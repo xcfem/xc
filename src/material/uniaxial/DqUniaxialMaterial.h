@@ -110,6 +110,17 @@ class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std
     int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;
+    
+// AddingSensitivity:BEGIN //////////////////////////////////////////
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    double getStressSensitivity(int gradIndex, bool conditional);
+    double getStrainSensitivity(int gradIndex);
+    double getInitialTangentSensitivity(int gradIndex);
+    double getTangentSensitivity(int gradIndex);
+    double getDampTangentSensitivity(int gradIndex);
+    double getRhoSensitivity(int gradIndex);
+    int commitSensitivity(double strainGradient, int gradIndex, int numGrads);
+// AddingSensitivity:END ///////////////////////////////////////////
 
   };
 

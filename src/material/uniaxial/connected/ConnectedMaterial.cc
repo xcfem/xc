@@ -92,7 +92,8 @@ int XC::ConnectedMaterial::sendData(Communicator &comm)
     int res= UniaxialMaterial::sendData(comm);
     res+= comm.sendMovable(theModels,getDbTagData(),CommMetaData(2));
     if(res<0)
-      std::cerr << "ConnectedMaterial::sendData -- failed to send.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send.\n";
     return res;
   }
 
@@ -102,10 +103,31 @@ int XC::ConnectedMaterial::recvData(const Communicator &comm)
     int res= UniaxialMaterial::recvData(comm);
     res+= comm.receiveMovable(theModels,getDbTagData(),CommMetaData(2));
     if(res<0)
-      std::cerr << "ConnectedMaterial::recvData -- failed to receive.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive.\n";
     return res;
   }
 
+int XC::ConnectedMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  { return theModels.setParameter(argv, param); }
+
+double XC::ConnectedMaterial::getStressSensitivity(int gradIndex, bool conditional)
+  { return theModels.getStressSensitivity(gradIndex, conditional); }
+
+double XC::ConnectedMaterial::getTangentSensitivity(int gradIndex)
+  { return theModels.getTangentSensitivity(gradIndex); }
+
+double XC::ConnectedMaterial::getInitialTangentSensitivity(int gradIndex)
+  { return theModels.getInitialTangentSensitivity(gradIndex); }
+
+double XC::ConnectedMaterial::getDampTangentSensitivity(int gradIndex)
+  { return theModels.getDampTangentSensitivity(gradIndex); }
+
+double XC::ConnectedMaterial::getRhoSensitivity(int gradIndex)
+  { return theModels.getRhoSensitivity(gradIndex); }
+
+int XC::ConnectedMaterial::commitSensitivity(double dedh, int gradIndex, int numGrads)
+  { return theModels.commitSensitivity(dedh, gradIndex, numGrads); }
 
 
 

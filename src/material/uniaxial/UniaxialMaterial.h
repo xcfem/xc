@@ -145,12 +145,13 @@ class UniaxialMaterial: public Material
     virtual int    setParameter(const std::vector<std::string> &argv, Parameter &param);
     virtual int    updateParameter(int parameterID, Information &info);
     virtual int    activateParameter(int parameterID);
-    virtual double getStressSensitivity(int gradNumber, bool conditional);
-    virtual double getStrainSensitivity(int gradNumber);
-    virtual double getInitialTangentSensitivity(int gradNumber);
-    virtual double getDampTangentSensitivity(int gradNumber);
-    virtual double getRhoSensitivity(int gradNumber);
-    virtual int    commitSensitivity(double strainGradient, int gradNumber, int numGrads);
+    virtual double getStressSensitivity(int gradIndex, bool conditional);
+    virtual double getStrainSensitivity(int gradIndex);
+    virtual double getTangentSensitivity(int gradIndex);
+    virtual double getInitialTangentSensitivity(int gradIndex);
+    virtual double getDampTangentSensitivity(int gradIndex);
+    virtual double getRhoSensitivity(int gradIndex);
+    virtual int    commitSensitivity(double strainGradient, int gradIndex, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
     virtual double getEnergy(void) const;
   };

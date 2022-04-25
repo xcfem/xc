@@ -449,3 +449,99 @@ void XC::DqUniaxialMaterial::Print(std::ostream &s, int flag) const
     for(size_t i= 0;i<sz;i++)
       s << "\t\tUniaxial XC::Material, tag: " << (*this)[i]->getTag() << std::endl;
   }
+
+int XC::DqUniaxialMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    const size_t argc= argv.size();
+    const size_t sz= size(); // number of materials.
+    
+    if(argv[0]=="material")
+      {
+	if (argc < 3)
+	  return -1;
+        else
+	  {
+	    const int materialTag = atoi(argv[1]);
+	    for(size_t i = 0; i < sz; i++)
+	      {
+	        if(materialTag == (*this)[i]->getTag())
+		  {
+		    std::vector<std::string> newArgs(argv);
+		    newArgs.erase(argv.begin()); // remove first element.
+		    newArgs.erase(argv.begin()); // remobe second element.
+		    (*this)[i]->setParameter(newArgs, param);
+		  }
+	      }
+          }
+      }
+    else
+      { // Send to everything
+        for(size_t i = 0; i < sz; i++)
+	  (*this)[i]->setParameter(argv, param);
+      }
+    return 0;
+  }
+
+double XC::DqUniaxialMaterial::getStressSensitivity(int gradIndex, bool conditional)
+  {
+    double dsdh = 0.0;
+    const size_t sz= size();
+    for(size_t i = 0; i < sz; i++)
+      dsdh += (*this)[i]->getStressSensitivity(gradIndex, conditional);
+
+    for(size_t i = 1; i < sz; i++)
+      {
+        double k0 = (*this)[i]->getInitialTangent();
+        //dsdh += k0/(29000*144.0);
+      }
+    //dsdh -= 0.125;
+    return dsdh;
+  }
+
+double XC::DqUniaxialMaterial::getTangentSensitivity(int gradIndex)
+  {
+    double dEdh = 0.0;
+    const size_t sz= size();
+    for(size_t i = 0; i < sz; i++)
+      dEdh += (*this)[i]->getTangentSensitivity(gradIndex);
+
+    return dEdh;
+  }
+
+double XC::DqUniaxialMaterial::getInitialTangentSensitivity(int gradIndex)
+  {
+    double dEdh = 0.0;
+    const size_t sz= size();
+    for(size_t i = 0; i < sz; i++)
+      dEdh += (*this)[i]->getInitialTangentSensitivity(gradIndex);
+
+    return dEdh;
+  }
+
+double XC::DqUniaxialMaterial::getDampTangentSensitivity(int gradIndex)
+  {
+    double dEdh = 0.0;
+    const size_t sz= size();
+    for(size_t i = 0; i < sz; i++)
+      dEdh += (*this)[i]->getDampTangentSensitivity(gradIndex);
+    return dEdh;
+  }
+
+double XC::DqUniaxialMaterial::getRhoSensitivity(int gradIndex)
+  {
+    double dpdh = 0.0;
+    const size_t sz= size();
+    for(size_t i = 0; i < sz; i++)
+      dpdh += (*this)[i]->getRhoSensitivity(gradIndex);
+
+    return dpdh;
+  }
+
+int XC::DqUniaxialMaterial::commitSensitivity(double dedh, int gradIndex, int numGrads)
+  {
+    int ok = 0;
+    const size_t sz= size();
+    for(size_t i= 0;i<sz;i++)
+      ok+= (*this)[i]->commitSensitivity(dedh, gradIndex, numGrads);
+    return ok;
+  }

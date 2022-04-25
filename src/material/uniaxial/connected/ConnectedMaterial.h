@@ -49,6 +49,16 @@ class ConnectedMaterial: public UniaxialMaterial
 
     int sendData(Communicator &);  
     int recvData(const Communicator &);
+// AddingSensitivity:BEGIN //////////////////////////////////////////
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    double getStressSensitivity(int gradNumber, bool conditional);
+    double getStrainSensitivity(int gradNumber);
+    double getInitialTangentSensitivity(int gradNumber);
+    double getDampTangentSensitivity(int gradNumber);
+    double getTangentSensitivity(int gradNumber);
+    double getRhoSensitivity(int gradNumber);
+    int commitSensitivity(double strainGradient, int gradNumber, int numGrads);
+// AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace
 

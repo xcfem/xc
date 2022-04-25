@@ -281,22 +281,25 @@ int XC::UniaxialMaterial::updateParameter(int parameterID, Information &info)
 int XC::UniaxialMaterial::activateParameter(int parameterID)
   { return -1; }
 
-double XC::UniaxialMaterial::getStressSensitivity(int gradNumber, bool conditional)
+double XC::UniaxialMaterial::getStressSensitivity(int gradIndex, bool conditional)
   { return 0.0; }
 
-double XC::UniaxialMaterial::getStrainSensitivity(int gradNumber)
+double XC::UniaxialMaterial::getStrainSensitivity(int gradIndex)
   { return 0.0; }
 
-double XC::UniaxialMaterial::getInitialTangentSensitivity(int gradNumber)
+double XC::UniaxialMaterial::getTangentSensitivity(int gradIndex)
   { return 0.0; }
 
-double XC::UniaxialMaterial::getRhoSensitivity(int gradNumber)
+double XC::UniaxialMaterial::getInitialTangentSensitivity(int gradIndex)
   { return 0.0; }
 
-double XC::UniaxialMaterial::getDampTangentSensitivity(int gradNumber)
+double XC::UniaxialMaterial::getRhoSensitivity(int gradIndex)
   { return 0.0; }
 
-int XC::UniaxialMaterial::commitSensitivity(double strainSensitivity, int gradNumber, int numGrads)
+double XC::UniaxialMaterial::getDampTangentSensitivity(int gradIndex)
+  { return 0.0; }
+
+int XC::UniaxialMaterial::commitSensitivity(double strainSensitivity, int gradIndex, int numGrads)
   { return -1; }
 
 double XC::UniaxialMaterial::getInitialTangent(void) const
