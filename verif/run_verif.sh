@@ -941,6 +941,7 @@ python tests/materials/astm_aisc/connection_design/bolt_fastener_design_test_01.
 python tests/materials/astm_aisc/connection_design/bolt_fastener_design_test_02.py
 python tests/materials/astm_aisc/connection_design/bolted_plate_test_01.py
 python tests/materials/astm_aisc/connection_design/bolted_flange_plate_connection_01.py
+python tests/materials/astm_aisc/connection_design/bolted_flange_plate_connection_02.py
 python tests/materials/astm_aisc/connection_design/single_plate_connection_01.py
 python tests/materials/astm_aisc/connection_design/single_plate_connection_02.py
 python tests/materials/astm_aisc/connection_design/test_end_plate_connection_01.py
