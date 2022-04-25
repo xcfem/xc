@@ -504,7 +504,6 @@ class SquarePlateWasher(swp.SquarePlateWasher):
         :param steelType: steel type.
         '''
         super(SquarePlateWasher, self).__init__(bolt, side, thickness, steelType)
-
         
 class BoltedPlate(bp.BoltedPlateBase):
     ''' Bolted plate the AISC/ASTM way.
