@@ -158,7 +158,7 @@ void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
 	    int grad= -1;
 	    if(theParameter)
 	      grad= theParameter->getGradIndex();
-	    if(grad > 0)
+	    if(grad >= 0)
 	      dataFlag= 1000 + grad;
 	    else
 	      dataFlag= 10;
@@ -173,7 +173,7 @@ void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
 	    int grad= -1;
 	    if(theParameter)
 	      grad= theParameter->getGradIndex();
-	    if(grad > 0)
+	    if(grad >= 0)
 	      dataFlag= 2000 + grad;
 	    else
 	      dataFlag= 10;
@@ -188,7 +188,7 @@ void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
 	    int grad= -1;
 	    if(theParameter)
 	      grad= theParameter->getGradIndex();
-	    if(grad > 0)
+	    if(grad >= 0)
 	      dataFlag = 3000 + grad;
 	    else
 	      dataFlag = 6;
