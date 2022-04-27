@@ -1,90 +1,49 @@
 # -*- coding: utf-8 -*-
 
-def writeULSCombinations(nmbArchivoDef, nmbArchivoLatex, nmbFormat):
-  ''' Write ULS combinations in a LaTeX file.
+import yaml
 
-  '''
-  {
-    def_hip_elu.open(nmbArchivoDef,"w")
-    \combinations
-      {
-        \comb_elu_persistentes
-          {
-            \expr{conta= 1}
-            \for_each
-              {
-                def_hip_elu.write("\combination[\"",format(int(conta),nmbFormat),"\"]{ \descomp{\"",getName,"\"}}\n")
-                \expr{conta= tonum(conta+1)}
-              }
-          }
-        \comb_elu_accidentales
-          {
-            \for_each
-              {
-                def_hip_elu.write("\combination[\"",format(int(conta),nmbFormat),"\"]{ \descomp{\"",getName,"\"}}\n")
-                \expr{conta= tonum(conta+1)}
-              }
-          }
-      }
+def writeULSCombinations(fileName, latexFileName, nmbFormat):
+    ''' Write ULS combinations in a LaTeX file.
+
+    :param latexFileName: LaTeX file name.
+    '''
+    ulsCombDict= dict()
+    ulsCombDict['comb_elu_persistentes']= combinations.comb_elu_persistentes.getDict()
+    ulsCombDict['comb_elu_accidentales']= combinations.comb_elu_accidentales.getDict()
+    
+    
+    with open('output.yaml', 'w') as def_hip_elu:
+        outputs= yaml.dump(ulsCombDict, def_hip_elu)
     def_hip_elu.close()
-    hip_elu_tex.open(nmbArchivoLatex,"w")
-    \printCabeceraListaHipotesis("hip_elu_tex"){}
-    \combinations
-      {
-        \comb_elu_persistentes
-          {
-            \expr{conta= 1}
-            \for_each
-              {
-                hip_elu_tex.write(format(int(conta),nmbFormat)," & ",getName,"\\\\\n")
-                \expr{conta= tonum(conta+1)}
-              }
-          }
-        \comb_elu_accidentales
-          {
-            \for_each
-              {
-                hip_elu_tex.write(format(int(conta),nmbFormat)," & ",getName,"\\\\\n")
-                \expr{conta= tonum(conta+1)}
-              }
-          }
-      }
+    
+    hip_elu_tex= open(latexFileName,"w")
+    printCabeceraListaHipotesis("hip_elu_tex")
+    for conta, comb in enumerate(combinations.comb_elu_persistentes):
+        hip_elu_tex.write(format(int(conta),nmbFormat)," & ",comb.getName,"\\\\\n")
+    for conta, comb in enumerate(combinations.comb_elu_accidentales):
+        hip_elu_tex.write(format(int(conta),nmbFormat)," & ",comb.getName,"\\\\\n")
     hip_elu_tex.write("\\end{supertabular}\n")
     hip_elu_tex.write("\\end{center}\n")
     hip_elu_tex.close()
-  }
 
-def writeFrequentSLSCombinations(nmbArchivoDef, nmbArchivoLatex,nmbFormat):
-  {
-    def_hip_els.open(nmbArchivoDef,"w")
-    \combinations
-      {
-        \comb_els_frecuentes
-          {
-            \expr{conta= 1}
-            \for_each
-              {
-                def_hip_els.write("\combination[\"",format(int(conta),nmbFormat),"\"]{ \descomp{\"",getName,"\"}}\n")
-                \expr{conta= tonum(conta+1)}
-              }
-          }
-      }
-    def_hip_els.close()
-    hip_els_tex.open(nmbArchivoLatex,"w")
-    \printCabeceraListaHipotesis("hip_els_tex"){}
-    \combinations
-      {
-        \comb_els_frecuentes
-          {
-            \expr{conta= 1}
-            \for_each
-              {
-                hip_els_tex.write(format(int(conta),nmbFormat)," & ",getName,"\\\\\n")
-                \expr{conta= tonum(conta+1)}
-              }
-          }
-      }
-    hip_els_tex.write("\\end{supertabular}\n")
-    hip_els_tex.write("\\end{center}\n")
-    hip_els_tex.close()
-  }
+
+def writeFrequentSLSCombinations(fileName, latexFileName, nmbFormat):
+    ''' Write SLS combinations in a LaTeX file.
+
+    :param latexFileName: LaTeX file name.
+    '''
+    ulsCombDict= dict()
+    ulsCombDict['comb_sls_frecuentes']= combinations.comb_sls_frecuentes.getDict()
+    
+    
+    with open('output.yaml', 'w') as def_hip_sls:
+        outputs= yaml.dump(ulsCombDict, def_hip_sls)
+    def_hip_sls.close()
+
+    hip_sls_tex= open(latexFileName,"w")
+    printCabeceraListaHipotesis("hip_sls_tex")
+    for conta, comb in enumerate(combinations.comb_sls_frecuentes):
+        hip_sls_tex.write(format(int(conta),nmbFormat)," & ",comb.getName,"\\\\\n")
+    hip_sls_tex.write("\\end{supertabular}\n")
+    hip_sls_tex.write("\\end{center}\n")
+    hip_sls_tex.close()
