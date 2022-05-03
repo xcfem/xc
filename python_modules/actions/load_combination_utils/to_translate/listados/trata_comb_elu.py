@@ -2,7 +2,7 @@
 def_hip_elu= open("./def_hip_elu.xci","w")
 calc_hip_elu= open("./calc_hip_elu.xci","w")
 hip_elu_tex= open("./hipotesis_elu.tex","w")
-printCabeceraListaHipotesis("hip_elu_tex"){}
+printCabeceraListaHipotesis("hip_elu_tex")
 
 for conta, comb in enumerate(combinations.comb_elu_persistentes):
     def_hip_elu.write("\combination[\"",format(int(conta),"ULS%03u"),"\"]{ \descomp{\"",getName,"\"}}\n")

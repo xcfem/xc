@@ -1,48 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-\combinations
-  {
-    \comb_elu_persistentes
-      {
-        print("Computed: ",number_of_combinations," combinations in persistent or transient situations\n")
-        arch_salida_ltx.open("./examples/output/comb_ehe_elu_pt.tex","w")
-        execfile("print_combinations.acc")
-        arch_salida_ltx.close()
-      }
-    \comb_elu_accidentales
-      {
-        print("Computed: ",number_of_combinations," combinations in accidental situations.\n")
-        arch_salida_ltx.open("./examples/output/comb_ehe_elu_acc.tex","w")
-        execfile("print_combinations.acc")
-        arch_salida_ltx.close()
-      }
-    \comb_elu_sismicas
-      {
-        print("Computed: ",number_of_combinations," combinations in seismic situations.\n")
-        arch_salida_ltx.open("./examples/output/comb_ehe_elu_sism.tex","w")
-        execfile("print_combinations.acc")
-        arch_salida_ltx.close()
-      }
-    \comb_els_poco_frecuentes
-      {
-        print("Computed: ",number_of_combinations," combinations in rare situations.\n")
-        arch_salida_ltx.open("./examples/output/comb_ehe_els_pf.tex","w")
-        execfile("print_combinations.acc")
-        arch_salida_ltx.close()
-      }
-    \comb_els_frecuentes
-      {
-        print("Computed: ",number_of_combinations," combinations in frequent situations.\n")
-        arch_salida_ltx.open("./examples/output/comb_ehe_els_f.tex","w")
-        execfile("print_combinations.acc")
-        arch_salida_ltx.close()
-      }
-    \comb_els_cuasi_permanentes
-      {
-        print("Computed: ",number_of_combinations," combinations in quasi-permanent situations.\n")
-        arch_salida_ltx.open("./examples/output/comb_ehe_els_cp.tex","w")
-        execfile("print_combinations.acc")
-        arch_salida_ltx.close()
-      }
-  }
+def printCombEHE(eheCombinations, outputFileName:str, msg:str)
+    number_of_combinations= len(s)
+    print("Computed: ",number_of_combinations," combinations in "+msg)
+    arch_salida_ltx= open(outputFileName,"w")
+    execfile("print_combinations.acc")
+    arch_salida_ltx.close()
+
+printCombEHE(combinations.comb_elu_persistentes, outputFileName= "./examples/output/comb_ehe_elu_pt.tex", msg= "persistent or transient situations.\n")
+
+printCombEHE(combinations.comb_elu_accidentales, outputFileName= "./examples/output/comb_ehe_elu_acc.tex", msg= "accidental situations.\n")
+
+printCombEHE(combinations.comb_elu_sismicas, outputFileName= "./examples/output/comb_ehe_elu_sism.tex", msg= "seismic situations.\n")
+
+printCombEHE(combinations.comb_els_poco_frecuentes, outputFileName= "./examples/output/comb_ehe_els_pf.tex", msg= "rare situations.\n")
+
+printCombEHE(combinations.comb_els_frecuentes, outputFileName= "./examples/output/comb_ehe_els_f.tex", msg= "frequent situations.\n")
+
+printCombEHE(combinations.comb_els_quasi_permanentes, outputFileName= "./examples/output/comb_ehe_els_cp.tex", msg= "quasi-permanent situations.\n")

@@ -3,7 +3,7 @@
 def_hip_elsf= open("./def_hip_elsf.xci","w")
 calc_hip_elsf= open("./calc_hip_elsf.xci","w")
 hip_elsf_tex= open("./hipotesis_elsf.tex","w")
-printCabeceraListaHipotesis("hip_elsf_tex"){}
+printCabeceraListaHipotesis("hip_elsf_tex")
 
 for conta, comb in enumerate(combinations.comb_els_frecuentes):
     def_hip_elsf.write("\combination[\"",format(int(conta),"ELSF%03u"),"\"]{ \descomp{\"",getName,"\"}}\n")
