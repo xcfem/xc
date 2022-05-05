@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-def printCombEHE(eheCombinations, outputFileName:str, msg:str)
-    number_of_combinations= len(s)
-    print("Computed: ",number_of_combinations," combinations in "+msg)
+def printCombEHE(eheCombinations, outputFileName:str, msg:str):
+    number_of_combinations= len(eheCombinations)
+    print("Computed: "+str(number_of_combinations)+" combinations in "+msg)
     arch_salida_ltx= open(outputFileName,"w")
     execfile("print_combinations.acc")
     arch_salida_ltx.close()
