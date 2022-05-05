@@ -23,3 +23,4 @@ This directory contains the classes that define the truss and frame elements ava
 - [Meshing for Column Loads](https://portwooddigital.com/2020/05/10/meshing-for-column-loads/)
 - [Direct Moment-Curvature](https://portwooddigital.com/2021/09/26/direct-moment-curvature/)
 - [Slender Things](https://portwooddigital.com/2021/11/04/slender-things/)
+- [A Complicated Equivalent](https://portwooddigital.com/2022/05/01/a-complicated-equivalent/)
