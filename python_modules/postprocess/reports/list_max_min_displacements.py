@@ -18,6 +18,10 @@ def listNodeUMaxUMin(preprocessor,setName, tit, fmt, fName):
     UMinMin= 0
     CombUMinMin= None 
     for n in nodes:
+        UMax= n.getProp('UMax')
+        CombUMax= n.getProp('CombUMax')
+        UMin= n.getProp('UMin')
+        CombUMin= n.getProp('CombUMin')        
         fName.write(tag," & ",fmt.format(UMax*1e3)," & ",CombUMax," & ",fmt.format(UMin*1e3)," & ",CombUMin,"\\\\\n")
         if(UMax>UMaxMax): 
             UMaxMax= UMax
@@ -55,15 +59,19 @@ def listNodeVMaxVMin(setName, tit, fmt, fName):
     s= preprocessor.getSets.getSet(setName)
     nodes= s.nodes
     for n in nodes:
-      fName.write(tag," & ",fmt.format(VMax*1e3)," & ",CombVMax," & ",fmt.format(VMin*1e3)," & ",CombVMin,"\\\\\n")
-      if(VMax>VMaxMax):
-        VMaxMax= VMax
-        CombVMaxMax= CombVMax
-        tagVMaxMax= tag
-      if(VMin<VMinMin):
-        VMinMin= VMin
-        CombVMinMin= CombVMin
-        tagVMinMin= tag
+        VMax= n.getProp('VMax')
+        CombVMax= n.getProp('CombVMax')
+        VMin= n.getProp('VMin')
+        CombVMin= n.getProp('CombVMin')        
+        fName.write(tag," & ",fmt.format(VMax*1e3)," & ",CombVMax," & ",fmt.format(VMin*1e3)," & ",CombVMin,"\\\\\n")
+        if(VMax>VMaxMax):
+            VMaxMax= VMax
+            CombVMaxMax= CombVMax
+            tagVMaxMax= tag
+        if(VMin<VMinMin):
+            VMinMin= VMin
+            CombVMinMin= CombVMin
+            tagVMinMin= tag
     fName.write("\\hline\n")
     fName.write("\\multicolumn{5}{|c|}{Valores extremos}\\\\\n")
     fName.write("\\hline\n")
@@ -91,6 +99,10 @@ def listNodeWMaxWMin(preprocessor, setName, tit, fmt, fName):
     s= preprocessor.getSets.getSet(setName)
     nodes= s.nodes
     for n in nodes:
+        WMax= n.getProp('WMax')
+        CombWMax= n.getProp('CombWMax')
+        WMin= n.getProp('WMin')
+        CombWMin= n.getProp('CombWMin')        
         fName.write(tag," & ",fmt.format(WMax*1e3)," & ",CombWMax," & ",fmt.format(WMin*1e3)," & ",CombWMin,"\\\\\n")
         if(WMax>WMaxMax):
              WMaxMax= WMax

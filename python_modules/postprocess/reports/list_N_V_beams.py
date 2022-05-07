@@ -3,7 +3,8 @@
 import sqlite3 as sqlite
 
 def listBarNormalStressesLaTeX(nmbDBase, nmbTabla, nmbArchivoListadoTex):
-    '''Result of normal stresses in linear elements to include in a LaTeX file.'''
+    '''Result of normal stresses in linear elements to include in a 
+       LaTeX file.'''
     archTex= open(nmbArchivoListadoTex)
     con= sqlite.connect(nmbDBase)
     con.row_factory= sqlite.Row
@@ -51,7 +52,7 @@ def listaBarShearLaTeX(nmbDBase, nmbTabla, nmbArchivoListadoTex):
     aprovV= 0.0
     cur= con.cursor("select * from " + nmbTabla)
     cur.execute()
-    for fow in cur:
+    for row in cur:
         idSecc= row["idSecc"]
         idElem= row["idElem"]
         idComb= row["idComb"]
