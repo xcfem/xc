@@ -9,3 +9,4 @@ This directory contains some verification tests related with this type of elemen
 - [ZeroLengthND Element](https://opensees.github.io/OpenSeesDocumentation/user/manual/model/elements/zeroLengthND.html)
 - [ZeroLengthContactASDimplex Element](https://opensees.github.io/OpenSeesDocumentation/user/manual/model/elements/zeroLengthContactASDimplex.html)
 - [Fuzzy Zero Length Logic](https://portwooddigital.com/2022/04/24/fuzzy-zero-length-logic/)
+- [Switching Sides](https://portwooddigital.com/2022/05/08/switching-sides/)
