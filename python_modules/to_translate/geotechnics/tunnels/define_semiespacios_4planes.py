@@ -8,30 +8,21 @@ P4= computeDipPlane(alpha4,beta4,p)
 tunnelAxisVector= [sin(axisBeta),cos(axisBeta),0]
 vectorITunel= cross([0,0,1],tunnelAxisVector)
 vectorJTunel= cross(tunnelAxisVector,vectorITunel)
-tunnelAxis= 
-\tunnelAxis
-  {
-    \setOrg{p}
-    \axis{\setVectoresIJ{[vectorITunel,vectorJTunel]}}
-  }
+tunnelAxis= tunnelAxis( org= p, axis= setVectoresIJ([vectorITunel,vectorJTunel]))
 '''Define the up and down half spaces that correspond
    to the planes P1, P2, P3 and P4'''
-P1L= 
-\P1L{\setPlane{P1}}
-P1U= 
-\P1U{\setPlane{P1} \swap{}}
+P1L= P1L(setPlane(P1))
+P1U= P1U(setPlane(P1))
+P1U.swap()
 
-P2L= 
-\P2L{\setPlane{P2}}
-P2U= 
-\P2U{\setPlane{P2} \swap{}}
+P2L= P2L(setPlane(P2))
+P2U= P2U(setPlane(P2))
+P2U.swap()
 
-P3L= 
-\P3L{\setPlane{P3}}
-P3U= 
-\P3U{\setPlane{P3} \swap{}}
+P3L= P3L(setPlane(P3))
+P3U= P3U(setPlane(P3))
+P3U.swap()
 
-P4L= 
-\P4L{\setPlane{P4}}
-P4U= 
-\P4U{\setPlane{P4} \swap{}}
+P4L= P4L(setPlane(P4))
+P4U= P4U(setPlane(P4))
+P4U.swap()
