@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
-# Macros that are useful in block theory calculations (see Goodman & Shi, Block theory and its application to rock engineering 1985)
+
+''' Macros that are useful in block theory calculations (see Goodman & Shi, Block theory and its application to rock engineering 1985)'''
+
 from __future__ import print_function
 
+import geom
 
 def computeDipPlane(alpha,beta,pos3d p):
     '''Return the dip plane defined by:
        alpha: dip angle.
        beta: dip direction.
        p: point for which the plane passes through.'''
-    A= math.sin(alpha)*sin(beta)
-    B= math.sin(alpha)*cos(beta)
+    sAlpha= math.sin(alpha)
+    A= sAlpha*math.sin(beta)
+    B= sAlpha*math.cos(beta)
     C= math.cos(alpha)
     D= -(A*p.x+B*p.y+C*p.z)
-    retval= ecuacion_general([A,B,C,D])
+    retval= geom.Plane()
+    retval.ecuacion_general([A,B,C,D])
     return retval
 
 def processPolyhedralAngle(nmbAng,nmbTunel):
