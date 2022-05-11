@@ -101,8 +101,8 @@ def listPointReactionsCSV(preprocessor, nmbComb,pointList, fmt, outputFile, incl
             reac= nod.getReaction()
             outputFile.write(fmt.format(reac[0]/1e3)+" ; "+fmt.format(reac[1]/1e3)+" ; "+fmt.format(reac[2]/1e3)+" ; ")
             outputFile.write(fmt.format(reac[3]/1e3)+" ; "+fmt.format(reac[4]/1e3)+" ; "+fmt.format(reac[5]/1e3)+"\n")
-      else:
-        outputFile.write("undefined node.\n")
+        else:
+            outputFile.write("undefined node.\n")
 
 class ReactionsListRecord(object):
     formato= '{:7.2f}'

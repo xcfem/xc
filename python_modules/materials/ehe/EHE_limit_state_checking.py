@@ -301,7 +301,6 @@ def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
     fctm= fctMedEHE08(fck) 
     ctgThetaE= min(max(0.5,sqrt(fctm-sgxd/fctm-sgyd)),2.0)
     ctgTheta= min(max(cotg(theta),0.5),2.0)
-    beta= 0.0
     if(ctgTheta<ctgThetaE):
         beta= (2*ctgTheta-1)/(2*ctgThetaE-1)
     else:
@@ -360,8 +359,6 @@ def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sg
     :param AsTrsv: transverse reinforcement area.
     :param fydTrsv: design yield strength of the transverse reinforcement.
     '''
-    vcu= 0.0
-    vsu= 0.0
     if(AsTrsv>0.0):
         vcu= getVcu(fck,Nd,Ac,b0,d,theta,AsPas,fyd,AsAct,fpd,sgxd,sgyd)
         vsu= getVsu(z,alpha,theta,AsTrsv,fydTrsv)

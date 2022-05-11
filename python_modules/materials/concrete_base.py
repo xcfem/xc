@@ -95,19 +95,18 @@ class ReinforcedConcreteLimitStrains(object):
       return (epsSMax/self.SMaxStrain)
 
     def getNormalStressesEfficiency(self, tipoSol, epsCMin, epsCMax, epsSMax):
-      ''' Return efficiency under normal stresses.'''
-      retval= 0.0
-      if(tipoSol==1): # Tensile or flexural tensile.
-        retval= getTensileBendingEfficiency(epsSMax)
-      else:
-        if(tipoSol==2): # Bending.
-          retval= getBendingEfficiency(epsCMin,epsSMax)
+        ''' Return efficiency under normal stresses.'''
+        if(tipoSol==1): # Tensile or flexural tensile.
+            retval= getTensileBendingEfficiency(epsSMax)
         else:
-          if(tipoSol==3): # Compressive or flexural compressive.
-            retval= getCompressiveBendingEfficiency(epsCMin,epsCMax)
-          else:
-            retval= -100.0
-      return retval
+            if(tipoSol==2): # Bending.
+                retval= getBendingEfficiency(epsCMin,epsSMax)
+            else:
+                if(tipoSol==3): # Compressive or flexural compressive.
+                    retval= getCompressiveBendingEfficiency(epsCMin,epsCMax)
+                else:
+                    retval= -100.0
+        return retval
 
 
 class Concrete(matWDKD.MaterialWithDKDiagrams):
@@ -1007,9 +1006,6 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
                       class B k>=1,08)
     '''
     Es= 2e11 # Elastic modulus of the material.
-  #  fmaxk= 0.0 # Characteristic ultimate stress
-    Esh= 0.0 # Slope of the line in the yielding region.
-    bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
     k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
     def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
         super(ReinforcingSteel,self).__init__(steelName)

@@ -54,26 +54,22 @@ class SectionProperties(object):
     def A(self):
         '''cross-sectional area (abstract method)'''
         raise Exception('Abstract method, please override')
-        return 0.0
     
     def hCOG(self):
         '''Return distance from the bottom fiber to the 
         centre of gravity of the section.
         '''
         raise Exception('Abstract method, please override')
-        return 0.0
   
     def bCOG(self):
         '''Return distance from the leftmost fiber to the 
         centre of gravity of the section.
         '''
         raise Exception('Abstract method, please override')
-        return 0.0
     
     def Iy(self):
         '''second moment of area about the local y-axis (abstract method)'''
         raise Exception('Abstract method, please override')
-        return 0.0
   
     def iy(self):
         '''Return the radius of gyration of the section around
@@ -84,7 +80,6 @@ class SectionProperties(object):
     def Iz(self):
         '''second moment of area about the local z-axis (abstract method)'''
         raise Exception('Abstract method, please override')
-        return 0.0
   
     def iz(self):
         '''Return the radius of gyration of the section around
@@ -95,17 +90,14 @@ class SectionProperties(object):
     def J(self):
         '''torsional constant of the section (abstract method)'''
         raise Exception('Abstract method, please override')
-        return 0.0
   
     def Wyel(self):
         '''section modulus with respect to local y-axis (abstract method)'''
         raise Exception('Abstract method, please override')
-        return 0.0
   
     def Wzel(self):
         '''section modulus with respect to local z-axis (abstract method)'''
         raise Exception('Abstract method, please override')
-        return 0.0
   
     def SteinerY(self,z):
         '''Return the moment of inertia obtained by applying
@@ -551,7 +543,6 @@ class RectangularSection(SectionProperties):
 
         Reference: concrete book Jiménez Montoya 14a. edition page 405
         '''
-        retval= 0.0
         if self.b<self.h:
             retval= self.alphaTable(self.h/self.b)
         else:
@@ -563,7 +554,6 @@ class RectangularSection(SectionProperties):
 
         Reference: concrete book Jiménez Montoya 14a. edition page 405
         '''
-        retval= 0.0
         if self.b<self.h:
             retval= self.betaTable(self.h/self.b)
         else:
@@ -576,7 +566,6 @@ class RectangularSection(SectionProperties):
         Reference: concrete book Jiménez Montoya 14a. edition page 405
         '''
         alphaJT= self.getAlphaTorsion()
-        retval= 0.0
         if self.b<self.h:
             retval= alphaJT*pow(self.b,3)*self.h
         else:
