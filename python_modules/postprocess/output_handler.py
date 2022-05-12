@@ -560,10 +560,9 @@ class OutputHandler(object):
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
-        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+        loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
-        preprocessor= setToDisplay.getPreprocessor
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         grid= displaySettings.setupGrid(setToDisplay)

@@ -252,57 +252,57 @@ class ShearController(lsc.ShearControllerBase):
         return self.Vcu+self.Vsu
 
     def check(self,elements,nmbComb):
-      '''
-      Check the shear strength of the RC section.
-         XXX Orientation of the transverse reinforcement is not
-         taken into account.
-      '''
-      lmsg.info("Postprocesing combination: "+nmbComb)
-      # XXX torsional deformation ingnored.
+        '''
+        Check the shear strength of the RC section.
+           XXX Orientation of the transverse reinforcement is not
+           taken into account.
+        '''
+        lmsg.info("Postprocesing combination: "+nmbComb)
+        # XXX torsional deformation ingnored.
 
-      for e in elements:
-          e.getResistingForce()
-          scc= e.getSection()
-          idSection= e.getProp("idSection")
-          section= scc.getProp('sectionData')
-          self.setSection(section)
-          shReinf= section.getShearReinfY()
-          AsTrsv= shReinf.getAs()
-          alpha= shReinf.angAlphaShReinf
-          theta= shReinf.angThetaConcrStruts
+        for e in elements:
+            e.getResistingForce()
+            scc= e.getSection()
+            idSection= e.getProp("idSection")
+            section= scc.getProp('sectionData')
+            self.setSection(section)
+            shReinf= section.getShearReinfY()
+            AsTrsv= shReinf.getAs()
+            alpha= shReinf.angAlphaShReinf
+            theta= shReinf.angThetaConcrStruts
 
-          VuTmp= section.getRoughVcuEstimation() 
-          NTmp= scc.getStressResultantComponent("N")
-          MyTmp= scc.getStressResultantComponent("My")
-          momentThreshold= VuTmp/1e6
-          if(abs(MyTmp)<momentThreshold): #bending moment too small.
-              MyTmp= momentThreshold
-          MzTmp= scc.getStressResultantComponent("Mz")
-          if(abs(MzTmp)<momentThreshold): #bending moment too small.
-              MzTmp= momentThreshold
-          VyTmp= scc.getStressResultantComponent("Vy")
-          if(abs(VyTmp)>VuTmp/5.0): #We "eliminate" very small shear forces.
-              posEsf= geom.Pos3d(NTmp,MyTmp,MzTmp)
-              diagInt= e.getProp("diagInt")
-              intersection= diagInt.getIntersection(posEsf)
-              Mu= intersection.z
-              VuTmp= self.calcVu(NTmp,MzTmp, Mu, VyTmp) #Mz associated with Vy
-          else:
-              #Fictitious ultimate moment.
-              Mu= self.concrete.Ecm()*section.getIz_RClocalZax()*1e-3/section.h
-              if(abs(MzTmp)>Mu):
-                  errMsg= 'Fictitious ultimate moment too low;'
-                  errMsg+= ' Mu= '+ str(Mu) + ' MzTmp= ' + str(MzTmp)
-                  lmsg.error(errMsg)
-          #13.02.2018 right-justified in order to be run only if VyTmp>VuTmp/5.0
-          if(VuTmp!=0.0):
-              FCtmp= abs(VyTmp)/VuTmp
-          else:
-              FCtmp= 10
-          if(FCtmp>=e.getProp(self.limitStateLabel).CF):
-              VzTmp= scc.getStressResultantComponent("Vz")
-              e.setProp(self.limitStateLabel,self.ControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
-          #13.02.2018 End of changes
+            VuTmp= section.getRoughVcuEstimation() 
+            NTmp= scc.getStressResultantComponent("N")
+            MyTmp= scc.getStressResultantComponent("My")
+            momentThreshold= VuTmp/1e6
+            if(abs(MyTmp)<momentThreshold): #bending moment too small.
+                MyTmp= momentThreshold
+            MzTmp= scc.getStressResultantComponent("Mz")
+            if(abs(MzTmp)<momentThreshold): #bending moment too small.
+                MzTmp= momentThreshold
+            VyTmp= scc.getStressResultantComponent("Vy")
+            if(abs(VyTmp)>VuTmp/5.0): #We "eliminate" very small shear forces.
+                posEsf= geom.Pos3d(NTmp,MyTmp,MzTmp)
+                diagInt= e.getProp("diagInt")
+                intersection= diagInt.getIntersection(posEsf)
+                Mu= intersection.z
+                VuTmp= self.calcVu(NTmp,MzTmp, Mu, VyTmp) #Mz associated with Vy
+            else:
+                #Fictitious ultimate moment.
+                Mu= self.concrete.Ecm()*section.getIz_RClocalZax()*1e-3/section.h
+                if(abs(MzTmp)>Mu):
+                    errMsg= 'Fictitious ultimate moment too low;'
+                    errMsg+= ' Mu= '+ str(Mu) + ' MzTmp= ' + str(MzTmp)
+                    lmsg.error(errMsg)
+            #13.02.2018 right-justified in order to be run only if VyTmp>VuTmp/5.0
+            if(VuTmp!=0.0):
+                FCtmp= abs(VyTmp)/VuTmp
+            else:
+                FCtmp= 10
+            if(FCtmp>=e.getProp(self.limitStateLabel).CF):
+                VzTmp= scc.getStressResultantComponent("Vz")
+                e.setProp(self.limitStateLabel,self.ControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+            #13.02.2018 End of changes
 
 
 class CrackControlSIA262(lsc.CrackControlBaseParameters):
@@ -399,7 +399,6 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
             #print("sgc0= ", stressCalc.sgc0)
             # sigma_s= 0.0
             # eNC= datosScc.depth/3
-            # exc= 0.0
             # As= max(datosScc.getAsPos(),datosScc.getAsNeg())
             # denom= 0.5*As*0.9*datosScc.depth
             # if(abs(Ntmp)<1e-6):
@@ -458,9 +457,7 @@ def procesResultVerifFISSIA262PlanB(preprocessor, nmbComb, limitStress, limitSta
 # Control of fatigue limit state according to SIA 262.
 
 def estimateSteelStress(sccData, N, M, As, y):
-    retval= 0.0
     eNC= sccData.depth/3.0
-    exc= 0.0
     denom= math.copysign(0.8*As*0.9*sccData.depth,y)
     retval= M/denom
     if(retval<0.0):
@@ -476,7 +473,6 @@ def estimateSteelStress(sccData, N, M, As, y):
 def estimateSteelStressPos(sccData, N, M):
     retval= 0.0
     eNC= sccData.depth/3.0
-    exc= 0.0
     As= sccData.getAsPos()
     y = sccData.getYAsPos()
     return estimateSteelStress(sccData, N, M, As, y)

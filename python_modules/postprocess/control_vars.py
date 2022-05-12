@@ -402,7 +402,7 @@ class ShearYControlVars(CFVy):
 
     :ivar idSection: section identifier
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,Vy= 0.0):
+    def __init__(self, idSection= 'nil',combName= 'nil',CF= -1.0,Vy= 0.0):
         '''
         Constructor.
 
@@ -428,17 +428,17 @@ class ShearYControlVars(CFVy):
 class UniaxialBendingControlVars(CFNMy):
     '''Uniaxial bending. Normal stresses limit state variables [CF,N,My].
 
-    :ivar idSection: section identifier
+    :ivar idSection: section identifier.
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
         '''
         Constructor.
 
-        :param idSection: section identifier
-        :param combName: name of the load combinations to deal with
-        :param CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
-        :param N:        axial force (defaults to 0.0)
-        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param idSection: section identifier.
+        :param combName: name of the load combinations to deal with.
+        :param CF: capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO).
+        :param N: axial force (defaults to 0.0).
+        :param My: bending moment about Y axis (defaults to 0.0).
         '''
         super(UniaxialBendingControlVars,self).__init__(combName,CF,N,My)
         self.idSection= idSection # Section identifier.
@@ -585,7 +585,7 @@ class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
         '''
         Constructor.
 
-        :param idSection: section identifier
+        :param idSection: section identifier.
         :param combName: name of the load combinations to deal with
         :param CF:       capacity factor (efficiency) (defaults to -1)
         :param N:        axial force (defaults to 0.0)
@@ -630,7 +630,7 @@ class SteelShapeBiaxialBendingControlVars(BiaxialBendingStrengthControlVars):
         '''
         Constructor.
 
-        :param idSection: section identifier
+        :param idSection: section identifier.
         :param combName: name of the load combinations to deal with
         :param CF:       capacity factor (efficiency) (defaults to -1)
         :param N:        axial force (defaults to 0.0)
@@ -676,7 +676,7 @@ class RCShearControlVars(BiaxialBendingControlVars):
         '''
         Constructor.
 
-        :param idSection: section identifier
+        :param idSection: section identifier.
         :param combName: name of the load combinations to deal with
         :param CF:       capacity factor (efficiency) (defaults to -1)
         :param N:        axial force (defaults to 0.0)
@@ -838,7 +838,7 @@ class RCCrackStraightControlVars(NMyMz):
     when when considering a concrete stress-strain diagram that takes account of 
     the effects of tension stiffening.
 
-    :ivar idSection: section identifier
+    :ivar idSection: section identifier.
     :ivar s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
     :ivar eps_sm:   mean strain in the reinforcement when taking into account the effects of tension stiffening
     :ivar wk:       crack width
@@ -847,7 +847,7 @@ class RCCrackStraightControlVars(NMyMz):
         '''
         Constructor.
 
-        :param idSection: section identifier
+        :param idSection: section identifier.
         :param combName: name of the load combinations to deal with
         :param N:        axial force
         :param My:       bending moment about Y axis
@@ -953,7 +953,7 @@ class FatigueControlVars(ControlVarsBase):
         '''
         Constructor.
 
-        :param idSection: section identifier
+        :param idSection: section identifier.
         :param combName:  name of the load combinations to deal with
         :param state0:    Fatigue values (FatigueControlBaseVars) under permanent load.
         :param state1:    Fatigue values (FatigueControlBaseVars) under fatigue load.
@@ -1081,7 +1081,7 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
         xcOutput= open(outputFileName+".py","w+")
     for e in elems:
         eTag= e.getProp("idElem") 
-        idSection= e.getProp("idSection")  
+        #idSection= e.getProp("idSection")  
         controlVar= e.getProp(controlVarName)
         outStr= controlVar.getLaTeXString(eTag,1e-3)
         sectionName= 'Sect'+str(e.getProp('dir'))
@@ -1096,7 +1096,7 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
         for e in elems:
             if(e.getProp("dir")==1):
                 eTag= e.getProp("idElem") 
-                idSection= e.getProp("idSection")  
+                #idSection= e.getProp("idSection")  
                 controlVar= e.getProp(controlVarName)
                 outStr= controlVar.getLaTeXString(eTag,1e-3)
                 texOutput.write(outStr)
@@ -1104,7 +1104,7 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
         for e in elems:
             if(e.getProp("dir")==2):
                 eTag= e.getProp("idElem") 
-                idSection= e.getProp("idSection")  
+                #idSection= e.getProp("idSection")  
                 controlVar= e.getProp(controlVarName)
                 outStr= controlVar.getLaTeXString(eTag,1e-3)
                 texOutput.write(outStr)

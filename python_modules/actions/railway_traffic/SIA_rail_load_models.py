@@ -78,15 +78,6 @@ class LoadModel(object):
             retval*= 7/4.0 # 35/20
         return retval
 
-    def trainBrakingLoad123(self,l):
-        ''' returns train braking load for models 1, 2 and 3 (table 19)'''
-        retval= 20e3*l
-        if(self.loadModelNumber==1):
-            retval= min(retval,6000e3)
-        elif(self.loadModelNumber==3):
-            retval*= 7/4.0 # 35/20
-        return retval
-
     def trainBrakingLoad456(self,l):
         ''' returns train braking load for models 4, 5 and 6'''
         retval= 0.25*self.qk*l
@@ -100,7 +91,6 @@ class LoadModel(object):
 
     def brakingLoad(self,l):
         ''' returns braking load'''
-        retval= 0.0
         if(self.loadModelNumber<4):
             retval= self.trainBrakingLoad123(l)
         else:
@@ -109,7 +99,6 @@ class LoadModel(object):
 
     def accelerationLoad(self,l):
         ''' returns acceleration load'''
-        retval= 0.0
         if(self.loadModelNumber<4):
             retval= self.trainAccelerationLoad123(l)
         else:
