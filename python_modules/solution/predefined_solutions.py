@@ -1282,7 +1282,8 @@ def solveCombEstat2ndOrderLin(combName,solutionProcedure):
     preprocessor= solutionProcedure.feProblem.getPreprocessor
     preprocessor.getLoadHandler.addToDomain(combName)
     analOk= solutionProcedure.solve()
-    analOk= solutionProcedure.solve()
+    if(analOk):
+        analOk= solutionProcedure.solve()
     preprocessor.getLoadHandler.removeFromDomain(combName)
     # lmsg.info("Resuelta combinación: ",combName,"\n")
 

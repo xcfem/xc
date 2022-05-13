@@ -245,13 +245,6 @@ class Member(steel_member_base.BucklingMember):
         '''
         return self.shape.getDesignCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ())
 
-    def getFlexuralStrengthReductionFactor(self):
-        ''' Return the reduction factor of the flexural strength 
-            of the member with respect to the reference flexural strength
-            of its section.
-        '''
-        return self.getDesignFlexuralStrength()/self.shape.getReferenceFlexuralStrength()
-    
     def getCompressiveStrengthReductionFactor(self):
         ''' Return the reduction factor of the compressive strength 
             of the member with respect to the plastic axial load of
@@ -531,7 +524,6 @@ def backupStiffness(elementSet):
     :param elementSet: elements to process.
     '''
     for e in elementSet.elements:
-        Ebackup= 0.0
         if(hasattr(e,"getMaterial")): # Trusses
             Ebackup= e.getMaterial().E
         else: # Beam elements.
@@ -566,7 +558,6 @@ def softenElements(elementSet):
                 # C2.3 (b) clause (flexural stiffness): 
                 Pns= crossSection.getReferenceCompressiveStrength()
                 ratio= abs(Pr)/Pns
-                tau= 1.0
                 if(ratio>0.5):
                     lmsg.log('Pr= '+ str(Pr/1e3)+' kN, Pns= '+str(Pns/1e3)+' kN, ratio= '+str(ratio))
                     tau= 4*ratio*(1-ratio)

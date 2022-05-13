@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''Generation of boundary conditions based on springs 
+'''
+
 from __future__ import division
 
 import math
@@ -12,8 +15,6 @@ from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from solution import predefined_solutions
 
-'''Generation of boundary conditions based on springs 
-'''
 
 __author__= " Ana Ortega (AO_O), Luis C. Pérez Tato (LCPT) "
 __copyright__= "Copyright 2017, AO_O, LCPT"
@@ -160,8 +161,6 @@ class ElasticFoundation(object):
          property 'soilPressure:' [xStress,yStress,zStress]
          property 'soilReaction:' [xForce,yForce,zForce]'''
         self.svdReac= geom.SlidingVectorsSystem3d()
-        f3d= geom.Vector3d(0.0,0.0,0.0)
-        m3d= geom.Vector3d(0.0,0.0,0.0)
         for e in self.springs:
             n= e.getNodes[1]
             rf= e.getResistingForce()

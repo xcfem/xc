@@ -1081,9 +1081,8 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
         xcOutput= open(outputFileName+".py","w+")
     for e in elems:
         eTag= e.getProp("idElem") 
-        #idSection= e.getProp("idSection")  
         controlVar= e.getProp(controlVarName)
-        outStr= controlVar.getLaTeXString(eTag,1e-3)
+        #outStr= controlVar.getLaTeXString(eTag,1e-3)
         sectionName= 'Sect'+str(e.getProp('dir'))
         xcOutput.write(controlVar.strElementProp(eTag,controlVarName+sectionName))
     xcOutput.close()
@@ -1096,7 +1095,6 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
         for e in elems:
             if(e.getProp("dir")==1):
                 eTag= e.getProp("idElem") 
-                #idSection= e.getProp("idSection")  
                 controlVar= e.getProp(controlVarName)
                 outStr= controlVar.getLaTeXString(eTag,1e-3)
                 texOutput.write(outStr)
