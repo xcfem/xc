@@ -1024,7 +1024,6 @@ class AnchorBolt(bolts.AnchorBase):
         :param Pu: axial load (LRFD).
         :param fc: concrete strength.
         '''
-        retval= 0.0
         Np= self.getNominalPulloutStrength(fc)
         retval= Pu/Np
         return retval
@@ -1367,7 +1366,6 @@ class ASTMShape(object):
         :param effectiveLengthZ: effective length of member (major axis).
         :param Fe: flexural or torsional elastic buckling stress.
         '''
-        retval= 0.0
         sr= self.getFlexuralSlendernessRatio(effectiveLengthY, effectiveLengthZ)
         E= self.get('E')
         Fy= self.steelType.fy
@@ -1418,7 +1416,6 @@ class ASTMShape(object):
         :param effectiveLengthY: effective length of member (minor axis).
         :param effectiveLengthZ: effective length of member (major axis).
         '''
-        retval= 0.0
         retval= self.getFlexuralBucklingCriticalStress(effectiveLengthY, effectiveLengthZ)
         if(effectiveLengthX>max(effectiveLengthY,effectiveLengthZ)):
             # When the torsional effective length is larger than the lateral
@@ -1500,7 +1497,6 @@ class ASTMShape(object):
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         :param sectionClass: dummy argument used for compatibility.
         '''
-        ratioN= 0.0
         if(Nd<0): # compression
             NcRd= chiN*self.getReferenceCompressiveStrength() # available compressive strength.
             ratioN=  abs(Nd)/NcRd
@@ -1530,7 +1526,6 @@ class ASTMShape(object):
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
-        ratioN= 0.0
         if(Nd<0): # compression
             NcRd= chiN*self.getReferenceCompressiveStrength() # available axial strength.
             ratioN=  abs(Nd)/NcRd

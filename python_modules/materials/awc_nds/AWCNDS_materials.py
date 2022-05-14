@@ -64,7 +64,6 @@ def getLoadCombinationDurationFactor(deadLoad= False, liveLoad= False, construct
     :param snowLoad: if true the snow load is present in the load combination.
     :param windLoad: if true the wind load is present in the load combination.
     '''
-    retval= 1.0
     deadLoadOnly= deadLoad and not (constructionLoad or liveLoad or snowLoad or windLoad)
     if(deadLoadOnly):
         retval= 0.9
@@ -233,7 +232,6 @@ def getFireDesignAdjustementFactor(refValue):
       :param refValue: reference design values (Fb, FbE, Ft,Fc,
                        and FcE)
     '''
-    retval= 2.03
     if(refValue=='Fb'):
         retval= 2.85
     elif(refValue=='FbE'):
@@ -280,7 +278,6 @@ class Wood(wood_base.Wood):
                          with the fastener axis parallel to the wood fibers.
                          See clause 12.3.3.4 of NDS.
         '''
-        retval= 0.0
         if(diameter<0.25*units_utils.inchToMeter):
             retval= 16600.0*pow(self.specificGravity,1.84)
         else:
@@ -562,7 +559,6 @@ class WoodSection(object):
         :param Nd: required axial strength.
         :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         '''
-        ratioN= 0.0
         if(Nd<=0): # compression
             NcRd= chiN*self.getCompressiveStrength() # available axial strength.
             ratioN=  abs(Nd)/NcRd

@@ -430,7 +430,6 @@ class BoltedPlateBase(plates.Plate):
 
         :param internalForces: internal forces.
         '''
-        CF= 0.0
         if(internalForces.N<0): # compression
             CF= self.getShearStrengthEfficiency(-internalForces.N)
         else:
@@ -531,7 +530,6 @@ class BoltedPlateBase(plates.Plate):
 
         :param loadDirection: direction of the load.
         '''
-        retval= list()
         contour= geom.Polygon2d(self.getCoreContour2d())
         retval= self.boltArray.getClearDistances(contour, loadDirection)
         return retval

@@ -158,7 +158,7 @@ class EC3Shape(object):
             classif+=1
         return (classif+1)
     
-    def getClassInternalPartInBending(self,steel,ratioCT=None):
+    def getClassInternalPartInBending(self, steel, ratioCT=None):
         '''Return the cross-section classification of internal part 
         (web in open shapes, ...) subject to pure bending. Clause 5.5 EC3-1-1
 
@@ -176,22 +176,22 @@ class EC3Shape(object):
         return (classif+1)
         
         
-    def getClassInternalPartInBending(self,steel):
-        '''Return the cross-section classification of internal part 
-        (web in open shapes, ...) totally subject to compression 
-        (conservative). Clause 5.5 EC3-1-1
+    # def getClassInternalPartInBending(self,steel):
+    #     '''Return the cross-section classification of internal part 
+    #     (web in open shapes, ...) totally subject to compression 
+    #     (conservative). Clause 5.5 EC3-1-1
 
-        :param steel: steel type (e.g. S275JR)
-        :param ratioCT: ratio c/t width-to-thickness of the internal
-                        compressed part (defaults to widthToThicknessWeb).
-        '''
-        ratioCT=self.widthToThicknessWeb()
-        eps=math.sqrt(235e6/steel.fy)
-        limits=[72*eps,83*eps,124*eps]
-        classif=0
-        while ratioCT>limits[classif]:
-            classif+=1
-        return (classif+1)
+    #     :param steel: steel type (e.g. S275JR)
+    #     :param ratioCT: ratio c/t width-to-thickness of the internal
+    #                     compressed part (defaults to widthToThicknessWeb).
+    #     '''
+    #     ratioCT=self.widthToThicknessWeb()
+    #     eps=math.sqrt(235e6/steel.fy)
+    #     limits=[72*eps,83*eps,124*eps]
+    #     classif=0
+    #     while ratioCT>limits[classif]:
+    #         classif+=1
+    #     return (classif+1)
         
 
     def getClassOutstandPartInCompression(self,steel,ratioCT=None):

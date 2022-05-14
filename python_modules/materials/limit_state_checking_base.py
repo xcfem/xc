@@ -165,7 +165,6 @@ class fibSectLSProperties(object):
         self.eps2= max(self.setsRC.concrFibers.fSet.getStrainMin(),0.0)
         self.sct.computeSpacement('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
-        nmbFi=self.tensSetFb.getNumFibers()
         '''
         print('x= ',self.x)
         print('d= ',self.d)

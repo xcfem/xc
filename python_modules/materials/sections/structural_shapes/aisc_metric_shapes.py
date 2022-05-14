@@ -184,7 +184,6 @@ def getUIShapeCriticalStressF(shape, lateralUnbracedLength, Cb, majorAxis= True)
         b_tf= 2.0*shape.get('bSlendernessRatio') # see lambda expression in F6. 
         return 0.69*E/b_tf**2 # equation F6-4
     else:
-        J= shape.get('It') # Torsional moment of inertia
         Sz= shape.get('Wzel') # Elastic section modulus about major axis.
         h0= shape.get('ho') # Distance between the flange centroids
         rts= shape.getRts()
@@ -206,7 +205,6 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
     :param Cb: lateral-torsional buckling modification factor.
     :param majorAxis: true if flexure about the major axis.
     '''
-    Mn= 0.0
     Mp= shape.getPlasticMoment(majorAxis) # plastic moment.
     Fy= shape.steelType.fy # specified minimum yield stress
     if(not majorAxis): # section F6
@@ -288,7 +286,6 @@ def getG22ShearBucklingStrengthCoefficient(slendernessRatio, E, Fy, kv, majorAxi
     :param kv: web plate shear buckling coefficient.
     :param majorAxis: true if flexure about the major axis.
     '''
-    Cv2= 1.0
     sqrtkvE_Fy= math.sqrt(kv*E/Fy)
     slendernessRatio_threshold= 1.10*sqrtkvE_Fy
     if(slendernessRatio<=slendernessRatio_threshold):
@@ -998,7 +995,6 @@ class WShape(structural_steel.IShape):
 
         :param a: clear distance between transverse stiffeners.
         '''
-        Cv1= 1.0
         h_tw= self.get('hSlendernessRatio')
         E_Fy= self.get('E')/self.steelType.fy
         h_tw_threshold= 2.24*math.sqrt(E_Fy)
@@ -1182,11 +1178,12 @@ class WShape(structural_steel.IShape):
         :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 3: special moment frame).
         '''
         factor= 1.57
-        e= 0.0 # eccentricity.
+        # compute eccentricity.
         if(N!=0.0):
             e= abs(M/N)
         else:
             e= abs(M)*1e6
+        # check bending.
         if(e>self.h()/2.0): # Bending -> beam.            
             # Ratio of required strength to available axial yield strength.
             Ca= N/self.getDesignTensileStrength() # table D1.1
@@ -1210,11 +1207,12 @@ class WShape(structural_steel.IShape):
         :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 2: special moment frame).
         '''
         factor= 1.57
-        e= 0.0 # eccentricity.
+        # compute eccentricity.
         if(N!=0.0):
             e= abs(M/N)
         else:
             e= abs(M)*1e6
+        # check bending.
         if(e>self.h()/2.0): # Bending -> beam.            
             # Ratio of required strength to available axial yield strength.
             Ca= N/self.getDesignTensileStrength() # table D1.1
@@ -1471,7 +1469,6 @@ class CShape(structural_steel.UShape):
 
         :param a: clear distance between transverse stiffeners.
         '''
-        Cv1= 1.0
         h_tw= self.get('hSlendernessRatio')
         E_Fy= self.get('E')/self.steelType.fy
         kv= self.getWebPlateShearBucklingCoefficient(a)
@@ -2073,7 +2070,6 @@ class LShape(structural_steel.LShape):
         def computeMn(My: float, Mcr: float):
             ''' Compute lateral-torsional buckling limit value according
                 to equations F10-2 and F10-3 of AISC 360-16.'''
-            Mn= 0.0
             if(My/Mcr<=1.0):
                 Mn= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
             else:
@@ -2564,7 +2560,6 @@ class HSSShape(structural_steel.QHShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        retval= 10.0
         lambda_p= self.getLambdaPFlangeBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
@@ -2580,7 +2575,6 @@ class HSSShape(structural_steel.QHShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        retval= 10.0
         lambda_r= self.getLambdaRFlangeBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
@@ -2595,7 +2589,6 @@ class HSSShape(structural_steel.QHShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        retval= 10.0
         lambda_p= self.getLambdaPWebBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
@@ -2611,7 +2604,6 @@ class HSSShape(structural_steel.QHShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        retval= 10.0
         lambda_r= self.getLambdaRWebBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
@@ -2826,7 +2818,6 @@ class HSSShape(structural_steel.QHShape):
 
         :param majorAxis: true if flexure about the major axis.'''
         Mp= self.getPlasticMoment(majorAxis)
-        Mn= 0.0 
         compactFlanges= self.bendingCompactFlangeRatio(majorAxis)
         if(compactFlanges<=1.0):
             Mn= Mp # equation F7-1
@@ -2853,7 +2844,6 @@ class HSSShape(structural_steel.QHShape):
 
         :param majorAxis: true if flexure about the major axis.'''
         Mp= self.getPlasticMoment(majorAxis)
-        Mn= 0.0
         compactWebs= self.bendingCompactWebRatio(majorAxis)
         if(compactWebs<=1.0):
             Mn= Mp # equation F7-1
@@ -2919,8 +2909,7 @@ class HSSShape(structural_steel.QHShape):
         '''
         Mp= self.getPlasticMoment(majorAxis)
         Lp= self.getLimitingLaterallyUnbracedLengthForYielding(majorAxis)
-        retval= 0.0
-        if(Lb<=Lp): #No lateral-torsional buckling.
+        if(Lb<=Lp): # No lateral-torsional buckling.
             retval= Mp
         else: #Lb>Lp
             Lr= self.getLimitingLaterallyUnbracedLengthForInelasticBuckling(majorAxis)
@@ -2952,8 +2941,6 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         Mp= self.getPlasticMoment(majorAxis)
-        Mn= 0.0
-
         compactSection= self.bendingCompactWebAndFlangeRatio(majorAxis)
         if(compactSection<=1.0):
             Mn= Mp # equation F7-1
@@ -3086,7 +3073,6 @@ class CHSSShape(structural_steel.CHShape):
             table B4.1b of AISC-360-16 return a value 
             less than one.
         '''
-        retval= 10.0
         slendernessRatio= self.get('slendernessRatio')
         lambda_p= self.getLambdaPBending() 
         retval= slendernessRatio/lambda_p
@@ -3098,7 +3084,6 @@ class CHSSShape(structural_steel.CHShape):
             they are slender.
 
         '''
-        retval= 10.0
         slendernessRatio= self.get('slendernessRatio')
         lambda_r= self.getLambdaRBending()
         retval= slendernessRatio/lambda_r

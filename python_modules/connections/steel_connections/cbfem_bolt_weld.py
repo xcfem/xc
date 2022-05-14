@@ -445,12 +445,12 @@ class BaseWeld(object):
         for n in nod_lWS1:
             nodePos= n.getInitialPos3d
             e= WS1Subset.getNearestElement(nodePos)
-            dist= e.getDist(nodePos, True)
+            #dist= e.getDist(nodePos, True)
             glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs))
         for n in nod_lWS2:
             nodePos= n.getInitialPos3d
             e= WS2Subset.getNearestElement(nodePos)
-            dist= e.getDist(nodePos, True)
+            #dist= e.getDist(nodePos, True)
             glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs))
         self.weldSet.fillDownwards()
         # remove temporary sets.

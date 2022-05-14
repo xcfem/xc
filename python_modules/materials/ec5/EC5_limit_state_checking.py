@@ -68,7 +68,6 @@ def kvert(f_vert:float):
     :param f_vert: fundamental natural frequency for vertical 
                    deformation of the bridge.
     '''
-    retval= 1
     if(f_vert<=1):
         retval= 0.33
     elif(f_vert<=1.5):
@@ -135,7 +134,6 @@ def khor(f_hor:float):
     :param f_hor: fundamental natural frequency for horizontal 
                    deformation of the bridge.
     '''
-    retval= 1
     if(f_hor>1.25 and f_hor<2.5):
         retval= 1-0.8*(f_hor-1.25)
     else:
