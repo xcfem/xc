@@ -842,6 +842,7 @@ python tests/materials/ehe/test_creep_02.py
 python tests/materials/ehe/test_creep_03.py
 python tests/materials/ehe/test_shrinkage_01.py
 #python tests/materials/ehe/test_shrinkage_02.py
+python tests/materials/ehe/test_shrinkage_03.py
 echo "$BLEU" "    Steel relaxation determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_steel_relaxation_01.py
 
