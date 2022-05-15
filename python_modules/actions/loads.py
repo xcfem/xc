@@ -112,9 +112,9 @@ class UniformLoadOnBeams(BaseVectorLoad):
         ''' Append load to the current load pattern.'''
         for e in self.xcSet.elements:
             if self.refSystem=='Local':
-                load= e.vector3dUniformLoadLocal(self.loadVector)
+                load= e.vector3dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
             else:
-                load= e.vector3dUniformLoadGlobal(self.loadVector)
+                load= e.vector3dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
  
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
@@ -207,9 +207,9 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
         ''' Append load to the current load pattern.'''
         for e in self.xcSet.elements:
             if self.refSystem=='Local':
-                load=e.vector3dUniformLoadLocal(self.loadVector)
+                load=e.vector3dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
             else:
-                load=e.vector3dUniformLoadGlobal(self.loadVector)
+                load=e.vector3dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
 
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
@@ -284,9 +284,9 @@ class PointLoadOverShellElems(BaseVectorLoad):
         aux_set,factor=self.distrParam()
         for e in aux_set.elements:
             if self.refSystem=='Local':
-                load=e.vector3dUniformLoadLocal(factor*self.loadVector)
+                load= e.vector3dUniformLoadLocal(factor*self.loadVector) # lgtm [py/multiple-definition]
             else:
-                load=e.vector3dUniformLoadGlobal(factor*self.loadVector)
+                load= e.vector3dUniformLoadGlobal(factor*self.loadVector) # lgtm [py/multiple-definition]
         aux_set.clear()
 
     def distrParam(self):

@@ -412,19 +412,19 @@ class BaseWeld(object):
         # set of rigid elements to glue to surface 1
         elements.defaultTransformation= lin.name
         elements.defaultMaterial= sectRigExtr.name
-        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS1[0].tag,nod_lW[0].tag]))
-        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS1[-1].tag,nod_lW[-1].tag]))
+        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS1[0].tag,nod_lW[0].tag])) # lgtm [py/multiple-definition]
+        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS1[-1].tag,nod_lW[-1].tag])) # lgtm [py/multiple-definition]
         elements.defaultMaterial= sectRig.name
         for i in range(1,nDiv):
-            e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS1[i].tag,nod_lW[i].tag]))
+            e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS1[i].tag,nod_lW[i].tag])) # lgtm [py/multiple-definition]
         # set of rigid elements to glue to surface 2
         elements.defaultTransformation= lin.name
         elements.defaultMaterial= sectRigExtr.name
-        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS2[0].tag,nod_lFWS2[0].tag]))
-        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS2[-1].tag,nod_lFWS2[-1].tag]))
+        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS2[0].tag,nod_lFWS2[0].tag])) # lgtm [py/multiple-definition]
+        e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS2[-1].tag,nod_lFWS2[-1].tag])) # lgtm [py/multiple-definition]
         elements.defaultMaterial= sectRig.name
         for i in range(1,nDiv):
-            e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS2[i].tag,nod_lFWS2[i].tag]))
+            e= elements.newElement("ElasticBeam3d",xc.ID([nod_lWS2[i].tag,nod_lFWS2[i].tag])) # lgtm [py/multiple-definition]
         # set of welding elemets
         #  extremity elements
         elements.defaultTransformation= lin.name
@@ -446,7 +446,7 @@ class BaseWeld(object):
             nodePos= n.getInitialPos3d
             e= WS1Subset.getNearestElement(nodePos)
             #dist= e.getDist(nodePos, True)
-            glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs))
+            glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs)) # lgtm [py/multiple-definition]
         for n in nod_lWS2:
             nodePos= n.getInitialPos3d
             e= WS2Subset.getNearestElement(nodePos)

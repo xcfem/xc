@@ -26,8 +26,6 @@ partial_safety_factors["variables"]= loadCombinations.PartialSafetyFactors(loadC
 #Coeficientes de ponderación para acciones accidentales.
 partial_safety_factors["accidentales"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,0,1,1),loadCombinations.SLSPartialSafetyFactors(0,0))
 
-combination_factors= factors.getCombinationFactors()
-
 combination_factors= loadCombinations.CombinationFactorsDict()
 
 combination_factors.insert("permanent",loadCombinations.CombinationFactors(1,1,1))

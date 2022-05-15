@@ -1312,7 +1312,6 @@ class IShape(WShape, structural_steel.IShape):
         idict['Wypl'] = (bf * tf) / 2 * bf + hw * tw **2 / 4
         idict['Wzpl'] = (bf * tf) * idict['ho'] + hw ** 2 * tw / 4
 
-
         structural_steel.IShape.__init__(self, steel,name,{name: idict})
 
     def getKc(self):

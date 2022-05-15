@@ -390,7 +390,6 @@ class ConnectedMemberMetaData(object):
         :param plate: plate to connect.
         '''
         weldDict= dict() # Weld line container.
-        weldLegSize= 0.0 # Weld size.
         plateOrigin= plate.refSys.getOrg()
         platePlane= plate.refSys.getXYPlane()
         angle= platePlane.getAngle(column.iVector)
@@ -449,7 +448,7 @@ class ConnectedMemberMetaData(object):
                 wls1= plate.getFilletWeldLegSize(otherThickness= column.shape.getWebThickness())
                 wls2= plate.getFilletWeldLegSize(otherThickness= beamTopPlate.thickness)
                 wls3= plate.getFilletWeldLegSize(otherThickness= beamBottomPlate.thickness)
-                weldLegSize= (wls1+wls2+wls3)/3.0
+                weldLegSize= (wls1+wls2+wls3)/3.0 # Weld size.
             else: # plate connected to one flange
                 columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
                 dTop= columnTopFlangeLine.dist(plateOrigin)
@@ -462,7 +461,7 @@ class ConnectedMemberMetaData(object):
                     plate.connectedTo= 'column_top_flange' 
                     weldDict['columnTopFlangeWeld']= columnTopFlangeLine
                 ## Compute weld size.
-                weldLegSize= plate.getFilletWeldLegSize(otherThickness= column.shape.getFlangeThickness())
+                weldLegSize= plate.getFilletWeldLegSize(otherThickness= column.shape.getFlangeThickness()) # Weld size.
         else: # beam flange plate
             # Compute contours for the column flanges.
             columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)

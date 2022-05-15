@@ -197,10 +197,6 @@ class Wood(wood_base.Wood):
         '''
         return self.getCharacteristicCompressiveStrengthPerpendicularToTheGrain()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
     
-    def getCharacteristicShearStrength(self):
-        ''' return the characteristic shear strength.'''
-        return self.fv_k
-    
     def getMeanValueOfModulusOfElasticityAlongTheGrain(self):
         ''' return the mean value of modulus of elasticity along the grain.'''
         return self.E0_mean

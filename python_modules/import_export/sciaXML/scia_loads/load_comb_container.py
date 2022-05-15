@@ -44,62 +44,63 @@ def getLoadCombTypeName(ltype):
     return 'Unknown'
 
 def getLoadCombType(typ):
-  if(typ.startswith('ELS')):
-    return 3
-  elif(typ.startswith('ELU')):
-    return 2
-  else:
-    return -1
+    ''' Return the type of the load combination by inspecting their... name?
 
+    :param typ: ??
+    '''
+    if(typ.startswith('ELS')):
+        return 3
+    elif(typ.startswith('ELU')):
+        return 2
+    else:
+        return -1
+      
 def getLoadCombComponentRow(combComp):
-  id= str(combComp.id)
-  lcName= combComp.loadCaseName
-  if(lcName==''):
-    lcName= loadCombPrefix+id
-  p0= oI.SCXMLObjectItem(lcName) #Load case name
-  p1= oI.SCXMLObjectItem(str(combComp.coef)) #Load case coefficient
-  p2= oI.SCXMLObjectItem('',str(combComp.loadCaseId))
-  p2.n= lcName
-  return rw.SCXMLRowP012(id,p0,p1,p2)
-  retval.rows.append(row)
-
-  return retval
+    id= str(combComp.id)
+    lcName= combComp.loadCaseName
+    if(lcName==''):
+        lcName= loadCombPrefix+id
+    p0= oI.SCXMLObjectItem(lcName) #Load case name
+    p1= oI.SCXMLObjectItem(str(combComp.coef)) #Load case coefficient
+    p2= oI.SCXMLObjectItem('',str(combComp.loadCaseId))
+    p2.n= lcName
+    return rw.SCXMLRowP012(id,p0,p1,p2)
 
 def getDescompObject(descomp):
-  retval= oI.SCXMLObjectItem()
-  for cc in descomp:
-    retval.rows.append(getLoadCombComponentRow(cc))
-  return retval
+    retval= oI.SCXMLObjectItem()
+    for cc in descomp:
+        retval.rows.append(getLoadCombComponentRow(cc))
+    return retval
 
 def getLoadCombObject(loadComb):
-  retval= obj.SCXMLObject()
-  id= str(loadComb.id)
-  retval.setId(id)
-  name= loadComb.name
-  if(name==''):
-    name= loadCombPrefix+id
-  retval.setNm(name)
-  retval.setP0(oI.SCXMLObjectItem(name)) #Name
-  retval.setP1(oI.SCXMLObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
-  retval.setP2(oI.SCXMLObjectItem(loadComb.desc)) #Description
-  ctyp= getLoadCombType(loadComb.typ)
-  ctypName= getLoadCombTypeName(ctyp)
-  tmp= oI.SCXMLObjectItem(str(ctyp))
-  tmp.t= ctypName
-  retval.setP3(tmp)
-  retval.setP4(getDescompObject(loadComb.descomp))
-  retval.setP5(oI.SCXMLObjectItem('0')) #Explode
-  retval.setP6(oI.SCXMLObjectItem('-1')) #Phase
-  retval.setP7(oI.SCXMLObjectItem('0')) #Master ID
-  return retval
+    retval= obj.SCXMLObject()
+    id= str(loadComb.id)
+    retval.setId(id)
+    name= loadComb.name
+    if(name==''):
+      name= loadCombPrefix+id
+    retval.setNm(name)
+    retval.setP0(oI.SCXMLObjectItem(name)) #Name
+    retval.setP1(oI.SCXMLObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
+    retval.setP2(oI.SCXMLObjectItem(loadComb.desc)) #Description
+    ctyp= getLoadCombType(loadComb.typ)
+    ctypName= getLoadCombTypeName(ctyp)
+    tmp= oI.SCXMLObjectItem(str(ctyp))
+    tmp.t= ctypName
+    retval.setP3(tmp)
+    retval.setP4(getDescompObject(loadComb.descomp))
+    retval.setP5(oI.SCXMLObjectItem('0')) #Explode
+    retval.setP6(oI.SCXMLObjectItem('-1')) #Phase
+    retval.setP7(oI.SCXMLObjectItem('0')) #Master ID
+    return retval
 
 
 class LoadCombContainer(ctr.SCXMLTableContainer):
   def __init__(self,loadCombsDict):
-    super(LoadCombContainer,self).__init__(idLoadCombContainer,tLoadCombContainer)
-    loadCombs= list()
-    for key in sorted(loadCombsDict):
-      ns= loadCombsDict[key]
-      loadCombs.append(getLoadCombObject(ns))
-    self.appendTable(tb.SCXMLTableXMLNodes(idLoadCombContainerTb,tLoadCombContainerTb, 'Combinations', None,loadCombs))
+      super(LoadCombContainer,self).__init__(idLoadCombContainer,tLoadCombContainer)
+      loadCombs= list()
+      for key in sorted(loadCombsDict):
+          ns= loadCombsDict[key]
+          loadCombs.append(getLoadCombObject(ns))
+      self.appendTable(tb.SCXMLTableXMLNodes(idLoadCombContainerTb,tLoadCombContainerTb, 'Combinations', None,loadCombs))
   
