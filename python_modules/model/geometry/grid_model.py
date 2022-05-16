@@ -1157,9 +1157,10 @@ class GridModel(object):
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         '''
         subset=self.prep.getSets.defSet(nameSubset)
-        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
-        auxSet=self.getSetLinMultiRegion(lstIJKRange,'auxSet')
-        subset=getSetIntersLin(superset,auxSet,nameSubset)
+        if self.prep.getSets.exists('auxSet'):
+            self.prep.getSets.removeSet('auxSet') 
+        auxSet= self.getSetLinMultiRegion(lstIJKRange,'auxSet')
+        subset= getSetIntersLin(superset,auxSet,nameSubset)
         subset.fillDownwards()
         return subset
     

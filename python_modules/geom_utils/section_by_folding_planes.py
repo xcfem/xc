@@ -11,7 +11,6 @@ class XYFoldingPlanes(object):
         self.xyPline= xyPolyline
     def getIntersectionWith3DLine(self,p0, p1):
         retval= []
-        err= 0.0
         P0proj= geom.Pos2d(p0.x,p0.y)
         P1proj= geom.Pos2d(p1.x,p1.y)
         line2d= geom.Line2d(P0proj,P1proj)
