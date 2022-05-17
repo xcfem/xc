@@ -18,7 +18,7 @@ from materials.ec2 import EC2_materials
 
 #Data
 #Type of concrete used in the deck slab
-concrDeck=EC2_materials.EC2Concrete("C35/45",-35e6,1.5)
+concrDeck=EC2_materials.EC2Concrete2004("C35/45",-35e6,1.5)
 concrDeck.cemType='N'   #class N cement
 RH=80                   #ambient relative humidity(%)
 
@@ -70,6 +70,10 @@ vCalc.append(round(Epscs*(-1),5))
 vComp.append(7.0e-5)
 
 '''
+print('Betadstts: ', Betadstts)
+print('basic shrinkage: ', Epsca*1e6, 'e-6')
+print('drying shrinkage: ', Epscd*1e6, 'e-6')
+print('total shrinkage: ', Epscs*1e6, 'e-6')
 print(vCalc)
 print(vComp)
 '''

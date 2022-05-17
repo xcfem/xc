@@ -499,8 +499,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                    - Ac= cross sectional area
                    - u= perimeter of the member in contact with the atmosphere
         '''
-        betadstts=(t-ts)/(t-ts+0.04*(h0*1e3)**(3.0/2.0))
-        return betadstts
+        return (t-ts)/(t-ts+0.04*(h0*1e3)**(3.0/2.0))
 
 #   Autogenous shrinkage strain
     def getShrEpsca(self,t):
@@ -1129,7 +1128,7 @@ def testReinfSteelDesignDiagram(preprocessor, matRecord):
         steelDiagram.commitState()
         sg= sigmaDReinfSteel(e,matRecord)
         err= abs((sg-steelDiagram.getStress())/sg)
-    # print("e= ",(e)," stress= ",stress," sg= ", (sg)," err= ", (err),"\n")
+        # print("e= ",(e)," stress= ",stress," sg= ", (sg)," err= ", (err),"\n")
         errMax= max(err,errMax)
         e= e+incr
     return errMax

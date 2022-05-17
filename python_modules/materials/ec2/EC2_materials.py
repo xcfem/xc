@@ -227,15 +227,12 @@ class EC2Concrete(EC2Concrete2004):
 
         :param t: age of concrete in days at the moment considered
         :param ts: age of concrete in days at the beginning of drying shrinkage (or swelling). Normally this is at the end of curing
-        :param h0: notional size of the member.
+        :param h0: notional size of the member expressed in millimeters.
                - h0=``2*Ac/u``, where:
                - Ac= cross sectional area
                - u = perimeter of the member in contact with the atmosphere
         '''
-        print(t-ts)
-        print(h0)
-        print((t-ts)/(0.035*(h0**2)+(t-ts)))
-        return math.pow((t-ts)/(0.035*(h0**2)+(t-ts)),0.5)
+        return math.pow((t-ts)/(0.035*((h0*1e3)**2)+(t-ts)),0.5)
     
     def getShrEpscdsfcm(self):
         '''notional drying shrinkage coefficient according to expression
