@@ -28,7 +28,6 @@ def CoefReductorCentrifugaIAPF(v, Lf):
     :param Lf: 
     '''
     vkmhIAPF= v*3.6
-    coefFIAPF= 0.0
     if(vkmhIAPF<120):
         coefFIAPF= 1
     elif(vkmhIAPF<300):

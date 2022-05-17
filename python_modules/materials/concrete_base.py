@@ -400,23 +400,24 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
 #Shrinkage
 #   Basic drying shrinkage
-    def getShrEpscd0(self,RH):
+    def getShrEpscd0(self, RH):
         '''Basic drying shrinkage strain [-]
         for the calculation of the drying shrinkage strain
-        (Annex B Eurocode 2 part 1-1)
+        according to equattion B.11 of clause B.2 
+        (Annex B Eurocode 2:2004 part 1-1)
  
         :param RH:  ambient relative humidity(%)
         '''
         fcmMPa=abs(self.getFcm())/1e6
         fcm0MPa=10       
-        epscd0=0.85*((220+110*self.getShrAlfads1())*math.exp(-self.getShrAlfads2()*fcmMPa/fcm0MPa))*1e-6*self.getShrBetaRH(RH)
-        return epscd0*(-1)
+        epscd0= -0.85*((220+110*self.getShrAlfads1())*math.exp(-self.getShrAlfads2()*fcmMPa/fcm0MPa))*1e-6*self.getShrBetaRH(RH) # equation B-11
+        return epscd0
 
 
     def getShrBetaRH(self,RH):
-        '''Coefficient for the calculation of the
-        basic drying shrinkage strain 
-        (Annex B Eurocode 2 part 1-1)
+        '''Coefficient for the calculation of the basic drying shrinkage 
+           strain according to equation B.12 of clause 
+           B.2 (Annex B Eurocode 2:2004 part 1-1). DEPRECATED by Eurocode2:2021
 
         :param RH:  ambient relative humidity(%)
         '''
@@ -486,7 +487,8 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getShrBetadstts(self,t,ts,h0):
         '''coefficient for the calculation of the drying shrinkage strain
-        (table 3.3 Eurocode 2 part 1-1)
+        according to expression 3.10 of clause 3.1.4 of Eurocode 2:2004 
+        part 1-1. DEPRECATED in Eurocode 2:2021.
  
         :param t:     age of concrete in days at the moment considered
         :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
@@ -502,28 +504,30 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
 #   Autogenous shrinkage strain
     def getShrEpsca(self,t):
-        '''Autogenous shrinkage strain 
-        (art. 3.1.4 Eurocode 2 part 1-1)
+        '''Autogenous shrinkage strain according to expression 3.11 of 
+           clause 3.1.4 Eurocode 2:2004 part 1-1. DEPRECATED in Eurocode 2:2021
 
-        :param t:     age of concrete in days at the moment considered
+        :param t: age of concrete in days at the moment considered
         '''
         epsca=self.getShrEpscainf(t)*self.getShrBetaast(t)
         return epsca
 
     def getShrEpscainf(self,t):
         '''coefficient for calculating the autogenous shrinkage strain [-]
-        (art. 3.1.4 Eurocode 2 part 1-1)
+         according to expression 3.12 of clause 3.1.4 Eurocode 2:2004 part 1-1.
+         DEPRECATED in Eurocode 2:2021
 
-        :param t:     age of concrete in days at the moment considered
+        :param t: age of concrete in days at the moment considered
         '''
         epscainf=2.5*(self.fckMPa()-10)*1e-6
         return epscainf*(-1)
 
     def getShrBetaast(self,t):
         '''coefficient for calculating the autogenous shrinkage strain
-        (art. 3.1.4 Eurocode 2 part 1-1)
+        according to expression 3.13 of clause 3.1.4 Eurocode 2:2004 part 1-1
+        and to expression B.27 of clause B.6 Eurocode 2:2021 part 1-1
 
-        :param t:     age of concrete in days at the moment considered
+        :param t: age of concrete in days at the moment considered
         '''
         betaast=1-math.exp(-0.2*t**0.5)
         return betaast

@@ -634,10 +634,11 @@ def readIntForcesFile(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_
     f= open(intForcCombFileName,"r")
     c= f.read(1)
     if(c=='{'):
-        return readIntForcesDict(intForcCombFileName,setCalc, vonMisesStressId)
+        retval= readIntForcesDict(intForcCombFileName,setCalc, vonMisesStressId)
     else:
-        return oldReadIntForcesFile(intForcCombFileName,setCalc)
+        retval= oldReadIntForcesFile(intForcCombFileName,setCalc)
     f.close()
+    return retval
 
 
 def string_el_max_axial_force(element,section,setName,combName,axialForc):

@@ -48,7 +48,6 @@ def getSoilAmplificationFactorPGA(C:float, pga:float, rho: float):
     '''
     tmp= rho*pga
     g= 9.81
-    retval= C
     if(tmp<=0.1*g):
         retval= C
     elif(tmp<=0.4*g):

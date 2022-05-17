@@ -21,8 +21,8 @@ __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 # Concrete according to Eurocode 2.
 
 
-class EC2Concrete(concrete_base.Concrete):
-    """Concrete model according to Eurocode 2
+class EC2Concrete2004(concrete_base.Concrete):
+    """Concrete model according to Eurocode 2:2004
 
        :ivar typeAggregate: type of aggregate
  
@@ -35,7 +35,7 @@ class EC2Concrete(concrete_base.Concrete):
     typeAggregate='Q'
 
     def __init__(self,nmbConcrete, fck, gammaC):
-        super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC)
+        super(EC2Concrete2004,self).__init__(nmbConcrete,fck, gammaC)
     
     def getEcm(self):
         """
@@ -137,8 +137,151 @@ class EC2Concrete(concrete_base.Concrete):
 #        return (self.getFcmT()/self.getFcm())**0.3*self.getEcm()
 
 
+class EC2Concrete(EC2Concrete2004):
+    """Concrete model according to Eurocode 2:2021
+    """
 
+    def __init__(self,nmbConcrete, fck, gammaC):
+        super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC)
 
+    # Autogenous shrinkage strain
+    def getShrAlphabs(self):
+        '''value of the alpha_bs coefficient accordint to table B.3 of 
+           Eurocode2:2021 part 1-1.
+        '''
+        if self.cemType=='R':    #high early strength
+            retval= 600
+        elif self.cemType=='S':  #low early strength
+            retval= 800
+        else:                   # ordinary early strength
+            retval= 700
+        return retval
+    
+    def getShrEpscbsfcm(self):
+        '''notional basic shrinkage coefficient according to expression
+           according to expression B26 of clause B.6 of Eurocode 2:2021
+           part 1-1.
+        '''
+        alpha_bs= self.getShrAlphabs()
+        fcm28= abs(self.getFcm())
+        return alpha_bs*math.pow(fcm28/(60e6+fcm28),2.5)*-1e-6
+        
+    def getShrEpscbs(self,t, alpha_ndp_b= 1.0):
+        '''Basic shrinkage strain according to expression B.24 of 
+           clause B.6 Eurocode 2:2021 part 1-1.
+
+        :param t: age of concrete in days at the moment considered
+        :param alpha_ndp_b: 1.0 unless otherwise stated in the national annex.
+        '''
+        retval= self.getShrEpscbsfcm()
+        retval*= self.getShrBetaast(t)
+        retval*= alpha_ndp_b
+        return retval
+        
+    # Drying shrinkage strain
+    def getShrAlphads(self):
+        '''value of the alpha_ds coefficient according to table B.3 of 
+           Eurocode2:2021 part 1-1.
+        '''
+        if self.cemType=='R':    #high early strength
+            retval= 6
+        elif self.cemType=='S':  #low early strength
+            retval= 3
+        else:                   # ordinary early strength
+            retval= 4
+        return retval
+    
+    def getShrRHeq(self):
+        '''value of the internal relative humidity of concrete (%) at
+           equilibrium according to expression B30 of clause B.6 of
+           Eurocode2:2021 part 1-1.
+        '''
+        return 99*min(math.pow(35e6/abs(self.getFcm()),.1),1.0)
+
+    def getShrBetaRH(self, RH):
+        '''coefficient to consider the effect of relative humidity on drying
+           shrinkage according to expression B29 of clause B.6 of
+           Eurocode2:2021 part 1-1.
+        '''
+        rhEq= self.getShrRHeq()
+        frac= RH/rhEq
+        retval= -1.55
+        if(RH<20):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; relative humidity: '+str(HR)+' out of range (20%<=HR<=100%).')
+        elif(RH<=rhEq): # equation B.29a
+            retval*= (1-frac**3)
+        elif(RH<=100):
+            retval*= (1-frac**2)
+            if(retval==100): retval+= 25
+        else: # RH>100 impossible.
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; relative humidity: '+str(HR)+' out of range (20%<=HR<=100%).')        
+        return retval
+
+    def getShrBetadstts(self, t, ts, h0):
+        '''time development of drying shrinkage according to expression B31
+           of clause B.6 of Eurocode2:2021 part 1-1.
+
+        :param t: age of concrete in days at the moment considered
+        :param ts: age of concrete in days at the beginning of drying shrinkage (or swelling). Normally this is at the end of curing
+        :param h0: notional size of the member.
+               - h0=``2*Ac/u``, where:
+               - Ac= cross sectional area
+               - u = perimeter of the member in contact with the atmosphere
+        '''
+        print(t-ts)
+        print(h0)
+        print((t-ts)/(0.035*(h0**2)+(t-ts)))
+        return math.pow((t-ts)/(0.035*(h0**2)+(t-ts)),0.5)
+    
+    def getShrEpscdsfcm(self):
+        '''notional drying shrinkage coefficient according to expression
+           according to expression B28 of clause B.6 of Eurocode 2:2021
+           part 1-1.
+        '''
+        alpha_ds= self.getShrAlphads()
+        fcm28= abs(self.getFcm())/1e6
+        return (-(220+110*alpha_ds)/math.exp(0.012*fcm28))*1e-6
+    
+    def getShrEpscds(self,t, ts, h0, RH, alpha_ndp_d= 1.0):
+        '''Drying shrinkage strain according to expression B.25 of 
+           clause B.6 Eurocode 2:2021 part 1-1.
+
+        :param t: age of concrete in days at the moment considered
+        :param ts: age of concrete in days at the beginning of drying shrinkage (or swelling). Normally this is at the end of curing
+        :param h0: notional size of the member.
+               - h0=``2*Ac/u``, where:
+               - Ac= cross sectional area
+               - u = perimeter of the member in contact with the atmosphere
+        :param RH: ambient relative humidity(%)
+        :param alpha_ndp_d: 1.0 unless otherwise stated in the national annex.
+        '''
+        retval= self.getShrEpscdsfcm()
+        retval*= self.getShrBetaRH(RH)
+        retval*= self.getShrBetadstts(t= t, ts= ts, h0= h0)
+        retval*= -alpha_ndp_d
+        return retval
+
+    def getShrEpscs(self,t, ts, RH, h0, alpha_ndp_b= 1.0, alpha_ndp_d= 1.0):
+        '''Return the total mean shrinkage strain according to expression B.23 
+           of clause B.6 Eurocode 2:2021 part 1-1.
+
+        :param t:     age of concrete in days at the moment considered
+        :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
+                   Normally this is at the end of curing
+        :param RH:    ambient relative humidity(%)
+        :param h0:  notional size of the member.
+                  - h0= 2*Ac/u, where:
+                  - Ac= cross sectional area
+                  - u = perimeter of the member in contact with the atmosphere
+        :param alpha_ndp_b: 1.0 unless otherwise stated in the national annex.
+        :param alpha_ndp_d: 1.0 unless otherwise stated in the national annex.
+        '''
+        return self.getShrEpscds(t= t,ts= ts, h0= h0, RH= RH)+self.getShrEpscbs(t= t)
+    
 #EC2 concretes 
 #1.5: recommended partial factor for concrete in persistent and transient 
 #design situations. In accidental situations gammac=1.2 is recommended

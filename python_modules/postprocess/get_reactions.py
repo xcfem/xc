@@ -22,8 +22,6 @@ class Reactions(object):
       self.svdReac= geom.SlidingVectorsSystem3d()
       nodeHandler= preprocessor.getNodeHandler
       nodeHandler.calculateNodalReactions(inclInertia, 1e-7)
-      f3d= geom.Vector3d(0.0,0.0,0.0)
-      m3d= geom.Vector3d(0.0,0.0,0.0)
       for n in supportNodes:
           tag= n.tag
           tmp= n.getReaction

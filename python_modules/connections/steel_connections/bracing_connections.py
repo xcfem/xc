@@ -122,7 +122,6 @@ class BracingEndTee(object):
         print('Shear yielding through the cap-plate thickness: CF=',round(CF_shear_yield_cap,2))
 
         #Shear rupture through the cap-plate thickness
-        fi=0.75
         Rn=0.6*boltedPlate.steelType.fu*Ag
         fi=0.75
         CF_shear_rupt_cap=Nd/(fi*Rn)
@@ -240,7 +239,6 @@ class BracingXcross(object):
               
 def get_Nd(cfg,setCalc,boltedPlate):
         limit_state_data.LimitStateData.envConfig= cfg 
-        limitState= limit_state_data.normalStressesResistance
         outCfg= limit_state_data.VerifOutVars(setCalc,appendToResFile='N',listFile='N',calcMeanCF='Y')
         limitState= limit_state_data.normalStressesResistance
         intForcesFileName= limitState.getInternalForcesFileName()
