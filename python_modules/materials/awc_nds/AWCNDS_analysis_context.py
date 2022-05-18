@@ -70,11 +70,23 @@ class AnalysisContext(analysis_context.AnalysisContextBase):
         # Revert the model to its initial state.
         self.resetPhase(comb)
         # Pre-load
-        result= self.preloadPhase(comb)
+        plResult= self.preloadPhase(comb)
+        if(plResult!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; something went wrong when solving for load combination: '+str(comb) + ' preloadPhase returned: '+str(plResult))
         # Load
-        result= self.loadPhase(comb)
+        lResult= self.loadPhase(comb)
+        if(lResult!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; something went wrong when solving for load combination: '+str(comb) + ' loadPhase returned: '+str(lResult))
         # Deactivate elements.
-        self.deactivationPhase(comb, calculateNodalReactions= True)
+        dResult= self.deactivationPhase(comb, calculateNodalReactions= True)
+        if(dResult!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; something went wrong when solving for load combination: '+str(comb) + ' deactivationPhase returned: '+str(dResult))
         # #Writing results.
         # if(limitState):
         #     nodSet= self.calcSet.nodes
@@ -106,11 +118,23 @@ class AnalysisContext(analysis_context.AnalysisContextBase):
         # Reset the model to its initial state.
         self.resetPhase(comb)
         # Pre-load
-        result= self.preloadPhase(comb)
+        plResult= self.preloadPhase(comb)
+        if(plResult!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; something went wrong when solving for load combination: '+str(comb) + ' preloadPhase returned: '+str(plResult))
         # Load
-        result= self.loadPhase(comb)
+        lResult= self.loadPhase(comb)
+        if(lResult!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; something went wrong when solving for load combination: '+str(comb) + ' loadPhase returned: '+str(lResult))
         # Deactivate elements.
-        result= self.deactivationPhase(comb, calculateNodalReactions= False)
+        dResult= self.deactivationPhase(comb, calculateNodalReactions= False)
+        if(dResult!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; something went wrong when deactivating elements for load combination: '+str(comb) + ' deactivationPhase returned: '+str(lResult))
         # Export reactions, update reduction factors and store internal forces.
         self.updateULSResults(comb, limitState)
         comb.removeFromDomain() #Remove combination from the model.

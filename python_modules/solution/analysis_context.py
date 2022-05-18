@@ -74,7 +74,7 @@ class AnalysisContextBase(object):
 
         :param comb: combination to analyze.
         '''
-        retval= None
+        retval= 0
         if(self.preloadPatterns):
             if(not self.silent): lmsg.log('preload phase for: '+comb.name)
             comb.addToDomain(self.preloadPatterns) # Add the first part of the combination.
@@ -89,12 +89,10 @@ class AnalysisContextBase(object):
 
         :param comb: combination to analyze.
         '''
-        retval= None
         #Solution
         if(not self.silent): lmsg.log('load phase for: '+comb.name)
         comb.addToDomain() # Add the remaining of the combination.
-        retval= self.solutionStep(currentCombination= comb, combinationActive= True)
-        return retval
+        return self.solutionStep(currentCombination= comb, combinationActive= True)
 
     def deactivationPhase(self, comb, calculateNodalReactions):
         ''' Deactivates the elements of the 'deactivationCandidates' set
