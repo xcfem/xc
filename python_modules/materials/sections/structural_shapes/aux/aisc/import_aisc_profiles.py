@@ -145,7 +145,7 @@ def writeShape(out, row):
         if(dictName not in createdDictionaries):
             out.write(dictName+"= dict()\n")
             createdDictionaries.append(dictName)
-        col= column_index_from_string(sheet_columns['Ht'])-1
+        #col= column_index_from_string(sheet_columns['Ht'])-1
         col= column_index_from_string('B')
         name= row[col].value
         out.write(dictName+"['" + name + "']= ")

@@ -119,7 +119,18 @@ class MemberModels(list):
                     columnSet.lines.append(l)
         columnSet.fillDownwards()
 
-
+    def __eq__(self,other):
+        '''Overrides the default implementation'''
+        retval= False
+        if isinstance(other, MemberModels):
+            retval= super(MemberModels, self).__eq__(other)
+            if(retval):
+                retval= (self.members==other.members)
+            if(retval):
+                retval= (self.beamMembers==other.beamMembers)
+            if(retval):
+                retval= (self.columnMembers==other.columnMembers)
+        return retval
 
 # Unbraced segment ascii art:
 #

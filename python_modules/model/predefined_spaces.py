@@ -311,10 +311,6 @@ class PredefinedSpace(object):
         self.preprocessor= preprocessor
         self.constraints= self.preprocessor.getBoundaryCondHandler
 
-    def getNodeHandler(self):
-        ''' Return the preprocessor node handler.'''
-        return self.preprocessor.getNodeHandler
-    
     def getMaterialHandler(self):
         ''' Return the preprocessor material handler.'''
         return self.preprocessor.getMaterialHandler

@@ -333,12 +333,9 @@ def flechaDinamicaTren(ejesTren,m:float,L:float,w0:float,psi:float,V:float,t:flo
     x: Abcisa en la que se calcula la flecha.
       '''
     retval= 0.0
-    xPEje= [0,0]
-    tEje= 0.0
-    fEje= 0.0
     for xPEje in ejesTren:
-        tEje= t-xPEje[0]/V # Tiempo "local" para el eje.
-        fEje= flechaDinamicaCargaAislada(-xPEje[1],m,L,w0,psi,V,tEje,x) # Flecha para el eje aislado.
+        tEje= t-xPEje[0]/V # "Local" time for the axis.
+        fEje= flechaDinamicaCargaAislada(-xPEje[1],m,L,w0,psi,V,tEje,x) # Dynamic deflection for the axis alone.
         retval+= fEje
     return retval
 

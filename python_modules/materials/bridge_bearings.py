@@ -187,7 +187,6 @@ class ElastomericBearing(Bearing):
     
     def getBeta(self):
         ''' Return the value of the beta factor.'''
-        retval= 0.0
         if(self.a<self.b):
             retval= self.betaTable(self.b/self.a)
         else:

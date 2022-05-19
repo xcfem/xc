@@ -49,8 +49,6 @@ class ControlVarDiagram(cd.ColoredDiagram):
                'T'
         '''
         # default values
-        value1= 0.0
-        value2= 0.0
         elemVDir= elem.getJVector3d(True) #initialGeometry= True
         if(self.attributeName != "intForce"):
             attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 '''Rough calculations related to prestressed concrete
 (geometry, losses of prestress, ...) 
 '''
