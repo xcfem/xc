@@ -83,25 +83,25 @@ python tests/utility/geom/polyline2d_test_02.py
 python tests/utility/geom/polyline3d_test_01.py
 python tests/utility/geom/polyline3d_test_02.py
 echo "$BLEU" "    Polygons." "$NORMAL"
-python tests/utility/geom/polygon2D_test_2d_01.py
-python tests/utility/geom/polygon2D_test_2d_02.py
-python tests/utility/geom/polygon2D_test_2d_03.py
-python tests/utility/geom/polygon2D_test_2d_04.py
-python tests/utility/geom/polygon2D_test_2d_05.py
-python tests/utility/geom/polygon2D_test_2d_06.py
-python tests/utility/geom/polygon2D_test_2d_07.py
-python tests/utility/geom/polygon2D_test_2d_08.py
-python tests/utility/geom/polygon2D_test_2d_09.py
-python tests/utility/geom/polygon2D_test_2d_10.py
-python tests/utility/geom/polygon2D_test_2d_11.py
-python tests/utility/geom/polygon2D_test_2d_12.py
-python tests/utility/geom/polygon3D_test_01.py
-python tests/utility/geom/polygon3D_test_02.py
-python tests/utility/geom/polygon3D_test_03.py
-python tests/utility/geom/polygon3D_test_04.py
-python tests/utility/geom/polygon3D_test_05.py
-python tests/utility/geom/polygon3D_test_06.py
-python tests/utility/geom/polygon3D_test_07.py
+python tests/utility/geom/polygons/polygon2D_test_2d_01.py
+python tests/utility/geom/polygons/polygon2D_test_2d_02.py
+python tests/utility/geom/polygons/polygon2D_test_2d_03.py
+python tests/utility/geom/polygons/polygon2D_test_2d_04.py
+python tests/utility/geom/polygons/polygon2D_test_2d_05.py
+python tests/utility/geom/polygons/polygon2D_test_2d_06.py
+python tests/utility/geom/polygons/polygon2D_test_2d_07.py
+python tests/utility/geom/polygons/polygon2D_test_2d_08.py
+python tests/utility/geom/polygons/polygon2D_test_2d_09.py
+python tests/utility/geom/polygons/polygon2D_test_2d_10.py
+python tests/utility/geom/polygons/polygon2D_test_2d_11.py
+python tests/utility/geom/polygons/polygon2D_test_2d_12.py
+python tests/utility/geom/polygons/polygon3D_test_01.py
+python tests/utility/geom/polygons/polygon3D_test_02.py
+python tests/utility/geom/polygons/polygon3D_test_03.py
+python tests/utility/geom/polygons/polygon3D_test_04.py
+python tests/utility/geom/polygons/polygon3D_test_05.py
+python tests/utility/geom/polygons/polygon3D_test_06.py
+python tests/utility/geom/polygons/polygon3D_test_07.py
 echo "$BLEU" "    Alpha shapes." "$NORMAL"
 python tests/utility/geom/basic_alpha_shape2d_test.py
 echo "$BLEU" "    Circles." "$NORMAL"
