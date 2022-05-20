@@ -17,8 +17,8 @@ eccentricity= 0.35
 
 # Bending moment along the beam due to prestressing.
 Mmax= prestressingLoad*eccentricity
-xi= [0, beam.l/2.0, beam.l]
-yi= [0.0, -Mmax, 0.0]
+xi= [0, beam.l]
+yi= [0.0, -Mmax]
 interpM= interpolate.interp1d(xi, yi, fill_value='extrapolate', bounds_error=False)
 
 def M(x):
@@ -27,7 +27,7 @@ def M(x):
 
 fMidSpan= beam.computeDeflection(x= beam.l/2.0, M= M)
 PL2eP_EI= prestressingLoad*eccentricity*beam.l**2/beam.EI()
-fMidSpanRef= PL2eP_EI/12.0
+fMidSpanRef= PL2eP_EI/16.0 # See https://estructurando.net/2017/06/26/contraflecha-debida-al-pretensado/
 ratio1= abs(fMidSpan-fMidSpanRef)/fMidSpanRef
     
 '''
@@ -39,17 +39,15 @@ print('ratio1= ', ratio1)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-3:
+if abs(ratio1)<1e-2:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
     
-# Display results.
-import matplotlib.pyplot as plt
-x= beam.samplePoints(x0= 0.0, x1= beam.l)
-y= beam.computeCurvature(x, M)
-f= beam.computeDeflectionValues(x, M= M)
-plt.plot(x, y, '-', x, f, '-')
-plt.xticks(np.arange(min(x), max(x)+1, 1))
-plt.grid()
-plt.show()
+# # Display results.
+# import matplotlib.pyplot as plt
+# x= beam.samplePoints(x0= 0.0, x1= beam.l)
+# y= beam.computeCurvature(x, M)
+# f= beam.computeDeflectionValues(x, M= M)
+# plt.plot(x, y, '-', x, f, '-')
+# plt.show()

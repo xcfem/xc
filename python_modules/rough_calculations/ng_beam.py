@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Base for beam formulas
+'''Base for beam formulas.'''
 
 from __future__ import division
 
@@ -14,7 +14,7 @@ class Beam(object):
     :ivar I: moment of inertia of the beam section.
     :ivar l: beam length.
     '''
-    n= 10 # number of divisions for integration
+    n= 20 # number of divisions for integration
     def __init__(self,E:float= 1.0, I:float = 1.0, l:float= 1.0):
         ''' Constructor.
 
@@ -90,7 +90,7 @@ class Beam(object):
         tmp= self.computeIncThetaValues(xi, M)
         return (np.add.accumulate(tmp))
     
-    def computeIncZeta(self, x0, x1, M):
+    def computeIncDeflection(self, x0, x1, M):
         ''' Compute increment of deflection between x0 and x1.
 
         :param x0: interval beginning.
@@ -107,24 +107,16 @@ class Beam(object):
             xA= x
         return scipy.integrate.trapz(first_integral, xi)
     
-    def computeIncZetaValues(self, xi, M):
+    def computeIncDeflectionValues(self, xi, M):
         ''' Compute increment of deflection between x0 and x1.
 
         :param xi: sample points.
         :param M: bending moment function.
         :param EI: bending stiffness.
         '''
-        incZeta= [0.0]
+        incDeflection= [0.0]
         xA= xi[0]
         for x in xi[1:]:
-            incZeta.append(self.computeIncZeta(x0= xA, x1= x, M= M))
-        return incZeta
+            incDeflection.append(self.computeIncDeflection(x0= xA, x1= x, M= M))
+        return incDeflection
 
-    def computeZetaValues(self, xi, M):
-        ''' Compute the increment of rotation values in sample points.
-
-        :param xi: sample points.
-        :param M: bending moment function.
-        '''
-        tmp= self.computeIncZetaValues(xi, M)
-        return (np.add.accumulate(tmp))

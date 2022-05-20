@@ -107,6 +107,8 @@ python tests/utility/geom/basic_alpha_shape2d_test.py
 echo "$BLEU" "    Circles." "$NORMAL"
 python tests/utility/geom/circle2d_test_01.py
 python tests/utility/geom/circle2d_test_02.py
+echo "$BLEU" "    Parabolas." "$NORMAL"
+python tests/utility/geom/parabola_test_01.py
 echo "$BLEU" "    Sliding vectors." "$NORMAL"
 python tests/utility/geom/sliding_vectors_systems/sliding_vector_2d_test_01.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vector_3d_test_01.py
@@ -1071,6 +1073,12 @@ python tests/rough_calculations/beam_formulas/test_simple_beam_01.py
 python tests/rough_calculations/beam_formulas/test_simple_beam_02.py
 python tests/rough_calculations/beam_formulas/test_simple_beam_03.py
 python tests/rough_calculations/beam_formulas/test_simple_beam_04.py
+python tests/rough_calculations/beam_formulas/beam_deflection_mohr_01.py
+python tests/rough_calculations/beam_formulas/beam_deflection_mohr_02.py
+python tests/rough_calculations/beam_formulas/beam_deflection_mohr_03.py
+python tests/rough_calculations/beam_formulas/beam_deflection_mohr_04.py
+python tests/rough_calculations/beam_formulas/beam_deflection_mohr_05.py
+python tests/rough_calculations/beam_formulas/beam_deflection_mohr_06.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"

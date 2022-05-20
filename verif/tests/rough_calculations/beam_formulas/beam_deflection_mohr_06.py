@@ -7,6 +7,8 @@ import scipy.integrate
 from scipy import interpolate
 from rough_calculations import ng_beam as b
 from rough_calculations import ng_simple_beam as sb
+import geom
+from geom_utils import parabola as pb
 
 # Simple beam definition.
 beam= sb.SimpleBeam(E=210e9, I= 3.49e-6, l= 10)
@@ -17,19 +19,21 @@ eccentricity= 0.35
 
 # Bending moment along the beam due to prestressing.
 Mmax= prestressingLoad*eccentricity
-xi= [0, beam.l/2.0, beam.l]
-yi= [0.0, -Mmax, 0.0]
-interpM= interpolate.interp1d(xi, yi, fill_value='extrapolate', bounds_error=False)
+p0= geom.Pos2d(0,0.0)
+p1= geom.Pos2d(beam.l,-Mmax)
+p2= geom.Pos2d(2*beam.l,0.0)
+parabola= pb.Parabola(p0,p1,p2)
 
 def M(x):
     '''Bending moment law.'''
-    return interpM(x)
+    return parabola.y(x)
 
 fMidSpan= beam.computeDeflection(x= beam.l/2.0, M= M)
 PL2eP_EI= prestressingLoad*eccentricity*beam.l**2/beam.EI()
-fMidSpanRef= PL2eP_EI/12.0
+fMidSpanRef= 17*PL2eP_EI/192.0 # See https://estructurando.net/2017/06/26/contraflecha-debida-al-pretensado/
 ratio1= abs(fMidSpan-fMidSpanRef)/fMidSpanRef
     
+
 '''
 print('fMidSpan= ', fMidSpan)
 print('fMidSpanRef= ', fMidSpanRef)
@@ -44,12 +48,12 @@ if abs(ratio1)<1e-3:
 else:
     lmsg.error(fname+' ERROR.')
     
-# Display results.
-import matplotlib.pyplot as plt
-x= beam.samplePoints(x0= 0.0, x1= beam.l)
-y= beam.computeCurvature(x, M)
-f= beam.computeDeflectionValues(x, M= M)
-plt.plot(x, y, '-', x, f, '-')
-plt.xticks(np.arange(min(x), max(x)+1, 1))
-plt.grid()
-plt.show()
+# # Display results.
+# import matplotlib.pyplot as plt
+# x= beam.samplePoints(x0= 0.0, x1= beam.l)
+# y= beam.computeCurvature(x, M)
+# f= beam.computeDeflectionValues(x, M= M)
+# plt.plot(x, y, '-', x, f, '-')
+# plt.xticks(np.arange(min(x), max(x)+1, 1))
+# plt.grid()
+# plt.show()

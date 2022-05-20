@@ -162,27 +162,28 @@ class SimpleBeam(bm.Beam):
             retval.append(tmp*(mode*math.pi/self.l)**2)
         return retval
 
-    def computeZeta(self, x, M):
+    def computeDeflection(self, x, M):
         ''' Compute the deflection in x due to bending moment M.
 
         :param x: abscissa.
         :param M: bending moment function.
         '''
-        z= self.computeIncZeta(0.0, x, M)
-        slope= self.computeIncZeta(0.0, self.l, M)/self.l
+        z= self.computeIncDeflection(0.0, x, M)
+        slope= self.computeIncDeflection(0.0, self.l, M)/self.l
         return z-slope*x
 
-    def computeZetaValues(self, xi, M):
+    def computeDeflectionValues(self, xi, M):
         ''' Compute the increment of rotation values in sample points.
 
         :param xi: sample points.
         :param M: bending moment function.
         :param n: number of divisions.
         '''
-        tmp= super(SimpleBeam,self).computeZetaValues(xi, M)
-        slope= tmp[-1]/self.l
+        tmp= super(SimpleBeam,self).computeIncDeflectionValues(xi, M)
+        x0= xi[0]
+        slope= (tmp[-1]-tmp[0])/(xi[-1]-x0)
         retval= list()
         for x,z in zip(xi,tmp):
-            retval.append(z-slope*x)
+            retval.append(z-slope*(x-x0))
         return retval
 
