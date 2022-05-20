@@ -626,6 +626,14 @@ class EC5Shape(object):
     def getDict(self):
         ''' Put member values in a dictionary.'''
         return {'name':self.name, 'wood':wood.getDict()}
+    
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.name= None
+        if('name' in dct):
+            name= dct['name']
+            if(name): self.name= name
+        wood.setFromDict('wood')
 
     def EIz(self):
         ''' Return the bending stiffness around the z axis.'''
@@ -697,10 +705,21 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         :param b: cross-section width (parallel to local z-axis)
         :param h: cross-section depth (parallel to local y-axis)
         '''
-        EC5Shape.__init__(self, wood, name)
+        super(RectangularShape, self).__init__(wood, name)
         section_properties.RectangularSection.__init__(self,name, b, h)
 
         
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(RectangularShape, self).getDict()
+        retval.update(section_properties.RectangularSection.getDict(self))
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        super(RectangularShape, self).setFromDict(dct)
+        section_properties.RectangularSection.setFromDict(dct, self)
+    
     def getDepthFactor(self):
         ''' Return the depth factor according to clause 3.2 of EC5.'''
         return self.wood.getDepthFactor(self.h)
