@@ -42,8 +42,8 @@ deltaL=5            #anchorage draw-in (provided by manufacturer) [mm]
 #XC calculation
 #Exact parabola
 from model.geometry import geom_utils
-a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
-x_parab_rough,y_parab_rough,z_parab_rough=geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
+a,b,c= geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
+x_parab_rough,y_parab_rough,z_parab_rough= geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
 
 #Tendon definition, layout and friction losses
 tendon=presconc.PrestressTendon([])

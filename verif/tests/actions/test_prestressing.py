@@ -39,7 +39,7 @@ for i in range(1,nPts+2):
 
 err= math.sqrt(err)
 
-print("err= ", err)
+# print("err= ", err)
   
 import os
 from misc_utils import log_messages as lmsg
