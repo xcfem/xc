@@ -29,16 +29,17 @@ x= 0.0
 err= 0
 nPts= 5
 for i in range(1,nPts+2):
-  x= float(i-1)*L/float(nPts)
-  alpha= traceCable.alpha(x)
-  r= traceCable.curvature(x)
-  Px= P/math.cos(alpha)*geom.Vector2d(math.cos(alpha),math.sin(alpha))
-  u= (P/math.cos(alpha))*r
-  err+= (u-uTeor)**2
+    x= float(i-1)*L/float(nPts)
+    alpha= traceCable.alpha(x)
+    cosAlpha= math.cos(alpha)
+    r= traceCable.curvature(x)
+    Px= P/cosAlpha*geom.Vector2d(cosAlpha,math.sin(alpha))
+    u= (P/cosAlpha)*r
+    err+= (u-uTeor)**2
 
 err= math.sqrt(err)
 
-#print("err= ", err)
+print("err= ", err)
   
 import os
 from misc_utils import log_messages as lmsg
@@ -47,3 +48,15 @@ if (err<0.01):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Display parabola.
+# import matplotlib.pyplot as plt
+# xi= list()
+# yi= list()
+# for i in range(0,41):
+#     x= float(i)/40*L
+#     xi.append(x)
+#     yi.append(traceCable.y(x))
+# plt.plot(xi, yi, '-')
+# plt.grid()
+# plt.show()
