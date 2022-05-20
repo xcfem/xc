@@ -44,12 +44,12 @@ if abs(ratio1)<1e-3:
 else:
     lmsg.error(fname+' ERROR.')
     
-# Display results.
-import matplotlib.pyplot as plt
-x= beam.samplePoints(x0= 0.0, x1= beam.l)
-y= beam.computeCurvature(x, M)
-f= beam.computeDeflectionValues(x, M= M)
-plt.plot(x, y, '-', x, f, '-')
-plt.xticks(np.arange(min(x), max(x)+1, 1))
-plt.grid()
-plt.show()
+# # Display results.
+# import matplotlib.pyplot as plt
+# x= beam.samplePoints(x0= 0.0, x1= beam.l)
+# y= beam.computeCurvature(x, M)
+# f= beam.computeDeflectionValues(x, M= M)
+# plt.plot(x, y, '-', x, f, '-')
+# plt.xticks(np.arange(min(x), max(x)+1, 1))
+# plt.grid()
+# plt.show()
