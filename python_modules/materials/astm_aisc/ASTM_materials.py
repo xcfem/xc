@@ -1622,8 +1622,8 @@ class WShape(ASTMShape,aisc_metric_shapes.WShape):
          :param steel: steel material (i.e. A36).
          :param name: shape name (i.e. W40X431)
         '''
-        ASTMShape.__init__(self,name)
-        aisc_metric_shapes.WShape.__init__(self,steel,name)
+        super(WShape, self).__init__(name= name)
+        aisc_metric_shapes.WShape.__init__(self, steel= steel, name= name)
         
     def getDict(self):
         ''' Put member values in a dictionary.'''
@@ -1636,6 +1636,14 @@ class WShape(ASTMShape,aisc_metric_shapes.WShape):
         ASTMShape.setFromDict(self, dct)
         aisc_metric_shapes.WShape.setFromDict(self, dct)
 
+    def getTorsionalElasticBucklingStress(self, effectiveLengthX):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2, E4-3 and E4-4 of 
+            AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        '''
+        return super(WShape, self).getTorsionalElasticBucklingStress(effectiveLengthX)
 
 class IShape(ASTMShape, aisc_metric_shapes.IShape):
     """I shape with ASTM/AISC verification routines."""
@@ -1664,6 +1672,14 @@ class IShape(ASTMShape, aisc_metric_shapes.IShape):
         ASTMShape.setFromDict(self, dct)
         aisc_metric_shapes.IShape.setFromDict(self, dct)
 
+    def getTorsionalElasticBucklingStress(self, effectiveLengthX):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2, E4-3 and E4-4 of 
+            AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        '''
+        return super(IShape, self).getTorsionalElasticBucklingStress(effectiveLengthX)
 
 class CShape(ASTMShape,aisc_metric_shapes.CShape):
     """C shape with ASTM/AISC verification routines."""
@@ -1688,6 +1704,26 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
         bf= self.getFlangeWidth() # Only one bolt per row.
         factor= self.steelType.getEquation7_6_2Factor()
         return bf*factor-3e-3
+    
+    def getTorsionalElasticBucklingStress(self, effectiveLengthX):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2, E4-3 and E4-4 of 
+            AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        '''
+        return super(CShape, self).getTorsionalElasticBucklingStress(effectiveLengthX)
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(CShape, self).getDict()
+        retval.update(aisc_metric_shapes.CShape.getDict(self))
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Read member values from a dictionary.'''
+        super(CShape, self).setFromDict(dct)
+        aisc_metric_shapes.CShape.setFromDict(self, dct)
 
 # *************************************************************************
 # AISC single angle profiles.
@@ -1705,18 +1741,41 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
 #
 # *************************************************************************
 class SimpleLShape(ASTMShape, aisc_metric_shapes.SimpleLShape):
-    """Single angle shape with simplified ASTM/AISC verification routines."""
+    '''Single angle shape with simplified ASTM/AISC verification routines.'''
+    
     def __init__(self,steel,name):
         ''' Constructor.
 
         :param steel: steel material (i.e. A36).
         :param name: shape name.
         '''
-        ASTMShape.__init__(self, name)
-        aisc_metric_shapes.SimpleLShape.__init__(self,steel,name)
+        super(SimpleLShape, self).__init__(name= name)
+        aisc_metric_shapes.SimpleLShape.__init__(self, steel= steel, name= name)
+        
+    def getCriticalStressE(self, effectiveLengthY, effectiveLengthZ, Fe):
+        ''' Return the critical stress of the member according
+            to equations E3-2 and E3-3 of AISC-360-16.
+
+        :param effectiveLengthY: effective length of member (minor axis).
+        :param effectiveLengthZ: effective length of member (major axis).
+        :param Fe: flexural or torsional elastic buckling stress.
+        '''
+        return aisc_metric_shapes.SimpleLShape.getCriticalStressE(self, effectiveLengthY)
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(SimpleLShape, self).getDict()
+        retval.update(aisc_metric_shapes.SimpleLShape.getDict(self))
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Read member values from a dictionary.'''
+        super(SimpleLShape, self).setFromDict(dct)
+        aisc_metric_shapes.SimpleLShape.setFromDict(self, dct)
 
 class LShape(ASTMShape, aisc_metric_shapes.LShape):
     """Single angle shape with ASTM/AISC verification routines."""
+    
     def __init__(self,steel,name):
         ''' Constructor.
 
@@ -1820,9 +1879,21 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         # Moments about principal axes (signs inverted).
         MW, MZ= self.getPrincipalAxesMoments(Mz= -Mzd, My= -Myd)
         return self.getBiaxialBendingEfficiencyPrincipalAxes(Nd= Nd, MZ= MZ, MW= MW, chiN= chiN, chiLT= chiLT)
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(LShape, self).getDict()
+        retval.update(aisc_metric_shapes.LShape.getDict(self))
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Read member values from a dictionary.'''
+        super(LShape, self).setFromDict(dct)
+        aisc_metric_shapes.LShape.setFromDict(self, dct)
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     """Rectangular HSS shape with ASTM/AISC verification routines."""
+    
     def __init__(self,steel,name):
         ''' Constructor.
 
@@ -1831,7 +1902,27 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.HSSShape.__init__(self,steel,name)
+        
+    def getTorsionalElasticBucklingStress(self, effectiveLengthX):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2, E4-3 and E4-4 of 
+            AISC-360-16.
 
+        :param effectiveLengthX: effective length of member (torsion).
+        '''
+        return super(HSSShape, self).getTorsionalElasticBucklingStress(effectiveLengthX)
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(HSSShape, self).getDict()
+        retval.update(aisc_metric_shapes.HSSShape.getDict(self))
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Read member values from a dictionary.'''
+        super(HSSShape, self).setFromDict(dct)
+        aisc_metric_shapes.HSSShape.setFromDict(self, dct)
+ 
 class CHSSShape(ASTMShape,aisc_metric_shapes.CHSSShape):
     """Circular HSS shape with ASTM/AISC verification routines."""
     def __init__(self,steel,name):
@@ -1842,6 +1933,26 @@ class CHSSShape(ASTMShape,aisc_metric_shapes.CHSSShape):
          '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.CHSSShape.__init__(self,steel,name)
+        
+    def getTorsionalElasticBucklingStress(self, effectiveLengthX):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2, E4-3 and E4-4 of 
+            AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        '''
+        return super(CHSSShape, self).getTorsionalElasticBucklingStress(effectiveLengthX)
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(CHSSShape, self).getDict()
+        retval.update(aisc_metric_shapes.CHSSShape.getDict(self))
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Read member values from a dictionary.'''
+        super(CHSSShape, self).setFromDict(dct)
+        aisc_metric_shapes.CHSSShape.setFromDict(self, dct)
 
 class HFSHSShape(ASTMShape,aisc_metric_shapes.HFSHSShape):
     """BS EN 10210-2: 2006 steel shapes with ASTM/AISC
@@ -1856,6 +1967,25 @@ class HFSHSShape(ASTMShape,aisc_metric_shapes.HFSHSShape):
         ASTMShape.__init__(self,name)
         aisc_metric_shapes.HFSHSShape.__init__(self,steel,name)
 
+    def getTorsionalElasticBucklingStress(self, effectiveLengthX):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2, E4-3 and E4-4 of 
+            AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        '''
+        return super(HFSHSShape, self).getTorsionalElasticBucklingStress(effectiveLengthX)
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(HFSHSShape, self).getDict()
+        retval.update(aisc_metric_shapes.HFSHSShape.getDict(self))
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Read member values from a dictionary.'''
+        super(HFSHSShape, self).setFromDict(dct)
+        aisc_metric_shapes.HFSHSShape.setFromDict(self, dct)
 
 def getCrossSections(steelShapes, steel_W= A992, steel_C= A36, steel_L= A36, steel_HSS= A500):
     ''' Return a dictionary containing the cross section definition for each
