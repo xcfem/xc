@@ -181,12 +181,12 @@ class CMUWallFabric(object):
         th_inches= self.thickness/units_utils.inchToMeter
         tol= 1e-3
         if(th_inches<=6.0):
-            if(th_inches<6.0-1e3):
+            if(th_inches<(6.0-tol)):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thin).')
             else:
                 th_inches= 6.0
         elif(th_inches>=12.0):
-            if(th_inches>12.0+tol):
+            if(th_inches>(12.0+tol)):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thick).')
             else:
                 th_inches= 12.0
@@ -199,12 +199,12 @@ class CMUWallFabric(object):
         th_inches= self.thickness/units_utils.inchToMeter
         tol= 1e-3
         if(th_inches<=6.0):
-            if(th_inches<6.0-1e3):
+            if(th_inches<(6.0-tol)):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thin).')
             else:
                 th_inches= 6.0
         elif(th_inches>=12.0):
-            if(th_inches>12.0+tol):
+            if(th_inches>(12.0+tol)):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thick).')
             else:
                 th_inches= 12.0

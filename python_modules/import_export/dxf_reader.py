@@ -22,10 +22,24 @@ from import_export import block_topology_entities as bte
 class FloatList(list):
     '''List of floats that are more than
        "tol" apart.
+
+    :ivar tol: tolerance.
     '''
     def __init__(self,tol= .01):
-      super(FloatList,self).__init__()
-      self.tol= tol
+        ''' Constructor. 
+
+        :param tol: tolerance.
+        '''
+        super(FloatList,self).__init__()
+        self.tol= tol
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        retval= super(FloatList, self).__eq__(other)
+        if(retval):
+            retval= self.tol == other.tol
+        return retval
+    
     def append(self,num):
         dMin= 1e23
         for v in self:

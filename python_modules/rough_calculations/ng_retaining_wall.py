@@ -165,7 +165,12 @@ class InternalForces(object):
         plt.close()
 
 class ReinforcementMap(dict):
-    ''' Simplified reinforcement for a cantilever retaining wall.'''
+    ''' Simplified reinforcement for a cantilever retaining wall.
+
+    :ivar concreteCover: concrete cover for rebars.
+    :ivar steel: reinforcement steel type.
+    :ivar rebarFamilyTemplate: reinforcement template.
+    '''
     def __init__(self,concreteCover=40e-3, steel= None,rebarFamilyTemplate= None):
         '''Constructor.
  
@@ -191,6 +196,17 @@ class ReinforcementMap(dict):
         # ecart= R/(n-1)
         # self[self.topSkinIndex]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        retval= super(ReinforcementMap, self).__eq__(other)
+        if(retval):
+            retval= self.concreteCover == other.concreteCover
+        if(retval):
+            retval= self.steel == other.steel
+        if(retval):
+            retval= retval.rebarFamilyTemplate == other.rebarFamilyTemplate
+        return retval
+            
     def setReinforcement(self,index,reinforcement):
         '''Set reinforcement.'''
         self[index]= reinforcement

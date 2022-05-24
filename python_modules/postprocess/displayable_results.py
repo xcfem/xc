@@ -33,15 +33,27 @@ class ResultDescription(object):
 class ResultsDescriptionContainer(dict):
     ''' Results to display as figures. 
 
-        :ivar limitStateData: string defining limit state check label (something like "Fatigue" or "CrackControl") and the name of the file that contains the results to display.
-         :ivar lst: list of results descriptions.
-      '''
+    :ivar limitStateData: string defining limit state check label (something like "Fatigue" or "CrackControl") and the name of the file that contains the results to display.
+    :ivar lst: list of results descriptions.
+    '''
 
     def __init__(self,limitStateData,lst):
+        ''' Constructor.
+
+        :param limitStateData: string defining limit state check label (something like "Fatigue" or "CrackControl") and the name of the file that contains the results to display.
+        :param lst: list of results descriptions.
+       '''
         self.limitStateData= limitStateData
         for l in lst:
             self.add(l)
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        retval= super(ResultsDescriptionContainer, self).__eq__(other)
+        if(retval):
+            retval= self.limitStateData == other.limitStateData
+        return retval
+    
     def add(self,rd):
         self[rd.argument]= rd
 

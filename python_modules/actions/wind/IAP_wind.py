@@ -261,7 +261,7 @@ pierWindUnitLoad_20["IV"]= [1.60, 1.72, 1.99]
 
 def getUnitWindLoadDeck(terrainCategory:str, v_b0: float, H_max:float= 20.0):
     ''' Return the wind load by square meter on bridge deck according to 
-        table 4.2-e of IAP-11.
+        tables 4.2-e and 4.2-f of IAP-11.
 
     :param terrainCategory: terrain category according to clause 4.2.2 of IAP-11.
     :param v_b0: fundamental basic wind velocity according to clause 4.2.1 of IAP-11.
@@ -270,7 +270,7 @@ def getUnitWindLoadDeck(terrainCategory:str, v_b0: float, H_max:float= 20.0):
     unitLoads= None
     if(H_max<=10.0):
         unitLoads= deckWindUnitLoad_10[terrainCategory]
-    elif(H_max<=10.0):
+    elif(H_max<=20.0):
         unitLoads= deckWindUnitLoad_20[terrainCategory]
     else:
         className= type(self).__name__
