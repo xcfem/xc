@@ -231,7 +231,7 @@ def getShearResistanceNonCrackedNoShearReinf(concrete, I, S, NEd, Ac, bw, alpha_
     fctdMPa= concrete.fctd()/1e6 #design tensile strength (MPa)
     return (I/S*bw)*math.sqrt(fctdMPa**2+alpha_l*sigma_cp*fctdMPa)*1e6
 
-def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, reinfSteel, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0, nationalAnnex= None):
+def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0, nationalAnnex= None):
     ''' Return the design value of the shear resistance VRdc for shear 
         reinforced members according to expressions 6.7N, 6.13 and 6.14 of
         EC2:2004.
@@ -243,7 +243,7 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, reinfSteel, s
     :param Asw: cross-sectional area of the shear reinforcement.
     :param s: spacing of the stirrups.
     :param z: inner lever arm, for a member with constant depth, corresponding to the bending moment in the element under consideration.
-    :param reinfSteel: reinforcing steel material.
+    :param shearReinfSteel: reinforcing steel material.
     :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
     :param strutAngle: (theta) angle between the concrete compression strut and the beam axis perpendicular to the shear force.
     :param nationalAnnex: identifier of the national annex.
@@ -254,13 +254,13 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, reinfSteel, s
         lmsg.warning(methodName+'; strut angle: '+str(math.degrees(strutAngle))+' out of range.')
     cotgAlpha= 1/math.tan(shearReinfAngle)
     sinAlpha= math.sin(shearReinfAngle)
-    fywd= reinfSteel.fyd()
+    fywd= shearReinfSteel.fyd()
     cotgThetaPluscotgAlpha= cotgTheta+cotgAlpha
     VRds= Asw/s*z*fywd*cotgThetaPluscotgAlpha*sinAlpha
     # nu1: strength reduction factor for concrete cracked in shear
     nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
     
-    # if(sigma_reinf<0.8*reinfSteel.fyk):
+    # if(sigma_reinf<0.8*shearReinfSteel.fyk):
     #     if(fckMPa<=60):
     #         nu1= 0.6
     #     else:
@@ -285,3 +285,18 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, reinfSteel, s
         alpha_cw= 1e-6
     VRdmax= alpha_cw*bw*z*nu1*fcdMPa*cotgThetaPluscotgAlpha/(1+cotgTheta**2)*1e6
     return min(VRds, VRdmax)
+
+def getMinShearReinforcementArea(concrete, shearReinfSteel, s, bw, shearReinfAngle= math.pi/2.0, nationalAnnex= None):
+    ''' Return the cross-sectional area of the shear reinforcement 
+        according to expression 9.4 of EC2:2004.
+
+    :param concrete: concrete material.
+    :param shearReinfSteel: reinforcing steel material.
+    :param s: spacing of the stirrups.
+    :param bw: smallest width of the cross-section in the tensile area.
+    :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    # minimum shear reinforcement ratio
+    ro_w= concrete.getMinShearReinfRatio(shearReinfSteel, nationalAnnex)
+    return ro_w*s*bw*math.sin(shearReinfAngle)

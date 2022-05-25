@@ -144,7 +144,20 @@ class EC2Concrete(concrete_base.Concrete):
         '''
         return 0.6*(1-self.fckMPa()/250) # equation 6.6N
         
-
+    def getMinShearReinfRatio(self, shearReinfSteel, nationalAnnex= None):
+        ''' Return the minimum shear reinforcement ratio according
+            to expression 9.5N (or the national annex substitution)
+        
+        :param shearReinfSteel: reinforcing steel material.
+        '''
+        fyk= shearReinfSteel.fyk # characteristic value of the shear
+                                 # reinforcement yield strength.
+        if(nationalAnnex=='Spain'):
+            retval= self.fctm()/7.5/fyk # Spanish national annex.
+        else:
+            retval= 0.08*math.sqrt(self.fckMPa())/(fyk/1e6)
+        return retval
+    
 #    def getEcmT(self):
 #        """
 #        EC2Ecmt: approximate value of the modulus of elasticity [Pa] at age 
