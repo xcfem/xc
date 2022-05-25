@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Computation of the ultimate shear force failure due to diagonal 
    compression in the web (Vu1) according to the clause 44.2.3.1 of EHE-08.'''
-import sys
+
+from __future__ import print_function
 
 from materials.ehe import EHE_limit_state_checking
 import math
@@ -13,16 +13,16 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-fck= 30e6
-fcd= fck/1.5
-Ncd= 0
-b= 0.35
-h= 0.7
-As= 0.0
-Ac= b*h-As
-b0= b
-d= h-0.041
-Vu1= EHE_limit_state_checking.getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,math.radians(90),math.radians(45))
+fck= 30e6 # concrete characteristic compressive strength MPa.
+fcd= fck/1.5 # design value of concrete compressive strength MPa.
+Ncd= 0 # Design value of axial force in concrete
+b= 0.35 # section width.
+h= 0.7 # section depth.
+As= 0.0 # reinforcement area.
+Ac= b*h-As # concrete section total area.
+b0= b # net width of the element according to clause 40.3.5.
+d= h-0.041 # effective depth.
+Vu1= EHE_limit_state_checking.getVu1EHE08(fck= fck, fcd= fcd, Ncd= Ncd, Ac= Ac,b0= b0,d= d, alpha= math.radians(90), theta= math.radians(45))
 
 ratio1= abs((Vu1-1.3839e6)/1.3839e6)
 

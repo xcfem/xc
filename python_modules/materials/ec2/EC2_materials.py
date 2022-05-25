@@ -21,7 +21,7 @@ __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 # Concrete according to Eurocode 2.
 
 
-class EC2Concrete2004(concrete_base.Concrete):
+class EC2Concrete(concrete_base.Concrete):
     """Concrete model according to Eurocode 2:2004
 
        :ivar typeAggregate: type of aggregate
@@ -35,7 +35,7 @@ class EC2Concrete2004(concrete_base.Concrete):
     typeAggregate='Q'
 
     def __init__(self,nmbConcrete, fck, gammaC):
-        super(EC2Concrete2004,self).__init__(nmbConcrete,fck, gammaC)
+        super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC)
     
     def getEcm(self):
         """
@@ -137,12 +137,12 @@ class EC2Concrete2004(concrete_base.Concrete):
 #        return (self.getFcmT()/self.getFcm())**0.3*self.getEcm()
 
 
-class EC2Concrete(EC2Concrete2004):
+class EC2Concrete2021(EC2Concrete):
     """Concrete model according to Eurocode 2:2021
     """
 
     def __init__(self,nmbConcrete, fck, gammaC):
-        super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC)
+        super(EC2Concrete2021,self).__init__(nmbConcrete,fck, gammaC)
 
     # Autogenous shrinkage strain
     def getShrAlphabs(self):

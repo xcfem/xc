@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Computation of the shear strength of members due to concrete tensile 
 strength (Vu2) of sections without shear reinforcement according to clauses
 44.2.3.2.1.1 and 44.2.3.2.1.2 of EHE-08.'''
 
-import sys
+from __future__ import print_function
 
 from materials.ehe import EHE_limit_state_checking
 from materials.ehe import EHE_materials
