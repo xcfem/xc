@@ -10,7 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 
 import re
-import dxfgrabber
+import dxfgrabber # OBSOLETE use ezdxf
 from dxfwrite import DXFEngine as dxf
 import geom
 from misc_utils import log_messages as lmsg
