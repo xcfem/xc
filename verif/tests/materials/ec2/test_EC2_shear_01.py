@@ -13,11 +13,16 @@ __email__= "l.pereztato@gmail.com"
 from materials.ec2 import EC2_materials
 from materials.ec2 import EC2_limit_state_checking
 
+# Geometry
 bw= .1
 h= .2
 d= .175
 Ac= bw*h
+
+# Axial load.
 Nd= -5e6*Ac
+
+# Material.
 concrete= EC2_materials.C40
 fctd= concrete.fctd() # Design mean tensile strength
 fctdRef= 1.6374499333992043e6 # See fctm expression in table 3.1 EC2:2004

@@ -151,22 +151,23 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
              #           [cementos normales en EHE]
              #    = 0,38 for cement of strength Classes CEM 32,5 N (Class S) 
              #           [cementos de endurecimiento lento en EHE]
-    alfacc=1
     tensionStiffparam=None
     
     
     # Definition of «derived» properties of the material.
-    def __init__(self,nmbConcrete, fck, gammaC):
+    def __init__(self,nmbConcrete, fck, gammaC, alphacc= 1.0):
         ''' Constructor.
 
         :param nmbConcrete: material name.
         :param fck: characteristic (5%) cylinder strength of the concrete.
         :param gammaC: partial safety factor for concrete.
+        :param alphacc: factor which takes account of the fatigue in the concrete when it is subjected to high levels of compression stress due to long duration loads. Normally alfacc=1 (default value)
         '''
         super(Concrete,self).__init__(nmbConcrete)
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete
         self.initTensStiff='N'
+        self.alfacc= alphacc 
 
     def density(self,reinforced= True):
         '''Return concrete density in kg/m3.'''

@@ -34,8 +34,15 @@ class EC2Concrete(concrete_base.Concrete):
     """
     typeAggregate='Q'
 
-    def __init__(self,nmbConcrete, fck, gammaC):
-        super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC)
+    def __init__(self, nmbConcrete, fck, gammaC, alphacc= 1.0):
+        ''' Constructor.
+
+        :param nmbConcrete: material name.
+        :param fck: characteristic (5%) cylinder strength of the concrete.
+        :param gammaC: partial safety factor for concrete.
+        :param alphacc: factor which takes account of the fatigue in the concrete when it is subjected to high levels of compression stress due to long duration loads. Normally alfacc=1 (default value)
+        '''
+        super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC, alphacc)
     
     def getEcm(self):
         """
@@ -128,6 +135,15 @@ class EC2Concrete(concrete_base.Concrete):
             return 3.5*(-1e-3)
         else:
             return (2.6+35*((90-self.fckMPa())/100)**4)*(-1e-3)
+
+    def getShearStrengthReductionFactor(self, nationalAnnex= None):
+        ''' Return the strength reduction factor for concrete cracked in shear
+            according to expression 6.6N of EC2:2004.
+        
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        return 0.6*(1-self.fckMPa()/250) # equation 6.6N
+        
 
 #    def getEcmT(self):
 #        """

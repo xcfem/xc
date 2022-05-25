@@ -230,3 +230,58 @@ def getShearResistanceNonCrackedNoShearReinf(concrete, I, S, NEd, Ac, bw, alpha_
                           # axis due to axial loading and/or prestressing
     fctdMPa= concrete.fctd()/1e6 #design tensile strength (MPa)
     return (I/S*bw)*math.sqrt(fctdMPa**2+alpha_l*sigma_cp*fctdMPa)*1e6
+
+def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, reinfSteel, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0, nationalAnnex= None):
+    ''' Return the design value of the shear resistance VRdc for shear 
+        reinforced members according to expressions 6.7N, 6.13 and 6.14 of
+        EC2:2004.
+
+    :param concrete: concrete material.
+    :param NEd: axial force in the cross-section due to loading or prestressing.
+    :param Ac: area of concrete cross-section. 
+    :param bw: smallest width of the cross-section in the tensile area.
+    :param Asw: cross-sectional area of the shear reinforcement.
+    :param s: spacing of the stirrups.
+    :param z: inner lever arm, for a member with constant depth, corresponding to the bending moment in the element under consideration.
+    :param reinfSteel: reinforcing steel material.
+    :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
+    :param strutAngle: (theta) angle between the concrete compression strut and the beam axis perpendicular to the shear force.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    cotgTheta=1/math.tan(strutAngle)
+    if((cotgTheta<1.0) or (cotgTheta>2.5)): # eq 6.7N
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+'; strut angle: '+str(math.degrees(strutAngle))+' out of range.')
+    cotgAlpha= 1/math.tan(shearReinfAngle)
+    sinAlpha= math.sin(shearReinfAngle)
+    fywd= reinfSteel.fyd()
+    cotgThetaPluscotgAlpha= cotgTheta+cotgAlpha
+    VRds= Asw/s*z*fywd*cotgThetaPluscotgAlpha*sinAlpha
+    # nu1: strength reduction factor for concrete cracked in shear
+    nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
+    
+    # if(sigma_reinf<0.8*reinfSteel.fyk):
+    #     if(fckMPa<=60):
+    #         nu1= 0.6
+    #     else:
+    #         nu1= max(0.9-fckMPa/200,0.5)
+    
+    # alpha_cw: coefficient taking account of the state of the stress in the compression chord
+    sigma_cp= -NEd/Ac/1e6 # concrete compressive stress at the centroidal
+                          # axis due to axial loading and/or prestressing
+    fcdMPa= -concrete.fcd()/1e6 # design value of concrete compressive strength (MPa).
+    sigma_ratio= sigma_cp/fcdMPa
+    if(sigma_cp==0.0):
+        alpha_cw= 1.0
+    elif(sigma_ratio<=0.25):
+        alpha_cw= 1.0+sigma_ratio
+    elif(sigma_ratio<=0.5):
+        alpha_cw= 1.25
+    elif(sigma_ratio<1.0):
+        alpha_cw= 2.5*(1.0-sigma_ratio)
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
+        alpha_cw= 1e-6
+    VRdmax= alpha_cw*bw*z*nu1*fcdMPa*cotgThetaPluscotgAlpha/(1+cotgTheta**2)*1e6
+    return min(VRds, VRdmax)
