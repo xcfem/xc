@@ -392,16 +392,16 @@ B500S= ReinforcingSteel(steelName="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
 
 steelOfName={"B400S":B400S,"B500S":B500S}
 # Bar areas in square meters.
-Fi6=0.28e-4
-Fi8=0.50e-4
-Fi10=0.79e-4
-Fi12=1.13e-4
-Fi14=1.54e-4
-Fi16=2.01e-4
-Fi20=3.14e-4
-Fi25=4.91e-4
-Fi32=8.04e-4
-Fi40=12.56e-4
+Fi6= 0.28e-4
+Fi8= 0.50e-4
+Fi10= 0.79e-4
+Fi12= 1.13e-4
+Fi14= 1.54e-4
+Fi16= 2.01e-4
+Fi20= 3.14e-4
+Fi25= 4.91e-4
+Fi32= 8.04e-4
+Fi40= 12.56e-4
 
 # ************* Prestressing steel. ********************
 
@@ -638,11 +638,11 @@ class Y1860S7Strand(PrestressingSteel):
         return self.area*7810.35496123245 # Adjusted value for steel density.
 
     def Fm(self):
-        ''' Return the characteristic valu of maximum force.'''
+        ''' Return the characteristic value of maximum force.'''
         return self.area*self.fmax
 
     def Fm_max(self):
-        ''' Return the maximum valu of maximum force.'''
+        ''' Return the maximum value of the maximum force.'''
         return self.gammaS*self.Fm()
 
     def Fp(self):
