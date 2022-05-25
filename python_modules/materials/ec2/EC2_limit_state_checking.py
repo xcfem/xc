@@ -181,3 +181,52 @@ def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
     '''
     retval=k3*cover+k1*k2*k4*fiReinf/ro_eff
     return retval
+
+def getShearResistanceCrackedNoShearReinf(concrete, NEd, Ac, Asl, bw, d, nationalAnnex= None):
+    ''' Return the design value of the shear resistance VRdc for cracked 
+        sections subjected to bending moment, according to expressions 6.2.a 
+        and 6.2.b of EC2:2004.
+
+    :param concrete: concrete material.
+    :param NEd: axial force in the cross-section due to loading or prestressing.
+    :param Ac: area of concrete cross-section. 
+    :param Asl: area of the tensile reinforcement, which extends beyond
+                the section considered (see clause 6.2.2 of EC2:2004).
+    :param bw: smallest width of the cross-section in the tensile area.
+    :param d: effective depth of the cross-section.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    k= min(1.0+math.sqrt(0.2/d),2) # d in meters.
+    ro_l= min(Asl/bw/d,.02)
+    fcdMPa= -concrete.fcd()/1e6 # design value of concrete compressive strength (MPa).
+    sigma_cp= min(-NEd/Ac/1e6,.2*fcdMPa)
+    gamma_c= concrete.gmmC
+    CRdc= 0.18/gamma_c # Recommended value and Spanish national annex.
+    k1= 0.15
+    fckMPa= -concrete.fck/1e6 # concrete characteristic compressive strength (MPa).
+    if(nationalAnnex=='Spain'):
+        v_min= 0.075/gamma_c*math.pow(k,1.5)*math.sqrt(min(fckMPa,60))
+    else:
+        v_min= 0.035*math.pow(k,1.5)*math.sqrt(fckMPa)
+    
+    VRdc_62a= (CRdc*k*math.pow(100.0*ro_l*fckMPa,1/3.0)+k1*sigma_cp)*bw*d*1e6
+    VRdc_62b= (v_min+k1*sigma_cp)*bw*d*1e6
+    return max(VRdc_62a, VRdc_62b)
+    
+def getShearResistanceNonCrackedNoShearReinf(concrete, I, S, NEd, Ac, bw, alpha_l= 1.0):
+    ''' Return the design value of the shear resistance VRdc for non-cracked 
+        sections subjected to bending moment, according to expression 6.4 of
+        EC2:2004.
+
+    :param concrete: concrete material.
+    :param I: second moment of area.
+    :param S: first moment of area above and about the centroidal axis.
+    :param NEd: axial force in the cross-section due to loading or prestressing.
+    :param Ac: area of concrete cross-section. 
+    :param bw: smallest width of the cross-section in the tensile area.
+    :param alpha_l: see expression 6.4 in EC2:2004.
+    '''
+    sigma_cp= -NEd/Ac/1e6 # concrete compressive stress at the centroidal
+                          # axis due to axial loading and/or prestressing
+    fctdMPa= concrete.fctd()/1e6 #design tensile strength (MPa)
+    return (I/S*bw)*math.sqrt(fctdMPa**2+alpha_l*sigma_cp*fctdMPa)*1e6

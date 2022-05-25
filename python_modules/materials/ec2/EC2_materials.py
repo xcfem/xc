@@ -53,12 +53,12 @@ class EC2Concrete(concrete_base.Concrete):
             return EcmGPa*1e9
 
     def getFctm(self):
-        """Fctm: mean tensile strength [Pa][+] (table 3.1 EC2)
-        """
-        if self.fckMPa() <= 50:
-            return 0.3*self.fckMPa()**(2.0/3.0)*1e6
+        """Fctm: mean tensile strength [Pa][+] (table 3.1 EC2)."""
+        if(self.fckMPa()<=50):
+            retval= 0.3*math.pow(self.fckMPa(),2.0/3.0)*1e6
         else:
-            return 2.12*math.log(1+abs(self.getFcm())*1e-6/10)*1e6
+            retval= 2.12*math.log(1+abs(self.getFcm())*1e-6/10)*1e6
+        return retval
 
     def getEpsc1(self):
         """

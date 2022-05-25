@@ -13,8 +13,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-fck= 30e6 # concrete characteristic compressive strength MPa.
-fcd= fck/1.5 # design value of concrete compressive strength MPa.
+fck= 30e6 # concrete characteristic compressive strength.
+fcd= fck/1.5 # design value of concrete compressive strength.
 Ncd= 0 # Design value of axial force in concrete
 b= 0.35 # section width.
 h= 0.7 # section depth.

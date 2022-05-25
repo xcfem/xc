@@ -240,18 +240,12 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''
         return (self.fckMPa()+8)*(-1e6)
  
-    def getFctk005(self,t=28):
-        '''Fctk005: tensile strength [Pa][+] 5% fractile (table 3.1 EC2)
-
-        :param t: age of the concrete in days
-        '''
+    def getFctk005(self):
+        '''Fctk005: tensile strength [Pa][+] 5% fractile (table 3.1 EC2).'''
         return 0.7*self.getFctm()
  
-    def getFctk095(self,t=28):
-        '''Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2)
-
-        :param t:      age of the concrete in days
-        '''
+    def getFctk095(self):
+        '''Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2).'''
         return 1.3*self.getFctm()
 
     def defDiagK(self,preprocessor):

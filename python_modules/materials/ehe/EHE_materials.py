@@ -214,8 +214,7 @@ class EHEConcrete(concrete_base.Concrete):
         return math.pow(self.getBetaCC(t),0.3)*self.getEcm()
 
     def getFctm(self):
-        """Fctm: mean tensile strength [Pa][+]
-        (art. 39.1 EHE)
+        """Fctm: mean tensile strength [Pa][+] (art. 39.1 EHE)
         """
         if self.fckMPa()<= 50:
             return 0.3*self.fckMPa()**(2.0/3.0)*1e6

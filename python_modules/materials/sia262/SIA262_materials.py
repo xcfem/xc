@@ -43,9 +43,11 @@ class ConcreteSIA262(ec2.EC2Concrete):
     def fctk0_05(self):
         '''SIA 262 sections 3.1.2.2.5 expr (7)'''
         return 0.7*self.getFctm()
+    
     def fctk0_95(self):
         '''SIA 262 sections 3.1.2.2.5 expr (8)'''
         return 1.3*self.getFctm()
+    
     def taucd(self):
         '''Design value of shear strength.'''
         return 0.3*math.sqrt(-self.fck/1e6)*1e6/self.gmmC

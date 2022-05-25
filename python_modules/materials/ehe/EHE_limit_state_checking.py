@@ -511,8 +511,8 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
 
 def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
     '''getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac) [units: N, m, rad].
-       Return the value of Vu2 (shear strength at failure due to tensile force in the web) 
-       according to clause 44.2.3.2.1.1 of EHE-08.
+       Return the value of Vu2 (shear strength at failure due to tensile 
+       force in the web) according to clause 44.2.3.2.1.1 of EHE-08.
 
     :param fctd: design tensile strength of the concrete.
     :param I: Moment of inertia of the section with respect of its centroid.
