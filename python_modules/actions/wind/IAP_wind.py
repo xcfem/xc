@@ -297,7 +297,7 @@ def getUnitWindLoadPier(terrainCategory:str, v_b0: float, H_max:float= 20.0):
     unitLoads= None
     if(H_max<=10.0):
         unitLoads= pierWindUnitLoad_10[terrainCategory]
-    elif(H_max<=10.0):
+    elif(H_max<=20.0):
         unitLoads= pierWindUnitLoad_20[terrainCategory]
     else:
         className= type(self).__name__

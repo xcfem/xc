@@ -408,6 +408,13 @@ class StemReinforcement(ReinforcementMap):
         super(StemReinforcement,self).__init__(concreteCover, steel)
         self.wallGeom= wallGeom
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        retval= super(StemReinforcement, self).__eq__(other)
+        if(retval):
+            retval= self.wallGeom == other.wallGeom
+        return retval
+        
     def getRCSections(self,stemSets):
         '''Create reinforced concrete sections for the stem.
 
@@ -530,6 +537,13 @@ class FootingReinforcement(ReinforcementMap):
         '''Constructor.'''
         super(FootingReinforcement,self).__init__(concreteCover, steel)
         self.wallGeom= wallGeom
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        retval= super(StemReinforcement, self).__eq__(other)
+        if(retval):
+            retval= self.wallGeom == other.wallGeom
+        return retval
 
     def getRCSections(self, footingSet):
         '''Create reinforced concrete sections for the footing.
