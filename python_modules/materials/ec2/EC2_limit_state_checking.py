@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
 
+import sys
 import math
 import geom
 from materials import limit_state_checking_base as lscb
@@ -270,7 +271,21 @@ def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSt
     fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
     fywd= shearReinfSteel.fyd()
     return 0.5*alpha_cw*nu1*fcd/fywd*bw*s
-    
+
+def getStrutAngleLimits(nationalAnnex= None):
+    ''' Return true if the strut angle is inside the limits specified
+        in the expression 6.7N of EC2:2004.
+
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    if(nationalAnnex=='Spain'): #EN 1992-1-1:2004 Apartado 6.2.3 (2)
+        limSup= math.atan(1/0.5)
+        limInf= math.atan(1/2.0)
+    else:
+        limSup= math.atan(1.0)
+        limInf= math.atan(1/2.5)
+    return limInf, limSup    
+
 def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0, nationalAnnex= None):
     ''' Return the design value of the shear resistance VRds for shear 
         reinforced members according to expressions 6.7N, 6.13 and 6.14 of
@@ -288,10 +303,17 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSte
     :param strutAngle: (theta) angle between the concrete compression strut and the beam axis perpendicular to the shear force.
     :param nationalAnnex: identifier of the national annex.
     '''
-    cotgTheta=1/math.tan(strutAngle)
-    if((cotgTheta<1.0) or (cotgTheta>2.5)): # eq 6.7N
+    limInf, limSup= getStrutAngleLimits(nationalAnnex)
+    if((strutAngle<limInf) or (strutAngle>limSup)): # eq 6.7N
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(methodName+'; strut angle: '+str(math.degrees(strutAngle))+' out of range.')
+        errString= methodName+'; strut angle: '+str(math.degrees(strutAngle))+' out of range: ['+str(math.degrees(limInf))+','+str(math.degrees(limSup))+']'
+        if(strutAngle<limInf):
+            strutAngle= limInf
+        elif(strutAngle>limSup):
+            strutAngle= limSup
+        errString+= ' using '+str(math.degrees(strutAngle))
+        lmsg.warning(errString)
+    cotgTheta= 1/math.tan(strutAngle)
     cotgAlpha= 1/math.tan(shearReinfAngle)
     sinAlpha= math.sin(shearReinfAngle)
     fywd= shearReinfSteel.fyd()

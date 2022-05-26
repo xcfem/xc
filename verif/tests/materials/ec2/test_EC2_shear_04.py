@@ -27,8 +27,8 @@ concrete= EC2_materials.C30
 
 ## Shear reinforcement
 stirrupsSteel= EC2_materials.S450B
-stirrups= EC2_materials.rebarsEC2['fi10']
-stirrupsArea= stirrups['area']
+stirrups= EC2_materials.rebarsEC2['fi10'] # rebar diameter
+stirrupsArea= stirrups['area'] # rebar area
 stirrupsAngle= math.pi/4.0
 numberOfLegs= 2
 stirrupsSpacing= 0.15
