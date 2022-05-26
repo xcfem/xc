@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Example 6.4 from EC2 Worked Examples (rev A 31-03-2017)'''
+''' Example 6.4b from EC2 Worked Examples (rev A 31-03-2017)'''
 
 from __future__ import print_function
 from __future__ import division
@@ -26,7 +26,7 @@ stirrups= EC2_materials.rebarsEC2['fi12']
 stirrupsArea= stirrups['area']
 numberOfLegs= 2
 stirrupSpacing= .15
-stirrupsSteel= EC2_materials.S450B
+stirrupsSteel= EC2_materials.S500C
 
 Asw= numberOfLegs*stirrupsArea # cross-sectional area of the shear reinforcement
 fyd= stirrupsSteel.fyd()
@@ -37,7 +37,7 @@ concrete= EC2_materials.C30
 nu= concrete.getShearStrengthReductionFactor()
 theta= math.asin(math.sqrt(Asw*fyd/(bw*stirrupSpacing*nu*-concrete.fcd())))
 VRdsA= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= math.pi/2.0, strutAngle= theta, nationalAnnex= None)
-VRdsARef= 382.9130152060541e3
+VRdsARef= 390.0862269964134e3
 ratio1= abs(VRdsA-VRdsARef)/VRdsARef
 
 # Concrete b)
@@ -46,7 +46,7 @@ concrete= EC2_materials.C60
 nu= concrete.getShearStrengthReductionFactor()
 theta= math.asin(math.sqrt(Asw*fyd/(bw*stirrupSpacing*nu*-concrete.fcd())))
 VRdsB= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= math.pi/2.0, strutAngle= theta, nationalAnnex= None)
-VRdsBRef= 562.6396866872334e3
+VRdsBRef= 583.9440401883879e3
 ratio2= abs(VRdsB-VRdsBRef)/VRdsBRef
 
 # # Concrete c) SOMETHING IS WRONG HERE:
@@ -71,6 +71,7 @@ print('ratio2= ', ratio2)
 # print('VRdsC= ', VRdsC/1e3, 'kN')
 # print('ratio3= ', ratio3)
 '''
+
 
 import os
 from misc_utils import log_messages as lmsg

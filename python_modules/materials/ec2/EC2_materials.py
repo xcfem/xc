@@ -149,6 +149,7 @@ class EC2Concrete(concrete_base.Concrete):
             to expression 9.5N (or the national annex substitution)
         
         :param shearReinfSteel: reinforcing steel material.
+        :param nationalAnnex: identifier of the national annex.
         '''
         fyk= shearReinfSteel.fyk # characteristic value of the shear
                                  # reinforcement yield strength.
@@ -156,6 +157,34 @@ class EC2Concrete(concrete_base.Concrete):
             retval= self.fctm()/7.5/fyk # Spanish national annex.
         else:
             retval= 0.08*math.sqrt(self.fckMPa())/(fyk/1e6)
+        return retval
+
+    def getAlphaCw(self, NEd, Ac, nationalAnnex= None):
+        ''' Return the coefficient taking account of the state of the stress 
+            in the compression chord according to expressions 6.11aN, 6.11bN
+            and 6.11cN of EC2:2004.
+
+        :param NEd: axial force in the cross-section due to loading 
+                    or prestressing.
+        :param Ac: area of concrete cross-section. 
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        sigma_cp= -NEd/Ac/1e6 # concrete compressive stress at the centroidal
+                              # axis due to axial loading and/or prestressing
+        fcdMPa= -self.fcd()/1e6 # design value of concrete compressive strength (MPa).
+        sigma_ratio= sigma_cp/fcdMPa
+        if(sigma_cp==0.0):
+            retval= 1.0
+        elif(sigma_ratio<=0.25):
+            retval= 1.0+sigma_ratio
+        elif(sigma_ratio<=0.5):
+            retval= 1.25
+        elif(sigma_ratio<1.0):
+            retval= 2.5*(1.0-sigma_ratio)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
+            retval= 1e-6
         return retval
     
 #    def getEcmT(self):

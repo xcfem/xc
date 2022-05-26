@@ -231,8 +231,48 @@ def getShearResistanceNonCrackedNoShearReinf(concrete, I, S, NEd, Ac, bw, alpha_
     fctdMPa= concrete.fctd()/1e6 #design tensile strength (MPa)
     return (I/S*bw)*math.sqrt(fctdMPa**2+alpha_l*sigma_cp*fctdMPa)*1e6
 
+def getStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfSteel, shearReinfAngle= math.pi/2.0, nationalAnnex= None):
+    ''' Return the strut angle that makes concrete collapse at the same time
+        that the shear reinforcement (V_{Rd,s}= V_{Rd,max})
+
+    :param concrete: concrete material.
+    :param bw: smallest width of the cross-section in the tensile area.
+    :param s: spacing of the stirrups.
+    :param Asw: cross-sectional area of the shear reinforcement.
+    :param shearReinfSteel: reinforcing steel material.
+    :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    # nu1: strength reduction factor for concrete cracked in shear
+    nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
+    fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
+    fywd= shearReinfSteel.fyd() # design yield strength of the shear reinforcement
+    cotgTheta= math.sqrt((bw*s*nu*fcd)/(Asw*fywd*math.sin(shearReinfAngle))-1)
+    return math.atan(1.0/cotgTheta)    
+
+def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSteel, shearReinfAngle= math.pi/2.0, nationalAnnex= None):
+    ''' Return the maximum effective shear reinforcement according to expression
+        6.15 and 6.12 of EC2:2004.
+
+    :param concrete: concrete material.
+    :param NEd: axial force in the cross-section due to loading or prestressing.
+    :param Ac: area of concrete cross-section. 
+    :param bw: smallest width of the cross-section in the tensile area.
+    :param s: spacing of the stirrups.
+    :param Asw: cross-sectional area of the shear reinforcement.
+    :param shearReinfSteel: reinforcing steel material.
+    :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
+    # nu1: strength reduction factor for concrete cracked in shear
+    nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
+    fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
+    fywd= shearReinfSteel.fyd()
+    return 0.5*alpha_cw*nu1*fcd/fywd*bw*s
+    
 def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0, nationalAnnex= None):
-    ''' Return the design value of the shear resistance VRdc for shear 
+    ''' Return the design value of the shear resistance VRds for shear 
         reinforced members according to expressions 6.7N, 6.13 and 6.14 of
         EC2:2004.
 
@@ -267,22 +307,8 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSte
     #         nu1= max(0.9-fckMPa/200,0.5)
     
     # alpha_cw: coefficient taking account of the state of the stress in the compression chord
-    sigma_cp= -NEd/Ac/1e6 # concrete compressive stress at the centroidal
-                          # axis due to axial loading and/or prestressing
+    alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
     fcdMPa= -concrete.fcd()/1e6 # design value of concrete compressive strength (MPa).
-    sigma_ratio= sigma_cp/fcdMPa
-    if(sigma_cp==0.0):
-        alpha_cw= 1.0
-    elif(sigma_ratio<=0.25):
-        alpha_cw= 1.0+sigma_ratio
-    elif(sigma_ratio<=0.5):
-        alpha_cw= 1.25
-    elif(sigma_ratio<1.0):
-        alpha_cw= 2.5*(1.0-sigma_ratio)
-    else:
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
-        alpha_cw= 1e-6
     VRdmax= alpha_cw*bw*z*nu1*fcdMPa*cotgThetaPluscotgAlpha/(1+cotgTheta**2)*1e6
     return min(VRds, VRdmax)
 
@@ -300,3 +326,13 @@ def getMinShearReinforcementArea(concrete, shearReinfSteel, s, bw, shearReinfAng
     # minimum shear reinforcement ratio
     ro_w= concrete.getMinShearReinfRatio(shearReinfSteel, nationalAnnex)
     return ro_w*s*bw*math.sin(shearReinfAngle)
+
+def getAdditionalTensileForceMainReinf(VEd, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0):
+    ''' Return the additional tensile force, in the longitudinal reinforcement
+        due to shear VEd according to expression 6.18 of EC2:2004.
+
+    :param VEd: design value of the applied shear force.
+    :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
+    :param strutAngle: (theta) angle between the concrete compression strut and the beam axis perpendicular to the shear force.
+    '''
+    return 0.5*VEd*(1.0/math.tan(strutAngle)-1.0/math.tan(shearReinfAngle))

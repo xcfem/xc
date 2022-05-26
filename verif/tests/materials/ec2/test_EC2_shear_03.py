@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Example 6.3 from EC2 Worked Examples (rev A 31-03-2017)'''
+''' Example based on section 4.5 
+    of "EUROCÓDIGO 2 GUÍA RÁPIDA Calter March 2021"'''
 
 from __future__ import print_function
 from __future__ import division
@@ -22,7 +23,7 @@ for c in concreteMaterials:
     ro_wmin= c.getMinShearReinfRatio(stirrupsSteel, 'Spain')
     results.append(ro_wmin*1e3)
 
-# Values taken frm "EUROCÓDIGO 2 GUÍA RÁPIDA Calter March 2021"
+# Values taken from "EUROCÓDIGO 2 GUÍA RÁPIDA Calter March 2021"
 refResults= [0.42, 0.51, 0.59, 0.68, 0.77, 0.86, 0.94, 1.01, 1.09]
 
 error= 0.0
