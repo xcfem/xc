@@ -36,7 +36,7 @@ concrete= EC2_materials.C30
 #concrete.alfacc= 0.85 # coefficient taking account of long term effects on the compressive strength
 nu= concrete.getShearStrengthReductionFactor()
 theta= math.asin(math.sqrt(Asw*fyd/(bw*stirrupSpacing*nu*-concrete.fcd())))
-VRdsA= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= math.pi/2.0, strutAngle= theta, nationalAnnex= None)
+VRdsA= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= math.pi/2.0, webStrutAngle= theta, nationalAnnex= None)
 VRdsARef= 390.0862269964134e3
 ratio1= abs(VRdsA-VRdsARef)/VRdsARef
 
@@ -45,7 +45,7 @@ concrete= EC2_materials.C60
 #concrete.alfacc= 0.85 # coefficient taking account of long term effects on the compressive strength
 nu= concrete.getShearStrengthReductionFactor()
 theta= math.asin(math.sqrt(Asw*fyd/(bw*stirrupSpacing*nu*-concrete.fcd())))
-VRdsB= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= math.pi/2.0, strutAngle= theta, nationalAnnex= None)
+VRdsB= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= math.pi/2.0, webStrutAngle= theta, nationalAnnex= None)
 VRdsBRef= 583.9440401883879e3
 ratio2= abs(VRdsB-VRdsBRef)/VRdsBRef
 
