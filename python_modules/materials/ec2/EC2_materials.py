@@ -187,6 +187,15 @@ class EC2Concrete(concrete_base.Concrete):
             retval= 1e-6
         return retval
     
+    def getConcreteFlangeShearStressStrength(self, nationalAnnex= None):
+        ''' Return the shear stress resisted by plain concrete according to
+            clause 6.2.4 (6) of EC2:2004.
+
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        k= 0.4 # Depends on national annex.
+        return k*self.fctd()
+
 #    def getEcmT(self):
 #        """
 #        EC2Ecmt: approximate value of the modulus of elasticity [Pa] at age 

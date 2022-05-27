@@ -42,18 +42,18 @@ Asw_maxRef= corr*7.4e6*bw*stirrupsSpacing/stirrupsSteel.fyd()
 ratio1= abs(Asw_max-Asw_maxRef)/Asw_maxRef
 
 # angle theta of simultaneous concrete – reinforcement steel collapse
-optimumStrutAngle= EC2_limit_state_checking.getStrutAngleForSimultaneousCollapse(concrete, bw= bw, s= stirrupsSpacing, Asw= Asw, shearReinfSteel= stirrupsSteel, shearReinfAngle= stirrupsAngle)
+optimumStrutAngle= EC2_limit_state_checking.getWebStrutAngleForSimultaneousCollapse(concrete, bw= bw, s= stirrupsSpacing, Asw= Asw, shearReinfSteel= stirrupsSteel, shearReinfAngle= stirrupsAngle)
 optimumStrutAngleRef= math.radians(25.32151662757501)
 ratio2= abs(optimumStrutAngle-optimumStrutAngleRef)/optimumStrutAngleRef
 
 # design value of the shear resistance
-VRds= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupsSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= stirrupsAngle, strutAngle= optimumStrutAngle, nationalAnnex= None)
+VRds= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupsSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= stirrupsAngle, webStrutAngle= optimumStrutAngle, nationalAnnex= None)
 VRdsRef= 608.9415444951244e3
 ratio3= abs(VRds-VRdsRef)/VRdsRef
 
 # increase of tensile force in the longitudinal bars.
 VEd= VRds # Ultimate shear force.
-incTensileForce= EC2_limit_state_checking.getAdditionalTensileForceMainReinf(VEd= VRds, shearReinfAngle= stirrupsAngle, strutAngle= optimumStrutAngle)
+incTensileForce= EC2_limit_state_checking.getAdditionalTensileForceMainReinf(VEd= VRds, shearReinfAngle= stirrupsAngle, webStrutAngle= optimumStrutAngle)
 incTensileForceRef= 339.0165663093328e3
 ratio4= abs(incTensileForce-incTensileForceRef)/incTensileForceRef
 

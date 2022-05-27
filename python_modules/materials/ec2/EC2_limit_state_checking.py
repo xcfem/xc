@@ -183,6 +183,9 @@ def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
     retval=k3*cover+k1*k2*k4*fiReinf/ro_eff
     return retval
 
+# EC2:2004 6.2 Shear
+
+# EC2:2004 6.2.2 Members not requiring design shear reinforcement
 def getShearResistanceCrackedNoShearReinf(concrete, NEd, Ac, Asl, bw, d, nationalAnnex= None):
     ''' Return the design value of the shear resistance VRdc for cracked 
         sections subjected to bending moment, according to expressions 6.2.a 
@@ -232,9 +235,10 @@ def getShearResistanceNonCrackedNoShearReinf(concrete, I, S, NEd, Ac, bw, alpha_
     fctdMPa= concrete.fctd()/1e6 #design tensile strength (MPa)
     return (I/S*bw)*math.sqrt(fctdMPa**2+alpha_l*sigma_cp*fctdMPa)*1e6
 
-def getStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfSteel, shearReinfAngle= math.pi/2.0, nationalAnnex= None):
-    ''' Return the strut angle that makes concrete collapse at the same time
-        that the shear reinforcement (V_{Rd,s}= V_{Rd,max})
+# EC2:2004 6.2.3 Members requiring design shear reinforcement.
+def getWebStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfSteel, shearReinfAngle= math.pi/2.0, nationalAnnex= None):
+    ''' Return the web strut angle that makes web concrete collapse at the same
+        time that the shear reinforcement (V_{Rd,s}= V_{Rd,max})
 
     :param concrete: concrete material.
     :param bw: smallest width of the cross-section in the tensile area.
@@ -249,7 +253,30 @@ def getStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfSteel, 
     fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
     fywd= shearReinfSteel.fyd() # design yield strength of the shear reinforcement
     cotgTheta= math.sqrt((bw*s*nu*fcd)/(Asw*fywd*math.sin(shearReinfAngle))-1)
-    return math.atan(1.0/cotgTheta)    
+    return math.atan(1.0/cotgTheta)   
+
+def getMaximumShearWebStrutCrushing(concrete, NEd, Ac, bw, z, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None):
+    ''' Return the maximum shear force due to diagonal compression in the web
+        (strut crushing) according to expression 6.14 and 6.9 of EC2:2004.
+
+    :param concrete: concrete material.
+    :param NEd: axial force in the cross-section due to loading or prestressing.
+    :param Ac: area of concrete cross-section. 
+    :param bw: smallest width of the cross-section in the tensile area.
+    :param z: internal lever arm.
+    :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
+    :param webStrutAngle: (theta) angle between the concrete compression strut and the beam axis perpendicular to the shear force.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    # alpha_cw: coefficient taking account of the state of the stress in the compression chord
+    alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
+    # nu1: strength reduction factor for concrete cracked in shear
+    nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
+    fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
+    webStrutAngle= checkWebStrutAngleLimits(webStrutAngle, nationalAnnex)
+    cotgTheta= 1/math.tan(webStrutAngle)
+    cotgAlpha= 1/math.tan(shearReinfAngle)
+    return alpha_cw*bw*z*nu1*fcd*(cotgTheta+cotgAlpha)/(1+cotgTheta**2)
 
 def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSteel, shearReinfAngle= math.pi/2.0, nationalAnnex= None):
     ''' Return the maximum effective shear reinforcement according to expression
@@ -265,6 +292,7 @@ def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSt
     :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
     :param nationalAnnex: identifier of the national annex.
     '''
+    # alpha_cw: coefficient taking account of the state of the stress in the compression chord
     alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
     # nu1: strength reduction factor for concrete cracked in shear
     nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
@@ -272,9 +300,9 @@ def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSt
     fywd= shearReinfSteel.fyd()
     return 0.5*alpha_cw*nu1*fcd/fywd*bw*s
 
-def getStrutAngleLimits(nationalAnnex= None):
-    ''' Return true if the strut angle is inside the limits specified
-        in the expression 6.7N of EC2:2004.
+def getWebStrutAngleLimits(nationalAnnex= None):
+    ''' Return the limits specified in the expression 6.7N of EC2:2004
+        for the web strut angle.
 
     :param nationalAnnex: identifier of the national annex.
     '''
@@ -282,11 +310,32 @@ def getStrutAngleLimits(nationalAnnex= None):
         limSup= math.atan(1/0.5)
         limInf= math.atan(1/2.0)
     else:
-        limSup= math.atan(1.0)
+        limSup= math.pi/4.0 # math.atan(1.0)
         limInf= math.atan(1/2.5)
-    return limInf, limSup    
+    return limInf, limSup
 
-def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0, nationalAnnex= None):
+def checkWebStrutAngleLimits(webStrutAngle, nationalAnnex= None):
+    ''' Check that the strut angle is inside the limits specified
+        in the expression 6.7N of EC2:2004. Otherwise, issue a
+        warning and return a suitable strut angle.
+
+    :param webStrutAngle: (theta) angle between the concrete compression web strut and the beam axis perpendicular to the shear force.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    retval= webStrutAngle
+    limInf, limSup= getWebStrutAngleLimits(nationalAnnex)
+    if((webStrutAngle<limInf) or (webStrutAngle>limSup)): # eq 6.7N
+        methodName= sys._getframe(0).f_code.co_name
+        errString= methodName+'; strut angle: '+str(math.degrees(webStrutAngle))+' out of range: ['+str(math.degrees(limInf))+','+str(math.degrees(limSup))+']'
+        if(webStrutAngle<limInf):
+            retval= limInf
+        elif(webStrutAngle>limSup):
+            retval= limSup
+        errString+= ' using '+str(math.degrees(retval))
+        lmsg.warning(errString)
+    return retval
+
+def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None):
     ''' Return the design value of the shear resistance VRds for shear 
         reinforced members according to expressions 6.7N, 6.13 and 6.14 of
         EC2:2004.
@@ -300,20 +349,11 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSte
     :param z: inner lever arm, for a member with constant depth, corresponding to the bending moment in the element under consideration.
     :param shearReinfSteel: reinforcing steel material.
     :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
-    :param strutAngle: (theta) angle between the concrete compression strut and the beam axis perpendicular to the shear force.
+    :param webStrutAngle: (theta) angle between the concrete compression web strut and the beam axis perpendicular to the shear force.
     :param nationalAnnex: identifier of the national annex.
     '''
-    limInf, limSup= getStrutAngleLimits(nationalAnnex)
-    if((strutAngle<limInf) or (strutAngle>limSup)): # eq 6.7N
-        methodName= sys._getframe(0).f_code.co_name
-        errString= methodName+'; strut angle: '+str(math.degrees(strutAngle))+' out of range: ['+str(math.degrees(limInf))+','+str(math.degrees(limSup))+']'
-        if(strutAngle<limInf):
-            strutAngle= limInf
-        elif(strutAngle>limSup):
-            strutAngle= limSup
-        errString+= ' using '+str(math.degrees(strutAngle))
-        lmsg.warning(errString)
-    cotgTheta= 1/math.tan(strutAngle)
+    webStrutAngle= checkWebStrutAngleLimits(webStrutAngle, nationalAnnex)
+    cotgTheta= 1/math.tan(webStrutAngle)
     cotgAlpha= 1/math.tan(shearReinfAngle)
     sinAlpha= math.sin(shearReinfAngle)
     fywd= shearReinfSteel.fyd()
@@ -349,12 +389,96 @@ def getMinShearReinforcementArea(concrete, shearReinfSteel, s, bw, shearReinfAng
     ro_w= concrete.getMinShearReinfRatio(shearReinfSteel, nationalAnnex)
     return ro_w*s*bw*math.sin(shearReinfAngle)
 
-def getAdditionalTensileForceMainReinf(VEd, shearReinfAngle= math.pi/2.0, strutAngle= math.pi/4.0):
+def getAdditionalTensileForceMainReinf(VEd, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0):
     ''' Return the additional tensile force, in the longitudinal reinforcement
         due to shear VEd according to expression 6.18 of EC2:2004.
 
     :param VEd: design value of the applied shear force.
     :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
-    :param strutAngle: (theta) angle between the concrete compression strut and the beam axis perpendicular to the shear force.
+    :param webStrutAngle: (theta) angle between the concrete web compression strut and the beam axis perpendicular to the shear force.
     '''
-    return 0.5*VEd*(1.0/math.tan(strutAngle)-1.0/math.tan(shearReinfAngle))
+    return 0.5*VEd*(1.0/math.tan(webStrutAngle)-1.0/math.tan(shearReinfAngle))
+
+# EC2:2004 6.2.4 Shear between web and flanges.
+def getFlangeStrutAngleLimits(compressionFlange= True, nationalAnnex= None):
+    ''' Return the limits specified in the clause 6.2.4(4) of EC2:2004 for
+        the angle of the struts in the flange.
+
+    :param compressionFlange: true if flange is compressed.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    if(compressionFlange):
+        limSup= math.pi/4.0 # math.atan(1.0)
+        limInf= math.atan(1/2.0) # 26.5º
+    else:
+        limSup= math.pi/4.0 # math.atan(1.0)
+        limInf= math.atan(1/1.25) # 38.6º
+    return limInf, limSup
+
+def checkFlangeStrutAngleLimits(flangeStrutAngle, compressionFlange= True, nationalAnnex= None):
+    ''' Check that the strut angle is inside the limits specified
+        in the expression 6.7N of EC2:2004. Otherwise, issue a
+        warning and return a suitable strut angle.
+
+    :param flangeStrutAngle: (theta_f) angle between the concrete flange compression strut and the shear plane (see figure 6.7 on EC2:2004).
+    :param compressionFlange: true if flange is compressed.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    retval= flangeStrutAngle
+    limInf, limSup= getFlangeStrutAngleLimits(compressionFlange, nationalAnnex)
+    if((flangeStrutAngle<limInf) or (flangeStrutAngle>limSup)): # eq 6.7N
+        methodName= sys._getframe(0).f_code.co_name
+        errString= methodName+'; flange strut angle: '+str(math.degrees(flangeStrutAngle))+' out of range: ['+str(math.degrees(limInf))+','+str(math.degrees(limSup))+']'
+        if(flangeStrutAngle<limInf):
+            retval= limInf
+        elif(flangeStrutAngle>limSup):
+            retval= limSup
+        errString+= ' using '+str(math.degrees(retval))
+        lmsg.warning(errString)
+    return retval
+
+def getMaximumShearFlangeStrutCrushingStress(concrete, flangeStrutAngle= math.pi/4.0, compressionFlange= True, nationalAnnex= None):
+    ''' Return the maximum shear force due to diagonal compression in the web
+        (strut crushing) according to expression 6.22 of EC2:2004.
+
+    :param concrete: concrete material.
+    :param flangeStrutAngle: (theta_f) angle between the concrete flange compression strut and the shear plane (see figure 6.7 on EC2:2004).
+    :param compressionFlange: true if flange is compressed.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    # nu1: strength reduction factor for concrete cracked in shear
+    nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
+    fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
+    flangeStrutAngle= checkFlangeStrutAngleLimits(flangeStrutAngle, compressionFlange, nationalAnnex)
+    return nu1*fcd*math.sin(flangeStrutAngle)*math.cos(flangeStrutAngle)
+
+def getConcreteFlangeShearStrength(concrete, hf, DeltaX, nationalAnnex= None):
+    ''' Return the shear stress resisted by plain concrete according to
+        clause 6.2.4 (6) of EC2:2004.
+
+    :param concrete: concrete material.
+    :param hf: flange thickness at the shear plane.
+    :param DeltaX: length under consideration (see figure 6.7 on EC2:2004).
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    return concrete.getConcreteFlangeShearStressStrength(nationalAnnex)*DeltaX*hf
+
+def getFlangeShearResistanceShearReinfStress(concrete, hf, Asf, sf, shearReinfSteel, flangeStrutAngle= math.pi/4.0, compressionFlange= True, nationalAnnex= None):
+    ''' Return the design value of the flange shear resistance  
+        according to expressions 6.21 of EC2:2004.
+
+    :param concrete: concrete material.
+    :param hf: flange thickness at the shear plane.
+    :param Asf: cross-sectional area of the flange transverse reinforcement.
+    :param sf: spacing of the reinforcement.
+    :param shearReinfSteel: reinforcing steel material.
+    :param flangeStrutAngle: (theta_f) angle between the concrete flange compression strut and the shear plane (see figure 6.7 on EC2:2004).
+    :param compressionFlange: true if flange is compressed.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    flangeStrutAngle= checkFlangeStrutAngleLimits(flangeStrutAngle, compressionFlange, nationalAnnex)
+    cotgThetaF= 1/math.tan(flangeStrutAngle)
+    fyd= shearReinfSteel.fyd()
+    vRds= Asf/sf*fyd*cotgThetaF/hf # expression 6.21 of EC2:2004
+    vRdmax= getMaximumShearFlangeStrutCrushingStress(concrete, flangeStrutAngle, compressionFlange, nationalAnnex) # expression 6.22 of EC2:2004
+    return min(vRds, vRdmax)

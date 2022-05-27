@@ -894,12 +894,14 @@ class ISection(SectionProperties):
 class PolygonalSection(SectionProperties):
     '''Polygonal section geometric parameters
 
-    :ivar name:  name of the section.
     :ivar plg:  contour of the section.
-
     '''
-    def __init__(self,name,plg):
-        '''Constructor.'''
+    def __init__(self, name, plg):
+        '''Constructor.
+
+        :param name:  name of the section.
+        :param plg:  contour of the section.
+        '''
         super(PolygonalSection,self).__init__(name)
         self.plg= plg
         self.reCenter()
@@ -914,6 +916,22 @@ class PolygonalSection(SectionProperties):
         '''Return total height (parallel to local y axis) of the section
         '''
         return self.plg.getBnd().height
+
+    def yMin(self):
+        ''' Return the minimum local y coordinate of the section.'''
+        return self.plg.getYMin
+    
+    def yMax(self):
+        ''' Return the minimum local y coordinate of the section.'''
+        return self.plg.getYMax
+
+    def zMin(self):
+        ''' Return the minimum local z coordinate of the section.'''
+        return self.plg.getXMin
+    
+    def zMax(self):
+        ''' Return the minimum local z coordinate of the section.'''
+        return self.plg.getXMax
     
     def A(self):
         '''Return cross-sectional area of the section'''
@@ -960,9 +978,67 @@ class PolygonalSection(SectionProperties):
     def getContourPoints(self):
         ''' Return the vertices of the rectangle.'''
         retval= list()
-        for p in self.plg:
+        for p in self.plg.getVertices():
             retval.append(p)
         return retval
+
+
+# T-section:
+#                 flange width
+#        +---------------------------------+
+#        |                                 | flange thickness
+#        +------------+      +-------------+
+#                     |      |
+#                     |      |
+#                     |      |  web height
+#                     |      |
+#                     |      |
+#                     |      |
+#                     +------+
+#                      web width
+#
+class TSection(PolygonalSection):
+    ''' T-section.
+
+    :ivar webWidth: web width.
+    :ivar webHeight: web height.
+    :ivar flangeWidth: flange width.
+    :ivar flangeThickness: flange thickness.
+    :ivar chamferSide: side of the chamfer between the web and the flange.
+    '''
+    
+    def __init__(self, name, webWidth, webHeight, flangeWidth, flangeThickness, chamferSide= 0.0):
+        ''' Constructor.
+
+        :param name:  name of the section.
+        :param webWidth: web width.
+        :param webHeight: web height.
+        :param flangeWidth: flange width.
+        :param flangeThickness: flange thickness.
+        :param chamferSide: side of the chamfer between the web and the flange.
+        '''
+        self.webWidth= webWidth # web width.
+        self.webHeight= webHeight # web height.
+        self.flangeWidth= flangeWidth # flange width.
+        self.flangeThickness= flangeThickness # flange thickness.
+        self.chamferSide= chamferSide
+        super(TSection, self).__init__(name= name, plg= self.buildContour())
+
+    def buildContour(self):
+        ''' Create the section contour.'''
+        contour= geom.Polygon2d()
+        contour.appendVertex(geom.Pos2d(0,0))
+        contour.appendVertex(geom.Pos2d(self.webWidth/2.0, 0))
+        contour.appendVertex(geom.Pos2d(self.webWidth/2.0, self.webHeight-self.chamferSide))
+        contour.appendVertex(geom.Pos2d(self.webWidth/2.0+self.chamferSide, self.webHeight))
+        contour.appendVertex(geom.Pos2d(self.flangeWidth/2.0, self.webHeight))
+        contour.appendVertex(geom.Pos2d(self.flangeWidth/2.0, self.webHeight+self.flangeThickness))
+        contour.appendVertex(geom.Pos2d(-self.flangeWidth/2.0, self.webHeight+self.flangeThickness))
+        contour.appendVertex(geom.Pos2d(-self.flangeWidth/2.0, self.webHeight))
+        contour.appendVertex(geom.Pos2d(-self.webWidth/2.0-self.chamferSide, self.webHeight))
+        contour.appendVertex(geom.Pos2d(-self.webWidth/2.0, self.webHeight-self.chamferSide))
+        contour.appendVertex(geom.Pos2d(-self.webWidth/2.0, 0.0))
+        return contour
 
 ##   Return the torsion constant of a box 
 ##   according to the book "Puentes (apuntes para su diseño
