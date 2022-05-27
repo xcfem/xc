@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Reinforced concrete section rough calculations test SIA 262 version.'''
+
 from __future__ import division
 from __future__ import print_function
 
@@ -8,9 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-'''
-   Wall stability
-'''
 from materials.sia262 import SIA262_materials
 from materials.sia262 import SIA262_limit_state_checking
 from materials.sections import rebar_family
@@ -33,6 +32,7 @@ print('ratio1= ', ratio1)
 print('VR= ', VR/1e3)
 print('ratio2= ', ratio2)
 '''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

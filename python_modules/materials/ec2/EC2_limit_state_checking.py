@@ -19,6 +19,7 @@ from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg
 from solution import predefined_solutions
 from materials import concrete_base
+from materials.sections import rebar_family as rf
 
 class CrackStraightController(lscb.LimitStateControllerBase):
     '''Definition of variables involved in the verification of the cracking
@@ -128,6 +129,32 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             if (wk>e.getProp(self.limitStateLabel).wk):
                 R=e.getProp('ResF')
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp("idSection"),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
+                
+###################
+# Rebar families. #
+###################
+
+class EC2RebarFamily(rf.RebarFamily):
+    ''' Family or reinforcement bars with checking according to EC2.
+
+       :ivar pos: reinforcement position according to clause 66.5.1
+                  of EC2.
+    '''
+    def __init__(self,steel, diam, spacing, concreteCover, pos= 'II'):
+        ''' Constructor.
+
+        :param steel: reinforcing steel material.
+        :param diam: diameter of the bars.
+        :param spacing: spacing of the bars.
+        :param concreteCover: concrete cover of the bars.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EC2.
+        '''
+        super(EC2RebarFamily,self).__init__(steel,diam,spacing,concreteCover)
+        self.pos= pos
+
+    def getCopy(self):
+        return EC2RebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover, pos= self.pos)
 
 
 
