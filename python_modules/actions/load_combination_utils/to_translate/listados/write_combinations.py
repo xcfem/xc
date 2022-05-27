@@ -13,7 +13,7 @@ def writeULSCombinations(fileName, latexFileName, nmbFormat):
     
     
     with open('output.yaml', 'w') as def_hip_elu:
-        outputs= yaml.dump(ulsCombDict, def_hip_elu)
+        dummy= yaml.dump(ulsCombDict, def_hip_elu)
     def_hip_elu.close()
     
     hip_elu_tex= open(latexFileName,"w")
@@ -37,7 +37,7 @@ def writeFrequentSLSCombinations(fileName, latexFileName, nmbFormat):
     
     
     with open('output.yaml', 'w') as def_hip_sls:
-        outputs= yaml.dump(ulsCombDict, def_hip_sls)
+        dummy= yaml.dump(ulsCombDict, def_hip_sls)
     def_hip_sls.close()
 
     hip_sls_tex= open(latexFileName,"w")

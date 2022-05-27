@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import geom
-
 def defParamAngPoliedrico(jp): 
     JPvacio= jp.Vacio
     if(not(JPvacio)):

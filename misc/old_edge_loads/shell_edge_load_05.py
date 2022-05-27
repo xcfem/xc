@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # vector3d_edge_load_global test (home made).
-import xc_base
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

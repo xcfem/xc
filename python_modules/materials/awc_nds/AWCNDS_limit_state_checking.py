@@ -525,16 +525,14 @@ class StudArrangement(object):
     def check(self, loadDict, loadCombinations):
         ''' Check the stud arrangement for the load arguments.
 
-        :param deadLoad: dead load value.
-        :param liveLoad: live load value.
-        :param snowLoad: live load value.
-        :param windLoad: dead load value.
+        :param loadDict: dictionary containing load values.
         :param loadCombinations: load combinations.
         '''
         
         worstCase= None
         worstCaseCF= 0.0
-        # Read loads values from dictionary.
+        # Read loads values from dictionary
+        # they will be used in expr.
         deadLoad= loadDict['deadLoad']
         liveLoad= loadDict['liveLoad']
         snowLoad= loadDict['snowLoad']
@@ -543,6 +541,7 @@ class StudArrangement(object):
         # Checking
         for loadCombName in loadCombinations:
             expr= loadCombinations[loadCombName].expr
+            # loads are used here inside 'expr'
             value= eval(expr)
             N= value[1]*self.studSpacing
             M= value[0]*self.studHeight**2/8.0            
@@ -634,11 +633,11 @@ class WallTopPlates(object):
         seedElemHandler= prep.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= section.name
         seedElemHandler.defaultTransformation= lin.name
-        elem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+        unusedElem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 
-        infSetMesh= self.infSet.genMesh(xc.meshDir.I)
+        unusedInfSetMesh= self.infSet.genMesh(xc.meshDir.I)
         self.infSet.fillDownwards()
-        supSetMesh= self.supSet.genMesh(xc.meshDir.I)
+        unusedSupSetMesh= self.supSet.genMesh(xc.meshDir.I)
         self.supSet.fillDownwards()
 
         ## Loaded nodes.
@@ -696,7 +695,7 @@ class WallTopPlates(object):
         ## Define load values.
         for lcName in loadDict:
             value= loadDict[lcName]
-            cLC= loadCaseManager.setCurrentLoadCase(lcName)
+            unusedCLC= loadCaseManager.setCurrentLoadCase(lcName)
             self.applyLoads(value)
             
     def checkPlates(self, loadDurationFactor):
@@ -834,9 +833,7 @@ class WallTopPlates(object):
                 worstPerpComprCF= perpComprCF
                 worstPerpComprCase= lcName
         # Store the values in a dictionary.
-        worstResults= dict()
-        for variable in ['worstDeflectionCase', 'worstDeflectionValue', 'worstBendingCase', 'worstBendingCF', 'worstShearCase', 'worstShearCF', 'worstPerpComprCase', 'worstPerpComprCF']:
-            worstResults[variable] = eval(variable)
+        worstResults= {'worstDeflectionCase':worstDeflectionCase, 'worstDeflectionValue':worstDeflectionValue, 'worstBendingCase':worstBendingCase, 'worstBendingCF':worstBendingCF, 'worstShearCase':worstShearCase, 'worstShearCF':worstShearCF, 'worstPerpComprCase':worstPerpComprCase, 'worstPerpComprCF':worstPerpComprCF}
         return results, worstResults
 
     def check(self, loadDict, combContainer):

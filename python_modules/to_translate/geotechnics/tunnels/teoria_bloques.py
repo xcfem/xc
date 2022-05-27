@@ -42,7 +42,7 @@ def processPolyhedralAngle(nmbAng,nmbTunel):
                 print("    points of tangency= ",ptsTang,"\n")
                 print("    cúspide= ",p3,"\n")
                 psplot.pageSize("letter")
-                outputFile= open(nmbTunel+nmbAng+".ps")
+                #outputFile= open(nmbTunel+nmbAng+".ps")
                 psplot.fspace(0.0, 0.0, 30.0, 30.0) # specify user coor system
                 psplot.lineWidth(0.1) # line thickness in user coordinates
                 psplot.penColorName("blue")  # path will be drawn in red

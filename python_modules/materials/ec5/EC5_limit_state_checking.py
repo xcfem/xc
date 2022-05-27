@@ -12,9 +12,6 @@ __email__= "ana.ortega@ciccp.es "
 
 import sys
 from misc_utils import log_messages as lmsg
-from materials.sections import section_properties
-from postprocess import def_vars_control
-from postprocess import callback_controls
 from postprocess import prop_statistics as ps
 
 
