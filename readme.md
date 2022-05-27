@@ -1,7 +1,8 @@
 ![XC](./doc/logo/xc_logo_alpha_channel_100x100.png)
 
-Open source finite element analysis program.
-============================================
+# Open source finite element analysis program.
+
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/xcfem/xc.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/xcfem/xc/context:python)
 
 ## Purpose
 The purpose of XC is simple: **master the analysis software instead of being mastered by the analysis software**.
