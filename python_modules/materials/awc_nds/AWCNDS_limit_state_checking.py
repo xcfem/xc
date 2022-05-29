@@ -21,7 +21,6 @@ from materials import wood_member_base
 from materials import limit_state_checking_base as lsc
 from materials.awc_nds import AWCNDS_materials
 from postprocess import control_vars as cv
-from postprocess import limit_state_data as lsd
 from misc_utils import units_utils
 from model import predefined_spaces
 from actions import load_cases as lcm
@@ -460,8 +459,8 @@ def defineBuiltUpColumnMember(dimensions, unbracedLengthB, unbracedLengthH, wood
     '''
     dim= dimensions.split('x')
     nPieces= int(dim[0]) # number of pieces.
-    pieceWidth= float(dim[1]) # thicknness of the piece. 
-    pieceHeight= float(dim[2]) # # height of the piece.
+    # dim[1] thicknness of the piece. 
+    # dim[2] height of the piece.
     (bb, hh)= AWCNDS_materials.dimensionLumberSizes[dim[1]+'x'+dim[2]]
     memberSection= None
     if(rotate):
