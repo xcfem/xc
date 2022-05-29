@@ -186,6 +186,16 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''
         return self.alfacc*self.fck/self.gmmC 
 
+    def getCDepth(self):
+        ''' Return the depth of the concrete rectangular compression block
+            (see figure 12 SIA 262:2013 or figure 39.5b of clause 39.5 b 
+            of EHE).
+        '''
+        retval= 0.8
+        if(self.fck>50e6):
+            retval-= (self.fck-50e6)/400e6
+        return retval
+
     def fmaxK(self):
         '''maximum characteristic strength of the concrete [Pa][-]
         '''

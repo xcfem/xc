@@ -27,6 +27,12 @@ class ConcreteSIA262(ec2.EC2Concrete):
         '''
         return self.eta_fc()*super(ConcreteSIA262,self).fcd()
     
+    def getCDepth(self):
+        ''' Return the depth of the concrete rectangular compression block
+            (see figure 12 SIA 262:2013).
+        '''
+        return 0.85
+    
     def fctd(self,t,favourable):
         '''SIA 262 sections 4.4.1.3 et 4.4.1.4
 

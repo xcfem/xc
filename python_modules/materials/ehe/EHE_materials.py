@@ -617,7 +617,7 @@ def get_losses_elastic_shortening_concrete_in_tendons(sigma_cp, Ep, Ecj):
 
 class Y1860S7Strand(PrestressingSteel):
     ''' Uncoated strand 7-Steel wire for prestressed concrete
-        according to EN 0138 - 3: March 2011.
+        according to EN 10138 - 3 Prestressing steels: March 2011.
 
      :ivar diameter: strand diameter.
      :ivar area: cross sectional area.

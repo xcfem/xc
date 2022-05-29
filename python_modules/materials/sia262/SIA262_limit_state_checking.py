@@ -157,7 +157,7 @@ class UniaxialBendingNormalStressController(lsc.UniaxialBendingNormalStressContr
 
 # Shear checking.
 
-def VuNoShearRebars(concrete,steel,Nd,Md,AsTrac,b,d):
+def VuNoShearRebars(concrete,steel,Nd,Md,AsTrac,b,d, z= None):
     '''Section shear capacity without shear reinforcement.
 
        :param concrete: concrete material.
@@ -167,8 +167,9 @@ def VuNoShearRebars(concrete,steel,Nd,Md,AsTrac,b,d):
        :param AsTrac: area of tensioned reinforcement.
        :param b: section width.
        :param d: section effective depth.
+       :param z: inner lever arm (if None z= 0.9*d).
     '''
-    Mu= ng_simple_bending_reinforcement.Mu(AsTrac,concrete.fcd(),steel.fyd(),b,d) 
+    Mu= ng_simple_bending_reinforcement.Mu(AsTrac,concrete.fcd(),steel.fyd(),b,d, z= z, c_depth= concrete.getCDepth()) 
     return VuNoShearRebarsSIA262(concrete,Nd,Md,Mu,b,d)
 
 def VuNoShearRebarsSIA262(concrete,Nd,Md,Mu,b,d):

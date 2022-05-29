@@ -6,23 +6,86 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
 from materials.sections import rebar_family
+from scipy import optimize
 
 
 class RCSection(object):
-    '''Reinforced concrete section.'''
-    tensionRebars= None
-    b= 0.25
-    h= 0.25
-    def __init__(self,tensionRebars,concrete,b,h):
-      self.tensionRebars= tensionRebars
-      self.concrete= concrete
-      self.b= b
-      self.h= h
-      self.stressLimitUnderPermanentLoads= 230e6
-      
+    '''Reinforced concrete section.
+
+    :ivar b: section width.
+    :ivar h: section depth.
+    :ivar concrete: concrete material.
+    :ivar tensionRebars: main reinforcement.
+    '''
+    def __init__(self, tensionRebars, concrete, b, h):
+        ''' Constructor.
+
+        :param b: section width.
+        :param h: section depth.
+        :param concrete: concrete material.
+        :param tensionRebars: main reinforcement.
+        '''
+        self.tensionRebars= tensionRebars
+        self.concrete= concrete
+        self.b= b
+        self.h= h
+        self.stressLimitUnderPermanentLoads= 230e6
+
+    def d(self):
+        ''' Return the effective depth of the reinforcement.
+
+        :param thickness: height of the rectangular section.
+        '''
+        return self.tensionRebars.d(self.h)
+
+    def z(self, MEd):
+        ''' Return the inner lever arm.
+
+        :param MEd: design value of the bending moment.      
+        '''
+        return self.d()-0.4*self.getNeutralAxisDepth(MEd)
+    
+    def getAc(self):
+        ''' Return the concrete area.'''
+        return self.b*self.h-self.tensionRebars.getAs()
+
+    def getDimensionlessMomentRatio(self, MEd):
+        ''' Return the ratio: MEd/(fcd*b*d^2).'''
+        return -MEd/self.concrete.fcd()/self.b/self.d()**2
+
+    def getDimensionlessReinforcementRatio(self):
+        ''' Return the ratio: As*fyd/(Ac*fcd).'''
+        fcd= -self.concrete.fcd()
+        return self.tensionRebars.getT()/self.getAc()/fcd
+
+    def getNeutralAxisDepth(self, MEd):
+        ''' Return the depth of the neutral axis assuming a rectangular 
+            stress diagram.
+
+        :param MEd: design value of the bending moment.      
+        '''
+        fcd= -self.concrete.fcd()
+        c= self.concrete.getCDepth()*fcd*self.b
+        d= self.d()
+        T= c*(d-math.sqrt(d**2-2*MEd/c))
+        xpl= T/c
+        assert xpl<=d, "neutral axis depth bigger than section depth."
+        return xpl
+
+    def getMinimumConcreteStrain(self, MEd):
+        ''' Return the minimum strain in the concrete.
+
+        :param MEd: design value of the bending moment.      
+        '''
+        d= self.d()
+        x= self.getNeutralAxisDepth(MEd)
+        steelStrain= 10e-3
+        return -(x/(d-x))*steelStrain
+    
     def setReinforcement(self,tensionRebars):
         self.tensionRebars= tensionRebars
         
@@ -32,7 +95,11 @@ class RCSection(object):
     def getMinReinfAreaUnderTension(self):
         return self.tensionRebars.getMinReinfAreaUnderTension(concrete= self.concrete,thickness= self.h)
     
-    def getMR(self):
+    def getMR(self, z= None):
+        ''' Return the resisting moment of the section.
+
+        :param z: inner lever arm.
+        '''
         return self.tensionRebars.getMR(self.concrete,self.b,self.h)
     
     def getVR(self,Nd,Md):

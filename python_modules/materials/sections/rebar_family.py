@@ -82,20 +82,26 @@ class RebarFamily(RebarRow):
     def getCopy(self):
         return RebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover)
             
-    def getMR(self,concrete,b,thickness):
+    def getMR(self,concrete,b,thickness, z= None):
         '''Return the bending resistance of the (b x thickness) rectangular section.
 
         :param concrete: concrete material.
         :param b: width of the rectangular section.
         :param thickness: height of the rectangular section.
+        :param z: inner lever arm (if None z= 0.9*d).
         '''
-        return ng_simple_bending_reinforcement.Mu(self.getAs(),concrete.fcd(),self.steel.fyd(),b,thickness-self.getEffectiveCover())
+        return ng_simple_bending_reinforcement.Mu(As= self.getAs(), fcd= concrete.fcd(), fsd= self.steel.fyd(), b= b, d= self.d(thickness), z= z, c_depth= concrete.getCDepth())
       
     def d(self,thickness):
+        ''' Return the effective depth of the reinforcement.
+
+        :param thickness: height of the rectangular section.
+        '''
         return thickness-self.getEffectiveCover()
       
     def getT(self):
-        ''' Return the tension force in the reinforcement.'''
+        ''' Return the design value of the ultimate tension force in 
+            the reinforcement.'''
         return self.getAs()*self.steel.fyd()
 
     def getDefStr(self):
