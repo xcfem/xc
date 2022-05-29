@@ -30,8 +30,8 @@ def calcNumeroEstabFromRp(r,rp):
         rp: plastification radius.'''
     return ptosNumeroEstab.valor(rp/r)
 
-'''Points that define the ratio between the excavation radius and the
-   plastification radius from the number of stability.'''
+# Points that define the ratio between the excavation radius and the
+# plastification radius from the number of stability.
 ptosPlastificationRadius= ptosPlastificationRadius(geom.Pos2d(1,1), geom.Pos2d(1.5,1.125), geom.Pos2d(2,1.45), geom.Pos2d(2.5,1.75), geom.Pos2d(3,2.15) )
 
 def calcPlastificationRadius(r,N):
