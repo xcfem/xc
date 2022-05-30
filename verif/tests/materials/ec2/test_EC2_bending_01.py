@@ -33,9 +33,6 @@ h= .5 # beam depth.
 d= 447e-3 # effective depth.
 nominalCover= h-d
 
-# Beam geometry.
-span= 6.0 # 6 m
-
 # Materials.
 concrete= EC2_materials.C30
 steel= EC2_materials.S500C
