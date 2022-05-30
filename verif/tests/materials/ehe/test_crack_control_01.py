@@ -47,16 +47,16 @@ section.positvRebarRows= def_simple_RC_section.LongReinfLayers([lowerRow])
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([])
 
 section.defRCSection(preprocessor,matDiagType= 'k')
-scc3d_testing_bench.sectionModel(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
-modelSpace.fixNodeF00_0FF(2)
+modelSpace.fixNode000_000(nodA.tag)
+modelSpace.fixNodeF00_0FF(nodB.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,0]))
+lp0.newNodalLoad(nodB.tag, xc.Vector([NDato,0,0,0,MyDato,0]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -68,7 +68,7 @@ analOk= analysis.analyze(10)
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 elements= preprocessor.getElementHandler
-scc= elements.getElement(1).getSection()
+scc= zlElement.getSection()
 secHAParamsFis.computeWk(scc,concr.matTagK,steel.matTagK,concr.fctm())
 
 wkReference= 0.226250241526506e-3 # Avg of computed values in different computers.

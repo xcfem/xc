@@ -81,16 +81,16 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomSecHA.name)
 secHA.setupFibers()
 
-scc3d_testing_bench.sectionModel(preprocessor, "secHA")
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 modelSpace.fixNodeF00_0FF(2)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -106,9 +106,7 @@ secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 
 
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
+scc= zlElement.getSection()
 secHAParamsFis.computeWk(scc,EHE_materials.HA25.matTagK,EHE_materials.B400S.matTagK,EHE_materials.HA25.fctm())
 
 ratio1= ((secHAParamsFis.tensionedRebars.spacing-0.105)/0.105)

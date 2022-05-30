@@ -68,15 +68,15 @@ section.shReinfY= shearReinf
 
 section.defRCSection(preprocessor,matDiagType= 'd')
 
-scc3d_testing_bench.sectionModel(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([NDato,0,VDato,0,MyDato,MzDato]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([NDato,0,VDato,0,MyDato,MzDato]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)

@@ -45,16 +45,16 @@ fiberSectionRepr= barsSection.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(barsSectionGeometry.name)
 barsSection.setupFibers()
 
-scc3d_testing_bench.sectionModel(preprocessor, "barsSection")
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "barsSection")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
-modelSpace.fixNodeF00_00F(2)
+modelSpace.fixNode000_000(nodA.tag)
+modelSpace.fixNodeF00_00F(nodB.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([0,0,0,0,0,MzDato]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([0,0,0,0,0,MzDato]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -67,13 +67,11 @@ analOk= analysis.analyze(1)
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
 
-RN= nodes.getNode(1).getReaction[0] 
-RM= nodes.getNode(1).getReaction[5] 
-RN2= nodes.getNode(2).getReaction[0] 
+RN= nodA.getReaction[0] 
+RM= nodA.getReaction[5] 
+RN2= nodB.getReaction[0] 
 
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
+scc= zlElement.getSection()
 esfN= scc.getFibers().getResultant()
 esfMy= scc.getFibers().getMy(0.0)
 esfMz= scc.getFibers().getMz(0.0)

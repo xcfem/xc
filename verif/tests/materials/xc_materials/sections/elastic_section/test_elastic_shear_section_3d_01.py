@@ -28,17 +28,17 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 matPoteau= scc10x20.defElasticShearSection3d(preprocessor,matscc10x20)
-elemZLS= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.name)
+elemZLS= zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 loadMz= 1e3
-lp0.newNodalLoad(2,xc.Vector([0,0,0,0,0,loadMz]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([0,0,0,0,0,loadMz]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -47,11 +47,11 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 nodes= preprocessor.getNodeHandler
-RM= nodes.getNode(1).getReaction[5] 
+RM= nodA.getReaction[5] 
 
 elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc0= ele1.getSection()
+
+scc0= zlElement.getSection()
 esfMz= scc0.getStressResultantComponent("Mz")
 
 ratio1= (RM+loadMz)/loadMz

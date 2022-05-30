@@ -74,11 +74,11 @@ section.shReinf= shearReinf
 
 section.defRCSection(preprocessor,matDiagType= 'd')
 
-scc3d_testing_bench.sectionModel(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
 Nd= -550e3 # Axial force when checking shear.
@@ -90,7 +90,7 @@ Vd= 148.7e3 # Shear value.
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-lp0.newNodalLoad(2,xc.Vector([Nd,0,Vd,0,Myd,Mzd]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([Nd,0,Vd,0,Myd,Mzd]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)

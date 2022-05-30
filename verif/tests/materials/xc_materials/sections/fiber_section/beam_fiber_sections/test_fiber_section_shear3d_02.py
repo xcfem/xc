@@ -59,10 +59,10 @@ sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")
 
-scc3d_testing_bench.sectionModel(preprocessor, "sa")
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "sa")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -73,7 +73,7 @@ loadVz= -3
 loadMx= -4
 loadMy= -5
 loadMz= -6
-lp0.newNodalLoad(2,xc.Vector([loadN,loadVy,loadVz,loadMx,loadMy,loadMz]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([loadN,loadVy,loadVz,loadMx,loadMy,loadMz]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -89,12 +89,10 @@ if(analOk!=0):
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
 
-n1= nodes.getNode(1)
+n1= nodA
 reacN1= n1.getReaction
 
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
+scc= zlElement.getSection()
 N= scc.getStressResultantComponent("N")
 Vy= scc.getStressResultantComponent("Vy")
 Vz= scc.getStressResultantComponent("Vz")

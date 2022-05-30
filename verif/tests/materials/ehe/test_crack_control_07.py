@@ -66,11 +66,11 @@ materialHandler= preprocessor.getMaterialHandler
 section.mainReinf= mainReinf
 
 section.defRCSection(preprocessor,matDiagType= 'k')
-scc3d_testing_bench.sectionModel(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
 Nd= -550e3/1.5 # Axial force when checking crack width.
@@ -81,7 +81,7 @@ Mzd= 0.0 # Z bending moment value when checking shear.
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-lp0.newNodalLoad(2,xc.Vector([Nd,0,0,0,Myd,Mzd]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([Nd,0,0,0,Myd,Mzd]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)

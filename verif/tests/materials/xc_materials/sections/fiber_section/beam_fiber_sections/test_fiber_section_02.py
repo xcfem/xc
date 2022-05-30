@@ -61,17 +61,17 @@ fiberSectionRepr.setGeomNamed(geomRectang.name)
 rectang.setupFibers()
 extractFiberSectionProperties(rectang,scc10x20)
 
-scc3d_testing_bench.sectionModel(preprocessor, "rectang")
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "rectang")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
-modelSpace.fixNodeF00_00F(2)
+modelSpace.fixNode000_000(nodA.tag)
+modelSpace.fixNodeF00_00F(nodB.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
 
 loadMz= 0.999*scc10x20.getPlasticMomentZ(fy)
-lp0.newNodalLoad(2,xc.Vector([0,0,0,0,0,loadMz]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([0,0,0,0,0,loadMz]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -85,11 +85,9 @@ analOk= analysis.analyze(1)
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
 
-RM= nodes.getNode(1).getReaction[5] 
+RM= nodA.getReaction[5] 
 
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
+scc= zlElement.getSection()
 esfMz= scc.getFibers().getMz(0.0)
 
 

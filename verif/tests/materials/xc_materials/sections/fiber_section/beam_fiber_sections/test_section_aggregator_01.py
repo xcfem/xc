@@ -66,10 +66,10 @@ agg= materialHandler.newMaterial("section_aggregator","sa")
 agg.setSection("rectang")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
-scc3d_testing_bench.sectionModel(preprocessor, "sa")
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "sa")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -78,7 +78,7 @@ loadVy= 2e4
 loadVz= 3e4
 loadMx= 1e3
 loadMz= 0.999*scc10x20.getPlasticMomentZ(fy)
-lp0.newNodalLoad(2,xc.Vector([0,loadVy,loadVz,loadMx,0,loadMz]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([0,loadVy,loadVz,loadMx,0,loadMz]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -94,14 +94,12 @@ if(analOk!=0):
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
 
-RVy= nodes.getNode(1).getReaction[1] 
-RVz= nodes.getNode(1).getReaction[2] 
-RMx= nodes.getNode(1).getReaction[3] 
-RMz= nodes.getNode(1).getReaction[5] 
+RVy= nodA.getReaction[1] 
+RVz= nodA.getReaction[2] 
+RMx= nodA.getReaction[3] 
+RMz= nodA.getReaction[5] 
 
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
+scc= zlElement.getSection()
 esfVy= scc.getStressResultantComponent("Vy")
 esfVz= scc.getStressResultantComponent("Vz")
 esfMx= scc.getStressResultantComponent("T")

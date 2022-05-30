@@ -55,20 +55,20 @@ section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([upperRow])
 # section.shReinfY= shearReinf
 
 section.defRCSection(preprocessor,matDiagType= 'd')
-scc3d_testing_bench.sectionModel(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
 lp1= modelSpace.newLoadPattern(name= '1')
-lp1.newNodalLoad(2,xc.Vector([NDato,0,0,0,MzDato/10.0,MyDato/10.0]))
+lp1.newNodalLoad(nodB.tag,xc.Vector([NDato,0,0,0,MzDato/10.0,MyDato/10.0]))
 lp2= modelSpace.newLoadPattern(name= '2')
-lp2.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,0]))
+lp2.newNodalLoad(nodB.tag,xc.Vector([NDato,0,0,0,0,0]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -87,9 +87,7 @@ concreteSectionShearParams= EHE_limit_state_checking.ShearController('ULS_shear'
 
 
 
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
+scc= zlElement.getSection()
 concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
 
 

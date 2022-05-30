@@ -63,16 +63,16 @@ preprocessor=  feProblem.getPreprocessor
 
 datosScc1LosC.defRCSection(preprocessor, "k")
 
-scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.name)
+zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nodA.tag)
 modelSpace.fixNodeF00_0F0(2)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,3.55271e-15]))
+lp0.newNodalLoad(nodB.tag,xc.Vector([NDato,0,0,0,MyDato,3.55271e-15]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -87,9 +87,7 @@ analOk= analysis.analyze(10)
 secHAParamsFis= SIA262_limit_state_checking.CrackControlSIA262('SLS_crack',400e6)
 
 
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
+scc= zlElement.getSection()
 sigma_s= secHAParamsFis.calcRebarStress(scc)
 
 
