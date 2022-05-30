@@ -506,3 +506,65 @@ def getFlangeShearResistanceShearReinfStress(concrete, hf, Asf, sf, shearReinfSt
     vRds= Asf/sf*fyd*cotgThetaF/hf # expression 6.21 of EC2:2004
     vRdmax= getMaximumShearFlangeStrutCrushingStress(concrete, flangeStrutAngle, compressionFlange, nationalAnnex) # expression 6.22 of EC2:2004
     return min(vRds, vRdmax)
+
+# 7.3.2 Minimum reinforcement areas
+
+def getAsMinCrackControl(concrete, reinfSteel, h, Act, stressDistribution):
+    ''' Return the minimum area of reinforcing steel within the tensile zone
+        according to expression 7.1 of EC2:2004.
+
+    :param concrete: concrete material.
+    :param reinfSteel: reinforcing steel material.
+    :param h: section depth.
+    :param Act: area of concrete within tensile zone. The tensile zone is 
+                that part of the section which is calculated to be in tension 
+                just before formation of the first crack.
+    :param stressDistribution: string indentifying the stress distribution
+                               (bending or pure tension) of the cross-section.
+    '''
+    kc= 0.4 # coefficient which takes account of the stress distribution
+            # within the section immediately prior to cracking and of the
+            # change of the lever arm
+    if(stressDistribution=='simple_tension'):
+        kc= 1.0
+    k= 1.0 # coefficient which allows for the effect of non-uniform
+           # self-equilibrating stresses, which lead to a reduction of
+           # restraint forces.
+    if(h>=0.8):
+        k= 0.65
+    elif(h>0.3):
+        k= -0.7*h+1.21 # linear interpolation.
+    fctef= concrete.fctm() # mean value of the tensile strength of the
+                           # concrete effective at the time when the cracks
+                           # may first be expected to occur.
+    sigma_s= reinfSteel.fyk
+    return kc*k*fctef/sigma_s*Act
+
+def getAsMinBeams(concrete, reinfSteel, h, z, bt, d, nationalAnnex= None):
+    ''' Return the minimum area of reinforcing steel within the tensile zone
+        according to expression 9.1N of EC2:2004.
+
+    :param concrete: concrete material.
+    :param reinfSteel: reinforcing steel material.
+    :param h: section depth.
+    :param d: effective depth.
+    :param z: inner lever arm.
+    :param bt: denotes the mean width of the tension zone.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    if(nationalAnnex=='Spain'):
+        W= bt*h**2/6.0
+        fctmfl= max(1.6-h,1.0)*concrete.fctm()
+        return W/z*fctmfl/reinfSteel.fyd()
+    else:
+        return max(0.26*concrete.fctm()/reinfSteel.fyk,0.0013)*bt*d
+    
+def getAsMaxBeams(Ac, nationalAnnex= None):
+    ''' Return the minimum area of reinforcing steel within the tensile zone
+        according to expression 9.1N of EC2:2004.
+
+    :param Ac: area of concrete cross-section. 
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    return .04*Ac    
+

@@ -102,7 +102,7 @@ class_<XC::FiberPtrDeque, bases<CommandEntity,fiber_ptrs_dq>, boost::noncopyable
   .def("getTensionedFibersMz",&XC::FiberPtrDeque::getTensionedFibersMz,"Return the bending moment around z of the forces in the tensioned fibers.")
   .def("getTensionedFibersMy",&XC::FiberPtrDeque::getTensionedFibersMy,"Return the bending moment around y of the forces in the tensioned fibers.")
   .def("getTensionedFibersCentroid",&XC::FiberPtrDeque::getTensionedFibersCentroid,return_value_policy<copy_const_reference>(),"Return the centroid of the tensioned fibers.")
-.def("getCentroidFibersWithStrainGreaterThan",&XC::FiberPtrDeque::getCentroidFibersWithStrainGreaterThan,return_value_policy<copy_const_reference>(), "Return the centroid of the fibers whose strain is greater than the argument.")
+  .def("getCentroidFibersWithStrainGreaterThan",&XC::FiberPtrDeque::getCentroidFibersWithStrainGreaterThan,return_value_policy<copy_const_reference>(), "Return the centroid of the fibers whose strain is greater than the argument.")
 
   .def("commitState",&XC::FiberPtrDeque::commitState)
 

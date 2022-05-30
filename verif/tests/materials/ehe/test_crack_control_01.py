@@ -32,9 +32,6 @@ numOfRebars= 7 # Number of rebars.
 NDato= 0.0 # Axial force for crack control checking.
 MyDato= 40e3 # Bending moment force for crack control checking.
 
-feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
-
 # Material definition
 concr= EHE_materials.HA25
 steel= EHE_materials.B500S
@@ -46,7 +43,12 @@ section= def_simple_RC_section.RCRectangularSection(name='test', width= width, d
 section.positvRebarRows= def_simple_RC_section.LongReinfLayers([lowerRow])
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([])
 
+# Trivial FE model
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
+## Fiber-section material.
 section.defRCSection(preprocessor,matDiagType= 'k')
+## Zero-length element.
 zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints

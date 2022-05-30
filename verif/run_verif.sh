@@ -860,6 +860,7 @@ python tests/materials/ec2/test_smearedCracking_04.py
 python tests/materials/ec2/test_smearedCracking_05.py
 python tests/materials/ec2/test_smearedCracking_06.py
 python tests/materials/ec2/test_ec2_interaction_diagram.py
+python tests/materials/ec2/test_EC2_bending_01.py
 python tests/materials/ec2/test_EC2_shear_01.py
 python tests/materials/ec2/test_EC2_shear_02.py
 python tests/materials/ec2/test_EC2_shear_03.py

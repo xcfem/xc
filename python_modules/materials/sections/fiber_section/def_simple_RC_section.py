@@ -985,6 +985,7 @@ class RCRectangularSection(BasicRectangularRCSection):
     def getHomogenizationCoefficient(self):
         '''Return the homogenization coefficient of the section.'''
         return self.fiberSectionParameters.reinfSteelType.Es/self.fiberSectionParameters.concrType.Ecm()
+    
     def getStressCalculator(self):
         Ec= self.fiberSectionParameters.concrType.Ecm()
         Es= self.fiberSectionParameters.reinfSteelType.Es

@@ -14,9 +14,9 @@ import geom
 import xc
 
 feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
+preprocessor= feProblem.getPreprocessor
 
-#Load modulation.
+# Load modulation.
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
 ts= lPatterns.newTimeSeries("linear_ts","ts")
