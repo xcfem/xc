@@ -24,5 +24,5 @@ def uploadCombinationTable(combDict, dataBaseName, tableName, groupName, subGrou
     db_cursor.execute('CREATE TABLE IF NOT EXISTS '+tableName+' (idComb INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, group CHAR(20), subgroup CHAR(10), descomp CHAR(100))')
     for combName in combDict:
         descomp= combDict[combName]
-        db_cursor.execute('INSERT INTO tableName (group,subgroup,descomp) VALUES ('+groupName+','+subGroupName+','+getName+')')
+        db_cursor.execute('INSERT INTO tableName (group,subgroup,descomp) VALUES ('+groupName+','+subGroupName+','+descomp+')')
 

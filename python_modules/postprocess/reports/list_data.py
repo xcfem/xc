@@ -76,7 +76,6 @@ def listBarElementSet(elements):
     rows= list()
     for e in elements:
         row= [str(e.tag), str(e.nod(0).tag), str(e.nod(1).tag)]
-        k= 0
         sections= e.getSections()
         for k, s in enumerate(sections):
             row.append(k)
@@ -94,10 +93,11 @@ def listSet(xcSet, elementListFunction, fmt):
        :param fmt: format for coordinates.
     '''
     retval= dict()
-    dict['kPts']= listKPtsSet(xcSet.points,fmt) 
-    dict['lines']= listLineSet(xcSet.lines) 
-    dict['nodes']= listNodeSet(xcSet.nodes,fmt) 
-    dict['elements']= elementListFunction(xcSet.elements,fmt) 
+    retval['kPts']= listKPtsSet(xcSet.points,fmt) 
+    retval['lines']= listLineSet(xcSet.lines) 
+    retval['nodes']= listNodeSet(xcSet.nodes,fmt) 
+    retval['elements']= elementListFunction(xcSet.elements,fmt)
+    return retval
 
 
 def listLineEntities(line, nmbProcLstElementos, fmt):
@@ -110,6 +110,6 @@ def listLineEntities(line, nmbProcLstElementos, fmt):
     '''
 
     retval= dict()
-    dict['nodes']= listNodeSet(line.nodes,fmt) 
-    dict['elements']= elementListFunction(line.elements) 
-
+    retval['nodes']= listNodeSet(line.nodes,fmt) 
+    retval['elements']= elementListFunction(line.elements) 
+    return retval

@@ -11,13 +11,11 @@ __email__= "ana.ortega@ciccp.es "
 
 import sys
 import math
-import geom
 from materials import limit_state_checking_base as lscb
 from materials.ec2 import EC2_materials
 from materials.sections.fiber_section import fiber_sets
 from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg
-from solution import predefined_solutions
 from materials import concrete_base
 from materials.sections import rebar_family as rf
 
@@ -93,17 +91,16 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             sctCrkProp=lscb.fibSectLSProperties(sct)
             sctCrkProp.setupStrghCrackDist()
             hceff=self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
-            Acgross=sct.getGrossEffectiveConcreteArea(hceff)
+            # Acgross=sct.getGrossEffectiveConcreteArea(hceff)
             Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
             concrete=EC2_materials.concrOfName[sctCrkProp.concrName]
             rfSteel=EC2_materials.steelOfName[sctCrkProp.rsteelName]
             k2=self.EC2_k2(sctCrkProp.eps1,sctCrkProp.eps2)
-#            print('elem= ',e.tag, ' Aceff= ',Aceff)
-            if Aceff<=0:
-                
+            # print('elem= ',e.tag, ' Aceff= ',Aceff)
+            if(Aceff<=0):
                 s_rmax=0
             else:
-                ro_s_eff=sctCrkProp.As/Aceff      #effective ratio of reinforcement
+                ro_s_eff=sctCrkProp.As/Aceff #effective ratio of reinforcement
                 s_rmax=self.k3*sctCrkProp.cover+self.k1*k2*self.k4*sctCrkProp.fiEqu/ro_s_eff
                 #Parameters for tension stiffening of concrete
                 paramTS= concrete_base.paramTensStiffness(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
