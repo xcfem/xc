@@ -64,7 +64,7 @@ zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)
-modelSpace.fixNodeF00_0F0(2)
+modelSpace.fixNodeF00_0F0(nodB.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')

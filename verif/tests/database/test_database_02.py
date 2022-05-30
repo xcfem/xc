@@ -79,8 +79,7 @@ result= analysis.analyze(1)
 
 
 nodes= preprocessor.getNodeHandler
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[0] # Node 2 xAxis displacement
+delta= n2.getDisp[0] # Node 2 xAxis displacement
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

@@ -110,8 +110,7 @@ if(analOk<0):
 shearController= EHE_limit_state_checking.ShearController('ULS_shear')
 secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
 
-elements= preprocessor.getElementHandler
-scc= elements.getElement(1).getSection()
+scc= zlElement.getSection()
 shearCF= shearController.checkSection(scc,secHAParamsTorsion)
 
 Vu1= shearController.Vu1

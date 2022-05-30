@@ -99,8 +99,7 @@ if(analOk<0):
 
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
-elements= preprocessor.getElementHandler
-scc= elements.getElement(1).getSection()
+scc= zlElement.getSection()
 secHAParamsFis.computeWk(scc,concr.matTagK,steel.matTagK,concr.fctm())
 ratio1= ((secHAParamsFis.Wk-0.383585469616e-3)/0.383585469616e-3)
 
