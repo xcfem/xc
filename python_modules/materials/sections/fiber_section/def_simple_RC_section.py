@@ -723,7 +723,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
         
-    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
+    def defElasticShearSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
         '''elastic section appropriate for 2D beam analysis, including 
            shear deformations.
 
