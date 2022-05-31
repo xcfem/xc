@@ -79,7 +79,6 @@ RN2= n2.getReaction[0]
 
 beam3d.getResistingForce()
 scc0= beam3d.getSections()[0]
-
 N0= scc0.getStressResultantComponent("N")
 
 F= (n*L)
