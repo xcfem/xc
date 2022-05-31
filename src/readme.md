@@ -39,7 +39,7 @@ Utility classes and functions.
 - [Pre-processing](https://fem-heroes.org/preprocessing)
 - [Solver](https://fem-heroes.org/solver)
 - [Post-processing](https://fem-heroes.org/postprocessing/)
-
+- [How to Find a Memory Leak in OpenSees](https://portwooddigital.com/2022/05/29/how-to-find-a-memory-leak-in-opensees/)
 
 <!-- NOTES FOR MYSELF: -->
 <!-- notes for alpha cluster: -->
