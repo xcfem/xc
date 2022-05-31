@@ -95,8 +95,8 @@ modelSpace.setCurrentLoadPattern("0")
 crdTransf= el.getCoordTransf
 vIElem= crdTransf.getIVector
 vJElem= crdTransf.getJVector
-vCarga= f*vIElem-p*vJElem
-el.vector2dUniformLoadGlobal(vCarga)
+loadVector= f*vIElem-p*vJElem
+el.vector2dUniformLoadGlobal(loadVector)
 
 
 loadHandler= preprocessor.getLoadHandler
