@@ -74,7 +74,7 @@ class ReinforcedConcreteLimitStrains(object):
                 retval= True
         return retval
 
-    def getCompressiveBendingEfficiency(self, epsCMin,epsCMax):
+    def getCompressiveBendingEfficiency(self, epsCMin, epsCMax):
         '''Return efficiency for compressive or flexural compressive strength..
 
         :param epsCMin: minimum strain for concrete.
@@ -352,7 +352,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             self.ft=ftdiag
             ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']
             self.epsct0=ectdiag
-            eydiag=self.tensionStiffparam.eps_y()
+            # eydiag= self.tensionStiffparam.eps_y()
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.Ets=Etsdiag
             self.epsctu=ectdiag+ftdiag/Etsdiag
@@ -707,7 +707,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         
     def plotDesignStressStrainDiagram(self,preprocessor,path=''):
         if self.materialDiagramD is None:
-          self.defDiagD(preprocessor)
+            self.defDiagD(preprocessor) # Define stress-strain design diagram.
         if self.tensionStiffparam is None:
             retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
         else:
@@ -953,11 +953,21 @@ class paramTensStiffness(object):
     
 
 def defDiagKConcrete(preprocessor, concreteRecord):
+    ''' Define concrete stress-strain characteristic diagram.
+
+    :param preprocessor: pre-processor of the finite element model.
+    :param concreteRecord: concrete material data.
+    '''
     methodName= sys._getframe(0).f_code.co_name
     lmsg.warning(methodName+'; deprecated: use concreteRecord.defDiagK(preproccesor)')
     return concreteRecord.defDiagK(preprocessor)
 
 def defDiagDConcrete(preprocessor, concreteRecord):
+    ''' Define concrete stress-strain design diagram.
+
+    :param preprocessor: pre-processor of the finite element model.
+    :param concreteRecord: concrete material data.
+    '''
     methodName= sys._getframe(0).f_code.co_name
     lmsg.warning(methodName+'; deprecated: use concreteRecord.defDiagK(preproccesor)')
     return concreteRecord.defDiagD(preprocessor)
@@ -966,8 +976,12 @@ def concreteDesignDiagramTest(preprocessor, concreteRecord):
     '''Calculates the differece between the stresses obtained from the
        Concrete01 uniaxial material (getStress() ) and the 
        theoretical law defined in Python (see sigmac()).
+
+    :param preprocessor: pre-processor of the finite element model.
+    :param concreteRecord: concrete data.
     '''
-    tag= concreteRecord.defDiagD(preprocessor)
+    unusedTag= concreteRecord.defDiagD(preprocessor) # Define concrete stress-strain design diagram.
+
     diagConcrete= preprocessor.getMaterialHandler.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
     errMax= 0.0
@@ -987,8 +1001,12 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
     ''' Calculates the differece between the values of the tangent obtained
      from de Concrete01 uniaxial material (getTangent() ) and the 
      theoretical law defined in Python (see tangc()).
+
+    :param preprocessor: pre-processor of the finite element model.
+    :param concreteRecord: concrete data.
     '''
-    tag= concreteRecord.defDiagD(preprocessor)
+    # Define concrete stress-strain design diagram.
+    unusedTag= concreteRecord.defDiagD(preprocessor)
     diagConcrete= preprocessor.getMaterialHandler.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
     errMax= 0.0
@@ -1021,6 +1039,15 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     Es= 2e11 # Elastic modulus of the material.
     k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
     def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
+        ''' Constructor.
+
+        :param steelName: identifier for the steel material.
+        :param fyk: characteristic value of the steel yield stress.
+        :param emax:     maximum strain in tension
+        :param gammaS:   Partial factor for material.
+        :param k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05,
+                         class B k>=1,08)
+        '''
         super(ReinforcingSteel,self).__init__(steelName)
         self.fyk= fyk # Characteristic value of the yield strength
         self.gammaS= gammaS
@@ -1034,18 +1061,23 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     def fyd(self):
         ''' Design yield stress. '''
         return self.fyk/self.gammaS
+    
     def eyk(self):
         ''' Caracteristic strain at yield point. '''
         return self.fyk/self.Es
+    
     def eyd(self):
         ''' Design strain at yield point. '''
         return self.fyd()/self.Es
+    
     def Esh(self):
         ''' Slope of the curve in the yielding region. '''
         return (self.fmaxk()-self.fyk)/(self.emax-self.eyk())
+    
     def bsh(self):
         ''' Ratio between post-yield tangent and initial elastic tangent. '''
         return self.Esh()/self.Es
+    
     def defDiagK(self,preprocessor):
         ''' Returns XC uniaxial material (characteristic values). '''
         self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
@@ -1082,6 +1114,12 @@ def defReinfSteelDesignDiagram(preprocessor, steelRecord):
 def sigmas(eps, fy, ey, Es, Esh):
     '''Stress-strain diagram of reinforcing steel, according to EC2 
        (the same one is adopted by EHE and SIA).
+
+    :param eps: steel strain.
+    :param fy: steel yield tensile strength.
+    :param ey: steel strain at yield (ey= fyd/Es).
+    :param Es: modulus of elasticity of the reinforcing steel.
+    :param Esh: slope of the inclined top branch of the diagram.
     '''
     if(eps>0):
         if(eps<ey):
@@ -1097,16 +1135,28 @@ def sigmas(eps, fy, ey, Es, Esh):
 
 def sigmaKReinfSteel(eps,matRecord):
     ''' Characteristic stress-strain diagram for reinforcing steel, 
-        according to EC2.'''
+        according to EC2.
+
+    :param eps: steel strain.
+    :param matRecord: material data.
+    '''
     return sigmas(eps,matRecord.fyk,matRecord.eyk(),matRecord.Es,matRecord.Esh())
 
 def sigmaDReinfSteel(eps,matRecord):
     '''Design stress-strain diagram for reinforcing steel, 
-       according to EC2.'''
+       according to EC2.
+
+    :param eps: steel strain.
+    :param matRecord: material data.
+    '''
     return sigmas(eps,matRecord.fyd(),matRecord.eyd(),matRecord.Es,matRecord.Esh())
 
 def testReinfSteelCharacteristicDiagram(preprocessor, matRecord):
-    ''' Checking of characteristic stress-strain diagram.'''
+    ''' Checking of characteristic stress-strain diagram.
+
+    :param preprocessor: pre-processor of the finite element model.
+    :param matRecord: material data.
+    '''
     steelDiagram= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
     ##30160925 was:
     #  tag= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
@@ -1126,7 +1176,11 @@ def testReinfSteelCharacteristicDiagram(preprocessor, matRecord):
     return errMax
 
 def testReinfSteelDesignDiagram(preprocessor, matRecord):
-    '''Checking of design stress-strain diagram.'''
+    '''Checking of design stress-strain diagram.
+
+    :param preprocessor: pre-processor of the finite element model.
+    :param matRecord: material data.
+    '''
     steelDiagram= defReinfSteelDesignDiagram(preprocessor, matRecord)
     ##30160925 was:
     #  tag= defReinfSteelDesignDiagram(preprocessor, matRecord)

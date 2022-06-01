@@ -6,11 +6,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
 from materials.sections import rebar_family
-from scipy import optimize
 
 
 class RCSection(object):
