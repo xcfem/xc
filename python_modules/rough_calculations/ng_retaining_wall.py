@@ -540,7 +540,7 @@ class FootingReinforcement(ReinforcementMap):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        retval= super(StemReinforcement, self).__eq__(other)
+        retval= super(FootingReinforcement, self).__eq__(other)
         if(retval):
             retval= self.wallGeom == other.wallGeom
         return retval
