@@ -130,7 +130,7 @@ class RebarFamily(RebarRow):
         super(RebarFamily,self).__init__(diam= diam, spacing= spacing, concreteCover= concreteCover, steel= steel)
       
     def __repr__(self):
-        return self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+        return self.steel.materialName + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))+' mm'
     
     def getCopy(self):
         return RebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover)
@@ -167,19 +167,28 @@ class RebarFamily(RebarRow):
         outputFile.write("  diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
         reinfDevelopment= self.getBasicAnchorageLength(concrete)
         outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
-
+        
 class FamNBars(RebarFamily):
     ''' Family of "n" rebars.
 
     :ivar n: number of rebars.
     '''
     n= 2 #Number of bars.
-    def __init__(self,steel,n,diam,spacing,concreteCover):
+    def __init__(self, steel, n, diam, spacing, concreteCover):
+        ''' Constructor.
+
+        :param steel: reinforcing steel material.
+        :param n: number of bars.
+        :param diam: diameter of the bars.
+        :param spacing: spacing of the bars.
+        :param concreteCover: concrete cover of the bars.
+        '''
         super(RebarFamily, self).__init__(steel= steel, diam= diam, spacing= spacing, concreteCover= concreteCover)
         self.n= int(n) # number of bars
         
     def __repr__(self):
-      return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+        retval= super(FamNBars, self).__repr__()
+        return str(self.n) + " x " + retval
   
     def getNumBars(self):
         ''' Return the number of bars in the length argument.
@@ -210,6 +219,57 @@ class FamNBars(RebarFamily):
       reinfDevelopment= self.getBasicAnchorageLength(concrete)
       outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
 
+class RebarArrangement(object):
+    ''' rebar arrangement (number of rebars, spacing and width).
+
+    :ivar numberOfRebars: number of rebars.
+    :ivar spacing: distance between bars.
+    :ivar width: total length occupied by the bar set.
+    '''
+    def __init__(self, numberOfRebars= None, spacing= None, width= None):
+        ''' Construct the rebar arrangement (number of rebars, spacing 
+            and width) from any two of the three parameters.
+
+        :param numberOfRebars: number of rebars.
+        :param spacing: distance between bars.
+        :param width: total length occupied by the bar set.
+        '''
+        if(numberOfRebars is None):
+            if((spacing is None) or (width is None)):
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(methodName+'; spacing and width values needed.')
+            else:
+                self.spacing= spacing
+                self.width= width
+                self.numberOfRebars= int(self.width/self.spacing)+1
+        elif(spacing is None):
+            if((numberOfRebars is None) or (width is None)):
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(methodName+'; number of rebars and width values needed.')
+            else:
+                self.numberOfRebars= numberOfRebars
+                self.width= width
+                self.spacing= self.width/(self.numberOfRebars-1)
+        elif(width is None):
+            if((numberOfRebars is None) or (spacing is None)):
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(methodName+'; number of rebars and spacing values needed.')
+            else:
+                self.numberOfRebars= numberOfRebars
+                self.spacing= spacing
+                self.width= (self.numberOfRebars-1)*self.spacing
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; one of the values (number of rebars, spacing or width) is supposed to be unknown (None).')
+
+    def getNBarsFamily(self, steel, diam, concreteCover):
+        ''' Return a family of "n" rebars.
+
+        :param steel: reinforcing steel material.
+        :param diam: diameter of the bars.
+        :param concreteCover: concrete cover of the bars.
+        '''
+        return FamNBars(steel= steel, n= self.numberOfRebars, diam= diam, spacing= self.spacing, concreteCover= concreteCover)
 
 class DoubleRebarFamily(object):
     ''' Two reinforcement bars families.

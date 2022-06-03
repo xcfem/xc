@@ -25,7 +25,7 @@ from geotechnics import frictional_cohesional_soil as fcs
 from actions import load_cases
 from actions import combinations
 from actions.earth_pressure import earth_pressure
-from postprocess.reports import common_formats as fmt
+#from postprocess.reports import common_formats as fmt
 #from postprocess import output_handler
 
 #Geometry
