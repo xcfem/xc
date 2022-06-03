@@ -13,42 +13,89 @@ from rough_calculations import ng_simple_bending_reinforcement
 from postprocess.reports import common_formats as fmt
 import math
 
-class RebarRow(object):
+class Rebar(object):
+    ''' Reinforcement bar.
+
+      :ivar diam: diameter of the bars.
+      :ivar steel: steel material.
+    '''
+    def __init__(self, diam:float, steel= None):
+        ''' Constructor.
+
+        :param diam: diameter of the bar.
+        :param steel: steel material.
+        '''
+        self.diam= diam
+        self.steel= steel
+      
+    def getDiam(self):
+        ''' Return the diameter of the bars.'''
+        return self.diam
+    
+    def getArea(self):
+        ''' Return the area of each bar.'''
+        return math.pi*(self.diam/2.0)**2
+
+    def getDesignStrength(self):
+        ''' Return the design value of the bar strength.'''
+        retval= 0.0
+        if(self.steel is not None):
+            retval= self.getArea()*self.steel.fyd()
+        else:
+            lmsg.warning('Reinforcing steel undefined.')
+        return retval
+    
+class RebarRow(Rebar):
     ''' Row of reinforcement bars.
 
       :ivar diam: diameter of the bars.
       :ivar spacing: spacing of the bars.
       :ivar concreteCover: concrete cover of the bars.
     '''
-    def __init__(self,diam,spacing,concreteCover):
+    def __init__(self,diam:float ,spacing:float ,concreteCover:float, steel= None):
         ''' Constructor.
 
         :param diam: diameter of the bars.
         :param spacing: spacing of the bars.
         :param concreteCover: concrete cover of the bars.
         '''
-        self.diam= diam
+        super(RebarRow, self).__init__(diam= diam, steel= steel)
         self.spacing= spacing
         self.concreteCover= concreteCover
       
-    def getDiam(self):
-        ''' Return the diameter of the bars.'''
-        return self.diam
-    
     def getBarArea(self):
         ''' Return the area of each bar.'''
-        return math.pi*(self.diam/2.0)**2
+        return super(RebarRow, self).getArea()
     
-    def getNumBarsPerMeter(self):
-        ''' Return the number of bars per unit length.'''
-        return 1.0/self.spacing
-      
-    def getAs(self, width= 1.0):
+    def getNumBarsPerMeter(self, roundUp= False):
+        ''' Return the number of bars per unit length.
+
+        :param roundUp: if true return an integer number of bars greater or
+                        equal to (width/spacing).
+        '''
+        retval= 1.0/self.spacing
+        if(roundUp):
+            retval= math.ceil(retval)
+        return retval
+        
+    def getNumBars(self, width, roundUp= False):
+        ''' Return the number of bars in the length argument.
+
+        :param width: width of the reinforcement.
+        :param roundUp: if true return an integer number of bars greater or
+                        equal to (width/spacing).
+        '''
+        retval= width/self.spacing
+        if(roundUp):
+            retval= math.ceil(retval)
+        return retval
+    
+    def getAs(self, width= 1.0, roundUp= False):
         ''' Return the total area of the bars.
 
         :param width: width of the reinforcement.
         '''
-        return self.getNumBarsPerMeter()*self.getBarArea()*width
+        return self.getNumBars(width, roundUp)*self.getBarArea()
     
     def getEffectiveCover(self):
         ''' returns the effective cover of the rebar family.
@@ -58,11 +105,18 @@ class RebarRow(object):
         '''
         return self.concreteCover+self.diam/2.0
     
-class RebarFamily(RebarRow):
-    ''' Family or reinforcement bars.
+    def getT(self, width= 1.0, roundUp= False):
+        ''' Return the design value of the ultimate tension force in 
+            the reinforcement.
 
-      :ivar steel: reinforcing steel material.
-    '''
+        :param width: width of the reinforcement.
+        :param roundUp: if true return an integer number of bars greater or
+                        equal to (width/spacing).
+        '''
+        return self.getAs(width, roundUp)*self.steel.fyd()
+    
+class RebarFamily(RebarRow):
+    ''' Family or reinforcement bars.'''
     minDiams= 50
     
     def __init__(self, steel, diam, spacing, concreteCover):
@@ -73,8 +127,7 @@ class RebarFamily(RebarRow):
         :param spacing: spacing of the bars.
         :param concreteCover: concrete cover of the bars.
         '''
-        super(RebarFamily,self).__init__(diam,spacing,concreteCover)
-        self.steel= steel
+        super(RebarFamily,self).__init__(diam= diam, spacing= spacing, concreteCover= concreteCover, steel= steel)
       
     def __repr__(self):
         return self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
@@ -92,18 +145,13 @@ class RebarFamily(RebarRow):
         '''
         return ng_simple_bending_reinforcement.Mu(As= self.getAs(), fcd= concrete.fcd(), fsd= self.steel.fyd(), b= b, d= self.d(thickness), z= z, c_depth= concrete.getCDepth())
       
-    def d(self,thickness):
+    def d(self, thickness):
         ''' Return the effective depth of the reinforcement.
 
         :param thickness: height of the rectangular section.
         '''
         return thickness-self.getEffectiveCover()
       
-    def getT(self):
-        ''' Return the design value of the ultimate tension force in 
-            the reinforcement.'''
-        return self.getAs()*self.steel.fyd()
-
     def getDefStr(self):
         ''' Return definition strings for drawSchema.'''
         return ("  $\\phi$ "+ fmt.Diam.format(self.getDiam()*1000) + " mm, e= "+ fmt.Diam.format(self.spacing*1e2)+ " cm")
@@ -121,16 +169,46 @@ class RebarFamily(RebarRow):
         outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
 
 class FamNBars(RebarFamily):
-  n= 2 #Number of bars.
-  def __init__(self,steel,n,diam,spacing,concreteCover):
-    RebarFamily.__init__(self,steel,diam,spacing,concreteCover)
-    self.n= int(n)
-  def __repr__(self):
-    return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
-  def writeDef(self,outputFile,concrete):
-    outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
-    reinfDevelopment= self.getBasicAnchorageLength(concrete)
-    outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
+    ''' Family of "n" rebars.
+
+    :ivar n: number of rebars.
+    '''
+    n= 2 #Number of bars.
+    def __init__(self,steel,n,diam,spacing,concreteCover):
+        super(RebarFamily, self).__init__(steel= steel, diam= diam, spacing= spacing, concreteCover= concreteCover)
+        self.n= int(n) # number of bars
+        
+    def __repr__(self):
+      return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+  
+    def getNumBars(self):
+        ''' Return the number of bars in the length argument.
+
+        :param width: width of the reinforcement.
+        :param roundUp: if true return an integer number of bars greater or
+                        equal to (width/spacing).
+        '''
+        return self.n
+
+    def getWidth(self):
+        ''' Return the width occupied by the rebar family.'''
+        return (self.n-1)*self.spacing()
+    
+    def getAs(self):
+        ''' Return the total area of the bars.
+        '''
+        return self.getNumBars()*self.getBarArea()
+    
+    def getT(self):
+        ''' Return the design value of the ultimate tension force in 
+            the reinforcement.
+        '''
+        return self.getAs()*self.steel.fyd()
+    
+    def writeDef(self,outputFile,concrete):
+      outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
+      reinfDevelopment= self.getBasicAnchorageLength(concrete)
+      outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
 
 
 class DoubleRebarFamily(object):
