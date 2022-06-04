@@ -738,7 +738,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        if(name==None):
+        if(name is None):
             name= self.materialName+'_uniaxial'
         rho= self.density()
         if(overrideRho!=None):

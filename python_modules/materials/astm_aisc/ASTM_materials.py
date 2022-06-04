@@ -17,16 +17,12 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import inspect
 import sys
 import math
-import json
 import scipy.interpolate
 import geom
-import materials
 from geom_utils import closest_pair_of_points as cpp
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import member_base
-from materials import steel_member_base
-from materials.astm_aisc import AISC_limit_state_checking as aisc
 from import_export import block_topology_entities as bte
 from connections.steel_connections import bolts
 from connections.steel_connections import square_plate_washer as swp

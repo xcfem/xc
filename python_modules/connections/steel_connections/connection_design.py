@@ -204,8 +204,6 @@ class Connection(connected_members.ConnectionMetaData):
         :param fromPoint: position in 3D space.
         '''
         retval= None
-        intersectionPoint= None
-        keyNearestPlate= None
         dist2= 6.023e23
         for key in self.column.connectedPlates:
             plate= self.column.connectedPlates[key]
@@ -326,7 +324,7 @@ class Connection(connected_members.ConnectionMetaData):
             d2= fromPoint.dist2(tmp)
             if(d2<dist2): # new intersection point is closer.
                 retval= tmp
-                dist2= d2
+                # dist2= d2
         if(retval):
             if(retval.notAPoint()):
                 className= type(self).__name__
@@ -861,8 +859,8 @@ class BasePlateConnection(Connection):
     def centerAnchors(self):
         ''' Center anchors with respect to the column steel shape.'''
         columnShape= self.getColumnShape()
-        flangeThickness= columnShape.get('tf')
-        interiorDist= columnShape.get('h')-2*flangeThickness
+        # flangeThickness= columnShape.get('tf')
+        # interiorDist= columnShape.get('h')-2*flangeThickness
         self.basePlate.centerAnchors(columnShape)
         
     def getBasePlateWeldLegMinSize(self):
@@ -1205,7 +1203,7 @@ class BoltedPlateController(lsc.LimitStateControllerBase):
         internalForcesValues= intForcItems[2]
         worstCase= WorstCase()
         for e in setCalc.elements:
-            sh= e.getProp('crossSection')
+            # sh= e.getProp('crossSection')
             elIntForc= internalForcesValues[e.tag]
             if(len(elIntForc)==0):
                 className= type(self).__name__

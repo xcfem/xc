@@ -170,7 +170,6 @@ def listaEsfuerzosZeroLengthSet(nmbComb, xcSet, fmt, outputFile, ltxSectioning, 
     cabeceraSupertabular(outputFile,8,defCampos,idsCampos,caption) 
 
     outStr= "" 
-    k= 0
     VX= 0
     VY= 0
     N= 0

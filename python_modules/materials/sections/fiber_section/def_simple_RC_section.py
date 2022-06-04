@@ -10,12 +10,10 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 import math
-import sys
 import uuid
 import geom
 import xc
 from materials.sections import section_properties
-from materials import typical_materials
 from materials.sections import stress_calc as sc
 from misc_utils import log_messages as lmsg
 import matplotlib.pyplot as plt
@@ -398,16 +396,16 @@ class RCFiberSectionParameters(object):
         self.diagType= matDiagType
         if(self.diagType=="d"):
             if(self.concrType.matTagD<0):
-                concreteMatTag= self.concrType.defDiagD(preprocessor)
+                unusedConcreteMatTag= self.concrType.defDiagD(preprocessor)
             if(self.reinfSteelType.matTagD<0):
-                reinfSteelMaterialTag= self.reinfSteelType.defDiagD(preprocessor)
+                unusedReinfSteelMaterialTag= self.reinfSteelType.defDiagD(preprocessor)
             self.concrDiagName= self.concrType.nmbDiagD
             self.reinfDiagName= self.reinfSteelType.nmbDiagD
         elif(self.diagType=="k"):
             if(self.concrType.matTagK<0):
-                concreteMatTag= self.concrType.defDiagK(preprocessor)
+                unusedConcreteMatTag= self.concrType.defDiagK(preprocessor)
             if(self.reinfSteelType.matTagK<0):
-                reinfSteelMaterialTag= self.reinfSteelType.defDiagK(preprocessor)
+                unusedReinfSteelMaterialTag= self.reinfSteelType.defDiagK(preprocessor)
             self.concrDiagName= self.concrType.nmbDiagK
             self.reinfDiagName= self.reinfSteelType.nmbDiagK
             
