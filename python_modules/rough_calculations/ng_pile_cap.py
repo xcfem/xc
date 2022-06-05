@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Two pile cap design according to clause 58.4.1.2.1 of EHE-08.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2022, LCPT"
@@ -7,6 +8,20 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
+
+#
+#                  N/2   N/2
+#                   |    |
+#                   v    v
+#                   +----+
+#                  /     \
+#                /        \
+#       Strut  /           \  Strut
+#            /              \
+#          /      Tie        \
+#        +--------------------+
+#     Pile                   Pile
+#
 
 class TwoPileCap(object):
     ''' Cap for a group of two piles.
@@ -17,9 +32,10 @@ class TwoPileCap(object):
     :ivar l: length of the pile cap.
     :ivar b: width of the pile cap.
     :ivar d: distance between piles.
+    :ivar a: width of the supported column.
     '''
 
-    def __init__(self, pileDiameter, mainReinfDiameter, reinfSteel, h= None, b= None, l= None, d= None, corbelLength= 0.25):
+    def __init__(self, pileDiameter, mainReinfDiameter, reinfSteel, h= None, b= None, l= None, d= None, a= 0.0, corbelLength= 0.25):
         ''' Constructor.
 
         :param pileDiameter: diameter of the pile.
@@ -29,6 +45,7 @@ class TwoPileCap(object):
         :param b: width of the pile cap.
         :param l: length of the pile cap.
         :param d: distance between piles.
+        :param a: width of the supported column.
         :param corbelLength: lenght of the corbel (minimum distance from the 
                              pile contour to the pile cap contour).
         '''
@@ -51,6 +68,7 @@ class TwoPileCap(object):
             self.d= self.getSuitableDistanceBetweenPiles()
         else:
             self.d= d
+        self.a= a
         self.corbelLength= corbelLength
 
     def getSuitableDistanceBetweenPiles(self):
@@ -76,19 +94,22 @@ class TwoPileCap(object):
 
     def getEffectiveDepth(self):
         ''' Return the effective depth of the pile cap.'''
-        return self.h-0.2
+        return self.h-0.25
 
     def getAlpha(self):
         ''' Return the angle between the concrete compressed struts and 
-            the horizontal.'''
-        return math.atan2(self.d/2.0, self.getEffectiveDepth())
+            the horizontal according to figure 58.4.1.2.1.1.a of EHE-08.'''
+        v= (self.d-self.a)/2.0
+        x= v+0.25*self.a
+        y= 0.85*self.getEffectiveDepth()
+        return math.atan2(y, x)
 
     def getTensionOnBottomReinforcement(self, Nd):
         ''' Returns the tension in the inferior reinforcement of the pile cap.
 
         :param Nd: design value of the axial load.
         '''
-        return Nd/math.tan(self.getAlpha())
+        return Nd/math.tan(self.getAlpha())/2.0
   
 
     def getBottomReinforcementReqArea(self, Nd):
