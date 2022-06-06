@@ -83,6 +83,7 @@ class TwoPileCap(object):
         retval= 15*self.mainReinfDiameter**2+0.2
         retval= max(retval, self.pileDiameter)
         retval= max(retval, 0.4)
+        return retval
 
     def getSuitableLength(self):
         ''' Return a suitable value for the length of the pile cap.'''
