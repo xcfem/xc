@@ -83,9 +83,9 @@ class OutputHandler(object):
            :param fileName: name of the file to plot the graphic. Defaults to 
                        None, in that case an screen display is generated
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        if(caption==None):
+        if(caption is None):
             caption= setToDisplay.name+' set; blocks'
         displaySettings= vtk_CAD_graphic.DisplaySettingsBlockTopo()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -105,9 +105,9 @@ class OutputHandler(object):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape)
         '''
-        if(setsToDisplay==None):
+        if(setsToDisplay is None):
             setsToDisplay= [self.modelSpace.getTotalSet()]
-        if(caption==None):
+        if(caption is None):
             setNames= ''
             if(type(setsToDisplay)==list):
                 for s in setsToDisplay:
@@ -132,9 +132,9 @@ class OutputHandler(object):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape)
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        if(caption==None):
+        if(caption is None):
             caption= setToDisplay.name+' set; local axes'
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -153,9 +153,9 @@ class OutputHandler(object):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape)
          '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        if(caption==None):
+        if(caption is None):
             caption= setToDisplay.name+' set; strong [red] and weak [blue] axes'
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -210,7 +210,7 @@ class OutputHandler(object):
 
         '''
         # Define the property at nodes.
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= 'disp'+itemToDisp
         vCompDisp= self.modelSpace.getDispComponentFromName(itemToDisp)
@@ -242,7 +242,7 @@ class OutputHandler(object):
 
         '''
         # Define the property at nodes.
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'stress')
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
@@ -270,7 +270,7 @@ class OutputHandler(object):
 
         '''
         # Define the property at nodes.
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentFromName, propToDefine= 'strain')
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
@@ -301,7 +301,7 @@ class OutputHandler(object):
 
         '''
         # Define the property at nodes.
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= vMisesCode)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
@@ -323,7 +323,7 @@ class OutputHandler(object):
         :param inclInertia: include inertia effects (defaults to false).
         :param reactionCheckTolerance: relative tolerance when checking reaction values.
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         self.modelSpace.preprocessor.getNodeHandler.calculateNodalReactions(inclInertia, reactionCheckTolerance)
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
@@ -436,7 +436,7 @@ class OutputHandler(object):
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         #auto-scale parameters
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
@@ -479,7 +479,7 @@ class OutputHandler(object):
               displayed in blue and those greater than vmax in red
               (defaults to None)
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         vCompDisp= self.modelSpace.getIntForceComponentFromName(itemToDisp)
         elSet= setToDisplay.elements.pickElemsOfDimension(2)
@@ -516,7 +516,7 @@ class OutputHandler(object):
                       initial/undeformed shape)
         '''
         lmsg.warning('displayLoadVectors:: deprecated; Use displayLoads')
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
@@ -557,7 +557,7 @@ class OutputHandler(object):
                   initial/undeformed shape)
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= preprocessor.getDomain.currentCombinationName
@@ -632,7 +632,7 @@ class OutputHandler(object):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
          '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         lmsg.warning("Auto scale not implemented yet.")
@@ -666,7 +666,7 @@ class OutputHandler(object):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
          '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         scaleFactor= 1.0
@@ -699,7 +699,7 @@ class OutputHandler(object):
                       by this factor. (Defaults to 0.0, i.e. display of 
                       initial/undeformed shape)
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
         domain= preprocessor.getDomain
@@ -768,10 +768,10 @@ class OutputHandler(object):
                plus its eigenVector multiplied by this factor. (Defaults to 0.0 
                i.e. display of initial/undeformed shape)
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         equLoadVctScale= self.outputStyle.equivalentLoadVectorsScaleFactor
-        if((equLoadVctScale!=0.0) and accelMode==None):
+        if((equLoadVctScale!=0.0) and accelMode is None):
             lmsg.warning("Can't display equivalent static loads. Parameter accelMode should not be null ")
             equLoadVctScale=None
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
@@ -876,7 +876,7 @@ class OutputHandler(object):
                     less than vmin are displayed in blue and those greater than vmax 
                     in red (defaults to None)
         '''
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         self.displayField(limitStateLabel, 1,argument, component, setToDisplay, fileName, defFScale, rgMinMax)
         self.displayField(limitStateLabel, 2,argument, component, setToDisplay, fileName, defFScale, rgMinMax)
@@ -913,7 +913,7 @@ class OutputHandler(object):
             sectRef='Sect'+str(section)
             sectDescr= self.outputStyle.directionDescription[section-1]
   
-        if(setToDisplay==None):
+        if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()

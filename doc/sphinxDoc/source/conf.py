@@ -70,7 +70,7 @@ def boostFuncSignature(name,obj,removeSelf=False):
 	removeSelf will attempt to remove the first argument from the signature.
 	"""
 	doc=obj.__doc__
-	if doc==None: # not a boost method
+	if doc is None: # not a boost method
 		return None,None
 	nname=name.split('.')[-1]
 	docc=doc.split('\n')

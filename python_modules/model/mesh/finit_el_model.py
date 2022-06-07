@@ -62,7 +62,7 @@ class RawLineSetToMesh(SetToMesh):
         '''
         elem= self.getSeedElement(preprocessor)
         for l in self.primitiveSet.getLines:
-            if(self.elemSize): #If elemSize==None don't touch the number of divisions.
+            if(self.elemSize): #If elemSize is None don't touch the number of divisions.
                 l.setElemSize(self.elemSize)
             l.genMesh(xc.meshDir.I)
             if sectGeom[0].lower()=='y':
@@ -82,7 +82,7 @@ def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfT
     retval.xzVector= vDir
     '''   13.11.2017 
     retval= trfs.getCoordTransf(coordTransfName)
-    if(retval==None):
+    if(retval is None):
       msg= "getDefaultCoordinateTransformation creates a PDelta"
       msg+= " 3D coordinate transformation which is not necessarily"
       msg+= " the best choice for your element."

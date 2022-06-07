@@ -583,7 +583,7 @@ def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
     internalForcesValues= defaultdict(list)
     internalForcesListing= csv.reader(f)
     next(internalForcesListing) # skip first line (head)
-    if setCalc==None:
+    if setCalc is None:
         for lst in internalForcesListing: # lst: list of internal forces for each combination and element
             if(len(lst)>0):
                 idComb= lst[0]

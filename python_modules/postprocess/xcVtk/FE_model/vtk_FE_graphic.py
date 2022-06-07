@@ -115,7 +115,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             arr= field.fillArray(nodeSet)
             field.creaLookUpTable()      
         # Load nodes in vtk
-        if eigenMode==None:
+        if eigenMode is None:
             for n in nodeSet:
                 pos= n.getCurrentPos3d(defFScale)
                 self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)

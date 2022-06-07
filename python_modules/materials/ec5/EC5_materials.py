@@ -117,7 +117,7 @@ class Wood(wood_base.Wood):
         E= self.E0_mean
         if(perpendicular):
             E= self.E90_mean
-        if(name==None):
+        if(name is None):
             name= self.name+str(thickness)+'_elastic_membrane_plate_section'
         rho= self.specificGravity
         if(overrideRho!=None):

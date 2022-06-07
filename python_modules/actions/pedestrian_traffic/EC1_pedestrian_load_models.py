@@ -162,9 +162,9 @@ class PedestrianLoad(object):
         '''
         retval= list()
         T= 1.0/self.fs
-        if(duration==None):
+        if(duration is None):
             duration= 4.0*T
-        if(tInc==None):
+        if(tInc is None):
             tInc= T/10.0
         numSteps= int(duration/tInc)+1
         t= tStart

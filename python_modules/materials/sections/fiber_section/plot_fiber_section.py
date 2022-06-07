@@ -129,13 +129,13 @@ class fibSectFeaturesToplot(object):
             ax2d.plot(y,z,self.colorEffDepth,label='Effective depth')
         #Limit of concrete effective area
         if self.colorEffConcrArea is not None:
-            if self.MaxEffHeight==None:
+            if self.MaxEffHeight is None:
                 lmsg.error("I can't plot the limit of the effective concrete area, a value to MaxEffHeight must be provided \n")
             else:
                 (y,z)=data_axis_to_pyplot(self.fiberSection.getEffectiveConcreteAreaLimitLine(self.MaxEffHeight),self.contour)
                 ax2d.plot(y,z,self.colorEffConcrArea,label='Limit of effective concrete area')
         if self.colorGrossEffConcrAreaContours is not None:
-            if self.MaxEffHeight==None:
+            if self.MaxEffHeight is None:
                 lmsg.error("I can't plot the contours of the gross effective concrete area, a value to MaxEffHeight must be provided \n")
             else:
                 countLst=self.fiberSection.getGrossEffectiveConcreteAreaContour(self.MaxEffHeight)

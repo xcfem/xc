@@ -143,7 +143,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
      is initialized with a tension capacity almost equal to 0 (equivalent to 
      the concrete01 diagram). Defaults to 'N'
 
-    If tensionStiffparam==None and initTensStiff=='N' (default values) no 
+    If tensionStiffparam is None and initTensStiff=='N' (default values) no 
     tensile strength is considered; the stress strain relationship corresponds 
     to a concrete01 material (zero tensile strength).
 
@@ -278,7 +278,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         is initialized with a tension capacity almost equal to 0 (equivalent to 
         the concrete01 diagram). Defaults to 'N'
 
-        -If tensionStiffparam==None and initTensStiff=='N' (default values) no 
+        -If tensionStiffparam is None and initTensStiff=='N' (default values) no 
         tensile strength is considered; the stress strain relationship  
         corresponds to a concrete01 material (zero tensile strength).
 
@@ -342,7 +342,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         is initialized with a tension capacity almost equal to 0 (equivalent to 
         the concrete01 diagram). Defaults to 'N'
 
-        -If tensionStiffparam==None and initTensStiff=='N' (default values) no 
+        -If tensionStiffparam is None and initTensStiff=='N' (default values) no 
         tensile strength is considered; the stress strain relationship  
         corresponds to a concrete01 material (zero tensile strength).
         '''

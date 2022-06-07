@@ -79,8 +79,8 @@ class ASTMSteel(steel_base.BasicSteel):
         if('name' in dct):
             name= dct['name']
             if(name): self.name= name
-        Rt= dct['Rt']
-        Ry= dct['Ry']
+        self.Rt= dct['Rt']
+        self.Ry= dct['Ry']
 
     def getPeakConnectionStrengthFactor(self):
         ''' Return the factor to account for peak connection strength, 
@@ -731,7 +731,6 @@ class FinPlate(BoltedPlate):
 
         :param shearVector: 2D shear load vector.
         '''
-        holeDiameter= self.boltArray.bolt.getDesignHoleDiameter()
         Agv= self.getGrossAreaSubjectedToShear(shearVector) # gross area subject to shear.
         Anv= self.getNetAreaSubjectedToShear(Agv, shearVector) # net area subject to shear.
         return 0.6*self.steelType.fu*Anv # (J4-4) 
@@ -1057,7 +1056,7 @@ class AnchorBolt(bolts.AnchorBase):
         retval= psi3*math.sqrt(fc_psi)
         h_ef_in= h_ef/units_utils.inchToMeter
         if(h_ef_in>25): # embedment length outside CCD method range (0.0 to 0.635 m)
-            he_ef_in= 25
+            h_ef_in= 25
         if(h_ef_in<11): 
             retval*= 24*math.pow(h_ef_in,1.5) # Eq. (D-7)
         else:
@@ -1087,7 +1086,6 @@ class AnchorBolt(bolts.AnchorBase):
         :param h_ef: depth of embedment.
         :param fc: concrete strength.
         '''
-        retval= 0.0
         Np_lim= 0.85*self.getNominalPulloutStrength(fc)
         Nsa= self.getNominalTensileStrength()
         Ncb_lim= 0.85*self.getNominalConcreteBreakoutStrength(h_ef, fc)
@@ -1197,7 +1195,7 @@ class AnchorGroup(object):
         AN= self.getConcreteBreakoutConePolygon(h_ef).getArea()
         ANo= self.anchors[0].getConcreteBreakoutConePolygon(h_ef).getArea()
         surfRatio= AN/ANo
-        fc_psi= fc*145.038e-6
+        # fc_psi= fc*145.038e-6 # remove 20220607
         retval= self.anchors[0].getNominalConcreteBreakoutStrength(h_ef, fc,psi3)*surfRatio
         return retval
     
@@ -2274,7 +2272,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         spacing= defaultSpacing
         # check spacing.
         distBetweenToes= self.shape.getDistanceBetweenWebToes()
-        depth= self.shape.h()
+        # depth= self.shape.h() # remove 20220607
         if(distBetweenToes<numberOfBolts*spacing):
             fmt= '{:.2f}'
             oldSpacing= spacing

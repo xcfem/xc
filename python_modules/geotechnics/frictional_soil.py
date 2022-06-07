@@ -135,6 +135,6 @@ class FrictionalSoil(object):
     '''
     gamma_soil= self.rho*g
     phi_d= math.atan(math.tan(self.phi)/1.25)
-    if(Kas==None):
+    if(Kas is None):
       Kas= self.Ka()
     return mononobe_okabe.overpressure_dry(H, gamma_soil, kv, kh, psi, phi_d, delta_ad,beta,Kas)

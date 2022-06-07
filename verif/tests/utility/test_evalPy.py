@@ -39,7 +39,7 @@ ss= pos1.evalPy("1+self.getProp('radius')")
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (bb==None) and abs(ratio1)<1e-15 and abs(ratio2)<1e-15:
+if (bb is None) and abs(ratio1)<1e-15 and abs(ratio2)<1e-15:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')

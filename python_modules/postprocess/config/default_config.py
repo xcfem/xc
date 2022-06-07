@@ -574,7 +574,7 @@ def get_temporary_env_config(subDirName: str= None):
         :param subDirName: name of the folder where results will be stored.
     '''
     dirName= None
-    if(subDirName==None):
+    if(subDirName is None):
         tempDir= tempfile.TemporaryDirectory()
         dirName= tempDir.name
     else:

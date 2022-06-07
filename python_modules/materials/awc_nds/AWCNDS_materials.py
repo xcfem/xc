@@ -1427,7 +1427,7 @@ class TJIJoistSection(WoodSection):
         area= self.h*b
         G= self.E/(2*(1+0.3))
         lR= self.linearRho
-        if(lR==None):
+        if(lR is None):
             lR= 632.62*b*self.h # average density kg/m3
         return typical_materials.defElasticShearSection2d(preprocessor,name= self.name, A= area,E= self.wood.E,G= G, I= self.Imajor,alpha= 5.0/6.0, linearRho= lR)
     
@@ -1445,7 +1445,7 @@ class TJIJoistSection(WoodSection):
         lR= self.linearRho
         Iy= self.Iy()
         J= Iy/1000.0
-        if(lR==None):
+        if(lR is None):
             lR= 632.62*b*self.h # average density kg/m3
         return typical_materials.defElasticShearSection3d(preprocessor,name= self.name, A= area,E= self.wood.E, G= G,Iz= self.Imajor, Iy= Iy, J= J, alpha_y= 5.0/6.0, alpha_z= 5/6.0, linearRho= lR)
 

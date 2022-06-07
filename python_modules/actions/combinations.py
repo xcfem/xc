@@ -117,7 +117,7 @@ class SituationCombs(dict):
         '''
         for key in self:
             retval= self[key].createCombination(xcCombHandler)
-            if(retval==None):
+            if(retval is None):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+': couln\'t create combination: \''+key+'\'')

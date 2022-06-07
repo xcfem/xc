@@ -320,7 +320,7 @@ class EarthPressLoad(BaseVectorLoad):
           (K:coefficient of pressure, zGround: global Z coordinate of
           ground level,gammaSoil: weight density of soil, zWater: global Z
           coordinate of groundwater level, gammaWater: weight density of
-          water) . soilProp==None if earth thrust is not considered.
+          water) . soilProp is None if earth thrust is not considered.
     :ivar vDir:unit xc vector defining pressures direction
     :ivar stripLoads: list of instances of the class
           StripLoadOnBackfill to define (if any) strip surcharge loads on

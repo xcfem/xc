@@ -589,7 +589,7 @@ class PredefinedSpace(object):
 
         :param xcSet: search only on the nodes in this set.
         '''
-        if(xcSet==None):
+        if(xcSet is None):
             xcSet= self.getTotalSet()
         floatingNodes= list()
         for n in xcSet.nodes:
@@ -621,7 +621,7 @@ class PredefinedSpace(object):
         :param eqNumber: number of the equation to locate.
         :param xcSet: search only on the nodes in this set.
         '''
-        if(xcSet==None):
+        if(xcSet is None):
             xcSet= self.getTotalSet()
         retval= None
         for n in xcSet.nodes:
@@ -638,7 +638,7 @@ class PredefinedSpace(object):
         :param xcSet: compute only the reactions of the nodes
                       in the set.
         '''
-        if(xcSet==None):
+        if(xcSet is None):
             xcSet= self.getTotalSet()
         supportNodes= list()
         for nTag in self.fixedNodesTags:
@@ -1091,7 +1091,7 @@ class PredefinedSpace(object):
         :param xcSet: set containing the objects to classify (defaults to the
                       total set).
         '''
-        if(xcSet==None):
+        if(xcSet is None):
             xcSet= self.getTotalSet()
         reader_base.populateSetsFromEntitiesLabels(setsFromLabels, xcSet)
 
@@ -2140,7 +2140,7 @@ class StructuralMechanics3D(StructuralMechanics):
         :param sectionName: name of the section material to assign to the element.
         :param nmbTransf: name of the coordinate transformation to use for the new bar.
         :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
-                        used only if nmbTransf==None.
+                        used only if nmbTransf is None.
         :param stiffnessFactor: factor to apply to the beam stiffness.
         '''
         elements= self.getElementHandler()
@@ -2166,7 +2166,7 @@ class StructuralMechanics3D(StructuralMechanics):
         :param nodeB: bar's to node.
         :param nmbTransf: name of the coordinate transformation to use for the new bar.
         :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
-                        used only if nmbTransf==None.
+                        used only if nmbTransf is None.
         :param stiffnessFactor: factor to apply to the beam stiffness.
         '''
         # Material definition

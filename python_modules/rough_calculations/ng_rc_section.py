@@ -74,9 +74,8 @@ class RCSection(object):
     
     def writeResultFlexion(self,outputFile,Nd,Md,Vd):
         AsMin= self.getMinReinfAreaUnderFlexion()
-        reinfDevelopment= self.tensionRebars.getBasicAnchorageLength(self.concrete)
         outputFile.write("  RC section dimensions; b= "+ fmt.Length.format(self.b)+ " m, h= "+ fmt.Length.format(self.h)+ " m\\\\\n")
-        self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
+        self.tensionRebars.writeRebars(outputFile, self.concrete, AsMin)
         if(abs(Md)>0):
             MR= self.getMR()
             outputFile.write("  Bending check: Md= "+ fmt.Esf.format(Md/1e3)+ " kN m, MR= "+ fmt.Esf.format(MR/1e3)+ "kN m")
@@ -88,7 +87,6 @@ class RCSection(object):
           
     def writeResultTraction(self,outputFile,Nd):
         AsMin= self.getMinReinfAreaUnderTension()/2.0
-        reinfDevelopment= self.tensionRebars.getBasicAnchorageLength(self.concrete)
         self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
         if(abs(Nd)>0):
           lmsg.error("ERROR; tension not implemented.")
