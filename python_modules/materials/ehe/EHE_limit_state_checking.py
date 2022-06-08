@@ -17,9 +17,8 @@ from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg
 import scipy.interpolate
-from solution import predefined_solutions
 from materials import concrete_base
-from scipy import interpolate
+# from scipy import interpolate
 from materials.sections import rebar_family as rf
 from postprocess.reports import common_formats as fmt
 
@@ -189,6 +188,7 @@ class StrandController(BaseReinfController):
                   expressed in days.
         '''
         lbpt= self.lbtp(phi, concrete, sg_pi, suddenRelease, ELU, t)
+        return lbpt
     
 # Reinforced concrete section shear checking.
 def getFcvEH91(fcd):
@@ -971,7 +971,7 @@ class ShearController(lscb.ShearControllerBase):
          :param reinfSteel: parameters to modelize reinforcement steel.
         '''
         rcSets= self.extractFiberData(scc,concrete,reinfSteel)
-        concrFibers= rcSets.concrFibers.fSet
+        # concrFibers= rcSets.concrFibers.fSet
         self.concreteArea= rcSets.getConcreteArea(1)
         if(self.concreteArea<1e-6):
             errMsg= "concrete area too small; Ac= " + str(self.concreteArea) + " m2\n"

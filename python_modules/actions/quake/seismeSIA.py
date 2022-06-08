@@ -212,7 +212,7 @@ def bUpperLimitAppuiFixe(soilClass,accelTerrain,CO,a12,l):
     :param CO: building class.
     :param l: bridge span.
     '''
-    a= alpha(soilClass)
+    # a= alpha(soilClass)
     u= grounDisplacement(soilClass,accelTerrain,CO)
     retval= 0.2+a12+2*u
     return retval

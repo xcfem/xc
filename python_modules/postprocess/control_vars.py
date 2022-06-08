@@ -17,10 +17,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 
 import os
 import scipy
-import inspect
 from misc_utils import log_messages as lmsg
-import geom
-import xc
 from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 

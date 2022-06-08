@@ -214,18 +214,7 @@ class Connection(connected_members.ConnectionMetaData):
                     if(d2<dist2):
                         retval= plate
                         dist2= d2
-                        keyNearestPlate= key
-                # midPlane= plate.getMidPlane()                
-                # tmp= midPlane.getIntersection(sg)
-                # if(tmp.notAPoint()): #intersection not found
-                #     continue
-                # else:
-                #     d2= fromPoint.dist2(tmp)
-                #     if(d2<dist2):
-                #         retval= plate
-                #         keyNearestPlate= key
-                #         intersectionPoint= tmp
-                #         dist2= d2
+                        # keyNearestPlate= key
         return retval
     
     def getConnectedPlatesNearestSide(self, fromPoint: geom.Pos3d):
