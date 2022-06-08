@@ -196,6 +196,22 @@ class EC2Concrete(concrete_base.Concrete):
         k= 0.4 # Depends on national annex.
         return k*self.fctd()
 
+    def getUltimateBondStress(self, rebarDiameter, eta1= 0.7):
+        ''' Return the ultimate bond stress of the concrete according to
+            expression 8.2 of clause 8.4.2 of EC2:2004.
+
+        :param rebarDiameter: bar diameter.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        '''
+        if(rebarDiameter<=32e-3):
+            eta2= 1.0
+        else:
+            eta2= (132-rebarDiameter*1e3)/100
+        return 2.25*eta1*eta2*self.fctd()
+
 #    def getEcmT(self):
 #        """
 #        EC2Ecmt: approximate value of the modulus of elasticity [Pa] at age 
@@ -368,31 +384,90 @@ concrOfName={"C12-15":C12,"C16-20":C16,"C20-25":C20,"C25-30":C25,"C30-37":C30,"C
 
 # EC2 reinforcing steel.
 
+class ReinforcingSteel(concrete_base.ReinforcingSteel):
+    ''' Reinforcing steel as defined in EC2:2004.
+
+    '''
+    def getBasicAnchorageLength(self, concrete, rebarDiameter, eta1= 0.7, sigma_sd= None):
+        '''Returns basic required anchorage length in tension according to 
+           clause 8.4.3 of EC2:2004 (expression 8.3).
+
+        :param concrete: concrete material.
+        :param rebarDiameter: nominal diameter of the bar.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param sigma_sd: the design stress of the bar at the position from 
+                         where the anchorage is measured from.
+        '''
+        fbd= getUltimateBondStress(rebarDiameter= rebarDiameter, eta1= eta1)
+        if(sigma_sd is None):
+            sigma_sd= self.fyd()
+        return (rebarDiameter/4.0)*sigma_sd/fbd
+    
+    def getMinimumAnchorageLength(self, lb_rqd, rebarDiameter, compression= True):
+        ''' Return the minimum anchorage length according to expressions
+            8.6 and 8.7 of EC2:2004 clause 8.4.4.
+
+        :param lb_rqd: basic required anchorage length in tension according to 
+                       clause 8.4.3 of EC2:2004 (expression 8.3).
+        :param rebarDiameter: nominal diameter of the bar.
+        :param compression: if true return the minimum anchorage length for
+                            anchorages in compression.
+        '''
+        if(compression):
+            factor= 0.6
+        else:
+            factor= 0.3
+        return max(factor*lb_rqd,max(10*rebarDiameter, 0.1))
+                
+    def getDesignAnchorageLength(self, concrete, rebarDiameter, alphas=(1.0, 1.0, 1.0, 1.0, 1.0), eta1= 0.7, sigma_sd= None, compression= True):
+        '''Returns design  anchorage length according to clause 8.4.4
+           of EC2:2004 (expression 8.4).
+
+        :param concrete: concrete material.
+        :param rebarDiameter: nominal diameter of the bar.
+        :param alphas: coefficients given in Table 8.2.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param sigma_sd: the design stress of the bar at the position from 
+                         where the anchorage is measured from.
+        :param compression: if true return the minimum anchorage length for
+                            anchorages in compression.
+        '''
+        lb_rqd= self.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= eta1, sigma_sd= sigma_sd)
+        lb_min= self.getMinimumAnchorageLength(lb_rqd= lb_rqd, rebarDiameter= rebarDiameter, compression= compression)
+        factor= alphas[0]*max(0.7, alphas[1]*alphas[2]*alphas[4])*alphas[3]
+        return max(lb_min, factor*lb_rqd)
+
 #
 #   steelName: Name identifying the material.
 #   fyk:      characteristic value of the yield strength.
 #   emax:     maximum strain in tension
 #   gammaS:   partial factor for material.
 #   k:        fmaxk/fyk ratio
-S400A= concrete_base.ReinforcingSteel(steelName="S400A", fyk=400e6, emax=0.025,gammaS=1.15,k=1.05)
-S400B= concrete_base.ReinforcingSteel(steelName="S400B", fyk=400e6, emax=0.05,gammaS=1.15,k=1.08)
-S400C= concrete_base.ReinforcingSteel(steelName="S400C", fyk=400e6, emax=0.075,gammaS=1.15,k=1.15)
+S400A= ReinforcingSteel(steelName="S400A", fyk=400e6, emax=0.025,gammaS=1.15,k=1.05)
+S400B= ReinforcingSteel(steelName="S400B", fyk=400e6, emax=0.05,gammaS=1.15,k=1.08)
+S400C= ReinforcingSteel(steelName="S400C", fyk=400e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S450A= concrete_base.ReinforcingSteel(steelName="S450A", fyk=450e6, emax=0.025,gammaS=1.15,k=1.05)
-S450B= concrete_base.ReinforcingSteel(steelName="S450B", fyk=450e6, emax=0.05,gammaS=1.15,k=1.08)
-S450C= concrete_base.ReinforcingSteel(steelName="S450C", fyk=450e6, emax=0.075,gammaS=1.15,k=1.15)
+S450A= ReinforcingSteel(steelName="S450A", fyk=450e6, emax=0.025,gammaS=1.15,k=1.05)
+S450B= ReinforcingSteel(steelName="S450B", fyk=450e6, emax=0.05,gammaS=1.15,k=1.08)
+S450C= ReinforcingSteel(steelName="S450C", fyk=450e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S500A= concrete_base.ReinforcingSteel(steelName="S500A", fyk=500e6, emax=0.025,gammaS=1.15,k=1.05)
-S500B= concrete_base.ReinforcingSteel(steelName="S500B", fyk=500e6, emax=0.05,gammaS=1.15,k=1.08)
-S500C= concrete_base.ReinforcingSteel(steelName="S500C", fyk=500e6, emax=0.075,gammaS=1.15,k=1.15)
+S500A= ReinforcingSteel(steelName="S500A", fyk=500e6, emax=0.025,gammaS=1.15,k=1.05)
+S500B= ReinforcingSteel(steelName="S500B", fyk=500e6, emax=0.05,gammaS=1.15,k=1.08)
+S500C= ReinforcingSteel(steelName="S500C", fyk=500e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S550A= concrete_base.ReinforcingSteel(steelName="S550A", fyk=550e6, emax=0.025,gammaS=1.15,k=1.05)
-S550B= concrete_base.ReinforcingSteel(steelName="S550B", fyk=550e6, emax=0.05,gammaS=1.15,k=1.08)
-S550C= concrete_base.ReinforcingSteel(steelName="S550C", fyk=550e6, emax=0.075,gammaS=1.15,k=1.15)
+S550A= ReinforcingSteel(steelName="S550A", fyk=550e6, emax=0.025,gammaS=1.15,k=1.05)
+S550B= ReinforcingSteel(steelName="S550B", fyk=550e6, emax=0.05,gammaS=1.15,k=1.08)
+S550C= ReinforcingSteel(steelName="S550C", fyk=550e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S600A= concrete_base.ReinforcingSteel(steelName="S600A", fyk=600e6, emax=0.025,gammaS=1.15,k=1.05)
-S600B= concrete_base.ReinforcingSteel(steelName="S600B", fyk=600e6, emax=0.05,gammaS=1.15,k=1.08)
-S600C= concrete_base.ReinforcingSteel(steelName="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1.15)
+S600A= ReinforcingSteel(steelName="S600A", fyk=600e6, emax=0.025,gammaS=1.15,k=1.05)
+S600B= ReinforcingSteel(steelName="S600B", fyk=600e6, emax=0.05,gammaS=1.15,k=1.08)
+S600C= ReinforcingSteel(steelName="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1.15)
 
 steelOfName={"S400A":S400A,"S400B":S400B,"S400C":S400C,"S450A":S450A,"S450B":S450B,"S450C":S450C,"S500A":S500A,"S500B":S500B,"S500C":S500C,"S550A":S550A,"S550B":S550B,"S550C":S550C,"S600A":S600A,"S600B":S600B,"S600C":S600C}
 
