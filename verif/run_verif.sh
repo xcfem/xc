@@ -849,6 +849,7 @@ echo "$BLEU" "    Steel relaxation determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_steel_relaxation_01.py
 
 echo "$BLEU" "    EC2 tests." "$NORMAL"
+python tests/materials/ec2/test_anchorage_length_01.py
 python tests/materials/ec2/test_EC2Concrete.py
 python tests/materials/ec2/test_EC2creep.py
 python tests/materials/ec2/test_EC2_2004_shrinkage.py
