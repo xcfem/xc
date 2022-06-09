@@ -23,7 +23,7 @@ from misc_utils import log_messages as lmsg
 from misc_utils import units_utils
 from postprocess.reports import common_formats as fmt
 
-class RebarController(object):
+class RebarController(lsc.RebarController):
     '''Control of some parameters as development length 
        minimum reinforcement and so on.
 
@@ -40,18 +40,13 @@ class RebarController(object):
        :ivar Ktr: transverse reinforcement index. Factor that represents the 
                   contribution of confining reinforcement across potential 
                   splitting planes; is conservatively assumed to be zero.
-       :ivar concreteCover: the distance from center of a bar or wire to 
-                            nearest concrete surface.
-       :ivar spacing: center-to-center spacing of bars or wires being 
-                      developed, in.
     '''
 
     def __init__(self, psi_t= 1.3, psi_e= 1.0, concreteCover= 35e-3, spacing= 150e-3):
         '''Constructor.'''
+        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
         self.psi_t= psi_t
         self.psi_e= psi_e
-        self.concreteCover= concreteCover
-        self.spacing= spacing
 
     def getKtr(self, n= 1, Atr= 0.0):
         '''Return the transverse reinforcing index according to

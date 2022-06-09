@@ -81,12 +81,13 @@ def MinReinfAreaUnderFlexion(concrete,concreteCover,crackCRequirement,spacing,t)
     sgAdm= SIA262_materials.stressLimits(crackCRequirement,spacing)
     return fctd*w/sgAdm/z
 
-class RebarController(object):
+class RebarController(lsc.RebarController):
     '''Control of some parameters as development length 
        minimum reinforcement and so on.'''
 
-    def __init__(self, crackCRequirement):
+    def __init__(self, crackCRequirement, concreteCover= 35e-3, spacing= 150e-3):
         '''Constructor.'''
+        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
         self.crackControlRequirement= crackCRequirement
 
     def getBasicAnchorageLength(self, concrete, phi, steel):
@@ -94,7 +95,6 @@ class RebarController(object):
 
         :param concrete: concrete material.
         :param phi: bar diameter.
-        :param fck: concrete characteristic compressive strength.
         :param steel: reinforcement steel.
         """
         return getBasicAnchorageLength(phi,-concrete.fck, steel.fyd())

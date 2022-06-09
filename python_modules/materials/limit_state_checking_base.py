@@ -19,6 +19,26 @@ from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
 import geom
 
+class RebarController(object):
+    '''Base class for rebar controllers (control of some parameters 
+       as anchorage length minimum reinforcement and so on.
+
+       :ivar concreteCover: the distance from center of a bar or wire to 
+                            nearest concrete surface.
+       :ivar spacing: center-to-center spacing of bars or wires being 
+                      developed, in.
+    '''    
+    def __init__(self, concreteCover= 35e-3, spacing= 150e-3):
+        '''Constructor.
+
+        :param concreteCover: the distance from center of a bar or wire to 
+                             nearest concrete surface.
+        :param spacing: center-to-center spacing of bars or wires being 
+                       developed, in.
+        '''
+        self.concreteCover= concreteCover
+        self.spacing= spacing
+
 class LimitStateControllerBase(object):
     '''
     Basic parameters for limit state control (normal stresses, shear, crack,...)    .'''

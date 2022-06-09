@@ -401,7 +401,7 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
         :param sigma_sd: the design stress of the bar at the position from 
                          where the anchorage is measured from.
         '''
-        fbd= getUltimateBondStress(rebarDiameter= rebarDiameter, eta1= eta1)
+        fbd= concrete.getUltimateBondStress(rebarDiameter= rebarDiameter, eta1= eta1)
         if(sigma_sd is None):
             sigma_sd= self.fyd()
         return (rebarDiameter/4.0)*sigma_sd/fbd
@@ -422,13 +422,13 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
             factor= 0.3
         return max(factor*lb_rqd,max(10*rebarDiameter, 0.1))
                 
-    def getDesignAnchorageLength(self, concrete, rebarDiameter, alphas=(1.0, 1.0, 1.0, 1.0, 1.0), eta1= 0.7, sigma_sd= None, compression= True):
+    def getDesignAnchorageLength(self, concrete, rebarDiameter, alphaCoefs=(1.0, 1.0, 1.0, 1.0, 1.0), eta1= 0.7, sigma_sd= None, compression= True):
         '''Returns design  anchorage length according to clause 8.4.4
            of EC2:2004 (expression 8.4).
 
         :param concrete: concrete material.
         :param rebarDiameter: nominal diameter of the bar.
-        :param alphas: coefficients given in Table 8.2.
+        :param alphaCoefs: coefficients given in Table 8.2.
         :param eta1: coefficient related to the quality of the bond condition 
                      and the position of the bar during concreting.
                      eta1= 1,0 when 'good' conditions are obtained and
@@ -440,7 +440,7 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
         '''
         lb_rqd= self.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= eta1, sigma_sd= sigma_sd)
         lb_min= self.getMinimumAnchorageLength(lb_rqd= lb_rqd, rebarDiameter= rebarDiameter, compression= compression)
-        factor= alphas[0]*max(0.7, alphas[1]*alphas[2]*alphas[4])*alphas[3]
+        factor= alphaCoefs[0]*max(0.7, alphaCoefs[1]*alphaCoefs[2]*alphaCoefs[4])*alphaCoefs[3]
         return max(lb_min, factor*lb_rqd)
 
 #

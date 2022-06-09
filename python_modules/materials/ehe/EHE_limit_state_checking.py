@@ -22,32 +22,12 @@ from materials import concrete_base
 from materials.sections import rebar_family as rf
 from postprocess.reports import common_formats as fmt
 
-class BaseReinfController(object):
-    '''Base class for reinforcement controllers 
-       (objects that check that code prescriptions are respected).
-
-       :ivar pos: reinforcement position according to clause 66.5.1
-                  of EHE-08.
-    '''
-    def __init__(self, pos= 'II'):
-        '''Constructor.
-
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
-        '''
-        self.pos= pos
-
-
-class RebarController(BaseReinfController):
+class RebarController(lscb.RebarController):
     '''Control of some parameters as development length 
        minimum reinforcement and so on.
 
        :ivar pos: reinforcement position according to clause 66.5.1
                   of EHE-08.
-       :ivar concreteCover: the distance from center of a bar or wire to 
-                            nearest concrete surface.
-       :ivar spacing: center-to-center spacing of bars or wires being 
-                      developed, in.
     '''    
     def __init__(self, concreteCover= 35e-3, spacing= 150e-3, pos= 'II'):
         '''Constructor.
@@ -59,9 +39,8 @@ class RebarController(BaseReinfController):
         :param pos: reinforcement position according to clause 66.5.1
                    of EHE-08.
         '''
-        super(RebarController,self).__init__(pos)
-        self.concreteCover= concreteCover
-        self.spacing= spacing
+        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
+        self.pos= pos
 
     def getM(self, concrete, steel):
         ''' Return the "m" coefficient according to table 66.5.1.2.a of
@@ -127,7 +106,7 @@ class RebarController(BaseReinfController):
         '''
         return steel.getOverlapLength(concrete, phi, self.pos, distBetweenNearestSplices, beta, efficiency, ratioOfOverlapedTensionBars, tensionedBars, dynamicEffects)
 
-class StrandController(BaseReinfController):
+class StrandController(RebarController):
     '''Control of some parameters as the length of transmission.
 
        :ivar pos: reinforcement position according to clause 66.5.1

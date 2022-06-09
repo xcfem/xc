@@ -19,6 +19,104 @@ from misc_utils import log_messages as lmsg
 from materials import concrete_base
 from materials.sections import rebar_family as rf
 
+class RebarController(lscb.RebarController):
+    '''Control of some parameters as development length 
+       minimum reinforcement and so on.
+
+    :ivar alphaCoefs: coefficients for anchorage length calculation
+                   given in Table 8.2 of EC2:2004.
+    :ivar eta1: coefficient related to the quality of the bond condition 
+                 and the position of the bar during concreting.
+                 eta1= 1,0 when 'good' conditions are obtained and
+                 eta1= 0,7 for all other cases.
+    :ivar compression: true if reinforcement is compressed.
+    '''
+
+    def __init__(self, concreteCover= 35e-3, spacing= 150e-3, alphaCoefs=(1.0, None, 1.0, 1.0, 1.0), eta1= 0.7, compression= True):
+        '''Constructor.
+
+        :param alphaCoefs: coefficients for anchorage length calculation
+                       given in Table 8.2 of EC2:2004.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param compression: true if reinforcement is compressed.
+        '''
+        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
+        self.alphaCoefs= alphaCoefs
+        self.eta1= eta1
+        self.compression= compression
+
+    def getBasicAnchorageLength(self, concrete, rebarDiameter, steel, steelEfficiency= 1.0):
+        '''Returns basic required anchorage length in tension according to 
+           clause 8.4.3 of EC2:2004 (expression 8.3).
+
+        :param concrete: concrete material.
+        :param rebarDiameter: nominal diameter of the bar.
+        :param steel: reinforcement steel.
+        :param steelEfficiency: ratio between the stress on the reinforcement
+                                and the yield stress of the 
+                                steel: (sigma_sd/fyd).
+        '''
+        sigma_sd= steelEfficiency*steel.fyd()
+        return steel.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= self.eta1, sigma_sd= sigma_sd)
+
+    def getConcreteMinimumCoverEffect(self, rebarDiameter, barShape= 'bent', lateralConcreteCover= None):
+        ''' Return the value of the alpha_2 factors that introduces the effect
+            of concrete minimum cover according to figure 8.3 and table 8.2
+            of EC2:2004.
+
+        :param rebarDiameter: nominal diameter of the bar.
+        :param barShape: 'straight' or 'bent' or 'looped'.
+        :param lateralConcreteCover: lateral concrete cover (c1 in figure 8.3
+                                     of EC2:2004). If None make it equal to
+                                     the regular concrete cover.
+        '''
+        retval= 1.0
+        if(not self.compression):
+            if(lateralConcreteCover is None):
+                lateralConcreteCover= self.concreteCover
+            if(barShape=='straight'):
+                cd= min(self.spacing/2.0, lateralConcreteCover, self.concreteCover)
+                retval-= 0.15*(cd-rebarDiameter)/rebarDiameter
+                retval= max(retval, 0.7)
+            elif(barShape=='bent'):
+                cd= min(self.spacing/2.0, lateralConcreteCover)
+                retval-= 0.15*(cd-3*rebarDiameter)/rebarDiameter
+                retval= max(retval, 0.7)
+            elif(barShape=='looped'):
+                cd= min(self.spacing/2.0, self.concreteCover)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_nameS
+                lmsg.error(className+'.'+methodName+'; unknown bar shape: '+str(barShape)+'.')
+        retval= min(retval, 1.0)
+        return retval
+        
+    
+    def getDesignAnchorageLength(self, concrete, rebarDiameter, steel, steelEfficiency= 1.0, barShape= 'bent', lateralConcreteCover= None):
+        '''Returns design  anchorage length according to clause 8.4.4
+           of EC2:2004 (expression 8.4).
+
+        :param concrete: concrete material.
+        :param rebarDiameter: nominal diameter of the bar.
+        :param steel: reinforcement steel.
+        :param steelEfficiency: ratio between the stress on the reinforcement
+                                and the yield stress of the 
+                                steel: (sigma_sd/fyd).
+        :param barShape: 'straight' or 'bent' or 'looped'.
+        :param lateralConcreteCover: lateral concrete cover (c1 in figure 8.3
+                                     of EC2:2004). If None make it equal to
+                                     the regular concrete cover.
+        '''
+        sigma_sd= steelEfficiency*steel.fyd()
+        if(self.alphaCoefs[1] is None): # alpha_2 factor not set.
+            alpha_2= self.getConcreteMinimumCoverEffect(rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
+            aCoefs= (self.alphaCoefs[0], alpha_2,  self.alphaCoefs[2], self.alphaCoefs[3], self.alphaCoefs[4])
+        return steel.getDesignAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, alphaCoefs= aCoefs, eta1= self.eta1, sigma_sd= sigma_sd, compression= self.compression)
+
+
 class CrackStraightController(lscb.LimitStateControllerBase):
     '''Definition of variables involved in the verification of the cracking
     serviceability limit state according to EC2 when considering a concrete
@@ -83,7 +181,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         for each of these elements. 
         '''
         if(self.verbose):
-          lmsg.log("Postprocessing combination: "+nmbComb)
+          lmsg.log('Postprocessing combination: '+nmbComb)
         for e in elements:
             Aceff=0  #init. value
             R=e.getResistingForce()
@@ -92,7 +190,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             sctCrkProp.setupStrghCrackDist()
             hceff=self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
             # Acgross=sct.getGrossEffectiveConcreteArea(hceff)
-            Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
+            Aceff=sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
             concrete=EC2_materials.concrOfName[sctCrkProp.concrName]
             rfSteel=EC2_materials.steelOfName[sctCrkProp.rsteelName]
             k2=self.EC2_k2(sctCrkProp.eps1,sctCrkProp.eps2)
@@ -115,9 +213,9 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         self.solutionProcedure.solveComb(nmbComb)
         for e in elements:
             sct=e.getSection()
-            rfset=sct.getFiberSets()["reinfSetFb"]
+            rfset=sct.getFiberSets()['reinfSetFb']
             eps_sm=rfset.getStrainMax()
-            srmax=e.getProp("s_rmax")
+            srmax=e.getProp('s_rmax')
 #            eps_cm=concrete.fctm()/2.0/concrete.E0()
 #            wk=srmax*(eps_sm-eps_cm)
             wk=srmax*eps_sm
@@ -125,7 +223,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
 #            print('e.getProp(self.limitStateLabel).wk', e.getProp(self.limitStateLabel).wk)
             if (wk>e.getProp(self.limitStateLabel).wk):
                 R=e.getProp('ResF')
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp("idSection"),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
                 
 ###################
 # Rebar families. #
