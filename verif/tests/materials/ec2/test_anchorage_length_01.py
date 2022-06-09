@@ -28,10 +28,10 @@ rebarControllerPoor= EC2_limit_state_checking.RebarController(concreteCover= 25e
 concrete= EC2_materials.C25
 steel= EC2_materials.S500C
 
-lbd_straight_good_cond= list()
-lbd_straight_poor_cond= list()
-lbd_bent_good_cond= list()
-lbd_bent_poor_cond= list()
+lbd_straight_good_cond= ['good', 'straight']
+lbd_straight_poor_cond= ['poor', 'straight']
+lbd_bent_good_cond= ['good', 'bent']
+lbd_bent_poor_cond= ['poor', 'bent']
 for d in diameters:
     tmp= rebarControllerGood.getDesignAnchorageLength(concrete, rebarDiameter= d, steel= steel, steelEfficiency= 1.0, barShape= 'straight')
     tmp= math.ceil(tmp*1e2)*10
@@ -47,12 +47,12 @@ for d in diameters:
     lbd_bent_poor_cond.append(tmp)
 
 values= [lbd_straight_good_cond, lbd_straight_poor_cond,lbd_bent_good_cond,lbd_bent_poor_cond]
-refValues= [[230, 320, 410, 600, 780, 1010, 1300, 1760], [330, 450, 580, 850, 1110, 1450, 1850, 2510], [320, 410, 490, 650, 810, 1010, 1300, 1760], [460, 580, 700, 930, 1160, 1450, 1850, 2510]]
+refValues= [['good', 'straight', 230, 320, 410, 600, 780, 1010, 1300, 1760], ['poor', 'straight', 330, 450, 580, 850, 1110, 1450, 1850, 2510], ['good', 'bent', 320, 410, 490, 650, 810, 1010, 1300, 1760], ['poor', 'bent', 460, 580, 700, 930, 1160, 1450, 1850, 2510]]
 
 err= 0.0 
 
 for row1, row2 in zip(values, refValues):
-    for v1, v2 in zip(row1, row2):
+    for v1, v2 in zip(row1[2:], row2[2:]):
         err+=(v1-v2)**2
 err= math.sqrt(err)
 
@@ -70,8 +70,35 @@ else:
     lmsg.error(fname+' ERROR.')
 
 
+# # Tabular output
+# numDiameters= len(diameters)
+# diametersCaption= ['']*numDiameters
+# diametersCaption[0]= 'Reinforcement in tension, bar diameter (mm)'
+# diametersHeader= ['']*numDiameters
+# for i, d in enumerate(diameters):
+#     diametersHeader[i]= str(int(d*1e3))
+    
+# header2= ['bar', 'bond', 'concrete', 'steel']+diametersCaption
+# header3= ['type', 'condition', 'type', 'type',]+diametersHeader
+# headers= [header2, header3]
 
+# results= headers
+# results.append(['']*len(header2))
+# for row in values:
+#     resultRow= [row[1], row[0], concrete.materialName, steel.materialName]
+#     resultRow.extend(row[2:])
+#     results.append(resultRow)
+    
+# from tabulate import tabulate
+# print(tabulate(results))
 
+# # Write csv file.
+# import csv
+# fileName= concrete.materialName+'_'+steel.materialName+'_anchorage_lengths.csv'
+# with open(fileName, 'w') as csvfile:
+#     writer = csv.writer(csvfile)
+#     for row in results:
+#         writer.writerow(row)
 
 
 
