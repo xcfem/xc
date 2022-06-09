@@ -82,9 +82,9 @@ class RebarController(lscb.RebarController):
         '''
         return steel.getNetAnchorageLength(concrete, phi, self.pos, beta, efficiency, tensionedBars, dynamicEffects)
 
-    def getOverlapLength(self ,concrete, phi, steel, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
-        '''Returns net anchorage length in tension according to clause
-           6.5.1.2 of EHE.
+    def getLapLength(self ,concrete, phi, steel, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
+        '''Returns net lap length in tension according to clause
+           69.5.2 of EHE08.
 
         :param concrete: concrete material.
         :param phi: nominal diameter of bar, wire, or prestressing strand.
@@ -104,7 +104,8 @@ class RebarController(lscb.RebarController):
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        return steel.getOverlapLength(concrete, phi, self.pos, distBetweenNearestSplices, beta, efficiency, ratioOfOverlapedTensionBars, tensionedBars, dynamicEffects)
+        return steel.getLapLength(concrete, phi, self.pos, distBetweenNearestSplices, beta, efficiency, ratioOfOverlapedTensionBars, tensionedBars, dynamicEffects)
+    
 
 class StrandController(RebarController):
     '''Control of some parameters as the length of transmission.

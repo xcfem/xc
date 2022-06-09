@@ -388,7 +388,7 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
     ''' Reinforcing steel as defined in EC2:2004.
 
     '''
-    def getBasicAnchorageLength(self, concrete, rebarDiameter, eta1= 0.7, sigma_sd= None):
+    def getBasicAnchorageLength(self, concrete, rebarDiameter, eta1= 0.7, steelEfficiency= 1.0):
         '''Returns basic required anchorage length in tension according to 
            clause 8.4.3 of EC2:2004 (expression 8.3).
 
@@ -398,12 +398,15 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
                      and the position of the bar during concreting.
                      eta1= 1,0 when 'good' conditions are obtained and
                      eta1= 0,7 for all other cases.
-        :param sigma_sd: the design stress of the bar at the position from 
-                         where the anchorage is measured from.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
         '''
         fbd= concrete.getUltimateBondStress(rebarDiameter= rebarDiameter, eta1= eta1)
-        if(sigma_sd is None):
-            sigma_sd= self.fyd()
+        sigma_sd= steelEfficiency*self.fyd()
         return (rebarDiameter/4.0)*sigma_sd/fbd
     
     def getMinimumAnchorageLength(self, lb_rqd, rebarDiameter, compression= True):
@@ -422,26 +425,78 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
             factor= 0.3
         return max(factor*lb_rqd,max(10*rebarDiameter, 0.1))
                 
-    def getDesignAnchorageLength(self, concrete, rebarDiameter, alphaCoefs=(1.0, 1.0, 1.0, 1.0, 1.0), eta1= 0.7, sigma_sd= None, compression= True):
+    def getDesignAnchorageLength(self, concrete, rebarDiameter, eta1= 0.7, steelEfficiency= 1.0, compression= True, alpha_1= 1.0, alpha_2= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0):
         '''Returns design  anchorage length according to clause 8.4.4
            of EC2:2004 (expression 8.4).
 
         :param concrete: concrete material.
         :param rebarDiameter: nominal diameter of the bar.
-        :param alphaCoefs: coefficients given in Table 8.2.
         :param eta1: coefficient related to the quality of the bond condition 
                      and the position of the bar during concreting.
                      eta1= 1,0 when 'good' conditions are obtained and
                      eta1= 0,7 for all other cases.
-        :param sigma_sd: the design stress of the bar at the position from 
-                         where the anchorage is measured from.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
         :param compression: if true return the minimum anchorage length for
                             anchorages in compression.
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_2: effect of concrete minimum cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_4: influence of one or more welded transverse bars along 
+                        the design anchorage length.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
         '''
-        lb_rqd= self.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= eta1, sigma_sd= sigma_sd)
+        lb_rqd= self.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= eta1, steelEfficiency= steelEfficiency)
         lb_min= self.getMinimumAnchorageLength(lb_rqd= lb_rqd, rebarDiameter= rebarDiameter, compression= compression)
-        factor= alphaCoefs[0]*max(0.7, alphaCoefs[1]*alphaCoefs[2]*alphaCoefs[4])*alphaCoefs[3]
+        factor= alpha_1*max(0.7, alpha_2*alpha_3*alpha_5)*alpha_4
         return max(lb_min, factor*lb_rqd)
+
+    def getAlpha6(self, ratioOfOverlapedTensionBars= 1):
+        ''' Return the value of the coefficient alpha_6 according to table
+            8.3 of EC2:2004.
+
+        :param ratioOfOverlapedTensionBars: ratio of overlapped tension bars 
+                                            in relation to the total steel
+                                            section.
+        '''
+        retval= math.sqrt(ratioOfOverlapedTensionBars/0.25)
+        return min(max(retval, 1.0), 1.5)        
+    
+    def getLapLength(self, concrete, rebarDiameter, eta1= 0.7, steelEfficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, alpha_1= 1.0, alpha_2= 1.0, alpha_3= 1.0, alpha_5= 1.0):
+        '''Returns the value of the design lap length according to clause
+           8.7.3 of EC2:2004 (expression 8.10).
+
+        :param concrete: concrete material.
+        :param rebarDiameter: nominal diameter of bar, wire, or prestressing strand.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
+        :param ratioOfOverlapedTensionBars: ratio of overlapped tension bars 
+                                            in relation to the total steel
+                                            section.
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_2: effect of concrete minimum cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
+        '''
+        lb_rqd= self.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= eta1, steelEfficiency= steelEfficiency)
+        alpha_6= self.getAlpha6(ratioOfOverlapedTensionBars)
+        l0= alpha_1*alpha_2*alpha_3*alpha_5*alpha_6*lb_rqd
+        l0_min= max(0.3*alpha_6*lb_rqd, 15*rebarDiameter, 0.2)
+        return max(l0, l0_min)
 
 #
 #   steelName: Name identifying the material.

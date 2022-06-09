@@ -104,7 +104,7 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
             retval= max(retval,2.0*lb/3.0)
         return retval
     
-    def getOverlapLength(self ,concrete, phi, pos, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
+    def getLapLength(self ,concrete, phi, pos, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
         '''Returns net anchorage length in tension according to clause
            6.5.1.2 of EHE.
 

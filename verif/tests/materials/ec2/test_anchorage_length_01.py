@@ -21,8 +21,8 @@ diameters= [8e-3, 10e-3, 12e-3, 16e-3, 20e-3, 25e-3, 32e-3, 40e-3]
 #diameters= [12e-3]
 
 # Define rebar controllers.
-rebarControllerGood= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, alphaCoefs=(1.0, None, 1.0, 1.0, 1.0), eta1= 1.0, compression= False)
-rebarControllerPoor= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3,alphaCoefs=(1.0, None, 1.0, 1.0, 1.0), eta1= 0.7, compression= False)
+rebarControllerGood= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 1.0, compression= False)
+rebarControllerPoor= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 0.7, compression= False)
 
 # Materials
 concrete= EC2_materials.C25

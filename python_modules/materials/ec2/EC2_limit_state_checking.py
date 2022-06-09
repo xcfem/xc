@@ -23,30 +23,45 @@ class RebarController(lscb.RebarController):
     '''Control of some parameters as development length 
        minimum reinforcement and so on.
 
-    :ivar alphaCoefs: coefficients for anchorage length calculation
-                   given in Table 8.2 of EC2:2004.
     :ivar eta1: coefficient related to the quality of the bond condition 
                  and the position of the bar during concreting.
                  eta1= 1,0 when 'good' conditions are obtained and
                  eta1= 0,7 for all other cases.
     :ivar compression: true if reinforcement is compressed.
+    :ivar alpha_1: effect of the form of the bars assuming adequate cover.
+    :ivar alpha_3: effect of confinement by transverse reinforcement.
+    :ivar alpha_4: influence of one or more welded transverse bars along 
+                    the design anchorage length.
+    :ivar alpha_5: effect of the pressure transverse to the plane of 
+                    splitting along the design anchorage length.
     '''
 
-    def __init__(self, concreteCover= 35e-3, spacing= 150e-3, alphaCoefs=(1.0, None, 1.0, 1.0, 1.0), eta1= 0.7, compression= True):
+    def __init__(self, concreteCover= 35e-3, spacing= 150e-3, eta1= 0.7, compression= True, alpha_1= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0):
         '''Constructor.
 
-        :param alphaCoefs: coefficients for anchorage length calculation
-                       given in Table 8.2 of EC2:2004.
+        :param concreteCover: the distance from center of a bar or wire to 
+                             nearest concrete surface.
+        :param spacing: center-to-center spacing of bars or wires being 
+                       developed, in.
         :param eta1: coefficient related to the quality of the bond condition 
                      and the position of the bar during concreting.
                      eta1= 1,0 when 'good' conditions are obtained and
                      eta1= 0,7 for all other cases.
         :param compression: true if reinforcement is compressed.
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_4: influence of one or more welded transverse bars along 
+                        the design anchorage length.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
         '''
         super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
-        self.alphaCoefs= alphaCoefs
         self.eta1= eta1
         self.compression= compression
+        self.alpha_1= alpha_1 #effect of the form of the bars assuming adequate cover.
+        self.alpha_3= alpha_3 # effect of confinement by transverse reinforcement.
+        self.alpha_4= alpha_4 # influence of one or more welded transverse bars along the design anchorage length.
+        self.alpha_5= alpha_5 # effect of the pressure transverse to the plane of splitting along the design anchorage length.
 
     def getBasicAnchorageLength(self, concrete, rebarDiameter, steel, steelEfficiency= 1.0):
         '''Returns basic required anchorage length in tension according to 
@@ -55,12 +70,14 @@ class RebarController(lscb.RebarController):
         :param concrete: concrete material.
         :param rebarDiameter: nominal diameter of the bar.
         :param steel: reinforcement steel.
-        :param steelEfficiency: ratio between the stress on the reinforcement
-                                and the yield stress of the 
-                                steel: (sigma_sd/fyd).
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
         '''
-        sigma_sd= steelEfficiency*steel.fyd()
-        return steel.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= self.eta1, sigma_sd= sigma_sd)
+        return steel.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= self.eta1, steelEfficiency= steelEfficiency)
 
     def getConcreteMinimumCoverEffect(self, rebarDiameter, barShape= 'bent', lateralConcreteCover= None):
         ''' Return the value of the alpha_2 factors that introduces the effect
@@ -102,20 +119,44 @@ class RebarController(lscb.RebarController):
         :param concrete: concrete material.
         :param rebarDiameter: nominal diameter of the bar.
         :param steel: reinforcement steel.
-        :param steelEfficiency: ratio between the stress on the reinforcement
-                                and the yield stress of the 
-                                steel: (sigma_sd/fyd).
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
         :param barShape: 'straight' or 'bent' or 'looped'.
         :param lateralConcreteCover: lateral concrete cover (c1 in figure 8.3
                                      of EC2:2004). If None make it equal to
                                      the regular concrete cover.
         '''
-        sigma_sd= steelEfficiency*steel.fyd()
-        if(self.alphaCoefs[1] is None): # alpha_2 factor not set.
-            alpha_2= self.getConcreteMinimumCoverEffect(rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
-            aCoefs= (self.alphaCoefs[0], alpha_2,  self.alphaCoefs[2], self.alphaCoefs[3], self.alphaCoefs[4])
-        return steel.getDesignAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, alphaCoefs= aCoefs, eta1= self.eta1, sigma_sd= sigma_sd, compression= self.compression)
+        alpha_2= self.getConcreteMinimumCoverEffect(rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
+        return steel.getDesignAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= self.eta1, steelEfficiency= steelEfficiency, compression= self.compression, alpha_1= self.alpha_1, alpha_2= alpha_2, alpha_3= self.alpha_3, alpha_4= self.alpha_4, alpha_5= self.alpha_5)
 
+    def getLapLength(self ,concrete, rebarDiameter, steel, steelEfficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, lateralConcreteCover= None):
+        '''Returns the value of the design lap length according to clause
+           8.7.3 of EC2:2004 (expression 8.10).
+
+        :param concrete: concrete material.
+        :param rebarDiameter: nominal diameter of bar, wire, or prestressing strand.
+        :param steel: reinforcement steel.
+        :param distBetweenNearestSplices: distance between the nearest splices
+                                          according to figure 69.5.2.2.a.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
+        :param ratioOfOverlapedTensionBars: ratio of overlapped tension bars 
+                                            in relation to the total steel
+                                            section.
+        :param lateralConcreteCover: lateral concrete cover (c1 in figure 8.3
+                                     of EC2:2004). If None make it equal to
+                                     the regular concrete cover.
+        '''
+        alpha_2= self.getConcreteMinimumCoverEffect(rebarDiameter= rebarDiameter, barShape= 'straight', lateralConcreteCover= lateralConcreteCover)
+        return steel.getLapLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= self.eta1, steelEfficiency= steelEfficiency, ratioOfOverlapedTensionBars= ratioOfOverlapedTensionBars, alpha_1= self.alpha_1, alpha_2= alpha_2, alpha_3= self.alpha_3, alpha_5= self.alpha_5)
 
 class CrackStraightController(lscb.LimitStateControllerBase):
     '''Definition of variables involved in the verification of the cracking
