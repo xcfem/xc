@@ -8,8 +8,6 @@ from geom_utils import aux_cairo_plot
 import matplotlib as mpl
 mpl.rc('figure', max_open_warning = 0)
 import matplotlib.pyplot as plt
-from matplotlib.path import Path
-import matplotlib.patches as patches
 from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"

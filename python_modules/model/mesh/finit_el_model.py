@@ -112,12 +112,17 @@ class LinSetToMesh(RawLineSetToMesh):
                        types: 'linear', 'PDelta' and 'corot' (defaults to 
                        'linear') 
     '''
-    def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear'):
+    def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='ElasticBeam3d', dimElemSpace=3, coordTransfType='linear'):
         self.vDirLAxZ= vDirLAxZ
         cTrf= None
         if(coordTransfType is not None):
-          trfName= linSet.name+'trYGlobal'
-          cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,coordTransfType,self.vDirLAxZ)
+            trfName= linSet.name+'trYGlobal'
+            cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,coordTransfType, self.vDirLAxZ)
+            if(cTrf is None):
+                  className= type(self).__name__
+                  methodName= sys._getframe(0).f_code.co_name
+                  lmsg.error(className+'.'+methodName+'; error creating coordinate transformation: '+ trfName+'.')
+
         super(LinSetToMesh,self).__init__(linSet,matSect,elemSize,cTrf,elemType,dimElemSpace)
 
    
@@ -207,7 +212,7 @@ def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLA
     :param sectGeom: ='Y' if want to create the property 'crossSection'
                   for each element (defaults to 'N')
     '''
-    s=preprocessor.getSets.defSet(setName)
+    s= preprocessor.getSets.defSet(setName)
     ext1=preprocessor.getMultiBlockTopology.getPoints.newPoint(startPnt)
     ext2=preprocessor.getMultiBlockTopology.getPoints.newPoint(endPnt)
     l=preprocessor.getMultiBlockTopology.getLines.newLine(ext1.tag,ext2.tag)

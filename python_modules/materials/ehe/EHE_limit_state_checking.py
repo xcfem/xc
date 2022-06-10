@@ -1733,7 +1733,8 @@ class BlockMember(object):
           :param Nd: concentrated load.
         '''
         return 0.25*((self.b-self.b1)/self.b)*Nd
-    def getReinforcementAreaBd(Nd, fyd):
+    
+    def getReinforcementAreaBd(self, Nd, fyd):
         '''
         Return the area of the reinforcement parallel to side b
         (see figure 61.1.a page 302 EHE-08)

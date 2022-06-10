@@ -6,3 +6,5 @@ The tests that verify the python code that generates loads due to earth pressure
 ## References
 
 - [Structural load](https://en.wikipedia.org/wiki/Structural_load)
+- [Multiple-Support Excitation](https://portwooddigital.com/2021/08/29/multiple-support-excitation/)
+- [Get the Accel Out](https://portwooddigital.com/2022/06/08/get-the-accel-out/)

@@ -12,7 +12,6 @@ __email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 
 import sys
 import enum
-import math
 from misc_utils import log_messages as lmsg
 from materials import steel_member_base
 from materials import limit_state_checking_base as lsc

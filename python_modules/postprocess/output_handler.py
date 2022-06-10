@@ -390,13 +390,14 @@ class OutputHandler(object):
         for st in setsToDisplayReactions:
             self.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
             
-    def displayDiagram(attributeName,component, setToDispRes,setDisp,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None):
+    def displayDiagram(self, attributeName,component, setToDispRes,setToDisplay,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None):
         '''Auxiliary function to display results on linear elements.
 
         :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
         :param component:    result item to display (e.g. 'N', 'My', ...)
         :param setToDispRes: set of linear elements to which display results
-        :param setToDisplay:      set of elements (any type) to be depicted
+        :param setToDisplay: set of elements (any type) to be depicted 
+                             as context.
         :param scaleFactor:  factor of scale to apply to the auto-scaled display
                              (defaults to 1)
         :param caption:      caption to display
@@ -565,7 +566,7 @@ class OutputHandler(object):
         unitDescription= self.outputStyle.getForceUnitsDescription()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        grid= displaySettings.setupGrid(setToDisplay)
+        unusedGrid= displaySettings.setupGrid(setToDisplay)
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         scOrient=1 #scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
         # auto-scaling parameters
@@ -642,7 +643,7 @@ class OutputHandler(object):
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        grid= displaySettings.setupGrid(setToDisplay)
+        unusedGrid= displaySettings.setupGrid(setToDisplay)
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
@@ -674,7 +675,7 @@ class OutputHandler(object):
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        grid= displaySettings.setupGrid(setToDisplay)
+        unusedGrid= displaySettings.setupGrid(setToDisplay)
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
@@ -705,7 +706,7 @@ class OutputHandler(object):
         domain= preprocessor.getDomain
         numModes= domain.numModes # number of computed modes.
         if(mode<=numModes):
-            norm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
+            unusedNorm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
             #auto-scale
             LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
             maxAbs= 0.0
