@@ -104,6 +104,8 @@ class RebarController(lscb.RebarController):
                 retval= max(retval, 0.7)
             elif(barShape=='looped'):
                 cd= min(self.spacing/2.0, self.concreteCover)
+                retval-= 0.15*(cd-3*rebarDiameter)/rebarDiameter
+                retval= max(retval, 0.7)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_nameS
