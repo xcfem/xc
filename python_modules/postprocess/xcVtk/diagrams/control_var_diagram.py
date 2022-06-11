@@ -10,9 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-
-import geom
-import vtk
 from postprocess.xcVtk.diagrams import colored_diagram as cd
 from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg

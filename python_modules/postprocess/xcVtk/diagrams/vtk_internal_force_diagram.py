@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 ''' Display of diagrams (forces, moments, ...) on linear elements'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
@@ -8,8 +7,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega@ciccp.es, l.pereztato@ciccp.es"
 
-import geom
-import vtk
 from postprocess.xcVtk.diagrams import colored_diagram as cd
 from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg

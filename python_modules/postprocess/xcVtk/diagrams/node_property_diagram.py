@@ -1,12 +1,7 @@
  # -*- coding: utf-8 -*-
-
 ''' Diagram to display a property defined at nodes over linear elements. '''
 
-import geom
-import vtk
 from postprocess.xcVtk.diagrams import colored_diagram as cd
-
-
 
 class NodePropertyDiagram(cd.ColoredDiagram):
   '''Diagram to display a property defined at nodes over linear elements.'''

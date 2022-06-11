@@ -11,9 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
-import geom
 import xc
-import vtk
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import vector_field as vf
 
