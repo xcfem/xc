@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.ortega@ciccp.es"
 
 import numpy
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

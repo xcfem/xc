@@ -35,8 +35,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es"
 
-import geom
-
 def column_based_sort(array, column=0):
     """
     >>> column_based_sort([(5, 1), (4, 2), (3, 0)], 1)

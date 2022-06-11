@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+'''Eurocode 3 checks for a beam or column.'''
+
 from __future__ import print_function
 
-
-'''Eurocode 3 checks for a beam or column.'''
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016 LCPT"
 __license__= "GPL"
@@ -11,7 +11,6 @@ __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 
 import math
-import geom
 import xc
 from materials import steel_member_base
 from materials.ec3 import EC3_limit_state_checking as EC3lsc

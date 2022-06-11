@@ -6,7 +6,6 @@ from __future__ import division
 from postprocess import element_section_map
 import pickle
 from misc_utils import log_messages as lmsg
-import geom
 import xc
 # Macros
 from solution import predefined_solutions

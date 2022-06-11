@@ -4,7 +4,6 @@ from __future__ import print_function
 
 import os
 import tempfile
-import geom
 import xc
 from postprocess import output_styles
 from postprocess import limit_state_data as lsd

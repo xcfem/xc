@@ -3,7 +3,6 @@
 import os
 from import_export import mesh_entities as me
 from import_export import block_topology_entities as bte
-import geom
 import xc
 
 

@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-import geom
+#import geom
 import xc
 from misc_utils import log_messages as lmsg
 

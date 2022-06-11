@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
-import geom
 import vtk
 import math
 from postprocess.xcVtk.diagrams import colored_diagram as cd

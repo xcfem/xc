@@ -3,9 +3,7 @@
 import datetime
 import textwrap
 import vtk
-from misc_utils import log_messages as lmsg
 from misc_utils import data_struct_utils as su
-import geom
 import xc
 
 class ScreenAnnotation(object):

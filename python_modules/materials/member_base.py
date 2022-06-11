@@ -12,7 +12,6 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 from misc_utils import log_messages as lmsg
 from model.geometry import geom_utils as gu
 
-import geom
 import xc
 
 class MemberConnection(object):

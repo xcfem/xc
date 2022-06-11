@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Limit state checking according to ACI-318-14.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -11,12 +12,10 @@ __email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
 
 from materials.aci import ACI_materials
 from materials.sections import rebar_family as rf
-import geom
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
 from rough_calculations import ng_simple_bending_reinforcement
 import math
-import geom
 from materials.sections.fiber_section import fiber_sets
 from materials.sections import stress_calc as sc
 from misc_utils import log_messages as lmsg

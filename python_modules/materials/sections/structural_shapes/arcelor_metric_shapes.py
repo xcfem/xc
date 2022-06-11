@@ -371,7 +371,6 @@ for item in UC:
     shape['AreaQz']= A-hi*tw
 
   
-import geom
 from materials.sections import structural_steel
 
 def common_prefix(a:str, b:str):

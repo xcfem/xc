@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import geom
-import xc
 
 # Direction Vectors for uni-dimensional elements.
 def getVectorIElem(preprocessor,idElem):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Moment curvature diagram for a section. '''
-import geom
+
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
