@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Elastic 2D section verification test.'''
+
+from __future__ import print_function
 
 import geom
 import xc
@@ -26,18 +27,18 @@ matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2
 
 # Materials definition
 matPoteau= scc10x20.defElasticSection2d(preprocessor,matscc10x20) 
-elemZLS= scc2d_testing_bench.sectionModel(preprocessor, scc10x20.name)
+elemZLS, n1, n2= scc2d_testing_bench.sectionModel(preprocessor, scc10x20.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
-modelSpace.fixNode000(1)
-spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
+modelSpace.fixNode000(n1.tag)
+spc= modelSpace.constraints.newSPConstraint(n2.tag,1,0.0)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 loadMz= 1e3
-lp0.newNodalLoad(2,xc.Vector([0,0,loadMz]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,0,loadMz]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -46,12 +47,11 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 nodes= preprocessor.getNodeHandler
-RM= nodes.getNode(1).getReaction[2] 
+RM= n1.getReaction[2] 
 
 elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-ele1.getResistingForce()
-scc0= ele1.getSection()
+elemZLS.getResistingForce()
+scc0= elemZLS.getSection()
 
 esfMz= scc0.getStressResultantComponent("Mz")
 
