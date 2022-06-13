@@ -11,9 +11,7 @@ from materials import typical_materials
 from model.sets import sets_mng 
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import fields
-from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from solution import predefined_solutions
 
 
 __author__= " Ana Ortega (AO_O), Luis C. Pérez Tato (LCPT) "
@@ -59,7 +57,6 @@ class SpringBC(object):
         '''create springs in all the points included in the set of entities 
         given as parameter
         '''
-        prep=setEnt.getPreprocessor
         lstnod=sets_mng.get_lstNod_on_points_fromSet(setEnt)
         return self.applyOnNodesLst(lstnod)
         
@@ -67,7 +64,6 @@ class SpringBC(object):
         '''create springs in all the nodes included in the set of entities 
         given as parameter
         '''
-        prep=setEnt.getPreprocessor
         lstnod=sets_mng.setNod_to_lst(setEnt)
         self.applyOnNodesLst(lstnod)
         
@@ -91,7 +87,7 @@ class SpringBC(object):
         Return the spring element created.
         '''
         self.createSpringMaterials()
-        fixedNode, elem= self.modelSpace.setBearing(node.tag,self.springMat)
+        unusedFixedNode, elem= self.modelSpace.setBearing(node.tag,self.springMat)
         return elem
 
 class ElasticFoundation(object):
@@ -136,7 +132,7 @@ class ElasticFoundation(object):
             self.xSpring.E= self.cRoz*self.wModulus*arTribNod
             self.ySpring.E= self.cRoz*self.wModulus*arTribNod
             self.zSpring.E= self.wModulus*arTribNod
-            nn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
+            unusedNn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
             self.springs.append(preprocessor.getElementHandler.getElement(idElem))
             idElem+= 1
             
@@ -189,7 +185,7 @@ class ElasticFoundation(object):
               in red (defaults to None)
         :param fileName: file name (defaults to None -> screen display)
         '''
-        reac= self.calcPressures()
+        unusedReac= self.calcPressures()
 
         field= fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
@@ -217,13 +213,18 @@ class ElasticFoundation(object):
         nodSet=self.foundationSet.getNodes
         for n in nodSet:
             n.setProp('maxSoilPressure',-1e10)
-        #Calculate max. pressure
+        # Calculate max. pressure
         comb_keys=[key for key in combs] 
         for k in comb_keys:
             print(combs[k].name,combs[k].expr)
             modelSpace.removeAllLoadPatternsFromDomain()
             modelSpace.addNewLoadCaseToDomain(combs[k].name,combs[k].expr)
             result= analysis.analyze(1)
+            if(result!=0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; can\'t solve for load case: '+str(combs[k].name)+'.')
+                exit(-1)
             reac= self.calcPressures()
             for n in nodSet:
                 prs=n.getProp('soilPressure')[2]
@@ -231,7 +232,7 @@ class ElasticFoundation(object):
                 if prs > n.getProp('maxSoilPressure'):
                     print(n.tag,prs)
                     n.setProp('maxSoilPressure',prs)
-        #Display max. pressures
+        # Display max. pressures
         field= fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         field.display(displaySettings,caption= caption+' '+unitDescription,fileName=fileName)

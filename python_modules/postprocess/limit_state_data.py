@@ -159,6 +159,7 @@ class LimitStateData(object):
         '''Return the Python executable file name.'''
         return self.getOutputDataBaseFileName() + '.py'
     
+    @staticmethod
     def loadPickleObject(objName):
         '''Read a Python object from a pickle file.'''
         with open(name + '.pkl', 'r') as f:

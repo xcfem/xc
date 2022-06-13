@@ -786,7 +786,7 @@ class WallTopPlates(object):
         if(result!=0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; cant solve for load case: '+str(comb)+'.')
+            lmsg.error(className+'.'+methodName+'; can\'t solve for load case: '+str(comb)+'.')
         loadDurationFactor= self.loadCombDurationFactorFunction(comb)
         results= self.checkPlates(loadDurationFactor= loadDurationFactor)
         preprocessor.getLoadHandler.removeFromDomain(comb)

@@ -249,9 +249,15 @@ class SolutionProcedure(object):
         if(not self.analysis):
             self.setup()
         result= self.analysis.analyze(self.numSteps)
-        if(calculateNodalReactions and (result==0)):
-            nodeHandler= self.feProblem.getPreprocessor.getNodeHandler
-            result= nodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
+        if(result!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; can\'t solve for current load case.')
+            exit(-1)
+        else:
+            if(calculateNodalReactions):
+                nodeHandler= self.feProblem.getPreprocessor.getNodeHandler
+                result= nodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
     def resetLoadCase(self):

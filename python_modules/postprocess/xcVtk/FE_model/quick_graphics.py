@@ -63,6 +63,10 @@ class LoadCaseResults(QuickGraphics):
         lmsg.warning('Here we use a simple linear static solution that is not always a suitable method.')
         analysis= predefined_solutions.simple_static_linear(self.feProblem)
         result= analysis.analyze(1)
+        if(result!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; can\'t solve for current load case.')
         #combs.removeFromDomain(self.loadCaseName)
         
     def checkSetToDisp(self,setToDisplay):

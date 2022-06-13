@@ -47,6 +47,12 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
         modelSpace.revertToStart()
         modelSpace.addLoadCaseToDomain(ULS)
         result= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance= 1e-4)
+        if(result!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; can\'t solve for load case: '+str(ULS)+'.')
+            exit(-1)
+        
         oh= output_handler.OutputHandler(modelSpace)
         #bolts checking
         set_bolt_check_resprop_current_LC(ULS,boltSets2Check,meanShearProc)

@@ -65,7 +65,7 @@ class AnalysisContextBase(object):
         if(retval!=0 or (combinationActive and not currentCombination.isActive())):
             lmsg.error('Failed to solve for combination: '+currentCombination.name)
             self.failedCombinations.append(currentCombination.name)
-            quit()
+            exit(-1)
         return retval
 
     def preloadPhase(self, comb):
