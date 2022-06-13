@@ -1,5 +1,4 @@
-Interaction diagrams for reinforced concrete sections
-=====================================================
+# Interaction diagrams for reinforced concrete sections
 
 ## Overview
 Three and two-dimensional <a href="https://github.com/xcfem/xc/blob/master/doc/screenshots/3D_interaction_diagram.png" target="_new">interaction diagrams</a> for reinforced concrete sections fiber models.
@@ -19,3 +18,7 @@ Three and two-dimensional <a href="https://github.com/xcfem/xc/blob/master/doc/s
 - NMyMzPointCloud.h (.cc): 3D point cloud structure. Each point in the cloud represents a (N,My,Mz) triplet.
 -python_inteface.tcc: boost.python code to expose all those clases to Python. 
 
+## References
+
+- [Implementation of interaction diagrams in the finite element open source software XC](http://www.xcengineering.xyz/blog_doc/2016_interact_diag/interactionDiagram.pdf)
+- [P-M Interaction by the Book](https://portwooddigital.com/2022/06/12/p-m-interaction-by-the-book)

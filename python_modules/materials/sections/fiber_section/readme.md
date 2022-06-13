@@ -3,7 +3,7 @@ Code that makes easier to define fiber section materials.
 
 A fiber section object is composed of Fibers, with each fiber containing a UniaxialMaterial, an area and a location: (y) for 2D sections or (y,z) for 3D sections.
 ## References
-- [Implementation of interaction diagrams in the finite element open source software XC](http://www.xcengineering.xyz/blog_doc/2016_interact_diag/interactionDiagram.pdf)
+
 - [Fiber Section (OpenSees)](https://opensees.berkeley.edu/wiki/index.php/Fiber_Section)
 - [Fiber Section Centroids](https://portwooddigital.com/2021/01/24/fiber-section-centroids/)
 - [Torsion with Fiber Sections](https://portwooddigital.com/2019/10/06/torsion-with-fiber-sections/)
@@ -11,3 +11,7 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 - [Two Fibers, Five Ways](https://portwooddigital.com/2022/01/16/two-fibers-five-ways)
 - [Two Fibers Explain So Much](https://portwooddigital.com/2022/02/06/two-fibers-explain-so-much/)
 - [Something, Something, Something Fiber](https://portwooddigital.com/2022/02/27/something-something-something-fiber/)
+
+### Interaction diagrams
+- [Implementation of interaction diagrams in the finite element open source software XC](http://www.xcengineering.xyz/blog_doc/2016_interact_diag/interactionDiagram.pdf)
+- [P-M Interaction by the Book](https://portwooddigital.com/2022/06/12/p-m-interaction-by-the-book)
