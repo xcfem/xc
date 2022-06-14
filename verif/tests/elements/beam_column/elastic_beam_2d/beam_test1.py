@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 # Reference:  Strength of Materials, Part I, Elementary Theory and Problems, pg. 98, problem 4
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

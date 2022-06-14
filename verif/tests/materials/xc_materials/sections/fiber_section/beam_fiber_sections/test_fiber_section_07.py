@@ -5,7 +5,6 @@ from __future__ import print_function
 
 
 import math
-import geom
 import xc
 from misc import scc3d_testing_bench
 

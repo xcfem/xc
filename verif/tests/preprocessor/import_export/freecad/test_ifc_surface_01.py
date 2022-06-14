@@ -13,7 +13,6 @@ from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
 from model import predefined_spaces
 import os
-import geom
 import xc
 
 def getRelativeCoo(pt):
@@ -41,6 +40,7 @@ ieData.writeToXCFile()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Test IFC surfaces.'
+import geom
 exec(open(ieData.outputFileName+'.py').read())
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes) 

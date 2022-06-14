@@ -6,7 +6,6 @@ from __future__ import print_function
 
 import math
 import yaml
-import geom
 import xc
 from model import predefined_spaces
 from materials.awc_nds import AWCNDS_materials

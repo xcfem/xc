@@ -16,7 +16,6 @@ linear regression of this curve is used for this purpose.
 '''
 
 import os
-import geom
 import xc
 from materials import concrete_base
 from materials import typical_materials

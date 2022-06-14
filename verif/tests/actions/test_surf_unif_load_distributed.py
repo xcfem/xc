@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 
 import os
-import geom
 import xc
 from materials import typical_materials as tm
 from materials.ehe import EHE_materials

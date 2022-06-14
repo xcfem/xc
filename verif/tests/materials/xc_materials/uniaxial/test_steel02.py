@@ -18,7 +18,6 @@ F= 1.05*E*epsy # Force to apply.
 Nsteps= 10 # number of analysis steps.
 
 import math
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

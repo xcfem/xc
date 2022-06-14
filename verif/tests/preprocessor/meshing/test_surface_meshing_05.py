@@ -2,7 +2,6 @@
 from __future__ import print_function
 from __future__ import division
 
-import geom
 import xc
 import math
 import os

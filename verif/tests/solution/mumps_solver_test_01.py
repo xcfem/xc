@@ -6,7 +6,6 @@ from __future__ import print_function
     Test the UMFPACK solver.
 '''
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

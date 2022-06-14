@@ -19,7 +19,6 @@ nu= 0.3 # Poisson's ratio.
 # Load
 F= 10 # Load magnitude en kips
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

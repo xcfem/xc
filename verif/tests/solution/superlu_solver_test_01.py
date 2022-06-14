@@ -3,7 +3,6 @@ from __future__ import print_function
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 26, problem 10
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

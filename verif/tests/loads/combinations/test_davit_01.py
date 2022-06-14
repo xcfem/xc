@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import yaml
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

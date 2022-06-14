@@ -11,7 +11,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
 import os
-import geom
 import xc
 
 def getRelativeCoo(pt):
@@ -39,6 +38,7 @@ ieData.writeToXCFile()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Test IFC lines.'
+import geom
 exec(open(ieData.outputFileName+'.py').read())
 
 xcTotalSet= preprocessor.getSets.getSet('total')

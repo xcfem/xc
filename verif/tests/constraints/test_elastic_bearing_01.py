@@ -16,7 +16,6 @@ FX= 1 # Force magnitude
 FY= 2 
 FZ= 3
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

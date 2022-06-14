@@ -3,7 +3,6 @@ from __future__ import print_function
 ''' Home made test.
     Obtaining the contour of an element set. '''
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

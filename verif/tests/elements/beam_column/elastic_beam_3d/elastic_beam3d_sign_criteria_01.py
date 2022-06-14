@@ -16,7 +16,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 
 import math
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

@@ -13,7 +13,6 @@ from solution import predefined_solutions
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

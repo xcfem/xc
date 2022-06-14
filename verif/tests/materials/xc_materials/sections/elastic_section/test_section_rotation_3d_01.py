@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-import geom
 import xc
 from materials import typical_materials
 import math

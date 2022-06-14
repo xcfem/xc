@@ -11,7 +11,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
 import csv
-import geom
 import xc
 from materials.sections.fiber_section import def_simple_RC_section as rcs
 from materials import typical_materials

@@ -13,7 +13,6 @@ __email__= "ana.ortega@xcengineering.xyz"
 
 import numpy as np
 import math
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials as tm

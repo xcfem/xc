@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import geom
 import xc
 
 feProblem= xc.FEProblem()

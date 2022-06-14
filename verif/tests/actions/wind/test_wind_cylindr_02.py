@@ -12,7 +12,6 @@ __email__= "ana.ortega.ort@gmail.com l.pereztato@gmail.com"
 
 import os
 import math
-import geom
 import xc
 from model import predefined_spaces
 from model.geometry import grid_model as gm

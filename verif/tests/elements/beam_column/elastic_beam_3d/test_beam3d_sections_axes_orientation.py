@@ -29,7 +29,6 @@ __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
 import math
 import os
-import geom
 import xc
 import numpy as np
 import csv

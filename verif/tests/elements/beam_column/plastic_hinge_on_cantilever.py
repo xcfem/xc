@@ -11,7 +11,6 @@ __email__= "l.pereztato@gmail.com"
 
 # Testing hinge development in a cantilever.
 
-import geom
 import xc
 
 from materials.sections.structural_shapes import arcelor_metric_shapes

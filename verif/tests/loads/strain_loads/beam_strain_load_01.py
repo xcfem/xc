@@ -9,7 +9,6 @@
 '''
 from __future__ import print_function
 
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

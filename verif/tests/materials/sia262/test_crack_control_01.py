@@ -3,7 +3,6 @@ from __future__ import print_function
 ''' Home-made Reinforced concrete section. Crack control verification test.
 '''
 
-import geom
 import xc
 
 from misc import scc3d_testing_bench

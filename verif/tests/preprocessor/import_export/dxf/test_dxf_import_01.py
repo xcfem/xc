@@ -14,7 +14,6 @@ from import_export import neutral_mesh_description as nmd
 
 import os
 import sys
-import geom
 import xc
 import logging
 
@@ -50,6 +49,7 @@ ieData.writeToXCFile()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Stair tower structure'
+import geom
 exec(open(outputFileName+'.py').read())
 
 # Import block topology information

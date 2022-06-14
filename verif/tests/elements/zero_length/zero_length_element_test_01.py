@@ -13,7 +13,6 @@ K= 1000 # Spring constant
 l= 1e-7 # Distance between nodes
 F= 1 # Force magnitude
 
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

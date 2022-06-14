@@ -15,7 +15,6 @@ from model import predefined_spaces
 from materials import typical_materials
 import os
 import xc_base
-import geom
 import xc
 
 # Input data

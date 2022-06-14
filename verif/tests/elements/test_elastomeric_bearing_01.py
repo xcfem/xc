@@ -16,7 +16,6 @@ MX= 4.0
 MY= 5.0 
 MZ= 6.0
 
-import geom
 import xc
 
 from model import predefined_spaces

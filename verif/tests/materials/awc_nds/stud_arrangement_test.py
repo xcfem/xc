@@ -11,7 +11,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es"
 
 import math
 import yaml
-import geom
 import xc
 from materials.sections import section_properties
 from materials.awc_nds import AWCNDS_materials

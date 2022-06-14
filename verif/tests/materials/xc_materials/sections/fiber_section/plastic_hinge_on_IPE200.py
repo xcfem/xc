@@ -9,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import geom
 import xc
 
 from materials.sections.structural_shapes import arcelor_metric_shapes

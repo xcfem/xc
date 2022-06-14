@@ -2,7 +2,6 @@
 from __future__ import print_function
 '''Elastic 3D section verification test.'''
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

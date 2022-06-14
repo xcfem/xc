@@ -12,7 +12,6 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 from scipy import interpolate
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

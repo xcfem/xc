@@ -10,7 +10,6 @@ __email__= "l.pereztato@gmail.com"
 
 l= 1e-7 # Distance between nodes
 
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

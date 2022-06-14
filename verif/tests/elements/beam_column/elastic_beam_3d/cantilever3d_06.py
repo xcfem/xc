@@ -14,7 +14,6 @@ E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
 
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces

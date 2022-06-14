@@ -9,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
-import geom
 import xc
 from materials.sia262 import SIA262_materials
 from materials.sections.fiber_section import def_simple_RC_section

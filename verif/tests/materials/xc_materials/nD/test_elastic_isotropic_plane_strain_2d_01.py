@@ -13,7 +13,6 @@ E= 30e6 # Young modulus (psi)
 nu= 0.33 # Poisson's ratio
 rho= 1.5 # Density
 
-import geom
 import xc
 from materials import typical_materials
 

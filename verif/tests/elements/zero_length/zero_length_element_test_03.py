@@ -17,7 +17,6 @@ FX= 1 # Force magnitude
 FY= 2 
 FT= 3 # Moment magnitude
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

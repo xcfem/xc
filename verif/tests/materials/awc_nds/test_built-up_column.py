@@ -14,7 +14,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
-import geom
 import xc
 
 from materials.sections import section_properties

@@ -15,7 +15,6 @@ fy= 36e3 # yield stress
 alpha= .01 # strain hardening ratio
 rho= 7850
 
-import geom
 import xc
 from materials import typical_materials
 

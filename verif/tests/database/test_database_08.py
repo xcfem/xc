@@ -5,7 +5,6 @@ from __future__ import division
 from __future__ import print_function
 
 
-import geom
 import xc
 from model import predefined_spaces
 from solution import predefined_solutions

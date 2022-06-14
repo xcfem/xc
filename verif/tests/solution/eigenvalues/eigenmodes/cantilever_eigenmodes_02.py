@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 # Tomado del example A47 del SOLVIA Verification Manual
-import geom
 import xc
 
 from model import predefined_spaces

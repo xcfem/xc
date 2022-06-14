@@ -3,7 +3,6 @@ from __future__ import print_function
 ''' home made test
    Test database functions with shell elements.'''
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

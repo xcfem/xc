@@ -6,6 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import geom
 from materials.ehe import EHE_materials
 
 defSec= dict(width= 0.2, # Section width expressed in meters.

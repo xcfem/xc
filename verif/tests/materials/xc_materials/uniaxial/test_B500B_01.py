@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Home made test.'''
 from __future__ import print_function
-import geom
 import xc
 
 from materials.sia262 import SIA262_materials

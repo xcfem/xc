@@ -16,7 +16,6 @@ b= 0.3*l # Length of tranche b
 F1= 1000.0 # Force magnitude 1 (pounds)
 F2= 1000.0/2.0 # Force magnitude 2 (pounds)
 
-import geom
 import xc
 from model import predefined_spaces
 from solution import predefined_solutions

@@ -15,7 +15,6 @@ nu= 0.3 # Poisson's ratio.
 h= 0.1 # thickness.
 dens= 1.33 # specific mass [kg/m2].
 
-import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials

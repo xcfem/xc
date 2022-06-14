@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 '''Silly test about sets.'''
-import geom
 import xc
 
 __author__= "Luis C. Pérez Tato (LCPT)"

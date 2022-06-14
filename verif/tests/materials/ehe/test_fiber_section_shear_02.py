@@ -6,7 +6,6 @@
 from __future__ import division
 from __future__ import print_function
 
-import geom
 import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions

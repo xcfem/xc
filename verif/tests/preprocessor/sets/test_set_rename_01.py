@@ -2,7 +2,6 @@
 ''' Test set renaming.'''
 from __future__ import print_function
 
-import geom
 import xc
 import math
 

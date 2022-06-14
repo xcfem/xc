@@ -11,7 +11,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 from import_export import dxf_reader
 from import_export import neutral_mesh_description as nmd
 import os
-import geom
 import xc
 from model import predefined_spaces
 # from postprocess import output_handler
@@ -49,13 +48,14 @@ dxfFName= baseName+'.dxf'
 xcBlocksFileName= baseName+'_blocks'
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
+    pth= "."
 dxfFilePath= pth+'/../../../aux/dxf/'+dxfFName
 ieData= importMultiBlockTopology(dxfFileName= dxfFilePath, outputFileName= xcBlocksFileName, layerNamesToImport= ['0*'], getRelativeCoo= getRelativeCooFunc)
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Split lines test'
 xcBlocksPath= './'+xcBlocksFileName+'.py'
+import geom
 exec(open(xcBlocksPath).read())
 
 numberOfLinesBeforeSplitting= len(lines)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # XXX Migrate to YAML
+import geom
 
 barsSectionGeometry= preprocessor.getMaterialHandler.newSectionGeometry("barsSectionGeometry")
 reinforcement= barsSectionGeometry.getReinfLayers

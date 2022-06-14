@@ -15,7 +15,6 @@ The results obtained are acceptable considering that:
 
 from __future__ import print_function
 from __future__ import division
-import geom
 import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions
