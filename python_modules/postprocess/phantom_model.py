@@ -9,13 +9,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.ortega@ciccp.es"
 
-import numpy
 import xc
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
 from postprocess import control_vars as cv
-from solution import predefined_solutions
 from misc_utils import log_messages as lmsg
 from collections import defaultdict
 from postprocess import limit_state_data as lsd
@@ -116,9 +114,8 @@ class PhantomModel(object):
         nodes= self.preprocessor.getNodeHandler
         self.modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
         elements= self.preprocessor.getElementHandler
-        constraints= self.preprocessor.getBoundaryCondHandler
         # Define materials
-        fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
+        unusedFkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
         elements.dimElem= 1
         self.tagsNodesToLoad= defaultdict(list)
         if(outputCfg.controller.fakeSection):
@@ -155,7 +152,7 @@ class PhantomModel(object):
         casos= cargas.getLoadPatterns
         #Load modulation.
         ts= casos.newTimeSeries("constant_ts","ts")
-        casos.currentTimeSeries= "ts"
+        casos.currentTimeSeries= ts.name
         #Load case definition
         mapCombs= {}
         for comb in self.idCombs:
@@ -193,10 +190,10 @@ class PhantomModel(object):
         combs= self.preprocessor.getLoadHandler.getLoadPatterns #Here each load pattern represents a combination.
         elements= self.preprocessor.getSets.getSet("total").elements
         for key in combs.getKeys():
-            comb= combs[key]
+            #comb= combs[key]
             #print("Solving load combination: ",key)
             controller.solutionProcedure.solveComb(key)
-            controller.preprocessor=self.preprocessor
+            controller.preprocessor= self.preprocessor
             controller.check(elements,key)
 
     def write(self,outputFileName,outputCfg):
