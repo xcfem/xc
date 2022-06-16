@@ -7,6 +7,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
+import sys
+import vtk
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
@@ -18,7 +20,6 @@ from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk.diagrams import linear_load_diagram as lld
 from postprocess.xcVtk.diagrams import node_property_diagram as npd
 from postprocess.xcVtk.diagrams import element_property_diagram as epd
-import vtk
 from postprocess import output_styles
 from misc_utils import log_messages as lmsg
 
@@ -879,10 +880,10 @@ class OutputHandler(object):
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        self.displayField(limitStateLabel, 1,argument, component, setToDisplay, fileName, defFScale, rgMinMax)
-        self.displayField(limitStateLabel, 2,argument, component, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayField(limitStateLabel, section= 1, argument= argument, component= component, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
+        self.displayField(limitStateLabel, section=2, argument= argument, component= component, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
-    def displayField(self,limitStateLabel, section,argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
+    def displayField(self, limitStateLabel, section,argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
         '''Display a field defined over bi-dimensional elements in its two 
            directions.
 
@@ -922,9 +923,17 @@ class OutputHandler(object):
         attributeName= limitStateLabel + sectRef
         fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
 
-        field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
+        field= fields.getScalarFieldFromControlVar(attributeName= attributeName,argument= argument, xcSet= setToDisplay, component= component, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
         captionTexts= self.outputStyle.getCaptionTextsDict()
-        captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + unitDescription + '. '+ setToDisplay.description.capitalize()
+        limitStateLabelCaption= captionTexts[limitStateLabel]
+        if(argument in captionTexts):
+            argumentCaption= captionTexts[argument]
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; caption for argument: '+str(argument)+" not found, we leave it empty.")
+            argumentCaption= ''
+        captionBaseText= limitStateLabelCaption + ', ' + argumentCaption+ ', ' + unitDescription + '. '+ setToDisplay.description.capitalize()
         field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr, fileName= fileName, defFScale= defFScale)
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):

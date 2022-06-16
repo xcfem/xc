@@ -1243,7 +1243,7 @@ def writeControlVarsFromElementsForAnsys(preprocessor,outputFileName, sectionNam
     retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
     return retval
 
-def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
+def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
     '''Extrapolates element's function values to the nodes.
 
      :param elemSet: set of elements.
@@ -1259,10 +1259,8 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
     #Calculate totals.
     for e in eSet:
         elemNodes= e.getNodes
-        sz= len(elemNodes) 
-        for i in range(0,sz):
-            n= elemNodes[i]
-            controlVar= e.getProp(propName)
+        controlVar= e.getProp(propName)
+        for n in elemNodes:
             if(controlVar):
                 value= controlVar(argument)
                 oldValue= n.getProp(nodePropName)

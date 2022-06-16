@@ -209,6 +209,7 @@ sp_capTexts={
 #English caption texts
 en_capTexts={
     'CF': 'efficiency',
+    'getCF':'efficiency',
     'uX':'displacement in global X direction',
     'uY':'displacement in global Y direction',
     'uZ':'displacement in global Z direction',

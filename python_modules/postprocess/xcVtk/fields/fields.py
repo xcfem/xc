@@ -131,13 +131,18 @@ def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitCon
     '''return an scalar field that represents the control var over the 
                  elements in the set.
 
-       :param attributeName: name of the element's property that has the 
-                             control var in it for example as in 
-                             elem.getProp(attributeName).eval(argument).
-       :param argument: name of the control var to represent.
-       :param xcSet: represent the field over those elements.
-       :param component: component of the control var to represent.
-       :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
+    :param attributeName: name of the element's property that has the 
+                          control var in it for example as in 
+                          elem.getProp(attributeName).eval(argument).
+    :param argument: name of the control var to represent.
+    :param xcSet: represent the field over those elements.
+    :param component: component of the control var to represent.
+    :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
+    :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                of the scalar field (if any) to be represented  (in units 
+                of calculation, not units of display). All the values 
+                less than vmin are displayed in blue and those greater than vmax 
+                in red (defaults to None)
     '''
-    nodePropName= cv.extrapolate_control_var(xcSet,attributeName,argument)
+    nodePropName= cv.extrapolate_control_var(elemSet= xcSet, propName= attributeName, argument= argument)
     return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv,rgMinMax)
