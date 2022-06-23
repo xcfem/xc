@@ -812,6 +812,9 @@ python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_j
 echo "$BLEU" "  RC sections test." "$NORMAL"
 echo "$BLEU" "    concrete shapes tests." "$NORMAL"
 python tests/materials/concrete_shapes/test_mass_properties_rc_section.py
+python tests/materials/concrete_shapes/test_reinf_row_01.py
+python tests/materials/concrete_shapes/test_reinf_layers_01.py
+python tests/materials/concrete_shapes/test_rc_section_01.py
 echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 python tests/materials/ehe/test_Ecm_concrete.py

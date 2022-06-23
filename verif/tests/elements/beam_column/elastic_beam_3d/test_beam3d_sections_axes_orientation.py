@@ -1,4 +1,21 @@
 # -*- coding: utf-8 -*-
+'''This test carries out some verifications on the orientation of the elements'
+local axes, of the Reinforced Concrete (RC) sections and their respective
+axes, and the disposition of rebars (positive, negative, ..)
+The model consists of three 3d cantilever beams with the same geometry,
+but different orientations:
+   -The first one, parallel to X global axis, is designed with the strong
+   axis of the RC section parallel to the global Y axis
+   -The second cantilever beam follows the direction of the global Y axis
+   and the strong axis is vertical (parallel to Z global)
+   -The third, in Z global axis direction, has its strong axis parallel to
+   the bisector of XY (through an angle of 45ª with the positive X axis)
+The three beams share their first node at (0,0,0), which is fixed in all its
+6 DOF.
+The same bending moment is applied to the three elements in the appropriate
+directions in order to produce the same results for the three cases.
+The criterion elected is to have tensional stresses in the Y-negative
+face of the beam.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -9,23 +26,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
-# This test carries out some verifications on the orientation of the elements'
-# local axes, of the Reinforced Concrete (RC) sections and their respective
-# axes, and the disposition of rebars (positive, negative, ..)
-# The model consists of three 3d cantilever beams with the same geometry,
-# but different orientations:
-#    -The first one, parallel to X global axis, is designed with the strong
-#    axis of the RC section parallel to the global Y axis
-#    -The second cantilever beam follows the direction of the global Y axis
-#    and the strong axis is vertical (parallel to Z global)
-#    -The third, in Z global axis direction, has its strong axis parallel to
-#    the bisector of XY (through an angle of 45ª with the positive X axis)
-# The three beams share their first node at (0,0,0), which is fixed in all its
-# 6 DOF.
-# The same bending moment is applied to the three elements in the appropriate
-# directions in order to produce the same results for the three cases.
-# The criterion elected is to have tensional stresses in the Y-negative
-# face of the beam 
 
 import math
 import os
@@ -78,11 +78,11 @@ reinfSteel= SIA262_materials.SpecialII1956SIA161
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sections container
 
-#Generic layers (rows of rebars). Other instance variables that we can define
-#for ReinfRows are coverLat and nRebars.If we define nRebars that
-#value overrides the rebarsSpacing
-fi10s75r30=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
-fi16s75r30=def_simple_RC_section.ReinfRow(rebarsDiam=16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
+# Generic layers (rows of rebars). Other instance variables that we can define
+# for ReinfRows are coverLat and nRebars. If we define nRebars that
+# value overrides the rebarsSpacing
+fi10s75r30= def_simple_RC_section.ReinfRow(rebarsDiam= 10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
+fi16s75r30= def_simple_RC_section.ReinfRow(rebarsDiam= 16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
 
 #instances of element_section_map.RCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two

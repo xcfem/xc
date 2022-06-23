@@ -120,9 +120,15 @@ class ReinfRow(object):
         self.centerRebars(width)
 
     def getAs(self):
-        '''returns the total cross-sectional area of reinforcing steel in the family
+        ''' Returns the total cross-sectional area of reinforcing steel 
+           in the family.
         '''
         return self.nRebars*self.areaRebar
+
+    def getI(self):
+        ''' Return the moment of inertia around the axis containing the bar
+            centers.'''
+        return self.nRebars*math.pi*(self.rebarsDiam/2.0)**4/4.0
       
     def centerRebars(self,width):
         '''center the row of rebars in the width of the section'''
@@ -188,7 +194,7 @@ class LongReinfLayers(object):
             self.rebarRows= lst  # list of ReinfRow data
         else:
             self.rebarRows= list()
-        self.reinfLayers= list()  # list of XC::StraightReinfLayer created.
+        self.reinfLayers= list()  # list of StraightReinfLayer created.
 
     def __getitem__(self, index):
         '''Return the i-th reinforcement row.'''
@@ -203,7 +209,8 @@ class LongReinfLayers(object):
         self.rebarRows.append(rebarRow)
         
     def getAsRows(self):
-        '''Returns a list with the cross-sectional area of the rebars in each row.'''
+        '''Returns a list with the cross-sectional area of the rebars in 
+           each row.'''
         retval=[]
         for rbRow in self.rebarRows:
             retval.append(rbRow.getAs())
@@ -227,9 +234,10 @@ class LongReinfLayers(object):
         to the face of the section 
         '''
         retval=0
-        for rbRow in self.rebarRows:
-            retval+= rbRow.getAs()*rbRow.cover
-        retval/= self.getAs()
+        if(len(self.rebarRows)>0):
+            for rbRow in self.rebarRows:
+                retval+= rbRow.getAs()*rbRow.cover
+            retval/= self.getAs()
         return retval
 
     def getSpacings(self):
@@ -772,6 +780,12 @@ class RCRectangularSection(BasicRectangularRCSection):
         '''
         return self.positvRebarRows.getRowsCGcover()
 
+    def hAsPos(self):
+        '''Return the distance from the bottom fiber to the 
+        centre of gravity of the rebars in the positive face.
+        '''
+        return self.getPosRowsCGcover()
+    
     def getYAsPos(self):
         '''returns the local Y coordinate of the center of gravity of the rebars
            in the positive face.
@@ -788,6 +802,12 @@ class RCRectangularSection(BasicRectangularRCSection):
         '''
         return self.negatvRebarRows.getRowsCGcover()
 
+    def hAsNeg(self):
+        '''Return the distance from the bottom fiber to the 
+        centre of gravity of the rebars in the positive face.
+        '''
+        return self.getNegRowsCGcover()
+    
     def getYAsNeg(self):
         '''returns the local Y coordinate of the center of gravity of the rebars
            in the negative face
@@ -806,13 +826,13 @@ class RCRectangularSection(BasicRectangularRCSection):
         return retval
     
     def hCOGHomogenizedSection(self):
-        '''Return distance from the bottom fiber to the 
+        '''Return the distance from the bottom fiber to the 
         centre of gravity of the homogenized section.
         '''
         retval= self.h/2.0*self.getAc()
         n= self.getHomogenizationCoefficient()
-        retval+= self.getYAsPos()*n*self.getAsPos()
-        retval+= self.getYAsNeg()*n*self.getAsNeg()
+        retval+= self.hAsPos()*n*self.getAsPos()
+        retval+= self.hAsNeg()*n*self.getAsNeg()
         retval/=self.getAreaHomogenizedSection()
         return retval
     
@@ -823,22 +843,55 @@ class RCRectangularSection(BasicRectangularRCSection):
         return 0.5e6*self.getAc() # 0.5 MPa
       
     def getI(self):
-        '''returns the second moment of area about the middle axis parallel to 
+        ''' Returns the second moment of area about the middle axis parallel to 
         the width '''
         return 1/12.0*self.b*self.h**3
+
+    def getPosReinforcementIz(self, hCOG, n= 1.0):
+        ''' Return the second moment of inertia of the reinforcement in the
+            positive side.
+
+        :param hCOG: distance from the section bottom to its center of gravity.
+        :param n: homogenizatrion coefficient.
+        '''
+        retval= 0.0
+        for row in self.positvRebarRows:
+            retval+= row.getI()
+        retval*= n
+        d= self.hAsPos()-hCOG
+        retval+= (n-1)*self.getAsPos()*d**2 # Steiner.
+        return retval
+        
+    def getNegReinforcementIz(self, hCOG, n= 1.0):
+        ''' Return the second moment of inertia of the reinforcement in the
+            negative side.
+
+        :param hCOG: distance from the section bottom to its center of gravity.
+        :param n: homogenizatrion coefficient.
+        '''
+        retval= 0.0
+        for row in self.negatvRebarRows:
+            retval+= row.getI()
+        retval*= n
+        d= self.hAsNeg()-hCOG
+        retval+= (n-1)*self.getAsNeg()*d**2 # Steiner.
+        return retval
 
     def getIzHomogenizedSection(self):
         '''returns the second moment of area about the axis parallel to 
         the section width through the center of gravity'''
-        retval= 1/12.0*self.b*self.h**3
+        retval= self.getI() # Moment of inertia of the concrete section.
+        # Position of the centroid.
         hCOGH= self.hCOGHomogenizedSection()
-        d= self.hCOG()-hCOGH
+        # Eccentricity of the concrete section.
+        d= self.hCOG()-hCOGH # distance from center of gravity.
         retval+= self.getAc()*d**2 # Steiner.
+        # Moment of inertia of the reinforcement.
         n= self.getHomogenizationCoefficient()
-        d= self.getYAsPos()-hCOGH
-        retval+= n*self.getAsPos()*d**2
-        d= self.getYAsNeg()-hCOGH
-        retval+= n*self.getAsNeg()*d**2
+        # Reinforcement on the possitive side.
+        retval+= self.getPosReinforcementIz(hCOG= hCOGH, n= n)
+        # Reinforcement on the possitive side.
+        retval+= self.getNegReinforcementIz(hCOG= hCOGH, n= n)
         return retval
     
     def izHomogenizedSection(self):

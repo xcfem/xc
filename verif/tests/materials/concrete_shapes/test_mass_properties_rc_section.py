@@ -34,33 +34,32 @@ err= 0.0
 grossSectionArea= rcSection.A()
 err+= (grossSectionArea-0.125)**2
 grossSectionIy= rcSection.Iy()
-err+= (grossSectionIy-0.000651041666667)**2
+err+= (grossSectionIy-0.0006510416666666666)**2
 grossSectionIz= rcSection.Iz()
-err+= (grossSectionIz-0.00260416666667)**2
+err+= (grossSectionIz-0.0026041666666666665)**2
 grossSectioniy= rcSection.iy()
-err+= (grossSectioniy-0.0721687836487)**2
+err+= (grossSectioniy-0.07216878364870322)**2
 grossSectioniz= rcSection.iz()
-err+= (grossSectioniz-0.144337567297)**2
+err+= (grossSectioniz-0.14433756729740643)**2
 grossSectionCOGy= rcSection.hCOG()
 err+= (grossSectionCOGy-0.25)**2
 grossSectionCOGz= rcSection.bCOG()
 err+= (grossSectionCOGz-0.125)**2
 
-
 # Homogenized section
 n= rcSection.getHomogenizationCoefficient()
 homogenizedSectionArea= rcSection.getAreaHomogenizedSection()
-err+= (homogenizedSectionArea-0.141123801568)**2
+err+= (homogenizedSectionArea-0.14112380156782012)**2
 # homogenizedSectionIy= rcSection.Iy()
 # err+= (homogenizedSectionIy-0.000651041666667)**2
 homogenizedSectionIz= rcSection.getIzHomogenizedSection()
-err+= (homogenizedSectionIz-0.00352774842486)**2
+err+= (homogenizedSectionIz-0.003169997768772509)**2
 # homogenizedSectioniy= rcSection.iy()
 # err+= (homogenizedSectioniy-0.0721687836487)**2
 homogenizedSectioniz= rcSection.izHomogenizedSection()
-err+= (homogenizedSectioniz-0.158106115944)**2
+err+= (homogenizedSectioniz-0.14987505132151643)**2
 homogenizedSectionCOGy= rcSection.hCOGHomogenizedSection()
-err+= (homogenizedSectionCOGy-0.232290926852)**2
+err+= (homogenizedSectionCOGy-0.22576177675074582)**2
 # homogenizedSectionCOGz= rcSection.bCOG()
 
 err= math.sqrt(err)
