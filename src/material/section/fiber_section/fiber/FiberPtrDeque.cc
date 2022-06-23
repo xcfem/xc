@@ -1440,7 +1440,7 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
     //Clip the rebars areas with the effective area contour.
     for(size_t i= 0;i<sz;i++) //For each rebar in the family.
       {
-        dm= getEquivalentDiameterOfFiber(i);
+        dm= (*this)[i]->getEquivalentDiameter();
         L= factor*dm; //Side of the square prescribed by the standard.
         R= L*sqrt(2/(n*sin(2*M_PI/n)));
         const Pos2d pos= (*this)[i]->getPos();
@@ -1554,13 +1554,6 @@ const double &XC::FiberPtrDeque::getFiberSpacing(const size_t &i) const
                 << std::endl;
     return seps[i];
   }
-
-//! @brief Return the diameter of the circle that has the same area
-//! of the fiber which index is being passed as parameter.
-double XC::FiberPtrDeque::getEquivalentDiameterOfFiber(const size_t &i) const
-  { return 2.0*sqrt((*this)[i]->getArea()/M_PI); }
-
-
 
 //! @brief Return the stress on the i-th fiber when cracking occurs
 //! in its effective area.

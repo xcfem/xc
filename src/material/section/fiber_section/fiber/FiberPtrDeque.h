@@ -170,7 +170,6 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     void computeSpacement(void) const;
     const double &getFiberCover(const size_t &i) const;
     const double &getFiberSpacing(const size_t &i) const;
-    double getEquivalentDiameterOfFiber(const size_t &i) const;
     double getSigmaSRAtFiber(const size_t &,const double &,const double &,const double &) const;
     double getAverageDistanceBetweenFibers(void) const;
     int updateCenterOfMass(void);

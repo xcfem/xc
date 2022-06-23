@@ -25,6 +25,7 @@ XC::UniaxialMaterial *(XC::Fiber::*getMaterialPtr)(void)= &XC::Fiber::getMateria
 class_<XC::Fiber,XC::Fiber*, bases<XC::TaggedObject>, boost::noncopyable >("Fiber", no_init)
   .def("getMaterial",make_function(getMaterialPtr,return_internal_reference<>()))
   .def("getArea",&XC::Fiber::getArea)
+  .def("getEquivalentDiameter",&XC::Fiber::getEquivalentDiameter)
   .def("setTrialFiberStrain",&XC::Fiber::setTrialFiberStrain)
 	
   .def("commitState",&XC::Fiber::commitState)
@@ -133,7 +134,6 @@ class_<XC::FiberPtrDeque, bases<CommandEntity,fiber_ptrs_dq>, boost::noncopyable
   .def("computeSpacement",&XC::FiberPtrDeque::computeSpacement)
   .def("getFiberCover",&XC::FiberPtrDeque::getFiberCover,return_value_policy<copy_const_reference>())
   .def("getFiberSpacing",&XC::FiberPtrDeque::getFiberSpacing,return_value_policy<copy_const_reference>())
-  .def("getEquivalentDiameterOfFiber",&XC::FiberPtrDeque::getEquivalentDiameterOfFiber)
   .def("getSigmaSRAtFiber",&XC::FiberPtrDeque::getSigmaSRAtFiber)
   .def("getAverageDistanceBetweenFibers",&XC::FiberPtrDeque::getAverageDistanceBetweenFibers)
   .def("updateCenterOfMass",&XC::FiberPtrDeque::updateCenterOfMass)

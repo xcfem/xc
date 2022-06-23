@@ -957,7 +957,6 @@ class ShearController(lscb.ShearControllerBase):
             errMsg= "concrete area too small; Ac= " + str(self.concreteArea) + " m2\n"
             lmsg.error(errMsg)
         else:
-            reinfFibers= rcSets.reinfFibers.fSet
             tensionedReinforcement= rcSets.tensionFibers
             self.isBending= scc.isSubjectedToBending(0.1)
             self.tensionedRebars.number= rcSets.getNumTensionRebars()
@@ -1142,7 +1141,7 @@ class ShearController(lscb.ShearControllerBase):
             lmsg.log("Postprocessing combination: "+combName)
         secHAParamsTorsion= None # XXX Ignore torsional deformation.
         for e in elements:
-            R=e.getResistingForce()
+            unusedR=e.getResistingForce()
             scc= e.getSection()
             idSection= e.getProp("idSection")
             FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(scc, secHAParamsTorsion)
@@ -1218,7 +1217,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             sctCrkProp=lscb.fibSectLSProperties(sct)
             sctCrkProp.setupStrghCrackDist()
             hceff=self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
-            Acgross=sct.getGrossEffectiveConcreteArea(hceff)
+            #Acgross=sct.getGrossEffectiveConcreteArea(hceff)
             Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
             concrete=EHE_materials.concrOfName[sctCrkProp.concrName]
             rfSteel=EHE_materials.steelOfName[sctCrkProp.rsteelName]
@@ -1230,7 +1229,6 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             print('My= ',sct.getStressResultantComponent("My"))
             print('Mz= ',sct.getStressResultantComponent("Mz"))
             print('hceff= ',hceff)
-            print('Acgross= ',Acgross)
             print('Aceff= ',Aceff)
             print('concrete=',concrete)
             print('eps1=',sctCrkProp.eps1)
@@ -1344,11 +1342,9 @@ class CrackControl(lscb.CrackControlBaseParameters):
             rebar= tensionedReinforcement[i]
             rebarArea= rebar.getArea()
             rebarPos= rebar.getPos()
-            rebar_y= rebarPos.x
-            rebar_z= rebarPos.y
             rebarStress= rebar.getMaterial().getStress()
             rebarCover= tensionedReinforcement.getFiberCover(i)
-            rebarDiameter= tensionedReinforcement.getEquivalentDiameterOfFiber(i)
+            rebarDiameter= rebar.getEquivalentDiameter()
             rebarSigmaSR= tensionedReinforcement.getSigmaSRAtFiber(i,self.E0,self.tensionedRebars.E,self.fctmFis)
             self.tensionedRebars.averageStress+= rebarArea*rebarSigmaSR
 
@@ -1374,7 +1370,6 @@ class CrackControl(lscb.CrackControlBaseParameters):
         if(self.rcSets is None):
             self.rcSets= fiber_sets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,reinfSteelMaterialTag,self.rebarFibersSetName)
         concrFibers= self.rcSets.concrFibers.fSet
-        reinfFibers= self.rcSets.reinfFibers.fSet
         tensionedReinforcement= self.rcSets.tensionFibers
 
         self.fctmFis= fctm
@@ -1400,35 +1395,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
             self.netEffectiveArea= scc.computeFibersEffectiveConcreteArea(self.hEfMax,self.tensionedRebarsFiberSetName,15)
 
             self.tensionedRebars.setup(tensionedReinforcement)
-            self.Wk= self.computeWkOnBars(tensionedReinforcement)
-
-    def check(self,elements,combName):
-        ''' Crack control of concrete sections.'''
-        if(self.verbose):
-            lmsg.log("Postprocessing combination: "+combName+"")
-
-        defParamsFisuracion("secHAParamsFisuracion")
-        materialHandler= preprocessor.getMaterialHandler
-        concrete= materialHandler.getMaterial(concreteCode)
-        concrTag= concrete.getProp("matTagK")
-        concrFctm= concrete.getProp("fctm")
-        reinforcement= materialHandler.getMaterial(reinforcementCode)
-        for e in elements:
-            scc= e.getSection()
-            Ntmp= scc.N
-            MyTmp= scc.My
-            MzTmp= scc.Mz
-            secHAParamsFisuracion= computeWk(concrTag,reinforcementTag,concrFctm)
-            Wk= secHAParamsFisuracion.Wk
-            if(Wk>WkCP):
-                WkCP= Wk # Worst case
-                HIPCP= combName
-                NCP= Ntmp
-                MyCP= MyTmp
-                MzCP= MzTmp
-
-#class CrackControlTensStiff(lscb.CrackControlBase):
-  
+            self.Wk= self.computeWkOnBars(tensionedReinforcement)  
 
 def printRebarCrackControlParameters():
     '''Prints crack control parameters of a bar.'''

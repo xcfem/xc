@@ -99,6 +99,12 @@ double XC::Fiber::getStress(void) const
     return retval;
   }
 
+//! @brief Return the diameter of the circle that has the same area
+//! of the fiber.
+double XC::Fiber::getEquivalentDiameter(void) const
+  { return 2.0*sqrt(this->getArea()/M_PI); }
+
+
 //! @brief Returns fiber position.
 Pos2d XC::Fiber::getPos(void) const
   { return Pos2d(getLocY(),getLocZ()); }
