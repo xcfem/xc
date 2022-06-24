@@ -489,6 +489,13 @@ class RCSectionBase(object):
         '''
         return self.fiberSectionParameters.defDiagrams(preprocessor, matDiagType)
 
+    def defShearResponse2d(self, preprocessor):
+        ''' Define the shear response of the 2D section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        self.respVy= self.getRespVy(preprocessor)
+        
     def defShearResponse(self, preprocessor):
         ''' Define the shear/torsional response of the section.
 
@@ -498,6 +505,29 @@ class RCSectionBase(object):
         self.respVy= self.getRespVy(preprocessor)
         self.respVz= self.getRespVz(preprocessor)
 
+    def defFiberSection2d(self,preprocessor):
+        '''Define 2D fiber section from geometry data.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d", self.name)
+        self.fiberSectionRepr= self.fs.getFiberSectionRepr()
+        self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
+        self.fs.setupFibers()
+        self.fs.setRespVyByName(self.respVyName())
+        self.fs.setProp('sectionData',self)
+        
+    def defRCSection2d(self, preprocessor, matDiagType):
+        ''' Definition of a 2D reinforced concrete section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+         '''
+        self.defShearResponse2d(preprocessor)
+        self.defSectionGeometry(preprocessor,matDiagType)
+        self.defFiberSection2d(preprocessor)
+        
     def defFiberSection(self,preprocessor):
         '''Define fiber section from geometry data.
 
@@ -607,7 +637,7 @@ class RCSectionBase(object):
         ''' Get a drawing of the section using matplotlib.'''
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        self.subplot(ax, preprocessor, matDiagType)
+        self.subplot(ax, preprocessor= preprocessor, matDiagType= matDiagType)
         plt.show()
    
 
@@ -806,7 +836,7 @@ class RCRectangularSection(BasicRectangularRCSection):
         '''Return the distance from the bottom fiber to the 
         centre of gravity of the rebars in the positive face.
         '''
-        return self.getNegRowsCGcover()
+        return self.h-self.getNegRowsCGcover()
     
     def getYAsNeg(self):
         '''returns the local Y coordinate of the center of gravity of the rebars
@@ -1007,9 +1037,9 @@ class RCRectangularSection(BasicRectangularRCSection):
 
         :param preprocessor: preprocessor of the finite element problem.
         :param matDiagType: type of stress-strain diagram 
-                     ("k" for characteristic diagram, "d" for design diagram)
+                            ("k" for characteristic diagram, "d" for design diagram)
         '''
-        self.defDiagrams(preprocessor,matDiagType)
+        self.defDiagrams(preprocessor, matDiagType)
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(self.geomSection)
         reinforcement= self.geomSection.getReinfLayers

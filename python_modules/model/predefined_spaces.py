@@ -1523,6 +1523,15 @@ class StructuralMechanics2D(StructuralMechanics):
         '''
         self.fixNode('0FF', nodeTag, restrainedNodeId)
 
+    def fixNodeF00(self, nodeTag, restrainedNodeId: str= None):
+        '''Restrain displacement Y and rotation (i. e. Uy= 0, Theta= 0).
+
+         :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
+        '''
+        self.fixNode('F00', nodeTag, restrainedNodeId)
+        
     def fixNodeF0F(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only Y displacement DOF (i. e. Uy= 0).
 

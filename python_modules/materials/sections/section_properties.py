@@ -584,20 +584,26 @@ class RectangularSection(SectionProperties):
         '''Return the shear stiffness of the section.'''
         return 5.0/6.0*G*self.A()
 
-    def getRegion(self,gm,nmbMat):
+    def getRegion(self, gm, nmbMat, twoDimensionalMember= False):
         '''generation of a quadrilateral region from the section 
         geometry (sizes and number of divisions for the cells)
         made of the specified material
 
         :param gm: object of type section_geometry
         :param nmbMat: name of the material (string)
+        :param twoDimensionalMember: true if the region corresponds to a 
+                                     two-dimensional member.
         '''
         regions= gm.getRegions
-        reg= regions.newQuadRegion(nmbMat)
-        reg.nDivIJ= self.nDivIJ
-        reg.nDivJK= self.nDivJK
-        reg.pMin= geom.Pos2d(-self.h/2.0,-self.b/2.0)
-        reg.pMax= geom.Pos2d(self.h/2.0,self.b/2.0)
+        reg= regions.newQuadRegion(nmbMat) # create region.
+        B= self.b
+        H= self.h
+        if(twoDimensionalMember):
+            B, H= H, B # swap dimensions.
+        reg.nDivIJ= self.nDivIJ # number of divisions I->J direction.
+        reg.nDivJK= self.nDivJK # number of divisions J->K direction.
+        reg.pMin= geom.Pos2d(-H/2.0,-B/2.0) # lower left corner.
+        reg.pMax= geom.Pos2d(H/2.0,B/2.0) # upper right corner.
         return reg
     
     def getContourPoints(self):
