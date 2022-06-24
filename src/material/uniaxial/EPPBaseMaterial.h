@@ -43,7 +43,6 @@ class EPPBaseMaterial: public ElasticBaseMaterial
     double trialTangent; //!< current trial tangent
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
   public:
     EPPBaseMaterial(int tag, int classtag, double E= 0.0, double e0= 0.0);
 
@@ -52,8 +51,8 @@ class EPPBaseMaterial: public ElasticBaseMaterial
       { return trialStress; }
     inline double getTangent(void) const
       { return trialTangent; }
-
-
+    
+    int revertToStart(void);
   };
 } // end of XC namespace
 

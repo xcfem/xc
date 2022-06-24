@@ -69,6 +69,12 @@ rectang.commitState()
 Mp1= rectang.getStressResultantComponent("Mz")
 rectang.revertToStart()
 
+matStiffnessMatrix= rectang.getTangentStiffness()
+EA= matStiffnessMatrix(0,0)
+EARef= sumAreas*E
+EI= matStiffnessMatrix(1,1)
+EIRef= scc10x20.Iz()*E
+
 # Check quantities:
 referenceCenterOfMassY= 0.0
 referenceCenterOfMassZ= 0.0
@@ -80,8 +86,14 @@ ratio5= (i1-scc10x20.iz())/scc10x20.iz()
 ratio6= (Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
 ratio7= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
 ratio8= ((scc10x20.getPlasticMomentZ(fy)-Mp1)/scc10x20.getPlasticMomentZ(fy))
+ratio9= abs(EA-EARef)/EARef
+ratio10= abs(EI-EIRef)/EIRef
 
 '''
+print('EA= ', EA)
+print('EARef= ', EARef)
+print('EI= ', EI)
+print('EIRef= ', EIRef)
 print('I1= ', I1)
 print('Iz= ', scc10x20.Iz())
 print('ratio1= ', ratio1)
@@ -92,11 +104,13 @@ print('ratio5= ', ratio5)
 print('ratio6= ', ratio6)
 print('ratio7= ', ratio7)
 print('ratio8= ', ratio8)
+print('ratio9= ', ratio9)
+print('ratio10= ', ratio10)
 '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-2) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-2) & (abs(ratio7)<1e-12) & (abs(ratio8)<1e-12):
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-2) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-2) & (abs(ratio7)<1e-12) & (abs(ratio8)<1e-12) & (abs(ratio9)<1e-12) & (abs(ratio10)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

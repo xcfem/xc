@@ -79,7 +79,7 @@ void XC::ElasticPPMaterial::set_fyp(const double &f)
       }
   }
 
-//! @brief Sets the positive el yield strain value (tension).
+//! @brief Sets the positive yield strain value (tension).
 void XC::ElasticPPMaterial::set_eyp(const double &eyp)
   { set_fyp(E*eyp); }
 
@@ -89,7 +89,8 @@ void XC::ElasticPPMaterial::set_fyn(const double &f)
     fyn= f;
     if(fyn > 0)
       {
-        std::cerr << "XC::ElasticPPMaterial::ElasticPPMaterial() - fyn > 0, setting < 0\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; fyn > 0, setting < 0\n";
         fyn*= -1.;
       }  
   }
@@ -99,6 +100,9 @@ void XC::ElasticPPMaterial::set_eyn(const double &eyn)
   { set_fyn(E*eyn); }
 
 //! @brief Constructor.
+//! @param[in] tag material identifier.
+//! @param[in] e material elastic modulus.
+//! @param[in] eyp positive yield strain value (tension).
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp)
   :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,e,0.0) 
   {
@@ -107,6 +111,10 @@ XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp)
   }
 
 //! @brief Constructor.
+//! @param[in] tag material identifier.
+//! @param[in] e material elastic modulus.
+//! @param[in] eyp positive yield strain value (tension).
+//! @param[in] eyn negative yield strain value (compression).
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp,double eyn, double ez )
   :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,e,ez), fyp(0.0), fyn(0.0)
   {

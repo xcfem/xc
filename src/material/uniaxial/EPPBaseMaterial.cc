@@ -30,9 +30,23 @@
 
 
 //! @brief Constructor.
+//! @param[in] tag material identifier.
+//! @param[in] classTag material class identifier.
+//! @param[in] e material elastic modulus.
+//! @param[in] e0 initial strain.
 XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)
-  :ElasticBaseMaterial(tag,classtag,e,e0), trialStress(0.0),
-   trialTangent(e) {}
+  :ElasticBaseMaterial(tag,classtag,e,e0),
+   trialStress(0.0), trialTangent(e)
+  {}
+
+//! @brief Returns the material to its initial state.
+int XC::EPPBaseMaterial::revertToStart(void)
+  {
+    int retval= ElasticBaseMaterial::revertToStart();
+    trialStress= 0.0;
+    trialTangent= E;
+    return retval;
+  }
 
 //! @brief Send object members through the communicator argument.
 int XC::EPPBaseMaterial::sendData(Communicator &comm)

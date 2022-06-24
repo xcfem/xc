@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# Verification test of the addFiber function
+''' Verification test of the addFiber function.'''
+ 
 import xc
 from model import predefined_spaces
 from materials import typical_materials
