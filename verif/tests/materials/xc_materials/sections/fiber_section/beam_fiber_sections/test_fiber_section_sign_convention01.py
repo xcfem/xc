@@ -33,7 +33,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/four_fiber_section.py").read())
+exec(open(pth+"/../../../../../aux/four_fiber_section.py").read())
 
 sigma= E*epsilon
 F= sigma*fiberArea
@@ -182,6 +182,7 @@ ratioD3= (D3Teor-D3).Norm()
 import math
 error= math.sqrt(ratioN0**2+ratioMy0**2+ratioMz0**2+ratioN0S**2+ratioMy0S**2+ratioMz0S**2+ratioR0**2+ratioD0**2+ratioN1**2+ratioMy1**2+ratioMz1**2+ratioN1S**2+ratioMy1S**2+ratioMz1S**2+ratioR1**2+ratioD1**2+ratioN2**2+ratioMy2**2+ratioMz2**2+ratioN2S**2+ratioMy2S**2+ratioMz2S**2+ratioR2**2+ratioD2**2+ratioN3**2+ratioMy3**2+ratioMz3**2+ratioN3S**2+ratioMy3S**2+ratioMz3S**2+ratioR3**2+ratioD3**2)
 
+'''
 print('N0= ', N0, ' N0S= ', N0S, ' N0Teor= ', N0Teor, ' ratioN0= ', ratioN0, ' ratioN0S= ', ratioN0S)
 print('My0= ', My0, ' My0S= ', My0S, ' My0Teor= ', My0Teor, ' ratioMy0= ', ratioMy0, ' ratioMy0S= ', ratioMy0S)
 print('Mz0= ', Mz0, ' Mz0S= ', Mz0S, ' Mz0Teor= ', Mz0Teor, ' ratioMz0= ', ratioMz0, ' ratioMz0S= ', ratioMz0S)
@@ -203,6 +204,7 @@ print('Mz3= ', Mz3, ' Mz3S= ', Mz3S, ' Mz3Teor= ', Mz3Teor, ' ratioMz3= ', ratio
 print('R3= ', R3, ' R3Teor= ', R3Teor, ' ratioR3= ', ratioR3)
 print('D3= ', D3, ' D3Teor= ', D3Teor, ' ratioD3= ', ratioD3)
 print('error= ', error)
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

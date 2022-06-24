@@ -780,27 +780,30 @@ python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_07.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_08.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_09.py
 echo "$BLEU" "        Beam fiber section tests." "$NORMAL"
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_prop.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section2d_01.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section2d_02.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_01.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_02.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_03.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_04.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_05.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_06.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_07.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_08.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_09.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_10.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_11.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_12.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_13.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_discretization_error_01.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_shear2d_01.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_shear3d_01.py
-python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_shear3d_02.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_section_aggregator_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_sign_convention01.py
+echo "$BLEU" "          2D Beam fiber section tests." "$NORMAL"
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_fiber_section2d_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_fiber_section2d_02.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_fiber_section_shear2d_01.py
+echo "$BLEU" "          3D Beam fiber section tests." "$NORMAL"
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_02.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_03.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_04.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_05.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_06.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_07.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_08.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_09.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_10.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_11.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_12.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_13.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_shear3d_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_shear3d_02.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_prop.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_discretization_error_01.py
 echo "$BLEU" "        Fiber section interaction diagrams." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram01.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram02.py

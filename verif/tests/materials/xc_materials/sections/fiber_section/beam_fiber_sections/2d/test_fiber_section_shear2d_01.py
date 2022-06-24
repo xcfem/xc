@@ -37,7 +37,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
     pth= "."
 # print("pth= ", pth)
-exec(open(pth+"/fiber_section_test_macros.py").read())
+exec(open(pth+"/../fiber_section_test_macros.py").read())
 
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
@@ -55,19 +55,19 @@ geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 # generation of a quadrilateral region of the scc10x20 sizes and number of
 # divisions made of material nmbMat
 reg= scc10x20.getRegion(gm=geomRectang, nmbMat= epp.name, twoDimensionalMember= True)
-sa= preprocessor.getMaterialHandler.newMaterial("fiber_section_2d","sa")
+sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d","sa")
 
 fiberSectionRepr= sa.getFiberSectionRepr() # Create fiber representation of the section.
 fiberSectionRepr.setGeomNamed(geomRectang.name) # Assign the geometry.
 sa.setupFibers()
 extractFiberSectionProperties(sa,scc10x20)
+sa.setRespVyByName(respVy.name)
 
 zlElement, nodA, nodB= scc2d_testing_bench.sectionModel(preprocessor, sa.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
 modelSpace.fixNode000(nodA.tag)
-modelSpace.fixNodeF0F(nodB.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -90,9 +90,11 @@ if(analOk!=0):
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
 n1= nodA
+RVy= n1.getReaction[1] 
 RMz= n1.getReaction[2] 
 
 scc= zlElement.getSection()
+esfVy= scc.getStressResultantComponent("Vy")
 esfMz= scc.getStressResultantComponent("Mz")
 
 
@@ -108,7 +110,14 @@ ratio6= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSection
 ratio7= (RMz+loadMz)/loadMz
 ratio8= (esfMz-loadMz)/loadMz
 
-''' 
+ratio9= (RVy+loadVy)/loadVy
+ratio10= (esfVy-loadVy)/loadVy
+
+'''
+print("RVy= ",(RVy))
+print("esfVy= ",(esfVy))
+print("loadVy= ",(loadVy))
+
 print("RMz= ",(RMz))
 print("esfMz= ",(esfMz))
 print("loadMz= ",(loadMz))
@@ -120,11 +129,13 @@ print('ratio5= ', ratio5)
 print('ratio6= ', ratio6)
 print('ratio7= ', ratio7)
 print('ratio8= ', ratio8)
-'''
+print('ratio9= ', ratio9)
+print('ratio10= ', ratio10)
+   '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<5e-3) & (abs(ratio4)<1e-3) & (abs(ratio5)<5e-3) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (analOk == 0.0) :
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<5e-3) & (abs(ratio4)<1e-3) & (abs(ratio5)<5e-3) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5) & (analOk == 0.0) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

@@ -37,7 +37,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
     pth= "."
 # print("pth= ", pth)
-exec(open(pth+"/fiber_section_test_macros.py").read())
+exec(open(pth+"/../fiber_section_test_macros.py").read())
 
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
@@ -55,72 +55,47 @@ geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 # generation of a quadrilateral region of the scc10x20 sizes and number of
 # divisions made of material nmbMat
 reg= scc10x20.getRegion(gm=geomRectang, nmbMat= epp.name, twoDimensionalMember= True)
-sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d","sa")
+rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_2d","rectang")
 
-fiberSectionRepr= sa.getFiberSectionRepr() # Create fiber representation of the section.
+fiberSectionRepr= rectang.getFiberSectionRepr() # Create fiber representation of the section.
 fiberSectionRepr.setGeomNamed(geomRectang.name) # Assign the geometry.
-sa.setupFibers()
-extractFiberSectionProperties(sa,scc10x20)
-sa.setRespVyByName(respVy.name)
+rectang.setupFibers()
+fibers= rectang.getFibers()
 
-zlElement, nodA, nodB= scc2d_testing_bench.sectionModel(preprocessor, sa.name)
+extractFiberSectionProperties(rectang,scc10x20)
+curvM= 0.005
+rectang.setTrialSectionDeformation(xc.Vector([0.0,curvM,0.0]))
+rectang.commitState()
+Mp1= rectang.getStressResultantComponent("Mz")
+rectang.revertToStart()
 
-# Constraints
-modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
-modelSpace.fixNode000(nodA.tag)
+matStiffnessMatrix= rectang.getTangentStiffness()
+EA= matStiffnessMatrix(0,0)
+EARef= sumAreas*E
+EI= matStiffnessMatrix(1,1)
+EIRef= scc10x20.Iz()*E
 
-# Loads definition
-lp0= modelSpace.newLoadPattern(name= '0')
-
-loadVy= 2e4
-loadMz= 0.999*scc10x20.getPlasticMomentZ(fy)
-lp0.newNodalLoad(nodB.tag,xc.Vector([0,loadVy,loadMz]))
-
-# We add the load case to domain.
-modelSpace.addLoadCaseToDomain(lp0.name)
-
-
-# Solution procedure
-analysis= predefined_solutions.plain_newton_raphson(feProblem)
-analOk= analysis.analyze(1)
-if(analOk!=0):
-    print("Error!; failed to converge.")
-    exit()
-
-nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True,1e-7)
-n1= nodA
-RVy= n1.getReaction[1] 
-RMz= n1.getReaction[2] 
-
-scc= zlElement.getSection()
-esfVy= scc.getStressResultantComponent("Vy")
-esfMz= scc.getStressResultantComponent("Mz")
-
-
-
+# Check quantities:
 referenceCenterOfMassY= 0.0
 referenceCenterOfMassZ= 0.0
-ratio1= (sumAreas-scc10x20.A())/scc10x20.A()
-ratio2= centerOfMassY-referenceCenterOfMassY
-ratio3= (I1-scc10x20.Iz())/scc10x20.Iz()
-ratio4= (i1-scc10x20.iz())/scc10x20.iz()
-ratio5= (Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
-ratio6= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
-ratio7= (RMz+loadMz)/loadMz
-ratio8= (esfMz-loadMz)/loadMz
-
-ratio9= (RVy+loadVy)/loadVy
-ratio10= (esfVy-loadVy)/loadVy
+ratio1= ((sumAreas-scc10x20.A())/scc10x20.A())
+ratio2= (centerOfMassY-referenceCenterOfMassY)
+ratio3= (centerOfMassZ-referenceCenterOfMassZ)
+ratio4= ((I1-scc10x20.Iz())/scc10x20.Iz())
+ratio5= (i1-scc10x20.iz())/scc10x20.iz()
+ratio6= (Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
+ratio7= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
+ratio8= ((scc10x20.getPlasticMomentZ(fy)-Mp1)/scc10x20.getPlasticMomentZ(fy))
+ratio9= abs(EA-EARef)/EARef
+ratio10= abs(EI-EIRef)/EIRef
 
 '''
-print("RVy= ",(RVy))
-print("esfVy= ",(esfVy))
-print("loadVy= ",(loadVy))
-
-print("RMz= ",(RMz))
-print("esfMz= ",(esfMz))
-print("loadMz= ",(loadMz))
+print('EA= ', EA)
+print('EARef= ', EARef)
+print('EI= ', EI)
+print('EIRef= ', EIRef)
+print('I1= ', I1)
+print('Iz= ', scc10x20.Iz())
 print('ratio1= ', ratio1)
 print('ratio2= ', ratio2)
 print('ratio3= ', ratio3)
@@ -131,11 +106,11 @@ print('ratio7= ', ratio7)
 print('ratio8= ', ratio8)
 print('ratio9= ', ratio9)
 print('ratio10= ', ratio10)
-   '''
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<5e-3) & (abs(ratio4)<1e-3) & (abs(ratio5)<5e-3) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5) & (analOk == 0.0) :
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-2) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-2) & (abs(ratio7)<1e-12) & (abs(ratio8)<1e-12) & (abs(ratio9)<1e-12) & (abs(ratio10)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

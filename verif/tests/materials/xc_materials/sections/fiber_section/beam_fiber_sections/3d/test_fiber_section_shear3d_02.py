@@ -31,7 +31,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 # print("pth= ", pth)
-exec(open(pth+"/fiber_section_test_macros.py").read())
+exec(open(pth+"/../fiber_section_test_macros.py").read())
 
 fy= 2600 # yield strength [kp/cm2].
 E= 1e6   # elastic moculus [kp/cm2].
