@@ -17,6 +17,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+from rough_calculations import ng_simple_beam as sb
 
 # Reinforcement row scheme:
 #
@@ -67,11 +68,16 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 ## Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-
+elasticProblem= False
 ## Materials.
-## Fiber-section material.
-rcSection.defRCSection2d(preprocessor,matDiagType= 'k')
-
+if(elasticProblem):
+    eSection= rcSection.defElasticShearSection2d(preprocessor) # Elastic cross-section.
+    beamSection= eSection
+    elementType= "ElasticBeam2d"
+else:
+    rcSection.defRCSection2d(preprocessor,matDiagType= 'k') # Fiber-section material.
+    beamSection= rcSection
+    elementType= "ForceBeamColumn2d"
 
 ## Create mesh.
 ### Create nodes.
@@ -81,3 +87,88 @@ beamNodes= list()
 for i in range(0,numDiv+1):
     x= i/numDiv*span
     beamNodes.append(nodes.newNodeXY(x,0.0))
+
+### Create elements.
+#### Geometric transformation.
+lin= modelSpace.newLinearCrdTransf("lin")
+elemHandler= preprocessor.getElementHandler
+elemHandler.defaultTransformation= lin.name # Coordinate transformation for the new elements
+elemHandler.defaultMaterial= beamSection.name
+
+beamElements= list()
+# n0= beamNodes[0]
+# for n1 in beamNodes[1:]:
+#     beamElements.append(elemHandler.newElement(elementType,xc.ID([n0.tag,n1.tag])))
+#     n0= n1
+reversedNodes= list(reversed(beamNodes))
+n0= reversedNodes[0]
+for n1 in reversedNodes[1:]:
+    beamElements.append(elemHandler.newElement(elementType,xc.ID([n0.tag,n1.tag])))
+    n0= n1
+
+## Constraints
+nA= beamNodes[0]
+nB= beamNodes[-1]
+nC= beamNodes[5]
+constraints= preprocessor.getBoundaryCondHandler
+modelSpace.fixNode00F(nA.tag) # First node pinned.
+modelSpace.fixNode00F(nB.tag) # Last node pinned.
+
+## Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern(lp0.name)
+q= -5e3
+#q= 5e3
+loadVector= xc.Vector([0.0, q])
+for e in beamElements:
+    e.vector2dUniformLoadGlobal(loadVector)
+### We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
+
+# Solution procedure
+analysis= predefined_solutions.plain_newton_raphson(feProblem)
+result= analysis.analyze(1)
+if(result!=0):
+    print('Can\'t solve.')
+    exit(1)
+
+# Get reactions.
+nodes.calculateNodalReactions(True,1e-7) 
+vDisp= xc.Vector([nC.getDisp[0],nC.getDisp[1]])
+vReacA= xc.Vector([nA.getReaction[0],nA.getReaction[1]])
+vReacB= xc.Vector([nB.getReaction[0],nB.getReaction[1]])
+
+# Check results
+halfSpan= span/2.0
+ratio1= abs(nC.getCoo[0]-halfSpan)/(halfSpan)
+
+print('element type= ', elementType)
+print(nC.getCoo[0])
+print('ratio1= ', ratio1)
+print('deflection = ', vDisp[1]*1e3, 'mm')
+
+#########################################################
+# Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+
+## Uncomment to display the mesh
+#oh.displayFEMesh()
+
+## Uncomment to display the element axes
+oh.displayLocalAxes()
+
+## Uncomment to display the loads
+#oh.displayLoads()
+
+## Uncomment to display the vertical displacement
+oh.displayDispRot(itemToDisp='uY')
+#oh.displayNodeValueDiagram(itemToDisp='uX')
+
+## Uncomment to display the reactions
+#oh.displayReactions()
+
+## Uncomment to display the internal force
+oh.displayIntForcDiag('Mz')
+oh.displayIntForcDiag('Vy')
+

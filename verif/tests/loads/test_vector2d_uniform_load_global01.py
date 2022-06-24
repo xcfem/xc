@@ -90,7 +90,7 @@ modelSpace.fixNode000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 crdTransf= el.getCoordTransf
 vIElem= crdTransf.getIVector
 vJElem= crdTransf.getJVector
