@@ -73,6 +73,11 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
 
 class_<XC::FiberSection2d, bases<XC::FiberSectionBase>, boost::noncopyable >("FiberSection2d", no_init);
 
+class_<XC::FiberSectionShear2d , bases<XC::FiberSection2d>, boost::noncopyable >("FiberSectionShear2d", no_init)
+  .def("setRespVyByName",&XC::FiberSectionShear2d::setRespVyByName)
+  .def("getRespVy",make_function(&XC::FiberSectionShear2d::getRespVy,return_internal_reference<>()),"Return shear y response.")
+  ;
+
 class_<XC::FiberSection3dBase , bases<XC::FiberSectionBase>, boost::noncopyable >("FiberSection3dBase", no_init);
 
 class_<XC::FiberSection3d, bases<XC::FiberSection3dBase>, boost::noncopyable >("FiberSection3d", no_init);

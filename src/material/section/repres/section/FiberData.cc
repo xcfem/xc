@@ -47,7 +47,9 @@ XC::FiberData::FiberData(const int &sz)
 
 //! @brief Constructor.
 XC::FiberData::FiberData(const SectionGeometry &gmSecc)
-  : fibersMaterial(gmSecc.getNumFiberData()),fibersPosition(2,gmSecc.getNumFiberData()),fibersArea(gmSecc.getNumFiberData())
+  : fibersMaterial(gmSecc.getNumFiberData()),
+    fibersPosition(2,gmSecc.getNumFiberData()),
+    fibersArea(gmSecc.getNumFiberData())
   {
     int k= PutCells(0,gmSecc.getRegions());
     k= putReinforcementLayers(k,gmSecc.getReinforcementLayers());
@@ -145,13 +147,13 @@ void XC::FiberData::get2DFibers(fiber_list &retval) const
                           << " for region.\n";
                 return;
               }
-
             if(Area(k)<=0)
               std::cerr << "FiberData::" << __FUNCTION__
 			<< "ERROR, zero or negative area"
 		        << " for the fiber in position: (" 
-                        << Position(0,k) << "," << 0.0 << ")." << std::endl;
-            tmp_fiber = new UniaxialFiber2d(k,*material,Area(k),Position(0,k));
+                        << Position(0,k) << "," << Position(1,k)
+			<< ")." << std::endl;
+            tmp_fiber = new UniaxialFiber2d(k,*material,Area(k),Position(1,k));
             if(!tmp_fiber)
               {
                 std::cerr << "FiberData::" << __FUNCTION__

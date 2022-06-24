@@ -83,7 +83,10 @@ ratio11= (SyPosG-scc10x20.getPlasticSectionModulusY())/scc10x20.getPlasticSectio
 ratio12= ((scc10x20.getPlasticMomentZ(fy)-Mp1)/scc10x20.getPlasticMomentZ(fy))
 ratio13= (scc10x20.getPlasticMomentY(fy)-Mp2)/scc10x20.getPlasticMomentY(fy)
 
+
 '''
+print('I1= ', I1)
+print('Iz= ', scc10x20.Iz())
 print('ratio1= ', ratio1)
 print('ratio2= ', ratio2)
 print('ratio3= ', ratio3)

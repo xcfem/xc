@@ -85,9 +85,9 @@ class FiberSection2d: public FiberSectionBase
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    FiberSection2d(int tag, int classTag, MaterialHandler *mat_ldr= nullptr);
   public:
-    FiberSection2d(MaterialHandler *mat_ldr= nullptr); 
-    FiberSection2d(int tag,MaterialHandler *mat_ldr= nullptr); 
+    FiberSection2d(int tag= 0,MaterialHandler *mat_ldr= nullptr); 
     FiberSection2d(int tag,const fiber_list &fibers,MaterialHandler *mat_ldr= nullptr);
 
     int setInitialSectionDeformation(const Vector &deforms); 

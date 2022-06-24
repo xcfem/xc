@@ -736,6 +736,7 @@ python tests/materials/xc_materials/sections/section_geom/test_segment_01.py
 python tests/materials/xc_materials/sections/section_geom/test_circular_region_01.py
 python tests/materials/xc_materials/sections/section_geom/test_quad_region_01.py
 python tests/materials/xc_materials/sections/section_geom/test_quad_region_02.py
+python tests/materials/xc_materials/sections/section_geom/test_quad_region_03.py
 python tests/materials/xc_materials/sections/section_geom/test_annular_sector_rg_01.py
 python tests/materials/xc_materials/sections/section_geom/test_annular_sector_rg_02.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_01.py
@@ -744,11 +745,14 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
+echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
+python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
+python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_02.py
+
 # Compound sections.
 echo "$BLEU" "      Compound sections." "$NORMAL"
 python tests/materials/xc_materials/sections/test_compound_section_01.py
 python tests/materials/xc_materials/sections/test_compound_section_02.py
-#Cross sections. Fiber model.
 echo "$BLEU" "      Elastic section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_2d_sign_convention_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_2d_01.py
@@ -777,6 +781,8 @@ python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_08.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_09.py
 echo "$BLEU" "        Beam fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_prop.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section2d_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section2d_02.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_01.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_02.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_03.py
@@ -791,6 +797,7 @@ python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/t
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_12.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_13.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_discretization_error_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_shear2d_01.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_shear3d_01.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_shear3d_02.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_section_aggregator_01.py
@@ -815,6 +822,7 @@ python tests/materials/concrete_shapes/test_mass_properties_rc_section.py
 python tests/materials/concrete_shapes/test_reinf_row_01.py
 python tests/materials/concrete_shapes/test_reinf_layers_01.py
 python tests/materials/concrete_shapes/test_rc_section_01.py
+python tests/materials/concrete_shapes/test_rc_section_02.py
 echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 python tests/materials/ehe/test_Ecm_concrete.py

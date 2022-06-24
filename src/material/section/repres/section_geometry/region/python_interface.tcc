@@ -39,7 +39,7 @@ class_<XC::QuadCellRegion, bases<XC::SectRegion>, boost::noncopyable >("QuadCell
   .add_property("nDivCirc",&XC::QuadCellRegion::getNDivIJ,&XC::QuadCellRegion::setNDivIJ,"Number of divisions of I->J side.")
   .add_property("nDivRad",&XC::QuadCellRegion::getNDivJK,&XC::QuadCellRegion::setNDivJK,"Number of divisions of J->K side.")
   .add_property("getNumCells",&XC::QuadCellRegion::getNumCells)
-  .def("genGrid",make_function(&XC::QuadCellRegion::getMesh,return_internal_reference<>()))
+  .def("genGrid",make_function(&XC::QuadCellRegion::getMesh,return_internal_reference<>()),"Generate mesh and return a reference to it.")
   .def("getCenterOfMassGrid",&XC::QuadCellRegion::getCenterOfMassGrid)
   .def("getVertCoords",&XC::QuadCellRegion::getVertCoords)
   .def("getCellVertCoords",&XC::QuadCellRegion::getCellVertCoords)
@@ -53,7 +53,9 @@ class_<XC::CircularSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("
   .add_property("finalAngle",&XC::CircularSectRegion::getFinalAngle,&XC::CircularSectRegion::setFinalAngle,"Final angle.")
   ;
 
-class_<XC::QuadSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("QuadSectRegion", no_init)
+class_<XC::QuadSectRegion, bases<XC::QuadCellRegion> >("QuadSectRegion")
+  .def(init<XC::Material *>())
+  .def(init<XC::Material *, int , int , const XC::Matrix &>())
   .add_property("pMin",&XC::QuadSectRegion::getPMin,&XC::QuadSectRegion::setPMin,"Lower left corner.")
   .add_property("pMax",&XC::QuadSectRegion::getPMax,&XC::QuadSectRegion::setPMax,"Upper right corner.")
   .def("setTileSizeIJ",&XC::QuadSectRegion::setTileSizeIJ,"Sets numbers of divisions to get a tile IJ side smaller than size.")

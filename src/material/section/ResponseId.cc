@@ -240,6 +240,15 @@ XC::RespPMzVyMyVzT::RespPMzVyMyVzT(void)
   }
 
 //! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
+XC::RespFiberSectionShear2d::RespFiberSectionShear2d(void)
+  : ResponseId(6)
+  {
+    (*this)(0)= SECTION_RESPONSE_P;
+    (*this)(1)= SECTION_RESPONSE_MZ;
+    (*this)(2)= SECTION_RESPONSE_VY;
+  }
+
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespFiberSectionShear3d::RespFiberSectionShear3d(void)
   : ResponseId(6)
   {

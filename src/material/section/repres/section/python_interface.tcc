@@ -22,8 +22,10 @@
 //python_interface.tcc
 
 class_<XC::SectionRepres, bases<XC::TaggedObject>, boost::noncopyable >("SectionRepres", no_init)
-.add_property("geometry",make_function(&XC::SectionRepres::getGeom,return_internal_reference<>()),&XC::SectionRepres::setGeom)
+  .add_property("geometry",make_function(&XC::SectionRepres::getGeom,return_internal_reference<>()),&XC::SectionRepres::setGeom)
   .def("setGeomNamed",&XC::SectionRepres::setGeomNamed);
   ;
 
-class_<XC::FiberSectionRepr, bases<XC::SectionRepres>, boost::noncopyable >("FiberSectionRepr", no_init);
+class_<XC::FiberSectionRepr, bases<XC::SectionRepres>, boost::noncopyable >("FiberSectionRepr", no_init)
+  .def("getNumFibers",&XC::FiberSectionRepr::getNumFibers)
+  ;

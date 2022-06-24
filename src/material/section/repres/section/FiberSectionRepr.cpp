@@ -151,11 +151,15 @@ XC::fiber_list XC::FiberSectionRepr::get2DFibers(void) const
 		  << "; material handler not defined.\n";
         return retval;
       }
+    
+    // Append the isolated fibers.
     for(fiber_list::const_iterator i= fibers.begin();i!=fibers.end();i++)
       retval.push_back(*i);
 
+    // Append the UniaxialFiber2d objects defined by regions.
     FiberData fiberData= getFiberData();
     fiberData.get2DFibers(retval);
+    
     return retval;
   }
 
@@ -169,11 +173,14 @@ XC::fiber_list XC::FiberSectionRepr::get3DFibers(void) const
 	          << "; material handler not defined.\n";
         return retval;
       }
+    // Append the isolated fibers.
     for(fiber_list::const_iterator i= fibers.begin();i!=fibers.end();i++)
       retval.push_back(*i);
 
+    // Append the UniaxialFiber2d objects defined by regions.
     FiberData fiberData= getFiberData();
     fiberData.get3DFibers(retval);
+    
     return retval;
   }
 

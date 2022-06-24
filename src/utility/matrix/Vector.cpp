@@ -185,7 +185,7 @@ XC::Vector::Vector(const double &x,const double &y,const double &z)
 //! To construct a Vector of order \p size whose data will be stored in the
 //! array pointed to by \p data. See setData method.
 XC::Vector::Vector(double *data, int size)
-  : sz(0),theData(nullptr),fromFree(0)
+  : sz(0),theData(nullptr), fromFree(0)
   {
     setData(data,size);
   }

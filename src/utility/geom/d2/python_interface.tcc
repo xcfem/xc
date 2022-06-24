@@ -237,7 +237,7 @@ class_<Grid2d, bases<Surface2d> >("Grid2d")
   .def("getPoint",&Grid2d::getPoint)
   .def("getQuad",&Grid2d::GetQuad)
   .def("In",&Grid2d::In)
-  .def("getPoints",make_function(&Grid2d::getPoints,return_internal_reference<>()))
+  .def("getPoints",make_function(&Grid2d::getPoints,return_internal_reference<>()), "Return a reference to the 2D point array defining the grid.")
    ;
 
 

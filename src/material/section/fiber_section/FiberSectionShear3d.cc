@@ -77,7 +77,10 @@ void XC::FiberSectionShear3d::setRespVy(const UniaxialMaterial *rvy)
   {
     if(respVy)
       delete respVy;
-    respVy= rvy->getCopy();
+    if(rvy)
+      respVy= rvy->getCopy();
+    else
+      respVy= nullptr;
   }
 
 //! @brief Sets the material defining the shear response along the z axis.
@@ -85,7 +88,10 @@ void XC::FiberSectionShear3d::setRespVz(const UniaxialMaterial *rvz)
   {
     if(respVz)
       delete respVz;
-    respVz= rvz->getCopy();
+    if(rvz)
+      respVz= rvz->getCopy();
+    else
+      respVz= nullptr;
   }
 
 //! @brief Sets the material that defines the torsional response.
@@ -93,24 +99,27 @@ void XC::FiberSectionShear3d::setRespT(const UniaxialMaterial *rt)
   {
     if(respT)
       delete respT;
-    respT= rt->getCopy();
+    if(rt)
+      respT= rt->getCopy();
+    else
+      respT= nullptr;
   }
 
 void XC::FiberSectionShear3d::setRespVyVzT(const UniaxialMaterial *rvy,const UniaxialMaterial *rvz,const UniaxialMaterial *rt)
   {
     freeRespVyVzT();
     if(rvy)
-      respVy= rvy->getCopy();
+      setRespVy(rvy);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << " undefined shear response along the y axis." << std::endl;
     if(rvz)
-      respVz= rvz->getCopy();
+      setRespVz(rvz);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << " undefined shear response along the z axis." << std::endl;
     if(rt)
-      respT= rt->getCopy();
+      setRespT(rt);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << " undefined respuesta al torsor." << std::endl;

@@ -9,23 +9,23 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 def extractFiberSectionProperties(fiberSec,scc):
-  fibers= fiberSec.getFibers()
-  global nFibers; nFibers= fibers.getNumFibers()
-  global sumAreas; sumAreas= fibers.getArea(1.0)
-  global Iz; Iz= fibers.getIz
-  global Iy; Iy= fibers.getIy 
-  global Pyz; Pyz= fibers.getPyz
-  global centerOfMassZ; centerOfMassZ= fibers.getCenterOfMassZ()
-  global centerOfMassY; centerOfMassY= fibers.getCenterOfMassY()
-  global I1; I1= fibers.getI1(1,0,0)
-  global I2; I2= fibers.getI2(1,0,0)
-  global i1; i1= math.sqrt(I1/sumAreas)  # major principal axis radius of giration.
-  global i2; i2= math.sqrt(I2/sumAreas); # minor principal axis radius of giration.
-  # th1= th1; 
-  global Me1; Me1= 2*fy/scc.h*I1; # Elastic moment of the section around its principal major axis.
-  global Me2; Me2= 2*fy/scc.b*I2; # Elastic moment of the section around its principal minor axis.
-  global SzPosG; SzPosG= fibers.getSzPos(0,0,1)
-  global SyPosG; SyPosG= fibers.getSyPos(0,0,1) 
+    fibers= fiberSec.getFibers()
+    global nFibers; nFibers= fibers.getNumFibers()
+    global sumAreas; sumAreas= fibers.getArea(1.0)
+    global Iz; Iz= fibers.getIz
+    global Iy; Iy= fibers.getIy 
+    global Pyz; Pyz= fibers.getPyz
+    global centerOfMassZ; centerOfMassZ= fibers.getCenterOfMassZ()
+    global centerOfMassY; centerOfMassY= fibers.getCenterOfMassY()
+    global I1; I1= fibers.getI1(1,0,0)
+    global I2; I2= fibers.getI2(1,0,0)
+    global i1; i1= math.sqrt(I1/sumAreas)  # major principal axis radius of giration.
+    global i2; i2= math.sqrt(I2/sumAreas); # minor principal axis radius of giration.
+    # th1= th1; 
+    global Me1; Me1= 2*fy/scc.h*I1; # Elastic moment of the section around its principal major axis.
+    global Me2; Me2= 2*fy/scc.b*I2; # Elastic moment of the section around its principal minor axis.
+    global SzPosG; SzPosG= fibers.getSzPos(0,0,1)
+    global SyPosG; SyPosG= fibers.getSyPos(0,0,1) 
 
 def printRatios(scc):
     print("areaTeor= ",(scc.area()))

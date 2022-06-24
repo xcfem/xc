@@ -101,6 +101,7 @@
 //#include "GenericSectionNd.h"
 #include "material/section/SectionAggregator.h"
 #include "material/section/fiber_section/FiberSection2d.h"
+#include "material/section/fiber_section/FiberSectionShear2d.h"
 #include "material/section/fiber_section/FiberSection3d.h"
 #include "material/section/fiber_section/FiberSectionGJ.h"
 #include "material/section/fiber_section/FiberSectionShear3d.h"

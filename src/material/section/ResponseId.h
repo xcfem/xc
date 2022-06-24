@@ -114,6 +114,12 @@ class RespPMzVyMyVzT: public ResponseId
     RespPMzVyMyVzT(void);
   };
 
+class RespFiberSectionShear2d: public ResponseId
+  {
+  public:
+    RespFiberSectionShear2d(void);
+  };
+  
 class RespFiberSectionShear3d: public ResponseId
   {
   public:
@@ -151,6 +157,7 @@ const RespVyP RespBidirectional;
 const RespPMzMy RespFiberSection3d;
 const RespPMzMyT RespElasticSection3d;
 const RespPMzVyMyVzT RespElasticShSection3d;
+const RespFiberSectionShear2d RespFiberSectionSh2d;
 const RespFiberSectionShear3d RespFiberSectionSh3d;
 const RespPVyMz RespIsolator2spring;
 const RespMembraneMaterial RespMembraneMat;

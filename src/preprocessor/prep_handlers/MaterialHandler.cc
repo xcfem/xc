@@ -126,6 +126,7 @@
 #include "material/section/elastic_section/ElasticSection3d.h"
 #include "material/section/elastic_section/ElasticShearSection3d.h"
 #include "material/section/fiber_section/FiberSection2d.h"
+#include "material/section/fiber_section/FiberSectionShear2d.h"
 #include "material/section/fiber_section/FiberSection3d.h"
 #include "material/section/fiber_section/FiberSectionGJ.h"
 #include "material/section/fiber_section/FiberSectionShear3d.h"
@@ -406,6 +407,8 @@ XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::Mater
       retval= new XC::ElasticShearSection3d(tag_mat,mhandler);
     else if(cmd == "fiber_section_2d")
       retval= new XC::FiberSection2d(tag_mat,mhandler);
+    else if(cmd == "fiberSectionShear2d")
+      retval= new XC::FiberSectionShear2d(tag_mat,mhandler);
     else if(cmd == "fiber_section_3d")
       retval= new XC::FiberSection3d(tag_mat,mhandler);
     else if(cmd == "fiber_section_GJ")
@@ -439,38 +442,26 @@ XC::Material *load_yield_surf_plastic_hardening(int tag_mat,const std::string &c
 XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialHandler *mhandler)
   {
     XC::Material *retval= load_uniaxial_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_uniaxial_fedeas_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_uniaxial_py_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_uniaxial_snap_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_nD_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_nD_finite_deformation_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_nD_cyclic_soil_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_nD_soil_material(tag_mat,cmd);
-    if(retval)
-      return retval;
-    retval= load_section_material(tag_mat,cmd,mhandler);
-    if(retval)
-      return retval;
-    retval= load_plate_section_material(tag_mat,cmd,mhandler);
-    if(retval)
-      return retval;
-    retval= load_yield_surf_plastic_hardening(tag_mat,cmd);
-    if(retval)
-      return retval;
+    if(!retval)
+      retval= load_uniaxial_fedeas_material(tag_mat,cmd);
+    if(!retval)
+      retval= load_uniaxial_py_material(tag_mat,cmd);
+    if(!retval)
+      retval= load_uniaxial_snap_material(tag_mat,cmd);
+    if(!retval)
+      retval= load_nD_material(tag_mat,cmd);
+    if(!retval)
+      retval= load_nD_finite_deformation_material(tag_mat,cmd);
+    if(!retval)
+      retval= load_nD_cyclic_soil_material(tag_mat,cmd);
+    if(!retval)
+      retval= load_nD_soil_material(tag_mat,cmd);
+    if(!retval)
+      retval= load_section_material(tag_mat,cmd,mhandler);
+    if(!retval)
+      retval= load_plate_section_material(tag_mat,cmd,mhandler);
+    if(!retval)
+      retval= load_yield_surf_plastic_hardening(tag_mat,cmd);
     return retval;
   }
 

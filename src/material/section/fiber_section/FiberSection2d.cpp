@@ -69,6 +69,10 @@
 #include "utility/geom/d1/Line2d.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
+//! @brief Constructor (it's used in FiberSectionShear2d).
+XC::FiberSection2d::FiberSection2d(int tag,int classTag,MaterialHandler *mat_ldr)
+  : FiberSectionBase(tag, classTag, 2, mat_ldr) {}
+
 // constructors:
 XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,MaterialHandler *mat_ldr)
   : FiberSectionBase(tag, SEC_TAG_FiberSection2d,2,mat_ldr)
@@ -81,16 +85,7 @@ XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,MaterialH
 
 //! @brief Constructor.
 XC::FiberSection2d::FiberSection2d(int tag, MaterialHandler *mat_ldr)
-  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,mat_ldr)
-  {
-// AddingSensitivity:BEGIN ////////////////////////////////////
-    parameterID= 0;
-// AddingSensitivity:END //////////////////////////////////////
-  }
-
-// constructor for blank object that recvSelf needs to be invoked upon
-XC::FiberSection2d::FiberSection2d(XC::MaterialHandler *mat_ldr)
-  : FiberSectionBase(0, SEC_TAG_FiberSection2d,mat_ldr)
+  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,2,mat_ldr)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
     parameterID= 0;

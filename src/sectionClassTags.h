@@ -54,5 +54,6 @@
 #define SEC_TAG_ElasticShear3d                  1022
 #define SEC_TAG_FiberSection2dInt               1023
 #define SEC_TAG_FiberSectionShear3d	        1024
+#define SEC_TAG_FiberSectionShear2d	        1025
 
 #endif

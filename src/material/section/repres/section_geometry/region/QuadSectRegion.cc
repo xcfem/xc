@@ -52,7 +52,7 @@ XC::QuadSectRegion::QuadSectRegion(Material *mat)
   : QuadCellRegion(mat), vertCoord(4,2) {}
 
 
-XC::QuadSectRegion::QuadSectRegion(Material *mat, int numSubdivIJ, int numSubdivJK,const XC::Matrix &vertexCoords)
+XC::QuadSectRegion::QuadSectRegion(Material *mat, int numSubdivIJ, int numSubdivJK,const Matrix &vertexCoords)
   : QuadCellRegion(mat,numSubdivIJ,numSubdivJK), vertCoord(vertexCoords)
   {}
   
@@ -198,6 +198,7 @@ void XC::QuadSectRegion::setVertCoords(const XC::Matrix &vertexCoords)
 const XC::Matrix &XC::QuadSectRegion::getVertCoords(void) const
   { return vertCoord; }
 
+//! @brief Generate mesh and return a reference to it.
 const Grid2d &XC::QuadSectRegion::getMesh(void) const
   { return alloc(Grid2d(getQuad().genBilinMesh(nDivIJ,nDivJK))); }
 
@@ -254,7 +255,7 @@ const XC::VectorCells &XC::QuadSectRegion::getCells(void) const
               cells.put(k,QuadCell(cellVertCoord)); 
               //std::cerr << "\ncreating cells Cell " << k << " :" << cells[k];
               k++;
-             }
+	    }
       }
     return cells;
   }

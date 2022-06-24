@@ -45,6 +45,7 @@ class Grid2d: public Surface2d
       { return points(i,j); }
     inline Pos2d &operator()(const size_t &i,const size_t &j)
       { return points(i,j); }
+    //! @brief Return a reference to the 2D point array defining the grid.
     inline Pos2dArray &getPoints(void)
       { return points; }
 

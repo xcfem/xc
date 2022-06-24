@@ -96,6 +96,7 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
     retval.E= E
     retval.fyp= fyp
     retval.fyn= fyn
+    retval.revertToStart() # Compute material derived parameters.
     return retval
 
 def defElastNoTensMaterial(preprocessor,name,E):

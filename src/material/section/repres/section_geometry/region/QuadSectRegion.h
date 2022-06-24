@@ -55,10 +55,8 @@ class QuadSectRegion: public QuadCellRegion
   {
   private:
     Matrix vertCoord; //!< Coordinates of the vertices.
-  protected:
-
   public:
-    QuadSectRegion(Material *);
+    QuadSectRegion(Material *mat= nullptr);
     QuadSectRegion(Material *, int numSubdivIJ, int numSubdivJK, const Matrix &vertexCoords);
 
     // edition functions

@@ -22,7 +22,7 @@ from materials.ec2 import EC2_materials
 #     cover                                          cover
 #
 
-# Geometry of the reinforcement.
+# Define reinforcement geometry.
 spacing= 0.15 # spacing of reinforcement.
 nBarsA= 10 # number of bars.
 cover= 0.035 # concrete cover.
@@ -55,7 +55,7 @@ b= width
 h= 0.20
 ## RC section.
 rcSection= def_simple_RC_section.RCRectangularSection(name='RC section', width= b, depth= h, concrType= concrete, reinfSteelType= steel)
-rcSection.positvRebarRows= reinfLayers # Reinforcement on the positive side.
+rcSection.negatvRebarRows= reinfLayers # Reinforcement on the negative side.
 
 # Compute homogenized areas.
 hCoef= rcSection.getHomogenizationCoefficient() # homogenization coefficient.
@@ -66,13 +66,13 @@ hRefArea= concreteArea+hCoef*steelArea # reference value for homogenized area.
 ratio1= abs(hArea-hRefArea)/hRefArea
 
 # Compute reinforcement position.
-hAsPos= rcSection.hAsPos()
-hAsPosRef= .035+barDiameter/2.0
-ratio2= abs(hAsPos-hAsPosRef)/hAsPosRef
+hAsNeg= rcSection.hAsNeg()
+hAsNegRef= h-(.035+barDiameter/2.0)
+ratio2= abs(hAsNeg-hAsNegRef)/hAsNegRef
 
 # Compute section centroid.
 cog= rcSection.hCOGHomogenizedSection()
-cogRef= (h/2.0*concreteArea+(cover+barDiameter/2.0)*hCoef*steelArea)/(concreteArea+hCoef*steelArea)
+cogRef= (h/2.0*concreteArea+(h-cover-barDiameter/2.0)*hCoef*steelArea)/(concreteArea+hCoef*steelArea)
 ratio3= abs(cog-cogRef)/cogRef
 
 
@@ -84,7 +84,7 @@ nBars= sum(reinfLayers.getNBar())
 izRef= 1/12*b*h**3+concreteArea*d**2
 ## Steel.
 izRef+= hCoef*nBars*math.pi*(barDiameter/2.0)**4/4.0
-d= hAsPosRef-cogRef
+d= hAsNegRef-cogRef
 steelInertiaRef= (hCoef-1)*steelArea*d**2
 izRef+= steelInertiaRef
 ratio4= abs(iz-izRef)/izRef
@@ -92,7 +92,7 @@ ratio4= abs(iz-izRef)/izRef
 '''
 print('homogenization coefficient: hCoef= ', hCoef)
 print('ratio1= ', ratio1)
-print('hAsPos= ', hAsPos, ' m')
+print('hAsNeg= ', hAsNeg, ' m')
 print('ratio2= ', ratio2)
 print('center of gravity: cog= ', cog, 'm')
 print('center of gravity: cogRef= ', cogRef, 'm')
@@ -109,3 +109,4 @@ if (ratio1==0 and (abs(ratio2)<1e-12) and (abs(ratio3)<1e-12) and (abs(ratio4)<1
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+

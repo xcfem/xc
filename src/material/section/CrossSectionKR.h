@@ -73,7 +73,7 @@ class CrossSectionKR: public CommandEntity, public MovableObject
 
         k[0]+= value; //Axial stiffness
         k[1]+= vas1;
-        k[2]+= vas1 * y;
+        k[3]+= vas1 * y; //Bending stiffness.
       }
     inline void updateK2d(const double &fiberArea,const double &y,const double &tangent)
       { updateK2d(kData,fiberArea,y,tangent); }

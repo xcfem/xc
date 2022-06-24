@@ -14,8 +14,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 sideLength= 1.0
-n1= 3
-n2= 2
+n1= 3 # IJ divisions.
+n2= 2 # JK divisions.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -28,19 +28,19 @@ elast.nDivIJ= n1
 elast.nDivJK= n2
 elast.pMin= geom.Pos2d(0.0,0.0)
 elast.pMax= geom.Pos2d(sideLength,sideLength)
-grid= elast.genGrid()
-points= grid.getPoints()
+grid= elast.genGrid() # Generate mesh and return a reference to it.
+points= grid.getPoints() # Return a reference to the 2D point array defining the grid.
 
-numQuads= points.getNumQuads()
-numPoints= points.getNumPoints()
-numFilas= points.nRow
-numCols= points.nCol
-area= points.getArea()
-G= points.getCenterOfMass()
-Ix= points.Ix()
-Iy= points.Iy()
-Pxy= points.Pxy()
-deltaX= points.getX(1,2)-points.getX(1,1)
+numQuads= points.getNumQuads() # Number of quads in the point array.
+numPoints= points.getNumPoints() # Numper of points in the array.
+numFilas= points.nRow # Number of rows.
+numCols= points.nCol # Number of columns.
+area= points.getArea() # Area.
+G= points.getCenterOfMass() # Center of mass.
+Ix= points.Ix() # Inertia around the x axis.
+Iy= points.Iy() # Inertia around the y axis.
+Pxy= points.Pxy() # Inertia product.
+deltaX= points.getX(1,2)-points.getX(1,1) 
 deltaY= points.getY(2,2)-points.getY(1,1)
 
 ''' 

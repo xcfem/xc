@@ -124,6 +124,8 @@ class_<XC::RespPMzMyT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzMyT",
 
 class_<XC::RespPMzVyMyVzT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzVyMyVzT", no_init);
 
+class_<XC::RespFiberSectionShear2d, bases<XC::ResponseId>, boost::noncopyable >("RespFiberSectionShear2d", no_init);
+
 class_<XC::RespFiberSectionShear3d, bases<XC::ResponseId>, boost::noncopyable >("RespFiberSectionShear3d", no_init);
 
 class_<XC::RespPVyMz, bases<XC::ResponseId>, boost::noncopyable >("RespPVyMz", no_init);

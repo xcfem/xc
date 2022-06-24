@@ -86,11 +86,12 @@ int XC::SectionRepres::getNumCells(void) const
     return ncells;
   }
 
+//! @brief Sets section geometry from its name.
 void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
   {
     const SectionGeometry *tmp= material_handler->find_ptr_section_geometry(nmbGeom);
     if(tmp)
-      gmSecc= tmp;
+      setGeom(tmp);
     else
      std::cerr << getClassName() << __FUNCTION__
 	       << " section geometry: '"
