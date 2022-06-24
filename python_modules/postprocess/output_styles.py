@@ -130,7 +130,7 @@ class OutputStyle(object):
         elif(itemToDisp=='rotX' or itemToDisp=='rotY' or itemToDisp=='rotZ'):
             fConvUnits= self.getRotationUnitsScaleFactor()
             unitDescription= self.getRotationUnitsDescription()
-        elif(itemToDisp=='CF'):
+        elif(itemToDisp=='CF' or itemToDisp=='getCF'):
             fConvUnits= 1.0
             unitDescription=''
         elif(itemToDisp.startswith('sigma_')):
