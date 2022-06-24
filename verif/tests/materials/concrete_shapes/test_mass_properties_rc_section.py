@@ -50,17 +50,21 @@ err+= (grossSectionCOGz-0.125)**2
 n= rcSection.getHomogenizationCoefficient()
 homogenizedSectionArea= rcSection.getAreaHomogenizedSection()
 err+= (homogenizedSectionArea-0.14112380156782012)**2
+
 # homogenizedSectionIy= rcSection.Iy()
 # err+= (homogenizedSectionIy-0.000651041666667)**2
 homogenizedSectionIz= rcSection.getIzHomogenizedSection()
-err+= (homogenizedSectionIz-0.003169997768772509)**2
+err+= (homogenizedSectionIz-0.003219241608286854)**2
+
 # homogenizedSectioniy= rcSection.iy()
 # err+= (homogenizedSectioniy-0.0721687836487)**2
 homogenizedSectioniz= rcSection.izHomogenizedSection()
-err+= (homogenizedSectioniz-0.14987505132151643)**2
+err+= (homogenizedSectioniz-0.15103467058463282)**2
+
 homogenizedSectionCOGy= rcSection.hCOGHomogenizedSection()
-err+= (homogenizedSectionCOGy-0.22576177675074582)**2
-# homogenizedSectionCOGz= rcSection.bCOG()
+err+= (homogenizedSectionCOGy-0.23914585172711966)**2
+
+
 
 err= math.sqrt(err)
 
@@ -68,7 +72,6 @@ err= math.sqrt(err)
 # feProblem= xc.FEProblem()
 # preprocessor=  feProblem.getPreprocessor
 # rcSection.plot(preprocessor)
-
 '''
 print('gross section area: ', grossSectionArea, ' m2')
 print('gross section Iy= ', grossSectionIy, ' m4')
