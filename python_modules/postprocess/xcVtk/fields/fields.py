@@ -27,6 +27,17 @@ class ScalarField(fb.FieldBase):
 
     '''
     def __init__(self, name, functionName, component=None, fUnitConv= 1.0,rgMinMax=None):
+        ''' Constructor.
+
+        :param name: node property that contains the value to represent.
+        :param functionName: name of the node method to obtain the value (usually 'getProp').
+        :param component: component of the control var to represent.
+        :param fUnitConv: unit conversion factor.
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the scalar field (if any) to be represented. All the values 
+                         less than vmin are displayed in blue and those greater than vmax 
+                         in red (defaults to None)
+        '''
         super(ScalarField,self).__init__(name,fUnitConv)
         self.attrName= functionName
         self.attrComponent= component
@@ -85,29 +96,41 @@ class ScalarField(fb.FieldBase):
 
 
 class ExtrapolatedScalarField(ScalarField):
-  '''Scalar field defined at nodes.
+    '''Scalar field defined at nodes.
 
-  :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-              of the scalar field (if any) to be represented. All the values 
-              less than vmin are displayed in blue and those greater than vmax 
-              in red (defaults to None)
-  '''
-  def __init__(self,name, functionName, xcSet, component= None, fUnitConv= 1.0,rgMinMax=None):
-    super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv,rgMinMax)
-    self.xcSet= xcSet
-
-  def display(self,displaySettings,caption= '',fileName= None, defFScale=0.0):
-    '''Display the scalar field graphic.
-
-      :param fileName: name of the graphic file to create (if None -> screen window).
-      :param caption: text to display in the graphic.
-      :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+    :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                of the scalar field (if any) to be represented. All the values 
+                less than vmin are displayed in blue and those greater than vmax 
+                in red (defaults to None)
     '''
-    displaySettings.displayMesh(xcSets= self.xcSet, field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
+    def __init__(self,name, functionName, xcSet, component= None, fUnitConv= 1.0,rgMinMax=None):
+        ''' Constructor.
+
+        :param name: node property that contains the value to represent.
+        :param functionName: name of the node method to obtain the value (usually 'getProp').
+        :param xcSet: elements in the field domain.
+        :param component: component of the control var to represent.
+        :param fUnitConv: unit conversion factor.
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the scalar field (if any) to be represented. All the values 
+                         less than vmin are displayed in blue and those greater than vmax 
+                         in red (defaults to None)
+        '''
+        super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv,rgMinMax)
+        self.xcSet= xcSet
+
+    def display(self,displaySettings,caption= '',fileName= None, defFScale=0.0):
+        '''Display the scalar field graphic.
+
+          :param fileName: name of the graphic file to create (if None -> screen window).
+          :param caption: text to display in the graphic.
+          :param defFScale: factor to apply to current displacement of nodes 
+                      so that the display position of each node equals to
+                      the initial position plus its displacement multiplied
+                      by this factor. (Defaults to 0.0, i.e. display of 
+                      initial/undeformed shape)
+        '''
+        displaySettings.displayMesh(xcSets= self.xcSet, field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
     
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
@@ -127,12 +150,12 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     self.extrapolate()
     displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
 
-def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv,rgMinMax):
+def getScalarFieldFromControlVar(attributeName, argument, xcSet, component, fUnitConv, rgMinMax):
     '''return an scalar field that represents the control var over the 
                  elements in the set.
 
     :param attributeName: name of the element's property that has the 
-                          control var in it for example as in 
+                          control var in it, for example as in 
                           elem.getProp(attributeName).eval(argument).
     :param argument: name of the control var to represent.
     :param xcSet: represent the field over those elements.

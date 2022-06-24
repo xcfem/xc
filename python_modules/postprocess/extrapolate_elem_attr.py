@@ -35,33 +35,34 @@ def flatten_attribute(elemSet,attributeName, treshold, limit):
 
 def create_attribute_at_nodes(xcSet,attributeName,initialValue):
     ''' Create an attribute on the nodes of the set passed as parameter.
-    return tags of the affected nodes.
+    Returns a dictionary with the number of elements connected to
+    a node indexed by the node tag.
 
     :param xcSet: nodes that will receive the attribute.
     :param attributeName: name of the attribute to define.
     :param initialValue: initial value to assign to the attribute.
     '''
-    touchedNodesTags= {}
+    touchedNodes= {}
     for e in xcSet:
         elemNodes= e.getNodes
         sz= len(elemNodes)
         for i in range(0,sz):
             n= elemNodes[i]
-            tag= n.tag
-            if tag not in touchedNodesTags:
-                touchedNodesTags[tag]= 1
+            nodeTag= n.tag
+            if nodeTag not in touchedNodes:
+                touchedNodes[nodeTag]= 1
                 if(n.hasProp(attributeName)):
                     lmsg.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
                 n.setProp(attributeName,initialValue)
             else:
-                touchedNodesTags[tag]+=1
-    return touchedNodesTags
+                touchedNodes[nodeTag]+=1
+    return touchedNodes
 
-def average_on_nodes(preprocessor, touchedNodesTags, attributeName):
+def average_on_nodes(preprocessor, touchedNodes, attributeName):
     ''' Divide by number of elements in the set that touch the node.'''
-    for tag in touchedNodesTags:
+    for tag in touchedNodes:
         n= preprocessor.getNodeHandler.getNode(tag)
-        denom= touchedNodesTags[tag]
+        denom= touchedNodes[tag]
         n.setProp(attributeName,n.getProp(attributeName)*(1.0/denom))
 
 def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
@@ -74,7 +75,7 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
     :param argument: name of the argument for the function call function (optional).
     :param initialValue: initial value for the attribute defined at the nodes.
     '''
-    touchedNodesTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
+    touchedNodes= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.
     for e in elemSet:
         elemNodes= e.getNodes
@@ -88,7 +89,7 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
                 n.setProp(attributeName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
-    average_on_nodes(preprocessor,touchedNodesTags, attributeName)
+    average_on_nodes(preprocessor,touchedNodes, attributeName)
 
 def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= None, initialValue= 0.0):
     '''Extrapolate element's function values to the nodes.
@@ -100,7 +101,7 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
     :param argument: name of the argument for the function call function (optional).
     :param initialValue: initial value for the attribute defined at the nodes.
     '''
-    touchedNodesTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
+    touchedNodes= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.
     for e in elemSet:
         elemNodes= e.getNodes
@@ -119,4 +120,4 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
                 n.setProp(attributeName,newValue)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
-    average_on_nodes(preprocessor,touchedNodesTags, attributeName)
+    average_on_nodes(preprocessor,touchedNodes, attributeName)

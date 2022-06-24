@@ -1255,7 +1255,7 @@ def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
     elemSet.fillDownwards()
     eSet= elemSet.elements
     nodePropName= propName+'_'+argument
-    nodeTags= ext.create_attribute_at_nodes(eSet,nodePropName,initialValue)
+    touchedNodes= ext.create_attribute_at_nodes(eSet,nodePropName,initialValue)
     #Calculate totals.
     for e in eSet:
         elemNodes= e.getNodes
@@ -1267,9 +1267,9 @@ def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
                 n.setProp(nodePropName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.getPreprocessor
-    for tag in nodeTags:
+    for tag in touchedNodes: # Nodes touched by the elements inthe set.
         n= preprocessor.getNodeHandler.getNode(tag)
-        denom= nodeTags[tag]
+        denom= float(touchedNodes[tag])
         newValue= n.getProp(nodePropName)/denom
         n.setProp(nodePropName,newValue)
     return nodePropName
