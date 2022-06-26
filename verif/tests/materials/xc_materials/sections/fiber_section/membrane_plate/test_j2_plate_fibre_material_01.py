@@ -92,7 +92,7 @@ lp0.newNodalLoad(n3.tag,xc.Vector([0.0,load,0.0,0.0,0.0,0.0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 ## Solve
-modelSpace.analysis= predefined_solutions.plain_krylov_newton(modelSpace.preprocessor.getProblem,mxNumIter=300, convergenceTestTol=1e-12,printFlag=0)
+modelSpace.analysis= predefined_solutions.plain_krylov_newton(modelSpace.preprocessor.getProblem,maxNumIter=300, convergenceTestTol=1e-12,printFlag=0)
 analOK= modelSpace.analyze(calculateNodalReactions= True)
 
 ## Tests

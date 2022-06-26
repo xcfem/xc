@@ -112,7 +112,7 @@ nB= beamNodes[-1]
 nC= beamNodes[5]
 constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode00F(nA.tag) # First node pinned.
-modelSpace.fixNode00F(nB.tag) # Last node pinned.
+modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 
 ## Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -126,11 +126,16 @@ for e in beamElements:
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
-analysis= predefined_solutions.plain_newton_raphson(feProblem)
+analysis= predefined_solutions.plain_newton_raphson(feProblem, maxNumIter= 20)
 result= analysis.analyze(1)
 if(result!=0):
     print('Can\'t solve.')
     exit(1)
+
+# If the program reaches this point the reinforcement is placed in the right
+# side of the section (try to inverse the applied load and you will see that
+# the solver crashes (there is no reinforcement to resist the inverse load).
+
 
 # Get reactions.
 nodes.calculateNodalReactions(True,1e-7) 
@@ -145,7 +150,10 @@ ratio1= abs(nC.getCoo[0]-halfSpan)/(halfSpan)
 print('element type= ', elementType)
 print(nC.getCoo[0])
 print('ratio1= ', ratio1)
+print('vertical reactions: ', vReacA, vReacB)
 print('deflection = ', vDisp[1]*1e3, 'mm')
+
+
 
 #########################################################
 # Graphic stuff.

@@ -87,7 +87,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
-analysis= predefined_solutions.plain_newton_raphson(feProblem, mxNumIter= 10)
+analysis= predefined_solutions.plain_newton_raphson(feProblem, maxNumIter= 10)
 analOk= analysis.analyze(10)
 
 import os
