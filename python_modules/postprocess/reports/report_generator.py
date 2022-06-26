@@ -9,7 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
-
+import os
 from postprocess import output_handler as oh
 from postprocess.config import default_config
 
@@ -53,13 +53,25 @@ class ReportGenerator(oh.OutputHandler):
             for arg in argsShEl:
                 capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. 1'
                 fullgrFileNm=fullPath+st.name+arg+'Sect1'
+                print('file name: ', fullgrFileNm)
                 rltvgrFileNm=rltvPath+st.name+arg+'Sect1'
-                self.displayField(limitStateLabel, 1,arg, None, st, fullgrFileNm+'.jpg')
+                fullgrFileNmAndExt= fullgrFileNm+'.jpg'
+                self.displayField(limitStateLabel, 1,arg, None, st, fullgrFileNmAndExt)
+                if not os.path.exists(fullgrFileNmAndExt):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
                 oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
+                
                 capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. 2'
                 fullgrFileNm=fullPath+st.name+arg+'Sect2'
                 rltvgrFileNm=rltvPath+st.name+arg+'Sect2'
-                self.displayField(limitStateLabel, 2,arg, None, st, fullgrFileNm+'.jpg')
+                fullgrFileNmAndExt= fullgrFileNm+'.jpg'
+                self.displayField(limitStateLabel, 2,arg, None, st, fullgrFileNmAndExt)
+                if not os.path.exists(fullgrFileNmAndExt):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
                 oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
 
         for stV in setsBmEl:
