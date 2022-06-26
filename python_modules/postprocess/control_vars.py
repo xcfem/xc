@@ -1259,7 +1259,10 @@ def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
     #Calculate totals.
     for e in eSet:
         elemNodes= e.getNodes
-        controlVar= e.getProp(propName)
+        if(e.hasProp(propName)):
+            controlVar= e.getProp(propName)
+        else: # Silently ignore this value (LP 26/07/2022).
+            controlVar= None
         for n in elemNodes:
             if(controlVar):
                 value= controlVar(argument)
