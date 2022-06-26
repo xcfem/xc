@@ -470,8 +470,8 @@ class PlainNewtonRaphson(SolutionProcedure):
         self.analysisSetup('static_analysis')
 
 ### Convenience function
-def plain_newton_raphson(prb, maxNumIter= 10):
-    solProc= PlainNewtonRaphson(prb, maxNumIter= maxNumIter)
+def plain_newton_raphson(prb, maxNumIter= 10, convergenceTestTol= 1e-9):
+    solProc= PlainNewtonRaphson(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol)
     solProc.setup()
     return solProc.analysis
 
