@@ -101,7 +101,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 
-modelSpace.analysis= predefined_solutions.plain_krylov_newton(modelSpace.preprocessor.getProblem,mxNumIter=300, convergenceTestTol=1e-12,printFlag=0)
+modelSpace.analysis= predefined_solutions.plain_krylov_newton(modelSpace.preprocessor.getProblem,maxNumIter=300, convergenceTestTol=1e-12,printFlag=0)
 
 areaSect=width**2
 Fdata=list() ; sigma_Pa=list() ; eps=list() ; xDisp_m=list()

@@ -470,8 +470,8 @@ class PlainNewtonRaphson(SolutionProcedure):
         self.analysisSetup('static_analysis')
 
 ### Convenience function
-def plain_newton_raphson(prb, mxNumIter= 10):
-    solProc= PlainNewtonRaphson(prb, maxNumIter= mxNumIter)
+def plain_newton_raphson(prb, maxNumIter= 10, convergenceTestTol= 1e-9):
+    solProc= PlainNewtonRaphson(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol)
     solProc.setup()
     return solProc.analysis
 
@@ -505,8 +505,8 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         self.analysisSetup('static_analysis')
 
 ### Convenience function
-def plain_newton_raphson_band_gen(prb, mxNumIter= 10):
-    solProc= PlainNewtonRaphsonBandGen(prb, maxNumIter= mxNumIter)
+def plain_newton_raphson_band_gen(prb, maxNumIter= 10):
+    solProc= PlainNewtonRaphsonBandGen(prb, maxNumIter= maxNumIter)
     solProc.setup()
     return solProc.analysis
 
@@ -564,14 +564,14 @@ class PenaltyNewtonRaphson(PenaltyNewtonRaphsonBase):
         
 
 ### Convenience function
-def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
+def penalty_newton_raphson(prb, maxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
     ''' Return a penalty Newton-Raphson solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
     '''
-    solProc= PenaltyNewtonRaphson(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+    solProc= PenaltyNewtonRaphson(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
     solProc.setup()
     return solProc.analysis
 
@@ -657,14 +657,14 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         self.analysisSetup('static_analysis')
     
 ### Convenience function
-def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01, printFlag= 0):
+def plain_static_modified_newton(prb, maxNumIter= 10, convergenceTestTol= .01, printFlag= 0):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
     '''
-    solProc= PlainStaticModifiedNewton(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+    solProc= PlainStaticModifiedNewton(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
     solProc.setup()
     return solProc.analysis
 
@@ -721,14 +721,14 @@ class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
         self.analysisSetup('static_analysis')        
 
 ### Convenience function
-def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
+def penalty_modified_newton(prb, maxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
     '''
-    solProc= PenaltyModifiedNewton(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
+    solProc= PenaltyModifiedNewton(prb,maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
     solProc.setup()
     return solProc.analysis
     
@@ -914,14 +914,14 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
         self.analysisSetup('static_analysis')
         
 ### Convenience function
-def penalty_newton_line_search_mumps(prb, mxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+def penalty_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
     '''
-    solProc= PenaltyNewtonLineSearchMUMPS(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType, lineSearchMethod= lineSearchMethod)
+    solProc= PenaltyNewtonLineSearchMUMPS(prb,maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType, lineSearchMethod= lineSearchMethod)
     solProc.setup()
     return solProc.analysis
  
@@ -1034,14 +1034,14 @@ class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
         self.analysisSetup('static_analysis')
         
 ### Convenience function
-def transformation_newton_line_search_mumps(prb, mxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
+def transformation_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
     '''
-    solProc= TransformationNewtonLineSearchMUMPS(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
+    solProc= TransformationNewtonLineSearchMUMPS(prb,maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
     solProc.setup()
     return solProc.analysis
 
@@ -1082,7 +1082,7 @@ class PlainKrylovNewton(SolutionProcedure):
         self.analysisSetup('static_analysis')
 
 ### Convenience function
-def plain_krylov_newton(prb, mxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0, maxDim= 6):
+def plain_krylov_newton(prb, maxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0, maxDim= 6):
     ''' Return a plain Krylov Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 300)
@@ -1090,7 +1090,7 @@ def plain_krylov_newton(prb, mxNumIter= 300, convergenceTestTol= 1e-9, printFlag
     :param printFlag: print message on each iteration
     :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
     '''
-    solProc= PlainKrylovNewton(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, maxDim= 6)
+    solProc= PlainKrylovNewton(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, maxDim= 6)
     solProc.setup()
     return solProc.analysis
 

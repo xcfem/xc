@@ -717,6 +717,14 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
 
+    def getElasticMaterialData(self, overrideRho= None):
+        ''' Return an elastic material constitutive model.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+    
     def defElasticSection1d(self, preprocessor, overrideRho= None):
         ''' Return an elastic section appropriate for truss analysis.
 
@@ -724,7 +732,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticSection1d(preprocessor, material= mat, overrideRho= overrideRho)
     
     def defElasticSection3d(self, preprocessor, overrideRho= None):
@@ -734,7 +742,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticSection3d(preprocessor, material= mat, overrideRho= overrideRho)
     
     def defElasticShearSection3d(self, preprocessor, overrideRho= None):
@@ -745,7 +753,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
          '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticShearSection3d(preprocessor, material= mat, overrideRho= overrideRho)
     
     def defElasticSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
@@ -756,7 +764,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
         
     def defElasticShearSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
@@ -768,7 +776,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticShearSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
 
 class RCRectangularSection(BasicRectangularRCSection):

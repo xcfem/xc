@@ -202,10 +202,10 @@ class SimpleAnalysisContext(AnalysisContext):
         '''
         return None
 
-    def defineSolver(self, mxNumIter, convergenceTestTol, printFlag= 0):
+    def defineSolver(self, maxNumIter, convergenceTestTol, printFlag= 0):
         ''' Define the solver to use.
 
-        :param mxNumIter: maximum number of iterations (defauts to 10)
+        :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         '''
-        self.modelSpace.analysis= predefined_solutions.penalty_modified_newton(self.modelSpace.preprocessor.getProblem, mxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+        self.modelSpace.analysis= predefined_solutions.penalty_modified_newton(self.modelSpace.preprocessor.getProblem, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
