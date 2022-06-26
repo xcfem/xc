@@ -161,8 +161,6 @@ class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1
        ;
 
 
-
-
 #include "truss_beam_column/python_interface.tcc"
 #include "utils/coordTransformation/python_interface.tcc"
 

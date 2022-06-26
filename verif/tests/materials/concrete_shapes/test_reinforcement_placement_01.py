@@ -50,8 +50,9 @@ rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barArea
 areaB= rowB.getAs()
 area= areaA+areaB
 
-# Define reinforcement layers.
+## Define reinforcement layers.
 reinfLayers= def_simple_RC_section.LongReinfLayers([rowA, rowB])
+# End of the reinforcement definition.
 
 # Define reinforced concrete rectangular section.
 ## Materials.
@@ -62,7 +63,8 @@ b= width
 h= 0.20
 ## RC section.
 rcSection= def_simple_RC_section.RCRectangularSection(name='RC section', width= b, depth= h, concrType= concrete, reinfSteelType= steel)
-rcSection.positvRebarRows= reinfLayers # Reinforcement on the positive side.
+rcSection.positvRebarRows= reinfLayers # Reinforcement on the "positive" side.
+# End of the reinforced concrete section definition.
 
 # Define finite element problem.
 feProblem= xc.FEProblem()
@@ -97,17 +99,16 @@ elemHandler= preprocessor.getElementHandler
 elemHandler.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elemHandler.defaultMaterial= beamSection.name
 
+#### Create elements and its orientation
+# Element local "y" axis points upwards and in this circunstamces the reinforced# defined as so the reinforcement previously defined in "positvRebarRows" is
+# placed in the section bottom.
+
 beamElements= list()
 n0= beamNodes[0]
 for n1 in beamNodes[1:]:
     beamElements.append(elemHandler.newElement(elementType,xc.ID([n0.tag,n1.tag])))
     n0= n1
-# reversedNodes= list(reversed(beamNodes))
-# n0= reversedNodes[0]
-# for n1 in reversedNodes[1:]:
-#     beamElements.append(elemHandler.newElement(elementType,xc.ID([n0.tag,n1.tag])))
-#     n0= n1
-
+    
 ## Constraints
 nA= beamNodes[0]
 nB= beamNodes[-1]
@@ -156,15 +157,17 @@ ratio3= abs(vReacA[1]+vReacB[1]+q*span)
 ## Check deflection.
 ratio4= abs(vDisp[1]+11.36816624000106e-3)/11.36816624000106e-3
 
+'''
+print('span l= ', span, ' m')
+print('uniform load: q= ', q/1e3, 'kN/m')
 print('element type= ', elementType)
-print(nC.getCoo[0])
+print('C node position: x= ', nC.getCoo[0], 'm')
 print('ratio1= ', ratio1)
 print('vertical reactions: ', vReacA, vReacB)
 print('ratio2= ', ratio2)
 print('ratio3= ', ratio3)
 print('deflection = ', vDisp[1]*1e3, 'mm')
 print('ratio4= ', ratio4)
-'''
 '''
 
 import os
@@ -175,28 +178,28 @@ else:
     lmsg.error(fname+' ERROR.')
 
 
-#########################################################
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
+# #########################################################
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
 
-## Uncomment to display the mesh
-#oh.displayFEMesh()
+# ## Uncomment to display the mesh
+# #oh.displayFEMesh()
 
-## Uncomment to display the element axes
-oh.displayLocalAxes()
+# ## Uncomment to display the element axes
+# oh.displayLocalAxes()
 
-## Uncomment to display the loads
-#oh.displayLoads()
+# ## Uncomment to display the loads
+# #oh.displayLoads()
 
-## Uncomment to display the vertical displacement
-oh.displayDispRot(itemToDisp='uY')
-#oh.displayNodeValueDiagram(itemToDisp='uX')
+# ## Uncomment to display the vertical displacement
+# #oh.displayDispRot(itemToDisp='uY')
+# #oh.displayNodeValueDiagram(itemToDisp='uX')
 
-## Uncomment to display the reactions
-#oh.displayReactions()
+# ## Uncomment to display the reactions
+# #oh.displayReactions()
 
-## Uncomment to display the internal force
-oh.displayIntForcDiag('Mz')
-oh.displayIntForcDiag('Vy')
+# ## Uncomment to display the internal force
+# #oh.displayIntForcDiag('Mz')
+# #oh.displayIntForcDiag('Vy')
 

@@ -37,6 +37,18 @@ class SectionProperties(object):
         self.xc_material= None
         self.torsionalStiffnessFactor= 1.0
         
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.name == other.name)
+            if(retval):
+                retval= (self.xc_material == other.xc_material)
+            if(retval):
+                retval= (self.torsionalStiffnessFactor== other.torsionalStiffnessFactor)
+        else:
+            retval= True
+        return retval
+    
     def getDict(self):
         ''' Put member values in a dictionary.'''
         if(self.xc_material):
@@ -451,6 +463,18 @@ class RectangularSection(SectionProperties):
         super(RectangularSection,self).__init__(name)
         self.b= b
         self.h= h
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(RectangularSection,self).__eq__(other)
+            if(retval):
+                retval= (self.b == other.b)
+            if(retval):
+                retval= (self.h== other.h)
+        else:
+            retval= True
+        return retval
       
     def A(self):
         '''Return cross-sectional area of the section'''
@@ -625,8 +649,20 @@ class CircularSection(SectionProperties):
     def __init__(self,name,Rext,Rint=0):
         super(CircularSection,self).__init__(name)
         self.Rext= Rext
-        self.Rint=Rint
+        self.Rint= Rint
       
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(CircularSection,self).__eq__(other)
+            if(retval):
+                retval= (self.Rext == other.Rext)
+            if(retval):
+                retval= (self.Rint== other.Rint)
+        else:
+            retval= True
+        return retval
+    
     def A(self):
         '''Return cross-sectional area of the section'''
         return math.pi*(self.Rext*self.Rext-self.Rint*self.Rint)
@@ -740,6 +776,30 @@ class GenericSection(SectionProperties):
         self.alphY=alphY
         self.alphZ=alphZ
       
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(GenericSection,self).__eq__(other)
+            if(retval):
+                retval= (self.area == other.area)
+            if(retval):
+                retval= (self.I_y == other.I_y)
+            if(retval):
+                retval= (self.I_z == other.I_z)
+            if(retval):
+                retval= (self.Jtors == other.Jtors)
+            if(retval):
+                retval= (self.W_y == other.W_y)
+            if(retval):
+                retval= (self.W_z == other.W_z)
+            if(retval):
+                retval= (self.alphY == other.alphY)
+            if(retval):
+                retval= (self.alphZ == other.alphZ)
+        else:
+            retval= True
+        return retval
+    
     def A(self):
         '''Return cross-sectional area'''
         return self.area
@@ -816,6 +876,26 @@ class ISection(SectionProperties):
         self.wBF= wdBotFlange
         self.tBF= thBotFlange
       
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(ISection,self).__eq__(other)
+            if(retval):
+                retval= (self.wTF == other.wTF)
+            if(retval):
+                retval= (self.tTF == other.tTF)
+            if(retval):
+                retval= (self.tW == other.tW)
+            if(retval):
+                retval= (self.hW == other.hW)
+            if(retval):
+                retval= (self.wBF == other.wBF)
+            if(retval):
+                retval= (self.tBF == other.tBF)
+        else:
+            retval= True
+        return retval
+    
     def hTotal(self):
         '''Return total height (parallel to local y axis) of the section
         '''
@@ -910,6 +990,16 @@ class PolygonalSection(SectionProperties):
         super(PolygonalSection,self).__init__(name)
         self.plg= plg
         self.reCenter()
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(PolygonalSection,self).__eq__(other)
+            if(retval):
+                retval= (self.plg == other.plg)
+        else:
+            retval= True
+        return retval
         
     def reCenter(self):
         '''Put the centroid of the section in the
@@ -1029,6 +1119,24 @@ class TSection(PolygonalSection):
         self.chamferSide= chamferSide
         super(TSection, self).__init__(name= name, plg= self.buildContour())
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(PolygonalSection,self).__eq__(other)
+            if(retval):
+                retval= (self.webWidth == other.webWidth)
+            if(retval):
+                retval= (self.webHeight == other.webHeight)
+            if(retval):
+                retval= (self.flangeWidth == other.flangeWidth)
+            if(retval):
+                retval= (self.flangeThickness == other.flangeThickness)
+            if(retval):
+                retval= (self.chamferSide == other.chamferSide)
+        else:
+            retval= True
+        return retval
+    
     def buildContour(self):
         ''' Create the section contour.'''
         contour= geom.Polygon2d()
@@ -1127,6 +1235,20 @@ class CompoundSection(SectionProperties):
         super(CompoundSection,self).__init__(name)
         self.sectionList= section_list
       
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(CompoundSection,self).__eq__(other)
+            if(retval):
+                retval= (len(self.sectionList) == len(other.sectionList))
+            for sectionA, sectionB in zip(self.sectionList, other.sectionList):
+                retval= (sectionA == sectionB)
+                if(not retval):
+                    break
+        else:
+            retval= True
+        return retval
+    
     def A(self):
         '''cross-sectional area'''
         retval= 0.0

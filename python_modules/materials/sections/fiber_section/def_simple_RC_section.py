@@ -62,6 +62,24 @@ class ShearReinforcement(object):
         self.angAlphaShReinf= angAlphaShReinf # angle between the shear reinforcing bars and the axis of the member.
         self.angThetaConcrStruts= angThetaConcrStruts # angle between the concrete's compression struts and the axis of the member
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.familyName == other.familyName)
+            if(retval):
+                retval= (self.nShReinfBranches == other.nShReinfBranches)
+            if(retval):
+                retval= (self.areaShReinfBranch == other.areaShReinfBranch)
+            if(retval):
+                retval= (self.shReinfSpacing == other.shReinfSpacing)
+            if(retval):
+                retval= (self.angAlphaShReinf == other.angAlphaShReinf)
+            if(retval):
+                retval= (self.angThetaConcrStruts == other.angThetaConcrStruts)
+        else:
+            retval= True
+        return retval
+    
     def getAs(self):
         '''returns the area per unit length of the family of shear 
            reinforcements.
@@ -119,6 +137,26 @@ class ReinfRow(object):
         self.cover= nominalCover+self.rebarsDiam/2.0
         self.centerRebars(width)
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.rebarsDiam == other.rebarsDiam)
+            if(retval):
+                retval= (self.areaRebar == other.areaRebar)
+            if(retval):
+                retval= (self.rebarsSpacing == other.rebarsSpacing)
+            if(retval):
+                retval= (self.nRebars == other.nRebars)
+            if(retval):
+                retval= (self.width == other.width)
+            if(retval):
+                retval= (self.nominalCover == other.nominalCover)
+            if(retval):
+                retval= (self.nominalLatCover == other.nominalLatCover)
+        else:
+            retval= True
+        return retval
+    
     def getAs(self):
         ''' Returns the total cross-sectional area of reinforcing steel 
            in the family.
@@ -196,6 +234,19 @@ class LongReinfLayers(object):
             self.rebarRows= list()
         self.reinfLayers= list()  # list of StraightReinfLayer created.
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (len(self.rebarRows) == len(other.rebarRows))
+            if(retval):
+                for rowA, rowB in zip(self.rebarRows, other.rebarRows):
+                    retval= (rowA==rowB)
+                    if(not retval):
+                        break
+        else:
+            retval= True
+        return retval
+    
     def __getitem__(self, index):
         '''Return the i-th reinforcement row.'''
         return self.rebarRows[index]
@@ -361,6 +412,24 @@ class RCFiberSectionParameters(object):
         self.reinfDiagName= None # Name of the uniaxial material
         self.nDivIJ= nDivIJ
         self.nDivJK= nDivJK
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.concrType == other.concrType)
+            if(retval):
+                retval= (self.concrDiagName == other.concrDiagName)
+            if(retval):
+                retval= (self.reinfSteelType == other.reinfSteelType)
+            if(retval):
+                retval= (self.reinfDiagName == other.reinfDiagName)
+            if(retval):
+                retval= (self.nDivIJ == other.nDivIJ)
+            if(retval):
+                retval= (self.nDivJK == other.nDivJK)
+        else:
+            retval= True
+        return retval
 
     def nDivCirc(self):
         '''Alias for nDivIJ when defining circular sections.'''
@@ -440,25 +509,58 @@ class RCSectionBase(object):
                                   concrete fiber section.
     :ivar fiberSectionRepr: fiber model of the section.
     '''
-    def __init__(self, sectionDescr= None, concrType=None,reinfSteelType=None, nIJ= 10, nJK= 10):
+    def __init__(self, sectionDescr= None, concrType=None,reinfSteelType=None, nDivIJ= 10, nDivJK= 10):
         ''' Constructor.
 
         :param sectionDescr: section description.
         :param concrType: type of concrete (e.g. EHE_materials.HA25).     
         :param reinfSteelType: type of reinforcement steel.
-        :param nIJ: number of cells in IJ (width or radial) direction.
-        :param nJK: number of cells in JK (height or tangential) direction.
+        :param nDivIJ: number of cells in IJ (width or radial) direction.
+        :param nDivJK: number of cells in JK (height or tangential) direction.
         '''
         self.sectionDescr= 'Text describing the role/position of the section in the structure.'
         if(sectionDescr):
             self.sectionDescr= sectionDescr
-        self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nIJ, nDivJK= nJK)
+        self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         self.fiberSectionRepr= None
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.sectionDescr == other.sectionDescr)
+            if(retval):
+                retval= (self.fiberSectionParameters == other.fiberSectionParameters)
+            if(retval):
+                retval= (self.fiberSectionRepr == other.fiberSectionRepr)
+        else:
+            retval= True
+        return retval
+    
+    def getCopy(self):
+        ''' Returns a copy of the object.'''
+        retval= RCSectionBase(sectionDescr= self.sectionDescr, concrType= self.getConcreteType(), reinfSteelType= self.getReinfSteelType(), nDivIJ= self.getNDivIJ(), nDivJK= self.getNDivJK())
+        return retval
 
     def gmSectionName(self):
         ''' returns the name of the geometric section'''
         return "geom"+self.name
-                
+
+    def getConcreteType(self):
+        ''' returns the concrete type of this sections.'''
+        return self.fiberSectionParameters.concrType
+    
+    def getReinfSteelType(self):
+        ''' returns the type of the reinforcing steel in this sections.'''
+        return self.fiberSectionParameters.reinfSteelType
+
+    def getNDivIJ(self):
+        ''' Return the number of cells in IJ (width or radial) direction.'''
+        return self.fiberSectionParameters.nDivIJ
+
+    def getNDivJK(self):
+        ''' Return the number of cells in JK (height or tangential) direction.'''
+        return self.fiberSectionParameters.nDivJK
+    
     def getConcreteDiagram(self,preprocessor):
         ''' Return the concrete stress-strain diagram.
 
@@ -650,7 +752,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
     :ivar shReinfY:        record of type ShearReinforcement
                            defining the shear reinforcement in Y direction
     '''
-    def __init__(self,name= None, sectionDescr= None, width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    def __init__(self,name= None, sectionDescr= None, width=0.25,depth=0.25,concrType=None, reinfSteelType=None, nDivIJ= 10, nDivJK= 10):
         ''' Constructor.
 
         :param name: name of the section     
@@ -660,7 +762,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 10, nJK= 10)
+        RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         section_properties.RectangularSection.__init__(self,name,width,depth)
 
         # Transverse reinforcement (z direction)
@@ -670,6 +772,25 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         # Transverse reinforcement (y direction)
         self.shReinfY= ShearReinforcement()
         self.shReinfY.familyName= "Vy"
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(BasicRectangularRCSection, self).__eq__(other)
+            if(retval):
+                retval= section_properties.RectangularSection.__eq__(self, other)
+            if(retval):
+                retval= (self.shReinfZ== other.shReinfZ)
+            if(retval):
+                retval= (self.shReinfY== other.shReinfY)
+        else:
+            retval= True
+        return retval
+
+    def getCopy(self):
+        ''' Returns a deep enough copy of the object.'''
+        retval= BasicRectangularRCSection(name= self.name, sectionDescr= self.sectionDescr, concrType= self.getConcreteType(), reinfSteelType= self.getReinfSteelType(), width= self.b, depth= self.h, nDivIJ= self.getNDivIJ(), nDivJK= self.getNDivJK())
+        return retval
 
     def getShearReinfY(self):
         '''Return the shear reinforcement for Vy.'''
@@ -791,7 +912,7 @@ class RCRectangularSection(BasicRectangularRCSection):
                            the section
     '''
     
-    def __init__(self, name= None, sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None):
+    def __init__(self, name= None, sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None, nDivIJ= 10, nDivJK= 10):
         ''' Constructor.
 
         :param name: name of the section 
@@ -801,12 +922,34 @@ class RCRectangularSection(BasicRectangularRCSection):
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        super(RCRectangularSection,self).__init__(name,sectionDescr,width,depth,concrType,reinfSteelType)
+        super(RCRectangularSection,self).__init__(name= name, sectionDescr= sectionDescr, width= width, depth= depth, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
 
         # Longitudinal reinforcement
         self.minCover= 0.0 
         self.positvRebarRows= LongReinfLayers() # list of ReinfRow data (positive face)
         self.negatvRebarRows= LongReinfLayers() # list of ReinfRow data (negative face)
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(RCRectangularSection, self).__eq__(other)
+            if(retval):
+                retval= (self.minCover == other.minCover)
+            if(retval):
+                retval= (self.shReinfZ == other.shReinfZ)
+            if(retval):
+                retval= (self.shReinfY == other.shReinfY)
+            if(retval):
+                retval= (self.positvRebarRows == other.positvRebarRows)
+            if(retval):
+                retval= (self.negatvRebarRows == other.negatvRebarRows)
+        else:
+            retval= True
+        return retval
+    
+    def getCopy(self):
+        ''' Returns a deep enough copy of the object.'''
+        retval= RCRectangularSection(name= self.name, sectionDescr= self.sectionDescr, concrType= self.getConcreteType(), reinfSteelType= self.getReinfSteelType(), width= self.b, depth= self.h, nDivIJ= self.getNDivIJ(), nDivJK= self.getNDivJK())
+        return retval
 
     def getAsPos(self):
         '''returns the cross-sectional area of the rebars in the positive face.'''
@@ -1051,14 +1194,18 @@ class RCRectangularSection(BasicRectangularRCSection):
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(self.geomSection)
         reinforcement= self.geomSection.getReinfLayers
+        # Placement of the negative reinforcement.
         negPoints= list()
+        ## Compute positions.
         for rbRow in self.negatvRebarRows.rebarRows:
             y= -self.h/2.0+rbRow.cover
             p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
             negPoints.append((p1,p2))
         self.negatvRebarRows.defStraightLayers(reinforcement,"neg",self.fiberSectionParameters.reinfDiagName,negPoints)
+        # Placement of the positive reinforcement.
         posPoints= list()
+        ## Compute positions.
         for rbRow in self.positvRebarRows.rebarRows:
             y= self.h/2.0-rbRow.cover
             p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)

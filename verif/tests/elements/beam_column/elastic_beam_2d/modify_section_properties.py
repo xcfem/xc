@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# Home made test
-'''Modification of the section properties of an element (area, inertia,...)'''
+''' Modification of the section properties of an element (area, inertia,...). 
+    Home made test.
+'''
 
 from __future__ import print_function
 from __future__ import division
