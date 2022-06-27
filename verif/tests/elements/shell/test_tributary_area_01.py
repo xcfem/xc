@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Verification test taken from example 2-005 of 
    the SAP 2000 verification manual.'''
+from __future__ import print_function
 
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -33,9 +33,6 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-# Define materials
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
-
 
 # Define materials
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
