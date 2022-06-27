@@ -34,21 +34,18 @@ spacing= 0.15 # spacing of reinforcement.
 nBarsA= 10 # number of bars.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-width= nBarsA*spacing+2.0*lateralCover
+width= (nBarsA-1)*spacing+2.0*lateralCover
 
 ## First row
 barDiameter= 25e-3 # Diameter of the reinforcement bar.
 barAreaA= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaA, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
-areaA= rowA.getAs()
 
 ## Second row
 barAreaB= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
 rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaB, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
-areaB= rowB.getAs()
-area= areaA+areaB
 
 ## Define reinforcement layers.
 reinfLayers= def_simple_RC_section.LongReinfLayers([rowA, rowB])
@@ -155,7 +152,7 @@ ratio2= abs(vReacA[0]+vReacB[0])
 ## Check vertical reactions.
 ratio3= abs(vReacA[1]+vReacB[1]+q*span)
 ## Check deflection.
-ratio4= abs(vDisp[1]+11.36816624000106e-3)/11.36816624000106e-3
+ratio4= abs(vDisp[1]+12.687263541949143e-3)/12.687263541949143e-3
 
 '''
 print('span l= ', span, ' m')

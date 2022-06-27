@@ -39,21 +39,18 @@ spacing= 0.15 # spacing of reinforcement.
 nBarsA= 10 # number of bars.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-width= nBarsA*spacing+2.0*lateralCover
+width= (nBarsA-1)*spacing+2.0*lateralCover
 
 ## First row.
 barDiameter= 25e-3 # Diameter of the reinforcement bar.
 barAreaA= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaA, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
-areaA= rowA.getAs()
 
 ## Second row.
 barAreaB= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
 rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaB, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
-areaB= rowB.getAs()
-area= areaA+areaB
 
 ## Concrete geometry.
 ## Materials.
@@ -108,7 +105,7 @@ modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 #### Store element reinforcement.
 for e in beamElements:
     e.setProp("baseSection", rcSection)
-    e.setProp("reinforcementOrientation", geom.Vector3d(0,1,0)) # Y+
+    e.setProp("reinforcementUpVector", geom.Vector3d(0,1,0)) # Y+
     e.setProp("positiveReinforcement", def_simple_RC_section.LongReinfLayers([rowA]))
     e.setProp("negativeReinforcement", def_simple_RC_section.LongReinfLayers())
     x= e.getPosCentroid(True).x
@@ -123,9 +120,9 @@ rcSections= def_simple_RC_section.get_element_rc_sections(beamElements)
 ##### Create corresponding XC materials.
 for i, s in enumerate(rcSections):
     s.name+= str(i)
-    s.defRCSection2d(preprocessor,matDiagType= 'k') # Create XC material.
+    s.defRCSection2d(preprocessor, matDiagType= 'k') # Create XC material.
 
-#### Assing material to elements.
+#### Assign material to elements.
 for s in rcSections:
     for eTag in s.elements:
         elem= elemHandler.getElement(eTag)
@@ -169,10 +166,11 @@ ratio2= abs(vReacA[0]+vReacB[0])
 ## Check vertical reactions.
 ratio3= abs(vReacA[1]+vReacB[1]+q*span)
 ## Check deflection.
-ratio4= abs(vDisp[1]+12.725382131697922e-3)/12.725382131697922e-3
+ratio4= abs(vDisp[1]+14.187242585506766e-3)/14.187242585506766e-3
 
 '''
 print('span l= ', span, ' m')
+print('width= ', width, ' m')
 print('uniform load: q= ', q/1e3, 'kN/m')
 print('C node position: x= ', nC.getCoo[0], 'm')
 print('ratio1= ', ratio1)
