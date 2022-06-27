@@ -38,13 +38,6 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
 
-
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= memb1.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
-
-
-
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d(CooMaxX,0.0,0.0))
@@ -55,7 +48,10 @@ s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
-
+# Generate mesh.
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= memb1.name
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 s.genMesh(xc.meshDir.I)
 constraints= preprocessor.getBoundaryCondHandler
