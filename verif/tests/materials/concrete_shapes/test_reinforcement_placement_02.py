@@ -118,13 +118,14 @@ for e in beamElements:
 rcSections= def_simple_RC_section.get_element_rc_sections(beamElements)
 
 ##### Create corresponding XC materials.
-for i, s in enumerate(rcSections):
-    s.name+= str(i)
+for s in rcSections:
     s.defRCSection2d(preprocessor, matDiagType= 'k') # Create XC material.
 
 #### Assign material to elements.
 for s in rcSections:
-    for eTag in s.elements:
+    for tple in s.elements:
+        # Each tuple has (element tag, section number).
+        eTag= tple[0] # Only one section, no need to go forward.
         elem= elemHandler.getElement(eTag)
         elem.setMaterial(s.name)
         

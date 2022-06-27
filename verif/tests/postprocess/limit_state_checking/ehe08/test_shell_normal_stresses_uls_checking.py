@@ -52,7 +52,7 @@ sepT= 1.0/numReinfBarsT
 numReinfBarsL= 7
 sepL= 1.0/numReinfBarsL
 
-sections= reinfConcreteSections.sectionDefinition
+sections= reinfConcreteSections.sectionDefinition # Get the sections container.
 
 deckSections= element_section_map.RCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
 deckSections.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)])

@@ -52,10 +52,10 @@ s.nDivJ= NumDivJ
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
-
 s.genMesh(xc.meshDir.I)
-constraints= preprocessor.getBoundaryCondHandler
 
+# Constraints.
+constraints= preprocessor.getBoundaryCondHandler
 sides= s.getSides
 for l in sides:
     for i in l.getEdge.getNodeTags():

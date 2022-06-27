@@ -58,6 +58,20 @@ class RCMaterialDistribution(object):
         self.sectionDistribution.assign(elemSet,setRCSects)
         self.elementSetNames.append(elemSet.owner.name)
 
+    def assignFromElementProperties(self, preprocessor, matDiagType, elemSet):
+        '''Creates the section materials from the element properties
+           and assigns them to the elements of the argument set .
+
+           :param preprocessor: preprocessor of the finite element problem.
+           :param matDiagType: type of stress-strain diagram 
+                               ("k" for characteristic diagram, "d" for design diagram)
+           :param elemSet: set of elements that receive the section names 
+                           property.
+        '''
+        retval= self.sectionDistribution.assignFromElementProperties(preprocessor= preprocessor, matDiagType= matDiagType, elemSet= elemSet)
+        self.elementSetNames.append(elemSet.owner.name)
+        return retval
+        
     def getElementSet(self,preprocessor):
         '''Returns an XC set that contains all the elements with an
            assigned section.'''

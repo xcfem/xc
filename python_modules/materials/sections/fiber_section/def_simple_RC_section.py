@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
+import sys
 import math
 import uuid
 import geom
@@ -900,6 +901,17 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticShearSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
 
+    def defElasticMembranePlateSection(self, preprocessor, overrideRho= None):
+        '''Constructs an elastic isotropic section material appropriate 
+           for plate and shell analysis.
+
+        :param preprocessor: XC preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
+        return super(BasicRectangularRCSection, self).defElasticMembranePlateSection(preprocessor= preprocessor, material= mat, overrideRho= overrideRho)
+
 class RCRectangularSection(BasicRectangularRCSection):
     ''' This class is used to define the variables that make up a reinforced 
         concrete section with top and bottom reinforcement layers.
@@ -1228,13 +1240,14 @@ class RCRectangularSection(BasicRectangularRCSection):
         return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
 
-def get_element_rc_sections(elements):
+def get_element_rc_sections(elements, propName= None):
     ''' Return a list containing the reinforced concrete sections from the
-        properties defined in the elements arguments. Those properties are
+        properties defined in the elements arguments. Those properties are:
+
         - baseSection: RCSectionBase derived object containing the geometry
                        and the material properties of the reinforcec concrete
                        section.
-        - reinforcementOrientation: reinforcement "up" direction which defines
+        - reinforcementUpVector: reinforcement "up" direction which defines
                                     the position of the positive reinforcement
                                     (bottom) and the negative reinforcement
                                     (up).
@@ -1245,25 +1258,78 @@ def get_element_rc_sections(elements):
      
      :param elements: elements for which the reinforce concrete sections 
                       will be computed.
+     :param propName: name of the property that stores the section names.
     '''
     retval= list()
-    for e in elements:
-        reinforcementOrientation= e.getProp("reinforcementOrientation") # reinforcement "up" direction.
-        elementOrientation= e.getJVector3d(False)
-        orientation= reinforcementOrientation.dot(elementOrientation)
-        baseSection= e.getProp('baseSection').getCopy()
-        if(orientation>0): # bottom reinforcement.
-            baseSection.positvRebarRows= e.getProp("positiveReinforcement")
-            baseSection.negatvRebarRows= e.getProp("negativeReinforcement")
-        else: # Reverse position.
-            baseSection.negatvRebarRows= e.getProp("positiveReinforcement")
-            baseSection.positvRebarRows= e.getProp("negativeReinforcement")
-        if(baseSection not in retval):
-            baseSection.elements= [e.tag]
-            retval.append(baseSection)
-        else:
-            idx= retval.index(baseSection)
-            retval[idx].elements.append(e.tag)
+    for el in elements:
+        reinforcementUpVector= el.getProp("reinforcementUpVector") # reinforcement "up" direction.
+        baseSection= el.getProp('baseSection').getCopy()
+        dim= el.getDimension
+        if(dim==1):
+            elementUpOrientation= el.getJVector3d(False)
+            upOrientation= reinforcementUpVector.dot(elementUpOrientation)
+            pR= el.getProp("positiveReinforcement")
+            nR= el.getProp("negativeReinforcement")
+            if(upOrientation<0): # reverse position.
+                pR, nR= nR, pR
+            baseSection.positvRebarRows= pR
+            baseSection.negatvRebarRows= nR
+            elementSections= [baseSection]
+        elif(dim==2):
+            elementUpOrientation= el.getKVector3d(False)
+            upOrientation= reinforcementUpVector.dot(elementUpOrientation)
+            reinforcementIVector= el.getProp('reinforcementIVector') # direction of the reinforcement in the slab.
+            elementIOrientation= el.getIVector3d(False)
+            iOrientation= reinforcementIVector.dot(elementIOrientation)
+            pRI= el.getProp("positiveReinforcementI")
+            nRI= el.getProp("negativeReinforcementI")
+            pRII= el.getProp("positiveReinforcementII")
+            nRII= el.getProp("negativeReinforcementII")
+            if(iOrientation<0): # reverse reinforcement directions.
+                pRI, pRII= pRII, pRI
+                nRI, nRII= nRII, nRI
+            if(upOrientation<0): # reverse top and bottom positions.
+                pRI, nRI= nRI, pRI
+                pRII, nRII= nRII, pRII
+            baseSection.name+= 'I'
+            baseSection.positvRebarRows= pRI
+            baseSection.negatvRebarRows= nRI
+            baseSectionII= baseSection.getCopy()
+            baseSectionII.name+= 'II'
+            baseSectionII.positvRebarRows= pRII
+            baseSectionII.negatvRebarRows= nRII
+            elementSections= [baseSection, baseSectionII]
+        # Assign elements to each section.
+        for i, eSection in enumerate(elementSections):
+            if(eSection not in retval):
+                eSection.elements= [(el.tag, i)]
+                retval.append(eSection)
+            else:
+                idx= retval.index(eSection)
+                retval[idx].elements.append((el.tag, i))
+    # Rename the new sections.        
+    for i, s in enumerate(retval):
+        s.name+= str(i)
+
+    if(not propName is None and (len(elements)>0)):
+        # Assign the sections names to the elements
+        preprocessor= elements[0].getDomain.getPreprocessor
+        elemHandler= preprocessor.getElementHandler
+        for elm in elements:
+            elm.setProp(propName, ['','']) # Initialize property
+        for sct in retval:
+            for tple in sct.elements:
+                # Each tuple has (element tag, section number).
+                eTag= tple[0] 
+                sectionIdx= tple[1]
+                element= elemHandler.getElement(eTag)
+                sectionNames= element.getProp(propName)
+                if(sectionNames[sectionIdx]!=''):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+'; element '+str(eTag) + ' has alreade section: '+sectionNames[sectionIdx])
+                sectionNames[sectionIdx]= sct.name
+                element.setProp(propName, sectionNames)
     return retval
 
                                   

@@ -4,6 +4,7 @@ from __future__ import division
 from __future__ import print_function
 
 import copy
+import sys
 from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import def_simple_RC_section
 from materials import typical_materials
@@ -521,7 +522,8 @@ class ElementSectionMap(dict):
        for each element number. This way it defines
        a spatial distribution of the sections over
        the structure.'''
-    propName= 'name'
+    propName= 'name' # Name of the property that stores the section names.
+    
     def assign(self,elemSet,setRCSects):
         '''Assigns the sections names to the elements of the set.
 
@@ -531,7 +533,9 @@ class ElementSectionMap(dict):
                               rebar positions,...
         '''
         if len(elemSet)== 0:
-            lmsg.warning("element set is empty\n")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning("element set is empty.\n")
 
         for e in elemSet:
             if(not e.hasProp(self.propName)):
@@ -542,4 +546,26 @@ class ElementSectionMap(dict):
             else:
               lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
 
+    def assignFromElementProperties(self, preprocessor, matDiagType, elemSet):
+        '''Creates the section materials from the element properties
+           and assigns them to the elements of the argument set .
+
+           :param preprocessor: preprocessor of the finite element problem.
+           :param matDiagType: type of stress-strain diagram 
+                               ("k" for characteristic diagram, "d" for design diagram)
+           :param elemSet: set of elements that receive the section names 
+                           property.
+        '''
+        if len(elemSet)== 0:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning("element set is empty.\n")
+            
+        # Compute the sections from the element properties.
+        rcSections= def_simple_RC_section.get_element_rc_sections(elemSet, propName= self.propName)
+        # Create the corresponding XC materials.
+        for s in rcSections:
+            s.defRCSection2d(preprocessor= preprocessor, matDiagType= matDiagType)
+        return rcSections
+        
 
