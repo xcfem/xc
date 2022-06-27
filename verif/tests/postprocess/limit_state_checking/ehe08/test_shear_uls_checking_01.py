@@ -100,7 +100,7 @@ lsd.shearResistance.saveAll(combContainer,totalSet)
 # main direction; in the case of beam elements the most common way is to define
 # RC sections in the front and back ends of the elements)
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
-sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sections container
+sections= reinfConcreteSectionDistribution.sectionDefinition # get the sections container
 
 #Generic layers (rows of rebars). Other instance variables that we can define
 #for ReinfRows are coverLat and nRebars.If we define nRebars that
