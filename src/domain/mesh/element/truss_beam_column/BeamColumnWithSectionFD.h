@@ -51,6 +51,7 @@ class BeamColumnWithSectionFD: public Element1D
 
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
+    void set_material(const Material *m);
   public:
     BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc= 1);
     BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const Material *m);
@@ -61,6 +62,7 @@ class BeamColumnWithSectionFD: public Element1D
 
     void setTrialSectionDeformations(const std::vector<Vector> &vs);
 
+    void setMaterial(const std::string &);    
     virtual void setSection(const PrismaticBarCrossSection *sccModel);
     bool setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs);
     inline size_t getNumSections(void) const

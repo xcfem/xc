@@ -54,6 +54,7 @@ class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d"
 class_<XC::BeamColumnWithSectionFD, bases<XC::Element1D>, boost::noncopyable >("BeamColumnWithSectionFD", no_init)
   .def("getNumSections",&XC::BeamColumnWithSectionFD::getNumSections)
   .def("getSections",make_function(&XC::BeamColumnWithSectionFD::getSections, return_internal_reference<>() ),"Returns element's sections.")
+  .def("setMaterial", &XC::BeamColumnWithSectionFD::setMaterial,"Assigns a different material to the element.")
    ;
 
 class_<XC::BeamColumnWithSectionFDTrf2d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf2d", no_init)

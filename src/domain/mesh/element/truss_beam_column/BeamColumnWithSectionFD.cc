@@ -90,6 +90,35 @@ int XC::BeamColumnWithSectionFD::revertToStart(void)
     return retval;
   }
 
+//! @brief Try to set the element material by downcasting the
+//! pointer argument.
+void XC::BeamColumnWithSectionFD::set_material(const Material *m)
+  {
+    if(m)
+      {
+        const PrismaticBarCrossSection *scc= dynamic_cast<const PrismaticBarCrossSection *>(m);
+        if(scc)
+          setSection(scc);
+        else
+          {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; material type: '" << m->getClassName()
+	              << "' is not valid.\n";
+          }
+      }
+    else
+      if(verbosity>0)
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer to material is null." << std::endl;
+  }
+//! @brief Set the element material.
+void XC::BeamColumnWithSectionFD::setMaterial(const std::string &matName)
+  {
+    const Material *ptr_mat= get_material_ptr(matName);
+    if(ptr_mat)
+      { set_material(ptr_mat); }
+  }
+
 void XC::BeamColumnWithSectionFD::setSection(const PrismaticBarCrossSection *matModel)
   { theSections.setSection(matModel); }
 

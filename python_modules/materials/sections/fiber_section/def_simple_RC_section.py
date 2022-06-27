@@ -1228,3 +1228,42 @@ class RCRectangularSection(BasicRectangularRCSection):
         return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
 
+def get_element_rc_sections(elements):
+    ''' Return a list containing the reinforced concrete sections from the
+        properties defined in the elements arguments. Those properties are
+        - baseSection: RCSectionBase derived object containing the geometry
+                       and the material properties of the reinforcec concrete
+                       section.
+        - reinforcementOrientation: reinforcement "up" direction which defines
+                                    the position of the positive reinforcement
+                                    (bottom) and the negative reinforcement
+                                    (up).
+        - positiveReinforcement: LongReinfLayers objects defining the positive
+                                 reinforcement.
+        - negativeReinforcement: LongReinfLayers objects defining the negative
+                                 reinforcement.
+     
+     :param elements: elements for which the reinforce concrete sections 
+                      will be computed.
+    '''
+    retval= list()
+    for e in elements:
+        reinforcementOrientation= e.getProp("reinforcementOrientation") # reinforcement "up" direction.
+        elementOrientation= e.getJVector3d(False)
+        orientation= reinforcementOrientation.dot(elementOrientation)
+        baseSection= e.getProp('baseSection').getCopy()
+        if(orientation>0): # bottom reinforcement.
+            baseSection.positvRebarRows= e.getProp("positiveReinforcement")
+            baseSection.negatvRebarRows= e.getProp("negativeReinforcement")
+        else: # Reverse position.
+            baseSection.negatvRebarRows= e.getProp("positiveReinforcement")
+            baseSection.positvRebarRows= e.getProp("negativeReinforcement")
+        if(baseSection not in retval):
+            baseSection.elements= [e.tag]
+            retval.append(baseSection)
+        else:
+            idx= retval.index(baseSection)
+            retval[idx].elements.append(e.tag)
+    return retval
+
+                                  
