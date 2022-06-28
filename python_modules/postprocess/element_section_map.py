@@ -181,7 +181,6 @@ class RawShellSections(ElementSections):
         for i, templateSection in enumerate(self.templateSections):
             name= templateSection.name
             if(not name in self.alreadyDefinedSections): # new section.
-                templateSection.flipReinforcement()
                 self.append_section(templateSection)
                 self.alreadyDefinedSections.append(name)
     

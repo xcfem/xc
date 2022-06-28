@@ -1289,10 +1289,11 @@ def get_element_rc_sections(elements, propName= None):
             nRI= el.getProp("negativeReinforcementI")
             pRII= el.getProp("positiveReinforcementII")
             nRII= el.getProp("negativeReinforcementII")
-            if(iOrientation<0): # reverse reinforcement directions.
+            if(abs(iOrientation)<1e-3): # reverse reinforcement directions.
                 pRI, pRII= pRII, pRI
                 nRI, nRII= nRII, nRI
-            if(upOrientation<0): # reverse top and bottom positions.
+            if(upOrientation>0): # for 2D elements reverse top and bottom
+                                 # positions if dot product > 0.
                 pRI, nRI= nRI, pRI
                 pRII, nRII= nRII, pRII
             baseSection.name+= 'I'
