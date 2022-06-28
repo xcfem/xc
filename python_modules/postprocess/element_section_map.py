@@ -41,10 +41,8 @@ class ElementSections(object):
                       lstRCSects[3]= integration point 2, direction 2
                       lstRCSects[4]= integration point 3, direction 1
                       lstRCSects[5]= integration point 3, direction 2                      
-    :ivar elemSet: set with the elements to which to assign the section
-                   (defaults to None).
     ''' 
-    def __init__(self,name,directions= [1, 2], gaussPoints= [1], elemSet= None):
+    def __init__(self,name,directions= [1, 2], gaussPoints= [1]):
         '''Constructor.
 
         :param name: name given to the list of reinforced concrete sections
@@ -52,14 +50,11 @@ class ElementSections(object):
                           point.
         :param gaussPoints: list of the integration points to consider for each
                            element.
-        :param elemSet: set with the elements to which to assign the section.
-                   (defaults to None).
         '''
         self.name=name
         self.directions= directions
         self.gaussPoints= gaussPoints
         self.lstRCSects= list()
-        self.elemSet= elemSet
 
     def append_section(self,RCSect):
         ''' Append the section argument to the container.
@@ -138,7 +133,7 @@ class setRCSections2SetElVerif(ElementSections):
        sections. The items of the list are instances of the 
        object *RCRectangularSection*
     ''' 
-    def __init__(self,name, directions, gaussPoints, elemSet):
+    def __init__(self,name, directions, gaussPoints):
         '''Constructor.
 
 
@@ -147,9 +142,8 @@ class setRCSections2SetElVerif(ElementSections):
                           point.
         :param gaussPoints: list of the integration points to consider for each
                            element.
-        :param elemSet: set with the elements to which to assign the section.
         '''
-        super(setRCSections2SetElVerif,self).__init__(name,directions, gaussPoints, elemSet)
+        super(setRCSections2SetElVerif,self).__init__(name,directions, gaussPoints)
 
     def setShearReinf(self,sectNmb,nShReinfBranches,areaShReinfBranch,spacing):
         '''sets parameters of the shear reinforcement of the simple section 
@@ -259,7 +253,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
                         the Z shear reinforcement in section 2
 
     '''
-    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0, elemSet= None):
+    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0):
         '''Constructor.
 
 
@@ -269,10 +263,8 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         :param reinfSteelType:  type of reinforcement steel.
         :param depth:           cross-section depth.
         :param width:           cross-section width (defaults to 1.0).
-        :param elemSet:  set with the elements to which to assign the section.
-                         (defaults to None)
         '''
-        super(RCSlabBeamSection,self).__init__(name,directions= [1,2], gaussPoints= [1], elemSet= elemSet)
+        super(RCSlabBeamSection,self).__init__(name,directions= [1,2], gaussPoints= [1])
         self.sectionDescr= sectionDescr
         self.concrType= concrType
         self.reinfSteelType= reinfSteelType
@@ -470,7 +462,7 @@ class RCMemberSection(ElementSections):
        sections. The items of the list are instances of the object 
        *RCRectangularSection*
     ''' 
-    def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2], elemSet= None):
+    def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2]):
         '''Constructor.
 
 
@@ -491,10 +483,8 @@ class RCMemberSection(ElementSections):
                            point (defaults to [1]).
         :param gaussPoints: list of the integration points to consider for each
                            element (defaults to [1,2]).
-        :param elemSet: with the elements to which to assign the section 
-                        (defaults to None)
         '''
-        super(RCMemberSection,self).__init__(name, directions, gaussPoints, elemSet)
+        super(RCMemberSection,self).__init__(name, directions, gaussPoints)
         self.templateSections= templateSections
         
     def createSections(self):
@@ -546,13 +536,10 @@ class ElementSectionMap(dict):
             else:
               lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
 
-    def assignFromElementProperties(self, preprocessor, matDiagType, elemSet):
+    def assignFromElementProperties(self, elemSet):
         '''Creates the section materials from the element properties
            and assigns them to the elements of the argument set .
 
-           :param preprocessor: preprocessor of the finite element problem.
-           :param matDiagType: type of stress-strain diagram 
-                               ("k" for characteristic diagram, "d" for design diagram)
            :param elemSet: set of elements that receive the section names 
                            property.
         '''
@@ -563,9 +550,17 @@ class ElementSectionMap(dict):
             
         # Compute the sections from the element properties.
         rcSections= def_simple_RC_section.get_element_rc_sections(elemSet, propName= self.propName)
-        # Create the corresponding XC materials.
-        for s in rcSections:
-            s.defRCSection2d(preprocessor= preprocessor, matDiagType= matDiagType)
+        # Compute section pairs.
+        sectionPairs= dict()
+        for el in elemSet:
+            elementSections= el.getProp(self.propName)
+            key= elementSections[0]+','+elementSections[1]
+            if(key in sectionPairs):
+                sectionPairs[key].append(el.tag)
+            else:
+                sectionPairs[key]= [el.tag]
+        print(sectionPairs)
+        quit()
         return rcSections
         
 
