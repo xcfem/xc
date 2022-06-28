@@ -98,10 +98,6 @@ cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 limit_state_data.LimitStateData.envConfig= cfg
 shutil.copy(pth+'/intForce_ULS_shearResistance.csv',limit_state_data.shearResistance.getInternalForcesFileName())
-#limit_state_data.LimitStateData.internal_forces_results_directory= pth+'/'
-#limit_state_data.LimitStateData.check_results_directory= '/tmp/'
-#limit_state_data.normalStressesResistance.outputDataBaseFileName= 'resVerif'
-
 
 outCfg= limit_state_data.VerifOutVars(listFile='N',calcMeanCF='Y')
 outCfg.controller= EHE_limit_state_checking.ShearController(limitStateLabel= limit_state_data.shearResistance.label)
