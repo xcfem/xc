@@ -54,8 +54,8 @@ pt4= points.newPoint(geom.Pos3d(0.0,b,0.0))
 ## Surface.
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
-s.nDivI= 6 #10
-s.nDivJ= 1 #2
+s.nDivI= 10
+s.nDivJ= 3
 
 # Generate mesh.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
@@ -156,8 +156,8 @@ meanFCs= reinfConcreteSectionDistribution.internalForcesVerification3D(lsd.norma
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
-ratio1= abs(meanFCs[0]-0.4959900218994817)/0.4959900218994817
-ratio2= abs(meanFCs[1]-0.2104903701903893)/0.2104903701903893
+ratio1= abs(meanFCs[0]-0.5151243799585318)/0.5151243799585318
+ratio2= abs(meanFCs[1]-0.49950728265667205)/0.49950728265667205
 
 '''
 print('meanFCs= ', meanFCs)
