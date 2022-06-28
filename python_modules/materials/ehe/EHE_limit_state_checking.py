@@ -854,7 +854,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     '''
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
-#Check normal stresses limit state.
+# Check normal stresses limit state.
 
 class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''

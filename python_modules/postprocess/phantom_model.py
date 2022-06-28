@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.ortega@ciccp.es"
 
+import sys
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -137,7 +138,9 @@ class PhantomModel(object):
                     self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
                                                                                       #for this element
             else:
-              lmsg.error("Element section names not found for element with tag: "+str(tagElem))
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; element section names not found for element with tag: '+str(tagElem))
         outputCfg.controller.initControlVars(retval)
         return retval
 
@@ -194,7 +197,7 @@ class PhantomModel(object):
             #print("Solving load combination: ",key)
             controller.solutionProcedure.solveComb(key)
             controller.preprocessor= self.preprocessor
-            controller.check(elements,key)
+            controller.check(elements, key)
 
     def write(self,outputFileName,outputCfg):
         '''Writes results into the output file

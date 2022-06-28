@@ -3,6 +3,7 @@
 from __future__ import print_function
 from __future__ import division
 
+import sys
 from postprocess import element_section_map
 import pickle
 from misc_utils import log_messages as lmsg
@@ -58,19 +59,15 @@ class RCMaterialDistribution(object):
         self.sectionDistribution.assign(elemSet,setRCSects)
         self.elementSetNames.append(elemSet.owner.name)
 
-    def assignFromElementProperties(self, preprocessor, matDiagType, elemSet):
+    def assignFromElementProperties(self, elemSet):
         '''Creates the section materials from the element properties
            and assigns them to the elements of the argument set .
 
-           :param preprocessor: preprocessor of the finite element problem.
-           :param matDiagType: type of stress-strain diagram 
-                               ("k" for characteristic diagram, "d" for design diagram)
            :param elemSet: set of elements that receive the section names 
                            property.
         '''
-        retval= self.sectionDistribution.assignFromElementProperties(preprocessor= preprocessor, matDiagType= matDiagType, elemSet= elemSet)
+        self.sectionDefinition= self.sectionDistribution.assignFromElementProperties(elemSet= elemSet, sectionWrapperName= elemSet.owner.name)
         self.elementSetNames.append(elemSet.owner.name)
-        return retval
         
     def getElementSet(self,preprocessor):
         '''Returns an XC set that contains all the elements with an
@@ -91,7 +88,9 @@ class RCMaterialDistribution(object):
         if tagElem in self.sectionDistribution.keys():
             return self.sectionDistribution[tagElem]
         else:
-            lmsg.error("RCMaterialDistribution::getSectionNamesForElement; element with tag: "+str(tagElem)+" not found.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; element with tag: '+str(tagElem)+' not found.')
             return None
 
     def getSectionDefinition(self,sectionName):

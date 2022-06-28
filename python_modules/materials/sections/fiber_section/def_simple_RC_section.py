@@ -957,7 +957,11 @@ class RCRectangularSection(BasicRectangularRCSection):
         else:
             retval= True
         return retval
-    
+
+    def flipReinforcement(self):
+        ''' Flip the reinforcement top<-->bottom.'''
+        self.positvRebarRows, self.negatvRebarRows= self.negatvRebarRows, self.positvRebarRows
+        
     def getCopy(self):
         ''' Returns a deep enough copy of the object.'''
         retval= RCRectangularSection(name= self.name, sectionDescr= self.sectionDescr, concrType= self.getConcreteType(), reinfSteelType= self.getReinfSteelType(), width= self.b, depth= self.h, nDivIJ= self.getNDivIJ(), nDivJK= self.getNDivJK())

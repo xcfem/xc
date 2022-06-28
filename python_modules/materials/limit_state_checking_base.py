@@ -294,7 +294,7 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
         '''
         super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
 
-    def check(self,elements, nmbComb):
+    def check(self, elements, nmbComb):
         '''Launch checking.
 
           :param elements: elements to check.
@@ -304,9 +304,8 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
             lmsg.log("Postprocessing combination: "+nmbComb)
         for e in elements:
             e.getResistingForce()
-            TagTmp= e.tag
-            scc= e.getSection()
-            idSection= e.getProp("idSection")
+            scc= e.getSection() # Element section in the phantom model.
+            idSection= e.getProp("idSection") # Element section in the real model.
             Ntmp= scc.getStressResultantComponent("N")
             MyTmp= scc.getStressResultantComponent("My")
             MzTmp= scc.getStressResultantComponent("Mz")
@@ -340,9 +339,8 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
             lmsg.log("Postprocessing combination: "+combName)
         for e in elements:
             e.getResistingForce()
-            TagTmp= e.tag
-            scc= e.getSection()
-            idSection= e.getProp("idSection")
+            scc= e.getSection() # Element section in the phantom model.
+            idSection= e.getProp("idSection") # Element section in the "real" model.
             Ntmp= scc.getStressResultantComponent("N")
             MyTmp= scc.getStressResultantComponent("My")
             posEsf= geom.Pos2d(Ntmp,MyTmp)

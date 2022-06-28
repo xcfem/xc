@@ -76,15 +76,15 @@ class SectionContainer(object):
         '''
         self.mapInteractionDiagrams= {}
         for s in self.sections:
-            for i in range(len(s.lstRCSects)):
+            for rcs in s.lstRCSects:
                 diag= None
                 if(diagramType=='NMyMz'):
-                    diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)
+                    diag= rcs.defInteractionDiagram(preprocessor)
                 elif(diagramType=='NMy'):
-                    diag= s.lstRCSects[i].defInteractionDiagramNMy(preprocessor,matDiagType)
+                    diag= rcs.defInteractionDiagramNMy(preprocessor,matDiagType)
                 elif(diagramType=='NMz'):
-                    diag= s.lstRCSects[i].defInteractionDiagramNMz(preprocessor,matDiagType)
+                    diag= rcs.defInteractionDiagramNMz(preprocessor,matDiagType)
                 else:
                     lmsg.error("calcInteractionDiagrams; interaction diagram type: " + diagramType + "' unknown.")
-                self.mapInteractionDiagrams[s.lstRCSects[i].name]= diag
+                self.mapInteractionDiagrams[rcs.name]= diag
 

@@ -3,10 +3,12 @@
 from __future__ import division
 from __future__ import print_function
 
+import string
 import copy
 import sys
 from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import def_simple_RC_section
+from materials.sections import RC_sections_container as sc
 from materials import typical_materials
 import matplotlib.pyplot as plt
 
@@ -56,13 +58,21 @@ class ElementSections(object):
         self.gaussPoints= gaussPoints
         self.lstRCSects= list()
 
-    def append_section(self,RCSect):
+    def append_section(self, RCSect):
         ''' Append the section argument to the container.
 
         :param RCSect: reinforced concrete section to append.
         '''
         self.lstRCSects.append(RCSect)
         return
+
+    def find_section(self, sectionName):
+        ''' Return the section whose name is the value passed as parameter or
+            None if the section is not in the list.
+
+        :param sectionName: section name.
+        '''
+        return next((sct for sct in self.lstRCSects if(sct.name==sectionName)), None)
 
     def createSections(self, templateSections):
         '''create the fiber sections that represent the material to be used 
@@ -72,41 +82,44 @@ class ElementSections(object):
         '''
         if(len(self.lstRCSects)>0):
             lmsg.warning('Sections already created.')
-        i= 0
         ngp= len(self.gaussPoints)
         ndir= len(self.directions)
         if(ngp>1 and ndir>1):
+            i= 0
             for gp in self.gaussPoints:
                 for d in self.directions:
                     self.creaSingleSection(templateSections[i], direction= d, gaussPnt= gp)
                     i+= 1
         elif(ngp==1 and ndir>0): # ngp==1
-            for d in self.directions:
+            for i, d in enumerate(self.directions):
                 self.creaSingleSection(templateSections[i], direction= d, gaussPnt= None)
-                i+= 1
         elif(ndir==1 and ngp>0): # ndir==1
-            for gp in self.gaussPoints:
+            for i, gp in enumerate(self.gaussPoints):
                 self.creaSingleSection(templateSections[i], direction= None, gaussPnt= gp)
-                i+= 1
             
     def creaSingleSection(self, templateSection, direction, gaussPnt):
         '''create a copy of the section argument for the gauss points and
            the direction arguments.
         '''
-        sect= copy.copy(templateSection)
+        name= templateSection.name
+        description= templateSection.sectionDescr
         directionText= ''
         if(direction):
             directionText= str(direction)
-            sect.name+= directionText 
-            sect.sectionDescr+= ". "+ directionText + " direction."
+            name+= directionText 
+            description+= ". "+ directionText + " direction."
         ipText= ''
         if(gaussPnt):
             ipText= str(gaussPnt)
             if(direction):
                 sect.name+= '_'
-            sect.name+= ipText
-            sect.sectionDescr+= ' ' + ipText + " integration point."
-        self.append_section(sect)
+            name+= ipText
+            description+= ' ' + ipText + " integration point."
+        if(self.find_section(name) is None):
+            sect= copy.copy(templateSection)
+            sect.name= name
+            sect.sectionDescr= description
+            self.append_section(sect)
 
     def plot(self, preprocessor, matDiagType= 'k'):
         ''' Get a drawing of the sections using matplotlib.'''
@@ -127,6 +140,50 @@ class ElementSections(object):
                         section= self.lstRCSects[idx]
                         section.subplot(axs[r,c], preprocessor, matDiagType)
             plt.show()
+            
+class RawShellSections(ElementSections):
+    '''This class is an specialization of ElemenSections for rectangulars
+       sections in two-dimensional members (slabs, walls). The items of the list 
+       are instances of the object *RCRectangularSection*
+    '''
+    alreadyDefinedSections= list() # Names of the already defined sections.
+    def __init__(self,name, templateSections, directions= [1,2], gaussPoints=[1]):
+        '''Constructor.
+
+
+        :param name: name given to the list of reinforced concrete sections
+        :param templateSections: RCSectionBase derived objects that define the
+                                 reinforced concrete sections of the element. 
+                                 The sections must be ordered by integration 
+                                 point and then by direction. For example for 
+                                 an element with three integration point and 
+                                 two directions the order is as follows:             
+                                 templateSections[0]= Gauss point 1, direction 1
+                                 templateSections[1]= Gauss point 1, direction 2
+                                 templateSections[2]= Gauss point 2, direction 1
+                                 templateSections[3]= Gauss point 2, direction 2
+                                 templateSections[4]= Gauss point 3, direction 1
+                                 templateSections[5]= Gauss point 3, direction 2
+        :param directions: list of the directions to consider for each integration
+                           point (defaults to [1]).
+        :param gaussPoints: list of the integration points to consider for each
+                           element (defaults to [1,2]).
+        '''
+        super(RawShellSections,self).__init__(name, directions, gaussPoints)
+        self.templateSections= templateSections
+        
+    def createSections(self):
+        '''create the fiber sections that represent the reinforced concrete fiber 
+        section to be used for the checking on each integration point and/or each 
+        direction. These sections are also added to the attribute 'lstRCSects' 
+        that contains the list of sections.
+        '''
+        for i, templateSection in enumerate(self.templateSections):
+            name= templateSection.name
+            if(not name in self.alreadyDefinedSections): # new section.
+                templateSection.flipReinforcement()
+                self.append_section(templateSection)
+                self.alreadyDefinedSections.append(name)
     
 class setRCSections2SetElVerif(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
@@ -525,7 +582,7 @@ class ElementSectionMap(dict):
         if len(elemSet)== 0:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning("element set is empty.\n")
+            lmsg.warning(className+'.'+methodName+'; element set is empty.')
 
         for e in elemSet:
             if(not e.hasProp(self.propName)):
@@ -534,33 +591,43 @@ class ElementSectionMap(dict):
                     self[e.tag].append(s.name)
                 e.setProp(self.propName,setRCSects.name)
             else:
-              lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
+              className= type(self).__name__
+              methodName= sys._getframe(0).f_code.co_name
+              lmsg.error(className+'.'+methodName+"; element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
 
-    def assignFromElementProperties(self, elemSet):
+    def assignFromElementProperties(self, elemSet, sectionWrapperName):
         '''Creates the section materials from the element properties
            and assigns them to the elements of the argument set .
 
            :param elemSet: set of elements that receive the section names 
                            property.
         '''
+        def n2a(n,b=string.ascii_uppercase):
+            d, m = divmod(n,len(b))
+            return n2a(d-1,b)+b[m] if d else b[m]
+        
         if len(elemSet)== 0:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning("element set is empty.\n")
+            lmsg.warning(className+'.'+methodName+'; element set is empty.')
             
         # Compute the sections from the element properties.
         rcSections= def_simple_RC_section.get_element_rc_sections(elemSet, propName= self.propName)
         # Compute section pairs.
-        sectionPairs= dict()
+        sectionPairs= list()
         for el in elemSet:
             elementSections= el.getProp(self.propName)
-            key= elementSections[0]+','+elementSections[1]
-            if(key in sectionPairs):
-                sectionPairs[key].append(el.tag)
-            else:
-                sectionPairs[key]= [el.tag]
-        print(sectionPairs)
-        quit()
-        return rcSections
+            self[el.tag]= elementSections
+            sectionPairs.append(elementSections)
+        # Rename sections and create RCMemberSection objects.
+        retval= sc.SectionContainer()
+        for i, names in enumerate(sectionPairs):
+            letter= n2a(i)
+            sect0= next((rcs for rcs in rcSections if(rcs.name==names[0])), None)
+            sect1= next((rcs for rcs in rcSections if(rcs.name==names[1])), None)
+            newName= sectionWrapperName+letter
+            rcMemberSection= RawShellSections(name= newName, templateSections= [sect0, sect1], directions= [1,2], gaussPoints=[1])
+            retval.append(rcMemberSection)
+        return retval
         
 

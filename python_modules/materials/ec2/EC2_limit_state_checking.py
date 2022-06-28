@@ -707,5 +707,26 @@ def getAsMaxBeams(Ac, nationalAnnex= None):
     :param Ac: area of concrete cross-section. 
     :param nationalAnnex: identifier of the national annex.
     '''
-    return .04*Ac    
+    return .04*Ac
+
+# Check normal stresses limit state.
+class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):
+    '''Object that controls normal stresses limit state.'''
+
+    def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressControllerBase):
+    '''Object that controls normal stresses limit state (uniaxial bending).'''
+
+    def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
