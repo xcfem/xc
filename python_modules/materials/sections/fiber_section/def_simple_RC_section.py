@@ -1255,10 +1255,10 @@ def get_element_rc_sections(elements, propName= None):
                                     the position of the positive reinforcement
                                     (bottom) and the negative reinforcement
                                     (up).
-        - positiveReinforcement: LongReinfLayers objects defining the positive
-                                 reinforcement.
-        - negativeReinforcement: LongReinfLayers objects defining the negative
-                                 reinforcement.
+        - bottomReinforcement: LongReinfLayers objects defining the 
+                               reinforcement at the bottom of the section.
+        - topReinforcement: LongReinfLayers objects defining the 
+                            reinforcement at the top of the section.
      
      :param elements: elements for which the reinforce concrete sections 
                       will be computed.
@@ -1272,8 +1272,8 @@ def get_element_rc_sections(elements, propName= None):
         if(dim==1):
             elementUpOrientation= el.getJVector3d(False)
             upOrientation= reinforcementUpVector.dot(elementUpOrientation)
-            pR= el.getProp("positiveReinforcement")
-            nR= el.getProp("negativeReinforcement")
+            pR= el.getProp("bottomReinforcement")
+            nR= el.getProp("topReinforcement")
             if(upOrientation<0): # reverse position.
                 pR, nR= nR, pR
             baseSection.positvRebarRows= pR
@@ -1285,10 +1285,10 @@ def get_element_rc_sections(elements, propName= None):
             reinforcementIVector= el.getProp('reinforcementIVector') # direction of the reinforcement in the slab.
             elementIOrientation= el.getIVector3d(False)
             iOrientation= reinforcementIVector.dot(elementIOrientation)
-            pRI= el.getProp("positiveReinforcementI")
-            nRI= el.getProp("negativeReinforcementI")
-            pRII= el.getProp("positiveReinforcementII")
-            nRII= el.getProp("negativeReinforcementII")
+            pRI= el.getProp("bottomReinforcementI")
+            nRI= el.getProp("topReinforcementI")
+            pRII= el.getProp("bottomReinforcementII")
+            nRII= el.getProp("topReinforcementII")
             if(abs(iOrientation)<1e-3): # reverse reinforcement directions.
                 pRI, pRII= pRII, pRI
                 nRI, nRII= nRII, nRI

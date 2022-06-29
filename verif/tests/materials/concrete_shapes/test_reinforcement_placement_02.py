@@ -106,13 +106,13 @@ modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 for e in beamElements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", geom.Vector3d(0,1,0)) # Y+
-    e.setProp("positiveReinforcement", def_simple_RC_section.LongReinfLayers([rowA]))
-    e.setProp("negativeReinforcement", def_simple_RC_section.LongReinfLayers())
+    e.setProp("bottomReinforcement", def_simple_RC_section.LongReinfLayers([rowA]))
+    e.setProp("topReinforcement", def_simple_RC_section.LongReinfLayers())
     x= e.getPosCentroid(True).x
     if(x>1.5 and x<3.5):
-        positiveReinforcement= e.getProp("positiveReinforcement")
-        positiveReinforcement.append(rowB)
-        e.setProp("positiveReinforcement", positiveReinforcement)
+        bottomReinforcement= e.getProp("bottomReinforcement")
+        bottomReinforcement.append(rowB)
+        e.setProp("bottomReinforcement", bottomReinforcement)
 
 #### Define sections.
 rcSections= def_simple_RC_section.get_element_rc_sections(beamElements)

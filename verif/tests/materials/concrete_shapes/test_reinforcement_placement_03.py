@@ -128,15 +128,15 @@ for e in s.elements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", geom.Vector3d(0,0,1)) # Z+
     e.setProp("reinforcementIVector", geom.Vector3d(1,0,0)) # X+
-    e.setProp("positiveReinforcementI", def_simple_RC_section.LongReinfLayers([rowA]))
-    e.setProp("negativeReinforcementI", def_simple_RC_section.LongReinfLayers([rowC]))
-    e.setProp("positiveReinforcementII", def_simple_RC_section.LongReinfLayers([rowC]))
-    e.setProp("negativeReinforcementII", def_simple_RC_section.LongReinfLayers([rowC]))
+    e.setProp("bottomReinforcementI", def_simple_RC_section.LongReinfLayers([rowA]))
+    e.setProp("topReinforcementI", def_simple_RC_section.LongReinfLayers([rowC]))
+    e.setProp("bottomReinforcementII", def_simple_RC_section.LongReinfLayers([rowC]))
+    e.setProp("topReinforcementII", def_simple_RC_section.LongReinfLayers([rowC]))
     x= e.getPosCentroid(True).x
     if(x>1.5 and x<3.5):
-        positiveReinforcementI= e.getProp("positiveReinforcementI")
-        positiveReinforcementI.append(rowB)
-        e.setProp("positiveReinforcementI", positiveReinforcementI)
+        bottomReinforcementI= e.getProp("bottomReinforcementI")
+        bottomReinforcementI.append(rowB)
+        e.setProp("bottomReinforcementI", bottomReinforcementI)
         
 #### Define sections.
 
