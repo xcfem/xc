@@ -142,9 +142,7 @@ for e in s.elements:
 
 # Define spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
-rcSections= reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
-# for rcs in rcSections:
-#     print(rcs.name, rcs.elements, rcs.positvRebarRows.getAs()*1e4, rcs.negatvRebarRows.getAs()*1e4)
+reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
 #Checking normal stresses.
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
