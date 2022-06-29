@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Limit state checking according to structural concrete spanish standard EHE-08.'''
 from __future__ import division
 from __future__ import print_function
 
-''' Limit state checking according to structural concrete spanish standard EHE-08.'''
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
@@ -1341,7 +1341,6 @@ class CrackControl(lscb.CrackControlBaseParameters):
         for i in range(0,sz):
             rebar= tensionedReinforcement[i]
             rebarArea= rebar.getArea()
-            rebarPos= rebar.getPos()
             rebarStress= rebar.getMaterial().getStress()
             rebarCover= tensionedReinforcement.getFiberCover(i)
             rebarDiameter= rebar.getEquivalentDiameter()
