@@ -97,8 +97,7 @@ class ReinfRow(object):
     :ivar rebarsSpacing: spacing between bars (not considered if nRebars is defined)
     :ivar nRebars: number of rebars to be placed in the row (>1)
     :ivar width: width of the cross-section (defautls to 1m)
-    :ivar nominalCover: nominal cover (defaults to 0.03m)
-    :ivar nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
+    :ivar cover: concrete cover.
     '''
     def __init__(self, rebarsDiam=None, areaRebar= None, rebarsSpacing= None, nRebars= None, width= 1.0, nominalCover= 0.03, nominalLatCover= 0.03):
         ''' Constructor.
@@ -124,6 +123,7 @@ class ReinfRow(object):
             self.areaRebar=math.pi*rebarsDiam**2/4.
         else:
             lmsg.warning('You must define either the diameter or the area of rebars')
+        self.width= width
         if nRebars:
             self.nRebars= nRebars
             # if width==1.0:
@@ -151,9 +151,7 @@ class ReinfRow(object):
             if(retval):
                 retval= (self.width == other.width)
             if(retval):
-                retval= (self.nominalCover == other.nominalCover)
-            if(retval):
-                retval= (self.nominalLatCover == other.nominalLatCover)
+                retval= (self.cover == other.cover)
         else:
             retval= True
         return retval
