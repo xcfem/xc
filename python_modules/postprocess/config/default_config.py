@@ -2,6 +2,8 @@
 from __future__ import division
 from __future__ import print_function
 
+import ast
+from pathlib import Path
 import os
 import tempfile
 import xc
@@ -503,7 +505,10 @@ class EnvConfig(output_styles.OutputStyle):
         self.capTexts= self.getCaptionTextsDict()
         self.colors=setBasicColors
         self.grWidth=grWidth
-        
+
+    def getWorkingDirectory(self):
+        return self.projectDirTree.workingDirectory
+    
     def makedirs(self, pth):
         ''' Recursive directory creation function. Like mkdir(), but 
             makes all intermediate-level directories needed to contain 
@@ -530,6 +535,13 @@ class EnvConfig(output_styles.OutputStyle):
         :param opener: see Python documentation for open built-in function.
         '''
         return self.projectDirTree.open(fileName, mode, buffering, encoding, errors, newline, closefd, opener)
+
+    def compileCode(self,filename):
+        ''' Execute the code in the file argument.
+
+        :param filename: name of the file to execute.
+        '''
+        return compileCode(self.getWorkingDirectory()+'/'+filename)
 
 #Predefined colors for sets (progressing from light to dark)
 
@@ -581,3 +593,10 @@ def get_temporary_env_config(subDirName: str= None):
     retval= EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='',reportResultsPath= 'annex/',grWidth='120mm')
     retval.projectDirTree.workingDirectory= dirName
     return retval
+
+def compileCode(inputFile):
+    fullPath= Path(inputFile).resolve()
+    codeSource= open(inputFile).read()
+    code= ast.parse(codeSource)
+    compiledCode= compile(code, filename=str(fullPath), mode='exec')
+    return compiledCode
