@@ -374,19 +374,31 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
 
     def getAs1neg(self):
         '''Steel area in local negative face direction 1.'''
-        return self.lstRCSects[0].getAsNeg()
+        if(len(self.lstRCSects)>0):
+            return self.lstRCSects[0].getAsNeg()
+        else:
+            return 0.0
     
     def getAs1pos(self):
         '''Steel area in local positive face direction 1.'''
-        return self.lstRCSects[0].getAsPos()
+        if(len(self.lstRCSects)>0):
+            return self.lstRCSects[0].getAsPos()
+        else:
+            return 0.0
   
     def getAs2neg(self):
         '''Steel area in local negative face direction 2.'''
-        return self.lstRCSects[1].getAsNeg()
-  
+        if(len(self.lstRCSects)>1):
+            return self.lstRCSects[1].getAsNeg()
+        else:
+            return 0.0
+    
     def getAs2pos(self):
         '''Steel area in local positive face direction 2.'''
-        return self.lstRCSects[1].getAsPos()
+        if(len(self.lstRCSects)>1):
+            return self.lstRCSects[1].getAsPos()
+        else:
+            return 0.0
   
     def getReinfArea(self,code):
         '''get steel area.
@@ -407,6 +419,9 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
             sys.stderr.write("code: "+ code + " unknown.\n")
             return None
 
+    def getAs(self):
+        ''' Return the total reinforcement area.'''
+        return self.getAs1neg()+self.getAs1pos()+self.getAs2neg()+self.getAs2pos()
     def getS1pos(self):
         '''list of distances between bars of rows the in local positive face direction 1.'''
         return self.lstRCSects[0].getSPos()
