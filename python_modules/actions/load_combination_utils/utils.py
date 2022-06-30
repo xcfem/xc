@@ -57,6 +57,10 @@ def splitCombination(loadCombination:str, loads):
     retval= '+'.join(tmp1), '+'.join(tmp2)
     return retval
 
+def getFileNameFromCombinationExpresion(loadCombination:str):
+    ''' Return a valid filename from the combination expression.'''
+    return ''.join(x for x in loadCombination if x.isalnum())
+
 def listActionGroup(actionGroup):
     '''List the defined actions in a group (permanent, variable, accidental).'''
     for familyName in actionGroup.getKeys():
