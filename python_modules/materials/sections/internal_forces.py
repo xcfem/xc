@@ -266,19 +266,17 @@ class ShellMaterialInternalForces:
 
     # Wood-Armer method for the assessment of reinforced concrete shells.
     def getWoodArmer1(self):
-        '''returns wood-archer method internal forces for axis 1.''' 
-        T= 0.0
-        Mx= self.m1+ math.copysign(self.m12,self.m1)
-        My= 0.0
-        return CrossSectionInternalForces(self.n1,self.q13,self.n12,T,Mx,My)
+        '''returns Wood-Armer method internal forces for axis 1.''' 
+        N= self.n1+ math.copysign(self.n12, self.n1)
+        M= self.m1+ math.copysign(self.m12,self.m1)
+        return CrossSectionInternalForces(N= N, Vy= self.q13, Vz= 0.0,T= 0.0,My= M, Mz= 0.0)
 
     def getWoodArmer2(self):
-        '''returns wood-archer method internal forces for axis 2.'''
-        T= 0.0
-        Mx= self.m2+ math.copysign(self.m12,self.m2)
-        My= 0.0
-        return CrossSectionInternalForces(self.n2,self.q23,self.n12,T,Mx,My)
+        '''returns Wood-Armer method internal forces for axis 2.'''
+        N= self.n2+ math.copysign(self.n12, self.n2)
+        M= self.m2+ math.copysign(self.m12,self.m2)
+        return CrossSectionInternalForces(N= N, Vy= self.q23, Vz= 0.0,T= 0.0, My= M, Mz= 0.0)
 
     def getWoodArmer(self):
-        '''returns wood-archer method internal forces.'''
+        '''returns Wood-Armer method internal forces.'''
         return [self.getWoodArmer1(),self.getWoodArmer2()]
