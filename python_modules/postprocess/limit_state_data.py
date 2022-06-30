@@ -269,8 +269,6 @@ class LimitStateData(object):
         #Putting combinations inside XC.
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
         
-        elemSet= setCalc.elements
-        nodSet= setCalc.nodes
         self.createOutputFiles()
         internalForcesDict= dict()
         reactionsDict= dict()
@@ -285,9 +283,9 @@ class LimitStateData(object):
                 for bm in bucklingMembers:
                     bm.updateReductionFactors()
             #Writing results.
-            internalForcesDict.update(self.getInternalForcesDict(comb.getName,elemSet))
+            internalForcesDict.update(self.getInternalForcesDict(comb.getName,setCalc.elements))
             reactionsDict.update(self.getReactionsDict(comb.getName,constrainedNodeSet))
-            self.writeDisplacements(comb.getName,nodSet)
+            self.writeDisplacements(comb.getName,setCalc.nodes)
             comb.removeFromDomain() #Remove combination from the model.
         self.writeInternalForces(internalForcesDict)
         self.writeReactions(reactionsDict)
