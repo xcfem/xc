@@ -7,7 +7,7 @@ import re
 import math
 import loadCombinations
 
-def getCombinationDict(loadCombination):
+def getCombinationDict(loadCombination:str):
     ''' Return a Python dictionary whose keys are the names of the actions
         in the combination and whose values are the factor that multiply the
         action.
@@ -20,6 +20,41 @@ def getCombinationDict(loadCombination):
         l= l.strip()
         factor, action= l.split('*')
         retval[action]= float(factor)
+    return retval
+
+def getCombinationExpr(combDict:dict):
+    ''' Return the expression corresponding to the load combination argument
+        in dictionary form (i. e.: {'G1':1.0, 'G2':1.00, 'Qwind':1.35}).
+
+    :param combDict: combination expressed in the form of a dictionary.
+    '''
+    tmp= list()
+    for key in combDict:
+        factor= combDict[key]
+        tmp.append(str(factor)+'*'+key)
+    retval= ''
+    if(len(tmp)>0):
+        retval= tmp[0]
+        for s in tmp[1:]:
+            retval+='+'+s
+    return retval
+    
+def splitCombination(loadCombination:str, loads):
+    ''' Return the part of a combination that concerns the actions passed as
+        argument and then the rest of the original combination.
+
+    :param loads: names of the desired loads.
+    '''
+    combDict= getCombinationDict(loadCombination)
+    tmp1= list(); tmp2= list()
+    for key in combDict:
+        factor= combDict[key]
+        addend= str(factor)+'*'+key
+        if(key in loads):
+            tmp1.append(addend)
+        else:
+            tmp2.append(addend)
+    retval= '+'.join(tmp1), '+'.join(tmp2)
     return retval
 
 def listActionGroup(actionGroup):

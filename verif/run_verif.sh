@@ -196,13 +196,14 @@ python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
-#python tests/actions/loadCombinations/testLoadCombinations.py
-python tests/actions/loadCombinations/test_action.py
-python tests/actions/loadCombinations/test_secondaries_00.py
-python tests/actions/loadCombinations/test_accidentales.py
-python tests/actions/loadCombinations/test_iap11_01.py
-python tests/actions/loadCombinations/test_iap11_02.py
-python tests/actions/loadCombinations/test_combination_dict.py
+#python tests/actions/load_combinations/testLoadCombinations.py
+python tests/actions/load_combinations/test_action.py
+python tests/actions/load_combinations/test_secondaries_00.py
+python tests/actions/load_combinations/test_accidentales.py
+python tests/actions/load_combinations/test_iap11_01.py
+python tests/actions/load_combinations/test_iap11_02.py
+python tests/actions/load_combinations/test_combination_dict.py
+python tests/actions/load_combinations/test_split_combination.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
