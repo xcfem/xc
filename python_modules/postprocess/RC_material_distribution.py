@@ -193,6 +193,11 @@ class RCMaterialDistribution(object):
         tmp.clearAll() #Free memory.
         return retval
 
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        self.sectionDefinition.report(os, indentation)
+        #self.sectionDistribution(os)
+        #self.elementSetNames.report(os)
 
 def loadRCMaterialDistribution():
     '''Load the reinforced concrete sections on each element from file.'''

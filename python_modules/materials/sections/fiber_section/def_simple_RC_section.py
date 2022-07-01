@@ -62,7 +62,7 @@ class ShearReinforcement(object):
         self.shReinfSpacing= shReinfSpacing # longitudinal distance between transverse reinforcements
         self.angAlphaShReinf= angAlphaShReinf # angle between the shear reinforcing bars and the axis of the member.
         self.angThetaConcrStruts= angThetaConcrStruts # angle between the concrete's compression struts and the axis of the member
-
+        
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -87,6 +87,14 @@ class ShearReinforcement(object):
         '''
         return self.nShReinfBranches*self.areaShReinfBranch/self.shReinfSpacing
 
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        os.write(indentation+'family name: '+str(self.familyName)+'\n')
+        os.write(indentation+'number of effective branches: '+str(self.nShReinfBranches)+'\n')
+        os.write(indentation+'area of the shear reinforcing bar: '+str(self.areaShReinfBranch)+'\n')
+        os.write(indentation+'longitudinal distance between transverse reinforcements: '+str(self.shReinfSpacing)+'\n')
+        os.write(indentation+'angle between the shear reinforcing bars and the axis of the member: '+str(math.degrees(self.angAlphaShReinf))+'\n')
+        os.write(indentation+'angle between the concrete\'s compression struts and the axis of the member: '+str(math.degrees(self.angThetaConcrStruts))+'\n')
 
 class ReinfRow(object):
     ''' Definition of the variables that make up a family (row) of main 
@@ -137,7 +145,7 @@ class ReinfRow(object):
             lmsg.warning('You must define either the number of rebars or the rebar spacing')
         self.cover= nominalCover+self.rebarsDiam/2.0
         self.centerRebars(width)
-
+        
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -212,6 +220,15 @@ class ReinfRow(object):
             self.reinfLayer.finalAngle= finalAngle
             self.reinfLayer.radius= extRad-self.cover
             return self.reinfLayer
+        
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        os.write(indentation+'bar diameter: '+str(self.rebarsDiam*1e3)+' mm\n')
+        os.write(indentation+'bar area: '+str(self.areaRebar*1e4)+' cm2\n')
+        os.write(indentation+'spacing: '+str(self.rebarsSpacing*1e3)+' mm\n')
+        os.write(indentation+'number of bars: '+str(self.nRebars)+'\n')
+        os.write(indentation+'width: '+str(self.width*1e3)+' mm\n')
+        os.write(indentation+'cover: '+str(self.cover*1e3)+' mm\n')
 
 def RebarRow2ReinfRow(rebarRow, width= 1.0, nominalLatCover= 0.03):
     ''' Returns a RebarRow object from a ReinfRow object
@@ -232,7 +249,7 @@ class LongReinfLayers(object):
         else:
             self.rebarRows= list()
         self.reinfLayers= list()  # list of StraightReinfLayer created.
-
+                    
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -365,6 +382,12 @@ class LongReinfLayers(object):
                     self.reinfLayers.append(layer)
         else:
             lmsg.warning('No longitudinal reinforcement.')
+            
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        os.write(indentation+'rebar rows: \n')
+        for rrow in self.rebarRows:
+            rrow.report(os, indentation+'  ')
 
 def rebLayer_mm(fi,s,c):
     '''Defines a layer of main reinforcement bars, given the spacement.
@@ -498,6 +521,16 @@ class RCFiberSectionParameters(object):
             self.idParams.concreteTag= self.concrType.matTagK
             self.idParams.reinforcementTag= self.reinfSteelType.matTagK
         return self.idParams
+    
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        os.write(indentation+'concrete type: '+str(self.concrType.materialName)+'\n')
+        os.write(indentation+'concrete stress-strain diagram: '+str(self.concrDiagName)+'\n')
+        os.write(indentation+'steel type: '+str(self.reinfSteelType.materialName)+'\n')
+        os.write(indentation+'steel stress-strain diagram: '+str(self.reinfDiagName)+'\n')
+        os.write(indentation+'number of IJ divisions nDivIJ= '+str(self.nDivIJ)+'\n')
+        os.write(indentation+'number of JK divisions nDivJK= '+str(self.nDivJK)+'\n')
+        
 
 class RCSectionBase(object):
     '''
@@ -522,7 +555,7 @@ class RCSectionBase(object):
             self.sectionDescr= sectionDescr
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         self.fiberSectionRepr= None
-
+        
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -741,6 +774,14 @@ class RCSectionBase(object):
         self.subplot(ax, preprocessor= preprocessor, matDiagType= matDiagType)
         plt.show()
    
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        os.write(indentation+'Section description: '+str(self.sectionDescr)+'\n')
+        indentation+= '  '
+        os.write(indentation+'Fiber section parameters:\n')
+        self.fiberSectionParameters.report(os, indentation+'  ')
+        if(self.fiberSectionRepr):
+            self.fiberSectionRepr.report(os, indentation+'  ')
 
 class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSection):
     '''
@@ -771,7 +812,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         # Transverse reinforcement (y direction)
         self.shReinfY= ShearReinforcement()
         self.shReinfY.familyName= "Vy"
-        
+                
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -909,6 +950,16 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         '''
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super(BasicRectangularRCSection, self).defElasticMembranePlateSection(preprocessor= preprocessor, material= mat, overrideRho= overrideRho)
+    
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        section_properties.RectangularSection.report(self, os)
+        super(BasicRectangularRCSection, self).report(os, indentation)
+        indentation+= '  '
+        os.write(indentation+'Transverse reinforcement (z direction):\n')
+        self.shReinfZ.report(os, indentation+'  ')
+        os.write(indentation+'Transverse reinforcement (y direction):\n')
+        self.shReinfY.report(os, indentation+'  ')
 
 class RCRectangularSection(BasicRectangularRCSection):
     ''' This class is used to define the variables that make up a reinforced 
@@ -964,6 +1015,15 @@ class RCRectangularSection(BasicRectangularRCSection):
         ''' Returns a deep enough copy of the object.'''
         retval= RCRectangularSection(name= self.name, sectionDescr= self.sectionDescr, concrType= self.getConcreteType(), reinfSteelType= self.getReinfSteelType(), width= self.b, depth= self.h, nDivIJ= self.getNDivIJ(), nDivJK= self.getNDivJK())
         return retval
+
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        super(RCRectangularSection, self).report(os, indentation)
+        indentation+= '  '
+        os.write(indentation+'Bottom reinforcement: \n')
+        self.positvRebarRows.report(os, indentation+'  ')
+        os.write(indentation+'Top reinforcement: \n')
+        self.negatvRebarRows.report(os, indentation+'  ')
 
     def getAsPos(self):
         '''returns the cross-sectional area of the rebars in the positive face.'''

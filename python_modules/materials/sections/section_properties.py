@@ -466,6 +466,11 @@ class SectionProperties(object):
                 transform= ax.transAxes)
                 top-= 0.05
         plt.show()
+        
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        os.write(indentation+'name: '+str(self.name)+'\n')
+        os.write(indentation+'xc material:: '+str(self.xc_material)+'\n')
 
 class RectangularSection(SectionProperties):
     '''Rectangular section geometric parameters
@@ -698,7 +703,14 @@ class RectangularSection(SectionProperties):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
-
+        
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        super(RectangularSection,self).report(os, indentation)
+        os.write(indentation+'width: '+str(self.b)+'\n')
+        os.write(indentation+'depth: '+str(self.h)+'\n')
+        
+    
 class CircularSection(SectionProperties):
     '''Geometric parameters of a circular or circular hollow section
 

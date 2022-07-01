@@ -5,6 +5,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import xc
 # Macros
 from misc_utils import log_messages as lmsg
@@ -37,8 +38,9 @@ class SectionContainer(object):
     def append(self, rcSections):
         rcSections.createSections()
         self.sections.append(rcSections)
-        for i in range(len(rcSections.lstRCSects)):
-            self.mapSections[rcSections.lstRCSects[i].name]= rcSections.lstRCSects[i]
+        # Update references to individual sections.
+        for ss in rcSections.lstRCSects:
+            self.mapSections[ss.name]= ss
 
     def search(self,nmb):
         ''' Return section named nmb (if founded) '''
@@ -88,3 +90,7 @@ class SectionContainer(object):
                     lmsg.error("calcInteractionDiagrams; interaction diagram type: " + diagramType + "' unknown.")
                 self.mapInteractionDiagrams[rcs.name]= diag
 
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        for s in self.sections:
+            s.report(os= os, indentation= indentation)
