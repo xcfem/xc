@@ -66,7 +66,7 @@ class RCMaterialDistribution(object):
            :param elemSet: set of elements that receive the section names 
                            property.
         '''
-        self.sectionDefinition= self.sectionDistribution.assignFromElementProperties(elemSet= elemSet, sectionWrapperName= elemSet.owner.name)
+        self.sectionDefinition.extend(self.sectionDistribution.assignFromElementProperties(elemSet= elemSet, sectionWrapperName= elemSet.owner.name))
         self.elementSetNames.append(elemSet.owner.name)
         
     def getElementSet(self,preprocessor):

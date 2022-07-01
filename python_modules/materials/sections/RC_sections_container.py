@@ -36,11 +36,23 @@ class SectionContainer(object):
         self.mapInteractionDiagrams= None
 
     def append(self, rcSections):
+        ''' Append the argument to the container.
+
+        :param rcSections: 
+        '''
         rcSections.createSections()
         self.sections.append(rcSections)
         # Update references to individual sections.
         for ss in rcSections.lstRCSects:
             self.mapSections[ss.name]= ss
+
+    def extend(self, other):
+        ''' Add all the elements of the container argument to the calling one.
+
+        :param other: SectionContainer object.
+        '''
+        self.sections.extend(other.sections)
+        self.mapSections.update(other.mapSections)
 
     def search(self,nmb):
         ''' Return section named nmb (if founded) '''

@@ -89,12 +89,16 @@ class ShearReinforcement(object):
 
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the object contents.'''
-        os.write(indentation+'family name: '+str(self.familyName)+'\n')
-        os.write(indentation+'number of effective branches: '+str(self.nShReinfBranches)+'\n')
-        os.write(indentation+'area of the shear reinforcing bar: '+str(self.areaShReinfBranch)+'\n')
-        os.write(indentation+'longitudinal distance between transverse reinforcements: '+str(self.shReinfSpacing)+'\n')
-        os.write(indentation+'angle between the shear reinforcing bars and the axis of the member: '+str(math.degrees(self.angAlphaShReinf))+'\n')
-        os.write(indentation+'angle between the concrete\'s compression struts and the axis of the member: '+str(math.degrees(self.angThetaConcrStruts))+'\n')
+        steelArea= self.getAs()
+        if(steelArea>0.0):
+            os.write(indentation+'family name: '+str(self.familyName)+'\n')
+            os.write(indentation+'number of effective branches: '+str(self.nShReinfBranches)+'\n')
+            os.write(indentation+'area of the shear reinforcing bar: '+str(self.areaShReinfBranch)+'\n')
+            os.write(indentation+'longitudinal distance between transverse reinforcements: '+str(self.shReinfSpacing)+'\n')
+            os.write(indentation+'angle between the shear reinforcing bars and the axis of the member: '+str(math.degrees(self.angAlphaShReinf))+'\n')
+            os.write(indentation+'angle between the concrete\'s compression struts and the axis of the member: '+str(math.degrees(self.angThetaConcrStruts))+'\n')
+        else:
+            os.write(indentation+'family name: -\n')
 
 class ReinfRow(object):
     ''' Definition of the variables that make up a family (row) of main 
@@ -1354,14 +1358,15 @@ def get_element_rc_sections(elements, propName= None):
                                  # positions if dot product > 0.
                 pRI, nRI= nRI, pRI
                 pRII, nRII= nRII, pRII
+            baseSectionII= baseSection.getCopy()
             baseSection.name+= 'I'
             baseSection.positvRebarRows= pRI
             baseSection.negatvRebarRows= nRI
-            baseSectionII= baseSection.getCopy()
             baseSectionII.name+= 'II'
             baseSectionII.positvRebarRows= pRII
             baseSectionII.negatvRebarRows= nRII
             elementSections= [baseSection, baseSectionII]
+            
         # Assign elements to each section.
         for i, eSection in enumerate(elementSections):
             if(eSection not in retval):
