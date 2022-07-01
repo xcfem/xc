@@ -147,6 +147,7 @@ class RawShellSections(ElementSections):
        are instances of the object *RCRectangularSection*
     '''
     alreadyDefinedSections= list() # Names of the already defined sections.
+    
     def __init__(self,name, templateSections, directions= [1,2], gaussPoints=[1]):
         '''Constructor.
 
@@ -178,11 +179,16 @@ class RawShellSections(ElementSections):
         direction. These sections are also added to the attribute 'lstRCSects' 
         that contains the list of sections.
         '''
-        for i, templateSection in enumerate(self.templateSections):
+        for templateSection in self.templateSections:
             name= templateSection.name
             if(not name in self.alreadyDefinedSections): # new section.
                 self.append_section(templateSection)
                 self.alreadyDefinedSections.append(name)
+
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        for templateSection in self.templateSections:
+            templateSection.report(os, indentation)
     
 class setRCSections2SetElVerif(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
@@ -632,7 +638,8 @@ class ElementSectionMap(dict):
         for el in elemSet:
             elementSections= el.getProp(self.propName)
             self[el.tag]= elementSections
-            sectionPairs.append(elementSections)
+            if(elementSections not in sectionPairs):
+                sectionPairs.append(elementSections)
         # Rename sections and create RCMemberSection objects.
         retval= sc.SectionContainer()
         for i, names in enumerate(sectionPairs):
