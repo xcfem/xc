@@ -1836,27 +1836,27 @@ class LongShearJoints(object):
             mu=0.9
         return mu
 
-    def getUltShearStressWithReinf(self,tao_rd):
+    def getUltShearStressWithReinf(self, tao_rd):
         '''Return the ultimate longitudinal shear stress at a joint between
-           concrete sections with transverse reinforcement.
+           concrete sections with transverse reinforcement according to clause
+           47.2.2 of EHE-08.
 
         :param tao_rd: design longitudinal shear stress at a joint between
                        concrete.
         '''
         beta=self.getBetaCoef()
-        compVal=2.5*beta*(1.30-0.30*abs(self.concrete.fck*1e-6)/25.)*self.concrete.fctd()
-        alpha=math.radians(self.angRebars)
+        compVal= 2.5*beta*(1.30-0.30*abs(self.concrete.fck*1e-6)/25.)*self.concrete.fctd()
+        alpha= math.radians(self.angRebars)
         f_yalphd=min(self.reinfsteel.fyd(),400e6)
-        if tao_rd <= compVal:  #case 1
-            mu=self.getMuCoefCase1()
-            term1=compVal/2.5
-        else: #case 2
-            mu=self.getMuCoefCase2()
+        if(tao_rd <= compVal):  #case 1 (clause 47.2.2.1)
+            mu= self.getMuCoefCase1() # table 47.2.2.2
+        else: #case 2 (clause 47.2.2.2)
+            mu= self.getMuCoefCase2() # table 47.2.2.2
         term_aux=mu*math.sin(alpha)+math.cos(alpha)
         tao_ru=self.Ast/(self.spacement*self.contactSurf)*f_yalphd*term_aux-mu*self.sigma_cd
         if tao_rd <= compVal:
             tao_ru+=compVal/2.5
-        tao_ru_max=0.25*abs(self.concrete.fcd())
+        tao_ru_max= 0.25*abs(self.concrete.fcd())
         return min(tao_ru, tao_ru_max)
 
     def checkShearStressJoints(self,tao_rd):

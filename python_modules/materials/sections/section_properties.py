@@ -693,7 +693,6 @@ class RectangularSection(SectionProperties):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                I= self.Iz();
                 rho= material.rho*self.h
                 if(overrideRho!=None):
                     rho= overrideRho
