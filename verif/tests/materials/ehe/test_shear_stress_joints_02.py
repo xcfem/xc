@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
+'''
+Verification of ultimate limit state due to longitudinal shear stress 
+at joints between concretes according to art. 47 EHE.
+
+Results are compared with those obtained in "Cálculo civil" app  
+(URL: https://calculocivil.com).
+'''
+
 from __future__ import print_function
 from __future__ import division
-''' Verification test for the concrete shrinkage computation
-   according to EHE-08. '''
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2019, AO_O"
@@ -14,12 +20,6 @@ import math
 from materials.ehe import EHE_materials as EHEmat
 from materials.ehe import EHE_limit_state_checking as EHEverif
 
-'''
-Verification of ultimate limit state due to longitudinal shear stress 
-at joints between concretes according to art. 47 EHE.
-
-Results are compared with those obtained in "Cálculo civil" app  
-'''
 
 #Data
 concrtype=EHEmat.HA25  #weakest EHE concrete type at joint
