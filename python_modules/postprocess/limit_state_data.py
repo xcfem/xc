@@ -165,6 +165,15 @@ class LimitStateData(object):
         with open(name + '.pkl', 'r') as f:
             return pickle.load(f)
 
+    def getCorrespondingLoadCombinations(self, combContainer):
+        '''Return the load combinations needed for this limit state.
+
+        :param combContainer: container with the definition of the different
+                              combination families (ULS, fatigue, SLS,...)
+                              see actions/combinations module.
+        '''
+        return combContainer.getCorrespondingLoadCombinations(self.designSituation)
+    
     def dumpCombinations(self,combContainer,loadCombinations):
         '''Load into the solver the combinations needed for this limit state.
 
@@ -174,24 +183,14 @@ class LimitStateData(object):
         :param loadCombinations: load combination handler inside the XC solver.
         '''
         loadCombinations.clear()
-        if(self.designSituation=='permanent'):
-            combContainer.ULS.perm.dumpCombinations(loadCombinations)
-        elif(self.designSituation== 'quasi-permanent'):
-            combContainer.SLS.qp.dumpCombinations(loadCombinations)
-        elif(self.designSituation== 'frequent'):
-            combContainer.SLS.freq.dumpCombinations(loadCombinations)
-        elif(self.designSituation== 'rare'):
-            combContainer.SLS.rare.dumpCombinations(loadCombinations)
-        elif(self.designSituation== 'fatigue'):
-            combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
-        elif(self.designSituation== 'sls_earthquake'):
-            combContainer.SLS.earthquake.dumpCombinations(loadCombinations)
-        elif(self.designSituation== 'uls_earthquake'):
-            combContainer.ULS.earthquake.dumpCombinations(loadCombinations)
+        # Get the combinations corresponding to this design situation.
+        combinations= self.getCorrespondingLoadCombinations(combContainer)
+        if(combinations):
+            combinations.dumpCombinations(loadCombinations)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(self.designSituation)+"' unknown..")
+            lmsg.warning(className+'.'+methodName+"; something went wrong. Couldn\'t dump the load combinations.")
         return loadCombinations
                          
     def getLastCalculationTime(self):

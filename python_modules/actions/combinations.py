@@ -324,3 +324,32 @@ class CombContainer(object):
         if not retval:
             retval= self.ULS.getLoadCaseDispParameters(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
         return retval
+
+    def getCorrespondingLoadCombinations(self, designSituation):
+        '''Return the load combinations needed for the design situation
+           argument.
+
+        :param desingSituation: string identifying the design situation
+                                (i. e.: permanent, quasi-permanent,
+                                        sls_earthquake, ...).
+        '''
+        retval= None
+        if(designSituation=='permanent'):
+            retval= self.ULS.perm
+        elif(designSituation== 'quasi-permanent'):
+            retval= self.SLS.qp
+        elif(designSituation== 'frequent'):
+            retval= self.SLS.freq
+        elif(designSituation== 'rare'):
+            retval= self.SLS.rare
+        elif(designSituation== 'fatigue'):
+            retval= self.ULS.fatigue
+        elif(designSituation== 'sls_earthquake'):
+            retval= self.SLS.earthquake
+        elif(designSituation== 'uls_earthquake'):
+            retval= self.ULS.earthquake
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(designSituation)+"' unknown.")
+        return retval
