@@ -132,11 +132,14 @@ class OutputStyle(object):
             unitDescription= self.getRotationUnitsDescription()
         elif(itemToDisp=='CF' or itemToDisp=='getCF'):
             fConvUnits= 1.0
-            unitDescription=''
+            unitDescription= ''
         elif(itemToDisp.startswith('sigma_')):
             fConvUnits= self.getPressureUnitsScaleFactor()
             unitDescription= self.getPressureUnitsDescription()
         elif(itemToDisp.endswith('stress')):
+            fConvUnits= self.getPressureUnitsScaleFactor()
+            unitDescription= self.getPressureUnitsDescription()
+        elif(itemToDisp.endswith('getMaxSteelStress')):
             fConvUnits= self.getPressureUnitsScaleFactor()
             unitDescription= self.getPressureUnitsDescription()
         elif(itemToDisp.startswith('epsilon_')):
