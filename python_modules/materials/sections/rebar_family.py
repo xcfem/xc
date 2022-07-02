@@ -183,7 +183,7 @@ class FamNBars(RebarFamily):
         :param spacing: spacing of the bars.
         :param concreteCover: concrete cover of the bars.
         '''
-        super(RebarFamily, self).__init__(steel= steel, diam= diam, spacing= spacing, concreteCover= concreteCover)
+        super(FamNBars, self).__init__(steel= steel, diam= diam, spacing= spacing, concreteCover= concreteCover)
         self.n= int(n) # number of bars
         
     def __repr__(self):
@@ -251,13 +251,9 @@ class RebarArrangement(object):
                 self.width= width
                 self.spacing= self.width/(self.numberOfRebars-1)
         elif(width is None):
-            if((numberOfRebars is None) or (spacing is None)):
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(methodName+'; number of rebars and spacing values needed.')
-            else:
-                self.numberOfRebars= numberOfRebars
-                self.spacing= spacing
-                self.width= (self.numberOfRebars-1)*self.spacing
+            self.numberOfRebars= numberOfRebars
+            self.spacing= spacing
+            self.width= (self.numberOfRebars-1)*self.spacing
         else:
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(methodName+'; one of the values (number of rebars, spacing or width) is supposed to be unknown (None).')
