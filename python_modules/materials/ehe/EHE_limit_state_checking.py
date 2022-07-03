@@ -155,7 +155,7 @@ class RebarController(lscb.EURebarController):
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        beta= self.getBeta(rebarDiameter= rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
+        beta= self.getBeta(rebarDiameter= rebarDiameter, barShape= 'straight', lateralConcreteCover= lateralConcreteCover)
         tensionedBars= not self.compression      
         return steel.getLapLength(concrete, rebarDiameter, self.pos, distBetweenNearestSplices, beta= beta, efficiency= steelEfficiency, ratioOfOverlapedTensionBars= ratioOfOverlapedTensionBars, tensionedBars= tensionedBars, dynamicEffects= dynamicEffects)
     
