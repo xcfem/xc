@@ -1,18 +1,5 @@
-# Truss and frame elements
+# Verification tests for beam-column elements
 
-This directory contains the classes that define the truss and frame elements available in XC.
-
-## Contents
-
-         - beam2d: beam elements for two-dimensional problems.
-         - beam3d: beam elements for three-dimensional problems.
-         - beamWithHinges: beam element with hinges.
-         - dispBeamColumn: displacement formulation beam elements.
-         - elasticBeamColumn: elastic beam elements.
-         - forceBeamColumn: force formulation beam elements.
-         - nonlinearBeamColumn: beam elements with non linear material.
-         - truss: truss elements.
-         - updatedLagrangianBeamColumn: beam elements with updated lagrangian formulation.
 
 ## References
 

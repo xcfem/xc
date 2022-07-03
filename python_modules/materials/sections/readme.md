@@ -8,3 +8,5 @@ Tools to deal with cross-sections to be used with beams or rods or by themselves
 - [You Gotta Keep ’em Aggregated](https://portwooddigital.com/2021/07/04/you-gotta-keep-em-aggregated/)
 - [Repeated Section Modes](https://portwooddigital.com/2021/11/16/repeated-section-modes)
 - [Plane Sections Do Remain Plane](https://portwooddigital.com/2022/05/15/plane-sections-do-remain-plane)
+- [Euler–Bernoulli beam theory](https://en.wikipedia.org/wiki/Euler%E2%80%93Bernoulli_beam_theory)
+- [Elastic Shear Beams in OpenSees](https://portwooddigital.com/2022/07/03/elastic-shear-beams-in-opensees/)
