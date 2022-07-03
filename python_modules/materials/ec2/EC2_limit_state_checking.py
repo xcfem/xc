@@ -19,7 +19,7 @@ from misc_utils import log_messages as lmsg
 from materials import concrete_base
 from materials.sections import rebar_family as rf
 
-class RebarController(lscb.RebarController):
+class RebarController(lscb.EURebarController):
     '''Control of some parameters as development length 
        minimum reinforcement and so on.
 
@@ -27,13 +27,6 @@ class RebarController(lscb.RebarController):
                  and the position of the bar during concreting.
                  eta1= 1,0 when 'good' conditions are obtained and
                  eta1= 0,7 for all other cases.
-    :ivar compression: true if reinforcement is compressed.
-    :ivar alpha_1: effect of the form of the bars assuming adequate cover.
-    :ivar alpha_3: effect of confinement by transverse reinforcement.
-    :ivar alpha_4: influence of one or more welded transverse bars along 
-                    the design anchorage length.
-    :ivar alpha_5: effect of the pressure transverse to the plane of 
-                    splitting along the design anchorage length.
     '''
 
     def __init__(self, concreteCover= 35e-3, spacing= 150e-3, eta1= 0.7, compression= True, alpha_1= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0):
@@ -55,13 +48,8 @@ class RebarController(lscb.RebarController):
         :param alpha_5: effect of the pressure transverse to the plane of 
                         splitting along the design anchorage length.
         '''
-        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
+        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing, compression= compression, alpha_1= alpha_1, alpha_3= alpha_3, alpha_4= alpha_4, alpha_5= alpha_5)
         self.eta1= eta1
-        self.compression= compression
-        self.alpha_1= alpha_1 #effect of the form of the bars assuming adequate cover.
-        self.alpha_3= alpha_3 # effect of confinement by transverse reinforcement.
-        self.alpha_4= alpha_4 # influence of one or more welded transverse bars along the design anchorage length.
-        self.alpha_5= alpha_5 # effect of the pressure transverse to the plane of splitting along the design anchorage length.
 
     def getBasicAnchorageLength(self, concrete, rebarDiameter, steel, steelEfficiency= 1.0):
         '''Returns basic required anchorage length in tension according to 
@@ -80,7 +68,7 @@ class RebarController(lscb.RebarController):
         return steel.getBasicAnchorageLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= self.eta1, steelEfficiency= steelEfficiency)
 
     def getConcreteMinimumCoverEffect(self, rebarDiameter, barShape= 'bent', lateralConcreteCover= None):
-        ''' Return the value of the alpha_2 factors that introduces the effect
+        ''' Return the value of the alpha_2 factor that introduces the effect
             of concrete minimum cover according to figure 8.3 and table 8.2
             of EC2:2004.
 
@@ -90,29 +78,7 @@ class RebarController(lscb.RebarController):
                                      of EC2:2004). If None make it equal to
                                      the regular concrete cover.
         '''
-        retval= 1.0
-        if(not self.compression):
-            if(lateralConcreteCover is None):
-                lateralConcreteCover= self.concreteCover
-            if(barShape=='straight'):
-                cd= min(self.spacing/2.0, lateralConcreteCover, self.concreteCover)
-                retval-= 0.15*(cd-rebarDiameter)/rebarDiameter
-                retval= max(retval, 0.7)
-            elif(barShape=='bent'):
-                cd= min(self.spacing/2.0, lateralConcreteCover)
-                retval-= 0.15*(cd-3*rebarDiameter)/rebarDiameter
-                retval= max(retval, 0.7)
-            elif(barShape=='looped'):
-                cd= min(self.spacing/2.0, self.concreteCover)
-                retval-= 0.15*(cd-3*rebarDiameter)/rebarDiameter
-                retval= max(retval, 0.7)
-            else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_nameS
-                lmsg.error(className+'.'+methodName+'; unknown bar shape: '+str(barShape)+'.')
-        retval= min(retval, 1.0)
-        return retval
-        
+        return super(RebarController, self).getConcreteMinimumCoverEffect(rebarDiameter= rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
     
     def getDesignAnchorageLength(self, concrete, rebarDiameter, steel, steelEfficiency= 1.0, barShape= 'bent', lateralConcreteCover= None):
         '''Returns design  anchorage length according to clause 8.4.4

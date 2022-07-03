@@ -31,29 +31,29 @@ lbIHA25B400= {0.006:0.12, 0.008:0.16, 0.01:0.2, 0.012:0.24, 0.016:0.32, 0.02:0.4
 lbIIHA25B400= {0.006:0.1714, 0.008:0.2286, 0.01:0.2857, 0.012:0.3429, 0.016:0.4571, 0.02:0.672, 0.025:1.05}
 
 # Rebar controller.
-rebarControllerPosI= EHE_limit_state_checking.RebarController(concreteCover= cCover, pos= 'I')
-rebarControllerPosII= EHE_limit_state_checking.RebarController(concreteCover= cCover, pos= 'II')
+rebarControllerPosI= EHE_limit_state_checking.RebarController(concreteCover= cCover, pos= 'I', compression= True)
+rebarControllerPosII= EHE_limit_state_checking.RebarController(concreteCover= cCover, pos= 'II', compression= True)
 
 
 err= 0.0
 for key in lbIHA25B500:
     lbRef= lbIHA25B500[key]
-    lbI= rebarControllerPosI.getNetAnchorageLength(ha25, key, b500s, beta= 1.0, efficiency= 1.0)
+    lbI= rebarControllerPosI.getNetAnchorageLength(ha25, key, b500s, steelEfficiency= 1.0)
     err+= (lbRef-lbI)**2
     
 for key in lbIIHA25B500:
     lbRef= lbIIHA25B500[key]
-    lbI= rebarControllerPosII.getNetAnchorageLength(ha25, key, b500s, beta= 1.0, efficiency= 1.0)
+    lbI= rebarControllerPosII.getNetAnchorageLength(ha25, key, b500s, steelEfficiency= 1.0)
     err+= (lbRef-lbI)**2
     
 for key in lbIHA25B400:
     lbRef= lbIHA25B400[key]
-    lbI= rebarControllerPosI.getNetAnchorageLength(ha25, key, b400s, beta= 1.0, efficiency= 1.0)
+    lbI= rebarControllerPosI.getNetAnchorageLength(ha25, key, b400s, steelEfficiency= 1.0)
     err+= (lbRef-lbI)**2
     
 for key in lbIIHA25B400:
     lbRef= lbIIHA25B400[key]
-    lbI= rebarControllerPosII.getNetAnchorageLength(ha25, key, b400s, beta= 1.0, efficiency= 1.0)
+    lbI= rebarControllerPosII.getNetAnchorageLength(ha25, key, b400s, steelEfficiency= 1.0)
     err+= (lbRef-lbI)**2
 
 err= math.sqrt(err)

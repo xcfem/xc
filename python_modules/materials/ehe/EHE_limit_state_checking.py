@@ -22,28 +22,35 @@ from materials import concrete_base
 from materials.sections import rebar_family as rf
 from postprocess.reports import common_formats as fmt
 
-class RebarController(lscb.RebarController):
+class RebarController(lscb.EURebarController):
     '''Control of some parameters as development length 
        minimum reinforcement and so on.
 
-       :ivar pos: reinforcement position according to clause 66.5.1
-                  of EHE-08.
+       :ivar pos: reinforcement position according to clause 69.5.1.1
+                  of EHE-08 (I: good adherence, II: poor adherence).
     '''    
-    def __init__(self, concreteCover= 35e-3, spacing= 150e-3, pos= 'II'):
+    def __init__(self, concreteCover= 35e-3, spacing= 150e-3, pos= 'II', compression= True, alpha_1= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0):
         '''Constructor.
 
         :param concreteCover: the distance from center of a bar or wire to 
                              nearest concrete surface.
         :param spacing: center-to-center spacing of bars or wires being 
                        developed, in.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1.1
+                    of EHE-08 (I: good adherence, II: poor adherence).
+        :param compression: true if reinforcement is compressed.
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_4: influence of one or more welded transverse bars along 
+                        the design anchorage length.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
         '''
-        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
+        super(RebarController,self).__init__(concreteCover= concreteCover, spacing= spacing, compression= compression, alpha_1= alpha_1, alpha_3= alpha_3, alpha_4= alpha_4, alpha_5= alpha_5)
         self.pos= pos
 
     def getM(self, concrete, steel):
-        ''' Return the "m" coefficient according to table 66.5.1.2.a of
+        ''' Return the "m" coefficient according to table 69.5.1.2.a of
             EHE-08
 
         :param concrete: concrete material.
@@ -51,48 +58,93 @@ class RebarController(lscb.RebarController):
         '''
         return concrete.getM(steel)
 
-    def getBasicAnchorageLength(self, concrete, phi, steel, dynamicEffects= False):
+    def getBasicAnchorageLength(self, concrete, rebarDiameter, steel, dynamicEffects= False):
         '''Returns basic anchorage length in tension according to clause
-           66.5.1.2 of EHE.
+           69.5.1.2 of EHE.
 
         :param concrete: concrete material.
-        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param rebarDiameter: nominal diameter of bar, wire, or prestressing strand.
         :param steel: reinforcement steel.
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        return steel.getBasicAnchorageLength(concrete, phi, self.pos, dynamicEffects)
+        return steel.getBasicAnchorageLength(concrete, rebarDiameter, self.pos, dynamicEffects)
+    
+    def getConcreteMinimumCoverEffect(self, rebarDiameter, barShape= 'bent', lateralConcreteCover= None):
+        ''' Return the value of the alpha_2 factor that introduces the effect
+            of concrete minimum cover according to figure 69.5.1.2.a and 
+            table 69.5.1.2.c of EHE-08.
 
-    def getNetAnchorageLength(self ,concrete, phi, steel, beta= 1.0, efficiency= 1.0, tensionedBars= True, dynamicEffects= False):
+        :param rebarDiameter: nominal diameter of the bar.
+        :param barShape: 'straight' or 'bent' or 'looped'.
+        :param lateralConcreteCover: lateral concrete cover (c1 in figure 8.3
+                                     of EC2:2004). If None make it equal to
+                                     the regular concrete cover.
+        '''
+        return super(RebarController, self).getConcreteMinimumCoverEffect(rebarDiameter= rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
+
+    def getBeta(self, rebarDiameter, barShape= 'bent', lateralConcreteCover= None):
+        ''' Return the value of beta according to the commentary to clause
+            69.5.1.2 of EHE-08 and table 69.5.1.2.c.
+
+        :param rebarDiameter: nominal diameter of the bar.
+        :param barShape: 'straight' or 'bent' or 'looped'.
+        :param lateralConcreteCover: lateral concrete cover (c1 in figure 8.3
+                                     of EC2:2004). If None make it equal to
+                                     the regular concrete cover.
+        '''
+        alpha_2= self.getConcreteMinimumCoverEffect(rebarDiameter= rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
+        return self.alpha_1*alpha_2*self.alpha_3*self.alpha_4*self.alpha_5
+
+    def getNetAnchorageLength(self ,concrete, rebarDiameter, steel, steelEfficiency= 1.0, barShape= 'bent', lateralConcreteCover= None, dynamicEffects= False):
         '''Returns net anchorage length in tension according to clause
-           6.5.1.2 of EHE.
+           69.5.1.2 of EHE.
 
         :param concrete: concrete material.
-        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param rebarDiameter: nominal diameter of bar, wire, or prestressing strand.
         :param steel: reinforcement steel.
-        :param beta: reduction factor defined in Table 69.5.1.2.b.
-        :param efficiency: working stress of the reinforcement that it is 
+        :param steelEfficiency: working stress of the reinforcement that it is 
                            intended to anchor, on the most unfavourable 
                            load hypothesis, in the section from which 
                            the anchorage length will be determined divided
                            by the steel design yield strength.
-        :param tensionedBars: true if the bars are in tension.
+        :param barShape: 'straight' or 'bent' or 'looped'.
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        return steel.getNetAnchorageLength(concrete, phi, self.pos, beta, efficiency, tensionedBars, dynamicEffects)
+        beta= self.getBeta(rebarDiameter= rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
+        tensionedBars= not self.compression
+        return steel.getNetAnchorageLength(concrete, rebarDiameter, self.pos, beta= beta, efficiency= steelEfficiency, tensionedBars= tensionedBars, dynamicEffects= dynamicEffects)
 
-    def getLapLength(self ,concrete, phi, steel, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
+    def getDesignAnchorageLength(self ,concrete, rebarDiameter, steel, steelEfficiency= 1.0, barShape= 'bent', lateralConcreteCover= None, dynamicEffects= False):
+        '''Added for EC2 compatibility: returns net anchorage length in tension according to clause
+           69.5.1.2 of EHE.
+
+        :param concrete: concrete material.
+        :param rebarDiameter: nominal diameter of bar, wire, or prestressing strand.
+        :param steel: reinforcement steel.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                           intended to anchor, on the most unfavourable 
+                           load hypothesis, in the section from which 
+                           the anchorage length will be determined divided
+                           by the steel design yield strength.
+        :param barShape: 'straight' or 'bent' or 'looped'.
+        :param dynamicEffects: true if the anchorage is subjected to
+                               dynamic effects.
+        '''
+        return  self.getNetAnchorageLength(concrete, rebarDiameter= rebarDiameter, steel= steel, steelEfficiency= steelEfficiency, barShape= barShape, lateralConcreteCover= lateralConcreteCover, dynamicEffects= dynamicEffects)
+
+    def getLapLength(self ,concrete, rebarDiameter, steel, distBetweenNearestSplices, steelEfficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, lateralConcreteCover= None, dynamicEffects= False):
         '''Returns net lap length in tension according to clause
            69.5.2 of EHE08.
 
         :param concrete: concrete material.
-        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param rebarDiameter: nominal diameter of bar, wire, or prestressing strand.
         :param steel: reinforcement steel.
         :param distBetweenNearestSplices: distance between the nearest splices
                                           according to figure 69.5.2.2.a.
         :param beta: reduction factor defined in Table 69.5.1.2.b.
-        :param efficiency: working stress of the reinforcement that it is 
+        :param steelEfficiency: working stress of the reinforcement that it is 
                            intended to anchor, on the most unfavourable 
                            load hypothesis, in the section from which 
                            the anchorage length will be determined divided
@@ -100,26 +152,27 @@ class RebarController(lscb.RebarController):
         :param ratioOfOverlapedTensionBars: ratio of overlapped tension bars 
                                             in relation to the total steel
                                             section.
-        :param tensionedBars: true if the bars are in tension.
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        return steel.getLapLength(concrete, phi, self.pos, distBetweenNearestSplices, beta, efficiency, ratioOfOverlapedTensionBars, tensionedBars, dynamicEffects)
+        beta= self.getBeta(rebarDiameter= rebarDiameter, barShape= barShape, lateralConcreteCover= lateralConcreteCover)
+        tensionedBars= not self.compression      
+        return steel.getLapLength(concrete, rebarDiameter, self.pos, distBetweenNearestSplices, beta= beta, efficiency= steelEfficiency, ratioOfOverlapedTensionBars= ratioOfOverlapedTensionBars, tensionedBars= tensionedBars, dynamicEffects= dynamicEffects)
     
 
 class StrandController(RebarController):
     '''Control of some parameters as the length of transmission.
 
-       :ivar pos: reinforcement position according to clause 66.5.1
-                  of EHE-08.
+       :ivar pos: reinforcement position according to clause 69.5.1
+                  of EHE-08 (I: good adherence, II: poor adherence).
        :ivar reinfType: prestressed reinforcement type: 'wire' or 'strand'
     '''
     
     def __init__(self, reinfType= 'strand', pos= 'II'):
         '''Constructor.
 
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         '''
         super(StrandController,self).__init__(pos)
         self.reinfType= reinfType
@@ -135,11 +188,11 @@ class StrandController(RebarController):
         '''
         return steel.getDesignAdherenceStress(concrete,self.pos,t)
 
-    def getTransmissionLength(self, phi, concrete, steel, sg_pi, suddenRelease= True, ELU= True, t= 28):
+    def getTransmissionLength(self, rebarDiameter, concrete, steel, sg_pi, suddenRelease= True, ELU= True, t= 28):
         ''' Return the length of transmission for the strand according
             to the commentaries to the article 70.2.3 of EHE.
 
-        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param rebarDiameter: nominal diameter of the wire, or prestressing strand.
         :param concrete: concrete material.
         :param steel: prestressing steel material.
         :param sg_pi: steel stress just after release.
@@ -149,14 +202,14 @@ class StrandController(RebarController):
         :param t: concrete age at themoment of the prestress transmission
                   expressed in days.
         '''
-        return steel.getTransmissionLength(phi, concrete, steel, sg_pi, suddenRelease, ELU, t)
+        return steel.getTransmissionLength(rebarDiameter, concrete, steel, sg_pi, suddenRelease, ELU, t)
 
 
-    def lbpd(self, phi, concrete, sg_pi, suddenRelease= True, ELU= True, t= 28):
+    def lbpd(self, rebarDiameter, concrete, sg_pi, suddenRelease= True, ELU= True, t= 28):
         ''' Return the design anchorage length for the strand according
             to the commentaries to the article 70.2.3 of EHE.
 
-        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param rebarDiameter: nominal diameter of the wire, or prestressing strand.
         :param concrete: concrete material.
         :param sg_pi: tendon stress just after release.
         :param sg_pd: tendon stress under design load.
@@ -167,7 +220,7 @@ class StrandController(RebarController):
         :param t: concrete age at themoment of the prestress transmission
                   expressed in days.
         '''
-        lbpt= self.lbtp(phi, concrete, sg_pi, suddenRelease, ELU, t)
+        lbpt= self.lbtp(rebarDiameter, concrete, sg_pi, suddenRelease, ELU, t)
         return lbpt
     
 # Reinforced concrete section shear checking.
@@ -1879,8 +1932,8 @@ class LongShearJoints(object):
 class EHERebarFamily(rf.RebarFamily):
     ''' Family or reinforcement bars with checking according to EHE-08.
 
-       :ivar pos: reinforcement position according to clause 66.5.1
-                  of EHE-08.
+       :ivar pos: reinforcement position according to clause 69.5.1
+                  of EHE-08 (I: good adherence, II: poor adherence).
     '''
     def __init__(self,steel, diam, spacing, concreteCover, pos= 'II'):
         ''' Constructor.
@@ -1889,8 +1942,8 @@ class EHERebarFamily(rf.RebarFamily):
         :param diam: diameter of the bars.
         :param spacing: spacing of the bars.
         :param concreteCover: concrete cover of the bars.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         '''
         super(EHERebarFamily,self).__init__(steel,diam,spacing,concreteCover)
         self.pos= pos

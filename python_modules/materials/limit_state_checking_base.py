@@ -39,6 +39,71 @@ class RebarController(object):
         self.concreteCover= concreteCover
         self.spacing= spacing
 
+class EURebarController(RebarController):
+    '''Base class for Eurocode based rebar controllers.
+
+    '''    
+    def __init__(self, concreteCover, spacing, compression, alpha_1= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0):
+        '''Constructor.
+
+        :param concreteCover: the distance from center of a bar or wire to 
+                             nearest concrete surface.
+        :param spacing: center-to-center spacing of bars or wires being 
+                       developed, in.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param compression: true if reinforcement is compressed.
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_4: influence of one or more welded transverse bars along 
+                        the design anchorage length.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
+        '''
+        super(EURebarController,self).__init__(concreteCover= concreteCover, spacing= spacing)
+        self.compression= compression # true if reinforcement is compressed.
+        self.alpha_1= alpha_1 #effect of the form of the bars assuming adequate cover.
+        self.alpha_3= alpha_3 # effect of confinement by transverse reinforcement.
+        self.alpha_4= alpha_4 # influence of one or more welded transverse bars along the design anchorage length.
+        self.alpha_5= alpha_5 # effect of the pressure transverse to the plane of splitting along the design anchorage length.
+
+    def getConcreteMinimumCoverEffect(self, rebarDiameter, barShape= 'bent', lateralConcreteCover= None):
+        ''' Return the value of the alpha_2 factor that introduces the effect
+            of concrete minimum cover according to figure 8.3 and table 8.2
+            of EC2:2004.
+
+        :param rebarDiameter: nominal diameter of the bar.
+        :param barShape: 'straight' or 'bent' or 'looped'.
+        :param lateralConcreteCover: lateral concrete cover (c1 in figure 8.3
+                                     of EC2:2004). If None make it equal to
+                                     the regular concrete cover.
+        '''
+        retval= 1.0
+        if(not self.compression): # bar in tension.
+            if(lateralConcreteCover is None):
+                lateralConcreteCover= self.concreteCover
+            if(barShape=='straight'):
+                cd= min(self.spacing/2.0, lateralConcreteCover, self.concreteCover)
+                retval-= 0.15*(cd-rebarDiameter)/rebarDiameter
+                retval= max(retval, 0.7)
+            elif(barShape=='bent'):
+                cd= min(self.spacing/2.0, lateralConcreteCover)
+                retval-= 0.15*(cd-3*rebarDiameter)/rebarDiameter
+                retval= max(retval, 0.7)
+            elif(barShape=='looped'):
+                cd= min(self.spacing/2.0, self.concreteCover)
+                retval-= 0.15*(cd-3*rebarDiameter)/rebarDiameter
+                retval= max(retval, 0.7)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_nameS
+                lmsg.error(className+'.'+methodName+'; unknown bar shape: '+str(barShape)+'.')
+        retval= min(retval, 1.0)
+        return retval
+        
+
 class LimitStateControllerBase(object):
     '''
     Basic parameters for limit state control (normal stresses, shear, crack,...)    .'''

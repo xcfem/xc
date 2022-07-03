@@ -53,12 +53,12 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
 
     def getBasicAnchorageLength(self, concrete, phi, pos, dynamicEffects= False):
         '''Returns basic anchorage length in tension according to clause
-           66.5.1.2 of EHE.
+           69.5.1.2 of EHE.
 
         :param concrete: concrete material.
         :param phi: nominal diameter of bar, wire, or prestressing strand.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
@@ -82,8 +82,8 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
 
         :param concrete: concrete material.
         :param phi: nominal diameter of bar, wire, or prestressing strand.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param beta: reduction factor defined in Table 69.5.1.2.b.
         :param efficiency: working stress of the reinforcement that it is 
                            intended to anchor, on the most unfavourable 
@@ -110,8 +110,8 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
 
         :param concrete: concrete material.
         :param phi: nominal diameter of bar, wire, or prestressing strand.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param distBetweenNearestSplices: distance between the nearest splices
                                           according to figure 69.5.2.2.a.
         :param beta: reduction factor defined in Table 69.5.1.2.b.
@@ -162,7 +162,7 @@ class EHEConcrete(concrete_base.Concrete):
         self.typeAggregate= typeAggregate
 
     def getM(self, steel):
-        ''' Return the "m" coefficient according to table 66.5.1.2.a of
+        ''' Return the "m" coefficient according to table 69.5.1.2.a of
             EHE-08
 
         :param steel: reinforcing steel.
@@ -448,8 +448,8 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
             to the commentaries to the article 70.2.3 of EHE.
 
         :param concrete: concrete material.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param t: concrete age at themoment of the prestress transmission
                   expressed in days.
         '''
@@ -472,8 +472,8 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
 
         :param phi: nominal diameter of the wire, or prestressing strand.
         :param concrete: concrete material.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param sg_pi: steel stress just after release.
         :param suddenRelease: if true, prestressing is transfered to concrete
                               in a very short time.
@@ -500,8 +500,8 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         :param phi: nominal diameter of the wire, or prestressing strand.
         :param lbpt: length of transmission for the tendon.
         :param concrete: concrete material.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param sg_pi: tendon stress just after release.
         :param sg_pd: tendon stress under design load.
         :param t: concrete age at themoment of the prestress transmission
@@ -519,8 +519,8 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
 
         :param phi: nominal diameter of the wire, or prestressing strand.
         :param concrete: concrete material.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param sg_pi: tendon stress just after release.
         :param sg_pd: tendon stress under design load.
         :param sg_pcs: tendon stress due to prestress after all losses.
@@ -652,8 +652,8 @@ class Y1860S7Strand(PrestressingSteel):
             to the commentaries to the article 70.2.3 of EHE.
 
         :param concrete: concrete material.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param sg_pi: steel stress just after release.
         :param suddenRelease: if true, prestressing is transfered to concrete
                               in a very short time.
@@ -668,8 +668,8 @@ class Y1860S7Strand(PrestressingSteel):
             to the commentaries to the article 70.2.3 of EHE.
 
         :param concrete: concrete material.
-        :param pos: reinforcement position according to clause 66.5.1
-                   of EHE-08.
+        :param pos: reinforcement position according to clause 69.5.1
+                   of EHE-08 (I: good adherence, II: poor adherence).
         :param sg_pi: tendon stress just after release.
         :param sg_pd: tendon stress under design load.
         :param sg_pcs: tendon stress due to prestress after all losses.
