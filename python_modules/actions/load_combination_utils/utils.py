@@ -14,12 +14,13 @@ def getCombinationDict(loadCombination:str):
 
     :param loadCombination: string of the form "1.00*G1 + 1.00*G2 + 1.35*Qwind"
     '''
-    loads= loadCombination.split('+')
     retval= dict()
-    for l in loads:
-        l= l.strip()
-        factor, action= l.split('*')
-        retval[action]= float(factor)
+    if(len(loadCombination)>0):
+        loads= loadCombination.split('+')
+        for l in loads:
+            l= l.strip()
+            factor, action= l.split('*')
+            retval[action]= float(factor)
     return retval
 
 def getCombinationExpr(combDict:dict):
