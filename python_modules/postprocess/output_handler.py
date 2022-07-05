@@ -391,7 +391,7 @@ class OutputHandler(object):
         for st in setsToDisplayReactions:
             self.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
             
-    def displayDiagram(self, attributeName,component, setToDispRes,setToDisplay,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None):
+    def displayDiagram(self, attributeName,component, setToDispRes,setToDisplay,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
         '''Auxiliary function to display results on linear elements.
 
         :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
@@ -410,8 +410,10 @@ class OutputHandler(object):
                     initial/undeformed shape)
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
+        :param defaultDirection: default direction of the diagram (J: element 
+                                 local j vector or K: element local K vector).
         '''
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component)
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component, defaultDirection= defaultDirection)
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters=cameraParameters
@@ -420,7 +422,7 @@ class OutputHandler(object):
         displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
         displaySettings.displayScene(caption=caption,fileName=fileName)
 
-    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
+    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1, titleScbar=None, defaultDirection= 'J'):
         '''displays the component of internal forces in the set of entities as a 
          diagram over lines (i.e. appropriated for beam elements).
 
@@ -437,6 +439,8 @@ class OutputHandler(object):
                 initial/undeformed shape)
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
+        :param defaultDirection: default direction of the diagram (J: element 
+                                 local j vector or K: element local K vector).
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -445,12 +449,12 @@ class OutputHandler(object):
         scaleFactor= self.outputStyle.internalForcesDiagramScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
-        diagAux= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
+        diagAux= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
         maxAbs= diagAux.getMaxAbsComp()
         if maxAbs > 0:
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -794,7 +798,7 @@ class OutputHandler(object):
         displaySettings.displayScene(caption,fileName)
         return displaySettings
 
-    def displayBeamResult(self,attributeName,itemToDisp,beamSetDispRes,setToDisplay=None,caption=None,fileName=None,defFScale=0.0):
+    def displayBeamResult(self,attributeName,itemToDisp,beamSetDispRes,setToDisplay=None,caption=None,fileName=None,defFScale=0.0, defaultDirection= 'J'):
         '''display results for beam elements from a limit state verification file.
 
         :param attributeName:attribute name(e.g. 'ULS_normalStressesResistance')
@@ -812,6 +816,8 @@ class OutputHandler(object):
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
 
+        :param defaultDirection: default direction of the diagram (J: element 
+                                 local j vector or K: element local K vector).
        '''
         #auto-scale parameters
         if(len(beamSetDispRes.elements)):            
@@ -830,7 +836,7 @@ class OutputHandler(object):
                 if(len(descrSet)==0): # No description provided.
                     descrSet= beamSetDispRes.name
                 caption= attributeName + ', ' + itemToDisp +' '+unitDescription+ '. '+ descrSet
-            diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp)
+            diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp, defaultDirection= defaultDirection)
             diagram.addDiagram()
             displaySettings= vtk_FE_graphic.DisplaySettingsFE()
             displaySettings.cameraParameters= self.getCameraParameters()

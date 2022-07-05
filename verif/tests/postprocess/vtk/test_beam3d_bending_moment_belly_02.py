@@ -129,7 +129,7 @@ modelSpace.analyze(calculateNodalReactions=True)
 xcTotalSet= modelSpace.getTotalSet()
 MyValues= list()
 for e in xcTotalSet.elements:
-    MyValues.append(cv.getElementInternalForceComponentData(e, 'My'))
+    MyValues.append(cv.getElementInternalForceComponentData(e, 'My', defaultDirection= 'J'))
 
 
 refMyValues= [[geom.Vector3d(0, 0, 1),   0.0, -1000],

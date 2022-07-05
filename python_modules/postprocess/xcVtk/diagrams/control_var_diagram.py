@@ -18,24 +18,33 @@ class ControlVarDiagram(cd.ColoredDiagram):
     '''Diagram of control var values (capacity factor values, 
     internal forces values (N,My,Mz,T,Vy,Vz), crack width values,...
 
-    :ivar scaleFactor:     scale factor for the diagram (can be negative  
-          too).
-    :ivar fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
     :ivar sets: list of element sets for which the diagram will be 
           displayed.
-    :param attributeName: name of the element's property that has the 
+    :iver attributeName: name of the element's property that has the 
            control var in it for example as in 
            elem.getProp(attributeName).component.
     :ivar component: property to be displayed 
           (possible arguments: 'CF', 'N', 'My', 'Mz', 'wk',...)
+    :ivar defaultDirection: default direction of the diagram (J: element local
+                            j vector or K: element local K vector).
     '''
-    def __init__(self, scaleFactor, fUnitConv, sets, attributeName, component):
+    def __init__(self, scaleFactor, fUnitConv, sets, attributeName, component, defaultDirection= 'J'):
         ''' Diagram constructor
+
+        :param scaleFactor: scale factor for the diagram (can be negative too).
+        :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
+        :param sets:      list of element sets for which the diagram will be displayed.
+        :param attributeName: name of the 
+        :param component: property to be displayed 
+                         (possible arguments: 'N', 'My', 'Mz'Vz,...)
+        :param defaultDirection: default direction of the diagram (J: element local
+                                 j vector or K: element local K vector).
         '''
         super(ControlVarDiagram,self).__init__(scaleFactor,fUnitConv)
         self.conjuntos= sets
         self.attributeName= attributeName 
         self.component= component
+        self.defaultDirection= defaultDirection
 
     def getElementComponentData(self,elem):
         '''Return the data to use to represent the diagram over the element
@@ -46,7 +55,12 @@ class ControlVarDiagram(cd.ColoredDiagram):
                'T'
         '''
         # default values
-        elemVDir= elem.getJVector3d(True) #initialGeometry= True
+        elemVDir= None
+        if(self.defaultDirection):
+            if(self.defaultDirection=='J'): # local J vector.
+                elemVDir= elem.getJVector3d(True) #initialGeometry= True
+            else: # local K vector.
+                elemVDir= elem.getKVector3d(True) #initialGeometry= True
         if(self.attributeName != "intForce"):
             attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
             attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
@@ -71,7 +85,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 value1= None
                 value2= None
         else:
-            [elemVDir,value1,value2]= cv.getElementInternalForceComponentData(elem, self.component)
+            [elemVDir,value1,value2]= cv.getElementInternalForceComponentData(elem, self.component, self.defaultDirection)
         return [elemVDir,value1,value2]
 
     def getMaxAbsComp(self):
@@ -83,17 +97,16 @@ class ControlVarDiagram(cd.ColoredDiagram):
         for s in self.conjuntos:
             for e in s.elements:
                 e.getResistingForce()
-                elementComponentData= self.getElementComponentData(e)
+                # direction irrelevant here.
+                elementComponentData= self.getElementComponentData(e) 
                 v1= abs(elementComponentData[1])
                 maxV= max(v1, maxV)
                 v2= abs(elementComponentData[2])
                 maxV= max(v2, maxV)
-        return maxV
-            
+        return maxV            
 
     def addDiagram(self):
-        '''Add diagram to the scene
-        '''
+        '''Add diagram to the scene.'''
         self.creaEstrucDatosDiagrama()
         self.creaLookUpTable()
         self.creaActorDiagrama()
@@ -101,10 +114,10 @@ class ControlVarDiagram(cd.ColoredDiagram):
         indiceSet= 0
         numSetsDiagrama= len(self.conjuntos)
         for s in self.conjuntos:
-          for e in s.elements:
-            e.getResistingForce()
-            componentData= self.getElementComponentData(e)
-            indxDiagrama= self.appendDataFromElementEnds(componentData[0],e,indxDiagrama,componentData[1],componentData[2])
+            for e in s.elements:
+                e.getResistingForce()
+                componentData= self.getElementComponentData(e)
+                indxDiagrama= self.appendDataFromElementEnds(componentData[0],e,indxDiagrama,componentData[1],componentData[2])
         self.updateLookUpTable()
         self.updateActorDiagrama()
 
