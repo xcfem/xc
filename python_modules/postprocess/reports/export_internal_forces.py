@@ -14,13 +14,17 @@ from materials.sections import internal_forces
 from misc_utils import log_messages as lmsg
 from model import model_inquiry
 
-def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stress'):
+def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stress', woodArmerAlsoForAxialForces= False):
     '''Creates a dictionary with the element's internal forces.
 
     :param nmbComb: combination name.
     :param elems: element set.
     :param vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
+    :param woodArmerAlsoForAxialForces: if true, use Wood-Armer method for both
+                                        axial and bending internal forces 
+                                        otherwise, use it only for bending 
+                                        moments.
     '''
     def getExtendedProperties(element):
         '''Return the values of the lateral buckling reduction reduction 
@@ -54,7 +58,7 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
         if('Shell' in elementType):
             internalForces= internal_forces.ShellMaterialInternalForces()
             internalForces.setFromAverageInShellElement(e)
-            internalForces= internalForces.getWoodArmer()
+            internalForces= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
             # Silently ask about maximum Von-Mises stress.
             maxVonMisesAtNodes= e.getValuesAtNodes(vonMisesStressId, True) 
             avgMaxVM= None
@@ -153,12 +157,16 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
     return combInternalForcesDict
 
-def exportInternalForces(nmbComb, elems, fDesc):
+def exportInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):
     '''Writes a comma separated values file with the element's internal forces.
 
     :param nmbComb: combination name.
     :param elems: element set.
     :param fDesc: file descriptor to write internal forces on.
+    :param woodArmerAlsoForAxialForces: if true, use Wood-Armer method for both
+                                        axial and bending internal forces 
+                                        otherwise, use it only for bending 
+                                        moments.
     '''
     errMsg= 'exportInternalForces deprecated use getInternalForcesDict'
     errMsg+= 'with apropriate arguments'
@@ -167,7 +175,7 @@ def exportInternalForces(nmbComb, elems, fDesc):
         if('Shell' in elementType):
           internalForces= internal_forces.ShellMaterialInternalForces()
           internalForces.setFromAverageInShellElement(e)
-          forcesOnNodes= internalForces.getWoodArmer()
+          forcesOnNodes= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
           sz= len(forcesOnNodes)
           for i in range(0,sz):
             force= forcesOnNodes[i]
@@ -217,29 +225,48 @@ def exportInternalForces(nmbComb, elems, fDesc):
             lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
       
 
-def exportShellInternalForces(nmbComb, elems, fDesc,fConv= 1.0):
-    '''Writes a comma separated values file with the element's internal forces.'''
+def exportShellInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):
+    '''Writes a comma separated values file with the element's internal forces.
+
+    :param nmbComb: combination name.
+    :param elems: element set whose internal forces will be exported..
+    :param fDesc: file descriptor to write internal forces on.
+    :param woodArmerAlsoForAxialForces: if true, use Wood-Armer method for both
+                                        axial and bending internal forces 
+                                        otherwise, use it only for bending 
+                                        moments.
+    '''
     errMsg= 'exportShellInternalForces deprecated use exportInternalForces'
-    errMsg+= 'with apropriate arguments'
+    errMsg+= ' with apropriate arguments'
     lmsg.error(errMsg)
     internalForces= internal_forces.ShellMaterialInternalForces()
     for e in elems:
       internalForces.setFromAverageInShellElement(e)
       strEsf= internalForces.getCSVString()
-      forcesOnNodes= internalForces.getWoodArmer()
+      forcesOnNodes= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
       sz= len(forcesOnNodes)
       for i in range(0,sz):
         force= forcesOnNodes[i]
         outStr= nmbComb+", "+str(e.tag)+", "+str(i)+", "+force.getCSVString()+'\n'
         fDesc.write(outStr)
 
-def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fName):
-    '''Writes a comma separated values file with the element's internal forces.'''
+def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fDesc, woodArmerAlsoForAxialForces= False):
+    '''Writes a comma separated values file with the element's internal forces.
+
+    :param nmbComb: combination name.
+    :param st: XC set containing the elements whose internal forces
+               will be exported.
+    :param fDesc: file descriptor to write internal forces on.
+    :param woodArmerAlsoForAxialForces: if true, use Wood-Armer method for
+                                        both axial and bending internal
+                                        forces otherwise, use it only for 
+                                        bending moments.
+    '''
     errMsg= 'exportaEsfuerzosShellSet deprecated use exportInternalForces'
-    errMsg+= 'with apropriate arguments'
+    errMsg+= ' with apropriate arguments'
     lmsg.error(errMsg)
     elems= st.elements
-    exportShellInternalForces(nmbComb,elems,fName)
+    exportShellInternalForces(nmbComb,elems,fDesc, woodArmerAlsoForAxialForces= woodArmerAlsoForAxialForces)
 
 def exportBeamInternalForces(nmbComb, elems, fName):
     '''Writes a comma separated values file with the element's internal forces.

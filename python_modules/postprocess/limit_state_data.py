@@ -93,7 +93,7 @@ class LimitStateData(object):
     
     envConfig= None
 
-    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation, woodArmerAlsoForAxialForces= False):
         '''Limit state data constructor.
 
 
@@ -103,10 +103,15 @@ class LimitStateData(object):
                                        display.
         :param designSituation: design situation; permanent, quasi-permanent,
                                 frequent, rare, earthquake. 
+        :param woodArmerAlsoForAxialForces: if true, use Wood-Armer method for
+                                            both axial and bending internal
+                                            forces otherwise, use it only for 
+                                            bending moments.
         '''
         self.label= limitStateLabel
         self.outputDataBaseFileName= outputDataBaseFileName
         self.designSituation= designSituation
+        self.woodArmerAlsoForAxialForces= woodArmerAlsoForAxialForces
        
     def getInternalForcesFileName(self):
         '''Return the name of the file where internal forces are stored.'''
@@ -136,7 +141,7 @@ class LimitStateData(object):
          :param nmbComb: combination name.
          :param elems: element set.
         '''
-        return eif.getInternalForcesDict(nmbComb,elems)
+        return eif.getInternalForcesDict(nmbComb= nmbComb, elems= elems,  woodArmerAlsoForAxialForces= self.woodArmerAlsoForAxialForces)
     
     def getReactionsDict(self, nmbComb, constrainedNodes):
         '''Creates a dictionary with the element's internal forces.
@@ -439,7 +444,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         :param nmbComb: combination name.
         :param elems: element set.
         '''
-        return eif.getInternalForcesDict(nmbComb,elems, vonMisesStressId= self.vonMisesStressId)
+        return eif.getInternalForcesDict(nmbComb,elems, vonMisesStressId= self.vonMisesStressId, woodArmerAlsoForAxialForces= False) # Wood-Armer has no sense here.
     
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
