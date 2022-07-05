@@ -1347,17 +1347,22 @@ def get_element_rc_sections(elements, propName= None):
             reinforcementIVector= el.getProp('reinforcementIVector') # direction of the reinforcement in the slab.
             elementIOrientation= el.getIVector3d(False)
             iOrientation= reinforcementIVector.dot(elementIOrientation)
+            theta= reinforcementIVector.getAngle(elementIOrientation)
             pRI= el.getProp("bottomReinforcementI")
             nRI= el.getProp("topReinforcementI")
             pRII= el.getProp("bottomReinforcementII")
             nRII= el.getProp("topReinforcementII")
-            if(abs(iOrientation)<1e-3): # reverse reinforcement directions.
+            if(abs(iOrientation)<0.7): # reverse reinforcement directions.
                 pRI, pRII= pRII, pRI
                 nRI, nRII= nRII, nRI
+                theta-= math.pi/2.0
             if(upOrientation>0): # for 2D elements reverse top and bottom
                                  # positions if dot product > 0.
                 pRI, nRI= nRI, pRI
                 pRII, nRII= nRII, pRII
+            if((abs(iOrientation)>1e-3) and (abs(abs(iOrientation)-1.0)>1e-3)): # reinforcement not parallel nor perpendicular
+                #el.setProp('theta', theta)
+                pass
             baseSectionII= baseSection.getCopy()
             baseSection.name+= 'I'
             baseSection.positvRebarRows= pRI
