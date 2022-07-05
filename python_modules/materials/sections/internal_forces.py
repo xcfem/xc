@@ -265,12 +265,12 @@ class ShellMaterialInternalForces:
         self.q23= eval(csvStr[7+offset])
 
     # Wood-Armer method for the assessment of reinforced concrete shells.
-    def getWoodArmer1(self, alsoForAxialForces= True):
+    def getWoodArmer1(self, alsoForAxialForces= False):
         '''returns Wood-Armer method internal forces for axis 1.
 
         :param alsoForAxialForces: if true use Wood-Armer method for both
                                    axial and bending internal forces 
-                                   otherwise use only for axial forces.
+                                   otherwise use it only for bending moments.
         '''
         N= self.n1
         M= self.m1+ math.copysign(self.m12,self.m1)
@@ -280,12 +280,12 @@ class ShellMaterialInternalForces:
             Vz= 0.0
         return CrossSectionInternalForces(N= N, Vy= self.q13, Vz= Vz, T= 0.0,My= M, Mz= 0.0)
 
-    def getWoodArmer2(self, alsoForAxialForces= True):
+    def getWoodArmer2(self, alsoForAxialForces= False):
         '''returns Wood-Armer method internal forces for axis 2.
 
         :param alsoForAxialForces: if true use Wood-Armer method for both
                                    axial and bending internal forces 
-                                   otherwise use only for axial forces.
+                                   otherwise use it only for bending moments.
         '''
         N= self.n2
         M= self.m2+ math.copysign(self.m12,self.m2)
@@ -295,11 +295,11 @@ class ShellMaterialInternalForces:
             Vz= 0.0        
         return CrossSectionInternalForces(N= N, Vy= self.q23, Vz= Vz,T= 0.0, My= M, Mz= 0.0)
 
-    def getWoodArmer(self, alsoForAxialForces= True):
+    def getWoodArmer(self, alsoForAxialForces= False):
         '''returns Wood-Armer method internal forces.
 
         :param alsoForAxialForces: if true use Wood-Armer method for both
                                    axial and bending internal forces 
-                                   otherwise use only for axial forces.
+                                   otherwise use it only for bending moments.
         '''
         return [self.getWoodArmer1(alsoForAxialForces),self.getWoodArmer2(alsoForAxialForces)]
