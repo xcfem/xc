@@ -1127,8 +1127,13 @@ class ShearController(lscb.ShearControllerBase):
         else:
             self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd,Td, circular)
 
-    def checkSection(self, sct, secHAParamsTorsion= None):
-        ''' Check shear on the section argument.'''
+    def checkSection(self, sct, torsionParameters= None):
+        ''' Check shear on the section argument.
+
+        :param sct: reinforced concrete section object to chech shear on.
+        :param torsionParameters: parameters that define torsional behaviour 
+                                  of the section as in clause 45.1 of EHE-08.
+        '''
         section= sct.getProp('sectionData')
         concreteCode= section.fiberSectionParameters.concrType
         reinforcementCode= section.fiberSectionParameters.reinfSteelType
@@ -1148,23 +1153,23 @@ class ShearController(lscb.ShearControllerBase):
         #Searching for the best theta angle (concrete strut inclination).
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
         thetaVuTmp=list()
-        self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
+        self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
         thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= (self.thetaMin+self.thetaMax)/2.0
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= 0.95*self.thetaMax
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= 1.05*self.thetaMin
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
         VuTmp= self.Vu
@@ -1192,12 +1197,12 @@ class ShearController(lscb.ShearControllerBase):
         '''
         if(self.verbose):
             lmsg.log("Postprocessing combination: "+combName)
-        secHAParamsTorsion= None # XXX Ignore torsional deformation.
+        torsionParameters= None # XXX Ignore torsional deformation.
         for e in elements:
             unusedR=e.getResistingForce()
             scc= e.getSection()
             idSection= e.getProp("idSection")
-            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(scc, secHAParamsTorsion)
+            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc, torsionParameters= torsionParameters)
             Mu= 0.0 #Apparently EHE doesn't use Mu
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
@@ -1468,8 +1473,8 @@ def printRebarCrackControlParameters():
 
 
 class TorsionParameters(object):
-    '''Methods for checking reinforced concrete section under torsion according to
-       clause 45.1 of EHE-08.'''
+    '''Methods for checking reinforced concrete section under torsion 
+       according to clause 45.1 of EHE-08.'''
     def __init__(self):
         self.h0= 0.0  # Actual thickness of the wall in the case of hollow sections.
         self.c= 0.0  # Covering of longitudinal reinforcements.

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 ''' Computation of Vsu value. The result is compared to that obtained
 from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
 '''
+
+from __future__ import print_function
 
 import sys
 from materials.ehe import EHE_limit_state_checking

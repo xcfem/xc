@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 ''' Computation of Vsu value. The results are compared with those obtained
 from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
 '''

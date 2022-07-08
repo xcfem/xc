@@ -1350,16 +1350,24 @@ def get_element_rc_sections(elements, propName= None):
             theta= reinforcementIVector.getAngle(elementIOrientation)
             pRI= el.getProp("bottomReinforcementI")
             nRI= el.getProp("topReinforcementI")
+            shRI= None
+            if(el.hasProp('shearReinforcementI')):
+               shRI= el.getProp('shearReinforcementI')
             pRII= el.getProp("bottomReinforcementII")
             nRII= el.getProp("topReinforcementII")
+            shRII= None
+            if(el.hasProp('shearReinforcementII')):
+                shRII= el.getProp('shearReinforcementII')
             if(abs(iOrientation)<0.7): # reverse reinforcement directions.
-                pRI, pRII= pRII, pRI
-                nRI, nRII= nRII, nRI
+                pRI, pRII= pRII, pRI # positive reinforcement.
+                nRI, nRII= nRII, nRI # negative reinforcement.
+                shRI, shRII= shRII, shRI # shear reinforcement.
                 theta-= math.pi/2.0
             if(upOrientation>0): # for 2D elements reverse top and bottom
                                  # positions if dot product > 0.
-                pRI, nRI= nRI, pRI
-                pRII, nRII= nRII, pRII
+                pRI, nRI= nRI, pRI # positive reinforcement.
+                pRII, nRII= nRII, pRII # positive reinforcement.
+                # shear reinforcement not affected.
             if((abs(iOrientation)>1e-3) and (abs(abs(iOrientation)-1.0)>1e-3)): # reinforcement not parallel nor perpendicular
                 #el.setProp('theta', theta)
                 pass
@@ -1367,9 +1375,13 @@ def get_element_rc_sections(elements, propName= None):
             baseSection.name+= 'I'
             baseSection.positvRebarRows= pRI
             baseSection.negatvRebarRows= nRI
+            if(shRI):
+                baseSection.shReinfY= shRI
             baseSectionII.name+= 'II'
             baseSectionII.positvRebarRows= pRII
             baseSectionII.negatvRebarRows= nRII
+            if(shRII):
+                baseSection.shReinfY= shRII
             elementSections= [baseSection, baseSectionII]
             
         # Assign elements to each section.

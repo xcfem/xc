@@ -1128,6 +1128,8 @@ echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_02.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_03.py
+python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_04.py
+python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ehe08/test_shell_normal_stresses_uls_checking.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
