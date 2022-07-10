@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''     Test that checks the method setControlPoints() of EC3Beam, that
         sets the five equally spaced points in the beam where the moment Mz 
         will be evaluated in order to obtain the moment gradient factor 
@@ -12,6 +11,8 @@ from __future__ import print_function
         element of the beam nearest to one control-point and the relative 
         distance from this control point to the first node of the element.
         '''
+
+from __future__ import print_function
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2018, AO_O"
 __license__= "GPL"

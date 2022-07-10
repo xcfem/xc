@@ -14,7 +14,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from materials.ec3 import EC3_materials
-from rough_calculations import ng_simple_beam as sb
 from geom_utils import interpolation as intp
 
 S355JR= EC3_materials.S355JR

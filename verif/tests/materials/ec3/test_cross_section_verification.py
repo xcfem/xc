@@ -18,7 +18,6 @@ import scipy.interpolate
 
 
 from materials.ec3 import EC3_materials
-from rough_calculations import ng_simple_beam as sb
 
 S355JR= EC3_materials.S355JR
 gammaM0= 1.0
@@ -46,18 +45,20 @@ MvRd= IPE400.getMvRdz(1,Vd)
 MvRdTeor= 464.0e3
 ratio4= abs(MvRd-MvRdTeor)/MvRdTeor
 
-# print('McRd= ', McRd/1e3, 'kN m')
-# print('McRdTeor= ', McRdTeor/1e3, 'kN m')
-# print('ratio1= ', ratio1)
-# print('bendingEfficiency= ', bendingEfficiency)
-# print('bendingEfficiencyTeor= ', bendingEfficiencyTeor)
-# print('ratio2= ', ratio2)
-# print('VcRd= ', VcRd/1e3, 'kN m')
-# print('VcRdTeor= ', VcRdTeor/1e3, 'kN m')
-# print('ratio3= ', ratio3)
-# print('MvRd= ', MvRd/1e3, 'kN m')
-# print('MvRdTeor= ', MvRdTeor/1e3, 'kN m')
-# print('ratio4= ', ratio4)
+'''
+print('McRd= ', McRd/1e3, 'kN m')
+print('McRdTeor= ', McRdTeor/1e3, 'kN m')
+print('ratio1= ', ratio1)
+print('bendingEfficiency= ', bendingEfficiency)
+print('bendingEfficiencyTeor= ', bendingEfficiencyTeor)
+print('ratio2= ', ratio2)
+print('VcRd= ', VcRd/1e3, 'kN m')
+print('VcRdTeor= ', VcRdTeor/1e3, 'kN m')
+print('ratio3= ', ratio3)
+print('MvRd= ', MvRd/1e3, 'kN m')
+print('MvRdTeor= ', MvRdTeor/1e3, 'kN m')
+print('ratio4= ', ratio4)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

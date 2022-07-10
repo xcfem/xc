@@ -5,10 +5,11 @@
    Modern steel construction. Nov/Dec 2013
    David Brown
 '''
+
 from __future__ import print_function
 from __future__ import division
-import math
 
+import math
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from geom_utils import interpolation as intp
 

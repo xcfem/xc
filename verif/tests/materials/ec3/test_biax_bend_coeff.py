@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+'''Compute coefficients alpha, beta for biaxial bending
+   (clause 6.2.9 of EC3.1.1)'''
+
 from __future__ import print_function
 from __future__ import division
 
-#Coefficients alpha, beta for biaxial bending  (clause 6.2.9 of EC3.1.1)
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2018, AO_O"
 __license__= "GPL"
