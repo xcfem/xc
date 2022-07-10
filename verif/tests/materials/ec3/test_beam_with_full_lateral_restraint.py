@@ -16,6 +16,12 @@
 from __future__ import print_function
 from __future__ import division
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2022, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es"
+
 import math
 from materials.ec3 import EC3_materials
 from rough_calculations import ng_simple_beam as sb
