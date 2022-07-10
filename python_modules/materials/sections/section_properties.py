@@ -378,37 +378,6 @@ class SectionProperties(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
-
-    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
-        '''elastic section appropriate for 2D beam analysis, including shear deformations
-
-        :param  preprocessor: preprocessor object.
-        :param material: material constitutive model (for which 
-                         E is the Young's modulus and G() the shear modulus).
-        :param majorAxis: true if bending occurs in the section major axis.
-        :param overrideRho: if defined (not None), override the value of 
-                            the material density.
-        '''
-        if(not self.xc_material):
-            materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.name)):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
-                self.xc_material= materialHandler.getMaterial(self.name)
-            else:
-                I= self.Iz();
-                if(not majorAxis):
-                    I= self.Iy()
-                rho= material.rho*self.A()
-                if(overrideRho!=None):
-                    rho= overrideRho
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= rho)
-        else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
-        return self.xc_material
         
     
     def getCrossSectionProperties2D(self, material):
