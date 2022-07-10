@@ -37,6 +37,7 @@ class EC3Steel(steel_base.BasicSteel):
           :param fy80: 63<t<80mm
           :param fy100: 80<t<100mm
           :param fy125: 80<t<125mm
+          :param gammaM: Partial safety factor for steel strength.
           :param gammaM1: Partial factor for buckling resistance.
           :param gammaM2: Partial factor for cross-sections in tension to fracture.
         '''
@@ -52,7 +53,15 @@ class EC3Steel(steel_base.BasicSteel):
         self.gammaM2= gammaM2 #Partial factor for cross-sections in tension to fracture.
 
     def gammaM0(self):
+        ''' Return the value of the partial safety factor for steel strength.'''
         return self.gammaM
+
+    def setGammaM0(self, gammaM0:float):
+        ''' Assign the value of the partial safety factor for steel strength.
+
+        :param gammaM0: Partial safety factor for steel strength.
+        '''
+        self.gammaM= gammaM0
 
     def fydV(self):
         ''' Return the design value of the shear strength.'''
@@ -140,35 +149,33 @@ class EC3Shape(object):
         self.name=name
         self.typo= typo
 
-    def getClassInternalPartInCompression(self,steel,ratioCT=None):
+    def getClassInternalPartInCompression(self, ratioCT=None):
         '''Return the cross-section classification of internal part 
         (web in open shapes, ...) totally subject to compression 
         (conservative). Clause 5.5 EC3-1-1
 
-        :param steel: steel type (e.g. S275JR)
         :param ratioCT: ratio c/t width-to-thickness of the internal
                         compressed part (defaults to widthToThicknessWeb)
         
         '''
         ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessWeb()
-        eps=math.sqrt(235e6/steel.fy)
+        eps=math.sqrt(235e6/self.steelType.fy)
         limits=[33*eps,38*eps,42*eps]
         classif=0
         while ratioCT>limits[classif]:
             classif+=1
         return (classif+1)
     
-    def getClassInternalPartInBending(self, steel, ratioCT=None):
+    def getClassInternalPartInBending(self, ratioCT=None):
         '''Return the cross-section classification of internal part 
         (web in open shapes, ...) subject to pure bending. Clause 5.5 EC3-1-1
 
-        :param steel: steel type (e.g. S275JR)
         :param ratioCT: ratio c/t width-to-thickness of the internal
                         compressed part (defaults to widthToThicknessWeb)
         
         '''
         ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessWeb()
-        eps=math.sqrt(235e6/steel.fy)
+        eps=math.sqrt(235e6/self.steelType.fy)
         limits=[72*eps,83*eps,124*eps]
         classif=0
         while ratioCT>limits[classif]:
@@ -176,17 +183,16 @@ class EC3Shape(object):
         return (classif+1)
         
         
-    # def getClassInternalPartInBending(self,steel):
+    # def getClassInternalPartInBending(self):
     #     '''Return the cross-section classification of internal part 
     #     (web in open shapes, ...) totally subject to compression 
     #     (conservative). Clause 5.5 EC3-1-1
 
-    #     :param steel: steel type (e.g. S275JR)
     #     :param ratioCT: ratio c/t width-to-thickness of the internal
     #                     compressed part (defaults to widthToThicknessWeb).
     #     '''
     #     ratioCT=self.widthToThicknessWeb()
-    #     eps=math.sqrt(235e6/steel.fy)
+    #     eps=math.sqrt(235e6/self.steelType.fy)
     #     limits=[72*eps,83*eps,124*eps]
     #     classif=0
     #     while ratioCT>limits[classif]:
@@ -194,18 +200,17 @@ class EC3Shape(object):
     #     return (classif+1)
         
 
-    def getClassOutstandPartInCompression(self,steel,ratioCT=None):
+    def getClassOutstandPartInCompression(self, ratioCT=None):
         '''Return the cross-section classification of outstand part 
         (flanges) totally subject to compression 
         (conservative). Clause 5.5 EC3-1-1
 
-        :param steel: steel type (e.g. S275JR)
         :param ratioCT: ratio c/t width-to-thickness of the outstand
                compressed part (defaults to widthToThicknessFlange)
         
         '''
         ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessFlange()
-        eps=math.sqrt(235e6/steel.fy)
+        eps=math.sqrt(235e6/self.steelType.fy)
         limits=[9*eps,10*eps,14*eps]
         classif=0
         while ratioCT>limits[classif]:
@@ -249,7 +254,8 @@ class EC3Shape(object):
         return EC3lsc.shearBucklingVerificationNeeded(self)
     
     def getVplRdy(self):
-        '''Return y direction (web direction) plastic shear resistance'''
+        '''Return y direction (web direction) plastic shear resistance
+           according to clause 6.2.6 (expression 6.18) of EC3-1-1:2005.'''
         if(self.shearBucklingVerificationNeeded()):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -290,9 +296,10 @@ class EC3Shape(object):
     
     def getMvRdz(self,sectionClass,Vd):
         '''Return the major bending resistance of the cross-section under a
-           shear force of Vd.
+           shear force of Vd according to clause 6.2.8 of EC3-1-1:2005.
 
           :param sectionClass: section classification (1,2,3 or 4)
+          :param Vd: concomintant shear force.
         '''
         return EC3lsc.getMvRdz(self,sectionClass,Vd)
 
@@ -485,9 +492,10 @@ So:
 
 from materials.sections.structural_shapes import arcelor_metric_shapes
 
+
 class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
     """IPN shape with Eurocode 3 verification routines."""
-    def __init__(self,steel,name):
+    def __init__(self, steel, name):
         ''' Constructor.
 
         :param steel: steel material.
@@ -499,7 +507,7 @@ class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
 
 class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
     '''IPE shape with Eurocode 3 verification routines.'''
-    def __init__(self,steel,name):
+    def __init__(self, steel, name):
         ''' Constructor.
 
         :param steel: steel material.
@@ -610,6 +618,17 @@ class UCShape(EC3Shape,arcelor_metric_shapes.UCShape):
         '''
         super(UCShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.UCShape.__init__(self,steel,name)
+        
+class UBShape(EC3Shape,arcelor_metric_shapes.UBShape):
+    """UB shape with Eurocode 3 verification routines."""
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. UB356x127x33)
+        '''
+        super(UBShape, self).__init__(name= name, typo= 'rolled')
+        arcelor_metric_shapes.UBShape.__init__(self,steel,name)
 
 from materials.sections.structural_shapes import bs_en_10210_shapes
 
