@@ -23,7 +23,7 @@ class SimpleBeam(bm.Beam):
         :param q: value of the uniform load.
         :param x: position of the section.
         '''
-        return -q*(self.l/2.0-x)
+        return q*(self.l/2.0-x)
       
     def getReactionUnderUniformLoad(self,q):
         ''' Return the reaction under uniform load.
