@@ -364,6 +364,25 @@ for item in UC:
     E= shape['E']
     nu= shape['nu']
     Avy= tw*(h-tf)/b #Projected shear area.
+    h= shape['h']
+    tf= shape['tf']
+    shape['hi']= h-2*tf
+    shape['Avy']= Avy
+    shape['alpha']= 1.0/2.0
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= A-2*b*tf+(tw+2*r)*tf
+    shape['AreaQz']= A-hi*tw
+    
+UB= arcelor_shapes_dictionaries.UB
+for item in UB:
+    shape= UB[item]
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    Avy= tw*(h-tf)/b #Projected shear area.
+    h= shape['h']
+    tf= shape['tf']
+    shape['hi']= h-2*tf
     shape['Avy']= Avy
     shape['alpha']= 1.0/2.0
     shape['G']= E/(2*(1+nu))
@@ -506,9 +525,16 @@ class CHSShape(structural_steel.SteelShape):
         '''Return shear shape factor with respect to local z-axis'''
         return self.alphaY()
         
-class UCShape(structural_steel.SteelShape):
+class UCShape(structural_steel.IShape):
     def __init__(self,steel,name):
         super(UCShape,self).__init__(steel,name,UC)
+    def getRho(self):
+        ''' Returns mass per unit length. '''
+        return self.get('P')
+        
+class UBShape(structural_steel.IShape):
+    def __init__(self,steel,name):
+        super(UBShape,self).__init__(steel,name,UB)
     def getRho(self):
         ''' Returns mass per unit length. '''
         return self.get('P')

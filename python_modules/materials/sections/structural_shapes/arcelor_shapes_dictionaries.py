@@ -302,3 +302,9 @@ with importlib.resources.open_text("materials.sections.structural_shapes.aux", "
     UC= json.load(file)
 arcelor_shapes['UC']= UC
 
+# ARCELOR's UK universal beams.
+UB= None
+with importlib.resources.open_text("materials.sections.structural_shapes.aux", "arcelor_ub_profiles.json") as file:
+    UB= json.load(file)
+arcelor_shapes['UB']= UB
+

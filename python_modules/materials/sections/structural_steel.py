@@ -504,10 +504,10 @@ class IShape(SteelShape):
     def updateQuantities(self):
         ''' Update some derived values.'''
         if(self.shape):
-            self.bHalf= self.get('b')/2.0 #Half flange width
-            self.hHalf= self.get('h')/2.0 #Half section height
-            self.hiHalf= self.get('hi')/2.0 #Half section interior height.
-            self.twHalf= self.get('tw')/2.0 #Half web thickness
+            self.bHalf= self.get('b')/2.0 # Half flange width
+            self.hHalf= self.get('h')/2.0 # Half section height
+            self.hiHalf= self.get('hi')/2.0 # Half section interior height.
+            self.twHalf= self.get('tw')/2.0 # Half web thickness
         
     def getDict(self):
         ''' Put member values in a dictionary.'''
