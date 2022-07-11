@@ -76,7 +76,7 @@ Mc_RdRef= Wpl*steel.fy/1.0
 ratio7= abs(Mc_Rd-Mc_RdRef)/Mc_RdRef
 
 '''
-print('Md= ', Md/1e3, ' kN.m/m')
+print('Md= ', Md/1e3, ' kN.m')
 print('ratio1= ', ratio1)
 print('Vd= ', Vd/1e3, ' kN/m')
 print('ratio2= ', ratio2)
