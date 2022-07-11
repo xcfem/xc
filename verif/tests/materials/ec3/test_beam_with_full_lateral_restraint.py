@@ -70,6 +70,7 @@ ratio5= abs(Av-AvRef)/AvRef
 Vpl_Rd= shape.getVplRdy()
 Vpl_RdRef= AvRef*275e6/math.sqrt(3)
 ratio6= abs(Vpl_Rd-Vpl_RdRef)/Vpl_RdRef
+# Bending resistance
 Mc_Rd= shape.getMvRdz(sectionClass= max(c1_2, c1_3), Vd= Vd)
 Wpl= shape.get('Wzpl')
 Mc_RdRef= Wpl*steel.fy/1.0
