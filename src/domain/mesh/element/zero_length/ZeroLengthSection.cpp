@@ -54,7 +54,7 @@
 // Description: This file contains the implementation for the
 // ZeroLengthSection class.
 
-#include <domain/mesh/element/zeroLength/ZeroLengthSection.h>
+#include <domain/mesh/element/zero_length/ZeroLengthSection.h>
 #include <domain/mesh/element/utils/Information.h>
 
 #include "material/section/PrismaticBarCrossSection.h"

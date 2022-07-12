@@ -27,7 +27,7 @@
 //ZeroLengthMaterials.cpp
 
 #include "ZeroLengthMaterials.h"
-#include "domain/mesh/element/zeroLength/ZeroLength.h"
+#include "domain/mesh/element/zero_length/ZeroLength.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 
 #include "preprocessor/Preprocessor.h"

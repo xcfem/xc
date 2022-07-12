@@ -168,4 +168,4 @@ class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1
 #include "plane/python_interface.tcc"
 #include "volumetric/python_interface.tcc"
 //#include "frictionBearing/python_interface.tcc"
-#include "zeroLength/python_interface.tcc"
+#include "zero_length/python_interface.tcc"

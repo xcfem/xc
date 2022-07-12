@@ -53,7 +53,7 @@
 #ifndef ZeroLength_h
 #define ZeroLength_h
 
-// File: ~/element/zeroLength/ZeroLength.h
+// File: ~/element/zero_length/ZeroLength.h
 // 
 // Written: GLF
 // Created: 12/99

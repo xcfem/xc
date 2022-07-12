@@ -59,7 +59,7 @@
 //
 // What: "@(#) ZeroLength.C, revA"
 
-#include "domain/mesh/element/zeroLength/ZeroLength.h"
+#include "domain/mesh/element/zero_length/ZeroLength.h"
 #include <domain/mesh/element/utils/Information.h>
 
 #include <domain/domain/Domain.h>

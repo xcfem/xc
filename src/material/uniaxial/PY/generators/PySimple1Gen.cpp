@@ -224,7 +224,7 @@ void XC::PySimple1Gen::GetPySimple1(const std::string &file1, const std::string 
     // Write headers for output file
     PyOut << "#######################################################################################" << std::endl;
     PyOut << "##" << std::endl;
-    PyOut << "## This file contains XC::PySimple1 materials associated with pre-defined nodes, zeroLength" << std::endl;
+    PyOut << "## This file contains PySimple1 materials associated with pre-defined nodes, zeroLength" << std::endl;
     PyOut << "## elements and pile beam column elements.  The file was created using the program" << std::endl;
     PyOut << "## PySimple1Gen.cpp written by Scott Brandenberg (sjbrandenberg@ucdavis.edu)" << std::endl;
     PyOut << "##" << std::endl;

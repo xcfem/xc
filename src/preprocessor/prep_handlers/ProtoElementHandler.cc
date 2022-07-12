@@ -85,10 +85,10 @@
 #include "domain/mesh/element/plane/shell/ShellNLDKGQ.h"
 #include "domain/mesh/element/plane/shell/ASDShellQ4.h"
 
-#include "domain/mesh/element/zeroLength/ZeroLength.h"
-#include "domain/mesh/element/zeroLength/ZeroLengthSection.h"
-#include "domain/mesh/element/zeroLength/ZeroLengthContact2D.h"
-#include "domain/mesh/element/zeroLength/ZeroLengthContact3D.h"
+#include "domain/mesh/element/zero_length/ZeroLength.h"
+#include "domain/mesh/element/zero_length/ZeroLengthSection.h"
+#include "domain/mesh/element/zero_length/ZeroLengthContact2D.h"
+#include "domain/mesh/element/zero_length/ZeroLengthContact3D.h"
 
 #include "preprocessor/Preprocessor.h"
 
