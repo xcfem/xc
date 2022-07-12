@@ -49,11 +49,8 @@ def alphaImperfectionFactor(bucklingCurve):
 class SteelShape(sp.SectionProperties):
     '''Properties of a section in structural steel
 
-    :ivar steel:    steel object (e.g. S275JR)
-    :ivar table:    module containing a dictionary with mechanical characteristics
-                    of a series of shapes 
-                    (e.g. materials.sections.structural_shapes.arcelor_metric_shapes.IPE)
-    :ivar name:     name identifying the section in the table
+    :ivar steelType: steel object (e.g. S275JR)
+    :ivar shape: steel profile (i.e. IPE300)
     '''
     def __init__(self,steel,name,table):
         ''' Constructor.
@@ -71,6 +68,18 @@ class SteelShape(sp.SectionProperties):
             self.shape= None
         super(SteelShape,self).__init__(name)
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(SteelShape, self).__eq__(other)
+            if(retval):
+                retval= (self.steelType == other.steelType)
+            if(retval):
+                retval= (self.shape == other.shape)
+        else:
+            retval= True
+        return retval
+    
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super(SteelShape, self).getDict()
