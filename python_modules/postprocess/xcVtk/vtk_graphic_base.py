@@ -286,7 +286,7 @@ class DisplaySettings(object):
         self.renWin.ShowWindowOff()
         self.renWin.Finalize()
         iren.TerminateApp()
-        del self.renWin, iren
+        #del self.renWin, iren
         
     def displayScene(self,caption= '', fileName= None):
         ''' Displaying scene

@@ -498,6 +498,7 @@ class SteelShape(sp.SectionProperties):
         
 
 class IShape(SteelShape):
+    ''' I (or double tee) shaped steel profile.'''
     def __init__(self,steel,name,table):
         ''' Constructor.
 
@@ -509,6 +510,16 @@ class IShape(SteelShape):
         super(IShape,self).__init__(steel,name,table)
         self.tileSize= 0.01 #Size of tiles
         self.updateQuantities()
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(IShape, self).__eq__(other)
+            if(retval):
+                retval= (self.tileSize == other.tileSize)
+        else:
+            retval= True
+        return retval
 
     def updateQuantities(self):
         ''' Update some derived values.'''
@@ -622,7 +633,11 @@ class IShape(SteelShape):
 
 
 class QHShape(SteelShape):
-    '''Quadrilateral hollow shape''' 
+    '''Quadrilateral hollow shape
+
+    :ivar bHalf: half section width.
+    :ivar hHalf: half section height
+    ''' 
     def __init__(self,steel, name, table):
         ''' Constructor.
 
@@ -635,6 +650,18 @@ class QHShape(SteelShape):
         self.bHalf= self.get('b')/2.0 #Half section width
         self.hHalf= self.get('h')/2.0 #Half section height
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(QHShape, self).__eq__(other)
+            if(retval):
+                retval= (self.bHalf == other.bHalf)
+            if(retval):
+                retval= (self.hHalf == other.hHalf)
+        else:
+            retval= True
+        return retval
+    
     def getSymmetry(self):
         ''' Returns the symmetry of the shape: 
             'double', 'simple' or 'none'.'''
