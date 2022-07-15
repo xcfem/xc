@@ -48,6 +48,17 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
       super(RCColumnSection,self).__init__(sectionDescr= sectionDescr)
       self.mainBars= ColumnMainReinforcement()
 
+    def __eq__(self, other):
+        ''' Redefines equal operator.'''
+        if(self is not other):
+            retval= super(RCRectangularColumnSection, self).__eq__(other)
+            if(retval):
+                retval= (self.mainBars == other.mainBars)
+        else:
+            retval= True
+        return retval
+        
+
     def defSectionGeometry(self,matDiagType):
         '''Returns a reinforced concrete section with reinforcement 
         symmetric in both directions (as usual in columns)
@@ -110,7 +121,7 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        def_simple_RC_section.RCSectionBase.__init__(self,sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= 20, nDivJK= 5)
+        super(RCCircularSection, self).__init__(sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= 20, nDivJK= 5)
         section_properties.CircularSection.__init__(self,name,Rint= Rint,Rext= Rext)
 
         # Longitudinal reinforcement.
@@ -120,6 +131,20 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         self.shReinf= def_simple_RC_section.ShearReinforcement()
         self.shReinf.familyName= "V"
         
+    def __eq__(self, other):
+        ''' Redefines equal operator.'''
+        if(self is not other):
+            retval= super(RCCircularSection, self).__eq__(other)
+            if(retval):
+                retval= section_properties.CircularSection.__eq__(self, other)
+            if(retval):
+                retval= (self.mainReinf == other.mainReinf)
+            if(retval):
+                retval= (self.shReinf == other.shReinf)
+        else:
+            retval= True
+        return retval
+    
     def isCircular(self):
         ''' Return true if it's a circular section.'''
         return True
