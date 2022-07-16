@@ -27,3 +27,4 @@ This directory contains the classes that define the truss and frame elements ava
 - [A Complicated Equivalent](https://portwooddigital.com/2022/05/01/a-complicated-equivalent/)
 - [A Solution, Just Not The Solution](https://portwooddigital.com/2022/05/22/a-solution-just-not-the-solution)
 - [Elastic Shear Beams in OpenSees](https://portwooddigital.com/2022/07/03/elastic-shear-beams-in-opensees/)
+- [Shear Verse, Same as the First](https://portwooddigital.com/2022/07/10/shear-verse-same-as-the-first/)
