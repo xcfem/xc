@@ -384,18 +384,22 @@ def getUIShapeLambdaHDWeb(shape, factor= 1.57):
     return factor*math.sqrt(E/Fy/Ry) # Case 5
 
 class WShape(structural_steel.IShape):
-    '''W shape
-
-    :ivar steel: steel material.
-    :ivar name: shape name (i.e. W40X431).
-    '''
-    def __init__(self,steel= None, name= ''):
+    '''W shape '''
+    def __init__(self, steel= None, name= ''):
         ''' Constructor.
 
         :param steel: steel material.
         :param name: shape name (i.e. W40X431).
         '''
         super(WShape,self).__init__(steel,name,W)
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(WShape, self).__eq__(other)
+        else:
+            retval= True
+        return retval
 
     def h(self):
         ''' Return overall depth of member (d in AISC tables).'''
@@ -2430,6 +2434,14 @@ class HSSShape(structural_steel.QHShape):
                       characteristics of a series of shapes.
         '''
         super(HSSShape,self).__init__(steel, name, table)
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super(HSSShape, self).__eq__(other)
+        else:
+            retval= True
+        return retval
 
     def t(self):
         '''Return HSS nominal wall thickess'''
