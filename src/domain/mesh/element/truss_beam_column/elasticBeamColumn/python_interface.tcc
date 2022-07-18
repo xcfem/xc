@@ -46,6 +46,7 @@ class_<XC::ElasticBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("El
    ;
 
 class_<XC::ElasticTimoshenkoBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("ElasticTimoshenkoBeam2d", no_init)
+  .add_property("geomNonLinear", &XC::ElasticTimoshenkoBeam2d::getGeomNonLinear, &XC::ElasticTimoshenkoBeam2d::getGeomNonLinear, "Get/Set geometric non-linear flag.")
   ;
 
 class_<XC::ElasticBeam3dBase, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticBeam3dBase", no_init)
@@ -83,4 +84,5 @@ class_<XC::ElasticBeam3d, bases<XC::ElasticBeam3dBase>, boost::noncopyable >("El
    ;
 
 class_<XC::ElasticTimoshenkoBeam3d, bases<XC::ElasticBeam3dBase>, boost::noncopyable >("ElasticTimoshenkoBeam3d", no_init)
-  ;
+  .add_property("geomNonLinear", &XC::ElasticTimoshenkoBeam3d::getGeomNonLinear, &XC::ElasticTimoshenkoBeam3d::getGeomNonLinear, "Get/Set geometric non-linear flag.")
+   ;

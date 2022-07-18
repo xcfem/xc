@@ -79,7 +79,7 @@ class ElasticTimoshenkoBeam2d: public ElasticBeam2dBase
     
     // parameters
     int cMass;   //!< consistent mass flag
-    int nlGeo;   //!< nonlinear geometry flag
+    bool nlGeo;   //!< nonlinear geometry flag
     double phi;  //!< ratio of bending to shear stiffness
     double L;    //!< element length
     
@@ -117,6 +117,12 @@ class ElasticTimoshenkoBeam2d: public ElasticBeam2dBase
     void setDomain(Domain *theDomain);
     
     int commitState(void);
+
+    //Geometric non-linear flag.
+    void setGeomNonLinear(const bool &gnl)
+      { nlGeo= gnl; }
+    bool getGeomNonLinear(void) const
+      { return nlGeo; }
     
     // public methods to obtain stiffness, mass, damping and residual information
     const Matrix &getTangentStiff(void) const;

@@ -56,7 +56,7 @@ XC::Vector XC::ElasticTimoshenkoBeam2d::theVector(6);
 //! @param tag: element identifier.
 XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag)
     : ElasticBeam2dBase(tag, ELE_TAG_ElasticTimoshenkoBeam2d),
-      cMass(0), nlGeo(0), phi(0.0), L(0.0),
+      cMass(0), nlGeo(false), phi(0.0), L(0.0),
       ul(6), ql(6), ql0(6), kl(6,6), klgeo(6,6), Tgl(6,6), Ki(6,6), M(6,6),
       theLoad(6)
   {
@@ -70,7 +70,7 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag)
 //! @param trf: element coordinate transformation.
 XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,const Material *m,const CrdTransf *trf)
   : ElasticBeam2dBase(tag, ELE_TAG_ElasticBeam2d,m,trf),
-    cMass(0), nlGeo(0), phi(0.0), L(0.0),
+    cMass(0), nlGeo(false), phi(0.0), L(0.0),
     ul(6), ql(6), ql0(6), kl(6,6), klgeo(6,6), Tgl(6,6), Ki(6,6), M(6,6),
     theLoad(6)
   {
@@ -94,19 +94,19 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,
     int Nd1, int Nd2, CrdTransf2d &coordTransf,
     double r, int cm)
   : ElasticBeam2dBase(tag, ELE_TAG_ElasticTimoshenkoBeam2d,a,avy/a,e,g,iz,Nd1,Nd2, coordTransf, r),
-    cMass(cm), nlGeo(0), phi(0.0), L(0.0),
+    cMass(cm), nlGeo(false), phi(0.0), L(0.0),
     ul(6), ql(6), ql0(6), kl(6,6), klgeo(6,6), Tgl(6,6), Ki(6,6), M(6,6),
     theLoad(6)
   {
     
     // get coordinate transformation type and save flag
     if(theCoordTransf->getClassName().substr(0,6)=="Linear")
-      { nlGeo = 0; }
+      { nlGeo= false; }
     else if(theCoordTransf->getClassName().substr(0,6)=="PDelta")
-      { nlGeo = 1; }
+      { nlGeo= true; }
     else if(theCoordTransf->getClassName().substr(0,5)=="Corot")
       {
-        nlGeo = 1;
+        nlGeo= true;
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "\n WARNING - Element: " << this->getTag() << std::endl
 		  << "Unsupported Corotational transformation assigned.\n"
@@ -159,13 +159,7 @@ const XC::Matrix &XC::ElasticTimoshenkoBeam2d::getTangentStiff(void) const
     // zero the matrix
     theMatrix.Zero();
     
-    if(nlGeo == 0)
-      {
-        // transform from local to global system
-        theMatrix.addMatrixTripleProduct(0.0, Tgl, kl, 1.0);
-        
-      }
-    else
+    if(nlGeo) //if non-linear
       {
         // initialize local stiffness matrix
         static Matrix klTot(6,6);
@@ -193,6 +187,11 @@ const XC::Matrix &XC::ElasticTimoshenkoBeam2d::getTangentStiff(void) const
         
         // transform from local to global system
         theMatrix.addMatrixTripleProduct(0.0, Tgl, klTot, 1.0);
+      }
+    else // if linear
+      {
+        // transform from local to global system
+        theMatrix.addMatrixTripleProduct(0.0, Tgl, kl, 1.0);
       }
     if(isDead())
       theMatrix*=dead_srf;
@@ -318,8 +317,8 @@ const XC::Vector &XC::ElasticTimoshenkoBeam2d::getResistingForce(void) const
     // get the resisting forces in local system
     ql.addMatrixVector(0.0, kl, ul, 1.0);
     
-    // add P-Delta moments to local forces
-    if ((ql(3) != 0.0) && (nlGeo == 1))
+    // if geometrically non-linear add P-Delta moments to local forces
+    if ((ql(3) != 0.0) && nlGeo)
         ql.addMatrixVector(1.0, klgeo, ul, ql(3));
     
     // add effects of element loads, ql = ql(ul) + ql0
@@ -385,7 +384,8 @@ int XC::ElasticTimoshenkoBeam2d::sendData(Communicator &comm)
   {
     int res= ElasticBeam2dBase::sendData(comm);
     res+= comm.sendDoubles(phi,L,getDbTagData(),CommMetaData(11));
-    res+= comm.sendInts(cMass, nlGeo, getDbTagData(),CommMetaData(12));
+    res+= comm.sendInt(cMass, getDbTagData(), CommMetaData(12));
+    res+= comm.sendBool(nlGeo, getDbTagData(), CommMetaData(13));
     return res;
   }
 
@@ -394,13 +394,14 @@ int XC::ElasticTimoshenkoBeam2d::recvData(const Communicator &comm)
   {
     int res= ElasticBeam2dBase::recvData(comm);
     res+= comm.receiveDoubles(phi,L,getDbTagData(),CommMetaData(11));
-    res+= comm.receiveInts(cMass, nlGeo,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveInt(cMass, getDbTagData(),CommMetaData(12));
+    res+= comm.receiveBool(nlGeo, getDbTagData(), CommMetaData(13));
     return res;
   }
 
 int XC::ElasticTimoshenkoBeam2d::sendSelf(Communicator &comm)
   {
-    inicComm(13);
+    inicComm(14);
     int res= sendData(comm);
 
     const int dataTag= getDbTag();
@@ -414,7 +415,7 @@ int XC::ElasticTimoshenkoBeam2d::sendSelf(Communicator &comm)
 int XC::ElasticTimoshenkoBeam2d::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
-    inicComm(13);
+    inicComm(14);
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__

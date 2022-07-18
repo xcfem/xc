@@ -79,7 +79,7 @@ class ElasticTimoshenkoBeam3d : public ElasticBeam3dBase
     double Avy;   //!< shear area along local y axis
     double Avz;   //!< shear area along local z axis
     int cMass;    //!< consistent mass flag
-    int nlGeo;    //!< nonlinear geometry flag
+    bool nlGeo;    //!< nonlinear geometry flag
     double phiY;  //!< ratio of bending to shear stiffness about local y axis
     double phiZ;  //!< ratio of bending to shear stiffness about local z axis
     double L;     //!< element length
@@ -118,6 +118,12 @@ class ElasticTimoshenkoBeam3d : public ElasticBeam3dBase
     
     // public methods to set the state of the element
     int commitState();
+    
+    //Geometric non-linear flag.
+    void setGeomNonLinear(const bool &gnl)
+      { nlGeo= gnl; }
+    bool getGeomNonLinear(void) const
+      { return nlGeo; }
     
     // public methods to obtain stiffness, mass, damping and residual information
     const Matrix &getTangentStiff(void) const;
