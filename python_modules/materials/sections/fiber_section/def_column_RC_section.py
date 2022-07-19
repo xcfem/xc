@@ -10,6 +10,8 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 Definition of the variables that make up a reinforced concrete section 
 with reinforcement symmetric in both directions (as usual in columns)
 '''
+
+import sys
 import math
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
@@ -219,3 +221,12 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         '''Return the section thickness for torsion.'''
         return section_properties.CircularSection.getThickness(self)
         
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        super(RCCircularSection, self).repeort(os= os, indentation= indentation)
+        indentation+= '  '
+        os.write(indentation+'main reinforcement: \n')
+        mainReinf.report(os= os, indentation= indentation)
+        os.write(indentation+'shear reinforcement: \n')        
+        shReinf.report(os= os, indentation= indentation)
+    
