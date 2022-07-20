@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Export reaction values. '''
 
 from __future__ import print_function
 from __future__ import division
@@ -9,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 from materials.sections import internal_forces
 from misc_utils import log_messages as lmsg
 from postprocess import output_styles

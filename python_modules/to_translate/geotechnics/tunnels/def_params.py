@@ -3,7 +3,7 @@
 def defParamAngPoliedrico(jp): 
     JPvacio= jp.Vacio()
     if(not(JPvacio)):
-        containsTunnelAxis= or(jp.esInterior(tunnelAxisVector),jp.esInterior(-tunnelAxisVector))  
+        containsTunnelAxis= jp.esInterior(tunnelAxisVector) or jp.esInterior(-tunnelAxisVector)
         I1= jp.getVectorExterno1(tunnelAxis)
         I2= jp.getVectorExterno2(tunnelAxis)
         angI1= I1.getXAxisAngle()

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-from __future__ import print_function
-
 '''Provide the user with a quick and easy way to 
    display results (internal forces, displacements) of an user-defined
    load case.'''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016 AO_O LCPT"
@@ -12,7 +12,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
-import math
 import xc
 from misc_utils import log_messages as lmsg
 from solution import predefined_solutions

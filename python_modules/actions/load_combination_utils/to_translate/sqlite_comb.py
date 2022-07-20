@@ -76,7 +76,8 @@ def SQLTtablaCombsSLSPF(dBaseName,tableName,offset):
     return cont
 
 def SQLTtablaCombsSLSF(dBaseName,tableName,offset):
-  '''Creates a table to show the combinations for serviceability limit states in frequent situations.
+    '''Creates a table to show the combinations for serviceability limit 
+       states in frequent situations.
 
     :param dBaseName: name of the database.
     :param tableName: name of the table.

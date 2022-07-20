@@ -13,6 +13,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
+import math
 from materials import steel_base
 from postprocess import def_vars_control as vc
 from model import model_inquiry

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-# Snow loads according to SIA-261 (2003).
+''' Snow loads according to SIA-261 (2003).'''
 
-import math
+from __future__ import division
 
 def PsSIA160_1970(h):
     '''

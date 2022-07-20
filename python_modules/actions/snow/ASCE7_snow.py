@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-# Snow loads according to SIA-261 (2003).
+'''Snow loads according to ASCE-7.'''
 
-import math
+from __future__ import division
+
 
 def importanceFactor(riskCategory: int):
     ''' Return the importance foctor for snow load according ASCE 7-16.

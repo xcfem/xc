@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 
-import math
 import xc
 from materials import steel_member_base
 from materials.ec3 import EC3_limit_state_checking as EC3lsc

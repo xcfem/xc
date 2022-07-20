@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''Field vector over points'''
 
 from __future__ import print_function
 
@@ -8,9 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-'''Field vector over points'''
 
-import math
 import vtk
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import field_base as fb

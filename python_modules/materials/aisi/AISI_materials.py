@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Steel as specified American Iron and Steel Institute standards.
-
-'''
+''' Steel as specified American Iron and Steel Institute standards.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -12,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
-import math
 from materials import steel_base
 
 class AISISteel(steel_base.BasicSteel):

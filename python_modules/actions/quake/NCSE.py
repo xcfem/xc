@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Earthquake loads according to NCSE-02 (Spain).
+'''Earthquake loads according to NCSE-02 (Spain).'''
 
 from __future__ import print_function
 from __future__ import division
@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
-import math
 import sys
 
 def C(soilClass:str):

@@ -4,6 +4,7 @@
 
 from __future__ import print_function
 
+import math
 import geom
 
 def computeDipPlane(alpha,beta, p):
