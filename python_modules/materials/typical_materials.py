@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Convenience functions to define common materials.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -9,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
-import xc
 from misc_utils import log_messages as lmsg
 import uuid
 

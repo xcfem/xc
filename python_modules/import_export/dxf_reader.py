@@ -13,7 +13,6 @@ __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 import math
 import ezdxf
 import geom
-import xc
 from import_export import reader_base
 from misc_utils import log_messages as lmsg
 from scipy.spatial.distance import cdist

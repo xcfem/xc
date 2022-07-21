@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+''' Extrapolate attribute values of elements.'''
 
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
@@ -9,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es  ana.ortega@ciccp.es"
 
-import xc
 import math
 from misc_utils import log_messages as lmsg
 

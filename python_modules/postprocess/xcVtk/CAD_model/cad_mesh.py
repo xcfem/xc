@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+''' Block topology displaying routines using VTK.'''
+
 from __future__ import print_function
 
 import vtk
 import xc_base
-import xc
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.CAD_model import create_array_set_data
 
@@ -20,8 +21,8 @@ def VtkDefineActorKPoint(recordGrid, renderer, radius):
 
     :ivar recordGrid: unstructured grid (generic data set) to which incorporate
                       the actor KPoint
-    :ivar renderer:   name of the renderer (lights, views, ...) to be used in the
-                      display
+    :ivar renderer:   name of the renderer (lights, views, ...) to be used in 
+                      the display
     :ivar radius:     radius of the spheres to be employed in the KPoints 
                       representation
     '''

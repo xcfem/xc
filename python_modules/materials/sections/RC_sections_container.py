@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Container of reinforced concrete section definitions.'''
+
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
@@ -6,7 +8,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
-import xc
 # Macros
 from misc_utils import log_messages as lmsg
 

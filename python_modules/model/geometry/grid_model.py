@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 # -*- coding: utf-8 -*-
 '''Particular geometry organization, linked to a framework of spaced points, 
 usually referenced by their indices (i,j,k) that point to the global 
@@ -13,6 +11,8 @@ facilitate and accelerate their creation, search, grouping in sets, ...
 Several grids can coexist in a FE problem.
 '''
 
+from __future__ import print_function
+
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"
@@ -21,7 +21,6 @@ __email__= "ana.Ortega@ciccp.es"
 
 
 import geom
-import xc
 import math
 from misc_utils import data_struct_utils as dsu
 

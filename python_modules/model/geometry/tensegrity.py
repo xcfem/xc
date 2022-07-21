@@ -7,7 +7,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es" 
 
-import xc
 import math
 import pandas as pd
 import numpy as np

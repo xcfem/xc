@@ -4,7 +4,6 @@ from __future__ import print_function
 from __future__ import division
 
 import os
-import xc
 import math
 from postprocess import output_handler
 from solution import predefined_solutions
