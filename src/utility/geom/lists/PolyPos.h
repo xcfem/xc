@@ -94,7 +94,9 @@ class PolyPos : public std::deque<pos>
     GEOM_FT GetSeparacionMedia(void) const;
 
     iterator getNearestPoint(const pos &);
+    const_iterator getNearestPoint(const pos &) const;
     iterator getFarthestPoint(const pos &);
+    const_iterator getFarthestPoint(const pos &) const;
     virtual iterator getFarthestPointFromSegment(iterator it1, iterator it2, GEOM_FT &pMaxDist);
     void simplify(GEOM_FT epsilon, iterator it1, iterator it2);
     void simplify(GEOM_FT epsilon);
@@ -312,9 +314,14 @@ PolyPos<pos> PolyPos<pos>::GetMenores(unsigned short int i,const GEOM_FT &d) con
     return retval;
   }
 
-//! @brief Returns the farthest point from those of the list.
+//! @brief Returns the nearest point from those of the list.
 template <class pos>
 typename PolyPos<pos>::iterator PolyPos<pos>::getNearestPoint(const pos &p)
+  { return nearest(this->begin(), this->end(),p); }
+
+//! @brief Returns the nearest point from those of the list.
+template <class pos>
+typename PolyPos<pos>::const_iterator PolyPos<pos>::getNearestPoint(const pos &p) const
   { return nearest(this->begin(), this->end(),p); }
 
 //! @brief Returns the farthest point from those of the list.
@@ -335,6 +342,14 @@ typename PolyPos<pos>::iterator PolyPos<pos>::getFarthestPoint(const pos &p)
     	  }
       }
     return retval;
+  }
+    
+//! @brief Returns the farthest point from those of the list.
+template <class pos>
+typename PolyPos<pos>::const_iterator PolyPos<pos>::getFarthestPoint(const pos &p) const
+  {
+    PolyPos<pos> *this_no_const= const_cast<PolyPos<pos> *>(this);
+    return this_no_const->getFarthestPoint(p); 
   }
 
 /**

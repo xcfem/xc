@@ -112,6 +112,36 @@ bool Polyline2d::In(const Pos2d &p, const double &tol) const
     return retval;
   }
 
+//! @brief Return the nearest segment to the argument.
+Polyline2d::const_iterator Polyline2d::getNearestSegment(const Pos2d &p) const    
+  {
+    Polyline2d::const_iterator retval= end();
+    const size_t nv= getNumVertices();
+    if(nv>=2)
+      {
+	list_Pos2d::const_iterator first= begin();
+	GEOM_FT minDist2= getSegment(first).dist2(p);
+	retval= first;
+	if(nv>=3)
+	  {
+	    list_Pos2d::const_iterator j=first;
+	    j++;
+	    list_Pos2d::const_iterator last= std::prev(end());
+	    for(;j != last;j++)
+	      {
+		double dist2= getSegment(j).dist2(p);
+		if(dist2<minDist2)
+		    {
+		      retval= j;
+		      minDist2= dist2;
+		    }
+	      }
+	  }
+      }
+    return retval;
+  }
+
+
 //! @brief Return the maximum value of the i coordinate.
 GEOM_FT Polyline2d::GetMax(unsigned short int i) const
   { return GeomObj::list_Pos2d::GetMax(i); }
@@ -235,7 +265,7 @@ GEOM_FT Polyline2d::Iz(void) const
 //! Return el trozo de Polyline2d:
 //! hasta p si sgn < 0
 //! desde p si sgn >= 0
-Polyline2d Polyline2d::Separa(const Pos2d &p,const short int &sgn) const
+Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn) const
   {
     Polyline2d result;
     const_iterator i= find(p);
@@ -246,6 +276,38 @@ Polyline2d Polyline2d::Separa(const Pos2d &p,const short int &sgn) const
       copy(i,end(),back_inserter(result));
     return result;
   }
+
+//! @brief Return the two polylines that result from splitting
+//! this one on the point nearest to the argument.
+boost::python::list Polyline2d::split(const Pos2d &p) const
+  {
+    Polyline2d retvalA, retvalB;
+    const_iterator nearestVertexIter= getNearestPoint(p);
+    const Pos2d nearestVertex= *nearestVertexIter;
+    const_iterator nearestSegmentIter= getNearestSegment(p);
+    const Segment2d nearestSegment= getSegment(nearestSegmentIter);
+    GEOM_FT distToVertex= dist(nearestVertex,p);
+    GEOM_FT distToSegment= nearestSegment.dist(p);
+    if(distToVertex<=distToSegment)
+      {
+        retvalA= getChunk(nearestVertex,-1);
+	retvalB= getChunk(nearestVertex,1);
+      }
+    else
+      {
+	const Pos2d splittingVertexA= *nearestSegmentIter;
+	retvalA= getChunk(splittingVertexA,-1);
+	retvalA.push_back(p);
+	const Pos2d splittingVertexB= *(nearestSegmentIter+1);
+	retvalB= getChunk(splittingVertexB,1);
+	retvalB.push_front(p);
+      }
+    boost::python::list retval;
+    retval.append(retvalA);
+    retval.append(retvalB);
+    return retval;
+  }
+  
 
 //! @brief Return the points of intersection of the polyline with
 //! the argument.

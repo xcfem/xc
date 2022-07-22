@@ -73,10 +73,12 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     Polyline3d GetMenores(unsigned short int i,const GEOM_FT &d) const;
     Segment3d getSegment(const list_Pos3d::const_iterator &) const;
     Segment3d getSegment(const size_t &) const;
+    const_iterator getNearestSegment(const Pos3d &) const;    
     //list_Pos3d Int(unsigned short int i,const GEOM_FT &d) const;
     list_Pos3d getIntersection(const Plane &) const;
     //Polyline3d Corta(unsigned short int i,const GEOM_FT &d) const;
-    Polyline3d Separa(const Pos3d &p,const short int &sgn) const;
+    Polyline3d getChunk(const Pos3d &p,const short int &sgn) const;
+    boost::python::list split(const Pos3d &) const;
     Pos3d getCenterOfMass(void) const
       { return GeomObj::list_Pos3d::getCenterOfMass(); }
 

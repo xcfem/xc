@@ -140,6 +140,35 @@ bool Polyline3d::In(const Pos3d &p, const double &tol) const
     return retval;
   }
 
+//! @brief Return the nearest segment to the argument.
+Polyline3d::const_iterator Polyline3d::getNearestSegment(const Pos3d &p) const    
+  {
+    Polyline3d::const_iterator retval= end();
+    const size_t nv= getNumVertices();
+    if(nv>=2)
+      {
+	list_Pos3d::const_iterator first= begin();
+	GEOM_FT minDist2= getSegment(first).dist2(p);
+	retval= first;
+	if(nv>=3)
+	  {
+	    list_Pos3d::const_iterator j=first;
+	    j++;
+	    list_Pos3d::const_iterator last= std::prev(end());
+	    for(;j != last;j++)
+	      {
+		double dist2= getSegment(j).dist2(p);
+		if(dist2<minDist2)
+		    {
+		      retval= j;
+		      minDist2= dist2;
+		    }
+	      }
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return the points of intersection of the polyline with
 //! the argument.
 GeomObj3d::list_Pos3d Polyline3d::getIntersection(const Plane &p) const
@@ -265,11 +294,11 @@ GEOM_FT Polyline3d::Iz(void) const
     return 0.0;
   }
 
-//! @brief Suponemos que p es vertice de la Polyline3d
-//! Return el trozo de Polyline3d:
-//! hasta p si sgn < 0
-//! desde p si sgn >= 0
-Polyline3d Polyline3d::Separa(const Pos3d &p,const short int &sgn) const
+//! @brief Assuming that p is a vertex of the polyline
+//! Return the chunk:
+//! from the beginning to p if sgn < 0
+//! from p to the end if sgn >= 0
+Polyline3d Polyline3d::getChunk(const Pos3d &p,const short int &sgn) const
   {
     Polyline3d result;
     GeomObj::list_Pos3d::const_iterator i= find(p);
@@ -279,6 +308,37 @@ Polyline3d Polyline3d::Separa(const Pos3d &p,const short int &sgn) const
     else
       copy(i,end(),back_inserter(result));
     return result;
+  }
+
+//! @brief Return the two polylines that result from splitting
+//! this one on the point nearest to the argument.
+boost::python::list Polyline3d::split(const Pos3d &p) const
+  {
+    Polyline3d retvalA, retvalB;
+    const_iterator nearestVertexIter= getNearestPoint(p);
+    const Pos3d nearestVertex= *nearestVertexIter;
+    const_iterator nearestSegmentIter= getNearestSegment(p);
+    const Segment3d nearestSegment= getSegment(nearestSegmentIter);
+    GEOM_FT distToVertex= dist(nearestVertex,p);
+    GEOM_FT distToSegment= nearestSegment.dist(p);
+    if(distToVertex<=distToSegment)
+      {
+        retvalA= getChunk(nearestVertex,-1);
+	retvalB= getChunk(nearestVertex,1);
+      }
+    else
+      {
+	const Pos3d splittingVertexA= *nearestSegmentIter;
+	retvalA= getChunk(splittingVertexA,-1);
+	retvalA.push_back(p);
+	const Pos3d splittingVertexB= *(nearestSegmentIter+1);
+	retvalB= getChunk(splittingVertexB,1);
+	retvalB.push_front(p);
+      }
+    boost::python::list retval;
+    retval.append(retvalA);
+    retval.append(retvalB);
+    return retval;
   }
 
 /**

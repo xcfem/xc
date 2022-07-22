@@ -89,6 +89,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     const Pos2d &Vertice(const size_t &i) const;
     Segment2d getSegment(const const_iterator &i) const;
     Segment2d getSegment(const size_t &i) const;
+    const_iterator getNearestSegment(const Pos2d &) const;    
 /*     virtual list_Pos2d Int(unsigned short int i, const double d) const */
 /*       { */
 /*         cerr << "Polyline2d Int(i,d) not implemented" << endl; */
@@ -102,7 +103,8 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     list_Pos2d getIntersection(const Ray2d &sr) const;
     list_Pos2d getIntersection(const Segment2d &sr) const;
     //Polyline2d Corta(unsigned short int i,const GEOM_FT &d) const;
-    Polyline2d Separa(const Pos2d &p,const short int &sgn) const;
+    Polyline2d getChunk(const Pos2d &,const short int &) const;
+    boost::python::list split(const Pos2d &) const;
     Pos2d getCenterOfMass(void) const
       { return GeomObj::list_Pos2d::getCenterOfMass(); }
 
