@@ -49,23 +49,32 @@ class CantileverSheetPile(object):
             in the book text).
         '''
         sigma_p_2= self.getActivePressureAtDepth(z= self.excavationDepth)
-        gammaSum= self.soil.submergedGamma()
         Ka= self.soil.Ka()
         Kp= self.soil.Kp() 
-        return sigma_p_2/(gammaSum*(Kp-Ka))
+        if(self.waterTableDepth<self.excavationDepth):
+            gammaSum= self.soil.submergedGamma()
+            retval= sigma_p_2/(gammaSum*(Kp-Ka)) # eq. 14.6 in the book.
+        else:
+            retval= self.excavationDepth*Ka/(Kp-Ka) # eq. 14.28 in the book.
+        return retval
 
     def getActiveSidePressureDiagram(self):
         ''' Return the pressure diagram at the active side of the sheet-pile.
         '''
         # Right side pressure diagram.
         ptA= geom.Pos2d(0.0, 0.0)
-        sigma_p_1= self.getActivePressureAtDepth(z= self.waterTableDepth)
-        ptC= geom.Pos2d(self.waterTableDepth, sigma_p_1)
+        points= [ptA]
+        if(self.waterTableDepth<self.excavationDepth):
+            sigma_p_1= self.getActivePressureAtDepth(z= self.waterTableDepth)
+            ptC= geom.Pos2d(self.waterTableDepth, sigma_p_1)
+            points.append(ptC)
         sigma_p_2= self.getActivePressureAtDepth(z= self.excavationDepth)
         ptD= geom.Pos2d(self.excavationDepth, sigma_p_2)
+        points.append(ptD)
         L3= self.getZeroNetPressureDepth()
         ptE= geom.Pos2d(self.excavationDepth+L3, 0.0)
-        return geom.Polygon2d([ptA, ptC, ptD, ptE])
+        points.append(ptE)
+        return geom.Polygon2d(points)
 
     def getActiveSidePressure(self):
         ''' Return the pressure and the lever arm of the active side
@@ -83,13 +92,17 @@ class CantileverSheetPile(object):
         ''' Return the polynomial corresponding to the expression 14.16
             of the book.'''
         gamma= self.soil.gamma()
-        L2= self.excavationDepth-self.waterTableDepth
-        gammaSum= self.soil.submergedGamma()
         Ka= self.soil.Ka()
         Kp= self.soil.Kp()
         L3= self.getZeroNetPressureDepth()
-        sigma_p_5= (gamma*self.waterTableDepth+gammaSum*L2)*Kp+gammaSum*L3*(Kp-Ka)
-        denom= gammaSum*(Kp-Ka)
+        if(self.waterTableDepth<self.excavationDepth):
+            L2= self.excavationDepth-self.waterTableDepth
+            gammaSum= self.soil.submergedGamma()
+            sigma_p_5= (gamma*self.waterTableDepth+gammaSum*L2)*Kp+gammaSum*L3*(Kp-Ka)
+            denom= gammaSum*(Kp-Ka)
+        else:
+            sigma_p_5= gamma*(self.excavationDepth*Kp+L3*(Kp-Ka))
+            denom= gamma*(Kp-Ka)
         denom2= denom**2
         P, z_bar= self.getActiveSidePressure()
         A1= sigma_p_5/denom

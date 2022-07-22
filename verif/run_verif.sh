@@ -1098,7 +1098,8 @@ python tests/rough_calculations/test_base_plate_design.py
 python tests/rough_calculations/test_simple_beam_oscillation.py
 echo "$BLEU" "    Earth retaining structures..." "$NORMAL"
 python tests/rough_calculations/earth_retaining/retaining_wall_test_01.py
-python tests/rough_calculations/earth_retaining/sheet_pile_example.py
+python tests/rough_calculations/earth_retaining/sheet_pile_example_01.py
+python tests/rough_calculations/earth_retaining/sheet_pile_example_02.py
 echo "$BLEU" "  Beam formulas..." "$NORMAL"
 python tests/rough_calculations/beam_formulas/test_cantilever01.py
 python tests/rough_calculations/beam_formulas/test_cantilever02.py
