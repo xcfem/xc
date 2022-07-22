@@ -148,9 +148,12 @@ class CantileverSheetPile(object):
     def getMaxBendingMoment(self):
         ''' Return the maximum bending moment according to equation
             (14.22) of the book.'''
-        gammaSum= self.soil.submergedGamma()
         Ka= self.soil.Ka()
         Kp= self.soil.Kp()
         P, z_bar= self.getActiveSidePressure()
-        z_p= math.sqrt(2*P/(Kp-Ka)/gammaSum) # Equation (14.21)
-        return P*(z_bar+z_p)-(0.5*gammaSum*z_p**2*(Kp-Ka))*z_p/3.0# Equation (14.22)
+        if(self.waterTableDepth<self.excavationDepth):
+            gmm= self.soil.submergedGamma()
+        else:
+            gmm= self.soil.gamma()
+        z_p= math.sqrt(2*P/(Kp-Ka)/gmm) # Equation (14.21)
+        return P*(z_bar+z_p)-(0.5*gmm*z_p**2*(Kp-Ka))*z_p/3.0# Equation (14.22)

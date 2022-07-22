@@ -56,7 +56,7 @@ L= sheetPile.getTotalLength(depthSafetyFactor= 1.3)
 
 # Maximum bending moment.
 Mmax= sheetPile.getMaxBendingMoment()
-ratioMmax= abs(Mmax-234.36754326842927e3)/234.36754326842927e3
+ratioMmax= abs(Mmax-212.0886594633984e3)/212.0886594633984e3
 
 '''
 print('Ka= ', Ka)
