@@ -12,6 +12,10 @@ __email__= "l.pereztato@gmail.com"
 import math
 import sys
 from geotechnics import frictional_soil as fs
+from scipy import interpolate
+from scipy import optimize
+import numpy
+import geom
 from misc_utils import log_messages as lmsg
 
 class RankineSoil(fs.FrictionalSoil):
@@ -162,7 +166,7 @@ def eq_coulomb(a,b,fi,d,p):
     :param b: slope of the backfill (radians).
     :param fi: internal friction angle of the soil (radians).
     :param d: friction angle between soil an back of retaining wall (radians).
-    :param q: Uniform load.
+    :param p: Uniform load.
     '''
     fSoil= fs.FrictionalSoil(fi)
     return fSoil.eq_coulomb(a, b, d, p)
@@ -187,8 +191,7 @@ def eql_coulomb(x,H,z,ql):
 
 
 def eqp_coulomb(x,H,z,qp):
-    '''
-    Return the earth pressure resulting from a vertical point load qp
+    ''' Return the earth pressure resulting from a vertical point load qp
     acting behind a retaining wall and is contained in the same vertical
     plane of the wall section.
 
@@ -205,3 +208,78 @@ def eqp_coulomb(x,H,z,qp):
     else:
         return(1.77*m**2*n**2/float(math.pow((m**2+n**2),3))*qp/float(H**2))
 
+def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, numValues= 8):
+    ''' Return the active earth pressure according to Culmann Method.
+
+    :param soil: soil model.
+    :param wallBack: 2D segment (geom.Segment2d) representing the back of the
+                     wall. The first point of the segment is the top of the 
+                     wall and the second one corresponds to the bottom.
+    :param backfillProfile: 2D polyline representing the profile of the backfill.
+    :param delta: friction angle of the soil and the wall.
+    :param numValues: number of test values along the backfill.
+    '''
+    ptA= wallBack.getFromPoint() # Top of the wall.
+    ptB= wallBack.getToPoint() # Bottom of the wall.
+    alphaAngle= wallBack.getAngle(geom.Vector2d(0.0,-1.0)) # Angle with respect to the vertical.
+    # Soil natural slope line.
+    naturalSlopeLine= geom.Ray2d(ptB, geom.Vector2d(math.cos(soil.phi), math.sin(soil.phi)))
+
+    # Get points along the backfill profile
+    ## Compute intersection of the backfill profile with the natural slope line.
+    ptC= backfillProfile.getIntersection(naturalSlopeLine)[0]
+
+    ## Points along the backfill surface.
+    startAngle= alphaAngle+math.pi/2.0
+    endAngle= soil.phi
+    angleIncrement= (endAngle-startAngle)/(numValues+1)
+    angles= list()
+    for i in range(1,numValues+1):
+        angles.append(startAngle+i*angleIncrement)
+
+    ### Compute points
+    pointsAlongBackfill= list()
+    raysToBackFill= list()
+    for angle in angles:
+        ray= geom.Ray2d(ptB, geom.Vector2d(math.cos(angle), math.sin(angle)))
+        raysToBackFill.append(ray)
+        pt= backfillProfile.getIntersection(ray)[0]
+        pointsAlongBackfill.append(pt)
+
+    ### Compute prism weights.
+    weights= list()
+    gamma= soil.gamma()
+    for pt in pointsAlongBackfill:
+        triangle= geom.Triangle2d(ptA, ptB, pt)
+        area= triangle.getArea()
+        w= gamma*triangle.getArea()
+        weights.append(w)
+    minWeight= min(weights)
+    maxWeight= max(weights)
+
+    ### Compute weight points along natural slope line.
+    weightPoints= list()
+    for w in weights:
+        pt= naturalSlopeLine.getPoint(w)
+        weightPoints.append(pt)
+
+    ### DirectionLine
+    directionLineAngle= soil.phi-(math.pi/2.0-alphaAngle-delta)
+    directionLine=  geom.Ray2d(ptB, geom.Vector2d(math.cos(directionLineAngle), math.sin(directionLineAngle)))
+
+    ### Compute pressure points.
+    pressurePoints= list()
+    pressureDistances= list() # distances to natural slope line
+    for ray, pt in zip(raysToBackFill, weightPoints):
+        ln= geom.Line2d(pt, directionLine.getVDir())
+        pressurePoint= ray.getIntersection(ln)[0]
+        pressurePoints.append(pressurePoint)
+        pressureDistances.append(naturalSlopeLine.dist(pressurePoint))
+
+    pressureFunction= interpolate.interp1d(weights, pressureDistances, kind='quadratic', fill_value="extrapolate")
+
+    xMax= optimize.fminbound(lambda x: -pressureFunction(x), x1= minWeight, x2= maxWeight)
+    maxPressure= pressureFunction(xMax)
+    return maxPressure, pressureFunction, minWeight, maxWeight
+    
+    
