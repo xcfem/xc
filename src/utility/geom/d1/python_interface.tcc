@@ -62,6 +62,7 @@ class_<Ray2d, bases<Linear2d> >("Ray2d")
   .def("downwards", &Ray2d::downwards,"return true if the ray goes down.")
   .add_property("getIVector", &Ray2d::getIVector,"Return the local x vector.")
   .add_property("getJVector", &Ray2d::getJVector,"Return the local y vector.")
+  .def("getVDir",&Ray2d::VDir,"return the ray direction vector.")
   ;
 
 GEOM_FT (Segment2d::*AngleVector2D)(const Vector2d &v) const= &Segment2d::getAngle;
