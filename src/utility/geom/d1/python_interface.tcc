@@ -50,6 +50,8 @@ class_<Line2d, bases<Linear2d> >("Line2d")
   .add_property("getJVector", &Line2d::getJVector,"Return the local y vector.")
   ;
 
+GeomObj::list_Pos2d (Ray2d::*ray_intersectionWithR2D)(const Line2d &) const= &Ray2d::getIntersection;
+GeomObj::list_Pos2d (Ray2d::*ray_intersectionWithRay2D)(const Line2d &) const= &Ray2d::getIntersection;
 class_<Ray2d, bases<Linear2d> >("Ray2d")
   .def(init<Ray2d>())
   .def(init<Pos2d, Pos2d>())
@@ -63,6 +65,9 @@ class_<Ray2d, bases<Linear2d> >("Ray2d")
   .add_property("getIVector", &Ray2d::getIVector,"Return the local x vector.")
   .add_property("getJVector", &Ray2d::getJVector,"Return the local y vector.")
   .def("getVDir",&Ray2d::VDir,"return the ray direction vector.")
+  .def("getPoint",&Ray2d::PtoParametricas,"return a point on the line.")
+  .def("getIntersection", ray_intersectionWithR2D, "Return the intersection with the line argument.")
+  .def("getIntersection", ray_intersectionWithRay2D, "Return the intersection with the ray argument.")
   ;
 
 GEOM_FT (Segment2d::*AngleVector2D)(const Vector2d &v) const= &Segment2d::getAngle;

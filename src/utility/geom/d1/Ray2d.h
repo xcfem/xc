@@ -65,9 +65,7 @@ class Ray2d : public Linear2d
     bool downwards(void) const;
     const Pos2d Point(const int &i) const
       { return Pos2d(cgsr.point(i)); }
-    //@brief Return a point of the line at a distance lambda from its origin.
-    Pos2d PtoParametricas(const GEOM_FT &lambda) const
-      { return Point(0)+lambda*VDir(); }
+    Pos2d PtoParametricas(const GEOM_FT &) const;
     inline bool EsVertical(void) const
       { return cgsr.is_vertical(); }
     inline bool isDegenerated(void) const

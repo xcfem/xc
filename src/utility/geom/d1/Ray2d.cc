@@ -65,6 +65,7 @@ void Ray2d::TwoPoints(const Pos2d &p1,const Pos2d &p2)
 
 Dir2d Ray2d::GetDir(void) const
   { return Dir2d(cgsr.direction()); }
+
 Vector2d Ray2d::VDir(void) const
   { return GetDir().GetVector(); }
 
@@ -95,6 +96,16 @@ Vector2d Ray2d::getJVector(void) const
   {
     Vector2d retval= Normal();
     retval.Normalize();
+    return retval;
+  }
+
+//! @brief Return a point of the line at a distance lambda
+//! from its origin.
+Pos2d Ray2d::PtoParametricas(const GEOM_FT &lambda) const
+  {
+    Pos2d retval= getFromPoint();
+    if(fabs(lambda)>0.0)
+      { retval+= lambda*getIVector(); }
     return retval;
   }
 
