@@ -49,6 +49,7 @@ class_<PolygonalSurface2d, bases<Surface2d>, boost::noncopyable >("PolygonalSurf
   .def("getRecubrimiento",getCoverA,"TO DEPRECATE. Return the cover of the position inside the surface.")
   .def("getCover",getCoverA,"Return the cover of the position inside the surface.")
   .def("getCover",getCoverB,"Return the distance from the point to the nearest of the intersections of the ray defined by the point and the vector with the nearest edge.")
+  .def("getArea",&PolygonalSurface2d::getArea,"Return the object area.")
   .def("clip",clipLine, "Clips the line by the polygonal surface.")
   .def("clip",clipRay, "Clips the ray by the polygonal surface.")
   .def("clip",clipSegment, "Clips the segment by the polygonal surface.")
@@ -78,7 +79,6 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def("offset",&Polygon2d::Offset)
   .def("getTributaryAreas",&Polygon2d::getTributaryAreas,"Return the tributary areas.")
   .def("appendVertex",&Polygon2d::push_back)
-  .def("getArea",&Polygon2d::getArea,"Return the polygon area.")
   .def("unePolygon2d",unePolygon2d,"Return the union of this polygon with the argument.")
   .def("clipUsingPolygon",&Polygon2d::clipBy)
   .def("getBayazitDecomposition",&Polygon2d::getBayazitDecomposition)
@@ -95,8 +95,9 @@ class_<Square2d, bases<Quadrilateral2d> >("Square2d")
   .def(init<>())
   ;
 
-class_<Triangle2d, bases<Polygon2d> >("Triangle2d")
+class_<Triangle2d, bases<PolygonalSurface2d> >("Triangle2d")
   .def(init<>())
+  .def(init<Pos2d, Pos2d, Pos2d>())
   ;
 
 class_<LineSegmentArrangement, bases<Surface2d> >("LineSegmentArrangement")
