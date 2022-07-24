@@ -39,6 +39,7 @@ namespace XC {
 class EPPBaseMaterial: public ElasticBaseMaterial
   {
   protected:
+    double commitStrain; //!< plastic strain at last commit
     double trialStress; //!< current trial stress
     double trialTangent; //!< current trial tangent
     int sendData(Communicator &);
@@ -52,6 +53,8 @@ class EPPBaseMaterial: public ElasticBaseMaterial
     inline double getTangent(void) const
       { return trialTangent; }
     
+    int commitState(void);
+    int revertToLastCommit(void);    
     int revertToStart(void);
   };
 } // end of XC namespace

@@ -35,14 +35,29 @@
 //! @param[in] e material elastic modulus.
 //! @param[in] e0 initial strain.
 XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)
-  :ElasticBaseMaterial(tag,classtag,e,e0),
+  :ElasticBaseMaterial(tag,classtag,e,e0), commitStrain(0.0),
    trialStress(0.0), trialTangent(e)
   {}
+
+//! @brief Commit the state of the material.
+int XC::EPPBaseMaterial::commitState(void)
+  {
+    commitStrain= trialStrain;
+    return 0;
+  }
+
+//! @brief Revert to the last commited state.
+int XC::EPPBaseMaterial::revertToLastCommit(void)
+  {
+    trialStrain = commitStrain;
+    return 0;
+  }
 
 //! @brief Returns the material to its initial state.
 int XC::EPPBaseMaterial::revertToStart(void)
   {
     int retval= ElasticBaseMaterial::revertToStart();
+    commitStrain= 0.0;
     trialStress= 0.0;
     trialTangent= E;
     return retval;
@@ -52,7 +67,7 @@ int XC::EPPBaseMaterial::revertToStart(void)
 int XC::EPPBaseMaterial::sendData(Communicator &comm)
   {
     int res= ElasticBaseMaterial::sendData(comm);
-    res+= comm.sendDoubles(trialStress,trialTangent,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDoubles(commitStrain, trialStress,trialTangent,getDbTagData(),CommMetaData(3));
     return res;
   }
 
@@ -60,6 +75,6 @@ int XC::EPPBaseMaterial::sendData(Communicator &comm)
 int XC::EPPBaseMaterial::recvData(const Communicator &comm)
   {
     int res= ElasticBaseMaterial::recvData(comm);
-    res+= comm.receiveDoubles(trialStress,trialTangent,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDoubles(commitStrain, trialStress,trialTangent,getDbTagData(),CommMetaData(3));
     return res;
   }

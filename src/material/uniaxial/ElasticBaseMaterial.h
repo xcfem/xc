@@ -40,7 +40,6 @@ class ElasticBaseMaterial: public UniaxialMaterial
   {
   protected:
     double trialStrain; //!< Material trial strain.
-    double commitStrain; //!< plastic strain at last commit
     double E; //!< Elastic modulus.
     double ezero; //!< Initial strain.
   protected:

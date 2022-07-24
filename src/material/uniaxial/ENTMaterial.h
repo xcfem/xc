@@ -80,8 +80,6 @@ class ENTMaterial: public ElasticBaseMaterial
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
-
   public:
     ENTMaterial(int tag= 0, const double &E=0.0,const double &a=0.0,const double &b=1.0);    
 

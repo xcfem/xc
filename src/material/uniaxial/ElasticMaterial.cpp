@@ -109,15 +109,6 @@ int XC::ElasticMaterial::setTrial(double strain, double &stress, double &tangent
 double XC::ElasticMaterial::getStress(void) const
   { return E*get_total_strain() + eta*trialStrainRate; }
 
-//! @brief Commit the material state.
-int XC::ElasticMaterial::commitState(void)
-  { return ElasticBaseMaterial::commitState(); }
-
-//! @brief Revert the material to its last commited state.
-int XC::ElasticMaterial::revertToLastCommit(void)
-  { return ElasticBaseMaterial::revertToLastCommit(); }
-
-
 //! @brief Revert the material to its initial state.
 int XC::ElasticMaterial::revertToStart(void)
   {

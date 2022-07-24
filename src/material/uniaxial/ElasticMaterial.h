@@ -99,8 +99,6 @@ class ElasticMaterial: public ElasticBaseMaterial
     double getTangent(void) const {return E;}
     double getDampTangent(void) const {return eta;}
 
-    int commitState(void);
-    int revertToLastCommit(void);    
     int revertToStart(void);        
 
     UniaxialMaterial *getCopy(void) const;
