@@ -88,6 +88,25 @@ class RankineSoil(fs.FrictionalSoil):
 # }
 
 # Earth pressure coefficients.
+def ka_rankine(b,fi):
+    '''Return the active earth pressure coefficient according to Rankine theory.
+
+    :param b:  slope of the backfill (radians).
+    :param fi: internal friction angle of the soil (radians).
+
+    '''
+    fSoil= RankineSoil(phi= fi, beta= b)
+    return fSoil.Ka()
+
+def kp_rankine(b,fi):
+    '''Return the active earth pressure coefficient according to Rankine theory.
+
+    :param b:  slope of the backfill (radians).
+    :param fi: internal friction angle of the soil (radians).
+
+    '''
+    fSoil= RankineSoil(phi= fi, beta= b)
+    return fSoil.Kp()
 
 def ka_coulomb(a,b,fi,d):
     '''Return the active earth pressure coefficient according to Coulomb theory.
@@ -232,6 +251,10 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     ptA= wallBack.getFromPoint() # Top of the wall.
     ptB= wallBack.getToPoint() # Bottom of the wall.
     alphaAngle= wallBack.getAngle(geom.Vector2d(0.0,-1.0)) # Angle with respect to the vertical.
+    TwoPi= 2*math.pi
+    alphaAngle%=TwoPi
+    if(abs(alphaAngle-TwoPi)<.01):
+        alphaAngle-= TwoPi
     # Soil natural slope line.
     naturalSlopeLine= geom.Ray2d(ptB, geom.Vector2d(math.cos(soil.phi), math.sin(soil.phi)))
 
@@ -253,8 +276,14 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     for angle in angles:
         ray= geom.Ray2d(ptB, geom.Vector2d(math.cos(angle), math.sin(angle)))
         raysToBackFill.append(ray)
-        pt= backfillProfile.getIntersection(ray)[0]
-        pointsAlongBackfill.append(pt)
+        intersections= backfillProfile.getIntersection(ray)
+        if(len(intersections)>0):
+            pt= intersections[0]
+            pointsAlongBackfill.append(pt)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; intersection with direction line not found for ray: '+str(ray)+ ' angle: '+str(math.degrees(angle)))
+            exit(1)
 
     ### Compute prism weights.
     weights= list()
@@ -284,9 +313,15 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     pressureDistances= list() # distances to natural slope line
     for ray, pt in zip(raysToBackFill, weightPoints):
         ln= geom.Line2d(pt, directionLine.getVDir())
-        pressurePoint= ray.getIntersection(ln)[0]
-        pressurePoints.append(pressurePoint)
-        pressureDistances.append(naturalSlopeLine.dist(pressurePoint))
+        intersections= ray.getIntersection(ln)
+        if(len(intersections)>0):
+            pressurePoint= intersections[0]
+            pressurePoints.append(pressurePoint)
+            pressureDistances.append(naturalSlopeLine.dist(pressurePoint))
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; intersection with direction line not found for ray: '+str(ray))
+            exit(1)
 
     pressureFunction= interpolate.interp1d(weights, pressureDistances, kind='quadratic', fill_value="extrapolate")
 
