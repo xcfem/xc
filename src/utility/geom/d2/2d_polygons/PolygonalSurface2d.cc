@@ -63,8 +63,8 @@ Polyline2d PolygonalSurface2d::getPolyline(void) const
   {
     Polyline2d retval;
     unsigned int nv= getNumVertices();
-    for(size_t i= 1; i <= nv; i++) retval.AgregaVertice(Vertice(i));
-    retval.AgregaVertice(Vertice(1)); //Close the polyline.
+    for(size_t i= 1; i <= nv; i++) retval.appendVertex(Vertice(i));
+    retval.appendVertex(Vertice(1)); //Close the polyline.
     return retval;
   }
 

@@ -51,10 +51,18 @@ Polyline2d::Polyline2d(const boost::python::list &l)
       push_back(boost::python::extract<Pos2d>(l[i]));
   }
 
-const Pos2d *Polyline2d::AgregaVertice(const Pos2d &p)
+//! @brief Append a vertex to the polyline.
+const Pos2d *Polyline2d::appendVertex(const Pos2d &p)
   {
     GeomObj::list_Pos2d::push_back(p);
     return &(*GeomObj::list_Pos2d::rbegin());
+  }
+
+//! @brief Append a vertex to the beginning of the polyline.
+const Pos2d *Polyline2d::appendVertexLeft(const Pos2d &p)
+  {
+    GeomObj::list_Pos2d::push_front(p);
+    return &(*GeomObj::list_Pos2d::begin());
   }
 
 size_t Polyline2d::getNumSegments(void) const
@@ -261,6 +269,15 @@ GEOM_FT Polyline2d::Iz(void) const
     return 0.0;
   }
 
+//! @brief Insert the point argurment as vertex by
+//! splitting the nearest segment.
+void Polyline2d::insertVertex(const Pos2d &p)
+  {
+    const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
+    insert(vertexIter,p);
+  }
+
+
 //! @brief Suponemos que p es vertice de la Polyline2d
 //! Return el trozo de Polyline2d:
 //! hasta p si sgn < 0
@@ -269,7 +286,8 @@ Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn) const
   {
     Polyline2d result;
     const_iterator i= find(p);
-    if (i == end()) return result;
+    if (i == end())
+      i= getNearestPoint(p);
     if (sgn < 0)
       copy(begin(),++i,back_inserter(result));
     else

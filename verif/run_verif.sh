@@ -76,14 +76,16 @@ python tests/utility/geom/segment3d_test_01.py
 python tests/utility/geom/segment3d_connect_01.py
 python tests/utility/geom/segment3d_connect_02.py
 python tests/utility/geom/ray2d_test.py
-echo "$BLEU" "    Polylines." "$NORMAL"
 python tests/utility/geom/pos2d_list_test_01.py
-python tests/utility/geom/polyline2d_test_01.py
-python tests/utility/geom/polyline2d_test_02.py
-python tests/utility/geom/polyline2d_test_03.py
-python tests/utility/geom/polyline3d_test_01.py
-python tests/utility/geom/polyline3d_test_02.py
-python tests/utility/geom/polyline3d_test_03.py
+echo "$BLEU" "    Polylines." "$NORMAL"
+python tests/utility/geom/polylines/polyline2d_test_01.py
+python tests/utility/geom/polylines/polyline2d_test_02.py
+python tests/utility/geom/polylines/polyline2d_test_03.py
+python tests/utility/geom/polylines/polyline2d_test_04.py
+python tests/utility/geom/polylines/polyline3d_test_01.py
+python tests/utility/geom/polylines/polyline3d_test_02.py
+python tests/utility/geom/polylines/polyline3d_test_03.py
+python tests/utility/geom/polylines/polyline3d_test_04.py
 echo "$BLEU" "    Polygons." "$NORMAL"
 python tests/utility/geom/polygons/polygon2D_test_2d_01.py
 python tests/utility/geom/polygons/polygon2D_test_2d_02.py

@@ -252,7 +252,7 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     for pt in pointsAlongBackfill:
         triangle= geom.Triangle2d(ptA, ptB, pt)
         area= triangle.getArea()
-        w= gamma*triangle.getArea()
+        w= gamma*area
         weights.append(w)
     minWeight= min(weights)
     maxWeight= max(weights)

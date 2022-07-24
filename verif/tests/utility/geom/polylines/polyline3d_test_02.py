@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Verification of the intersection method.'''
 
 from __future__ import print_function
 

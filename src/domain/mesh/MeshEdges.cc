@@ -81,10 +81,10 @@ Polyline3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop, con
     for(std::deque<const XC::MeshEdge *>::const_iterator i= loop.begin();i!=loop.end();i++)
       {
         pt= (*i)->getFirstNode()->getCurrentPosition3d(factor);
-        retval.AgregaVertice(pt);
+        retval.appendVertex(pt);
       }
     pt= retval.front(); //First point.
-    retval.AgregaVertice(pt); //Polyline closed.
+    retval.appendVertex(pt); //Polyline closed.
     return retval;
   } 
 

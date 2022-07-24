@@ -57,7 +57,8 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
 /*       { Ref3d::GiraY(ang); TrfPoints();  } */
 /*     inline virtual void GiraZ(double ang) */
 /*       { Ref3d::GiraZ(ang); TrfPoints();  } */
-    const Pos3d *AgregaVertice(const Pos3d &p);
+    const Pos3d *appendVertex(const Pos3d &);
+    const Pos3d *appendVertexLeft(const Pos3d &);
     virtual bool In(const Pos3d &p, const double &tol= 0.0) const;
 
     virtual GEOM_FT Ix(void) const;
@@ -77,6 +78,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     //list_Pos3d Int(unsigned short int i,const GEOM_FT &d) const;
     list_Pos3d getIntersection(const Plane &) const;
     //Polyline3d Corta(unsigned short int i,const GEOM_FT &d) const;
+    void insertVertex(const Pos3d &);
     Polyline3d getChunk(const Pos3d &p,const short int &sgn) const;
     boost::python::list split(const Pos3d &) const;
     Pos3d getCenterOfMass(void) const

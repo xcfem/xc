@@ -23,10 +23,7 @@ vertices= [  geom.Pos2d(0,0), #1
   geom.Pos2d(0,1) #10
   ]
 
-polA= geom.Polyline2d()
-
-for v in vertices:
-  polA.appendVertex(v)
+polA= geom.Polyline2d(vertices)
 
 polB= geom.Polyline2d(polA)
 

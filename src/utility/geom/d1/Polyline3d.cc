@@ -80,10 +80,18 @@ boost::python::list Polyline3d::getVertexListPy(void) const
     return retval;
   }
 
-const Pos3d *Polyline3d::AgregaVertice(const Pos3d &p)
+//! @brief Append a vertex to the polyline.
+const Pos3d *Polyline3d::appendVertex(const Pos3d &p)
   {
     GeomObj::list_Pos3d::push_back(p);
     return &(*rbegin());
+  }
+
+//! @brief Append a vertex to the beginning of the polyline.
+const Pos3d *Polyline3d::appendVertexLeft(const Pos3d &p)
+  {
+    GeomObj::list_Pos3d::push_front(p);
+    return &(*GeomObj::list_Pos3d::begin());
   }
 
 size_t Polyline3d::getNumSegments(void) const
@@ -294,6 +302,14 @@ GEOM_FT Polyline3d::Iz(void) const
     return 0.0;
   }
 
+//! @brief Insert the point argurment as vertex by
+//! splitting the nearest segment.
+void Polyline3d::insertVertex(const Pos3d &p)
+  {
+    const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
+    insert(vertexIter, p);
+  }
+
 //! @brief Assuming that p is a vertex of the polyline
 //! Return the chunk:
 //! from the beginning to p if sgn < 0
@@ -302,7 +318,8 @@ Polyline3d Polyline3d::getChunk(const Pos3d &p,const short int &sgn) const
   {
     Polyline3d result;
     GeomObj::list_Pos3d::const_iterator i= find(p);
-    if (i == end()) return result;
+    if (i == end())
+      i= getNearestPoint(p);
     if(sgn < 0)
       copy(begin(),++i,back_inserter(result));
     else

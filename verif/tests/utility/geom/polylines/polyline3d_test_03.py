@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Home made test. Verification of Douglas Peucker algorithm implementation.'''
+'''Home made test. Verification of split method.'''
 
 from __future__ import print_function
 
@@ -11,20 +11,22 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
 import math
-vertices= [  geom.Pos2d(0,0), #1
-  geom.Pos2d(1,0), #2
-  geom.Pos2d(1,2), #3
+vertices= [  geom.Pos3d(0,0,0), #1
+  geom.Pos3d(1,0,0), #2
+  geom.Pos3d(1,2,0), #3
   ]
 
-polA= geom.Polyline2d(vertices)
+polA= geom.Polyline3d(vertices)
 
-resultVertex= polA.split(geom.Pos2d(1,0))
+# Split at vertex.
+resultVertex= polA.split(geom.Pos3d(1,0,0))
 lengthA= resultVertex[0].getLength()
 ratio0= abs(lengthA-1)
 lengthB= resultVertex[1].getLength()
 ratio1= abs(lengthB-2)/2
 
-resultVertex= polA.split(geom.Pos2d(1,1))
+# Split at segment.
+resultVertex= polA.split(geom.Pos3d(1,1,0))
 lengthC= resultVertex[0].getLength()
 ratio2= abs(lengthC-2)/2
 lengthD= resultVertex[1].getLength()
@@ -44,7 +46,7 @@ print('ratio3= ', ratio3)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if math.fabs(ratio0)<1e-10 and math.fabs(ratio1)<1e-10 and math.fabs(ratio3)<1e-10:
+if abs(ratio0)<1e-10 and abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')

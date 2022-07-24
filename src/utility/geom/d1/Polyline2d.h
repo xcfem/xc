@@ -63,7 +63,8 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
 /*       { Ref2d::GiraY(ang); TrfPoints();  } */
 /*     inline virtual void GiraZ(double ang) */
 /*       { Ref2d::GiraZ(ang); TrfPoints();  } */
-    const Pos2d *AgregaVertice(const Pos2d &p);
+    const Pos2d *appendVertex(const Pos2d &);
+    const Pos2d *appendVertexLeft(const Pos2d &);
     //! @brief Insert the vertices between [first,last) antes
     template <class InputIterator>
     inline void assign(InputIterator first, InputIterator last)
@@ -103,6 +104,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     list_Pos2d getIntersection(const Ray2d &sr) const;
     list_Pos2d getIntersection(const Segment2d &sr) const;
     //Polyline2d Corta(unsigned short int i,const GEOM_FT &d) const;
+    void insertVertex(const Pos2d &);
     Polyline2d getChunk(const Pos2d &,const short int &) const;
     boost::python::list split(const Pos2d &) const;
     Pos2d getCenterOfMass(void) const
