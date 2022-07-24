@@ -16,8 +16,6 @@ from postprocess.reports import draw_wall_reinforcement_scheme as draw_schema
 from postprocess import get_reactions
 import math
 import scipy.interpolate
-import matplotlib
-import matplotlib.pyplot as plt
 from materials import typical_materials
 from materials.sections import section_properties
 from model.geometry import retaining_wall_geometry
@@ -158,6 +156,7 @@ class InternalForces(object):
         vNeg= []
         for vi in self.vdEnvelope.negative:
             vNeg.append(vi/1e3)
+        import matplotlib.pyplot as plt
         plt.plot(mPos,z,'+', vPos, z,'^',mNeg,z,'-', vNeg, z,'v')
         plt.legend(['Md+ (kN m/m)', 'Vd+ (kN/m)','Md- (kN m/m)', 'Vd- (kN/m)'], loc='best')
         plt.title("Internal forces.")
