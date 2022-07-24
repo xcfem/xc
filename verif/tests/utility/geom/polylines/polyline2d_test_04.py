@@ -34,11 +34,10 @@ vertices= [  geom.Pos2d(0,0), #1
 polA= geom.Polyline2d(vertices)
 
 cutPoint= geom.Pos2d(1.5,1)
-polA.insertVertex(cutPoint)
 
-resultA= polA.getChunk(cutPoint, -1)
+resultA= polA.getLeftChunk(cutPoint, 1e-3)
 ratio1= (resultA.getLength()-2.5)/2.5
-resultB= polA.getChunk(cutPoint, 1)
+resultB= polA.getRightChunk(cutPoint, 1e-3)
 ratio2= (resultB.getLength()-2.5)/2.5
 
 

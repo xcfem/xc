@@ -78,8 +78,10 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     //list_Pos3d Int(unsigned short int i,const GEOM_FT &d) const;
     list_Pos3d getIntersection(const Plane &) const;
     //Polyline3d Corta(unsigned short int i,const GEOM_FT &d) const;
-    void insertVertex(const Pos3d &);
-    Polyline3d getChunk(const Pos3d &p,const short int &sgn) const;
+    void insertVertex(const Pos3d &, const GEOM_FT &tol= 1e-6);
+    Polyline3d getChunk(const Pos3d &,const short int &, const GEOM_FT &) const;
+    Polyline3d getLeftChunk(const Pos3d &, const GEOM_FT &tol) const;
+    Polyline3d getRightChunk(const Pos3d &, const GEOM_FT &tol) const;
     boost::python::list split(const Pos3d &) const;
     Pos3d getCenterOfMass(void) const
       { return GeomObj::list_Pos3d::getCenterOfMass(); }

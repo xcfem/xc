@@ -269,31 +269,77 @@ GEOM_FT Polyline2d::Iz(void) const
     return 0.0;
   }
 
-//! @brief Insert the point argurment as vertex by
-//! splitting the nearest segment.
-void Polyline2d::insertVertex(const Pos2d &p)
+//! @brief Insert the point argument as vertex by
+//! splitting the nearest segment if the nearest vertex
+//! is not closer than tol. Otherwise do nothing.
+void Polyline2d::insertVertex(const Pos2d &p, const GEOM_FT &tol)
   {
-    const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
-    insert(vertexIter,p);
+    const_iterator nearestVertexIter= getNearestPoint(p);
+    const Pos2d nearestVertex= *nearestVertexIter;
+    const GEOM_FT distToVertex= dist(nearestVertex,p);
+    if(distToVertex>tol) // No vertices close to p
+      {
+        const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
+        insert(vertexIter,p);
+      }
   }
 
 
-//! @brief Suponemos que p es vertice de la Polyline2d
-//! Return el trozo de Polyline2d:
-//! hasta p si sgn < 0
-//! desde p si sgn >= 0
-Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn) const
+//! @brief Assuming that p is a vertex of the polyline
+//! Return the chunk:
+//! from the beginning to p if sgn < 0
+//! from p to the end if sgn >= 0
+//! @param p: position of the vertex
+//! @param sgn: if < 0 get left chunk else get right chunk.
+//! @param tol: if >0 insert p as vertex if nearest vertex is not closer than tol.
+Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn, const GEOM_FT &tol) const
   {
     Polyline2d result;
     const_iterator i= find(p);
+    GEOM_FT distToVertex= 0.0;
     if (i == end())
-      i= getNearestPoint(p);
-    if (sgn < 0)
-      copy(begin(),++i,back_inserter(result));
+      {
+        i= getNearestPoint(p);
+	Pos2d nearestVertex= *i;
+	distToVertex= dist(nearestVertex,p);
+	// Deal with the case in which two
+	// vertices are equally distant from p.
+	const_iterator nearestSegmentIter= getNearestSegment(p);
+	const Segment2d nearestSegment= getSegment(nearestSegmentIter);
+	const GEOM_FT distToSegment= nearestSegment.dist(p);
+	if((distToSegment<distToVertex) and (sgn>0))
+	  {
+	    i= nearestSegmentIter+1; // end point of the segment.
+	    nearestVertex= *i;
+	    distToVertex= dist(nearestVertex,p);
+	  }   
+      }
+    if(sgn < 0)
+      {
+        copy(begin(),++i,back_inserter(result));
+	if(distToVertex>tol)
+	  result.appendVertex(p);
+      }
     else
-      copy(i,end(),back_inserter(result));
+      {
+        copy(i,end(),back_inserter(result));
+	if(distToVertex>tol)
+	  result.appendVertexLeft(p);
+      }	
     return result;
   }
+
+//! @brief Return the polyline chunk that goes from its beginning
+//! to the nearest vertex to p. If distance from vertex to p is
+//! greater than tol add the vertex to the resulting polyline.
+Polyline2d Polyline2d::getLeftChunk(const Pos2d &p, const GEOM_FT &tol) const
+  { return getChunk(p, -1, tol); }
+  
+//! @brief Return the polyline chunk that goes the nearest vertex to
+//! to p to its end. If distance from vertex to p is
+//! greater than tol add the vertex to the resulting polyline.
+Polyline2d Polyline2d::getRightChunk(const Pos2d &p, const GEOM_FT &tol) const
+  { return getChunk(p, 1, tol); }
 
 //! @brief Return the two polylines that result from splitting
 //! this one on the point nearest to the argument.
@@ -304,20 +350,20 @@ boost::python::list Polyline2d::split(const Pos2d &p) const
     const Pos2d nearestVertex= *nearestVertexIter;
     const_iterator nearestSegmentIter= getNearestSegment(p);
     const Segment2d nearestSegment= getSegment(nearestSegmentIter);
-    GEOM_FT distToVertex= dist(nearestVertex,p);
-    GEOM_FT distToSegment= nearestSegment.dist(p);
+    const GEOM_FT distToVertex= dist(nearestVertex,p);
+    const GEOM_FT distToSegment= nearestSegment.dist(p);
     if(distToVertex<=distToSegment)
       {
-        retvalA= getChunk(nearestVertex,-1);
-	retvalB= getChunk(nearestVertex,1);
+        retvalA= getLeftChunk(nearestVertex,0.0);
+	retvalB= getRightChunk(nearestVertex,0.0);
       }
     else
       {
 	const Pos2d splittingVertexA= *nearestSegmentIter;
-	retvalA= getChunk(splittingVertexA,-1);
+	retvalA= getLeftChunk(splittingVertexA,0.0);
 	retvalA.push_back(p);
 	const Pos2d splittingVertexB= *(nearestSegmentIter+1);
-	retvalB= getChunk(splittingVertexB,1);
+	retvalB= getRightChunk(splittingVertexB,0.0);
 	retvalB.push_front(p);
       }
     boost::python::list retval;

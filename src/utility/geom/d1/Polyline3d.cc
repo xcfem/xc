@@ -304,28 +304,70 @@ GEOM_FT Polyline3d::Iz(void) const
 
 //! @brief Insert the point argurment as vertex by
 //! splitting the nearest segment.
-void Polyline3d::insertVertex(const Pos3d &p)
+void Polyline3d::insertVertex(const Pos3d &p, const GEOM_FT &tol)
   {
-    const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
-    insert(vertexIter, p);
+    const_iterator nearestVertexIter= getNearestPoint(p);
+    const Pos3d nearestVertex= *nearestVertexIter;
+    const GEOM_FT distToVertex= dist(nearestVertex,p);
+    if(distToVertex>tol) // No vertices close to p
+      {
+        const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
+        insert(vertexIter, p);
+      }
   }
 
 //! @brief Assuming that p is a vertex of the polyline
 //! Return the chunk:
 //! from the beginning to p if sgn < 0
 //! from p to the end if sgn >= 0
-Polyline3d Polyline3d::getChunk(const Pos3d &p,const short int &sgn) const
+Polyline3d Polyline3d::getChunk(const Pos3d &p,const short int &sgn, const GEOM_FT &tol) const
   {
     Polyline3d result;
-    GeomObj::list_Pos3d::const_iterator i= find(p);
+    const_iterator i= find(p);
+    GEOM_FT distToVertex= 0.0;
     if (i == end())
-      i= getNearestPoint(p);
+      {
+        i= getNearestPoint(p);
+	Pos3d nearestVertex= *i;
+	distToVertex= dist(nearestVertex,p);
+	// Deal with the case in which two
+	// vertices are equally distant from p.
+	const_iterator nearestSegmentIter= getNearestSegment(p);
+	const Segment3d nearestSegment= getSegment(nearestSegmentIter);
+	const GEOM_FT distToSegment= nearestSegment.dist(p);
+	if((distToSegment<distToVertex) and (sgn>0))
+	  {
+	    i= nearestSegmentIter+1; // end point of the segment.
+	    nearestVertex= *i;
+	    distToVertex= dist(nearestVertex,p);
+	  }   
+      }
     if(sgn < 0)
-      copy(begin(),++i,back_inserter(result));
+      {
+        copy(begin(),++i,back_inserter(result));
+	if(distToVertex>tol)
+	  result.appendVertex(p);
+      }
     else
-      copy(i,end(),back_inserter(result));
+      {
+        copy(i,end(),back_inserter(result));
+	if(distToVertex>tol)
+	  result.appendVertexLeft(p);
+      }	
     return result;
   }
+
+//! @brief Return the polyline chunk that goes from its beginning
+//! to the nearest vertex to p. If distance from vertex to p is
+//! greater than tol add the vertex to the resulting polyline.
+Polyline3d Polyline3d::getLeftChunk(const Pos3d &p, const GEOM_FT &tol) const
+  { return getChunk(p, -1, tol); }
+  
+//! @brief Return the polyline chunk that goes the nearest vertex to
+//! to p to its end. If distance from vertex to p is
+//! greater than tol add the vertex to the resulting polyline.
+Polyline3d Polyline3d::getRightChunk(const Pos3d &p, const GEOM_FT &tol) const
+  { return getChunk(p, 1, tol); }
 
 //! @brief Return the two polylines that result from splitting
 //! this one on the point nearest to the argument.
@@ -340,16 +382,16 @@ boost::python::list Polyline3d::split(const Pos3d &p) const
     GEOM_FT distToSegment= nearestSegment.dist(p);
     if(distToVertex<=distToSegment)
       {
-        retvalA= getChunk(nearestVertex,-1);
-	retvalB= getChunk(nearestVertex,1);
+        retvalA= getLeftChunk(nearestVertex,0.0);
+	retvalB= getRightChunk(nearestVertex,0.0);
       }
     else
       {
 	const Pos3d splittingVertexA= *nearestSegmentIter;
-	retvalA= getChunk(splittingVertexA,-1);
+	retvalA= getLeftChunk(splittingVertexA,0.0);
 	retvalA.push_back(p);
 	const Pos3d splittingVertexB= *(nearestSegmentIter+1);
-	retvalB= getChunk(splittingVertexB,1);
+	retvalB= getRightChunk(splittingVertexB,0.0);
 	retvalB.push_front(p);
       }
     boost::python::list retval;

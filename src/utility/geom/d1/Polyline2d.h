@@ -104,8 +104,10 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     list_Pos2d getIntersection(const Ray2d &sr) const;
     list_Pos2d getIntersection(const Segment2d &sr) const;
     //Polyline2d Corta(unsigned short int i,const GEOM_FT &d) const;
-    void insertVertex(const Pos2d &);
-    Polyline2d getChunk(const Pos2d &,const short int &) const;
+    void insertVertex(const Pos2d &, const GEOM_FT &tol= 1e-6);
+    Polyline2d getChunk(const Pos2d &,const short int &, const GEOM_FT &tol) const;
+    Polyline2d getLeftChunk(const Pos2d &, const GEOM_FT &tol) const;
+    Polyline2d getRightChunk(const Pos2d &, const GEOM_FT &tol) const;
     boost::python::list split(const Pos2d &) const;
     Pos2d getCenterOfMass(void) const
       { return GeomObj::list_Pos2d::getCenterOfMass(); }
