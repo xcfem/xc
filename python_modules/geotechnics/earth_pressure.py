@@ -219,6 +219,16 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     :param delta: friction angle of the soil and the wall.
     :param numValues: number of test values along the backfill.
     '''
+    def getPolygon(cutPoint):
+        ''' Return the polygon defined by the backfill surface until cutPoint
+            and the wall back.'''
+        retval= geom.Polygon2d()
+        terrainSurface= backfillProfile.getLeftChunk(cutPoint, 1e-3)
+        for pt in terrainSurface:
+            retval.appendVertex(pt)
+        retval.appendVertex(ptB)
+        return retval
+        
     ptA= wallBack.getFromPoint() # Top of the wall.
     ptB= wallBack.getToPoint() # Bottom of the wall.
     alphaAngle= wallBack.getAngle(geom.Vector2d(0.0,-1.0)) # Angle with respect to the vertical.
@@ -250,8 +260,10 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     weights= list()
     gamma= soil.gamma()
     for pt in pointsAlongBackfill:
-        triangle= geom.Triangle2d(ptA, ptB, pt)
-        area= triangle.getArea()
+        #triangle= geom.Triangle2d(ptA, ptB, pt)
+        #area= triangle.getArea()
+        plg= getPolygon(pt)
+        area= plg.getArea()
         w= gamma*area
         weights.append(w)
     minWeight= min(weights)
