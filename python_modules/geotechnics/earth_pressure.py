@@ -120,7 +120,7 @@ def phi_rankine_from_active_coefficient(b, ka):
         cPhi= math.cos(phi)
         r= math.sqrt(cBeta**2-cPhi**2)
         return (cBeta*(cBeta-r)/(cBeta+r)-ka)
-    result= optimize.root_scalar(rankine_ka, bracket=[0, math.pi/2.0], method='brentq')
+    result= optimize.root_scalar(rankine_ka, bracket=[b, math.pi/2.0], method='brentq')
     retval= None
     if(result.converged):
         retval= result.root
