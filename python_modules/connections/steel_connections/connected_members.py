@@ -5,18 +5,17 @@
 from __future__ import division
 from __future__ import print_function
 
-__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__author__= "Luis C. Pérez Tato (LCPT), Ana Ortega (AO_O) "
 __copyright__= "Copyright 2020, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-import sys
 import enum
 import math
-import json
 from import_export import block_topology_entities as bte
 import geom
+import sys
 from misc_utils import log_messages as lmsg
 from import_export import neutral_mesh_description as nmd
 
@@ -489,7 +488,9 @@ class ConnectedMemberMetaData(object):
                     # that lie on each half of the flange.
                     pInt= columnWebMidPlane.getIntersection(columnBottomFlangeLine)
                     if pInt.notAPoint():
-                        lmsg.error('intersection point not found.')
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+'; intersection point not found.')
                     columnBottomFlangeLineA= geom.Segment3d(columnBottomFlangeLine.getFromPoint(), pInt)
                     columnBottomFlangeLineB= geom.Segment3d(pInt, columnBottomFlangeLine.getToPoint())
                     weldDict['columnBottomFlangeWeldA']= columnBottomFlangeLineA
@@ -500,7 +501,9 @@ class ConnectedMemberMetaData(object):
                     # that lie on each half of the flange.
                     pInt= columnWebMidPlane.getIntersection(columnTopFlangeLine)
                     if pInt.notAPoint():
-                        lmsg.error('intersection point not found.')
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+'; intersection point not found.')
                     columnTopFlangeLineA= geom.Segment3d(columnTopFlangeLine.getFromPoint(), pInt)
                     columnTopFlangeLineB= geom.Segment3d(pInt, columnTopFlangeLine.getToPoint())
                     weldDict['columnTopFlangeWeldA']= columnTopFlangeLineA
@@ -540,7 +543,9 @@ class ConnectedMemberMetaData(object):
                     loadPos= [originPos.x,originPos.y,originPos.z]
                     self.internalForces[comb]= (loadPos, iForces)
         if(len(self.internalForces)==0):
-            lmsg.warning('No internal forces found for element: '+str(self.eTag))           
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; no internal forces found for element: '+str(self.eTag))           
         return self.internalForces
 
 class ConnectionMetaData(object):

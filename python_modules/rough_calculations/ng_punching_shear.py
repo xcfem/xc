@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import sys
+__author__= "Luis C. Pérez Tato (LCPT), Ana Ortega (AO_O) "
+__copyright__= "Copyright 2017, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 import math
 
 def esfuerzoPunzonamiento(qk,A):

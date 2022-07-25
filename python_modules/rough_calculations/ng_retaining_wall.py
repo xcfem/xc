@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import sys
 from postprocess.reports import common_formats as fmt
 from postprocess.reports import draw_wall_reinforcement_scheme as draw_schema
 from postprocess import get_reactions

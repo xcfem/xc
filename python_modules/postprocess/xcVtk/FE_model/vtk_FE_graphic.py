@@ -11,7 +11,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-import sys
 import vtk
 from misc_utils import log_messages as lmsg
 import xc_base

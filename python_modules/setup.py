@@ -23,7 +23,7 @@ from __future__ import print_function
 #
 
 from distutils.core import setup, sys
-from distutils.sysconfig import get_python_lib
+#from distutils.sysconfig import get_python_lib
 import site
 
 myPrefix = sys.prefix

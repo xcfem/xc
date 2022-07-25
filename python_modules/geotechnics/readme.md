@@ -1,6 +1,6 @@
-# Earth pressure
+# Geotechnics
 
-Verification tests concerning earth pressure calculation routines.
+Python modules related to geotechnical calculations.
 
 ## References
 

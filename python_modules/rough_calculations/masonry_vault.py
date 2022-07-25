@@ -1,11 +1,8 @@
 #-*- coding: utf-8 -*-
-from __future__ import division
-import scipy.interpolate
-from matplotlib import pyplot as plt
-import numpy
-
 '''Based on the thesis: Capacité portante de ponts en arc en maçonnerie de pierre naturelle - Modèle d'évaluation intégrant le niveau d'endommagement. Alix Grandjean (2010). documenturl: https://infoscience.epfl.ch/record/142552/files/EPFL_TH4596.pdf
 '''
+
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2017, AOO and LCPT"
@@ -14,7 +11,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import math
-import sys
+import scipy.interpolate
+from matplotlib import pyplot as plt
+import numpy
 from scipy.optimize import minimize
 from misc_utils import log_messages as lmsg
 
