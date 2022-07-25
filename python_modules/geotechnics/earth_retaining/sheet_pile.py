@@ -12,7 +12,7 @@ import math
 import geom
 import numpy
 
-class CantileverSheetPile(object):
+class CantileverSheetPileWall(object):
     ''' Cantilever sheet pile. according to chapter 14
         of the book "Principles of Foundation Engineering"
         of Braja M. Das. Eight Edition. CENGAGE Learning.
@@ -21,7 +21,7 @@ class CantileverSheetPile(object):
     :ivar soil: soil type
     :ivar waterTableDepth: depth of the water table (measured from the
                            sheet-pile top). L1 in the book text.
-    :ivar excavationDepth: depth of the excavaion (measured from the
+    :ivar excavationDepth: depth of the excavation (measured from the
                            sheet-pile top). L1 in the book text.
     '''
     def __init__(self, soil, waterTableDepth, excavationDepth):
@@ -30,7 +30,7 @@ class CantileverSheetPile(object):
         :param soil: soil type.
         :param waterTableDepth: depth of the water table (measured from the
                                sheet-pile top). L1 in the book text.
-        :param excavationDepth: depth of the excavaion (measured from the
+        :param excavationDepth: depth of the excavation (measured from the
                                sheet-pile top). L1 in the book text.
         '''
         self.soil= soil
@@ -105,11 +105,11 @@ class CantileverSheetPile(object):
             denom= gamma*(Kp-Ka)
         denom2= denom**2
         P, z_bar= self.getActiveSidePressure()
-        A1= sigma_p_5/denom
-        A2= 8*P/denom
-        A3= 6*P*(2*z_bar*denom+sigma_p_5)/denom2
-        A4= P*(6*z_bar*sigma_p_5+4*P)/denom2
-        return A1, A2, A3, A4
+        A1= sigma_p_5/denom # L4^3 coefficient
+        A2= 8*P/denom # L4^2 coefficient
+        A3= 6*P*(2*z_bar*denom+sigma_p_5)/denom2 # L4^1 coefficient
+        A4= P*(6*z_bar*sigma_p_5+4*P)/denom2 # L4^0 coefficient
+        return A1, -A2, -A3, -A4
         
     def getL4(self):
         ''' Return the distance from the zero pressure point to the bottom
@@ -117,7 +117,7 @@ class CantileverSheetPile(object):
         # Polynomial coefficients.
         A1, A2, A3, A4= self.getL4PolynomialCoeffs()
         # Compute L4
-        coeff= [-A4, -A3, -A2, A1, 1]
+        coeff= [A4, A3, A2, A1, 1]
         roots= numpy.polynomial.polynomial.polyroots(coeff)
         results= list()
         for r in roots:
@@ -157,3 +157,45 @@ class CantileverSheetPile(object):
             gmm= self.soil.gamma()
         z_p= math.sqrt(2*P/(Kp-Ka)/gmm) # Equation (14.21)
         return P*(z_bar+z_p)-(0.5*gmm*z_p**2*(Kp-Ka))*z_p/3.0# Equation (14.22)
+
+class AnchoredSheetPileWall(CantileverSheetPileWall):
+    ''' Anchored sheet pile. according to chapter 14
+        of the book "Principles of Foundation Engineering"
+        of Braja M. Das. Eight Edition. CENGAGE Learning.
+        2016.
+
+    :ivar anchorDepth: depth of the anchor (measured from the
+                       sheet-pile top). l1 in the book text.
+    '''
+    def __init__(self, soil, waterTableDepth, excavationDepth, anchorDepth):
+        ''' Constructor.
+
+        :param soil: soil type.
+        :param waterTableDepth: depth of the water table (measured from the
+                               sheet-pile top). L1 in the book text.
+        :param excavationDepth: depth of the excavation (measured from the
+                               sheet-pile top). L1 in the book text.
+        :param anchorDepth: depth of the anchor (measured from the
+                            sheet-pile top). l1 in the book text.
+        '''
+        super().__init__(soil= soil, waterTableDepth= waterTableDepth, excavationDepth= excavationDepth)
+        self.anchorDepth= anchorDepth
+    def getL4PolynomialCoeffs(self):
+        ''' Return the polynomial corresponding to the expression 14.16
+            of the book.'''
+        gamma= self.soil.gamma()
+        Ka= self.soil.Ka()
+        Kp= self.soil.Kp()
+        L3= self.getZeroNetPressureDepth()
+        if(self.waterTableDepth<self.excavationDepth):
+            L2= self.excavationDepth-self.waterTableDepth
+            denom= gammaSum*(Kp-Ka)
+        else:
+            L2= 0.0
+            denom= gamma*(Kp-Ka)
+        P, z_bar= self.getActiveSidePressure()
+        A1= 1.0 # L4^3 coefficient
+        A2= 1.5*(l2+L2+L3) # L4^2 coefficient
+        A3= 0.0 # L4^1 coefficient
+        A4= 3*P*((L1+L2+L3)-(z_bar*l1))/denom # L4^0 coefficient
+        return A1, A2, A3, A4

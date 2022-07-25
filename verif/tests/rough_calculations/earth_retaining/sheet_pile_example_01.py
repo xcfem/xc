@@ -23,7 +23,7 @@ Kp= soil.Kp()
 ratio2= abs(Kp-3.2545883032998644)/3.2545883032998644
 
 # Sheet-pile object.
-sheetPile= sheet_pile.CantileverSheetPile(soil= soil, waterTableDepth= L1, excavationDepth= L1+L2)
+sheetPile= sheet_pile.CantileverSheetPileWall(soil= soil, waterTableDepth= L1, excavationDepth= L1+L2)
     
 # unit weight
 gamma= soil.gamma()
@@ -48,9 +48,9 @@ ratio7= abs(z_bar-2.230098685234527)/2.230098685234527
 # Left side pressure diagram.
 A1, A2, A3, A4= sheetPile.getL4PolynomialCoeffs()
 ratioA1= abs(A1-7.66087360478114)/7.66087360478114
-ratioA2= abs(A2-16.639336065524226)/16.639336065524226
-ratioA3= abs(A3-151.26493007344456)/151.26493007344456
-ratioA4= abs(A4-230.51032363941252)/230.51032363941252
+ratioA2= abs(A2+16.639336065524226)/16.639336065524226
+ratioA3= abs(A3+151.26493007344456)/151.26493007344456
+ratioA4= abs(A4+230.51032363941252)/230.51032363941252
 # Compute L4
 L4= sheetPile.getL4()
 ratioL4= abs(L4-4.74111008501169)/4.74111008501169
