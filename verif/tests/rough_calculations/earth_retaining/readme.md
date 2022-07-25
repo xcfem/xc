@@ -1,6 +1,6 @@
-# Earth pressure
+# Earth retaining structures
 
-Verification tests concerning earth pressure calculation routines.
+Verification tests concerning earth retaining structures.
 
 ## References
 
