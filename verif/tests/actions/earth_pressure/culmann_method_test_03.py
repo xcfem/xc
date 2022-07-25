@@ -39,10 +39,10 @@ delta= math.radians(10) # friction angle of the soil and the wall.
 maxPressureCulmann, pressureFunction, minWeight, maxWeight= earth_pressure.active_pressure_culmann_method(soil= soil, wallBack= wallBack, backfillProfile= backfillProfile, delta= delta)
 KaCulmann= maxPressureCulmann/(0.5*soil.gamma()*wallHeight**2)
 # # Coulomb method.
-# KaCoulomb= earth_pressure.ka_coulomb(a= 0.0, b= backfillSlopeAngle, fi= soil.phi, d= delta)
+# KaCoulomb= earth_pressure.ka_coulomb(a= 0.0, b= backfillSlopeAngle, phi=  soil.phi, d= delta)
 # maxPressureCoulomb= 0.5*soil.gamma()*wallHeight**2*KaCoulomb
 # # Rankine method.
-# KaRankine= earth_pressure.ka_rankine(b= backfillSlopeAngle, fi= soil.phi)
+# KaRankine= earth_pressure.ka_rankine(b= backfillSlopeAngle, phi=  soil.phi)
 # maxPressureRankine= 0.5*soil.gamma()*wallHeight**2*KaRankine
 
 ratio= abs(maxPressureCulmann-1894.211278183068e3)/1894.211278183068e3

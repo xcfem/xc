@@ -38,18 +38,19 @@ class KreyEarthPressurUnderConcentratedLoad(object):
   b= None # Loaded surface height.
   p_max= None # Maximum pressure 
   Q= None # Integral of pressures.
-  fi= None # Friction angle of soil.
-  def __init__(self,P,a,fi):
+  phi= None # Friction angle of soil.
+  
+  def __init__(self,P,a,phi):
     self.P= P
     self.a= a
-    self.fi= fi
-    tg1= math.tan(math.pi/4.0+self.fi/2.0)
+    self.phi= phi
+    tg1= math.tan(math.pi/4.0+self.phi/2.0)
     self.Q= P * tg1
-    self.b= a*(tg1-math.tan(fi))
+    self.b= a*(tg1-math.tan(phi))
     self.p_max= 4*self.Q/self.a/self.b
 
   def getZLimSup(self):
-    return -self.a*math.tan(self.fi)
+    return -self.a*math.tan(self.phi)
   def getZLimInf(self):
     return self.getZLimSup()-self.b
 

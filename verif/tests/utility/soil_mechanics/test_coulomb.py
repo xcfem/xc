@@ -19,15 +19,15 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 from geotechnics import earth_pressure
 import math
 
-ka1= earth_pressure.ka_coulomb(a= math.radians(0), b= math.radians(0),fi= math.radians(28), d= math.radians(0))
-ka2= earth_pressure.ka_coulomb(a= math.radians(0), b= math.radians(0),fi= math.radians(30), d= math.radians(5))
-ka3= earth_pressure.ka_coulomb(a= math.radians(0), b= math.radians(0),fi= math.radians(32), d= math.radians(10))
-ka4= earth_pressure.ka_coulomb(a= math.radians(-20), b= math.radians(-20), fi= math.radians(40), d= math.radians(10))
+ka1= earth_pressure.ka_coulomb(a= math.radians(0), b= math.radians(0),phi=  math.radians(28), d= math.radians(0))
+ka2= earth_pressure.ka_coulomb(a= math.radians(0), b= math.radians(0),phi=  math.radians(30), d= math.radians(5))
+ka3= earth_pressure.ka_coulomb(a= math.radians(0), b= math.radians(0),phi=  math.radians(32), d= math.radians(10))
+ka4= earth_pressure.ka_coulomb(a= math.radians(-20), b= math.radians(-20), phi=  math.radians(40), d= math.radians(10))
 
-kp1= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(0),fi= math.radians(26), d= math.radians(0))
-kp2= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(0),fi= math.radians(30), d= math.radians(-22))
-kp3= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(10),fi= math.radians(32), d= math.radians(-17))
-kp4= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(-10),fi= math.radians(40), d= math.radians(-16))
+kp1= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(0),phi=  math.radians(26), d= math.radians(0))
+kp2= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(0),phi=  math.radians(30), d= math.radians(-22))
+kp3= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(10),phi=  math.radians(32), d= math.radians(-17))
+kp4= earth_pressure.kp_coulomb(a= math.radians(0), b= math.radians(-10),phi=  math.radians(40), d= math.radians(-16))
 
 ratio1= abs(ka1-0.3610)/0.3610 # Table 6.4 page 353
 ratio2= abs(ka2-0.3189)/0.3189 # Table 6.4 page 353

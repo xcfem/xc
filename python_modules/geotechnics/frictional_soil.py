@@ -58,12 +58,12 @@ class FrictionalSoil(object):
         :param b:  slope of the backfill (radians).
         :param d:  friction angle between soil an back of retaining wall (radians). See Recomendaciones para obras marítimas ROM 0.5-05 page 315 
         '''
-        fi= self.getDesignPhi()
-        num= 1.0/math.cos(a)*math.cos(fi-a)
+        phi= self.getDesignPhi()
+        num= 1.0/math.cos(a)*math.cos(phi-a)
         r1=math.sqrt(math.cos(a+d))
-        if(b>fi):
-            lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(fi)))
-        r2=math.sqrt(math.sin(fi+d)*math.sin(fi-b)/math.cos(b-a))
+        if(b>phi):
+            lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
+        r2=math.sqrt(math.sin(phi+d)*math.sin(phi-b)/math.cos(b-a))
         return (math.pow((num/(r1+r2)),2))
 
     def Kah_coulomb(self,a,b,d):
@@ -84,7 +84,7 @@ class FrictionalSoil(object):
 
         :param a:  angle of the back of the retaining wall (radians).
         :param b:  slope of the backfill (radians).
-        :param fi: internal friction angle of the soil (radians).
+        :param phi: internal friction angle of the soil (radians).
         :param d:  friction angle between soil an back of retaining wall (radians).
         '''
         return (self.Ka_coulomb(a,b,d)*math.sin(a+d))
@@ -97,12 +97,12 @@ class FrictionalSoil(object):
         :param b:  slope of the backfill (radians).
         :param d:  friction angle between soil an back of retaining wall (radians).
         '''
-        fi= self.getDesignPhi()
-        if(b>fi):
-            lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(fi)))
+        phi= self.getDesignPhi()
+        if(b>phi):
+            lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
         p1= 1.0/(math.cos(a)**2)
-        num= math.cos(fi+a)
-        r1=math.sqrt(math.sin(fi-d)*math.sin(fi+b)/(math.cos(a+d)*math.cos(b-a)))
+        num= math.cos(phi+a)
+        r1=math.sqrt(math.sin(phi-d)*math.sin(phi+b)/(math.cos(a+d)*math.cos(b-a)))
         denom= 1.0-r1
         retval= p1*((num/denom)**2)/math.cos(a+d)
         return retval

@@ -39,7 +39,7 @@ maxPressureCulmann, pressureFunction, minWeight, maxWeight= earth_pressure.activ
 KaCulmann= maxPressureCulmann/(0.5*soil.gamma()*wallHeight**2)
 
 # Coulomb method.
-KaCoulomb= earth_pressure.ka_coulomb(a= 0.0, b= backfillSlopeAngle, fi= soil.phi, d= delta)
+KaCoulomb= earth_pressure.ka_coulomb(a= 0.0, b= backfillSlopeAngle, phi=  soil.phi, d= delta)
 maxPressureCoulomb= 0.5*soil.gamma()*wallHeight**2*KaCoulomb
 
 ratio= abs(maxPressureCulmann-maxPressureCoulomb)/maxPressureCoulomb
