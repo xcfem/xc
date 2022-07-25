@@ -11,16 +11,27 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 from geotechnics import earth_pressure
 import math
 
-Kp= earth_pressure.RankineSoil(math.pi/6.0).Kp()
+phi= math.pi/6.0
+rankineSoil= earth_pressure.RankineSoil(phi)
 
-#print('Kp= ', Kp)
-
+Kp= rankineSoil.Kp()
 ratio1= abs(Kp-3)/3.0
+
+Ka= rankineSoil.Ka()
+phiFromKa= earth_pressure.phi_rankine_from_active_coefficient(b= 0.0, ka= Ka)
+ratio2= abs(phiFromKa-phi)/phi
+
+
+'''
+print('Kp= ', Kp)
+print(phiFromKa)
+print(ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-12):
+if (ratio1<1e-12) and abs(ratio2<1e-6):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')

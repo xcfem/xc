@@ -88,62 +88,81 @@ class RankineSoil(fs.FrictionalSoil):
 # }
 
 # Earth pressure coefficients.
-def ka_rankine(b,fi):
+def ka_rankine(b,phi):
     '''Return the active earth pressure coefficient according to Rankine theory.
 
     :param b:  slope of the backfill (radians).
-    :param fi: internal friction angle of the soil (radians).
+    :param phi: internal friction angle of the soil (radians).
 
     '''
-    fSoil= RankineSoil(phi= fi, beta= b)
+    fSoil= RankineSoil(phi= phi, beta= b)
     return fSoil.Ka()
 
-def kp_rankine(b,fi):
+def kp_rankine(b,phi):
     '''Return the active earth pressure coefficient according to Rankine theory.
 
     :param b:  slope of the backfill (radians).
-    :param fi: internal friction angle of the soil (radians).
+    :param phi: internal friction angle of the soil (radians).
 
     '''
-    fSoil= RankineSoil(phi= fi, beta= b)
+    fSoil= RankineSoil(phi= phi, beta= b)
     return fSoil.Kp()
 
-def ka_coulomb(a,b,fi,d):
+def phi_rankine_from_active_coefficient(b, ka):
+    '''Return the active earth pressure coefficient according to Rankine theory.
+
+    :param b:  slope of the backfill (radians).
+    :param phi: internal friction angle of the soil (radians).
+    '''
+    def rankine_ka(phi):
+        '''Returns Rankine's active earth pressure coefficient.'''
+        cBeta= math.cos(b)
+        cPhi= math.cos(phi)
+        r= math.sqrt(cBeta**2-cPhi**2)
+        return (cBeta*(cBeta-r)/(cBeta+r)-ka)
+    result= optimize.root_scalar(rankine_ka, bracket=[0, math.pi/2.0], method='brentq')
+    retval= None
+    if(result.converged):
+        retval= result.root
+    return retval
+    
+
+def ka_coulomb(a,b,phi,d):
     '''Return the active earth pressure coefficient according to Coulomb theory.
 
     :param a:  angle of the back of the retaining wall (radians).
     :param b:  slope of the backfill (radians).
-    :param fi: internal friction angle of the soil (radians).
+    :param phi: internal friction angle of the soil (radians).
     :param d:  friction angle between soil an back of retaining wall (radians).See Jiménez Salas, Geotecnia y Cimientos page 682.
 
     '''
-    fSoil= fs.FrictionalSoil(fi)
+    fSoil= fs.FrictionalSoil(phi)
     return fSoil.Ka_coulomb(a, b, d)
 
-def kah_coulomb(a,b,fi,d):
+def kah_coulomb(a,b,phi,d):
     '''
     Return the horizontal component of the active earth pressure coefficient
     according to Coulomb's theory.
 
     :param a:  angle of the back of the retaining wall (radians).
     :param b:  slope of the backfill (radians).
-    :param fi: internal friction angle of the soil (radians).
+    :param phi: internal friction angle of the soil (radians).
     :param d:  friction angle between soil an back of retaining wall (radians).
     '''
-    fSoil= fs.FrictionalSoil(fi)
+    fSoil= fs.FrictionalSoil(phi)
     return fSoil.Kah_coulomb(a, b, d)
 
-def kav_coulomb(a,b,fi,d):
+def kav_coulomb(a,b,phi,d):
     '''
     Return the vertical component of the active earth pressure coefficient
     according to Coulomb's theory.
 
     :param a:  angle of the back of the retaining wall (radians).
     :param b:  slope of the backfill (radians).
-    :param fi: internal friction angle of the soil (radians).
+    :param phi: internal friction angle of the soil (radians).
     :param d:  friction angle between soil an back of retaining wall (radians).
     '''
-    fSoil= fs.FrictionalSoil(fi)
+    fSoil= fs.FrictionalSoil(phi)
     return fSoil.Kav_coulomb(a, b, d)
 
 def k_janssen(k,d,B,z):
@@ -162,32 +181,32 @@ def k_janssen(k,d,B,z):
         retval= 1.0/(2*tanD)*(B/z)*(1-math.exp(-2*k*z/B*tanD))
     return retval
 
-def kp_coulomb(a,b,fi,d):
+def kp_coulomb(a,b,phi,d):
     '''
     Return the passive earth pressure coefficient according to Coulomb's theory.
 
     :param a:  angle of the back of the retaining wall (radians).
     :param b:  slope of the backfill (radians).
-    :param fi: internal friction angle of the soil (radians).
+    :param phi: internal friction angle of the soil (radians).
     :param d:  friction angle between soil an back of retaining wall (radians).
     '''
-    fSoil= fs.FrictionalSoil(fi)
+    fSoil= fs.FrictionalSoil(phi)
     return fSoil.Kp_coulomb(a, b, d)
 
 #Empujes unitarios debidos a cargas sobre el terreno.
 
-def eq_coulomb(a,b,fi,d,p):
+def eq_coulomb(a,b,phi,d,p):
     '''
     Return the lateral earth pressure caused by a uniform load q
     action over the backfill surface according to Coulomb's theory.
 
     :param a: angle of the back of the retaining wall (radians).
     :param b: slope of the backfill (radians).
-    :param fi: internal friction angle of the soil (radians).
+    :param phi: internal friction angle of the soil (radians).
     :param d: friction angle between soil an back of retaining wall (radians).
     :param p: Uniform load.
     '''
-    fSoil= fs.FrictionalSoil(fi)
+    fSoil= fs.FrictionalSoil(phi)
     return fSoil.eq_coulomb(a, b, d, p)
 
 def eql_coulomb(x,H,z,ql):
