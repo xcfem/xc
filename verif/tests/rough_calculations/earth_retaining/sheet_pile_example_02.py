@@ -41,7 +41,7 @@ ratio6= abs(P-67.43391982503054e3)/67.43391982503054e3
 ratio7= abs(z_bar-2.014165982527552)/2.014165982527552
 
 # Left side pressure diagram.
-A1, A2, A3, A4= sheetPile.getL4PolynomialCoeffs()
+A0, A1, A2, A3, A4= sheetPile.getL4PolynomialCoeffs()
 ratioA1= abs(A1-6.042497947582659)/6.042497947582659
 ratioA2= abs(A2+11.511781446540626)/11.511781446540626
 ratioA3= abs(A3+86.9498947046773)/86.9498947046773

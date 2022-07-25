@@ -105,19 +105,20 @@ class CantileverSheetPileWall(object):
             denom= gamma*(Kp-Ka)
         denom2= denom**2
         P, z_bar= self.getActiveSidePressure()
+        A0= 1.0 # L4^4 coefficient
         A1= sigma_p_5/denom # L4^3 coefficient
         A2= 8*P/denom # L4^2 coefficient
         A3= 6*P*(2*z_bar*denom+sigma_p_5)/denom2 # L4^1 coefficient
         A4= P*(6*z_bar*sigma_p_5+4*P)/denom2 # L4^0 coefficient
-        return A1, -A2, -A3, -A4
+        return A0, A1, -A2, -A3, -A4
         
     def getL4(self):
         ''' Return the distance from the zero pressure point to the bottom
             end of the sheet-pile.'''
         # Polynomial coefficients.
-        A1, A2, A3, A4= self.getL4PolynomialCoeffs()
+        A0, A1, A2, A3, A4= self.getL4PolynomialCoeffs()
         # Compute L4
-        coeff= [A4, A3, A2, A1, 1]
+        coeff= [A4, A3, A2, A1, A0]
         roots= numpy.polynomial.polynomial.polyroots(coeff)
         results= list()
         for r in roots:
@@ -180,6 +181,7 @@ class AnchoredSheetPileWall(CantileverSheetPileWall):
         '''
         super().__init__(soil= soil, waterTableDepth= waterTableDepth, excavationDepth= excavationDepth)
         self.anchorDepth= anchorDepth
+        
     def getL4PolynomialCoeffs(self):
         ''' Return the polynomial corresponding to the expression 14.16
             of the book.'''
@@ -187,15 +189,78 @@ class AnchoredSheetPileWall(CantileverSheetPileWall):
         Ka= self.soil.Ka()
         Kp= self.soil.Kp()
         L3= self.getZeroNetPressureDepth()
+        l1= self.anchorDepth
         if(self.waterTableDepth<self.excavationDepth):
-            L2= self.excavationDepth-self.waterTableDepth
+            L1= self.waterTableDepth
+            L2= self.excavationDepth-L1
+            l2= self.waterTableDepth-l1
+            gammaSum= self.soil.submergedGamma()
             denom= gammaSum*(Kp-Ka)
         else:
+            L1= self.excavationDepth
             L2= 0.0
+            l2= self.excavationDepth-l1
             denom= gamma*(Kp-Ka)
         P, z_bar= self.getActiveSidePressure()
+        A0= 0.0 # L4^4 coefficient
         A1= 1.0 # L4^3 coefficient
         A2= 1.5*(l2+L2+L3) # L4^2 coefficient
         A3= 0.0 # L4^1 coefficient
-        A4= 3*P*((L1+L2+L3)-(z_bar*l1))/denom # L4^0 coefficient
-        return A1, A2, A3, A4
+        A4= 3*P*((L1+L2+L3)-(z_bar+l1))/denom # L4^0 coefficient
+        return A0, A1, A2, A3, -A4
+
+    def getAnchorForcePerUnitLength(self):
+        ''' Return the anchor force per unit length of the wall.'''
+        Ka= self.soil.Ka()
+        Kp= self.soil.Kp()
+        P, z_bar= self.getActiveSidePressure()
+        if(self.waterTableDepth<self.excavationDepth):
+            gmm= self.soil.submergedGamma()
+        else:
+            gmm= self.soil.gamma()
+        L4= self.getL4()
+        return P-0.5*gmm*(Kp-Ka)*L4**2
+
+    def getZeroShearDepth(self):
+        ''' Return the depth for zero shear according to equation 14.69
+            of the book.'''
+        if(self.waterTableDepth<self.excavationDepth):
+            L1= self.waterTableDepth
+            gmm= self.soil.submergedGamma()
+        else:
+            L1= self.excavationDepth
+            gmm= self.soil.gamma()
+        sigma_p_1= self.getActivePressureAtDepth(z= L1)
+        Ka= self.soil.Ka()
+        F= self.getAnchorForcePerUnitLength()
+        # Using x= z-L1
+        c= 0.5*sigma_p_1*L1-F
+        b= sigma_p_1
+        a= 0.5*gmm*Ka
+        x= (-b+math.sqrt(b**2-4*a*c))/(2.0*a)
+        z= x+L1
+        return z
+
+    def getMaxBendingMoment(self):
+        ''' Return the maximum bending moment according to equation
+            (14.22) of the book.'''
+        l1= self.anchorDepth
+        if(self.waterTableDepth<self.excavationDepth):
+            L1= self.waterTableDepth
+            gmm= self.soil.submergedGamma()
+            l2= self.waterTableDepth-l1
+        else:
+            L1= self.excavationDepth
+            gmm= self.soil.gamma()
+            l2= self.excavationDepth-l1
+        Ka= self.soil.Ka()
+        z= self.getZeroShearDepth()
+        x= z-L1
+        sigma_p_1= self.getActivePressureAtDepth(z= L1)
+        F= self.getAnchorForcePerUnitLength()
+        m1= -0.5*sigma_p_1*L1*(x+L1/3.0)
+        m2= F*(x+l2)
+        m3= -(sigma_p_1*x**2/2)
+        m4= -(0.5*Ka*gmm*x**3/3.0)
+        return m1+m2+m3+m4
+
