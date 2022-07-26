@@ -13,6 +13,8 @@ import geom
 import numpy
 import sys
 from postprocess.reports import common_formats as fmt
+from scipy import interpolate
+from misc_utils import log_messages as lmsg
 
 class CantileverSheetPileWall(object):
     ''' Cantilever sheet pile. according to chapter 14
@@ -81,7 +83,7 @@ class CantileverSheetPileWall(object):
         points.append(ptE)
         return geom.Polygon2d(points)
 
-    def getActiveSidePressure(self):
+    def getActiveSidePressure(self, withDiagram= False):
         ''' Return the pressure and the lever arm of the active side
             pressure diagram.'''
         pressureDiagram= self.getActiveSidePressureDiagram()
@@ -91,23 +93,32 @@ class CantileverSheetPileWall(object):
         zP= pressureDiagram.getCenterOfMass().x
         L3= self.getZeroNetPressureDepth()
         z_bar= self.excavationDepth+L3-zP
-        return P, z_bar
+        if(withDiagram):
+            return P, z_bar, pressureDiagram
+        else:
+            return P, z_bar
 
-    def getL4PolynomialCoeffs(self):
-        ''' Return the polynomial corresponding to the expression 14.16
+    def getSigmaP5(self):
+        ''' Return the valu of sigma_p_5 according to the expression (14.11)
             of the book.'''
-        gamma= self.soil.gamma()
         Ka= self.soil.Ka()
         Kp= self.soil.Kp()
         L3= self.getZeroNetPressureDepth()
+        gamma= self.soil.gamma()
         if(self.waterTableDepth<self.excavationDepth):
             L2= self.excavationDepth-self.waterTableDepth
             gammaSum= self.soil.submergedGamma()
             sigma_p_5= (gamma*self.waterTableDepth+gammaSum*L2)*Kp+gammaSum*L3*(Kp-Ka)
-            denom= gammaSum*(Kp-Ka)
+            gmmKpKa= gammaSum*(Kp-Ka)
         else:
             sigma_p_5= gamma*(self.excavationDepth*Kp+L3*(Kp-Ka))
-            denom= gamma*(Kp-Ka)
+            gmmKpKa= gamma*(Kp-Ka)
+        return sigma_p_5, gmmKpKa
+
+    def getL4PolynomialCoeffs(self):
+        ''' Return the polynomial corresponding to the expression 14.16
+            of the book.'''
+        sigma_p_5, denom= self.getSigmaP5()
         denom2= denom**2
         P, z_bar= self.getActiveSidePressure()
         A0= 1.0 # L4^4 coefficient
@@ -164,6 +175,32 @@ class CantileverSheetPileWall(object):
         z_p= math.sqrt(2*P/(Kp-Ka)/gmm) # Equation (14.21)
         return P*(z_bar+z_p)-(0.5*gmm*z_p**2*(Kp-Ka))*z_p/3.0# Equation (14.22)
 
+    def getPressureDiagram(self):
+        ''' Return the pressure diagram along the wall.'''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; needs debugging. Don\'t use it')
+        zi= list() # depths.
+        pi= list() # pressures.
+        P, z_bar, plgActiveSide= self.getActiveSidePressure(withDiagram= True)
+        for pt in plgActiveSide.getVertices():
+            zi.append(-pt.x)
+            pi.append(pt.y)
+        Ka= self.soil.Ka()
+        Kp= self.soil.Kp()
+        L3= self.getZeroNetPressureDepth()
+        L4= self.getL4()
+        sigma_p_5, gmmKpKa= self.getSigmaP5()
+        sigma_p_3= L4*gmmKpKa # equation (14.7)
+        sigma_p_4= sigma_p_5+sigma_p_3 # equation (14.10)
+        L5= (sigma_p_3*L4-2.0*P)/(sigma_p_3+sigma_p_4)
+        totalDepth= self.excavationDepth+L3+L4
+        zi.append(-(totalDepth-L5))
+        pi.append(-sigma_p_3)
+        zi.append(-totalDepth)
+        pi.append(sigma_p_4)
+        return interpolate.interp1d(zi, pi, kind='linear', fill_value="extrapolate"), zi
+    
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the design results.'''
         # Active side pressure.

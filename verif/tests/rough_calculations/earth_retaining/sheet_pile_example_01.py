@@ -12,6 +12,7 @@ import math
 from geotechnics import earth_pressure
 from geotechnics.earth_retaining import sheet_pile
 from scipy.constants import g
+from scipy.integrate import quad
 
 soil= earth_pressure.RankineSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g)
 L1= 2.0 # m
@@ -103,3 +104,54 @@ if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
+
+# # Draw pressure law.
+# import matplotlib.pyplot as plt
+# pressureDiagram, zi= sheetPile.getPressureDiagram()
+# print(zi)
+# pi= list()
+# for z in zi:
+#     pi.append(pressureDiagram(z)/1e3)
+
+# plt.plot(pi, zi)
+# plt.axvline(0, color='red') # vertical axis 
+# plt.title("Pressure diagram")
+# plt.xlabel('pressure (kN/m2)')
+# plt.ylabel('depth (m)')
+# plt.show()
+
+# # Integrate pressure.
+# zii= list()
+# pii= list()
+# zA= zi[0]
+# numSteps= 5
+# for z in zi[1:]:
+#     zB= z
+#     incZ= (zB-zA)/numSteps
+#     for i in range(0,numSteps):
+#         z= zA+i*incZ
+#         zii.append(z)
+#         pii.append(pressureDiagram(z))
+#     zA= zB
+# z= zi[-1] # last point.
+# zii.append(z)
+# pii.append(pressureDiagram(z))
+
+# # Compute shear
+# q= 0.0
+# p0= 0.0
+# z0= 0.0
+# qii= [q]
+# for z,p in zip(zii[1:], pii[1:]):
+#     q+= (p+p0)/2.0*(z-z0)
+#     qii.append(q/1e3)
+#     p0= p
+#     z0= z
+    
+# plt.plot(qii, zii)
+# plt.axvline(0, color='red') # vertical axis 
+# plt.title("Shear diagram")
+# plt.xlabel('pressure (kN/m)')
+# plt.ylabel('depth (m)')
+# plt.show()
+# print(quad(pressureDiagram,zi[0],zi[-1], points = zi))
