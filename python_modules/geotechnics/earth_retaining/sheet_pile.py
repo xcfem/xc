@@ -167,21 +167,26 @@ class CantileverSheetPileWall(object):
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the design results.'''
         # Active side pressure.
-        P, z_bar= sheetPile.getActiveSidePressure()
+        P, z_bar= self.getActiveSidePressure()
         # Theoretical depth
-        Dtheor= sheetPile.getDepth(depthSafetyFactor= 1.0)
+        Dtheor= self.getDepth(depthSafetyFactor= 1.0)
         # Actual depth.
-        Dactual= sheetPile.getDepth(depthSafetyFactor= 1.3)
+        Dactual= self.getDepth(depthSafetyFactor= 1.3)
         # Total length
-        L= sheetPile.getTotalLength(depthSafetyFactor= 1.3)
-        Mmax= sheetPile.getMaxBendingMoment()
+        L= self.getTotalLength(depthSafetyFactor= 1.3)
+        Mmax= self.getMaxBendingMoment()
         os.write(indentation+'problem title: '+str(self.title)+'\n')
         os.write(indentation+'  excavation depth: H= '+fmt.Length.format(self.excavationDepth)+' m\n')
-        os.write(indentation+'  total pressure: P= '+ fmt.Esf.format(P)+' kN/m\n')
+        if(self.waterTableDepth<L):
+            os.write(indentation+'  water table depth: W= '+ fmt.Esf.format(self.waterTableDepth)+' m\n')
+        else:
+            os.write(indentation+'  water table depth: W= - m\n')
+            
+        os.write(indentation+'  total pressure: P= '+ fmt.Esf.format(P/1e3)+' kN/m\n')
         os.write(indentation+'  theoretical depth: Dth= '+fmt.Length.format(Dtheor)+' m\n')
         os.write(indentation+'  actual depth: Dact= '+fmt.Length.format(Dactual)+' m\n')
         os.write(indentation+'  total length: L= '+fmt.Length.format(L)+' m\n')
-        os.write(indentation+'  maximum bending moment: Mmax= '+ fmt.Esf.format(Mmax)+' kN.m/m\n')
+        os.write(indentation+'  maximum bending moment: Mmax= '+ fmt.Esf.format(Mmax/1e3)+' kN.m/m\n')
     
 class AnchoredSheetPileWall(CantileverSheetPileWall):
     ''' Anchored sheet pile. according to chapter 14
@@ -289,3 +294,9 @@ class AnchoredSheetPileWall(CantileverSheetPileWall):
         m4= -(0.5*Ka*gmm*x**3/3.0)
         return m1+m2+m3+m4
 
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the design results.'''
+        super().report(os= os, indentation= indentation)
+        # Anchor force per unit length of the wall
+        F= self.getAnchorForcePerUnitLength()
+        os.write(indentation+'  anchor force per unit length of the wall: F= '+ fmt.Esf.format(F/1e3)+' kN/m\n')
