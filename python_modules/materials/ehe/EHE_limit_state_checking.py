@@ -975,25 +975,7 @@ class ShearController(lscb.ShearControllerBase):
         self.Vu2= 0.0 # Shear strength at failure due to tensile force in the web
         self.Vu= 0.0 # Shear strength at failure.
 
-    def extractFiberData(self, scc, concrete, reinfSteel):
-        ''' Extract basic parameters from the fiber model of the section
-
-         :param scc: fiber model of the section.
-         :param concrete: parameters to modelize concrete.
-         :param reinfSteel: parameters to modelize reinforcement steel.
-        '''
-        self.concreteMatTag= concrete.matTagD
-        self.fckH= abs(concrete.fck)
-        self.fcdH= abs(concrete.fcd())
-        self.fctdH= concrete.fctd()
-        self.gammaC= concrete.gmmC
-        self.reinfSteelMaterialTag= reinfSteel.matTagD
-        self.fydS= reinfSteel.fyd()
-        if(not scc.hasProp("rcSets")):
-            scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
-        return scc.getProp("rcSets")
-
-    def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
+    def calcVuEHE08NoAt(self, scc, concrete, reinfSteel, rcSets):
         ''' Compute the shear strength at failure without shear reinforcement
          according to clause 44.2.3.2.1 of EHE-08.
          XXX Presstressing contribution not implemented yet.
@@ -1002,8 +984,8 @@ class ShearController(lscb.ShearControllerBase):
          :param reinfSteelMaterialTag: reinforcement steel material identifier.
          :param concrete: parameters to modelize concrete.
          :param reinfSteel: parameters to modelize reinforcement steel.
+         :param rcSets: fiber sets in the reinforced concrete section.
         '''
-        rcSets= self.extractFiberData(scc,concrete,reinfSteel)
         # concrFibers= rcSets.concrFibers.fSet
         self.concreteArea= rcSets.getConcreteArea(1)
         if(self.concreteArea<1e-6):
@@ -1040,20 +1022,20 @@ class ShearController(lscb.ShearControllerBase):
             self.Vcu= self.Vu2
             self.Vu= self.Vu2
 
-    def calcVuEHE08SiAt(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, circular= False):
+    def calcVuEHE08SiAt(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH shear reinforcement.
          XXX Presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param torsionParameters: parameters that define torsional behaviour 
                                    of the section as in clause 45.1 of EHE-08.
-         :param reinfSteelMaterialTag: reinforcement steel material identifier.
          :param concrete: concrete material.
          :param reinfSteel: reinforcement steel.
          :param Nd: Design value of axial force (here positive if in tension)
          :param Md: Absolute value of design value of bending moment.
          :param Vd: Absolute value of effective design shear (clause 42.2.2).
          :param Td: design value of torsional moment.
+         :param rcSets: fiber sets in the reinforced concrete section.
          :param circular: if true we reduce the efectiveness of the shear 
                           reinforcement due to the transverse inclination of
                           its elements.
@@ -1064,8 +1046,6 @@ class ShearController(lscb.ShearControllerBase):
         else: # XXX Ignore torsional deformation.
             self.VuAe= 1.0
             self.Vuue= 0.0
-
-        rcSets= self.extractFiberData(scc,concrete,reinfSteel)
 
         concrFibers= rcSets.concrFibers.fSet
         reinfFibers= rcSets.reinfFibers.fSet
@@ -1105,7 +1085,7 @@ class ShearController(lscb.ShearControllerBase):
                 self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
             self.Vu= min(self.Vu1,self.Vu2)
 
-    def calcVuEHE08(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, circular= False):
+    def calcVuEHE08(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         '''  Compute the shear strength at failure.
          XXX Presstressing contribution not implemented yet.
 
@@ -1118,21 +1098,27 @@ class ShearController(lscb.ShearControllerBase):
          :param Md: Absolute value of design value of bending moment.
          :param Vd: Absolute value of effective design shear (clause 42.2.2).
          :param Td: design value of torsional moment.
+         :param rcSets: fiber sets in the reinforced concrete section.
          :param circular: if true we reduce the efectiveness of the shear 
                           reinforcement due to the transverse inclination of
                           its elements.
         '''
         if(self.AsTrsv==0):
-            self.calcVuEHE08NoAt(scc,concrete,reinfSteel)
+            self.calcVuEHE08NoAt(scc,concrete,reinfSteel,rcSets)
         else:
-            self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd,Td, circular)
+            self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd, Td, rcSets, circular)
 
-    def checkSection(self, sct, torsionParameters= None):
-        ''' Check shear on the section argument.
+    def checkInternalForces(self, sct, torsionParameters, Nd, Md, Vd, Td):
+        '''  Compute the shear strength at failure.
+         XXX Presstressing contribution not implemented yet.
 
-        :param sct: reinforced concrete section object to chech shear on.
-        :param torsionParameters: parameters that define torsional behaviour 
-                                  of the section as in clause 45.1 of EHE-08.
+         :param sct: reinforced concrete section object to chech shear on.
+         :param torsionParameters: parameters that define torsional behaviour 
+                                   of the section as in clause 45.1 of EHE-08.
+         :param Nd: Design value of axial force (positive if in tension)
+         :param Md: Absolute value of design value of bending moment.
+         :param Vd: Absolute value of effective design shear (clause 42.2.2).
+         :param Td: design value of torsional moment.
         '''
         section= sct.getProp('sectionData')
         concreteCode= section.fiberSectionParameters.concrType
@@ -1142,6 +1128,43 @@ class ShearController(lscb.ShearControllerBase):
         self.AsTrsv= shReinf.getAs()
         self.alpha= shReinf.angAlphaShReinf
         self.theta= shReinf.angThetaConcrStruts
+        #Searching for the best theta angle (concrete strut inclination).
+        #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
+        thetaVuTmp=list()
+        rcSets= self.extractFiberData(sct, concreteCode, reinforcementCode)
+        self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+        thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<Vd):
+            self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+            thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<Vd):
+            self.theta= (self.thetaMin+self.thetaMax)/2.0
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+            thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<Vd):
+            self.theta= 0.95*self.thetaMax
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+            thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<Vd):
+            self.theta= 1.05*self.thetaMin
+            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+            thetaVuTmp.append([self.theta,self.Vu])
+        self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
+        VuTmp= self.Vu
+        if(VuTmp!=0.0):
+            FCtmp= Vd/VuTmp
+        else:
+            FCtmp= 1e99
+        return FCtmp, VuTmp
+            
+    def checkSection(self, sct, torsionParameters= None):
+        ''' Check shear on the section argument.
+
+        :param sct: reinforced concrete section object to chech shear on.
+        :param torsionParameters: parameters that define torsional behaviour 
+                                  of the section as in clause 45.1 of EHE-08.
+        '''
         NTmp= sct.getStressResultantComponent("N")
         MyTmp= sct.getStressResultantComponent("My")
         MzTmp= sct.getStressResultantComponent("Mz")
@@ -1152,31 +1175,7 @@ class ShearController(lscb.ShearControllerBase):
         TTmp= sct.getStressResultantComponent("Mx")
         #Searching for the best theta angle (concrete strut inclination).
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
-        thetaVuTmp=list()
-        self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
-        thetaVuTmp.append([self.theta,self.Vu])
-        if(self.Vu<VTmp):
-            self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        if(self.Vu<VTmp):
-            self.theta= (self.thetaMin+self.thetaMax)/2.0
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        if(self.Vu<VTmp):
-            self.theta= 0.95*self.thetaMax
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        if(self.Vu<VTmp):
-            self.theta= 1.05*self.thetaMin
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
-        VuTmp= self.Vu
-        if(VuTmp!=0.0):
-            FCtmp= VTmp/VuTmp
-        else:
-            FCtmp= 1e99
+        FCtmp, VuTmp= self.checkInternalForces(sct= sct, torsionParameters= torsionParameters, Nd= NTmp, Md= MTmp, Vd= VTmp, Td= TTmp)
         return FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp 
 
     def check(self,elements,combName):
@@ -1199,7 +1198,8 @@ class ShearController(lscb.ShearControllerBase):
             lmsg.log("Postprocessing combination: "+combName)
         torsionParameters= None # XXX Ignore torsional deformation.
         for e in elements:
-            unusedR=e.getResistingForce()
+            # Call getResisting force to update the internal forces.
+            unusedR= e.getResistingForce() 
             scc= e.getSection()
             idSection= e.getProp("idSection")
             FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc, torsionParameters= torsionParameters)

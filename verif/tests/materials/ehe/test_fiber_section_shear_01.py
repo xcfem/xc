@@ -82,15 +82,16 @@ if(analOk!=0):
 
 
 
-concreteSectionShearParams= EHE_limit_state_checking.ShearController('ULS_shear')
+shearController= EHE_limit_state_checking.ShearController('ULS_shear')
 
 
 
 scc= zlElement.getSection()
-concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
+rcSets= shearController.extractFiberData(scc, EHE_materials.HA25, EHE_materials.B500S)
+shearController.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0, rcSets= rcSets)
 
 
-Vu2A= concreteSectionShearParams.Vu2
+Vu2A= shearController.Vu2
 
 
 loadHandler= preprocessor.getLoadHandler.removeFromDomain("0") # Remove this load.
@@ -104,9 +105,9 @@ if(analOk!=0):
     exit()
 
 
-concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
+shearController.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0, rcSets= rcSets)
 
-Vu2B= concreteSectionShearParams.Vu2
+Vu2B= shearController.Vu2
 
 
 loadHandler= preprocessor.getLoadHandler.removeFromDomain("1") # Remove this load.
@@ -120,9 +121,9 @@ if(analOk!=0):
     exit()
 
 
-concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
+shearController.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0, rcSets= rcSets)
 
-Vu2C= concreteSectionShearParams.Vu2
+Vu2C= shearController.Vu2
 
 
 ''' Instead of taking Vu2= 127.638 kN as stated in the reference

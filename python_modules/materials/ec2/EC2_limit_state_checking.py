@@ -696,3 +696,225 @@ class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressCont
         '''
         super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
+
+
+# Shear checking.
+
+class ShearController(lscb.ShearControllerBase):
+    '''Shear control according to EHE-08.'''
+
+    ControlVars= cv.RCShearControlVars
+    def __init__(self, limitStateLabel, nationalAnnex= None):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
+        self.concreteFibersSetName= "concrete" # Name of the concrete fibers set.
+        self.rebarFibersSetName= "reinforcement" # Name of the rebar fibers set.
+        self.nationalAnnex= nationalAnnex # national annex.
+        
+    def getShearStrengthCrackedNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
+        '''Return the design value of the shear resistance VRdc for cracked 
+           sections subjected to bending moment, according to expressions 6.2.a 
+           and 6.2.b of EC2:2004.
+
+         :param scc: fiber model of the section.
+         :param concrete: concrete material.
+         :param reinfSteel: shear reinforcement steel.
+         :param Nd: Design value of axial force (here positive if in tension)
+         :param Md: Absolute value of design value of bending moment.
+         :param Vd: Absolute value of effective design shear (clause 42.2.2).
+         :param Td: design value of torsional moment.
+         :param rcSets: fiber sets in the reinforced concrete section.
+         :param circular: if true we reduce the efectiveness of the shear 
+                          reinforcement due to the transverse inclination of
+                          its elements.
+        '''
+        Ac= rcSets.getConcreteArea(1) # Ac
+        strutWidth= scc.getCompressedStrutWidth() # b0
+        # area of the tensile reinforcement
+        tensileReinforcementArea= 0.0
+        if(rcSets.getNumTensionRebars()>0):
+            tensileReinforcementArea= rcSets.tensionFibers.getArea(1)
+        return getShearResistanceCrackedNoShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, Asl= tensileReinforcementArea, bw= strutWidth, d= scc.getEffectiveDepth(), nationalAnnex= self.nationalAnnex)
+    
+    def getShearStrengthNonCrackedNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
+        ''' Return the design value of the shear resistance VRdc for non-cracked 
+            sections subjected to bending moment, according to expression 6.4 of
+            EC2:2004.
+
+         :param scc: fiber model of the section.
+         :param concrete: concrete material.
+         :param reinfSteel: shear reinforcement steel.
+         :param Nd: Design value of axial force (here positive if in tension)
+         :param Md: Absolute value of design value of bending moment.
+         :param Vd: Absolute value of effective design shear (clause 42.2.2).
+         :param Td: design value of torsional moment.
+         :param rcSets: fiber sets in the reinforced concrete section.
+         :param circular: if true we reduce the efectiveness of the shear 
+                          reinforcement due to the transverse inclination of
+                          its elements.
+        '''
+        Ac= rcSets.getConcreteArea(1) # Ac
+        strutWidth= scc.getCompressedStrutWidth() # b0
+        E0= rcSets.getConcreteInitialTangent()
+        # second moment of area.
+        I= scc.getHomogenizedI(E0)
+        # first moment of area above and about the centroidal axis.
+        S= scc.getSPosHomogenized(E0)
+        alpha_l= 1.0 # see expression 6.4 in EC2:2004.
+        return getShearResistanceNonCrackedNoShearReinf(self, concrete= concrete, I= i, S= S, NEd= Nd, Ac= Ac, bw= strutWidth, alpha_l= alpha_l)
+    
+    def getShearStrengthNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
+        ''' Return the design value of the shear resistance VRdc for cracked
+            or non-cracked sections subjected to bending moment, according 
+            to expression 6.4 of EC2:2004.
+
+         :param scc: fiber model of the section.
+         :param concrete: concrete material.
+         :param reinfSteel: shear reinforcement steel.
+         :param Nd: Design value of axial force (here positive if in tension)
+         :param Md: Absolute value of design value of bending moment.
+         :param Vd: Absolute value of effective design shear (clause 42.2.2).
+         :param Td: design value of torsional moment.
+         :param rcSets: fiber sets in the reinforced concrete section.
+         :param circular: if true we reduce the efectiveness of the shear 
+                          reinforcement due to the transverse inclination of
+                          its elements.
+        '''
+        tensionedReinforcement= rcSets.tensionFibers
+        isBending= scc.isSubjectedToBending(0.1)
+        numberOfTensionedRebars= rcSets.getNumTensionRebars()
+        E0= rcSets.getConcreteInitialTangent()
+        if(isBending):
+            eps1= rcSets.getMaxConcreteStrain()
+            # design tensile strength of the concrete.
+            fctdH= concrete.fctd()
+            if((self.E0*self.eps1)<self.fctdH): # Non cracked section
+                self.getShearStrengthNonCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+            else:
+                self.getShearStrengthCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+        
+    def getShearStrengthShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
+        ''' Compute the shear strength at failure WITH shear reinforcement.
+         XXX Presstressing contribution not implemented yet.
+
+         :param scc: fiber model of the section.
+         :param concrete: concrete material.
+         :param reinfSteel: shear reinforcement steel.
+         :param Nd: Design value of axial force (here positive if in tension)
+         :param Md: Absolute value of design value of bending moment.
+         :param Vd: Absolute value of effective design shear (clause 42.2.2).
+         :param Td: design value of torsional moment.
+         :param rcSets: fiber sets in the reinforced concrete section.
+         :param circular: if true we reduce the efectiveness of the shear 
+                          reinforcement due to the transverse inclination of
+                          its elements.
+        '''
+        Ac= rcSets.getConcreteArea(1) # Ac
+        strutWidth= scc.getCompressedStrutWidth() # b0
+        isBending= scc.isSubjectedToBending(0.1)
+        print('bending: ', isBending)
+        if(isBending):
+            innerLeverArm= scc.scc.getMechanicLeverArm() # z
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for shear without bending.')
+            exit(1)
+            
+        return getShearResistanceShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex)
+
+    def getShearStrength(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
+        ''' Compute the shear strength at failure WITH or WITHIOUT shear 
+            reinforcement.
+         XXX Presstressing contribution not implemented yet.
+
+         :param scc: fiber model of the section.
+         :param concrete: concrete material.
+         :param reinfSteel: shear reinforcement steel.
+         :param Nd: Design value of axial force (here positive if in tension)
+         :param Md: Absolute value of design value of bending moment.
+         :param Vd: Absolute value of effective design shear (clause 42.2.2).
+         :param Td: design value of torsional moment.
+         :param rcSets: fiber sets in the reinforced concrete section.
+         :param circular: if true we reduce the efectiveness of the shear 
+                          reinforcement due to the transverse inclination of
+                          its elements.
+        '''
+        if(self.Asw==0):
+            self.getShearStrengthNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+        else:
+            self.getShearStrengthShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+        
+    def checkInternalForces(self, sct, Nd, Md, Vd, Td):
+        '''  Compute the shear strength at failure.
+         XXX Presstressing contribution not implemented yet.
+
+         :param sct: reinforced concrete section object to chech shear on.
+         :param Nd: Design value of axial force (positive if in tension)
+         :param Md: Absolute value of design value of bending moment.
+         :param Vd: Absolute value of effective design shear (clause 42.2.2).
+         :param Td: design value of torsional moment.
+        '''
+        section= sct.getProp('sectionData')
+        concreteCode= section.fiberSectionParameters.concrType
+        reinforcementCode= section.fiberSectionParameters.reinfSteelType
+        shReinf= section.getShearReinfY()
+        circular= section.isCircular()
+        strutWidth= sct.getCompressedStrutWidth() # bw
+        self.Asw= shReinf.getAs()
+        self.stirrupSpacing= shReinf.shReinfSpacing
+        self.alpha= shReinf.angAlphaShReinf
+        self.theta= getWebStrutAngleForSimultaneousCollapse(concrete= concreteCode, bw= strutWidth, s= self.stirrupSpacing, Asw= self.Asw, shearReinfSteel= reinforcementCode, shearReinfAngle= shReinf.angAlphaShReinf)
+        #Searching for the best theta angle (concrete strut inclination).
+        #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
+        rcSets= self.extractFiberData(sct, concreteCode, reinforcementCode)
+        self.getShearStrength(sct, concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+        
+    def checkSection(self, sct):
+        ''' Check shear on the section argument.
+
+        :param sct: reinforced concrete section object to chech shear on.
+        '''
+        NTmp= sct.getStressResultantComponent("N")
+        MyTmp= sct.getStressResultantComponent("My")
+        MzTmp= sct.getStressResultantComponent("Mz")
+        MTmp= math.sqrt((MyTmp)**2+(MzTmp)**2)
+        VyTmp= sct.getStressResultantComponent("Vy")
+        VzTmp= sct.getStressResultantComponent("Vz")
+        VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
+        TTmp= sct.getStressResultantComponent("Mx")
+        #Searching for the best theta angle (concrete strut inclination).
+        #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
+        FCtmp, VuTmp= self.checkInternalForces(sct= sct, torsionParameters= torsionParameters, Nd= NTmp, Md= MTmp, Vd= VTmp, Td= TTmp)
+        return FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp 
+
+    def check(self, elements, combName):
+        ''' For each element in the set 'elements' passed as first parameter
+        and the resulting internal forces for the load combination 'combName'  
+        passed as second parameter, this method calculates all the variables 
+        involved in the shear-ULS checking and obtains the capacity factor.
+        In the case that the calculated capacity factor is smaller than the 
+        smallest obtained for the element in previous load combinations, this 
+        value is saved in the element results record.
+
+        Elements processed are those belonging to the phantom model, that is to 
+        say, of type xc.ZeroLengthSection. As we have defined the variable 
+        fakeSection as False, a reinfoced concrete fiber section is generated
+        for each of these elements. 
+
+        XXX Rebar orientation not taken into account yet.
+        '''
+        if(self.verbose):
+            lmsg.log("Postprocessing combination: "+combName)
+        for e in elements:
+            # Call getResisting force to update the internal forces.
+            unusedR= e.getResistingForce() 
+            scc= e.getSection()
+            idSection= e.getProp("idSection")
+            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc)
+            if(FCtmp>=e.getProp(self.limitStateLabel).CF):
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
