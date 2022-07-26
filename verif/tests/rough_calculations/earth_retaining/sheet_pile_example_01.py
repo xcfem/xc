@@ -23,7 +23,7 @@ Kp= soil.Kp()
 ratio2= abs(Kp-3.2545883032998644)/3.2545883032998644
 
 # Sheet-pile object.
-sheetPile= sheet_pile.CantileverSheetPileWall(soil= soil, waterTableDepth= L1, excavationDepth= L1+L2)
+sheetPile= sheet_pile.CantileverSheetPileWall(title= 'Example 14.1', soil= soil, waterTableDepth= L1, excavationDepth= L1+L2)
     
 # unit weight
 gamma= soil.gamma()

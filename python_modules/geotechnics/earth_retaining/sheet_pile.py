@@ -11,6 +11,8 @@ __email__= "l.pereztato@gmail.com"
 import math
 import geom
 import numpy
+import sys
+from postprocess.reports import common_formats as fmt
 
 class CantileverSheetPileWall(object):
     ''' Cantilever sheet pile. according to chapter 14
@@ -18,21 +20,24 @@ class CantileverSheetPileWall(object):
         of Braja M. Das. Eight Edition. CENGAGE Learning.
         2016.
 
+    :ivar title: problem title.
     :ivar soil: soil type
     :ivar waterTableDepth: depth of the water table (measured from the
                            sheet-pile top). L1 in the book text.
     :ivar excavationDepth: depth of the excavation (measured from the
                            sheet-pile top). L1 in the book text.
     '''
-    def __init__(self, soil, waterTableDepth, excavationDepth):
+    def __init__(self, title, soil, waterTableDepth, excavationDepth):
         ''' Constructor.
 
+        :param title: problem title
         :param soil: soil type.
         :param waterTableDepth: depth of the water table (measured from the
                                sheet-pile top). L1 in the book text.
         :param excavationDepth: depth of the excavation (measured from the
                                sheet-pile top). L1 in the book text.
         '''
+        self.title= title
         self.soil= soil
         self.waterTableDepth= waterTableDepth # L1 in the book text.
         self.excavationDepth= excavationDepth # L1+L2 in the book text.
@@ -159,6 +164,25 @@ class CantileverSheetPileWall(object):
         z_p= math.sqrt(2*P/(Kp-Ka)/gmm) # Equation (14.21)
         return P*(z_bar+z_p)-(0.5*gmm*z_p**2*(Kp-Ka))*z_p/3.0# Equation (14.22)
 
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the design results.'''
+        # Active side pressure.
+        P, z_bar= sheetPile.getActiveSidePressure()
+        # Theoretical depth
+        Dtheor= sheetPile.getDepth(depthSafetyFactor= 1.0)
+        # Actual depth.
+        Dactual= sheetPile.getDepth(depthSafetyFactor= 1.3)
+        # Total length
+        L= sheetPile.getTotalLength(depthSafetyFactor= 1.3)
+        Mmax= sheetPile.getMaxBendingMoment()
+        os.write(indentation+'problem title: '+str(self.title)+'\n')
+        os.write(indentation+'  excavation depth: H= '+fmt.Length.format(self.excavationDepth)+' m\n')
+        os.write(indentation+'  total pressure: P= '+ fmt.Esf.format(P)+' kN/m\n')
+        os.write(indentation+'  theoretical depth: Dth= '+fmt.Length.format(Dtheor)+' m\n')
+        os.write(indentation+'  actual depth: Dact= '+fmt.Length.format(Dactual)+' m\n')
+        os.write(indentation+'  total length: L= '+fmt.Length.format(L)+' m\n')
+        os.write(indentation+'  maximum bending moment: Mmax= '+ fmt.Esf.format(Mmax)+' kN.m/m\n')
+    
 class AnchoredSheetPileWall(CantileverSheetPileWall):
     ''' Anchored sheet pile. according to chapter 14
         of the book "Principles of Foundation Engineering"
@@ -168,9 +192,10 @@ class AnchoredSheetPileWall(CantileverSheetPileWall):
     :ivar anchorDepth: depth of the anchor (measured from the
                        sheet-pile top). l1 in the book text.
     '''
-    def __init__(self, soil, waterTableDepth, excavationDepth, anchorDepth):
+    def __init__(self, title, soil, waterTableDepth, excavationDepth, anchorDepth):
         ''' Constructor.
 
+        :param title: problem title.
         :param soil: soil type.
         :param waterTableDepth: depth of the water table (measured from the
                                sheet-pile top). L1 in the book text.
@@ -179,7 +204,7 @@ class AnchoredSheetPileWall(CantileverSheetPileWall):
         :param anchorDepth: depth of the anchor (measured from the
                             sheet-pile top). l1 in the book text.
         '''
-        super().__init__(soil= soil, waterTableDepth= waterTableDepth, excavationDepth= excavationDepth)
+        super().__init__(title= title, soil= soil, waterTableDepth= waterTableDepth, excavationDepth= excavationDepth)
         self.anchorDepth= anchorDepth
         
     def getL4PolynomialCoeffs(self):
