@@ -2,7 +2,7 @@
 ''' Sheet-piles according to chapter 14 of the book "Principles of Foundation 
 Engineering" of Braja M. Das. Eight Edition. CENGAGE Learning. 2016.
 
-Example 14.2 (same as example 14.1 assuming the absence of water table).
+Example 14.2 (using a trick to simulate the absence of water table).
 '''
 
 from __future__ import division
@@ -13,8 +13,14 @@ from geotechnics import earth_pressure
 from geotechnics.earth_retaining import sheet_pile
 from scipy.constants import g
 
-soil= earth_pressure.RankineSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g)
-L= 5.0 # m
+# Trick to simulate the absence of water table
+rho= 15.90e3/g
+waterDensity= 1e3 # kg/m3
+fakeSatRho= rho+waterDensity
+
+soil= earth_pressure.RankineSoil(phi= math.radians(32), rho= rho, rhoSat= fakeSatRho)
+L1= 2.0 # m
+L2= 3.0 # m
 
 Ka= soil.Ka()
 ratio1= abs(Ka-0.3072585245224683)/0.3072585245224683
@@ -22,7 +28,7 @@ Kp= soil.Kp()
 ratio2= abs(Kp-3.2545883032998644)/3.2545883032998644
 
 # Sheet-pile object.
-sheetPile= sheet_pile.CantileverSheetPileWall(soil= soil, waterTableDepth= 2*L, excavationDepth= L)
+sheetPile= sheet_pile.CantileverSheetPileWall(soil= soil, waterTableDepth= L1, excavationDepth= L1+L2)
     
 # unit weight
 gamma= soil.gamma()
