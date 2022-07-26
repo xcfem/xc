@@ -1162,7 +1162,7 @@ class TSection(PolygonalSection):
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
-            retval= super(PolygonalSection,self).__eq__(other)
+            retval= super(TSection,self).__eq__(other)
             if(retval):
                 retval= (self.webWidth == other.webWidth)
             if(retval):
