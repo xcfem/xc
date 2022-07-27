@@ -1543,7 +1543,7 @@ class ReinforcementRatios(object):
     :ivar Ac: concrete area.
     :ivar fyd: design value of the tensile strength of passive reinforcement steel.
     '''
-    def __init__(self,Ac,fcd,fyd):
+    def __init__(self, Ac, fyd):
         '''Constructor.
 
         :param Ac: gross concrete section area.
