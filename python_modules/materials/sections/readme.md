@@ -10,3 +10,5 @@ Tools to deal with cross-sections to be used with beams or rods or by themselves
 - [Plane Sections Do Remain Plane](https://portwooddigital.com/2022/05/15/plane-sections-do-remain-plane)
 - [Euler–Bernoulli beam theory](https://en.wikipedia.org/wiki/Euler%E2%80%93Bernoulli_beam_theory)
 - [Elastic Shear Beams in OpenSees](https://portwooddigital.com/2022/07/03/elastic-shear-beams-in-opensees/)
+- [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant#Circle)
+- [Section properties](https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/properties/)

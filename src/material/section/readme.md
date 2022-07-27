@@ -9,3 +9,5 @@ The aim of the classes on this folder is to represent section materials. Those m
 - [Repeated Section Modes](https://portwooddigital.com/2021/11/16/repeated-section-modes)
 - [Plane Sections Do Remain Plane](https://portwooddigital.com/2022/05/15/plane-sections-do-remain-plane)
 - [Rectangular Patches](https://portwooddigital.com/2022/06/05/rectangular-patches/)
+- [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant#Circle)
+- [Section properties](https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/properties/)
