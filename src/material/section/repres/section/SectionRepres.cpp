@@ -86,6 +86,14 @@ int XC::SectionRepres::getNumCells(void) const
     return ncells;
   }
 
+//! @brief Return a pointer to the material handler.
+XC::MaterialHandler *XC::SectionRepres::getMaterialHandler(void)
+  { return material_handler; }
+
+//! @brief Return a pointer to the material handler.
+const XC::MaterialHandler *XC::SectionRepres::getMaterialHandler(void) const
+  { return material_handler; }
+
 //! @brief Sets section geometry from its name.
 void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
   {

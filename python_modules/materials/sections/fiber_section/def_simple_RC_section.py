@@ -16,8 +16,12 @@ import geom
 import xc
 from materials.sections import section_properties
 from materials.sections import stress_calc as sc
+from materials.sections.fiber_section import plot_fiber_section as pfs
 from misc_utils import log_messages as lmsg
 import matplotlib.pyplot as plt
+from pathlib import Path
+from misc.latex import latex_utils
+from postprocess.reports import common_formats as cf
 
 # Classes defining reinforcement.
 
@@ -99,6 +103,27 @@ class ShearReinforcement(object):
             os.write(indentation+'angle between the concrete\'s compression struts and the axis of the member: '+str(math.degrees(self.angThetaConcrStruts))+'\n')
         else:
             os.write(indentation+'family name: -\n')
+            
+    def latexReport(self, width, os= sys.stdout):
+        ''' Write a report of the object in LaTeX format.
+
+        :param width: section width.
+        :param os: output stream.
+        '''
+        os.write("\\hline\n")
+    #    os.write(self.familyName+' & '+str(self.nShReinfBranches))  #04/01/21 commented out to avoid writing  nonsense family names
+        os.write(' & '+str(self.nShReinfBranches))
+        areaShReinfBranchs= self.getAs()
+        diamRamas= math.sqrt(4*areaShReinfBranchs/math.pi)
+        os.write(' & '+str(round(diamRamas*1e3)))
+        os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*self.nShReinfBranches*1e4))
+        os.write(' & '+cf.fmt4_1f.format(self.shReinfSpacing*1e2))
+        if(abs(width)>0):
+            os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*self.nShReinfBranches/width/self.shReinfSpacing*1e4))
+        else:
+            os.write(' & -')
+        os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angAlphaShReinf)))
+        os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angThetaConcrStruts))+"\\\\\n")
 
 class ReinfRow(object):
     ''' Definition of the variables that make up a family (row) of main 
@@ -388,10 +413,13 @@ class LongReinfLayers(object):
             lmsg.warning('No longitudinal reinforcement.')
             
     def report(self, os= sys.stdout, indentation= ''):
-        ''' Get a report of the object contents.'''
+        ''' Get a report of the object contents.
+
+        :param os: output stream.
+        '''
         os.write(indentation+'rebar rows: \n')
         for rrow in self.rebarRows:
-            rrow.report(os, indentation+'  ')
+            rrow.report(os, indentation+'  ')        
 
 def rebLayer_mm(fi,s,c):
     '''Defines a layer of main reinforcement bars, given the spacement.
@@ -779,13 +807,176 @@ class RCSectionBase(object):
         plt.show()
    
     def report(self, os= sys.stdout, indentation= ''):
-        ''' Get a report of the object contents.'''
+        ''' Get a report of the object contents.
+
+        :param os: output stream.
+        '''
         os.write(indentation+'Section description: '+str(self.sectionDescr)+'\n')
         indentation+= '  '
         os.write(indentation+'Fiber section parameters:\n')
         self.fiberSectionParameters.report(os, indentation+'  ')
         if(self.fiberSectionRepr):
             self.fiberSectionRepr.report(os, indentation+'  ')
+            
+    def latexReportMainReinforcementLayer(self, reinfLayer, concreteArea, os= sys.stdout):
+        ''' Write a report of the reinforcement layer argument 
+            in LaTeX format.
+
+        :param os: output stream.
+        '''
+        name= reinfLayer.name
+        nRebars= reinfLayer.numReinfBars # number of rebars
+        rebarsDiam= reinfLayer.barDiameter # Rebars diameter
+        areaRebar= reinfLayer.barArea # total area of reinforcement in the layer
+        minEffCover= reinfLayer.getCover() # Minimum value of effective cover
+        barsCOG= reinfLayer.getCenterOfMass() # center of gravity of the bars
+        os.write(name+' & '+str(nRebars))
+        os.write(' & '+str(round(rebarsDiam*1e3)))
+        os.write(' & '+cf.fmt5_2f.format(areaRebar*1e4))
+        os.write(' & '+cf.fmt4_2f.format(areaRebar/concreteArea*1e3))
+        os.write(' & '+cf.fmt4_1f.format(minEffCover*1e2))
+        os.write(' & '+cf.fmt5_3f.format(barsCOG[0]) +' & '+cf.fmt5_3f.format(barsCOG[1]) +"\\\\\n")
+
+    def latexReportMainReinforcement(self, os= sys.stdout):
+        ''' Write a report of the main reinforcement in LaTeX format.
+
+        :param os: output stream.
+        '''
+        os.write("\\begin{tabular}{ll}\n")
+        mainReinfFamilies= self.geomSection.getReinfLayers
+        areaMainReinforcement= mainReinfFamilies.getAreaGrossSection()
+        concreteArea= self.geomSection.getAreaGrossSection() # Area
+        os.write("Total area $A_s="+cf.fmt5_2f.format(areaMainReinforcement*1e4) +"\\ cm^2$ & Geometric quantity $\\rho= "+cf.fmt4_2f.format(areaMainReinforcement/concreteArea*1e3) +"\\permil$\\\\\n")
+        os.write("\\end{tabular} \\\\\n")
+        os.write("\\hline\n")
+        os.write("Layers of main reinforcement:\\\\\n")
+        os.write("\\hline\n")
+        os.write("\\begin{tabular}{cccccccc}\n")
+        os.write("Id & N$^o$ bars & $\\phi$ & area & c. geom. & eff. cover & $y_{COG}$ & $z_{COG}$\\\\\n")
+        os.write(" &  & $(mm)$ & $(cm^2)$ & $(\\permil)$ & $(cm)$ & $(m)$ & $(m)$\\\\\n")
+        for f in mainReinfFamilies:
+            os.write("\hline\n")
+            self.latexReportMainReinforcementLayer(f, concreteArea, os)
+        os.write("\\end{tabular} \\\\\n")
+
+    def latexReport(self, os= sys.stdout, graphicWidth='80mm', outputPath= None, includeGraphicsPath= None):
+        ''' Write a report of the object in LaTeX format.
+
+        :param os: output stream.
+        :param graphicWidth: width for the cross-section graphic.
+        :param outputPath: directory to write the section plot into.
+        :param includeGraphicsPath: directory to use in the latex includegraphics command.
+        '''
+        # Retrieve section geometry definition.
+        materialHandler= self.fiberSectionRepr.getMaterialHandler
+        gmSectName= self.gmSectionName()
+        geomSection= materialHandler.getSectionGeometry(gmSectName)
+        # Plot cross-section
+        crossSectionFigureFName= ''.join(x for x in self.name if x.isalnum())
+        if(self.geomSection):
+            tmp= crossSectionFigureFNam
+            if(outputPath):
+                tmp= outputPath+'/'+crossSectionFigureFName
+            pfs.plotSectionGeometry(geomSection,tmp)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; geometry of section: '+self.name+' not defined\n')
+        # Some convenience lines.
+        os.write('%% ****** Packages needed for LaTeX document: ****** \n')
+        os.write('%%\\usepackage{graphicx} %%\postscript includes\n')
+        os.write('%%\\usepackage{multirow} %%\multirow command\n')
+        os.write('%%\\usepackage{wasysym} %%\permil command\n')
+        os.write('%%\\usepackage{gensymb} %%\degree command\n')
+        # Write table header.
+        os.write('\\begin{table}\n')
+        os.write('\\begin{center}\n')
+        os.write('\\begin{tabular}{|c|}\n')
+        os.write('\\hline\n')
+        os.write('\\begin{large} '+latex_utils.toLaTeX(self.name)+' \end{large}\\\\\n')
+        os.write('\\hline\n')
+        os.write(self.sectionDescr+'\\\\\n')
+        os.write('\\hline\n')
+        # Section geometry
+        os.write('\\begin{tabular}{c|l}\n')
+        ## Include figure in table
+        os.write('\\begin{minipage}{85mm}\n')
+        os.write('\\vspace{2mm}\n')
+        os.write('\\begin{center}\n')
+        #  name without extension to allow pdfLatex choose the file
+        nameWOExt= Path(crossSectionFigureFName).stem
+        if(includeGraphicsPath):
+            nameWOExt= includeGraphicsPath+'/'+nameWOExt
+        os.write('\\includegraphics[width='+graphicWidth+']{'+nameWOExt+'}\n')
+        os.write('\\end{center}\n')
+        os.write('\\vspace{1pt}\n')
+        os.write('\\end{minipage} & \n')
+        self.latexReportGeometry(os)
+        os.write('\\end{tabular} \\\\\n')
+        # Write materials.
+        os.write('\\hline\n')
+        os.write('\\textbf{Materials - mechanical properties}:\\\\\n')
+        os.write('\\hline\n')
+        os.write('\\begin{tabular}{ll}\n')
+        concrete= self.fiberSectionParameters.concrType
+        os.write('Concrete: '+concrete.materialName+' & Modulus of elasticity: $E_c= '+'{0:.2f}'.format(concrete.Ecm()/1e9)+'\\ GPa$\\\\\n')
+        os.write('\\hline\n')
+        steel= self.fiberSectionParameters.reinfSteelType
+        os.write('Steel: '+steel.materialName+' & Modulus of elasticity: $E_s= '+'{0:.2f}'.format(steel.Es/1e9)+'\\ GPa$\\\\\n')
+        os.write('\\end{tabular} \\\\\n')
+        os.write('\\hline\n')
+        # Write section mechanical properties.
+        os.write('\\textbf{Sections - geometric and mechanical characteristics}:\\\\\n')
+        os.write('\\hline\n')
+        os.write('Gross section:\\\\\n')
+        GB= self.geomSection.getCenterOfMassGrossSection() # Center of mass.
+        AB= self.geomSection.getAreaGrossSection() # Area
+        IyB= self.geomSection.getIyGrossSection() # Inertia
+        IzB= self.geomSection.getIzGrossSection()
+        PyzB= self.geomSection.getPyzGrossSection()
+        JTorsion= self.getJTorsion()
+        os.write('\\hline\n')
+        os.write('\\begin{tabular}{ll}\n')
+        os.write('$A_{gross}='+cf.fmt6_3f.format(AB) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(IyB*1e4) +' & '+cf.fmt5_2f.format(PyzB) +' \\\\ 0.00 & '+cf.fmt5_2f.format(PyzB) +' & '+cf.fmt5_2f.format(IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
+        os.write('& \\\\\n')
+        os.write('C.O.G.: $('+cf.fmt5_3f.format(GB[0])+','+cf.fmt5_3f.format(GB[1])+')\\ m$  & \\\\\n')
+        os.write('\\end{tabular} \\\\\n')
+        os.write('\\hline\n')
+        os.write('Homogenized section:\\\\\n')
+        preprocessor= materialHandler.getPreprocessor
+        tangConcr= self.getConcreteDiagram(preprocessor).getTangent()
+        GH= self.geomSection.getCenterOfMassHomogenizedSection(tangConcr) # Center of gravity of the homogenized section
+        AH= self.geomSection.getAreaHomogenizedSection(tangConcr) # Area of the homogenized section
+        IyH= self.geomSection.getIyHomogenizedSection(tangConcr) # Inertia tensor of homogenized section.
+        IzH=  self.geomSection.getIzHomogenizedSection(tangConcr)
+        PyzH= self.geomSection.getPyzHomogenizedSection(tangConcr)
+        
+        os.write('\\hline\n')
+        os.write('\\begin{tabular}{ll}\n')
+        os.write('$A_{homog.}='+cf.fmt6_3f.format(AH) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(IyH*1e4) +' & '+cf.fmt5_2f.format(PyzH) +' \\\\ 0.00 & '+cf.fmt5_2f.format(PyzH) +' & '+cf.fmt5_2f.format(IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
+        os.write('& \\\\\n')
+        os.write('C.O.G.: $('+cf.fmt5_3f.format(GH[0])+','+cf.fmt5_3f.format(GH[1])+')\\ m$  & \\\\\n')
+        os.write('\\end{tabular} \\\\\n')
+        os.write('\\hline\n')
+        # Passive reinforcement.
+        os.write('\\textbf{Passive reinforcement}:\\\\\n')
+        os.write('\\hline\n')
+        ## Main reinforcement.
+        self.latexReportMainReinforcement(os)
+        ## Shear reinforcement.
+        os.write('\\hline\n')
+        os.write('Layers of shear reinforcement:\\\\\n')
+        os.write('\\hline\n')
+        os.write('\\begin{tabular}{cccccccc}\n')
+        os.write('Id & N$^o$ branch & $\\phi$ & area & spac. & area/m & $\\alpha$ & $\\beta$\\\\\n')
+        os.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
+        self.latexReportShearReinforcement(os)
+        os.write('\\end{tabular} \\\\\n')
+        os.write('\\hline\n')
+        os.write('\\end{tabular}\n')
+        os.write('\\end{center}\n')
+        os.write('\\caption{'+self.sectionDescr+' ('+ latex_utils.toLaTeX(self.name) +').'+'} \\label{tb_'+self.name.replace(' ','_')+'}\n')
+        os.write('\\end{table}\n')
 
 class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSection):
     '''
@@ -964,6 +1155,26 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         self.shReinfZ.report(os, indentation+'  ')
         os.write(indentation+'Transverse reinforcement (y direction):\n')
         self.shReinfY.report(os, indentation+'  ')
+
+    def latexReportGeometry(self, os= sys.stdout):
+        ''' Write geometry data in LaTeX format.
+
+        :param os: output stream.
+        '''
+        os.write('\\begin{tabular}{l}\n')
+        os.write('width: \\\\\n')
+        os.write('$b= '+'{0:.2f}'.format(self.width)+'\\ m$\\\\\n')
+        os.write('depth: \\\\\n')
+        os.write('$h= '+'{0:.2f}'.format(self.depth)+'\\ m$\\\\\n')
+        os.write('\\end{tabular} \\\\\n')
+
+    def latexReportShearReinforcement(self, os= sys.stdout):
+        ''' Write shear reinforcement report in LaTeX format.
+
+        :param os: output stream.
+        '''
+        self.shReinfY.latexReport(width= self.width, os= os)
+        self.shReinfZ.latexReport(width= self.depth, os= os)       
 
 class RCRectangularSection(BasicRectangularRCSection):
     ''' This class is used to define the variables that make up a reinforced 

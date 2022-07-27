@@ -21,9 +21,11 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+XC::MaterialHandler *(XC::SectionRepres::*getMaterialHandlerPtr)(void)= &XC::SectionRepres::getMaterialHandler;
 class_<XC::SectionRepres, bases<XC::TaggedObject>, boost::noncopyable >("SectionRepres", no_init)
   .add_property("geometry",make_function(&XC::SectionRepres::getGeom,return_internal_reference<>()),&XC::SectionRepres::setGeom)
-  .def("setGeomNamed",&XC::SectionRepres::setGeomNamed);
+  .def("setGeomNamed",&XC::SectionRepres::setGeomNamed)
+  .add_property("getMaterialHandler", make_function(getMaterialHandlerPtr, return_internal_reference<>() ), "Return a reference to the material handler.")
   ;
 
 class_<XC::FiberSectionRepr, bases<XC::SectionRepres>, boost::noncopyable >("FiberSectionRepr", no_init)

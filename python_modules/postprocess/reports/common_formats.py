@@ -17,3 +17,10 @@ Length= "{:4.2f}"
 Area= "{:6.2f}"
 Factor= "{:4.2f}"
 Displacement= "{:4.2f}"
+
+fmt3_1f= '{:3.1f}'
+fmt4_1f= '{:4.1f}'
+fmt4_2f= '{:4.2f}'
+fmt5_2f= '{:5.2f}'
+fmt5_3f= '{:5.3f}'
+fmt6_3f= '{:6.3f}'

@@ -13,16 +13,10 @@ import math
 import os
 from misc.latex import latex_utils
 from postprocess.reports import graph_material as mg
+from postprocess.reports import common_formats as cf
 from materials.sections.fiber_section import plot_fiber_section as pfs
 from materials.sections import section_properties as prmRect
 from materials.sections.fiber_section import  def_simple_RC_section as sHAs
-
-fmt3_1f= '{:3.1f}'
-fmt4_1f= '{:4.1f}'
-fmt4_2f= '{:4.2f}'
-fmt5_2f= '{:5.2f}'
-fmt5_3f= '{:5.3f}'
-fmt6_3f= '{:6.3f}'
 
 class MainReinforcementLayer(object):
     '''Parameters for each layer of main reinforcement
@@ -38,15 +32,15 @@ class MainReinforcementLayer(object):
     def texWrite(self,archTex,areaHorm):
         archTex.write(self.name+' & '+str(self.nRebars))
         archTex.write(' & '+str(round(self.rebarsDiam*1e3)))
-        archTex.write(' & '+fmt5_2f.format(self.areaRebar*1e4))
-        archTex.write(' & '+fmt4_2f.format(self.areaRebar/areaHorm*1e3))
-        archTex.write(' & '+fmt4_1f.format(self.minEffCover*1e2))
-        archTex.write(' & '+fmt5_3f.format(self.barsCOG[0]) +' & '+fmt5_3f.format(self.barsCOG[1]) +"\\\\\n")
+        archTex.write(' & '+cf.fmt5_2f.format(self.areaRebar*1e4))
+        archTex.write(' & '+cf.fmt4_2f.format(self.areaRebar/areaHorm*1e3))
+        archTex.write(' & '+cf.fmt4_1f.format(self.minEffCover*1e2))
+        archTex.write(' & '+cf.fmt5_3f.format(self.barsCOG[0]) +' & '+cf.fmt5_3f.format(self.barsCOG[1]) +"\\\\\n")
 
 def writeMainReinforcement(listaFamMainReinforcement, areaHorm, archTex):
     archTex.write("\\begin{tabular}{ll}\n")
     areaMainReinforcement= listaFamMainReinforcement.getAreaGrossSection()
-    archTex.write("Total area $A_s="+fmt5_2f.format(areaMainReinforcement*1e4) +"\\ cm^2$ & Geometric quantity $\\rho= "+fmt4_2f.format(areaMainReinforcement/areaHorm*1e3) +"\\permil$\\\\\n")
+    archTex.write("Total area $A_s="+cf.fmt5_2f.format(areaMainReinforcement*1e4) +"\\ cm^2$ & Geometric quantity $\\rho= "+cf.fmt4_2f.format(areaMainReinforcement/areaHorm*1e3) +"\\permil$\\\\\n")
     archTex.write("\\end{tabular} \\\\\n")
     archTex.write("\\hline\n")
     archTex.write("Layers of main reinforcement:\\\\\n")
@@ -66,11 +60,14 @@ def writeShearReinforcement(recordShearReinf, archTex, width):
     areaShReinfBranchs= recordShearReinf.getAs()
     diamRamas= math.sqrt(4*areaShReinfBranchs/math.pi)
     archTex.write(' & '+str(round(diamRamas*1e3)))
-    archTex.write(' & '+fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches*1e4))
-    archTex.write(' & '+fmt4_1f.format(recordShearReinf.shReinfSpacing*1e2))
-    archTex.write(' & '+fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches/width/recordShearReinf.shReinfSpacing*1e4))
-    archTex.write(' & '+fmt3_1f.format(math.degrees(recordShearReinf.angAlphaShReinf)))
-    archTex.write(' & '+fmt3_1f.format(math.degrees(recordShearReinf.angThetaConcrStruts))+"\\\\\n")
+    archTex.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches*1e4))
+    archTex.write(' & '+cf.fmt4_1f.format(recordShearReinf.shReinfSpacing*1e2))
+    if(abs(width)>0):
+        archTex.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches/width/recordShearReinf.shReinfSpacing*1e4))
+    else:
+        archTex.write(' & -')
+    archTex.write(' & '+cf.fmt3_1f.format(math.degrees(recordShearReinf.angAlphaShReinf)))
+    archTex.write(' & '+cf.fmt3_1f.format(math.degrees(recordShearReinf.angThetaConcrStruts))+"\\\\\n")
 
 class SectionInfo(object):
     ''' Obtains the fiber section parameters for writing its report page
@@ -166,6 +163,7 @@ class SectionInfo(object):
         fileHandler.write('\\end{center}\n')
         fileHandler.write('\\vspace{1pt}\n')
         fileHandler.write('\\end{minipage} & \n')
+        # Write section dimensions.
         fileHandler.write('\\begin{tabular}{l}\n')
         fileHandler.write('width: \\\\\n')
         fileHandler.write('$b= '+'{0:.2f}'.format(self.width)+'\\ m$\\\\\n')
@@ -187,19 +185,20 @@ class SectionInfo(object):
         fileHandler.write('Gross section:\\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write('\\begin{tabular}{ll}\n')
-        fileHandler.write('$A_{gross}='+fmt6_3f.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyB*1e4) +' & '+fmt5_2f.format(self.PyzB) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzB) +' & '+fmt5_2f.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
+        fileHandler.write('$A_{gross}='+cf.fmt6_3f.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(self.JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(self.IyB*1e4) +' & '+cf.fmt5_2f.format(self.PyzB) +' \\\\ 0.00 & '+cf.fmt5_2f.format(self.PyzB) +' & '+cf.fmt5_2f.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
         fileHandler.write('& \\\\\n')
-        fileHandler.write('C.O.G.: $('+fmt5_3f.format(self.GB[0])+','+fmt5_3f.format(self.GB[1])+')\\ m$  & \\\\\n')
+        fileHandler.write('C.O.G.: $('+cf.fmt5_3f.format(self.GB[0])+','+cf.fmt5_3f.format(self.GB[1])+')\\ m$  & \\\\\n')
         fileHandler.write('\\end{tabular} \\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write('Homogenized section:\\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write('\\begin{tabular}{ll}\n')
-        fileHandler.write('$A_{homog.}='+fmt6_3f.format(self.AH) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyH*1e4) +' & '+fmt5_2f.format(self.PyzH) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzH) +' & '+fmt5_2f.format(self.IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
+        fileHandler.write('$A_{homog.}='+cf.fmt6_3f.format(self.AH) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(self.JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(self.IyH*1e4) +' & '+cf.fmt5_2f.format(self.PyzH) +' \\\\ 0.00 & '+cf.fmt5_2f.format(self.PyzH) +' & '+cf.fmt5_2f.format(self.IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
         fileHandler.write('& \\\\\n')
-        fileHandler.write('C.O.G.: $('+fmt5_3f.format(self.GH[0])+','+fmt5_3f.format(self.GH[1])+')\\ m$  & \\\\\n')
+        fileHandler.write('C.O.G.: $('+cf.fmt5_3f.format(self.GH[0])+','+cf.fmt5_3f.format(self.GH[1])+')\\ m$  & \\\\\n')
         fileHandler.write('\\end{tabular} \\\\\n')
         fileHandler.write('\\hline\n')
+        # Passive reinforcement.
         fileHandler.write('\\textbf{Passive reinforcement}:\\\\\n')
         fileHandler.write('\\hline\n')
         writeMainReinforcement(self.reinforcement,self.AB,fileHandler)
@@ -213,7 +212,7 @@ class SectionInfo(object):
         # writeShearReinforcement(self.getShearReinfY(), fileHandler,self.width)
         # writeShearReinforcement(self.getShearReinfY(), fileHandler,self.depth)
         writeShearReinforcement(self.shReinfY, fileHandler,self.width)
-        writeShearReinforcement(self.shReinfY, fileHandler,self.depth)
+        writeShearReinforcement(self.shReinfZ, fileHandler,self.depth)
         fileHandler.write('\\end{tabular} \\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write('\\end{tabular}\n')
@@ -231,6 +230,10 @@ class SectionInfoHASimple(SectionInfo):
     :ivar sectGrWth: with of the section graphic (defaults to '80mm')
     '''
     def __init__(self,preprocessor,sectHASimple,sectGrWth='80mm'):
+
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; this clase will be deprecated. Use the latexReport method of class: '+type(sectHASimple)+'.\n')        
         self.scc= sectHASimple
         sectName=sectHASimple.gmSectionName()
         sectDescr=sectHASimple.sectionDescr
@@ -240,7 +243,7 @@ class SectionInfoHASimple(SectionInfo):
         rfStDiag=sectHASimple.getSteelDiagram(preprocessor)
         geomSection= preprocessor.getMaterialHandler.getSectionGeometry(sectName)
         if(sectHASimple.isCircular()):
-            width= sectHASimple.Rext
+            width= 2*sectHASimple.Rext
             depth= sectHASimple.Rint
         else:
             width=sectHASimple.b

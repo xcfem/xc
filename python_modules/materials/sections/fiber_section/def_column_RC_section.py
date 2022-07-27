@@ -222,11 +222,32 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         return section_properties.CircularSection.getThickness(self)
         
     def report(self, os= sys.stdout, indentation= ''):
-        ''' Get a report of the object contents.'''
-        super(RCCircularSection, self).repeort(os= os, indentation= indentation)
+        '''Get a report of the object contents.
+
+        :param os: output stream.
+        '''
+        super(RCCircularSection, self).report(os= os, indentation= indentation)
         indentation+= '  '
         os.write(indentation+'main reinforcement: \n')
         mainReinf.report(os= os, indentation= indentation)
         os.write(indentation+'shear reinforcement: \n')        
         shReinf.report(os= os, indentation= indentation)
     
+    def latexReportGeometry(self, os= sys.stdout):
+        ''' Write geometry data in LaTeX format.
+
+        :param os: output stream.
+        '''
+        os.write('\\begin{tabular}{l}\n')
+        os.write('ext. radius: \\\\\n')
+        os.write('$r_{ext}= '+'{0:.2f}'.format(self.Rext)+'\\ m$\\\\\n')
+        os.write('int. radius: \\\\\n')
+        os.write('$r_{int}= '+'{0:.2f}'.format(self.Rint)+'\\ m$\\\\\n')
+        os.write('\\end{tabular} \\\\\n')
+        
+    def latexReportShearReinforcement(self, os= sys.stdout):
+        ''' Write shear reinforcement report in LaTeX format.
+
+        :param os: output stream.
+        '''
+        self.shReinf.latexReport(width= 2.0*self.Rext, os= os)

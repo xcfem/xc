@@ -92,6 +92,10 @@ class SectionRepres: public TaggedObject
 
     SectionRepres &operator=(const SectionRepres &);
 
+    // Access to the material handler.
+    MaterialHandler *getMaterialHandler(void);
+    const MaterialHandler *getMaterialHandler(void) const;
+    
     // Section inquiring functions
     virtual int getType(void) const = 0;
     int getNumCells(void) const;
