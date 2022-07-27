@@ -17,6 +17,7 @@ from postprocess.reports import common_formats as cf
 from materials.sections.fiber_section import plot_fiber_section as pfs
 from materials.sections import section_properties as prmRect
 from materials.sections.fiber_section import  def_simple_RC_section as sHAs
+from misc_utils import log_messages as lmsg
 
 class MainReinforcementLayer(object):
     '''Parameters for each layer of main reinforcement
@@ -233,7 +234,7 @@ class SectionInfoHASimple(SectionInfo):
 
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; this clase will be deprecated. Use the latexReport method of class: '+type(sectHASimple)+'.\n')        
+        lmsg.warning(className+'.'+methodName+'; this clase will be deprecated. Use the latexReport method of class: '+str(type(sectHASimple))+'.\n')        
         self.scc= sectHASimple
         sectName=sectHASimple.gmSectionName()
         sectDescr=sectHASimple.sectionDescr
