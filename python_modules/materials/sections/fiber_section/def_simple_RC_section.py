@@ -91,6 +91,10 @@ class ShearReinforcement(object):
         '''
         return self.nShReinfBranches*self.areaShReinfBranch/self.shReinfSpacing
 
+    def getDiameter(self):
+        ''' Return the diameter of the bars from its area.'''
+        return 2*math.sqrt(self.areaShReinfBranch/math.pi)
+
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the object contents.'''
         steelArea= self.getAs()
@@ -114,12 +118,12 @@ class ShearReinforcement(object):
     #    os.write(self.familyName+' & '+str(self.nShReinfBranches))  #04/01/21 commented out to avoid writing  nonsense family names
         os.write(' & '+str(self.nShReinfBranches))
         areaShReinfBranchs= self.getAs()
-        diamRamas= math.sqrt(4*areaShReinfBranchs/math.pi)
+        diamRamas= self.getDiameter()
         os.write(' & '+str(round(diamRamas*1e3)))
-        os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*self.nShReinfBranches*1e4))
+        os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*1e4))
         os.write(' & '+cf.fmt4_1f.format(self.shReinfSpacing*1e2))
         if(abs(width)>0):
-            os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*self.nShReinfBranches/width/self.shReinfSpacing*1e4))
+            os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs/self.shReinfSpacing*1e4))
         else:
             os.write(' & -')
         os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angAlphaShReinf)))
@@ -583,7 +587,7 @@ class RCSectionBase(object):
         :param nDivJK: number of cells in JK (height or tangential) direction.
         '''
         self.sectionDescr= 'Text describing the role/position of the section in the structure.'
-        if(sectionDescr):
+        if(not sectionDescr is None):
             self.sectionDescr= sectionDescr
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         self.fiberSectionRepr= None
@@ -859,7 +863,7 @@ class RCSectionBase(object):
             self.latexReportMainReinforcementLayer(f, concreteArea, os)
         os.write("\\end{tabular} \\\\\n")
 
-    def latexReport(self, os= sys.stdout, graphicWidth='80mm', outputPath= None, includeGraphicsPath= None):
+    def latexReport(self, os= sys.stdout, graphicWidth='70mm', outputPath= None, includeGraphicsPath= None):
         ''' Write a report of the object in LaTeX format.
 
         :param os: output stream.
@@ -874,9 +878,9 @@ class RCSectionBase(object):
         # Plot cross-section
         crossSectionFigureFName= ''.join(x for x in self.name if x.isalnum())
         if(self.geomSection):
-            tmp= crossSectionFigureFNam
+            tmp= crossSectionFigureFName+'.eps'
             if(outputPath):
-                tmp= outputPath+'/'+crossSectionFigureFName
+                tmp= outputPath+'/'+tmp
             pfs.plotSectionGeometry(geomSection,tmp)
         else:
             className= type(self).__name__
@@ -977,6 +981,40 @@ class RCSectionBase(object):
         os.write('\\end{center}\n')
         os.write('\\caption{'+self.sectionDescr+' ('+ latex_utils.toLaTeX(self.name) +').'+'} \\label{tb_'+self.name.replace(' ','_')+'}\n')
         os.write('\\end{table}\n')
+
+    def writeDXF(self, modelSpace, concreteLayerName= 'concrete', reinforcementLayerName= 'reinforcement'):
+        ''' Writes the shape contour in the model
+            space argument.
+
+        :param modelSpace: ezdxf model space to write into.
+        :param concretLayerName: DXF layer name for concrete material.
+        :param reinforcementLayerName: DXF layer name for steel material.
+        '''
+        # Draw contour
+        # Retrieve section geometry definition.
+        materialHandler= self.fiberSectionRepr.getMaterialHandler
+        gmSectName= self.gmSectionName()
+        geomSection= materialHandler.getSectionGeometry(gmSectName)
+        regions= geomSection.getRegions
+        for r in regions:
+            vertices= r.getPolygon().getVertexList()
+            points= list()
+            for v in vertices:
+                points.append((v.x,v.y,0.0))
+            points.append(points[0]) # close region.
+            modelSpace.add_lwpolyline(points, dxfattribs={"layer": concreteLayerName})
+        # Draw reinforcement.
+        reinforcement= geomSection.getReinfLayers
+        for reinfLayer in reinforcement:
+            rebars= reinfLayer.getReinfBars
+            for b in rebars:
+                ptPlot= b.getPos2d
+                rPlot= b.diameter/2.0
+                #labelPlot= str(int(round(b.diameter*1e3)))
+                modelSpace.add_circle(center= (ptPlot.x, ptPlot.y), radius= rPlot, dxfattribs={"layer": reinforcementLayerName})
+
+        
+            
 
 class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSection):
     '''
