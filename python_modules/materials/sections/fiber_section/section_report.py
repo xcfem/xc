@@ -102,8 +102,8 @@ class SectionInfo(object):
         self.rfSteel=rfSteel
         self.concrDiag=concrDiag
         self.rfStDiag=rfStDiag
-        self.width=width
-        self.depth=depth
+        self.width= width
+        self.depth= depth
         self.JTorsion=self.scc.getJTorsion()
         self.shReinfY= sHAs.ShearReinforcement()
         self.shReinfY.familyName= "Vy"
@@ -161,7 +161,7 @@ class SectionInfo(object):
         nameWOExt= os.path.splitext(rltvPathFigure)[0]
         fileHandler.write('\\includegraphics[width='+self.sectGrWth+']{'+nameWOExt+'}\n')
         # name without extension and without path
-        # nameWOExt= os.path.splitext(pathFigura)[0]
+        # nameWOExt= os.path.splitext(pathFigure)[0]
         # fileHandler.write('\\includegraphics[width=80mm]{'+self.sectName[4:]+'}\n')
         fileHandler.write('\\end{center}\n')
         fileHandler.write('\\vspace{1pt}\n')
@@ -239,8 +239,12 @@ class SectionInfoHASimple(SectionInfo):
         concrDiag=sectHASimple.getConcreteDiagram(preprocessor)
         rfStDiag=sectHASimple.getSteelDiagram(preprocessor)
         geomSection= preprocessor.getMaterialHandler.getSectionGeometry(sectName)
-        width=sectHASimple.b
-        depth=sectHASimple.h
+        if(sectHASimple.isCircular()):
+            width= sectHASimple.Rext
+            depth= sectHASimple.Rint
+        else:
+            width=sectHASimple.b
+            depth=sectHASimple.h
         super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth,sectGrWth)
         self.shReinfZ= sectHASimple.getShearReinfZ()
         self.shReinfY= sectHASimple.getShearReinfY()

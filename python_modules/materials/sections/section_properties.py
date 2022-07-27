@@ -741,8 +741,16 @@ class CircularSection(SectionProperties):
   
     def J(self):
         '''Return torsional constant of the section'''
-        return 2*self.Iy()*self.torsionalStiffnessFactor
+        return self.getJTorsion()
   
+    def getJTorsion(self):
+        '''Return torsional constant of the section.
+
+        Reference: https://en.wikipedia.org/wiki/Torsion_constant#Circle
+        '''
+        retval= 2.0*self.Iy()*self.torsionalStiffnessFactor
+        return retval
+    
     def alphaY(self):
         '''Return distortion coefficient with respect to local Y axis
            (see Oñate, Cálculo de estructuras por el MEF page 122)
