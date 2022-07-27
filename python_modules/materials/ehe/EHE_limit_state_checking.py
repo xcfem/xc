@@ -1537,6 +1537,70 @@ def computeEffectiveHollowSectionParametersRCSection(rcSection):
     h0= rcSection.getTorsionalThickness()
     return computeEffectiveHollowSectionParameters(rcSection.geomSection,h0,rcSection.minCover)
 
+class ReinforcementRatios(object):
+    ''' Maximum and minimum reinforcement ratios according to EHE-08.
+
+    :ivar Ac: concrete area.
+    :ivar fyd: design value of the tensile strength of passive reinforcement steel.
+    '''
+    def __init__(self,Ac,fcd,fyd):
+        '''Constructor.
+
+        :param Ac: gross concrete section area.
+        :param fyd: design value of the tensile strength of passive reinforcement steel.
+        '''
+        self.Ac= Ac
+        self.fyd= fyd
+    
+
+class BeamReinforcementRatios(ReinforcementRatios):
+    ''' Maximum and minimum reinforcement ratios for members subjected to
+        pure or combined bending.
+
+    :ivar fct_m_fl: average flexural strength of the concrete.
+    :ivar W1: section modulus of the gross section relating to the fibre under greatest tension.
+    :ivar z: Mechanical lever arm of the section. In the absence of more accurate calculations, this may be taken to be z = 0.8 h.
+    :ivar Ap: area of the bonded active reinforcement.
+    :ivar fpd: design value of the tensile strength of bonded active reinforcement steel.
+    '''
+    def __init__(self,Ac, fyd, fct_m_fl, W1, z, Ap= 0.0, fpd= 0.0, P= 0.0, dp=0.0, ds=0.0, e= 0.0):
+        '''Constructor.
+
+        :param Ac: concrete area.
+        :param fyd: design value of the tensile strength of passive reinforcement steel.
+        :param fct_m_fl: average flexural strength of the concrete.
+        :param W1: section modulus of the gross section relating to the fibre under greatest tension.
+        :param z: mechanical lever arm of the section. In the absence of more accurate calculations, this may be taken to be z = 0.8 h.
+        :param Ap: area of the bonded active reinforcement.
+        :param fpd: design value of the tensile strength of bonded active reinforcement steel.
+        :param dp: depth of the active reinforcement from the most compressed fibre in the section.
+        :param ds: depth of the passive reinforcement from the most compressed fibre in the section.
+        :param e: eccentricity of the pre-stressing relative to the centre of gravity of the gross section.
+        '''
+        super().__init__(Ac= Ac, fyd= fyd)
+        self.fct_m_fl= fct_m_fl
+        self.W1= W1
+        self.z= z
+        self.Ap= Ap
+        self.fpd= fpd
+        self.P= P
+        self.dp= dp
+        self.ds= ds
+        self.e= e
+    
+    def getMinimumMechanicalAmount(self):
+        ''' Minimum mechanical reinforcement amount according to
+            clause 42.3.2 of EHE-08.'''
+        retval= (self.W1/self.z*self.fct_m_fl)
+        if(self.Ap!=0.0): # prestressing
+            retval+= self.P/self.z*(self.W1/self.Ac+self.e)
+            frac= 1.0
+            if(self.ds!=0.0): # Passive and active reinforcement.
+                frac= self.dp/self.ds
+            retval-= self.Ap*self.fpd*frac
+        retval/= self.fyd
+        return max(retval,0.0)
+
 class ColumnReinforcementRatios(object):
     def __init__(self,Ac,fcd,fyd):
         '''Constructor.
@@ -1545,16 +1609,17 @@ class ColumnReinforcementRatios(object):
         :param fcd: design value of concrete compressive strength (N/m2).
         :param fyd: design yield strength (Pa)
         '''
-        self.Ac= Ac
+        super().__init__(Ac= Ac, fyd= fyd)
         self.fcd= fcd
-        self.fyd= fyd
+        
     def getMinimumGeometricAmount(self):
         ''' Minimum geometric reinforcement amount for columns
             according to table 42.3.5 of EHE-08.'''
         return 0.004*self.Ac 
 
     def getMinimumMechanicalAmount(self,Nd):
-        ''' Minimum mechanical reinforcement amount.'''
+        ''' Minimum mechanical reinforcement amount according to
+            clause 42.3.3 of EHE-08.'''
         return 0.1*Nd/self.fyd
 
     def getMaximumReinforcementAmount(self):

@@ -402,6 +402,28 @@ Fi25= 4.91e-4
 Fi32= 8.04e-4
 Fi40= 12.56e-4
 
+# rebars as defined in EHE-08.
+rebarsEHE={}
+
+rebarsEHE['fi04']= {'nmb':'fi04','d':4e-3,'P':0.099}
+rebarsEHE['fi06']= {'nmb':'fi06','d':6e-3,'P':0.222}
+rebarsEHE['fi08']= {'nmb':'fi08','d':8e-3,'P':0.395}
+rebarsEHE['fi10']= {'nmb':'fi10','d':10e-3,'P':0.617}
+rebarsEHE['fi12']= {'nmb':'fi12','d':12e-3,'P':0.888}
+rebarsEHE['fi16']= {'nmb':'fi16','d':16e-3,'P':1.578}
+rebarsEHE['fi20']= {'nmb':'fi20','d':20e-3,'P':2.466}
+rebarsEHE['fi25']= {'nmb':'fi25','d':25e-3,'P':3.854}
+rebarsEHE['fi32']= {'nmb':'fi32','d':32e-3,'P':6.313}
+rebarsEHE['fi40']= {'nmb':'fi40','d':40e-3,'P':9.865}
+rebarsEHE['fi50']= {'nmb':'fi50','d':50e-3,'P':15.413}
+
+
+for item in rebarsEHE:
+    bar= rebarsEHE[item]
+    bar['r']= bar['d']/2.0
+    bar['area']= math.pi*bar['r']*bar['r']
+
+
 # ************* Prestressing steel. ********************
 
 # Relaxation of steel according to EHE-08 (Artº 38.9)
