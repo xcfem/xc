@@ -507,12 +507,12 @@ int XC::ElasticTimoshenkoBeam2d::getResponse(int responseID, Information &eleInf
         return eleInfo.setVector(this->getResistingForce());
     
      case 2: // local forces
-        theVector.Zero();
-        // determine resisting forces in local system
-        theVector = ql;
+       this->getResistingForce(); // Compute resisting force.
+       theVector.Zero();
+       // determine resisting forces in local system
+       theVector = ql;
         
-        return eleInfo.setVector(theVector);
-    
+       return eleInfo.setVector(theVector);
      default:
         return -1;
      }

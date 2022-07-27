@@ -538,20 +538,21 @@ XC::Response *XC::ElasticTimoshenkoBeam3d::setResponse(const std::vector<std::st
 
 int XC::ElasticTimoshenkoBeam3d::getResponse(int responseID, Information &eleInfo)
   {
-    switch (responseID) {
-    case 1: // global forces
-        return eleInfo.setVector(this->getResistingForce());
-    
-    case 2: // local forces
-        theVector.Zero();
-        // determine resisting forces in local system
-        theVector = ql;
-        
-        return eleInfo.setVector(theVector);
-    
-    default:
-        return -1;
-    }
+    switch (responseID)
+      {
+      case 1: // global forces
+	  return eleInfo.setVector(this->getResistingForce());
+
+      case 2: // local forces
+	 this->getResistingForce(); // Compute resisting force.
+	 theVector.Zero();
+	 // determine resisting forces in local system
+	 theVector = ql;
+
+	 return eleInfo.setVector(theVector);    
+      default:
+	 return -1;
+      }
   }
 
 
