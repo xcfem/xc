@@ -513,8 +513,6 @@ class RectangularBasePlate(object):
         :param modelSpace: ezdxf model space to write into.
         :param layerName: DXF layer name.
         '''
-        deltaX= self.B/2.0
-        deltaY= self.N/2.0
         positions= self.getContour().getVertexList()
         modelSpace.add_line((positions[0].x, positions[0].y), (positions[1].x, positions[1].y), dxfattribs={'layer': layerName})
         modelSpace.add_line((positions[1].x, positions[1].y), (positions[2].x, positions[2].y), dxfattribs={'layer': layerName})
