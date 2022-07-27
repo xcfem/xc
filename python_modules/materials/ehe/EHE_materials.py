@@ -248,6 +248,18 @@ class EHEConcrete(concrete_base.Concrete):
         """
         return 0.7*self.fctMedEHE08()
 
+    def getFlexuralStrength(self, h):
+        ''' Return the value of the flexural strength
+            according to the coomentary to clause 31.3
+            of EHE-08.
+
+        :param h: depth of the member cross-section.
+        '''
+        retval= self.fctMedEHE08()
+        factor= 1.5*pow(h*10, 0.7)
+        retval*= (1+factor)/factor
+        return retval
+
     def getEpsc2(self):
         """
         return strain (<0) at peak stress at parabola-rectangle diagram 
