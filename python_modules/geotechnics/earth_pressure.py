@@ -14,7 +14,6 @@ import sys
 from geotechnics import frictional_soil as fs
 from scipy import interpolate
 from scipy import optimize
-import numpy
 import geom
 from misc_utils import log_messages as lmsg
 
@@ -258,8 +257,8 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     :param numValues: number of test values along the backfill.
     '''
     def getPolygon(cutPoint):
-        ''' Return the polygon defined by the backfill surface until cutPoint
-            and the wall back.'''
+        ''' Return the polygon defined by the backfill surface between
+            the wall back and the cutPoint.'''
         retval= geom.Polygon2d()
         terrainSurface= backfillProfile.getLeftChunk(cutPoint, 1e-3)
         for pt in terrainSurface:
@@ -267,7 +266,6 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
         retval.appendVertex(ptB)
         return retval
         
-    ptA= wallBack.getFromPoint() # Top of the wall.
     ptB= wallBack.getToPoint() # Bottom of the wall.
     alphaAngle= wallBack.getAngle(geom.Vector2d(0.0,-1.0)) # Angle with respect to the vertical.
     TwoPi= 2*math.pi
@@ -278,8 +276,6 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     naturalSlopeLine= geom.Ray2d(ptB, geom.Vector2d(math.cos(soil.phi), math.sin(soil.phi)))
 
     # Get points along the backfill profile
-    ## Compute intersection of the backfill profile with the natural slope line.
-    ptC= backfillProfile.getIntersection(naturalSlopeLine)[0]
 
     ## Points along the backfill surface.
     startAngle= alphaAngle+math.pi/2.0
@@ -308,8 +304,6 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     weights= list()
     gamma= soil.gamma()
     for pt in pointsAlongBackfill:
-        #triangle= geom.Triangle2d(ptA, ptB, pt)
-        #area= triangle.getArea()
         plg= getPolygon(pt)
         area= plg.getArea()
         w= gamma*area
