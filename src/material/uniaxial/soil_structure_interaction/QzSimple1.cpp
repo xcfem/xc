@@ -47,7 +47,7 @@
 
 #include <cstdlib>
 #include <cmath>
-#include "material/uniaxial/PY/QzSimple1.h"
+#include "material/uniaxial/soil_structure_interaction/QzSimple1.h"
 #include <utility/matrix/Vector.h>
 
 

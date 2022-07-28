@@ -46,7 +46,7 @@
 // Description: This file contains the class implementation for XC::PQyzBase
 
 
-#include "material/uniaxial/PY/PQyzBase.h"
+#include "material/uniaxial/soil_structure_interaction/PQyzBase.h"
 
 
 // Controls on internal iteration between spring components

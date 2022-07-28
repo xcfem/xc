@@ -45,7 +45,7 @@
 //
 // Description: This file contains the class implementation for XC::TzLiq1
 
-#include <material/uniaxial/PY/TzLiq1.h>
+#include <material/uniaxial/soil_structure_interaction/TzLiq1.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/nD/soil/FluidSolidPorousMaterial.h>
 #include <material/nD/NDMaterial.h>

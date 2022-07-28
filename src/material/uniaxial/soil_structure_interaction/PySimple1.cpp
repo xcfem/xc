@@ -48,7 +48,7 @@
 #include <cstdlib>
 #include <cmath>
 
-#include "material/uniaxial/PY/PySimple1.h"
+#include "material/uniaxial/soil_structure_interaction/PySimple1.h"
 #include <utility/matrix/Vector.h>
 
 

@@ -116,6 +116,6 @@ class_<XC::UniaxialStateVars, bases<XC::MovableObject>, boost::noncopyable >("Un
 #include "connected/python_interface.tcc"
 #include "drain/python_interface.tcc"
 #include "fedeas/python_interface.tcc"
-#include "PY/python_interface.tcc"
+#include "soil_structure_interaction/python_interface.tcc"
 #include "snap/python_interface.tcc"
 #include "steel/python_interface.tcc"

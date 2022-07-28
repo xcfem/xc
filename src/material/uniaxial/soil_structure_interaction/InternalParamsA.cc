@@ -24,57 +24,76 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//InternalParamsLR.cc
+//InternalParams.cc
 
-#include "material/uniaxial/PY/InternalParamsLR.h"
+#include "material/uniaxial/soil_structure_interaction/InternalParamsA.h"
 
+/////////////////////////////////////////////////////////////////////
 //! @brief Constructor with data
-XC::InternalParamsLR::InternalParamsLR(const double &V,const double &r,const double &t,const double &yl,const double &yr)
-  : InternalParamsA(V,r,t), vLeft(yl), vRight(yr) {}
+XC::InternalParamsA::InternalParamsA(const double &V,const double &r,const double &t)
+  : MovableObject(0),v(V), R(r), Tang(t)  {}
+
+void XC::InternalParamsA::getField(const double &V)
+  {
+    v= V;
+    R= Tang*v;
+  }
+
+const double &XC::InternalParamsA::updateField(const double &Tp)
+  {
+    double dv= residual(Tp);
+    v+= dv;
+    return v;
+  }
+
+void XC::InternalParamsA::revertToStart(const double &tg)
+  {
+    v= 0.0;
+    R= 0.0;
+    Tang= tg;
+  }
 
 //! @brief Send object members through the communicator argument.
-int XC::InternalParamsLR::sendData(Communicator &comm)
+int XC::InternalParamsA::sendData(Communicator &comm)
   {
-    int res= InternalParamsA::sendData(comm);
-    res+= comm.sendDoubles(vLeft,vRight,getDbTagData(),CommMetaData(1));
+    int res= comm.sendDoubles(v,R,Tang,getDbTagData(),CommMetaData(0));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
-int XC::InternalParamsLR::recvData(const Communicator &comm)
+int XC::InternalParamsA::recvData(const Communicator &comm)
   {
-    int res= InternalParamsA::recvData(comm);
-    res+= comm.receiveDoubles(vLeft,vRight,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveDoubles(v,R,Tang,getDbTagData(),CommMetaData(0));
     return res;
   }
 
 //! @brief Sends object through the communicator argument.
-int XC::InternalParamsLR::sendSelf(Communicator &comm)
+int XC::InternalParamsA::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(2); 
+    inicComm(1); 
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "InternalParamsLR::sendSelf - failed to send data.\n";
+      std::cerr << "InternalParamsA::sendSelf - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object through the communicator argument.
-int XC::InternalParamsLR::recvSelf(const Communicator &comm)
+int XC::InternalParamsA::recvSelf(const Communicator &comm)
   {
-    inicComm(2);
+    inicComm(1);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "InternalParamsLR::recvSelf - failed to receive ids.\n";
+      std::cerr << "InternalParamsA::recvSelf - failed to receive ids.\n";
     else
       {
         res+= recvData(comm);
         if(res<0)
-           std::cerr << "InternalParamsLR::recvSelf - failed to receive data.\n";
+           std::cerr << "InternalParamsA::recvSelf - failed to receive data.\n";
       }
     return res;
   }

@@ -46,7 +46,7 @@
 // Description: This file contains the class implementation for XC::TzSimple1
 
 #include <cstdlib>
-#include "material/uniaxial/PY/TzSimple1.h"
+#include "material/uniaxial/soil_structure_interaction/TzSimple1.h"
 #include <utility/matrix/Vector.h>
 
 #include <cmath>

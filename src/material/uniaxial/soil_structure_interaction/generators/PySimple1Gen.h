@@ -27,7 +27,7 @@
 //----------------------------------------------------------------------------
 //$Revision: 1.4 $
 //$Date: 2004/06/30 00:27:40 $
-//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/generators/PySimple1Gen.h,v $
+//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/soil_structure_interaction/generators/PySimple1Gen.h,v $
 
 #ifndef PYSIMPLE1GEN_H
 #define PYSIMPLE1GEN_H

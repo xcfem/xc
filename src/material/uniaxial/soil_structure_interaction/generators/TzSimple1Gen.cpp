@@ -38,7 +38,7 @@
 
 //$Revision: 1.4 $
 //$Date: 2004/06/30 00:27:40 $
-//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/generators/TzSimple1Gen.cpp,v $
+//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/soil_structure_interaction/generators/TzSimple1Gen.cpp,v $
 
 #include "TzSimple1Gen.h"
 #include <iostream>

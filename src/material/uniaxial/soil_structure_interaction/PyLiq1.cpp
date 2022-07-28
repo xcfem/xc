@@ -45,7 +45,7 @@
 //
 // Description: This file contains the class implementation for XC::PyLiq1
 
-#include <material/uniaxial/PY/PyLiq1.h>
+#include <material/uniaxial/soil_structure_interaction/PyLiq1.h>
 #include <material/nD/NDMaterial.h>
 #include <utility/matrix/Vector.h>
 

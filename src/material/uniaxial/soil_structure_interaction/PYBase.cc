@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //PYBase.cc
 
-#include "material/uniaxial/PY/PYBase.h"
+#include "material/uniaxial/soil_structure_interaction/PYBase.h"
 
 
 /////////////////////////////////////////////////////////////////////

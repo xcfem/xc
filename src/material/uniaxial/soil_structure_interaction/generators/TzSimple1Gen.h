@@ -27,7 +27,7 @@
 //----------------------------------------------------------------------------
 //$Revision: 1.4 $
 //$Date: 2004/06/30 00:27:40 $
-//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/generators/TzSimple1Gen.h,v $
+//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/soil_structure_interaction/generators/TzSimple1Gen.h,v $
 
 #ifndef TZSIMPLE1GEN_H
 #define TZSIMPLE1GEN_H
