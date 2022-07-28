@@ -720,8 +720,8 @@ python tests/materials/xc_materials/uniaxial/test_cable_material05.py
 python tests/materials/xc_materials/uniaxial/test_cable_material06.py
 python tests/materials/xc_materials/uniaxial/test_cable_material07.py
 python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
-echo "$BLEU" "      PY materials." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/py_simple1_test.py
+echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 #nD Materials
 echo "$BLEU" "      nD materials tests." "$NORMAL"
 python tests/materials/xc_materials/nD/test_elastic_isotropic_plane_strain_2d_01.py

@@ -73,7 +73,7 @@ if(error<1e-10):
 else:
     lmsg.error(fname+' ERROR.')
 
-###   FIGURES & REPORTS
-#import matplotlib.pyplot as plt
-#plt.plot(strains,stresses)
-#plt.show()
+# #  FIGURES & REPORTS
+# import matplotlib.pyplot as plt
+# plt.plot(strains,stresses)
+# plt.show()
