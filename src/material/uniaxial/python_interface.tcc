@@ -43,12 +43,15 @@ class_<XC::UniaxialMaterial,XC::UniaxialMaterial *, bases<XC::Material>, boost::
 
 class_<XC::ElasticBaseMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("ElasticBaseMaterial", no_init)
     .add_property("E", &XC::ElasticBaseMaterial::getE, &XC::ElasticBaseMaterial::setE)
-       ;
+  ;
 
 class_<XC::ElasticMaterial, bases<XC::ElasticBaseMaterial> >("ElasticMaterial")
-       ;
+  ;
 
-class_<XC::ENTMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("ENTMaterial", no_init);
+class_<XC::ENTMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("ENTMaterial", no_init)
+  .add_property("a", &XC::ENTMaterial::getA, &XC::ENTMaterial::setA,"Get/set the a parameter of the material.")
+  .add_property("b", &XC::ENTMaterial::getB, &XC::ENTMaterial::setB,"Get/set the a parameter of the material.")
+  ;
 
 class_<XC::EPPBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("EPPBaseMaterial", no_init);
 

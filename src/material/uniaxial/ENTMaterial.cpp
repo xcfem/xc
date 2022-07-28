@@ -103,6 +103,15 @@ double XC::ENTMaterial::getTangent(void) const
 XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
   { return new ENTMaterial(*this); }
 
+double XC::ENTMaterial::getA(void) const
+  { return a; }
+void XC::ENTMaterial::setA(const double &aa)
+  { a= aa; }
+double XC::ENTMaterial::getB(void) const
+  { return b; }
+void XC::ENTMaterial::setB(const double &bb)
+  { b= bb; }
+
 //! @brief Send object members through the communicator argument.
 int XC::ENTMaterial::sendData(Communicator &comm)
   {

@@ -242,7 +242,7 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::Concrete02(tag_mat);
     else if(cmd == "concrete04_material")
       retval= new XC::Concrete04(tag_mat);
-    else if(cmd == "elast_no_trac_material")
+    else if(cmd == "elastic_no_traction_material")
       retval= new XC::ENTMaterial(tag_mat);
     else if(cmd == "epp_gap_material")
       retval= new XC::EPPGapMaterial(tag_mat);

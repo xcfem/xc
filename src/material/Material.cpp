@@ -65,6 +65,25 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
 
+//! @param matName: name of the material.
+const XC::Material *XC::Material::get_material_ptr(const std::string &matName) const
+  {
+    const Material *retval= nullptr; 
+    const MaterialHandler *material_handler= getMaterialHandler();
+    if(material_handler)
+      retval= material_handler->find_ptr(matName);
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor." << std::endl;
+      }
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		<< "material identified by: '" << matName
+		<< "' not found.\n";      
+    return retval;
+  }
+
 //! @brief Constructor.
 //!
 //! To construct a material whose unique identifier among materials in the

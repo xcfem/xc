@@ -58,7 +58,6 @@ class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std
     int sendData(Communicator &);  
     int recvData(const Communicator &);
 
-
   public:
     DqUniaxialMaterial(CommandEntity *owner= nullptr,const size_t &sz= 0);
     DqUniaxialMaterial(CommandEntity *owner,const UniaxialMaterial &);

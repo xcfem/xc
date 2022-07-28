@@ -71,7 +71,8 @@ XC::ConnectedMaterial::ConnectedMaterial(int tag, int classTag,const DqUniaxialM
 
 //! @brief Default constructor.
 XC::ConnectedMaterial::ConnectedMaterial(int tag, int classTag)
-  :UniaxialMaterial(tag,classTag), theModels(this) {}
+  :UniaxialMaterial(tag,classTag), theModels()
+  { theModels.set_owner(this); }
 
 XC::ConnectedMaterial::ConnectedMaterial(const ConnectedMaterial &other)
   :UniaxialMaterial(other), theModels(other.theModels)
@@ -85,6 +86,27 @@ XC::ConnectedMaterial &XC::ConnectedMaterial::operator=(const ConnectedMaterial 
     return *this;
   }
 
+//! @brief Append a connected material.
+//!
+//! @param dir: direction 
+void XC::ConnectedMaterial::appendMaterial(const std::string &matName)
+  {
+    const Material *ptr_mat= get_material_ptr(matName);
+    if(ptr_mat)
+      {
+	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
+	if(tmp)
+	  theModels.push_back(tmp);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		    << "material identified by: '" << matName
+		    << "' is not an uniaxial material.\n";
+      }
+  }
+
+//! @brief Return the number of connected materials.
+size_t XC::ConnectedMaterial::getNumMaterials(void) const
+  { return theModels.size(); }
 
 //! @brief Send its members through the communicator argument.
 int XC::ConnectedMaterial::sendData(Communicator &comm)

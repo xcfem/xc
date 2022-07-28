@@ -47,6 +47,9 @@ class ConnectedMaterial: public UniaxialMaterial
     ConnectedMaterial(const ConnectedMaterial &);
     ConnectedMaterial &operator=(const ConnectedMaterial &);
 
+    void appendMaterial(const std::string &);
+    size_t getNumMaterials(void) const;
+    
     int sendData(Communicator &);  
     int recvData(const Communicator &);
 // AddingSensitivity:BEGIN //////////////////////////////////////////

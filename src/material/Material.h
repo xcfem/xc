@@ -91,6 +91,8 @@ class ID;
 //! in the domain. 
 class Material: public TaggedObject, public MovableObject
   {
+  protected:
+    const Material *get_material_ptr(const std::string &) const;    
   public:
     Material(int tag, int classTag);
 

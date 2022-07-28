@@ -87,6 +87,11 @@ class ENTMaterial: public ElasticBaseMaterial
     double getStress(void) const;
     double getTangent(void) const;
 
+    double getA(void) const;
+    void setA(const double &);
+    double getB(void) const;
+    void setB(const double &);
+
     UniaxialMaterial *getCopy(void) const;
         
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

@@ -107,7 +107,7 @@ def defElastNoTensMaterial(preprocessor,name,E):
     :param E:            tangent in the elastic zone of the stress-strain diagram
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elast_no_trac_material",name)
+    retval= materialHandler.newMaterial("elastic_no_traction_material",name)
     retval.E= E
     return retval
 
@@ -558,7 +558,7 @@ def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("membrane_plate_fiber_section",name)
-    retval.setMaterial(nDMaterial);
+    retval.setMaterial(nDMaterial)
     retval.h= h
     return retval
 
@@ -573,6 +573,18 @@ def defMultiLinearMaterial(preprocessor,name,points):
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("multi_linear",name)
     retval.setValues(points)
+    return retval
+
+def defSeriesMaterial(preprocessor, name, materialsToConnect):
+    '''Constructs an elastic perfectly-plastic uniaxial material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param materialsToConnect: name of the materials to be connected.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("series_material",name)
+    for matName in materialsToConnect:
+        retval.append(matName)
     return retval
 
 class MaterialData(BasicElasticMaterial):

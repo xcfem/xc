@@ -207,7 +207,8 @@ void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
   { 
     // check that vectors for orientation are correct size
     if(x.Size() != 3 || yp.Size() != 3 )
-      std::cerr << "Element0D::setUp -- incorrect dimension of orientation vectors\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; incorrect dimension of orientation vectors\n";
 			
     // establish orientation of element for the transformation matrix
     // z = x cross yp

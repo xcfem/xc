@@ -189,9 +189,16 @@ class SolutionProcedure(object):
         self.integratorSetup(integratorType)
         if(self.convTestType):
             self.ctest= self.solutionStrategy.newConvergenceTest(self.convTestType)
-            self.ctest.tol= self.convergenceTestTol
-            self.ctest.maxNumIter= self.maxNumIter
-            self.ctest.printFlag= self.printFlag
+            if(self.ctest):
+                self.ctest.tol= self.convergenceTestTol
+                self.ctest.maxNumIter= self.maxNumIter
+                self.ctest.printFlag= self.printFlag
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; something went wrong: '+str(self.convTestType) + ' seems not to be valid convergence test type.')
+                exit(1)
+                
 
     def getConvergenceTest(self):
         ''' Return the convergence test.'''
@@ -1094,6 +1101,45 @@ def plain_krylov_newton(prb, maxNumIter= 300, convergenceTestTol= 1e-9, printFla
     solProc= PlainKrylovNewton(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, maxDim= 6)
     solProc.setup()
     return solProc.analysis
+
+class PenaltyKrylovNewton(SolutionProcedure):
+    ''' KrylovNewton algorithm object which uses a Krylov subspace 
+        accelerator to accelerate the convergence of the modified 
+        newton method.
+
+    See appendix C. Analysis model script of the document
+    "Finite Element Modeling of Gusset Plate Failure Using Opensees"
+    Andrew J. Walker. Oregon State University
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', maxDim= 6):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
+        '''
+        super(PenaltyKrylovNewton,self).__init__(name, 'penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver')
+        self.feProblem= prb
+        self.maxDim= maxDim
+        self.setPenaltyFactors()
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(PenaltyKrylovNewton,self).setup()
+        self.solutionAlgorithmSetup(solAlgType= 'krylov_newton_soln_algo', integratorType= 'load_control_integrator')
+        self.integrator.dLambda1= 1.0/self.numSteps
+        self.solAlgo.maxDimension= self.maxDim
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+
 
 ## Dynamic analysis        
 class PlainLinearNewmark(SolutionProcedure):
