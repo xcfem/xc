@@ -34,6 +34,7 @@
 #include "material/uniaxial/CableMaterial.h"
 #include "material/uniaxial/ENTMaterial.h"
 #include "material/uniaxial/MinMaxMaterial.h"
+#include "material/uniaxial/MultiLinear.h"
 
 //PY springs: RWBoulanger and BJeremic
 #include "material/uniaxial/soil_structure_interaction/PySimple1.h"

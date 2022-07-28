@@ -562,6 +562,19 @@ def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
     retval.h= h
     return retval
 
+def defMultiLinearMaterial(preprocessor,name,points):
+    '''Constructs an elastic perfectly-plastic uniaxial material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name:         name identifying the material
+    :param points:       list of tuples defining the (strain, stress) or
+                         (displacement, force) points.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("multi_linear",name)
+    retval.setValues(points)
+    return retval
+
 class MaterialData(BasicElasticMaterial):
     '''Base class to construct some material definition classes
 

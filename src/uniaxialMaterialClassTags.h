@@ -104,4 +104,6 @@
 #define MAT_TAG_BiLinear	                64
 #define MAT_TAG_Pinching	                65
 
+#define MAT_TAG_MultiLinear		       152
+
 #endif

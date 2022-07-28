@@ -45,6 +45,7 @@
 #include "material/uniaxial/HardeningMaterial.h"
 #include "material/uniaxial/HystereticMaterial.h"
 #include "material/uniaxial/MinMaxMaterial.h"
+#include "material/uniaxial/MultiLinear.h"
 #include "material/uniaxial/NewUniaxialMaterial.h"
 #include "material/uniaxial/connected/ParallelMaterial.h"
 #include "material/uniaxial/connected/SeriesMaterial.h"
@@ -227,6 +228,7 @@ XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
 //! - steel01: Steel01 material.
 //! - steel02: Steel02 material.
 //! - steel03: Steel03 material.
+//! - multi_linear: MultiLinear material.
 XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
@@ -274,6 +276,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::Steel03(tag_mat);
     else if(cmd == "viscous_material")
       retval= new XC::ViscousMaterial(tag_mat);
+    else if(cmd == "multi_linear")
+      retval= new XC::MultiLinear(tag_mat);
     return retval;
   }
 

@@ -26,7 +26,7 @@ from materials import typical_materials
 E= 2.0e11 # Young modulus.
 l= 1.44 # Bar length in inches.
 A= 31e-4 # Beam cross-section area.
-h= math.sqrt(A) # Beam cross-section depth.
+h= 2.0*math.sqrt(A/math.pi) # Beam cross-section depth.
 I= 2810e-8 # Inertia of the beam section.
 sry= 2.42 # Shear coefficient.
 Ay= A/sry

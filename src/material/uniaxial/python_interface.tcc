@@ -71,6 +71,11 @@ class_<XC::EncapsulatedMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable
 
 class_<XC::MinMaxMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("MinMaxMaterial", no_init);
 
+class_<XC::MultiLinear, bases<XC::UniaxialMaterial>, boost::noncopyable >("MultiLinear", no_init)
+  .def("setValues", &XC::MultiLinear::setupPyList,"Set values using a list of tuples [(u1, f1), (u2,f2),...].")
+  .add_property("numPoints", &XC::MultiLinear::getNumPoints,"Return the number of points used to define the material.")
+  ;
+
 class_<XC::PathIndependentMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("PathIndependentMaterial", no_init);
 
 //class_<XC::BarSlipMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("BarSlipMaterial", no_init);
