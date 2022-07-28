@@ -67,11 +67,11 @@
 #include "material/uniaxial/fedeas/FedeasSteel1Material.h"
 #include "material/uniaxial/fedeas/FedeasSteel2Material.h"
 
-#include "material/uniaxial/PY/PySimple1.h"
-#include "material/uniaxial/PY/QzSimple1.h"
-#include "material/uniaxial/PY/TzSimple1.h"
-#include "material/uniaxial/PY/PyLiq1.h"
-#include "material/uniaxial/PY/TzLiq1.h"
+#include "material/uniaxial/soil_structure_interaction/PySimple1.h"
+#include "material/uniaxial/soil_structure_interaction/QzSimple1.h"
+#include "material/uniaxial/soil_structure_interaction/TzSimple1.h"
+#include "material/uniaxial/soil_structure_interaction/PyLiq1.h"
+#include "material/uniaxial/soil_structure_interaction/TzLiq1.h"
 
 #include "material/uniaxial/snap/Bilinear.h"
 #include "material/uniaxial/snap/Clough.h"

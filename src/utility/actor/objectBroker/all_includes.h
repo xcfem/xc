@@ -36,16 +36,16 @@
 #include "material/uniaxial/MinMaxMaterial.h"
 
 //PY springs: RWBoulanger and BJeremic
-#include "material/uniaxial/PY/PySimple1.h"
-#include "material/uniaxial/PY/TzSimple1.h"
-#include "material/uniaxial/PY/QzSimple1.h"
-#include "material/uniaxial/PY/PyLiq1.h"
-#include "material/uniaxial/PY/TzLiq1.h"
-#include "material/uniaxial/PY/generators/PySimple1Gen.h"
-#include "material/uniaxial/PY/generators/TzSimple1Gen.h"
-//#include "material/uniaxial/PY/PySimple2.h"
-//#include "material/uniaxial/PY/TzSimple2.h"
-//#include "material/uniaxial/PY/QzSimple2.h"
+#include "material/uniaxial/soil_structure_interaction/PySimple1.h"
+#include "material/uniaxial/soil_structure_interaction/TzSimple1.h"
+#include "material/uniaxial/soil_structure_interaction/QzSimple1.h"
+#include "material/uniaxial/soil_structure_interaction/PyLiq1.h"
+#include "material/uniaxial/soil_structure_interaction/TzLiq1.h"
+#include "material/uniaxial/soil_structure_interaction/generators/PySimple1Gen.h"
+#include "material/uniaxial/soil_structure_interaction/generators/TzSimple1Gen.h"
+//#include "material/uniaxial/soil_structure_interaction/PySimple2.h"
+//#include "material/uniaxial/soil_structure_interaction/TzSimple2.h"
+//#include "material/uniaxial/soil_structure_interaction/QzSimple2.h"
 
 
 #include "material/uniaxial/fedeas/FedeasBond1Material.h"
