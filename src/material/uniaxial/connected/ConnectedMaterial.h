@@ -39,6 +39,8 @@ namespace XC{
 //! @brief Connected uniaxial materials (parallel or serial).
 class ConnectedMaterial: public UniaxialMaterial
   {
+  private:
+    void appendMaterial(const std::string &);
   protected:
     DqUniaxialMaterial theModels; //!< an array of pointers to the UniaxialMaterials
   public:
@@ -47,7 +49,7 @@ class ConnectedMaterial: public UniaxialMaterial
     ConnectedMaterial(const ConnectedMaterial &);
     ConnectedMaterial &operator=(const ConnectedMaterial &);
 
-    void appendMaterial(const std::string &);
+    virtual void setMaterials(const boost::python::list &);
     size_t getNumMaterials(void) const;
     
     int sendData(Communicator &);  

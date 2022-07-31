@@ -104,6 +104,17 @@ void XC::ConnectedMaterial::appendMaterial(const std::string &matName)
       }
   }
 
+//! @brief Set the connected materials.
+void XC::ConnectedMaterial::setMaterials(const boost::python::list &materialsToConnect)
+  {
+    const size_t sz= len(materialsToConnect);
+    for(size_t i=0; i<sz; i++)
+      {
+	const std::string matName= boost::python::extract<std::string>(materialsToConnect[i]);
+	appendMaterial(matName);
+      }
+  }
+
 //! @brief Return the number of connected materials.
 size_t XC::ConnectedMaterial::getNumMaterials(void) const
   { return theModels.size(); }

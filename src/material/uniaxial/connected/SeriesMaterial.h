@@ -68,17 +68,17 @@ namespace XC {
 class SeriesMaterial: public ConnectedMaterial
   {
   private:
-    double Tstrain;
-    double Cstrain;
+    double Tstrain; //!< Trial strain.
+    double Cstrain; //!< Commited strain.
 
-    double Tstress;
-    double Cstress;
+    double Tstress; //!< Trial stress.
+    double Cstress; //!< Commited stress.
 
-    double Ttangent;
-    double Ctangent;
+    double Ttangent; //!< Trial tangent stiffness.
+    double Ctangent; //!< Commited tangent stiffness.
 
-    int maxIterations;
-    double tolerance;
+    int maxIterations; //!< Maximum number of iterations.
+    double tolerance; //!< Error tolerance.
 
     std::vector<double> stress;
     std::vector<double> flex;
@@ -89,11 +89,14 @@ class SeriesMaterial: public ConnectedMaterial
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    void setup(void);
   public:
     SeriesMaterial(int tag,const DqUniaxialMaterial &theMaterials, int maxIter = 1, double tol = 1.0e-10);
     SeriesMaterial(int tag= 0);
 
 
+    virtual void setMaterials(const boost::python::list &);
+    
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStrain(void) const;          
     double getStress(void) const;

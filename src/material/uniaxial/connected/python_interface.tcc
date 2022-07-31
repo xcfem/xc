@@ -23,7 +23,7 @@
 
 class_<XC::ConnectedMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("ConnectedMaterial", no_init)
   .add_property("numMaterials", &XC::ConnectedMaterial::getNumMaterials,"Return the number of connected materials.")
-  .def("append",&XC::ConnectedMaterial::appendMaterial)
+  .def("setMaterials",&XC::ConnectedMaterial::setMaterials)
   ;
 
 class_<XC::ParallelMaterial, bases<XC::ConnectedMaterial>, boost::noncopyable >("ParallelMaterial", no_init);

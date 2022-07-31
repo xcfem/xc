@@ -64,20 +64,38 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include "boost/lexical_cast.hpp"
 
+
+//! @brief Prepare object members.
+void XC::SeriesMaterial::setup(void)
+  {
+    const size_t numMaterials= getNumMaterials();
+    strain.resize(numMaterials);
+    stress.resize(numMaterials);
+    flex.resize(numMaterials);
+    for(size_t i = 0; i < numMaterials; i++)
+      {
+        strain[i]= 0.0;
+        stress[i]= 0.0;
+        flex[i]= 0.0;
+      }
+    Ttangent= this->getInitialTangent();
+    Ctangent= Ttangent;
+    maxIterations= std::max(maxIterations, 1);
+  }
+
+//! @brief Set the materials in the serie.
+void XC::SeriesMaterial::setMaterials(const boost::python::list &materialsToConnect)
+  {
+    ConnectedMaterial::setMaterials(materialsToConnect);
+    setup();
+  }
+
 XC::SeriesMaterial::SeriesMaterial(int tag,const DqUniaxialMaterial &theMaterialModels,int maxIter, double tol)
-  :ConnectedMaterial(tag,MAT_TAG_SeriesMaterial,theMaterialModels),
+  : ConnectedMaterial(tag,MAT_TAG_SeriesMaterial,theMaterialModels),
    Tstrain(0.0), Cstrain(0.0), Tstress(0.0), Cstress(0.0),
    Ttangent(0.0), Ctangent(0.0), maxIterations(maxIter), tolerance(tol),
    stress(theMaterialModels.size()), flex(theMaterialModels.size()), strain(theMaterialModels.size()), initialFlag(false)
-  {
-    const size_t numMaterials= theMaterialModels.size();
-    for( size_t i = 0; i < numMaterials; i++)
-      {
-        strain[i] = 0.0;
-        stress[i] = 0.0;
-        flex[i] = 0.0;
-      }
-  }
+  { setup(); }
 
 XC::SeriesMaterial::SeriesMaterial(int tag)
   :ConnectedMaterial(tag,MAT_TAG_SeriesMaterial),
@@ -91,69 +109,68 @@ int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
   {
     // Using the incremental iterative strain
     double dv = newStrain-Tstrain;
-
-    Tstrain = newStrain;
-
-    // Stress increment using tangent at last iteration
-    double dq = Ttangent*dv;
-
-    // Update stress 
-    Tstress += dq;
-
-    for(int j = 0; j < maxIterations; j++)
+    if(fabs(dv)>=DBL_EPSILON)
       {
-        // Set to zero for integration
-        double f = 0.0;
-        double vr = 0.0;
-        const size_t numMaterials= theModels.size();
-        for(size_t i = 0; i < numMaterials; i++)
-          {
-            // Stress unbalance in material i
-            double ds = Tstress - stress[i];
-            // Strain increment
-            double de = flex[i]*ds;
-            if(initialFlag == true)
-              strain[i] += de;
+	Tstrain= newStrain;
+	// Stress increment using tangent at last iteration
+	double dq = Ttangent*dv;
+	// Update stress 
+	Tstress += dq;
+	for(int j = 0; j < maxIterations; j++)
+	  {
+	    // Set to zero for integration
+	    double f= 0.0;
+	    double vr= 0.0;
+	    const size_t numMaterials= theModels.size();
+	    for(size_t i = 0; i < numMaterials; i++)
+	      {
+		// Stress unbalance in material i
+		double ds= Tstress - stress[i];
+		// Strain increment
+		double de= flex[i]*ds;
+		if(initialFlag == true)
+		  strain[i] += de;
 
-            // Update material i
-            theModels[i]->setTrialStrain(strain[i]);
-            // Get updated stress from material i
-            stress[i]= theModels[i]->getStress();
+		// Update material i
+		theModels[i]->setTrialStrain(strain[i]);
+		// Get updated stress from material i
+		stress[i]= theModels[i]->getStress();
 
-            // Get updated flexibility from material i
-            flex[i] = theModels[i]->getTangent();
-            if(fabs(flex[i]) > 1.0e-12)
-              flex[i] = 1.0/flex[i];
-            else
-              flex[i] = (flex[i] < 0.0) ? -1.0e12 : 1.0e12;
+		// Get updated flexibility from material i
+		flex[i] = theModels[i]->getTangent();
+		if(fabs(flex[i]) > 1.0e-12)
+		  flex[i] = 1.0/flex[i];
+		else
+		  flex[i] = (flex[i] < 0.0) ? -1.0e12 : 1.0e12;
 
-            // Stress unbalance in material i
-            ds = Tstress - stress[i];
-            // Residual strain in material i
-            de = flex[i]*ds;
+		// Stress unbalance in material i
+		ds = Tstress - stress[i];
+		// Residual strain in material i
+		de = flex[i]*ds;
 
-            // Integrate flexibility ...
-            f+= flex[i];
+		// Integrate flexibility ...
+		f+= flex[i];
 
-            // ... and integrate residual strain
-            vr += strain[i] + de;
-          }
-        // Updated series tangent
-        if(fabs(f) > 1.0e-12)
-          Ttangent = 1.0/f;
-        else
-          Ttangent = (f < 0.0) ? -1.0e12 : 1.0e12;
+		// ... and integrate residual strain
+		vr += strain[i] + de;
+	      }
+	    // Updated series tangent
+	    if(fabs(f) > 1.0e-12)
+	      Ttangent = 1.0/f;
+	    else
+	      Ttangent = (f < 0.0) ? -1.0e12 : 1.0e12;
 
-        // Residual deformation
-        dv = Tstrain - vr;
-        // Stress increment
-        dq = Ttangent*dv;
-        if(fabs(dq*dv) < tolerance)
-          break;
+	    // Residual deformation
+	    dv = Tstrain - vr;
+	    // Stress increment
+	    dq = Ttangent*dv;
+	    if(fabs(dq*dv) < tolerance)
+	      break;
+	  }
+	// Updated stress
+	Tstress+= dq;
+	initialFlag = true;
       }
-    // Updated stress
-    Tstress += dq;
-    initialFlag = true;
     return 0;
   }
 
