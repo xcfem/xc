@@ -583,8 +583,7 @@ def defSeriesMaterial(preprocessor, name, materialsToConnect):
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("series_material",name)
-    for matName in materialsToConnect:
-        retval.append(matName)
+    retval.setMaterials(materialsToConnect)
     return retval
 
 class MaterialData(BasicElasticMaterial):
