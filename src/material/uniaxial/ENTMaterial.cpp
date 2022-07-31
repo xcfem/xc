@@ -89,7 +89,7 @@ double XC::ENTMaterial::getStress(void) const
 //! @brief Returns elastic modulus.
 double XC::ENTMaterial::getTangent(void) const
   {
-    if(trialStrain<0.0)
+    if(trialStrain<=0.0)
       return E;
     else if(a == 0.0)
       return 0.0;

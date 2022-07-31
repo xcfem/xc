@@ -52,6 +52,7 @@ err= math.sqrt(err)
 
 '''
 print(seriesMaterial.numMaterials)
+print(strainValues)
 print(stresses)
 print(err)
 '''
@@ -65,15 +66,15 @@ else:
     lmsg.error(fname+' ERROR.')
 
 # FIGURES & REPORTS
-# import matplotlib.pyplot as plt
-# plt.title(fname)
-# plt.xlabel('index')
-# plt.ylabel('strain')
-# xi= range(0, len(strainValues))
-# plt.plot(xi, strainValues, color= 'blue')
-# plt.show()
+import matplotlib.pyplot as plt
+plt.title(fname)
+plt.xlabel('index')
+plt.ylabel('strain')
+xi= range(0, len(strainValues))
+plt.plot(xi, strainValues, color= 'blue')
+plt.show()
 
-# plt.xlabel('strain')
-# plt.ylabel('stress')
-# plt.plot(strainValues,stresses, color= 'blue')
-# plt.show()
+plt.xlabel('strain')
+plt.ylabel('stress')
+plt.plot(strainValues,stresses, color= 'blue')
+plt.show()
