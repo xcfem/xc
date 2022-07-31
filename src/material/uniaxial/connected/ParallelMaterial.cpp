@@ -150,6 +150,7 @@ int XC::ParallelMaterial::commitState(void)
     return theModels.commitState();
   }
 
+//! @brief Return to the last commited state.
 int XC::ParallelMaterial::revertToLastCommit(void)
   {
     // invoke commitState() on each of local MaterialModel objects
@@ -238,7 +239,7 @@ XC::Response *XC::ParallelMaterial::setResponse(const std::vector<std::string> &
     const size_t numMaterials= theModels.size();
     const size_t argc= argv.size();
     if(argv[0] == "stresses")
-      return new MaterialResponse(this, 100, XC::Vector(numMaterials));
+      return new MaterialResponse(this, 100, Vector(numMaterials));
     else if(argv[0] == "material" || argv[0] == "component")
       {
         if(argc > 1)

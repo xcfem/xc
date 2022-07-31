@@ -596,7 +596,7 @@ void XC::SectionAggregator::Print(std::ostream &s, int flag) const
 XC::Response *XC::SectionAggregator::setResponse(const std::vector<std::string> &argv, Information &info)
   {
     // See if the response is one of the defaults
-    Response *res= XC::PrismaticBarCrossSection::setResponse(argv,info);
+    Response *res= PrismaticBarCrossSection::setResponse(argv,info);
     if(res != 0)
       return res;
   

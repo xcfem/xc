@@ -49,7 +49,8 @@ XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag, UniaxialMa
     copy(&material);
     if(!theMaterial)
       {
-        std::cerr <<  "EncapsulatedMaterial::EncapsulatedMaterial -- failed to get copy of material\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  <<  "; failed to get copy of material\n";
         exit(-1);
       }
   }
