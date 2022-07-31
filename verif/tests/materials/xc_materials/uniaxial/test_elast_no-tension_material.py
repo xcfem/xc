@@ -26,18 +26,18 @@ feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 # Define materials
+ent= typical_materials.defElastNoTensMaterial(preprocessor, "ent",E)
+
 sIni= -0.01
 sFin= 0.01
 incr= ((sFin-sIni)/Nsteps)
-ent= typical_materials.defElastNoTensMaterial(preprocessor, "ent",E)
-
 j=sIni
 while(j<=sFin):
-  ent.setTrialStrain(j,0.0)
-  ent.commitState()
-  lStrain.append(ent.getStrain())
-  lStress.append(ent.getStress())
-  j= j+incr 
+    ent.setTrialStrain(j,0.0)
+    ent.commitState()
+    lStrain.append(ent.getStrain())
+    lStress.append(ent.getStress())
+    j= j+incr 
 
 
 diff_strain= []
@@ -71,3 +71,17 @@ if (ratio1 < 1e-15) & (ratio2 < 1e-15):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# FIGURES & REPORTS
+# import matplotlib.pyplot as plt
+# plt.title(fname)
+# plt.xlabel('index')
+# plt.ylabel('strain')
+# xi= range(0, len(lStrain))
+# plt.plot(xi, lStrain, color= 'blue')
+# plt.show()
+
+# plt.xlabel('strain')
+# plt.ylabel('stress')
+# plt.plot(lStrain,lStress, color= 'blue')
+# plt.show()
