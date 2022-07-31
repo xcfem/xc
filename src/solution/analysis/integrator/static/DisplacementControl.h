@@ -127,9 +127,17 @@ class DisplacementControl: public DispBase
       { theDof= dof; }
     inline int getDof(void) const
       { return theDof; }
+    
     void setIncrement(const double &);
     inline double getIncrement(void) const
       { return theIncrement; }
+    void setMinIncrement(const double &);
+    inline double getMinIncrement(void) const
+      { return minIncrement; }
+    void setMaxIncrement(const double &);
+    inline double getMaxIncrement(void) const
+      { return maxIncrement; }
+    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 

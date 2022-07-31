@@ -167,6 +167,16 @@ class SolutionProcedure(object):
             self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
         elif(integratorType=='newmark_integrator'):
             self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([0.5,0.25]))
+        elif(integratorType=='displacement_control_integrator'):
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
+            self.integrator.nodeTag= self.dispControlNode.tag
+            self.integrator.dof= self.dispControlDof
+            self.integrator.increment= self.dispControlIncrement
+            
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; integrator type: '+str(integratorType)+' unknown.')
 
     def getSolutionStrategyName(self):
         ''' Return the name for the model wrapper.'''
@@ -484,7 +494,7 @@ def plain_newton_raphson(prb, maxNumIter= 10, convergenceTestTol= 1e-9):
     return solProc.analysis
 
 class PlainNewtonRaphsonBandGen(SolutionProcedure):
-    ''' Newton-Raphson solution algorithm with a s
+    ''' Newton-Raphson solution algorithm with a
         plain constraint handler and a band general
         SOE solver.
     '''
@@ -1457,3 +1467,72 @@ class LinearBucklingAnalysis(object):
         return self.analysis.analyze(self.numModes)
 
     
+# Displacement control analysis.
+class DisplacementControlBase(SolutionProcedure):
+    ''' Base class for displacement control analysis.
+
+    :ivar dispControlNode: node whose response controls solution.
+    :ivar dispControlDof: degree of freedom that controls solution.
+    :ivar dispControlIncrement: first displacement increment.
+    '''
+    def __init__(self, prb, node, dof, increment, numSteps, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numberingMethod, convTestType, soeType, solverType):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param node: node whose response controls solution.
+        :param dof: degree of freedom that controls solution.
+        :param increment: first displacement increment.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        '''
+        super().__init__(name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType)
+        self.feProblem= prb
+        self.dispControlNode= node
+        self.dispControlDof= dof
+        self.dispControlIncrement= increment
+        
+    def setup(self, solAlgType):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super().setup()
+        self.solutionAlgorithmSetup(solAlgType= solAlgType, integratorType= 'displacement_control_integrator')
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+        
+class SimpleNewtonRaphsonDisplacementControl(DisplacementControlBase):
+    ''' Newton-Raphson solution algorithm with a
+        plain constraint handler and a band general
+        SOE solver.
+    '''
+    def __init__(self, prb, node, dof, increment, numSteps, name= None, maxNumIter= 10, convergenceTestTol= 1e-12, printFlag= 0, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param node: node whose response controls solution.
+        :param dof: degree of freedom that controls solution.
+        :param increment: first displacement increment.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        '''
+        super().__init__(prb= prb, node= node, dof= dof, increment= increment, name= name, constraintHandlerType= 'transformation', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
+        self.feProblem= prb
+        self.dispControlNode= node
+        self.dispControlDof= dof
+        self.dispControlIncrement= increment
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super().setup(solAlgType= 'newton_raphson_soln_algo')

@@ -110,12 +110,35 @@ XC::DisplacementControl::~DisplacementControl(void)
       dom->setNodeReactionException(-1);
   }
 
+//! @brief Set displacement increment.
 void XC::DisplacementControl::setIncrement(const double &d)
   {
     theIncrement= d;
     //Update extrema.
     minIncrement= std::min(theIncrement,minIncrement);
     maxIncrement= std::max(theIncrement,maxIncrement);
+  }
+
+//! @brief Set the min stepsize the user will allow.
+void XC::DisplacementControl::setMinIncrement(const double &d)
+  {
+    minIncrement= d;
+    if(theIncrement<minIncrement)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING. Specified value for min increment: " << minIncrement
+	        << " greater than the specified increment: " << theIncrement
+	        << std::endl;
+  }
+
+//! @brief Set the max stepsize the user will allow.
+void XC::DisplacementControl::setMaxIncrement(const double &d)
+  {
+    maxIncrement= d;
+    if(theIncrement>maxIncrement)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING. Specified value for max increment: " << maxIncrement
+	        << " smaller than the specified increment: " << theIncrement
+	        << std::endl;
   }
 
 //! @brief Commits model state.

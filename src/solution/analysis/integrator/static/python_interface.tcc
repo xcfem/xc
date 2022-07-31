@@ -39,9 +39,12 @@ class_<XC::BaseControl , bases<XC::StaticIntegrator>, boost::noncopyable >("Base
 class_<XC::DispBase, bases<XC::BaseControl>, boost::noncopyable >("DispBase", no_init);
 
 class_<XC::DisplacementControl, bases<XC::DispBase>, boost::noncopyable >("DisplacementControl", no_init)
-  .add_property("nod",&XC::DisplacementControl::getNodeTag,&XC::DisplacementControl::setNodeTag,"assign/retrieve node tag value.")
+  .add_property("nodeTag",&XC::DisplacementControl::getNodeTag,&XC::DisplacementControl::setNodeTag,"assign/retrieve node tag value.")
   .add_property("dof",&XC::DisplacementControl::getDof,&XC::DisplacementControl::setDof,"assign/retrieve dof index.")
   .add_property("dU1",&XC::DisplacementControl::getIncrement,&XC::DisplacementControl::setIncrement,"assign/retrieve increment value.")
+  .add_property("increment",&XC::DisplacementControl::getIncrement,&XC::DisplacementControl::setIncrement,"assign/retrieve increment value.")
+  .add_property("minIncrement",&XC::DisplacementControl::getMinIncrement,&XC::DisplacementControl::setMinIncrement,"assign/retrieve the min stepsize the user will allow.")
+  .add_property("maxIncrement",&XC::DisplacementControl::getMaxIncrement,&XC::DisplacementControl::setMaxIncrement,"assign/retrieve the max stepsize the user will allow.")
   ;
 
 class_<XC::MinUnbalDispNorm, bases<XC::DispBase>, boost::noncopyable >("MinUnbalDispNorm", no_init);

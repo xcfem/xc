@@ -88,7 +88,6 @@ zl= elements.newElement("ZeroLengthSection",xc.ID([n1.tag,n2.tag]))
 modelSpace.fixNode000_000(n1.tag)
 
 # Loads definition
-# Load modulation.
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 lp1= modelSpace.newLoadPattern(name= '1')
@@ -96,6 +95,7 @@ lp2= modelSpace.newLoadPattern(name= '2')
 lp3= modelSpace.newLoadPattern(name= '3')
 lp4= modelSpace.newLoadPattern(name= '4')
 lp5= modelSpace.newLoadPattern(name= '5')
+# Load values.
 lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0,0,0,0]))
 lp1.newNodalLoad(n2.tag, xc.Vector([0,2*F,0,0,0,0]))
 lp2.newNodalLoad(n2.tag, xc.Vector([0,0,3*F,0,0,0]))

@@ -109,6 +109,8 @@ int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
   {
     // Using the incremental iterative strain
     double dv = newStrain-Tstrain;
+    std::cout << "****** newStrain= " << newStrain
+	      << " dv= " << dv << std::endl;
     if(fabs(dv)>=DBL_EPSILON)
       {
 	Tstrain= newStrain;
@@ -126,11 +128,14 @@ int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
 	      {
 		// Stress unbalance in material i
 		double ds= Tstress - stress[i];
+		std::cout << "i= " << i
+			  << " stress unbalance ds= " << ds << std::endl;
 		// Strain increment
 		double de= flex[i]*ds;
 		if(initialFlag == true)
-		  strain[i] += de;
-
+		  strain[i]+= de;
+		std::cout << "i= " << i
+			  << " strain increment de= " << de << std::endl;
 		// Update material i
 		theModels[i]->setTrialStrain(strain[i]);
 		// Get updated stress from material i
@@ -138,6 +143,9 @@ int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
 
 		// Get updated flexibility from material i
 		flex[i] = theModels[i]->getTangent();
+		std::cout << "i= " << i << " Tstrain= " << Tstrain
+		          << " strain[i]= " << strain[i]
+			  << " tangent: " << flex[i] << std::endl;
 		if(fabs(flex[i]) > 1.0e-12)
 		  flex[i] = 1.0/flex[i];
 		else
@@ -160,6 +168,8 @@ int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
 	    else
 	      Ttangent = (f < 0.0) ? -1.0e12 : 1.0e12;
 
+	    std::cout << "Ttangent= " << Ttangent << std::endl;
+
 	    // Residual deformation
 	    dv = Tstrain - vr;
 	    // Stress increment
@@ -169,6 +179,7 @@ int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
 	  }
 	// Updated stress
 	Tstress+= dq;
+	std::cout << "Tstress= " << Tstress << std::endl;
 	initialFlag = true;
       }
     return 0;
@@ -192,16 +203,21 @@ double XC::SeriesMaterial::getInitialTangent(void) const
     double k  = 0.0;
 
     const size_t numMaterials= theModels.size();
-    if(numMaterials != 0)
-    kf = theModels[0]->getInitialTangent();
-    for(size_t i=1; i<numMaterials; i++)
+    if(numMaterials>0)
       {
-        k = theModels[i]->getInitialTangent();
-        if((kf + k) != 0.0)
-          kf = kf*k/(kf+k);
-        else
-          return 0.0;
+	kf = theModels[0]->getInitialTangent();
+	std::cout << "kf= " << kf << std::endl;
+	for(size_t i=1; i<numMaterials; i++)
+	  {
+	    k = theModels[i]->getInitialTangent();
+	    std::cout << "k= " << k << std::endl;
+	    if((kf + k) != 0.0)
+	      kf = kf*k/(kf+k);
+	    else
+	      return 0.0;
+	  }
       }
+    std::cout << "returns kf= " << kf << std::endl;
     return kf;
   }
 
