@@ -702,7 +702,7 @@ python tests/materials/xc_materials/uniaxial/test_HA25_02.py
 python tests/materials/xc_materials/uniaxial/test_HP45_01.py
 python tests/materials/xc_materials/uniaxial/test_HP45_02.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_01.py
-python tests/materials/xc_materials/uniaxial/test_series_material_01.py
+python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
 echo "$BLEU" "      EHE reinforcing steel." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_B400S_01.py
 python tests/materials/xc_materials/uniaxial/test_B400S_02.py
@@ -722,6 +722,8 @@ python tests/materials/xc_materials/uniaxial/test_cable_material05.py
 python tests/materials/xc_materials/uniaxial/test_cable_material06.py
 python tests/materials/xc_materials/uniaxial/test_cable_material07.py
 python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
+echo "$BLEU" "      Connected materials." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/connected/test_series_material_01.py
 echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 #nD Materials
