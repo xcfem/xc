@@ -765,7 +765,7 @@ class ShearController(lscb.ShearControllerBase):
         # first moment of area above and about the centroidal axis.
         S= scc.getSPosHomogenized(E0)
         alpha_l= 1.0 # see expression 6.4 in EC2:2004.
-        return getShearResistanceNonCrackedNoShearReinf(self, concrete= concrete, I= i, S= S, NEd= Nd, Ac= Ac, bw= strutWidth, alpha_l= alpha_l)
+        return getShearResistanceNonCrackedNoShearReinf(self, concrete= concrete, I= I, S= S, NEd= Nd, Ac= Ac, bw= strutWidth, alpha_l= alpha_l)
     
     def getShearStrengthNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Return the design value of the shear resistance VRdc for cracked
@@ -784,15 +784,15 @@ class ShearController(lscb.ShearControllerBase):
                           reinforcement due to the transverse inclination of
                           its elements.
         '''
-        tensionedReinforcement= rcSets.tensionFibers
+        #tensionedReinforcement= rcSets.tensionFibers
         isBending= scc.isSubjectedToBending(0.1)
-        numberOfTensionedRebars= rcSets.getNumTensionRebars()
-        E0= rcSets.getConcreteInitialTangent()
+        #numberOfTensionedRebars= rcSets.getNumTensionRebars()
         if(isBending):
             eps1= rcSets.getMaxConcreteStrain()
             # design tensile strength of the concrete.
             fctdH= concrete.fctd()
-            if((self.E0*self.eps1)<self.fctdH): # Non cracked section
+            E0= rcSets.getConcreteInitialTangent()
+            if((E0*self.eps1)<fctdH): # Non cracked section
                 self.getShearStrengthNonCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
             else:
                 self.getShearStrengthCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
