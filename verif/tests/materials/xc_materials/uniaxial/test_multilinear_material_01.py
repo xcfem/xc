@@ -20,18 +20,46 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Define materials
-strainStressPoints= [(0,0), (1,1), (2,2), (3,3)]
-mlinear= typical_materials.defMultiLinearMaterial(preprocessor, "mlinear", strainStressPoints)
+sampleStrains= [0.02, 0.05, 0.1, 0.270833333]
+sampleStresses= [13527, 15957, 16100, 16100.41376]
+sampleStrainStressCurve= list()
+for strain, stress in zip(sampleStrains, sampleStresses):
+    sampleStrainStressCurve.append((strain, stress))
+mlinear= typical_materials.defMultiLinearMaterial(preprocessor, "mlinear", sampleStrainStressCurve)
 
 numIntervals= mlinear.numPoints
-ratio= numIntervals-len(strainStressPoints)
+ratio= numIntervals-len(sampleStrainStressCurve)
+
+# Compute stresses.
+err= 0.0
+stresses= list()
+for ss in sampleStrainStressCurve:
+    sampleStrain= ss[0]
+    mlinear.setTrialStrain(sampleStrain, 0.0)
+    mlinear.commitState()
+    stress= mlinear.getStress()
+    sampleStress= ss[1]
+    err+= (sampleStress-stress)**2
+    stresses.append(stress)
+
+err= math.sqrt(err)
 
 #print(numPoints)
+#print(err)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio==0):
+if(ratio==0 and err<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # FIGURES & REPORTS
+# import matplotlib.pyplot as plt
+# plt.title(fname)
+# plt.xlabel('strain')
+# plt.ylabel('stress')
+# plt.plot(sampleStrains, stresses, color= 'blue')
+# plt.plot(sampleStrains, sampleStresses, 'ro')
+# plt.show()
