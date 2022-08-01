@@ -379,7 +379,8 @@ echo "$BLEU" "  Ill conditioning tests." "$NORMAL"
 python tests/solution/ill_conditioning/ill_conditioning_01.py
 python tests/solution/ill_conditioning/get_floating_nodes_01.py
 echo "$BLEU" "  Integrators tests." "$NORMAL"
-python tests/solution/integrator/test_displacement_control_integrator.py
+python tests/solution/integrator/test_displacement_control_integrator_01.py
+python tests/solution/integrator/test_displacement_control_integrator_02.py
 
 ## Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"

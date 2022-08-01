@@ -37,6 +37,7 @@ spring= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 
 # Define load.
 ## Load definition.
+ts= modelSpace.newTimeSeries(name= "ts", tsType= "linear_ts")
 lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag,xc.Vector([10,0,0]))
 ## We add the load case to domain.
