@@ -728,6 +728,7 @@ python tests/materials/xc_materials/uniaxial/test_cable_material07.py
 python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
 echo "$BLEU" "      Connected materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_01.py
+python tests/materials/xc_materials/uniaxial/connected/test_series_material_02.py
 echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 #nD Materials
