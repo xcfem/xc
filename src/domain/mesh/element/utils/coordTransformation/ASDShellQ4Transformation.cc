@@ -38,7 +38,7 @@ void XC::ASDShellQ4Transformation::setDomain(Domain *domain, const ID &node_ids)
 	if(m_nodes[i] == nullptr)
 	  {
 	    std::cerr << "ASDShellQ4Transformation::setDomain - no node "
-		      << node_ids(i) << " exists in the model\n";
+		      << node_ids(i) << " exists in the model." << std::endl;
 	    exit(-1);
 	  }
 	const Vector &iU = m_nodes[i]->getTrialDisp();
@@ -47,7 +47,7 @@ void XC::ASDShellQ4Transformation::setDomain(Domain *domain, const ID &node_ids)
 	    std::cerr << "ASDShellQ4Transformation::setDomain - node "
 		      << node_ids(i)
 		      << " has " << iU.Size()
-		      << " DOFs, while 6 are expected\n";
+		      << " DOFs, while 6 are expected." << std::endl;
 	    exit(-1);
 	  }
 	const size_t index= i * 6;

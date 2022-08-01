@@ -122,7 +122,7 @@ int XC::CrdTransf::set_node_ptrs(Node *nodeIPointer, Node *nodeJPointer)
     if ((!nodeIPtr) || (!nodeJPtr))
       {
         std::cerr << "CrdTransf::" << __FUNCTION__
-		  << "; invalid pointers to the element nodes\n";
+		  << "; invalid pointers to the element nodes." << std::endl;
         return -1;
       }
     return 0;
@@ -217,7 +217,7 @@ int XC::CrdTransf::sendData(Communicator &comm)
     res+= comm.sendBool(initialDispChecked,getDbTagData(),CommMetaData(6));
     if(res<0)
       std::cerr << "CrdTransf::" << __FUNCTION__
-		<< "; failed to send data.\n";
+		<< "; failed to send data." << std::endl;
     return res;
   }
 
@@ -233,7 +233,7 @@ int XC::CrdTransf::recvData(const Communicator &comm)
     res+= comm.receiveBool(initialDispChecked,getDbTagData(),CommMetaData(6));
     if(res<0)
       std::cerr << "CrdTransf::" << __FUNCTION__
-		<< "; failed to receive data.\n";
+		<< "; failed to receive data." << std::endl;
     return res;    
   }
 

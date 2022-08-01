@@ -80,7 +80,7 @@ void XC::CrdTransf2d::set_rigid_joint_offsetI(const Vector &rigJntOffset1)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << ": invalid rigid joint offset vector for node I\n"
-		  << "Size must be 2\n";
+		  << "Size must be 2." << std::endl;
       }
     else
       if(rigJntOffset1.Norm() > 0.0)
@@ -97,7 +97,7 @@ void XC::CrdTransf2d::set_rigid_joint_offsetJ(const Vector &rigJntOffset2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << ": invalid rigid joint offset vector for node J\n"
-		  << "Size must be 2\n";      
+		  << "Size must be 2." << std::endl;      
       }
     else
       if(rigJntOffset2.Norm() > 0.0)
@@ -652,7 +652,7 @@ int XC::CrdTransf2d::sendData(Communicator &comm)
     int res= CrdTransf::sendData(comm);
     res+= comm.sendDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
     if(res<0)
-      std::cerr << "CrdTransf2d::sendData - failed to send data.\n";
+      std::cerr << "CrdTransf2d::sendData - failed to send data." << std::endl;
     return res;
   }
 
@@ -662,7 +662,7 @@ int XC::CrdTransf2d::recvData(const Communicator &comm)
     int res= CrdTransf::recvData(comm);
     res+= comm.receiveDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
     if(res<0)
-      std::cerr << "CrdTransf2d::recvData - failed to receive data.\n";
+      std::cerr << "CrdTransf2d::recvData - failed to receive data." << std::endl;
     return res;    
   }
 

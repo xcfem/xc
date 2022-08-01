@@ -105,7 +105,7 @@ XC::CorotCrdTransf2d::CorotCrdTransf2d(int tag, const Vector &rigJntOffsetI,cons
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << ";  invalid rigid joint offset vector for node I.\n"
-		  << "Size must be 2.\n";      
+		  << "Size must be 2." << std::endl;      
         nodeIOffset.Zero();      
       }
     else
@@ -116,7 +116,7 @@ XC::CorotCrdTransf2d::CorotCrdTransf2d(int tag, const Vector &rigJntOffsetI,cons
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; invalid rigid joint offset vector for node J.\n"
-		  << "Size must be 2\n";      
+		  << "Size must be 2." << std::endl;      
         nodeJOffset.Zero(); 
       }
     else
@@ -162,7 +162,7 @@ int XC::CorotCrdTransf2d::initialize(Node *nodeIPointer, Node *nodeJPointer)
     if((!nodeIPtr) || (!nodeJPtr))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; invalid pointers to the element nodes.\n";
+		  << "; invalid pointers to the element nodes." << std::endl;
         return -1;
       }
     
@@ -285,7 +285,7 @@ int XC::CorotCrdTransf2d::compElemtLengthAndOrient(void)
     if(L == 0.0) 
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; 0 length.\n";
+		  << "; 0 length." << std::endl;
         return -2;
       }
     
@@ -316,7 +316,7 @@ int XC::CorotCrdTransf2d::compElemtLengthAndOrientWRTLocalSystem(const Vector &u
     if(Ln == 0.0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; 0 length.\n";
+		  << "; 0 length." << std::endl;
         return -2;  
       }
     
@@ -957,7 +957,7 @@ int XC::CorotCrdTransf2d::sendData(Communicator &comm)
     res+= comm.sendBool(nodeOffsets,getDbTagData(),CommMetaData(15));
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data.\n";
+		<< "; failed to send data." << std::endl;
     return res;
   }
 
@@ -973,7 +973,7 @@ int XC::CorotCrdTransf2d::recvData(const Communicator &comm)
     res+= comm.receiveBool(nodeOffsets,getDbTagData(),CommMetaData(15));
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive data.\n";
+		<< "; failed to receive data." << std::endl;
     return res;    
   }
 
@@ -987,7 +987,7 @@ int XC::CorotCrdTransf2d::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; data could not be sent.\n" ;
+		<< "; data could not be sent." << std::endl;
     return res;
   }
 
@@ -1000,7 +1000,7 @@ int XC::CorotCrdTransf2d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; data could not be received.\n" ;
+		<< "; data could not be received." << std::endl;
     else
       res+= recvData(comm);
     return res;

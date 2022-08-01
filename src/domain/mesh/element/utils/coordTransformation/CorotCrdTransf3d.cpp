@@ -97,7 +97,7 @@ XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag, const Vector &vecInLocXZPlane,co
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << ";  vector that defines local xz plane is not valid.\n"
-		  << "Size must be 3\n. Using (0,0,1)";      
+		  << "Size must be 3\n. Using (0,0,1)" << std::endl;      
         vAxis(0) = 0;       vAxis(1) = 0;      vAxis(2) = 1;
       }
     else
@@ -108,7 +108,7 @@ XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag, const Vector &vecInLocXZPlane,co
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; invalid rigid joint offset vector for node I\n"
-		  << "Size must be 3.\n";      
+		  << "Size must be 3." << std::endl;      
         nodeIOffset.Zero();      
       }
     else
@@ -119,7 +119,7 @@ XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag, const Vector &vecInLocXZPlane,co
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; invalid rigid joint offset vector for node J\n"
-		  << "Size must be 3.\n";      
+		  << "Size must be 3." << std::endl;      
         nodeJOffset.Zero(); 
       }
     else
@@ -133,7 +133,7 @@ XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag, const Vector &vecInLocXZPlane,co
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; rigid joint zones not implemented yet\n"
-		  << "Using zero values\n"; 
+		  << "Using zero values." << std::endl; 
         nodeIOffset.Zero();
         nodeJOffset.Zero();
       }
@@ -273,7 +273,7 @@ int XC::CorotCrdTransf3d::initialize(Node *nodeIPointer, Node *nodeJPointer)
     if((!nodeIPtr) || (!nodeJPtr))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "\ninvalid pointers to the element nodes.\n";
+		  << "\ninvalid pointers to the element nodes." << std::endl;
         return -1;
       }
     
@@ -462,7 +462,7 @@ int XC::CorotCrdTransf3d::update(void)
             if(Ln == 0.0) 
             {
                 std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "\n; 0 deformed length.\n";
+			  << "\n; 0 deformed length." << std::endl;
                 return -2;  
             }
             
@@ -545,7 +545,7 @@ void XC::CorotCrdTransf3d::compTransfMatrixBasicGlobal(void)
     // extract columns of rotation matrices
     int i, j, k;
     
-    //std::cerr << "comprTransfMatrixBasicGlobal: *****************************\n";
+    //std::cerr << "comprTransfMatrixBasicGlobal: *****************************." << std::endl;
     static Vector r1(3), r2(3), r3(3);
     static Vector e1(3), e2(3), e3(3);
     static Vector rI1(3), rI2(3), rI3(3);
@@ -744,7 +744,7 @@ void XC::CorotCrdTransf3d::compTransfMatrixBasicGlobalNew(void)
     // extract columns of rotation matrices
     int i, j, k;
     
-    //std::cerr << "comprTransfMatrixBasicGlobal: *****************************\n";
+    //std::cerr << "comprTransfMatrixBasicGlobal: *****************************." << std::endl;
     static Vector r1(3), r2(3), r3(3);
     static Vector e1(3), e2(3), e3(3);
     static Vector rI1(3), rI2(3), rI3(3);
@@ -1502,7 +1502,7 @@ int XC::CorotCrdTransf3d::computeLocalAxis(void) const
     if(L == 0.0) 
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "\n; 0 length.\n";
+		  << "\n; 0 length." << std::endl;
         return -2;  
       }
     
@@ -1524,7 +1524,7 @@ int XC::CorotCrdTransf3d::computeLocalAxis(void) const
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "\n vector v: '" << vAxis
-		  << "' that defines plane xz is parallel to x axis.\n";
+		  << "' that defines plane xz is parallel to x axis." << std::endl;
         return -3;
       }
     
@@ -1846,7 +1846,7 @@ const XC::Matrix &XC::CorotCrdTransf3d::getKs2Matrix(const Vector &ri, const Vec
     static Matrix ks2(12,12);
     static Vector e1(3), r1(3);
     
-    //std::cerr << "\ngetKs2Matrix:\n";
+    //std::cerr << "\ngetKs2Matrix:." << std::endl;
     //std::cerr << "ri: " << ri;
     
     //std::cerr << "z: " << z;
@@ -2013,7 +2013,7 @@ int XC::CorotCrdTransf3d::sendData(Communicator &comm)
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data.\n";
+		<< "; failed to send data." << std::endl;
     return res;
   }
 
@@ -2035,7 +2035,7 @@ int XC::CorotCrdTransf3d::recvData(const Communicator &comm)
     res+= comm.receiveVector(ulpr,getDbTagData(),CommMetaData(21));
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive data.\n";
+		<< "; failed to receive data." << std::endl;
     return res;
   }
 
@@ -2048,7 +2048,7 @@ int XC::CorotCrdTransf3d::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send ID.\n";
+		<< "; failed to send ID." << std::endl;
     return res;
   }
 
@@ -2060,7 +2060,7 @@ int XC::CorotCrdTransf3d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; data could not be received\n" ;
+		<< "; data could not be received." << std::endl;
     else
       res+= recvData(comm);
     return res;            
@@ -2077,7 +2077,7 @@ const XC::Vector &XC::CorotCrdTransf3d::getPointGlobalCoordFromLocal(const Vecto
   {
     static Vector xg(3);
     std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet" ;
+	      << "; not implemented yet" << std::endl;
     return xg;  
   }
 
@@ -2086,7 +2086,7 @@ const XC::Vector &XC::CorotCrdTransf3d::getPointGlobalDisplFromBasic(double xi, 
   {
     static Vector uxg(3);
     std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet" ;
+	      << "; not implemented yet" << std::endl;
     return uxg;  
   }
 

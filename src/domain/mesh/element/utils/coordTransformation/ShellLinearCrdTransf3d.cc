@@ -164,7 +164,7 @@ int XC::ShellLinearCrdTransf3d::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; data could not be sent.\n";
+	        << "; data could not be sent." << std::endl;
     return res;
   }
 
@@ -176,7 +176,7 @@ int XC::ShellLinearCrdTransf3d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; data could not be received.\n";
+	        << "; data could not be received." << std::endl;
     else
       res+= recvData(comm);
     return res;

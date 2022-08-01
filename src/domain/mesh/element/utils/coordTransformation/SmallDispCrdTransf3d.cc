@@ -79,7 +79,7 @@ int XC::SmallDispCrdTransf3d::computeElemtLengthAndOrient(void) const
     
     if(L==0.0)
       {
-        std::cerr << "SmallDispCrdTransf3d::computeElemtLengthAndOrien: 0 length\n";
+        std::cerr << "SmallDispCrdTransf3d::computeElemtLengthAndOrien: 0 length." << std::endl;
         return -2;  
       }
     
@@ -111,7 +111,7 @@ int XC::SmallDispCrdTransf3d::computeLocalAxis(void) const
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; in coordinate transformation: '" << getName()
-	          << "' vector v that defines plane xz is parallel to x axis\n";
+	          << "' vector v that defines plane xz is parallel to x axis." << std::endl;
         return -3;
       }
     
@@ -475,7 +475,7 @@ int XC::SmallDispCrdTransf3d::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data\n";
+		<< "; failed to send data." << std::endl;
     return res;
   }
 
@@ -489,14 +489,14 @@ int XC::SmallDispCrdTransf3d::recvSelf(const Communicator &comm)
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+		<< "; failed to receive ids." << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << __FUNCTION__
-		    << "; failed to receive data.\n";
+		    << "; failed to receive data." << std::endl;
       }
     return res;
   }
