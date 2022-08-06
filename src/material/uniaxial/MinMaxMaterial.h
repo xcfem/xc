@@ -73,22 +73,27 @@ class MinMaxMaterial: public EncapsulatedMaterial
 
     bool Tfailed;
     bool Cfailed;
+    
+    DbTagData &getDbTagData(void) const;
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
   public:
     MinMaxMaterial(int tag, UniaxialMaterial &material, double min, double max); 
-    MinMaxMaterial(int tag);
-    MinMaxMaterial(void);
+    MinMaxMaterial(int tag= 0);
+    
+    UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStress(void) const;
     double getTangent(void) const;
     double getDampTangent(void) const;
-    inline double getInitialTangent(void) const {return theMaterial->getInitialTangent();}
+    inline double getInitialTangent(void) const
+        {return theMaterial->getInitialTangent();}
 
     int commitState(void);
     int revertToLastCommit(void);    
     int revertToStart(void);        
 
-    UniaxialMaterial *getCopy(void) const;
     
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);

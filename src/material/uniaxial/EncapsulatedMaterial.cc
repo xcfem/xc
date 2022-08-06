@@ -43,8 +43,8 @@ void XC::EncapsulatedMaterial::copy(const UniaxialMaterial *other)
       theMaterial= other->getCopy();
   }
 
-XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag, UniaxialMaterial &material)
-  :UniaxialMaterial(tag,classTag), theMaterial(nullptr)
+//! @brief Sets the encapsulated material.
+void XC::EncapsulatedMaterial::setMaterial(const UniaxialMaterial &material)
   {
     copy(&material);
     if(!theMaterial)
@@ -52,11 +52,39 @@ XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag, UniaxialMa
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  <<  "; failed to get copy of material\n";
         exit(-1);
-      }
+      }    
   }
 
+//! @brief Sets the encapsulated material.
+void XC::EncapsulatedMaterial::setMaterial(const std::string &matName)
+  {
+    const Material *ptr_mat= get_material_ptr(matName);
+    if(ptr_mat)
+      {
+	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
+	if(tmp)
+	  setMaterial(*tmp);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		    << "material identified by: '" << matName
+		    << "' is not an uniaxial material." << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		<< "material identified by: '" << matName
+		<< "' not found." << std::endl;
+  }
+
+//! @brief Constructor.
+XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag, const UniaxialMaterial &material)
+  :UniaxialMaterial(tag,classTag), theMaterial(nullptr)
+  {
+    setMaterial(material);
+  }
+
+//! @brief Constructor.
 XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag)
-  :UniaxialMaterial(tag,classTag), theMaterial(nullptr) {}
+  : UniaxialMaterial(tag,classTag), theMaterial(nullptr) {}
 
 XC::EncapsulatedMaterial::~EncapsulatedMaterial(void)
   { free_mem(); }

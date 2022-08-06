@@ -575,8 +575,30 @@ def defMultiLinearMaterial(preprocessor,name,points):
     retval.setValues(points)
     return retval
 
+def defInitStrainMaterial(preprocessor, name, materialToEncapsulate):
+    '''Constructs an initial strain uniaxial material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param materialToEncapsulate: material that will name of the materials to be connected.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("init_strain_material",name)
+    retval.setMaterial(materialToEncapsulate)
+    return retval
+
+def defInitStressMaterial(preprocessor, name, materialToEncapsulate):
+    '''Constructs an initial strain uniaxial material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param materialToEncapsulate: material that will name of the materials to be connected.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("init_stress_material",name)
+    retval.setMaterial(materialToEncapsulate)
+    return retval
+
 def defSeriesMaterial(preprocessor, name, materialsToConnect):
-    '''Constructs an elastic perfectly-plastic uniaxial material.
+    '''Constructs an series material.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param materialsToConnect: name of the materials to be connected.

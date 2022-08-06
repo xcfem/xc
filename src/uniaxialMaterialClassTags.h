@@ -61,7 +61,6 @@
 #define MAT_TAG_Concrete02			25
 #define MAT_TAG_Steel02				26
 
-
 #define MAT_TAG_Concrete04                      30
 
 //B Jeremic
@@ -105,5 +104,7 @@
 #define MAT_TAG_Pinching	                65
 
 #define MAT_TAG_MultiLinear		       152
+#define MAT_TAG_InitStrain		       147
+#define MAT_TAG_InitStress		       148
 
 #endif

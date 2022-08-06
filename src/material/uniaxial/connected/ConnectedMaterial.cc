@@ -102,6 +102,10 @@ void XC::ConnectedMaterial::appendMaterial(const std::string &matName)
 		    << "material identified by: '" << matName
 		    << "' is not an uniaxial material.\n";
       }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		<< "material identified by: '" << matName
+		<< "' not found." << std::endl;
   }
 
 //! @brief Set the connected materials.

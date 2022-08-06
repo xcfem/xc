@@ -66,11 +66,21 @@ class_<XC::ElasticPPMaterial , bases<XC::EPPBaseMaterial>, boost::noncopyable >(
 
 
 class_<XC::CableMaterial, bases<XC::ElasticBaseMaterial> >("CableMaterial")
-    .add_property("prestress", &XC::CableMaterial::getPrestress, &XC::CableMaterial::setPrestress,"Cable's prestress.")
-    .add_property("length", &XC::CableMaterial::getLength, &XC::CableMaterial::setLength)
-       ;
+  .add_property("prestress", &XC::CableMaterial::getPrestress, &XC::CableMaterial::setPrestress,"Cable's prestress.")
+  .add_property("length", &XC::CableMaterial::getLength, &XC::CableMaterial::setLength, "Return the length of the cable.")
+  ;
 
-class_<XC::EncapsulatedMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("EncapsulatedMaterial", no_init);
+void (XC::EncapsulatedMaterial::*setEncapsulatedMaterial)(const std::string &)= &XC::EncapsulatedMaterial::setMaterial;
+class_<XC::EncapsulatedMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("EncapsulatedMaterial", no_init)
+  .def("setMaterial", setEncapsulatedMaterial, "Assigns the encapsulated material.")
+  ;
+
+class_<XC::InitStrainBaseMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("InitStrainBaseMaterial", no_init)
+  ;
+
+class_<XC::InitStrainMaterial, bases<XC::InitStrainBaseMaterial>, boost::noncopyable >("InitStrainMaterial", no_init);
+
+class_<XC::InitStressMaterial, bases<XC::InitStrainBaseMaterial>, boost::noncopyable >("InitStressMaterial", no_init);
 
 class_<XC::MinMaxMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("MinMaxMaterial", no_init);
 

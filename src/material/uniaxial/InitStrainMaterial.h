@@ -45,114 +45,60 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.6 $
-// $Date: 2005/06/16 21:41:03 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/EPPGapMaterial.h,v $
-
-// File: ~/material/EPPGapMaterial.h
-//
-// Written: krm
-// Created: 07/2000
-// Revision: A
+// $Revision: 1.1 $
+// $Date: 2010-09-11 00:45:21 $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/InitStrainMaterial.h,v $
+                                                      
+// Written: fmk
+// Created: Sep 2010
 //
 // Description: This file contains the class definition for 
-// ElasticMaterial. EPPGapMaterial provides the abstraction
-// of an elastic perfectly plastic (tension only) path dependent uniaxial 
-// material, with an initial gap offset (force-displacement units)
-// For compression only behavior, enter negative gap and ep
-// Damage can accumulate through specification of damage = 1 switch,
-// otherwise damage = 0
-//
-//                  gap ep
-//                  |<>|>|
-//          stress  |    +-----+ fy
-//                  |   /E    /
-//         ---------+--+-+---+----strain
-//                  |       
-//                  |   
-//                  |      
-//
-// What: "@(#) EPPGapMaterial.h, revA"
+// InitStrainMaterial.  InitStrainMaterial wraps a UniaxialMaterial
+// and imposes an initial strain
 
-#ifndef EPPGapMaterial_h
-#define EPPGapMaterial_h
+#ifndef InitStrainMaterial_h
+#define InitStrainMaterial_h
 
-#include "material/uniaxial/EPPBaseMaterial.h"
-#include "utility/matrix/Matrix.h"
+#include <material/uniaxial/InitStrainBaseMaterial.h>
 
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Elastic perfectly plastic material with initial "gap".
-//! provides the abstraction of an elastic perfectly
-//! plastic (tension only) path dependent uniaxial 
-//! material, with an initial gap offset (force-displacement units)
-//! For compression only behavior, enter negative gap and ep
-//! Damage can accumulate through specification of damage = 1 switch,
-//! otherwise damage = 0
-//
-//                  gap ep
-//                  |<>|>|
-//          stress  |    +-----+ fy
-//                  |   /E    /
-//         ---------+--+-+---+----strain
-//                  |       
-//                  |   
-//                  |      
-//
-class EPPGapMaterial: public EPPBaseMaterial
+//! @brief InitStrainMaterial wraps a UniaxialMaterial
+//! and imposes an initial strain
+class InitStrainMaterial: public InitStrainBaseMaterial
   {
-  private:
-    double fy;
-    double gap;
-    double eta;
-    double maxElasticYieldStrain;
-    double minElasticYieldStrain;
-    int damage;
-    //added by SAJalali
-    double commitStress;      // prev. trial stress
-    double Energy, EnergyP;
-    
-    // AddingSensitivity:BEGIN //////////////////////////////////////////
-    int parameterID;
-    Matrix SHVs;
-    // AddingSensitivity:END ///////////////////////////////////////////
-
   protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);    
+    double localStrain;
+
+    DbTagData &getDbTagData(void) const;
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
   public:
-    EPPGapMaterial(int tag= 0);  
-    EPPGapMaterial(int tag, double E, double fy, double gap, double eta, int damage = 0);
-
-    int setTrialStrain(double strain, double strainRate = 0.0); 
-    double getInitialTangent(void) const;
-
-    int commitState(void);
-    int revertToLastCommit(void);    
-    int revertToStart(void);    
-
+    InitStrainMaterial(int tag= 0);
+    InitStrainMaterial(int tag, const UniaxialMaterial &material, double epsInit); 
+    // Virtual constructor.
     UniaxialMaterial *getCopy(void) const;
     
+    virtual void setMaterial(const UniaxialMaterial &);
+    
+    virtual int setInitialStrain(const double &);
+    
+    int setTrialStrain(double strain, double strainRate = 0.0); 
+    double getStrain(void) const;          
+
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
     
-    //by SAJalali
-    virtual double getEnergy(void)
-      { return Energy; }
     void Print(std::ostream &s, int flag =0) const;
     
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int setParameter(const std::vector<std::string> &, Parameter &);
     int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
-    double getStressSensitivity(int gradIndex, bool conditional);
-    double getTangentSensitivity(int gradIndex);
-    double getInitialTangentSensitivity(int gradIndex);
-    int commitSensitivity(double strainGradient, int gradIndex, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace
 
 
 #endif
+

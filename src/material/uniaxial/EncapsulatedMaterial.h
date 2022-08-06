@@ -43,12 +43,15 @@ class EncapsulatedMaterial: public UniaxialMaterial
     void free_mem(void);
     void copy(const UniaxialMaterial *);
   public:
-    EncapsulatedMaterial(int tag, int classTag, UniaxialMaterial &material); 
+    EncapsulatedMaterial(int tag, int classTag, const UniaxialMaterial &material); 
     EncapsulatedMaterial(int tag= 0,int classTag= 0);
     EncapsulatedMaterial(const EncapsulatedMaterial &);
     EncapsulatedMaterial &operator=(const EncapsulatedMaterial &);
     ~EncapsulatedMaterial(void);
 
+    virtual void setMaterial(const UniaxialMaterial &);
+    void setMaterial(const std::string &);
+    
     double getStrain(void) const;          
     double getStrainRate(void) const;
     

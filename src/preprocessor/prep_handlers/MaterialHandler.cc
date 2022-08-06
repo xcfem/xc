@@ -44,6 +44,8 @@
 #include "material/uniaxial/FatigueMaterial.h"
 #include "material/uniaxial/HardeningMaterial.h"
 #include "material/uniaxial/HystereticMaterial.h"
+#include "material/uniaxial/InitStrainMaterial.h"
+#include "material/uniaxial/InitStressMaterial.h"
 #include "material/uniaxial/MinMaxMaterial.h"
 #include "material/uniaxial/MultiLinear.h"
 #include "material/uniaxial/NewUniaxialMaterial.h"
@@ -256,6 +258,10 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::HardeningMaterial(tag_mat);
     else if(cmd == "hysteretic_material")
       retval= new XC::HystereticMaterial(tag_mat);
+    else if(cmd == "init_strain_material")
+      retval= new XC::InitStrainMaterial(tag_mat);
+    else if(cmd == "init_stress_material")
+      retval= new XC::InitStressMaterial(tag_mat);
     else if(cmd == "min_max_material")
       retval= new XC::MinMaxMaterial(tag_mat);
     else if(cmd == "parallel_material")

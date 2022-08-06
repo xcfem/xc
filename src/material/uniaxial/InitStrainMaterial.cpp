@@ -46,132 +46,90 @@
                                                                         
 // $Revision: 1.5 $
 // $Date: 2003/04/02 22:02:42 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/MinMaxMaterial.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/InitStrainMaterial.cpp,v $
 
-// Written: MHS
-// Created: Aug 2001
-//
-// Description: This file contains the class definition for 
-// MinMaxMaterial.  MinMaxMaterial wraps a UniaxialMaterial
-// and imposes min and max strain limits.
+#include <material/uniaxial/InitStrainMaterial.h>
+#include <domain/mesh/element/utils/Information.h>
+#include "domain/component/Parameter.h"
 
-#include <cstdlib>
-
-#include <material/uniaxial/MinMaxMaterial.h>
-#include <utility/matrix/ID.h>
-#include "utility/matrix/Vector.h"
-
-XC::MinMaxMaterial::MinMaxMaterial(int tag, UniaxialMaterial &material, double min, double max)
-  :EncapsulatedMaterial(tag,MAT_TAG_MinMax,material),
-   minStrain(min), maxStrain(max), Tfailed(false), Cfailed(false)
-  {}
-
-XC::MinMaxMaterial::MinMaxMaterial(int tag)
-  :EncapsulatedMaterial(tag,MAT_TAG_MinMax),
-   minStrain(0.0), maxStrain(0.0), Tfailed(false), Cfailed(false) {}
-
-int XC::MinMaxMaterial::setTrialStrain(double strain, double strainRate)
+//! @brief Sets the encapsulated material.
+void XC::InitStrainMaterial::setMaterial(const UniaxialMaterial &material)
   {
-    if(Cfailed)
-      return 0;
-    if(strain >= maxStrain || strain <= minStrain)
+    InitStrainBaseMaterial::setMaterial(material);
+    if(theMaterial)
       {
-        Tfailed = true;
-        return 0;
-      }
-    else
+	theMaterial->setTrialStrain(epsInit);
+        theMaterial->commitState();
+      }    
+  }
+
+XC::InitStrainMaterial::InitStrainMaterial(int tag, const UniaxialMaterial &material, double epsini)
+  : InitStrainBaseMaterial(tag,MAT_TAG_InitStrain, material, epsini),
+    localStrain(0.0)
+  {
+    if(theMaterial)
       {
-        Tfailed = false;
-        return theMaterial->setTrialStrain(strain, strainRate);
+	theMaterial->setTrialStrain(epsInit);
+        theMaterial->commitState();
       }
   }
 
-double XC::MinMaxMaterial::getStress(void) const
+XC::InitStrainMaterial::InitStrainMaterial(int tag)
+  :InitStrainBaseMaterial(tag,MAT_TAG_InitStrain),
+   localStrain(0.0) {}
+
+int XC::InitStrainMaterial::setInitialStrain(const double &initStrain)
   {
-    if(Tfailed)
-      return 0.0;
-    else
-      return theMaterial->getStress();
+    InitStrainBaseMaterial::setInitialStrain(initStrain);
+    if(theMaterial)
+      {
+	theMaterial->setTrialStrain(epsInit);
+        theMaterial->commitState();
+      }
+    return 0;
   }
 
-//! @brief Return the material tangent stiffness.
-double XC::MinMaxMaterial::getTangent(void) const
+int XC::InitStrainMaterial::setTrialStrain(double strain, double strainRate)
   {
-    if(Tfailed)
-      //return 0.0;
-      return 1.0e-8*theMaterial->getInitialTangent();
+    localStrain = strain;
+
+    if (theMaterial)
+      return theMaterial->setTrialStrain(strain+epsInit, strainRate);
     else
-      return theMaterial->getTangent();
+      return -1;
   }
 
-double XC::MinMaxMaterial::getDampTangent(void) const
-  {
-    if(Tfailed)
-      return 0.0;
-    else
-      return theMaterial->getDampTangent();
-  }
+double XC::InitStrainMaterial::getStrain(void) const
+  { return localStrain; }
 
-//! @brief Commit the state of the material.
-int XC::MinMaxMaterial::commitState(void)
-  {        
-    Cfailed = Tfailed;
-
-    // Check if failed at current step
-    if(Tfailed)
-      return 0;
-    else
-      return theMaterial->commitState();
-  }
-
-int XC::MinMaxMaterial::revertToLastCommit(void)
-  {
-    // Check if failed at last step
-    if(Cfailed)
-      return 0;
-    else
-      return theMaterial->revertToLastCommit();
-  }
-
-int XC::MinMaxMaterial::revertToStart(void)
-  {
-    int retval= EncapsulatedMaterial::revertToStart();
-    Cfailed = false;
-    Tfailed = false;
-    retval+= theMaterial->revertToStart();
-    return retval;
-  }
-
-XC::UniaxialMaterial *XC::MinMaxMaterial::getCopy(void) const
-  { return new MinMaxMaterial(*this); }
+XC::UniaxialMaterial *XC::InitStrainMaterial::getCopy(void) const
+  { return new InitStrainMaterial(*this); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
-XC::DbTagData &XC::MinMaxMaterial::getDbTagData(void) const
+XC::DbTagData &XC::InitStrainMaterial::getDbTagData(void) const
   {
     static DbTagData retval(6);
     return retval;
   }
 
 //! @brief Send object members through the communicator argument.
-int XC::MinMaxMaterial::sendData(Communicator &comm)
+int XC::InitStrainMaterial::sendData(Communicator &comm)
   {
-    int res= EncapsulatedMaterial::sendData(comm);
-    res+= comm.sendDoubles(minStrain,maxStrain,getDbTagData(),CommMetaData(4));
-    res+= comm.sendBools(Tfailed, Cfailed, getDbTagData(),CommMetaData(5));
+    int res= InitStrainBaseMaterial::sendData(comm);
+    res+= comm.sendDouble(localStrain,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
-int XC::MinMaxMaterial::recvData(const Communicator &comm)
+int XC::InitStrainMaterial::recvData(const Communicator &comm)
   {
-    int res= EncapsulatedMaterial::recvData(comm);
-    res+= comm.receiveDoubles(minStrain,maxStrain, getDbTagData(),CommMetaData(4));
-    res+= comm.receiveBools(Tfailed, Cfailed, getDbTagData(), CommMetaData(5));
+    int res= InitStrainBaseMaterial::recvData(comm);
+    res+= comm.receiveDouble(localStrain, getDbTagData(),CommMetaData(5));
     return res;
   }
 
-int XC::MinMaxMaterial::sendSelf(Communicator &comm)
+int XC::InitStrainMaterial::sendSelf(Communicator &comm)
   {
     inicComm(6);
     int res= sendData(comm);
@@ -183,7 +141,7 @@ int XC::MinMaxMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-int XC::MinMaxMaterial::recvSelf(const Communicator &comm)
+int XC::InitStrainMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
@@ -193,13 +151,44 @@ int XC::MinMaxMaterial::recvSelf(const Communicator &comm)
 	        << ";  data could not be received.\n" ;
     else
       res+= recvData(comm);
-    return res;    
+    return res;
   }
 
-void XC::MinMaxMaterial::Print(std::ostream &s, int flag) const
+void XC::InitStrainMaterial::Print(std::ostream &s, int flag) const
   {
-    s << "MinMaxMaterial tag: " << this->getTag() << std::endl;
+    s << "InitStrainMaterial tag: " << this->getTag() << std::endl;
     s << "\tMaterial: " << theMaterial->getTag() << std::endl;
-    s << "\tMin strain: " << minStrain << std::endl;
-    s << "\tMax strain: " << maxStrain << std::endl;
+    s << "\tinitial strain: " << epsInit << std::endl;
+    s << "\tlocal strain: " << localStrain << std::endl;
   }
+
+int XC::InitStrainMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    int retval= -1;
+    if(argv[0]=="epsInit")
+      {
+        param.setValue(epsInit);
+        retval= param.addObject(1, this);
+      }
+    else //Otherwise, pass it on to the wrapped material
+      if(theMaterial)
+	retval= theMaterial->setParameter(argv, param);
+    return retval;
+  }
+
+int XC::InitStrainMaterial::updateParameter(int parameterID, Information &info)
+  {
+    int retval= -1;
+    if(parameterID==1)
+      {
+        epsInit = info.theDouble;
+	if(theMaterial)
+	  {
+	    theMaterial->setTrialStrain(localStrain+epsInit);
+	    theMaterial->commitState();
+	    retval= 0;
+	  }
+      }
+    return retval;
+  }
+

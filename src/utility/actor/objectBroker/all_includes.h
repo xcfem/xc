@@ -33,6 +33,8 @@
 #include "material/uniaxial/PathIndependentMaterial.h"
 #include "material/uniaxial/CableMaterial.h"
 #include "material/uniaxial/ENTMaterial.h"
+#include "material/uniaxial/InitStrainMaterial.h"
+#include "material/uniaxial/InitStressMaterial.h"
 #include "material/uniaxial/MinMaxMaterial.h"
 #include "material/uniaxial/MultiLinear.h"
 
