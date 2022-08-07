@@ -187,11 +187,12 @@ double XC::MultiLinear::getTangent(void) const
   { return tTangent; }
 
 int XC::MultiLinear::commitState(void)
-{
+  {
     // if yielded we need to reset the values               
-    if (tSlope != 0) { // yielded
-        
-        if (tStrain > data(0, 1)) {  // positive yield direction
+    if(tSlope != 0)
+      { // yielded
+        if (tStrain > data(0, 1))
+	  {  // positive yield direction
             
             // set elastic bounds
             data(0, 1) = tStrain;
@@ -201,12 +202,13 @@ int XC::MultiLinear::commitState(void)
             
             // reset bounds for all those pts before yield
             //  - pos & neg affected
-            for (int i = 1; i < tSlope; i++) {
+            for(int i = 1; i < tSlope; i++)
+	      {
                 data(i, 1) = tStrain;
                 data(i, 3) = tStress;
                 data(i, 0) = data(i - 1, 0) - 2 * data(i, 5);
                 data(i, 2) = data(i - 1, 2) - 2 * data(i, 5) * data(i, 4);
-            }
+              }
             
             // reset bounds for all those pts after
             //  - neg affected 
@@ -215,14 +217,16 @@ int XC::MultiLinear::commitState(void)
             data(tSlope, 2) = data(tSlope - 1, 2)
                             + (data(tSlope, 0) - data(tSlope - 1, 0)) * data(tSlope, 4);
             
-            for (int i = tSlope + 1; i < numSlope; i++) {
+            for (int i = tSlope + 1; i < numSlope; i++)
+	      {
                 data(i, 0) = data(i - 1, 0) - 2 * data(i, 5)
                            + data(i, 1) - data(i - 1, 1);
                 data(i, 2) = data(i - 1, 2)
                            + (data(i, 0) - data(i - 1, 0)) * data(i, 4);
-            }
-        }
-        else {  // neg yield direction
+              }
+	  }
+        else
+	  {  // neg yield direction
 
             // set elastic bounds
             data(0, 0) = tStrain;
@@ -232,12 +236,13 @@ int XC::MultiLinear::commitState(void)
             
             // reset bounds for all those pts before yield slope
             //  - pos & neg affected 
-            for (int i = 1; i < tSlope; i++) {
+            for (int i = 1; i < tSlope; i++)
+	      {
                 data(i, 0) = tStrain;
                 data(i, 2) = tStress;
                 data(i, 1) = data(i - 1, 1) + 2 * data(i, 5);
                 data(i, 3) = data(i - 1, 3) + 2 * data(i, 5) * data(i, 4);
-            }
+              }
             
             // reset bounds for all those pts after
             //  - pos pts affected 
@@ -246,19 +251,19 @@ int XC::MultiLinear::commitState(void)
             data(tSlope, 3) = data(tSlope - 1, 3)
                             + (data(tSlope, 1) - data(tSlope - 1, 1)) * data(tSlope, 4);
             
-            for (int i = tSlope + 1; i < numSlope; i++) {
+            for(int i = tSlope + 1; i < numSlope; i++)
+	      {
                 data(i, 1) = data(i - 1, 1) + 2 * data(i, 5)
                            + data(i, 0) - data(i - 1, 0);
                 data(i, 3) = data(i - 1, 3)
                            + (data(i, 1) - data(i - 1, 1)) * data(i, 4);
-            }
-        }
-    }
+              }
+	  }
+      }
     
     cStress = tStress;
     cStrain = tStrain;
     cTangent = tTangent;
-    
     return 0;
   }
 
@@ -278,15 +283,14 @@ int XC::MultiLinear::revertToStart(void)
     data(0, 0) = -data(0, 1);
     data(0, 2) = -data(0, 3);
     
-    for (int i = 1; i < numSlope; i++) {
+    for(int i = 1; i < numSlope; i++)
+      {
         data(i, 1) = data(i - 1, 1) + data(i, 5);
         data(i, 3) = data(i - 1, 3) + data(i, 5) * data(i, 4);
         data(i, 0) = -data(i, 1);
         data(i, 2) = -data(i, 3);
-    }
-
+      }
     
-
     data(0, 0) = -e0(0);      // neg yield strain
     data(0, 1) = e0(0);       // pos yield strain
     data(0, 2) = -s0(0);      // neg yield stress

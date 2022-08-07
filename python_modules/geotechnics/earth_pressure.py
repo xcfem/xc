@@ -23,7 +23,7 @@ class RankineSoil(fs.FrictionalSoil):
     :ivar phi:    internal friction angle of the soil
     :ivar beta:   angle of backfill with horizontal
     '''
-    def __init__(self,phi,beta= 0.0,rho= 2100.0, rhoSat= None, gammaMPhi= 1.0):
+    def __init__(self,phi, beta= 0.0, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0):
         ''' Constructor.
 
         :param phi: internal friction angle of the soil
@@ -343,3 +343,35 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     return maxPressure, pressureFunction, minWeight, maxWeight
     
     
+def getHorizontalSoilReactionDiagram(depth, tributaryArea, gamma, Ka, K0, Kp, Kh):
+    ''' Return the points of the force-displacement diagram.
+
+    :param depth: depth of the point.
+    :param tributaryArea: area on which the pressure acts.
+    :param Ka: active earth pressure coefficient.
+    :param K0: earth pressure at rest coefficient.
+    :param Kp: passive earth pressure coefficient.
+    :param Kh: horizontal Winkler modulus.
+    '''
+    Ea= Ka*depth*gamma*tributaryArea
+    E0= K0*depth*gamma*tributaryArea
+    Ep= Kp*depth*gamma*tributaryArea
+    # Compute active and passive limits.
+    activeLimit= (Ea-E0)/Kh
+    passiveLimit= (Ep-E0)/Kh
+    # Compute diagram bounds.
+    bandWidth= 20.0*max(abs(activeLimit), abs(passiveLimit))
+    lowerBound= -bandWidth/2.0
+    upperBound= bandWidth/2.0
+    # Move the diagram towards positive domain.
+    initStrain= -math.floor(lowerBound*1e3)/1e3
+
+    # Compute diagram points.
+    ## Point at rest
+    lowerBoundPt= (lowerBound+initStrain, 0.99*Ea)
+    activeLimitPt= (activeLimit+initStrain, Ea)
+    atRestPt= (initStrain, E0)
+    passiveLimitPt= (passiveLimit+initStrain, Ep)
+    upperBoundPt= (upperBound+initStrain, 1.01*Ep)
+
+    return [lowerBoundPt, activeLimitPt, atRestPt, passiveLimitPt, upperBoundPt], initStrain

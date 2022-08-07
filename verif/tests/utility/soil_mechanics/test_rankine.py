@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Rankine soil model verification test.'''
 
 from __future__ import print_function
 

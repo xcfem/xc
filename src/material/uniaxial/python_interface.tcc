@@ -70,8 +70,10 @@ class_<XC::CableMaterial, bases<XC::ElasticBaseMaterial> >("CableMaterial")
   .add_property("length", &XC::CableMaterial::getLength, &XC::CableMaterial::setLength, "Return the length of the cable.")
   ;
 
+XC::UniaxialMaterial *(XC::EncapsulatedMaterial::*getMaterialPtr)(void)= &XC::EncapsulatedMaterial::getMaterial;
 void (XC::EncapsulatedMaterial::*setEncapsulatedMaterial)(const std::string &)= &XC::EncapsulatedMaterial::setMaterial;
 class_<XC::EncapsulatedMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("EncapsulatedMaterial", no_init)
+  .add_property("material", make_function(getMaterialPtr,return_internal_reference<>()), "Return the encapsulated material.")
   .def("setMaterial", setEncapsulatedMaterial, "Assigns the encapsulated material.")
   ;
 

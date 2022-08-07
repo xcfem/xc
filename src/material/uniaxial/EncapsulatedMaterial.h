@@ -49,6 +49,8 @@ class EncapsulatedMaterial: public UniaxialMaterial
     EncapsulatedMaterial &operator=(const EncapsulatedMaterial &);
     ~EncapsulatedMaterial(void);
 
+    const UniaxialMaterial *getMaterial(void) const;
+    UniaxialMaterial *getMaterial(void);
     virtual void setMaterial(const UniaxialMaterial &);
     void setMaterial(const std::string &);
     

@@ -562,7 +562,7 @@ def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
     retval.h= h
     return retval
 
-def defMultiLinearMaterial(preprocessor,name,points):
+def defMultiLinearMaterial(preprocessor, name, points):
     '''Constructs an elastic perfectly-plastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -579,6 +579,7 @@ def defInitStrainMaterial(preprocessor, name, materialToEncapsulate):
     '''Constructs an initial strain uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
     :param materialToEncapsulate: material that will name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
@@ -590,6 +591,7 @@ def defInitStressMaterial(preprocessor, name, materialToEncapsulate):
     '''Constructs an initial strain uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
     :param materialToEncapsulate: material that will name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
@@ -601,11 +603,29 @@ def defSeriesMaterial(preprocessor, name, materialsToConnect):
     '''Constructs an series material.
 
     :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
     :param materialsToConnect: name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("series_material",name)
     retval.setMaterials(materialsToConnect)
+    return retval
+
+def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStrain):
+    ''' Return a material that represents the force-displacement
+        diagram of the soil reaction in a point.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
+    :param samplePoints: points defining the soil response diagram.
+    :param initStrain: initial strain of the soil.
+    '''
+    ## Material definition
+    encapsulatedMaterialName= name+'_encapsulated'
+    encapsulated= defMultiLinearMaterial(preprocessor, name= encapsulatedMaterialName, points= samplePoints) # We'll set the points AGAIN, AFTER specifying the initial strain
+    retval= defInitStrainMaterial(preprocessor, name, encapsulated.name)
+    retval.initialStrain= initStrain # displacement at rest.
+    retval.material.setValues(samplePoints) # and now we set the points AGAIN.
     return retval
 
 class MaterialData(BasicElasticMaterial):

@@ -43,6 +43,14 @@ void XC::EncapsulatedMaterial::copy(const UniaxialMaterial *other)
       theMaterial= other->getCopy();
   }
 
+//! @brief Return a pointer to the material.
+const XC::UniaxialMaterial *XC::EncapsulatedMaterial::getMaterial(void) const
+  { return theMaterial; }
+
+//! @brief Return a pointer to the material.
+XC::UniaxialMaterial *XC::EncapsulatedMaterial::getMaterial(void)
+  { return theMaterial; }
+
 //! @brief Sets the encapsulated material.
 void XC::EncapsulatedMaterial::setMaterial(const UniaxialMaterial &material)
   {
