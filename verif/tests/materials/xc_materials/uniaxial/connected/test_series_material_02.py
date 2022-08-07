@@ -27,7 +27,7 @@ mat2= typical_materials.defMultiLinearMaterial(preprocessor, "1005", sampleStrai
 materialsToConnect= [mat1.name, mat2.name]
 seriesMaterial= typical_materials.defSeriesMaterial(preprocessor, 'seriesMaterial', materialsToConnect)
 
-# Spring to avoid zero stiffness when soil is in tension.
+# Spring to avoid zero stiffness when the previous material is in tension.
 k= typical_materials.defElasticMaterial(preprocessor, "k",E= 1e2)
 
 ratio= abs(seriesMaterial.numMaterials-len(materialsToConnect))
@@ -51,6 +51,10 @@ zl= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 elements.defaultMaterial= k.name
 spring= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 
+## Constraints
+modelSpace.fixNode000(n1.tag)
+modelSpace.fixNodeF00(n2.tag)
+
 # Define load.
 ## Load definition.
 ts= modelSpace.newTimeSeries(name= "ts", tsType= "linear_ts")
@@ -58,10 +62,6 @@ lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag,xc.Vector([1,0,0]))
 ## We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
-
-# Constraints
-modelSpace.fixNode000(n1.tag)
-modelSpace.fixNodeF00(n2.tag)
 
 ## Solution recipe
 dispIncrement= .001

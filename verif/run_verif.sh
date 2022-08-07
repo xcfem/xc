@@ -734,6 +734,7 @@ echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_03.py
 #nD Materials
 echo "$BLEU" "      nD materials tests." "$NORMAL"
 python tests/materials/xc_materials/nD/test_elastic_isotropic_plane_strain_2d_01.py
