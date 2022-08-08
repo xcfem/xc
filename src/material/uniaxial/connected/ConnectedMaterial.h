@@ -51,6 +51,8 @@ class ConnectedMaterial: public UniaxialMaterial
 
     virtual void setMaterials(const boost::python::list &);
     size_t getNumMaterials(void) const;
+    const DqUniaxialMaterial &getMaterials(void) const;
+    DqUniaxialMaterial &getMaterials(void);
     
     int sendData(Communicator &);  
     int recvData(const Communicator &);

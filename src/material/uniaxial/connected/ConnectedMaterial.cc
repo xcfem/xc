@@ -123,6 +123,14 @@ void XC::ConnectedMaterial::setMaterials(const boost::python::list &materialsToC
 size_t XC::ConnectedMaterial::getNumMaterials(void) const
   { return theModels.size(); }
 
+//! @brief Return a reference to the material container.
+const XC::DqUniaxialMaterial &XC::ConnectedMaterial::getMaterials(void) const
+  { return theModels; }
+
+//! @brief Return a reference to the material container.
+XC::DqUniaxialMaterial &XC::ConnectedMaterial::getMaterials(void)
+  { return theModels; }
+
 //! @brief Send its members through the communicator argument.
 int XC::ConnectedMaterial::sendData(Communicator &comm)
   {

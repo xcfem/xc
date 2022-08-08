@@ -21,9 +21,11 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+XC::DqUniaxialMaterial & (XC::ConnectedMaterial::*getConnectedMaterials)(void)= &XC::ConnectedMaterial::getMaterials;
 class_<XC::ConnectedMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("ConnectedMaterial", no_init)
   .add_property("numMaterials", &XC::ConnectedMaterial::getNumMaterials,"Return the number of connected materials.")
-  .def("setMaterials",&XC::ConnectedMaterial::setMaterials)
+  .def("setMaterials",&XC::ConnectedMaterial::setMaterials, "Sets the connected materials.")
+  .def("getMaterials",make_function(getConnectedMaterials,return_internal_reference<>()),"Return a reference to the material container.")
   ;
 
 class_<XC::ParallelMaterial, bases<XC::ConnectedMaterial>, boost::noncopyable >("ParallelMaterial", no_init);
