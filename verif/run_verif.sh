@@ -735,13 +735,14 @@ python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simpl
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_03.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_04.py
 #nD Materials
 echo "$BLEU" "      nD materials tests." "$NORMAL"
 python tests/materials/xc_materials/nD/test_elastic_isotropic_plane_strain_2d_01.py
 python tests/materials/xc_materials/nD/test_elastic_isotropic_plane_stress_2d_01.py
 python tests/materials/xc_materials/nD/test_elastic_isotropic_3d_01.py
 python tests/materials/xc_materials/nD/test_elastic_isotropic_3d_strain_load.py
-echo "$BLEU" "        J2 (Von Mises) materials tests." "$NORMAL"
+echo "$BLEU" "      J2 (Von Mises) materials tests." "$NORMAL"
 python tests/materials/xc_materials/nD/test_j2_plate_fibre.py
 python tests/materials/xc_materials/nD/test_j2_plate_fibre_strain_load.py
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
