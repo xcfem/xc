@@ -251,3 +251,57 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         :param os: output stream.
         '''
         self.shReinf.latexReport(width= 2.0*self.Rext, os= os)
+        
+    def defElasticSection1d(self, preprocessor, overrideRho= None):
+        ''' Return an elastic section appropriate for truss analysis.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
+        return super().defElasticSection1d(preprocessor, material= mat, overrideRho= overrideRho)
+    
+    def defElasticSection3d(self, preprocessor, overrideRho= None):
+        ''' Return an elastic section appropriate for 3D beam analysis
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
+        return super().defElasticSection3d(preprocessor, material= mat, overrideRho= overrideRho)
+    
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
+        '''elastic section appropriate for 3D beam analysis, including shear 
+           deformations
+
+        :param preprocessor: XC preprocessor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+         '''
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
+        return super().defElasticShearSection3d(preprocessor, material= mat, overrideRho= overrideRho)
+    
+    def defElasticSection2d(self, preprocessor, overrideRho= None):
+        ''' Return an elastic section appropriate for 2D beam analysis
+
+        :param preprocessor: XC preprocessor for the finite element problem.
+        :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
+        return super().defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
+        
+    def defElasticShearSection2d(self, preprocessor, overrideRho= None):
+        '''elastic section appropriate for 2D beam analysis, including 
+           shear deformations.
+
+        :param preprocessor: XC preprocessor for the finite element problem.
+        :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.getElasticMaterialData(overrideRho= overrideRho)
+        return super().defElasticShearSection2d(preprocessor, material= mat, majorAxis= True, overrideRho= overrideRho)

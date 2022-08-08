@@ -621,6 +621,14 @@ class RCSectionBase(object):
         ''' returns the type of the reinforcing steel in this sections.'''
         return self.fiberSectionParameters.reinfSteelType
 
+    def getElasticMaterialData(self, overrideRho= None):
+        ''' Return an elastic material constitutive model.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+    
     def getNDivIJ(self):
         ''' Return the number of cells in IJ (width or radial) direction.'''
         return self.fiberSectionParameters.nDivIJ
@@ -1110,14 +1118,6 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         rg.nDivJK= self.fiberSectionParameters.nDivJK
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
-
-    def getElasticMaterialData(self, overrideRho= None):
-        ''' Return an elastic material constitutive model.
-
-        :param overrideRho: if defined (not None), override the value of 
-                            the material density.
-        '''
-        return self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
     
     def defElasticSection1d(self, preprocessor, overrideRho= None):
         ''' Return an elastic section appropriate for truss analysis.
