@@ -53,38 +53,44 @@ modelSpace.fixNodeF00(n4.tag)
 ## Define element.
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 # Dimension of element space
+
 ### Left element.
 elements.defaultMaterial= soilResponse.name
-zlLeft= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
+zlLeft= elements.newElement("ZeroLength",xc.ID([n4.tag,n3.tag]))
 soilMaterialLeft= zlLeft.getMaterials()[0]
-zlLeft.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
+zlLeft.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
 elements.defaultMaterial= k.name
-leftSpring= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
+leftSpring= elements.newElement("ZeroLength",xc.ID([n3.tag,n4.tag]))
 
 ### Right element.
 elements.defaultMaterial= soilResponse.name
-zlRight= elements.newElement("ZeroLength",xc.ID([n4.tag,n3.tag]))
+zlRight= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 soilMaterialRight= zlRight.getMaterials()[0]
-zlRight.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
+zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
 elements.defaultMaterial= k.name
-rightSpring= elements.newElement("ZeroLength",xc.ID([n3.tag,n4.tag]))
+rightSpring= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
+
 
 
 # Solve 
 solProc= predefined_solutions.PenaltyKrylovNewton(prb= feProblem, numSteps= 10)
 solProc.solve()
 
-materialStrain= soilMaterialLeft.getStrain()
-materialStress= soilMaterialLeft.getStress()
+rightMaterialStrain= soilMaterialRight.getStrain()
+rightMaterialStress= soilMaterialRight.getStress()
 dispXN2= n2.getDisp[0]
+leftMaterialStrain= soilMaterialLeft.getStrain()
+leftMaterialStress= soilMaterialLeft.getStress()
 dispXN4= n4.getDisp[0]
 
 ratio= abs(dispXN2+dispXN4)
 
 '''
-print('material strain: ', materialStrain)
-print('material stress: ', materialStress)
+print('right material strain: ', rightMaterialStrain)
+print('right material stress: ', rightMaterialStress)
 print('dispXN2= ', dispXN2)
+print('left material strain: ', leftMaterialStrain)
+print('left material stress: ', leftMaterialStress)
 print('dispXN4= ', dispXN4)
 print('ratio= ', ratio)
 '''
