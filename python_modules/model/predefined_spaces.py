@@ -254,6 +254,26 @@ class PredefinedSpace(object):
     def getNodeHandler(self):
         ''' Return the node handler for this model.'''
         return self.preprocessor.getNodeHandler
+
+    # Produces inconsistency between 'total' set and the elements in
+    # the domain.
+    # def removeNode(self, nodeTag):
+    #     ''' Remove the node identified by the argument.
+
+    #     :param nodeTag: node tag.
+    #     '''
+    #     mesh= self.preprocessor.getDomain.getMesh
+    #     return mesh.removeNode(nodeTag)
+    
+    # Produces inconsistency between 'total' set and the elements in
+    # the domain.
+    # def removeElement(self, eTag):
+    #     ''' Remove the element identified by the argument.
+
+    #     :param eTag: element tag.
+    #     '''
+    #     mesh= self.preprocessor.getDomain.getMesh
+    #     return mesh.removeElement(eTag)
     
     def newNodeXY(self, x, y):
         ''' Create a new node.
