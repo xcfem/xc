@@ -28,6 +28,10 @@ preprocessor=  feProblem.getPreprocessor
 ## Material definition
 soilResponse= typical_materials.defMultiLinearMaterial(preprocessor, "soilResponse", samplePoints)
 
+# Invert sample.
+samplePoints= [ (-x,-y) for (x,y) in samplePoints]
+initStrain= -initStrain
+
 # Compute stresses.
 err= 0.0
 stresses= list()

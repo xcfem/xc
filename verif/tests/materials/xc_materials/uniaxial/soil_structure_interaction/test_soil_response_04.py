@@ -28,7 +28,7 @@ samplePoints, initStrain= earth_pressure.getHorizontalSoilReactionDiagram(depth=
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 ## Material definition
-soilResponse= typical_materials.defHorizontalSoilReactionMaterial(preprocessor, name= "soilResponse", samplePoints= samplePoints, initStrain= initStrain)
+soilResponse= typical_materials.defHorizontalSoilReactionMaterial(preprocessor, name= "soilResponse", samplePoints= samplePoints, initStrain= -initStrain)
 # Spring opposed to soil movement.
 k= typical_materials.defElasticMaterial(preprocessor, "k",E= 1e6)
 
@@ -86,12 +86,12 @@ dispXN4= n4.getDisp[0]
 ratio= abs(dispXN2+dispXN4)
 
 '''
-print('right material strain: ', rightMaterialStrain)
+print('\nright material strain: ', rightMaterialStrain)
 print('right material stress: ', rightMaterialStress)
-print('dispXN2= ', dispXN2)
+print('displacement to the right: dispXN2= ', dispXN2)
 print('left material strain: ', leftMaterialStrain)
 print('left material stress: ', leftMaterialStress)
-print('dispXN4= ', dispXN4)
+print('displacement to the left: dispXN4= ', dispXN4)
 print('ratio= ', ratio)
 '''
 

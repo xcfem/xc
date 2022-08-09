@@ -599,6 +599,18 @@ def defInitStressMaterial(preprocessor, name, materialToEncapsulate):
     retval.setMaterial(materialToEncapsulate)
     return retval
 
+def defInvertMaterial(preprocessor, name, materialToEncapsulate):
+    '''Constructs an inverted uniaxial material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
+    :param materialToEncapsulate: material that will name of the materials to be connected.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("invert_material",name)
+    retval.setMaterial(materialToEncapsulate)
+    return retval
+
 def defSeriesMaterial(preprocessor, name, materialsToConnect):
     '''Constructs an series material.
 
@@ -623,9 +635,11 @@ def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStra
     ## Material definition
     encapsulatedMaterialName= name+'_encapsulated'
     encapsulated= defMultiLinearMaterial(preprocessor, name= encapsulatedMaterialName, points= samplePoints) # We'll set the points AGAIN, AFTER specifying the initial strain
-    retval= defInitStrainMaterial(preprocessor, name, encapsulated.name)
+    invertedMaterialName= name+'_inverted'
+    inverted= defInvertMaterial(preprocessor, name= invertedMaterialName, materialToEncapsulate= encapsulated.name)
+    retval= defInitStrainMaterial(preprocessor, name= name, materialToEncapsulate= inverted.name)
     retval.initialStrain= initStrain # displacement at rest.
-    retval.material.setValues(samplePoints) # and now we set the points AGAIN.
+    retval.material.material.setValues(samplePoints) # and now we set the points AGAIN.
     return retval
 
 class MaterialData(BasicElasticMaterial):

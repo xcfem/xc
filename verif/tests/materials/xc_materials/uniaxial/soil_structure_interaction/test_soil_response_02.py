@@ -27,7 +27,11 @@ samplePoints, initStrain= earth_pressure.getHorizontalSoilReactionDiagram(depth=
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 ## Material definition
-soilResponse= typical_materials.defHorizontalSoilReactionMaterial(preprocessor, name= "soilResponse", samplePoints= samplePoints, initStrain= initStrain)
+soilResponse= typical_materials.defHorizontalSoilReactionMaterial(preprocessor, name= "soilResponse", samplePoints= samplePoints, initStrain= -initStrain)
+
+# Invert sample.
+samplePoints= [ (-x,-y) for (x,y) in samplePoints]
+initStrain= -initStrain
 
 # Compute stresses.
 err= 0.0
