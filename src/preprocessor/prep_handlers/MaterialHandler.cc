@@ -38,6 +38,8 @@
 #include "material/uniaxial/concrete/Concrete02.h"
 #include "material/uniaxial/concrete/Concrete04.h"
 #include "material/uniaxial/ENTMaterial.h"
+#include "material/uniaxial/TensionOnlyMaterial.h"
+#include "material/uniaxial/InvertMaterial.h"
 #include "material/uniaxial/EPPGapMaterial.h"
 #include "material/uniaxial/ElasticMaterial.h"
 #include "material/uniaxial/ElasticPPMaterial.h"
@@ -46,8 +48,8 @@
 #include "material/uniaxial/HystereticMaterial.h"
 #include "material/uniaxial/InitStrainMaterial.h"
 #include "material/uniaxial/InitStressMaterial.h"
-#include "material/uniaxial/MinMaxMaterial.h"
 #include "material/uniaxial/MultiLinear.h"
+#include "material/uniaxial/MinMaxMaterial.h"
 #include "material/uniaxial/NewUniaxialMaterial.h"
 #include "material/uniaxial/connected/ParallelMaterial.h"
 #include "material/uniaxial/connected/SeriesMaterial.h"
@@ -244,8 +246,12 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::Concrete02(tag_mat);
     else if(cmd == "concrete04_material")
       retval= new XC::Concrete04(tag_mat);
-    else if(cmd == "elastic_no_traction_material")
+    else if((cmd == "elastic_no_traction_material") or (cmd == "elastic_no_tension_material"))
       retval= new XC::ENTMaterial(tag_mat);
+    else if(cmd == "tension_only_material")
+      retval= new XC::TensionOnlyMaterial(tag_mat);
+    else if(cmd == "invert_material")
+      retval= new XC::InvertMaterial(tag_mat);
     else if(cmd == "epp_gap_material")
       retval= new XC::EPPGapMaterial(tag_mat);
     else if(cmd == "elastic_material")

@@ -106,5 +106,7 @@
 #define MAT_TAG_MultiLinear		       152
 #define MAT_TAG_InitStrain		       147
 #define MAT_TAG_InitStress		       148
+#define MAT_TAG_TensionOnly		       1601
+#define MAT_TAG_Invert                         1602
 
 #endif
