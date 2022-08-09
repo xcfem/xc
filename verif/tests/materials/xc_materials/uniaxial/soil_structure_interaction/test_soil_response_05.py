@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Pressure-displacement diagram verification test.'''
+''' Pressure-displacement diagram verification test. Now add elastic no
+tension material to avoid soil to work in tension.'''
 
 from __future__ import print_function
 
@@ -27,9 +28,10 @@ samplePoints, initStrain= earth_pressure.getHorizontalSoilReactionDiagram(depth=
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-## Material definition
-soilResponse= typical_materials.defHorizontalSoilReactionMaterial(preprocessor, name= "soilResponse", samplePoints= samplePoints, initStrain= -initStrain)
-# Spring opposed to soil movement.
+## Nonlinear spring material
+nlSpringMaterial= typical_materials.defHorizontalSoilReactionMaterial(preprocessor, name= "soilResponse", samplePoints= samplePoints, initStrain= -initStrain, noTension= True)
+
+# Spring opposed to soil movement to simulate the earth-retaining structure.
 k= typical_materials.defElasticMaterial(preprocessor, "k",E= 1e6)
 
 ## Problem type
@@ -43,7 +45,6 @@ n2= nodes.newNodeXY(0,0)
 n3= nodes.newNodeXY(0,0)
 n4= nodes.newNodeXY(0,0)
 
-
 ## Constraints
 modelSpace.fixNode000(n1.tag)
 modelSpace.fixNodeF00(n2.tag)
@@ -55,7 +56,7 @@ elements= preprocessor.getElementHandler
 elements.dimElem= 2 # Dimension of element space
 
 ### Left element.
-elements.defaultMaterial= soilResponse.name
+elements.defaultMaterial= nlSpringMaterial.name
 zlLeft= elements.newElement("ZeroLength",xc.ID([n4.tag,n3.tag]))
 soilMaterialLeft= zlLeft.getMaterials()[0]
 zlLeft.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
@@ -63,16 +64,19 @@ elements.defaultMaterial= k.name
 leftSpring= elements.newElement("ZeroLength",xc.ID([n3.tag,n4.tag]))
 
 ### Right element.
-elements.defaultMaterial= soilResponse.name
+elements.defaultMaterial= nlSpringMaterial.name
 zlRight= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 soilMaterialRight= zlRight.getMaterials()[0]
 zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
 elements.defaultMaterial= k.name
 rightSpring= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 
+
+
 # Solve 
 solProc= predefined_solutions.PenaltyKrylovNewton(prb= feProblem, numSteps= 10)
 solProc.solve()
+
 dispXN2= n2.getDisp[0]
 dispXN4= n4.getDisp[0]
 ratio0= abs(dispXN2+dispXN4)

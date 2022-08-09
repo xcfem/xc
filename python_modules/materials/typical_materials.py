@@ -611,6 +611,30 @@ def defInvertMaterial(preprocessor, name, materialToEncapsulate):
     retval.setMaterial(materialToEncapsulate)
     return retval
 
+def defCompressionOnlyMaterial(preprocessor, name, materialToEncapsulate):
+    '''Constructs a compression-only material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
+    :param materialToEncapsulate: material that will name of the materials to be connected.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("compression_only_material",name)
+    retval.setMaterial(materialToEncapsulate)
+    return retval
+
+def defTensionOnlyMaterial(preprocessor, name, materialToEncapsulate):
+    '''Constructs a compression-only material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
+    :param materialToEncapsulate: material that will name of the materials to be connected.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("tension_only_material",name)
+    retval.setMaterial(materialToEncapsulate)
+    return retval
+
 def defSeriesMaterial(preprocessor, name, materialsToConnect):
     '''Constructs an series material.
 
@@ -623,7 +647,7 @@ def defSeriesMaterial(preprocessor, name, materialsToConnect):
     retval.setMaterials(materialsToConnect)
     return retval
 
-def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStrain):
+def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStrain, noTension= False):
     ''' Return a material that represents the force-displacement
         diagram of the soil reaction in a point.
 
@@ -633,13 +657,23 @@ def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStra
     :param initStrain: initial strain of the soil.
     '''
     ## Material definition
+    if(initStrain>0.0):
+        lmsg.warning('initStrain ('+str(initStrain)+') must be negative.')
     encapsulatedMaterialName= name+'_encapsulated'
     encapsulated= defMultiLinearMaterial(preprocessor, name= encapsulatedMaterialName, points= samplePoints) # We'll set the points AGAIN, AFTER specifying the initial strain
-    invertedMaterialName= name+'_inverted'
+    invertedMaterialName= encapsulatedMaterialName+'_inverted'
     inverted= defInvertMaterial(preprocessor, name= invertedMaterialName, materialToEncapsulate= encapsulated.name)
-    retval= defInitStrainMaterial(preprocessor, name= name, materialToEncapsulate= inverted.name)
-    retval.initialStrain= initStrain # displacement at rest.
-    retval.material.material.setValues(samplePoints) # and now we set the points AGAIN.
+    if(noTension):
+        initStrainMaterialName= invertedMaterialName+'_e0'
+        initStrainMaterial= defInitStrainMaterial(preprocessor, name= initStrainMaterialName, materialToEncapsulate= inverted.name)
+        retval= defCompressionOnlyMaterial(preprocessor, name= name, materialToEncapsulate= initStrainMaterial.name) 
+        retval.material.initialStrain= initStrain # displacement at rest.
+        mLinearMat= retval.material.material.material
+        mLinearMat.setValues(samplePoints) # and now we set the points AGAIN.
+    else:
+        retval= defInitStrainMaterial(preprocessor, name= name, materialToEncapsulate= inverted.name)
+        retval.initialStrain= initStrain # displacement at rest.
+        retval.material.material.setValues(samplePoints) # and now we set the points AGAIN.
     return retval
 
 class MaterialData(BasicElasticMaterial):
