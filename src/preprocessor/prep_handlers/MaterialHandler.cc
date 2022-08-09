@@ -39,6 +39,7 @@
 #include "material/uniaxial/concrete/Concrete04.h"
 #include "material/uniaxial/ENTMaterial.h"
 #include "material/uniaxial/TensionOnlyMaterial.h"
+#include "material/uniaxial/CompressionOnlyMaterial.h"
 #include "material/uniaxial/InvertMaterial.h"
 #include "material/uniaxial/EPPGapMaterial.h"
 #include "material/uniaxial/ElasticMaterial.h"
@@ -250,6 +251,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::ENTMaterial(tag_mat);
     else if(cmd == "tension_only_material")
       retval= new XC::TensionOnlyMaterial(tag_mat);
+    else if(cmd == "compression_only_material")
+      retval= new XC::CompressionOnlyMaterial(tag_mat);
     else if(cmd == "invert_material")
       retval= new XC::InvertMaterial(tag_mat);
     else if(cmd == "epp_gap_material")

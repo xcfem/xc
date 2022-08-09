@@ -46,96 +46,94 @@
                                                                         
 // $Revision: 1.6 $
 // $Date: 2010-09-11 00:50:53 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/TensionOnlyMaterial.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/CompressionOnlyMaterial.cpp,v $
 
 // Written: MHS
 // Created: Aug 2001
 //
 // Description: This file contains the class definition for 
-// TensionOnlyMaterial.  TensionOnlyMaterial wraps a UniaxialMaterial
-// and imposes min and max strain limits.
+// CompressionOnlyMaterial.  CompressionOnlyMaterial wraps a UniaxialMaterial
+// and removes the positive part of its stress-strain diagram.
 
-#include "TensionOnlyMaterial.h"
+#include "CompressionOnlyMaterial.h"
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
-XC::TensionOnlyMaterial::TensionOnlyMaterial(int tag, UniaxialMaterial &material)
-  :HalfDiagramMaterial(tag,MAT_TAG_TensionOnly, material)
+XC::CompressionOnlyMaterial::CompressionOnlyMaterial(int tag, UniaxialMaterial &material)
+  :HalfDiagramMaterial(tag,MAT_TAG_CompressionOnly, material)
   {}
 
-XC::TensionOnlyMaterial::TensionOnlyMaterial(int tag)
-  :HalfDiagramMaterial(tag,MAT_TAG_TensionOnly)
+XC::CompressionOnlyMaterial::CompressionOnlyMaterial(int tag)
+  :HalfDiagramMaterial(tag,MAT_TAG_CompressionOnly)
   {}
 
 //! @brief Return the material stress.
-double XC::TensionOnlyMaterial::getStress(void) const
+double XC::CompressionOnlyMaterial::getStress(void) const
   {
     const double f= theMaterial->getStress();
-    if (f < 0.0)
+    if(f > 0.0)
       return factor*f;
     else
       return f;
   }
 
 //! @brief Return the tangent stiffness.
-double XC::TensionOnlyMaterial::getTangent(void) const
+double XC::CompressionOnlyMaterial::getTangent(void) const
   {
     const double E= theMaterial->getTangent();
     const double f= theMaterial->getStress();
-    if(f < 0.0)
+    if(f > 0.0)
       return factor*E;
     else
       return E;
   }
 
-double XC::TensionOnlyMaterial::getDampTangent(void) const
+double XC::CompressionOnlyMaterial::getDampTangent(void) const
   {
     const double D= theMaterial->getDampTangent();
     const double f= theMaterial->getStress();
-    if (f < 0.0)
+    if (f > 0.0)
       return factor*D;
     else
       return D;
   }
 
 
-int XC::TensionOnlyMaterial::commitState(void)
+int XC::CompressionOnlyMaterial::commitState(void)
   {
     const double f= theMaterial->getStress();
-    if(f >= 0.0)
+    if(f <= 0.0)
       return theMaterial->commitState();
     else
       return 0;
   }
 
-XC::UniaxialMaterial *XC::TensionOnlyMaterial::getCopy(void) const
-  { return new TensionOnlyMaterial(*this); }
+XC::UniaxialMaterial *XC::CompressionOnlyMaterial::getCopy(void) const
+  { return new CompressionOnlyMaterial(*this); }
 
-double XC::TensionOnlyMaterial::getStressSensitivity(int gradIndex, bool conditional)
+double XC::CompressionOnlyMaterial::getStressSensitivity(int gradIndex, bool conditional)
 {
-  double f = theMaterial->getStress();
-  if (f < 0.0)
+  const double f = theMaterial->getStress();
+  if (f > 0.0)
     return 0.0;
   else 
     return theMaterial->getStressSensitivity(gradIndex, conditional);
 }
 
-double
-XC::TensionOnlyMaterial::getDampTangentSensitivity(int gradIndex)
+double XC::CompressionOnlyMaterial::getDampTangentSensitivity(int gradIndex)
 {
-  double f = theMaterial->getStress();
-  if (f < 0.0)
+  const double f = theMaterial->getStress();
+  if (f > 0.0)
     return 0.0;
   else
     return theMaterial->getDampTangentSensitivity(gradIndex);
 }
 
-int   
-XC::TensionOnlyMaterial::commitSensitivity(double strainGradient,
+int XC::CompressionOnlyMaterial::commitSensitivity(double strainGradient,
 				       int gradIndex, int numGrads)
 {
   double f = theMaterial->getStress();
-  if (f >= 0.0)
+  if (f <= 0.0)
     return theMaterial->commitSensitivity(strainGradient, gradIndex, numGrads);
   else
     return 0;

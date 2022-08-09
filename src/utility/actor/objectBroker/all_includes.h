@@ -34,6 +34,7 @@
 #include "material/uniaxial/CableMaterial.h"
 #include "material/uniaxial/ENTMaterial.h"
 #include "material/uniaxial/TensionOnlyMaterial.h"
+#include "material/uniaxial/CompressionOnlyMaterial.h"
 #include "material/uniaxial/InvertMaterial.h"
 #include "material/uniaxial/InitStrainMaterial.h"
 #include "material/uniaxial/InitStressMaterial.h"

@@ -58,48 +58,27 @@
 #ifndef TensionOnlyMaterial_h
 #define TensionOnlyMaterial_h
 
-#include "material/uniaxial/EncapsulatedMaterial.h"
+#include "material/uniaxial/HalfDiagramMaterial.h"
 
 namespace XC {
 //! @brief Removes negative part of the stress-strain diagram.
 //! @ingroup MatUnx
-class TensionOnlyMaterial : public EncapsulatedMaterial
+class TensionOnlyMaterial : public HalfDiagramMaterial
   {
-  private:
-    const double factor= 0.0001;
-  protected:
-    DbTagData &getDbTagData(void) const;
   public:
     TensionOnlyMaterial(int tag, UniaxialMaterial &material); 
     TensionOnlyMaterial(int tagl= 0);
     UniaxialMaterial *getCopy(void) const;
 
-    int setTrialStrain(double strain, double strainRate = 0.0); 
-    //int setTrialStrain(double strain, double FiberTemperature, double strainRate); 
     double getStress(void) const;
     double getTangent(void) const;
     double getDampTangent(void) const;
-    inline double getInitialTangent(void) const
-      { return theMaterial->getInitialTangent();}
 
     int commitState(void);
-    int revertToLastCommit(void);    
-    int revertToStart(void);        
-
     
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &s, int flag =0) const;
-
     // AddingSensitivity:BEGIN //////////////////////////////////////////
-    int setParameter(const std::vector<std::string> &, Parameter &);
-    int updateParameter(int parameterID, Information &info);
     double getStressSensitivity     (int gradIndex, bool conditional);
-    double getStrainSensitivity     (int gradIndex);
-    double getInitialTangentSensitivity(int gradIndex);
     double getDampTangentSensitivity(int gradIndex);
-    double getRhoSensitivity        (int gradIndex);
     int    commitSensitivity        (double strainGradient, int gradIndex, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
