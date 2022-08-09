@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -45,50 +44,41 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.3 $
-// $Date: 2003/02/14 23:01:39 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/MinMaxMaterial.h,v $
+// $Revision: 1.5 $
+// $Date: 2008-04-14 21:26:50 $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/InvertMaterial.h,v $
                                                       
 // Written: MHS
 // Created: Aug 2001
 //
 // Description: This file contains the class definition for 
-// MinMaxMaterial.  MinMaxMaterial wraps a UniaxialMaterial
+// InvertMaterial.  InvertMaterial wraps a UniaxialMaterial
 // and imposes min and max strain limits.
 
-#ifndef MinMaxMaterial_h
-#define MinMaxMaterial_h
+#ifndef InvertMaterial_h
+#define InvertMaterial_h
 
 #include "material/uniaxial/EncapsulatedMaterial.h"
 
 namespace XC {
+//! @brief Removes negative part of the stress-strain diagram.
 //! @ingroup MatUnx
-//
-//! @brief Stores max and min strain values.
-class MinMaxMaterial: public EncapsulatedMaterial
+class InvertMaterial : public EncapsulatedMaterial
   {
-  private:
-    double minStrain;
-    double maxStrain;
-
-    bool Tfailed;
-    bool Cfailed;
-    
+  protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(Communicator &);  
-    int recvData(const Communicator &);
   public:
-    MinMaxMaterial(int tag, UniaxialMaterial &material, double min, double max); 
-    MinMaxMaterial(int tag= 0);
-    
+    InvertMaterial(int tag, UniaxialMaterial &material); 
+    InvertMaterial(int tagl= 0);
     UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
+    //int setTrialStrain(double strain, double FiberTemperature, double strainRate); 
     double getStress(void) const;
     double getTangent(void) const;
     double getDampTangent(void) const;
     inline double getInitialTangent(void) const
-        {return theMaterial->getInitialTangent();}
+      { return -theMaterial->getInitialTangent();}
 
     int commitState(void);
     int revertToLastCommit(void);    
@@ -99,9 +89,19 @@ class MinMaxMaterial: public EncapsulatedMaterial
     int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
+
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    int setParameter(const std::vector<std::string> &, Parameter &);
+    int updateParameter(int parameterID, Information &info);
+    double getStressSensitivity     (int gradIndex, bool conditional);
+    double getStrainSensitivity     (int gradIndex);
+    double getInitialTangentSensitivity(int gradIndex);
+    double getDampTangentSensitivity(int gradIndex);
+    double getRhoSensitivity        (int gradIndex);
+    int    commitSensitivity        (double strainGradient, int gradIndex, int numGrads);
+    // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace
-
 
 #endif
 

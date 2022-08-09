@@ -77,6 +77,12 @@ class_<XC::EncapsulatedMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable
   .def("setMaterial", setEncapsulatedMaterial, "Assigns the encapsulated material.")
   ;
 
+class_<XC::TensionOnlyMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("TensionOnlyMaterial", no_init)
+  ;
+
+class_<XC::InvertMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("InvertMaterial", no_init)
+  ;
+
 class_<XC::InitStrainBaseMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("InitStrainBaseMaterial", no_init)
   ;
 
