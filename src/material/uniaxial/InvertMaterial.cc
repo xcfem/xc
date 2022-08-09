@@ -82,10 +82,10 @@ double XC::InvertMaterial::getStress(void) const
 
 //! @brief Return the tangent stiffness.
 double XC::InvertMaterial::getTangent(void) const
-  { return -theMaterial->getTangent();  }
+  { return theMaterial->getTangent();  }
 
 double XC::InvertMaterial::getDampTangent(void) const
-  { return -theMaterial->getDampTangent(); }
+  { return theMaterial->getDampTangent(); }
 
 int XC::InvertMaterial::commitState(void)
   { return theMaterial->commitState(); }

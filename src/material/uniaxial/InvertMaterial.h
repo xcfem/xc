@@ -78,7 +78,7 @@ class InvertMaterial : public EncapsulatedMaterial
     double getTangent(void) const;
     double getDampTangent(void) const;
     inline double getInitialTangent(void) const
-      { return -theMaterial->getInitialTangent();}
+      { return theMaterial->getInitialTangent();}
 
     int commitState(void);
     int revertToLastCommit(void);    
