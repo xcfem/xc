@@ -258,9 +258,10 @@ class CantileverSheetPileWall(object):
         os.write(indentation+'  actual depth: Dact= '+fmt.Length.format(Dactual)+' m\n')
         os.write(indentation+'  total length: L= '+fmt.Length.format(L)+' m\n')
         os.write(indentation+'  maximum bending moment: Mmax= '+ fmt.Esf.format(Mmax/1e3)+' kN.m/m\n')
-        
-        os.write(indentation+'  maximum displacement on wall top: Umax= '+fmt.Length.format(Umax*1000)+' mm\n')
-        os.write(indentation+'  minimum displacement on wall bottom: Umin= '+fmt.Length.format(Umin*1000)+' mm\n')
+        if(Umax):
+            os.write(indentation+'  maximum displacement on wall top: Umax= '+fmt.Length.format(Umax*1000)+' mm\n')
+        if(Umin):
+            os.write(indentation+'  minimum displacement on wall bottom: Umin= '+fmt.Length.format(Umin*1000)+' mm\n')
     
 class AnchoredSheetPileWall(CantileverSheetPileWall):
     ''' Anchored sheet pile. according to chapter 14
@@ -374,3 +375,17 @@ class AnchoredSheetPileWall(CantileverSheetPileWall):
         # Anchor force per unit length of the wall
         F= self.getAnchorForcePerUnitLength()
         os.write(indentation+'  anchor force per unit length of the wall: F= '+ fmt.Esf.format(F/1e3)+' kN/m\n')
+
+    def getDisplacements(self, wallHeight):
+        ''' Return the an estimation of the displacements at the top and bottom
+        of the wall according to the article: "El Coeficiente de Balasto 
+        en el Cálculo de Pantallas." of Fernando Muzás Labad. ETSAM UPM.
+
+        :param wallHeight: wall total height.
+        :param E: soil deformation modulus.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; not implemented yet.')
+        return None, None
+        
