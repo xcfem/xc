@@ -375,3 +375,4 @@ def getHorizontalSoilReactionDiagram(depth, tributaryArea, gamma, Ka, K0, Kp, Kh
     upperBoundPt= (upperBound+initStrain, 1.01*Ep)
 
     return [lowerBoundPt, activeLimitPt, atRestPt, passiveLimitPt, upperBoundPt], initStrain
+

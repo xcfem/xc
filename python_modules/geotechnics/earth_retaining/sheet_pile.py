@@ -16,6 +16,29 @@ from postprocess.reports import common_formats as fmt
 from scipy import interpolate
 from misc_utils import log_messages as lmsg
 
+def getPileWallDisplacements(soil, wallHeight, excavationDepth):
+    ''' Return the an estimation of the displacements at the top and bottom
+        of the wall according to the article: "El Coeficiente de Balasto 
+        en el Cálculo de Pantallas." of Fernando Muzás Labad. ETSAM UPM.
+
+    :param soil: soil type.
+    :param wallHeight: total wall height.
+    :param excavationDepth: depth of the excavation.
+    '''
+    Ka= soil.Ka() # active pressure coefficient. 
+    K0= soil.K0Jaky() # at rest pressure coefficient. 
+    Kp= soil.Kp() # passive pressure coefficient.
+    gamma= soil.gamma()
+    E= soil.E # soil deformation modulus.
+    t= wallHeight-excavationDepth
+    Uo= 2.77778*gamma*excavationDepth/E*K0 # initial translation
+    #P= 72.5*math.pow(Ka, 3.36)*pow(excavationDepth/t,4.3)
+    G= gamma*201.4*math.pow(Ka, 3.36)/E*pow(excavationDepth/t,4.3) # rotation
+
+    Umax= 1.7*excavationDepth*G+Uo
+    Umin= -(t-0.7*excavationDepth)*G+Uo
+    return Umax, Umin
+
 class CantileverSheetPileWall(object):
     ''' Cantilever sheet pile. according to chapter 14
         of the book "Principles of Foundation Engineering"
@@ -200,6 +223,16 @@ class CantileverSheetPileWall(object):
         zi.append(-totalDepth)
         pi.append(sigma_p_4)
         return interpolate.interp1d(zi, pi, kind='linear', fill_value="extrapolate"), zi
+
+    def getDisplacements(self, wallHeight):
+        ''' Return the an estimation of the displacements at the top and bottom
+        of the wall according to the article: "El Coeficiente de Balasto 
+        en el Cálculo de Pantallas." of Fernando Muzás Labad. ETSAM UPM.
+
+        :param wallHeight: wall total height.
+        :param E: soil deformation modulus.
+        '''
+        return getPileWallDisplacements(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
     
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the design results.'''
@@ -212,6 +245,7 @@ class CantileverSheetPileWall(object):
         # Total length
         L= self.getTotalLength(depthSafetyFactor= 1.3)
         Mmax= self.getMaxBendingMoment()
+        Umax, Umin= self.getDisplacements(wallHeight= L)
         os.write(indentation+'problem title: '+str(self.title)+'\n')
         os.write(indentation+'  excavation depth: H= '+fmt.Length.format(self.excavationDepth)+' m\n')
         if(self.waterTableDepth<L):
@@ -224,6 +258,9 @@ class CantileverSheetPileWall(object):
         os.write(indentation+'  actual depth: Dact= '+fmt.Length.format(Dactual)+' m\n')
         os.write(indentation+'  total length: L= '+fmt.Length.format(L)+' m\n')
         os.write(indentation+'  maximum bending moment: Mmax= '+ fmt.Esf.format(Mmax/1e3)+' kN.m/m\n')
+        
+        os.write(indentation+'  maximum displacement on wall top: Umax= '+fmt.Length.format(Umax*1000)+' mm\n')
+        os.write(indentation+'  minimum displacement on wall bottom: Umin= '+fmt.Length.format(Umin*1000)+' mm\n')
     
 class AnchoredSheetPileWall(CantileverSheetPileWall):
     ''' Anchored sheet pile. according to chapter 14
