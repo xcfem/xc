@@ -108,8 +108,7 @@ class HardeningMaterial: public UniaxialMaterial
   public:
     HardeningMaterial(int tag, double E, double sigmaY,
 		      double K, double H, double eta = 0.0);
-    HardeningMaterial(int tag);
-    HardeningMaterial(void);
+    HardeningMaterial(int tag= 0);
     HardeningMaterial(const HardeningMaterial &);
     HardeningMaterial &operator=(const HardeningMaterial &);
     ~HardeningMaterial(void);

@@ -83,13 +83,6 @@ XC::HardeningMaterial::HardeningMaterial(int tag)
     this->revertToStart();
   }
 
-XC::HardeningMaterial::HardeningMaterial(void)
-:UniaxialMaterial(0,MAT_TAG_Hardening), E(0.0), sigmaY(0.0), Hiso(0.0), Hkin(0.0), eta(0.0), parameterID(0), SHVs(nullptr)
-  {
-    // Initialize variables
-    this->revertToStart();
-  }
-
 XC::HardeningMaterial::HardeningMaterial(const HardeningMaterial &other)
 :UniaxialMaterial(other), E(other.E), sigmaY(other.sigmaY), Hiso(other.Hiso),
  Hkin(other.Hkin), eta(other.eta),
@@ -326,34 +319,39 @@ int XC::HardeningMaterial::setParameter(const std::vector<std::string> &argv, Pa
       return param.addObject(3, this);
     else if(argv[0] == "H_iso")
       return param.addObject(4, this);
+    else if(argv[0] == "eta")
+      return param.addObject(5, this);
     else
       std::cerr << "WARNING: Could not set parameter in XC::HardeningMaterial. " << std::endl;
     return -1;
   }
 
 int XC::HardeningMaterial::updateParameter(int parameterID, Information &info)
-{
-        switch (parameterID) {
-        case -1:
-                return -1;
-        case 1:
-                this->sigmaY = info.theDouble;
-                break;
-        case 2:
-                this->E = info.theDouble;
-                break;
-        case 3:
-                this->Hkin = info.theDouble;
-                break;
-        case 4:
-                this->Hiso = info.theDouble;
-                break;
-        default:
-                return -1;
-        }
-
-        return 0;
-}
+  {
+    switch (parameterID)
+      {
+      case -1:
+	return -1;
+      case 1:
+	this->sigmaY = info.theDouble;
+	break;
+      case 2:
+	this->E = info.theDouble;
+	break;
+      case 3:
+	this->Hkin = info.theDouble;
+	break;
+      case 4:
+	this->Hiso = info.theDouble;
+	break;
+      case 5:
+	this->eta = info.theDouble;
+	break;
+      default:
+        return -1;
+      }
+    return 0;
+  }
 
 
 
@@ -451,74 +449,79 @@ double XC::HardeningMaterial::getInitialTangentSensitivity(int gradNumber)
   }
 
 
-int XC::HardeningMaterial::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
+int XC::HardeningMaterial::commitSensitivity(double TstrainSensitivity, int gradIndex, int numGrads)
   {
-        if (SHVs == 0) {
-                SHVs = new Matrix(3,numGrads);
-        }
+    if(SHVs==nullptr)
+      { SHVs = new Matrix(2,numGrads); }
+    if(gradIndex >= SHVs->noCols())
+      { return 0; }
 
-        // First set values depending on what is random
-        double SigmaYSensitivity = 0.0;
-        double ESensitivity = 0.0;
-        double HkinSensitivity = 0.0;
-        double HisoSensitivity = 0.0;
+    // First set values depending on what is random
+    double SigmaYSensitivity = 0.0;
+    double ESensitivity = 0.0;
+    double HkinSensitivity = 0.0;
+    double HisoSensitivity = 0.0;
 
-        if (parameterID == 1) {  // sigmaY
-                SigmaYSensitivity = 1.0;
-        }
-        else if (parameterID == 2) {  // E
-                ESensitivity = 1.0;
-        }
-        else if (parameterID == 3) {  // Hkin
-                HkinSensitivity = 1.0;
-        }
-        else if (parameterID == 4) {  // Hiso
-                HisoSensitivity = 1.0;
-        }
-        else {
-                // Nothing random here, but may have to save SHV's in any case
-        }
+    if (parameterID == 1) {  // sigmaY
+	    SigmaYSensitivity = 1.0;
+    }
+    else if (parameterID == 2) {  // E
+	    ESensitivity = 1.0;
+    }
+    else if (parameterID == 3) {  // Hkin
+	    HkinSensitivity = 1.0;
+    }
+    else if (parameterID == 4) {  // Hiso
+	    HisoSensitivity = 1.0;
+    }
+    else {
+	    // Nothing random here, but may have to save SHV's in any case
+      }
 
-        // Then pick up history variables for this gradient number
-        double CplasticStrainSensitivity= (*SHVs)(0,(gradNumber-1));
-        double CbackStressSensitivity        = (*SHVs)(1,(gradNumber-1));
-        double ChardeningSensitivity        = (*SHVs)(2,(gradNumber-1));
+    // Then pick up history variables for this gradient number
+    double CplasticStrainSensitivity= (*SHVs)(0,(gradIndex-1));
+    double ChardeningSensitivity= (*SHVs)(1,(gradIndex-1));
 
-        // Elastic step
-        if ( fabs(TplasticStrain-CplasticStrain) < 1.0e-8) { 
-                // No changes in the sensitivity history variables
-        }
+    // Elastic trial stress
+    double Tstress = E * (Tstrain-CplasticStrain);
 
-        // Plastic step
-        else { 
+    // Compute trial stress relative to committed back stress
+    double xsi = Tstress - Hkin*CplasticStrain;
 
-                double myTstress = E * (Tstrain-CplasticStrain);
+    // Compute yield criterion
+    double f = fabs(xsi) - (sigmaY + Hiso*Chardening);
 
-                double xsi = myTstress - CbackStress;
-                
-                double f = fabs(xsi) - (sigmaY + Hiso*Chardening);
+    // Elastic step ... no updates required
+    if (f <= -DBL_EPSILON * E)
+      {
+    //if (f <= 1.0e-8) {
+	    // No changes in the sensitivity history variables
+      }
 
-                double TstressSensitivity = ESensitivity*(Tstrain-CplasticStrain)
-                        + E*(TstrainSensitivity-CplasticStrainSensitivity);
+    // Plastic step
+    else
+      { 
 
-                int sign = (xsi < 0) ? -1 : 1;
+	double TstressSensitivity = ESensitivity*(Tstrain-CplasticStrain)
+		+ E*(TstrainSensitivity-CplasticStrainSensitivity);
 
-                double dGamma = f / (E+Hiso+Hkin);
+	const int sign = (xsi < 0) ? -1 : 1;
+	//f = 0.0;
+	//double dGamma = f / (E+Hiso+Hkin);
 
-                double fSensitivity = (TstressSensitivity-CbackStressSensitivity)*sign
-                        - SigmaYSensitivity - HisoSensitivity*Chardening - Hiso*ChardeningSensitivity;
+	double CbackStressSensitivity = (HkinSensitivity*CplasticStrain + Hkin*CplasticStrainSensitivity);
 
-                double dGammaSensitivity = 
-                        (fSensitivity*(E+Hkin+Hiso)-f*(ESensitivity+HkinSensitivity+HisoSensitivity))
-                        /((E+Hkin+Hiso)*(E+Hkin+Hiso));
+	double fSensitivity = (TstressSensitivity-CbackStressSensitivity)*sign
+		- SigmaYSensitivity - HisoSensitivity*Chardening - Hiso*ChardeningSensitivity;
 
-                (*SHVs)(0,(gradNumber-1)) += dGammaSensitivity*sign;
-                (*SHVs)(1,(gradNumber-1)) += dGammaSensitivity*Hkin*sign + dGamma*HkinSensitivity*sign;
-                (*SHVs)(2,(gradNumber-1)) += dGammaSensitivity;
+	double dGammaSensitivity = (fSensitivity*(E+Hkin+Hiso)-f*(ESensitivity+HkinSensitivity+HisoSensitivity))/((E+Hkin+Hiso)*(E+Hkin+Hiso));
+	    //double dGammaSensitivity = fSensitivity/(E+Hkin+Hiso);
 
-        }
+	(*SHVs)(0,gradIndex)+= dGammaSensitivity*sign;
+	(*SHVs)(1,gradIndex)+= dGammaSensitivity;
+      }
 
-        return 0;
+    return 0;
   }
 // AddingSensitivity:END /////////////////////////////////////////////
 
