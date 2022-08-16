@@ -80,6 +80,9 @@ class ElasticPPMaterial: public EPPBaseMaterial
   {
   private:
     double fyp, fyn; //!< positive and negative yield stress
+    double ep; //!< plastic strain at last commit
+    double commitStress; //!< last committed stress
+    double EnergyP; //!< Energy stored in the material by SAJalali
 
     //! @brief Computes yield function value.
     inline double yield_function(const double &sigtrial) const
@@ -91,15 +94,14 @@ class ElasticPPMaterial: public EPPBaseMaterial
       }
   protected:
     inline double get_total_strain(void) 
-      { return EPPBaseMaterial::get_total_strain()-commitStrain; }
+      { return EPPBaseMaterial::get_total_strain()-ep; }
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
   public:
     ElasticPPMaterial(int tag, double E, double eyp);    
     ElasticPPMaterial(int tag, double E, double eyp, double eyn, double ezero);    
-    ElasticPPMaterial(int tag);    
-    ElasticPPMaterial(void);
+    ElasticPPMaterial(int tag= 0);    
 
     void set_fyp(const double &);
     void set_eyp(const double &);
@@ -109,6 +111,8 @@ class ElasticPPMaterial: public EPPBaseMaterial
     double get_eyp(void) const;
     double get_fyn(void) const;
     double get_eyn(void) const;
+    virtual double getEnergy(void)
+      { return EnergyP; }
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
 
