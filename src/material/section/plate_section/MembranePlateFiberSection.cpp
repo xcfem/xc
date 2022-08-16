@@ -57,6 +57,7 @@
 #include <material/section/plate_section/MembranePlateFiberSection.h>
 #include <material/nD/NDMaterial.h>
 #include "material/section/ResponseId.h"
+#include "domain/mesh/element/utils/Information.h"
 
 const double XC::MembranePlateFiberSection::root56= sqrt(5.0/6.0); //shear correction
 
@@ -64,18 +65,30 @@ const double XC::MembranePlateFiberSection::root56= sqrt(5.0/6.0); //shear corre
 XC::Vector XC::MembranePlateFiberSection::stressResultant(XC::MembranePlateFiberSection::order);
 XC::Matrix XC::MembranePlateFiberSection::tangent(XC::MembranePlateFiberSection::order, XC::MembranePlateFiberSection::order);
 
-
-const double XC::MembranePlateFiberSection::sg[] = { -1, 
+const std::string XC::MembranePlateFiberSection::lobattoLabel= "Lobatto";
+const double XC::MembranePlateFiberSection::sgLobatto[] = { -1, 
                                                   -0.65465367, 
                                                    0, 
                                                    0.65465367, 
                                                    1 };
  
-const double XC::MembranePlateFiberSection::wg[] = { 0.1, 
+const double XC::MembranePlateFiberSection::wgLobatto[] = { 0.1, 
                                                   0.5444444444, 
                                                   0.7111111111, 
                                                   0.5444444444, 
                                                   0.1  };
+const std::string XC::MembranePlateFiberSection::gaussLabel= "Gauss";
+const double XC::MembranePlateFiberSection::sgGauss[] = { -0.906179845938664,
+						      -0.538469310105683,
+						      0.0,
+						      0.538469310105683,
+						      0.906179845938664 };
+
+const double XC::MembranePlateFiberSection::wgGauss[] = { 0.236926885056189,
+						      0.478628670499366,
+						      0.568888888888889,
+						      0.478628670499366,
+						      0.236926885056189};
 
 /*      from Ham-O
         case 5:
@@ -135,19 +148,23 @@ void XC::MembranePlateFiberSection::free(void)
 //! @brief Default constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
   : PlateBase( tag, SEC_TAG_MembranePlateFiberSection ),
-    strainResultant(order), initialStrain(order)
+    strainResultant(order), initialStrain(order), integrationType(0)
   { init(); }
 
 //! @brief full constructor
-XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber)
+XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber, const std::string &integrType)
   : PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness, Afiber.getRho()),
-    strainResultant(order), initialStrain(order)
-  { alloc(Afiber); }
+    strainResultant(order), initialStrain(order), integrationType(0)
+  {
+    alloc(Afiber);
+    setIntegrationType(integrType);
+  }
 
 //! @brief Copy constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(const MembranePlateFiberSection &other)
   : PlateBase(other),
-    strainResultant(other.strainResultant), initialStrain(other.initialStrain) 
+    strainResultant(other.strainResultant), initialStrain(other.initialStrain),
+    integrationType(other.integrationType)
   {
     init();
     copy_fibers(other);
@@ -159,6 +176,7 @@ XC::MembranePlateFiberSection &XC::MembranePlateFiberSection::operator=(const Me
     PlateBase::operator=(other);
     strainResultant= other.strainResultant;
     initialStrain= other.initialStrain;
+    integrationType= other.integrationType;
     copy_fibers(other);
     return *this;
   }
@@ -177,6 +195,8 @@ XC::SectionForceDeformation  *XC::MembranePlateFiberSection::getCopy(void) const
 std::vector<double> XC::MembranePlateFiberSection::getFiberZs(void) const
   {
     std::vector<double> retval(numFibers,0.0);
+    const double *sg= (integrationType == 0) ? sgLobatto : sgGauss;
+      sg= sgGauss;
     for(int i = 0; i < numFibers; i++ )
       { retval[i]= ( 0.5*h ) * sg[i]; }
     return retval;
@@ -186,6 +206,7 @@ std::vector<double> XC::MembranePlateFiberSection::getFiberZs(void) const
 std::vector<double> XC::MembranePlateFiberSection::getFiberWeights(void) const
   {
     std::vector<double> retval(numFibers,0.0);
+    const double *wg= (integrationType == 0) ? wgLobatto : wgGauss;
     for(int i = 0; i < numFibers; i++)
       { retval[i]= (0.5*h) * wg[i];}
     return retval;
@@ -195,6 +216,8 @@ std::vector<double> XC::MembranePlateFiberSection::getFiberWeights(void) const
 std::vector<std::pair<double, double> > XC::MembranePlateFiberSection::getFiberZsAndWeights(void) const
   {
     std::vector<std::pair<double, double> > retval(numFibers,std::pair<double,double>(0.0,0.0));
+    const double *sg= (integrationType == 0) ? sgLobatto : sgGauss;
+    const double *wg= (integrationType == 0) ? wgLobatto : wgGauss;
     for(int i = 0; i < numFibers; i++)
       {
 	retval[i].first= (0.5*h) * sg[i];
@@ -243,6 +266,36 @@ int XC::MembranePlateFiberSection::revertToStart(void)
     return success;
   }
 
+void XC::MembranePlateFiberSection::setIntegrationType(const std::string &integrType)
+  {
+    if(integrType== lobattoLabel)
+      integrationType= 0;
+    else if(integrType== gaussLabel)
+      integrationType= 0;
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; integration type: " << integrType
+	   	  << " unknown. Assuming Lobatto." << std::endl;
+	integrationType= 0;
+      }
+  }
+
+const std::string &XC::MembranePlateFiberSection::getIntegrationType(void) const
+  {
+    if(integrationType == 0)
+      return lobattoLabel;
+    else if(integrationType == 1)
+      return gaussLabel;
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; unrecognized integration type value: " << integrationType
+	   	  << ". Assuming Lobatto." << std::endl;
+	return lobattoLabel;
+      }
+  }
+  
 
 //! @brief Return mass per unit area.
 double XC::MembranePlateFiberSection::getRho(void) const
@@ -613,6 +666,7 @@ int XC::MembranePlateFiberSection::sendData(Communicator &comm)
     res+= comm.sendBrokedPtr(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
     res+= comm.sendVector(strainResultant,getDbTagData(),CommMetaData(22));
     res+= comm.sendVector(initialStrain,getDbTagData(),CommMetaData(23));
+    res+= comm.sendInt(integrationType,getDbTagData(),CommMetaData(24));
     return res;
   }
 
@@ -627,6 +681,7 @@ int XC::MembranePlateFiberSection::recvData(const Communicator &comm)
     theFibers[4]= comm.getBrokedMaterial(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
     res+= comm.receiveVector(strainResultant,getDbTagData(),CommMetaData(22));
     res+= comm.receiveVector(initialStrain,getDbTagData(),CommMetaData(23));
+    res+= comm.receiveInt(integrationType,getDbTagData(),CommMetaData(24));
     return res;
   }
 
@@ -635,7 +690,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(24);
+    inicComm(25);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -649,7 +704,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
 //! @brief Receive object itself through the communicator argument.
 int XC::MembranePlateFiberSection::recvSelf(const Communicator &comm)
   {
-    inicComm(24);
+    inicComm(25);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
@@ -667,5 +722,84 @@ int XC::MembranePlateFiberSection::recvSelf(const Communicator &comm)
     return res;
   }
  
+XC::Response *XC::MembranePlateFiberSection::setResponse(const std::vector<std::string> &argv, Information &info)
+  {
+    Response *theResponse= nullptr;
+    const int argc= argv.size();
+    if(argc > 2 && (argv[0]=="fiber"))
+      {
+        const int passarg = 2;
+        const int key = atoi(argv[1]);    
+
+	if(key > 0 && key <= numFibers)
+	  {
+	    //info.tag("FiberOutput");
+	    //info.attr("number", key);
+	    //const double *sg= (integrationType == 0) ? sgLobatto : sgGauss;
+	    //const double *wg= (integrationType == 0) ? wgLobatto : wgGauss;      
+	    //info.attr("zLoc", 0.5 * h * sg[key - 1]);
+	    //info.attr("thickness", 0.5 * h * wg[key - 1]);
+            // Slice arguments.
+	    const std::vector<std::string> argv2= std::vector<std::string>(argv.begin()+passarg, argv.end());
+	    theResponse= theFibers[key-1]->setResponse(argv2, info);
+	    //info.endTag();
+	  }
+      }
+    if(!theResponse)
+      return SectionForceDeformation::setResponse(argv, info);
+    return theResponse;
+  }
+
+int XC::MembranePlateFiberSection::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    // if the user explicitly wants to update a material in this section...
+    const int argc= argv.size();
+    if(argc > 1)
+      {
+        // case 1: fiber value (all fibers)
+        // case 2: fiber id value (one specific fiber)
+        if((argv[0]=="fiber") || (argv[0]=="Fiber"))
+	  {
+            // test case 2 (one specific fiber) ...
+            if(argc > 2)
+	      {
+                const int pointNum = atoi(argv[1]);
+                if(pointNum > 0 && pointNum <= numFibers)
+		  {
+		    // Slice arguments.
+		    const std::vector<std::string> argv2= std::vector<std::string>(argv.begin()+2, argv.end());
+                    return theFibers[pointNum - 1]->setParameter(argv2, param);
+                  }
+              }
+            // ... otherwise case 1 (all fibers), if the argv[1] is not a valid id
+            int mixed_result = -1;
+            for(int i = 0; i < numFibers; ++i)
+	      {
+		// Slice arguments.
+		const std::vector<std::string> argv1= std::vector<std::string>(argv.begin()+1, argv.end());
+                if(theFibers[i]->setParameter(argv1, param) == 0)
+                    mixed_result = 0; // if at least one fiber handles the param, make it successful
+              }
+            return mixed_result;
+	  }
+      }
+    // if we are here, the first keyword is not "fiber", so we can check for parameters
+    // specific to this section (if any) or forward the request to all fibers.
+    if(argc > 0)
+      {
+        // we don't have parameters for this section, so we directly forward it to all fibers.
+        // placeholder for future implementations: if we will have parameters for this class, check them here
+        // before forwarding to all fibers
+        int mixed_result = -1;
+        for(int i = 0; i < numFibers; ++i)
+	  {
+            if (theFibers[i]->setParameter(argv, param) == 0)
+                mixed_result = 0; // if at least one fiber handles the param, make it successful
+          }
+        return mixed_result;
+      }
+    // fallback to base class implementation
+    return SectionForceDeformation::setParameter(argv, param);
+  }
 
 

@@ -49,6 +49,7 @@ class_<XC::ElasticPlateSection, bases<ElasticPlateProto5>, boost::noncopyable >(
   ;
 
 class_<XC::MembranePlateFiberSection, bases<XC::PlateBase>, boost::noncopyable >("MembranePlateFiberSection", no_init)
+  .add_property("integrationType", make_function(&XC::MembranePlateFiberSection::getIntegrationType, return_internal_reference<>() ), &XC::MembranePlateFiberSection::setIntegrationType)
   .def("setMaterial", &XC::MembranePlateFiberSection::setMaterial, " assigns the material to the fibers.")
   ;
 

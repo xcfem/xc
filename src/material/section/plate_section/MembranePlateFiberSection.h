@@ -75,15 +75,22 @@ class MembranePlateFiberSection: public PlateBase
     static constexpr int order= 8;
     
     //quadrature data
-    static const double sg[numFibers];
-    static const double wg[numFibers];
+    static const std::string lobattoLabel;
+    static const double sgLobatto[numFibers]; //Lobatto integration
+    static const double wgLobatto[numFibers];
+    static const std::string gaussLabel;
+    static const double sgGauss[numFibers]; //Gauss integration.
+    static const double wgGauss[numFibers];
+    
     static const double root56; //shear correction
     static Vector stressResultant;
     static Matrix tangent;
+
     
     NDMaterial *theFibers[numFibers];  //pointers to five materials (fibers)
     Vector strainResultant;
     Vector initialStrain;
+    int integrationType; // 0= Lobatto, 1= Gauss
 
     void init(void);
     void alloc(const NDMaterial &);
@@ -94,11 +101,14 @@ class MembranePlateFiberSection: public PlateBase
     int recvData(const Communicator &);
   public: 
     MembranePlateFiberSection(int tag= 0);
-    MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber);
+    MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber, const std::string &integrType= "Lobatto");
     MembranePlateFiberSection(const MembranePlateFiberSection &);
     MembranePlateFiberSection &operator=(const MembranePlateFiberSection &);
     virtual ~MembranePlateFiberSection(void);
 
+    void setIntegrationType(const std::string &);
+    const std::string &getIntegrationType(void) const;
+    
     inline void setMaterial(const NDMaterial &ndmat)
       { alloc(ndmat); }
 
@@ -139,6 +149,11 @@ class MembranePlateFiberSection: public PlateBase
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    
+    Response *setResponse(const std::vector<std::string> &, Information &);
+
+    // parameters
+    int setParameter(const std::vector<std::string> &, Parameter &);
   }; //end of MembranePlateFiberSection declarations
 
 } // end of XC namespace
