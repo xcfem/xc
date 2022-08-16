@@ -178,7 +178,7 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const std::vector<double> 
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor, FVector &q0, int release) const
+void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor, FVector &q0, int releasey, int releasez) const
   {
     const double wy = WTrans()*loadFactor;  // Transverse
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)
@@ -190,24 +190,29 @@ void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<dou
 
     // Fixed end forces in basic system
     q0[0]-= 0.5*P;
-    if(release == 0)
+    if(releasez == 0)
       {
         q0[1]-= Mz;
         q0[2]+= Mz;
       }
-    else if(release == 1)
+    else if(releasez == 1)
       { q0[2]+= wy*L*L/8;  }
-    else if(release == 2)
+    else if(releasez == 2)
       { q0[1]-= wy*L*L/8; }
-    else if(release == 3)
+    else if(releasez == 3)
       {
         // Nothing to do
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << " release value (" << release
+	        << " z-axis release value (" << releasez
 	        << ") not valid. Must be between 0 and 3."
 	        << std::endl;
+    if(releasey!=0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< " y-axis release value (" << releasey
+		<< ") not valid. Must be 0 for 2D loads."
+		<< std::endl;
   }
 
 void XC::Beam2dUniformLoad::addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)

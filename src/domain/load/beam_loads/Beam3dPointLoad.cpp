@@ -229,9 +229,9 @@ void XC::Beam3dPointLoad::addReactionsInBasicSystem(const std::vector<double> &,
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int releasey, int releasez) const
   {
-    if(release!=0)
+    if((releasey!=0) or (releasez!=0))
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; release effect not implemented yet."
 		  << std::endl;

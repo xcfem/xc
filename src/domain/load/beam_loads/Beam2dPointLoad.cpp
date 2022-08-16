@@ -209,7 +209,7 @@ void XC::Beam2dPointLoad::addReactionsInBasicSystem(const std::vector<double> &L
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int releasey, int releasez) const
   {
     const double aOverL= X();
 
@@ -235,23 +235,28 @@ void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<doubl
         q0[0]-= N*aOverL;
         const double M1= -a * b2 * Py * L2;
         const double M2= a2 * b * Py * L2;
-	if(release == 0)
+	if(releasez == 0)
 	  {
   	   q0[1]+= M1;
 	   q0[2]+= M2;
           }
-	else if(release == 1)
+	else if(releasez == 1)
 	  { q0[2]+= 0.5*Py*a*b*L2*(a+L); }
-        else if(release == 2)
+        else if(releasez == 2)
 	  { q0[1]-= 0.5*Py*a*b*L2*(b+L); }
-        else if(release == 3)
+        else if(releasez == 3)
 	  {
 	   // Nothing to do
           }
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << " release value (" << release
+		    << " z-axis release value (" << releasez
 		    << ") not valid. Must be between 0 and 3."
+		    << std::endl;
+	if(releasey!=0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << " y-axis release value (" << releasey
+		    << ") not valid. Must be 0 for 2D loads."
 		    << std::endl;
       }
   }

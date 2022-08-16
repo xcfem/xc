@@ -144,9 +144,9 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const std::vector<double> 
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int releasey, int releasez) const
   {
-    if(release!=0)
+    if((releasey!=0) or (releasez!=0))
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; release effect not implemented yet."
 		  << std::endl;
@@ -165,10 +165,33 @@ void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<dou
 
     // Fixed end forces in basic system
     q0[0]+= -0.5*P; //Axil at the back end.
-    q0[1]+= -Mz;  
-    q0[2]+= Mz;
-    q0[3]+= My;
-    q0[4]+= -My;
+    if(releasez == 0)
+      {
+	q0[1]+= -Mz;  
+	q0[2]+= Mz;
+      }
+    if(releasez == 1)
+      {
+        q0[2]+= wy*L*L/8;
+      }
+    if(releasez == 2)
+      {
+        q0[1]-= wy*L*L/8;
+      }
+    
+    if(releasey == 0)
+      {
+	q0[3]+= My;
+	q0[4]+= -My;
+      }
+    if(releasey == 1)
+      {
+        q0[4]-= wz*L*L/8;
+      }
+    if(releasey == 2)
+      {
+        q0[3]+= wz*L*L/8;
+      }
   }
 
 //! @brief Adds elastic strains to the v0 vector.

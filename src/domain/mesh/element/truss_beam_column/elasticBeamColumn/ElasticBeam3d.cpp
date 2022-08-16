@@ -212,45 +212,90 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
 
     const double E= sprop.E();
     const double EA= sprop.A()*E; // EA
+    const double GJ= sprop.GJ(); // GJ
+    
+    //Element internal forces due to the actions of the domain on its nodes.
+    q.N()= EA*v(0); //axial force in the element.
+    q.T()= GJ*v(5); //Torsion in the element.
+
+    kb.Zero();
+    const double L = theCoordTransf->getInitialLength();
+    const double EAoverL= EA/L;	// EA/L
+    const double GJoverL= GJ/L; // GJ/L
+    kb(0,0) = EAoverL;
+    kb(5,5) = GJoverL;
     
     const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
     const double EIz4= 2.0*EIz2; // 4EIz
+    if(releasez == 0)
+      {
+	q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI*v(1)+2EI*v(2).
+	q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI*v(1)+4EI*v(2).
+	const double EIzoverL2= EIz2/L;	// 2EIz/L
+	const double EIzoverL4= EIz4/L; // 4EIz/L
+        kb(1,1) = kb(2,2)= EIzoverL4;
+        kb(2,1) = kb(1,2)= EIzoverL2;
+      }
+    else if(releasez == 1) // release node I
+      {
+	q.Mz1()= 0.0; //z bending moment in node 1
+        const double EIz3 = 3.0*sprop.Iz()*E;
+	q.Mz2()= EIz3*v(2); //z bending moment in node 2: 3EI*v(2).
+        const double EIzoverL3 = EIz3/L;
+        kb(2,2)= EIzoverL3;
+      }
+    else if(releasez == 2) // release node J
+      {
+	q.Mz2()= 0.0; //z bending moment in node 2
+        const double EIz3 = 3.0*sprop.Iz()*E;
+	q.Mz1()= EIz3*v(1); //z bending moment in node 1: 4EI*v(1).
+        const double EIzoverL3 = EIz3/L;
+        kb(1,1) = EIzoverL3;
+      }
+    else if(releasez == 3) // release both nodes I and J.
+      {
+	q.Mz1()= 0.0; //z bending moment in node 1
+	q.Mz2()= 0.0; //z bending moment in node 2
+      }
+
     const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
     const double EIy4= 2.0*EIy2; // 4EIy
-    
-    const double GJ= sprop.GJ(); // GJ
-    
-    if(releasez!= 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; release z not implemented yet." << std::endl;
-    if(releasey!= 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; release y not implemented yet." << std::endl;
-
-    //Element internal forces due to the actions of the domain on its nodes.
-    q.N()= EA*v(0); //axial force in the element.
-    q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI/L*v(1)+2EI/L*v(2).
-    q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI/L*v(1)+4EI/L*v(2).
-    q.My1()= EIy4*v(3) + EIy2*v(4); //y bending moment in node 1: 4EI/L*v(3)+2EI/L*v(4).
-    q.My2()= EIy2*v(3) + EIy4*v(4); //y bending moment in node 2: 2EI/L*v(3)+4EI/L*v(4).
-    q.T() = GJ*v(5); //Torsion in the element.
+    if(releasey == 0)
+      {
+        q.My1()= EIy4*v(3) + EIy2*v(4); //y bending moment in node 1: 4EI*v(3)+2EI*v(4).
+        q.My2()= EIy2*v(3) + EIy4*v(4); //y bending moment in node 2: 2EI*v(3)+4EI*v(4).
+	const double EIyoverL2= EIy2/L;	// 2EIy/L
+	const double EIyoverL4= EIy4/L; // 4EIy/L
+        kb(3,3) = kb(4,4)= EIyoverL4;
+        kb(4,3) = kb(3,4)= EIyoverL2;
+      }
+    else if(releasey == 1) // release node I
+      {
+	q.My1()= 0.0; //y bending moment in node 1
+        const double EIy3 = 3.0*sprop.Iy()*E;
+	q.My2()= EIy3*v(2); //y bending moment in node 2: 3EI/L*v(2).
+        const double EIyoverL3 = EIy3/L;
+        kb(4,4)= EIyoverL3;
+      }
+    else if(releasey == 2) // release node J
+      {
+	q.My2()= 0.0; //y bending moment in node 2
+        const double EIy3 = 3.0*sprop.Iy()*E;
+	q.My1()= EIy3*v(1); //y bending moment in node 1: 4EI/L*v(1).
+        const double EIyoverL3 = EIy3/L;
+        kb(3,3) = EIyoverL3;
+      }
+    else if(releasey == 3) // release both nodes I and J.
+      {
+	q.My1()= 0.0; //y bending moment in node 1
+	q.My2()= 0.0; //y bending moment in node 2
+      }
 
     q.N()+= q0[0];
     q.Mz1()+= q0[1];
     q.Mz2()+= q0[2];
     q.My1()+= q0[3];
     q.My2()+= q0[4];
-
-    const double L = theCoordTransf->getInitialLength();
-    const double EAoverL= EA/L;	// EA/L
-    const double GJoverL= GJ/L; // GJ/L
-    
-    kb(0,0) = EAoverL;
-    kb(1,1) = kb(2,2)= EIz4/L;
-    kb(2,1) = kb(1,2)= EIz2/L;
-    kb(3,3) = kb(4,4)= EIy4/L;
-    kb(4,3) = kb(3,4)= EIy2/L;
-    kb(5,5) = GJoverL;
 
     static Matrix retval;
     retval= theCoordTransf->getGlobalStiffMatrix(kb,q);
@@ -279,26 +324,46 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     const double oneOverL = 1.0/L;
     const double EoverL   = sprop.E()*oneOverL;
     const double EAoverL  = sprop.A()*EoverL; // EA/L
-    const double EIzoverL2 = 2.0*sprop.Iz()*EoverL; // 2EIz/L
-    const double EIzoverL4 = 2.0*EIzoverL2; // 4EIz/L
-    const double EIyoverL2 = 2.0*sprop.Iy()*EoverL; // 2EIy/L
-    const double EIyoverL4 = 2.0*EIyoverL2; // 4EIy/L
     const double GJoverL = sprop.GJ()*oneOverL; // GJ/L
 
-    if(releasez!= 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; release z not implemented yet." << std::endl;
-    if(releasey!= 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; release y not implemented yet." << std::endl;
-    
+    kb.Zero();
     kb(0,0) = EAoverL;
-    kb(1,1) = kb(2,2) = EIzoverL4;
-    kb(2,1) = kb(1,2) = EIzoverL2;
-    kb(3,3) = kb(4,4) = EIyoverL4;
-    kb(4,3) = kb(3,4) = EIyoverL2;
     kb(5,5) = GJoverL;
 
+    const double Iz= sprop.Iz();
+    if(releasez == 0)
+      {
+        const double EIzoverL2 = 2.0*Iz*EoverL;	// 2EIz/L
+        const double EIzoverL4 = 2.0*EIzoverL2;	// 4EIz/L
+        kb(1,1) = kb(2,2) = EIzoverL4;
+        kb(2,1) = kb(1,2) = EIzoverL2;
+      }
+    else if(releasez == 1) // release node I
+      {
+        kb(2,2) = 3.0*Iz*EoverL;
+      }
+    else if(releasez == 2) // release node J
+      {
+        kb(1,1) = 3.0*Iz*EoverL;
+      }
+
+    const double Iy= sprop.Iy();
+    if(releasey == 0)
+      {
+        double EIyoverL2 = 2.0*Iy*EoverL;		// 2EIy/L
+        double EIyoverL4 = 2.0*EIyoverL2;		// 4EIy/L
+        kb(3,3) = kb(4,4) = EIyoverL4;
+        kb(4,3) = kb(3,4) = EIyoverL2;
+      }
+    else if(releasey == 1) // release node I
+      {
+        kb(4,4) = 3.0*Iy*EoverL;
+      }
+    else if(releasey == 2) // release node J
+      {
+        kb(3,3) = 3.0*Iy*EoverL;
+      }   
+    
     static Matrix retval;
     retval= theCoordTransf->getInitialGlobalStiffMatrix(kb);
     if(isDead())
@@ -355,18 +420,11 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << std::endl;
     else
       {
-	if(releasez!= 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; release z not implemented yet." << std::endl;
-	if(releasey!= 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; release y not implemented yet." << std::endl;
-	
         if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
             const double L = theCoordTransf->getInitialLength();
             beamMecLoad->addReactionsInBasicSystem({L},loadFactor,p0); // Accumulate reactions in basic system
-            beamMecLoad->addFixedEndForcesInBasicSystem({L},loadFactor,q0); // Fixed end forces in basic system
+            beamMecLoad->addFixedEndForcesInBasicSystem({L},loadFactor,q0, releasey, releasez); // Fixed end forces in basic system
           }
         else if(const BeamStrainLoad *strainLoad= dynamic_cast<const BeamStrainLoad *>(theLoad)) //Prescribed strains.
           {
@@ -421,7 +479,95 @@ int XC::ElasticBeam3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
+//! @brief Return the element resisting force.
+const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
+  {
+    const Vector &v= getSectionDeformation();
+    const CrossSectionProperties3d &sprop= getSectionProperties();
+    const double E= sprop.E();
+    const double EA= sprop.A()*E; // EA
+    const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
+    const double EIz4= 2.0*EIz2; // 4EIz
+    const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
+    const double EIy4= 2.0*EIy2; // 4EIy
+    const double GJ= sprop.GJ(); // GJ
+    
+    //Element internal forces due to the actions of the structure over its nodes.
+    q.N()= EA*v(0); //axial force in the element.
+    q.T()= GJ*v(5); //Torsor in the element.
 
+    if(releasez==0)
+      {
+        q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI*v(1)+2EI*v(2).
+        q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI*v(1)+4EI*v(2).
+      }
+    else if(releasez==1)
+      {
+        q.Mz1()= 0.0;
+        const double EIz3= 3.0*sprop.Iz()*E; // 3EIz
+        q.Mz2()= EIz3*v(2);
+      }
+    else if(releasez == 2)
+      {
+        const double EIz3= 3.0*sprop.Iz()*E; // 3EIz
+        q.Mz1()= EIz3*v(1);
+        q.Mz2()= 0.0;
+      }
+    if(releasez == 3)
+      {
+        q.Mz1()= 0.0;
+        q.Mz2()= 0.0;
+     }
+    
+    if(releasey==0)
+      {
+        q.My1()= EIy4*v(3) + EIy2*v(4); //y bending moment in node 1: 4EI*v(3)+2EI*v(4).
+        q.My2()= EIy2*v(3) + EIy4*v(4); //y bending moment in node 2: 2EI*v(3)+4EI*v(4).
+      }
+    else if(releasey==1)
+      {
+        q.My1()= 0.0;
+        const double EIy3= 3.0*sprop.Iy()*E; // 3EIy
+        q.My2()= EIy3*v(2);
+      }
+    else if(releasey == 2)
+      {
+        const double EIy3= 3.0*sprop.Iy()*E; // 3EIy
+        q.My1()= EIy3*v(1);
+        q.My2()= 0.0;
+      }
+    if(releasey == 3)
+      {
+        q.My1()= 0.0;
+        q.My2()= 0.0;
+     }
+    
+    q.N()+= q0[0];
+    q.Mz1()+= q0[1];
+    q.Mz2()+= q0[2];
+    q.My1()+= q0[3];
+    q.My2()+= q0[4];
+    
+    if(isDead()) //Set internal forces to zero when element is dead.
+      q*= dead_srf;
+
+    const Vector p0Vec= p0.getVector();
+
+    //  std::cerr << q;
+
+    P= theCoordTransf->getGlobalResistingForce(q, p0Vec);
+
+    // std::cerr << P;
+
+    // P = P - load;
+    P.addVector(1.0, load, -1.0);
+
+    if(isDead())
+      P*= dead_srf;
+    return P;
+  }
+
+//! @brief Return the element resisting force.
 const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
   {
     P = this->getResistingForce();
@@ -454,57 +600,6 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
       P*=dead_srf;
   }
 
-//! @brief Return the element resisting force.
-const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
-  {
-    const Vector &v= getSectionDeformation();
-    const CrossSectionProperties3d &sprop= getSectionProperties();
-    const double E= sprop.E();
-    const double EA= sprop.A()*E; // EA
-    const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
-    const double EIz4= 2.0*EIz2; // 4EIz
-    const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
-    const double EIy4= 2.0*EIy2; // 4EIy
-    const double GJ= sprop.GJ(); // GJ
-
-    if(releasez!= 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; release z not implemented yet." << std::endl;
-    if(releasey!= 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; release y not implemented yet." << std::endl;
-    //Element internal forces due to the actions of the structure over its nodes.
-    q.N()= EA*v(0); //axial force in the element.
-    q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI/L*v(1)+2EI/L*v(2).
-    q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI/L*v(1)+4EI/L*v(2).
-    q.My1()= EIy4*v(3) + EIy2*v(4); //y bending moment in node 1: 4EI/L*v(3)+2EI/L*v(4).
-    q.My2()= EIy2*v(3) + EIy4*v(4); //y bending moment in node 2: 2EI/L*v(3)+4EI/L*v(4).
-    q.T()= GJ*v(5); //Torsor in the element.
-
-    q.N()+= q0[0];
-    q.Mz1()+= q0[1];
-    q.Mz2()+= q0[2];
-    q.My1()+= q0[3];
-    q.My2()+= q0[4];
-    
-    if(isDead()) //Set internal forces to zero when element is dead.
-      q*= dead_srf;
-
-    const Vector p0Vec= p0.getVector();
-
-    //  std::cerr << q;
-
-    P= theCoordTransf->getGlobalResistingForce(q, p0Vec);
-
-    // std::cerr << P;
-
-    // P = P - load;
-    P.addVector(1.0, load, -1.0);
-
-    if(isDead())
-      P*= dead_srf;
-    return P;
-  }
 
 
 //! @brief Returns a vector to store the dbTags
@@ -578,6 +673,8 @@ void XC::ElasticBeam3d::Print(std::ostream &s, int flag) const
        //s << sectionTag << "\t" << sectionTag;
        s  << "\t" << theNodes.getTagNode(0) << "\t" << theNodes.getTagNode(1);
        s << "\t0\t0.0000000\n";
+       s << "\trelease about z:  " << releasez << std::endl;
+       s << "\trelease about y:  " << releasey << std::endl;		
      }
    else
      {

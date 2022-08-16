@@ -67,7 +67,7 @@ void XC::BeamMecLoad::addReactionsInBasicSystem(const std::vector<double> &,cons
 //! @param loadFactor Load factor.
 //! @param q0 consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &L,const double &loadFactor,FVector &, int release) const
+void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &L,const double &loadFactor,FVector &, int releasey, int releasez) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;

@@ -99,7 +99,7 @@ class ElasticBeam3d: public ElasticBeam3dBase
     ElasticBeam3d(int tag, const Material *m,const CrdTransf *trf);
     ElasticBeam3d(int tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2, CrdTransf3d &theTransf, double rho = 0.0, int releasez= 0, int releasey= 0);
 
-    ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section, CrdTransf3d &theTransf, double rho = 0.0, int relz= 0, int rely= 0);
+    ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section, CrdTransf3d &theTransf, double rho = 0.0, int releasez= 0, int releasey= 0);
     Element *getCopy(void) const;
 
     const Vector &computeCurrentStrain(void) const;

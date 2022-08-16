@@ -532,7 +532,7 @@ void XC::DispBeamColumn3d::zeroLoad(void)
 int XC::DispBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;
@@ -542,12 +542,13 @@ int XC::DispBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
           {
             const double L = theCoordTransf->getInitialLength();
             beamMecLoad->addReactionsInBasicSystem({L},loadFactor,p0); // Accumulate reactions in basic system
-            beamMecLoad->addFixedEndForcesInBasicSystem({L},loadFactor,q0); // Fixed end forces in basic system
+            beamMecLoad->addFixedEndForcesInBasicSystem({L},loadFactor,q0, 0, 0); // Fixed end forces in basic system
           }
         else
           {
-            std::cerr << "XC::DispBeamColumn2d::addLoad() -- load type unknown for element with tag: " <<
-              this->getTag() << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; load type unknown for element with tag: "
+		      << this->getTag() << std::endl;
             return -1;
           }
       }
