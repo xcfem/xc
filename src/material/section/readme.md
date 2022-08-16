@@ -11,3 +11,5 @@ The aim of the classes on this folder is to represent section materials. Those m
 - [Rectangular Patches](https://portwooddigital.com/2022/06/05/rectangular-patches/)
 - [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant#Circle)
 - [Section properties](https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/properties/)
+- [Nonlinear Sections, Elastic Elements](https://portwooddigital.com/2022/07/24/nonlinear-sections-elastic-elements/)
+- [Full Fiber Circle](https://portwooddigital.com/2022/06/15/full-fiber-circle/)
