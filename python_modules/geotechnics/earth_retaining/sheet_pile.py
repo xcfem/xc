@@ -27,7 +27,6 @@ def getPileWallDisplacements(soil, wallHeight, excavationDepth):
     '''
     Ka= soil.Ka() # active pressure coefficient. 
     K0= soil.K0Jaky() # at rest pressure coefficient. 
-    Kp= soil.Kp() # passive pressure coefficient.
     gamma= soil.gamma()
     E= soil.E # soil deformation modulus.
     t= wallHeight-excavationDepth
@@ -209,8 +208,6 @@ class CantileverSheetPileWall(object):
         for pt in plgActiveSide.getVertices():
             zi.append(-pt.x)
             pi.append(pt.y)
-        Ka= self.soil.Ka()
-        Kp= self.soil.Kp()
         L3= self.getZeroNetPressureDepth()
         L4= self.getL4()
         sigma_p_5, gmmKpKa= self.getSigmaP5()
