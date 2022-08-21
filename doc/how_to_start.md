@@ -54,15 +54,6 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 - [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/quickstart/fork-a-repo)
 - [Bifurcar un repositorio](https://docs.github.com/es/github/getting-started-with-github/quickstart/fork-a-repo)
 
-
-## Graphic interface. Visualization toolkit (VTK)
-
-- [The Visualization Toolkit](https://vtk.org/vtk-textbook/)
-- [VTK User's Guide](https://vtk.org/documentation/)
-- [VTK Examples](https://kitware.github.io/vtk-examples/site/)
-- [Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)
-- [X Window System](https://en.wikipedia.org/wiki/X_Window_System)
-
 ## Python
 
 - [Guide To Python Coding](https://pythonguides.com/guide-to-python-coding/)
@@ -84,3 +75,11 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 
 - [The Finite Element Method: Its Basis and Fundamentals](https://www.elsevier.com/books/the-finite-element-method-its-basis-and-fundamentals/zienkiewicz/978-1-85617-633-0)
 - [OpenSees tutorial](https://opensees.berkeley.edu/workshop/NEESgridUser-EndWorkshop2005_presentations/NEESgridUser-EndWorkshopOpenSeesTutorial_SilviaMazzoni2005.pdf)
+
+## Graphic interface. Visualization toolkit (VTK)
+
+- [The Visualization Toolkit](https://vtk.org/vtk-textbook/)
+- [VTK User's Guide](https://vtk.org/documentation/)
+- [VTK Examples](https://kitware.github.io/vtk-examples/site/)
+- [Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)
+- [X Window System](https://en.wikipedia.org/wiki/X_Window_System)
