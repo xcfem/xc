@@ -19,6 +19,7 @@ This is all about cooperation. If you're new to open source projects you can tak
 See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 
 ## XC tutorials and examples
+If you know already how to run a [Python](https://www.python.org/) script you can check out the following examples. Otherwise, you can [learn a bit of Python](## Python) to get more comfortable with it (it's really easy, I promise). 
 
 ### Examples
 - [XC examples](https://github.com/xcfem/xc_examples)
