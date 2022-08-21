@@ -30,6 +30,8 @@ If you know already how to run a [Python](https://www.python.org/) script you ca
 - [Properties of a reinforced concrete section obtained from a fiber-section model](https://raw.githubusercontent.com/xcfem/xc_examples/master/XC_tutorial_003/tutorial003_fiber_section.pdf)
 
 ### Verification tests
+The test set (more than 900 hundred times an counting) we use to check that all goes as expected after each modification of the code: 
+
 - [XC verification tests](https://github.com/xcfem/xc/tree/master/verif/tests)
 
 
