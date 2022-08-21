@@ -74,6 +74,8 @@ class SteelBase0103: public SteelBase
     double TshiftN;
     int Tloading;
 
+    double Energy; //!< Energy stored in the material.
+    
     virtual void determineTrialState(double dStrain)= 0;
     virtual double get_total_strain(void) const
       { return Tstrain-ezero; }
@@ -96,6 +98,9 @@ class SteelBase0103: public SteelBase
     double getStress(void) const;
     double getTangent(void) const;
 
+    inline virtual double getEnergy()
+      { return Energy; }
+    
     int commitState(void);
     int revertToLastCommit(void);
     int revertToStart(void);

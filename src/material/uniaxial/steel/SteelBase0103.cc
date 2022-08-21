@@ -64,15 +64,15 @@ int XC::SteelBase0103::setup_parameters(void)
 
 //! @brief Constructor.
 XC::SteelBase0103::SteelBase0103(int tag, int classTag, double FY, double E, double B,double A1, double A2, double A3, double A4)
-  : SteelBase(tag,classTag,FY,E,B,A1,A2,A3,A4) {}
+  : SteelBase(tag,classTag,FY,E,B,A1,A2,A3,A4), Energy(0.0) {}
 
 //! @brief Constructor.
 XC::SteelBase0103::SteelBase0103(int tag, int classTag)
-  :SteelBase(tag,classTag,0.0,0.0,0.0,STEEL_0103_DEFAULT_A1,STEEL_0103_DEFAULT_A2,STEEL_0103_DEFAULT_A3,STEEL_0103_DEFAULT_A4) {}
+  :SteelBase(tag,classTag,0.0,0.0,0.0,STEEL_0103_DEFAULT_A1,STEEL_0103_DEFAULT_A2,STEEL_0103_DEFAULT_A3,STEEL_0103_DEFAULT_A4), Energy(0.0) {}
 
 //! @brief Constructor.
 XC::SteelBase0103::SteelBase0103(int classTag)
-  :SteelBase(0,classTag,0.0,0.0,0.0,STEEL_0103_DEFAULT_A1,STEEL_0103_DEFAULT_A2,STEEL_0103_DEFAULT_A3,STEEL_0103_DEFAULT_A4) {}
+  :SteelBase(0,classTag,0.0,0.0,0.0,STEEL_0103_DEFAULT_A1,STEEL_0103_DEFAULT_A2,STEEL_0103_DEFAULT_A3,STEEL_0103_DEFAULT_A4), Energy(0.0) {}
 
 int XC::SteelBase0103::setTrialStrain(double strain, double strainRate)
   {
@@ -137,6 +137,9 @@ int XC::SteelBase0103::commitState(void)
     Cloading= Tloading;
 
     // State variables
+    //by SAJalali
+    Energy += 0.5*(Tstress + Cstress)*(Tstrain - Cstrain);
+    
     Cstrain= Tstrain;
     Cstress= Tstress;
     Ctangent= Ttangent;

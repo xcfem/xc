@@ -241,7 +241,7 @@ int XC::Steel01::sendData(Communicator &comm)
   {
     int res= SteelBase0103::sendData(comm);
     const double pid= parameterID;
-    res+= comm.sendDouble(pid,getDbTagData(),CommMetaData(8));
+    res+= comm.sendDoubles(pid,Energy, getDbTagData(),CommMetaData(8));
     res+= comm.sendMatrix(SHVs,getDbTagData(),CommMetaData(9));
     return res;
   }
@@ -251,7 +251,7 @@ int XC::Steel01::recvData(const Communicator &comm)
   {
     int res= SteelBase0103::recvData(comm);
     double pid;
-    res+= comm.receiveDouble(pid,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveDoubles(pid, Energy, getDbTagData(),CommMetaData(8));
     parameterID= pid;
     res+= comm.receiveMatrix(SHVs,getDbTagData(),CommMetaData(9));
     return res;
