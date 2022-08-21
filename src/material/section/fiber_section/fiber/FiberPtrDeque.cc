@@ -434,8 +434,13 @@ const XC::Vector &XC::FiberPtrDeque::getCenterOfMassHomogenizedSection(const dou
 		    << "; null pointer to material." << std::endl;
       }
     static Vector retval(2);
-    retval[0]= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
-    retval[1]= Qy/Atot; //center of mass z coordinate 
+    retval[0]= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    retval[1]= Qy; //center of mass z coordinate
+    if(Atot!=0.0)
+      {
+        retval[0]/= Atot;
+        retval[1]/= Atot;
+      }    
     return retval;
   }
 
@@ -1589,8 +1594,13 @@ int XC::FiberPtrDeque::updateCenterOfMass(void)
         Qz+= -yLoc*fiberArea; //minus y coordinate.
         Qy+= zLoc*fiberArea;
       }
-    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
-    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
+    yCenterOfMass= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy; //center of mass z coordinate
+    if(Atot!=0.0)
+      {
+        yCenterOfMass/= Atot;
+        zCenterOfMass/= Atot;
+      }
     return 0;
   }
 
@@ -1625,7 +1635,9 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSecti
             kr2.updateNMz(fs0,yLoc);
           }
       }
-    yCenterOfMass= -Qz/Atot; //center or mass z coordinate 
+    yCenterOfMass= -Qz; //center or mass z coordinate
+    if(Atot!=0.0)
+        yCenterOfMass/= Atot;
     kr2.kData[2]= kr2.kData[1]; //Symmetry.
     return 0;
   }
@@ -1809,8 +1821,13 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection3d &Section3d,CrossSecti
             kr3.updateNMzMy(fs0,yLoc,zLoc);
 	  }
       }
-    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
-    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
+    yCenterOfMass= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy; //center of mass z coordinate
+    if(Atot!=0.0)
+      {
+        yCenterOfMass/= Atot;
+        zCenterOfMass/= Atot;
+      }
     kr3.kData[3]= kr3.kData[1]; //Stiffness matrix symmetry.
     kr3.kData[6]= kr3.kData[2];
     kr3.kData[7]= kr3.kData[5];
@@ -1961,8 +1978,13 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSectionGJ &SectionGJ,CrossSecti
             krGJ.updateNMzMy(fs0,yLoc,zLoc);
           }
       }
-    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
-    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
+    yCenterOfMass= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy; //center of mass z coordinate
+    if(Atot!=0.0)
+      {
+        yCenterOfMass/= Atot;
+        zCenterOfMass/= Atot;
+      }
     krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
