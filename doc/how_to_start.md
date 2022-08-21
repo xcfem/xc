@@ -43,7 +43,7 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 - [X Window System tutorial](https://www.astro.princeton.edu/~strauss/AST303/Xintro.pdf)
 
 ## Git
-Basic knowledge about [Git](https://git-scm.com/) the [version control](https://en.wikipedia.org/wiki/Version_control) system that we use to develop XC. 
+Basic knowledge about [Git](https://git-scm.com/), the [version control](https://en.wikipedia.org/wiki/Version_control) system that we use to develop XC. 
 
 ### Git for beginners
 
@@ -56,7 +56,7 @@ Basic knowledge about [Git](https://git-scm.com/) the [version control](https://
 - [Bifurcar un repositorio](https://docs.github.com/es/github/getting-started-with-github/quickstart/fork-a-repo)
 
 ## Python
-Introduction to [Python](https://www.python.org/) the scripting language we use to describe and analyze the finite element models.
+Introduction to [Python](https://www.python.org/), the scripting language we use to describe and analyze the finite element models.
 
 - [Guide To Python Coding](https://pythonguides.com/guide-to-python-coding/)
 - [Python for beginners](https://www.python.org/about/gettingstarted/)
