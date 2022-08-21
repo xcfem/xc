@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import math
+import sys
 from materials import steel_base
 from materials import typical_materials
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
