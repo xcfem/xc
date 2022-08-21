@@ -65,6 +65,7 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 
 ## Python
 
+- [Guide To Python Coding](https://pythonguides.com/guide-to-python-coding/)
 - [Python for beginners](https://www.python.org/about/gettingstarted/)
 - [Python para principiantes](https://www.ionos.es/digitalguide/paginas-web/desarrollo-web/tutorial-de-python/)
 
