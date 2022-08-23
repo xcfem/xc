@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 '''Verification of the computing of the ultimate load of an steel corbel
 from the exercise 24.4.5 at page XXV-40 of the book Estructuras Metálicas
 de Vicente Cudós Samblancat (url={https://books.google.ch/books?id=7UrJnQEACAAJ}).'''
+
+from __future__ import print_function
+
 
 from materials.eae import EAE_limit_state_checking
 import math
@@ -15,11 +16,33 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Geometry
-H= 0.2
-l= 0.2
-d= 0.2
-tChapa= 8e-3 # Thickness of the plate thas supports the load.
-tRig= 8e-3 # Stiffener thickness.
+
+#         |------ d -----|
+#
+#                        | R
+#                        |
+#                        V
+#         |-------------------|
+#         |-------------------|   --
+#         |                 /      |
+#         |               /        |
+#         |             /          |
+#         |           /            |
+#         |         /               
+#         |       /                H (corbel height)
+#         |     /                   
+#         |   /                    | 
+#         | /                      |
+#         |/                       |
+#         |                       --
+#
+#         |-------- l -------|   (corbel length)
+
+corbelHeight= 0.2 # corbel height (H)
+corbelLength= 0.2 # corbel length (l)
+d= 0.2 # Distance from load to column (d)
+topPlateThickness= 8e-3 # Thickness of the plate that supports the load.
+stiffenerThickness= 8e-3 # Stiffener thickness.
 
 # Material properties
 fy= 2600*9.81/1e-4 # A42b steel
@@ -27,10 +50,10 @@ fyd= fy/1.0 # Strength reduction factor
 Es= 2.1e6*9.81/1e-4 # Elastic modulus of the steel.
 
 # Partial results.
-c= EAE_limit_state_checking.widthMax(tChapa,l,H)
-lmbd= EAE_limit_state_checking.esbeltezAdim(c,tChapa,fy,Es)
+c= EAE_limit_state_checking.widthMax(topPlateThickness, corbelLength,corbelHeight)
+lmbd= EAE_limit_state_checking.esbeltezAdim(c,topPlateThickness,fy,Es)
 CE= EAE_limit_state_checking.coefEscuadra(lmbd)
-MplRd= EAE_limit_state_checking.momPlastRig(tRig,c,fy)
+MplRd= EAE_limit_state_checking.momPlastRig(stiffenerThickness,c,fy)
 VRd2= EAE_limit_state_checking.ultimateLoadRig(CE,d,MplRd)
 
 '''The difference between this value for cTeor and the one used here
@@ -40,7 +63,7 @@ as specified in the figure on the EAE standard and in the reference book
  
 cTeor= (0.208*math.sqrt(2)/2)
 ratio1= ((c-cTeor)/cTeor)
-lambdaTeor= (0.0283*c/tRig)
+lambdaTeor= (0.0283*c/stiffenerThickness)
 ratio2= ((lmbd-lambdaTeor)/lambdaTeor)
 ratio3= ((CE-1.8)/1.8)
 MplRdTeor= (103381*9.81/100)
