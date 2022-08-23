@@ -25,9 +25,10 @@ class EAESteel(EC3_materials.EC3Steel):
           :param fy63: 40<t<63mm
           :param fy80: 63<t<80mm
           :param fy100: 80<t<100mm
-          :param fy125: 80<t<125mm
-          :param gammaM1: Partial factor for buckling resistance.
-          :param gammaM2: Partial factor for cross-sections in tension to fracture.
+          :param fy125: 100<t<125mm
+          :param gammaM: partial safety factor for steel strength.
+          :param gammaM1: partial factor for buckling resistance.
+          :param gammaM2: partial factor for cross-sections in tension to fracture.
         '''
 
         super(EAESteel,self).__init__(fy, fy16, fy40, fy63, fy80, fy100, fy125, fu, gammaM, gammaM1, gammaM2)
