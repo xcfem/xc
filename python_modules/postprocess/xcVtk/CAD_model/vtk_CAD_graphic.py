@@ -11,6 +11,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import vtk
 from postprocess.xcVtk.CAD_model import cad_mesh
 from postprocess.xcVtk import vtk_graphic_base
@@ -38,7 +39,9 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
             surfAxesField= lavf.SurfacesLocalAxesVectorField(setToDisplay.name+'_surfLocalAxes', scaleFactor= vectorScale)
             surfAxesField.dumpVectors(setToDisplay)
         else:
-            lmsg.warning("Error when drawing set: '"+setToDisplay.name+"' it has not key points so I can't get set geometry (use fillDownwards?)")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+setToDisplay.name+"', it has not key points so I can't get set geometry (use fillDownwards?)")
         return lineAxesField, surfAxesField
         
     def defineMeshScene(self):
@@ -55,8 +58,12 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
             cad_mesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
             cad_mesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
             self.renderer.ResetCamera()
+            return True
         else:
-            lmsg.warning("Error when drawing set: '"+setToDraw.name+"' it has not key points so I can't get set geometry (use fillDownwards?)")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+setToDraw.name+"', it has not key points so I can't get set geometry (use fillDownwards?)")
+            return False
 
         #Implement drawing of labels.
         # if(entToLabel=="cells"):
@@ -72,8 +79,9 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         :param caption: text to display in the graphic.
         '''
         self.setupGrid(setToDisplay)
-        self.defineMeshScene()
-        self.displayScene(caption= caption)
+        meshSceneOk= self.defineMeshScene()
+        if(meshSceneOk):
+            self.displayScene(caption= caption)
 
     def displayBlockEntities(self, setToDisplay, caption, fileName= None):
         ''' Display geometric entities (points, lines, surfaces and volumes)
@@ -83,8 +91,9 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         :param fileName: name of the graphic file to create (if None then -> screen window).
         '''
         self.setupGrid(setToDisplay)
-        self.defineMeshScene()
-        self.displayScene(caption,fileName)
+        meshSceneOk= self.defineMeshScene()
+        if(meshSceneOk):
+            self.displayScene(caption,fileName)
 
     def displayLocalAxes(self, setToDisplay, caption, fileName= None):
         '''Display the element local axes.
@@ -96,12 +105,13 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         self.setupGrid(setToDisplay)
         # Draw local axes.
         lineAxesField, surfAxesField= self.defineLocalAxes(setToDisplay)
-        self.defineMeshScene()
-        if(lineAxesField):
-            lineAxesField.addToDisplay(self) # Draw lines local axes.
-        if(surfAxesField):
-            surfAxesField.addToDisplay(self) # Draw quad surfaces local axes.
-        self.displayScene(caption, fileName)
+        meshSceneOk= self.defineMeshScene()
+        if(meshSceneOk):
+            if(lineAxesField):
+                lineAxesField.addToDisplay(self) # Draw lines local axes.
+            if(surfAxesField):
+                surfAxesField.addToDisplay(self) # Draw quad surfaces local axes.
+            self.displayScene(caption, fileName)
 
     def displayBlocks(self, setToDisplay, displayLocalAxes= True, caption= '', fileName= None):
         '''Display the element local axes.

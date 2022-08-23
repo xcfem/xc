@@ -34,11 +34,14 @@ ieData.outputFileName= '/tmp/'+baseName+'_blocks'
 ieData.problemName= 'FEcase'
 ieData.blockData= blocks
 
+# Write block topology data.
 ieData.writeToXCFile()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Test IFC lines.'
 import geom
+
+# Read block topology data.
 exec(open(ieData.outputFileName+'.py').read())
 
 xcTotalSet= preprocessor.getSets.getSet('total')
