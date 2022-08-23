@@ -286,7 +286,7 @@ def ultimateLoad(tf,tw,r,b,a,fy,fu,betaW,gammaM2):
     :param gammaM2: Partial safety factor for steel (clause 15.3 page 34 EAE).
     '''
     return min(ultimateLoad1(tf,r,tw,fy),min(ultimateLoad2(b,a,fu,betaW,gammaM2),ultimateLoad3(b,t,fy)))
-  
+
 # Maximum value of the force to bear by means of an
 # angle support with stiffeners. According to EAE, clause 
 # 61.5.1, page 324. See also 25.3.3 on the book
@@ -294,17 +294,41 @@ def ultimateLoad(tf,tw,r,b,a,fy,fu,betaW,gammaM2):
 # (url={https://books.google.es/books?id=X9JIRAAACAAJ}, isbn={9788486957087}) 
 # of Vicente Cudós Samblancat from Escuela de la Edificación.
 
-def widthMax(tChapa,l,H):
+# Corbel geometry
+
+#         |------ d -----|
+#
+#                        | R
+#                        |
+#                        V
+#         |-------------------|
+#         |-------------------|   --
+#         |                 /      |
+#         |               /        |
+#         |             /          |
+#         |           /            |
+#         |         /               
+#         |       /                H (corbel height)
+#         |     /                   
+#         |   /                    | 
+#         | /                      |
+#         |/                       |
+#         |                       --
+#
+#         |-------- l -------|   (corbel length)
+#
+
+def widthMax(topPlateThickness,l,H):
     '''
     Return the maximum depth of the stiffener (see figure 61.1.5.b
     page 325 EAE).
 
-    :param tChapa: Thickness of the sheets that supports the load.
-    :param l: Length of the horizontal cathetus of the stiffener.
-    :param H: Length of the vertical cathetus of the stiffener. 
+    :param topPlateThickness: Thickness of the plate that supports the load.
+    :param l: corbel length (horizontal cathetus of the stiffener).
+    :param H: corbel height (vertical cathetus of the stiffener). 
     '''
     theta=math.atan2(l,H)
-    return l*math.cos(theta)+tChapa*math.sin(theta)
+    return l*math.cos(theta)+topPlateThickness*math.sin(theta)
   
 
   
@@ -317,7 +341,7 @@ def esbeltezAdim(c,tRig,fy,Es):
     :param fy: Steel yield strength.
     :param Es: Steel elastic modulus.
     '''
-    return 0.805*c/tRig*math.sqrt(fy/Es) 
+    return (2.53/math.pi)*c/tRig*math.sqrt(fy/Es) 
 
 
   
