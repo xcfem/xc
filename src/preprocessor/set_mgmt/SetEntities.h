@@ -32,6 +32,7 @@
 
 #include "preprocessor/PreprocessorContainer.h"
 #include "DqPtrsEntities.h"
+#include "DqPtrsFaces.h"
 #include "utility/actor/actor/MovableObject.h"
 #include "preprocessor/set_mgmt/SetMeshComp.h"
 
@@ -84,7 +85,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     typedef lst_line_pointers::iterator lin_iterator; //!< Line set iterator.
     typedef lst_line_pointers::const_iterator lin_const_iterator; //!< Line set const iterator.
 
-    typedef DqPtrsEntities<Face> lst_surface_ptrs; //!< surface set.
+    typedef DqPtrsFaces lst_surface_ptrs; //!< surface set.
     typedef lst_surface_ptrs::iterator sup_iterator; //!< surface set iterator.
     typedef lst_surface_ptrs::const_iterator sup_const_iterator; //!< surface set const iterator.
 

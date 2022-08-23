@@ -964,7 +964,7 @@ XC::SetEntities XC::SetEntities::pickSurfacesInside(const GeomObj3d &geomObj, co
   {
     Preprocessor *prep= const_cast<Preprocessor *>(getPreprocessor());
     SetEntities retval(prep);
-    retval.surfaces= surfaces.pickEntitiesInside(geomObj,tol);
+    retval.surfaces= surfaces.pickSurfacesInside(geomObj,tol);
     return retval;
   }
 

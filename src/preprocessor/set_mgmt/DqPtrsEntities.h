@@ -62,8 +62,8 @@ class DqPtrsEntities: public DqPtrs<T>
     explicit DqPtrsEntities(const std::set<const T *> &ts)
       : DqPtrs<T>(ts) {}
 
-    DqPtrsEntities &operator-=(const DqPtrsEntities &);
-    DqPtrsEntities &operator*=(const DqPtrsEntities &);
+    DqPtrsEntities<T> &operator-=(const DqPtrsEntities<T> &);
+    DqPtrsEntities<T> &operator*=(const DqPtrsEntities<T> &);
 
     void remove(const DqPtrsEntities<T> &other);
     void intersect(const DqPtrsEntities<T> &other);

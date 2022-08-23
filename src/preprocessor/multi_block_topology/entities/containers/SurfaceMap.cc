@@ -201,3 +201,10 @@ double XC::SurfaceMap::getAverageArea(void) const
     return retval;
   }
 
+//! @brief Reverse the orientation of the surfaces.
+void XC::SurfaceMap::reverse(void)
+  {
+    for(iterator i= begin();i!=end();i++)
+      (*i).second->reverse();
+  }
+

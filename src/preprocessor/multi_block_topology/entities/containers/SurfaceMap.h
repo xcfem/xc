@@ -117,6 +117,9 @@ class SurfaceMap: public EntityMap<Face>
     PolygonalFace *newPolygonalFacePoints(const ID &);
     PolygonalFace *newPolygonalFacePointsPy(const boost::python::list &);
     double getAverageArea(void) const;
+
+    // Surface orientation.
+    void reverse(void);
   };
 
 

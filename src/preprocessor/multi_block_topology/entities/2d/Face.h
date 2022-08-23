@@ -129,9 +129,6 @@ class Face: public CmbEdge
     Plane getPlane(void) const;
     Polyline3d getContour(void) const;
     Polygon3d getPolygon(void) const;
-    bool clockwise(const Pos3d &) const;
-    bool counterclockwise(const Pos3d &) const;
-    std::string orientation(const Pos3d &) const;
     double getArea(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &getConnectedBodies(void) const
@@ -149,7 +146,13 @@ class Face: public CmbEdge
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
+
+    //Surface orientation.
+    bool clockwise(const Pos3d &) const;
+    bool counterclockwise(const Pos3d &) const;
+    std::string orientation(const Pos3d &) const;
     virtual void reverse(void);
+    void setOrientation(const Vector3d &);
 
     int getVtkCellType(void) const;
   };

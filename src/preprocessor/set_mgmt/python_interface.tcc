@@ -233,15 +233,23 @@ class_<dq_ptrs_surfaces, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_sur
   .def("clear",&dq_ptrs_surfaces::clear,"Removes all items.")
    ;
 
-class_<XC::SetEntities::lst_surface_ptrs, bases<dq_ptrs_surfaces> >("lstSurfaces",no_init)
-  .def("append", &XC::SetEntities::lst_surface_ptrs::push_back,"Appends surface at the end of the list.")
-  .def("pushFront", &XC::SetEntities::lst_surface_ptrs::push_front,"Push surface at the beginning of the list.")
-  .add_property("size", &XC::SetEntities::lst_surface_ptrs::size, "Returns list size.")
-  .def("__len__",&XC::SetEntities::lst_surface_ptrs::size, "Returns list size.")
-  .def("pickSurfacesInside",&XC::SetEntities::lst_surface_ptrs::pickEntitiesInside,"pickSurfacesInside(geomObj,tol) return the nodes inside the geometric object.") 
-  .def("getBnd", &XC::SetEntities::lst_surface_ptrs::Bnd, "Returns surfaces boundary.")
-  .def("findTag",make_function(&XC::SetEntities::lst_surface_ptrs::findTag, return_internal_reference<>() ),"Returns the surface identified by the tag argument.")
+typedef XC::DqPtrsEntities<XC::Face> dq_ptrs_faces;
+class_<dq_ptrs_faces, bases<dq_ptrs_surfaces> >("dq_ptrs_faces",no_init)
+  .def("append", &dq_ptrs_faces::push_back,"Appends surface at the end of the list.")
+  .def("pushFront", &dq_ptrs_faces::push_front,"Push surface at the beginning of the list.")
+  .add_property("size", &dq_ptrs_faces::size, "Returns list size.")
+  .def("__len__",&dq_ptrs_faces::size, "Returns list size.")
+  .def("pickSurfacesInside",&dq_ptrs_faces::pickEntitiesInside,"pickSurfacesInside(geomObj,tol) return the faces inside the geometric object.") 
+  .def("getBnd", &dq_ptrs_faces::Bnd, "Returns surfaces boundary.")
+  .def("findTag",make_function(&dq_ptrs_faces::findTag, return_internal_reference<>() ),"Returns the surface identified by the tag argument.")
    ;
+
+class_<XC::DqPtrsFaces, bases<dq_ptrs_faces> >("DqPtrsFaces",no_init)
+  .def("reverse", &XC::DqPtrsFaces::reverse, "Reverse surfaces.")
+  .def("setOrientation", &XC::DqPtrsFaces::setOrientation, "Set the orientation of the face according to the vector argument.")
+  .def("pickSurfacesInside",&XC::DqPtrsFaces::pickSurfacesInside,"pickSurfacesInside(geomObj,tol) return the faces inside the geometric object.") 
+  ;
+
 
 typedef XC::DqPtrs<XC::Body> dq_body_ptrs;
 class_<dq_body_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_body_ptrs",no_init)

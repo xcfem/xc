@@ -801,6 +801,18 @@ void XC::Face::reverse(void)
     close();
   }
 
+//! @brief Set the orientation according to the vector argument. If the dot
+//! product of the vector and the surface normal vector is negative the
+//! method changes the surface orientation.
+//! @param v: orientation vector.
+void XC::Face::setOrientation(const Vector3d &v)
+  {
+    const double d= dot(this->getKVector(), v);    
+    if(d<0.0)
+      this->reverse();
+  }
+
+
 //! @brief Returns the i-th vertex.
 const XC::Pnt *XC::Face::getVertex(const size_t &i) const
   { return getSide(i)->P1(); }
