@@ -59,3 +59,16 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
         self.fy= dct['fy']
         self.fu= dct['fu']
         self.gammaM= dct['gammaM']
+
+
+    def defJ2PlateFibre(self, preprocessor, name, alpha= .05):
+        '''Constructs a J2 (Von Mises) material with a linear-strain
+           hardening rule appropriate for plate analysis.
+
+        :param  preprocessor: preprocessor of the finite element problem.
+        :param  name:         name identifying the material.
+        :param  alpha:        strain hardening ratio (default: (0.01), 
+                              range: 0 to 1).
+        :param  rho:          mass density (defaults to 0.0).
+        '''
+        return typical_materials.defJ2PlateFibre(preprocessor, name= name, E= self.E, nu= self.nu, fy= self.fy, alpha=alpha, rho= self.rho)
