@@ -185,43 +185,47 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
     '''
     # Classify points.
     for p in xcSet.points: # for each point in the set.
-        labels= p.getProp('labels') # point labels.
-        for pair in labelSetPairs:
-            regEx= re.compile(pair[0]) # regular expression
-            setToPopulate= pair[1] # set to populate
-            for lbl in labels:
-                if(regEx.match(lbl)): # if the label match the regular expr.
-                    setToPopulate.getPoints.append(p) # put the point in the set
+        if(p.hasProp('labels')):
+            labels= p.getProp('labels') # point labels.
+            for pair in labelSetPairs:
+                regEx= re.compile(pair[0]) # regular expression
+                setToPopulate= pair[1] # set to populate
+                for lbl in labels:
+                    if(regEx.match(lbl)): # if the label match the regular expr.
+                        setToPopulate.getPoints.append(p) # put the point in the set
 
     # Classify lines.
     for l in xcSet.lines: # for each line in the set.
-        labels= l.getProp('labels') # line labels.
-        for pair in labelSetPairs:
-            regEx= re.compile(pair[0]) # regular expression
-            setToPopulate= pair[1] # set to populate
-            for lbl in labels:
-                if(regEx.match(lbl)): # if the label match the regular expr
-                    setToPopulate.getLines.append(l) # put the line in the set
+        if(l.hasProp('labels')):
+            labels= l.getProp('labels') # line labels.
+            for pair in labelSetPairs:
+                regEx= re.compile(pair[0]) # regular expression
+                setToPopulate= pair[1] # set to populate
+                for lbl in labels:
+                    if(regEx.match(lbl)): # if the label match the regular expr
+                        setToPopulate.getLines.append(l) # put the line in the set
                     
     # Classify surfaces.
     for s in xcSet.surfaces: # for each line in the set.
-        labels= s.getProp('labels') # surface labels.
-        for pair in labelSetPairs:
-            regEx= re.compile(pair[0]) # regular expression
-            setToPopulate= pair[1] # set to populate
-            for lbl in labels:
-                if(regEx.match(lbl)): # if the label match the regular expr
-                    setToPopulate.getSurfaces.append(s) # put the surface in the set
+        if(s.hasProp('labels')):
+            labels= s.getProp('labels') # surface labels.
+            for pair in labelSetPairs:
+                regEx= re.compile(pair[0]) # regular expression
+                setToPopulate= pair[1] # set to populate
+                for lbl in labels:
+                    if(regEx.match(lbl)): # if the label match the regular expr
+                        setToPopulate.getSurfaces.append(s) # put the surface in the set
                     
     # Classify bodies.
     for b in xcSet.bodies: # for each line in the set.
-        labels= b.getProp('labels') # body labels.
-        for pair in labelSetPairs:
-            regEx= re.compile(pair[0]) # regular expression
-            setToPopulate= pair[1] # set to populate
-            for lbl in labels:
-                if(regEx.match(lbl)): # if the label match the regular expr
-                    setToPopulate.getBodies.append(b) # put the body in the set
+        if(b.hasProp('labels')):
+            labels= b.getProp('labels') # body labels.
+            for pair in labelSetPairs:
+                regEx= re.compile(pair[0]) # regular expression
+                setToPopulate= pair[1] # set to populate
+                for lbl in labels:
+                    if(regEx.match(lbl)): # if the label match the regular expr
+                        setToPopulate.getBodies.append(b) # put the body in the set
 
     # Fill sets downwards.
     visited= list()
