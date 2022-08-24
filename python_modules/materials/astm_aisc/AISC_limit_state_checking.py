@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Classes and functions for limit state checking according to Eurocode 3. '''
+''' Classes and functions for limit state checking according to AISC 360-16.'''
 
 from __future__ import print_function
 from __future__ import division
