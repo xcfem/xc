@@ -36,12 +36,13 @@ class BasicElasticMaterial(object):
     def G(self):
         '''shear modulus.'''
         return self.E/(2*(1+self.nu))
-    
+
     def defElasticMaterial(self, preprocessor, name= None, overrideRho= None):
         ''' Return an elastic material appropriate for example for
             truss elements
 
         :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''        
@@ -51,11 +52,69 @@ class BasicElasticMaterial(object):
             matName= uuid.uuid1().hex
         retval= materialHandler.newMaterial("elastic_material",matName)
         retval.E= self.E
+        matRho= self.rho
+        if(overrideRho!=None):
+            matRho= overrideRho
+        retval.rho= matRho
+        return retval
+    
+    def defElasticIsotropic3d(self, preprocessor, name= None, overrideRho= None):
+        ''' Return an elastic isotropic 3D material appropriate for example for
+            brick elements
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''        
+        materialHandler= preprocessor.getMaterialHandler
+        matName= name
+        if(not matName):
+            matName= uuid.uuid1().hex
+        matRho= self.rho
+        if(overrideRho!=None):
+            matRho= overrideRho
+        return defElasticIsotropic3d(preprocessor= preprocessor, name= matName, E= self.E, nu= self.nu,rho= matRho)
+
+
+    def defElasticMembranePlateSection(self, preprocessor, thickness, name= None, overrideRho= None):
+        ''' Return an elastic membrane plate section material appropriate
+            for example for shell elements.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param thickness: plate thickness.
+        :param name: name for the new material.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''        
+        materialHandler= preprocessor.getMaterialHandler
+        matName= name
+        if(not matName):
+            matName= uuid.uuid1().hex
         rho= self.rho
         if(overrideRho!=None):
             rho= overrideRho
-        retval.rho= rho
-        return retval
+        return defElasticMembranePlateSection(preprocessor= preprocessor, name= matName, E= self.E, nu= self.nu, rho= rho, h= thickness)
+    
+    def defMembranePlateFiberSection(self, preprocessor, thickness, name= None, overrideRho= None):
+        ''' Return an elastic membrane plate section material appropriate
+            for example for shell elements.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param thickness: plate thickness.
+        :param name: name for the new material.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        baseMaterial= self.defElasticIsotropic3d(preprocessor= preprocessor, overrideRho= overrideRho)
+        materialHandler= preprocessor.getMaterialHandler
+        matName= name
+        if(not matName):
+            matName= uuid.uuid1().hex
+        rho= self.rho
+        if(overrideRho!=None):
+            rho= overrideRho
+        return defMembranePlateFiberSection(preprocessor= preprocessor, name= matName, h= thickness, nDMaterial= baseMaterial)        
 
     def getDict(self):
         ''' Returns a dictionary whith the values of the internal forces.
@@ -463,7 +522,7 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu, rho= 0.0):
     return retval
 
 #Linear elastic isotropic 3d material.
-def defElasticIsotropic3d(preprocessor,name,E,nu, rho= 0.0):
+def defElasticIsotropic3d(preprocessor, name, E, nu, rho= 0.0):
     '''Constructs an linear elastic isotropic 3D material.
 
     :param  preprocessor: preprocessor of the finite element problem.
