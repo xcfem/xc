@@ -44,6 +44,8 @@ class Dir2d
     virtual bool operator==(const Dir2d &) const;
     const CGDirection_2 &ToCGAL(void) const
       { return cgd; }
+    inline int dimension(void) const
+      { return 2; }
     void Neg(void)
       { cgd= -cgd; }
     inline GEOM_FT operator()(const size_t &i) const

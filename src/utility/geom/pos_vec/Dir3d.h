@@ -43,6 +43,8 @@ class Dir3d
     virtual bool operator==(const Dir3d &) const;
     const CGDirection_3 &ToCGAL(void) const
       { return cgd; }
+    inline int dimension(void) const
+      { return 3; }
     void Neg(void)
       { cgd=-cgd; }
     inline GEOM_FT operator()(const size_t &i) const

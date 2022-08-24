@@ -54,6 +54,8 @@ class Vector2d: public ProtoGeom
     virtual bool operator==(const Vector2d &) const;
     const CGVector_2 &ToCGAL(void) const
       { return cgvct; }
+    inline int dimension(void) const
+      { return cgvct.dimension(); }
     void Neg(void)
       { cgvct= -cgvct; }
     inline Vector2d operator-(void) const

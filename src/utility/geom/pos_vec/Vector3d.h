@@ -49,6 +49,8 @@ class Vector3d: public ProtoGeom
     virtual bool operator==(const Vector3d &) const;
     const CGVector_3 &ToCGAL(void) const
       { return cgvct; }
+    inline int dimension(void) const
+      { return cgvct.dimension(); }
     void Neg(void)
       { cgvct= -cgvct; }
     bool Nulo(void) const;
