@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
+import sys
 import geom
 import xc
 from actions.earth_pressure import earth_pressure as ep
@@ -235,16 +236,13 @@ class UnifLoadSurfNodesDistributed(BaseVectorLoad):
         if prep.getSets.exists('auxNodSet'): prep.getSets.removeSet('auxNodSet')
         for s in self.surfSet.surfaces:
             lstNodes=list()
-            auxNodSet=prep.getSets.defSet('auxNodSet')
             lstNodes+=[n for n in s.nodes]
             for l in s.getEdges: lstNodes+=l.nodes
             for p in s.getVertices: lstNodes+=p.nodes
             if len(lstNodes) > 0:
-                for n in lstNodes: auxNodSet.nodes.append(n)
                 surfLoadVect=s.getArea()*self.loadVector
-                slv=SlidingVectorLoad('slv',auxNodSet,s.getCentroid(),surfLoadVect)
+                slv= SlidingVectorLoad('slv',nodes= lstNodes, pntCoord= s.getCentroid(), loadVector= surfLoadVect)
                 slv.appendLoadToCurrentLoadPattern()
-            prep.getSets.removeSet('auxNodSet')
             
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
@@ -628,36 +626,59 @@ class SlidingVectorLoad(BaseVectorLoad):
     a set.
 
     :ivar name: name identifying the load
-    :ivar xcSet: set that contains the nodes to distribute the load on.
+    :ivar nodes: nodes to distribute the load on.
     :ivar pntCoord: (x,y,z) coordinates of a point of the sliding vector.
     :ivar loadVector:  xc.Vector(Fx,Fy,Fz,Mx,My,Mz) components of the force sliding vector
     '''
-    def __init__(self,name, xcSet, pntCoord,loadVector):
+    def __init__(self,name, nodes, pntCoord, loadVector):
         ''' Constructor.
+
         :param name: name identifying the load
-        :param xcSet: set that contains the nodes to distribute the load on.
+        :param nodes: nodes to distribute the load on.
         :param pntCoord: (x,y,z) coordinates of a point of the sliding vector.
         :param loadVector: xc.Vector(Fx,Fy,Fz,Mx,My,Mz) components of the force sliding vector.
         '''
         super(SlidingVectorLoad,self).__init__(name,loadVector)
-        self.xcSet=xcSet
-        self.pntCoord=pntCoord
+        self.loadedNodes= nodes
+        self.pntCoord= pntCoord
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append the loads to the current load pattern.'''
-        O=geom.Pos3d(self.pntCoord[0],self.pntCoord[1],self.pntCoord[2])
-        force=geom.Vector3d(self.loadVector[0],self.loadVector[1],self.loadVector[2])
-        moment=geom.Vector3d(self.loadVector[3],self.loadVector[4],self.loadVector[5])
-        loadSVS=geom.SlidingVectorsSystem3d(O,force,moment)
-        ptList= list()
-        nodeList= self.xcSet.nodes
-        if len(nodeList)>0:
-            for n in nodeList:
-                ptList.append(n.getInitialPos3d)
-                loadVectors= loadSVS.distribute(ptList)
-            for n, v in zip(nodeList,loadVectors):
-                f= v.getVector3d()
-                n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
+        if(len(self.loadedNodes)>0):
+            n0= self.loadedNodes[0]
+            numDOFs= n0.getNumberDOF
+            if(numDOFs==6):
+                O=geom.Pos3d(self.pntCoord[0],self.pntCoord[1],self.pntCoord[2])
+                force=geom.Vector3d(self.loadVector[0],self.loadVector[1],self.loadVector[2])
+                moment=geom.Vector3d(self.loadVector[3],self.loadVector[4],self.loadVector[5])
+                loadSVS= geom.SlidingVectorsSystem3d(O,force,moment)
+                ptList= list()
+                nodeList= self.loadedNodes
+                if len(self.loadedNodes)>0:
+                    for n in self.loadedNodes:
+                        ptList.append(n.getInitialPos3d)
+                        loadVectors= loadSVS.distribute(ptList)
+                    for n, v in zip(nodeList,loadVectors):
+                        f= v.getVector3d()
+                        n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
+            elif(numDOFs==3):
+                O=geom.Pos2d(self.pntCoord[0],self.pntCoord[1])
+                force= geom.Vector2d(self.loadVector[0],self.loadVector[1])
+                moment= self.loadVector[2]
+                loadSVS= geom.SlidingVectorsSystem2d(O,force,moment)
+                ptList= list()
+                nodeList= self.loadedNodes
+                if len(self.loadedNodes)>0:
+                    for n in self.loadedNodes:
+                        ptList.append(n.getInitialPos2d)
+                        loadVectors= loadSVS.distribute(ptList)
+                    for n, v in zip(nodeList,loadVectors):
+                        f= v.getVector2d()
+                        n.newLoad(xc.Vector([f.x,f.y,0.0]))
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; algorithm for '+str(numDOFs)+' degrees of freedom not implemented yet.')
 
         
 class MovableLoad(object):

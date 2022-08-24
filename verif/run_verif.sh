@@ -167,7 +167,6 @@ python tests/utility/soil_mechanics/test_boussinesq.py
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_prestressing.py
-python tests/actions/test_surf_unif_load_distributed.py
 echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
 python tests/actions/earth_pressure/test_earth_pressure.py
@@ -632,6 +631,10 @@ python tests/loads/concentrated_loads/test_vector3d_point_load_local.py
 python tests/loads/concentrated_loads/test_vector3d_point_load_global_01.py
 python tests/loads/concentrated_loads/test_vector3d_point_load_global_02.py
 python tests/loads/concentrated_loads/test_vector3d_point_load_global_03.py
+echo "$BLEU" "    Load distribution." "$NORMAL"
+python tests/loads/load_distribution/test_sliding_vector_load_01.py
+python tests/loads/load_distribution/test_sliding_vector_load_02.py
+python tests/loads/load_distribution/test_surf_unif_load_distributed.py
 echo "$BLEU" "    Strain loads." "$NORMAL"
 python tests/loads/strain_loads/truss_strain_load_01.py
 python tests/loads/strain_loads/truss_strain_load_02.py
