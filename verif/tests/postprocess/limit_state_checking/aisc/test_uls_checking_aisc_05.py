@@ -46,7 +46,7 @@ steel.gammaM= 1.00
 sg_yield= steel.fy # Allowable stress: yield stress of steel (Pa)
 
 ## XC material model
-steel3d= typical_materials.defElasticIsotropic3d(preprocessor, "steel3d",steel.E,steel.nu,rho= steel.rho)
+steel3d= typical_materials.defElasticIsotropic3d(preprocessor, "steel3d", steel.E,steel.nu,rho= steel.rho)
 
 plateFiber= typical_materials.defMembranePlateFiberSection(preprocessor, name= "plateFiber", h= t, nDMaterial= steel3d);
 
