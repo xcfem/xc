@@ -117,7 +117,7 @@ class CellRecord(object):
     :ivar thk: cell thickness.
     '''
     _ids= count(0) # counter
-    def __init__(self,ident, typ, nodes,thk= 0.0):
+    def __init__(self,ident, typ, nodes, thk= 0.0):
         '''
         Cell record constructor.
 

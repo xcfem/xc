@@ -82,34 +82,33 @@ class ReaderBase(object):
         retval.logMessage+= str(datetime.datetime.now())
 
         if(self.kPoints):
-            counter= 0
+            pointCounter= 0
             for p in self.kPoints:
-                key= self.kPointsNames[counter]
+                key= self.kPointsNames[pointCounter]
                 bp= bte.BlockProperties()
                 bp.copyFrom(self.propertyDict[key])
                 # Add labels and attributes of points
                 for k in self.points:
                     pp= self.points[k][0]
-                    if(pp==counter):
+                    if(pp==pointCounter):
                         bp.extend(self.propertyDict[k])
-                retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], pointProperties= bp)
-                counter+= 1
+                retval.appendPoint(id= pointCounter,x= p[0],y= p[1],z= p[2], pointProperties= bp)
+                pointCounter+= 1
 
-            counter= 0
+            blockCounter= 0
             for key, line in self.lines.items():
                 bp= self.propertyDict[key]
-                block= bte.BlockRecord(counter,'line',line, blockProperties= bp)
+                block= bte.BlockRecord(blockCounter,'line',line, blockProperties= bp)
                 retval.appendBlock(block)
-                counter+= 1
+                blockCounter+= 1
 
-            counter= 0
             for name in self.getNamesToImport():
                 fg= self.facesTree[name]
                 for key, face in fg.items():
                     bp= self.propertyDict[key]
-                    block= bte.BlockRecord(counter,'face',face, blockProperties= bp)
+                    block= bte.BlockRecord(blockCounter,'face',face, blockProperties= bp)
                     retval.appendBlock(block)
-                    counter+= 1
+                    blockCounter+= 1
         else:
             lmsg.warning('Nothing to export.')
         return retval

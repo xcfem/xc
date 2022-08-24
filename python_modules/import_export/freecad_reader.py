@@ -141,7 +141,9 @@ class FreeCADImport(reader_base.ReaderBase):
             if(reader_base.nameToImport(obj.Label, regExpList)):
                 retval.append(obj)
         if(len(retval)==0):
-            lmsg.warning(f'No groups to import (names to import: {namesToImport})')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+f': no groups to import (names to import: {namesToImport})')
         return retval
     
     def extractPoints(self):
@@ -230,7 +232,9 @@ class FreeCADImport(reader_base.ReaderBase):
             vertices[0]= idx0
             vertices[1]= idx1
             if(vertices[0]==vertices[1]):
-                lmsg.error(f'Error in line {edgeName} vertices are equal: {vertices}')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+f': error in line {edgeName} vertices are equal: {vertices}')
             if(length>self.threshold):
                 self.lines[edgeName]= vertices
                 objLabels= [labelName]
@@ -239,7 +243,9 @@ class FreeCADImport(reader_base.ReaderBase):
                 #     objLabels.extend(self.entitiesGroups[edgeName])
                 self.propertyDict[edgeName]= bte.BlockProperties(labels= objLabels, attributes= edgeAttributes)
             else:
-                lmsg.error(f'line too short: {p1},{p2}, {length}')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+f'; line too short: {p1},{p2}, {length}')
 
         def import_edges(edges, names, labelName, attributes):
             ''' Import edges from a wire shape.

@@ -557,6 +557,7 @@ python tests/preprocessor/import_export/freecad/test_ifc_lines.py
 python tests/preprocessor/import_export/freecad/test_ifc_surface_01.py
 python tests/preprocessor/import_export/freecad/test_ifc_surface_02.py
 python tests/preprocessor/import_export/freecad/test_ifc_pinned_member.py
+python tests/preprocessor/import_export/freecad/test_ifc_mixed_blocks_01.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"

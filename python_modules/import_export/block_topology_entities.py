@@ -9,6 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import ezdxf
+import sys
 import logging
 import geom
 from import_export import basic_entities as be
@@ -488,6 +489,10 @@ class BlockData(object):
 
         :param block: block to append.
         '''
+        if block.ident in self.blocks:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; redefinition of block: '+str(block.ident))
         self.blocks[block.ident]= block
         return block.ident
 
