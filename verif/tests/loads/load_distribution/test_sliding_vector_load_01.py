@@ -41,7 +41,7 @@ slidingVectorLoad.appendLoadToCurrentLoadPattern()
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
-# Solution
+## Compute solution
 result= modelSpace.analyze(1, calculateNodalReactions= True)
 if(result!=0):
     print('Can\'t solve.')
