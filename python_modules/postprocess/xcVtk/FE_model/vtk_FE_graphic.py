@@ -110,36 +110,46 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.gridRecord.uGrid.name= eSet.name+'_grid'
         # Scalar values.
         nodeSet= eSet.nodes
-        if(field):
-            arr= field.fillArray(nodeSet)
-            field.creaLookUpTable()      
-        # Load nodes in vtk
-        if eigenMode is None:
-            for n in nodeSet:
-                pos= n.getCurrentPos3d(defFScale)
-                self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
-        else:
-            for n in nodeSet:
-                pos= n.getEigenPos3d(defFScale,eigenMode)
-                self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
-         # Load elements in vtk
-        setElems= eSet.elements
-        for e in setElems:
-            vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
-            vtx= vtk.vtkIdList()
-            for vIndex in vertices:
-                vtx.InsertNextId(vIndex)
-            if(e.getVtkCellType!= vtk.VTK_VERTEX):
-                self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
-        setConstraints= eSet.getConstraints
-        for c in setConstraints:
-            if(hasattr(c,'getIdxNodes')):
-                vertices= xc_base.vector_int_to_py_list(c.getIdxNodes)
+        numNodes= len(nodeSet)
+        if(numNodes>0):
+            if(field):
+                arr= field.fillArray(nodeSet)
+                field.creaLookUpTable()      
+            # Load nodes in vtk
+            if eigenMode is None:
+                for n in nodeSet:
+                    pos= n.getCurrentPos3d(defFScale)
+                    self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+            else:
+                for n in nodeSet:
+                    pos= n.getEigenPos3d(defFScale,eigenMode)
+                    self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+             # Load elements in vtk
+            setElems= eSet.elements
+            for e in setElems:
+                vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
                 vtx= vtk.vtkIdList()
                 for vIndex in vertices:
                     vtx.InsertNextId(vIndex)
-                if(c.getVtkCellType!= vtk.VTK_VERTEX):
-                    self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+                if(e.getVtkCellType!= vtk.VTK_VERTEX):
+                    self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
+            setConstraints= eSet.getConstraints
+            for c in setConstraints:
+                if(hasattr(c,'getIdxNodes')):
+                    vertices= xc_base.vector_int_to_py_list(c.getIdxNodes)
+                    vtx= vtk.vtkIdList()
+                    for vIndex in vertices:
+                        vtx.InsertNextId(vIndex)
+                    if(c.getVtkCellType!= vtk.VTK_VERTEX):
+                        self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+            return True
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+eSet.name+"', it has no nodes so I can't get set geometry (use fillDownwards?)")
+            return False
+            
+                        
 
     def defineMeshScene(self, field: fields.ScalarField, defFScale= 0.0, eigenMode= None, color= xc.Vector([rd.random(),rd.random(),rd.random()])):
         '''Define the scene for the mesh
@@ -157,12 +167,13 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param color: RGB color to represent the elements (defaults to random
                       color)
         '''
-        self.VtkLoadElemMesh(field, defFScale, eigenMode)
+        retval= self.VtkLoadElemMesh(field, defFScale, eigenMode)
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
         self.VtkDefineNodesActor(0.002)
         self.VtkDefineElementsActor("surface", field, color)
         self.renderer.ResetCamera()
+        return retval
 
         #Implement labels.
         # if(self.gridRecord.entToLabel=="elementos"):

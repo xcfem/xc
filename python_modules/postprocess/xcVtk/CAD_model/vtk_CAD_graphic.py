@@ -62,7 +62,7 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+setToDraw.name+"', it has not key points so I can't get set geometry (use fillDownwards?)")
+            lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+setToDraw.name+"', it has no key points so I can't get set geometry (use fillDownwards?)")
             return False
 
         #Implement drawing of labels.
