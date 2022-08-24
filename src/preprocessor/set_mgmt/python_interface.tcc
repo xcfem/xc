@@ -242,6 +242,7 @@ class_<dq_ptrs_faces, bases<dq_ptrs_surfaces> >("dq_ptrs_faces",no_init)
   .def("pickSurfacesInside",&dq_ptrs_faces::pickEntitiesInside,"pickSurfacesInside(geomObj,tol) return the faces inside the geometric object.") 
   .def("getBnd", &dq_ptrs_faces::Bnd, "Returns surfaces boundary.")
   .def("findTag",make_function(&dq_ptrs_faces::findTag, return_internal_reference<>() ),"Returns the surface identified by the tag argument.")
+  .def("getCentroid", &dq_ptrs_faces::getCentroid, "Returns the centroid of the points.")
    ;
 
 class_<XC::DqPtrsFaces, bases<dq_ptrs_faces> >("DqPtrsFaces",no_init)
