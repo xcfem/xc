@@ -843,6 +843,11 @@ Polygon3d XC::Face::getPolygon(void) const
     return Polygon3d(contour);
   }
 
+//! @brief Return the squared distance to the point.
+double XC::Face::getSquaredDistanceTo(const Pos3d &pt) const    
+  { return getPolygon().dist2(pt); }
+
+
 //! @brief Return true if the point list is oriented clockwise.
 //! @param vPoint: position of the point of view.
 bool XC::Face::clockwise(const Pos3d &vPoint) const

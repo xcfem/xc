@@ -129,6 +129,7 @@ class Face: public CmbEdge
     Plane getPlane(void) const;
     Polyline3d getContour(void) const;
     Polygon3d getPolygon(void) const;
+    double getSquaredDistanceTo(const Pos3d &pt) const;    
     double getArea(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &getConnectedBodies(void) const
