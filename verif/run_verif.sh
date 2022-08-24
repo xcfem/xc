@@ -1175,6 +1175,8 @@ python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_03.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_04.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_05.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_06.py
+echo "$BLEU" "    NBE EA-95 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/nbe_ea95/test_uls_checking_von_mises.py
 echo "$BLEU" "    AWC/NDS limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/awc_nds/test_uls_checking_nds_01.py
 python tests/postprocess/limit_state_checking/awc_nds/test_uls_checking_nds_02.py

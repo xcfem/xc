@@ -60,7 +60,7 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForces.setFromAverageInShellElement(e)
             internalForces= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
             # Silently ask about maximum Von-Mises stress.
-            maxVonMisesAtNodes= e.getValuesAtNodes(vonMisesStressId, True) 
+            maxVonMisesAtNodes= e.getValuesAtNodes(vonMisesStressId, True)
             avgMaxVM= None
             if(len(maxVonMisesAtNodes)>1): # vonMisesStressId found.
                 avgMaxVM= 0.0
