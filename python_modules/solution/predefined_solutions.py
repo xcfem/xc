@@ -125,7 +125,7 @@ class SolutionProcedure(object):
             problem object.
         '''
         self.clear()
-        modelWrapperName= self.modelWrapperSetup()
+        unusedModelWrapperName= self.modelWrapperSetup()
         self.constraintHandlerSetup()
 
     def getModelWrapperName(self):
