@@ -34,6 +34,7 @@ class Nut(object):
     # Minimum height of the nut (m).
     m_min= [1.05e-3, 1.35e-3, 1.75e-3, 2.15e-3, 2.55e-3, 2.9e-3, 4.4e-3, 4.9e-3, 6.44e-3, 8.04e-3, 10.37e-3, 12.1e-3, 14.1e-3, 15.1e-3, 16.9e-3, 18.1e-3, 20.2e-3, 22.5e-3, 24.3e-3, 27.4e-3, 29.4e-3, 31.8e-3, 32.4e-3, 34.4e-3, 36.4e-3, 40.4e-3, 43.4e-3, 46.4e-3, 49.1e-3]
     fm_min= scipy.interpolate.interp1d(diameters,m_min)
+
     ''' Nut dimensions.
 
     :ivar boltDiameter: nominal diameter of the bolt.
@@ -80,6 +81,11 @@ class BoltBase(object):
     :ivar diameter: bolt diameter.
     :ivar pos3d: bolt position.
     '''
+    # Pitch (distance between threads according to ISO 724).
+    pitch_bolt_diams= [1.6E-03, 2.0E-03, 2.5E-03, 3.0E-03, 3.5E-03, 4.0E-03, 5.0E-03, 6.0E-03, 8.0E-03, 10.0E-03, 12.0E-03, 14.0E-03, 16.0E-03, 20.0E-03, 22.0E-03, 24.0E-03, 27.0E-03, 30.0E-03, 36.0E-03, 42.0E-03, 48.0E-03, 56.0E-03, 64.0E-03, 68.0E-03]
+    pitch_values= [350e-06, 400e-06, 450e-06, 500e-06, 600e-06, 700e-06, 800e-06, 1.0e-03, 1.3e-03, 1.5e-03, 1.8e-03, 2.0e-03, 2.0e-03, 2.5e-03, 2.5e-03, 3.0e-03, 3.0e-03, 3.5e-03, 4.0e-03, 4.5e-03, 5.0e-03, 5.5e-03, 6.0e-03, 6.0e-03]
+    f_pitch= scipy.interpolate.interp1d(pitch_bolt_diams, pitch_values)
+    
     def __init__(self, diameter, pos3d= None):
        ''' Constructor.
 
@@ -120,10 +126,24 @@ class BoltBase(object):
     def getName(self):
         return 'M'+str(self.diameter*1e3)[0:2]
 
+    def getPitch(self):
+        ''' Return the distance between threads according
+            to ISO 724.'''
+        return float(self.f_pitch(self.diameter))
+    
     def getArea(self):
         ''' Return the area of the bolt.
         '''
         return math.pi*(self.diameter/2.0)**2
+    
+    def getTensileStressArea(self, threadsExcluded= False):
+        ''' Return the tensile stress area of the bolt.'''
+        if(threadsExcluded):
+            retval= self.getArea()
+        else:
+            pitch= self.getPitch()
+            retval= (math.pi/4.0)*(self.diameter-0.938194*pitch)**2
+        return retval
     
     def getDict(self):
         ''' Put member values in a dictionary.'''

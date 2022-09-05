@@ -17,6 +17,7 @@ from materials import typical_materials
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from misc_utils import log_messages as lmsg
 from materials.sections import structural_steel
+from connections.steel_connections import bolts
 
 class EC3Steel(steel_base.BasicSteel):
     '''Eurocode 3 structural steel.
@@ -33,12 +34,14 @@ class EC3Steel(steel_base.BasicSteel):
     '''
     def __init__(self, fy, fy16, fy40, fy63, fy80, fy100, fy125, fu, gammaM, gammaM1= 1.0, gammaM2= 1.1):
         ''' Constructor.
+          :param fy:  yield stress.
           :param fy16: 0<t<16mm
           :param fy40: 16<t<40mm
           :param fy63: 40<t<63mm
           :param fy80: 63<t<80mm
           :param fy100: 80<t<100mm
           :param fy125: 100<t<125mm
+          :param fu: ultimate stress.
           :param gammaM: partial safety factor for steel strength.
           :param gammaM1: partial factor for buckling resistance.
           :param gammaM2: partial factor for cross-sections in tension to fracture.
@@ -687,3 +690,96 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
         '''
         super(CFCHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFCHSShape.__init__(self, steel= steel, name= name)
+
+class EC3BoltSteel(steel_base.BasicSteel):
+    '''Eurocode 3 structural steel for bolts according to table 3.1 of
+       EC3-1-8:2005.
+
+      :ivar gammaM2: partial safety factor for steel strength.
+    '''
+    def __init__(self, name= None, fy= 240e6, fu= 400e6, gammaM2= 1.25):
+        ''' Constructor.
+          :param fy:  yield stress.
+          :param fu: ultimate stress.
+          :param gammaM2: partial safety factor for steel strength.
+        '''
+
+        super(EC3BoltSteel,self).__init__(E= 210000e6,nu= 0.3,fy= fy, fu= fu, gammaM= gammaM2)
+        if(name):
+            self.name= name
+        else:
+            self.name= None
+
+    def getAlpha_v(self, threadsExcluded= False):
+        ''' Return the alpha_v coefficient of the fastener according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        retval= 0.5
+        if(threadsExcluded):
+            retval= 0.6
+        elif((self.name=='4.6') or (self.name=='5.6') or (self.name=='8.8')):
+            retval= 0.6
+        return retval
+    
+    def getNominalShearStrength(self, threadsExcluded= False):
+        ''' Return the nominal shear strength of the steel according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        return self.getAlpha_v(threadsExcluded= threadsExcluded)*self.fu
+
+    def getDesignShearStrength(self, threadsExcluded= False):
+        ''' Return the design shear strength of the steel according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        return self.getNominalShearStrength(threadsExcluded= threadsExcluded)/self.gammaM
+    
+bolt4dot6Steel= EC3BoltSteel(name='4.6', fy= 240e6, fu= 400e6, gammaM2= 1.25)
+bolt4dot8Steel= EC3BoltSteel(name= '4.8', fy= 320e6, fu= 400e6, gammaM2= 1.25)
+bolt5dot6Steel= EC3BoltSteel(name= '5.6', fy= 300e6, fu= 500e6, gammaM2= 1.25)
+bolt6dot8Steel= EC3BoltSteel(name= '6.8', fy= 480e6, fu= 600e6, gammaM2= 1.25)
+bolt8dot8Steel= EC3BoltSteel(name= '8.8', fy= 640e6, fu= 800e6, gammaM2= 1.25)
+bolt10dot9Steel= EC3BoltSteel(name= '10.9', fy= 900e6, fu= 1000e6, gammaM2= 1.25)
+       
+class BoltFastener(bolts.BoltBase):
+    ''' Bolt according to chapter 3 of EC3-1-8:2005.
+
+    :ivar steelType: type of the bolt steel. 
+    '''
+    def __init__(self, diameter, steelType= bolt8dot8Steel, pos3d= None):
+       ''' Constructor.
+
+       :param diameter: bolt diameter.
+       :param steelType: bolt steel type.
+       :param pos3d: bolt position.
+       '''
+       super(BoltFastener,self).__init__(diameter, pos3d)
+       self.steelType= steelType
+    
+    def getNominalShearStrength(self, threadsExcluded= False, numberOfShearPlanes= 1):
+        ''' Return the nominal shear strength of the fastener according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        :param numberOfShearPlanes: number of shear planes.
+        '''
+        return self.steelType.getNominalShearStrengthv(threadsExcluded= threadsExcluded)*self.getTensileStressArea(threadsExcluded= threadsExcluded)*numberOfShearPlanes
+
+    def getDesignShearStrength(self, threadsExcluded= False, numberOfShearPlanes= 1):
+        ''' Return the design shear strength of the fastener according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        :param numberOfShearPlanes: number of shear planes.
+        '''
+        return self.steelType.getDesignShearStrength()*self.getTensileStressArea(threadsExcluded= threadsExcluded)*numberOfShearPlanes

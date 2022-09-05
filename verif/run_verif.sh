@@ -958,6 +958,7 @@ python tests/materials/ec3/test_beam_contrpnt.py
 python tests/materials/ec3/test_biax_bend_coeff.py
 python tests/materials/ec3/test_classif.py
 python tests/materials/ec3/test_beam_with_full_lateral_restraint.py
+python tests/materials/ec3/test_bolt_shear_01.py
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
 python tests/materials/eae/test_simple_shear_welded_web.py
