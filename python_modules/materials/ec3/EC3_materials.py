@@ -754,15 +754,17 @@ class BoltFastener(bolts.BoltBase):
 
     :ivar steelType: type of the bolt steel. 
     '''
-    def __init__(self, diameter, steelType= bolt8dot8Steel, pos3d= None):
+    def __init__(self, diameter, steelType= bolt8dot8Steel, gammaM3= 1.25, pos3d= None):
        ''' Constructor.
 
        :param diameter: bolt diameter.
        :param steelType: bolt steel type.
+       :param gammaM3: partial safety factor for slip resistance.
        :param pos3d: bolt position.
        '''
        super(BoltFastener,self).__init__(diameter, pos3d)
        self.steelType= steelType
+       self.gammaM3= gammaM3
     
     def getNominalShearStrength(self, threadsExcluded= False, numberOfShearPlanes= 1):
         ''' Return the nominal shear strength of the fastener according
@@ -783,3 +785,66 @@ class BoltFastener(bolts.BoltBase):
         :param numberOfShearPlanes: number of shear planes.
         '''
         return self.steelType.getDesignShearStrength()*self.getTensileStressArea(threadsExcluded= threadsExcluded)*numberOfShearPlanes
+
+    def getKs(self, holeType= 'normal', slotParallelToLoad= False):
+        ''' Return the value of k_s according to table 3.6 of EC3-1-8:2005.
+
+        :param holeType: 'normal' or 'shortSlot' or 'longSlot'.
+        :param slotParallelToLoad: true if the load is parallel to the axis of the slot.
+        '''
+        retval= 0.63 # pessimistic assumption.
+        if(holeType=='normal'):
+            retval= 1.0
+        else:
+            if(slotParallelToLoad and (holeType=='shortSlot')):
+                retval= 0.76
+            else: # load perpendicular to the slot axis.
+                if(holeType=='shortSlot'): # short slotted holes
+                    retval= 0.85
+                else:
+                    retval= 0.7
+               
+        return retval
+
+    def getSlipFactor(self, classOfFrictionSurfaces= 'D'):
+        ''' Return the value of the slip factor according to table 3.7
+            of EC3-1-8:2005.
+
+        :param classOfFrictionSurfaces: class of friction surfaces
+                                       (see 1.2.7 Reference standard: Group 7).
+        '''
+        retval= 0.2
+        if(classOfFrictionSurfaces=='A'):
+            retval= 0.5
+        elif(classOfFrictionSurfaces=='B'):
+            retval= 0.4
+        elif(classOfFrictionSurfaces=='C'):
+            retval= 0.3
+        elif(classOfFrictionSurfaces=='D'):
+            retval= 0.2
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': unknown class of friction: '+str(classOfFrictionSurfaces))
+        return retval
+
+    def getNominalSlipStrength(self, holeType= 'normal', slotParallelToLoad= False, numberOfFrictionSurfaces= 1, classOfFrictionSurfaces= 'D'):
+        ''' Return the value the design value of the  slip resistance according
+            to clause 3.9.1 of EC3-1-8:2005.
+
+        :param holeType: 'normal' or 'shortSlot' or 'longSlot'.
+        :param slotParallelToLoad: true if the load is parallel to the axis of the slot.
+        '''
+        ks= self.getKs(holeType= holeType, slotParallelToLoad= slotParallelToLoad)
+        mu= self.getSlipFactor(classOfFrictionSurfaces=classOfFrictionSurfaces)
+        FpC= 0.7*self.steelType.fu*self.getTensileStressArea(threadsExcluded= False)
+        return FpC*ks*numberOfFrictionSurfaces*mu
+    
+    def getDesignSlipStrength(self, holeType= 'normal', slotParallelToLoad= False, numberOfFrictionSurfaces= 1, classOfFrictionSurfaces= 'D'):
+        ''' Return the value the design value of the  slip resistance according
+            to clause 3.9.1 of EC3-1-8:2005.
+
+        :param holeType: 'normal' or 'shortSlot' or 'longSlot'.
+        :param slotParallelToLoad: true if the load is parallel to the axis of the slot.
+        '''
+        return self.getNominalSlipStrength(holeType= holeType, slotParallelToLoad= slotParallelToLoad, numberOfFrictionSurfaces= numberOfFrictionSurfaces, classOfFrictionSurfaces= classOfFrictionSurfaces)/self.gammaM3
