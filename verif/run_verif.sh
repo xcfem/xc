@@ -163,6 +163,7 @@ python tests/utility/soil_mechanics/test_brinch_hansen01.py
 python tests/utility/soil_mechanics/test_brinch_hansen02.py
 python tests/utility/soil_mechanics/test_stratified_soil.py
 python tests/utility/soil_mechanics/test_boussinesq.py
+python tests/utility/soil_mechanics/test_cohesive_soil_01.py
 
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
