@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 '''
    Verification of the Brinch Hansen formula.
 
@@ -15,7 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from geotechnics import frictional_cohesional_soil as fcs
+from geotechnics import frictional_cohesive_soil as fcs
 import math
 
 #Values in table (Phi,Nq,Nc,Ngamma)
@@ -49,7 +48,7 @@ tableValues= [[20,6.4,14.8,3.9],
 err= 0.0
 for values in tableValues:
   phiTable= math.radians(values[0])
-  soil= fcs.FrictionalCohesionalSoil(phiTable,0.0,0.0)
+  soil= fcs.FrictionalCohesiveSoil(phiTable,0.0,0.0)
   errNq= (values[1]-soil.Nq())/values[1]
   errNc= (values[2]-soil.Nc())/values[2]
   errNgamma= (values[3]-soil.Ngamma(2.0))/values[3]

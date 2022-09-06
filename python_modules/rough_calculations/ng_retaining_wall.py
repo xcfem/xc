@@ -966,7 +966,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
          :param R: (SlidingVectorsSystem3d) resultant of the loads acting on the retaining wall.
          :param gammaR: partial resistance reduction factor.
-         :param foundationSoilModel: (FrictionalCohesionalSoil) soil model.
+         :param foundationSoilModel: (FrictionalCohesiveSoil) soil model.
          :param gammaMPhi: (float) partial reduction factor for internal friction angle of the soil.
          :param gammaMc: (float) partial reduction factor for soil cohesion.
         '''

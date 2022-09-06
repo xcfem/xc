@@ -13,10 +13,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from geotechnics import frictional_cohesional_soil as fcs
+from geotechnics import frictional_cohesive_soil as fcs
 import math
 
-shortTermSoil= fcs.FrictionalCohesionalSoil(0.0,c=10.3,rho= (2.2-1.0)/9.81)
+shortTermSoil= fcs.FrictionalCohesiveSoil(0.0,c=10.3,rho= (2.2-1.0)/9.81)
 
 D= 2.0 #Foundation depth
 Beff= 5.5 #Effective foundation width
@@ -44,7 +44,7 @@ err+= (abs(icSTS-0.89)/0.89)**2 #Better approximation of i_c than
                                 #those employed in reference example
 err+= (abs(quSTS-64.0)/64.0)**2 #Better approximation of i_c than
                              #those employed in reference example
-longTermSoil= fcs.FrictionalCohesionalSoil(math.radians(30.0),c=1.7,rho= (2.2-1.0)/9.81)
+longTermSoil= fcs.FrictionalCohesiveSoil(math.radians(30.0),c=1.7,rho= (2.2-1.0)/9.81)
 
 NgammaLTS= longTermSoil.Ngamma(1.8)
 NqLTS= longTermSoil.Nq()

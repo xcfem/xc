@@ -14,7 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from geotechnics import frictional_cohesional_soil as fcs
+from geotechnics import frictional_cohesive_soil as fcs
 import math
 
 hi= [1.0,1.0,100.0]
