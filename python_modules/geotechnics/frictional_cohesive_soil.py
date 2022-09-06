@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-import math
-from geotechnics import frictional_soil as fs
-from misc_utils import log_messages as lmsg
-from scipy.optimize import fminbound
-
 '''FrictionalCohesiveSoil.py: soil with friction and cohesion.
 
 References: 
@@ -13,6 +7,12 @@ References:
 [2] Brinch Hansen. A general formula for bearing capacity. The Danish Geotechnical Institute. Bulletin 11. Copenhagen 1961.
 [3] Guía de cimentaciones en obras de carretera. Ministerio de Fomento (spain). 2002 (https://books.google.ch/books?id=a0eoygAACAAJ).
 '''
+
+from __future__ import division
+import math
+from geotechnics import frictional_soil as fs
+from misc_utils import log_messages as lmsg
+from scipy.optimize import fminbound
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
@@ -77,6 +77,18 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             retval= max(a1+a2,0.0)/sg_v
         return retval
 
+    def getCoulombTensionCrackDepth(self, sg_v, a, b, d= 0.0):
+        ''' Return the depth of the tension crack (the depth at which
+            active lateral earth pressure is cero due to soil cohesion).
+
+        :param sg_v: vertical stress.
+        :param a: angle of the back of the retaining wall (radians).
+        :param b: slope of the backfill (radians).
+        :param d: friction angle between soil an back of retaining wall (radians).
+        '''
+        ka= super(FrictionalCohesiveSoil,self).Ka_coulomb(a,b,d)
+        return max((2.0*self.getDesignC()/math.sqrt(ka)-sg_v)/self.gamma(), 0.0)
+    
     def ea_coulomb(self, sg_v, a, b, d= 0.0):
         '''
         Return the lateral earth active pressure.
@@ -94,7 +106,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             retval= max(a1-a2,0.0)
         return retval
 
-    def eah_coulomb(self, sg_v,a,b,d):
+    def eah_coulomb(self, sg_v,a,b,d= 0.0):
         '''
         Return the horizontal component of the lateral earth active pressure.
 
@@ -103,9 +115,9 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param b:  slope of the backfill (radians).
         :param d:  friction angle between soil an back of retaining wall (radians).
         '''
-        return (self.ea_coulomb(a,b,d)*math.cos(a+d))
+        return (self.ea_coulomb(sg_v= sg_v, a= a, b= b, d= d)*math.cos(a+d))
 
-    def eav_coulomb(self, sg_v,a,b,d):
+    def eav_coulomb(self, sg_v,a,b,d= 0.0):
         '''
         Return the vertical component of the active earth pressure coefficient
         according to Coulomb's theory.
@@ -116,7 +128,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param fi: internal friction angle of the soil (radians).
         :param d: friction angle between soil an back of retaining wall (radians).
         '''
-        return (self.ea_coulomb(a,b,d)*math.sin(a+d))
+        return (self.ea_coulomb(sg_v= sg_v, a= a, b= b, d= d)*math.sin(a+d))
       
     def ep_coulomb(self, sg_v, a, b, d= 0.0):
         '''
@@ -144,7 +156,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param b:  slope of the backfill (radians).
         :param d:  friction angle between soil an back of retaining wall (radians).
         '''
-        return (self.ep_coulomb(a,b,d)*math.cos(a+d))
+        return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d)*math.cos(a+d))
 
     def epv_coulomb(self, sg_v,a,b,d):
         '''
@@ -157,7 +169,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param fi: internal friction angle of the soil (radians).
         :param d: friction angle between soil an back of retaining wall (radians).
         '''
-        return (self.ep_coulomb(a,b,d)*math.sin(a+d))
+        return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d)*math.sin(a+d))
       
     def eq_bell(self, p, a, b, d):
         '''
