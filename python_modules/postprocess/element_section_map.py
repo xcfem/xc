@@ -533,6 +533,25 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         thickness= self.depth
         rho= self.concrType.density()
         return typical_materials.defElasticMembranePlateSection(preprocessor,shellMatName,Ec,nu,rho,thickness)
+    
+class LegacyRCSlabBeamSection(RCSlabBeamSection):
+    '''This class is used for compatibility with older code. The main
+    difference is that the slab reinforcement is linked with an
+    element set.
+
+    :ivar dir2ShReinfZ: instance of class ShearReinforcement that represents
+                        the Z shear reinforcement in section 2
+
+    '''
+    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0, elemSet= None):
+        '''Constructor.
+
+        :param elemSet:set with the elements to which to assign the section.
+                         (defaults to None)
+        '''
+        super(LegacyRCSlabBeamSection,self).__init__(name= name, sectionDescr= sectionDescr, concrType= concrType, reinfSteelType= reinfSteelType, depth= depth, width= width)
+        self.elemSet= elemSet
+
 
 class RCMemberSection(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
