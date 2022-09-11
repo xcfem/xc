@@ -255,7 +255,6 @@ void XC::SymBandEigenSOE::identityM(void)
     const int sz= M.Size();
     for(int i=0;i<sz;i++)
       M(i)= 1.0;
-    std::cout << "here size= " << sz << std::endl;
   }
 
 int XC::SymBandEigenSOE::sendSelf(Communicator &comm)
