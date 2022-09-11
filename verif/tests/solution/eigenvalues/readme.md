@@ -13,3 +13,4 @@ Geometrically, an eigenvector, corresponding to a real nonzero eigenvalue, point
 - [More Than You or Eigen Chew](https://portwooddigital.com/2022/03/06/more-than-you-or-eigen-chew/)
 - [Eigenvalue and eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) computation related verification tests.
 - [Eigenvalue algorithm](https://en.wikipedia.org/wiki/Eigenvalue_algorithm)
+- [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
