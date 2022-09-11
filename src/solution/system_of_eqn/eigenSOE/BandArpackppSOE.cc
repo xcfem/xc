@@ -206,14 +206,14 @@ int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
 //! @brief Zeroes the matrix M.
 void XC::BandArpackppSOE::zeroM(void)
   { 
-    EigenSOE::zeroM();
+    ArpackSOE::zeroM();
     M.Anula();
   }
 
 //! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
 void XC::BandArpackppSOE::identityM(void)
   {
-    EigenSOE::identityM();
+    ArpackSOE::identityM();
     M.Identity();
   }
 

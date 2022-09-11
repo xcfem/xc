@@ -77,22 +77,21 @@ XC::EigenAlgorithm::EigenAlgorithm(SolutionStrategy *owr,int classTag)
 XC::EigenIntegrator *XC::EigenAlgorithm::getEigenIntegratorPtr()
   { return dynamic_cast<EigenIntegrator *>(getIntegratorPtr()); }
 
+
 //! @brief Dump the eigenvalues into the model.
 void XC::EigenAlgorithm::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
     assert(theModel);
     theModel->setNumEigenvectors(numModes);
-    Vector theEigenvalues(numModes);
-    Vector modalParticipationFactors(numModes);
     EigenSOE *theSOE= getEigenSOEPtr();
     assert(theSOE);
+    const Vector theEigenvalues= theSOE->getEigenvalues(numModes);
     for(int i= 1;i<=numModes;i++)
       {
-        theEigenvalues[i-1] = theSOE->getEigenvalue(i);
-        modalParticipationFactors[i-1] = theSOE->getModalParticipationFactor(i);
         theModel->setEigenvector(i, theSOE->getEigenvector(i));
       }
     theModel->setEigenvalues(theEigenvalues);
+    const Vector modalParticipationFactors= theSOE->getModalParticipationFactors(numModes);
     theModel->setModalParticipationFactors(modalParticipationFactors);
   }

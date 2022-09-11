@@ -88,7 +88,7 @@ class EigenAlgorithm: public SolutionAlgorithm
 
     EigenAlgorithm(SolutionStrategy *,int classTag);
   public:
-    // pure virtual functions
+
     virtual int solveCurrentStep(int numModes) = 0;
     virtual void Print(std::ostream &s, int flag=0) const=0;
      

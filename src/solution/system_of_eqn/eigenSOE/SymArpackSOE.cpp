@@ -322,18 +322,6 @@ int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
 void XC::SymArpackSOE::zeroA(void)
   { factored = false; }
 
-//! @brief Zeroes the matrix M.
-void XC::SymArpackSOE::zeroM(void)
-  {
-    EigenSOE::zeroM();
-  }
-
-//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
-void XC::SymArpackSOE::identityM(void)
-  {
-    EigenSOE::identityM();
-  }
-
 int XC::SymArpackSOE::sendSelf(Communicator &comm)
   { return 0; }
 

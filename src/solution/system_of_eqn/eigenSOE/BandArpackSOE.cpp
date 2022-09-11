@@ -237,19 +237,6 @@ int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
     return retval;
   }
 
-//! @brief Zeroes the matrix M.
-void XC::BandArpackSOE::zeroM(void)
-  {
-    EigenSOE::zeroM();
-  }
-
-//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
-void XC::BandArpackSOE::identityM(void)
-  {
-    EigenSOE::identityM();
-  }
-
-
 int XC::BandArpackSOE::sendSelf(Communicator &comm)
   { return 0; }
 

@@ -88,8 +88,6 @@ class SymArpackSOE: public ArpackSOE
     virtual int addM(const Matrix &, const ID &, double fact = 1.0);    
       
     virtual void zeroA(void);
-    virtual void zeroM(void);
-    virtual void identityM(void);
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

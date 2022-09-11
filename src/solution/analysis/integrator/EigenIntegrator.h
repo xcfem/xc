@@ -95,7 +95,7 @@ class EigenIntegrator: public Integrator
     EigenIntegrator(SolutionStrategy *);
     Integrator *getCopy(void) const;
   public:
-     
+
     // methods to form the M and K matrices.
     virtual int formK(void);
     virtual int formM(void);
