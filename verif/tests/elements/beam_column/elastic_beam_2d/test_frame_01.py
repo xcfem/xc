@@ -32,6 +32,10 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
+
+# Mesh definition.
+
+## Nodes.
 n1= nodes.newNodeXY(0,0) # First frame
 n2= nodes.newNodeXY(0,H)
 n3= nodes.newNodeXY(B,0)
@@ -42,13 +46,18 @@ n7= nodes.newNodeXY(2*B+B,0)
 n8= nodes.newNodeXY(2*B+B,H)
 
 
+## Elements.
+
+### Coordinate transformation.
 lin= modelSpace.newLinearCrdTransf("lin")
+
+### Material.
 sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= area; sectionProperties.E= Es
 sectionProperties.I= Iz
 section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
-# Elements definition
+### Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name

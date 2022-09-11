@@ -163,7 +163,7 @@ class SolutionProcedure(object):
 
         :param integratorType: type of integrator to use.
         '''
-        if(integratorType in ['load_control_integrator','eigen_integrator', 'ill-conditioning_integrator', 'linear_buckling_integrator']):
+        if(integratorType in ['load_control_integrator','eigen_integrator','standard_eigen_integrator', 'ill-conditioning_integrator', 'linear_buckling_integrator']):
             self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
         elif(integratorType=='newmark_integrator'):
             self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([0.5,0.25]))
@@ -320,7 +320,7 @@ class PenaltyStaticLinearBase(SolutionProcedure):
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         '''
-        super(PenaltyStaticLinearBase,self).__init__(name, 'penalty', maxNumIter= 1, convergenceTestTol= 1e-9, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType)
+        super(PenaltyStaticLinearBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= 1, convergenceTestTol= 1e-9, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType)
         self.feProblem= prb
         self.setPenaltyFactors()
 
@@ -544,7 +544,7 @@ class PenaltyNewtonRaphsonBase(SolutionProcedure):
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         '''
-        super(PenaltyNewtonRaphsonBase,self).__init__(name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType)
+        super(PenaltyNewtonRaphsonBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType)
         self.feProblem= prb
         self.setPenaltyFactors()
 
@@ -702,7 +702,7 @@ class PenaltyModifiedNewtonBase(SolutionProcedure):
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         '''
-        super(PenaltyModifiedNewtonBase,self).__init__(name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType)
+        super(PenaltyModifiedNewtonBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType)
         self.feProblem= prb
         self.setPenaltyFactors()
 
@@ -840,7 +840,7 @@ class PenaltyNewtonLineSearchBase(LineSearchBase):
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         '''
-        super(PenaltyNewtonLineSearchBase,self).__init__(prb, name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType)
+        super(PenaltyNewtonLineSearchBase,self).__init__(prb, name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, lineSearchMethod=lineSearchMethod, soeType=soeType, solverType= solverType)
         self.setPenaltyFactors()
         
     def setup(self):
@@ -1134,7 +1134,7 @@ class PenaltyKrylovNewton(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
-        super(PenaltyKrylovNewton,self).__init__(name, 'penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver')
+        super(PenaltyKrylovNewton,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver')
         self.feProblem= prb
         self.maxDim= maxDim
         self.setPenaltyFactors()
@@ -1213,7 +1213,7 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
-        super(PenaltyNewmarkNewtonRapshon,self).__init__(name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver')
+        super(PenaltyNewmarkNewtonRapshon,self).__init__(name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver')
         self.feProblem= prb
         self.setPenaltyFactors(alphaSP= 1.0e18, alphaMP= 1.0e18)
         
@@ -1228,6 +1228,40 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
 
 
 ## Eigen analysis
+class OrdinaryEigenvalues(SolutionProcedure):
+    ''' Procedure to obtain the ordinary eigenvalues of the stiffness matrix
+        of the finite element model.'''
+    
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_lapack', numberingMethod= 'rcm', shift:float= None):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param printFlag: if not zero print convergence results on each step.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        '''        
+        super(OrdinaryEigenvalues, self).__init__(name= name, constraintHandlerType= 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift)
+        self.feProblem= prb
+        self.setPenaltyFactors()
+
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(OrdinaryEigenvalues, self).setup()
+        self.solutionAlgorithmSetup(solAlgType= 'standard_eigen_soln_algo', integratorType= 'standard_eigen_integrator')
+        self.sysOfEqnSetup()
+        self.analysisSetup('ill-conditioning_analysis')
+        
+### Convenience function
+def ordinary_eigenvalues(prb):
+    ''' Return a solution procedure that computes the ordinary eigenvalues
+        of the model stiffness matrix.'''
+    solProc= OrdinaryEigenvalues(prb)
+    solProc.setup()
+    return solProc.analysis
+
+
 class FrequencyAnalysis(SolutionProcedure):
     ''' Return a natural frequency computation procedure.'''
 
@@ -1275,7 +1309,7 @@ class IllConditioningAnalysisBase(SolutionProcedure):
         :param systemPrefix: string that identifies the SOE and Solver types.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         '''        
-        super(IllConditioningAnalysisBase,self).__init__(name, 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift)
+        super(IllConditioningAnalysisBase,self).__init__(name, constraintHandlerType='penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift)
         self.feProblem= prb
         self.setPenaltyFactors()
         
@@ -1308,7 +1342,7 @@ def zero_energy_modes(prb):
         energy modes of the model.'''
     solProc= ZeroEnergyModes(prb)
     solProc.setup()
-    return solProc.analysis
+    return solProc.analysis        
 
 class IllConditioningAnalysis(IllConditioningAnalysisBase):
     ''' Procedure to obtain the modes

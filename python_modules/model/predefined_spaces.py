@@ -887,6 +887,19 @@ class PredefinedSpace(object):
             lmsg.log(className+'.'+methodName+'; redefining analysis.')
         self.analysis= predefined_solutions.zero_energy_modes(problem)
         return self.analysis.analyze(numModes)
+
+    def ordinaryEigenvalues(self, numModes= 1):
+        ''' Obtains the ordinary eigenvalues of the model stiffness matrix.
+
+        :param numModes: number of zero energy modes to obtain.
+        '''
+        problem= self.getProblem()
+        if(self.analysis):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+'; redefining analysis.')
+        self.analysis= predefined_solutions.ordinary_eigenvalues(problem)
+        return self.analysis.analyze(numModes)
     
     def illConditioningAnalysis(self, numModes= 1):
         ''' Perform an ill-conditioning analysis on the finite element model.
