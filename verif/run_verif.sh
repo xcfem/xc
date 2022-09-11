@@ -395,6 +395,7 @@ echo "$BLEU" "  Eigenvalue solution tests." "$NORMAL"
 python tests/solution/eigenvalues/test_string_under_tension.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
+python tests/solution/eigenvalues/test_ordinary_eigenvalues.py
 echo "$BLEU" "    Eigenmode computation." "$NORMAL"
 python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_01.py
 python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_02.py
