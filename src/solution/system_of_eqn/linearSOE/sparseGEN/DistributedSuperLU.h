@@ -68,7 +68,8 @@
 //
 // What: "@(#) DistributedSuperLU.h, revA"
 
-#include <other/superLU_dist_2.0/src/superlu_ddefs.h>
+#include "solution/system_of_eqn/linearSOE/DistributedLinSOE.h"
+#include <superlu-dist/superlu_ddefs.h>
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSolver.h>
 
 
@@ -80,10 +81,10 @@ namespace XC {
 //! pivoting (GEPP). The columns of A may be preordered before
 //! factorization; the preordering for sparsity is completely separate
 //! from the factorization and a number of ordering schemes are provided.
-class DistributedSuperLU: public SparseGenColLinSolver
+class DistributedSuperLU: public SparseGenColLinSolver, public DistributedLinSOE
   {
   private:
-    superlu_options_t_Distributed options;
+    superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     ScalePermstruct_t ScalePermstruct;
@@ -93,13 +94,11 @@ class DistributedSuperLU: public SparseGenColLinSolver
     bool gridInit;
     int npRow, npCol;
 
-    int processID;
-    int numChannels;
-    std::vector<Channel *> theChannels;
-
     MPI_Comm comm_SuperLU;
     Vector b;
     ID rowA;
+    
+    DbTagData &getDbTagData(void) const;
   public:
     DistributedSuperLU(int npRow, int npCol);
     DistributedSuperLU(void);
@@ -107,9 +106,7 @@ class DistributedSuperLU: public SparseGenColLinSolver
 
     int solve(void);
     int setSize(void);
-
-    virtual int setProcessID(int domainTag);
-    virtual int setChannels(int numChannels, Channel **theChannels);
+    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
   };

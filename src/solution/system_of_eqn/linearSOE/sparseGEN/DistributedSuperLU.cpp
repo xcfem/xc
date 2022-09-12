@@ -51,7 +51,7 @@
                                                                         
 // Written: fmk 
 //
-// Description: This file contains the implementation of XC::DistributedSuperLU
+// Description: This file contains the implementation of DistributedSuperLU
 //
 // What: "@(#) DistributedSuperLU.h, revA"
 
@@ -63,20 +63,18 @@
 
 //! @brief Constructor.
 XC::DistributedSuperLU::DistributedSuperLU(int npR, int npC)
-  :SparseGenColLinSolver(SOLVER_TAGS_DistributedSuperLU), 
-   gridInit(false), npRow(npR), npCol(npC),
-   processID(0), numChannels(0), theChannels(0){}
+  :SparseGenColLinSolver(SOLVER_TAGS_DistributedSuperLU),
+   gridInit(false), npRow(npR), npCol(npC) {}
 
 //! @brief Default constructor.
 XC::DistributedSuperLU::DistributedSuperLU(void)
   :SparseGenColLinSolver(SOLVER_TAGS_DistributedSuperLU), 
-   gridInit(false), npRow(0), npCol(0),
-   processID(0), numChannels(0), theChannels(0){}
+   gridInit(false), npRow(0), npCol(0){}
 
 
 XC::DistributedSuperLU::~DistributedSuperLU(void)
   {
-    //Destroy_LU(theSOE->size, &grid, &LUstruct); 
+    //Destroy_LU(theSOE->getNumEqn(), &grid, &LUstruct); 
     ScalePermstructFree(&ScalePermstruct);
     LUstructFree(&LUstruct); 
 
@@ -86,7 +84,7 @@ XC::DistributedSuperLU::~DistributedSuperLU(void)
   }
 
 int XC::DistributedSuperLU::solve(void)
-{
+  {
   if (theSOE == 0) {
     std::cerr << "WARNING XC::DistributedSuperLU::solve(void)- ";
     std::cerr << " No XC::LinearSOE object has been set\n";
@@ -94,51 +92,55 @@ int XC::DistributedSuperLU::solve(void)
   }
 
   // check for quick return
-  if (theSOE->size == 0)
+  if (theSOE->getNumEqn() == 0)
     return 0;
 
   // if subprocess recv A & B from p0
-  if (processID != 0) {
-    Channel *theChannel = theChannels[0];
-    theChannel->recvVector(0, 0, (*theSOE->vectB));
-    Vector vectA(theSOE->A, theSOE->nnz);    
-    theChannel->recvVector(0, 0, vectA);
-  } 
+  if (processID != 0)
+    {
+      Channel *theChannel = theChannels[0];
+      theChannel->recvVector(0, 0, theSOE->getB());
+      //Vector vectA(&theSOE->getA(), theSOE->getNNZ());    
+      theChannel->recvVector(0, 0, theSOE->getA());
+    } 
 
   //
   // if XC::main process, send B & A to all, solve and send back X, B & result
 
 
-  else {
+  else
+    {
+      //Vector vectA(theSOE->getA(), theSOE->nnz);    
 
-    Vector vectA(theSOE->A, theSOE->nnz);    
-
-    // send B & A to p1 through n-1
-    for (int j=0; j<numChannels; j++) {
-      Channel *theChannel = theChannels[j];
-      theChannel->sendVector(0, 0, *(theSOE->vectB));
-      theChannel->sendVector(0, 0, vectA);
+      // send B & A to p1 through n-1
+      const int numChannels= getNumChannels();
+      for (int j=0; j<numChannels; j++)
+	{
+	  Channel *theChannel = theChannels[j];
+	  theChannel->sendVector(0, 0, theSOE->getB());
+	  theChannel->sendVector(0, 0, theSOE->getA());
+	}
     }
-  }
 
   int info;
 
   int iam = grid.iam;
 
-  if (iam < (npRow * npCol)) {
-    int n = theSOE->size;
-    int nnz = theSOE->nnz;
+  if (iam < (npRow * npCol))
+    {
+    int n = theSOE->getNumEqn();
+    int nnz = theSOE->getNNZ();
     int ldb = n;
     int nrhs = 1;
     static double berr[1];
 
     // first copy B into X
-    double *Xptr = theSOE->X;
-    double *Bptr = theSOE->B;
+    double *Xptr = theSOE->getPtrX();
+    double *Bptr = theSOE->getPtrB();
 
     for (int i=0; i<n; i++)
       *(Xptr++) = *(Bptr++);
-    Xptr = theSOE->X;
+    Xptr= theSOE->getPtrX();
 
     //
     // set the Fact options:
@@ -146,7 +148,7 @@ int XC::DistributedSuperLU::solve(void)
     //   otherwise use SamePattern if factored at least once
     //
 
-    if((options.Fact == FACTORED) && (theSOE->factored == false))
+    if((options.Fact == FACTORED) && (theSOE->getFactored() == false))
       {
         options.Fact = SamePattern;
         for (int i=0; i<nnz; i++) rowA(i) = theSOE->rowA[i];
@@ -159,10 +161,11 @@ int XC::DistributedSuperLU::solve(void)
     pdgssvx_ABglobal(&options, &A, &ScalePermstruct, Xptr, ldb, nrhs, &grid,
 		     &LUstruct, berr, &stat, &info);
 
-    if (theSOE->factored == false) {
-      options.Fact = FACTORED;      
-      theSOE->factored = true;
-    }
+    if(theSOE->getFactored() == false)
+      {
+        options.Fact = FACTORED;      
+        theSOE->setFactored(true);
+      }
   }
 
   /*
@@ -187,7 +190,7 @@ int XC::DistributedSuperLU::solve(void)
 
 int XC::DistributedSuperLU::setSize()
   {
-    int n = theSOE->size;
+    int n = theSOE->getNumEqn();
 
   //
   // init the super lu process grid
@@ -207,7 +210,7 @@ int XC::DistributedSuperLU::setSize()
 
   // free old structures if resize already called
   } else {
-    Destroy_LU(theSOE->size, &grid, &LUstruct); 
+    Destroy_LU(theSOE->getNumEqn(), &grid, &LUstruct); 
     ScalePermstructFree(&ScalePermstruct);
     LUstructFree(&LUstruct); 
   }
@@ -224,24 +227,22 @@ int XC::DistributedSuperLU::setSize()
   if(n > 0)
     {
       // create the SuperMatrix A	
-      int nnz = theSOE->nnz;
-      rowA.resize(nnz);
-      for(int i=0; i<nnz; i++)
-        rowA(i)= theSOE->rowA[i];
+      const int nnz = theSOE->getNNZ();
+      rowA= theSOE->rowA;
 
-      dCreate_CompCol_Matrix_dist(&A, n, n, nnz, theSOE->A,rowA.getDataPtr(), theSOE->colStartA,SLU_NC, SLU_D, SLU_GE);
+      dCreate_CompCol_Matrix_dist(&A, n, n, nnz, theSOE->getA().getDataPtr(),rowA.getDataPtr(), theSOE->colStartA.getDataPtr(),SLU_NC, SLU_D, SLU_GE);
 
       //
       // Initialize ScalePermstruct and LUstruct.
       //
       ScalePermstructInit(n, n, &ScalePermstruct);
-      LUstructInit(n, n, &LUstruct);
+      LUstructInit(n, &LUstruct);
     }  
 			      
     //
     //  set default options
     //
-    set_default_options_Distributed(&options);    
+    set_default_options_dist(&options);    
 
     //
     // Initialize the statistics variables. 
@@ -250,90 +251,79 @@ int XC::DistributedSuperLU::setSize()
     return 0;
   }
 
-
-int XC::DistributedSuperLU::setProcessID(int dTag) 
+//! @brief Returns a vector to store the dbTags
+//! de los miembros of the clase.
+XC::DbTagData &XC::DistributedSuperLU::getDbTagData(void) const
   {
-    processID = dTag;
-    return 0;
+    static DbTagData retval(3);
+    return retval;
   }
 
-int XC::DistributedSuperLU::setChannels(int nChannels, Channel **theC)
+int XC::DistributedSuperLU::sendSelf(Communicator &comm)
   {
-    numChannels = nChannels;
-    theChannels= std::vector<Channel *>(numChannels, nullptr);
+    int sendID =0;
 
-    for(int i=0; i<numChannels; i++)
-      theChannels[i] = theC[i];
+    // if P0 check if already sent. If already sent use old processID; if not allocate a new_ process 
+    // id for remote part of object, enlarge channel * to hold a channel * for this remote object.
+
+    // if not P0, send current processID
+
+    if(processID == 0)
+      {
+	// check if already using this object
+	bool found = false;
+	Channel *theChannel= comm.getChannel();
+	int numChannels= getNumChannels();
+	for(int i=0; i<numChannels; i++)
+	  if(theChannels[i] == theChannel)
+	    {
+	      sendID = i+1;
+	      found = true;
+	    }
+
+	// if new_ object, enlarge Channel pointers to hold new_ channel * & allocate new_ ID
+	if(found == false)
+	  {
+	    int nextNumChannels= numChannels + 1;
+	    theChannels.resize(nextNumChannels,theChannel);
+
+	    numChannels = nextNumChannels;
+
+	    // allocate new_ processID for remote object
+	    sendID = numChannels;
+	  }
+       }
+     else 
+       sendID = processID;
+
+     static ID idData(3);
+     idData(0) = sendID;
+     idData(1) = npRow;
+     idData(2) = npCol;
+     int res= comm.sendInts(sendID, npRow, npCol,getDbTagData(),CommMetaData(0));
+     if(res < 0)
+       {
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; WARNING failed to send data\n";
+	  return -1;
+	}	      
     return 0;
   }
-
-int
-XC::DistributedSuperLU::sendSelf(Communicator &comm)
-{
-  int sendID =0;
-
-  // if P0 check if already sent. If already sent use old processID; if not allocate a new_ process 
-  // id for remote part of object, enlarge channel * to hold a channel * for this remote object.
-
-  // if not P0, send current processID
-
-  if(processID == 0)
-    {
-      // check if already using this object
-      bool found = false;
-      for(int i=0; i<numChannels; i++)
-        if(theChannels[i] == &theChannel)
-          {
-	    sendID = i+1;
-	    found = true;
-          }
-
-      // if new_ object, enlarge Channel pointers to hold new_ channel * & allocate new_ ID
-      if(found == false)
-        {
-          int nextNumChannels = numChannels + 1;
-          theChannels.resize(nextNumChannels,nullptr);
-
-          theChannels[numChannels] = &theChannel;    
-          numChannels = nextNumChannels;
-      
-          // allocate new_ processID for remote object
-          sendID = numChannels;
-        }
-     }
-   else 
-     sendID = processID;
-
-    static ID idData(3);
-    idData(0) = sendID;
-    idData(1) = npRow;
-    idData(2) = npCol;
-    int res = comm.sendIdData(0);
-   if (res < 0) {
-    std::cerr <<"WARNING XC::DistributedSuperLU::sendSelf() - failed to send data\n";
-    return -1;
-  }	      
-  return 0;
-}
 
 int XC::DistributedSuperLU::recvSelf(const Communicator &comm)
   {
     static ID idData(3);
 
-    int res = comm.receiveIdData(0);
+    int res = comm.receiveInts(processID, npRow, npCol,getDbTagData(),CommMetaData(0));
     if(res < 0)
       {
-        std::cerr <<"WARNING XC::DistributedSuperLU::recvSelf() - failed to receive data\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; failed to receive data." << std::endl;
         return -1;
       }	      
 
-    processID = idData(0);
-    npRow = idData(1);
-    npCol = idData(2);
-
-    numChannels = 1;
-    theChannels= std::vector<Channel *>(1,nullptr);
-    theChannels[0]= &theChannel;
+    Channel *theChannel= const_cast<Channel *>(comm.getChannel());
+    setChannel(theChannel);
     return 0;
   }
 
