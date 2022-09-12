@@ -223,7 +223,11 @@ int XC::ArpackSolver::solve(void)
     int ncv = getNCV(n, nev);
     int ldv = n;
     int lworkl = ncv*ncv + 8*ncv;
-
+    if (nev > 1) {
+      ncv = nev+1;
+      lworkl = ncv*ncv + 8*ncv;
+      //opserr << "now - ncv = " << ncv << ", lworkl = " << lworkl << endln;
+    }
     int processID = theArpackSOE->processID;
 
     // set up the space for ARPACK functions.
