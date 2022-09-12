@@ -247,7 +247,6 @@ int XC::ArpackSolver::solve(void)
 	  workl[i]= 0;
         for(int i=0; i<3*n+1; i++)
 	  workd[i]= 0;
-
         for(int i=0; i<ldv*ncv; i++)
 	  v[i] = 0;
         numModesMax = numModes;
