@@ -101,10 +101,9 @@ int XC::SymBandEigenSolver::solve(void)
         return -1;
       }
   
-    if(which!="LM")
+    if(!findSmallest)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; computation of: " << which
-	        << " eigenvalues not implemented yet."
+	        << "; computation of largest eigenvalues not implemented yet."
 	        << std::endl;
     
     // Number of equations
@@ -155,6 +154,7 @@ int XC::SymBandEigenSolver::solve(void)
     // Index ranges [1,numModes] of eigenpairs to compute
     int il= 1; //index of the smallest eigenvalue to be returned.
     int iu= numModes; //index of the largest eigenvalue to be returned.
+    std::string which= getWhich();
     if(which=="SM")
       {
 	iu= n;

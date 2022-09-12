@@ -37,7 +37,7 @@
 #ifndef BandArpackSOE_h
 #define BandArpackSOE_h
 
-#include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
+#include <solution/system_of_eqn/eigenSOE/ArpackSOEBase.h>
 #include "utility/matrix/Vector.h"
 
 namespace XC {
@@ -49,7 +49,7 @@ class BandArpackSolver;
 //! @brief BandArpackSOE is a subclass of ArpackSOE. It uses the LAPACK storage
 //! scheme to store the components of the K, M matrix, which is a full matrix.
 //! It uses the <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> to do eigenvalue analysis.
-class BandArpackSOE: public ArpackSOE
+class BandArpackSOE: public ArpackSOEBase
   {
   private:
     int numSuperD; //!< Number of diagonals above the principal.

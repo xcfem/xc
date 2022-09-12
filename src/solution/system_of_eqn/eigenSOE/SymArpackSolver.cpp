@@ -152,10 +152,10 @@ int XC::SymArpackSolver::solve(void)
     int ido = 0;
     int ipntr[11];
     //int ierr = 0;
-    //unsigned int sizeWhich =2;
     //unsigned int sizeBmat =1;
     //unsigned int sizeHowmany =1;
-    //char which[] = "LM"; 
+    bool shiftInvertMode= true; //Shift-invert mode technique.
+    std::string which= getWhich(shiftInvertMode);
     while(1)
       {
         dsaupd_(&ido, &bmat, &n, which.c_str(), &nev, &tol, &resid[0], &ncv, v.getDataPtr(), &ldv,

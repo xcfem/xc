@@ -82,8 +82,10 @@
 #define EigenSOLVER_TAGS_BandArpackSolver 	1
 #define EigenSOLVER_TAGS_SymArpackSolver 	2
 #define EigenSOLVER_TAGS_SymBandEigenSolver     3
-#define EigenSOLVER_TAGS_BandArpackppSolver 	4
-#define EigenSOLVER_TAGS_FullGenEigenSolver  5
+#define EigenSOLVER_TAGS_FullGenEigenSolver  4
+#define EigenSOLVER_TAGS_ArpackSolver  5
+#define EigenSOLVER_TAGS_GeneralArpackSolver  6
+#define EigenSOLVER_TAGS_BandArpackppSolver 	101
 
 #define EigenALGORITHM_TAGS_Frequency 1
 #define EigenALGORITHM_TAGS_Standard  2

@@ -61,12 +61,13 @@ class EigenSolver: public Solver
   {
   protected:
     int numModes; //!< number of eigenvalues to compute.
-    std::string which= "LM"; //!< which eigen values to compute; LM: compute the largest eigenvalues, SM: compute the smallest eigenvalues. 
-
+    bool generalized; //!< if true, generalized eigenvalue problem otherwise standard eigenvalue problem.
+    bool findSmallest; //!< if true find the smallest eigenvalues.
     friend class EigenSOE;
     virtual EigenSolver *getCopy(void) const= 0;
     virtual bool setEigenSOE(EigenSOE *theSOE) = 0;
     EigenSolver(const int &classTag, const int &nModes= 0);
+    std::string getWhich(const bool &shiftInvertMode= true) const;
   public:
     virtual ~EigenSolver(void) 
       {}
@@ -76,10 +77,10 @@ class EigenSolver: public Solver
 
     const int &getNumModes(void) const
       { return numModes; }
-    std::string getWhichEigenvalues(void) const
-      { return which; }
-    void setWhichEigenvalues(const std::string &s)
-      { which= s; }
+    bool getFindSmallest(void) const
+      { return findSmallest; }
+    void setFindSmallest(const bool &b)
+      { findSmallest= b; }
     virtual const Vector &getEigenvector(int mode) const = 0;
     Vector getNormalizedEigenvector(int mode) const;
     Matrix getEigenvectors(void) const;

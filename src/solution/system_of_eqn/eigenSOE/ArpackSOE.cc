@@ -35,18 +35,72 @@
 // scheme to store the components of the K, M matrix, which is a full matrix.
 // It uses the ARPACK to do eigenvalue analysis.
 
-#include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
+#include "ArpackSOE.h"
+#include "utility/actor/channel/Channel.h"
+#include "solution/system_of_eqn/linearSOE/LinearSOE.h"
 
 
 //! @brief Constructor.
-XC::ArpackSOE::ArpackSOE(SolutionStrategy *owr,int classTag, double theShift)
-  :EigenSOE(owr,classTag), shift(theShift) {}
+XC::ArpackSOE::ArpackSOE(SolutionStrategy *owr, double theShift)
+  :ArpackSOEBase(owr,theShift), theSOE(nullptr)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; Work in progres. Not yet ready." << std::endl;
+  }
 
 
-//! @brief Returns the value of the shift parameter.
-const double &XC::ArpackSOE::getShift(void) const
-  { return shift; }
+//! @brief Assigns the value of the linear SOE.
+int XC::ArpackSOE::setLinearSOE(LinearSOE &theLinearSOE)
+  {
+    theSOE = &theLinearSOE;
+    return 0;
+  }
 
-//! @brief Assigns the value of the shift parameter.
-void XC::ArpackSOE::setShift(const double &s)
-  { shift= s; }
+//! @brief Return the number of equations of the linear SOE.
+int XC::ArpackSOE::getNumEqn(void) const
+  {
+    if (theSOE != 0)
+      return theSOE->getNumEqn();
+    else 
+      return 0;
+  }
+
+int XC::ArpackSOE::checkSameInt(int value)
+  {
+	if (processID == -1)
+		return 1;
+
+	static ID idData(1);
+    if (processID != 0) {
+    
+		Channel *theChannel = theChannels[0];
+	    idData(0) = value;
+		theChannel->sendID(0, 0, idData);
+		theChannel->recvID(0, 0, idData);
+		if (idData(0) == 1)
+			return 1;
+		else
+			return 0;
+	} 
+
+	else {
+        int ok = 1;
+		// receive B
+	const int numChannels= getNumChannels();
+		for (int j=0; j<numChannels; j++) {
+		// get X & add
+			Channel *theChannel = theChannels[j];
+			theChannel->recvID(0, 0, idData);
+			if (idData(0) != value)
+				ok = 0;
+		}
+
+		// send results back
+		idData(0) = ok;
+		for (int j=0; j<numChannels; j++) {
+			Channel *theChannel = theChannels[j];
+			theChannel->sendID(0, 0, idData);
+		}
+		return ok;
+    }
+}
