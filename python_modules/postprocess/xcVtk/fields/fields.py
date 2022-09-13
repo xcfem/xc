@@ -12,7 +12,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 
 import vtk
-from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import field_base as fb
 from postprocess import extrapolate_elem_attr
 from postprocess import control_vars as cv
@@ -133,22 +132,26 @@ class ExtrapolatedScalarField(ScalarField):
         displaySettings.displayMesh(xcSets= self.xcSet, field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
     
 class ExtrapolatedProperty(ExtrapolatedScalarField):
-  '''Scalar field defined as property value at nodes.'''
-  def __init__(self,name,functionName,xcSet, component= None,fUnitConv= 1.0,rgMinMax=None):
-    super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv,rgMinMax)
+    '''Scalar field defined as property value at nodes.'''
+    def __init__(self,name,functionName,xcSet, component= None,fUnitConv= 1.0,rgMinMax=None):
+        super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv,rgMinMax)
 
-  def extrapolate(self):
-    extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements,self.name,"getProp", self.name)
+    def extrapolate(self):
+        extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements,self.name,"getProp", self.name)
 
-  def display(self,displaySettings,caption= '',fileName= None, defFScale=0.0):
-    ''' Display the field.
+    def display(self,displaySettings,caption= '',fileName= None, defFScale=0.0):
+        ''' Display the field.
 
-       :param fileName: name of the graphic file to create (if None -> screen window).
-       :param caption: text to display in the graphic.
-    '''
-
-    self.extrapolate()
-    displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
+        :param fileName: name of the graphic file to create (if None -> screen window).
+        :param caption: text to display in the graphic.
+        :param defFScale: factor to apply to current displacement of nodes 
+                      so that the display position of each node equals to
+                      the initial position plus its displacement multiplied
+                      by this factor. (Defaults to 0.0, i.e. display of 
+                      initial/undeformed shape)
+        '''
+        self.extrapolate()
+        displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
 
 def getScalarFieldFromControlVar(attributeName, argument, xcSet, component, fUnitConv, rgMinMax):
     '''return an scalar field that represents the control var over the 

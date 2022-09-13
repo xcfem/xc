@@ -75,7 +75,9 @@ class VerifOutVars(object):
             prep= self.setCalc.getPreprocessor
             retval= cv.writeControlVarsFromElements(prep,outputDataBaseFileName,self, sections)
         else:
-            lmsg.error("Result file hasn't been created, you must specify a valid set of elements")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; result file hasn't been created, you must specify a valid set of elements.")
         return retval
         
 
@@ -283,6 +285,10 @@ class LimitStateData(object):
             comb.addToDomain() #Combination to analyze.
             #Solution
             result= solutionProcedure.solve()
+            if(result!=0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; can't solve.")
             if(bucklingMembers): # Update reduction factors for buckling members
                 for bm in bucklingMembers:
                     bm.updateReductionFactors()
@@ -419,7 +425,9 @@ class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
 
         :param reinfConcreteSections: Reinforced concrete sections on each element.
         '''
-        lmsg.error('FreqLoadsDisplacementControlLimitStateData.check() not implemented.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; not implemented.")
 
 class FatigueResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''

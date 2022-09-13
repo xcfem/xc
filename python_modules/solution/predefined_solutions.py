@@ -246,7 +246,9 @@ class SolutionProcedure(object):
         elif(self.cHandlerType=='plain'):
             self.cHandler= self.modelWrapper.newConstraintHandler("plain_handler")
         else:
-            lmsg.error('unknown constraint handler type: '+self.cHandlerType)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; unknown constraint handler type: '+self.cHandlerType)
 
     def analysisSetup(self, analysisType= 'static_analysis'):
         ''' Define the analysis object.
@@ -1370,21 +1372,26 @@ def ill_conditioning_analysis(prb):
 ## Utility functions
 
 def solveStaticLinearComb(combName,solutionProcedure):
-    lmsg.warning("DEPRECATED; use solveComb")
+    methodName= sys._getframe(0).f_code.co_name
+    lmsg.warning(methodName+'; DEPRECATED; use solveComb.')
     solutionProcedure.solveComb(combName)
 
 def solveCombEstat2ndOrderLin(combName,solutionProcedure):
     solutionProcedure.resetLoadCase()
     preprocessor= solutionProcedure.feProblem.getPreprocessor
     preprocessor.getLoadHandler.addToDomain(combName)
-    analOk= solutionProcedure.solve()
-    if(analOk):
-        analOk= solutionProcedure.solve()
+    analOk= solutionProcedure.solve() # 1st order.
+    if(analOk!=0):
+        analOk= solutionProcedure.solve() # 2nd order.
+        if(analOk!=0):
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; can\'t solve.')
     preprocessor.getLoadHandler.removeFromDomain(combName)
     # lmsg.info("Resuelta combinación: ",combName,"\n")
 
 def solveStaticNoLinCase(combName):
-    lmsg.warning("DEPRECATED; use use solveComb")
+    methodName= sys._getframe(0).f_code.co_name
+    lmsg.warning(methodName+'; DEPRECATED; use solveComb.')
     solveComb(preprocessor,combName,analysis,numSteps)
 
 class BucklingAnalysisEigenPart(SolutionProcedure):
