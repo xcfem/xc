@@ -17,10 +17,23 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+# Rebar diameters.
 diameters= [8e-3, 10e-3, 12e-3, 16e-3, 20e-3, 25e-3, 32e-3, 40e-3]
-#diameters= [12e-3]
 
 # Define rebar controllers.
+# concreteCover: the distance from center of a bar or wire to 
+#                nearest concrete surface.
+#
+# spacing: center-to-center spacing of bars or wires being 
+#          developed, in.
+#
+# eta1: coefficient related to the quality of the bond condition 
+#       and the position of the bar during concreting.
+#       eta1= 1,0 when 'good' conditions are obtained and
+#       eta1= 0,7 for all other cases.
+#
+# compression: true if reinforcement is compressed.
+#
 rebarControllerGood= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 1.0, compression= False)
 rebarControllerPoor= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 0.7, compression= False)
 
