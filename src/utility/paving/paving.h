@@ -44,6 +44,7 @@ typedef int logical;
 typedef int ftnlen;
 typedef double doublereal;
 
+#include "common_block_declarations.h"
 #include "paving.ih"
 
 #define TRUE_ (1)

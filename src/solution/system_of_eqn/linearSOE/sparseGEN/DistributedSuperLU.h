@@ -74,7 +74,17 @@
 
 
 namespace XC {
-
+#if SUPERLU_DIST_MAJOR_VERSION > 6 ||                                   \
+    (SUPERLU_DIST_MAJOR_VERSION == 6 && SUPERLU_DIST_MINOR_VERSION > 2)
+#define ScalePermstruct_t dScalePermstruct_t
+#define LUstruct_t dLUstruct_t
+#define SOLVEstruct_t dSOLVEstruct_t
+#define ScalePermstructFree dScalePermstructFree
+#define ScalePermstructInit dScalePermstructInit
+#define Destroy_LU dDestroy_LU
+#define LUstructFree dLUstructFree
+#define LUstructInit dLUstructInit
+#endif
 //! @ingroup LinearSolver
 //
 //! @brief <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> based solver for distributed sparse matrix linear systems of equations. It uses Gaussian elimination with partial

@@ -30,6 +30,7 @@
 #ifndef ChannelQueue_h
 #define ChannelQueue_h
 #include <deque>
+#include <cstddef>
 
 namespace XC {
 

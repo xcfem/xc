@@ -42,7 +42,6 @@ class Hexahedron3d: public Polyhedron3d
     GEOM_FT getVolumeWithSign(void) const;
     GEOM_FT getVolume(void) const;
     bool In(const Pos3d &,const double &) const;
-    void Print(std::ostream &os) const;
   };
 
 #endif

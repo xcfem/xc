@@ -23,6 +23,11 @@
 #ifndef CGAL_TYPES_H
 #define CGAL_TYPES_H
 
+// Deal with CGAL <-> BOOST conflicts. 
+// Avoid using CGAL IO headers
+#define CGAL_IO_POLYHEDRON_IOSTREAM_H
+// End of deal.
+
 #include <CGAL/Homogeneous.h>
 #include <CGAL/Lazy_exact_nt.h>
 #include <CGAL/Gmpz.h>
@@ -34,7 +39,6 @@
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/Tetrahedron_3.h>
 #include <iostream>
-#include <CGAL/IO/Geomview_stream.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Arrangement_2.h>
 
@@ -89,8 +93,6 @@ typedef CGAL::Aff_transformation_3<GEOMKernel> CGTrfAfin_3;
 //Functions
 
 //Misc
-typedef CGAL::Geomview_stream CGview_stream;
-
 GEOM_FT double_to_FT(const double &d);
 GEOM_FT sqrt_FT(const GEOM_FT &n);
 GEOM_FT abs_FT(const GEOM_FT &n);

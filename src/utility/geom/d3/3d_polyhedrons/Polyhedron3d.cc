@@ -28,17 +28,13 @@
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/d1/Segment3d.h"
 #include <CGAL/Polyhedron_incremental_builder_3.h>
-#include <CGAL/IO/Polyhedron_geomview_ostream.h>
-#include <CGAL/IO/Polyhedron_iostream.h>
+//#include <CGAL/IO/Polyhedron_geomview_ostream.h>
+//#include <CGAL/IO/Polyhedron_iostream.h>
 #include "quad-triangle.h"
 #include "polyhedron3d_bool_op.h"
 #include "VertexMap.h"
 #include <set>
 #include "utility/geom/pos_vec/Pos3dList.h"
-
-
-
-
 
 //! @brief Default constructor.
 Polyhedron3d::Polyhedron3d(void): cgpolyhedron() {}
@@ -187,24 +183,19 @@ std::deque<Polygon3d> Polyhedron3d::GetCaras(void) const
 //! @brief Print stuff.
 void Polyhedron3d::Print(std::ostream &os) const
   {
-    CGAL::set_ascii_mode(os);
-    CGAL::set_pretty_mode(os);
-    os << cgpolyhedron << std::endl;
-  }
-
-void Polyhedron3d::Print(CGview_stream &v) const
-  {
-    v << cgpolyhedron;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; deprecated." << std::endl;
+    // CGAL::set_ascii_mode(os);
+    // CGAL::set_pretty_mode(os);
+    // CGAL::operator<<(os, cgpolyhedron);
   }
 
 //! @brief Read the polyhedrom from an Object File Format file.
 void Polyhedron3d::ReadOFF(std::istream &is)
-  { is >> cgpolyhedron; }
-
-CGview_stream &operator<<(CGview_stream &v,const Polyhedron3d &p)
   {
-    p.Print(v);
-    return v;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; deprecated." << std::endl;
+    //is >> cgpolyhedron;
   }
 
 EPolyhedron Polyhedron3d::GetEnriquecido(void) const

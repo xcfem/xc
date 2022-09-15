@@ -15,20 +15,6 @@ extern "C" {
 #endif
 #include "paving.h"
 
-/* Common Block Declarations */
-
-struct {
-    char cdebug[8];
-} debugc_;
-
-#define debugc_1 debugc_
-
-struct {
-    integer idebug;
-} debugn_;
-
-#define debugn_1 debugn_
-
 /* Table of constant values */
 
 static integer c__1 = 1;

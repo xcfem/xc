@@ -29,8 +29,8 @@
 #ifndef DamageModels_h
 #define DamageModels_h
 
-
 #include <vector>
+#include <cstddef>
 
 namespace XC {
 class DamageModel;

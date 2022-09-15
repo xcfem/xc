@@ -15,14 +15,6 @@ extern "C" {
 #endif
 #include "paving.h"
 
-/* Common Block Declarations */
-
-struct {
-    xc_float timea, timep, timec, timepc, timeaj, times;
-} timing_;
-
-#define timing_1 timing_
-
 /* Table of constant values */
 
 static integer c__2 = 2;

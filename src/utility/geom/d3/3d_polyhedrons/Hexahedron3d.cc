@@ -99,12 +99,4 @@ bool Hexahedron3d::In(const Pos3d &p,const double &tol) const
     return false;
   }
 
-//! @brief Prints object.
-void Hexahedron3d::Print(std::ostream &os) const
-  {
-    CGAL::set_ascii_mode(os);
-    CGAL::set_pretty_mode(os);
-    os << cgpolyhedron << std::endl;
-  }
-
 

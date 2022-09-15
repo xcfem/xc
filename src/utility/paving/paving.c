@@ -40,14 +40,6 @@ double dbl_abs(double a)
      PR -> perimeter
   */
   
-/* Common Block Declarations */
-
-struct {
-    f2c_float timea, timep, timec, timepc, timeaj, times;
-} timing_;
-
-#define timing_1 timing_
-
 /* Table of constant values */
 
 static integer c__10 = 10;

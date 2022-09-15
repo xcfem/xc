@@ -15,34 +15,6 @@ extern "C" {
 #endif
 #include "paving.h"
 
-/* Common Block Declarations */
-
-struct {
-    integer ndim, numnp, numel, nelblk, nvarhi, nvargl, nvarnp, nvarel, 
-	    nvarns, nvarss, nsteps, nstepw, nshl;
-} dbnums_;
-
-#define dbnums_1 dbnums_
-
-struct {
-    logical is3dim;
-    integer nnpsur, numnpf, llnset;
-} d3nums_;
-
-#define d3nums_1 d3nums_
-
-struct {
-    xc_float vecscl;
-} etcopt_;
-
-#define etcopt_1 etcopt_
-
-struct {
-    xc_float dtw, vwscl;
-} devdat_;
-
-#define devdat_1 devdat_
-
 /* Table of constant values */
 
 static integer c__2 = 2;
