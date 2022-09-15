@@ -74,10 +74,7 @@
 
 XC::AuxMatrix XC::Matrix::auxMatrix(MATRIX_WORK_AREA,INT_WORK_AREA);
 double XC::Matrix::MATRIX_NOT_VALID_ENTRY =0.0;
-int XC::Matrix::sizeDoubleWork= MATRIX_WORK_AREA;
-int XC::Matrix::sizeIntWork= INT_WORK_AREA;
-double *XC::Matrix::matrixWork= nullptr;
-int *XC::Matrix::intWork= nullptr;
+
 
 //! @brief Default constructor.
 XC::Matrix::Matrix(void)
@@ -936,17 +933,17 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 #endif
 
     // cheack work area can hold the temporary matrix
-    int sizeWork = B.numRows * numCols;
+    const size_t sizeWork = B.numRows * numCols;
 
-    if(sizeWork > sizeDoubleWork) {
+    if(sizeWork > auxMatrix.getSizeDoubleWork()) {
       this->addMatrix(thisFact, A^B*C, otherFact);
       return 0;
     }
 
     // zero out the work area
-    double *matrixWorkPtr = matrixWork;
-    for(int l=0; l<sizeWork; l++)
-      *matrixWorkPtr++ = 0.0;
+    double *matrixWork= auxMatrix.getMatrixWork();
+    for(size_t l=0; l<sizeWork; l++)
+      *matrixWork++ = 0.0;
 
     // now form B * C * fact store in matrixWork == A area
     // NOTE: looping as per blas3 dgemm_: j,k,i
@@ -1931,20 +1928,19 @@ double XC::Matrix::RCond(void) const
     const int dataSize= data.Size();
     auxMatrix.resize(dataSize,n);
 
-    double *matrixWork= auxMatrix.getMatrixWork();
+    double *Aptr= auxMatrix.getMatrixWork();
     for(int i=0; i<dataSize; i++)
-      matrixWork[i]= data(i);
-
+      Aptr[i]= data(i);
+    
     int ldA= n;
     int info;
-    double *Aptr= matrixWork;
 
     //Computes the "1" norm of the matrix using LAPACK.
     Vector wrk(n);
     double *wrkPtr= wrk.getDataPtr();
     const double anorm= dlange_("1", &n, &n, Aptr, &ldA, wrkPtr, 1);
-
-    //Modifies matrixWork in place with a LU factorization.
+    
+    //Modifies Aptr in place with a LU factorization.
     int *iPIV= auxMatrix.getIntWork();
     dgetrf_(&n, &n, Aptr, &ldA, iPIV, &info);
     // info

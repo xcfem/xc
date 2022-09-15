@@ -1107,7 +1107,9 @@ python tests/database/sqlite_test_03.py
 python tests/database/readln_test_01.py
 
 echo "$BLEU" "Verifiyng misc. utilities." "$NORMAL"
-python tests/utility/rcond.py
+python tests/utility/rcond_01.py
+python tests/utility/rcond_02.py
+python tests/utility/rcond_03.py
 python tests/utility/import_combinations.py
 python tests/utility/test_suitable_xzvector.py
 
