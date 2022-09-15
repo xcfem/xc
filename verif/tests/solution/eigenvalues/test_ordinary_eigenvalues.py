@@ -5,17 +5,19 @@ https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/
 
 from __future__ import print_function
 from __future__ import division
-import xc
-
-from model import predefined_spaces
-from materials import typical_materials
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2019, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+
+import math
+import xc
+import geom
+from model import predefined_spaces
+from materials import typical_materials
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -67,32 +69,36 @@ eig2Ref= 3*eig1Ref
 ratio2= abs(eig2-eig2Ref)/eig2Ref
 
 refValue= math.sqrt(2)/2.0
-v11= n1.getEigenvector(1)[2]
-ratio3= abs(v11+refValue)/refValue
-v12= n2.getEigenvector(2)[2]
-ratio4= abs(v12+refValue)/refValue
-v21= n2.getEigenvector(1)[2]
-ratio5= abs(v21-refValue)/refValue
-v22= n2.getEigenvector(2)[2]
-ratio6= abs(v22+refValue)/refValue
 
+refVector1= geom.Vector2d(refValue, -refValue)
+refVector2= geom.Vector2d(refValue, refValue)
 
-'''
+v1= n1.getEigenvector(1)[2] # (mode)[component]
+v2= n2.getEigenvector(1)[2] # (mode)[component]
+vector1= geom.Vector2d(v1, v2)
+ratio3= min((refVector1-vector1).getModulus(),(refVector1+vector1).getModulus())/refValue # sign doesn't count
+
+v1= n2.getEigenvector(1)[2] # (mode)[component]
+v2= n2.getEigenvector(2)[2] # (mode)[component]
+vector2= geom.Vector2d(v1, v2)
+ratio4= min((refVector2-vector2).getModulus(),(refVector2+vector2).getModulus())/refValue # sign doesn't count
+
 print('computed eigenvalues: ', eig1, eig2)
 print('expected eigenvalues: ', eig1Ref, eig2Ref)
 print('         ratio: ', ratio1, ratio2)
-print('Eigenvector 1')
-print(v11,v21)
-print(ratio3,ratio4)
-print('Eigenvector 2')
-print(v12,v22)
-print(ratio5,ratio6)
+print('Eigenvector 1: ', vector1)
+print('Reference eigenvector 1: ', refVector1)
+print('ratio3= ', ratio3)
+print('Eigenvector 2: ', vector2)
+print('Reference eigenvector 2: ', refVector2)
+print('ratio3= ', ratio3)
+'''
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-6) and (abs(ratio2)<1e-6) and (abs(ratio3)<1e-9) and (abs(ratio4)<1e-9) and (abs(ratio5)<1e-9) and (abs(ratio6)<1e-9):
+if (abs(ratio1)<1e-6) and (abs(ratio2)<1e-6) and (abs(ratio3)<1e-9) and (abs(ratio4)<1e-9):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
