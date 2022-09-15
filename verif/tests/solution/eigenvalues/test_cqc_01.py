@@ -101,12 +101,12 @@ crossCQCCoefficients= analysis.getCQCModalCrossCorrelationCoefficients(xc.Vector
 from misc import matrix_utils
 eigNod3= nod3.getNormalizedEigenvectors
 eigenvectors= matrix_utils.matrixToNumpyArray(eigNod3)
-modos= eigenvectors[0:3,0:3] #eigenvectors.getBox(0,0,2,2)
-modo1= modos[:,0] #.getCol(1)
-modo2= modos[:,1] #.getCol(2)
-modo3= modos[:,2] #.getCol(3)
+modos= eigenvectors[0:3,0:3]
+modo1= modos[:,0] # first column.
+modo2= modos[:,1] # second column.
+modo3= modos[:,2] # third column.
 
-factoresParticipacionModalX= nod3.getModalParticipationFactorsForDOFs([0])
+modalParticipationFactorsX= nod3.getModalParticipationFactorsForDOFs([0])
 factoresDistribucion= nod3.getDistributionFactors
 A1= matrix_utils.vectorToNumpyArray(nod3.getMaxModalDisplacementForDOFs(1,aceleraciones[0],[0]))
 maxDispMod1= A1[0:3] #getBox(A1,1,1,3,1)
@@ -125,20 +125,30 @@ ratio1= (periods-theorPeriods).Norm()
 modosTeor= numpy.matrix([[-0.731,0.271,-1],
                          [0.232,1,0.242],
                          [-1,0.036,0.787]])
-# modo1Teor= getCol(modosTeor,1)
-# modo2Teor= getCol(modosTeor,2)
-# modo3Teor= getCol(modosTeor,3)
-diff= (modos-modosTeor)
-ratio2= numpy.linalg.norm(diff)
-# This CQC coefficientes are taken from Solvia manual
+modo1Teor= modosTeor[:,0].reshape(3) # first column.
+modo2Teor= modosTeor[:,1].reshape(3) # second column.
+modo3Teor= modosTeor[:,2].reshape(3) # third column.
+err= min(numpy.linalg.norm(modo1-modo1Teor), numpy.linalg.norm(modo1+modo1Teor))
+err+= min(numpy.linalg.norm(modo2-modo2Teor), numpy.linalg.norm(modo2+modo2Teor))
+err+= min(numpy.linalg.norm(modo3-modo3Teor), numpy.linalg.norm(modo3+modo3Teor))
+ratio2= err
+# This CQC coefficients are taken from the Solvia manual
 crossCQCCoefficientsTeor= xc.Matrix([[1,0.79280,0.005705],[0.79280,1,0.006383],[0.005705,0.006383,1]])
 ratio3= (crossCQCCoefficients-crossCQCCoefficientsTeor).Norm()
-factoresParticipacionModalXTeor= xc.Vector([-.731/1.588,.271/1.075,-1/1.678])
-ratio4= (factoresParticipacionModalX-factoresParticipacionModalXTeor).Norm()
+
+modalParticipationFactorsXTeor= xc.Vector([-.731/1.588,.271/1.075,-1/1.678])
+err= 0.0
+for j in range(0,3):
+    v1= abs(modalParticipationFactorsX[j]-modalParticipationFactorsXTeor[j])
+    v2= abs(modalParticipationFactorsX[j]+modalParticipationFactorsXTeor[j])
+    err+= min(v1,v2)**2
+#ratio4= (modalParticipationFactorsX-modalParticipationFactorsXTeor).Norm()
+ratio4= math.sqrt(err)
+
 ''' 
-maxDispMod1Teor= modo1Teor*factoresParticipacionModalXTeor[0]*aceleraciones[0]/sqr(angularFrequenciesTeor[0])
-maxDispMod2Teor= modo2Teor*factoresParticipacionModalXTeor[1]*aceleraciones[1]/sqr(angularFrequenciesTeor[1])
-maxDispMod3Teor= modo3Teor*factoresParticipacionModalXTeor[2]*aceleraciones[2]/sqr(angularFrequenciesTeor[2])
+maxDispMod1Teor= modo1Teor*modalParticipationFactorsXTeor[0]*aceleraciones[0]/sqr(angularFrequenciesTeor[0])
+maxDispMod2Teor= modo2Teor*modalParticipationFactorsXTeor[1]*aceleraciones[1]/sqr(angularFrequenciesTeor[1])
+maxDispMod3Teor= modo3Teor*modalParticipationFactorsXTeor[2]*aceleraciones[2]/sqr(angularFrequenciesTeor[2])
 maxDispMod1Teor= [0.119,-0.038,0.162]*0.3048
 maxDispMod2Teor= [0.039,0.143,0.005]*0.3048
 maxDispMod3Teor= [0.064,-0.016,-0.055]*0.3048
@@ -160,16 +170,16 @@ j= 0
 k= 0
 
 for i in range(0,nMod):
-  for j in range(0,nMod):
-    maxDispModI= maxDispMod[i]
-    maxDispModJ= maxDispMod[j]
-    cqcCoeff= crossCQCCoefficients(i,j)
-    for k in range(0,3):
-      maxDispCQC[k]= maxDispCQC[k]+cqcCoeff*maxDispModI[k]*maxDispModJ[k]
+    for j in range(0,nMod):
+        maxDispModI= maxDispMod[i]
+        maxDispModJ= maxDispMod[j]
+        cqcCoeff= crossCQCCoefficients(i,j)
+        for k in range(0,3):
+            maxDispCQC[k]= maxDispCQC[k]+cqcCoeff*maxDispModI[k]*maxDispModJ[k]
 
 
 for k in range(0,3):
-  maxDispCQC[k]= math.sqrt(maxDispCQC[k])
+    maxDispCQC[k]= math.sqrt(maxDispCQC[k])
 
 maxDispCQC= xc.Vector(maxDispCQC)
 ratioDispCQC= (maxDispCQC-maxDispCQCTeor).Norm()
@@ -184,13 +194,12 @@ print("theorPeriods: ",theorPeriods)
 print("ratio1= ",ratio1)
 print("modos: ",modos)
 print("modosTeor: ",modosTeor)
-print("diff: ",diff)
 print("ratio2= ",ratio2)
 print("coefficients CQC: ",crossCQCCoefficients)
 print("coefficients CQC example: ",crossCQCCoefficientsTeor)
 print("ratio3= ",ratio3)
-print("factoresParticipacionModalX: ",factoresParticipacionModalX)
-print("factoresParticipacionModalXTeor: ",factoresParticipacionModalXTeor)
+print("modalParticipationFactorsX: ",modalParticipationFactorsX)
+print("modalParticipationFactorsXTeor: ",modalParticipationFactorsXTeor)
 print("ratio4= ",ratio4)
 print("********** maximum displacement mode 1: ",maxDispMod1*1000)
 print("********** maximum displacement mode 1 (example): ",maxDispMod1Teor*1000)

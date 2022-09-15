@@ -83,6 +83,7 @@ v2= n2.getEigenvector(2)[2] # (mode)[component]
 vector2= geom.Vector2d(v1, v2)
 ratio4= min((refVector2-vector2).getModulus(),(refVector2+vector2).getModulus())/refValue # sign doesn't count
 
+'''
 print('computed eigenvalues: ', eig1, eig2)
 print('expected eigenvalues: ', eig1Ref, eig2Ref)
 print('         ratio: ', ratio1, ratio2)
@@ -92,7 +93,6 @@ print('ratio3= ', ratio3)
 print('Eigenvector 2: ', vector2)
 print('Reference eigenvector 2: ', refVector2)
 print('ratio3= ', ratio3)
-'''
 '''
 
 import os

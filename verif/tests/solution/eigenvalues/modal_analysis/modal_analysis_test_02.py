@@ -183,7 +183,6 @@ diff= distributionFactors-exampleDistribFactors
 ratio4= diff.Norm()
 ratio5= math.sqrt((cargaModo1[0]-273523)**2+(cargaModo2[0]-31341)**2+(cargaModo3[0]-6214)**2)/273523.0
 
-print("ratio2= ",ratio2)
 '''
 print("kPlBaja= ",kPlBaja)
 print("kPl1a= ",kPl1a)
