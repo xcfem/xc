@@ -52,17 +52,19 @@ class FrictionalSoil(object):
       
     def Ka_coulomb(self, a, b, d= 0.0):
         '''
-        Return the active earth pressure coefficient according to Coulomb's theory.
+        Return the active earth pressure coefficient according to Coulomb's theory (see Recomendaciones para obras marítimas ROM 0.5-05 figure 3.7.12.).
 
-        :param a:  angle of the back of the retaining wall (radians).
-        :param b:  slope of the backfill (radians).
-        :param d:  friction angle between soil an back of retaining wall (radians). See Recomendaciones para obras marítimas ROM 0.5-05 page 315 
+        :param a:  angle of the back of the retaining wall (radians, 0 if vertical).
+        :param b:  slope of the backfill (radians, 0 if horizontal).
+        :param d:  friction angle between soil and the back of retaining wall (radians).
         '''
         phi= self.getDesignPhi()
         num= 1.0/math.cos(a)*math.cos(phi-a)
         r1=math.sqrt(math.cos(a+d))
         if(b>phi):
-            lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; the angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
         r2=math.sqrt(math.sin(phi+d)*math.sin(phi-b)/math.cos(b-a))
         return (math.pow((num/(r1+r2)),2))
 
