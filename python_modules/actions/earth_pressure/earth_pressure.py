@@ -23,9 +23,10 @@ import xc
 from misc_utils import log_messages as lmsg
 from geotechnics import mononobe_okabe
 from model.sets import sets_mng as sets
+from bisect import bisect
 
 class PressureModelBase(object):
-    '''Basse class for objects defining earth pressures.'''
+    '''Base class for objects defining earth pressures.'''
     
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.'''
@@ -429,3 +430,52 @@ class EarthPressureSlopedWall(object):
             if(presElem!=0.0):
                 e.vector3dUniformLoadGlobal(loadVector)
 
+
+class WeightDistrFilling(object):
+    '''Distribution of pressure on a set of shells due to the weight of a
+       soil filling. The surface of the soil-filling is a a strip defined
+       by the angle that its axis forms with the X global axis 
+       (counterclockwise) and a list of coordinates [[yp1,z1],[yp2,z2], ...],
+       where yp coordinates are expressed in a coordinate system obtained 
+       rotating theta degrees the global system.
+
+    :ivar gammaSoil: weight density of the soil
+    :ivar theta: angle counterclockwise in degrees that forms the axis of
+                 the strip of soil-filling with the global X-axis
+    :ivar coordSoilSurf: list of coordinates [[yp1,z1],[yp2,z2], ...] 
+          that defines the soil surface, where yp are the y coordinates of the
+          vertices of a transversal section in the surface, expressed in 
+          the rotated reference system 
+    '''
+    def __init__(self,gammaSoil,theta,coordSoilSurf):
+        self.gammaSoil=gammaSoil
+        self.theta=theta
+        self.coordSoilSurf=sorted(coordSoilSurf)
+        self.thetarad=math.radians(theta)
+        self.ypmin=coordSoilSurf[0][0]
+        self.ypmax=coordSoilSurf[-1][0]
+        self.ypList=[self.coordSoilSurf[i][0] for i in range(len(self.coordSoilSurf))]
+
+    def getPressure(self,x,y,z):
+        yp=-x*math.sin(self.thetarad)+y*math.cos(self.thetarad)
+        if self.ypmin < yp < self.ypmax:
+            indYp=bisect(self.ypList,yp)
+            yp1,yp2=self.coordSoilSurf[indYp-1][0],self.coordSoilSurf[indYp][0]
+            z1,z2=self.coordSoilSurf[indYp-1][1],self.coordSoilSurf[indYp][1]
+            zGround=z1+(z2-z1)/(yp2-yp1)*(yp-yp1)
+            ret_press=self.gammaSoil*(zGround-z)
+        else:
+            ret_press=0.0
+        return ret_press
+
+    def appendLoadToCurrentLoadPattern(self,xcSet):
+        for e in xcSet.elements:
+            coo=e.getCooCentroid(False)
+            presElem=self.getPressure(coo[0],coo[1],coo[2])
+            loadVector= xc.Vector([0,0,-presElem])
+            if(presElem!=0.0):
+                e.vector3dUniformLoadGlobal(loadVector)
+                
+            
+            
+                    
