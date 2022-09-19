@@ -396,6 +396,7 @@ echo "$BLEU" "  Eigenvalue solution tests." "$NORMAL"
 python tests/solution/eigenvalues/test_string_under_tension.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
+python tests/solution/eigenvalues/test_ordinary_eigenvalues.py
 echo "$BLEU" "    Eigenmode computation." "$NORMAL"
 python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_01.py
 python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_02.py
@@ -1107,7 +1108,9 @@ python tests/database/sqlite_test_03.py
 python tests/database/readln_test_01.py
 
 echo "$BLEU" "Verifiyng misc. utilities." "$NORMAL"
-python tests/utility/rcond.py
+python tests/utility/rcond_01.py
+python tests/utility/rcond_02.py
+python tests/utility/rcond_03.py
 python tests/utility/import_combinations.py
 python tests/utility/test_suitable_xzvector.py
 

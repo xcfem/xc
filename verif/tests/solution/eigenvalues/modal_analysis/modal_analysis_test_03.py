@@ -117,13 +117,19 @@ distributionFactors= analysis.getDistributionFactors()
 
 targetPeriods= xc.Vector([0.468,0.177,0.105,0.084,0.065])
 ratio1= (periods-targetPeriods).Norm()
-exempleModes= xc.Matrix([[0.323,-0.764,0.946,-0.897,0.623],
+exampleModes= xc.Matrix([[0.323,-0.764,0.946,-0.897,0.623],
                          [0.521,-0.941,0.378,0.251,-1.000],
                          [0.685,-0.700,-0.672,0.907,0.658],
                          [0.891,0.241,-1.000,-1.000,-0.195],
                          [1.000,1.000,0.849,0.427,0.042]])
-subtract_modes= (modos-exempleModes)
-ratio2= (subtract_modes).Norm()
+# Compute difference.
+err= 0.0
+for j in range(0,exampleModes.noCols):
+    v1= modos.getCol(j)
+    v2= exampleModes.getCol(j)
+    err+= min((v1-v2).Norm(),(v1+v2).Norm()) # sign doesn't count
+ratio2= err
+
 ratio3= abs(totalMass-targetTotalMass)/targetTotalMass
 ''' The values of the first three distribution factors values (fist 3 columns)
    were taken from the reference example. The two others (which are not given

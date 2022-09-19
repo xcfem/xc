@@ -252,6 +252,14 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
 	            << std::endl;
          theIntegrator= new KEigenIntegrator(this);
       }
+    else if(nmb=="standard_eigen_integrator")
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+         theIntegrator= new KEigenIntegrator(this);
+      }
     else if(nmb=="alpha_os_integrator")
       {
 	if(params.Size()>0)
@@ -457,7 +465,7 @@ bool XC::SolutionStrategy::alloc_system_of_equations(const std::string &nmb,Anal
       theSOE= new BandArpackppSOE(this);
     else if((nmb=="sym_arpack_soe") || (nmb=="sym_arpack_eigen_soe"))
       theSOE= new SymArpackSOE(this);
-    else if(nmb=="sym_band_eigen_soe")
+    else if((nmb=="sym_band_eigen_soe") || (nmb=="sym_band_lapack_soe"))
       theSOE= new SymBandEigenSOE(this);
     else if(nmb=="full_gen_eigen_soe")
       theSOE= new FullGenEigenSOE(this);

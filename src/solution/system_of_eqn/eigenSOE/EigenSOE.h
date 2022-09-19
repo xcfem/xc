@@ -97,6 +97,7 @@ class EigenSOE: public SystemOfEqn
     virtual void identityM(void);
 
     const int &getNumModes(void) const;
+    bool standardProblem(void) const;
 
     //Eigenvectors
     virtual const Vector &getEigenvector(int mode) const;
@@ -109,6 +110,7 @@ class EigenSOE: public SystemOfEqn
     double getAngularFrequency(int mode) const;
     double getPeriod(int mode) const;
     double getFrequency(int mode) const;
+    Vector getEigenvalues(const int &numModes) const;
     Vector getEigenvalues(void) const;
     Vector getAngularFrequencies(void) const;
     Vector getPeriods(void) const;
@@ -116,6 +118,7 @@ class EigenSOE: public SystemOfEqn
 
     //Modal participation factors.
     virtual double getModalParticipationFactor(int mode) const;
+    Vector getModalParticipationFactors(const int &numModes) const;
     Vector getModalParticipationFactors(void) const;
 
     //Distribution factors.

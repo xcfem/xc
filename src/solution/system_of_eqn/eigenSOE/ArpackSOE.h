@@ -30,22 +30,29 @@
 #ifndef ArpackSOE_h
 #define ArpackSOE_h
 
-#include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
+#include <solution/system_of_eqn/eigenSOE/ArpackSOEBase.h>
+#include "solution/system_of_eqn/linearSOE/DistributedLinSOE.h"
 
 namespace XC {
 
-//! @ingroup EigenSOE
-//
 //! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based system of equations.
-class ArpackSOE: public EigenSOE
+//! @ingroup EigenSOE
+class ArpackSOE: public ArpackSOEBase, DistributedLinSOE
   {
+    std::vector<double> M;
+    int Msize;
+    bool mDiagonal;
+    AnalysisModel *theModel;
   protected:
-    double shift;
+    LinearSOE *theSOE;
 
-    ArpackSOE(SolutionStrategy *,int classTag,double shift = 0.0);
+    ArpackSOE(SolutionStrategy *,double shift = 0.0);
   public:
-    virtual const double &getShift(void) const;
-    void setShift(const double &);
+    friend class ArpackSolver;
+    int checkSameInt(int);
+    
+    int setLinearSOE(LinearSOE &);    
+    int getNumEqn(void) const;
 
   };
 } // end of XC namespace

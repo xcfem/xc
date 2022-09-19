@@ -30,7 +30,7 @@
 #ifndef BandArpackppSOE_h
 #define BandArpackppSOE_h
 
-#include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
+#include <solution/system_of_eqn/eigenSOE/ArpackSOEBase.h>
 #include "utility/matrices/matdispZ.h"
 
 typedef matdispZ<double> msp_double;
@@ -41,7 +41,7 @@ class BandArpackppSolver;
 //! @ingroup EigenSOE
 //
 //! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based band matrix eigenvalue SOE solver.
-class BandArpackppSOE: public ArpackSOE
+class BandArpackppSOE: public ArpackSOEBase
   {
   private:
     msp_double A;

@@ -53,7 +53,7 @@ class BasicElasticMaterial(object):
         retval= materialHandler.newMaterial("elastic_material",matName)
         retval.E= self.E
         matRho= self.rho
-        if(overrideRho!=None):
+        if(overrideRho):
             matRho= overrideRho
         retval.rho= matRho
         return retval
@@ -67,12 +67,11 @@ class BasicElasticMaterial(object):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''        
-        materialHandler= preprocessor.getMaterialHandler
         matName= name
         if(not matName):
             matName= uuid.uuid1().hex
         matRho= self.rho
-        if(overrideRho!=None):
+        if(overrideRho):
             matRho= overrideRho
         return defElasticIsotropic3d(preprocessor= preprocessor, name= matName, E= self.E, nu= self.nu,rho= matRho)
 
@@ -87,12 +86,11 @@ class BasicElasticMaterial(object):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''        
-        materialHandler= preprocessor.getMaterialHandler
         matName= name
         if(not matName):
             matName= uuid.uuid1().hex
         rho= self.rho
-        if(overrideRho!=None):
+        if(overrideRho):
             rho= overrideRho
         return defElasticMembranePlateSection(preprocessor= preprocessor, name= matName, E= self.E, nu= self.nu, rho= rho, h= thickness)
     
@@ -107,13 +105,9 @@ class BasicElasticMaterial(object):
                             the material density.
         '''
         baseMaterial= self.defElasticIsotropic3d(preprocessor= preprocessor, overrideRho= overrideRho)
-        materialHandler= preprocessor.getMaterialHandler
         matName= name
         if(not matName):
             matName= uuid.uuid1().hex
-        rho= self.rho
-        if(overrideRho!=None):
-            rho= overrideRho
         return defMembranePlateFiberSection(preprocessor= preprocessor, name= matName, h= thickness, nDMaterial= baseMaterial)        
 
     def getDict(self):
@@ -360,7 +354,7 @@ def defElasticSectionFromMechProp1d(preprocessor,name,mechProp1d, overrideRho= N
                         the material density.
     '''  
     rho= mechProp1d.linearRho
-    if(overrideRho!=None):
+    if(overrideRho):
         rho= overrideRho
     retval= defElasticSection1d(preprocessor,name,mechProp1d.A,mechProp1d.E, linearRho= rho)
     return retval
@@ -377,7 +371,7 @@ def defElasticSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho=
                         the material density.
     '''  
     rho= mechProp2d.linearRho
-    if(overrideRho!=None):
+    if(overrideRho):
         rho= overrideRho
     retval= defElasticSection2d(preprocessor,name,mechProp2d.A,mechProp2d.E,mechProp2d.I,linearRho= rho)
     return retval
@@ -394,7 +388,7 @@ def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrid
                         the material density.
     '''  
     rho= mechProp2d.linearRho
-    if(overrideRho!=None):
+    if(overrideRho):
         rho= overrideRho
     retval= defElasticShearSection2d(preprocessor,name= name, A= mechProp2d.A, E= mechProp2d.E, G= mechProp2d.G, I= mechProp2d.I, alpha= mechProp2d.Alpha, linearRho= rho)
     return retval
@@ -436,7 +430,7 @@ def defElasticSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho=
                         the material density.
     '''  
     rho= mechProp3d.linearRho
-    if(overrideRho!=None):
+    if(overrideRho):
         rho= overrideRho
     return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,linearRho= rho)
 
@@ -452,7 +446,7 @@ def defElasticShearSectionFromMechProp3d(preprocessor, name, mechProp3d, overrid
                         the material density.
     '''  
     rho= mechProp3d.linearRho
-    if(overrideRho!=None):
+    if(overrideRho):
         rho= overrideRho
     return defElasticShearSection3d(preprocessor, name= name, A= mechProp3d.A, E= mechProp3d.E, G= mechProp3d.G, Iz= mechProp3d.Iz, Iy= mechProp3d.Iy, J= mechProp3d.J, alpha_y= mechProp3d.AlphaY, alpha_z= mechProp3d.AlphaZ, linearRho= rho)
 
@@ -785,7 +779,7 @@ class DeckMaterialData(MaterialData):
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= self.rho
-                if(overrideRho!=None):
+                if(overrideRho):
                     rho= overrideRho
                 self.xc_material= defElasticMembranePlateSection(preprocessor, name= self.name,E= self.E, nu= self.nu, rho= rho, h= self.thickness)
         else:
@@ -826,7 +820,7 @@ class BeamMaterialData(MaterialData):
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= self.getRho()
-                if(overrideRho!=None):
+                if(overrideRho):
                     rho= overrideRho
                 self.xc_material= defElasticShearSection3d(preprocessor,name= self.name, A= self.section.A(), E= self.material.E, G= self.material.G(), Iz= self.section.Iz(), Iy= self.section.Iy(), J= self.section.J(), alpha_y= self.section.alphaY(), alpha_z= self.section.alphaZ(), linearRho= rho)
         else:

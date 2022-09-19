@@ -25,17 +25,17 @@ class_<XC::EigenSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("EigenSOE", "B
 .def("newSolver", &XC::EigenSOE::newSolver,return_internal_reference<>()," \n""newSolver(type)""Define the solver to be used.""Parameters: \n""type: type of solver. Available types: 'band_arpack_solver', 'band_arpackpp_solver', 'sym_band_eigen_solver', 'full_gen_eigen_solver', 'sym_arpack_solver'")
   ;
 
-class_<XC::ArpackSOE, bases<XC::EigenSOE>, boost::noncopyable >("ArpackSOE", no_init)
-  .add_property("shift", make_function(&XC::ArpackSOE::getShift, return_value_policy<copy_const_reference>() ),&XC::ArpackSOE::setShift)
+class_<XC::ArpackSOEBase, bases<XC::EigenSOE>, boost::noncopyable >("ArpackSOEBase", no_init)
+  .add_property("shift", make_function(&XC::ArpackSOEBase::getShift, return_value_policy<copy_const_reference>() ),&XC::ArpackSOEBase::setShift)
   ;
 
-class_<XC::BandArpackSOE, bases<XC::ArpackSOE>, boost::noncopyable >("BandArpackSOE", no_init)
+class_<XC::BandArpackSOE, bases<XC::ArpackSOEBase>, boost::noncopyable >("BandArpackSOE", no_init)
   ;
 
-class_<XC::BandArpackppSOE, bases<XC::ArpackSOE>, boost::noncopyable >("BandArpackppSOE", no_init)
+class_<XC::BandArpackppSOE, bases<XC::ArpackSOEBase>, boost::noncopyable >("BandArpackppSOE", no_init)
   ;
 
-class_<XC::SymArpackSOE, bases<XC::ArpackSOE>, boost::noncopyable >("SymArpackSOE", no_init)
+class_<XC::SymArpackSOE, bases<XC::ArpackSOEBase>, boost::noncopyable >("SymArpackSOE", no_init)
   ;
 
 class_<XC::FullGenEigenSOE, bases<XC::EigenSOE>, boost::noncopyable >("FullGenEigenSOE", no_init)

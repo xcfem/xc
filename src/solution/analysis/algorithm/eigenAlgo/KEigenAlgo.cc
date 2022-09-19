@@ -79,12 +79,12 @@ int XC::KEigenAlgo::form_matrices(void)
     return 0;
   }
 //! @brief Compute the smallest or largest eigenvalues.
-int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
+int XC::KEigenAlgo::compute_eigenvalues(int numEigen, bool findSmallest)
   {
     EigenSOE *theSOE = getEigenSOEPtr();
     theSOE->save();
     EigenSolver *solver= theSOE->getSolver();
-    solver->setWhichEigenvalues(which); //Which eigenvalues to compute.
+    solver->setFindSmallest(findSmallest); //Which eigenvalues to compute.
     if(theSOE->solve(numEigen) < 0) //Computes numEigen eigenvalues.
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -134,7 +134,7 @@ int XC::KEigenAlgo::compute_smallest_eigenvalues(void)
     theSOE->save();
     if(ns>0)
       {
-	if(compute_eigenvalues(ns,"LM") == 0) // YES LM.
+	if(compute_eigenvalues(ns,true) == 0) // YES LM.
 	  dump_modes();
       }
     theSOE->restore();
@@ -151,7 +151,7 @@ int XC::KEigenAlgo::compute_largest_eigenvalues(void)
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; computation of largest eigenvalues"
                   << " not implemented yet." << std::endl;
-    	// if(compute_eigenvalues(nl,"SM") == 0) // YES SM.
+    	// if(compute_eigenvalues(nl,false) == 0) // YES SM.
     	//   dump_modes();
       }
     theSOE->restore();

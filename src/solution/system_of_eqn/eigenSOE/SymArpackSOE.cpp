@@ -47,7 +47,7 @@
 
 //! @brief Constructor.
 XC::SymArpackSOE::SymArpackSOE(SolutionStrategy *owr,double theShift)
-  :ArpackSOE(owr,EigenSOE_TAGS_SymArpackSOE,theShift),
+  :ArpackSOEBase(owr,EigenSOE_TAGS_SymArpackSOE,theShift),
    nnz(0), colA(0), rowStartA(0), 
    nblks(0), xblk(0), invp(0), diag(0), penv(0), rowblks(0),
    begblk(0), first(0) {}
@@ -60,10 +60,12 @@ bool XC::SymArpackSOE::setSolver(EigenSolver *newSolver)
     if(tmp)
       {
         tmp->setEigenSOE(*this);
-        retval= ArpackSOE::setSolver(tmp);
+        retval= ArpackSOEBase::setSolver(tmp);
       }
     else
-      std::cerr << "XC::BandArpackSOE::setSolver; solver incompatible con system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; solver incompatible con system of equations."
+		<< std::endl;
     return retval;
   }
 
@@ -123,8 +125,9 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
 	    theVertex = theGraph.getVertexPtr(a);
 	    if(theVertex == 0)
               {
-	        std::cerr << "WARNING: SymArpackSOE::setSize :";
-	        std::cerr << " vertex " << a << " not in graph! - size set to 0\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; WARNING: vertex " << a
+			  << " not in graph! - size set to 0\n";
 	        size = 0;
 	        return -1;
 	      }
@@ -170,8 +173,8 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
     int solverOK = theSolvr->setSize();
     if(solverOK < 0)
       {
-	std::cerr << "WARNING: SymArpackSOE::setSize :";
-	std::cerr << " solver failed setSize()\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: solver failed setSize()\n";
 	return solverOK;
       } 
     return result;
@@ -190,8 +193,8 @@ int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
     // check that m and id are of similar size
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-	std::cerr << "SymArpackSOE::addA() ";
-	std::cerr << " - Matrix and XC::ID not of similar sizes\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes" << std::endl;
 	return -1;
       }
     
@@ -305,7 +308,9 @@ int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
     const int idSize = id.Size();
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-        std::cerr << "BandArpackSOE::addA(); Matrix and ID not of similar sizes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes."
+	          << std::endl;
         return -1;
       }
     resize_mass_matrix_if_needed(idSize);      
@@ -321,18 +326,6 @@ int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
 //! @brief Zeroes the matrix A.
 void XC::SymArpackSOE::zeroA(void)
   { factored = false; }
-
-//! @brief Zeroes the matrix M.
-void XC::SymArpackSOE::zeroM(void)
-  {
-    EigenSOE::zeroM();
-  }
-
-//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
-void XC::SymArpackSOE::identityM(void)
-  {
-    EigenSOE::identityM();
-  }
 
 int XC::SymArpackSOE::sendSelf(Communicator &comm)
   { return 0; }

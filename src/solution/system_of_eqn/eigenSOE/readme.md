@@ -18,3 +18,4 @@ The following methods provide the solution of the generalized eigenvalue problem
  - [More Than You or Eigen Chew](https://portwooddigital.com/2022/03/06/more-than-you-or-eigen-chew/)
  - [Eigenvalues and eigenvectors](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors)
  - [Eigenvalue algorithm](https://en.wikipedia.org/wiki/Eigenvalue_algorithm)
+ - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)

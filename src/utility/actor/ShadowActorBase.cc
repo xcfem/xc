@@ -43,11 +43,11 @@ XC::ShadowActorBase::ShadowActorBase(int actorType, FEM_ObjectBroker &myBroker, 
   {
     // start the remote actor process running
     theChannel = theMachineBroker.startActor(actorType, compDemand);
-    if(theChannel < 0)
+    if(!theChannel)
       {
         std::cerr << "ShadowActorBase::ShadowActorBase; "
-	          << " could not start remote actor\n";
-        std::cerr << " using program " << actorType << std::endl;
+	          << " could not start remote actor\n"
+		  << " using program " << actorType << std::endl;
         exit(-1);
       }
     else

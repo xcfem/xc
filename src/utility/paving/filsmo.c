@@ -15,14 +15,6 @@ extern "C" {
 #endif
 #include "paving.h"
 
-/* Common Block Declarations */
-
-struct {
-    xc_float timea, timep, timec, timepc, timeaj, times;
-} timing_;
-
-#define timing_1 timing_
-
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
 /*    NTESS, the U.S. Government retains certain rights in this software. */

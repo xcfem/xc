@@ -15,65 +15,6 @@ extern "C" {
 #endif
 #include "paving.h"
 
-/* Common Block Declarations */
-
-struct {
-    xc_float devcap[23], defout[7];
-} status_;
-
-#define status_1 status_
-
-struct {
-    xc_float devp[5];
-} device_;
-
-#define device_1 device_
-
-struct {
-    xc_float colp[3], palett[48]	/* was [3][16] */;
-} color_;
-
-#define color_1 color_
-
-struct {
-    xc_float textp[40];
-} text_;
-
-#define text_1 text_
-
-struct {
-    xc_float vectp[5], xcur, ycur;
-} vectrc_;
-
-#define vectrc_1 vectrc_
-
-struct {
-    integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
-	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
-	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
-} font_;
-
-#define font_1 font_
-
-struct {
-    xc_float graphp[100];
-} graph_;
-
-#define graph_1 graph_
-
-struct {
-    xc_float mapp[11];
-} mappar_;
-
-#define mappar_1 mappar_
-
-struct {
-    integer memory[1000];
-} storag_;
-
-#define storag_1 storag_
-
 /* Table of constant values */
 
 static integer c__2 = 2;

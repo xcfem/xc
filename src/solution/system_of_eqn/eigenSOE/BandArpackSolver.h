@@ -66,11 +66,11 @@ struct ArpackAuxVars
     int dsaupd(int &ido, const int &n, const std::string &which, const int &nev, const double &tol,
 	       const int &ncv, int &info);
   };
-//! @ingroup LinearSolver
-//
+
 //! @brief Arpack solver for banded matrices.
 //! The ARnoldi PACKage, is a numerical software
 //! library written in FORTRAN 77 for solving large scale eigenvalue problems.
+//! @ingroup EigenSolver
 class BandArpackSolver: public EigenSolver
   {
   private:

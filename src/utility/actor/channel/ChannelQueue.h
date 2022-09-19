@@ -30,6 +30,7 @@
 #ifndef ChannelQueue_h
 #define ChannelQueue_h
 #include <deque>
+#include <cstddef>
 
 namespace XC {
 
@@ -41,6 +42,11 @@ class Channel;
 //! object to transmit.
 class ChannelQueue: public std::deque<Channel *>
   {
+  public:
+    ChannelQueue(void)
+      :std::deque<Channel *>(){}
+    ChannelQueue(const size_t &sz, Channel *ch)
+      :std::deque<Channel *>(sz, ch){}
   };
 
 } // end of XC namespace

@@ -142,12 +142,18 @@ class SparseGenColLinSOE: public SparseGenSOEBase
 
     friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
+    friend class DistributedSuperLU;
     SparseGenColLinSOE(SolutionStrategy *);        
     SparseGenColLinSOE(SolutionStrategy *,int classTag);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);
     virtual int addA(const Matrix &, const ID &, double fact = 1.0);
+
+    const ID &getRowA(void) const
+      { return rowA; }
+    ID &getRowA(void)
+      { return rowA; }
     
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

@@ -25,33 +25,32 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//FactoredSOEBase.h
-                                                                        
-                                                                        
-#ifndef FactoredSOEBase_h
-#define FactoredSOEBase_h
+// ArpackSOEBase.h
 
-#include "solution/system_of_eqn/linearSOE/LinearSOEData.h"
+#ifndef ArpackSOEBase_h
+#define ArpackSOEBase_h
+
+#include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
 
 namespace XC {
 
-//! @ingroup LinearSOE
-//
-//! @brief Base class for factored systems of equations.
-class FactoredSOEBase: public LinearSOEData
+//! @brief Base class for <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based system of equations.
+//! @ingroup EigenSOE
+class ArpackSOEBase: public EigenSOE
   {
   protected:
-    bool factored; //!< True if the system is factored.
+    double shift;
 
-    FactoredSOEBase(SolutionStrategy *,int classTag,int N= 0);
+    ArpackSOEBase(SolutionStrategy *,int classTag,double shift = 0.0);
   public:
-    inline bool getFactored(void) const
-      { return factored; }
-    void setFactored(bool b)
-      { factored= b; }
+    virtual const double &getShift(void) const;
+    void setShift(const double &);
+
   };
 } // end of XC namespace
 
 
 #endif
+
+
 

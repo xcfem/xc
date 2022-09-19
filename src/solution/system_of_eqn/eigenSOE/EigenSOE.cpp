@@ -121,7 +121,7 @@ XC::EigenSolver &XC::EigenSOE::newSolver(const std::string &type)
       setSolver(new BandArpackSolver());
     else if((type=="band_arpackpp_solver") || (type=="band_arpackpp_eigen_solver"))
       setSolver(new BandArpackppSolver());
-    else if(type=="sym_band_eigen_solver")
+    else if((type=="sym_band_eigen_solver") || (type=="sym_band_lapack_solver"))
       setSolver(new SymBandEigenSolver());
     else if(type=="full_gen_eigen_solver")
       setSolver(new FullGenEigenSolver());
@@ -234,6 +234,15 @@ double XC::EigenSOE::getFrequency(int i) const
   { return 1./getPeriod(i); }
 
 //! @brief Returns a vector with computed eigenvalues for each mode.
+XC::Vector XC::EigenSOE::getEigenvalues(const int &numModes) const
+  {
+    Vector retval(numModes);
+    for(int i= 1;i<=numModes;i++)
+      retval[i-1]= getEigenvalue(i);
+    return retval;    
+  }
+
+//! @brief Returns a vector with computed eigenvalues for each mode.
 XC::Vector XC::EigenSOE::getEigenvalues(void) const
   { return theSolver->getEigenvalues(); }
 
@@ -257,6 +266,15 @@ XC::Vector XC::EigenSOE::getFrequencies(void) const
 const int &XC::EigenSOE::getNumModes(void) const
   { return theSolver->getNumModes(); }
 
+bool XC::EigenSOE::standardProblem(void) const
+  {
+    bool retval= false;
+    if((massMatrix.size1()==0) || (massMatrix.size2()==0))
+      retval= true;
+    return retval;
+  }
+
+
 //! @brief Returns the modal participation factor for the mode.
 double XC::EigenSOE::getModalParticipationFactor(int mode) const
   {
@@ -278,13 +296,22 @@ double XC::EigenSOE::getModalParticipationFactor(int mode) const
   }
 
 //! @brief Returns the modal participation factors.
-XC::Vector XC::EigenSOE::getModalParticipationFactors(void) const
+XC::Vector XC::EigenSOE::getModalParticipationFactors(const int &numModes) const
   {
-    const int nm= getNumModes();
-    Vector retval(nm);
-    for(int i= 1;i<=nm;i++)
-      retval[i-1]= getModalParticipationFactor(i);
+    Vector retval(numModes);
+    if(standardProblem())
+      retval.Zero();
+    else
+      for(int i= 1;i<=numModes;i++)
+	retval[i-1]= getModalParticipationFactor(i);
     return retval;
+  }
+
+//! @brief Returns the modal participation factors.
+XC::Vector XC::EigenSOE::getModalParticipationFactors(void) const
+  { 
+    const int nm= getNumModes();
+    return getModalParticipationFactors(nm);
   }
 
 //! @brief Returns the distribution factors for the i-th mode.

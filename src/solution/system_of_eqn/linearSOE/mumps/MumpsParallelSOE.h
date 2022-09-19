@@ -64,21 +64,22 @@
 // What: "@(#) MumpsParallelSOE.h, revA"
 
 #include "MumpsSOE.h"
+#include "solution/system_of_eqn/linearSOE/DistributedLinSOE.h"
 
 namespace XC {
 class MumpsParallelSolver;
 
-class MumpsParallelSOE : public MumpsSOE
+class MumpsParallelSOE : public MumpsSOE, DistributedLinSOE
   {
   private:
-    int processID;
-    std::vector<Channel *> theChannels;
     std::vector<ID> localCol;
     
   protected:
     mutable std::vector<double> workArea;
     Vector myB;
-    
+
+    void inicComm(const int &) const;
+    DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
@@ -99,10 +100,9 @@ class MumpsParallelSOE : public MumpsSOE
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
-    friend class MumpsParallelSolver;
-    
-    int setProcessID(int processTag);
-    int setChannels(const std::vector<Channel *> &theChannels);
+    friend class MumpsParallelSolver;    
+
+    int setChannels(const ChannelQueue &);
   };
 } // end of XC namespace
 

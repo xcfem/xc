@@ -44,7 +44,7 @@
 
 //! @brief Constructor.
 XC::BandArpackSOE::BandArpackSOE(SolutionStrategy *owr, double theShift)
-  :ArpackSOE(owr,EigenSOE_TAGS_BandArpackSOE,theShift),
+  :ArpackSOEBase(owr,EigenSOE_TAGS_BandArpackSOE,theShift),
    numSuperD(0), numSubD(0) {}
 
 //! @brief Sets the solver that will be used to compute the solution.
@@ -55,7 +55,7 @@ bool XC::BandArpackSOE::setSolver(EigenSolver *newSolver)
     if(tmp)
       {
         tmp->setEigenSOE(*this);
-        retval= ArpackSOE::setSolver(tmp);
+        retval= ArpackSOEBase::setSolver(tmp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -236,19 +236,6 @@ int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
     retval= this->addA(m, id, -shift);
     return retval;
   }
-
-//! @brief Zeroes the matrix M.
-void XC::BandArpackSOE::zeroM(void)
-  {
-    EigenSOE::zeroM();
-  }
-
-//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
-void XC::BandArpackSOE::identityM(void)
-  {
-    EigenSOE::identityM();
-  }
-
 
 int XC::BandArpackSOE::sendSelf(Communicator &comm)
   { return 0; }

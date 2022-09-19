@@ -182,10 +182,9 @@ int XC::FullGenEigenSolver::solve(void)
                   << " we take the maximum." << std::endl;
         numModes = n;
       }
-    if(which!="LM")
+    if(!findSmallest)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; computation of: " << which
-	        << " eigenvalues not implemented yet."
+	        << "; computation of largest: eigenvalues not implemented yet."
 	        << std::endl;
     // do not compute left eigenvalues and eigenvectors
     char jobvl[]= "N";

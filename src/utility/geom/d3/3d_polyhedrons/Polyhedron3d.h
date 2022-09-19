@@ -145,11 +145,8 @@ class Polyhedron3d: public PolyhedronBase
     friend Polyhedron3d get_convex_hull(InputIterator first,InputIterator last);
 
     void Print(std::ostream &os) const;
-    void Print(CGview_stream &v) const;
     void ReadOFF(std::istream &is);
   };
-
-CGview_stream &operator<<(CGview_stream &v,const Polyhedron3d &p);
 
 inline PolygonMap<CGPolyhedron_3> getPolygonMap(const Polyhedron3d &p)
   { return p.GetPolygonMap(); }

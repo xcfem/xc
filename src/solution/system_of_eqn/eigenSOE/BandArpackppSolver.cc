@@ -86,10 +86,9 @@ int XC::BandArpackppSolver::solve(void)
     else
       {
         const int n= theSOE->size; // Number of equations
-	if(which!="LM")
+	if(!findSmallest)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; computation of: " << which
-		    << " eigenvalues not implemented yet."
+		    << "; computation of largest eigenvalues not implemented yet."
 		    << std::endl;
     
         // Check for quick return

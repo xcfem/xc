@@ -113,10 +113,6 @@ class Matrix: public CommandEntity
   private:
     static double MATRIX_NOT_VALID_ENTRY;
     static AuxMatrix auxMatrix;
-    static double *matrixWork;
-    static int *intWork;
-    static int sizeDoubleWork;
-    static int sizeIntWork;
 
     int numRows;
     int numCols;

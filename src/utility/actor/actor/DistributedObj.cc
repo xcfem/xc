@@ -55,6 +55,16 @@ int XC::DistributedObj::setProcessID(int dTag)
     return 0;
   }
 
+//! @brief Return the number of channels.
+int XC::DistributedObj::getNumChannels(void) const
+  { return theChannels.size(); }
+
+int XC::DistributedObj::setChannel(Channel *theC)
+  {
+    theChannels= ChannelQueue(1, theC);
+    return 0;
+  }
+
 int XC::DistributedObj::setChannels(const ChannelQueue &theC)
   {
     theChannels= theC;

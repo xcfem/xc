@@ -15,25 +15,6 @@ extern "C" {
 #endif
 #include "paving.h"
 
-/* Common Block Declarations */
-
-struct {
-    char devnam[6], devcod[16];
-} grpcoc_;
-
-#define grpcoc_1 grpcoc_
-
-struct {
-    integer icurdv;
-    logical ishard, devok[2], talkok[2];
-    integer nsnap[2], ifont[2];
-    logical softch[2], autopl[2];
-    integer maxcol[2], numcol[4]	/* was [2][2] */, mapalt[2], mapuse[2]
-	    ;
-} grpcom_;
-
-#define grpcom_1 grpcom_
-
 /* Table of constant values */
 
 static integer c__201 = 201;

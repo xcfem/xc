@@ -239,6 +239,7 @@ int XC::BandArpackSolver::dsaupd_loop(const int &ncv, const int &nev, ArpackAuxV
     while(1)
       {
         //dsaupd_(&ido, &av.bmat, &n, which.c_str(), &nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv,av.iparam, av.ipntr, &av.workd[0], &av.workl[0], &av.lworkl, &info);
+	std::string which= getWhich();
 	av.dsaupd(ido, n, which, nev, tol, ncv, info);
         if(ido == -1) //Initialization phase
           {
@@ -368,6 +369,7 @@ int XC::BandArpackSolver::solve(void)
             n= theSOE->size;
             av.ldv = n;
 
+	    std::string which= getWhich();
             dseupd_(&rvec, &av.howmy, &av.select[0], av.d.getDataPtr(), av.z.getDataPtr(), &av.ldv, &sigma, &av.bmat, &n,
 		    which.c_str(),&nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv, av.iparam, av.ipntr, &av.workd[0],
                     &av.workl[0], &av.lworkl, &info);
@@ -450,7 +452,8 @@ const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
   {
     if(mode <= 0 || mode > numModes)
       {
-        std::cerr << "BandArpackSOE::getEigenvector() - mode is out of range(1 - nev)";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode is out of range(1 - nev)";
         eigenV.Zero();
         return eigenV;
       }

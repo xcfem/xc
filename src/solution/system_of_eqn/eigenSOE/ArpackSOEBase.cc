@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -25,33 +24,29 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//FactoredSOEBase.h
-                                                                        
-                                                                        
-#ifndef FactoredSOEBase_h
-#define FactoredSOEBase_h
-
-#include "solution/system_of_eqn/linearSOE/LinearSOEData.h"
-
-namespace XC {
-
-//! @ingroup LinearSOE
+// File: ~/system_of_eqn/eigenSOE/ArpackSOEBase.cc
 //
-//! @brief Base class for factored systems of equations.
-class FactoredSOEBase: public LinearSOEData
-  {
-  protected:
-    bool factored; //!< True if the system is factored.
+// Written: Jun Peng 
+// Created: February 1999
+// Revision: A
+//
+// Description: This file contains the class definition for XC::ArpackSOEBase
+// ArpackSOEBase is a subclass of XC::EigenSOE. It uses the LAPACK storage
+// scheme to store the components of the K, M matrix, which is a full matrix.
+// It uses the ARPACK to do eigenvalue analysis.
 
-    FactoredSOEBase(SolutionStrategy *,int classTag,int N= 0);
-  public:
-    inline bool getFactored(void) const
-      { return factored; }
-    void setFactored(bool b)
-      { factored= b; }
-  };
-} // end of XC namespace
+#include <solution/system_of_eqn/eigenSOE/ArpackSOEBase.h>
 
 
-#endif
+//! @brief Constructor.
+XC::ArpackSOEBase::ArpackSOEBase(SolutionStrategy *owr,int classTag, double theShift)
+  :EigenSOE(owr,classTag), shift(theShift) {}
 
+
+//! @brief Returns the value of the shift parameter.
+const double &XC::ArpackSOEBase::getShift(void) const
+  { return shift; }
+
+//! @brief Assigns the value of the shift parameter.
+void XC::ArpackSOEBase::setShift(const double &s)
+  { shift= s; }

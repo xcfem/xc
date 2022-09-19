@@ -80,8 +80,6 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         self.reinforcementInf.code= "infWidth"
         self.reinforcementInf.numReinfBars= self.mainBars.nRebarsWidth
         self.reinforcementInf.barArea= self.mainBars.areaRebarWidth
-        self.reinforcementInf.p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # bottom layer (side -).
-        self.reinforcementInf.p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
         self.reinforcementSup= reinforcement.newStraightReinfLayer(reinfDiagName)
         self.reinforcementSup.code= "supWidth"

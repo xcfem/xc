@@ -448,10 +448,10 @@ const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
         return P;
       }
 
-    const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-    const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
-    const XC::Vector &accel3 = theNodes[2]->getTrialAccel();
-    const XC::Vector &accel4 = theNodes[3]->getTrialAccel();
+    const Vector &accel1 = theNodes[0]->getTrialAccel();
+    const Vector &accel2 = theNodes[1]->getTrialAccel();
+    const Vector &accel3 = theNodes[2]->getTrialAccel();
+    const Vector &accel4 = theNodes[3]->getTrialAccel();
 
     static double a[8];
 
@@ -547,7 +547,7 @@ void XC::FourNodeQuad::Print(std::ostream &s, int flag) const
 
         for(int i=0; i<numNodes(); i++)
           {
-            const XC::Vector &nodeCrd = theNodes[i]->getCrds();
+            const Vector &nodeCrd = theNodes[i]->getCrds();
             //const XC::Vector &nodeDisp = theNodes[i]->getDisp();
             s << "#NODE " << nodeCrd(0) << " " << nodeCrd(1) << " " << std::endl;
           }

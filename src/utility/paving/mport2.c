@@ -15,23 +15,6 @@ extern "C" {
 #endif
 #include "paving.h"
 
-/* Common Block Declarations */
-
-struct {
-    xc_float model[16]	/* was [4][4] */, view[16]	/* was [4][4] */, 
-	    proj[16]	/* was [4][4] */, cpnear, cpfar, vwport[4], mvp[16]	
-	    /* was [4][4] */, vp[16]	/* was [4][4] */, cpline[40]	/* 
-	    was [2][2][10] */, cpplan[60]	/* was [2][3][10] */, peye[3],
-	     plook[3], etwist;
-    integer ncplin, ncplan;
-    xc_float tmat1[16]	/* was [4][4] */, tmat2[16]	/* was [4][4] */, 
-	    tmat3[16]	/* was [4][4] */, tvec1[4], tvec2[4], tvec3[4], tvec4[
-	    4], tarr1[32], tarr2[32], tarr3[32], tarr4[32], tarr5[32], tarr6[
-	    32], tarr7[32], tarr8[32];
-} map_;
-
-#define map_1 map_
-
 /* Table of constant values */
 
 static integer c__2 = 2;

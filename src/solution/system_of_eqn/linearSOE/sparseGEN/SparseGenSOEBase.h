@@ -46,6 +46,10 @@ class SparseGenSOEBase: public SparseSOEBase
     SparseGenSOEBase(SolutionStrategy *,int classTag,int N= 0, int NNZ= 0);
 
   public:
+    const Vector &getA(void) const
+      { return A; }
+    Vector &getA(void)
+      { return A; }
     virtual void zeroA(void);
   };
 } // end of XC namespace

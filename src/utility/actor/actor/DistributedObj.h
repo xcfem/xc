@@ -52,8 +52,10 @@ class DistributedObj: public DistributedBase
     DistributedObj(void);
     DistributedObj(const ChannelQueue &theC);
 
+    int getNumChannels(void) const;
     bool buscaCanal(const Communicator &,int &);
     int setProcessID(int processTag);
+    int setChannel(Channel *);
     int setChannels(const ChannelQueue &theChannels);
   };
 } // end of XC namespace

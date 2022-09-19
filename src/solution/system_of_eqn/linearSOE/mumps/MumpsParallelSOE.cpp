@@ -67,8 +67,7 @@
 #include "utility/actor/actor/Communicator.h"
 
 XC::MumpsParallelSOE::MumpsParallelSOE(SolutionStrategy *owr)
-  : MumpsSOE(owr, LinSOE_TAGS_MumpsParallelSOE), 
-   processID(0)
+  : MumpsSOE(owr, LinSOE_TAGS_MumpsParallelSOE)
   {}
 
 // XC::MumpsParallelSOE::MumpsParallelSOE(SolutionStrategy *owr, MumpsParallelSolver &the_Solver, int _matType)
@@ -84,7 +83,6 @@ XC::SystemOfEqn *XC::MumpsParallelSOE::getCopy(void) const
 
 XC::MumpsParallelSOE::~MumpsParallelSOE()
   {
-    theChannels.clear();
     localCol.clear();
   }
 
@@ -139,7 +137,7 @@ int XC::MumpsParallelSOE::setSize(Graph &theGraph)
 
 	static ID data(1);
 	//FEM_ObjectBroker theBroker;
-	const size_t numChannels= theChannels.size();
+	const size_t numChannels= getNumChannels();
 	for (size_t j=0; j<numChannels; j++)
 	  {
 	    theChannels[j]->recvID(0, 0, data);
@@ -456,6 +454,16 @@ const XC::Vector &XC::MumpsParallelSOE::getB(void) const
     return B;
   }
 
+void XC::MumpsParallelSOE::inicComm(const int &dataSize) const
+  { MumpsSOE::inicComm(dataSize); }
+
+//! @brief Returns a vector to store the dbTags
+//! de los miembros of the clase.
+XC::DbTagData &XC::MumpsParallelSOE::getDbTagData(void) const
+  {
+    return MumpsSOE::getDbTagData(); 
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::MumpsParallelSOE::sendData(Communicator &comm)
   {
@@ -564,21 +572,15 @@ int XC::MumpsParallelSOE::recvSelf(const Communicator &comm)
   }
 
 
-int XC::MumpsParallelSOE::setChannels(const std::vector<Channel *> &channels)
+int XC::MumpsParallelSOE::setChannels(const ChannelQueue &channels)
   {
-    theChannels= channels;
+    int retval= DistributedLinSOE::setChannels(channels);
 
-    const size_t numChannels= theChannels.size();
+    const size_t numChannels= getNumChannels();
     localCol.resize(numChannels);
     for(size_t i=0; i<numChannels; i++)
       localCol[i].clear();
 
-    return 0;
-  }
-
-int XC::MumpsParallelSOE::setProcessID(int dTag) 
-  {
-    processID = dTag;
-    return 0;
+    return retval;
   }
 

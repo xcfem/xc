@@ -44,7 +44,7 @@
 #ifndef SymArpackSOE_h
 #define SymArpackSOE_h
 
-#include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
+#include <solution/system_of_eqn/eigenSOE/ArpackSOEBase.h>
 
 extern "C" {
    #include <solution/system_of_eqn/linearSOE/sparseSYM/FeStructs.h>
@@ -58,7 +58,7 @@ class SymArpackSolver;
 //! @ingroup EigenSOE
 //
 //! @brief Arpack system of equations for symmetric matrices.
-class SymArpackSOE: public ArpackSOE
+class SymArpackSOE: public ArpackSOEBase
   {
   private:
     int nnz; // number of non-zeros in A
@@ -88,8 +88,6 @@ class SymArpackSOE: public ArpackSOE
     virtual int addM(const Matrix &, const ID &, double fact = 1.0);    
       
     virtual void zeroA(void);
-    virtual void zeroM(void);
-    virtual void identityM(void);
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

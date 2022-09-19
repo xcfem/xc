@@ -48,7 +48,25 @@
 
 //! @brief Constructor.
 XC::EigenSolver::EigenSolver(const int &classTag,const int &nModes)
-  :Solver(classTag), numModes(nModes), which("LM") {}
+  : Solver(classTag), numModes(nModes), generalized(true), findSmallest(true) {}
+
+
+//! @brief Return a string identified which eigen values to compute;
+//! LM: compute the largest eigenvalues, SM: compute the smallest eigenvalues.
+//! @param shiftInvertMode: if true use shift invert mode to compute eigenvalues.
+std::string XC::EigenSolver::getWhich(const bool &shiftInvertMode) const
+  {
+    if(shiftInvertMode) //Shift-invert mode technique.
+      if(findSmallest)
+	return "LM";
+      else
+	return "SM";
+    else
+      if(findSmallest)
+	return "SM";
+      else
+	return "LM";
+  }
 
 int XC::EigenSolver::solve(int nEigen)
   {

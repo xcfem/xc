@@ -172,8 +172,9 @@ int XC::EigenIntegrator::formM(void)
       {     
 	if(theSOE->addM(elePtr->getTangent(this), elePtr->getID()) < 0)
           {
-	    std::cerr << "WARNING EigenIntegrator::formM -";
-	    std::cerr << " failed in addM for ID " << elePtr->getID();	    
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; failed in addM for ID "
+		      << elePtr->getID() << std::endl;	    
 	    result = -2;
 	  }
       }
