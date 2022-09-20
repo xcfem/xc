@@ -73,8 +73,6 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         self.defConcreteRegion(self.geomSection)
 
         reinforcement= sectionGeom.getReinfLayers
-        p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # bottom layer (side -).
-        p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
         self.reinforcementInf= reinforcement.newStraightReinfLayer(reinfDiagName)
         self.reinforcementInf.code= "infWidth"

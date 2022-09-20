@@ -9,9 +9,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-import scipy.interpolate
-from materials import steel_base
-from misc_utils import log_messages as lmsg
+# import scipy.interpolate # Not needed yet.
+# from materials import steel_base # Not needed yet.
+# from misc_utils import log_messages as lmsg # Not needed yet.
 from materials.ec3 import EC3_materials
 
 class EA95Steel(EC3_materials.EC3Steel):

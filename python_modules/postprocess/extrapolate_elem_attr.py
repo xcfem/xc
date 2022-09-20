@@ -105,7 +105,6 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
     #Calculate totals.
     for e in elemSet:
         elemNodes= e.getNodes
-        value= None
         if(argument):
             values= function(e, argument)
         else:

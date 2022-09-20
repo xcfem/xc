@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 
-import sys
+# import sys # Not needed yet.
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd

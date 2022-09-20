@@ -535,7 +535,7 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
             for elemId in elements.keys():
                 tagElem= eval(elemId)
                 elementData= elements[elemId]
-                elementType= elementData['type']
+                #elementType= elementData['type']
                 internalForces= elementData['internalForces']
                 for k in internalForces.keys():
                     idSection= eval(k)
@@ -558,7 +558,7 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
                 tagElem= eval(elemId)
                 if(tagElem in setElTags): # search element tag
                     elementData= elements[elemId]
-                    elementType= elementData['type']
+                    #elementType= elementData['type']
                     internalForces= elementData['internalForces']
                     for k in internalForces.keys():
                         idSection= eval(k)
