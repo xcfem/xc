@@ -17,12 +17,12 @@ coordSoilSurf=[[0,0],
                   [3,3],
                   [4,0]] #list of coordinates [[yp1,z1],[yp2,z2], ...] that defines the soil surface, where yp are the y coordinates of the vertices of a transversal section in the surface, expressed in the rotated reference system.
 
-theta=0 # angle counterclockwise in degrees that forms the axis of the strip of soil-filling with the global X-axis
-soil0=ep.WeightDistrFilling(gammaSoil,theta,coordSoilSurf)
+theta=0 # angle counterclockwise in degrees that forms the axis of the strip of embankment with the global X-axis
+soil0=ep.WeightDistrEmbankment(gammaSoil,theta,coordSoilSurf,xcSet=None)
 theta=90
-soil90=ep.WeightDistrFilling(gammaSoil,theta,coordSoilSurf)
+soil90=ep.WeightDistrEmbankment(gammaSoil,theta,coordSoilSurf,xcSet=None)
 theta=45
-soil45=ep.WeightDistrFilling(gammaSoil,theta,coordSoilSurf)
+soil45=ep.WeightDistrEmbankment(gammaSoil,theta,coordSoilSurf,xcSet=None)
 
 #strip parallel to Y-axis
 x0=[0.5,2,3.5]

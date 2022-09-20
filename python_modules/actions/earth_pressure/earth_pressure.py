@@ -430,9 +430,10 @@ class EarthPressureSlopedWall(object):
                 e.vector3dUniformLoadGlobal(loadVector)
 
 
-class WeightDistrFilling(object):
+class WeightDistrEmbankment(object):
     '''Distribution of pressure on a set of shells due to the weight of a
-       soil-filling. The surface of the soil-filling is a a strip defined
+       the soil on the shell elements. 
+       The surface of the embankment is a a strip defined
        by the angle that its transversal section forms with the X global axis 
        (counterclockwise) and a list of coordinates [[xp1,z1],[xp2,z2], ...],
        where xp coordinates are expressed in a coordinate system obtained 
@@ -440,13 +441,14 @@ class WeightDistrFilling(object):
 
     :ivar gammaSoil: weight density of the soil
     :ivar theta: angle counterclockwise in degrees that forms the axis of
-                 the strip of soil-filling with the global X-axis
+                 the embankment with the global X-axis
     :ivar coordSoilSurf: list of coordinates [[xp1,z1],[xp2,z2], ...] 
           that defines the soil surface, where xp are the x coordinates of the
           vertices of a transversal section in the surface, expressed in 
           the rotated reference system.
+    :ivar xcSet: set of elements to which apply the loads
     '''
-    def __init__(self,gammaSoil,theta,coordSoilSurf):
+    def __init__(self,gammaSoil,theta,coordSoilSurf,xcSet):
         self.gammaSoil=gammaSoil
         self.theta=theta
         self.coordSoilSurf=sorted(coordSoilSurf)
@@ -454,6 +456,7 @@ class WeightDistrFilling(object):
         self.xpmin=coordSoilSurf[0][0]
         self.xpmax=coordSoilSurf[-1][0]
         self.xpList=[self.coordSoilSurf[i][0] for i in range(len(self.coordSoilSurf))]
+        self.xcSet=xcSet
 
     def getPressure(self,x,y,z):
         xp=x*math.cos(self.thetarad)+y*math.sin(self.thetarad)
@@ -467,8 +470,8 @@ class WeightDistrFilling(object):
             ret_press=0.0
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet):
-        for e in xcSet.elements:
+    def appendLoadToCurrentLoadPattern(self):
+        for e in self.xcSet.elements:
             coo=e.getCooCentroid(False)
             presElem=self.getPressure(coo[0],coo[1],coo[2])
             loadVector= xc.Vector([0,0,-presElem])
