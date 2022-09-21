@@ -440,8 +440,8 @@ class WeightDistrEmbankment(object):
        rotating theta degrees the global system.
 
     :ivar gammaSoil: weight density of the soil
-    :ivar theta: angle counterclockwise in degrees that forms the axis of
-                 the embankment with the global X-axis
+    :ivar theta: angle counterclockwise in degrees that forms the transversal
+                 section of the embankment with the global X-axis
     :ivar coordSoilSurf: list of coordinates [[xp1,z1],[xp2,z2], ...] 
           that defines the soil surface, where xp are the x coordinates of the
           vertices of a transversal section in the surface, expressed in 
