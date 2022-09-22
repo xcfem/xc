@@ -283,10 +283,11 @@ class DisplaySettings(object):
     def closeWindow(self, iren):
         ''' Close the current render window.'''
         iren.SetRenderWindow(None)
-        self.renWin.ShowWindowOff()
+        # 20220922 Apparently "ShowWindowOff" method has been deprecated.
+        if(hasattr(self.renWin,"ShowWindowOff")):
+            self.renWin.ShowWindowOff()
         self.renWin.Finalize()
         iren.TerminateApp()
-        #del self.renWin, iren
         
     def displayScene(self,caption= '', fileName= None):
         ''' Displaying scene
