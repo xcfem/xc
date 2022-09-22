@@ -96,10 +96,5 @@ else:
 # oh.displayBlocks()#setToDisplay= )
 # oh.displayFEMesh()#setsToDisplay=[])
 # oh.displayLocalAxes()
-# oh.displayLoads()
-# oh.displayReactions()
-# oh.displayDispRot(itemToDisp='uX')
-# oh.displayDispRot(itemToDisp='uY')
-# oh.displayDispRot(itemToDisp='uZ')
 
 
