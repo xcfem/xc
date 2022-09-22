@@ -552,6 +552,12 @@ class IShape(SteelShape):
     def h(self):
         '''Return shape height.'''
         return self.get('h')
+
+    def hCOG(self):
+        '''Return distance from the bottom fiber of the inferior flange to the 
+        centre of gravity of the section.
+        '''
+        return self.h()/2.0
       
     def tf(self):
         '''Return flange thickess'''
@@ -734,6 +740,7 @@ class CHShape(SteelShape):
 
     
 class UShape(SteelShape):
+    ''' Channel (or U) shaped structural steel section.'''
     def __init__(self,steel,name,table):
         ''' Constructor.
 
@@ -756,6 +763,12 @@ class UShape(SteelShape):
     def h(self):
         '''Return shape height.'''
         return self.get('h')
+
+    def hCOG(self):
+        '''Return distance from the bottom fiber of the inferior flange to the 
+        centre of gravity of the section.
+        '''
+        return self.h()/2.0
       
     def d(self):
         '''Return internal web height.'''

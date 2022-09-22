@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Cantilever under vertical load at his end.'''
+''' Home made test. Test Arcelor structural steel shapes properties.'''
 
 from __future__ import print_function
 
