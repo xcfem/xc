@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+'''Mononobe-Okabe theory.'''
 
 from __future__ import division
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2022, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
-
-'''Mononobe-Okabe theory.'''
 
 def theta_values(kh, kv):
     ''' Return the values of the auxiliary angle theta for the case of water
@@ -29,7 +33,8 @@ def active_earth_pressure_coefficient_Kad(psi, phi, theta, delta_ad,beta):
            - kh= seismic coefficient of horizontal acceleration.
            - tan(theta)= kh/(1+kv) AND tan(theta)= kh/(1-kv)
         :param delta_ad: angle of friction soil - structure.
-        :param beta: slope inclination of terrain.'''
+        :param beta: slope inclination of terrain.
+    '''
     num= (math.sin(psi+phi-theta))**2
     denom1= math.cos(theta)*(math.sin(psi))**2*math.sin(psi-theta-delta_ad)
     if(beta<=theta):
