@@ -148,7 +148,7 @@ class PeckPressureEnvelope(EarthPressureBase):
         if(z<self.zGround):
             ret_press=0.65*self.K*self.gammaSoil*self.H
             if(z<self.zWater):
-              lmsg.error('pressures under water table not implemented.''')
+              lmsg.error('pressures under water table not implemented.')
         return ret_press
 
 class UniformLoadOnStem(PressureModelBase):
@@ -409,7 +409,6 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         return maxValue
                                                   
                                                   
-
 class MononobeOkabePressureDistribution(EarthPressureBase):
     '''Overpressure due to seismic action according to Mononobe-Okabe
 
