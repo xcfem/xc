@@ -165,6 +165,7 @@ python tests/utility/soil_mechanics/test_boussinesq.py
 python tests/utility/soil_mechanics/test_cohesive_soil_01.py
 python tests/utility/soil_mechanics/test_mononobe_okabe_01.py
 python tests/utility/soil_mechanics/test_mononobe_okabe_02.py
+python tests/utility/soil_mechanics/test_iskander_01.py
 
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
