@@ -1,11 +1,11 @@
 from __future__ import division
 from __future__ import print_function
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2016, LCPT and AO_O"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
+__email__= "ana.Ortega@ciccp.es" "l.pereztato@ciccp.es" 
 
 import math
 from actions.earth_pressure import earth_pressure as ep
