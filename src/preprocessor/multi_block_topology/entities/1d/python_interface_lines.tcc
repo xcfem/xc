@@ -35,6 +35,7 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
   .add_property("getVertices",&XC::Edge::getVerticesPy,"Return the vertices")
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
+  .def("getVertex",make_function(&XC::Edge::getVertex, return_internal_reference<>()),"Return i-th vertex.")
   .def("getLength", &XC::Edge::getLength,"Return the length of the edge.")
   .def("getElemSize", &XC::Edge::getElemSize,"Return the element size.")
   .def("getCentroid", &XC::Edge::getCentroid,"Return the centroid of the edge.")

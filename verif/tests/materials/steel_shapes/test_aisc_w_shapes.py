@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
+''' Test properties of AISC W shapes.'''
+
 from __future__ import print_function
-from materials import typical_materials
-from materials.sections.structural_shapes import aisc_metric_shapes
-from sympy.physics import units
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from materials import typical_materials
+from materials.sections.structural_shapes import aisc_metric_shapes
+from sympy.physics import units
+
 
 ratio1= 10
 ratio2= 10

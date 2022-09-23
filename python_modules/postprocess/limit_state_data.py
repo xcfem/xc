@@ -586,8 +586,8 @@ def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
                     means that all the elements in the file of internal forces
                     results are analyzed) 
     '''
-    errMsg= 'oldReadIntForcesFile will be deprecated soon.'
-    #lmsg.error(errMsg)
+    # errMsg= 'oldReadIntForcesFile will be deprecated soon.'
+    # lmsg.error(errMsg)
     elementTags= set()
     idCombs= set()
     f= open(intForcCombFileName,"r")

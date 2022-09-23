@@ -15,7 +15,6 @@ from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
 from misc_utils import log_messages as lmsg
 import geom
-import materials
 from model import model_inquiry
 
 
@@ -389,7 +388,7 @@ class SteelShape(sp.SectionProperties):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        sectionClass= elem.getProp('sectionClass')
+        # sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
         chiN= elem.getProp('chiN') # Axial strength reduction factor.
         [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
@@ -552,6 +551,12 @@ class IShape(SteelShape):
     def h(self):
         '''Return shape height.'''
         return self.get('h')
+
+    def hCOG(self):
+        '''Return distance from the bottom fiber of the inferior flange to the 
+        centre of gravity of the section.
+        '''
+        return self.h()/2.0
       
     def tf(self):
         '''Return flange thickess'''
@@ -611,6 +616,11 @@ class IShape(SteelShape):
         return c/t
         
     def discretization(self,preprocessor,matModelName):
+        ''' Discretize the section into tiles.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matModelName: name for the new material.
+        '''
         self.sectionGeometryName= 'gm'+self.get('nmb')
         self.gm= preprocessor.getMaterialHandler.newSectionGeometry(self.sectionGeometryName)
         regions= self.gm.getRegions
@@ -618,17 +628,22 @@ class IShape(SteelShape):
             reg= regions.newQuadRegion(matModelName)
             reg.pMin= r[0]
             reg.pMax= r[1]
-            numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
+            unusedNumberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
         return self.gm
 
     def getFiberSection3d(self,preprocessor,matModelName):
-        reg= self.discretization(preprocessor,matModelName)
+        ''' Return a FiberSection3d material.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matModelName: name for the new material.
+        '''
+        unusedReg= self.discretization(preprocessor,matModelName)
         self.fiberSection3dName= 'fs3d'+self.get('nmb')
         self.fiberSection3d= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d",self.fiberSection3dName)
         fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
         fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
         self.fiberSection3d.setupFibers()
-        fibras= self.fiberSection3d.getFibers()
+        unusedFibers= self.fiberSection3d.getFibers()
         return self.fiberSection3d
 
 
@@ -734,6 +749,7 @@ class CHShape(SteelShape):
 
     
 class UShape(SteelShape):
+    ''' Channel (or U) shaped structural steel section.'''
     def __init__(self,steel,name,table):
         ''' Constructor.
 
@@ -756,6 +772,12 @@ class UShape(SteelShape):
     def h(self):
         '''Return shape height.'''
         return self.get('h')
+
+    def hCOG(self):
+        '''Return distance from the bottom fiber of the inferior flange to the 
+        centre of gravity of the section.
+        '''
+        return self.h()/2.0
       
     def d(self):
         '''Return internal web height.'''

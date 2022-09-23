@@ -202,6 +202,7 @@ python tests/actions/thermal/test_iap_thermal.py
 echo "$BLEU" "  Traffic loads tests." "$NORMAL"
 python tests/actions/traffic_loads/test_derailment_SIA.py
 python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
+python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
