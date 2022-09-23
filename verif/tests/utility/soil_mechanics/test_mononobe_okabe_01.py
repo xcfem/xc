@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Test active earth pressure coefficient values according to Mononobe-Okabe.
+Home-made test.'''
 
 from __future__ import division
 from __future__ import print_function

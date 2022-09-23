@@ -155,7 +155,6 @@ python tests/utility/geom/ezdxf_test_01.py
 
 ## Soil mechanics (basic utilities)
 echo "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
-python tests/utility/soil_mechanics/test_mononobe_okabe.py
 python tests/utility/soil_mechanics/test_coulomb.py
 python tests/utility/soil_mechanics/test_janssen_limited_backfill_widht.py
 python tests/utility/soil_mechanics/test_rankine.py
@@ -164,6 +163,8 @@ python tests/utility/soil_mechanics/test_brinch_hansen02.py
 python tests/utility/soil_mechanics/test_stratified_soil.py
 python tests/utility/soil_mechanics/test_boussinesq.py
 python tests/utility/soil_mechanics/test_cohesive_soil_01.py
+python tests/utility/soil_mechanics/test_mononobe_okabe_01.py
+python tests/utility/soil_mechanics/test_mononobe_okabe_02.py
 
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"

@@ -148,7 +148,9 @@ class PeckPressureEnvelope(EarthPressureBase):
         if(z<self.zGround):
             ret_press=0.65*self.K*self.gammaSoil*self.H
             if(z<self.zWater):
-              lmsg.error('pressures under water table not implemented.')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; pressures under water table not implemented.')
         return ret_press
 
 class UniformLoadOnStem(PressureModelBase):
