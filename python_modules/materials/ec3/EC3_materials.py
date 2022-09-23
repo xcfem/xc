@@ -16,7 +16,6 @@ from materials import steel_base
 from materials import typical_materials
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from misc_utils import log_messages as lmsg
-from materials.sections import structural_steel
 from connections.steel_connections import bolts
 
 class EC3Steel(steel_base.BasicSteel):

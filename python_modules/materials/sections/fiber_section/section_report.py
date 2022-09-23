@@ -12,10 +12,8 @@ import sys
 import math
 import os
 from misc.latex import latex_utils
-from postprocess.reports import graph_material as mg
 from postprocess.reports import common_formats as cf
 from materials.sections.fiber_section import plot_fiber_section as pfs
-from materials.sections import section_properties as prmRect
 from materials.sections.fiber_section import  def_simple_RC_section as sHAs
 from misc_utils import log_messages as lmsg
 
