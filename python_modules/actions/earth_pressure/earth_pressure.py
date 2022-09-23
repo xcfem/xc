@@ -19,6 +19,7 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import math
 import xc
+import geom
 from misc_utils import log_messages as lmsg
 from geotechnics import mononobe_okabe
 from model.sets import sets_mng as sets
@@ -287,6 +288,61 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
         maxEstValue=self.getPressure(zcontrol)
         return maxEstValue
 
+class PointVerticalLoadOnBackfill(object):
+    '''Lateral earth pressure on a retaining wall due to a point 
+    load acting in vertical direction on the backfill. (J.Calavera)
+
+    :ivar xcSet: set of elements to which apply the loads
+    :ivar Qload: value of the point load 
+    :ivar loadAppPnt: load application point (xc.Vector([x,y,z])
+    :ivar zBaseWall: global Z coordinate of the base of the wall
+    :ivar distWall: horizontal distance between the wall and the point 
+                    load
+    :ivar vdir: xc unit vector prependicular to the wall pointing to its back
+                (xc.Vector([ux,uy,0])
+    '''
+    def __init__(self,xcSet,Qload, loadAppPnt,zBaseWall,distWall,vdir):
+        self.xcSet=xcSet
+        self.Qload=Qload
+        self.loadAppPnt=loadAppPnt
+        self.zBaseWall=zBaseWall
+        self.distWall=distWall
+        self.vdir=vdir
+        
+    def getAngPsi(self,x,y):
+        '''Return the angle used to distribute pressures horizontally'''
+        auxV=geom.Vector2d(x-self.loadAppPnt[0],y-self.loadAppPnt[1])
+        auxVperp=geom.Vector2d(self.vdir[0],self.vdir[1])
+        angPsi=auxV.getAngle(auxVperp)
+        return angPsi 
+        
+    def getPressure(self,x,y,z):
+        '''Return the earth pressure acting on the point of the wall
+           placed at global coordinates (x,y,z)
+        '''
+        ret_press=0.0
+        difZ=self.loadAppPnt[2]-z
+        if difZ>0:
+            H=self.loadAppPnt[2]-self.zBaseWall
+            n=difZ/H
+            m=abs(self.distWall)/H
+            if m < 0.4:
+                PN0=0.28*(self.Qload/(H)**2)*(n**2/(0.16+n**2)**3)
+            else:
+                PN0=1.77*(self.Qload/(H)**2)*(m**2*n**2/(m**2+n**2)**3)
+            psi=self.getAngPsi(x,y)
+            ret_press=PN0*(math.cos(psi))**2
+        return ret_press
+    
+    def appendLoadToCurrentLoadPattern(self):
+        for e in self.xcSet.elements:
+            coo=e.getCooCentroid(False)
+            presElem=self.getPressure(coo[0],coo[1],coo[2])
+            loadVector= presElem*self.vdir
+            if(presElem!=0.0):
+                e.vector3dUniformLoadGlobal(loadVector)
+
+
 class HorizontalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to a surcharge 
     load acting in horizontal direction on the backfill. 
@@ -353,6 +409,7 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         return maxValue
                                                   
                                                   
+
 class MononobeOkabePressureDistribution(EarthPressureBase):
     '''Overpressure due to seismic action according to Mononobe-Okabe
 
@@ -380,6 +437,7 @@ class MononobeOkabePressureDistribution(EarthPressureBase):
     def update(self):
         self.overpressure_dry= mononobe_okabe.overpressure_dry(self.H, self.gammaSoil, self.kv, self.kh, self.psi, self.phi, self.delta_ad, self.beta, self.Kas)
         self.max_stress= 2*self.overpressure_dry/self.H
+        
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z
         '''
@@ -439,6 +497,7 @@ class WeightDistrEmbankment(object):
        where xp coordinates are expressed in a coordinate system obtained 
        rotating theta degrees the global system.
 
+    :ivar xcSet: set of elements to which apply the loads
     :ivar gammaSoil: weight density of the soil
     :ivar theta: angle counterclockwise in degrees that forms the transversal
                  section of the embankment with the global X-axis
@@ -446,9 +505,9 @@ class WeightDistrEmbankment(object):
           that defines the soil surface, where xp are the x coordinates of the
           vertices of a transversal section in the surface, expressed in 
           the rotated reference system.
-    :ivar xcSet: set of elements to which apply the loads
     '''
-    def __init__(self,gammaSoil,theta,coordSoilSurf,xcSet):
+    def __init__(self,xcSet,gammaSoil,theta,coordSoilSurf):
+        self.xcSet=xcSet
         self.gammaSoil=gammaSoil
         self.theta=theta
         self.coordSoilSurf=sorted(coordSoilSurf)
@@ -456,7 +515,6 @@ class WeightDistrEmbankment(object):
         self.xpmin=coordSoilSurf[0][0]
         self.xpmax=coordSoilSurf[-1][0]
         self.xpList=[self.coordSoilSurf[i][0] for i in range(len(self.coordSoilSurf))]
-        self.xcSet=xcSet
 
     def getPressure(self,x,y,z):
         xp=x*math.cos(self.thetarad)+y*math.sin(self.thetarad)

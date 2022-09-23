@@ -1,11 +1,11 @@
 from __future__ import division
 from __future__ import print_function
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2016, LCPT and AO_O"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
+__email__= "ana.Ortega@ciccp.es" "l.pereztato@ciccp.es" 
 
 import math
 from actions.earth_pressure import earth_pressure as ep
@@ -18,11 +18,11 @@ coordSoilSurf=[[0,0],
                   [4,0]] #list of coordinates [[yp1,z1],[yp2,z2], ...] that defines the soil surface, where yp are the y coordinates of the vertices of a transversal section in the surface, expressed in the rotated reference system.
 
 theta=0 # angle counterclockwise in degrees that forms the axis of the strip of embankment with the global X-axis
-soil0=ep.WeightDistrEmbankment(gammaSoil,theta,coordSoilSurf,xcSet=None)
+soil0=ep.WeightDistrEmbankment(xcSet=None,gammaSoil=gammaSoil,theta=theta,coordSoilSurf=coordSoilSurf)
 theta=90
-soil90=ep.WeightDistrEmbankment(gammaSoil,theta,coordSoilSurf,xcSet=None)
+soil90=ep.WeightDistrEmbankment(xcSet=None,gammaSoil=gammaSoil,theta=theta,coordSoilSurf=coordSoilSurf)
 theta=45
-soil45=ep.WeightDistrEmbankment(gammaSoil,theta,coordSoilSurf,xcSet=None)
+soil45=ep.WeightDistrEmbankment(xcSet=None,gammaSoil=gammaSoil,theta=theta,coordSoilSurf=coordSoilSurf)
 
 #strip parallel to Y-axis
 x0=[0.5,2,3.5]
