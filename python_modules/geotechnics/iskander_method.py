@@ -15,7 +15,7 @@ import numpy as np
 
 class Iskander(object):
     ''' Calculation of Active static and seismic earth pressure for cohesive 
-        soils according to the    article cited below.
+        soils according to the article cited below.
 
     :ivar kh: horizontal seismic coefficient.
     :ivar kv: vertical seismic coefficient.
