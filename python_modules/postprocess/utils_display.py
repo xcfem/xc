@@ -18,7 +18,6 @@ from postprocess.xcVtk.fields import fields
 from postprocess.control_vars import *
 
 import matplotlib.pyplot as plt
-import numpy as np
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 def convert_to_eps(fileName, epsFileName):
