@@ -12,7 +12,6 @@ __email__= "ana.Ortega@ciccp.es"
 import sys
 import geom
 import xc
-from actions.earth_pressure import earth_pressure as ep
 from model.sets import sets_mng as sets
 from misc_utils import log_messages as lmsg
 import numpy as np
@@ -178,9 +177,9 @@ class UniformLoadOnLines(BaseVectorLoad):
             lnInfl.append((p2.dist(p1))/2.0)
 #            lnInfl.append((sortNod[len(sortNod)-2].getInitialPos3d).dist(sortNod[len(sortNod)-1].getInitialPos3d)/2.0)
             for i in range(len(sortNod)):
-                n=sortNod[i]
-                load=lnInfl[i]*self.loadVector
-                sortNod[i].newLoad(lnInfl[i]*self.loadVector)
+                n= sortNod[i]
+                load= lnInfl[i]*self.loadVector
+                n.newLoad(load)
 
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
@@ -396,7 +395,6 @@ class StrainLoadOnShells(object):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
         prep=self.xcSet.getPreprocessor
-        lcm=load_cases.LoadCaseManager(prep)
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
         for e in self.xcSet.elements:
@@ -418,7 +416,6 @@ class StrainLoadOnBeams(object):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
         prep=self.xcSet.getPreprocessor
-        lcm=load_cases.LoadCaseManager(prep)
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
         pDef= xc.DeformationPlane(self.strain)
@@ -439,7 +436,6 @@ class StrainLoadOnTrusses(object):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
         prep=self.xcSet.getPreprocessor
-        lcm=load_cases.LoadCaseManager(prep)
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
         for e in self.xcSet.elements:
@@ -471,7 +467,6 @@ class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
         prep=self.elemSet.getPreprocessor
-        lcm=load_cases.LoadCaseManager(prep)
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
         for e in self.elemSet.elements:

@@ -283,7 +283,6 @@ class FreeCADImport(reader_base.ReaderBase):
                     import_wire(obj, attributes)
                 elif(shapeType=='Compound'):
                     for cCount, ss in enumerate(obj.Shape.SubShapes):
-                        ssType= ss.ShapeType
                         ssName= f'{obj.Name}.{cCount}'
                         edges= ss.Edges
                         names= list()
@@ -337,13 +336,6 @@ class FreeCADImport(reader_base.ReaderBase):
             properties= bte.BlockProperties(labels= [objLabel], attributes= faceAttributes)
             self.propertyDict[faceName]= properties
             
-
-        def import_shell(shapeContainer, faceName, objLabel):
-            ''' Import shell objects from the container argument.'''
-            for fCount, f in enumerate(shapeContainer):
-                thisFaceName= f'{faceName}.{fCount}'
-                import_face(f, thisFaceName, objLabel)
-
         def import_shape(shape, objName, objLabel):
             ''' Import simple shape.'''
             shapeType= shape.ShapeType

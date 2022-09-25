@@ -10,7 +10,7 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 from materials import typical_materials
-from misc_utils import log_messages as lmsg
+#from misc_utils import log_messages as lmsg
 
 class BasicSteel(typical_materials.BasicElasticMaterial):
     '''Base class for structural steels.
