@@ -41,22 +41,19 @@ P_AEH2= figure5.P_AEH2() # Pragmatic value of the horizontal lateral
 
 earthPressure= figure5.getStressDistribution2()
 
+# Compute pressure diagram and store it in a polygon.
 zi= [1e-4, 3, 6, 9, 12, 15, figure5.Hl()]
-pi= list()
 points= list()
-points.append(geom.Pos2d(figure5.Hl(),0.0))
-points.append(geom.Pos2d(0.0,0.0))
+points.append(geom.Pos2d(figure5.Hl(),0.0)) # Diagram origin.
+points.append(geom.Pos2d(0.0,0.0)) # Top vertex.
 for z in zi:
-    pressure= float(earthPressure(z))
-    pi.append(pressure)
-    points.append(geom.Pos2d(z,pressure))
+    points.append(geom.Pos2d(z,float(earthPressure(z))))
 
+# Store the diagram in a polygon.
 plg= geom.Polygon2d(points)
-plgArea= plg.getArea()
-plgCentroid= plg.getCenterOfMass()
+plgArea= plg.getArea() # Compute diagram area.
+plgCentroid= plg.getCenterOfMass() # Compute diagram center of mass.
 hCentroid= (figure5.Hl()-plgCentroid.x)
-
-    
 
 ratio1= abs(Hp2-5.320888862379561)/5.320888862379561
 ratio2= abs(P_AEH2-1726.786768897252e3)/1726.786768897252e3
