@@ -65,9 +65,14 @@ class EarthPressureBase(PressureModelBase):
     '''Parameters to define a load of type earth pressure
 
       :ivar zGround:   global Z coordinate of ground level
-      :ivar gammaSoil: weight density of soil 
+      :ivar gammaSoil: weight density of soil .
     '''
     def __init__(self, zGround, gammaSoil):
+        ''' Constructor.
+
+        :param zGround:   global Z coordinate of ground level
+        :param gammaSoil: weight density of soil 
+        '''
         super(EarthPressureBase,self).__init__()
         self.zGround= zGround
         self.gammaSoil= gammaSoil
@@ -88,7 +93,21 @@ class EarthPressureModel(PressureModelBase):
       :ivar gammaWater: weight density of water
       :ivar qUnif: uniform load over the backfill surface (defaults to 0)
     '''
-    def __init__(self, zGround, zBottomSoils,KSoils,gammaSoils, zWater, gammaWater,qUnif=0):
+    def __init__(self, zGround, zBottomSoils, KSoils, gammaSoils, zWater, gammaWater,qUnif=0):
+        ''' Constructor.
+
+        :param zGround: global Z coordinate of ground level
+        :param zBottomSoils: list of global Z coordinates of the bottom level
+              for each soil (from top to bottom)
+        :param KSoils: list of pressure coefficients for each soil (from top 
+              to bottom)
+        :param gammaSoils: list of weight density for each soil (from top to
+              bottom)
+        :param zWater: global Z coordinate of groundwater level 
+              (if zGroundwater<minimum z of model => there is no groundwater)
+        :param gammaWater: weight density of water
+        :param qUnif: uniform load over the backfill surface (defaults to 0)
+        '''
         super(EarthPressureModel,self).__init__()
         self.zGround= zGround
         self.zBottomSoils= zBottomSoils
@@ -110,7 +129,9 @@ class EarthPressureModel(PressureModelBase):
         self.qUnif=qUnif
 
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z.'''
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
+        '''
         ret_press=0
         if z <= self.zGround:
             self.zTopLev.reverse()
@@ -132,10 +153,19 @@ class PeckPressureEnvelope(EarthPressureBase):
         of cuts in sand. See 10.2 in the book "Principles of Foundation
         Engineering" from Braja M. Das.
 
-      :ivar H:         height of the cut.
-      :ivar phi:       effective friction angle of sand.
+      :ivar H: height of the cut.
+      :ivar phi: effective friction angle of sand.
     '''
     def __init__(self,phi , zGround, gammaSoil, zWater, gammaWater, H):
+        ''' Constructor.
+
+        :param phi: effective friction angle of sand.
+        :param zGround: global Z coordinate of ground level.
+        :param gammaSoil: weight density of soil.
+        :param zWater: global Z coordinate of groundwater level.
+        :param gammaWater: weight density of water
+        :param H: height of the cut.
+        '''
         self.K= math.tan(math.pi/4.0-phi/2.0)**2 # Rankine active pressure coefficient.
         self.zWater=zWater
         self.gammaWater=gammaWater
@@ -156,28 +186,41 @@ class PeckPressureEnvelope(EarthPressureBase):
 class UniformLoadOnStem(PressureModelBase):
     '''Uniform lateral earth pressure on a retaining wall.
 
-    :ivar qLoad: surcharge load (force per unit area)
+    :ivar qLoad: surcharge load (force per unit area).
     '''
     def __init__(self,qLoad):
+        ''' Constructor.
+
+        :param qLoad: surcharge load (force per unit area).
+        '''
         super(UniformLoadOnStem,self).__init__()
         self.qLoad=qLoad
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z.'''
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
+        '''
         return self.qLoad
 
 class UniformLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a uniform indefinite
        load on the backfill.
 
-    :ivar qLoad: surcharge load (force per unit area)
+    :ivar K: pressure coefficient.
     '''
     def __init__(self,K, qLoad):
+        ''' Constructor.
+
+        :param K: pressure coefficient.
+        :param qLoad: surcharge load (force per unit area).
+        '''
         super(UniformLoadOnBackfill,self).__init__(qLoad)
         self.K= K
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z.'''
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
+        '''
         return self.K*self.qLoad
 
 class StripLoadOnBackfill(UniformLoadOnStem):
@@ -192,6 +235,13 @@ class StripLoadOnBackfill(UniformLoadOnStem):
                 walls. It can be redefined =2 for rigid walls
     '''
     def __init__(self,qLoad, zLoad,distWall, stripWidth):
+        ''' Constructor.
+
+        :param qLoad: surcharge load (force per unit area).
+        :param distWall: minimal horizontal distance between the wall and the 
+                        surcharge load
+        :param stripWidth: width of the strip
+        '''
         super(StripLoadOnBackfill,self).__init__(qLoad)
         self.zLoad=zLoad
         self.distWall=abs(distWall)
@@ -199,7 +249,8 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         self.coef=1.5
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
         '''
         ret_press=0.0
         difZ=self.zLoad-z
@@ -248,9 +299,12 @@ class StripLoadOnBackfill(UniformLoadOnStem):
 
     def getMaxMagnitude(self,xcSet):
         '''Return an estimation of the maximum magnitude of the vector loads 
-        (it's supposed to occur in a point placed 1/3L from the top)'''
-        zmin=sets.get_min_coo_nod(xcSet,2)
-        zmax=sets.get_max_coo_nod(xcSet,2)
+        (it's supposed to occur in a point placed 1/3L from the top)
+
+        :param xcSet: set containing the elements.
+        '''
+        zmin= sets.get_min_coo_nod(xcSet,2)
+        zmax= sets.get_max_coo_nod(xcSet,2)
         zcontrol=zmin+2/3.*(zmax-zmin)
         maxEstValue=self.getPressure(zcontrol)
         return maxEstValue
@@ -266,13 +320,21 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
                     surcharge load
     '''
     def __init__(self,qLoad, zLoad,distWall):
+        ''' Constructor.
+
+        :param qLoad: surcharge load (force per unit length)
+        :param zLoad: global Z coordinate where the line load acts
+        :param distWall: horizontal distance between the wall and the line 
+                        surcharge load
+        '''
         super(LineVerticalLoadOnBackfill,self).__init__()
         self.qLoad=qLoad
         self.zLoad=zLoad
         self.distWall=abs(distWall)
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
         '''
         ret_press=0.0
         difZ=self.zLoad-z
@@ -283,7 +345,10 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
 
     def getMaxMagnitude(self,xcSet):
         '''Return an estimation of the maximum magnitude of the vector loads 
-        (it's supposed to occur in a point placed 1/3L from the top)'''
+        (it's supposed to occur in a point placed 1/3L from the top).
+
+        :param xcSet: set containing the elements.
+        '''
         zmin=sets.get_min_coo_nod(xcSet,2)
         zmax=sets.get_max_coo_nod(xcSet,2)
         zcontrol=zmin+2/3.*(zmax-zmin)
@@ -303,7 +368,18 @@ class PointVerticalLoadOnBackfill(object):
     :ivar vdir: xc unit vector prependicular to the wall pointing to its back
                 (xc.Vector([ux,uy,0])
     '''
-    def __init__(self,xcSet,Qload, loadAppPnt,zBaseWall,distWall,vdir):
+    def __init__(self, xcSet, Qload, loadAppPnt, zBaseWall, distWall, vdir):
+        ''' Constructor.
+
+        :param xcSet: set of elements to which apply the loads
+        :param Qload: value of the point load 
+        :param loadAppPnt: load application point (xc.Vector([x,y,z])
+        :param zBaseWall: global Z coordinate of the base of the wall
+        :param distWall: horizontal distance between the wall and the point 
+                        load
+        :param vdir: xc unit vector prependicular to the wall pointing to its
+                     back (xc.Vector([ux,uy,0])
+        '''
         self.xcSet=xcSet
         self.Qload=Qload
         self.loadAppPnt=loadAppPnt
@@ -320,7 +396,7 @@ class PointVerticalLoadOnBackfill(object):
         
     def getPressure(self,x,y,z):
         '''Return the earth pressure acting on the point of the wall
-           placed at global coordinates (x,y,z)
+           placed at global coordinates (x,y,z).
         '''
         ret_press=0.0
         difZ=self.loadAppPnt[2]-z
@@ -363,9 +439,25 @@ class HorizontalLoadOnBackfill(PressureModelBase):
           the lengthLoadArea (defaults to 0 to apply all the load to a
           length of wall =lengthLoadArea, which would be the case of a
           continous load)
-
     '''
     def __init__(self,soilIntFi, qLoad, zLoad,distWall,widthLoadArea,lengthLoadArea=1,horDistrAngle=0):
+        ''' Constructor.
+
+        :param soilIntFi: agle of internal friction of the soil (º)
+        :param qLoad: surcharge load (force per unit length)
+        :param zLoad: global Z coordinate where the line load acts
+        :param distWall: minimal horizontal distance between the wall and
+              the area where the surcharge load acts (e.g.: a foundation)
+        :param widthLoadArea: width (perperdicular to wall) of the area on
+              which the horizontal load acts (e.g.: a foundation). 
+        :param lengthLoadArea: width (parallel to wall) of the area on
+              which the horizontal load acts (e.g.: a foundation). We can
+              take lengthLoadArea=1 (default) for a continous load  
+        :param horDistrAngle: angle to distribute load in the direction of
+              the lengthLoadArea (defaults to 0 to apply all the load to a
+              length of wall =lengthLoadArea, which would be the case of a
+              continous load)
+        '''
         super(HorizontalLoadOnBackfill,self).__init__()
         self.soilIntFi=soilIntFi
         self.qLoad=qLoad
@@ -376,8 +468,7 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         self.horDistrAngle=horDistrAngle
 
     def setup(self):
-        '''Calculate basic parameters
-        '''
+        '''Calculate basic parameters.'''
         IntFiRad=math.radians(self.soilIntFi)
         psi=math.pi/4+IntFiRad/2
         self.zpresmax=self.zLoad-self.distWall*math.tan(IntFiRad)
@@ -387,7 +478,8 @@ class HorizontalLoadOnBackfill(PressureModelBase):
                                                   
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
         '''
         ret_press=0
         if z<=self.zpresmax and z>=self.zpresmin:
@@ -423,8 +515,22 @@ class MononobeOkabePressureDistribution(EarthPressureBase):
       :ivar beta: slope inclination of backfill.
       :ivar Kas: static earth pressure coefficient 
     '''
-    def __init__(self,zGround, gamma_soil, H, kv, kh, psi, phi, delta_ad, beta, Kas):
-        super(MononobeOkabePressureDistribution,self).__init__(zGround, gamma_soil)
+    def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, delta_ad, beta, Kas):
+        ''' Constructor.
+
+        :param zGround: global Z coordinate of ground level.
+        :param gammaSoil: weight density of soil.
+        :param H: height of the structure.
+        :param kv: seismic coefficient of vertical acceleration.
+        :param kh: seismic coefficient of horizontal acceleration.
+        :param psi: back face inclination of the structure (< PI/2)
+        :param phi: angle of internal friction of soil.
+        :param delta_ad: angle of friction soil - structure.
+        :param beta: slope inclination of backfill.
+        :param Kas: static earth pressure coefficient.
+        '''
+        
+        super(MononobeOkabePressureDistribution,self).__init__(zGround, gammaSoil)
         self.H= H
         self.kv= kv
         self.kh= kh
@@ -440,7 +546,8 @@ class MononobeOkabePressureDistribution(EarthPressureBase):
         self.max_stress= 2*self.overpressure_dry/self.H
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
         '''
         zSup= self.zGround
         zInf= self.zGround-self.H
@@ -463,7 +570,18 @@ class EarthPressureSlopedWall(object):
     :ivar XYpnt2: (x,y) coordinates of point 2   
     '''
     
-    def __init__(self, Ksoil,gammaSoil,zGroundPnt1,XYpnt1,zGroundPnt2,XYpnt2):
+    def __init__(self, Ksoil, gammaSoil, zGroundPnt1, XYpnt1, zGroundPnt2, XYpnt2):
+        ''' Constructor.
+
+        :param Ksoil: pressure coefficient of the soil
+        :param gammaSoil: weight density of the soil
+        :param zGroundPnt1: global Z coordinate of ground level at point of 
+                          coordinates XYpnt1
+        :param XYpnt1: (x,y) coordinates of point 1   
+        :param zGroundPnt2: global Z coordinate of ground level at point of 
+                          coordinates XYpnt2
+        :param XYpnt2: (x,y) coordinates of point 2   
+        '''
         self.Ksoil=Ksoil
         self.gammaSoil=gammaSoil
         self.zGroundPnt1=zGroundPnt1
@@ -507,7 +625,18 @@ class WeightDistrEmbankment(object):
           vertices of a transversal section in the surface, expressed in 
           the rotated reference system.
     '''
-    def __init__(self,xcSet,gammaSoil,theta,coordSoilSurf):
+    def __init__(self, xcSet, gammaSoil, theta, coordSoilSurf):
+        ''' Constructor.
+
+        :param xcSet: set of elements to which apply the loads
+        :param gammaSoil: weight density of the soil
+        :param theta: angle counterclockwise in degrees that forms the transversal
+                     section of the embankment with the global X-axis
+        :param coordSoilSurf: list of coordinates [[xp1,z1],[xp2,z2], ...] 
+              that defines the soil surface, where xp are the x coordinates of
+              the vertices of a transversal section in the surface, expressed
+              in the rotated reference system.
+        '''
         self.xcSet=xcSet
         self.gammaSoil=gammaSoil
         self.theta=theta
