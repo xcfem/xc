@@ -182,6 +182,10 @@ python tests/actions/earth_pressure/test_embankment_weight_distr.py
 python tests/actions/earth_pressure/test_earth_pressure_point_load.py
 echo "$BLEU" "  Earthquake action tests." "$NORMAL"
 python tests/actions/quake/mononobe_okabe_test_01.py
+python tests/actions/quake/iskander_method_test_01.py
+python tests/actions/quake/iskander_method_test_02.py
+python tests/actions/quake/iskander_method_test_03.py
+python tests/actions/quake/iskander_method_test_04.py
 python tests/actions/quake/test_NCSP_01.py
 echo "$BLEU" "  Snow action tests." "$NORMAL"
 python tests/actions/snow/test_snowSIA.py

@@ -22,6 +22,7 @@ import xc
 import geom
 from misc_utils import log_messages as lmsg
 from geotechnics import mononobe_okabe
+from geotechnics import iskander_method
 from model.sets import sets_mng as sets
 import bisect
 
@@ -501,18 +502,70 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         self.setup()
         maxValue=self.getPressure(self.zpresmax)
         return maxValue
-                                                  
-                                                  
-class MononobeOkabePressureDistribution(EarthPressureBase):
+
+class SeismicPressureDistribution(EarthPressureBase):
     '''Overpressure due to seismic action according to Mononobe-Okabe
 
       :ivar H: height of the structure.
       :ivar kv: seismic coefficient of vertical acceleration.
       :ivar kh: seismic coefficient of horizontal acceleration.
-      :ivar psi: back face inclination of the structure (< PI/2)
+      :ivar psi: back face inclination of the structure (<= PI/2)
       :ivar phi: angle of internal friction of soil.
-      :ivar delta_ad: angle of friction soil - structure.
       :ivar beta: slope inclination of backfill.
+    '''
+    def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, beta):
+        ''' Constructor.
+
+        :param zGround: global Z coordinate of ground level.
+        :param gammaSoil: weight density of soil.
+        :param H: height of the structure.
+        :param kv: seismic coefficient of vertical acceleration.
+        :param kh: seismic coefficient of horizontal acceleration.
+        :param psi: back face inclination of the structure (<= PI/2)
+        :param phi: angle of internal friction of soil.
+        :param beta: slope inclination of backfill.
+        '''
+        
+        super(SeismicPressureDistribution,self).__init__(zGround, gammaSoil)
+        self.H= H
+        self.kv= kv
+        self.kh= kh
+        self.psi= psi
+        self.phi= phi
+        self.beta= beta
+
+    def setPhi(self, phi):
+        ''' Assigns the value of the angle of internal friction of soil.
+
+        :param phi: angle of internal friction of soil.
+        '''
+        self.phi= phi
+        self.update()
+
+    def setKh(self, kh):
+        ''' Assigns the value of the horizontal seismic coefficient.
+
+        :param kh: seismic coefficient of horizontal acceleration.
+        '''
+        self.kh= kh
+        self.update()
+        
+    def setKv(self, kv):
+        ''' Assigns the value of the vertical seismic coefficient.
+
+        :param kv: seismic coefficient of vertical acceleration.
+        '''
+        self.kv= kv
+        self.update()
+        
+    def getThrust(self):
+        ''' Return the value of the earthquake thrust.'''
+        return 0.5*self.max_stress*self.H
+                                                  
+class MononobeOkabePressureDistribution(SeismicPressureDistribution):
+    '''Overpressure due to seismic action according to Mononobe-Okabe
+
+      :ivar delta_ad: angle of friction soil - structure.
       :ivar Kas: static earth pressure coefficient 
     '''
     def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, delta_ad, beta, Kas):
@@ -523,21 +576,15 @@ class MononobeOkabePressureDistribution(EarthPressureBase):
         :param H: height of the structure.
         :param kv: seismic coefficient of vertical acceleration.
         :param kh: seismic coefficient of horizontal acceleration.
-        :param psi: back face inclination of the structure (< PI/2)
+        :param psi: back face inclination of the structure (<= PI/2)
         :param phi: angle of internal friction of soil.
         :param delta_ad: angle of friction soil - structure.
         :param beta: slope inclination of backfill.
         :param Kas: static earth pressure coefficient.
         '''
         
-        super(MononobeOkabePressureDistribution,self).__init__(zGround, gammaSoil)
-        self.H= H
-        self.kv= kv
-        self.kh= kh
-        self.psi= psi
-        self.phi= phi
+        super(MononobeOkabePressureDistribution,self).__init__(zGround= zGround, gammaSoil= gammaSoil, H= H, kv= kv, kh= kh, psi= psi, phi= phi, beta= beta)
         self.delta_ad= delta_ad
-        self.beta= beta
         self.Kas= Kas
         self.update()
         
@@ -556,6 +603,60 @@ class MononobeOkabePressureDistribution(EarthPressureBase):
             retval= (z-zInf)/(zSup-zInf)*self.max_stress
         return retval
 
+
+class IskanderPressureDistribution(SeismicPressureDistribution):
+    '''Overpressure due to seismic action according to Iskander et al.
+       (Active static and seismic earth pressure for c–φ soils Magued Iskander, 
+        Zhibo (Chris) Chen , Mehdi Omidvar, Ivan Guzman, Omar Elsheri. 
+        Polytechnic Institute of New York University, USA)
+
+    :ivar c: cohesion
+    '''
+    def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, beta, c):
+        ''' Constructor.
+
+        :param zGround: global Z coordinate of ground level.
+        :param gammaSoil: weight density of soil.
+        :param H: height of the structure.
+        :param kv: seismic coefficient of vertical acceleration.
+        :param kh: seismic coefficient of horizontal acceleration.
+        :param psi: back face inclination of the structure (<= PI/2)
+        :param phi: angle of internal friction of soil.
+        :param beta: slope inclination of backfill.
+        :param c: cohesion
+        '''
+        
+        super(IskanderPressureDistribution,self).__init__(zGround= zGround, gammaSoil= gammaSoil, H= H, kv= kv, kh= kh, psi= psi, phi= phi, beta= beta)
+        self.c= c
+        self.update()
+
+    def update(self):
+        omega= math.pi/2.0-self.psi # Angle with vertical.
+        self.iskander= iskander_method.Iskander(kh= self.kh, kv= self.kv, omega= omega, beta= self.beta, phi= self.phi, gamma= self.gammaSoil, c= self.c, H= self.H)
+        # Compute pressure with earthquake.
+        self.hl= self.iskander.Hl()
+        pressureA= self.iskander.sigma_AEH(self.hl)
+        # Compute pressure with earthquake.
+        self.iskander.kh= 0.0
+        self.iskander.kv= 0.0
+        pressureB= self.iskander.sigma_AEH(self.hl)
+        self.max_stress= pressureA-pressureB
+        # Restore earthquake coefficients.
+        self.iskander.kh= self.kh
+        self.iskander.kv= self.kv
+
+    def getPressure(self,z):
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
+        '''
+        zSup= self.zGround
+        zInf= self.zGround-self.hl
+        retval= 0.0
+        if((z>=zInf) and (z<=zSup)):
+            retval= (zSup-z)/(zSup-zInf)*self.max_stress
+        return retval
+        
+        
 class EarthPressureSlopedWall(object):
     '''Earth pressure on a sloped wall. A single soil type with no freatic
     is considered.
