@@ -7,8 +7,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import scipy.interpolate
-from geom_utils import acad_script_utils as script
-import os
 from geom_utils import longitudinal_profile
 import geom
 

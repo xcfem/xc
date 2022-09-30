@@ -15,7 +15,6 @@ import xc
 from model.sets import sets_mng as sets
 from misc_utils import log_messages as lmsg
 import numpy as np
-from actions import load_cases
 from actions.imposed_strain import imp_strain as imps 
 from misc_utils import log_messages as lmsg
 

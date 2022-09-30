@@ -3,9 +3,7 @@
 
 from __future__ import print_function
 
-import re
 import math
-import loadCombinations
 
 def getCombinationDict(loadCombination:str):
     ''' Return a Python dictionary whose keys are the names of the actions

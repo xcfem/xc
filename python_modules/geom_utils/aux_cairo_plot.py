@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es"
 
 import math
-import cairo
 import geom
 
 
