@@ -12,8 +12,6 @@ __email__= "l.pereztato@gmail.com"
 
 from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
 from import_export.sciaXML.xml_basics import scxml_property as prop
-from import_export.sciaXML.xml_basics import scxml_ref as rf
-from import_export.sciaXML.xml_basics import scxml_enum_item as eI
 from import_export.sciaXML.xml_basics import scxml_enum as enum
 from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
 import xml.etree.cElementTree as ET

@@ -8,8 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import copy
-
 class LoadRecord(object):
   def __init__(self, loadCase,bName= 'nil',v= 1.0):
     self.loadCaseId= loadCase.id

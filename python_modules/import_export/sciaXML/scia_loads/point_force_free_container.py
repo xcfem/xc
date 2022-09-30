@@ -12,10 +12,7 @@ from import_export.sciaXML.xml_basics import scxml_table_container as ctr
 from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
 from import_export.sciaXML.xml_basics import scxml_object as obj
 from import_export.sciaXML.xml_basics import scxml_object_item as oI
-from import_export.sciaXML.xml_basics import scxml_row as rw
 from import_export.sciaXML.scia_loads import point_force_free_properties as pffp
-from import_export.sciaXML.scia_loads import load_case_container as lcc
-from import_export.sciaXML import node_container as nc
 from import_export.sciaXML.scia_loads import load_component_base as lcb
 import uuid
 

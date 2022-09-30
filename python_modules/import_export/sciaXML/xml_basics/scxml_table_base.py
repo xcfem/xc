@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from import_export.sciaXML.xml_basics import scxml_base as b
-import xml.etree.cElementTree as ET
 
 class SCXMLTableBase(b.SCXMLBase):
   '''Base class for al sciaXML tables.'''

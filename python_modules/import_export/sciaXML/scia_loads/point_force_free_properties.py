@@ -16,7 +16,6 @@ from import_export.sciaXML.xml_basics import scxml_ref as rf
 from import_export.sciaXML.xml_basics import scxml_enum_item as eI
 from import_export.sciaXML.xml_basics import scxml_enum as enum
 from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
-from import_export.sciaXML.xml_basics import scxml_properties_sub_table as propSubTable
 import xml.etree.cElementTree as ET
 from import_export.sciaXML.scia_loads import load_case_properties as lcp
 from import_export.sciaXML.scia_loads import node_load_properties as nlp

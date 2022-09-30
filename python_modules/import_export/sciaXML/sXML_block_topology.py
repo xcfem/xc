@@ -8,7 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import os
 from import_export.sciaXML import node_container as nCtr
 from import_export.sciaXML import ep_plane_container as eppc
 from import_export.sciaXML import node_support_container as nsc

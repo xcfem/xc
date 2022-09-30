@@ -12,12 +12,7 @@ __email__= "l.pereztato@gmail.com"
 
 from import_export.sciaXML.xml_basics import scxml_table_container as ctr
 from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
-from import_export.sciaXML.xml_basics import scxml_header_item as hi
-from import_export.sciaXML.xml_basics import scxml_object as obj
-from import_export.sciaXML.xml_basics import scxml_object_item as oI
-from import_export.sciaXML.xml_basics import scxml_row as rw
 from import_export.sciaXML import material_properties as mp
-import uuid
 
 idMaterialContainer= mp.containerId
 tMaterialContainer= mp.containerProgId

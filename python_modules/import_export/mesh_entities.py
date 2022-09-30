@@ -2,6 +2,8 @@
 from collections import defaultdict
 from itertools import count
 from import_export import basic_entities as be
+import ezdxf
+import logging
 from misc_utils import log_messages as lmsg
 
 class MaterialRecord(object):
