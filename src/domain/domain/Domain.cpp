@@ -475,7 +475,11 @@ bool XC::Domain::addLoadPattern(LoadPattern *lp)
     if(result)
       {
         lp->setDomain(this);
-        domainChange();
+	// MH Scott 20221001 Remove call to domainChange if only adding/removing a nodal load
+	const int numSPs= lp->getNumSPs();
+	if(numSPs>0)
+          domainChange();
+	// End of modification.
       }
     else
       {
