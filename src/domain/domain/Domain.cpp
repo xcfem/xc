@@ -345,7 +345,7 @@ bool XC::Domain::addNodalLoad(NodalLoad *load, int loadPatternTag)
     if(result)
       {
         load->setDomain(this); // done in LoadPattern::addNodalLoad()
-        this->domainChange();
+        //this->domainChange(); // a nodal load does not change the domain (20221001 MH Scott).
       }
     return result;
   }
