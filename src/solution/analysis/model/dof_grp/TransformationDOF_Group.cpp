@@ -73,7 +73,7 @@
 
 const int MAX_NUM_DOF= 16;
 
-// static variables initialisation
+// static variables initialization
 XC::UnbalAndTangentStorage XC::TransformationDOF_Group::unbalAndTangentArrayMod(MAX_NUM_DOF+1);
 int XC::TransformationDOF_Group::numTransDOFs(0);     // number of objects
 XC::TransformationConstraintHandler *XC::TransformationDOF_Group::theHandler= nullptr;     // number of objects

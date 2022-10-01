@@ -79,7 +79,7 @@ class Response;
 //
 //! @ingroup SpecialElem
 //!
-//! @defgroup ElemJoint Joint modelling elements.
+//! @defgroup ElemJoint Joint modeling elements.
 //
 //! @ingroup ElemJoint
 //

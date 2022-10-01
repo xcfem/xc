@@ -59,7 +59,7 @@
 // EigenAnalysis is a subclass of XC::Analysis, it is used to perform the 
 // eigen value analysis on the FE_Model.
 //
-// This class is inheritanted from the base class of XC::Analysis
+// This class is inherited from the base class of XC::Analysis
 // which was created by fmk (Frank).
 
 

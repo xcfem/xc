@@ -127,12 +127,11 @@ XC::UDP_Socket::UDP_Socket(unsigned int port)
 
 
 
-// UDP_Socket(unsigned int other_Port, char *other_InetAddr): 
-// 	constructor to open a socket with my inet_addr and with a port number 
-//	given by the OS. It then sends a messege comprising of a single character
-// 	to an address given by other_InetAddr and other_Port. This is to allow
-// 	a shadow object to find address of the actor it initiatites.
-
+//! @brief UDP_Socket(unsigned int other_Port, char *other_InetAddr): 
+//! constructor to open a socket with my inet_addr and with a port number 
+//! given by the OS. It then sends a message comprising of a single character
+//! to an address given by other_InetAddr and other_Port. This is to allow
+//! a shadow object to find address of the actor it initiates.
 XC::UDP_Socket::UDP_Socket(unsigned int other_Port, char *other_InetAddr) 
 :sockfd(0), connectType(1), shadow_inetAddr(other_InetAddr), shadow_port(other_Port)
 {

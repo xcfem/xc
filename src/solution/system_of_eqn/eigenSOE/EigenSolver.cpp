@@ -36,7 +36,7 @@
 // can be instantiated. Instances of XC::EigenSolver are used to solve
 // a XC::EigenSOE. (perform eigen analysis)
 //
-// This class is inheritanted from the base class of XC::Solver
+// This class is inherited from the base class of XC::Solver
 // which was created by fmk (Frank).
 
 

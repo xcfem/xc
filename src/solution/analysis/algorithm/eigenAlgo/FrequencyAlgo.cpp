@@ -60,7 +60,7 @@
 // to solve the Generalized eigen equations. It is not expected that 
 // this class will have subclasses.
 //
-// This class is inheritanted from the base class of XC::SolutionAlgorithm
+// This class is inherited from the base class of XC::SolutionAlgorithm
 // which was created by fmk (Frank).
 
 

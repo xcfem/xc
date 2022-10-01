@@ -37,7 +37,7 @@
 // by the given K and M, find the corresponding eigen value and eigen
 // vectors.
 //
-// This class is inheritanted from the base class of XC::SystemOfEqn
+// This class is inherited from the base class of XC::SystemOfEqn
 // which was created by fmk (Frank).
 
 

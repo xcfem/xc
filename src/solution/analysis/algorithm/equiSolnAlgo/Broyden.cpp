@@ -185,7 +185,7 @@ int XC::Broyden::solveCurrentStep(void)
             //save displacement increment
             du= theSysOfEqn->getX( );
 
-            //broyden modifications to du
+            // Broyden modifications to du
             BroydenUpdate( theIntegrator, theSysOfEqn, du, nBroyden );
 
             if(theIntegrator->update(du) < 0 )
@@ -201,7 +201,7 @@ int XC::Broyden::solveCurrentStep(void)
                 << sqrt( (*residNew) ^ (*residNew) ) << std::endl;
             */
 
-            //increment broyden counter
+            //increment Broyden counter
             nBroyden+= 1;
 
             //save displacement increment
@@ -213,8 +213,9 @@ int XC::Broyden::solveCurrentStep(void)
             //form the residual again
             if(theIntegrator->formUnbalance() < 0)
               {
-                std::cerr << "WARNING XC::Broyden::solveCurrentStep() -";
-                std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; WARNING the Integrator failed in formUnbalance()"
+		          << std::endl;
               }
             result = localTest->test();
           }
@@ -227,10 +228,11 @@ int XC::Broyden::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "XC::Broyden::solveCurrentStep() -"
-                  << "the XC::ConvergenceTest object failed in test()\n"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "the ConvergenceTest object failed in test()\n"
                   << "convergence test message: "
-		  << theTest->getStatusMsg(1) << std::endl;
+		  << theTest->getStatusMsg(1)
+		  << std::endl;
         return -3;
       }
     // note - if positive result we are returning what the convergence test returned

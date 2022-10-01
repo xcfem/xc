@@ -95,7 +95,7 @@ void XC::KrylovNewton::setMaxDimension(const int &maxDim)
 int XC::KrylovNewton::solveCurrentStep(void)
   {
     // set up some pointers and check they are valid
-    // NOTE this could be taken away if we set Ptrs as protecetd in superclass
+    // NOTE this could be taken away if we set Ptrs as protected in superclass
     AnalysisModel *theAnaModel= getAnalysisModelPtr();
     IncrementalIntegrator *theIntegrator= getIncrementalIntegratorPtr();
     LinearSOE *theSOE= getLinearSOEPtr();

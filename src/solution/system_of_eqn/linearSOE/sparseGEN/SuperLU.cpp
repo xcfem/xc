@@ -170,7 +170,7 @@ void XC::SuperLU::alloc(const size_t &n)
     if(n>0)
       {
         alloc_permutation_vectors(n);
-        // initialisation
+        // initialization
         StatInit(&stat);
         alloc_matrices(n);
       }

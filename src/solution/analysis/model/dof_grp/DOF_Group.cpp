@@ -72,7 +72,7 @@
 const int MAX_NUM_DOF= 256;
 
 
-// static variables initialisation
+// static variables initialization
 XC::Matrix XC::DOF_Group::errMatrix(1,1);
 XC::Vector XC::DOF_Group::errVect(1);
 XC::UnbalAndTangentStorage XC::DOF_Group::unbalAndTangentArray(MAX_NUM_DOF+1);

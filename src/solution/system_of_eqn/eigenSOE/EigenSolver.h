@@ -37,7 +37,7 @@
 // can be instantiated. Instances of EigenSolver are used to solve
 // a EigenSOE. (perform eigen analysis)
 //
-// This class is inheritanted from the base class of Solver
+// This class is inherited from the base class of Solver
 // which was created by fmk (Frank).
 
 

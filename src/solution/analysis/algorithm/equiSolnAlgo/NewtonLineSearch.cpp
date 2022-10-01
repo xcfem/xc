@@ -149,7 +149,7 @@ bool XC::NewtonLineSearch::setLineSearchMethod(const std::string &lineSearchMeth
 int XC::NewtonLineSearch::solveCurrentStep(void)
   {
     // set up some pointers tond check they are valid
-    // NOTE this could be taken away if we set Ptrs as protecetd in superclass
+    // NOTE this could be taken away if we set Ptrs as protected in superclass
     AnalysisModel *theAnaModel= getAnalysisModelPtr();
     IncrementalIntegrator *theIntegrator= getIncrementalIntegratorPtr();
     LinearSOE *theSOE= getLinearSOEPtr();
@@ -157,8 +157,10 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
 
     if((!theAnaModel) || (!theIntegrator) || (!theSOE) || (!theTest))
       {
-        std::cerr << "WARNING XC::NewtonLineSearch::solveCurrentStep() - setLinks() has";
-        std::cerr << "no se ha asignado modelo, integrator o system of equations.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING setLinks() has"
+		  << "no se ha asignado modelo, integrator o system of equations."
+		  << std::endl;
         return -5;
       }
 

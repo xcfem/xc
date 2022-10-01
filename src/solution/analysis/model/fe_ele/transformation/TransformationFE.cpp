@@ -72,7 +72,7 @@
 
 const int MAX_NUM_DOF= 64;
 
-// static variables initialisation
+// static variables initialization
 XC::UnbalAndTangentStorage XC::TransformationFE::unbalAndTangentArrayMod(MAX_NUM_DOF+1);
 std::vector<XC::Matrix *> XC::TransformationFE::theTransformations; 
 int XC::TransformationFE::numTransFE(0);           

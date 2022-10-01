@@ -62,7 +62,7 @@
 
 namespace XC {
 
-//! @brief Bidimensional elastic section for plate modellings.
+//! @brief Bidimensional elastic section for plate modelings.
 //! @ingroup MATPLAC
 class ElasticPlateSection: public ElasticPlateProto<5>
   {

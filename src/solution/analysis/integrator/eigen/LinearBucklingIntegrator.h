@@ -30,7 +30,7 @@
 // LinearBucklingIntegrator is an algorithmic class for setting up the finite element 
 // equations for a eigen problem analysis. 
 //
-// This class is inheritanted from the base class of Integrator which was
+// This class is inherited from the base class of Integrator which was
 // created by fmk (Frank).
 
 

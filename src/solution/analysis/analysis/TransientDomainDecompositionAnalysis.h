@@ -86,7 +86,7 @@ class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
     int analyze(double dT);
     bool doesIndependentAnalysis(void);    
 
-    // methods for standard domain deomposition analysis
+    // methods for standard domain decomposition analysis
     // that do some form of condensation to the tangent
     int getNumExternalEqn(void);
     int getNumInternalEqn(void);

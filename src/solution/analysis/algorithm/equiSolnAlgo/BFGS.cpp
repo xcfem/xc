@@ -210,7 +210,7 @@ int XC::BFGS::solveCurrentStep(void)
                 << sqrt( (*residNew) ^ (*residNew) ) << std::endl;
 	    */
         
-            //increment broyden counter
+            //increment Broyden counter
             nBFGS += 1;
 
             //save displacement increment

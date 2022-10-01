@@ -67,7 +67,7 @@ namespace XC {
 //! @ingroup IPComm
 //
 //! @brief TCP_Socket is a sub-class of channel. It is implemented with Berkeley
-//! stream sockets using the TCP protocol. Messages delivery is garaunteed. 
+//! stream sockets using the TCP protocol. Messages delivery is guaranteed. 
 //! Communication is full-duplex between a pair of connected sockets.
 class TCP_Socket: public Channel
   {
