@@ -110,9 +110,11 @@ def setImperfectionsXY(nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
     :param slopeY: out of plumbness on y axis.
     '''
     if(abs(slopeX)<1.0/500.0):
-        lmsg.warning('small imperfection on X.')
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; imperfection on X quite small.')
     if(abs(slopeY)<1.0/500):
-        lmsg.warning('small imperfection on Y.')
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; imperfection on Y quite small.')
     maxValue= 0.0
     if(len(nodeSet.nodes)>0):
         pos= nodeSet.nodes[0].getInitialPos3d
