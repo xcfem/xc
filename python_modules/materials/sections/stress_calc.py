@@ -30,7 +30,6 @@ class StressCalc(object):
     sgs= 0.0
     sgsp= 0.0
 
-
     def __init__(self,b,h,r,rp,As,Asp,Ec,Es):
         self.b= b
         self.h= h
@@ -275,9 +274,13 @@ class StressCalc(object):
         errN= abs(self.N-NR)
         pc= errN/max(abs(self.N),1)
         if(pc>0.05):
-            lmsg.error("ERROR N= ", N, " NR= ", NR, "errN= ", errN, "(",pc*100,"%)")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; error N= '+str(N)+' NR= '+str(NR)+'errN= '+str(errN)+'('+str(pc*100)+'%)')
         MR= s.resistingM()
         errM= abs(self.M-MR)
         pc= errM/max(abs(self.M),1)
         if(pc>0.05):
-            lmsg.error("ERROR M= ", M, " MR= ", MR, "errM= ", errM, "(",pc*100,"%)")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; error M= '+str(M)+' MR= '+str(MR)+'errM= '+str(errM)+'('+str(pc*100)+'%)')

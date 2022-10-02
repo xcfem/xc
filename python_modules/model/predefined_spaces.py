@@ -111,10 +111,10 @@ def setImperfectionsXY(nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
     '''
     if(abs(slopeX)<1.0/500.0):
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; imperfection on X quite small.')
+        lmsg.warning(methodName+'; imperfection on X quite small.')
     if(abs(slopeY)<1.0/500):
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; imperfection on Y quite small.')
+        lmsg.warning(methodName+'; imperfection on Y quite small.')
     maxValue= 0.0
     if(len(nodeSet.nodes)>0):
         pos= nodeSet.nodes[0].getInitialPos3d
