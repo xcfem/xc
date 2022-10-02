@@ -10,11 +10,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import math
-from misc_utils import log_messages as lmsg
-import numpy
+# from misc_utils import log_messages as lmsg
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
-from postprocess import limit_state_data as lsd
 
 # Lateral torsional buckling of steel beams.
 # References:

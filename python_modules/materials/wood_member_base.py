@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
-from misc_utils import log_messages as lmsg
 from materials import member_base
 
 class Member(member_base.Member):

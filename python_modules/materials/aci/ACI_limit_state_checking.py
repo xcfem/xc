@@ -14,10 +14,7 @@ from materials.aci import ACI_materials
 from materials.sections import rebar_family as rf
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
-from rough_calculations import ng_simple_bending_reinforcement
 import math
-from materials.sections.fiber_section import fiber_sets
-from materials.sections import stress_calc as sc
 from misc_utils import log_messages as lmsg
 from misc_utils import units_utils
 from postprocess.reports import common_formats as fmt

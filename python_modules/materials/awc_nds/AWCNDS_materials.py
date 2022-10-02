@@ -7,6 +7,12 @@ VERIFICATION TESTS REQUIRED!!!.'''
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 import math
 import sys
 from enum import IntEnum
@@ -17,18 +23,9 @@ from materials import typical_materials
 from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
 from materials import typical_materials
-from materials import steel_member_base
-import pickle
-from misc_utils import pickle_utils
-import os
 from model import model_inquiry
 from misc_utils import units_utils
 
-__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
-__copyright__= "Copyright 2016, LCPT, AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 # ENHANCE: it will be great if we can store
 # the interpolation in a file to avoid repeating

@@ -18,7 +18,6 @@ from rough_calculations import ng_simple_bending_reinforcement
 import math
 import geom
 from materials.sections.fiber_section import fiber_sets
-from materials.sections import stress_calc as sc
 from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
 

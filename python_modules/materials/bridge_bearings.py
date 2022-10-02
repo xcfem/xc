@@ -41,7 +41,6 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import scipy.interpolate
 from itertools import count
 from materials import typical_materials
-from model import predefined_spaces
 import math
 import xc
 

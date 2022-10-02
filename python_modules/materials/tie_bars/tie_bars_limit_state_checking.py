@@ -13,7 +13,6 @@ __email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 from postprocess import control_vars as cv
 from materials import steel_member_base
 from materials import limit_state_checking_base as lsc
-from postprocess import limit_state_data as lsd
 
 class TieBarMember(steel_member_base.Member):
     ''' Tie bar members.'''

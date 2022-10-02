@@ -2,10 +2,14 @@
 ''' Import shapes from AISC database version 15.0 (metric units)'''
 from __future__ import print_function
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es"
+
 import openpyxl
-from misc_utils import log_messages as lmsg
-from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
-import unicodedata
 
 # Section axis:
 
