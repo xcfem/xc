@@ -178,3 +178,11 @@ if (ratio1<1e-4) and (ratio2<1e-4):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# #########################################################
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# oh.displayFEMesh()
+
