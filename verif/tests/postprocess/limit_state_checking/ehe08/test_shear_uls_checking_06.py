@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' Verify shear limit state checking using reinforcement placement routines
-    (element-based reinforcement definition).'''
+    (element-based reinforcement definition). Check that in-plane shear
+    doesn't affect results (this test checks that an old error does not
+    come back).'''
 
 from __future__ import print_function
 
@@ -96,7 +98,7 @@ loadCaseNames= ['load']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## load pattern.
-load= xc.Vector([0.0,0.0,-80e3])  # No "in-plane" loads (see example 06 in the same folder).
+load= xc.Vector([0.0,35e3,-80e3]) # Small "in-plane" load to check it has no effect on results (see test description at top).
 cLC= loadCaseManager.setCurrentLoadCase('load')
 for e in s.elements:
     e.vector3dUniformLoadGlobal(load)
@@ -203,7 +205,8 @@ else:
 # #Load properties to display:
 # from postprocess.control_vars import *
 # exec(open(cfg.projectDirTree.getVerifShearFile()).read())
-# argument= 'CF' #Possible arguments: 'CF','Vy','Vz'
-# oh.displayFieldDirs1and2(limitStateLabel=lsd.shearResistance.label, argument=argument, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
+# arguments= ['Vy', 'Vz', 'CF'] #Possible arguments: 'CF','Vy','Vz'
+# for arg in arguments:
+#     oh.displayFieldDirs1and2(limitStateLabel=lsd.shearResistance.label, argument= arg, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
 
 cfg.cleandirs()  # Clean after yourself.
