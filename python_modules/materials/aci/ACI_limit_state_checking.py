@@ -227,13 +227,14 @@ class ShearController(lsc.ShearControllerBase):
             e.getResistingForce()
             scc= e.getSection()
             idSection= e.getProp("idSection")
+            masterElementDimension= e.getProp("masterElementDimension")
             section= scc.getProp('sectionData')
             self.setSection(section)
             NTmp= scc.getStressResultantComponent("N")
             VuTmp= self.calcVu(NTmp) 
             VyTmp= scc.getStressResultantComponent("Vy")
             VzTmp= scc.getStressResultantComponent("Vz")
-            VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
+            VTmp= self.getShearForce(Vy= VyTmp, Vz= VzTmp, elementDimension= masterElementDimension)
             if(VuTmp!=0.0):
               FCtmp= abs(VTmp)/VuTmp
             else:

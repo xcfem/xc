@@ -82,9 +82,20 @@ class RCMaterialDistribution(object):
         sUtils.append_sets(retval,sets)
         return retval
 
+    def getMasterElementDimension(self, tagElem):
+        ''' Return the dimension (1, 2 or 3) of the element whose tag is being passed
+           as a parameter.
+
+        :param tagElem: master element identifier.
+        '''
+        return self.sectionDistribution.getElementDimension(tagElem)
+        
     def getSectionNamesForElement(self,tagElem):
-        '''Returns the section names for the element which tag is being passed
-           as a parameter.'''
+        '''Returns the section names for the element whose tag is being passed
+           as a parameter.
+
+        :param tagElem: master element identifier.
+        '''
         if tagElem in self.sectionDistribution.keys():
             return self.sectionDistribution[tagElem]
         else:

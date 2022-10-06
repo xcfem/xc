@@ -33,8 +33,10 @@ elementTags= [2524,2527]
 #Reinforced concrete sections on each element.
 reinfConcreteSections= RC_material_distribution.RCMaterialDistribution()
 
+# Set-up material distribution and element dimensions.
 for eTag in elementTags:
     reinfConcreteSections.sectionDistribution[eTag]= ["deck2","deck1"]
+    reinfConcreteSections.sectionDistribution.elementDimension[eTag]= 2
 
 # deck.
 concrete= SIA262_materials.c30_37
@@ -83,7 +85,6 @@ outCfg.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressControl
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 feProblem.errFileName= "cerr" # From now on display errors if any.
-
 
 #print("mean FCs: ", meanFCs)
 

@@ -816,7 +816,6 @@ class ShearController(lscb.ShearControllerBase):
         Ac= rcSets.getConcreteArea(1) # Ac
         strutWidth= scc.getCompressedStrutWidth() # b0
         isBending= scc.isSubjectedToBending(0.1)
-        print('bending: ', isBending)
         if(isBending):
             innerLeverArm= scc.scc.getMechanicLeverArm() # z
         else:
@@ -874,10 +873,11 @@ class ShearController(lscb.ShearControllerBase):
         rcSets= self.extractFiberData(sct, concreteCode, reinforcementCode)
         self.getShearStrength(sct, concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
         
-    def checkSection(self, sct):
+    def checkSection(self, sct, elementDimension):
         ''' Check shear on the section argument.
 
         :param sct: reinforced concrete section object to chech shear on.
+        :param elementDimension: dimension of the element (1, 2 or 3).
         '''
         NTmp= sct.getStressResultantComponent("N")
         MyTmp= sct.getStressResultantComponent("My")
@@ -885,7 +885,7 @@ class ShearController(lscb.ShearControllerBase):
         MTmp= math.sqrt((MyTmp)**2+(MzTmp)**2)
         VyTmp= sct.getStressResultantComponent("Vy")
         VzTmp= sct.getStressResultantComponent("Vz")
-        VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
+        VTmp= self.getShearForce(Vy= VyTmp, Vz= VzTmp, elementDimension= masterElementDimension)
         TTmp= sct.getStressResultantComponent("Mx")
         #Searching for the best theta angle (concrete strut inclination).
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
@@ -915,6 +915,7 @@ class ShearController(lscb.ShearControllerBase):
             unusedR= e.getResistingForce() 
             scc= e.getSection()
             idSection= e.getProp("idSection")
-            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc)
+            masterElementDimension= e.getProp("masterElementDimension")
+            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc, elementDimension= masterElementDimension)
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case

@@ -10,6 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
+import sys
 import geom
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import fiber_sets
@@ -462,7 +463,6 @@ class ShearDesignParameters(object):
       self.angAlpha= math.pi/2 # angle of the shear reinforcement with the member axis (figure 44.2.3.1.a EHE).
       self.angTheta= math.pi/6. # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
       self.ultimateShearStrength= 0.0
-  #    print('transv. reinf. area=',self.areaShReinfBranchsTrsv)
 
     def computeUltimateShearStrength(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
         '''Compute section shear strength.'''
@@ -476,15 +476,15 @@ class ShearDesignParameters(object):
         self.sigmaXD= N/area+Mz/Iz*centerOfMassY+My/Iy*centerOfMassZ
         self.ultimateShearStrength= getVu(fck= fck, fcd= fcd, Nd= N, Ac= self.concreteArea, b0= self.widthMin, d= self.effectiveDepth, z= self.mechanicLeverArm, alpha= self.angAlpha, theta= self.angTheta, AsPas= self.tensionedRebarsArea, fyd= fyd, AsAct= self.tensionedStrandsArea, fpd= fpd, sgxd= self.sigmaXD, sgyd= self.sigmaYD, AsTrsv= self.areaShReinfBranchsTrsv, fydTrsv= fydTrsv)
 
-    def printParams(self):
-        '''print(shear checking values.)'''
-        print("area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2")
-        print("transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2")
-        print("design value of normal stress; sigmaXD= ",self.sigmaXD/1e6," MPa")
-        print("effective depth; d= ",self.effectiveDepth," m")
-        print("minimal width; b0= ",self.widthMin," m")
-        print("mechanic lever arm; z= ",self.mechanicLeverArm," m")
-        print("shear strength; Vu= ",self.ultimateShearStrength/1e3," kN")
+    def printParams(self, os= sys.stdout):
+        '''print shear checking values.'''
+        os.write("area of tensioned rebars; As= "+str(self.tensionedRebarsArea*1e4)+" cm2")
+        os.write("transverse reinforcement area; AsTrsv= "+str(self.areaShReinfBranchsTrsv*1e4)+" cm2")
+        os.write("design value of normal stress; sigmaXD= "+str(self.sigmaXD/1e6)+"MPa")
+        os.write("effective depth; d= "+str(self.effectiveDepth)+" m")
+        os.write("minimal width; b0= "+str(self.widthMin)+" m")
+        os.write("mechanic lever arm; z= "+str(self.mechanicLeverArm)+" m")
+        os.write("shear strength; Vu= "+str(self.ultimateShearStrength/1e3)+" kN")
 
 def getF1cdEHE08(fck,fcd):
     '''getF1cdEHE08(fck,fcd). Returns the value of f1cd (design value of the concrete strut strength) according to clause 44.2.3.1 of EHE-08.
@@ -508,7 +508,8 @@ def getKEHE08(sgpcd,fcd):
     '''
     s=-sgpcd/fcd #Positive when compressed
     if s>1:
-        lmsg.warning("getKEHE08; too much compression in concrete: ("+str(sgpcd)+"<"+str(-fcd)+")\n")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+"; too much compression in concrete: ("+str(sgpcd)+"<"+str(-fcd)+")\n")
     if s<=0:
         retval=1.0
     elif s<=0.25:
@@ -753,7 +754,7 @@ def getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''
     return math.radians(getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)*7000+29) 
 
-def getBetaVcuEHE08(theta,thetaE):
+def getBetaVcuEHE08(theta, thetaE):
     '''getBetaVcuEHE08(theta,thetaE) [units: N, m, rad]
      Return the value of «beta» for the expression
      of Vcu according to clause 44.2.3.2.2 of EHE-08.
@@ -766,7 +767,8 @@ def getBetaVcuEHE08(theta,thetaE):
     cotgThetaE=1/math.tan(thetaE)
     retval=0.0
     if cotgTheta<0.5:
-        lmsg.warning('getBetaVcuEHE08; theta angle is too small.')
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+'; theta angle (theta= '+str(math.degrees(theta))+') is too small.')
     else:
         if(cotgTheta<cotgThetaE):
             retval= (2*cotgTheta-1)/(2*cotgThetaE-1)
@@ -774,7 +776,8 @@ def getBetaVcuEHE08(theta,thetaE):
             if cotgTheta<=2.0:
                 retval= (cotgTheta-2)/(cotgThetaE-2)
             else:
-                print("getBetaVcuEHE08; theta angle is too big.")
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(methodName+'; theta angle (theta= '+str(math.degrees(theta))+') is too big.')
     return retval
   
 
@@ -989,7 +992,9 @@ class ShearController(lscb.ShearControllerBase):
         # concrFibers= rcSets.concrFibers.fSet
         self.concreteArea= rcSets.getConcreteArea(1)
         if(self.concreteArea<1e-6):
-            errMsg= "concrete area too small; Ac= " + str(self.concreteArea) + " m2\n"
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"; concrete area too small; Ac= " + str(self.concreteArea) + " m2\n"
             lmsg.error(errMsg)
         else:
             tensionedReinforcement= rcSets.tensionFibers
@@ -1055,7 +1060,9 @@ class ShearController(lscb.ShearControllerBase):
         self.tensionedRebars.number= rcSets.getNumTensionRebars()
         self.concreteArea= rcSets.getConcreteArea(1)
         if(self.concreteArea<1e-6):
-            errMsg= "concrete area too small; Ac= " + str(self.concreteArea) + " m2\n"
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"concrete area too small; Ac= " + str(self.concreteArea) + "\n"
             lmsg.error(errMsg)
         else:
             self.E0= concrFibers[0].getMaterial().getInitialTangent()
@@ -1158,10 +1165,11 @@ class ShearController(lscb.ShearControllerBase):
             FCtmp= 1e99
         return FCtmp, VuTmp
             
-    def checkSection(self, sct, torsionParameters= None):
+    def checkSection(self, sct, elementDimension, torsionParameters= None):
         ''' Check shear on the section argument.
 
-        :param sct: reinforced concrete section object to chech shear on.
+        :param sct: reinforced concrete section object to check shear on.
+        :param elementDimension: dimension of the element (1, 2 or 3).
         :param torsionParameters: parameters that define torsional behaviour 
                                   of the section as in clause 45.1 of EHE-08.
         '''
@@ -1171,14 +1179,14 @@ class ShearController(lscb.ShearControllerBase):
         MTmp= math.sqrt((MyTmp)**2+(MzTmp)**2)
         VyTmp= sct.getStressResultantComponent("Vy")
         VzTmp= sct.getStressResultantComponent("Vz")
-        VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
+        VTmp= self.getShearForce(Vy= VyTmp, Vz= VzTmp, elementDimension= elementDimension)
         TTmp= sct.getStressResultantComponent("Mx")
         #Searching for the best theta angle (concrete strut inclination).
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
         FCtmp, VuTmp= self.checkInternalForces(sct= sct, torsionParameters= torsionParameters, Nd= NTmp, Md= MTmp, Vd= VTmp, Td= TTmp)
         return FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp 
 
-    def check(self,elements,combName):
+    def check(self, elements, combName):
         ''' For each element in the set 'elements' passed as first parameter
         and the resulting internal forces for the load combination 'combName'  
         passed as second parameter, this method calculates all the variables 
@@ -1193,19 +1201,25 @@ class ShearController(lscb.ShearControllerBase):
         for each of these elements. 
 
         XXX Rebar orientation not taken into account yet.
+
+        :param elements: phantom model elements.
+        :param combName: name of the load combination being checked.
         '''
         if(self.verbose):
-            lmsg.log("Postprocessing combination: "+combName)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+"; postprocessing combination: "+combName)
         torsionParameters= None # XXX Ignore torsional deformation.
         for e in elements:
             # Call getResisting force to update the internal forces.
             unusedR= e.getResistingForce() 
             scc= e.getSection()
             idSection= e.getProp("idSection")
-            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc, torsionParameters= torsionParameters)
+            masterElementDimension= e.getProp("masterElementDimension")
+            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc, elementDimension= masterElementDimension, torsionParameters= torsionParameters)
             Mu= 0.0 #Apparently EHE doesn't use Mu
-            if(FCtmp>=e.getProp(self.limitStateLabel).CF):
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+            if(FCtmp>=e.getProp(self.limitStateLabel).CF): # new worst case.
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # set worst case
 
 
 class CrackStraightController(lscb.LimitStateControllerBase):
@@ -1272,7 +1286,9 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             is generated for each of these elements. 
         '''
         if(self.verbose):
-            lmsg.log("Postprocessing combination: "+combName)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+"; postprocessing combination: "+combName)
         for e in elements:
             Aceff=0  #init. value
             R=e.getResistingForce()
@@ -1376,22 +1392,22 @@ class CrackControl(lscb.CrackControlBaseParameters):
                        # cracking caused by indirect actions only, and 1.7 otherwise.
         self.Wk= 0.0 # Characteristic crack opening.
 
-    def printParams(self):
+    def printParams(self, os= sys.stdout):
         ''' Prints crack control parameters.'''
         self.tensionedRebars.printParams()    
-        print("Gross effective area: ",self.grossEffectiveArea*1e4," cm2")
-        print("Net effective area: ",self.netEffectiveArea*1e4," cm2")
-        print("Maximum concrete strain in the cracked section inside the tensioned zone; eps1= ",self.eps1*1e3," per mil.")
-        print("Minimum concrete strain in the cracked section inside the tensioned zone; eps2= ",self.eps2*1e3," per mil.")
-        print("Effect of the tension diagram; k1= ",self.k1,"")
-        print("Mechanic depth; h= ",self.depthMecanico," m")
-        print("Lever arm; z= ",self.mechanicLeverArm," m")
-        print("Mechanical width; b= ",self.widthMecanico," m")
-        print("Aspect ratio; r= ",self.aspectRatio,"")
-        print("Maximum depth for effective area; hEfMax= ",self.hEfMax," m")
-        print("Average tensile strength of the concrete; fctm= ",self.fctmFis/1e6," MPa")
-        print("Concrete tangent stiffness; E0= ",self.E0/1e9," GPa")
-        print("Characteristic crack opening; Wk= ",self.Wk*1e3," mm")
+        os.write("Gross effective area: "+str(self.grossEffectiveArea*1e4)+" cm2")
+        os.write("Net effective area: "+str(self.netEffectiveArea*1e4)+" cm2")
+        os.write("Maximum concrete strain in the cracked section inside the tensioned zone; eps1= "+str(self.eps1*1e3)+" per mil.")
+        os.write("Minimum concrete strain in the cracked section inside the tensioned zone; eps2= "+str(self.eps2*1e3)+" per mil.")
+        os.write("Effect of the tension diagram; k1= "+str(self.k1)+"")
+        os.write("Mechanic depth; h= "+str(self.depthMecanico)+" m")
+        os.write("Lever arm; z= "+str(self.mechanicLeverArm)+" m")
+        os.write("Mechanical width; b= "+str(self.widthMecanico)+" m")
+        os.write("Aspect ratio; r= "+str(self.aspectRatio)+"")
+        os.write("Maximum depth for effective area; hEfMax= "+str(self.hEfMax)+" m")
+        os.write("Average tensile strength of the concrete; fctm= "+str(self.fctmFis/1e6)+" MPa")
+        os.write("Concrete tangent stiffness; E0= "+str(self.E0/1e9)+" GPa")
+        os.write("Characteristic crack opening; Wk= "+str(self.Wk*1e3)+" mm")
 
     def computeWkOnBars(self,tensionedReinforcement):
         '''Compute the characteristic crack opening on each bar and return
@@ -1459,22 +1475,22 @@ class CrackControl(lscb.CrackControlBaseParameters):
             self.tensionedRebars.setup(tensionedReinforcement)
             self.Wk= self.computeWkOnBars(tensionedReinforcement)  
 
-def printRebarCrackControlParameters():
+def printRebarCrackControlParameters(os= sys.stdout):
     '''Prints crack control parameters of a bar.'''
-    print("\niRebar= ",iRebar,"")
-    print("Effective area Acef= ",rebarEffConcArea*1e4," cm2")
-    print("Bar area As= ",rebarArea*1e4," cm2")
-    print("Bar position: (",rebar_y,",",rebar_z,")")
-    print("Bar cover c= ",rebarCover," m")
-    print("Bar diameter fi= ",rebarDiameter,"")
-    print("Bar stress= ",rebarStress/1e6," MPa")
-    print("Bar stress_SR= ",rebarSigmaSR/1e6," MPa")
-    print("Bar spacement s= ",rebarSpacing," m")
-    print("k1= ",k1,"")
-    print("rebarCrackMeanSep= ",rebarCrackMeanSep," m")
-    print("Maximum bar elongation: ",maxBarElongation*1e3," por mil.")
-    print("Average bar elongation: ",averageBarElongation*1e3," por mil.")
-    print("Characteristic crack width= ",rebarWk*1e3," mm\n")
+    os.write("\niRebar= "+str(iRebar))
+    os.write("Effective area Acef= "+str(rebarEffConcArea*1e4)+" cm2")
+    os.write("Bar area As= "+str(rebarArea*1e4)+" cm2")
+    os.write("Bar position: ("+str(rebar_y)+")+"+str(rebar_z)+")")
+    os.write("Bar cover c= "+str(rebarCover)+" m")
+    os.write("Bar diameter fi= "+str(rebarDiameter)+"")
+    os.write("Bar stress= "+str(rebarStress/1e6)+" MPa")
+    os.write("Bar stress_SR= "+str(rebarSigmaSR/1e6)+" MPa")
+    os.write("Bar spacement s= "+str(rebarSpacing)+" m")
+    os.write("k1= "+str(k1)+"")
+    os.write("rebarCrackMeanSep= "+str(rebarCrackMeanSep)+" m")
+    os.write("Maximum bar elongation: "+str(maxBarElongation*1e3)+" per mil.")
+    os.write("Average bar elongation: "+str(averageBarElongation*1e3)+" per mil.")
+    os.write("Characteristic crack width= "+str(rebarWk*1e3)+" mm\n")
 
 
 class TorsionParameters(object):
@@ -1635,17 +1651,23 @@ class ColumnReinforcementRatios(object):
         '''Checking of main reinforcement ratio in compression.'''
         ctMinGeom= self.getMinumumGeometricAmount()
         if(As<ctMinGeom):
-            msg= "Reinforcement area: "+str(As*1e4)+\
-                 " cm2, gives a ratio below minimal geometric reinforcement amount: "+\
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            msg= className+'.'+methodName+"; reinforcement area: "+str(As*1e4)+\
+                 " cm, gives a ratio below minimal geometric reinforcement amount: "+\
                  str(ctMinGeom*1e4)+" cm2\n"
             lmsg.warning(msg)
         ctMinMec= self.getMinimumMechanicalAmount(Nd)
         if(As<ctMinMec):
-            msg= "Reinforcement area: "+str(As*1e4)+" cm2, gives a ratio below minimal mechanical reinforcement amount: "+str(ctMinMec*1e4)+" cm2\n"
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            msg= className+'.'+methodName+"; reinforcement area: "+str(As*1e4)+" cm, gives a ratio below minimal mechanical reinforcement amount: "+str(ctMinMec*1e4)+" cm2\n"
             lmsg.warning(msg)
         ctMax= self.getMaximumReinforcementAmount()
         if(As>ctMax):
-            msg= "Reinforcement area: "+str(As*1e4)+" cm2, gives a ratio above the maximum mechanical reinforcement ratio: "+str(ctMax*1e4)+" cm2\n"
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            msg= className+'.'+methodName+"; reinforcement area: "+str(As*1e4)+" cm, gives a ratio above the maximum mechanical reinforcement ratio: "+str(ctMax*1e4)+" cm2\n"
             lmsg.warning(msg)
 
 

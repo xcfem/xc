@@ -33,8 +33,10 @@ elementTags= [2524,2527]
 #Reinforced concrete sections on each element.
 reinfConcreteSections= RC_material_distribution.RCMaterialDistribution()
 
+# Set-up material distribution and element dimensions.
 for eTag in elementTags:
     reinfConcreteSections.sectionDistribution[eTag]= ["deck2","deck1"]
+    reinfConcreteSections.sectionDistribution.elementDimension[eTag]= 2
 
 # deck.
 concrete= EHE_materials.HA30

@@ -604,13 +604,35 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
             e.setProp(code,0.0)
 
 class ElementSectionMap(dict):
-    '''dictionary that stores a section name(s)
-       for each element number. This way it defines
-       a spatial distribution of the sections over
-       the structure.'''
+    '''dictionary that stores a section name(s) for each element number. 
+       This way it defines  a spatial distribution of the sections over
+       the structure.
+
+    :ivar elementDimension: dictionary to store the dimension (1, 2 or 3) 
+                            of each element.
+    '''
     propName= 'name' # Name of the property that stores the section names.
-    
-    def assign(self,elemSet,setRCSects):
+
+    def __init__(self):
+        ''' Constructor.'''
+        super(ElementSectionMap, self).__init__()
+        self.elementDimension= dict() # Store dimension (1, 2 or 3) of each element.
+
+    def getElementDimension(self, elemTag):
+        ''' Return the dimension of the element whose tag is being passed
+           as parameter.
+
+        :param tagElem: master element identifier.
+        '''
+        if elemTag in self.elementDimension.keys():
+            return self.elementDimension[elemTag]
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; element: "+ str(elemTag) + " not found.")
+            
+        
+    def assign(self, elemSet, setRCSects):
         '''Assigns the sections names to the elements of the set.
 
            :param elemSet: set of elements that receive the section names 
@@ -626,13 +648,14 @@ class ElementSectionMap(dict):
         for e in elemSet:
             if(not e.hasProp(self.propName)):
                 self[e.tag]= list()
+                self.elementDimension[e.tag]= e.getDimension
                 for s in setRCSects.lstRCSects:
                     self[e.tag].append(s.name)
                 e.setProp(self.propName,setRCSects.name)
             else:
-              className= type(self).__name__
-              methodName= sys._getframe(0).f_code.co_name
-              lmsg.error(className+'.'+methodName+"; element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
 
     def assignFromElementProperties(self, elemSet, sectionWrapperName):
         '''Creates the section materials from the element properties
@@ -657,6 +680,7 @@ class ElementSectionMap(dict):
         for el in elemSet:
             elementSections= el.getProp(self.propName)
             self[el.tag]= elementSections
+            self.elementDimension[el.tag]= el.getDimension
             if(elementSections not in sectionPairs):
                 sectionPairs.append(elementSections)
         # Rename sections and create RCMemberSection objects.

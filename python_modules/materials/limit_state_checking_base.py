@@ -445,3 +445,27 @@ class ShearControllerBase(LimitStateControllerBase):
         if(not scc.hasProp("rcSets")):
             scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
         return scc.getProp("rcSets")
+
+    def getShearForce(self, Vy, Vz, elementDimension):
+        ''' Return the shear internal force to use when checking shear 
+            strenght.
+
+        :param Vy: shear force on "Y" axis.
+        :param Vz: shear force on "Z" axis.
+        :param elementDimension: dimension of the element (1, 2 or 3).
+        '''
+        retval= None
+        if((elementDimension==0) or (elementDimension==1)):
+            # 0D elements (pure sections).
+            # 1D elements (beam-column, ...).
+            retval= math.sqrt((Vy)**2+(Vz)**2)
+        elif(elementDimension==2):
+            # 2D elements (shell,...)
+            retval= math.fabs(Vy)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for elements of dimension: '+str(elementDimension))
+            exit(1)
+        return retval
+          

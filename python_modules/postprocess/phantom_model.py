@@ -66,11 +66,12 @@ class PhantomModel(object):
         self.idCombs=intForcItems[1]
         self.internalForcesValues=intForcItems[2]    
 
-    def createPhantomElement(self,idElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
+    def createPhantomElement(self, masterElementId, masterElementDimension, sectionName, sectionDefinition, sectionIndex, interactionDiagram, fakeSection):
         '''Creates a phantom element (that represents a section to check) 
 
-        :param idElem: identifier of the element in the "true" model associated
-               with the phantom element to be created.
+        :param masterElementId: identifier of the master element (element in the "true" model associated
+               with the phantom element to be created).
+        :param masterElementDimension: dimension (1, 2 or 3) of the master element.
         :param sectionName: name of the 3D fiber section to create the 
                zero-length phantom element (default material)  
         :param idSection: name of the section assigned to the phantom element
@@ -89,16 +90,17 @@ class PhantomModel(object):
         if(not fakeSection):
           self.preprocessor.getElementHandler.defaultMaterial= sectionName
         phantomElement= self.preprocessor.getElementHandler.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
-        phantomElement.setProp("idElem", idElem) #Element to check
-        phantomElement.setProp("idSection", sectionName) #Section to check
-        phantomElement.setProp("dir",sectionIndex) #Section index in the element.
+        phantomElement.setProp("idElem", masterElementId) # Element to check
+        phantomElement.setProp("idSection", sectionName) # Section to check
+        phantomElement.setProp("masterElementDimension", masterElementDimension) # dimension (1, 2 or 3) of the master element.
+        phantomElement.setProp("dir",sectionIndex) # Section index in the element.
         scc= phantomElement.getSection()
         scc.setProp('sectionData', sectionDefinition) #Section definition
         phantomElement.setProp("diagInt",interactionDiagram)
         return phantomElement
 
 
-    def createElements(self,intForcCombFileName, outputCfg):
+    def createElements(self, intForcCombFileName, outputCfg):
         '''Creates the phantom model elements from the data read on the file.
 
         :param intForcCombFileName: name of the file containing the internal
@@ -123,8 +125,10 @@ class PhantomModel(object):
             elements.defaultMaterial= sccFICT.name
         for tagElem in self.elementTags:
             elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
+            
             if(elementSectionNames):
                 elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
+                masterElementDimension= self.sectionsDistribution.getMasterElementDimension(tagElem)
                 mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
                 sz= len(elementSectionNames)
                 for i in range(0,sz):
@@ -133,7 +137,7 @@ class PhantomModel(object):
                     if(mapInteractionDiagrams is not None):
                         diagInt= mapInteractionDiagrams[sectionName]
           #         print('tagElem =',tagElem,' sectionName=',sectionName,' elSecDef=',elementSectionDefinitions[i],' sectIndex=', i+1,' diagInt=', diagInt)
-                    phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt, outputCfg.controller.fakeSection)
+                    phantomElem= self.createPhantomElement(masterElementId= tagElem, masterElementDimension= masterElementDimension, sectionName= sectionName, sectionDefinition= elementSectionDefinitions[i], sectionIndex= i+1, interactionDiagram= diagInt, fakeSection= outputCfg.controller.fakeSection)
                     retval.append(phantomElem)
                     self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
                                                                                       #for this element
@@ -168,7 +172,7 @@ class PhantomModel(object):
                 nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
                 lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
 
-    def build(self,intForcCombFileName, outputCfg):
+    def build(self, intForcCombFileName, outputCfg):
         '''Builds the phantom model from the data read from the file.
 
         :param intForcCombFileName: name of the file containing the forces and 
