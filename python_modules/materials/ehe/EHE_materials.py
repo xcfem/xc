@@ -416,6 +416,7 @@ Fi40= 12.56e-4
 
 # rebars as defined in EHE-08.
 rebarsEHE={}
+rebars= rebarsEHE # useful alias.
 
 rebarsEHE['fi04']= {'nmb':'fi04','d':4e-3,'P':0.099}
 rebarsEHE['fi06']= {'nmb':'fi06','d':6e-3,'P':0.222}
