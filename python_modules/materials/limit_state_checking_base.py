@@ -128,6 +128,11 @@ class LimitStateControllerBase(object):
         self.preprocessor=None
         self.verbose= True # display log messages by default
         
+    def expectsTensionStiffeningModel(self):
+        ''' Return true if a tension-stiffening concrete fiber model must be
+            used for this limit state.'''
+        return False
+        
     def initControlVars(self,elements):
         ''' Initialize control variables over elements.
 

@@ -139,11 +139,11 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
 
     :ivar initTensStiff: variable that also determines the behaviour of 
-     concrete under tension. If initTensStiff ='Y' a concrete02 material model 
+     concrete under tension. If initTensStiff==True a concrete02 material model 
      is initialized with a tension capacity almost equal to 0 (equivalent to 
-     the concrete01 diagram). Defaults to 'N'
+     the concrete01 diagram). Defaults to False
 
-    If tensionStiffparam is None and initTensStiff=='N' (default values) no 
+    If tensionStiffparam is None and initTensStiff==False (default values) no 
     tensile strength is considered; the stress strain relationship corresponds 
     to a concrete01 material (zero tensile strength).
 
@@ -171,7 +171,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         super(Concrete,self).__init__(nmbConcrete)
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete
-        self.initTensStiff='N'
+        self.initTensStiff=False
         self.alfacc= alphacc 
 
     def density(self,reinforced= True):
@@ -274,14 +274,13 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         constitutive model proposed by Stramandinoli & La Rovere (ref. article: 
         Engineering Structures 30 (2008) 2069-2080)
 
-        -If initTensStiff ='Y' a concrete02 material model 
+        -If initTensStiff==True a concrete02 material model 
         is initialized with a tension capacity almost equal to 0 (equivalent to 
-        the concrete01 diagram). Defaults to 'N'
+        the concrete01 diagram). Defaults to False
 
-        -If tensionStiffparam is None and initTensStiff=='N' (default values) no 
-        tensile strength is considered; the stress strain relationship  
-        corresponds to a concrete01 material (zero tensile strength).
-
+        -If tensionStiffparam is None and initTensStiff==False (default value)
+         no tensile strength is considered; the stress strain relationship  
+         corresponds to a concrete01 material (zero tensile strength).
         '''
         if self.tensionStiffparam:
             self.tensionStiffparam.diagType='K'
@@ -309,7 +308,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             # ftdiag=self.tensionStiffparam.f_ct
             # Etsdiag=-self.tensionStiffparam.slopeRegresLineFixedPoint()
             # self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
-        elif self.initTensStiff[0].lower()=='y':
+        elif(self.initTensStiff):
             ftdiag=self.fctk()/10.
 #            self.ft=ftdiag
             ectdiag=ftdiag/self.E0()
@@ -338,13 +337,13 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         constitutive model proposed by Stramandinoli & La Rovere (ref. article: 
         Engineering Structures 30 (2008) 2069-2080)
 
-        -If initTensStiff ='Y' a concrete02 material model 
+        -If initTensStiff==True a concrete02 material model 
         is initialized with a tension capacity almost equal to 0 (equivalent to 
-        the concrete01 diagram). Defaults to 'N'
+        the concrete01 diagram). Defaults to False
 
-        -If tensionStiffparam is None and initTensStiff=='N' (default values) no 
-        tensile strength is considered; the stress strain relationship  
-        corresponds to a concrete01 material (zero tensile strength).
+        -If tensionStiffparam is None and initTensStiff==False (default values)
+         no tensile strength is considered; the stress strain relationship  
+         corresponds to a concrete01 material (zero tensile strength).
         '''
         if self.tensionStiffparam:
             self.tensionStiffparam.diagType='D'
@@ -359,7 +358,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
             self.materialDiagramD.epsct0=ectdiag
             self.materialDiagramD.epsctu=ectdiag+ftdiag/Etsdiag
-        elif self.initTensStiff[0].lower()=='y':
+        elif(self.initTensStiff):
             ftdiag=self.fctk()/10.
             ectdiag=ftdiag/self.E0()
             Etsdiag=ftdiag/(5*ectdiag)

@@ -105,7 +105,7 @@ class ControlVarsBase(object):
                 lmsg.error('argument: '+ arg+' not found')
         retval= obj
         return retval
-  
+    
     def getFieldNames(self,parent= ''):
         ''' Return the object field names.
 
@@ -856,8 +856,8 @@ class CrackControlVars(ControlVarsBase):
 
 class RCCrackStraightControlVars(NMyMz):
     '''Control variables for cracking serviacebility limit state verification
-    when when considering a concrete stress-strain diagram that takes account of 
-    the effects of tension stiffening.
+    when when considering a concrete stress-strain diagram that takes account
+    of the effects of tension stiffening.
 
     :ivar idSection: section identifier.
     :ivar s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between

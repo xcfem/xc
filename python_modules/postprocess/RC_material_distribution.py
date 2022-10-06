@@ -141,9 +141,10 @@ class RCMaterialDistribution(object):
         '''
         feProblem= xc.FEProblem()
         preprocessor= feProblem.getPreprocessor
-        if 'straight' in str(outputCfg.controller).lower():
+        # Check if a tension-stiffening model is expected.
+        if outputCfg.controller.expectsTensionStiffeningModel():
              for s in self.sectionDefinition.sections:
-                 s.fiberSectionParameters.concrType.initTensStiff='Y'
+                 s.fiberSectionParameters.concrType.initTensStiff= True
         self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
                           #for each element in the container the fiber sections
                           #(RCsimpleSections) associated with it.

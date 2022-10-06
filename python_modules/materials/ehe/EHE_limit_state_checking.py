@@ -1223,6 +1223,11 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
         self.beta=1.7    #if only indirect actions beta must be =1.3
 
+    def expectsTensionStiffeningModel(self):
+        ''' Return true if a tension-stiffening concrete fiber model must be
+            used for this limit state.'''
+        return True
+    
     def EHE_hceff(self,width,h,x):
         '''Return the maximum height to be considered in the calculation of 
            the concrete effective area in tension.
