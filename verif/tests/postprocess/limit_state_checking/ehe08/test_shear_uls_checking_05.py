@@ -171,7 +171,6 @@ print("ratio2= ",ratio2)
 '''
 
 import os
-cfg.cleandirs()  # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-4) and (ratio2<1e-4):
@@ -179,10 +178,16 @@ if (ratio1<1e-4) and (ratio2<1e-4):
 else:
     lmsg.error(fname+' ERROR.')
     
-# #########################################################
-# # Graphic stuff.
+# # #########################################################
+# # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayFEMesh()
+# # oh.displayFEMesh()
+# #Load properties to display:
+# from postprocess.control_vars import *
+# exec(open(cfg.projectDirTree.getVerifShearFile()).read())
+# argument= 'CF' #Possible arguments: 'CF','Vy','Vz'
+# oh.displayFieldDirs1and2(limitStateLabel=lsd.shearResistance.label, argument=argument, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
 
+cfg.cleandirs()  # Clean after yourself.
