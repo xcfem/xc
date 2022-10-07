@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+'''Data to represent directions (modulus doesn't matters) field in VTK.'''
 
 from __future__ import print_function
 
-'''Data to represent directions (modulus doesn't matters) field in VTK.'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, AO_O and LCPT"
@@ -11,7 +11,7 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import vtk
-from misc_utils import log_messages as lmsg
+# from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import vector_field_data as vfd
 
 class DirectionFieldData(vfd.VectorFieldData):

@@ -15,9 +15,6 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 import xc
 from misc_utils import log_messages as lmsg
 from solution import predefined_solutions
-from postprocess.xcVtk import vtk_graphic_base
-from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 from postprocess import output_handler as oh
 from postprocess import output_styles
 from model import predefined_spaces

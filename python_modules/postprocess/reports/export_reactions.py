@@ -10,8 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from materials.sections import internal_forces
-from misc_utils import log_messages as lmsg
+# from misc_utils import log_messages as lmsg
 from postprocess import output_styles
 import csv
 

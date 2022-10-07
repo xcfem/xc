@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''Spatial distribution of reinforced concrete material.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -8,8 +9,6 @@ from postprocess import element_section_map
 import pickle
 from misc_utils import log_messages as lmsg
 import xc
-# Macros
-from solution import predefined_solutions
 from postprocess import phantom_model as phm
 from materials.sections import RC_sections_container as sc
 from model.sets import sets_mng as sUtils

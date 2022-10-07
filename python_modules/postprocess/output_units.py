@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+''' Utils for units (m, kN, MPa,...) output.'''
 
 from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2019, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
-from misc_utils import log_messages as lmsg
+#from misc_utils import log_messages as lmsg
 
 class UnitDefinitionPair(object):
     ''' Text symbol describing the unit (kN,lb,N,m,mm,in, etc) and
