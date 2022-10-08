@@ -16,15 +16,11 @@ import sys
 import logging
 import math
 import json
-import copy
 import geom
-from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
 from materials.astm_aisc import ASTM_materials
-import materials
 from import_export import block_topology_entities as bte
 import ezdxf # See https://ezdxf.readthedocs.io
-import csv
 from colorama import Fore
 from colorama import Style
 

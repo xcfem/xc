@@ -12,7 +12,6 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 # import math
 import math
 from typing import Sequence
-import re
 import sys
 import geom
 import xc
