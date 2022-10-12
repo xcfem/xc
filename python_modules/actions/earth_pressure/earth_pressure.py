@@ -17,6 +17,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com" 
 
+import sys
 import math
 import xc
 import geom
@@ -30,8 +31,12 @@ class PressureModelBase(object):
     '''Base class for objects defining earth pressures.'''
     
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z.'''
-        lsmg.error('Error: getPressure must be overloaded in derived classes.')
+        '''Return the earth pressure acting on the points at global 
+           coordinate z.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; error: getPressure must be overloaded in derived classes.')
         return 0.0
 
     def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2,delta= 0.0):

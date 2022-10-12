@@ -22,12 +22,20 @@ def post_stress_elem_line(preprocessor,tag_line, tension):
     '''
 
     line= preprocessor.getMultiBlockTopology.getLine(tag_line)
-    elems= linea.getElems()
+    elems= line.getElems()
     for e in elems:
         pret= e.getPrestress
         e.getMaterial().prestress(tension+pret)
 
-def re_stress_elem_lines(set_lines, umbral, tension):
+def re_stress_elem_lines(preprocessor, set_lines, umbral, tension):
+    '''Increments stress on the elmenents contained in the lines if its
+       current one is lower than threshold.
+
+    :param preprocessor: preprocessor
+    :param set_lines: line container
+    :param umbral: stress threshold.
+    :param tension: tension value
+    '''
     setsLines= preprocessor.getSets.getSet(set_lines)
     for s in setsLines:
         elems= s.getElems()

@@ -81,7 +81,6 @@ def listActionWeighting(actionWeighting):
     for awKey in actionWeighting.getKeys():
         print(awKey)
         aw= actionWeighting[awKey]
-        permanentActions= aw.permanentActions
         print('  Permanent actions: ')
         listActionGroup(aw.permanentActions)
         print('  Non-constant permanent actions: ')

@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import math
 import scipy.interpolate
 from misc_utils import log_messages as lmsg
@@ -58,9 +59,8 @@ def getZmin(terrainCategory:str):
     elif(terrainCategory=='IV'):
         retval= 10.0
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
+        lmsg.error(methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
     return retval
 
 def getZ0(terrainCategory:str):
@@ -81,9 +81,8 @@ def getZ0(terrainCategory:str):
     elif(terrainCategory=='IV'):
         retval= 1.0
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
+        lmsg.error(methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
     return retval
 
 def getKr(terrainCategory:str):
@@ -104,9 +103,8 @@ def getKr(terrainCategory:str):
     elif(terrainCategory=='IV'):
         retval= .235
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
+        lmsg.error(methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
     return retval
         
 
@@ -273,17 +271,15 @@ def getUnitWindLoadDeck(terrainCategory:str, v_b0: float, H_max:float= 20.0):
     elif(H_max<=20.0):
         unitLoads= deckWindUnitLoad_20[terrainCategory]
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; H_max= '+str(H_max)+' out of range (0,20] m.')
+        lmsg.error(methodName+'; H_max= '+str(H_max)+' out of range (0,20] m.')
     unitWindLoad= scipy.interpolate.interp1d(fundamentalBasicWindSpeed, unitLoads, kind='linear')
     retval= None
     if((v_b0>=26.0) and (v_b0<=29)):
         retval= unitWindLoad(v_b0)*1e3
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; v_b0= '+str(v_b0)+' out of range [26,29] m/s.')
+        lmsg.error(methodName+'; v_b0= '+str(v_b0)+' out of range [26,29] m/s.')
     return retval
     
 def getUnitWindLoadPier(terrainCategory:str, v_b0: float, H_max:float= 20.0):
@@ -300,17 +296,15 @@ def getUnitWindLoadPier(terrainCategory:str, v_b0: float, H_max:float= 20.0):
     elif(H_max<=20.0):
         unitLoads= pierWindUnitLoad_20[terrainCategory]
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; H_max= '+str(H_max)+' out of range (0,20] m.')
+        lmsg.error(methodName+'; H_max= '+str(H_max)+' out of range (0,20] m.')
     unitWindLoad= scipy.interpolate.interp1d(fundamentalBasicWindSpeed, unitLoads, kind='linear')
     retval= None
     if((v_b0>=26.0) and (v_b0<=29)):
         retval= unitWindLoad(v_b0)*1e3
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; v_b0= '+str(v_b0)+' out of range [26,29] m/s.')
+        lmsg.error(methodName+'; v_b0= '+str(v_b0)+' out of range [26,29] m/s.')
     return retval
 
 #           a

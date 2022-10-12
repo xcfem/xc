@@ -93,4 +93,4 @@ def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):
     casos= loads.getLoadPatterns
     loads.clearAll()
     ts= casos.newTimeSeries(tipoTimeSeries,nmbTimeSeries)
-    casos.currentTimeSeries= nmbTimeSeries
+    casos.currentTimeSeries= ts.name

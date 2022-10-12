@@ -17,6 +17,7 @@ __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import math
+from misc_utils import log_messages as lmsg
 
 def alphaConstant(exposure: str):
     ''' Return the terrain exposure constant alpha

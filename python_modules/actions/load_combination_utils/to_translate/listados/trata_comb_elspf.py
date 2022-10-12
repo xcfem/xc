@@ -5,7 +5,7 @@ calc_hip_elspf= open("./calc_hip_elspf.xci","w")
 hip_elspf_tex= open("./hipotesis_elspf.tex","w")
 printCabeceraListaHipotesis("hip_elspf_tex")
 
-for conta, comb in enumerate(combinations.comb_els_poco_frecuentes):
+for conta, comb in enumerate(comb_els_poco_frecuentes):
     def_hip_elspf.write("\combination[\"",format(int(conta),"ELSPF%03u"),"\"]{ \descomp{\"",getName,"\"}}\n")
     calc_hip_elspf.write("\\solveStaticLinearComb(\"",format(int(conta),"ELSPF%03u"),"\"){}","\n")
     calc_hip_elspf.write("\\trataResultsComb(\"",format(int(conta),"ELSPF%03u"),"\"){}","\n")
