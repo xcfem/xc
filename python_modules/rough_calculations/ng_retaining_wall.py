@@ -844,7 +844,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
            :param pressureModel: (obj) earth pressure model.
            :param vDir: (xc.Vector) direction for the pressures.
         '''
-        pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,vDir,iCoo= 1,delta= Delta)
+        pressureModel.xcSet=self.stemSet
+        pressureModel.vDir=vDir
+        pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1,delta= Delta)
 
     def createEarthPressureLoadOnHeelEnd(self,pressureModel):
         '''Create the loads of the earth pressure over the vertical face
