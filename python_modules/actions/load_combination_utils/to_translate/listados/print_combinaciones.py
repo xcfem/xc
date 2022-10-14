@@ -30,29 +30,29 @@ def printComb(combs, outputPath):
 def printCombEluSitPersistentes(outputPath):
     '''Write the combinations that correspond to ultimate limit states in
        persistent or transient situations.'''
-    printComb(combinations.comb_elu_persistentes, outputPath)
+    printComb(comb_elu_persistentes, outputPath)
 
 def printCombEluSitAccidentales(outputPath):
     '''Write the combinations that correspond to ultimate limit states in
        accidental situations.'''
-    printComb(combinations.comb_elu_accidentales, outputPath)
+    printComb(comb_elu_accidentales, outputPath)
 
 def printCombEluSitSismicas(outputPath):
     '''Write the combinations that correspond to ultimate limit states in
        seismic situations.'''
-    printComb(combinations.comb_elu_sismicas, outputPath)
+    printComb(comb_elu_sismicas, outputPath)
 
 def printCombElsSitPocoFrecuentes(outputPath):
     '''Write the combinations that correspond to serviceability limit states in
      rare situations.'''
-    printComb(combinations.comb_els_poco_frecuentes, outputPath)
+    printComb(comb_els_poco_frecuentes, outputPath)
 
 def printCombElsSitFrecuentes(outputPath):
     '''Write the combinations that correspond to serviceability limit states in
        frequent situations.'''
-    printComb(combinations.comb_els_frecuentes, outputPath)
+    printComb(comb_els_frecuentes, outputPath)
 
 def printCombElsSitCuasiPermanentes(outputPath):
     '''Write the combinations that correspond to serviceability limit states in
        quasi-permanent situations.'''
-    printComb(combinations.comb_els_cuasi_permanentes, outputPath)
+    printComb(comb_els_cuasi_permanentes, outputPath)

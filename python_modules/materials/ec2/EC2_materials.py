@@ -528,6 +528,7 @@ steelOfName={"S400A":S400A,"S400B":S400B,"S400C":S400C,"S450A":S450A,"S450B":S45
 
 # rebars as defined in Eurocode 2.
 rebarsEC2={}
+rebars= rebarsEC2 # useful alias.
 
 rebarsEC2['fi04']= {'nmb':'fi04','d':4e-3,'P':0.099}
 rebarsEC2['fi05']= {'nmb':'fi05','d':5e-3,'P':0.154}

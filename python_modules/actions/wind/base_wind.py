@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega.Ort@gmail.com"
 
+import sys
 import math
 from enum import Enum
 from misc_utils import log_messages as lmsg
@@ -48,7 +49,9 @@ class windParams(object):
         elif z <= self.zg:
             Kz=2.01*(z/self.zg)**(2/self.alpha)
         else:
-            lmsg.warning("Can't evaluate Kz for z= "+ str(z) + " > zg= "+ str(zg))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warnint(className+'.'+methodName+'; can\'t evaluate Kz for z= '+ str(z) + ' > zg= '+ str(self.zg))
         return Kz
 
     def qz(self,z):

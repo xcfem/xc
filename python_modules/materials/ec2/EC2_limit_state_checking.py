@@ -765,7 +765,7 @@ class ShearController(lscb.ShearControllerBase):
         # first moment of area above and about the centroidal axis.
         S= scc.getSPosHomogenized(E0)
         alpha_l= 1.0 # see expression 6.4 in EC2:2004.
-        return getShearResistanceNonCrackedNoShearReinf(self, concrete= concrete, I= I, S= S, NEd= Nd, Ac= Ac, bw= strutWidth, alpha_l= alpha_l)
+        return getShearResistanceNonCrackedNoShearReinf(concrete= concrete, I= I, S= S, NEd= Nd, Ac= Ac, bw= strutWidth, alpha_l= alpha_l)
     
     def getShearStrengthNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Return the design value of the shear resistance VRdc for cracked
@@ -784,18 +784,20 @@ class ShearController(lscb.ShearControllerBase):
                           reinforcement due to the transverse inclination of
                           its elements.
         '''
+        retval= 0.0
         #tensionedReinforcement= rcSets.tensionFibers
-        isBending= scc.isSubjectedToBending(0.1)
+        self.isBending= scc.isSubjectedToBending(0.1)
         #numberOfTensionedRebars= rcSets.getNumTensionRebars()
-        if(isBending):
-            eps1= rcSets.getMaxConcreteStrain()
+        if(self.isBending):
+            self.eps1= rcSets.getMaxConcreteStrain()
             # design tensile strength of the concrete.
             fctdH= concrete.fctd()
             E0= rcSets.getConcreteInitialTangent()
             if((E0*self.eps1)<fctdH): # Non cracked section
-                self.getShearStrengthNonCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+                retval= self.getShearStrengthNonCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
             else:
-                self.getShearStrengthCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+                retval= self.getShearStrengthCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+        return retval
         
     def getShearStrengthShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH shear reinforcement.
@@ -817,7 +819,7 @@ class ShearController(lscb.ShearControllerBase):
         strutWidth= scc.getCompressedStrutWidth() # b0
         isBending= scc.isSubjectedToBending(0.1)
         if(isBending):
-            innerLeverArm= scc.scc.getMechanicLeverArm() # z
+            innerLeverArm= scc.getMechanicLeverArm() # z
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -844,9 +846,10 @@ class ShearController(lscb.ShearControllerBase):
                           its elements.
         '''
         if(self.Asw==0):
-            self.getShearStrengthNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+            retval= self.getShearStrengthNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
         else:
-            self.getShearStrengthShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+            retval= self.getShearStrengthShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+        return retval
         
     def checkInternalForces(self, sct, Nd, Md, Vd, Td):
         '''  Compute the shear strength at failure.
@@ -867,11 +870,20 @@ class ShearController(lscb.ShearControllerBase):
         self.Asw= shReinf.getAs()
         self.stirrupSpacing= shReinf.shReinfSpacing
         self.alpha= shReinf.angAlphaShReinf
-        self.theta= getWebStrutAngleForSimultaneousCollapse(concrete= concreteCode, bw= strutWidth, s= self.stirrupSpacing, Asw= self.Asw, shearReinfSteel= reinforcementCode, shearReinfAngle= shReinf.angAlphaShReinf)
         #Searching for the best theta angle (concrete strut inclination).
+        if(self.Asw>0.0):
+            self.theta= getWebStrutAngleForSimultaneousCollapse(concrete= concreteCode, bw= strutWidth, s= self.stirrupSpacing, Asw= self.Asw, shearReinfSteel= reinforcementCode, shearReinfAngle= shReinf.angAlphaShReinf)
+        else:
+            self.theta= math.pi/4.0
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
         rcSets= self.extractFiberData(sct, concreteCode, reinforcementCode)
-        self.getShearStrength(sct, concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+        self.Vu= self.getShearStrength(sct, concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
+        VuTmp= self.Vu
+        if(VuTmp!=0.0):
+            FCtmp= Vd/VuTmp
+        else:
+            FCtmp= 1e99
+        return FCtmp, VuTmp
         
     def checkSection(self, sct, elementDimension):
         ''' Check shear on the section argument.
@@ -885,11 +897,11 @@ class ShearController(lscb.ShearControllerBase):
         MTmp= math.sqrt((MyTmp)**2+(MzTmp)**2)
         VyTmp= sct.getStressResultantComponent("Vy")
         VzTmp= sct.getStressResultantComponent("Vz")
-        VTmp= self.getShearForce(Vy= VyTmp, Vz= VzTmp, elementDimension= masterElementDimension)
+        VTmp= self.getShearForce(Vy= VyTmp, Vz= VzTmp, elementDimension= elementDimension)
         TTmp= sct.getStressResultantComponent("Mx")
         #Searching for the best theta angle (concrete strut inclination).
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
-        FCtmp, VuTmp= self.checkInternalForces(sct= sct, torsionParameters= torsionParameters, Nd= NTmp, Md= MTmp, Vd= VTmp, Td= TTmp)
+        FCtmp, VuTmp= self.checkInternalForces(sct= sct, Nd= NTmp, Md= MTmp, Vd= VTmp, Td= TTmp)
         return FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp 
 
     def check(self, elements, combName):
@@ -917,5 +929,6 @@ class ShearController(lscb.ShearControllerBase):
             idSection= e.getProp("idSection")
             masterElementDimension= e.getProp("masterElementDimension")
             FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc, elementDimension= masterElementDimension)
+            Mu= 0.0 #Apparently EC2 doesn't use Mu
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection= idSection, combName= combName, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= self.theta, Vu=VuTmp)) # Worst case

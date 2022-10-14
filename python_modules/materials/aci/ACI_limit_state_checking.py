@@ -142,6 +142,7 @@ def V_max(concrete,Nd,b,d):
 
 class ShearController(lsc.ShearControllerBase):
     '''Object that controls shear limit state according to ACI 318.'''
+    ControlVars= cv.SIATypeRCShearControlVars
     def __init__(self,limitStateLabel):
         ''' Constructor.
         
@@ -236,15 +237,15 @@ class ShearController(lsc.ShearControllerBase):
             VzTmp= scc.getStressResultantComponent("Vz")
             VTmp= self.getShearForce(Vy= VyTmp, Vz= VzTmp, elementDimension= masterElementDimension)
             if(VuTmp!=0.0):
-              FCtmp= abs(VTmp)/VuTmp
+                FCtmp= abs(VTmp)/VuTmp
             else:
-              FCtmp= 10
+                FCtmp= 10
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
-              MyTmp= scc.getStressResultantComponent("My")
-              MzTmp= scc.getStressResultantComponent("Mz")
-              Mu= 0.0 # Not used in ACI-318
-              theta= None # Not used in ACI-318
-              e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vc,self.Vsu,VuTmp)) # Worst cas
+                MyTmp= scc.getStressResultantComponent("My")
+                MzTmp= scc.getStressResultantComponent("Mz")
+                Mu= 0.0 # Not used in ACI-318
+                theta= None # Not used in ACI-318
+                e.setProp(self.limitStateLabel,self.ControlVars(idSection= idSection, combName= nmbComb, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= theta, Vcu= self.Vc, Vsu= self.Vsu, Vu= VuTmp)) # Worst cas
 
 ##################
 # Rebar families.#

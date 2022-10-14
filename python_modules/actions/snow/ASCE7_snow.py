@@ -2,6 +2,7 @@
 '''Snow loads according to ASCE-7.'''
 
 from __future__ import division
+from misc_utils import log_messages as lmsg
 
 
 def importanceFactor(riskCategory: int):

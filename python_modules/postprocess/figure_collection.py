@@ -56,7 +56,7 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"FCCP2",txtFCshearStresses,self.reinforcementText2))
     #Load properties to display:
     fName= self.fieldFilesPath + "verifRsl_shearULS.py"
-    execfile(fName)
+    exec(open(fName).read())
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
@@ -70,7 +70,7 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"sg_s2",txtSGSFreq,self.reinforcementText2,self.sUnits))
     #Load properties to display:
     fName= self.fieldFilesPath + "verifRsl_crackingSLS_freq.py"
-    execfile(fName)
+    exec(open(fName).read())
     elemSet= preprocessor.getSets.getSet(elemSetName).elements
     for e in elemSet:
       sgPos1= e.getProp("sg_sPos1")
@@ -93,7 +93,7 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"sg_s2",txtSGSQP,self.reinforcementText2,self.sUnits))
     #Load properties to display:
     fName= self.fieldFilesPath + "verifRsl_crackingSLS_qperm.py"
-    execfile(fName)
+    exec(open(fName).read())
     elemSet= preprocessor.getSets.getSet(elemSetName).elements
     for e in elemSet:
       sgPos1= e.getProp("sg_sPos1")
@@ -123,16 +123,16 @@ class FigsCollectionPlotter(object):
 
     #Load properties to display:
     fName= self.fieldFilesPath + "verifRsl_fatigueULS.py"
-    execfile(fName)
+    exec(open(fName).read())
 
     elemSet= preprocessor.getSets.getSet(elemSetName).elements
     for e in elemSet:
-      Vy11= e.getProp("Vy11")
-      Vy01= e.getProp("Vy01")
-      e.setProp("incV1",Vy11-Vy01)
-      Vy12= e.getProp("Vy12")
-      Vy02= e.getProp("Vy02")
-      e.setProp("incV2",Vy12-Vy02)
+        Vy11= e.getProp("Vy11")
+        Vy01= e.getProp("Vy01")
+        e.setProp("incV1",Vy11-Vy01)
+        Vy12= e.getProp("Vy12")
+        Vy02= e.getProp("Vy02")
+        e.setProp("incV2",Vy12-Vy02)
 
 
     tp= utils_display.TakePhotos(elemSetName)

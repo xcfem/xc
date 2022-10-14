@@ -937,7 +937,7 @@ class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressCont
 class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
 
-    ControlVars= cv.RCShearControlVars
+    ControlVars= cv.SIATypeRCShearControlVars
     def __init__(self, limitStateLabel):
         ''' Constructor.
         
@@ -1219,7 +1219,7 @@ class ShearController(lscb.ShearControllerBase):
             FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(sct= scc, elementDimension= masterElementDimension, torsionParameters= torsionParameters)
             Mu= 0.0 #Apparently EHE doesn't use Mu
             if(FCtmp>=e.getProp(self.limitStateLabel).CF): # new worst case.
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # set worst case
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection= idSection, combName= combName, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= self.theta, Vcu= self.Vcu, Vsu= self.Vsu, Vu= VuTmp)) # set worst case
 
 
 class CrackStraightController(lscb.LimitStateControllerBase):

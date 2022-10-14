@@ -6,7 +6,6 @@ from __future__ import print_function
 
 import math
 import geom
-import materials
 from import_export import block_topology_entities as bte
 from misc_utils import log_messages as lmsg
 

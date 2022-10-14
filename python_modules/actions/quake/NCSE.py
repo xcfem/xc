@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import sys
+from misc_utils import log_messages as lmsg
 
 def C(soilClass:str):
     ''' Return the value of soil factor according to clause 2.4 
@@ -28,9 +29,8 @@ def C(soilClass:str):
     elif(soilClass== 'IV'):
         retval= 2.0
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+"; soil class: '"+soilClass+"' unknown.\n")
+        lmsg.error(methodName+"; soil class: '"+soilClass+"' unknown.\n")
     return retval
 
 def getSoilAmplificationFactorPGA(C:float, pga:float, rho: float):

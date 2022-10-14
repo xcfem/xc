@@ -3,10 +3,12 @@
 from __future__ import print_function
 from __future__ import division
 
+import sys
 import os
 import math
 from postprocess import output_handler
 from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2020, AO_O and LCPT"
@@ -47,12 +49,10 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
         modelSpace.addLoadCaseToDomain(ULS)
         result= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance= 1e-4)
         if(result!=0):
-            className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; can\'t solve for load case: '+str(ULS)+'.')
+            lmsg.error(methodName+'; can\'t solve for load case: '+str(ULS)+'.')
             exit(-1)
         
-        oh= output_handler.OutputHandler(modelSpace)
         #bolts checking
         set_bolt_check_resprop_current_LC(ULS,boltSets2Check,meanShearProc)
         #welds checking
@@ -68,7 +68,7 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
             for l in Lres: print(l)
     #print results of weld checking
     if len(welds2Check)>0:
-        Lres=print_weld_results(singlWelds)
+        Lres=print_welds_results(singlWelds)
         if resFile:
             f=open(resFile+'_welds.tex','w')
             f.writelines(Lres)
@@ -77,36 +77,6 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
            for l in Lres: print(l)
     if warningsFile:
         write_check_warnings(warningsFile,boltSets2Check,singlWelds)
-
-def print_bolt_results(boltSets2Check):
-    '''return a list with the results
-
-    :param singlWelds: list of welds and results generated during 
-          weld checking
-    '''
-    retval=list()
-    for checkIt in  boltSets2Check:
-        bset=checkIt[0]
-        btype=checkIt[1] 
-        CFmax=0
-        for e in bset.elements:
-            CF=e.getProp('CF')
-            if CF>CFmax: CFmax=CF
-        retval.append('Bolt set: ' + bset.description + ' diameter=' + str(round(btype.diameter,3)) + ' CF=' + str(round(CFmax,2))+'\n')
-    return retval
-
-def print_weld_results(singlWelds):
-    '''return a list with the results
-
-    :param singlWelds: list of welds and results generated during 
-          weld checking
-    '''
-    retval=list()
-    for w in  singlWelds:
-        weld=w[0]
-        par=w[1]
-        retval.append('Weld: ' + weld.descr+ ' minSz=' + str(round(weld.minSz*1e3,1)) + ' maxSz=' + str(round(weld.maxSz*1e3,1))  + ' size='+ str(round(weld.weldSz*1e3,1)) + ' CF=' + str(round(par[1],2)) + '\n')
-    return retval
         
 def write_check_warnings(warningsFile,boltSets2Check,singlWelds):
     f=open(warningsFile,'w')
@@ -275,6 +245,9 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.addLoadCaseToDomain(ULS)
         result= modelSpace.analyze(calculateNodalReactions= True)
+        if(result!=0):
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; can\'t solve.')
         graphNm=texfileNm+'weld'+str(cont)
         w[1].append(rltvGrPath+graphNm)
         oh.displayIntForcDiag('N',weld.weldSet,fileName=grPath+graphNm+'_N.jpg')
@@ -283,7 +256,7 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
         cont+=1
     #print results of bolt checking
     if len(boltSets2Check)>0:
-        Lres=print_bolt_results(boltSets2Check)
+        Lres= print_bolt_results(boltSets2Check)
         f=open(texPath+texfileNm+'_bolts.tex','w')
         f.writelines(Lres)
         f.close()
@@ -394,9 +367,9 @@ def display_weld_results(modelSpace,welds2Check,ULS,set2displ=None):
     in welds. Print the total internal forces for each weld seam.
     set2displ is the set to display displacements (defaults to None)
     '''
-    singlWelds=init_prop_checking_welds(welds2Check)
-    lstWEldSets=[w[0].weldSet for w in singlWelds]
+    singlWelds= init_prop_checking_welds(welds2Check)
     oh= output_handler.OutputHandler(modelSpace)
+    # lstWeldSets= [w[0].weldSet for w in singlWelds]
     # weldsSet=modelSpace.setSum('weldsSet',lstWEldSets)
     # oh.displayFEMesh(weldsSet)
     modelSpace.removeAllLoadPatternsFromDomain()
@@ -423,7 +396,6 @@ def display_weld_results(modelSpace,welds2Check,ULS,set2displ=None):
 
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess import limit_state_data as lsd
-from postprocess.control_vars import VonMisesControlVars
 
 def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
     '''Generates the graphics corresponding to results of vonmises verification
@@ -441,7 +413,6 @@ def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvRe
     :param resVMfile: file containing results from Von Mises verification (defaults 
                       to './tmp_results/verifications/verifRsl_VonMisesStressULS.py')
     '''
-    preprocessor=outphand.modelSpace.preprocessor
     limitState= lsd.vonMisesStressResistance
     exec(open(resVMfile).read())
     resPath=reportPath+rltvResPath

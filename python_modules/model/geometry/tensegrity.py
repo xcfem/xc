@@ -9,7 +9,6 @@ __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 
 import math
 import pandas as pd
-import numpy as np
 
 class tensegrityPrism(object):
     '''This class is aimed at constructing the model of a rotationally symetric     tensegrity prism with n-polygons on two parallel planes, twisted over angle 

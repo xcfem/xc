@@ -3,6 +3,7 @@
 from __future__ import print_function
 from __future__ import division
 
+import sys
 import geom
 import uuid
 import xc
@@ -771,9 +772,8 @@ def gen_bolts_xc_conn_model(modelSpace,matchedBolts):
                 n= pntB.getNode()
                 modelSpace.fixNode000_000(n.tag)
     else:
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; matched bolts is empty.')
+        lmsg.warning(methodName+'; matched bolts is empty.')
     return boltSets2Check
     
 def gen_welds_xc_conn_model(welds , weldMetal, weldSzFactor= None, avlbWeldSz= None):
@@ -796,9 +796,8 @@ def gen_welds_xc_conn_model(welds , weldMetal, weldSzFactor= None, avlbWeldSz= N
         # otherwise this correction factor = -1 (the orientation is changed)
         vWS1= w.memberToWeld.getKVector
         if(len(w.memberToWeld.elements)<1):
-            className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; attached member has no elements.')
+            lmsg.error(methodName+'; attached member has no elements.')
             print(w.memberToWeld.name)
             print(l.name)
         vWS1el= w.memberToWeld.elements[0].getKVector3d(True)
@@ -861,9 +860,8 @@ def change_weld_size(xcWelds,welds2change):
         t1= welds2change[wch]['t1']
         newSize= welds2change[wch]['newSize']
         for w in xcWelds:
-            className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.info(className+'.'+methodName+'; weld size changed')
+            lmsg.info(methodName+'; weld size changed')
             wt1= w.memberToWeld.elements[0].getPhysicalProperties.getVectorMaterials[0].h
             if (name in w.getDescription().lower()) and (abs(oldSize-w.legSize)<1e-4) and (abs(t1-wt1)<1e-4):
                 w.setLegSize(newSize)

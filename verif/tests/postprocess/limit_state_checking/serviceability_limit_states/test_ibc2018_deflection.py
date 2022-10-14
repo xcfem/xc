@@ -2,7 +2,7 @@
 ''' Test deflection values returned by the function getDeflectionLimit
     of the ibc_2018_sls module.'''
 
-from serviceability_limit_states import ibc_2018_sls
+from postprocess.serviceability_limit_states import ibc_2018_sls
 
 memberTypes= ['Roof', 'Floor', 'ExteriorWall', 'InteriorWall', 'FarmMember' ,'GreenhouseMember']
 

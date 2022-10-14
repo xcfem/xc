@@ -688,10 +688,65 @@ class RCShearControlVars(BiaxialBendingControlVars):
     :ivar Vy:       shear force parallel to the y axis
     :ivar Vz:       shear force parallel to the z axis
     :ivar theta:    angle between the concrete compression struts and the beam axis
-    :ivar Vcu:      Vcu component of the shear strength (defined in the codes)
-    :ivar Vsu:      Vsu component of the shear strength (defined in the codes)
     :ivar Vu:       shear strength
 
+    '''
+    def __init__(self,idSection=-1,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vu= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier.
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Mu:       ultimate bending moment
+        :param Vy:       shear force parallel to the y axis
+        :param Vz:       shear force parallel to the z axis
+        :param theta:    angle between the concrete compression struts and the beam axis
+        :param Vu:       shear strength
+        '''
+        super(RCShearControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
+        self.Mu= Mu #Ultimate bending moment.
+        self.Vy= Vy #Shear parallel to the y axis.
+        self.Vz= Vz #Shear parallel to the z axis.
+        self.theta= theta #Strut angle.
+        self.Vu= Vu # Shear strength.
+
+    def getAnsysStrings(self,eTag,axis, factor= 1e-3):
+        ''' Returns a string to represent fields in ANSYS (R).
+
+        :param eTag: element identifier.
+        :param axis: section 1 or 2
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        retval= super(RCShearControlVars,self).getAnsysStrings(eTag,axis,factor)
+        retval.append("detab,"+str(eTag)+",Mu" +axis+","+str(self.Mu*factor)+"\n")
+        retval.append("detab,"+str(eTag)+",Vy" +axis+","+str(self.Vy*factor)+"\n")
+        retval.append("detab,"+str(eTag)+",Vz" +axis+","+str(self.Vz*factor)+"\n")
+        retval.append("detab,"+str(eTag)+",Vu" +axis+","+str(self.Vu*factor)+"\n")
+        return retval
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(RCShearControlVars,self).getDict()
+        retval.update({'Mu':self.Mu, 'Vy':self.Vy, 'Vz':self.Vz, 'theta':self.theta, 'Vu':self.Vu})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(RCShearControlVars,self).setFromDict(dct)
+        self.Mu= dct['Mu']
+        self.Vy= dct['Vy']
+        self.Vz= dct['Vz']
+        self.theta= dct['theta']
+        self.Vu= dct['Vu']
+
+class SIATypeRCShearControlVars(RCShearControlVars):
+    '''Control variables for shear limit state verification in EHE-08.
+
+    :ivar Vcu: Vcu component of the shear strength.
+    :ivar Vsu: Vsu component of the shear strength.
     '''
     def __init__(self,idSection=-1,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vcu= 0.0, Vsu= 0.0, Vu= 0.0):
         '''
@@ -711,46 +766,33 @@ class RCShearControlVars(BiaxialBendingControlVars):
         :param Vsu:      Vsu component of the shear strength (defined in the codes)
         :param Vu:       shear strength
         '''
-        super(RCShearControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
-        self.Mu= Mu #Ultimate bending moment.
-        self.Vy= Vy #Shear parallel to the y axis.
-        self.Vz= Vz #Shear parallel to the z axis.
-        self.theta= theta #Strut angle.
-        self.Vcu= Vcu #Vcu component of the shear strength (defined in the codes).
-        self.Vsu= Vsu #Vsu component of the shear strength (defined in the codes).
-        self.Vu= Vu # Shear strength.
-
+        super(SIATypeRCShearControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= My, Mz= Mz, Mu= Mu, Vy= Vy, Vz= Vz, theta= theta, Vu= Vu)
+        self.Vcu= Vcu #Vcu component of the shear strength.
+        self.Vsu= Vsu #Vsu component of the shear strength.
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
         :param eTag: element identifier.
         :param axis: section 1 or 2
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(RCShearControlVars,self).getAnsysStrings(eTag,axis,factor)
-        retval.append("detab,"+str(eTag)+",Mu" +axis+","+str(self.Mu*factor)+"\n")
-        retval.append("detab,"+str(eTag)+",Vy" +axis+","+str(self.Vy*factor)+"\n")
-        retval.append("detab,"+str(eTag)+",Vz" +axis+","+str(self.Vz*factor)+"\n")
+        :param factor: factor for units (default 1e-3 -> kN)
+        '''
+        retval= super(SIATypeRCShearControlVars,self).getAnsysStrings(eTag,axis,factor)
         retval.append("detab,"+str(eTag)+",Vcu" +axis+","+str(self.Vcu*factor)+"\n")
         retval.append("detab,"+str(eTag)+",Vsu" +axis+","+str(self.Vsu*factor)+"\n")
-        retval.append("detab,"+str(eTag)+",Vu" +axis+","+str(self.Vu*factor)+"\n")
         return retval
-
+    
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
-        retval= super(RCShearControlVars,self).getDict()
-        retval.update({'Mu':self.Mu, 'Vy':self.Vy, 'Vz':self.Vz, 'theta':self.theta, 'Vcu':self.Vcu, 'Vsu':self.Vsu, 'Vu':self.Vu})
+        retval= super(SIATypeRCShearControlVars,self).getDict()
+        retval.update({'Vcu':self.Vcu, 'Vsu':self.Vsu})
         return retval
        
     def setFromDict(self,dct):
         ''' Set the data values from the dictionary argument.'''
-        super(RCShearControlVars,self).setFromDict(dct)
-        self.Mu= dct['Mu']
-        self.Vy= dct['Vy']
-        self.Vz= dct['Vz']
-        self.theta= dct['theta']
+        super(SIATypeRCShearControlVars,self).setFromDict(dct)
         self.Vcu= dct['Vcu']
         self.Vsu= dct['Vsu']
-        self.Vu= dct['Vu']
+
 
 class CrackControlBaseVars(CFNMyMz):
     '''Biaxial bending. Cracking serviceability limit state variables.

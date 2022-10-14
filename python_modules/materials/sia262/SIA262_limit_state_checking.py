@@ -200,7 +200,7 @@ def VuWithShearRebarsSIA262(concrete,steel,Nd,Md,Mu,b,d,Asw,s,z,alpha=math.radia
 class ShearController(lsc.ShearControllerBase):
     '''Object that controls shear limit state according to SIA 262.'''
 
-    ControlVars= cv.RCShearControlVars
+    ControlVars= cv.SIATypeRCShearControlVars
     def __init__(self, limitStateLabel):
         ''' Constructor.
         
@@ -301,7 +301,7 @@ class ShearController(lsc.ShearControllerBase):
                 FCtmp= 10
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
                 VzTmp= scc.getStressResultantComponent("Vz")
-                e.setProp(self.limitStateLabel,self.ControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+                e.setProp(self.limitStateLabel,self.ControlVars(idSection= idSection, combName= nmbComb, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= theta, Vcu= self.Vcu, Vsu= self.Vsu, Vu=VuTmp)) # Worst case
             #13.02.2018 End of changes
 
 

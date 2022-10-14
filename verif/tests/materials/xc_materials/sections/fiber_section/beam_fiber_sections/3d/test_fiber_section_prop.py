@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
-__author__= "Ana Ortega (AO_O) "
-__copyright__= "Copyright 2016, AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "ana.ortega@ciccp.es "
-
 ''' Evaluation of several geometrical and mechanical properties of a 
 RC rectangular section under uniaxial bending moment.
 The data are taken from Example 7.3 of the manual «EC2-worked examples»
@@ -26,10 +18,16 @@ The properties checked include:
 - effective concrete area
 
 This properties can be shown in a figure plotted using fibSectFeaturesToplot 
-function
-
-
+function.
 '''
+
+from __future__ import print_function
+
+__author__= "Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es "
 
 import geom
 import xc

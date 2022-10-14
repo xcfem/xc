@@ -3,6 +3,9 @@
 
 from __future__ import division
 
+import sys
+from misc_utils import log_messages as lmsg
+
 def PsSIA160_1970(h):
     '''
     characteristic value of snow load.
@@ -34,7 +37,8 @@ def Ce(windExposition):
     elif(windExposition == "low"):
         retval= 1.2
     elif(windExposition != "normal"):
-        sys.stderr.write("wind exposition: '"+windExposition+"' unknown.\n")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; wind exposition: \''+windExposition+'\' unknown.\n')
     return retval
 
 def qkRoof(mui,Ct,h0,windExposition):

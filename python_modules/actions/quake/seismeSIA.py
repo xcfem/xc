@@ -88,7 +88,7 @@ def eta(viscousDamping):
     correction coefficient "eta" to obtain the elastic response spectrum.
     according SIA 261 2003 (16.2.3.1).
     '''
-    return math.max(mat.sqrt(1/(0.5+10*viscousDamping),0.55))
+    return math.max(math.sqrt(1/(0.5+10*viscousDamping),0.55))
 
 def elasticReponseSpectrum(soilClass,viscousDamping,accelTerrain,T):
     ''' elastic response spectrum according SIA 261 2003 (16.2.3.1).
