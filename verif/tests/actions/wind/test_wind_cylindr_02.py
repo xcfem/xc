@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "ana.ortega.ort@gmail.com l.pereztato@gmail.com"
 
 import os
-import math
 import xc
 from model import predefined_spaces
 from model.geometry import grid_model as gm
@@ -125,7 +124,6 @@ OK=abs(ratio1)<1e-4 and abs(ratio2)<1e-4 and abs(ratio3)<1e-4 and abs(ratio4)<1e
 print(OK)
 '''
 
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (OK):
