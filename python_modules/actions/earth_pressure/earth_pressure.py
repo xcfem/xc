@@ -94,7 +94,7 @@ class EarthPressureModel(PressureModelBase):
       :ivar gammaWater: weight density of water
       :ivar qUnif: uniform load over the backfill surface (defaults to 0)
     '''
-    def __init__(self, zGround, zBottomSoils, KSoils, gammaSoils, zWater, gammaWater,qUnif=0):
+    def __init__(self, zGround, zBottomSoils, KSoils, gammaSoils, zWater, gammaWater,qUnif=0,xcSet=None,vDir=None):
         ''' Constructor.
 
         :param zGround: global Z coordinate of ground level
@@ -108,6 +108,10 @@ class EarthPressureModel(PressureModelBase):
               (if zGroundwater<minimum z of model => there is no groundwater)
         :param gammaWater: weight density of water
         :param qUnif: uniform load over the backfill surface (defaults to 0)
+        :ivar xcSet: set that contains the elements (shells and/or beams)
+        :ivar vDir: unit xc vector defining pressures direction
+        Note: xcSet and vDir have a default value None for compatibility with
+          old definitions (through loads module)
         '''
         super(EarthPressureModel,self).__init__()
         self.zGround= zGround
@@ -128,6 +132,8 @@ class EarthPressureModel(PressureModelBase):
             self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
                 
         self.qUnif=qUnif
+        self.xcSet=xcSet
+        self.vDir=vDir
 
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.
@@ -149,6 +155,9 @@ class EarthPressureModel(PressureModelBase):
             ret_press+=self.KSoils[ind]*self.qUnif
         return ret_press
 
+    def appendLoadToCurrentLoadPattern(self):
+        super(EarthPressureModel,self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir)
+        
 class PeckPressureEnvelope(EarthPressureBase):
     ''' Envelope of apparent lateral pressure diagrams for design 
         of cuts in sand. See 10.2 in the book "Principles of Foundation
@@ -319,8 +328,12 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
     :ivar zLoad: global Z coordinate where the line load acts
     :ivar distWall: horizontal distance between the wall and the line 
                     surcharge load
+    :ivar xcSet: set that contains the elements (shells and/or beams)
+    :ivar vDir: unit xc vector defining pressures direction
+    Note: xcSet and vDir have a default value None for compatibility with
+          old definitions (through loads module)
     '''
-    def __init__(self,qLoad, zLoad,distWall):
+    def __init__(self,qLoad, zLoad,distWall,xcSet=None,vDir=None):
         ''' Constructor.
 
         :param qLoad: surcharge load (force per unit length)
@@ -332,6 +345,8 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
         self.qLoad=qLoad
         self.zLoad=zLoad
         self.distWall=abs(distWall)
+        self.xcSet=xcSet
+        self.vDir=vDir
         
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.
@@ -355,6 +370,9 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
         zcontrol=zmin+2/3.*(zmax-zmin)
         maxEstValue=self.getPressure(zcontrol)
         return maxEstValue
+    
+    def appendLoadToCurrentLoadPattern(self):
+        super(LineVerticalLoadOnBackfill,self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir)
 
 class PointVerticalLoadOnBackfill(object):
     '''Lateral earth pressure on a retaining wall due to a point 
