@@ -22,8 +22,6 @@ from materials.sections.fiber_section import def_column_RC_section
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 
-from materials import typical_materials
-
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"

@@ -5,7 +5,6 @@ from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
 
 from __future__ import print_function
 from __future__ import division
-import sys
 
 from materials.ehe import EHE_limit_state_checking
 import math

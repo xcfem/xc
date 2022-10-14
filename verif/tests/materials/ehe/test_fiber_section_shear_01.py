@@ -8,7 +8,6 @@ from __future__ import print_function
 
 
 from misc import scc3d_testing_bench
-from solution import predefined_solutions
 from materials.sections.fiber_section import def_simple_RC_section
 
 from materials.ehe import EHE_materials
@@ -16,7 +15,6 @@ from materials.ehe import EHE_limit_state_checking
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials import typical_materials
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -33,7 +31,7 @@ NDato= -400e3 # Axial force for shear checking.
 MyDato= 1e5 # Bending moment for shear checking.
 MzDato= 1e3 # Bending moment for shear checking.
 
-rebarArea=4e-4
+rebarArea= 4e-4
 rebarDiam= 2.0*math.sqrt(rebarArea/math.pi)
 numOfRebars= 3
 lowerRow= def_simple_RC_section.ReinfRow(areaRebar= rebarArea, width= width, nRebars= numOfRebars, nominalCover= cover-rebarDiam/2.0, nominalLatCover= cover-rebarDiam/2.0)
