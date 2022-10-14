@@ -101,7 +101,7 @@ def getBoltCapacityFactor(M, MR, V, VR):
    :param V: Shear force.
    :PARAM VR: Resisting shear force.
   '''
-  return sqr(M/MR)+sqr(V/VR)
+  return (M/MR)**+(V/VR)**2
 
 
 

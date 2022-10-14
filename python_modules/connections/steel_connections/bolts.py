@@ -15,6 +15,7 @@ import geom
 import importlib
 import scipy.interpolate
 from import_export import block_topology_entities as bte
+from connections.steel_connections import square_plate_washer
 
 class Nut(object):
     # Bolt nominal diameters (m)
@@ -280,7 +281,7 @@ class AnchorBase(BoltBase):
         ''' Read member values from a dictionary.'''
         super(AnchorBase, self).setFromDict(dct)
         if('plateWasher' in dct):
-            self.plateWasher= spw.SquarePlateWasher()
+            self.plateWasher= square_plate_washer.SquarePlateWasher()
             self.plateWasher.setFromDict(dct['plateWasher'])
 
 

@@ -405,7 +405,7 @@ class Plate(SteelPanel):
         retval= super(Plate, self).getDict()
         retval.update({'width':self.width, 'length':self.length, 'refSys':self.refSys})
         if(self.attachedMemberCenter):
-            retval['attachedMemberCenter']= attachedMemberCenter.getDict()
+            retval['attachedMemberCenter']= self.attachedMemberCenter.getDict()
         else:
             retval['attachedMemberCenter']= None
         return retval
