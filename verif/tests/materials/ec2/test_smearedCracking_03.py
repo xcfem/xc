@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
-__author__= "Ana Ortega (AO_O) "
-__copyright__= "Copyright 2016, AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "ana.ortega@ciccp.es "
-
 ''' Evaluation of crack amplitude in a RC rectangular section under
 bending moment.
 The data are taken from Example 7.3 of the manual «EC2-worked examples»
@@ -15,6 +7,15 @@ titled «Evaluation of crack amplitude [EC2 clause 7.3.4]»
 The section is 400mm width by 600 mm height. A bending moment of 
 300 kNm is applied
 '''
+
+from __future__ import print_function
+
+__author__= "Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es "
+
 
 import geom
 import xc
@@ -72,7 +73,7 @@ n1= nodes.newNodeXYZ(1.0,0,0) # node 1 defined by its (x,y,z) global coordinates
 n2= nodes.newNodeXYZ(1.0+l,0,0) # node 2 defined by its (x,y,z) global coordinates
 
 # Materials definition
-concrete=EC2_materials.C30 # concrete according to EC2 fck=30 MPa      
+concrete= EC2_materials.C30 # concrete according to EC2 fck=30 MPa      
 
 # Reinforcing steel.
 rfSteel=EC2_materials.S450C # reinforcing steel according to EC2 fyk=450 MPa
