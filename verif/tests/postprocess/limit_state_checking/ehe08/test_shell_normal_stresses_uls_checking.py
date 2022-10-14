@@ -14,7 +14,6 @@ from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import element_section_map
 from postprocess import RC_material_distribution
-from materials.sections import RC_sections_container as sc
 from materials.ehe import EHE_limit_state_checking
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
