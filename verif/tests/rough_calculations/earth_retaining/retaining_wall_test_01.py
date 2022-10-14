@@ -116,7 +116,6 @@ totalSet= preprocessor.getSets.getSet("total")
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
 loadCaseNames= ['selfWeight','earthPress','earthPressAcc']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
-
 #Self weight.
 selfWeight= loadCaseManager.setCurrentLoadCase('selfWeight')
 wall.createSelfWeightLoads(rho= concrete.density(),grav= gravity)
@@ -131,7 +130,6 @@ wall.createBackFillPressures(backFillPressureModel, Delta= backFillDelta)
 zGroundFrontFill= zGroundBackFill-wall.stemHeight+frontFillDepth #Front fill
 frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFrontFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createFrontFillPressures(frontFillPressureModel)
-
 #Accidental: earth pressure failure drainage system.
 gSoil= backFillSoilModel.rho*gravity
 earthPressAcc= loadCaseManager.setCurrentLoadCase('earthPressAcc')

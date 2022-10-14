@@ -232,7 +232,7 @@ class SectionInfoHASimple(SectionInfo):
 
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; this clase will be deprecated. Use the latexReport method of class: '+str(type(sectHASimple))+'.\n')        
+        lmsg.warning(className+'.'+methodName+'; this class will be deprecated. Use the latexReport method of class: '+str(type(sectHASimple))+'.\n')        
         self.scc= sectHASimple
         sectName=sectHASimple.gmSectionName()
         sectDescr=sectHASimple.sectionDescr

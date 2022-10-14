@@ -886,10 +886,13 @@ class RCSectionBase(object):
         # Plot cross-section
         crossSectionFigureFName= ''.join(x for x in self.name if x.isalnum())
         if(self.geomSection):
-            tmp= crossSectionFigureFName+'.eps'
+            epsFileName= crossSectionFigureFName+'.eps'
             if(outputPath):
-                tmp= outputPath+'/'+tmp
-            pfs.plotSectionGeometry(geomSection,tmp)
+                epsFileName= outputPath+'/'+epsFileName
+            print('here epsFileName= ', epsFileName)
+            pfs.plotSectionGeometry(geomSection,epsFileName)
+            # Convert the image to PNG
+            pfs.eps2png(inputFileName= epsFileName, outputFileName= None)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -1044,7 +1047,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param reinfSteelType: type of reinforcement steel.
         '''
         RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
-        section_properties.RectangularSection.__init__(self,name,width,depth)
+        section_properties.RectangularSection.__init__(self, name= name, b= width, h= depth)
 
         # Transverse reinforcement (z direction)
         self.shReinfZ= ShearReinforcement()
@@ -1201,9 +1204,9 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         '''
         os.write('\\begin{tabular}{l}\n')
         os.write('width: \\\\\n')
-        os.write('$b= '+'{0:.2f}'.format(self.width)+'\\ m$\\\\\n')
+        os.write('$b= '+'{0:.2f}'.format(self.b)+'\\ m$\\\\\n')
         os.write('depth: \\\\\n')
-        os.write('$h= '+'{0:.2f}'.format(self.depth)+'\\ m$\\\\\n')
+        os.write('$h= '+'{0:.2f}'.format(self.h)+'\\ m$\\\\\n')
         os.write('\\end{tabular} \\\\\n')
 
     def latexReportShearReinforcement(self, os= sys.stdout):
@@ -1211,8 +1214,8 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
 
         :param os: output stream.
         '''
-        self.shReinfY.latexReport(width= self.width, os= os)
-        self.shReinfZ.latexReport(width= self.depth, os= os)       
+        self.shReinfY.latexReport(width= self.b, os= os)
+        self.shReinfZ.latexReport(width= self.h, os= os)       
 
 class RCRectangularSection(BasicRectangularRCSection):
     ''' This class is used to define the variables that make up a reinforced 

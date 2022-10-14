@@ -8,12 +8,33 @@ import matplotlib as mpl
 mpl.rc('figure', max_open_warning = 0)
 import matplotlib.pyplot as plt
 from misc_utils import log_messages as lmsg
+from PIL import Image
+from pathlib import Path
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
+
+
+def eps2png(inputFileName, outputFileName= None):
+    ''' Convert the encapsulated Postscript input image into a PNG image
+        with a "decent" resolution.
+
+    :param inputFileName: name of the input file.
+    :param outputFileName: name of the output file.
+    '''
+    eps_image = Image.open(inputFileName)
+    # Rasterise onto 4x higher resolution grid
+    eps_image.load(scale=4)
+    if(outputFileName is None):
+        pth= Path(inputFileName)
+        outputFileName= str(pth.with_suffix(''))+'.png'
+    eps_image.save(outputFileName)
+    
+
+    
 
 def plotReinforcement(reinforcement, ctx):
     '''draw section rebars in a postcript file.'''
