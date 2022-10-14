@@ -962,7 +962,7 @@ def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     :param capText:    text for the caption
     :param labl:       label
     '''
-    texFile.write('\\begin{figure}\n')
+    texFile.write('\\begin{figure}[ht]\n')
     texFile.write('\\begin{center}\n')
     texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
     texFile.write('\\caption{'+capText+'}\n')

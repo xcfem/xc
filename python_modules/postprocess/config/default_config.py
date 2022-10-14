@@ -170,15 +170,15 @@ class ProjectDirTree(object):
 
     def getReportSectionsFile(self):
         ''' Return the full path for the sections report file.'''        
-        return self.getFullTextReportPath()+'sectReport.tex'
+        return self.getFullTextReportPath()+'report_RCsections.tex'
     
     def getReportSectionsGrPath(self):
         ''' Return the full path for the sections graphic files.'''        
-        return self.getFullTextReportPath()+'sections/'
+        return self.getFullGraphicsPath()+'sections/'
 
     def getRltvReportSectionsGrPath(self):
         ''' Return the relative path for the sections graphic files.'''        
-        return self.getRltvReportPath()+'sections/'
+        return self.getRltvGraphicsPath()+'sections/'
 
     def getReportLoadsFile(self):
         ''' Return the path for the load report file.'''        
