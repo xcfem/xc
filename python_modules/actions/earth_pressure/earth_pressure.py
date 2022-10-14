@@ -160,8 +160,8 @@ class EarthPressureModel(PressureModelBase):
             ret_press+=self.KSoils[ind]*self.qUnif
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self):
-        super(EarthPressureModel,self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir)
+    def appendLoadToCurrentLoadPattern(self,iCoo=2,delta=0):
+        super(EarthPressureModel,self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir,iCoo,delta)
         
 class PeckPressureEnvelope(EarthPressureBase):
     ''' Envelope of apparent lateral pressure diagrams for design 
