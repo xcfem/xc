@@ -182,7 +182,7 @@ class GussetPlate(plates.SteelPanel):
         holeProperties.appendAttribute('ownerId', ownerId) # Hole owner id.
         blk.holes= self.getHoleBlocks(ownerId, blockProperties= holeProperties) # Get the hole blocks for the new plate
         retval.extend(blk.holes)
-        kPointIds= blk.getKPointIds()
+        # kPointIds= blk.getKPointIds()
         blk.weldBlocks= self.getWeldBlocks(ownerId, blockProperties) # Get the weld blocks for the new plate
         retval.extend(blk.weldBlocks)
         return retval

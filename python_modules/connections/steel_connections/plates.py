@@ -110,6 +110,9 @@ class SteelPanel(object):
                 pA= wl.getFromPoint()
                 pB= wl.getToPoint()
                 weldBlk= retval.blockFromPoints(points= [pA, pB], blockProperties= weldProperties, thickness= None)
+                if __debug__:
+                    if not weldBlk:
+                        AssertionError('Can\'t create the block.')
         return retval
 
     def getDict(self):

@@ -242,7 +242,7 @@ def get_Nd(cfg,setCalc,boltedPlate):
         outCfg= limit_state_data.VerifOutVars(setCalc,appendToResFile='N',listFile='N',calcMeanCF='Y')
         limitState= limit_state_data.normalStressesResistance
         intForcesFileName= limitState.getInternalForcesFileName()
-        controller= connection_design.BoltedPlateController(boltedPlate)
-        worstCase= controller.predimConnection(intForcesFileName,setCalc)
-        Nd=worstCase.forces.N #maximum axial force
+        outCfg.controller= connection_design.BoltedPlateController(boltedPlate)
+        worstCase= outCfg.controller.predimConnection(intForcesFileName,setCalc)
+        Nd= worstCase.forces.N #maximum axial force
         return Nd

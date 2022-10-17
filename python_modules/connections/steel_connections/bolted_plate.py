@@ -595,6 +595,9 @@ def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates
         for pB in boltedPlateBoltCenters:
             dist= math.sqrt((pA.coords[0]-pB.coords[0])**2+(pA.coords[1]-pB.coords[1])**2+(pA.coords[2]-pB.coords[2])**2)
             if(abs(dist-distBetweenPlates)<tol):
-                boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB.id], blockProperties= boltProperties)
-                id= retval.appendBlock(boltBlk)
+                boltBlk= bte.BlockRecord(blkId= -1, typ= 'line', kPoints= [pA.id, pB.id], blockProperties= boltProperties)
+                blkId= retval.appendBlock(boltBlk)
+                if __debug__:
+                    if (blkId==-1):
+                        AssertionError('Can\'t append the block.')
     return retval

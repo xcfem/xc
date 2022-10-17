@@ -266,8 +266,11 @@ class AnchorBase(BoltBase):
         pA= blk.topPoint
         center3d= geom.Pos3d(pA.coords[0], pA.coords[1], pA.coords[2])
         pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-1*self.diameter, pointProperties= anchorPointProperties)
-        boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB])
-        id= retval.appendBlock(boltBlk)
+        boltBlk= bte.BlockRecord(blkId= -1, typ= 'line', kPoints= [pA.id, pB])
+        blkId= retval.appendBlock(boltBlk)
+        if __debug__:
+            if (blkId==-1):
+                AssertionError('Can\'t append the block.')
         return retval
     
     def getDict(self):
