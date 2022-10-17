@@ -5,10 +5,7 @@ the expression is correctly written in Python.'''
 from __future__ import division
 from __future__ import print_function
 
-import sys
-
 from materials.ehe import EHE_limit_state_checking
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

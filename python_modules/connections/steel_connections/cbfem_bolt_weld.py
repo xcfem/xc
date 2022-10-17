@@ -82,9 +82,8 @@ class Bolt(object):
                         (set must be created previously)
 
         '''
-        prep=entLst[0].getPreprocessor
-        nodes=prep.getNodeHandler
-        elements=prep.getElementHandler
+        prep= entLst[0].getPreprocessor
+        elements= prep.getElementHandler
         # if not prep.getSets.exists(setName):
         #     retSet=prep.getSets.defSet(setName)
         # else:
@@ -448,11 +447,19 @@ class BaseWeld(object):
             e= WS1Subset.getNearestElement(nodePos)
             #dist= e.getDist(nodePos, True)
             glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs)) # lgtm [py/multiple-definition]
+            if(not glue):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; something went wrong. Cannot glue the node: '+str(n.tag)+' to the element: '+str(e.tag))
         for n in nod_lWS2:
             nodePos= n.getInitialPos3d
             e= WS2Subset.getNearestElement(nodePos)
             #dist= e.getDist(nodePos, True)
             glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs))
+            if(not glue):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; something went wrong. Cannot glue the node: '+str(n.tag)+' to the element: '+str(e.tag))
         self.weldSet.fillDownwards()
         # remove temporary sets.
         prep.getSets.removeSet(WS1Subset.name)
@@ -511,7 +518,6 @@ class FilletWeld(BaseWeld):
         :param WS2sign: face of welding surface 2 to place the weld 
                         1 for positive face, -1 for negative face (defaults to 1)
         '''
-        prep= self.setWS1.getPreprocessor
         self.tWS1= self.setWS1.getElements[0].getPhysicalProperties.getVectorMaterials[0].h   # thickness of surface 1is taken from only first element (constant thickness is supossed)
         weldElSz= self.weldSz/2
         distWeldEl_WS1= self.tWS1/2+self.weldSz/2
@@ -621,8 +627,7 @@ class PenetrationWeld(BaseWeld):
         :param WS2sign: face of welding surface 2 to place the weld 
                         1 for positive face, -1 for negative face (defaults to 1)
         '''
-        prep= self.setWS1.getPreprocessor
-        self.tWS1= self.setWS1.getElements[0].getPhysicalProperties.getVectorMaterials[0].h   # thickness of surface 1is taken from only first element (constant thickness is supossed)
+        self.tWS1= self.setWS1.getElements[0].getPhysicalProperties.getVectorMaterials[0].h # thickness of surface 1is taken from the first element only (constant thickness is supossed)
         weldElSz= self.weldSz
         distWeldEl_WS1= self.tWS1/4
         super(PenetrationWeld,self).generateWeld(weldElSz,distWeldEl_WS1,nDiv,WS1sign,WS2sign)
@@ -674,8 +679,6 @@ class MultiFilletWeld(object):
         :param bothSidesOfWS2: if True, weld on both sides of surface SW2 
                                (WS2sign ignored) (defaults to False)
         '''
-        prep= self.setWS1.getPreprocessor
-        pnts= prep.getMultiBlockTopology.getPoints
         if not self.setName: self.setName= str(uuid.uuid1())
         if len(self.specDescr) < len(self.lstLines):
             self.specDescr=['weld '+str(i) for i in range(len(self.lstLines))]

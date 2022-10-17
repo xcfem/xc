@@ -738,6 +738,10 @@ class RCSectionBase(object):
         '''
         return False
         
+    def getMainReinforcementArea(self):
+        ''' Return the total area of the main reinforcement.'''
+        return self.geomSection.getReinfLayers.getAreaGrossSection()
+    
     def defInteractionDiagramParameters(self, preprocessor):
         ''' parameters for interaction diagrams.
 
@@ -889,7 +893,6 @@ class RCSectionBase(object):
             epsFileName= crossSectionFigureFName+'.eps'
             if(outputPath):
                 epsFileName= outputPath+'/'+epsFileName
-            print('here epsFileName= ', epsFileName)
             pfs.plotSectionGeometry(geomSection,epsFileName)
             # Convert the image to PNG
             pfs.eps2png(inputFileName= epsFileName, outputFileName= None)
