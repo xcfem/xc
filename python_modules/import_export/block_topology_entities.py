@@ -204,11 +204,11 @@ class BlockRecord(me.CellRecord):
 
     :ivar blockProperties: labels and attributes of the block.
     '''    
-    def __init__(self,id, typ, kPoints, blockProperties= None, thk= 0.0, matId= None):
+    def __init__(self, blkId, typ, kPoints, blockProperties= None, thk= 0.0, matId= None):
         '''
         Block record constructor.
 
-        :param id: identifier for the block.
+        :param blkId: identifier for the block.
         :param typ: block type.
         :param kPoints: key points that define block geometry and topology.
         :param blockProperties: labels and attributes of the block.
@@ -224,7 +224,7 @@ class BlockRecord(me.CellRecord):
         self.blockProperties.appendAttribute('matId', matId)
         if('Thickness' in self.blockProperties.attributes):
             thk= self.blockProperties.attributes['Thickness']
-        super(BlockRecord,self).__init__(id,typ,kPoints,thk)
+        super(BlockRecord,self).__init__(ident= blkId, typ= typ, nodes= kPoints, thk= thk)
 
     def getKPointIds(self):
         ''' Return the key points identifiers of the block.'''
@@ -341,7 +341,7 @@ class BlockDict(dict):
                 thickness= 0.0
                 if(len(s.elements)>0):
                     thickness= s.getElement(1,1,1).getPhysicalProperties.getVectorMaterials[0].h
-                block= BlockRecord(id= s.tag, typ= 'surface',kPoints= tagPoints,thk= thickness)
+                block= BlockRecord(blkId= s.tag, typ= 'surface',kPoints= tagPoints,thk= thickness)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -353,7 +353,7 @@ class BlockDict(dict):
             numPoints= len(points)
             if(numPoints==2):
                 tagPoints= [points[0],points[1]]
-                block= BlockRecord(id= l.tag, typ= 'line',kPoints= tagPoints, thk= 0.0)
+                block= BlockRecord(blkId= l.tag, typ= 'line',kPoints= tagPoints, thk= 0.0)
             self.append(block)
         return len(self)
         
@@ -483,7 +483,7 @@ class BlockData(object):
         self.points[pr.ident]= pr 
         return pr.ident
         
-    def appendBlock(self,block):
+    def appendBlock(self, block):
         ''' Append a block (line, surface, volume) to the 
             block data.
 
@@ -516,7 +516,9 @@ class BlockData(object):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; at least 2 points required.')
-        self.appendBlock(block)
+            block= None
+        if(block):
+            self.appendBlock(block)
         return block
     
     def extend(self, other):
