@@ -53,7 +53,6 @@ class ReportGenerator(oh.OutputHandler):
             for arg in argsShEl:
                 capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. 1'
                 fullgrFileNm=fullPath+st.name+arg+'Sect1'
-                print('file name: ', fullgrFileNm)
                 rltvgrFileNm=rltvPath+st.name+arg+'Sect1'
                 fullgrFileNmAndExt= fullgrFileNm+'.jpg'
                 self.displayField(limitStateLabel, 1,arg, None, st, fullgrFileNmAndExt)
@@ -61,7 +60,7 @@ class ReportGenerator(oh.OutputHandler):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
-                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
+                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth, capText= capt)
                 
                 capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. 2'
                 fullgrFileNm=fullPath+st.name+arg+'Sect2'
@@ -72,7 +71,7 @@ class ReportGenerator(oh.OutputHandler):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
-                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
+                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth, capText= capt)
 
         for stV in setsBmEl:
             for argS in argsBmEl:
