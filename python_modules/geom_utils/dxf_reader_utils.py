@@ -58,8 +58,8 @@ class DXFReader(object):
       retval= []
       for layer in self.dxfFile.layers:
           layerName= layer.name
-          if(layerToImport(layer.name,namesToImport)):
-              retval.append(layer.name)
+          if(layerToImport(layerName,namesToImport)):
+              retval.append(layerName)
       return retval
 
     def getPoint3d(self,dxfPoint):
@@ -86,7 +86,6 @@ class DXFReader(object):
         layerName= obj.layer
         if(layerName in self.layersToImport):
             if(type == 'LINE'):
-                vertices= [-1,-1]
                 p1= self.getPoint3d(obj.start)
                 p2= self.getPoint3d(obj.end)
                 self.lines[lineName]= geom.Segment3d(p1.getPos3d(),p2.getPos3d())
@@ -129,7 +128,7 @@ class DXFReader(object):
             drawing.add_layer(layer)
         for key in self.points:
             p= self.points[key]
-            p1= l.getPos3d()
+            p1= p.getPos3d()
             layerName= self.labelDict[key]
             drawing.add(dxf.point((p1.x, p1.y), layer=layerName))
         for key in self.lines:

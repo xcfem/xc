@@ -1,79 +1,90 @@
 # -*- coding: utf-8 -*-
+''' Simple utilities to draw longitudinal sections.'''
+
 from __future__ import print_function
-import scipy.interpolate
+
 import math
-from geom_utils import acad_script_utils as script
 import os
+import sys
+from misc_utils import log_messages as lmsg
+from geom_utils import acad_script_utils as script
+import scipy.interpolate
 
 class extrap1d(object):
-  fn= None
-  def check_x(self,x):
-    sz= len(x)
-    for i in range(1,sz):
-      x0= x[i-1]
-      x1= x[i]
-      if(x1<=x0):
-        print("problem at position: ", i, " in ", x)
-  def __init__(self,x,y):
-    self.check_x(x)
-    self.fn= scipy.interpolate.interp1d(x, y)
-   
-  def __call__(self,x):
-    retval= None
-    if (x < self.fn.x[0]):
-      Ax= self.fn.x[1]-self.fn.x[0]
-      if Ax!=0.0:
-        retval= self.fn.y[0]+(self.fn.y[1]-self.fn.y[0])/Ax*(x-self.fn.x[0])
-      else:
-        print("repeated vertices at the beginning; Ax= ", Ax)
-    elif (x > self.fn.x[-1]):
-      Ax= self.fn.x[-1]-self.fn.x[-2]
-      if Ax!=0.0:
-        retval= self.fn.y[-2]+(self.fn.y[-1]-self.fn.y[-2])/Ax*(x-self.fn.x[-2])
-      else:
-        print("repeated vertices at the end; Ax= ", Ax)
-    else:
-      retval= self.fn(x)
-    return retval
+    fn= None
+    def check_x(self,x):
+        sz= len(x)
+        for i in range(1,sz):
+            x0= x[i-1]
+            x1= x[i]
+            if(x1<=x0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; problem at position: '+ str(i)+' in '+str(x))
+    def __init__(self,x,y):
+      self.check_x(x)
+      self.fn= scipy.interpolate.interp1d(x, y)
+
+    def __call__(self,x):
+        retval= None
+        if (x < self.fn.x[0]):
+            Ax= self.fn.x[1]-self.fn.x[0]
+            if Ax!=0.0:
+                retval= self.fn.y[0]+(self.fn.y[1]-self.fn.y[0])/Ax*(x-self.fn.x[0])
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; repeated vertices at the beginning; Ax= '+str(Ax))
+        elif (x > self.fn.x[-1]):
+            Ax= self.fn.x[-1]-self.fn.x[-2]
+            if Ax!=0.0:
+                retval= self.fn.y[-2]+(self.fn.y[-1]-self.fn.y[-2])/Ax*(x-self.fn.x[-2])
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; repeated vertices at the end; Ax= '+str(Ax))
+        else:
+            retval= self.fn(x)
+        return retval
 
 class GuitarString:
-  name= 'nil'
-  xData= []
-  yData= []
-  fmt= '{:.3f}'
-  def __init__(self,name,xData,yData):
-    self.name= name
-    self.xData= xData
-    self.yData= yData
-  def __len__(self):
-    return min(len(self.xData),len(self.yData))
-  def x(self,i):
-    return self.xData[i]
-  def y(self,i):
-    return self.yData[i]
-  def getInterpolation1d(self):
-    return extrap1d(self.xData,self.yData)
-  def getOffseted(self,name,offset):
-    sz= len(self.xData)
-    tmp=[]
-    for i in range(0,sz):
-      tmp.append(self.yData[i]+offset)
-    return GuitarString(name,self.xData,tmp)
-  def getDifference(self,name,other,x):
-    fnA= self.getInterpolation1d()
-    fnB= other.getInterpolation1d()
-    tmp= []
-    for xi in x:
-      v= float(fnA(xi))-float(fnB(xi)) 
-      tmp.append(self.fmt.format(v))
-    return GuitarString(name,x,tmp)
-  def getTexts(self,fScript,x):
-    fn= self.getInterpolation1d()
-    retval= []
-    for xi in x:
-      v= float(fn(xi)) 
-      retval.append(self.fmt.format(v))
-    return retval
+    name= 'nil'
+    xData= []
+    yData= []
+    fmt= '{:.3f}'
+    def __init__(self,name,xData,yData):
+        self.name= name
+        self.xData= xData
+        self.yData= yData
+    def __len__(self):
+        return min(len(self.xData),len(self.yData))
+    def x(self,i):
+        return self.xData[i]
+    def y(self,i):
+        return self.yData[i]
+    def getInterpolation1d(self):
+        return extrap1d(self.xData,self.yData)
+    def getOffseted(self,name,offset):
+        sz= len(self.xData)
+        tmp=[]
+        for i in range(0,sz):
+          tmp.append(self.yData[i]+offset)
+        return GuitarString(name,self.xData,tmp)
+    def getDifference(self,name,other,x):
+        fnA= self.getInterpolation1d()
+        fnB= other.getInterpolation1d()
+        tmp= []
+        for xi in x:
+            v= float(fnA(xi))-float(fnB(xi)) 
+            tmp.append(self.fmt.format(v))
+        return GuitarString(name,x,tmp)
+    def getTexts(self,fScript,x):
+        fn= self.getInterpolation1d()
+        retval= []
+        for xi in x:
+            v= float(fn(xi)) 
+            retval.append(self.fmt.format(v))
+        return retval
 
 def getGuitarStringFromPline3D(name,points):
   x= getAbscissasFromPline3d(points)
@@ -95,15 +106,15 @@ class LongProfile:
   yMN= 1e9
 
   def __init__(self,x,nameY,y):
-    sz= len(x)
-    zeros= [0]*sz
-    self.dataLines= {}
-    self.ordinateNames= []
-    self.rowOrder= []
-    self.setAbscissaLine("distCum",x,x)
-    px= self.getPartials()
-    self.appendDummyLine("distPart",px)
-    self.appendOrdinatesLine(nameY,x,y)
+      #sz= len(x)
+      #zeros= [0]*sz
+      self.dataLines= {}
+      self.ordinateNames= []
+      self.rowOrder= []
+      self.setAbscissaLine("distCum",x,x)
+      px= self.getPartials()
+      self.appendDummyLine("distPart",px)
+      self.appendOrdinatesLine(nameY,x,y)
 
   def update(self,dl):
     self.dataLines.update({dl.name:dl})
@@ -279,7 +290,7 @@ def getLongXYPline3d(points,dist):
   for p in points:
     retval+= getDistXY(p0,p)
     p0= p
-  return distOrg
+  return retval
 
 def getAbscissasFromPline3d(points):
   p0= points[0]
