@@ -49,17 +49,6 @@ class Rectangle2d: public Quadrilateral2d
 
     virtual GeomObj *getCopy(void) const
       { return new Rectangle2d(*this); }
-/*     void Offset(const double &offset) */
-/*       { */
-/* 	Quadrilateral2d::Offset(offset); */
-/*         height+=2.0*offset; */
-/*       } */
-/*     Rectangle2d GetOffset(const double &offset) const */
-/*       { */
-/*         Rectangle2d retval(*this); */
-/*         retval.Offset(offset); */
-/*         return retval; */
-/*       } */
 /*     inline const double &Base(void) const */
 /*       { return lado; } */
 /*     inline double &Base(void) */

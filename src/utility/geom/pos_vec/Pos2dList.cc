@@ -65,9 +65,9 @@ void Pos2dList::Transform(const Trf2d &trf2d)
 
 //! @brief Return the vertex list of a polyline parallel to
 //! the polyline builded with the vertex of this line at the
-//! distance being passed as parameter. Si the distance is
+//! distance being passed as parameter. If the distance is
 //! positive the new polyline is builded on the right.
-Pos2dList Pos2dList::Offset(const GEOM_FT &d) const
+Pos2dList Pos2dList::offset(const GEOM_FT &d) const
   {
     Pos2dList retval;
     const size_t nv= getNumberOfPoints();
@@ -75,14 +75,14 @@ Pos2dList Pos2dList::Offset(const GEOM_FT &d) const
       {
         point_const_iterator i= points_begin();
         point_const_iterator j= i;j++;
-        const Segment2d s1= Segment2d(*i,*j).Offset(d);
+        const Segment2d s1= Segment2d(*i,*j).offset(d);
         Line2d r1= s1.getSupportLine();
         retval.appendPoint(s1.getFromPoint());
         Segment2d s2= s1;
         i++;j++;//Next segment.
         for(;j != points_end();i++,j++)
           {
-            s2= Segment2d(*i,*j).Offset(d);
+            s2= Segment2d(*i,*j).offset(d);
             Line2d r2= s2.getSupportLine();
             Pos2d ptIntersection= intersection_point(r1,r2);
             retval.appendPoint(ptIntersection);

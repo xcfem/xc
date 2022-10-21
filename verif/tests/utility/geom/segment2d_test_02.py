@@ -12,15 +12,21 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import geom
 import math
 
+# Define a line.
 fromPoint=geom.Pos2d(0,0)
 toPoint=geom.Pos2d(10,0)
 s1=geom.Segment2d(fromPoint,toPoint)
-s2=s1.offsetDouble(2)
-s3=s1.offsetDouble(-2)
 
+# get a line parallel to the previous one, at a fixed distance
+s2=s1.offset(2)
+# the same, at the opposite side.
+s3=s1.offset(-2)
+
+# Compute the centroids.
 p1=s2.getCenterOfMass()
 p2=s3.getCenterOfMass()
 
+# Verify that the distance results as expected.
 ratio1=math.fabs(p1.dist(p2)-4)
 
 import os

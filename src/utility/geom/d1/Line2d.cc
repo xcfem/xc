@@ -358,7 +358,7 @@ Line2d Line2d::Perpendicular(const Pos2d &p) const
 //! @brief Return the line that result from displacing this
 //! one by the vector argument.
 //! @param v: displacement vector.
-Line2d Line2d::Offset(const Vector2d &v) const
+Line2d Line2d::offset(const Vector2d &v) const
   {
     const Pos2d p= Point()+v;
     return Line2d(p,VDir());
@@ -368,17 +368,17 @@ Line2d Line2d::Offset(const Vector2d &v) const
 Line2d Line2d::isParallel(const Pos2d &p) const
   {
     const Vector2d v= p-Point();
-    return Offset(v);
+    return offset(v);
   }
 
 //! @brief Return a line parallel to this one at the distance
 //! being passed as parameter. It the distance is positive the
 //! new line is placed on the right.
-Line2d Line2d::Offset(const GEOM_FT &d) const
+Line2d Line2d::offset(const GEOM_FT &d) const
   {
     const Vector2d v= d*VersorDir();
     const Vector2d n(v.y(),-v.x());
-    return Offset(n);
+    return offset(n);
   }
 
 //! @brief Set the points that define the line.

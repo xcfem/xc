@@ -23,8 +23,8 @@
 class_<Linear2d, bases<GeomObj2d>, boost::noncopyable  >("Linear2d", no_init)
   ;
 
-Line2d (Line2d::*OffsetVector)(const Vector2d &v) const= &Line2d::Offset;
-Line2d (Line2d::*OffsetDouble)(const GEOM_FT &) const= &Line2d::Offset;
+Line2d (Line2d::*OffsetVector)(const Vector2d &v) const= &Line2d::offset;
+Line2d (Line2d::*OffsetDouble)(const GEOM_FT &) const= &Line2d::offset;
 GeomObj::list_Pos2d (Line2d::*intersectionWithR2D)(const Line2d &) const= &Line2d::getIntersection;
 Pos2d (Line2d::*Pos2dProj)(const Pos2d &) const= &Line2d::Projection;
 Vector2d (Line2d::*Vector2dProj)(const Vector2d &) const= &Line2d::Projection;
@@ -33,8 +33,8 @@ class_<Line2d, bases<Linear2d> >("Line2d")
   .def(init<Pos2d, Dir2d>()) //Constructs the line from a point and a direction.
   .def(init<Pos2d, Vector2d>()) //Constructs the line from a point and a vector.
   .def(init<Line2d>()) //Copy constructor.
-  .def("OffsetVector",OffsetVector,"returns a parallel line obtained by adding the vector to the points that define this line.")
-  .def("OffsetDouble",OffsetDouble,"returns a parallel line.")
+  .def("offset",OffsetVector,"returns a parallel line obtained by adding the vector to the points that define this line.")
+  .def("offset",OffsetDouble,"returns a parallel line.")
   .def("getParamA",&Line2d::GetParamA,"returns line slope; 'a' parameter from equation (y= a*x+b).")
   .def("getParamB",&Line2d::GetParamB,"returns line y-intercept; 'b' parameter from equation (y= a*x+b).")
   .def("getIntersection", intersectionWithR2D, "Return the intersection with the line argument.")
@@ -75,8 +75,8 @@ GEOM_FT (Segment3d::*AngleLine2D)(const Line3d &) const= &Segment3d::getAngle;
 GEOM_FT (Segment3d::*AngleRay2D)(const Ray3d &) const= &Segment3d::getAngle;
 GEOM_FT (Segment2d::*AngleSegment2D)(const Segment2d &v) const= &Segment2d::getAngle;
 
-Segment2d (Segment2d::*OffsetSegmentVector)(const Vector2d &v) const= &Segment2d::Offset;
-Segment2d (Segment2d::*OffsetSegmentDouble)(const GEOM_FT &d) const= &Segment2d::Offset;
+Segment2d (Segment2d::*OffsetSegmentVector)(const Vector2d &v) const= &Segment2d::offset;
+Segment2d (Segment2d::*OffsetSegmentDouble)(const GEOM_FT &d) const= &Segment2d::offset;
 GeomObj::list_Pos2d (Segment2d::*segment2dIntersectionWithLine)(const Line2d &) const= &Segment2d::getIntersection;
 GeomObj::list_Pos2d (Segment2d::*segment2dIntersectionWithRay)(const Ray2d &) const= &Segment2d::getIntersection;
 class_<Segment2d, bases<Linear2d> >("Segment2d")
@@ -103,8 +103,8 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("getAngle",AngleSegment2D,"Returns the angle between both line segments.")
   .def("angleVector",AngleVector2D,"DEPRECATED use getAngle; returns the angle between the line segment and the vector.")
   .def("angleSegment",AngleSegment2D,"DEPRECATED use getAngle; returns the angle between the line segments.")
-  .def("offsetVector",OffsetSegmentVector)
-  .def("offsetDouble",OffsetSegmentDouble)
+  .def("offset",OffsetSegmentVector)
+  .def("offset",OffsetSegmentDouble)
   .def("getIntersection", segment2dIntersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersection", segment2dIntersectionWithRay, "Return the intersection with the ray argument.")
   .def("Divide", &Segment2d::DividePy,"Divide(numparts); returns the points that divide the segment.")
@@ -213,7 +213,7 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("getIz", &Polyline2d::Iz)
   .def("getPxy", &Polyline2d::Pxy)
   .def("getLength", &Polyline2d::getLength,"Return the length of the polyline.")
-  .def("offset", &Polyline2d::Offset)
+  .def("offset", &Polyline2d::offset)
   .def("getIntersection", intersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersection", intersectionWithRay, "Return the intersection with the ray argument.")
   .def("getIntersection", intersectionWithSegment, "Return the intersection with the segment argument.")

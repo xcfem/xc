@@ -216,10 +216,10 @@ const Pos2d &Polyline2d::Vertice(const size_t &i) const
 //! @brief Return a polyline parallel to this one at the distance
 //! being passed as parameter. If the distance is positive the new
 //! polyline will be placed on the right.
-Polyline2d Polyline2d::Offset(const GEOM_FT &d) const
+Polyline2d Polyline2d::offset(const GEOM_FT &d) const
   {
     Pos2dList tmp(*this);
-    Polyline2d retval(tmp.Offset(d));
+    Polyline2d retval(tmp.offset(d));
     return retval;
   }
 

@@ -40,16 +40,6 @@ class Square2d : public Quadrilateral2d
 
     virtual GeomObj *getCopy(void) const
       { return new Square2d(*this); }
-/*     void Offset(const GEOM_FT &offset) */
-/*       { lado+=2*offset; } */
-/*     Square2d GetOffset(const GEOM_FT &offset) const */
-/*       { */
-/*         Square2d retval(*this); */
-/*         retval.Offset(offset); */
-/*         return retval; */
-/*       } */
-    
-
   };
 
 #endif

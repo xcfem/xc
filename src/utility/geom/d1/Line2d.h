@@ -117,8 +117,8 @@ class Line2d : public Linear2d
 
     Line2d Perpendicular(const Pos2d &p) const;
     Line2d isParallel(const Pos2d &v) const;
-    Line2d Offset(const Vector2d &v) const;
-    Line2d Offset(const GEOM_FT &d) const;
+    Line2d offset(const Vector2d &v) const;
+    Line2d offset(const GEOM_FT &d) const;
     void Put(const Pos2d &p1,const Pos2d &p2);
 
     bool intersects(const Line2d &r2) const;

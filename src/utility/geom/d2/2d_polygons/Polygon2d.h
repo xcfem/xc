@@ -127,7 +127,7 @@ class Polygon2d: public PolygonalSurface2d
       { cgpol.reverse_orientation(); }
     void makeCounterClockWise(void);
 
-    Polygon2d Offset(const GEOM_FT &d) const;
+    Polygon2d offset(const GEOM_FT &d) const;
 
     inline GEOM_FT AreaSigno(void) const
       { return cgpol.area(); }
