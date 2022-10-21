@@ -68,6 +68,7 @@ class_<Ray2d, bases<Linear2d> >("Ray2d")
   .def("getPoint",&Ray2d::PtoParametricas,"return a point on the line.")
   .def("getIntersection", ray_intersectionWithR2D, "Return the intersection with the line argument.")
   .def("getIntersection", ray_intersectionWithRay2D, "Return the intersection with the ray argument.")
+  .def("getSupportLine", &Ray2d::getSupportLine, "Return the supporting line.")
   ;
 
 GEOM_FT (Segment2d::*AngleVector2D)(const Vector2d &v) const= &Segment2d::getAngle;
@@ -107,6 +108,7 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("offset",OffsetSegmentDouble)
   .def("getIntersection", segment2dIntersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersection", segment2dIntersectionWithRay, "Return the intersection with the ray argument.")
+  .def("getSupportLine", &Segment2d::getSupportLine, "Return the supporting line.")
   .def("Divide", &Segment2d::DividePy,"Divide(numparts); returns the points that divide the segment.")
   .def("swap", &Segment2d::swap,"changes the orientation of the segment.")
   ;
@@ -153,6 +155,7 @@ class_<Ray3d, bases<Linear3d> >("Ray3d")
   .def("getSlope", &Ray3d::getSlope,"return the ray slope.")
   .def("upwards", &Ray3d::upwards,"return true if the ray goes up.")
   .def("downwards", &Ray3d::downwards,"return true if the ray goes down.")
+  .def("getSupportLine", &Ray3d::getSupportLine, "Return the supporting line.")
   ;
 
 GEOM_FT (Segment3d::*AngleVector3D)(const Vector3d &v) const= &Segment3d::getAngle;
@@ -183,6 +186,7 @@ class_<Segment3d, bases<Linear3d> >("Segment3d")
   .def("getIntersection", segment3dIntersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersection", segment3dIntersectionWithRay, "Return the intersection with the ray argument.")
   .def("getIntersection", segment3dIntersectionWithSegment, "Return the intersection with the segment argument.")
+  .def("getSupportLine", &Segment3d::getSupportLine, "Return the supporting line.")
   .add_property("getIVector", &Segment3d::getIVector,"Return the local x vector.")
   .add_property("getJVector", &Segment3d::getJVector,"Return the local y vector.")
   .add_property("getKVector", &Segment3d::getKVector,"Return the local z vector.")

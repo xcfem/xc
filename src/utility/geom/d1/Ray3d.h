@@ -52,7 +52,7 @@ class Ray3d : public Linear3d
       { return NAN; }
     virtual GEOM_FT GetMin(unsigned short int) const
       { return NAN; }
-    Line3d getSupportLine(void) const
+    virtual Line3d getSupportLine(void) const
       { return Line3d(cgsr.supporting_line()); }
     Pos3d getFromPoint(void) const
       { return Pos3d(cgsr.source()); }
