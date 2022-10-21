@@ -3,7 +3,7 @@
 
 import os
 from import_export import mesh_entities as me
-
+from import_export import block_topology_entities as bte
 
 class GroupRecord(object):
 
@@ -117,7 +117,7 @@ class XCImportExportData(object):
             self.meshDesc.groups.append(grp)
 
     def readDxfFile(self,fName,preprocessor):
-        self.blockData= BlockData()
+        self.blockData= bte.BlockData()
         self.blockData.name= fName
         self.blockData.readFromDxfFile(fName,preprocessor,self.dxfLayers)
         for l in self.dxfLayers:
@@ -166,8 +166,8 @@ class MEDMeshData(me.MeshData):
         self.numberOfCells= umesh.getNumberOfCells()
         self.numberOfNodes= umesh.getNumberOfNodes()
 
-        nodes.readFromUMesh(umesh)
-        cells.readFromUMesh(umesh)
+        self.nodes.readFromUMesh(umesh)
+        self.cells.readFromUMesh(umesh)
 
     def __str__(self):
         retval= "meshDimension= " + str(self.meshDimension) + '\n'

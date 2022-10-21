@@ -43,7 +43,7 @@ def import_load_combinations_from_sheet(pyExcelBook, sheetName, nameColumsRow, c
     uls_sheet.name_columns_by_row(1)
     records = uls_sheet.to_records()
     for record in records:
-        keys = sorted(record.keys())
+        # keys = sorted(record.keys())
         combName= to_str(record[combNameColumn])
         combExpr= ''
         if(len(combName)>0):

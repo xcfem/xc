@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import print_function
 
 
@@ -8,15 +9,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import geom
+
 class LoadRecord(object):
-  def __init__(self, loadCase,bName= 'nil',v= 1.0):
-    self.loadCaseId= loadCase.id
-    self.loadCaseName= loadCase.name
-    self.loadName= bName
-    self.value= v
-    self.vDir= [0,0,-1]
-  def __str__(self):
-    return 'id= ' + str(self.loadCaseId) + ' name= ' + self.loadCaseName + ' loadName= ' + str(self.loadName) + ' value= ' +  str(self.value) + ' dir= ' + str(self.vDir)
+    def __init__(self, loadCase,bName= 'nil',v= 1.0):
+        self.loadCaseId= loadCase.id
+        self.loadCaseName= loadCase.name
+        self.loadName= bName
+        self.value= v
+        self.vDir= [0,0,-1]
+    def __str__(self):
+        return 'id= ' + str(self.loadCaseId) + ' name= ' + self.loadCaseName + ' loadName= ' + str(self.loadName) + ' value= ' +  str(self.value) + ' dir= ' + str(self.vDir)
   
 class PointForceRecord(LoadRecord):
   '''Force applied in a point.'''
@@ -155,19 +158,19 @@ class LoadCombComponent(object):
     self.loadCaseName= loadCase.name
     self.coef= coef #Multiplier for load i.
     
-def getComponentsFromStr(descompStr,mapLoadCases):
-  retval= list()
-  components= descompStr.split('+')
-  counter= 0
-  for c in components:
-    factors= c.split('*')
-    coef= float(factors[0])
-    loadCaseName= factors[1]
-    loadCase= mapLoadCases[loadCaseName]
-    #print("coef= ", coef, "loadCase= ", loadCaseName, " id= ", loadCase.id)
-    retval.append(LoadCombComponent(counter,loadCase,coef))
-    counter+= 1
-  return retval
+def getComponentsFromStr(descompStr, mapLoadCases):
+    retval= list()
+    components= descompStr.split('+')
+    counter= 0
+    for c in components:
+        factors= c.split('*')
+        coef= float(factors[0])
+        loadCaseName= factors[1]
+        loadCase= mapLoadCases[loadCaseName]
+        #print("coef= ", coef, "loadCase= ", loadCaseName, " id= ", loadCase.id)
+        retval.append(LoadCombComponent(counter,loadCase,coef))
+        counter+= 1
+    return retval
     
 
 class LoadComb(object):

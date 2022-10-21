@@ -14,6 +14,7 @@ import logging
 import geom
 from import_export import basic_entities as be
 from import_export import mesh_entities as me
+# from import_export import dxf_reader
 from misc_utils import log_messages as lmsg
 
 class BlockProperties(object):
@@ -271,7 +272,6 @@ class BlockRecord(me.CellRecord):
         retval= None
         vertices= self.getVertices(pointDict)
         if(self.cellType=='line'):
-            p1= vertices[0]
             retval= geom.Segment3d(vertices[0], vertices[1])
         elif(self.cellType=='face'):
             retval= geom.Polygon3d(vertices)
@@ -547,27 +547,27 @@ class BlockData(object):
         retval+= self.pointSupports.readFromXCSet(xcSet,self.points)
         return retval
 
-    def readFromDxfFile(self,fName,preprocessor,dxfLayers):
-        ''' Read block topology from a DXF file.
+    # def readFromDxfFile(self,fName,preprocessor,dxfLayers):
+    #     ''' Read block topology from a DXF file.
 
-        :param fName: name of the DXF file to write.
-        :param preprocessor: XC preprocessor
-        :param dxfLayers: layers to import objects from.
-        '''
-        dxfReader= dxf_reader.OldDxfReader()
-        dxfReader.read(fName,preprocessor,dxfLayers)
-        pointSet= preprocessor.getSets.getSet("total").getPoints
-        for p in pointSet:
-            pos= p.getPos
-            self.appendPoint(p.tag, pos.x, pos.y, pos.z)
-        lineSet= preprocessor.getSets.getSet("total").getLines
-        for l in lineSet:
-            points= l.getKPoints()
-            tagPoints= [points[0],points[1]]
-            block= BlockRecord(l.tag,'line',tagPoints)
-            self.appendBlock(block)
-        self.pointsInLayer= dxfReader.pointsInLayer
-        self.blocksInLayer= dxfReader.blocksInLayer
+    #     :param fName: name of the DXF file to write.
+    #     :param preprocessor: XC preprocessor
+    #     :param dxfLayers: layers to import objects from.
+    #     '''
+    #     dxfReader= dxf_reader.OldDxfReader()
+    #     dxfReader.read(fName,preprocessor,dxfLayers)
+    #     pointSet= preprocessor.getSets.getSet("total").getPoints
+    #     for p in pointSet:
+    #         pos= p.getPos
+    #         self.appendPoint(p.tag, pos.x, pos.y, pos.z)
+    #     lineSet= preprocessor.getSets.getSet("total").getLines
+    #     for l in lineSet:
+    #         points= l.getKPoints()
+    #         tagPoints= [points[0],points[1]]
+    #         block= BlockRecord(l.tag,'line',tagPoints)
+    #         self.appendBlock(block)
+    #     self.pointsInLayer= dxfReader.pointsInLayer
+    #     self.blocksInLayer= dxfReader.blocksInLayer
 
     def writeDxf(self,drawing):
         '''Write the blocks (point, lines, surfaces, volumes,...) 

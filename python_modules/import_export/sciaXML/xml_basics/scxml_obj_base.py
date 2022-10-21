@@ -34,8 +34,8 @@ class SCXMLObjBase(object):
     self.id = id
 
   def populateXMLElement(self,xmlElement):
-    pp1= self.p1.getXMLElement(xmlElement,1)
-    pp2= self.p2.getXMLElement(xmlElement,2)
+    self.pp1= self.p1.getXMLElement(xmlElement,1)
+    self.pp2= self.p2.getXMLElement(xmlElement,2)
 
   def getXMLElement(self,parent):
     '''Returns the corresponding XML element for the object.
