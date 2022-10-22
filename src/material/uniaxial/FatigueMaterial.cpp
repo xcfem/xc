@@ -725,18 +725,18 @@ void XC::FatigueMaterial::Print(std::ostream &s, int flag) const
       // }
   }
 
-XC::Response *XC::FatigueMaterial::setResponse(const std::vector<std::string> &, Information &)
+XC::Response *XC::FatigueMaterial::setResponse(const std::vector<std::string> &argv, Information &info)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << " not migrated from OpenSees yet." << std::endl;
-    return nullptr;
+    return UniaxialMaterial::setResponse(argv, info);
   }
 
 int XC::FatigueMaterial::getResponse(int responseID, Information &matInformation)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << " not migrated from OpenSees yet." << std::endl;
-    return 0;
+    return UniaxialMaterial::getResponse(responseID, matInformation);
   }
 
 bool XC::FatigueMaterial::hasFailed(void)

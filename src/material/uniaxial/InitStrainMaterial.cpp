@@ -48,8 +48,9 @@
 // $Date: 2003/04/02 22:02:42 $
 // $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/InitStrainMaterial.cpp,v $
 
-#include <material/uniaxial/InitStrainMaterial.h>
-#include <domain/mesh/element/utils/Information.h>
+#include "InitStrainMaterial.h"
+#include "domain/mesh/element/utils/Information.h"
+#include "utility/recorder/response/MaterialResponse.h"
 #include "domain/component/Parameter.h"
 
 //! @brief Sets the encapsulated material.
@@ -154,6 +155,29 @@ int XC::InitStrainMaterial::recvSelf(const Communicator &comm)
     return res;
   }
 
+XC::Response *XC::InitStrainMaterial::setResponse(const std::vector<std::string> &argv, Information &info)
+  {
+
+      Response *theResponse = 0;
+
+      if(argv[0]=="strain")
+	{
+	  theResponse = new MaterialResponse(this, 100, 0.0);
+	  return theResponse;
+        }
+      else
+        return InitStrainBaseMaterial::setResponse(argv, info);
+  }
+
+int XC::InitStrainMaterial::getResponse(int responseID, Information &matInformation)
+  {
+    if (responseID == 100)
+      return matInformation.setDouble(localStrain+epsInit);
+
+    return InitStrainBaseMaterial::getResponse(responseID, matInformation);
+  }
+
+//! @brief Print stuff.
 void XC::InitStrainMaterial::Print(std::ostream &s, int flag) const
   {
     s << "InitStrainMaterial tag: " << this->getTag() << std::endl;
