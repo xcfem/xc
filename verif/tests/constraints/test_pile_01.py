@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+'''Calculation of displacements and internal forces of a pile taken from project "Reordenación del Enlace de la Pañoleta y Accesos a Camas (Sevilla)", annex nº 13 Structures, pages 93-96'''
+
 from __future__ import print_function
 from __future__ import division
 
@@ -18,7 +20,7 @@ from materials.ehe import EHE_materials
 from materials import typical_materials as tm
 from model.boundary_cond import spring_bound_cond as sbc
 
-# Calculation of displacements and internal forces of a pile taken from project "Reordenación del Enlace de la Pañoleta y Accesos a Camas (Sevilla)", annex nº 13 Structures, pages 93-96 
+
 
 # Data
 fiPile=1.5  # pile diameter [m]
