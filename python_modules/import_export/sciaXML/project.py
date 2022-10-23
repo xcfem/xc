@@ -8,11 +8,15 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from import_export.sciaXML.xml_basics import scxml_object as obj
-from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+# from import_export.sciaXML.xml_basics import scxml_object as obj
+# from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_header as hdr
+from import_export.sciaXML.xml_basics import scxml_header_item as hdr_item
+# from import_export.sciaXML.xml_basics import scxml_object_item as obj_item
+from import_export.sciaXML import node_container
 import xml.etree.cElementTree as ET
 
-class Project:    
+class Project:
     
     def __init__(self,xmlns, defn, containers):
         ''' Constructor:
@@ -27,164 +31,163 @@ class Project:
         self.fileName= ''
         self.uuid= ''
 
-    def getContainerNos(self, sumarioDados):
-        nos= sumarioDados.getListaDeNos()
-        containerNos= None
-        if(len(nos) > 0):
-          objects= list()
-          for coordinate in nos:
-            o= obj.SCXMLObject()
-            o.setId(coordinate.getId() + self.uuid)
-            o.setNm(coordinate.getName()  + self.uuid)
-            o.setP0(ObjectItem(String.valueOf(coordinate.getName()  + self.uuid), None, None, None, None, None))
-            o.setP1(ObjectItem(String.valueOf(coordinate.getX()), None, None, None, None, None))
-            o.setP2(ObjectItem(String.valueOf(coordinate.getY()), None, None, None, None, None))
-            o.setP3(ObjectItem(String.valueOf(coordinate.getZ()), None, None, None, None, None))
-            objects.append(o)
+    # def getContainerNos(self, sumarioDados):
+    #     nos= sumarioDados.getListaDeNos()
+    #     containerNos= None
+    #     if(len(nos) > 0):
+    #       objects= list()
+    #       for coordinate in nos:
+    #         o= obj.SCXMLObject()
+    #         o.setId(coordinate.getId() + self.uuid)
+    #         o.setNm(coordinate.getName()  + self.uuid)
+    #         o.setP0(obj_item.SCXMLObjectItem(String.valueOf(coordinate.getName()  + self.uuid), None, None, None, None, None))
+    #         o.setP1(obj_item.SCXMLObjectItem(String.valueOf(coordinate.getX()), None, None, None, None, None))
+    #         o.setP2(obj_item.SCXMLObjectItem(String.valueOf(coordinate.getY()), None, None, None, None, None))
+    #         o.setP3(obj_item.SCXMLObjectItem(String.valueOf(coordinate.getZ()), None, None, None, None, None))
+    #         objects.append(o)
 
 
-          header= getDefaultStructNodeHeader()
-          tabelaNos=TableXMLNodes(SciaXMLConstantes.STRUCT_NODE_TABLE_ID,SciaXMLConstantes.STRUCT_NODE_TABLE, SciaXMLConstantes.STRUCT_NODE_TABLE_NAME, header, objects)
-          containerNos= Container(SciaXMLConstantes.STRUCT_NODE_ID, SciaXMLConstantes.STRUCT_NODE_TITLE, tabelaNos)
-          return containerNos
+    #       header= getDefaultStructNodeHeader()
+    #       tabelaNos=TableXMLNodes(SciaXMLConstantes.STRUCT_NODE_TABLE_ID,SciaXMLConstantes.STRUCT_NODE_TABLE, SciaXMLConstantes.STRUCT_NODE_TABLE_NAME, header, objects)
+    #       containerNos= Container(SciaXMLConstantes.STRUCT_NODE_ID, SciaXMLConstantes.STRUCT_NODE_TITLE, tabelaNos)
+    #       return containerNos
 
 
-    def getContainerPecas(self, sumarioDados):
-        containerPecas= None
-        objects= list()
-        objects.appendAll(getPecas(sumarioDados.getPecasFinais()))
+    # def getContainerPecas(self, sumarioDados):
+    #     containerPecas= None
+    #     objects= list()
+    #     objects.appendAll(getPecas(sumarioDados.getPecasFinais()))
 
-        header= getDefaultBeamHeader()
-        tabelaPecas= TableXMLNodes(SciaXMLConstantes.BEAM_TABLE_ID, SciaXMLConstantes.BEAM_TABLE, SciaXMLConstantes.BEAM_TABLE_NAME, header, objects)
+    #     header= getDefaultBeamHeader()
+    #     tabelaPecas= TableXMLNodes(SciaXMLConstantes.BEAM_TABLE_ID, SciaXMLConstantes.BEAM_TABLE, SciaXMLConstantes.BEAM_TABLE_NAME, header, objects)
 
-        containerPecas= ctr.SCXMLTableContainer(SciaXMLConstantes.BEAM_ID, SciaXMLConstantes.BEAM_TITLE, tabelaPecas)
+    #     containerPecas= ctr.SCXMLTableContainer(SciaXMLConstantes.BEAM_ID, SciaXMLConstantes.BEAM_TITLE, tabelaPecas)
 
-        return containerPecas
-
-
-    def getContainerCamadas(self, sumarioDados):
-        containerPecas= None
-
-        objects= list()
-        objects.appendAll(getCamadas(sumarioDados.getPecasFinais()))
-
-        header= getDefaultDataLayerNodeHeader()
-        tabelaPecas= TableXMLNodes(SciaXMLConstantes.DATA_LAYER_TABLE_ID,SciaXMLConstantes.DATA_LAYER_TABLE, SciaXMLConstantes.DATA_LAYER_TABLE_NAME, header, objects)
-        containerPecas= Container(SciaXMLConstantes.DATA_LAYER_ID, SciaXMLConstantes.DATA_LAYER_TITLE, tabelaPecas)
-        return containerPecas
+    #     return containerPecas
 
 
-    def getCamadas(pecas):
-        retorno= list()
+    # def getContainerCamadas(self, sumarioDados):
+    #     containerPecas= None
 
-        pecasUnicas= set()
+    #     objects= list()
+    #     objects.appendAll(getCamadas(sumarioDados.getPecasFinais()))
 
-        # Removendo os itens repetidos
-        for peca in pecas:
-          pecasUnicas.append(peca.getType())
-
-
-        if(len(pecasUnicas) > 0):
-          counterID= 1
-          for peca in pecasUnicas:
-            pecaOrigem= RepositorioPecas.pecas.get(peca)
-            o= Object()                
-            containerOrigem= None
-            listaContainer= pecaOrigem.getContainers()
-
-            for container in listaContainer:
-              if(container.getT().contains(SciaXMLConstantes.DATA_LAYER)):
-                containerOrigem= container
-                break
+    #     header= getDefaultDataLayerNodeHeader()
+    #     tabelaPecas= TableXMLNodes(SciaXMLConstantes.DATA_LAYER_TABLE_ID,SciaXMLConstantes.DATA_LAYER_TABLE, SciaXMLConstantes.DATA_LAYER_TABLE_NAME, header, objects)
+    #     containerPecas= Container(SciaXMLConstantes.DATA_LAYER_ID, SciaXMLConstantes.DATA_LAYER_TITLE, tabelaPecas)
+    #     return containerPecas
 
 
-          # Um arquivo de peça só possui um object/peça no container Beam
-          objectOrigem= containerOrigem.getTables()[0].getObjects().get(0)
+    # def getCamadas(pecas):
+    #     retval= list()
 
-          o.setId(String.valueOf(counterID))
-          o.setNm(peca)
-          o.setP0(ObjectItem(peca, None, None, None, None, None))
-          o.setP1(objectOrigem.getP1())
-          retorno.append(o)
-          counterID+= 1
+    #     pecasUnicas= set()
 
-        return retorno
+    #     # Removendo os itens repetidos
+    #     for peca in pecas:
+    #       pecasUnicas.append(peca.getType())
 
 
-    def getPecas(self, pecas):
-        retorno= list()
-        for peca in pecas:
-          o= Object()
-          pecaOrigem= RepositorioPecas.pecas.get(peca.getType())
+    #     if(len(pecasUnicas) > 0):
+    #       counterID= 1
+    #       for peca in pecasUnicas:
+    #         pecaOrigem= RepositorioPecas.pecas.get(peca)
+    #         o= Object()                
+    #         containerOrigem= None
+    #         listaContainer= pecaOrigem.getContainers()
 
-          containerOrigem= None
-          listaContainer= pecaOrigem.getContainers()
-          for container in listaContainer:
-            if(container.getT().contains(SciaXMLConstantes.BEAM)):
-              containerOrigem= container
-              break
+    #         for container in listaContainer:
+    #           if(container.getT().contains(SciaXMLConstantes.DATA_LAYER)):
+    #             containerOrigem= container
+    #             break
 
-          # Um arquivo de peça só possui um object/peça no container Beam
-          objectOrigem= containerOrigem.getTables()[0].getObjects().get(0)
 
-          o.setId(peca.getId() + self.uuid)
-          o.setNm(peca.getName() + self.uuid)
-          o.setP0(ObjectItem(peca.getId()  + self.uuid, None, None, None, None, None))
-          o.setP1(ObjectItem(None,String.valueOf(peca.getNoInicial().getId()  + self.uuid),String.valueOf(peca.getNoInicial().getId() + self.uuid),None,None,None))
-          o.setP2(ObjectItem(None,String.valueOf(peca.getNoFinal().getId() + self.uuid),String.valueOf(peca.getNoFinal().getId() + self.uuid),None,None,None))
+    #       # Um arquivo de peça só possui um object/peça no container Beam
+    #       objectOrigem= containerOrigem.getTables()[0].getObjects().get(0)
 
-          item= ObjectItem()
-          item.setV(peca.getId())
-          if(objectOrigem.getP3() is not None):
-            valor= objectOrigem.getP3().getN().substring(0, objectOrigem.getP3().getN().indexOf("-")-1)
-            item.setN(valor)
+    #       o.setId(String.valueOf(counterID))
+    #       o.setNm(peca)
+    #       o.setP0(obj_item.SCXMLObjectItem(peca, None, None, None, None, None))
+    #       o.setP1(objectOrigem.getP1())
+    #       retval.append(o)
+    #       counterID+= 1
 
-          o.setP3(item)            
-          o.setP4(objectOrigem.getP4())
-          o.setP5(objectOrigem.getP5())
-          o.setP6(objectOrigem.getP6())
-          o.setP7(objectOrigem.getP7())
-          o.setP8(objectOrigem.getP8())
-          o.setP9(objectOrigem.getP9())
-          o.setP10(objectOrigem.getP10())
-          o.setP11(objectOrigem.getP11())
-          o.setP12(objectOrigem.getP12())
+    #     return retval
 
-        # TODO: Se necessário atualizar os valores da tabela de geometria
-        # o.getXX().setT(String())
-        retorno.append(o)
-        return retorno
+    # def getPecas(self, pecas):
+    #     retval= list()
+    #     for peca in pecas:
+    #       o= Object()
+    #       pecaOrigem= RepositorioPecas.pecas.get(peca.getType())
+
+    #       containerOrigem= None
+    #       listaContainer= pecaOrigem.getContainers()
+    #       for container in listaContainer:
+    #         if(container.getT().contains(SciaXMLConstantes.BEAM)):
+    #           containerOrigem= container
+    #           break
+
+    #       # Um arquivo de peça só possui um object/peça no container Beam
+    #       objectOrigem= containerOrigem.getTables()[0].getObjects().get(0)
+
+    #       o.setId(peca.getId() + self.uuid)
+    #       o.setNm(peca.getName() + self.uuid)
+    #       o.setP0(obj_item.SCXMLObjectItem(peca.getId()  + self.uuid, None, None, None, None, None))
+    #       o.setP1(obj_item.SCXMLObjectItem(None,String.valueOf(peca.getNoInicial().getId()  + self.uuid),String.valueOf(peca.getNoInicial().getId() + self.uuid),None,None,None))
+    #       o.setP2(obj_item.SCXMLObjectItem(None,String.valueOf(peca.getNoFinal().getId() + self.uuid),String.valueOf(peca.getNoFinal().getId() + self.uuid),None,None,None))
+
+    #       item= obj_item.SCXMLObjectItem()
+    #       item.setV(peca.getId())
+    #       if(objectOrigem.getP3() is not None):
+    #         valor= objectOrigem.getP3().getN().substring(0, objectOrigem.getP3().getN().indexOf("-")-1)
+    #         item.setN(valor)
+
+    #       o.setP3(item)            
+    #       o.setP4(objectOrigem.getP4())
+    #       o.setP5(objectOrigem.getP5())
+    #       o.setP6(objectOrigem.getP6())
+    #       o.setP7(objectOrigem.getP7())
+    #       o.setP8(objectOrigem.getP8())
+    #       o.setP9(objectOrigem.getP9())
+    #       o.setP10(objectOrigem.getP10())
+    #       o.setP11(objectOrigem.getP11())
+    #       o.setP12(objectOrigem.getP12())
+
+    #     # TODO: Se necessário atualizar os valores da tabela de geometria
+    #     # o.getXX().setT(String())
+    #     retval.append(o)
+    #     return retval
 
     def getDefaultBeamHeader(self):
-        retorno= hdr.Header()
-        retorno.setH0(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H0))
-        retorno.setH1(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H1))
-        retorno.setH2(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H2))
-        retorno.setH3(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H3))
-        retorno.setH4(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H4))
-        retorno.setH5(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H5))
-        retorno.setH6(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H6))
-        retorno.setH7(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H7))
-        retorno.setH8(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H8))
-        retorno.setH9(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H9))
-        retorno.setH10(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H10))
-        retorno.setH11(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H11))
-        retorno.setH12(HeaderItem(SciaXMLConstantes.BEAM_HEADER_H12))
-        return retorno
+        retval= hdr.SCXMLHeader()
+        # retval.setH0(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H0))
+        # retval.setH1(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H1))
+        # retval.setH2(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H2))
+        # retval.setH3(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H3))
+        # retval.setH4(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H4))
+        # retval.setH5(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H5))
+        # retval.setH6(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H6))
+        # retval.setH7(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H7))
+        # retval.setH8(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H8))
+        # retval.setH9(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H9))
+        # retval.setH10(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H10))
+        # retval.setH11(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H11))
+        # retval.setH12(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.BEAM_HEADER_H12))
+        return retval
 
     def getDefaultStructNodeHeader(self):
-        retorno= Header()
-        retorno.setH0(HeaderItem(SciaXMLConstantes.STRUCT_NODE_HEADER_H0))
-        retorno.setH1(HeaderItem(SciaXMLConstantes.STRUCT_NODE_HEADER_H1))
-        retorno.setH2(HeaderItem(SciaXMLConstantes.STRUCT_NODE_HEADER_H2))
-        retorno.setH3(HeaderItem(SciaXMLConstantes.STRUCT_NODE_HEADER_H3))
-        return retorno
+        retval= hdr.SCXMLHeader()
+        retval.setH0(hdr_item.SCXMLHeaderItem(node_container.STRUCT_NODE_HEADER_H0))
+        retval.setH1(hdr_item.SCXMLHeaderItem(node_container.STRUCT_NODE_HEADER_H1))
+        retval.setH2(hdr_item.SCXMLHeaderItem(node_container.STRUCT_NODE_HEADER_H2))
+        retval.setH3(hdr_item.SCXMLHeaderItem(node_container.STRUCT_NODE_HEADER_H3))
+        return retval
 
     def getDefaultDataLayerNodeHeader(self):
-        retorno= Header()
-        retorno.setH0(HeaderItem(SciaXMLConstantes.DATA_LAYER_HEADER_H0))
-        retorno.setH1(HeaderItem(SciaXMLConstantes.DATA_LAYER_HEADER_H1))
-        return retorno
+        retval= hdr.SCXMLHeader()
+        # retval.setH0(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.DATA_LAYER_HEADER_H0))
+        # retval.setH1(hdr_item.SCXMLHeaderItem(SciaXMLConstantes.DATA_LAYER_HEADER_H1))
+        return retval
 
     def getDef(self):
         return self.defn

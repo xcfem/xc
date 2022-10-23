@@ -11,7 +11,7 @@ __email__= "l.pereztato@gmail.com"
 import xml.etree.cElementTree as ET
 
 class SCXMLObjectItem(object):
-    ''' Item of a table.'''	
+    ''' Item of a table.'''
     def __init__(self, v= '', i= '', n= '', t= '', h= None, rws= None):
       ''' Constructor.
 
