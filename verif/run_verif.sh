@@ -585,7 +585,6 @@ python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
 python tests/constraints/test_release_beam_node_01.py
-python tests/constraints/test_pile_01.py
 echo "$BLEU" "  Glue node to element constraints tests." "$NORMAL"
 python tests/constraints/test_glue_node_to_element_01.py
 python tests/constraints/test_glue_node_to_element_02.py
@@ -1091,6 +1090,9 @@ python tests/materials/eota_tr_29/test_shear_anchor.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
+
+echo "$BLEU" "  Foundation design tests." "$NORMAL"
+python tests/materials/geotechnics/test_pile_01.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"

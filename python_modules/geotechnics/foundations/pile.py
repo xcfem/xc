@@ -8,6 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import math
 from misc_utils import log_messages as lmsg
 from materials.sections import section_properties as sp
@@ -64,12 +65,12 @@ class Pile(object):
             lmsg.error(className+'.'+methodName+'; pile element set not defined.')
         return retval
             
-    def getPileAerialLength(self):
+    def getAerialLength(self):
         '''Return the length of pile above the ground surface'''
         zMax= self.getZMax()
         return max(0,zMax-self.groundLevel)
 
-    def getPileBuriedLength(self):
+    def getBuriedLength(self):
         '''Return the length of pile below the ground surface'''
         zMax= self.getZMax()
         zMin= self.getZMin()
@@ -77,8 +78,8 @@ class Pile(object):
     
     def getTotalLength(self):
         '''Return the total length of the pile.'''
-        aerL= self.getPileAerialLength()
-        burL= self.getPileBuriedLength()
+        aerL= self.getAerialLength()
+        burL= self.getBuriedLength()
         return aerL+burL
     
     def getCrossSectionArea(self):
@@ -95,7 +96,7 @@ class Pile(object):
         '''
         Ipile= self.crossSection.I(majorAxis= majorAxis)
         LePA= math.pow(self.E*Ipile/(Eterrain/3.),0.25)
-        if(LePA>2*getPileBuriedLength()):
+        if(LePA>2*self.getBuriedLength()):
             lmsg.error("Pile is too short to compute its elastic length.")
         return(LePA)
 
