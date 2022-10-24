@@ -183,9 +183,10 @@ else:
 
 
 '''
-from postprocess.xcVtk.FE_model import quick_graphics as QGrph
-dsp=QGrph.QuickGraphics()
-dsp.displayDispRot(itemToDisp='uX',setToDisplay=pile,fConvUnits=1e3,unitDescription= 'mm')
-dsp.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile,fConvUnits=1e-3,unitDescription= 'kN')
-dsp.displayIntForcDiag(itemToDisp='Mz',setToDisplay=pile,fConvUnits=1e-3,unitDescription= 'kN')
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+
+oh.displayDispRot(itemToDisp='uX',setToDisplay=pile)
+oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile)
+oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=pile)
 '''
