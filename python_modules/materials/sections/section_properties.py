@@ -98,6 +98,22 @@ class SectionProperties(object):
            the axis parallel to Z that passes through section centroid.
         '''
         return math.sqrt(self.Iz()/self.A())
+
+    def I(self, majorAxis):
+        ''' Return the second moment of area about the local major or minor
+            axis.
+
+        :param majorAxis: true if the required inertia corresponds to the
+                          bending around major axis. 
+        '''
+        Imax= self.Iz()
+        Imin= self.Iy()
+        if(Imin>Imax): # swap values
+            Imax, Imin= Imin, Imax            
+        if(majorAxis):
+            return Imax
+        else:
+            return Imin
   
     def J(self):
         '''torsional constant of the section (abstract method)'''

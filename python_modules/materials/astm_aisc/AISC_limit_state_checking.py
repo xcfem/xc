@@ -273,6 +273,9 @@ class Member(steel_member_base.BucklingMember):
     def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal compressive strength of the member
             according to chapter F of AISC-360-16.
+
+        :param majorAxis: true if the required strength corresponds to the
+                          bending around major axis. 
         '''
         lateralUnbracedLength= self.getEffectiveLengthX()
         Cb= 1.0 # conservative value
@@ -288,6 +291,9 @@ class Member(steel_member_base.BucklingMember):
     def getDesignFlexuralStrength(self, majorAxis= True):
         ''' Return the design flexural strength of the member
             according to section F of AISC-360-16.
+
+        :param majorAxis: true if the required strength corresponds to the
+                          bending around major axis. 
         '''
         nominalValue= self.getNominalFlexuralStrength(majorAxis)
         if(isinstance(nominalValue, tuple)):
@@ -316,6 +322,9 @@ class Member(steel_member_base.BucklingMember):
     def getDesignShearStrength(self, majorAxis= True):
         ''' Return the design shear strength of the member
             according to section G of AISC-360-16.
+
+        :param majorAxis: true if the required shear strength corresponds to the
+                          bending around major axis. 
         '''
         return self.shape.getDesignShearStrength(majorAxis= majorAxis)
     

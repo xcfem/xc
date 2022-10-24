@@ -4,6 +4,7 @@
 
 from __future__ import division
 
+import sys
 import math
 import geom
 from model import predefined_spaces
@@ -12,7 +13,7 @@ from model.sets import sets_mng
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-
+from geotechnics.foundations import pile
 
 __author__= " Ana Ortega (AO_O), Luis C. Pérez Tato (LCPT) "
 __copyright__= "Copyright 2017, AO_O, LCPT"
@@ -132,7 +133,11 @@ class ElasticFoundation(object):
             self.xSpring.E= self.cRoz*self.wModulus*arTribNod
             self.ySpring.E= self.cRoz*self.wModulus*arTribNod
             self.zSpring.E= self.wModulus*arTribNod
-            unusedNn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
+            Nn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
+            if __debug__:
+                if(not Nn):
+                    AssertionError('Can\'t set beareng on node: '+str(n.tag))
+                
             self.springs.append(preprocessor.getElementHandler.getElement(idElem))
             idElem+= 1
             
@@ -161,7 +166,6 @@ class ElasticFoundation(object):
             n= e.getNodes[1]
             rf= e.getResistingForce()
             a= n.getTributaryArea()
-            print(n.tag,'area=',a)
             if(len(rf)==6):
                 f3d= geom.Vector3d(rf[0],rf[1],0.0)
                 m3d= geom.Vector3d(0.0,0.0,rf[2])
@@ -172,8 +176,6 @@ class ElasticFoundation(object):
             self.svdReac+= geom.SlidingVectorsSystem3d(pos,f3d,m3d)
             n.setProp('soilPressure',[f3d.x/a,f3d.y/a,f3d.z/a])
             n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
-            print(n.tag,'soil pressure',n.getProp('soilPressure'))
-            print(n.tag,'soil reaction',n.getProp('soilReaction'))
             
         return self.svdReac.reduceTo(self.getCentroid())
 
@@ -185,7 +187,10 @@ class ElasticFoundation(object):
               in red (defaults to None)
         :param fileName: file name (defaults to None -> screen display)
         '''
-        unusedReac= self.calcPressures()
+        reac= self.calcPressures()
+        if __debug__:
+            if(not reac):
+                AssertionError('Error computing pressures.')
 
         field= fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
@@ -226,11 +231,12 @@ class ElasticFoundation(object):
                 lmsg.error(className+'.'+methodName+'; can\'t solve for load case: '+str(combs[k].name)+'.')
                 exit(-1)
             reac= self.calcPressures()
+            if __debug__:
+                if(not reac):
+                    AssertionError('Error computing pressures.')
             for n in nodSet:
                 prs=n.getProp('soilPressure')[2]
-#                print ('*', n.tag,prs)
                 if prs > n.getProp('maxSoilPressure'):
-                    print(n.tag,prs)
                     n.setProp('maxSoilPressure',prs)
         # Display max. pressures
         field= fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)
@@ -238,15 +244,12 @@ class ElasticFoundation(object):
         field.display(displaySettings,caption= caption+' '+unitDescription,fileName=fileName)
         modelSpace.removeLoadCaseFromDomain(combs[k].name)
         
-def takeSecond(elem):
-    return elem[1]
 
-class PileFoundation(object):
+class PileFoundation(pile.CircularPile):
     '''Pile foundation model according to art. 5.13.1 (single pile) and art. 
     5.13.3. (pile group) of «Guía de cimentaciones para obras de carretera»,  
     by «Ministerio de Fomento».
     
-    :ivar pileSet: set of elements defining a single pile
     :ivar pileDiam: diameter of the pile
     :ival E: elastic modulus of pile material
     :ival pileBearingCapacity: total bearing capacity (skin friction + 
@@ -266,62 +269,39 @@ class PileFoundation(object):
                             -'su' for clay soil, corresponding to the 
                                   shear strength of the saturated cohesive soil.
     '''
-    def __init__(self,setPile,pileDiam,E,pileType,pileBearingCapacity,groundLevel,soilsProp):
-        self.setPile=setPile
-        self.pileDiam=pileDiam
-        self.E=E
-        self.pileType=pileType
+    def __init__(self,pileSet,pileDiam,E,pileType,pileBearingCapacity,groundLevel,soilsProp):
+        super(PileFoundation, self).__init__(E= E, pileType= pileType, groundLevel= groundLevel, diameter= pileDiam, pileSet= pileSet)
         self.pileBearingCapacity=pileBearingCapacity
-        self.groundLevel=groundLevel
-        self.soilsProp=soilsProp
-        self.pileType=pileType
-
-    def getPileAerialLength(self):
-        '''Return the length of pile above the ground surface'''
-        zMax=max([n.get3dCoo[2] for n in self.setPile.nodes])
-        return max(0,zMax-self.groundLevel)
-
-    def getPileBuriedLength(self):
-        '''Return the length of pile below the ground surface'''
-        zMax=max([n.get3dCoo[2] for n in self.setPile.nodes])
-        zMin=min([n.get3dCoo[2] for n in self.setPile.nodes])
-        return min(zMax-zMin,self.groundLevel-zMin)
+        self.soilsProp= soilsProp
             
     def getCalcLengthEndBearingPile(self):
-        '''Return the calculation length for a single end bearing pile 
+        '''Return the calculation length for a single end bearing pile. 
         '''
-        aerL=self.getPileAerialLength()
-        burL=self.getPileBuriedLength()
-        return aerL+burL
+        return self.getTotalLength()
 
     def getCalcLengthFrictionPile(self):
-        '''Return the calculation length for a single friction pile 
-        '''
+        '''Return the calculation length for a single friction pile .'''
         aerL=self.getPileAerialLength()
         burL=self.getPileBuriedLength()
         return aerL+2/3.*burL
     
     def getCalcLength(self):
-        '''Return the calculation length for a single pile'''
+        '''Return the calculation length for a single pile.'''
         if str.lower(self.pileType[:2]) in 'friction':
             return self.getCalcLengthFrictionPile()
         else:
             return self.getCalcLengthEndBearingPile()
 
-    def getAreaPile(self):
-        '''Return the cross-sectional area of the cylindrical pile'''
-        return math.pi*self.pileDiam**2/4.
-
     def getVerticalStiffnessSinglePile(self):
         '''Return the vertical stiffness of a single pile
         '''
         Lc=self.getCalcLength()
-        A=self.getAreaPile()
-        Kv=1/(self.pileDiam/40/self.pileBearingCapacity+Lc/A/self.E)
+        A= self.getCrossSectionArea()
+        Kv=1/(self.getDiameter()/40/self.pileBearingCapacity+Lc/A/self.E)
         return Kv
 
-    def generateSpringsPile(self,alphaKh_x,alphaKh_y,alphaKv_z):
-        '''Generate the springs that simulate the soils along the pile
+    def getLinearSpringsConstants(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+        '''Compute the spring contants that simulate the soils along the pile
 
         :param alphaKh_x: coefficient to be applied to the horizontal stiffness
                           of a single pile in X direction
@@ -330,61 +310,47 @@ class PileFoundation(object):
         :param alphaKh_Z: coefficient to be applied to the vertical stiffness of
                           a single pile in Z direction
         '''
-        prep=self.setPile.getPreprocessor
-        #init spring elastic materials
-        springX=typical_materials.defElasticMaterial(prep,'springX',1e-5)
-        springY=typical_materials.defElasticMaterial(prep,'springY',1e-5)
-        springZ=typical_materials.defElasticMaterial(prep,'springZ',1e-5)
-        self.setPile.resetTributaries()
-        self.setPile.computeTributaryLengths(False)
-        lstNodPile=[(n,n.get3dCoo[2]) for n in self.setPile.nodes]
-        lstNodPile.sort(key=takeSecond,reverse=True) #z in descending order
+        self.computeTributaryLengths(initialGeometry= False)
+        lstNodPile= self.getNodeZs()
         if self.soilsProp[-1][0] >= lstNodPile[-1][1]:
             self.soilsProp[-1][0]=lstNodPile[-1][1]-1
         zval=lstNodPile[0][1]
         while zval > self.groundLevel:  #aerial zone of pile
             lstNodPile.pop(0)
             zval=lstNodPile[0][1]
-        modelSpace= predefined_spaces.getModelSpace(prep)
         #Springs horizontal stiffness
         z=lstNodPile[0][1]
-        self.springs= list() #spring elements.
-        if self.pileDiam <= 1:
+        if self.getDiameter() <= 1:
             coefKh=1
         else:
-            coefKh=self.pileDiam
-        for s in range(len(self.soilsProp)):
-            zBottom=self.soilsProp[s][0]
-            soilType=self.soilsProp[s][1][:2].lower()
-            soilPrp=self.soilsProp[s][2]
+            coefKh=self.getDiameter()
+        retval= dict()
+        for sp in self.soilsProp:
+            zBottom= sp[0]
+            soilType= sp[1][:2].lower()
+            soilPrp= sp[2]
             if soilType not in ('sa','cl'):
-                lmsg.warning('wrong type of soil')
-            while z>zBottom:
-                n=lstNodPile[0][0]
-                lnTribNod=n.getTributaryLength()
-                if soilType == 'sa': #sandy soil
-                    Kh_x=alphaKh_x*soilPrp*(self.groundLevel-z)*lnTribNod*coefKh
-                    Kh_y=alphaKh_y*soilPrp*(self.groundLevel-z)*lnTribNod*coefKh
-                else:
-                    Kh_x=75*alphaKh_x*soilPrp*lnTribNod*coefKh
-                    Kh_y=75*alphaKh_y*soilPrp*lnTribNod*coefKh
-                springX.E=Kh_x
-                springY.E=Kh_y
+                lmsg.warning('wrong type of soil: '+str(soilType))
+            while(z>zBottom):
+                n= lstNodPile[0][0]
+                lnTribNod= n.getTributaryLength()
+                if(soilType == 'sa'): #sandy soil
+                    Kh_x= alphaKh_x*soilPrp*(self.groundLevel-z)*lnTribNod*coefKh
+                    Kh_y= alphaKh_y*soilPrp*(self.groundLevel-z)*lnTribNod*coefKh
+                else: # cohesive soil
+                    Kh_x= 75*alphaKh_x*soilPrp*lnTribNod*coefKh
+                    Kh_y= 75*alphaKh_y*soilPrp*lnTribNod*coefKh
                 if len(lstNodPile)==1:
                     #Spring vertical stiffness (end of pile)
                     Kv_end=alphaKv_z*self.getVerticalStiffnessSinglePile()
-                    springZ.E=Kv_end
-                    nn= modelSpace.setBearing(n.tag,['springX','springY','springZ'])
-                    self.springs.append(nn[1])
+                    retval[n.tag]= [Kh_x, Kh_y, Kv_end]
                     break
                 else:
-                    nn= modelSpace.setBearing(n.tag,['springX','springY','springZ'])
-                    self.springs.append(nn[1])
+                    retval[n.tag]= [Kh_x, Kh_y, 1e-5]
                     z=lstNodPile[1][1]
                     lstNodPile.pop(0)
-        return
-            
-        
+        return retval
+    
         
 def spring_bound_cond_anydir(setNodes,orientation,Klist,name):
     '''Apply spring boundary conditions to a set of nodes

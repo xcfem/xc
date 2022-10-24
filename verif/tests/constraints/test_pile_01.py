@@ -77,25 +77,25 @@ gridGeom= gm.GridModel(prep,xList,yList,zList)
 gridGeom.generatePoints()
 # Lines generation
 pile_rg=gm.IJKRange((0,0,0),(0,0,1))
-pile=gridGeom.genLinOneRegion(ijkRange=pile_rg,setName='pile')
+pile= gridGeom.genLinOneRegion(ijkRange=pile_rg,setName='pile')
 
 #                         *** MATERIALS *** 
-concrProp=tm.MaterialData(name='concrProp',E=concrete.Ecm(),nu=concrete.nuc,rho=concrete.density())
+concrProp= tm.MaterialData(name='concrProp',E=concrete.Ecm(),nu=concrete.nuc,rho=concrete.density())
 # Geometric sections
 # rectangular sections
 from materials.sections import section_properties as sectpr
-geomSectPile=sectpr.RectangularSection(name='geomSectPile',b=LeqPile,h=LeqPile)
+geomSectPile= sectpr.RectangularSection(name='geomSectPile',b=LeqPile,h=LeqPile)
 # Elastic material-section
-pile_mat=tm.BeamMaterialData(name='pile_mat', section=geomSectPile, material=concrProp)
+pile_mat= tm.BeamMaterialData(name='pile_mat', section=geomSectPile, material=concrProp)
 pile_mat.setupElasticShear3DSection(preprocessor=prep)
 
 #                         ***FE model - MESH***
-pile_mesh=fem.LinSetToMesh(linSet=pile,matSect=pile_mat,elemSize=eSize,vDirLAxZ=xc.Vector([0,1,0]),elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear')
+pile_mesh= fem.LinSetToMesh(linSet=pile,matSect=pile_mat,elemSize=eSize,vDirLAxZ=xc.Vector([0,1,0]),elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear')
 fem.multi_mesh(preprocessor=prep,lstMeshSets=[pile_mesh])
 
 
 #                       ***BOUNDARY CONDITIONS***
-pileBC=sbc.PileFoundation(setPile=pile,pileDiam=fiPile,E=concrete.Ecm(),pileType='endBearing',pileBearingCapacity=bearCap,groundLevel=zGround,soilsProp=soils)
+pileBC= sbc.PileFoundation(pileSet=pile,pileDiam=fiPile,E=concrete.Ecm(), pileType='endBearing',pileBearingCapacity=bearCap,groundLevel=zGround, soilsProp=soils)
 pileBC.generateSpringsPile(alphaKh_x=1,alphaKh_y=1,alphaKv_z=1)
 springs=pileBC.springs
 springSet=preprocessor.getSets.defSet('springSet')
@@ -109,9 +109,9 @@ from postprocess.xcVtk.FE_model import vtk_FE_graphic
 displaySettings= vtk_FE_graphic.DisplaySettingsFE()
 displaySettings.displayMesh(xcSets=allSets,fName= None,caption='Mesh',nodeSize=0.5,scaleConstr=0.10)
 '''
-pTop=gridGeom.getPntXYZ((0,0,0))
-nTop=pTop.getNode()
-pBase=gridGeom.getPntXYZ((0,0,-Lpile))
+pTop= gridGeom.getPntXYZ((0,0,0))
+nTop= pTop.getNode()
+pBase= gridGeom.getPntXYZ((0,0,-Lpile))
 nBase=pBase.getNode()
 modelSpace.fixNode('FFF_FF0',nBase.tag)  #
 modelSpace.fixNode('FFF_F0F',nTop.tag)  #
