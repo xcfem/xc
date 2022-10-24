@@ -136,7 +136,7 @@ class ElasticFoundation(object):
             Nn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
             if __debug__:
                 if(not Nn):
-                    AssertionError('Can\'t set beareng on node: '+str(n.tag))
+                    AssertionError('Can\'t set bearing on node: '+str(n.tag))
                 
             self.springs.append(preprocessor.getElementHandler.getElement(idElem))
             idElem+= 1
