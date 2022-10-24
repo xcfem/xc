@@ -183,6 +183,7 @@ else:
 
 
 '''
+# Graphic stuff.
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
 
