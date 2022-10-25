@@ -27,7 +27,6 @@ lcg.insert("EHEIntenso","accidentales",loadCombinations.Action("A6","Hipot. 6"),
 import os
 os.system("rm -f "+dbName)
 
-import sqlite3 as sqlite
 from misc.sqlite_utils import sqlite_macros
 
 
