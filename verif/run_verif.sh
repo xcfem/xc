@@ -154,21 +154,6 @@ python tests/utility/geom/principal_axes_of_inertia_2d_test_01.py
 echo "$BLEU" "    DXF reading." "$NORMAL"
 python tests/utility/geom/ezdxf_test_01.py
 
-## Soil mechanics (basic utilities)
-echo "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
-python tests/utility/soil_mechanics/test_coulomb.py
-python tests/utility/soil_mechanics/test_janssen_limited_backfill_widht.py
-python tests/utility/soil_mechanics/test_rankine.py
-python tests/utility/soil_mechanics/test_brinch_hansen01.py
-python tests/utility/soil_mechanics/test_brinch_hansen02.py
-python tests/utility/soil_mechanics/test_stratified_soil.py
-python tests/utility/soil_mechanics/test_boussinesq.py
-python tests/utility/soil_mechanics/test_cohesive_soil_01.py
-python tests/utility/soil_mechanics/test_mononobe_okabe_01.py
-python tests/utility/soil_mechanics/test_mononobe_okabe_02.py
-python tests/utility/soil_mechanics/test_iskander_01.py
-python tests/utility/soil_mechanics/test_iskander_02.py
-
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_prestressing.py
@@ -1093,6 +1078,20 @@ python tests/materials/test_elastomeric_bearing_stiffness.py
 
 echo "$BLEU" "  Foundation design tests." "$NORMAL"
 python tests/materials/geotechnics/test_pile_01.py
+## Soil mechanics (basic utilities)
+echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
+python tests/materials/geotechnics/soil_mechanics/test_coulomb.py
+python tests/materials/geotechnics/soil_mechanics/test_janssen_limited_backfill_widht.py
+python tests/materials/geotechnics/soil_mechanics/test_rankine.py
+python tests/materials/geotechnics/soil_mechanics/test_brinch_hansen01.py
+python tests/materials/geotechnics/soil_mechanics/test_brinch_hansen02.py
+python tests/materials/geotechnics/soil_mechanics/test_stratified_soil.py
+python tests/materials/geotechnics/soil_mechanics/test_boussinesq.py
+python tests/materials/geotechnics/soil_mechanics/test_cohesive_soil_01.py
+python tests/materials/geotechnics/soil_mechanics/test_mononobe_okabe_01.py
+python tests/materials/geotechnics/soil_mechanics/test_mononobe_okabe_02.py
+python tests/materials/geotechnics/soil_mechanics/test_iskander_01.py
+python tests/materials/geotechnics/soil_mechanics/test_iskander_02.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
