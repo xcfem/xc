@@ -690,6 +690,20 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
         super(CFCHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFCHSShape.__init__(self, steel= steel, name= name)
 
+from materials.sections.structural_shapes import common_micropile_tubes
+
+class  MicropileTubeShape(EC3Shape, common_micropile_tubes. MicropileTubeShape):
+    """Common micropile tube shapes with Eurocode 3 verification routines.
+    """
+    def __init__(self, steel, name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'HFSHS300x300x10.0')
+        '''
+        super(MicropileTubeShape, self).__init__(name= name, typo= 'rolled')
+        common_micropile_tubes.MicropileTubeShape.__init__(self, steel= steel, name= name)
+        
 class EC3BoltSteel(steel_base.BasicSteel):
     '''Eurocode 3 structural steel for bolts according to table 3.1 of
        EC3-1-8:2005.
