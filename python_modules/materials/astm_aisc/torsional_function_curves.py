@@ -14,6 +14,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
+from misc_utils import log_messages as lmsg
 
 def theta(case, steelShape, z, L, T, zT):
     ''' Return the value of the angle twist.
@@ -33,7 +34,7 @@ def theta(case, steelShape, z, L, T, zT):
     if(case==1): # Concentrated Torques with Free Ends
         return T*z/GJ
     elif(case==2):  # Concentrated Torques with Fixed Ends
-        c1= Ta/GJ
+        c1= T*a/GJ
         c2= math.tanh(L/2/a)
         z_a= z/a
         return c1*(c2*math.cosh(z_a)-c2+z_a-math.sinh(z_a))
@@ -63,10 +64,13 @@ def theta_dot(case, steelShape, z, L, T, zT):
                is applied.
     '''
     GJ= steelShape.get('G')*steelShape.J()
+    Cw= steelShape.get('Cw') # Warping constant.
+    E= steelShape.get('E')
+    a= math.sqrt(E*Cw/GJ)
     if(case==1): #Concentrated Torques with Free Ends
         return T/GJ
     elif(case==2):  # Concentrated Torques with Fixed Ends
-        c1= Ta/GJ
+        c1= T*a/GJ
         c2= math.tanh(L/2/a)
         z_a= z/a
         return c1/a*(1-math.cosh(z_a)+c2*math.sinh(z_a))
@@ -96,15 +100,17 @@ def theta_dot_dot(case, steelShape, z, L, T, zT):
                is applied.
     '''
     GJ= steelShape.get('G')*steelShape.J()
+    Cw= steelShape.get('Cw') # Warping constant.
+    E= steelShape.get('E')
+    a= math.sqrt(E*Cw/GJ)
     if(case==1): #Concentrated Torques with Free Ends
         return 0.0
     elif(case==2):  # Concentrated Torques with Fixed Ends
-        c1= Ta/GJ
+        c1= T*a/GJ
         c2= math.tanh(L/2/a)
         z_a= z/a
         return c1/(a**2)*(c2*math.cosh(z_a)-math.sinh(z_a))
     elif(case==3):  # Concentrated Torque with Pinned Ends
-        alph= zT/L
         alphL= zT
         alphL_a= alphL/a
         c1= T/GJ
@@ -129,15 +135,17 @@ def theta_dot_dot_dot(case, steelShape, z, L, T, zT):
                is applied.
     '''
     GJ= steelShape.get('G')*steelShape.J()
+    Cw= steelShape.get('Cw') # Warping constant.
+    E= steelShape.get('E')
+    a= math.sqrt(E*Cw/GJ)
     if(case==1): #Concentrated Torques with Free Ends
         return 0.0
     elif(case==2):  # Concentrated Torques with Fixed Ends
-        c1= Ta/GJ
+        c1= T*a/GJ
         c2= math.tanh(L/2/a)
         z_a= z/a
         return c1/(a**3)*(-math.cosh(z_a)+c2*math.sinh(z_a))
     elif(case==3):  # Concentrated Torque with Pinned Ends
-        alph= zT/L
         alphL= zT
         alphL_a= alphL/a
         c1= T/GJ
