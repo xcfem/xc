@@ -6,6 +6,7 @@ from __future__ import print_function
 
 # from colorama import Fore
 # from colorama import Style
+import sys
 from misc_utils import log_messages as lmsg
 from solution import analysis_context
 from materials.astm_aisc import AISC_limit_state_checking as aisc

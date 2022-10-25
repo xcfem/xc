@@ -54,7 +54,7 @@ class MemberModel(object):
         ''' Return the length of the member.'''
         retval= 0.0
         if(self.overrideUnbracedLength):
-            retval= overrideUnbracedLength
+            retval= self.overrideUnbracedLength
         else:
             for l in self.lineList:
                 retval+= l.getLength()
@@ -94,7 +94,7 @@ class MemberModels(list):
         self.columnMembers= list()
         # Create AISC member objects.
         for mm in self: # for each member model.
-            memberLength= mm.getMemberLength()
+            # memberLength= mm.getMemberLength()
             member= mm.createMember()
             if(mm.memberType=='beam'):
                 self.beamMembers.append(member)
