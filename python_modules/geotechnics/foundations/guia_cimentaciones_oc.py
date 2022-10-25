@@ -114,7 +114,9 @@ class PileFoundation(pile.CircularPile):
             soilType= sp[1][:2].lower()
             soilPrp= sp[2]
             if soilType not in ('sa','cl'):
-                lmsg.warning('wrong type of soil: '+str(soilType))
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; wrong type of soil: '+str(soilType))
             while(z>zBottom):
                 n= lstNodPile[0][0]
                 lnTribNod= n.getTributaryLength()
