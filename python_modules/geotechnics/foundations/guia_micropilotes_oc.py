@@ -220,8 +220,14 @@ class Micropile(pile.CircularPile):
         :param Fuc: reduction factor of the cross-section area due to the 
                     type of the union taken from table 3.4.
         '''
-        
-        super(Micropile, self).__init__(E= None, pileType= pileType, groundLevel= groundLevel, diameter= pileDiam, pileSet= pileSet)
+        E= 0.0
+        if(pipeSection):
+            E= pipeSection.steelType.E
+        elif(mortarMaterial):
+            E= mortarMaterial.concrete.getEcm()
+        elif(axialRebar):
+            E= axialRebar.steel.Es
+        super(Micropile, self).__init__(E= E, pileType= pileType, groundLevel= groundLevel, diameter= pileDiam, pileSet= pileSet)
         self.mortarMaterial= mortarMaterial
         self.pipeSection= pipeSection
         self.axialRebar= axialRebar
@@ -290,6 +296,137 @@ class Micropile(pile.CircularPile):
         retval*= R/1.2/self.Fe
         return retval
 
-        
-        
+    def getVcRd(self):
+        ''' Return the shear strength of the micropile according to clause
+            A-4.2 of the "Guía".'''
+        retval= 0.0
+        if(self.pipeSection):
+            Aa= self.getSteelPipeDesignArea() # Steel pipe remaining area.
+            fyd= self.pipeSection.steelType.fyd()
+            retval= 2*Aa/math.pi/math.sqrt(3)*fyd
+        return retval
+
+    def getWpl(self):
+        ''' Return the plastic modulus of the remaining steel section
+            (reduced due to the corrosion).
+        '''
+        retval= 0.0
+        if(self.pipeSection):
+            re= self.getCorrosionThicknessReduction() # Corroded steel.
+            de= self.pipeSection.getOutsideDiameter() # External diameter.
+            di= self.pipeSection.getInsideDiameter() # Internal diameter.
+            dr= de-2*re # Reduced external diameter.
+            retval= (dr**3-di**3)/6.0
+        return retval
     
+    def getWel(self):
+        ''' Return the elastic modulus of the remaining steel section
+            (reduced due to the corrosion).
+        '''
+        retval= 0.0
+        if(self.pipeSection):
+            re= self.getCorrosionThicknessReduction() # Corroded steel.
+            de= self.pipeSection.getOutsideDiameter() # External diameter
+            di= self.pipeSection.getInsideDiameter() # Internal diameter.
+            dr= de-2*re # Reduced external diameter.
+            retval= math.pi*(dr**4-di**4)/(32*dr)
+        return retval
+
+    def getMcRd(self, Fuf= 0.5):
+        ''' Return the bending strength of the micropile according to clause
+            A-4.2 of the "Guía".
+
+        :param Fuf: bending modulus reduction factor depending of the type
+                    of the connection. Defaults to 0.5 
+        '''
+        retval= 0.0
+        if(self.pipeSection):
+            re= self.getCorrosionThicknessReduction() # Corroded steel.
+            de= self.pipeSection.getOutsideDiameter() # External diameter
+            t= self.t() # Pipe wall thickness.
+            dr= de-2*re # Reduced external diameter.
+            tr= t-re # Reduced thickness.
+            ratio= dr/tr
+            fy= self.pipeSection.steelType.fy() # elastic limit stress.
+            if(ratio<=16450e6/fy):
+                Wpl= self.getWpl()
+                retval= Wpl
+            elif(ratio<=21150e6/fy):
+                Wel= self.getWpl()
+                retval= Wel
+            else:
+                retval= 0.0
+
+        fyd= self.pipeSection.steelType.fyd() # design value of the elastic limit stress.
+        retval*= fyd*Fuf
+        return retval
+
+    def getBendingEfficiency(self, Nd, Md, Vd= 0.0, Fuf= 0.5):
+        '''Return bending efficiency
+
+        :param Nd: required axial strength.
+        :param Mzd: required bending strength.
+        :param Vyd: required shear strength.
+        :param Fuf: bending modulus reduction factor depending of the type
+                    of the connection. Defaults to 0.5 
+        '''
+        if(Nd!=0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': for compressed sections not implemented yet.')
+        McRd= self.getMcRd(Fuf= Fuf)
+        VcRd= self.getVcRd()
+        if(abs(Vd)<=0.5*VcRd):
+            retval= Md/McRd
+        else:
+            ro= (2*Vd/VcRd-1)**2
+            retval= (1-ro)*McRd
+        
+    def defElasticSection3d(self,preprocessor, overrideRho= None):
+        ''' Return an elastic section appropriate for 3D beam analysis
+
+        :param  preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.pipeSection.defElasticSection3d(preprocessor, overrideRho= overrideRho)
+    
+    def defElasticShearSection3d(self,preprocessor, overrideRho= None):
+        '''elastic section appropriate for 3D beam analysis, including shear 
+           deformations
+
+        :param preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.pipeSection.defElasticShearSection3d(preprocessor, overrideRho= overrideRho)
+
+    def defElasticSection1d(self,preprocessor, overrideRho= None):
+        ''' Return an elastic section appropriate for truss analysis.
+
+        :param preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.pipeSection.defElasticSection1d(preprocessor, overrideRho= overrideRho)
+    
+    def defElasticSection2d(self,preprocessor, majorAxis= True, overrideRho= None):
+        ''' Return an elastic section appropriate for 2D beam analysis
+
+        :param preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.pipeSection.defElasticSection2d(preprocessor, majorAxis= majorAxis, overrideRho= overrideRho)
+    
+    def defElasticShearSection2d(self,preprocessor, majorAxis= True, overrideRho= None):
+        '''elastic section appropriate for 2D beam analysis, including shear deformations
+
+        :param  preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.pipeSection.defElasticShearSection2d(preprocessor, majorAxis= majorAxis, overrideRho= overrideRho)
+
