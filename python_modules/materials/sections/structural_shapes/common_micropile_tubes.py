@@ -23,7 +23,7 @@ for item in MP:
     shape['AreaQy']= 0.5*A
     shape['AreaQz']= 0.5*A
 
-class MicropileTubeShape(structural_steel.SteelShape):
+class MicropileTubeShape(structural_steel.CHShape):
     ''' Cold formed circular hollow sections according to 
         BS EN 2019.'''
     def __init__(self,steel,name):
@@ -34,6 +34,14 @@ class MicropileTubeShape(structural_steel.SteelShape):
         '''
         super(MicropileTubeShape, self).__init__(steel,name,MP)
         
+    def t(self):
+        '''Return HSS nominal wall thickess'''
+        return self.get('t')
+    
+    def getSlendernessRatio(self):
+        ''' Return the slenderness ratio.'''
+        return self.get('slendernessRatio')
+    
     def getRho(self):
         ''' Returns mass per unit length. '''
         return self.get('P')

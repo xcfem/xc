@@ -137,6 +137,32 @@ S355JR= EC3Steel(fy= 355e6, fy16= 355e6, fy40= 345e6, fy63= 335e6, fy80= 325e6, 
 
 S450J0= EC3Steel(fy= 450e6, fy16= 450e6, fy40= 430e6, fy63= 410e6, fy80= 390e6, fy100= 380e6, fy125= 380e6, fu= 360e6, gammaM= 1.1)
 
+#Alpha imperfection factor.
+def alphaImperfectionFactor(bucklingCurve):
+    '''Return the alpha imperfection factor for buckling curves
+       see tables 6.1 and 6.2 of EC3 (EN 19931-1:2005).
+
+       :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
+              to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+              curve for a cross-section". Note that in table 6.2 Y and 
+              Z axes are swapped with respect to those used in XC. 
+              XC axes: Y->weak axis, Z->strong axis.
+    '''
+    retval= 0.76
+    if(bucklingCurve=='a0'):
+        retval= 0.13
+    elif(bucklingCurve=='a'):
+        retval= 0.21
+    elif(bucklingCurve=='b'):
+        retval= 0.34
+    elif(bucklingCurve=='c'):
+        retval= 0.49
+    elif(bucklingCurve=='d'):
+        retval= 0.76
+    else:
+        lmsg.error('Buckling curve: '+str(bucklingCurve)+' unknown.')
+    return retval
+
 class EC3Shape(object):
     '''Steel shape with Eurocode 3 verification routines.
 
@@ -227,7 +253,105 @@ class EC3Shape(object):
         '''
         if self.name[0] in ['I','H']:
             C=self.h
-        
+            
+    def getAdimensionalSlendernessY(self,Leq,sectionClass= 1):
+        '''return adimensional slenderness relative to y-axis (weak axis) 
+           as defined in EC3 part 1 6.3.1
+
+           :param Leq: buckling length in XZ buckling plane.
+           :param sectionClass: class of the section (1 to 3, 4 not yet 
+                  implemented) (defaults to 1)
+        '''
+        betaA= self.getAeff(sectionClass)/self.A()
+        lambdA= self.getSlendernessY(Leq)
+        lambda1= self.steelType.getLambda1()
+        return lambdA/lambda1*math.sqrt(betaA)
+    
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        raise NotImplementedError()
+        return 'd'
+    
+    def getBucklingReductionFactorY(self,Leq, sectionClass= 1):
+        '''return buckling reduction factor relative to y-axis (weak axis) 
+        as defined in EC3-1-1 6.3.1
+
+        :param Leq: buckling length in XZ buckling plane.
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1)
+        '''
+        bucklingCurve= self.getBucklingCurve(majorAxis= False)
+        alpha= alphaImperfectionFactor(bucklingCurve)
+        lmb= self.getAdimensionalSlendernessY(Leq,sectionClass= 1)
+        phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
+        return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
+
+    def getBucklingResistanceY(self,Leq, sectionClass= 1):
+        '''return buckling resistance relative to y-axis (weak axis)
+        according to EC3-1-1 6.3.2
+
+        :param Leq: buckling length in XZ buckling plane.
+        :param sectionClass: class of the section (1 to 3, 4 not yet implemented) (defaults to 1).
+        '''
+        X= self.getBucklingReductionFactorY(Leq,sectionClass)
+        return X*self.getAeff(sectionClass)*self.steelType.fyd()
+    
+    def getAdimensionalSlendernessZ(self,Leq,sectionClass= 1):
+        '''return adimensional slenderness relative to z-axis (strong axis) 
+           as defined in EC3-1-1 6.3.1
+
+           :param Leq: buckling length in XY buckling plane.
+           :param sectionClass: class of the section (1 to 3, 4 not yet 
+                  implemented) (defaults to 1)
+        '''
+        betaA= self.getAeff(sectionClass)/self.A()
+        lambdA= self.getSlendernessZ(Leq)
+        lambda1= self.steelType.getLambda1()
+        return lambdA/lambda1*math.sqrt(betaA)
+    
+    def getBucklingReductionFactorZ(self, Leq, sectionClass= 1):
+        '''return buckling reduction factor lative to z-axis (strong axis) 
+        as defined in EC3-1-1 6.3.1
+
+        :param Leq: buckling length in XY buckling plane.
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1)
+        '''
+        bucklingCurve= self.getBucklingCurve(majorAxis= True)
+        alpha= alphaImperfectionFactor(bucklingCurve)
+        lmb= self.getAdimensionalSlendernessZ(Leq,sectionClass= 1)
+        phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
+        return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
+
+    def getBucklingResistanceZ(self, Leq, sectionClass= 1):
+        '''return buckling resistance relative to z-axis (strong axis)
+        according to EC3-1-1 6.3.2
+
+        :param Leq: buckling length in XY buckling plane.
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1).
+        '''
+        X= self.getBucklingReductionFactorZ(Leq,sectionClass)
+        return X*self.getAeff(sectionClass)*self.steelType.fyd()
+
+    def getBucklingResistance(self, LeqY, LeqZ, sectionClass= 1):
+        '''return minimum of buckling resistance in XY and XZ buckling planes
+        calculated according to EC3-1-1 6.3.2
+
+        :param LeqY: buckling length of the member in XZ buckling plane.
+        :param LeqZ: buckling length of the member in XY buckling plane.
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1)
+        '''
+        rY= self.getBucklingResistanceY(LeqY,sectionClass)
+        rZ= self.getBucklingResistanceZ(LeqZ,sectionClass)
+        return min(rY,rZ)
+    
     def getLateralTorsionalBucklingCurve(self):
         ''' Return the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).'''
         return EC3lsc.getLateralTorsionalBucklingCurve(self)
@@ -497,6 +621,77 @@ So:
 from materials.sections.structural_shapes import arcelor_metric_shapes
 
 
+def getIShapedRolledSectionBucklingCurve(shape, majorAxis):
+    ''' Return the buckling curve  (a0,a,b,c or d) for I shaped rolled
+       cross-sections according to table 6.2 of EN 1993-1-1:2005 "Selection 
+       of buckling  curve for a cross-section". Note that in table 6.2 Y and 
+       Z axes are swapped with respect to those used in XC. 
+       XC axes: Y->weak axis, Z->strong axis.
+
+    :param majorAxis: true if buckling around major axis.
+    '''
+    fy= shape.steelType.fy # steel fy
+    h= shape.h() # section depth.
+    b= shape.b() # flange width.
+    tf= shape.tf() # flange thickness.
+    if(h/b>1.2):
+        if(tf<=0.04): # tf<=40 mm
+            if(fy>=460e6):
+                retval= 'a0'
+            else:
+                if(majorAxis):
+                    retval= 'a'
+                else:
+                    retval= 'b'
+        elif(tf<=0.1): # 40 mm < tf <= 100 mm
+            if(fy>=460e6):
+                retval= 'a'
+            else:
+                if(majorAxis):
+                    retval= 'b'
+                else:
+                    retval= 'c'
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(methodName+': flange too thick: '+str(tf/1e3)+' mm')
+    else: # h/b<=1.2
+        if(tf<=0.1): # tf<=100 mm
+            if(fy>=460e6):
+                retval= 'a'
+            else:
+                if(majorAxis):
+                    retval= 'b'
+                else:
+                    retval= 'c'
+        else: # tf > 100 mm
+            if(fy>=460e6):
+                retval= 'c'
+            else:
+                if(majorAxis):
+                    retval= 'd'
+                else:
+                    retval= 'd'
+    return retval
+
+def getHollowShapedSectionBucklingCurve(shape, hotFinished):
+    ''' Return the buckling curve  (a0,a,b,c or d) for O shaped rolled
+       cross-sections according to table 6.2 of EN 1993-1-1:2005 "Selection 
+       of buckling  curve for a cross-section". Note that in table 6.2 Y and 
+       Z axes are swapped with respect to those used in XC. 
+       XC axes: Y->weak axis, Z->strong axis.
+
+    :param hotFinished: true if hot finished steel false for cold formed.
+    '''
+    fy= shape.steelType.fy # steel fy
+    if(hotFinished): # hot finished steel
+        if(fy>=460e6):
+            retval= 'a0'
+        else:
+            retval= 'a'
+    else: # cold formed steel.
+        retval= 'c'
+    return retval    
+
 class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
     """IPN shape with Eurocode 3 verification routines."""
     def __init__(self, steel, name):
@@ -507,6 +702,15 @@ class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
         '''
         super(IPNShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.IPNShape.__init__(self,steel,name)
+
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        return getIShapedRolledSectionBucklingCurve(self, majorAxis)
 
 
 class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
@@ -520,6 +724,14 @@ class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
         super(IPEShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.IPEShape.__init__(self,steel,name)
         
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        return getIShapedRolledSectionBucklingCurve(self, majorAxis)
 
 class SHSShape(EC3Shape,arcelor_metric_shapes.SHSShape):
     """SHS shape with Eurocode 3 verification routines."""
@@ -531,6 +743,16 @@ class SHSShape(EC3Shape,arcelor_metric_shapes.SHSShape):
         '''
         super(SHSShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.SHSShape.__init__(self,steel,name)
+        
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
 
 '''
 European H beams
@@ -567,6 +789,15 @@ class HEShape(EC3Shape,arcelor_metric_shapes.HEShape):
         '''
         super(HEShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.HEShape.__init__(self,steel,name)
+        
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        return getIShapedRolledSectionBucklingCurve(self, majorAxis)
 
 class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
     """UPN shape with Eurocode 3 verification routines."""
@@ -600,7 +831,28 @@ class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
         '''
         super(CHSShape, self).__init__(name= name, typo='rolled')
         arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
+
+    def getClassInCompression(self):
+        '''Return the cross-section classification of the section 
+        subject to compression. Clause 5.5 EC3-1-1.
+        '''
+        return self.getClassInternalPartInCompression(ratioCT= self.getSlendernessRatio())
+
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
     
+    def getNcRd(self):
+        '''Return the axial compression resistance of the cross-section.'''
+        return super(CHSShape, self).getNcRd(self.getClassInCompression())
+
+        
 class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
     """RHS shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
@@ -611,6 +863,16 @@ class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
         '''
         super(RHSShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.RHSShape.__init__(self,steel,name)
+        
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
     
 class UCShape(EC3Shape,arcelor_metric_shapes.UCShape):
     """UC shape with Eurocode 3 verification routines."""
@@ -622,6 +884,16 @@ class UCShape(EC3Shape,arcelor_metric_shapes.UCShape):
         '''
         super(UCShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.UCShape.__init__(self,steel,name)
+        
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
         
 class UBShape(EC3Shape,arcelor_metric_shapes.UBShape):
     """UB shape with Eurocode 3 verification routines."""
@@ -649,6 +921,16 @@ class HFSHSShape(EC3Shape, bs_en_10210_shapes.HFSHSShape):
         super(HFSHSShape, self).__init__(name= name, typo= 'rolled')
         bs_en_10210_shapes.HFSHSShape.__init__(self,steel,name)
         
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
+        
 from materials.sections.structural_shapes import bs_en_10219_shapes
 
 class CFSHSShape(EC3Shape, bs_en_10219_shapes.CFSHSShape):
@@ -664,6 +946,16 @@ class CFSHSShape(EC3Shape, bs_en_10219_shapes.CFSHSShape):
         super(CFSHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFSHSShape.__init__(self, steel, name)
         
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
+        
 class CFRHSShape(EC3Shape, bs_en_10219_shapes.CFRHSShape):
     """BS EN 10219-2: cold formed rectangular hollow steel shapes 
        with Eurocode 3 verification routines.
@@ -677,6 +969,16 @@ class CFRHSShape(EC3Shape, bs_en_10219_shapes.CFRHSShape):
         super(CFRHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFRHSShape.__init__(self, steel= steel, name= name)
         
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
+        
 class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
     """BS EN 10219-2: cold formed circular hollow steel shapes 
        with Eurocode 3 verification routines.
@@ -689,6 +991,16 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
         '''
         super(CFCHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFCHSShape.__init__(self, steel= steel, name= name)
+        
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
 
 from materials.sections.structural_shapes import common_micropile_tubes
 
@@ -703,6 +1015,16 @@ class  MicropileTubeShape(EC3Shape, common_micropile_tubes. MicropileTubeShape):
         '''
         super(MicropileTubeShape, self).__init__(name= name, typo= 'rolled')
         common_micropile_tubes.MicropileTubeShape.__init__(self, steel= steel, name= name)
+        
+    def getBucklingCurve(self, majorAxis= False):
+        ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
+            according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        '''
+        hotFinished= (self.typo=='rolled')
+        return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
         
 class EC3BoltSteel(steel_base.BasicSteel):
     '''Eurocode 3 structural steel for bolts according to table 3.1 of
