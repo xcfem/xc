@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Buckling resistance of of steel columns.
+''' Buckling resistance of steel columns.
    Example 1 page 12 from publication:
    Eurocodes ‐ Design of steel buildings with worked examples
    Brussels, 16 - 17 October 2014

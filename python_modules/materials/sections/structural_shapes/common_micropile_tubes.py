@@ -34,10 +34,18 @@ class MicropileTubeShape(structural_steel.CHShape):
         '''
         super(MicropileTubeShape, self).__init__(steel,name,MP)
         
+    def getOutsideDiameter(self):
+        ''' Returns the outside diameter. '''
+        return self.get('D')
+        
     def t(self):
-        '''Return HSS nominal wall thickess'''
-        return self.get('t')
+        '''Return wall thickess'''
+        return self.get('e')
     
+    def getInsideDiameter(self):
+        ''' Returns the inside diameter. '''
+        return self.getOutsideDiameter()-2*self.t()
+       
     def getSlendernessRatio(self):
         ''' Return the slenderness ratio.'''
         return self.get('slendernessRatio')

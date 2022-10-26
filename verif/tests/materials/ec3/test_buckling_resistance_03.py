@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Buckling resistance of of steel column.
+''' Buckling resistance of steel column.
    Test adapted from the web page:
 
    https://sdcverifier.com/benchmarks/eurocode-3-buckling-resistance-of-a-compression-member/
    Eurocode 3. Example 6.7: Buckling resistance of a compression member.
 '''
 __author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
+__copyright__= "Copyright 2022, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

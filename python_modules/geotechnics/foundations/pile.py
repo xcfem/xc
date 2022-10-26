@@ -35,7 +35,7 @@ class Pile(object):
         :param groundLevel: ground elevation
         :param pileSet: set of nodes and elements defining a single pile.
         '''
-        self.E=E
+        self.E= E
         self.crossSection= crossSection
         self.pileType= pileType
         self.groundLevel= groundLevel

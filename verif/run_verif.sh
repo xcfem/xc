@@ -1082,6 +1082,7 @@ python tests/materials/test_elastomeric_bearing_stiffness.py
 
 echo "$BLEU" "  Foundation design tests." "$NORMAL"
 python tests/materials/geotechnics/test_pile_01.py
+python tests/materials/geotechnics/test_micropile_01.py
 ## Soil mechanics (basic utilities)
 echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
 python tests/materials/geotechnics/soil_mechanics/test_coulomb.py

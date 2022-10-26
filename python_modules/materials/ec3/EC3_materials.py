@@ -1004,7 +1004,8 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
 
 from materials.sections.structural_shapes import common_micropile_tubes
 
-class MicropileTubeShape(EC3Shape, common_micropile_tubes. MicropileTubeShape):
+# Shapes for micropile tubes.
+class MicropileTubeShape(EC3Shape, common_micropile_tubes.MicropileTubeShape):
     '''Common micropile tube shapes with Eurocode 3 verification routines.
     '''
     def __init__(self, steel, name):
