@@ -21,7 +21,7 @@ fNameOut= '../common_micropile_tubes.json'
 columnOrder= dict()
 columnOrder['MP']= ['nmb', 'D', 'e', 'P', 'A', 'slendernessRatio', 'Iz', 'iz', 'Wzel', 'Wzpl', 'It', 'Wt', 'AL', 'AG', '']
 
-columnUnits= {'e':'e-3', 'P':'', 'A':'e-4', 'slendernessRatio':'', 'Iz':'e-8', 'iz':'e-2', 'Wzel':'e-6', 'Wzpl':'e-6', 'It':'e-8',  'Wt':'e-6'}
+columnUnits= {'e':'e-3', 'P':'', 'A':'e-4', 'slendernessRatio':'', 'Iz':'e-8', 'iz':'e-2', 'Wzel':'e-6', 'Wzpl':'e-6', 'Iy':'e-8', 'iy':'e-2', 'Wyel':'e-6', 'Wypl':'e-6', 'It':'e-8',  'Wt':'e-6'}
 
 def importSections(rows, namePrefix):
     ''' Import the data corresponding to cold formed
