@@ -11,10 +11,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import scipy.interpolate
 from materials.awc_nds import AWCNDS_materials
 from materials import typical_materials
 from misc_utils import units_utils
+from misc_utils import log_messages as lmsg
 
 fourInches= 4*units_utils.inchToMeter
 eightInches= 8*units_utils.inchToMeter
@@ -243,7 +245,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; grade: '+grade+' unknown.')
+            lmsg.error(className+'.'+methodName+'; grade: '+self.grade+' unknown.')
         return retval;
     
     def getTensionSizeFactor(self, b, h):
@@ -255,7 +257,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         :param h: section depth.
         '''
         width= max(b,h)
-        thickness= min(b,h)
+        # thickness= min(b,h)
         retval= 1.0
         if(self.grade in ['structural','no_1','no_2','no_3']):
             f= self.ft_size_factor_interp
@@ -271,7 +273,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; grade: '+grade+' unknown.')
+            lmsg.error(className+'.'+methodName+'; grade: '+self.grade+' unknown.')
         return retval;
     
     def getCompressionSizeFactor(self, b, h):
@@ -282,7 +284,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         :param h: nominal section depth.
         '''
         width= max(b,h)
-        thickness= min(b,h)
+        # thickness= min(b,h)
         retval= 1.0
         if(self.grade in ['structural','no_1','no_2','no_3']):
             f= self.fc_size_factor_interp
@@ -298,7 +300,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; grade: '+grade+' unknown.')
+            lmsg.error(className+'.'+methodName+'; grade: '+self.grade+' unknown.')
         return retval;
     
     def getFb(self, b, h):
@@ -717,7 +719,7 @@ class SouthernPineWood(DimensionLumberWood):
         :param h: section depth.
         '''
         width= max(b,h)
-        thickness= min(b,h)
+        # thickness= min(b,h)
         retval= 1.0
         for s in ['86', '72', '65']:
             if s in self.grade:
@@ -741,7 +743,7 @@ class SouthernPineWood(DimensionLumberWood):
         :param h: nominal section depth.
         '''
         width= max(b,h)
-        thickness= min(b,h)
+        # thickness= min(b,h)
         retval= 1.0
         for s in ['86', '72', '65']:
             if s in self.grade:

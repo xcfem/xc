@@ -113,7 +113,7 @@ class DowelFastener(object):
         Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m, endGrain)
         Fes= sideMemberWood.getDowelBearingStrength(self.D, theta_s)
         Re= Fem/Fes
-        Rt= lm/ls
+        #Rt= lm/ls
         D= self.getDiameterForYield()
         return -1+math.sqrt(2.0*(1+Re)+(2.0*self.Fyb*(2.0+Re)*D**2)/(3.0*Fem*lm**2))
     def getK3(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, endGrain= False):
@@ -257,7 +257,7 @@ class Nail(DowelFastener):
         '''
         W= self.getReferenceWithdrawal(G)
         pt= self.L - sideMemberThickness
-        return self.getReferenceWithdrawal(G)*pt
+        return W*pt
     
     def getMinPenetration(self):
         ''' Return the minimum length of nail pentration, p_min,
@@ -332,7 +332,7 @@ class LagScrew(Screw):
                               12.2 of NDS-2018.'''
         W= self.getReferenceWithdrawal(G)
         pt= self.getPenetration(sideMemberThickness)
-        return self.getReferenceWithdrawal(G)*endGrainFactor*pt
+        return W*endGrainFactor*pt
     
     def getMinPenetration(self):
         ''' Return the minimum length of lag screw pentration, p_min,

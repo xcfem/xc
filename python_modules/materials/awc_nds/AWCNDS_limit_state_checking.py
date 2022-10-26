@@ -632,11 +632,19 @@ class WallTopPlates(object):
         seedElemHandler= prep.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= section.name
         seedElemHandler.defaultTransformation= lin.name
-        unusedElem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
-
-        unusedInfSetMesh= self.infSet.genMesh(xc.meshDir.I)
+        elem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+        if __debug__:
+            if(not elem):
+                AssertionError('Can\'t create the element.')
+        infSetMesh= self.infSet.genMesh(xc.meshDir.I)
+        if __debug__:
+            if(not infSetMesh):
+                AssertionError('Can\'t create the mesh.')
         self.infSet.fillDownwards()
-        unusedSupSetMesh= self.supSet.genMesh(xc.meshDir.I)
+        supSetMesh= self.supSet.genMesh(xc.meshDir.I)
+        if __debug__:
+            if(not supSetMesh):
+                AssertionError('Can\'t create the mesh.')
         self.supSet.fillDownwards()
 
         ## Loaded nodes.
@@ -694,7 +702,10 @@ class WallTopPlates(object):
         ## Define load values.
         for lcName in loadDict:
             value= loadDict[lcName]
-            unusedCLC= loadCaseManager.setCurrentLoadCase(lcName)
+            cLC= loadCaseManager.setCurrentLoadCase(lcName)
+            if __debug__:
+                if(not cLC):
+                    AssertionError('Can\'t create the load case.')
             self.applyLoads(value)
             
     def checkPlates(self, loadDurationFactor):
