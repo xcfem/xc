@@ -38,8 +38,8 @@ ratio2= abs(NcRd-refNcRd)/refNcRd
 
 # Buckling reduction factors.
 Leq= 4.0
-XY= steelShape.getBucklingReductionFactorY(Leq,1)
-XZ= steelShape.getBucklingReductionFactorZ(Leq,1)
+XY= steelShape.getBucklingReductionFactorY(Leq, sectionClass= sectionClass)
+XZ= steelShape.getBucklingReductionFactorZ(Leq, sectionClass= sectionClass)
 ratio3= math.sqrt((XY-0.877783874726401)**2+(XZ-0.877783874726401)**2)
 
 # Buckling resistance.
