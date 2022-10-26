@@ -336,6 +336,7 @@ class SteelShape(sp.SectionProperties):
         ''' Return an elastic section appropriate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
@@ -345,15 +346,21 @@ class SteelShape(sp.SectionProperties):
         '''elastic section appropriate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
         return super(SteelShape,self).defElasticShearSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis, overrideRho= overrideRho)
     
-    def getCrossSectionProperties2D(self):
-        '''Return a CrossSectionProperties object with the
-         2D properties of the section.'''
-        return super(SteelShape,self).getCrossSectionProperties2D(material= self.steelType)
+    # def getCrossSectionProperties2D(self):
+    #     '''Return a CrossSectionProperties object with the 2D properties of 
+    #        the section.'''
+    #     return super(SteelShape,self).getCrossSectionProperties2D(material= self.steelType)
+    
+    # def getCrossSectionProperties3D(self):
+    #     '''Return a CrossSectionProperties object with the 3D properties of 
+    #        the section.'''
+    #     return super(SteelShape,self).getCrossSectionProperties2D(material= self.steelType)
         
 
 class IShape(SteelShape):
