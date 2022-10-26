@@ -287,7 +287,7 @@ class EC3Shape(object):
         '''
         bucklingCurve= self.getBucklingCurve(majorAxis= False)
         alpha= alphaImperfectionFactor(bucklingCurve)
-        lmb= self.getAdimensionalSlendernessY(Leq,sectionClass= 1)
+        lmb= self.getAdimensionalSlendernessY(Leq, sectionClass= sectionClass)
         phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
         return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
 
@@ -301,7 +301,7 @@ class EC3Shape(object):
         X= self.getBucklingReductionFactorY(Leq,sectionClass)
         return X*self.getAeff(sectionClass)*self.steelType.fyd()
     
-    def getAdimensionalSlendernessZ(self,Leq,sectionClass= 1):
+    def getAdimensionalSlendernessZ(self, Leq, sectionClass= 1):
         '''return adimensional slenderness relative to z-axis (strong axis) 
            as defined in EC3-1-1 6.3.1
 
@@ -324,7 +324,7 @@ class EC3Shape(object):
         '''
         bucklingCurve= self.getBucklingCurve(majorAxis= True)
         alpha= alphaImperfectionFactor(bucklingCurve)
-        lmb= self.getAdimensionalSlendernessZ(Leq,sectionClass= 1)
+        lmb= self.getAdimensionalSlendernessZ(Leq, sectionClass= sectionClass)
         phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
         return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
 
@@ -1004,9 +1004,9 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
 
 from materials.sections.structural_shapes import common_micropile_tubes
 
-class  MicropileTubeShape(EC3Shape, common_micropile_tubes. MicropileTubeShape):
-    """Common micropile tube shapes with Eurocode 3 verification routines.
-    """
+class MicropileTubeShape(EC3Shape, common_micropile_tubes. MicropileTubeShape):
+    '''Common micropile tube shapes with Eurocode 3 verification routines.
+    '''
     def __init__(self, steel, name):
         ''' Constructor.
 
@@ -1016,6 +1016,12 @@ class  MicropileTubeShape(EC3Shape, common_micropile_tubes. MicropileTubeShape):
         super(MicropileTubeShape, self).__init__(name= name, typo= 'rolled')
         common_micropile_tubes.MicropileTubeShape.__init__(self, steel= steel, name= name)
         
+    def getClassInCompression(self):
+        '''Return the cross-section classification of the section 
+        subject to compression. Clause 5.5 EC3-1-1.
+        '''
+        return self.getClassInternalPartInCompression(ratioCT= self.getSlendernessRatio())
+    
     def getBucklingCurve(self, majorAxis= False):
         ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
             according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
@@ -1025,7 +1031,11 @@ class  MicropileTubeShape(EC3Shape, common_micropile_tubes. MicropileTubeShape):
         '''
         hotFinished= (self.typo=='rolled')
         return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
-        
+
+    def getNcRd(self):
+        '''Return the axial compression resistance of the cross-section.'''
+        return super(MicropileTubeShape, self).getNcRd(self.getClassInCompression())
+
 class EC3BoltSteel(steel_base.BasicSteel):
     '''Eurocode 3 structural steel for bolts according to table 3.1 of
        EC3-1-8:2005.
