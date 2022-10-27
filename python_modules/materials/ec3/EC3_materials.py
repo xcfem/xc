@@ -94,11 +94,11 @@ def fyEC3(desig, t):
         lmsg.error(methodName+'; part thickness out of range: '+str(t*1000)+' mm.')
 
     if(desig == 235):
-        retval= ifte(t<40e-3,235e6,215e6)
+        retval= 235e6 if (t<40e-3) else 215e6
     elif(desig == 275):
-        retval= ifte(t<40e-3,275e6,255e6)
+        retval= 275e6 if (t<40e-3) else 255e6
     elif(desig == 355):
-        retval= ifte(t<40e-3,355e6,335e6)
+        retval= 355e6 if (t<40e-3) else 335e6
     else:
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(methodName+'; unknown steel designation: '+str(desig)+'.')
@@ -118,11 +118,11 @@ def fuEC3(desig, t):
         lmsg.error(methodName+'; part thickness out of range: '+str(t*1000)+' mm.')
 
     if(desig == 235):
-        retval= ifte(t<40e-3,360e6,340e6)
+        retval= 360e6 if(t<40e-3) else 340e6
     elif(desig == 275):
-        retval= ifte(t<40e-3,430e6,410e6)
+        retval= 430e6 if(t<40e-3) else 410e6
     elif(desig == 355):
-        retval= ifte(t<40e-3,510e6,490e6)
+        retval= 510e6 if(t<40e-3) else 490e6
     else:
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(methodName+'; unknown steel designation: '+str(desig)+'.')
@@ -251,8 +251,10 @@ class EC3Shape(object):
         '''Return the C length of internal part in compression used to 
         classify the cross-section. Table 5.2 EC3-1-1
         '''
+        retval= None
         if self.name[0] in ['I','H']:
-            C=self.h
+            retval= self.h
+        return retval
             
     def getAdimensionalSlendernessY(self,Leq,sectionClass= 1):
         '''return adimensional slenderness relative to y-axis (weak axis) 

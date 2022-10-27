@@ -12,6 +12,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 
 import math
+import sys
 import scipy.interpolate
 from scipy import stats
 from materials import typical_materials
@@ -102,13 +103,13 @@ class ReinforcedConcreteLimitStrains(object):
     def getNormalStressesEfficiency(self, tipoSol, epsCMin, epsCMax, epsSMax):
         ''' Return efficiency under normal stresses.'''
         if(tipoSol==1): # Tensile or flexural tensile.
-            retval= getTensileBendingEfficiency(epsSMax)
+            retval= self.getTensileBendingEfficiency(epsSMax)
         else:
             if(tipoSol==2): # Bending.
-                retval= getBendingEfficiency(epsCMin,epsSMax)
+                retval= self.getBendingEfficiency(epsCMin,epsSMax)
             else:
                 if(tipoSol==3): # Compressive or flexural compressive.
-                    retval= getCompressiveBendingEfficiency(epsCMin,epsCMax)
+                    retval= self.getCompressiveBendingEfficiency(epsCMin,epsCMax)
                 else:
                     retval= -100.0
         return retval
@@ -979,7 +980,10 @@ def concreteDesignDiagramTest(preprocessor, concreteRecord):
     :param preprocessor: pre-processor of the finite element model.
     :param concreteRecord: concrete data.
     '''
-    unusedTag= concreteRecord.defDiagD(preprocessor) # Define concrete stress-strain design diagram.
+    diagTag= concreteRecord.defDiagD(preprocessor) # Define concrete stress-strain design diagram.
+    if(__debug__):
+        if(not diagTag):
+            AssertionError('Can\'t create the diagram.')        
 
     diagConcrete= preprocessor.getMaterialHandler.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
@@ -1005,7 +1009,10 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
     :param concreteRecord: concrete data.
     '''
     # Define concrete stress-strain design diagram.
-    unusedTag= concreteRecord.defDiagD(preprocessor)
+    diagTag= concreteRecord.defDiagD(preprocessor)
+    if(__debug__):
+        if(not diagTag):
+            AssertionError('Can\'t create the diagram.')        
     diagConcrete= preprocessor.getMaterialHandler.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
     errMax= 0.0
