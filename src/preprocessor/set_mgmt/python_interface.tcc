@@ -119,7 +119,7 @@ class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("Dq
 
 XC::DqPtrsNode &(XC::SetMeshComp::*getNodesRef)(void)= &XC::SetMeshComp::getNodes;
 XC::DqPtrsElem &(XC::SetMeshComp::*getElementsRef)(void)= &XC::SetMeshComp::getElements;
-XC::DqPtrsConstraint &(XC::SetMeshComp::*GetConstraintsRef)(void)= &XC::SetMeshComp::GetConstraints;
+XC::DqPtrsConstraint &(XC::SetMeshComp::*getConstraintsRef)(void)= &XC::SetMeshComp::getConstraints;
 XC::Node *(XC::SetMeshComp::*getNearestNodeSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestNode;
 XC::Element *(XC::SetMeshComp::*getNearestElementSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestElement;
 void (XC::SetMeshComp::*transforms)(const XC::TrfGeom &)= &XC::SetMeshComp::Transform;
@@ -132,10 +132,10 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase>>("SetMeshComp",no_
   .def("rename",&XC::SetMeshComp::rename,"Change the name of the set.")
   .add_property("getNodes", make_function(getNodesRef, return_internal_reference<>() ),"return the nodes of the set. DEPRECATED use nodes.")
   .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ),"return the elements of the set. DEPRECATED use elements.")
-  .add_property("getConstraints", make_function(GetConstraintsRef, return_internal_reference<>() ),"return the constraints of the set.")
+  .add_property("getConstraints", make_function(getConstraintsRef, return_internal_reference<>() ),"return the constraints of the set.")
   .add_property("nodes", make_function(getNodesRef, return_internal_reference<>() ),&XC::SetMeshComp::setNodes,"nodes of the set.")
   .add_property("elements", make_function(getElementsRef, return_internal_reference<>() ),&XC::SetMeshComp::setElements,"elements of the set.")
-  .add_property("constraints", make_function(GetConstraintsRef, return_internal_reference<>() ),&XC::SetMeshComp::setConstraints,"constraints of the set.")
+  .add_property("constraints", make_function(getConstraintsRef, return_internal_reference<>() ),&XC::SetMeshComp::setConstraints,"constraints of the set.")
   .def("getNearestNode",make_function(getNearestNodeSetMeshComp, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNearestElement",make_function(getNearestElementSetMeshComp, return_internal_reference<>() ),"Returns nearest element.")
   .def("killElements",&XC::SetMeshComp::kill_elements,"Deactivates set's elements.")
@@ -316,7 +316,7 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("fillUpwards", &XC::Set::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::Set::fillDownwards,"add entities downwards.")
   .def("conciliaNDivs", &XC::Set::conciliaNDivs)
-  .def("numerate", &XC::Set::numera,"Numerate entities (VTK).")
+  .def("numerate", &XC::Set::numerate,"Numerate entities (VTK).")
   .def("clear",&XC::Set::clear,"Removes all items.")
   .def("empty",&XC::Set::empty,"Return true if the set is empty.")
   .def("getBnd", &XC::Set::Bnd, "Returns set boundary.")

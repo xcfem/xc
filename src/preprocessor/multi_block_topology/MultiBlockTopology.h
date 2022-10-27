@@ -74,8 +74,8 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
     int recvData(const Communicator &);
   private:
     template <class L>
-    static void numera_lista(L &l);
-    void numera(void);
+    static void numerate_list(L &l);
+    void numerate(void);
     ReferenceFrameMap reference_systems; //!< Reference systems container.
 
     PntMap points; //!< Points container.

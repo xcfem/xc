@@ -91,9 +91,19 @@ bool XC::EntMdlr::operator==(const EntMdlr &other) const
   }
 
 //! @brief Assigns the objects index for its use in
-//! VTK arrays(see numera in Set).
+//! VTK arrays (see numerate in Set).
 void XC::EntMdlr::set_index(const size_t &i)
   { idx= i; }
+
+//! @brief Return a description of the object.
+//! This mimics the corresponding function in XC::Set and allows
+//! the modeler entities behave as sets in the Python interface.
+std::string XC::EntMdlr::getDescription(void) const
+  {
+    std::string retval= getClassName()+": ";
+    retval+= getName();
+    return retval;
+  }
 
 //! @brief Interfaz con VTK.
 int XC::EntMdlr::getVtkCellType(void) const

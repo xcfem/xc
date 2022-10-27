@@ -55,7 +55,7 @@ class DqPtrsConstraint: public DqPtrs<Constraint>
     Constraint *buscaConstrainto(const int &tag);
     const Constraint *buscaConstrainto(const int &tag) const;
 
-    void numera(void);
+    void numerate(void);
   };
 
 DqPtrsConstraint operator+(const DqPtrsConstraint &,const DqPtrsConstraint &);

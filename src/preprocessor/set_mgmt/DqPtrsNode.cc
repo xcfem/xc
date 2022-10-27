@@ -154,7 +154,7 @@ size_t XC::DqPtrsNode::getNumDeadNodes(void) const
   }
 
 //!  @brief Set indices to the objects to allow its use in VTK.
-void XC::DqPtrsNode::numera(void)
+void XC::DqPtrsNode::numerate(void)
   {
     size_t idx= 0;
     for(iterator i= begin();i!=end();i++,idx++)

@@ -138,8 +138,8 @@ XC::Element1D *XC::ElemPtrArray3d::get_nearest_element_1d(const Vector &p, const
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; method: " << callingMethod
-		<< " not defined for elements of class: "
-		<< elem->getClassName() << " yet."
+		<< " no nearest element found."
+		<< " Number of elements: " << size()
 		<< std::endl;
     return retval;
   }

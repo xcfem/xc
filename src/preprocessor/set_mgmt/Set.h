@@ -59,7 +59,7 @@ class Set: public SetMeshComp
   private:
     Set *alloc_set(void);
   public:
-    void numera(void);
+    void numerate(void);
 
   protected:
     std::string description; //!< set description.

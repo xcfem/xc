@@ -64,12 +64,12 @@ XC::MultiBlockTopology::MultiBlockTopology(Preprocessor *prep)
 
 //! @brief Assign indexes to the objects (nodes,elements,points,...)
 //! to be used in VTK arrays.
-void XC::MultiBlockTopology::numera(void)
+void XC::MultiBlockTopology::numerate(void)
   {
-    points.numera();
-    edges.numera();
-    faces.numera();
-    bodies.numera();
+    points.numerate();
+    edges.numerate();
+    faces.numerate();
+    bodies.numerate();
   }
 
 //! @brief Return the «edge» that has as end points those

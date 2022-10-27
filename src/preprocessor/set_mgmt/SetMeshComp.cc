@@ -241,11 +241,11 @@ bool XC::SetMeshComp::In(const Element *e) const
 
 //! @brief Assigns index to each object in the set (nodes,elements,points...)
 //! to be able to use them in VTK.
-void XC::SetMeshComp::numera(void)
+void XC::SetMeshComp::numerate(void)
   {
-    nodes.numera();
-    elements.numera();
-    numera_lista(constraints);
+    nodes.numerate();
+    elements.numerate();
+    numerate_list(constraints);
   }
 
 //! @brief Moves the nodes.

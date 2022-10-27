@@ -82,7 +82,7 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     DqPtrsElem pickElemsOfType(const std::string &);
     DqPtrsElem pickElemsOfDimension(const size_t &);
     DqPtrsElem pickElemsOfMaterial(const std::string &);
-    void numera(void);
+    void numerate(void);
     double getAverageSize(bool initialGeometry= true) const;
     
     // Loads on elements.

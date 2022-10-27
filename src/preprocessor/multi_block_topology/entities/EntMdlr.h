@@ -81,6 +81,8 @@ class EntMdlr: public SetEstruct
     EntMdlr &operator=(const EntMdlr &);
     virtual bool operator==(const EntMdlr &) const;
 
+    std::string getDescription(void) const;
+    
     virtual void set_index(const size_t &i);
 
     virtual bool In(const GeomObj3d &, const double &tol= 0.0) const;
@@ -127,6 +129,7 @@ class EntMdlr: public SetEstruct
       { return ttzElements; }
     const ElemPtrArray3d &getTtzElements(void) const
       { return ttzElements; }
+        
     //! @brief Return the object dimension (0, 1, 2 or 3).
     virtual unsigned short int GetDimension(void) const= 0;
     virtual BND3d Bnd(void) const= 0;
