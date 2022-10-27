@@ -95,7 +95,8 @@ fem.multi_mesh(preprocessor=prep,lstMeshSets=[pile_mesh])
 
 
 #                       ***BOUNDARY CONDITIONS***
-pileBC= guia.PileFoundation(pileSet=pile,pileDiam=fiPile,E=concrete.Ecm(), pileType='endBearing',pileBearingCapacity=bearCap,groundLevel=zGround, soilsProp=soils)
+soilLayers= guia.SoilLayers(soilProfile= soils, groundLevel= zGround)
+pileBC= guia.PileFoundation(pileSet=pile,pileDiam=fiPile,E=concrete.Ecm(), pileType='endBearing',pileBearingCapacity=bearCap, soilLayers= soilLayers)
 pileBC.generateSpringsPile(alphaKh_x=1,alphaKh_y=1,alphaKv_z=1)
 springs=pileBC.springs
 springSet=preprocessor.getSets.defSet('springSet')

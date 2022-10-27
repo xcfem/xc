@@ -146,52 +146,96 @@ def soilReactionModulus(soilType, soilState, relativeDensity= None, consistency=
     a_p= alpha_p(soilType= soilType, soilState= soilState)
     return EM*6/(4/3.0*pow(2.65,a_p)+a_p)
 
-def soilReactionModulusSand(relativeDensity, depth, waterTableDepth):
-    ''' Return the value of the soil reaction modulus according to the table
-        A-6.7 of the "Guía..." document.
+class SandySoilLayers(pile.SoilLayers):
+    ''' Class to compute the value of the soil reaction modulus according 
+        to the table A-6.7 of the "Guía..." document.
 
-    :param relativeDensity: if not None, relative density of the granular soil, 
-                            expressed as 'veryLoose', 'loose', 'medium',
-                            'dense' or 'veryDense'.
-    :param depth: depth of the point for which the reaction modulus will be
-                  obtained.
-    :param waterTableDepth: depth of the water table. 
+    :ivar soilProfile: properties of the horizons of sandy soil, defined from 
+                       top to bottom as a list: 
+                       - [[zBottomSoil,relativeDensity], ...] where,
+                       'zBottomSoil' is the global Z coordinate of the 
+                        bottom level of the soil,
+                       - relativeDensity: relative density of the granular soil,
+                         expressed as 'veryLoose', 'loose', 'medium',
+                        'dense' or 'veryDense'.
     '''
-    if(depth>waterTableDepth): # not submerged
-        if(relativeDensity=='veryLoose'):
-            retval= 1
-        elif(relativeDensity=='loose'):
-            retval= 2
-        elif(relativeDensity=='medium'):
-            retval= 5
-        elif(relativeDensity=='dense'):
-            retval= 10
-        elif(relativeDensity=='veryDense'):
-            retval= 20
-        else:
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(methodName+'; unknown relative density: '+str(relativeDensity))
-            retval= None
-    else: # submerged
-        if(relativeDensity=='veryLoose'):
-            retval= 0.6
-        elif(relativeDensity=='loose'):
-            retval= 1.2
-        elif(relativeDensity=='medium'):
-            retval= 3
-        elif(relativeDensity=='dense'):
-            retval= 6
-        elif(relativeDensity=='veryDense'):
-            retval= 12
-        else:
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(methodName+'; unknown relative density: '+str(relativeDensity))
-            retval= None
-    if(retval):
-        retval*= depth*1e6
-    return retval
+    def __init__(self, soilProfile, waterTableZ, groundLevel= 0.0):
+        ''' Constructor.
+
+        :param soilProfile: properties of the horizons of sandy soil, defined from 
+                           top to bottom as a list: 
+                           - [[zBottomSoil,relativeDensity], ...] where,
+                           'zBottomSoil' is the global Z coordinate of the 
+                            bottom level of the soil,
+                           - relativeDensity: relative density of the granular soil,
+                             expressed as 'veryLoose', 'loose', 'medium',
+                            'dense' or 'veryDense'.
+        :param waterTableZ: global Z coordinate of the water table.
+        :param groundLevel: global Z coordinate of the ground level.
+        '''
+        super().__init__(waterTableZ= waterTableZ, groundLevel= groundLevel)
+        self.soilProfile= soilProfile
+
+    def getRelativeDensity(self, z):
+        ''' Return the relative density of the soil at the depth argument.
+
+        :param z: global Z coordinate of the point of interest.
+        '''
+        retval= None
+        if(z<self.groundLevel):
+            for layer in self.soilProfile:
+                zBottom= layer[0]
+                if(zBottom<z):
+                    retval= layer[1]
+                    break
+        return retval
+
+    def submerged(self, z):
+        ''' Return true if z<waterTableZ.'''
+        return z<self.waterTableZ
+
+    def getReactionModulus(self, z):
+        ''' Return the value of the soil reaction modulus according to the table
+            A-6.7 of the "Guía..." document.
+
+        :param z: global Z coordinate of the point of interest.
+        '''
+        submerged= self.submerged(z)
+        relativeDensity= self.getRelativeDensity(z)
+        if(not submerged): # not submerged
+            if(relativeDensity=='veryLoose'):
+                retval= 1
+            elif(relativeDensity=='loose'):
+                retval= 2
+            elif(relativeDensity=='medium'):
+                retval= 5
+            elif(relativeDensity=='dense'):
+                retval= 10
+            elif(relativeDensity=='veryDense'):
+                retval= 20
+            else:
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(methodName+'; unknown relative density: '+str(relativeDensity))
+                retval= None
+        else: # submerged
+            if(relativeDensity=='veryLoose'):
+                retval= 0.6
+            elif(relativeDensity=='loose'):
+                retval= 1.2
+            elif(relativeDensity=='medium'):
+                retval= 3
+            elif(relativeDensity=='dense'):
+                retval= 6
+            elif(relativeDensity=='veryDense'):
+                retval= 12
+            else:
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(methodName+'; unknown relative density: '+str(relativeDensity))
+                retval= None
+        if(retval):
+            retval*= (self.groundLevel-z)*1e6
+        return retval
         
-    
 # Commonly used tubes
 class Micropile(pile.CircularPile):
     '''Micropile foundation model according to "Guía para el proyecto y la 
@@ -200,12 +244,12 @@ class Micropile(pile.CircularPile):
     
     :ivar pileDiam: diameter of the pile
     '''
-    def __init__(self, pileSet, pileDiam, mortarMaterial, pipeSection, axialRebar= None, groundLevel= 0.0, pileType= 'endBearing', soilAggressivity= 'aggresiveBackfill', designLife= 100, Fe= 1.5, Fuc= 0.5):
+    def __init__(self, pileSet, pileDiam, soilLayers, mortarMaterial, pipeSection, axialRebar= None, pileType= 'endBearing', soilAggressivity= 'aggresiveBackfill', designLife= 100, Fe= 1.5, Fuc= 0.5):
         ''' Constructor.
 
         :param pileSet: set of nodes and elements defining a single pile.
-        :param pileDiam: diameter of the pile.
-        :param groundLevel: ground elevation.
+        :param pileDiam: diameter of the micropile.
+        :param soilLayers: properties of the soil horizons.
         :param mortarMaterial: mortar material.
         :param pipeSection: cross-section of the tubular reinforcement.
         :param axialRebar: reinforcement steel bar in the axis of the micropile.
@@ -227,7 +271,7 @@ class Micropile(pile.CircularPile):
             E= mortarMaterial.concrete.getEcm()
         elif(axialRebar):
             E= axialRebar.steel.Es
-        super(Micropile, self).__init__(E= E, pileType= pileType, groundLevel= groundLevel, diameter= pileDiam, pileSet= pileSet)
+        super(Micropile, self).__init__(E= E, pileType= pileType, soilLayers= soilLayers, diameter= pileDiam, pileSet= pileSet)
         self.mortarMaterial= mortarMaterial
         self.pipeSection= pipeSection
         self.axialRebar= axialRebar
@@ -430,3 +474,40 @@ class Micropile(pile.CircularPile):
         '''
         return self.pipeSection.defElasticShearSection2d(preprocessor, majorAxis= majorAxis, overrideRho= overrideRho)
 
+    def getEstimatedTipReactionModulus(self, NcEk_Rcd= 1.0):
+        ''' Return an estimation of the tip reaction modulus according to the expression
+            in the clause 3.7.3 of the "Guía".
+
+        :param NcEk_Rcd: quotient between the solliciting axial load and the design value
+                         of the micropile strength.
+        '''
+        sN= (9*NcEk_Rcd-2)*self.getDiameter()/90
+        NcRd= self.getNcRd()
+        k= NcRd/sN
+        return k        
+
+    def getLinearSpringsConstants(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+        '''Compute the spring contants that simulate the soils along the pile
+
+        :param alphaKh_x: coefficient to be applied to the horizontal stiffness
+                          of a single pile in X direction
+        :param alphaKh_y: coefficient to be applied to the horizontal stiffness
+                          of a single pile in Y direction
+        :param alphaKh_Z: coefficient to be applied to the vertical stiffness of
+                          a single pile in Z direction
+        '''
+        # Soil reaction modulus at each node.
+        lstNodPile= self.getNodeZs()
+        self.computeTributaryLengths(False)
+        retval= dict()
+        for (n,z) in lstNodPile:
+            if(z<self.soilLayers.groundLevel):
+                 soilReactionModulus= self.soilLayers.getReactionModulus(z= z)
+                 springStiffness= soilReactionModulus*n.getTributaryLength()*self.getDiameter()
+                 retval[n.tag]= [springStiffness, springStiffness, 1e-5]
+        # Compute vertical stiffness on the tip.
+        tipNode= lstNodPile[-1][0]
+        tipNodeStiffness= retval[tipNode.tag]
+        tipStiffness= self.getEstimatedTipReactionModulus()
+        tipNodeStiffness[2]= tipStiffness
+        return retval

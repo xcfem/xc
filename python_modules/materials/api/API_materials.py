@@ -8,10 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-import scipy.interpolate
-from materials import steel_base
-from misc_utils import log_messages as lmsg
-from connections.steel_connections import bolts 
 from materials.ec3 import EC3_materials
 
 class APISteel(EC3_materials.EC3Steel):

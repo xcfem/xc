@@ -15,6 +15,26 @@ from materials.sections import section_properties as sp
 from materials import typical_materials
 from model import predefined_spaces
 
+class SoilLayers(object):
+    ''' Base class for soil horizons in pile computations.
+
+    :ivar waterTableZ: global Z coordinate of the water table. 
+    :ivar groundLevel: global Z coordinate of the ground level.
+    '''
+    def __init__(self, waterTableZ= -100, groundLevel= 0.0):
+        ''' Constructor.
+
+        :param waterTableZ: global Z coordinate of the water table.
+        :param groundLevel: global Z coordinate of the ground level.
+        '''
+        self.waterTableZ= waterTableZ
+        self.groundLevel= groundLevel
+
+    def submerged(self, z):
+        ''' Return true if z<waterTableZ.'''
+        return z<self.waterTableZ
+
+
 class Pile(object):
     '''Pile basic properties.
     
@@ -22,23 +42,23 @@ class Pile(object):
     :ivar E: elastic modulus of pile material.
     :ivar pileType: "endBearing" for end bearing piles 
                     "friction" for friction piles
-    :ivar groundLevel: ground elevation.
+    :ivar soilLayers:  properties of the soils horizons.
     :ivar pileSet: set of nodes and elements defining a single pile.
     '''
-    def __init__(self, E, crossSection, pileType, groundLevel, pileSet= None):
+    def __init__(self, E, crossSection, pileType, soilLayers, pileSet= None):
         ''' Constructor.
 
         :param crossSection: cross-section of the pile.
         :param E: elastic modulus of pile material
         :param pileType: "endBearing" for end bearing piles 
                         "friction" for friction piles
-        :param groundLevel: ground elevation
+        :param soilLayers:  properties of the soil horizons.
         :param pileSet: set of nodes and elements defining a single pile.
         '''
         self.E= E
         self.crossSection= crossSection
         self.pileType= pileType
-        self.groundLevel= groundLevel
+        self.soilLayers= soilLayers
         self.pileSet= None
         if(pileSet):
             self.pileSet= pileSet
@@ -68,13 +88,13 @@ class Pile(object):
     def getAerialLength(self):
         '''Return the length of pile above the ground surface'''
         zMax= self.getZMax()
-        return max(0,zMax-self.groundLevel)
-
+        return max(0,zMax-self.soilLayers.groundLevel)
+    
     def getBuriedLength(self):
         '''Return the length of pile below the ground surface'''
         zMax= self.getZMax()
         zMin= self.getZMin()
-        return min(zMax-zMin,self.groundLevel-zMin)
+        return min(zMax-zMin,self.soilLayers.groundLevel-zMin)
     
     def getTotalLength(self):
         '''Return the total length of the pile.'''
@@ -172,19 +192,19 @@ class Pile(object):
 
 class CircularPile(Pile):
     ''' Pile with circular cross-section.'''
-    def __init__(self, E, pileType, groundLevel, diameter, pileSet):
+    def __init__(self, E, pileType, diameter, soilLayers, pileSet):
         ''' Constructor.
 
         :param E: elastic modulus of pile material
         :param pileType: "endBearing" for end bearing piles 
                         "friction" for friction piles
-        :param groundLevel: ground elevation.
         :param diameter: diameter of the pile cross-section.
+        :param soilLayers:  properties of the soil horizons.
         :param pileSet: set of nodes and elements defining a single pile.
         '''
         cs= sp.CircularSection(name= None, Rext= diameter/2.0,Rint=0.0)
 
-        super(CircularPile, self).__init__(E= E, crossSection= cs, pileType= pileType, groundLevel= groundLevel, pileSet= pileSet)
+        super(CircularPile, self).__init__(E= E, crossSection= cs, pileType= pileType, soilLayers= soilLayers, pileSet= pileSet)
 
     def getDiameter(self):
         ''' Return the pile diameter.'''
