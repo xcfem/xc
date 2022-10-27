@@ -108,18 +108,19 @@ if abs(ratio1)<1e-8 and abs(ratio2)<1e-8:
 else:
     lmsg.error(fname+' ERROR.')
 
+
 '''
 # Graphic stuff.
+dispSet= modelSpace.defSet('dispSet')
+dispSet.lines.append(l)
+dispSet.fillDownwards()
+    
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
-
 oh.displayFEMesh()
-oh.displayDispRot(itemToDisp='uX',defFScale= 2.0)
-oh.displayDispRot(itemToDisp='uZ',defFScale= 2.0)
-oh.displayIntForcDiag(itemToDisp='N')
-oh.displayIntForcDiag(itemToDisp='Vy')
-oh.displayIntForcDiag(itemToDisp='Mz')
-oh.displayDispRot(itemToDisp='uX',setToDisplay=micropile.pileSet)
-oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=micropile.pileSet)
-oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=micropile.pileSet)
+oh.displayDispRot(itemToDisp='uX',defFScale= 2.0,setToDisplay=dispSet)
+oh.displayDispRot(itemToDisp='uZ',defFScale= 2.0,setToDisplay=dispSet)
+oh.displayIntForcDiag(itemToDisp='N',setToDisplay=dispSet)
+oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=dispSet)
+oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=dispSet)
 '''
