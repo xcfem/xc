@@ -129,6 +129,17 @@ class ShearReinforcement(object):
         os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angAlphaShReinf)))
         os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angThetaConcrStruts))+"\\\\\n")
 
+
+#                   Reinforce concrete section
+#    + -------------------------------------------------------+ 
+#    |  o    o    o    o    o    o    o    o    o    o    o   | <- ReinfRow
+#    |                                                        |
+#    |                                                        |
+#    |  o    o    o    o    o    o    o    o    o    o    o   | <- ReinfRow
+#    + -------------------------------------------------------+ 
+#
+
+
 class ReinfRow(object):
     ''' Definition of the variables that make up a family (row) of main 
     (longitudinal) reinforcing bars.
