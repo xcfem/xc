@@ -237,6 +237,16 @@ class SandySoilLayers(pile.SoilLayers):
         return retval
         
 # Commonly used tubes
+# (ascii art from ascii.co.uk)
+# 
+#              =-=   
+#           =   _   = 
+#          =  /   \  =
+#          |    o    |
+#          =  \ _ /  =
+#           =       = 
+#              = =    
+#      
 class Micropile(pile.CircularPile):
     '''Micropile foundation model according to "Guía para el proyecto y la 
       ejecución de micropilotes en obras de carreteras." by «Ministerio 

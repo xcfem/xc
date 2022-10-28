@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Definition of the variables that make up a reinforced concrete section 
+with reinforcement symmetric in both directions (as usual in columns)
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and A_OO"
@@ -6,10 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
-'''
-Definition of the variables that make up a reinforced concrete section 
-with reinforcement symmetric in both directions (as usual in columns)
-'''
 
 import sys
 import math
@@ -102,6 +101,19 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         self.reinforcementCDer.p1= geom.Pos2d(width/2-cover,-depth/2+cover+rebarsSpacingCanto) # Right side reinforcement.
         self.reinforcementCDer.p2= geom.Pos2d(width/2-cover,depth/2-cover-rebarsSpacingCanto)
 
+#  Circular RC section
+#  (ascii art from ascii.co.uk)
+#                _ _
+#             =  o  o =
+#           = o        o =
+#          = o          o =
+#          = o          o =
+#           = o        o =
+#             = o  o =
+#                ~~
+
+
+        
 class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.CircularSection):
     '''
     Base class for rectangular reinforced concrete sections.

@@ -27,6 +27,16 @@ mortar= EHE_materials.HA25
 rebar= EHE_materials.rebar32_B500S
 
 # Micropile
+# (ascii art from ascii.co.uk)
+# 
+#              =-=   
+#           =   _   = 
+#          =  /   \  =
+#          |    o    |
+#          =  \ _ /  =
+#           =       = 
+#              = =    
+#      
 ## soilAggressivity: soil aggresivity descriptor
 ##                   ('unalteredNatural', 'pollutedNatural', 'aggresiveNatural',
 ##                    'backfill', 'aggresiveBackfill') according to table 2.4.
