@@ -26,7 +26,7 @@ mortar= EHE_materials.HA25
 ## Rebar
 rebar= EHE_materials.rebar32_B500S
 
-# Micropile
+# Micropile section.
 # (ascii art from ascii.co.uk)
 # 
 #              =-=   
