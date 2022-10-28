@@ -529,6 +529,8 @@ python tests/preprocessor/sets/test_resisting_svd01.py
 python tests/preprocessor/sets/test_get_contours_01.py
 python tests/preprocessor/sets/test_get_contours_02.py
 python tests/preprocessor/sets/test_pick_entities.py
+python tests/preprocessor/sets/test_pick_elements_in_zone.py
+python tests/preprocessor/sets/test_pick_node_on_point.py
 python tests/preprocessor/sets/test_sets_and_grids.py
 python tests/preprocessor/sets/test_sets_and_grids_02.py
 python tests/preprocessor/sets/test_get_bnd_01.py

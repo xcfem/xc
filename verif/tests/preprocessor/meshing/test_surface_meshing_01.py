@@ -38,14 +38,10 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 
 
+# Material.
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= elast2d.name
-elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
-
-
-
+# Problem geometry.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d(CooMaxX/2,0.0,0.0))
@@ -59,6 +55,10 @@ s1= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt5.tag,pt4.tag)
 s1.nDivI= 1
 s1.nDivJ= 1
 
+# Mesh generation.
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= elast2d.name
+elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 s1.genMesh(xc.meshDir.I)
 total= preprocessor.getSets.getSet("total")
 
