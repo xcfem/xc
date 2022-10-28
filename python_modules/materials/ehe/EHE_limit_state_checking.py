@@ -254,8 +254,8 @@ def getVu1(fcd, Nd, Ac, b0, d, alpha, theta):
     f1cd= 0.6*fcd
     sgpcd= (Nd/Ac)
     K= min(5/3*(1+sgpcd/fcd),1)
-    ctgTheta= min(max(cotg(theta),0.5),2.0)
-    return K*f1cd*b0*d*(ctgTheta+cotg(alpha))/(1+ctgTheta^2)
+    ctgTheta= min(max(math.cotg(theta),0.5),2.0)
+    return K*f1cd*b0*d*(ctgTheta+math.cotg(alpha))/(1+ctgTheta^2)
 
 def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
     '''
@@ -279,7 +279,7 @@ def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
     :param fpd: design value of prestressing steel strength (clause 38.6 EHE). 
     '''
     sgpcd= Nd/Ac
-    chi= 1+sqrt(200/(d*1000)) # d MUST BE EXPRESSED IN METERS.
+    chi= 1+math.sqrt(200/(d*1000)) # d MUST BE EXPRESSED IN METERS.
     rol= min((AsPas+AsAct*fpd/fyd)/(b0*d),0.02)
     return fact*chi*(rol*fck/1e4)^(1/3)*1e6-0.15*sgpcd
 
@@ -333,8 +333,8 @@ def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
     '''
     fcv= getFcv(0.10,fck,Nd,Ac,b0,d,AsPas,fyd,AsAct,fpd)
     fctm= fctMedEHE08(fck) 
-    ctgThetaE= min(max(0.5,sqrt(fctm-sgxd/fctm-sgyd)),2.0)
-    ctgTheta= min(max(cotg(theta),0.5),2.0)
+    ctgThetaE= min(max(0.5,math.sqrt(fctm-sgxd/fctm-sgyd)),2.0)
+    ctgTheta= min(max(math.cotg(theta),0.5),2.0)
     if(ctgTheta<ctgThetaE):
         beta= (2*ctgTheta-1)/(2*ctgThetaE-1)
     else:
@@ -356,9 +356,9 @@ def getVsu(z, alpha, theta, AsTrsv, fyd):
     :param fyd: design yield strength of the transverse reinforcement.
 
     '''
-    ctgTheta= min(max(cotg(theta),0.5),2.0)
+    ctgTheta= min(max(math.cotg(theta),0.5),2.0)
     fyalphad= min(fyd,400e6) # comment to clause 40.2 EHE
-    return z*sin(alpha)*(cotg(alpha)+ctgTheta)*AsTrsv*fyalphad
+    return z*math.sin(alpha)*(math.cotg(alpha)+ctgTheta)*AsTrsv*fyalphad
 
 
 def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv):
@@ -473,7 +473,7 @@ class ShearDesignParameters(object):
         self.tensionedRebarsArea= tensionedRebarsFiberSet.getArea
         # self.tensionedStrandsArea= 
 
-        self.sigmaXD= N/area+Mz/Iz*centerOfMassY+My/Iy*centerOfMassZ
+        self.sigmaXD= N/area+Mz/Iz*self.centerOfMassY+My/Iy*self.centerOfMassZ
         self.ultimateShearStrength= getVu(fck= fck, fcd= fcd, Nd= N, Ac= self.concreteArea, b0= self.widthMin, d= self.effectiveDepth, z= self.mechanicLeverArm, alpha= self.angAlpha, theta= self.angTheta, AsPas= self.tensionedRebarsArea, fyd= fyd, AsAct= self.tensionedStrandsArea, fpd= fpd, sgxd= self.sigmaXD, sgyd= self.sigmaYD, AsTrsv= self.areaShReinfBranchsTrsv, fydTrsv= fydTrsv)
 
     def printParams(self, os= sys.stdout):
@@ -908,7 +908,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param Ae: Area enclosed by the middle line of the effective hollow section.
     :param ue: Perimeter of the middle line of the effective hollow section.
     '''
-    return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
+    return  min(getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
 # Check normal stresses limit state.
 
@@ -1212,7 +1212,10 @@ class ShearController(lscb.ShearControllerBase):
         torsionParameters= None # XXX Ignore torsional deformation.
         for e in elements:
             # Call getResisting force to update the internal forces.
-            unusedR= e.getResistingForce() 
+            R= e.getResistingForce()
+            if(__debug__):
+                if(not R):
+                    AssertionError('Can\'t append the block.')                    
             scc= e.getSection()
             idSection= e.getProp("idSection")
             masterElementDimension= e.getProp("masterElementDimension")
@@ -1475,22 +1478,24 @@ class CrackControl(lscb.CrackControlBaseParameters):
             self.tensionedRebars.setup(tensionedReinforcement)
             self.Wk= self.computeWkOnBars(tensionedReinforcement)  
 
-def printRebarCrackControlParameters(os= sys.stdout):
-    '''Prints crack control parameters of a bar.'''
-    os.write("\niRebar= "+str(iRebar))
-    os.write("Effective area Acef= "+str(rebarEffConcArea*1e4)+" cm2")
-    os.write("Bar area As= "+str(rebarArea*1e4)+" cm2")
-    os.write("Bar position: ("+str(rebar_y)+")+"+str(rebar_z)+")")
-    os.write("Bar cover c= "+str(rebarCover)+" m")
-    os.write("Bar diameter fi= "+str(rebarDiameter)+"")
-    os.write("Bar stress= "+str(rebarStress/1e6)+" MPa")
-    os.write("Bar stress_SR= "+str(rebarSigmaSR/1e6)+" MPa")
-    os.write("Bar spacement s= "+str(rebarSpacing)+" m")
-    os.write("k1= "+str(k1)+"")
-    os.write("rebarCrackMeanSep= "+str(rebarCrackMeanSep)+" m")
-    os.write("Maximum bar elongation: "+str(maxBarElongation*1e3)+" per mil.")
-    os.write("Average bar elongation: "+str(averageBarElongation*1e3)+" per mil.")
-    os.write("Characteristic crack width= "+str(rebarWk*1e3)+" mm\n")
+# This is probably an ancient function that has become
+# a zombie (nobody seems to call it).
+# def printRebarCrackControlParameters(os= sys.stdout):
+#     '''Prints crack control parameters of a bar.'''
+#     os.write("\niRebar= "+str(iRebar))
+#     os.write("Effective area Acef= "+str(rebarEffConcArea*1e4)+" cm2")
+#     os.write("Bar area As= "+str(rebarArea*1e4)+" cm2")
+#     os.write("Bar position: ("+str(rebar_y)+")+"+str(rebar_z)+")")
+#     os.write("Bar cover c= "+str(rebarCover)+" m")
+#     os.write("Bar diameter fi= "+str(rebarDiameter)+"")
+#     os.write("Bar stress= "+str(rebarStress/1e6)+" MPa")
+#     os.write("Bar stress_SR= "+str(rebarSigmaSR/1e6)+" MPa")
+#     os.write("Bar spacement s= "+str(rebarSpacing)+" m")
+#     os.write("k1= "+str(k1)+"")
+#     os.write("rebarCrackMeanSep= "+str(rebarCrackMeanSep)+" m")
+#     os.write("Maximum bar elongation: "+str(maxBarElongation*1e3)+" per mil.")
+#     os.write("Average bar elongation: "+str(averageBarElongation*1e3)+" per mil.")
+#     os.write("Characteristic crack width= "+str(rebarWk*1e3)+" mm\n")
 
 
 class TorsionParameters(object):
@@ -1811,7 +1816,7 @@ class BlockMember(object):
       return self.a1*self.b1
     def getF3cd(self, fcd):
       '''Return the value of f3cd.'''
-      return min(sqrt(self.getAc()/self.Ac1()),3.3)*fcd
+      return min(math.sqrt(self.getAc()/self.Ac1()),3.3)*fcd
     def getNuConcentratedLoad(self, fcd):
       '''
       Return the the maximum compressive force that can be obtained in the
