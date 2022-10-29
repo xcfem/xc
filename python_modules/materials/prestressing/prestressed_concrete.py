@@ -405,7 +405,7 @@ class PrestressTendon(object):
             xLab='X'
         elif XaxisValues.upper()=='Y':
             XaxisCoord=self.fineCoordMtr[1]
-            YaxisRoughCoord=self.roughCoordMtr[1]
+            #YaxisRoughCoord=self.roughCoordMtr[1]
             xLab='Y'
         elif XaxisValues.upper()=='XY':
             XaxisCoord=self.fineProjXYcoord
