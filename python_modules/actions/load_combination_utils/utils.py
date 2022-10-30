@@ -4,6 +4,7 @@
 from __future__ import print_function
 
 import math
+import sys
 
 def getCombinationDict(loadCombination:str):
     ''' Return a Python dictionary whose keys are the names of the actions
@@ -70,7 +71,10 @@ def listActionGroup(actionGroup):
           print('     ', a)
 
 def listActionFamily(actionFamily):
-    '''List the defined actions in a family.'''
+    '''List the defined actions in a family.
+
+    :param actionFamily: family of actions. 
+    '''
     print('    partial safety factors: ', actionFamily.partial_safety_factors)
     actions= actionFamily.actions
     for a in actions:
@@ -91,17 +95,43 @@ def listActionWeighting(actionWeighting):
         listActionFamily(aw.accidentalActions)
         print('  Seismic actions: ')
         listActionFamily(aw.seismicActions)
-  
 
-def writeLoadCombinations(outputFileName, prefix, loadCombs):
-    f= open(outputFileName,'w')
+def getNamedCombinations(loadCombinations, prefix):
+    '''Return a dictionary containing the load combinations in the argument
+       with an arbitrary name as key. The name is formed by concatenation of
+       a prefix (such as ULS, SLS or somethink like that) and a number.
+
+    :param loadCombinations: load combinations to be named.
+    :param prefix: prefix to form the name (such as ULS, SLS or somethink like that).
+    '''
+    sz= len(loadCombinations) # number of combinations to name.
+    szLength= int(math.log(sz,10))+1 # number of leading zeros
+    retval= dict()
+    for count, comb in enumerate(loadCombinations):
+        key= prefix+str(count).zfill(szLength)
+        retval[key]= comb
+    return retval
+
+def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
+    ''' Write the load combinations in a XC format.
+
+    :param loadCombinations: load combinations to be named.
+    :param prefix: prefix to form the name (such as ULS, SLS or somethink like that).
+    :param outputFileName: name of the output file (if None use standard output).
+    '''
+    if(outputFileName is None):
+        f= sys.stdout
+    else:
+        f= open(outputFileName,'w')
     f.write("combs= loadLoader.getLoadCombinations\n")
-    conta= 1
-    sz= len(loadCombs)
-    szLength= int(math.log(sz,10))+1
-    for comb in loadCombs:
-        cod= prefix+str(conta).zfill(szLength)
+    # Assign a name to each combination.
+    namedCombinations= getNamedCombinations(loadCombinations, prefix)
+    for key in namedCombinations:
+        comb= namedCombinations[key]
         output= 'comb= combs.newLoadCombination('
-        output+= '"'+cod+'","'+comb.name+'")\n'
+        output+= '"'+key+'","'+comb.name+'")\n'
         f.write(output)
-        conta+= 1
+    if(outputFileName is None):
+        f.flush()
+    else:
+        f.close()
