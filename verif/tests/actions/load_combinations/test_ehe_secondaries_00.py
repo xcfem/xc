@@ -9,28 +9,24 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import xc_base
-import loadCombinations
 from actions.load_combination_utils import ehe
 
-lcg= ehe.intenseControlCombGenerator
-PP1= lcg.insert("EHEIntenso","permanentes",loadCombinations.Action("PP1","Peso propio"),"permanents","permanentes_ctr_intenso")
+lcg= ehe.combGenerator
+PP1= lcg.newPermanentAction(actionName= "PP1", actionDescription= "Peso propio")
 
-SC1= lcg.insert("EHEIntenso","variables",loadCombinations.Action("SC1","Puente grúa"),"azotea_solo_conserv","variables_ctr_intenso")
-SC1.getRelaciones.appendIncompatible("SC.*")
+SC1= lcg.newVariableAction(actionName= "SC1", actionDescription= "Puente grúa", combinationFactorsName= "azotea_solo_conserv", incompatibleActions= ["SC.*"])
 
-SC2= lcg.insert("EHEIntenso","variables",loadCombinations.Action("SC2","Sobrecarga de uso cubierta"),"azotea_solo_conserv","variables_ctr_intenso")
-SC2.getRelaciones.appendIncompatible("SC.*")
+SC2= lcg.newVariableAction(actionName= "SC2", actionDescription= "Sobrecarga de uso cubierta", combinationFactorsName= "azotea_solo_conserv", incompatibleActions= ["SC.*"])
 
-F1= lcg.insert("EHEIntenso","variables",loadCombinations.Action("F1","Frenado puente grúa"),"azotea_solo_conserv","variables_ctr_intenso")
-F1.getRelaciones.appendMain("SC1.*")
+F1= lcg.newVariableAction(actionName= "F1", actionDescription= "Frenado puente grúa", combinationFactorsName= "azotea_solo_conserv", dependsOn= "SC1.*")
 
 #lcg.setVerbosityLevel(3)
-lcg.genera()
+lcg.computeCombinations()
 
 coeficientesRef_elu_persistentes= [[1,0,0,0],[1.35,0,0,0],[1,1.5,0,0],[1,1.5,0,1.05],[1,0,1.5,0],[1,1.05,0,1.5],[1.35,1.5,0,0],[1.35,1.5,0,1.05],[1.35,0,1.5,0],[1.35,1.05,0,1.5]]
 
 coeficientes_elu_persistentes= []
-combAcc= lcg.getLoadCombinations.getULSTransientCombinations
+combAcc= lcg.getULSTransientCombinations()
 base= xc_base.vector_string_from_py_list(["PP1","SC1","SC2","F1"])
 for comb in combAcc:
   coeficientes_elu_persistentes.append(xc_base.vector_double_to_py_list(comb.getCoeficientes(base)))

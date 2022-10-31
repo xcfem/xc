@@ -201,8 +201,8 @@ python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
 #python tests/actions/load_combinations/testLoadCombinations.py
 python tests/actions/load_combinations/test_action.py
-python tests/actions/load_combinations/test_secondaries_00.py
-python tests/actions/load_combinations/test_accidentales.py
+python tests/actions/load_combinations/test_ehe_secondaries_00.py
+python tests/actions/load_combinations/test_ehe_accidentales.py
 python tests/actions/load_combinations/test_iap11_01.py
 python tests/actions/load_combinations/test_iap11_02.py
 python tests/actions/load_combinations/test_combination_dict.py

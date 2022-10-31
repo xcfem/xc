@@ -19,7 +19,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //ActionsAndFactors.h
-//Almacena todas las familias de acciones para la estructura o el elemento estructural.
+//Store all the families of actions for the structure of structural element.
 
 #ifndef ACTIONSANDFACTORS_H
 #define ACTIONSANDFACTORS_H
@@ -30,7 +30,7 @@
 namespace cmb_acc{
 //! @ingroup CMBACC
 //
-//! @brief Almacena todas las familias de acciones.
+//! @brief Container for all the action families.
 class ActionsAndFactors: public ActionContainer
   {
   private:
@@ -44,6 +44,6 @@ class ActionsAndFactors: public ActionContainer
     const Factors &getFactors(void) const
       { return factors; }
   };
-} //fin namespace nmb_acc.
+} //end namespace cmb_acc.
 
 #endif

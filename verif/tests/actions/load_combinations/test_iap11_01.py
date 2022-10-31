@@ -11,25 +11,24 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import xc_base
 import loadCombinations
 from actions.load_combination_utils import iap11
-from actions.load_combination_utils import utils
 from misc_utils import log_messages as lmsg
 
-lcg= iap11.controlCombGenerator
+lcg= iap11.combGenerator
 #print('*******', pond.permanentActions.gammaF.getGammaFELU.desfavorable)
 
-G1= lcg.insert("IAP11","permanentes",loadCombinations.Action("G1", "Peso propio"),"permanentes","permanentes")
-G2= lcg.insert("IAP11","permanentes",loadCombinations.Action("G2", "Carga muerta"),"permanentes","permanentes")
-G3= lcg.insert("IAP11","permanentes",loadCombinations.Action("G3", "Retracc."),"permanentes","permanentes")
-Q1a_1= lcg.insert("IAP11","variables",loadCombinations.Action("Q1a_1", "Tren cargas pos. 1a_1"),"vehículos_pesados","variables_SCuso")
-Q1a_2= lcg.insert("IAP11","variables",loadCombinations.Action("Q1a_2", "Tren cargas pos. 1a_2"),"vehículos_pesados","variables_SCuso")
+G1= lcg.newPermanentAction(actionName=  "G1", actionDescription= "Peso propio")
+G2= lcg.newPermanentAction(actionName=  "G2", actionDescription= "Carga muerta")
+G3= lcg.newPermanentAction(actionName=  "G3", actionDescription=  "Retracc.")
+Q1a_1= lcg.newHeavyVehicleAction(actionName=  "Q1a_1", actionDescription= "Tren cargas pos. 1a_1")
+Q1a_2= lcg.newHeavyVehicleAction(actionName=  "Q1a_2", actionDescription= "Tren cargas pos. 1a_2")
 
       
 #lcg.setVerbosityLevel(3)
-lcg.genera()
+lcg.computeCombinations()
 coeficientesRef_elu_persistentes= [[1.0, 1.0, 1.0, 0.0, 0.0], [1.0, 1.0, 1.35, 0.0, 0.0], [1.0, 1.35, 1.0, 0.0, 0.0], [1.0, 1.35, 1.35, 0.0, 0.0], [1.35, 1.0, 1.0, 0.0, 0.0], [1.35, 1.0, 1.35, 0.0, 0.0], [1.35, 1.35, 1.0, 0.0, 0.0], [1.35, 1.35, 1.35, 0.0, 0.0], [1.0, 1.0, 1.0, 1.35, 0.0], [1.0, 1.0, 1.0, 1.35, 1.01], [1.0, 1.0, 1.0, 0.0, 1.35], [1.0, 1.0, 1.0, 1.01, 1.35], [1.0, 1.0, 1.35, 1.35, 0.0], [1.0, 1.0, 1.35, 1.35, 1.01], [1.0, 1.0, 1.35, 0.0, 1.35], [1.0, 1.0, 1.35, 1.01, 1.35], [1.0, 1.35, 1.0, 1.35, 0.0], [1.0, 1.35, 1.0, 1.35, 1.01], [1.0, 1.35, 1.0, 0.0, 1.35], [1.0, 1.35, 1.0, 1.01, 1.35], [1.0, 1.35, 1.35, 1.35, 0.0], [1.0, 1.35, 1.35, 1.35, 1.01], [1.0, 1.35, 1.35, 0.0, 1.35], [1.0, 1.35, 1.35, 1.01, 1.35], [1.35, 1.0, 1.0, 1.35, 0.0], [1.35, 1.0, 1.0, 1.35, 1.01], [1.35, 1.0, 1.0, 0.0, 1.35], [1.35, 1.0, 1.0, 1.01, 1.35], [1.35, 1.0, 1.35, 1.35, 0.0], [1.35, 1.0, 1.35, 1.35, 1.01], [1.35, 1.0, 1.35, 0.0, 1.35], [1.35, 1.0, 1.35, 1.01, 1.35], [1.35, 1.35, 1.0, 1.35, 0.0], [1.35, 1.35, 1.0, 1.35, 1.01], [1.35, 1.35, 1.0, 0.0, 1.35], [1.35, 1.35, 1.0, 1.01, 1.35], [1.35, 1.35, 1.35, 1.35, 0.0], [1.35, 1.35, 1.35, 1.35, 1.01], [1.35, 1.35, 1.35, 0.0, 1.35], [1.35, 1.35, 1.35, 1.01, 1.35]]
 
 coeficientes_elu_persistentes= []
-combAcc= lcg.getLoadCombinations.getULSTransientCombinations
+combAcc= lcg.getULSTransientCombinations()
 base= xc_base.vector_string_from_py_list(["G1","G2","G3","Q1a_1","Q1a_2"])
 for comb in combAcc:
   coeficientes_elu_persistentes.append(xc_base.vector_double_to_py_list(comb.getCoeficientes(base)))

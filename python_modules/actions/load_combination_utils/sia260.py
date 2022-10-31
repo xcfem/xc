@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
+''' Load combinations according to SIA-260 (Switzerland).'''
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import loadCombinations
+from actions.load_combination_utils import utils
 
 factors= loadCombinations.Factors()
 partial_safety_factors= factors.getPartialSafetyFactors()
@@ -64,6 +72,68 @@ combination_factors.insert("ponts_routes_pression_hydraulique",loadCombinations.
 
 combination_factors.insert("accidentales",loadCombinations.CombinationFactors(1,1,1))
 
-controlCombGenerator= loadCombinations.LoadCombGenerator()
-actionsAndFactors= controlCombGenerator.actionWeighting.create("SIA260",factors)
+class CombGenerator(utils.CombGenerator):
+    ''' Generate combinations corresponding to SIA 260.'''
 
+    def __init__(self):
+        ''' Constructor.'''
+        super().__init__(combGeneratorName= 'SIA260', factors= factors)
+
+    def newPermanentAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+        ''' Creates a permanent action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        return self.newAction(family= "permanentes",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= "permanentes", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newRailwayTrafficAction(self, actionName: str, actionDescription: str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None):
+        ''' Creates a railway traffic action and appends it to the 
+            combinations generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param combinationFactorsName: name of the combination factors container.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= "trafic_ferroviaire", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+    def newWindAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+        ''' Creates a wind action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'vent', partialSafetyFactorsName= "variables", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+    def newThermalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+        ''' Creates a wind action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        '''
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'temperature', partialSafetyFactorsName= "variables", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newAccidentalAction(self, actionName: str, actionDescription: str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None):
+        ''' Creates an accidental action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param combinationFactorsName: name of the combination factors container.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        return self.newAction(family= "accidentales",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= "accidentales", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+combGenerator= CombGenerator()
+        

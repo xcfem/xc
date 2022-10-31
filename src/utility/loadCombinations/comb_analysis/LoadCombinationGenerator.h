@@ -31,12 +31,12 @@ class LoadCombinations;
 
 //! @ingroup CMBACC
 //
-//! @brief Objeto that generates and manages the combinations.
+//! @brief Object that generates and manages the combinations.
 class LoadCombinationGenerator: public CommandEntity
   {
   private:
-    ActionWeightingMap action_weighting;
-    LoadCombinations *combinations;
+    ActionWeightingMap action_weighting; //!< actions with its factors (partial safety factors and combination factos).
+    LoadCombinations *combinations; //!< computed load combinations.
   public:
     LoadCombinationGenerator(CommandEntity *owr= nullptr);
 
