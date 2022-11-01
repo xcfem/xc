@@ -133,6 +133,7 @@ class RebarFamily(RebarRow):
         return self.steel.materialName + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))+' mm'
     
     def getCopy(self):
+        ''' Virtual constructor.'''
         return RebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover)
             
     def getMR(self,concrete,b,thickness, z= None):

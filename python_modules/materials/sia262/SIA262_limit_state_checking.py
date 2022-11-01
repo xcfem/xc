@@ -639,6 +639,7 @@ class SIARebarFamily(rf.RebarFamily):
         self.crackControlRequirement= crackControlRequirement
       
     def getCopy(self):
+        ''' Virtual constructor.'''
         return SIARebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover, crackControlRequirement= self.crackControlRequirement)
       
     def getRebarController(self):
@@ -735,5 +736,11 @@ class SIADoubleRebarFamily(rf.DoubleRebarFamily):
         rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 
-
+def copy_rebar_family(reinfToCopy, newCrackingRequirement):
+    ''' Return a copy of the reinforcement argument changing the
+        cracking requirement.
+    '''
+    retval= reinfToCopy.getCopy()
+    retval.crackControlRequirement= newCrackingRequirement
+    return retval
     
