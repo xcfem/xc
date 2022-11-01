@@ -13,7 +13,6 @@ __email__= "l.pereztato@gmail.com"
 import math
 import os
 from rough_calculations import ng_retaining_wall
-import xc
 from materials.sia262 import SIA262_materials
 from materials.sia262 import SIA262_limit_state_checking
 from materials.ehe import EHE_materials

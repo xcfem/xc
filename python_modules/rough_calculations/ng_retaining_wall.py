@@ -353,11 +353,11 @@ class Envelope(object):
         '''Return the greatest value positive or negative'''
         retval= self.positive[0]
         for v in self.positive[1:]:
-          if(abs(v)>abs(retval)):
-            retval= v
+            if(abs(v)>abs(retval)):
+                retval= v
         for v in self.negative:
-          if(abs(v)>abs(retval)):
-            retval= v
+            if(abs(v)>abs(retval)):
+                retval= v
         return retval
       
     def filterRepeatedValues(self):
@@ -577,7 +577,7 @@ class FootingReinforcement(ReinforcementMap):
         # Reinforcement on footing top
         CTopFooting= self.getSectionTopFooting()
         NdTopFooting= 0.0 #we neglect axial force
-        VdTopFooting= self.wallGeom.internalForcesULS.VdFooting.getAbsMaximum()
+        VdTopFooting= abs(self.wallGeom.internalForcesULS.VdFooting.getAbsMaximum())
         MdTopFooting= self.wallGeom.internalForcesULS.MdFooting.getAbsMaximum() # Concomitant??
         outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (footing top reinforcement):}\\\\\n")
         CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
@@ -1052,12 +1052,25 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         return md, vd
 
     def getHeelInternalForces(self):
-        md= 1.0e15
-        vd= 1.0e15
-        for e in self.heelSet.elements:
-            md= min(md,e.getMz1)
-            vd= min(vd,e.getVy1)
-        return md, vd
+        ''' Return the maximum bending moment and shear force at the wall
+            heel.
+        '''
+        retvalMd= 0.0
+        retvalVd= 0.0
+        heelElements= self.heelSet.elements.getPythonList()
+        # Values from the first element.
+        if(len(heelElements)>0):
+            e0= heelElements[0]
+            retvalMd= e0.getMz1
+            retvalVd= e0.getVy1
+            for e in heelElements[1:]:
+                if(abs(e.getMz1)>abs(retvalMd)):
+                    retvalMd= e.getMz1
+                if(abs(e.getMz2)>abs(retvalMd)):
+                    retvalMd= e.getMz2
+                if(abs(e.getVy1)>abs(retvalVd)):    
+                    retvalVd= e.getVy1
+        return retvalMd, retvalVd
 
     def resultComb(self,nmbComb):
         '''Solution and result retrieval routine.'''
