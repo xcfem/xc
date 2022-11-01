@@ -627,19 +627,22 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     b= 1.0
     numberOfStemSets= 4
     
-    def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25, stemBackSlope= 0.0,footingThickness= 0.25, concrete= None, steel= None):
+    def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25, stemBackSlope= 0.0,footingThickness= 0.25, concrete= None, steel= None,title=None):
         '''Constructor
 
         :param stemBottomWidth: (float) Stem width at his contact with the footing.
         :param stemTopWidth: (float) Stem width at his top.
         :param stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
         :param footingThickness: (float) Thickness of the footing.
+        :param title: title for the report tables.
         '''
         super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness,stemBackSlope)
         #Materials.
         self.concrete= concrete
         self.stemReinforcement= StemReinforcement(self,concreteCover, steel)
         self.footingReinforcement= FootingReinforcement(self,concreteCover, steel)
+        self.title=title if title else name
+        
 
     def setULSInternalForcesEnvelope(self,wallInternalForces):
         '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
@@ -671,7 +674,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\begin{center}\n")
         outputFile.write("\\begin{tabular}[H]{|l|}\n")
         outputFile.write("\\hline\n")
-        outputFile.write("\\multicolumn{1}{|c|}{\\textsc{"+self.name+"}}\\\\\n")
+        outputFile.write("\\multicolumn{1}{|c|}{\\textsc{"+self.title+"}}\\\\\n")
         outputFile.write("\\hline\n")
         outputFile.write("\\begin{tabular}{c|l}\n")
         outputFile.write("\\begin{minipage}{85mm}\n")
@@ -693,7 +696,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\end{tabular} \\\\\n")
         outputFile.write("\\hline\n")
         outputFile.write("\\end{tabular}\n")
-        outputFile.write("\\caption{Wall materials and dimensions "+ self.name +"} \\label{tb_def_"+self.name+"}\n")
+        outputFile.write("\\caption{Wall materials and dimensions "+ self.title +"} \\label{tb_def_"+self.name+"}\n")
         outputFile.write("\\end{center}\n")
         outputFile.write("\\end{table}\n")
 
@@ -701,11 +704,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''Write reinforcement verification results in LaTeX format.'''
         outputFile= open(pth+self.name+".tex","w")
         self.writeDef(pth,outputFile)
-        self.stability_results.writeOutput(outputFile,self.name)
-        self.sls_results.writeOutput(outputFile,self.name)
-        outputFile.write("\\bottomcaption{Wall "+ self.name +" reinforcement} \\label{tb_"+self.name+"}\n")
-        outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" wall reinforcement}}\\\\\\hline\n}\n")
-        outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
+        self.stability_results.writeOutput(outputFile,self.title)
+        self.sls_results.writeOutput(outputFile,self.title)
+        outputFile.write("\\bottomcaption{Wall "+ self.title +" reinforcement} \\label{tb_"+self.name+"}\n")
+        outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.title+" wall reinforcement}}\\\\\\hline\n}\n")
+        outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.title+" (suite)}}\\\\\\hline\n}\n")
         outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
         outputFile.write("\\tablelasttail{\\hline}\n")
         outputFile.write("\\begin{center}\n")
@@ -738,7 +741,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             outputFile.write(l)
         outputFile.write(draw_schema.tail)
         outputFile.write("\\end{center}\n")
-        outputFile.write("\\caption{Wall "+ self.name +" reinforcement scheme} \\label{fg_"+self.name+"}\n")
+        outputFile.write("\\caption{Wall "+ self.title +" reinforcement scheme} \\label{fg_"+self.name+"}\n")
         outputFile.write("\\end{figure}\n")
 
     def createRCSections(self,stemSets):
