@@ -520,9 +520,27 @@ class AUShape(structural_steel.SteelShape):
         ''' Returns mass per unit length. '''
         return self.get('P')
 
-class CHSShape(structural_steel.SteelShape):
+class CHSShape(structural_steel.CHShape):
     def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel type.
+        :param name: name of the steel shape in the shapes dictionary.
+        '''
         super(CHSShape,self).__init__(steel,name,CHS)
+            
+    def getOutsideDiameter(self):
+        ''' Returns the external diameter of the section. '''
+        return self.get('D')
+    
+    def t(self):
+        '''Return HSS nominal wall thickess'''
+        return self.get('t')
+    
+    def getSlendernessRatio(self):
+        ''' Return the slenderness ratio.'''
+        return self.getOutsideDiameter()/self.t()
+    
     def getRho(self):
         ''' Returns mass per unit length. '''
         return self.get('P')

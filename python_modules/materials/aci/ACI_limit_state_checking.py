@@ -46,7 +46,7 @@ class RebarController(lsc.RebarController):
 
     def getKtr(self, n= 1, Atr= 0.0):
         '''Return the transverse reinforcing index according to
-           clause 25.4.2.3 of ACI 318-14.
+           expression (25.4.2.3b) of clause 25.4.2.3 of ACI 318-14.
 
         :param n: number of bars or wires being developed or
                   lap spliced along the plane of splitting.
@@ -54,7 +54,6 @@ class RebarController(lsc.RebarController):
                     within spacing s that crosses the potential plane of
                     splitting through the reinforcement being developed.
         '''
-        Atr_inch2= Atr*(1.0/0.0254)**2
         return (40.0*Atr/self.spacing/n)*0.0254 #To meters.
 
     def getConfinementTerm(self, phi, n= 1, Atr= 0.0):
@@ -352,11 +351,14 @@ class ACIRebarFamily(rf.RebarFamily):
 
 class ACIFamNBars(ACIRebarFamily):
     n= 2 #Number of bars.
+    
     def __init__(self,steel,n,barNumber,spacing,concreteCover):
-        RebarFamily.__init__(self,steel,barNumber,spacing,concreteCover)
+        super(ACIFamNBars, self).__init__(self,steel,barNumber,spacing,concreteCover)
         self.n= int(n)
+        
     def __repr__(self):
-        return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+        return str(self.n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+    
     def writeDef(self,outputFile,concrete):
         outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
         reinfDevelopment= self.getBasicAnchorageLength(concrete)
@@ -708,7 +710,7 @@ class AnchorBolt(object):
         return Nb
 
     def getConcrBreakoutStrengthTension(self,cracking=True):
-        '''Return the nominal concrete breakout strength  of a single anchor
+        '''Return the nominal concrete breakout strength of a single anchor
         in tension
 
         :param cracking: True for anchors located in a region of a concrete 
@@ -906,28 +908,34 @@ class AnchorBolt(object):
         Strength reduction factors are based on art. D.4.5.
 
         :param ductility: True if ductile steel element, False if brittle steel element
-         :param loadCombAlt: True if load combinations of Appendix C of ACI-31 are used,
-                            False if load combinations of art. 9.2. of ACI-31 are used
+        :param loadCombAlt: True if load combinations of Appendix C of ACI-31
+                            are used,
+                            False if load combinations of art. 9.2. of ACI-31 
+                            are used
                             (defaults to False)
         :param sleeveTrhShearPlane: True if sleeves extend through the shear 
-               plane (defaults to True)
-         :param ShForcPerp: True for shear force perpendicular to the edge, 
-                            False for shear force parallel to the edge
+                                    plane (defaults to True)
+        :param ShForcPerp: True for shear force perpendicular to the edge, 
+                           False for shear force parallel to the edge
         :param cracking: True for anchors located in a region of a concrete 
-               member where analysis indicates cracking. (Defaults to True)
+                         member where analysis indicates cracking.
+                         (Defaults to True)
         :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
-               0 == no reinforcement)
-         '''
-        Vsa=self.getSteelStrengthShear(sleeveTrhShearPlane)
-        Vcb=self.getConcrBreakoutStrengthShear(ShForcPerp,cracking,reinfBarDiam)
-        Vcp=self.getPryoutStrengthShear(cracking)
-        if loadCombAlt:
-            fi1=(0.75 if ductility else 0.65)
-            fi2=(0.85 if reinfBarDiam>0 else 0.75)
-        else:
-            fi1=(0.65 if ductility else 0.60)
-            fi2=(0.75 if reinfBarDiam>0 else 0.70)
-        Vnd=min(0.75*Vsa,0.75*Vcb,0.75*Vcp)
+                             0 == no reinforcement)
+        '''
+        # nominal strength of an anchor in shear as governed by steel
+        Vsa= self.getSteelStrengthShear(sleeveTrhShearPlane)
+        # nominal concrete breakout strength
+        Vcb= self.getConcrBreakoutStrengthShear(ShForcPerp,cracking,reinfBarDiam)
+        # nominal pryout strength
+        Vcp= self.getPryoutStrengthShear(cracking)
+        if(loadCombAlt): # Combinations of appendix C.
+            fi1=(0.75 if ductility else 0.65) # D.4.5 a.ii or b.ii
+            fi2=(0.85 if reinfBarDiam>0 else 0.75) # D.4.5 c.i conditions A or B.
+        else: # combinations of art. 9.2
+            fi1=(0.65 if ductility else 0.60) # D.4.4 a.ii or b.ii
+            fi2=(0.75 if reinfBarDiam>0 else 0.70) # D.4.4 c.i conditions A or B.
+        Vnd= min(fi1*Vsa, fi2*Vcb, fi2*Vcp)
         return Vnd
 
     def getStrengthDuctilityShear(self,ShForcPerp=True,cracking=True,reinfBarDiam=0):

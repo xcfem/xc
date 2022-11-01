@@ -8,3 +8,6 @@ This directory contains the source code that represents constitutive equations o
   - Uniaxial materials: representation of a uniaxial generalized stress-strain relationship.
 
 It contains also the damage models.
+
+## References
+- [Un-MATLAB Your OpenSees](https://portwooddigital.com/2022/09/04/un-matlab-your-opensees/)

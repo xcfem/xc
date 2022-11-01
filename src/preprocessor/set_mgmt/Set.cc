@@ -168,13 +168,13 @@ void XC::Set::clearAll(void)
   }
 
 //! @brief Set indices for the set objects (nodes,elements,points...) to its use in VTK.
-void XC::Set::numera(void)
+void XC::Set::numerate(void)
   {
-    SetMeshComp::numera();
-    SetMeshComp::numera_lista(entities.getPoints());
-    SetMeshComp::numera_lista(entities.getLines());
-    SetMeshComp::numera_lista(entities.getSurfaces());
-    //numera_lista(entities.getBodies());
+    SetMeshComp::numerate();
+    SetMeshComp::numerate_list(entities.getPoints());
+    SetMeshComp::numerate_list(entities.getLines());
+    SetMeshComp::numerate_list(entities.getSurfaces());
+    //numerate_list(entities.getBodies());
   }
 
 //! @brief Moves the objects of the set.

@@ -84,8 +84,8 @@ class ArrowDiamond(ArrowSolidBase):
         y1= vertices[0][1]
         x2= vertices[1][0]
         y2= vertices[1][1]
-        x3= end.x + self.length * 2 * math.cos(angle)
-        y3= end.y + self.length * 2 * math.sin(angle)
+        x3= end.x + self.length * 2 * math.cos(self.angle)
+        y3= end.y + self.length * 2 * math.sin(self.angle)
 
         ctx.move_to (end.x, end.y)
         ctx.line_to (x1, y1)

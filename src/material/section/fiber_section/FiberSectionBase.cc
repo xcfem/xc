@@ -374,7 +374,7 @@ Line2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEf
 	    const Vector lav= normalize(getLeverArmVector());
             const Vector v= lav*d;
 	    const Vector2d v2d= Vector2d(v[0],v[1]);
-            retval= fn.Offset(v2d);
+            retval= fn.offset(v2d);
           }
       }
     return retval;

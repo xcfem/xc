@@ -65,7 +65,7 @@
 #include "domain/component/Parameter.h"
 #include <utility/matrix/Vector.h>
 
-#include <domain/mesh/element/utils/Information.h>
+#include "domain/mesh/element/utils/Information.h"
 #include <cmath>
 #include <cfloat>
 #include "utility/actor/actor/MatrixCommMetaData.h"

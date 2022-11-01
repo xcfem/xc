@@ -14,6 +14,8 @@ __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 import math
 import scipy.interpolate
 from materials import concrete_base
+from materials.sections import rebar_family
+from misc_utils import log_messages as lmsg
 
 ReinforcedConcreteLimitStrainsEHE08= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.5e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3)
 
@@ -435,6 +437,30 @@ for item in rebarsEHE:
     bar= rebarsEHE[item]
     bar['r']= bar['d']/2.0
     bar['area']= math.pi*bar['r']*bar['r']
+
+rebar04_B400S= rebar_family.Rebar(diam= 4e-3, steel= B400S) 
+rebar06_B400S= rebar_family.Rebar(diam= 6e-3, steel= B400S) 
+rebar08_B400S= rebar_family.Rebar(diam= 8e-3, steel= B400S) 
+rebar10_B400S= rebar_family.Rebar(diam= 10e-3, steel= B400S) 
+rebar12_B400S= rebar_family.Rebar(diam= 12e-3, steel= B400S) 
+rebar16_B400S= rebar_family.Rebar(diam= 16e-3, steel= B400S) 
+rebar20_B400S= rebar_family.Rebar(diam= 20e-3, steel= B400S) 
+rebar25_B400S= rebar_family.Rebar(diam= 25e-3, steel= B400S) 
+rebar32_B400S= rebar_family.Rebar(diam= 32e-3, steel= B400S) 
+rebar40_B400S= rebar_family.Rebar(diam= 40e-3, steel= B400S) 
+rebar50_B400S= rebar_family.Rebar(diam= 50e-3, steel= B400S) 
+
+rebar04_B500S= rebar_family.Rebar(diam= 4e-3, steel= B500S) 
+rebar06_B500S= rebar_family.Rebar(diam= 6e-3, steel= B500S) 
+rebar08_B500S= rebar_family.Rebar(diam= 8e-3, steel= B500S) 
+rebar10_B500S= rebar_family.Rebar(diam= 10e-3, steel= B500S) 
+rebar12_B500S= rebar_family.Rebar(diam= 12e-3, steel= B500S) 
+rebar16_B500S= rebar_family.Rebar(diam= 16e-3, steel= B500S) 
+rebar20_B500S= rebar_family.Rebar(diam= 20e-3, steel= B500S) 
+rebar25_B500S= rebar_family.Rebar(diam= 25e-3, steel= B500S) 
+rebar32_B500S= rebar_family.Rebar(diam= 32e-3, steel= B500S) 
+rebar40_B500S= rebar_family.Rebar(diam= 40e-3, steel= B500S) 
+rebar50_B500S= rebar_family.Rebar(diam= 50e-3, steel= B500S) 
 
 
 # ************* Prestressing steel. ********************

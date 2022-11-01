@@ -33,6 +33,8 @@
 const double cmb_acc::Action::zero= 1e-6;
 
 //! @brief Default constructor.
+//! @param n: action name.
+//! @param descrip: action description.
 cmb_acc::Action::Action(const std::string &n, const std::string &descrip)
   : NamedEntity(n), description(descrip), relaciones(), nodet(false), f_pond(1.0) {}
 

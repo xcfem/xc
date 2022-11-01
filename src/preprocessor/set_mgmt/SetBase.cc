@@ -180,6 +180,8 @@ void XC::SetBase::resetTributaries(void) const
  
 //! @brief Computes the tributary lengths that correspond to each
 //! node of the element set.
+//! @param initialGeometry: if true compute lengths on the initial geometry
+//!                         of the model. Otherwise use its current geometry.
 void XC::SetBase::computeTributaryLengths(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();

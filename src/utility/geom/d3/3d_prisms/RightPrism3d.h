@@ -43,12 +43,12 @@ class RightPrism3d : public Prism3d
     RightPrism3d(const PG &secc,const GEOM_FT &lng): Prism3d(), extru(secc,lng) {}
     inline virtual GeomObj *getCopy(void) const
       { return new RightPrism3d<PG>(*this); }
-    inline void Offset(const GEOM_FT &offset)
-      { extru.Offset(offset); }
-    inline RightPrism3d<PG> GetOffset(const GEOM_FT &offset) const
+    inline void self_offset(const GEOM_FT &offset)
+      { extru.self_offset(offset); }
+    inline RightPrism3d<PG> offset(const GEOM_FT &offset) const
       {
         RightPrism3d<PG> retval(*this);
-        retval.Offset(offset);
+        retval.self_offset(offset);
         return retval;
       }
 /*     inline virtual Polyhedron::v_ind_vertices IndVerticesFaceta(unsigned int faceta) const */

@@ -53,21 +53,34 @@ class RCSets(object):
     '''This class constructs both the concrete and reinforced steel fiber sets 
     from a reinforced concrete fiber section
 
-    :ivar scc:       fiber section
-    :ivar concrMatTag:  tag of the uniaxial material that makes up the concrete
-          fibers of the section
-    :ivar concrSetName:   name of the set of fibers of concrete to be generated
-    :ivar reinfMatTag:  tag of the uniaxial material that makes up the 
-          reinforcing steel fibers of the section
-    :ivar reinfSetName:   name of the set of fibers of reinforcing steel to be 
-          generated
+    :ivar scc: fiber section.
+    :ivar concrMatTag: identifier of the uniaxial material that makes up
+                        the concrete fibers of the section
+    :ivar concrSetName: name of the set of fibers of concrete to be 
+                         generated.
+    :ivar reinfMatTag: identifier of the uniaxial material that makes 
+                        up the reinforcing steel fibers of the section.
+    :ivar reinfSetName: name of the set of fibers of reinforcing steel
+                         to be generated.
     '''
     concrFibers= None
     reinfFibers= None
     tensionFibers= None
 
     def __init__(self,scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName):
-        fiberSets= scc.getFiberSets()
+        ''' Constructor.
+
+        :param scc: fiber section.
+        :param concrMatTag: identifier of the uniaxial material that makes up
+                            the concrete fibers of the section
+        :param concrSetName: name of the set of fibers of concrete to be 
+                             generated.
+        :param reinfMatTag: identifier of the uniaxial material that makes 
+                            up the reinforcing steel fibers of the section.
+        :param reinfSetName: name of the set of fibers of reinforcing steel
+                             to be generated.
+        '''
+        #fiberSets= scc.getFiberSets()
         self.concrFibers= FiberSet(scc,concrSetName,concrMatTag)
         self.reinfFibers= FiberSet(scc,reinfSetName,reinfMatTag)
 #        self.tensionFibers= None

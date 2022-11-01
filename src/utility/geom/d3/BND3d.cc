@@ -303,8 +303,8 @@ bool BND3d::In(const Pos3d &p,const double &tol) const
     return (side != CGAL::ON_UNBOUNDED_SIDE);
   }
 
-//! @brief Recrece el BND en la cantidad que se pasa como parámetro.
-BND3d BND3d::Offset(const GEOM_FT &o) const
+//! @brief Grows the boundary in the specified amount.
+BND3d BND3d::offset(const GEOM_FT &o) const
   {
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__

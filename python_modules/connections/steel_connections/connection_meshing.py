@@ -32,6 +32,9 @@ def genPlatesMesh(plateSetsToMesh, xc_materials, seedElemHandler):
             xcMat.h= s.getProp('thickness') # set thickness
             seedElemHandler.defaultMaterial= xcMat.name
             seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+            if __debug__:
+                if not seedElem:
+                    AssertionError('Can\'t create seed element.')
             s.genMesh(xc.meshDir.I, False)
 
 def createTemporarySet(setsToMesh):
@@ -81,6 +84,9 @@ def genRegularMesh(setsToMesh, xc_materials, seedElemHandler):
             xcMat.h= s.getProp('thickness') # set thickness
             seedElemHandler.defaultMaterial= xcMat.name
             seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+            if __debug__:
+                if not seedElem:
+                    AssertionError('Can\'t create seed element.')
             s.genMesh(xc.meshDir.I)
     # Remove temporary set
     preprocessor.getSets.removeSet(xcTmpSet.name)
@@ -124,6 +130,9 @@ def genGmshMesh(setsToMesh, xc_materials, seedElemHandler):
     ## Create seed element.
     seedElemHandler.defaultMaterial= xcMat.name
     seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+    if __debug__:
+        if not seedElem:
+            AssertionError('Can\'t create seed element.')
     ## Generate mesh.
     xcTmpSet.useGmsh= True # use Gmsh for meshing.
     xcTmpSet.genMesh(xc.meshDir.I)
@@ -176,10 +185,7 @@ class BoundaryConditions(object):
                 side= pair[0]
                 for n in side.getEdge.nodes:
                     nodeSet.nodes.append(n)
-            centroid= nodeSet.nodes.getCentroid(0.0)
             # Distribute the loads over the nodes.
-            centroidNode= nodeSet.getNearestNode(centroid)
-            centroidNodePos= centroidNode.getInitialPos3d
             internalForces= self.internalForcesData[str(key)]
             for name in internalForces:
                 originLst= internalForces[name][0]
@@ -231,13 +237,13 @@ class BoundaryConditions(object):
 
         # Create load patterns.
         lPatterns= self.createLoadPatterns()
-
-        # Get loaded sides.
-        xcTotalSet= self.modelSpace.getTotalSet()
-        self.loadedSides= import_connection.getLoadedSides(xcTotalSet)
+        if(lPatterns): # Not empty
+            # Get loaded sides.
+            xcTotalSet= self.modelSpace.getTotalSet()
+            self.loadedSides= import_connection.getLoadedSides(xcTotalSet)
         
-        # Create loads.
-        self.genLoads()
+            # Create loads.
+            self.genLoads()
         return self.loadCaseNames
     
 def createLoadsFromFile(modelSpace, fileName):

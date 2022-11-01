@@ -54,16 +54,17 @@ class SolidExtru3d : public Solid3d
       }
     virtual GeomObj *getCopy(void) const
       { return new SolidExtru3d<S>(*this); }
-    void Offset(const GEOM_FT &offset)
-      //Similar al offset de AutoCad.
+    //! @brief offset this object.
+    void self_offset(const GEOM_FT &offset)
       {
-        scc.Offset(offset);
+        scc= scc.offset(offset);
         l+=2.0*offset;
       }
-    SolidExtru3d<S> GetOffset(const GEOM_FT &offset) const
+    //! @brief get an object parallel to this one, at a fixed distance.
+    SolidExtru3d<S> offset(const GEOM_FT &offset) const
       {
         SolidExtru3d<S> retval(this);
-        retval.Offset(offset);
+        retval.self_offset(offset);
         return retval;
       }
     //! @brief Return the extruded section.

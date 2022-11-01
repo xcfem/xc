@@ -134,7 +134,7 @@ size_t XC::DqPtrsElem::getNumDeadElements(void) const
   }
 
 //! @brief Set indices to the objects to allow its use in VTK.
-void XC::DqPtrsElem::numera(void)
+void XC::DqPtrsElem::numerate(void)
   {
     size_t idx= 0;
     for(iterator i= begin();i!=end();i++,idx++)

@@ -179,7 +179,7 @@ Line2d Segment2d::isParallel(const Pos2d &p) const
 
 //! @brief Return the a copy of the segment translated along
 //! the vector argument.
-Segment2d Segment2d::Offset(const Vector2d &v) const
+Segment2d Segment2d::offset(const Vector2d &v) const
   {
     const Pos2d p= getFromPoint()+v;
     const Pos2d q= getToPoint()+v;
@@ -189,11 +189,11 @@ Segment2d Segment2d::Offset(const Vector2d &v) const
 //! @brief Return a segment parallel to this one at the distance
 //! argument. If the distance is poisitive the new segment will
 //! be on the right from this one.
-Segment2d Segment2d::Offset(const GEOM_FT &d) const
+Segment2d Segment2d::offset(const GEOM_FT &d) const
   {
     const Vector2d v= d*getSupportLine().VersorDir();
     const Vector2d n(v.y(),-v.x());
-    return Offset(n);
+    return offset(n);
   }
 
 //! @brief Return the perpendicular_bisector of the segment.

@@ -5,7 +5,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import integra_simpson as isimp
+from misc_utils import integra_simpson as isimp
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

@@ -82,6 +82,7 @@ python tests/utility/geom/polylines/polyline2d_test_01.py
 python tests/utility/geom/polylines/polyline2d_test_02.py
 python tests/utility/geom/polylines/polyline2d_test_03.py
 python tests/utility/geom/polylines/polyline2d_test_04.py
+python tests/utility/geom/polylines/polyline2d_test_05.py
 python tests/utility/geom/polylines/polyline3d_test_01.py
 python tests/utility/geom/polylines/polyline3d_test_02.py
 python tests/utility/geom/polylines/polyline3d_test_03.py
@@ -153,21 +154,6 @@ python tests/utility/geom/principal_axes_of_inertia_2d_test_01.py
 echo "$BLEU" "    DXF reading." "$NORMAL"
 python tests/utility/geom/ezdxf_test_01.py
 
-## Soil mechanics (basic utilities)
-echo "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
-python tests/utility/soil_mechanics/test_coulomb.py
-python tests/utility/soil_mechanics/test_janssen_limited_backfill_widht.py
-python tests/utility/soil_mechanics/test_rankine.py
-python tests/utility/soil_mechanics/test_brinch_hansen01.py
-python tests/utility/soil_mechanics/test_brinch_hansen02.py
-python tests/utility/soil_mechanics/test_stratified_soil.py
-python tests/utility/soil_mechanics/test_boussinesq.py
-python tests/utility/soil_mechanics/test_cohesive_soil_01.py
-python tests/utility/soil_mechanics/test_mononobe_okabe_01.py
-python tests/utility/soil_mechanics/test_mononobe_okabe_02.py
-python tests/utility/soil_mechanics/test_iskander_01.py
-python tests/utility/soil_mechanics/test_iskander_02.py
-
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_prestressing.py
@@ -215,12 +201,13 @@ python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
 #python tests/actions/load_combinations/testLoadCombinations.py
 python tests/actions/load_combinations/test_action.py
-python tests/actions/load_combinations/test_secondaries_00.py
-python tests/actions/load_combinations/test_accidentales.py
+python tests/actions/load_combinations/test_ehe_secondaries_00.py
+python tests/actions/load_combinations/test_ehe_accidentales.py
 python tests/actions/load_combinations/test_iap11_01.py
 python tests/actions/load_combinations/test_iap11_02.py
 python tests/actions/load_combinations/test_combination_dict.py
 python tests/actions/load_combinations/test_split_combination.py
+python tests/actions/load_combinations/test_sia_pont_ferroviaire.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
@@ -543,6 +530,8 @@ python tests/preprocessor/sets/test_resisting_svd01.py
 python tests/preprocessor/sets/test_get_contours_01.py
 python tests/preprocessor/sets/test_get_contours_02.py
 python tests/preprocessor/sets/test_pick_entities.py
+python tests/preprocessor/sets/test_pick_elements_in_zone.py
+python tests/preprocessor/sets/test_pick_node_on_point.py
 python tests/preprocessor/sets/test_sets_and_grids.py
 python tests/preprocessor/sets/test_sets_and_grids_02.py
 python tests/preprocessor/sets/test_get_bnd_01.py
@@ -584,7 +573,6 @@ python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
 python tests/constraints/test_release_beam_node_01.py
-python tests/constraints/test_pile_01.py
 echo "$BLEU" "  Glue node to element constraints tests." "$NORMAL"
 python tests/constraints/test_glue_node_to_element_01.py
 python tests/constraints/test_glue_node_to_element_02.py
@@ -960,17 +948,21 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
-python tests/materials/ec3/test_buckling_resistance_01.py
-python tests/materials/ec3/test_lateral_torsional_buckling00.py
-python tests/materials/ec3/test_lateral_torsional_buckling01.py
-python tests/materials/ec3/test_lateral_torsional_buckling02.py
-python tests/materials/ec3/test_lateral_torsional_buckling03.py
 python tests/materials/ec3/test_cross_section_verification.py
 python tests/materials/ec3/test_beam_contrpnt.py
 python tests/materials/ec3/test_biax_bend_coeff.py
 python tests/materials/ec3/test_classif.py
 python tests/materials/ec3/test_beam_with_full_lateral_restraint.py
 python tests/materials/ec3/test_bolt_shear_01.py
+echo "$BLEU" "      buckling tests." "$NORMAL"
+python tests/materials/ec3/test_buckling_resistance_01.py
+python tests/materials/ec3/test_buckling_resistance_02.py
+python tests/materials/ec3/test_buckling_resistance_03.py
+echo "$BLEU" "      lateral-torsional buckling tests." "$NORMAL"
+python tests/materials/ec3/test_lateral_torsional_buckling00.py
+python tests/materials/ec3/test_lateral_torsional_buckling01.py
+python tests/materials/ec3/test_lateral_torsional_buckling02.py
+python tests/materials/ec3/test_lateral_torsional_buckling03.py
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
 python tests/materials/eae/test_simple_shear_welded_web.py
@@ -1090,6 +1082,25 @@ python tests/materials/eota_tr_29/test_shear_anchor.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
+
+echo "$BLEU" "  Foundation design tests." "$NORMAL"
+python tests/geotechnics/test_pile_01.py
+python tests/geotechnics/test_micropile_01.py
+python tests/geotechnics/test_micropile_01.py
+## Soil mechanics (basic utilities)
+echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
+python tests/geotechnics/soil_mechanics/test_coulomb.py
+python tests/geotechnics/soil_mechanics/test_janssen_limited_backfill_widht.py
+python tests/geotechnics/soil_mechanics/test_rankine.py
+python tests/geotechnics/soil_mechanics/test_brinch_hansen01.py
+python tests/geotechnics/soil_mechanics/test_brinch_hansen02.py
+python tests/geotechnics/soil_mechanics/test_stratified_soil.py
+python tests/geotechnics/soil_mechanics/test_boussinesq.py
+python tests/geotechnics/soil_mechanics/test_cohesive_soil_01.py
+python tests/geotechnics/soil_mechanics/test_mononobe_okabe_01.py
+python tests/geotechnics/soil_mechanics/test_mononobe_okabe_02.py
+python tests/geotechnics/soil_mechanics/test_iskander_01.py
+python tests/geotechnics/soil_mechanics/test_iskander_02.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"

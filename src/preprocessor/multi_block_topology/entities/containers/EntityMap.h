@@ -50,7 +50,7 @@ class EntityMap: public ModelComponentContainer<Entity>
 
     Entity *getNearest(const Pos3d &p);
     const Entity *getNearest(const Pos3d &p) const;
-    void numera(void);
+    void numerate(void);
     void genMesh(meshing_dir dm);
   };
 
@@ -97,7 +97,7 @@ const Entity *EntityMap<Entity>::getNearest(const Pos3d &p) const
 
 //!  @brief Set indices to the objects to allow its use in VTK.
 template <class Entity>
-void EntityMap<Entity>::numera(void)
+void EntityMap<Entity>::numerate(void)
   {
     size_t idx= 0;
     for(iterator i= this->begin();i!=this->end();i++,idx++)
@@ -106,6 +106,7 @@ void EntityMap<Entity>::numera(void)
         ptr->set_index(idx);
       }
   }
+  
 //!  @brief Generate mesh.
 template <class Entity>
 void EntityMap<Entity>::genMesh(meshing_dir dm)

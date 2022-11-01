@@ -60,8 +60,8 @@ class SetMeshComp: public SetBase
   {
   protected:
     template <class L>
-    static void numera_lista(L &l);
-    void numera(void);
+    static void numerate_list(L &l);
+    void numerate(void);
   public:
     //Nodes.
     typedef DqPtrsNode::iterator nod_iterator; //!< Iterator over the node set.
@@ -167,10 +167,10 @@ class SetMeshComp: public SetBase
     SetMeshComp pickElemsOfMaterial(const std::string &, const std::string &);
 
     //! @brief Return the constraints container.
-    virtual const DqPtrsConstraint &GetConstraints(void) const
+    virtual const DqPtrsConstraint &getConstraints(void) const
       { return constraints; }
     //! @brief Return the constraints container.
-    virtual DqPtrsConstraint &GetConstraints(void)
+    virtual DqPtrsConstraint &getConstraints(void)
       { return constraints; }
     //! @brief Sets the constraints.
     void setConstraints(const DqPtrsConstraint &cts)
@@ -253,7 +253,7 @@ class SetMeshComp: public SetBase
 
 //!  @brief Set indices to the object to allow its use in VTK.
 template <class L>
-void XC::SetMeshComp::numera_lista(L &l)
+void XC::SetMeshComp::numerate_list(L &l)
   {
     size_t idx= 0;
     typedef typename L::iterator iterator;

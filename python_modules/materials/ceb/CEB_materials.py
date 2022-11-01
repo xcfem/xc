@@ -50,7 +50,7 @@ class CEBPrestressingSteel(concrete_base.PrestressingSteel):
       if((self.tendonClass=="wire") | (self.tendonClass=="strand")):
           if(self.steelRelaxationClass==2):
               return self.ptsRO1000Class2(self.alpha)
-          elif(steelRelaxationClass==1):
+          elif(self.steelRelaxationClass==1):
               return self.ptsRO1000Class1(self.alpha) 
       elif(self.tendonClass=="bar"):
           return self.ptsRO1000Class3(self.alpha)

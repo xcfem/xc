@@ -86,8 +86,8 @@ class Segment2d : public Linear2d
     GeomObj::list_Pos2d Ordena(const GeomObj::list_Pos2d &ptos) const
       { return getSupportLine().Ordena(ptos); }
 
-    Segment2d Offset(const Vector2d &v) const;
-    Segment2d Offset(const GEOM_FT &d) const;
+    Segment2d offset(const Vector2d &v) const;
+    Segment2d offset(const GEOM_FT &d) const;
 
     inline bool intersects(const Segment2d &r2) const
       { return do_intersect(cgseg,r2.cgseg); }

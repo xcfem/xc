@@ -346,13 +346,13 @@ class FreeCADImport(reader_base.ReaderBase):
                     import_shape(s, objName, objLabel)
             elif(shapeType=='Compound'):
                 for cCount, ss in enumerate(shape.SubShapes):
-                    ssType= ss.ShapeType
+                    # ssType= ss.ShapeType
                     ssName= f'{objName}.{cCount}'
                     import_shape(ss, ssName, objLabel)
             elif(shapeType=='Vertex'):
-                count=0 # Nothing to do with those here.
+                pass # Nothing to do with those here.
             elif(shapeType in ['Wire']):
-                count= 0 # Nothing to do with those.
+                pass # Nothing to do with those.
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name

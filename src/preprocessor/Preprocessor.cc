@@ -96,13 +96,13 @@ void XC::Preprocessor::updateSets(Element *new_elem)
 //! sets that are currently opened.
 void XC::Preprocessor::updateSets(Constraint *new_constraint)
   {
-    sets.get_set_total()->GetConstraints().push_back(new_constraint);
+    sets.get_set_total()->getConstraints().push_back(new_constraint);
     MapSet::map_sets &open_sets= sets.get_open_sets();
     for(MapSet::map_sets::iterator i= open_sets.begin();i!= open_sets.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetConstraints().push_back(new_constraint);
+        ptr_set->getConstraints().push_back(new_constraint);
       }
   }
 

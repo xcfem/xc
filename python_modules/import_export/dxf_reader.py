@@ -113,7 +113,7 @@ def decompose_polyline(polyline, tol= .01):
     if((len(polyline)>2) and polyline.is_closed):
         # Compute the local axis.
         points= list()
-        for i, pt in enumerat(i,polyline.points()):
+        for pt in polyline.points():
             points.append([pt[0],pt[1],pt[2]])            
         sisRef= get_polygon_axis(points,tol)
 
@@ -490,7 +490,7 @@ class OldDxfReader(object):
     for obj in entities:
       if(obj.dxf.layer == layerName):
         dxfType= obj.dxftype()
-        color= obj.color
+        # color= obj.color
         if(dxfType=='LINE'):
           pt= self.newKeyPoint(obj.start)
           if(pt):
@@ -510,7 +510,7 @@ class OldDxfReader(object):
     for obj in entities:
       if(obj.dxf.layer == layerName):
         dxfType= obj.dxftype()
-        color= obj.color
+        # color= obj.color
         if(dxfType=='LINE'):
           retval.append(self.newLine(obj).tag)
         if((dxfType == 'POLYLINE') or (dxfType == 'LWPOLYLINE')):

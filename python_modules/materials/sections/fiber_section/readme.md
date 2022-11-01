@@ -12,6 +12,20 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 - [Two Fibers Explain So Much](https://portwooddigital.com/2022/02/06/two-fibers-explain-so-much/)
 - [Something, Something, Something Fiber](https://portwooddigital.com/2022/02/27/something-something-something-fiber/)
 
+### Reinforced concrete
+<!-- language: lang-none -->
+
+                      Reinforce concrete section
+    + -------------------------------------------------------+ 
+    |  o    o    o    o    o    o    o    o    o    o    o   |
+    |                                                        |
+    |                                                        |
+    |  o    o    o    o    o    o    o    o    o    o    o   |
+    + -------------------------------------------------------+ 
+
+- [EHE](https://www.mitma.gob.es/organos-colegiados/mas-organos-colegiados/comision-permanente-del-hormigon/cph/instrucciones/ehe-08-version-en-ingles)
+
+
 ### Interaction diagrams
 - [Implementation of interaction diagrams in the finite element open source software XC](http://www.xcengineering.xyz/blog_doc/2016_interact_diag/interactionDiagram.pdf)
 - [P-M Interaction by the Book](https://portwooddigital.com/2022/06/12/p-m-interaction-by-the-book)

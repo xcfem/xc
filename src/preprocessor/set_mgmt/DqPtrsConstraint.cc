@@ -92,7 +92,7 @@ const XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag) con
   }
 
 //!  @brief Set indices to the objects to allow its use in VTK. 
-void XC::DqPtrsConstraint::numera(void)
+void XC::DqPtrsConstraint::numerate(void)
   {
     size_t idx= 0;
     for(iterator i= begin();i!=end();i++,idx++)

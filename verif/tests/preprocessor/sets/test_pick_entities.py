@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Selection of entities inside a geometric object. Home made test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
@@ -41,8 +40,8 @@ pt1= points.newPoint(geom.Pos3d(0.5,0.5,0.5))
 pt2= points.newPoint(geom.Pos3d(3.0,3.0,3.0))
 pt3= points.newPoint(geom.Pos3d(4.0,4.0,4.0))
 
-l1=  preprocessor.getMultiBlockTopology.getLines.newLine(pt0.tag,pt1.tag)
-l2=  preprocessor.getMultiBlockTopology.getLines.newLine(pt2.tag,pt3.tag)
+l1= preprocessor.getMultiBlockTopology.getLines.newLine(pt0.tag,pt1.tag)
+l2= preprocessor.getMultiBlockTopology.getLines.newLine(pt2.tag,pt3.tag)
 
 geomObj= geom.BND3d(geom.Pos3d(-1.0,-1.0,-1.0),geom.Pos3d(1.0,1.0,1.0))
 

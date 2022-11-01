@@ -924,7 +924,10 @@ class ShearController(lscb.ShearControllerBase):
             lmsg.log("Postprocessing combination: "+combName)
         for e in elements:
             # Call getResisting force to update the internal forces.
-            unusedR= e.getResistingForce() 
+            R= e.getResistingForce() 
+            if(__debug__):
+                if(not R):
+                    AssertionError('Can\'t get the resisting force.')        
             scc= e.getSection()
             idSection= e.getProp("idSection")
             masterElementDimension= e.getProp("masterElementDimension")

@@ -41,23 +41,23 @@ cmb_acc::ActionContainer::ActionContainer(void)
   }
 
 //! @brief Insert the action into the family identified by the string.
-cmb_acc::ActionRValue &cmb_acc::ActionContainer::insert(const std::string &familia,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+cmb_acc::ActionRValue &cmb_acc::ActionContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
-    if(familia=="permanentes")
+    if(family=="permanentes" or family=="permanent")
       return G.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(familia=="permanentes_nc")
+    else if(family=="permanentes_nc")
       return G_aster.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(familia=="variables")
+    else if(family=="variables" or family=="variable")
       return Q.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(familia=="accidentales")
+    else if(family=="accidentales" or family=="accidental")
       return A.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(familia=="sismicas")
+    else if(family=="sismicas" or family=="seismic")
       return AS.insert(acc,combination_factors_name,partial_safety_factors_name);
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; load family: '"
-                  << familia << "' not found."
+                  << family << "' not found."
 	          << " Candidates are: "
 	          << " permanentes, permanentes_nc, variables,"
 	          << " accidentales and sismicas."

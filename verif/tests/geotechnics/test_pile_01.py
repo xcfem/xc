@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+'''Calculation of displacements and internal forces of a pile taken from project "Reordenación del Enlace de la Pañoleta y Accesos a Camas (Sevilla)", annex nº 13 Structures, pages 93-96'''
+
 from __future__ import print_function
 from __future__ import division
 
@@ -16,9 +18,9 @@ from model.geometry import grid_model as gm
 from model.mesh import finit_el_model as fem
 from materials.ehe import EHE_materials
 from materials import typical_materials as tm
-from model.boundary_cond import spring_bound_cond as sbc
+from geotechnics.foundations import guia_cimentaciones_oc as guia
 
-# Calculation of displacements and internal forces of a pile taken from project "Reordenación del Enlace de la Pañoleta y Accesos a Camas (Sevilla)", annex nº 13 Structures, pages 93-96 
+
 
 # Data
 fiPile=1.5  # pile diameter [m]
@@ -75,25 +77,26 @@ gridGeom= gm.GridModel(prep,xList,yList,zList)
 gridGeom.generatePoints()
 # Lines generation
 pile_rg=gm.IJKRange((0,0,0),(0,0,1))
-pile=gridGeom.genLinOneRegion(ijkRange=pile_rg,setName='pile')
+pile= gridGeom.genLinOneRegion(ijkRange=pile_rg,setName='pile')
 
 #                         *** MATERIALS *** 
-concrProp=tm.MaterialData(name='concrProp',E=concrete.Ecm(),nu=concrete.nuc,rho=concrete.density())
+concrProp= tm.MaterialData(name='concrProp',E=concrete.Ecm(),nu=concrete.nuc,rho=concrete.density())
 # Geometric sections
 # rectangular sections
 from materials.sections import section_properties as sectpr
-geomSectPile=sectpr.RectangularSection(name='geomSectPile',b=LeqPile,h=LeqPile)
+geomSectPile= sectpr.RectangularSection(name='geomSectPile',b=LeqPile,h=LeqPile)
 # Elastic material-section
-pile_mat=tm.BeamMaterialData(name='pile_mat', section=geomSectPile, material=concrProp)
+pile_mat= tm.BeamMaterialData(name='pile_mat', section=geomSectPile, material=concrProp)
 pile_mat.setupElasticShear3DSection(preprocessor=prep)
 
 #                         ***FE model - MESH***
-pile_mesh=fem.LinSetToMesh(linSet=pile,matSect=pile_mat,elemSize=eSize,vDirLAxZ=xc.Vector([0,1,0]),elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear')
+pile_mesh= fem.LinSetToMesh(linSet=pile,matSect=pile_mat,elemSize=eSize,vDirLAxZ=xc.Vector([0,1,0]),elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear')
 fem.multi_mesh(preprocessor=prep,lstMeshSets=[pile_mesh])
 
 
 #                       ***BOUNDARY CONDITIONS***
-pileBC=sbc.PileFoundation(setPile=pile,pileDiam=fiPile,E=concrete.Ecm(),pileType='endBearing',pileBearingCapacity=bearCap,groundLevel=zGround,soilsProp=soils)
+soilLayers= guia.SoilLayers(soilProfile= soils, groundLevel= zGround)
+pileBC= guia.PileFoundation(pileSet=pile,pileDiam=fiPile,E=concrete.Ecm(), pileType='endBearing',pileBearingCapacity=bearCap, soilLayers= soilLayers)
 pileBC.generateSpringsPile(alphaKh_x=1,alphaKh_y=1,alphaKv_z=1)
 springs=pileBC.springs
 springSet=preprocessor.getSets.defSet('springSet')
@@ -107,9 +110,9 @@ from postprocess.xcVtk.FE_model import vtk_FE_graphic
 displaySettings= vtk_FE_graphic.DisplaySettingsFE()
 displaySettings.displayMesh(xcSets=allSets,fName= None,caption='Mesh',nodeSize=0.5,scaleConstr=0.10)
 '''
-pTop=gridGeom.getPntXYZ((0,0,0))
-nTop=pTop.getNode()
-pBase=gridGeom.getPntXYZ((0,0,-Lpile))
+pTop= gridGeom.getPntXYZ((0,0,0))
+nTop= pTop.getNode()
+pBase= gridGeom.getPntXYZ((0,0,-Lpile))
 nBase=pBase.getNode()
 modelSpace.fixNode('FFF_FF0',nBase.tag)  #
 modelSpace.fixNode('FFF_F0F',nTop.tag)  #
@@ -181,9 +184,11 @@ else:
 
 
 '''
-from postprocess.xcVtk.FE_model import quick_graphics as QGrph
-dsp=QGrph.QuickGraphics()
-dsp.displayDispRot(itemToDisp='uX',setToDisplay=pile,fConvUnits=1e3,unitDescription= 'mm')
-dsp.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile,fConvUnits=1e-3,unitDescription= 'kN')
-dsp.displayIntForcDiag(itemToDisp='Mz',setToDisplay=pile,fConvUnits=1e-3,unitDescription= 'kN')
+# Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+
+oh.displayDispRot(itemToDisp='uX',setToDisplay=pile)
+oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile)
+oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=pile)
 '''

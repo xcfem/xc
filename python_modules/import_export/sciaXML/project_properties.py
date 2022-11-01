@@ -23,39 +23,42 @@ import xml.etree.cElementTree as ET
 
 class ProjectProperties(object):    
     
-  def __init__(self,xmlns= 'http://www.scia.cz', fileName= ''):
-    self.xmlns= xmlns
-    self.fileName= fileName
-    self.nodeProperties= ncd.NodeProperties()
-    self.materialProperties= mp.MaterialProperties()
-    self.epPlaneProperties= eppp.EPPlaneProperties()
-    self.nodeSupportProperties= nsp.NodeSupportProperties()
-    self.loadGroupProperties= lgp.LoadGroupProperties()
-    self.loadCaseProperties= lcp.LoadCaseProperties()
-    self.loadCombProperties= lcmbp.LoadCombProperties()
-    self.nodeLoadProperties= nlp.NodeLoadProperties()
-    self.elementLoadProperties= elp.ElementLoadProperties()
-    self.pointLoadFreeProperties= pffp.PointForceFreeProperties()
-    self.surfaceLoadFreeProperties= sffp.SurfacePressureFreeProperties()
+    def __init__(self,xmlns= 'http://www.scia.cz', fileName= ''):
+        self.xmlns= xmlns
+        self.fileName= fileName
+        self.nodeProperties= ncd.NodeProperties()
+        self.materialProperties= mp.MaterialProperties()
+        self.epPlaneProperties= eppp.EPPlaneProperties()
+        self.nodeSupportProperties= nsp.NodeSupportProperties()
+        self.loadGroupProperties= lgp.LoadGroupProperties()
+        self.loadCaseProperties= lcp.LoadCaseProperties()
+        self.loadCombProperties= lcmbp.LoadCombProperties()
+        self.nodeLoadProperties= nlp.NodeLoadProperties()
+        self.elementLoadProperties= elp.ElementLoadProperties()
+        self.pointLoadFreeProperties= pffp.PointForceFreeProperties()
+        self.surfaceLoadFreeProperties= sffp.SurfacePressureFreeProperties()
 
-  def getXMLElement(self,defFileName):
-    '''Returns the corresponding XML element for the object.
-       Parameters:
-       defFileName: XML definition file name.'''
-    project= ET.Element("def_project")
-    project.set("xmlns",self.xmlns)
-    containers= [self.nodeProperties, self.materialProperties, self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties, self.pointLoadFreeProperties, self.surfaceLoadFreeProperties]
-    for c in containers:
-      elem= c.getXMLElement(project)
-    return project
+    def getXMLElement(self,defFileName):
+        '''Returns the corresponding XML element for the object.
+           Parameters:
+           defFileName: XML definition file name.'''
+        project= ET.Element("def_project")
+        project.set("xmlns",self.xmlns)
+        containers= [self.nodeProperties, self.materialProperties, self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties, self.pointLoadFreeProperties, self.surfaceLoadFreeProperties]
+        for c in containers:
+            elem= c.getXMLElement(project)
+            if __debug__:
+                if(not elem):
+                    AssertionError('Couldn\'t get XML element.')
+        return project
 
-  def getXMLTree(self,defFileName):
-    '''Returns the corresponding XML tree.'''
-    project= self.getXMLElement(defFileName)
-    tree = ET.ElementTree(project)
-    return tree
+    def getXMLTree(self,defFileName):
+        '''Returns the corresponding XML tree.'''
+        project= self.getXMLElement(defFileName)
+        tree = ET.ElementTree(project)
+        return tree
 
-  def writeXMLFile(self): 
-    '''Writes the corresponding XML element in a file.'''
-    tree= self.getXMLTree(self.fileName)
-    tree.write(self.fileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")
+    def writeXMLFile(self): 
+        '''Writes the corresponding XML element in a file.'''
+        tree= self.getXMLTree(self.fileName)
+        tree.write(self.fileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")

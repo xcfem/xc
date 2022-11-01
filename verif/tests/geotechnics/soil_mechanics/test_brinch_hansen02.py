@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-from __future__ import print_function
 '''
 Verification of the Brinch Hansen formula.
 
 See Brinch Hansen. A general formula for bearing capacity. The Danish Geotechnical Institute. Bulletin 11. Copenhagen 1961. Example on page 45
 '''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
@@ -16,13 +17,14 @@ __email__= "l.pereztato@gmail.com"
 from geotechnics import frictional_cohesive_soil as fcs
 import math
 
+# Short-term bearing capacity.
 shortTermSoil= fcs.FrictionalCohesiveSoil(0.0,c=10.3,rho= (2.2-1.0)/9.81)
 
-D= 2.0 #Foundation depth
-Beff= 5.5 #Effective foundation width
-Leff= 9.0 #Effective foundation length
-V= 3000.0 #Vertical load
-H= 225.0 #Horizontal load.
+D= 2.0 # Foundation depth
+Beff= 5.5 # Effective foundation width
+Leff= 9.0 # Effective foundation length
+V= 3000.0 # Vertical load
+H= 225.0 # Horizontal load.
 deltaB= math.atan(H/V)
 deltaL= 0.0
 q= 4.4
@@ -35,7 +37,7 @@ scSTS= shortTermSoil.sc(Beff,Leff)
 icSTS= shortTermSoil.ic(deltaB,deltaL,H,Beff,Leff)
 quSTS= shortTermSoil.qu(q,D,Beff,Leff,V,H,0.0,1.8)
 
-err= abs(NgammaSTS)**2
+err= abs(NgammaSTS)**2 
 err+= abs(NqSTS-1.0)**2
 err+= (abs(NcSTS-5.1)/5.1)**2
 err+= (abs(dcSTS-1.13)/1.13)**2
@@ -43,7 +45,9 @@ err+= (abs(scSTS-1.12)/1.12)**2
 err+= (abs(icSTS-0.89)/0.89)**2 #Better approximation of i_c than
                                 #those employed in reference example
 err+= (abs(quSTS-64.0)/64.0)**2 #Better approximation of i_c than
-                             #those employed in reference example
+                                #those employed in reference example
+
+# Long-term bearing capacity.
 longTermSoil= fcs.FrictionalCohesiveSoil(math.radians(30.0),c=1.7,rho= (2.2-1.0)/9.81)
 
 NgammaLTS= longTermSoil.Ngamma(1.8)

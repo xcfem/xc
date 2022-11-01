@@ -52,7 +52,7 @@ class ElementLoadComponent(lcb.LoadComponentBase):
     retval.setId(loadCompId)
     name= elementLoadPrefix+loadCompId
     retval.setNm(name)
-    elementId= str(self.elementId) # Load name.
+    # elementId= str(self.elementId) # Load name.
     retval.setP0(self.getElementReferenceItem()) #Reference to element.
     retval.setP1(self.getLoadCaseReferenceItem()) #Reference to load case.
     retval.setP2(oI.SCXMLObjectItem(name)) #Name

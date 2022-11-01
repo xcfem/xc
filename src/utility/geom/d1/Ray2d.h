@@ -55,7 +55,7 @@ class Ray2d : public Linear2d
       { return NAN; }
     virtual GEOM_FT GetMin(unsigned short int) const
       { return NAN; }
-    Line2d getSupportLine(void) const
+    virtual Line2d getSupportLine(void) const
       { return Line2d(cgsr.supporting_line()); }
     Pos2d getFromPoint(void) const
       { return Pos2d(cgsr.source()); }

@@ -38,7 +38,8 @@ class LoadComponentBase(object):
     '''Returns load case name.'''
     retval= self.loadCaseName
     if(retval==''):
-      retval= lcc.loadCasePrefix+lcId
+        lcId= str(self.loadCaseId) #Reference to load case.
+        retval= lcc.loadCasePrefix+lcId
     return retval
 
   def getLoadCaseReferenceItem(self):

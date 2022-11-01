@@ -90,6 +90,9 @@ class InitStrainMaterial: public InitStrainBaseMaterial
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
     
+    Response *setResponse(const std::vector<std::string> &, Information &);
+    int getResponse(int responseID, Information &);
+    
     void Print(std::ostream &s, int flag =0) const;
     
     // AddingSensitivity:BEGIN //////////////////////////////////////////

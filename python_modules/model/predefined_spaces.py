@@ -149,6 +149,33 @@ def setImperfectionsY(nodeSet, slopeY= 1.0/500.0):
     '''
     setImperfectionsXY(nodeSet, 0.0, slopeY)
 
+def pick_elements_in_zone(plg, resultSet, originSet):
+    ''' Return a set containing the elements that lie
+        inside the zone argument.
+
+    :param plg: polygon to select the elements inside.
+    :param resultSet: set that will be populated with the elements.
+    :param originSet: set that contains the elements to check.
+    '''
+    pln= plg.getPlane()
+    for e in originSet.elements:
+        pos= pln.getProjection(e.getPosCentroid(True))
+        if(plg.In(pos,1e-2)):
+            resultSet.elements.append(e)
+    return resultSet
+
+def pick_node_on_point(pos, resultSet, originSet):
+    ''' Append to resultSet the nearest node to the point argument
+        from those in originSet.
+
+    :param pos: 3D point.
+    :param resultSet: set that will be populated with the picked node.
+    :param originSet: set that contains the nodes to pick.
+    '''
+    n= originSet.getNearestNode(pos)
+    resultSet.nodes.append(n)
+    return n
+
 class PredefinedSpace(object):
     ''' Convenience class that sets the space dimension and
         the number of degrees of freedom for a XC finite element
@@ -739,6 +766,32 @@ class PredefinedSpace(object):
             retval*= s
         retval.name= setName # remove all the expressions from name.
         return retval
+
+    def pickElementsInZone(self, zone, resultSet, originSet= None):
+        ''' Return a set containing the elements that lie
+            inside the zone argument.
+
+        :param zone: surface representing the zone to load.
+        :param resultSet: set that will be populated with the picked elements.
+        :param originSet: set that contains the elements to pick. If None
+                          consider the total set.
+        '''
+        if(originSet is None):
+            originSet= self.getTotalSet()
+        return pick_elements_in_zone(zone, resultSet, originSet)
+
+    def pickNodeOnPoint(self, pt, resultSet, originSet= None):
+        ''' Append to resultSet the nearest node to the point argument
+            from those in originSet.
+
+        :param pt: point to load.
+        :param resultSet: set that will be populated with the picked nodes.
+        :param originSet: set that contains the nodes to pick. If None
+                          consider the total set.
+        '''
+        if(originSet is None):
+            originSet= self.getTotalSet()
+        return pick_node_on_point(pt, resultSet, originSet)
     
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''

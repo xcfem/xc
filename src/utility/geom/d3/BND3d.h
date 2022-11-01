@@ -84,7 +84,7 @@ class BND3d: public GeomObj3d
     unsigned short int RegionCode(const Pos3d &,const double &tol= 0.0) const;
     bool In(const Pos3d &p,const double &tol= 0.0) const;
     bool ClipLine(const Pos3d &p1,const Pos3d &p2) const;
-    BND3d Offset(const GEOM_FT &o) const;
+    BND3d offset(const GEOM_FT &o) const;
     BND3d &operator +=(const Pos3d &p);
     BND3d &operator +=(const BND3d &a);
     friend BND3d operator +(const BND3d &a, const BND3d &b);

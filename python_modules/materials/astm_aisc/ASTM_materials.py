@@ -1389,7 +1389,7 @@ class ASTMShape(object):
 
         :param effectiveLengthX: effective length of member (torsion).
         '''
-        return getShapeTorsionalElasticBucklingStress(self, effectiveLengthX)
+        return self.getShapeTorsionalElasticBucklingStress(self, effectiveLengthX)
     
     def getTorsionalBucklingCriticalStress(self, effectiveLengthX, effectiveLengthY, effectiveLengthZ):
         ''' Return the torsional critical stress of the member according

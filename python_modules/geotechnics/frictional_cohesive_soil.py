@@ -456,10 +456,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
                     must be determined by iterations.
         '''
         if(Vload<0.0):
-             lmsg.warning('Negative vertical load (V= '+str(Vload)+') means pushing upwards.')
-        deltaB= math.atan(HloadB/Vload)
-        deltaL= math.atan(HloadL/Vload)
-        Hload= math.sqrt(HloadB**2+HloadL**2)
+             lmsg.warning('Negative vertical load (V= '+str(Vload)+') means pulling upwards.')
         gammaComp= self.quGamma(D,Beff,Leff,Vload,HloadB,HloadL,NgammaCoef,psi,eta)
         cComp= self.quCohesion(D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
         qComp= self.quQ(q,D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
@@ -546,17 +543,15 @@ class StratifiedSoil(object):
     def computeAffectedDepth(self,Beff):
         '''Computes affected depth.
 
-            Args:
-                :Beff: (float) width of the effective foundation area
-                      (see figure 12 in page 44 of reference[2]).
+        :Beff: (float) width of the effective foundation area
+              (see figure 12 in page 44 of reference[2]).
         '''
+        # define the acceptable range for Beff
         Bmin= Beff
         Bmax= 3.0*Beff
-        # define the starting guess 
-        start_guess= (Bmin+Bmax)/2.0
-
-        # define the acceptable range for Beff
-        my_ranges = (Bmin,Bmax)
+        
+        # # define the starting guess 
+        # start_guess= (Bmin+Bmax)/2.0
 
         # minimize 
         return fminbound(self.getEquivalentPhi, Bmin, Bmax)

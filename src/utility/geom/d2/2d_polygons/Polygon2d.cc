@@ -22,7 +22,7 @@
 
 #include "Polygon2d.h"
 #include "polygon2d_bool_op.h"
-#include<CGAL/create_offset_polygons_2.h>
+#include <CGAL/create_offset_polygons_2.h>
 #include "utility/geom/trf/Trf2d.h"
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/geom/d1/Polyline2d.h"
@@ -98,7 +98,7 @@ GeomObj *Polygon2d::getCopy(void) const
 //! @brief Return a polygon parallel to this one at the distance
 //! being passed as parameter. The new polygon will be exterior
 //! if the distance is positive.
-Polygon2d Polygon2d::Offset(const GEOM_FT &d) const
+Polygon2d Polygon2d::offset(const GEOM_FT &d) const
   {
     Polygon2d retval;
     typedef boost::shared_ptr<CGPolygon_2> PolygonPtr;

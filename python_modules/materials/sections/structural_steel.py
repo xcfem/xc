@@ -18,32 +18,6 @@ import geom
 from model import model_inquiry
 
 
-#Alpha imperfection factor.
-def alphaImperfectionFactor(bucklingCurve):
-    '''Return the alpha imperfection factor for buckling curves
-       see tables 6.1 and 6.2 of EC3 (EN 19931-1:2005).
-
-       :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-              to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-              curve for a cross-section". Note that in table 6.2 Y and 
-              Z axes are swapped with respect to those used in XC. 
-              XC axes: Y->weak axis, Z->strong axis.
-    '''
-    retval= 0.76
-    if(bucklingCurve=='a0'):
-        retval= 0.13
-    elif(bucklingCurve=='a'):
-        retval= 0.21
-    elif(bucklingCurve=='b'):
-        retval= 0.34
-    elif(bucklingCurve=='c'):
-        retval= 0.49
-    elif(bucklingCurve=='d'):
-        retval= 0.76
-    else:
-        lmsg.error('Buckling curve: '+str(bucklingCurve)+' unknown.')
-    return retval
-
 
 class SteelShape(sp.SectionProperties):
     '''Properties of a section in structural steel
@@ -121,52 +95,6 @@ class SteelShape(sp.SectionProperties):
         '''
         return Leq/self.getGyrationRadiusY()
 
-    def getAdimensionalSlendernessY(self,Leq,sectionClass= 1):
-        '''return adimensional slenderness relative to y-axis (weak axis) 
-           as defined in EC3 part 1 6.3.1
-
-           :param Leq: buckling length in XZ buckling plane.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1)
-        '''
-        betaA= self.getAeff(sectionClass)/self.A()
-        lambdA= self.getSlendernessY(Leq)
-        lambda1= self.steelType.getLambda1()
-        return lambdA/lambda1*math.sqrt(betaA)
-
-    def getBucklingReductionFactorY(self,Leq,bucklingCurve,sectionClass= 1):
-        '''return buckling reduction factor relative to y-axis (weak axis) 
-        as defined in EC3-1-1 6.3.1
-
-        :param Leq: buckling length in XZ buckling plane.
-        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-           curve for a cross-section". Note that in table 6.2 Y and 
-           Z axes are swapped with respect to those used in XC. 
-           XC axes: Y->weak axis, Z->strong axis.
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1)
-        '''
-        alpha= alphaImperfectionFactor(bucklingCurve)
-        lmb= self.getAdimensionalSlendernessY(Leq,sectionClass= 1)
-        phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
-        return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
-
-    def getBucklingResistanceY(self,Leq,bucklingCurve,sectionClass= 1):
-        '''return buckling resistance relative to y-axis (weak axis)
-        according to EC3-1-1 6.3.2
-
-        :param Leq: buckling length in XZ buckling plane.
-        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-           curve for a cross-section". Note that in table 6.2 Y and 
-           Z axes are swapped with respect to those used in XC. 
-           XC axes: Y->weak axis, Z->strong axis.
-        :param sectionClass: class of the section (1 to 3, 4 not yet implemented) (defaults to 1).
-        '''
-        X= self.getBucklingReductionFactorY(Leq,bucklingCurve,sectionClass)
-        return X*self.getAeff(sectionClass)*self.steelType.fyd()
-
     def Iz(self):
         '''return second moment of area about z-axis (strong axis)'''
         return self.get('Iz')
@@ -181,74 +109,6 @@ class SteelShape(sp.SectionProperties):
            :param Leq: buckling length in XY buckling plane.
         '''
         return Leq/self.getGyrationRadiusZ()
-
-    def getAdimensionalSlendernessZ(self,Leq,sectionClass= 1):
-        '''return adimensional slenderness relative to z-axis (strong axis) 
-           as defined in EC3-1-1 6.3.1
-
-           :param Leq: buckling length in XY buckling plane.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1)
-        '''
-        betaA= self.getAeff(sectionClass)/self.A()
-        lambdA= self.getSlendernessZ(Leq)
-        lambda1= self.steelType.getLambda1()
-        return lambdA/lambda1*math.sqrt(betaA)
-
-    def getBucklingReductionFactorZ(self,Leq,bucklingCurve,sectionClass= 1):
-        '''return buckling reduction factor lative to z-axis (strong axis) 
-        as defined in EC3-1-1 6.3.1
-
-        :param Leq: buckling length in XY buckling plane.
-        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-           curve for a cross-section". Note that in table 6.2 Y and 
-           Z axes are swapped with respect to those used in XC. 
-           XC axes: Y->weak axis, Z->strong axis.
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1)
-        '''
-        alpha= alphaImperfectionFactor(bucklingCurve)
-        lmb= self.getAdimensionalSlendernessZ(Leq,sectionClass= 1)
-        phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
-        return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
-
-    def getBucklingResistanceZ(self,Leq,bucklingCurve,sectionClass= 1):
-        '''return buckling resistance relative to z-axis (strong axis)
-        according to EC3-1-1 6.3.2
-
-        :param Leq: buckling length in XY buckling plane.
-        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-           curve for a cross-section". Note that in table 6.2 Y and 
-           Z axes are swapped with respect to those used in XC. 
-           XC axes: Y->weak axis, Z->strong axis.
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1).
-        '''
-        X= self.getBucklingReductionFactorZ(Leq,bucklingCurve,sectionClass)
-        return X*self.getAeff(sectionClass)*self.steelType.fyd()
-
-    def getBucklingResistance(self,LeqY,LeqZ,bucklingCurveY,bucklingCurveZ,sectionClass= 1):
-        '''return minimum of buckling resistance in XY and XZ buckling planes
-        calculated according to EC3-1-1 6.3.2
-
-        :param LeqY: buckling length of the member in XZ buckling plane.
-        :param LeqZ: buckling length of the member in XY buckling plane.
-        :param bucklingCurveY: buckling curve (a0,a,b,c or d) with respect 
-           to y-axis (weak axis) according 
-           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-           curve for a cross-section". Note that in table 6.2 Y and 
-           Z axes are swapped with respect to those used in XC. 
-           XC axes: Y->weak axis, Z->strong axis.
-        :param bucklingCurveY: buckling curve (a0,a,b,c or d) with respect 
-           to z-axis (strong axis)
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1)
-        '''
-        rY= self.getBucklingResistanceY(LeqY,bucklingCurveY,sectionClass)
-        rZ= self.getBucklingResistanceZ(LeqZ,bucklingCurveZ,sectionClass)
-        return min(rY,rZ)
 
     def J(self):
         '''return torsional moment of inertia of the section'''
@@ -476,6 +336,7 @@ class SteelShape(sp.SectionProperties):
         ''' Return an elastic section appropriate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
@@ -485,15 +346,21 @@ class SteelShape(sp.SectionProperties):
         '''elastic section appropriate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
         return super(SteelShape,self).defElasticShearSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis, overrideRho= overrideRho)
     
-    def getCrossSectionProperties2D(self):
-        '''Return a CrossSectionProperties object with the
-         2D properties of the section.'''
-        return super(SteelShape,self).getCrossSectionProperties2D(material= self.steelType)
+    # def getCrossSectionProperties2D(self):
+    #     '''Return a CrossSectionProperties object with the 2D properties of 
+    #        the section.'''
+    #     return super(SteelShape,self).getCrossSectionProperties2D(material= self.steelType)
+    
+    # def getCrossSectionProperties3D(self):
+    #     '''Return a CrossSectionProperties object with the 3D properties of 
+    #        the section.'''
+    #     return super(SteelShape,self).getCrossSectionProperties2D(material= self.steelType)
         
 
 class IShape(SteelShape):

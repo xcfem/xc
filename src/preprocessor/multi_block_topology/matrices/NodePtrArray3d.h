@@ -60,7 +60,7 @@ class NodePtrArray3d: public PtrArray3dBase<NodePtrArray>
     const Node *getNearestNode(const Pos3d &p) const;
     ID getNodeIndices(const Node *) const;
     boost::python::list getPyNodeList(void) const;
-
+    
     template <class F>
     std::deque<double> RowSimpsonIntegration(const F &,const std::string &,const size_t &,const ExprAlgebra &,const size_t &) const;
     Vector IRowSimpsonIntegration(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;

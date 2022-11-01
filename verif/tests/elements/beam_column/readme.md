@@ -15,3 +15,4 @@
 - [A Solution, Just Not The Solution](https://portwooddigital.com/2022/05/22/a-solution-just-not-the-solution)
 - [Elastic Shear Beams in OpenSees](https://portwooddigital.com/2022/07/03/elastic-shear-beams-in-opensees/)
 - [Shear Verse, Same as the First](https://portwooddigital.com/2022/07/10/shear-verse-same-as-the-first/)
+- [Force-Based Element Moment Release](https://portwooddigital.com/2022/10/16/force-based-element-moment-release/)

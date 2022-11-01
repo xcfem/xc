@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-from __future__ import division
-
 """
 The algorithm finds distance between closest pair of points
 in the given n points.
@@ -29,6 +26,10 @@ implementation in any Programming Language
 https://github.com/TheAlgorithms
 
 """
+
+from __future__ import division
+
+
 __author__= "Luis C. Pérez Tato (LCPT)"
 __cppyright__= "Copyright 2020 LCPT"
 __license__= "GPL"

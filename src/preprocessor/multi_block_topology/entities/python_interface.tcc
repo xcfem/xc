@@ -26,10 +26,9 @@ XC::ElemPtrArray3d &(XC::EntMdlr::*getTtzElements)(void)= &XC::EntMdlr::getTtzEl
 XC::Node *(XC::EntMdlr::*getNodeEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getNode;
 XC::Node *(XC::EntMdlr::*getNearestNodeEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestNode;
 XC::Element *(XC::EntMdlr::*getElementEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getElement; 
-
-
 XC::Element *(XC::EntMdlr::*getNearestElementEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestElement;
 class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_init)
+  .add_property("description", &XC::EntMdlr::getDescription, "Description (string) of the entity.")
   .add_property("getIdx", &XC::EntMdlr::getIdx)
   .add_property("getNodeLayers", make_function( getTtzNodes, return_internal_reference<>() ))
   .add_property("getElementLayers", make_function( getTtzElements, return_internal_reference<>() ))

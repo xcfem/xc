@@ -9,8 +9,10 @@ Ductility grades:
    -C: seismic      eps_uk>=7.5% k>=1.15 k<1.35
 '''
 
+import sys
 import math
 from materials import concrete_base
+from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -292,7 +294,7 @@ class EC2Concrete2021(EC2Concrete):
         if(RH<20):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; relative humidity: '+str(HR)+' out of range (20%<=HR<=100%).')
+            lmsg.warning(className+'.'+methodName+'; relative humidity: '+str(self.HR)+' out of range (20%<=HR<=100%).')
         elif(RH<=rhEq): # equation B.29a
             retval*= (1-frac**3)
         elif(RH<=100):
@@ -301,7 +303,7 @@ class EC2Concrete2021(EC2Concrete):
         else: # RH>100 impossible.
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; relative humidity: '+str(HR)+' out of range (20%<=HR<=100%).')        
+            lmsg.warning(className+'.'+methodName+'; relative humidity: '+str(self.HR)+' out of range (20%<=HR<=100%).')        
         return retval
 
     def getShrBetadstts(self, t, ts, h0):

@@ -313,7 +313,6 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
                         the Y shear reinforcement in section 2
     :ivar dir2ShReinfZ: instance of class ShearReinforcement that represents
                         the Z shear reinforcement in section 2
-
     '''
     def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0):
         '''Constructor.

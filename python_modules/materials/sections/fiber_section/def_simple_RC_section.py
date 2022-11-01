@@ -129,6 +129,17 @@ class ShearReinforcement(object):
         os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angAlphaShReinf)))
         os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angThetaConcrStruts))+"\\\\\n")
 
+
+#                   Reinforce concrete section
+#    + -------------------------------------------------------+ 
+#    |  o    o    o    o    o    o    o    o    o    o    o   | <- ReinfRow
+#    |                                                        |
+#    |                                                        |
+#    |  o    o    o    o    o    o    o    o    o    o    o   | <- ReinfRow
+#    + -------------------------------------------------------+ 
+#
+
+
 class ReinfRow(object):
     ''' Definition of the variables that make up a family (row) of main 
     (longitudinal) reinforcing bars.
@@ -264,14 +275,14 @@ class ReinfRow(object):
         os.write(indentation+'cover: '+str(self.cover*1e3)+' mm\n')
 
 def RebarRow2ReinfRow(rebarRow, width= 1.0, nominalLatCover= 0.03):
-    ''' Returns a RebarRow object from a ReinfRow object
+    ''' Returns a ReinfRow object from a RebarRow object
         as defined in the rebar_family module.
 
     :param rebarRow: RebarRow object.
     :param width: width of the cross-section (defautls to 1 m)
     :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
     '''
-    return RebarRow(rebarsDiam= rebarRow.diam,rebarsSpacing= rebarRows.spacing,width= widht, nominalCover= rebarRow.cover, nominalLatCover= nominalLatCover)
+    return ReinfRow(rebarsDiam= rebarRow.diam,rebarsSpacing= rebarRow.spacing,width= width, nominalCover= rebarRow.cover, nominalLatCover= nominalLatCover)
 
 class LongReinfLayers(object):
     ''' Layers of longitudinal reinforcement.'''
@@ -531,16 +542,28 @@ class RCFiberSectionParameters(object):
         self.diagType= matDiagType
         if(self.diagType=="d"):
             if(self.concrType.matTagD<0):
-                unusedConcreteMatTag= self.concrType.defDiagD(preprocessor)
+                concreteMatTag= self.concrType.defDiagD(preprocessor)
+                if(__debug__):
+                    if(concreteMatTag is None):
+                        AssertionError('Can\'t get concrete stress-strain diagram.')                    
             if(self.reinfSteelType.matTagD<0):
-                unusedReinfSteelMaterialTag= self.reinfSteelType.defDiagD(preprocessor)
+                reinfSteelMaterialTag= self.reinfSteelType.defDiagD(preprocessor)
+                if(__debug__):
+                    if(reinfSteelMaterialTag is None):
+                        AssertionError('Can\'t get steel stress-strain diagram.')                    
             self.concrDiagName= self.concrType.nmbDiagD
             self.reinfDiagName= self.reinfSteelType.nmbDiagD
         elif(self.diagType=="k"):
             if(self.concrType.matTagK<0):
-                unusedConcreteMatTag= self.concrType.defDiagK(preprocessor)
+                concreteMatTag= self.concrType.defDiagK(preprocessor)
+                if(__debug__):
+                    if(concreteMatTag is None):
+                        AssertionError('Can\'t get concrete stress-strain diagram.')                    
             if(self.reinfSteelType.matTagK<0):
-                unusedReinfSteelMaterialTag= self.reinfSteelType.defDiagK(preprocessor)
+                reinfSteelMaterialTag= self.reinfSteelType.defDiagK(preprocessor)
+                if(__debug__):
+                    if(reinfSteelMaterialTag is None):
+                        AssertionError('Can\'t get steel stress-strain diagram.')                    
             self.concrDiagName= self.concrType.nmbDiagK
             self.reinfDiagName= self.reinfSteelType.nmbDiagK
             
@@ -1665,9 +1688,8 @@ def get_element_rc_sections(elements, propName= None):
                 element= elemHandler.getElement(eTag)
                 sectionNames= element.getProp(propName)
                 if(sectionNames[sectionIdx]!=''):
-                    className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+'; element '+str(eTag) + ' has alreade section: '+sectionNames[sectionIdx])
+                    lmsg.error(methodName+'; element '+str(eTag) + ' has alreade section: '+sectionNames[sectionIdx])
                 sectionNames[sectionIdx]= sct.name
                 element.setProp(propName, sectionNames)
     return retval

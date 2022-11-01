@@ -96,7 +96,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
 /*         cerr << "Polyline2d Int(i,d) not implemented" << endl; */
 /*         return list_Pos2d(); */
 /*       } */
-    Polyline2d Offset(const GEOM_FT &d) const;
+    Polyline2d offset(const GEOM_FT &d) const;
     //! @brief Return the intersections of the polyline with
     //! the line coord_i= d
     // list_Pos2d Int(unsigned short int i,const GEOM_FT &d) const;

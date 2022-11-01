@@ -98,6 +98,22 @@ class SectionProperties(object):
            the axis parallel to Z that passes through section centroid.
         '''
         return math.sqrt(self.Iz()/self.A())
+
+    def I(self, majorAxis):
+        ''' Return the second moment of area about the local major or minor
+            axis.
+
+        :param majorAxis: true if the required inertia corresponds to the
+                          bending around major axis. 
+        '''
+        Imax= self.Iz()
+        Imin= self.Iy()
+        if(Imin>Imax): # swap values
+            Imax, Imin= Imin, Imax            
+        if(majorAxis):
+            return Imax
+        else:
+            return Imin
   
     def J(self):
         '''torsional constant of the section (abstract method)'''
@@ -143,14 +159,14 @@ class SectionProperties(object):
         newIz= self.Iz()+A*y**2
         return newIy,newIz
   
-    def SteinerJ(self,pos):
+    def SteinerJ(self, dist):
         '''Return the moments of inertia obtained by applying
            the parallel axis theorem (or Huygens-Steiner theorem
            or Steiner's theorem.
 
-          :param pos: position of the original section centroid
+          :param dist: distance to the original section centroid
         '''
-        d2= pos.x**2+pos.y**2
+        d2= dist**2
         A= self.A()
         return self.J()+A*d2
   
@@ -252,10 +268,11 @@ class SectionProperties(object):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                rho= material.rho*self.A()
+                csp= self.getCrossSectionProperties3D(material)
+                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name, A= csp.A,E= csp.E,G= csp.G, Iz= csp.Iz, Iy= csp.Iy, J= csp.J, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -280,10 +297,11 @@ class SectionProperties(object):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                rho= material.rho*self.A()
+                csp= self.getCrossSectionProperties3D(material)
+                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= self.A(), E= material.E, G= material.G(), Iz= self.Iz(), Iy= self.Iy(),J= self.J(), alpha_y= self.alphaY(), alpha_z= self.alphaZ(), linearRho= rho)
+                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= csp.A, E= csp.E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy,J= csp.J, alpha_y= csp.AlphaY, alpha_z= csp.AlphaZ, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -307,10 +325,11 @@ class SectionProperties(object):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                rho= material.rho*self.A()
+                csp= self.getCrossSectionProperties2D(material)
+                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,self.A(),material.E, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,A= csp.A, E= csp.E, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -335,13 +354,14 @@ class SectionProperties(object):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                I= self.Iz();
+                csp= self.getCrossSectionProperties3D(material)
+                I= csp.Iz;
                 if(not majorAxis):
-                    I= self.Iy()
-                rho= material.rho*self.A()
+                    I= csp.Iy
+                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,self.A(),material.E,I, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A,E= csp.E, I= csp.I, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -366,13 +386,14 @@ class SectionProperties(object):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                I= self.Iz();
+                csp= self.getCrossSectionProperties3D(material)
+                I= csp.Iz;
                 if(not majorAxis):
-                    I= self.Iy()
-                rho= material.rho*self.A()
+                    I= csp.Iy
+                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= rho)
+                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,csp.A,E= csp.E, G= csp.G, I= I, alpha= csp.Alpha, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -381,14 +402,28 @@ class SectionProperties(object):
         
     
     def getCrossSectionProperties2D(self, material):
-        '''Return a CrossSectionProperties object with the
-           2D properties of the section.'''
+        '''Return a CrossSectionProperties object with the 2D properties of 
+           the section.'''
         retval= xc.CrossSectionProperties2d()
         retval.E= material.E
         retval.A= self.A()
         retval.I= self.Iz()
         retval.G= material.G()
         retval.Alpha= self.alphaY()
+        return retval
+    
+    def getCrossSectionProperties3D(self, material):
+        '''Return a CrossSectionProperties object with the 2D properties of 
+           the section.'''
+        retval= xc.CrossSectionProperties3d()
+        retval.E= material.E
+        retval.A= self.A()
+        retval.Iz= self.Iz()
+        retval.Iy= self.Iy()
+        retval.G= material.G()
+        retval.J= self.J()
+        retval.AlphaY= self.alphaY()
+        retval.AlphaZ= self.alphaZ()
         return retval
     
     def getXYVertices(self, offset:geom.Vector2d= None):
@@ -1349,7 +1384,7 @@ class CompoundSection(SectionProperties):
         center= geom.Pos2d(self.zCenterOfMass(), self.yCenterOfMass())
         retval= 0.0
         for s in self.sectionList:
-            retval+= s[1].SteinerJ(s[0].dist(center))
+            retval+= s[1].SteinerJ(dist= s[0].dist(center))
         retval*= self.torsionalStiffnessFactor
         return retval
   

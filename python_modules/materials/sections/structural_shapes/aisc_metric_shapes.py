@@ -3043,7 +3043,7 @@ class CHSSShape(structural_steel.CHShape):
         :param name: shape name (i.e. HSS16.000X0.375).
         '''
         super(CHSSShape,self).__init__(steel,name,CHSS)
-        
+    
     def t(self):
         '''Return HSS nominal wall thickess'''
         # HSS shapes have two values of thickness:
@@ -3053,6 +3053,10 @@ class CHSSShape(structural_steel.CHShape):
         # t: according to the readme of AISC Shapes Database v15.0 is
         # the thickness of angle leg.
         return self.get('tnom')
+    
+    def getSlendernessRatio(self):
+        ''' Return the slenderness ratio.'''
+        return self.getOutsideDiameter()/self.t()
 
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
@@ -3194,8 +3198,7 @@ class CHSSShape(structural_steel.CHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         lambda_p= self.getLambdaPWallBending()
-        slendernessRatio= self.getOutsideDiameter()/self.t()
-        return slendernessRatio/lambda_p # if <1 then wall is compact.
+        return self.getSlendernessRatio()/lambda_p # if <1 then wall is compact.
     
     def bendingSlenderWallRatio(self, majorAxis= True):
         ''' If wall is noncompact according to table 4.1b of 
@@ -3205,8 +3208,7 @@ class CHSSShape(structural_steel.CHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         lambda_r= self.getLambdaRWallBending()
-        slendernessRatio= self.getOutsideDiameter()/self.t()
-        return slendernessRatio/lambda_r # if <1 then wall is noncompact.
+        return self.getSlendernessRatio()/lambda_r # if <1 then wall is noncompact.
 
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member

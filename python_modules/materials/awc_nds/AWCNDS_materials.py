@@ -22,7 +22,6 @@ from materials import wood_base
 from materials import typical_materials
 from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
-from materials import typical_materials
 from model import model_inquiry
 from misc_utils import units_utils
 
@@ -337,9 +336,9 @@ class LSL_135E(LSL):
         :param depth: member depth.
         '''
         if(depth<3.5*units_utils.inchToMeter):
-            return 1.159*Fb_12
+            return 1.159*self.Fb_12
         else:
-            return math.pow((12.0/depth),0.12)*Fb_12
+            return math.pow((12.0/depth),0.12)*self.Fb_12
 
 class LSL_155E(LSL):
     ''' LSL 1.35E.'''
@@ -603,9 +602,9 @@ class WoodSection(object):
             fb2= abs(Myd)/Sy # Bending stress (minor axis)
             if(abs(Myd)>abs(Mzd)): # bending on weak axis
                 if(Nd>0):
+                    Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
                     CF= ratioN+fb2/Fb2_aster # equation 3.9-1
                     if(fb2>stressTreshold): # not so small stress. 
-                        Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
                         Fb2_aster2= Fb2_aster*chiLT # CL adjustement; F'b2 in equation 3.9-3
                         eq392= (fb2-axialStress)/Fb2_aster2 # equation 3.9-2
                         CF= max(CF, eq392)

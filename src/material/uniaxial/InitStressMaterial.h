@@ -91,12 +91,12 @@ class InitStressMaterial: public InitStrainBaseMaterial
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
-    
+        
     void Print(std::ostream &s, int flag =0) const;
     
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int setParameter(const std::vector<std::string> &, Parameter &);
-    int updateParameter(int parameterID, Information &info);
+    int updateParameter(int parameterID, Information &);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Definition of the variables that make up a reinforced concrete section 
+with reinforcement symmetric in both directions (as usual in columns)
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and A_OO"
@@ -6,16 +9,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
-'''
-Definition of the variables that make up a reinforced concrete section 
-with reinforcement symmetric in both directions (as usual in columns)
-'''
 
 import sys
 import math
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
 from materials.sections import section_properties
+from misc_utils import log_messages as lmsg
 import geom
 
 class ColumnMainReinforcement(object):
@@ -47,7 +47,7 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
     '''
 
     def __init__(self, sectionDescr= None):
-      super(RCColumnSection,self).__init__(sectionDescr= sectionDescr)
+      super(RCRectangularColumnSection,self).__init__(sectionDescr= sectionDescr)
       self.mainBars= ColumnMainReinforcement()
 
     def __eq__(self, other):
@@ -61,10 +61,11 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         return retval
         
 
-    def defSectionGeometry(self,matDiagType):
+    def defSectionGeometry(self, preprocessor, matDiagType):
         '''Returns a reinforced concrete section with reinforcement 
         symmetric in both directions (as usual in columns)
 
+        :param preprocessor: XC preprocessor for the finite element problem.
         :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, ="d" for design diagram)
         '''
         self.defDiagrams(preprocessor,matDiagType)
@@ -72,36 +73,52 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(self.geomSection)
 
-        reinforcement= sectionGeom.getReinfLayers
+        reinforcement= self.geomSection.getReinfLayers
 
-        self.reinforcementInf= reinforcement.newStraightReinfLayer(reinfDiagName)
+        self.reinforcementInf= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
         self.reinforcementInf.code= "infWidth"
         self.reinforcementInf.numReinfBars= self.mainBars.nRebarsWidth
         self.reinforcementInf.barArea= self.mainBars.areaRebarWidth
 
-        self.reinforcementSup= reinforcement.newStraightReinfLayer(reinfDiagName)
+        self.reinforcementSup= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
         self.reinforcementSup.code= "supWidth"
         self.reinforcementSup.numReinfBars= self.mainBars.nRebarsWidth
         self.reinforcementSup.barArea= self.mainBars.areaRebarWidth
+        cover= self.mainBars.cover
+        width= self.b
+        depth= self.h
         self.reinforcementSup.p1= geom.Pos2d(-width/2+cover,depth/2+cover) # top layer (side +).
         self.reinforcementSup.p2= geom.Pos2d(width/2-cover,depth/2+cover)
 
-        rebarsSpacingCanto= (depth-2*cover)/(nRebarsDepth+1)
+        rebarsSpacingCanto= (depth-2*cover)/(self.mainBars.nRebarsDepth+1)
 
-        self.reinforcementCIzq= reinforcement.newStraightReinfLayer(reinfDiagName)
+        self.reinforcementCIzq= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
         self.reinforcementCIzq.code= "leftDepth"
         self.reinforcementCIzq.numReinfBars= self.mainBars.nRebarsDepth
         self.reinforcementCIzq.barArea= self.mainBars.areaRebarDepth
         self.reinforcementCIzq.p1= geom.Pos2d(-width/2+cover,-depth/2+cover+rebarsSpacingCanto) # Left side reinforcement.
         self.reinforcementCIzq.p2= geom.Pos2d(-width/2+cover,depth/2-cover-rebarsSpacingCanto)
 
-        self.reinforcementCDer= reinforcement.newStraightReinfLayer(reinfDiagName)
+        self.reinforcementCDer= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
         self.reinforcementCDer.code= "rightDepth"
         self.reinforcementCDer.numReinfBars= self.mainBars.nRebarsDepth
         self.reinforcementCDer.barArea= self.mainBars.areaRebarDepth
         self.reinforcementCDer.p1= geom.Pos2d(width/2-cover,-depth/2+cover+rebarsSpacingCanto) # Right side reinforcement.
         self.reinforcementCDer.p2= geom.Pos2d(width/2-cover,depth/2-cover-rebarsSpacingCanto)
 
+#  Circular RC section
+#  (ascii art from ascii.co.uk)
+#                _ _
+#             =  o  o =
+#           = o        o =
+#          = o          o =
+#          = o          o =
+#           = o        o =
+#             = o  o =
+#                ~~
+
+
+        
 class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.CircularSection):
     '''
     Base class for rectangular reinforced concrete sections.
@@ -198,10 +215,11 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
             lmsg.warning(className+'.'+methodName+'; hollow sections not implemented yet. Internal contour ignored.')
         return vertices
         
-    def defSectionGeometry(self,preprocessor,matDiagType):
+    def defSectionGeometry(self, preprocessor, matDiagType):
         '''
         Define the XC section geometry object for this reinforced concrete section 
 
+        :param preprocessor: XC preprocessor for the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                      ("k" for characteristic diagram, "d" for design diagram)
         '''
@@ -225,9 +243,9 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         super(RCCircularSection, self).report(os= os, indentation= indentation)
         indentation+= '  '
         os.write(indentation+'main reinforcement: \n')
-        mainReinf.report(os= os, indentation= indentation)
+        self.mainReinf.report(os= os, indentation= indentation)
         os.write(indentation+'shear reinforcement: \n')        
-        shReinf.report(os= os, indentation= indentation)
+        self.shReinf.report(os= os, indentation= indentation)
     
     def latexReportGeometry(self, os= sys.stdout):
         ''' Write geometry data in LaTeX format.
@@ -279,7 +297,7 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super().defElasticShearSection3d(preprocessor, material= mat, overrideRho= overrideRho)
     
-    def defElasticSection2d(self, preprocessor, overrideRho= None):
+    def defElasticSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
         ''' Return an elastic section appropriate for 2D beam analysis
 
         :param preprocessor: XC preprocessor for the finite element problem.
@@ -290,7 +308,7 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
         return super().defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
         
-    def defElasticShearSection2d(self, preprocessor, overrideRho= None):
+    def defElasticShearSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
         '''elastic section appropriate for 2D beam analysis, including 
            shear deformations.
 
