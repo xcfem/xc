@@ -63,6 +63,8 @@ class DqPtrs: public CommandEntity, protected std::deque<T *>
     typedef typename lst_ptr::reference reference;
     typedef typename lst_ptr::const_reference const_reference;
     typedef typename lst_ptr::size_type size_type;
+    typedef typename lst_ptr::value_type value_type;
+    typedef typename lst_ptr::difference_type difference_type;
     typedef boost::indirect_iterator<iterator> indIterator;
   public:
     DqPtrs(CommandEntity *owr= nullptr);
@@ -96,6 +98,8 @@ class DqPtrs: public CommandEntity, protected std::deque<T *>
       { return lst_ptr::size(); }
     bool in(const T *) const;
     //void sort_on_prop(const std::string &cod,const bool &ascending= true);
+    
+    boost::python::list getPythonList(void);
 
     const ID &getTags(void) const;
     T *findTag(const size_t &);
@@ -175,6 +179,17 @@ void DqPtrs<T>::extend(const DqPtrs &other)
   {
     for( const_iterator i= other.begin();i!=other.end();i++)
       push_back(*i);
+  }
+
+//! @brief Return a python list containing the pointers to the
+//! objects in this container.
+template <class T>
+boost::python::list DqPtrs<T>::getPythonList(void)
+  {
+    boost::python::list retval;
+    for(iterator i= begin();i!=end();i++)
+      retval.append(boost::ref(*i));
+    return retval;
   }
 
 //! @brief Clears out the list of pointers.

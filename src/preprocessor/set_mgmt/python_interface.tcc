@@ -28,6 +28,7 @@ class_<dq_ptrs_node, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_node",n
   .def("__len__",&dq_ptrs_node::size, "Returns list size.")
   .def("at",make_function(&dq_ptrs_node::get, return_internal_reference<>() ), "Access specified node with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_node::get, return_internal_reference<>() ), "Access specified node with bounds checking.")
+  .def("getPythonList",&dq_ptrs_node::getPythonList, "Returns the nodes in a Python list.")
   .def("getTags",make_function(&dq_ptrs_node::getTags, return_internal_reference<>() ),"Returns node identifiers.")
   .def("findTag",make_function(&dq_ptrs_node::findTag, return_internal_reference<>() ),"Returns the node identified by the tag argument.")
   .def("clear",&dq_ptrs_node::clear,"Removes all items.")
@@ -59,6 +60,7 @@ class_<dq_ptrs_element, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_elem
   .def("__len__",&dq_ptrs_element::size, "Returns list size.")
   .def("at",make_function(&dq_ptrs_element::get, return_internal_reference<>() ), "Access specified element with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_element::get, return_internal_reference<>() ), "Access specified element with bounds checking.")
+  .def("getPythonList",&dq_ptrs_element::getPythonList, "Returns the elements in a Python list.")
   .def("getTags",make_function(&dq_ptrs_element::getTags, return_internal_reference<>() ),"Returns element identifiers.")
   .def("findTag",make_function(&dq_ptrs_element::findTag, return_internal_reference<>() ),"Returns the element identified by the tag argument.")
   .def("clear",&dq_ptrs_element::clear,"Removes all items.")
@@ -102,6 +104,7 @@ class_<dq_ptrs_constraint, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_c
   .def("__len__",&dq_ptrs_constraint::size, "Returns list size.")
   .def("at",make_function(&dq_ptrs_constraint::get, return_internal_reference<>() ), "Access specified constraint with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_constraint::get, return_internal_reference<>() ), "Access specified constraint with bounds checking.")
+  .def("getPythonList",&dq_ptrs_constraint::getPythonList, "Returns the constraints in a Python list.")
   .def("getTags",make_function(&dq_ptrs_constraint::getTags, return_internal_reference<>() ),"Returns constraint identifiers.")
   .def("clear",&dq_ptrs_constraint::clear,"Removes all items.")
   ;
@@ -186,6 +189,7 @@ class_<dq_ptrs_pnt, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_pnt",no_
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_pnt::indBegin, &dq_ptrs_pnt::indEnd))
   .def("at",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
+  .def("getPythonList",&dq_ptrs_pnt::getPythonList, "Returns the points in a Python list.")
   .def("findTag",make_function(&dq_ptrs_pnt::findTag, return_internal_reference<>() ),"Returns the point identified by the tag argument.")
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
@@ -212,6 +216,7 @@ class_<dq_line_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_line_ptrs",n
   .def("__len__",&dq_line_ptrs::size, "Return container size.")
   .def("at",make_function(&dq_line_ptrs::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
   .def("__getitem__",make_function(&dq_line_ptrs::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
+  .def("getPythonList",&dq_line_ptrs::getPythonList, "Returns the lines in a Python list.")
   .def("findTag",make_function(&dq_line_ptrs::findTag, return_internal_reference<>() ),"Returns the edge identified by the tag argument.")
   .def("clear",&dq_line_ptrs::clear,"Removes all items.")
    ;
@@ -229,6 +234,7 @@ class_<dq_ptrs_surfaces, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_sur
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_surfaces::indBegin, &dq_ptrs_surfaces::indEnd))
   .def("at",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
+  .def("getPythonList",&dq_ptrs_surfaces::getPythonList, "Returns the surfaces in a Python list.")
   .def("findTag",make_function(&dq_ptrs_surfaces::findTag, return_internal_reference<>() ),"Returns the surface identified by the tag argument.")
   .def("clear",&dq_ptrs_surfaces::clear,"Removes all items.")
    ;
@@ -257,6 +263,7 @@ class_<dq_body_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_body_ptrs",n
   .def("__iter__", range<return_internal_reference<> >(&dq_body_ptrs::indBegin, &dq_body_ptrs::indEnd))
   .def("at",make_function(&dq_body_ptrs::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
   .def("__getitem__",make_function(&dq_body_ptrs::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
+  .def("getPythonList",&dq_body_ptrs::getPythonList, "Returns the bodies in a Python list.")
   .def("findTag",make_function(&dq_body_ptrs::findTag, return_internal_reference<>() ),"Returns the body identified by the tag argument.")
   .def("clear",&dq_body_ptrs::clear,"Removes all items.")
    ;

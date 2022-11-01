@@ -209,9 +209,7 @@ XC::Element1D *XC::DqPtrsElem::get_nearest_element_1d(const Vector &p, const std
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; method: " << callingMethod
-		<< " not defined for elements of class: "
-		<< elem->getClassName() << " yet."
+		<< "; no nearest element to the point: " << p
 		<< std::endl;
     return retval;
   }
