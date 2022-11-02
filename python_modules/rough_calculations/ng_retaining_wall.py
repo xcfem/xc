@@ -149,19 +149,31 @@ class InternalForces(object):
         return self.VdMin(yMidStem)
     
     def VdMax(self, y):
-        '''Max. shear (envelope) at height y.'''
+        '''Max. shear (envelope) at height y.
+  
+        :param y: height to compyte the shear force at.
+        '''
         return abs(self.vdMaxStem(y))
     
     def MdMax(self, y):
-        '''Max. bending moment (envelope) at height y.'''
+        '''Max. bending moment (envelope) at height y.
+  
+        :param y: height to compyte the shear force at.
+        '''
         return abs(self.mdMaxStem(y))
     
     def VdMin(self, y):
-        '''Min. shear (envelope) at height y.'''
+        '''Min. shear (envelope) at height y.
+  
+        :param y: height to compyte the shear force at.
+        '''
         return abs(self.vdMinStem(y))
     
     def MdMin(self, y):
-        '''Min bending moment (envelope) at height y.'''
+        '''Min bending moment (envelope) at height y.
+  
+        :param y: height to compyte the shear force at.
+        '''
         return abs(self.mdMinStem(y))
     
     def getYStem(self,hCoupe):
