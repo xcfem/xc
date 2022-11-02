@@ -707,8 +707,15 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             self.stemHeight= wallInternalForces.stemHeight
         self.internalForcesSLS= wallInternalForces
 
-    def writeDef(self,pth, outputFile, convertToEPS= False):
-        '''Write wall definition in LaTeX format.'''
+    def writeDef(self, pth:str, outputFile, includeGraphicsPath:str, convertToEPS= False):
+        '''Write wall definition in LaTeX format.
+
+        :param pth: output path.
+        :param outputFile: LaTeX output file.
+        :param includeGraphicsPath: path for the includegraphics LaTeX command. 
+        :param convertToEPS: if true, create a postscript version of the 
+                             graphic output.
+        '''
         figurePath= pth+self.name
         figurePathPNG= figurePath+".png"
         self.internalForcesULS.writeGraphic(figurePathPNG)
@@ -725,7 +732,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\begin{minipage}{85mm}\n")
         outputFile.write("\\vspace{2mm}\n")
         outputFile.write("\\begin{center}\n")
-        outputFile.write("\\includegraphics[width=80mm]{"+figurePath+"}\n")
+        outputFile.write("\\includegraphics[width=80mm]{"+includeGraphicsPath+self.name+"}\n")
         outputFile.write("\\end{center}\n")
         outputFile.write("\\vspace{1pt}\n")
         outputFile.write("\\end{minipage} & \n")
@@ -745,12 +752,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\end{center}\n")
         outputFile.write("\\end{table}\n")
 
-    def writeResult(self,pth):
-        '''Write reinforcement verification results in LaTeX format.'''
-        outputFile= open(pth+self.name+".tex","w")
-        self.writeDef(pth,outputFile)
-        self.stability_results.writeOutput(outputFile,self.title)
-        self.sls_results.writeOutput(outputFile,self.title)
+    def writeStrengthResults(self, outputFile):
+        ''' Write reinforced concrete strength results.
+
+        :param outputFile: LaTeX output file.
+        '''
         outputFile.write("\\bottomcaption{Wall "+ self.title +" reinforcement} \\label{tb_"+self.name+"}\n")
         outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.title+" wall reinforcement}}\\\\\\hline\n}\n")
         outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.title+" (suite)}}\\\\\\hline\n}\n")
@@ -767,6 +773,25 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\end{supertabular}\n")
         outputFile.write("\\end{center}\n")
         outputFile.close()
+        
+    def writeResult(self, pth:str, includeGraphicsPath= None, convertToEPS= False):
+        '''Write reinforcement verification results in LaTeX format.
+
+        :param pth: output path.
+        :param includeGraphicsPath: path for the includegraphics LaTeX command. 
+        :param convertToEPS: if true, create a postscript version of the 
+                             graphic output.
+        '''
+        if(includeGraphicsPath is None):
+            includeGraphicsPath= pth
+        outputFile= open(pth+self.name+".tex","w") # LaTeX output file.
+        self.writeDef(pth= pth, outputFile= outputFile, includeGraphicsPath= includeGraphicsPath, convertToEPS= convertToEPS)
+        # Stability ULS results.
+        self.stability_results.writeOutput(outputFile,self.title)
+        # Serviceability limit states results.
+        self.sls_results.writeOutput(outputFile,self.title)
+        # Structural strength results.
+        self.writeStrengthResults(outputFile)
 
     def drawSchema(self,pth):
         '''Retaining wall scheme drawing in LaTeX format.'''
