@@ -497,7 +497,7 @@ class StemReinforcement(ReinforcementMap):
         CExtStemBottom= self.getSectionExtStemBottom()
         VdMaxEncastrement= self.wallGeom.internalForcesULS.VdMaxEncastrement(self.wallGeom.stemBottomWidth)
         MdMaxEncastrement= self.wallGeom.internalForcesULS.MdMaxEncastrement(self.wallGeom.footingThickness)
-        outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (outside reinforcement dowels) :} \\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (back reinforcement dowels) :} \\\\\n")
         NdEncastrement= 0.0 #we neglect axial force
         CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
         CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
@@ -509,7 +509,7 @@ class StemReinforcement(ReinforcementMap):
         NdExtStem= 0.0 #we neglect axial force
         VdExtStem= self.wallGeom.internalForcesULS.VdMax(yCoupeExtStem)
         MdExtStem= self.wallGeom.internalForcesULS.MdMax(yCoupeExtStem)
-        outputFile.write("\\textbf{Reinforcement "+str(self.extStemIndex)+" (outside stem reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.extStemIndex)+" (back vertical stem reinforcement):}\\\\\n")
         CExtStem.writeResultFlexion(outputFile,NdExtStem,MdExtStem,VdExtStem)
         CExtStem.writeResultStress(outputFile,MdExtStem)
 
@@ -520,11 +520,11 @@ class StemReinforcement(ReinforcementMap):
         CSectionStemLongExt= self.getSectionStemLongExt()
         CSectionStemLongInt= CSectionStemLongExt
 
-        outputFile.write("\\textbf{Reinforcement "+str(self.intStemBottomIndex)+" (inside reinforcement dowels):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.intStemBottomIndex)+" (front reinforcement dowels):}\\\\\n")
         CIntStemBottom.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
 
         # Exterior reinforcement at stem.
-        outputFile.write("\\textbf{Reinforcement "+str(self.intStemIndex)+" (inside vertical stem reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.intStemIndex)+" (front vertical stem reinforcement):}\\\\\n")
         CIntStem.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
 
         # Reinforcement at stem top.
@@ -532,15 +532,15 @@ class StemReinforcement(ReinforcementMap):
         CSectionStemTop.writeResultFlexion(outputFile,0.0,0.0,0.0)
 
         # Stem exterior longitudinal reinforcement.
-        outputFile.write("\\textbf{Reinforcement "+str(self.longExtStemIndex)+" (outside stem longitudinal reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.longExtStemIndex)+" (back longitudinal stem reinforcement):}\\\\\n")
         CSectionStemLongExt.writeResultTraction(outputFile,0.0)
 
         # Stem interior longitudinal reinforcement.
-        outputFile.write("\\textbf{Reinforcement  "+str(self.longIntStemIndex)+" (inside stem longitudinal reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement  "+str(self.longIntStemIndex)+" (front longitudinal stem reinforcement):}\\\\\n")
         CSectionStemLongInt.writeResultTraction(outputFile,0.0)
 
         # Stem top skin reinforcement.
-        outputFile.write("\\textbf{Reinforcement "+str(self.topSkinIndex)+" (longitudinal stem top reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.topSkinIndex)+" (top longitudinal stem reinforcement):}\\\\\n")
         outputFile.write("  --\\\\\n")
         #self[self.topSkinIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
 
@@ -612,7 +612,7 @@ class FootingReinforcement(ReinforcementMap):
         NdTopFooting= 0.0 #we neglect axial force
         VdTopFooting= abs(self.wallGeom.internalForcesULS.VdFooting.getAbsMaximum())
         MdTopFooting= self.wallGeom.internalForcesULS.MdFooting.getAbsMaximum() # Concomitant??
-        outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (footing top reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (top transverse footing reinforcement):}\\\\\n")
         CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
         CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdFooting.getAbsMaximum())
 
@@ -621,19 +621,19 @@ class FootingReinforcement(ReinforcementMap):
         CSectionFootingTopLongitudinal= CSectionFootingBottomLongitudinal
 
         # Reinforcemnt at footing bottom.
-        outputFile.write("\\textbf{Reinforcement "+str(self.bottomFootingIndex)+" (footing bottom transverse reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.bottomFootingIndex)+" (bottom transverse footing reinforcement):}\\\\\n")
         CSectionFootingBottom.writeResultCompression(outputFile,0.0,CSectionFootingBottomLongitudinal.tensionRebars.getAs())
 
         # Longitudinal reinforcement at footing bottom.
-        outputFile.write("\\textbf{Reinforcement "+str(self.longBottomFootingIndex)+" (footing bottom longitudinal reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.longBottomFootingIndex)+" (bottom longitudinal footing reinforcement):}\\\\\n")
         CSectionFootingBottomLongitudinal.writeResultTraction(outputFile,0.0)
 
         # Longitudinal reinforcement at footing top.
-        outputFile.write("\\textbf{Reinforcement "+str(self.longTopFootingIndex)+" (footing top longitudinal reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.longTopFootingIndex)+" (top longitudinal footing reinforcement):}\\\\\n")
         CSectionFootingTopLongitudinal.writeResultTraction(outputFile,0.0)
 
         # Footing skin reinforcement.
-        outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (foogint skin reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (skin fooging reinforcement):}\\\\\n")
         outputFile.write("  --\\\\\n")
         #self[self.skinFootingIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
 
