@@ -28,7 +28,12 @@ from solution import predefined_solutions
 
 def filterRepeatedValues(yList,mList,vList):
     ''' Filter values that are repeated 
-        in the list.'''
+        in the list.
+
+    :param yList: list of y coordinates.
+    :param mList: list of corresponding bending moments.
+    :param vList: list of corresponding shear forces.
+    '''
     sz= len(yList)
 
     mapM={}
@@ -74,12 +79,14 @@ class InternalForces(object):
         self.stemHeight= self.y[-1]
         self.MdFooting= MdFooting
         self.VdFooting= VdFooting
+        
     def interpolate(self):
         self.y= self.mdEnvelope.yValues
         self.mdMaxStem= scipy.interpolate.interp1d(self.y,self.mdEnvelope.positive)
         self.mdMinStem= scipy.interpolate.interp1d(self.y,self.mdEnvelope.negative)
         self.vdMaxStem= scipy.interpolate.interp1d(self.y,self.vdEnvelope.positive)    
-        self.vdMinStem= scipy.interpolate.interp1d(self.y,self.vdEnvelope.negative)    
+        self.vdMinStem= scipy.interpolate.interp1d(self.y,self.vdEnvelope.negative)
+        
     def __imul__(self,f):
         for m in self.mdMax:
           m*=f
@@ -98,8 +105,10 @@ class InternalForces(object):
         retval= self.clone()
         retval*= f
         return retval
+    
     def __rmul__(self,f):
         return self*f
+    
     def MdMaxEncastrement(self,footingThickness):
         '''Bending moment (envelope) at stem base.
 
@@ -251,11 +260,18 @@ class ReinforcementMap(dict):
         return retval
             
     def setReinforcement(self,index,reinforcement):
-        '''Set reinforcement.'''
+        '''Set reinforcement.
+
+        :param index: index of the reinforcement to set.
+        :param reinforcement: reinforcement to set.
+        '''
         self[index]= reinforcement
 
     def getReinforcement(self,index):
-        '''Return reinforcement at index.'''
+        '''Return reinforcement at index.
+
+        :param index: index of the reinforcement to get.
+        '''
         return self[index]
 
     def getBasicAnchorageLength(self,index, concrete):
@@ -363,7 +379,10 @@ class WallSLSResults(WallULSResults):
 class Envelope(object):
     ''' Store internal forces envelope.'''
     def __init__(self, yValues):
-        '''Constructor.'''
+        '''Constructor.
+
+        :param yValues: values of y coordinates.
+        '''
         self.yValues= yValues
         size= len(self.yValues)
         self.positive= [-1.0e23]*size
