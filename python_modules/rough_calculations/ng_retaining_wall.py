@@ -10,16 +10,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import os
+import sys
+import math
 from postprocess.reports import common_formats as fmt
 from postprocess.reports import draw_wall_reinforcement_scheme as draw_schema
 from postprocess import get_reactions
-import math
 import scipy.interpolate
 from materials import typical_materials
 from materials.sections import section_properties
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rc_section
-import os
 from misc_utils import log_messages as lmsg
 import geom
 import xc
@@ -100,46 +101,78 @@ class InternalForces(object):
     def __rmul__(self,f):
         return self*f
     def MdMaxEncastrement(self,footingThickness):
-        '''Bending moment (envelope) at stem base.'''
+        '''Bending moment (envelope) at stem base.
+
+        :param footingThickness: thickness of the footing.
+        '''
         yEncastrement= self.stemHeight-footingThickness/2.0
         return self.MdMax(yEncastrement)
+    
     def VdMaxEncastrement(self,epaisseurEncastrement):
-        '''Shear force (envelope) at stem base.'''
+        '''Shear force (envelope) at stem base.
+
+        :param epaisseurEncastrement: thickness of the stem bottom.
+        '''
         yV= self.stemHeight-epaisseurEncastrement
         return abs(self.vdMaxStem(yV))
+    
     def MdMaxMidStem(self,footingThickness):
-        '''Max. bending moment (envelope) at the middle of the stem.'''
+        '''Max. bending moment (envelope) at the middle of the stem.
+
+        :param footingThickness: thickness of the footing.
+        '''
         yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
         return self.MdMax(yMidStem)
+    
     def VdMaxMidStem(self,footingThickness):
-        '''Max. shear (envelope) at the middle of the stem.'''
+        '''Max. shear (envelope) at the middle of the stem.
+
+        :param footingThickness: thickness of the footing.
+        '''
         yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
         return self.VdMax(yMidStem)
+    
     def MdMinMidStem(self,footingThickness):
-        '''Min. bending moment (envelope) at the middle of the stem.'''
+        '''Min. bending moment (envelope) at the middle of the stem.
+
+        :param footingThickness: thickness of the footing.
+        '''
         yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
         return self.MdMin(yMidStem)
+    
     def VdMinMidStem(self,footingThickness):
-        '''Min. shear (envelope) at the middle of the stem.'''
+        '''Min. shear (envelope) at the middle of the stem.
+
+        :param footingThickness: thickness of the footing.
+        '''
         yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
         return self.VdMin(yMidStem)
-    def VdMax(self, yCoupe):
-        '''Max. shear (envelope) at height yCoupe.'''
-        return abs(self.vdMaxStem(yCoupe))
-    def MdMax(self, yCoupe):
-        '''Max. bending moment (envelope) at height yCoupe.'''
-        return abs(self.mdMaxStem(yCoupe))
-    def VdMin(self, yCoupe):
-        '''Min. shear (envelope) at height yCoupe.'''
-        return abs(self.vdMinStem(yCoupe))
-    def MdMin(self, yCoupe):
-        '''Min bending moment (envelope) at height yCoupe.'''
-        return abs(self.mdMinStem(yCoupe))
+    
+    def VdMax(self, y):
+        '''Max. shear (envelope) at height y.'''
+        return abs(self.vdMaxStem(y))
+    
+    def MdMax(self, y):
+        '''Max. bending moment (envelope) at height y.'''
+        return abs(self.mdMaxStem(y))
+    
+    def VdMin(self, y):
+        '''Min. shear (envelope) at height y.'''
+        return abs(self.vdMinStem(y))
+    
+    def MdMin(self, y):
+        '''Min bending moment (envelope) at height y.'''
+        return abs(self.mdMinStem(y))
+    
     def getYStem(self,hCoupe):
         return self.stemHeight-hCoupe
+    
     def writeGraphic(self,fileName):
         '''Draws a graphic of internal forces (envelopes) in
-           the wall stem.'''
+           the wall stem.
+
+        :param fileName: name of the output file.
+        '''
         z= []
         for yi in self.y:
             z.append(self.stemHeight-yi)
@@ -413,30 +446,30 @@ class StemReinforcement(ReinforcementMap):
             retval= self.wallGeom == other.wallGeom
         return retval
         
-    def getRCSections(self,stemSets):
-        '''Create reinforced concrete sections for the stem.
+    # def getRCSections(self,stemSets):
+    #     '''Create reinforced concrete sections for the stem.
 
-        :param stemSets: sets of elements along the stem.
-        '''
-        numberOfSets= len(stemSets)
-        stemDepthInc= (self.wallGeom.stemTopWidth-self.wallGeom.stemBottomWidth)/numberOfSets
-        stemRCSections= dict()
-        for i in range(0,4):
-            h= self.wallGeom.stemBottomWidth
-            sectName= 'stemRCSect'+str(h)
-            stemRCSections[h]= element_section_map.RCSlabBeamSection(name=sectName,sectionDescr='stem',concrType= self.concrete, reinfSteelType= stemReinforcement.steel,width= self.b, depth= h,elemSet= stemSets[i])
-            if(i==0):
-                positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.extStemBottomIndex])])
-                negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.intStemBottomIndex])])
-            else:
-                positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.extStemIndex])])
-                negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.intStemIndex])])
-            stemRCSections[h].dir1PositvRebarRows= positvRebarRows1
-            stemRCSections[h].dir1NegatvRebarRows= negatvRebarRows1
-            stemRCSections[h].dir2PositvRebarRows= positvRebarRows1
-            stemRCSections[h].dir2NegatvRebarRows= negatvRebarRows1
-            h-= stemDepthInc
-        return stemRCSections
+    #     :param stemSets: sets of elements along the stem.
+    #     '''
+    #     numberOfSets= len(stemSets)
+    #     stemDepthInc= (self.wallGeom.stemTopWidth-self.wallGeom.stemBottomWidth)/numberOfSets
+    #     stemRCSections= dict()
+    #     for i in range(0,4):
+    #         h= self.wallGeom.stemBottomWidth
+    #         sectName= 'stemRCSect'+str(h)
+    #         stemRCSections[h]= element_section_map.RCSlabBeamSection(name=sectName,sectionDescr='stem',concrType= self.concrete, reinfSteelType= stemReinforcement.steel,width= self.b, depth= h,elemSet= stemSets[i])
+    #         if(i==0):
+    #             positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.extStemBottomIndex])])
+    #             negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.intStemBottomIndex])])
+    #         else:
+    #             positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.extStemIndex])])
+    #             negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.intStemIndex])])
+    #         stemRCSections[h].dir1PositvRebarRows= positvRebarRows1
+    #         stemRCSections[h].dir1NegatvRebarRows= negatvRebarRows1
+    #         stemRCSections[h].dir2PositvRebarRows= positvRebarRows1
+    #         stemRCSections[h].dir2NegatvRebarRows= negatvRebarRows1
+    #         h-= stemDepthInc
+    #     return stemRCSections
       
     def getSectionExtStemBottom(self):
         '''Returns RC section for exterior reinforcement at stem bottom.'''
@@ -543,21 +576,21 @@ class FootingReinforcement(ReinforcementMap):
             retval= self.wallGeom == other.wallGeom
         return retval
 
-    def getRCSections(self, footingSet):
-        '''Create reinforced concrete sections for the footing.
+    # def getRCSections(self, footingSet):
+    #     '''Create reinforced concrete sections for the footing.
         
-        :param footingSet: set of the footing elements.
-        '''
-        sectName= 'footingRCSet'
-        footingRCSection= element_section_map.RCSlabBeamSection(name=sectName,sectionDescr='stem',concrType= self.concrete, reinfSteelType= stemReinforcement.steel,width= self.b, depth= h,elemSet= footingSet)
+    #     :param footingSet: set of the footing elements.
+    #     '''
+    #     sectName= 'footingRCSet'
+    #     footingRCSection= element_section_map.RCSlabBeamSection(name=sectName,sectionDescr='stem',concrType= self.concrete, reinfSteelType= stemReinforcement.steel,width= self.b, depth= h,elemSet= footingSet)
         
-        positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.bottomFootingIndex])])
-        negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.topFootingIndex])])
-        footingRCSection.dir1PositvRebarRows= positvRebarRows1
-        footingRCSection.dir1NegatvRebarRows= negatvRebarRows1
-        footingRCSection.dir2PositvRebarRows= positvRebarRows1
-        footingRCSection.dir2NegatvRebarRows= negatvRebarRows1
-        return footingRCSection
+    #     positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.bottomFootingIndex])])
+    #     negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.topFootingIndex])])
+    #     footingRCSection.dir1PositvRebarRows= positvRebarRows1
+    #     footingRCSection.dir1NegatvRebarRows= negatvRebarRows1
+    #     footingRCSection.dir2PositvRebarRows= positvRebarRows1
+    #     footingRCSection.dir2NegatvRebarRows= negatvRebarRows1
+    #     return footingRCSection
       
     def getSectionTopFooting(self):
         '''Returns RC section for reinforcement on footing top.'''
@@ -662,14 +695,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             self.stemHeight= wallInternalForces.stemHeight
         self.internalForcesSLS= wallInternalForces
 
-    def writeDef(self,pth,outputFile, convertToEPS= False):
+    def writeDef(self,pth, outputFile, convertToEPS= False):
         '''Write wall definition in LaTeX format.'''
-        pathFigureEPS= pth+self.name+".eps"
-        pathFigurePNG= pth+self.name+".png"
-        #self.internalForcesULS.writeGraphic(pathFigureEPS)
-        self.internalForcesULS.writeGraphic(pathFigurePNG)
+        figurePath= pth+self.name
+        figurePathPNG= figurePath+".png"
+        self.internalForcesULS.writeGraphic(figurePathPNG)
         if(convertToEPS):
-            os.system("convert "+pathFigurePNG+" "+pathFigureEPS)
+            figurePathEPS= figurePath+".eps"
+            os.system("convert "+figurePathPNG+" "+figurePathEPS)
         outputFile.write("\\begin{table}\n")
         outputFile.write("\\begin{center}\n")
         outputFile.write("\\begin{tabular}[H]{|l|}\n")
@@ -680,7 +713,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\begin{minipage}{85mm}\n")
         outputFile.write("\\vspace{2mm}\n")
         outputFile.write("\\begin{center}\n")
-        outputFile.write("\\includegraphics[width=80mm]{"+self.name+"}\n")
+        outputFile.write("\\includegraphics[width=80mm]{"+figurePath+"}\n")
         outputFile.write("\\end{center}\n")
         outputFile.write("\\vspace{1pt}\n")
         outputFile.write("\\end{minipage} & \n")
@@ -744,13 +777,18 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\caption{Wall "+ self.title +" reinforcement scheme} \\label{fg_"+self.name+"}\n")
         outputFile.write("\\end{figure}\n")
 
-    def createRCSections(self,stemSets):
-        '''Create reinforced concrete sections.
+    # def createRCSections(self,stemSets):
+    #     '''Create reinforced concrete sections.
 
-        :param stemSets: sets of elements along the stem.
-        '''
-        stemRCSections= self.stemReinforcement.getRCSections(stemSets)
-        footingRCSection= self.footingReinforcement.getRCSections(footingSet)
+    #     :param stemSets: sets of elements along the stem.
+    #     '''
+    #     stemRCSections= self.stemReinforcement.getRCSections(stemSets)
+    #     footingRCSection= self.footingReinforcement.getRCSections(footingSet)
+    #     if(__debug__):
+    #         if(not stemRCSections):
+    #             AssertionError('Can\'t stem footing sections.')
+    #         if(not footingRCSection):
+    #             AssertionError('Can\'t create footing section.')
         
     def createFEProblem(self, title):
         '''Create finite element problem.'''
@@ -768,11 +806,17 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         wallMatData= typical_materials.MaterialData(name=self.name+'Concrete',E=self.concrete.getEcm(),nu=0.2,rho=2500)
         foundationSection= section_properties.RectangularSection(self.name+"FoundationSection",self.b,self.footingThickness)
         foundationMaterial= foundationSection.defElasticShearSection2d(preprocessor,wallMatData) #Foundation elements material.
+        if(__debug__):
+            if(not foundationMaterial):
+                AssertionError('Can\'t create section for foundation.')
         elementSize= 0.2
         seedElemHandler= preprocessor.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= foundationSection.name
         seedElemHandler.defaultTransformation= transformationName
         seedElem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+        if(__debug__):
+            if(not seedElem):
+                AssertionError('Can\'t create seed element.')
         self.wallSet= preprocessor.getSets.defSet("wallSet")
         self.heelSet= preprocessor.getSets.defSet("heelSet")
         self.toeSet= preprocessor.getSets.defSet("toeSet")
@@ -792,6 +836,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
         stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
         stemMaterial= stemSection.defElasticShearSection2d(preprocessor,wallMatData) #Stem elements material.
+        if(__debug__):
+            if(not stemMaterial):
+                AssertionError('Can\'t create section for stem.')
         self.stemSet= preprocessor.getSets.defSet("stemSet")
         for lineName in ['stem']:
             l= self.wireframeModelLines[lineName]
@@ -963,7 +1010,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         b= self.getFootingWidth()
         if(e>0.0): # Overturning not possible.
             e= -.001*b
-        bReduced= 2*(b/2.0+e)
         return b/(3*(-e)*gammaR)
 
     def getSlidingSafetyFactor(self,R,gammaR,foundationSoilModel):
@@ -992,11 +1038,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         ''' Return the bearing pressure.
 
          :param R: force on the bearing plane.
-         :param foundationSoilModel: soil model for the Brinch-Hansen analysis.
-         :param toeFillDepth: (float) depht of the soil filling over the toe.
-         :param q: (float) uniform load over the filling.
         '''
-        Beff= self.b
         e= self.getEccentricity(R) #eccentricity
         b= self.getFootingWidth()
         bReduced= 2*(b/2.0+e)
@@ -1004,7 +1046,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         sigma= F.y/bReduced
         return sigma
       
-    def getBearingPressureSafetyFactor(self,R,foundationSoilModel,toeFillDepth,q= 0.0):
+    def getBearingPressureSafetyFactor(self, R, foundationSoilModel, toeFillDepth, q= 0.0):
         ''' Return the factor of safety against bearing capacity of the soil.
 
          :param R: force on the bearing plane.
@@ -1013,7 +1055,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
          :param q: (float) uniform load over the filling.
         '''
         D= self.getFoundationDepth(toeFillDepth)
-        Beff= self.b
         e= self.getEccentricity(R) #eccentricity
         b= self.getFootingWidth()
         bReduced= 2*(b/2.0+e)
@@ -1081,6 +1122,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         #Solution
         solution= predefined_solutions.SimpleStaticLinear(self.feProblem)
         result= solution.solve()
+        if(result!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; could not solve for combination: '+str(nmbComb))
         reactions= self.getReactions()
         #preprocessor.getLoadHandler.removeFromDomain(nmbComb)
         return reactions
@@ -1116,6 +1161,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         envelopeVdHeel= Envelope([0.0])
         for comb in combinations:
             reactions= self.resultComb(comb)
+            if(__debug__):
+                if(not reactions):
+                    AssertionError('Can\'t obtain the reactions.')
             envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
             rot= self.getFoundationRotation()
             if(rot<rotation):
@@ -1137,6 +1185,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         envelopeVdHeel= Envelope([0.0])
         for comb in combinations:
             reactions= self.resultComb(comb)
+            if(__debug__):
+                if(not reactions):
+                    AssertionError('Can\'t obtain the reactions.')
             envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
         internalForces= InternalForces(y,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
         self.uls_results= WallULSResults(internalForces)
