@@ -495,7 +495,10 @@ class IShape(SteelShape):
             reg= regions.newQuadRegion(matModelName)
             reg.pMin= r[0]
             reg.pMax= r[1]
-            unusedNumberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
+            numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
+            if(__debug__):
+                if(not numberOfTiles):
+                    AssertionError('Can\'t set tile size.')        
         return self.gm
 
     def getFiberSection3d(self,preprocessor,matModelName):
@@ -504,13 +507,19 @@ class IShape(SteelShape):
         :param preprocessor: preprocessor of the finite element problem.
         :param matModelName: name for the new material.
         '''
-        unusedReg= self.discretization(preprocessor,matModelName)
+        reg= self.discretization(preprocessor,matModelName)
+        if(__debug__):
+            if(reg is None):
+                AssertionError('Can\'t create discretization.')        
         self.fiberSection3dName= 'fs3d'+self.get('nmb')
         self.fiberSection3d= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d",self.fiberSection3dName)
         fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
         fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
         self.fiberSection3d.setupFibers()
-        unusedFibers= self.fiberSection3d.getFibers()
+        fibers= self.fiberSection3d.getFibers()
+        if(__debug__):
+            if(fibers is None):
+                AssertionError('Can\'t get the fibers.')        
         return self.fiberSection3d
 
 
