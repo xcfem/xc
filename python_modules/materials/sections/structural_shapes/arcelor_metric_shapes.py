@@ -464,7 +464,6 @@ def getSteelShapeDepthRange(namePattern:str, minDepth:float, maxDepth):
                 if(regex.match(shapeKey)):
                     shape= shapeDict[shapeKey]
                     depth= shape['h']
-                    tmp= abs(depth-shape['h'])
                     if((depth>=minDepth) and (depth<=maxDepth)):
                         retval.append(shape)
     return retval

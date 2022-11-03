@@ -9,14 +9,15 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
+import math
+import geom
 import scipy.interpolate
 from materials.sia262 import SIA262_materials
 from materials.sections import rebar_family as rf
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
 from rough_calculations import ng_simple_bending_reinforcement
-import math
-import geom
 from materials.sections.fiber_section import fiber_sets
 from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
@@ -185,13 +186,13 @@ def VuNoShearRebarsSIA262(concrete,Nd,Md,Mu,b,d):
     taucd= concrete.taucd()
     return kd*taucd*b*d
 
-def VuShearRebars90SIA262(Asw,s,steel,z,alpha=math.radians(30)):
+def VuShearRebars90SIA262(Asw,s,steel,z,alpha= math.radians(30)):
     '''Shear capacity of shear reinforcement.'''  
     cot_alpha= 1.0/math.tan(alpha)
     retval= Asw/s*z*steel.fyd()*cot_alpha
     return retval
 
-def VuWithShearRebarsSIA262(concrete,steel,Nd,Md,Mu,b,d,Asw,s,z,alpha=math.radians(30)):
+def VuWithShearRebarsSIA262(concrete,steel,Nd,Md,Mu,b,d,Asw,s,z,alpha= math.radians(30)):
     '''Section shear capacity with shear reinforcement.'''  
     Vcu= VuNoShearRebarsSIA262(concrete,Nd,Md,Mu,b,d)
     Vsu= VuShearRebars90SIA262(Asw,s,steel,z,alpha)
@@ -228,6 +229,7 @@ class ShearController(lsc.ShearControllerBase):
            :param AsTrac: area of tensioned reinforcement.
         '''
         return VuNoShearRebars(self.concrete, self.steel,Nd,Md,AsTrac,self.width,self.effectiveDepth)
+    
     def calcVcu(self, Nd, Md, Mu):
         ''' Computes the shear strength of the section without 
             shear reinforcement.
@@ -267,8 +269,8 @@ class ShearController(lsc.ShearControllerBase):
             section= scc.getProp('sectionData')
             self.setSection(section)
             shReinf= section.getShearReinfY()
-            AsTrsv= shReinf.getAs()
-            alpha= shReinf.angAlphaShReinf
+            #AsTrsv= shReinf.getAs()
+            #alpha= shReinf.angAlphaShReinf
             theta= shReinf.angThetaConcrStruts
 
             VuTmp= section.getRoughVcuEstimation() 
@@ -331,7 +333,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
           scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,concreteTag,self.concreteFibersSetName,reinfMatTag,self.rebarFibersSetName))
         rcSets= scc.getProp("rcSets")
         concrFibers= rcSets.concrFibers.fSet
-        reinfFibers= rcSets.reinfFibers.fSet
+        #reinfFibers= rcSets.reinfFibers.fSet
         tensionedReinforcement= rcSets.tensionFibers
 
         self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
@@ -357,10 +359,10 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
         lmsg.warning("REWRITE NEEDED. See equivalent function in  CrackControlSIA262PlanB.")
         for e in elements:
           scc= e.getSection()
-          idSection= e.getProp("idSection")
+          # idSection= e.getProp("idSection")
           sigma_s= self.calcRebarStress(scc)
           if(sigma_s>e.getProp("sg_sCP")):
-            e.setProp("sg_sCP",sigma_s) # Caso pésimo
+            e.setProp("sg_sCP",sigma_s) # Worst case
             e.setProp("HIPCP",nmbComb)
             Ntmp= scc.getStressResultantComponent("N")
             MyTmp= scc.getStressResultantComponent("My")
@@ -395,7 +397,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
             stressCalc.solve(Ntmp, MyTmp)
             sigma_sPos= stressCalc.sgs
             sigma_sNeg= stressCalc.sgsp
-            sigma_c= stressCalc.sgc
+            # sigma_c= stressCalc.sgc
             #print("sgc0= ", stressCalc.sgc0)
             # sigma_s= 0.0
             # eNC= datosScc.depth/3
@@ -418,7 +420,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
             if(e.hasProp(self.limitStateLabel)):
                 elementControlVars= e.getProp(self.limitStateLabel)
             else:
-                elementControlVars= self.ControlVars(idSection,cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos),CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg))
+                elementControlVars= self.ControlVars(idSection,cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos),cv.CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg))
             if(CFPos>elementControlVars.crackControlVarsPos.CF):
                 elementControlVars.crackControlVarsPos= cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos)
             if(CFNeg>elementControlVars.crackControlVarsNeg.CF):
@@ -471,14 +473,23 @@ def estimateSteelStress(sccData, N, M, As, y):
     return retval
 
 def estimateSteelStressPos(sccData, N, M):
-    retval= 0.0
-    eNC= sccData.depth/3.0
+    ''' Estimate positive stress on the steel.
+
+    :param sccData: section geometry data.
+    :param N: axial load.
+    :param M: bending moment.
+    '''
     As= sccData.getAsPos()
     y = sccData.getYAsPos()
     return estimateSteelStress(sccData, N, M, As, y)
 
 def estimateSteelStressNeg(sccData, N, M):
-    retval= 0.0
+    ''' Estimate negative stress on the steel.
+
+    :param sccData: section geometry data.
+    :param N: axial load.
+    :param M: bending moment.
+    '''
     As= sccData.getAsNeg()
     y = sccData.getYAsNeg()
     return estimateSteelStress(sccData, N, M, As, y)
@@ -507,10 +518,10 @@ def estimateSigmaCPlanB(sccData, N, M):
     return 2.0*sgc #Ver Jiménez Montoya 12.3 (page 244)
 
 def getConcreteLimitStress(sccData,kc, controlVars):
-    '''4.3.8.3.1 SIA 262 2013'''
+    '''4.3.8.3.1 SIA 262 2013.'''
     fcd= sccData.fiberSectionParameters.concrType.fcd()
     concreteStresses= controlVars.getConcreteMaxMinStresses()
-    sg_max= concreteStresses[0]
+    #sg_max= concreteStresses[0]
     sg_min= concreteStresses[1]
     return min(-0.5*kc*fcd+0.45*abs(sg_min),-0.9*kc*fcd)
 
@@ -531,9 +542,8 @@ def getShearLimit(sccData,controlVars,vu):
     else:
         retval= 0.5*vu-abs(vd_min)
     if(retval<0):
-        className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; negative limit:'+str(retval)+'.')
+        lmsg.warning(methodName+'; negative limit:'+str(retval)+'.')
     return retval
 
 def getShearCF(controlVars):
@@ -583,7 +593,7 @@ class FatigueController(lsc.LimitStateControllerBase):
             My= scc.getStressResultantComponent("My")
             Mz= scc.getStressResultantComponent("Mz")
             Vy= scc.getStressResultantComponent("Vy")
-            Vz= scc.getStressResultantComponent("Vz")
+            #Vz= scc.getStressResultantComponent("Vz")
             datosScc= scc.getProp('sectionData')
             stressCalc= datosScc.getStressCalculator()
             stressCalc.solve(N, My)
@@ -693,10 +703,10 @@ class SIARebarFamily(rf.RebarFamily):
 class SIAFamNBars(SIARebarFamily):
     n= 2 #Number of bars.
     def __init__(self,steel,n,diam,spacing,concreteCover):
-        RebarFamily.__init__(self,steel,diam,spacing,concreteCover)
+        super(SIAFamNBars, self).__init__(self,steel,diam,spacing,concreteCover)
         self.n= int(n)
     def __repr__(self):
-        return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+        return str(self.n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
     def writeDef(self,outputFile,concrete):
         outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
         reinfDevelopment= self.getBasicAnchorageLength(concrete)
@@ -716,7 +726,9 @@ class SIADoubleRebarFamily(rf.DoubleRebarFamily):
             of SIA 262:2014.'''
         retval= self.f1.crackControlRequirement
         if(retval!=self.f2.crackControlRequirement):
-          cmsg.error("Different specifications for crack control.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; different specifications for crack control.')
         return retval
     
     def getVR(self,concrete,Nd,Md,b,thickness):
