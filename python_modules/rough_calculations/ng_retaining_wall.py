@@ -1134,6 +1134,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         ''' Perform stability limit state analysis.
 
         :param combinations: load combinations to use in the analysis.
+        :param foundationSoilModel: model of the foundation soil.
+        :param sg_adm: admissible stress of the terrain (optional).
         '''
         self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, sg_adm)
         return self.stability_results
