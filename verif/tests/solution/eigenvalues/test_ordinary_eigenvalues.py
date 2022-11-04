@@ -71,16 +71,18 @@ ratio2= abs(eig2-eig2Ref)/eig2Ref
 refValue= math.sqrt(2)/2.0
 
 refVector1= geom.Vector2d(refValue, -refValue)
-refVector2= geom.Vector2d(refValue, refValue)
 
+# Mode 1
 v1= n1.getEigenvector(1)[2] # (mode)[component]
 v2= n2.getEigenvector(1)[2] # (mode)[component]
 vector1= geom.Vector2d(v1, v2)
 ratio3= min((refVector1-vector1).getModulus(),(refVector1+vector1).getModulus())/refValue # sign doesn't count
 
-v1= n2.getEigenvector(1)[2] # (mode)[component]
+#Mode 2
+v1= n2.getEigenvector(2)[2] # (mode)[component]
 v2= n2.getEigenvector(2)[2] # (mode)[component]
 vector2= geom.Vector2d(v1, v2)
+refVector2= geom.Vector2d(refValue, refValue)
 ratio4= min((refVector2-vector2).getModulus(),(refVector2+vector2).getModulus())/refValue # sign doesn't count
 
 '''
@@ -92,7 +94,7 @@ print('Reference eigenvector 1: ', refVector1)
 print('ratio3= ', ratio3)
 print('Eigenvector 2: ', vector2)
 print('Reference eigenvector 2: ', refVector2)
-print('ratio3= ', ratio3)
+print('ratio4= ', ratio4)
 '''
 
 import os
