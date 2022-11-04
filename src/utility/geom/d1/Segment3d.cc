@@ -394,7 +394,11 @@ boost::python::list Segment3d::DividePy(int num_partes) const
 //! @brief Return the points that divide the segments in the proportions
 //! being passed as parameter.
 //!
-//! @param proportions: list of proportions.
+//! @param proportions: list of float numbers that contain
+//! the unitary length of the desired intervals (i.e. [1] for one
+//! interval only with the full length of the segment, [0.5,0.5] for
+//! two intervals with half the length of the segment, [0.25, 75] for
+//! two intervals with a quarter and three quarters of the segment...
 VectorPos3d Segment3d::Divide(const std::vector<double> &proportions) const
   {
     const size_t sz= proportions.size();
