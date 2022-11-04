@@ -182,7 +182,7 @@ wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
 
 
-err= math.sqrt((sr.Foverturning-5.66890156886)**2+(sr.Fsliding-1.76751713157)**2+(sr.Fbearing-0.520148768619)**2+(sr.FadmPressure-0.906533104128)**2)
+err= math.sqrt((sr.Foverturning-5.66890156886)**2+(sr.Fsliding-1.8485532242465315)**2+(sr.Fbearing-0.5574461243200024)**2+(sr.FadmPressure-0.906533104128)**2)
 
 '''
 print("Overturning: ",sr.Foverturning)

@@ -7,18 +7,20 @@ References:
 [2] Brinch Hansen. A general formula for bearing capacity. The Danish Geotechnical Institute. Bulletin 11. Copenhagen 1961.
 [3] Guía de cimentaciones en obras de carretera. Ministerio de Fomento (spain). 2002 (https://books.google.ch/books?id=a0eoygAACAAJ).
 '''
-
 from __future__ import division
-import math
-from geotechnics import frictional_soil as fs
-from misc_utils import log_messages as lmsg
-from scipy.optimize import fminbound
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import sys
+import math
+from geotechnics import frictional_soil as fs
+from misc_utils import log_messages as lmsg
+from scipy.optimize import fminbound
+
 
 class FrictionalCohesiveSoil(fs.FrictionalSoil):
     '''Soil with friction and cohesion
@@ -470,7 +472,7 @@ class StratifiedSoil(object):
     (https://books.google.ch/books?id=a0eoygAACAAJ)
     2009
 
-    :ivar hi:    (float list) layer thicknesses.
+    :ivar hi: (float list) layer thicknesses.
     :ivar rhoi: (float list) layer densities.
     :ivar phii: (float list) layer internal friction angle.
     :ivar ci: (float list) layer cohesions.
@@ -478,28 +480,35 @@ class StratifiedSoil(object):
     def __init__(self,hi,rhoi,phii,ci):
         '''Constructor.
 
-            Args:
-                :hi:    (float list) layer thicknesses.
-                :rhoi: (float list) layer densities.
-                :phii: (float list) layer internal friction angle.
-                :ci: (float list) layer cohesions.
+        :param hi: (float list) layer thicknesses.
+        :param rhoi: (float list) layer densities.
+        :param phii: (float list) layer internal friction angle.
+        :param ci: (float list) layer cohesions.
         '''
         self.hi= hi
         self.rhoi= rhoi
         self.phii= phii
         self.ci= ci
 
-    def getAffectedHeights(self,affectedDepth):
-        '''Returns the layer at depths less than H.'''
-        th= 0.0
+    def getAffectedHeights(self, affectedDepth):
+        '''Returns the layers at depths less than affectedDepth.
+
+        :param affectedDepth: depth affected by pressures on foundation soil.
+        '''
+        currentDepth= 0.0
         retval= list()
         for h in self.hi:
-            if((th+h)<affectedDepth):
+            currentDepth+= h
+            if(currentDepth<affectedDepth):
                 retval.append(h)
             else:
-                retval.append(affectedDepth-th)
+                retval.append(affectedDepth-(currentDepth-h)) # Previous depth.
+                currentDepth= affectedDepth
                 break
-            th+= h
+        if(currentDepth<affectedDepth):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; soil layers are not deep enough '+str(currentDepth) + ' < '+str(affectedDepth))
         return retval
     
     def getEquivalentRho(self,affectedDepth):
@@ -508,9 +517,9 @@ class StratifiedSoil(object):
         sz= len(affectedHeights)
         retval= 0.0
         for i in range(0,sz):
-          h= affectedHeights[i]
-          rho= self.rhoi[i]
-          retval+= h*rho
+            h= affectedHeights[i]
+            rho= self.rhoi[i]
+            retval+= h*rho
         retval/= affectedDepth
         return retval
     
@@ -527,20 +536,20 @@ class StratifiedSoil(object):
         return retval
     
     def getEquivalentPhi(self,affectedDepth):
-        '''Return equivalent cohesion.'''
+        '''Return equivalent internal friction angle.'''
         affectedHeights= self.getAffectedHeights(affectedDepth)
         sz= len(affectedHeights)
         retval= 0.0
         for i in range(0,sz):
-          h= affectedHeights[i]
-          phi= self.phii[i]
-          retval+= h*math.log(math.tan(phi))
+            h= affectedHeights[i]
+            phi= self.phii[i]
+            retval+= h*math.log(math.tan(phi))
         retval/= affectedDepth
         retval= math.exp(retval)
         retval= math.atan(retval)
         return retval
 
-    def computeAffectedDepth(self,Beff):
+    def computeAffectedDepth(self, Beff):
         '''Computes affected depth.
 
         :Beff: (float) width of the effective foundation area
@@ -559,14 +568,13 @@ class StratifiedSoil(object):
     def getEquivalentSoil(self,Beff,gMPhi,gMc):
         '''Computes affected depth.
 
-            Args:
-                :Beff: (float) width of the effective foundation area
+        :param Beff: (float) width of the effective foundation area
                       (see figure 12 in page 44 of reference[2]).
-                :gammaMPhi: (float) partial reduction factor for internal 
-                            friction angle of the soil.
-                :gammaMc: (float) partial reduction factor for soil cohesion.
+        :param gammaMPhi: (float) partial reduction factor for internal 
+                          friction angle of the soil.
+        :param gammaMc: (float) partial reduction factor for soil cohesion.
         '''
-        H= self.computeAffectedDepth(1.5)
+        H= self.computeAffectedDepth(Beff)
         equivalentRho= self.getEquivalentRho(H)
         equivalentC= self.getEquivalentC(H)
         equivalentPhi= self.getEquivalentPhi(H)
