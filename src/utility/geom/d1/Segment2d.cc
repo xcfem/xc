@@ -31,6 +31,7 @@
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include "utility/geom/d1/Polyline2d.h"
+#include "utility/kernel/python_utils.h"
 
 const double quiet_nan= std::numeric_limits<double>::quiet_NaN();
 
@@ -504,6 +505,49 @@ VectorPos2d Segment2d::Divide(int num_partes) const
 boost::python::list Segment2d::DividePy(int num_partes) const
   {
     VectorPos2d tmp= Divide(num_partes);
+    boost::python::list retval;
+    for(VectorPos2d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the points that divide the segments in the proportions
+//! being passed as parameter.
+//!
+//! @param proportions: list of proportions.
+VectorPos2d Segment2d::Divide(const std::vector<double> &proportions) const
+  {
+    const size_t sz= proportions.size();
+    const size_t numPoints= sz+1;
+    VectorPos2d retval(numPoints);
+    double lambda= 0.0;
+    if(sz>1)
+      {
+        for(size_t i= 0; i<numPoints; i++)
+	  {
+	    retval[i]= PtoParametricas(lambda);
+	    lambda+= proportions[i];
+	  }  
+      }
+    else if(sz>0)
+      {
+	retval[0]= getFromPoint();
+	retval[1]= getToPoint();
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " argument must not be empty." << std::endl;
+    return retval;
+  }
+
+//! @brief Return a Python list containing the points that results
+//! from the segment division.
+//!
+//! @param num_partes: number of segments.
+boost::python::list Segment2d::DividePy(const boost::python::list &proportions) const
+  {
+    std::vector<double> v_double= vector_double_from_py_list(proportions);
+    VectorPos2d tmp= Divide(v_double);
     boost::python::list retval;
     for(VectorPos2d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
       retval.append(*i);

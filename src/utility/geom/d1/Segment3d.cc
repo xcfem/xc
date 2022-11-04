@@ -32,6 +32,7 @@
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include "utility/geom/d1/Polyline3d.h"
+#include "utility/kernel/python_utils.h"
 
 //! @brief Constructor.
 Segment3d::Segment3d(void): Linear3d(),cgseg(CGPoint_3(0,0,0),CGPoint_3(1,0,0)) {}
@@ -384,6 +385,49 @@ VectorPos3d Segment3d::Divide(int num_partes) const
 boost::python::list Segment3d::DividePy(int num_partes) const
   {
     VectorPos3d tmp= Divide(num_partes);
+    boost::python::list retval;
+    for(VectorPos3d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the points that divide the segments in the proportions
+//! being passed as parameter.
+//!
+//! @param proportions: list of proportions.
+VectorPos3d Segment3d::Divide(const std::vector<double> &proportions) const
+  {
+    const size_t sz= proportions.size();
+    const size_t numPoints= sz+1;
+    VectorPos3d retval(numPoints);
+    double lambda= 0.0;
+    if(sz>1)
+      {
+        for(size_t i= 0; i<numPoints; i++)
+	  {
+	    retval[i]= PtoParametricas(lambda);
+	    lambda+= proportions[i];
+	  }  
+      }
+    else if(sz>0)
+      {
+	retval[0]= getFromPoint();
+	retval[1]= getToPoint();
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " argument must not be empty." << std::endl;
+    return retval;
+  }
+
+//! @brief Return a Python list containing the points that results
+//! from the segment division.
+//!
+//! @param num_partes: number of segments.
+boost::python::list Segment3d::DividePy(const boost::python::list &proportions) const
+  {
+    std::vector<double> v_double= vector_double_from_py_list(proportions);
+    VectorPos3d tmp= Divide(v_double);
     boost::python::list retval;
     for(VectorPos3d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
       retval.append(*i);
