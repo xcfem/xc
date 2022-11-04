@@ -49,11 +49,11 @@ backFillDelta=math.radians(18.3)
 frontFillDepth= 0.25
 zGroundBackFill=0 #Back fill
 
-# Foundation stratified soil properties (not used)
-hi=[1]#,3,5,8,100]  #cuaternario (QG), QT3L, QT3G,formación  Dueñas
-rhoi= [rhoS]#,1910,1690,2100,1950]
-phii= [math.radians(phiS)]#,math.radians(25),math.radians(32),math.radians(35),math.radians(24)]
-ci=[0e3]#,2.5e3,5e3,30e3,50e3]
+# Foundation stratified soil properties
+hi=[100]
+rhoi= [rhoS]
+phii= [math.radians(phiS)]
+ci=[0e3]
 
 
 #Loads
