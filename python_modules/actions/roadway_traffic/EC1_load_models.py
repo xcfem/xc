@@ -22,10 +22,10 @@ EC1_notional_lane2=lmb.LoadModel(wLoads= tandem200LM1.getWheelLoads())
 EC1_notional_lane3=lmb.LoadModel(wLoads= tandem100LM1.getWheelLoads())
 
 #Carro EC1 concomitante con frenado (0.75*Q)
-EC1_notional_lane1_fren=lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFactor= 0.75))
-EC1_notional_lane2_fren=lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
+EC1_notional_lane1_brake=lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFactor= 0.75))
+EC1_notional_lane2_brake=lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
 
-EC1_notional_lane3_fren=lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
+EC1_notional_lane3_brake=lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
 
 def getAdditionalAmplificationFactor(D:float):
     ''' Return the additional amplification factor according to the expression

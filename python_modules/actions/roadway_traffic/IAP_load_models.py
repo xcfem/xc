@@ -27,10 +27,10 @@ IAP_notional_lane2=lmb.LoadModel(wLoads= tandem200LM1.getWheelLoads())
 IAP_notional_lane3=lmb.LoadModel(wLoads= tandem100LM1.getWheelLoads())
 
 #Carro IAP concomitante con frenado (0.75*Q)
-IAP_notional_lane1_fren=lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFactor= 0.75))
-IAP_notional_lane2_fren=lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
+IAP_notional_lane1_brake=lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFactor= 0.75))
+IAP_notional_lane2_brake=lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
 
-IAP_notional_lane3_fren=lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
+IAP_notional_lane3_brake=lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
 
 def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1.0,vQbraking=None,virtLane2Set=None,xyCentPL2=None,virtLane3Set=None,xyCentPL3=None,restDrivewaySet=None,sidewalkSet=None):
     '''Return a traffic load case according to IAP.
@@ -59,7 +59,7 @@ def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1
     preprocessor=deckSet.getPreprocessor
     if vQbraking:
         qunifVL1,qunifVL2,qunifVL3,qunifRest,qunifSidewalk=[0.4*9e3]+4*[0.4*2.5e3] #uniform load on virtual lanes, rest of driveway and sidewalks when braking forceis considered
-        QpointVL1,QpointVL2,QpointVL3=[IAP_notional_lane1_fren,IAP_notional_lane2_fren,IAP_notional_lane3_fren]
+        QpointVL1,QpointVL2,QpointVL3=[IAP_notional_lane1_brake,IAP_notional_lane2_brake,IAP_notional_lane3_brake]
     else:
         qunifVL1,qunifVL2,qunifVL3,qunifRest,qunifSidewalk=[9e3]+4*[2.5e3]    
         QpointVL1,QpointVL2,QpointVL3=[IAP_notional_lane1,IAP_notional_lane2,IAP_notional_lane3]
