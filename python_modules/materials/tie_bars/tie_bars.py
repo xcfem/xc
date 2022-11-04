@@ -163,14 +163,15 @@ class TieBar(object):
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             
     def checkUniaxialBendingForElement(self, elem, nmbComb):
-        '''Called in every commit to check uniaxial bending criterion (bars in 2D problems).
+        '''Called in every commit to check uniaxial bending 
+           criterion (bars in 2D problems).
 
         :param elem: finite element to check.
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        N1= 0.0; M1= 0.0; V1= 0.0
-        N2= 0.0; M2= 0.0; V2= 0.0
+        N1= 0.0
+        N2= 0.0
         axialForces= elem.getValuesAtNodes('N', False)
         if(len(axialForces)>1): # 'N' found.
             N1= axialForces[0]

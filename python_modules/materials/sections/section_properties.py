@@ -361,7 +361,7 @@ class SectionProperties(object):
                 rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A,E= csp.E, I= csp.I, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A,E= csp.E, I= I, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

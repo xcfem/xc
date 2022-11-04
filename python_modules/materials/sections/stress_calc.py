@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
+import sys
 import math
 from misc_utils import log_messages as lmsg
 
@@ -87,7 +88,7 @@ class StressCalc(object):
         retval= 0.0
         sg= self.sgc-self.sgc0
         if(self.xx>=self.h):
-            retval= -(1/2.0*self.h*sg*self.b)*h/6.0
+            retval= -(1/2.0*self.h*sg*self.b)*self.h/6.0
         elif(self.xx>0.0):
             y= math.copysign(self.h/2.0-self.xx/3.0,self.M)
             retval= -self.getNc()*y
@@ -168,8 +169,8 @@ class StressCalc(object):
 
 
     def residX(self,x):
-        ds= self.h-r
-        dsp= self.h-rp
+        ds= self.h-self.r
+        #dsp= self.h-rp
         self.sgc= 2*self.Ec*x*self.N/(self.b*self.Ec*x**2+(2*self.Asp-2*self.As)*self.Es*x-2*self.Asp*self.Es*self.rp+2*self.As*ds*self.Es)
         Nc= 1/2.0*self.sgc*x*self.b
         Mc= Nc*(self.h/2.0-x/3.0)
@@ -270,17 +271,17 @@ class StressCalc(object):
           #self.verif()
 
     def verif(self):
-        NR= s.resistingN()
+        NR= self.resistingN()
         errN= abs(self.N-NR)
         pc= errN/max(abs(self.N),1)
         if(pc>0.05):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; error N= '+str(N)+' NR= '+str(NR)+'errN= '+str(errN)+'('+str(pc*100)+'%)')
-        MR= s.resistingM()
+            lmsg.error(className+'.'+methodName+'; error N= '+str(self.N)+' NR= '+str(NR)+'errN= '+str(errN)+'('+str(pc*100)+'%)')
+        MR= self.resistingM()
         errM= abs(self.M-MR)
         pc= errM/max(abs(self.M),1)
         if(pc>0.05):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; error M= '+str(M)+' MR= '+str(MR)+'errM= '+str(errM)+'('+str(pc*100)+'%)')
+            lmsg.error(className+'.'+methodName+'; error M= '+str(self.M)+' MR= '+str(MR)+'errM= '+str(errM)+'('+str(pc*100)+'%)')

@@ -26,15 +26,64 @@ class WheelLoad(object):
        self.load= ld
        self.lx=lx
        self.ly=ly
+       
+class TandemLoad(object):
+    ''' Tandem load.
+
+    :ivar axleLoad: axle load.
+    :ivar xSpacing: distance between wheels of the same axle.
+    :ivar ySpacing: tandem axle spacing.
+    :ivar lx: width of the contact surface of the wheel.
+    :ivar ly: length of the contact surface of the wheel.
+    '''
+    def __init__(self, axleLoad, xSpacing= 2.0, ySpacing= 1.2, lx= 0.4, ly= 0.4):
+        ''' Constructor.
+
+        :param axleLoad: axle load.
+        :param xSpacing: distance between wheels of the same axle.
+        :param ySpacing: tandem axle spacing.
+        :param lx: width of the contact surface of the wheel.
+        :param ly: length of the contact surface of the wheel.
+        '''
+        self.axleLoad= axleLoad
+        self.xSpacing= xSpacing
+        self.ySpacing= ySpacing
+        self.lx= lx
+        self.ly= ly
+
+    def getWheelPositions(self):
+        ''' Return a list with the positions of the wheels.'''
+        dX= self.xSpacing/2.0
+        dY= self.ySpacing/2.0
+        return [geom.Pos2d(dX,-dY),geom.Pos2d(-dX,-dY),geom.Pos2d(dX,dY),geom.Pos2d(-dX,dY)]
+        
+    def getWheelLoads(self, loadFactor= 1.0):
+        ''' Return the loads of the wheels of the tandem along with its 
+            positions.
+
+        :param loadFactor: factor to apply to the loads.
+        '''
+        positions= self.getWheelPositions()
+        wheelLoad= self.axleLoad/2.0*loadFactor
+        retval= list()
+        for p in positions:
+            wl= WheelLoad(pos= p,ld=wheelLoad,lx=self.lx,ly=self.ly)
+            retval.append(wl)
+        return retval
 
 class LoadModel(object):
     ''' Roadway traffic load model
 
-      :ivar wheelLoads: position and loads of each wheel
-      :ivar vehicleBoundary: polygon without uniform load around the vehicle.
+    :ivar wheelLoads: position and loads of each wheel
+    :ivar vehicleBoundary: polygon without uniform load around the vehicle.
     '''
 
     def __init__(self,wLoads, vBoundary= None):
+        ''' Constructor.
+
+        :param wheelLoads: position and loads of each wheel
+        :param vehicleBoundary: polygon without uniform load around the vehicle.
+        '''
         self.wheelLoads= wLoads # Wheel positions and loads
         self.vehicleBoundary= vBoundary
 

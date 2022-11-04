@@ -341,7 +341,7 @@ def getShapeTorsionalElasticBucklingStress(shape, effectiveLengthX):
         retval= shape.getTorsionalElasticBucklingStress(Lc)
     elif(symmetry=='simple'):
         Fex= shape.getTorsionalElasticBucklingStress(Lc) # E4-7
-        Fey= getFlexuralElasticBucklingStressY() #E4-6
+        Fey= shape.getFlexuralElasticBucklingStressY() #E4-6
         H= shape.getFlexuralConstant() # E4-8
         retval= (Fey+Fex)/2/H*(1-math.sqrt(1-(4.0*Fey*Fex*H)/(Fey+Fex)**2))
     else: # no simmetry: E4-4
@@ -2228,7 +2228,7 @@ class LShape(structural_steel.LShape):
                 Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
             retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
         else: # slender legs.
-            Fcr= 0.71*E/(b/t)**2 # equation F10-8
+            #Fcr= 0.71*E/(b/t)**2 # equation F10-8
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+': not implemented for slender sections.')

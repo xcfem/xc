@@ -318,7 +318,8 @@ class CMUWallFabric(object):
         Fm= self.mortar.Fm()
         r= Fs/Fm
         if(self.cellReinf):
-            retval= self.get_n()/(2*r*(n+r))
+            n= self.get_n()
+            retval= n/(2*r*(n+r))
         else:
             lmsg.warning('reinforcement not defined.')
         return retval

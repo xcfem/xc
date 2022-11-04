@@ -9,9 +9,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
+import math
 from rough_calculations import ng_simple_bending_reinforcement
 from postprocess.reports import common_formats as fmt
-import math
+from misc_utils import log_messages as lmsg
 
 class Rebar(object):
     ''' Reinforcement bar.

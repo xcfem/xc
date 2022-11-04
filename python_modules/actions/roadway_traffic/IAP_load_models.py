@@ -16,44 +16,21 @@ from actions.roadway_traffic import load_model_base as lmb
 from actions import load_cases as lcases
 from actions import loads
 
+tandem300LM1= lmb.TandemLoad(axleLoad= 300e3)
+tandem200LM1= lmb.TandemLoad(axleLoad= 200e3)
+tandem100LM1= lmb.TandemLoad(axleLoad= 100e3)
+
+
 # pos: (transversal,longitudinal)
-IAP_carril_virt1=lmb.LoadModel(wLoads=
-[lmb.WheelLoad(pos=geom.Pos2d(1.0,-0.6),ld=150e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,-0.6),ld=150e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(1.0,0.6),ld=150e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,0.6),ld=150e3,lx=0.4,ly=0.4)])
-
-IAP_carril_virt2=lmb.LoadModel(wLoads=
-[lmb.WheelLoad(pos=geom.Pos2d(1.0,-0.6),ld=100e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,-0.6),ld=100e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(1.0,0.6),ld=100e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,0.6),ld=100e3,lx=0.4,ly=0.4)])
-
-IAP_carril_virt3=lmb.LoadModel(wLoads=
-[lmb.WheelLoad(pos=geom.Pos2d(1.0,-0.6),ld=50e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,-0.6),ld=50e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(1.0,0.6),ld=50e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,0.6),ld=50e3,lx=0.4,ly=0.4)])
+IAP_notional_lane1=lmb.LoadModel(wLoads= tandem300LM1.getWheelLoads())
+IAP_notional_lane2=lmb.LoadModel(wLoads= tandem200LM1.getWheelLoads())
+IAP_notional_lane3=lmb.LoadModel(wLoads= tandem100LM1.getWheelLoads())
 
 #Carro IAP concomitante con frenado (0.75*Q)
-IAP_carril_virt1_fren=lmb.LoadModel(wLoads=
-[lmb.WheelLoad(pos=geom.Pos2d(1.0,-0.6),ld=112.5e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,-0.6),ld=112.5e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(1.0,0.6),ld=112.5e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,0.6),ld=112.5e3,lx=0.4,ly=0.4)])
+IAP_notional_lane1_brake=lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFactor= 0.75))
+IAP_notional_lane2_brake=lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
 
-IAP_carril_virt2_fren=lmb.LoadModel(wLoads=
-[lmb.WheelLoad(pos=geom.Pos2d(1.0,-0.6),ld=75e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,-0.6),ld=75e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(1.0,0.6),ld=75e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,0.6),ld=75e3,lx=0.4,ly=0.4)])
-
-IAP_carril_virt3_fren=lmb.LoadModel(wLoads=
-[lmb.WheelLoad(pos=geom.Pos2d(1.0,-0.6),ld=37.5e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,-0.6),ld=37.5e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(1.0,0.6),ld=37.5e3,lx=0.4,ly=0.4),
-lmb.WheelLoad(pos=geom.Pos2d(-1.0,0.6),ld=37.5e3,lx=0.4,ly=0.4)])
-
+IAP_notional_lane3_brake=lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
 
 def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1.0,vQbraking=None,virtLane2Set=None,xyCentPL2=None,virtLane3Set=None,xyCentPL3=None,restDrivewaySet=None,sidewalkSet=None):
     '''Return a traffic load case according to IAP.
@@ -82,10 +59,10 @@ def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1
     preprocessor=deckSet.getPreprocessor
     if vQbraking:
         qunifVL1,qunifVL2,qunifVL3,qunifRest,qunifSidewalk=[0.4*9e3]+4*[0.4*2.5e3] #uniform load on virtual lanes, rest of driveway and sidewalks when braking forceis considered
-        QpointVL1,QpointVL2,QpointVL3=[IAP_carril_virt1_fren,IAP_carril_virt2_fren,IAP_carril_virt3_fren]
+        QpointVL1,QpointVL2,QpointVL3=[IAP_notional_lane1_brake,IAP_notional_lane2_brake,IAP_notional_lane3_brake]
     else:
         qunifVL1,qunifVL2,qunifVL3,qunifRest,qunifSidewalk=[9e3]+4*[2.5e3]    
-        QpointVL1,QpointVL2,QpointVL3=[IAP_carril_virt1,IAP_carril_virt2,IAP_carril_virt3]
+        QpointVL1,QpointVL2,QpointVL3=[IAP_notional_lane1,IAP_notional_lane2,IAP_notional_lane3]
     lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
     lc.create()
     # add uniform loads
