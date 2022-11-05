@@ -480,7 +480,10 @@ class PredefinedSpace(object):
         sz= min(numDOFs,numDisp)
         for i in range(0,sz):
             spc= self.newSPConstraint(nodeTag,i,prescDisplacements[i])
-
+            if(__debug__):
+                if(not spc):
+                    AssertionError('Can\'t create the constraint.')
+                    
     def setRigidBeamBetweenNodes(self,nodeTagA: int, nodeTagB: int):
         '''Create a rigid beam between the nodes passed as parameters.
 
@@ -521,6 +524,11 @@ class PredefinedSpace(object):
         fulcrumNode= nodes.newNodeFromVector(coordNodeB)
         rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
         ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNodeTag,xc.ID(self.getDisplacementDOFs()))
+        if(__debug__):
+            if(not rb):
+                AssertionError('Can\'t create the rigid beam constraint.')
+            if(not ed):
+                AssertionError('Can\'t create the constraint.')
         return fulcrumNode
 
     def setBearingBetweenNodes(self,iNodA: int, iNodB: int, bearingMaterialNames: Sequence[str], orientation= None):
@@ -578,10 +586,12 @@ class PredefinedSpace(object):
         # Element definition
         newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterialNames,orientation)
         # Boundary conditions
-        constraints= self.preprocessor.getBoundaryCondHandler
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         for i in range(0,numDOFs):
             spc= self.newSPConstraint(newNode.tag,i,0.0)
+            if(__debug__):
+                if(not spc):
+                    AssertionError('Can\'t create the constraint.')
         return newNode, newElement
 
     def setBearingOnX(self, iNod: int, bearingMaterialName: str):
@@ -591,7 +601,7 @@ class PredefinedSpace(object):
            :param bearingMaterialName (string): material name for the zero 
                                                 length element.
         '''
-        return setBearing(iNod,[bearingMaterialName])
+        return self.setBearing(iNod,[bearingMaterialName])
 
     def setBearingOnXYRigZ(self, iNod: int, bearingMaterialNames: Sequence[str]):
         '''Modelize a non rigid on X and Y directions and rigid on Z bearing.
@@ -601,6 +611,9 @@ class PredefinedSpace(object):
         '''
         newNode, newElement= self.setBearing(iNod,bearingMaterialNames)
         eDofs= self.constraints.newEqualDOF(newNode.tag,iNod,xc.ID([2]))
+        if(__debug__):
+            if(not eDofs):
+                AssertionError('Can\'t create the constraint.')
         return newNode, newElement
 
     def setUniaxialBearing2D(self, iNod: int, bearingMaterialName: str, direction):
@@ -630,6 +643,9 @@ class PredefinedSpace(object):
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         for i in range(0,numDOFs):
             spc= self.newSPConstraint(newNode.tag,i,0.0)
+            if(__debug__):
+                if(not spc):
+                    AssertionError('Can\'t create the constraint.')
         return newNode.tag, zl.tag
 
     def getFloatingNodes(self, xcSet= None):
@@ -854,7 +870,7 @@ class PredefinedSpace(object):
         combs= self.getLoadHandler().getLoadCombinations
         lCase= combs.newLoadCombination(loadCaseName,loadCaseExpression)
         self.preprocessor.resetLoadCase()
-        self.addLoadCaseToDomain(loadCaseName)
+        self.addLoadCaseToDomain(lCase.name)
 
     def addCombinationForNonLinearAnalysis(self, loadCaseExpression:str):
         ''' Adds a load combination to the domain and sets the partial
@@ -1110,7 +1126,7 @@ class PredefinedSpace(object):
         :param xcSet: set containing the surfaces to mesh.
         '''
         if(not xcSet):
-            xcSet= getTotalSet()
+            xcSet= self.getTotalSet()
         # Get structural surfaces
         structuralSurfaces= list()
         for face in xcSet.surfaces:
@@ -1124,12 +1140,15 @@ class PredefinedSpace(object):
             thickness= face.getProp('attributes')['Thickness']
             membranePlateSectionName= face.name+'_'+concrete.materialName
             membranePlateSection= concrete.defElasticMembranePlateSection(self.preprocessor, membranePlateSectionName, thickness)
-            face.setProp('materialName', membranePlateSectionName)
+            face.setProp('materialName', membranePlateSection.name)
         # Generate mesh
         seedElementHandler= self.preprocessor.getElementHandler.seedElemHandler
         for face in structuralSurfaces:
             seedElementHandler.defaultMaterial= face.getProp('materialName')
             seedElem= seedElementHandler.newElement(elementType,xc.ID([0,0,0,0]))
+            if(__debug__):
+                if(not seedElem):
+                    AssertionError('Can\'t create the seed element.')
             face.setElemSizeIJ(elemSize,elemSize)
             face.genMesh(xc.meshDir.I)
             
@@ -1373,7 +1392,7 @@ class StructuralMechanics(PredefinedSpace):
         elementType= 'Truss'
         if(corotational):
             elementType= 'CorotTruss'
-        numDOFs= self.preprocessor.getNodeHandler.numDOFs
+        # numDOFs= self.preprocessor.getNodeHandler.numDOFs
         dimElem= self.preprocessor.getNodeHandler.dimSpace
         seedElemHandler= self.getSeedElementHandler()
         seedElemHandler.defaultMaterial= material.name
@@ -1434,8 +1453,11 @@ class StructuralMechanics(PredefinedSpace):
             else:
                 v3d= l.getKVector
                 trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
-            seedElemHandler.defaultTransformation= trf.name
+            seedElemHandler.defaultTransformation= trf.names
             elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
+            if(__debug__):
+                if(not elem):
+                    AssertionError('Can\'t create the element.')
             l.genMesh(xc.meshDir.I)
             if(crossSection):
                 for e in l.getElements:
@@ -2259,6 +2281,9 @@ class StructuralMechanics3D(StructuralMechanics):
             nmbTransf= 'bar' + str(nodeA.tag) + str(nodeB.tag)
             xzVector= self.getSuitableXZVector(nodeA, nodeB)
             trf= self.newCrdTransf(nmbTransf, xzVector= xzVector, trfType= trfType)
+            if(__debug__):
+                if(not trf):
+                    AssertionError('Can\'t create the transformation.')
         elements.defaultTransformation= nmbTransf
         # Element definition
         elements.defaultMaterial= sectionName
@@ -2289,6 +2314,9 @@ class StructuralMechanics3D(StructuralMechanics):
         torsional_inertia= inertia/100
         (A,Iz,Iy,J)= (area, inertia, inertia, torsional_inertia)
         scc= tm.defElasticSection3d(self.preprocessor,matName,A,E,G,Iz,Iy,J)
+        if(__debug__):
+            if(not scc):
+                AssertionError('Can\'t create the section.')
         return self.setBeamBetweenNodes(nodeA, nodeB, matName, nmbTransf, trfType, beamElementType= 'ElasticBeam3d')
 
     def setHugeTrussBetweenNodes(self,nodeA, nodeB, stiffnessFactor= 1.0):
@@ -2304,6 +2332,9 @@ class StructuralMechanics3D(StructuralMechanics):
         matName= 'truss' + str(nodeA.tag) + str(nodeB.tag)
         (A,E)=( 10 , 1e14*stiffnessFactor)
         mat= tm.defElasticMaterial(self.preprocessor, matName,E)
+        if(__debug__):
+            if(not mat):
+                AssertionError('Can\'t create the material.')
         elements.dimElem= 3
         elements.defaultMaterial= matName
         elem= elements.newElement("Truss",xc.ID([nodeA.tag,nodeB.tag]))
@@ -2314,7 +2345,7 @@ class StructuralMechanics3D(StructuralMechanics):
         ''' Releases the rotational degrees of fredom at the extremities 
             of the line.
 
-        :param line: line whose end elements will be pinned.
+        :param ln: line whose end elements will be pinned.
         :stiffnessFactors: factors that multiply the element stiffnesses on 
                            each DOF: [KX, KY, KZ, KrotX, KrotY, KrotZ]
                            the axis correspond to the local axis of the element.
@@ -2323,7 +2354,7 @@ class StructuralMechanics3D(StructuralMechanics):
                                      [1]->only the "to" point
                                      [0,1]-> both extremities.
         '''
-        nodes= self.preprocessor.getNodeHandler
+        # nodes= self.preprocessor.getNodeHandler
         if(0 in extremitiesToRelease):
             n0= ln.firstNode # First node.
             connectedElements= ln.getConnectedElements(n0)

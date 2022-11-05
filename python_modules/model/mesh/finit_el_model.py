@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-#import geom
+import sys
 import xc
 from misc_utils import log_messages as lmsg
 
@@ -61,6 +61,9 @@ class RawLineSetToMesh(SetToMesh):
                   for each element (defaults to 'N')
         '''
         elem= self.getSeedElement(preprocessor)
+        if(__debug__):
+            if(not elem):
+                AssertionError('Can\'t create the seed element.')        
         for l in self.primitiveSet.getLines:
             if(self.elemSize): #If elemSize is None don't touch the number of divisions.
                 l.setElemSize(self.elemSize)
@@ -158,6 +161,9 @@ class SurfSetToMesh(SetToMesh):
                 s.setElemSizeIJ(self.elemSize,self.elemSize)
         preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
         elem= self.getSeedElement(preprocessor)
+        if(__debug__):
+            if(not elem):
+                AssertionError('Can\'t create the seed element.')        
         for s in self.primitiveSet.getSurfaces:
             s.genMesh(xc.meshDir.I)
             if sectGeom[0].lower()=='y':

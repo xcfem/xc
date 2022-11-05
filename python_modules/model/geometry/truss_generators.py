@@ -230,6 +230,9 @@ class TrussBase(TrussGeometry):
         # End posts
         seedElemHandler.defaultMaterial= self.postsMaterial.name  # Material name.
         beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0])) # lgtm [py/multiple-definition]
+        if(__debug__):
+            if(not beam3d):
+                AssertionError('Can\'t create the beam seed element.')        
         self.postsSet.genMesh(xc.meshDir.I)  # Generate the elements.
         self.fillDownwards()
 

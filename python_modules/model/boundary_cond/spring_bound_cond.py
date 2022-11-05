@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es "
 
 import sys
-import math
 import geom
 from model import predefined_spaces
 from materials import typical_materials

@@ -200,7 +200,7 @@ class CantileverRetainingWallGeometry(object):
             # build a rectangle in axes coords
             left, width = .25, .5
             bottom, height = .25, .5
-            right = left + width
+            # right = left + width
             top = bottom + height
             for text in notes:
                 ax.text(left+width/2, top, text,
