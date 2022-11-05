@@ -80,6 +80,8 @@ Segment2d (Segment2d::*OffsetSegmentVector)(const Vector2d &v) const= &Segment2d
 Segment2d (Segment2d::*OffsetSegmentDouble)(const GEOM_FT &d) const= &Segment2d::offset;
 GeomObj::list_Pos2d (Segment2d::*segment2dIntersectionWithLine)(const Line2d &) const= &Segment2d::getIntersection;
 GeomObj::list_Pos2d (Segment2d::*segment2dIntersectionWithRay)(const Ray2d &) const= &Segment2d::getIntersection;
+boost::python::list (Segment2d::*dividePyEq2d)(int) const= &Segment2d::DividePy;
+boost::python::list (Segment2d::*dividePyProp2d)(const boost::python::list &) const= &Segment2d::DividePy;
 class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def(init<>())
   .def(init<Pos2d,Pos2d>())
@@ -109,7 +111,8 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("getIntersection", segment2dIntersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersection", segment2dIntersectionWithRay, "Return the intersection with the ray argument.")
   .def("getSupportLine", &Segment2d::getSupportLine, "Return the supporting line.")
-  .def("Divide", &Segment2d::DividePy,"Divide(numparts); returns the points that divide the segment.")
+  .def("Divide", dividePyEq2d,"Divide(numparts); returns the points that divide the segment in numparts equal parts.")
+  .def("Divide", dividePyProp2d,"Divide(proportions); returns the points that divide the segment in the proportions of the list.")
   .def("swap", &Segment2d::swap,"changes the orientation of the segment.")
   ;
 
@@ -165,6 +168,8 @@ GEOM_FT (Segment3d::*AngleSegment3D)(const Segment3d &v) const= &Segment3d::getA
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithLine)(const Line3d &) const= &Segment3d::getIntersection;
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithRay)(const Ray3d &) const= &Segment3d::getIntersection;
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithSegment)(const Segment3d &) const= &Segment3d::getIntersection;
+boost::python::list (Segment3d::*dividePyEq3d)(int) const= &Segment3d::DividePy;
+boost::python::list (Segment3d::*dividePyProp3d)(const boost::python::list &) const= &Segment3d::DividePy;
 class_<Segment3d, bases<Linear3d> >("Segment3d")
   .def(init<>())
   .def(init<Pos3d,Pos3d>())
@@ -191,7 +196,8 @@ class_<Segment3d, bases<Linear3d> >("Segment3d")
   .add_property("getJVector", &Segment3d::getJVector,"Return the local y vector.")
   .add_property("getKVector", &Segment3d::getKVector,"Return the local z vector.")
   .def("getVDir",&Segment3d::VDir,"return the direction vector of the segment.")
-  .def("Divide", &Segment3d::DividePy,"Divide(numparts); returns the points that divide the segment.")
+  .def("Divide", dividePyEq3d,"Divide(numparts); returns the points that divide the segment in numparts equal parts.")
+  .def("Divide", dividePyProp3d,"Divide(proportions); returns the points that divide the segment in the proportions of the list.")
   .def("swap", &Segment3d::swap,"changes the orientation of the segment.")
   ;
 

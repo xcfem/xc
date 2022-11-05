@@ -62,21 +62,23 @@ python tests/utility/geom/pos2d_test_01.py
 python tests/utility/geom/pos3d_test_01.py
 python tests/utility/geom/pos3d_list_test_01.py
 python tests/utility/geom/closest_pair_of_points.py
-echo "$BLEU" "    Lines, rays and segments." "$NORMAL"
+echo "$BLEU" "    Lines and rays." "$NORMAL"
 python tests/utility/geom/line2d_test_01.py
 python tests/utility/geom/line3d_test_01.py
 python tests/utility/geom/line3d_test_02.py
 python tests/utility/geom/line2d_intersection_test.py
-python tests/utility/geom/segment2d_test_01.py
-python tests/utility/geom/segment2d_test_02.py
-python tests/utility/geom/segment2d_connect_01.py
-python tests/utility/geom/segment2d_connect_02.py
 python tests/utility/geom/line_segment_intersection_test.py
-python tests/utility/geom/segment3d_test_01.py
-python tests/utility/geom/segment3d_connect_01.py
-python tests/utility/geom/segment3d_connect_02.py
 python tests/utility/geom/ray2d_test.py
 python tests/utility/geom/pos2d_list_test_01.py
+echo "$BLEU" "    Segments." "$NORMAL"
+python tests/utility/geom/segments/segment2d_test_01.py
+python tests/utility/geom/segments/segment2d_test_02.py
+python tests/utility/geom/segments/segment2d_connect_01.py
+python tests/utility/geom/segments/segment2d_connect_02.py
+python tests/utility/geom/segments/segment3d_test_01.py
+python tests/utility/geom/segments/segment3d_test_02.py
+python tests/utility/geom/segments/segment3d_connect_01.py
+python tests/utility/geom/segments/segment3d_connect_02.py
 echo "$BLEU" "    Polylines." "$NORMAL"
 python tests/utility/geom/polylines/polyline2d_test_01.py
 python tests/utility/geom/polylines/polyline2d_test_02.py
@@ -197,6 +199,7 @@ python tests/actions/traffic_loads/test_derailment_SIA.py
 python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
+python tests/actions/traffic_loads/test_ec1_notional_lane_computation_01.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"

@@ -759,7 +759,7 @@ class GridModel(object):
         :param surfName: name given to the grid surface
         return the quadrangle surface
         '''
-        points= self.prep.getMultiBlockTopology.getPoints
+        # points= self.prep.getMultiBlockTopology.getPoints
         (tgPt1,tgPt2,tgPt3,tgPt4)=(int(surfName[1:7]),int(surfName[7:13]),int(surfName[13:19]),int(surfName[19:25]))
         surfaces= self.prep.getMultiBlockTopology.getSurfaces
         qs= surfaces.newQuadSurfacePts(tgPt1,tgPt2,tgPt3,tgPt4)
@@ -799,7 +799,7 @@ class GridModel(object):
         :param linName: name given to the grid line
         return the line
         '''
-        points= self.prep.getMultiBlockTopology.getPoints
+        #points= self.prep.getMultiBlockTopology.getPoints
         (tgPt1,tgPt2)=(int(linName[1:7]),int(linName[7:15]))
         lines= self.prep.getMultiBlockTopology.getLines
         ln= lines.newLine(tgPt1,tgPt2)

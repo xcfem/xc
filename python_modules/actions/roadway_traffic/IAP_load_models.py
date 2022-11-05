@@ -22,15 +22,14 @@ tandem100LM1= lmb.TandemLoad(axleLoad= 100e3)
 
 
 # pos: (transversal,longitudinal)
-IAP_notional_lane1=lmb.LoadModel(wLoads= tandem300LM1.getWheelLoads())
-IAP_notional_lane2=lmb.LoadModel(wLoads= tandem200LM1.getWheelLoads())
-IAP_notional_lane3=lmb.LoadModel(wLoads= tandem100LM1.getWheelLoads())
+IAP_notional_lane1= lmb.LoadModel(wLoads= tandem300LM1.getWheelLoads())
+IAP_notional_lane2= lmb.LoadModel(wLoads= tandem200LM1.getWheelLoads())
+IAP_notional_lane3= lmb.LoadModel(wLoads= tandem100LM1.getWheelLoads())
 
 #Carro IAP concomitante con frenado (0.75*Q)
-IAP_notional_lane1_brake=lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFactor= 0.75))
-IAP_notional_lane2_brake=lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
-
-IAP_notional_lane3_brake=lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
+IAP_notional_lane1_brake= lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFactor= 0.75))
+IAP_notional_lane2_brake= lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
+IAP_notional_lane3_brake= lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
 
 def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1.0,vQbraking=None,virtLane2Set=None,xyCentPL2=None,virtLane3Set=None,xyCentPL3=None,restDrivewaySet=None,sidewalkSet=None):
     '''Return a traffic load case according to IAP.
@@ -38,22 +37,26 @@ def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1
     :param lcName: load case name
     :param deckSet: deck set of elements (used to distribute point loads)
     :param virtLane1Set: virtual lane 1 set of elements
-    :param xyCentPL1: [xCent,yCent] global coord. X,Y where to place the centroid of the 
-                     vehicle on virtual lane 1
+    :param xyCentPL1: [xCent,yCent] global coord. X,Y where to place the 
+                     centroid of the vehicle on virtual lane 1
     :param hDistrPL: height considered to distribute each point load with
-                  slope slopeDistr 
+                     slope slopeDistr 
     :param slopeDistrPL: slope (H/V) through hDistr to distribute the load of 
-                  a wheel (defaults to 1)
-    :param vQbraking: [qfrenX,qfrenY] x, y components of the uniform load due to braking
-                      on virtual lane 1 (defaults to None)
+                        a wheel (defaults to 1)
+    :param vQbraking: [qfrenX,qfrenY] x, y components of the uniform load 
+                      due to braking on virtual lane 1 (defaults to None)
     :param virtLane2Set: virtual lane 2 set of elements
-    :param xyCentPL2: [xCent,yCent] global coord. X,Y where to place the centroid of the 
-                     vehicle on virtual lane 2
-    :param virtLane3Set: virtual lane 3 set of elements (defaults to None, not considered)
-    :param xyCentPL3: [xCent,yCent] global coord. X,Y where to place the centroid of the 
-                     vehicle on virtual lane 3 (defaults to None)
-    :param restDrivewaySet: rest of driveway set of elements (defaults to None, not considered)
-    :param sidewalkSet: sidewalk set of elements (defaults to None, not considered)
+    :param xyCentPL2: [xCent,yCent] global coord. X,Y where to place the 
+                      centroid of the vehicle on virtual lane 2
+    :param virtLane3Set: virtual lane 3 set of elements (defaults to None, not
+                         considered)
+    :param xyCentPL3: [xCent,yCent] global coord. X,Y where to place the 
+                      centroid of the  vehicle on virtual lane 3 (defaults 
+                      to None)
+    :param restDrivewaySet: rest of driveway set of elements (defaults to 
+                            None, not considered)
+    :param sidewalkSet: sidewalk set of elements (defaults to None, not 
+                        considered)
  
     '''
     preprocessor=deckSet.getPreprocessor
@@ -63,7 +66,7 @@ def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1
     else:
         qunifVL1,qunifVL2,qunifVL3,qunifRest,qunifSidewalk=[9e3]+4*[2.5e3]    
         QpointVL1,QpointVL2,QpointVL3=[IAP_notional_lane1,IAP_notional_lane2,IAP_notional_lane3]
-    lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
+    lc= lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
     lc.create()
     # add uniform loads
     lc.addLstLoads([loads.UniformLoadOnSurfaces(name= lcName+'quVL1',xcSet=virtLane1Set,loadVector=xc.Vector([0,0,-qunifVL1,0,0,0]),refSystem='Global')])

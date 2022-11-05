@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
 
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2018,  LCPT AO_O "
@@ -22,10 +23,10 @@ class WheelLoad(object):
     :ivar ly: length wheel in longitudinal direction 
     '''
     def __init__(self,pos,ld,lx=0,ly=0):
-       self.position= pos
-       self.load= ld
-       self.lx=lx
-       self.ly=ly
+        self.position= pos
+        self.load= ld
+        self.lx=lx
+        self.ly=ly
        
 class TandemLoad(object):
     ''' Tandem load.

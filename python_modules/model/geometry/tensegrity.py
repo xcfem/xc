@@ -37,7 +37,7 @@ class tensegrityPrism(object):
         self.Lstruts=Lstruts
         self.alpha=math.pi*(1/2-1/self.nSidPol)
         if Hprism==0:
-            self.Hprism=math.sqrt(self.Lstruts**2-self.RtopC**2-self.RbaseC**2+2*self.RtopC*self.RbaseC*math.cos(2*math.pi/self.nSidPol+alfa))
+            self.Hprism=math.sqrt(self.Lstruts**2-self.RtopC**2-self.RbaseC**2+2*self.RtopC*self.RbaseC*math.cos(2*math.pi/self.nSidPol+self.alfa))
         self.angPoly=2*math.pi/self.nSidPol
 
 

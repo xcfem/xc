@@ -165,10 +165,10 @@ def lstP3d_from_lstLns(lstLns):
     return lstP3d
 
 def lstLns_from_lstPnts(lstPnts):
-    '''Return an ordered list of consecutive lines  from the ordered list of 
+    '''Return an ordered list of consecutive lines from the ordered list of 
     points 'lstPnts' given as parameter. 
     '''
-    prep=lstPnts[0].getPreprocessor
+    #prep=lstPnts[0].getPreprocessor
     lstLn=[get_lin_2Pts(lstPnts[i],lstPnts[i+1]) for i in range (len(lstPnts)-1)]
     lstLn.append(get_lin_2Pts(lstPnts[-2],lstPnts[-1]))
     return lstLn
