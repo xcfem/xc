@@ -91,11 +91,11 @@ def getNotionalLanesContours(firstBorder, lastBorder, laneWidth= 3.0, reverse= F
 
     p1= firstBorder.getFromPoint()
     p2= firstBorder.getToPoint()
-    startingLine= geom.Segment3d(p1, p2)
-    startingLinePoints= startingLine.Divide(fractions)
     p3= lastBorder.getFromPoint()
     p4= lastBorder.getToPoint()
-    finishLine= geom.Segment3d(p3, p4)
+    startingLine= geom.Segment3d(p1, p3)
+    startingLinePoints= startingLine.Divide(fractions)
+    finishLine= geom.Segment3d(p2, p4)
     finishLinePoints= finishLine.Divide(fractions)
 
     retval= list()

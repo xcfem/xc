@@ -1176,6 +1176,7 @@ python tests/rough_calculations/beam_formulas/beam_deflection_mohr_03.py
 python tests/rough_calculations/beam_formulas/beam_deflection_mohr_04.py
 python tests/rough_calculations/beam_formulas/beam_deflection_mohr_05.py
 python tests/rough_calculations/beam_formulas/beam_deflection_mohr_06.py
+python tests/rough_calculations/beam_formulas/test_max_bending_moment.py
 echo "$BLEU" "  Reinforced concrete rough calculations,..." "$NORMAL"
 python tests/rough_calculations/reinforced_concrete/test_punzo01.py
 python tests/rough_calculations/reinforced_concrete/test_punzo02.py

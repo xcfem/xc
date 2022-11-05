@@ -14,10 +14,10 @@ import math
 import geom
 from actions.roadway_traffic import EC1_load_models
 
-p1= geom.Pos3d(0.0, 0.0, 0.0)
-p2= geom.Pos3d(10.0, 0.0, 0.0)
-p3= geom.Pos3d(0.0, 11.5, 0.0)
-p4= geom.Pos3d(10.0, 11.5, 0.0)
+p1= geom.Pos3d(0.0, 2.0, 0.0)
+p2= geom.Pos3d(10.0, 2.0, 0.0)
+p3= geom.Pos3d(0.0, 13.5, 0.0)
+p4= geom.Pos3d(10.0, 13.5, 0.0)
 
 border1= geom.Segment3d(p1, p2)
 border2= geom.Segment3d(p3, p4)
@@ -47,6 +47,7 @@ for plg, refArea in zip(reversedNotionalLanesContours, refReversedAreas):
 err2= math.sqrt(err2)
 
 '''
+print(notionalLanesContours[0].getVertexList())
 print('carriageway width: ', carriagewayWidth)
 print('widths of the notional lanes: ', notionalLanesWidths)
 print('areas: ', areas)
