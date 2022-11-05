@@ -999,7 +999,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
            :param loadOnBackFill: (obj) load acting on the backfill.
         '''
-        loadOnBackFill.appendVerticalLoadToCurrentLoadPattern(self.heelSet,xc.Vector([0.0,-1.0]),0,1)
+        loadOnBackFill.appendVerticalLoadToCurrentLoadPattern(xcSet= self.heelSet, vDir= xc.Vector([0.0,-1.0]), iXCoo= 0, iZCoo= 1)
 
     def createPressuresFromLoadOnBackFill(self, loadOnBackFill,Delta= 0.0):
         '''Create the pressures on the stem and on the heel dues to 

@@ -161,6 +161,13 @@ class EarthPressureModel(PressureModelBase):
         return ret_press
 
     def appendLoadToCurrentLoadPattern(self,iCoo=2,delta=0):
+        '''Append earth thrust on a set of elements to the current
+        load pattern.
+
+
+        :param iCoo: index of the coordinate that represents depth.
+        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
+        '''
         super(EarthPressureModel,self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir,iCoo,delta)
         
 class PeckPressureEnvelope(EarthPressureBase):
@@ -211,11 +218,21 @@ class UniformLoadOnStem(PressureModelBase):
         super(UniformLoadOnStem,self).__init__()
         self.qLoad=qLoad
         
-    def getPressure(self,z):
+    def getPressure(self, z):
         '''Return the earth pressure acting on the points at global coordinate z.
         :param z: global z coordinate.
         '''
         return self.qLoad
+
+    def appendLoadToCurrentLoadPattern(self,iCoo=2,delta=0):
+        '''Append earth thrust on a set of elements to the current
+        load pattern.
+
+
+        :param iCoo: index of the coordinate that represents depth.
+        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
+        '''
+        super(UniformLoadOnStem, self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir,iCoo,delta)
 
 class UniformLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a uniform indefinite
@@ -237,6 +254,28 @@ class UniformLoadOnBackfill(UniformLoadOnStem):
         :param z: global z coordinate.
         '''
         return self.K*self.qLoad
+    
+    def appendVerticalLoadToCurrentLoadPattern(self,xcSet,vDir,iXCoo= 0,iZCoo= 2,alph= math.radians(30)):
+        '''Append to the current load pattern the vertical pressures on 
+           a set of elements due to the strip load. According to
+           11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
+           isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix\_EC)
+
+        :param xcSet: set that contains the elements.
+        :param vDir: unit xc vector defining pressures direction.
+        :param iXCoo: index of the horizontal coordinate.
+        :param iZCoo: index of the vertical coordinate.
+        :param alph: angle of stress spreading.
+        '''
+        sigma_v= self.qLoad
+        if(len(vDir)==3): #3D load.
+            for e in xcSet.elements:
+                if (sigma_v!=0.0):
+                    e.vector3dUniformLoadGlobal(sigma_v*vDir)
+        else: #2D load.
+            for e in xcSet.elements:
+                if (sigma_v!=0.0):
+                    e.vector2dUniformLoadGlobal(sigma_v*vDir)
 
 class StripLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a strip surcharge 
@@ -284,7 +323,9 @@ class StripLoadOnBackfill(UniformLoadOnStem):
            isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix\_EC)
 
         :param xcSet: set that contains the elements.
-        :param vDir: unit xc vector defining pressures direction
+        :param vDir: unit xc vector defining pressures direction.
+        :param iXCoo: index of the horizontal coordinate.
+        :param iZCoo: index of the vertical coordinate.
         :param alph: angle of stress spreading.
         '''
         tanAlph= math.tan(alph)
@@ -516,6 +557,8 @@ class HorizontalLoadOnBackfill(PressureModelBase):
 
         :param xcSet: set that contains the elements (shells and/or beams)
         :param vDir: unit xc vector defining pressures direction
+        :param iCoo: index of the coordinate that represents depth.
+        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
         '''
         self.setup()
         super(HorizontalLoadOnBackfill,self).appendLoadToCurrentLoadPattern(xcSet,vDir,iCoo,delta)
