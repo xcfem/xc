@@ -9,4 +9,5 @@ Utilities for post-processing. Some of them require refactoring.
  - [Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)
  - [X Window System](https://en.wikipedia.org/wiki/X_Window_System)
  - [X Org Foundation](https://x.org)
+ - [Simple Loads on a Cantilever](https://portwooddigital.com/2022/11/04/simple-loads-on-a-cantilever/)
 
