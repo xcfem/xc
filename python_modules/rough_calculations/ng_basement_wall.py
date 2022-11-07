@@ -15,116 +15,122 @@ from rough_calculations import ng_rc_section
 import xc
 
 class BasementWall(rw.RetainingWall):
-  '''Basement retaining wall (propped cantilever).'''
-  def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, concrete= None, steel= None):
-    '''Constructor '''
-    super(BasementWall,self).__init__(name,concreteCover, stemBottomWidth,stemTopWidth,footingThickness, concrete, steel)
+    '''Basement retaining wall (propped cantilever).'''
+    def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, concrete= None, steel= None):
+        '''Constructor '''
+        super(BasementWall,self).__init__(name,concreteCover, stemBottomWidth,stemTopWidth,footingThickness, concrete, steel)
 
-  def getSectionIntStem(self):
-    '''Returns RC section for reinforcement at stem interior.'''
-    return ng_rc_section.RCSection(self.stemReinforcement[self.stemReinforcement.intStemIndex],self.concrete,self.b,self.stemBottomWidth)
+    def getSectionIntStem(self):
+        '''Returns RC section for reinforcement at stem interior.'''
+        return ng_rc_section.RCSection(self.stemReinforcement[self.stemReinforcement.intStemIndex],self.concrete,self.b,self.stemBottomWidth)
 
-  def genMesh(self,nodes,springMaterials):
-    '''Generate finite element mesh.'''
-    super(BasementWall,self).genMesh(nodes, springMaterials)
-    stemLine= self.wireframeModelLines['stem']
-    # pin stem head
-    headNode= stemLine.lastNode
-    headNode.fix(xc.ID([0]),xc.Vector([0.0]))
+    def genMesh(self,nodes,springMaterials):
+        '''Generate finite element mesh.'''
+        super(BasementWall,self).genMesh(nodes, springMaterials)
+        stemLine= self.wireframeModelLines['stem']
+        # pin stem head
+        headNode= stemLine.lastNode
+        headNode.fix(xc.ID([0]),xc.Vector([0.0]))
 
-  def writeResult(self,pth):
-    '''Write reinforcement verification results in LaTeX format.'''
-    outputFile= open(pth+self.name+".tex","w")
-    self.writeDef(pth,outputFile)
-    self.stability_results.writeOutput(outputFile,self.name)
-    self.sls_results.writeOutput(outputFile,self.name)
-    outputFile.write("\\bottomcaption{"+ self.name +" wall reinforcement} \\label{tb_"+self.name+"}\n")
-    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" wall reinforcement}}\\\\\\hline\n}\n")
-    outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
-    outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
-    outputFile.write("\\tablelasttail{\\hline}\n")
-    outputFile.write("\\begin{center}\n")
-    outputFile.write("\\begin{supertabular}[H]{|l|}\n")
-    outputFile.write("\\hline\n")
+    def writeResult(self, pth:str, includeGraphicsPath= None, convertToEPS= False):
+        '''Write reinforcement verification results in LaTeX format.
 
-    #Coupe ExtStemBottomIndex. Reinforced concrete. Encastrement.
-    CExtStemBottom= self.stemReinforcement.getSectionExtStemBottom()
-    VdMaxEncastrement= self.internalForcesULS.VdMaxEncastrement(self.stemBottomWidth)
-    MdMaxEncastrement= self.internalForcesULS.MdMaxEncastrement(self.footingThickness)
-    outputFile.write("\\textbf{Reinforcement " + str(self.stemReinforcement.extStemBottomIndex) + " (outside reinforcement dowels) :} \\\\\n")
-    NdEncastrement= 0.0 #we neglect axial force
-    CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
-    CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
+        :param pth: output path.
+        :param includeGraphicsPath: path for the includegraphics LaTeX command. 
+        :param convertToEPS: if true, create a postscript version of the 
+                             graphic output.
+        '''
+        outputFile= open(pth+self.name+".tex","w")
+        self.writeDef(pth= pth, outputFile= outputFile, includeGraphicsPath= includeGraphicsPath, convertToEPS= convertToEPS)
+        self.stability_results.writeOutput(outputFile,self.name)
+        self.sls_results.writeOutput(outputFile,self.name)
+        outputFile.write("\\bottomcaption{"+ self.name +" wall reinforcement} \\label{tb_"+self.name+"}\n")
+        outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" wall reinforcement}}\\\\\\hline\n}\n")
+        outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
+        outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
+        outputFile.write("\\tablelasttail{\\hline}\n")
+        outputFile.write("\\begin{center}\n")
+        outputFile.write("\\begin{supertabular}[H]{|l|}\n")
+        outputFile.write("\\hline\n")
 
-    # Exterior rebars in stem.
-    yCoupeExtStem= self.internalForcesULS.getYStem(self.stemReinforcement.getBasicAnchorageLength(self.stemReinforcement.extStemBottomIndex, self.concrete))
-    CExtStem= self.stemReinforcement.getSectionExtStem(yCoupeExtStem)
+        #Coupe ExtStemBottomIndex. Reinforced concrete. Encastrement.
+        CExtStemBottom= self.stemReinforcement.getSectionExtStemBottom()
+        VdMaxEncastrement= self.internalForcesULS.VdMaxEncastrement(self.stemBottomWidth)
+        MdMaxEncastrement= self.internalForcesULS.MdMaxEncastrement(self.footingThickness)
+        outputFile.write("\\textbf{Reinforcement " + str(self.stemReinforcement.extStemBottomIndex) + " (outside reinforcement dowels) :} \\\\\n")
+        NdEncastrement= 0.0 #we neglect axial force
+        CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
+        CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
 
-    # Rebars on footing top
-    CTopFooting= self.footingReinforcement.getSectionTopFooting()
-    NdTopFooting= 0.0 #we neglect axial force
-    VdTopFooting= max(abs(self.internalForcesULS.VdFooting.positive[0]),abs(self.internalForcesULS.VdFooting.negative[0]))
-    MdTopFooting= max(abs(self.internalForcesULS.MdFooting.positive[0]),abs(self.internalForcesULS.MdFooting.negative[0]))
-    outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.topFootingIndex)+" (footing top reinforcement):}\\\\\n")
-    CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
-    CTopFooting.writeResultStress(outputFile,MdTopFooting)
+        # Exterior rebars in stem.
+        yCoupeExtStem= self.internalForcesULS.getYStem(self.stemReinforcement.getBasicAnchorageLength(self.stemReinforcement.extStemBottomIndex, self.concrete))
+        CExtStem= self.stemReinforcement.getSectionExtStem(yCoupeExtStem)
 
-    CIntStemBottom= self.stemReinforcement.getSectionIntStemBottom()
-    
-    CSectionStemTop= self.stemReinforcement.getSectionStemTop()
-    CSectionFootingBottom= self.footingReinforcement.getSectionFootingBottom()
-    CSectionFootingBottomLongitudinal= self.footingReinforcement.getSectionFootingBottomLongitudinal()
-    CSectionFootingTopLongitudinal= CSectionFootingBottomLongitudinal
-    CSectionStemLongExt= self.stemReinforcement.getSectionStemLongExt()
-    CSectionStemLongInt= CSectionStemLongExt
+        # Rebars on footing top
+        CTopFooting= self.footingReinforcement.getSectionTopFooting()
+        NdTopFooting= 0.0 #we neglect axial force
+        VdTopFooting= max(abs(self.internalForcesULS.VdFooting.positive[0]),abs(self.internalForcesULS.VdFooting.negative[0]))
+        MdTopFooting= max(abs(self.internalForcesULS.MdFooting.positive[0]),abs(self.internalForcesULS.MdFooting.negative[0]))
+        outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.topFootingIndex)+" (footing top reinforcement):}\\\\\n")
+        CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
+        CTopFooting.writeResultStress(outputFile,MdTopFooting)
 
-    # Interior rebars at stem bottom 
-    outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.intStemBottomIndex)+" (inside reinforcement dowels):}\\\\\n")
-    CIntStemBottom.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
+        CIntStemBottom= self.stemReinforcement.getSectionIntStemBottom()
 
-    # Interior rebars at stem.
-    outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.intStemIndex)+" (inside stem reinforcement):}\\\\\n")
-    CIntStem= self.getSectionIntStem()
-    VdMinMidStem= self.internalForcesULS.VdMinMidStem(self.stemBottomWidth)
-    MdMinMidStem= self.internalForcesULS.MdMinMidStem(self.footingThickness)
-    NdMidStem= 0.0 #we neglect axial force
-    CIntStem.writeResultFlexion(outputFile,NdMidStem, MdMinMidStem,VdMinMidStem)
-    CIntStem.writeResultStress(outputFile,MdMinMidStem)
+        CSectionStemTop= self.stemReinforcement.getSectionStemTop()
+        CSectionFootingBottom= self.footingReinforcement.getSectionFootingBottom()
+        CSectionFootingBottomLongitudinal= self.footingReinforcement.getSectionFootingBottomLongitudinal()
+        CSectionFootingTopLongitudinal= CSectionFootingBottomLongitudinal
+        CSectionStemLongExt= self.stemReinforcement.getSectionStemLongExt()
+        CSectionStemLongInt= CSectionStemLongExt
 
-    # Reinforcement at stem top.
-    outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.topStemIndex)+" (stem top transverse reinforcement):}\\\\\n")
-    CSectionStemTop.writeResultFlexion(outputFile,0.0,0.0,0.0)
+        # Interior rebars at stem bottom 
+        outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.intStemBottomIndex)+" (inside reinforcement dowels):}\\\\\n")
+        CIntStemBottom.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
 
-    # Reinforcement at footing bottom.
-    outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.bottomFootingIndex)+" (footing bottom transverse reinforcement):}\\\\\n")
-    CSectionFootingBottom.writeResultCompression(outputFile,0.0,CSectionFootingBottomLongitudinal.tensionRebars.getAs())
+        # Interior rebars at stem.
+        outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.intStemIndex)+" (inside stem reinforcement):}\\\\\n")
+        CIntStem= self.getSectionIntStem()
+        VdMinMidStem= self.internalForcesULS.VdMinMidStem(self.stemBottomWidth)
+        MdMinMidStem= self.internalForcesULS.MdMinMidStem(self.footingThickness)
+        NdMidStem= 0.0 #we neglect axial force
+        CIntStem.writeResultFlexion(outputFile,NdMidStem, MdMinMidStem,VdMinMidStem)
+        CIntStem.writeResultStress(outputFile,MdMinMidStem)
 
-    # Longitudinal reinforcement at footing bottom.
-    outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.longBottomFootingIndex)+" (footing bottom longitudinal reinforcement):}\\\\\n")
-    CSectionFootingBottomLongitudinal.writeResultTraction(outputFile,0.0)
+        # Reinforcement at stem top.
+        outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.topStemIndex)+" (stem top transverse reinforcement):}\\\\\n")
+        CSectionStemTop.writeResultFlexion(outputFile,0.0,0.0,0.0)
 
-    # Longitudinal reinforcement at footing top.
-    outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.longTopFootingIndex)+" (footing top longitudinal reinforcement):}\\\\\n")
-    CSectionFootingTopLongitudinal.writeResultTraction(outputFile,0.0)
+        # Reinforcement at footing bottom.
+        outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.bottomFootingIndex)+" (footing bottom transverse reinforcement):}\\\\\n")
+        CSectionFootingBottom.writeResultCompression(outputFile,0.0,CSectionFootingBottomLongitudinal.tensionRebars.getAs())
 
-    # Footing skin reinforcement.
-    outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.skinFootingIndex)+" (footing skin reinforcement):}\\\\\n")
-    outputFile.write("  --\\\\\n")
-    #self.reinforcement[self.skinFootingIndex].writeRebars(outputFile,self.concrete,1e-5)
+        # Longitudinal reinforcement at footing bottom.
+        outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.longBottomFootingIndex)+" (footing bottom longitudinal reinforcement):}\\\\\n")
+        CSectionFootingBottomLongitudinal.writeResultTraction(outputFile,0.0)
 
-    # Stem exterior longitudinal reinforcement.
-    outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.longExtStemIndex)+" (stem outside longitudinal reinforcement):}\\\\\n")
-    CSectionStemLongExt.writeResultTraction(outputFile,0.0)
+        # Longitudinal reinforcement at footing top.
+        outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.longTopFootingIndex)+" (footing top longitudinal reinforcement):}\\\\\n")
+        CSectionFootingTopLongitudinal.writeResultTraction(outputFile,0.0)
 
-    # Stem interior longitudinal reinforcement.
-    outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.longIntStemIndex)+" (stem inside longitudinal reinforcement):}\\\\\n")
-    CSectionStemLongInt.writeResultTraction(outputFile,0.0)
+        # Footing skin reinforcement.
+        outputFile.write("\\textbf{Reinforcement "+str(self.footingReinforcement.skinFootingIndex)+" (footing skin reinforcement):}\\\\\n")
+        outputFile.write("  --\\\\\n")
+        #self.reinforcement[self.skinFootingIndex].writeRebars(outputFile,self.concrete,1e-5)
 
-    # Stem top skin reinforcement.
-    outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.topSkinIndex)+" (stem top skin reinforcement):}\\\\\n")
-    outputFile.write("  --\\\\\n")
-    #self.reinforcement[self.topSkinIndex].writeRebars(outputFile,self.concrete,1e-5)
-    outputFile.write("\\hline\n")
-    outputFile.write("\\end{supertabular}\n")
-    outputFile.write("\\end{center}\n")
-    outputFile.close()
+        # Stem exterior longitudinal reinforcement.
+        outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.longExtStemIndex)+" (stem outside longitudinal reinforcement):}\\\\\n")
+        CSectionStemLongExt.writeResultTraction(outputFile,0.0)
+
+        # Stem interior longitudinal reinforcement.
+        outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.longIntStemIndex)+" (stem inside longitudinal reinforcement):}\\\\\n")
+        CSectionStemLongInt.writeResultTraction(outputFile,0.0)
+
+        # Stem top skin reinforcement.
+        outputFile.write("\\textbf{Reinforcement "+str(self.stemReinforcement.topSkinIndex)+" (stem top skin reinforcement):}\\\\\n")
+        outputFile.write("  --\\\\\n")
+        #self.reinforcement[self.topSkinIndex].writeRebars(outputFile,self.concrete,1e-5)
+        outputFile.write("\\hline\n")
+        outputFile.write("\\end{supertabular}\n")
+        outputFile.write("\\end{center}\n")
+        outputFile.close()

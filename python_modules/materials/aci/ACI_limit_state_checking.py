@@ -353,7 +353,7 @@ class ACIFamNBars(ACIRebarFamily):
     n= 2 #Number of bars.
     
     def __init__(self,steel,n,barNumber,spacing,concreteCover):
-        super(ACIFamNBars, self).__init__(self,steel,barNumber,spacing,concreteCover)
+        super(ACIFamNBars, self).__init__(steel= steel, barNumber= barNumber, spacing= spacing, concreteCover= concreteCover)
         self.n= int(n)
         
     def __repr__(self):

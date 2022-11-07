@@ -284,9 +284,8 @@ class AnchorBase(BoltBase):
         ''' Read member values from a dictionary.'''
         super(AnchorBase, self).setFromDict(dct)
         if('plateWasher' in dct):
-            self.plateWasher= square_plate_washer.SquarePlateWasher()
+            self.plateWasher= square_plate_washer.SquarePlateWasher(bolt= self)
             self.plateWasher.setFromDict(dct['plateWasher'])
-
 
 def createHolesOnMemberBlocks(templateHoles, memberBlocks, boltProperties, materialsModuleName):
     ''' Projects the holes in the argument onto the surfaces
