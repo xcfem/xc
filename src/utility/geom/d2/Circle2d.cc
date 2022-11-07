@@ -218,3 +218,5 @@ void Circle2d::Plot(Plotter &plotter) const
     const Pos2d c= Centro();
     plotter.fcircle(c.x(),c.y(),getRadius());
   }
+
+

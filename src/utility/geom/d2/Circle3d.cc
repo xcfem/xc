@@ -120,10 +120,105 @@ Polygon3d Circle3d::getInscribedPolygon(const size_t &n,const double &theta_inic
 void Circle3d::Print(std::ostream &os) const
   { os << circ; }
 
+//! @brief Equal operator.
 bool operator ==(const Circle3d &a,const Circle3d &b)
   {
     if((const D2to3d &) a ==(const D2to3d &) b)  
       return ( a.circ == b.circ );
     else
       return false;
+  }
+
+//! @brief Return the curvature radius of the circumscribed circle
+//! for the triangle ABC (based on https://es.mathworks.com/matlabcentral/fileexchange/69452-curvature-of-a-1d-curve-in-a-2d-or-3d-space).
+//
+//! @param A: first point.
+//! @param B: second point.
+//! @param C: third point.
+GEOM_FT curvatureRadius(const Pos3d &A,const Pos3d &B,const Pos3d &C)
+  {
+    const Vector3d D= cross(B-A,C-A); // cross-product.
+    const GEOM_FT b= Abs(A-C); // norm
+    const GEOM_FT c= Abs(A-B); // norm
+    const GEOM_FT a= Abs(B-C); //slightly faster if only R is required
+    GEOM_FT retval= a*b*c/2.0/Abs(D);
+    if(Abs(D) == 0.0)
+      retval= std::numeric_limits<GEOM_FT>::infinity();
+    return retval;
+  }
+
+//! @brief Return the curvature of the circumscribed circle
+//! for the triangle ABC (based on https://es.mathworks.com/matlabcentral/fileexchange/69452-curvature-of-a-1d-curve-in-a-2d-or-3d-space).
+//
+//! @param A: first point.
+//! @param B: second point.
+//! @param C: third point.
+GEOM_FT curvature(const Pos3d &A,const Pos3d &B,const Pos3d &C)
+  { return 1.0/curvatureRadius(A,B,C); }
+
+//! @brief Return the curvature vector of the circumscribed circle
+//! for the triangle ABC (based on https://es.mathworks.com/matlabcentral/fileexchange/69452-curvature-of-a-1d-curve-in-a-2d-or-3d-space).
+//
+//! @param A: first point.
+//! @param B: second point.
+//! @param C: third point.
+Vector3d curvatureVector(const Pos3d &A,const Pos3d &B,const Pos3d &C)
+  {
+    const Vector3d D= cross(B-A,C-A); // cross-product.
+    const GEOM_FT b= Abs(A-C); // norm
+    const GEOM_FT c= Abs(A-B); // norm
+    const Vector3d E= cross(D,B-A);
+    const Vector3d F= cross(D,C-A); 
+    const Vector3d G= (b*b*E-c*c*F)/pow(Abs(D),2)/2.0;
+    const Pos3d M= A + G;
+    GEOM_FT R= Abs(G); // Radius of curvature
+    Vector3d retval;
+    if(R == 0.0)
+      retval = G;
+    else if(Abs(D) == 0.0) // aligned points.
+      {
+        R= std::numeric_limits<GEOM_FT>::infinity();
+        retval= D;
+      }
+     else
+       retval = G/pow(R,2); // Curvature vector
+    return retval;
+  }
+
+//! @brief Return the curvature radius of the circumscribed circle
+//! for the triangle ABC (based on https://es.mathworks.com/matlabcentral/fileexchange/69452-curvature-of-a-1d-curve-in-a-2d-or-3d-space).
+//
+//! @param A: first point.
+//! @param B: second point.
+//! @param C: third point.
+GEOM_FT curvatureRadius(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3)
+  {
+    const Pos3d A= To3dXY2d(p1,0.0);
+    const Pos3d B= To3dXY2d(p2,0.0);
+    const Pos3d C= To3dXY2d(p3,0.0);
+    return curvatureRadius(A,B,C);
+  }
+
+//! @brief Return the curvature of the circumscribed circle
+//! for the triangle ABC (based on https://es.mathworks.com/matlabcentral/fileexchange/69452-curvature-of-a-1d-curve-in-a-2d-or-3d-space).
+//
+//! @param A: first point.
+//! @param B: second point.
+//! @param C: third point.
+GEOM_FT curvature(const Pos2d &A,const Pos2d &B,const Pos2d &C)
+  { return 1.0/curvatureRadius(A,B,C); }
+
+//! @brief Return the curvature vector of the circumscribed circle
+//! for the triangle ABC (based on https://es.mathworks.com/matlabcentral/fileexchange/69452-curvature-of-a-1d-curve-in-a-2d-or-3d-space).
+//
+//! @param A: first point.
+//! @param B: second point.
+//! @param C: third point.
+Vector2d curvatureVector(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3)
+  {
+    const Pos3d A= To3dXY2d(p1,0.0);
+    const Pos3d B= To3dXY2d(p2,0.0);
+    const Pos3d C= To3dXY2d(p3,0.0);
+    const Vector3d tmp= curvatureVector(A,B,C);
+    return Vector2d(tmp.x(), tmp.y());
   }

@@ -67,6 +67,12 @@ class_<Circle2d, bases<Surface2d> >("Circle2d")
   .def("getPxy", &Circle2d::Pxy)
   .def("getCenterOfMass", &Circle2d::getCenterOfMass, " return the center of mass.")
   ;
+Vector2d (*curvature_vector_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvatureVector;
+def("curvatureVector", curvature_vector_2d, "curvatureVector(ptA, ptB, ptC): return the curvature vector of the circumscribed circle");
+double (*curvature_radius_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvatureRadius;
+def("curvatureRadius", curvature_radius_2d, "curvatureRadius(ptA, ptB, ptC): return the curvature radius of the circumscribed circle");
+double (*curvature_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvature;
+def("curvature", curvature_2d, "curvature(ptA, ptB, ptC): return the curvature of the circumscribed circle");
 
 #include "2d_polygons/python_interface.tcc"
 
@@ -219,6 +225,13 @@ class_<Circle3d, bases<D2to3d> >("Circle3d")
   .def("getPxy", &Circle3d::Pxy)
   .def("getCenterOfMass", &Circle3d::getCenterOfMass, " return the center of mass.")
   ;
+
+Vector3d (*curvature_vector_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvatureVector;
+def("curvatureVector", curvature_vector_3d, "curvatureVector(ptA, ptB, ptC): return the curvature vector of the circumscribed circle");
+double (*curvature_radius_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvatureRadius;
+def("curvatureRadius", curvature_radius_3d, "curvatureRadius(ptA, ptB, ptC): return the curvature radius of the circumscribed circle");
+double (*curvature_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvature;
+def("curvature", curvature_3d, "curvature(ptA, ptB, ptC): return the curvature of the circumscribed circle");
 
 class_<Triangle3d, bases<Polygon3d>  >("Triangle3d")
   .def(init<Pos3d,Pos3d,Pos3d>())
