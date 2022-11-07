@@ -26,9 +26,8 @@
 
 #include "utility/geom/lists/utils_list_pos2d.h"
 #include "utility/geom/trf/Trf2d.h"
-
-
 #include "utility/geom/pos_vec/Pos2dList.h"
+#include "utility/geom/d2/Circle3d.h"
 
 //! @brief Default constructor.
 Polyline2d::Polyline2d(void)
@@ -248,6 +247,125 @@ Segment2d Polyline2d::getSegment(const size_t &i) const
                 << "-th is the last one." << std::endl;
     Segment2d s(Vertice(i),Vertice(i+1));
     return s;
+  }
+
+//! @brief Return the approximate curvature of the polyline at
+//! the vertex pointed by the iterator argument.
+//
+//! @param nth: iterator pointing to the desired vertex.
+GEOM_FT Polyline2d::getCurvatureAtVertex(const_iterator nth) const
+  {
+    double retval;
+    const size_t sz= this->size();
+    if(sz<3) //Only one segment.
+      retval= 0.0;
+    else
+      {
+	const_iterator previousVertexIter= nth-1;
+	const_iterator thisVertexIter= nth;
+	const_iterator nextVertexIter= nth+1;
+	if(nth == this->begin()) // No previous vertex.
+	  {
+	    previousVertexIter= nth;
+	    thisVertexIter= nth+1;
+	    nextVertexIter= nth+2;
+	  }
+	else if(nth == this->end()) // No following vertex.
+	  {
+	    previousVertexIter= nth-2;
+	    thisVertexIter= nth-1;
+	    nextVertexIter= nth;
+	  }
+	const Pos2d &A= *thisVertexIter;
+	const Pos2d &B= *previousVertexIter;
+	const Pos2d &C= *nextVertexIter;
+	retval= curvature(A,B,C);
+      }
+    return retval;
+  }
+//! @brief Return the approximate curvature of the polyline at
+//! the the point at a distance "s" measured along the polyline
+//! from its origin.
+//
+//! @param s: distance measured along the polyline from its origin.
+GEOM_FT Polyline2d::getCurvatureAtLength(const GEOM_FT &s) const
+  {
+    double retval= 0.0;
+    const size_t sz= this->size();
+    if(sz<3) //Only one segment.
+      retval= 0.0;
+    else
+      {
+	const const_iterator i= getSegmentAtLength(s);
+	if(i!=this->end()) // found it
+	  {
+	    GEOM_FT k1= this->getCurvatureAtVertex(i);
+            const_iterator j= i+1;
+	    if(j==this->end())
+	      retval= k1;
+	    else
+	      {
+		GEOM_FT k2= this->getCurvatureAtVertex(i+1);
+		const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
+		const GEOM_FT remainderLength= s-lengthUntil;
+		const Segment2d sg= getSegment(i);
+		const GEOM_FT factor= remainderLength/sg.getLength();
+		retval= (1-factor)*k1+factor*k2;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the point at a distance "s" measured along
+//! the polyline from its origin.
+//
+//! @param s: distance measured along the polyline from its origin.
+Pos2d Polyline2d::getPointAtLength(const GEOM_FT &s) const
+  {
+    Pos2d retval;
+    const const_iterator i= getSegmentAtLength(s);
+    if(i!=this->end()) // found it
+      {
+	const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
+	const GEOM_FT remainderLength= s-lengthUntil;
+	const Segment2d sg= getSegment(i);
+	retval= sg.PtoParametricas(remainderLength);
+      }
+    return retval;
+  }
+
+//! @brief Return the I vector of the segment that lies at the
+//! point at a distance "s" measured along the polyline from
+//! its origin.
+//! @param s: distance measured along the polyline from its origin.
+Vector2d Polyline2d::getIVectorAtLength(const GEOM_FT &s) const
+  {
+    Vector2d retval;
+    const int i= getIndexOfSegmentAtLength(s);
+    if(i>=0) // found it
+      {
+	const Segment2d sg= getSegment(i+1);
+	retval= sg.getIVector();
+      }
+    return retval;
+  }
+
+//! @brief Return the J vector of the segment that lies at the
+//! point at a distance "s" measured along the polyline from
+//! its origin.
+//! @param s: distance measured along the polyline from its origin.
+Vector2d Polyline2d::getJVectorAtLength(const GEOM_FT &s) const
+  {
+    Vector2d retval;
+    const int i= getIndexOfSegmentAtLength(s);
+    if(i>=0) // found it
+      {
+	const Segment2d sg= getSegment(i+1);
+	retval= -sg.getJVector(); // Negate to make it point to
+	                          // the centroid of the curve.
+      }
+    return retval;
   }
 
 GEOM_FT Polyline2d::Ix(void) const

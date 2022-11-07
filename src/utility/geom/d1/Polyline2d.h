@@ -30,6 +30,7 @@ class Segment2d;
 class Ray2d;
 class Line2d;
 class Pos2dList;
+class Circle2d;
 
 //! @ingroup GEOM
 //
@@ -74,6 +75,12 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     virtual GEOM_FT Ix(void) const;
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Iz(void) const;
+
+    GEOM_FT getCurvatureAtVertex(const_iterator) const;
+    GEOM_FT getCurvatureAtLength(const GEOM_FT &) const;
+    Pos2d getPointAtLength(const GEOM_FT &) const;
+    Vector2d getIVectorAtLength(const GEOM_FT &) const;
+    Vector2d getJVectorAtLength(const GEOM_FT &) const;
     
     //! @brief Inertia product.
     inline virtual GEOM_FT Pxy(void) const

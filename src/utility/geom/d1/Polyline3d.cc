@@ -302,6 +302,71 @@ GEOM_FT Polyline3d::Iz(void) const
     return 0.0;
   }
 
+//! @brief Return the the point at a distance "s" measured along
+//! the polyline from its origin.
+//! @param s: distance measured along the polyline from its origin.
+Pos3d Polyline3d::getPointAtLength(const GEOM_FT &s) const
+  {
+    Pos3d retval;
+    const const_iterator i= getSegmentAtLength(s);
+    if(i!=this->end()) // found it
+      {
+	const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
+	const GEOM_FT remainderLength= s-lengthUntil;
+	const Segment3d sg= getSegment(i);
+	retval= sg.PtoParametricas(remainderLength);
+      }
+    return retval;
+  }
+
+//! @brief Return the I vector of the segment that lies at the
+//! point at a distance "s" measured along the polyline from
+//! its origin.
+//! @param s: distance measured along the polyline from its origin.
+Vector3d Polyline3d::getIVectorAtLength(const GEOM_FT &s) const
+  {
+    Vector3d retval;
+    const int i= getIndexOfSegmentAtLength(s);
+    if(i>=0) // found it
+      {
+	const Segment3d sg= getSegment(i+1);
+	retval= sg.getIVector();
+      }
+    return retval;
+  }
+
+//! @brief Return the J vector of the segment that lies at the
+//! point at a distance "s" measured along the polyline from
+//! its origin.
+//! @param s: distance measured along the polyline from its origin.
+Vector3d Polyline3d::getJVectorAtLength(const GEOM_FT &s) const
+  {
+    Vector3d retval;
+    const int i= getIndexOfSegmentAtLength(s);
+    if(i>=0) // found it
+      {
+	const Segment3d sg= getSegment(i+1);
+	retval= sg.getJVector();
+      }
+    return retval;
+  }
+
+//! @brief Return the K vector of the segment that lies at the
+//! point at a distance "s" measured along the polyline from
+//! its origin.
+//! @param s: distance measured along the polyline from its origin.
+Vector3d Polyline3d::getKVectorAtLength(const GEOM_FT &s) const
+  {
+    Vector3d retval;
+    const int i= getIndexOfSegmentAtLength(s);
+    if(i>=0) // found it
+      {
+	const Segment3d sg= getSegment(i+1);
+	retval= sg.getKVector();
+      }
+    return retval;
+  }
+
 //! @brief Insert the point argurment as vertex by
 //! splitting the nearest segment.
 void Polyline3d::insertVertex(const Pos3d &p, const GEOM_FT &tol)
