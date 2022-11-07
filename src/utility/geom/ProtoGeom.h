@@ -25,11 +25,11 @@
 
 #include "utility/kernel/CommandEntity.h"
 
-//! @defgroup GEOM Entidades geométricas.
+//! @defgroup GEOM Geometric entities.
 //
 //! @ingroup GEOM
 //
-//! @brief Clase base para redefinir el método printprop
+//! @brief Base class for geometry objects.
 class ProtoGeom: public CommandEntity
   {
   private:
