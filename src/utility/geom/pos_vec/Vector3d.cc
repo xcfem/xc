@@ -216,8 +216,6 @@ GEOM_FT Vector3d::getSignedAngle(const Vector3d &v) const
     const GEOM_FT coseno= prod_escalar/prod_mod;
     const Vector3d cross_product= this->getCross(v);
     const GEOM_FT seno= cross_product.GetModulus()/prod_mod;
-    std::cout << "v1= " << *this << " v2= " << v
-              << " cos= " << coseno << " sin= " << seno << std::endl;
     return atan2(seno,coseno);
   }
 

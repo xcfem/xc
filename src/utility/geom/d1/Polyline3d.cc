@@ -22,6 +22,8 @@
 
 #include "Polyline3d.h"
 #include "utility/geom/d2/Plane.h"
+#include "utility/geom/d2/Circle3d.h" //Curvature functions.
+#include "utility/utils/misc_utils/matem.h" // RadToDeg
 
 //! @brief Default constructor.
 Polyline3d::Polyline3d(void)
@@ -302,6 +304,160 @@ GEOM_FT Polyline3d::Iz(void) const
     return 0.0;
   }
 
+//! @brief Return the approximate curvature of the polyline at
+//! the vertex pointed by the iterator argument.
+//
+//! @param nth: iterator pointing to the desired vertex.
+GEOM_FT Polyline3d::getCurvatureAtVertex(const_iterator nth) const
+  {
+    double retval;
+    const size_t sz= this->size();
+    if(sz<3) //Only one segment.
+      retval= 0.0;
+    else
+      {
+	const_iterator previousVertexIter= nth-1;
+	const_iterator thisVertexIter= nth;
+	const_iterator nextVertexIter= nth+1;
+	if(nth == this->begin()) // No previous vertex.
+	  {
+	    previousVertexIter= nth;
+	    thisVertexIter= nth+1;
+	    nextVertexIter= nth+2;
+	  }
+	else if(nth == this->end()) // No following vertex.
+	  {
+	    previousVertexIter= nth-2;
+	    thisVertexIter= nth-1;
+	    nextVertexIter= nth;
+	  }
+	const Pos3d &A= *thisVertexIter;
+	const Pos3d &B= *previousVertexIter;
+	const Pos3d &C= *nextVertexIter;
+	retval= curvature(A,B,C);
+      }
+    return retval;
+  }
+
+//! @brief Return the approximate curvature of the polyline at
+//! the the point at a distance "s" measured along the polyline
+//! from its origin.
+//
+//! @param s: distance measured along the polyline from its origin.
+GEOM_FT Polyline3d::getCurvatureAtLength(const GEOM_FT &s) const
+  {
+    double retval= 0.0;
+    const size_t sz= this->size();
+    if(sz<3) //Only one segment.
+      retval= 0.0;
+    else
+      {
+	const const_iterator i= getSegmentAtLength(s);
+	if(i!=this->end()) // found it
+	  {
+	    GEOM_FT k1= this->getCurvatureAtVertex(i);
+            const_iterator j= i+1;
+	    if(j==this->end())
+	      retval= k1;
+	    else
+	      {
+		GEOM_FT k2= this->getCurvatureAtVertex(i+1);
+		const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
+		const GEOM_FT remainderLength= s-lengthUntil;
+		const Segment3d sg= getSegment(i);
+		const GEOM_FT factor= remainderLength/sg.getLength();
+		retval= (1-factor)*k1+factor*k2;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the approximate curvature of the polyline at
+//! the vertex pointed by the iterator argument.
+//
+//! @param nth: iterator pointing to the desired vertex.
+Vector3d Polyline3d::getCurvatureVectorAtVertex(const_iterator nth) const
+  {
+    Vector3d retval;
+    const size_t sz= this->size();
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";ERROR: no segments, so no curvature vector." << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment3d sg= this->getSegment(1);
+	retval= sg.getJVector();
+      }
+    else
+      {
+	const_iterator previousVertexIter= nth-1;
+	const_iterator thisVertexIter= nth;
+	const_iterator nextVertexIter= nth+1;
+	if(nth == this->begin()) // No previous vertex.
+	  {
+	    previousVertexIter= nth;
+	    thisVertexIter= nth+1;
+	    nextVertexIter= nth+2;
+	  }
+	else if(nth == this->end()) // No following vertex.
+	  {
+	    previousVertexIter= nth-2;
+	    thisVertexIter= nth-1;
+	    nextVertexIter= nth;
+	  }
+	const Pos3d &A= *thisVertexIter;
+	const Pos3d &B= *previousVertexIter;
+	const Pos3d &C= *nextVertexIter;
+	retval= curvatureVector(A,B,C);
+      }
+    return retval;
+  }
+
+//! @brief Return the approximate curvature vector of the polyline at
+//! the the point at a distance "s" measured along the polyline
+//! from its origin.
+//
+//! @param s: distance measured along the polyline from its origin.
+Vector3d Polyline3d::getCurvatureVectorAtLength(const GEOM_FT &s) const
+  {
+    Vector3d retval;
+    const size_t sz= this->size();
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";ERROR: no segments, so no curvature vector." << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment3d sg= this->getSegment(1);
+	retval= sg.getJVector();
+      }
+    else
+      {
+	const const_iterator i= getSegmentAtLength(s);
+	if(i!=this->end()) // found it
+	  {
+	    Vector3d k1= this->getCurvatureVectorAtVertex(i);
+            const_iterator j= i+1;
+	    if(j==this->end())
+	      retval= k1;
+	    else
+	      {
+		Vector3d k2= this->getCurvatureVectorAtVertex(i+1);
+		const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
+		const GEOM_FT remainderLength= s-lengthUntil;
+		const Segment3d sg= getSegment(i);
+		const GEOM_FT factor= remainderLength/sg.getLength();
+		retval= (1-factor)*k1+factor*k2;
+	      }
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return the the point at a distance "s" measured along
 //! the polyline from its origin.
 //! @param s: distance measured along the polyline from its origin.
@@ -341,12 +497,33 @@ Vector3d Polyline3d::getIVectorAtLength(const GEOM_FT &s) const
 //! @param s: distance measured along the polyline from its origin.
 Vector3d Polyline3d::getJVectorAtLength(const GEOM_FT &s) const
   {
+    const GEOM_FT angleTol= 1e-3;
+    const GEOM_FT pi_2= M_PI/2.0;
     Vector3d retval;
     const int i= getIndexOfSegmentAtLength(s);
     if(i>=0) // found it
       {
 	const Segment3d sg= getSegment(i+1);
-	retval= sg.getJVector();
+	const Vector3d sgJVector= sg.getJVector();
+	const Vector3d sgKVector= sg.getKVector();
+	// Get orientation from the approximated curvature vector.
+	const Vector3d vK= getCurvatureVectorAtLength(s);
+	if(Abs(vK)>0.0)
+	  {
+	    const GEOM_FT sgJAngle= sgJVector.getSignedAngle(vK);
+	    const GEOM_FT sgKAngle= sgKVector.getSignedAngle(vK);
+	    if(abs(sgKAngle-pi_2)<angleTol or abs(sgKAngle+pi_2)<angleTol)
+	      { retval= sgJVector; }
+	    if(abs(sgJAngle-pi_2)<angleTol or abs(sgJAngle+pi_2)<angleTol)
+	      { retval= sgKVector; }
+	    const GEOM_FT dt= dot(retval, vK);
+	    if(dt<0)
+	      retval= -retval;
+	  }
+	else
+	  {
+	    retval= sgJVector;
+	  }
       }
     return retval;
   }
@@ -357,14 +534,9 @@ Vector3d Polyline3d::getJVectorAtLength(const GEOM_FT &s) const
 //! @param s: distance measured along the polyline from its origin.
 Vector3d Polyline3d::getKVectorAtLength(const GEOM_FT &s) const
   {
-    Vector3d retval;
-    const int i= getIndexOfSegmentAtLength(s);
-    if(i>=0) // found it
-      {
-	const Segment3d sg= getSegment(i+1);
-	retval= sg.getKVector();
-      }
-    return retval;
+    Vector3d iVector= this->getIVectorAtLength(s);
+    Vector3d jVector= this->getJVectorAtLength(s);
+    return cross(iVector, jVector);
   }
 
 //! @brief Insert the point argurment as vertex by

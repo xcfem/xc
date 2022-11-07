@@ -27,7 +27,7 @@
 #include "utility/geom/lists/utils_list_pos2d.h"
 #include "utility/geom/trf/Trf2d.h"
 #include "utility/geom/pos_vec/Pos2dList.h"
-#include "utility/geom/d2/Circle3d.h"
+#include "utility/geom/d2/Circle3d.h" // Curvature functions.
 
 //! @brief Default constructor.
 Polyline2d::Polyline2d(void)
@@ -283,6 +283,7 @@ GEOM_FT Polyline2d::getCurvatureAtVertex(const_iterator nth) const
       }
     return retval;
   }
+
 //! @brief Return the approximate curvature of the polyline at
 //! the the point at a distance "s" measured along the polyline
 //! from its origin.
@@ -306,6 +307,91 @@ GEOM_FT Polyline2d::getCurvatureAtLength(const GEOM_FT &s) const
 	    else
 	      {
 		GEOM_FT k2= this->getCurvatureAtVertex(i+1);
+		const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
+		const GEOM_FT remainderLength= s-lengthUntil;
+		const Segment2d sg= getSegment(i);
+		const GEOM_FT factor= remainderLength/sg.getLength();
+		retval= (1-factor)*k1+factor*k2;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the approximate curvature of the polyline at
+//! the vertex pointed by the iterator argument.
+//
+//! @param nth: iterator pointing to the desired vertex.
+Vector2d Polyline2d::getCurvatureVectorAtVertex(const_iterator nth) const
+  {
+    Vector2d retval;
+    const size_t sz= this->size();
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";ERROR: no segments, so no curvature vector." << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment2d sg= this->getSegment(1);
+	retval= sg.getJVector();
+      }
+    else
+      {
+	const_iterator previousVertexIter= nth-1;
+	const_iterator thisVertexIter= nth;
+	const_iterator nextVertexIter= nth+1;
+	if(nth == this->begin()) // No previous vertex.
+	  {
+	    previousVertexIter= nth;
+	    thisVertexIter= nth+1;
+	    nextVertexIter= nth+2;
+	  }
+	else if(nth == this->end()) // No following vertex.
+	  {
+	    previousVertexIter= nth-2;
+	    thisVertexIter= nth-1;
+	    nextVertexIter= nth;
+	  }
+	const Pos2d &A= *thisVertexIter;
+	const Pos2d &B= *previousVertexIter;
+	const Pos2d &C= *nextVertexIter;
+	retval= curvatureVector(A,B,C);
+      }
+    return retval;
+  }
+
+//! @brief Return the approximate curvature vector of the polyline at
+//! the the point at a distance "s" measured along the polyline
+//! from its origin.
+//
+//! @param s: distance measured along the polyline from its origin.
+Vector2d Polyline2d::getCurvatureVectorAtLength(const GEOM_FT &s) const
+  {
+    Vector2d retval;
+    const size_t sz= this->size();
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";ERROR: no segments, so no curvature vector." << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment2d sg= this->getSegment(1);
+	retval= sg.getJVector();
+      }
+    else
+      {
+	const const_iterator i= getSegmentAtLength(s);
+	if(i!=this->end()) // found it
+	  {
+	    Vector2d k1= this->getCurvatureVectorAtVertex(i);
+            const_iterator j= i+1;
+	    if(j==this->end())
+	      retval= k1;
+	    else
+	      {
+		Vector2d k2= this->getCurvatureVectorAtVertex(i+1);
 		const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
 		const GEOM_FT remainderLength= s-lengthUntil;
 		const Segment2d sg= getSegment(i);
@@ -362,8 +448,13 @@ Vector2d Polyline2d::getJVectorAtLength(const GEOM_FT &s) const
     if(i>=0) // found it
       {
 	const Segment2d sg= getSegment(i+1);
-	retval= -sg.getJVector(); // Negate to make it point to
-	                          // the centroid of the curve.
+	Vector2d jVector= -sg.getJVector();
+	// Get orientation from the approximated curvature vector.
+	const Vector2d vK= getCurvatureVectorAtLength(s);
+	const GEOM_FT dt= dot(jVector, vK);
+	if(dt<0)
+	  jVector= -jVector;
+	retval= jVector;
       }
     return retval;
   }
