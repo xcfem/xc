@@ -207,7 +207,7 @@ python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
 python tests/actions/traffic_loads/test_ec1_notional_lane_computation_01.py
-python tests/actions/traffic_loads/test_ec1_notional_lm1_position.py
+python tests/actions/traffic_loads/test_ec1_lm1_tandem_position.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
