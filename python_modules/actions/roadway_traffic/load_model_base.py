@@ -22,18 +22,18 @@ class WheelLoad(object):
     :ivar load: load
     :ivar lx: length wheel in transversal direction 
     :ivar ly: length wheel in longitudinal direction 
-    :ivar nodeTag: identifier of the corresponding node.
+    :ivar node: node under the wheel.
     '''
-    def __init__(self,pos,ld,lx=0,ly=0,nTag= None):
+    def __init__(self,pos,ld,lx=0,ly=0,node= None):
         self.position= pos
         self.load= ld
         self.lx=lx
         self.ly=ly
-        self.nodeTag= nTag
+        self.node= node
 
     def getDict(self):
         ''' Return a dictionary with the object values.'''
-        return {'pos':self.position,'load':self.load,'lx':self.lx,'ly':self.ly, 'nodeTag': self.nodeTag}
+        return {'pos':self.position,'load':self.load,'lx':self.lx,'ly':self.ly, 'nodeTag': self.node.tag}
 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
@@ -41,7 +41,7 @@ class WheelLoad(object):
         self.load= dct['ld']
         self.lx= dct['lx']
         self.ly= dct['ly']
-        self.nodeTag= dct['nodeTag']
+        #self.nodeTag= dct['nodeTag']
 
     def __str__(self):
         return str(self.getDict())
@@ -52,15 +52,19 @@ class WheelLoad(object):
         :param originSet: in not None pick the nearest node for each wheel load.
         '''
         n= originSet.getNearestNode(self.position)
-        self.nodeTag= n.tag
+        self.node= n
 
-    def defNodalLoad(self, loadCase):
+    def defNodalLoad(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Create a new nodal load.
 
-        :param loadCase: load pattern to create the nodal load on.
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
         '''
-        loadVector= xc.Vector([0.0,0.0,-self.load,0.0,0.0,0.0])
-        loadCase.newNodalLoad(self.nodeTag, loadVector)
+        vLoad= self.load*gravityDir
+        if(brakingDir): # compute braking load
+            vLoad+= self.load*xc.Vector(brakingDir)
+        loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
+        return self.node.newLoad(loadVector)
     
        
 class TandemLoad(object):
@@ -387,6 +391,14 @@ class LaneAxis(object):
             pos3d= ref.getGlobalPosition(pos2d)
             wl.position= pos3d
         return wheelLoads
+
+    def getVDir(self, lmbdArcLength= 0.5):
+        ''' Return the direction vector of the lane axis.
+
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        '''
+        return self.pline.getIVectorAtLength(lmbdArcLength*self.pline.getLength())
     
 # Rudimentary implementation of the notional lane concept.
 #
@@ -435,8 +447,19 @@ class NotionalLane(object):
         finishEdge= self.getFinishEdge()
         return LaneAxis(pline= geom.Polyline3d([startingEdge.getCenterOfMass(), finishEdge.getCenterOfMass()]))
 
+    def getVDir(self, lmbdArcLength= 0.5):
+        ''' Return the direction vector of the lane axis.
+
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+         '''
+        return self.getAxis().getVDir(lmbdArcLength= lmbdArcLength)
+
 class NotionalLanes(object):
-    ''' Notional lanes container base class (abstract class).'''
+    ''' Notional lanes container base class (abstract class).
+
+    :ivar laneSets: sets of elements belonging to each notional lane.
+    '''
     
     def getAreas(self):
         ''' Return the areas of the notional lanes.'''
@@ -451,28 +474,23 @@ class NotionalLanes(object):
 
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
-        :param relativePositions: relative positions of the tandem center in
-                                  the notional lane axis (0 -> beginning of
-                                  the axis, 0.5-> middle of the axis, 1-> end
-                                  of the axis).
+        :param relativePosition: relative positions of the tandem center in
+                                 the notional lane axis (0 -> beginning of
+                                 the axis, 0.5-> middle of the axis, 1-> end
+                                 of the axis).
         :param originSet: in not None pick the nearest node for each wheel load.
         '''
-        retval= dict()
-        for tp in relativePositions:
-            posKey= 'pos'+str(tp)
-            wheelLoads= dict()
-            # Compute load positions in each lane.
-            for nl,td in zip(self.lanes,tandems):
-                laneKey= nl.name
+        retval= list()
+        # Compute load positions in each lane.
+        for nl,rpos,td in zip(self.lanes, relativePositions,tandems):
+            tandemLoads= list()
+            if(td is not None):
                 axis= nl.getAxis()
-                wheelLoads[laneKey]= axis.getWheelLoads(loadModel= td, lmbdArcLength= tp)
-            retval[posKey]= wheelLoads
+                tandemLoads= axis.getWheelLoads(loadModel= td, lmbdArcLength= rpos)
+            retval.extend(tandemLoads)
         if(originSet): # pick the nodes under each wheel
-            for posKey in retval:
-                wheelLoads= retval[posKey]
-                for laneKey in wheelLoads:
-                    for load in wheelLoads[laneKey]:
-                        load.pickNode(originSet= originSet)
+            for load in retval:
+                load.pickNode(originSet= originSet)
         return retval
     
     def defUniformLoadsXCSets(self, modelSpace, originSet):
@@ -482,14 +500,69 @@ class NotionalLanes(object):
         :param modelSpace: model space used to define the FE problem.
         :param originSet: set with the elements to pick from.
         '''
-        retval= list()
+        self.laneSets= list()
         for nl in self.lanes:
             setName= nl.name+'Set'
             xcSet= modelSpace.defSet(setName)
             modelSpace.pickElementsInZone(zone= nl.contour, resultSet= xcSet, originSet= originSet)
             xcSet.fillDownwards()
-            retval.append(xcSet)
+            self.laneSets.append(xcSet)
+        return self.laneSets
+
+    def defUniformLoads(self, laneUniformLoads= [9e3, 2.5e3, 2.5e3], gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define uniform loads on the lanes with the argument values:
+
+        :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        retval= list()
+        for q, xcSet in zip(laneUniformLoads, self.laneSets):
+            if(q is not None):
+                loadVector= q*gravityDir
+                if(brakingDir): # Compute braking load
+                    loadVector+= q*xc.Vector(brakingDir)
+                for e in xcSet.elements:
+                    retval.append(e.vector3dUniformLoadGlobal(loadVector))
         return retval
+
+    def defPunctualLoads(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define punctual loads under the wheels.
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePosition: relative positions of the tandem center in
+                                 the notional lane axis (0 -> beginning of
+                                 the axis, 0.5-> middle of the axis, 1-> end
+                                 of the axis).
+        :param originSet: in not None pick the nearest node for each wheel load.
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        wheelLoads= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet)
+        retval= list()
+        for wl in wheelLoads:
+            retval.append(wl.defNodalLoad(gravityDir= gravityDir, brakingDir= brakingDir))
+        return retval
+    
+    def defLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define punctual and uniform loads.
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePosition: relative positions of each tandem center in
+                                 the notional lane axis (0 -> beginning of
+                                 the axis, 0.5-> middle of the axis, 1-> end
+                                 of the axis).
+        :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
+        :param originSet: in not None pick the nearest node for each wheel load.
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        # punctual loads.
+        self.defPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
+        # uniform load.
+        self.defUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
+       
+
 
     
 
