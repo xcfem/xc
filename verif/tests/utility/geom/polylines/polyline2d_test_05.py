@@ -24,17 +24,17 @@ import geom
 #
 vertices= [geom.Pos2d(0, 0), geom.Pos2d(1, 0), geom.Pos2d(1,1), geom.Pos2d(0, 1)]
 
-contour2d= geom.Polyline2d(vertices)
-l= contour2d.getLength()
+pline2d= geom.Polyline2d(vertices)
+l= pline2d.getLength()
 
 # compute a polyline parallel to the previous one, at a fixed distance
 offsetValue= 0.25
-interior= contour2d.offset(-offsetValue)
+interior= pline2d.offset(-offsetValue)
 lInt= interior.getLength()
 lIntRef= l-4.0*offsetValue
 ratio1= abs(lInt-lIntRef)/lInt
 
-exterior= contour2d.offset(offsetValue)
+exterior= pline2d.offset(offsetValue)
 lExt= exterior.getLength()
 lExtRef= l+4.0*offsetValue
 ratio2= abs(lExt-lExtRef)/lExt

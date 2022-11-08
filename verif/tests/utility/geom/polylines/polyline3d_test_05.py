@@ -37,7 +37,7 @@ import geom
 vertices= [geom.Pos3d(0,0,0), geom.Pos3d(1,0,0), geom.Pos3d(1,1,0), geom.Pos3d(0, 1,0), geom.Pos3d(0,2,0), geom.Pos3d(1,2,0)]
 
 # Define polyline.
-contour3d= geom.Polyline3d(vertices)
+pline3d= geom.Polyline3d(vertices)
 
 # Check results at different points.
 lengths= [0.5, 1.5, 2.5, 3.5, 4.5]
@@ -48,13 +48,13 @@ pointsRef= [geom.Pos3d(0.5,0.0,0.0), geom.Pos3d(1.0,0.5,0.0), geom.Pos3d(0.5,1.0
 err= 0.0
 
 for l, vIr in zip(lengths, vIRef):
-    vI= contour3d.getIVectorAtLength(l) # I vector at s= l
+    vI= pline3d.getIVectorAtLength(l) # I vector at s= l
     err+= (vI-vIr).getModulus()**2
 for l, vJr in zip(lengths, vJRef):
-    vJ= contour3d.getJVectorAtLength(l) # J vector at s= l
+    vJ= pline3d.getJVectorAtLength(l) # J vector at s= l
     err+= (vJ-vJr).getModulus()**2
 for l, pr in zip(lengths, pointsRef):
-    p= contour3d.getPointAtLength(l) # point at s= l
+    p= pline3d.getPointAtLength(l) # point at s= l
     err+= (p-pr).getModulus()**2
 
 err= math.sqrt(err) # average quadratic error
