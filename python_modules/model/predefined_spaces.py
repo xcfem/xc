@@ -808,7 +808,7 @@ class PredefinedSpace(object):
         if(originSet is None):
             originSet= self.getTotalSet()
         return pick_node_on_point(pt, resultSet, originSet)
-    
+
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''
         self.preprocessor.getDomain.removeAllLoadPatterns()

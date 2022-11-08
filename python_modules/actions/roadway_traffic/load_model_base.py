@@ -22,12 +22,46 @@ class WheelLoad(object):
     :ivar load: load
     :ivar lx: length wheel in transversal direction 
     :ivar ly: length wheel in longitudinal direction 
+    :ivar nodeTag: identifier of the corresponding node.
     '''
-    def __init__(self,pos,ld,lx=0,ly=0):
+    def __init__(self,pos,ld,lx=0,ly=0,nTag= None):
         self.position= pos
         self.load= ld
         self.lx=lx
         self.ly=ly
+        self.nodeTag= nTag
+
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        return {'pos':self.position,'load':self.load,'lx':self.lx,'ly':self.ly, 'nodeTag': self.nodeTag}
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        self.position= dct['pos']
+        self.load= dct['ld']
+        self.lx= dct['lx']
+        self.ly= dct['ly']
+        self.nodeTag= dct['nodeTag']
+
+    def __str__(self):
+        return str(self.getDict())
+
+    def pickNode(self, originSet):
+        ''' Pick the nearest node to the wheel load position.
+
+        :param originSet: in not None pick the nearest node for each wheel load.
+        '''
+        n= originSet.getNearestNode(self.position)
+        self.nodeTag= n.tag
+
+    def defNodalLoad(self, loadCase):
+        ''' Create a new nodal load.
+
+        :param loadCase: load pattern to create the nodal load on.
+        '''
+        loadVector= xc.Vector([0.0,0.0,-self.load,0.0,0.0,0.0])
+        loadCase.newNodalLoad(self.nodeTag, loadVector)
+    
        
 class TandemLoad(object):
     ''' Tandem load.
@@ -370,13 +404,19 @@ class NotionalLane(object):
 
     :ivar contour: 3D polygon defining the contour of the notional lane.
     '''
-    def __init__(self, contour):
+    def __init__(self, name, contour):
         ''' Constructor.
 
+        :param name: name of the notional lane.
         :param contour: 3D polygon defining the contour of the notional lane.
         '''
+        self.name= name
         self.contour= contour
 
+    def getArea(self):
+        ''' Return the area of the notional lane contour.'''
+        return self.contour.getArea()
+    
     def getCentroid(self):
         ''' Return the centroid of the notional lane contour.'''
         return self.contour.getCenterOfMass()
@@ -388,9 +428,68 @@ class NotionalLane(object):
     def getFinishEdge(self):
         ''' Return the edge at the "finish" of the notional lane.'''
         return self.contour.getEdge(2)
-    
+
     def getAxis(self):
         ''' Return the axis of the notional lane.'''
         startingEdge= self.getStartingEdge()
         finishEdge= self.getFinishEdge()
         return LaneAxis(pline= geom.Polyline3d([startingEdge.getCenterOfMass(), finishEdge.getCenterOfMass()]))
+
+class NotionalLanes(object):
+    ''' Notional lanes container base class (abstract class).'''
+    
+    def getAreas(self):
+        ''' Return the areas of the notional lanes.'''
+        retval= list()
+        for lane in self.lanes:
+            retval.append(lane.getArea())
+        return retval
+
+    def getWheelLoads(self, tandems, relativePositions, originSet= None):
+        ''' Return a dictionary containing the wheel loads due to the tandems
+            argument in the positions argument.
+
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePositions: relative positions of the tandem center in
+                                  the notional lane axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param originSet: in not None pick the nearest node for each wheel load.
+        '''
+        retval= dict()
+        for tp in relativePositions:
+            posKey= 'pos'+str(tp)
+            wheelLoads= dict()
+            # Compute load positions in each lane.
+            for nl,td in zip(self.lanes,tandems):
+                laneKey= nl.name
+                axis= nl.getAxis()
+                wheelLoads[laneKey]= axis.getWheelLoads(loadModel= td, lmbdArcLength= tp)
+            retval[posKey]= wheelLoads
+        if(originSet): # pick the nodes under each wheel
+            for posKey in retval:
+                wheelLoads= retval[posKey]
+                for laneKey in wheelLoads:
+                    for load in wheelLoads[laneKey]:
+                        load.pickNode(originSet= originSet)
+        return retval
+    
+    def defUniformLoadsXCSets(self, modelSpace, originSet):
+        ''' Creates the XC sets with the elements that fall inside
+            each of the notional lanes of the argument.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param originSet: set with the elements to pick from.
+        '''
+        retval= list()
+        for nl in self.lanes:
+            setName= nl.name+'Set'
+            xcSet= modelSpace.defSet(setName)
+            modelSpace.pickElementsInZone(zone= nl.contour, resultSet= xcSet, originSet= originSet)
+            xcSet.fillDownwards()
+            retval.append(xcSet)
+        return retval
+
+    
+

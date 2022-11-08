@@ -24,30 +24,26 @@ border2= geom.Segment3d(p3, p4)
 
 carriagewayWidth= EC1_load_models.getCarriagewayWidth(firstBorder= border1, lastBorder= border2)
 notionalLanesWidths= EC1_load_models.getNotionalLanesWidths(carriagewayWidth)
-notionalLanesContours= EC1_load_models.getNotionalLanesContours(firstBorder= border1, lastBorder= border2)
+notionalLanes= EC1_load_models.NotionalLanes(firstBorder= border1, lastBorder= border2)
 
 err1= 0.0
 refAreas= [30.0, 30.0, 30.0, 25]
-areas= list()
-for plg, refArea in zip(notionalLanesContours, refAreas):
-    A= plg.getArea()
-    areas.append(A)
-    err1+= (A-refArea)**2
+areas= notionalLanes.getAreas()
+for area, refArea in zip(areas, refAreas):
+    err1+= (area-refArea)**2
 err1= math.sqrt(err1)
 
-reversedNotionalLanesContours= EC1_load_models.getNotionalLanesContours(firstBorder= border1, lastBorder= border2, reverse= True)
+reversedNotionalLanes= EC1_load_models.NotionalLanes(firstBorder= border1, lastBorder= border2, reverse= True)
 
 err2= 0.0
-reversedAreas= list()
+reversedAreas= reversedNotionalLanes.getAreas()
 refReversedAreas= [25, 30.0, 30.0, 30.0]
-for plg, refArea in zip(reversedNotionalLanesContours, refReversedAreas):
-    A= plg.getArea()
-    reversedAreas.append(A)
-    err2= (A-refArea)**2
+for area, refArea in zip(reversedAreas, refReversedAreas):
+    err2= (area-refArea)**2
 err2= math.sqrt(err2)
 
 '''
-print(notionalLanesContours[0].getVertexList())
+print(notionalLanes[0].contour.getVertexList())
 print('carriageway width: ', carriagewayWidth)
 print('widths of the notional lanes: ', notionalLanesWidths)
 print('areas: ', areas)
