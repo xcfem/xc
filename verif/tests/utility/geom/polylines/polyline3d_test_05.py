@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test getIVectorAtLength, getJVectorAtLength and getKVectorAtLength 
-    methods.'''
+''' Test getPointAtLength.'''
 
 from __future__ import print_function
 
@@ -15,44 +14,22 @@ import geom
 
 # Points.
 #
-#    p5              p6
 #    +--------------+
-#    |
-#    |
-#    |
-#    |
-#    |
-#    |
-#    +--------------+ p3
-#   p4              |
-#                   |
-#                   |
-#                   |
-#                   |
-#                   |
-#    +--------------+ p2
-#    p1
+#                   
+
 
 # Vertex list.
-vertices= [geom.Pos3d(0,0,0), geom.Pos3d(1,0,0), geom.Pos3d(1,1,0), geom.Pos3d(0, 1,0), geom.Pos3d(0,2,0), geom.Pos3d(1,2,0)]
+vertices= [geom.Pos3d(1, 3.5, 0), geom.Pos3d(11, 3.5, 0)]
 
 # Define polyline.
 pline3d= geom.Polyline3d(vertices)
 
 # Check results at different points.
-lengths= [0.5, 1.5, 2.5, 3.5, 4.5]
+lengths= [0.1,5.0,9.0]
 # Reference values.
-vIRef= [geom.Vector3d(1.0,0.0,0.0), geom.Vector3d(0.0,1.0,0.0), geom.Vector3d(-1.0,0.0,0.0), geom.Vector3d(0.0,1.0,0.0), geom.Vector3d(1.0,0.0,0.0)]
-vJRef= [geom.Vector3d(0.0,1.0,0.0), geom.Vector3d(-1.0,0.0,0.0), geom.Vector3d(0.0,-1.0,0.0), geom.Vector3d(1.0,0.0,0.0), geom.Vector3d(0.0,-1.0,0.0)]
-pointsRef= [geom.Pos3d(0.5,0.0,0.0), geom.Pos3d(1.0,0.5,0.0), geom.Pos3d(0.5,1.0,0.0), geom.Pos3d(0.0,1.5,0.0), geom.Pos3d(0.5, 2.0,0.0)]
+pointsRef= [geom.Pos3d(1.1, 3.5,0.0), geom.Pos3d(6.0, 3.5,0.0), geom.Pos3d(10.0, 3.5, 0.0)]
 err= 0.0
 
-for l, vIr in zip(lengths, vIRef):
-    vI= pline3d.getIVectorAtLength(l) # I vector at s= l
-    err+= (vI-vIr).getModulus()**2
-for l, vJr in zip(lengths, vJRef):
-    vJ= pline3d.getJVectorAtLength(l) # J vector at s= l
-    err+= (vJ-vJr).getModulus()**2
 for l, pr in zip(lengths, pointsRef):
     p= pline3d.getPointAtLength(l) # point at s= l
     err+= (p-pr).getModulus()**2

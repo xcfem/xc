@@ -13,6 +13,7 @@ import geom
 import xc
 from actions import loads
 from model.geometry import geom_utils as gu
+from misc_utils import log_messages as lmsg
 
 class WheelLoad(object):
     ''' Load of a wheel.
@@ -52,19 +53,25 @@ class TandemLoad(object):
         self.lx= lx
         self.ly= ly
 
-    def getWheelPositions(self):
-        ''' Return a list with the positions of the wheels.'''
+    def getWheelPositions(self, swapAxes= False):
+        ''' Return a list with the positions of the wheels.
+
+        :param swapAxes: if true swap X and Y axis.
+        '''
         dX= self.xSpacing/2.0
         dY= self.ySpacing/2.0
+        if(swapAxes):
+            dX, dY= dY, dX
         return [geom.Pos2d(dX,-dY),geom.Pos2d(-dX,-dY),geom.Pos2d(dX,dY),geom.Pos2d(-dX,dY)]
         
-    def getWheelLoads(self, loadFactor= 1.0):
+    def getWheelLoads(self, loadFactor= 1.0, swapAxes= False):
         ''' Return the loads of the wheels of the tandem along with its 
             positions.
 
         :param loadFactor: factor to apply to the loads.
+        :param swapAxes: if true swap X and Y axis.
         '''
-        positions= self.getWheelPositions()
+        positions= self.getWheelPositions(swapAxes= swapAxes)
         wheelLoad= self.axleLoad/2.0*loadFactor
         retval= list()
         for p in positions:
@@ -290,3 +297,100 @@ class VehicleLoad(object):
             retval.appendVertex(geom.Pos2d(p.x,p.y))
         return retval
 
+class LaneAxis(object):
+    ''' Notional lane
+
+    :ivar pline: 3D polyline defining the axis of a lane.
+    '''
+    def __init__(self, pline):
+        ''' Constructor.
+
+        :param pline: 3D polyline defining the axis of a lane.
+        '''
+        self.pline= pline        
+        
+    def getReferenceAt(self, lmbdArcLength):
+        ''' Return a 3D reference system with origin at the point 
+            O+lmbdArcLength*L where O is the first point of the reference 
+            axis and lmbdArcLength is a value between 0 and 1. If 
+            lmbdArcLength=0 the returned point is the origin of the notional
+            lane axis, and if lmbdArcLength= 1 it returns its end. The axis
+            of the reference system are (or will be) defined as follows:
+
+            - x: tangent to the notional lane axis oriented towards its end.
+            - y: normal to the notional lane axis oriented towards its center.
+            - z: defined by the cross-product x^y.
+
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        '''
+        if((lmbdArcLength>1.0) or (lmbdArcLength<0)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; lbmdArcLength '+str(lmbdArcLength) + ' out of range (0,1)')
+            
+        l= lmbdArcLength*self.pline.getLength()
+        O= self.pline.getPointAtLength(l)
+        iVector= self.pline.getIVectorAtLength(l)
+        jVector= self.pline.getJVectorAtLength(l)
+        return geom.Ref2d3d(O, iVector, jVector)
+
+    def getWheelLoads(self, loadModel, lmbdArcLength, loadFactor= 1.0):
+        ''' Return the wheel loads of load model argument in the position
+            specified by the lmbdArcLength parameter.
+
+        :param loadModel: object that has a getWheelLoad method that returns
+                          the 2D positions of the wheels and the loads to
+                          apply on them (see TandemLoad class).
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        :param loadFactor: factor to apply to the loads.
+        '''
+        wheelLoads= loadModel.getWheelLoads(loadFactor= loadFactor, swapAxes= True)
+        ref= self.getReferenceAt(lmbdArcLength= lmbdArcLength)
+        for wl in wheelLoads:
+            pos2d= wl.position
+            pos3d= ref.getGlobalPosition(pos2d)
+            wl.position= pos3d
+        return wheelLoads
+    
+# Rudimentary implementation of the notional lane concept.
+#
+#     Notional lane
+#   P1                                                 P2
+#     +-----------------------------------------------+
+#     |                                               |
+#     |                                               |
+#     |                                               |
+#     +-----------------------------------------------+
+#    P0                                                P3
+
+class NotionalLane(object):
+    ''' Notional lane
+
+    :ivar contour: 3D polygon defining the contour of the notional lane.
+    '''
+    def __init__(self, contour):
+        ''' Constructor.
+
+        :param contour: 3D polygon defining the contour of the notional lane.
+        '''
+        self.contour= contour
+
+    def getCentroid(self):
+        ''' Return the centroid of the notional lane contour.'''
+        return self.contour.getCenterOfMass()
+
+    def getStartingEdge(self):
+        ''' Return the edge at the "start" of the notional lane.'''
+        return self.contour.getEdge(0)
+
+    def getFinishEdge(self):
+        ''' Return the edge at the "finish" of the notional lane.'''
+        return self.contour.getEdge(2)
+    
+    def getAxis(self):
+        ''' Return the axis of the notional lane.'''
+        startingEdge= self.getStartingEdge()
+        finishEdge= self.getFinishEdge()
+        return LaneAxis(pline= geom.Polyline3d([startingEdge.getCenterOfMass(), finishEdge.getCenterOfMass()]))

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test getIVectorAtLength, getJVectorAtLength methods.'''
+''' Offset method test on 2D polylines.'''
 
 from __future__ import print_function
 
@@ -9,61 +9,50 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 import geom
 
 # Points.
 #
-#    p5              p6
 #    +--------------+
-#    |
-#    |
-#    |
-#    |
-#    |
-#    |
-#    +--------------+ p3
-#   p4              |
 #                   |
+#        +------+   |
+#               |   |
+#               |   |
+#        +------+   |
 #                   |
-#                   |
-#                   |
-#                   |
-#    +--------------+ p2
-#    p1
+#    +--------------+
+#
+vertices= [geom.Pos2d(0, 0), geom.Pos2d(1, 0), geom.Pos2d(1,1), geom.Pos2d(0, 1)]
 
-# Vertex list.
-vertices= [geom.Pos2d(0, 0), geom.Pos2d(1, 0), geom.Pos2d(1,1), geom.Pos2d(0, 1), geom.Pos2d(0,2), geom.Pos2d(1,2)]
-
-# Define polyline.
 pline2d= geom.Polyline2d(vertices)
+l= pline2d.getLength()
 
-# Check results at different points.
-lengths= [0.5, 1.5, 2.5, 3.5, 4.5]
-# Reference values.
-vIRef= [geom.Vector2d(1.0,0.0), geom.Vector2d(0.0,1.0), geom.Vector2d(-1.0,0.0), geom.Vector2d(0.0,1.0), geom.Vector2d(1.0,0.0)]
-vJRef= [geom.Vector2d(0.0,1.0), geom.Vector2d(-1.0,0.0), geom.Vector2d(0.0,-1.0), geom.Vector2d(1.0,0.0), geom.Vector2d(0.0,-1.0)]
-pointsRef= [geom.Pos2d(0.5,0.0), geom.Pos2d(1.0,0.5), geom.Pos2d(0.5,1.0), geom.Pos2d(0.0,1.5), geom.Pos2d(0.5, 2.0)]
-err= 0.0
+# compute a polyline parallel to the previous one, at a fixed distance
+offsetValue= 0.25
+interior= pline2d.offset(-offsetValue)
+lInt= interior.getLength()
+lIntRef= l-4.0*offsetValue
+ratio1= abs(lInt-lIntRef)/lInt
 
-for l, vIr in zip(lengths, vIRef):
-    vI= pline2d.getIVectorAtLength(l) # I vector at s= l
-    err+= (vI-vIr).getModulus()**2
-for l, vJr in zip(lengths, vJRef):
-    vJ= pline2d.getJVectorAtLength(l) # J vector at s= l
-    err+= (vJ-vJr).getModulus()**2
-for l, pr in zip(lengths, pointsRef):
-    p= pline2d.getPointAtLength(l) # point at s= l
-    err+= (p-pr).getModulus()**2
+exterior= pline2d.offset(offsetValue)
+lExt= exterior.getLength()
+lExtRef= l+4.0*offsetValue
+ratio2= abs(lExt-lExtRef)/lExt
 
-err= math.sqrt(err) # average quadratic error
-
-#print('err= ', err)
+'''
+print(l)
+print(lInt)
+print(ratio1)
+print(lExt)
+print(ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(err)<1e-10:
+if abs(ratio1)<1e-10 and abs(ratio2)<1e-10:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
+
+

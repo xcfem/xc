@@ -86,12 +86,14 @@ python tests/utility/geom/polylines/polyline2d_test_03.py
 python tests/utility/geom/polylines/polyline2d_test_04.py
 python tests/utility/geom/polylines/polyline2d_test_05.py
 python tests/utility/geom/polylines/polyline2d_test_06.py
+python tests/utility/geom/polylines/polyline2d_test_07.py
 python tests/utility/geom/polylines/polyline3d_test_01.py
 python tests/utility/geom/polylines/polyline3d_test_02.py
 python tests/utility/geom/polylines/polyline3d_test_03.py
 python tests/utility/geom/polylines/polyline3d_test_04.py
 python tests/utility/geom/polylines/polyline3d_test_05.py
 python tests/utility/geom/polylines/polyline3d_test_06.py
+python tests/utility/geom/polylines/polyline3d_test_07.py
 echo "$BLEU" "    Polygons." "$NORMAL"
 python tests/utility/geom/polygons/polygon2D_test_2d_01.py
 python tests/utility/geom/polygons/polygon2D_test_2d_02.py
@@ -205,6 +207,7 @@ python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
 python tests/actions/traffic_loads/test_ec1_notional_lane_computation_01.py
+python tests/actions/traffic_loads/test_ec1_notional_lm1_position.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"

@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 import math
 import geom
 
-# Points on XY plane.
+# Points on YZ plane.
 #
 #    p5              p6
 #    +--------------+
@@ -32,19 +32,21 @@ import geom
 #                   |
 #    +--------------+ p2
 #    p1
+#
 
 # Vertex list.
-vertices= [geom.Pos3d(0,0,0), geom.Pos3d(1,0,0), geom.Pos3d(1,1,0), geom.Pos3d(0, 1,0), geom.Pos3d(0,2,0), geom.Pos3d(1,2,0)]
+vertices= [geom.Pos3d(0, 0, 0), geom.Pos3d(0, 1, 0), geom.Pos3d(0, 1, 1), geom.Pos3d(0, 0, 1), geom.Pos3d(0,0,2), geom.Pos3d(0,1,2)]
 
 # Define polyline.
 pline3d= geom.Polyline3d(vertices)
 
 # Check results at different points.
-lengths= [0.5, 1.5, 2.5, 3.5, 4.5]
+lengths= [0.5, 1.5, 2.4, 3.5, 4.5] # Curvature at s=2.5 is zero that's why we take s=2.4
 # Reference values.
-vIRef= [geom.Vector3d(1.0,0.0,0.0), geom.Vector3d(0.0,1.0,0.0), geom.Vector3d(-1.0,0.0,0.0), geom.Vector3d(0.0,1.0,0.0), geom.Vector3d(1.0,0.0,0.0)]
-vJRef= [geom.Vector3d(0.0,1.0,0.0), geom.Vector3d(-1.0,0.0,0.0), geom.Vector3d(0.0,-1.0,0.0), geom.Vector3d(1.0,0.0,0.0), geom.Vector3d(0.0,-1.0,0.0)]
-pointsRef= [geom.Pos3d(0.5,0.0,0.0), geom.Pos3d(1.0,0.5,0.0), geom.Pos3d(0.5,1.0,0.0), geom.Pos3d(0.0,1.5,0.0), geom.Pos3d(0.5, 2.0,0.0)]
+vIRef= [geom.Vector3d(0.0, 1.0, 0.0), geom.Vector3d(0.0, 0.0, 1.0), geom.Vector3d(0.0, -1.0, 0.0), geom.Vector3d(0,0,1), geom.Vector3d(0,1,0)]
+vJRef= [geom.Vector3d(0.0, 0.0,1.0), geom.Vector3d(0.0, -1.0,0.0), geom.Vector3d(0.0, 0.0,-1.0), geom.Vector3d(0,1,0), geom.Vector3d(0,0,-1)]
+vKRef= [geom.Vector3d(1.0, 0.0,0.0), geom.Vector3d(1.0, 0.0,0.0), geom.Vector3d(1.0, 0.0,0.0)]
+pointsRef= [geom.Pos3d(0.0, 0.5,0.0), geom.Pos3d(0.0, 1.0,0.5), geom.Pos3d(0.0, 0.6,1.0), geom.Pos3d(0.0, 0,1.5), geom.Pos3d(0.0, 0.5, 2.0)]
 err= 0.0
 
 for l, vIr in zip(lengths, vIRef):
@@ -53,6 +55,9 @@ for l, vIr in zip(lengths, vIRef):
 for l, vJr in zip(lengths, vJRef):
     vJ= pline3d.getJVectorAtLength(l) # J vector at s= l
     err+= (vJ-vJr).getModulus()**2
+for l, vKr in zip(lengths, vKRef):
+    vK= pline3d.getKVectorAtLength(l) # K vector at s= l
+    err+= (vK-vKr).getModulus()**2
 for l, pr in zip(lengths, pointsRef):
     p= pline3d.getPointAtLength(l) # point at s= l
     err+= (p-pr).getModulus()**2
