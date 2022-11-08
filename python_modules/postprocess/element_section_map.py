@@ -112,7 +112,7 @@ class ElementSections(object):
         if(gaussPnt):
             ipText= str(gaussPnt)
             if(direction):
-                sect.name+= '_'
+                name+= '_'
             name+= ipText
             description+= ' ' + ipText + " integration point."
         if(self.find_section(name) is None):

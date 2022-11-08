@@ -1260,12 +1260,24 @@ def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sectio
     return retval
 
 
-def writeControlVarsFromElementsForAnsys(preprocessor,outputFileName, sectionName1, sectionName2):
+def writeControlVarsFromElementsForAnsys(preprocessor,outputFileName, outputCfg, sectionName1, sectionName2):
     '''
-    :param   preprocessor:    preprocessor name
-    :param   outputFileName:  name of the output file containing tue results of the 
-                       verification 
+    :param preprocessor: preprocessor for the FE problem.
+    :param outputFileName: name of the output file containing the results 
+                          of the verification. 
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
+           variables that control the output of the checking (set of 
+           elements to be analyzed [defaults to 'total'], append or not the 
+           results to the result file [defatults to 'N'], generation or not of 
+           list file [defatults to 'N', ...)
+    :param sectioName1: name of the first section to write the output for.
+    :param sectioName2: name of the second section to write the output for.
     '''
+    def odd(v):
+        if v & 1:
+            return True
+        else:
+            return False
     controlVarName= outputCfg.controller.limitStateLabel
     texOutput1= open("/tmp/texOutput1.tmp","w")
     texOutput1.write("Section 1\n")
@@ -1285,13 +1297,13 @@ def writeControlVarsFromElementsForAnsys(preprocessor,outputFileName, sectionNam
         if(odd(e.tag)):
             fcs1.append(controlVar.getCF())
             texOutput1.write(outStr)
-            ansOut= controlVal.getAnsysStrings(eTag,'1',1e-3)
+            ansOut= controlVar.getAnsysStrings(eTag,'1',1e-3)
             for s in ansOut:
                 ansysOutput1.write(s)
         else:
             fcs2.append(controlVar.getCF())
             texOutput2.write(outStr)
-            ansOut= controlVal.getAnsysStrings(eTag,'2',1e-3)
+            ansOut= controlVar.getAnsysStrings(eTag,'2',1e-3)
             for s in ansOut:
                 ansysOutput2.write(s)
     #printCierreListadoCapacityFactor("texOutput1")
