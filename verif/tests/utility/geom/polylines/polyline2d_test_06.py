@@ -35,7 +35,7 @@ import geom
 # Vertex list.
 vertices= [geom.Pos2d(0, 0), geom.Pos2d(1, 0), geom.Pos2d(1,1), geom.Pos2d(0, 1), geom.Pos2d(0,2), geom.Pos2d(1,2)]
 
-# Define polygon.
+# Define polyline.
 contour2d= geom.Polyline2d(vertices)
 
 # Check results at different points.

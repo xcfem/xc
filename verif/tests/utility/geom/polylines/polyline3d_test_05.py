@@ -36,7 +36,7 @@ import geom
 # Vertex list.
 vertices= [geom.Pos3d(0,0,0), geom.Pos3d(1,0,0), geom.Pos3d(1,1,0), geom.Pos3d(0, 1,0), geom.Pos3d(0,2,0), geom.Pos3d(1,2,0)]
 
-# Define polygon.
+# Define polyline.
 contour3d= geom.Polyline3d(vertices)
 
 # Check results at different points.
