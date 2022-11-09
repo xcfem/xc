@@ -263,7 +263,7 @@ Pos2d Segment2d::PtoParametricas(const GEOM_FT &lambda) const
 
 //! @brief Return the mid point of the segment.
 Pos2d Segment2d::getMidPoint(void) const
-  { return PtoParametricas(0.5); }
+  { return PtoParametricas(0.5*getLength()); }
 
 //! @brief Return the parametric coordinate that corresponds to the
 //! natural coordinate argument.
@@ -273,7 +273,7 @@ double Segment2d::getParamNaturalCoord(const GEOM_FT &chi) const
 //! @brief Return the point of the segment with the natural coordinate
 //! being passed as parameter.
 Pos2d Segment2d::getPointNaturalCoord(const GEOM_FT &chi) const
-  { return PtoParametricas(getParamNaturalCoord(chi)); }
+  { return PtoParametricas(getParamNaturalCoord(chi)*getLength()); }
 
 bool Segment2d::intersects(const Line2d &r) const
   { return CGAL::do_intersect(r.cgr,cgseg); }
@@ -525,11 +525,12 @@ VectorPos2d Segment2d::Divide(const std::vector<double> &proportions) const
     const size_t numPoints= sz+1;
     VectorPos2d retval(numPoints);
     double lambda= 0.0;
+    const GEOM_FT length= getLength();
     if(sz>1)
       {
         for(size_t i= 0; i<numPoints; i++)
 	  {
-	    retval[i]= PtoParametricas(lambda);
+	    retval[i]= PtoParametricas(lambda*length);
 	    lambda+= proportions[i];
 	  }  
       }

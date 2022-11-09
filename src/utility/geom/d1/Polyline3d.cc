@@ -470,7 +470,7 @@ Pos3d Polyline3d::getPointAtLength(const GEOM_FT &s) const
 	const GEOM_FT lengthUntil= this->getLengthUntilVertex(i);
 	const GEOM_FT remainderLength= s-lengthUntil;
 	const Segment3d sg= getSegment(i);
-	retval= sg.PtoParametricas(remainderLength/sg.getLength());
+	retval= sg.PtoParametricas(remainderLength);
       }
     return retval;
   }

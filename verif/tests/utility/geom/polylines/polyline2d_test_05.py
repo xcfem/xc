@@ -36,7 +36,7 @@ for l, pr in zip(lengths, pointsRef):
 
 err= math.sqrt(err) # average quadratic error
 
-#print('err= ', err)
+# print('err= ', err)
 
 import os
 from misc_utils import log_messages as lmsg

@@ -10,7 +10,7 @@
         a list of five tuples (elem,relativDist), each of which contains the
         element of the beam nearest to one control-point and the relative 
         distance from this control point to the first node of the element.
-        '''
+'''
 
 from __future__ import print_function
 __author__= "Ana Ortega (AO_O)"
@@ -25,7 +25,6 @@ from materials.ec3 import EC3_materials
 from model.geometry import grid_model as gm
 from model.mesh import finit_el_model as fem
 from model import predefined_spaces
-
 
 FEcase= xc.FEProblem()
 preprocessor=FEcase.getPreprocessor
@@ -87,21 +86,21 @@ ec3beam=ec3b.EC3Beam(name='ec3bm',ec3Shape=None,lstLines=lstLines)
 
 ec3beam.setControlPoints()
 
-#calculated control points
-e1S=ec3beam.contrPnt[0][0].getLineSegment(0)
-v1CP=e1S.getFromPoint()+(e1S.getToPoint()-e1S.getFromPoint())*ec3beam.contrPnt[0][1]
+# calculated control points
+e1S= ec3beam.contrPnt[0][0].getLineSegment(0)
+v1CP= e1S.getFromPoint()+(e1S.getToPoint()-e1S.getFromPoint())*ec3beam.contrPnt[0][1]
 
-e2S=ec3beam.contrPnt[1][0].getLineSegment(0)
-v2CP=e2S.getFromPoint()+(e2S.getToPoint()-e2S.getFromPoint())*ec3beam.contrPnt[1][1]
+e2S= ec3beam.contrPnt[1][0].getLineSegment(0)
+v2CP= e2S.getFromPoint()+(e2S.getToPoint()-e2S.getFromPoint())*ec3beam.contrPnt[1][1]
 
-e3S=ec3beam.contrPnt[2][0].getLineSegment(0)
-v3CP=e3S.getFromPoint()+(e3S.getToPoint()-e3S.getFromPoint())*ec3beam.contrPnt[2][1]
+e3S= ec3beam.contrPnt[2][0].getLineSegment(0)
+v3CP= e3S.getFromPoint()+(e3S.getToPoint()-e3S.getFromPoint())*ec3beam.contrPnt[2][1]
 
-e4S=ec3beam.contrPnt[3][0].getLineSegment(0)
-v4CP=e4S.getFromPoint()+(e4S.getToPoint()-e4S.getFromPoint())*ec3beam.contrPnt[3][1]
+e4S= ec3beam.contrPnt[3][0].getLineSegment(0)
+v4CP= e4S.getFromPoint()+(e4S.getToPoint()-e4S.getFromPoint())*ec3beam.contrPnt[3][1]
 
-e5S=ec3beam.contrPnt[4][0].getLineSegment(0)
-v5CP=e5S.getFromPoint()+(e5S.getToPoint()-e5S.getFromPoint())*ec3beam.contrPnt[4][1]
+e5S= ec3beam.contrPnt[4][0].getLineSegment(0)
+v5CP= e5S.getFromPoint()+(e5S.getToPoint()-e5S.getFromPoint())*ec3beam.contrPnt[4][1]
 
 #Target control points 
 p1=geom.Pos3d(0,0,0)
@@ -115,6 +114,24 @@ ratio2=v2CP.dist2(p2)
 ratio3=v3CP.dist2(p3)
 ratio4=v4CP.dist2(p4)
 ratio5=v5CP.dist2(p5)
+
+'''
+print('p1= ', p1)
+print('v1CP= ', v1CP)
+print('ratio1= ', ratio1)
+print('p2= ', p2)
+print('v2CP= ', v2CP)
+print('ratio2= ', ratio2)
+print('p3= ', p3)
+print('v3CP= ', v3CP)
+print('ratio3= ', ratio3)
+print('p4= ', p4)
+print('v4CP= ', v4CP)
+print('ratio4= ', ratio4)
+print('p5= ', p5)
+print('v5CP= ', v5CP)
+print('ratio5= ', ratio5)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

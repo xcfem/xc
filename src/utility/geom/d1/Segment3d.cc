@@ -104,11 +104,11 @@ const Pos3d Segment3d::Point(const int &i) const
 
 //! @brief Return a point of the line at a distance lambda from its origin.
 Pos3d Segment3d::PtoParametricas(const GEOM_FT &lambda) const
-  { return Point(0)+lambda*VDir(); }
+  { return Point(0)+lambda*VDir().getNormalized(); }
 
 //! @brief Return the mid point of the segment.
 Pos3d Segment3d::getMidPoint(void) const
-  { return PtoParametricas(0.5); }
+  { return PtoParametricas(0.5*getLength()); }
 
 //! @brief Return the parametric coordinate that corresponds
 //! to the natural coordinate being passed as parameter.
@@ -118,7 +118,7 @@ double Segment3d::getParamNaturalCoord(const GEOM_FT &chi) const
 //! @brief Return the parametric coordinate that corresponds
 //! to the natural coordinate being passed as parameter.
 Pos3d Segment3d::getPointNaturalCoord(const GEOM_FT &chi) const
-  { return PtoParametricas(getParamNaturalCoord(chi)); }
+  { return PtoParametricas(getParamNaturalCoord(chi)*getLength()); }
 
 inline bool Segment3d::isDegenerated(void) const
   { return cgseg.is_degenerate(); }
@@ -404,12 +404,13 @@ VectorPos3d Segment3d::Divide(const std::vector<double> &proportions) const
     const size_t sz= proportions.size();
     const size_t numPoints= sz+1;
     VectorPos3d retval(numPoints);
-    double lambda= 0.0;
+    GEOM_FT lambda= 0.0;
+    const GEOM_FT length= getLength();
     if(sz>1)
       {
         for(size_t i= 0; i<numPoints; i++)
 	  {
-	    retval[i]= PtoParametricas(lambda);
+	    retval[i]= PtoParametricas(lambda*length);
 	    lambda+= proportions[i];
 	  }  
       }

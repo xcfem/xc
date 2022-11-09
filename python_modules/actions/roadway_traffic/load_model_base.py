@@ -336,7 +336,7 @@ class VehicleLoad(object):
         return retval
 
 class LaneAxis(object):
-    ''' Notional lane
+    ''' Lane axis
 
     :ivar pline: 3D polyline defining the axis of a lane.
     '''
