@@ -54,6 +54,7 @@ print('err2= ', err2)
 
 import os
 fname= os.path.basename(__file__)
+from misc_utils import log_messages as lmsg
 if(err1<1e-6) & (err2<1e-6):
     print('test '+fname+': ok.')
 else:
