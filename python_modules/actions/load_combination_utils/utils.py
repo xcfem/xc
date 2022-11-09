@@ -89,6 +89,75 @@ class CombGenerator(object):
         '''
         return self.getLoadCombinations().getULSSeismicCombinations
 
+    def getNamedCombinations(self, situation: str):
+        ''' Return a dictionary containing the load combinations 
+            corresponding to the situation argument, with its assigned 
+            names as key of the dictionary.
+
+        :param situation: project situation ('SLSRare' or 'SLSFrequent' 
+                           or 'SLSQuasiPermanent' or 'ULSTransient' 
+                           or 'ULSAccidental' or 'ULSSeismic'.
+        '''
+        if(situation== 'SLSRare'):
+            prefix= 'SLSR'
+            loadCombinations= self.getSLSCharacteristicCombinations()
+        elif(situation== 'SLSFrequent'):
+            prefix= 'SLSF'
+            loadCombinations= self.getSLSFrequentCombinations()
+        elif(situation== 'SLSQuasiPermanent'):
+            prefix= 'SLSQP'
+            loadCombinations= self.getSLSQuasiPermanentCombinations()
+        elif(situation== 'ULSTransient'):
+            prefix= 'ULS'
+            loadCombinations= self.getULSTransientCombinations()
+        elif(situation== 'ULSAccidental'):
+            prefix= 'ULSA'
+            loadCombinations= self.getULSAccidentalCombinations()
+        elif(situation== 'ULSSeismic'):
+            prefix= 'ULSS'
+            loadCombinations= self.getULSSeismicCombinations()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; situation: '+str(group) + ' unknown.')   
+        # Assign a name to each combination.
+        return getNamedCombinations(loadCombinations, prefix)
+
+    def getLoadCombinationsDict(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
+        ''' Return a dictionary containing the load combinations corresponding
+            to each situation.
+
+        :param situations: project situations of interest.
+        '''
+        retval= dict()
+        for sit in situations:
+            retval[sit]= self.getNamedCombinations(sit)
+        return retval
+            
+    def writeXCLoadCombinations(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic'], outputFileName= None):
+        ''' Write the load combinations in a format readably by XC.
+
+        :param situations: project situations of interest.
+        :param outputFileName: name of the output file (if None use standard output).
+        '''
+        if(outputFileName is None):
+            f= sys.stdout
+        else:
+            f= open(outputFileName,'w')
+        f.write("combs= loadLoader.getLoadCombinations\n")
+        loadCombinations= self.getLoadCombinationsDict(situations)
+        for sitKey in loadCombinations:
+            sitCombinations= loadCombinations[sitKey]
+            for key in sitCombinations:
+                comb= sitCombinations[key]
+                output= 'comb= combs.newLoadCombination('
+                output+= '"'+key+'","'+comb.name+'")\n'
+                f.write(output)
+        if(outputFileName is None):
+            f.flush()
+        else:
+            f.close()
+
 def getCombinationDict(loadCombination:str):
     ''' Return a Python dictionary whose keys are the names of the actions
         in the combination and whose values are the factor that multiply the
@@ -188,15 +257,16 @@ def getNamedCombinations(loadCombinations, prefix):
     :param prefix: prefix to form the name (such as ULS, SLS or somethink like that).
     '''
     sz= len(loadCombinations) # number of combinations to name.
-    szLength= int(math.log(sz,10))+1 # number of leading zeros
     retval= dict()
-    for count, comb in enumerate(loadCombinations):
-        key= prefix+str(count).zfill(szLength)
-        retval[key]= comb
+    if(sz>0):
+        szLength= int(math.log(sz,10))+1 # number of leading zeros
+        for count, comb in enumerate(loadCombinations):
+            key= prefix+str(count).zfill(szLength)
+            retval[key]= comb
     return retval
 
 def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
-    ''' Write the load combinations in a XC format.
+    ''' Write the load combinations in a format readably by XC.
 
     :param loadCombinations: load combinations to be named.
     :param prefix: prefix to form the name (such as ULS, SLS or somethink like that).
