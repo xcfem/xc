@@ -223,7 +223,7 @@ SET(cuadGauss utility/gauss_quadrature/GaussQuadrature2D.cc utility/gauss_quadra
 ### Load combinations.
 SET(ca_factors utility/load_combinations/factors/PartialSafetyFactors.cc utility/load_combinations/factors/PartialSafetyFactorsMap.cc utility/load_combinations/factors/CombinationFactors.cc utility/load_combinations/factors/CombinationFactorsMap.cc utility/load_combinations/factors/Factors.cc)
 
-SET(ca_actions utility/load_combinations/actions/LeadingActionInfo.cc utility/load_combinations/actions/Action.cc utility/load_combinations/actions/ActionRelationships.cc utility/load_combinations/actions/ActionRValue.cc utility/load_combinations/actions/ActionRValueList.cc utility/load_combinations/actions/ActionsFamily.cc utility/load_combinations/actions/ActionContainer.cc utility/load_combinations/actions/ActionsAndFactors.cc)
+SET(ca_actions utility/load_combinations/actions/LeadingActionInfo.cc utility/load_combinations/actions/Action.cc utility/load_combinations/actions/ActionRelationships.cc utility/load_combinations/actions/ActionRepresentativeValues.cc utility/load_combinations/actions/ActionDesignValues.cc utility/load_combinations/actions/ActionDesignValuesList.cc utility/load_combinations/actions/ActionsFamily.cc utility/load_combinations/actions/ActionContainer.cc utility/load_combinations/actions/ActionsAndFactors.cc)
 
 SET(ca_combinations utility/load_combinations/comb_analysis/Variation.cc utility/load_combinations/comb_analysis/Variations.cc utility/load_combinations/comb_analysis/LoadCombinationVector.cc utility/load_combinations/comb_analysis/LoadCombinations.cc utility/load_combinations/comb_analysis/ActionWeightingMap.cc utility/load_combinations/comb_analysis/LoadCombinationGenerator.cc)
 

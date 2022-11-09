@@ -27,7 +27,7 @@
 #include "utility/utils/text/latex.h"
 
 
-#include "ActionRValueList.h"
+#include "ActionDesignValuesList.h"
 #include "utility/functions/algebra/ExprAlgebra.h"
 
 const double cmb_acc::Action::zero= 1e-6;
@@ -226,7 +226,7 @@ bool cmb_acc::Action::Incompatible(const Action &f) const
     return retval;
   }
 
-std::string cmb_acc::Action::incompatibleStringList(ActionRValueList *af) const
+std::string cmb_acc::Action::incompatibleStringList(ActionDesignValuesList *af) const
   {
     std::string retval;
     if(af)

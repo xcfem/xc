@@ -34,7 +34,7 @@
 //! Routines to generate combinations of actions.
 namespace cmb_acc{
 
-class ActionRValueList;
+class ActionDesignValuesList;
 
 //! @defgroup CMBACC Routines to generate combinations of actions.
 //
@@ -128,7 +128,7 @@ class Action: public NamedEntity
         return retval;
       }
 
-    std::string incompatibleStringList(ActionRValueList *af) const;
+    std::string incompatibleStringList(ActionDesignValuesList *af) const;
     std::vector<double> getCoeficientes(const std::vector<std::string> &) const;
     virtual void Print(std::ostream &os) const;
   };

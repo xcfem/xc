@@ -21,7 +21,7 @@
 //Variations.cxx
 
 #include "Variations.h"
-#include "utility/load_combinations/actions/ActionRValueList.h"
+#include "utility/load_combinations/actions/ActionDesignValuesList.h"
 
 //! @brief Constructor.
 cmb_acc::Variations::Variations(const size_t &sz,const Variation &v)

@@ -18,7 +18,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ActionRValueList.hxx
+//ActionDesignValuesList.hxx
 //Conjunto de acciones.
 
 #ifndef LISTAVRACCION_HXX
@@ -26,7 +26,7 @@
 
 #include "utility/kernel/CommandEntity.h"
 #include <deque>
-#include "ActionRValue.h"
+#include "ActionDesignValues.h"
 
 namespace cmb_acc{
 class Variation;
@@ -37,16 +37,16 @@ class ActionsFamily;
 
 //! @ingroup CMBACC
 //
-//! @brief List of representative values of actions (ActionRValue objects).
-class ActionRValueList: public std::deque<ActionRValue>, public CommandEntity
+//! @brief List of representative values of actions (ActionDesignValues objects).
+class ActionDesignValuesList: public std::deque<ActionDesignValues>, public CommandEntity
   {
     friend class Variation;
     friend class ActionsFamily;
 
-    ActionRValue &push_back(const ActionRValue &a);
+    ActionDesignValues &push_back(const ActionDesignValues &a);
   public:
-    int getIndex(const ActionRValue *) const;
-    ActionRValue &insert(const Action &,const std::string &,const std::string &);
+    int getIndex(const ActionDesignValues *) const;
+    ActionDesignValues &insert(const Action &,const std::string &,const std::string &);
     Action buildCombination(const Variation &v,const LeadingActionInfo &) const;
     const CombinationFactorsMap *getPtrCombinationFactors(void) const;
     const PartialSafetyFactorsMap *getPtrPartialSafetyFactors(void) const;
@@ -56,7 +56,7 @@ class ActionRValueList: public std::deque<ActionRValue>, public CommandEntity
     void Print(std::ostream &os) const;
   };
 
-std::ostream &operator<<(std::ostream &os,const ActionRValueList &vs);
+std::ostream &operator<<(std::ostream &os,const ActionDesignValuesList &vs);
 
 } //fin namespace nmb_acc.
 

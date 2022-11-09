@@ -42,22 +42,22 @@ class_<Action, bases<NamedEntity> >("Action")
   .def(self_ns::repr(self_ns::self))
   ;
 
-class_<ActionRValue, bases<Action>, boost::noncopyable >("ActionRValue", no_init)
-  .def("getPartialSafetyFactors", make_function( &ActionRValue::getPartialSafetyFactors, return_internal_reference<>() ), "Return the partial safety factors for this action.")
-  .def("setPartialSafetyFactors", &ActionRValue::setPartialSafetyFactors, "Set the partial safety factors for this action.")
+class_<ActionDesignValues, bases<Action>, boost::noncopyable >("ActionDesignValues", no_init)
+  .def("getPartialSafetyFactors", make_function( &ActionDesignValues::getPartialSafetyFactors, return_internal_reference<>() ), "Return the partial safety factors for this action.")
+  .def("setPartialSafetyFactors", &ActionDesignValues::setPartialSafetyFactors, "Set the partial safety factors for this action.")
   ;
 
-typedef std::deque<ActionRValue> dq_action_r_value;
+typedef std::deque<ActionDesignValues> dq_action_r_value;
 class_<dq_action_r_value >("dq_action_r_values")
   .def(vector_indexing_suite<dq_action_r_value>())
   ;
 
-class_<ActionRValueList, bases<dq_action_r_value,CommandEntity> >("ActionRValueLists")
+class_<ActionDesignValuesList, bases<dq_action_r_value,CommandEntity> >("ActionDesignValuesLists")
   .def(self_ns::str(self_ns::self))
   .def(self_ns::repr(self_ns::self))
   ;
 
-const ActionRValueList &(ActionsFamily::*getFamilyActions)(void) const= &ActionsFamily::getActions;
+const ActionDesignValuesList &(ActionsFamily::*getFamilyActions)(void) const= &ActionsFamily::getActions;
 class_<ActionsFamily, bases<NamedEntity> >("ActionsFamily")
   .def(init<std::string>())
   .add_property("actions", make_function( getFamilyActions, return_internal_reference<>() ), &ActionsFamily::setActions)

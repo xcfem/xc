@@ -25,7 +25,7 @@
 #include "utility/load_combinations/comb_analysis/Variation.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 
-#include "utility/load_combinations/actions/ActionRValueList.h"
+#include "utility/load_combinations/actions/ActionDesignValuesList.h"
 
 cmb_acc::SLSPartialSafetyFactors::SLSPartialSafetyFactors(const float &fav,const float &desfav)
   : partial_safety_factors_fav(fav), partial_safety_factors_unfav(desfav) {}

@@ -29,7 +29,7 @@
 
 namespace cmb_acc{
 
-class ActionRValueList;
+class ActionDesignValuesList;
 
 //! @ingroup CMBACC
 //

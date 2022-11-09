@@ -49,7 +49,7 @@ class ActionContainer: public CommandEntity
     ActionContainer(void);
     inline virtual ~ActionContainer(void) {}
 
-    ActionRValue &insert(const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
+    ActionDesignValues &insert(const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
 
     const ActionsFamily &getPermanentActions(void) const;
     void setPermanentActions(const ActionsFamily &);

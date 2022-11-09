@@ -41,7 +41,7 @@ cmb_acc::ActionContainer::ActionContainer(void)
   }
 
 //! @brief Insert the action into the family identified by the string.
-cmb_acc::ActionRValue &cmb_acc::ActionContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+cmb_acc::ActionDesignValues &cmb_acc::ActionContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
     if(family=="permanentes" or family=="permanent")
       return G.insert(acc,combination_factors_name,partial_safety_factors_name);

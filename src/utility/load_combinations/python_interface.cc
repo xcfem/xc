@@ -30,7 +30,7 @@
 #include "utility/load_combinations/factors/PartialSafetyFactorsMap.h"
 #include "utility/load_combinations/factors/CombinationFactors.h"
 #include "utility/load_combinations/actions/Action.h"
-#include "utility/load_combinations/actions/ActionRValueList.h"
+#include "utility/load_combinations/actions/ActionDesignValuesList.h"
 #include "utility/load_combinations/actions/ActionsFamily.h"
 #include "utility/load_combinations/actions/ActionContainer.h"
 #include "utility/load_combinations/actions/ActionsAndFactors.h"

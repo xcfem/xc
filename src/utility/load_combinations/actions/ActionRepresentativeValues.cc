@@ -18,10 +18,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ActionRValue.cxx
+//ActionRepresentativeValues.cxx
 
-#include "utility/load_combinations/actions/ActionRValue.h"
-#include "utility/load_combinations/actions/ActionRValueList.h"
+#include "utility/load_combinations/actions/ActionRepresentativeValues.h"
+#include "utility/load_combinations/actions/ActionDesignValuesList.h"
 #include "utility/load_combinations/factors/PartialSafetyFactors.h"
 #include "utility/load_combinations/factors/CombinationFactorsMap.h"
 #include "utility/load_combinations/factors/PartialSafetyFactorsMap.h"
@@ -31,24 +31,21 @@
 
 
 //! @brief Default constructor.
-cmb_acc::ActionRValue::ActionRValue(const std::string &n, const std::string &descrip,ActionRValueList *fam)
+cmb_acc::ActionRepresentativeValues::ActionRepresentativeValues(const std::string &n, const std::string &descrip,ActionDesignValuesList *fam)
   : Action(n,descrip), acc_familia(fam),
-    partial_safety_factors(nullptr),
     combination_factors(nullptr)
    {}
 
 //! @brief Default constructor.
-cmb_acc::ActionRValue::ActionRValue(const Action &a,ActionRValueList *fam,const std::string &nmb_combination_factors, const std::string &nmb_partial_safety_factors)
+cmb_acc::ActionRepresentativeValues::ActionRepresentativeValues(const Action &a,ActionDesignValuesList *fam,const std::string &nmb_combination_factors)
   : Action(a), acc_familia(fam),
-    partial_safety_factors(nullptr),
     combination_factors(nullptr)
   {
-    setPartialSafetyFactors(nmb_partial_safety_factors);
     setCombinationFactors(nmb_combination_factors);
   }
 
 //! @brief Asigna los coeficientes de simultaneidad de la acción.
-void cmb_acc::ActionRValue::setCombinationFactors(const std::string &nmb_factors)
+void cmb_acc::ActionRepresentativeValues::setCombinationFactors(const std::string &nmb_factors)
   {
     if(!nmb_factors.empty())
       {
@@ -70,7 +67,7 @@ void cmb_acc::ActionRValue::setCombinationFactors(const std::string &nmb_factors
 
 
 //! @brief Return the r-th combination factor.
-double cmb_acc::ActionRValue::getCombinationFactor(short int r) const
+double cmb_acc::ActionRepresentativeValues::getCombinationFactor(short int r) const
   {
     double retval= 1.0;
     if(combination_factors)
@@ -83,41 +80,8 @@ double cmb_acc::ActionRValue::getCombinationFactor(short int r) const
     return retval;
   }
 
-//! @brief Return the r-th combination factor.
-const cmb_acc::PartialSafetyFactors *cmb_acc::ActionRValue::getPartialSafetyFactors(void) const
-  {
-    if(!partial_safety_factors)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; ERROR: action " << getName()
-	        << ": partial safety factors not set."
-	        << std::endl;
-    return partial_safety_factors;
-  }
-
-//! @brief Set the partial safety factors.
-void cmb_acc::ActionRValue::setPartialSafetyFactors(const std::string &nmb_factors)
-  {
-    if(!nmb_factors.empty())
-      {
-        const PartialSafetyFactors *tmp=nullptr;
-        if(acc_familia)
-          tmp= acc_familia->getPtrPartialSafetyFactors()->getPtrCoefs(nmb_factors);
-        else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; ERROR: pointer to actions family not set."
-		    << std::endl;
-        if(tmp)
-           partial_safety_factors= tmp;
-	else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; ERROR: combination factors with name: '"
-		    << nmb_factors
-	            << "' not found." << std::endl;
-      }
-  }
-
 //! @brief Return the representative value of the action.
-cmb_acc::Action cmb_acc::ActionRValue::getValue(short int r) const
+cmb_acc::Action cmb_acc::ActionRepresentativeValues::getValue(short int r) const
   {
     Action retval(*this);
     switch(r)
@@ -139,28 +103,9 @@ cmb_acc::Action cmb_acc::ActionRValue::getValue(short int r) const
     return retval;
   }
 
-//! @brief Return the index of the action in its family.
-int cmb_acc::ActionRValue::getIndex(void) const
-  {
-    int retval= -1;
-    if(acc_familia)
-      retval= acc_familia->getIndex(this);
-    return retval;
-  }
-
-//! @brief Compute the variations that can be formed with this action.
-//!
-//! @param uls: True if it's an ultimate limit state.
-//! @param sit_accidental: true if it's an accidental or seismic situation.
-cmb_acc::Variations cmb_acc::ActionRValue::getVariations(const bool &uls,const bool &sit_accidental) const
-  {
-    Variation v= getPartialSafetyFactors()->getVariation(uls,sit_accidental);
-    return Variations::first_combination(v);
-  }
-
 //! @brief Return the representative value for the action.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::Action cmb_acc::ActionRValue::getRepresentativeValue(const LeadingActionInfo &lai) const
+cmb_acc::Action cmb_acc::ActionRepresentativeValues::getRepresentativeValue(const LeadingActionInfo &lai) const
   {
     Action retval= getValue(lai.getGeneralRepresentativeValueIndex());
     if(lai.leadingActionExists())
@@ -172,18 +117,10 @@ cmb_acc::Action cmb_acc::ActionRValue::getRepresentativeValue(const LeadingActio
     return retval;
   }
 
-//! @brief Return the combination value for the action.
-//! @param leadingActioInfo: Information about the leading action.
-//! @param psf: partial safety factor.
-cmb_acc::Action cmb_acc::ActionRValue::getCombinationValue(const LeadingActionInfo &lai, const double &psf) const
-  { return psf*getRepresentativeValue(lai); }
-
 //! @brief Print stuff.
-void cmb_acc::ActionRValue::Print(std::ostream &os) const
+void cmb_acc::ActionRepresentativeValues::Print(std::ostream &os) const
   {
     Action::Print(os);
-    if(partial_safety_factors)
-      os << "; " << *partial_safety_factors;
     if(combination_factors)
       os << "; " << *combination_factors;
   }
