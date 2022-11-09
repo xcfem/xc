@@ -21,7 +21,7 @@
 //ActionWeightingMap.cc
 
 #include "ActionWeightingMap.h"
-#include "utility/loadCombinations/actions/ActionsAndFactors.h"
+#include "utility/load_combinations/actions/ActionsAndFactors.h"
 #include "LoadCombinations.h"
 
 //! @brief Return true if the object is found.

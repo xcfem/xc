@@ -21,7 +21,7 @@
 //ActionContainer.cxx
 
 #include "ActionContainer.h"
-#include "utility/loadCombinations/comb_analysis/LoadCombinationVector.h"
+#include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 #include "LeadingActionInfo.h"
 
 

@@ -37,7 +37,7 @@ class ActionsFamily;
 
 //! @ingroup CMBACC
 //
-//! @brief List of representative values of actions (objetos ActionRValue).
+//! @brief List of representative values of actions (ActionRValue objects).
 class ActionRValueList: public std::deque<ActionRValue>, public CommandEntity
   {
     friend class Variation;

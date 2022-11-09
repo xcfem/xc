@@ -25,7 +25,7 @@
 #define ACTIONSANDFACTORS_H
 
 #include "ActionContainer.h"
-#include "utility/loadCombinations/factors/Factors.h"
+#include "utility/load_combinations/factors/Factors.h"
 
 namespace cmb_acc{
 //! @ingroup CMBACC

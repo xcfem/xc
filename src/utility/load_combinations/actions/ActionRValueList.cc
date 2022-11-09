@@ -22,11 +22,11 @@
 
 #include "ActionRValueList.h"
 #include "ActionsFamily.h"
-#include "utility/loadCombinations/comb_analysis/Variation.h"
-#include "utility/loadCombinations/comb_analysis/Variations.h"
+#include "utility/load_combinations/comb_analysis/Variation.h"
+#include "utility/load_combinations/comb_analysis/Variations.h"
 #include "LeadingActionInfo.h"
-#include "utility/loadCombinations/factors/PartialSafetyFactors.h"
-#include "utility/loadCombinations/comb_analysis/LoadCombinationVector.h"
+#include "utility/load_combinations/factors/PartialSafetyFactors.h"
+#include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 
 cmb_acc::ActionRValue &cmb_acc::ActionRValueList::push_back(const ActionRValue &a)
   {

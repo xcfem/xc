@@ -25,7 +25,7 @@
 #define ACTIONWEIGHTINGMAP_H
 
 #include "utility/kernel/CommandEntity.h"
-#include "utility/loadCombinations/factors/Factors.h"
+#include "utility/load_combinations/factors/Factors.h"
 #include <map>
 
 

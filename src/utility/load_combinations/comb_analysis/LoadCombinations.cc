@@ -21,7 +21,7 @@
 //LoadCombinations.cc
 
 #include "LoadCombinations.h"
-#include "utility/loadCombinations/actions/ActionContainer.h"
+#include "utility/load_combinations/actions/ActionContainer.h"
 
 
 //! @brief Default constructor.

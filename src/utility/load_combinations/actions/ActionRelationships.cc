@@ -25,7 +25,7 @@
 #include "utility/functions/algebra/ExprAlgebra.h"
 
 #include "boost/regex.hpp"
-#include "utility/loadCombinations/comb_analysis/LoadCombinationVector.h"
+#include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 
 //! @brief Elimina el factor que multiplica a la acción en la cadena de
 //! la forma "1.35*A" que se pasa como parámetro.

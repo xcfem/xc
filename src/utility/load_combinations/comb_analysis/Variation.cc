@@ -18,60 +18,56 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Variations.cxx
+//Variation.cxx
 
-#include "Variations.h"
-#include "utility/loadCombinations/actions/ActionRValueList.h"
+#include "Variation.h"
+#include "utility/load_combinations/actions/ActionRValueList.h"
 
-//! @brief Constructor.
-cmb_acc::Variations::Variations(const size_t &sz,const Variation &v)
-  : std::vector<Variation>(sz,v) {}
-
-//! \fn void cmb_acc::Variations::print(std::ostream &os) const
-//! @brief Imprime las variations.
-void cmb_acc::Variations::print(std::ostream &os) const
+//! \fn void cmb_acc::Variation::print(std::ostream &os) const
+//! @brief Imprime la variación.
+void cmb_acc::Variation::print(std::ostream &os) const
   {
     if(size()<1) return;
     const_iterator i= begin();
     os << '[';
     os << *i; i++;
     for(;i!=end();i++)
-      os << ' ' <<*i;
+      os << ',' << *i;
     os << ']';
   }
 
-//! @brief Return the first combination.
-cmb_acc::Variations cmb_acc::Variations::first_combination(const Variation &v)
-  {
-    const size_t sz= v.size();
-    Variations retval(sz);
-    for(size_t i=0;i<sz;i++)
-      retval[i]= Variation(1,v[i]);
-    return retval;
-  }
-
-//! @brief Return el producto cartesiano de las variations que se pasan como parámetro.
-cmb_acc::Variations cmb_acc::Variations::prod_cartesiano(const Variations &a,const Variations &b)
+//! \fn cmb_acc::Variation cmb_acc::Variation::concat(const cmb_acc::Variation &a,const cmb_acc::Variation &b)
+//! @brief Concatena a la variación a la variación b
+cmb_acc::Variation cmb_acc::Variation::concat(const cmb_acc::Variation &a,const cmb_acc::Variation &b)
   {
     const size_t sz_a= a.size();
     const size_t sz_b= b.size();
-    std::deque<Variation> tmp;
+    const size_t sz= sz_a+sz_b;
+    Variation retval(sz);
     for(size_t i=0;i<sz_a;i++)
-      for(size_t j=0;j<sz_b;j++)
-        {
-          Variation tmp_var= Variation::concat(a[i],b[j]);
-          tmp.push_back(tmp_var);
-        }
-    const size_t sz= tmp.size();
-    Variations retval(sz);
-    for(size_t i= 0;i<sz;i++)
-      retval[i]= tmp[i];
+      retval[i]= a[i];
+    for(size_t i=0;i<sz_b;i++)
+      retval[i+sz_a]= b[i];
     return retval;
   }
 
-//! @brief Operador salida.
-std::ostream &cmb_acc::operator<<(std::ostream &os,const Variations &vs)
+
+//! @brief Return verdadero si las acciones que contiene la variaciónes son compatibles
+bool cmb_acc::Variation::compatible(const ActionRValueList &lvr)
   {
-    vs.print(os);
+    const size_t sz= size();
+    for(size_t i=0;i<sz;i++)
+      for(size_t j=i+1;j<sz;j++)
+        if( ((*this)[i]!= 0.0) && ((*this)[j]!= 0.0) )
+          if(incompatibles(lvr[i],lvr[j]))
+            return false;
+    return true;
+  }
+
+//! \fn std::ostream &cmb_acc::operator<<(std::ostream &os,const cmb_acc::Variation &v)
+//! @brief Operador salida.
+std::ostream &cmb_acc::operator<<(std::ostream &os,const cmb_acc::Variation &v)
+  {
+    v.print(os);
     return os;
   }

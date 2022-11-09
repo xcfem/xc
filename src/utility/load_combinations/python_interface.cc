@@ -26,17 +26,17 @@
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <boost/python/docstring_options.hpp>
-#include "utility/loadCombinations/factors/PartialSafetyFactors.h"
-#include "utility/loadCombinations/factors/PartialSafetyFactorsMap.h"
-#include "utility/loadCombinations/factors/CombinationFactors.h"
-#include "utility/loadCombinations/actions/Action.h"
-#include "utility/loadCombinations/actions/ActionRValueList.h"
-#include "utility/loadCombinations/actions/ActionsFamily.h"
-#include "utility/loadCombinations/actions/ActionContainer.h"
-#include "utility/loadCombinations/actions/ActionsAndFactors.h"
-#include "utility/loadCombinations/comb_analysis/LoadCombinationVector.h"
-#include "utility/loadCombinations/comb_analysis/LoadCombinations.h"
-#include "utility/loadCombinations/comb_analysis/LoadCombinationGenerator.h"
+#include "utility/load_combinations/factors/PartialSafetyFactors.h"
+#include "utility/load_combinations/factors/PartialSafetyFactorsMap.h"
+#include "utility/load_combinations/factors/CombinationFactors.h"
+#include "utility/load_combinations/actions/Action.h"
+#include "utility/load_combinations/actions/ActionRValueList.h"
+#include "utility/load_combinations/actions/ActionsFamily.h"
+#include "utility/load_combinations/actions/ActionContainer.h"
+#include "utility/load_combinations/actions/ActionsAndFactors.h"
+#include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
+#include "utility/load_combinations/comb_analysis/LoadCombinations.h"
+#include "utility/load_combinations/comb_analysis/LoadCombinationGenerator.h"
 
 BOOST_PYTHON_MODULE(loadCombinations)
   {

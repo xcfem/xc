@@ -38,9 +38,9 @@ class ActionRValueList;
 
 //! @defgroup CMBACC Routines to generate combinations of actions.
 //
-//! @ingroup CMBACC
 //
 //! @brief Action or linear combination of actions.
+//! @ingroup CMBACC
 class Action: public NamedEntity
   {
     std::string description; //!< Description de la acción p. ej. "Viento derecho".

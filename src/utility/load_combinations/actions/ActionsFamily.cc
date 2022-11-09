@@ -22,8 +22,8 @@
 
 #include "ActionsFamily.h"
 #include "ActionsAndFactors.h"
-#include "utility/loadCombinations/comb_analysis/Variations.h"
-#include "utility/loadCombinations/comb_analysis/LoadCombinationVector.h"
+#include "utility/load_combinations/comb_analysis/Variations.h"
+#include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 #include "Action.h"
 
 

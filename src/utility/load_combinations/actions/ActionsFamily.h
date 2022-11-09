@@ -24,7 +24,7 @@
 #ifndef FAMILIAACCIONES_H
 #define FAMILIAACCIONES_H
 
-#include "utility/loadCombinations/actions/ActionRValueList.h"
+#include "utility/load_combinations/actions/ActionRValueList.h"
 
 namespace cmb_acc{
 class LoadCombinationVector;
