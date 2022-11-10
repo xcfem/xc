@@ -28,6 +28,7 @@
 #include <deque>
 #include <memory> //std::shared_ptr
 #include "SingleActionWrapper.h"
+#include "GroupActionWrapper.h"
 
 namespace cmb_acc{
 class Variation;
@@ -48,6 +49,7 @@ class ActionWrapperList: public std::deque<std::shared_ptr<ActionWrapper> >, pub
     friend class ActionsFamily;
 
     ActionWrapper &push_back(const SingleActionWrapper &a);
+    ActionWrapper &push_back(const GroupActionWrapper &a);
   public:
     int getIndex(const ActionWrapper *) const;
     ActionWrapper &insert(const Action &,const std::string &,const std::string &);

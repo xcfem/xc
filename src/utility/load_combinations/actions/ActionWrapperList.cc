@@ -34,6 +34,17 @@ cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::push_back(const SingleAction
     base_pointer ptr= std::make_shared<SingleActionWrapper>(a);
     base_container::push_back(ptr);
     ActionWrapper &retval= *back().get();
+    retval.set_owner(this);
+    return retval;
+  }
+
+//! @brief Back inserter.
+cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::push_back(const GroupActionWrapper &a)
+  {
+    base_pointer ptr= std::make_shared<GroupActionWrapper>(a);
+    base_container::push_back(ptr);
+    ActionWrapper &retval= *back().get();
+    retval.set_owner(this);
     return retval;
   }
 
@@ -41,7 +52,6 @@ cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::push_back(const SingleAction
 cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::insert(const Action &a,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
     SingleActionWrapper acc(a,this,combination_factors_name,partial_safety_factors_name);
-    acc.set_owner(this);
     return push_back(acc);
   }
 

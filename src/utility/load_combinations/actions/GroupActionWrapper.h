@@ -18,27 +18,30 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SingleActionWrapper.hxx
+//GroupActionWrapper.hxx
 //Representative values of an action.
 
-#ifndef SINGLEACTIONWRAPPER_H
-#define SINGLEACTIONWRAPPER_H
+#ifndef GROUPACTIONWRAPPER_H
+#define GROUPACTIONWRAPPER_H
 
 #include "ActionWrapper.h"
 #include "ActionRepresentativeValues.h"
 
 namespace cmb_acc{
 
-//! @brief Wrapper for a single action.
+//! @brief Wrapper for a group action.
 //! @ingroup CMBACC
-class SingleActionWrapper: public ActionWrapper
+class GroupActionWrapper: public ActionWrapper
   {
+    typedef std::deque<ActionRepresentativeValues> action_container;
+    typedef action_container::iterator iterator;
+    typedef action_container::const_iterator const_iterator;
     friend class ActionWrapperList;
   protected:
-    ActionRepresentativeValues action;
+    action_container actions;
     //! @brief Default constructor.
-    SingleActionWrapper(const std::string &n="", const std::string &descrip="", ActionWrapperList *list= nullptr);
-    SingleActionWrapper(const Action &a, ActionWrapperList *list= nullptr,const std::string &nmb_comb_factors= "", const std::string &nmb_partial_safety_factors= "");
+    GroupActionWrapper(const std::string &n="", const std::string &descrip="", ActionWrapperList *list= nullptr);
+    GroupActionWrapper(const Action &a, ActionWrapperList *list= nullptr,const std::string &nmb_comb_factors= "", const std::string &nmb_partial_safety_factors= "");
     virtual std::string getName(void) const;
   public:    
     std::vector<const Action *> getWrappedActions(void) const;

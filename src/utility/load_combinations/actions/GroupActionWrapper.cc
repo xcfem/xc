@@ -18,42 +18,60 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SingleActionWrapper.cxx
+//GroupActionWrapper.cxx
 
-#include "utility/load_combinations/actions/SingleActionWrapper.h"
+#include "utility/load_combinations/actions/GroupActionWrapper.h"
 
 //! @brief Default constructor.
-cmb_acc::SingleActionWrapper::SingleActionWrapper(const std::string &n, const std::string &descrip, ActionWrapperList *list)
+cmb_acc::GroupActionWrapper::GroupActionWrapper(const std::string &n, const std::string &descrip, ActionWrapperList *list)
   : ActionWrapper(list),
-    action(n, descrip, this)
+    actions(1, ActionRepresentativeValues(n, descrip, this))
    {}
 
 //! @brief Default constructor.
-cmb_acc::SingleActionWrapper::SingleActionWrapper(const Action &a, ActionWrapperList *list,const std::string &nmb_comb_factors, const std::string &nmb_partial_safety_factors)
+cmb_acc::GroupActionWrapper::GroupActionWrapper(const Action &a, ActionWrapperList *list,const std::string &nmb_comb_factors, const std::string &nmb_partial_safety_factors)
   : ActionWrapper(list, nmb_partial_safety_factors),
-    action(a, this, nmb_comb_factors)
+    actions(1, ActionRepresentativeValues(a, this, nmb_comb_factors))
   {}
 
 //! @brief Return the action name.
-std::string cmb_acc::SingleActionWrapper::getName(void) const
-  { return action.getName(); }
+std::string cmb_acc::GroupActionWrapper::getName(void) const
+  {
+    std::string retval= "";
+    for(const_iterator i= actions.begin(); i!=actions.end(); i++)
+      retval+= (*i).getName();
+    return retval;
+  }
 
 //! @brief Return pointers to the actions wrapped in this object.
-std::vector<const cmb_acc::Action *> cmb_acc::SingleActionWrapper::getWrappedActions(void) const
+std::vector<const cmb_acc::Action *> cmb_acc::GroupActionWrapper::getWrappedActions(void) const
   {
-    std::vector<const Action *> retval(1, &action);
+    const size_t sz= actions.size();
+    std::vector<const Action *> retval(sz, nullptr);
+    size_t count= 0;
+    for(const_iterator i= actions.begin(); i!=actions.end(); i++, count++)
+      retval[count]= &(*i);
     return retval;
   }
 
 //! @brief Get the representative value of the action in the contest being
 //! pased as parameter.
 //! @param LeadingActionInfo: information about the combination leading action.
-cmb_acc::Action cmb_acc::SingleActionWrapper::getRepresentativeValue(const LeadingActionInfo &linfo) const
+cmb_acc::Action cmb_acc::GroupActionWrapper::getRepresentativeValue(const LeadingActionInfo &linfo) const
   {
     const int index= getIndex(); //Get the index of the action wrapper.
-    return action.getRepresentativeValue(linfo, index);
+    Action tmp;
+    for(const_iterator i= actions.begin(); i!=actions.end(); i++)
+      {
+	const ActionRepresentativeValues &a= *i;
+	tmp+= a.getRepresentativeValue(linfo, index);
+      }
+    return tmp;
   }
 
 //! @brief Return the relatioships with the other actions.
-const cmb_acc::ActionRelationships &cmb_acc::SingleActionWrapper::getRelaciones(void) const
-  { return action.getRelaciones(); }
+const cmb_acc::ActionRelationships &cmb_acc::GroupActionWrapper::getRelaciones(void) const
+  {
+    assert(!actions.empty());
+    return actions[0].getRelaciones();
+  }

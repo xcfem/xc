@@ -223,7 +223,7 @@ SET(cuadGauss utility/gauss_quadrature/GaussQuadrature2D.cc utility/gauss_quadra
 ### Load combinations.
 SET(ca_factors utility/load_combinations/actions/factors/PartialSafetyFactors.cc utility/load_combinations/actions/factors/PartialSafetyFactorsMap.cc utility/load_combinations/actions/factors/CombinationFactors.cc utility/load_combinations/actions/factors/CombinationFactorsMap.cc utility/load_combinations/actions/factors/Factors.cc)
 
-SET(ca_actions utility/load_combinations/actions/LeadingActionInfo.cc utility/load_combinations/actions/Action.cc utility/load_combinations/actions/ActionRelationships.cc utility/load_combinations/actions/ActionRepresentativeValues.cc utility/load_combinations/actions/ActionWrapper.cc utility/load_combinations/actions/SingleActionWrapper.cc utility/load_combinations/actions/ActionWrapperList.cc)
+SET(ca_actions utility/load_combinations/actions/LeadingActionInfo.cc utility/load_combinations/actions/Action.cc utility/load_combinations/actions/ActionRelationships.cc utility/load_combinations/actions/ActionRepresentativeValues.cc utility/load_combinations/actions/ActionWrapper.cc utility/load_combinations/actions/SingleActionWrapper.cc utility/load_combinations/actions/GroupActionWrapper.cc utility/load_combinations/actions/ActionWrapperList.cc)
 
 SET(ca_action_containers utility/load_combinations/actions/containers/ActionsFamily.cc utility/load_combinations/actions/containers/ActionFamilyContainer.cc utility/load_combinations/actions/containers/ActionsAndFactors.cc)
 

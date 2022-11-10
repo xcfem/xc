@@ -34,7 +34,7 @@ class LoadCombinationVector;
 
 //! @ingroup CMBACC
 //
-//! @brief Contenedor de coeficientes de simultaneidad de acciones.
+//! @brief Combination factor container.
 template <class Factors>
 class FactorsMap: public CommandEntity, public std::map<std::string,Factors>
   {

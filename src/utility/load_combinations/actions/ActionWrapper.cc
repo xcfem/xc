@@ -126,6 +126,29 @@ bool cmb_acc::incompatibles(const ActionWrapper &acc_i,const ActionWrapper &acc_
     return retval;
   }
 
+//! @brief Return true if this actions are not compatible with
+//! those in the argument wrapper.
+bool cmb_acc::ActionWrapper::Incompatible(const ActionWrapper &other) const
+  {
+    bool retval= false;
+    std::vector<const Action *> this_actions= this->getWrappedActions();
+    std::vector<const Action *> other_actions= other.getWrappedActions();
+    for(std::vector<const Action *>::const_iterator i= this_actions.begin(); i!=this_actions.end(); i++)
+      {
+        const Action *this_action= *i;
+	for(std::vector<const Action *>::const_iterator j= other_actions.begin(); j!=other_actions.end(); j++)
+	  {
+	    const Action *other_action= *j;
+	    if(this_action->Incompatible(*other_action))
+	      {
+		retval= true;
+		break; //No need to continue.
+	      }
+	  }
+      }
+    return retval;
+  }
+
 std::string cmb_acc::ActionWrapper::incompatibleStringList(ActionWrapperList *awl) const
   {
     std::string retval;

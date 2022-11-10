@@ -57,7 +57,7 @@ class ActionWrapper: public EntityWithOwner
 
     virtual std::vector<const Action *> getWrappedActions(void) const= 0;
     virtual const ActionRelationships &getRelaciones(void) const= 0;
-    virtual bool Incompatible(const ActionWrapper &f) const= 0;
+    virtual bool Incompatible(const ActionWrapper &f) const;
     //! @brief Return true if this actions is compatible with
     //! the argument one.
     inline bool Compatible(const ActionWrapper &aw) const
