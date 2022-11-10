@@ -26,13 +26,13 @@
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <boost/python/docstring_options.hpp>
-#include "utility/load_combinations/factors/PartialSafetyFactors.h"
-#include "utility/load_combinations/factors/PartialSafetyFactorsMap.h"
-#include "utility/load_combinations/factors/CombinationFactors.h"
+#include "utility/load_combinations/actions/factors/PartialSafetyFactors.h"
+#include "utility/load_combinations/actions/factors/PartialSafetyFactorsMap.h"
+#include "utility/load_combinations/actions/factors/CombinationFactors.h"
 #include "utility/load_combinations/actions/Action.h"
 #include "utility/load_combinations/actions/ActionDesignValuesList.h"
 #include "utility/load_combinations/actions/ActionsFamily.h"
-#include "utility/load_combinations/actions/ActionContainer.h"
+#include "utility/load_combinations/actions/ActionFamilyContainer.h"
 #include "utility/load_combinations/actions/ActionsAndFactors.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinations.h"
@@ -47,7 +47,7 @@ BOOST_PYTHON_MODULE(loadCombinations)
     using namespace cmb_acc;
     docstring_options doc_options;
 
-#include "factors/python_interface.tcc"
+#include "actions/factors/python_interface.tcc"
 #include "actions/python_interface.tcc"
 #include "comb_analysis/python_interface.tcc"
   }

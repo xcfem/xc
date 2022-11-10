@@ -22,9 +22,9 @@
 
 #include "utility/load_combinations/actions/ActionRepresentativeValues.h"
 #include "utility/load_combinations/actions/ActionDesignValuesList.h"
-#include "utility/load_combinations/factors/PartialSafetyFactors.h"
-#include "utility/load_combinations/factors/CombinationFactorsMap.h"
-#include "utility/load_combinations/factors/PartialSafetyFactorsMap.h"
+#include "utility/load_combinations/actions/factors/PartialSafetyFactors.h"
+#include "utility/load_combinations/actions/factors/CombinationFactorsMap.h"
+#include "utility/load_combinations/actions/factors/PartialSafetyFactorsMap.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 #include "LeadingActionInfo.h"
 

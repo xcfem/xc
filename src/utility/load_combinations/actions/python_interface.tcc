@@ -64,16 +64,16 @@ class_<ActionsFamily, bases<NamedEntity> >("ActionsFamily")
   .def("insert", make_function(&ActionsFamily::insert,return_internal_reference<>()))
   ;
 
-class_<ActionContainer, bases<CommandEntity> >("ActionContainer")
-  .add_property("permanentActions", make_function( &ActionContainer::getPermanentActions, return_internal_reference<>() ), &ActionContainer::setPermanentActions)
-  .add_property("ncPermanentActions", make_function( &ActionContainer::getPermanentActionsNC, return_internal_reference<>() ), &ActionContainer::setPermanentActionsNC,"return a reference to the families of non-constant permanent actions container.")
-  .add_property("variableActions", make_function( &ActionContainer::getVariableActions, return_internal_reference<>() ), &ActionContainer::setVariableActions,"return a reference to the families of variable actions container.")
-  .add_property("accidentalActions", make_function( &ActionContainer::getAccidentalActions, return_internal_reference<>() ), &ActionContainer::setAccidentalActions)
-  .add_property("seismicActions", make_function( &ActionContainer::getSeismicActions, return_internal_reference<>() ), &ActionContainer::setSeismicActions)
-  .def("insert", make_function(&ActionContainer::insert,return_internal_reference<>()))
+class_<ActionFamilyContainer, bases<CommandEntity> >("ActionFamilyContainer")
+  .add_property("permanentActions", make_function( &ActionFamilyContainer::getPermanentActions, return_internal_reference<>() ), &ActionFamilyContainer::setPermanentActions)
+  .add_property("ncPermanentActions", make_function( &ActionFamilyContainer::getPermanentActionsNC, return_internal_reference<>() ), &ActionFamilyContainer::setPermanentActionsNC,"return a reference to the families of non-constant permanent actions container.")
+  .add_property("variableActions", make_function( &ActionFamilyContainer::getVariableActions, return_internal_reference<>() ), &ActionFamilyContainer::setVariableActions,"return a reference to the families of variable actions container.")
+  .add_property("accidentalActions", make_function( &ActionFamilyContainer::getAccidentalActions, return_internal_reference<>() ), &ActionFamilyContainer::setAccidentalActions)
+  .add_property("seismicActions", make_function( &ActionFamilyContainer::getSeismicActions, return_internal_reference<>() ), &ActionFamilyContainer::setSeismicActions)
+  .def("insert", make_function(&ActionFamilyContainer::insert,return_internal_reference<>()))
   ;
 
-class_<ActionsAndFactors, bases<ActionContainer> >("ActionsAndFactors")
+class_<ActionsAndFactors, bases<ActionFamilyContainer> >("ActionsAndFactors")
   .def(init<Factors>())
   .def("getFactors", &ActionsAndFactors::getFactors, return_internal_reference<>())
   ;

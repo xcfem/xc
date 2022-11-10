@@ -18,7 +18,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ActionContainer.h
+//ActionFamilyContainer.h
 //Almacena todas las familias de acciones para la estructura o el elemento estructural.
 
 #ifndef ACTIONCONTAINER_H
@@ -30,7 +30,7 @@ namespace cmb_acc{
 //! @ingroup CMBACC
 //
 //! @brief Almacena todas las familias de acciones.
-class ActionContainer: public CommandEntity
+class ActionFamilyContainer: public CommandEntity
   {
   protected:
     ActionsFamily G; //!< Permanent actions.
@@ -46,8 +46,8 @@ class ActionContainer: public CommandEntity
   protected:
     friend class ActionWeightingMap;
   public:
-    ActionContainer(void);
-    inline virtual ~ActionContainer(void) {}
+    ActionFamilyContainer(void);
+    inline virtual ~ActionFamilyContainer(void) {}
 
     ActionDesignValues &insert(const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
 

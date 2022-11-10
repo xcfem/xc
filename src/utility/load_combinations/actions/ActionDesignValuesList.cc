@@ -25,7 +25,7 @@
 #include "utility/load_combinations/comb_analysis/Variation.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 #include "LeadingActionInfo.h"
-#include "utility/load_combinations/factors/PartialSafetyFactors.h"
+#include "utility/load_combinations/actions/factors/PartialSafetyFactors.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 
 cmb_acc::ActionDesignValues &cmb_acc::ActionDesignValuesList::push_back(const ActionDesignValues &a)

@@ -24,7 +24,7 @@
 
 //! @brief Default constructor.
 cmb_acc::ActionsAndFactors::ActionsAndFactors(const Factors &fs)
-  : ActionContainer(), factors(fs)
+  : ActionFamilyContainer(), factors(fs)
   {}
 
 

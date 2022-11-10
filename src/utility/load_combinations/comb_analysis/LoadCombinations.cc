@@ -21,7 +21,7 @@
 //LoadCombinations.cc
 
 #include "LoadCombinations.h"
-#include "utility/load_combinations/actions/ActionContainer.h"
+#include "utility/load_combinations/actions/ActionFamilyContainer.h"
 
 
 //! @brief Default constructor.
@@ -33,7 +33,7 @@ cmb_acc::LoadCombinations::~LoadCombinations(void)
   {}
 
 //! @brief Constructor.
-cmb_acc::LoadCombinations::LoadCombinations(const ActionContainer &acc)
+cmb_acc::LoadCombinations::LoadCombinations(const ActionFamilyContainer &acc)
   : comb_uls_transient(acc.GetPersistentesOTransit()), comb_uls_accid(acc.GetAccidentales()),
     comb_uls_sism(acc.GetSismicas()), comb_sls_poco_frec(acc.GetPocoFrecuentes()),
     comb_sls_frec(acc.GetFrecuentes()), comb_sls_cuasi_perm(acc.GetCuasiPermanentes())

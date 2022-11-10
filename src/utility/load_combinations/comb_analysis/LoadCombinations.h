@@ -26,7 +26,7 @@
 #include "LoadCombinationVector.h"
 
 namespace cmb_acc{
-class ActionContainer;
+class ActionFamilyContainer;
 class ActionWeightingMap;
 
 //! @ingroup CMBACC
@@ -47,7 +47,7 @@ class LoadCombinations: public CommandEntity
 
   public:
     LoadCombinations(void);
-    LoadCombinations(const ActionContainer &acc);
+    LoadCombinations(const ActionFamilyContainer &acc);
     virtual ~LoadCombinations(void);
     void Concat(const LoadCombinations &others);
 

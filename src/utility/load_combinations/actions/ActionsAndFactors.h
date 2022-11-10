@@ -24,14 +24,14 @@
 #ifndef ACTIONSANDFACTORS_H
 #define ACTIONSANDFACTORS_H
 
-#include "ActionContainer.h"
-#include "utility/load_combinations/factors/Factors.h"
+#include "ActionFamilyContainer.h"
+#include "utility/load_combinations/actions/factors/Factors.h"
 
 namespace cmb_acc{
 //! @ingroup CMBACC
 //
 //! @brief Container for all the action families.
-class ActionsAndFactors: public ActionContainer
+class ActionsAndFactors: public ActionFamilyContainer
   {
   private:
     Factors factors; //!< Factors to use to build combinations.

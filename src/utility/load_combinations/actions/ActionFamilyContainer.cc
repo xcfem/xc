@@ -18,15 +18,15 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ActionContainer.cxx
+//ActionFamilyContainer.cxx
 
-#include "ActionContainer.h"
+#include "ActionFamilyContainer.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 #include "LeadingActionInfo.h"
 
 
 //! @brief Default constructor.
-cmb_acc::ActionContainer::ActionContainer(void)
+cmb_acc::ActionFamilyContainer::ActionFamilyContainer(void)
   : G("Permanentes"), 
     G_aster("Permanentes val. no cte."), 
     Q("Variables"),
@@ -41,7 +41,7 @@ cmb_acc::ActionContainer::ActionContainer(void)
   }
 
 //! @brief Insert the action into the family identified by the string.
-cmb_acc::ActionDesignValues &cmb_acc::ActionContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+cmb_acc::ActionDesignValues &cmb_acc::ActionFamilyContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
     if(family=="permanentes" or family=="permanent")
       return G.insert(acc,combination_factors_name,partial_safety_factors_name);
@@ -67,50 +67,50 @@ cmb_acc::ActionDesignValues &cmb_acc::ActionContainer::insert(const std::string 
   }
 
 //! @brief Return el conjunto de acciones permanentes.
-const cmb_acc::ActionsFamily &cmb_acc::ActionContainer::getPermanentActions(void) const
+const cmb_acc::ActionsFamily &cmb_acc::ActionFamilyContainer::getPermanentActions(void) const
   { return G; }
 
 //! @brief Asigna el conjunto de acciones permanentes.
-void cmb_acc::ActionContainer::setPermanentActions(const ActionsFamily &g)
+void cmb_acc::ActionFamilyContainer::setPermanentActions(const ActionsFamily &g)
   { G= g; }
 
 //! @brief Return the non-constant permanent actions.
-const cmb_acc::ActionsFamily &cmb_acc::ActionContainer::getPermanentActionsNC(void) const
+const cmb_acc::ActionsFamily &cmb_acc::ActionFamilyContainer::getPermanentActionsNC(void) const
   { return G_aster; }
 
 //! @brief Set the non-constant permanent actions.
-void cmb_acc::ActionContainer::setPermanentActionsNC(const ActionsFamily &mfa)
+void cmb_acc::ActionFamilyContainer::setPermanentActionsNC(const ActionsFamily &mfa)
   { G_aster= mfa; }
 
 //! @brief Return el conjunto de acciones variables.
-const cmb_acc::ActionsFamily &cmb_acc::ActionContainer::getVariableActions(void) const
+const cmb_acc::ActionsFamily &cmb_acc::ActionFamilyContainer::getVariableActions(void) const
   { return Q; }
 
 //! @brief Return el conjunto de acciones variables.
-void cmb_acc::ActionContainer::setVariableActions(const ActionsFamily &fa)
+void cmb_acc::ActionFamilyContainer::setVariableActions(const ActionsFamily &fa)
   { Q= fa; }
 
 //! @brief Return el conjunto de acciones accidentales.
-const cmb_acc::ActionsFamily &cmb_acc::ActionContainer::getAccidentalActions(void) const
+const cmb_acc::ActionsFamily &cmb_acc::ActionFamilyContainer::getAccidentalActions(void) const
   { return A; }
 
 //! @brief Asigna el conjunto de acciones accidentales.
-void cmb_acc::ActionContainer::setAccidentalActions(const ActionsFamily &fa)
+void cmb_acc::ActionFamilyContainer::setAccidentalActions(const ActionsFamily &fa)
   { A= fa; }
 
 //! @brief Return el conjunto de acciones sísmicas.
-const cmb_acc::ActionsFamily &cmb_acc::ActionContainer::getSeismicActions(void) const
+const cmb_acc::ActionsFamily &cmb_acc::ActionFamilyContainer::getSeismicActions(void) const
   { return AS; }
 
 //! @brief Asigna el conjunto de acciones sísmicas.
-void cmb_acc::ActionContainer::setSeismicActions(const ActionsFamily &fa)
+void cmb_acc::ActionFamilyContainer::setSeismicActions(const ActionsFamily &fa)
   { AS= fa; }
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPermanentes(const bool &uls,const bool &sit_accidental) const
+//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetPermanentes(const bool &uls,const bool &sit_accidental) const
 //! @brief Return the combinations obtained from permanent and non-constant permanent actions.
 //! @param uls: True if the combinations correspond to ultimate limit states.
 //! @param sit_accidental: True if the combinations correspond to accidental situations.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPermanentes(const bool &uls,const bool &sit_accidental) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetPermanentes(const bool &uls,const bool &sit_accidental) const
   {
     LoadCombinationVector retval;
     if(!G.empty()) //Hay acciones permanentes.
@@ -127,13 +127,13 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPermanentes(const bo
     return retval;
   }
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetVariables(const LoadCombinationVector &permanentes,const bool &uls,const bool &sit_accidental,const short int &v) const
+//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetVariables(const LoadCombinationVector &permanentes,const bool &uls,const bool &sit_accidental,const short int &v) const
 //! @brief Return the combinations that correspond to permanent (constant or not) and variable actions.
-//! @param permanentes: LoadCombinations de las acciones permanentes obtenidas mediante cmb_acc::ActionContainer::GetPermanentes.
+//! @param permanentes: LoadCombinations de las acciones permanentes obtenidas mediante cmb_acc::ActionFamilyContainer::GetPermanentes.
 //! @param uls: True if the combinations correspond to ultimate limit states.
 //! @param sit_accidental: True if the combinations correspond to accidental situations.
 //! @param v: representative value to consider for the leading action.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetVariables(const LoadCombinationVector &permanentes,const bool &uls,const bool &sit_accidental,const bool &sit_sismica,const short int &v) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetVariables(const LoadCombinationVector &permanentes,const bool &uls,const bool &sit_accidental,const bool &sit_sismica,const short int &v) const
   {
     LoadCombinationVector retval; //Inicializa con acciones permanentes.
     if(!Q.empty()) //Hay acciones variables.
@@ -151,9 +151,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetVariables(const Load
   }
 
 //! @brief Return the combinations that correspond to accidental or seismic situations.
-//! @param previas: LoadCombinations de las acciones permanentes y variables obtenidas mediante cmb_acc::ActionContainer::GetVariables.
+//! @param previas: LoadCombinations de las acciones permanentes y variables obtenidas mediante cmb_acc::ActionFamilyContainer::GetVariables.
 //! @param Acc: Familia de acciones accidentales o sísmicas.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetAccSis(const LoadCombinationVector &previas,const ActionsFamily &Acc) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetAccSis(const LoadCombinationVector &previas,const ActionsFamily &Acc) const
   {
     LoadCombinationVector retval(previas);
     if(!Acc.empty()) //Existen acciones accidentales o sísmicas.
@@ -175,9 +175,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetAccSis(const LoadCom
 
 
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPersistentesOTransit(void) const
+//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetPersistentesOTransit(void) const
 //! @brief Return the combinations that correspond to ultimate limit states in persisten or transient situations.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPersistentesOTransit(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetPersistentesOTransit(void) const
   {
     if(verbosity>1) std::clog << "Computing combinations for ULS in persistent or transient situations..." << std::endl; 
     if(verbosity>1) std::clog << "  Computing combinatios of permanent actions...";
@@ -193,9 +193,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPersistentesOTransit
     return retval;
   }
 
-//! \fn cmb_acc::ActionContainer::GetAccidentales(void) const
+//! \fn cmb_acc::ActionFamilyContainer::GetAccidentales(void) const
 //! @brief Return the combinations that correspond to ultimate limit states in accidental situations.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetAccidentales(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetAccidentales(void) const
   {
     LoadCombinationVector retval;
     if(A.empty()) return retval; //No hay acciones accidentales.
@@ -218,9 +218,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetAccidentales(void) c
   }
 
 
-//! \fn cmb_acc::ActionContainer::GetSismicas(void) const
+//! \fn cmb_acc::ActionFamilyContainer::GetSismicas(void) const
 //! @brief Return the combinations that correspond to ultimate limit states in seismic situations.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetSismicas(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetSismicas(void) const
   {
     LoadCombinationVector retval;
     if(AS.empty()) return retval; //No hay acciones sismicas.
@@ -241,9 +241,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetSismicas(void) const
     return retval;
   }
 
-//! \fn cmb_acc::ActionContainer::GetCombULS(void) const
+//! \fn cmb_acc::ActionFamilyContainer::GetCombULS(void) const
 //! @brief Return the combinations that correspond to all ultimate limit states.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCombULS(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetCombULS(void) const
   {
     LoadCombinationVector retval= GetPersistentesOTransit(); //Situaciones persistentes o transitorias.
     LoadCombinationVector accidentales= GetAccidentales();
@@ -259,9 +259,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCombULS(void) const
 //serviceability limit states.
 
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPocoFrecuentes(void) const
+//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetPocoFrecuentes(void) const
 //! @brief Return the combinations that correspond to rare situations.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPocoFrecuentes(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetPocoFrecuentes(void) const
   {
     if(verbosity>1) std::clog << "Computing combinations for SLS in rare situations..." << std::endl; 
     if(verbosity>1) std::clog << "  Computing combinations of permanent actions...";
@@ -278,9 +278,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPocoFrecuentes(void)
     return retval;
   }
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetFrecuentes(void) const
+//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetFrecuentes(void) const
 //! @brief Return the combinations that correspond to frequent situations.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetFrecuentes(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetFrecuentes(void) const
   {
     if(verbosity>1) std::clog << "Computing combinations for SLS in frequent situations..." << std::endl; 
     if(verbosity>1) std::clog << "  Computing combinations of permanent actions...";
@@ -297,9 +297,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetFrecuentes(void) con
     return retval;
   }
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCuasiPermanentes(void) const
+//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetCuasiPermanentes(void) const
 //! @brief Return the combinations that correspond to quasi-permanent situations.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCuasiPermanentes(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetCuasiPermanentes(void) const
   {
     if(verbosity>1) std::clog << "Computing combinations for SLS in quasi-permanent situations..." << std::endl; 
     if(verbosity>1) std::clog << "  Computing combinations of permanent actions...";
@@ -316,9 +316,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCuasiPermanentes(voi
     return retval;
   }
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCombSLS(void) const
+//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetCombSLS(void) const
 //! @brief Return the combinations that correspond to all serviceability limit states.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCombSLS(void) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetCombSLS(void) const
   {
     LoadCombinationVector retval= GetPocoFrecuentes(); //LoadCombinations poco frecuentes.
     LoadCombinationVector frecuente= GetFrecuentes();
