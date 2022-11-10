@@ -223,9 +223,13 @@ SET(cuadGauss utility/gauss_quadrature/GaussQuadrature2D.cc utility/gauss_quadra
 ### Load combinations.
 SET(ca_factors utility/load_combinations/actions/factors/PartialSafetyFactors.cc utility/load_combinations/actions/factors/PartialSafetyFactorsMap.cc utility/load_combinations/actions/factors/CombinationFactors.cc utility/load_combinations/actions/factors/CombinationFactorsMap.cc utility/load_combinations/actions/factors/Factors.cc)
 
-SET(ca_actions utility/load_combinations/actions/LeadingActionInfo.cc utility/load_combinations/actions/Action.cc utility/load_combinations/actions/ActionRelationships.cc utility/load_combinations/actions/ActionRepresentativeValues.cc utility/load_combinations/actions/ActionDesignValues.cc utility/load_combinations/actions/ActionDesignValuesList.cc utility/load_combinations/actions/ActionsFamily.cc utility/load_combinations/actions/ActionFamilyContainer.cc utility/load_combinations/actions/ActionsAndFactors.cc)
+SET(ca_actions utility/load_combinations/actions/LeadingActionInfo.cc utility/load_combinations/actions/Action.cc utility/load_combinations/actions/ActionRelationships.cc utility/load_combinations/actions/ActionRepresentativeValues.cc utility/load_combinations/actions/ActionWrapper.cc utility/load_combinations/actions/SingleActionWrapper.cc utility/load_combinations/actions/ActionWrapperList.cc)
+
+SET(ca_action_containers utility/load_combinations/actions/containers/ActionsFamily.cc utility/load_combinations/actions/containers/ActionFamilyContainer.cc utility/load_combinations/actions/containers/ActionsAndFactors.cc)
 
 SET(ca_combinations utility/load_combinations/comb_analysis/Variation.cc utility/load_combinations/comb_analysis/Variations.cc utility/load_combinations/comb_analysis/LoadCombinationVector.cc utility/load_combinations/comb_analysis/LoadCombinations.cc utility/load_combinations/comb_analysis/ActionWeightingMap.cc utility/load_combinations/comb_analysis/LoadCombinationGenerator.cc)
+
+SET(ca_load_combinations ${ca_factors} ${ca_actions} ${ca_action_containers} ${ca_combinations})
 
 ### Actor
 SET(actor utility/actor/actor/Actor.cpp utility/actor/actor/DistributedBase.cc utility/actor/actor/DistributedObj.cc utility/actor/actor/MovableObject.cpp utility/actor/actor/CommMetaData.cc utility/actor/actor/PtrCommMetaData.cc utility/actor/actor/BrokedPtrCommMetaData.cc utility/actor/actor/ArrayCommMetaData.cc utility/actor/actor/MatrixCommMetaData.cc utility/actor/actor/TensorCommMetaData.cc utility/actor/actor/DbTagData.cc utility/actor/actor/Communicator.cc utility/actor/actor/MovableMap.cc utility/actor/actor/MovableDeque.cc utility/actor/actor/MovableVector.cc utility/actor/actor/MovableBJTensor.cc utility/actor/actor/MovableString.cc utility/actor/actor/MovableVectors.cc utility/actor/actor/MovableMatrix.cc utility/actor/actor/MovableID.cc utility/actor/actor/MovableMatrices.cc utility/actor/actor/MovableContainer.cc utility/actor/actor/MovableStrings.cc utility/actor/address/ChannelAddress.cpp utility/actor/address/SocketAddress.cpp utility/actor/channel/ChannelQueue.cc utility/actor/channel/Channel.cpp utility/actor/channel/TCP_Socket.cpp utility/actor/channel/UDP_Socket.cpp utility/actor/channel/mySocket.c utility/actor/machineBroker/MachineBroker.cpp utility/actor/message/Message.cpp utility/actor/objectBroker/FEM_ObjectBroker.cpp utility/actor/objectBroker/ObjectBroker.cpp utility/actor/ObjectWithObjBroker.cc utility/actor/ShadowActorBase.cc utility/actor/shadow/Shadow.cpp utility/xc_python_utils.cc)
@@ -441,7 +445,7 @@ SET(solution solution/analysis/ModelWrapper.cc solution/SolutionStrategy.cc solu
 add_library(xc_basic_utils ${text_utils} ${stream_utils} ${misc_utils} ${sqlitepp_utils} ${matrices} ${three_d_arrays} ${skypack} ${itpack} ${functions})
 install(TARGETS xc_basic_utils DESTINATION lib)
 
-add_library(xc_utils SHARED ${SQLITE} ${cuadGauss} ${geom} ${GnuGts} ${KERNEL} ${VtkAux} ${ca_factors} ${ca_actions} ${ca_combinations})
+add_library(xc_utils SHARED ${SQLITE} ${cuadGauss} ${geom} ${GnuGts} ${KERNEL} ${VtkAux} ${ca_load_combinations})
 
 
 add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} version.cc FEProblem.cc)

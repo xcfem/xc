@@ -24,7 +24,7 @@
 #ifndef FAMILIAACCIONES_H
 #define FAMILIAACCIONES_H
 
-#include "utility/load_combinations/actions/ActionDesignValuesList.h"
+#include "utility/load_combinations/actions/ActionWrapperList.h"
 
 namespace cmb_acc{
 class LoadCombinationVector;
@@ -44,23 +44,23 @@ class LeadingActionInfo;
 class ActionsFamily: public NamedEntity
   {
   private:
-    ActionDesignValuesList actions; //!< Family actions container.
+    ActionWrapperList actions; //!< Family actions container.
 
   protected:
     friend class ActionsAndFactors;
   public:
     ActionsFamily(const std::string &nmb="");
     inline virtual ~ActionsFamily(void) {}
-    ActionDesignValues &insert(const Action &,const std::string &combination_factors_name,const std::string &partial_safety_factors_name);
+    ActionWrapper &insert(const Action &,const std::string &combination_factors_name,const std::string &partial_safety_factors_name);
 
     //! @brief Return the actions in the family.
-    inline const ActionDesignValuesList &getActions(void) const
+    inline const ActionWrapperList &getActions(void) const
       { return actions; }
     //! @brief Return the actions in the family.
-    inline ActionDesignValuesList &getActions(void)
+    inline ActionWrapperList &getActions(void)
       { return actions; }
     //! @brief Set the actions in the family.
-    inline void setActions(const ActionDesignValuesList &acc)
+    inline void setActions(const ActionWrapperList &acc)
       { actions= acc; }
 
     //! brief Return true if no actions in the family.

@@ -31,7 +31,6 @@
 namespace cmb_acc{
 class Variation;
 class Variations;
-class ActionDesignValuesList;
 
 //! @ingroup CMBACC
 //

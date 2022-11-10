@@ -18,27 +18,29 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ActionDesignValuesList.cxx
+//ActionWrapperList.cxx
 
-#include "ActionDesignValuesList.h"
-#include "ActionsFamily.h"
+#include "ActionWrapperList.h"
+#include "containers/ActionsFamily.h"
 #include "utility/load_combinations/comb_analysis/Variation.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 #include "LeadingActionInfo.h"
-#include "utility/load_combinations/actions/factors/PartialSafetyFactors.h"
+// #include "utility/load_combinations/actions/factors/PartialSafetyFactors.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 
-cmb_acc::ActionDesignValues &cmb_acc::ActionDesignValuesList::push_back(const ActionDesignValues &a)
+//! @brief Back inserter.
+cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::push_back(const SingleActionWrapper &a)
   {
-    std::deque<ActionDesignValues>::push_back(a);
-    ActionDesignValues &retval= back();
+    base_pointer ptr= std::make_shared<SingleActionWrapper>(a);
+    base_container::push_back(ptr);
+    ActionWrapper &retval= *back().get();
     return retval;
   }
 
 //! @brief Insert the action being passed as parameter.
-cmb_acc::ActionDesignValues &cmb_acc::ActionDesignValuesList::insert(const Action &a,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::insert(const Action &a,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
-    ActionDesignValues acc(a,this,combination_factors_name,partial_safety_factors_name);
+    SingleActionWrapper acc(a,this,combination_factors_name,partial_safety_factors_name);
     acc.set_owner(this);
     return push_back(acc);
   }
@@ -47,25 +49,25 @@ cmb_acc::ActionDesignValues &cmb_acc::ActionDesignValuesList::insert(const Actio
 //!
 //! @param v: Variation to build.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::Action cmb_acc::ActionDesignValuesList::buildCombination(const Variation &var, const LeadingActionInfo &lai) const
+cmb_acc::Action cmb_acc::ActionWrapperList::buildCombination(const Variation &var, const LeadingActionInfo &lai) const
   {
     const size_t num_acciones= size();
     Action retval= Action::NULA(); //Initialize to zero.
     for(size_t j=0;j<num_acciones;j++)
       {
-        retval+= (*this)[j].getCombinationValue(lai,var[j]);
+        retval+= (*this)[j].get()->getCombinationValue(lai,var[j]);
       }
     return retval;
   }
 
 //! @brief Return the index of the argument in the list.
-int cmb_acc::ActionDesignValuesList::getIndex(const ActionDesignValues *ptr) const
+int cmb_acc::ActionWrapperList::getIndex(const ActionWrapper *ptr) const
   {
     const size_t num_acciones= size();
     int retval= -1;
     for(size_t j=0;j<num_acciones;j++)
       {
-	const ActionDesignValues *tmp= &(*this)[j];
+	const ActionWrapper *tmp= (*this)[j].get();
 	if(ptr==tmp)
 	  {
 	    retval= j;
@@ -75,10 +77,14 @@ int cmb_acc::ActionDesignValuesList::getIndex(const ActionDesignValues *ptr) con
     return retval;
   }
 
-//! @brief Return a pointer to the table of coeficientes de simultaneidad.
-const cmb_acc::CombinationFactorsMap *cmb_acc::ActionDesignValuesList::getPtrCombinationFactors(void) const
+//! @brief Return the family that owns this list.
+const cmb_acc::ActionsFamily *cmb_acc::ActionWrapperList::getFamily(void) const
+  { return dynamic_cast<const ActionsFamily *>(Owner()); }
+
+//! @brief Return a pointer to the table of combination factors.
+const cmb_acc::CombinationFactorsMap *cmb_acc::ActionWrapperList::getPtrCombinationFactors(void) const
   {
-    const ActionsFamily *tmp= dynamic_cast<const ActionsFamily *>(Owner());
+    const ActionsFamily *tmp= this->getFamily();
     if(tmp)
       return tmp->getPtrCombinationFactors();
     else
@@ -90,9 +96,9 @@ const cmb_acc::CombinationFactorsMap *cmb_acc::ActionDesignValuesList::getPtrCom
   }
 
 //! @brief Return a pointer to the table of coeficientes de simultaneidad.
-const cmb_acc::PartialSafetyFactorsMap *cmb_acc::ActionDesignValuesList::getPtrPartialSafetyFactors(void) const
+const cmb_acc::PartialSafetyFactorsMap *cmb_acc::ActionWrapperList::getPtrPartialSafetyFactors(void) const
   {
-    const ActionsFamily *tmp= dynamic_cast<const ActionsFamily *>(Owner());
+    const ActionsFamily *tmp= this->getFamily();
     if(tmp)
       return tmp->getPtrPartialSafetyFactors();
     else
@@ -108,16 +114,16 @@ const cmb_acc::PartialSafetyFactorsMap *cmb_acc::ActionDesignValuesList::getPtrP
 //! @param uls: True if it's an ultimate limit state.
 //! @param sit_accidental: true if it's an accidental or seismic situation.
 //! @param leadingActionIndex: index of the leading action (-1 if no one is).
-cmb_acc::Variations cmb_acc::ActionDesignValuesList::computeVariations(const bool &uls,const bool &sit_accidental,const int &leadingActionIndex) const
+cmb_acc::Variations cmb_acc::ActionWrapperList::computeVariations(const bool &uls,const bool &sit_accidental,const int &leadingActionIndex) const
   {
     
     const_iterator i= begin();
-    Variations v= i->getVariations(uls,sit_accidental);
+    Variations v= (*i).get()->getVariations(uls,sit_accidental);
     Variations retval(v);
     i++;
     for(;i!=end();i++)
       {
-	v= i->getVariations(uls,sit_accidental);
+	v= (*i).get()->getVariations(uls,sit_accidental);
 	retval= Variations::prod_cartesiano(retval,v); //Order is important (LCPT 4/08/2018) 
       }
     if(retval.empty())
@@ -131,13 +137,13 @@ cmb_acc::Variations cmb_acc::ActionDesignValuesList::computeVariations(const boo
 //! @param uls: Verdadero si se trata de un estado límite último.
 //! @param sit_accidental: Verdadero si estamos en situación accidental.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::LoadCombinationVector cmb_acc::ActionDesignValuesList::getCombinations(const bool &uls,const bool &sit_accidental, const LeadingActionInfo &leadingActionInfo) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionWrapperList::getCombinations(const bool &uls,const bool &sit_accidental, const LeadingActionInfo &leadingActionInfo) const
   {
     const int leadingActionIndex= leadingActionInfo.getLeadingActionIndex();
     Variations var= computeVariations(uls,sit_accidental,leadingActionIndex);
     const size_t num_variations= var.size();
     LoadCombinationVector retval(num_variations);
-    ActionDesignValuesList *this_no_const= const_cast<ActionDesignValuesList *>(this);
+    ActionWrapperList *this_no_const= const_cast<ActionWrapperList *>(this);
     for(size_t i=0;i<num_variations;i++)
       {
         const Variation &v_i= var[i];
@@ -163,7 +169,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionDesignValuesList::getCombinations(
 //! @param uls: Verdadero si se trata de un estado límite último.
 //! @param sit_accidental: Verdadero si estamos en situación accidental.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::LoadCombinationVector cmb_acc::ActionDesignValuesList::getCombinationsWhenLeading(const bool &uls,const bool &sit_accidental, const bool &sit_sismica,const short int &v) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionWrapperList::getCombinationsWhenLeading(const bool &uls,const bool &sit_accidental, const bool &sit_sismica,const short int &v) const
   {
     const size_t nq= size();
     LoadCombinationVector retval;
@@ -189,14 +195,14 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionDesignValuesList::getCombinationsW
   }
 
 //! @brief Print stuff.
-void cmb_acc::ActionDesignValuesList::Print(std::ostream &os) const
+void cmb_acc::ActionWrapperList::Print(std::ostream &os) const
   {
     for(const_iterator i=begin();i!=end();i++)
       os << *i << ' ';
   }
 
-//! @brief Operador salida.
-std::ostream &cmb_acc::operator<<(std::ostream &os,const ActionDesignValuesList &lvr)
+//! @brief Output operator.
+std::ostream &cmb_acc::operator<<(std::ostream &os,const ActionWrapperList &lvr)
   {
     lvr.Print(os);
     return os;

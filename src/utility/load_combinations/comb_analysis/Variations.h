@@ -29,8 +29,6 @@
 
 namespace cmb_acc{
 
-class ActionDesignValuesList;
-
 //! @ingroup CMBACC
 //
 //! @brief Conjunto de las posibles variations de dos elementos (partial_safety_factors_fav y partial_safety_factors_desfav) tomados de n en n.

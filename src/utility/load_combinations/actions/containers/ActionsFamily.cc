@@ -24,7 +24,7 @@
 #include "ActionsAndFactors.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
-#include "Action.h"
+#include "utility/load_combinations/actions/Action.h"
 
 
 //! @brief Default constructor.
@@ -68,7 +68,7 @@ const cmb_acc::PartialSafetyFactorsMap *cmb_acc::ActionsFamily::getPtrPartialSaf
 
 //! @brief Insert the action argument and sets the "psi" load combination
 //! factors.
-cmb_acc::ActionDesignValues &cmb_acc::ActionsFamily::insert(const Action &a,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+cmb_acc::ActionWrapper &cmb_acc::ActionsFamily::insert(const Action &a,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   { return actions.insert(a,combination_factors_name,partial_safety_factors_name); }
 
 

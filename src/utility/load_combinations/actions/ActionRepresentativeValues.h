@@ -32,6 +32,7 @@ class PartialSafetyFactors;
 class CombinationFactors;
 class Variations;
 class LeadingActionInfo;
+class ActionWrapper;
 
 //! @ingroup CMBACC
 //
@@ -39,20 +40,20 @@ class LeadingActionInfo;
 class ActionRepresentativeValues: public Action
   {
   protected:
-    ActionDesignValuesList *acc_familia; //!< Container for the actions of the family.
+    ActionWrapper *wrapper; //!< Wrapper for this action.
     const CombinationFactors *combination_factors; //!< Combination factors.
 
     inline double getCombinationFactor(short int r) const;
     
-    friend class ActionDesignValuesList;
+    friend class SingleActionWrapper;
+    friend class GroupActionWrapper;
     //! @brief Default constructor.
-    ActionRepresentativeValues(const std::string &n="", const std::string &descrip="",ActionDesignValuesList *fam= nullptr);
-    ActionRepresentativeValues(const Action &a,ActionDesignValuesList *fam= nullptr,const std::string &nmb_comb_factors= "");
+    ActionRepresentativeValues(const std::string &n="", const std::string &descrip="", ActionWrapper *wrapper= nullptr);
+    ActionRepresentativeValues(const Action &a,ActionWrapper *wrapper= nullptr,const std::string &nmb_comb_factors= "");
+    Action getRepresentativeValue(const LeadingActionInfo &, const int &index) const;    
   public:
     Action getValue(short int r) const;
     void setCombinationFactors(const std::string &);
-    virtual int getIndex(void) const= 0; 
-    Action getRepresentativeValue(const LeadingActionInfo &) const;    
     void Print(std::ostream &os) const;    
   };
 

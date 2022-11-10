@@ -10,13 +10,14 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import loadCombinations
 from actions.load_combination_utils import ehe
+from misc_utils import log_messages as lmsg
 
 dbName= "/tmp/test_accidentales.db"
 tbName= "combinations"
 
 lcg= ehe.combGenerator
 # G= lcg.newPermanentAction(actionName= "G", actionDescription= "Self weight")
-lcg.newAccidentalAction(actionName= "A1", actionDescription= "Hipot. 1")
+a1= lcg.newAccidentalAction(actionName= "A1", actionDescription= "Hipot. 1")
 lcg.newAccidentalAction(actionName= "A2", actionDescription= "Hipot. 2")
 lcg.newAccidentalAction(actionName= "A3", actionDescription= "Hipot. 3")
 lcg.newAccidentalAction(actionName= "A4", actionDescription= "Hipot. 4")

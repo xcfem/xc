@@ -13,10 +13,10 @@ PP1= lcg.newPermanentAction(actionName= "G", actionDescription= "Poids propre")
 
 # Railway loads.
 LM6= lcg.newRailwayTrafficAction(actionName= "LM6", actionDescription= "Modèle de charge 6", combinationFactorsName= "voie_etroite_load_model_6")
-LM6.getRelaciones.appendIncompatible("LM7")
+LM6.relationships.appendIncompatible("LM7")
 
 LM7= lcg.newRailwayTrafficAction(actionName= "LM7", actionDescription= "Modèle de charge 7", combinationFactorsName= "voie_etroite_load_model_7")
-LM7.getRelaciones.appendIncompatible("LM6")
+LM7.relationships.appendIncompatible("LM6")
 
 LM8= lcg.newRailwayTrafficAction(actionName= "LM8", actionDescription= "Modèle de charge 8", combinationFactorsName= "voie_etroite_load_model_8", incompatibleActions= ['LM6', 'LM7'])
 

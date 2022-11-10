@@ -20,6 +20,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+#include "utility/load_combinations/actions/factors/python_interface.tcc"
+
 class_<ActionRelationships, bases<CommandEntity> >("ActionRelationships")
   .def("appendIncompatible", &ActionRelationships::appendIncompatible)
   .def("incompatibleNames", &ActionRelationships::incompatibleNames)
@@ -42,38 +44,21 @@ class_<Action, bases<NamedEntity> >("Action")
   .def(self_ns::repr(self_ns::self))
   ;
 
-class_<ActionDesignValues, bases<Action>, boost::noncopyable >("ActionDesignValues", no_init)
-  .def("getPartialSafetyFactors", make_function( &ActionDesignValues::getPartialSafetyFactors, return_internal_reference<>() ), "Return the partial safety factors for this action.")
-  .def("setPartialSafetyFactors", &ActionDesignValues::setPartialSafetyFactors, "Set the partial safety factors for this action.")
+class_<ActionWrapper, bases<EntityWithOwner>, boost::noncopyable >("ActionWrapper", no_init)
+  .add_property("name", &ActionWrapper::getName,"returns the wrapper name.")
+  .add_property("relationships", make_function( &ActionWrapper::getRelaciones, return_internal_reference<>() ), "Return the relationships with other actions")
+  .def("getPartialSafetyFactors", make_function( &ActionWrapper::getPartialSafetyFactors, return_internal_reference<>() ), "Return the partial safety factors for this action.")
+  .def("setPartialSafetyFactors", &ActionWrapper::setPartialSafetyFactors, "Set the partial safety factors for this action.")
   ;
 
-typedef std::deque<ActionDesignValues> dq_action_r_value;
-class_<dq_action_r_value >("dq_action_r_values")
-  .def(vector_indexing_suite<dq_action_r_value>())
+typedef std::deque<std::shared_ptr<ActionWrapper> > dq_action_wrappers;
+class_<dq_action_wrappers>("dq_action_wrappers")
+.def(vector_indexing_suite<dq_action_wrappers, true>())
   ;
 
-class_<ActionDesignValuesList, bases<dq_action_r_value,CommandEntity> >("ActionDesignValuesLists")
+class_<ActionWrapperList, bases<dq_action_wrappers,CommandEntity> >("ActionWrapperLists")
   .def(self_ns::str(self_ns::self))
   .def(self_ns::repr(self_ns::self))
   ;
 
-const ActionDesignValuesList &(ActionsFamily::*getFamilyActions)(void) const= &ActionsFamily::getActions;
-class_<ActionsFamily, bases<NamedEntity> >("ActionsFamily")
-  .def(init<std::string>())
-  .add_property("actions", make_function( getFamilyActions, return_internal_reference<>() ), &ActionsFamily::setActions)
-  .def("insert", make_function(&ActionsFamily::insert,return_internal_reference<>()))
-  ;
-
-class_<ActionFamilyContainer, bases<CommandEntity> >("ActionFamilyContainer")
-  .add_property("permanentActions", make_function( &ActionFamilyContainer::getPermanentActions, return_internal_reference<>() ), &ActionFamilyContainer::setPermanentActions)
-  .add_property("ncPermanentActions", make_function( &ActionFamilyContainer::getPermanentActionsNC, return_internal_reference<>() ), &ActionFamilyContainer::setPermanentActionsNC,"return a reference to the families of non-constant permanent actions container.")
-  .add_property("variableActions", make_function( &ActionFamilyContainer::getVariableActions, return_internal_reference<>() ), &ActionFamilyContainer::setVariableActions,"return a reference to the families of variable actions container.")
-  .add_property("accidentalActions", make_function( &ActionFamilyContainer::getAccidentalActions, return_internal_reference<>() ), &ActionFamilyContainer::setAccidentalActions)
-  .add_property("seismicActions", make_function( &ActionFamilyContainer::getSeismicActions, return_internal_reference<>() ), &ActionFamilyContainer::setSeismicActions)
-  .def("insert", make_function(&ActionFamilyContainer::insert,return_internal_reference<>()))
-  ;
-
-class_<ActionsAndFactors, bases<ActionFamilyContainer> >("ActionsAndFactors")
-  .def(init<Factors>())
-  .def("getFactors", &ActionsAndFactors::getFactors, return_internal_reference<>())
-  ;
+#include "utility/load_combinations/actions/containers/python_interface.tcc"

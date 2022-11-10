@@ -39,10 +39,10 @@ class CombGenerator(object):
         newAction= loadCombinations.Action(actionName, actionDescription)
         retval= self.controlCombGenerator.insert(self.name, family, newAction, combinationFactorsName, partialSafetyFactorsName)
         if(dependsOn is not None):
-            retval.getRelaciones.appendMain(dependsOn)
+            retval.relationships.appendMain(dependsOn)
         if(incompatibleActions is not None):
             for actionNameRegex in incompatibleActions:
-                retval.getRelaciones.appendIncompatible(actionNameRegex)
+                retval.relationships.appendIncompatible(actionNameRegex)
         return retval
 
     def computeCombinations(self):

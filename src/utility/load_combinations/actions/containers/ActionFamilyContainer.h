@@ -21,8 +21,8 @@
 //ActionFamilyContainer.h
 //Almacena todas las familias de acciones para la estructura o el elemento estructural.
 
-#ifndef ACTIONCONTAINER_H
-#define ACTIONCONTAINER_H
+#ifndef ACTIONFAMILYCONTAINER_H
+#define ACTIONFAMILYCONTAINER_H
 
 #include "ActionsFamily.h"
 
@@ -49,7 +49,7 @@ class ActionFamilyContainer: public CommandEntity
     ActionFamilyContainer(void);
     inline virtual ~ActionFamilyContainer(void) {}
 
-    ActionDesignValues &insert(const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
+    ActionWrapper &insert(const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
 
     const ActionsFamily &getPermanentActions(void) const;
     void setPermanentActions(const ActionsFamily &);

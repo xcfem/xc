@@ -30,10 +30,10 @@
 #include "utility/load_combinations/actions/factors/PartialSafetyFactorsMap.h"
 #include "utility/load_combinations/actions/factors/CombinationFactors.h"
 #include "utility/load_combinations/actions/Action.h"
-#include "utility/load_combinations/actions/ActionDesignValuesList.h"
-#include "utility/load_combinations/actions/ActionsFamily.h"
-#include "utility/load_combinations/actions/ActionFamilyContainer.h"
-#include "utility/load_combinations/actions/ActionsAndFactors.h"
+#include "utility/load_combinations/actions/ActionWrapperList.h"
+#include "utility/load_combinations/actions/containers/ActionsFamily.h"
+#include "utility/load_combinations/actions/containers/ActionFamilyContainer.h"
+#include "utility/load_combinations/actions/containers/ActionsAndFactors.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinations.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationGenerator.h"
@@ -47,7 +47,6 @@ BOOST_PYTHON_MODULE(loadCombinations)
     using namespace cmb_acc;
     docstring_options doc_options;
 
-#include "actions/factors/python_interface.tcc"
 #include "actions/python_interface.tcc"
 #include "comb_analysis/python_interface.tcc"
   }

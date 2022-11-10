@@ -21,7 +21,7 @@
 //Variation.cxx
 
 #include "Variation.h"
-#include "utility/load_combinations/actions/ActionDesignValuesList.h"
+#include "utility/load_combinations/actions/ActionWrapperList.h"
 
 //! \fn void cmb_acc::Variation::print(std::ostream &os) const
 //! @brief Imprime la variación.
@@ -51,15 +51,14 @@ cmb_acc::Variation cmb_acc::Variation::concat(const cmb_acc::Variation &a,const 
     return retval;
   }
 
-
 //! @brief Return verdadero si las acciones que contiene la variaciónes son compatibles
-bool cmb_acc::Variation::compatible(const ActionDesignValuesList &lvr)
+bool cmb_acc::Variation::compatible(const ActionWrapperList &lvr)
   {
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       for(size_t j=i+1;j<sz;j++)
         if( ((*this)[i]!= 0.0) && ((*this)[j]!= 0.0) )
-          if(incompatibles(lvr[i],lvr[j]))
+          if(incompatibles(*lvr[i].get(),*lvr[j].get()))
             return false;
     return true;
   }

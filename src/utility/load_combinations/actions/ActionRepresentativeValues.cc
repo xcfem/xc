@@ -21,24 +21,23 @@
 //ActionRepresentativeValues.cxx
 
 #include "utility/load_combinations/actions/ActionRepresentativeValues.h"
-#include "utility/load_combinations/actions/ActionDesignValuesList.h"
+#include "utility/load_combinations/actions/ActionWrapper.h"
+#include "utility/load_combinations/actions/containers/ActionsFamily.h"
 #include "utility/load_combinations/actions/factors/PartialSafetyFactors.h"
 #include "utility/load_combinations/actions/factors/CombinationFactorsMap.h"
 #include "utility/load_combinations/actions/factors/PartialSafetyFactorsMap.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 #include "LeadingActionInfo.h"
 
-
-
 //! @brief Default constructor.
-cmb_acc::ActionRepresentativeValues::ActionRepresentativeValues(const std::string &n, const std::string &descrip,ActionDesignValuesList *fam)
-  : Action(n,descrip), acc_familia(fam),
+cmb_acc::ActionRepresentativeValues::ActionRepresentativeValues(const std::string &n, const std::string &descrip,ActionWrapper *w)
+  : Action(n,descrip), wrapper(w),
     combination_factors(nullptr)
    {}
 
 //! @brief Default constructor.
-cmb_acc::ActionRepresentativeValues::ActionRepresentativeValues(const Action &a,ActionDesignValuesList *fam,const std::string &nmb_combination_factors)
-  : Action(a), acc_familia(fam),
+cmb_acc::ActionRepresentativeValues::ActionRepresentativeValues(const Action &a,ActionWrapper *w,const std::string &nmb_combination_factors)
+  : Action(a), wrapper(w),
     combination_factors(nullptr)
   {
     setCombinationFactors(nmb_combination_factors);
@@ -50,11 +49,18 @@ void cmb_acc::ActionRepresentativeValues::setCombinationFactors(const std::strin
     if(!nmb_factors.empty())
       {
         const CombinationFactors *tmp=nullptr;
-        if(acc_familia)
-          tmp= acc_familia->getPtrCombinationFactors()->getPtrCoefs(nmb_factors);
+        if(wrapper)
+	  {
+	    const ActionsFamily *family= wrapper->getFamily();
+	    if(family)
+                tmp= family->getPtrCombinationFactors()->getPtrCoefs(nmb_factors);
+	    else
+              std::cerr << getClassName() << "::" << __FUNCTION__
+	                << "; ERROR: pointer to actions family not set." << std::endl;	      
+	  }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; ERROR: pointer to actions family not set." << std::endl;
+	            << "; ERROR: pointer to wrapper not set." << std::endl;
         if(tmp)
            combination_factors= tmp;
 	else
@@ -105,13 +111,12 @@ cmb_acc::Action cmb_acc::ActionRepresentativeValues::getValue(short int r) const
 
 //! @brief Return the representative value for the action.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::Action cmb_acc::ActionRepresentativeValues::getRepresentativeValue(const LeadingActionInfo &lai) const
+cmb_acc::Action cmb_acc::ActionRepresentativeValues::getRepresentativeValue(const LeadingActionInfo &lai, const int &index) const
   {
     Action retval= getValue(lai.getGeneralRepresentativeValueIndex());
     if(lai.leadingActionExists())
       {
-	const int j= getIndex();
-        if(lai.isLeadingActionIndex(j)) //j is the leading action index.
+        if(lai.isLeadingActionIndex(index)) //index is the leading action index.
 	  retval= getValue(lai.getLeadingRepresentativeValueIndex()); //Representative value for the leading action.
       }
     return retval;

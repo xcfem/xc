@@ -27,7 +27,7 @@
 #include "utility/utils/text/latex.h"
 
 
-#include "ActionDesignValuesList.h"
+#include "ActionWrapperList.h"
 #include "utility/functions/algebra/ExprAlgebra.h"
 
 const double cmb_acc::Action::zero= 1e-6;
@@ -193,7 +193,7 @@ void cmb_acc::Action::suma(const Action &f)
       set_owner(const_cast<CommandEntity *>(f.Owner()));
   }
 
-//! @brief Return verdadero si la acción que se pasa como parámetro es incompatible con esta,
+//! @brief Return true si la acción que se pasa como parámetro es incompatible con esta,
 //! es decir que ambas no pueden estar presentes en la misma hipótesis.
 //!
 //! Action will be incompatible if its name verifies one or more of the 
@@ -208,8 +208,8 @@ bool cmb_acc::Action::incompatible(const Action &f) const
   }
 
 //! \fn cmb_acc::Action::Incompatible(const Action &f) const
-//! @brief Return verdadero si la acción que se pasa como parámetro es incompatible con esta,
-//! es decir que ambas no pueden estar presentes en la misma hipótesis.
+//! @brief Return true if this actions is not compatible with
+//! the argument one, so they cannot be present both in the same combination.
 //!
 //! @param f: Action cuya incompatibilidad con ésta se comprueba.
 //! Action will be incompatible if its name verifies one or more of the 
@@ -226,20 +226,6 @@ bool cmb_acc::Action::Incompatible(const Action &f) const
     return retval;
   }
 
-std::string cmb_acc::Action::incompatibleStringList(ActionDesignValuesList *af) const
-  {
-    std::string retval;
-    if(af)
-      {
-        std::deque<const cmb_acc::Action *> incomp= listaIncompatibles(this,af->begin(),af->end());
-        if(!incomp.empty())
-          retval= actionPtrsNames(incomp.begin(),incomp.end());
-      }
-    else
-      std::cerr << "El puntero a la familia de acciones es nulo." << std::endl;
-    return retval; 
-  }
-
 //! @brief Print stuff.
 void cmb_acc::Action::Print(std::ostream &os) const
   {
@@ -247,7 +233,7 @@ void cmb_acc::Action::Print(std::ostream &os) const
     relaciones.Print(os);
   }
 
-//! @brief Return verdadero si las acciones de índices i y j son incompatibles.
+//! @brief Return true if actions are incompatible.
 bool cmb_acc::incompatibles(const Action &acc_i,const Action &acc_j)
   {
     bool retval= false;

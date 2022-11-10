@@ -34,7 +34,7 @@ cmb_acc::LoadCombinationGenerator::LoadCombinationGenerator(CommandEntity *owr)
 //! @param act: the action object itself.
 //! @param combination_factors_name: name of the combination factors container.
 //! @param partial_safety_factors_name: name of the partial safety factor container.
-cmb_acc::ActionDesignValues &cmb_acc::LoadCombinationGenerator::insert(const std::string &weighting,const std::string &family,const Action &act,const std::string &combination_factors_name, const std::string &partial_safety_factors_name)
+cmb_acc::ActionWrapper &cmb_acc::LoadCombinationGenerator::insert(const std::string &weighting,const std::string &family,const Action &act,const std::string &combination_factors_name, const std::string &partial_safety_factors_name)
   { return action_weighting.insert(weighting,family,act,combination_factors_name,partial_safety_factors_name); }
 
 //! @brief Generation of combinations

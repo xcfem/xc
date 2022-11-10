@@ -22,7 +22,7 @@
 
 #include "ActionFamilyContainer.h"
 #include "utility/load_combinations/comb_analysis/LoadCombinationVector.h"
-#include "LeadingActionInfo.h"
+#include "utility/load_combinations/actions/LeadingActionInfo.h"
 
 
 //! @brief Default constructor.
@@ -41,7 +41,7 @@ cmb_acc::ActionFamilyContainer::ActionFamilyContainer(void)
   }
 
 //! @brief Insert the action into the family identified by the string.
-cmb_acc::ActionDesignValues &cmb_acc::ActionFamilyContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+cmb_acc::ActionWrapper &cmb_acc::ActionFamilyContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
     if(family=="permanentes" or family=="permanent")
       return G.insert(acc,combination_factors_name,partial_safety_factors_name);

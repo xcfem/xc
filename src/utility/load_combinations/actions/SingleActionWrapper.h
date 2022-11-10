@@ -18,38 +18,35 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ActionDesignValues.hxx
+//SingleActionWrapper.hxx
 //Representative values of an action.
 
-#ifndef ACTIONRVALUE_H
-#define ACTIONRVALUE_H
+#ifndef SINGLEACTIONWRAPPER_H
+#define SINGLEACTIONWRAPPER_H
 
+#include "ActionWrapper.h"
 #include "ActionRepresentativeValues.h"
 
 namespace cmb_acc{
 
+//! @brief Wrapper for a single action.
 //! @ingroup CMBACC
-//
-//! @brief Design values of an action.
-class ActionDesignValues: public ActionRepresentativeValues
+class SingleActionWrapper: public ActionWrapper
   {
-  private:
-    const PartialSafetyFactors *partial_safety_factors; //!< Partial safety factors for this action.
-
+    friend class ActionWrapperList;
   protected:
-    friend class ActionDesignValuesList;
+    ActionRepresentativeValues action;
     //! @brief Default constructor.
-    ActionDesignValues(const std::string &n="", const std::string &descrip="",ActionDesignValuesList *fam= nullptr);
-    ActionDesignValues(const Action &a,ActionDesignValuesList *fam= nullptr,const std::string &nmb_comb_factors= "",const std::string &nmb_partial_safety_factors= "");
-  public:
-    const PartialSafetyFactors *getPartialSafetyFactors(void) const;
-    void setPartialSafetyFactors(const std::string &);
-    int getIndex(void) const; 
-    Variations getVariations(const bool &,const bool &) const;
-    Action getCombinationValue(const LeadingActionInfo &, const double &) const;    
-    void Print(std::ostream &os) const;    
+    SingleActionWrapper(const std::string &n="", const std::string &descrip="", ActionWrapperList *list= nullptr);
+    SingleActionWrapper(const Action &a, ActionWrapperList *list= nullptr,const std::string &nmb_comb_factors= "", const std::string &nmb_partial_safety_factors= "");
+    virtual std::string getName(void) const;
+  public:    
+    std::vector<const Action *> getWrappedActions(void) const;
+    virtual Action getRepresentativeValue(const LeadingActionInfo &) const;  
+    bool Incompatible(const ActionWrapper &f) const;
+    const ActionRelationships &getRelaciones(void) const;
   };
-
+  
 } //fin namespace nmb_acc.
 
 #endif

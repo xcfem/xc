@@ -18,15 +18,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ActionDesignValuesList.hxx
+//ActionWrapperList.hxx
 //Conjunto de acciones.
 
-#ifndef LISTAVRACCION_HXX
-#define LISTAVRACCION_HXX
+#ifndef ACTIONWRAPPERLIST_HXX
+#define ACTIONWRAPPERLIST_HXX
 
 #include "utility/kernel/CommandEntity.h"
 #include <deque>
-#include "ActionDesignValues.h"
+#include <memory> //std::shared_ptr
+#include "SingleActionWrapper.h"
 
 namespace cmb_acc{
 class Variation;
@@ -35,19 +36,23 @@ class CombinationFactorsMap;
 class PartialSafetyFactorsMap;
 class ActionsFamily;
 
+//! @brief List of representative values of actions (ActionWrapper objects).
 //! @ingroup CMBACC
-//
-//! @brief List of representative values of actions (ActionDesignValues objects).
-class ActionDesignValuesList: public std::deque<ActionDesignValues>, public CommandEntity
+class ActionWrapperList: public std::deque<std::shared_ptr<ActionWrapper> >, public CommandEntity
   {
+  public:
+    typedef std::shared_ptr<ActionWrapper> base_pointer;
+    typedef std::deque<std::shared_ptr<ActionWrapper> > base_container;
+  private:
     friend class Variation;
     friend class ActionsFamily;
 
-    ActionDesignValues &push_back(const ActionDesignValues &a);
+    ActionWrapper &push_back(const SingleActionWrapper &a);
   public:
-    int getIndex(const ActionDesignValues *) const;
-    ActionDesignValues &insert(const Action &,const std::string &,const std::string &);
+    int getIndex(const ActionWrapper *) const;
+    ActionWrapper &insert(const Action &,const std::string &,const std::string &);
     Action buildCombination(const Variation &v,const LeadingActionInfo &) const;
+    const ActionsFamily *getFamily(void) const;
     const CombinationFactorsMap *getPtrCombinationFactors(void) const;
     const PartialSafetyFactorsMap *getPtrPartialSafetyFactors(void) const;
     Variations computeVariations(const bool &,const bool &,const int &) const;
@@ -56,7 +61,7 @@ class ActionDesignValuesList: public std::deque<ActionDesignValues>, public Comm
     void Print(std::ostream &os) const;
   };
 
-std::ostream &operator<<(std::ostream &os,const ActionDesignValuesList &vs);
+  std::ostream &operator<<(std::ostream &os,const ActionWrapperList &vs);
 
 } //fin namespace nmb_acc.
 

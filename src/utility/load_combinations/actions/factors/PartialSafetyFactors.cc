@@ -25,10 +25,11 @@
 #include "utility/load_combinations/comb_analysis/Variation.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 
-#include "utility/load_combinations/actions/ActionDesignValuesList.h"
-
-cmb_acc::SLSPartialSafetyFactors::SLSPartialSafetyFactors(const float &fav,const float &desfav)
-  : partial_safety_factors_fav(fav), partial_safety_factors_unfav(desfav) {}
+//! @brief Constructor.
+//! @param fav: partial safety factor when effect is favourable.
+//! @param unfav: partial safety factor when effect is unfavourable.
+cmb_acc::SLSPartialSafetyFactors::SLSPartialSafetyFactors(const float &fav,const float &unfav)
+  : partial_safety_factors_fav(fav), partial_safety_factors_unfav(unfav) {}
 
 
 //! @brief Return the partial safety factors for serviceability limit state.

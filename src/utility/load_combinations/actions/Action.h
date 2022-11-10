@@ -34,7 +34,7 @@
 //! Routines to generate combinations of actions.
 namespace cmb_acc{
 
-class ActionDesignValuesList;
+class ActionWrapperList;
 
 //! @defgroup CMBACC Routines to generate combinations of actions.
 //
@@ -85,9 +85,9 @@ class Action: public NamedEntity
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);    
 
-    //! @brief Return verdadero si esta acción es incompatible con la que se pasa como parámetro.
-    bool Incompatible(const Action &f) const;
-    //! @brief Return verdadero si esta acción es compatible con la que se pasa como parámetro.
+    bool Incompatible(const Action &) const;
+    //! @brief Return true if this actions is compatible with
+    //! the argument one.
     inline bool Compatible(const Action &f) const
       { return !Incompatible(f); }
 
@@ -128,7 +128,6 @@ class Action: public NamedEntity
         return retval;
       }
 
-    std::string incompatibleStringList(ActionDesignValuesList *af) const;
     std::vector<double> getCoeficientes(const std::vector<std::string> &) const;
     virtual void Print(std::ostream &os) const;
   };
@@ -136,20 +135,6 @@ class Action: public NamedEntity
 std::ostream &operator<<(std::ostream &os,const Action &acc);
 
 bool incompatibles(const Action &acc_i,const Action &acc_j);
-
-//! @brief Return the list of actions incompatible with the one 
-//! being passed as parameter.
-template <class InputIterator>
-std::deque<const Action *> listaIncompatibles(const Action *acc,InputIterator begin,InputIterator end)
-  {
-    std::deque<const Action *> retval;
-    for(InputIterator i=begin;i!=end;i++)
-      {
-        const Action &data= *i;
-        if(acc->Incompatible(data)) retval.push_back(&data);
-      }
-    return retval;
-  }
 
 //! @brief Returns a list with the action names.
 template <class InputIterator>

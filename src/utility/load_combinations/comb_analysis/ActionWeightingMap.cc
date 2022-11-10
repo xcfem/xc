@@ -21,7 +21,7 @@
 //ActionWeightingMap.cc
 
 #include "ActionWeightingMap.h"
-#include "utility/load_combinations/actions/ActionsAndFactors.h"
+#include "utility/load_combinations/actions/containers/ActionsAndFactors.h"
 #include "LoadCombinations.h"
 
 //! @brief Return true if the object is found.
@@ -89,7 +89,7 @@ cmb_acc::ActionsAndFactors *cmb_acc::ActionWeightingMap::create(const std::strin
   }
 
 //! @brief Insert the action being passed as parameter.
-cmb_acc::ActionDesignValues &cmb_acc::ActionWeightingMap::insert(const std::string &pond,const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+cmb_acc::ActionWrapper &cmb_acc::ActionWeightingMap::insert(const std::string &pond,const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
     ActionsAndFactors *ponderacion_ptr= findByName(pond);
     if(!ponderacion_ptr)
