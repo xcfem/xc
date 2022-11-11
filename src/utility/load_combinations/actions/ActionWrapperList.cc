@@ -267,7 +267,14 @@ std::tuple<std::vector<cmb_acc::Action>, std::vector<std::string> > cmb_acc::ext
     for(size_t i= 0;i<sz;++i)
       {
 	boost::python::tuple tuple= boost::python::extract<boost::python::tuple>(actionTuples[i]);
-	if(boost::python::len(tuple) != 2) throw std::invalid_argument("bad");
+        const size_t tuple_size= boost::python::len(tuple);
+	if(tuple_size != 2)
+	  {
+	    std::cerr << __FUNCTION__
+	              << "; expected a tuple of 2 values get one with: "
+	              << tuple_size << " values." << std::endl;
+	    exit(-1);
+	  } 
         const Action extractedAction= boost::python::extract<Action>(tuple[0]);
 	actionLst[i]= extractedAction;
         const std::string extractedString= boost::python::extract<std::string>(tuple[1]);

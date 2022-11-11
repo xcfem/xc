@@ -63,7 +63,12 @@ class ActionWrapper: public EntityWithOwner
     inline bool Compatible(const ActionWrapper &aw) const
       { return !Incompatible(aw); }
     std::string incompatibleStringList(ActionWrapperList *) const;
-    
+
+    Action::map_descomp getComponents(void) const;
+    boost::python::dict getComponentsPy(void) const;
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
+   
     Variations getVariations(const bool &,const bool &) const;
     virtual Action getRepresentativeValue(const LeadingActionInfo &) const= 0;    
     Action getCombinationValue(const LeadingActionInfo &, const double &) const;    

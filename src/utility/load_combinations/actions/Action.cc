@@ -65,7 +65,7 @@ const std::string cmb_acc::Action::getExpandedName(void) const
     return retval;
   }
 
-//! @brief Return la decomposition when the action is a combination.
+//! @brief When the actions is a combination return its decomposition.
 cmb_acc::Action::map_descomp cmb_acc::Action::getComponents(void) const
   {
     map_descomp descomp;
@@ -88,7 +88,7 @@ cmb_acc::Action::map_descomp cmb_acc::Action::getComponents(void) const
     return descomp;
   }
 
-//! @brief Return la decomposition when the action is a combination.
+//! @brief Return the action components in a Python dictionary.
 boost::python::dict cmb_acc::Action::getComponentsPy(void) const
   {
     boost::python::dict retval; 

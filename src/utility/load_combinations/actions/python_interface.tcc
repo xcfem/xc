@@ -49,6 +49,8 @@ class_<ActionWrapper, bases<EntityWithOwner>, boost::noncopyable >("ActionWrappe
   .add_property("relationships", make_function( &ActionWrapper::getRelaciones, return_internal_reference<>() ), "Return the relationships with other actions")
   .def("getPartialSafetyFactors", make_function( &ActionWrapper::getPartialSafetyFactors, return_internal_reference<>() ), "Return the partial safety factors for this action.")
   .def("setPartialSafetyFactors", &ActionWrapper::setPartialSafetyFactors, "Set the partial safety factors for this action.")
+  .def("getDict", &ActionWrapper::getPyDict,"Return a Python dictionary containing the object members values.")
+  .def("setFromDict", &ActionWrapper::setPyDict,"Set the values of the object members from a Python dictionary.")
   ;
 
 typedef std::deque<std::shared_ptr<ActionWrapper> > dq_action_wrappers;

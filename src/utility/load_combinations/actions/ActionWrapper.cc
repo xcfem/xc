@@ -87,6 +87,70 @@ const cmb_acc::ActionsFamily *cmb_acc::ActionWrapper::getFamily(void) const
     return retval;
   }
 
+//! @brief When the wrapped actions decomposition.
+cmb_acc::Action::map_descomp cmb_acc::ActionWrapper::getComponents(void) const
+  {
+    Action::map_descomp retval;
+    std::vector<const Action *> this_actions= this->getWrappedActions();
+    for(std::vector<const Action *>::const_iterator i= this_actions.begin(); i!=this_actions.end(); i++)
+      {
+        const Action *this_action= *i;
+	Action::map_descomp tmp= this_action->getComponents();
+	retval.merge(tmp);
+      }
+    return retval;
+  }
+
+//! @brief Return the group components in a Python dictionary.
+boost::python::dict cmb_acc::ActionWrapper::getComponentsPy(void) const
+  {
+    boost::python::dict retval; 
+    const Action::map_descomp descomp= getComponents();
+    for(Action::map_descomp::const_iterator i= descomp.begin(); i!= descomp.end(); i++)
+      {
+	const std::string key= (*i).first;
+	const double factor= (*i).second;
+	retval[key]= factor;
+      }
+    return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict cmb_acc::ActionWrapper::getPyDict(void) const
+  {
+    boost::python::dict retval= EntityWithOwner::getPyDict();
+    std::vector<const Action *> this_actions= this->getWrappedActions();
+    // Populate action dictionary.
+    boost::python::dict actionDict;
+    for(std::vector<const Action *>::const_iterator i= this_actions.begin(); i!=this_actions.end(); i++)
+      {
+	const Action *this_action= *i;
+	const std::string &actionName= this_action->getName();
+	actionDict[actionName]= this_action->getPyDict();
+      }
+    retval["actions"]= actionDict;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void cmb_acc::ActionWrapper::setPyDict(const boost::python::dict &d)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+    // EntityWithOwner::setPyDict(d);
+    // boost::python::dict actionDict= boost::python::extract<std::string>(d["actions"]);
+    // auto items= actionDict.items();
+    // for (auto it = stl_input_iterator<tuple>(items); it != stl_input_iterator<tuple>(); ++it)
+    //   {
+    //     tuple kv = *it;
+    // 	std::string key= kv[0];
+    // 	boost::python::dict values= kv[1];
+    // 	Action newAction;
+    // 	newAction.setPyDict(values);
+        
+    //   }
+  }
+
 //! @brief Compute the variations that can be formed with this action.
 //!
 //! @param uls: True if it's an ultimate limit state.
