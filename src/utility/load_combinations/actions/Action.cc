@@ -70,20 +70,34 @@ cmb_acc::Action::map_descomp cmb_acc::Action::getComponents(void) const
   {
     map_descomp descomp;
     typedef std::deque<std::string> dq_string;
-    dq_string str_sumandos= ActionRelationships::get_combination_addends(getName());
-    for(dq_string::iterator i= str_sumandos.begin();i!=str_sumandos.end();i++)
+    const std::string name= getName();
+    if((name.find('*')==std::string::npos) and (name.find('+')==std::string::npos)) //No product or sum.
+      descomp[name]= 1.0;
+    else
       {
-        const std::string &str_sum_i= *i;
-        dq_string str_prod= separa_cadena(str_sum_i,"*");
-        const size_t sz2= str_prod.size();
-        if(sz2!=2)
-	  std::cerr << "El sumando: " << str_sum_i << " está mal expresado." << std::endl;
-        else
-          {
-            const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
-            const std::string nmb_acc= q_blancos(str_prod[1]);
-            descomp[nmb_acc]= factor;
-          } 
+	dq_string str_sumandos= ActionRelationships::get_combination_addends(name);
+	for(dq_string::iterator i= str_sumandos.begin();i!=str_sumandos.end();i++)
+	  {
+	    const std::string &str_sum_i= *i;
+	    if(str_sum_i.find('*')==std::string::npos) //No product.
+              {
+		descomp[str_sum_i]= 1.0;
+	      }
+	    else
+	      {
+		dq_string str_prod= separa_cadena(str_sum_i,"*");
+		const size_t sz2= str_prod.size();
+		if(sz2!=2)
+		  std::cerr << "El sumando: " << str_sum_i
+			    << " está mal expresado." << std::endl;
+		else
+		  {
+		    const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
+		    const std::string nmb_acc= q_blancos(str_prod[1]);
+		    descomp[nmb_acc]= factor;
+		  }
+	      }
+	  }
       }
     return descomp;
   }
@@ -157,8 +171,30 @@ void cmb_acc::Action::multiplica(const double &d)
     f_pond*= d;
     clean_names();
     const std::string strnum= num2str(f_pond,2);
-    NamedEntity::Name()= strnum + "*" + getName();
-    description= strnum + "*" + description;
+    map_descomp components= getComponents();
+    const size_t sz= components.size();
+    if(getName().empty())
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; action with empty and f_pond= " << f_pond << std::endl;
+    if(sz==1)
+      {
+        NamedEntity::Name()= strnum + "*" + getName();
+        description= strnum + "*" + description;
+      }
+    else
+      {
+	std::string str_product= "";
+	for(map_descomp::const_iterator i= components.begin(); i!= components.end(); i++)
+	  {
+	    const std::string key= (*i).first;
+	    const double factor= (*i).second*d;
+	    const std::string str_factor= num2str(factor,2);
+	    str_product+= str_factor + "*" + key + " + ";
+	  }
+	str_product.resize(str_product.size () - 3); // Remove the last " + "
+	NamedEntity::Name()= str_product;
+	description= str_product;
+      }
   }
 
 //! \fn cmb_acc::Action::suma(const Action &f)

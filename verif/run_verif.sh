@@ -221,6 +221,7 @@ python tests/actions/load_combinations/test_iap11_02.py
 python tests/actions/load_combinations/test_combination_dict.py
 python tests/actions/load_combinations/test_split_combination.py
 python tests/actions/load_combinations/test_sia_pont_ferroviaire.py
+python tests/actions/load_combinations/test_ec0_traffic_groups.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"

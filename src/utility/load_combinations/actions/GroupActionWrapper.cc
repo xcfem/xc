@@ -75,13 +75,21 @@ std::vector<const cmb_acc::Action *> cmb_acc::GroupActionWrapper::getWrappedActi
 cmb_acc::Action cmb_acc::GroupActionWrapper::getRepresentativeValue(const LeadingActionInfo &linfo) const
   {
     const int index= getIndex(); //Get the index of the action wrapper.
-    Action tmp;
-    for(const_iterator i= actions.begin(); i!=actions.end(); i++)
+    Action retval;
+    if(actions.empty())
+      retval.setName("Zero");
+    else
       {
-	const ActionRepresentativeValues &a= *i;
-	tmp+= a.getRepresentativeValue(linfo, index);
+	const_iterator i= actions.begin();
+	retval= (*i).getRepresentativeValue(linfo, index);
+	i++;
+	for(; i!=actions.end(); i++)
+	  {
+	    const ActionRepresentativeValues &a= *i;
+	    retval+= a.getRepresentativeValue(linfo, index);
+	  }
       }
-    return tmp;
+    return retval;
   }
 
 //! @brief Return the relatioships with the other actions.

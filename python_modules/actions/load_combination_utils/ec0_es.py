@@ -23,13 +23,15 @@ partial_safety_factors= factors.getPartialSafetyFactors()
 
 #Partial safety factors for permanent actions
 partial_safety_factors['permanent']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1.35,1,1),loadCombinations.SLSPartialSafetyFactors(1,1))
-partial_safety_factors['settlement_linear_analysis']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.20,0,1),loadCombinations.SLSPartialSafetyFactors(1,1))
+partial_safety_factors['settlement_linear_analysis']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.20,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 partial_safety_factors['settlement_non_linear_analysis']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
-#Coeficientes de ponderación para acciones variables (Q).
-#Sobrecarga de  uso
+#Partial safety factors for variable actions.
+# Traffic loads.
 partial_safety_factors['road_traffic']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 partial_safety_factors['pedestrian']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 partial_safety_factors['railway_traffic']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.45,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
+# Thermal actions.
+partial_safety_factors['thermal']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 
 
 # Combination factors for road bridges (table AN.5 (table A2.1) )
@@ -77,6 +79,21 @@ class CombGenerator(utils.CombGenerator):
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
         return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= 'permanent', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newSettlementAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, nonLinearAnalysis= True):
+        ''' Creates a permanent action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        if(nonLinearAnalysis):
+            partialSafetyFactorsName= 'settlement_non_linear_analysis'
+        else:
+            partialSafetyFactorsName= 'settlement_linear_analysis'
+        return self.newAction(family= 'variable',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
     def newHeavyVehicleAction(self, actionName: str, actionDescription: str, group:str, dependsOn= None, incompatibleActions= None):
         ''' Creates a heavy vehicle action and appends it to the combinations 
@@ -152,7 +169,7 @@ class CombGenerator(utils.CombGenerator):
         raise NotImplementedError()
         return None
     
-    def newThermalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+    def newThermalActionOnRoadBridge(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
         ''' Creates a thermal action and appends it to the combinations 
             generator.
 
@@ -161,7 +178,7 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
-        raise NotImplementedError()
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_thermal', partialSafetyFactorsName= 'thermal', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
         return None
 
     def newSnowAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
