@@ -10,6 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import loadCombinations
+from misc_utils import log_messages as lmsg
 
 actionA= loadCombinations.Action('TestAction',"Test action description.")
 actionA.weightingFactor= 3.141592

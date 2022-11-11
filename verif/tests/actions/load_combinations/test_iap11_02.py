@@ -10,9 +10,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import os
 import xc_base
-import loadCombinations
 from actions.load_combination_utils import iap11
-from actions.load_combination_utils import utils
 from misc_utils import log_messages as lmsg
 import re
 import math

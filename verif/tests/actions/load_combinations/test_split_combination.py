@@ -10,7 +10,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 
 from actions.load_combination_utils import utils
-from misc_utils import log_messages as lmsg
 
 combTest= "1.35*G1 + 1.35*G2 + 1.00*G3 + 1.00*P1 + 1.35*Q1a1 + 0.90*Q32"
 combTerms= ['G1', 'P1', 'Q32']
