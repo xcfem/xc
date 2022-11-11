@@ -66,10 +66,39 @@ const cmb_acc::PartialSafetyFactorsMap *cmb_acc::ActionsFamily::getPtrPartialSaf
     return retval;
   }
 
-//! @brief Insert the action argument and sets the "psi" load combination
-//! factors.
+//! @brief Insert the action argument and sets the its combination and
+//! partial safety factors.
+//! @param a: Action object to insert.
+//! @param combination_factors_name: name of the combination factors that
+//!                                  correspond to the action.
+//! @param partial_safety_factors_name: name of the partial safety factors
+//!                                     that correspond to the action.
 cmb_acc::ActionWrapper &cmb_acc::ActionsFamily::insert(const Action &a,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   { return actions.insert(a,combination_factors_name,partial_safety_factors_name); }
 
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param actions: Vector of action objects to insert.
+//! @param combination_factors_names: vector of names of the combination factors //!                                  that correspond to the action.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionsFamily::insertGroup(const std::vector<Action> &actions, const std::vector<std::string> &combination_factors_names, const std::string &partial_safety_factors_name)
+  {
+    return this->actions.insertGroup(actions, combination_factors_names, partial_safety_factors_name);
+  }
 
-
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param actionTuples: list of (action, combination_factors_name) tuples.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionsFamily::insertGroupPy(const boost::python::list &actionTuples, const std::string &partial_safety_factors_name)
+  {
+    return this->actions.insertGroupPy(actionTuples, partial_safety_factors_name);
+  }

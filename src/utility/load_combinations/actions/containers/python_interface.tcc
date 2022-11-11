@@ -25,6 +25,7 @@ class_<ActionsFamily, bases<NamedEntity> >("ActionsFamily")
   .def(init<std::string>())
   .add_property("actions", make_function( getFamilyActions, return_internal_reference<>() ), &ActionsFamily::setActions)
   .def("insert", make_function(&ActionsFamily::insert,return_internal_reference<>()))
+  .def("insertGroup", make_function( &ActionsFamily::insertGroupPy, return_internal_reference<>() ), "insertGroup(actionTuples, partial_safety_factors_name): inserts the action group into the actions family.")
   ;
 
 class_<ActionFamilyContainer, bases<CommandEntity> >("ActionFamilyContainer")
@@ -34,6 +35,7 @@ class_<ActionFamilyContainer, bases<CommandEntity> >("ActionFamilyContainer")
   .add_property("accidentalActions", make_function( &ActionFamilyContainer::getAccidentalActions, return_internal_reference<>() ), &ActionFamilyContainer::setAccidentalActions)
   .add_property("seismicActions", make_function( &ActionFamilyContainer::getSeismicActions, return_internal_reference<>() ), &ActionFamilyContainer::setSeismicActions)
   .def("insert", make_function(&ActionFamilyContainer::insert,return_internal_reference<>()))
+  .def("insertGroup", make_function( &ActionFamilyContainer::insertGroupPy, return_internal_reference<>() ), "insertGroup(actionTuples, partial_safety_factors_name): inserts the action group into the container.")
   ;
 
 class_<ActionsAndFactors, bases<ActionFamilyContainer> >("ActionsAndFactors")

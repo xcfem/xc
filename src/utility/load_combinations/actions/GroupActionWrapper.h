@@ -40,8 +40,8 @@ class GroupActionWrapper: public ActionWrapper
   protected:
     action_container actions;
     //! @brief Default constructor.
-    GroupActionWrapper(const std::string &n="", const std::string &descrip="", ActionWrapperList *list= nullptr);
-    GroupActionWrapper(const Action &a, ActionWrapperList *list= nullptr,const std::string &nmb_comb_factors= "", const std::string &nmb_partial_safety_factors= "");
+    GroupActionWrapper(const std::vector<std::string> &names={""}, const std::vector<std::string> &descriptions={""}, ActionWrapperList *list= nullptr);
+    GroupActionWrapper(const std::vector<Action> &, ActionWrapperList *list= nullptr,const std::vector<std::string> &combination_factors_names= {""}, const std::string &nmb_partial_safety_factors= "");
     virtual std::string getName(void) const;
   public:    
     std::vector<const Action *> getWrappedActions(void) const;

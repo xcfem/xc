@@ -89,7 +89,14 @@ cmb_acc::ActionsAndFactors *cmb_acc::ActionWeightingMap::create(const std::strin
   }
 
 //! @brief Insert the action being passed as parameter.
-cmb_acc::ActionWrapper &cmb_acc::ActionWeightingMap::insert(const std::string &pond,const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+//! @param pond: name of the factors repository (ActionsAndFactors object).
+//! @param familyName: name of the family to which the action belongs.
+//! @param acc: Action object to insert.
+//! @param combination_factors_name: name of the combination factors that
+//!                                  correspond to the action.
+//! @param partial_safety_factors_name: name of the partial safety factors
+//!                                     that correspond to the action.
+cmb_acc::ActionWrapper &cmb_acc::ActionWeightingMap::insert(const std::string &pond, const std::string &familyName, const Action &acc, const std::string &combination_factors_name, const std::string &partial_safety_factors_name)
   {
     ActionsAndFactors *ponderacion_ptr= findByName(pond);
     if(!ponderacion_ptr)
@@ -98,7 +105,49 @@ cmb_acc::ActionWrapper &cmb_acc::ActionWeightingMap::insert(const std::string &p
 	          << "; weighting: '"
                   << pond << "' not found.\n";
       }
-    return ponderacion_ptr->insert(family,acc,combination_factors_name,partial_safety_factors_name);
+    return ponderacion_ptr->insert(familyName,acc,combination_factors_name,partial_safety_factors_name);
+  }
+
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param pond: name of the factors repository (ActionsAndFactors object).
+//! @param familyName: name of the family to which the action belongs.
+//! @param actions: Vector of action objects to insert.
+//! @param combination_factors_names: vector of names of the combination factors
+//!                                  that correspond to the action.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionWeightingMap::insertGroup(const std::string &pond, const std::string &familyName, const std::vector<Action> &actions, const std::vector<std::string> &combination_factors_names, const std::string &partial_safety_factors_name)
+  {
+    ActionsAndFactors *ponderacion_ptr= findByName(pond);
+    if(!ponderacion_ptr)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; weighting: '"
+                  << pond << "' not found.\n";
+      }
+    return ponderacion_ptr->insertGroup(familyName, actions,combination_factors_names,partial_safety_factors_name);
+  }
+
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param pond: name of the factors repository (ActionsAndFactors object).
+//! @param familyName: name of the family to which the action belongs.
+//! @param actionTuples: list of (action, combination_factors_name) tuples.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionWeightingMap::insertGroupPy(const std::string &pond, const std::string &familyName, const boost::python::list &actionTuples, const std::string &partial_safety_factors_name)
+  {
+    // Extract values from Python list.
+    auto [actionLst, combFactorsNameLst] = extract_action_tuples(actionTuples);
+    // Call C++ counterpart.
+    return insertGroup(pond,familyName,actionLst,combFactorsNameLst,partial_safety_factors_name);
   }
 
 //! @brief Borra todas las actions_and_factors definidos.

@@ -59,6 +59,8 @@ class_<dq_action_wrappers>("dq_action_wrappers")
 class_<ActionWrapperList, bases<dq_action_wrappers,CommandEntity> >("ActionWrapperLists")
   .def(self_ns::str(self_ns::self))
   .def(self_ns::repr(self_ns::self))
+  .def("insert", make_function( &ActionWrapperList::insert, return_internal_reference<>() ), "insert(action, comb_factors_name, partial_safety_factors_name): inserts the action into the list.")
+  .def("insertGroup", make_function( &ActionWrapperList::insertGroupPy, return_internal_reference<>() ), "insertGroup(actionTuples, partial_safety_factors_name): inserts the action group into the list.")
   ;
 
 #include "utility/load_combinations/actions/containers/python_interface.tcc"

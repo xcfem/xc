@@ -51,7 +51,9 @@ class ActionsFamily: public NamedEntity
   public:
     ActionsFamily(const std::string &nmb="");
     inline virtual ~ActionsFamily(void) {}
-    ActionWrapper &insert(const Action &,const std::string &combination_factors_name,const std::string &partial_safety_factors_name);
+    ActionWrapper &insert(const Action &,const std::string &, const std::string &);
+    ActionWrapper &insertGroup(const std::vector<Action> &, const std::vector<std::string> &, const std::string &);
+    ActionWrapper &insertGroupPy(const boost::python::list &, const std::string &);
 
     //! @brief Return the actions in the family.
     inline const ActionWrapperList &getActions(void) const

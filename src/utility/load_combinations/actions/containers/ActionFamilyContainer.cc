@@ -40,30 +40,81 @@ cmb_acc::ActionFamilyContainer::ActionFamilyContainer(void)
     AS.set_owner(this);
   }
 
-//! @brief Insert the action into the family identified by the string.
-cmb_acc::ActionWrapper &cmb_acc::ActionFamilyContainer::insert(const std::string &family,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+//!@brief Return the family corresponding to the familyName argument. 
+const cmb_acc::ActionsFamily &cmb_acc::ActionFamilyContainer::getFamily(const std::string &familyName) const
   {
-    if(family=="permanentes" or family=="permanent")
-      return G.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(family=="permanentes_nc")
-      return G_aster.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(family=="variables" or family=="variable")
-      return Q.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(family=="accidentales" or family=="accidental")
-      return A.insert(acc,combination_factors_name,partial_safety_factors_name);
-    else if(family=="sismicas" or family=="seismic")
-      return AS.insert(acc,combination_factors_name,partial_safety_factors_name);
+    ActionFamilyContainer *this_no_const= const_cast<ActionFamilyContainer *>(this);
+    return this_no_const->getFamily(familyName);
+  }
+
+//!@brief Return the family corresponding to the familyName argument. 
+cmb_acc::ActionsFamily &cmb_acc::ActionFamilyContainer::getFamily(const std::string &familyName)
+  {
+    if(familyName=="permanentes" or familyName=="permanent")
+      return G;
+    else if(familyName=="permanentes_nc")
+      return G_aster;
+    else if(familyName=="variables" or familyName=="variable")
+      return Q;
+    else if(familyName=="accidentales" or familyName=="accidental")
+      return A;
+    else if(familyName=="sismicas" or familyName=="seismic")
+      return AS;
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; load family: '"
-                  << family << "' not found."
+                  << familyName << "' not found."
 	          << " Candidates are: "
 	          << " permanentes, permanentes_nc, variables,"
 	          << " accidentales and sismicas."
-	          << " Added to variable loads.\n";
-        return Q.insert(acc,combination_factors_name,partial_safety_factors_name);
+	          << " Return variable loads family.\n";
+        return Q;
       }
+    }
+
+//! @brief Insert the action into the family identified by the string.
+//! @param familyName: name of the family to which the action belongs.
+//! @param acc: Action object to insert.
+//! @param combination_factors_name: name of the combination factors that
+//!                                  correspond to the action.
+//! @param partial_safety_factors_name: name of the partial safety factors
+//!                                     that correspond to the action.
+cmb_acc::ActionWrapper &cmb_acc::ActionFamilyContainer::insert(const std::string &familyName,const Action &acc,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
+  {
+    ActionsFamily &family= getFamily(familyName);
+    return family.insert(acc,combination_factors_name,partial_safety_factors_name);
+  }
+
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param familyName: name of the family to which the action belongs.
+//! @param actions: Vector of action objects to insert.
+//! @param combination_factors_names: vector of names of the combination factors //!                                  that correspond to the action.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionFamilyContainer::insertGroup(const std::string &familyName, const std::vector<Action> &actions, const std::vector<std::string> &combination_factors_names, const std::string &partial_safety_factors_name)
+  {
+    ActionsFamily &family= getFamily(familyName);
+    return family.insertGroup(actions,combination_factors_names,partial_safety_factors_name);
+  }
+
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param familyName: name of the family to which the action belongs.
+//! @param actionTuples: list of (action, combination_factors_name) tuples.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionFamilyContainer::insertGroupPy(const std::string &familyName, const boost::python::list &actionTuples, const std::string &partial_safety_factors_name)
+  {
+    ActionsFamily &family= getFamily(familyName);
+    return family.insertGroupPy(actionTuples, partial_safety_factors_name);
   }
 
 //! @brief Return el conjunto de acciones permanentes.

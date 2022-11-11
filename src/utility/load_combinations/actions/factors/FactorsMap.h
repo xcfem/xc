@@ -154,6 +154,8 @@ Factors *FactorsMap<Factors>::crea_coefs(const std::string &name)
   }
 
 //! @brief Inserts the coefficients.
+//! @param name: identifier of the coefficients.
+//! @param c: coefficient values.
 template <class Factors>
 void FactorsMap<Factors>::insert(const std::string &name,const Factors &c)
   { (*this)[name]= c; }

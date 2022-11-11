@@ -41,6 +41,8 @@ class LoadCombinationGenerator: public CommandEntity
     LoadCombinationGenerator(CommandEntity *owr= nullptr);
 
     ActionWrapper &insert(const std::string &,const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
+    ActionWrapper &insertGroup(const std::string &, const std::string &, const std::vector<Action> &, const std::vector<std::string> &, const std::string &);
+    ActionWrapper &insertGroupPy(const std::string &, const std::string &, const boost::python::list &, const std::string &);
     void genera(void);
     inline ActionWeightingMap &getActionWeighting(void)
       { return action_weighting; }

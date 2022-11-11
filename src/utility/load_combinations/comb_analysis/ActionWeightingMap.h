@@ -63,6 +63,8 @@ class ActionWeightingMap: public CommandEntity
     cmb_acc::ActionsAndFactors *create(const std::string &,const Factors &coefs= Factors());
 
     ActionWrapper &insert(const std::string &,const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
+    ActionWrapper &insertGroup(const std::string &, const std::string &, const std::vector<Action> &, const std::vector<std::string> &, const std::string &);
+    ActionWrapper &insertGroupPy(const std::string &, const std::string &, const boost::python::list &, const std::string &);
 
     size_t size(void) const;
     bool empty(void) const;

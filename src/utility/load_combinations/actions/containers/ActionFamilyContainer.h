@@ -29,7 +29,7 @@
 namespace cmb_acc{
 //! @ingroup CMBACC
 //
-//! @brief Almacena todas las familias de acciones.
+//! @brief Stores all the families of actions.
 class ActionFamilyContainer: public CommandEntity
   {
   protected:
@@ -49,7 +49,12 @@ class ActionFamilyContainer: public CommandEntity
     ActionFamilyContainer(void);
     inline virtual ~ActionFamilyContainer(void) {}
 
-    ActionWrapper &insert(const std::string &,const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
+    ActionsFamily &getFamily(const std::string &);
+    const ActionsFamily &getFamily(const std::string &) const;
+
+    ActionWrapper &insert(const std::string &, const Action &,const std::string &combination_factors_name="",const std::string &partial_safety_factors_name="");
+    ActionWrapper &insertGroup(const std::string &, const std::vector<Action> &, const std::vector<std::string> &, const std::string &);
+    ActionWrapper &insertGroupPy(const std::string &, const boost::python::list &, const std::string &);
 
     const ActionsFamily &getPermanentActions(void) const;
     void setPermanentActions(const ActionsFamily &);

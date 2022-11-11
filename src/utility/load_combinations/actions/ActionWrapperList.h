@@ -53,6 +53,8 @@ class ActionWrapperList: public std::deque<std::shared_ptr<ActionWrapper> >, pub
   public:
     int getIndex(const ActionWrapper *) const;
     ActionWrapper &insert(const Action &,const std::string &,const std::string &);
+    ActionWrapper &insertGroup(const std::vector<Action> &, const std::vector<std::string> &, const std::string &);
+    ActionWrapper &insertGroupPy(const boost::python::list &, const std::string &);
     Action buildCombination(const Variation &v,const LeadingActionInfo &) const;
     const ActionsFamily *getFamily(void) const;
     const CombinationFactorsMap *getPtrCombinationFactors(void) const;
@@ -63,7 +65,8 @@ class ActionWrapperList: public std::deque<std::shared_ptr<ActionWrapper> >, pub
     void Print(std::ostream &os) const;
   };
 
-  std::ostream &operator<<(std::ostream &os,const ActionWrapperList &vs);
+std::ostream &operator<<(std::ostream &os,const ActionWrapperList &vs);
+std::tuple<std::vector<Action>, std::vector<std::string> > extract_action_tuples(const boost::python::list &);
 
 } //fin namespace nmb_acc.
 

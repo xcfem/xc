@@ -21,18 +21,33 @@
 //GroupActionWrapper.cxx
 
 #include "utility/load_combinations/actions/GroupActionWrapper.h"
+#include <boost/range/combine.hpp> // boost::combine
 
 //! @brief Default constructor.
-cmb_acc::GroupActionWrapper::GroupActionWrapper(const std::string &n, const std::string &descrip, ActionWrapperList *list)
-  : ActionWrapper(list),
-    actions(1, ActionRepresentativeValues(n, descrip, this))
-   {}
+cmb_acc::GroupActionWrapper::GroupActionWrapper(const std::vector<std::string> &names, const std::vector<std::string> &descriptions, ActionWrapperList *list)
+  : ActionWrapper(list)
+   {
+     for(auto tup : boost::combine(names, descriptions))
+       {
+	 std::string name;
+	 std::string description;
+	 boost::tie(name, description)= tup;
+	 actions.push_back(ActionRepresentativeValues(name, description, this));
+       }
+   }
 
 //! @brief Default constructor.
-cmb_acc::GroupActionWrapper::GroupActionWrapper(const Action &a, ActionWrapperList *list,const std::string &nmb_comb_factors, const std::string &nmb_partial_safety_factors)
-  : ActionWrapper(list, nmb_partial_safety_factors),
-    actions(1, ActionRepresentativeValues(a, this, nmb_comb_factors))
-  {}
+cmb_acc::GroupActionWrapper::GroupActionWrapper(const std::vector<Action> &actions, ActionWrapperList *list,const std::vector<std::string> &combination_factors_names, const std::string &nmb_partial_safety_factors)
+  : ActionWrapper(list, nmb_partial_safety_factors)
+  {
+     for(auto tup : boost::combine(actions, combination_factors_names))
+       {
+	 Action a;
+	 std::string comb_factors_name;
+	 boost::tie(a, comb_factors_name)= tup;
+	 this->actions.push_back(ActionRepresentativeValues(a, this, comb_factors_name));
+       }
+  }
 
 //! @brief Return the action name.
 std::string cmb_acc::GroupActionWrapper::getName(void) const

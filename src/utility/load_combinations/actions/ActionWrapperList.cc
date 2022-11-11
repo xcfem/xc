@@ -48,11 +48,49 @@ cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::push_back(const GroupActionW
     return retval;
   }
 
-//! @brief Insert the action being passed as parameter.
+//! @brief Insert the action being passed as parameter and sets its combination
+//! and partial safety factors.
+//! @param a: Action object to insert.
+//! @param combination_factors_name: name of the combination factors that
+//!                                  correspond to the action.
+//! @param partial_safety_factors_name: name of the partial safety factors
+//!                                     that correspond to the action.
 cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::insert(const Action &a,const std::string &combination_factors_name,const std::string &partial_safety_factors_name)
   {
     SingleActionWrapper acc(a,this,combination_factors_name,partial_safety_factors_name);
     return push_back(acc);
+  }
+
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param actions: Vector of action objects to insert.
+//! @param combination_factors_names: vector of names of the combination factors
+//!                                  that correspond to the action.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::insertGroup(const std::vector<Action> &actions, const std::vector<std::string> &combination_factors_names, const std::string &partial_safety_factors_name)
+  {
+    GroupActionWrapper accGrp(actions,this,combination_factors_names,partial_safety_factors_name);
+    return push_back(accGrp);
+  }
+
+//! @brief Insert the group of actions being passed as parameter and sets
+//! its combination and partial safety factors.
+//! @param actionTuples: list of (action, combination_factors_name) tuples.
+//! @param partial_safety_factors_name: name (unique) of the partial safety
+//!                                     factors that correspond to the actions
+//!                                     of the group. The uniqueness of the
+//!                                     applicable partial safety factors is
+//!                                     the essence of a group of actions.
+cmb_acc::ActionWrapper &cmb_acc::ActionWrapperList::insertGroupPy(const boost::python::list &actionTuples, const std::string &partial_safety_factors_name)
+  {
+    // Extract values from Python list.
+    auto [actionLst, combFactorsNameLst] = extract_action_tuples(actionTuples);
+    // Call C++ counterpart.
+    return insertGroup(actionLst,combFactorsNameLst,partial_safety_factors_name);
   }
 
 //! @brief Build the combination of actions defined by the variation argument.
@@ -216,4 +254,25 @@ std::ostream &cmb_acc::operator<<(std::ostream &os,const ActionWrapperList &lvr)
   {
     lvr.Print(os);
     return os;
+  }
+
+//! @brief Extract the (action, combination_factors_name) pairs from the
+//! argument list.
+//! @param actionTuples: list of (action, combination_factors_name) tuples.
+std::tuple<std::vector<cmb_acc::Action>, std::vector<std::string> > cmb_acc::extract_action_tuples(const boost::python::list &actionTuples)
+  {
+    const size_t sz= len(actionTuples);
+    std::vector<Action> actionLst(sz);
+    std::vector<std::string> combFactorsNameLst(sz);
+    for(size_t i= 0;i<sz;++i)
+      {
+	boost::python::tuple tuple= boost::python::extract<boost::python::tuple>(actionTuples[i]);
+	if(boost::python::len(tuple) != 2) throw std::invalid_argument("bad");
+        const Action extractedAction= boost::python::extract<Action>(tuple[0]);
+	actionLst[i]= extractedAction;
+        const std::string extractedString= boost::python::extract<std::string>(tuple[1]);
+	combFactorsNameLst[i]= extractedString;
+	
+      }
+    return {actionLst,combFactorsNameLst};
   }
