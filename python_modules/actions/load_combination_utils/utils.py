@@ -10,6 +10,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import math
 import sys
 import loadCombinations
+from actions import combinations
 
 class CombGenerator(object):
     ''' Base class for load combination generators.
@@ -156,6 +157,40 @@ class CombGenerator(object):
         retval= dict()
         for sit in situations:
             retval[sit]= self.getNamedCombinations(sit)
+        return retval
+
+    def getCombContainer(self):
+        ''' Return a CombContainer object (see combinations module) containing
+        the combinations computed here.
+        '''
+        retval= combinations.CombContainer()
+        combDict= self.getLoadCombinationsDict()
+        # ULS transient and permanent situations.
+        combs= combDict['ULSTransient']
+        for key in combs:
+            retval.ULS.perm.add(key,combs[key].name)
+        # ULS fatigue not implemented yet.
+        # ULS accidental.
+        combs= combDict['ULSAccidental']
+        for key in combs:
+            retval.ULS.acc.add(key,combs[key].name)
+        # ULS earthquake.
+        combs= combDict['ULSSeismic']
+        for key in combs:
+            retval.ULS.earthquake.add(key,combs[key].name)
+        # SLS quasi-permanent.
+        combs= combDict['SLSQuasiPermanent']
+        for key in combs:
+            retval.SLS.qp.add(key,combs[key].name)
+        # SLS frequent.
+        combs= combDict['SLSFrequent']
+        for key in combs:
+            retval.SLS.freq.add(key,combs[key].name)
+        # SLS rare.
+        combs= combDict['SLSRare']
+        for key in combs:
+            retval.SLS.rare.add(key,combs[key].name)
+        # SLS seismic not implemented yet.
         return retval
             
     def writeXCLoadCombinations(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic'], outputFileName= None):
