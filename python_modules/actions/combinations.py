@@ -70,6 +70,15 @@ class CombinationRecord(object):
         retval.unitsDispl= unitsDispl    
         return retval
     
+    def writePythonScript(self, prefix, os= sys.stdout):
+        '''Write a Python script that can be used to re-create this object.
+
+        :param prefix: string defining the container where the combination
+                       will be added.
+        :param os: output stream.
+        '''
+        outputStr= prefix+'.add("'+str(self.name)+'","'+str(self.expr)+'")\n'
+        os.write(outputStr)
 
 class SituationCombs(dict):
     '''Dictionary of combinations for a situation (frequent, rare, 
@@ -168,6 +177,17 @@ class SituationCombs(dict):
         '''
         comb= self[combName]
         return comb.getLoadCaseDispParameters(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+    
+    def writePythonScript(self, prefix, os= sys.stdout):
+        '''Write a Python script that can be used to re-create this object.
+
+        :param prefix: string defining the container where the combination
+                       will be added.
+        :param os: output stream.
+        '''
+        if(len(self)>0): # if not empty.
+            for key in sorted(self):
+                self[key].writePythonScript(prefix= prefix, os= os)
 
 class SituationsSet(object):
     '''Set of situations as used in limit states
@@ -218,11 +238,9 @@ class SituationsSet(object):
                 comb= s[combName]
                 return comb.getLoadCaseDispParameters(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
   
-
 class SLSCombinations(SituationsSet):
     '''Combinations of actions for serviceability limit states
 
-    :ivar name:        name to identify the limit state (serviceability, ultimate,...)
     :ivar rare:        combination for a rare design situation
     :ivar freq:        combination for a frequent design situation
     :ivar qp:          combination for a quasi-permanent design situation
@@ -243,6 +261,22 @@ class SLSCombinations(SituationsSet):
         retval.update(self.qp.getNeutralFormat(counter+len(retval),'SLSQP', mapLoadCases))
         retval.update(self.earthquake.getNeutralFormat(counter+len(retval),'SLSS', mapLoadCases))
         return retval
+    
+    def writePythonScript(self, prefix, os= sys.stdout):
+        '''Write a Python script that can be used to re-create this object.
+
+        :param prefix: string defining the container where the combination
+                       will be added.
+        :param os: output stream.
+        '''
+        newPrefix= prefix+'.rare'
+        self.rare.writePythonScript(prefix= newPrefix, os= os)
+        newPrefix= prefix+'.freq'
+        self.freq.writePythonScript(prefix= newPrefix, os= os)
+        newPrefix= prefix+'.qp'
+        self.qp.writePythonScript(prefix= newPrefix, os= os)
+        newPrefix= prefix+'.earthquake'
+        self.earthquake.writePythonScript(prefix= newPrefix, os= os)
 
 class ULSCombinations(SituationsSet):
     '''Combinations of actions for ultimate limit states
@@ -268,12 +302,28 @@ class ULSCombinations(SituationsSet):
         retval.update(self.fatigue.getNeutralFormat(counter+len(retval),'ULSF', mapLoadCases))
         retval.update(self.earthquake.getNeutralFormat(counter+len(retval),'ULSS', mapLoadCases))
         return retval
+    
+    def writePythonScript(self, prefix, os= sys.stdout):
+        '''Write a Python script that can be used to re-create this object.
+
+        :param prefix: string defining the container where the combination
+                       will be added.
+        :param os: output stream.
+        '''
+        newPrefix= prefix+'.perm'
+        self.perm.writePythonScript(prefix= newPrefix, os= os)
+        newPrefix= prefix+'.acc'
+        self.acc.writePythonScript(prefix= newPrefix, os= os)
+        newPrefix= prefix+'.fatigue'
+        self.fatigue.writePythonScript(prefix= newPrefix, os= os)
+        newPrefix= prefix+'.earthquake'
+        self.earthquake.writePythonScript(prefix= newPrefix, os= os)
 
 class CombContainer(object):
     '''Container of load combinations.
 
-    :ivar SLS: serviceability limit state combination
-    :ivar ULS: ultimate limit state combination
+    :ivar SLS: serviceability limit state combinations.
+    :ivar ULS: ultimate limit state combinations.
     '''
     def __init__(self):
         ''' Constructor.'''
@@ -294,7 +344,7 @@ class CombContainer(object):
         retval.update(self.ULS.getNeutralFormat(counter+len(retval), mapLoadCases))
         return retval
      
-    def dumpCombinations(self,preprocessor):
+    def dumpCombinations(self, preprocessor):
         '''Introduces the combinations into the XC combination handler.
 
         :param preprocessor: pre-processor for the finite element problem.
@@ -310,6 +360,18 @@ class CombContainer(object):
             ls.exportToLatex(f)
         f.close()
 
+    def writePythonScript(self, containerName= 'combContainer', os= sys.stdout):
+        '''Write a Python script that can be used to re-create this object.
+
+        :param prefix: string defining the container where the combination
+                       will be added.
+        :param os: output stream.
+        '''
+        newPrefix= containerName+'.SLS'
+        self.SLS.writePythonScript(prefix= newPrefix, os= os)
+        newPrefix= containerName+'.ULS'
+        self.ULS.writePythonScript(prefix= newPrefix, os= os)
+        
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
 
@@ -336,18 +398,20 @@ class CombContainer(object):
         retval= None
         if(designSituation=='permanent'):
             retval= self.ULS.perm
+        elif(designSituation== 'fatigue'):
+            retval= self.ULS.fatigue
+        elif(designSituation== 'accidental'):
+            retval= self.ULS.acc
+        elif(designSituation== 'uls_earthquake'):
+            retval= self.ULS.earthquake
         elif(designSituation== 'quasi-permanent'):
             retval= self.SLS.qp
         elif(designSituation== 'frequent'):
             retval= self.SLS.freq
         elif(designSituation== 'rare'):
             retval= self.SLS.rare
-        elif(designSituation== 'fatigue'):
-            retval= self.ULS.fatigue
         elif(designSituation== 'sls_earthquake'):
             retval= self.SLS.earthquake
-        elif(designSituation== 'uls_earthquake'):
-            retval= self.ULS.earthquake
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
