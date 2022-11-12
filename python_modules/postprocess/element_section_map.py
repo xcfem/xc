@@ -186,7 +186,11 @@ class RawShellSections(ElementSections):
                 self.alreadyDefinedSections.append(name)
 
     def report(self, os= sys.stdout, indentation= ''):
-        ''' Get a report of the object contents.'''
+        ''' Get a report of the object contents.
+
+        :param os: output stream.
+        :param indentation: indentation to apply to the subsequent lines.
+        '''
         for templateSection in self.templateSections:
             templateSection.report(os, indentation)
     
