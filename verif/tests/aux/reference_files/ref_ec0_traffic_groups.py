@@ -1,4 +1,4 @@
-combs= loadLoader.getLoadCombinations
+combs= preprocessor.getLoadHandler.getLoadCombinations
 comb= combs.newLoadCombination("SLSR00","1.00*G + 1.00*S")
 comb= combs.newLoadCombination("SLSR01","1.00*G + 1.00*S + 1.00*TS + 0.40*UDL")
 comb= combs.newLoadCombination("SLSR02","1.00*G + 1.00*S + 0.60*T")
