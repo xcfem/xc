@@ -168,7 +168,7 @@ class CombGenerator(object):
             f= sys.stdout
         else:
             f= open(outputFileName,'w')
-        f.write("combs= loadLoader.getLoadCombinations\n")
+        f.write("combs= preprocessor.getLoadHandler.getLoadCombinations\n")
         loadCombinations= self.getLoadCombinationsDict(situations)
         for sitKey in loadCombinations:
             sitCombinations= loadCombinations[sitKey]
