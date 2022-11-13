@@ -10,9 +10,10 @@ __version__= "3.0"
 __email__= " ana.Ortega@ciccp.es "
 
 from misc_utils import data_struct_utils as su
-from postprocess import output_handler
-from postprocess.xcVtk import vtk_graphic_base
 from model import predefined_spaces
+## Graphics.
+from postprocess.xcVtk import vtk_graphic_base
+from postprocess import output_handler
 
 class OuputUnits(object):
     '''Unit for the generation of graphic files report files.
@@ -181,7 +182,7 @@ class RecordDisp(OuputUnits):
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispIntForc:
-            qg.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale,orientScbar=orientScbar,titleScbar=titleScbar)
+            outputHandler.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale,orientScbar=orientScbar,titleScbar=titleScbar)
 
     def dispLoadCaseBeamEl(self, setToDisplay,caption= None,fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
@@ -302,8 +303,8 @@ class LoadCaseDispParameters(RecordDisp):
         return capt
 
     def writeLoadReport(self, modelSpace, texFile, cfg):
-        '''Creates the graphics files of loads for the load case and insert them in
-        a LaTex file
+        '''Creates the graphics files of loads for the load case and insert
+           them in a LaTex file
 
         :param modelSpace: model space object (see predefined_spaces.py).
         :param texFile:    laTex file where to include the graphics 
@@ -313,8 +314,11 @@ class LoadCaseDispParameters(RecordDisp):
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
         cfg.makedirs(fullPath) # Create directory if needed.
         rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
-        description= self.getDescription()
+        # description= self.getDescription()
         FEcase= modelSpace.getProblem()
+        if __debug__:
+            if(not FEcase):
+                AssertionError('Can\'t create XC finite element problem.')
         outputHandler= output_handler.OutputHandler(modelSpace)
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()

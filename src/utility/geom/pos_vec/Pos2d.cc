@@ -30,6 +30,8 @@
 #include "utility/geom/d1/Line2d.h"
 #include "utility/geom/d1/Ray2d.h"
 #include "utility/geom/d1/Segment2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/Circle2d.h"
 
 //! @brief Default constructor.
 Pos2d::Pos2d(void)
@@ -172,6 +174,18 @@ GEOM_FT Pos2d::dist2(const Segment2d &sg) const
 //! @brief Return the distance to the segment.
 GEOM_FT Pos2d::dist(const Segment2d &sg) const
   { return sg.dist(*this); }
+
+//! @brief Return a buffer polygon around the point.
+//!
+//! Return a 2D polygon with boundaries that buffer this point
+//! by a distance d.
+//! @param d: distance around the point.
+//! @param n: number of vertex of the returned polygon.
+Polygon2d Pos2d::getBufferPolygon(const GEOM_FT &d, const size_t &numVertices) const
+  {
+    Circle2d c(*this, d);
+    return c.getInscribedPolygon(numVertices);
+  }
 
 void Pos2d::Plot(Plotter &plotter) const
   {

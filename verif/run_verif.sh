@@ -59,6 +59,7 @@ python tests/utility/geom/vector3d_test_02.py
 python tests/utility/geom/vector3d_angle_test_01.py
 echo "$BLEU" "    Points." "$NORMAL"
 python tests/utility/geom/pos2d_test_01.py
+python tests/utility/geom/pos2d_test_02.py
 python tests/utility/geom/pos3d_test_01.py
 python tests/utility/geom/pos3d_list_test_01.py
 python tests/utility/geom/closest_pair_of_points.py
@@ -73,6 +74,7 @@ python tests/utility/geom/pos2d_list_test_01.py
 echo "$BLEU" "    Segments." "$NORMAL"
 python tests/utility/geom/segments/segment2d_test_01.py
 python tests/utility/geom/segments/segment2d_test_02.py
+python tests/utility/geom/segments/segment2d_test_03.py
 python tests/utility/geom/segments/segment2d_connect_01.py
 python tests/utility/geom/segments/segment2d_connect_02.py
 python tests/utility/geom/segments/segment3d_test_00.py

@@ -9,7 +9,6 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import sys
 import vtk
-from misc_utils import log_messages as lmsg
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
@@ -21,7 +20,7 @@ from postprocess.xcVtk.diagrams import linear_load_diagram as lld
 from postprocess.xcVtk.diagrams import node_property_diagram as npd
 from postprocess.xcVtk.diagrams import element_property_diagram as epd
 from postprocess import output_styles
-from misc_utils import log_messages as lmsg
+from misc_utils import log_messages as lmsg # Error messages.
 
 class OutputHandler(object):
     ''' Object that handles the ouput (graphics, etc.)
@@ -392,7 +391,7 @@ class OutputHandler(object):
         for st in setsToDisplayReactions:
             self.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
             
-    def displayDiagram(self, attributeName,component, setToDispRes,setToDisplay,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
+    def displayDiagram(self, attributeName, component, setToDispRes, setToDisplay,caption, scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
         '''Auxiliary function to display results on linear elements.
 
         :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
@@ -414,10 +413,11 @@ class OutputHandler(object):
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
         '''
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component, defaultDirection= defaultDirection)
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters=cameraParameters
+        displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
@@ -575,7 +575,10 @@ class OutputHandler(object):
         unitDescription= self.outputStyle.getForceUnitsDescription()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        unusedGrid= displaySettings.setupGrid(setToDisplay)
+        grid= displaySettings.setupGrid(setToDisplay)
+        if __debug__:
+            if(not grid):
+                AssertionError('Can\'t setup grid.')
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             scOrient=1 #scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
@@ -653,7 +656,10 @@ class OutputHandler(object):
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        unusedGrid= displaySettings.setupGrid(setToDisplay)
+        grid= displaySettings.setupGrid(setToDisplay)
+        if __debug__:
+            if(not grid):
+                AssertionError('Can\'t setup grid.')
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram) #Append diagram to the scene.
@@ -686,7 +692,10 @@ class OutputHandler(object):
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        unusedGrid= displaySettings.setupGrid(setToDisplay)
+        grid= displaySettings.setupGrid(setToDisplay)
+        if __debug__:
+            if(not grid):
+                AssertionError('Can\'t setup grid.')
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram) #Append diagram to the scene.
@@ -718,7 +727,10 @@ class OutputHandler(object):
         domain= preprocessor.getDomain
         numModes= domain.numModes # number of computed modes.
         if(mode<=numModes):
-            unusedNorm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
+            norm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
+            if __debug__:
+                if(not norm):
+                    AssertionError('Can\'t normalize eigenvectors.')
             #auto-scale
             LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
             maxAbs= 0.0

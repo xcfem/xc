@@ -33,8 +33,8 @@ class_<Line2d, bases<Linear2d> >("Line2d")
   .def(init<Pos2d, Dir2d>()) //Constructs the line from a point and a direction.
   .def(init<Pos2d, Vector2d>()) //Constructs the line from a point and a vector.
   .def(init<Line2d>()) //Copy constructor.
-  .def("offset",OffsetVector,"returns a parallel line obtained by adding the vector to the points that define this line.")
-  .def("offset",OffsetDouble,"returns a parallel line.")
+  .def("offset",OffsetVector,"returns a parallel segment obtained by adding the vector to the points that define this line.")
+  .def("offset",OffsetDouble,"returns a parallel segment.")
   .def("getParamA",&Line2d::GetParamA,"returns line slope; 'a' parameter from equation (y= a*x+b).")
   .def("getParamB",&Line2d::GetParamB,"returns line y-intercept; 'b' parameter from equation (y= a*x+b).")
   .def("getIntersection", intersectionWithR2D, "Return the intersection with the line argument.")
@@ -116,6 +116,7 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("swap", &Segment2d::swap,"changes the orientation of the segment.")
   .add_property("getIVector", &Segment2d::getIVector,"Return the local x vector.")
   .add_property("getJVector", &Segment2d::getJVector,"Return the local y vector.")
+  .def("getBufferPolygon", &Segment2d::getBufferPolygon, "Return a buffer polygon around the segment.")
   ;
 
 class_<Linear3d, bases<GeomObj3d>, boost::noncopyable  >("Linear3d", no_init);

@@ -84,6 +84,12 @@ class InteractionDiagramGraphic(MPLGraphic):
     
 class UniaxialMaterialDiagramGraphic:
   def __init__(self,epsMin,epsMax,title):
+    ''' Constructor.
+
+    :param epsMin: minimum strain.
+    :param epsMax: maximum strain.
+    :param title: graphic title.
+    '''
     self.decorations= MPLGraphicDecorations(title)
     self.decorations.xLabel= 'strain'
     self.decorations.yLabel= 'stress [MPa]'
@@ -91,12 +97,14 @@ class UniaxialMaterialDiagramGraphic:
     self.epsMax= epsMax
     self.incEps= (epsMax-epsMin)/100.0
     self.stressScaleFactor= 1.0/1e6
+    
   def getStrains(self):
     '''Abcissae for the diagram '''
     retval= np.arange(self.epsMin,self.epsMax,self.incEps)
     #retval.extend(np.arange(self.epsMax,self.epsMin,-self.incEps))
     #retval.extend(np.arange(self.epsMin,self.epsMax,self.incEps))
     return retval
+  
   def getStresses(self,diag):
     self.factoredStresses= []
     self.strainMin= 1e9
@@ -116,10 +124,12 @@ class UniaxialMaterialDiagramGraphic:
       # print("strain= ", diag.getStrain(), " stress= ", factoredStress/1e6)
     diag.revertToStart()
     return self.factoredStresses
+  
   def setupAxis(self,plt):
     plt.axis([1.05*self.strainMin, 1.05*self.strainMax, 1.05*self.factoredStressMin, 1.05*self.factoredStressMax])
+    
   def setupGraphic(self,plt,materialDiagram):
-    factoredStresses= self.getStresses(materialDiagram)
+    self.getStresses(materialDiagram)
     plt.plot(self.strains, self.factoredStresses)
     self.setupAxis(plt)
     if(self.decorations.title):
