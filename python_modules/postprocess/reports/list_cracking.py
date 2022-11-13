@@ -8,38 +8,46 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 from misc.latex import latex_utils
 
-# Imprime el encabezamiento para el listado de aperturas de fisura.
-def printCabeceraListadoFisuracion(archivo, nmbSecc):
-  archivo.write("\\begin{center}\n")
-  archivo.write("\\begin{footnotesize}\n")
-  archivo.write("\\tablefirsthead{%\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{6}{|c|}{\\textbf{",nmbArch,"}}\\\\\n")
-  archivo.write("\\multicolumn{6}{|c|}{Comprobación de la sección ", latex_utils.toLaTeX(nmbSecc),"}\\\\\n")
-  archivo.write("\\hline\n")
-  archivo.write("Elem. & Hip. & $N$  & $M_x$  & $M_y$  & $w_k$ \\\\\n")
-  archivo.write("      &      & (kN) & (kN m) & (kN m) & (mm)  \\\\\n")
-  archivo.write("\\hline}\n")
-  archivo.write("\\tablehead{%\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{6}{|l|}{\small\sl \ldots continúa}\\\\\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{6}{|c|}{\\textbf{",nmbArch,"}}\\\\\n")
-  archivo.write("\\multicolumn{6}{|c|}{Comprobación de la sección ", latex_utils.toLaTeX(nmbSecc),"}\\\\\n")
-  archivo.write("\\hline\n")
-  archivo.write("Elem. & Hip. & $N$  & $M_x$  & $M_y$  & $w_k$ \\\\\n")
-  archivo.write("      &      & (kN) & (kN m) & (kN m) & (mm)  \\\\\n")
-  archivo.write("\\hline}\n")
-  archivo.write("\\tabletail{%\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{6}{|r|}{\small\sl continúa\ldots}\\\\\n")
-  archivo.write("\\hline}\n")
-  archivo.write("\\tablelasttail{\hline}\n")
-  archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
+def printCabeceraListadoFisuracion(outputFile, sectionName, title):
+    ''' Prints the header for crack width listings.
 
-# Imprime el cierre del listado de aperturas de fisura.
-def printCierreListadoFisuracion(archivo):
-  archivo.write("\\end{supertabular}\n")
-  archivo.write("\\end{footnotesize}\n")
-  archivo.write("\\end{center}\n")
+    :param outputFile: output file.
+    :param sectionName: name of the section being checked.
+    '''
+    outputFile.write("\\begin{center}\n")
+    outputFile.write("\\begin{footnotesize}\n")
+    outputFile.write("\\tablefirsthead{%\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{6}{|c|}{\\textbf{"+title+"}}\\\\\n")
+    outputFile.write("\\multicolumn{6}{|c|}{Comprobación de la sección "+ latex_utils.toLaTeX(sectionName)+"}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Elem. & Hip. & $N$  & $M_x$  & $M_y$  & $w_k$ \\\\\n")
+    outputFile.write("      &      & (kN) & (kN m) & (kN m) & (mm)  \\\\\n")
+    outputFile.write("\\hline}\n")
+    outputFile.write("\\tablehead{%\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{6}{|l|}{\small\sl \ldots continúa}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{6}{|c|}{\\textbf{"+title+"}}\\\\\n")
+    outputFile.write("\\multicolumn{6}{|c|}{Comprobación de la sección "+ latex_utils.toLaTeX(sectionName)+"}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Elem. & Hip. & $N$  & $M_x$  & $M_y$  & $w_k$ \\\\\n")
+    outputFile.write("      &      & (kN) & (kN m) & (kN m) & (mm)  \\\\\n")
+    outputFile.write("\\hline}\n")
+    outputFile.write("\\tabletail{%\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{6}{|r|}{\small\sl continúa\ldots}\\\\\n")
+    outputFile.write("\\hline}\n")
+    outputFile.write("\\tablelasttail{\hline}\n")
+    outputFile.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
+
+def printCierreListadoFisuracion(outputFile):
+    ''' Closes the crack width listings.
+
+    :param outputFile: output file.
+    '''
+  
+    outputFile.write("\\end{supertabular}\n")
+    outputFile.write("\\end{footnotesize}\n")
+    outputFile.write("\\end{center}\n")
 

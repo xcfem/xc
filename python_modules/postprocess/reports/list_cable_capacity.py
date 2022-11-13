@@ -42,7 +42,7 @@ def listTieStrength(preprocessor,setName, fName, titulo):
   elems= st.elements
   tagFCTNCPCP= 0
   FCTNCPCP= 0
-  HIPCPCPTN= ""
+  HIPCPTN= ""
   for e in elems:
     fName.write(e.tag," & ",HIPCPTN," & ",'{:5.2f}'.format(e.getProp("NCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCTNCP")),"\\\\\n")
     if(e.getProp("FCTNCP")>FCTNCPCP):
