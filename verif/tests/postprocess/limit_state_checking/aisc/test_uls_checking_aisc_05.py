@@ -13,9 +13,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
-import math
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from actions import load_cases

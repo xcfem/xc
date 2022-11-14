@@ -132,19 +132,19 @@ outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 outCfg.controller= ACI_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
 outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
+(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
-#print("mean FCs: ", meanFCs)
+#print("mean FCs: ", meanCFs)
 
-meanFC0Teor= 0.932218036004
-ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
-meanFC1Teor= 0.932218036004
-ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
+meanCF0Teor= 0.932218036004
+ratio1= abs(meanCFs[0]-meanCF0Teor)/meanCF0Teor
+meanCF1Teor= 0.932218036004
+ratio2= abs(meanCFs[1]-meanCF1Teor)/meanCF1Teor
 
 '''
-print("meanFCs[0]= ", meanFCs[0])
+print("meanCFs[0]= ", meanCFs[0])
 print("ratio1= ",ratio1)
-print("meanFCs[1]= ", meanFCs[1])
+print("meanCFs[1]= ", meanCFs[1])
 print("ratio2= ",ratio2)
 '''
 

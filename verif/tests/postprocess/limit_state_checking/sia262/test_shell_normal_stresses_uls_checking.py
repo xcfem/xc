@@ -83,20 +83,20 @@ outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 outCfg.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
 
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
+meanCFs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
-#print("mean FCs: ", meanFCs)
+#print("mean FCs: ", meanCFs)
 
-meanFC0Teor= 0.6467847191964301
-ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
-meanFC1Teor= 0.8366279701238778
-ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
+meanCF0Teor= 0.6467847191964301
+ratio1= abs(meanCFs[0]-meanCF0Teor)/meanCF0Teor
+meanCF1Teor= 0.8366279701238778
+ratio2= abs(meanCFs[1]-meanCF1Teor)/meanCF1Teor
 
 '''
-print("meanFCs[0]= ", meanFCs[0])
+print("meanCFs[0]= ", meanCFs[0])
 print("ratio1= ",ratio1)
-print("meanFCs[1]= ", meanFCs[1])
+print("meanCFs[1]= ", meanCFs[1])
 print("ratio2= ",ratio2)
 '''
 

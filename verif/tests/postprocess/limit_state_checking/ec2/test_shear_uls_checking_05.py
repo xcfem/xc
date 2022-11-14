@@ -174,15 +174,15 @@ outCfg.controller.verbose= False # Don't display log messages.
 
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
+(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
-ratio1= abs(meanFCs[0]-refMeanFC0)/refMeanFC0
-ratio2= abs(meanFCs[1]-refMeanFC1)/refMeanFC1
+ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0
+ratio2= abs(meanCFs[1]-refMeanFC1)/refMeanFC1
 
 '''
-print('meanFCs= ',meanFCs)
+print('meanCFs= ',meanCFs)
 print('reference values: ', refMeanFC0, refMeanFC1)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
