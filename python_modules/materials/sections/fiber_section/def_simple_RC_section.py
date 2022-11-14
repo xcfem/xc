@@ -1659,7 +1659,7 @@ def get_element_rc_sections(elements, propName= None):
             baseSectionII.positvRebarRows= pRII
             baseSectionII.negatvRebarRows= nRII
             if(shRII):
-                baseSection.shReinfY= shRII
+                baseSectionII.shReinfY= shRII
             elementSections= [baseSection, baseSectionII]
             
         # Assign elements to each section.
