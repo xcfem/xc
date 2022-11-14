@@ -62,13 +62,13 @@ class WheelLoad(object):
         ''' Return the loaded contour of the wheel taking into account
             the dispersal through the different pavement, earth and
             concrete layers between the wheel contact area and the
-            middle surface of the concrete slab.
+            middle surface of the bridge deck.
 
         :param spreadingLayers: list of tuples containing the depth
                                 and the spread-to-depth ratio of 
                                 the layers between the wheel contact 
                                 area and the middle surface of the 
-                                concrete slab.
+                                bridge deck.
         '''
         # Compute spread.
         spread= 0.0
@@ -122,7 +122,7 @@ class WheelLoad(object):
                                 and the spread-to-depth ratio of 
                                 the layers between the wheel contact 
                                 area and the middle surface of the 
-                                concrete slab.
+                                bridge deck.
         '''
         if(self.localCooSystem):
             reference, loadedContour= self.getLoadedContour(spreadingLayers= spreadingLayers)
@@ -630,7 +630,7 @@ class NotionalLanes(object):
                     retval.append(e.vector3dUniformLoadGlobal(loadVector))
         return retval
 
-    def defPunctualLoads(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defPunctualLoads(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual loads under the wheels.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -641,14 +641,19 @@ class NotionalLanes(object):
         :param originSet: in not None pick the nearest node for each wheel load.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                bridge deck.
         '''
-        wheelLoads= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet)
+        wheelLoads= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
         retval= list()
         for wl in wheelLoads:
             retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
-    def defLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual and uniform loads.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -660,9 +665,14 @@ class NotionalLanes(object):
         :param originSet: in not None pick the nearest node for each wheel load.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                bridge deck.
         '''
         # punctual loads.
-        self.defPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
         # uniform load.
         self.defUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
        
