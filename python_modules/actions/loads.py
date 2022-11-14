@@ -20,20 +20,33 @@ from actions.imposed_strain import imp_strain as imps
 class BaseVectorLoad(object):
     '''Base class for loads introduced using a load as an xcVector 
 
-    :ivar name:     name identifying the load
+    :ivar name: name identifying the load
     :ivar loadVector: load xc.Vector
     '''
     def __init__(self,name, loadVector):
+        ''' Constructor.
+
+        :param name: name identifying the load
+        :param loadVector: load xc.Vector
+        '''
         self.name=name
         self.loadVector= loadVector
 
     def __mul__(self,factor):
-        '''Apply the factor to the load and append it to the current load pattern'''
+        '''Apply the factor to the load and append it to the current 
+           load pattern
+
+        :param factor: factor to apply.
+        '''
         self.loadVector=factor*self.loadVector
         self.appendLoadToCurrentLoadPattern()
             
     def __rmul__(self,factor):
-        '''Apply the factor to the load and append it to the current load pattern'''
+        '''Apply the factor to the load and append it to the current 
+           load pattern.
+
+        :param factor: factor to apply.
+        '''
         self.loadVector=factor*self.loadVector
         self.appendLoadToCurrentLoadPattern()
      

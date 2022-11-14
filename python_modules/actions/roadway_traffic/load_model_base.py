@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
+import sys
 import geom
 import xc
 from actions import loads
@@ -20,20 +21,86 @@ class WheelLoad(object):
     
     :ivar position: position of the wheel
     :ivar load: load
-    :ivar lx: length wheel in transversal direction 
-    :ivar ly: length wheel in longitudinal direction 
-    :ivar node: node under the wheel.
+    :ivar lx: length of the wheel contact area in transversal direction 
+    :ivar ly: length of the wheel contact area in longitudinal direction 
+    :ivar nodes: nodes under the wheel.
     '''
-    def __init__(self,pos,ld,lx=0,ly=0,node= None):
+    def __init__(self, pos, ld, lx=0, ly=0, localCooSystem= None, nodes= None):
+        ''' Constructor.
+
+        :param pos: position of the wheel
+        :param ld: load
+        :param lx: length of the wheel contact area in transversal direction 
+        :param ly: length of the wheel contact area in longitudinal direction 
+        :param localCooSystem: local coordinate system whose I vector
+                               is aligned with the lane axis and
+                               its XY plane contains the road surface
+                               at the wheel position.
+        :param nodes: nodes under the wheel.
+        '''
         self.position= pos
         self.load= ld
         self.lx=lx
         self.ly=ly
-        self.node= node
+        self.localCooSystem= localCooSystem
+        self.nodes= nodes
 
+    def getLocalReferenceSystem(self):
+        ''' Return a local reference system for the wheel with origin in
+            the wheel position, x axis along the lane axis and y axis normal
+            to the x axis on the road surface.'''
+        retval= None
+        if(self.localCooSystem):
+            retval= geom.Ref2d3d(self.position, self.localCooSystem.getIVector(), self.localCooSystem.getJVector())
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; undefined local coordinate system.')
+        return retval        
+
+    def getLoadedContour(self, spreadingLayers= None):
+        ''' Return the loaded contour of the wheel taking into account
+            the dispersal through the different pavement, earth and
+            concrete layers between the wheel contact area and the
+            middle surface of the concrete slab.
+
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                concrete slab.
+        '''
+        # Compute spread.
+        spread= 0.0
+        if(spreadingLayers):
+            for sl in spreadingLayers:
+                layerDepth= sl[0]
+                layerSpreadToDepthRatio= sl[1]
+                spread+= layerDepth*layerSpreadToDepthRatio
+        # Compute local axis.
+        reference= self.getLocalReferenceSystem()
+        laneAxisDir= reference.getLocalCoordinates(self.localCooSystem.getIVector())
+        jVector= laneAxisDir # Longitudinal direction.
+        iVector= geom.Vector2d(-jVector.y, jVector.x) # Transverse direction.
+        # Compute spread in each direction.
+        transverseSpread= self.lx/2.0+spread
+        longitudinalSpread= self.ly/2.0+spread
+        # Compute contour points.
+        contourPoints= list()
+        origin= geom.Pos2d(0,0)
+        contourPoints.append(origin+transverseSpread*iVector+longitudinalSpread*jVector) # +,+
+        contourPoints.append(origin-transverseSpread*iVector+longitudinalSpread*jVector) # -,+
+        contourPoints.append(origin-transverseSpread*iVector-longitudinalSpread*jVector) # -,-
+        contourPoints.append(origin+transverseSpread*iVector-longitudinalSpread*jVector) # +,-
+        return reference, geom.Polygon2d(contourPoints)
+            
     def getDict(self):
         ''' Return a dictionary with the object values.'''
-        return {'pos':self.position,'load':self.load,'lx':self.lx,'ly':self.ly, 'nodeTag': self.node.tag}
+        nodeTags= list()
+        if(self.nodes):
+            for n in self.nodes:
+                nodeTags.append(n.tag)
+        return {'pos':self.position,'load':self.load,'lx':self.lx,'ly':self.ly, 'nodeTags': nodeTags}
 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
@@ -41,30 +108,57 @@ class WheelLoad(object):
         self.load= dct['ld']
         self.lx= dct['lx']
         self.ly= dct['ly']
-        #self.nodeTag= dct['nodeTag']
+        self.nodeTags= None # Loaded nodes reading from dict not implemented yet.
+        #self.nodeTags= dct['nodeTag']
 
     def __str__(self):
         return str(self.getDict())
 
-    def pickNode(self, originSet):
-        ''' Pick the nearest node to the wheel load position.
+    def pickNodes(self, originSet, spreadingLayers= None):
+        ''' Pick the nodes loaded by the wheel.
 
-        :param originSet: in not None pick the nearest node for each wheel load.
+        :param originSet: set to pick the loaded nodes from.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                concrete slab.
         '''
-        n= originSet.getNearestNode(self.position)
-        self.node= n
+        if(self.localCooSystem):
+            reference, loadedContour= self.getLoadedContour(spreadingLayers= spreadingLayers)
+            tol= .01
+            self.nodes= list()
+            for n in originSet.nodes:
+                nodePos2d= reference.getLocalPosition(n.getInitialPos3d)
+                if(loadedContour.In(nodePos2d, tol)): # node in loaded contour.
+                    self.nodes.append(n)
+        else:
+            n= originSet.getNearestNode(self.position)
+            self.nodes= [n]
 
-    def defNodalLoad(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
-        ''' Create a new nodal load.
+    def defNodalLoads(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Create the nodal loads corresponding to the contact pressure.
 
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         '''
-        vLoad= self.load*gravityDir
-        if(brakingDir): # compute braking load
-            vLoad+= self.load*xc.Vector(brakingDir)
-        loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
-        return self.node.newLoad(loadVector)
+        retval= list()
+        numLoadedNodes= 0
+        if(self.nodes):
+            numLoadedNodes= len(self.nodes)
+        if(numLoadedNodes>0):
+            # Compute load vector.
+            vLoad= self.load*gravityDir
+            if(brakingDir): # compute braking load
+                vLoad+= self.load*xc.Vector(brakingDir)
+            loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
+            if(numLoadedNodes==1):
+                retval.append(self.nodes[0].newLoad(loadVector))
+            else:
+                ptCoo= [self.position.x, self.position.y, self.position.z]
+                slidingVectorLoad= loads.SlidingVectorLoad(name= 'wheelLoad', nodes= self.nodes, pntCoord= ptCoo, loadVector= loadVector)
+                slidingVectorLoad.appendLoadToCurrentLoadPattern()
+        return retval
     
        
 class TandemLoad(object):
@@ -90,6 +184,10 @@ class TandemLoad(object):
         self.ySpacing= ySpacing
         self.lx= lx
         self.ly= ly
+
+    def getTotalLoad(self):
+        ''' Return the total load of the tandem.'''
+        return 2.0*self.axleLoad
 
     def getWheelPositions(self, swapAxes= False):
         ''' Return a list with the positions of the wheels.
@@ -390,6 +488,7 @@ class LaneAxis(object):
             pos2d= wl.position
             pos3d= ref.getGlobalPosition(pos2d)
             wl.position= pos3d
+            wl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector()) 
         return wheelLoads
 
     def getVDir(self, lmbdArcLength= 0.5):
@@ -468,7 +567,7 @@ class NotionalLanes(object):
             retval.append(lane.getArea())
         return retval
 
-    def getWheelLoads(self, tandems, relativePositions, originSet= None):
+    def getWheelLoads(self, tandems, relativePositions, originSet= None, spreadingLayers= None):
         ''' Return a dictionary containing the wheel loads due to the tandems
             argument in the positions argument.
 
@@ -479,18 +578,23 @@ class NotionalLanes(object):
                                  the axis, 0.5-> middle of the axis, 1-> end
                                  of the axis).
         :param originSet: in not None pick the nearest node for each wheel load.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                concrete slab.
         '''
         retval= list()
         # Compute load positions in each lane.
         for nl,rpos,td in zip(self.lanes, relativePositions,tandems):
             tandemLoads= list()
             if(td is not None):
-                axis= nl.getAxis()
-                tandemLoads= axis.getWheelLoads(loadModel= td, lmbdArcLength= rpos)
+                laneAxis= nl.getAxis() # Lane axis.
+                tandemLoads= laneAxis.getWheelLoads(loadModel= td, lmbdArcLength= rpos)
             retval.extend(tandemLoads)
-        if(originSet): # pick the nodes under each wheel
+        if(originSet): # pick the loaded by each wheel
             for load in retval:
-                load.pickNode(originSet= originSet)
+                load.pickNodes(originSet= originSet, spreadingLayers= spreadingLayers)
         return retval
     
     def defUniformLoadsXCSets(self, modelSpace, originSet):
@@ -541,7 +645,7 @@ class NotionalLanes(object):
         wheelLoads= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet)
         retval= list()
         for wl in wheelLoads:
-            retval.append(wl.defNodalLoad(gravityDir= gravityDir, brakingDir= brakingDir))
+            retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
     def defLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
