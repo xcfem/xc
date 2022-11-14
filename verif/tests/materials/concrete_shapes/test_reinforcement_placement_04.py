@@ -126,11 +126,21 @@ smallBarDiameter= 4e-3
 smallBarArea= math.pi*(smallBarDiameter/2.0)**2 # Area of the reinforcement bar.
 rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, areaRebar= smallBarArea, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
+## Define reinforcement directions.
+reinforcementUpVector= geom.Vector3d(0,0,1) # Z+ this vector defines the meaning
+                                            # of top reinforcement ot bottom
+                                            # reinforcement.
+reinforcementIVector= geom.Vector3d(0,1,0) # Y+ this vector defines the meaning
+                                           # of reinforcement I (parallel to
+                                           # this vector) and
+                                           # reinforcement II (normal to this
+                                           # vector)
+
 ## Store element reinforcement.
 for e in s.elements:
     e.setProp("baseSection", rcSection)
-    e.setProp("reinforcementUpVector", geom.Vector3d(0,0,1)) # Z+
-    e.setProp("reinforcementIVector", geom.Vector3d(0,1,0)) # Y+
+    e.setProp("reinforcementUpVector", reinforcementUpVector) # Z+
+    e.setProp("reinforcementIVector", reinforcementIVector) # Y+
     e.setProp("bottomReinforcementI", def_simple_RC_section.LongReinfLayers([rowA]))
     e.setProp("topReinforcementI", def_simple_RC_section.LongReinfLayers([rowC]))
     e.setProp("bottomReinforcementII", def_simple_RC_section.LongReinfLayers([rowC]))

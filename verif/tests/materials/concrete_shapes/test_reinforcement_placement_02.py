@@ -15,6 +15,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
+import os
 import math
 from materials.sections.fiber_section import def_simple_RC_section
 from materials.ec2 import EC2_materials
@@ -22,8 +23,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials import typical_materials
-from rough_calculations import ng_simple_beam as sb
 from misc_utils import log_messages as lmsg
 
 # Reinforcement row scheme:
@@ -102,10 +101,14 @@ constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode00F(nA.tag) # First node pinned.
 modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 
+## Define reinforcement directions.
+reinforcementUpVector= geom.Vector3d(0,1,0) # Y+ this vector defines the meaning
+                                            # of top reinforcement ot bottom
+                                            # reinforcement.
 #### Store element reinforcement.
 for e in beamElements:
     e.setProp("baseSection", rcSection)
-    e.setProp("reinforcementUpVector", geom.Vector3d(0,1,0)) # Y+
+    e.setProp("reinforcementUpVector", reinforcementUpVector) # Y+
     e.setProp("bottomReinforcement", def_simple_RC_section.LongReinfLayers([rowA]))
     e.setProp("topReinforcement", def_simple_RC_section.LongReinfLayers())
     x= e.getPosCentroid(True).x
@@ -144,6 +147,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.plain_newton_raphson(feProblem, maxNumIter= 20, convergenceTestTol= 1e-6)
 result= analysis.analyze(1)
 if(result!=0):
+    fname= os.path.basename(__file__)
     lmsg.error(fname+' ERROR. Can\'t solve.')
     exit(1)
 
@@ -182,7 +186,6 @@ print('deflection = ', vDisp[1]*1e3, 'mm')
 print('ratio4= ', ratio4)
 '''
 
-import os
 fname= os.path.basename(__file__)
 if (ratio1<1e-6) and (ratio2<1e-6) and (ratio3<1e-6) and (ratio4<1e-6):
     print('test '+fname+': ok.')

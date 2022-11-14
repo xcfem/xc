@@ -11,14 +11,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
+import os
 import math
 from materials.sections.fiber_section import def_simple_RC_section
 from materials.ec2 import EC2_materials
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials import typical_materials
-from rough_calculations import ng_simple_beam as sb
 from misc_utils import log_messages as lmsg
 
 # Reinforcement row scheme:
@@ -129,6 +128,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.plain_newton_raphson(feProblem, maxNumIter= 20, convergenceTestTol= 1e-6)
 result= analysis.analyze(1)
 if(result!=0):
+    fname= os.path.basename(__file__)
     lmsg.error(fname+' ERROR. Can\'t solve.')
     exit(1)
 
