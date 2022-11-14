@@ -12,8 +12,6 @@ __email__= "l.pereztato@gmail.com"
 import math
 import geom
 import xc
-from materials.ehe import EHE_materials
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 

@@ -16,9 +16,7 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model.mesh import finit_el_model
 from materials import typical_materials
-from materials.sections import section_properties
 
 
 # *********Problem definition*********

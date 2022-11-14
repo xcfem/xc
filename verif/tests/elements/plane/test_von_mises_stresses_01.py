@@ -16,10 +16,8 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
 
 # Data
 F= 5e3 # Applied (full!) force (N)
@@ -163,6 +161,7 @@ else:
     lmsg.error(fname+' ERROR.')
   
 # Graphic stuff.
+#from postprocess import output_handler
 #oh= output_handler.OutputHandler(modelSpace)
 #oh.displayFEMesh()
 #oh.displayLocalAxes()

@@ -13,7 +13,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import os
 import xc
-import math
 from model import predefined_spaces
 from model.geometry import grid_model as gm
 from model.mesh import finit_el_model as fem

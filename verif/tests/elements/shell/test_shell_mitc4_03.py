@@ -20,7 +20,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-import math
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
