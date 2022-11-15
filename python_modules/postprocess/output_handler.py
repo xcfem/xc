@@ -40,7 +40,7 @@ class OutputHandler(object):
 
     def getCaptionText(self, itemToDisp, unitDescription, setToDisplay):
         ''' Return the text to use in the image caption.'''
-        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+        loadCaseName= self.modelSpace.getCurrentLoadCaseName()
         return loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
 
     def getOutputLengthUnitSym(self):
