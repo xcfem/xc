@@ -707,6 +707,7 @@ python tests/loads/combinations/test_combination06.py
 python tests/loads/combinations/test_combination07.py
 python tests/loads/combinations/test_combination08.py
 python tests/loads/combinations/test_combination09.py
+python tests/loads/combinations/test_combination10.py
 python tests/loads/combinations/test_davit_01.py
 python tests/loads/combinations/test_davit_02.py
 
