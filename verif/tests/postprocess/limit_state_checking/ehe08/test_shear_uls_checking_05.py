@@ -142,7 +142,22 @@ rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, areaRebar= sm
 # Shear reinforcement at both ends.
 shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "shearReinf",nShReinfBranches= 2, areaShReinfBranch= EHE_materials.Fi8, shReinfSpacing= 0.15, angAlphaShReinf= math.pi/2.0)
 
-## Store element reinforcement.
+## Store element reinforcement. Assign to each element the properties
+# that will be used to define its reinforcement on each direction:
+#
+# - baseSection: RCSectionBase derived object containing the geometry
+#                and the material properties of the reinforcec concrete
+#                section.
+# - reinforcementUpVector: reinforcement "up" direction which defines
+#                          the position of the positive reinforcement
+#                          (bottom) and the negative reinforcement
+#                          (up).
+# - bottomReinforcement: LongReinfLayers objects defining the 
+#                        reinforcement at the bottom of the section.
+# - topReinforcement: LongReinfLayers objects defining the 
+#                     reinforcement at the top of the section.
+# - shearReinforcement: ShearReinforcement objects defining the 
+#                       reinforcement at the bottom of the section.
 for e in s.elements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", geom.Vector3d(0,0,1)) # Z+

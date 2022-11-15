@@ -133,7 +133,22 @@ reinforcementIVector= geom.Vector3d(1,0,0) # X+ this vector defines the meaning
                                            # reinforcement II (normal to this
                                            # vector)
 
-## Store element reinforcement.
+## Store element reinforcement. Assign to each element the properties
+# that will be used to define its reinforcement on each direction:
+#
+# - baseSection: RCSectionBase derived object containing the geometry
+#                and the material properties of the reinforcec concrete
+#                section.
+# - reinforcementUpVector: reinforcement "up" direction which defines
+#                          the position of the positive reinforcement
+#                          (bottom) and the negative reinforcement
+#                          (up).
+# - bottomReinforcement: LongReinfLayers objects defining the 
+#                        reinforcement at the bottom of the section.
+# - topReinforcement: LongReinfLayers objects defining the 
+#                     reinforcement at the top of the section.
+# - shearReinforcement: ShearReinforcement objects defining the 
+#                       reinforcement at the bottom of the section.
 for e in s.elements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", reinforcementUpVector) # Z+

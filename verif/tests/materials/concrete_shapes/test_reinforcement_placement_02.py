@@ -105,7 +105,22 @@ modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 reinforcementUpVector= geom.Vector3d(0,1,0) # Y+ this vector defines the meaning
                                             # of top reinforcement ot bottom
                                             # reinforcement.
-#### Store element reinforcement.
+## Store element reinforcement. Assign to each element the properties
+# that will be used to define its reinforcement on each direction:
+#
+# - baseSection: RCSectionBase derived object containing the geometry
+#                and the material properties of the reinforcec concrete
+#                section.
+# - reinforcementUpVector: reinforcement "up" direction which defines
+#                          the position of the positive reinforcement
+#                          (bottom) and the negative reinforcement
+#                          (up).
+# - bottomReinforcement: LongReinfLayers objects defining the 
+#                        reinforcement at the bottom of the section.
+# - topReinforcement: LongReinfLayers objects defining the 
+#                     reinforcement at the top of the section.
+# - shearReinforcement: ShearReinforcement objects defining the 
+#                       reinforcement at the bottom of the section.
 for e in beamElements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", reinforcementUpVector) # Y+

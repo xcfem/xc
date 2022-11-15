@@ -123,7 +123,24 @@ smallBarDiameter= 4e-3
 smallBarArea= math.pi*(smallBarDiameter/2.0)**2 # Area of the reinforcement bar.
 rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, areaRebar= smallBarArea, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
-## Store element reinforcement.
+## Store element reinforcement. Assign to each element the properties
+# that will be used to define its reinforcement on each direction:
+#
+# - baseSection: RCSectionBase derived object containing the geometry
+#                and the material properties of the reinforcec concrete
+#                section.
+# - reinforcementUpVector: reinforcement "up" direction which defines
+#                          the position of the positive reinforcement
+#                          (bottom) and the negative reinforcement
+#                          (up).
+# - reinforcementIVector: (for slabs) direction corresponding to 
+#                         the first RC section
+# - bottomReinforcement: LongReinfLayers objects defining the 
+#                        reinforcement at the bottom of the section.
+# - topReinforcement: LongReinfLayers objects defining the 
+#                     reinforcement at the top of the section.
+# - shearReinforcement: ShearReinforcement objects defining the 
+#                       reinforcement at the bottom of the section.
 for e in s.elements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", geom.Vector3d(0,0,1)) # Z+
