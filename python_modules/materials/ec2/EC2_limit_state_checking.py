@@ -654,9 +654,9 @@ def getAsMinBeams(concrete, reinfSteel, h, z, bt, d, nationalAnnex= None):
     :param concrete: concrete material.
     :param reinfSteel: reinforcing steel material.
     :param h: section depth.
-    :param d: effective depth.
     :param z: inner lever arm.
-    :param bt: denotes the mean width of the tension zone.
+    :param bt: mean width of the tension zone.
+    :param d: effective depth.
     :param nationalAnnex: identifier of the national annex.
     '''
     if(nationalAnnex=='Spain'):
