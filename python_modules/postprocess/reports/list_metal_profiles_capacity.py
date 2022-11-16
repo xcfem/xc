@@ -35,29 +35,28 @@ def printTNListingEndSteelShape(archivo):
   archivo.write("\\end{center}\n")
 
 
-def listSteelShapeTNStrengthElasticRange(setName, fName, titulo):
-  '''
-  Print the results of normal stresses checking in an element set
-  whose material is a steel shape.
-  '''
-  printTNListingHeaderSteelShape(fName,titulo) 
-  st= preprocessor.getSets.getSet(setName)
-  elems= st.elements
-  tagFCTNCPCP= 0
-  FCTNCPCP= 0
-  HIPCPCPTN= ""
-  for e in elems:
-    fName.write(tag," & ",HIPCPTN," & ",'{:5.2f}',format(e.getProp("NCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MyCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MzCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCTNCP")),"\\\\\n")
-    if(e.getProp("FCTNCP")>FCTNCPCP):
-      FCTNCPCP= e.getProp("FCTNCP")
-      HIPCPCPTN= e.getProp("HIPCPTN")
-      tagFCTNCPCP= e.tag
-  fName.write("\\hline\n")
-  fName.write("\\multicolumn{6}{|c|}{Caso pésimo}\\\\\n")
-  fName.write("\\hline\n")
-  fName.write(tagFCTNCPCP," & ",HIPCPCPTN," &  &  &  & ",'{:3.2f}'.format(FCTNCPCP),"\\\\\n")
+def listSteelShapeTNStrengthElasticRange(xcSet, fName, titulo):
+    '''
+    Print the results of normal stresses checking in an element set
+    whose material is a steel shape.
+    '''
+    printTNListingHeaderSteelShape(fName,titulo) 
+    elems= xcSet.elements
+    tagFCTNCP= 0
+    FCTNCP= 0
+    HIPCPTN= ""
+    for e in elems:
+        fName.write(e.tag," & ",HIPCPTN," & ",'{:5.2f}',format(e.getProp("NCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MyCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MzCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCTNCP")),"\\\\\n")
+        if(e.getProp("FCTNCP")>FCTNCP):
+            FCTNCP= e.getProp("FCTNCP")
+            HIPCPTN= e.getProp("HIPCPTN")
+            tagFCTNCP= e.tag
+    fName.write("\\hline\n")
+    fName.write("\\multicolumn{6}{|c|}{Caso pésimo}\\\\\n")
+    fName.write("\\hline\n")
+    fName.write(tagFCTNCP," & ",HIPCPTN," &  &  &  & ",'{:3.2f}'.format(FCTNCP),"\\\\\n")
 
-  printTNListingEndSteelShape(fName) 
+    printTNListingEndSteelShape(fName) 
 
 
 
@@ -88,26 +87,24 @@ def printVListingHeaderSteelShape(archivo, tit):
   archivo.write("\\tablelasttail{\hline}\n")
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
-def listSteelShapeVStrength(setName, fName, titulo):
-  '''
-  Print the results of shear stress checking in an element set
-  whose material is a steel shape.
-  '''
-  printVListingHeaderSteelShape(fName,titulo) 
-  st= preprocessor.getSets.getSet(setName)
-  elems= st.elements
-  tagFCTNCPCP= 0
-  FCTNCPCP= 0
-  HIPCPCPTN= ""
-  for e in elems:
-    fName.write(tag," & ",HIPCPV," & ",'{:5.2f}'.format(e.getProp("VyCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("VzCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCVCP")),"\\\\\n")
-    if(e.getProp("FCTNCP")>FCTNCPCP):
-      FCTNCPCP= e.getProp("FCTNCP")
-      HIPCPCPTN= e.getProp("HIPCPTN")
-      tagFCTNCPCP= e.tag
-  fName.write("\\hline\n")
-  fName.write("\\multicolumn{5}{|c|}{Caso pésimo}\\\\\n")
-  fName.write("\\hline\n")
-  fName.write(tagFCVCPCP," & ",HIPCPCPV," &  &  & ",format(e.getProp("FCVCPCP"),'{:3.2f}'),"\\\\\n")
-  printTNListingEndSteelShape(fName) 
+def listSteelShapeVStrength(xcSet, fName, titulo):
+    '''Print the results of shear stress checking in an element set
+    whose material is a steel shape.
+    '''
+    printVListingHeaderSteelShape(fName,titulo) 
+    elems= xcSet.elements
+    tagFCVCP= 0
+    FCVCP= 0
+    HIPCPV= ""
+    for e in elems:
+        fName.write(e.tag," & ",HIPCPV," & ",'{:5.2f}'.format(e.getProp("VyCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("VzCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCVCP")),"\\\\\n")
+        if(e.getProp("FCVCP")>FCVCP):
+            FCVCP= e.getProp("FCVCP")
+            HIPCPV= e.getProp("HIPCPV")
+            tagFCVCP= e.tag
+    fName.write("\\hline\n")
+    fName.write("\\multicolumn{5}{|c|}{Caso pésimo}\\\\\n")
+    fName.write("\\hline\n")
+    fName.write(tagFCVCP," & ",HIPCPV," &  &  & ",format(e.getProp("FCVCP"),'{:3.2f}'),"\\\\\n")
+    printTNListingEndSteelShape(fName) 
 
