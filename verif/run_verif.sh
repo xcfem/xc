@@ -1212,6 +1212,7 @@ python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_
 echo "$BLEU" "    ACI limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aci/test_shear_uls_checking_aci.py
 echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
