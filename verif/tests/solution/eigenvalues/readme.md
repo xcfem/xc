@@ -8,9 +8,11 @@ In linear algebra, an eigenvector or characteristic vector of a linear transform
 Geometrically, an eigenvector, corresponding to a real nonzero eigenvalue, points in a direction in which it is stretched by the transformation and the eigenvalue is the factor by which it is stretched. If the eigenvalue is negative, the direction is reversed. Loosely speaking, in a multidimensional vector space, the eigenvector is not rotated.
 
 ## References
-- [Linear buckling analysis](https://portwooddigital.com/2021/05/29/right-under-your-nose)
-- [Eigenvalues During an Analysis](https://portwooddigital.com/2021/11/09/eigenvalues-during-an-analysis/)
-- [More Than You or Eigen Chew](https://portwooddigital.com/2022/03/06/more-than-you-or-eigen-chew/)
-- [Eigenvalue and eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) computation related verification tests.
-- [Eigenvalue algorithm](https://en.wikipedia.org/wiki/Eigenvalue_algorithm)
-- [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
+ - [Linear buckling analysis](https://portwooddigital.com/2021/05/29/right-under-your-nose)
+ - [Eigenvalues During an Analysis](https://portwooddigital.com/2021/11/09/eigenvalues-during-an-analysis/)
+ - [More Than You or Eigen Chew](https://portwooddigital.com/2022/03/06/more-than-you-or-eigen-chew/)
+ - [Eigenvalue and eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) computation related verification tests.
+ - [Eigenvalue algorithm](https://en.wikipedia.org/wiki/Eigenvalue_algorithm)
+ - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
+ - [One Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/10/one-way-to-get-bad-eigenvalues/)
+ - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)

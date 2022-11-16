@@ -6,6 +6,7 @@
 - [Euler–Bernoulli beam theory](https://en.wikipedia.org/wiki/Euler%E2%80%93Bernoulli_beam_theory)
 - [General beam theory](https://web.mit.edu/16.20/homepage/8_GeneralBeamTheory/GeneralBeamTheory_files/module_8_with_solutions.pdf.moved)
 - [A Vector in the x-z Plane](https://portwooddigital.com/2020/08/08/a-vector-in-the-x-z-plane/)
+- [Geometric transformation](https://portwooddigital.com/2022/11/15/geometric-transformation/)
 - [Plastic Rotation](https://portwooddigital.com/2021/03/14/plastic-rotation/)
 - [A tale of two element formulations](https://portwooddigital.com/2020/02/23/a-tale-of-two-element-formulations/)
 - [Meshing for Column Loads](https://portwooddigital.com/2020/05/10/meshing-for-column-loads/)
