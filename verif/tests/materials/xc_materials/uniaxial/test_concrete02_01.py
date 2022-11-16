@@ -12,9 +12,7 @@ l= 1e-7 # Distance between nodes
 
 import xc
 from solution import predefined_solutions
-from model import predefined_spaces
 from materials import typical_materials
-from postprocess.reports import graph_material 
 from materials.ehe import EHE_materials
 # import matplotlib.pyplot as plt
 import numpy as np
