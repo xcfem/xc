@@ -111,8 +111,6 @@ class ControlVarDiagram(cd.ColoredDiagram):
         self.creaLookUpTable()
         self.creaActorDiagrama()
         indxDiagrama= 0
-        indiceSet= 0
-        numSetsDiagrama= len(self.conjuntos)
         for s in self.conjuntos:
             for e in s.elements:
                 e.getResistingForce()

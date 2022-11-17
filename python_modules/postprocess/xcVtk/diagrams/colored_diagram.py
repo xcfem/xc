@@ -88,12 +88,11 @@ class ColoredDiagram(vtk_lut_field.LUTField):
          :param valDest: Valor del campo escalar en el extremo frontal. '''
 
         assert(valOrg*valDest<=0.0)
-        org_dest= dest-org
-        longTramo= (org_dest).getModulus
+        org_dest= dest-org # org->dest vector.
         s0= 0.0
         if(abs(valOrg-valDest)>0):
             s0= valOrg/(valOrg-valDest)
-        return(org+s0*org_dest)
+        return (org+s0*org_dest)
 
 
     def createChangedSignDiagramInterval(self, offset, org, valOrg, dest, valDest):

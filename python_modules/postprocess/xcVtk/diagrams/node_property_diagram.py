@@ -48,8 +48,6 @@ class NodePropertyDiagram(cd.ColoredDiagram):
     self.creaActorDiagrama()
 
     indxDiagrama= 0
-    indiceSet= 0
-    numSetsDiagrama= len(self.lstSets)
     for s in self.lstSets:
       self.appendDataSetToDiagram(s,indxDiagrama)
 

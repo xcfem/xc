@@ -12,12 +12,14 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
+import sys
 import xc
 from misc_utils import log_messages as lmsg
 from solution import predefined_solutions
 from postprocess import output_handler as oh
 from postprocess import output_styles
 from model import predefined_spaces
+import random as rd
 
 class QuickGraphics(oh.OutputHandler):
     '''This class is aimed at providing the user with a quick and easy way to 

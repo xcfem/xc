@@ -13,6 +13,7 @@ def printCabeceraListadoFisuracion(outputFile, sectionName, title):
 
     :param outputFile: output file.
     :param sectionName: name of the section being checked.
+    :param title: title for the tabular data.
     '''
     outputFile.write("\\begin{center}\n")
     outputFile.write("\\begin{footnotesize}\n")

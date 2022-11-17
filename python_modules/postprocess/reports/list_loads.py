@@ -30,10 +30,10 @@ def punctualLoadList(loadPattern, outputFile, load, fmt):
 
     :param loadPattern: load pattern. 
     :param outputFile: output file name.
-    :param load: ??
+    :param load: load vector.
     :param fmt: format for numbers.
     '''
-    xLoad= x
+    xLoad= '??'
     preprocessor= loadPattern.getPreprocessor()
     elemTags= loadPattern.getElementTags()
     for i in elemTags:

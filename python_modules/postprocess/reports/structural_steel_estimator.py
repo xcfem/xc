@@ -34,7 +34,7 @@ class StructuralSteelEstimator(object):
             if((e.getDimension==1) and e.hasProp('crossSection')):
                 length= e.getLength(True)
                 crossSection= e.getProp('crossSection')
-                name= crossSection.get('nmb')
+                # name= crossSection.get('nmb')
                 P= crossSection.get('P')
                 W= P*length
                 if(P<30):

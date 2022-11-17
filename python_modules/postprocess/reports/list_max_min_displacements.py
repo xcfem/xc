@@ -48,15 +48,20 @@ def listNodeUMaxUMin(preprocessor,setName, tit, fmt, fName):
     supertabular.cierraSupertabular(fName) 
 
 
-def listNodeVMaxVMin(setName, tit, fmt, fName):
+def listNodeVMaxVMin(xcSet, tit, fmt, outputFile):
     '''
     Print the extrema of the displacements of the nodes set which name
     is being passed as parameter.
+
+    :param xcSet: set containing the nodes to list.
+    :param tit: caption for the table.
+    :param fmt: format for the displacement values.
+    :param outputFile: output file.
     '''
     caption= tit
     defCampos= "|l|r|r|r|r|"
     idsCampos= "IdN & $V_{max}$ & Comb. & $V_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
-    supertabular.cabeceraSupertabular(fName,5,defCampos,idsCampos,caption) 
+    supertabular.cabeceraSupertabular(outputFile,5,defCampos,idsCampos,caption) 
     tagVMaxMax= 0
     VMaxMax= 0
     CombVMaxMax= None
@@ -64,14 +69,12 @@ def listNodeVMaxVMin(setName, tit, fmt, fName):
     VMinMin= 0
     CombVMinMin= None
 
-    s= preprocessor.getSets.getSet(setName)
-    nodes= s.nodes
-    for n in nodes:
+    for n in xcSet.nodes:
         VMax= n.getProp('VMax')
         CombVMax= n.getProp('CombVMax')
         VMin= n.getProp('VMin')
         CombVMin= n.getProp('CombVMin')        
-        fName.write(n.tag," & ",fmt.format(VMax*1e3)," & ",CombVMax," & ",fmt.format(VMin*1e3)," & ",CombVMin,"\\\\\n")
+        outputFile.write(n.tag," & ",fmt.format(VMax*1e3)," & ",CombVMax," & ",fmt.format(VMin*1e3)," & ",CombVMin,"\\\\\n")
         if(VMax>VMaxMax):
             VMaxMax= VMax
             CombVMaxMax= CombVMax
@@ -80,23 +83,28 @@ def listNodeVMaxVMin(setName, tit, fmt, fName):
             VMinMin= VMin
             CombVMinMin= CombVMin
             tagVMinMin= n.tag
-    fName.write("\\hline\n")
-    fName.write("\\multicolumn{5}{|c|}{Valores extremos}\\\\\n")
-    fName.write("\\hline\n")
-    fName.write(tagVMaxMax," & ",fmt.format(VMaxMax*1e3)," & ",CombVMaxMax," & - & - \\\\\n")
-    fName.write("\\hline\n")
-    fName.write(tagVMinMin," & - & - &",fmt.format(VMinMin*1e3)," & ",CombVMinMin,"\\\\\n")
-    supertabular.cierraSupertabular(fName) 
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{5}{|c|}{Valores extremos}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write(tagVMaxMax," & ",fmt.format(VMaxMax*1e3)," & ",CombVMaxMax," & - & - \\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write(tagVMinMin," & - & - &",fmt.format(VMinMin*1e3)," & ",CombVMinMin,"\\\\\n")
+    supertabular.cierraSupertabular(outputFile) 
 
-def listNodeWMaxWMin(preprocessor, setName, tit, fmt, fName):
+def listNodeWMaxWMin(xcSet, tit, fmt, outputFile):
     '''
     Print displacement extrema of the nodes set which name is 
     being passed as parameter.
+
+    :param xcSet: set containing the nodes to list.
+    :param tit: caption for the table.
+    :param fmt: format for the displacement values.
+    :param outputFile: output file.
     '''
     caption= tit
     defCampos= "|l|r|r|r|r|"
     idsCampos= "IdN & $W_{max}$ & Comb. & $W_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
-    supertabular.cabeceraSupertabular(fName,5,defCampos,idsCampos,caption) 
+    supertabular.cabeceraSupertabular(outputFile,5,defCampos,idsCampos,caption) 
     tagWMaxMax= 0
     WMaxMax= 0
     CombWMaxMax= None
@@ -104,14 +112,12 @@ def listNodeWMaxWMin(preprocessor, setName, tit, fmt, fName):
     WMinMin= 0
     CombWMinMin= None
 
-    s= preprocessor.getSets.getSet(setName)
-    nodes= s.nodes
-    for n in nodes:
+    for n in xcSet.nodes:
         WMax= n.getProp('WMax')
         CombWMax= n.getProp('CombWMax')
         WMin= n.getProp('WMin')
         CombWMin= n.getProp('CombWMin')        
-        fName.write(n.tag," & ",fmt.format(WMax*1e3)," & ",CombWMax," & ",fmt.format(WMin*1e3)," & ",CombWMin,"\\\\\n")
+        outputFile.write(n.tag," & ",fmt.format(WMax*1e3)," & ",CombWMax," & ",fmt.format(WMin*1e3)," & ",CombWMin,"\\\\\n")
         if(WMax>WMaxMax):
              WMaxMax= WMax
              CombWMaxMax= CombWMax
@@ -121,10 +127,10 @@ def listNodeWMaxWMin(preprocessor, setName, tit, fmt, fName):
             CombWMinMin= CombWMin
             tagWMinMin= n.tag
 
-    fName.write("\\hline\n")
-    fName.write("\\multicolumn{5}{|c|}{Valores extremos}\\\\\n")
-    fName.write("\\hline\n")
-    fName.write(tagWMaxMax," & ",fmt.format(WMaxMax*1e3)," & ",CombWMaxMax," & - & - \\\\\n")
-    fName.write("\\hline\n")
-    fName.write(tagWMinMin," & - & - &",fmt.format(WMinMin*1e3)," & ",CombWMinMin,"\\\\\n")
-    supertabular.cierraSupertabular(fName) 
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{5}{|c|}{Valores extremos}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write(tagWMaxMax," & ",fmt.format(WMaxMax*1e3)," & ",CombWMaxMax," & - & - \\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write(tagWMinMin," & - & - &",fmt.format(WMinMin*1e3)," & ",CombWMinMin,"\\\\\n")
+    supertabular.cierraSupertabular(outputFile) 
