@@ -185,8 +185,9 @@ class EC2Concrete(concrete_base.Concrete):
         elif(sigma_ratio<1.0):
             retval= 2.5*(1.0-sigma_ratio)
         else:
+            className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
+            lmsg.warning(className+'.'+methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
             retval= 1e-6
         return retval
     
