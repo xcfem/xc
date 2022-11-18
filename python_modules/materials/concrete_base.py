@@ -208,7 +208,8 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return self.fcd()
 
     def fckMPa(self):
-        '''characteristic (5%) cylinder strength of the concrete in MPa (absolute value)''' 
+        '''Characteristic (5%) cylinder strength of the concrete in 
+           MPa (absolute value)''' 
         return abs(self.fck)*1e-6
 
     def fctm(self):
