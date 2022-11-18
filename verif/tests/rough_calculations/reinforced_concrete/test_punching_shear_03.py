@@ -24,12 +24,12 @@ steel= EC2_materials.S500B
 columnAxialLoad= 215e3
 tributaryArea= 1.0*3.95/2.0
 slabUniformLoad= columnAxialLoad/tributaryArea
-criticalPerimeterLength= 2.4589
 
 # Problem geometry.
 d= 0.23 # distance from the micropile plate to the top surface of the slab.
 slabThickness= 0.4
 micropilePlateSide= 0.2
+criticalPerimeterLength= 2.4589
 
 # Maximum punching shear
 # Approximate design value of punching shear resistance of a slab without 
