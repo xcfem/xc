@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+'''Routines for basement walls design.'''
+
 from __future__ import division
 from __future__ import print_function
 
-'''Routines for cantilever retaining walls design.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
@@ -63,8 +64,8 @@ class BasementWall(rw.RetainingWall):
         CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
 
         # Exterior rebars in stem.
-        yCoupeExtStem= self.internalForcesULS.getYStem(self.stemReinforcement.getBasicAnchorageLength(self.stemReinforcement.extStemBottomIndex, self.concrete))
-        CExtStem= self.stemReinforcement.getSectionExtStem(yCoupeExtStem)
+        #yCoupeExtStem= self.internalForcesULS.getYStem(self.stemReinforcement.getBasicAnchorageLength(self.stemReinforcement.extStemBottomIndex, self.concrete))
+        #CExtStem= self.stemReinforcement.getSectionExtStem(yCoupeExtStem)
 
         # Rebars on footing top
         CTopFooting= self.footingReinforcement.getSectionTopFooting()

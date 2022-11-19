@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
-# Cantilerver formulas
+'''Cantilever formulas.'''
 
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+import sys
 import math
 from rough_calculations import ng_beam as bm
 from misc_utils import log_messages as lmsg
@@ -94,7 +102,6 @@ class Cantilever(bm.Beam):
         :param a: position of the load.
         :param x: position of the section.
         '''
-        b= self.l-a
         retval= P*x**2/(6.0*self.EI())*(3*a-x)
         if(x>a):
           retval= P*a**2/(6.0*self.EI())*(3*x-a)

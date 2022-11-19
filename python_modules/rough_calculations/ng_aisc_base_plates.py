@@ -68,7 +68,7 @@ def getNDimension(steelShape, Areq):
     :param Areq: base plate required area
     '''
     d= steelShape.get('h') # Overall depth of member.
-    bf= steelShape.get('b') # Flange width.
+    # bf= steelShape.get('b') # Flange width.
     delta= getDelta(steelShape)
     Nmin= max(math.sqrt(Areq),d)
     return Nmin+delta
@@ -364,7 +364,7 @@ class RectangularBasePlate(object):
             T_rod= Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
             tw= self.steelShape.get('tw') # Web thickness
             anchorLeverArm= self.getAnchorLeverArm()
-            M= T_rod*anchorLeverArm-tw/2.0
+            # M= T_rod*anchorLeverArm-tw/2.0
             b_eff= (anchorLeverArm-tw/2.0)*2
             forcePerInch= T_rod/b_eff
             retval= 2.0*forcePerInch/tw
@@ -522,7 +522,7 @@ class RectangularBasePlate(object):
         :param modelSpace: ezdxf model space to write into.
         :param layerName: DXF layer name.
         '''
-        boltDiameter= self.anchorGroup.anchors[0].diameter
+        # boltDiameter= self.anchorGroup.anchors[0].diameter
         self.holeDiameter= self.getNominalHoleDiameter()
         origin2d= geom.Pos2d(self.origin.x, self.origin.y)
         for anchor in self.anchorGroup.anchors:

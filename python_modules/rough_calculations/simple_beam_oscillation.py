@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+''' Simple beam oscillation.'''
+
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
 
@@ -112,7 +122,7 @@ def amplitudDotCargaAisladaTrasPuente(P:float,m:float,L:float,w0:float,psi:float
     n0= w0/2/math.pi
     K= V/2/n0/L
     assert(t>=L/V)
-    return 2*K*P*(psi*w0*math.sin(w0*(t-L/V))*math.exp(-(psi*w0*(t-L/V)))-w0*math.cos(w0*(t-L/V))*math.exp(-(psi*w0*(t-L/V)))-psi*w0*math.exp(-(psi*t*w0))*sin(t*w0)+w0*math.exp(-(psi*t*w0))*math.cos(t*w0))/(m*(w0**2)*(1-(K**2))*L)
+    return 2*K*P*(psi*w0*math.sin(w0*(t-L/V))*math.exp(-(psi*w0*(t-L/V)))-w0*math.cos(w0*(t-L/V))*math.exp(-(psi*w0*(t-L/V)))-psi*w0*math.exp(-(psi*t*w0))*math.sin(t*w0)+w0*math.exp(-(psi*t*w0))*math.cos(t*w0))/(m*(w0**2)*(1-(K**2))*L)
 
 def amplitudDotDotCargaAisladaTrasPuente(P:float,m:float,L:float,w0:float,psi:float,V:float,t:float):
     '''Devuelve el valor de la derivada segunda de la amplitud (aceleración) del movimiento de vibración para el primer modo de vibración de

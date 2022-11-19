@@ -93,7 +93,6 @@ class prestressingWire(object):
         alpha= self.alpha(x)
         return P*geom.Vector3d(math.cos(alpha),0.0,math.sin(alpha))
     def getU(self,x,P):
-        alpha= self.alpha(x)
         r= self.curvature(x)
         return P*r
     def getIntegratedU(self,P):
