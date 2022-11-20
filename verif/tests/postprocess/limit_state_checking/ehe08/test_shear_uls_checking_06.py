@@ -144,7 +144,24 @@ rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, areaRebar= sm
 # Shear reinforcement at both ends.
 shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "shearReinf",nShReinfBranches= 2, areaShReinfBranch= EHE_materials.Fi8, shReinfSpacing= 0.15, angAlphaShReinf= math.pi/2.0)
 
-## Store element reinforcement.
+## Store element reinforcement. Assign to each element the properties
+# that will be used to define its reinforcement on each direction:
+#
+# - baseSection: RCSectionBase derived object containing the geometry
+#                and the material properties of the reinforcec concrete
+#                section.
+# - reinforcementUpVector: reinforcement "up" direction which defines
+#                          the position of the positive reinforcement
+#                          (bottom) and the negative reinforcement
+#                          (up).
+# - reinforcementIVector: (for slabs) direction corresponding to 
+#                         the first RC section
+# - bottomReinforcement: LongReinfLayers objects defining the 
+#                        reinforcement at the bottom of the section.
+# - topReinforcement: LongReinfLayers objects defining the 
+#                     reinforcement at the top of the section.
+# - shearReinforcement: ShearReinforcement objects defining the 
+#                       reinforcement at the bottom of the section.
 for e in s.elements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", geom.Vector3d(0,0,1)) # Z+
@@ -175,15 +192,15 @@ outCfg.controller.verbose= False # Don't display log messages.
 
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
+(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
-ratio1= abs(meanFCs[0]-refMeanFC0)/refMeanFC0
-ratio2= abs(meanFCs[1]-refMeanFC1)/refMeanFC1
+ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0
+ratio2= abs(meanCFs[1]-refMeanFC1)/refMeanFC1
 
 '''
-print('meanFCs= ',meanFCs)
+print('meanCFs= ',meanCFs)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 '''

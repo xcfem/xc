@@ -62,8 +62,8 @@ class RCMaterialDistribution(object):
         '''Creates the section materials from the element properties
            and assigns them to the elements of the argument set .
 
-           :param elemSet: set of elements that receive the section names 
-                           property.
+        :param elemSet: set of elements that receive the section names 
+                        property.
         '''
         self.sectionDefinition.extend(self.sectionDistribution.assignFromElementProperties(elemSet= elemSet, sectionWrapperName= elemSet.owner.name))
         self.elementSetNames.append(elemSet.owner.name)

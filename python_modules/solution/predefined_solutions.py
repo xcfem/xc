@@ -2,7 +2,6 @@
 from __future__ import print_function
 from __future__ import division
 
-
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
@@ -125,7 +124,10 @@ class SolutionProcedure(object):
             problem object.
         '''
         self.clear()
-        unusedModelWrapperName= self.modelWrapperSetup()
+        modelWrapperName= self.modelWrapperSetup()
+        if(__debug__):
+            if(not modelWrapperName):
+                AssertionError('Can\'t set up the model wrapper.')            
         self.constraintHandlerSetup()
 
     def getModelWrapperName(self):
@@ -286,7 +288,7 @@ class SolutionProcedure(object):
         preprocessor.resetLoadCase() # Remove previous loads.
         preprocessor.getDomain.revertToStart() # Revert to initial state.
         
-    def solveComb(self,combName, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
+    def solveComb(self, combName, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
         ''' Obtains the solution for the combination argument.
 
         :param combName: name of the combination to obtain the response for.
@@ -1371,10 +1373,10 @@ def ill_conditioning_analysis(prb):
 
 ## Utility functions
 
-def solveStaticLinearComb(combName,solutionProcedure):
+def solveStaticLinearComb(combName, solutionProcedure):
     methodName= sys._getframe(0).f_code.co_name
-    lmsg.warning(methodName+'; DEPRECATED; use solveComb.')
-    solutionProcedure.solveComb(combName)
+    lmsg.warning(methodName+'; DEPRECATED; use solutionProcedure.solveComb.')
+    solutionProcedure.solveComb(combName= combName)
 
 def solveCombEstat2ndOrderLin(combName,solutionProcedure):
     solutionProcedure.resetLoadCase()
@@ -1389,10 +1391,10 @@ def solveCombEstat2ndOrderLin(combName,solutionProcedure):
     preprocessor.getLoadHandler.removeFromDomain(combName)
     # lmsg.info("Resuelta combinación: ",combName,"\n")
 
-def solveStaticNoLinCase(combName):
+def solveStaticNoLinCase(combName, solutionProcedure):
     methodName= sys._getframe(0).f_code.co_name
-    lmsg.warning(methodName+'; DEPRECATED; use solveComb.')
-    solveComb(preprocessor,combName,analysis,numSteps)
+    lmsg.warning(methodName+'; DEPRECATED; use solutionProcedure.solveComb.')
+    solutionProcedure.solveComb(combName= combName)
 
 class BucklingAnalysisEigenPart(SolutionProcedure):
     ''' Eigenvalue part of a linear buckling analysis.'''

@@ -11,10 +11,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from actions import loads
-import math
 
 # Load
 f= 2e3 # Load magnitude.

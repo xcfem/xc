@@ -33,8 +33,8 @@ class_<Line2d, bases<Linear2d> >("Line2d")
   .def(init<Pos2d, Dir2d>()) //Constructs the line from a point and a direction.
   .def(init<Pos2d, Vector2d>()) //Constructs the line from a point and a vector.
   .def(init<Line2d>()) //Copy constructor.
-  .def("offset",OffsetVector,"returns a parallel line obtained by adding the vector to the points that define this line.")
-  .def("offset",OffsetDouble,"returns a parallel line.")
+  .def("offset",OffsetVector,"returns a parallel segment obtained by adding the vector to the points that define this line.")
+  .def("offset",OffsetDouble,"returns a parallel segment.")
   .def("getParamA",&Line2d::GetParamA,"returns line slope; 'a' parameter from equation (y= a*x+b).")
   .def("getParamB",&Line2d::GetParamB,"returns line y-intercept; 'b' parameter from equation (y= a*x+b).")
   .def("getIntersection", intersectionWithR2D, "Return the intersection with the line argument.")
@@ -114,6 +114,9 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("Divide", dividePyEq2d,"Divide(numparts); returns the points that divide the segment in numparts equal parts.")
   .def("Divide", dividePyProp2d,"Divide(proportions); returns the points that divide the segment in the proportions of the list.")
   .def("swap", &Segment2d::swap,"changes the orientation of the segment.")
+  .add_property("getIVector", &Segment2d::getIVector,"Return the local x vector.")
+  .add_property("getJVector", &Segment2d::getJVector,"Return the local y vector.")
+  .def("getBufferPolygon", &Segment2d::getBufferPolygon, "Return a buffer polygon around the segment.")
   ;
 
 class_<Linear3d, bases<GeomObj3d>, boost::noncopyable  >("Linear3d", no_init);
@@ -235,8 +238,11 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("getRightChunk", &Polyline2d::getRightChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from the point argument to its end. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("split", &Polyline2d::split,"split(point) returns the result of splitting the polyline by the point argument.")
   .def("getSegment", get2DSegment, "return the i-th segment.")  
-  .add_property("getIVector", &Segment2d::getIVector,"Return the local x vector.")
-  .add_property("getJVector", &Segment2d::getJVector,"Return the local y vector.")
+  .def("getIndexOfSegmentAtLength", &Polyline2d::getIndexOfSegmentAtLength,"getIndexOfSegmentAtLength(s): return the index of the segment that lies at the point at a distance \"s\" measured along the polyline from its origin.")
+  .def("getIndexOfSegmentAtParam", &Polyline2d::getIndexOfSegmentAtParam,"getIndexOfSegmentAtParam(s): return the index of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getPointAtLength", &Polyline2d::getPointAtLength, "getPointAtLength(s): return the point that lies at a distance \"s\" measured along the polyline from its origin.")
+  .def("getIVectorAtLength", &Polyline2d::getIVectorAtLength, "getIVectorAtLength(s): return the I vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getJVectorAtLength", &Polyline2d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   ;
 
 
@@ -261,6 +267,12 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("simplify", simplify3DPoly,"simplification of the polyline (Douglas-Peucker algorithm).")
   .def("getCenterOfMass", &Polyline3d::getCenterOfMass)
   .def("getSegment", get3DSegment, "return the i-th segment.")
+  .def("getIndexOfSegmentAtParam", &Polyline3d::getIndexOfSegmentAtParam,"Return the index of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getIndexOfSegmentAtLength", &Polyline3d::getIndexOfSegmentAtLength,"getIndexOfSegmentAtLength(s): return the index of the segment that lies at the point at a distance \"s\" measured along the polyline from its origin.")
+  .def("getPointAtLength", &Polyline3d::getPointAtLength, "getPointAtLength(s): return the point that lies at a distance \"s\" measured along the polyline from its origin.")
+  .def("getIVectorAtLength", &Polyline3d::getIVectorAtLength, "getIVectorAtLength(s): return the I vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getJVectorAtLength", &Polyline3d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getKVectorAtLength", &Polyline3d::getKVectorAtLength, "getKVectorAtLength(s): return the K vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   .def("insertVertex", &Polyline3d::insertVertex,"Insert the point argurment as vertex by splitting the nearest segment.")
   .def("getChunk", &Polyline3d::getChunk,"getChunk(point, sgn, tol) returns the chunk of the polyline that goes from the begining to the argument point if sgn<0 or from the argument point to the polyline end if sgn>=0. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("getLeftChunk", &Polyline3d::getLeftChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from its beginning to the point argument. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")

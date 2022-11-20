@@ -128,7 +128,7 @@ class SlideDefinition(FigureBase):
         self.setupDiagrams()
         displaySettings.cameraParameters= self.cameraParameters
         if(self.field):
-            self.field.plot(preprocessor, displaySettings,fileName)
+            self.field.plot(preprocessor, displaySettings, graphFileName)
         else:
             displaySettings.displayMesh(xcSet,None,self.diagrams,jpegName,self.getCaption())
         if(convertToEPS):
@@ -325,14 +325,14 @@ def plotStressStrainFibSet(fiberSet,title,fileName=None,nContours=100,pointSize=
         im1=ax1.tricontourf(lsYcoo,lsZcoo,lsStrain, nContours)
         im2=ax2.tricontourf(lsYcoo,lsZcoo,lsStress, nContours)
     divider1 = make_axes_locatable(ax1)
-    cax1 = divider1.append_axes("right", size="20%", pad=0.05)
-    cbar1 = plt.colorbar(im1,cax=cax1)
+    cax1= divider1.append_axes("right", size="20%", pad=0.05)
+    cbar1= plt.colorbar(im1,cax=cax1)
     ax2.set_title('Stress')
   #  im2=ax2.tricontourf(lsYcoo,lsZcoo,lsStress, nContours)
   #  im2=ax2.scatter(lsYcoo,lsZcoo,50,lsStress)
     divider2 = make_axes_locatable(ax2)
-    cax2 = divider2.append_axes("right", size="20%", pad=0.05)
-    cbar2 = plt.colorbar(im2,cax=cax2)
+    cax2= divider2.append_axes("right", size="20%", pad=0.05)
+    cbar2= plt.colorbar(im2,cax=cax2)
     if(fileName!=None):
         plt.savefig(fileName)
     plt.show()

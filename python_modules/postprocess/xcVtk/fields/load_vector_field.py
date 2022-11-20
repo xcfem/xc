@@ -154,6 +154,9 @@ class LoadVectorField(LoadOnPoints):
                 nTag= nl.getNodeTag
                 if nTag in nTagsSet:
                     node= preprocessor.getNodeHandler.getNode(nTag)
+                    if(__debug__):
+                        if(not node):
+                            AssertionError('Can\'t create the node.')
                     vLoad= nl.getLoadVector
                     if(dim>1):
                         v= xc.Vector([vLoad[comp_i], vLoad[comp_j], vLoad[comp_k]])

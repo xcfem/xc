@@ -104,13 +104,13 @@ outCfg.controller= EHE_limit_state_checking.ShearController(limitStateLabel= lim
 outCfg.controller.verbose= False # Don't display log messages.
 outCfg.controller.solutionProcedureType= CustomNewtonRaphson
 
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(limit_state_data.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
+(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(limit_state_data.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
-ratio1= abs(meanFCs[0]-0.80132369462323072)/0.80132369462323072
-ratio2= abs(meanFCs[1]-0.80504447847657745)/0.80504447847657745
+ratio1= abs(meanCFs[0]-0.80132369462323072)/0.80132369462323072
+ratio2= abs(meanCFs[1]-0.80504447847657745)/0.80504447847657745
 
 '''
-print('meanFCs= ',meanFCs)
+print('meanCFs= ',meanCFs)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 '''

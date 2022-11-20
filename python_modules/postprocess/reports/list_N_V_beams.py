@@ -8,7 +8,7 @@ def listBarNormalStressesLaTeX(nmbDBase, nmbTabla, nmbArchivoListadoTex):
     archTex= open(nmbArchivoListadoTex)
     con= sqlite.connect(nmbDBase)
     con.row_factory= sqlite.Row
-    tipoSol= 0
+    #tipoSol= 0
     cur= con.cursor()
     cur.execute("select * from " + nmbTabla)
     for row in cur:
@@ -18,11 +18,11 @@ def listBarNormalStressesLaTeX(nmbDBase, nmbTabla, nmbArchivoListadoTex):
         axil= row["axil"]
         m1= row["m1"]
         m2= row["m2"]
-        tipoSol= row["tipoSol"]
+        #tipoSol= row["tipoSol"]
         epsCMin= row["epsCMin"]
         epsCMax= row["epsCMax"]
         epsSMax= row["epsSMax"]
-        aprovTN= row["aprovTN"]
+        #aprovTN= row["aprovTN"]
         archTex.write(int(idSecc)," & ",int(idElem)," & ",idComb," & ",format(axil/1e3,'{:6.3f}')," & ",format(m1/1e3,'{:6.3f}')," & ",format(m2/1e3,'{:6.3f}')," & ",format(epsCMin*100,'{:3.2f}')," & ",format(epsCMax*100,'{:3.2f}')," & ",format(epsSMax*100,'{:3.2f}'),"\\\\\n")
     archTex.close()
 
@@ -42,6 +42,6 @@ def listaBarShearLaTeX(nmbDBase, nmbTabla, nmbArchivoListadoTex):
         vu1= row["vu1"]
         vu2= row["vu2"]
         vu= row["vu"]
-        aprovV= row["aprovV"]
+        #aprovV= row["aprovV"]
         archTex.write(int(idSecc)," & ",int(idElem)," & ",idComb," & ",format(axil/1e3,'{:6.3f}')," & ",format(vrd/1e3,'{:6.3f}')," & ",format(vu1/1e3,'{:6.3f}')," & ",format(vu2/1e3,'{:6.3f}')," & ",format(vu/1e3,'{:6.3f}'),"\\\\\n")
     archTex.close()

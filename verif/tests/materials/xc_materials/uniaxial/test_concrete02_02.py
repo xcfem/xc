@@ -15,14 +15,11 @@ the tension-stiffening effect. Since the concrete02 implementation requires a st
 linear regression of this curve is used for this purpose.
 '''
 
-import os
 import xc
 from materials import concrete_base
 from materials import typical_materials
 from materials.ehe import EHE_materials
-from materials import concrete_base
 # import matplotlib.pyplot as plt
-import math
 import numpy as np
 
 width=0.3     #width (cross-section coordinate Y)

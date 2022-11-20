@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import print_function
 
+__author__= "Ana Ortega (AO_O)"
+__copyright__= "Copyright 2017, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.Ortega@ciccp.es"
+
 import math
+from postprocess.reports import common_formats as fmt
+
 
 # Nº de pilotes necesario y predimensionamiento de los mismos. Números gordos, 2ª ed., pag.30
 print("\input{cabecera.tex}")
@@ -19,11 +28,11 @@ prefabricado= "si" # Si los pilotes son prefabricados "si"
 print("\\textsc{Predimensionamiento de pilotes} \\\\ \\\\")
 print("Datos")
 print("\\begin{itemize}")
-print("\\item Axil característico del pilar N$_k$ = ", "%5.2f".format(Nk), " kN" )
-print("\\item Área del pilote A$_c$ = ", "%5.2f".format(Apil)," m$^2$")
-print("\\item Tensión de servicio del pilote $\\sigma$ = ", "%10.0f".format(Spil), " kN/m$^2$" )
-print("\\item Concrete characteristic strength of the pile f$_{ck}$ =", "%3.0f".format(fck), " N/mm$^2$")
-print("\\item Characteristic value of pile steel yield strength f$_{ck}$ =", "%4.0f".format(fyk), " N/mm$^2$")
+print("\\item Axil característico del pilar $N_k$ = ", fmt.Esf.format(Nk), " kN" )
+print("\\item Área del pilote A$_c$ = ", fmt.Area.format(Apil)," m$^2$")
+print("\\item Tensión de servicio del pilote $\\sigma$ = ", fmt.Stress.format(Spil), " $kN/m^2$" )
+print("\\item Concrete characteristic strength of the pile $f_{ck}$ =", fmt.Stress.format(fck), " $N/mm^2$")
+print("\\item Characteristic value of pile steel yield strength $f_{yk}$ =", fmt.Stress.format(fyk), " $N/mm^2$")
 print("\\end{itemize}")
 
 
@@ -31,28 +40,28 @@ print("\\end{itemize}")
 print("Número de pilotes \\\\ \n ")
 Rpil=(Apil*Spil)
 npil=math.ceil(Nk/Rpil)
-print("$$Resistencia\ de\ un\ pilote\ R=A\\cdot\\sigma = ", "%5.2f".format(Rpil),"\ kN$$")
-print("$$N^o\ pilotes\ n=\\cfrac{N_k}{R} = ", "%3.0f".format(npil),"\ pilotes$$")
+print("$$Resistencia\ de\ un\ pilote\ R=A\\cdot\\sigma = ", fmt.Length.format(Rpil),"\ kN$$")
+print("$$N^o\ pilotes\ n=\\cfrac{N_k}{R} = ", int(npil),"\ pilotes$$")
 print("Reinforcement \\\\ \n ")
 print("\\begin{itemize}")
 print("\\item{Axil de cálculo}")
 Nd=(1.5*Nk/npil)
-print("$$N_d = 1.5 \\cfrac{N_K}{n} = ", "%5.2f".format(Nd),"\ kN$$")
+print("$$N_d = 1.5 \\cfrac{N_K}{n} = ", fmt.Esf.format(Nd),"\ kN$$")
 print("\\item{Reinforcement}")
 As=((Nd-fck/1.5*Apil/1000)/fyk*1.15*10)
 print("$$N_d = f_{cd} A_c + f_{yd} A_s \\rightarrow $$")
-print("$$A_s = \\cfrac{N_d - f_{cd} A_c \\left[\\times \\cfrac{1}{1000}\\right]}{f_{yd}}[\\times 10] =", "%5.2f".format(As),"\ cm^2  $$")
+print("$$A_s = \\cfrac{N_d - f_{cd} A_c \\left[\\times \\cfrac{1}{1000}\\right]}{f_{yd}}[\\times 10] =", fmt.Area.format(As),"\ cm^2  $$")
 print("\\item{Minimum reinforcement}")
-print("$$Min.\ geom.\ A_s \\ge 4\\permil A_c =", "%5.2f".format((Apil*40)),"\ cm^2 $$")
+print("$$Min.\ geom.\ A_s \\ge 4\\permil A_c =", fmt.Area.format((Apil*40)),"\ cm^2 $$")
 Asmmec=(0.1*Apil*fck/1.5/fyk*1.15*10000)
-print("$$Min.\ mec.\ A_s \\ge\\cfrac{ 10\\% A_c f_{cd}}{f_{yd}}=", "%5.2f".format(Asmmec),"\ cm^2 $$")
+print("$$Min.\ mec.\ A_s \\ge\\cfrac{ 10\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\ cm^2 $$")
 print("\\item{Maximum reinforcement}")
 if(prefabricado=="si"):
   Asmmec=(0.6*Apil*fck/1.5/fyk*1.15*10000)
-  print("$$Max.\ mec.\ A_s \\le\\cfrac{ 60\\% A_c f_{cd}}{f_{yd}}=", "%5.2f".format(Asmmec),"\ cm^2 $$")
+  print("$$Max.\ mec.\ A_s \\le\\cfrac{ 60\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\ cm^2 $$")
 else:
   Asmmec=(Apil*fck/1.5/fyk*1.15*10000)
-  print("$$Max.\ mec.\ A_s \\le\\cfrac{ 100\\% A_c f_{cd}}{f_{yd}}=", "%5.2f".format(Asmmec),"\ cm^2 $$")
+  print("$$Max.\ mec.\ A_s \\le\\cfrac{ 100\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\ cm^2 $$")
 
 print("\\item{Reinforcement tips} \\\\")
 print("\\begin{tabular}{lr}")

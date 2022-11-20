@@ -88,6 +88,7 @@ class Segment2d : public Linear2d
 
     Segment2d offset(const Vector2d &v) const;
     Segment2d offset(const GEOM_FT &d) const;
+    Polygon2d getBufferPolygon(const GEOM_FT &d, const size_t &numVertices= 8) const;
 
     inline bool intersects(const Segment2d &r2) const
       { return do_intersect(cgseg,r2.cgseg); }

@@ -123,11 +123,36 @@ smallBarDiameter= 4e-3
 smallBarArea= math.pi*(smallBarDiameter/2.0)**2 # Area of the reinforcement bar.
 rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, areaRebar= smallBarArea, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
-## Store element reinforcement.
+## Define reinforcement directions.
+reinforcementUpVector= geom.Vector3d(0,0,1) # Z+ this vector defines the meaning
+                                            # of top reinforcement ot bottom
+                                            # reinforcement.
+reinforcementIVector= geom.Vector3d(1,0,0) # X+ this vector defines the meaning
+                                           # of reinforcement I (parallel to
+                                           # this vector) and
+                                           # reinforcement II (normal to this
+                                           # vector)
+
+## Store element reinforcement. Assign to each element the properties
+# that will be used to define its reinforcement on each direction:
+#
+# - baseSection: RCSectionBase derived object containing the geometry
+#                and the material properties of the reinforcec concrete
+#                section.
+# - reinforcementUpVector: reinforcement "up" direction which defines
+#                          the position of the positive reinforcement
+#                          (bottom) and the negative reinforcement
+#                          (up).
+# - bottomReinforcement: LongReinfLayers objects defining the 
+#                        reinforcement at the bottom of the section.
+# - topReinforcement: LongReinfLayers objects defining the 
+#                     reinforcement at the top of the section.
+# - shearReinforcement: ShearReinforcement objects defining the 
+#                       reinforcement at the bottom of the section.
 for e in s.elements:
     e.setProp("baseSection", rcSection)
-    e.setProp("reinforcementUpVector", geom.Vector3d(0,0,1)) # Z+
-    e.setProp("reinforcementIVector", geom.Vector3d(1,0,0)) # X+
+    e.setProp("reinforcementUpVector", reinforcementUpVector) # Z+
+    e.setProp("reinforcementIVector", reinforcementIVector) # X+
     e.setProp("bottomReinforcementI", def_simple_RC_section.LongReinfLayers([rowA]))
     e.setProp("topReinforcementI", def_simple_RC_section.LongReinfLayers([rowC]))
     e.setProp("bottomReinforcementII", def_simple_RC_section.LongReinfLayers([rowC]))
@@ -150,15 +175,15 @@ outCfg.controller= EC2_limit_state_checking.BiaxialBendingNormalStressController
 outCfg.controller.verbose= False # Don't display log messages.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanFCs= reinfConcreteSectionDistribution.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
+meanCFs= reinfConcreteSectionDistribution.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
-ratio1= abs(meanFCs[0]-0.5151243799585318)/0.5151243799585318
-ratio2= abs(meanFCs[1]-0.49950728265667205)/0.49950728265667205
+ratio1= abs(meanCFs[0]-0.5151243799585318)/0.5151243799585318
+ratio2= abs(meanCFs[1]-0.49950728265667205)/0.49950728265667205
 
 '''
-print('meanFCs= ', meanFCs)
+print('meanCFs= ', meanCFs)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 '''

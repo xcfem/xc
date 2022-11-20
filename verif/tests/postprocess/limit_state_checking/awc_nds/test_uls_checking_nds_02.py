@@ -26,9 +26,6 @@ from postprocess.config import default_config
 from postprocess import limit_state_data as lsd
 from materials.awc_nds import AWCNDS_limit_state_checking as nds
 
-# Loads
-from actions import load_cases as lcm
-
 # Units
 inchToMeter= 2.54/100.0
 footToMeter= 0.3048

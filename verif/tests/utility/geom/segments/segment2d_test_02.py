@@ -17,6 +17,11 @@ fromPoint=geom.Pos2d(0,0)
 toPoint=geom.Pos2d(10,0)
 s1=geom.Segment2d(fromPoint,toPoint)
 
+# get segment midpoint.
+midPoint= s1.getMidPoint()
+refDist= 10.0/2.0
+ratio0= abs(midPoint.dist(fromPoint)-refDist)/refDist
+
 # get a line parallel to the previous one, at a fixed distance
 s2=s1.offset(2)
 # the same, at the opposite side.
@@ -32,7 +37,7 @@ ratio1=math.fabs(p1.dist(p2)-4)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if ratio1<1e-15:
+if (ratio0<1e-15) and (ratio1<1e-15):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')

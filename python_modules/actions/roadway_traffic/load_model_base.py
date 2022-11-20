@@ -9,24 +9,157 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
+import sys
 import geom
 import xc
 from actions import loads
 from model.geometry import geom_utils as gu
+from misc_utils import log_messages as lmsg
 
 class WheelLoad(object):
     ''' Load of a wheel.
     
     :ivar position: position of the wheel
     :ivar load: load
-    :ivar lx: length wheel in transversal direction 
-    :ivar ly: length wheel in longitudinal direction 
+    :ivar lx: length of the wheel contact area in transversal direction 
+    :ivar ly: length of the wheel contact area in longitudinal direction 
+    :ivar nodes: nodes under the wheel.
     '''
-    def __init__(self,pos,ld,lx=0,ly=0):
+    def __init__(self, pos, ld, lx=0, ly=0, localCooSystem= None, nodes= None):
+        ''' Constructor.
+
+        :param pos: position of the wheel
+        :param ld: load
+        :param lx: length of the wheel contact area in transversal direction 
+        :param ly: length of the wheel contact area in longitudinal direction 
+        :param localCooSystem: local coordinate system whose I vector
+                               is aligned with the lane axis and
+                               its XY plane contains the road surface
+                               at the wheel position.
+        :param nodes: nodes under the wheel.
+        '''
         self.position= pos
         self.load= ld
         self.lx=lx
         self.ly=ly
+        self.localCooSystem= localCooSystem
+        self.nodes= nodes
+
+    def getLocalReferenceSystem(self):
+        ''' Return a local reference system for the wheel with origin in
+            the wheel position, x axis along the lane axis and y axis normal
+            to the x axis on the road surface.'''
+        retval= None
+        if(self.localCooSystem):
+            retval= geom.Ref2d3d(self.position, self.localCooSystem.getIVector(), self.localCooSystem.getJVector())
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; undefined local coordinate system.')
+        return retval        
+
+    def getLoadedContour(self, spreadingLayers= None):
+        ''' Return the loaded contour of the wheel taking into account
+            the dispersal through the different pavement, earth and
+            concrete layers between the wheel contact area and the
+            middle surface of the bridge deck.
+
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                bridge deck.
+        '''
+        # Compute spread.
+        spread= 0.0
+        if(spreadingLayers):
+            for sl in spreadingLayers:
+                layerDepth= sl[0]
+                layerSpreadToDepthRatio= sl[1]
+                spread+= layerDepth*layerSpreadToDepthRatio
+        # Compute local axis.
+        reference= self.getLocalReferenceSystem()
+        laneAxisDir= reference.getLocalCoordinates(self.localCooSystem.getIVector())
+        jVector= laneAxisDir # Longitudinal direction.
+        iVector= geom.Vector2d(-jVector.y, jVector.x) # Transverse direction.
+        # Compute spread in each direction.
+        transverseSpread= self.lx/2.0+spread
+        longitudinalSpread= self.ly/2.0+spread
+        # Compute contour points.
+        contourPoints= list()
+        origin= geom.Pos2d(0,0)
+        contourPoints.append(origin+transverseSpread*iVector+longitudinalSpread*jVector) # +,+
+        contourPoints.append(origin-transverseSpread*iVector+longitudinalSpread*jVector) # -,+
+        contourPoints.append(origin-transverseSpread*iVector-longitudinalSpread*jVector) # -,-
+        contourPoints.append(origin+transverseSpread*iVector-longitudinalSpread*jVector) # +,-
+        return reference, geom.Polygon2d(contourPoints)
+            
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        nodeTags= list()
+        if(self.nodes):
+            for n in self.nodes:
+                nodeTags.append(n.tag)
+        return {'pos':self.position,'load':self.load,'lx':self.lx,'ly':self.ly, 'nodeTags': nodeTags}
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        self.position= dct['pos']
+        self.load= dct['ld']
+        self.lx= dct['lx']
+        self.ly= dct['ly']
+        self.nodeTags= None # Loaded nodes reading from dict not implemented yet.
+        #self.nodeTags= dct['nodeTag']
+
+    def __str__(self):
+        return str(self.getDict())
+
+    def pickNodes(self, originSet, spreadingLayers= None):
+        ''' Pick the nodes loaded by the wheel.
+
+        :param originSet: set to pick the loaded nodes from.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                bridge deck.
+        '''
+        if(self.localCooSystem):
+            reference, loadedContour= self.getLoadedContour(spreadingLayers= spreadingLayers)
+            tol= .01
+            self.nodes= list()
+            for n in originSet.nodes:
+                nodePos2d= reference.getLocalPosition(n.getInitialPos3d)
+                if(loadedContour.In(nodePos2d, tol)): # node in loaded contour.
+                    self.nodes.append(n)
+        else:
+            n= originSet.getNearestNode(self.position)
+            self.nodes= [n]
+
+    def defNodalLoads(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Create the nodal loads corresponding to the contact pressure.
+
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        retval= list()
+        numLoadedNodes= 0
+        if(self.nodes):
+            numLoadedNodes= len(self.nodes)
+        if(numLoadedNodes>0):
+            # Compute load vector.
+            vLoad= self.load*gravityDir
+            if(brakingDir): # compute braking load
+                vLoad+= self.load*xc.Vector(brakingDir)
+            loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
+            if(numLoadedNodes==1):
+                retval.append(self.nodes[0].newLoad(loadVector))
+            else:
+                ptCoo= [self.position.x, self.position.y, self.position.z]
+                slidingVectorLoad= loads.SlidingVectorLoad(name= 'wheelLoad', nodes= self.nodes, pntCoord= ptCoo, loadVector= loadVector)
+                slidingVectorLoad.appendLoadToCurrentLoadPattern()
+        return retval
+    
        
 class TandemLoad(object):
     ''' Tandem load.
@@ -52,19 +185,29 @@ class TandemLoad(object):
         self.lx= lx
         self.ly= ly
 
-    def getWheelPositions(self):
-        ''' Return a list with the positions of the wheels.'''
+    def getTotalLoad(self):
+        ''' Return the total load of the tandem.'''
+        return 2.0*self.axleLoad
+
+    def getWheelPositions(self, swapAxes= False):
+        ''' Return a list with the positions of the wheels.
+
+        :param swapAxes: if true swap X and Y axis.
+        '''
         dX= self.xSpacing/2.0
         dY= self.ySpacing/2.0
+        if(swapAxes):
+            dX, dY= dY, dX
         return [geom.Pos2d(dX,-dY),geom.Pos2d(-dX,-dY),geom.Pos2d(dX,dY),geom.Pos2d(-dX,dY)]
         
-    def getWheelLoads(self, loadFactor= 1.0):
+    def getWheelLoads(self, loadFactor= 1.0, swapAxes= False):
         ''' Return the loads of the wheels of the tandem along with its 
             positions.
 
         :param loadFactor: factor to apply to the loads.
+        :param swapAxes: if true swap X and Y axis.
         '''
-        positions= self.getWheelPositions()
+        positions= self.getWheelPositions(swapAxes= swapAxes)
         wheelLoad= self.axleLoad/2.0*loadFactor
         retval= list()
         for p in positions:
@@ -289,4 +432,251 @@ class VehicleLoad(object):
         for p in tmp:
             retval.appendVertex(geom.Pos2d(p.x,p.y))
         return retval
+
+class LaneAxis(object):
+    ''' Lane axis
+
+    :ivar pline: 3D polyline defining the axis of a lane.
+    '''
+    def __init__(self, pline):
+        ''' Constructor.
+
+        :param pline: 3D polyline defining the axis of a lane.
+        '''
+        self.pline= pline        
+        
+    def getReferenceAt(self, lmbdArcLength):
+        ''' Return a 3D reference system with origin at the point 
+            O+lmbdArcLength*L where O is the first point of the reference 
+            axis and lmbdArcLength is a value between 0 and 1. If 
+            lmbdArcLength=0 the returned point is the origin of the notional
+            lane axis, and if lmbdArcLength= 1 it returns its end. The axis
+            of the reference system are (or will be) defined as follows:
+
+            - x: tangent to the notional lane axis oriented towards its end.
+            - y: normal to the notional lane axis oriented towards its center.
+            - z: defined by the cross-product x^y.
+
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        '''
+        if((lmbdArcLength>1.0) or (lmbdArcLength<0)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; lbmdArcLength '+str(lmbdArcLength) + ' out of range (0,1)')
+            
+        l= lmbdArcLength*self.pline.getLength()
+        O= self.pline.getPointAtLength(l)
+        iVector= self.pline.getIVectorAtLength(l)
+        jVector= self.pline.getJVectorAtLength(l)
+        return geom.Ref2d3d(O, iVector, jVector)
+
+    def getWheelLoads(self, loadModel, lmbdArcLength, loadFactor= 1.0):
+        ''' Return the wheel loads of load model argument in the position
+            specified by the lmbdArcLength parameter.
+
+        :param loadModel: object that has a getWheelLoad method that returns
+                          the 2D positions of the wheels and the loads to
+                          apply on them (see TandemLoad class).
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        :param loadFactor: factor to apply to the loads.
+        '''
+        wheelLoads= loadModel.getWheelLoads(loadFactor= loadFactor, swapAxes= True)
+        ref= self.getReferenceAt(lmbdArcLength= lmbdArcLength)
+        for wl in wheelLoads:
+            pos2d= wl.position
+            pos3d= ref.getGlobalPosition(pos2d)
+            wl.position= pos3d
+            wl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector()) 
+        return wheelLoads
+
+    def getVDir(self, lmbdArcLength= 0.5):
+        ''' Return the direction vector of the lane axis.
+
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        '''
+        return self.pline.getIVectorAtLength(lmbdArcLength*self.pline.getLength())
+    
+# Rudimentary implementation of the notional lane concept.
+#
+#     Notional lane
+#   P1                                                 P2
+#     +-----------------------------------------------+
+#     |                                               |
+#     |                                               |
+#     |                                               |
+#     +-----------------------------------------------+
+#    P0                                                P3
+
+class NotionalLane(object):
+    ''' Notional lane
+
+    :ivar contour: 3D polygon defining the contour of the notional lane.
+    '''
+    def __init__(self, name, contour):
+        ''' Constructor.
+
+        :param name: name of the notional lane.
+        :param contour: 3D polygon defining the contour of the notional lane.
+        '''
+        self.name= name
+        self.contour= contour
+
+    def getArea(self):
+        ''' Return the area of the notional lane contour.'''
+        return self.contour.getArea()
+    
+    def getCentroid(self):
+        ''' Return the centroid of the notional lane contour.'''
+        return self.contour.getCenterOfMass()
+
+    def getStartingEdge(self):
+        ''' Return the edge at the "start" of the notional lane.'''
+        return self.contour.getEdge(0)
+
+    def getFinishEdge(self):
+        ''' Return the edge at the "finish" of the notional lane.'''
+        return self.contour.getEdge(2)
+
+    def getAxis(self):
+        ''' Return the axis of the notional lane.'''
+        startingEdge= self.getStartingEdge()
+        finishEdge= self.getFinishEdge()
+        return LaneAxis(pline= geom.Polyline3d([startingEdge.getCenterOfMass(), finishEdge.getCenterOfMass()]))
+
+    def getVDir(self, lmbdArcLength= 0.5):
+        ''' Return the direction vector of the lane axis.
+
+        :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+         '''
+        return self.getAxis().getVDir(lmbdArcLength= lmbdArcLength)
+
+class NotionalLanes(object):
+    ''' Notional lanes container base class (abstract class).
+
+    :ivar laneSets: sets of elements belonging to each notional lane.
+    '''
+    
+    def getAreas(self):
+        ''' Return the areas of the notional lanes.'''
+        retval= list()
+        for lane in self.lanes:
+            retval.append(lane.getArea())
+        return retval
+
+    def getWheelLoads(self, tandems, relativePositions, originSet= None, spreadingLayers= None):
+        ''' Return a dictionary containing the wheel loads due to the tandems
+            argument in the positions argument.
+
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePosition: relative positions of the tandem center in
+                                 the notional lane axis (0 -> beginning of
+                                 the axis, 0.5-> middle of the axis, 1-> end
+                                 of the axis).
+        :param originSet: in not None pick the nearest node for each wheel load.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                concrete slab.
+        '''
+        retval= list()
+        # Compute load positions in each lane.
+        for nl,rpos,td in zip(self.lanes, relativePositions,tandems):
+            tandemLoads= list()
+            if(td is not None):
+                laneAxis= nl.getAxis() # Lane axis.
+                tandemLoads= laneAxis.getWheelLoads(loadModel= td, lmbdArcLength= rpos)
+            retval.extend(tandemLoads)
+        if(originSet): # pick the loaded by each wheel
+            for load in retval:
+                load.pickNodes(originSet= originSet, spreadingLayers= spreadingLayers)
+        return retval
+    
+    def defUniformLoadsXCSets(self, modelSpace, originSet):
+        ''' Creates the XC sets with the elements that fall inside
+            each of the notional lanes of the argument.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param originSet: set with the elements to pick from.
+        '''
+        self.laneSets= list()
+        for nl in self.lanes:
+            setName= nl.name+'Set'
+            xcSet= modelSpace.defSet(setName)
+            modelSpace.pickElementsInZone(zone= nl.contour, resultSet= xcSet, originSet= originSet)
+            xcSet.fillDownwards()
+            self.laneSets.append(xcSet)
+        return self.laneSets
+
+    def defUniformLoads(self, laneUniformLoads= [9e3, 2.5e3, 2.5e3], gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define uniform loads on the lanes with the argument values:
+
+        :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        retval= list()
+        for q, xcSet in zip(laneUniformLoads, self.laneSets):
+            if(q is not None):
+                loadVector= q*gravityDir
+                if(brakingDir): # Compute braking load
+                    loadVector+= q*xc.Vector(brakingDir)
+                for e in xcSet.elements:
+                    retval.append(e.vector3dUniformLoadGlobal(loadVector))
+        return retval
+
+    def defPunctualLoads(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+        ''' Define punctual loads under the wheels.
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePosition: relative positions of the tandem center in
+                                 the notional lane axis (0 -> beginning of
+                                 the axis, 0.5-> middle of the axis, 1-> end
+                                 of the axis).
+        :param originSet: in not None pick the nearest node for each wheel load.
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                bridge deck.
+        '''
+        wheelLoads= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
+        retval= list()
+        for wl in wheelLoads:
+            retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
+        return retval
+    
+    def defLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+        ''' Define punctual and uniform loads.
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePosition: relative positions of each tandem center in
+                                 the notional lane axis (0 -> beginning of
+                                 the axis, 0.5-> middle of the axis, 1-> end
+                                 of the axis).
+        :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
+        :param originSet: in not None pick the nearest node for each wheel load.
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                bridge deck.
+        '''
+        # punctual loads.
+        self.defPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
+        # uniform load.
+        self.defUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
+       
+
+
+    
 

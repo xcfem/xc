@@ -24,7 +24,7 @@ class Reactions(object):
       nodeHandler.calculateNodalReactions(inclInertia, 1e-7)
       for n in supportNodes:
           tag= n.tag
-          tmp= n.getReaction
+          #tmp= n.getReaction
           f3d= n.getReactionForce3d
           m3d= n.getReactionMoment3d
           if(nodeHandler.numDOFs==3):

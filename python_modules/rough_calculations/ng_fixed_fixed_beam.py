@@ -2,8 +2,15 @@
 ''' Formulas for fixed-fixed beams.'''
 
 from __future__ import print_function
-
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2017, AOO and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
+import sys
 import math
 from rough_calculations import ng_beam as bm
 from misc_utils import log_messages as lmsg

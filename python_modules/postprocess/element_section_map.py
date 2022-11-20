@@ -112,7 +112,7 @@ class ElementSections(object):
         if(gaussPnt):
             ipText= str(gaussPnt)
             if(direction):
-                sect.name+= '_'
+                name+= '_'
             name+= ipText
             description+= ' ' + ipText + " integration point."
         if(self.find_section(name) is None):
@@ -186,7 +186,11 @@ class RawShellSections(ElementSections):
                 self.alreadyDefinedSections.append(name)
 
     def report(self, os= sys.stdout, indentation= ''):
-        ''' Get a report of the object contents.'''
+        ''' Get a report of the object contents.
+
+        :param os: output stream.
+        :param indentation: indentation to apply to the subsequent lines.
+        '''
         for templateSection in self.templateSections:
             templateSection.report(os, indentation)
     
@@ -660,8 +664,11 @@ class ElementSectionMap(dict):
         '''Creates the section materials from the element properties
            and assigns them to the elements of the argument set .
 
-           :param elemSet: set of elements that receive the section names 
-                           property.
+        :param elemSet: set of elements that receive the section names 
+                        property.
+        :param sectionWrapperName: name to use as prefix for the sections
+                                   that will be created for the elements
+                                   of the set.
         '''
         def n2a(n,b=string.ascii_uppercase):
             d, m = divmod(n,len(b))
@@ -672,7 +679,8 @@ class ElementSectionMap(dict):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; element set is empty.')
             
-        # Compute the sections from the element properties.
+        # Compute the different sections from the element properties.
+        # propName: name of the element properties that stores the section name
         rcSections= def_simple_RC_section.get_element_rc_sections(elemSet, propName= self.propName)
         # Compute section pairs.
         sectionPairs= list()

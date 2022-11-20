@@ -626,7 +626,7 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
     return retval;
   }
 
-//! @brief Remove from all load pattenrs from domain.
+//! @brief Remove from all load patterns from domain.
 bool XC::Domain::removeAllLoadPatterns(void)
   {
     // Get the tags of the load patterns to remove.
@@ -640,6 +640,8 @@ bool XC::Domain::removeAllLoadPatterns(void)
     for(std::set<int>::iterator it= tags_to_remove.begin();
 	it!=tags_to_remove.end();it++)
       { retval*= removeLoadPattern(*it); }
+    // Clear also active combinations (there are not active anymore).
+    activeCombinations.clear();
     return retval;
   }
 

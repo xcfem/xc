@@ -10,6 +10,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import math
 import sys
 import loadCombinations
+from actions import combinations
 
 class CombGenerator(object):
     ''' Base class for load combination generators.
@@ -39,10 +40,34 @@ class CombGenerator(object):
         newAction= loadCombinations.Action(actionName, actionDescription)
         retval= self.controlCombGenerator.insert(self.name, family, newAction, combinationFactorsName, partialSafetyFactorsName)
         if(dependsOn is not None):
-            retval.getRelaciones.appendMain(dependsOn)
+            retval.relationships.appendMain(dependsOn)
         if(incompatibleActions is not None):
             for actionNameRegex in incompatibleActions:
-                retval.getRelaciones.appendIncompatible(actionNameRegex)
+                retval.relationships.appendIncompatible(actionNameRegex)
+        return retval
+    
+    def newActionGroup(self, family: str, actionTuples, partialSafetyFactorsName:str, dependsOn= None, incompatibleActions= None):
+        ''' Creates an action and appends it to the combinations generator.
+
+        :param weighting: name of the weighting factors repository.
+        :param family: family to which the action belongs ("permanent", "variable", "seismic",...)
+        :param actionTuples: tuples of (name, description, combinationFactorsName) defining the actions of the group.
+        :param actionDescription: description of the action.
+        :param combinationFactorsName: name of the combination factors container.
+        :param partialSafetyFactorsName: name of the partial safety factor container.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        newActions= list()
+        for (actionName, actionDescription, combFactorsName) in actionTuples:
+            action= loadCombinations.Action(actionName, actionDescription)
+            newActions.append((action, combFactorsName))
+        retval= self.controlCombGenerator.insertGroup(self.name, family, newActions, partialSafetyFactorsName)
+        if(dependsOn is not None):
+            retval.relationships.appendMain(dependsOn)
+        if(incompatibleActions is not None):
+            for actionNameRegex in incompatibleActions:
+                retval.relationships.appendIncompatible(actionNameRegex)
         return retval
 
     def computeCombinations(self):
@@ -88,6 +113,109 @@ class CombGenerator(object):
             to ultimate limit states.
         '''
         return self.getLoadCombinations().getULSSeismicCombinations
+
+    def getNamedCombinations(self, situation: str):
+        ''' Return a dictionary containing the load combinations 
+            corresponding to the situation argument, with its assigned 
+            names as key of the dictionary.
+
+        :param situation: project situation ('SLSRare' or 'SLSFrequent' 
+                           or 'SLSQuasiPermanent' or 'ULSTransient' 
+                           or 'ULSAccidental' or 'ULSSeismic'.
+        '''
+        if(situation== 'SLSRare'):
+            prefix= 'SLSR'
+            loadCombinations= self.getSLSCharacteristicCombinations()
+        elif(situation== 'SLSFrequent'):
+            prefix= 'SLSF'
+            loadCombinations= self.getSLSFrequentCombinations()
+        elif(situation== 'SLSQuasiPermanent'):
+            prefix= 'SLSQP'
+            loadCombinations= self.getSLSQuasiPermanentCombinations()
+        elif(situation== 'ULSTransient'):
+            prefix= 'ULS'
+            loadCombinations= self.getULSTransientCombinations()
+        elif(situation== 'ULSAccidental'):
+            prefix= 'ULSA'
+            loadCombinations= self.getULSAccidentalCombinations()
+        elif(situation== 'ULSSeismic'):
+            prefix= 'ULSS'
+            loadCombinations= self.getULSSeismicCombinations()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; situation: '+str(group) + ' unknown.')   
+        # Assign a name to each combination.
+        return getNamedCombinations(loadCombinations, prefix)
+
+    def getLoadCombinationsDict(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
+        ''' Return a dictionary containing the load combinations corresponding
+            to each situation.
+
+        :param situations: project situations of interest.
+        '''
+        retval= dict()
+        for sit in situations:
+            retval[sit]= self.getNamedCombinations(sit)
+        return retval
+
+    def getCombContainer(self):
+        ''' Return a CombContainer object (see combinations module) containing
+        the combinations computed here.
+        '''
+        retval= combinations.CombContainer()
+        combDict= self.getLoadCombinationsDict()
+        # ULS transient and permanent situations.
+        combs= combDict['ULSTransient']
+        for key in combs:
+            retval.ULS.perm.add(key,combs[key].name)
+        # ULS fatigue not implemented yet.
+        # ULS accidental.
+        combs= combDict['ULSAccidental']
+        for key in combs:
+            retval.ULS.acc.add(key,combs[key].name)
+        # ULS earthquake.
+        combs= combDict['ULSSeismic']
+        for key in combs:
+            retval.ULS.earthquake.add(key,combs[key].name)
+        # SLS quasi-permanent.
+        combs= combDict['SLSQuasiPermanent']
+        for key in combs:
+            retval.SLS.qp.add(key,combs[key].name)
+        # SLS frequent.
+        combs= combDict['SLSFrequent']
+        for key in combs:
+            retval.SLS.freq.add(key,combs[key].name)
+        # SLS rare.
+        combs= combDict['SLSRare']
+        for key in combs:
+            retval.SLS.rare.add(key,combs[key].name)
+        # SLS seismic not implemented yet.
+        return retval
+            
+    def writeXCLoadCombinations(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic'], outputFileName= None):
+        ''' Write the load combinations in a format readably by XC.
+
+        :param situations: project situations of interest.
+        :param outputFileName: name of the output file (if None use standard output).
+        '''
+        if(outputFileName is None):
+            f= sys.stdout
+        else:
+            f= open(outputFileName,'w')
+        f.write("combs= preprocessor.getLoadHandler.getLoadCombinations\n")
+        loadCombinations= self.getLoadCombinationsDict(situations)
+        for sitKey in loadCombinations:
+            sitCombinations= loadCombinations[sitKey]
+            for key in sitCombinations:
+                comb= sitCombinations[key]
+                output= 'comb= combs.newLoadCombination('
+                output+= '"'+key+'","'+comb.name+'")\n'
+                f.write(output)
+        if(outputFileName is None):
+            f.flush()
+        else:
+            f.close()
 
 def getCombinationDict(loadCombination:str):
     ''' Return a Python dictionary whose keys are the names of the actions
@@ -188,15 +316,16 @@ def getNamedCombinations(loadCombinations, prefix):
     :param prefix: prefix to form the name (such as ULS, SLS or somethink like that).
     '''
     sz= len(loadCombinations) # number of combinations to name.
-    szLength= int(math.log(sz,10))+1 # number of leading zeros
     retval= dict()
-    for count, comb in enumerate(loadCombinations):
-        key= prefix+str(count).zfill(szLength)
-        retval[key]= comb
+    if(sz>0):
+        szLength= int(math.log(sz,10))+1 # number of leading zeros
+        for count, comb in enumerate(loadCombinations):
+            key= prefix+str(count).zfill(szLength)
+            retval[key]= comb
     return retval
 
 def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
-    ''' Write the load combinations in a XC format.
+    ''' Write the load combinations in a format readably by XC.
 
     :param loadCombinations: load combinations to be named.
     :param prefix: prefix to form the name (such as ULS, SLS or somethink like that).

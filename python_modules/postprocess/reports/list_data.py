@@ -2,7 +2,7 @@
 
 from tabulate import tabulate
 
-def listKPts(kPts, fmt):
+def listKPtsSet(kPts, fmt):
     ''' Return a tabulate object containing the point data
 
        :param kPts: iterable containing the points.
@@ -15,7 +15,7 @@ def listKPts(kPts, fmt):
         rows.append([p.tag,fmt.format(p.pos.x),fmt.format(p.pos.y),fmt.format(p.pos.z)])
     return tabulate(rows, headers= headers)
 
-def listaLineasSet(lines):
+def listLineSet(lines):
     ''' Returns a tabulate object containing the line data.
 
        :param lines: iterable containing the lines.
@@ -62,13 +62,14 @@ def listTrussElementSet(elements):
     headers= ['Id', 'nI', 'nJ', 'Material']
     rows= list()
     for e in elements:
-        rows.append([e.tag, e.getNode(0).tag, e.getNode(1).tag, e,getMaterial().name])
+        rows.append([e.tag, e.getNode(0).tag, e.getNode(1).tag, e.getMaterial().name])
     return tabulate(rows, headers= headers)
 
-def listBarElementSet(elements):
+def listBarElementSet(elements, fmt):
     ''' Returns a tabulate object containing the bar element data.
 
-       :param elements: iterable containing the elements.
+    :param elements: iterable containing the elements.
+    :param fmt: format for coordinates.
     '''
     #caption= "Elemento from set: "+setName
     headers= ['Id', 'nI', 'nJ','Sc.', 'E', 'G', 'Area', 'alpha', 'J', 'Iy', 'Iz']
@@ -104,12 +105,12 @@ def listLineEntities(line, nmbProcLstElementos, fmt):
     ''' Returs a dictionary with the tabulate objects containing 
         the nodes and elements of the line.
 
-       :param lineName: name of the line.
-       :param fileName: file name.
-       :param fmt: format for coordinates.
+    :param line: line to extract the nodes from.
+    :param nmbProcLstElementos: function to be used for the element list.
+    :param fmt: format for the node coordinates.
     '''
 
     retval= dict()
     retval['nodes']= listNodeSet(line.nodes,fmt) 
-    retval['elements']= elementListFunction(line.elements) 
+    retval['elements']= nmbProcLstElementos(line.elements) 
     return retval

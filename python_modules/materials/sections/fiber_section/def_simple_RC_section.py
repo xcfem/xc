@@ -1583,22 +1583,110 @@ class RCRectangularSection(BasicRectangularRCSection):
         Es= self.fiberSectionParameters.reinfSteelType.Es
         return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
-
-def get_element_rc_sections(elements, propName= None):
+def compute_element_reinforcement(element):
     ''' Return a list containing the reinforced concrete sections from the
-        properties defined in the elements arguments. Those properties are:
+        properties defined in the elements argument. Those properties are:
 
         - baseSection: RCSectionBase derived object containing the geometry
                        and the material properties of the reinforcec concrete
                        section.
         - reinforcementUpVector: reinforcement "up" direction which defines
-                                    the position of the positive reinforcement
-                                    (bottom) and the negative reinforcement
-                                    (up).
+                                 the position of the positive reinforcement
+                                 (bottom) and the negative reinforcement
+                                 (up).
+        - reinforcementIVector: (for slabs) direction corresponding to 
+                                the first RC section
         - bottomReinforcement: LongReinfLayers objects defining the 
                                reinforcement at the bottom of the section.
         - topReinforcement: LongReinfLayers objects defining the 
                             reinforcement at the top of the section.
+        - shearReinforcement: ShearReinforcement objects defining the 
+                              reinforcement at the bottom of the section.
+     
+     :param element: element for which the reinforce concrete sections 
+                     will be computed.
+    '''
+    reinforcementUpVector= element.getProp("reinforcementUpVector") # reinforcement "up" direction.
+    baseSection= element.getProp('baseSection').getCopy()
+    dim= element.getDimension
+    if(dim==1):
+        elementUpOrientation= element.getJVector3d(False)
+        upOrientation= reinforcementUpVector.dot(elementUpOrientation)
+        pR= element.getProp("bottomReinforcement")
+        nR= element.getProp("topReinforcement")
+        shR= None
+        if(element.hasProp('shearReinforcement')):
+           shR= element.getProp('shearReinforcement')
+        if(upOrientation<0): # reverse position.
+            pR, nR= nR, pR
+        baseSection.positvRebarRows= pR
+        baseSection.negatvRebarRows= nR
+        if(shR):
+            baseSection.shReinfY= shR
+        retval= [baseSection]
+    elif(dim==2):
+        elementUpOrientation= element.getKVector3d(False)
+        upOrientation= reinforcementUpVector.dot(elementUpOrientation)
+        reinforcementIVector= element.getProp('reinforcementIVector') # direction of the reinforcement in the slab.
+        elementIOrientation= element.getIVector3d(False)
+        iOrientation= reinforcementIVector.dot(elementIOrientation)
+        theta= reinforcementIVector.getAngle(elementIOrientation)
+        pRI= element.getProp("bottomReinforcementI")
+        nRI= element.getProp("topReinforcementI")
+        shRI= None
+        if(element.hasProp('shearReinforcementI')):
+           shRI= element.getProp('shearReinforcementI')
+        pRII= element.getProp("bottomReinforcementII")
+        nRII= element.getProp("topReinforcementII")
+        shRII= None
+        if(element.hasProp('shearReinforcementII')):
+            shRII= element.getProp('shearReinforcementII')
+        if(abs(iOrientation)<0.7): # reverse reinforcement directions.
+            pRI, pRII= pRII, pRI # positive reinforcement.
+            nRI, nRII= nRII, nRI # negative reinforcement.
+            shRI, shRII= shRII, shRI # shear reinforcement.
+            theta-= math.pi/2.0
+        if(upOrientation>0): # for 2D elements reverse top and bottom
+                             # positions if dot product > 0.
+            pRI, nRI= nRI, pRI # positive reinforcement.
+            pRII, nRII= nRII, pRII # positive reinforcement.
+            # shear reinforcement not affected.
+        if((abs(iOrientation)>1e-3) and (abs(abs(iOrientation)-1.0)>1e-3)): # reinforcement not parallel nor perpendicular
+            #element.setProp('theta', theta)
+            pass
+        baseSectionII= baseSection.getCopy()
+        baseSection.name+= 'I'
+        baseSection.positvRebarRows= pRI
+        baseSection.negatvRebarRows= nRI
+        if(shRI):
+            baseSection.shReinfY= shRI
+        baseSectionII.name+= 'II'
+        baseSectionII.positvRebarRows= pRII
+        baseSectionII.negatvRebarRows= nRII
+        if(shRII):
+            baseSectionII.shReinfY= shRII
+        retval= [baseSection, baseSectionII]
+    return retval
+    
+def get_element_rc_sections(elements, propName= None):
+    ''' Return a list containing the reinforced concrete sections from the
+        properties defined in the elements argument. Those properties are:
+
+        - baseSection: RCSectionBase derived object containing the geometry
+                       and the material properties of the reinforcec concrete
+                       section.
+        - reinforcementUpVector: reinforcement "up" direction which defines
+                                 the position of the positive reinforcement
+                                 (bottom) and the negative reinforcement
+                                 (up).
+        - reinforcementIVector: (for slabs) direction corresponding to 
+                                the first RC section
+        - bottomReinforcement: LongReinfLayers objects defining the 
+                               reinforcement at the bottom of the section.
+        - topReinforcement: LongReinfLayers objects defining the 
+                            reinforcement at the top of the section.
+        - shearReinforcement: ShearReinforcement objects defining the 
+                              reinforcement at the bottom of the section.
      
      :param elements: elements for which the reinforce concrete sections 
                       will be computed.
@@ -1606,62 +1694,7 @@ def get_element_rc_sections(elements, propName= None):
     '''
     retval= list()
     for el in elements:
-        reinforcementUpVector= el.getProp("reinforcementUpVector") # reinforcement "up" direction.
-        baseSection= el.getProp('baseSection').getCopy()
-        dim= el.getDimension
-        if(dim==1):
-            elementUpOrientation= el.getJVector3d(False)
-            upOrientation= reinforcementUpVector.dot(elementUpOrientation)
-            pR= el.getProp("bottomReinforcement")
-            nR= el.getProp("topReinforcement")
-            if(upOrientation<0): # reverse position.
-                pR, nR= nR, pR
-            baseSection.positvRebarRows= pR
-            baseSection.negatvRebarRows= nR
-            elementSections= [baseSection]
-        elif(dim==2):
-            elementUpOrientation= el.getKVector3d(False)
-            upOrientation= reinforcementUpVector.dot(elementUpOrientation)
-            reinforcementIVector= el.getProp('reinforcementIVector') # direction of the reinforcement in the slab.
-            elementIOrientation= el.getIVector3d(False)
-            iOrientation= reinforcementIVector.dot(elementIOrientation)
-            theta= reinforcementIVector.getAngle(elementIOrientation)
-            pRI= el.getProp("bottomReinforcementI")
-            nRI= el.getProp("topReinforcementI")
-            shRI= None
-            if(el.hasProp('shearReinforcementI')):
-               shRI= el.getProp('shearReinforcementI')
-            pRII= el.getProp("bottomReinforcementII")
-            nRII= el.getProp("topReinforcementII")
-            shRII= None
-            if(el.hasProp('shearReinforcementII')):
-                shRII= el.getProp('shearReinforcementII')
-            if(abs(iOrientation)<0.7): # reverse reinforcement directions.
-                pRI, pRII= pRII, pRI # positive reinforcement.
-                nRI, nRII= nRII, nRI # negative reinforcement.
-                shRI, shRII= shRII, shRI # shear reinforcement.
-                theta-= math.pi/2.0
-            if(upOrientation>0): # for 2D elements reverse top and bottom
-                                 # positions if dot product > 0.
-                pRI, nRI= nRI, pRI # positive reinforcement.
-                pRII, nRII= nRII, pRII # positive reinforcement.
-                # shear reinforcement not affected.
-            if((abs(iOrientation)>1e-3) and (abs(abs(iOrientation)-1.0)>1e-3)): # reinforcement not parallel nor perpendicular
-                #el.setProp('theta', theta)
-                pass
-            baseSectionII= baseSection.getCopy()
-            baseSection.name+= 'I'
-            baseSection.positvRebarRows= pRI
-            baseSection.negatvRebarRows= nRI
-            if(shRI):
-                baseSection.shReinfY= shRI
-            baseSectionII.name+= 'II'
-            baseSectionII.positvRebarRows= pRII
-            baseSectionII.negatvRebarRows= nRII
-            if(shRII):
-                baseSection.shReinfY= shRII
-            elementSections= [baseSection, baseSectionII]
-            
+        elementSections= compute_element_reinforcement(el)    
         # Assign elements to each section.
         for i, eSection in enumerate(elementSections):
             if(eSection not in retval):
@@ -1683,8 +1716,8 @@ def get_element_rc_sections(elements, propName= None):
         for sct in retval:
             for tple in sct.elements:
                 # Each tuple has (element tag, section number).
-                eTag= tple[0] 
-                sectionIdx= tple[1]
+                eTag= tple[0] # Element identifier.
+                sectionIdx= tple[1] # Index of the sct section in the element.
                 element= elemHandler.getElement(eTag)
                 sectionNames= element.getProp(propName)
                 if(sectionNames[sectionIdx]!=''):

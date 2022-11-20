@@ -88,22 +88,22 @@ outCfg.controller= EHE_limit_state_checking.BiaxialBendingNormalStressController
 
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 
-meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
+meanCFs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
 
-#print("mean FCs: ", meanFCs)
+#print("mean FCs: ", meanCFs)
 
-meanFC0Teor= 0.64702580108264973
-ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
-meanFC1Teor= 0.84660274501497856
-ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
+meanCF0Teor= 0.64702580108264973
+ratio1= abs(meanCFs[0]-meanCF0Teor)/meanCF0Teor
+meanCF1Teor= 0.84660274501497856
+ratio2= abs(meanCFs[1]-meanCF1Teor)/meanCF1Teor
 
 '''
-print("meanFCs[0]= ", meanFCs[0])
+print("meanCFs[0]= ", meanCFs[0])
 print("ratio1= ",ratio1)
-print("meanFCs[1]= ", meanFCs[1])
+print("meanCFs[1]= ", meanCFs[1])
 print("ratio2= ",ratio2)
 '''
 

@@ -9,8 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import xc_base
-import loadCombinations
-from actions.load_combination_utils import iap11
+from actions.load_combination_utils import iap11 # Spanish IAP-11
 from misc_utils import log_messages as lmsg
 
 lcg= iap11.combGenerator
@@ -38,6 +37,7 @@ import numpy
 szRef= len(coeficientesRef_elu_persistentes)
 sz= len(coeficientes_elu_persistentes)
 import os
+fname= os.path.basename(__file__)
 if(szRef!=sz):
     lmsg.error('different sizes: '+str(szRef)+', '+str(sz))
     lmsg.error(fname+' ERROR.')
@@ -73,7 +73,6 @@ comb=[c for c in ULS]
 for c in comb:
     print(c.descripcion)
 '''
-fname= os.path.basename(__file__)
 if (abs(error)<1e-6):
     print('test: '+fname+': ok.')
 else:

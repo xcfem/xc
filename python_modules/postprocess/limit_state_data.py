@@ -130,12 +130,12 @@ class LimitStateData(object):
         '''
         return readIntForcesFile(self.getInternalForcesFileName(), setCalc)
     
-    def readReactions(self, nodeSet):
-        ''' Read the reactions for the nodes in the set argument.
+    # def readReactions(self, nodeSet):
+    #     ''' Read the reactions for the nodes in the set argument.
 
-        :param nodeSet: nodes to read reactions for.
-        '''
-        return readReactionsFile(self.getReactionsFileName(), nodeSet)
+    #     :param nodeSet: nodes to read reactions for.
+    #     '''
+    #     return readReactionsFile(self.getReactionsFileName(), nodeSet)
 
     def getInternalForcesDict(self, nmbComb, elems):
         '''Creates a dictionary with the element's internal forces.
@@ -169,7 +169,7 @@ class LimitStateData(object):
     @staticmethod
     def loadPickleObject(objName):
         '''Read a Python object from a pickle file.'''
-        with open(name + '.pkl', 'r') as f:
+        with open(objName + '.pkl', 'r') as f:
             return pickle.load(f)
 
     def getCorrespondingLoadCombinations(self, combContainer):

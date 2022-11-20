@@ -285,7 +285,7 @@ def ultimateLoad(tf,tw,r,b,a,fy,fu,betaW,gammaM2):
     :param betaW: Correlation coefficient (table 59.8.2 page 304 EAE).
     :param gammaM2: Partial safety factor for steel (clause 15.3 page 34 EAE).
     '''
-    return min(ultimateLoad1(tf,r,tw,fy),min(ultimateLoad2(b,a,fu,betaW,gammaM2),ultimateLoad3(b,t,fy)))
+    return min(ultimateLoad1(tf,r,tw,fy),min(ultimateLoad2(b,a,fu,betaW,gammaM2),ultimateLoad3(b,min(tf,tw),fy)))
 
 # Maximum value of the force to bear by means of an
 # angle support with stiffeners. According to EAE, clause 

@@ -81,7 +81,13 @@ class Circle3d : public D2to3d
     void Print(std::ostream &os) const;
   };
 
-Circle3d Circle3dThreepoints(const Pos3d &p1,const Pos3d &p2,const Pos3d &p3);
+Circle3d Circle3dThreepoints(const Pos3d &,const Pos3d &,const Pos3d &);
+Vector3d curvatureVector(const Pos3d &,const Pos3d &,const Pos3d &);
+Vector2d curvatureVector(const Pos2d &,const Pos2d &,const Pos2d &);
+GEOM_FT curvatureRadius(const Pos3d &,const Pos3d &,const Pos3d &);
+GEOM_FT curvatureRadius(const Pos2d &,const Pos2d &,const Pos2d &);
+GEOM_FT curvature(const Pos3d &,const Pos3d &,const Pos3d &);
+GEOM_FT curvature(const Pos2d &,const Pos2d &,const Pos2d &);
 
 #endif
 

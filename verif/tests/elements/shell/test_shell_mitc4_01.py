@@ -9,10 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.Ortega@ciccp.es"
 
-E= 2.1e6 # Steel Young's modulus [kg/cm2].
-nu= 0.3 # Poisson's ratio.
-h= 0.1 # thickness.
-dens= 1.33 # specific mass [kg/m2].
 
 import xc
 from model import predefined_spaces
@@ -34,6 +30,10 @@ n3= nodes.newNodeXYZ(2,1,1)
 n4= nodes.newNodeXYZ(0,1,1)
 
 # Materials definition
+E= 2.1e6 # Steel Young's modulus [kg/cm2].
+nu= 0.3 # Poisson's ratio.
+h= 0.1 # thickness.
+dens= 1.33 # specific mass [kg/m2].
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 elements= preprocessor.getElementHandler

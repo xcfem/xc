@@ -118,7 +118,10 @@ class PhantomModel(object):
         self.modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
         elements= self.preprocessor.getElementHandler
         # Define materials
-        unusedFkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
+        fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
+        if __debug__:
+            if(not fkSection):
+                AssertionError('Can\'t define material.')
         elements.dimElem= 1
         self.tagsNodesToLoad= defaultdict(list)
         if(outputCfg.controller.fakeSection):

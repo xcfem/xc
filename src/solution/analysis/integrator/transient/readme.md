@@ -16,3 +16,4 @@ Determing the next time step for an analysis including inertial effects can be d
 - [Don’t Try This at Home](https://portwooddigital.com/2021/02/21/dont-try-this-at-home/)
 - [Parametric Oscillator](https://portwooddigital.com/2022/08/14/parametric-oscillator/)
 - [Negative Feedback Loop](https://portwooddigital.com/2022/07/17/negative-feedback-loop/)
+- [Pseudo-Time Is Not the Load Factor](https://portwooddigital.com/2022/11/07/pseudo-time-is-not-the-load-factor/)

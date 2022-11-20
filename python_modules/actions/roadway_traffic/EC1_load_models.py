@@ -71,39 +71,52 @@ def getCarriagewayWidth(firstBorder, lastBorder):
     midLine= geom.Segment3d(firstBorderMidPoint, lastBorderMidPoint)
     return midLine.getLength()
 
-def getNotionalLanesContours(firstBorder, lastBorder, laneWidth= 3.0, reverse= False):
-    ''' Return the contours of the notional lanes according to clause 4.2.3
-        of EC1-2:2003.
+class NotionalLanes(lmb.NotionalLanes):
+    ''' Notional lanes for a road section according to clause 4.2.3 
+    of EC1-2:2003.
 
-    :param firstBorder: 2D segment (geom.Segment2d) representing the border of
-                        the carriageway.
-    :param lastBorder: 2D segment (geom.Segment2d) representing the border of
-                       the carriageway.
+    :ivar lanes: list of notional lanes.
     '''
-    carriagewayWidth= getCarriagewayWidth(firstBorder, lastBorder)
-    notionalLanesWidths= getNotionalLanesWidths(carriagewayWidth)
-    fractions= list()
-    for w in notionalLanesWidths:
-        fractions.append(w/carriagewayWidth)
+    def __init__(self, firstBorder, lastBorder, laneWidth= 3.0, reverse= False):
+        ''' Construct the contours of the notional lanes.
 
-    if(reverse):
-        fractions.reverse()
+        :param firstBorder: 2D segment (geom.Segment2d) representing the 
+                            border of the carriageway.
+        :param lastBorder: 2D segment (geom.Segment2d) representing the 
+                           border of the carriageway.
+        :param reverse: if true start from the last border and finish
+                        on the first one.
+        '''
+        super().__init__()
+        carriagewayWidth= getCarriagewayWidth(firstBorder, lastBorder)
+        notionalLanesWidths= getNotionalLanesWidths(carriagewayWidth)
+        fractions= list()
+        for w in notionalLanesWidths:
+            fractions.append(w/carriagewayWidth)
 
-    p1= firstBorder.getFromPoint()
-    p2= firstBorder.getToPoint()
-    startingLine= geom.Segment3d(p1, p2)
-    startingLinePoints= startingLine.Divide(fractions)
-    p3= lastBorder.getFromPoint()
-    p4= lastBorder.getToPoint()
-    finishLine= geom.Segment3d(p3, p4)
-    finishLinePoints= finishLine.Divide(fractions)
+        if(reverse):
+            fractions.reverse()
 
-    retval= list()
-    startingPoint= startingLinePoints[0]
-    finishPoint= finishLinePoints[0]
-    for sp, fp in zip(startingLinePoints[1:],finishLinePoints[1:]):
-        contour= [startingPoint, sp, fp, finishPoint]
-        retval.append(geom.Polygon3d(contour))
-        startingPoint= sp
-        finishPoint= fp
-    return retval
+        p1= firstBorder.getFromPoint()
+        p2= firstBorder.getToPoint()
+        p3= lastBorder.getFromPoint()
+        p4= lastBorder.getToPoint()
+        startingLine= geom.Segment3d(p1, p3)
+        startingLinePoints= startingLine.Divide(fractions)
+        finishLine= geom.Segment3d(p2, p4)
+        finishLinePoints= finishLine.Divide(fractions)
+
+        contours= list()
+        startingPoint= startingLinePoints[0]
+        finishPoint= finishLinePoints[0]
+        for sp, fp in zip(startingLinePoints[1:],finishLinePoints[1:]):
+            contour= [startingPoint, sp, fp, finishPoint]
+            contours.append(geom.Polygon3d(contour))
+            startingPoint= sp
+            finishPoint= fp
+        self.lanes= list()
+        for i, plg in enumerate(contours):
+            name= 'notionalLane'+str(i+1)
+            self.lanes.append(lmb.NotionalLane(name= name, contour= plg))
+        self.lanes[-1].name= 'remainingArea' # remaining area
+

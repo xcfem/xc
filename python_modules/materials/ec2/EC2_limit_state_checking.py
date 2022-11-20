@@ -383,7 +383,12 @@ def getWebStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfStee
     nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
     fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
     fywd= shearReinfSteel.fyd() # design yield strength of the shear reinforcement
-    cotgTheta= math.sqrt((bw*s*nu*fcd)/(Asw*fywd*math.sin(shearReinfAngle))-1)
+    ratio= (bw*s*nu*fcd)/(Asw*fywd*math.sin(shearReinfAngle))
+    if(ratio<1):
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; Warning, cross-sectional area of the shear reinforcement too big: '+str(Asw*1e6)+' mm2. Returning math.pi/4.0.')
+        ratio= 2.0
+    cotgTheta= math.sqrt(ratio-1)
     return math.atan(1.0/cotgTheta)   
 
 def getMaximumShearWebStrutCrushing(concrete, NEd, Ac, bw, z, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None):
@@ -654,9 +659,9 @@ def getAsMinBeams(concrete, reinfSteel, h, z, bt, d, nationalAnnex= None):
     :param concrete: concrete material.
     :param reinfSteel: reinforcing steel material.
     :param h: section depth.
-    :param d: effective depth.
     :param z: inner lever arm.
-    :param bt: denotes the mean width of the tension zone.
+    :param bt: mean width of the tension zone.
+    :param d: effective depth.
     :param nationalAnnex: identifier of the national annex.
     '''
     if(nationalAnnex=='Spain'):
@@ -795,8 +800,17 @@ class ShearController(lscb.ShearControllerBase):
             E0= rcSets.getConcreteInitialTangent()
             if((E0*self.eps1)<fctdH): # Non cracked section
                 retval= self.getShearStrengthNonCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
-            else:
+            else: # cracked
                 retval= self.getShearStrengthCrackedNoShearReinf(scc= scc, concrete= concrete, reinfSteel= reinfSteel, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
+        else: # not bending.
+            # In real problems you don't need to check the shear strength right
+            # over the pinned support (M= 0) so, normally, this code is not
+            # reach. Anyway, we return a safe estimation based on the shear
+            # strength of a T-beam flange in its plane.
+            hf= scc.getCompressedStrutWidth()
+            Ac= rcSets.getConcreteArea(1) # Ac
+            DeltaX= Ac/hf
+            retval= getConcreteFlangeShearStrength(concrete= concrete, hf= hf, DeltaX= DeltaX, nationalAnnex= None)
         return retval
         
     def getShearStrengthShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
@@ -820,12 +834,12 @@ class ShearController(lscb.ShearControllerBase):
         isBending= scc.isSubjectedToBending(0.1)
         if(isBending):
             innerLeverArm= scc.getMechanicLeverArm() # z
-        else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; not implemented for shear without bending.')
-            exit(1)
-            
+        else: # not bending
+            # In real problems you don't need to check the shear strength right
+            # over the pinned support (M= 0) so, normally, this code is not
+            # reach. Anyway, we return a safe estimation of the lever arm.
+            sectionDepth= Ac/strutWidth
+            innerLeverArm= 0.7*sectionDepth
         return getShearResistanceShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex)
 
     def getShearStrength(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):

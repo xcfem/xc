@@ -12,7 +12,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 import xc
 from materials.ec2 import EC2_materials
 from materials.ec2 import EC2_limit_state_checking

@@ -14,39 +14,36 @@ import math
 import geom
 from actions.roadway_traffic import EC1_load_models
 
-p1= geom.Pos3d(0.0, 0.0, 0.0)
-p2= geom.Pos3d(10.0, 0.0, 0.0)
-p3= geom.Pos3d(0.0, 11.5, 0.0)
-p4= geom.Pos3d(10.0, 11.5, 0.0)
+p1= geom.Pos3d(0.0, 2.0, 0.0)
+p2= geom.Pos3d(10.0, 2.0, 0.0)
+p3= geom.Pos3d(0.0, 13.5, 0.0)
+p4= geom.Pos3d(10.0, 13.5, 0.0)
 
 border1= geom.Segment3d(p1, p2)
 border2= geom.Segment3d(p3, p4)
 
 carriagewayWidth= EC1_load_models.getCarriagewayWidth(firstBorder= border1, lastBorder= border2)
 notionalLanesWidths= EC1_load_models.getNotionalLanesWidths(carriagewayWidth)
-notionalLanesContours= EC1_load_models.getNotionalLanesContours(firstBorder= border1, lastBorder= border2)
+notionalLanes= EC1_load_models.NotionalLanes(firstBorder= border1, lastBorder= border2)
 
 err1= 0.0
 refAreas= [30.0, 30.0, 30.0, 25]
-areas= list()
-for plg, refArea in zip(notionalLanesContours, refAreas):
-    A= plg.getArea()
-    areas.append(A)
-    err1+= (A-refArea)**2
+areas= notionalLanes.getAreas()
+for area, refArea in zip(areas, refAreas):
+    err1+= (area-refArea)**2
 err1= math.sqrt(err1)
 
-reversedNotionalLanesContours= EC1_load_models.getNotionalLanesContours(firstBorder= border1, lastBorder= border2, reverse= True)
+reversedNotionalLanes= EC1_load_models.NotionalLanes(firstBorder= border1, lastBorder= border2, reverse= True)
 
 err2= 0.0
-reversedAreas= list()
+reversedAreas= reversedNotionalLanes.getAreas()
 refReversedAreas= [25, 30.0, 30.0, 30.0]
-for plg, refArea in zip(reversedNotionalLanesContours, refReversedAreas):
-    A= plg.getArea()
-    reversedAreas.append(A)
-    err2= (A-refArea)**2
+for area, refArea in zip(reversedAreas, refReversedAreas):
+    err2= (area-refArea)**2
 err2= math.sqrt(err2)
 
 '''
+print(notionalLanes[0].contour.getVertexList())
 print('carriageway width: ', carriagewayWidth)
 print('widths of the notional lanes: ', notionalLanesWidths)
 print('areas: ', areas)
@@ -57,6 +54,7 @@ print('err2= ', err2)
 
 import os
 fname= os.path.basename(__file__)
+from misc_utils import log_messages as lmsg
 if(err1<1e-6) & (err2<1e-6):
     print('test '+fname+': ok.')
 else:

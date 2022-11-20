@@ -106,7 +106,7 @@ class Pile(object):
         '''Return the cross-sectional area of the pile'''
         return self.crossSection.A()
     
-    def getPileElasticLengthInClay(self, Eterrain, L, majorAxis= False):
+    def getPileElasticLengthInClay(self, Eterrain, majorAxis= False):
         ''' Return the equivalent elastic length of the pile embedded in
         cohesive soil.
 
@@ -128,7 +128,7 @@ class Pile(object):
         :param majorAxis: true if the required inertia corresponds to the
                           bending around major axis. 
         '''
-        return 1.2*self.getPileElasticLengthInClay(Eterrain)
+        return 1.2*self.getPileElasticLengthInClay(Eterrain= Eterrain, majorAxis= majorAxis)
 
     def computeTributaryLengths(self, initialGeometry= False):
         ''' Compute the tributary lengths for the nodes of the finite

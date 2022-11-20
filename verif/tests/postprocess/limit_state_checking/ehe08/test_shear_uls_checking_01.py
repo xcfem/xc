@@ -131,19 +131,19 @@ outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 outCfg.controller= EHE_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
 outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
+(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
-#print("mean FCs: ", meanFCs)
+#print("mean FCs: ", meanCFs)
 
 refMeanFC0= 0.9015944748072897
-ratio1= abs(meanFCs[0]-refMeanFC0)/refMeanFC0
+ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0
 refMeanFC1= 1.017060280651913
-ratio2= abs(meanFCs[1]-refMeanFC1)/refMeanFC1
+ratio2= abs(meanCFs[1]-refMeanFC1)/refMeanFC1
 
 '''
-print("meanFCs[0]= ", meanFCs[0])
+print("meanCFs[0]= ", meanCFs[0])
 print("ratio1= ",ratio1)
-print("meanFCs[1]= ", meanFCs[1])
+print("meanCFs[1]= ", meanCFs[1])
 print("ratio2= ",ratio2)
 '''
 

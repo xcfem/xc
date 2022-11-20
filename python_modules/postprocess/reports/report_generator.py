@@ -10,8 +10,10 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import os
+import sys
 from postprocess import output_handler as oh
 from postprocess.config import default_config
+from misc_utils import log_messages as lmsg
 
 class ReportGenerator(oh.OutputHandler):
     '''Class intended to generate reports of data, loads and  

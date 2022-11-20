@@ -10,9 +10,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import os
 import xc_base
-import loadCombinations
 from actions.load_combination_utils import iap11
-from actions.load_combination_utils import utils
 from misc_utils import log_messages as lmsg
 import re
 import math
@@ -44,7 +42,7 @@ actions.append(G2)
 Q1= lcg.newFootbridgeAction(actionName= "Q1", actionDescription= "Carga uniforme.")
 actions.append(Q1)
 Q2= lcg.newFootbridgeAction(actionName= "Q2", actionDescription= "Carga horizontal en barandilla.")
-Q2.getRelaciones.appendMain("Q1")
+Q2.relationships.appendMain("Q1")
 actions.append(Q2)
 #Qviento= lcg.insert(weighting= "IAP11", family="variables", action= loadCombinations.Action("Qviento", "Viento transversal."), combination_factors_name= "viento_pasarelas", partial_safety_factors_name= "variables_SCuso")
 Qviento= lcg.newFootbridgeWindAction(actionName= "Qviento", actionDescription= "Viento transversal.")

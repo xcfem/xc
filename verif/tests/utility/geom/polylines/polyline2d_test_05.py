@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Offset method test on 2D polylines.'''
+''' Test getPointAtLength.'''
 
 from __future__ import print_function
 
@@ -9,50 +9,39 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import geom
 
 # Points.
 #
 #    +--------------+
-#                   |
-#        +------+   |
-#               |   |
-#               |   |
-#        +------+   |
-#                   |
-#    +--------------+
+#   x=1            x= 11 
 #
-vertices= [geom.Pos2d(0, 0), geom.Pos2d(1, 0), geom.Pos2d(1,1), geom.Pos2d(0, 1)]
 
-contour2d= geom.Polyline2d(vertices)
-l= contour2d.getLength()
+# Vertex list.
+vertices= [geom.Pos2d(1, 3.5), geom.Pos2d(11, 3.5)]
 
-# compute a polyline parallel to the previous one, at a fixed distance
-offsetValue= 0.25
-interior= contour2d.offset(-offsetValue)
-lInt= interior.getLength()
-lIntRef= l-4.0*offsetValue
-ratio1= abs(lInt-lIntRef)/lInt
+# Define polyline.
+pline2d= geom.Polyline2d(vertices)
 
-exterior= contour2d.offset(offsetValue)
-lExt= exterior.getLength()
-lExtRef= l+4.0*offsetValue
-ratio2= abs(lExt-lExtRef)/lExt
+# Check results at different points.
+lengths= [0.1,5.0,9.0]
+## Reference values.
+pointsRef= [geom.Pos2d(1.1, 3.5), geom.Pos2d(6.0, 3.5), geom.Pos2d(10.0, 3.5)]
+err= 0.0
 
-'''
-print(l)
-print(lInt)
-print(ratio1)
-print(lExt)
-print(ratio2)
-'''
+for l, pr in zip(lengths, pointsRef):
+    p= pline2d.getPointAtLength(l) # point at s= l
+    err+= (p-pr).getModulus()**2
+
+err= math.sqrt(err) # average quadratic error
+
+# print('err= ', err)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-10 and abs(ratio2)<1e-10:
+if abs(err)<1e-10:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
-
-

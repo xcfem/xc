@@ -32,6 +32,7 @@
 #include <boost/graph/graph_utility.hpp>
 #include "utility/geom/d1/Polyline2d.h"
 #include "utility/kernel/python_utils.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 const double quiet_nan= std::numeric_limits<double>::quiet_NaN();
 
@@ -197,6 +198,30 @@ Segment2d Segment2d::offset(const GEOM_FT &d) const
     return offset(n);
   }
 
+//! @brief Return a buffer polygon around the segment.
+//!
+//! Return a 2D polygon with boundaries that buffer this segment
+//! by a distance d.
+//! @param d: distance around the segment.
+//! @param n: number of vertex of the buffers around the endpoints.
+Polygon2d Segment2d::getBufferPolygon(const GEOM_FT &d, const size_t &numVertices) const
+  {
+    // Rectangle around the segment.
+    Segment2d s1= this->offset(d);
+    Segment2d s2= this->offset(-d);
+    Polygon2d retval;
+    retval.push_back(s1.getFromPoint());
+    retval.push_back(s1.getToPoint());
+    retval.push_back(s2.getToPoint());
+    retval.push_back(s2.getFromPoint());
+    // Buffers around the endpoints.
+    Polygon2d b1= this->getFromPoint().getBufferPolygon(d, numVertices);
+    Polygon2d b2= this->getToPoint().getBufferPolygon(d, numVertices);
+    retval.une(b1);
+    retval.une(b2);
+    return retval;
+  }
+
 //! @brief Return the perpendicular_bisector of the segment.
 Line2d Segment2d::getPerpendicularBisector(void) const
   {
@@ -263,7 +288,7 @@ Pos2d Segment2d::PtoParametricas(const GEOM_FT &lambda) const
 
 //! @brief Return the mid point of the segment.
 Pos2d Segment2d::getMidPoint(void) const
-  { return PtoParametricas(0.5); }
+  { return PtoParametricas(0.5*getLength()); }
 
 //! @brief Return the parametric coordinate that corresponds to the
 //! natural coordinate argument.
@@ -273,7 +298,7 @@ double Segment2d::getParamNaturalCoord(const GEOM_FT &chi) const
 //! @brief Return the point of the segment with the natural coordinate
 //! being passed as parameter.
 Pos2d Segment2d::getPointNaturalCoord(const GEOM_FT &chi) const
-  { return PtoParametricas(getParamNaturalCoord(chi)); }
+  { return PtoParametricas(getParamNaturalCoord(chi)*getLength()); }
 
 bool Segment2d::intersects(const Line2d &r) const
   { return CGAL::do_intersect(r.cgr,cgseg); }
@@ -525,11 +550,12 @@ VectorPos2d Segment2d::Divide(const std::vector<double> &proportions) const
     const size_t numPoints= sz+1;
     VectorPos2d retval(numPoints);
     double lambda= 0.0;
+    const GEOM_FT length= getLength();
     if(sz>1)
       {
         for(size_t i= 0; i<numPoints; i++)
 	  {
-	    retval[i]= PtoParametricas(lambda);
+	    retval[i]= PtoParametricas(lambda*length);
 	    lambda+= proportions[i];
 	  }  
       }
@@ -624,6 +650,9 @@ std::list<Segment2d> without_degenerated(const std::list<Segment2d> &lista)
     return retval;
   }
 
+//! @brief Return the polylines that can be formed from the list of segments
+//! @param segments: list of segments to be connected into polylines.
+//! @param tol: minimum distance between vertices to be considered coincident.
 std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const GEOM_FT &tol)
   {
     std::list<Polyline2d> retval;

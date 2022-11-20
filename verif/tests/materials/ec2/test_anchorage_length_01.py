@@ -5,11 +5,9 @@
 from __future__ import division
 from __future__ import print_function
 
-import os
 import math
 from materials.ec2 import EC2_materials
 from materials.ec2 import EC2_limit_state_checking
-from misc_utils import log_messages as lmsg
 
 __author__= "Luis Claudio Pérez Tato (LCPT)"
 __copyright__= "Copyright 2022, LCPT"

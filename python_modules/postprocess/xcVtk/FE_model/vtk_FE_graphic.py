@@ -57,7 +57,9 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         elif(reprType=="surface"):
             elemActor.GetProperty().SetRepresentationToSurface()
         else:
-            lmsg.error("Representation type: '"+ reprType+ "' unknown.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; Representation type: '"+ reprType+ "' unknown.")
         self.renderer.AddActor(elemActor)
         if(field):
             field.creaColorScaleBar()
@@ -115,6 +117,9 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         if(numNodes>0):
             if(field):
                 arr= field.fillArray(nodeSet)
+                if(__debug__):
+                    if(not arr):
+                        AssertionError('Can\'t create the array.')
                 field.creaLookUpTable()      
             # Load nodes in vtk
             if eigenMode is None:
@@ -196,7 +201,9 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape)
         '''
-        lmsg.warning('FEmeshGraphic DEPRECATED use displayFEMesh.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; FEmeshGraphic DEPRECATED use displayFEMesh.')
         self.cameraParameters= cameraParameters
         self.displayFEMesh(setToDisplay,caption,defFScale)
 
@@ -339,11 +346,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                initial/undeformed shape)
         '''
         loadPattern.addToDomain()
-        loadPatternName= loadPattern.getProp("dispName")
+        #loadPatternName= loadPattern.getProp("dispName")
         lIter= loadPattern.loads.getNodalLoadIter
         load= lIter.next()
         while not(load is None):
-            actorName= "flecha"+loadPatternName+"%04d".format(load.tag) # Tag force.
+            #actorName= "flecha"+loadPatternName+'{:04d}'.format(load.tag) # Tag force.
             nodeTag= load.getNodeTag
             node= preprocessor.getNodeHandler.getNode(nodeTag)
             force= load.getForce
@@ -359,21 +366,23 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         xForce= pLoad.getElems()
         eleTags= pLoad.elementTags
         loadPatternName= loadPattern.getProp("dispName")
-        actorName= "flechaP"+loadPatternName+"%04d".format(tag) # Tag force.
+        actorName= "flechaP"+loadPatternName+'{:04d}'.format(pLoad.tag) # Tag force.
         for tag in eleTags:
             ele= preprocessor.getElementHandler.getElement(tag)
-            actorName+= "%04d".format(tag) # Tag elemento.
+            actorName+= '{:04d}'.format(tag) # element identifier.
             pos= ele.point(xForce)
             utils_vtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
 
     def displayElementUniformLoad(self, preprocessor, unifLoad,loadPattern, color, force, fScale):
         loadPatternName= loadPattern.getProp("dispName")
-        actorName= "flechaU"+loadPatternName+"%04d".format(unifLoad.tag)
+        actorName= "flechaU"+loadPatternName+'{:04d}'.format(unifLoad.tag)
         eleTags= unifLoad.elementTags
         for tag in eleTags:
-            ele= preprocessor.getElementHandler.getElement(tag)
-            actorName+= "%04d".format(tag) # Tag elemento.
-            lmsg.error('displayElementUniformLoad not implemented.')
+            # ele= preprocessor.getElementHandler.getElement(tag)
+            actorName+= '{:04d}'.format(tag) # element identifier.
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; displayElementUniformLoad not implemented.')
             # points= ele.getPoints(3,1,1,True)
             # i= 0
             # for capa in points:
@@ -383,10 +392,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             #     i+= 1
 
     def displayElementalLoads(self, preprocessor,loadPattern, color, fScale):
-        loadPattern.addToDomain()
-        eleLoadIter= loadPattern.loads.getElementalLoadIter
-        eleLoad= eleLoadIter.next()
-        lmsg.error('displayElementalLoads not implemented.')
+        # loadPattern.addToDomain()
+        # eleLoadIter= loadPattern.loads.getElementalLoadIter
+        # eleLoad= eleLoadIter.next()
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; displayElementalLoads not implemented.')
         # while not(eleLoad is None):
         #   force= eleLoad.getGlobalForces()
         #   category= eleLoad.category
@@ -444,7 +455,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
 def VtkLoadIdsNodes(recordGrid):
     '''Load node labels. Not yet implemented.'''
     VtkCreaStrArraySetData(recordGrid.setName,"nodes","etiqNod","tag")()
-    nmbUGrid.GetPointData().SetStrings(etiqNod)
+    recordGrid.GetPointData().SetStrings('etiqNod')
 
 def VtkDisplayIdsNodes(recordGrid, renderer):
     '''Display node labels (not implemented yet)'''

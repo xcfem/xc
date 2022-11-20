@@ -16,7 +16,6 @@ import math
 import os
 import geom
 import xc
-from materials.awc_nds import structural_panels
 from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs
@@ -26,9 +25,6 @@ from materials.awc_nds import AWCNDS_limit_state_checking as nds
 from materials.awc_nds import AWCNDS_materials
 from materials.awc_nds import dimensional_lumber
 from materials.awc_nds import AWCNDS_analysis_context
-
-# Loads
-from actions import load_cases as lcm
 
 # Units
 inchToMeter= 2.54/100.0

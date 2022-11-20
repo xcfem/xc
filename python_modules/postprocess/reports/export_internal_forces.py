@@ -72,7 +72,6 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             sz= len(internalForces)
             internalForcesDict= dict()
             for i in range(0,sz):
-                nForceDict= dict()
                 force= internalForces[i]
                 internalForcesDict[i]= force.getDict()
                 if(avgMaxVM):
@@ -242,7 +241,6 @@ def exportShellInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces
     internalForces= internal_forces.ShellMaterialInternalForces()
     for e in elems:
       internalForces.setFromAverageInShellElement(e)
-      strEsf= internalForces.getCSVString()
       forcesOnNodes= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
       sz= len(forcesOnNodes)
       for i in range(0,sz):

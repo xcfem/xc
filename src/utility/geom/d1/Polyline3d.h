@@ -65,6 +65,15 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Iz(void) const;
 
+    GEOM_FT getCurvatureAtVertex(const_iterator) const;
+    GEOM_FT getCurvatureAtLength(const GEOM_FT &) const;
+    Vector3d getCurvatureVectorAtVertex(const_iterator) const;
+    Vector3d getCurvatureVectorAtLength(const GEOM_FT &) const;
+    Pos3d getPointAtLength(const GEOM_FT &) const;
+    Vector3d getIVectorAtLength(const GEOM_FT &) const;
+    Vector3d getJVectorAtLength(const GEOM_FT &) const;
+    Vector3d getKVectorAtLength(const GEOM_FT &) const;
+    
     //! @brief Return the length of the object.
     virtual GEOM_FT getLength(void) const
       { return GeomObj::list_Pos3d::getLength(); }

@@ -22,6 +22,6 @@ Multi-freedom may be used to model:
 
 
 ## References
-[Support and Connection Types](https://web.mit.edu/4.441/1_lectures/1_lecture13/1_lecture13.html)
-[Handling of Constraints in Finite-Element Response Sensitivity Analysis](http://jaguar.ucsd.edu/sensitivity/Gu_2009_b.pdf)
-
+ - [Support and Connection Types](https://web.mit.edu/4.441/1_lectures/1_lecture13/1_lecture13.html)
+ - [Handling of Constraints in Finite-Element Response Sensitivity Analysis](http://jaguar.ucsd.edu/sensitivity/Gu_2009_b.pdf)
+ - [Rigid Diaphragm for 2D Models](https://portwooddigital.com/2022/11/05/rigid-diaphragm-for-2d-models/)

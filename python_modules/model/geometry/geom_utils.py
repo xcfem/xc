@@ -160,7 +160,9 @@ def lstP3d_from_lstLns(lstLns):
     '''
     prep=lstLns[0].getPreprocessor
     pointsHandler=prep.getMultiBlockTopology.getPoints
+    # Append the positions of the first K-point of the lines.
     lstP3d=[pointsHandler.get(l.getKPoints()[0]).getPos for l in lstLns]
+    # Append the position of the last K-point.
     lstP3d.append(pointsHandler.get(lstLns[-1].getKPoints()[1]).getPos)
     return lstP3d
 
@@ -214,7 +216,7 @@ def lstEquPnts_from_polyline(pol,nDiv):
             sg=pol.getSegment(j)
             LSegm=sg.getLength()
             if lengthCP<LSegm:
-                retval.append(sg.getPoint(lengthCP/LSegm))
+                retval.append(sg.getPoint(lengthCP))
                 break
             else:
                 nmbSegm+=1

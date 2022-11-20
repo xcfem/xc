@@ -4,6 +4,14 @@
 from __future__ import print_function
 from __future__ import division
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2014, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+from misc.latex import supertabular
+
 def uniformLoadList(loadPattern, outputFile, load, fmt):
     ''' List of uniform loads.
 
@@ -11,7 +19,7 @@ def uniformLoadList(loadPattern, outputFile, load, fmt):
     :param outputFile: output file name.
     :param fmt: format for numbers.
     '''
-    preprocessor= loadPatter.getPreprocessor()
+    preprocessor= loadPattern.getPreprocessor()
     elemTags= loadPattern.getElementTags()
     for i in elemTags:
         e= preprocessor.getElementHandler.getElement(i)
@@ -22,10 +30,11 @@ def punctualLoadList(loadPattern, outputFile, load, fmt):
 
     :param loadPattern: load pattern. 
     :param outputFile: output file name.
+    :param load: load vector.
     :param fmt: format for numbers.
     '''
-    xLoad= x
-    preprocessor= loadPatter.getPreprocessor()
+    xLoad= '??'
+    preprocessor= loadPattern.getPreprocessor()
     elemTags= loadPattern.getElementTags()
     for i in elemTags:
         e= preprocessor.getElementHandler.getElement(i)
@@ -41,10 +50,10 @@ def ElementLoadList(loadPattern, outputFile, fmt):
     caption= 'Loads on elements'
     defCampos= "|r|c|c|r|r|r|r|"
     idsCampos= "Id & Acc. & Type & x & Fx & Fy &Fz \\\\\n - & - & - &  & kN/m & kN/m & kN/m "
-    cabeceraSupertabular(outputFile,7,defCampos,idsCampos,caption)
-    preprocessor= loadPatter.getPreprocessor()
+    supertabular.cabeceraSupertabular(outputFile,7,defCampos,idsCampos,caption)
+    preprocessor= loadPattern.getPreprocessor()
     loads= preprocessor.getLoadPatterns
-    print("Number of load patterns: "+numLoadPatterns)
+    print("Number of load patterns: "+len(loads))
     print("Number of loads on elements: "+ loadPattern.getNumEleLoads())
     eleLoads= loadPattern.getEleLoads()
     for l in eleLoads:
@@ -54,7 +63,7 @@ def ElementLoadList(loadPattern, outputFile, fmt):
             uniformLoadList(loadPattern,outputFile,load,fmt)
         elif(l.category=="punctual"):
             punctualLoadList(loadPattern,outputFile,load,fmt)
-    cierraSupertabular(outputFile) 
+    supertabular.cierraSupertabular(outputFile) 
 
 def listNodalLoads(loadPattern, outputFile, fmt):
     ''' List loads on nodes.
@@ -66,12 +75,12 @@ def listNodalLoads(loadPattern, outputFile, fmt):
     caption= "Nodal loads"
     defCampos= "|r|c|c|r|r|r|r|"
     idsCampos= "Id & Acc. & Type & x & Fx & Fy &Fz \\\\\n - & - & - &  & kN & kN & kN "
-    cabeceraSupertabular(outputFile,7,defCampos,idsCampos,caption) 
+    supertabular.cabeceraSupertabular(outputFile,7,defCampos,idsCampos,caption) 
     print("Number of nodal loads: "+ loadPattern.getNumNodalLoads())
     nodalLoads= loadPattern.getNodalLoads()
     for l in nodalLoads:
         load= l.load
         outputFile.write(l.nod.tag+" & "+loadPattern+" & nod. &  & "+fmt.format(load[0]/1e3)+" & "+fmt.format(load[1]/1e3)+" & "+fmt.format(load[2]/1e3)+"\\\\\n")
-    cierraSupertabular(outputFile) 
+    supertabular.cierraSupertabular(outputFile) 
 
 

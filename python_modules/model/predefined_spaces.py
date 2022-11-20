@@ -808,7 +808,7 @@ class PredefinedSpace(object):
         if(originSet is None):
             originSet= self.getTotalSet()
         return pick_node_on_point(pt, resultSet, originSet)
-    
+
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''
         self.preprocessor.getDomain.removeAllLoadPatterns()
@@ -841,10 +841,10 @@ class PredefinedSpace(object):
         combContainer.dumpCombinations(self.preprocessor)
 
     def addLoadCaseToDomain(self, loadCaseName: str):
-        '''Add the load case argument (load pattern or
-           combination) to the domain.
+        '''Add the load case argument (load pattern or combination) to 
+           the domain.
 
-           :param loadCaseName: name of the load pattern or combination.
+        :param loadCaseName: name of the load pattern or combination.
         '''
         loadHandler= self.getLoadHandler()
         loadHandler.addToDomain(loadCaseName)
@@ -852,12 +852,18 @@ class PredefinedSpace(object):
         return loadHandler.getLoadPatterns[loadCaseName]
 
     def removeLoadCaseFromDomain(self, loadCaseName: str):
-        '''Add the load case argument (load pattern or
-           combination) to the domain.
+        '''Add the load case argument (load pattern or combination) to the 
+           domain.
 
-           :param loadCaseName: name of the load pattern or combination.
+        :param loadCaseName: name of the load pattern or combination.
         '''
         self.getLoadHandler().removeFromDomain(loadCaseName)
+
+    def getCurrentLoadCaseName(self):
+        ''' Return the name of the current combination (if any).'''
+        retval= self.preprocessor.getDomain.currentCombinationName
+        return retval
+        
         
     def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str):
         '''Defines a new combination and add it to the domain.

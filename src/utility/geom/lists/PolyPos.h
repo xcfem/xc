@@ -81,6 +81,10 @@ class PolyPos : public std::deque<pos>
     void close(void);
     bool isClosed(const GEOM_FT &tol= 1e-6) const;
     GEOM_FT getLength(void) const;
+    GEOM_FT getLengthUntilVertex(const_iterator) const;
+    const_iterator getSegmentAtLength(const GEOM_FT &s) const;
+    int getIndexOfSegmentAtLength(const GEOM_FT &s) const;
+    int getIndexOfSegmentAtParam(const GEOM_FT &lambda) const;
     GEOM_FT GetMax(unsigned short i) const;
     GEOM_FT GetMin(unsigned short i) const;
     PolyPos GetMayores(unsigned short int i,const GEOM_FT &d) const;
@@ -147,17 +151,95 @@ bool PolyPos<pos>::isClosed(const GEOM_FT &tol) const
 //! @brief Return the length of the PolyPos.
 template <class pos>
 GEOM_FT PolyPos<pos>::getLength(void) const
+  { return getLengthUntilVertex(this->end()); }
+
+//! @brief Return the length of the PolyPos until the vertex pointed
+//! by the iterator.
+//
+//! @param nth: iterator pointing to the desired vertex.
+template <class pos>
+GEOM_FT PolyPos<pos>::getLengthUntilVertex(const_iterator nth) const
   {
     if(this->size()<2) return 0.0;
     GEOM_FT temp = 0;
+    const_iterator last= this->end();
+    if(nth<this->end())
+       last= nth;
     const_iterator j;
-    for(const_iterator i=this->begin(); i != this->end(); i++)
+    for(const_iterator i=this->begin(); i != last; i++)
       {
         j= i;j++;
         if (j!=this->end()) temp += dist(*i,*j);
       }
     return temp;
   }
+
+//! @brief Return an iterator pointing to the vertex that is just before the
+//! point at a distance "s" measured along the polyline from its origin.
+//
+//! @param s: distance measured along the polyline from its origin.
+template <class pos>
+typename PolyPos<pos>::const_iterator PolyPos<pos>::getSegmentAtLength(const GEOM_FT &s) const
+  {
+    const_iterator retval= this->end(); // past the end
+    const size_t sz= this->size();
+    if(sz<2)
+      {
+	std::cerr << "PolyPos<>::" << __FUNCTION__
+	      << ";ERROR: no segments, so no length." << std::endl;
+      }
+    else
+      {
+	GEOM_FT totalLength= this->getLength();
+	if(s<=totalLength)
+	  {
+	    GEOM_FT temp = 0; //Distance from origin.
+	    retval= this->begin();
+	    const_iterator j;
+	    for(const_iterator i=this->begin(); i != this->end(); i++)
+	      {
+		j= i;j++;
+		if(j!=this->end())
+		  {
+		    temp+= dist(*i,*j); // increment distance.
+		    if(temp>=s) //we found it.
+		      {
+			retval= i;
+		        break;
+		      }
+		  }
+	      }
+	  }
+	else
+	  {
+	    std::clog << "PolyPos<>::" << __FUNCTION__
+		      << ";WARNING: length argument: " << s
+	              << " greater than total length: " << totalLength
+	              << std::endl;
+	    retval= this->end()-2; // return last segment.
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the index of the segment that lies at the
+//! point at a distance "s" measured along the polyline from
+//! its origin.
+//! @param s: distance measured along the polyline from its origin.
+template <class pos>
+int PolyPos<pos>::getIndexOfSegmentAtLength(const GEOM_FT &s) const
+  {
+    const_iterator i= this->getSegmentAtLength(s);
+    return std::distance(this->begin(), i);
+  }
+    
+//! @brief Return the index of the segment that lies at the
+//! point at a distance "lambda*L" measured along the polyline from
+//! its origin.
+//! @param lambda: parameter (0.0->start of the pline, 1.0->end of the pline).
+template <class pos>
+int PolyPos<pos>::getIndexOfSegmentAtParam(const GEOM_FT &lambda) const
+  { return this->getIndexOfSegmentAtParam(lambda*this->getLength()); }
 
 //! @brief Return the maximum value of j-th coordinate.
 template <class pos>

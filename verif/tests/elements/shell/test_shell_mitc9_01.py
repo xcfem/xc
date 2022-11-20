@@ -17,7 +17,6 @@ dens= 1.33 # specific mass [kg/m2].
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import math
 
 v1= xc.Vector([0,1,0])
 v2= xc.Vector([0,0,1])

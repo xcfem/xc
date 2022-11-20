@@ -33,6 +33,7 @@ class Plotter;
 class Line2d;
 class Ray2d;
 class Segment2d;
+class Polygon2d;
 
 //! @ingroup GEOM
 //
@@ -94,6 +95,8 @@ class Pos2d: public ProtoGeom
     GEOM_FT dist(const Segment2d &) const;
 
     friend bool colineales(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3);
+
+    Polygon2d getBufferPolygon(const GEOM_FT &d, const size_t &numVertices= 8) const;
 
     void Print(std::ostream &os) const;
     void Plot(Plotter &psos) const;

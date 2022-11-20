@@ -12,6 +12,7 @@ Ductility grades:
 import sys
 import math
 from materials import concrete_base
+from materials.sections import rebar_family
 from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -184,8 +185,9 @@ class EC2Concrete(concrete_base.Concrete):
         elif(sigma_ratio<1.0):
             retval= 2.5*(1.0-sigma_ratio)
         else:
+            className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
+            lmsg.warning(className+'.'+methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
             retval= 1e-6
         return retval
     
@@ -528,6 +530,18 @@ S600C= ReinforcingSteel(steelName="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1
 
 steelOfName={"S400A":S400A,"S400B":S400B,"S400C":S400C,"S450A":S450A,"S450B":S450B,"S450C":S450C,"S500A":S500A,"S500B":S500B,"S500C":S500C,"S550A":S550A,"S550B":S550B,"S550C":S550C,"S600A":S600A,"S600B":S600B,"S600C":S600C}
 
+# Bar areas in square meters.
+Fi6= 0.28e-4
+Fi8= 0.50e-4
+Fi10= 0.79e-4
+Fi12= 1.13e-4
+Fi14= 1.54e-4
+Fi16= 2.01e-4
+Fi20= 3.14e-4
+Fi25= 4.91e-4
+Fi32= 8.04e-4
+Fi40= 12.56e-4
+
 # rebars as defined in Eurocode 2.
 rebarsEC2={}
 rebars= rebarsEC2 # useful alias.
@@ -552,3 +566,27 @@ for item in rebarsEC2:
     bar= rebarsEC2[item]
     bar['r']= bar['d']/2.0
     bar['area']= math.pi*bar['r']*bar['r']
+    
+rebar04_S400B= rebar_family.Rebar(diam= 4e-3, steel= S400B) 
+rebar06_S400B= rebar_family.Rebar(diam= 6e-3, steel= S400B) 
+rebar08_S400B= rebar_family.Rebar(diam= 8e-3, steel= S400B) 
+rebar10_S400B= rebar_family.Rebar(diam= 10e-3, steel= S400B) 
+rebar12_S400B= rebar_family.Rebar(diam= 12e-3, steel= S400B) 
+rebar16_S400B= rebar_family.Rebar(diam= 16e-3, steel= S400B) 
+rebar20_S400B= rebar_family.Rebar(diam= 20e-3, steel= S400B) 
+rebar25_S400B= rebar_family.Rebar(diam= 25e-3, steel= S400B) 
+rebar32_S400B= rebar_family.Rebar(diam= 32e-3, steel= S400B) 
+rebar40_S400B= rebar_family.Rebar(diam= 40e-3, steel= S400B) 
+rebar50_S400B= rebar_family.Rebar(diam= 50e-3, steel= S400B) 
+
+rebar04_S500B= rebar_family.Rebar(diam= 4e-3, steel= S500B) 
+rebar06_S500B= rebar_family.Rebar(diam= 6e-3, steel= S500B) 
+rebar08_S500B= rebar_family.Rebar(diam= 8e-3, steel= S500B) 
+rebar10_S500B= rebar_family.Rebar(diam= 10e-3, steel= S500B) 
+rebar12_S500B= rebar_family.Rebar(diam= 12e-3, steel= S500B) 
+rebar16_S500B= rebar_family.Rebar(diam= 16e-3, steel= S500B) 
+rebar20_S500B= rebar_family.Rebar(diam= 20e-3, steel= S500B) 
+rebar25_S500B= rebar_family.Rebar(diam= 25e-3, steel= S500B) 
+rebar32_S500B= rebar_family.Rebar(diam= 32e-3, steel= S500B) 
+rebar40_S500B= rebar_family.Rebar(diam= 40e-3, steel= S500B) 
+rebar50_S500B= rebar_family.Rebar(diam= 50e-3, steel= S500B) 

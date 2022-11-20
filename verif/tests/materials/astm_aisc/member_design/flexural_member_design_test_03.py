@@ -146,6 +146,7 @@ print('ratio1= ',ratio1)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/units_utils.footToMeter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/units_utils.footToMeter,' kip-ft)')
 print('ratio2= ',ratio2)
+print('MuRef= ',MuRefText/1e3,' kN m(',MuRefText/1e3*kN2kips/units_utils.footToMeter,' kip-ft)')
 print('ratio3= ',ratio3)
 '''
 

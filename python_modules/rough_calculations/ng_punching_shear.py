@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
+''' Rough design of concrete slabs under punching loads according to the
+    publication: "Números gordos en el proyecto de estructuras" by
+    Juan Carlos Arroyo et al. ISBN: 97884932270-4-3. Cinter 2009.
 
+   https://books.google.es/books?id=tf5-tgAACAAJ
+''' 
 __author__= "Luis C. Pérez Tato (LCPT), Ana Ortega (AO_O) "
 __copyright__= "Copyright 2017, LCPT, AO_O"
 __license__= "GPL"
@@ -8,55 +13,81 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 
-def esfuerzoPunzonamiento(qk,A):
-    '''Estimación del esfuerzo de punzonamiento en la losa sobre
-       un pilar (HL.3 números gordos)
+def designPunchingLoad(qk,A):
+    '''Rough estimation of the punching shear load over a column
+      (HL.3 números gordos).
     
-       :param qk: characteristic total uniform load on the slab or deck.
-       :param A: column tributary area.
+    :param qk: characteristic value of the total uniform load on the slab.
+    :param A: column tributary area.
     '''
     return 1.6*qk*A
 
-def punzMaximo(fck,d,a,b):
-    ''' Estimate of the strut strength in the section at the intersection
-        of the support contour with the deck (HL.3 números gordos)
-        (Interpreto que este es el punzonamiento máximo si no vamos a disponer
-        reinforcement de punzonamiento)
-        Si el esfuerzo de punzonamiento es mayor habrá que:
+def maximum_punching_shear_load(concrete,d,a,b):
+    ''' Estimate of the maximum punching shear resistance along the section 
+        at the intersection of the support contour with the deck
+        (HL.3 números gordos).
 
-          - Aumentar la escuadría del pilar (lo más barato)
-          - Aumentar el depth de la losa (lo más efectivo)
-          - Mejorar la resistencia del hormigón
+        (This is the maximum punching shear load you can transfer to the
+         column through the contact surface. This is the same type of
+         limitation that the maximum shear forde that the strut can
+         support in a )
+
+        If the shear load to resist is greater, then we need to.
+
+          - increment the support dimensions (the cheaper solution)
+          - increment the slab thickness (the better solution)
+          - increase the concrete strength
    
-        :param fck: characteristic strength of concrete (N/m2)
-        :param d: effective depth of the floor deck (m)
+        :param concrete: concrete material (N/m2)
+        :param d: effective depth of the slab (m)
         :param a,b: dimensions of the column (m)
 
         Result is expressed in N
     '''
-    fcd=fck*10/1.5/1e6  #resistencia de cálculo del hormigón (kp/cm2)
-    return 1.5*math.sqrt(fcd)*2*d*(a+b)*100e3
+    fcd= -concrete.fcd()  # concrete design compressive strength
+    nu= 0.6*(1-concrete.fckMPa()/250) # EC2:2004 eq. (6.6N) (recommended value).
+    return 0.4*nu*fcd*2*d*(a+b)
 
-def reinforcementPunz(Vd,fck,d,a,b,h,fyd):
-    ''' Estimate the punching reinforcement area
-        computed at the critical perimeter defined to occur at 
-        d/2 from the column faces (HL.3 números gordos)
+def concrete_resisted_punching_load(concrete, d, a, b, criticalPerimeterLength= None):
+    ''' Approximate design value of punching shear resistance of a slab without 
+        punching shear reinforcement, computed at the critical perimeter
+        defined to occur at d/2 from the column faces (HL.3 números gordos)
 
-       :param Vd: Desing value of the punching shear (N)
-       :param fck: characteristic strength of concrete (N/m2)
-       :param fyd: design value of reinforcement steel yield strength (Pa).
-       :param d: effective depth of the floor deck (m)
-       :param h: slab depth (m).
-       :param a,b: dimensions of the column (m)
-
-    Result is expressed in m2/m
+       :param concrete: concrete material.
+       :param d: effective depth of the floor deck
+       :param a,b: dimensions of the column
+       :param criticalPerimeterLength: length of the critical perimeter.
     '''
-    fcd=fck*10/1.5/1e6   #resistencia de cálculo del hormigón (kp/cm2)
-    Vcu=math.sqrt(fcd)*2*d*(a+b+2*d)*100e3 #resistencia del hormigón a punzonamiento (kN)
-    if Vd < Vcu:
-        return 0
+    fck= concrete.fckMPa()
+    k= min(1+math.sqrt(.2/d),2.0)
+    # Expresion based on EC2:2004 clause 6.2.2 equation (6.2.b).
+    tau= 0.035*pow(k,3/2.0)*math.sqrt(fck)*1e6 # About 0.5 MPa
+    if(criticalPerimeterLength is None):
+        criticalPerimeterLength= 2*(a+b+2*math.pi*d) # The correct formula is
+                                                     # this. Ther is an error
+                                                     # in the book.
+    criticalArea= criticalPerimeterLength*d
+    return tau*criticalArea
+    
+
+def punching_shear_reinforcement_area(concrete, steel, Vd, d, a, b, h, criticalPerimeterLength= None):
+    ''' Estimate the needed punching shear reinforcement area
+        computed at the critical perimeter defined to occur at 
+        2d from the column faces (HL.3 números gordos)
+
+    :param concrete: concrete material.
+    :param steel: steel material.
+    :param Vd: Desing value of the punching shear (N)
+    :param d: effective depth of the floor deck (m)
+    :param h: slab depth (m).
+    :param a,b: dimensions of the column (m)
+    :param criticalPerimeterLength: length of the critical perimeter.
+    '''
+    Vcu= concrete_resisted_punching_load(concrete= concrete, a= a, b= b, d= d, criticalPerimeterLength= criticalPerimeterLength)
+    if(abs(Vd) < Vcu):
+        return 0.0
     else:
-        fyalfad=min(400,fyd/1e6)
-        Aalfa=(Vd-0.5*Vcu)/0.8/h/fyalfad*10/1e7
+        fyalfad=min(400,steel.fyd()/1e6)
+        Aalfa=(abs(Vd)-0.5*Vcu)/0.8/h/fyalfad*10/1e7
         return Aalfa
 

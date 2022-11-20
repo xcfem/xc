@@ -59,6 +59,7 @@ python tests/utility/geom/vector3d_test_02.py
 python tests/utility/geom/vector3d_angle_test_01.py
 echo "$BLEU" "    Points." "$NORMAL"
 python tests/utility/geom/pos2d_test_01.py
+python tests/utility/geom/pos2d_test_02.py
 python tests/utility/geom/pos3d_test_01.py
 python tests/utility/geom/pos3d_list_test_01.py
 python tests/utility/geom/closest_pair_of_points.py
@@ -73,8 +74,10 @@ python tests/utility/geom/pos2d_list_test_01.py
 echo "$BLEU" "    Segments." "$NORMAL"
 python tests/utility/geom/segments/segment2d_test_01.py
 python tests/utility/geom/segments/segment2d_test_02.py
+python tests/utility/geom/segments/segment2d_test_03.py
 python tests/utility/geom/segments/segment2d_connect_01.py
 python tests/utility/geom/segments/segment2d_connect_02.py
+python tests/utility/geom/segments/segment3d_test_00.py
 python tests/utility/geom/segments/segment3d_test_01.py
 python tests/utility/geom/segments/segment3d_test_02.py
 python tests/utility/geom/segments/segment3d_connect_01.py
@@ -85,10 +88,15 @@ python tests/utility/geom/polylines/polyline2d_test_02.py
 python tests/utility/geom/polylines/polyline2d_test_03.py
 python tests/utility/geom/polylines/polyline2d_test_04.py
 python tests/utility/geom/polylines/polyline2d_test_05.py
+python tests/utility/geom/polylines/polyline2d_test_06.py
+python tests/utility/geom/polylines/polyline2d_test_07.py
 python tests/utility/geom/polylines/polyline3d_test_01.py
 python tests/utility/geom/polylines/polyline3d_test_02.py
 python tests/utility/geom/polylines/polyline3d_test_03.py
 python tests/utility/geom/polylines/polyline3d_test_04.py
+python tests/utility/geom/polylines/polyline3d_test_05.py
+python tests/utility/geom/polylines/polyline3d_test_06.py
+python tests/utility/geom/polylines/polyline3d_test_07.py
 echo "$BLEU" "    Polygons." "$NORMAL"
 python tests/utility/geom/polygons/polygon2D_test_2d_01.py
 python tests/utility/geom/polygons/polygon2D_test_2d_02.py
@@ -112,8 +120,10 @@ python tests/utility/geom/polygons/polygon3D_test_07.py
 echo "$BLEU" "    Alpha shapes." "$NORMAL"
 python tests/utility/geom/basic_alpha_shape2d_test.py
 echo "$BLEU" "    Circles." "$NORMAL"
-python tests/utility/geom/circle2d_test_01.py
-python tests/utility/geom/circle2d_test_02.py
+python tests/utility/geom/circles/circle2d_test_01.py
+python tests/utility/geom/circles/circle2d_test_02.py
+python tests/utility/geom/circles/test_curvature_vector_2d_01.py
+python tests/utility/geom/circles/test_curvature_vector_3d_01.py
 echo "$BLEU" "    Parabolas." "$NORMAL"
 python tests/utility/geom/parabola_test_01.py
 echo "$BLEU" "    Sliding vectors." "$NORMAL"
@@ -200,11 +210,12 @@ python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
 python tests/actions/traffic_loads/test_ec1_notional_lane_computation_01.py
+python tests/actions/traffic_loads/test_ec1_lm1_tandem_position.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
-#python tests/actions/load_combinations/testLoadCombinations.py
 python tests/actions/load_combinations/test_action.py
+python tests/actions/load_combinations/test_action_group.py
 python tests/actions/load_combinations/test_ehe_secondaries_00.py
 python tests/actions/load_combinations/test_ehe_accidentales.py
 python tests/actions/load_combinations/test_iap11_01.py
@@ -212,6 +223,7 @@ python tests/actions/load_combinations/test_iap11_02.py
 python tests/actions/load_combinations/test_combination_dict.py
 python tests/actions/load_combinations/test_split_combination.py
 python tests/actions/load_combinations/test_sia_pont_ferroviaire.py
+python tests/actions/load_combinations/test_ec0_traffic_groups.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
@@ -639,6 +651,8 @@ echo "$BLEU" "    Load distribution." "$NORMAL"
 python tests/loads/load_distribution/test_sliding_vector_load_01.py
 python tests/loads/load_distribution/test_sliding_vector_load_02.py
 python tests/loads/load_distribution/test_surf_unif_load_distributed.py
+python tests/loads/load_distribution/test_wheel_load_distribution.py
+python tests/loads/load_distribution/test_notional_lane_load_distribution.py
 echo "$BLEU" "    Strain loads." "$NORMAL"
 python tests/loads/strain_loads/truss_strain_load_01.py
 python tests/loads/strain_loads/truss_strain_load_02.py
@@ -693,6 +707,7 @@ python tests/loads/combinations/test_combination06.py
 python tests/loads/combinations/test_combination07.py
 python tests/loads/combinations/test_combination08.py
 python tests/loads/combinations/test_combination09.py
+python tests/loads/combinations/test_combination10.py
 python tests/loads/combinations/test_davit_01.py
 python tests/loads/combinations/test_davit_02.py
 
@@ -864,6 +879,8 @@ python tests/materials/concrete_shapes/test_reinforcement_placement_03.py
 python tests/materials/concrete_shapes/test_reinforcement_placement_04.py
 python tests/materials/concrete_shapes/test_reinforcement_placement_05.py
 python tests/materials/concrete_shapes/test_reinforcement_placement_06.py
+python tests/materials/concrete_shapes/test_reinforcement_placement_07.py
+python tests/materials/concrete_shapes/test_reinforcement_placement_08.py
 echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 python tests/materials/ehe/test_Ecm_concrete.py
@@ -903,6 +920,7 @@ python tests/materials/ehe/test_steel_relaxation_01.py
 
 echo "$BLEU" "    EC2 tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
+python tests/materials/ec2/test_EC2_max_min_reinforcement_area_01.py
 python tests/materials/ec2/test_lap_length_01.py
 python tests/materials/ec2/test_EC2Concrete.py
 python tests/materials/ec2/test_EC2creep.py
@@ -953,7 +971,7 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
 python tests/materials/ec3/test_cross_section_verification.py
-python tests/materials/ec3/test_beam_contrpnt.py
+python tests/materials/ec3/test_beam_control_points.py
 python tests/materials/ec3/test_biax_bend_coeff.py
 python tests/materials/ec3/test_classif.py
 python tests/materials/ec3/test_beam_with_full_lateral_restraint.py
@@ -1176,9 +1194,11 @@ python tests/rough_calculations/beam_formulas/beam_deflection_mohr_03.py
 python tests/rough_calculations/beam_formulas/beam_deflection_mohr_04.py
 python tests/rough_calculations/beam_formulas/beam_deflection_mohr_05.py
 python tests/rough_calculations/beam_formulas/beam_deflection_mohr_06.py
+python tests/rough_calculations/beam_formulas/test_max_bending_moment.py
 echo "$BLEU" "  Reinforced concrete rough calculations,..." "$NORMAL"
-python tests/rough_calculations/reinforced_concrete/test_punzo01.py
-python tests/rough_calculations/reinforced_concrete/test_punzo02.py
+python tests/rough_calculations/reinforced_concrete/test_punching_shear_01.py
+python tests/rough_calculations/reinforced_concrete/test_punching_shear_02.py
+python tests/rough_calculations/reinforced_concrete/test_punching_shear_03.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_sia262.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ehe.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ec2.py
@@ -1193,6 +1213,7 @@ python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_
 echo "$BLEU" "    ACI limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aci/test_shear_uls_checking_aci.py
 echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"

@@ -2,6 +2,13 @@
 '''Simple beam formulas.'''
 
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import math
 from rough_calculations import ng_beam as bm
 
@@ -56,34 +63,63 @@ class SimpleBeam(bm.Beam):
     #  ___________________
     # ^                   ^
     def getReaction1UnderUniformLoadPartiallyDistributed(self,q,a,b):
-      c= self.l-a-b
-      retval= q*b/2.0/self.l*(2*c+b)
-      return -retval
+        ''' Return the reaction on the left support when the beam
+        is submitted to a uniform partially distributed load.
+
+        :param q: value of the uniform load.
+        :param a: distance from the left support to the beginning of the load.
+        :param b: length of the partial uniform load.
+        '''
+        c= self.l-a-b
+        retval= q*b/2.0/self.l*(2*c+b)
+        return -retval
 
     def getReaction2UnderUniformLoadPartiallyDistributed(self,q,a,b):
-      c= self.l-a-b
-      retval= q*b/2.0/self.l*(2*a+b)
-      return -retval
+        ''' Return the reaction on the right support when the beam
+        is submitted to a uniform partially distributed load.
+
+        :param q: value of the uniform load.
+        :param a: distance from the left support to the beginning of the load.
+        :param b: length of the partial uniform load.
+        '''
+        retval= q*b/2.0/self.l*(2*a+b)
+        return -retval
 
     def getShearUnderUniformLoadPartiallyDistributed(self,q,a,b,x):
-      R1= getReaction1UnderUniformLoadPartiallyDistributed(self,q,a,b)
-      retval= R1
-      if(x>a):
-        if(x<(a+b)):
-          retval-= q*(x-a)
-        else:
-          retval= getReaction2UnderUniformLoadPartiallyDistributed(self,q,a,b)
-      return retval
+        ''' Return the shear force at x when the beam is submitted to a 
+            uniform partially distributed load.
+
+        :param q: value of the uniform load.
+        :param a: distance from the left support to the beginning of the load.
+        :param b: length of the partial uniform load.
+        :param x: position of the section.
+        '''
+        R1= self.getReaction1UnderUniformLoadPartiallyDistributed(self,q,a,b)
+        retval= R1
+        if(x>a):
+            if(x<(a+b)):
+                retval-= q*(x-a)
+            else:
+                retval= self.getReaction2UnderUniformLoadPartiallyDistributed(self,q,a,b)
+        return retval
 
     def getBendingMomentUnderUniformLoadPartiallyDistributed(self,q,a,b,x):
-      R1= getReaction1UnderUniformLoadPartiallyDistributed(self,q,a,b)
-      retval= R1*x
-      if(x>a):
-        if(x<(a+b)):
-          retval-= q/2.0*(x-a)**2
-        else:
-          retval= getReaction2UnderUniformLoadPartiallyDistributed(self,q,a,b)*(self.l-x)
-      return retval
+        ''' Return the bending moment at x when the beam is submitted to a 
+            uniform partially distributed load.
+
+        :param q: value of the uniform load.
+        :param a: distance from the left support to the beginning of the load.
+        :param b: length of the partial uniform load.
+        :param x: position of the section.
+        '''
+        R1= self.getReaction1UnderUniformLoadPartiallyDistributed(self,q,a,b)
+        retval= R1*x
+        if(x>a):
+          if(x<(a+b)):
+            retval-= q/2.0*(x-a)**2
+          else:
+            retval= self.getReaction2UnderUniformLoadPartiallyDistributed(self,q,a,b)*(self.l-x)
+        return retval
 
     #          l
     # |<---------------->|
@@ -107,7 +143,6 @@ class SimpleBeam(bm.Beam):
         :param P: value of the concentrated load.
         :param a: position of the load.
         '''
-        b= self.l-a
         return -P*a/self.l
 
     def getShearUnderConcentratedLoad(self,P,a,x):

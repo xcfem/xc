@@ -8,39 +8,44 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 from misc.latex import latex_utils
 
-def printShearVerificationListingHeader(archivo, nmbSecc):
-  '''Prints the header of the shear verification listing.'''
-  archivo.write("\\begin{center}\n")
-  archivo.write("\\begin{footnotesize}\n")
-  archivo.write("\\tablefirsthead{%\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{12}{|c|}{\\textbf{",nmbArch,"}}\\\\\n")
-  archivo.write("\\multicolumn{12}{|c|}{Comprobación de la sección ", latex_utils.toLaTeX(nmbSecc),"}\\\\\n")
-  archivo.write("\\hline\n")
-  archivo.write("Elem. & Hip. & $N$  & $V_y$ & $V_z$ & $V_{u1}$ & $\\theta$              & $V_{cu}$ & $V_{su}$  & $V_{u2}$ & $V_u$ & FC \\\\\n")
-  archivo.write("      &      & (kN) & (kN)  & (kN)  & (kN)     & (\\textsuperscript{o}) & (kN)     & (kN)      & (kN)     & (kN)  &    \\\\\n")
-  archivo.write("\\hline}\n")
-  archivo.write("\\tablehead{%\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{12}{|l|}{\small\sl \ldots continúa}\\\\\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{12}{|c|}{\\textbf{",nmbArch,"}}\\\\\n")
-  archivo.write("\\multicolumn{12}{|c|}{Comprobación de la sección ", latex_utils.toLaTeX(nmbSecc),"}\\\\\n")
-  archivo.write("\\hline\n")
-  archivo.write("Elem. & Hip. & $N$  & $V_y$ & $V_z$ & $V_{u1}$ & $\\theta$              & $V_{cu}$ & $V_{su}$  & $V_{u2}$ & $V_u$ & FC \\\\\n")
-  archivo.write("      &      & (kN) & (kN)  & (kN)  & (kN)     & (\\textsuperscript{o}) & (kN)     & (kN)      & (kN)     & (kN)  &    \\\\\n")
-  archivo.write("\\hline}\n")
-  archivo.write("\\tabletail{%\n")
-  archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{12}{|r|}{\small\sl continúa\ldots}\\\\\n")
-  archivo.write("\\hline}\n")
-  archivo.write("\\tablelasttail{\hline}\n")
-  archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|r|r|r|r|r|r|}\n")
+def printShearVerificationListingHeader(outputFile, sectionName, title):
+    ''' Prints the header of the shear verification listing.
+
+    :param outputFile: output file.
+    :param sectionName: name of the section being checked.
+    :param title: title for the tabular data.
+    '''
+    outputFile.write("\\begin{center}\n")
+    outputFile.write("\\begin{footnotesize}\n")
+    outputFile.write("\\tablefirsthead{%\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{12}{|c|}{\\textbf{"+title+"}}\\\\\n")
+    outputFile.write("\\multicolumn{12}{|c|}{Comprobación de la sección "+ latex_utils.toLaTeX(sectionName)+"}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Elem. & Hip. & $N$  & $V_y$ & $V_z$ & $V_{u1}$ & $\\theta$              & $V_{cu}$ & $V_{su}$  & $V_{u2}$ & $V_u$ & FC \\\\\n")
+    outputFile.write("      &      & (kN) & (kN)  & (kN)  & (kN)     & (\\textsuperscript{o}) & (kN)     & (kN)      & (kN)     & (kN)  &    \\\\\n")
+    outputFile.write("\\hline}\n")
+    outputFile.write("\\tablehead{%\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{12}{|l|}{\small\sl \ldots continúa}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{12}{|c|}{\\textbf{"+title+"}}\\\\\n")
+    outputFile.write("\\multicolumn{12}{|c|}{Comprobación de la sección "+ latex_utils.toLaTeX(sectionName)+"}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Elem. & Hip. & $N$  & $V_y$ & $V_z$ & $V_{u1}$ & $\\theta$              & $V_{cu}$ & $V_{su}$  & $V_{u2}$ & $V_u$ & FC \\\\\n")
+    outputFile.write("      &      & (kN) & (kN)  & (kN)  & (kN)     & (\\textsuperscript{o}) & (kN)     & (kN)      & (kN)     & (kN)  &    \\\\\n")
+    outputFile.write("\\hline}\n")
+    outputFile.write("\\tabletail{%\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{12}{|r|}{\small\sl continúa\ldots}\\\\\n")
+    outputFile.write("\\hline}\n")
+    outputFile.write("\\tablelasttail{\hline}\n")
+    outputFile.write("\\begin{supertabular}{|l|r|r|r|r|r|r|r|r|r|r|r|}\n")
 
 
-def printShearVerificationListingFoot(archivo):
-  '''Print the shear verification listing foot.'''
-  archivo.write("\\end{supertabular}\n")
-  archivo.write("\\end{footnotesize}\n")
-  archivo.write("\\end{center}\n")
+def printShearVerificationListingFoot(outputFile):
+    '''Print the shear verification listing foot.'''
+    outputFile.write("\\end{supertabular}\n")
+    outputFile.write("\\end{footnotesize}\n")
+    outputFile.write("\\end{center}\n")
 
