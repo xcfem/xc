@@ -448,43 +448,43 @@ def shearExploitationRatioe(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd
     vu= getVu(fck,fcd,Nd,Ac,b0,d,z,alpha,theta,AsPas,fyd,AsAct,fpd,sgxd,sgyd,AsTrsv,fydTrsv)
     return Vrd/vu
 
-class ShearDesignParameters(object):
-    '''Defines shear design parameters.'''
-    def __init__(self):
-      self.concreteArea= 0.0 # Concrete section total area.
-      self.widthMin= 0.0 # net width of the element according to clause 40.3.5.
-      self.effectiveDepth= 0.0 # effective depth (meters).
-      self.mechanicLeverArm= 0.0 # mechanic lever arm (meters).
-      self.tensionedRebarsArea= 0.0 # Area of tensioned longitudinal steel rebars anchored at a distance greater than the effective depth of the section.
-      self.tensionedStrandsArea= 0.0 # Area of tensioned longitudinal prestressed steel anchored at a distance greater than the effective depth of the section.
-      self.areaShReinfBranchsTrsv= 0.0 # transverse reinforcement area.
-      self.sigmaXD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to the main axis of the member. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
-      self.sigmaYD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to shear force Vd. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
-      self.angAlpha= math.pi/2 # angle of the shear reinforcement with the member axis (figure 44.2.3.1.a EHE).
-      self.angTheta= math.pi/6. # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-      self.ultimateShearStrength= 0.0
+# class ShearDesignParameters(object):
+#     '''Defines shear design parameters.'''
+#     def __init__(self):
+#       self.concreteArea= 0.0 # Concrete section total area.
+#       self.widthMin= 0.0 # net width of the element according to clause 40.3.5.
+#       self.effectiveDepth= 0.0 # effective depth (meters).
+#       self.mechanicLeverArm= 0.0 # mechanic lever arm (meters).
+#       self.tensionedRebarsArea= 0.0 # Area of tensioned longitudinal steel rebars anchored at a distance greater than the effective depth of the section.
+#       self.tensionedStrandsArea= 0.0 # Area of tensioned longitudinal prestressed steel anchored at a distance greater than the effective depth of the section.
+#       self.areaShReinfBranchsTrsv= 0.0 # transverse reinforcement area.
+#       self.sigmaXD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to the main axis of the member. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
+#       self.sigmaYD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to shear force Vd. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
+#       self.angAlpha= math.pi/2 # angle of the shear reinforcement with the member axis (figure 44.2.3.1.a EHE).
+#       self.angTheta= math.pi/6. # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+#       self.ultimateShearStrength= 0.0
 
-    def computeUltimateShearStrength(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
-        '''Compute section shear strength.'''
-        self.concreteArea= concreteFibersSet.getArea()
-        self.widthMin= concreteFibersSet.getAnchoMecanico() # Enhance (not valid with non-convex sections).
-        self.effectiveDepth= concreteFibersSet.getEffectiveDepth()
-        self.mechanicLeverArm= concreteFibersSet.getMechanicLeverArm()
-        self.tensionedRebarsArea= tensionedRebarsFiberSet.getArea
-        # self.tensionedStrandsArea= 
+#     def computeUltimateShearStrength(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
+#         '''Compute section shear strength.'''
+#         self.concreteArea= concreteFibersSet.getArea()
+#         self.widthMin= concreteFibersSet.getAnchoMecanico() # Enhance (not valid with non-convex sections).
+#         self.effectiveDepth= concreteFibersSet.getEffectiveDepth()
+#         self.mechanicLeverArm= concreteFibersSet.getMechanicLeverArm()
+#         self.tensionedRebarsArea= tensionedRebarsFiberSet.getArea
+#         # self.tensionedStrandsArea= 
 
-        self.sigmaXD= N/area+Mz/Iz*self.centerOfMassY+My/Iy*self.centerOfMassZ
-        self.ultimateShearStrength= getVu(fck= fck, fcd= fcd, Nd= N, Ac= self.concreteArea, b0= self.widthMin, d= self.effectiveDepth, z= self.mechanicLeverArm, alpha= self.angAlpha, theta= self.angTheta, AsPas= self.tensionedRebarsArea, fyd= fyd, AsAct= self.tensionedStrandsArea, fpd= fpd, sgxd= self.sigmaXD, sgyd= self.sigmaYD, AsTrsv= self.areaShReinfBranchsTrsv, fydTrsv= fydTrsv)
+#         self.sigmaXD= N/area+Mz/Iz*self.centerOfMassY+My/Iy*self.centerOfMassZ
+#         self.ultimateShearStrength= getVu(fck= fck, fcd= fcd, Nd= N, Ac= self.concreteArea, b0= self.widthMin, d= self.effectiveDepth, z= self.mechanicLeverArm, alpha= self.angAlpha, theta= self.angTheta, AsPas= self.tensionedRebarsArea, fyd= fyd, AsAct= self.tensionedStrandsArea, fpd= fpd, sgxd= self.sigmaXD, sgyd= self.sigmaYD, AsTrsv= self.areaShReinfBranchsTrsv, fydTrsv= fydTrsv)
 
-    def printParams(self, os= sys.stdout):
-        '''print shear checking values.'''
-        os.write("area of tensioned rebars; As= "+str(self.tensionedRebarsArea*1e4)+" cm2")
-        os.write("transverse reinforcement area; AsTrsv= "+str(self.areaShReinfBranchsTrsv*1e4)+" cm2")
-        os.write("design value of normal stress; sigmaXD= "+str(self.sigmaXD/1e6)+"MPa")
-        os.write("effective depth; d= "+str(self.effectiveDepth)+" m")
-        os.write("minimal width; b0= "+str(self.widthMin)+" m")
-        os.write("mechanic lever arm; z= "+str(self.mechanicLeverArm)+" m")
-        os.write("shear strength; Vu= "+str(self.ultimateShearStrength/1e3)+" kN")
+#     def printParams(self, os= sys.stdout):
+#         '''print shear checking values.'''
+#         os.write("area of tensioned rebars; As= "+str(self.tensionedRebarsArea*1e4)+" cm2")
+#         os.write("transverse reinforcement area; AsTrsv= "+str(self.areaShReinfBranchsTrsv*1e4)+" cm2")
+#         os.write("design value of normal stress; sigmaXD= "+str(self.sigmaXD/1e6)+"MPa")
+#         os.write("effective depth; d= "+str(self.effectiveDepth)+" m")
+#         os.write("minimal width; b0= "+str(self.widthMin)+" m")
+#         os.write("mechanic lever arm; z= "+str(self.mechanicLeverArm)+" m")
+#         os.write("shear strength; Vu= "+str(self.ultimateShearStrength/1e3)+" kN")
 
 def getF1cdEHE08(fck,fcd):
     '''getF1cdEHE08(fck,fcd). Returns the value of f1cd (design value of the concrete strut strength) according to clause 44.2.3.1 of EHE-08.
