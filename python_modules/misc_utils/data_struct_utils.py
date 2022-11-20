@@ -13,6 +13,7 @@ import re
 import unicodedata
 import chardet
 import sys
+import decimal
 
 if sys.version_info[0] >= 3:
     unicode = str
@@ -132,3 +133,10 @@ def sort_human(l):
     alphanum = lambda key: [convert(c) for c in re.split('([-+]?[0-9]*\.?[0-9]*)', key)]
     l.sort(key=alphanum)
     return l
+
+def get_number_decimal_positions(number):
+    '''Return the number of decimal positions in the number given as parameter
+    '''
+    d=decimal.Decimal(str(number))
+    retval=-d.as_tuple().exponent
+    return retval

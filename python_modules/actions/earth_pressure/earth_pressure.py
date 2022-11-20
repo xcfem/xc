@@ -828,7 +828,7 @@ class WeightDistrEmbankment(object):
     def appendLoadToCurrentLoadPattern(self):
         for e in self.xcSet.elements:
             coo=e.getCooCentroid(False)
-            presElem=self.getPressure(coo[0],coo[1],coo[2])
+            presElem=max(0,self.getPressure(coo[0],coo[1],coo[2]))
             loadVector= xc.Vector([0,0,-presElem])
             if(presElem!=0.0):
                 e.vector3dUniformLoadGlobal(loadVector)
