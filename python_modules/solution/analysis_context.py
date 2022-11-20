@@ -7,6 +7,12 @@
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
+__copyright__= "Copyright 2016, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
+
 from postprocess.reports import export_internal_forces as eif
 from postprocess.reports import export_reactions as er
 from colorama import Fore
@@ -142,7 +148,7 @@ class AnalysisContextBase(object):
         :param limitState: limit state to compute displacements for.
         '''
         if(len(self.failedCombinations)>0):
-            lmsg.error('Analysis failed in the following combinations: '+str(failedCombinations))
+            lmsg.error('Analysis failed in the following combinations: '+str(self.failedCombinations))
         else:
             if(not self.silent): lmsg.log(Fore.GREEN+'Analysis for combinations for '+str(limitState.label)+': '+str(loadCombinations.getKeys())+' finished.\n'+Style.RESET_ALL)
         

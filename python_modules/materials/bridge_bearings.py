@@ -54,9 +54,16 @@ class Bearing(object):
     '''
     _ids = count(0) #Object counter.
     def __init__(self):
-      self.materials= list()
-      self.materialHandler= None
-      self.id= next(self._ids) #Object identifier.
+        ''' Constructor.
+
+        :param materials: material list (one material for each degree 
+                         of freedom).
+        :param materialHandler: XC material handler.
+        :param id: object identifier (auto).
+        '''
+        self.materials= list()
+        self.materialHandler= None
+        self.id= next(self._ids) #Object identifier.
     def getMaterial(self,i):
         ''' Returns the i-th uniaxial material that modelizes the response in the i-th direction.'''
         return self.materialHandler.getMaterial(self.materials[i])
@@ -134,10 +141,10 @@ class ElastomericBearing(Bearing):
     def __init__(self,G: float,a: float,b: float ,e: float):
         '''Class constructor.
 
-        :ivar G: elastomer shear modulus.
-        :ivar a: width of the bearing (parallel to bridge axis).
-        :ivar b: length of the bearing (parallel to lintel axis).
-        :ivar e: net thickness of the bearing (without steel plates).
+        :param G: elastomer shear modulus.
+        :param a: width of the bearing (parallel to bridge axis).
+        :param b: length of the bearing (parallel to lintel axis).
+        :param e: net thickness of the bearing (without steel plates).
         '''
         super(ElastomericBearing,self).__init__()
         self.G= G
@@ -242,10 +249,12 @@ class ElastomericBearing(Bearing):
         
         newElement= modelSpace.setBearingBetweenNodes(newNode.tag,iNod,self.materials, orientation)
         # Boundary conditions
-        constraints= modelSpace.constraints
         numDOFs= nodeHandler.numDOFs
         for i in range(0,numDOFs):
             spc= modelSpace.newSPConstraint(newNode.tag,i,0.0)
+            if(__debug__):
+                if(not spc):
+                    AssertionError('Can\'t create the constraint.')
         return newNode, newElement
 
 # Points that define the Teflon coefficient of friction of
@@ -309,6 +318,9 @@ class PTFEPotBearing(Bearing):
         '''
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials)
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([2]))
+        if(__debug__):
+            if(not eDofs):
+                AssertionError('Can\'t create constraints.')
         return newElement
 
     def putOnXBetweenNodes(self,modelSpace,iNodA, iNodB):
@@ -320,6 +332,9 @@ class PTFEPotBearing(Bearing):
         '''
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[self.matXName])
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([1,2]))
+        if(__debug__):
+            if(not eDofs):
+                AssertionError('Can\'t create constraints.')
         return newElement
 
     def putOnYBetweenNodes(self,modelSpace,iNodA, iNodB):
@@ -331,6 +346,9 @@ class PTFEPotBearing(Bearing):
         '''
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[None,self.matYName])
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([0,2]))
+        if(__debug__):
+            if(not eDofs):
+                AssertionError('Can\'t create constraints.')
         return newElement
 
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
