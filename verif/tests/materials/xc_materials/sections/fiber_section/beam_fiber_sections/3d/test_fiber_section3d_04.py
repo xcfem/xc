@@ -4,7 +4,6 @@ from __future__ import print_function
    Home made test. '''
 
 
-import math
 import geom
 import xc
 

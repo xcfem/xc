@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-import math
 
 pol1=geom.Polyline3d()
 pol2=geom.Polyline3d()

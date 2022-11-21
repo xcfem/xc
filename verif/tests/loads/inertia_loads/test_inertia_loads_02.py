@@ -13,7 +13,6 @@ __email__= "l.pereztato@gmail.com"
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import math
 
 gravity= 1#9.81
 E= 30e6 # Young modulus (psi)

@@ -17,7 +17,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 from materials.astm_aisc import ASTM_materials
 from misc_utils import units_utils
 

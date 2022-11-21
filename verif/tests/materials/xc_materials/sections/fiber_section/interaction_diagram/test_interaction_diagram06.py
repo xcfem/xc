@@ -7,7 +7,6 @@ import geom
 import xc
 
 from materials.ehe import EHE_materials
-import math
 from materials.sia262 import SIA262_materials
 from materials.sections.fiber_section import def_simple_RC_section
 

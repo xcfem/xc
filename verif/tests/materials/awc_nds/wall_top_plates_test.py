@@ -4,7 +4,6 @@
 from __future__ import division
 from __future__ import print_function
 
-import math
 import yaml
 import xc
 from model import predefined_spaces

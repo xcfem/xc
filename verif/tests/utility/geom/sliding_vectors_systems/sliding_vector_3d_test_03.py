@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-import math
 
 fromPoint=geom.Pos3d(0.5,0,0)
 ptoDest=geom.Pos3d(0.5,0,100)

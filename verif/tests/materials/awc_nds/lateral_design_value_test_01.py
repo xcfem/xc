@@ -12,7 +12,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-import math
 from materials.awc_nds import specific_gravity as sg
 from materials.awc_nds import dowel_type_fasteners as fasteners
 from materials.awc_nds import AWCNDS_materials as mat

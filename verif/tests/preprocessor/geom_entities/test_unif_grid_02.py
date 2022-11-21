@@ -2,7 +2,6 @@
 from __future__ import print_function
 
 import xc
-import math
 import os
 from model import predefined_spaces
 from materials import typical_materials

@@ -6,7 +6,6 @@ dy= 2
 dz= 3
 import geom
 import xc
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

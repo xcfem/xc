@@ -3,7 +3,6 @@ from __future__ import print_function
 from __future__ import division
 import geom
 import xc
-import math
 import os
 from model import predefined_spaces
 from materials import typical_materials

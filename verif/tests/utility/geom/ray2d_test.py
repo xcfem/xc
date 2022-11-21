@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-import math
 
 sg= geom.Segment2d(geom.Pos2d(-0.443,0.443),geom.Pos2d(-0.443,-0.443))
 sr= geom.Ray2d(geom.Pos2d(0.19855,-0.082042),geom.Pos2d(-39.7765,16.6642))

@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-import math
 
 A= geom.Pos3d(11.3722,5.09673,4.80346)
 B= geom.Pos3d(11.3722,3.61173,4.80346)

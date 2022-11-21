@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 import geom
 
 points= [geom.Pos3d(5.601,0.0,30.087), geom.Pos3d(5.525,0.0,30.087), geom.Pos3d(5.525, 0.0, 28.837), geom.Pos3d(5.601,0.0,28.837)]

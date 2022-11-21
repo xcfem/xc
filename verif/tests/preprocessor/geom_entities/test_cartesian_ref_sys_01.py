@@ -3,7 +3,6 @@ from __future__ import print_function
 
 import geom
 import xc
-import math
 import os
 
 __author__= "Luis C. Pérez Tato (LCPT)"

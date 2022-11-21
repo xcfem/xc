@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-import math
 
 r1=geom.Line3d(geom.Pos3d(0.,0.,0.),geom.Pos3d(10.,10.,10.))
 

@@ -8,7 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega.Ort@gmail.com"
 
-import math
 from rough_calculations import vaults_rough_calc as vault
 import numpy as np
 

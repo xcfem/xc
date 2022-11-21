@@ -3,7 +3,6 @@ from __future__ import print_function
 CooMax= 10
 import geom
 import xc
-import math
 from model.sets import sets_mng as sUtils
 
 __author__= "Luis C. Pérez Tato (LCPT)"

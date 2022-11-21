@@ -6,7 +6,6 @@
 from __future__ import division
 from __future__ import print_function
 
-import math
 from materials.aci import ACI_materials
 from materials.tm5_809_3 import tm5_809_3_materials
 from misc_utils import units_utils

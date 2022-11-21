@@ -8,7 +8,6 @@ __license__= "GPL"
 __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
-import math
 from rough_calculations import suspension_bridge_simple_model as sbm
 
 GWBridge= sbm.SuspensionBridgeRoughModel(325,377,3500,650)

@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-import math
 
 # Sliding vector system.
 O= geom.Pos2d(0.0,1.0)

@@ -6,7 +6,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 from materials.ec3 import EC3_materials
 from materials.api import API_materials
 from materials.ehe import EHE_materials

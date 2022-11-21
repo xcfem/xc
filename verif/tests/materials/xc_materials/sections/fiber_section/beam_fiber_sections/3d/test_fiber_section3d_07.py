@@ -4,7 +4,6 @@ from __future__ import print_function
    el material fiber_section_GJ. '''
 
 
-import math
 import xc
 from misc import scc3d_testing_bench
 

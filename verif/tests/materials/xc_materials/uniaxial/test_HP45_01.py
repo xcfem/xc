@@ -2,7 +2,6 @@
 ''' Home made test.'''
 from __future__ import print_function
 
-import math
 import xc
 from materials import typical_materials
 from materials import concrete_base

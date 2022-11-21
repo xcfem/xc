@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from materials.eae import EAE_limit_state_checking
-import math
 
 # Stresses on the throat plane revolved over the bead face.
 tn= 72.07e6 # Tangential stress normal to weld axis.

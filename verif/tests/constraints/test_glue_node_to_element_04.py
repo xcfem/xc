@@ -18,7 +18,6 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import math
 from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
 
