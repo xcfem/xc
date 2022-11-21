@@ -14,7 +14,6 @@ import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials import typical_materials
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 from materials.sections import section_properties

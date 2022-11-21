@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from materials import typical_materials
 from materials.sections.structural_shapes import aisc_metric_shapes
 from sympy.physics import units
 

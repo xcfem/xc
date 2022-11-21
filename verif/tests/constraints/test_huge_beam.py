@@ -11,7 +11,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials import typical_materials
 import math
 
 

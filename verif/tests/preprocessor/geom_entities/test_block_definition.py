@@ -11,7 +11,6 @@ __email__= "l.pereztato@gmail.com"
 import geom
 import xc
 from model import predefined_spaces
-from materials import typical_materials
 # from postprocess import output_handler
 
 # Problem type

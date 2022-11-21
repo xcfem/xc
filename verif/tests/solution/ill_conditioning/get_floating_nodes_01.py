@@ -6,7 +6,6 @@ from __future__ import division
 import xc
 
 from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2019, LCPT"

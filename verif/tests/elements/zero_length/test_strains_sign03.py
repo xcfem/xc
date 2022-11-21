@@ -15,7 +15,6 @@ from __future__ import division
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

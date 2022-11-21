@@ -13,7 +13,6 @@ from misc_utils import log_messages as lmsg
 from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
 from model import predefined_spaces
-from materials import typical_materials
 import os
 import xc_base
 import xc

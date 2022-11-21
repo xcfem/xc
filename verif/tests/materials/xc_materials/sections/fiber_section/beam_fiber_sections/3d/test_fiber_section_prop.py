@@ -36,7 +36,6 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials.ec2 import EC2_materials
 from materials import concrete_base
-from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import section_report 
 # import matplotlib.pyplot as plt

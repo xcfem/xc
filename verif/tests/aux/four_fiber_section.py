@@ -22,6 +22,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+from materials import typical_materials
+
 # Material properties
 E= 2.1e6 # Elastic modulus (Pa)
 

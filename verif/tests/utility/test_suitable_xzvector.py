@@ -14,7 +14,6 @@ F= 1 # Force magnitude
 
 import xc
 from model import predefined_spaces
-from materials import typical_materials
 
 
 # Model definition

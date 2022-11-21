@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 import xc
-from materials import typical_materials
 from materials import concrete_base
 from materials.ehe import EHE_materials
 
