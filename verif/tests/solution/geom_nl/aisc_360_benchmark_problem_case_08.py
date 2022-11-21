@@ -14,7 +14,6 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import geom
 import xc
 from materials.astm_aisc import ASTM_materials
-from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs

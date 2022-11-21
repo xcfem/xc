@@ -13,7 +13,6 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 from materials.astm_aisc import ASTM_materials
-from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 
 from misc_utils import units_utils
