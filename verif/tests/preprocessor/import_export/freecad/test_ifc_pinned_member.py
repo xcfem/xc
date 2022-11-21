@@ -22,7 +22,6 @@ from materials.awc_nds import dimensional_lumber
 import os
 from actions import load_cases as lcm
 from actions import combinations as combs
-from solution import predefined_solutions
 
 # Unit conversion.
 gravity= 9.81 # m/s2

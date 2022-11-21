@@ -9,13 +9,11 @@ from __future__ import print_function
 
 from materials.sections import section_properties
 from misc import scc2d_testing_bench
-from solution import predefined_solutions
 
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 

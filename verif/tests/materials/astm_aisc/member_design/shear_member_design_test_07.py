@@ -18,7 +18,6 @@ from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs
-from solution import predefined_solutions
 
 from misc_utils import units_utils
 
