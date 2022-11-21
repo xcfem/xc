@@ -113,6 +113,8 @@ def CdTableroAlmaLlenaIAPF(B,h,angAlma):
     '''CdTableroAlmaLlenaIAPF(B,h,angAlma)
     Coeficiente de arrastre para empuje horizontal sobre tableros
     de alma llena according to clause 2.3.7.5.1 IAPF.
+
+    :param angAlma: web angle (randians).
     '''
     coefRedCdIAPF= max(0.7,1-(5/1000*math.degrees(angAlma)))
     tmpCdIAPF=2.5-0.3*B/h

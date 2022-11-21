@@ -724,10 +724,9 @@ class IskanderPressureDistribution(SeismicPressureDistribution):
         
         
 class EarthPressureSlopedWall(object):
-    '''Earth pressure on a sloped wall. A single soil type with no freatic
-    is considered.
+    '''Earth pressure on a sloped wall. A single soil type with no water table.
 
-    :ivar Ksoil: pressure coefficient of the soil
+    :ivar Ksoil: pressure coefficient of the soil.
     :ivar gammaSoil: weight density of the soil
     :ivar zGroundPnt1: global Z coordinate of ground level at point of 
                       coordinates XYpnt1
@@ -781,11 +780,11 @@ class WeightDistrEmbankment(object):
        by the angle that its transversal section forms with the X global axis 
        (counterclockwise) and a list of coordinates [[xp1,z1],[xp2,z2], ...],
        where xp coordinates are expressed in a coordinate system obtained 
-       rotating theta degrees the global system.
+       rotating theta radians the global system.
 
     :ivar xcSet: set of elements to which apply the loads
     :ivar gammaSoil: weight density of the soil
-    :ivar theta: angle counterclockwise in degrees that forms the transversal
+    :ivar theta: angle counterclockwise in radians that forms the transversal
                  section of the embankment with the global X-axis
     :ivar coordSoilSurf: list of coordinates [[xp1,z1],[xp2,z2], ...] 
           that defines the soil surface, where xp are the x coordinates of the
@@ -797,7 +796,7 @@ class WeightDistrEmbankment(object):
 
         :param xcSet: set of elements to which apply the loads
         :param gammaSoil: weight density of the soil
-        :param theta: angle counterclockwise in degrees that forms the transversal
+        :param theta: angle counterclockwise in radians that forms the transversal
                      section of the embankment with the global X-axis
         :param coordSoilSurf: list of coordinates [[xp1,z1],[xp2,z2], ...] 
               that defines the soil surface, where xp are the x coordinates of

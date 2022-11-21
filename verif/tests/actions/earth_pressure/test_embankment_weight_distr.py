@@ -17,7 +17,7 @@ coordSoilSurf=[[0,0],
                   [3,3],
                   [4,0]] #list of coordinates [[yp1,z1],[yp2,z2], ...] that defines the soil surface, where yp are the y coordinates of the vertices of a transversal section in the surface, expressed in the rotated reference system.
 
-theta=0 # angle counterclockwise in degrees that forms the axis of the strip of embankment with the global X-axis
+theta= math.radians(0) # angle counterclockwise in radians that forms the axis of the strip of embankment with the global X-axis
 soil0=ep.WeightDistrEmbankment(xcSet=None,gammaSoil=gammaSoil,theta=theta,coordSoilSurf=coordSoilSurf)
 theta=90
 soil90=ep.WeightDistrEmbankment(xcSet=None,gammaSoil=gammaSoil,theta=theta,coordSoilSurf=coordSoilSurf)

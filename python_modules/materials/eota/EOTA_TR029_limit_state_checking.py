@@ -283,14 +283,14 @@ def psiEcVFactor(ev, c1):
   return min(1/(1+2*ev/3/c1),1.0)
 
 def psiAlphaVFactor(alphaV):
-  '''
-  Factor that takes account of the angle between the applied load and the direction perpendicular to the free edge of the concrete member (must be less than 90 degrees) see figure 4.7c and expression 5.8g on section f) of clause 5.2.3.4 of EOTA TR029.
+    '''
+    Factor that takes account of the angle between the applied load and the direction perpendicular to the free edge of the concrete member (must be less than 90 degrees) see figure 4.7c and expression 5.8g on section f) of clause 5.2.3.4 of EOTA TR029.
 
-  :param alphaV: angle between the applied load and the direction perpendicular to the free edge of the concrete member.
-  '''
-  if(alphaV>(math.pi/2.0)):
-    lmsg.error('angle must be smaller than 90 degrees (see section f of clause 5.2.3.4 of EOTA TR029).')
-  return max(sqrt(1.0/(cos(alphaV)^2+(sin(alphaV)/2.5)^2)),1.0)
+    :param alphaV: angle between the applied load and the direction perpendicular to the free edge of the concrete member.
+    '''
+    if(alphaV>(math.pi/2.0)):
+        lmsg.error('angle must be smaller than 90 degrees (see section f of clause 5.2.3.4 of EOTA TR029).')
+    return max(sqrt(1.0/(cos(alphaV)^2+(sin(alphaV)/2.5)^2)),1.0)
 
 def psiHVFactor(h, c1):
   '''

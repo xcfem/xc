@@ -90,7 +90,7 @@ sideWallsCpRef= -0.7
 ratio8= abs(sideWallsCp-sideWallsCpRef)/-sideWallsCpRef
 
 ## Roof pressure coefficients.
-tht= 36.87 # Angle of plane of roof from horizontal, in degrees.
+tht= math.radians(36.87) # Angle of plane of roof from horizontal, in radians.
 
 ### Wind normal to ridge.
 windwardRoofCp= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.windward, L= L, h= meanRoofHeight, theta= tht)[1]
