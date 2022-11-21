@@ -32,8 +32,8 @@ diameters= [8e-3, 10e-3, 12e-3, 16e-3, 20e-3, 25e-3, 32e-3, 40e-3]
 #
 # compression: true if reinforcement is compressed.
 #
-rebarControllerGood= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 1.0, compression= False)
-rebarControllerPoor= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 0.7, compression= False)
+rebarControllerGood= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 1.0, compression= False) # Good conditions: eta1= 1.0
+rebarControllerPoor= EC2_limit_state_checking.RebarController(concreteCover= 25e-3, spacing= 150e-3, eta1= 0.7, compression= False) # Poor conditions: eta1= 0.7
 
 # Materials
 concrete= EC2_materials.C25
