@@ -5,7 +5,6 @@ según Rankine, Culmann y Coulomb.'''
 from __future__ import division
 from __future__ import print_function
 
-import sys
 import math
 import geom
 from geotechnics import frictional_soil

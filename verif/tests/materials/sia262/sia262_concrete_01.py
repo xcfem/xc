@@ -3,7 +3,6 @@
 
 from __future__ import print_function
 from __future__ import division
-import sys
 from materials.sia262 import SIA262_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"

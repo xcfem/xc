@@ -3,7 +3,6 @@
 
 from __future__ import print_function
 from __future__ import division
-import sys
 from materials.sia262 import SIA262_materials
 from materials.sia262 import SIA262_limit_state_checking
 from rough_calculations import ng_simple_bending_reinforcement

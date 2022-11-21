@@ -24,7 +24,6 @@ from postprocess.config import default_config
 from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import element_section_map
 import os
-import sys
 import logging
 
 from misc_utils import log_messages as lmsg

@@ -12,7 +12,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import sys
 import rough_calculations.masonry_vault
 
 #Coefficients of polynomial

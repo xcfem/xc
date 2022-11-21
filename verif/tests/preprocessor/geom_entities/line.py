@@ -7,7 +7,6 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import sys
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"

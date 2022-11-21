@@ -3,7 +3,6 @@
 from __future__ import print_function
 from __future__ import division
 
-import sys
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 

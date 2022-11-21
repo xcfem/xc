@@ -3,7 +3,6 @@ from __future__ import print_function
 import geom
 import xc
 import os
-import sys
 from model import predefined_spaces
 from materials import typical_materials
 

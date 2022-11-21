@@ -13,7 +13,6 @@ from import_export import dxf_reader
 from import_export import neutral_mesh_description as nmd
 
 import os
-import sys
 import xc
 import logging
 

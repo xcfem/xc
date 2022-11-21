@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import sys
 import numpy as np
 import pydoc
 import rough_calculations.masonry_vault as masonry_vault

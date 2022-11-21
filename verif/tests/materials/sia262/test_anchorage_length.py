@@ -3,7 +3,6 @@
 
 from __future__ import print_function
 from __future__ import division
-import sys
 import materials.sia262.SIA262_limit_state_checking
 
 __author__= "Luis C. Pérez Tato (LCPT)"

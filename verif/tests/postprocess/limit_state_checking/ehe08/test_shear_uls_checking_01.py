@@ -24,7 +24,6 @@ from postprocess import RC_material_distribution
 from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import element_section_map
 from postprocess.config import default_config
-import sys
 import os
 import logging
 
