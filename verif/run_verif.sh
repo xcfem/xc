@@ -90,6 +90,7 @@ python tests/utility/geom/polylines/polyline2d_test_04.py
 python tests/utility/geom/polylines/polyline2d_test_05.py
 python tests/utility/geom/polylines/polyline2d_test_06.py
 python tests/utility/geom/polylines/polyline2d_test_07.py
+python tests/utility/geom/polylines/plane_polyline3d_test_01.py
 python tests/utility/geom/polylines/polyline3d_test_01.py
 python tests/utility/geom/polylines/polyline3d_test_02.py
 python tests/utility/geom/polylines/polyline3d_test_03.py
@@ -1106,9 +1107,9 @@ echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
 
 echo "$BLEU" "  Foundation design tests." "$NORMAL"
-python tests/geotechnics/test_pile_01.py
-python tests/geotechnics/test_micropile_01.py
-python tests/geotechnics/test_micropile_01.py
+python tests/geotechnics/foundations/test_pile_01.py
+python tests/geotechnics/foundations/test_micropile_01.py
+python tests/geotechnics/foundations/test_micropile_01.py
 ## Soil mechanics (basic utilities)
 echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
 python tests/geotechnics/soil_mechanics/test_coulomb.py
@@ -1123,6 +1124,9 @@ python tests/geotechnics/soil_mechanics/test_mononobe_okabe_01.py
 python tests/geotechnics/soil_mechanics/test_mononobe_okabe_02.py
 python tests/geotechnics/soil_mechanics/test_iskander_01.py
 python tests/geotechnics/soil_mechanics/test_iskander_02.py
+## Earthworks
+echo  "$BLEU" "  Earthworks." "$NORMAL"
+python tests/geotechnics/earthworks/test_embankment_01.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"

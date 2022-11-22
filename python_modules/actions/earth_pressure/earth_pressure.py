@@ -772,7 +772,6 @@ class EarthPressureSlopedWall(object):
             if(presElem!=0.0):
                 e.vector3dUniformLoadGlobal(loadVector)
 
-
 class WeightDistrEmbankment(object):
     '''Distribution of pressure on a set of shells due to the weight of a
        the soil on the shell elements. 
