@@ -208,9 +208,13 @@ Polyline2d Polyline2d::GetMenores(unsigned short int i,const GEOM_FT &d) const
 //      return result;
 //   }
 
-//! @brief Return el vértice i-ésimo (el primero es el 1).
+//! @brief Return the i-th vertex (the first one has the index 1).
 const Pos2d &Polyline2d::Vertice(const size_t &i) const
   { return GeomObj::list_Pos2d::operator[](i-1); }
+
+//! @brief Return the i-th vertex (the first one has the index 0).
+const Pos2d &Polyline2d::Vertice0(const size_t &i) const
+  { return GeomObj::list_Pos2d::operator[](i); }
 
 //! @brief Return a polyline parallel to this one at the distance
 //! being passed as parameter. If the distance is positive the new
@@ -246,6 +250,19 @@ Segment2d Polyline2d::getSegment(const size_t &i) const
 	        << "-th and " << ns
                 << "-th is the last one." << std::endl;
     Segment2d s(Vertice(i),Vertice(i+1));
+    return s;
+  }
+
+//! @brief Return i-th segment (the first one is the 0).
+Segment2d Polyline2d::getSegment0(const size_t &i) const
+  {
+    const size_t ns= getNumSegments();
+    if(i>ns)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; you asked for the " << i
+	        << "-th and " << ns
+                << "-th is the last one." << std::endl;
+    Segment2d s(Vertice0(i),Vertice0(i+1));
     return s;
   }
 
@@ -594,7 +611,7 @@ GeomObj::list_Pos2d Polyline2d::getIntersection(const Line2d &r) const
         Segment2d s(*j,*k);
         list_Pos2d tmp= intersection(r,s);
         if(!tmp.empty())
-          retval.Agrega(tmp);
+          retval.AgregaSiNuevo(tmp);
       }
     return retval;
   }
@@ -611,7 +628,7 @@ GeomObj::list_Pos2d Polyline2d::getIntersection(const Ray2d &sr) const
         Segment2d s(*j,*k);
         list_Pos2d tmp= intersection(sr,s);
         if(!tmp.empty())
-          retval.Agrega(tmp);
+          retval.AgregaSiNuevo(tmp);
       }
     return retval;
   }
@@ -628,7 +645,7 @@ GeomObj::list_Pos2d Polyline2d::getIntersection(const Segment2d &sg) const
         Segment2d s(*j,*k);
         list_Pos2d tmp= intersection(sg,s);
         if(!tmp.empty())
-          retval.Agrega(tmp);
+          retval.AgregaSiNuevo(tmp);
       }
     return retval;
   }

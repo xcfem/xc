@@ -245,6 +245,63 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("getJVectorAtLength", &Polyline2d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   ;
 
+void (PlanePolyline3d::*simplifyPP3DPoly)(GEOM_FT epsilon)= &PlanePolyline3d::simplify;
+Segment3d (PlanePolyline3d::*getPP3DSegment)(const unsigned int ) const= &PlanePolyline3d::getSegment;
+GeomObj3d::list_Pos3d (PlanePolyline3d::*getPPPlaneIntersection)(const Plane &) const= &PlanePolyline3d::getIntersection;
+GeomObj3d::list_Pos3d (PlanePolyline3d::*getPPLineIntersection)(const Line3d &) const= &PlanePolyline3d::getIntersection;
+Vector3d (D2to3d::*ppto_3dv)(const Vector2d &) const= &D2to3d::to_3d;
+Pos3d (D2to3d::*ppto_3dp)(const Pos2d &) const= &D2to3d::to_3d;
+Line3d (D2to3d::*ppto_3dln)(const Line2d &) const= &D2to3d::to_3d;
+Segment3d (D2to3d::*ppto_3dsg)(const Segment2d &) const= &D2to3d::to_3d;
+Vector2d (D2to3d::*ppto_2dv)(const Vector3d &) const= &D2to3d::to_2d;
+Pos2d (D2to3d::*ppto_2dp)(const Pos3d &) const= &D2to3d::to_2d;
+Line2d (D2to3d::*ppto_2dln)(const Line3d &) const= &D2to3d::to_2d;
+Segment2d (D2to3d::*ppto_2dsg)(const Segment3d &) const= &D2to3d::to_2d;
+class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
+  .def(init<>())
+  .def(init<PlanePolyline3d>())
+  .def(init<boost::python::list>())
+  .add_property("getXMax",&PlanePolyline3d::GetXMax, "Return maximum value for x coordinate.")
+  .add_property("getYMax",&PlanePolyline3d::GetYMax, "Return maximum value for y coordinate.")
+  .add_property("getZMax",&PlanePolyline3d::GetZMax, "Return maximum value for z coordinate.")
+  .add_property("getXMin",&PlanePolyline3d::GetXMin, "Return minimum value for x coordinate.")
+  .add_property("getYMin",&PlanePolyline3d::GetYMin, "Return minimum value for y coordinate.")
+  .add_property("getZMin",&PlanePolyline3d::GetZMin, "Return minimum value for z coordinate.")
+  .def("getPlane",&PlanePolyline3d::getPlane, "Return the plane that contains the polyline.")
+  .def("to_3d",ppto_3dv, "Return the corresponding 3D vector.")
+  .def("to_3d",ppto_3dp, "Return the corresponding 3D point.")
+  .def("to_3d",ppto_3dln, "Return the corresponding 3D line.")
+  .def("to_3d",ppto_3dsg, "Return the corresponding 3D segment.")
+  .def("to_2d",ppto_2dv, "Return the corresponding 2D vector.")
+  .def("to_2d",ppto_2dp, "Return the corresponding 2D point.")
+  .def("to_2d",ppto_2dln, "Return the corresponding 2D line.")
+  .def("to_2d",ppto_2dsg, "Return the corresponding 2D segment.")
+  .def("appendVertex", &PlanePolyline3d::appendVertex, "Append a vertex to the end of the polyline.")
+  .def("appendVertexLeft", &PlanePolyline3d::appendVertexLeft, "Append a vertex to the beginning of the polyline.")
+  .def("getNumVertices", &PlanePolyline3d::getNumVertices)
+  .def("getNumSegments", &PlanePolyline3d::getNumSegments)
+  .def("getLength", &PlanePolyline3d::getLength,"Return the length of the polyline.")
+  .def("getFromPoint", &PlanePolyline3d::getFromPoint,"return the first point of the polyline.")
+  .def("getToPoint", &PlanePolyline3d::getToPoint,"return the last point of the polyline.")
+  .def("getVertexList",&PlanePolyline3d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
+  .def("getIntersection", getPPPlaneIntersection, "Return the intersection with the plane argument.")
+  .def("getIntersection", getPPLineIntersection, "Return the intersection with the line argument.")
+  .def("isClosed",&PlanePolyline3d::isClosed,"returns true if the last vertex is coincident with the first one -dist(first,last)<tol*length-.")
+  .def("simplify", simplifyPP3DPoly,"simplification of the polyline (Douglas-Peucker algorithm).")
+  .def("getCenterOfMass", &PlanePolyline3d::getCenterOfMass)
+  .def("getSegment", getPP3DSegment, "return the i-th segment.")
+  .def("getIndexOfSegmentAtParam", &PlanePolyline3d::getIndexOfSegmentAtParam,"Return the index of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getIndexOfSegmentAtLength", &PlanePolyline3d::getIndexOfSegmentAtLength,"getIndexOfSegmentAtLength(s): return the index of the segment that lies at the point at a distance \"s\" measured along the polyline from its origin.")
+  .def("getPointAtLength", &PlanePolyline3d::getPointAtLength, "getPointAtLength(s): return the point that lies at a distance \"s\" measured along the polyline from its origin.")
+  .def("getIVectorAtLength", &PlanePolyline3d::getIVectorAtLength, "getIVectorAtLength(s): return the I vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getJVectorAtLength", &PlanePolyline3d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("getKVectorAtLength", &PlanePolyline3d::getKVectorAtLength, "getKVectorAtLength(s): return the K vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("insertVertex", &PlanePolyline3d::insertVertex,"Insert the point argurment as vertex by splitting the nearest segment.")
+  .def("getChunk", &PlanePolyline3d::getChunk,"getChunk(point, sgn, tol) returns the chunk of the polyline that goes from the begining to the argument point if sgn<0 or from the argument point to the polyline end if sgn>=0. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
+  .def("getLeftChunk", &PlanePolyline3d::getLeftChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from its beginning to the point argument. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
+  .def("getRightChunk", &PlanePolyline3d::getRightChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from the point argument to its end. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
+  .def("split", &PlanePolyline3d::split,"split(point) returns the result of splitting the polyline by the point argument.")
+  ;
 
 
 void (Polyline3d::*simplify3DPoly)(GEOM_FT epsilon)= &Polyline3d::simplify;

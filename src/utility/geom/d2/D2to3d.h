@@ -68,11 +68,13 @@ class D2to3d: public Surface3d
     Vector3d getKVector(void) const; //K unary vector.
 
     Pos3d to_3d(const Pos2d &) const;
+    Vector3d to_3d(const Vector2d &) const;
     Line3d to_3d(const Line2d &) const;
     Ray3d to_3d(const Ray2d &) const;
     Segment3d to_3d(const Segment2d &) const;
     Pos3dArray to_3d(const Pos2dArray &) const;
     Pos2d to_2d(const Pos3d &) const;
+    Vector2d to_2d(const Vector3d &) const;
     Line2d to_2d(const Line3d &) const;
     Ray2d to_2d(const Ray3d &) const;
     Segment2d to_2d(const Segment3d &) const;

@@ -72,6 +72,7 @@
 #include "utility/geom/d3/3d_polyhedrons/Polyhedron3d.h"
 #include "utility/geom/d3/3d_polyhedrons/Hexahedron3d.h"
 #include "utility/geom/pos_vec/Pos3dList.h"
+#include "utility/geom/d1/PlanePolyline3d.h"
 #include "utility/geom/d1/Polyline3d.h"
 //#include "utility/geom/d3/Solid3d.h"
 #include "utility/geom/d2/Surface3d.h"

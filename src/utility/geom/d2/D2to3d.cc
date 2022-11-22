@@ -100,6 +100,10 @@ Vector3d D2to3d::getKVector(void) const
 Pos3d D2to3d::to_3d(const Pos2d &p2d) const
   { return ref.getGlobalPosition(p2d); }
 
+//! @brief Return the 3D vector corresponding to the 2D vector argument.
+Vector3d D2to3d::to_3d(const Vector2d &v2d) const
+  { return ref.getGlobalCoordinates(v2d); }
+
 //! @brief Return the 3D line corresponding to the 2D line argument.
 Line3d D2to3d::to_3d(const Line2d &l2d) const
   { return Line3d(to_3d(l2d.Point(0)),to_3d(l2d.Point(100))); }
@@ -127,6 +131,10 @@ Pos3dArray D2to3d::to_3d(const Pos2dArray &p2d) const
 //! @brief Return the 2D point corresponding to the 3D point argument.
 Pos2d D2to3d::to_2d(const Pos3d &p3d) const
   { return ref.getLocalPosition(p3d); }
+
+//! @brief Return the 2D vector corresponding to the 3D vector argument.
+Vector2d D2to3d::to_2d(const Vector3d &v3d) const
+  { return ref.getLocalCoordinates(v3d); }
 
 //! @brief Return the 2D line corresponding to the 3D line argument.
 Line2d D2to3d::to_2d(const Line3d &l3d) const

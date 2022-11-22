@@ -64,6 +64,7 @@ class PolyPos : public std::deque<pos>
       }
     inline void Agrega(const PolyPos<pos> &p)
       { Cat(p); }
+    inline void AgregaSiNuevo(const PolyPos<pos> &p);
     //! @brief Append the vertices between [first,last) to thebefore
     //! end of the list.
     template <class InputIterator>
@@ -502,6 +503,13 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon)
         iterator j= this->end(); --j; //Last point.
         simplify(epsilon,i,j);
       }
+  }
+
+template <class pos>
+void PolyPos<pos>::AgregaSiNuevo(const PolyPos<pos> &l)
+  {
+    for(typename PolyPos<pos>::const_iterator k= l.begin();k!=l.end();k++)
+      this->AgregaSiNuevo(*k);
   }
 
 template <class pos>

@@ -96,9 +96,11 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     //! @brief Return the minimum value of the i coordinate.
     Polyline2d GetMayores(unsigned short int i,const GEOM_FT &d) const;
     Polyline2d GetMenores(unsigned short int i,const GEOM_FT &d) const;
-    const Pos2d &Vertice(const size_t &i) const;
+    const Pos2d &Vertice(const size_t &) const;
+    const Pos2d &Vertice0(const size_t &) const;
     Segment2d getSegment(const const_iterator &i) const;
     Segment2d getSegment(const size_t &i) const;
+    Segment2d getSegment0(const size_t &i) const;
     const_iterator getNearestSegment(const Pos2d &) const;    
 /*     virtual list_Pos2d Int(unsigned short int i, const double d) const */
 /*       { */

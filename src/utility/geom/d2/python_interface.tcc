@@ -99,21 +99,25 @@ class_<Surface3d, bases<GeomObj3d>, boost::noncopyable  >("Surface3d", no_init)
   .def("dist2",&Surface3d::dist2,"Return the squared distance from point to this surface.")
   ;
 
+Vector3d (D2to3d::*to_3dv)(const Vector2d &) const= &D2to3d::to_3d;
 Pos3d (D2to3d::*to_3dp)(const Pos2d &) const= &D2to3d::to_3d;
 Line3d (D2to3d::*to_3dln)(const Line2d &) const= &D2to3d::to_3d;
 Segment3d (D2to3d::*to_3dsg)(const Segment2d &) const= &D2to3d::to_3d;
-Pos3dArray (D2to3d::*to_3dpt_array)(const Pos2dArray &) const= &D2to3d::to_3d;
+//Pos3dArray (D2to3d::*to_3dpt_array)(const Pos2dArray &) const= &D2to3d::to_3d;
+Vector2d (D2to3d::*to_2dv)(const Vector3d &) const= &D2to3d::to_2d;
 Pos2d (D2to3d::*to_2dp)(const Pos3d &) const= &D2to3d::to_2d;
 Line2d (D2to3d::*to_2dln)(const Line3d &) const= &D2to3d::to_2d;
 Segment2d (D2to3d::*to_2dsg)(const Segment3d &) const= &D2to3d::to_2d;
 class_<D2to3d, bases<Surface3d>, boost::noncopyable  >("D2to3d", no_init)
-  .def("getPlane",&D2to3d::getPlane)
+  .def("getPlane",&D2to3d::getPlane, "Return the plane that contains the polyline.")
   .def("getIVector",&D2to3d::getIVector, "Return unary vector i.")
   .def("getJVector",&D2to3d::getJVector, "Return unary vector j.")
   .def("getKVector",&D2to3d::getKVector, "Return unary vector k.")  
+  .def("to_3d",to_3dv, "Return the corresponding 3D vector.")
   .def("to_3d",to_3dp, "Return the corresponding 3D point.")
   .def("to_3d",to_3dln, "Return the corresponding 3D line.")
   .def("to_3d",to_3dsg, "Return the corresponding 3D segment.")
+  .def("to_2d",to_2dv, "Return the corresponding 2D vector.")
   .def("to_2d",to_2dp, "Return the corresponding 2D point.")
   .def("to_2d",to_2dln, "Return the corresponding 2D line.")
   .def("to_2d",to_2dsg, "Return the corresponding 2D segment.")
