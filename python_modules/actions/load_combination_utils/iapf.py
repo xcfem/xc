@@ -3,6 +3,7 @@
 #sys.path.append('usr/local/src/fuentes/c/biblioteca/xc_utils/lib/')
 
 import loadCombinations
+from actions.load_combination_utils import utils
 
 factors= loadCombinations.Factors()
 partial_safety_factors= factors.getPartialSafetyFactors()

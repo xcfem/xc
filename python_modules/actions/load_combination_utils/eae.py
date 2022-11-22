@@ -7,6 +7,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import loadCombinations
+from actions.load_combination_utils import utils
 
 factors= loadCombinations.Factors()
 partial_safety_factors= factors.getPartialSafetyFactors()

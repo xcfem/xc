@@ -11,6 +11,7 @@ import math
 import sys
 import loadCombinations
 from actions import combinations
+from misc_utils import log_messages as lmsg
 
 class CombGenerator(object):
     ''' Base class for load combination generators.
@@ -144,7 +145,7 @@ class CombGenerator(object):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; situation: '+str(group) + ' unknown.')   
+            lmsg.error(className+'.'+methodName+'; situation: '+str(situation) + ' unknown.')   
         # Assign a name to each combination.
         return getNamedCombinations(loadCombinations, prefix)
 
