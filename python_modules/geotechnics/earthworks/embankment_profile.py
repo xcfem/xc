@@ -12,7 +12,7 @@ __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 
 import geom
 
-class EmbankmentProfile(object):
+class EmbankmentLayer(object):
     ''' 2D polyline representing the profile of the backfill.
 
     :ivar soil: soil model.

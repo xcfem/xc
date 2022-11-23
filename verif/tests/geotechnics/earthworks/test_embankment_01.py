@@ -35,7 +35,7 @@ soilRho= soilGamma/g
 soil= fs.FrictionalSoil(phi= math.radians(30), rho= soilRho)
 
 # Define embankment profile.
-embankmentProfile= ep.EmbankmentProfile(soil= soil, pline= plane_pline_3d)
+embankmentProfile= ep.EmbankmentLayer(soil= soil, pline= plane_pline_3d)
 
 # Compute depths of the surface vertices (must be zero).
 depths0= embankmentProfile.getDepths(pointList= vertices)
