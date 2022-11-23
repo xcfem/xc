@@ -159,7 +159,7 @@ class Wood(wood_base.Wood):
     
     def getCharacteristicTensileStrengthAlongTheGrain(self):
         ''' return the characteristic tensile strength along the grain.'''
-        return ft_0_k
+        return self.ft_0_k
     
     def getCharacteristicTensileStrengthPerpendicularToTheGrain(self):
         ''' return the characteristic tensile strength perpendicular to 
@@ -625,7 +625,7 @@ class EC5Shape(object):
        
     def getDict(self):
         ''' Put member values in a dictionary.'''
-        return {'name':self.name, 'wood':wood.getDict()}
+        return {'name':self.name, 'wood':self.wood.getDict()}
     
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
@@ -633,7 +633,7 @@ class EC5Shape(object):
         if('name' in dct):
             name= dct['name']
             if(name): self.name= name
-        wood.setFromDict('wood')
+        self.wood.setFromDict('wood')
 
     def EIz(self):
         ''' Return the bending stiffness around the z axis.'''

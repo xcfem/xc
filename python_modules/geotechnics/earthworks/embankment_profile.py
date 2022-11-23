@@ -40,6 +40,7 @@ class EmbankmentProfile(object):
             argument.
 
         :param pointList: points whose depths will be computed.
+        :param verticalDir: vector pointing «up».
         '''
         # Compute boundaries.
         xMin= self.getXMin()
@@ -55,6 +56,24 @@ class EmbankmentProfile(object):
                     v= ip-prj # Vector from the intersection to the proj. pt.
                     dist= verticalDir.dot(v) # Dot product.
                     retval.append(dist)
+        return retval
+    
+    def getWeightVerticalStresses(self, pointList, verticalDir= geom.Vector3d(0,0,1)):
+        ''' Return the vertical stresses due to the soil weight on each of the 
+            points in the list argument.
+
+        :param pointList: points whose vertical stresses will be computed.
+        :param verticalDir: vector pointing «up».
+        '''
+        # Compute depths.
+        depths= self.getDepths(pointList= pointList, verticalDir= verticalDir)
+        retval= list()
+        for depth in depths:
+            if(depth>0.0): # under the soil surface.
+                vStress= self.soil.gammaSoil()*depth
+            else: # over the soil surface (in the air).
+                vStress= 0.0
+            retval.append(vStress)
         return retval
                 
                 

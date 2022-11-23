@@ -536,6 +536,9 @@ class StudArrangement(object):
         liveLoad= loadDict['liveLoad']
         snowLoad= loadDict['snowLoad']
         windLoad= loadDict['windLoad']
+        if(__debug__): # Mostly to avoid "not used" warning from pyflakes3
+            if(not deadLoad or not liveLoad or not snowLoad or not windLoad):
+                AssertionError('Can\'t get the loads.')
         results= dict()
         # Checking
         for loadCombName in loadCombinations:
