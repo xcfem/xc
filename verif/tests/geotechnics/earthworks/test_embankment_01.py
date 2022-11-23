@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test Embankment profile class.'''
+''' Test Embankment layer class.'''
 
 from __future__ import print_function
 
@@ -11,7 +11,7 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 import geom
-from geotechnics.earthworks import embankment_profile as ep
+from geotechnics.earthworks import embankment
 from geotechnics import frictional_soil as fs
 from scipy.constants import g
 
@@ -19,9 +19,9 @@ from scipy.constants import g
 #     p2 +--------+ p3
 #       /          \
 #      /            \
-#  p1 /              \
-#    +                + p4
-#
+#     /              \
+# p1 +                + p4
+# 
 
 # Vertex list.
 vertices= [geom.Pos3d(0, 0, 0), geom.Pos3d(1, 0, 1), geom.Pos3d(2, 0, 1), geom.Pos3d(3, 0, 0)]
@@ -34,18 +34,18 @@ soilGamma= 20e3 # N/m3
 soilRho= soilGamma/g
 soil= fs.FrictionalSoil(phi= math.radians(30), rho= soilRho)
 
-# Define embankment profile.
-embankmentProfile= ep.EmbankmentLayer(soil= soil, pline= plane_pline_3d)
+# Define embankment layer.
+embankmentLayer= embankment.EmbankmentLayer(pline= plane_pline_3d, soil= soil)
 
 # Compute depths of the surface vertices (must be zero).
-depths0= embankmentProfile.getDepths(pointList= vertices)
+depths0= embankmentLayer.getDepths(pointList= vertices)
 
 # Try some other points
 testPointsA= [geom.Pos3d(0.5, 10.0, 1.0), geom.Pos3d(1.5, 15.0, 1.5), geom.Pos3d(2.5, -12.0, 1)]
-depthsA= embankmentProfile.getDepths(pointList= testPointsA)
+depthsA= embankmentLayer.getDepths(pointList= testPointsA)
 
 testPointsB= [geom.Pos3d(0.5, 10.0, -1.0), geom.Pos3d(1.5, 15.0, -0.5), geom.Pos3d(2.5, -12.0, -1)]
-depthsB= embankmentProfile.getDepths(pointList= testPointsB)
+depthsB= embankmentLayer.getDepths(pointList= testPointsB)
 
 values= [depths0, depthsA, depthsB]
 refValues= [4*[0.0], 3*[-0.5], 3*[1.5]]
