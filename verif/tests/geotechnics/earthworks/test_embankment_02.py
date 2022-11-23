@@ -59,28 +59,41 @@ embankment.appendLayer(soil= fill, loadSpreadingRatio= fillLoadSpreadingRatio, l
 testPoints= [geom.Pos3d(-1.0, 0, 0), geom.Pos3d(0.5, 0, 0), geom.Pos3d(1, 0, 0), geom.Pos3d(2, 0, 1), geom.Pos3d(3, 0, 0), geom.Pos3d(4,0,0), geom.Pos3d(5,0,0), geom.Pos3d(6,0,0)]
 
 # Compute thicknesses on each test point.
-results= list()
+thicknessValues= list()
+weightPressures= list()
 for p in testPoints:
     thicknesses= embankment.getLayerThicknesses(point= p)
-    results.append(thicknesses)
+    thicknessValues.append(thicknesses)
+    weightPressure= embankment.getWeightVerticalStresses(point= p)
+    weightPressures.append(weightPressure)
 
 # Check results.
-refValues= [[0.0, 0.0], [0.0, 0.5], [0.0, 1.0], [0.5, 0.0], [0.5, 1.0], [0.5, 1.0], [0.0, 1.0], [0.0, 0.0]]
-err= 0.0
-for vRow, refRow in zip(results, refValues):
+## Check thickness results.
+thicknessRefValues= [[0.0, 0.0], [0.0, 0.5], [0.0, 1.0], [0.5, 0.0], [0.5, 1.0], [0.5, 1.0], [0.0, 1.0], [0.0, 0.0]]
+errTh= 0.0
+for vRow, refRow in zip(thicknessValues, thicknessRefValues):
     for v, vRef in zip(vRow, refRow):
-        err+= (v-vRef)**2
-err= math.sqrt(err)
+        errTh+= (v-vRef)**2
+errTh= math.sqrt(errTh)
+
+## Check weight results.
+weightRefValues= [0.0, 0.5*fill.gamma(), 1.0*fill.gamma(), 0.5*ballast.gamma(), 0.5*ballast.gamma()+1.0*fill.gamma(), 0.5*ballast.gamma()+1.0*fill.gamma(), 1.0*fill.gamma(), 0.0]
+errW= 0.0
+for w, wRef in zip(weightPressures, weightRefValues):
+    errW+= (w-wRef)**2
+errW= math.sqrt(errW)
 
 '''
-print('results:', results)
-print('err= ', err)
+print('thicknessValues:', thicknessValues)
+print('errTh= ', errTh)
+print('weightPressures:', weightPressures)
+print('errW= ', errW)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (err<1e-12):
+if (errTh<1e-12) and (errW<1e-12):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')

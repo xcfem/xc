@@ -114,7 +114,7 @@ class EmbankmentLayer(object):
             retval.append(vStress)
         return retval
                 
-                
+# See ascii-art describing data structure at the top of this file.
 class EmbankmentCrossSection(object):
     ''' Class representing the an embankment cross-section
 
@@ -194,3 +194,19 @@ class EmbankmentCrossSection(object):
             retval.append(layerThickness) 
             previousDepth= d
         return list(reversed(retval)) # Results from top to bottom.
+
+    def getWeightVerticalStresses(self, point, verticalDir= geom.Vector3d(0,0,1)):
+        ''' Return the vertical stresses due to the soil weight on each of the 
+            points in the list argument.
+
+        :param point: point whose vertical stress will be computed.
+        :param verticalDir: vector pointing «up».
+        '''
+        # Compute thicknesses.
+        thicknesses= self.getLayerThicknesses(point= point, verticalDir= verticalDir)
+        retval= 0.0
+        for layer, thickness in zip(self.layers, thicknesses):
+            if(thickness>0.0): # thickness for this layer.
+                retval+= layer.soil.gamma()*thickness
+        return retval
+    
