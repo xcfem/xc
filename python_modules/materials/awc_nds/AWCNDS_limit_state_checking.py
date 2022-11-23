@@ -530,8 +530,8 @@ class StudArrangement(object):
         
         worstCase= None
         worstCaseCF= 0.0
-        # Read loads values from dictionary
-        # they will be used in expr.
+        # Read loads values from dictionary they will be used
+        # in expr (see eval command in the for loop).
         deadLoad= loadDict['deadLoad']
         liveLoad= loadDict['liveLoad']
         snowLoad= loadDict['snowLoad']
@@ -543,7 +543,7 @@ class StudArrangement(object):
         # Checking
         for loadCombName in loadCombinations:
             expr= loadCombinations[loadCombName].expr
-            # loads are used here inside 'expr'
+            # loads values are used here inside 'expr'
             value= eval(expr)
             N= value[1]*self.studSpacing
             M= value[0]*self.studHeight**2/8.0            
