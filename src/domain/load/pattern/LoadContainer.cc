@@ -210,6 +210,11 @@ int XC::LoadContainer::getNumLoads(void) const
   { return getNumNodalLoads()+getNumElementalLoads(); }
 
 
+//! @brief Returns true if there is no loads.
+bool XC::LoadContainer::empty(void) const
+  { return (getNumLoads()==0); }
+
+
 //! @brief Deletes all loads.
 void XC::LoadContainer::clearLoads(void)
   {

@@ -840,6 +840,16 @@ class PredefinedSpace(object):
         '''
         combContainer.dumpCombinations(self.preprocessor)
 
+    def getLoadCaseNamed(self, loadCaseName: str):
+        '''Return the load case argument (load pattern or combination) whose 
+           name is passed as parameter.
+
+        :param loadCaseName: name of the load pattern or combination.
+        '''
+        loadHandler= self.getLoadHandler()
+        # Return the corresponding load pattern.
+        return loadHandler.getLoadPatterns[loadCaseName]
+        
     def addLoadCaseToDomain(self, loadCaseName: str):
         '''Add the load case argument (load pattern or combination) to 
            the domain.

@@ -114,6 +114,7 @@ class LoadContainer: public CommandEntity, public MovableObject
     int getNumNodalLoads(void) const;
     int getNumElementalLoads(void) const;
     int getNumLoads(void) const;
+    bool empty(void) const;
 
     // methods to remove things (loads, time_series,...)
     virtual void clearAll(void);

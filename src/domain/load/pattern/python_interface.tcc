@@ -34,6 +34,7 @@ class_<XC::LoadContainer, bases<CommandEntity>, boost::noncopyable >("LoadContai
   .add_property("getNumNodalLoads",&XC::LoadContainer::getNumNodalLoads,"return the number of nodal loads.")
     .add_property("getNumElementalLoads",&XC::LoadContainer::getNumElementalLoads,"return the number of elemental loads.")
   .add_property("getNumLoads",&XC::LoadContainer::getNumLoads,"return the totalnumber of loads.")
+  .def("empty",&XC::LoadContainer::empty,"return true if there is no loads.")
   ;
 
 double &(XC::LoadPattern::*getGammaFRef)(void)= &XC::LoadPattern::GammaF;
