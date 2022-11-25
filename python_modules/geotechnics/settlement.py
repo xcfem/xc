@@ -8,14 +8,16 @@
 '''
 
 from __future__ import division
-import math
-
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2017, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import numpy as np
+import math
+import geom
 
 def stress_increment_under_concentrated_load(P, x, y, z):
     ''' Return the increment in the vertical stress of a point inside an
@@ -26,9 +28,15 @@ def stress_increment_under_concentrated_load(P, x, y, z):
         :param y: y-coordinate of the point relative to the loaded point.
         :param z: z-coordinate of the point relative to the loaded point.
     '''
+    retval= 0.0
     r= math.sqrt(x**2+y**2)
-    denom= 2.0*math.pi*z**2*math.pow(1+(r/z)**2,5.0/2.0)
-    return 3.0*P/denom
+    if(z!=0.0):
+        denom= 2.0*math.pi*z**2*math.pow(1+(r/z)**2,5.0/2.0)
+        retval= 3.0*P/denom
+    else:
+        if(r==0.0):
+            retval= float('inf')
+    return retval
 
 def average_stress_increment_under_concentrated_load(P, x, y, z1, z2, zInc= 0.2):
     ''' Return the average increment in the vertical stress of a the points
@@ -102,3 +110,78 @@ def average_stress_increment_under_rectangular_loaded_area(q, B, L, x, y, z1, z2
         z+= zInc
     retval/= nDivZ
     return retval
+
+class QuadLoadedArea(object):
+    ''' Four-sided polygon under uniform pressure.
+
+    :ivar vertices: polygon vertices.
+    '''
+    def __init__(self, p1, p2, p3, p4):
+        ''' Constructor.
+
+        :param p1: first vertex.
+        :param p2: second vertex.
+        :param p3: third vertex.
+        :param p4: fourth vertex.
+        '''
+        self.vertices= [p1, p2, p3, p4]
+
+    def getSamplePoints(self, eSize):
+        ''' Return the points uniformly distributed along the surface.
+
+        :param eSize: length of the side for the discretization.
+        '''
+        def Ni(xi, eta):
+            ''' Shape functions.'''
+            return [0.25*(1-xi)*(1-eta),
+                    0.25*(1+xi)*(1-eta),
+                    0.25*(1+xi)*(1+eta),
+                    0.25*(1-xi)*(1+eta)]
+        def getIntervalCenters(n):
+            ''' Get the centers of the intervals in natural coordinates.
+
+            :param n: number of intervals.
+            '''
+            sz= 2.0/n
+            xi= np.linspace(start= -1, stop= 1, num= n+1, endpoint= True)
+            return [ x+sz/2.0 for x in xi[:-1]] # Centers of the intervals.       
+        avgWidth= (self.vertices[0].dist(self.vertices[1])+self.vertices[2].dist(self.vertices[3]))/2.0
+        avgLength= (self.vertices[0].dist(self.vertices[3])+self.vertices[1].dist(self.vertices[2]))/2.0
+        nDivWidth= int(math.ceil(avgWidth/eSize))
+        nDivLength= int(math.ceil(avgLength/eSize))
+        xi_i= getIntervalCenters(n= nDivWidth)
+        eta_i= getIntervalCenters(n= nDivLength)
+        retval= list()
+        for xi in xi_i:
+            for eta in eta_i:
+                ni= Ni(xi= xi, eta= eta)
+                x= 0; y= 0; z= 0
+                for shape, vertex in zip(ni, self.vertices):
+                    x+= shape*vertex.x
+                    y+= shape*vertex.y
+                    z+= shape*vertex.z
+                retval.append(geom.Pos3d(x,y,z))
+        return retval
+
+    def getStressIncrement(self, q, points, eSize):
+        ''' Return the increment in the vertical stress for the points inside
+            an homogeneous and elastic soil due to a load distributed on
+            a rectangular area.
+
+            :param q: pressure on the loaded area.
+            :param eSize: length of the side for the discretization.
+            :param points: points whose stress increment will be computed.
+        '''
+        loadedPoints= self.getSamplePoints(eSize)
+        area= geom.Polygon3d(self.vertices).getArea()
+        tributaryArea= area/len(loadedPoints)
+        P= q*tributaryArea # punctual load.
+        retval= list()
+        for p in points:
+            pLoad= 0.0
+            for loadedPoint in loadedPoints:
+                xLoad= loadedPoint.x; yLoad= loadedPoint.y; zLoad= loadedPoint.z
+                pLoad+= stress_increment_under_concentrated_load(P, p.x-xLoad, p.y-yLoad, p.z-zLoad)
+            retval.append(pLoad)
+        return retval
+    

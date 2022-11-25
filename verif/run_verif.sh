@@ -1118,12 +1118,14 @@ python tests/geotechnics/soil_mechanics/test_rankine.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen01.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen02.py
 python tests/geotechnics/soil_mechanics/test_stratified_soil.py
-python tests/geotechnics/soil_mechanics/test_boussinesq.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_01.py
 python tests/geotechnics/soil_mechanics/test_mononobe_okabe_01.py
 python tests/geotechnics/soil_mechanics/test_mononobe_okabe_02.py
 python tests/geotechnics/soil_mechanics/test_iskander_01.py
 python tests/geotechnics/soil_mechanics/test_iskander_02.py
+python tests/geotechnics/soil_mechanics/test_boussinesq.py
+python tests/geotechnics/soil_mechanics/test_quad_loaded_area_01.py
+python tests/geotechnics/soil_mechanics/test_quad_loaded_area_02.py
 ## Earthworks
 echo  "$BLEU" "  Earthworks." "$NORMAL"
 python tests/geotechnics/earthworks/test_embankment_01.py
