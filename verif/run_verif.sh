@@ -639,6 +639,7 @@ python tests/loads/test_vector3d_uniform_load_global01.py
 python tests/loads/test_vector3d_uniform_load_global02.py
 python tests/loads/test_vector3d_uniform_load_global03.py
 python tests/loads/element_load_on_already_active_pattern.py
+python tests/loads/test_shell_uniform_load.py
 echo "$BLEU" "    Concentrated loads." "$NORMAL"
 python tests/loads/concentrated_loads/test_vector2d_point_load_local.py
 python tests/loads/concentrated_loads/test_vector2d_point_load_global_01.py
