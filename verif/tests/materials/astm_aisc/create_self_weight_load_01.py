@@ -77,7 +77,7 @@ modelSpace.createSelfWeightLoad(xcTotalSet,gravityVector)
 ## Linear static analysis.
 modelSpace.analysis= predefined_solutions.simple_static_linear(steelBeam)
 
-## Deflection linit
+## Deflection limit
 preprocessor.getLoadHandler.addToDomain('deadLoad')
 result= modelSpace.analyze(calculateNodalReactions= True)
 
