@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+'''Lateral earth pressure on a retaining wall due to a point 
+    load acting in vertical direction on the backfill.'''
+
 from __future__ import division
 from __future__ import print_function
 
@@ -10,8 +14,6 @@ __email__= "ana.Ortega@ciccp.es" "l.pereztato@ciccp.es"
 import math
 import xc
 from actions.earth_pressure import earth_pressure as ep
-'''Lateral earth pressure on a retaining wall due to a point 
-    load acting in vertical direction on the backfill.'''
 
 vref_cuadCos45=0.5
 

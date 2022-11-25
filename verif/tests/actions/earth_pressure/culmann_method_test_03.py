@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Pantalla de pilotes. Relación entre el coeficiente de empuje calculado
-según Rankine, Culmann y Coulomb.'''
+''' Pile curtain. Relationship between the thrust coefficient calculated 
+according to Rankine, Culmann and Coulomb.'''
 
 from __future__ import division
 from __future__ import print_function
