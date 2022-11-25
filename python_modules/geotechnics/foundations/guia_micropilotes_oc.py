@@ -310,7 +310,7 @@ class Micropile(pile.CircularPile):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; unknown soil aggresivity descriptor: '+str(soilType))
+            lmsg.warning(className+'.'+methodName+'; unknown soil aggresivity descriptor: '+str(self.soilAggressivity))
         f= interpolate.interp1d(xi, yi, kind='linear', fill_value="extrapolate")
         return float(f(self.designLife))*1e-3 # mm->m
  
@@ -435,6 +435,7 @@ class Micropile(pile.CircularPile):
         else:
             ro= (2*Vd/VcRd-1)**2
             retval= (1-ro)*McRd
+        return retval
         
     def defElasticSection3d(self,preprocessor, overrideRho= None):
         ''' Return an elastic section appropriate for 3D beam analysis

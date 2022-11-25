@@ -8,6 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es "
 
+import sys
 from geotechnics.foundations import pile
 from misc_utils import log_messages as lmsg
 

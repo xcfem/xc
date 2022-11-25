@@ -168,20 +168,20 @@ def getFactor2cN(A0cN, AcN):
 # Splitting
 
 def getCcrSpHiltiHY150(h, hEf):
-  '''
-  half-side del influence area (critical distance to the edge)
-     of an individual anchor according to 
-     table 7 of ETA-05/0051 (page 19).
+    '''
+    half-side del influence area (critical distance to the edge)
+       of an individual anchor according to 
+       table 7 of ETA-05/0051 (page 19).
 
-   :param h: thickness of concrete member (m).
-   :param hEf: effective anchorage depth (m).
-  '''
-  if(h>=2*hEf):
-    return hef 
-  elif(h>1.3*hEf):
-    return 4.6*hEf-1.8*h 
-  else:
-    return 2.26*hEf
+     :param h: thickness of concrete member (m).
+     :param hEf: effective anchorage depth (m).
+    '''
+    if(h>=2*hEf):
+        return hEf 
+    elif(h>1.3*hEf):
+        return 4.6*hEf-1.8*h 
+    else:
+        return 2.26*hEf
 
 def getA0spN(anchorPosition, CcrSp):
     '''
@@ -258,15 +258,18 @@ def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
 '''
 
 def psiReVFactor(descr):
-  '''
-  Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, computed according to section g) of clause 5.2.3.4 of EOTA TR029.
+    '''
+    Return the value of the psi_{re,V} factor that takes account of the 
+    effect of the type of reinforcement used in cracked concrete, according
+    to expression 5.8 of EOTA TR029, computed according to section g) of 
+    clause 5.2.3.4 of EOTA TR029.
 
-  :param descr: Descriptor que puede tomar los valores:
-    1: anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
-    2: anclaje en cracked concrete con reinforcement de refuerzo en el borde (diámetro > 12mm).
-    3: anclaje en cracked concrete con reinforcement de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
-  '''
-  return ifte(descr<=1,1.0,ifte(descr<=2,1.2,1.4))
+    :param descr: Descriptor que puede tomar los valores:
+      1: anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
+      2: anclaje en cracked concrete con reinforcement de refuerzo en el borde (diámetro > 12mm).
+      3: anclaje en cracked concrete con reinforcement de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
+    '''
+    return 1+(descr-1)*0.2
 
 def psiEcVFactor(ev, c1):
   '''
@@ -290,48 +293,50 @@ def psiAlphaVFactor(alphaV):
     '''
     if(alphaV>(math.pi/2.0)):
         lmsg.error('angle must be smaller than 90 degrees (see section f of clause 5.2.3.4 of EOTA TR029).')
-    return max(sqrt(1.0/(cos(alphaV)^2+(sin(alphaV)/2.5)^2)),1.0)
+    return max(math.sqrt(1.0/(math.cos(alphaV)^2+(math.sin(alphaV)/2.5)^2)),1.0)
 
 def psiHVFactor(h, c1):
-  '''
-  Coefficient that is used to introduce in the calculation the lack of 
-  proportionality between the reduction of shear strength and the decrease 
-  of the part thickness as is assumed in the quotient Ac,v/Ac,v0. See 
-  expression 5.8f of the clause 5.2.3.4 of EOTA TR029.
+    '''
+    Coefficient that is used to introduce in the calculation the lack of 
+    proportionality between the reduction of shear strength and the decrease 
+    of the part thickness as is assumed in the quotient Ac,v/Ac,v0. See 
+    expression 5.8f of the clause 5.2.3.4 of EOTA TR029.
 
-  :param h: Concrete part thickness.
-  :param c1: edge distance in direction 1; in case of anchorages close to an 
-             edge loaded in shear c 1 is the edge distance in direction of 
-             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
-  '''
-  return max(sqrt(1.5*c1/h),1.0)
+    :param h: Concrete part thickness.
+    :param c1: edge distance in direction 1; in case of anchorages close to an 
+               edge loaded in shear c 1 is the edge distance in direction of 
+               the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    '''
+    return max(math.sqrt(1.5*c1/h),1.0)
 
 def psiSVFactor(c1, c2):
-  '''
-  Coeficiente que sirve para introducir en el cálculo la perturbación en la distribución de tensiones en el hormigón que produce la presencia de un segundo borde libre próximo al anclaje. Ver expresión 5.8e of clause 5.2.3.4 of EOTA TR029.
+    '''
+    Coeficiente que sirve para introducir en el cálculo la perturbación en la distribución de tensiones en el hormigón que produce la presencia de un segundo borde libre próximo al anclaje. Ver expresión 5.8e of clause 5.2.3.4 of EOTA TR029.
 
-  :param c1: edge distance in direction 1; in case of anchorages close to an 
-             edge loaded in shear c 1 is the edge distance in direction of 
-             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
-  :param c2: edge distance in direction 2; direction 2 is perpendicular to 
-             direction 1.
-  '''
-  return min((0.7+0.2*c2/c1),1.0)
+    :param c1: edge distance in direction 1; in case of anchorages close to an 
+               edge loaded in shear c 1 is the edge distance in direction of 
+               the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    :param c2: edge distance in direction 2; direction 2 is perpendicular to 
+               direction 1.
+    '''
+    return min((0.7+0.2*c2/c1),1.0)
 
 def areaAcV0(h, c1):
-  '''
-  area of concrete cone of an individual anchor at the lateral concrete surface
-  not affected by edges parallel to the assumed loading direction, member 
-  thickness or adjacent anchors, assuming the shape of the fracture area as a 
-  half pyramid with a height equal to c1 and a base-length of 1.5 c1 and 3 c1.
-  See figure 5.6 and expression 5.8d of EOTA TR029.
+    '''
+    area of concrete cone of an individual anchor at the lateral concrete
+    surface not affected by edges parallel to the assumed loading direction, 
+    member thickness or adjacent anchors, assuming the shape of the fracture
+    area as a half pyramid with a height equal to c1 and a base-length 
+    of 1.5 c1 and 3 c1.
 
-  :param h: Concrete part thickness.
-  :param c1: edge distance in direction 1; in case of anchorages close to an 
-             edge loaded in shear c 1 is the edge distance in direction of 
-             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
-  '''
-  return 3*c1*min(1.5*c1,h)
+    See figure 5.6 and expression 5.8d of EOTA TR029.
+
+    :param h: Concrete part thickness.
+    :param c1: edge distance in direction 1; in case of anchorages close to an 
+               edge loaded in shear c 1 is the edge distance in direction of 
+               the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    '''
+    return 3*c1*min(1.5*c1,h)
 
 def AcV2Pernos(h, c1, s2):
   '''
