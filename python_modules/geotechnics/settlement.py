@@ -30,13 +30,13 @@ def average_vertical_stress_increment_under_concentrated_load(P, x, y, z1, z2, z
         :param z2: lower limit of the z-coordinate.
         :param zInc: size of the discretization.
     '''
-    H= z2-z1
+    H= z1-z2
     nDivZ= int(math.ceil(H/zInc))
     retval= 0.0
-    z= z1+zInc/2.0
+    z= z1-zInc/2.0
     for i in range(0,nDivZ):
         retval+= boussinesq.vertical_stress_increment_under_concentrated_load(P, x, y, z)
-        z+= zInc
+        z-= zInc
     retval/= nDivZ
     return retval
 
@@ -82,12 +82,12 @@ def average_vertical_stress_increment_under_rectangular_loaded_area(q, B, L, x, 
         :param z2: lower limit of the z-coordinate.
         :param zInc: size of the discretization.
     '''
-    H= z2-z1
+    H= z1-z2
     nDivZ= int(math.ceil(H/zInc))
     retval= 0.0
-    z= z1+zInc/2.0
+    z= z1-zInc/2.0
     for i in range(0,nDivZ):
         retval+= vertical_stress_increment_under_rectangular_loaded_area(q, B, L, x, y, z, eSize= 0.01)
-        z+= zInc
+        z-= zInc
     retval/= nDivZ
     return retval

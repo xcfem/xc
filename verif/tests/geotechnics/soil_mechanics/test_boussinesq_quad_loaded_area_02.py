@@ -21,17 +21,18 @@ loadedArea= boussinesq.QuadLoadedArea(p1= geom.Pos3d(0,0,0),
 
 # Compute stress increment in some test points.
 testPoints= [geom.Pos3d(0.25,0.25,-1), geom.Pos3d(.25,0.75,-1), geom.Pos3d(0.75,0.25,-1), geom.Pos3d(0.75,0.75,-1)]
-stresses= loadedArea.getStressIncrement(q= 1e3, points= testPoints, eSize= 0.5)
+vertStresses= loadedArea.getVerticalStressIncrement(q= -1e3, points= testPoints, eSize= 0.5)
+stressVectors= loadedArea.getStressIncrement(q= -1e3, points= testPoints, eSize= 0.5)
 
 # Check results
-refValues= 4*[299.341104612446]
+refValues= 4*[-299.341104612446]
 err= 0.0
-for v, rv in zip(stresses, refValues):
+for v, rv in zip(vertStresses, refValues):
     err+= (v-rv)**2
 err+= math.sqrt(err)
 
 '''
-print(stresses)
+print(vertStresses)
 print(refValues)
 '''
 

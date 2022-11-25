@@ -19,17 +19,30 @@ concentratedLoad= boussinesq.ConcentratedLoad(p= geom.Pos3d(0.5,0.5,0))
 
 # Compute stress increment.
 testPoints= [geom.Pos3d(0.25,0.25,-1), geom.Pos3d(.25,0.75,-1), geom.Pos3d(0.75,0.25,-1), geom.Pos3d(0.75,0.75,-1)]
-stresses= concentratedLoad.getStressIncrement(P= 1e3, points= testPoints)
+vertStresses= concentratedLoad.getVerticalStressIncrement(P= -1e3, points= testPoints)
+stressVectors= concentratedLoad.getStressIncrement(P= -1e3, points= testPoints)
 
 # Check results
-refValues= 4*[355.6805199633012]
+## Vertical stresses.
+vStress= -355.6805199633012
+refVertStresses= 4*[vStress]
 err= 0.0
-for v, rv in zip(stresses, refValues):
+for v, rv in zip(vertStresses, refVertStresses):
     err+= (v-rv)**2
+
+## Stress vector.
+hStress= -28.357724863608592*math.sqrt(2)/2
+refStressVectors= 4*[geom.Vector3d(hStress,hStress,vStress)]
+for v, rv in zip(stressVectors, refStressVectors):
+    err+= (v-rv).getModulus()**2
 err+= math.sqrt(err)
+    
 
 '''
-print(stresses)
+print(vertStresses)
+print(refVertStresses)
+print(stressVectors)
+print(refStressVectors)
 print(err)
 '''
 

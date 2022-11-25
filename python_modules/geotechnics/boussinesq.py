@@ -24,20 +24,56 @@ def vertical_stress_increment_under_concentrated_load(P, x, y, z):
     ''' Return the increment in the vertical stress of a point inside an
         homogeneous and elastic soil due to a load on the surface.
 
-        :param P: value of the load.
-        :param x: x-coordinate of the point relative to the loaded point.
-        :param y: y-coordinate of the point relative to the loaded point.
-        :param z: z-coordinate of the point relative to the loaded point.
+    :param P: value of the load.
+    :param x: x-coordinate of the point relative to the loaded point.
+    :param y: y-coordinate of the point relative to the loaded point.
+    :param z: z-coordinate of the point relative to the loaded point.
     '''
     retval= 0.0
     r= math.sqrt(x**2+y**2)
-    if(z!=0.0):
-        denom= 2.0*math.pi*z**2*math.pow(1+(r/z)**2,5.0/2.0)
+    if(z>=0.0): # The point is above the loaded point.
+        retval= 0.0
+    else: # z < 0.0
+        denom= 2.0*math.pi*z**2*math.pow(1+(r/-z)**2,5.0/2.0)
         retval= 3.0*P/denom
-    else:
-        if(r==0.0):
-            retval= float('inf')
     return retval
+
+def radial_stress_increment_under_concentrated_load(P, x, y, z, eta= 1.0):
+    ''' Return the increment in the radial stress of a point inside an
+        homogeneous and elastic soil due to punctual load in the surface,
+        according to equation 11-20a of Bowles book).
+
+    :param P: value of the load.
+    :param x: x-coordinate of the point relative to the loaded point.
+    :param y: y-coordinate of the point relative to the loaded point.
+    :param z: z-coordinate of the point relative to the loaded point.
+    :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see commentaries
+               in Bowles book (page 633).
+    '''
+    retval= 0.0
+    r= max(math.sqrt(x**2+y**2), 1e-6)
+    if(z<0.0): # The point is under the loaded point.
+        R= math.sqrt(r**2+z**2)
+        denom= R*(R-z) # Z oriented upwards in function.
+        retval= P/2.0/math.pi*(3*r**2*z/math.pow(R,5)-(1-2*eta)/denom)
+    return retval
+
+def stress_increment_vector_under_concentrated_load(P, x, y, z, eta= 1.0):
+    ''' Return the increment in the radial stress of a point inside an
+        homogeneous and elastic soil due to punctual load in the surface.
+
+    :param P: value of the load.
+    :param x: x-coordinate of the point relative to the loaded point.
+    :param y: y-coordinate of the point relative to the loaded point.
+    :param z: z-coordinate of the point relative to the loaded point.
+    :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see commentaries
+               in Bowles book (page 633).
+    '''
+    # Compute vertical and radial stresses.
+    sigma_z= vertical_stress_increment_under_concentrated_load(P, x, y, z)
+    sigma_r= radial_stress_increment_under_concentrated_load(P, x, y, z, eta)
+    r= max(math.sqrt(x**2+y**2), 1e-6)
+    return geom.Vector3d(sigma_r*abs(x)/r, sigma_r*abs(y)/r, sigma_z)
 
 class ConcentratedLoad(object):
     ''' Concentrated load.
@@ -51,7 +87,7 @@ class ConcentratedLoad(object):
         '''
         self.loadedPoint= p
     
-    def getStressIncrement(self, P, points):
+    def getVerticalStressIncrement(self, P, points):
         ''' Return the increment in the vertical stress for the points inside
             an homogeneous and elastic soil due to a concentrated load.
 
@@ -62,6 +98,22 @@ class ConcentratedLoad(object):
         xLoad= self.loadedPoint.x; yLoad= self.loadedPoint.y; zLoad= self.loadedPoint.z
         for p in points:
             pLoad= vertical_stress_increment_under_concentrated_load(P, p.x-xLoad, p.y-yLoad, p.z-zLoad)
+            retval.append(pLoad)
+        return retval
+    
+    def getStressIncrement(self, P, points, eta= 1.0):
+        ''' Return the vector increment in the vertical stress for the points
+            inside an homogeneous and elastic soil due to a concentrated load.
+
+        :param P: value of the concentrated load.
+        :param points: points whose stress increment will be computed.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see commentaries
+                   in Bowles book (page 633).
+        '''
+        retval= list()
+        xLoad= self.loadedPoint.x; yLoad= self.loadedPoint.y; zLoad= self.loadedPoint.z
+        for p in points:
+            pLoad= stress_increment_vector_under_concentrated_load(P= P, x=(p.x-xLoad), y= (p.y-yLoad), z= (p.z-zLoad), eta= eta)
             retval.append(pLoad)
         return retval
 
@@ -117,10 +169,10 @@ class QuadLoadedArea(object):
                 retval.append(geom.Pos3d(x,y,z))
         return retval
 
-    def getStressIncrement(self, q, points, eSize):
+    def getVerticalStressIncrement(self, q, points, eSize):
         ''' Return the increment in the vertical stress for the points inside
             an homogeneous and elastic soil due to a load distributed on
-            a rectangular area.
+            this quadrilateral area.
 
             :param q: pressure on the loaded area.
             :param eSize: length of the side for the discretization.
@@ -136,6 +188,30 @@ class QuadLoadedArea(object):
             for loadedPoint in loadedPoints:
                 xLoad= loadedPoint.x; yLoad= loadedPoint.y; zLoad= loadedPoint.z
                 pLoad+= vertical_stress_increment_under_concentrated_load(P, p.x-xLoad, p.y-yLoad, p.z-zLoad)
+            retval.append(pLoad)
+        return retval
+    
+    def getStressIncrement(self, q, points, eSize, eta= 1.0):
+        ''' Return the increment in the vertical stress for the points inside
+            an homogeneous and elastic soil due to a load distributed on
+            this quadrilateral area.
+
+        :param q: pressure on the loaded area.
+        :param eSize: length of the side for the discretization.
+        :param points: points whose stress increment will be computed.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    commentaries in Bowles book (page 633).
+        '''
+        loadedPoints= self.getSamplePoints(eSize)
+        area= geom.Polygon3d(self.vertices).getArea()
+        tributaryArea= area/len(loadedPoints)
+        P= q*tributaryArea # punctual load.
+        retval= list()
+        for p in points:
+            pLoad= geom.Vector3d(0.0,0.0,0.0)
+            for loadedPoint in loadedPoints:
+                xLoad= loadedPoint.x; yLoad= loadedPoint.y; zLoad= loadedPoint.z
+                pLoad+= stress_increment_vector_under_concentrated_load(P, p.x-xLoad, p.y-yLoad, p.z-zLoad)
             retval.append(pLoad)
         return retval
     
