@@ -132,6 +132,11 @@ class QuadLoadedArea(object):
         '''
         self.vertices= [p1, p2, p3, p4]
 
+    def getPolygon(self):
+        ''' Return the polygon whose vertices are the those of the
+            loaded area.'''
+        return geom.Polygon3d(self.vertices)
+
     def getSamplePoints(self, eSize):
         ''' Return the points uniformly distributed along the surface.
 
@@ -174,12 +179,12 @@ class QuadLoadedArea(object):
             an homogeneous and elastic soil due to a load distributed on
             this quadrilateral area.
 
-            :param q: pressure on the loaded area.
-            :param eSize: length of the side for the discretization.
-            :param points: points whose stress increment will be computed.
+        :param q: pressure on the loaded area.
+        :param eSize: length of the side for the discretization.
+        :param points: points whose stress increment will be computed.
         '''
         loadedPoints= self.getSamplePoints(eSize)
-        area= geom.Polygon3d(self.vertices).getArea()
+        area= self.getPolygon().getArea()
         tributaryArea= area/len(loadedPoints)
         P= q*tributaryArea # punctual load.
         retval= list()
