@@ -14,8 +14,8 @@ __email__= "l.pereztato@gmail.com"
 
 from geotechnics import settlement
 
-incSigma= settlement.stress_increment_under_rectangular_loaded_area(q=150e3, B= 2.5, L=5.0, x=0.0, y=0.0, z=6.25, eSize= 0.1)
-averageIncSigma= settlement.average_stress_increment_under_rectangular_loaded_area(q=100e3, B= 3.0, L=3.0, x=0.0, y=0.0, z1=3.0, z2= 5.0, eSize= 0.2, zInc= 0.5)
+incSigma= settlement.vertical_stress_increment_under_rectangular_loaded_area(q=150e3, B= 2.5, L=5.0, x=0.0, y=0.0, z=6.25, eSize= 0.1)
+averageIncSigma= settlement.average_vertical_stress_increment_under_rectangular_loaded_area(q=100e3, B= 3.0, L=3.0, x=0.0, y=0.0, z1=3.0, z2= 5.0, eSize= 0.2, zInc= 0.5)
 
 ratio1= abs(incSigma-19.65e3)/19.65e3
 ratio2= abs(averageIncSigma-21e3)/21e3

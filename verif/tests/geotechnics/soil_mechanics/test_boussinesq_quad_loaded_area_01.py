@@ -11,10 +11,10 @@ __email__= "l.pereztato@gmail.com"
 
 import geom
 import math
-from geotechnics import settlement
+from geotechnics import boussinesq
 
 # Define loaded area
-loadedArea= settlement.QuadLoadedArea(p1= geom.Pos3d(0,0,0),
+loadedArea= boussinesq.QuadLoadedArea(p1= geom.Pos3d(0,0,0),
                                       p2= geom.Pos3d(1,0,0),
                                       p3= geom.Pos3d(1,1,0),
                                       p4= geom.Pos3d(0,1,0))

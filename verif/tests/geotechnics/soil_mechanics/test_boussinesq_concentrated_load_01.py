@@ -11,10 +11,10 @@ __email__= "l.pereztato@gmail.com"
 
 import geom
 import math
-from geotechnics import settlement
+from geotechnics import boussinesq
 
 # Define loaded area
-concentratedLoad= settlement.ConcentratedLoad(p= geom.Pos3d(0.5,0.5,0))
+concentratedLoad= boussinesq.ConcentratedLoad(p= geom.Pos3d(0.5,0.5,0))
 
 
 # Compute stress increment.
