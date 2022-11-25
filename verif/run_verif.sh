@@ -1124,6 +1124,7 @@ python tests/geotechnics/soil_mechanics/test_mononobe_okabe_02.py
 python tests/geotechnics/soil_mechanics/test_iskander_01.py
 python tests/geotechnics/soil_mechanics/test_iskander_02.py
 python tests/geotechnics/soil_mechanics/test_boussinesq.py
+python tests/geotechnics/soil_mechanics/test_concentrated_load_01.py
 python tests/geotechnics/soil_mechanics/test_quad_loaded_area_01.py
 python tests/geotechnics/soil_mechanics/test_quad_loaded_area_02.py
 ## Earthworks

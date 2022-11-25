@@ -111,6 +111,33 @@ def average_stress_increment_under_rectangular_loaded_area(q, B, L, x, y, z1, z2
     retval/= nDivZ
     return retval
 
+
+class ConcentratedLoad(object):
+    ''' Concentrated load.
+
+    :ivar loadedPoint: position of the load.
+    '''
+    def __init__(self, p):
+        ''' Constructor.
+
+        :param p: position of the load.
+        '''
+        self.loadedPoint= p
+    
+    def getStressIncrement(self, P, points):
+        ''' Return the increment in the vertical stress for the points inside
+            an homogeneous and elastic soil due to a concentrated load.
+
+        :param P: value of the concentrated load.
+        :param points: points whose stress increment will be computed.
+        '''
+        retval= list()
+        xLoad= self.loadedPoint.x; yLoad= self.loadedPoint.y; zLoad= self.loadedPoint.z
+        for p in points:
+            pLoad= stress_increment_under_concentrated_load(P, p.x-xLoad, p.y-yLoad, p.z-zLoad)
+            retval.append(pLoad)
+        return retval
+
 class QuadLoadedArea(object):
     ''' Four-sided polygon under uniform pressure.
 
