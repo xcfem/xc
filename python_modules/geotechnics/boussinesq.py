@@ -25,6 +25,7 @@ __email__= "l.pereztato@gmail.com"
 import numpy as np
 import math
 import geom
+import xc
 from geom_utils import tensor_transformation as tt
 
 class BoussinesqStresses(object):
@@ -162,14 +163,15 @@ class ConcentratedLoad(object):
 
     :ivar loadedPoint: position of the load.
     '''
-    def __init__(self, p):
+    def __init__(self, p, Q):
         ''' Constructor.
 
         :param p: position of the load.
+        :param Q: load value.
         '''
         self.loadedPoint= p
     
-    def getStressIncrement(self, P, points, unitVectorDirs, eta= 1.0):
+    def getStressIncrement(self, points, unitVectorDirs, eta= 1.0):
         ''' Return the vector increment in the vertical stress for the points
             inside an homogeneous and elastic soil due to a concentrated load.
 
@@ -183,7 +185,7 @@ class ConcentratedLoad(object):
         retval= list()
         xLoad= self.loadedPoint.x; yLoad= self.loadedPoint.y; zLoad= self.loadedPoint.z
         for p, vDir in zip(points, unitVectorDirs):
-            bs= BoussinesqStresses(P= P, x=(p.x-xLoad), y= (p.y-yLoad), z= (p.z-zLoad), eta= eta)
+            bs= BoussinesqStresses(P= self.Q, x=(p.x-xLoad), y= (p.y-yLoad), z= (p.z-zLoad), eta= eta)
             stressVector= bs.getCartesianStressVector(unitVectorDir= vDir)
             retval.append(stressVector)
         return retval
@@ -193,26 +195,27 @@ class QuadLoadedArea(object):
 
     :ivar vertices: polygon vertices.
     '''
-    def __init__(self, p1, p2, p3, p4):
+    def __init__(self, p1, p2, p3, p4, q, eSize):
         ''' Constructor.
 
         :param p1: first vertex.
         :param p2: second vertex.
         :param p3: third vertex.
         :param p4: fourth vertex.
+        :param q: pressure on the loaded area.
+        :param eSize: length of the side for the discretization.
         '''
         self.vertices= [p1, p2, p3, p4]
+        self.q= q
+        self.eSize= eSize
 
     def getPolygon(self):
         ''' Return the polygon whose vertices are the those of the
             loaded area.'''
         return geom.Polygon3d(self.vertices)
 
-    def getSamplePoints(self, eSize):
-        ''' Return the points uniformly distributed along the surface.
-
-        :param eSize: length of the side for the discretization.
-        '''
+    def getSamplePoints(self):
+        ''' Return the points uniformly distributed along the surface.'''
         def Ni(xi, eta):
             ''' Shape functions.'''
             return [0.25*(1-xi)*(1-eta),
@@ -229,8 +232,8 @@ class QuadLoadedArea(object):
             return [ x+sz/2.0 for x in xi[:-1]] # Centers of the intervals.       
         avgWidth= (self.vertices[0].dist(self.vertices[1])+self.vertices[2].dist(self.vertices[3]))/2.0
         avgLength= (self.vertices[0].dist(self.vertices[3])+self.vertices[1].dist(self.vertices[2]))/2.0
-        nDivWidth= int(math.ceil(avgWidth/eSize))
-        nDivLength= int(math.ceil(avgLength/eSize))
+        nDivWidth= int(math.ceil(avgWidth/self.eSize))
+        nDivLength= int(math.ceil(avgLength/self.eSize))
         xi_i= getIntervalCenters(n= nDivWidth)
         eta_i= getIntervalCenters(n= nDivLength)
         retval= list()
@@ -245,23 +248,21 @@ class QuadLoadedArea(object):
                 retval.append(geom.Pos3d(x,y,z))
         return retval
 
-    def getStressIncrement(self, q, points, unitVectorDirs, eSize, eta= 1.0):
+    def getStressIncrement(self, points, unitVectorDirs, eta= 1.0):
         ''' Return the increment in the vertical stress for the points inside
             an homogeneous and elastic soil due to a load distributed on
             this quadrilateral area.
 
-        :param q: pressure on the loaded area.
-        :param eSize: length of the side for the discretization.
         :param points: points whose stress increment will be computed.
         :param unitVectorDirs: stress direction vectors (must be a unit vector) 
                                corresponding to the points.
         :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
                     commentaries in Bowles book (page 633).
         '''
-        loadedPoints= self.getSamplePoints(eSize)
+        loadedPoints= self.getSamplePoints()
         area= geom.Polygon3d(self.vertices).getArea()
         tributaryArea= area/len(loadedPoints)
-        P= q*tributaryArea # punctual load.
+        P= self.q*tributaryArea # punctual load.
         retval= list()
         for p, vDir in zip(points, unitVectorDirs):
             stressVector= geom.Vector3d(0.0,0.0,0.0)
@@ -271,4 +272,67 @@ class QuadLoadedArea(object):
                 stressVector+= bs.getCartesianStressVector(unitVectorDir= vDir)
             retval.append(stressVector)
         return retval
+
+    def computePressuresOnElements(self, elements, eta= 1.0, delta= 0.0):
+        ''' Compute pressures due to this load on the elements argument.
+
+        :param elements: elements to compute the pressure on.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    commentaries in Bowles book (page 633).
+        :param delta: friction angle between the soil and the element material.
+        '''
+        loadCentroid= self.getPolygon().getCenterOfMass()
+        # Get loaded points.
+        loadedPoints= list()
+        unitVectors= list()
+        for e in elements:
+            pos= e.getPosCentroid(True)
+            loadedPoints.append(pos) # Append loaded point.
+            # Compute normal vector 
+            kVector= e.getKVector3d(True)
+            orientation= kVector.dot(loadCentroid-pos)
+            if(orientation>0.0): # pressure on the "positive" side of the element.
+                unitVectors.append(kVector)
+            else: # pressure on the "negative" side of the element.
+                unitVectors.append(-kVector)
+        # Compute the pressure values.
+        stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
+
+        tanDelta= math.tan(delta)
+        retval= list()
+        for e, stressVector in zip(elements, stressVectors):
+            iVector= e.getIVector3d(True)
+            jVector= e.getJVector3d(True)
+            kVector= e.getKVector3d(True)
+            # Normal pressure.
+            normalPressure= stressVector.dot(kVector)
+            maxTangentPressure= abs(tanDelta*normalPressure)
+            # Pressure parallel to i vector.
+            tangentIPressure= stressVector.dot(iVector)
+            if(abs(tangentIPressure)>maxTangentPressure):
+                tangentIPressure= math.copysign(maxTangentPressure, tangentIPressure)
+            # Pressure parallel to j vector.
+            tangentJPressure= stressVector.dot(jVector)
+            if(abs(tangentJPressure)>maxTangentPressure):
+                tangentJPressure= math.copysign(maxTangentPressure, tangentJPressure)
+            # Append the computed values to the returned list.
+            retval.append([e, tangentIPressure, tangentJPressure, normalPressure])
+        return retval
+
+    def appendLoadToCurrentLoadPattern(self, elements, eta= 1.0, delta= 0.0):
+        ''' Append this load to the current load pattern.
+
+        :param elements: elements to apply the load on.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    commentaries in Bowles book (page 633).
+        :param delta: friction angle between the soil and the element material.
+        '''
+        pressures= self.computePressuresOnElements(elements= elements, eta= eta, delta= delta)
+        for pData in pressures:
+            e= pData[0]
+            e.vector3dUniformLoadLocal(xc.Vector([pData[1],pData[2],pData[3]]))
+
+
+        
+
     

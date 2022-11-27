@@ -17,10 +17,12 @@ from geotechnics import boussinesq
 loadedArea= boussinesq.QuadLoadedArea(p1= geom.Pos3d(0,0,0),
                                       p2= geom.Pos3d(1,0,0),
                                       p3= geom.Pos3d(1,1,0),
-                                      p4= geom.Pos3d(0,1,0))
+                                      p4= geom.Pos3d(0,1,0),
+                                      q= None,
+                                      eSize= 0.5)
 
 # Compute sample points.
-samplePoints= loadedArea.getSamplePoints(eSize= 0.5)
+samplePoints= loadedArea.getSamplePoints()
 
 # Check results.
 refPoints= [geom.Pos3d(0.25,0.25,0), geom.Pos3d(.25,0.75,0), geom.Pos3d(0.75,0.25,0), geom.Pos3d(0.75,0.75,0)]

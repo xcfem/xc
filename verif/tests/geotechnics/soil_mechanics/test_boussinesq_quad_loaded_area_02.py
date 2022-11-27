@@ -17,12 +17,14 @@ from geotechnics import boussinesq
 loadedArea= boussinesq.QuadLoadedArea(p1= geom.Pos3d(0,0,0),
                                       p2= geom.Pos3d(1,0,0),
                                       p3= geom.Pos3d(1,1,0),
-                                      p4= geom.Pos3d(0,1,0))
+                                      p4= geom.Pos3d(0,1,0),
+                                      q= -1e3,
+                                      eSize= 0.5)
 
 # Compute stress increment in some test points.
 testPoints= [geom.Pos3d(0.25,0.25,-1), geom.Pos3d(.25,0.75,-1), geom.Pos3d(0.75,0.25,-1), geom.Pos3d(0.75,0.75,-1)]
 unitVectors= 4*[geom.Vector3d(0,0,1)]
-vertStresses= loadedArea.getStressIncrement(q= -1e3, points= testPoints, unitVectorDirs= unitVectors, eSize= 0.5)
+vertStresses= loadedArea.getStressIncrement(points= testPoints, unitVectorDirs= unitVectors)
 
 # Check results
 refValues= 4*[-299.341104612446]
