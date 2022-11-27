@@ -19,6 +19,7 @@ from misc.vtk_utils import utils_vtk
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.fields import local_axes_vector_field as lavf
+from postprocess.xcVtk.CAD_model import create_array_set_data
 import random as rd 
 import xc
 
@@ -454,7 +455,10 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                     
 def VtkLoadIdsNodes(recordGrid):
     '''Load node labels. Not yet implemented.'''
-    VtkCreaStrArraySetData(recordGrid.setName,"nodes","etiqNod","tag")()
+    nodeLabels=  create_array_set_data.VtkCreaStrArraySetData(recordGrid.setName,"nodes","etiqNod","tag")()
+    if(__debug__):
+        if(not nodeLabels):
+            AssertionError('Can\'t create the labels.')
     recordGrid.GetPointData().SetStrings('etiqNod')
 
 def VtkDisplayIdsNodes(recordGrid, renderer):

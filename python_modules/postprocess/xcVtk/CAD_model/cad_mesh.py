@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 
+import sys
 import vtk
 import xc_base
 from misc_utils import log_messages as lmsg
@@ -60,7 +61,8 @@ def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
     elif(tipoRepr== "surface"):
         cellActor.GetProperty().SetRepresentationToSurface()
     else:
-        lmsg.error("error: "+tipoRepr+" no implementada.")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+"; error: "+tipoRepr+" not implemented.")
     renderer.AddActor(cellActor) # Actor para las celdas
 
 def VtkCargaIdsKPts(uGrid, setToDraw):
@@ -98,10 +100,11 @@ def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):
 
         renderer.AddActor2D(pointLabels)
     else:
-        lmsg.warning("El conjunto: '"+setToDraw.name+"' no tiene KPts.")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+"; no kPoints in set : '"+setToDraw.name+"'.")
 
-# ****** Creamos las etiquetas para las celdas *******
 def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
+    ''' Create cell labels.'''
     ids= vtk.vtkIdFilter()
     ids.SetInput(uGrid)
     ids.CellIdsOff()

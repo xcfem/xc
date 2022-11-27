@@ -327,12 +327,18 @@ def plotStressStrainFibSet(fiberSet,title,fileName=None,nContours=100,pointSize=
     divider1 = make_axes_locatable(ax1)
     cax1= divider1.append_axes("right", size="20%", pad=0.05)
     cbar1= plt.colorbar(im1,cax=cax1)
+    if(__debug__):
+        if(not cbar1):
+            AssertionError('Can\'t set color bar.')
     ax2.set_title('Stress')
   #  im2=ax2.tricontourf(lsYcoo,lsZcoo,lsStress, nContours)
   #  im2=ax2.scatter(lsYcoo,lsZcoo,50,lsStress)
     divider2 = make_axes_locatable(ax2)
     cax2= divider2.append_axes("right", size="20%", pad=0.05)
     cbar2= plt.colorbar(im2,cax=cax2)
+    if(__debug__):
+        if(not cbar2):
+            AssertionError('Can\'t set color bar.')
     if(fileName!=None):
         plt.savefig(fileName)
     plt.show()
