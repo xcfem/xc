@@ -161,12 +161,15 @@ XC::Response *XC::InitStrainMaterial::setResponse(const std::vector<std::string>
       Response *theResponse = 0;
 
       if(argv[0]=="strain")
+	{ theResponse = new MaterialResponse(this, 100, 0.0); }
+      else if(argv[0]=="material")
 	{
-	  theResponse = new MaterialResponse(this, 100, 0.0);
-	  return theResponse;
-        }
+	  const std::vector<std::string> newArgv(argv.begin()+1, argv.end());
+	  theResponse = theMaterial->setResponse(newArgv, info);
+	}
       else
-        return InitStrainBaseMaterial::setResponse(argv, info);
+        theResponse= InitStrainBaseMaterial::setResponse(argv, info);
+      return theResponse;
   }
 
 int XC::InitStrainMaterial::getResponse(int responseID, Information &matInformation)

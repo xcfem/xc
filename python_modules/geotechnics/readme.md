@@ -15,3 +15,4 @@ The reference [Earth pressure theory and application](https://dot.ca.gov/-/media
 - [Rankine’s Theory of Active Earth Pressure](https://www.soilmanagementindia.com/lateral-earth-pressure/rankines-theory/rankines-theory-of-active-earth-pressure-soil/14031)
 - [Active static and seismic earth pressure for c-Φ soils](https://www.researchgate.net/publication/259094234_Active_static_and_seismic_earth_pressure_for_c-PH_soils#fullTextFileContent)
 - [Earth Retaining Structures. Example problems](https://www.geoengineer.org/education/online-lecture-notes-on-soil-mechanics/75-example-problems)
+- [Theory of Elasticity](https://books.google.es/books?id=GOnFQgAACAAJ&dq=timoshenko+theory+of+elasticity&hl=en&sa=X&redir_esc=y)

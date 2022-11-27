@@ -15,6 +15,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 import math
+from misc_utils import log_messages as lmsg
 
 v1= xc.Vector([0,math.sqrt(2)/2,math.sqrt(2)/2])
 v2= xc.Vector([0,-math.sqrt(2)/2,math.sqrt(2)/2])
@@ -71,6 +72,9 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
+if(result!=0):
+    lmsg.error('Can\'t solve.')
+    
 
 reaction= xc.Vector(6*[0.0])
 for n in [n1,n2,n3,n4]:
@@ -94,7 +98,6 @@ print(err)
 # oh.displayLoads()
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(err)<1e-10:
     print('test '+fname+': ok.')

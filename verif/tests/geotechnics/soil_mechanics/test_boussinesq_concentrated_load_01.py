@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Trivial test for ConcentratedLoad objects.'''
+''' Test based on the example from the table 11.7 of the text
+
+  "Fondation Analysis and Design". Fifth Edition. Joseph E. Bowles. 
+   McGraw-Hill 1982
+   ISBN= 9780070067707
+   LCCN= lc81013649
+   url= https://books.google.es/books?id=eNtRAAAAMAAJ
+'''
 
 from __future__ import print_function
 
@@ -12,44 +19,56 @@ __email__= "l.pereztato@gmail.com"
 import geom
 import math
 from geotechnics import boussinesq
+from scipy import integrate
+import numpy as np
 
-# Define loaded area
-concentratedLoad= boussinesq.ConcentratedLoad(p= geom.Pos3d(0.5,0.5,0))
+# Wall height
+H= 4.0
 
+# Define load.
+P= -50e3 # 50 kN concentrated load.
+x= 1.3 # load position, x coordinate distance from the wall.
+y= 0.0 # load position, y coordinate.
+z= -2.0 # load position, z coordinate.
+eta= 1.0 # Poisson's ratio.
 
-# Compute stress increment.
-testPoints= [geom.Pos3d(0.25,0.25,-1), geom.Pos3d(.25,0.75,-1), geom.Pos3d(0.75,0.25,-1), geom.Pos3d(0.75,0.75,-1)]
-vertStresses= concentratedLoad.getVerticalStressIncrement(P= -1e3, points= testPoints)
-stressVectors= concentratedLoad.getStressIncrement(P= -1e3, points= testPoints)
+testValue= boussinesq.radial_stress_increment_under_concentrated_load(P= P, x= x, y= y, z= z, eta= eta)
 
-# Check results
-## Vertical stresses.
-vStress= -355.6805199633012
-refVertStresses= 4*[vStress]
-err= 0.0
-for v, rv in zip(vertStresses, refVertStresses):
-    err+= (v-rv)**2
+# Equation 11.20a:
+r2= x**2+y**2
+R= math.sqrt(r2+z**2)
+refValue= P/math.pi/2.0*(3*r2*(-z)/R**5-(1-2*eta)/R/(R-z))
+err= abs(testValue-refValue)/refValue
 
-## Stress vector.
-hStress= -28.357724863608592*math.sqrt(2)/2
-refStressVectors= 4*[geom.Vector3d(hStress,hStress,vStress)]
-for v, rv in zip(stressVectors, refStressVectors):
-    err+= (v-rv).getModulus()**2
-err+= math.sqrt(err)
-    
+# Integrate along the wall.
+## Function to integrate.
+def pressure(z):
+    return boussinesq.radial_stress_increment_under_concentrated_load(P= P, x= x, y= y, z= z, eta= eta)   
+
+## Sample points
+n= 11
+deltaZ= H/n
+nDiv= int(math.ceil(H/deltaZ))
+zi= np.linspace(start= -deltaZ/2.0, stop= -(H-deltaZ/2.0), num= n, endpoint= True)
+pi= [ pressure(z) for z in zi]
+
+##  call quad to integrate f from -4 to 0
+#force, int_err = integrate.quad(pressure, -4, 0)
+force= integrate.simpson(pi, zi, even='first')
+err= abs(force-10e3)/10e3
 
 '''
-print(vertStresses)
-print(refVertStresses)
-print(stressVectors)
-print(refStressVectors)
+print(testValue, refValue)
+print(zi)
+print(pi)
+print(force)
 print(err)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (err<1e-12):
+if(err<1e-2):
     print('test: '+fname+': ok.')
 else:
-    lmsg.error('test: '+fname+' ERROR.')
+    lmsg.error(fname+": ERROR.")

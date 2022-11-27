@@ -1211,7 +1211,11 @@ class PredefinedSpace(object):
         ## Convert readed blocks to XC commands.
         xcCommands= ieData.getXCCommandString()
         ## Return the XC commands.
-        preprocessor= self.preprocessor
+        preprocessor= self.preprocessor # used inside xcCommands
+        if(not preprocessor):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; preprocessor not set.')
         exec(xcCommands)
 
     def classifyBlockTopologyObjects(self, setsFromLabels, xcSet= None):
