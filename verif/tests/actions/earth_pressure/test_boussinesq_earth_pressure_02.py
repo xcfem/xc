@@ -101,10 +101,14 @@ cLC= loadCaseManager.setCurrentLoadCase('earth_pressure')
 
 # Define concentreted load
 load= -11.15*1900*psf2Pa
-loadedPoint= boussinesq.ConcentratedLoad(p= geom.Pos3d(6.096,2.286, 2.4384), Q=load)
+origin= geom.Pos3d(6.096,2.286, 2.4384)
+length= 1.0
+p1= origin-geom.Vector3d(0,length/2.0,0)
+p2= origin+geom.Vector3d(0,length/2.0,0)
+loadedLine= boussinesq.LinearLoad(segment= geom.Segment3d(p1,p2), loadValues=[load/length, load/length], eSize= 0.25)
 
 # Compute loads on elements.
-loadedPoint.appendLoadToCurrentLoadPattern(elements= s.elements, eta= 1.0, delta= math.radians(10.0))
+loadedLine.appendLoadToCurrentLoadPattern(elements= s.elements, eta= 1.0, delta= math.radians(10.0))
 
 modelSpace.addLoadCaseToDomain('earth_pressure')
 
@@ -127,9 +131,9 @@ avgPressureOnWall= reaction[1]/wallLength/wallHeight
 
 ratio1= abs(reaction[0])
 ratio2= math.sqrt(reaction[4]**2+reaction[5]**2)
-ratio3= abs(avgPressureOnWall-8.845997924980255e3)/8.845997924980255e3
-ratio4= abs(leverArm-1.1563959373748223)/1.1563959373748223
-ratio5= abs(halfXReaction-7.031238438182229e3)/7.031238438182229e3
+ratio3= abs(avgPressureOnWall-8.884338342931411e3)/8.884338342931411e3
+ratio4= abs(leverArm-1.1644853207692412)/1.1644853207692412
+ratio5= abs(halfXReaction-6.854692754585873e3)/6.854692754585873e3
 
 '''
 print(reaction)

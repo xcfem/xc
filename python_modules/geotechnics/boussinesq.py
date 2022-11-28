@@ -214,6 +214,35 @@ class BoussinesqLoad(object):
             # Append the computed values to the returned list.
             retval.append([e, tangentIPressure, tangentJPressure, normalPressure])
         return retval
+    
+    def computePressuresOnElements(self, elements, eta= 1.0, delta= 0.0):
+        ''' Compute pressures due to this load on the elements argument.
+
+        :param elements: elements to compute the pressure on.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    commentaries in Bowles book (page 633).
+        :param delta: friction angle between the soil and the element material.
+        '''
+        loadCentroid= self.getCentroid()
+        # Compute element orientation with respect to this load.
+        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements, p= loadCentroid)
+        # Compute the pressure values.
+        stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
+        # Compute loads on elements.
+        return self.computeElementalLoads(elements= elements, stressVectors= stressVectors, delta= delta)
+
+    def appendLoadToCurrentLoadPattern(self, elements, eta= 1.0, delta= 0.0):
+        ''' Append this load to the current load pattern.
+
+        :param elements: elements to apply the load on.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    commentaries in Bowles book (page 633).
+        :param delta: friction angle between the soil and the element material.
+        '''
+        pressures= self.computePressuresOnElements(elements= elements, eta= eta, delta= delta)
+        for pData in pressures:
+            e= pData[0]
+            e.vector3dUniformLoadLocal(xc.Vector([pData[1],pData[2],pData[3]]))
 
 class ConcentratedLoad(BoussinesqLoad):
     ''' Concentrated load.
@@ -226,7 +255,6 @@ class ConcentratedLoad(BoussinesqLoad):
         :param p: position of the load.
         :param Q: load value.
         '''
-        super().__init_()
         self.loadedPoint= p
         self.Q= Q
     
@@ -249,24 +277,11 @@ class ConcentratedLoad(BoussinesqLoad):
             retval.append(stressVector)
         return retval
 
+    def getCentroid(self):
+        ''' Return the position of the load centroid.'''
+        return self.loadedPoint
     
-    def computePressuresOnElements(self, elements, delta= 0.0):
-        ''' Compute pressures due to this load on the elements argument.
-
-        :param elements: elements to compute the pressure on.
-        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
-                    commentaries in Bowles book (page 633).
-        :param delta: friction angle between the soil and the element material.
-        '''
-        # Compute element orientation with respect of this load.
-        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements, p= self.p)
-        # Compute the pressure values.
-        stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
-
-        # Compute loads on elements.
-        return self.computeElementalLoads(elements= elements, stressVectors= stressVectors, delta= delta)
-
-class LinearLoadedArea(BoussinesqLoad):
+class LinearLoad(BoussinesqLoad):
     ''' Polyline under vertical linear load.
 
     :ivar segment: segment representing the load position.
@@ -283,20 +298,54 @@ class LinearLoadedArea(BoussinesqLoad):
         self.loadValues= loadValues
         self.eSize= eSize
 
+    def getCentroid(self):
+        ''' Return the position of the load centroid.'''
+        return self.segment.getMidPoint()
+    
     def getSamplePoints(self):
         ''' Return the points uniformly distributed along the surface.'''
         # Compute positions along the polyline.
         L= self.segment.getLength()
         numParts= int(math.ceil(L/self.eSize))
-        points= self.pline.Divide(numParts)
+        points= self.segment.Divide(numParts)
         # Compute load values for each position.
         origin= points[0]
-        slope= (loadValues[1]-loadValues[0])/L
+        slope= (self.loadValues[1]-self.loadValues[0])/L
         retval= list()
-        for p in points[1:]:
+        # First sample point.
+        retval.append((origin, self.loadValues[0]*self.eSize/2.0))
+        # Intermediate sample points.
+        for p in points[1:-1]:
             dist= p.dist(origin)
-            Q= slope*dist+loadValues[0] # load value.
-            retval.append(ConcentratedLoad(p= p, Q= Q))
+            Q= (slope*dist+self.loadValues[0])*self.eSize # load value.
+            retval.append((p, Q))
+        # Last sample point
+        Q= self.loadValues[1]*self.eSize/2.0
+        retval.append((points[-1], Q))
+        return retval
+    
+    def getStressIncrement(self, points, unitVectorDirs, eta= 1.0):
+        ''' Return the increment in the vertical stress for the points inside
+            an homogeneous and elastic soil due to a load distributed on
+            this quadrilateral area.
+
+        :param points: points whose stress increment will be computed.
+        :param unitVectorDirs: stress direction vectors (must be a unit vector) 
+                               corresponding to the points.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    commentaries in Bowles book (page 633).
+        '''
+        loadedPoints= self.getSamplePoints()
+        retval= list()
+        for p, vDir in zip(points, unitVectorDirs):
+            stressVector= geom.Vector3d(0.0,0.0,0.0)
+            for loadedPoint in loadedPoints:
+                position= loadedPoint[0]
+                load= loadedPoint[1]
+                xLoad= position.x; yLoad= position.y; zLoad= position.z
+                bs= BoussinesqStresses(P= load, x=(p.x-xLoad), y= (p.y-yLoad), z= (p.z-zLoad), eta= eta)
+                stressVector+= bs.getCartesianStressVector(unitVectorDir= vDir)
+            retval.append(stressVector)
         return retval
         
 class QuadLoadedArea(BoussinesqLoad):
@@ -323,6 +372,10 @@ class QuadLoadedArea(BoussinesqLoad):
             loaded area.'''
         return geom.Polygon3d(self.vertices)
 
+    def getCentroid(self):
+        ''' Return the position of the load centroid.'''
+        return self.getPolygon().getCenterOfMass()
+    
     def getSamplePoints(self):
         ''' Return the points uniformly distributed along the surface.'''
         def Ni(xi, eta):
@@ -382,34 +435,6 @@ class QuadLoadedArea(BoussinesqLoad):
             retval.append(stressVector)
         return retval
 
-    def computePressuresOnElements(self, elements, eta= 1.0, delta= 0.0):
-        ''' Compute pressures due to this load on the elements argument.
-
-        :param elements: elements to compute the pressure on.
-        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
-                    commentaries in Bowles book (page 633).
-        :param delta: friction angle between the soil and the element material.
-        '''
-        loadCentroid= self.getPolygon().getCenterOfMass()
-        # Compute element orientation with respect to this load.
-        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements, p= loadCentroid)
-        # Compute the pressure values.
-        stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
-        # Compute loads on elements.
-        return self.computeElementalLoads(elements= elements, stressVectors= stressVectors, delta= delta)
-
-    def appendLoadToCurrentLoadPattern(self, elements, eta= 1.0, delta= 0.0):
-        ''' Append this load to the current load pattern.
-
-        :param elements: elements to apply the load on.
-        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
-                    commentaries in Bowles book (page 633).
-        :param delta: friction angle between the soil and the element material.
-        '''
-        pressures= self.computePressuresOnElements(elements= elements, eta= eta, delta= delta)
-        for pData in pressures:
-            e= pData[0]
-            e.vector3dUniformLoadLocal(xc.Vector([pData[1],pData[2],pData[3]]))
 
 
         

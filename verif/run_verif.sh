@@ -181,6 +181,8 @@ python tests/actions/earth_pressure/culmann_method_test_03.py
 python tests/actions/earth_pressure/test_embankment_weight_distr.py
 python tests/actions/earth_pressure/test_earth_pressure_point_load.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_01.py
+python tests/actions/earth_pressure/test_boussinesq_earth_pressure_02.py
+python tests/actions/earth_pressure/test_boussinesq_earth_pressure_03.py
 echo "$BLEU" "  Earthquake action tests." "$NORMAL"
 python tests/actions/quake/mononobe_okabe_test_01.py
 python tests/actions/quake/iskander_method_test_01.py

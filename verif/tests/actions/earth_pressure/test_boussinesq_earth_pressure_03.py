@@ -99,12 +99,18 @@ loadCaseNames= ['earth_pressure']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 cLC= loadCaseManager.setCurrentLoadCase('earth_pressure')
 
-# Define concentreted load
-load= -11.15*1900*psf2Pa
-loadedPoint= boussinesq.ConcentratedLoad(p= geom.Pos3d(6.096,2.286, 2.4384), Q=load)
+# Define loaded area (strip load)
+pressure= -1900*psf2Pa
+stripLoadStart= 6*foot2Meter
+stripLoadEnd= (6+3)*foot2Meter
+loadedArea= boussinesq.QuadLoadedArea(p1= geom.Pos3d(0,stripLoadStart,wallHeight),
+                                      p2= geom.Pos3d(wallLength,stripLoadStart,wallHeight),
+                                      p3= geom.Pos3d(wallLength,stripLoadEnd,wallHeight),
+                                      p4= geom.Pos3d(0,stripLoadEnd,wallHeight),
+                                      q= pressure, eSize= 0.25)
 
 # Compute loads on elements.
-loadedPoint.appendLoadToCurrentLoadPattern(elements= s.elements, eta= 1.0, delta= math.radians(10.0))
+loadedArea.appendLoadToCurrentLoadPattern(elements= s.elements, eta= 1.0, delta= math.radians(10.0))
 
 modelSpace.addLoadCaseToDomain('earth_pressure')
 
@@ -127,9 +133,9 @@ avgPressureOnWall= reaction[1]/wallLength/wallHeight
 
 ratio1= abs(reaction[0])
 ratio2= math.sqrt(reaction[4]**2+reaction[5]**2)
-ratio3= abs(avgPressureOnWall-8.845997924980255e3)/8.845997924980255e3
-ratio4= abs(leverArm-1.1563959373748223)/1.1563959373748223
-ratio5= abs(halfXReaction-7.031238438182229e3)/7.031238438182229e3
+ratio3= abs(avgPressureOnWall-8.002372180961066e3)/8.002372180961066e3
+ratio4= abs(leverArm-1.1762622683222976)/1.1762622683222976
+ratio5= abs(halfXReaction-9.805417761757726e3)/9.805417761757726e3
 
 '''
 print(reaction)
@@ -137,6 +143,7 @@ print('ratio1= ', ratio1)
 print('ratio2= ', ratio2)
 print('lever arm: ', leverArm, 'm')
 print('ratio4= ', ratio4)
+print('average pressure on soil: ', abs(pressure)/1e3, 'kPa')
 print('average pressure on wall: ', avgPressureOnWall/1e3, 'kPa')
 print('ratio3= ', ratio3)
 print('halfXReaction= ', halfXReaction/1e3, 'kN')
@@ -148,8 +155,8 @@ print('ratio5= ', ratio5)
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
-# # oh.displayFEMesh()
-# # oh.displayLocalAxes()
+# #oh.displayFEMesh()
+# oh.displayLocalAxes()
 # oh.displayLoads()
 
 import os
