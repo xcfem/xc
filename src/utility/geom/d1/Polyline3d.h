@@ -73,6 +73,11 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     Vector3d getIVectorAtLength(const GEOM_FT &) const;
     Vector3d getJVectorAtLength(const GEOM_FT &) const;
     Vector3d getKVectorAtLength(const GEOM_FT &) const;
+
+    VectorPos3d Divide(int num_partes) const;
+    boost::python::list DividePy(int num_partes) const;
+    VectorPos3d Divide(const std::vector<double> &) const;
+    boost::python::list DividePy(const boost::python::list &) const;
     
     //! @brief Return the length of the object.
     virtual GEOM_FT getLength(void) const

@@ -31,6 +31,7 @@ class Ray2d;
 class Line2d;
 class Pos2dList;
 class Circle2d;
+class VectorPos2d;
 
 //! @ingroup GEOM
 //
@@ -83,6 +84,11 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     Pos2d getPointAtLength(const GEOM_FT &) const;
     Vector2d getIVectorAtLength(const GEOM_FT &) const;
     Vector2d getJVectorAtLength(const GEOM_FT &) const;
+    
+    VectorPos2d Divide(int num_partes) const;
+    boost::python::list DividePy(int num_partes) const;
+    VectorPos2d Divide(const std::vector<double> &) const;
+    boost::python::list DividePy(const boost::python::list &) const;
     
     //! @brief Inertia product.
     inline virtual GEOM_FT Pxy(void) const

@@ -29,6 +29,8 @@
 #include "../cgal_types.h"
 #include "utility/geom/d2/Plane.h"
 
+class VectorPos3d;
+
 //! @ingroup GEOM
 //
 //! @brief Plane polygon in a 3D space.
@@ -101,6 +103,11 @@ class PlanePolyline3d: public D2to3d
     Vector3d getJVectorAtLength(const GEOM_FT &) const;
     Vector3d getKVectorAtLength(const GEOM_FT &) const;
 
+    VectorPos3d Divide(int num_partes) const;
+    boost::python::list DividePy(int num_partes) const;
+    VectorPos3d Divide(const std::vector<double> &) const;
+    boost::python::list DividePy(const boost::python::list &) const;
+    
     void swap(void);
 
     Plane getPlaneFromSide0(unsigned int i) const;

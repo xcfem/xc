@@ -158,10 +158,67 @@ def stress_increment_vector_under_concentrated_load(P, x, y, z, unitVectorDir, e
     # Compute vertical and radial stresses.
     return BoussinesqStresses(P= P, x= x, y= y, z= z, eta= eta).getCartesianStressVector(unitVectorDir= unitVectorDir)
 
-class ConcentratedLoad(object):
+
+class BoussinesqLoad(object):
+    ''' Base class for object that compute soil stresses using the 
+        Boussinesq equations.
+    '''
+
+    def computeElementOrientation(self, elements, p):
+        ''' Compute pressures due to this load on the elements argument.
+
+        :param elements: elements to compute the orintation of.
+        :param p: position of the loan on the soil surface.
+        '''
+        # Get loaded points.
+        loadedPoints= list()
+        unitVectors= list()
+        for e in elements:
+            pos= e.getPosCentroid(True)
+            loadedPoints.append(pos) # Append loaded point.
+            # Compute normal vector 
+            kVector= e.getKVector3d(True)
+            orientation= kVector.dot(p-pos)
+            if(orientation>0.0): # pressure on the "positive" side of the element.
+                unitVectors.append(kVector)
+            else: # pressure on the "negative" side of the element.
+                unitVectors.append(-kVector)
+        return loadedPoints, unitVectors
+    
+    def computeElementalLoads(self, elements, stressVectors, delta):
+        ''' Compute loads on elements from the stress vectors passes as
+            parameter.
+
+        :param elements: elements to compute the pressure on.
+        :param stressVectors: value of the stress vector (cartesian coord.)
+                              on the centroid of each element.
+        :param delta: friction angle between the soil and the element material.
+        '''
+        tanDelta= math.tan(delta)
+        retval= list()
+        for e, stressVector in zip(elements, stressVectors):
+            iVector= e.getIVector3d(True)
+            jVector= e.getJVector3d(True)
+            kVector= e.getKVector3d(True)
+            # Normal pressure.
+            normalPressure= stressVector.dot(kVector)
+            maxTangentPressure= abs(tanDelta*normalPressure)
+            # Pressure parallel to i vector.
+            tangentIPressure= stressVector.dot(iVector)
+            if(abs(tangentIPressure)>maxTangentPressure):
+                tangentIPressure= math.copysign(maxTangentPressure, tangentIPressure)
+            # Pressure parallel to j vector.
+            tangentJPressure= stressVector.dot(jVector)
+            if(abs(tangentJPressure)>maxTangentPressure):
+                tangentJPressure= math.copysign(maxTangentPressure, tangentJPressure)
+            # Append the computed values to the returned list.
+            retval.append([e, tangentIPressure, tangentJPressure, normalPressure])
+        return retval
+
+class ConcentratedLoad(BoussinesqLoad):
     ''' Concentrated load.
 
-    :ivar loadedPoint: position of the load.
+    :ivar loadedPoint: position of the vertical load.
     '''
     def __init__(self, p, Q):
         ''' Constructor.
@@ -169,7 +226,9 @@ class ConcentratedLoad(object):
         :param p: position of the load.
         :param Q: load value.
         '''
+        super().__init_()
         self.loadedPoint= p
+        self.Q= Q
     
     def getStressIncrement(self, points, unitVectorDirs, eta= 1.0):
         ''' Return the vector increment in the vertical stress for the points
@@ -190,8 +249,58 @@ class ConcentratedLoad(object):
             retval.append(stressVector)
         return retval
 
-class QuadLoadedArea(object):
-    ''' Four-sided polygon under uniform pressure.
+    
+    def computePressuresOnElements(self, elements, delta= 0.0):
+        ''' Compute pressures due to this load on the elements argument.
+
+        :param elements: elements to compute the pressure on.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    commentaries in Bowles book (page 633).
+        :param delta: friction angle between the soil and the element material.
+        '''
+        # Compute element orientation with respect of this load.
+        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements, p= self.p)
+        # Compute the pressure values.
+        stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
+
+        # Compute loads on elements.
+        return self.computeElementalLoads(elements= elements, stressVectors= stressVectors, delta= delta)
+
+class LinearLoadedArea(BoussinesqLoad):
+    ''' Polyline under vertical linear load.
+
+    :ivar segment: segment representing the load position.
+    :ivar loadValues: load values at the segment endpoints.
+    '''
+    def __init__(self, segment, loadValues, eSize):
+        ''' Constructor.
+
+        :param segment: 3D segment representing the load position.
+        :param loadValues: load values at the segment endpoints.
+        :param eSize: length of the side for the discretization.
+        '''
+        self.segment= segment
+        self.loadValues= loadValues
+        self.eSize= eSize
+
+    def getSamplePoints(self):
+        ''' Return the points uniformly distributed along the surface.'''
+        # Compute positions along the polyline.
+        L= self.segment.getLength()
+        numParts= int(math.ceil(L/self.eSize))
+        points= self.pline.Divide(numParts)
+        # Compute load values for each position.
+        origin= points[0]
+        slope= (loadValues[1]-loadValues[0])/L
+        retval= list()
+        for p in points[1:]:
+            dist= p.dist(origin)
+            Q= slope*dist+loadValues[0] # load value.
+            retval.append(ConcentratedLoad(p= p, Q= Q))
+        return retval
+        
+class QuadLoadedArea(BoussinesqLoad):
+    ''' Four-sided polygon under vertical uniform pressure.
 
     :ivar vertices: polygon vertices.
     '''
@@ -282,42 +391,12 @@ class QuadLoadedArea(object):
         :param delta: friction angle between the soil and the element material.
         '''
         loadCentroid= self.getPolygon().getCenterOfMass()
-        # Get loaded points.
-        loadedPoints= list()
-        unitVectors= list()
-        for e in elements:
-            pos= e.getPosCentroid(True)
-            loadedPoints.append(pos) # Append loaded point.
-            # Compute normal vector 
-            kVector= e.getKVector3d(True)
-            orientation= kVector.dot(loadCentroid-pos)
-            if(orientation>0.0): # pressure on the "positive" side of the element.
-                unitVectors.append(kVector)
-            else: # pressure on the "negative" side of the element.
-                unitVectors.append(-kVector)
+        # Compute element orientation with respect to this load.
+        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements, p= loadCentroid)
         # Compute the pressure values.
         stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
-
-        tanDelta= math.tan(delta)
-        retval= list()
-        for e, stressVector in zip(elements, stressVectors):
-            iVector= e.getIVector3d(True)
-            jVector= e.getJVector3d(True)
-            kVector= e.getKVector3d(True)
-            # Normal pressure.
-            normalPressure= stressVector.dot(kVector)
-            maxTangentPressure= abs(tanDelta*normalPressure)
-            # Pressure parallel to i vector.
-            tangentIPressure= stressVector.dot(iVector)
-            if(abs(tangentIPressure)>maxTangentPressure):
-                tangentIPressure= math.copysign(maxTangentPressure, tangentIPressure)
-            # Pressure parallel to j vector.
-            tangentJPressure= stressVector.dot(jVector)
-            if(abs(tangentJPressure)>maxTangentPressure):
-                tangentJPressure= math.copysign(maxTangentPressure, tangentJPressure)
-            # Append the computed values to the returned list.
-            retval.append([e, tangentIPressure, tangentJPressure, normalPressure])
-        return retval
+        # Compute loads on elements.
+        return self.computeElementalLoads(elements= elements, stressVectors= stressVectors, delta= delta)
 
     def appendLoadToCurrentLoadPattern(self, elements, eta= 1.0, delta= 0.0):
         ''' Append this load to the current load pattern.

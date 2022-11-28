@@ -29,6 +29,9 @@
 #include "utility/geom/d3/GeomGroup3d.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/lists/auxiliary.h"
+#include "utility/geom/pos_vec/VectorPos2d.h"
+#include "utility/geom/pos_vec/VectorPos3d.h"
+#include "utility/kernel/python_utils.h"
 
 
 //! @brief Constructor.
@@ -358,6 +361,65 @@ Vector3d PlanePolyline3d::getKVectorAtLength(const GEOM_FT &) const
     return plane.Normal();
   }
 
+//! @brief Return the points that results from the segment division.
+//!
+//! @param num_partes: number of segments.
+VectorPos3d PlanePolyline3d::Divide(int num_partes) const
+  {
+    const VectorPos2d tmp= this->pline2d.Divide(num_partes);
+    const size_t sz= tmp.size();
+    VectorPos3d retval(sz);
+    size_t k= 0;
+    for(VectorPos2d::const_iterator i= tmp.begin();i!=tmp.end(); i++, k++)
+      { retval[k]= to_3d(*i); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the points that results
+//! from the segment division.
+//!
+//! @param num_partes: number of segments.
+boost::python::list PlanePolyline3d::DividePy(int num_partes) const
+  {
+    VectorPos3d tmp= this->Divide(num_partes);
+    boost::python::list retval;
+    for(VectorPos3d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the points that divide the segments in the proportions
+//! being passed as parameter.
+//!
+//! @param proportions: list of float numbers that contain
+//! the unitary length of the desired intervals (i.e. [1] for one
+//! interval only with the full length of the segment, [0.5,0.5] for
+//! two intervals with half the length of the segment, [0.25, 75] for
+//! two intervals with a quarter and three quarters of the segment...
+VectorPos3d PlanePolyline3d::Divide(const std::vector<double> &proportions) const
+  {
+    const VectorPos2d tmp= this->pline2d.Divide(proportions);
+    const size_t sz= tmp.size();
+    VectorPos3d retval(sz);
+    size_t k= 0;
+    for(VectorPos2d::const_iterator i= tmp.begin();i!=tmp.end(); i++, k++)
+      { retval[k]= to_3d(*i); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the points that results
+//! from the segment division.
+//!
+//! @param num_partes: number of segments.
+boost::python::list PlanePolyline3d::DividePy(const boost::python::list &proportions) const
+  {
+    std::vector<double> v_double= vector_double_from_py_list(proportions);
+    VectorPos3d tmp= Divide(v_double);
+    boost::python::list retval;
+    for(VectorPos3d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
 
 Plane PlanePolyline3d::getPlaneFromSide(unsigned int i) const
   {

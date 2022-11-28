@@ -211,6 +211,8 @@ GeomObj::list_Pos2d (Polyline2d::*intersectionWithRay)(const Ray2d &) const= &Po
 GeomObj::list_Pos2d (Polyline2d::*intersectionWithSegment)(const Segment2d &) const= &Polyline2d::getIntersection;
 void (Polyline2d::*simplify2DPoly)(GEOM_FT epsilon)= &Polyline2d::simplify;
 Segment2d (Polyline2d::*get2DSegment)(const size_t &) const= &Polyline2d::getSegment;
+boost::python::list (Polyline2d::*pline2dDividePyEq2d)(int) const= &Polyline2d::DividePy;
+boost::python::list (Polyline2d::*pline2dDividePyProp2d)(const boost::python::list &) const= &Polyline2d::DividePy;
 class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def(init<>())
   .def(init<Pos2dList>())
@@ -245,6 +247,8 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("getPointAtLength", &Polyline2d::getPointAtLength, "getPointAtLength(s): return the point that lies at a distance \"s\" measured along the polyline from its origin.")
   .def("getIVectorAtLength", &Polyline2d::getIVectorAtLength, "getIVectorAtLength(s): return the I vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   .def("getJVectorAtLength", &Polyline2d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("Divide", pline2dDividePyEq2d,"Divide(numparts); returns the points that divide the polyline in numparts equal parts.")
+  .def("Divide", pline2dDividePyProp2d,"Divide(proportions); returns the points that divide the polyline in the proportions of the list.")
   ;
 
 void (PlanePolyline3d::*simplifyPP3DPoly)(GEOM_FT epsilon)= &PlanePolyline3d::simplify;
@@ -259,6 +263,8 @@ Vector2d (D2to3d::*ppto_2dv)(const Vector3d &) const= &D2to3d::to_2d;
 Pos2d (D2to3d::*ppto_2dp)(const Pos3d &) const= &D2to3d::to_2d;
 Line2d (D2to3d::*ppto_2dln)(const Line3d &) const= &D2to3d::to_2d;
 Segment2d (D2to3d::*ppto_2dsg)(const Segment3d &) const= &D2to3d::to_2d;
+boost::python::list (PlanePolyline3d::*planePline3dDividePyEq3d)(int) const= &PlanePolyline3d::DividePy;
+boost::python::list (PlanePolyline3d::*planePline3dDividePyProp3d)(const boost::python::list &) const= &PlanePolyline3d::DividePy;
 class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def(init<>())
   .def(init<PlanePolyline3d>())
@@ -298,6 +304,8 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("getIVectorAtLength", &PlanePolyline3d::getIVectorAtLength, "getIVectorAtLength(s): return the I vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   .def("getJVectorAtLength", &PlanePolyline3d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   .def("getKVectorAtLength", &PlanePolyline3d::getKVectorAtLength, "getKVectorAtLength(s): return the K vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("Divide", planePline3dDividePyEq3d,"Divide(numparts); returns the points that divide the polyline in numparts equal parts.")
+  .def("Divide", planePline3dDividePyProp3d,"Divide(proportions); returns the points that divide the polyline in the proportions of the list.")
   .def("insertVertex", &PlanePolyline3d::insertVertex,"Insert the point argurment as vertex by splitting the nearest segment.")
   .def("getChunk", &PlanePolyline3d::getChunk,"getChunk(point, sgn, tol) returns the chunk of the polyline that goes from the begining to the argument point if sgn<0 or from the argument point to the polyline end if sgn>=0. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("getLeftChunk", &PlanePolyline3d::getLeftChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from its beginning to the point argument. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
@@ -308,6 +316,8 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
 
 void (Polyline3d::*simplify3DPoly)(GEOM_FT epsilon)= &Polyline3d::simplify;
 Segment3d (Polyline3d::*get3DSegment)(const size_t &) const= &Polyline3d::getSegment;
+boost::python::list (Polyline3d::*pline3dDividePyEq3d)(int) const= &Polyline3d::DividePy;
+boost::python::list (Polyline3d::*pline3dDividePyProp3d)(const boost::python::list &) const= &Polyline3d::DividePy;
 class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def(init<>())
 //.def(init<Pos3dList>())
@@ -332,6 +342,8 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("getIVectorAtLength", &Polyline3d::getIVectorAtLength, "getIVectorAtLength(s): return the I vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   .def("getJVectorAtLength", &Polyline3d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   .def("getKVectorAtLength", &Polyline3d::getKVectorAtLength, "getKVectorAtLength(s): return the K vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
+  .def("Divide", pline3dDividePyEq3d,"Divide(numparts); returns the points that divide the polyline in numparts equal parts.")
+  .def("Divide", pline3dDividePyProp3d,"Divide(proportions); returns the points that divide the polyline in the proportions of the list.")
   .def("insertVertex", &Polyline3d::insertVertex,"Insert the point argurment as vertex by splitting the nearest segment.")
   .def("getChunk", &Polyline3d::getChunk,"getChunk(point, sgn, tol) returns the chunk of the polyline that goes from the begining to the argument point if sgn<0 or from the argument point to the polyline end if sgn>=0. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("getLeftChunk", &Polyline3d::getLeftChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from its beginning to the point argument. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")

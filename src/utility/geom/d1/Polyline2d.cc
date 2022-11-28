@@ -28,6 +28,8 @@
 #include "utility/geom/trf/Trf2d.h"
 #include "utility/geom/pos_vec/Pos2dList.h"
 #include "utility/geom/d2/Circle3d.h" // Curvature functions.
+#include "utility/geom/pos_vec/VectorPos2d.h"
+#include "utility/kernel/python_utils.h"
 
 //! @brief Default constructor.
 Polyline2d::Polyline2d(void)
@@ -473,6 +475,84 @@ Vector2d Polyline2d::getJVectorAtLength(const GEOM_FT &s) const
 	  jVector= -jVector;
 	retval= jVector;
       }
+    return retval;
+  }
+
+//! @brief Return the points that results from the division of the polyline.
+//!
+//! @param num_partes: number of segments.
+VectorPos2d Polyline2d::Divide(int num_partes) const
+  {
+    const double L= this->getLength();
+    const double segmentLength= L/num_partes;
+    const size_t numPoints= num_partes+1;
+    VectorPos2d retval(numPoints);
+    retval[0]= this->getFromPoint(); // first point.
+    for(int i= 1; i<num_partes;i++) // intermediate points.
+      { retval[i]= this->getPointAtLength(i*segmentLength); }
+    retval[num_partes]= this->getToPoint(); //last point: num_partes==numPoints-1
+    return retval;
+  }
+
+//! @brief Return a Python list containing the points that results
+//! from the division of the polyline.
+//!
+//! @param num_partes: number of segments.
+boost::python::list Polyline2d::DividePy(int num_partes) const
+  {
+    VectorPos2d tmp= this->Divide(num_partes);
+    boost::python::list retval;
+    for(VectorPos2d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the points that divide the polyline in the proportions
+//! being passed as parameter.
+//!
+//! @param proportions: list of float numbers that contain
+//! the unitary length of the desired intervals (i.e. [1] for one
+//! interval only with the full length of the segment, [0.5,0.5] for
+//! two intervals with half the length of the segment, [0.25, 75] for
+//! two intervals with a quarter and three quarters of the segment...
+VectorPos2d Polyline2d::Divide(const std::vector<double> &proportions) const
+  {
+    const size_t sz= proportions.size();
+    const size_t numPoints= sz+1;
+    VectorPos2d retval(numPoints);
+    GEOM_FT lambda= 0.0;
+    const GEOM_FT length= getLength();
+    if(sz>0) // At least two points.
+      {
+	retval[0]= getFromPoint(); // First point.
+	retval[sz]= getToPoint(); // Last point.
+      }
+    if(sz>1) //At least one intermediate point.
+      {
+	lambda= proportions[0];
+        for(size_t i= 1; i<sz; i++) // sz==(numPoints-1)
+	  {
+	    retval[i]= this->getPointAtLength(lambda*length);
+	    lambda+= proportions[i];
+	  }  
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " argument must not be empty." << std::endl;
+    return retval;
+  }
+
+//! @brief Return a Python list containing the points that results
+//! from the division of the polyline.
+//!
+//! @param num_partes: number of segments.
+boost::python::list Polyline2d::DividePy(const boost::python::list &proportions) const
+  {
+    std::vector<double> v_double= vector_double_from_py_list(proportions);
+    VectorPos2d tmp= Divide(v_double);
+    boost::python::list retval;
+    for(VectorPos2d::const_iterator i= tmp.begin();i!=tmp.end(); i++)
+      retval.append(*i);
     return retval;
   }
 
