@@ -488,7 +488,10 @@ class PointVerticalLoadOnBackfill(object):
 
 class HorizontalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to a surcharge 
-    load acting in horizontal direction on the backfill. 
+    load acting in horizontal direction on the backfill.
+
+     See: https://estructurando.net/2017/04/18/empujes-muros-sobrecarga-horizontal/
+
 
     :ivar soilIntFi: agle of internal friction of the soil (º)
     :ivar qLoad: surcharge load (force per unit length)
@@ -497,7 +500,7 @@ class HorizontalLoadOnBackfill(PressureModelBase):
           the area where the surcharge load acts (e.g.: a foundation)
     :ivar widthLoadArea: width (perperdicular to wall) of the area on
           which the horizontal load acts (e.g.: a foundation). 
-    :ivar lengthLoadArea: width (parallel to wall) of the area on
+    :ivar lengthLoadArea: length (normal to wall) of the area on
           which the horizontal load acts (e.g.: a foundation). We can
           take lengthLoadArea=1 (default) for a continous load  
     :ivar horDistrAngle: angle to distribute load in the direction of

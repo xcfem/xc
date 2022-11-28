@@ -17,7 +17,7 @@
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2017, LCPT and AOO"
+__copyright__= "Copyright 2022, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -352,6 +352,8 @@ class QuadLoadedArea(BoussinesqLoad):
     ''' Four-sided polygon under vertical uniform pressure.
 
     :ivar vertices: polygon vertices.
+    :ivar q: pressure on the loaded area.
+    :ivar eSize: length of the side for the discretization.
     '''
     def __init__(self, p1, p2, p3, p4, q, eSize):
         ''' Constructor.
