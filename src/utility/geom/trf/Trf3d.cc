@@ -188,7 +188,7 @@ Pos3dArray Trf3d::operator()(const Pos3dArray &m) const
 
 Trf3d operator*(const Trf3d &a,const Trf3d &b)
   {
-    Trf3d retval(a*b);
+    Trf3d retval(a.cgtrf*b.cgtrf);
     return retval;
   }
 

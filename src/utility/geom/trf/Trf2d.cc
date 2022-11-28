@@ -132,6 +132,6 @@ GeomObj::list_Pos2d Trf2d::operator()(const GeomObj::list_Pos2d &lp2d) const
   { return Transform(lp2d); }
 Trf2d operator*(const Trf2d &a,const Trf2d &b)
   {
-    Trf2d retval(a*b);
+    Trf2d retval(a.cgtrf*b.cgtrf);
     return retval;
   }

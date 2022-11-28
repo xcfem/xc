@@ -162,7 +162,10 @@ python tests/utility/geom/coordinate_systems/refsys3d3d_test_01.py
 python tests/utility/geom/coordinate_systems/refsys2d3d_test_01.py
 python tests/utility/geom/coordinate_systems/tensor_transformation_test_01.py
 echo "$BLEU" "    Transformations." "$NORMAL"
-python tests/utility/geom/rotation2d_test_01.py
+python tests/utility/geom/trf/rotation2d_test_01.py
+python tests/utility/geom/trf/rotation2d_test_02.py
+python tests/utility/geom/trf/rotation3d_test_01.py
+python tests/utility/geom/trf/rotation3d_test_02.py
 echo "$BLEU" "    Mechanical properties." "$NORMAL"
 python tests/utility/geom/principal_axes_of_inertia_2d_test_01.py
 echo "$BLEU" "    DXF reading." "$NORMAL"
