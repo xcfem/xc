@@ -1135,6 +1135,9 @@ python tests/geotechnics/soil_mechanics/test_boussinesq_settlement.py
 python tests/geotechnics/soil_mechanics/test_boussinesq_concentrated_load_01.py
 python tests/geotechnics/soil_mechanics/test_boussinesq_quad_loaded_area_01.py
 python tests/geotechnics/soil_mechanics/test_boussinesq_quad_loaded_area_02.py
+python tests/geotechnics/soil_mechanics/test_horizontal_surcharge3d_01.py
+python tests/geotechnics/soil_mechanics/test_horizontal_surcharge3d_02.py
+python tests/geotechnics/soil_mechanics/test_horizontal_surcharge3d_03.py
 ## Earthworks
 echo  "$BLEU" "  Earthworks." "$NORMAL"
 python tests/geotechnics/earthworks/test_embankment_01.py
