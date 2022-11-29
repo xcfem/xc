@@ -3,6 +3,8 @@
 según el documento «Tema VIII: Cálculo de túneles por elementos finitos» de
 Francisco Javier Castanedo Navarro.'''
 
+import geom
+
 def calcNumeroEstab(sigma0,sigmaC):
     ''' Devuelve el valor del número de estabilidad a partir de:
 
