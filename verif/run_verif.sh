@@ -75,11 +75,13 @@ echo "$BLEU" "    Segments." "$NORMAL"
 python tests/utility/geom/segments/segment2d_test_01.py
 python tests/utility/geom/segments/segment2d_test_02.py
 python tests/utility/geom/segments/segment2d_test_03.py
+python tests/utility/geom/segments/segment2d_test_04.py
 python tests/utility/geom/segments/segment2d_connect_01.py
 python tests/utility/geom/segments/segment2d_connect_02.py
 python tests/utility/geom/segments/segment3d_test_00.py
 python tests/utility/geom/segments/segment3d_test_01.py
 python tests/utility/geom/segments/segment3d_test_02.py
+python tests/utility/geom/segments/segment3d_test_03.py
 python tests/utility/geom/segments/segment3d_connect_01.py
 python tests/utility/geom/segments/segment3d_connect_02.py
 echo "$BLEU" "    Polylines." "$NORMAL"
