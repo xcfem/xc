@@ -231,7 +231,7 @@ class_<SlidingVectorsSystem2d, bases<SlidingVector2d> >("SlidingVectorsSystem2d"
   .def("getMoment",getMomentPos2D, "Return the moment of the SVS with respect to the point argument.")
   .def("reduceTo",&SlidingVectorsSystem2d::reduceTo,"Sets the reference point to express the moments with respect to.")
   .def("zeroMomentLine",&SlidingVectorsSystem2d::getZeroMomentLine,"Return zero moment line (if it exists).")
-  .def("distribute",&SlidingVectorsSystem2d::distributePy, "distribute(pointList, weights): create an equivalent vector system on the argument points.") 
+  .def("distribute",&SlidingVectorsSystem2d::distributePy, "distribute(pointList, weights): create an equivalent vector system on the argument points and areas.") 
   .def("distribute",&SlidingVectorsSystem2d::distributePyNoWeights, "distribute(pointList): create an equivalent vector system on the argument points.") 
   .def(SlidingVector2d()+self) //Sobrecarga de operadores
   .def(self+SlidingVector2d())

@@ -164,12 +164,14 @@ class BoussinesqLoad(object):
         Boussinesq equations.
     '''
 
-    def computeElementOrientation(self, elements, p):
-        ''' Compute pressures due to this load on the elements argument.
+    def computeElementOrientation(self, elements):
+        ''' Compute the orientation of the elements with respect to this
+        load.
 
-        :param elements: elements to compute the orintation of.
-        :param p: position of the loan on the soil surface.
+        :param elements: elements to compute the orientation of.
         '''
+        # Get the centroid of the load.
+        loadCentroid= self.getCentroid()
         # Get loaded points.
         loadedPoints= list()
         unitVectors= list()
@@ -178,7 +180,7 @@ class BoussinesqLoad(object):
             loadedPoints.append(pos) # Append loaded point.
             # Compute normal vector 
             kVector= e.getKVector3d(True)
-            orientation= kVector.dot(p-pos)
+            orientation= kVector.dot(loadCentroid-pos)
             if(orientation>0.0): # pressure on the "positive" side of the element.
                 unitVectors.append(kVector)
             else: # pressure on the "negative" side of the element.
@@ -223,9 +225,8 @@ class BoussinesqLoad(object):
                     commentaries in Bowles book (page 633).
         :param delta: friction angle between the soil and the element material.
         '''
-        loadCentroid= self.getCentroid()
         # Compute element orientation with respect to this load.
-        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements, p= loadCentroid)
+        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements)
         # Compute the pressure values.
         stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
         # Compute loads on elements.
@@ -259,10 +260,9 @@ class ConcentratedLoad(BoussinesqLoad):
         self.Q= Q
     
     def getStressIncrement(self, points, unitVectorDirs, eta= 1.0):
-        ''' Return the vector increment in the vertical stress for the points
+        ''' Return the vector increment in the soil stress for the points
             inside an homogeneous and elastic soil due to a concentrated load.
 
-        :param P: value of the concentrated load.
         :param points: points whose stress increment will be computed.
         :param unitVectorDirs: stress direction vectors (must be a unit vector) 
                                corresponding to the points.

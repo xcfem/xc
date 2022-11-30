@@ -13,8 +13,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import math
 import geom
+import xc
 from misc_utils import log_messages as lmsg
 
 class HorizontalLoadOnBackFill(object):
@@ -48,6 +50,143 @@ class HorizontalLoadOnBackFill(object):
         ## Compute vertex "shadow"
         lightRay= geom.Ray3d(v, 100.0*rotatedVector)
         return loadedPlane.getIntersection(lightRay)
+    
+    def computeElementOrientation(self, elements):
+        ''' Compute the orientation of the elements with respect to this
+        load.
+
+        :param elements: elements to compute the orientation of.
+        '''
+        # Get the centroid of the load.
+        loadCentroid= self.getCentroid()
+        # Get loaded points.
+        loadedPoints= list()
+        loadedAreas= list()
+        unitVectors= list()
+        for e in elements:
+            pos= e.getPosCentroid(True)
+            loadedPoints.append(pos) # Append loaded point.
+            loadedAreas.append(e.getArea(True))
+            # Compute normal vector 
+            kVector= e.getKVector3d(True)
+            orientation= kVector.dot(loadCentroid-pos)
+            if(orientation>0.0): # pressure on the "positive" side of the element.
+                unitVectors.append(kVector)
+            else: # pressure on the "negative" side of the element.
+                unitVectors.append(-kVector)
+        return loadedPoints, loadedAreas, unitVectors
+
+    def getForceDistribution(self, points, areas, phi):
+        ''' Return the distribution of the forces over the points.
+
+        :param points: points whose stress increment will be computed.
+        :param areas: tributary areas corresponding to the points.
+        :param phi: effective friction angle of soil.
+        '''
+        retval= list()
+        # Compute the area subject to pressure.
+        loadedPlane= geom.Plane3d(points) # compute regression plane.
+        shadowContour= self.getLoadedArea(loadedPlane, phi= phi)
+        shadowContourArea= shadowContour.getArea()
+        loadedArea= 0.0
+        loadedAreas= list()
+        numberOfLoadedPoints= 0
+        for p, area, in zip(points, areas):
+            if(shadowContour.In(p, 1e-2)): # if point inside loaded area.
+                loadedArea+= area
+                loadedAreas.append(area)
+                numberOfLoadedPoints+= 1
+            else: # ouside loaded area
+                loadedAreas.append(0.0) # area= 0 => no load on this point.
+        loadedAreaRatio= loadedArea/shadowContourArea
+        # Compute the load distribution.
+        shadowContourCentroid= shadowContour.getCenterOfMass()
+        F= loadedAreaRatio*self.H # Load to distribute over the points.
+        if(numberOfLoadedPoints>1): # isostatic distribution over the points. 
+            verticalSegment= shadowContour.clip(geom.Line3d(shadowContourCentroid, geom.Vector3d(0,0,100)))
+            ## Get a point 1/3*length down from the top point.
+            fromPoint= verticalSegment.getFromPoint()
+            segmentTopPoint= verticalSegment.getToPoint()
+            if(segmentTopPoint.z<fromPoint.z):
+                segmentTopPoint= fromPoint
+            loadApplicationPoint= segmentTopPoint+(1/3)*verticalSegment.getLength()*geom.Vector3d(0,0,-1)
+            ## Create the sliding vector system.
+            M= geom.Vector3d(0,0,0) # Zero moment at this point.
+            loadSVS= geom.SlidingVectorsSystem3d(loadApplicationPoint,F,M)
+            forceVectors= loadSVS.distribute(points, loadedAreas)
+        else: # no distribution needed.
+            forceVectors= list()
+            for p, a in zip(points, loadedAreas):
+                M= geom.Vector3d(0,0,0) # Zero moment at this point.
+                if(a>0.0): # Concentrated load.
+                    forceVector= geom.SlidingVectorsSystem3d(p,F,M)
+                else: # Zero load.
+                    forceVector= geom.SlidingVectorsSystem3d(p,M,M)
+                forceVectors.append(forceVector)
+        return forceVectors, loadedAreaRatio
+        
+    def computeElementalLoads(self, elements, forceVectors, delta):
+        ''' Compute loads on elements from the stress vectors passes as
+            parameter.
+
+        :param elements: elements to compute the pressure on.
+        :param forceVectors: value of the stress vector (cartesian coord.)
+                             on the centroid of each element.
+        :param delta: friction angle between the soil and the element material.
+        '''
+        tanDelta= math.tan(delta)
+        retval= list()
+        for e, forceVector in zip(elements, forceVectors):
+            if(forceVector.getModulus()>1e-6):
+                iVector= e.getIVector3d(True)
+                jVector= e.getJVector3d(True)
+                kVector= e.getKVector3d(True)
+                # Normal pressure.
+                stressVector= forceVector.getVector3d()*(1.0/e.getArea(True))
+                normalPressure= stressVector.dot(kVector)
+                maxTangentPressure= abs(tanDelta*normalPressure)
+                # Pressure parallel to i vector.
+                tangentIPressure= stressVector.dot(iVector)
+                if(abs(tangentIPressure)>maxTangentPressure):
+                    tangentIPressure= math.copysign(maxTangentPressure, tangentIPressure)
+                # Pressure parallel to j vector.
+                tangentJPressure= stressVector.dot(jVector)
+                if(abs(tangentJPressure)>maxTangentPressure):
+                    tangentJPressure= math.copysign(maxTangentPressure, tangentJPressure)
+                # Append the computed values to the returned list.
+                retval.append([e, tangentIPressure, tangentJPressure, normalPressure])
+            else: # No load in this element.
+                retval.append([e, 0.0, 0.0, 0.0])
+        return retval
+    
+    def computeForcesOnElements(self, elements, phi, delta= 0.0):
+        ''' Compute pressures due to this load on the elements argument.
+
+        :param elements: elements to compute the pressure on.
+        :param phi: effective friction angle of soil.
+        :param delta: friction angle between the soil and the element material.
+        '''
+        # Compute element orientation with respect to this load.
+        loadedPoints, loadedAreas, unitVectors= self.computeElementOrientation(elements= elements)
+        # Compute the force distribution.
+        forceVectors, loadedAreaRatio= self.getForceDistribution(points= loadedPoints, areas= loadedAreas, phi= phi)
+        # Compute loads on elements.
+        elementalLoads= self.computeElementalLoads(elements= elements, forceVectors= forceVectors, delta= delta)
+        return elementalLoads, loadedAreaRatio
+    
+    def appendLoadToCurrentLoadPattern(self, elements, phi, delta= 0.0):
+        ''' Append this load to the current load pattern.
+
+        :param elements: elements to apply the load on.
+        :param phi: effective friction angle of soil.
+        :param delta: friction angle between the soil and the element material.
+        '''
+        pressures, loadedAreaRatio= self.computeForcesOnElements(elements= elements, phi= phi, delta= delta)
+        for pData in pressures:
+            if(pData[3]!=0.0): # if actually loaded.
+               e= pData[0]
+               e.vector3dUniformLoadLocal(xc.Vector([pData[1],pData[2],pData[3]]))
+        return loadedAreaRatio
 
 class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
     ''' Horizontal concentrated surcharge on backfill surface. This load 
@@ -64,14 +203,17 @@ class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
         super().__init__(H= H)
         self.pos= pos
 
+    def getCentroid(self):
+        ''' Return the centroid of the loaded area.'''
+        return self.pos
+
     def getLoadedArea(self, loadedPlane, phi):
         ''' Return the polygon on the loadedPlane affected by this horizontal
         load.
 
         :param loadedPlane: plane under load.
-        :param soil: effective friction angle of soil.
+        :param phi: effective friction angle of soil.
         '''
-        retval= None
         # Compute vertical angles.
         pi_4= math.pi/4.0
         horizontalAngle= pi_4
@@ -89,7 +231,6 @@ class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
             horizontalAngles= [pi_4, -pi_4]
             # Compute intersections of the rays with the loaded plane.
             loadShadowContour= list()
-            baseDir= self.H.normalized() # Direction of the load.
             loadShadowContour.append(self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[0], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
             loadShadowContour.append(self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[1], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
             loadShadowContour.append(self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[1], vAngle= verticalAngles[1], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
@@ -146,7 +287,6 @@ class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
             # Compute vertical angles.
             pi_4= math.pi/4.0
             xi= pi_4+phi/2
-            vertexVerticalAngles= list() # Vertical angle of the ray for each vertex.
             horizontalAngle= pi_4
             # The vertical angle depends on the horizontal rotation:
             rotatedVerticalAngleUp= math.atan(math.tan(phi)*math.sin(horizontalAngle))
@@ -165,7 +305,6 @@ class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
                 horizontalAngles= [pi_4, -pi_4]
                 # Compute intersections of the rays with the loaded plane.
                 loadShadowContour= list()
-                baseDir= self.H.normalized() # Direction of the load.
                 loadShadowContour.append(self.getVertexShadow(v= nearestVertex, hAngle= horizontalAngles[0], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
                 loadShadowContour.append(self.getVertexShadow(v= nearestVertex, hAngle= horizontalAngles[1], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
                 loadShadowContour.append(self.getVertexShadow(v= farthestVertex, hAngle= horizontalAngles[1], vAngle= verticalAngles[1], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
