@@ -13,4 +13,6 @@ This directory contains the classes that define the finite elements available in
 		
 ## References
 
+- [Finite element method](https://en.wikipedia.org/wiki/Finite_element_method)
 - [Inerters everywhere](https://portwooddigital.com/2021/11/13/inerters-everywhere/)
+- [Stop Hogging All the RAM](https://portwooddigital.com/2022/11/16/stop-hogging-all-the-ram/)
