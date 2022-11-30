@@ -209,4 +209,24 @@ class EmbankmentCrossSection(object):
             if(thickness>0.0): # thickness for this layer.
                 retval+= layer.soil.gamma()*thickness
         return retval
-    
+
+    def getEarthPressuresAtRest(self, elements, unitVectorDirs):
+        ''' Return the pressure for the elements being passed as parameter.
+
+        :param elements: elements whose pressure on will be computed.
+        :param unitVectorDirs: pressure direction vectors (must be unit vectors)
+                               corresponding to the points.
+        '''
+        retval= list()
+        if(len(self.layers)>1):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; not implemented for multiple soil layers. Using the Jacky coefficient of the first layer only.')
+        k0= self.layers[0].soil.K0Jaky()# Jaky's earth pressure at rest
+                                        # coefficient.
+        for e, vDir in zip(elements, unitVectorDirs):
+            centroid= e.getPosCentroid(True)
+            weightPressure= self.getWeightVerticalStresses(point= centroid)
+            lateralPressure= -k0*weightPressure*vDir
+            retval.append(lateralPressure)
+        return retval

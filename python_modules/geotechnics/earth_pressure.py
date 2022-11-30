@@ -98,7 +98,7 @@ def ka_rankine(b,phi):
     return fSoil.Ka()
 
 def kp_rankine(b,phi):
-    '''Return the active earth pressure coefficient according to Rankine theory.
+    '''Return the passive earth pressure coefficient according to Rankine theory.
 
     :param b:  slope of the backfill (radians).
     :param phi: internal friction angle of the soil (radians).
@@ -108,10 +108,11 @@ def kp_rankine(b,phi):
     return fSoil.Kp()
 
 def phi_rankine_from_active_coefficient(b, ka):
-    '''Return the active earth pressure coefficient according to Rankine theory.
+    '''Return the soil internal friction angle of the soil, given its active
+       earth pressure coefficient according to Rankine theory.
 
     :param b:  slope of the backfill (radians).
-    :param phi: internal friction angle of the soil (radians).
+    :param ka: active earth pressure coefficiente according to Rankine theory.
     '''
     def rankine_ka(phi):
         '''Returns Rankine's active earth pressure coefficient.'''

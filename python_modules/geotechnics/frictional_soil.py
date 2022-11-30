@@ -37,7 +37,7 @@ class FrictionalSoil(object):
         self.rhoSat= rhoSat
 
     def K0Jaky(self):
-        '''Returns Jaky's earth pressure at rest.'''
+        '''Returns Jaky's coefficient (earth pressure at rest).'''
         return 1.0-math.sin(self.getDesignPhi())
 
     def Ka(self):

@@ -264,7 +264,7 @@ class ConcentratedLoad(BoussinesqLoad):
             inside an homogeneous and elastic soil due to a concentrated load.
 
         :param points: points whose stress increment will be computed.
-        :param unitVectorDirs: stress direction vectors (must be a unit vector) 
+        :param unitVectorDirs: stress direction vectors (must be unit vectors) 
                                corresponding to the points.
         :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
                     commentaries in Bowles book (page 633).
