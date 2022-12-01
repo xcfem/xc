@@ -517,11 +517,6 @@ class LaneAxis(object):
         :param lmbdArcLength: parameter (0.0->start of the axis, 1.0->end of
                               the axis).
         '''
-        if((lmbdArcLength>1.0) or (lmbdArcLength<0)):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; lbmdArcLength '+str(lmbdArcLength) + ' out of range (0,1)')
-            
         l= lmbdArcLength*self.pline.getLength()
         O= self.pline.getPointAtLength(l)
         iVector= self.pline.getIVectorAtLength(l)
