@@ -614,17 +614,15 @@ class NotionalLane(object):
 
     def getContiguousLaneSegment(self, length, name= None):
         ''' Return the contour of another piece of road lane that continues
-        this one at its beginning (if length<0) or at its end (if 
-        length>0). The length of the returned segment is length
-        times the length of this one.
+        this one at its beginning (if length<0) or at its end (if length>0). 
 
         This solution will probably be deprecated when a more general type
         of notional lanes (not necessarily quadrilateral) have been developed.
 
-        :param lenghtFactor: real number that defines the length of the new
-                             lane segment and its position with respecto to
-                             this one (at its beginning if smaller 
-                             than 0, or at its end if greater than 0).
+        :param lengtht: real number that defines the length of the new lane
+                        segment and its position with respecto to this one
+                        (at its beginning if smaller than 0, or at its end 
+                        if greater than 0).
         :param name: name for the new notional lane.
         '''
         # Compute mirror and mirrored edges.
@@ -654,7 +652,9 @@ class NotionalLane(object):
         else:
             contourPoints= [ptB, ptA, ptA+vectorA, ptB+vectorB]
         # Construct the new notional lane.
-        return NotionalLane(name= self.name+suffix, contour= geom.Polygon3d(contourPoints))
+        if(name is None):
+            name= self.name+suffix
+        return NotionalLane(name= name, contour= geom.Polygon3d(contourPoints))
         
 
 class NotionalLanes(object):
@@ -669,6 +669,28 @@ class NotionalLanes(object):
         for lane in self.lanes:
             retval.append(lane.getArea())
         return retval
+
+    def getContiguousNotionalLanes(self, length):
+        ''' Return the contiguous notional lanes that continue the lanes of
+        this one at its beginning (if length<0) or at its end (if length>0). 
+        The length of the returned segment is length times the length of 
+        this one.
+
+        This solution will probably be deprecated when a more general type
+        of notional lanes (not necessarily quadrilateral) have been developed.
+
+        :param lenght: real number that defines the length of the new lane 
+                       segments and its position with respecto to those of
+                       this set (at its beginning if negative, or at its end
+                       positive).
+        '''
+        newLanes= list()
+        for lane in self.lanes:
+            newLanes.append(lane.getContiguousLaneSegment(length= length))
+        retval= NotionalLanes()
+        retval.lanes= newLanes
+        return retval
+        
 
     def getWheelLoads(self, tandems, relativePositions, originSet= None, spreadingLayers= None):
         ''' Return a dictionary containing the wheel loads due to the tandems

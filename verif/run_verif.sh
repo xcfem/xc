@@ -224,6 +224,7 @@ python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
 python tests/actions/traffic_loads/test_notional_lane_01.py
 python tests/actions/traffic_loads/test_ec1_notional_lane_computation_01.py
+python tests/actions/traffic_loads/test_ec1_notional_lane_computation_02.py
 python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_01.py
 python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_02.py
 
