@@ -80,7 +80,7 @@ else:
 # # Write notional lane contour.
 # points= getPoints(notionalLaneContourPoints)
 # msp.add_polyline3d(points)
-# # Write polyline joining wheel load centers.
+# # Write previous and following notional lanes contours.
 # points= getPoints(previousNotionalLaneVertices)
 # msp.add_polyline3d(points)
 # points= getPoints(followingNotionalLaneVertices)
