@@ -81,7 +81,7 @@ wheelLoads= axis.getWheelLoads(loadModel= tandem, lmbdArcLength=0.5, loadFactor=
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
 for wl in wheelLoads:
-    wl.pickNodes(originSet= originSet, spreadingLayers= spreadingLayers)
+    wl.pickDeckNodes(originSet= originSet, spreadingLayers= spreadingLayers)
     wl.defNodalLoads()
 
 # We add the load case to domain.

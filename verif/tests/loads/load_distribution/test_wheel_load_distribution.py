@@ -68,7 +68,7 @@ originSet= modelSpace.getTotalSet()
 spreadingLayers= [(0.5, 1), (0.5, 1)]
 localCoordinateSystem= geom.CooSysRect3d3d(geom.Vector3d(1,0,0), geom.Vector3d(0,1,0))
 wheelLoad= load_model_base.WheelLoad(pos= geom.Pos3d(span/2.0, span/2.0, 0.0), ld= 150e3, lx= 0.4, ly= 0.4, localCooSystem= localCoordinateSystem)
-wheelLoad.pickNodes(originSet= originSet, spreadingLayers= spreadingLayers)
+wheelLoad.pickDeckNodes(originSet= originSet, spreadingLayers= spreadingLayers)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
