@@ -32,6 +32,7 @@
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/d3/BND3d.h"
+#include "utility/geom/d2/Plane.h"
 
 //! @brief Constructor.
 XC::DqPtrsNode::DqPtrsNode(CommandEntity *owr)
@@ -289,6 +290,32 @@ Pos3d XC::DqPtrsNode::getCentroid(const double &factor= 1.0) const
 	  }
         retval+= (vectorPos*1/sz);
       }
+    return retval;
+  }
+
+//! @brief Returns the regression plane from the positions of the nodes.
+//!
+//! @param factor: scale factor for the current position
+//!                initPos+ factor * nodDisplacement.
+Plane XC::DqPtrsNode::getRegressionPlane(const double &factor= 1.0) const
+  {
+    Plane retval;
+    const size_t sz= size();
+    if(sz>3) //At least three points to define a plane.
+      {
+        GeomObj3d::list_Pos3d lp;
+	for(const_iterator i= begin();i!=end();i++)
+	  {
+	    const Node *n= (*i);
+	    assert(n);
+	    lp.push_back(n->getCurrentPosition3d(factor));
+	  }
+        retval= Plane(lp);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; at least 3 nodes are needed. This set contains: "
+	        << sz << " nodes." << std::endl;
     return retval;
   }
 

@@ -39,6 +39,7 @@ class Vector3d;
 class ExprAlgebra;
 class GeomObj3d;
 class BND3d;
+class Plane;
 
 namespace XC {
 class TrfGeom;
@@ -68,6 +69,7 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     DqPtrsNode pickNodesInside(const GeomObj3d &, const double &tol= 0.0);
     BND3d Bnd(const double &) const;
     Pos3d getCentroid(const double &) const;
+    Plane getRegressionPlane(const double &) const;
 
     Node *findNode(const int &tag);
     const Node *findNode(const int &tag) const;
