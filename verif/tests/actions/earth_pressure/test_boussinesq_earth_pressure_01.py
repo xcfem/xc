@@ -89,7 +89,7 @@ for n in fixedNodes:
 #  ___             _    _           _ __                                   
 # | __| __ _  _ _ | |_ | |_        | '_ \ _ _  ___  ___ ___ _  _  _ _  ___ 
 # | _| / _` || '_||  _||   \       | .__/| '_|/ -_)(_-/(_-/| || || '_|/ -_)
-# |___|\__/_||_|   \__||_||_|      |_|   |_|  \___|/__//__/ \_._||_|  \___|
+# |___|\__/_||_|  \__||_||_|       |_|   |_|  \___|/__//__/ \_._||_|  \___|
 #
 # =============================================================================
 # =============================================================================
@@ -100,8 +100,9 @@ loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 cLC= loadCaseManager.setCurrentLoadCase('earth_pressure')
 
 # Define concentreted load
-load= -11.15*1900*psf2Pa
-loadedPoint= boussinesq.ConcentratedLoad(p= geom.Pos3d(6.096,2.286, 2.4384), Q=load)
+pos= geom.Pos3d(6.096,2.286, 2.4384) # Load position.
+load= -11.15*1900*psf2Pa # Load value
+loadedPoint= boussinesq.ConcentratedLoad(p= pos, Q=load)
 
 # Compute loads on elements.
 loadedPoint.appendLoadToCurrentLoadPattern(elements= s.elements, eta= 1.0, delta= math.radians(10.0))
