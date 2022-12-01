@@ -597,6 +597,12 @@ class NotionalLane(object):
         startingEdge= self.getStartingEdge()
         finishEdge= self.getFinishEdge()
         return LaneAxis(pline= geom.Polyline3d([startingEdge.getCenterOfMass(), finishEdge.getCenterOfMass()]))
+    
+    def getLength(self):
+        ''' Return the axis of the notional lane.'''
+        startingEdge= self.getStartingEdge()
+        finishEdge= self.getFinishEdge()
+        return startingEdge.getCenterOfMass().dist(finishEdge.getCenterOfMass())
 
     def getVDir(self, lmbdArcLength= 0.5):
         ''' Return the direction vector of the lane axis.
@@ -605,6 +611,51 @@ class NotionalLane(object):
                               the axis).
          '''
         return self.getAxis().getVDir(lmbdArcLength= lmbdArcLength)
+
+    def getContiguousLaneSegment(self, length, name= None):
+        ''' Return the contour of another piece of road lane that continues
+        this one at its beginning (if length<0) or at its end (if 
+        length>0). The length of the returned segment is length
+        times the length of this one.
+
+        This solution will probably be deprecated when a more general type
+        of notional lanes (not necessarily quadrilateral) have been developed.
+
+        :param lenghtFactor: real number that defines the length of the new
+                             lane segment and its position with respecto to
+                             this one (at its beginning if smaller 
+                             than 0, or at its end if greater than 0).
+        :param name: name for the new notional lane.
+        '''
+        # Compute mirror and mirrored edges.
+        lengthFactor= length/self.getLength()
+        ## Assume lengthFactor>0
+        mirrorEdge= self.getFinishEdge() # Edge in the mirrored plane.
+        mirroredEdge= self.getStartingEdge() # Edge to be mirrored.
+        suffix= '_following'
+        if(lengthFactor<0): # If not, then swap
+            mirrorEdge, mirroredEdge= mirroredEdge, mirrorEdge
+            suffix= '_preceding'
+        #Compute mirror transformation.
+        normalVector= self.contour.getKVector()
+        ptA= mirrorEdge.getFromPoint()
+        ptB= mirrorEdge.getToPoint()
+        ptC= ptA+100.0*normalVector
+        mirrorPlane= geom.Plane3d(ptA, ptB, ptC)
+        mirrorTransformation= geom.Reflection3d(mirrorPlane)
+        # Compute the mirrored lane contour.
+        mirroredPtA= mirrorTransformation.getTransformed(mirroredEdge.getFromPoint())
+        mirroredPtB= mirrorTransformation.getTransformed(mirroredEdge.getToPoint())
+        absLengthFactor= abs(lengthFactor)
+        vectorA= absLengthFactor*(mirroredPtA-ptB)
+        vectorB= absLengthFactor*(mirroredPtB-ptA)
+        if(lengthFactor<0.0):
+            contourPoints= [ptA+vectorA, ptB+vectorB, ptB, ptA]
+        else:
+            contourPoints= [ptB, ptA, ptA+vectorA, ptB+vectorB]
+        # Construct the new notional lane.
+        return NotionalLane(name= self.name+suffix, contour= geom.Polygon3d(contourPoints))
+        
 
 class NotionalLanes(object):
     ''' Notional lanes container base class (abstract class).

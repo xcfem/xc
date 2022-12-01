@@ -26,8 +26,10 @@ Pos2d (Trf2d::*TrfPos2d)(const Pos2d &) const= &Trf2d::Transform;
 Vector2d (Trf2d::*TrfVector2d)(const Vector2d &) const= &Trf2d::Transform;
 class_<Trf2d, bases<Trf> >("Trf2d")
 //.def("getInverse", &Trf2d::Inversa)
-  .def("getTrfVector2d", TrfVector2d)
-  .def("getTrfPos2d", TrfPos2d)
+  .def("getTrfVector2d", TrfVector2d) //To deprecate.
+  .def("getTrfPos2d", TrfPos2d) // To deprecate.
+  .def("getTransformed", TrfVector2d)
+  .def("getTransformed", TrfPos2d)
   .def(self * self) // __mul__
    ;
 
@@ -56,6 +58,8 @@ Vector3d (Trf3d::*TrfVector3d)(const Vector3d &) const= &Trf3d::Transform;
 class_<Trf3d, bases<Trf>>("Trf3d")
   .def("getTrfVector3d", TrfVector3d)
   .def("getTrfPos3d", TrfPos3d)
+  .def("getTransformed", TrfVector3d)
+  .def("getTransformed", TrfPos3d)
   .def(self * self) // __mul__
   ;
 

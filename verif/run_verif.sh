@@ -222,6 +222,7 @@ python tests/actions/traffic_loads/test_derailment_SIA.py
 python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
+python tests/actions/traffic_loads/test_notional_lane_01.py
 python tests/actions/traffic_loads/test_ec1_notional_lane_computation_01.py
 python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_01.py
 python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_02.py
