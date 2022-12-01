@@ -18,7 +18,7 @@ xAxis= geom.Line3d(geom.Pos3d(0,0,0), geom.Pos3d(100,0,0))
 rot3dA= geom.Rotation3d(xAxis, alpha)
 rot3dB= geom.Rotation3d(xAxis, -alpha)
 rot3dC= rot3dA*rot3dB
-v= rot3dC.getTrfVector3d(u)
+v= rot3dC.getTransformed(u)
 
 vRef= u
 

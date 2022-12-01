@@ -16,7 +16,7 @@ u= geom.Vector3d(0,1,1)
 alpha= -math.pi/4.0
 xAxis= geom.Line3d(geom.Pos3d(0,0,0), geom.Pos3d(100,0,0))
 rot3d= geom.Rotation3d(xAxis, alpha)
-v= rot3d.getTrfVector3d(u)
+v= rot3d.getTransformed(u)
 
 vRef= geom.Vector3d(0,math.sqrt(2), 0)
 

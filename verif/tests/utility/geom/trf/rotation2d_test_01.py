@@ -14,7 +14,7 @@ import math
 u=geom.Vector2d(1,1)
 alpha=math.radians(90)
 rot2d= geom.Rotation2d(alpha)
-v= rot2d.getTrfVector2d(u)
+v= rot2d.getTransformed(u)
 
 ratio1= abs(v.x+u.y)
 ratio2= abs(v.y-u.x)

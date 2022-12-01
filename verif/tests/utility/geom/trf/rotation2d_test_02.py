@@ -17,7 +17,7 @@ alpha= -math.pi/4.0
 rot2dA= geom.Rotation2d(alpha)
 rot2dB= geom.Rotation2d(-alpha)
 rot2dC= rot2dA*rot2dB
-v= rot2dC.getTrfVector2d(u)
+v= rot2dC.getTransformed(u)
 
 vRef= u
 
