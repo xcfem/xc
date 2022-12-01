@@ -15,6 +15,8 @@ import xc
 from actions import loads
 from model.geometry import geom_utils as gu
 from misc_utils import log_messages as lmsg
+from geotechnics import horizontal_surcharge as hs
+from geotechnics import boussinesq
 
 class WheelLoad(object):
     ''' Load of a wheel.
@@ -114,8 +116,8 @@ class WheelLoad(object):
     def __str__(self):
         return str(self.getDict())
 
-    def pickNodes(self, originSet, spreadingLayers= None):
-        ''' Pick the nodes loaded by the wheel.
+    def pickDeckNodes(self, originSet, spreadingLayers= None):
+        ''' Pick the deck nodes loaded by the wheel.
 
         :param originSet: set to pick the loaded nodes from.
         :param spreadingLayers: list of tuples containing the depth
@@ -136,7 +138,7 @@ class WheelLoad(object):
             n= originSet.getNearestNode(self.position)
             self.nodes= [n]
 
-    def getLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckSpreadingRatio= 2/1.0):
+    def getDeckLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckSpreadingRatio= 2/1.0):
         ''' Return the loaded contour of the wheel taking into account
             the dispersal through the different pavement, earth and
             concrete layers between the wheel contact area and the
@@ -170,19 +172,22 @@ class WheelLoad(object):
         # Call the regular method.
         return self.getLoadedContour(spreadingLayers= spreadingLayers)
         
-    def pickNodesThroughEmbankment(self, originSet, embankment, deckMidplane, deckSpreadingRatio= 2/1.0):
+    def pickDeckNodesThroughEmbankment(self, originSet, embankment, deckSpreadingRatio= 2/1.0):
         ''' Pick the nodes loaded by the wheel.
 
         :param originSet: set to pick the loaded nodes from.
         :param embankment: embankment object as defined in
                            earthworks.embankment.
-        :param deckMidplane: mid-plane of the bridge deck.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
         if(self.localCooSystem):
-            reference, loadedContour= self.getLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio= deckSpreadingRatio)
+            # Compute the deck mid-plane as the regression plane
+            # of the positions of its nodes.
+            deckMidplane= originSet.nodes.getRegressionPlane(0.0)
+            # Compute the loaded contour.
+            reference, loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio= deckSpreadingRatio)
             tol= .01
             self.nodes= list()
             for n in originSet.nodes:
@@ -193,11 +198,24 @@ class WheelLoad(object):
             n= originSet.getNearestNode(self.position)
             self.nodes= [n]
 
+    def getLoadVector(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Return the load vector at the contact surface.
+
+
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load (properly factored).
+        '''
+        # Compute load vector.
+        retval= self.load*gravityDir
+        if(brakingDir): # compute braking load
+            retval+= self.load*xc.Vector(brakingDir)
+        return retval
+        
     def defNodalLoads(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Create the nodal loads corresponding to the contact pressure.
 
         :param gravityDir: direction of the gravity field.
-        :param brakingDir: direction of the braking load.
+        :param brakingDir: direction of the braking load (properly factored).
         '''
         retval= list()
         numLoadedNodes= 0
@@ -205,9 +223,7 @@ class WheelLoad(object):
             numLoadedNodes= len(self.nodes)
         if(numLoadedNodes>0):
             # Compute load vector.
-            vLoad= self.load*gravityDir
-            if(brakingDir): # compute braking load
-                vLoad+= self.load*xc.Vector(brakingDir)
+            vLoad= self.getLoadVector(gravityDir= gravityDir, brakingDir= brakingDir)
             loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
             if(numLoadedNodes==1):
                 retval.append(self.nodes[0].newLoad(loadVector))
@@ -216,7 +232,22 @@ class WheelLoad(object):
                 slidingVectorLoad= loads.SlidingVectorLoad(name= 'wheelLoad', nodes= self.nodes, pntCoord= ptCoo, loadVector= loadVector)
                 slidingVectorLoad.appendLoadToCurrentLoadPattern()
         return retval
-    
+
+    def getBackfillConcentratedLoad(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Return the concentrated loads on the backfill corresponding to
+            the wheel loads.
+
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load (properly factored).
+        '''
+        if(gravityDir[0]!=0.0) or (gravityDir[1]!=0.0) or (gravityDir[2]!=-1.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; gravity directions different from (0,0,-1) not supported yet.')
+        vLoad= self.getLoadVector(gravityDir= gravityDir, brakingDir= brakingDir)
+        boussinesqLoad= boussinesq.ConcentratedLoad(p= self.position, Q=vLoad[2])
+        horizontalLoad= hs.HorizontalConcentratedLoadOnBackfill3D(pos= self.position, H= geom.Vector3d(vLoad[0],vLoad[1],0))
+        return (horizontalLoad, boussinesqLoad)
        
 class TandemLoad(object):
     ''' Tandem load.
@@ -691,10 +722,9 @@ class NotionalLanes(object):
         retval.lanes= newLanes
         return retval
         
-
-    def getWheelLoads(self, tandems, relativePositions, originSet= None, spreadingLayers= None):
-        ''' Return a dictionary containing the wheel loads due to the tandems
-            argument in the positions argument.
+    def getWheelLoads(self, tandems, relativePositions):
+        ''' Return a the wheel loads due to the tandems argument placed at
+            the positions argument.
 
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -702,12 +732,6 @@ class NotionalLanes(object):
                                   the notional lane axis (0 -> beginning of
                                   the axis, 0.5-> middle of the axis, 1-> end
                                   of the axis).
-        :param originSet: in not None pick the nearest node for each wheel load.
-        :param spreadingLayers: list of tuples containing the depth
-                                and the spread-to-depth ratio of 
-                                the layers between the wheel contact 
-                                area and the middle surface of the 
-                                concrete slab.
         '''
         retval= list()
         # Compute load positions in each lane.
@@ -717,9 +741,48 @@ class NotionalLanes(object):
                 laneAxis= nl.getAxis() # Lane axis.
                 tandemLoads= laneAxis.getWheelLoads(loadModel= td, lmbdArcLength= rpos)
             retval.extend(tandemLoads)
+        return retval
+    
+    def getDeckWheelLoads(self, tandems, relativePositions, originSet= None, spreadingLayers= None):
+        ''' Return the wheel loads due to the tandems argument placed at
+            the positions argument.
+
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePositions: relative positions of the tandem center in
+                                  the notional lane axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param originSet: pick the loaded nodes for each wheel load.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of 
+                                the layers between the wheel contact 
+                                area and the middle surface of the 
+                                concrete slab.
+        '''
+        retval= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions)
         if(originSet): # pick the loaded by each wheel
-            for load in retval:
-                load.pickNodes(originSet= originSet, spreadingLayers= spreadingLayers)
+            for wheelLoad in retval:
+                wheelLoad.pickDeckNodes(originSet= originSet, spreadingLayers= spreadingLayers)
+        return retval
+    
+    def getBackfillConcentratedLoads(self, tandems, relativePositions, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Return the wheel loads on the backfill due to the tandems argument 
+        placed at the positions argument.
+
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePositions: relative positions of the tandem center in
+                                  the notional lane axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load (properly factored).
+        '''
+        wheelLoads= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions)
+        retval= list()
+        for wheelLoad in wheelLoads:
+            retval.append(wheelLoad.getBackfillConcentratedLoad(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
     def defUniformLoadsXCSets(self, modelSpace, originSet):
@@ -738,7 +801,7 @@ class NotionalLanes(object):
             self.laneSets.append(xcSet)
         return self.laneSets
 
-    def defUniformLoads(self, laneUniformLoads= [9e3, 2.5e3, 2.5e3], gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckUniformLoads(self, laneUniformLoads= [9e3, 2.5e3, 2.5e3], gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define uniform loads on the lanes with the argument values:
 
         :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
@@ -755,7 +818,7 @@ class NotionalLanes(object):
                     retval.append(e.vector3dUniformLoadGlobal(loadVector))
         return retval
 
-    def defPunctualLoads(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+    def defDeckPunctualLoads(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual loads under the wheels.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -763,7 +826,7 @@ class NotionalLanes(object):
                                   the notional lane axis (0 -> beginning of
                                   the axis, 0.5-> middle of the axis, 1-> end
                                   of the axis).
-        :param originSet: in not None pick the nearest node for each wheel load.
+        :param originSet: set with the nodes to pick from.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         :param spreadingLayers: list of tuples containing the depth
@@ -772,14 +835,14 @@ class NotionalLanes(object):
                                 area and the middle surface of the 
                                 bridge deck.
         '''
-        wheelLoads= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
+        wheelLoads= self.getDeckWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
         retval= list()
         for wl in wheelLoads:
             retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
     
-    def defLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+    def defDeckLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual and uniform loads.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -788,7 +851,7 @@ class NotionalLanes(object):
                                   the axis, 0.5-> middle of the axis, 1-> end
                                   of the axis).
         :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
-        :param originSet: in not None pick the nearest node for each wheel load.
+        :param originSet: set containing the nodes to pick from.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         :param spreadingLayers: list of tuples containing the depth
@@ -798,11 +861,11 @@ class NotionalLanes(object):
                                 bridge deck.
         '''
         # punctual loads.
-        self.defPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
+        self.defDeckPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
         # uniform load.
-        self.defUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defDeckUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
 
-    def getWheelLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckMidplane, deckSpreadingRatio= 2/1.0, originSet= None):
+    def getDeckWheelLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckSpreadingRatio= 2/1.0, originSet= None):
         ''' Return a dictionary containing the wheel loads due to the tandems
             argument in the positions argument.
 
@@ -814,26 +877,18 @@ class NotionalLanes(object):
                                   of the axis).
         :param embankment: embankment object as defined in
                            earthworks.embankment.
-        :param deckMidplane: mid-plane of the bridge deck.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param originSet: in not None pick the nearest node for each wheel load.
+        :param originSet: set containing the nodes to pick from.
         '''
-        retval= list()
-        # Compute load positions in each lane.
-        for nl,rpos,td in zip(self.lanes, relativePositions, tandems):
-            tandemLoads= list()
-            if(td is not None):
-                laneAxis= nl.getAxis() # Lane axis.
-                tandemLoads= laneAxis.getWheelLoads(loadModel= td, lmbdArcLength= rpos)
-            retval.extend(tandemLoads)
+        retval= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions)
         if(originSet): # pick the loaded by each wheel
             for load in retval:
-                load.pickNodesThroughEmbankment(originSet= originSet, embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio= deckSpreadingRatio)
+                load.pickDeckNodesThroughEmbankment(originSet= originSet, embankment= embankment, deckSpreadingRatio= deckSpreadingRatio)
         return retval
     
-    def defPunctualLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckMidplane, deckSpreadingRatio= 2/1.0, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckPunctualLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckSpreadingRatio= 2/1.0, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define punctual loads under the wheels.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -843,21 +898,20 @@ class NotionalLanes(object):
                                   of the axis).
         :param embankment: embankment object as defined in
                            earthworks.embankment.
-        :param deckMidplane: mid-plane of the bridge deck.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param originSet: in not None pick the nearest node for each wheel load.
+        :param originSet: set containing the nodes to pick from.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         '''
-        wheelLoads= self.getWheelLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio= deckSpreadingRatio, originSet= originSet)
+        wheelLoads= self.getDeckWheelLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckSpreadingRatio= deckSpreadingRatio, originSet= originSet)
         retval= list()
         for wl in wheelLoads:
             retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
-    def defLoadsThroughEmbankment(self, tandems, relativePositions, laneUniformLoads, embankment, deckMidplane, deckSpreadingRatio= 2/1.0, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckLoadsThroughEmbankment(self, tandems, relativePositions, laneUniformLoads, embankment, deckSpreadingRatio= 2/1.0, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define punctual and uniform loads.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -868,18 +922,75 @@ class NotionalLanes(object):
         :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
         :param embankment: embankment object as defined in 
                            earthworks.embankment.
-        :param deckMidplane: mid-plane of the bridge deck.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param originSet: in not None pick the nearest node for each wheel load.
+        :param originSet: set containing the nodes to pick from.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         '''
         # punctual loads.
-        self.defPunctualLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio=deckSpreadingRatio, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defDeckPunctualLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckSpreadingRatio=deckSpreadingRatio, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
         # uniform load.
-        self.defUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defDeckUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
+
+        
+    def defBackfillPunctualLoads(self, tandems, relativePositions, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define punctual loads under the wheels.
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePositions: relative positions of the tandem center in
+                                  the notional lane axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param originSet: set containing the elements to pick from.
+        :param embankment: embankment object as defined in 
+                           earthworks.embankment.
+        :param delta: friction angle between the soil and the element material.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    implementation remarks in boussinesq module).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        backfillLoads= self.getBackfillConcentratedLoads(tandems= tandems, relativePositions= relativePositions, gravityDir= gravityDir, brakingDir= brakingDir)
+        phi= embankment.layers[0].soil.phi
+        sz= len(backfillLoads)
+        avgLoadedAreaRatio= 0.0
+        print(len(backfillLoads))
+        for bfl in backfillLoads:
+            horizontalLoad= bfl[0]
+            if(horizontalLoad.getModulus()>1e-3): # If not zero.
+                avgLoadedAreaRatio+= horizontalLoad.appendLoadToCurrentLoadPattern(elements= s.elements, phi= phi, delta= delta)
+            verticalLoad= bfl[1]
+            if(verticalLoad.getModulus()>1e-3): # If not zero.
+                verticalLoad.appendLoadToCurrentLoadPattern(elements= originSet, eta= eta, delta= delta)
+        if(sz):
+            avgLoadedAreaRatio/= sz
+        return avgLoadedAreaRatio
+    
+    def defBackfillLoads(self, tandems, relativePositions, laneUniformLoads, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define punctual and uniform loads.
+
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePositions: relative positions of each tandem center in
+                                  the notional lane axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
+        :param originSet: set containing the elements to pick from.
+        :param embankment: embankment object as defined in 
+                           earthworks.embankment.
+        :param delta: friction angle between the soil and the element material.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    implementation remarks in boussinesq module).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        # punctual loads.
+        self.defBackfillPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
+        # # uniform load.
+        # self.defAbutmentUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
 
 
     
