@@ -240,7 +240,8 @@ class WheelLoad(object):
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load (properly factored).
         '''
-        if(gravityDir[0]!=0.0) or (gravityDir[1]!=0.0) or (gravityDir[2]!=-1.0):
+        normalized= gravityDir.Normalized()
+        if(abs(gravityDir[0])>1e-3) or (abs(gravityDir[1])>1e-3):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; gravity directions different from (0,0,-1) not supported yet.')
@@ -958,11 +959,9 @@ class NotionalLanes(object):
         avgLoadedAreaRatio= 0.0
         for bfl in backfillLoads:
             horizontalLoad= bfl[0]
-            if(horizontalLoad.getModulus()>1e-3): # If not zero.
-                avgLoadedAreaRatio+= horizontalLoad.appendLoadToCurrentLoadPattern(elements= s.elements, phi= phi, delta= delta)
+            avgLoadedAreaRatio+= horizontalLoad.appendLoadToCurrentLoadPattern(elements= originSet.elements, phi= phi, delta= delta)
             verticalLoad= bfl[1]
-            if(verticalLoad.getModulus()>1e-3): # If not zero.
-                verticalLoad.appendLoadToCurrentLoadPattern(elements= originSet, eta= eta, delta= delta)
+            verticalLoad.appendLoadToCurrentLoadPattern(elements= originSet.elements, eta= eta, delta= delta)
         if(sz):
             avgLoadedAreaRatio/= sz
         return avgLoadedAreaRatio
@@ -994,7 +993,7 @@ class NotionalLanes(object):
                     p1= laneContour[0]; p2= laneContour[1]
                     p3= laneContour[2]; p4= laneContour[3]
                     ## Define Boussinesq loaded area.
-                    boussinesqLoadedArea= boussinesq.QuadLoadedArea(p1= p1, p2= p2, p3= p3, p4= p4, q= loadVector[2], eSize= 0.25)
+                    boussinesqLoadedArea= boussinesq.QuadLoadedArea(p1= p1, p2= p2, p3= p3, p4= p4, q= loadVector[2], eSize= 0.5)
                     ## Compute loads on elements.
                     boussinesqLoadedArea.appendLoadToCurrentLoadPattern(elements= originSet.elements, eta= eta, delta= delta)
                     ## Define horizontally loaded area.

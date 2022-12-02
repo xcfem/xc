@@ -225,12 +225,16 @@ class BoussinesqLoad(object):
                     commentaries in Bowles book (page 633).
         :param delta: friction angle between the soil and the element material.
         '''
-        # Compute element orientation with respect to this load.
-        loadedPoints, unitVectors= self.computeElementOrientation(elements= elements)
-        # Compute the pressure values.
-        stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
-        # Compute loads on elements.
-        return self.computeElementalLoads(elements= elements, stressVectors= stressVectors, delta= delta)
+        retval= list()
+        if(not self.isZero()): # Don't waste time if load is zero.
+            # Compute element orientation with respect to this load.
+            loadedPoints, unitVectors= self.computeElementOrientation(elements= elements)
+            # Compute the pressure values.
+            stressVectors= self.getStressIncrement(points= loadedPoints, unitVectorDirs= unitVectors)
+            # Compute loads on elements.
+            retval= self.computeElementalLoads(elements= elements, stressVectors= stressVectors, delta= delta)
+        return retval
+    
 
     def appendLoadToCurrentLoadPattern(self, elements, eta= 1.0, delta= 0.0):
         ''' Append this load to the current load pattern.
@@ -258,6 +262,10 @@ class ConcentratedLoad(BoussinesqLoad):
         '''
         self.loadedPoint= p
         self.Q= Q
+    
+    def isZero(self, tol= 1e-6):
+        ''' Return true if the maximum load is smaller that tol.'''
+        return (abs(self.Q)<tol)
     
     def getStressIncrement(self, points, unitVectorDirs, eta= 1.0):
         ''' Return the vector increment in the soil stress for the points
@@ -301,6 +309,15 @@ class LinearLoad(BoussinesqLoad):
     def getCentroid(self):
         ''' Return the position of the load centroid.'''
         return self.segment.getMidPoint()
+    
+    def isZero(self, tol= 1e-6):
+        ''' Return true if the maximum load is smaller that tol.'''
+        retval= True
+        for lv in self.loadValues:
+            if(abs(lv)>tol):
+                retval= False
+                break
+        return retval
     
     def getSamplePoints(self):
         ''' Return the points uniformly distributed along the surface.'''
@@ -368,6 +385,10 @@ class QuadLoadedArea(BoussinesqLoad):
         self.vertices= [p1, p2, p3, p4]
         self.q= q
         self.eSize= eSize
+
+    def isZero(self, tol= 1e-6):
+        ''' Return true if the load is smaller that tol.'''
+        return (abs(self.q)<tol)
 
     def getPolygon(self):
         ''' Return the polygon whose vertices are the those of the

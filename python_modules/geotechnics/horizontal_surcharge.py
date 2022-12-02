@@ -49,7 +49,13 @@ class HorizontalLoadOnBackFill(object):
         rotatedVector= rotation.getTrfVector3d(baseDir)
         ## Compute vertex "shadow"
         lightRay= geom.Ray3d(v, 100.0*rotatedVector)
-        return loadedPlane.getIntersection(lightRay)
+        ptIntersection= loadedPlane.getIntersection(lightRay)
+        if(not ptIntersection.exists):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane.')
+            ptIntersection= None
+        return ptIntersection
     
     def computeElementOrientation(self, elements):
         ''' Compute the orientation of the elements with respect to this
@@ -230,7 +236,7 @@ class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
         # Ray in the direction of the load.
         loadRay= geom.Ray3d(self.pos, 100.0*self.H)
         rayIntersection= loadedPlane.getIntersection(loadRay)
-        if(rayIntersection): # no intersection -> no loads on plane.
+        if(rayIntersection.exists): # no intersection -> no loads on plane.
             verticalPlane= geom.Plane3d(rayIntersection, self.pos, self.pos+geom.Vector3d(0,0,100.0))
             # Compute horizontal angles.
             horizontalAngles= [pi_4, -pi_4]
@@ -245,7 +251,13 @@ class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
-        return geom.Polygon3d(loadShadowContour)
+            retval= geom.Polygon3d(loadShadowContour)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane.')
+            retval= None
+        return retval
 
 class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
     ''' Horizontal linear surcharge on backfill surface. This load 
@@ -303,7 +315,7 @@ class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
             # Ray in the direction of the load.
             loadRay= geom.Ray3d(centroid, 100.0*self.H)
             rayIntersection= loadedPlane.getIntersection(loadRay)
-            if(rayIntersection): # no intersection -> no loads on plane.
+            if(rayIntersection.exists): # no intersection -> no loads on plane.
                 verticalPlane= geom.Plane3d(rayIntersection, centroid, centroid+geom.Vector3d(0,0,100.0))
                 # Compute horizontal angles.
                 # Compute horizontal angles.
@@ -319,7 +331,12 @@ class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
-            retval= geom.Polygon3d(loadShadowContour)
+                retval= geom.Polygon3d(loadShadowContour)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane.')
+                retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -390,7 +407,7 @@ class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackFill):
             # Ray in the direction of the load.
             loadRay= geom.Ray3d(centroid, 100.0*self.H)
             rayIntersection= loadedPlane.getIntersection(loadRay)
-            if(rayIntersection.exists): # no intersection -> no loads on plane.
+            if(rayIntersection.exists): # intersection found.
                 verticalPlane= geom.Plane3d(rayIntersection, centroid, centroid+geom.Vector3d(0,0,100.0))
                 # Compute horizontal angles.
                 vertexHorizontalAngles= list()
@@ -411,6 +428,10 @@ class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackFill):
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
                 retval= geom.Polygon3d(loadShadowContour)
+            else: # no intersection -> no loads on plane.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane.')                
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
