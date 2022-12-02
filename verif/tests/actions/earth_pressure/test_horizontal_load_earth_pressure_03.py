@@ -109,12 +109,12 @@ posC= pos+geom.Vector3d( 0.5, 0.5,0.0)
 posD= pos+geom.Vector3d( 0.5,-0.5,0.0)
 # Horizontal load.
 H= geom.Vector3d(-5e3,-10e3,0)
-loadedLine= hs.HorizontalLoadedAreaOnBackfill3D(contour= [posA, posB, posC, posD], H= H)
+loadedArea= hs.HorizontalLoadedAreaOnBackfill3D(contour= [posA, posB, posC, posD], H= H)
 
 # Compute loads on elements.
 phi= math.radians(30) # effective friction angle of soil.
 delta= math.radians(10.0) # friction angle between the soil and the element material.
-loadedAreaRatio= loadedLine.appendLoadToCurrentLoadPattern(elements= s.elements, phi= phi, delta= delta)
+loadedAreaRatio= loadedArea.appendLoadToCurrentLoadPattern(elements= s.elements, phi= phi, delta= delta)
 
 # Loaded area ratio is the quotient between the actually loaded portion of the
 # retaining structure and the area of the intersection of the "prism" that
