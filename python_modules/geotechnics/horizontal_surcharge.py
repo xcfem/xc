@@ -83,46 +83,48 @@ class HorizontalLoadOnBackFill(object):
         :param areas: tributary areas corresponding to the points.
         :param phi: effective friction angle of soil.
         '''
-        retval= list()
+        forceVectors= list()
+        loadedAreaRatio= 0.0
         # Compute the area subject to pressure.
         loadedPlane= geom.Plane3d(points) # compute regression plane.
         shadowContour= self.getLoadedArea(loadedPlane, phi= phi)
-        shadowContourArea= shadowContour.getArea()
-        loadedArea= 0.0
-        loadedAreas= list()
-        numberOfLoadedPoints= 0
-        for p, area, in zip(points, areas):
-            if(shadowContour.In(p, 1e-2)): # if point inside loaded area.
-                loadedArea+= area
-                loadedAreas.append(area)
-                numberOfLoadedPoints+= 1
-            else: # ouside loaded area
-                loadedAreas.append(0.0) # area= 0 => no load on this point.
-        loadedAreaRatio= loadedArea/shadowContourArea
-        # Compute the load distribution.
-        shadowContourCentroid= shadowContour.getCenterOfMass()
-        F= loadedAreaRatio*self.H # Load to distribute over the points.
-        if(numberOfLoadedPoints>1): # isostatic distribution over the points. 
-            verticalSegment= shadowContour.clip(geom.Line3d(shadowContourCentroid, geom.Vector3d(0,0,100)))
-            ## Get a point 1/3*length down from the top point.
-            fromPoint= verticalSegment.getFromPoint()
-            segmentTopPoint= verticalSegment.getToPoint()
-            if(segmentTopPoint.z<fromPoint.z):
-                segmentTopPoint= fromPoint
-            loadApplicationPoint= segmentTopPoint+(1/3)*verticalSegment.getLength()*geom.Vector3d(0,0,-1)
-            ## Create the sliding vector system.
-            M= geom.Vector3d(0,0,0) # Zero moment at this point.
-            loadSVS= geom.SlidingVectorsSystem3d(loadApplicationPoint,F,M)
-            forceVectors= loadSVS.distribute(points, loadedAreas)
-        else: # no distribution needed.
-            forceVectors= list()
-            for p, a in zip(points, loadedAreas):
+        if(shadowContour):
+            shadowContourArea= shadowContour.getArea()
+            loadedArea= 0.0
+            loadedAreas= list()
+            numberOfLoadedPoints= 0
+            for p, area, in zip(points, areas):
+                if(shadowContour.In(p, 1e-2)): # if point inside loaded area.
+                    loadedArea+= area
+                    loadedAreas.append(area)
+                    numberOfLoadedPoints+= 1
+                else: # ouside loaded area
+                    loadedAreas.append(0.0) # area= 0 => no load on this point.
+            loadedAreaRatio= loadedArea/shadowContourArea
+            # Compute the load distribution.
+            shadowContourCentroid= shadowContour.getCenterOfMass()
+            F= loadedAreaRatio*self.H # Load to distribute over the points.
+            if(numberOfLoadedPoints>1): # isostatic distribution over the points. 
+                verticalSegment= shadowContour.clip(geom.Line3d(shadowContourCentroid, geom.Vector3d(0,0,100)))
+                ## Get a point 1/3*length down from the top point.
+                fromPoint= verticalSegment.getFromPoint()
+                segmentTopPoint= verticalSegment.getToPoint()
+                if(segmentTopPoint.z<fromPoint.z):
+                    segmentTopPoint= fromPoint
+                loadApplicationPoint= segmentTopPoint+(1/3)*verticalSegment.getLength()*geom.Vector3d(0,0,-1)
+                ## Create the sliding vector system.
                 M= geom.Vector3d(0,0,0) # Zero moment at this point.
-                if(a>0.0): # Concentrated load.
-                    forceVector= geom.SlidingVectorsSystem3d(p,F,M)
-                else: # Zero load.
-                    forceVector= geom.SlidingVectorsSystem3d(p,M,M)
-                forceVectors.append(forceVector)
+                loadSVS= geom.SlidingVectorsSystem3d(loadApplicationPoint,F,M)
+                forceVectors= loadSVS.distribute(points, loadedAreas)
+            else: # no distribution needed.
+                forceVectors= list()
+                for p, a in zip(points, loadedAreas):
+                    M= geom.Vector3d(0,0,0) # Zero moment at this point.
+                    if(a>0.0): # Concentrated load.
+                        forceVector= geom.SlidingVectorsSystem3d(p,F,M)
+                    else: # Zero load.
+                        forceVector= geom.SlidingVectorsSystem3d(p,M,M)
+                    forceVectors.append(forceVector)
         return forceVectors, loadedAreaRatio
         
     def computeElementalLoads(self, elements, forceVectors, delta):
@@ -166,12 +168,15 @@ class HorizontalLoadOnBackFill(object):
         :param phi: effective friction angle of soil.
         :param delta: friction angle between the soil and the element material.
         '''
-        # Compute element orientation with respect to this load.
-        loadedPoints, loadedAreas, unitVectors= self.computeElementOrientation(elements= elements)
-        # Compute the force distribution.
-        forceVectors, loadedAreaRatio= self.getForceDistribution(points= loadedPoints, areas= loadedAreas, phi= phi)
-        # Compute loads on elements.
-        elementalLoads= self.computeElementalLoads(elements= elements, forceVectors= forceVectors, delta= delta)
+        elementalLoads= list()
+        loadedAreaRatio= 0.0
+        if(self.H.getModulus()>1e-6): # If load not zero.
+            # Compute element orientation with respect to this load.
+            loadedPoints, loadedAreas, unitVectors= self.computeElementOrientation(elements= elements)
+            # Compute the force distribution.
+            forceVectors, loadedAreaRatio= self.getForceDistribution(points= loadedPoints, areas= loadedAreas, phi= phi)
+            # Compute loads on elements.
+            elementalLoads= self.computeElementalLoads(elements= elements, forceVectors= forceVectors, delta= delta)
         return elementalLoads, loadedAreaRatio
     
     def appendLoadToCurrentLoadPattern(self, elements, phi, delta= 0.0):
@@ -385,7 +390,7 @@ class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackFill):
             # Ray in the direction of the load.
             loadRay= geom.Ray3d(centroid, 100.0*self.H)
             rayIntersection= loadedPlane.getIntersection(loadRay)
-            if(rayIntersection): # no intersection -> no loads on plane.
+            if(rayIntersection.exists): # no intersection -> no loads on plane.
                 verticalPlane= geom.Plane3d(rayIntersection, centroid, centroid+geom.Vector3d(0,0,100.0))
                 # Compute horizontal angles.
                 vertexHorizontalAngles= list()
@@ -405,7 +410,7 @@ class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackFill):
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
-            retval= geom.Polygon3d(loadShadowContour)
+                retval= geom.Polygon3d(loadShadowContour)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

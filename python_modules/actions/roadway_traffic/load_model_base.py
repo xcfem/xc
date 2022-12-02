@@ -785,7 +785,7 @@ class NotionalLanes(object):
             retval.append(wheelLoad.getBackfillConcentratedLoad(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
-    def defUniformLoadsXCSets(self, modelSpace, originSet):
+    def defDeckUniformLoadsXCSets(self, modelSpace, originSet):
         ''' Creates the XC sets with the elements that fall inside
             each of the notional lanes of the argument.
 
@@ -956,7 +956,6 @@ class NotionalLanes(object):
         phi= embankment.layers[0].soil.phi
         sz= len(backfillLoads)
         avgLoadedAreaRatio= 0.0
-        print(len(backfillLoads))
         for bfl in backfillLoads:
             horizontalLoad= bfl[0]
             if(horizontalLoad.getModulus()>1e-3): # If not zero.
@@ -967,6 +966,43 @@ class NotionalLanes(object):
         if(sz):
             avgLoadedAreaRatio/= sz
         return avgLoadedAreaRatio
+    
+    def defBackfillUniformLoads(self, originSet, embankment, delta, eta= 1.0, laneUniformLoads= [9e3, 2.5e3, 2.5e3], gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define uniform loads on the lanes with the argument values:
+
+        :param originSet: set containing the elements to pick from.
+        :param embankment: embankment object as defined in 
+                           earthworks.embankment.
+        :param delta: friction angle between the soil and the element material.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    implementation remarks in boussinesq module).
+        :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        loadedAreaRatio= 0.0
+        for q, lane in zip(laneUniformLoads, self.lanes):
+            if(q is not None):
+                # Compute load vector on each lane.
+                loadVector= q*gravityDir
+                if(brakingDir): # Compute braking load
+                    loadVector+= q*xc.Vector(brakingDir)
+                if(loadVector.Norm()>1e-6): # Not zero.
+                    # Compute Boussinesq loaded area
+                    ## Get contour points.
+                    laneContour= lane.contour.getVertexList()
+                    p1= laneContour[0]; p2= laneContour[1]
+                    p3= laneContour[2]; p4= laneContour[3]
+                    ## Define Boussinesq loaded area.
+                    boussinesqLoadedArea= boussinesq.QuadLoadedArea(p1= p1, p2= p2, p3= p3, p4= p4, q= loadVector[2], eSize= 0.25)
+                    ## Compute loads on elements.
+                    boussinesqLoadedArea.appendLoadToCurrentLoadPattern(elements= originSet.elements, eta= eta, delta= delta)
+                    ## Define horizontally loaded area.
+                    hLoadedArea= hs.HorizontalLoadedAreaOnBackfill3D(contour= [p1, p2, p3, p4], H= geom.Vector3d(loadVector[0], loadVector[1], 0.0))
+                    ## Compute loads on elements.
+                    phi= embankment.layers[0].soil.phi # effective friction angle of soil.
+                    loadedAreaRatio= hLoadedArea.appendLoadToCurrentLoadPattern(elements= originSet.elements, phi= phi, delta= delta)
+        return loadedAreaRatio
     
     def defBackfillLoads(self, tandems, relativePositions, laneUniformLoads, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define punctual and uniform loads.
@@ -989,8 +1025,8 @@ class NotionalLanes(object):
         '''
         # punctual loads.
         self.defBackfillPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
-        # # uniform load.
-        # self.defAbutmentUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
+        # uniform load.
+        self.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta, laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
 
 
     
