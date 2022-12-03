@@ -181,6 +181,8 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("linearLeastSquaresFitting", linearLeastSquaresFittingPtr,"compute the plane that best suits the point cloud.")
   .def("positiveSide", &Plane::positiveSide, " return true if the point is on the positive side of the plane (local coordinate z>0).")
   .def("negativeSide", &Plane::negativeSide, " return true if the point is on the negative side of the plane (local coordinate z<0).")
+  .def("signedDist", &Plane::PseudoDist, " return signed distance fromt the point to the plane (positive if the point is on the positive side of the plane).")
+  .def("signedDist2", &Plane::PseudoDist2, " return signed squared distance fromt the point to the plane (positive if the point is on the positive side of the plane).")
   ;
 
 Segment3d (Polygon3d::*clipLine3d)(const Line3d &) const=&Polygon3d::Clip;
