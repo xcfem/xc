@@ -18,6 +18,14 @@ from misc_utils import log_messages as lmsg
 from geotechnics import horizontal_surcharge as hs
 from geotechnics import boussinesq
 
+# Traffic loads.
+#
+#      |^^^^^^^^^^^^^^||____
+#      |      Truck   |||””‘|””\__,_
+#      | ____________ l||___|__|__||)
+#      |(@)@)”””””””****|(@)(@)**|(@)
+# ——————————————————————————————————————————
+
 class WheelLoad(object):
     ''' Load of a wheel.
     
