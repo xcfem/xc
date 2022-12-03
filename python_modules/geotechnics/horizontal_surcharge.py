@@ -37,25 +37,30 @@ class HorizontalLoadOnBackFill(object):
         plane argument with the loaded plane.
         '''
         baseDir= self.H.normalized() # Direction of the load.
-        # Compute rotation.
-        ## Horizontal axis.
-        horizLine= geom.Line3d(v, 100.0*verticalPlane.getNormal())
-        vertRotation= geom.Rotation3d(horizLine, vAngle)
-        ## Vertical axis.
-        vertLine= geom.Line3d(v,geom.Vector3d(0,0,100.0))
-        horizRotation= geom.Rotation3d(vertLine, hAngle)
-        ## Composed rotatation (WARNING: not commutative).
-        rotation= horizRotation*vertRotation
-        rotatedVector= rotation.getTrfVector3d(baseDir)
-        ## Compute vertex "shadow"
-        lightRay= geom.Ray3d(v, 100.0*rotatedVector)
-        ptIntersection= loadedPlane.getIntersection(lightRay)
-        if(not ptIntersection.exists):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane.')
-            ptIntersection= None
-        return ptIntersection
+        # Check if the point is on the plane (or almost)
+        dist= loadedPlane.dist(v)
+        if(dist<1e-6): # The point is almost on the plane, take the point as intersection
+            retval= v
+        else:
+            # Compute rotation.
+            ## Horizontal axis.
+            horizLine= geom.Line3d(v, 100.0*verticalPlane.getNormal())
+            vertRotation= geom.Rotation3d(horizLine, vAngle)
+            ## Vertical axis.
+            vertLine= geom.Line3d(v,geom.Vector3d(0,0,100.0))
+            horizRotation= geom.Rotation3d(vertLine, hAngle)
+            ## Composed rotatation (WARNING: not commutative).
+            rotation= horizRotation*vertRotation
+            rotatedVector= rotation.getTrfVector3d(baseDir)
+            ## Compute vertex "shadow"
+            lightRay= geom.Ray3d(v, 100.0*rotatedVector)
+            retval= loadedPlane.getIntersection(lightRay)
+            if(not retval.exists):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane. Horizontal load: '+str(self.H)+ ' loaded plane: '+str(loadedPlane))
+                retval= None
+        return retval
     
     def computeElementOrientation(self, elements):
         ''' Compute the orientation of the elements with respect to this
@@ -251,6 +256,7 @@ class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
+                    exit(1)
             retval= geom.Polygon3d(loadShadowContour)
         else:
             className= type(self).__name__
@@ -331,6 +337,7 @@ class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
+                        exit(1)
                 retval= geom.Polygon3d(loadShadowContour)
             else:
                 className= type(self).__name__
@@ -427,6 +434,7 @@ class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackFill):
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
+                        exit(1)
                 retval= geom.Polygon3d(loadShadowContour)
             else: # no intersection -> no loads on plane.
                 className= type(self).__name__
