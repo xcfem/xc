@@ -131,7 +131,7 @@ void (XC::SetMeshComp::*extend_nodes)(const XC::DqPtrsNode &)= &XC::SetMeshComp:
 void (XC::SetMeshComp::*extend_elements)(const XC::DqPtrsElem &)= &XC::SetMeshComp::extend;
 void (XC::SetMeshComp::*extend_constraints)(const XC::SetMeshComp::lst_ptr_constraints &)= &XC::SetMeshComp::extend;
 void (XC::SetMeshComp::*extend_mesh_comp)(const XC::SetMeshComp &)= &XC::SetMeshComp::extend;
-class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase>>("SetMeshComp",no_init)
+class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no_init)
   .add_property("name", &XC::SetMeshComp::getStrName, &XC::SetMeshComp::newName,"get object name.")
   .def("rename",&XC::SetMeshComp::rename,"Change the name of the set.")
   .add_property("getNodes", make_function(getNodesRef, return_internal_reference<>() ),"return the nodes of the set. DEPRECATED use nodes.")
@@ -196,7 +196,7 @@ class_<dq_ptrs_pnt, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_pnt",no_
    ;
 
 XC::Pnt *(XC::SetEntities::lst_ptr_points::*getNearestPnt)(const Pos3d &)= &XC::SetEntities::lst_ptr_points::getNearest;
-class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
+class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt> >("lstPnts",no_init)
   .def("append", &XC::SetEntities::lst_ptr_points::push_back,"Append a point at the end of the list.")
   .def("pushFront", &XC::SetEntities::lst_ptr_points::push_front,"Push point at the beginning of the list.")
   .add_property("size", &XC::SetEntities::lst_ptr_points::size, "Return list size.")
@@ -360,6 +360,6 @@ typedef XC::RowSet<XC::NodePtrArray3d::var_ref_k_row,XC::ElemPtrArray3d::var_ref
 class_<set_k_row, bases<XC::SetEstruct>, boost::noncopyable >("set_k_row", no_init);
 class_<XC::KRowSet, bases<set_k_row>, boost::noncopyable >("KRowSet", no_init);
 
-// XC::MapSetBase and XC::MapSet exposed in export_preprocessor_main.cc
+// XC::MapSetBase and XC::MapSet exposed in python_interface_set_containers.cc
 
 
