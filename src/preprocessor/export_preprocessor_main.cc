@@ -29,27 +29,8 @@ void export_preprocessor_main(void)
     using namespace boost::python;
     docstring_options doc_options;
 
-    typedef std::map<std::string,XC::SetBase *> map_sets;
-    class_<map_sets, boost::noncopyable >("map_sets", no_init)
-      .def(XC::mapptr_indexing_suite<map_sets >())
-      ;
-    class_<XC::MapSetBase , bases<map_sets>, boost::noncopyable >("MapSetBase", no_init)
-      .def("removeSet", &XC::MapSetBase::remove,"Delete the set and remove it from the sets map.")
-      .def("exists",&XC::MapSetBase::exists,"Return true if the sets already exists.")
-      .def("getSetsNames",&XC::MapSetBase::getSetsNamesPy,"Returns the names of the sets.")
-      .def("getKeys",&XC::MapSetBase::getKeysPy,"Returns the map keys in a list.")
-      .def("rename",&XC::MapSetBase::rename,"Rename a set.")
-      ;
- 
-    XC::MapSet::const_iterator (XC::MapSet::*cBegin)(void) const= &XC::MapSet::begin;
-    XC::MapSet::const_iterator (XC::MapSet::*cEnd)(void) const= &XC::MapSet::end;
-    class_<XC::MapSet, bases<XC::PreprocessorContainer,XC::MapSetBase>, boost::noncopyable >("MapSet", no_init)
-      .def("__iter__",range(cBegin, cEnd))
-      .def("__getitem__",&XC::MapSet::getSet, return_internal_reference<>())
-      .def("getSet", make_function(&XC::MapSet::getSet, return_internal_reference<>()),"Returns set by name.")
-      .def("defSet", make_function(&XC::MapSet::defSet, return_internal_reference<>()),"Creates a new set with the name which is passed as a parameter.")
-      ;
 
+#include "preprocessor/set_mgmt/python_interface_set_containers.tcc"
 
 enum_<XC::meshing_dir>("meshDir")
   .value("I", XC::dirm_i)
