@@ -54,17 +54,24 @@ class PhantomModel(object):
         '''Extracts element and combination identifiers from the internal
            forces listing file.
 
-        :param   intForcCombFileName: name of the file containing the internal
-                                      forces obtained for each element for 
-                                      the combinations analyzed
+        :param intForcCombFileName: name of the file containing the internal
+                                    forces obtained for each element for 
+                                    the combinations analyzed
         :param setCalc: set of elements to be analyzed (defaults to None which 
                         means that all the elements in the file of internal forces
                         results are analyzed) 
         '''
-        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
-        self.elementTags= intForcItems[0]
-        self.idCombs=intForcItems[1]
-        self.internalForcesValues=intForcItems[2]    
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        numberOfElements= len(intForcItems[0])
+        if(numberOfElements>0):
+            self.elementTags= intForcItems[0]
+            self.idCombs= intForcItems[1]
+            self.internalForcesValues= intForcItems[2]
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; no elements to check in internal forces file.')
+            exit(1)
 
     def createPhantomElement(self, masterElementId, masterElementDimension, sectionName, sectionDefinition, sectionIndex, interactionDiagram, fakeSection):
         '''Creates a phantom element (that represents a section to check) 
@@ -126,28 +133,28 @@ class PhantomModel(object):
         self.tagsNodesToLoad= defaultdict(list)
         if(outputCfg.controller.fakeSection):
             elements.defaultMaterial= sccFICT.name
-        for tagElem in self.elementTags:
-            elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
-            
+        elementsWithoutSection= set()
+        sectionNames= self.sectionsDistribution.getSectionNames(self.elementTags)
+        for tagElem, elementSectionNames in zip(self.elementTags, sectionNames):
             if(elementSectionNames):
                 elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
                 masterElementDimension= self.sectionsDistribution.getMasterElementDimension(tagElem)
                 mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
                 sz= len(elementSectionNames)
-                for i in range(0,sz):
-                    sectionName= elementSectionNames[i]
+                for i, sectionName in enumerate(elementSectionNames):
                     diagInt= None
                     if(mapInteractionDiagrams is not None):
                         diagInt= mapInteractionDiagrams[sectionName]
-          #         print('tagElem =',tagElem,' sectionName=',sectionName,' elSecDef=',elementSectionDefinitions[i],' sectIndex=', i+1,' diagInt=', diagInt)
                     phantomElem= self.createPhantomElement(masterElementId= tagElem, masterElementDimension= masterElementDimension, sectionName= sectionName, sectionDefinition= elementSectionDefinitions[i], sectionIndex= i+1, interactionDiagram= diagInt, fakeSection= outputCfg.controller.fakeSection)
                     retval.append(phantomElem)
                     self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
                                                                                       #for this element
             else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; element section names not found for element with tag: '+str(tagElem))
+                elementsWithoutSection.add(tagElem)
+        if(elementsWithoutSection):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; element section names not found for element with tags: '+str(elementsWithoutSection))
         outputCfg.controller.initControlVars(retval)
         return retval
 
@@ -168,12 +175,21 @@ class PhantomModel(object):
         for comb in self.idCombs:
             mapCombs[comb]= casos.newLoadPattern("default",str(comb))
 
+        elementsWithoutLoadedNodes= set()
         for key in self.internalForcesValues:
             internalForcesElem= self.internalForcesValues[key]
             for iforce in internalForcesElem:
                 lp= mapCombs[iforce.idComb]
-                nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
-                lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
+                tagsNodesToLoad=  self.tagsNodesToLoad[iforce.tagElem]
+                if(tagsNodesToLoad):
+                    nodeTag= tagsNodesToLoad[iforce.idSection]
+                    lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
+                else:
+                    elementsWithoutLoadedNodes.add(iforce.tagElem)
+        if(elementsWithoutLoadedNodes):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; no loaded nodes for elements with tags: '+str(elementsWithoutLoadedNodes))                    
 
     def build(self, intForcCombFileName, outputCfg):
         '''Builds the phantom model from the data read from the file.
@@ -201,7 +217,6 @@ class PhantomModel(object):
         elements= self.preprocessor.getSets.getSet("total").elements
         for key in combs.getKeys():
             #comb= combs[key]
-            #print("Solving load combination: ",key)
             controller.solutionProcedure.solveComb(key)
             controller.preprocessor= self.preprocessor
             controller.check(elements, key)
@@ -229,7 +244,7 @@ class PhantomModel(object):
                    variables that control the output of the checking (set of 
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
-         '''
+        '''
         retval=None
         intForcCombFileName= limitStateData.getInternalForcesFileName()
         controller= outputCfg.controller
