@@ -260,6 +260,70 @@ void XC::MapSet::reset(void)
     setup_total();
   }
 
+//! @brief Return the sets that contain the pointer to the node whose
+//! identifier is being passed as parameter.
+std::set<XC::SetBase *> XC::MapSet::get_sets_containing_node(const int &nodeTag)
+  {
+    std::set<SetBase *> retval;
+    const Preprocessor *prep= getPreprocessor();
+    if(prep)
+      {
+        const Domain *dom= prep->getDomain();
+	const Node *n= dom->getNode(nodeTag);
+	if(n)
+	  retval= get_sets(n);
+      }
+    return retval;
+  }
+
+//! @brief Return the a Python list with the sets that contain the pointer
+//! to the node whose identifier is being passed as parameter.
+boost::python::list XC::MapSet::get_sets_containing_node_py(const int &nodeTag)
+  {
+    boost::python::list retval;
+    const Preprocessor *prep= getPreprocessor();
+    if(prep)
+      {
+        const Domain *dom= prep->getDomain();
+	const Node *n= dom->getNode(nodeTag);
+	if(n)
+	  retval= get_sets_py(n);
+      }
+    return retval;
+  }
+
+//! @brief Return the sets that contain the pointer to the element whose
+//! identifier is being passed as parameter.  
+std::set<XC::SetBase *> XC::MapSet::get_sets_containing_element(const int &elementTag)
+  {
+    std::set<SetBase *> retval;
+    const Preprocessor *prep= getPreprocessor();
+    if(prep)
+      {
+        const Domain *dom= prep->getDomain();
+	const Element *e= dom->getElement(elementTag);
+	if(e)
+	  retval= get_sets(e);
+      }
+    return retval;
+  }
+
+//! @brief Return the a Python list with the sets that contain the pointer
+//! to the element whose identifier is being passed as parameter.
+boost::python::list XC::MapSet::get_sets_containing_element_py(const int &elementTag)
+  {
+    boost::python::list retval;
+    const Preprocessor *prep= getPreprocessor();
+    if(prep)
+      {
+        const Domain *dom= prep->getDomain();
+	const Element *e= dom->getElement(elementTag);
+	if(e)
+	  retval= get_sets_py(e);
+      }
+    return retval;
+  }
+
 //! @brief Destructor.
 XC::MapSet::~MapSet(void)
   { clearAll(); }

@@ -88,6 +88,10 @@ class Set: public SetMeshComp
     Set getEntitiesSet(void) const;
     Set getMeshComponentsSet(void) const;
 
+    bool In(const Node *) const;
+    bool In(const Element *) const;
+    
+
     //! @brief Return a reference to the entities container.
     virtual const SetEntities &getEntities(void) const
       { return entities; }

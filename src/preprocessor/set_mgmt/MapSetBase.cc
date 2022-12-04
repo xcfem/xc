@@ -268,6 +268,21 @@ std::set<XC::SetBase *> XC::MapSetBase::get_sets(const Node *n)
     return retval;
   }
 
+//! @brief Return a Python list containing the sets that contain the pointer
+//! to node being passed as parameter.
+boost::python::list XC::MapSetBase::get_sets_py(const Node *n)
+  {
+    boost::python::list retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+	Set *setPtr= dynamic_cast<Set *>((*i).second);
+	if(setPtr)
+          if(setPtr->In(n))
+	    retval.append(setPtr);
+      }
+    return retval;
+  }
+
 //! @brief Return the sets that contain the element pointer
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSetBase::get_sets(const Element *e)
@@ -275,6 +290,21 @@ std::set<XC::SetBase *> XC::MapSetBase::get_sets(const Element *e)
     std::set<SetBase *> retval;
     for(iterator i= begin();i!=end();i++)
       if((*i).second->In(e)) retval.insert((*i).second);
+    return retval;
+  }
+
+//! @brief Return a Python list containing the sets that contain the pointer
+//! to node being passed as parameter.
+boost::python::list XC::MapSetBase::get_sets_py(const Element *e)
+  {
+    boost::python::list retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+	Set *setPtr= dynamic_cast<Set *>((*i).second);
+	if(setPtr)
+          if(setPtr->In(e))
+	    retval.append(setPtr);
+      }
     return retval;
   }
 

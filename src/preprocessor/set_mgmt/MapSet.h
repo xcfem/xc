@@ -111,6 +111,11 @@ class MapSet: public PreprocessorContainer, public MovableObject, public MapSetB
     Set *defSet(const std::string &);
     void removeSet(const std::string &);
 
+    std::set<SetBase *> get_sets_containing_node(const int &);
+    boost::python::list get_sets_containing_node_py(const int &);
+    std::set<SetBase *> get_sets_containing_element(const int &);
+    boost::python::list get_sets_containing_element_py(const int&);
+
     const SetBase *find_set(const std::string &nmb) const;
     SetBase &getSet(const std::string &nmb);
 

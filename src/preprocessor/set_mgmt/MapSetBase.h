@@ -32,6 +32,7 @@
 #define MAPSETBASE_H
 
 #include "preprocessor/PreprocessorContainer.h"
+#include "domain/domain/Domain.h"
 #include "utility/actor/actor/MovableObject.h"
 #include <map>
 #include <deque>
@@ -90,7 +91,9 @@ class MapSetBase: public std::map<std::string,SetBase *>
     boost::python::list getKeysPy(void) const;
 
     std::set<SetBase *> get_sets(const Node *);
+    boost::python::list get_sets_py(const Node *);
     std::set<SetBase *> get_sets(const Element *);
+    boost::python::list get_sets_py(const Element *);
     std::set<SetBase *> get_sets(const Pnt *);
     std::set<SetBase *> get_sets(const Edge *);
     std::set<SetBase *> get_sets(const Face *);

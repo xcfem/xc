@@ -563,6 +563,7 @@ python tests/preprocessor/sets/test_sets_and_grids.py
 python tests/preprocessor/sets/test_sets_and_grids_02.py
 python tests/preprocessor/sets/test_fill_downwards_01.py
 python tests/preprocessor/sets/test_get_mesh_components_01.py
+python tests/preprocessor/sets/test_get_sets_containing_01.py
 echo "$BLEU" "    Sets geometry queries." "$NORMAL"
 python tests/preprocessor/sets/geometric_queries/test_get_contours_01.py
 python tests/preprocessor/sets/geometric_queries/test_get_contours_02.py

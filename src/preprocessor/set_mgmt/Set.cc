@@ -237,6 +237,13 @@ void XC::Set::setUseGmsh(const bool &b)
 bool XC::Set::getUseGmsh(void) const
   { return entities.getUseGmsh(); }
 
+//! @brief Returns true if the node belongs to the set.
+bool XC::Set::In(const Node *n) const
+  { return SetMeshComp::In(n); }
+
+//! @brief Returns true if the element belongs to the set.
+bool XC::Set::In(const Element *e) const
+  { return SetMeshComp::In(e); }
 
 //!  @brief Triggers mesh generation from set components.
 //!
