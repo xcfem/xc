@@ -89,19 +89,39 @@ class RCMaterialDistribution(object):
         '''
         return self.sectionDistribution.getElementDimension(tagElem)
         
-    def getSectionNamesForElement(self,tagElem):
+    def getSectionNamesForElement(self,elementTag):
         '''Returns the section names for the element whose tag is being passed
            as a parameter.
 
-        :param tagElem: master element identifier.
+        :param elementTag: master element identifier.
         '''
-        if tagElem in self.sectionDistribution.keys():
-            return self.sectionDistribution[tagElem]
+        if elementTag in self.sectionDistribution.keys():
+            return self.sectionDistribution[elementTag]
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; element with tag: '+str(tagElem)+' not found.')
+            lmsg.warning(className+'.'+methodName+'; element with tag: '+str(elementTag)+' not found.')
             return None
+        
+    def getSectionNames(self, elementTags):
+        '''Returns the section names for the elements whose tags are being
+           passed as a parameter.
+
+        :param elementTags: list of element identifiers.
+        '''
+        retval= list()
+        elementsWithoutSection= set()
+        for eTag in elementTags:
+            if eTag in self.sectionDistribution.keys():
+                retval.append(self.sectionDistribution[eTag])
+            else:
+                retval.append(None)
+                elementsWithoutSection.add(eTag)
+        if(elementsWithoutSection):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; no section found for elements with tags: '+str(elementsWithoutSection))
+        return retval
 
     def getSectionDefinition(self,sectionName):
         '''Returns the section definition which has the name being passed
