@@ -20,9 +20,14 @@ import logging
 
 #Maybe it's interesting to write all that stuff in a file (possibly with an echo in another terminal...).
 #logging.basicConfig(filename='example.log',level=logging.INFO)
-#logging.addLevelName( logging.INFO, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.INFO))
+logging.addLevelName( logging.INFO, "\033[1;34m%s\033[1;0m" % logging.getLevelName(logging.INFO))
 logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
 logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+ERROR= logging.ERROR
+DEBUG= logging.DEBUG
+INFO= logging.INFO
+
 
 def log(msg):
     logging.info(msg)
@@ -32,6 +37,10 @@ def warning(msg):
 
 def error(msg):
     logging.error(msg)
+
+def setLevel(level):
+    logger= logging.getLogger()
+    logger.setLevel(level)
 
 def to_file(fName):
     logging.basicConfig(filename= fName, filemode='w', format='%(name)s - %(levelname)s - %(message)s')
