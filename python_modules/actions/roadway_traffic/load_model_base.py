@@ -190,21 +190,27 @@ class WheelLoad(object):
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
-        if(self.localCooSystem):
-            # Compute the deck mid-plane as the regression plane
-            # of the positions of its nodes.
-            deckMidplane= originSet.nodes.getRegressionPlane(0.0)
-            # Compute the loaded contour.
-            reference, loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio= deckSpreadingRatio)
-            tol= .01
-            self.nodes= list()
-            for n in originSet.nodes:
-                nodePos2d= reference.getLocalPosition(n.getInitialPos3d)
-                if(loadedContour.In(nodePos2d, tol)): # node in loaded contour.
-                    self.nodes.append(n)
+        nNodes= len(originSet.nodes) # Number of nodes in the origin set.
+        if(nNodes>3):
+            if(self.localCooSystem):
+                # Compute the deck mid-plane as the regression plane
+                # of the positions of its nodes.
+                deckMidplane= originSet.nodes.getRegressionPlane(0.0)
+                # Compute the loaded contour.
+                reference, loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio= deckSpreadingRatio)
+                tol= .01
+                self.nodes= list()
+                for n in originSet.nodes:
+                    nodePos2d= reference.getLocalPosition(n.getInitialPos3d)
+                    if(loadedContour.In(nodePos2d, tol)): # node in loaded contour.
+                        self.nodes.append(n)
+            else:
+                n= originSet.getNearestNode(self.position)
+                self.nodes= [n]
         else:
-            n= originSet.getNearestNode(self.position)
-            self.nodes= [n]
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; the set: \''+originSet.name+'\' must have at least 3 nodes, it has: '+str(nNodes))
 
     def getLoadVector(self, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Return the load vector at the contact surface.
@@ -637,6 +643,13 @@ class NotionalLane(object):
         startingEdge= self.getStartingEdge()
         finishEdge= self.getFinishEdge()
         return LaneAxis(pline= geom.Polyline3d([startingEdge.getCenterOfMass(), finishEdge.getCenterOfMass()]))
+
+    def getWidth(self):
+        ''' Return the width of the notional lane.'''
+        retval= self.getStartingEdge().getLength()
+        retval+= self.getFinishEdge().getLength()
+        retval/= 2.0
+        return retval
     
     def getLength(self):
         ''' Return the axis of the notional lane.'''
@@ -644,6 +657,10 @@ class NotionalLane(object):
         finishEdge= self.getFinishEdge()
         return startingEdge.getCenterOfMass().dist(finishEdge.getCenterOfMass())
 
+    def isRemainingArea(self):
+        ''' Return true if this lane is a remaining area.'''
+        return ('remainingArea' in self.name)
+    
     def getVDir(self, lmbdArcLength= 0.5):
         ''' Return the direction vector of the lane axis.
 
@@ -651,6 +668,27 @@ class NotionalLane(object):
                               the axis).
          '''
         return self.getAxis().getVDir(lmbdArcLength= lmbdArcLength)
+    
+    def getWheelLoads(self, tandem, relativePosition):
+        ''' Return a the wheel loads due to the tandem argument placed at
+            the positions argument.
+
+        :param tandems: tandems on each notional lane (tandem1 -> notional 
+                        lane 1, tandem 2 -> notional lane 2 and so on).
+        :param relativePosition: relative position of the tandem center in
+                                 the notional lane axis (0 -> beginning of
+                                 the axis, 0.5-> middle of the axis, 1-> end
+                                 of the axis).
+        '''
+        retval= list()
+        if(not self.isRemainingArea()): # if it's a true lane.
+            laneAxis= self.getAxis()
+            retval= laneAxis.getWheelLoads(loadModel= tandem, lmbdArcLength= relativePosition)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; called on a remaining area. Returning an empty list.')
+        return retval
 
     def getContiguousLaneSegment(self, length, name= None):
         ''' Return the contour of another piece of road lane that continues
@@ -710,6 +748,14 @@ class NotionalLanes(object):
             retval.append(lane.getArea())
         return retval
 
+    def getNumberOfTrueLanes(self):
+        ''' Return the number of lanes that are not a remaining area.'''
+        retval= len(self.lanes)
+        if(retval>1):
+            if(self.lanes[-1].isRemainingArea()):
+                retval-= 1
+        return retval
+            
     def getContiguousNotionalLanes(self, length):
         ''' Return the contiguous notional lanes that continue the lanes of
         this one at its beginning (if length<0) or at its end (if length>0). 
@@ -747,8 +793,7 @@ class NotionalLanes(object):
         for nl,rpos,td in zip(self.lanes, relativePositions,tandems):
             tandemLoads= list()
             if(td is not None):
-                laneAxis= nl.getAxis() # Lane axis.
-                tandemLoads= laneAxis.getWheelLoads(loadModel= td, lmbdArcLength= rpos)
+                tandemLoads= nl.getWheelLoads(tandem= td, relativePosition= rpos)
             retval.extend(tandemLoads)
         return retval
     
