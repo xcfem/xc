@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
-import math
 from materials.sections.fiber_section import def_simple_RC_section
 
 # Reinforcement row scheme:
@@ -28,16 +27,14 @@ width= nBarsA*spacing+2.0*lateralCover
 
 # First row
 barDiameterA= 10e-3 # Diameter of the reinforcement bar.
-barAreaA= math.pi*(barDiameterA/2.0)**2 # Area of the reinforcement bar.
 ## Reinforcement row.
-rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameterA, areaRebar= barAreaA, rebarsSpacing= spacing, width= width, nominalCover= 0.035, nominalLatCover= lateralCover)
+rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameterA, rebarsSpacing= spacing, width= width, nominalCover= 0.035, nominalLatCover= lateralCover)
 areaA= rowA.getAs()
 
 # Second row
 barDiameterB= 20e-3 # Diameter of the reinforcement bar.
-barAreaB= math.pi*(barDiameterB/2.0)**2 # Area of the reinforcement bar.
 ## Reinforcement row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameterB, areaRebar= barAreaB, rebarsSpacing= spacing, width= width-spacing, nominalCover= 0.035, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameterB, rebarsSpacing= spacing, width= width-spacing, nominalCover= 0.035, nominalLatCover= lateralCover+spacing/2.0)
 areaB= rowB.getAs()
 area= areaA+areaB
 

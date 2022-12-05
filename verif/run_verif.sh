@@ -891,6 +891,7 @@ echo "$BLEU" "  RC sections test." "$NORMAL"
 echo "$BLEU" "    concrete shapes tests." "$NORMAL"
 python tests/materials/concrete_shapes/test_mass_properties_rc_section.py
 python tests/materials/concrete_shapes/test_reinf_row_01.py
+python tests/materials/concrete_shapes/test_reinf_row_02.py
 python tests/materials/concrete_shapes/test_reinf_layers_01.py
 python tests/materials/concrete_shapes/test_rc_section_01.py
 python tests/materials/concrete_shapes/test_rc_section_02.py

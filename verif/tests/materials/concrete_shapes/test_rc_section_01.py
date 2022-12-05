@@ -31,15 +31,13 @@ width= nBarsA*spacing+2.0*lateralCover
 
 ## First row
 barDiameter= 25e-3 # Diameter of the reinforcement bar.
-barAreaA= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
-rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaA, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
+rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
 areaA= rowA.getAs()
 
 ## Second row
-barAreaB= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaB, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 areaB= rowB.getAs()
 area= areaA+areaB
 

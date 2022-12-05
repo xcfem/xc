@@ -162,31 +162,28 @@ class ReinfRow(object):
         :param nominalCover: nominal cover (defaults to 0.03m)
         :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
         '''
-        if rebarsDiam:
-            self.rebarsDiam= rebarsDiam
-        elif areaRebar:
-            self.areaRebar= areaRebar
-            self.rebarsDiam=2*math.sqrt(areaRebar/math.pi)
-        else:
-            lmsg.warning('You must define either the diameter or the area of rebars')
-        if areaRebar:
-            self.areaRebar= areaRebar
-        elif rebarsDiam:
-            self.areaRebar=math.pi*rebarsDiam**2/4.
-        else:
-            lmsg.warning('You must define either the diameter or the area of rebars')
+        # Set the rebar diameter and area.
+        if(rebarsDiam and areaRebar):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; you must define either the diameter or the area of rebars, but not both.')
+            
+        if(rebarsDiam):
+            self.setRebarDiameter(rebarsDiam)
+        if(areaRebar):
+            self.setRebarArea(areaRebar)
+            
         self.width= width
+        if(nRebars and rebarsSpacing):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; you must define either the number of bars or its spacing, but not both.')
+            
         if nRebars:
-            self.nRebars= nRebars
-            # if width==1.0:
-            #     lmsg.warning('Spacing is calculated using a section width = 1 m')
-            self.rebarsSpacing= (width-2*nominalLatCover-self.rebarsDiam)/(nRebars-1)
-        elif rebarsSpacing:
-            self.rebarsSpacing= rebarsSpacing
-            nRebarsTeor= width/rebarsSpacing
-            self.nRebars= int(math.floor(nRebarsTeor))
-        else:
-            lmsg.warning('You must define either the number of rebars or the rebar spacing')
+            self.setNumberOfBars(nRebars= nRebars, width= width, nominalLatCover= nominalLatCover)
+        if rebarsSpacing:
+            self.setSpacing(rebarsSpacing= rebarsSpacing, width= width)
+            
         self.cover= nominalCover+self.rebarsDiam/2.0
         self.centerRebars(width)
         
@@ -207,12 +204,59 @@ class ReinfRow(object):
         else:
             retval= True
         return retval
+
+    def setRebarDiameter(self, rebarDiameter):
+        '''Set the diameter of the rebars.
+
+        :param rebarDiameter: diameter of the rebars.
+        '''
+        self.rebarsDiam= rebarDiameter
+        self.areaRebar=math.pi*rebarDiameter**2/4.
+
+    def setRebarArea(self, rebarArea):
+        '''Set the area of the rebars.
+
+        :param rebarArea: area of the rebars.
+        '''
+        self.areaRebar= rebarArea
+        self.rebarsDiam=2*math.sqrt(rebarArea/math.pi)
+
+    def setNumberOfBars(self, nRebars:int, width:float, nominalLatCover:float):
+        ''' Set the number of rebars.
+
+        :param nRebars: number of rebars.
+        :param width: width occupied by the rebars.
+        :param nominalLatCover: nominal lateral cover.
+        '''
+        self.nRebars= nRebars
+        self.rebarsSpacing= (width-2*nominalLatCover-self.rebarsDiam)/(nRebars-1)
+    def setSpacing(self, rebarsSpacing:float, width:float):
+        ''' Set the space between rebar axes.
+
+        :param rebarsSpacing: spacing between bars.
+        :param width: width occupied by the rebars.
+        '''
+        self.rebarsSpacing= rebarsSpacing
+        nRebarsTeor= width/rebarsSpacing
+        self.nRebars= int(math.floor(nRebarsTeor))
+        
+    def getCopy(self):
+        ''' Return a copy of this object.'''
+        retval= ReinfRow(rebarsDiam= self.rebarsDiam, nRebars= self.nRebars)
+        retval.rebarsSpacing= self.rebarsSpacing
+        retval.width= self.width
+        retval.cover= self.cover
+        return retval
     
     def getAs(self):
         ''' Returns the total cross-sectional area of reinforcing steel 
            in the family.
         '''
         return self.nRebars*self.areaRebar
+
+    def getNominalCover(self):
+        ''' Return the nominal cover of the reinforcement bars.'''
+        return self.cover-self.rebarsDiam/2.0
 
     def getI(self):
         ''' Return the moment of inertia around the axis containing the bar

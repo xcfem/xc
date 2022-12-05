@@ -12,7 +12,6 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
 import os
-import math
 from materials.sections.fiber_section import def_simple_RC_section
 from materials.ec2 import EC2_materials
 import xc
@@ -37,14 +36,12 @@ width= (nBarsA-1)*spacing+2.0*lateralCover
 
 ## First row
 barDiameter= 25e-3 # Diameter of the reinforcement bar.
-barAreaA= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
-rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaA, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
+rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row
-barAreaB= math.pi*(barDiameter/2.0)**2 # Area of the reinforcement bar.
 ### Reinforcement row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barAreaB, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Define reinforcement layers.
 reinfLayers= def_simple_RC_section.LongReinfLayers([rowA, rowB])

@@ -29,7 +29,7 @@ lateralCover= 0.035 # concrete cover for the bars at the extremities of the row.
 width= nBars*spacing+2.0*lateralCover
 
 # Reinforcement row.
-row1= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, areaRebar= barArea, rebarsSpacing= spacing, width= width, nominalCover= 0.035, nominalLatCover= lateralCover)
+row1= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= 0.035, nominalLatCover= lateralCover)
 area= row1.getAs()
 
 ratio1= abs(row1.nRebars-nBars)
