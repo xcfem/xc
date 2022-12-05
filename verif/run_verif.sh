@@ -1155,6 +1155,7 @@ python tests/geotechnics/soil_mechanics/test_horizontal_surcharge3d_03.py
 echo  "$BLEU" "  Earthworks." "$NORMAL"
 python tests/geotechnics/earthworks/test_embankment_01.py
 python tests/geotechnics/earthworks/test_embankment_02.py
+python tests/geotechnics/earthworks/test_embankment_03.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"

@@ -45,12 +45,12 @@ class EmbankmentLayer(object):
     def getXMin(self):
         ''' Return the minimum x coordinate of the profile.'''
         #return self.pline.getXMin
-        return self.pline.getFromPoint().x
+        return self.pline.to_2d(self.pline.getFromPoint()).x
 
     def getXMax(self):
         ''' Return the maximum x coordinate of the profile.'''
         #return self.pline.getXMax
-        return self.pline.getToPoint().x
+        return self.pline.to_2d(self.pline.getToPoint()).x
 
     def getDepth(self, point, verticalDir= geom.Vector3d(0,0,1)):
         ''' Return the depth corresponding to the point argument.
@@ -63,7 +63,7 @@ class EmbankmentLayer(object):
         xMax= self.getXMax()
         retval= None # Not defined unless between xMin and xMax
         prj= self.pline.getPlane().getProjection(point)
-        x= prj.x
+        x= self.pline.to_2d(prj).x
         if(x<=xMax and x>=xMin): # Check boundaries.
             vLine= geom.Line3d(prj, 100*verticalDir) # Vertical line.
             intPoints= self.pline.getIntersection(vLine)
@@ -83,10 +83,11 @@ class EmbankmentLayer(object):
         # Compute boundaries.
         xMin= self.getXMin()
         xMax= self.getXMax()
+        plane= self.pline.getPlane()
         retval= list()
         for p in pointList:
-            prj= self.pline.getPlane().getProjection(p)
-            x= prj.x
+            prj= plane.getProjection(p)
+            x= self.pline.to_2d(prj).x
             if(x<=xMax and x>=xMin): # Check boundaries.
                 vLine= geom.Line3d(prj, 100*verticalDir) # Vertical line.
                 intPoints= self.pline.getIntersection(vLine)
