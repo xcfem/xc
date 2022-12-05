@@ -19,9 +19,8 @@ from postprocess import limit_state_data as lsd
 concrete= SIA262_materials.c30_37
 reinfSteel= SIA262_materials.B500B
 
-areaFi14= SIA262_materials.section_barres_courantes[14e-3]
-fi14s150r40= def_simple_RC_section.ReinfRow(rebarsDiam=14e-3,areaRebar= areaFi14,rebarsSpacing= 0.150,width=1.0,nominalCover= 0.040)
-fi14s150r50=def_simple_RC_section.ReinfRow(rebarsDiam=14e-3,areaRebar= areaFi14,rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
+fi14s150r40= def_simple_RC_section.ReinfRow(rebarsDiam=14e-3, rebarsSpacing= 0.150,width=1.0,nominalCover= 0.040)
+fi14s150r50=def_simple_RC_section.ReinfRow(rebarsDiam=14e-3, rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
 
 slab30RCSect= element_section_map.RCSlabBeamSection(name='slab30RCSect',sectionDescr="foundation slab thickness 30 cm.",concrType=concrete, reinfSteelType=reinfSteel,depth=0.3)
 slab30RCSect.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([fi14s150r40]) #Longitudinal

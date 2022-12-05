@@ -39,7 +39,7 @@ negRebRow=def_simple_RC_section.ReinfRow(nRebars=2,rebarsDiam=10e-10,width=datos
 # negRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 # negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows= def_simple_RC_section.LongReinfLayers([negRebRow])
-posRebRow=def_simple_RC_section.ReinfRow(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
+posRebRow=def_simple_RC_section.ReinfRow(nRebars=6,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
 # posRebRow=def_simple_RC_section.ReinfRow()
 # posRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 # posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
@@ -90,13 +90,12 @@ scc= zlElement.getSection()
 sigma_s= secHAParamsFis.calcRebarStress(scc)
 
 
-ratio1= (sigma_s-166.925177095e6)/166.925177095e6
+ratio1= (sigma_s-166.35650302345326e6)/166.35650302345326e6
 
-
-''' 
+'''
 datosScc1LosC.plot(preprocessor) # Display section geometry
 print("sigma_s= ",sigma_s/1e6, " MPa")
-print("ratio1= ",ratio1)
+print("ratio1= ",ratio1) 
 '''
 
 import os
