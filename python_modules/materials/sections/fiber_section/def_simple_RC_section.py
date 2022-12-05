@@ -487,7 +487,7 @@ def rebLayer_mm(fi,s,c):
     :param s: spacing [mm]
     :param c: cover [mm] (nominal cover)
     '''
-    return ReinfRow(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
+    return ReinfRow(rebarsDiam=fi*1e-3, rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
 
 def rebLayerByNumFi_mm(n,fi,c,latC,L):
     '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated

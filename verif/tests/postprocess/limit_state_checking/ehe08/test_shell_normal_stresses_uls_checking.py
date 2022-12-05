@@ -56,10 +56,10 @@ sepL= 1.0/numReinfBarsL
 sections= reinfConcreteSections.sectionDefinition # Get the sections container.
 
 deckSections= element_section_map.RCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
-deckSections.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)])
-deckSections.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)])
-deckSections.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)])
-deckSections.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)])
+deckSections.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=12e-3,rebarsSpacing=sepT,nominalCover=basicCover)])
+deckSections.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=12e-3,rebarsSpacing=sepT,nominalCover=basicCover)])
+deckSections.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=20e-3,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)])
+deckSections.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=20e-3,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)])
 sections.append(deckSections)
 
 # # Display sections geometry

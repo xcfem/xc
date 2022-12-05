@@ -104,9 +104,8 @@ sections= reinfConcreteSectionDistribution.sectionDefinition # get the sections 
 #for ReinfRows are coverLat and nRebars. If we define nRebars that
 #value overrides the rebarsSpacing
 barArea= 4e-4
-barDiameter= math.sqrt(barArea)/math.pi
 
-reinfLayer= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter,areaRebar= barArea,rebarsSpacing=0.075,width=0.25,nominalCover=0.050)
+reinfLayer= def_simple_RC_section.ReinfRow(areaRebar= barArea,rebarsSpacing=0.075,width=0.25,nominalCover=0.050)
 
 #instances of element_section_map.RCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two
@@ -132,9 +131,9 @@ outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d", threeDim= True, outputCfg=outCfg)  
 
 
-refMeanFC0= 0.8437684649161892
+refMeanFC0= 0.8576189308851021
 ratio1= abs(meanFCs[0]-refMeanFC0)/refMeanFC0
-refMeanFC1= 1.2945693603935113
+refMeanFC1= 1.3013922288261284
 ratio2= abs(meanFCs[1]-refMeanFC1)/refMeanFC1
 
 '''

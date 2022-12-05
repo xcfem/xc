@@ -128,16 +128,14 @@ spacing= (rcSection.b-2.0*lateralCover)/(nBarsA-1)
 
 ## First row.
 mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
-mainBarArea= math.pi*(mainBarDiameter/2.0)**2 # Area of the reinforcement bar.
-rowA= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, areaRebar= mainBarArea, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
+rowA= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, areaRebar= mainBarArea, rebarsSpacing= spacing, width= rcSection.b-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Third row.
 smallBarDiameter= 4e-3
-smallBarArea= math.pi*(smallBarDiameter/2.0)**2 # Area of the reinforcement bar.
-rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, areaRebar= smallBarArea, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 # Shear reinforcement at both ends.
 fi8Area= EC2_materials.rebars['fi08']['area']
