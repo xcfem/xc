@@ -21,7 +21,7 @@ from scipy.constants import g
 #       /          \
 #      /            \
 #     /              \
-# p1 +                + p4
+# p1 +                + p4  ---> Y axis
 # 
 
 # Vertex list.
