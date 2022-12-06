@@ -705,6 +705,10 @@ class PredefinedSpace(object):
         '''
         if(xcSet is None):
             xcSet= self.getTotalSet()
+            if(__debug__):
+                if(not xcSet):
+                    AssertionError("Can\'t get the 'total' set")
+                
         supportNodes= list()
         for nTag in self.fixedNodesTags:
             n= self.preprocessor.getNodeHandler.getNode(nTag)

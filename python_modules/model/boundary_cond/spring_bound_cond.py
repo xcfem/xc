@@ -80,6 +80,10 @@ class SpringBC(object):
         self.createSpringMaterials()
         for n in Nodelist:
             fixedNode, elem= self.modelSpace.setBearing(n.tag,self.springMat)
+            if(__debug__):
+                if((not elem) or (not fixedNode)):
+                    AssertionError('Can\'t set bearing on node: '+str(n.tag))
+                
 
     def applyBConNode(self,node):
         '''create spring boundary conditions in the node.

@@ -140,7 +140,6 @@ class PhantomModel(object):
                 elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
                 masterElementDimension= self.sectionsDistribution.getMasterElementDimension(tagElem)
                 mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
-                sz= len(elementSectionNames)
                 for i, sectionName in enumerate(elementSectionNames):
                     diagInt= None
                     if(mapInteractionDiagrams is not None):

@@ -1458,13 +1458,13 @@ class CShape(structural_steel.UShape):
         ''' Return area for shear strength calculation.'''
         return getUIAw(self, majorAxis)
         
-    def getWebPlateShearBucklingCoefficient(shape, a= 1e6):
+    def getWebPlateShearBucklingCoefficient(self, a= 1e6):
         '''Return the web plate shear buckling coefficient
            according to expression G2-5 of AISC-360-16.
 
         :param a: clear distance between transverse stiffeners.
         '''
-        return getUIWebPlateShearBucklingCoefficient(shape,a)
+        return getUIWebPlateShearBucklingCoefficient(self, a)
     
     def getWebShearStrengthCoefficient(self, a= 1e6):
         ''' Return the web shear stress coefficient Cv1 according

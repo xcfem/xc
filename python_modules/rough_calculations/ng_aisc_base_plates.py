@@ -617,7 +617,7 @@ class BasePlateGroup(object):
         objects= dict()
         for key in self.basePlates:
             basePlateClassName= str(self.basePlates[key].__class__)[8:-2].split('.')[-1]
-            classModule= self.basePlates[key].__module__
+            # classModule= self.basePlates[key].__module__
             constructors[key]= basePlateClassName+'()'
             objects[key]= self.basePlates[key].getDict()
         retval['constructors']= constructors # Store constructors.
