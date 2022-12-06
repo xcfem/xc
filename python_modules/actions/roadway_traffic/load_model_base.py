@@ -146,7 +146,7 @@ class WheelLoad(object):
             n= originSet.getNearestNode(self.position)
             self.nodes= [n]
 
-    def getDeckLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckSpreadingRatio= 2/1.0):
+    def getDeckLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
         ''' Return the loaded contour of the wheel taking into account
             the dispersal through the different pavement, earth and
             concrete layers between the wheel contact area and the
@@ -155,6 +155,7 @@ class WheelLoad(object):
         :param embankment: embankment object as defined in
                            earthworks.embankment.
         :param deckMidplane: mid-plane of the bridge deck.
+        :param deckThickness: thickness of the bridge deck.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
@@ -164,28 +165,26 @@ class WheelLoad(object):
         ## mid-plane.
         vertLine= geom.Line3d(self.position, geom.Vector3d(0,0,-100.0))
         projPos= deckMidplane.getIntersection(vertLine)
+        ## Compute half deck thickness.
+        halfDeckThickness= deckThickness/2.0
         ## Ask the embankment about the layer thicknesses in this position.
-        layerThicknesses= embankment.getLayerThicknesses(point= projPos)
+        layerThicknesses= embankment.getLayerThicknesses(point= projPos+geom.Vector3d(0,0,halfDeckThickness))
         ## Construct the spreading layers list.
         spreadingLayers= list()
-        fillingThickness= 0.0
         for thk, layer in zip(layerThicknesses, embankment.layers):
             spreadingLayers.append((thk, layer.loadSpreadingRatio))
-            fillingThickness+= thk
-        ## Compute the deck thickness.
-        midplaneDepth= self.position.dist(projPos)
-        halfDeckThickness= midplaneDepth-fillingThickness
         ## Append the deck spreading too.
         spreadingLayers.append((halfDeckThickness, deckSpreadingRatio))
         # Call the regular method.
         return self.getLoadedContour(spreadingLayers= spreadingLayers)
         
-    def pickDeckNodesThroughEmbankment(self, originSet, embankment, deckSpreadingRatio= 2/1.0):
+    def pickDeckNodesThroughEmbankment(self, originSet, embankment, deckThickness, deckSpreadingRatio= 1/1):
         ''' Pick the nodes loaded by the wheel.
 
         :param originSet: set to pick the loaded nodes from.
         :param embankment: embankment object as defined in
                            earthworks.embankment.
+        :param deckThickness: thickness of the deck.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
@@ -197,7 +196,7 @@ class WheelLoad(object):
                 # of the positions of its nodes.
                 deckMidplane= originSet.nodes.getRegressionPlane(0.0)
                 # Compute the loaded contour.
-                reference, loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckSpreadingRatio= deckSpreadingRatio)
+                reference, loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
                 tol= .01
                 self.nodes= list()
                 for n in originSet.nodes:
@@ -919,7 +918,7 @@ class NotionalLanes(object):
         # uniform load.
         self.defDeckUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
 
-    def getDeckWheelLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckSpreadingRatio= 2/1.0, originSet= None):
+    def getDeckWheelLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None):
         ''' Return a dictionary containing the wheel loads due to the tandems
             argument in the positions argument.
 
@@ -931,6 +930,7 @@ class NotionalLanes(object):
                                   of the axis).
         :param embankment: embankment object as defined in
                            earthworks.embankment.
+        :param deckThickness: thickness of the bridge deck.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
@@ -939,10 +939,10 @@ class NotionalLanes(object):
         retval= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions)
         if(originSet): # pick the loaded by each wheel
             for load in retval:
-                load.pickDeckNodesThroughEmbankment(originSet= originSet, embankment= embankment, deckSpreadingRatio= deckSpreadingRatio)
+                load.pickDeckNodesThroughEmbankment(originSet= originSet, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         return retval
     
-    def defDeckPunctualLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckSpreadingRatio= 2/1.0, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckPunctualLoadsThroughEmbankment(self, tandems, relativePositions, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define punctual loads under the wheels.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -952,6 +952,7 @@ class NotionalLanes(object):
                                   of the axis).
         :param embankment: embankment object as defined in
                            earthworks.embankment.
+        :param deckThickness: thickness of the deck bridge.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
@@ -959,13 +960,13 @@ class NotionalLanes(object):
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         '''
-        wheelLoads= self.getDeckWheelLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckSpreadingRatio= deckSpreadingRatio, originSet= originSet)
+        wheelLoads= self.getDeckWheelLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, originSet= originSet)
         retval= list()
         for wl in wheelLoads:
             retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
-    def defDeckLoadsThroughEmbankment(self, tandems, relativePositions, laneUniformLoads, embankment, deckSpreadingRatio= 2/1.0, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckLoadsThroughEmbankment(self, tandems, relativePositions, laneUniformLoads, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define punctual and uniform loads.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -976,6 +977,7 @@ class NotionalLanes(object):
         :param laneUniformLoads: load for each notional lane [1st, 2nd, 3rd,...].
         :param embankment: embankment object as defined in 
                            earthworks.embankment.
+        :param deckThickness: thickness of the deck bridge.
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see 
                                    clause 4.3.6 on Eurocode 1-2:2003).
@@ -984,7 +986,7 @@ class NotionalLanes(object):
         :param brakingDir: direction of the braking load.
         '''
         # punctual loads.
-        self.defDeckPunctualLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckSpreadingRatio=deckSpreadingRatio, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defDeckPunctualLoadsThroughEmbankment(tandems= tandems, relativePositions= relativePositions, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio=deckSpreadingRatio, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
         # uniform load.
         self.defDeckUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
 
