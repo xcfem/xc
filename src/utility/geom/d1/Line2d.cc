@@ -27,10 +27,10 @@
 #include "../pos_vec/Dir2d.h"
 #include "../pos_vec/Vector2d.h"
 #include "../pos_vec/Pos3d.h"
-
-
 #include "Segment2d.h"
+#include "Polyline2d.h"
 #include "utility/geom/trf/Trf2d.h"
+
 const double quiet_nan= std::numeric_limits<double>::quiet_NaN();
 
 
@@ -469,6 +469,10 @@ Pos2d Line2d::getIntersection(const Segment2d &sg) const
       retval.setExists(false);
     return retval;
   }
+
+//! @brief Return (if exists) the intersections with the poliline argument.
+GeomObj2d::list_Pos2d Line2d::getIntersection(const Polyline2d &pline) const
+  { return pline.getIntersection(*this); }
 
 //! @brief Return the intersection of the line with the plane
 //! defined by the equation coord_i= d.

@@ -53,7 +53,7 @@ class Line2dParametricForm
 class Dir2d;
 class Ray2d;
 class Segment2d;
-
+class Polyline2d;
 
 //! @ingroup GEOM
 //
@@ -127,6 +127,7 @@ class Line2d : public Linear2d
     Pos2d getIntersection(const Ray2d &p) const;
     bool intersects(const Segment2d &p) const;
     Pos2d getIntersection(const Segment2d &p) const;
+    GeomObj2d::list_Pos2d getIntersection(const Polyline2d &) const;
     GeomObj2d::list_Pos2d getIntersection(unsigned short int i, const double &d) const;
 
     bool isParallel(const Line2d &r) const;
