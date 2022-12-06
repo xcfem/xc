@@ -72,6 +72,8 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     inline void assign(InputIterator first, InputIterator last)
       { GeomObj::list_Pos2d::assign(first,last); }
     virtual bool In(const Pos2d &p, const double &tol= 0.0) const;
+    virtual GEOM_FT dist2(const Pos2d &p) const;
+    GEOM_FT dist(const Pos2d &p) const;
 
     virtual GEOM_FT Ix(void) const;
     virtual GEOM_FT Iy(void) const;

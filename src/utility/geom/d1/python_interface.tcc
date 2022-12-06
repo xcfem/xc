@@ -26,6 +26,7 @@ class_<Linear2d, bases<GeomObj2d>, boost::noncopyable  >("Linear2d", no_init)
 Line2d (Line2d::*OffsetVector)(const Vector2d &v) const= &Line2d::offset;
 Line2d (Line2d::*OffsetDouble)(const GEOM_FT &) const= &Line2d::offset;
 GeomObj::list_Pos2d (Line2d::*intersectionWithR2D)(const Line2d &) const= &Line2d::getIntersection;
+GeomObj::list_Pos2d (Line2d::*intersectionWithPline2D)(const Polyline2d &) const= &Line2d::getIntersection;
 Pos2d (Line2d::*Pos2dProj)(const Pos2d &) const= &Line2d::Projection;
 Vector2d (Line2d::*Vector2dProj)(const Vector2d &) const= &Line2d::Projection;
 class_<Line2d, bases<Linear2d> >("Line2d")
@@ -38,6 +39,7 @@ class_<Line2d, bases<Linear2d> >("Line2d")
   .def("getParamA",&Line2d::GetParamA,"returns line slope; 'a' parameter from equation (y= a*x+b).")
   .def("getParamB",&Line2d::GetParamB,"returns line y-intercept; 'b' parameter from equation (y= a*x+b).")
   .def("getIntersection", intersectionWithR2D, "Return the intersection with the line argument.")
+  .def("getIntersection", intersectionWithPline2D, "Return the intersection with the line argument.")
   .def("getPos2dProj",Pos2dProj,"return the projection of a point onto the line.")
   .def("getVector2dProj",Vector2dProj,"return the projection of a vector onto the line.")
   .def("getPoint",&Line2d::PtoParametricas,"return a point on the line.")
@@ -249,6 +251,8 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("getJVectorAtLength", &Polyline2d::getJVectorAtLength, "getJVectorAtLength(s): return the J vector of the segment that lies at the point at a distance \"lambda*L\" measured along the polyline from its origin.")
   .def("Divide", pline2dDividePyEq2d,"Divide(numparts); returns the points that divide the polyline in numparts equal parts.")
   .def("Divide", pline2dDividePyProp2d,"Divide(proportions); returns the points that divide the polyline in the proportions of the list.")
+  .def("dist", &Polyline2d::dist,"return the distance to the point.")
+  .def("dist2", &Polyline2d::dist2,"return the squared distance to the point.")
   ;
 
 void (PlanePolyline3d::*simplifyPP3DPoly)(GEOM_FT epsilon)= &PlanePolyline3d::simplify;
@@ -349,6 +353,8 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("getLeftChunk", &Polyline3d::getLeftChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from its beginning to the point argument. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("getRightChunk", &Polyline3d::getRightChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from the point argument to its end. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("split", &Polyline3d::split,"split(point) returns the result of splitting the polyline by the point argument.")
+  .def("dist", &Polyline2d::dist,"return the distance to the point.")
+  .def("dist2", &Polyline2d::dist2,"return the squared distance to the point.")
   ;
 
 typedef std::deque<Polyline3d> dq_polyline3D;

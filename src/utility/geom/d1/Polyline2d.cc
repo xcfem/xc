@@ -121,6 +121,28 @@ bool Polyline2d::In(const Pos2d &p, const double &tol) const
     return retval;
   }
 
+//! @brief Return the squared distance to the polyline.
+GEOM_FT Polyline2d::dist2(const Pos2d &p) const
+  {
+    GEOM_FT retval= std::numeric_limits<GEOM_FT>::infinity();    
+    if(!empty())
+      {
+	list_Pos2d::const_iterator first= begin();
+	list_Pos2d::const_iterator last= std::prev(end());
+	for(list_Pos2d::const_iterator j=first;j != last;j++)
+	  {
+	    const GEOM_FT dist2= getSegment(j).dist2(p);
+            if(dist2<retval)
+	      { retval= dist2; }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the distance from the point to the segment.
+GEOM_FT Polyline2d::dist(const Pos2d &p) const
+  { return sqrt(this->dist2(p)); }
+
 //! @brief Return the nearest segment to the argument.
 Polyline2d::const_iterator Polyline2d::getNearestSegment(const Pos2d &p) const    
   {
@@ -582,7 +604,7 @@ void Polyline2d::insertVertex(const Pos2d &p, const GEOM_FT &tol)
   {
     const_iterator nearestVertexIter= getNearestPoint(p);
     const Pos2d nearestVertex= *nearestVertexIter;
-    const GEOM_FT distToVertex= dist(nearestVertex,p);
+    const GEOM_FT distToVertex= p.dist(nearestVertex);
     if(distToVertex>tol) // No vertices close to p
       {
         const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
@@ -607,7 +629,7 @@ Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn, const GEOM_
       {
         i= getNearestPoint(p);
 	Pos2d nearestVertex= *i;
-	distToVertex= dist(nearestVertex,p);
+	distToVertex= p.dist(nearestVertex);
 	// Deal with the case in which two
 	// vertices are equally distant from p.
 	const_iterator nearestSegmentIter= getNearestSegment(p);
@@ -617,7 +639,7 @@ Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn, const GEOM_
 	  {
 	    i= nearestSegmentIter+1; // end point of the segment.
 	    nearestVertex= *i;
-	    distToVertex= dist(nearestVertex,p);
+	    distToVertex= p.dist(nearestVertex);
 	  }   
       }
     if(sgn < 0)
@@ -656,7 +678,7 @@ boost::python::list Polyline2d::split(const Pos2d &p) const
     const Pos2d nearestVertex= *nearestVertexIter;
     const_iterator nearestSegmentIter= getNearestSegment(p);
     const Segment2d nearestSegment= getSegment(nearestSegmentIter);
-    const GEOM_FT distToVertex= dist(nearestVertex,p);
+    const GEOM_FT distToVertex= p.dist(nearestVertex);
     const GEOM_FT distToSegment= nearestSegment.dist(p);
     if(distToVertex<=distToSegment)
       {

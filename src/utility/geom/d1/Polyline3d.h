@@ -60,6 +60,8 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     const Pos3d *appendVertex(const Pos3d &);
     const Pos3d *appendVertexLeft(const Pos3d &);
     virtual bool In(const Pos3d &p, const double &tol= 0.0) const;
+    virtual GEOM_FT dist2(const Pos3d &p) const;
+    GEOM_FT dist(const Pos3d &p) const;
 
     virtual GEOM_FT Ix(void) const;
     virtual GEOM_FT Iy(void) const;
