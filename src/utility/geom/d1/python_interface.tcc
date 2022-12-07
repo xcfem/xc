@@ -257,6 +257,8 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
 
 void (PlanePolyline3d::*simplifyPP3DPoly)(GEOM_FT epsilon)= &PlanePolyline3d::simplify;
 Segment3d (PlanePolyline3d::*getPP3DSegment)(const unsigned int ) const= &PlanePolyline3d::getSegment;
+bool (PlanePolyline3d::*getPPPlaneIntersects)(const Plane &) const= &PlanePolyline3d::intersects;
+bool (PlanePolyline3d::*getPPLineIntersects)(const Line3d &) const= &PlanePolyline3d::intersects;
 GeomObj3d::list_Pos3d (PlanePolyline3d::*getPPPlaneIntersection)(const Plane &) const= &PlanePolyline3d::getIntersection;
 GeomObj3d::list_Pos3d (PlanePolyline3d::*getPPLineIntersection)(const Line3d &) const= &PlanePolyline3d::getIntersection;
 Vector3d (D2to3d::*ppto_3dv)(const Vector2d &) const= &D2to3d::to_3d;
@@ -267,6 +269,7 @@ Vector2d (D2to3d::*ppto_2dv)(const Vector3d &) const= &D2to3d::to_2d;
 Pos2d (D2to3d::*ppto_2dp)(const Pos3d &) const= &D2to3d::to_2d;
 Line2d (D2to3d::*ppto_2dln)(const Line3d &) const= &D2to3d::to_2d;
 Segment2d (D2to3d::*ppto_2dsg)(const Segment3d &) const= &D2to3d::to_2d;
+BND3d (D2to3d::*bnd_3d)(void) const= &D2to3d::Bnd;
 boost::python::list (PlanePolyline3d::*planePline3dDividePyEq3d)(int) const= &PlanePolyline3d::DividePy;
 boost::python::list (PlanePolyline3d::*planePline3dDividePyProp3d)(const boost::python::list &) const= &PlanePolyline3d::DividePy;
 class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
@@ -288,6 +291,7 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("to_2d",ppto_2dp, "Return the corresponding 2D point.")
   .def("to_2d",ppto_2dln, "Return the corresponding 2D line.")
   .def("to_2d",ppto_2dsg, "Return the corresponding 2D segment.")
+  .def("getBnd",bnd_3d, "Return the object boundary box.")
   .def("appendVertex", &PlanePolyline3d::appendVertex, "Append a vertex to the end of the polyline.")
   .def("appendVertexLeft", &PlanePolyline3d::appendVertexLeft, "Append a vertex to the beginning of the polyline.")
   .def("getNumVertices", &PlanePolyline3d::getNumVertices)
@@ -296,6 +300,8 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("getFromPoint", &PlanePolyline3d::getFromPoint,"return the first point of the polyline.")
   .def("getToPoint", &PlanePolyline3d::getToPoint,"return the last point of the polyline.")
   .def("getVertexList",&PlanePolyline3d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
+  .def("intersects", getPPPlaneIntersects, "Return true if this object intersects with the plane argument.")
+  .def("intersects", getPPLineIntersects, "Return true if this object intersects with the line argument.")
   .def("getIntersection", getPPPlaneIntersection, "Return the intersection with the plane argument.")
   .def("getIntersection", getPPLineIntersection, "Return the intersection with the line argument.")
   .def("isClosed",&PlanePolyline3d::isClosed,"returns true if the last vertex is coincident with the first one -dist(first,last)<tol*length-.")
