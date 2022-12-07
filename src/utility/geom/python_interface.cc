@@ -96,7 +96,8 @@ BOOST_PYTHON_MODULE(geom)
       .def("getIz", &GeomObj2d::Iz)
       .def("getPxy", pure_virtual(&GeomObj2d::Pxy))
       .def("move",&GeomObj2d::Move,"move(vector): move the object.")
-      .def("In",&GeomObj2d::In)
+      .def("In",&GeomObj2d::In, "Return true if the argument lies inside this object.")
+      .def("getBnd",&GeomObj2d::Bnd, "Return the boundary box for this object.")
       .def<Pos2d (GeomObj2d::*)(const Pos2d &) const>("getProjection", &GeomObj2d::Projection)
       .def<Vector2d (GeomObj2d::*)(const Vector2d &) const>("getProjection", &GeomObj2d::Projection)
       ;
@@ -119,6 +120,7 @@ BOOST_PYTHON_MODULE(geom)
       .def<Pos3d (GeomObj3d::*)(const Pos3d &) const>("getProjection", &GeomObj3d::Projection)
       .def<Vector3d (GeomObj3d::*)(const Vector3d &) const>("getProjection", &GeomObj3d::Projection)
       .def("In", &GeomObj3d::In, "In(pos3d,tol) return true if the points lies inside the polygon (distance from the point to the polygon less than the tolerance argument).")
+      .def("getBnd",&GeomObj3d::Bnd, "Return the boundary box for this object.")
      ;
 
     #include "lists/python_interface.tcc"
