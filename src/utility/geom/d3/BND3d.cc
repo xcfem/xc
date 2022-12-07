@@ -296,11 +296,36 @@ unsigned short int BND3d::RegionCode(const Pos3d &p,const double &tol) const
   }
 bool BND3d::In(const Pos3d &p,const double &tol) const
   {
-    if(undefined)
+    bool retval= false;
+    if(!undefined)
+      {
+	const GEOM_FT xmin= GetXMin()-tol;
+	const GEOM_FT xmax= GetXMax()+tol;
+	const GEOM_FT ymin= GetYMin()-tol;
+	const GEOM_FT ymax= GetYMax()+tol;
+	const GEOM_FT zmin= GetZMin()-tol;
+	const GEOM_FT zmax= GetZMax()+tol;
+	if(p.x()< xmin)
+	  retval= false;
+	else if(p.x()>xmax)
+	  retval= false;
+	else if(p.y()<ymin)
+	  retval= false;
+	else if(p.y()>ymax)
+	  retval= false;
+	else if(p.z()<zmin)
+	  retval= false;
+	else if(p.z()>zmax)
+	  retval= false;
+	else
+	  retval= true;
+      }
+    else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-    CGAL::Bounded_side side= cgisocub.bounded_side(p.ToCGAL());
-    return (side != CGAL::ON_UNBOUNDED_SIDE);
+    //CGAL::Bounded_side side= cgisocub.bounded_side(p.ToCGAL());
+    //return (side != CGAL::ON_UNBOUNDED_SIDE);
+    return retval;
   }
 
 //! @brief Grows the boundary in the specified amount.
