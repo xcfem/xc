@@ -247,21 +247,31 @@ class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
             horizontalAngles= [pi_4, -pi_4]
             # Compute intersections of the rays with the loaded plane.
             loadShadowContour= list()
-            loadShadowContour.append(self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[0], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
-            loadShadowContour.append(self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[1], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
-            loadShadowContour.append(self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[1], vAngle= verticalAngles[1], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
-            loadShadowContour.append(self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[0], vAngle= verticalAngles[1], verticalPlane= verticalPlane, loadedPlane= loadedPlane))
-            for vertexShadow in loadShadowContour:
-                if(vertexShadow is None):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
-                    exit(1)
-            retval= geom.Polygon3d(loadShadowContour)
+            vShadow00= self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[0], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane)
+            if(vShadow00):
+                loadShadowContour.append(vShadow00)
+            vShadow10= self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[1], vAngle= verticalAngles[0], verticalPlane= verticalPlane, loadedPlane= loadedPlane)
+            if(vShadow10):
+                loadShadowContour.append(vShadow10)
+            vShadow11= self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[1], vAngle= verticalAngles[1], verticalPlane= verticalPlane, loadedPlane= loadedPlane)
+            if(vShadow11):
+                loadShadowContour.append(vShadow11)
+            vShadow01= self.getVertexShadow(v= self.pos, hAngle= horizontalAngles[0], vAngle= verticalAngles[1], verticalPlane= verticalPlane, loadedPlane= loadedPlane)
+            if(vShadow01):
+                loadShadowContour.append(vShadow01)
+            numVertices= len(loadShadowContour)
+            if(numVertices<4):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; error computing load "shadow". Only '+str(numVertices)+' have been found.')
+            if(numVertices>2):
+                retval= geom.Polygon3d(loadShadowContour)
+            else:
+                retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane.')
+            lmsg.warning(className+'.'+methodName+'; horizontal load not pointing towards the loaded plane. Horizontal load: '+str(self.H)+' loaded plane: '+str(loadedPlane))
             retval= None
         return retval
 
@@ -433,9 +443,10 @@ class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackFill):
                     else:
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
-                        lmsg.error(className+'.'+methodName+'; error computing load "shadow".')
-                        exit(1)
-                retval= geom.Polygon3d(loadShadowContour)
+                        lmsg.error(className+'.'+methodName+'; error computing load "shadow" for vertex: '+str(v))
+                numVertices= len(loadShadowContour)
+                if(numVertices>2):
+                    retval= geom.Polygon3d(loadShadowContour)
             else: # no intersection -> no loads on plane.
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
