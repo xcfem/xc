@@ -42,32 +42,29 @@ class EmbankmentLayer(object):
         self.soil= soil
         self.loadSpreadingRatio= loadSpreadingRatio
 
-    def getXMin(self):
-        ''' Return the minimum x coordinate of the profile.'''
-        #return self.pline.getXMin
-        return self.pline.to_2d(self.pline.getFromPoint()).x
-
-    def getXMax(self):
-        ''' Return the maximum x coordinate of the profile.'''
-        #return self.pline.getXMax
-        return self.pline.to_2d(self.pline.getToPoint()).x
-
     def getDepth(self, point, verticalDir= geom.Vector3d(0,0,1)):
         ''' Return the depth corresponding to the point argument.
 
         :param point: point whose depth will be computed.
         :param verticalDir: vector pointing «up».
         '''
-        # Compute boundaries.
-        xMin= self.getXMin()
-        xMax= self.getXMax()
-        retval= None # Not defined unless between xMin and xMax
-        prj= self.pline.getPlane().getProjection(point)
-        x= self.pline.to_2d(prj).x
-        if(x<=xMax and x>=xMin): # Check boundaries.
-            vLine= geom.Line3d(prj, 100*verticalDir) # Vertical line.
+        retval= None        
+        plane= self.pline.getPlane()
+        prj= plane.getProjection(point)
+        vLine= geom.Line3d(prj, 100*verticalDir) # Vertical line.
+        if(self.pline.intersects(vLine)):
             intPoints= self.pline.getIntersection(vLine)
-            for ip in intPoints:
+            sz= len(intPoints) # number of intersection points.
+            if(sz==0): # none
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; something went wrong. No intersection found.')
+            else:
+                if(sz>1): # multiple.
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+'; multiple intersection with layer surface. Returning depth with respect the first one.')
+                ip= intPoints[0] # intersection point.
                 v= ip-prj # Vector from the intersection to the proj. pt.
                 dist= verticalDir.dot(v) # Dot product.
                 retval= dist
@@ -80,18 +77,24 @@ class EmbankmentLayer(object):
         :param pointList: points whose depths will be computed.
         :param verticalDir: vector pointing «up».
         '''
-        # Compute boundaries.
-        xMin= self.getXMin()
-        xMax= self.getXMax()
         plane= self.pline.getPlane()
         retval= list()
         for p in pointList:
             prj= plane.getProjection(p)
-            x= self.pline.to_2d(prj).x
-            if(x<=xMax and x>=xMin): # Check boundaries.
-                vLine= geom.Line3d(prj, 100*verticalDir) # Vertical line.
+            vLine= geom.Line3d(prj, 100*verticalDir) # Vertical line.
+            if(self.pline.intersects(vLine)):
                 intPoints= self.pline.getIntersection(vLine)
-                for ip in intPoints:
+                sz= len(intPoints) # number of intersection points.
+                if(sz==0): # none
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+'; something went wrong. No intersection found.')
+                else:
+                    if(sz>1): # multiple.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.warning(className+'.'+methodName+'; multiple intersection with layer surface. Returning depth with respect the first one.')
+                    ip= intPoints[0] # intersection point.
                     v= ip-prj # Vector from the intersection to the proj. pt.
                     dist= verticalDir.dot(v) # Dot product.
                     retval.append(dist)

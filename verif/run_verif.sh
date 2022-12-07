@@ -1156,6 +1156,7 @@ echo  "$BLEU" "  Earthworks." "$NORMAL"
 python tests/geotechnics/earthworks/test_embankment_01.py
 python tests/geotechnics/earthworks/test_embankment_02.py
 python tests/geotechnics/earthworks/test_embankment_03.py
+python tests/geotechnics/earthworks/test_embankment_04.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
