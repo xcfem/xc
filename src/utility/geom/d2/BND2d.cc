@@ -138,15 +138,15 @@ GEOM_FT BND2d::Iy(void) const
 
 
 //! @brief Return true it the boundary contains the point.
-bool BND2d::In(const Pos2d &p) const
+bool BND2d::In(const Pos2d &p, const double &tol) const
   {
     bool retval= false;
     if(!undefined)
       {
-	const GEOM_FT xmin= GetXMin();
-	const GEOM_FT xmax= GetXMax();
-	const GEOM_FT ymin= GetYMin();
-	const GEOM_FT ymax= GetYMax();
+	const GEOM_FT xmin= GetXMin()-tol;
+	const GEOM_FT xmax= GetXMax()+tol;
+	const GEOM_FT ymin= GetYMin()-tol;
+	const GEOM_FT ymax= GetYMax()+tol;
 	if(p.x()< xmin)
 	  retval= false;
 	else if(p.x()>xmax)
@@ -158,16 +158,19 @@ bool BND2d::In(const Pos2d &p) const
 	else
 	  retval= true;
       }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; boundary is undefined." << std::endl;
     return retval;
   }
 
 //! @brief Return true if contains the polyline.
-bool BND2d::In(const Polyline2d &p) const
-  { return In(p.begin(),p.end()); }
+bool BND2d::In(const Polyline2d &p, const double &tol) const
+  { return this->In(p.begin(),p.end(), tol); }
 
 //! @brief Return true if contains the polygon.
-bool BND2d::In(const Polygon2d &p) const
-  { return In(p.vertices_begin(),p.vertices_end()); }
+bool BND2d::In(const Polygon2d &p, const double &tol) const
+  { return this->In(p.vertices_begin(),p.vertices_end(), tol); }
 
 //! @brief Return true if the boundary contains the point.
 bool BND2d::Overlap(const Pos2d &p) const

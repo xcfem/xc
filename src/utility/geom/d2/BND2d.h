@@ -42,8 +42,8 @@ class BND2d: public GeomObj2d
     template <class inputIterator>
     bool Overlap(inputIterator begin, inputIterator end) const;
   protected:
-    inline bool In(const CGPoint_2 &p) const
-      { return In(Pos2d(p)); }
+    inline bool In(const CGPoint_2 &p, const double &tol) const
+      { return In(Pos2d(p), tol); }
     inline bool Overlap(const CGPoint_2 &p) const
       { return Overlap(Pos2d(p)); }     
   public:
@@ -90,11 +90,11 @@ class BND2d: public GeomObj2d
 
     Pos2d getCenterOfMass(void) const;
 
-    bool In(const Pos2d &) const;
+    bool In(const Pos2d &, const double &tol= 0.0) const;
     template <class inputIterator>
-    bool In(inputIterator begin, inputIterator end) const;
-    bool In(const Polyline2d &) const;
-    bool In(const Polygon2d &) const;
+    bool In(inputIterator begin, inputIterator end, const double &tol= 0.0) const;
+    bool In(const Polyline2d &, const double &tol= 0.0) const;
+    bool In(const Polygon2d &, const double &tol= 0.0) const;
     bool Overlap(const Pos2d &) const;
     bool Overlap(const Line2d &r) const;
     bool Overlap(const Ray2d &sr) const;
@@ -134,11 +134,11 @@ inline bool intersecan(const BND2d &bnd,const Segment2d &sg)
 //!@brief Return verdadero si todos los objetos de la secuencia
 //! están contenidos en el BND.
 template <class inputIterator>
-bool BND2d::In(inputIterator begin, inputIterator end) const
+bool BND2d::In(inputIterator begin, inputIterator end, const double &tol) const
   {
     bool retval= true;
     for(inputIterator i= begin;i!=end;i++)
-      if(!In(*i))
+      if(!this->In(*i, tol))
         {
           retval= false;
           break;
