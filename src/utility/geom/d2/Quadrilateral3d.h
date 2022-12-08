@@ -97,8 +97,10 @@ class Quadrilateral3d: public D2to3d
     GEOM_FT distSigno2(const Pos3d &p) const;
     GEOM_FT dist2(const Pos3d &p) const;
     
+    std::vector<double> getNaturalCoordinates(const Pos3d &) const;
     std::vector<double> Ni(const Pos3d &) const;
     boost::python::list NiPy(const Pos3d &) const;
+    Pos3d getMidpoint(void) const;
     
     Segment3d Clip(const Line3d &) const;
     Segment3d Clip(const Ray3d &) const;

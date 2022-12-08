@@ -89,6 +89,8 @@ class_<Quadrilateral2d, bases<Polygon2d> >("Quadrilateral2d")
   .def(init<>())
   .def(init<Pos2d, Pos2d, Pos2d, Pos2d>())
   .def("Ni",&Quadrilateral2d::NiPy,"Return the values of the shape functions a the point argument (expressed in regular cartesian coordinates).")
+  .add_property("midpoint", &Quadrilateral2d::getMidpoint,"Return the intersection between the segments that joint the midpoints of its sides")
+  .def("getNaturalCoordinates", &Quadrilateral2d::getNaturalCoordinates,"Returns the natural coordinates of a 2D point.")
   ;
 
 

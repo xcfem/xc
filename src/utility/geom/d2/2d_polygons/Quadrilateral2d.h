@@ -24,11 +24,12 @@
 #define QUADRILATERAL2D_H
 
 #include "Polygon2d.h"
+#include <tuple>
 
 class Triangle2d;
 class Pos2dArray;
 
-// Orden de los vértices 1->2->3->4.
+// Vertex order: 1->2->3->4.
 //
 // 4 +---------------+ 3
 //   |               |
@@ -50,8 +51,11 @@ class Quadrilateral2d: public Polygon2d
       { return new Quadrilateral2d(*this); }
     void push_back(const Pos2d &);
 
+    std::vector<double> getNaturalCoordinates(const Pos2d &) const;
     std::vector<double> Ni(const Pos2d &) const;
     boost::python::list NiPy(const Pos2d &) const;
+    Pos2d getMidpoint(void) const;
+    
     Triangle2d getFirstTriangle(void) const;
     Triangle2d getSecondTriangle(void) const;
     Pos2dArray genMesh(int n1,int n2) const;

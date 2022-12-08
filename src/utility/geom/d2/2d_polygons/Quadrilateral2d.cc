@@ -26,6 +26,14 @@
 #include "utility/geom/d1/Segment2d.h"
 #include <vector>
 
+// Vertex order: 1->2->3->4.
+//
+// 4 +---------------+ 3
+//   |               |
+//   |               |
+//   |               |
+// 1 +---------------+ 2
+
 //! @brief Default constructor.
 Quadrilateral2d::Quadrilateral2d(void)
   : Polygon2d() 
@@ -55,9 +63,14 @@ void Quadrilateral2d::push_back(const Pos2d &p)
 		<< " maximum number of vertices reached." << std::endl;
   }
 
-//! @brief Return the values of the shape functions for the point argument.
-std::vector<double> Quadrilateral2d::Ni(const Pos2d &p) const
+//! @brief Return natural coordinates for point xy (in cartesian coord.)
+//! based on \$ 23.6 from Felippa book:"Introduction to Finite Element Methods"
+//! see IFEM.Ch23.pdf
+//!
+//! @param p: position in cartesian coordinates.
+std::vector<double> Quadrilateral2d::getNaturalCoordinates(const Pos2d &p) const
   {
+    std::vector<double> retval(2,0.0);
     // Store convenience values.
     const Pos2d &v1= Vertice(1); const Pos2d &v2= Vertice(2);
     const Pos2d &v3= Vertice(3); const Pos2d &v4= Vertice(4);
@@ -69,22 +82,51 @@ std::vector<double> Quadrilateral2d::Ni(const Pos2d &p) const
     const double &y3= v3.y();
     const double &x4= v4.x();
     const double &y4= v4.y();
-    const double x12= x1-x2;
-    const double x34= x3-x4;
-    const double y14= y1-y4;
-    const double y23= y2-y3;
-    // Get cartesian coordinates of the point.
-    const double x= p.x();
-    const double y= p.y();
-    // Compute values of the shape functions.
-    std::vector<double> retval(4,0.0);
-    retval[0]= (x-x2)/(x12)*(y-y4)/(y14);
-    retval[1]= (x1-x)/(x12)*(y-y3)/(y23);
-    retval[2]= (x-x4)/(x34)*(y2-y)/(y23);
-    retval[3]= (x3-x)/(x34)*(y1-y)/(y14);
+    // Compute natural coordinates.
+    const double xb= x1-x2+x3-x4;
+    const double yb= y1-y2+y3-y4;
+    const double xcChi= x1+x2-x3-x4;
+    const double ycChi= y1+y2-y3-y4;
+    const double xcEta= x1-x2-x3+x4;
+    const double ycEta= y1-y2-y3+y4;
+    const double x0= (x1+x2+x3+x4)/4.0;
+    const double y0= (y1+y2+y3+y4)/4.0;
+    const double J0= (x3-x1)*(y4-y2)-(x4-x2)*(y3-y1); 
+    const double A= J0/2.0;
+    const double J1= (x3-x4)*(y1-y2)-(x1-x2)*(y3-y4);
+    const double J2= (x2-x3)*(y1-y4)-(x1-x4)*(y2-y3);
+    const double dx= p.x()-x0;
+    const double dy= p.y()-y0;
+    const double bChi= A-dx*yb+dy*xb;
+    const double bEta= -A-dx*yb+dy*xb;
+    const double cChi= dx*ycChi-dy*xcChi;
+    const double cEta= dx*ycEta-dy*xcEta;
+    retval[0]= 2*cChi/(-sqrt(bChi*bChi-2*J1*cChi)-bChi);
+    retval[1]= 2*cEta/( sqrt(bEta*bEta+2*J2*cEta)-bEta);
     return retval;
   }
-//! @brief Return a Python list containing the values of the shape functions for the point argument.
+
+//! @brief Return the values of the shape functions for the point argument.
+std::vector<double> Quadrilateral2d::Ni(const Pos2d &p) const
+  {
+    // Compute natural coordinates.
+    std::vector<double> naturalCoord= this->getNaturalCoordinates(p);
+    // Store convenience values.
+    const double oneMinusR= 1.0-naturalCoord[0];
+    const double onePlusR= 1.0+naturalCoord[0];
+    const double oneMinusS= 1.0-naturalCoord[1];
+    const double onePlusS= 1.0+naturalCoord[1];
+    // Compute values of the shape functions.
+    std::vector<double> retval(4,0.0);
+    retval[0]= oneMinusR*oneMinusS/4.0;
+    retval[1]= onePlusR*oneMinusS/4.0;
+    retval[2]= onePlusR*onePlusS/4.0;
+    retval[3]= oneMinusR*onePlusS/4.0;
+    return retval;
+  }
+
+//! @brief Return a Python list containing the values of the shape functions
+//! for the point argument.
 boost::python::list Quadrilateral2d::NiPy(const Pos2d &p) const
   {
     boost::python::list retval;
@@ -92,6 +134,40 @@ boost::python::list Quadrilateral2d::NiPy(const Pos2d &p) const
     std::vector<double>::const_iterator i= tmp.begin();
     for(;i!=tmp.end();i++)
       retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the intersection between the lines that join the midpoints
+//! of the quadrilateral sides.
+Pos2d Quadrilateral2d::getMidpoint(void) const
+  {
+    // Get vertices.
+    const Pos2d &v1= Vertice(1); const Pos2d &v2= Vertice(2);
+    const Pos2d &v3= Vertice(3); const Pos2d &v4= Vertice(4);
+
+    // Compute midpoints of the sides.
+    //            p3
+    // v4 +-------x-------+ v3
+    //    |               |
+    // p4 x               x p2
+    //    |               |
+    // v1 +-------x-------+ v2
+    //          p1
+    Pos2d p1= Segment2d(v1,v2).getMidPoint();
+    Pos2d p2= Segment2d(v2,v3).getMidPoint();
+    Pos2d p3= Segment2d(v3,v4).getMidPoint();
+    Pos2d p4= Segment2d(v4,v1).getMidPoint();
+
+    // Compute quadrilateral "axis".
+    Segment2d yAxis(p1, p3);
+    Segment2d xAxis(p4, p2);
+    Pos2d retval;
+    GeomObj2d::list_Pos2d tmp= xAxis.getIntersection(yAxis);
+    if(!tmp.empty())
+      retval= (*tmp.begin());
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< " intersection between quadrilateral \"axis\" not found." << std::endl;
     return retval;
   }
 

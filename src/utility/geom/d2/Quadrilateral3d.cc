@@ -340,6 +340,14 @@ GEOM_FT Quadrilateral3d::dist(const Pos3d &p) const
     return (retval >= 0 ? retval : 0);
   }
 
+//! @brief Return natural coordinates for point xy (in cartesian coord.)
+//! based on \$ 23.6 from Felippa book:"Introduction to Finite Element Methods"
+//! see IFEM.Ch23.pdf
+//!
+//! @param p: position in cartesian coordinates.
+std::vector<double> Quadrilateral3d::getNaturalCoordinates(const Pos3d &p) const
+  { return this->quad2d.getNaturalCoordinates(this->to_2d(p)); }
+
 //! @brief Return the values of the shape functions for the point argument.
 std::vector<double> Quadrilateral3d::Ni(const Pos3d &p) const
   { return this->quad2d.Ni(this->to_2d(p)); }
@@ -347,6 +355,11 @@ std::vector<double> Quadrilateral3d::Ni(const Pos3d &p) const
 //! @brief Return a Python list containing the values of the shape functions for the point argument.
 boost::python::list Quadrilateral3d::NiPy(const Pos3d &p) const
   { return this->quad2d.NiPy(this->to_2d(p)); }
+
+//! @brief Return the intersection between the lines that join the midpoints
+//! of the quadrilateral sides.
+Pos3d Quadrilateral3d::getMidpoint(void) const
+  { return this->to_3d(quad2d.getMidpoint()); }
 
 //! @brief Return the intersection of the quadrilateral with the line.
 Segment3d Quadrilateral3d::Clip(const Line3d &r) const
