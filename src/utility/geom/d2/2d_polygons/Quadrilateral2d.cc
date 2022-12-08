@@ -95,6 +95,7 @@ std::vector<double> Quadrilateral2d::getNaturalCoordinates(const Pos2d &p) const
     const double A= J0/2.0;
     const double J1= (x3-x4)*(y1-y2)-(x1-x2)*(y3-y4);
     const double J2= (x2-x3)*(y1-y4)-(x1-x4)*(y2-y3);
+    
     const double dx= p.x()-x0;
     const double dy= p.y()-y0;
     const double bChi= A-dx*yb+dy*xb;
@@ -106,7 +107,82 @@ std::vector<double> Quadrilateral2d::getNaturalCoordinates(const Pos2d &p) const
     return retval;
   }
 
+//! @brief Return natural coordinates for points xy (in cartesian coord.)
+//! @param points: positions in cartesian coordinates.
+std::vector<std::vector<double> > Quadrilateral2d::getNaturalCoordinates(const std::list<Pos2d> &points) const
+  {    
+    // Store convenience values.
+    const Pos2d &v1= Vertice(1); const Pos2d &v2= Vertice(2);
+    const Pos2d &v3= Vertice(3); const Pos2d &v4= Vertice(4);
+    const double &x1= v1.x();
+    const double &y1= v1.y();
+    const double &x2= v2.x();
+    const double &y2= v2.y();
+    const double &x3= v3.x();
+    const double &y3= v3.y();
+    const double &x4= v4.x();
+    const double &y4= v4.y();
+    // Compute natural coordinates.
+    const double xb= x1-x2+x3-x4;
+    const double yb= y1-y2+y3-y4;
+    const double xcChi= x1+x2-x3-x4;
+    const double ycChi= y1+y2-y3-y4;
+    const double xcEta= x1-x2-x3+x4;
+    const double ycEta= y1-y2-y3+y4;
+    const double x0= (x1+x2+x3+x4)/4.0;
+    const double y0= (y1+y2+y3+y4)/4.0;
+    const double J0= (x3-x1)*(y4-y2)-(x4-x2)*(y3-y1); 
+    const double A= J0/2.0;
+    const double J1= (x3-x4)*(y1-y2)-(x1-x2)*(y3-y4);
+    const double J2= (x2-x3)*(y1-y4)-(x1-x4)*(y2-y3);
+
+    const size_t sz= points.size();
+    std::vector<double> retval_i(2,0.0);
+    std::vector<std::vector<double> > retval(sz, retval_i);
+    size_t count= 0;
+    for(std::list<Pos2d>::const_iterator i= points.begin(); i!=points.end(); i++, count++)
+      {
+	const Pos2d &p= *i;
+	const double dx= p.x()-x0;
+	const double dy= p.y()-y0;
+	const double bChi= A-dx*yb+dy*xb;
+	const double bEta= -A-dx*yb+dy*xb;
+	const double cChi= dx*ycChi-dy*xcChi;
+	const double cEta= dx*ycEta-dy*xcEta;
+	retval_i[0]= 2*cChi/(-sqrt(bChi*bChi-2*J1*cChi)-bChi);
+	retval_i[1]= 2*cEta/( sqrt(bEta*bEta+2*J2*cEta)-bEta);
+	retval[count]= retval_i;
+      }
+    return retval;
+  }
+
+//! @brief Return natural coordinates for points xy (in cartesian coord.)
+//! @param points: positions in cartesian coordinates.
+boost::python::list Quadrilateral2d::getNaturalCoordinatesPy(const boost::python::list &points) const
+  {
+    const int sz= len(points);
+    std::list<Pos2d> tmp;
+    // populate std::list
+    for(int i=0; i<sz; i++)
+      tmp.push_back(boost::python::extract<Pos2d>(points[i]));
+    // call "pure" c++ method.
+    std::vector<std::vector<double> > naturalCoord= this->getNaturalCoordinates(tmp);
+    // populate returned list.
+    boost::python::list retval;
+    std::vector<std::vector<double> >::const_iterator i= naturalCoord.begin();
+    for(;i!=naturalCoord.end();i++)
+      {
+	const std::vector<double> &tmp_i= *i;
+	boost::python::list retval_i;
+	retval_i.append(tmp_i[0]); // r coordinate.
+	retval_i.append(tmp_i[1]); // s coordinate.
+        retval.append(retval_i);
+      }
+    return retval;    
+  }
+
 //! @brief Return the values of the shape functions for the point argument.
+//! @param p: point where the shape functions are evaluated.
 std::vector<double> Quadrilateral2d::Ni(const Pos2d &p) const
   {
     // Compute natural coordinates.
@@ -127,6 +203,7 @@ std::vector<double> Quadrilateral2d::Ni(const Pos2d &p) const
 
 //! @brief Return a Python list containing the values of the shape functions
 //! for the point argument.
+//! @param p: point where the shape functions are evaluated.
 boost::python::list Quadrilateral2d::NiPy(const Pos2d &p) const
   {
     boost::python::list retval;
@@ -135,6 +212,66 @@ boost::python::list Quadrilateral2d::NiPy(const Pos2d &p) const
     for(;i!=tmp.end();i++)
       retval.append(*i);
     return retval;
+  }
+
+//! @brief Return a vector of vectors containing the values of the shape
+//! functions for the points in the argument list.
+//! @param points: points where the shape functions are evaluated.
+std::vector<std::vector<double> > Quadrilateral2d::Ni(const std::list<Pos2d> &points) const
+  {
+    // Compute natural coordinates.
+    std::vector<std::vector<double> > naturalCoord= this->getNaturalCoordinates(points);
+    // Prepare return values.
+    std::vector<double> retval_i(4,0.0);
+    const size_t sz= points.size();
+    std::vector<std::vector<double> > retval(sz, retval_i);
+    // Iterate through the computed natural coordinates.
+    size_t count= 0;
+    std::vector<std::vector<double> >::const_iterator i= naturalCoord.begin();
+    for(;i!= naturalCoord.end();i++, count++)
+      {
+	const std::vector<double> &naturalCoord_i= *i; //i-th natural coordinates.
+	// Store convenience values.
+	const double oneMinusR= 1.0-naturalCoord_i[0];
+	const double onePlusR= 1.0+naturalCoord_i[0];
+	const double oneMinusS= 1.0-naturalCoord_i[1];
+	const double onePlusS= 1.0+naturalCoord_i[1];
+	// Compute values of the shape functions.
+	retval_i[0]= oneMinusR*oneMinusS/4.0;
+	retval_i[1]= onePlusR*oneMinusS/4.0;
+	retval_i[2]= onePlusR*onePlusS/4.0;
+	retval_i[3]= oneMinusR*onePlusS/4.0;
+	retval[count]= retval_i;
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the values of the shape
+//! functions for the points in the argument list.
+//! @param points: points where the shape functions are evaluated.
+boost::python::list Quadrilateral2d::NiPy(const boost::python::list &points) const
+  {
+    const int sz= len(points);
+    std::list<Pos2d> tmp;
+    // populate std::list
+    for(int i=0; i<sz; i++)
+      tmp.push_back(boost::python::extract<Pos2d>(points[i]));
+    // call "pure" c++ method.
+    std::vector<std::vector<double> > Ni= this->Ni(tmp);
+    // populate returned list.
+    boost::python::list retval;
+    std::vector<std::vector<double> >::const_iterator j= Ni.begin();
+    for(;j!=Ni.end();j++)
+      {
+	const std::vector<double> &Ni_j= *j; //j-th shape functions values.
+	boost::python::list retval_i;
+	retval_i.append(Ni_j[0]);
+	retval_i.append(Ni_j[1]);
+	retval_i.append(Ni_j[2]);
+	retval_i.append(Ni_j[3]);
+        retval.append(retval_i);
+      }
+    return retval;    
   }
 
 //! @brief Return the intersection between the lines that join the midpoints

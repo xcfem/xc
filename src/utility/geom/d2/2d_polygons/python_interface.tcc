@@ -85,12 +85,17 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def("getVertexList",&Polygon2d::getVertexListPy,"Return a Python list containing the positions of the polygon vertices.")
   ;
 
+std::vector<double> (Quadrilateral2d::*get2DPointNaturalCoordinates)(const Pos2d &) const= &Quadrilateral2d::getNaturalCoordinates;
+boost::python::list (Quadrilateral2d::*get2dPointNi)(const Pos2d &) const= &Quadrilateral2d::NiPy;
+boost::python::list (Quadrilateral2d::*get2dPointsNi)(const boost::python::list &) const= &Quadrilateral2d::NiPy;
 class_<Quadrilateral2d, bases<Polygon2d> >("Quadrilateral2d")
   .def(init<>())
   .def(init<Pos2d, Pos2d, Pos2d, Pos2d>())
-  .def("Ni",&Quadrilateral2d::NiPy,"Return the values of the shape functions a the point argument (expressed in regular cartesian coordinates).")
+  .def("Ni",get2dPointNi,"Return the values of the shape functions a the point argument (expressed in regular cartesian coordinates).")
+  .def("Ni",get2dPointsNi,"Return the values of the shape functions a the points contained in the argument list (expressed in regular cartesian coordinates).")
   .add_property("midpoint", &Quadrilateral2d::getMidpoint,"Return the intersection between the segments that joint the midpoints of its sides")
-  .def("getNaturalCoordinates", &Quadrilateral2d::getNaturalCoordinates,"Returns the natural coordinates of a 2D point.")
+  .def("getNaturalCoordinates", get2DPointNaturalCoordinates,"Returns the natural coordinates of a 2D point.")
+  .def("getNaturalCoordinates", &Quadrilateral2d::getNaturalCoordinatesPy,"Returns the natural coordinates of a list of 2D points.")
   ;
 
 

@@ -52,8 +52,12 @@ class Quadrilateral2d: public Polygon2d
     void push_back(const Pos2d &);
 
     std::vector<double> getNaturalCoordinates(const Pos2d &) const;
+    std::vector<std::vector<double> > getNaturalCoordinates(const std::list<Pos2d> &) const;
+    boost::python::list getNaturalCoordinatesPy(const boost::python::list &) const;
     std::vector<double> Ni(const Pos2d &) const;
+    std::vector<std::vector<double> > Ni(const std::list<Pos2d> &) const;
     boost::python::list NiPy(const Pos2d &) const;
+    boost::python::list NiPy(const boost::python::list &) const;
     Pos2d getMidpoint(void) const;
     
     Triangle2d getFirstTriangle(void) const;

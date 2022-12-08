@@ -348,9 +348,56 @@ GEOM_FT Quadrilateral3d::dist(const Pos3d &p) const
 std::vector<double> Quadrilateral3d::getNaturalCoordinates(const Pos3d &p) const
   { return this->quad2d.getNaturalCoordinates(this->to_2d(p)); }
 
+
+//! @brief Return natural coordinates for points xy (in cartesian coord.)
+//! @param points: positions in cartesian coordinates.
+std::vector<std::vector<double> > Quadrilateral3d::getNaturalCoordinates(const std::list<Pos3d> &points) const
+  {
+    std::list<Pos2d> tmp;
+    for(std::list<Pos3d>::const_iterator i= points.begin(); i!= points.end(); i++)
+      tmp.push_back(this->to_2d(*i));
+    return this->quad2d.getNaturalCoordinates(tmp);
+  }
+
+boost::python::list Quadrilateral3d::getNaturalCoordinatesPy(const boost::python::list &points) const
+  {
+    const int sz= len(points);
+    boost::python::list tmp;
+    // populate std::list
+    for(int i=0; i<sz; i++)
+      tmp.append(this->to_2d(boost::python::extract<Pos3d>(points[i])));
+    // call "pure" c++ method.
+    return this->quad2d.getNaturalCoordinatesPy(tmp);
+  }
+
 //! @brief Return the values of the shape functions for the point argument.
 std::vector<double> Quadrilateral3d::Ni(const Pos3d &p) const
   { return this->quad2d.Ni(this->to_2d(p)); }
+
+//! @brief Return a vector of vectors containing the values of the shape
+//! functions for the points in the argument list.
+//! @param points: points where the shape functions are evaluated.
+std::vector<std::vector<double> > Quadrilateral3d::Ni(const std::list<Pos3d> &points) const
+  {
+    std::list<Pos2d> tmp;
+    for(std::list<Pos3d>::const_iterator i= points.begin(); i!= points.end(); i++)
+      tmp.push_back(this->to_2d(*i));
+    return this->quad2d.Ni(tmp);
+  }
+
+//! @brief Return a Python list containing the values of the shape
+//! functions for the points in the argument list.
+//! @param points: points where the shape functions are evaluated.
+boost::python::list Quadrilateral3d::NiPy(const boost::python::list &points) const
+  {
+    const int sz= len(points);
+    boost::python::list tmp;
+    // populate std::list
+    for(int i=0; i<sz; i++)
+      tmp.append(this->to_2d(boost::python::extract<Pos3d>(points[i])));
+    // call "pure" c++ method.
+    return this->quad2d.NiPy(tmp);
+  }
 
 //! @brief Return a Python list containing the values of the shape functions for the point argument.
 boost::python::list Quadrilateral3d::NiPy(const Pos3d &p) const

@@ -216,6 +216,9 @@ class_<Polygon3d, bases<D2to3d> >("Polygon3d")
   .def("getIndexOfProximalVertex", &Polygon3d::getIndexOfProximalVertex,"Return the index of the proximal vertex with respect to the point argument.")
   ;
 
+std::vector<double> (Quadrilateral3d::*get3DPointNaturalCoordinates)(const Pos3d &) const= &Quadrilateral3d::getNaturalCoordinates;
+boost::python::list (Quadrilateral3d::*get3dPointNi)(const Pos3d &) const= &Quadrilateral3d::NiPy;
+boost::python::list (Quadrilateral3d::*get3dPointsNi)(const boost::python::list &) const= &Quadrilateral3d::NiPy;
 class_<Quadrilateral3d, bases<D2to3d> >("Quadrilateral3d")
   .def(init<Pos3d,Pos3d,Pos3d,Pos3d>())
   .def(init<const Ref2d3d &,const Quadrilateral2d &>())
@@ -230,8 +233,10 @@ class_<Quadrilateral3d, bases<D2to3d> >("Quadrilateral3d")
   .def("getPerimeter",&Quadrilateral3d::getPerimeter, "Return the object perimeter.")
   .def("getVertexList",&Quadrilateral3d::getVertexListPy,"Return a Python list containing the positions of the quadrilateral vertices.")
   .def("dist",&Quadrilateral3d::dist,"Return the distance from point to this quadrilateral.")
-  .def("getNaturalCoordinates", &Quadrilateral3d::getNaturalCoordinates,"Returns the natural coordinates of a 3D point.")
-  .def("Ni",&Quadrilateral3d::NiPy,"Return the values of the shape functions a the point argument (expressed in regular cartesian coordinates).")
+  .def("getNaturalCoordinates", get3DPointNaturalCoordinates,"Returns the natural coordinates of a 3D point.")
+  .def("getNaturalCoordinates", &Quadrilateral2d::getNaturalCoordinatesPy,"Returns the natural coordinates of a list of 2D points.")
+  .def("Ni",get3dPointNi,"Return the values of the shape functions a the point argument (expressed in regular cartesian coordinates).")
+  .def("Ni",get3dPointsNi,"Return the values of the shape functions a the points contained in the argument list (expressed in regular cartesian coordinates).")
   .add_property("midpoint", &Quadrilateral3d::getMidpoint,"Return the intersection between the segments that joint the midpoints of its sides")
   .def("getCenterOfMass", &Quadrilateral3d::getCenterOfMass, " return the center of mass.")
   .def("clip",clipLine3d, "Clips the line by the quadrilateral surface.")
