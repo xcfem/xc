@@ -39,26 +39,19 @@ class Pos2dArray;
 
 //! @ingroup GEOM
 //
-//! @brief Cuadrilátero en dos dimensiones.
+//! @brief Quadrilateral on a bi-dimensional space.
 class Quadrilateral2d: public Polygon2d
   {
   public:
-    Quadrilateral2d(void): Polygon2d() 
-      {
-        push_back(Pos2d(0,0));
-        push_back(Pos2d(1,0));
-        push_back(Pos2d(1,1));
-        push_back(Pos2d(0,1));
-      }
+    Quadrilateral2d(void);
     Quadrilateral2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3,const Pos2d &p4);
 
     virtual GeomObj *getCopy(void) const
       { return new Quadrilateral2d(*this); }
-    inline void push_back(const Pos2d &p)
-      {
-        if(getNumVertices()<5)
-	  Polygon2d::push_back(p);
-      }
+    void push_back(const Pos2d &);
+
+    std::vector<double> Ni(const Pos2d &) const;
+    boost::python::list NiPy(const Pos2d &) const;
     Triangle2d getFirstTriangle(void) const;
     Triangle2d getSecondTriangle(void) const;
     Pos2dArray genMesh(int n1,int n2) const;

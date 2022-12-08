@@ -88,6 +88,7 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
 class_<Quadrilateral2d, bases<Polygon2d> >("Quadrilateral2d")
   .def(init<>())
   .def(init<Pos2d, Pos2d, Pos2d, Pos2d>())
+  .def("Ni",&Quadrilateral2d::NiPy,"Return the values of the shape functions a the point argument (expressed in regular cartesian coordinates).")
   ;
 
 

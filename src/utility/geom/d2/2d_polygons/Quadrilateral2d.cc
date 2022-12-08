@@ -26,12 +26,73 @@
 #include "utility/geom/d1/Segment2d.h"
 #include <vector>
 
+//! @brief Default constructor.
+Quadrilateral2d::Quadrilateral2d(void)
+  : Polygon2d() 
+  {
+    push_back(Pos2d(0,0));
+    push_back(Pos2d(1,0));
+    push_back(Pos2d(1,1));
+    push_back(Pos2d(0,1));
+  }
+
+//! @brief Constructor.
 Quadrilateral2d::Quadrilateral2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3,const Pos2d &p4): Polygon2d()
   {
     push_back(p1);
     push_back(p2);
     push_back(p3);
     push_back(p4);
+  }
+
+//! @brief Back inserter.
+void Quadrilateral2d::push_back(const Pos2d &p)
+  {
+    if(getNumVertices()<5)
+      Polygon2d::push_back(p);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< " maximum number of vertices reached." << std::endl;
+  }
+
+//! @brief Return the values of the shape functions for the point argument.
+std::vector<double> Quadrilateral2d::Ni(const Pos2d &p) const
+  {
+    // Store convenience values.
+    const Pos2d &v1= Vertice(1); const Pos2d &v2= Vertice(2);
+    const Pos2d &v3= Vertice(3); const Pos2d &v4= Vertice(4);
+    const double &x1= v1.x();
+    const double &y1= v1.y();
+    const double &x2= v2.x();
+    const double &y2= v2.y();
+    const double &x3= v3.x();
+    const double &y3= v3.y();
+    const double &x4= v4.x();
+    const double &y4= v4.y();
+    const double x12= x1-x2;
+    const double x34= x3-x4;
+    const double y14= y1-y4;
+    const double y23= y2-y3;
+    // Get cartesian coordinates of the point.
+    const double x= p.x();
+    const double y= p.y();
+    // Compute values of the shape functions.
+    std::vector<double> retval(4,0.0);
+    retval[0]= (x-x2)/(x12)*(y-y4)/(y14);
+    retval[1]= (x1-x)/(x12)*(y-y3)/(y23);
+    retval[2]= (x-x4)/(x34)*(y2-y)/(y23);
+    retval[3]= (x3-x)/(x34)*(y1-y)/(y14);
+    return retval;
+  }
+//! @brief Return a Python list containing the values of the shape functions for the point argument.
+boost::python::list Quadrilateral2d::NiPy(const Pos2d &p) const
+  {
+    boost::python::list retval;
+    std::vector<double> tmp= Ni(p);
+    std::vector<double>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
   }
 
 Triangle2d Quadrilateral2d::getFirstTriangle(void) const
