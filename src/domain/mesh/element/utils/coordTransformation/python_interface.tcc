@@ -110,7 +110,7 @@ class_<XC::ShellCrdTransf3dBase, bases<CommandEntity>, boost::noncopyable >("She
   .def("getProj", &XC::ShellCrdTransf3dBase::getProj)
   .add_property("getLocalReference", &XC::ShellCrdTransf3dBase::getLocalReference)
   .def("getLocalCoordinates", &XC::ShellCrdTransf3dBase::getLocalCoordinates,"Returns local coordinates of a point.")
-  .def("getNaturalCoordinates", &XC::ShellCrdTransf3dBase::getNaturalCoordinates,"Returns local coordinates of a point.")
+  .def("getNaturalCoordinates", &XC::ShellCrdTransf3dBase::getNaturalCoordinates,"Returns the natural coordinates of a point.")
   .def("getVectorGlobalCoordFromLocal", getVGlobalFromLocal, return_value_policy<copy_const_reference>(),"Returns global coordinates of a vector.")
   .def("getVectorLocalCoordFromGlobal", getVLocalFromGlobal,  return_value_policy<copy_const_reference>(),"Returns local coordinates of a vector.")
    ;
