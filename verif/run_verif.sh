@@ -121,7 +121,11 @@ python tests/utility/geom/polygons/polygon3D_test_05.py
 python tests/utility/geom/polygons/polygon3D_test_06.py
 python tests/utility/geom/polygons/polygon3D_test_07.py
 python tests/utility/geom/polygons/quadrilateral2D_test_01.py
+python tests/utility/geom/polygons/quadrilateral2D_test_02.py
+python tests/utility/geom/polygons/quadrilateral2D_test_03.py
 python tests/utility/geom/polygons/quadrilateral3D_test_01.py
+python tests/utility/geom/polygons/quadrilateral3D_test_02.py
+python tests/utility/geom/polygons/quadrilateral3D_test_03.py
 echo "$BLEU" "    Alpha shapes." "$NORMAL"
 python tests/utility/geom/basic_alpha_shape2d_test.py
 echo "$BLEU" "    Circles." "$NORMAL"

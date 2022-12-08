@@ -45,17 +45,27 @@ for p in [p1, p2, p3, p4]:
     shapeFunctionsValues.append(niValues)
 refShapeFunctionsValues= [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
 
+# Compute the values of the shape functions at the quadrilateral midpoint.
+midpointNiValues= quad.Ni(quad.midpoint)
+refMidpointNiValues= 4*[1/4.0]
+
+
 # Check the results.
 ratio1= abs(area-refArea)/refArea
 err= 0
 for values,refValues in zip(shapeFunctionsValues, refShapeFunctionsValues):
     for ni, refNi in zip(values, refValues):
-        err= (ni-refNi)**2
+        err+= (ni-refNi)**2
+
+for ni, refNi in zip(midpointNiValues, refMidpointNiValues):
+    err+= (ni-refNi)**2
+    
 err= math.sqrt(err)
 
 '''
 print(ratio1)
 print(shapeFunctionsValues)
+print(midpointNiValues)
 print(err)
 '''
 
