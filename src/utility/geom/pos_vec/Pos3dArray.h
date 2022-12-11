@@ -27,6 +27,7 @@
 #include "PosArray.h"
 
 class Triangle3d;
+class Quadrilateral3d;
 class BND3d;
 class Trf3d;
 class Revolution3d;
@@ -54,6 +55,15 @@ class Pos3dArray: public PosArray<Pos3d>
     Triangle3d getTriangle2(const size_t &i,const size_t &j) const;
     GEOM_FT Lagrange(const GEOM_FT &tol);
     void Transform(const Trf3d &trf);
+    
+    size_t getNumQuads(void) const;
+    Quadrilateral3d getQuad(const size_t &i,const size_t &j) const;
+    double getQuadArea(const size_t &i,const size_t &j) const;
+    Pos3d getQuadCentroid(const size_t &i,const size_t &j) const;
+    std::vector<Pos3d> getQuadCentroids(void) const;
+    boost::python::list getQuadCentroidsPy(void) const;
+    std::vector<double> getQuadAreas(void) const;
+    boost::python::list getQuadAreasPy(void) const;
   };
 
 GEOM_FT dist2(const Pos3dArray &ptos,const Pos3d &pt);

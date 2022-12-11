@@ -205,6 +205,7 @@ Pos2d PolygonalSurface2d::getCenterOfMass(void) const
      const GEOM_FT area= getArea();
      return Pos2d(getMoment(1,0)/area,getMoment(0,1)/area);
   }
+
 //! @brief Return the centroid (point interior to the polygon).
 //! Return the centroid (point interior to the polygon).
 //! See the book Sistemas de Información Geográfica de

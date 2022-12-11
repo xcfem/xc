@@ -96,6 +96,8 @@ class_<Quadrilateral2d, bases<Polygon2d> >("Quadrilateral2d")
   .add_property("midpoint", &Quadrilateral2d::getMidpoint,"Return the intersection between the segments that joint the midpoints of its sides")
   .def("getNaturalCoordinates", get2DPointNaturalCoordinates,"Returns the natural coordinates of a 2D point.")
   .def("getNaturalCoordinates", &Quadrilateral2d::getNaturalCoordinatesPy,"Returns the natural coordinates of a list of 2D points.")
+  .def("getGrid",&Quadrilateral2d::genMesh, "Return a grid of points uniformly distributed on the quadrilateral surface.")
+  .def("getBilinearGrid",&Quadrilateral2d::genBilinMesh, "Return a grid of points generated using bililiear coordinate interpolation.")
   ;
 
 

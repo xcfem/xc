@@ -24,6 +24,7 @@
 #include "utility/utils/misc_utils/matem.h"
 #include "utility/geom/d1/Segment3d.h"
 #include "utility/geom/d2/Triangle3d.h"
+#include "utility/geom/d2/Quadrilateral3d.h"
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/BND3d.h"
 
@@ -322,3 +323,97 @@ BND3d get_bnd(const Pos3dArray &ptos)
     retval+= ptos(n_rows,n_columns);
     return retval;
   }
+
+//! @brief Return the i,j quadrilateral:
+//
+// i+1,j +---+ i+1,j+1
+//       |   |
+//       |   |
+//       |   |
+//   i,j +---+ i,j+1
+//
+Quadrilateral3d Pos3dArray::getQuad(const size_t &i,const size_t &j) const
+  { return Quadrilateral3d((*this)(i,j),(*this)(i,j+1),(*this)(i+1,j+1),(*this)(i+1,j)); }
+
+//! @brief Return the area of the quad at i,j:
+//
+//  i+1,j +---+ i+1,j+1
+//        |   |
+//        |   |
+//        |   |
+//    i,j +---+ i,j+1
+//
+GEOM_FT Pos3dArray::getQuadArea(const size_t &i,const size_t &j) const
+  { return this->getQuad(i,j).getArea(); }
+
+//! @brief Return the centroid of the quad at i,j:
+//
+//  i+1,j +---+ i+1,j+1
+//        |   |
+//        |   |
+//        |   |
+//    i,j +---+ i,j+1
+//
+Pos3d Pos3dArray::getQuadCentroid(const size_t &i,const size_t &j) const
+  { return this->getQuad(i,j).Centroid(); }
+
+//! @brief Return the number of quadrilaterals in the grid.
+size_t Pos3dArray::getNumQuads(void) const
+  { return (n_rows-1)*(n_columns-1); }
+
+//! @brief Return the positions of the quad centroids.
+std::vector<Pos3d> Pos3dArray::getQuadCentroids(void) const
+  {
+    const size_t sz= this->getNumQuads();
+    std::vector<Pos3d> retval(sz);
+    size_t idx= 0;
+    for(size_t i=1;i<n_rows;i++)
+      {
+        for(size_t j=1;j<n_columns;j++)
+	  {
+            retval[idx]= this->getQuadCentroid(i,j);
+	    idx++;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the positions of the quad centroids in a Python list.
+boost::python::list Pos3dArray::getQuadCentroidsPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<Pos3d> tmp= this->getQuadCentroids();
+    std::vector<Pos3d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the areas of the grid quads.
+std::vector<double> Pos3dArray::getQuadAreas(void) const
+  {
+    const size_t sz= this->getNumQuads();
+    std::vector<double> retval(sz);
+    size_t idx= 0;
+    for(size_t i=1;i<n_rows;i++)
+      {
+        for(size_t j=1;j<n_columns;j++)
+	  {
+            retval[idx]= this->getQuadArea(i,j);
+	    idx++;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the quad areas in a Python list.
+boost::python::list Pos3dArray::getQuadAreasPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<double> tmp= this->getQuadAreas();
+    std::vector<double>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+

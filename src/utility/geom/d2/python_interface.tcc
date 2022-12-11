@@ -247,6 +247,8 @@ class_<Quadrilateral3d, bases<D2to3d> >("Quadrilateral3d")
   .def("getIndexOfProximalEdge", &Quadrilateral3d::getIndexOfProximalEdge,"Return the index of the proximal edge with respect to the point argument.")
   .def("getIndexOfDistalVertex", &Quadrilateral3d::getIndexOfDistalVertex,"Return the index of the distal vertex with respect to the point argument.")
   .def("getIndexOfProximalVertex", &Quadrilateral3d::getIndexOfProximalVertex,"Return the index of the proximal vertex with respect to the point argument.")
+  .def("getGrid",&Quadrilateral3d::genMesh, "Return a grid of points uniformly distributed on the quadrilateral surface.")
+  .def("getBilinearGrid",&Quadrilateral3d::genBilinMesh, "Return a grid of points generated using bililiear coordinate interpolation.")
   ;
 
 class_<Circle3d, bases<D2to3d> >("Circle3d")

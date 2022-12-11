@@ -30,6 +30,7 @@
 #include "utility/geom/d3/GeomGroup3d.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/lists/auxiliary.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
 
 
 //! @brief Constructor.
@@ -232,6 +233,16 @@ bool Quadrilateral3d::In(const Pos3d &p,const double &tol) const
 Pos3d Quadrilateral3d::getCenterOfMass(void) const
   {
     const Pos2d centroid= quad2d.getCenterOfMass();
+    return to_3d(centroid);
+  }
+
+//! @brief Return the centroid (point interior to the polygon).
+//! Return the centroid (point interior to the polygon).
+//! See the book Sistemas de Información Geográfica de
+//! Joaquín Bosque Sendra (Ed. Rialp ).
+Pos3d Quadrilateral3d::Centroid(void) const
+  {
+    const Pos2d centroid= quad2d.Centroide();
     return to_3d(centroid);
   }
 
@@ -551,5 +562,53 @@ std::string Quadrilateral3d::orientation(const Pos3d &vPoint) const
     std::string retval= "counterclockwise";
     if(clockwise(vPoint))
       { retval= "clockwise"; }
+    return retval;
+  }
+
+//! @brief Returns a point grid.
+Pos3dArray Quadrilateral3d::genMesh(int n1,int n2) const
+  {
+    Pos3dArray l1(Vertice(1),Vertice(2),n1);
+    Pos3dArray l2(Vertice(2),Vertice(3),n2);
+    Pos3dArray l3(Vertice(4),Vertice(3),n1);
+    Pos3dArray l4(Vertice(1),Vertice(4),n2);
+    return Pos3dArray(l1,l2,l3,l4);
+  }
+
+//! @brief Returns a point grid (the routine is taken from OpenSees).
+Pos3dArray Quadrilateral3d::genBilinMesh(const size_t &nDiv12,const size_t &nDiv23) const
+  {
+    Pos3dArray retval(nDiv23+1,nDiv12+1);
+    if(nDiv12 > 0  && nDiv23 > 0)
+      {
+        const double deltaXi= 2.0 / nDiv12;
+        const double deltaEta= 2.0 / nDiv23;
+
+        double xi, eta, x, y, z;
+	double N[4];
+        for(size_t j= 0;j<nDiv23+1;j++)
+          for(size_t i= 0;i<nDiv12+1;i++)
+            {
+              //natural coordinates of the points
+              xi= -1.0 + deltaXi  * i;
+              eta= -1.0 + deltaEta * j;
+
+              // map to cartesian coordinates using bilinear
+              // shape functions
+              N[0]= (1.0 - xi)*(1.0 - eta)/4.0;
+              N[1]= (1.0 + xi)*(1.0 - eta)/4.0;
+              N[2]= (1.0 + xi)*(1.0 + eta)/4.0;
+              N[3]= (1.0 - xi)*(1.0 + eta)/4.0;
+              x= 0.0; y= 0.0; z= 0.0;
+              for(size_t s=1;s<=4;s++)
+                {
+		  const Pos3d &v= Vertice(s);
+                  x+= N[s-1] * v.x();
+                  y+= N[s-1] * v.y();
+                  z+= N[s-1] * v.z();
+                }
+              retval(j+1,i+1)= Pos3d(x,y,z);
+            }
+      }
     return retval;
   }

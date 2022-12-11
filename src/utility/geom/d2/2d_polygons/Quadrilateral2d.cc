@@ -313,7 +313,7 @@ Triangle2d Quadrilateral2d::getFirstTriangle(void) const
 Triangle2d Quadrilateral2d::getSecondTriangle(void) const
   { return Triangle2d(Vertice(1),Vertice(3),Vertice(4)); }
 
-
+//! @brief Returns a point grid.
 Pos2dArray Quadrilateral2d::genMesh(int n1,int n2) const
   {
     Pos2dArray l1(Vertice(1),Vertice(2),n1);
@@ -323,7 +323,7 @@ Pos2dArray Quadrilateral2d::genMesh(int n1,int n2) const
     return Pos2dArray(l1,l2,l3,l4);
   }
 
-//! @brief Returns a point mesh (la rutina esta tomada de OpenSees).
+//! @brief Returns a point grid (the routine is taken from OpenSees).
 Pos2dArray Quadrilateral2d::genBilinMesh(const size_t &nDiv12,const size_t &nDiv23) const
   {
     Pos2dArray retval(nDiv23+1,nDiv12+1);
@@ -350,8 +350,9 @@ Pos2dArray Quadrilateral2d::genBilinMesh(const size_t &nDiv12,const size_t &nDiv
               x= 0.0; y= 0.0;
               for(size_t s=1;s<=4;s++)
                 {
-                  x+= N[s-1] * Vertice(s).x();
-                  y+= N[s-1] * Vertice(s).y();
+		  const Pos2d &v= Vertice(s);
+                  x+= N[s-1] * v.x();
+                  y+= N[s-1] * v.y();
                 }
               retval(j+1,i+1)= Pos2d(x,y);
             }

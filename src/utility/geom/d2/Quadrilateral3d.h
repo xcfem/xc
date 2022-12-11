@@ -27,6 +27,7 @@
 #include "utility/geom/d2/2d_polygons/Quadrilateral2d.h"
 
 class Polygon3d;
+class Pos3dArray;
 
 //! @ingroup GEOM
 //
@@ -83,6 +84,7 @@ class Quadrilateral3d: public D2to3d
     Plane getPlaneFromSide(unsigned int i) const;
 
     Pos3d getCenterOfMass(void) const;
+    Pos3d Centroid(void) const;
     GEOM_FT Ix(void) const;
     GEOM_FT Iy(void) const;
     GEOM_FT Iz(void) const;
@@ -116,6 +118,9 @@ class Quadrilateral3d: public D2to3d
     bool intersects(const Plane &) const;
     Segment3d getIntersection(const Plane &) const;
 
+    Pos3dArray genMesh(int n1,int n2) const;
+    Pos3dArray genBilinMesh(const size_t &n1,const size_t &n2) const;
+    
     void Print(std::ostream &os) const;
   };
 

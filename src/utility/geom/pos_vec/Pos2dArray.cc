@@ -68,7 +68,7 @@ GEOM_FT Pos2dArray::dist_lagrange(void) const
     return retval;
   }
 
-//! @brief Return el número de cuadriláteross
+//! @brief Return the number of quadrilaterals in the grid.
 size_t Pos2dArray::GetNumQuads(void) const
   { return (n_rows-1)*(n_columns-1); }
 
@@ -251,8 +251,7 @@ const FT_matrix &Pos2dArray::GetVertCoords(const size_t &i,const size_t &j) cons
 Pos2d Pos2dArray::getPoint(const size_t &i,const size_t &j) const
 { return (*this)(i,j); }
 
-
-//! @brief Return the el cuadrilátero i,j:
+//! @brief Return the i,j quadrilateral:
 //                                                                             i+1,j +---+ i+1,j+1
 //                                                                                   |   |
 //                                                                                   |   |
@@ -276,22 +275,82 @@ bool Pos2dArray::In(const Pos2d &p, const double &tol) const
   }
 
 //! @brief Return the area of the quad at i,j:
-//                                                                             i+1,j +---+ i+1,j+1
-//                                                                                   |   |
-//                                                                                   |   |
-//                                                                                   |   |
-//                                                                               i,j +---+ i,j+1
+//
+//  i+1,j +---+ i+1,j+1
+//        |   |
+//        |   |
+//        |   |
+//    i,j +---+ i,j+1
+//
 GEOM_FT Pos2dArray::GetAreaQuad(const size_t &i,const size_t &j) const
   { return GetQuad(i,j).getArea(); }
 
 //! @brief Return the centroid of the quad at i,j:
-//                                                                             i+1,j +---+ i+1,j+1
-//                                                                                   |   |
-//                                                                                   |   |
-//                                                                                   |   |
-//                                                                               i,j +---+ i,j+1
+//
+//  i+1,j +---+ i+1,j+1
+//        |   |
+//        |   |
+//        |   |
+//    i,j +---+ i,j+1
+//
 Pos2d Pos2dArray::getQuadCentroid(const size_t &i,const size_t &j) const
   { return GetQuad(i,j).Centroide(); }
+
+//! @brief Return the positions of the quad centroids.
+std::vector<Pos2d> Pos2dArray::getQuadCentroids(void) const
+  {
+    const size_t sz= this->GetNumQuads();
+    std::vector<Pos2d> retval(sz);
+    size_t idx= 0;
+    for(size_t i=1;i<n_rows;i++)
+      {
+        for(size_t j=1;j<n_columns;j++)
+	  {
+            retval[idx]= this->getQuadCentroid(i,j);
+	    idx++;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the positions of the quad centroids in a Python list.
+boost::python::list Pos2dArray::getQuadCentroidsPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<Pos2d> tmp= this->getQuadCentroids();
+    std::vector<Pos2d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the areas of the grid quads.
+std::vector<double> Pos2dArray::getQuadAreas(void) const
+  {
+    const size_t sz= this->GetNumQuads();
+    std::vector<double> retval(sz);
+    size_t idx= 0;
+    for(size_t i=1;i<n_rows;i++)
+      {
+        for(size_t j=1;j<n_columns;j++)
+	  {
+            retval[idx]= this->GetAreaQuad(i,j);
+	    idx++;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the quad areas in a Python list.
+boost::python::list Pos2dArray::getQuadAreasPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<double> tmp= this->getQuadAreas();
+    std::vector<double>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
 
 //! @brief Return the maximum value of the k coordinate.
 GEOM_FT Pos2dArray::GetMax(unsigned short int k) const

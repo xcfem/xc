@@ -72,6 +72,10 @@ class Pos2dArray: public PosArray<Pos2d>
     Quadrilateral2d GetQuad(const size_t &i,const size_t &j) const;
     double GetAreaQuad(const size_t &i,const size_t &j) const;
     Pos2d getQuadCentroid(const size_t &i,const size_t &j) const;
+    std::vector<Pos2d> getQuadCentroids(void) const;
+    boost::python::list getQuadCentroidsPy(void) const;
+    std::vector<double> getQuadAreas(void) const;
+    boost::python::list getQuadAreasPy(void) const;
     bool In(const Pos2d &, const double &) const;
 
     void Transform(const Trf2d &trf2d);
