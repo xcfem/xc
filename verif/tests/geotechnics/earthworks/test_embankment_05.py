@@ -38,12 +38,21 @@ soilLoadSpreadingRatio= 2/1 # 2 vertical : 1 horizontal.
 # We define a natural terrain without weight to consider only the weight
 # of the embankment over this soil 
 naturalSoil= fs.FrictionalSoil(phi= math.radians(30), rho= 0.0) # No mass.
-
+## Natural soil surface.
+### We need two aditional non-coplanar points to define a new layer so we
+### create a fictitious surface based on the embankment endpoints.
+downVector= geom.Vector3d(0,0,-1)
+nsSegment= geom.Segment3d(vertices[0]-downVector, vertices[-1]-downVector)
+nsP1= nsSegment.getPoint(-10)
+nsP2= vertices[0]
+nsP3= vertices[-1]
+nsP4= nsSegment.getPoint(nsSegment.getLength()+10)
+nsVertices= [nsP1, nsP2, nsP3, nsP4]
 
 # Construct embankment.
 embankment= embankment.EmbankmentCrossSection()
 embankment.appendLayer(soil= soil, loadSpreadingRatio= soilLoadSpreadingRatio, layerSurfacePoints= vertices)
-embankment.appendLayer(soil= naturalSoil, loadSpreadingRatio= soilLoadSpreadingRatio, layerSurfacePoints= [vertices[0], vertices[-1]])
+embankment.appendLayer(soil= naturalSoil, loadSpreadingRatio= soilLoadSpreadingRatio, layerSurfacePoints= nsVertices)
 
 # Create loaded quadrilateral.
 #            Top
@@ -67,7 +76,6 @@ unitVectorDirs= pointGrid.getQuadNormals()
 ## Compute pressures on grid centroids.
 k0= naturalSoil.K0Jaky() # Earth pressure at rest
 earthPressures= embankment.getEarthPressuresOnPointGrid(pointGrid= pointGrid, unitVectorDirs= unitVectorDirs, k= k0)
-print(earthPressures)
 areas= pointGrid.getQuadAreas()
 ## Integrate pressure.
 E= geom.Vector3d(0.0,0,0)
