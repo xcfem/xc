@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test Embankment getLateralPressuresOnPoints method.'''
+''' Test Embankment getEarthPressuresOnPointGrid method.'''
 
 from __future__ import print_function
 
