@@ -233,6 +233,23 @@ class EmbankmentCrossSection(object):
             retval.append(lateralPressure)
         return retval
     
+    def getEarthPressuresOnPointGrid(self, pointGrid, unitVectorDirs, k):
+        ''' Return the pressure for the elements being passed as parameter.
+
+        :param pointGrid: array of 3D points (see geom.PosArray3d) whose
+                          quadrilaterals will stand the pressure.
+        :param unitVectorDirs: pressure direction vectors (must be unit vectors)
+                               corresponding to the centroids of the grid.
+        :param k: coefficient of lateral earth pressure, k, defined as the 
+                  ratio of the horizontal effective stress, to the vertical 
+                  effective stress.
+        '''
+        points= list()
+        centroids= pointGrid.getQuadCentroids()
+        for centroid in centroids:
+            points.append(centroid)
+        return self.getLateralPressuresOnPoints(points, unitVectorDirs, k)
+    
     def getEarthPressuresOnElements(self, elements, unitVectorDirs, k):
         ''' Return the pressure for the elements being passed as parameter.
 
