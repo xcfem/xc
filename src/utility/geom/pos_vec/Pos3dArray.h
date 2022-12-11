@@ -60,10 +60,13 @@ class Pos3dArray: public PosArray<Pos3d>
     Quadrilateral3d getQuad(const size_t &i,const size_t &j) const;
     double getQuadArea(const size_t &i,const size_t &j) const;
     Pos3d getQuadCentroid(const size_t &i,const size_t &j) const;
+    Vector3d getQuadNormal(const size_t &i,const size_t &j) const;
     std::vector<Pos3d> getQuadCentroids(void) const;
     boost::python::list getQuadCentroidsPy(void) const;
     std::vector<double> getQuadAreas(void) const;
     boost::python::list getQuadAreasPy(void) const;
+    std::vector<Vector3d> getQuadNormals(void) const;
+    boost::python::list getQuadNormalsPy(void) const;
   };
 
 GEOM_FT dist2(const Pos3dArray &ptos,const Pos3d &pt);

@@ -320,12 +320,14 @@ class_<m_pos3d, bases<mt_pos3d> >("m_pos3d")
   ;
 
 class_<Pos3dArray, bases<m_pos3d> >("Pos3dArray")
-.def("getNumQuads",&Pos3dArray::getNumQuads, "Return the number of quadrilaterals of the grid.")
+  .def("getNumQuads",&Pos3dArray::getNumQuads, "Return the number of quadrilaterals of the grid.")
   .def("getQuad",&Pos3dArray::getQuad,"Return the (i,j) quad.")
   .def("getAreaQuad",&Pos3dArray::getQuadArea, "Return the area of the (i,j) quad.")
   .def("getQuadAreas",&Pos3dArray::getQuadAreasPy, "Return the centroids of the grid quads.")
   .def("getQuadCentroid",&Pos3dArray::getQuadCentroid, "Return the centroid of the (i,j) quad.")
   .def("getQuadCentroids",&Pos3dArray::getQuadCentroidsPy, "Return the centroids of the grid quads.")
+  .def("getQuadNormal",&Pos3dArray::getQuadNormal, "Return the normal of the (i,j) quad.")
+  .def("getQuadNormals",&Pos3dArray::getQuadNormalsPy, "Return the normals of the grid quads.")
   ;
 
 typedef std::vector<m_pos3d > ttz_pos3d;

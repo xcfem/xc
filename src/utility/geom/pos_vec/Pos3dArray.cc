@@ -417,3 +417,41 @@ boost::python::list Pos3dArray::getQuadAreasPy(void) const
     return retval;
   }
 
+//! @brief Return the normal of the quad at i,j:
+//
+//  i+1,j +---+ i+1,j+1
+//        |   |
+//        |   |
+//        |   |
+//    i,j +---+ i,j+1
+//
+Vector3d Pos3dArray::getQuadNormal(const size_t &i,const size_t &j) const
+  { return this->getQuad(i,j).getNormal(); }
+
+//! @brief Return the positions of the quad normals.
+std::vector<Vector3d> Pos3dArray::getQuadNormals(void) const
+  {
+    const size_t sz= this->getNumQuads();
+    std::vector<Vector3d> retval(sz);
+    size_t idx= 0;
+    for(size_t i=1;i<n_rows;i++)
+      {
+        for(size_t j=1;j<n_columns;j++)
+	  {
+            retval[idx]= this->getQuadNormal(i,j);
+	    idx++;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the positions of the quad normals in a Python list.
+boost::python::list Pos3dArray::getQuadNormalsPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<Vector3d> tmp= this->getQuadNormals();
+    std::vector<Vector3d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }

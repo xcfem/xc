@@ -83,6 +83,8 @@ class Quadrilateral3d: public D2to3d
     Plane getPlaneFromSide0(unsigned int i) const;
     Plane getPlaneFromSide(unsigned int i) const;
 
+    Vector3d getNormal(void) const;
+    
     Pos3d getCenterOfMass(void) const;
     Pos3d Centroid(void) const;
     GEOM_FT Ix(void) const;

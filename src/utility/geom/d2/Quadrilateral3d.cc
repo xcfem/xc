@@ -246,6 +246,10 @@ Pos3d Quadrilateral3d::Centroid(void) const
     return to_3d(centroid);
   }
 
+//! @brief Return the normal to the quadrilateral.
+Vector3d Quadrilateral3d::getNormal(void) const
+  { return getKVector(); }
+
 //! @brief Moment of inertia with respect to an axis parallel to
 //! the x axis passing through the center of mass.
 GEOM_FT Quadrilateral3d::Ix(void) const
