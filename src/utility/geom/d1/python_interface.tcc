@@ -166,6 +166,7 @@ class_<Ray3d, bases<Linear3d> >("Ray3d")
   .def("upwards", &Ray3d::upwards,"return true if the ray goes up.")
   .def("downwards", &Ray3d::downwards,"return true if the ray goes down.")
   .def("getSupportLine", &Ray3d::getSupportLine, "Return the supporting line.")
+  .def("getPoint",&Ray3d::PtoParametricas,"return a point on the line.")
   ;
 
 GEOM_FT (Segment3d::*AngleVector3D)(const Vector3d &v) const= &Segment3d::getAngle;
