@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-# COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
-# Volume 1: Design Examples
-# EXAMPLE E.1A W-SHAPE COLUMN DESIGN WITH PINNED ENDS
+'''
+Verification test based on the example:
+
+COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
+Volume 1: Design Examples
+EXAMPLE E.1A W-SHAPE COLUMN DESIGN WITH PINNED ENDS
+'''
 
 from __future__ import division
 from __future__ import print_function
@@ -34,7 +38,7 @@ shape= ASTM_materials.WShape(steel,'W14X132')
 ## Steel column
 column= aisc.Member('column', shape,30.0*units_utils.footToMeter)
 
-## Load.
+## Design value of applied axial force.
 Pd= 840e3*kip2kN
 
 ## Compressive strength
