@@ -286,12 +286,12 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
         # Check each element section.
         for lf in elementInternalForces: 
             # Compute efficiency.
-            CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(sectionClass,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiLT)
+            CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(sectionClass,lf.N,lf.My,lf.Mz,lf.Vy,chiLT= lf.chiLT, chiN= lf.chiN)
             sectionLabel= self.getSectionLabel(lf.idSection)
             label= self.limitStateLabel+sectionLabel
             # Update efficiency.
             if(CFtmp>elem.getProp(label).CF):
-                elem.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT))
+                elem.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
         
 
 class ShearController(lsc.LimitStateControllerBase2Sections):

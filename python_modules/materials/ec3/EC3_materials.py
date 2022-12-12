@@ -542,41 +542,50 @@ class EC3Shape(object):
             beta=1
         return (alpha,beta)
     
-    def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0,chiLT=1.0):
+    def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0, chiN= 1.0, chiLT=1.0):
         '''Return biaxial bending efficiency (clause 6.2.9 of EC3.1.1)
         (only class 1 and 2 cross-sections are considered currently)
 
         :param sectionClass: section classification (1,2,3 or 4)
+        :param chiN: flexural buckling reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
-        NcRd= self.getNcRd(sectionClass)
-        McRdy= self.getMcRdy(sectionClass)
-        McRdz= self.getMcRdz(sectionClass)
+        # Axial efficiency.
+        NcRd= chiN*self.getNcRd(sectionClass) # Flexural buckling reduction.
+        nCF= abs(Nd)/NcRd
+        # Bending efficiency.
+        bendingFactor= (1-math.pow(nCF,1.7))
+        McRdy= self.getMcRdy(sectionClass)*bendingFactor
+        McRdz= self.getMcRdz(sectionClass)*bendingFactor
         MvRdz= self.getMvRdz(sectionClass,Vyd)
-        MbRdz= chiLT*MvRdz #Lateral buckling reduction.
-        alpha,beta=self.getBiaxBendCoeffs(Nd,NcRd)
-        CF=(abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta
+        MbRdz= chiLT*MvRdz # Lateral buckling reduction.
+        alpha, beta=self.getBiaxBendCoeffs(Nd,NcRd)
+        mCF= (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta # Bending efficiency
+        CF= math.sqrt(nCF**2+mCF**2)
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
 
-    def setupULSControlVars(self, elems, sectionClass= 1, chiLT=1.0):
+    def setupULSControlVars(self, elems, sectionClass= 1, chiN= 1.0, chiLT=1.0):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
         :param elems: elements to define properties on.
         :param sectionClass: section classification (1,2,3 or 4)
+        :param chiN: flexural buckling reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         super(EC3Shape,self).setupULSControlVars(elems)
         for e in elems:
             e.setProp('sectionClass',sectionClass) #Cross section class.
-            e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+            e.setProp('chiN', chiN) # Flexural buckling reduction factor.
+            e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
             e.setProp('crossSection',self)
 
-    def installULSControlRecorder(self, recorderType, elems, sectionClass= 1, chiLT=1.0, calcSet= None):
+    def installULSControlRecorder(self, recorderType, elems, sectionClass= 1, chiN= 1.0, chiLT=1.0, calcSet= None):
         '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.
 
         :param recorderType: recorder type.
         :param sectionClass: section classification (1,2,3 or 4)
+        :param chiN: flexural buckling reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         :param calcSet: set of elements to be checked (defaults to 'None' which 
                         means that this set will be created elsewhere). In not
@@ -584,7 +593,7 @@ class EC3Shape(object):
         '''
         recorder= self.createRecorder(recorderType, calcSet)
 
-        self.setupULSControlVars(elems,sectionClass,chiLT)
+        self.setupULSControlVars(elems,sectionClass,chiN= chiN, chiLT= chiLT)
         nodHndlr= self.getPreprocessor().getNodeHandler        
         if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
@@ -834,11 +843,17 @@ class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
         super(CHSShape, self).__init__(name= name, typo='rolled')
         arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
 
+    def getClassInternalPartInCompression(self):
+        '''Return the cross-section classification of the section 
+        subject to compression. Clause 5.5 EC3-1-1.
+        '''
+        return super(CHSShape, self).getClassInternalPartInCompression(ratioCT= self.getSlendernessRatio())
+        
     def getClassInCompression(self):
         '''Return the cross-section classification of the section 
         subject to compression. Clause 5.5 EC3-1-1.
         '''
-        return self.getClassInternalPartInCompression(ratioCT= self.getSlendernessRatio())
+        return self.getClassInternalPartInCompression()
 
     def getBucklingCurve(self, majorAxis= False):
         ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
@@ -1019,11 +1034,17 @@ class MicropileTubeShape(EC3Shape, common_micropile_tubes.MicropileTubeShape):
         super(MicropileTubeShape, self).__init__(name= name, typo= 'rolled')
         common_micropile_tubes.MicropileTubeShape.__init__(self, steel= steel, name= name)
         
+    def getClassInternalPartInCompression(self):
+        '''Return the cross-section classification of the section 
+        subject to compression. Clause 5.5 EC3-1-1.
+        '''
+        return super(MicropileTubeShape, self).getClassInternalPartInCompression(ratioCT= self.getSlendernessRatio())
+    
     def getClassInCompression(self):
         '''Return the cross-section classification of the section 
         subject to compression. Clause 5.5 EC3-1-1.
         '''
-        return self.getClassInternalPartInCompression(ratioCT= self.getSlendernessRatio())
+        return self.getClassInternalPartInCompression()
     
     def getBucklingCurve(self, majorAxis= False):
         ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
