@@ -416,4 +416,8 @@ class CombContainer(object):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+"; design situation: '"+str(designSituation)+"' unknown.")
+        if(len(retval)==0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(designSituation)+"' has no defined combinations.")
         return retval
