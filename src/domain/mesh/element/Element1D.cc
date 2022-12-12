@@ -652,6 +652,38 @@ XC::CrdTransf *XC::Element1D::getCoordTransf(void)
 const XC::CrdTransf *XC::Element1D::getCoordTransf(void) const
   { return nullptr; }
 
+//! @brief Reinitialize coordinate transformation (for example after a "manual"
+//! change in the nodal coordinates, to impose an imperfect shape for example.
+int XC::Element1D::initializeCoordTransf(void)
+  {
+    CrdTransf *theCoordTransf= this->getCoordTransf();
+    int retval= -1;
+    if(theCoordTransf)
+      {
+	retval= theCoordTransf->initialize(theNodes[0], theNodes[1]);
+	if(retval != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation\n";
+	    exit(-1);
+	  }
+
+	const double L= theCoordTransf->getInitialLength();
+
+	if(L == 0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; element has zero length\n";
+	    exit(-1);
+	  }
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; the element has not coordinate transformation."
+		<< std::endl;
+    return retval;
+  }
+
 //! @brief Returns (and checks that it exists) a const pointer to the coordinate transformation.
 XC::CrdTransf *XC::Element1D::checkCoordTransf(void)
   {
