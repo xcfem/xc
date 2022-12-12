@@ -135,7 +135,7 @@ bool XC::NodePtrsWithIDs::set_id_nodes(int Nd1,int Nd2)
 bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3)
   {
     bool retval= set_id_nodes(nd1,nd2);
-    assert(connectedExternalNodes.Size()>=4);
+    assert(connectedExternalNodes.Size()>=3);
     retval|= set_id_node(2, nd3);
     return retval;
   }
