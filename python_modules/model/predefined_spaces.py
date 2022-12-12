@@ -837,6 +837,10 @@ class PredefinedSpace(object):
         ''' Revert the domain to its initial state..'''
         self.preprocessor.getDomain.revertToStart()
 
+    def commit(self):
+        ''' Commit the current state.'''
+        self.preprocessor.getDomain.commit()
+
     def dumpCombinations(self, combContainer):
         ''' Dump combination definitions into XC.
 
