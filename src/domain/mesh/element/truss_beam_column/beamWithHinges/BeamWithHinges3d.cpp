@@ -151,17 +151,11 @@ void XC::BeamWithHinges3d::setDomain(Domain *theDomain)
     BeamColumnWithSectionFDTrf3d::setDomain(theDomain);
     if(theDomain)
       {
-        initialize_trf();
-
-        // get element length
-        const double L= theCoordTransf->getInitialLength();
-        if(L == 0.0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; element has zero length\n";
-            exit(-1);
-          }
-
+	if(this->initializeCoordTransf() != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation\n";
+	  }
         // Set up section interpolation and hinge lengths
         this->setHinges();
 

@@ -142,15 +142,11 @@ void XC::NLBeamColumn3d::setDomain(Domain *theDomain)
             exit(0);
           }
 
-        initialize_trf();
-
-        // get element length
-        const double L = theCoordTransf->getInitialLength();
-        if(L == 0.0)
-          {
-            std::cerr << "XC::NLBeamColumn3d::setDomain(): Zero element length:" << this->getTag();
-            exit(0);
-          }
+	if(this->initializeCoordTransf() != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation\n";
+	  }
         if(initialFlag != 2)
           this->initializeSectionHistoryVariables();
       }

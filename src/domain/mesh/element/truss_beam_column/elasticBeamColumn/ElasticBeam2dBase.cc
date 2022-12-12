@@ -170,26 +170,11 @@ void XC::ElasticBeam2dBase::setDomain(Domain *theDomain)
 	          << dofNd2 << " instead of 3.\n";
         exit(-1);
       }
-    if(theCoordTransf)
+    if(this->initializeCoordTransf() != 0)
       {
-        if(theCoordTransf->initialize(theNodes[0], theNodes[1]) != 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; error initializing coordinate transformation\n";
-            exit(-1);
-          }
-        const double L= theCoordTransf->getInitialLength();
-        if(L==0.0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; element has zero length\n";
-            exit(-1);
-          }
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error initializing coordinate transformation\n";
       }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; the element has not coordinate transformation."
-		<< std::endl;
    }
 
 //! @brief Returns the direction vector of element strong axis

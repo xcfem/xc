@@ -89,16 +89,6 @@ XC::BeamColumnWithSectionFDTrf3d::~BeamColumnWithSectionFDTrf3d(void)
     theCoordTransf= nullptr;
   }
 
-void XC::BeamColumnWithSectionFDTrf3d::initialize_trf(void)
-  {
-    if(theCoordTransf->initialize(theNodes[0], theNodes[1]))
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; failed to initialize coordinate transformation\n";
-        exit(-1);
-      }
-  }
-
 //! @brief Returns (if possible) a pointer to the coordinate transformation.
 XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void)
   { return theCoordTransf; }

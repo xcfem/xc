@@ -196,14 +196,11 @@ void XC::DispBeamColumn2dBase::setDomain(Domain *theDomain)
             //        this->getTag());
             return;
           }
-        initialize_trf();
-
-        const double L = theCoordTransf->getInitialLength();
-
-        if(L == 0.0)
-          {
-            // Add some error check
-          }
+	if(this->initializeCoordTransf() != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation\n";
+	  }
         this->update();
       }
   }

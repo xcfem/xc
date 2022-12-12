@@ -58,7 +58,6 @@ class BeamColumnWithSectionFDTrf2d: public BeamColumnWithSectionFD
     BeamColumnWithSectionFDTrf2d(int tag, int classTag,int numSec, int nodeI, int nodeJ,CrdTransf2d &coordTransf);
     BeamColumnWithSectionFDTrf2d(const BeamColumnWithSectionFDTrf2d &);
     ~BeamColumnWithSectionFDTrf2d(void);
-    void initialize_trf(void);
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
 

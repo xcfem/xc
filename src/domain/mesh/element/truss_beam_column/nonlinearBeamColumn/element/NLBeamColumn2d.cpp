@@ -154,19 +154,16 @@ void XC::NLBeamColumn2d::setDomain(Domain *theDomain)
 
         if((dofNode1 !=3 ) || (dofNode2 != 3))
           {
-            std::cerr << "XC::NLBeamColumn2d::setDomain(): Nd2 or Nd1 incorrect dof ";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << ": Nd2 or Nd1 incorrect dof ";
             exit(0);
           }
 
-        initialize_trf(); // initialize the transformation
-
-        // get element length
-        const double L = theCoordTransf->getInitialLength();
-        if(L == 0.0)
-          {
-            std::cerr << "XC::NLBeamColumn2d::setDomain(): Zero element length:" << this->getTag();
-            exit(0);
-          }
+	if(this->initializeCoordTransf() != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation\n";
+	  }
         if(initialFlag == 0)
           this->initializeSectionHistoryVariables();
       }

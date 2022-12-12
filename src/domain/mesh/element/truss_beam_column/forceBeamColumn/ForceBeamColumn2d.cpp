@@ -205,15 +205,10 @@ void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
       }
 
     // initialize the transformation
-    initialize_trf();
-
-    // get element length
-    double L = theCoordTransf->getInitialLength();
-    if(L == 0.0)
+    if(this->initializeCoordTransf() != 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ERROR zero element length:" << this->getTag();
-        exit(0);
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error initializing coordinate transformation\n";
       }
     if(initialFlag == 0)
       this->initializeSectionHistoryVariables();

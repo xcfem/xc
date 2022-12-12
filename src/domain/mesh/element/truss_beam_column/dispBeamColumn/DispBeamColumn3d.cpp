@@ -167,13 +167,11 @@ void XC::DispBeamColumn3d::setDomain(Domain *theDomain)
             return;
           }
 
-        initialize_trf();
-
-        const double L = theCoordTransf->getInitialLength();
-        if(L == 0.0)
-          {
-            // Add some error check
-          }
+	if(this->initializeCoordTransf() != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation\n";
+	  }
         this->update();
      }
   }
