@@ -418,6 +418,9 @@ python tests/solution/ill_conditioning/get_floating_nodes_01.py
 echo "$BLEU" "  Integrators tests." "$NORMAL"
 python tests/solution/integrator/test_displacement_control_integrator_01.py
 python tests/solution/integrator/test_displacement_control_integrator_02.py
+echo "$BLEU" "  Geometric imperfections." "$NORMAL"
+python tests/solution/initial_imperfection/test_geometric_imperfection_00.py
+python tests/solution/initial_imperfection/test_geometric_imperfection_01.py
 
 ## Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"
@@ -1006,6 +1009,7 @@ python tests/materials/ec3/test_biax_bend_coeff.py
 python tests/materials/ec3/test_classif.py
 python tests/materials/ec3/test_beam_with_full_lateral_restraint.py
 python tests/materials/ec3/test_bolt_shear_01.py
+python tests/materials/ec3/compressed_section_test_01.py
 echo "$BLEU" "      buckling tests." "$NORMAL"
 python tests/materials/ec3/test_buckling_resistance_01.py
 python tests/materials/ec3/test_buckling_resistance_02.py
@@ -1015,6 +1019,7 @@ python tests/materials/ec3/test_lateral_torsional_buckling00.py
 python tests/materials/ec3/test_lateral_torsional_buckling01.py
 python tests/materials/ec3/test_lateral_torsional_buckling02.py
 python tests/materials/ec3/test_lateral_torsional_buckling03.py
+echo "$BLEU" "      compression_lateral-torsional buckling tests." "$NORMAL"
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
 python tests/materials/eae/test_simple_shear_welded_web.py
@@ -1259,6 +1264,8 @@ echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
+echo "$BLEU" "    EC3 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_02.py
