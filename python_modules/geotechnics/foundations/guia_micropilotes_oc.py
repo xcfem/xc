@@ -514,11 +514,12 @@ class Micropile(pile.CircularPile):
         for (n,z) in lstNodPile:
             if(z<self.soilLayers.groundLevel):
                  soilReactionModulus= self.soilLayers.getReactionModulus(z= z)
+                 assert(soilReactionModulus>=0)
                  springStiffness= soilReactionModulus*n.getTributaryLength()*self.getDiameter()
-                 retval[n.tag]= [springStiffness, springStiffness, 1e-5]
+                 retval[n.tag]= [alphaKh_x*springStiffness, alphaKh_x*springStiffness, 1e-5]
         # Compute vertical stiffness on the tip.
         tipNode= lstNodPile[-1][0]
         tipNodeStiffness= retval[tipNode.tag]
         tipStiffness= self.getEstimatedTipReactionModulus()
-        tipNodeStiffness[2]= tipStiffness
+        tipNodeStiffness[2]= alphaKv_z*tipStiffness
         return retval
