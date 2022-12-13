@@ -38,7 +38,7 @@ Iy= Iz # Moment of inertia in m4
 E=1e4/Iz # Elastic modulus in N/m2
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
-J= 0.001 # Cross section torsion constant (m4) (ES IRRELEVANTE)
+J= 0.001 # Cross section torsion constant (m4) (IRRELEVANT)
 P= -100 # Carga vertical sobre la columna.
 
 NumDiv= 6
