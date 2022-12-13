@@ -839,18 +839,18 @@ class OutputHandler(object):
 
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
-       '''
+        '''
+        if(setToDisplay is None):
+            setToDisplay= self.modelSpace.getTotalSet()
         #auto-scale parameters
         if(len(beamSetDispRes.elements)):            
-            LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
+            LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
             lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
             unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
             scaleFactor= 1.0
             maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
             if(maxAbs>0):
                 scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
-            if not setToDisplay:
-                setToDisplay= beamSetDispRes
             if not caption:
                 if hasattr(beamSetDispRes,'description'):
                     descrSet= beamSetDispRes.description.capitalize()
