@@ -363,8 +363,8 @@ class EC3Shape(object):
         return self.get('Avy')
     
     def getShearArea(self, majorAxis= True):
-        ''' Return area for shear strength calculation (added for compatibility
-            with ASTM steel sections).
+        ''' Return area for shear strength calculation according to paragraph
+            3 of the clauses 6.2.6 of EC3-1-1:2005.
 
         :param majorAxis: if true major axis bending; so shear parallel to
                           minor axis.
@@ -380,17 +380,26 @@ class EC3Shape(object):
         return retval
     
     def shearBucklingVerificationNeeded(self):
-        '''Return true if shear buckling verification is needed EC3-1-5'''
-        return EC3lsc.shearBucklingVerificationNeeded(self)
+        '''Return true if shear buckling verification is needed according
+           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).'''
+        epsilon= math.sqrt(235e6/self.steelType.fy)
+        eta= 1.0 #Conservative
+        f1= self.hw()/self.tw()
+        f2= 72*epsilon/eta
+        return (f1>f2)
     
-    def getVplRdy(self):
+    def getVplRdy(self, majorAxis= True):
         '''Return y direction (web direction) plastic shear resistance
-           according to clause 6.2.6 (expression 6.18) of EC3-1-1:2005.'''
+           according to clause 6.2.6 (expression 6.18) of EC3-1-1:2005.
+
+        :param majorAxis: if true major axis bending; so shear parallel to
+                          minor axis.
+        '''
         if(self.shearBucklingVerificationNeeded()):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+': section needs shear buckling verification.')
-        return self.getAvy()*(self.steelType.fy/math.sqrt(3))/self.steelType.gammaM0()
+        return self.getShearArea()*(self.steelType.fy/math.sqrt(3))/self.steelType.gammaM0()
     
     def getVcRdy(self):
         '''Return y direction (web direction) shear resistance
@@ -821,7 +830,7 @@ class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
         super(UPNShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.UPNShape.__init__(self,steel,name)
 
-class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
+class AUShape(EC3Shape, arcelor_metric_shapes.AUShape):
     """AU shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
@@ -869,6 +878,18 @@ class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
         '''Return the axial compression resistance of the cross-section.'''
         return super(CHSShape, self).getNcRd(self.getClassInCompression())
 
+    def shearBucklingVerificationNeeded(self):
+        '''Return true if shear buckling verification is needed according
+           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).'''
+        return False # There is now web (circular hollow section).
+    
+    def getShearArea(self, majorAxis= True):
+        ''' Return area for shear strength calculation according to item g) of
+            paragraph 3 of the clause 6.2.6 of EC3-1-1:2005.
+
+        :param majorAxis: has no meaning here (circular section).
+        '''
+        return 2*self.A()/math.pi
         
 class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
     """RHS shape with Eurocode 3 verification routines."""
@@ -1018,6 +1039,18 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
         '''
         hotFinished= (self.typo=='rolled')
         return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
+    def shearBucklingVerificationNeeded(self):
+        '''Return true if shear buckling verification is needed according
+           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).'''
+        return False # There is no web (circular hollow section).
+    
+    def getShearArea(self, majorAxis= True):
+        ''' Return area for shear strength calculation according to item g) of
+            paragraph 3 of the clause 6.2.6 of EC3-1-1:2005.
+
+        :param majorAxis: has no meaning here (circular section).
+        '''
+        return 2*self.A()/math.pi
 
 from materials.sections.structural_shapes import common_micropile_tubes
 
@@ -1056,9 +1089,23 @@ class MicropileTubeShape(EC3Shape, common_micropile_tubes.MicropileTubeShape):
         hotFinished= (self.typo=='rolled')
         return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
 
-    def getNcRd(self):
+    def getNcRd(self, sectionClass= None):
         '''Return the axial compression resistance of the cross-section.'''
-        return super(MicropileTubeShape, self).getNcRd(self.getClassInCompression())
+        if(sectionClass is None):
+            sectionClass= self.getClassInCompression()
+        return super(MicropileTubeShape, self).getNcRd(sectionClass= sectionClass)
+    def shearBucklingVerificationNeeded(self):
+        '''Return true if shear buckling verification is needed according
+           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).'''
+        return False # There is now web (circular hollow section).
+    
+    def getShearArea(self, majorAxis= True):
+        ''' Return area for shear strength calculation according to item g) of
+            paragraph 3 of the clause 6.2.6 of EC3-1-1:2005.
+
+        :param majorAxis: has no meaning here (circular section).
+        '''
+        return 2*self.A()/math.pi
 
 class EC3BoltSteel(steel_base.BasicSteel):
     '''Eurocode 3 structural steel for bolts according to table 3.1 of

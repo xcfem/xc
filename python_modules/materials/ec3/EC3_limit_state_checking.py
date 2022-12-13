@@ -38,21 +38,13 @@ def getLateralTorsionalBucklingCurve(steelShape):
     else:
         return 'd'
 
-def shearBucklingVerificationNeeded(steelShape):
-    '''Returns true if shear buckling verification is needed EC3-1-5
 
-    :param steelShape: cross section shape.'''
-    epsilon= math.sqrt(235e6/steelShape.steelType.fy)
-    eta= 1.0 #Conservative
-    f1= steelShape.hw()/steelShape.tw()
-    f2= 72*epsilon/eta
-    return (f1>f2)
-
-def getBendingResistanceReductionCoefficient(steelShape,Vd):
+def getBendingResistanceReductionCoefficient(steelShape, Vd):
     '''Returns bending resistance reduction coefficient as in
     clause 6.2.8 of EC3 EN 1993-1-1
 
     :param steelShape: cross section shape.
+    :param Vd: design value of the shear load.
     '''
     VplRd= steelShape.getVplRdy()
     ratio= Vd/VplRd
