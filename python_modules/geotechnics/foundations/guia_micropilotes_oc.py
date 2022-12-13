@@ -253,6 +253,8 @@ class Micropile(pile.CircularPile):
       de Fomento" 2009. Spain.
     
     :ivar pileDiam: diameter of the pile
+    :ivar pipeSection: cross-section of the tubular reinforcement.
+    :ivar axialRebar: reinforcement steel bar in the axis of the micropile.
     '''
     def __init__(self, pileSet, pileDiam, soilLayers, mortarMaterial, pipeSection, axialRebar= None, pileType= 'endBearing', soilAggressivity= 'aggresiveBackfill', designLife= 100, Fe= 1.5, Fuc= 0.5):
         ''' Constructor.
