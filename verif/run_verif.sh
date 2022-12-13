@@ -421,6 +421,8 @@ python tests/solution/integrator/test_displacement_control_integrator_02.py
 echo "$BLEU" "  Geometric imperfections." "$NORMAL"
 python tests/solution/initial_imperfection/test_geometric_imperfection_00.py
 python tests/solution/initial_imperfection/test_geometric_imperfection_01.py
+python tests/solution/initial_imperfection/test_geometric_imperfection_02.py
+python tests/solution/initial_imperfection/test_geometric_imperfection_03.py
 
 ## Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"

@@ -35,27 +35,26 @@ steelColumn= xc.FEProblem()
 steelColumn.title= 'Test geometry imperfection 01.'
 preprocessor= steelColumn.getPreprocessor
 nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Model geometry
 
 ### Nodes
-n0= nodes.newNodeXY(0,0)
-n1= nodes.newNodeXY(0,height)
+n0= nodes.newNodeXYZ(0,0,0)
+n1= nodes.newNodeXYZ(0,0,height)
 
 ### Material.
-xcSection= shape.defElasticShearSection2d(preprocessor)
+xcSection= shape.defElasticShearSection3d(preprocessor)
 ### Mesh generation
 
 ### Geometric transformations
-cooTrf= modelSpace.newLinearCrdTransf("lin") # Linear transformation.
+cooTrf= modelSpace.newLinearCrdTransf("lin",xzVector= xc.Vector([0,1,0])) # Linear transformation.
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= cooTrf.name
 elements.defaultMaterial= xcSection.name
-#  syntax: beam2d_02[<tag>] 
 
-elemA= elements.newElement("ElasticBeam2d",xc.ID([n0.tag,n1.tag]))
+elemA= elements.newElement("ElasticBeam3d",xc.ID([n0.tag,n1.tag]))
 
 ### Imperfection
 e0= 10
@@ -64,11 +63,11 @@ newX= e0
 pos.x+= newX
 n1.setPos(pos)
 newCoo= n1.getCoo
-err0= (newCoo-xc.Vector([10,10])).Norm()
+err0= (newCoo-xc.Vector([10,0,10])).Norm()
 
 # Update the coordinate transformation after a change in the node position.
 elemA.initializeCoordTransf()
-elemB= elements.newElement("ElasticBeam2d",xc.ID([n0.tag,n1.tag]))
+elemB= elements.newElement("ElasticBeam3d",xc.ID([n0.tag,n1.tag]))
 
 iVectorA= elemA.getIVector3d(True)
 iVectorB= elemB.getIVector3d(True)

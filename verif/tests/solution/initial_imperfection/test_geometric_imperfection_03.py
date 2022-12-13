@@ -31,46 +31,46 @@ height= 10.0 # column height.
 # Finite element model.
 ## Problem type
 steelColumn= xc.FEProblem()
-steelColumn.title= 'Test geometry imperfection 01.'
+steelColumn.title= 'Test geometric imperfection.'
 preprocessor= steelColumn.getPreprocessor
 nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Model geometry
 
 ### Points.
 p0= modelSpace.newKPoint(0.0,0.0,0.0)
-p1= modelSpace.newKPoint(0.0,height,0.0)
+p1= modelSpace.newKPoint(0.0,0.0,height)
 
 ### Lines
 l1= modelSpace.newLine(p0,p1)
 l1.nDiv= 6
 
 ### Material.
-xcSection= shape.defElasticShearSection2d(preprocessor)
+xcSection= shape.defElasticShearSection3d(preprocessor)
 ### Mesh generation
 
 ### Geometric transformations
-cooTrf= modelSpace.newCorotCrdTransf("corot") # Corotational transformation.
+cooTrf= modelSpace.newCorotCrdTransf("corot", xzVector= xc.Vector([1,0,0])) # Corotational transformation.
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 2 # Bars defined in a two-dimensional space.
 seedElemHandler.defaultMaterial= xcSection.name
 seedElemHandler.defaultTransformation= cooTrf.name
-elem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
 xcTotalSet= preprocessor.getSets.getSet('total')
 mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 
 ### Constraints
-modelSpace.fixNode00F(p0.getNode().tag)
-modelSpace.fixNode0FF(p1.getNode().tag)
+modelSpace.fixNode('000_FF0', p0.getNode().tag)
+modelSpace.fixNode('00F_FFF', p1.getNode().tag)
 
 ### Imperfection
 e0= 0.1
 for n in xcTotalSet.nodes:
     pos= n.getInitialPos3d
-    newX= e0*math.sin(pos.y*math.pi/height)
+    newX= e0*math.sin(pos.z*math.pi/height)
     pos.x+= newX
     n.setPos(pos)
 
@@ -86,7 +86,7 @@ lp0= modelSpace.newLoadPattern(name= '0')
 ## Point load.
 cLC= modelSpace.setCurrentLoadPattern(lp0.name)
 P= 10e3
-pLoad= xc.Vector([0.0,-P, 0.0])
+pLoad= xc.Vector([0.0, 0.0, -P, 0.0, 0.0, 0.0])
 p1.getNode().newLoad(pLoad)
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -97,10 +97,10 @@ result= analysis.analyze(1)
 # Compute maximum bending moment.
 mMax= 0.0
 for e in xcTotalSet.elements:
-    M= abs(e.getM1)
+    M= abs(e.getMy1)
     if(M>mMax):
         mMax= M
-    M= abs(e.getM2)
+    M= abs(e.getMy2)
     if(M>mMax):
         mMax= M
 
@@ -116,15 +116,15 @@ leverArm= e0+mxDisp
 err= abs(mMax-leverArm*P)
 
 '''
-print(mMax/1e3)        
-print(mxDisp*1e3)
-print(err)
+print('mMax= ', mMax/1e3, 'kN m')        
+print('mxDisp= ', mxDisp*1e3, 'mm')
+print('err= ', err)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(abs(err)<1e-8):
+if(abs(err)<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
