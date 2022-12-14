@@ -63,7 +63,7 @@ Polygon2d::Polygon2d(const GeomObj::list_Pos2d &lv)
 Polygon2d::Polygon2d(const Polyline2d &p)
   {
     //XXX Falla si la linea se interseca a sí misma.
-    for(Polyline2d::const_iterator i= p.begin(); i!=p.begin(); i++)
+    for(Polyline2d::const_iterator i= p.begin(); i!=p.end(); i++)
       push_back(*i);
   }
 
