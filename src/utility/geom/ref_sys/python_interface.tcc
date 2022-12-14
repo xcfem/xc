@@ -117,8 +117,9 @@ class_<Ref2d3d , bases<ref_Rect2d3dCooSys> >("Ref2d3d")
   .def(init<const Pos3d &,const Pos3d &,const Pos3d &>())
   .def(init<const Pos3d &,const Vector3d &>())
   .def(init<const Pos3d &,const Vector3d &,const Vector3d &>())
-  .def("getIVector",&Ref2d3d::getIVector, "Return unary vector i")
-  .def("getJVector",&Ref2d3d::getJVector, "Return unary vector j")
+  .def("getIVector",&Ref2d3d::getIVector, "Return unary vector i.")
+  .def("getJVector",&Ref2d3d::getJVector, "Return unary vector j.")
+  .def("getKVector",&Ref2d3d::getKVector, "Return unary vector k.")
   .def("getXYPlane", &Ref2d3d::getXYPlane,"Return the XY plane.")
   ;
 
