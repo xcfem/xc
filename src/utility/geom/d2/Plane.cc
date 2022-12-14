@@ -246,6 +246,18 @@ bool Plane::positiveSide(const Pos3d &p) const
 bool Plane::negativeSide(const Pos3d &p) const
   { return cgp.has_on_negative_side(p.ToCGAL()); }
 
+//! @brief Return 1 if point in positive side, -1 if in negative side or 0
+//! otherwise.
+int Plane::getSide(const Pos3d &p) const
+  {
+    int retval= 0;
+    if(positiveSide(p))
+      retval= 1;
+    else if(negativeSide(p))
+      retval= -1;
+    return retval;
+  }
+
 //! @brief Return true if the point is in the plane.
 //!
 //! @param tol: tolerance.

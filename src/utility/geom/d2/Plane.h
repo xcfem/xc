@@ -99,6 +99,7 @@ class Plane : public Surface3d
 
     bool positiveSide(const Pos3d &p) const;
     bool negativeSide(const Pos3d &p) const;
+    int getSide(const Pos3d &p) const;
     virtual bool In(const Pos3d &p, const GEOM_FT &tol= 0.0) const;
 
     CGAL::Oriented_side ClassifyPoint(const Pos3d &p) const;
