@@ -277,6 +277,8 @@ boost::python::list (PlanePolyline3d::*planePline3dDividePyProp3d)(const boost::
 class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def(init<>())
   .def(init<PlanePolyline3d>())
+  .def(init<Ref2d3d,Polyline2d>())
+  .def(init<Ref3d3d,Polyline2d>())
   .def(init<boost::python::list>())
   .add_property("getXMax",&PlanePolyline3d::GetXMax, "Return maximum value for x coordinate.")
   .add_property("getYMax",&PlanePolyline3d::GetYMax, "Return maximum value for y coordinate.")
@@ -302,9 +304,10 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("getFromPoint", &PlanePolyline3d::getFromPoint,"return the first point of the polyline.")
   .def("getToPoint", &PlanePolyline3d::getToPoint,"return the last point of the polyline.")
   .def("getVertexList",&PlanePolyline3d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
-  .def("intersects", getPPPlaneIntersects, "Return true if this object intersects with the plane argument.")
+  .def("getPolyline3d", &PlanePolyline3d::getPolyline3d,"Return the corresponding 3D polyline.")
   .def("intersects", getPPLineIntersects, "Return true if this object intersects with the line argument.")
   .def("getIntersection", getPPPlaneIntersection, "Return the intersection with the plane argument.")
+  .def("intersects", getPPPlaneIntersects, "Return true if this object intersects with the plane argument.")
   .def("getIntersection", getPPLineIntersection, "Return the intersection with the line argument.")
   .def("isClosed",&PlanePolyline3d::isClosed,"returns true if the last vertex is coincident with the first one -dist(first,last)<tol*length-.")
   .def("simplify", simplifyPP3DPoly,"simplification of the polyline (Douglas-Peucker algorithm).")
@@ -323,7 +326,9 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("getLeftChunk", &PlanePolyline3d::getLeftChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from its beginning to the point argument. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("getRightChunk", &PlanePolyline3d::getRightChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from the point argument to its end. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("split", &PlanePolyline3d::split,"split(point) returns the result of splitting the polyline by the point argument.")
-  ;
+  .def("offset", &PlanePolyline3d::offset)
+  .def("getBufferPolygon", &PlanePolyline3d::getBufferPolygon, "Return a buffer polygon around the polyline.")
+;
 
 
 void (Polyline3d::*simplify3DPoly)(GEOM_FT epsilon)= &Polyline3d::simplify;

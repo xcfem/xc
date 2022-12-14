@@ -25,7 +25,9 @@
 #include "utility/geom/d1/Line2d.h"
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/geom/d1/Segment3d.h"
+#include "utility/geom/d1/Polyline3d.h"
 #include "utility/geom/d1/Line3d.h"
+#include "utility/geom/d2/Polygon3d.h"
 #include "utility/geom/d3/GeomGroup3d.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/lists/auxiliary.h"
@@ -322,6 +324,12 @@ Segment3d PlanePolyline3d::getSegment0(unsigned int i) const
     return to_3d(sg2d);
   }
 
+//! @brief Return the corresponding 3D polyline.
+Polyline3d PlanePolyline3d::getPolyline3d(void) const
+  {
+    return Polyline3d(this->getVertexList());
+  }
+
 //! @brief Return the the point at a distance "s" measured along
 //! the polyline from its origin.
 //! @param s: distance measured along the polyline from its origin.
@@ -607,6 +615,18 @@ bool PlanePolyline3d::TocaCuadrante(const int &cuadrante) const
 
 void PlanePolyline3d::swap(void)
   { pline2d.swap(); }
+
+PlanePolyline3d PlanePolyline3d::offset(const GEOM_FT &d) const
+  {
+    Polyline2d tmp= this->pline2d.offset(d);
+    return PlanePolyline3d(this->getRef(),tmp);
+  }
+
+Polygon3d PlanePolyline3d::getBufferPolygon(const GEOM_FT &d, const size_t &numVertices) const
+  {
+    Polygon2d tmp= this->pline2d.getBufferPolygon(d, numVertices);
+    return Polygon3d(this->getRef(), tmp);
+  }
 
 /**
    * Douglas Peucker algorithm implementation. 

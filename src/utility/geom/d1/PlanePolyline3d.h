@@ -62,6 +62,9 @@ class PlanePolyline3d: public D2to3d
     
     Pos3d getToPoint(void) const
       { return to_3d(this->pline2d.getToPoint()); }
+    
+    PlanePolyline3d offset(const GEOM_FT &d) const;
+    Polygon3d getBufferPolygon(const GEOM_FT &d, const size_t &numVertices= 8) const;
 
     bool empty(void) const;
     GEOM_FT GetXMax(void) const;
@@ -97,6 +100,7 @@ class PlanePolyline3d: public D2to3d
     boost::python::list getVertexListPy(void) const;
     Segment3d getSegment0(unsigned int i) const;
     Segment3d getSegment(unsigned int i) const;
+    Polyline3d getPolyline3d(void) const;
     
     Pos3d getPointAtLength(const GEOM_FT &) const;
     Vector3d getIVectorAtLength(const GEOM_FT &) const;

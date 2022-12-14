@@ -32,6 +32,10 @@ Polyline3d::Polyline3d(void)
   : Linear3d(), GeomObj::list_Pos3d() {}
 
 //! @brief Constructor.
+Polyline3d::Polyline3d(const GeomObj::list_Pos3d &l)
+  : Linear3d(), GeomObj::list_Pos3d(l){}
+
+//! @brief Constructor.
 Polyline3d::Polyline3d(const Pos3dList &l)
   : Linear3d(), GeomObj::list_Pos3d(l.getPoints()){}
 

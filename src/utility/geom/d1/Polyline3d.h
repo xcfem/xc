@@ -37,6 +37,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
   {
   public:
     Polyline3d(void);
+    explicit Polyline3d(const GeomObj::list_Pos3d &);
     explicit Polyline3d(const Pos3dList &);
     explicit Polyline3d(const boost::python::list &);
     
