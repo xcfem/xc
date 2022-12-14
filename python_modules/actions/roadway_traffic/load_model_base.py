@@ -324,7 +324,7 @@ class LoadModel(object):
     :ivar vehicleBoundary: polygon without uniform load around the vehicle.
     '''
 
-    def __init__(self,wLoads, vBoundary= None):
+    def __init__(self, wLoads, vBoundary= None):
         ''' Constructor.
 
         :param wheelLoads: position and loads of each wheel
@@ -348,7 +348,7 @@ class LoadModel(object):
     def getTotalLoad(self):
         retval= 0.0
         for l in self.wheelLoads:
-          retval+= l.load
+            retval+= l.load
         return retval
 
     def getCentroid(self):
@@ -356,12 +356,12 @@ class LoadModel(object):
         retvalPos= geom.Pos2d(0.0,0.0)
         totalLoad= 0.0
         for i in self.wheelLoads:
-          retvalPos.x+= i.load*i.position.x
-          retvalPos.y+= i.load*i.position.y
-          totalLoad+= i.load
+            retvalPos.x+= i.load*i.position.x
+            retvalPos.y+= i.load*i.position.y
+            totalLoad+= i.load
         if(totalLoad!=0.0):
-          retvalPos.x/=totalLoad
-          retvalPos.y/=totalLoad
+            retvalPos.x/=totalLoad
+            retvalPos.y/=totalLoad
         return retvalPos
 
     def getLoadRelativePositions(self):
