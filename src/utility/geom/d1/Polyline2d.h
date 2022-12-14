@@ -116,6 +116,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
 /*         return list_Pos2d(); */
 /*       } */
     Polyline2d offset(const GEOM_FT &d) const;
+    Polygon2d getBufferPolygon(const GEOM_FT &d, const size_t &numVertices= 8) const;
     //! @brief Return the intersections of the polyline with
     //! the line coord_i= d
     // list_Pos2d Int(unsigned short int i,const GEOM_FT &d) const;

@@ -30,6 +30,7 @@
 #include "utility/geom/d2/Circle3d.h" // Curvature functions.
 #include "utility/geom/pos_vec/VectorPos2d.h"
 #include "utility/kernel/python_utils.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Default constructor.
 Polyline2d::Polyline2d(void)
@@ -247,6 +248,28 @@ Polyline2d Polyline2d::offset(const GEOM_FT &d) const
   {
     Pos2dList tmp(*this);
     Polyline2d retval(tmp.offset(d));
+    return retval;
+  }
+
+//! @brief Return a buffer polygon around the segment.
+//!
+//! Return a 2D polygon with boundaries that buffer this segment
+//! by a distance d.
+//! @param d: distance around the segment.
+//! @param n: number of vertex of the buffers around the endpoints.
+Polygon2d Polyline2d::getBufferPolygon(const GEOM_FT &d, const size_t &numVertices) const
+  {
+    // Rectangle around the segment.
+    Polyline2d s1= this->offset(d);
+    Polyline2d s2= this->offset(-d);
+    for(const_reverse_iterator i= s2.rbegin(); i!=s2.rend(); i++)
+        s1.push_back(*i);
+    Polygon2d retval(s1);
+    // Buffers around the endpoints.
+    Polygon2d b1= this->getFromPoint().getBufferPolygon(d, numVertices);
+    retval.une(b1);
+    Polygon2d b2= this->getToPoint().getBufferPolygon(d, numVertices);
+    retval.une(b2);
     return retval;
   }
 

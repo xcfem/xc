@@ -28,7 +28,8 @@ Segment2d (PolygonalSurface2d::*clipLine)(const Line2d &) const=&PolygonalSurfac
 Segment2d (PolygonalSurface2d::*clipRay)(const Ray2d &) const=&PolygonalSurface2d::Clip;
 Segment2d (PolygonalSurface2d::*clipSegment)(const Segment2d &) const=&PolygonalSurface2d::Clip;
 class_<PolygonalSurface2d, bases<Surface2d>, boost::noncopyable >("PolygonalSurface2d", no_init)
-  .def("getPerimeter",&PolygonalSurface2d::getPerimeter)
+.def("getPerimeter",&PolygonalSurface2d::getPerimeter, " Return the object perimeter.")
+  .def("getLength",&PolygonalSurface2d::getLength, " Return the object perimeter.")
   .def("getCenterOfMass",&PolygonalSurface2d::getCenterOfMass)
   .def("getIx",&PolygonalSurface2d::Ix)
   .def("getIy",&PolygonalSurface2d::Iy)
