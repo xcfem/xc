@@ -6,3 +6,5 @@ Imposed loads (models and representative values) associated with rail traffic wh
 - [Eurocode 1: Actions on structures - Part 2: Traffic loads on bridges.](https://www.en.une.org/encuentra-tu-norma/busca-tu-norma/norma/?c=norma-une-en-1991-2-2019-n0061460)
 - [Eurocode 1: Actions on structures](https://en.wikipedia.org/wiki/Eurocode_1:_Actions_on_structures)
 - [Slipstream](https://en.wikipedia.org/wiki/Slipstream)
+- [Track geometry](https://en.wikipedia.org/wiki/Track_geometry)
+- [1435 mm track gauge](https://www.wikidata.org/wiki/Q1999572)
