@@ -177,8 +177,13 @@ class EmbankmentCrossSection(object):
         :param verticalDir: vector pointing «up».
         '''
         retval= list()
-        for layer in self.layers:
-            retval.append(layer.getDepth(point= point, verticalDir= verticalDir))
+        if(self.layers):
+            for layer in self.layers:
+                depth= layer.getDepth(point= point, verticalDir= verticalDir)
+                if(depth is None):
+                    depth= 0.0
+                if(depth>=0.0):
+                    retval.append(depth)
         return retval
 
     def getLayerThicknesses(self, point, verticalDir= geom.Vector3d(0,0,1)):
@@ -189,15 +194,18 @@ class EmbankmentCrossSection(object):
         :param verticalDir: vector pointing «up».
         '''
         retval= list()
-        rDepths= list(reversed(self.getDepths(point= point, verticalDir= verticalDir))) # From bottom to top.
-        rDepths= [0.0 if x is None else x for x in rDepths] # Replace None by 0.
-        previousDepth= rDepths[0] # Deepest one.
-        retval.append(previousDepth)
-        for d in rDepths[1:]:
-            layerThickness= max(d-previousDepth,0.0) # Compute layer thickness.
-            retval.append(layerThickness) 
-            previousDepth= d
-        return list(reversed(retval)) # Results from top to bottom.
+        depths= self.getDepths(point= point, verticalDir= verticalDir)
+        if(depths):
+            rDepths= list(reversed(depths)) # From bottom to top.
+            rDepths= [0.0 if x is None else x for x in rDepths] # Replace None by 0.
+            previousDepth= rDepths[0] # Deepest one.
+            retval.append(previousDepth)
+            for d in rDepths[1:]:
+                layerThickness= max(d-previousDepth,0.0) # Compute layer thickness.
+                retval.append(layerThickness) 
+                previousDepth= d
+            retval= list(reversed(retval)) # Results from top to bottom.
+        return retval
 
     def getWeightVerticalStresses(self, point, verticalDir= geom.Vector3d(0,0,1)):
         ''' Return the vertical stresses due to the soil weight on each of the 
