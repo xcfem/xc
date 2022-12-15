@@ -55,6 +55,8 @@ combination_factors.insert('road_bridge_thermal',loadCombinations.CombinationFac
 combination_factors.insert('road_bridge_snow',loadCombinations.CombinationFactors(0.8,0.0,0.0))
 combination_factors.insert('road_bridge_hidrostatic_pressure',loadCombinations.CombinationFactors(1.0,1.0,1.0))
 combination_factors.insert('road_bridge_construction_loads',loadCombinations.CombinationFactors(1.0,0.0,1.0))
+# Combination factors for railway bridges
+combination_factors.insert('LM71_alone_uls',loadCombinations.CombinationFactors(0.8,0.8,0.0))
 
 class CombGenerator(utils.CombGenerator):
     ''' Generate combinations corresponding to Eurocode 0 (Spanish annex).
@@ -145,7 +147,7 @@ class CombGenerator(utils.CombGenerator):
         raise NotImplementedError()
         return None
     
-    def newRailwayTrafficAction(self, actionName: str, actionDescription: str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None):
+    def newRailwayTrafficAction(self, actionName:str, actionDescription:str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None):
         ''' Creates a railway traffic action and appends it to the 
             combinations generator.
 
@@ -155,8 +157,7 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
-        raise NotImplementedError()
-        return None
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= 'railway_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
     def newWindAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
         ''' Creates a wind action on footbridge and appends it to the 
