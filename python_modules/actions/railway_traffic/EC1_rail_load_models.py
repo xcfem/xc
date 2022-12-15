@@ -12,7 +12,7 @@ __email__= "l.pereztato@gmail.com"
 import geom
 from actions.railway_traffic import load_model_base as lmb
 
-locomotiveLM1= lmb.LocomotiveLoad(nAxes= 4, axleLoad= 250e3, xSpacing= 1.435, ySpacing= 1.6)
+locomotiveLM1= lmb.LocomotiveLoad(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435)
 
 class TrackAxes(lmb.TrackAxes):
     ''' Notional lanes for a road section according to clause 4.2.3 

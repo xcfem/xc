@@ -253,7 +253,7 @@ class WheelLoad(object):
         return (horizontalLoad, boussinesqLoad)
 
 class DynamicFactorLoad(object):
-    ''' Locomotive load.
+    ''' Base class for railway loads.
 
     :ivar dynamicFactor: dynamic factor affecting the load.
     '''
@@ -362,7 +362,7 @@ class UniformRailLoad(DynamicFactorLoad):
         # Call the regular method.
         return self.getLoadedContour(midplane= deckMidplane, spreadingLayers= spreadingLayers)
     
-    def getLoadVector(self, numNodes, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def getNodalLoadVector(self, numNodes, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Return the load vector at the contact surface.
 
         :param numNodes: number of loaded nodes.
@@ -370,7 +370,8 @@ class UniformRailLoad(DynamicFactorLoad):
         :param brakingDir: direction of the braking load (properly factored).
         '''
         # Compute load vector.
-        nodalLoad= self.load/numNodes
+        totalLoad= self.getDynamicLoad()*self.railAxis.getLength()
+        nodalLoad= totalLoad/numNodes
         retval= nodalLoad*gravityDir
         if(brakingDir): # compute braking load
             retval+= nodalLoad*xc.Vector(brakingDir)
@@ -402,30 +403,52 @@ class UniformRailLoad(DynamicFactorLoad):
                 loadedNodes.append(n)
         # Compute load vector
         numLoadedNodes= len(loadedNodes)
-        vLoad= self.getLoadVector(numLoadedNodes, gravityDir= gravityDir, brakingDir= brakingDir)
+        vLoad= self.getNodalLoadVector(numLoadedNodes, gravityDir= gravityDir, brakingDir= brakingDir)
         loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
         # Apply nodal loads.
         retval= list()
         for n in loadedNodes:
             retval.append(n.newLoad(loadVector))
         return retval
-            
+
+    def defBackfillUniformLoads(self, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define backfill loads due the uniform loads on the rail.
+
+        :param originSet: set containing the elements to pick from.
+        :param embankment: embankment object as defined in 
+                           earthworks.embankment.
+        :param delta: friction angle between the soil and the element material.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    implementation remarks in boussinesq module).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        dynamicLoad= self.getDynamicLoad()
+        vertexList= self.railAxis.getVertexList()
+        if((abs(dynamicLoad)>0) and (len(vertexList)>1)):
+            v0= vertexList[0]
+            for v1 in vertexList[1:]:
+                segment= geom.Segment3d(v0,v1)
+                loadedLine= boussinesq.LinearLoad(segment= segment, loadValues=[-dynamicLoad, -dynamicLoad], eSize= 0.25)
+                # Compute loads on elements.
+                loadedLine.appendLoadToCurrentLoadPattern(elements= originSet.elements, eta= eta, delta= delta)
+                v0= v1
     
 class LocomotiveLoad(DynamicFactorLoad):
     ''' Locomotive load.
 
     :ivar nAxes: number of axes.
     :ivar axleLoad: axle load.
-    :ivar xSpacing: distance between wheels of the same axle.
-    :ivar ySpacing: tandem axle spacing.
+    :ivar xSpacing: tandem axle spacing.
+    :ivar yXpacing: distance between wheels of the same axle.
     '''
-    def __init__(self, nAxes= 4, axleLoad= 250e3, xSpacing= 1.435, ySpacing= 1.6, dynamicFactor= 1.0):
+    def __init__(self, nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435, dynamicFactor= 1.0):
         ''' Constructor.
 
         :param nAxes: defaults to 4 (Eurocode 1, load model 1)
         :param axleLoad: axle load.
-        :param xSpacing: distance between wheels of the same axle (defaults to nternational standard gauge 1435 mm).
-        :param ySpacing: tandem axle spacing (defaults to 1.6 m, Eurocode 1, load model 1).
+        :param xSpacing: tandem axle spacing (defaults to 1.6 m, Eurocode 1, load model 1).
+        :param ySpacing: distance between wheels of the same axle (defaults to nternational standard gauge 1435 mm).
         :param dynamicFactor: dynamic factor.
         '''
         super().__init__(dynamicFactor= dynamicFactor)
@@ -440,24 +463,22 @@ class LocomotiveLoad(DynamicFactorLoad):
 
     def getTotalLength(self):
         ''' Return the length occupied by the locomotive.'''
-        return self.nAxes*self.ySpacing
+        return self.nAxes*self.xSpacing
     
-    def getWheelPositions(self, swapAxes= False):
+    def getWheelPositions(self):
         ''' Return a list with the positions of the wheels.
 
         :param swapAxes: if true swap X and Y axis.
         '''
-        dX= self.xSpacing/2.0
-        dY= self.ySpacing
-        if(swapAxes):
-            dX, dY= dY, dX
-        axesDisp= (self.nAxes-1)*dY/2.0 # Axes positions relative to the center.
+        dX= self.xSpacing
+        dY= self.ySpacing/2.0
+        axesDisp= (self.nAxes-1)*dX/2.0 # Axes positions relative to the center.
         axlesPos= list()
         for i in range(0,self.nAxes):
-            axlesPos.append(i*dY-axesDisp)
+            axlesPos.append(i*dX-axesDisp)
         retval= list()
-        for x in [-dX, dX]:
-            for y in axlesPos:
+        for y in [-dY, dY]:
+            for x in axlesPos:
                 retval.append(geom.Pos2d(x,y))
         return retval
 
@@ -465,14 +486,13 @@ class LocomotiveLoad(DynamicFactorLoad):
         ''' Return the load on each wheel affected by the dynamic factor.'''
         return self.axleLoad/2.0*self.dynamicFactor
         
-    def getWheelLoads(self, loadFactor= 1.0, swapAxes= False):
+    def getWheelLoads(self, loadFactor= 1.0):
         ''' Return the loads of the wheels of the tandem along with its 
             positions.
 
         :param loadFactor: factor to apply to the loads.
-        :param swapAxes: if true swap X and Y axis.
         '''
-        positions= self.getWheelPositions(swapAxes= swapAxes)
+        positions= self.getWheelPositions()
         wheelLoad= self.getDynamicWheelLoad()*loadFactor
         retval= list()
         for p in positions:
@@ -572,14 +592,16 @@ class TrackAxis(object):
                               the axis).
         :param loadFactor: factor to apply to the loads.
         '''
-        wheelLoads= loadModel.getWheelLoads(loadFactor= loadFactor, swapAxes= True)
-        ref= self.getReferenceAt(lmbdArcLength= relativePosition)
-        for wl in wheelLoads:
-            pos2d= wl.position
-            pos3d= ref.getGlobalPosition(pos2d)
-            wl.position= pos3d
-            wl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector()) 
-        return wheelLoads
+        retval= list()
+        if(relativePosition is not None):
+            retval= loadModel.getWheelLoads(loadFactor= loadFactor)
+            ref= self.getReferenceAt(lmbdArcLength= relativePosition)
+            for wl in retval:
+                pos2d= wl.position
+                pos3d= ref.getGlobalPosition(pos2d)
+                wl.position= pos3d
+                wl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector()) 
+        return retval
 
     def getRailAxes(self, trackGauge= 1.435):
         ''' Return a 3D polyline representing the rail axis.
@@ -604,6 +626,51 @@ class TrackAxis(object):
         rail2= planePolyline.offset(offsetDist)
         return rail1, rail2
 
+    def getRailChunks(self, trainModel, relativePosition):
+        ''' Return the rail segments that are not occupied by the locomotive.
+
+        :param trainModel: trainModel on this track.
+        :param relativePosition: relative position of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        '''
+        # Compute the axes of the rails.
+        rail1, rail2= self.getRailAxes()
+        railChunks= list() # Uniform loaded rail chunks.
+        if(relativePosition is None): # No locomotive in this segment.
+           railChunks.append(rail1)
+           railChunks.append(rail2)
+        else:
+            # Compute planes at locomotive front and back.
+            halfLocomotiveLength= trainModel.locomotive.getTotalLength()/2.0
+            ref= self.getReferenceAt(lmbdArcLength= relativePosition)
+            org= ref.Org
+            jVector= ref.getJVector()
+            kVector= ref.getKVector()
+            pointAtFront= ref.getGlobalPosition(geom.Pos2d(halfLocomotiveLength,0))
+            planeAtFront= geom.Plane3d(pointAtFront, jVector, kVector)
+            pointAtBack= ref.getGlobalPosition(geom.Pos2d(-halfLocomotiveLength,0))
+            planeAtBack= geom.Plane3d(pointAtBack, jVector, kVector)
+            # Get the rails that are outside the locomotive.
+            for rail in [rail1, rail2]:
+                railFromPoint= rail.getFromPoint()
+                for plane in [planeAtFront, planeAtBack]:
+                    orgSide= plane.getSide(org) # This one is in the locomotive center.
+                    targetSide= -orgSide # So we search for this side. 
+                    intList= rail.getIntersection(plane)
+                    if(len(intList)>0): # intersection found.
+                        intPoint= intList[0]
+                        fromPointSide= plane.getSide(railFromPoint)
+                        if(fromPointSide==targetSide):
+                            targetChunk= rail.getLeftChunk(intPoint,.01)
+                        else:
+                            targetChunk= rail.getRightChunk(intPoint, .01)
+                        railChunks.append(targetChunk)
+                    else: # Locomotive is longer than the rail => no intersection.
+                        intPoint= None
+        return railChunks
+    
     def getRailUniformLoads(self, trainModel, relativePosition, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Return the uniform loads on the track rails.
 
@@ -615,37 +682,8 @@ class TrackAxis(object):
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         '''
-        # Compute the axes of the rails.
-        rail1, rail2= self.getRailAxes()
-        # Compute planes at locomotive front and back.
-        halfLocomotiveLength= trainModel.locomotive.getTotalLength()/2.0
-        ref= self.getReferenceAt(lmbdArcLength= relativePosition)
-        org= ref.Org
-        iVector= ref.getJVector()
-        kVector= ref.getKVector()
-        pointAtFront= ref.getGlobalPosition(geom.Pos2d(halfLocomotiveLength,0))
-        planeAtFront= geom.Plane3d(pointAtFront, iVector, kVector)
-        pointAtBack= ref.getGlobalPosition(geom.Pos2d(-halfLocomotiveLength,0))
-        planeAtBack= geom.Plane3d(pointAtBack, iVector, kVector)
         # Get the rails that are outside the locomotive.
-        railChunks= list() # Uniform loaded rail chunks.
-        for rail in [rail1, rail2]:
-            railFromPoint= rail.getFromPoint()
-            for plane in [planeAtFront, planeAtBack]:
-                orgSide= plane.getSide(org) # This one is in the locomotive center.
-                targetSide= -orgSide # So we search for this side. 
-                intList= rail.getIntersection(plane)
-                if(len(intList)>0): # intersection found.
-                    intPoint= intList[0]
-                    fromPointSide= plane.getSide(railFromPoint)
-                    if(fromPointSide==targetSide):
-                        targetChunk= rail.getLeftChunk(intPoint,.01)
-                    else:
-                        targetChunk= rail.getRightChunk(intPoint, .01)
-                    railChunks.append(targetChunk)
-                else: # Locomotive is longer than the rail => no intersection.
-                    intPoint= None
-                print('intPoint= ', intPoint)
+        railChunks= self.getRailChunks(trainModel, relativePosition) # Uniform loaded rail chunks.
         # Create the uniform rail loads.      
         qRail= trainModel.getRailUniformLoad()
         retval= list()
@@ -676,6 +714,28 @@ class TrackAxis(object):
         railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir, brakingDir= brakingDir)
         for rul in railUniformLoads:
             rul.defDeckRailUniformLoads(embankment= embankment, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
+
+    def defBackfillUniformLoads(self, trainModel, relativePosition, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define backfill loads due the uniform load on the track.
+
+        :param trainModel: trainModel on this track.
+        :param relativePosition: relative position of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param originSet: set containing the elements to pick from.
+        :param embankment: embankment object as defined in 
+                           earthworks.embankment.
+        :param delta: friction angle between the soil and the element material.
+        :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
+                    implementation remarks in boussinesq module).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir, brakingDir= brakingDir)
+        for rul in railUniformLoads:
+            rul.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
+        
 
     
 class TrackAxes(object):
@@ -945,44 +1005,28 @@ class TrackAxes(object):
             avgLoadedAreaRatio/= sz
         return avgLoadedAreaRatio
     
-    def defBackfillUniformLoads(self, originSet, embankment, delta, eta= 1.0, trackUniformLoads= [9e3, 2.5e3, 2.5e3], gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
-        ''' Define uniform loads on the tracks with the argument values:
+    def defBackfillUniformLoads(self, trainModels, relativePositions, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define backfill loads due the uniform loads on the tracks.
 
+        :param trainModels: train models on each track (trainModel1 -> track 1,
+                            trainModel2 -> track 2 and so on).
+        :param relativePositions: relative positions of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
         :param originSet: set containing the elements to pick from.
         :param embankment: embankment object as defined in 
                            earthworks.embankment.
         :param delta: friction angle between the soil and the element material.
         :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see 
                     implementation remarks in boussinesq module).
-        :param trackUniformLoads: load for each track [1st, 2nd, 3rd,...].
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         '''
-        loadedAreaRatio= 0.0
-        for q, track in zip(trackUniformLoads, self.trackAxes):
-            if(q is not None):
-                # Compute load vector on each track.
-                loadVector= q*gravityDir
-                if(brakingDir): # Compute braking load
-                    loadVector+= q*xc.Vector(brakingDir)
-                if(loadVector.Norm()>1e-6): # Not zero.
-                    # Compute Boussinesq loaded area
-                    ## Get contour points.
-                    trackContour= track.contour.getVertexList()
-                    p1= trackContour[0]; p2= trackContour[1]
-                    p3= trackContour[2]; p4= trackContour[3]
-                    ## Define Boussinesq loaded area.
-                    boussinesqLoadedArea= boussinesq.QuadLoadedArea(p1= p1, p2= p2, p3= p3, p4= p4, q= loadVector[2], eSize= 0.5)
-                    ## Compute loads on elements.
-                    boussinesqLoadedArea.appendLoadToCurrentLoadPattern(elements= originSet.elements, eta= eta, delta= delta)
-                    ## Define horizontally loaded area.
-                    hLoadedArea= hs.HorizontalLoadedAreaOnBackfill3D(contour= [p1, p2, p3, p4], H= geom.Vector3d(loadVector[0], loadVector[1], 0.0))
-                    ## Compute loads on elements.
-                    phi= embankment.layers[0].soil.phi # effective friction angle of soil.
-                    loadedAreaRatio= hLoadedArea.appendLoadToCurrentLoadPattern(elements= originSet.elements, phi= phi, delta= delta)
-        return loadedAreaRatio
-    
-    def defBackfillLoads(self, trainModels, relativePositions, trackUniformLoads, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        for trackAxis, tm, rp in zip(self.trackAxes, trainModels, relativePositions):
+            trackAxis.defBackfillUniformLoads(trainModel= tm, relativePosition= rp, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
+        
+    def defBackfillLoads(self, trainModels, relativePositions, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define punctual and uniform loads.
 
         :param trainModels: train model on each track (train model 1 -> track 1,
@@ -991,7 +1035,6 @@ class TrackAxes(object):
                                   the track axis (0 -> beginning of
                                   the axis, 0.5-> middle of the axis, 1-> end
                                   of the axis).
-        :param trackUniformLoads: load for each track [1st, 2nd, 3rd,...].
         :param originSet: set containing the elements to pick from.
         :param embankment: embankment object as defined in 
                            earthworks.embankment.
@@ -1004,4 +1047,4 @@ class TrackAxes(object):
         # punctual loads.
         self.defBackfillPunctualLoads(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
         # uniform load.
-        self.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta, trackUniformLoads= trackUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defBackfillUniformLoads(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
