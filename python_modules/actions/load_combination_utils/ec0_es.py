@@ -33,6 +33,9 @@ partial_safety_factors['pedestrian']= loadCombinations.PartialSafetyFactors(load
 partial_safety_factors['railway_traffic']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.45,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 # Thermal actions.
 partial_safety_factors['thermal']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
+# Hydrostatic pressure
+partial_safety_factors['hydrostatic_pressure']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
+
 
 
 # Combination factors for road bridges (table AN.5 (table A2.1) )
@@ -53,7 +56,7 @@ combination_factors.insert('road_bridge_wind_during_execution',loadCombinations.
 combination_factors.insert('road_bridge_wind_aster',loadCombinations.CombinationFactors(1.0,0.0,0.0))
 combination_factors.insert('road_bridge_thermal',loadCombinations.CombinationFactors(0.6,0.6,0.5))
 combination_factors.insert('road_bridge_snow',loadCombinations.CombinationFactors(0.8,0.0,0.0))
-combination_factors.insert('road_bridge_hidrostatic_pressure',loadCombinations.CombinationFactors(1.0,1.0,1.0))
+combination_factors.insert('road_bridge_hydrostatic_pressure',loadCombinations.CombinationFactors(1.0,1.0,1.0))
 combination_factors.insert('road_bridge_construction_loads',loadCombinations.CombinationFactors(1.0,0.0,1.0))
 # Combination factors for railway bridges
 combination_factors.insert('LM71_alone_uls',loadCombinations.CombinationFactors(0.8,0.8,0.0))
@@ -181,8 +184,18 @@ class CombGenerator(utils.CombGenerator):
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
         return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_thermal', partialSafetyFactorsName= 'thermal', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
-        return None
 
+    def newHydrostaticPressureActionOnRoadBridge(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+        ''' Creates a thermal action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        return self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_hydrostatic_pressure', partialSafetyFactorsName= 'hydrostatic_pressure', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
     def newSnowAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
         ''' Creates a snow action and appends it to the combinations 
             generator.
