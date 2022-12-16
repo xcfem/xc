@@ -1,13 +1,24 @@
 # -*- coding: utf-8 -*-
-'''Verification of the quasi-Winkler model.'''
-# Verification of the quasi-Winkler model according to
-#    the article of Gabriel E. Barrientos
-#    «Vigas sobre fundaciones bi-paramétricas del tipo Cuasi-Winker»
-#    Departamento de Ingeniería Mecánica. Universidad del Bío-Bío.
-#    Casilla 5-C. Concepción. Chile.
+'''Verification of the quasi-Winkler model.
+
+Verification of the quasi-Winkler model according to the article of 
+Gabriel E. Barrientos «Vigas sobre fundaciones bi-paramétricas del 
+tipo Cuasi-Winkler» Departamento de Ingeniería Mecánica. Universidad 
+del Bío-Bío. Casilla 5-C. Concepción. Chile.
+
+https://cimec.org.ar/ojs/index.php/mc/article/view/2412/0
+
+'''
 
 from __future__ import print_function
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import geom
 import xc
 from solution import predefined_solutions
@@ -16,11 +27,6 @@ from materials import typical_materials
 from model.geometry import geom_utils
 import math
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 numDiv= 30
 L= 5500
@@ -30,7 +36,7 @@ I= 342990
 beta= 3*math.pi/L
 k= pow(beta,4)*4*E*I
 h= pow(12*I,1/3.0)
-A= h # Suponemos width unidad
+A= h # Assume unit width
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -113,11 +119,11 @@ yAdimCentroVano= l1LastNode.getDisp[1]/EIbeta3
 yAdimMaxima= -1e6
 
 for n in l2.nodes:
-  yAdimMaxima= max(yAdimMaxima,n.getDisp[1]/EIbeta3)
-  ''' 
-    print("  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L)
-    print(" dy= ",n.getDisp[1]/EIbeta3)
-  '''
+    yAdimMaxima= max(yAdimMaxima,n.getDisp[1]/EIbeta3)
+    ''' 
+      print("  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L)
+      print(" dy= ",n.getDisp[1]/EIbeta3)
+    '''
 
 
 ''' Adimensional values for the minimum deflection/span ratio at midspan
