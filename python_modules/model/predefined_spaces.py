@@ -115,6 +115,7 @@ def setImperfectionsXY(nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
         methodName= sys._getframe(0).f_code.co_name
         lmsg.warning(methodName+'; imperfection on Y quite small.')
     maxValue= 0.0
+    connectedElements= list() # Collect elements connected to this nodes.
     if(len(nodeSet.nodes)>0):
         pos= nodeSet.nodes[0].getInitialPos3d
         zMin= pos.z
@@ -131,6 +132,11 @@ def setImperfectionsXY(nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
             maxValue= max(maxValue, deltaX**2+deltaY**2)
             newPos= pos+geom.Vector3d(deltaX,deltaY,0.0)
             n.setPos(newPos)
+            # Collect connected elements.
+            connectedElements.extend(n.getConnectedElements())
+    # Initialize coordinate transformation of the connected elements.
+    for e in connectedElements:
+        e.initializeCoordTransf()
     return math.sqrt(maxValue)
 
 def setImperfectionsX(nodeSet, slopeX= 1.0/500.0):
