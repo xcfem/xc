@@ -107,8 +107,27 @@ class ElasticFoundation(object):
         self.cRoz= cRoz
         self.noTensionZ=noTensionZ
         
-    def createMaterials(self,preprocessor,name):
-        #elastic materials (initialize them here and then we apply the corresponding elastic modulus to each node)
+    def createMaterials2D(self, preprocessor, name):
+        ''' Create the elastic materials for the zero-length elements in a 2D
+        space.
+
+        elastic materials (initialize them here and then we apply the 
+        corresponding elastic modulus to each node).
+        '''
+        self.xSpringName= name + '_xSpring'
+        self.xSpring=typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
+        self.ySpringName= name + '_ySpring'
+        if self.noTensionZ:
+            self.ySpring= typical_materials.defElastNoTensMaterial(preprocessor,self.ySpringName,1)
+        else:
+            self.ySpring= typical_materials.defElasticMaterial(preprocessor,self.ySpringName,1)
+            
+    def createMaterials3D(self, preprocessor, name):
+        ''' Create the elastic materials for the zero-length elements in a 3D
+        space.
+
+         elastic materials (initialize them here and then we apply the corresponding elastic modulus to each node).
+        '''
         self.xSpringName= name + '_xSpring'
         self.xSpring=typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
         self.ySpringName= name + '_ySpring'
@@ -119,6 +138,18 @@ class ElasticFoundation(object):
         else:
             self.zSpring=typical_materials.defElasticMaterial(preprocessor,self.zSpringName,1)
             
+    def createMaterials(self, preprocessor, name):
+        ''' Create the elastic materials for the zero-length elements in a 3D
+        space.
+
+         elastic materials (initialize them here and then we apply the corresponding elastic modulus to each node).
+        '''
+        dimSpace= preprocessor.getNodeHandler.dimSpace # space dimension.
+        if(dimSpace==2):
+            self.createMaterials2D(preprocessor, name)
+        else:
+            self.createMaterials3D(preprocessor, name)
+            
     def generateSprings(self,xcSet):
         '''Creates the springs at the nodes of the xcSet given as parameter.'''
         self.foundationSet= xcSet #Set with elastic supported elements
@@ -127,15 +158,25 @@ class ElasticFoundation(object):
         self.foundationSet.computeTributaryAreas(False)
         sNod= self.foundationSet.nodes
         preprocessor= self.foundationSet.getPreprocessor
-        modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+        # Get the dimensions of the space (usually 2 or 3).
+        dimSpace= preprocessor.getNodeHandler.dimSpace # space dimension.
+        if(dimSpace==2):
+            modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
+        else:
+            modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
         self.createMaterials(preprocessor,self.foundationSet.name)
         idElem= preprocessor.getElementHandler.defaultTag
         for n in sNod:
-            arTribNod=n.getTributaryArea()
+            arTribNod= n.getTributaryArea()
             self.xSpring.E= self.cRoz*self.wModulus*arTribNod
-            self.ySpring.E= self.cRoz*self.wModulus*arTribNod
-            self.zSpring.E= self.wModulus*arTribNod
-            Nn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
+            if(dimSpace==2): # Two-dimensional problem.
+                self.ySpring.E= self.wModulus*arTribNod
+                nodeSprings= [self.xSpringName,self.ySpringName]
+            else: # Three-dimensional problem.
+                self.ySpring.E= self.cRoz*self.wModulus*arTribNod
+                self.zSpring.E= self.wModulus*arTribNod
+                nodeSprings= [self.xSpringName,self.ySpringName,self.zSpringName]
+            Nn= modelSpace.setBearing(n.tag, nodeSprings)
             if __debug__:
                 if(not Nn):
                     AssertionError('Can\'t set bearing on node: '+str(n.tag))
