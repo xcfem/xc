@@ -98,8 +98,10 @@ class Element1D: public ElementBase<2>
     Vector getInterpolationFactors(const ParticlePos3d &) const;
     Vector getInterpolationFactors(const Pos3d &) const;
 
-    virtual void computeTributaryLengths(bool initialGeometry= true) const;
+    void computeTributaryLengths(bool initialGeometry= true) const;
     double getTributaryLength(const Node *) const;
+    void computeTributaryAreas(bool initialGeometry= true) const;
+    double getTributaryArea(const Node *) const;
 
     void vector2dUniformLoadGlobal(const Vector &);
     void vector2dUniformLoadLocal(const Vector &);

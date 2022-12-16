@@ -991,3 +991,14 @@ double XC::Element1D::getTributaryLength(const Node *nod) const
       retval= tributaryLengths[i];
     return retval;
   }
+
+//! @brief Compute the tributary LENGTHS that corresponds to each
+//! node of the element (assume unit width for the element).
+void XC::Element1D::computeTributaryAreas(bool initialGeometry) const
+  { this->computeTributaryLengths(initialGeometry); }
+
+
+//! @brief Return the tributary LENGTH corresponding to the node being passed
+//! as parameter (assume unit width for the element).
+double XC::Element1D::getTributaryArea(const Node *n) const
+  { return this->getTributaryLength(n); }
