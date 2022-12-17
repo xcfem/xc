@@ -1667,7 +1667,7 @@ def compute_element_reinforcement(element):
         baseSection.negatvRebarRows= nR
         if(shR):
             baseSection.shReinfY= shR
-        retval= [baseSection]
+        retval= [baseSection, baseSection] # Section at element integration points.
     elif(dim==2):
         elementUpOrientation= element.getKVector3d(False)
         upOrientation= reinforcementUpVector.dot(elementUpOrientation)
@@ -1738,7 +1738,7 @@ def get_element_rc_sections(elements, propName= None):
     '''
     retval= list()
     for el in elements:
-        elementSections= compute_element_reinforcement(el)    
+        elementSections= compute_element_reinforcement(el)
         # Assign elements to each section.
         for i, eSection in enumerate(elementSections):
             if(eSection not in retval):
