@@ -35,6 +35,10 @@ class CombinationRecord(object):
         '''
         return xcCombHandler.newLoadCombination(self.name,self.expr)
 
+    def getNameExpressionPair(self):
+        ''' Return a (combinationName, combinationExpression) tuple.'''
+        return (self.name, self.expr)
+    
     def exportToLatex(self, outputFile):
          '''Creates LaTeX tables and put the combinations in them.
 
@@ -107,10 +111,19 @@ class SituationCombs(dict):
         :param expr: expresion of the load combination (i.e. 1.0*G+1.0*Q).
         '''
         self[name]= CombinationRecord(name,expr)
+        
     def getNames(self):
         '''returns a list of the combination names.'''
         return self.keys()
-     
+           
+    def getNameExpressionPairs(self):
+        ''' Return a list of (combinationName, combinationExpression) tuples.'''
+        retval= list()
+        for key in self:
+            comb= self[key]
+            retval.append(comb.getNameExpressionPair())
+        return retval
+    
     def getNeutralFormat(self, counter, typ, mapLoadCases):
         retval= dict()
         for key in self:
@@ -210,6 +223,13 @@ class SituationsSet(object):
             retval.extend(s.getNames())
         return retval
       
+    def getNameExpressionPairs(self):
+        ''' Return a list of (combinationName, combinationExpression) tuples.'''
+        retval= list()
+        for s in self.situations:
+            retval.extend(s.getNameExpressionPairs())
+        return retval
+    
     def dumpCombinations(self,xcCombHandler):
         '''Introduces the combinations into the XC combination handler.
 
@@ -336,6 +356,13 @@ class CombContainer(object):
         retval= list()
         for ls in self.limitStates:
             retval.extend(ls.getNames())
+        return retval
+
+    def getNameExpressionPairs(self):
+        ''' Return a list of (combinationName, combinationExpression) tuples.'''
+        retval= list()
+        for ls in self.limitStates:
+            retval.extend(ls.getNameExpressionPairs())
         return retval
      
     def getNeutralFormat(self, mapLoadCases):
