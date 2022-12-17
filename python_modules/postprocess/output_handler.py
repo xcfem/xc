@@ -558,7 +558,7 @@ class OutputHandler(object):
         :param fUnitConv:  factor of conversion to be applied to the results
                         (defaults to 1)
         :param caption:   caption for the graphic
-        :param fileName:  name of the file to plot the graphic. Defaults to None,
+        :param fileName:  name of the file to plot the graphic. Defaults to None
                           in that case an screen display is generated
         :param defFScale: factor to apply to current displacement of nodes 
                   so that the display position of each node equals to
