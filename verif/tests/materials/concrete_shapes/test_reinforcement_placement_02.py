@@ -99,10 +99,10 @@ modelSpace.fixNode00F(nA.tag) # First node pinned.
 modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 
 ## Define reinforcement directions.
-reinforcementUpVector= geom.Vector3d(0,1,0) # Y+ this vector defines the meaning
-                                            # of top reinforcement ot bottom
-                                            # reinforcement.
-## Store element reinforcement. Assign to each element the properties
+reinforcementUpVector= geom.Vector3d(0,1,0) # Y+. This vector defines the
+                                            # meaning of "top reinforcement"
+                                            # or "bottom reinforcement".
+## Store element reinforcement properties. Assign to each element the properties
 # that will be used to define its reinforcement on each direction:
 #
 # - baseSection: RCSectionBase derived object containing the geometry
