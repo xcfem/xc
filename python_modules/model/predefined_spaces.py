@@ -1249,6 +1249,78 @@ class PredefinedSpace(object):
             xcSet= self.getTotalSet()
         reader_base.populateSetsFromEntitiesLabels(setsFromLabels, xcSet)
 
+    def displayLoads(self, oh, loadCasesToDisplay, setsToDisplay= None, elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None, defFScale=0.0, scaleConstr= 0.2):
+        ''' Display the loads.
+
+        :param oh: output handler to use as display engine.
+        :param loadCasesToDisplay: load cases that will be displayed.
+        :param setsToDisplay: element sets to display the loads on.
+        :param elLoadComp:component of the linear loads on elements to be 
+               depicted [available components: 'xyzComponents' (default),
+               'axialComponent', 'transComponent', 'transYComponent', 
+               'transZComponent']
+        :param fUnitConv:  factor of conversion to be applied to the results
+                        (defaults to 1)
+        :param caption:   caption for the graphic
+        :param fileName:  name of the file to plot the graphic. Defaults to None
+                          in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+        :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
+        '''
+        if(setsToDisplay is None):
+            setsToDisplay= [self.getTotalSet()]
+        for lcName in loadCasesToDisplay:
+            self.removeAllLoadPatternsFromDomain()
+            self.revertToStart()
+            lp= self.getLoadCaseNamed(lcName)
+            if(not lp.loads.empty()): # Contains loads.
+                lp= self.addLoadCaseToDomain(lcName)
+                for xcSet in setsToDisplay:
+                    oh.displayLoads(setToDisplay= xcSet, elLoadComp= elLoadComp,fUnitConv= fUnitConv, caption= caption, fileName= fileName, defFScale= defFScale, scaleConstr= scaleConstr)
+            else: # There are no loads.
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(methodName+'; load case: '+str(lp.name)+' is empty.')
+
+    def displayReactions(self, oh, setsToDisplay= None, loadCasesToDisplay= None, combContainer= None, echo= False, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
+        ''' Display the loads.
+
+        :param oh: output handler to use as display engine.
+        :param model: finite element model to display the loads on.
+        :param setsToDisplay: element sets to display the loads on.
+        :param loadCasesToDisplay: load cases whose reaction will be displayed.
+        :param combContainer: load combinations whose reaction will be displayed.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                    None, in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param inclInertia: include inertia effects (defaults to false).
+        :param reactionCheckTolerance: relative tolerance when checking reaction values.
+        '''
+        if(setsToDisplay is None):
+            setsToDisplay= [self.getTotalSet()]
+        if(loadCasesToDisplay):
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(methodName+'; not implemented yet.')        
+        if(combContainer):
+            nameExprPairs= combContainer.getNameExpressionPairs()
+            if(nameExprPairs):
+                for (combKey, loadCombination) in nameExprPairs:
+                    self.removeAllLoadPatternsFromDomain()
+                    self.revertToStart()
+                    if(echo):
+                        lmsg.info(str(combKey)+': '+str(loadCombination))
+                    self.addNewLoadCaseToDomain(loadCaseName= combKey, loadCaseExpression= loadCombination)
+                    self.analyze()
+                    for xcSet in setsToDisplay:
+                        oh.displayReactions(setToDisplay= xcSet)
+
                 
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
