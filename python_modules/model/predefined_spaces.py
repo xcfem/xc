@@ -1334,13 +1334,14 @@ def getModelSpace(preprocessor: xc.Preprocessor):
       return PredefinedSpace(nodes,dimSpace,numDOFs)
 
 class SolidMechanics2D(PredefinedSpace):
-    def __init__(self,nodes):
+    def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Defines the dimension of the space: nodes by two coordinates (x,y) 
          and two DOF for each node (Ux,Uy)
 
          :param nodes: preprocessor nodes handler
+         :param solProcType: type of the solution procedure.
         '''
-        super(SolidMechanics2D,self).__init__(nodes,2,2)
+        super(SolidMechanics2D,self).__init__(nodes,2,2, solProcType= solProcType)
         self.Ux= 0 # Displacement components
         self.Uy= 1
         self.epsilon_11= 0 # Strain components
@@ -1475,15 +1476,16 @@ def gdls_elasticidad2D(nodes):
 
 class StructuralMechanics(PredefinedSpace):
     '''Structural mechanics finite element problem.'''
-    def __init__(self, nodes, dimSpace: int, numDOFs: int):
+    def __init__(self, nodes, dimSpace: int, numDOFs: int, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Defines the dimension of the space: nodes by two coordinates (x,y) 
          and three DOF for each node (Ux,Uy,theta)
 
          :param nodes: preprocessor nodes handler
          :param dimSpace: dimension of the space (1, 2 or 3)
          :param numDOFs: number of degrees of freedom for each node.
+         :param solProcType: type of the solution procedure.
         '''
-        super(StructuralMechanics,self).__init__(nodes,dimSpace,numDOFs)
+        super(StructuralMechanics,self).__init__(nodes,dimSpace,numDOFs, solProcType)
             
     def createTrusses(self, xcSet: xc.Set, material, area, crossSection= None, corotational= False):
         ''' Meshes the lines of the set argument with Truss
@@ -1572,13 +1574,14 @@ class StructuralMechanics(PredefinedSpace):
 
         
 class StructuralMechanics2D(StructuralMechanics):
-    def __init__(self,nodes):
+    def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Defines the dimension of the space: nodes by two coordinates (x,y) 
          and three DOF for each node (Ux,Uy,theta)
 
          :param nodes: preprocessor nodes handler
+         :param solProcType: type of the solution procedure.
         '''
-        super(StructuralMechanics2D,self).__init__(nodes,2,3)
+        super(StructuralMechanics2D,self).__init__(nodes,2,3, solProcType= solProcType)
         self.Ux= 0 # displacement components
         self.Uy= 1
         self.Theta= 2
@@ -1812,13 +1815,14 @@ def gdls_resist_materials2D(nodes):
     return StructuralMechanics2D(nodes)
 
 class SolidMechanics3D(PredefinedSpace):
-    def __init__(self,nodes):
+    def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
          and two DOF for each node (Ux,Uy,Uz)
 
          :param nodes: preprocessor nodes handler
+         :param solProcType: type of the solution procedure.
         '''
-        super(SolidMechanics3D,self).__init__(nodes,3,3)
+        super(SolidMechanics3D,self).__init__(nodes,3,3, solProcType)
         self.Ux= 0 # displacement components.
         self.Uy= 1
         self.Uz= 2
@@ -1953,13 +1957,14 @@ def gdls_elasticidad3D(nodes):
 
 
 class StructuralMechanics3D(StructuralMechanics):
-    def __init__(self,nodes):
+    def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Define the dimension of the space: nodes by three coordinates (x,y,z) 
         and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
         :param nodes: preprocessor nodes handler
+        :param solProcType: type of the solution procedure.
         '''
-        super(StructuralMechanics3D,self).__init__(nodes,3,6)
+        super(StructuralMechanics3D,self).__init__(nodes,3,6, solProcType= solProcType)
         self.Ux= 0 # displacement components
         self.Uy= 1
         self.Uz= 2
