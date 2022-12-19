@@ -9,11 +9,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega@ciccp.es "
 
+import sys
 from misc_utils import data_struct_utils as su
 from model import predefined_spaces
 ## Graphics.
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess import output_handler
+from misc_utils import log_messages as lmsg
 
 class OuputUnits(object):
     '''Unit for the generation of graphic files report files.
@@ -345,8 +347,8 @@ class LoadCaseDispParameters(RecordDisp):
             output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
 
     def loadReports(self,FEcase,texFile,cfg):
-        '''Creates the graphics files of loads for the load case and insert them in
-        a LaTex file
+        '''Creates the graphics files of loads for the load case and insert 
+        them in a LaTex file
 
         :param FEcase:     finite element problem 
         :param texFile:    laTex file where to include the graphics 
@@ -444,8 +446,12 @@ def getLabelText(caption):
 
 def getLoadCaseDispParametersFromLoadPattern(loadPattern, modelSpace= None, unitsScaleLoads= 1e-3, unitsScaleDispl= 1e-3, setsToDispLoads= None, setsToDispDspRot= None, setsToDispIntForc= None):
     domain= loadPattern.getDomain # Not always set.
-    if(not domain):
+    if(not domain and modelSpace):
         domain= modelSpace.preprocessor.getDomain
+    if(not domain):
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; can\'t get the domain from action: '+str(loadPattern.name)+' (domain not set). Could you provide the modelSpace parameter?')
+        exit(1)
     if(domain):
         xcTotalSet= domain.getPreprocessor.getSets.getSet("total")
         if(not setsToDispLoads):
