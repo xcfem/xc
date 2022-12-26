@@ -9,3 +9,4 @@ Classes and functions that are useful for the implementation of the finite eleme
 - [Approach for selection of rayleigh damping parameters used for time history analysis.](https://inldigitallibrary.inl.gov/sites/sti/sti/4310583.pdf)
 - [Much Ado About Damping](https://portwooddigital.com/2022/01/30/much-ado-about-damping/)
 - [Proportional Damping from Experimental Data](http://papers.vibetech.com/Paper61-ProportionalDamping.pdf)
+- [More Ado About Damping](https://portwooddigital.com/2022/11/29/more-ado-about-damping/)
