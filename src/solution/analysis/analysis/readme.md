@@ -26,6 +26,7 @@ Classes that implement the different types of analysis:
 - [OpenSees: Static, Cyclic, and Dynamic Analysis Examples](https://opensees.berkeley.edu/workshop/OpenSeesDays2008/A10_UsersExampleAnalysis.pdf)
 - [Transient Analysis of a Cantilever Beam](https://sites.ualberta.ca/~wmoussa/AnsysTutorial/IT/Transient/Transient.html)
 - [The time-domain transient method in structural finite element analysis](https://getwelsim.medium.com/the-time-domain-transient-method-in-structural-finite-element-analysis-3666dd066d81)
+- [Multi-Threaded SDF Analysis](https://portwooddigital.com/2022/11/25/multi-threaded-sdf-analysis/)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
