@@ -14,6 +14,7 @@ import sys
 import math
 import geom
 from misc_utils import log_messages as lmsg
+from scipy.constants import g
 
 # Terrain data structure:
 #
@@ -31,21 +32,18 @@ from misc_utils import log_messages as lmsg
 #                            +       + 
 #                             p8       p4
 
-class TerrainLayer(object):
-    ''' Abstraction of an terrain layer.
+class Layer(object):
+    ''' Base class for terrain and water table layers.
 
-    :ivar soil: soil model.
     :ivar pline: plane 3D polyline representing the layer top surface.
     '''
-    def __init__(self, pline, soil= None):
+    def __init__(self, pline):
         ''' Constructor.
         
-        :param soil: soil model.
         :param pline: plane 3D polyline representing the layer top surface.
         '''
         self.pline= pline
-        self.soil= soil
-        
+
     def getDepth(self, point, verticalDir= geom.Vector3d(0,0,1)):
         ''' Return the depth corresponding to the point argument.
 
@@ -72,7 +70,7 @@ class TerrainLayer(object):
                 v= ip-prj # Vector from the intersection to the proj. pt.
                 dist= verticalDir.dot(v) # Dot product.
                 retval= dist
-        return retval
+        return retval    
     
     def getDepths(self, pointList, verticalDir= geom.Vector3d(0,0,1)):
         ''' Return the depths corresponding to the points in the list
@@ -103,6 +101,52 @@ class TerrainLayer(object):
                     dist= verticalDir.dot(v) # Dot product.
                     retval.append(dist)
         return retval
+
+
+class WaterTable(Layer):
+    ''' Abstraction of a water table.
+
+    :ivar soil: soil model.
+    '''
+    def __init__(self, pline, waterDensity= 1e3):
+        ''' Constructor.
+        
+        :param pline: plane 3D polyline representing the layer top surface.
+        :param waterDensity: density of the water.
+        '''
+        super().__init__(pline= pline)
+        self.waterDensity= waterDensity
+
+    def getPressure(self, point, verticalDir= geom.Vector3d(0,0,1), capillaryAction= False):
+        ''' Return the pressure corresponding to the point argument.
+
+        :param point: point whose pressure will be computed.
+        :param verticalDir: vector pointing «up».
+        :param capillaryAction: if true compute also negative pressures.
+        '''
+        retval= 0.0
+        depth= self.getDepth(point= point, verticalDir= verticalDir)
+        if(capillaryAction):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; capillary action not implemented yet')
+        if(depth>0.0):
+            retval= depth*g*self.waterDensity
+        return retval
+    
+class TerrainLayer(Layer):
+    ''' Abstraction of a terrain layer.
+
+    :ivar soil: soil model.
+    '''
+    def __init__(self, pline, soil= None):
+        ''' Constructor.
+        
+        :param soil: soil model.
+        :param pline: plane 3D polyline representing the layer top surface.
+        '''
+        super().__init__(pline= pline)
+        self.soil= soil
             
     def getWeightVerticalStresses(self, pointList, verticalDir= geom.Vector3d(0,0,1)):
         ''' Return the vertical stresses due to the soil weight on each of the 
@@ -123,7 +167,7 @@ class TerrainLayer(object):
         return retval
 
 # See ascii-art describing data structure at the top of this file.
-class TerrainCrossSection(object):
+class TerrainStrata(object):
     ''' Class representing the an terrain cross-section
 
     :ivar layers: list of TerrainLayer objects.
@@ -145,6 +189,7 @@ class TerrainCrossSection(object):
         if(terrainLayers):
             for (soil, layerSurfacePoints) in terrainLayers:
                 self.appendLayer(soil, layerSurfacePoints)
+        self.waterTable= None
 
     def appendLayer(self, soil, layerSurfacePoints):
         ''' Append an terrain layer.
@@ -164,8 +209,44 @@ class TerrainCrossSection(object):
                 lmsg.error(className+'.'+methodName+'; layer surfaces don\'t share a common plane. Angle between planes: '+"{:4.2f}".format(math.degrees(angle))+' degrees')
         else: # Not set yet.
             self.commonPlane= plane
-        self.layers.append(TerrainLayer(pline= plane_pline_3d, soil= soilatio))
+        self.layers.append(TerrainLayer(pline= plane_pline_3d, soil= soil))
         return self.layers[-1]
+
+    def appendWaterTable(self, waterSurfacePoints, waterDensity= 1e3):
+        ''' Append the water table surface defined by the argument points.
+
+        :param waterSurfacePoints: sequence of 3D points representing the water
+                                   table surface.
+        :param waterDensity: density of the water.
+        '''
+        plane_pline_3d= geom.PlanePolyline3d(waterSurfacePoints)
+        plane= plane_pline_3d.getPlane()
+        if(self.commonPlane): # Check that are the same plane (or almost).
+            angle= self.commonPlane.getAngle(plane)
+            tol= 1e-3
+            if(abs(angle)>tol and abs(angle-math.pi)>tol):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; waterr surfaces don\'t share a common plane with previous layers. Angle between planes: '+"{:4.2f}".format(math.degrees(angle))+' degrees')
+        else: # Not set yet.
+            self.commonPlane= plane
+        self.waterTable= WaterTable(pline= plane_pline_3d, waterDensity= waterDensity)
+
+    def getLayerAtPoint(self, point, verticalDir= geom.Vector3d(0,0,1)):
+        ''' Return the layer that corresponds to the point argument.
+
+        :param point: point whose depth will be computed.
+        :param verticalDir: vector pointing «up».
+        '''
+        retval= None
+        if(self.layers):
+            rLayers= list(reversed(self.layers))
+            for layer in rLayers:
+                depth= layer.getDepth(point= point, verticalDir= verticalDir)
+                if(depth>=0.0):
+                    retval= layer
+                    break
+        return retval
     
     def getDepths(self, point, verticalDir= geom.Vector3d(0,0,1)):
         ''' Return the depths corresponding to the point argument for
@@ -218,6 +299,8 @@ class TerrainCrossSection(object):
         for layer, thickness in zip(self.layers, thicknesses):
             if(thickness>0.0): # thickness for this layer.
                 retval+= layer.soil.gamma()*thickness
+        if(self.waterTable):
+            retval-= self.waterTable.getPressure(point= point, verticalDir= verticalDir)
         return retval
     
     def getLateralPressuresOnPoints(self, points, unitVectorDirs, k):
@@ -233,10 +316,24 @@ class TerrainCrossSection(object):
                   effective stress.
         '''
         retval= list()
-        for point, vDir in zip(points, unitVectorDirs):
+        weightPressures= list()
+        for point in points:
             weightPressure= self.getWeightVerticalStresses(point= point)
-            lateralPressure= -k*weightPressure*vDir
-            retval.append(lateralPressure)
+            weightPressures.append(weightPressure)
+        lateralPressures= list()
+        if(isinstance(k, list)):
+            for ki, weightPressure in zip(k,weightPressures):
+                lateralPressure= ki*weightPressure
+                lateralPressures.append(lateralPressure)
+        else:
+            for weightPressure in weightPressures:
+                lateralPressure= k*weightPressure
+                lateralPressures.append(lateralPressure)
+        if(unitVectorDirs is not None):
+            for pressure, vDir in zip(lateralPressures, unitVectorDirs):
+                retval.append(-pressure*vDir)
+        else:
+            retval= lateralPressures
         return retval
     
     def getEarthPressuresOnPointGrid(self, pointGrid, unitVectorDirs, k):
