@@ -38,16 +38,16 @@ class FrictionalSoil(object):
 
     def K0Jaky(self):
         '''Returns Jaky's coefficient (earth pressure at rest).'''
-        return 1.0-math.sin(self.getDesignPhi())
+        return 1.0-math.sin(self.phi)
 
     def Ka(self):
         '''Active earth pressure coefficient.'''
-        sinPhi= math.sin(self.getDesignPhi())
+        sinPhi= math.sin(self.phi)
         return (1-sinPhi)/(1+sinPhi)
       
     def Kp(self):
         '''Passive earth pressure coefficient.'''
-        sinPhi= math.sin(self.getDesignPhi())
+        sinPhi= math.sin(self.phi)
         return (1+sinPhi)/(1-sinPhi)
       
     def Ka_coulomb(self, a, b, d= 0.0):
@@ -58,7 +58,7 @@ class FrictionalSoil(object):
         :param b:  slope of the backfill (radians, 0 if horizontal).
         :param d:  friction angle between soil and the back of retaining wall (radians).
         '''
-        phi= self.getDesignPhi()
+        phi= self.phi
         num= 1.0/math.cos(a)*math.cos(phi-a)
         r1=math.sqrt(math.cos(a+d))
         if(b>phi):
@@ -99,7 +99,7 @@ class FrictionalSoil(object):
         :param b:  slope of the backfill (radians).
         :param d:  friction angle between soil an back of retaining wall (radians).
         '''
-        phi= self.getDesignPhi()
+        phi= self.phi
         if(b>phi):
             lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
         p1= 1.0/(math.cos(a)**2)
