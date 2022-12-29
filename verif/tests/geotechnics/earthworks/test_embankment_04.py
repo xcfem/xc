@@ -64,7 +64,7 @@ weightPressures= list()
 for p in testPoints:
     thicknesses= embankment.getLayerThicknesses(point= p)
     thicknessValues.append(thicknesses)
-    weightPressure= embankment.getWeightVerticalStresses(point= p)
+    weightPressure= embankment.getWeightVerticalStress(point= p)
     weightPressures.append(weightPressure)
 
 # Check results.
