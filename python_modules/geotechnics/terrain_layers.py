@@ -286,8 +286,8 @@ class TerrainStrata(object):
             retval= list(reversed(retval)) # Results from top to bottom.
         return retval
     
-    def getWeightVerticalStresses(self, point, verticalDir= geom.Vector3d(0,0,1)):
-        ''' Return the vertical stresses due to the soil weight on each of the 
+    def getWeightVerticalStress(self, point, verticalDir= geom.Vector3d(0,0,1)):
+        ''' Return the vertical stress due to the soil weight on each of the 
             points in the list argument.
 
         :param point: point whose vertical stress will be computed.
@@ -300,7 +300,8 @@ class TerrainStrata(object):
             if(thickness>0.0): # thickness for this layer.
                 retval+= layer.soil.gamma()*thickness
         if(self.waterTable):
-            retval-= self.waterTable.getPressure(point= point, verticalDir= verticalDir)
+            waterPressure= self.waterTable.getPressure(point= point, verticalDir= verticalDir)
+            retval-= waterPressure
         return retval
     
     def getLateralPressuresOnPoints(self, points, unitVectorDirs, k):
@@ -318,7 +319,7 @@ class TerrainStrata(object):
         retval= list()
         weightPressures= list()
         for point in points:
-            weightPressure= self.getWeightVerticalStresses(point= point)
+            weightPressure= self.getWeightVerticalStress(point= point)
             weightPressures.append(weightPressure)
         lateralPressures= list()
         if(isinstance(k, list)):

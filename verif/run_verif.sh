@@ -1146,6 +1146,7 @@ echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
 
 echo "$BLEU" "  Foundation design tests." "$NORMAL"
+python tests/geotechnics/foundations/test_skin_friction.py
 python tests/geotechnics/foundations/test_pile_01.py
 python tests/geotechnics/foundations/test_micropile_01.py
 python tests/geotechnics/foundations/test_micropile_02.py
