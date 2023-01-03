@@ -1,7 +1,6 @@
-# Shell elements
+# Shell elements verification tests
 
-This directory contains the C++ classes corresponding to the implementation of 
-shell elements.
+This directory contains the verification tests corresponding to the implementation of shell elements.
 
 ## References
 

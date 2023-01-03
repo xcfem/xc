@@ -8,6 +8,11 @@ Classes that implement the different types of analysis:
 
 ## References
 
+### Explicit and implicit methods
+
+- [Explicit and implicit methods](https://en.wikipedia.org/wiki/Explicit_and_implicit_methods)
+- [Implicit vs Explicit Finite Element Method (FEM): What Is the Difference?](https://www.simscale.com/blog/implicit-vs-explicit-fem/)
+
 ### Buckling analysis
 - [Linear buckling analysis](https://portwooddigital.com/2021/05/29/right-under-your-nose)
 - [That’s a Large Mass](https://portwooddigital.com/2021/08/01/thats-a-large-mass/)
@@ -27,6 +32,13 @@ Classes that implement the different types of analysis:
 - [Transient Analysis of a Cantilever Beam](https://sites.ualberta.ca/~wmoussa/AnsysTutorial/IT/Transient/Transient.html)
 - [The time-domain transient method in structural finite element analysis](https://getwelsim.medium.com/the-time-domain-transient-method-in-structural-finite-element-analysis-3666dd066d81)
 - [Multi-Threaded SDF Analysis](https://portwooddigital.com/2022/11/25/multi-threaded-sdf-analysis/)
+
+#### Rotary inertia terms
+- [ShellMITC4 creates indeterminate matrix in explicit analysis](https://github.com/OpenSees/OpenSees/issues/998)
+- [Rotary inertia for 5 degree of freedom shell elements](https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/stm/default.htm?startat=ch03s06ath83.html)
+- [Rotary inertia](http://193.136.142.5/v6.11/books/usb/default.htm?startat=pt06ch29s02alm23.html#usb-elm-erotinertia)
+- [Rotary inertia element](http://193.136.142.5/v6.11/books/stm/default.htm?startat=ch03s09ath98.html)
+
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
