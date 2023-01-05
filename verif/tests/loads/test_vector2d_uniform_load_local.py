@@ -3,16 +3,17 @@
 
 from __future__ import print_function
 
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
-from materials import typical_materials
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
+import sys
+import xc
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
 
 # Geometry
 width= .05
@@ -58,11 +59,14 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../aux/testQuadRegion.py").read())
+auxModulePath= pth+"/../aux"
+sys.path.append(auxModulePath)
+import testQuadRegion as tqr
 
 materialHandler= preprocessor.getMaterialHandler
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
+testQuadRegion= tqr.getTestQuadRegion(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
 fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 A= quadFibers.getFibers().getArea(1.0)
