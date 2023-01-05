@@ -9,6 +9,7 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 # Testing fiber section model of Steel01 uniaxial material.
 
+import sys
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -47,9 +48,13 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../../../aux/testQuadRegion.py").read())
+auxModulePath= pth+"/../../../../aux"
+sys.path.append(auxModulePath)
+import testQuadRegion as tqr
+
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
+testQuadRegion= tqr.getTestQuadRegion(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
 fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 fibras= quadFibers.getFibers()
