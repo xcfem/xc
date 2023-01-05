@@ -27,7 +27,7 @@ class XYFoldingPlanes(object):
         for p in proj:
             segment3d= geom.LineSegment3d(p0,p1)
             lmb= (p.dist(P0proj)/P1proj.dist(P0proj))*segment3d.getLength()
-            pInt= sg3d.getPoint(lmb)
+            pInt= segment3d.getPoint(lmb)
             err= (pInt.x-p.x)**2+(pInt.y-p.y)**2
             if(err>1e-6):
                 className= type(self).__name__
