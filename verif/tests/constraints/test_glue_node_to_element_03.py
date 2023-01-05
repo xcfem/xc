@@ -19,6 +19,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -104,7 +105,6 @@ ratio3= svdResid.getMoment().getModulus()/actionNode10Norm
 # print("RN4= ", RN4)
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (analOk==0):
     print('test '+fname+': ok.')

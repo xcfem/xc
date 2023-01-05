@@ -20,6 +20,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -108,7 +109,6 @@ actionNode20Norm= actionNode20.Norm()
 
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 condNode10= (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9)
 condNode20= (abs(ratio4)<1e-10)
