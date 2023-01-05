@@ -2,7 +2,6 @@
 ''' Home made test. Horizontal cantilever under tension load at its end.'''
 
 from __future__ import print_function
-#
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -10,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -58,10 +58,14 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
     pth= "."
-exec(open(pth+"/../../aux/testQuadRegion.py").read())
+auxModulePath= pth+"/../../aux"
+sys.path.append(auxModulePath)
+import testQuadRegion as tqr
+
 materialHandler= preprocessor.getMaterialHandler
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
+testQuadRegion= tqr.getTestQuadRegion(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
 fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 A= quadFibers.getFibers().getArea

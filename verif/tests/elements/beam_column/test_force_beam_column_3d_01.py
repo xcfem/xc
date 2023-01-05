@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -47,12 +48,16 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/testQuadRegion.py").read()) # Definition of section geometry (regions and rebars)
+auxModulePath= pth+"/../../aux"
+sys.path.append(auxModulePath)
+import testQuadRegion as tqr
+
 # Definition of a new empty fiber section named 'quadFibers' and stored in a
 # Python variable of the same name (surprisingly enough).
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section representation
                                                      # of 'quadFibers'
+testQuadRegion= tqr.getTestQuadRegion(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
 fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry (regions and rebars)
                                                   # to the fiber section representation
                                                   # of 'quadFibers'
