@@ -35,7 +35,10 @@ class BoussinesqStresses(object):
     :ivar sigma_rr: radial component of the stress.
     :ivar sigma_thth: tangential component of the stress.
     :ivar tau_rz: shear (r,z) component of the stress.
+    :ivar radiusLowerBound: lower limit to the radius of the point (x^2+y^2+z^2) to avoid
+                             almost infinite values of the pressure.
     '''
+    radiusLowerBound= 0.5
     
     def __init__(self, P, x, y, z, eta= 1.0):
         ''' Constructor.
@@ -73,7 +76,7 @@ class BoussinesqStresses(object):
             r2= x**2+y**2
             r= math.sqrt(r2)
             R2= r2+Z**2
-            R= math.sqrt(R2)
+            R= max(math.sqrt(R2), self.radiusLowerBound)
             R5= R**5
             P_twoPi= P/(2.0*math.pi)
             P3_twoPi_R5= 3.0*P_twoPi/R5
@@ -93,6 +96,7 @@ class BoussinesqStresses(object):
         cylTensor= self.getStressTensorCylindrical()
         theta= math.atan2(self.y, self.x)
         return tt.cylindrical_to_cartesian(tensorCylindrical=cylTensor, theta= theta)
+    
     def getCartesianStressVector(self, unitVectorDir):
         ''' Return the stress vector for the direction argument.
 
@@ -188,7 +192,7 @@ class BoussinesqLoad(object):
         return loadedPoints, unitVectors
     
     def computeElementalLoads(self, elements, stressVectors, delta):
-        ''' Compute loads on elements from the stress vectors passes as
+        ''' Compute loads on elements from the stress vectors passed as
             parameter.
 
         :param elements: elements to compute the pressure on.
