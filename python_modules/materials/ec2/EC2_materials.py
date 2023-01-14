@@ -215,7 +215,7 @@ class EC2Concrete(concrete_base.Concrete):
         else:
             eta2= (132-rebarDiameter*1e3)/100
         return 2.25*eta1*eta2*self.fctd()
-
+    
 #    def getEcmT(self):
 #        """
 #        EC2Ecmt: approximate value of the modulus of elasticity [Pa] at age 
@@ -236,11 +236,11 @@ class EC2Concrete2021(EC2Concrete):
         '''value of the alpha_bs coefficient accordint to table B.3 of 
            Eurocode2:2021 part 1-1.
         '''
-        if self.cemType=='R':    #high early strength
+        if self.cemType=='R': # high early strength
             retval= 600
-        elif self.cemType=='S':  #low early strength
+        elif self.cemType=='S': # low early strength
             retval= 800
-        else:                   # ordinary early strength
+        else: # ordinary early strength
             retval= 700
         return retval
     
@@ -289,6 +289,8 @@ class EC2Concrete2021(EC2Concrete):
         '''coefficient to consider the effect of relative humidity on drying
            shrinkage according to expression B29 of clause B.6 of
            Eurocode2:2021 part 1-1.
+
+        :param RH: relative humidity (%).
         '''
         rhEq= self.getShrRHeq()
         frac= RH/rhEq
@@ -314,7 +316,7 @@ class EC2Concrete2021(EC2Concrete):
 
         :param t: age of concrete in days at the moment considered
         :param ts: age of concrete in days at the beginning of drying shrinkage (or swelling). Normally this is at the end of curing
-        :param h0: notional size of the member expressed in millimeters.
+        :param h0: notional size of the member.
                - h0=``2*Ac/u``, where:
                - Ac= cross sectional area
                - u = perimeter of the member in contact with the atmosphere

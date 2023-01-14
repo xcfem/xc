@@ -417,7 +417,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         according to equattion B.11 of clause B.2 
         (Annex B Eurocode 2:2004 part 1-1)
  
-        :param RH:  ambient relative humidity(%)
+        :param RH: ambient relative humidity(%)
         '''
         fcmMPa=abs(self.getFcm())/1e6
         fcm0MPa=10       
@@ -476,8 +476,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
         '''
         #epscd: drying shrinkage strain
-        epscd=self.getShrBetadstts(t,ts,h0)*self.getShrKh(h0)*self.getShrEpscd0(RH)
-        return epscd
+        return self.getShrBetadstts(t,ts,h0)*self.getShrKh(h0)*self.getShrEpscd0(RH)
 
     def getShrKh(self,h0):
         '''coefficient depending on the notional size h0
@@ -485,10 +484,10 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         (table 3.3 Eurocode 2 part 1-1)
 
         :param h0:  notional size of the member.
-
-                  - h0=``2*Ac/u``, where:
-                       - Ac= cross sectional area
-                       - u = perimeter of the member in contact with the atmosphere
+                    - h0=``2*Ac/u``, where:
+                         - Ac= cross sectional area
+                         - u = perimeter of the member in contact with 
+                               the atmosphere.
         '''
         x=(0.0, 0.1, 0.2, 0.3, 0.5, 1e10)
         y=(1.0,1.0,0.85,0.75,0.70,0.70)
@@ -510,7 +509,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                    - Ac= cross sectional area
                    - u= perimeter of the member in contact with the atmosphere
         '''
-        return (t-ts)/(t-ts+0.04*(h0*1e3)**(3.0/2.0))
+        return (t-ts)/(t-ts+0.04*math.pow(h0*1e3,3.0/2.0))
 
 #   Autogenous shrinkage strain
     def getShrEpsca(self,t):
