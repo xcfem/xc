@@ -256,18 +256,37 @@ class DynamicFactorLoad(object):
     ''' Base class for railway loads.
 
     :ivar dynamicFactor: dynamic factor affecting the load.
+    :ivar classificationFactor: classification factor (on lines carrying rail 
+                                traffic which is heavier or lighter than 
+                                normal rail traffic).
     '''
-    def __init__(self, dynamicFactor):
+    def __init__(self, dynamicFactor, classificationFactor= 1.21):
         ''' Constructor.
 
+        :param dynamicFactor: dynamic factor.
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
+        '''
+        self.dynamicFactor= dynamicFactor
+        self.classificationFactor= classificationFactor
+
+    def setDynamicFactor(self, dynamicFactor):
+        ''' Set the dynamic factor for the load.
 
         :param dynamicFactor: dynamic factor.
         '''
         self.dynamicFactor= dynamicFactor
 
-    def setDynamicFactor(self, dynamicFactor):
-        ''' Set the dynamic factor for the load.'''
-        self.dynamicFactor= dynamicFactor
+    def setClassificationFactor(self, classificationFactor):
+        ''' Set the classification factor for the load.
+
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
+        '''
+        self.classificationFactor= classificationFactor
+        
     
 class UniformRailLoad(DynamicFactorLoad):
     ''' Uniform load along a rail.
@@ -275,13 +294,16 @@ class UniformRailLoad(DynamicFactorLoad):
     :ivar railAxis: 3D polyline defining the axis of the rail.
     :ivar load: value of the uniform load.
     '''
-    def __init__(self, railAxis, load, dynamicFactor= 1.0):
+    def __init__(self, railAxis, load, dynamicFactor= 1.0, classificationFactor= 1.21):
         ''' Constructor.
 
         :param railAxis: 3D polyline defining the axis of the rail.
         :param load: value of the uniform load.
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
         '''
-        super().__init__(dynamicFactor= dynamicFactor)
+        super().__init__(dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
         self.railAxis= railAxis
         self.load= load
 
@@ -289,9 +311,14 @@ class UniformRailLoad(DynamicFactorLoad):
         ''' Return the midpoint of the rail axis.'''
         return self.railAxis.getPointAtLength(0.5*self.railAxis.getLength())
 
+    def getClassifiedLoad(self):
+        ''' Return the value of the load affected by the classification 
+            factor.'''
+        return self.load*self.classificationFactor
+
     def getDynamicLoad(self):
         ''' Return the value of the load affected by the dynamic factor.'''
-        return self.load*self.dynamicFactor
+        return self.getClassifiedLoad()*self.dynamicFactor
 
     def getRailAxisProjection(self, midplane):
         ''' Return the projection of the rail axis onto the plane argument.
@@ -442,7 +469,7 @@ class LocomotiveLoad(DynamicFactorLoad):
     :ivar xSpacing: tandem axle spacing.
     :ivar yXpacing: distance between wheels of the same axle.
     '''
-    def __init__(self, nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435, dynamicFactor= 1.0):
+    def __init__(self, nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435, dynamicFactor= 1.0, classificationFactor= 1.21):
         ''' Constructor.
 
         :param nAxes: defaults to 4 (Eurocode 1, load model 1)
@@ -450,16 +477,24 @@ class LocomotiveLoad(DynamicFactorLoad):
         :param xSpacing: tandem axle spacing (defaults to 1.6 m, Eurocode 1, load model 1).
         :param ySpacing: distance between wheels of the same axle (defaults to nternational standard gauge 1435 mm).
         :param dynamicFactor: dynamic factor.
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
         '''
-        super().__init__(dynamicFactor= dynamicFactor)
+        super().__init__(dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
         self.nAxes= nAxes
         self.axleLoad= axleLoad
         self.xSpacing= xSpacing
         self.ySpacing= ySpacing
+
+    def getAxleClassifiedLoad(self):
+        ''' Return the value of the axle load affected by the classification
+            factor.'''
+        return self.axleLoad*self.classificationFactor
         
     def getTotalLoad(self):
         ''' Return the total load of the tandem.'''
-        return self.nAxes*self.axleLoad*self.dynamicFactor
+        return self.nAxes*self.getAxleClassifiedLoad()*self.dynamicFactor
 
     def getTotalLength(self):
         ''' Return the length occupied by the locomotive.'''
@@ -484,7 +519,7 @@ class LocomotiveLoad(DynamicFactorLoad):
 
     def getDynamicWheelLoad(self):
         ''' Return the load on each wheel affected by the dynamic factor.'''
-        return self.axleLoad/2.0*self.dynamicFactor
+        return self.getAxleClassifiedLoad()/2.0*self.dynamicFactor
         
     def getWheelLoads(self, loadFactor= 1.0):
         ''' Return the loads of the wheels of the tandem along with its 
@@ -506,22 +541,30 @@ class TrainLoadModel(object):
     :ivar locomotive: locomotive model.
     :ivar uniformLoad: uniform load on the track.
     '''
-    def __init__(self, locomotive, uniformLoad, dynamicFactor):
+    def __init__(self, locomotive, uniformLoad, dynamicFactor, classificationFactor= 1.21):
         ''' Constructor:
 
         :param locomotive: locomotive model.
         :param uniformLoad: uniform load on the track.
 
         :param dynamicFactor: dynamic factor.
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
         '''
         self.locomotive= locomotive
         # The dynamic factor is stored in the locomotive.
         self.locomotive.setDynamicFactor(dynamicFactor)
+        self.locomotive.setClassificationFactor(classificationFactor)
         self.uniformLoad= uniformLoad
 
     def getDynamicFactor(self):
         ''' Return the dynamic factor.'''
         return self.locomotive.dynamicFactor
+
+    def getClassificationFactor(self):
+        ''' Return the classification factor.'''
+        return self.locomotive.classificationFactor
 
     def getRailUniformLoad(self):
         ''' Return the raw uniform load.'''
@@ -529,7 +572,7 @@ class TrainLoadModel(object):
         
     def getDynamicUniformLoad(self):
         ''' Return the uniform load affected by the dynamic factor.'''
-        return self.locomotive.dynamicFactor*self.uniformLoad
+        return self.getClassificationFactor()*self.getDynamicFactor()*self.uniformLoad
 
 # Rudimentary implementation of the track axis concept.
 #
@@ -688,7 +731,7 @@ class TrackAxis(object):
         qRail= trainModel.getRailUniformLoad()
         retval= list()
         for rc in railChunks:
-            unifRailLoad= UniformRailLoad(railAxis= rc.getPolyline3d(), load= qRail, dynamicFactor= trainModel.getDynamicFactor())
+            unifRailLoad= UniformRailLoad(railAxis= rc.getPolyline3d(), load= qRail, dynamicFactor= trainModel.getDynamicFactor(), classificationFactor= trainModel.getClassificationFactor())
             retval.append(unifRailLoad)
         return retval
 
