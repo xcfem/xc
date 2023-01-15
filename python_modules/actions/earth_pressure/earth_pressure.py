@@ -573,7 +573,7 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         return maxValue
 
 class SeismicPressureDistribution(EarthPressureBase):
-    '''Overpressure due to seismic action according to Mononobe-Okabe
+    '''Base class for soil overpressure due to seismic action
 
       :ivar H: height of the structure.
       :ivar kv: seismic coefficient of vertical acceleration.
@@ -769,8 +769,8 @@ class EarthPressureSlopedWall(object):
         
     def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
         for e in xcSet.elements:
-            coo=e.getCooCentroid(False)
-            presElem=self.getPressure(coo[0],coo[1],coo[2])
+            coo= e.getCooCentroid(False)
+            presElem= self.getPressure(coo[0],coo[1],coo[2])
             loadVector= presElem*vDir
             if(presElem!=0.0):
                 e.vector3dUniformLoadGlobal(loadVector)
