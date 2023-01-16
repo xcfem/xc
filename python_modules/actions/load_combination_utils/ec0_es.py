@@ -168,7 +168,7 @@ class CombGenerator(utils.CombGenerator):
         :param context: context for the action (building, railway_bridge, footbridge,...)
         '''
         retval= None
-        if(context=='road_bridge'):
+        if(context=='railway_bridge'):
             retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= 'railway_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
         else:
             className= type(self).__name__
