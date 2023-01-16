@@ -99,7 +99,7 @@ loadCaseNames= ['earth_pressure']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 cLC= loadCaseManager.setCurrentLoadCase('earth_pressure')
 
-# Define concentreted load
+# Define concentrated load
 pos= geom.Pos3d(6.096,2.286, 2.4384) # Load position.
 load= -11.15*1900*psf2Pa # Load value
 loadedPoint= boussinesq.ConcentratedLoad(p= pos, Q=load)
@@ -107,7 +107,7 @@ loadedPoint= boussinesq.ConcentratedLoad(p= pos, Q=load)
 # Compute loads on elements.
 loadedPoint.appendLoadToCurrentLoadPattern(elements= s.elements, eta= 1.0, delta= math.radians(10.0))
 
-modelSpace.addLoadCaseToDomain('earth_pressure')
+modelSpace.addLoadCaseToDomain(cLC.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
