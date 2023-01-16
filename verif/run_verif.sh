@@ -202,6 +202,7 @@ python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_02.py
 python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_03.py
 echo "$BLEU" "  Earthquake action tests." "$NORMAL"
 python tests/actions/quake/mononobe_okabe_test_01.py
+python tests/actions/quake/mononobe_okabe_test_02.py
 python tests/actions/quake/iskander_method_test_01.py
 python tests/actions/quake/iskander_method_test_02.py
 python tests/actions/quake/iskander_method_test_03.py

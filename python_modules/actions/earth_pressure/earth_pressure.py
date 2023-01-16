@@ -672,6 +672,32 @@ class MononobeOkabePressureDistribution(SeismicPressureDistribution):
             retval= (z-zInf)/(zSup-zInf)*self.max_stress
         return retval
 
+    def appendLoadToCurrentLoadPattern(self, elements, vDir, iCoo= 2):
+        '''Append earth thrust on a set of elements to the current
+        load pattern.
+
+        :param elements: elements to apply the load on.
+        :param vDir: unit xc vector defining pressures direction
+        :param iCoo: index of the coordinate that represents depth.
+        '''
+        if(vDir.getDimension()==3): #3D load.
+            for e in elements:
+                presElem= self.getPressure(e.getCooCentroid(False)[iCoo])
+                loadVector= presElem*e.getKVector3d(True)
+                orientation= loadVector.dot(vDir)
+                if(orientation<0.0):
+                    loadVector= -loadVector
+                if(presElem!=0.0):
+                    e.vector3dUniformLoadGlobal(xc.Vector(loadVector))
+        else: #2D load.
+            for e in elements:
+                presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
+                loadVector= presElem*e.getJVector2d(True)
+                orientation= loadVector.dot(vDir)
+                if(orientation<0.0):
+                    loadVector= -loadVector
+                if(presElem!=0.0):
+                    e.vector2dUniformLoadGlobal(xc.Vector(loadVector))
 
 class IskanderPressureDistribution(SeismicPressureDistribution):
     '''Overpressure due to seismic action according to Iskander et al.
