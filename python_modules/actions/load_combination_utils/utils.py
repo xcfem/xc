@@ -26,6 +26,19 @@ class CombGenerator(object):
         self.controlCombGenerator= loadCombinations.LoadCombGenerator()
         self.actionsAndFactors= self.controlCombGenerator.actionWeighting.create(self.name, factors)
 
+    def getFactors(self):
+        ''' Return a pointer to the container of the partial safety factors
+            and combination factors.'''
+        return self.actionsAndFactors.getFactors()
+
+    def getPartialSafetyFactors(self):
+        ''' Return a pointer to the container of the partial safety factors.'''
+        return self.getFactors().getPartialSafetyFactors()
+
+    def getCombinationFactors(self):
+        ''' Return a pointer to the container of the combination factors.'''
+        return self.getFactors().getPartialSafetyFactors()
+    
     def newAction(self, family: str, actionName: str, actionDescription: str, combinationFactorsName:str, partialSafetyFactorsName:str, dependsOn= None, incompatibleActions= None):
         ''' Creates an action and appends it to the combinations generator.
 

@@ -53,6 +53,7 @@ class FactorsMap: public CommandEntity, public std::map<std::string,Factors>
     const Factors &BuscaCoefs(const std::string &) const;
     void insert(const std::string &,const Factors &);
     std::deque<std::string> getNames(void) const;
+    boost::python::list getKeys(void) const;
   };
 
 template <class Factors>
@@ -93,7 +94,16 @@ std::deque<std::string> FactorsMap<Factors>::getNames(void) const
     return retval;
   }
 
- 
+ //! @brief Return the names of the factor families.
+template <class Factors>
+boost::python::list FactorsMap<Factors>::getKeys(void) const
+  {
+    boost::python::list retval;
+    for(const_iterator i=this->begin();i!=this->end();i++)
+      retval.append((*i).first);
+    return retval;    
+  }
+
 //! @brief Return a pointer to the factors named with the string
 //! argument.
 template <class Factors>

@@ -48,11 +48,13 @@ class_<map_partial_safety_factors >("map_partial_safety_factorss")
 
 typedef FactorsMap<PartialSafetyFactors> factors_map_partial_safety_factors;
 class_<factors_map_partial_safety_factors, bases<CommandEntity,map_partial_safety_factors> >("factors_map_partial_safety_factors")
+  .def("getKeys", &factors_map_partial_safety_factors::getKeys,"Returns partial safety factors naes.")
   ;
 
 class_<PartialSafetyFactorsMap, bases<factors_map_partial_safety_factors> >("PartialSafetyFactorsDict")
   .def("get", &PartialSafetyFactorsMap::BuscaCoefs, return_value_policy<copy_const_reference>())
-  .def("insert", &PartialSafetyFactorsMap::insert);
+  .def("insert", &PartialSafetyFactorsMap::insert)
+  ;
 
 class_<CombinationFactors, bases<CommandEntity> >("CombinationFactors")
   .def(init<double, double, double>())

@@ -36,7 +36,8 @@ partial_safety_factors['thermal']= loadCombinations.PartialSafetyFactors(loadCom
 # Hydrostatic pressure
 partial_safety_factors['hydrostatic_pressure']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 
-
+# Partial safety factors for accidental actions.
+partial_safety_factors['accidentales']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,0,0,1),loadCombinations.SLSPartialSafetyFactors(0,0))
 
 # Combination factors for road bridges (table AN.5 (table A2.1) )
 combination_factors= factors.getCombinationFactors()
@@ -74,6 +75,26 @@ class CombGenerator(utils.CombGenerator):
         '''
         super().__init__(combGeneratorName= 'EC0_ES', factors= factors)
         self.structureType= structureType
+        
+    def defSeismicPartialSafetyFactors(self, ulsImportanceFactor, slsImportanceFactor= 0.0):
+        ''' Create the partial safety factors for the seismic actions.
+
+        :param ulsImportanceFactor: importance factor (partial safety factor) to use
+                                    with seismic actions in ultimate limit states.
+        :param slsImportanceFactor: importance factor (partial safety factor) to use
+                                    with seismic actions in serviceability limit
+                                    states.
+        '''
+        partial_safety_factors= self.getPartialSafetyFactors()
+        code= "seismic_"+str(ulsImportanceFactor)+"_"+str(slsImportanceFactor)
+        retval= None
+        if code in partial_safety_factors:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(methodName+'; seismic partical safety factors for ulsImportanceFactor=  '+str(ulsImportanceFactor) + ' and slsImportanceFactor= '+str(slsImportanceFactor) + ' already defined. Command ignored.')
+        else:
+            psf= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,0,0,ulsImportanceFactor), loadCombinations.SLSPartialSafetyFactors(0,slsImportanceFactor))
+            partial_safety_factors.insert(code,psf)
+        return code
         
     def newPermanentAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= None):
         ''' Creates a permanent action and appends it to the combinations 
@@ -241,17 +262,26 @@ class CombGenerator(utils.CombGenerator):
         raise NotImplementedError()
         return None
     
-    def newSeismicAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= None):
+    def newSeismicAction(self, actionName: str, actionDescription: str, ulsImportanceFactor, slsImportanceFactor= 0.0, dependsOn= None, incompatibleActions= None, context= None):
         ''' Creates a snow action and appends it to the combinations 
             generator.
 
         :param actionName: name of the action.
         :param actionDescription: description of the action.
+        :param ulsImportanceFactor: importance factor (partial safety factor)
+                                    to use with seismic action in ultimate
+                                    limit states.
+        :param slsImportanceFactor: importance factor (partial safety factor) 
+                                    to use with seismic action in
+                                    serviceability limit states.
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
         '''
-        raise NotImplementedError()
-        return None
+        code= "seismic_"+str(ulsImportanceFactor)+"_"+str(slsImportanceFactor)
+        if not code in partial_safety_factors: # Part. sfty fctrs not yet defnd
+            self.defSeismicPartialSafetyFactors(ulsImportanceFactor, slsImportanceFactor)
+        return self.newAction(family= "seismic", actionName= actionName, actionDescription= actionDescription, combinationFactorsName= '', partialSafetyFactorsName= code, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
     
 combGenerator= CombGenerator()
