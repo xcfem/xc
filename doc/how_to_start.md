@@ -78,8 +78,11 @@ Introduction to [Python](https://www.python.org/), the scripting language we use
 
 ## Finite element analysis
 
+- [Finite element method](https://en.wikipedia.org/wiki/Finite_element_method)
+- [Finite Element Procedures](https://books.google.es/books/about/Finite_Element_Procedures.html?id=rWvefGICfO8C&redir_esc=y)
 - [The Finite Element Method: Its Basis and Fundamentals](https://www.elsevier.com/books/the-finite-element-method-its-basis-and-fundamentals/zienkiewicz/978-1-85617-633-0)
 - [OpenSees tutorial](https://opensees.berkeley.edu/workshop/NEESgridUser-EndWorkshop2005_presentations/NEESgridUser-EndWorkshopOpenSeesTutorial_SilviaMazzoni2005.pdf)
+- [Modélisations et calculs aux éléments finis dans le domaine du génie civil - bilan du groupe de travail afgc 2016/2019](https://wiki.afgc.asso.fr/accueil-gtef)
 
 ## Graphic interface. Visualization toolkit (VTK)
 
