@@ -324,7 +324,7 @@ class LinearLoad(BoussinesqLoad):
         return retval
     
     def getSamplePoints(self):
-        ''' Return the points uniformly distributed along the surface.'''
+        ''' Return the points uniformly distributed along the line.'''
         # Compute positions along the polyline.
         L= self.segment.getLength()
         numParts= int(math.ceil(L/self.eSize))
