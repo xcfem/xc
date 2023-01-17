@@ -320,6 +320,21 @@ class UniformRailLoad(DynamicFactorLoad):
         ''' Return the value of the load affected by the dynamic factor.'''
         return self.getClassifiedLoad()*self.dynamicFactor
 
+    def clip(self, clippingPlane):
+        ''' Clips the rail axis with the plane argument. It's used to remove
+        the part of the rail axis that lies behind the plane (normally the
+        plane will correspond to the midplane of a wall that will resist
+        the pressures caused by this load. That way, if some of the rail axis
+        lies behind the wall we'll remove the "negative" pressures caused
+        by that chunk of the rail load.
+
+        :param clippingPlane: plane to clip with.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; not implemented yet.')
+
+
     def getRailAxisProjection(self, midplane):
         ''' Return the projection of the rail axis onto the plane argument.
 
@@ -776,7 +791,9 @@ class TrackAxis(object):
         :param brakingDir: direction of the braking load.
         '''
         railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir, brakingDir= brakingDir)
+        setMidplane= originSet.nodes.getRegressionPlane(0.0)
         for rul in railUniformLoads:
+            rul.clip(setMidplane) # Avoid "negative" pressures over the wall.
             rul.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
         
 
