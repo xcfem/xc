@@ -105,6 +105,7 @@ class Segment3d : public Linear3d
     boost::python::list DividePy(int num_partes) const;
     VectorPos3d Divide(const std::vector<double> &) const;
     boost::python::list DividePy(const boost::python::list &) const;
+    boost::python::list split(const Pos3d &) const;
     
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

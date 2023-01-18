@@ -439,6 +439,28 @@ boost::python::list Segment3d::DividePy(const boost::python::list &proportions) 
     return retval;
   }
 
+//! @brief Return the two segments that result from splitting
+//! this one on the point nearest to the argument.
+boost::python::list Segment3d::split(const Pos3d &p) const
+  {
+    const Pos3d &p0= getFromPoint();
+    const GEOM_FT df= p.dist(p0);
+    const Pos3d &p1= getToPoint();
+    const GEOM_FT dt= p.dist(p1);
+    const GEOM_FT length= this->getLength();
+    const GEOM_FT tol= length/1e6;
+    boost::python::list retval;
+    if((df>tol) and (dt>tol))
+      {
+        Segment3d retvalA(getFromPoint(), p), retvalB(p, getToPoint());
+        retval.append(retvalA);
+        retval.append(retvalB);
+      }
+    else
+      retval.append(*this);
+    return retval;
+  }
+
 //! @brief Return a Python dictionary with the object members values.
 boost::python::dict Segment3d::getPyDict(void) const
   {

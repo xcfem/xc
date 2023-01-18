@@ -584,6 +584,16 @@ boost::python::list Segment2d::DividePy(const boost::python::list &proportions) 
     return retval;
   }
 
+//! @brief Return the two segments that result from splitting
+//! this one on the point nearest to the argument.
+boost::python::list Segment2d::split(const Pos2d &p) const
+  {
+    Segment2d retvalA(getFromPoint(), p), retvalB(p, getToPoint());
+    boost::python::list retval;
+    retval.append(retvalA);
+    retval.append(retvalB);
+    return retval;
+  }
 //! @brief Return a Python dictionary with the object members values.
 boost::python::dict Segment2d::getPyDict(void) const
   {
