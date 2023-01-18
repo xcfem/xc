@@ -141,6 +141,11 @@ Pos3d (Plane::*IntersLine3d)(const Line3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersRay3d)(const Ray3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersSegment3d)(const Segment3d &) const= &Plane::getIntersection;
 Segment3d (Plane::*IntersPolygon3d)(const Polygon3d &) const= &Plane::getIntersection;
+bool (Plane::*ExistIntersPlane)(const Plane &) const= &Plane::intersects;
+bool (Plane::*ExistIntersLine3d)(const Line3d &) const= &Plane::intersects;
+bool (Plane::*ExistIntersRay3d)(const Ray3d &) const= &Plane::intersects;
+bool (Plane::*ExistIntersSegment3d)(const Segment3d &) const= &Plane::intersects;
+bool (Plane::*ExistIntersPolygon3d)(const Polygon3d &) const= &Plane::intersects;
 double (Plane::*linearLeastSquaresFittingPtr)(const GeomObj3d::list_Pos3d &)= &Plane::linearLeastSquaresFitting;
 class_<Plane, bases<Surface3d> >("Plane3d")
   .def(init<Pos3d,Pos3d,Pos3d>())
@@ -174,6 +179,13 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("getIntersection",IntersRay3d,"return the intersection with the ray argument.")
   .def("getIntersection",IntersSegment3d,"return the intersection with the segment argument.")
   .def("getIntersection",IntersPolygon3d,"return the intersection with the polygon argument.")
+
+  .def("intersects",ExistIntersPlane, "return the intersection with the plane argument.")
+  .def("intersects",ExistIntersLine3d,"return the intersection with the line argument.")
+  .def("intersects",ExistIntersRay3d,"return the intersection with the ray argument.")
+  .def("intersects",ExistIntersSegment3d,"return the intersection with the segment argument.")
+  .def("intersects",ExistIntersPolygon3d,"return the intersection with the polygon argument.")
+
   .def("getPoint()", &Plane::Point, "return an arbitrary point on the plane.")
   .def("getNormal", &Plane::Normal,"return the plane normal or local k vector.")
   .def("getBase1", &Plane::Base1, "return the first base vector or local i vector.")
