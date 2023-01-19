@@ -400,7 +400,13 @@ class SLS_LimitStateData(LimitStateData):
                generation or not of lists, ...)
          '''
         return reinfConcreteSections.internalForcesVerification3D(self, "k",outputCfg)
-        
+
+class RareLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
+    ''' Reinforced concrete crack control under rare loads limit state data.'''
+    def __init__(self):
+        '''Limit state data constructor '''
+        super(RareLoadsCrackControlRCLimitStateData,self).__init__('SLS_rareLoadsCrackControl','verifRsl_crackingSLS_rare', designSituation= 'rare')
+
 class FreqLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
     def __init__(self):
@@ -492,8 +498,11 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         return retval
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
+
+rareLoadsCrackControl= RareLoadsCrackControlRCLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlRCLimitStateData()
 quasiPermanentLoadsCrackControl= QPLoadsCrackControlRCLimitStateData()
+
 # Normal stresses.
 normalStressesResistance= NormalStressesRCLimitStateData()
 steelNormalStressesResistance= NormalStressesSteelLimitStateData()

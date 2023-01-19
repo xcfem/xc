@@ -129,35 +129,66 @@ issQPfisFrench= ResultsDescriptionContainer(qplCrackControl,[
     ResultDescription(qplCrackControl.label+'Sect2','getMaxSteelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, faces positive et negative", 'MPa')
   ])
 
-#Issues sous charges fréquentes (fissuration)
+# Issues sous charges fréquentes (fissuration)
 fqlCrackControl= lsd.freqLoadsCrackControl
 issFQfisFrench= ResultsDescriptionContainer(fqlCrackControl,[
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.steelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'MPa'),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'm.kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", ''),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", ''),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.steelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'MPa'),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'm.kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", ''),
-    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", ''),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.steelStress',"Enveloppe de contraintes maximales sous charges fréquentes, face positive", 'MPa'),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", 'kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", 'm.kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", ''),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsPos.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", ''),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.steelStress',"Enveloppe de contraintes maximales sous charges fréquentes, face negative", 'MPa'),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", 'kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", 'm.kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", ''),
+    ResultDescription(fqlCrackControl.label+'Sect1','crackControlVarsNeg.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", ''),
     ResultDescription(fqlCrackControl.label+'Sect1','idSection',"Nom de la section", ''),
-    ResultDescription(fqlCrackControl.label+'Sect1','getCF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, faces positive et negative", ''),
-    ResultDescription(fqlCrackControl.label+'Sect1','getMaxSteelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, faces positive et negative", 'MPa'),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.steelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'MPa'),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'm.kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", ''),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", ''),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.steelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'MPa'),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'm.kN/m'),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", ''),
-    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", ''),
+    ResultDescription(fqlCrackControl.label+'Sect1','getCF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges fréquentes, faces positive et negative", ''),
+    ResultDescription(fqlCrackControl.label+'Sect1','getMaxSteelStress',"Enveloppe de contraintes maximales sous charges fréquentes, faces positive et negative", 'MPa'),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.steelStress',"Enveloppe de contraintes maximales sous charges fréquentes, face positive", 'MPa'),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", 'kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", 'm.kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", ''),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsPos.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", ''),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.steelStress',"Enveloppe de contraintes maximales sous charges fréquentes, face negative", 'MPa'),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", 'kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", 'm.kN/m'),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", ''),
+    ResultDescription(fqlCrackControl.label+'Sect2','crackControlVarsNeg.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", ''),
     ResultDescription(fqlCrackControl.label+'Sect2','idSection',"Nom de la section", ''),
-    ResultDescription(fqlCrackControl.label+'Sect2','getCF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, faces positive et negative", ''),
-    ResultDescription(fqlCrackControl.label+'Sect2','getMaxSteelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, faces positive et negative", 'MPa')
+    ResultDescription(fqlCrackControl.label+'Sect2','getCF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges fréquentes, faces positive et negative", ''),
+    ResultDescription(fqlCrackControl.label+'Sect2','getMaxSteelStress',"Enveloppe de contraintes maximales sous charges fréquentes, faces positive et negative", 'MPa')
+  ])
+
+# Issues sous charges rares (fissuration)
+rareCrackControl= lsd.rareLoadsCrackControl
+issRRfisFrench= ResultsDescriptionContainer(rareCrackControl,[
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsPos.steelStress',"Enveloppe de contraintes maximales sous charges rares, face positive", 'MPa'),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsPos.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges rares, face positive", 'kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsPos.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges rares, face positive", 'm.kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsPos.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges rares, face positive", ''),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsPos.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges rares, face positive", ''),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsNeg.steelStress',"Enveloppe de contraintes maximales sous charges rares, face negative", 'MPa'),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsNeg.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges rares, face negative", 'kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsNeg.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges rares, face negative", 'm.kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsNeg.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges rares, face negative", ''),
+    ResultDescription(rareCrackControl.label+'Sect1','crackControlVarsNeg.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges rares, face negative", ''),
+    ResultDescription(rareCrackControl.label+'Sect1','idSection',"Nom de la section", ''),
+    ResultDescription(rareCrackControl.label+'Sect1','getCF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges rares, faces positive et negative", ''),
+    ResultDescription(rareCrackControl.label+'Sect1','getMaxSteelStress',"Enveloppe de contraintes maximales sous charges rares, faces positive et negative", 'MPa'),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsPos.steelStress',"Enveloppe de contraintes maximales sous charges rares, face positive", 'MPa'),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsPos.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges rares, face positive", 'kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsPos.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges rares, face positive", 'm.kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsPos.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges rares, face positive", ''),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsPos.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges rares, face positive", ''),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsNeg.steelStress',"Enveloppe de contraintes maximales sous charges rares, face negative", 'MPa'),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsNeg.N',"Effort normal associé à l'enveloppe de contraintes maximales sous charges rares, face negative", 'kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsNeg.My',"Moment de flexion associé à l'enveloppe de contraintes maximales sous charges rares, face negative", 'm.kN/m'),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsNeg.CF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges rares, face negative", ''),
+    ResultDescription(rareCrackControl.label+'Sect2','crackControlVarsNeg.combName',"Nom de la combinaison associé à l'enveloppe de contraintes maximales sous charges rares, face negative", ''),
+    ResultDescription(rareCrackControl.label+'Sect2','idSection',"Nom de la section", ''),
+    ResultDescription(rareCrackControl.label+'Sect2','getCF',"Taux d'exploitation associé à l'enveloppe de contraintes maximales sous charges rares, faces positive et negative", ''),
+    ResultDescription(rareCrackControl.label+'Sect2','getMaxSteelStress',"Enveloppe de contraintes maximales sous charges rares, faces positive et negative", 'MPa')
   ])
 
 #Issues sous charges durables - contraintes normales

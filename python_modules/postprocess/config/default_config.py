@@ -253,12 +253,34 @@ class ProjectDirTree(object):
         ''' Return the path for the VonMisesStress verification
             graphics files.'''
         return self.getRltvGraphicsPath()+'VonMisesStressULS/'
+
+    # Rare loads.
+    def getVerifCrackRareFile(self):
+        ''' Return the path of the crack verification
+            results file (rare loads).'''
+        return self.getFullVerifPath()+'verifRsl_crackingSLS_rare.py'
     
+    def getReportCrackRareFile(self):
+        ''' Return the path of the crack verification
+            report file (rare loads).'''
+        return self.getFullTextReportPath()+'report_crackingSLS_rare.tex'
+    
+    def getReportCrackRareGrPath(self):
+        ''' Return the path for the crack verification
+            graphics files (rare loads).'''
+        return self.getFullGraphicsPath()+'crackingSLS_rare/' 
+        
+    def getRltvReportCrackRareGrPath(self):
+        ''' Return the path for the crack verification
+            graphics files (rare loads).'''
+        return self.getRltvGraphicsPath()+'crackingSLS_rare/'
+
+    # Frequent loads.
     def getVerifCrackFreqFile(self):
         ''' Return the path of the crack verification
             results file (frequent loads).'''
         return self.getFullVerifPath()+'verifRsl_crackingSLS_freq.py'
-    
+        
     def getReportCrackFreqFile(self):
         ''' Return the path of the crack verification
             report file (frequent loads).'''
@@ -274,6 +296,7 @@ class ProjectDirTree(object):
             graphics files (frequent loads).'''
         return self.getRltvGraphicsPath()+'crackingSLS_freq/' 
         
+    # Quasi-permanent loads.
     def getVerifCrackQpermFile(self):
         ''' Return the path of the crack verification
             results file (quasi-permanent loads).'''
@@ -324,6 +347,8 @@ class ProjectDirTree(object):
             return self.getVerifNormStrFile()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getVerifShearFile()
+        elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
+            return self.getVerifCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getVerifCrackFreqFile()
         elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
@@ -346,6 +371,8 @@ class ProjectDirTree(object):
             return self.getReportNormStrFile()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getReportShearFile()
+        elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
+            return self.getReportCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getReportCrackFreqFile()
         elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
@@ -368,6 +395,8 @@ class ProjectDirTree(object):
             return self.getReportNormStrGrPath()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getReportShearGrPath()
+        elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
+            return self.getReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getReportCrackFreqGrPath()
         elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
@@ -390,6 +419,8 @@ class ProjectDirTree(object):
             return self.getRltvReportNormStrGrPath()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getRltvReportShearGrPath()
+        elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
+            return self.getRltvReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getRltvReportCrackFreqGrPath()
         elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
