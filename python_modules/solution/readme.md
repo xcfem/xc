@@ -35,3 +35,4 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [One Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/10/one-way-to-get-bad-eigenvalues/)
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
+ - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
