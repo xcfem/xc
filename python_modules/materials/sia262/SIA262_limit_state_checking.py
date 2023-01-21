@@ -517,6 +517,31 @@ def estimateSigmaCPlanB(sccData, N, M):
     sgc= min(min(sg1,sg2),0.0)
     return 2.0*sgc #Ver Jiménez Montoya 12.3 (page 244)
 
+def getSteelFatigueLimitStress(barShape, barDiameter, overlappingConnectionsOnly= True):
+    ''' Return the design value of the fatigue strength according to expression
+        86 from clause 4.3.8.2.3 and table 13 of SIA 262 2013.
+
+    :param barShape: 'straight' or 'stirrup'
+    :param barDiameter: diameter of the reinforcement bar.
+    :param overlappingConnectionsOnly: if false, bars are welded of coupled with
+                                       mechanical splices and the fatigue 
+                                       strength is accordingly reduced.
+    '''
+    DSigma_sd_fat= 55e6 # table 13 welded or coupled joints.
+    if(overlappingConnectionsOnly): # no welds, no couplers
+        if(barShape=='straight'):
+            if(barDiameter<=20e-3): # small diameter
+                DSigma_sd_fat= 145e6
+            else:
+                DSigma_sd_fat= 120e6
+        elif(barShape=='stirrup'):
+            if(barDiameter<=16e-3): # small diameter
+                DSigma_sd_fat= 135e6
+            else:
+                funcName= sys._getframe(0).f_code.co_name
+                lmsg.error(funcName+'; not implemented for stirrups with diameter greater than 16 mm')
+    return 0.8*DSigma_sd_fat # Equation 86
+    
 def getConcreteLimitStress(sccData,kc, controlVars):
     '''4.3.8.3.1 SIA 262 2013.'''
     fcd= sccData.fiberSectionParameters.concrType.fcd()

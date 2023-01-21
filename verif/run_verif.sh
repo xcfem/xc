@@ -988,6 +988,7 @@ python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
 python tests/materials/sia262/shear_02.py
 python tests/materials/sia262/test_anchorage_length.py
+python tests/materials/sia262/test_fatigue_strength_01.py
 python tests/materials/sia262/test_crack_control_01.py
 echo "$BLEU" "    ACI 318 tests." "$NORMAL"
 python tests/materials/aci/test_aci_development_01.py
