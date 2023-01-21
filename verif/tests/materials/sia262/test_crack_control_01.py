@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Home-made Reinforced concrete section. Crack control verification test.
 '''
+from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc
 
@@ -11,16 +17,10 @@ from materials.sections.fiber_section import def_simple_RC_section
 # from materials.sections import section_properties
 
 
-from materials.ehe import EHE_materials
 from materials.sia262 import SIA262_materials
 from materials.sia262 import SIA262_limit_state_checking
 from model import predefined_spaces
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 areaFi22= SIA262_materials.section_barres_courantes[22e-3]
 areaFi26= SIA262_materials.section_barres_courantes[26e-3]
@@ -28,20 +28,20 @@ areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 datosScc1LosC= def_simple_RC_section.RCRectangularSection()
 datosScc1LosC.name= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
-concr= EHE_materials.HA30
+concr= SIA262_materials.c30_37
 concr.alfacc=0.85 # f_maxd= 0.85*fcd
 datosScc1LosC.fiberSectionParameters.concrType= concr
 datosScc1LosC.h= 0.35
 datosScc1LosC.b= 1.0001
-datosScc1LosC.fiberSectionParameters.reinfSteelType= EHE_materials.B500S
+datosScc1LosC.fiberSectionParameters.reinfSteelType= SIA262_materials.B500B
 negRebRow=def_simple_RC_section.ReinfRow(nRebars=2,rebarsDiam=10e-10,width=datosScc1LosC.b)
 # negRebRow=def_simple_RC_section.ReinfRow()
-# negRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+# negRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= SIA262_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 # negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows= def_simple_RC_section.LongReinfLayers([negRebRow])
 posRebRow=def_simple_RC_section.ReinfRow(nRebars=6,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
 # posRebRow=def_simple_RC_section.ReinfRow()
-# posRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+# posRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= SIA262_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 # posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
 datosScc1LosC.positvRebarRows= def_simple_RC_section.LongReinfLayers([posRebRow])
 
@@ -56,8 +56,8 @@ MyDato= 117e3 # Bending moment force for crack control checking.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-# concreteMatTag= EHE_materials.HA30.defDiagK(preprocessor)
-# reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
+# concreteMatTag= SIA262_materials.HA30.defDiagK(preprocessor)
+# reinfSteelMaterialTag= SIA262_materials.B500S.defDiagK(preprocessor)
 
 
 datosScc1LosC.defRCSection(preprocessor, "k")
