@@ -23,7 +23,7 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials.ehe import EHE_materials
+from materials.ec2 import EC2_materials
 from materials import concrete_base
 from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
@@ -61,7 +61,7 @@ n1= nodes.newNodeXY(1.0,0)
 n2= nodes.newNodeXY(1.0+l,0)
 
 # Materials definition
-concrAux= EHE_materials.HA25           #parameters only for the compression branche 
+concrAux= EC2_materials.C25           #parameters only for the compression branche 
 
 #Reinforcing steel.
 rfSteel=concrete_base.ReinforcingSteel(steelName='rfSteel', fyk=fy_exp, emax=0.08, gammaS=1.15,k=1.05)
