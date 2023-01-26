@@ -11,6 +11,7 @@ __email__= "ana.ortega@ciccp.es "
 
 import sys
 import math
+import scipy.interpolate
 from materials import limit_state_checking_base as lscb
 from materials.ec2 import EC2_materials
 from materials.sections.fiber_section import fiber_sets
@@ -126,6 +127,77 @@ class RebarController(lscb.EURebarController):
         alpha_2= self.getConcreteMinimumCoverEffect(rebarDiameter= rebarDiameter, barShape= 'straight', lateralConcreteCover= lateralConcreteCover)
         return steel.getLapLength(concrete= concrete, rebarDiameter= rebarDiameter, eta1= self.eta1, steelEfficiency= steelEfficiency, ratioOfOverlapedTensionBars= ratioOfOverlapedTensionBars, alpha_1= self.alpha_1, alpha_2= alpha_2, alpha_3= self.alpha_3, alpha_5= self.alpha_5)
 
+# EC2:2004 part 1-1. Clause 7.3.3. Control of cracking without direct calculation.
+
+table7_2NSteelStresses= [160e6, 200e6, 240e6, 280e6, 320e6, 360e6, 400e6, 450e6]
+table7_2NMaxBarSize04mm= [40e-3, 32e-3, 20e-3, 16e-3, 12e-3, 10e-3, 8e-3, 6e-3]
+table7_2NColumn04mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize04mm)
+table7_2NMaxBarSize03mm= [32e-3, 25e-3, 16e-3, 12e-3, 10e-3, 8e-3, 6e-3, 5e-3]
+table7_2NColumn03mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize03mm)
+table7_2NMaxBarSize02mm= [25e-3, 16e-3, 12e-3, 8e-3, 6e-3, 5e-3, 4e-3, 1e-6]
+table7_2NColumn02mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize02mm)
+
+def getMaximumBarDiameterForCrackControl(steelStress, wk= 0.3e-3):
+    ''' Return the maximum diameter of the bar according to table 7.2N of
+        of EC2:2004 part 1-1. (clause 7.3.3).
+
+    :param steelStress: maximum stress permitted in the reinforcement
+                        immediately after formation of the crack.
+    :param wk: crack width (m)
+    '''
+    if (steelStress<table7_2NSteelStresses[0]) or (steelStress>table7_2NSteelStresses[-1]):
+        lmsg.error(methodName+'; maximum stress permitted in the reinforcement immediately after formation of the crack. steelStress= '+str(wk/1e6)+' MPa. Out of range ('+str(table7_2NSteelStresses[0]/1e6)+','+str(table7_2NSteelStresses[-1]/1e6)+') MPa.')
+        retval= None
+        
+    if (wk<=0.4e-3) and (wk>0.3e-3): # 0.4 and 0.3 columns.
+        diam04= float(table7_2NColumn04mm(steelStress))
+        diam03= float(table7_2NColumn03mm(steelStress))
+        retval= (diam04-diam03)*1e4*(wk-0.3e-3)+diam03
+    elif (wk<=0.3e-3) and (wk>=0.2e-3): # 0.3 and 0.2 columns.
+        diam03= float(table7_2NColumn03mm(steelStress))
+        diam02= float(table7_2NColumn02mm(steelStress))
+        retval= (diam03-diam02)*1e4*(wk-0.2e-3)+diam02
+    else:
+        retval= None
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; value of crack width: wk= '+str(wk*1e3)+' mm. Out of range (0.2e-3,0.4e-3) meters.')
+    return retval
+
+table7_3NSteelStresses= [160e6, 200e6, 240e6, 280e6, 320e6, 360e6]
+table7_3NMaxBarSpacing04mm= [0.30, 0.30, 0.25, 0.2, 0.15, 0.1]
+table7_3NColumn04mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing04mm)
+table7_3NMaxBarSpacing03mm= [0.30, 0.25, 0.20, 0.15, 0.10, 0.05]
+table7_3NColumn03mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing03mm)
+table7_3NMaxBarSpacing02mm= [0.20, 0.15, 0.10, 0.05, 1e-3, 1e-4]
+table7_3NColumn02mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing02mm)
+
+def getMaximumBarSpacingForCrackControl(steelStress, wk= 0.3e-3):
+    ''' Return the maximum bar spacing according to table 7.3N of
+        of EC2:2004 part 1-1. (clause 7.3.3).
+
+    :param steelStress: maximum stress permitted in the reinforcement
+                        immediately after formation of the crack.
+    :param wk: crack width (m)
+    '''
+    if (steelStress<table7_3NSteelStresses[0]) or (steelStress>table7_3NSteelStresses[-1]):
+        lmsg.error(methodName+'; maximum stress permitted in the reinforcement immediately after formation of the crack. steelStress= '+str(wk/1e6)+' MPa. Out of range ('+str(table7_3NSteelStresses[0]/1e6)+','+str(table7_3NSteelStresses[-1]/1e6)+') MPa.')
+        retval= None
+        
+    if (wk<=0.4e-3) and (wk>0.3e-3): # 0.4 and 0.3 columns.
+        spacing04= float(table7_3NColumn04mm(steelStress))
+        spacing03= float(table7_3NColumn03mm(steelStress))
+        retval= (spacing04-spacing03)*1e4*(wk-0.3e-3)+spacing03
+    elif (wk<=0.3e-3) and (wk>=0.2e-3): # 0.3 and 0.2 columns.
+        spacing03= float(table7_3NColumn03mm(steelStress))
+        spacing02= float(table7_3NColumn02mm(steelStress))
+        retval= (spacing03-spacing02)*1e4*(wk-0.2e-3)+spacing02
+    else:
+        retval= None
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; value of crack width: wk= '+str(wk*1e3)+' mm. Out of range (0.2e-3,0.4e-3) meters.')
+    return retval
+    
+        
 class CrackStraightController(lscb.LimitStateControllerBase):
     '''Definition of variables involved in the verification of the cracking
     serviceability limit state according to EC2 when considering a concrete
@@ -149,7 +221,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         self.k3=3.4
         self.k4=0.425
 
-    def EC2_k2(self,eps1,eps2):
+    def EC2_k2(self, eps1, eps2):
         '''Return the coefficient k2 involved in the calculation of the mean 
         crack distance according to EC2. This coefficient represents the effect of 
         the tension diagram in the section.
@@ -621,9 +693,9 @@ def getFlangeShearResistanceShearReinfStress(concrete, hf, Asf, sf, shearReinfSt
 
 # 7.3.2 Minimum reinforcement areas
 
-def getAsMinCrackControl(concrete, reinfSteel, h, Act, stressDistribution):
+def getAsMinCrackControl(concrete, reinfSteel, h, Act, stressDistribution, sigma_s= None):
     ''' Return the minimum area of reinforcing steel within the tensile zone
-        according to expression 7.1 of EC2:2004.
+        according to expression 7.1 of clause 7.3.2 of EC2:2004.
 
     :param concrete: concrete material.
     :param reinfSteel: reinforcing steel material.
@@ -633,6 +705,13 @@ def getAsMinCrackControl(concrete, reinfSteel, h, Act, stressDistribution):
                 just before formation of the first crack.
     :param stressDistribution: string indentifying the stress distribution
                                (bending or pure tension) of the cross-section.
+    :param sigma_s: absolute value of the maximum stress permitted in the 
+                    reinforcement immediately after formation of the crack. 
+                    This may be taken as the yield strength of the 
+                    reinforcement, f_yk, A lower value may, however, be needed 
+                    to satisfy the crack width limits according to the maximum 
+                    bar size or the maximum bar spacing (see 7.3.3 (2) 
+                    of EN 1992-1-1).
     '''
     kc= 0.4 # coefficient which takes account of the stress distribution
             # within the section immediately prior to cracking and of the

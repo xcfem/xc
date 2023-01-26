@@ -967,6 +967,7 @@ python tests/materials/ec2/test_EC2creep.py
 python tests/materials/ec2/test_EC2_2004_shrinkage_01.py
 python tests/materials/ec2/test_EC2_2004_shrinkage_02.py
 python tests/materials/ec2/test_EC2_2021_shrinkage.py
+python tests/materials/ec2/test_crack_control_without_direct_calcuation_01.py
 python tests/materials/ec2/test_smearedCracking_01.py
 python tests/materials/ec2/test_smearedCracking_02.py
 python tests/materials/ec2/test_smearedCracking_03.py
