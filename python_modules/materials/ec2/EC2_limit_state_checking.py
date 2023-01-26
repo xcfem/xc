@@ -131,11 +131,11 @@ class RebarController(lscb.EURebarController):
 
 table7_2NSteelStresses= [160e6, 200e6, 240e6, 280e6, 320e6, 360e6, 400e6, 450e6]
 table7_2NMaxBarSize04mm= [40e-3, 32e-3, 20e-3, 16e-3, 12e-3, 10e-3, 8e-3, 6e-3]
-table7_2NColumn04mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize04mm)
+table7_2NColumn04mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize04mm, fill_value='extrapolate')
 table7_2NMaxBarSize03mm= [32e-3, 25e-3, 16e-3, 12e-3, 10e-3, 8e-3, 6e-3, 5e-3]
-table7_2NColumn03mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize03mm)
+table7_2NColumn03mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize03mm, fill_value='extrapolate')
 table7_2NMaxBarSize02mm= [25e-3, 16e-3, 12e-3, 8e-3, 6e-3, 5e-3, 4e-3, 1e-6]
-table7_2NColumn02mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize02mm)
+table7_2NColumn02mm= scipy.interpolate.interp1d(table7_2NSteelStresses, table7_2NMaxBarSize02mm, fill_value='extrapolate')
 
 def getMaximumBarDiameterForCrackControl(steelStress, wk= 0.3e-3):
     ''' Return the maximum diameter of the bar according to table 7.2N of
@@ -146,9 +146,8 @@ def getMaximumBarDiameterForCrackControl(steelStress, wk= 0.3e-3):
     :param wk: crack width (m)
     '''
     if (steelStress<table7_2NSteelStresses[0]) or (steelStress>table7_2NSteelStresses[-1]):
-        lmsg.error(methodName+'; maximum stress permitted in the reinforcement immediately after formation of the crack. steelStress= '+str(wk/1e6)+' MPa. Out of range ('+str(table7_2NSteelStresses[0]/1e6)+','+str(table7_2NSteelStresses[-1]/1e6)+') MPa.')
-        retval= None
-        
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+'; maximum stress permitted in the reinforcement immediately after formation of the crack. steelStress= '+str(steelStress/1e6)+' MPa. Out of range ('+str(table7_2NSteelStresses[0]/1e6)+','+str(table7_2NSteelStresses[-1]/1e6)+') MPa. Value computed by EXTRAPOLATION.')
     if (wk<=0.4e-3) and (wk>0.3e-3): # 0.4 and 0.3 columns.
         diam04= float(table7_2NColumn04mm(steelStress))
         diam03= float(table7_2NColumn03mm(steelStress))
@@ -165,11 +164,11 @@ def getMaximumBarDiameterForCrackControl(steelStress, wk= 0.3e-3):
 
 table7_3NSteelStresses= [160e6, 200e6, 240e6, 280e6, 320e6, 360e6]
 table7_3NMaxBarSpacing04mm= [0.30, 0.30, 0.25, 0.2, 0.15, 0.1]
-table7_3NColumn04mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing04mm)
+table7_3NColumn04mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing04mm, fill_value='extrapolate')
 table7_3NMaxBarSpacing03mm= [0.30, 0.25, 0.20, 0.15, 0.10, 0.05]
-table7_3NColumn03mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing03mm)
+table7_3NColumn03mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing03mm, fill_value='extrapolate')
 table7_3NMaxBarSpacing02mm= [0.20, 0.15, 0.10, 0.05, 1e-3, 1e-4]
-table7_3NColumn02mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing02mm)
+table7_3NColumn02mm= scipy.interpolate.interp1d(table7_3NSteelStresses, table7_3NMaxBarSpacing02mm, fill_value='extrapolate')
 
 def getMaximumBarSpacingForCrackControl(steelStress, wk= 0.3e-3):
     ''' Return the maximum bar spacing according to table 7.3N of
@@ -180,9 +179,8 @@ def getMaximumBarSpacingForCrackControl(steelStress, wk= 0.3e-3):
     :param wk: crack width (m)
     '''
     if (steelStress<table7_3NSteelStresses[0]) or (steelStress>table7_3NSteelStresses[-1]):
-        lmsg.error(methodName+'; maximum stress permitted in the reinforcement immediately after formation of the crack. steelStress= '+str(wk/1e6)+' MPa. Out of range ('+str(table7_3NSteelStresses[0]/1e6)+','+str(table7_3NSteelStresses[-1]/1e6)+') MPa.')
-        retval= None
-        
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+'; maximum stress permitted in the reinforcement immediately after formation of the crack. steelStress= '+str(steelStress/1e6)+' MPa. Out of range ('+str(table7_3NSteelStresses[0]/1e6)+','+str(table7_3NSteelStresses[-1]/1e6)+') MPa. Value computed by EXTRAPOLATION.')
     if (wk<=0.4e-3) and (wk>0.3e-3): # 0.4 and 0.3 columns.
         spacing04= float(table7_3NColumn04mm(steelStress))
         spacing03= float(table7_3NColumn03mm(steelStress))
