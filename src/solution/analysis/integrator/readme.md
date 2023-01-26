@@ -7,3 +7,4 @@ Integrators form the stiffness, dumping and mass matrices and the load vector fo
 ## References
  - [It's not Load Control](https://portwooddigital.com/2021/02/07/its-not-load-control/)
  - [Gimme All Your Modal Damping](https://portwooddigital.com/2022/04/03/gimme-all-your-modal-damping/)
+ - [Modal and Stiffness Proportional Damping](https://portwooddigital.com/2023/01/25/modal-and-stiffness-proportional-damping/)

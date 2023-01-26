@@ -33,3 +33,4 @@
  - [One Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/10/one-way-to-get-bad-eigenvalues/)
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
+ - [Modal and Stiffness Proportional Damping](https://portwooddigital.com/2023/01/25/modal-and-stiffness-proportional-damping/)

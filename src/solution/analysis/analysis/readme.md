@@ -32,6 +32,7 @@ Classes that implement the different types of analysis:
 - [Transient Analysis of a Cantilever Beam](https://sites.ualberta.ca/~wmoussa/AnsysTutorial/IT/Transient/Transient.html)
 - [The time-domain transient method in structural finite element analysis](https://getwelsim.medium.com/the-time-domain-transient-method-in-structural-finite-element-analysis-3666dd066d81)
 - [Multi-Threaded SDF Analysis](https://portwooddigital.com/2022/11/25/multi-threaded-sdf-analysis/)
+- [Modal and Stiffness Proportional Damping](https://portwooddigital.com/2023/01/25/modal-and-stiffness-proportional-damping/)
 
 #### Rotary inertia terms
 - [ShellMITC4 creates indeterminate matrix in explicit analysis](https://github.com/OpenSees/OpenSees/issues/998)

@@ -10,3 +10,4 @@ Classes and functions that are useful for the implementation of the finite eleme
 - [Much Ado About Damping](https://portwooddigital.com/2022/01/30/much-ado-about-damping/)
 - [Proportional Damping from Experimental Data](http://papers.vibetech.com/Paper61-ProportionalDamping.pdf)
 - [More Ado About Damping](https://portwooddigital.com/2022/11/29/more-ado-about-damping/)
+- [Modal and Stiffness Proportional Damping](https://portwooddigital.com/2023/01/25/modal-and-stiffness-proportional-damping/)
