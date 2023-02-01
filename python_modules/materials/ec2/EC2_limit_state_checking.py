@@ -195,8 +195,207 @@ def getMaximumBarSpacingForCrackControl(steelStress, wk= 0.3e-3):
         lmsg.error(methodName+'; value of crack width: wk= '+str(wk*1e3)+' mm. Out of range (0.2e-3,0.4e-3) meters.')
     return retval
     
+#These functions  should disappear               
+def h_c_eff(depth_tot,depht_eff,depth_neutral_axis):
+    '''
+    Returns the depth of the effective area of concrete in tension surrounding
+    the reinforcement or prestressing tendons, according to EC2
+
+    :param depth_tot: overall depth of the cross-section [h]
+    :param depht_eff: effective depth of the cross-section [d]
+    :param depth_neutral_axis: depht of the neutral axis[x]
+    '''
+    h,d,x=depth_tot,depht_eff,depth_neutral_axis
+    retval=min(2.5*(h-d),(h-x)/3.,h/2.)
+    return retval
+
+def ro_eff(A_s, width, h_c_eff):
+    '''
+    Returns the effective reinforcement ratio [A_s/A_ceff] depth of the 
+    effective area of concrete in tension surrounding
+    the reinforcement or prestressing tendons, according to EC2
+
+    :param A_s: area of reinforcment steel
+    :param width: width of the RC cross-section
+    :param ,h_c_eff: depth of the effective area of concrete in 
+    tension surrounding the reinforcement or prestressing tendons
+    '''
+    retval=A_s/width/h_c_eff
+    return retval
+
+def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
+    ''' Returns the maximum crack spacing, according to expresion 7.11 of
+    clause 7.34 of EC2:2004
+ 
+    :param k1: coefficient which takes account of the bond properties
+               of the bonded reinforcement:
+
+               - =0.8 for high bond bars
+               - =1.6 for bars with an effectively plain surface (e.g. 
+                      prestressing tendons)
+
+    :param k2: coefficient that takes account of the distribution of strain:
+
+               - =0.5 for bending
+               - =1.0 for pure tension
+               - for cases of eccentric tension or for local areas, intermediate values of k2 should be used (see clause 7.3.4 EC2)
+    :param k3: recommended k3=3.4
+    :param k4: recommended k4=0.425 
+    :param cover: cover of the longitudinal reinforcement
+    :param fiReinf: bar diameter. Where a mixture of bar diameters is used in a
+                    section, an equivalent diameter is used (see clause 7.3.4 EC2)
+    :param ro_eff: effective reinforcement ratio
+    '''
+    retval= k3*cover + k1*k2*k4*fiReinf/ro_eff
+    return retval
+
+class CrackController(lscb.LimitStateControllerBase):
+    '''Definition of variables involved in the verification of the cracking
+    serviceability limit state according to EC2.
+
+    :ivar k1: coefficient that takes account of the bound properties of the 
+          bonded reinforcement. k1=0.8 for high bond bars, k1=1.0 for bars with
+          effectively plain surface (e.g. prestressing tendons). Defaults to 0.8
+    :ivar k3: defaults to the value recommended by EC2 and in EHE k3=3.4
+    :ivar k4: defaults to the value recommended by EC2 and EHE k4=0.425
+    '''
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
         
-class CrackStraightController(lscb.LimitStateControllerBase):
+        :param limitStateLabel: label that identifies the limit state.
+        :param k1: coefficient which takes account of the bond properties
+                   of the bonded reinforcement:
+
+               - = 0.8 for high bond bars
+               - = 1.6 for bars with an effectively plain surface (e.g. 
+                      prestressing tendons)
+        '''
+        super(CrackController,self).__init__(limitStateLabel,fakeSection= False)
+        self.k1= 0.8
+        self.k3= 3.4
+        self.k4= 0.425
+
+    def EC2_k2(self, eps1, eps2):
+        '''Return the coefficient k2 involved in the calculation of the mean 
+        crack distance according to EC2. This coefficient represents the 
+        effect of the tension diagram in the section.
+
+        :param eps1: maximum deformation calculated in the section at the 
+                     limits of the tension zone
+        :param eps2: minimum deformation calculated in the section at the
+                     limits of the tension zone
+        '''
+        k2= (eps1+eps2)/(2.0*eps1)
+        return k2
+
+    def EC2_hceff(self, h, d,x):
+        '''Return the maximum height to be considered in the calculation of the 
+        concrete effective area in tension. See paragraph (3) of clause 7.3.2 
+        of EC2.
+     
+        :param width: section width
+        :param h: lever arm
+        :param d: effective depth of the cross-section 
+        :param x: depth of the neutral fiber.
+
+        '''
+        hceff= min(2.5*(h-d),abs(h+x)/3.,h/2.)
+        return hceff
+
+    def s_r_max(self, k2, cover, reinfPhi, spacing , ro_eff, h= None, x= None):
+        ''' Returns the maximum crack spacing, according to expressions 7.11 
+            and 7.14 of clause 7.3.4 of EC2:2004 part 1.
+
+        :param k2: coefficient that takes account of the distribution of strain:
+
+                   - =0.5 for bending
+                   - =1.0 for pure tension
+                   - for cases of eccentric tension or for local areas, 
+                     intermediate values of k2 should be used 
+                     (see clause 7.3.4 EC2)
+        :param cover: cover of the longitudinal reinforcement
+        :param reinfPhi: bar diameter. Where a mixture of bar diameters is used
+                        in a section, an equivalent diameter is used (see 
+                        clause 7.3.4 EC2).
+        :param spacing: spacing of the bonded reinforcement.
+        :param ro_eff: effective reinforcement ratio.
+        :param h: overall depth of the section.
+        :param x: depth of the neutral axis.
+        '''
+        influenceWidth= 5.0*(cover+reinfPhi/2.0)
+        if(reinfPhi==0.0) or (spacing>influenceWidth):
+            retval= 1.3*(h-x) # Expression 7.14
+        else:
+            retval= self.k3*cover + self.k1*k2*self.k4*reinfPhi/ro_eff
+        return retval
+
+    def meanStrainDifference(self, sigma_s, steel, concrete, ro_eff, shortTermLoading= False):
+        ''' Returns the mean strain difference according to expression 7.9 of
+            clause 7.3.4 of EC2:2004.
+
+        :param sigma_s: stress in the tension reinforcement assuming a cracked
+                        section. For pretensioned members, as may be replaced 
+                         by Delta(sigma_p) the stress variation in prestressing
+                         tendons from the state of zero strain of the concrete
+                         at the same level.
+        :param steel: steel type of the reinforcement.
+        :param As: steel reinforcement area 
+        :param concrete: concrete of the section.
+        :param ro_eff: effective reinforcement ratio computed according to
+                       expression 7.10 of EC2:2004 part 1.
+        :param shortTermLoading: if true, consider short therm loading 
+                                 (k_t= 0.6), otherwise consider long term 
+                                 loading (k_t= 0.4).
+        '''
+        kt= 0.4
+        if(shortTermLoading):
+            kt= 0.6
+        fct_eff= concrete.fctm() # mean value of the tensile strength of the
+                                 # concrete effective at the time when the
+                                 # cracks may first be expected to occur.
+        Es= steel.Es # steel elastic modulus.
+        alpha_e= Es/concrete.Ecm() # ratio between elastic moduli.
+        retval= (sigma_s - kt*fct_eff/ro_eff*(1+alpha_e*ro_eff))/Es
+        retval= max(retval, 0.6*sigma_s/Es)
+        return retval
+
+    def computeWk(self, sigma_s, steel, concrete, ro_eff, k2, cover, reinfPhi, spacing, h= None, x= None, shortTermLoading= False):
+        '''Computes the characteristic value of the crack width according to the
+           expression 7.8 of EC2:2004 part 1.
+
+        :param sigma_s: stress in the tension reinforcement assuming a cracked
+                        section. For pretensioned members, as may be replaced 
+                         by Delta(sigma_p) the stress variation in prestressing
+                         tendons from the state of zero strain of the concrete
+                         at the same level.
+        :param steel: steel type of the reinforcement.
+        :param As: steel reinforcement area 
+        :param concrete: concrete of the section.
+        :param ro_eff: effective reinforcement ratio computed according to
+                       expression 7.10 of EC2:2004 part 1.
+        :param k2: coefficient that takes account of the distribution of strain:
+
+                   - =0.5 for bending
+                   - =1.0 for pure tension
+                   - for cases of eccentric tension or for local areas, 
+                     intermediate values of k2 should be used 
+                     (see clause 7.3.4 EC2)
+        :param cover: cover of the longitudinal reinforcement
+        :param reinfPhi: bar diameter. Where a mixture of bar diameters is used
+                        in a section, an equivalent diameter is used (see 
+                        clause 7.3.4 EC2).
+        :param spacing: spacing of the bonded reinforcement.
+        :param h: overall depth of the section.
+        :param x: depth of the neutral axis.
+        :param shortTermLoading: if true, consider short therm loading 
+                                 (k_t= 0.6), otherwise consider long term 
+                                 loading (k_t= 0.4).
+        '''
+        s_r_max= self.s_r_max(k2= k2, cover= cover, reinfPhi= reinfPhi, spacing= spacing, ro_eff= ro_eff)
+        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff, shortTermLoading= shortTermLoading)
+        return meanStrainDifference*s_r_max
+
+class CrackStraightController(CrackController):
     '''Definition of variables involved in the verification of the cracking
     serviceability limit state according to EC2 when considering a concrete
     stress-strain diagram that takes account of the effects of tension 
@@ -214,36 +413,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         
         :param limitStateLabel: label that identifies the limit state.
         '''
-        super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
-        self.k1=0.8
-        self.k3=3.4
-        self.k4=0.425
-
-    def EC2_k2(self, eps1, eps2):
-        '''Return the coefficient k2 involved in the calculation of the mean 
-        crack distance according to EC2. This coefficient represents the effect of 
-        the tension diagram in the section.
-
-        :param eps1: maximum deformation calculated in the section at the limits 
-           of the tension zone
-        :param eps2: minimum deformation calculated in the section at the limits 
-           of the tension zone
-        '''
-        k2= (eps1+eps2)/(2.0*eps1)
-        return k2
-
-    def EC2_hceff(self,h,d,x):
-        '''Return the maximum height to be considered in the calculation of the 
-        concrete effective area in tension.
-    
-        :param width: section width
-        :param h: lever arm
-        :param d: effective depth of the cross-section 
-        :param x: depth of the neutral fiber.
-
-        '''
-        hceff=min(2.5*(h-d),abs(h+x)/3.,h/2.)
-        return hceff
+        super(CrackStraightController,self).__init__(limitStateLabel)
 
     def check(self,elements,nmbComb):
         ''' For each element in the set 'elememts' passed as first parameter and 
@@ -262,7 +432,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         if(self.verbose):
           lmsg.log('Postprocessing combination: '+nmbComb)
         for e in elements:
-            Aceff=0  #init. value
+            Aceff=0  #initial  value
             R=e.getResistingForce()
             sct=e.getSection()
             sctCrkProp=lscb.fibSectLSProperties(sct)
@@ -272,7 +442,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             Aceff=sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
             concrete=EC2_materials.concrOfName[sctCrkProp.concrName]
             rfSteel=EC2_materials.steelOfName[sctCrkProp.rsteelName]
-            k2=self.EC2_k2(sctCrkProp.eps1,sctCrkProp.eps2)
+            k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
             # print('elem= ',e.tag, ' Aceff= ',Aceff)
             if(Aceff<=0):
                 s_rmax=0
@@ -332,57 +502,6 @@ class EC2RebarFamily(rf.RebarFamily):
 
 
 
-#These functions  should disappear               
-def h_c_eff(depth_tot,depht_eff,depth_neutral_axis):
-    '''
-    Returns the depth of the effective area of concrete in tension surrounding
-    the reinforcement or prestressing tendons, according to EC2
-
-    :param depth_tot: overall depth of the cross-section [h]
-    :param depht_eff: effective depth of the cross-section [d]
-    :param depth_neutral_axis: depht of the neutral axis[x]
-    '''
-    h,d,x=depth_tot,depht_eff,depth_neutral_axis
-    retval=min(2.5*(h-d),(h-x)/3.,h/2.)
-    return retval
-
-def ro_eff(A_s,width,h_c_eff):
-    '''
-    Returns the effective reinforcement ratio [A_s/A_ceff]depth of the effective area of concrete in tension surrounding
-    the reinforcement or prestressing tendons, according to EC2
-
-    :param A_s: area of reinforcment steel
-    :param width: width of the RC cross-section
-    :param ,h_c_eff: depth of the effective area of concrete in 
-    tension surrounding the reinforcement or prestressing tendons
-    '''
-    retval=A_s/width/h_c_eff
-    return retval
-
-def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
-    '''
-    Returns the maximum crack spacing, according to EC2
- 
-    :param k1: coefficient which takes account of the bond properties
-               of the bonded reinforcement:
-
-               - =0.8 for high bond bars
-               - =1.6 for bars with an effectively plain surface (e.g. prestressing tendons)
-
-    :param k2: coefficient that takes account of the distribution of strain:
-
-               - =0.5 for bending
-               - =1.0 for pure tension
-               - for cases of eccentric tension or for local areas, intermediate values of k2 should be used (see clause 7.3.4 EC2)
-    :param k3: recommended k3=3.4
-    :param k4: recommended k4=0.425 
-    :param cover: cover of the longitudinal reinforcement
-    :param fiReinf: bar diameter. Where a mixture of bar diameters is used in a
-                    section, an equivalent diameter is used (see clause 7.3.4 EC2)
-    :param ro_eff: effective reinforcement ratio
-    '''
-    retval=k3*cover+k1*k2*k4*fiReinf/ro_eff
-    return retval
 
 # EC2:2004 6.2 Shear
 

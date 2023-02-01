@@ -118,7 +118,7 @@ class RebarRow(Rebar):
         return self.getAs(width, roundUp)*self.steel.fyd()
     
 class RebarFamily(RebarRow):
-    ''' Family or reinforcement bars.'''
+    ''' Family of reinforcement bars.'''
     minDiams= 50
     
     def __init__(self, steel, diam, spacing, concreteCover):
