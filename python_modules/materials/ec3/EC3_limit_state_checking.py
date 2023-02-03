@@ -9,10 +9,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
+import sys
 import math
 # from misc_utils import log_messages as lmsg
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
+from misc_utils import log_messages as lmsg
 
 # Lateral torsional buckling of steel beams.
 # References:
@@ -275,15 +277,28 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
         # Get element section properties.
         steelShape= elem.getProp('crossSection')
         sectionClass= elem.getProp('sectionClass')
-        # Check each element section.
-        for lf in elementInternalForces: 
-            # Compute efficiency.
-            CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(sectionClass,lf.N,lf.My,lf.Mz,lf.Vy,chiLT= lf.chiLT, chiN= lf.chiN)
-            sectionLabel= self.getSectionLabel(lf.idSection)
-            label= self.limitStateLabel+sectionLabel
-            # Update efficiency.
-            if(CFtmp>elem.getProp(label).CF):
-                elem.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
+        if(steelShape and sectionClass):
+            # Check each element section.
+            for lf in elementInternalForces: 
+                # Compute efficiency.
+                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(sectionClass,lf.N,lf.My,lf.Mz,lf.Vy,chiLT= lf.chiLT, chiN= lf.chiN)
+                sectionLabel= self.getSectionLabel(lf.idSection)
+                label= self.limitStateLabel+sectionLabel
+                # Update efficiency.
+                if(CFtmp>elem.getProp(label).CF):
+                    elem.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
+        else:
+            if(not steelShape):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= className+'.'+methodName+"; cross section not defined for element: " + str(elem.tag) + "\n"
+                lmsg.error(errMsg)
+            elif(not sectionClass):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= className+'.'+methodName+"; cross section class not defined for element: " + str(elem.tag) + "\n"
+                lmsg.error(errMsg)
+                    
         
 
 class ShearController(lsc.LimitStateControllerBase2Sections):

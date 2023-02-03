@@ -68,12 +68,17 @@ class VerifOutVars(object):
         '''
         retval=None
         if(self.setCalc):
-            # Initialize control variables.
-            self.controller.initControlVars(self.setCalc)
-            # Update efficiency values.
-            self.controller.updateEfficiencyForSet(intForcCombFileName,self.setCalc)
-            prep= self.setCalc.getPreprocessor
-            retval= cv.writeControlVarsFromElements(prep,outputDataBaseFileName,self, sections)
+            if(len(self.setCalc.elements)>0):
+                # Initialize control variables.
+                self.controller.initControlVars(self.setCalc)
+                # Update efficiency values.
+                self.controller.updateEfficiencyForSet(intForcCombFileName,self.setCalc)
+                prep= self.setCalc.getPreprocessor
+                retval= cv.writeControlVarsFromElements(prep,outputDataBaseFileName,self, sections)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+"; element set is empty. Nothing done.")                
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
