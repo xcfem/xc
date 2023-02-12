@@ -146,13 +146,17 @@ void XC::PenaltyMRMFreedom_FE::determineTangent(void)
     // now form the tangent: [K] = alpha * [C]^t[C]
     // *(tang) = C^C;
     // *(tang) *= alpha;
-
-    // THIS IS A WORKAROUND UNTIL WE GET addMatrixTransposeProduct() IN
-    // THE Matrix CLASS OR UNROLL THIS COMPUTATION
-    Matrix CT= C.getTrn();
+    /*
+      // THIS IS A WORKAROUND UNTIL WE GET addMatrixTransposeProduct() IN
+      // THE Matrix CLASS OR UNROLL THIS COMPUTATION
+      Matrix CT= C.getTrn();
+      const Matrix &Cref= C;
+      // Compute alpha*(C^C)
+      tang.addMatrixProduct(0.0, CT, Cref, alpha);
+    */
+    // workaround no longer required
     const Matrix &Cref= C;
-    // Compute alpha*(C^C)
-    tang.addMatrixProduct(0.0, CT, Cref, alpha);
+    tang.addMatrixTransposeProduct(0.0, Cref, Cref, alpha);
   }
 
 
