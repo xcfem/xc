@@ -755,7 +755,7 @@ int XC::Matrix::addMatrixTransposeProduct(double thisFact,
 
 #ifdef _G3DEBUG
   if((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows)) {
-    opserr << "Matrix::addMatrixProduct(): incompatible matrices, this\n";
+    std::cerr << "Matrix::addMatrixProduct(): incompatible matrices, this\n";
     return -1;
   }
 #endif
