@@ -93,3 +93,9 @@ Introduction to [Python](https://www.python.org/), the scripting language we use
 - [VTK Examples](https://kitware.github.io/vtk-examples/site/)
 - [Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)
 - [X Window System](https://en.wikipedia.org/wiki/X_Window_System)
+
+
+# Computing and civil/structural engineers
+
+- [Leonardo Torres Quevedo](https://www.torresquevedo.org/LTQ10/index.php?title=M%C3%A1quinas_de_calcular&oldid=1436)
+- [Konrad Zuse](https://en.wikipedia.org/wiki/Konrad_Zuse)
