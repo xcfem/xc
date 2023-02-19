@@ -452,7 +452,9 @@ const XC::Matrix &XC::EnhancedQuad::getMass(void) const
 
 int XC::EnhancedQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::EnhancedQuad::addLoad - load type unknown for ele with tag: " << this->getTag() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; load type unknown for element with tag: "
+	      << this->getTag() << std::endl;
     return -1;
   }
 
@@ -878,7 +880,8 @@ void XC::EnhancedQuad::formResidAndTangent(int tang_flag) const
       Kee.Solve( residE, dalpha );
 
       if(dalpha(0) > 1.0e10)
-	std::cerr << "dalpha: " << residE << dalpha;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; dalpha: " << residE << dalpha;
 
       this->alpha+= dalpha;
 
