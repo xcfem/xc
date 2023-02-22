@@ -37,7 +37,7 @@
 #include "utility/geom/pos_vec/Dir2d.h"
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "utility/geom/pos_vec/Pos2d.h"
-#include "utility/geom/ref_sys/Ref2d2d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
 
 #include "material/section/repres/section_geometry/SectionGeometry.h"
 

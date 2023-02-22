@@ -66,7 +66,7 @@
 
 #include "utility/geom/pos_vec/Pos3dArray.h"
 #include "utility/geom/pos_vec/Vector3d.h"
-#include "utility/geom/ref_sys/Ref2d2d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
 //! @brief constructor:

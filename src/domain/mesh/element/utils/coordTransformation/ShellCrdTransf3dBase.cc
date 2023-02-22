@@ -43,7 +43,7 @@
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "utility/geom/d2/Plane.h"
-#include "utility/geom/ref_sys/Ref2d3d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"
 
 //! @brief Default constructor
 XC::ShellCrdTransf3dBase::ShellCrdTransf3dBase(void)

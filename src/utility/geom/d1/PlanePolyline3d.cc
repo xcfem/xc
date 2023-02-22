@@ -21,7 +21,7 @@
 //PlanePolyline3d.cc
 
 #include "PlanePolyline3d.h"
-#include "utility/geom/ref_sys/Ref2d3d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"
 #include "utility/geom/d1/Line2d.h"
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/geom/d1/Segment3d.h"

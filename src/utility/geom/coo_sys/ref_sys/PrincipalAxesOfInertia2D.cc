@@ -22,7 +22,7 @@
 
 #include "PrincipalAxesOfInertia2D.h"
 #include "utility/utils/misc_utils/inertia.h"
-#include "utility/geom/ref_sys/Ref2d2d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
 
 
 //! @brief Constructor.

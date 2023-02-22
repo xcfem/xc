@@ -18,45 +18,43 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Ref1d3d.h
+//Ref2d2d.h
 
-#ifndef REF1D3D_H
-#define REF1D3D_H
+#ifndef REF2D2D_H
+#define REF2D2D_H
 
 #include "Ref.h"
-#include "../coo_sys/Rect1d3dCooSys.h"
-#include "../d3/GeomObj3d.h"
-#include "../pos_vec/Pos3d.h"
-#include "../pos_vec/Vector3d.h"
-#include "../pos_vec/Dir3d.h"
+#include "utility/geom/coo_sys/Rect2d2dCooSys.h"
+#include "utility/geom/d2/GeomObj2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Dir2d.h"
 
-class Line3d;
-class Ref2d3d;
-class Ref3d3d;
+class Line2d;
 
 //! @ingroup SisRef
 //! 
-//! @brief 1D reference system defined in a
-//! three-dimensional one.
-class Ref1d3d : public Ref<Rect1d3dCooSys>
+//! @brief Two-dimensional reference system defined in a 
+//! two-dimensional space.
+class Ref2d2d : public Ref<Rect2d2dCooSys>
   {
   public:
-    typedef GeomObj3d::list_Pos3d list_Pos3d;
-    typedef Ref<Rect1d3dCooSys> BaseRef;
+    typedef GeomObj2d::list_Pos2d list_Pos2d;
+    typedef Ref<Rect2d2dCooSys> BaseRef;
+
   public:
-    Ref1d3d(void);
-    explicit Ref1d3d(const Pos3d &o);
-    Ref1d3d(const Pos3d &,const Rect1d3dCooSys &);
-    Ref1d3d(const Pos3d &o,const Vector3d &vX);
-    Ref1d3d(const Pos3d &o,const Dir3d &dirX);
-    Ref1d3d(const Pos3d &o,const Pos3d &p);
-    explicit Ref1d3d(const Ref2d3d &);
-    explicit Ref1d3d(const Ref3d3d &);
+    Ref2d2d(void);
+    Ref2d2d(const Pos2d &o);
+    Ref2d2d(const Pos2d &,const Rect2d2dCooSys &);
+    Ref2d2d(const Pos2d &o,const Vector2d &vX);
+    Ref2d2d(const Pos2d &o,const Dir2d &dirX);
+    Ref2d2d(const Pos2d &o,const Pos2d &p);
+    Vector2d getIVector(void) const; //I unary vector.
+    Vector2d getJVector(void) const; //J unary vector.
+    Line2d getXAxis(void) const; //Return the x axis.
+    Line2d getYAxis(void) const; //Return the y axis.
 
-    Vector3d getIVector(void) const;
-    Line3d getXAxis(void) const;
-
-    virtual ~Ref1d3d(void)
+    virtual ~Ref2d2d(void)
       {}
   };
 

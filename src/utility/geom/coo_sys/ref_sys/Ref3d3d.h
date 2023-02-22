@@ -24,9 +24,9 @@
 #define REF3D3D_H
 
 #include "Ref.h"
-#include "../coo_sys/Rect3d3dCooSys.h"
-#include "../d3/GeomObj3d.h"
-#include "../pos_vec/Pos3d.h"
+#include "utility/geom/coo_sys/Rect3d3dCooSys.h"
+#include "utility/geom/d3/GeomObj3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 
 class Line3d;
 class Vector3d;

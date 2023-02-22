@@ -29,5 +29,5 @@ void export_sys_trf(void)
 
 #include "trf/python_interface.tcc"
 #include "coo_sys/python_interface.tcc"
-#include "ref_sys/python_interface.tcc"
+#include "coo_sys/ref_sys/python_interface.tcc"
   }

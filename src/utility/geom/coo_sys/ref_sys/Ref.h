@@ -23,7 +23,7 @@
 #ifndef REF_H
 #define REF_H
 
-#include "../ProtoGeom.h"
+#include "utility/geom/ProtoGeom.h"
 
 //! @ingroup GEOM
 //

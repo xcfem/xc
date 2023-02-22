@@ -24,7 +24,7 @@
 #define GEOMOBJ2D_H
 
 #include "utility/geom/GeomObj.h"
-#include "utility/geom/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
 
 class BND2d;
 class Dir2d;

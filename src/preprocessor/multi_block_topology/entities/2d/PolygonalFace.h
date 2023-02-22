@@ -32,7 +32,7 @@
 
 #include "Face.h"
 #include "preprocessor/multi_block_topology/matrices/PntPtrArray.h"
-#include "utility/geom/ref_sys/Ref2d3d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"
 
 namespace XC {
 

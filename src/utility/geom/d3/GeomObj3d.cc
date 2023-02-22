@@ -22,9 +22,9 @@
 
 #include "GeomObj3d.h"
 #include "BND3d.h"
-#include "../pos_vec/Pos3d.h"
-#include "../pos_vec/Vector3d.h"
-#include "../ref_sys/Ref3d3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref3d3d.h"
 #include "utility/geom/d1/Line3d.h"
 #include "utility/geom/FT_matrix.h"
 

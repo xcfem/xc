@@ -18,43 +18,46 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Ref2d2d.h
+//Ref1d2d.h
 
-#ifndef REF2D2D_H
-#define REF2D2D_H
+#ifndef REF1D2D_H
+#define REF1D2D_H
 
 #include "Ref.h"
-#include "../coo_sys/Rect2d2dCooSys.h"
-#include "../d2/GeomObj2d.h"
-#include "../pos_vec/Pos2d.h"
-#include "../pos_vec/Vector2d.h"
-#include "../pos_vec/Dir2d.h"
+#include "utility/geom/coo_sys/Rect1d2dCooSys.h"
+#include "utility/geom/d2/GeomObj2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Dir2d.h"
 
 class Line2d;
+class Dir2d;
+class Ref2d2d;
 
 //! @ingroup SisRef
 //! 
-//! @brief Two-dimensional reference system defined in a 
-//! two-dimensional space.
-class Ref2d2d : public Ref<Rect2d2dCooSys>
+//! @brief 1D Reference system defined in a
+//! bi-dimensional one.
+class Ref1d2d : public Ref<Rect1d2dCooSys>
   {
   public:
     typedef GeomObj2d::list_Pos2d list_Pos2d;
-    typedef Ref<Rect2d2dCooSys> BaseRef;
+    typedef Ref<Rect1d2dCooSys> BaseRef;
 
   public:
-    Ref2d2d(void);
-    Ref2d2d(const Pos2d &o);
-    Ref2d2d(const Pos2d &,const Rect2d2dCooSys &);
-    Ref2d2d(const Pos2d &o,const Vector2d &vX);
-    Ref2d2d(const Pos2d &o,const Dir2d &dirX);
-    Ref2d2d(const Pos2d &o,const Pos2d &p);
-    Vector2d getIVector(void) const; //I unary vector.
-    Vector2d getJVector(void) const; //J unary vector.
-    Line2d getXAxis(void) const; //Return the x axis.
-    Line2d getYAxis(void) const; //Return the y axis.
+    Ref1d2d(void);
+    explicit Ref1d2d(const Pos2d &);
+    Ref1d2d(const Pos2d &,const Rect1d2dCooSys &);
+    Ref1d2d(const Pos2d &o,const Vector2d &vX);
+    Ref1d2d(const Pos2d &o,const Dir2d &dirX);
+    Ref1d2d(const Pos2d &o,const Pos2d &p);
+    explicit Ref1d2d(const Ref2d2d &);
 
-    virtual ~Ref2d2d(void)
+    Vector2d getIVector(void) const;
+    //! @brief Return the I unary vector of the global system.
+    Line2d getXAxis(void) const; //Return the line defining x axis.
+
+    virtual ~Ref1d2d(void)
       {}
   };
 

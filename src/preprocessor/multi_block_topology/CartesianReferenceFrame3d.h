@@ -32,7 +32,7 @@
 #define SISREFCARTESIANAS3D_H
 
 #include "ReferenceFrame.h"
-#include "utility/geom/ref_sys/Ref3d3d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref3d3d.h"
 
 namespace XC {
 

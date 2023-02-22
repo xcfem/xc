@@ -24,7 +24,7 @@
 #define D2TO3D_H
 
 #include "utility/geom/d2/Surface3d.h"
-#include "utility/geom/ref_sys/Ref2d3d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"
 #include "../cgal_types.h"
 
 class Plane;

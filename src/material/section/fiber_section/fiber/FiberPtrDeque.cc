@@ -38,7 +38,7 @@
 #include "material/uniaxial/UniaxialMaterial.h"
 
 #include <domain/mesh/element/utils/Information.h>
-#include "utility/geom/ref_sys/Ref3d3d.h"
+#include "utility/geom/coo_sys/ref_sys/Ref3d3d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/d2/BND2d.h"
