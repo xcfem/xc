@@ -1861,7 +1861,7 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         MvRdz= McRdz # available flexural strength due to shear interaction.
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
     
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0, sectionClass= None):
         '''Return biaxial bending efficiency according to section H2
            of AISC-360-16.
 
@@ -1870,6 +1870,7 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         :param Vyd: required shear strength (major axis)
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param sectionClass: NOT used here.
         '''
         # Moments about principal axes (signs inverted).
         MW, MZ= self.getPrincipalAxesMoments(Mz= -Mzd, My= -Myd)
