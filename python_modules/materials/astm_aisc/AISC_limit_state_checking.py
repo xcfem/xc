@@ -271,7 +271,7 @@ class Member(steel_member_base.BucklingMember):
         return retval
 
     def getNominalFlexuralStrength(self, majorAxis= True):
-        ''' Return the nominal compressive strength of the member
+        ''' Return the nominal flexural strength of the member
             according to chapter F of AISC-360-16.
 
         :param majorAxis: true if the required strength corresponds to the
@@ -328,7 +328,7 @@ class Member(steel_member_base.BucklingMember):
         '''
         return self.shape.getDesignShearStrength(majorAxis= majorAxis)
     
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd):
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd):
         '''Return biaxial bending efficiency according to section H1
            of AISC-360-16.
 

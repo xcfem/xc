@@ -82,7 +82,7 @@ lstLines=gridGeom.getLstLinRange(beamY_rg)
 
 from materials.ec3 import EC3Beam as ec3b
 
-ec3beam=ec3b.EC3Beam(name='ec3bm',ec3Shape=None,lstLines=lstLines)
+ec3beam= ec3b.EC3Beam(name='ec3bm',ec3Shape=None, lstLines=lstLines)
 
 ec3beam.setControlPoints()
 

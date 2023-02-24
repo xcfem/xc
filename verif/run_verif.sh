@@ -1285,6 +1285,7 @@ echo "$BLEU" "    EC3 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_03.py
+python tests/postprocess/limit_state_checking/ec3/test_simply_supported_fully_restrained_beam.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_02.py

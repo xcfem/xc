@@ -1510,7 +1510,7 @@ class ASTMShape(object):
 
     
     # Combined internal forces
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0, sectionClass= None):
         '''Return biaxial bending efficiency according to section H1
            of AISC-360-16.
 
@@ -1519,6 +1519,7 @@ class ASTMShape(object):
         :param Vyd: required shear strength (major axis)
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param sectionClass: NOT used here.
         '''
         if(Nd<0): # compression
             NcRd= chiN*self.getReferenceCompressiveStrength() # available axial strength.

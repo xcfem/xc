@@ -19,7 +19,6 @@ from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs
-# from postprocess import output_handler
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 
@@ -155,6 +154,7 @@ else:
 
 # #########################################################
 # # Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # oh.displayElementValueDiagram('chiN', setToDisplay= aiscCalcSet)

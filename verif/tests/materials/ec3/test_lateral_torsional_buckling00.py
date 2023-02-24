@@ -17,24 +17,24 @@ __email__= "l.pereztato@gmail.com"
 
 
 def caseASampleMoments(L,M,FF):
-  nDiv= 20
-  step= L/nDiv
-  xx=(0,L)
-  yy=(M,FF*M)
-  f=scipy.interpolate.interp1d(xx, yy)
-  x=list()
-  M=list()
-  xi= 0.0
-  Mi= 0.0
-  for i in range(1,nDiv+2):
-    Mi= f(xi)
-    x.append(xi)
-    M.append(float(Mi))
-    xi+= step
-  return [x,M]
+    nDiv= 20
+    step= L/nDiv
+    xx=(0,L)
+    yy=(M,FF*M)
+    f=scipy.interpolate.interp1d(xx, yy)
+    x=list()
+    M=list()
+    xi= 0.0
+    Mi= 0.0
+    for i in range(1,nDiv+2):
+        Mi= f(xi)
+        x.append(xi)
+        M.append(float(Mi))
+        xi+= step
+    return [x,M]
 
 
-supportCoefs= EC3lsc.SupportCoefficients(k1= 1.0,k2= 1.0)
+beamSupportCoefs= EC3lsc.BeamSupportCoefficients(k1= 1.0,k2= 1.0)
 nDiv= 20
 step= 2/nDiv
 psi=list()
@@ -42,19 +42,19 @@ c1=list()
 psii= -1.0
 C1i= 0.0
 for i in range(1,nDiv+2): 
-  mD= caseASampleMoments(5.0,10.0,psii)
-  Mi=intp.interpEquidistPoints(xi=mD[0],yi=mD[1],nDiv=4)
-  mgf= EC3lsc.MomentGradientFactorC1(Mi)
-  C1i= mgf.getC1(supportCoefs)
-  psi.append(psii)
-  c1.append(C1i)
-  psii+= step
+    mD= caseASampleMoments(5.0,10.0,psii)
+    Mi=intp.interpEquidistPoints(xi=mD[0],yi=mD[1],nDiv=4)
+    mgf= EC3lsc.MomentGradientFactorC1(Mi)
+    C1i= mgf.getC1(beamSupportCoefs)
+    psi.append(psii)
+    c1.append(C1i)
+    psii+= step
 
 C1Teor=  [2.4494897427831783, 2.5202394341199024, 2.551789158017712, 2.539514968727602, 2.485250608738542, 2.3965787580611124, 2.284160962880643, 2.158748288883464, 2.0291986247835694, 1.9017865941611045, 1.7803963942770489, 1.6670801802983037, 1.5626453420774271, 1.4671286132146033, 1.3801311186847085, 1.301036207838119, 1.229142533193964, 1.1637407889826492, 1.1041549711386875, 1.0497621901901266, 1.0]
 ratio1= 0
 sz= len(C1Teor)
 for i in range(0,sz):
-  ratio1+= (c1[i]-C1Teor[i])**2
+    ratio1+= (c1[i]-C1Teor[i])**2
 
 ratio1= math.sqrt(ratio1)
 

@@ -448,7 +448,7 @@ class EC3Shape(object):
         '''
         return EC3lsc.getLateralBucklingImperfectionFactor(self)
 
-    def getLateralBucklingIntermediateFactor(self,sectionClass,L,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
+    def getLateralBucklingIntermediateFactor(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
         ''' Returns lateral torsional buckling intermediate factor value.
 
          :param sectionClass: section classification (1,2,3 or 4)
@@ -457,7 +457,7 @@ class EC3Shape(object):
         '''
         return EC3lsc.getLateralBucklingIntermediateFactor(self,sectionClass,L,Mi,supportCoefs)
 
-    def getLateralBucklingReductionFactor(self,sectionClass,L,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
+    def getLateralBucklingReductionFactor(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
         ''' Returns lateral torsional buckling reduction factor value.
 
           :param sectionClass: section classification (1 to 3, 4 not yet implemented)
@@ -466,7 +466,7 @@ class EC3Shape(object):
         '''  
         return EC3lsc.getLateralBucklingReductionFactor(self,sectionClass,L,Mi,supportCoefs)
 
-    def getLateralTorsionalBucklingResistance(self,sectionClass,L,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
+    def getLateralTorsionalBucklingResistance(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
         '''Return lateral torsional buckling resistance of this cross-section.
            Calculation is made following the paper:
 
@@ -480,7 +480,7 @@ class EC3Shape(object):
         '''
         return EC3lsc.getLateralTorsionalBucklingResistance(self,sectionClass,L,Mi,supportCoefs)
 
-    def getMcr(self,L,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
+    def getMcr(self,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
         '''Return elastic critical moment about minor axis: y
            Calculation is made following the paper:
 
@@ -494,7 +494,7 @@ class EC3Shape(object):
         '''
         return EC3lsc.getMcr(self,L,Mi,supportCoefs)
 
-    def getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,L,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
+    def getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
 
         '''Return non dimensional beam slenderness
          for lateral torsional buckling
