@@ -18,14 +18,12 @@ class EC3Beam(EC3lsc.Member):
     its section class, the coefficients of supports and the type  
     
     '''
-    def __init__(self, name, ec3Shape,sectionClass=1,supportCoefs= EC3lsc.BeamSupportCoefficients(ky=1.0,kw=1.0,k1=1.0,k2=1.0), typo= 'rolled', lstLines=None, lstPoints=None):
+    def __init__(self, name, ec3Shape, beamSupportCoefs= EC3lsc.BeamSupportCoefficients(ky=1.0,kw=1.0,k1=1.0,k2=1.0), typo= 'rolled', lstLines=None, lstPoints=None):
         '''Constructor.
 
         :param name: object name.
         :param ec3Shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
-        :param sectionClass: section class (1 to 3, 4 not yet implemented) 
-                             (defaults to 1).
-        :param supportCoefs: instance of EC3_limit_state_checking.BeamSupportCoefficients
+        :param beamSupportCoefs: instance of EC3_limit_state_checking.BeamSupportCoefficients
                              that wraps the support coefficients: ky, kw, k1 
                              and k2; where ky is the lateral bending 
                              coefficient, kw the warping coefficient,  k1 and 
@@ -38,6 +36,6 @@ class EC3Beam(EC3lsc.Member):
         :param lstPoints: ordered list of points that make up the beam. 
                           Ignored if lstLines is given (defaults to None)
         '''
-        super(EC3Beam,self).__init__(name= name, ec3Shape= ec3Shape, lstLines= lstLines, lstPoints= lstPoints, sectionClass= sectionClass, supportCoefs= supportCoefs, typo= typo)
+        super(EC3Beam,self).__init__(name= name, ec3Shape= ec3Shape, lstLines= lstLines, lstPoints= lstPoints, beamSupportCoefs= beamSupportCoefs, typo= typo)
             
 

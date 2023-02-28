@@ -28,8 +28,8 @@ else:
     ratio0= 1
 
 # Section class.
-sectionClass= steelShape.getClassInCompression()
-ratio1= abs(sectionClass-1)
+steelShape.sectionClass= steelShape.getClassInCompression()
+ratio1= abs(steelShape.sectionClass-1)
 
 # Compression strength of the section.
 NcRd= steelShape.getNcRd()
@@ -38,12 +38,12 @@ ratio2= abs(NcRd-refNcRd)/refNcRd
 
 # Buckling reduction factors.
 Leq= 4.0
-XY= steelShape.getBucklingReductionFactorY(Leq, sectionClass= sectionClass)
-XZ= steelShape.getBucklingReductionFactorZ(Leq, sectionClass= sectionClass)
+XY= steelShape.getBucklingReductionFactorY(Leq)
+XZ= steelShape.getBucklingReductionFactorZ(Leq)
 ratio3= math.sqrt((XY-0.7448176472713355)**2+(XZ-0.7448176472713355)**2)
 
 # Buckling resistance.
-NbRd= steelShape.getBucklingResistance(Leq,Leq,1)
+NbRd= steelShape.getBucklingResistance(Leq,Leq)
 refNbRd= 0.7448176472713355*refNcRd
 ratio4= abs(NbRd-refNbRd)/refNbRd
 

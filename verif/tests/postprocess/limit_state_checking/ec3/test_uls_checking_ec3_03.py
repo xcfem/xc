@@ -36,6 +36,7 @@ steel= EC3_materials.S355JR
 steel.gammaM= 1.00
 ## Profile geometry
 shape= EC3_materials.MicropileTubeShape(steel= steel, name= 'MP_177.8x10.5')
+shape.sectionClass= 1
 
 ## Problem geometry
 height= 1.0 # column height.
@@ -48,7 +49,7 @@ ratio1= abs(Ncr-refNcr)/refNcr
 # Non-dimensional slenderness.
 lambdaZ= shape.getAdimensionalSlendernessZ(Leq= height)
 # Bow imperfection
-McRdz= shape.getMcRdz(sectionClass= 1)
+McRdz= shape.getMcRdz()
 NcRd= shape.getNcRd()
 e0= 0.34*(lambdaZ-0.2)*McRdz/NcRd
 
@@ -145,7 +146,6 @@ lsd.steelShearResistance,
 # Assign element properties.
 ec3CalcSet= xcTotalSet
 for e in ec3CalcSet.elements:
-    e.setProp('sectionClass', 1)
     e.setProp('crossSection', shape)
     e.setProp('chiLT', 1.0)
     e.setProp('chiN', chiN)

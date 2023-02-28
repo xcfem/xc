@@ -22,17 +22,17 @@ S355JR= EC3_materials.S355JR
 gammaM0= 1.0
 S355JR.gammaM= gammaM0 
 IPE400= EC3_materials.IPEShape(S355JR,"IPE_400")
-
+IPE400.sectionClass= 1
 
 # Geometry
 k1= 1.0; k2= 1.0
 
 #Check results page 31
 Md= 114.3e3
-McRd= IPE400.getMcRdz(1)
+McRd= IPE400.getMcRdz()
 McRdTeor= 464.0e3
 ratio1= abs(McRd-McRdTeor)/McRdTeor
-resCheckBending=IPE400.getBiaxialBendingEfficiency(1,0.0,0.0,Md)
+resCheckBending=IPE400.getBiaxialBendingEfficiency(Nd= 0.0,Myd= 0.0,Mzd= Md)
 bendingEfficiency= resCheckBending[0]
 bendingEfficiencyTeor= (Md/McRdTeor)**2
 ratio2= abs(bendingEfficiency-bendingEfficiencyTeor)/bendingEfficiencyTeor
@@ -40,7 +40,7 @@ Vd= 75.9e3
 VcRd= IPE400.getVcRdy()
 VcRdTeor= 875e3
 ratio3= abs(VcRd-VcRdTeor)/VcRdTeor
-MvRd= IPE400.getMvRdz(1,Vd)
+MvRd= IPE400.getMvRdz(Vd= Vd)
 MvRdTeor= 464.0e3
 ratio4= abs(MvRd-MvRdTeor)/MvRdTeor
 

@@ -20,7 +20,7 @@ S355JR= EC3_materials.S355JR
 gammaM0= 1.00
 S355JR.gammaM= gammaM0 
 IPE400= EC3_materials.IPEShape(S355JR,"IPE_400")
-
+IPE400.sectionClass= 1
 
 # Geometry
 k1= 1.0; k2= 1.0
@@ -30,12 +30,12 @@ L= 3 # Bar length (m)
 x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3]
 Mi=intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
-overlineLambdaLT= IPE400.getLateralBucklingNonDimensionalBeamSlenderness(1,L,Mi)
+overlineLambdaLT= IPE400.getLateralBucklingNonDimensionalBeamSlenderness(L= L, Mi= Mi)
 alphaLT= IPE400.getLateralBucklingImperfectionFactor()
 # phiLT= IPE400.getLateralBucklingIntermediateFactor(1,x,M)
 # chiLT= IPE400.getLateralBucklingReductionFactor(1,x,M)
 # chiLT= IPE400.getLateralBucklingReductionFactor(1,x,M)
-MbRd= IPE400.getLateralTorsionalBucklingResistance(1,L,Mi)
+MbRd= IPE400.getLateralTorsionalBucklingResistance(L= L, Mi= Mi)
 MbRdTeor= 412.9e3
 ratio1= abs(MbRd-MbRdTeor)/MbRdTeor
 ratio2= abs(overlineLambdaLT-0.51)/0.51

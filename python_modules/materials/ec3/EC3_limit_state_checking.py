@@ -56,20 +56,20 @@ def getBendingResistanceReductionCoefficient(steelShape, Vd):
     else:
         return (2*ratio-1)**2
 
-def getMvRdz(steelShape,sectionClass,Vd):
+def getMvRdz(steelShape, Vd):
     '''Returns the major bending resistance of the cross-section under a
     shear force of Vd.
 
     param steelShape: cross section shape.
     '''
-    McRdz= steelShape.getMcRdz(sectionClass)
+    McRdz= steelShape.getMcRdz()
     reductionCoeff= steelShape.getBendingResistanceReductionCoefficient(Vd)
     if(reductionCoeff<=0.0):
         return McRdz
     else:
         Aw= steelShape.hw()*steelShape.tw()
         sustr= reductionCoeff*Aw**2/4.0/steelShape.tw()
-        return min((steelShape.getWz(sectionClass)-sustr)*steelShape.steelType.fy/steelShape.steelType.gammaM0(),McRdz)
+        return min((steelShape.getWz()-sustr)*steelShape.steelType.fy/steelShape.steelType.gammaM0(),McRdz)
 
 def getLateralBucklingImperfectionFactor(steelShape):
     ''' Returns lateral torsional imperfection factor depending of the type of section 
@@ -116,30 +116,31 @@ class BeamSupportCoefficients(object):
         to equation 12 of the reference [1].'''
     return [(1.0-self.k2),5*self.k1**3/self.k2**2,5*(1.0/self.k1+1.0/self.k2),5*self.k2**3/self.k1**2,(1.0-self.k1)]
 
-def getLateralBucklingIntermediateFactor(steelShape,sectionClass,L,Mi,beamSupportCoefs= BeamSupportCoefficients()):
+def getLateralBucklingIntermediateFactor(steelShape, L, Mi, beamSupportCoefs= BeamSupportCoefficients()):
     ''' Returns lateral torsional buckling intermediate factor value.
 
     :param steelShape: cross section shape.
+    :param L: member length.
     :param Mi: ordinate for the moment diagram
     :param beamSupportCoefs: coefficients that represent support conditions.
     '''
     alphaLT= steelShape.getLateralBucklingImperfectionFactor()
-    overlineLambdaLT= steelShape.getLateralBucklingNonDimensionalBeamSlenderness(sectionClass,L,Mi,beamSupportCoefs)
+    overlineLambdaLT= steelShape.getLateralBucklingNonDimensionalBeamSlenderness(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
     return 0.5*(1+alphaLT*(overlineLambdaLT-0.2)+overlineLambdaLT**2)
 
-def getLateralBucklingReductionFactor(steelShape,sectionClass,L,Mi,beamSupportCoefs= BeamSupportCoefficients()):
+def getLateralBucklingReductionFactor(steelShape, L, Mi, beamSupportCoefs= BeamSupportCoefficients()):
     ''' Returns lateral torsional buckling reduction factor value.
 
     :param steelShape: cross section shape.
-    :param sectionClass: section classification (1 to 3, 4 not yet implemented)
+    :param L: member length.
     :param Mi: ordinate for the moment diagram
     :param beamSupportCoefs: coefficients that represent support conditions.
     '''  
-    phiLT= steelShape.getLateralBucklingIntermediateFactor(sectionClass,L,Mi,beamSupportCoefs)
-    overlineLambdaLT= steelShape.getLateralBucklingNonDimensionalBeamSlenderness(sectionClass,L,Mi,beamSupportCoefs)
+    phiLT= steelShape.getLateralBucklingIntermediateFactor(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+    overlineLambdaLT= steelShape.getLateralBucklingNonDimensionalBeamSlenderness(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
     return min(1.0,1.0/(phiLT+math.sqrt(phiLT**2-overlineLambdaLT**2)))
 
-def getLateralTorsionalBucklingResistance(steelShape,sectionClass,L,Mi,beamSupportCoefs= BeamSupportCoefficients()):
+def getLateralTorsionalBucklingResistance(steelShape, L, Mi, beamSupportCoefs= BeamSupportCoefficients()):
     '''Returns lateral torsional buckling resistance of this cross-section.
     Calculation is made following the paper:
 
@@ -149,14 +150,13 @@ def getLateralTorsionalBucklingResistance(steelShape,sectionClass,L,Mi,beamSuppo
     (Lisbon, Portugal: Stability and ductility of steel structures, 2006).
 
     :param steelShape: cross section shape.
-    :param sectionClass: section classification (1,2,3 or 4)
     :param Mi: ordinate for the moment diagram
     :param beamSupportCoefs: coefficients that represent support conditions.
     '''  
-    chiLT= steelShape.getLateralBucklingReductionFactor(sectionClass,L,Mi,beamSupportCoefs)
-    return chiLT*steelShape.getMcRdz(sectionClass)
+    chiLT= steelShape.getLateralBucklingReductionFactor(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+    return chiLT*steelShape.getMcRdz()
 
-def getMcr(steelShape,L,Mi,beamSupportCoefs= BeamSupportCoefficients()):
+def getMcr(steelShape, L, Mi, beamSupportCoefs= BeamSupportCoefficients()):
     '''Returns elastic critical moment about minor axis: y
     Calculation is made following the paper:
 
@@ -166,11 +166,12 @@ def getMcr(steelShape,L,Mi,beamSupportCoefs= BeamSupportCoefficients()):
     (Lisbon, Portugal: Stability and ductility of steel structures, 2006).
 
     :param steelShape: cross section shape.
+    :param L: member length.
     :param Mi: ordinate for the moment diagram
     :param beamSupportCoefs: coefficients that represent support conditions.
     '''
     mgf= MomentGradientFactorC1(Mi)
-    C1= mgf.getC1(beamSupportCoefs)
+    C1= mgf.getC1(beamSupportCoefs= beamSupportCoefs)
     pi2EIy= math.pi**2*steelShape.EIy()
     GIt= steelShape.GJ()
     kyL2= (beamSupportCoefs.ky*L)**2
@@ -189,18 +190,17 @@ def getMcr(steelShape,L,Mi,beamSupportCoefs= BeamSupportCoefficients()):
     # print('  f2= ', f2)
     return C1*Mcr0*f2
 
-def getLateralBucklingNonDimensionalBeamSlenderness(steelShape,sectionClass,L,Mi,beamSupportCoefs= BeamSupportCoefficients()):
+def getLateralBucklingNonDimensionalBeamSlenderness(steelShape, L, Mi, beamSupportCoefs= BeamSupportCoefficients()):
     '''Returns non dimensional beam slenderness
     for lateral torsional buckling
     see parameter definition on method getMcr.
 
     :param steelShape: cross section shape.
-    :param sectionClass: section classification (1,2,3 or 4)
     :param Mi: ordinate for the moment diagram
     :param beamSupportCoefs: coefficients that represent support conditions.
     '''
-    Mcr= steelShape.getMcr(L,Mi,beamSupportCoefs)
-    return math.sqrt(steelShape.getWz(sectionClass)*steelShape.steelType.fy/Mcr)
+    Mcr= steelShape.getMcr(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+    return math.sqrt(steelShape.getWz()*steelShape.steelType.fy/Mcr)
 
 class MomentGradientFactorC1(object):
     ''' Calculation of the C1 moment gradient factor as defined
@@ -239,16 +239,20 @@ class MomentGradientFactorC1(object):
         Mmax2= self.getExtremeMoment()**2
         return (Mmax2+ai[0]*self.Mi[0]**2+ai[1]*self.Mi[1]**2+ai[2]*self.Mi[2]**2+ai[3]*self.Mi[3]**2+ai[4]*self.Mi[4]**2)/((1+ai[0]+ai[1]+ai[2]+ai[3]+ai[4])*Mmax2)
 
-    def getC1(self,beamSupportCoefs):
+    def getC1(self, beamSupportCoefs):
         '''Return the value for the C1 coefficient according to equation 8
            of the reference [1]. 
 
-        :param k1: warping AND lateral bending coefficient at left end
-                                   k1= 1.0 => free warping AND lateral bending
-                                   k1= 0.5 => prevented warp. AND lateral bending
-        :param k2: warping AND lateral bending coefficient at right end
-                                   k2= 1.0 => free warping AND lateral bending
-                                   k2= 0.5 => prevented warp. AND lateral bending'''
+        :param beamSupportCoefs: instance of EC3_limit_state_checking.BeamSupportCoefficients
+                             that wraps the support coefficients: ky, kw, k1 
+                             and k2; where ky is the lateral bending 
+                             coefficient, kw the warping coefficient,  k1 and 
+                             the warping AND lateral bending coefficients at first
+                             and last ends respectively (1.0 => free, 0.5 => prevented). 
+                             (Defaults to ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0)
+        '''
+
+
         k= math.sqrt(beamSupportCoefs.k1*beamSupportCoefs.k2) # equation 9
         A1= self.getA1(beamSupportCoefs)
         A2= self.getA2()
@@ -260,8 +264,6 @@ class Member(steel_member_base.BucklingMember):
     '''Steel beam defined by an arbitrary name, a cross-section shape, 
     its section class, the coefficients of supports and the type  
     
-    :ivar sectionClass: section class (1 to 3, 4 not yet implemented) 
-          (defaults to 1).
     :ivar supportCoefs: instance of EC3_limit_state_checking.BeamSupportCoefficients
           that wraps the support coefficients: ky, kw, k1 and k2. where ky is 
           the lateral bending coefficient, kw the warping coefficient,  k1 and
@@ -270,14 +272,12 @@ class Member(steel_member_base.BucklingMember):
           (Defaults to ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0)
     :ivar typo: 'rolled' or 'welded' (defaults to rolled)
     '''
-    def __init__(self, name, ec3Shape,sectionClass=1,supportCoefs= BeamSupportCoefficients(ky=1.0,kw=1.0,k1=1.0,k2=1.0), typo= 'rolled', lstLines=None, lstPoints=None):
+    def __init__(self, name, ec3Shape, beamSupportCoefs= BeamSupportCoefficients(ky=1.0,kw=1.0,k1=1.0,k2=1.0), typo= 'rolled', lstLines=None, lstPoints=None):
         '''Constructor.
 
         :param name: object name.
         :param ec3Shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
-        :param sectionClass: section class (1 to 3, 4 not yet implemented) 
-                             (defaults to 1).
-        :param supportCoefs: instance of EC3_limit_state_checking.BeamSupportCoefficients
+        :param beamSupportCoefs: instance of EC3_limit_state_checking.BeamSupportCoefficients
                              that wraps the support coefficients: ky, kw, k1 
                              and k2; where ky is the lateral bending 
                              coefficient, kw the warping coefficient,  k1 and 
@@ -291,15 +291,14 @@ class Member(steel_member_base.BucklingMember):
                           Ignored if lstLines is given (defaults to None)
         '''
         super(Member,self).__init__(name, ec3Shape, lstLines, lstPoints)
-        self.sectionClass= sectionClass
-        self.supportCoefs= supportCoefs
+        self.beamSupportCoefs= beamSupportCoefs
         self.typo=typo
 
     def getLateralBucklingReductionFactor(self):
         ''' Return lateral torsional buckling reduction factor value
         for the elements of the beam.'''
         Mi= self.getBendingMomentsAtControlPoints()
-        return self.shape.getLateralBucklingReductionFactor(self.sectionClass,self.getLength(),Mi,self.supportCoefs)
+        return self.shape.getLateralBucklingReductionFactor(L= self.getLength(), Mi= Mi, beamSupportCoefs= self.beamSupportCoefs)
 
     def updateLateralBucklingReductionFactor(self):
         '''Update the value of the lateral buckling reduction factor.'''
@@ -325,7 +324,7 @@ class Member(steel_member_base.BucklingMember):
         lrfLT= self.getFlexuralStrengthReductionFactor()
         print(lrfLT)
 
-        return self.shape.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= Vyd, sectionClass= self.sectionClass, chiN= lrfN, chiLT= lrfLT)
+        return self.shape.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= Vyd, chiN= lrfN, chiLT= lrfLT)
 
     def installULSControlRecorder(self,recorderType, chiLT=1.0, calcSet= None):
         '''Install recorder for verification of ULS criterion.
@@ -336,7 +335,7 @@ class Member(steel_member_base.BucklingMember):
                         'None' the member elements will be appended to this set.
         '''
         recorder= self.createRecorder(recorderType, calcSet)
-        self.shape.setupULSControlVars(self.elemSet, self.sectionClass,chiLT)
+        self.shape.setupULSControlVars(self.elemSet, chiLT= chiLT)
         nodHndlr= self.getPreprocessor().getNodeHandler        
         if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
@@ -366,29 +365,21 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
         '''
         # Get element section properties.
         steelShape= elem.getProp('crossSection')
-        sectionClass= elem.getProp('sectionClass')
-        if(steelShape and sectionClass):
+        if(steelShape):
             # Check each element section.
             for lf in elementInternalForces: 
                 # Compute efficiency.
-                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(sectionClass,lf.N,lf.My,lf.Mz,lf.Vy,chiLT= lf.chiLT, chiN= lf.chiN)
+                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, Vyd= lf.Vy, chiLT= lf.chiLT, chiN= lf.chiN)
                 sectionLabel= self.getSectionLabel(lf.idSection)
                 label= self.limitStateLabel+sectionLabel
                 # Update efficiency.
                 if(CFtmp>elem.getProp(label).CF):
                     elem.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
         else:
-            if(not steelShape):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                errMsg= className+'.'+methodName+"; cross section not defined for element: " + str(elem.tag) + "\n"
-                lmsg.error(errMsg)
-            elif(not sectionClass):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                errMsg= className+'.'+methodName+"; cross section class not defined for element: " + str(elem.tag) + "\n"
-                lmsg.error(errMsg)
-                    
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"; cross section not defined for element: " + str(elem.tag) + "\n"
+            lmsg.error(errMsg)
         
 
 class ShearController(lsc.LimitStateControllerBase2Sections):
@@ -412,11 +403,10 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
         '''
         # Get element section properties.
         steelShape= elem.getProp('crossSection')
-        sectionClass= elem.getProp('sectionClass')
         # Check each element section.
         for lf in elementInternalForces: 
             # Compute efficiency.
-            CFtmp= steelShape.getYShearEfficiency(sectionClass,lf.Vy)
+            CFtmp= steelShape.getYShearEfficiency(Vyd= lf.Vy)
             sectionLabel= self.getSectionLabel(lf.idSection)
             label= self.limitStateLabel+sectionLabel
             # Update efficiency.

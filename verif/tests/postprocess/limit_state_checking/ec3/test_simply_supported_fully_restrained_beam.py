@@ -41,7 +41,8 @@ variableAction= 3.3e3 # N/m2
 # Material
 steel= EC3_materials.S275JR
 steel.setGammaM0(1.0)
-shape= EC3_materials.UBShape(steel,'UB457x191x82') # Advance UK Beam (UKB) S275 
+shape= EC3_materials.UBShape(steel,'UB457x191x82') # Advance UK Beam (UKB) S275
+shape.sectionClass= 1
 
 # Ultimate limit state load.
 ulsLoad= 0.925*1.35*permanentAction+1.5*variableAction

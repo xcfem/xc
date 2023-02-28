@@ -134,39 +134,34 @@ class SteelShape(sp.SectionProperties):
         ''' return the product G*J (G=shear modulus, J=St. Venant torsional constant) '''
         return self.steelType.G()*self.It()
 
-    def getWz(self,sectionClass= 1):
-        '''return section modulus with respect to z-axis (strong axis)
-
-        :param sectionClass: 1 to 3 (4 not yet implemented) (defaults to 1)
+    def getWz(self):
+        '''return section modulus with respect to z-axis (strong axis).
         '''
-        if(sectionClass<3):
+        if(self.sectionClass<3):
             return self.get('Wzpl')
-        elif(sectionClass==3):
+        elif(self.sectionClass==3):
             return self.get('Wzel')
         else:
-            lmsg.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
+            lmsg.warning('cross sections of class: '+ str(self.sectionClass) + ' not implemented.')
 
-    def getWy(self,sectionClass= 1):
-        '''return section modulus with respect to y-axis (weak axis)
-
-        :param sectionClass: 1 to 3 (4 not yet implemented) (defaults to 1)
+    def getWy(self):
+        '''return section modulus with respect to y-axis (weak axis).
         '''
-        if(sectionClass<3):
+        if(self.sectionClass<3):
             return self.get('Wypl')
-        elif(sectionClass==3):
+        elif(self.sectionClass==3):
             return self.get('Wyel')
         else:
-            lmsg.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
+            lmsg.warning('cross sections of class: '+ str(self.sectionClass) + ' not implemented.')
 
-    def getAeff(self,sectionClass= 1):
+    def getAeff(self):
         '''return effective area depending on the cross-section class.
-
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1)
         '''
         retval= self.A()
-        if(sectionClass>=3):
-            lmsg.warning('effective area for sections of class: '+ str(sectionClass) + ' not implemented.')
+        if(self.sectionClass>=3):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': effective area for sections of class: '+ str(self.sectionClass) + ' not implemented.')
             retval/=100.0
         return retval
 
@@ -224,12 +219,11 @@ class SteelShape(sp.SectionProperties):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
         chiN= elem.getProp('chiN') # Axial strength reduction factor.
         [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], silent= False)
-        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
-        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
+        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
@@ -248,13 +242,11 @@ class SteelShape(sp.SectionProperties):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        # sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
         chiN= elem.getProp('chiN') # Axial strength reduction factor.
-        sectionClass= elem.getProp('sectionClass') # Section class.
         [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
-        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
-        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
@@ -272,10 +264,9 @@ class SteelShape(sp.SectionProperties):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        sectionClass= elem.getProp('sectionClass')
         [[Vy1], [Vy2]]= model_inquiry.getValuesAtNodes(elem,['Vy'], False)
-        FCV1= self.getYShearEfficiency(sectionClass,Vy1)
-        FCV2= self.getYShearEfficiency(sectionClass,Vy2)
+        FCV1= self.getYShearEfficiency(Vyd= Vy1)
+        FCV2= self.getYShearEfficiency(Vyd= Vy2)
         fcv= elem.getProp("FCVCP")
         if(FCV1 > fcv[0]):
             fcv[0]= FCV1
@@ -292,10 +283,9 @@ class SteelShape(sp.SectionProperties):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        sectionClass= elem.getProp('sectionClass')
         [[Vz1], [Vz2]]= model_inquiry.getValuesAtNodes(elem,['Vz'], False)
-        FCV1= self.getZShearEfficiency(sectionClass,Vz1)
-        FCV2= self.getZShearEfficiency(sectionClass,Vz2)
+        FCV1= self.getZShearEfficiency(Vzd= Vz1)
+        FCV2= self.getZShearEfficiency(Vzd= Vz2)
         fcv= elem.getProp("FCVCP")
         if(FCV1 > fcv[0]):
             fcv[0]= FCV1

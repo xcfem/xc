@@ -1463,24 +1463,22 @@ class ASTMShape(object):
         return self.referenceFlexuralStrength
 
     # Shear
-    def getYShearEfficiency(self, sectionClass, Vy):
+    def getYShearEfficiency(self, Vyd):
         '''Return major axis shear efficiency according to AISC-360-16.
 
-        :param sectionClass: dummy argument used for compatibility.
-        :param Vy: required shear strength (major axis)
+        :param Vyd: required shear strength (major axis)
         '''
-        return abs(Vy)/self.getDesignShearStrength(majorAxis= True)
+        return abs(Vyd)/self.getDesignShearStrength(majorAxis= True)
     
-    def getZShearEfficiency(self, sectionClass, Vz):
+    def getZShearEfficiency(self, Vzd):
         '''Return major axis shear efficiency according to AISC-360-16.
 
-        :param sectionClass: dummy argument used for compatibility.
         :param Vz: required shear strength (minor axis)
         '''
-        return Vz/self.getDesignShearStrength(majorAxis= False)
+        return Vzd/self.getDesignShearStrength(majorAxis= False)
         
 
-    def getZBendingEfficiency(self, Nd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0, sectionClass= None):
+    def getZBendingEfficiency(self, Nd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
         '''Return major axis bending efficiency according to section H1
            of AISC-360-16.
 
@@ -1489,7 +1487,6 @@ class ASTMShape(object):
         :param Vyd: required shear strength (major axis)
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
-        :param sectionClass: dummy argument used for compatibility.
         '''
         if(Nd<0): # compression
             NcRd= chiN*self.getReferenceCompressiveStrength() # available compressive strength.
@@ -1498,7 +1495,7 @@ class ASTMShape(object):
             NcRd= self.getDesignTensileStrength() # available axial strength.
             ratioN= Nd/NcRd
         McRdz= self.getReferenceFlexuralStrength() # reference flexural strength major axis.
-        # MvRdz= self.getMvRdz(sectionClass,Vyd)
+        # MvRdz= self.getMvRdz(Vyd)
         MvRdz= McRdz
         MbRdz= chiLT*MvRdz # available flexural strength major axis.
         ratioMz= abs(Mzd)/MbRdz
@@ -1510,7 +1507,7 @@ class ASTMShape(object):
 
     
     # Combined internal forces
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0, sectionClass= None):
+    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H1
            of AISC-360-16.
 
@@ -1519,7 +1516,6 @@ class ASTMShape(object):
         :param Vyd: required shear strength (major axis)
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
-        :param sectionClass: NOT used here.
         '''
         if(Nd<0): # compression
             NcRd= chiN*self.getReferenceCompressiveStrength() # available axial strength.
@@ -1529,7 +1525,7 @@ class ASTMShape(object):
             ratioN= Nd/NcRd
         McRdy= self.getDesignFlexuralStrength(None, None, majorAxis= False) # available flexural strength minor axis.
         McRdz= self.getReferenceFlexuralStrength() # reference flexural strength major axis.
-        # MvRdz= self.getMvRdz(sectionClass,Vyd)
+        # MvRdz= self.getMvRdz(Vyd)
         MvRdz= McRdz # available flexural strength due to shear interaction.
         MbRdz= chiLT*MvRdz # available flexural strength major axis.
         ratioMz= abs(Mzd)/MbRdz
@@ -1540,18 +1536,16 @@ class ASTMShape(object):
             CF= ratioN/2.0+(ratioMz+ratioMy) # equation H1-1b
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
 
-    def setupULSControlVars(self, elems, sectionClass= 1, chiN=1.0, chiLT=1.0):
+    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
         :param elems: elements to define properties on.
-        :param sectionClass: dummy argument used for compatibility.
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         super(ASTMShape,self).setupULSControlVars(elems)
         for e in elems:
-            e.setProp('sectionClass',sectionClass) #Cross section class.
             e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
             e.setProp('chiN',chiN) # Axial strength reduction factor.
             e.setProp('crossSection',self)
@@ -1861,7 +1855,7 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         MvRdz= McRdz # available flexural strength due to shear interaction.
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
     
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0, sectionClass= None):
+    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H2
            of AISC-360-16.
 
@@ -1870,7 +1864,6 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         :param Vyd: required shear strength (major axis)
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
-        :param sectionClass: NOT used here.
         '''
         # Moments about principal axes (signs inverted).
         MW, MZ= self.getPrincipalAxesMoments(Mz= -Mzd, My= -Myd)

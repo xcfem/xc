@@ -46,7 +46,7 @@ x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3]
 Mi=intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
 mgf= EC3lsc.MomentGradientFactorC1(Mi)
-Mcr2= IPE400.getMcr(L,Mi)
+Mcr2= IPE400.getMcr(L= L, Mi= Mi)
 Mcr2Teor= 1778e3
 
 ratio2= abs(Mcr2-Mcr2Teor)/Mcr2Teor

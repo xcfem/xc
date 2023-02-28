@@ -36,6 +36,7 @@ steel= EC3_materials.S235JR
 steel.gammaM= 1.00
 ## Profile geometry
 shape= EC3_materials.HEShape(steel= steel, name= 'HE_300_B')
+shape.sectionClass= 1
 
 ## Problem geometry
 height= 10.0 # column height.
@@ -48,8 +49,8 @@ ratio1= abs(Ncr-refNcr)/refNcr
 # Non-dimensional slenderness.
 lambdaZ= shape.getAdimensionalSlendernessZ(Leq= height)
 # Bow imperfection
-McRdz= shape.getMcRdz(sectionClass= 1)
-NcRd= shape.getNcRd(sectionClass= 1)
+McRdz= shape.getMcRdz()
+NcRd= shape.getNcRd()
 e0= 0.34*(lambdaZ-0.2)*McRdz/NcRd
 
 # Buckling reduction factor
@@ -145,7 +146,6 @@ lsd.steelShearResistance,
 # Assign element properties.
 ec3CalcSet= xcTotalSet
 for e in ec3CalcSet.elements:
-    e.setProp('sectionClass', 1)
     e.setProp('crossSection', shape)
     e.setProp('chiLT', 1.0)
     e.setProp('chiN', chiN)

@@ -168,16 +168,21 @@ class EC3Shape(object):
 
     :ivar name: steel shape name.
     :ivar typo: 'rolled' or 'welded' shape
+    :ivar sectionClass: section classification according to 
+                        clause 5.5 of EC3-1-1:2005.
     '''
-    def __init__(self,name, typo= 'rolled'):
+    def __init__(self,name, typo= 'rolled', sectionClass= None):
         '''
           Constructor.
 
         :param name: steel shape name.
         :param typo: 'rolled' or 'welded' shape
+        :param sectionClass: section classification according to 
+                             clause 5.5 of EC3-1-1:2005.
         '''
         self.name=name
         self.typo= typo
+        self.sectionClass= sectionClass
 
     def getClassInternalPartInCompression(self, ratioCT=None):
         '''Return the cross-section classification of internal part 
@@ -256,15 +261,13 @@ class EC3Shape(object):
             retval= self.h
         return retval
             
-    def getAdimensionalSlendernessY(self,Leq,sectionClass= 1):
+    def getAdimensionalSlendernessY(self, Leq):
         '''return adimensional slenderness relative to y-axis (weak axis) 
            as defined in EC3 part 1 6.3.1
 
-           :param Leq: buckling length in XZ buckling plane.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1)
+          :param Leq: buckling length in XZ buckling plane.
         '''
-        betaA= self.getAeff(sectionClass)/self.A()
+        betaA= self.getAeff()/self.A()
         lambdA= self.getSlendernessY(Leq)
         lambda1= self.steelType.getLambda1()
         return lambdA/lambda1*math.sqrt(betaA)
@@ -279,79 +282,73 @@ class EC3Shape(object):
         raise NotImplementedError()
         return 'd'
     
-    def getBucklingReductionFactorY(self,Leq, sectionClass= 1):
+    def getBucklingReductionFactorY(self, Leq):
         '''return buckling reduction factor relative to y-axis (weak axis) 
         as defined in EC3-1-1 6.3.1
 
         :param Leq: buckling length in XZ buckling plane.
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1)
         '''
         bucklingCurve= self.getBucklingCurve(majorAxis= False)
         alpha= alphaImperfectionFactor(bucklingCurve)
-        lmb= self.getAdimensionalSlendernessY(Leq, sectionClass= sectionClass)
+        lmb= self.getAdimensionalSlendernessY(Leq)
         phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
         return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
 
-    def getBucklingResistanceY(self,Leq, sectionClass= 1):
+    def getBucklingResistanceY(self, Leq):
         '''return buckling resistance relative to y-axis (weak axis)
         according to EC3-1-1 6.3.2
 
         :param Leq: buckling length in XZ buckling plane.
-        :param sectionClass: class of the section (1 to 3, 4 not yet implemented) (defaults to 1).
         '''
-        X= self.getBucklingReductionFactorY(Leq,sectionClass)
-        return X*self.getAeff(sectionClass)*self.steelType.fyd()
+        X= self.getBucklingReductionFactorY(Leq)
+        return X*self.getAeff()*self.steelType.fyd()
     
-    def getAdimensionalSlendernessZ(self, Leq, sectionClass= 1):
+    def getAdimensionalSlendernessZ(self, Leq):
         '''return adimensional slenderness relative to z-axis (strong axis) 
            as defined in EC3-1-1 6.3.1
 
            :param Leq: buckling length in XY buckling plane.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1)
         '''
-        betaA= self.getAeff(sectionClass)/self.A()
+        if(self.sectionClass is None):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': sectionClass not set. Assuming class 2.')
+            self.sectionClass= 2
+        betaA= self.getAeff()/self.A()
         lambdA= self.getSlendernessZ(Leq)
         lambda1= self.steelType.getLambda1()
         return lambdA/lambda1*math.sqrt(betaA)
     
-    def getBucklingReductionFactorZ(self, Leq, sectionClass= 1):
+    def getBucklingReductionFactorZ(self, Leq):
         '''return buckling reduction factor lative to z-axis (strong axis) 
         as defined in EC3-1-1 6.3.1
 
         :param Leq: buckling length in XY buckling plane.
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1)
         '''
         bucklingCurve= self.getBucklingCurve(majorAxis= True)
         alpha= alphaImperfectionFactor(bucklingCurve)
-        lmb= self.getAdimensionalSlendernessZ(Leq, sectionClass= sectionClass)
+        lmb= self.getAdimensionalSlendernessZ(Leq)
         phi= 0.5*(1+alpha*(lmb-0.2)+lmb**2)
         return min(1.0/(phi+math.sqrt(phi**2-lmb**2)),1.0)
 
-    def getBucklingResistanceZ(self, Leq, sectionClass= 1):
+    def getBucklingResistanceZ(self, Leq):
         '''return buckling resistance relative to z-axis (strong axis)
         according to EC3-1-1 6.3.2
 
         :param Leq: buckling length in XY buckling plane.
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1).
         '''
-        X= self.getBucklingReductionFactorZ(Leq,sectionClass)
-        return X*self.getAeff(sectionClass)*self.steelType.fyd()
+        X= self.getBucklingReductionFactorZ(Leq)
+        return X*self.getAeff()*self.steelType.fyd()
 
-    def getBucklingResistance(self, LeqY, LeqZ, sectionClass= 1):
+    def getBucklingResistance(self, LeqY, LeqZ):
         '''return minimum of buckling resistance in XY and XZ buckling planes
         calculated according to EC3-1-1 6.3.2
 
         :param LeqY: buckling length of the member in XZ buckling plane.
         :param LeqZ: buckling length of the member in XY buckling plane.
-        :param sectionClass: class of the section (1 to 3, 4 not yet 
-               implemented) (defaults to 1)
         '''
-        rY= self.getBucklingResistanceY(LeqY,sectionClass)
-        rZ= self.getBucklingResistanceZ(LeqZ,sectionClass)
+        rY= self.getBucklingResistanceY(LeqY)
+        rZ= self.getBucklingResistanceZ(LeqZ)
         return min(rY,rZ)
     
     def getLateralTorsionalBucklingCurve(self):
@@ -381,7 +378,8 @@ class EC3Shape(object):
     
     def shearBucklingVerificationNeeded(self):
         '''Return true if shear buckling verification is needed according
-           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).'''
+           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).ç
+        '''
         epsilon= math.sqrt(235e6/self.steelType.fy)
         eta= 1.0 #Conservative
         f1= self.hw()/self.tw()
@@ -412,35 +410,30 @@ class EC3Shape(object):
            clause 6.2.8 of EC31-1'''
         return EC3lsc.getBendingResistanceReductionCoefficient(self,Vd)
     
-    def getNcRd(self,sectionClass):
+    def getNcRd(self):
         '''Return the axial compression resistance of the cross-section.
-
-        :param sectionClass: section classification (1,2,3 or 4)
         '''
-        return self.getAeff(sectionClass)*self.steelType.fy/self.steelType.gammaM0()
+        return self.getAeff()*self.steelType.fy/self.steelType.gammaM0()
     
-    def getMcRdy(self,sectionClass):
+    def getMcRdy(self):
         '''Return the minor bending resistance of the cross-section.
 
-        :param sectionClass: section classification (1,2,3 or 4)
         '''
-        return self.getWy(sectionClass)*self.steelType.fy/self.steelType.gammaM0()
+        return self.getWy()*self.steelType.fy/self.steelType.gammaM0()
     
-    def getMcRdz(self,sectionClass):
+    def getMcRdz(self):
         '''Return the major bending resistance of the cross-section.
 
-        :param sectionClass: section classification (1,2,3 or 4)
         '''
-        return self.getWz(sectionClass)*self.steelType.fy/self.steelType.gammaM0()
+        return self.getWz()*self.steelType.fy/self.steelType.gammaM0()
     
-    def getMvRdz(self,sectionClass,Vd):
+    def getMvRdz(self,Vd):
         '''Return the major bending resistance of the cross-section under a
            shear force of Vd according to clause 6.2.8 of EC3-1-1:2005.
 
-          :param sectionClass: section classification (1,2,3 or 4)
           :param Vd: concomintant shear force.
         '''
-        return EC3lsc.getMvRdz(self,sectionClass,Vd)
+        return EC3lsc.getMvRdz(self, Vd)
 
     def getLateralBucklingImperfectionFactor(self):
         ''' Return lateral torsional imperfection factor depending of the type of section (rolled, welded,...).
@@ -448,25 +441,25 @@ class EC3Shape(object):
         '''
         return EC3lsc.getLateralBucklingImperfectionFactor(self)
 
-    def getLateralBucklingIntermediateFactor(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
+    def getLateralBucklingIntermediateFactor(self, L, Mi, beamSupportCoefs= EC3lsc.BeamSupportCoefficients()):
         ''' Returns lateral torsional buckling intermediate factor value.
 
-         :param sectionClass: section classification (1,2,3 or 4)
+         :param L: member length.
          :param Mi: ordinate for the moment diagram
          :param supportCoefs: coefficients that represent support conditions.
         '''
-        return EC3lsc.getLateralBucklingIntermediateFactor(self,sectionClass,L,Mi,supportCoefs)
+        return EC3lsc.getLateralBucklingIntermediateFactor(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
 
-    def getLateralBucklingReductionFactor(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
+    def getLateralBucklingReductionFactor(self, L, Mi, beamSupportCoefs= EC3lsc.BeamSupportCoefficients()):
         ''' Returns lateral torsional buckling reduction factor value.
 
-          :param sectionClass: section classification (1 to 3, 4 not yet implemented)
+          :param L: member length.
           :param Mi: ordinate for the moment diagram
-          :param supportCoefs: coefficients that represent support conditions.
+          :param beamSupportCoefs: coefficients that represent support conditions.
         '''  
-        return EC3lsc.getLateralBucklingReductionFactor(self,sectionClass,L,Mi,supportCoefs)
+        return EC3lsc.getLateralBucklingReductionFactor(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
 
-    def getLateralTorsionalBucklingResistance(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
+    def getLateralTorsionalBucklingResistance(self, L, Mi, beamSupportCoefs= EC3lsc.BeamSupportCoefficients()):
         '''Return lateral torsional buckling resistance of this cross-section.
            Calculation is made following the paper:
 
@@ -475,12 +468,13 @@ class EC3Shape(object):
            the moment gradient factor.
            (Lisbon, Portugal: Stability and ductility of steel structures, 2006).
 
+         :param L: member length.
          :param Mi: ordinate for the moment diagram
-         :param supportCoefs: coefficients that represent support conditions.
+         :param beamSupportCoefs: coefficients that represent support conditions.
         '''
-        return EC3lsc.getLateralTorsionalBucklingResistance(self,sectionClass,L,Mi,supportCoefs)
+        return EC3lsc.getLateralTorsionalBucklingResistance(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
 
-    def getMcr(self,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
+    def getMcr(self, L, Mi, beamSupportCoefs= EC3lsc.BeamSupportCoefficients()):
         '''Return elastic critical moment about minor axis: y
            Calculation is made following the paper:
 
@@ -489,32 +483,32 @@ class EC3Shape(object):
            the moment gradient factor.
            (Lisbon, Portugal: Stability and ductility of steel structures, 2006).
 
+         :param L: member length.
          :param Mi: ordinate for the moment diagram
-         :param supportCoefs: coefficients that represent support conditions.
+         :param beamSupportCoefs: coefficients that represent support conditions.
         '''
-        return EC3lsc.getMcr(self,L,Mi,supportCoefs)
+        return EC3lsc.getMcr(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
 
-    def getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,L,Mi,supportCoefs= EC3lsc.BeamSupportCoefficients()):
+    def getLateralBucklingNonDimensionalBeamSlenderness(self, L, Mi, beamSupportCoefs= EC3lsc.BeamSupportCoefficients()):
 
         '''Return non dimensional beam slenderness
          for lateral torsional buckling
          see parameter definition on method getMcr.
 
-         :param shape: cross section shape.
-         :param sectionClass: section classification (1,2,3 or 4)
+         :param L: member length.
          :param Mi: ordinate for the moment diagram
-         :param supportCoefs: coefficients that represent support conditions.
+         :param beamSupportCoefs: coefficients that represent support conditions.
         '''
-        return EC3lsc.getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,L,Mi,supportCoefs)
+        return EC3lsc.getLateralBucklingNonDimensionalBeamSlenderness(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
 
-    def getYShearEfficiency(self,sectionClass,Vyd):
+    def getYShearEfficiency(self, Vyd):
         '''Return major axis shear efficiency.
 
-         :param sectionClass: section classification (1,2,3 or 4)
+         :param Vyd: design value of the required shear strength.
         '''
         return abs(Vyd/self.getVcRdy())
 
-    def getZBendingEfficiency(self, Nd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0,sectionClass= None):
+    def getZBendingEfficiency(self, Nd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
         '''Return major axis bending efficiency
 
         :param Nd: required axial strength.
@@ -522,28 +516,31 @@ class EC3Shape(object):
         :param Vyd: required shear strength (major axis)
         :param chiN: axial strength reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
-        :param sectionClass: section classification (1,2,3 or 4)
         '''
         if(Nd!=0.0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+': for compressed sections not implemented yet.')
-        MvRdz= self.getMvRdz(sectionClass,Vyd)
+        MvRdz= self.getMvRdz(Vyd)
         MbRdz= chiLT*MvRdz #Lateral buckling reduction.
         return abs(Mzd)/MbRdz
 
-    def getBiaxBendCoeffs(self,NEd,NplRd):
+    def getBiaxBendCoeffs(self, NEd, NplRd):
         '''Return (alpha,beta) constants for bi-axial bending criterion 
         (clause 6.2.9 of EC3.1.1)
+
+        :param NEd: design value of the axial force.
+        :param NplRd: design plastic resistancc to normal forces of the 
+                      gross cross-section.
         '''
         n= NEd/NplRd
-        if self.name[0] in ['I','H']:
+        if self.name[0] in ['I','H']: # I and H sections.
             alpha=2
             beta=max(1,5*n)
-        elif self.name[:2] == 'CH':
+        elif self.name[:2] == 'CH': # circular hollow sections.
             alpha=2
             beta=2
-        elif self.name[:2] in ['RH','SH']:
+        elif self.name[:2] in ['RH','SH']: # rectangular hollow sections.
             alpha=min(6,abs(1.66/(1-1.13*n**2)))
             beta=alpha
         else:  #conservative
@@ -551,49 +548,54 @@ class EC3Shape(object):
             beta=1
         return (alpha,beta)
     
-    def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0, chiN= 1.0, chiLT=1.0):
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN= 1.0, chiLT=1.0):
         '''Return biaxial bending efficiency (clause 6.2.9 of EC3.1.1)
         (only class 1 and 2 cross-sections are considered currently)
 
-        :param sectionClass: section classification (1,2,3 or 4)
+        :param Nd: design value of the axial force.
+        :param Myd: design value of the bending moment about y-y axis.
+        :param Mzd: design value of the bending moment about z-z axis.
+        :param Vyd: design value of the shear force on y axis.
         :param chiN: flexural buckling reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
-        # Axial efficiency.
-        NcRd= chiN*self.getNcRd(sectionClass) # Flexural buckling reduction.
-        nCF= abs(Nd)/NcRd
-        # Bending efficiency.
-        bendingFactor= (1-math.pow(nCF,1.7))
-        McRdy= self.getMcRdy(sectionClass)*bendingFactor
-        McRdz= self.getMcRdz(sectionClass)*bendingFactor
-        MvRdz= self.getMvRdz(sectionClass,Vyd)
-        MbRdz= chiLT*MvRdz # Lateral buckling reduction.
-        alpha, beta=self.getBiaxBendCoeffs(Nd,NcRd)
-        mCF= (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta # Bending efficiency
-        CF= math.sqrt(nCF**2+mCF**2)
-        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
+        if(self.sectionClass<=2):
+            # Axial efficiency.
+            NcRd= chiN*self.getNcRd() # Flexural buckling reduction.
+            nCF= abs(Nd)/NcRd
+            # Bending efficiency.
+            bendingFactor= (1-math.pow(nCF,1.7))
+            McRdy= self.getMcRdy()*bendingFactor
+            McRdz= self.getMcRdz()*bendingFactor
+            MvRdz= self.getMvRdz(Vyd)
+            MbRdz= chiLT*MvRdz # Lateral buckling reduction.
+            alpha, beta=self.getBiaxBendCoeffs(Nd,NcRd)
+            mCF= (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta # Bending efficiency
+            CF= math.sqrt(nCF**2+mCF**2)
+            return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': not implemented for cross section class greater than 2.')
+            return None
 
-    def setupULSControlVars(self, elems, sectionClass= 1, chiN= 1.0, chiLT=1.0):
+    def setupULSControlVars(self, elems, chiN= 1.0, chiLT=1.0):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
         :param elems: elements to define properties on.
-        :param sectionClass: section classification (1,2,3 or 4)
         :param chiN: flexural buckling reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         super(EC3Shape,self).setupULSControlVars(elems)
         for e in elems:
-            e.setProp('sectionClass',sectionClass) #Cross section class.
             e.setProp('chiN', chiN) # Flexural buckling reduction factor.
             e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
             e.setProp('crossSection',self)
 
-    def installULSControlRecorder(self, recorderType, elems, sectionClass= 1, chiN= 1.0, chiLT=1.0, calcSet= None):
+    def installULSControlRecorder(self, recorderType, elems, chiN= 1.0, chiLT=1.0, calcSet= None):
         '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.
 
         :param recorderType: recorder type.
-        :param sectionClass: section classification (1,2,3 or 4)
         :param chiN: flexural buckling reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         :param calcSet: set of elements to be checked (defaults to 'None' which 
@@ -602,7 +604,7 @@ class EC3Shape(object):
         '''
         recorder= self.createRecorder(recorderType, calcSet)
 
-        self.setupULSControlVars(elems,sectionClass,chiN= chiN, chiLT= chiLT)
+        self.setupULSControlVars(elems, chiN= chiN, chiLT= chiLT)
         nodHndlr= self.getPreprocessor().getNodeHandler        
         if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
@@ -876,7 +878,9 @@ class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
     
     def getNcRd(self):
         '''Return the axial compression resistance of the cross-section.'''
-        return super(CHSShape, self).getNcRd(self.getClassInCompression())
+        if(self.sectionClass is None):
+            self.sectionClass= self.getClassInCompression()
+        return super(CHSShape, self).getNcRd()
 
     def shearBucklingVerificationNeeded(self):
         '''Return true if shear buckling verification is needed according
@@ -1089,11 +1093,12 @@ class MicropileTubeShape(EC3Shape, common_micropile_tubes.MicropileTubeShape):
         hotFinished= (self.typo=='rolled')
         return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
 
-    def getNcRd(self, sectionClass= None):
+    def getNcRd(self):
         '''Return the axial compression resistance of the cross-section.'''
-        if(sectionClass is None):
-            sectionClass= self.getClassInCompression()
-        return super(MicropileTubeShape, self).getNcRd(sectionClass= sectionClass)
+        if(self.sectionClass is None):
+            self.sectionClass= self.getClassInCompression()
+        return super(MicropileTubeShape, self).getNcRd()
+    
     def shearBucklingVerificationNeeded(self):
         '''Return true if shear buckling verification is needed according
            to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).'''

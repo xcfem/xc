@@ -29,6 +29,7 @@ pipeSteel= API_materials.M80
 gammaM0= 1.10
 pipeSteel.gammaM= gammaM0
 pipeShape= EC3_materials.MicropileTubeShape(steel= pipeSteel, name= 'MP_88.9x7.5')
+pipeShape.sectionClass= 1
 ## Mortar
 mortar= EHE_materials.HA25
 

@@ -20,7 +20,7 @@ S355JR= EC3_materials.S355JR
 gammaM0= 1.00
 S355JR.gammaM= gammaM0 
 steelShape= EC3_materials.HEShape(S355JR,'HE_340_B')
-
+steelShape.sectionClass= 1
 
 #Check results pages 34 and 35
 Leq= 4.335 # Buckling length
@@ -35,13 +35,13 @@ else:
     ratio0= 1
     
 # Buckling reduction factors.
-XY= steelShape.getBucklingReductionFactorY(Leq,1)
-XZ= steelShape.getBucklingReductionFactorZ(Leq,1)
+XY= steelShape.getBucklingReductionFactorY(Leq)
+XZ= steelShape.getBucklingReductionFactorZ(Leq)
 XYTeor= 0.69
 ratio1= abs(XY-XYTeor)/XY
 
 # Buckling resistance.
-NbRd= steelShape.getBucklingResistance(Leq,Leq,1)
+NbRd= steelShape.getBucklingResistance(Leq,Leq)
 NbRdTeor= 4186.2e3
 ratio2= abs(NbRd-NbRdTeor)/NbRd
 

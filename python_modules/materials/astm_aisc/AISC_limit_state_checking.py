@@ -363,8 +363,7 @@ class Member(steel_member_base.BucklingMember):
                         'None' the member elements will be appended to this set.
         '''
         recorder= self.createRecorder(recorderType, calcSet)
-        sectionClassif= 1 # dummy argument usef for compatibility
-        self.shape.setupULSControlVars(self.elemSet, sectionClassif, chiN= chiN, chiLT= chiLT)
+        self.shape.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT)
         nodHndlr= self.getPreprocessor().getNodeHandler
         if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
@@ -453,11 +452,10 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
         '''
         # Get section properties.
         steelShape= elem.getProp('crossSection')
-        sectionClass= elem.getProp('sectionClass')
         # Check each element section.
         for sectionIForces in elementInternalForces:
             # Compute efficiency.
-            CFtmp= steelShape.getYShearEfficiency(sectionClass,sectionIForces.Vy)
+            CFtmp= steelShape.getYShearEfficiency(Vyd= sectionIForces.Vy)
             sectionLabel= self.getSectionLabel(sectionIForces.idSection)
             label= self.limitStateLabel+sectionLabel
             # Update efficiency.
