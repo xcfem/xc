@@ -770,7 +770,7 @@ class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
-        super(PenaltyModifiedNewtonUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        super(PenaltyModifiedNewtonUMF,self).__init__(prb= prb, name= name, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
