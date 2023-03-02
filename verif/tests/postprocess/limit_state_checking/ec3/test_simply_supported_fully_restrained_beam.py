@@ -139,7 +139,7 @@ loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
 limitStates= [lsd.steelNormalStressesResistance, # Normal stresses resistance.
-lsd.steelShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
+lsd.steelShearResistance, # Shear stresses resistance
 ]
 
 ## Create EC3 Member objects.
@@ -154,24 +154,40 @@ for l in xcTotalSet.getLines:
 for ls in limitStates:
     ls.saveAll(combContainer,ec3CalcSet, bucklingMembers= ec3Members)
 
+## Check normal stresses.
 outCfg= lsd.VerifOutVars(setCalc=ec3CalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState= lsd.normalStressesResistance
 outCfg.controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
-average= limitState.runChecking(outCfg)
+bendingAverage= limitState.runChecking(outCfg)
 
-# Get the maximum efficiency.
-maxCF= 0.0
+### Get the maximum efficiency.
+maxBendingCF= 0.0
 for e in xcTotalSet.elements:
     CF1= e.getProp('ULS_normalStressesResistanceSect1').CF
     CF2= e.getProp('ULS_normalStressesResistanceSect2').CF
-    maxCF= max(maxCF, CF1, CF2)
+    maxBendingCF= max(maxBendingCF, CF1, CF2)
 
-ratio= ((average[0]-0.6024629441558013)/0.6024629441558013)**2
-ratio+= ((average[1]-0.6024629441558034)/0.6024629441558034)**2
+## Check shear.
+limitState= lsd.shearResistance
+outCfg.controller= EC3_limit_state_checking.ShearController(limitState.label)
+shearAverage= limitState.runChecking(outCfg)
+
+### Get the maximum efficiency.
+maxShearCF= 0.0
+for e in xcTotalSet.elements:
+    CF1= e.getProp('ULS_shearResistanceSect1').CF
+    CF2= e.getProp('ULS_shearResistanceSect2').CF
+    maxShearCF= max(maxShearCF, CF1, CF2)
+
+ratio= ((bendingAverage[0]-0.6024629441558013)/0.6024629441558013)**2
+ratio+= ((bendingAverage[1]-0.6024629441558034)/0.6024629441558034)**2
 ratio= math.sqrt(ratio)
 
-# Value in the text CF= 0.91 (See 6.2.5(2))
-ratio2= abs(maxCF-0.9128226426603291)/0.912822642660329
+# Check results.
+# Value in the text maxBendingCF= 0.91 (See 6.2.5(2))
+ratio2= abs(maxBendingCF-0.9128226426603291)/0.912822642660329
+# Value in the text maxShearCF= 0.3 (See 6.2.6(2))
+ratio3= abs(maxShearCF-0.3041257786282982)/0.3041257786282982
 
 #   ___       _             _   
 #  / _ \ _  _| |_ _ __ _  _| |_ 
@@ -180,15 +196,17 @@ ratio2= abs(maxCF-0.9128226426603291)/0.912822642660329
 #                |_|            
 '''
 print('Ultimate design load per meter Fd= ', ultimateDesignLoadPerMetre/1e3, 'kN/m')
-print('average= ', average)
+print('bending average= ', bendingAverage)
 print('ratio= ', ratio)
+print('shear average= ', shearAverage)
+print('maximum shear efficiency: ', maxShearCF)
 '''
 
 cfg.cleandirs() # Clean after yourself.
 from misc_utils import log_messages as lmsg
 import os
 fname= os.path.basename(__file__)
-if(ratio<1e-8 and ratio2<1e-8):
+if(ratio<1e-8 and ratio<1e-8 and ratio2<1e-8 and ratio3<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
@@ -199,6 +217,10 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
+# # Display lateral buckling reduction factor.
 # oh.displayElementValueDiagram('chiLT', setToDisplay= ec3CalcSet)
 
+# # Display normal stresses efficiency.
 # oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)
+# # Display shear efficiency.
+# oh.displayBeamResult(attributeName=lsd.shearResistance.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)
