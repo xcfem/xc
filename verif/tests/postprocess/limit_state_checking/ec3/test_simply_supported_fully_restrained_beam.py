@@ -179,11 +179,14 @@ for e in xcTotalSet.elements:
     CF2= e.getProp('ULS_shearResistanceSect2').CF
     maxShearCF= max(maxShearCF, CF1, CF2)
 
+# Check results.
+## Average values.
 ratio= ((bendingAverage[0]-0.6024629441558013)/0.6024629441558013)**2
 ratio+= ((bendingAverage[1]-0.6024629441558034)/0.6024629441558034)**2
+ratio+= ((shearAverage[0]-0.15206288931414974)/0.15206288931414974)**2
+ratio+= ((shearAverage[1]-0.15206288931414977)/0.15206288931414977)**2
 ratio= math.sqrt(ratio)
 
-# Check results.
 # Value in the text maxBendingCF= 0.91 (See 6.2.5(2))
 ratio2= abs(maxBendingCF-0.9128226426603291)/0.912822642660329
 # Value in the text maxShearCF= 0.3 (See 6.2.6(2))
@@ -197,16 +200,16 @@ ratio3= abs(maxShearCF-0.3041257786282982)/0.3041257786282982
 '''
 print('Ultimate design load per meter Fd= ', ultimateDesignLoadPerMetre/1e3, 'kN/m')
 print('bending average= ', bendingAverage)
-print('ratio= ', ratio)
-print('shear average= ', shearAverage)
 print('maximum shear efficiency: ', maxShearCF)
+print('shear average= ', shearAverage)
+print('ratio= ', ratio)
 '''
 
 cfg.cleandirs() # Clean after yourself.
 from misc_utils import log_messages as lmsg
 import os
 fname= os.path.basename(__file__)
-if(ratio<1e-8 and ratio<1e-8 and ratio2<1e-8 and ratio3<1e-8):
+if(ratio<1e-8 and ratio2<1e-8 and ratio3<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
