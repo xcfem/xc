@@ -10,8 +10,6 @@ __email__= "l.pereztato@gmail.com"
 from actions.wind import CTE_wind
 import math
 
-#exec(open("interpolacion.lcmdm").read())
-
 cpPruebaF= CTE_wind.cpDosAguasZonaFVTrsv(5.5,math.radians(30))
 cpPruebaG= CTE_wind.cpDosAguasZonaGVTrsv(5.5,math.radians(-15))
 cpPruebaGL= CTE_wind.cpDosAguasZonaGVLong(5.5,math.radians(45))
