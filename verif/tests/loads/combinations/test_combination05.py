@@ -155,23 +155,6 @@ printFlag= 0
 
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, maxNumIter= 10,  convergenceTestTol= 1e-3)
 
-def solveStaticLinearComb(comb,db,dbHelp):
-    preprocessor.resetLoadCase()
-    dbHelp.helpSolve(comb,db)
-    exec(open("solution/database_helper_solve.xci").read())
-    ''' 
-      print("previousName= ",previousName)
-      print("tag= ",comb.tag)
-      print("tagPrevia= ",tagPrevia)
-      print("descomp previa= ",getComponentsCombPrevia)
-      print("resto sobre previa= ",getComponentsRestoSobrePrevia)
-    '''
-    comb.addToDomain()
-    analOk= solProc.solve(1)
-    db.save(comb.tag*100)
-    comb.removeFromDomain()
-
-
 dXMin=1e9
 dXMax=-1e9
 
