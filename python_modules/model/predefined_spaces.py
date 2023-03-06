@@ -20,6 +20,7 @@ from misc_utils import log_messages as lmsg
 from materials import typical_materials as tm
 from postprocess import extrapolate_elem_attr
 from postprocess import get_reactions
+from postprocess import control_vars
 from actions.load_combination_utils import utils
 from solution import predefined_solutions
 from import_export import reader_base
@@ -1321,6 +1322,14 @@ class PredefinedSpace(object):
                     for xcSet in setsToDisplay:
                         oh.displayReactions(setToDisplay= xcSet)
 
+    def readControlVars(self, inputFileName):
+        ''' Read control var data from the input file an put them as properties
+            of the model elements.
+
+        :param inputFileName: name of the input file containing the data.
+        '''
+        control_vars.readControlVars(preprocessor= self.preprocessor, inputFileName= inputFileName)
+        
                 
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 

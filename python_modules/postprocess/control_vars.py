@@ -16,6 +16,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 
 
 import os
+import json
 import scipy
 from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
@@ -1126,29 +1127,76 @@ class VonMisesControlVars(ControlVarsBase):
         ''' Return the capacity factor.'''
         return self.CF
 
+def readControlVars(preprocessor, inputFileName):
+    ''' Read control var data from the input file an put them as properties
+        of the model elements and/or nodes.
+
+    :param preprocessor: pre-processor for the finite element model.
+    :param inputFileName: name of the input file containing the data.
+    '''
+    try:
+        with open(inputFileName) as f:
+               dataDict= json.load(f)
+    except IOError:
+        lmsg.error("can't read from file: "+str(inputFileName))
+        return
+    if 'elementData' in dataDict: # Control variables on elements.
+        elementData= dataDict['elementData']
+        elementHandler= preprocessor.getElementHandler
+        for eKey in elementData: # iterate on elements.
+            elementTag= int(eKey)
+            element= elementHandler.getElement(elementTag)
+            elementControlVars= elementData[eKey]
+            for propKey in elementControlVars: # iterate on element control vars.
+                propValue= eval(elementControlVars[propKey])
+                element.setProp(propKey, propValue)
+    if 'nodeData' in dataDict: # Control variables on nodes.
+        nodeData= dataDict['nodeData']
+        nodeHandler= preprocessor.getNodeHandler
+        for eKey in nodeData: # iterate on nodes.
+            nodeTag= int(eKey)
+            node= nodeHandler.getNode(nodeTag)
+            nodeControlVars= nodeData[eKey]
+            for propKey in nodeControlVars: # iterate on node control vars.
+                propValue= eval(nodeControlVars[propKey])
+                node.setProp(propKey, propValue)
+
 def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
     '''Writes in file 'outputFileName' the control-variable values calculated for
      the RC elements in the phantom model.
 
     :param preprocessor:   preprocessor from FEA model.
-    :param outputFileName: name to the files (.py and .tex)
+    :param outputFileName: name to the files (.json and .tex)
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (append or not
            the results to a file, generation or not of lists, ...)
     '''
     elems= preprocessor.getSets['total'].elements
     controlVarName= outputCfg.controller.limitStateLabel
+    dataDict= None
+    jsonFileName= outputFileName+'.json'
     if outputCfg.appendToResFile.lower()[0]=='y':
-        xcOutput= open(outputFileName+".py","a+")
+        try:
+            with open(jsonFileName) as f:
+               dataDict= json.load(f)
+        except IOError:
+            lmsg.error("can't read from file: "+str(inputFileName))
     else:
-        xcOutput= open(outputFileName+".py","w+")
+        dataDict= dict()
+    elementDataDict= dict()
+    dataDict['elementData']= elementDataDict
     for e in elems:
-        eTag= e.getProp("idElem") 
+        eTag= e.getProp("idElem")
+        if not eTag in elementDataDict:
+            elementDataDict[eTag]= dict()
         controlVar= e.getProp(controlVarName)
         #outStr= controlVar.getLaTeXString(eTag,1e-3)
         sectionName= 'Sect'+str(e.getProp('dir'))
-        xcOutput.write(controlVar.strElementProp(eTag,controlVarName+sectionName))
-    xcOutput.close()
+        propName= controlVarName+sectionName
+        elementDataDict[eTag][propName]= controlVar.getStrConstructor()
+    with open(jsonFileName, 'w') as f:
+        json.dump(dataDict, f)       
+
     if outputCfg.listFile.lower()[0]=='y':
         if outputCfg.appendToResFile.lower()[0]=='y':
             texOutput= open(outputFileName+".tex","a+")
@@ -1212,7 +1260,7 @@ def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sectio
     '''Writes in file 'outputFileName' the control-variable values calculated for elements in set 'setCalc'. 
 
     :param preprocessor:    preprocessor from FEA model.
-    :param outputFileName: name of the files to write (.py and .tex)
+    :param outputFileName: name of the files to write (.json and .tex)
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (set of 
            elements to be analyzed [defaults to 'total'], append or not the 
@@ -1222,18 +1270,32 @@ def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sectio
     '''
     elems= outputCfg.getCalcSetElements(preprocessor) # elements in set 'setCalc'
     controlVarName= outputCfg.controller.limitStateLabel
-    if outputCfg.appendToResFile.lower()[0]=='y':
-        xcOutput= open(outputFileName+".py","a+")
+    dataDict= None
+    jsonFileName= outputFileName+'.json'
+    if(outputCfg.appendToResFile.lower()[0]=='y' and os.path.isfile(jsonFileName)):
+        try:
+            with open(jsonFileName) as f:
+               dataDict= json.load(f)
+        except IOError:
+            lmsg.error("can't read from file: "+str(jsonFileName)+". Are you sure you need to read previous results?")
+            quit()
     else:
-        xcOutput= open(outputFileName+".py","w+")
+        dataDict= dict()
+    # Write report in JSON format.
     importString= getControlVarImportModuleStr(preprocessor, outputCfg, sections)
-    xcOutput.write(importString+'\n')
+    dataDict['importString']= importString
+    elementDataDict= dict()
+    dataDict['elementData']= elementDataDict
     for e in elems:
+        elementDataDict[e.tag]= dict()
         for s in sections:
             propName= controlVarName+s
             controlVar= e.getProp(propName)
-            xcOutput.write(controlVar.strElementProp(e.tag,propName))
-    xcOutput.close()
+            elementDataDict[e.tag][propName]= controlVar.getStrConstructor()
+    with open(jsonFileName, 'w') as f:
+        json.dump(dataDict, f)
+    
+    # Write report in LaTeX format.
     if outputCfg.listFile.lower()[0]=='y':
         if outputCfg.appendToResFile.lower()[0]=='y':
             texOutput= open(outputFileName+".tex","a+")

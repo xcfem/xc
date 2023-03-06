@@ -197,7 +197,7 @@ class ProjectDirTree(object):
     def getVerifNormStrFile(self):
         ''' Return the path of the normal stresses verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_normStrsULS.py'
+        return self.getFullVerifPath()+'verifRsl_normStrsULS.json'
     
     def getReportNormStrFile(self):
         ''' Return the path of the normal stresses verification
@@ -217,7 +217,7 @@ class ProjectDirTree(object):
     def getVerifShearFile(self):
         ''' Return the path of the shear verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_shearULS.py'
+        return self.getFullVerifPath()+'verifRsl_shearULS.json'
     
     def getReportShearFile(self):
         ''' Return the path of the shear verification
@@ -237,7 +237,7 @@ class ProjectDirTree(object):
     def getVerifVonMisesStressFile(self):
         ''' Return the path of the VonMisesStress verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_VonMisesStressULS.py'
+        return self.getFullVerifPath()+'verifRsl_VonMisesStressULS.json'
     
     def getReportVonMisesStressFile(self):
         ''' Return the path of the VonMisesStress verification
@@ -258,7 +258,7 @@ class ProjectDirTree(object):
     def getVerifCrackRareFile(self):
         ''' Return the path of the crack verification
             results file (rare loads).'''
-        return self.getFullVerifPath()+'verifRsl_crackingSLS_rare.py'
+        return self.getFullVerifPath()+'verifRsl_crackingSLS_rare.json'
     
     def getReportCrackRareFile(self):
         ''' Return the path of the crack verification
@@ -279,7 +279,7 @@ class ProjectDirTree(object):
     def getVerifCrackFreqFile(self):
         ''' Return the path of the crack verification
             results file (frequent loads).'''
-        return self.getFullVerifPath()+'verifRsl_crackingSLS_freq.py'
+        return self.getFullVerifPath()+'verifRsl_crackingSLS_freq.json'
         
     def getReportCrackFreqFile(self):
         ''' Return the path of the crack verification
@@ -300,7 +300,7 @@ class ProjectDirTree(object):
     def getVerifCrackQpermFile(self):
         ''' Return the path of the crack verification
             results file (quasi-permanent loads).'''
-        return self.getFullVerifPath()+'verifRsl_crackingSLS_qperm.py'
+        return self.getFullVerifPath()+'verifRsl_crackingSLS_qperm.json'
     
     def getReportCrackQpermFile(self):
         ''' Return the path of the crack verification
@@ -320,7 +320,7 @@ class ProjectDirTree(object):
     def getVerifFatigueFile(self):
         ''' Return the path of the fatigue verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_fatigueULS.py'
+        return self.getFullVerifPath()+'verifRsl_fatigueULS.json'
     
     def getReportFatigueFile(self):
         ''' Return the path of the fatigue verification

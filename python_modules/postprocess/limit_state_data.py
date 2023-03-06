@@ -28,18 +28,31 @@ defaultSolutionProcedureType=  predefined_solutions.SimpleStaticLinear
 class VerifOutVars(object):
     '''Variables that control the output of limit state verifications.
 
-    :param setCalc: set of elements to be checked (defaults to 'None' which 
+    :ivar setCalc: set of elements to be checked (defaults to 'None' which 
            means that all the elements in the file of internal forces
            results are analyzed) 
-    :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+    :ivar appendToResFile:  'Yes','Y','y',.., if results are appended to 
            existing file of results (defaults to 'N')
-    :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+    :ivar listFile: 'Yes','Y','y',.., if latex listing file of results 
            is desired to be generated (defaults to 'N')
-    :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+    :ivar calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
            meant to be calculated (defaults to 'N')
-    :param controller: object that controls the limit state checking.
+    :ivar controller: object that controls the limit state checking.
     '''
-    def __init__(self,setCalc=None,appendToResFile='N',listFile='N',calcMeanCF='N', controller= None):
+    def __init__(self, setCalc=None, appendToResFile='N', listFile='N', calcMeanCF='N', controller= None):
+        ''' Constructor.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        :param controller: object that controls the limit state checking.
+        '''
         self.setCalc= setCalc
         self.appendToResFile= appendToResFile
         self.listFile= listFile
