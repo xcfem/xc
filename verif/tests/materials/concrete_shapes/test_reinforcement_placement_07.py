@@ -245,8 +245,8 @@ else:
 # # Uncomment to display the results for the limit state
 # argument= 'CF'
 # #Load properties to display:
-# exec(open(cfg.projectDirTree.getVerifShearFile()).read())
-# #exec(open(cfg.projectDirTree.getVerifNormStrFile()).read())
+# modelSpace.readControlVars(inputFileName= (cfg.projectDirTree.getVerifShearFile())
+# #modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifNormStrFile())
 # oh.displayFieldDirs1and2(limitStateLabel= limitState.label,argument=argument,setToDisplay=xcTotalSet,component=None,fileName=None,defFScale=0.0,rgMinMax= None)
 
 cfg.cleandirs()  # Clean after yourself.
