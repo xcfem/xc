@@ -130,7 +130,7 @@ for l in xcTotalSet.getLines:
 for ls in limitStates:
     ls.saveAll(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
 
-outCfg= lsd.VerifOutVars(setCalc=aiscCalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y')
+outCfg= lsd.VerifOutVars(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState= lsd.normalStressesResistance
 outCfg.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
 average= limitState.runChecking(outCfg)
