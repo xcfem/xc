@@ -21,9 +21,9 @@ factor= SIA262_materials.getFullCrackedSectionStiffnesFactor(ro_comp= ro_comp, r
 
 ratio1= abs(factor-3.7825724331665165)/3.7825724331665165
 
+'''
 print("factor= ", factor)
 print("ratio1= ",ratio1)
-'''
 '''
 
 import os
