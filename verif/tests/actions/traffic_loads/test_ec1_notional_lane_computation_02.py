@@ -5,7 +5,7 @@ from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
+__copyright__= "Copyright 2022, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
