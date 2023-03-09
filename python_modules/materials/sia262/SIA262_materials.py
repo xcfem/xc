@@ -150,3 +150,17 @@ def numBars(AsNec):
         retval.append((d,n))
     return retval
 
+
+def getFullCrackedSectionStiffnesFactor(ro_comp, ro_tens, h, d, phi= 2.5):
+    ''' Return the stiffness factor for a fully cracked reinforced concrete
+        section according to experssion (102) of SIA 262:2013
+        (clause 4.4.3.2.5).
+
+    :param ro_comp: reinforcement ratio of the compressed rebars.
+    :param ro_tens: reinforcement ratio of the tensioned rebars.
+    :param phi: creep coefficient.
+    :param h: section depth.
+    :param d: seccion effective depth.
+    '''
+    return (1-20*ro_comp)/(10*math.pow(ro_tens,0.7))*(0.75+0.1*phi)*math.pow(h/d,3.0)
+    
