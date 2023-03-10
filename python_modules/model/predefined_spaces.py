@@ -1231,7 +1231,7 @@ class PredefinedSpace(object):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; preprocessor not set.')
-        exec(xcCommands)
+        exec(xcCommands) # XXX To deprecate.
 
     def classifyBlockTopologyObjects(self, setsFromLabels, xcSet= None):
         ''' Insert each block topology object (point, line, surface, volume)
