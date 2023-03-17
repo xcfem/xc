@@ -141,6 +141,7 @@
 
 #include "material/nD/soil/FluidSolidPorousMaterial.h"
 #include "material/nD/soil/PressureDependMultiYield.h"
+#include "material/nD/soil/PressureDependMultiYield02.h"
 #include "material/nD/soil/PressureIndependMultiYield.h"
 
 #include "material/nD/Template3Dep/CamClayPotentialSurface.h"

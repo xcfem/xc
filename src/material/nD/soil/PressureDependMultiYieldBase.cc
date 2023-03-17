@@ -39,20 +39,20 @@
 #include <utility/matrix/nDarray/stresst.h>
 #include "material/nD/NDMaterialType.h"
 
-double* XC::PressureDependMultiYieldBase::refShearModulusx=0;
-double* XC::PressureDependMultiYieldBase::refBulkModulusx=0;
-double* XC::PressureDependMultiYieldBase::phaseTransfAnglex=0; 
-double* XC::PressureDependMultiYieldBase::contractParam1x=0;
-double* XC::PressureDependMultiYieldBase::dilateParam1x=0;
-double* XC::PressureDependMultiYieldBase::dilateParam2x=0;
-double* XC::PressureDependMultiYieldBase::liquefyParam1x=0;
-double* XC::PressureDependMultiYieldBase::liquefyParam2x=0;
-double* XC::PressureDependMultiYieldBase::einitx=0;    //initial void ratio
-double* XC::PressureDependMultiYieldBase::volLimit1x=0;
-double* XC::PressureDependMultiYieldBase::volLimit2x=0;
-double* XC::PressureDependMultiYieldBase::volLimit3x=0;
-double* XC::PressureDependMultiYieldBase::Hvx=0;
-double* XC::PressureDependMultiYieldBase::Pvx=0;
+std::vector<double> XC::PressureDependMultiYieldBase::refShearModulusx;
+std::vector<double> XC::PressureDependMultiYieldBase::refBulkModulusx;
+std::vector<double> XC::PressureDependMultiYieldBase::phaseTransfAnglex; 
+std::vector<double> XC::PressureDependMultiYieldBase::contractParam1x;
+std::vector<double> XC::PressureDependMultiYieldBase::dilateParam1x;
+std::vector<double> XC::PressureDependMultiYieldBase::dilateParam2x;
+std::vector<double> XC::PressureDependMultiYieldBase::liquefyParam1x;
+std::vector<double> XC::PressureDependMultiYieldBase::liquefyParam2x;
+std::vector<double> XC::PressureDependMultiYieldBase::einitx;    //initial void ratio
+std::vector<double> XC::PressureDependMultiYieldBase::volLimit1x;
+std::vector<double> XC::PressureDependMultiYieldBase::volLimit2x;
+std::vector<double> XC::PressureDependMultiYieldBase::volLimit3x;
+std::vector<double> XC::PressureDependMultiYieldBase::Hvx;
+std::vector<double> XC::PressureDependMultiYieldBase::Pvx;
 
 double XC::PressureDependMultiYieldBase::pAtm = 101.;
 XC::T2Vector XC::PressureDependMultiYieldBase::trialStrain;
@@ -72,125 +72,15 @@ XC::PressureDependMultiYieldBase::PressureDependMultiYieldBase(int tag, int clas
                                                     double dilationParam2,
                                                     double liquefactionParam1,
                                                     double liquefactionParam2,
-                                                    double liquefactionParam4,
                                                     int numberOfYieldSurf, 
-                                                                double * gredu,
+						    const std::vector<double> &gredu,
                                                     double ei,
                                                     double volLim1, double volLim2, double volLim3,
                                                     double atm, double cohesi,
                                                         double hv, double pv)
   : XC::PressureMultiYieldBase(tag,classTag,nd,r,frictionAng,peakShearStra,refPress,pressDependCoe,cohesi,numberOfYieldSurf), PPZPivot(), PPZCenter(), PPZPivotCommitted(), PPZCenterCommitted()
-   {
-  if(refShearModul <= 0) {
-    std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: refShearModulus <= 0" << std::endl;
-   exit(-1);
-  }
-  if(refBulkModul <= 0) {
-    std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: refBulkModulus <= 0" << std::endl;
-   exit(-1);
-  }
-  if(frictionAng <= 0.) {
-    std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: frictionAngle <= 0" << std::endl;
-   exit(-1);
-  }
-  if(frictionAng >= 90.) {
-    std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: frictionAngle >= 90" << std::endl;
-   exit(-1);
-  }
-  if(phaseTransformAng <= 0.) {
-    std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: phaseTransformAng <= 0" << std::endl;
-   exit(-1);
-  }
-  if(phaseTransformAng > frictionAng) {
-    std::cerr << "WARNING:XC::PressureDependMultiYieldBase:: phaseTransformAng > frictionAng" << std::endl;
-    std::cerr << "Will set phaseTransformAng = frictionAng." <<std::endl;
-    phaseTransformAng = frictionAng;
-  }
-
-  if(ei < 0) {
-    std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: e <= 0" << std::endl;
-   exit(-1);
-  }
-
-  if(matCount%20 == 0)
-    {
-      double * temp4 = refShearModulusx;
-      double * temp5 = refBulkModulusx;
-      double * temp13 = phaseTransfAnglex; 
-      double * temp14 = contractParam1x;
-      double * temp15 = dilateParam1x;
-      double * temp16 = dilateParam2x;
-      double * temp17 = liquefyParam1x;
-      double * temp18 = liquefyParam2x;
-      double * temp19 = einitx;    //initial void ratio
-      double * temp20 = Hvx;
-      double * temp21 = Pvx;
-
-
-     refShearModulusx = new double[matCount+20];
-     refBulkModulusx = new double[matCount+20];
-     phaseTransfAnglex = new double[matCount+20]; 
-     contractParam1x = new double[matCount+20];
-     dilateParam1x = new double[matCount+20];
-     dilateParam2x = new double[matCount+20];
-     liquefyParam1x = new double[matCount+20];
-     liquefyParam2x = new double[matCount+20];
-     einitx = new double[matCount+20];    //initial void ratio
-     Hvx = new double[matCount+20];
-     Pvx = new double[matCount+20];
-
-     for(int i=0; i<matCount; i++)
-       {
-         refShearModulusx[i] = temp4[i];
-         refBulkModulusx[i] = temp5[i];
-         phaseTransfAnglex[i] = temp13[i]; 
-         contractParam1x[i] = temp14[i];
-         dilateParam1x[i] = temp15[i];
-         dilateParam2x[i] = temp16[i];
-         liquefyParam1x[i] = temp17[i];
-         liquefyParam2x[i] = temp18[i];
-         einitx[i] = temp19[i];    //initial void ratio
-         Hvx[i] = temp20[i];
-         Pvx[i] = temp21[i];
-       }
-     
-         if(matCount > 0)
-           {
-             delete [] temp4; 
-             delete [] temp5; 
-             delete [] temp13; delete [] temp14; delete [] temp15; delete [] temp16; 
-             delete [] temp17; delete [] temp18; delete [] temp19; delete [] temp20; 
-             delete [] temp21;
-           }
-  }
-
-  refShearModulusx[matCount] = refShearModul;
-  refBulkModulusx[matCount] = refBulkModul;
-  phaseTransfAnglex[matCount] = phaseTransformAng;
-  contractParam1x[matCount] = contractionParam1;
-  dilateParam1x[matCount] = dilationParam1;
-  dilateParam2x[matCount] = dilationParam2;
-  liquefyParam1x[matCount] = liquefactionParam1;
-  liquefyParam2x[matCount] = liquefactionParam2;
-  einitx[matCount] = ei;
-  Hvx[matCount] = hv;
-  Pvx[matCount] = pv;
-
-  pAtm = atm;
-
-  //int numOfSurfaces = numOfSurfacesx[matN];
-  initPress = refPressurex[matN];
-
-  onPPZCommitted = onPPZ = -1 ; 
-  PPZSizeCommitted = PPZSize = 0.;
-  pressureDCommitted = pressureD = modulusFactor = 0.;
-  cumuDilateStrainOctaCommitted    = cumuDilateStrainOcta = 0.;
-  maxCumuDilateStrainOctaCommitted = maxCumuDilateStrainOcta = 0.;
-  cumuTranslateStrainOctaCommitted = cumuTranslateStrainOcta = 0.;
-  prePPZStrainOctaCommitted = prePPZStrainOcta = 0.;
-  oppoPrePPZStrainOctaCommitted = oppoPrePPZStrainOcta = 0.;
-  maxPress = 0.;
-
+  {
+     setupLocalMembers(nd, r, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAng,  contractionParam1, dilationParam1, dilationParam2, liquefactionParam1, liquefactionParam2, numberOfYieldSurf, gredu, ei, volLim1, volLim2, volLim3, atm, cohesi, hv, pv);
   }
    
 XC::PressureDependMultiYieldBase::PressureDependMultiYieldBase(int tag, int classTag) 
@@ -227,6 +117,123 @@ XC::PressureDependMultiYieldBase::PressureDependMultiYieldBase(const PressureDep
     maxPress = a.maxPress;
   }
 
+void XC::PressureDependMultiYieldBase::setupLocalMembers(int nd, 
+					     double r, double refShearModul,
+					     double refBulkModul, double frictionAng,
+					     double peakShearStra, double refPress, 
+					     double pressDependCoe,
+					     double phaseTransformAng, 
+					     double contractionParam1,
+					     double dilationParam1,
+					     double dilationParam2,
+					     double liquefactionParam1,
+					     double liquefactionParam2,
+					     int numberOfYieldSurf, 
+					     const std::vector<double> &gredu,
+					     double ei,
+					     double volLim1, double volLim2, double volLim3,
+					     double atm, double cohesi,
+					     double hv, double pv)
+  {
+    if(refShearModul <= 0)
+      {
+        std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: refShearModulus <= 0" << std::endl;
+     exit(-1);
+    }
+    if(refBulkModul <= 0) {
+      std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: refBulkModulus <= 0" << std::endl;
+     exit(-1);
+    }
+    if(frictionAng <= 0.) {
+      std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: frictionAngle <= 0" << std::endl;
+     exit(-1);
+    }
+    if(frictionAng >= 90.) {
+      std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: frictionAngle >= 90" << std::endl;
+     exit(-1);
+    }
+    if(phaseTransformAng <= 0.) {
+      std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: phaseTransformAng <= 0" << std::endl;
+     exit(-1);
+    }
+    if(phaseTransformAng > frictionAng) {
+      std::cerr << "WARNING:XC::PressureDependMultiYieldBase:: phaseTransformAng > frictionAng" << std::endl;
+      std::cerr << "Will set phaseTransformAng = frictionAng." <<std::endl;
+      phaseTransformAng = frictionAng;
+    }
+
+    if(ei < 0) {
+      std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: e <= 0" << std::endl;
+     exit(-1);
+    }
+
+    if(matCount%20 == 0)
+      {
+	refShearModulusx.resize(matCount+20);
+	refBulkModulusx.resize(matCount+20);
+	phaseTransfAnglex.resize(matCount+20); 
+	contractParam1x.resize(matCount+20);
+	dilateParam1x.resize(matCount+20);
+	dilateParam2x.resize(matCount+20);
+	liquefyParam1x.resize(matCount+20);
+	liquefyParam2x.resize(matCount+20);
+	einitx.resize(matCount+20);    //initial void ratio
+	Hvx.resize(matCount+20);
+	Pvx.resize(matCount+20);
+
+      }
+
+    refShearModulusx[matCount] = refShearModul;
+    refBulkModulusx[matCount] = refBulkModul;
+    phaseTransfAnglex[matCount] = phaseTransformAng;
+    contractParam1x[matCount] = contractionParam1;
+    dilateParam1x[matCount] = dilationParam1;
+    dilateParam2x[matCount] = dilationParam2;
+    liquefyParam1x[matCount] = liquefactionParam1;
+    liquefyParam2x[matCount] = liquefactionParam2;
+    einitx[matCount] = ei;
+    Hvx[matCount] = hv;
+    Pvx[matCount] = pv;
+
+    pAtm = atm;
+
+    //int numOfSurfaces = numOfSurfacesx[matN];
+    initPress = refPressurex[matN];
+
+    onPPZCommitted = onPPZ = -1 ; 
+    PPZSizeCommitted = PPZSize = 0.;
+    pressureDCommitted = pressureD = modulusFactor = 0.;
+    cumuDilateStrainOctaCommitted    = cumuDilateStrainOcta = 0.;
+    maxCumuDilateStrainOctaCommitted = maxCumuDilateStrainOcta = 0.;
+    cumuTranslateStrainOctaCommitted = cumuTranslateStrainOcta = 0.;
+    prePPZStrainOctaCommitted = prePPZStrainOcta = 0.;
+    oppoPrePPZStrainOctaCommitted = oppoPrePPZStrainOcta = 0.;
+    maxPress = 0.;
+  }
+
+void XC::PressureDependMultiYieldBase::setup(int nd, 
+					     double r, double refShearModul,
+					     double refBulkModul, double frictionAng,
+					     double peakShearStra, double refPress, 
+					     double pressDependCoe,
+					     double phaseTransformAng, 
+					     double contractionParam1,
+					     double dilationParam1,
+					     double dilationParam2,
+					     double liquefactionParam1,
+					     double liquefactionParam2,
+					     int numberOfYieldSurf, 
+					     const std::vector<double> &gredu,
+					     double ei,
+					     double volLim1, double volLim2, double volLim3,
+					     double atm, double cohesi,
+					     double hv, double pv)
+  {
+    // Call parent class setup.
+    PressureMultiYieldBase::setup(nd, r, frictionAng, peakShearStra, refPress, pressDependCoe, cohesi, numberOfYieldSurf);
+    // Call local members setup.
+    this->setupLocalMembers(nd, r, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAng,  contractionParam1, dilationParam1, dilationParam2, liquefactionParam1, liquefactionParam2, numberOfYieldSurf, gredu, ei, volLim1, volLim2, volLim3, atm, cohesi, hv, pv);
+  }
 
 void XC::PressureDependMultiYieldBase::elast2Plast(void) const
   {
@@ -326,7 +333,7 @@ int XC::PressureDependMultiYieldBase::setTrialStrainIncr(const XC::Vector &strai
 }
 
 
-const XC::Matrix & XC::PressureDependMultiYieldBase::getInitialTangent(void)
+const XC::Matrix &XC::PressureDependMultiYieldBase::getInitialTangent(void)
 {
   int loadStage = loadStagex[matN];
   double refShearModulus = refShearModulusx[matN];

@@ -29,11 +29,13 @@ class_<XC::PressureDependMultiYieldBase, bases<XC::PressureMultiYieldBase>, boos
 
 class_<XC::PressureDependMultiYield, bases<XC::PressureDependMultiYieldBase>, boost::noncopyable >("PressureDependMultiYield", no_init);
 
-//class_<XC::PressureDependMultiYield02, bases<XC::PressureDependMultiYieldBase>, boost::noncopyable >("PressureDependMultiYield02", no_init);
+class_<XC::PressureDependMultiYield02, bases<XC::PressureDependMultiYieldBase>, boost::noncopyable >("PressureDependMultiYield02", no_init)
+//  .def("setup",&XC::PressureDependMultiYield02::setupPy)
+  ;
 
 
 class_<XC::PressureIndependMultiYield, bases<XC::PressureMultiYieldBase>, boost::noncopyable >("PressureIndependMultiYield", no_init)
-  .def("setup",&XC::PressureIndependMultiYield::setup)
+  .def("setup",&XC::PressureIndependMultiYield::setupPy)
   ;
 
 class_<XC::T2Vector, bases<XC::MovableObject>, boost::noncopyable >("T2Vector", no_init);

@@ -45,21 +45,21 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
   {
   protected:
   // user supplied 
-     static double* refShearModulusx;
-     static double* refBulkModulusx;
-     static double* phaseTransfAnglex; 
-     static double* contractParam1x;
-     static double* dilateParam1x;
-     static double* dilateParam2x;
-     static double* einitx;    //initial void ratio
-     static double* liquefyParam1x;
-     static double* liquefyParam2x;
-     static double* volLimit1x;
-     static double* volLimit2x;
-     static double* volLimit3x;
+     static std::vector<double> refShearModulusx;
+     static std::vector<double> refBulkModulusx;
+     static std::vector<double> phaseTransfAnglex; 
+     static std::vector<double> contractParam1x;
+     static std::vector<double> dilateParam1x;
+     static std::vector<double> dilateParam2x;
+     static std::vector<double> einitx;    //initial void ratio
+     static std::vector<double> liquefyParam1x;
+     static std::vector<double> liquefyParam2x;
+     static std::vector<double> volLimit1x;
+     static std::vector<double> volLimit2x;
+     static std::vector<double> volLimit3x;
      static double pAtm;
-     static double* Hvx;
-     static double* Pvx;
+     static std::vector<double> Hvx;
+     static std::vector<double> Pvx;
 
      // internal
 
@@ -94,6 +94,31 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
      static T2Vector workT2V;
      double maxPress;
      
+     void setupLocalMembers(int nd,
+		    double rho,
+		    double refShearModul,
+		    double refBulkModul,
+		    double frictionAng,
+		    double peakShearStra,
+		    double refPress,
+		    double pressDependCoe,
+		    double phaseTransformAngle, 
+		    double contractionParam1,
+		    double dilationParam1,
+		    double dilationParam2,
+		    double liquefactionParam1,
+		    double liquefactionParam2,
+		    int numberOfYieldSurf,
+		    const std::vector<double> &gredu,
+		    double e,
+		    double volLimit1,
+		    double volLimit2,
+		    double volLimit3,
+		    double atm,
+		    double cohesi,
+		    double hv,
+		    double pv);
+    
      void elast2Plast(void) const;
      // Called by constructor
      double yieldFunc(const T2Vector & stress,const std::vector<MultiYieldSurface> &surfaces, int surface_num) const;
@@ -120,9 +145,9 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
     int recvData(const Communicator &);
   public:
      // Initialization constructor
-     PressureDependMultiYieldBase (int tag, int classTag, 
+     PressureDependMultiYieldBase(int tag, int classTag, 
 			       int nd,
-						 double rho,
+			       double rho,
 			       double refShearModul,
 			       double refBulkModul,
 			       double frictionAng,
@@ -135,23 +160,46 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
 			       double dilationParam2,
 			       double liquefactionParam1,
 			       double liquefactionParam2,
-			       double liquefactionParam4,
 			       int   numberOfYieldSurf = 20,
-				   double * gredu = 0,
-		           double e = 0.6,
+			       const std::vector<double> &gredu= std::vector<double>(),
+		               double e = 0.6,
 			       double volLimit1 = 0.9,
 			       double volLimit2 = 0.02,
 			       double volLimit3 = 0.7,
 			       double atm = 101.,
-				   double cohesi = 0.1,
-				   double hv = 0.,
-				   double pv = 1.);
+			       double cohesi = 0.1,
+			       double hv = 0.,
+			       double pv = 1.);
 
      PressureDependMultiYieldBase(int tag, int classTag);
 
      // Copy constructor
      PressureDependMultiYieldBase(const PressureDependMultiYieldBase &);
 
+     void setup(int nd,
+		double rho,
+		double refShearModul,
+		double refBulkModul,
+		double frictionAng,
+		double peakShearStra,
+		double refPress,
+		double pressDependCoe,
+		double phaseTransformAngle, 
+		double contractionParam1,
+		double dilationParam1,
+		double dilationParam2,
+		double liquefactionParam1,
+		double liquefactionParam2,
+		int numberOfYieldSurf,
+		const std::vector<double> &gredu,
+		double e,
+		double volLimit1,
+		double volLimit2,
+		double volLimit3,
+		double atm,
+		double cohesi,
+		double hv,
+		double pv);
      double getRho(void) const
        {return rhox[matN];} ;
 

@@ -49,13 +49,80 @@
 
 #include "material/nD/NDMaterialType.h"
 
-double* XC::PressureDependMultiYield02::contractParam2x=0;
-double* XC::PressureDependMultiYield02::contractParam3x=0;
-double* XC::PressureDependMultiYield02::dilateParam3x=0;
+std::vector<double> XC::PressureDependMultiYield02::contractParam2x;
+std::vector<double> XC::PressureDependMultiYield02::contractParam3x;
+std::vector<double> XC::PressureDependMultiYield02::dilateParam3x;
 
 const        double pi = 3.14159265358979;
 
-//double check;
+void XC::PressureDependMultiYield02::setupLocalMembers(int nd,
+			   double rho,
+			   double refShearModul,
+			   double refBulkModul,
+			   double frictionAng,
+			   double peakShearStra,
+			   double refPress,
+			   double pressDependCoe,
+			   double phaseTransformAngle,
+			   double contractionParam1,
+			   double contractionParam3,
+			   double dilationParam1,
+			   double dilationParam3,
+			   int   numberOfYieldSurf,
+			   const std::vector<double> &gredu,
+			   double contractionParam2,
+			   double dilationParam2,
+			   double liquefactionParam1,
+			   double liquefactionParam2,
+			   double e,
+			   double volLimit1,
+			   double volLimit2,
+			   double volLimit3,
+			   double atm,
+			   double cohesi,
+			   double hv,
+			   double pv)
+  {
+  /*if(phaseTransformAng > frictionAng) {
+    std::cerr << "WARNING:XC::PressureDependMultiYield02:: phaseTransformAng > frictionAng" << std::endl;
+    std::cerr << "Will set phaseTransformAng = frictionAng." <<std::endl;
+    phaseTransformAng = frictionAng+0.1;
+  }*/
+
+
+    if(volLimit1 < 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: volLim1 < 0." << std::endl
+		  << " Will reset volLimit to 0.8" << std::endl;
+	volLimit1 = 0.8;
+      }
+
+    if(matCount%20 == 0)
+      {
+        contractParam2x.resize(matCount+20);
+        contractParam3x.resize(matCount+20);
+        dilateParam3x.resize(matCount+20);
+        volLimit1x.resize(matCount+20);
+        volLimit2x.resize(matCount+20);
+        volLimit3x.resize(matCount+20);
+
+      }
+
+    contractParam2x[matCount] = contractionParam2;
+    contractParam3x[matCount] = contractionParam3;
+    volLimit1x[matCount] = volLimit1;
+    volLimit2x[matCount] = volLimit2;
+    volLimit3x[matCount] = volLimit3;
+    dilateParam3x[matCount] = dilationParam3;
+    einitx[matCount] = e;
+    Hvx[matCount] = hv;
+    Pvx[matCount] = pv;
+
+    damage = 0.;
+
+    setUpSurfaces(gredu);  // residualPress and stressRatioPT are calculated inside.    
+  }
 
 XC::PressureDependMultiYield02::PressureDependMultiYield02 (int tag, int nd,
                                                     double r, double refShearModul,
@@ -68,7 +135,7 @@ XC::PressureDependMultiYield02::PressureDependMultiYield02 (int tag, int nd,
                                                     double dilationParam1,
                                                         double dilationParam3,
                                                 int   numberOfYieldSurf,
-                                                    double * gredu,
+							    const std::vector<double> &gredu,
                                                     double contractionParam2,
                                                 double dilationParam2,
                                                 double liquefactionParam1,
@@ -80,66 +147,8 @@ XC::PressureDependMultiYield02::PressureDependMultiYield02 (int tag, int nd,
  : PressureDependMultiYieldBase(tag,ND_TAG_PressureDependMultiYield02), check(0), updatedTrialStress(),
    PivotStrainRate(6), PivotStrainRateCommitted(6)
   {
-
-  /*if(phaseTransformAng > frictionAng) {
-    std::cerr << "WARNING:XC::PressureDependMultiYield02:: phaseTransformAng > frictionAng" << std::endl;
-    std::cerr << "Will set phaseTransformAng = frictionAng." <<std::endl;
-    phaseTransformAng = frictionAng+0.1;
-  }*/
-
-
-  if(volLim1 < 0) {
-    std::cerr << "WARNING:XC::PressureDependMultiYield02:: volLim1 < 0" << std::endl;
-    std::cerr << "Will reset volLimit to 0.8" << std::endl;
-    volLim1 = 0.8;
+    this->setupLocalMembers(nd, r, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAng, contractionParam1, contractionParam3, dilationParam1, dilationParam3, numberOfYieldSurf, gredu, contractionParam2, dilationParam2, liquefactionParam1, liquefactionParam2, ei, volLim1, volLim2, volLim3, atm, cohesi, hv, pv);
   }
-
-    if(matCount%20 == 0)
-      {
-        double *temp1a = contractParam2x;
-        double *temp1b = contractParam3x;
-        double *temp2 = dilateParam3x;
-        double *temp3 = volLimit1x;
-        double *temp4 = volLimit2x;
-        double *temp5 = volLimit3x;
-        contractParam2x = new double[matCount+20];
-        contractParam3x = new double[matCount+20];
-        dilateParam3x = new double[matCount+20];
-        volLimit1x = new double[matCount+20];
-        volLimit2x = new double[matCount+20];
-        volLimit3x = new double[matCount+20];
-
-        for(int i=0; i<matCount; i++)
-          {
-         contractParam2x[i] = temp1a[i];
-         contractParam3x[i] = temp1b[i];
-         dilateParam3x[i] = temp2[i];
-         volLimit1x[i] = temp3[i];
-         volLimit2x[i] = temp4[i];
-         volLimit3x[i] = temp5[i];
-      }
-
-         if(matCount > 0)
-           {
-             delete [] temp1a; delete [] temp1b; delete [] temp2; delete [] temp3; delete [] temp4;
-             delete [] temp5;
-           }
-    }
-
-  contractParam2x[matCount] = contractionParam2;
-  contractParam3x[matCount] = contractionParam3;
-  volLimit1x[matCount] = volLim1;
-  volLimit2x[matCount] = volLim2;
-  volLimit3x[matCount] = volLim3;
-  dilateParam3x[matCount] = dilationParam3;
-  einitx[matCount] = ei;
-  Hvx[matCount] = hv;
-  Pvx[matCount] = pv;
-
-  damage = 0.;
-
-  setUpSurfaces(gredu);  // residualPress and stressRatioPT are calculated inside.
-}
 
 
 XC::PressureDependMultiYield02::PressureDependMultiYield02(int tag)
@@ -159,6 +168,78 @@ XC::PressureDependMultiYield02::PressureDependMultiYield02 (const XC::PressureDe
    PivotStrainRate(a.PivotStrainRate), PivotStrainRateCommitted(a.PivotStrainRateCommitted)
   { damage = a.damage; }
 
+void XC::PressureDependMultiYield02::setup(int nd,
+			   double rho,
+			   double refShearModul,
+			   double refBulkModul,
+			   double frictionAng,
+			   double peakShearStra,
+			   double refPress,
+			   double pressDependCoe,
+			   double phaseTransformAngle,
+			   double contractionParam1,
+			   double contractionParam3,
+			   double dilationParam1,
+			   double dilationParam3,
+			   int numberOfYieldSurf,
+			   const std::vector<double> &gredu,
+			   double contractionParam2,
+			   double dilationParam2,
+			   double liquefactionParam1,
+			   double liquefactionParam2,
+			   double e,
+			   double volLimit1,
+			   double volLimit2,
+			   double volLimit3,
+			   double atm,
+			   double cohesi,
+			   double hv,
+			   double pv)
+  {
+    // Call parent class setup.
+    PressureDependMultiYieldBase::setup(nd, rho, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAngle,  contractionParam1, dilationParam1, dilationParam2, liquefactionParam1, liquefactionParam2, numberOfYieldSurf, gredu, e, volLimit1, volLimit2, volLimit3, atm, cohesi, hv, pv);
+    
+    // Call local members setup.
+    this->setupLocalMembers(nd, rho, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAngle, contractionParam1, contractionParam3, dilationParam1, dilationParam3, numberOfYieldSurf, gredu, contractionParam2, dilationParam2, liquefactionParam1, liquefactionParam2, e, volLimit1, volLimit2, volLimit3, atm, cohesi, hv, pv);
+  }
+
+void XC::PressureDependMultiYield02::setupPy(int nd,
+			   double rho,
+			   double refShearModul,
+			   double refBulkModul,
+			   double frictionAng,
+			   double peakShearStra,
+			   double refPress,
+			   double pressDependCoe,
+			   double phaseTransformAngle,
+			   double contractionParam1,
+			   double contractionParam3,
+			   double dilationParam1,
+			   double dilationParam3,
+			   int numberOfYieldSurf,
+			   const boost::python::list &greduPy,
+			   double contractionParam2,
+			   double dilationParam2,
+			   double liquefactionParam1,
+			   double liquefactionParam2,
+			   double e,
+			   double volLimit1,
+			   double volLimit2,
+			   double volLimit3,
+			   double atm,
+			   double cohesi,
+			   double hv,
+			   double pv)
+  {
+    const size_t sz= len(greduPy);
+    std::vector<double> gredu(sz);
+    if(sz>0)
+      {
+	for(size_t i=0; i<sz; i++)
+	  { gredu[i]= boost::python::extract<double>(greduPy[i]); }
+      }
+    this->setup(nd, rho, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAngle, contractionParam1, contractionParam3, dilationParam1, dilationParam3, numberOfYieldSurf, gredu, contractionParam2, dilationParam2, liquefactionParam1, liquefactionParam2, e, volLimit1, volLimit2, volLimit3, atm, cohesi, hv, pv);
+  }
 
 //! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::PressureDependMultiYield02::getTangent(void) const
@@ -522,140 +603,156 @@ const XC::Vector & XC::PressureDependMultiYield02::getCommittedStress(void)
 
 
 // NOTE: surfaces[0] is not used
-void XC::PressureDependMultiYield02::setUpSurfaces(double * gredu)
-{
+void XC::PressureDependMultiYield02::setUpSurfaces(const std::vector<double> &gredu)
+  {
     double residualPress = residualPressx[matN];
     double refPressure = refPressurex[matN];
     //double pressDependCoeff =pressDependCoeffx[matN];
     double refShearModulus = refShearModulusx[matN];
     int numOfSurfaces = numOfSurfacesx[matN];
     double frictionAngle = frictionAnglex[matN];
-        double cohesion = cohesionx[matN];
+    double cohesion = cohesionx[matN];
     double peakShearStrain = peakShearStrainx[matN];
     double phaseTransfAngle = phaseTransfAnglex[matN];
-        double stressRatioPT = stressRatioPTx[matN];
+    double stressRatioPT = stressRatioPTx[matN];
 
     double refStrain, peakShear, coneHeight;
     double stress1, stress2, strain1, strain2, size, elasto_plast_modul, plast_modul;
     double ratio1, ratio2;
 
-        if(gredu==0) {
-          double sinPhi = sin(frictionAngle * pi/180.);
-    double Mnys = 6.*sinPhi/(3.-sinPhi);
-    double sinPhiPT = sin(phaseTransfAngle * pi/180.);
-    stressRatioPT = 6.*sinPhiPT/(3.-sinPhiPT);
+    if(gredu.empty())
+      {
+        double sinPhi = sin(frictionAngle * pi/180.);
+        double Mnys = 6.*sinPhi/(3.-sinPhi);
+        double sinPhiPT = sin(phaseTransfAngle * pi/180.);
+        stressRatioPT = 6.*sinPhiPT/(3.-sinPhiPT);
                 // tao = cohesion * sqrt(8)/3.
-    residualPress = 2 * cohesion / Mnys;
-    // a small nonzero residualPress for numerical purpose only
-    if(residualPress < 0.01) residualPress = 0.01;
-    coneHeight = - (refPressure - residualPress);
-    peakShear = sqrt(2.) * coneHeight * Mnys / 3.;
-    refStrain = (peakShearStrain * peakShear)
+        residualPress = 2 * cohesion / Mnys;
+        // a small nonzero residualPress for numerical purposes only
+        if(residualPress < 0.01) residualPress = 0.01;
+        coneHeight = - (refPressure - residualPress);
+        peakShear = sqrt(2.) * coneHeight * Mnys / 3.;
+        refStrain = (peakShearStrain * peakShear)
                                   / (refShearModulus * peakShearStrain - peakShear);
 
-    double stressInc = peakShear / numOfSurfaces;
+        double stressInc = peakShear / numOfSurfaces;
 
-    for(int ii=1; ii<=numOfSurfaces; ii++){
-      stress1 = ii * stressInc;
-      stress2 = stress1 + stressInc;
-      ratio1 = 3. * stress1 / sqrt(2.) / coneHeight;
-      ratio2 = 3. * stress2 / sqrt(2.) / coneHeight;
-      strain1 = stress1 * refStrain / (refShearModulus * refStrain - stress1);
-      strain2 = stress2 * refStrain / (refShearModulus * refStrain - stress2);
+      for(int ii=1; ii<=numOfSurfaces; ii++)
+	{
+	  stress1 = ii * stressInc;
+	  stress2 = stress1 + stressInc;
+	  ratio1 = 3. * stress1 / sqrt(2.) / coneHeight;
+	  ratio2 = 3. * stress2 / sqrt(2.) / coneHeight;
+	  strain1 = stress1 * refStrain / (refShearModulus * refStrain - stress1);
+	  strain2 = stress2 * refStrain / (refShearModulus * refStrain - stress2);
 
-      if(ratio1 <= stressRatioPT && ratio2 >= stressRatioPT) {
-        double ratio = (ratio2 - stressRatioPT)/(ratio2 - ratio1);
-        strainPTOcta = strain2 - ratio * (strain2 - strain1);
-                        }
+	  if(ratio1 <= stressRatioPT && ratio2 >= stressRatioPT)
+	    {
+	      double ratio = (ratio2 - stressRatioPT)/(ratio2 - ratio1);
+	      strainPTOcta = strain2 - ratio * (strain2 - strain1);
+	    }
 
-      size = ratio1;
-      elasto_plast_modul = 2.*(stress2 - stress1)/(strain2 - strain1);
-      if( (2.*refShearModulus - elasto_plast_modul) <= 0)
-        plast_modul = UP_LIMIT;
-      else
-        plast_modul = (2.*refShearModulus * elasto_plast_modul)/
-                            (2.*refShearModulus - elasto_plast_modul);
-      if(plast_modul < 0) plast_modul = 0;
-      if(plast_modul > UP_LIMIT) plast_modul = UP_LIMIT;
-      if(ii==numOfSurfaces) plast_modul = 0;
-      workV6.Zero();
-          //std::cerr<<ii<<" "<<size<<" "<<plast_modul<<std::endl;
-      committedSurfaces[ii] = MultiYieldSurface(workV6,size,plast_modul);
-                }  // ii
-        }
-        else {  //user defined surfaces
-                int ii = 2*(numOfSurfaces-1);
-                double tmax = refShearModulus*gredu[ii]*gredu[ii+1];
-                double Mnys = -(sqrt(3.) * tmax - 2.* cohesion) / refPressure;
-    residualPress = 2 * cohesion / Mnys;
-    if(residualPress < 0.01) residualPress = 0.01;
-    coneHeight = - (refPressure - residualPress);
-
-    double sinPhi = 3*Mnys /(6+Mnys);
-                if(sinPhi<0. || sinPhi>1.) {
-                        std::cerr <<"\nPressureDependMultiYieldBase " <<this->getTag()<<": Invalid friction angle, please modify ref. pressure or G/Gmax curve."<<std::endl;
-     exit(-1);
-                }
-
-                frictionAngle = asin(sinPhi)*180/pi;
-                std::cerr << "\nPressureDependMultiYieldBase " <<this->getTag()<<": Friction angle is "<<frictionAngle<<"\n"<<std::endl;
-    if(phaseTransfAngle > frictionAngle) {
-                        std::cerr << "\nPressureDependMultiYieldBase " <<this->getTag()<<": phase Transformation Angle > friction Angle,"
-                                   << "will set phase Transformation Angle = friction Angle.\n" <<std::endl;
-                        phaseTransfAngle = frictionAngle;
-                }
-                double sinPhiPT = sin(phaseTransfAngle * pi/180.);
-    stressRatioPT = 6.*sinPhiPT/(3.-sinPhiPT);
-
-                for(int i=1; i<numOfSurfaces; i++) {
-                        int ii = 2*(i-1);
-                        strain1 = gredu[ii];
-      stress1 = refShearModulus*gredu[ii+1]*strain1;
-                        strain2 = gredu[ii+2];
-      stress2 = refShearModulus*gredu[ii+3]*strain2;
-
-      ratio1 = sqrt(3.) * stress1 / coneHeight;
-      ratio2 = sqrt(3.) * stress2 / coneHeight;
-      if(ratio1 <= stressRatioPT && ratio2 >= stressRatioPT) {
-        double ratio = (ratio2 - stressRatioPT)/(ratio2 - ratio1);
-                          // gamma_oct = sqrt(6)/3*gamma12
-        strainPTOcta = sqrt(6.)/3 * (strain2 - ratio * (strain2 - strain1));
-                        }
-
-      size = ratio1;
-      elasto_plast_modul = 2.*(stress2 - stress1)/(strain2 - strain1);
-
-                        if( (2.*refShearModulus - elasto_plast_modul) <= 0)
-                                        plast_modul = UP_LIMIT;
-      else
-                                        plast_modul = (2.*refShearModulus * elasto_plast_modul)/
-                        (2.*refShearModulus - elasto_plast_modul);
-      if(plast_modul <= 0) {
-                                std::cerr << "\nPressureDependMultiYieldBase " <<this->getTag()<<": Surface " << i
-                                           << " has plastic modulus < 0.\n Please modify G/Gmax curve.\n"<<std::endl;
-       exit(-1);
+	  size = ratio1;
+	  elasto_plast_modul = 2.*(stress2 - stress1)/(strain2 - strain1);
+	  if( (2.*refShearModulus - elasto_plast_modul) <= 0)
+	    plast_modul = UP_LIMIT;
+	  else
+	    plast_modul = (2.*refShearModulus * elasto_plast_modul)/
+				(2.*refShearModulus - elasto_plast_modul);
+	  if(plast_modul < 0) plast_modul = 0;
+	  if(plast_modul > UP_LIMIT) plast_modul = UP_LIMIT;
+	  if(ii==numOfSurfaces) plast_modul = 0;
+	  workV6.Zero();
+	  //std::cerr<<ii<<" "<<size<<" "<<plast_modul<<std::endl;
+	  committedSurfaces[ii] = MultiYieldSurface(workV6,size,plast_modul);
+	}  // ii
       }
-      if(plast_modul > UP_LIMIT) plast_modul = UP_LIMIT;
+    else
+      {  //user defined surfaces
+        int ii = 2*(numOfSurfaces-1);
+        double tmax = refShearModulus*gredu[ii]*gredu[ii+1];
+        double Mnys = -(sqrt(3.) * tmax - 2.* cohesion) / refPressure;
+        residualPress = 2 * cohesion / Mnys;
+        if(residualPress < 0.01) residualPress = 0.01;
+        coneHeight = - (refPressure - residualPress);
 
-      workV6.Zero();
+        double sinPhi = 3*Mnys /(6+Mnys);
+        if(sinPhi<0. || sinPhi>1.)
+	  {
+            std::cerr <<"\nPressureDependMultiYieldBase " <<this->getTag()<<": Invalid friction angle, please modify ref. pressure or G/Gmax curve."<<std::endl;
+     exit(-1);
+	  }
+
+        frictionAngle = asin(sinPhi)*180/pi;
+        std::cerr << "\nPressureDependMultiYieldBase " <<this->getTag()<<": Friction angle is "<<frictionAngle<<"\n"<<std::endl;
+        if(phaseTransfAngle > frictionAngle)
+	  {
+            std::cerr << "\nPressureDependMultiYieldBase "
+		      <<this->getTag()
+		      <<": phase Transformation Angle > friction Angle,"
+                      << "will set phase Transformation Angle = friction Angle.\n"
+		      <<std::endl;
+            phaseTransfAngle = frictionAngle;
+	  }
+        double sinPhiPT = sin(phaseTransfAngle * pi/180.);
+        stressRatioPT = 6.*sinPhiPT/(3.-sinPhiPT);
+
+        for(int i=1; i<numOfSurfaces; i++)
+	  {
+            int ii = 2*(i-1);
+            strain1 = gredu[ii];
+            stress1 = refShearModulus*gredu[ii+1]*strain1;
+            strain2 = gredu[ii+2];
+            stress2 = refShearModulus*gredu[ii+3]*strain2;
+
+            ratio1 = sqrt(3.) * stress1 / coneHeight;
+            ratio2 = sqrt(3.) * stress2 / coneHeight;
+            if(ratio1 <= stressRatioPT && ratio2 >= stressRatioPT)
+	      {
+                double ratio = (ratio2 - stressRatioPT)/(ratio2 - ratio1);
+                          // gamma_oct = sqrt(6)/3*gamma12
+                strainPTOcta = sqrt(6.)/3 * (strain2 - ratio * (strain2 - strain1));
+	      }
+
+            size = ratio1;
+            elasto_plast_modul = 2.*(stress2 - stress1)/(strain2 - strain1);
+
+            if( (2.*refShearModulus - elasto_plast_modul) <= 0)
+              plast_modul = UP_LIMIT;
+            else
+              plast_modul = (2.*refShearModulus * elasto_plast_modul)/
+                        (2.*refShearModulus - elasto_plast_modul);
+            if(plast_modul <= 0)
+	      {
+                std::cerr << "\nPressureDependMultiYieldBase "
+			  <<this->getTag()<<": Surface "
+			  << i
+			  << " has plastic modulus < 0.\n Please modify G/Gmax curve.\n"
+			  <<std::endl;
+                exit(-1);
+	      }
+            if(plast_modul > UP_LIMIT) plast_modul = UP_LIMIT;
+
+            workV6.Zero();
                         //std::cerr<<size<<" "<<i<<" "<<plast_modul<<" "<<gredu[ii]<<" "<<gredu[ii+1]<<std::endl;
-      committedSurfaces[i] = MultiYieldSurface(workV6,size,plast_modul);
+            committedSurfaces[i] = MultiYieldSurface(workV6,size,plast_modul);
 
-                        if(i==(numOfSurfaces-1)) {
-                                plast_modul = 0;
-                                size = ratio2;
-                          //std::cerr<<size<<" "<<i+1<<" "<<plast_modul<<" "<<gredu[ii+2]<<" "<<gredu[ii+3]<<std::endl;
-        committedSurfaces[i+1] = MultiYieldSurface(workV6,size,plast_modul);
-                        }
-                }
+            if(i==(numOfSurfaces-1))
+	      {
+                plast_modul = 0;
+                size = ratio2;
+                //std::cerr<<size<<" "<<i+1<<" "<<plast_modul<<" "<<gredu[ii+2]<<" "<<gredu[ii+3]<<std::endl;
+                committedSurfaces[i+1] = MultiYieldSurface(workV6,size,plast_modul);
+	      }
+	  }
+      }
+
+    residualPressx[matN] = residualPress;
+    frictionAnglex[matN] = frictionAngle;
+    cohesionx[matN] = cohesion;
+    phaseTransfAnglex[matN] = phaseTransfAngle;
+    stressRatioPTx[matN] = stressRatioPT;
   }
-
-  residualPressx[matN] = residualPress;
-  frictionAnglex[matN] = frictionAngle;
-  cohesionx[matN] = cohesion;
-  phaseTransfAnglex[matN] = phaseTransfAngle;
-  stressRatioPTx[matN] = stressRatioPT;
-}
 
 
 void XC::PressureDependMultiYield02::initStrainUpdate(void)

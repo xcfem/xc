@@ -58,9 +58,9 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
   {
   private:
     // user supplied
-    static double* contractParam2x;
-    static double* contractParam3x;
-    static double* dilateParam3x;
+    static std::vector<double> contractParam2x;
+    static std::vector<double> contractParam3x;
+    static std::vector<double> dilateParam3x;
 
     mutable double damage;
     mutable double check;
@@ -70,8 +70,35 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
     Vector PivotStrainRateCommitted;
 
     // Called by constructor
-    void setUpSurfaces(double *);
+    void setUpSurfaces(const std::vector<double> &);
     void initStrainUpdate(void);
+    void setupLocalMembers(int nd,
+			   double rho,
+			   double refShearModul,
+			   double refBulkModul,
+			   double frictionAng,
+			   double peakShearStra,
+			   double refPress,
+			   double pressDependCoe,
+			   double phaseTransformAngle,
+			   double contractionParam1,
+			   double contractionParam3,
+			   double dilationParam1,
+			   double dilationParam3,
+			   int   numberOfYieldSurf,
+			   const std::vector<double> &gredu,
+			   double contractionParam2,
+			   double dilationParam2,
+			   double liquefactionParam1,
+			   double liquefactionParam2,
+			   double e,
+			   double volLimit1,
+			   double volLimit2,
+			   double volLimit3,
+			   double atm,
+			   double cohesi,
+			   double hv,
+			   double pv);
 
     // Return num_strain_subincre
     int isCriticalState(const T2Vector & stress) const;
@@ -86,9 +113,9 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
     int recvData(const Communicator &);
   public:
     // Initialization constructor
-    PressureDependMultiYield02 (int tag,
+    PressureDependMultiYield02(int tag,
 			       int nd,
-				   double rho,
+			       double rho,
 			       double refShearModul,
 			       double refBulkModul,
 			       double frictionAng,
@@ -101,19 +128,19 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
 			       double dilationParam1,
 			       double dilationParam3,
 			       int   numberOfYieldSurf = 20,
-				   double * gredu = 0,
+			       const std::vector<double> &gredu= std::vector<double>(),
 			       double contractionParam2 = 5.,
 			       double dilationParam2 = 3.,
 			       double liquefactionParam1 = 1. ,
 			       double liquefactionParam2 = 0. ,
-		           double e = 0.6,
+		               double e = 0.6,
 			       double volLimit1 = 0.9,
 			       double volLimit2 = 0.02,
 			       double volLimit3 = 0.7,
 			       double atm = 101.,
-				   double cohesi = 0.1,
-				   double hv = 0.,
-				   double pv = 1.);
+			       double cohesi = 0.1,
+			       double hv = 0.,
+			       double pv = 1.);
 
      PressureDependMultiYield02(int tag);
      // Default constructor
@@ -122,6 +149,61 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
      // Copy constructor
      PressureDependMultiYield02 (const PressureDependMultiYield02 &);
 
+     void setup(int nd,
+	       double rho,
+	       double refShearModul,
+	       double refBulkModul,
+	       double frictionAng,
+	       double peakShearStra,
+	       double refPress,
+	       double pressDependCoe,
+	       double phaseTransformAngle,
+	       double contractionParam1,
+	       double contractionParam3,
+	       double dilationParam1,
+	       double dilationParam3,
+	       int numberOfYieldSurf,
+	       const std::vector<double> &gredu,
+	       double contractionParam2,
+	       double dilationParam2,
+	       double liquefactionParam1,
+	       double liquefactionParam2,
+	       double e,
+	       double volLimit1,
+	       double volLimit2,
+	       double volLimit3,
+	       double atm,
+	       double cohesi,
+	       double hv,
+	       double pv);
+    
+    void setupPy(int nd,
+	       double rho,
+	       double refShearModul,
+	       double refBulkModul,
+	       double frictionAng,
+	       double peakShearStra,
+	       double refPress,
+	       double pressDependCoe,
+	       double phaseTransformAngle,
+	       double contractionParam1,
+	       double contractionParam3,
+	       double dilationParam1,
+	       double dilationParam3,
+	       int numberOfYieldSurf,
+	       const boost::python::list &,
+	       double contractionParam2,
+	       double dilationParam2,
+	       double liquefactionParam1,
+	       double liquefactionParam2,
+	       double e,
+	       double volLimit1,
+	       double volLimit2,
+	       double volLimit3,
+	       double atm,
+	       double cohesi,
+	       double hv,
+	       double pv);
 
      // Calculates current tangent stiffness.
      const Matrix &getTangent(void) const;

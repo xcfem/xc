@@ -57,9 +57,11 @@ class PressureIndependMultiYield: public PressureMultiYieldBase
     mutable double refShearModulus;
     mutable double refBulkModulus;
 
+     void setupLocalMembers(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const std::vector<double> &gredu);
+    
     void elast2Plast(void) const;
     // Called by constructor
-    void setUpSurfaces(double *);  
+    void setUpSurfaces(const std::vector<double> &);  
 
     double yieldFunc(const T2Vector & stress, const std::vector<MultiYieldSurface> &,int surface_num) const;
 
@@ -102,11 +104,12 @@ class PressureIndependMultiYield: public PressureMultiYieldBase
                                  double refPress = 100, 
                                  double pressDependCoe = 0.0,
                                  int   numberOfYieldSurf = 20,
-                                 double * gredu = 0);
+			       const std::vector<double> &gredu= std::vector<double>());
 
      PressureIndependMultiYield(int tag= 0);
 
-    void setup(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, double * gredu);
+     void setup(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const std::vector<double> &gredu);
+     void setupPy(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const boost::python::list &gredu);
 
      inline double getRho(void) const
        {return rhox[matN];}

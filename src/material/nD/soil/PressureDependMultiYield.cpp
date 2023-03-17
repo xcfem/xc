@@ -61,7 +61,7 @@
 #include <utility/matrix/nDarray/stresst.h>
 #include "material/nD/NDMaterialType.h"
 
-double* XC::PressureDependMultiYield::liquefyParam4x=0;
+std::vector<double> XC::PressureDependMultiYield::liquefyParam4x;
 
 const double pi = 3.14159265358979;
 
@@ -96,29 +96,10 @@ XC::PressureDependMultiYield::PressureDependMultiYield(int tag, int nd,
 
     if(matCount%20 == 0)
       {
-        double *temp1 = liquefyParam4x;
-        double *temp2 = volLimit1x;
-        double *temp3 = volLimit2x;
-        double *temp4 = volLimit3x;
-
-
-        liquefyParam4x = new double[matCount+20];
-        volLimit1x = new double[matCount+20];
-        volLimit2x = new double[matCount+20];
-        volLimit3x = new double[matCount+20];
-
-        for(int i=0; i<matCount; i++)
-          {
-            liquefyParam4x[i] = temp1[i];
-            volLimit1x[i] = temp2[i];
-            volLimit2x[i] = temp3[i];
-            volLimit3x[i] = temp4[i];
-          }
-     
-         if(matCount > 0)
-           {
-             delete [] temp1; delete [] temp2; delete [] temp3; delete [] temp4; 
-           }
+        liquefyParam4x.resize(matCount+20);
+        volLimit1x.resize(matCount+20);
+        volLimit2x.resize(matCount+20);
+        volLimit3x.resize(matCount+20);
       }
     volLimit1x[matCount] = volLim1;
     volLimit2x[matCount] = volLim2;

@@ -58,7 +58,7 @@ class PressureDependMultiYield: public PressureDependMultiYieldBase
   {
   private:
   // user supplied 
-     static double* liquefyParam4x;
+     static std::vector<double> liquefyParam4x;
 
      mutable T2Vector reversalStress;
      mutable T2Vector lockStress;
