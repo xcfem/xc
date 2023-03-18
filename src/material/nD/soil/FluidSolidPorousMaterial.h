@@ -60,9 +60,9 @@ class FluidSolidPorousMaterial: public NDMaterial
   {
   private:
     static int matCount;
-    static int* ndmx;
-    static int* loadStagex;
-    static double *combinedBulkModulusx;
+    static std::vector<int> ndmx;
+    static std::vector<int> loadStagex;
+    static std::vector<double> combinedBulkModulusx;
     static double pAtm;
     int matN;
     NDMaterial *theSoilMaterial;

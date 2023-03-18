@@ -109,7 +109,7 @@ class PressureIndependMultiYield: public PressureMultiYieldBase
      PressureIndependMultiYield(int tag= 0);
 
      void setup(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const std::vector<double> &gredu);
-     void setupPy(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const boost::python::list &gredu);
+     void setupPy(const boost::python::dict &);
 
      inline double getRho(void) const
        {return rhox[matN];}

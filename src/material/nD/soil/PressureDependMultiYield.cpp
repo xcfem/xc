@@ -94,7 +94,8 @@ XC::PressureDependMultiYield::PressureDependMultiYield(int tag, int nd,
     volLim1 = 0.8;
   }
 
-    if(matCount%20 == 0)
+    const int vSize= liquefyParam4x.size();
+    if(matCount>=vSize)
       {
         liquefyParam4x.resize(matCount+20);
         volLimit1x.resize(matCount+20);

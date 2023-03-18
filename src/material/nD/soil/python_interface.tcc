@@ -30,7 +30,7 @@ class_<XC::PressureDependMultiYieldBase, bases<XC::PressureMultiYieldBase>, boos
 class_<XC::PressureDependMultiYield, bases<XC::PressureDependMultiYieldBase>, boost::noncopyable >("PressureDependMultiYield", no_init);
 
 class_<XC::PressureDependMultiYield02, bases<XC::PressureDependMultiYieldBase>, boost::noncopyable >("PressureDependMultiYield02", no_init)
-//  .def("setup",&XC::PressureDependMultiYield02::setupPy)
+  .def("setup",&XC::PressureDependMultiYield02::setupPy)
   ;
 
 

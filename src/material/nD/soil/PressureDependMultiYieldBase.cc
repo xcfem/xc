@@ -162,12 +162,14 @@ void XC::PressureDependMultiYieldBase::setupLocalMembers(int nd,
       phaseTransformAng = frictionAng;
     }
 
-    if(ei < 0) {
-      std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: e <= 0" << std::endl;
-     exit(-1);
-    }
+    if(ei < 0)
+      {
+        std::cerr << "FATAL:XC::PressureDependMultiYieldBase:: e <= 0" << std::endl;
+       exit(-1);
+      }
 
-    if(matCount%20 == 0)
+    const int vSize= refShearModulusx.size();
+    if(matCount>=vSize)
       {
 	refShearModulusx.resize(matCount+20);
 	refBulkModulusx.resize(matCount+20);
@@ -180,9 +182,7 @@ void XC::PressureDependMultiYieldBase::setupLocalMembers(int nd,
 	einitx.resize(matCount+20);    //initial void ratio
 	Hvx.resize(matCount+20);
 	Pvx.resize(matCount+20);
-
       }
-
     refShearModulusx[matCount] = refShearModul;
     refBulkModulusx[matCount] = refBulkModul;
     phaseTransfAnglex[matCount] = phaseTransformAng;

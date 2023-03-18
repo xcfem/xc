@@ -729,13 +729,62 @@ def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStra
         retval.material.material.setValues(samplePoints) # and now we set the points AGAIN.
     return retval
 
+def defPressureIndependentMultiYieldMaterial(preprocessor, name, nd, rho, refShearModul,refBulkModul,cohesi,peakShearStra,frictionAng = 0.,refPress = 100, pressDependCoe = 0.0, numberOfYieldSurf = 20, gredu= []):
+    ''' Define a pressure independent yield material for soil analysis.
+
+    :param name: name identifying the material.
+    :param nd: number of dimensions, 2 for plane-strain, and 3 for 3D analysis.
+    :param rho: Saturated soil mass density.
+    :param refShearModul: Reference low-strain shear modulus, specified at a reference mean effective confining pressure refPress.
+    :param refBulkModul: Reference bulk modulus, specified at a reference mean effective confining pressure refPress.
+    :param cohesi: apparent cohesion at zero effective confinement.
+    :param peakShearStra: an octahedral shear strain at which the maximum shear strength is reached, specified at a reference mean effective confining pressure refPress.
+    :param frictionAng: friction angle at peak shear strength in degrees. (optional: default is 0.0).
+    :param refPress: reference mean effective confining pressure at which refShearModul, refBulModul, and peakShearStra are defined.
+    :param pressDependCoe: a positive constant defining variations of G and B as a function of instantaneous effective confinement p’(default is 0.0). see notes 4 and 5 in https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/PressureIndependentMultiYield.html
+    :param numberOfYieldSurf: Number of yield surfaces, optional (must be less than 40: default is 20). The surfaces are generated based on the hyperbolic relation defined in https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/PressureIndependentMultiYield.html
+    :param gredu: instead of automatic surfaces generation (Note 2), you can define yield surfaces directly based on desired shear modulus reduction curve. To do so, add a minus sign in front of numberOfYieldSurf, then provide numberOfYieldSurf pairs of shear strain (γ) and modulus ratio (Gs) values. For example, to define 10 surfaces: … -10γ1Gs1 … γ10Gs10 …
+    '''
+    parameterDict= {'nd':nd, 'rho':rho, 'refShearModul':refShearModul,'refBulkModul':refBulkModul,'cohesi':cohesi,'peakShearStra':peakShearStra,'frictionAng':frictionAng, 'refPress':refPress, 'pressDependCoe':pressDependCoe, 'numberOfYieldSurf':numberOfYieldSurf, 'gredu':gredu}
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("pressure_independ_multi_yield",name)
+    retval.setup(parameterDict)
+    return retval
+
+def defPressureDependentMultiYield02Material(preprocessor, name, nd, rho, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAngle, contractionParam1, contractionParam3, dilationParam1, dilationParam3, numberOfYieldSurf= 20, gredu= [], contractionParam2= 5., dilationParam2= 3., liquefactionParam1= 1., liquefactionParam2= 0., e= 0.6, volLimit1= 0.9, volLimit2= .02, volLimit3= 0.7, atm= 101., cohesi= 0.1, hv= 0., pv= 1.):
+    '''
+    :param nd: Number of dimensions, 2 for plane-strain, and 3 for 3D analysis.
+    :param rho: Saturated soil mass density.
+    :param refShearModul: Reference low-strain shear modulus, specified at a reference mean effective confining pressure refPress.
+    :param refBulkModul: Reference bulk modulus, specified at a reference mean effective confining pressure refPress.
+    :param frictionAng: Friction angle at peak shear strength, in degrees.
+    :param peakShearStra: An octahedral shear strain at which the maximum shear strength is reached, specified at a reference mean effective confining pressure refPress.
+    :param refPress: reference mean effective confining pressure at which refShearModul, refBulModul, and peakShearStra are defined.
+    :param pressDependCoe: A positive constant defining variations of G and B as a function of instantaneous effective confinement p’.
+    :param phaseTransformAngle: Phase transformation angle, in degrees.
+    :param contractionParam1: A non-negative constant defining the rate of shear-induced volume decrease (contraction) or pore pressure buildup. A larger value corresponds to faster contraction rate.
+    :param contractionParam3: See contractionParam1.
+    :param dilationParam1: Non-negative constants defining the rate of shear-induced volume increase (dilation). Larger values correspond to stronger dilation rate.
+    :param dilationParam2: see dilationParam1.
+    :param numberOfYieldSurf: Number of yield surfaces, optional (must be less than 40, default is 20). The surfaces are generated based on the hyperbolic relation defined in Note 2 in https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/PressureDependentMultiYield.html
+    :param liquefactionParam1: Parameters controlling the mechanism of liquefaction-induced perfectly plastic shear strain accumulation, i.e., cyclic mobility. Set liquefac1 = 0 to deactivate this mechanism altogether.
+    :param liquefactionParam2: see liquefactionParam1.
+    :param e: Initial void ratio, optional (default is 0.6).
+    :param cohesi: Cohesion.
+    '''
+    parameterDict= {'nd':nd, 'rho':rho, 'refShearModul':refShearModul, 'refBulkModul':refBulkModul, 'frictionAng':frictionAng, 'peakShearStra':peakShearStra, 'refPress':refPress, 'pressDependCoe':pressDependCoe, 'phaseTransformAngle':phaseTransformAngle, 'contractionParams':[contractionParam1, contractionParam2, contractionParam3], 'dilationParams':[dilationParam1, dilationParam2, dilationParam3], 'numberOfYieldSurf':numberOfYieldSurf, 'gredu':gredu, 'dilationParam2':dilationParam2, 'liquefactionParams':[liquefactionParam1, liquefactionParam2], 'e':e, 'volLimits':[volLimit1,volLimit2, volLimit3], 'atm':atm, 'cohesi':cohesi, 'hv':hv, 'pv':pv}
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("pressure_depend_multi_yield02",name)
+    retval.setup(parameterDict)
+    return retval
+
 class MaterialData(BasicElasticMaterial):
     '''Base class to construct some material definition classes
 
      :ivar name:         name identifying the material
      :ivar xc_material:  pointer to XC material.    
     '''
-    def __init__(self,name,E,nu,rho):
+    def __init__(self, name, E, nu, rho):
         '''Base class to construct some material definition classes
 
          :param name:         name identifying the material

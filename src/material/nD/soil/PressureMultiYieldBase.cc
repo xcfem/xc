@@ -105,8 +105,9 @@ void XC::PressureMultiYieldBase::setup(int nd, double r, double frictionAng,doub
 	std::cerr << "FATAL:XC::PressureMultiYieldBase:: rho <= 0" << std::endl;
        exit(-1);
       }
-
-    if(matCount%20 == 0)
+    
+    const int vSize= loadStagex.size();
+    if(matCount>=vSize)
       {
 	loadStagex.resize(matCount+20);
 	ndmx.resize(matCount+20);

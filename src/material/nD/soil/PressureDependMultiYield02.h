@@ -177,33 +177,7 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
 	       double hv,
 	       double pv);
     
-    void setupPy(int nd,
-	       double rho,
-	       double refShearModul,
-	       double refBulkModul,
-	       double frictionAng,
-	       double peakShearStra,
-	       double refPress,
-	       double pressDependCoe,
-	       double phaseTransformAngle,
-	       double contractionParam1,
-	       double contractionParam3,
-	       double dilationParam1,
-	       double dilationParam3,
-	       int numberOfYieldSurf,
-	       const boost::python::list &,
-	       double contractionParam2,
-	       double dilationParam2,
-	       double liquefactionParam1,
-	       double liquefactionParam2,
-	       double e,
-	       double volLimit1,
-	       double volLimit2,
-	       double volLimit3,
-	       double atm,
-	       double cohesi,
-	       double hv,
-	       double pv);
+     void setupPy(const boost::python::dict &);
 
      // Calculates current tangent stiffness.
      const Matrix &getTangent(void) const;

@@ -55,6 +55,25 @@ std::vector<double> XC::PressureDependMultiYield02::dilateParam3x;
 
 const        double pi = 3.14159265358979;
 
+//! @brief Set values of local members.
+//! @param nd: Number of dimensions, 2 for plane-strain, and 3 for 3D analysis.
+//! @param rho: Saturated soil mass density.
+//! @param refShearModul: Reference low-strain shear modulus, specified at a reference mean effective confining pressure refPress.
+//! @param refBulkModul: Reference bulk modulus, specified at a reference mean effective confining pressure refPress.
+//! @param frictionAng: Friction angle at peak shear strength, in degrees.
+//! @param peakShearStra: An octahedral shear strain at which the maximum shear strength is reached, specified at a reference mean effective confining pressure refPress.
+//! @param refPress: reference mean effective confining pressure at which refShearModul, refBulModul, and peakShearStra are defined.
+//! @param pressDependCoe: A positive constant defining variations of G and B as a function of instantaneous effective confinement p’.
+//! @param phaseTransformAngle: Phase transformation angle, in degrees.
+//! @param contractionParam1: A non-negative constant defining the rate of shear-induced volume decrease (contraction) or pore pressure buildup. A larger value corresponds to faster contraction rate.
+//! @param contractionParam3: See contractionParam1.
+//! @param dilationParam1: Non-negative constants defining the rate of shear-induced volume increase (dilation). Larger values correspond to stronger dilation rate.
+//! @param dilationParam2: see dilationParam1.
+//! @param numberOfYieldSurf: Number of yield surfaces, optional (must be less than 40, default is 20). The surfaces are generated based on the hyperbolic relation defined in Note 2 in https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/PressureDependentMultiYield.html
+//! @param liquefactionParam1: Parameters controlling the mechanism of liquefaction-induced perfectly plastic shear strain accumulation, i.e., cyclic mobility. Set liquefac1 = 0 to deactivate this mechanism altogether.
+//! @param liquefactionParam2: see liquefactionParam1.
+//! @param e: Initial void ratio, optional (default is 0.6).
+//! @param cohesi: Cohesion.
 void XC::PressureDependMultiYield02::setupLocalMembers(int nd,
 			   double rho,
 			   double refShearModul,
@@ -98,7 +117,8 @@ void XC::PressureDependMultiYield02::setupLocalMembers(int nd,
 	volLimit1 = 0.8;
       }
 
-    if(matCount%20 == 0)
+    const int vSize= contractParam2x.size();
+    if(matCount>=vSize)
       {
         contractParam2x.resize(matCount+20);
         contractParam3x.resize(matCount+20);
@@ -106,7 +126,6 @@ void XC::PressureDependMultiYield02::setupLocalMembers(int nd,
         volLimit1x.resize(matCount+20);
         volLimit2x.resize(matCount+20);
         volLimit3x.resize(matCount+20);
-
       }
 
     contractParam2x[matCount] = contractionParam2;
@@ -203,34 +222,32 @@ void XC::PressureDependMultiYield02::setup(int nd,
     this->setupLocalMembers(nd, rho, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAngle, contractionParam1, contractionParam3, dilationParam1, dilationParam3, numberOfYieldSurf, gredu, contractionParam2, dilationParam2, liquefactionParam1, liquefactionParam2, e, volLimit1, volLimit2, volLimit3, atm, cohesi, hv, pv);
   }
 
-void XC::PressureDependMultiYield02::setupPy(int nd,
-			   double rho,
-			   double refShearModul,
-			   double refBulkModul,
-			   double frictionAng,
-			   double peakShearStra,
-			   double refPress,
-			   double pressDependCoe,
-			   double phaseTransformAngle,
-			   double contractionParam1,
-			   double contractionParam3,
-			   double dilationParam1,
-			   double dilationParam3,
-			   int numberOfYieldSurf,
-			   const boost::python::list &greduPy,
-			   double contractionParam2,
-			   double dilationParam2,
-			   double liquefactionParam1,
-			   double liquefactionParam2,
-			   double e,
-			   double volLimit1,
-			   double volLimit2,
-			   double volLimit3,
-			   double atm,
-			   double cohesi,
-			   double hv,
-			   double pv)
+
+//! @brief Python version of the setup method.
+//! @param pythonDict: Python dictionary containing the values of the parameters.
+void XC::PressureDependMultiYield02::setupPy(const boost::python::dict &pythonDict)
   {
+    const int nd= boost::python::extract<int>(pythonDict["nd"]);
+    const double rho= boost::python::extract<double>(pythonDict["rho"]);
+    const double refShearModul= boost::python::extract<double>(pythonDict["refShearModul"]);
+    const double refBulkModul= boost::python::extract<double>(pythonDict["refBulkModul"]);
+    const double frictionAng= boost::python::extract<double>(pythonDict["frictionAng"]);
+    const double peakShearStra= boost::python::extract<double>(pythonDict["peakShearStra"]);
+    const double refPress= boost::python::extract<double>(pythonDict["refPress"]);
+    const double pressDependCoe= boost::python::extract<double>(pythonDict["pressDependCoe"]);
+    const double phaseTransformAngle= boost::python::extract<double>(pythonDict["phaseTransformAngle"]);
+    const boost::python::list &contractionParams= boost::python::extract<boost::python::list>(pythonDict["contractionParams"]);
+    const boost::python::list &dilationParams= boost::python::extract<boost::python::list>(pythonDict["dilationParams"]);
+    const int numberOfYieldSurf= boost::python::extract<int>(pythonDict["numberOfYieldSurf"]);
+    const boost::python::list &greduPy= boost::python::extract<boost::python::list>(pythonDict["gredu"]);
+    const boost::python::list &liquefactionParams= boost::python::extract<boost::python::list>(pythonDict["liquefactionParams"]);
+    const double e= boost::python::extract<double>(pythonDict["e"]);
+    const boost::python::list &volLimits= boost::python::extract<boost::python::list>(pythonDict["volLimits"]);
+    const double atm= boost::python::extract<double>(pythonDict["atm"]);
+    const double cohesi= boost::python::extract<double>(pythonDict["cohesi"]);
+    const double hv= boost::python::extract<double>(pythonDict["hv"]);
+    const double pv= boost::python::extract<double>(pythonDict["pv"]);
+
     const size_t sz= len(greduPy);
     std::vector<double> gredu(sz);
     if(sz>0)
@@ -238,6 +255,43 @@ void XC::PressureDependMultiYield02::setupPy(int nd,
 	for(size_t i=0; i<sz; i++)
 	  { gredu[i]= boost::python::extract<double>(greduPy[i]); }
       }
+    double volLimit1= 0.9;
+    double volLimit2= 0.02;
+    double volLimit3= 0.7;
+    const size_t szVL= len(volLimits);
+    if(szVL>0)
+      volLimit1= boost::python::extract<double>(volLimits[0]);
+    if(szVL>1)
+      volLimit2= boost::python::extract<double>(volLimits[1]);
+    if(szVL>2)
+      volLimit3= boost::python::extract<double>(volLimits[2]);
+    double dilationParam1= 0.0;
+    double dilationParam2= 3.0;
+    double dilationParam3= 0.0;
+    const size_t szDP= len(dilationParams);
+    if(szDP>0)
+      dilationParam1= boost::python::extract<double>(dilationParams[0]);
+    if(szDP>1)
+      dilationParam2= boost::python::extract<double>(dilationParams[1]);
+    if(szDP<2)
+      dilationParam3= boost::python::extract<double>(dilationParams[2]);
+    double contractionParam1= 0.0;
+    double contractionParam2= 5.0;
+    double contractionParam3= 0.0;
+    const size_t szCP= len(contractionParams);
+    if(szCP>0)
+      contractionParam1= boost::python::extract<double>(contractionParams[0]);
+    if(szCP>1)
+      contractionParam2= boost::python::extract<double>(contractionParams[1]);
+    if(szCP>2)
+      contractionParam3= boost::python::extract<double>(contractionParams[2]);
+    double liquefactionParam1= 1.0;
+    double liquefactionParam2= 0.0;
+    const size_t szLP= len(liquefactionParams);
+    if(szLP>0)
+      liquefactionParam1= boost::python::extract<double>(liquefactionParams[0]);
+    if(szLP>1)
+      liquefactionParam2= boost::python::extract<double>(liquefactionParams[1]);
     this->setup(nd, rho, refShearModul, refBulkModul, frictionAng, peakShearStra, refPress, pressDependCoe, phaseTransformAngle, contractionParam1, contractionParam3, dilationParam1, dilationParam3, numberOfYieldSurf, gredu, contractionParam2, dilationParam2, liquefactionParam1, liquefactionParam2, e, volLimit1, volLimit2, volLimit3, atm, cohesi, hv, pv);
   }
 

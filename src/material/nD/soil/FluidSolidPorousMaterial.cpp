@@ -47,9 +47,9 @@
 
 #include "material/nD/NDMaterialType.h"
 
-int* XC::FluidSolidPorousMaterial::loadStagex = 0;
-int* XC::FluidSolidPorousMaterial::ndmx = 0;
-double* XC::FluidSolidPorousMaterial::combinedBulkModulusx = 0;
+std::vector<int> XC::FluidSolidPorousMaterial::loadStagex;
+std::vector<int> XC::FluidSolidPorousMaterial::ndmx;
+std::vector<double> XC::FluidSolidPorousMaterial::combinedBulkModulusx;
 int XC::FluidSolidPorousMaterial::matCount = 0;
 double XC::FluidSolidPorousMaterial::pAtm = 101;
 
@@ -82,22 +82,12 @@ XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(int tag, int nd,const NDM
         combinedBulkModul= 0.;
       }
 
-    if(matCount%20 == 0)
+    const int vSize= loadStagex.size();
+    if(matCount>=vSize)
       {
-        int *temp1= loadStagex;
-        int *temp2= ndmx;
-        double *temp3= combinedBulkModulusx;
-        loadStagex = new int[matCount+20];
-        ndmx= new int[matCount+20];
-        combinedBulkModulusx= new double[matCount+20];
-        for(int i=0; i<matCount; i++)
-          {
-             loadStagex[i] = temp1[i];
-             ndmx[i] = temp2[i];
-             combinedBulkModulusx[i] = temp3[i];
-          }
-        if(matCount > 0)
-          { delete [] temp1; delete [] temp2; delete [] temp3; }
+        loadStagex.resize(matCount+20);
+        ndmx.resize(matCount+20);
+        combinedBulkModulusx.resize(matCount+20);
       }
 
     ndmx[matCount] = nd;

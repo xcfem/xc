@@ -96,8 +96,22 @@ void XC::PressureIndependMultiYield::setup(int nd, double r, double refShearModu
     this->setupLocalMembers(nd, r, refShearModul, refBulkModul, cohesi, peakShearStra, frictionAng, refPress, pressDependCoe, numberOfYieldSurf, gredu);
   }
 
-void XC::PressureIndependMultiYield::setupPy(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const boost::python::list &greduPy)
+//! @brief Python version of the setup method.
+//! @param pythonDict: Python dictionary containing the values of the parameters.
+void XC::PressureIndependMultiYield::setupPy(const boost::python::dict &pythonDict)
   {
+    const int nd= boost::python::extract<int>(pythonDict["nd"]);
+    const double r= boost::python::extract<double>(pythonDict["rho"]);
+    const double refShearModul= boost::python::extract<double>(pythonDict["refShearModul"]);
+    const double refBulkModul= boost::python::extract<double>(pythonDict["refBulkModul"]);
+    const double frictionAng= boost::python::extract<double>(pythonDict["frictionAng"]);
+    const double peakShearStra= boost::python::extract<double>(pythonDict["peakShearStra"]);
+    const double refPress= boost::python::extract<double>(pythonDict["refPress"]);
+    const double pressDependCoe= boost::python::extract<double>(pythonDict["pressDependCoe"]);
+    const int numberOfYieldSurf= boost::python::extract<int>(pythonDict["numberOfYieldSurf"]);
+    const boost::python::list &greduPy= boost::python::extract<boost::python::list>(pythonDict["gredu"]);
+    const double cohesi= boost::python::extract<double>(pythonDict["cohesi"]);
+
     const size_t sz= len(greduPy);
     std::vector<double> gredu(sz);
     if(sz>0)
