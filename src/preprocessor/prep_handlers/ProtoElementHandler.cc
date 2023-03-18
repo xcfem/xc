@@ -418,6 +418,12 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
         if(!retval)
 	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
+    else if(cmd == "NineFourNodeQuadUP")
+      {
+        retval= new_element_mat<NineFourNodeQuadUP, NDMaterial>(tag_elem, get_ptr_material());
+        if(!retval)
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
+      }
     else if(cmd == "EnhancedQuad")
       {
         retval= new_element_mat<EnhancedQuad,NDMaterial>(tag_elem, get_ptr_material());

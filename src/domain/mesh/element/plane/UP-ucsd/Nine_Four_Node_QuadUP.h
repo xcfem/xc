@@ -97,7 +97,7 @@ class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    NineFourNodeQuadUP(void);
+    NineFourNodeQuadUP(int tag= 0,const NDMaterial *ptr_mat= nullptr);
     NineFourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4,
 		  int nd5, int nd6, int nd7, int nd8, int nd9,
 		  NDMaterial &m, const char *type,

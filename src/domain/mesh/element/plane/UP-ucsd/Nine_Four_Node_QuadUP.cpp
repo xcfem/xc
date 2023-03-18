@@ -85,6 +85,16 @@ const int XC::NineFourNodeQuadUP::nenu=9;
 
 const int XC::NineFourNodeQuadUP::nenp=4;
 
+XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,const NDMaterial *ptr_mat)
+  :ElemWithMaterial<9,SolidMech2D>(tag,ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,ptr_mat,1.0)),
+  Ki(nullptr), kc(0.0), applyLoad(0), initNodeDispl(nullptr)
+  {
+    load.reset(22);
+
+    this->shapeFunction(wu, nintu, nenu, 0);
+    this->shapeFunction(wp, nintp, nenp, 1);
+    this->shapeFunction(wp, nintp, nenu, 2);
+  }
 
 
 XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,
@@ -121,21 +131,6 @@ XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,
 
     // Set connected external node IDs
     theNodes.set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9);
-  }
-
-
-
-
-
-XC::NineFourNodeQuadUP::NineFourNodeQuadUP(void)
-  :ElemWithMaterial<9,SolidMech2D>(0,ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,nullptr,1.0)),
-  Ki(nullptr), kc(0.0), applyLoad(0), initNodeDispl(nullptr)
-  {
-    load.reset(22);
-
-    this->shapeFunction(wu, nintu, nenu, 0);
-    this->shapeFunction(wp, nintp, nenp, 1);
-    this->shapeFunction(wp, nintp, nenu, 2);
   }
 
 
