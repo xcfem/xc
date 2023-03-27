@@ -324,16 +324,16 @@ int XC::TCP_Socket::recvMsg(int dbTag, int commitTag, Message &msg, ChannelAddre
 
     // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
-    int nleft,nread;
+    int nread;
     char *gMsg;
     gMsg = msg.data;
-    nleft = msg.length;
-
-    while (nleft > 0) {
+    int nleft = msg.length;
+    while(nleft > 0)
+      {
 	nread = recv(sockfd,gMsg,nleft,0);
 	nleft -= nread;
 	gMsg +=  nread;
-    }
+      }
     return 0;
 }
 
