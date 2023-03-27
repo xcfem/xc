@@ -76,7 +76,7 @@ class OracleDatastore: public DBDatastore
     int searchProjTag(const std::string &projName);
 
     // methods defined in the Channel class interface which do nothing
-    char *addToProgram(void);
+    std::string addToProgram(void);
     int setUpShadow(void);
     int setUpActor(void);
     int setNextAddress(const ChannelAddress &otherChannelAddress);

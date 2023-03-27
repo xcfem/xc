@@ -106,7 +106,7 @@ class TCP_SocketNoDelay: public Channel
     int recvID(ID &theID, ChannelAddress *theAddress =0);    
     
     unsigned int getPortNumber(void) const;
-    char *addToProgram(void);
+    std::string addToProgram(void);
   };
 } // end of XC namespace
 

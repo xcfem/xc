@@ -79,7 +79,7 @@ void XC::TCP_UDP_Socket_base::setup(unsigned int port, int socketType)
     my_Addr.addr_in.sin_family = AF_INET;
     my_Addr.addr_in.sin_port = htons(port);
     my_Addr.addr_in.sin_addr.s_addr = htonl(INADDR_ANY);
-    addrLength = sizeof(my_Addr.addr_in);
+    addrLength = sizeof(my_Addr.addr);
     
     // open a socket
     if((sockfd = socket(AF_INET, socketType, 0)) < 0)

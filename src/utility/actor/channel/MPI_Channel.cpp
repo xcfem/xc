@@ -491,14 +491,12 @@ XC::MPI_Channel::getPortNumber(void) const
 }
 */
 
-char *XC::MPI_Channel::addToProgram(void)
+std::string XC::MPI_Channel::addToProgram(void)
   {
     std::cerr << "MPI_Channel::addToProgram(void) - ";
     std::cerr << " this should not be called - need MPI-2.0\n";
-    char *newStuff =(char *)malloc(10*sizeof(char));
-    for(int i=0; i<10; i++) 
-	newStuff[i] = ' ';
-    return newStuff;
+    std::string retval(10,' ');
+    return retval;
   }
 
 

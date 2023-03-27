@@ -97,8 +97,8 @@ bool XC::FE_Datastore::isDatastore(void) const
  ********************************************************************/
 
 //! @brief Return \f$nullptr\f$.
-char *XC::FE_Datastore::addToProgram(void)
-  { return nullptr; }
+std::string XC::FE_Datastore::addToProgram(void)
+  { return std::string(); }
 
 int XC::FE_Datastore::setUpConnection(void)
   { return 0; }

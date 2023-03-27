@@ -73,7 +73,7 @@
 //	given by the OS. 
 
 XC::TCP_Socket::TCP_Socket(bool checkEndnss)
-  : TCP_UDP_Socket_base(0, checkEndnss)
+  : TCP_UDP_Socket_base(0, checkEndnss), noDelay(0)
   {
     // set up my_Addr 
     bzero((char *) &my_Addr, sizeof(my_Addr));
@@ -84,8 +84,8 @@ XC::TCP_Socket::TCP_Socket(bool checkEndnss)
 // TCP_Socket(unsigned int port): 
 //	constructor to open a socket with my inet_addr and with a port number port.
 
-XC::TCP_Socket::TCP_Socket(unsigned int port, bool checkEndnss) 
-  : TCP_UDP_Socket_base(0, checkEndnss)
+XC::TCP_Socket::TCP_Socket(unsigned int port, bool checkEndnss, int nodelay) 
+  : TCP_UDP_Socket_base(0, checkEndnss), noDelay(nodelay)
   {
     // set up my_Addr.addr_in with address given by port and internet address of
     // machine on which the process that uses this routine is running.
@@ -102,8 +102,8 @@ XC::TCP_Socket::TCP_Socket(unsigned int port, bool checkEndnss)
 //	given by the OS. Then to connect with a TCP_Socket whose address is
 //	given by other_Port and other_InetAddr. 
 
-XC::TCP_Socket::TCP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkEndnss)
-  : TCP_UDP_Socket_base(1, checkEndnss)
+XC::TCP_Socket::TCP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkEndnss, int nodelay)
+  : TCP_UDP_Socket_base(1, checkEndnss), noDelay(nodelay)
   {
     // set up remote address
     bzero((char *) &other_Addr.addr_in, sizeof(other_Addr.addr_in));
@@ -151,68 +151,67 @@ void XC::TCP_Socket::checkForEndiannessProblem(void)
 
 
 int  XC::TCP_Socket::setUpConnection(void)
-{
-  if (connectType == 1) {
+  {
+    if(connectType == 1)
+      {
+	// now try to connect to socket with remote address.
+	if(connect(sockfd, (struct sockaddr *) &other_Addr.addr_in, 
+		  sizeof(other_Addr.addr_in))< 0)
+	  {
+	    std::cerr << "XC::TCP_Socket::TCP_Socket - could not connect\n";
+	    return -1;
+	  }
+	// get my_address info
+	getsockname(sockfd, &my_Addr.addr, &addrLength);
 
-    // now try to connect to socket with remote address.
-    if (connect(sockfd, (struct sockaddr *) &other_Addr.addr_in, 
-		sizeof(other_Addr.addr_in))< 0) {
-      
-	std::cerr << "XC::TCP_Socket::TCP_Socket - could not connect\n";
-	return -1;
-    }
-    // get my_address info
-    getsockname(sockfd, &my_Addr.addr, &addrLength);
-    
+	// set TCP_NODELAY option
+	if ((setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, 
+	    (char *) &noDelay, sizeof(int))) < 0)
+	  { 
+	    std::cerr << "TCP_Socket::setUpConnection() - "
+	 	      << "could not set TCP_NODELAY option\n";
+	  }
 
-  } else {
-    
-    // wait for other process to contact me & set up connection
-    socket_type newsockfd;
-    listen(sockfd, 1);    
-    newsockfd = accept(sockfd, (struct sockaddr *) &other_Addr.addr_in, &addrLength);
-    
-    if (newsockfd < 0) {
-      std::cerr << "XC::TCP_Socket::TCP_Socket - could not accept connection\n";
-      return -1;
-    }    
-    
-    // close old socket & reset sockfd
-    // we can close as we are not going to wait for others to connect
-    #ifdef _WIN32
-      closesocket(sockfd);
-    #else
-      close(sockfd);
-    #endif
+	// check for endianness problem if requested
+	checkForEndiannessProblem();
+      }
+    else
+      {
 
-    sockfd = newsockfd;
-    
-    // get my_address info
-    getsockname(sockfd, &my_Addr.addr, &addrLength);
-    myPort = ntohs(my_Addr.addr_in.sin_port);    
+	// wait for other process to contact me & set up connection
+	socket_type newsockfd;
+	listen(sockfd, 1);    
+	newsockfd = accept(sockfd, (struct sockaddr *) &other_Addr.addr_in, &addrLength);
+
+	if(newsockfd < 0)
+	  {
+	    std::cerr << "XC::TCP_Socket::TCP_Socket - could not accept connection\n";
+	    return -1;
+	  }    
+
+	// close old socket & reset sockfd
+	// we can close as we are not going to wait for others to connect
+	close(sockfd);
+
+	sockfd = newsockfd;
+
+	// get my_address info
+	getsockname(sockfd, &my_Addr.addr, &addrLength);
+
+	// set TCP_NODELAY option
+	if ((setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, 
+	    (char *) &noDelay, sizeof(int))) < 0)
+	  { 
+	    std::cerr << "TCP_Socket::setUpConnection() - "
+		      << "could not set TCP_NODELAY option\n";
+	  }
+
+	// check for endianness problem if requested
+	checkForEndiannessProblem();
+      }    
+
+    return 0;
   }    
-
-  // set socket so no delay    
-  /*
-    int optlen;
-    optlen = 1;
-    if ((setsockopt(sockfd,IPPROTO_TCP, TCP_NODELAY, 
-    (char *) &optlen, sizeof(int))) < 0) { 
-    std::cerr << "XC::TCP_Socket::TCP_Socket - could not set TCP_NODELAY\n";
-    }	  
-  */
-  /*
-    int flag=sizeof(int);
-    if ((getsockopt(sockfd,IPPROTO_TCP, TCP_NODELAY, 
-    (char *) &optlen, &flag)) < 0) { 
-    std::cerr << "XC::TCP_Socket::TCP_Socket - could not set TCP_NODELAY\n";
-    }	        
-    std::cerr << "XC::TCP_Socket::TCP_Socket - " << optlen << " flag " << flag <<  std::endl;
-  */
-    
-
-  return 0;
-}    
 
 int XC::TCP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
   {	
@@ -644,9 +643,9 @@ int XC::TCP_Socket::sendID(int dbTag, int commitTag,const ID &theID, ChannelAddr
 
 
 
-char *XC::TCP_Socket::addToProgram(void)
+std::string XC::TCP_Socket::addToProgram(void)
   {
-    const char *tcp = " 1 ";
+    const std::string tcp(" 1 ");
 
     char  my_InetAddr[MAX_INET_ADDR];
     char  myPortNum[8];
@@ -656,18 +655,9 @@ char *XC::TCP_Socket::addToProgram(void)
     const std::string me= getHostName(); //gethostname(me,MAX_INET_ADDR);
     getHostAddress(me,my_InetAddr);
 
-    char *newStuff =(char *)malloc(100*sizeof(char));
-    for (int i=0; i<100; i++) 
-	newStuff[i] = ' ';
-    
-    strcpy(newStuff,tcp);
-    strcat(newStuff," ");          
-    strcat(newStuff,my_InetAddr);
-    strcat(newStuff," ");
-    strcat(newStuff,myPortNum);
-    strcat(newStuff," ");    
-
-    return newStuff;
+    std::string retval(tcp);
+    retval+= " "+std::string(my_InetAddr)+" "+std::string(myPortNum)+" ";
+    return retval;
 }
 
 

@@ -72,6 +72,7 @@
 XC::UDP_Socket::UDP_Socket(bool checkendianness) 
   : TCP_UDP_Socket_base(0, checkendianness), shadow_inetAddr(nullptr), shadow_port(0) 
   {
+    bzero((char *) &my_Addr, sizeof(my_Addr));
     this->setup(0, SOCK_DGRAM);
   }    
 
@@ -84,6 +85,7 @@ XC::UDP_Socket::UDP_Socket(bool checkendianness)
 XC::UDP_Socket::UDP_Socket(unsigned int port, bool checkendianness) 
   : TCP_UDP_Socket_base(0, checkendianness), shadow_inetAddr(nullptr), shadow_port(0)
   {
+    bzero((char *) &my_Addr, sizeof(my_Addr));
     this->setup(port, SOCK_DGRAM);
   }    
 
@@ -98,6 +100,19 @@ XC::UDP_Socket::UDP_Socket(unsigned int port, bool checkendianness)
 XC::UDP_Socket::UDP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkendianness) 
   : TCP_UDP_Socket_base(1, checkendianness), shadow_inetAddr(other_InetAddr), shadow_port(other_Port)
   {
+    // set up remote address
+    bzero((char *) &other_Addr, sizeof(other_Addr));
+    other_Addr.addr_in.sin_family = AF_INET;
+    other_Addr.addr_in.sin_port = htons(other_Port);
+    
+#ifdef _WIN32
+    other_Addr.addr_in.sin_addr.S_un.S_addr = inet_addr(other_InetAddr);
+#else
+    other_Addr.addr_in.sin_addr.s_addr = inet_addr(other_InetAddr);
+#endif
+    
+    // set up my_Addr.addr_in
+    bzero((char *) &my_Addr, sizeof(my_Addr));
     this->setup(0, SOCK_DGRAM);
   }
 
@@ -131,40 +146,83 @@ void XC::UDP_Socket::checkForEndiannessProblem(void)
 
 int XC::UDP_Socket::setUpConnection(void)
   {
-  if (connectType == 1) {
-    if (shadow_inetAddr == 0)
+    int ierr, trial;
+    char data;
+    
+    if(connectType == 1)
+      {  
+        // send a 1-byte message to address (try 3-times)
+        data = 'a';
+        addrLength = sizeof(other_Addr.addr);
+        trial = 0;
+        do
+	  {
+            ierr = sendto(sockfd, &data, 1, 0, &other_Addr.addr, addrLength);
+            trial++;
+          }
+	while (ierr != 1 && trial < 3);
+        if(ierr != 1)
+	  {
+            std::cerr << "UDP_Socket::setUpConnection() - client could not send intial message\n";
+            return -1;
+          }
+        
+        // receive a 1-byte message from other (try 3-times)
+        trial = 0;
+        do
+	  {
+            ierr = recvfrom(sockfd, &data, 1, 0, &other_Addr.addr, &addrLength);
+            trial++;
+          }
+	while (ierr != 1 && data != 'b' && trial < 3);
+        if(ierr != 1)
+	  {
+            std::cerr << "UDP_Socket::setUpConnection() - client could not receive intial message\n";
+            return -1;
+          }
+        
+        // check for endianness problem if requested
+        checkForEndiannessProblem();
+        
+      }
+    else
       {
-	std::cerr << "XC::FATAL::XC::UDP_Socket::setUpActor() -"
-		  << " incorrect choice of UDP_Socket constructor for actor.\n";
-	exit(-1);
+        
+        // wait for remote process to send a 1-byte message (try 3-times)
+        addrLength = sizeof(other_Addr.addr);
+        trial = 0;
+        do {
+            ierr = recvfrom(sockfd, &data, 1, 0, &other_Addr.addr, &addrLength);
+            trial++;
+        } while (ierr != 1 && data != 'a' && trial < 3);
+        if (ierr != 1) {
+            std::cerr << "UDP_Socket::setUpConnection() - server could not receive intial message\n";
+            return -1;
+        }
+        
+        // then send a 1-byte message back (try 3-times)
+        data = 'b';
+        trial = 0;
+        do {
+            ierr = sendto(sockfd, &data, 1, 0, &other_Addr.addr, addrLength);
+            trial++;
+        } while (ierr != 1 && trial < 3);
+        if (ierr != 1) {
+            std::cerr << "UDP_Socket::setUpConnection() - server could not send intial message\n";
+            return -1;
+        }
+        
+        // check for endianness problem if requested
+        checkForEndiannessProblem();
     }
-
-    // send a message to address.
-    SocketAddress other(shadow_inetAddr, shadow_port);
-    char charData = 'a';
-    sendto(sockfd, &charData, 1, 0, &other.address.addr, other.addrLength);    
-    bcopy((char *) &other.address.addr, (char *) &other_Addr, addrLength);
     
-    // receive a message from other
-    recvfrom(sockfd, &charData, 1, 0, &other_Addr.addr, &addrLength);    
-
-  } else {
-
-    // wait for remote process to send message;
-    char charData = 'b';
-    recvfrom(sockfd, &charData, 1, 0, &other_Addr.addr, &addrLength);    
-    
-    // then send a message back
-    sendto(sockfd, &charData, 1, 0, &other_Addr.addr, addrLength);        
-  }
-
-  return 0;    
-}    
+    return 0;
+  }    
 
 
 int XC::UDP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
   {	
-    SocketAddress *theSocketAddress = 0;
+    SocketAddress *theSocketAddress = nullptr;
     if (theAddress.getType() == SOCKET_TYPE) {
 	theSocketAddress = (SocketAddress *)(&theAddress);    
 	// set up the address of the Socket to which data will be sent
@@ -176,7 +234,7 @@ int XC::UDP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
 	return  0;	    
     }
     else {
-	std::cerr << "XC::TCP_Socket::setNextAddress() - a UDP_Socket ";
+	std::cerr << "XC::UDP_Socket::setNextAddress() - a UDP_Socket ";
 	std::cerr << "can only communicate with a UDP_Socket";
 	std::cerr << " address given is not of type XC::SocketAddress\n"; 
 	return -1;	    
@@ -649,7 +707,7 @@ int XC::UDP_Socket::sendID(int dbTag, int commitTag, const XC::ID &theID, Channe
 
 
 
-char *XC::UDP_Socket::addToProgram(void)
+std::string XC::UDP_Socket::addToProgram(void)
   {
     const char *tcp = " 2 ";
     
@@ -664,14 +722,9 @@ char *XC::UDP_Socket::addToProgram(void)
 
     getHostAddress(me,my_InetAddr);
 
-    strcpy(add,tcp);
-    strcat(add," ");          
-    strcat(add,my_InetAddr);
-    strcat(add," ");
-    strcat(add,myPortNum);
-    strcat(add," ");    
-    
-    return add;
+    std::string retval(tcp);
+    retval+= " "+std::string(my_InetAddr)+" "+std::string(myPortNum)+" ";
+    return retval;
   }
 
 

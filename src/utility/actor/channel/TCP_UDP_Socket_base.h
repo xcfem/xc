@@ -57,7 +57,6 @@ class TCP_UDP_Socket_base: public Channel
     socklen_type addrLength;
     unsigned int myPort;
 
-    char add[40];
     bool checkEndianness;
     bool endiannessProblem;
 

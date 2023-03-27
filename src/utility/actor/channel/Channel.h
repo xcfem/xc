@@ -108,7 +108,7 @@ class Channel: public CommandEntity
     //! information is provided in the string returned from this method. It
     //! is used by the machine broker when starting the remote process. It
     //! places this information as the last arguments to the program.
-    virtual char *addToProgram(void) =0;
+    virtual std::string addToProgram(void) =0;
     virtual int setUpConnection(void) =0;
     //! @brief A method invoked to set specify the next address that the next
     //! messages to be sent if {\em sendMessage()} or received if {\em

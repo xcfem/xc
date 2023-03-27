@@ -96,7 +96,7 @@ class FE_Datastore: public Channel
     inline virtual ~FE_Datastore(void) {} 
 
     // methods defined in the Channel class interface which mean nothing for a Datastore
-    char *addToProgram(void);
+    std::string addToProgram(void);
     int setUpConnection(void);
     int setNextAddress(const ChannelAddress &otherChannelAddress);
     ChannelAddress *getLastSendersAddress(void);

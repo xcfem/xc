@@ -75,7 +75,7 @@ class MPI_Channel: public Channel
   public:
     MPI_Channel(int otherProcess);        
 
-    char *addToProgram(void);
+    std::string addToProgram(void);
     
     virtual int setUpConnection(void);
 

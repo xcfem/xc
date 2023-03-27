@@ -129,8 +129,8 @@ int XC::OracleDatastore::searchProjTag(const std::string &projName)
  *                   CHANNEL METHODS  THAT DO NOTHING               *
  ********************************************************************/
 
-char *XC::OracleDatastore::addToProgram(void)
-  { return 0; }
+std::string XC::OracleDatastore::addToProgram(void)
+  { return std::string(); }
 
 //! @brief Return \f$0\f$.
 int XC::OracleDatastore::setUpShadow(void)

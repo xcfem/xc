@@ -71,15 +71,15 @@ namespace XC {
 class TCP_Socket: public TCP_UDP_Socket_base
   {
   private:
-
+    int noDelay;
   protected:
     virtual void checkForEndiannessProblem(void);
   public:
     TCP_Socket(bool checkEndianness = false);        
-    TCP_Socket(unsigned int, bool checkEndianness = false);    
-    TCP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkEndianness = false); 
+    TCP_Socket(unsigned int, bool checkEndianness = false, int noDelay = 0);    
+    TCP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkEndianness = false, int noDelay = 0); 
 
-    char *addToProgram(void);
+    std::string addToProgram(void);
     
     virtual int setUpConnection(void);
 

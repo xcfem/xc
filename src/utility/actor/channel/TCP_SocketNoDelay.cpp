@@ -706,9 +706,8 @@ XC::TCP_SocketNoDelay::getPortNumber(void) const
 }
 
 
-char *
-XC::TCP_SocketNoDelay::addToProgram(void)
-{
+std::string XC::TCP_SocketNoDelay::addToProgram(void)
+  {
     char *tcp = " 3 ";
 
     char  me[20];
@@ -732,19 +731,10 @@ XC::TCP_SocketNoDelay::addToProgram(void)
     GetHostAddr(me,my_InetAddr);
 
 
-    char *newStuff =(char *)malloc(100*sizeof(char));
-    for (int i=0; i<100; i++) 
-	newStuff[i] = ' ';
-    
-    strcpy(newStuff,tcp);
-    strcat(newStuff," ");          
-    strcat(newStuff,my_InetAddr);
-    strcat(newStuff," ");
-    strcat(newStuff,myPortNum);
-    strcat(newStuff," ");    
-
-    return newStuff;
-}
+    std::string retval(tcp);
+    retval+= " "+std::string(my_InetAddr)+" "+std::string(myPortNum)+" ";
+    return retval;
+  }
 
 
 // G e t H o s t A d d r
