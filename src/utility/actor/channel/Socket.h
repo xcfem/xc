@@ -77,11 +77,12 @@ extern "C" {
 typedef int socket_type;
 typedef socklen_t socklen_type;
 
-inline bool startup_socket()
-  { return true; } 
+inline int startup_sockets(void)
+  { return 1; }
+inline extern void cleanup_sockets(void)
+  { }
 
-inline void cleanup_socket()
-  {}
+extern int httpGet(const char *URL, const char *page, unsigned int port, char **dataPtr);
 
 #endif 
 

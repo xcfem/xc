@@ -67,80 +67,33 @@
 #include "../address/ChannelAddress.h"
 #include "../actor/MovableObject.h"
 
-static int GetHostAddr(char *host, char *IntAddr);
-static void inttoa(unsigned int no, char *string, int *cnt);
 
 // TCP_Socket(unsigned int other_Port, char *other_InetAddr): 
 // 	constructor to open a socket with my inet_addr and with a port number 
 //	given by the OS. 
 
-XC::TCP_Socket::TCP_Socket(void)
-  :myPort(0), connectType(0)
+XC::TCP_Socket::TCP_Socket(bool checkEndnss)
+  : TCP_UDP_Socket_base(0, checkEndnss)
   {
     // set up my_Addr 
-    bzero((char *) &my_Addr, sizeof(my_Addr));    
-    my_Addr.addr_in.sin_family = AF_INET;
-    my_Addr.addr_in.sin_port = htons(0);
-
-    my_Addr.addr_in.sin_addr.s_addr = htonl(INADDR_ANY);
-
-    addrLength = sizeof(my_Addr.addr_in);
-    
-    // open a socket
-    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
- 	std::cerr << "XC::TCP_Socket::TCP_Socket - could not open socket\n";
-    }
-
-    // bind local address to it
-    if (bind(sockfd, (struct sockaddr *) &my_Addr.addr_in, sizeof(my_Addr.addr_in)) < 0) {
-	std::cerr << "XC::TCP_Socket::TCP_Socket - could not bind local address\n";
-    }
-    
-    // get my_address info
-    getsockname(sockfd, &my_Addr.addr, &addrLength);
-    myPort = ntohs(my_Addr.addr_in.sin_port);
+    bzero((char *) &my_Addr, sizeof(my_Addr));
+    this->setup(0, SOCK_STREAM);
   }    
-
-
-
 
 
 // TCP_Socket(unsigned int port): 
 //	constructor to open a socket with my inet_addr and with a port number port.
 
-XC::TCP_Socket::TCP_Socket(unsigned int port) 
-  :myPort(0), connectType(0)
-{
+XC::TCP_Socket::TCP_Socket(unsigned int port, bool checkEndnss) 
+  : TCP_UDP_Socket_base(0, checkEndnss)
+  {
     // set up my_Addr.addr_in with address given by port and internet address of
     // machine on which the process that uses this routine is running.
 
     // set up my_Addr 
     bzero((char *) &my_Addr.addr_in, sizeof(my_Addr.addr_in));
-    my_Addr.addr_in.sin_family = AF_INET;
-    my_Addr.addr_in.sin_port = htons(port);
-
-    #ifdef _WIN32
-      my_Addr.addr_in.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
-    #else
-      my_Addr.addr_in.sin_addr.s_addr = htonl(INADDR_ANY);
-    #endif
-
-    addrLength = sizeof(my_Addr.addr_in);
-
-    // open a socket
-    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-	std::cerr << "XC::TCP_Socket::TCP_Socket - could not open socket\n";
-    }
-    
-    // bind local address to it
-    if (bind(sockfd,&my_Addr.addr, sizeof(my_Addr.addr_in)) < 0) {
-	std::cerr << "XC::TCP_Socket::TCP_Socket - could not bind local address\n";
-    }    
-
-    // get my_address info
-    getsockname(sockfd, &my_Addr.addr, &addrLength);
-    myPort = ntohs(my_Addr.addr_in.sin_port);    
-}
+    this->setup(port, SOCK_STREAM);
+  }
 
 
 
@@ -149,9 +102,9 @@ XC::TCP_Socket::TCP_Socket(unsigned int port)
 //	given by the OS. Then to connect with a TCP_Socket whose address is
 //	given by other_Port and other_InetAddr. 
 
-XC::TCP_Socket::TCP_Socket(unsigned int other_Port, char *other_InetAddr)
-  :myPort(0), connectType(1)
-{
+XC::TCP_Socket::TCP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkEndnss)
+  : TCP_UDP_Socket_base(1, checkEndnss)
+  {
     // set up remote address
     bzero((char *) &other_Addr.addr_in, sizeof(other_Addr.addr_in));
     other_Addr.addr_in.sin_family      = AF_INET;
@@ -165,46 +118,39 @@ XC::TCP_Socket::TCP_Socket(unsigned int other_Port, char *other_InetAddr)
 
     // set up my_Addr.addr_in 
     bzero((char *) &my_Addr.addr_in, sizeof(my_Addr.addr_in));    
-    my_Addr.addr_in.sin_family = AF_INET;
-    my_Addr.addr_in.sin_port = htons(0);
+    this->setup(0, SOCK_STREAM);
+  }    
 
-    #ifdef _WIN32
-      my_Addr.addr_in.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
-    #else
-      my_Addr.addr_in.sin_addr.s_addr = htonl(INADDR_ANY);
-    #endif
+void XC::TCP_Socket::checkForEndiannessProblem(void)
+  {
+    if(checkEndianness)
+      {
+	int i = 1;
+	int j;
 
-    addrLength = sizeof(my_Addr.addr_in);
-    
-    // open a socket
-    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
- 	std::cerr << "XC::TCP_Socket::TCP_Socket - could not open socket\n";
-    }
+	int *data = &i;
+	char *gMsg = (char *)data;
+        send(sockfd, gMsg, sizeof(int), 0);
 
-    // bind local address to it
-    if (bind(sockfd, (struct sockaddr *) &my_Addr.addr_in,sizeof(my_Addr.addr_in)) < 0) {
-	std::cerr << "XC::TCP_Socket::TCP_Socket - could not bind local address\n";
-    }
-    myPort = ntohs(my_Addr.addr_in.sin_port);    
-}    
+	data = &j;
+	gMsg = (char *)data;
+        recv(sockfd, gMsg, sizeof(int), 0);
 
+	if (i != j)
+	  {
+	    int k = 0x41424344;
+	    char *c = (char *)&k;
 
-// ~TCP_Socket():
-//	destructor
-
-XC::TCP_Socket::~TCP_Socket()
-{
-  #ifdef _WIN32
-    closesocket(sockfd);
-  #else
-    close(sockfd);
-  #endif
-}
+	    if (*c == 0x41)
+	      {
+		endiannessProblem = true;
+	      }
+	  }
+      }
+  }
 
 
-
-int 
-XC::TCP_Socket::setUpConnection(void)
+int  XC::TCP_Socket::setUpConnection(void)
 {
   if (connectType == 1) {
 
@@ -698,33 +644,17 @@ int XC::TCP_Socket::sendID(int dbTag, int commitTag,const ID &theID, ChannelAddr
 
 
 
-
-unsigned int XC::TCP_Socket::getPortNumber(void) const
-  { return myPort; }
-
-
 char *XC::TCP_Socket::addToProgram(void)
   {
     const char *tcp = " 1 ";
 
     char  my_InetAddr[MAX_INET_ADDR];
     char  myPortNum[8];
-    char  me[30];
     unsigned int thePort = this->getPortNumber();
-   /*
-    char *me =(char *)malloc(30*sizeof(char));
-    char *my_InetAddr=(char *)malloc(30*sizeof(char));
-    char *myPortNum = (char *)malloc(30*sizeof(char));
-    for (int i=0; i<30; i++) {
-	me[i] = ' ';
-	my_InetAddr[i] = ' ';
-	myPortNum[i] = ' ';
-    }
-    */
     int start = 0;
-    inttoa(thePort,myPortNum,&start);
-    gethostname(me,MAX_INET_ADDR);
-    GetHostAddr(me,my_InetAddr);
+    int2a(thePort,myPortNum,&start);
+    const std::string me= getHostName(); //gethostname(me,MAX_INET_ADDR);
+    getHostAddress(me,my_InetAddr);
 
     char *newStuff =(char *)malloc(100*sizeof(char));
     for (int i=0; i<100; i++) 
@@ -740,42 +670,4 @@ char *XC::TCP_Socket::addToProgram(void)
     return newStuff;
 }
 
-
-// G e t H o s t A d d r
-//     	GetHostAddr is a function to get the internet address of a host
-// 	Takes machine name host & Returns 0 if o.k,  -1 if gethostbyname 
-//	error, -2 otherwise. The internet address is returned in IntAddr
-
-static int GetHostAddr(char *host, char *IntAddr)
-  {
-    struct hostent *hostptr;
-
-    if ( (hostptr = gethostbyname(host)) == nullptr) 
-	return (-1);
-
-    switch(hostptr->h_addrtype) {
-      case AF_INET:
-	strcpy(IntAddr,inet_ntoa(*(struct in_addr *)*hostptr->h_addr_list));
-	return (0);
-	
-      default:
-	return (-2);
-    }
-  }
-
-    
-/*
- *  i n t t o a
- *
- *  Function to convert int to ascii
- *  
- */
-
-static void inttoa(unsigned int no, char *string, int *cnt) {
-    if (no /10) {
-        inttoa(no/10, string, cnt);
-        *cnt = *cnt+1;
-    }
-    string[*cnt] = no % 10 + '0';
-}
 

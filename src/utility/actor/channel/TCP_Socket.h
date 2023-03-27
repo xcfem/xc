@@ -59,8 +59,7 @@
 #ifndef TCP_Socket_h
 #define TCP_Socket_h
 
-#include "utility/actor/channel/Socket.h"
-#include "utility/actor/channel/Channel.h"
+#include "utility/actor/channel/TCP_UDP_Socket_base.h"
 #include "../address/SocketAddress.h"
 
 namespace XC {
@@ -69,33 +68,16 @@ namespace XC {
 //! @brief TCP_Socket is a sub-class of channel. It is implemented with Berkeley
 //! stream sockets using the TCP protocol. Messages delivery is guaranteed. 
 //! Communication is full-duplex between a pair of connected sockets.
-class TCP_Socket: public Channel
+class TCP_Socket: public TCP_UDP_Socket_base
   {
   private:
-    socket_type sockfd;
 
-    union {
-      struct sockaddr    addr;
-      struct sockaddr_in addr_in;
-    } my_Addr;
-    union {
-      struct sockaddr    addr;
-      struct sockaddr_in addr_in;
-    } other_Addr;
-
-    socklen_type addrLength;
-
-    unsigned int myPort;
-    int connectType;
-
-    char add[40];
   protected:
-    unsigned int getPortNumber(void) const;
+    virtual void checkForEndiannessProblem(void);
   public:
-    TCP_Socket();        
-    TCP_Socket(unsigned int);    
-    TCP_Socket(unsigned int other_Port, char *other_InetAddr); 
-    ~TCP_Socket();
+    TCP_Socket(bool checkEndianness = false);        
+    TCP_Socket(unsigned int, bool checkEndianness = false);    
+    TCP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkEndianness = false); 
 
     char *addToProgram(void);
     

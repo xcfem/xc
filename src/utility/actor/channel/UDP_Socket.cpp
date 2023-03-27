@@ -64,37 +64,16 @@
 #include "../message/Message.h"
 #include "../address/SocketAddress.h"
 #include "../actor/MovableObject.h"
-#include "boost/asio/ip/host_name.hpp"
-
-static int GetHostAddr(const std::string &, char *IntAddr);
-static void inttoa(unsigned int no, char *string, int *cnt);
 
 // UDP_Socket(): 
 //	constructor to open a socket with my inet_addr and with a port number 
 //	assigned by the OS from the available free port numbers.
 
-XC::UDP_Socket::UDP_Socket(void) 
-  :sockfd(0), connectType(0), shadow_inetAddr(0), shadow_port(0) 
-{
-    // set up my_Addr 
-    my_Addr.addr_in.sin_family = AF_INET;
-    my_Addr.addr_in.sin_addr.s_addr = htonl(INADDR_ANY); 
-    my_Addr.addr_in.sin_port = htons(0);
-    addrLength = sizeof(my_Addr.addr_in);
-    
-    // open a socket
-    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	std::cerr << "XC::UDP_Socket::UDP_Socket - could not open socket\n";
-    }
-    
-    // bind local address to it
-    if (bind(sockfd, (struct sockaddr *) &my_Addr.addr_in,sizeof(my_Addr.addr_in)) < 0) {
-	std::cerr << "XC::UDP_Socket::UDP_Socket - could not bind local address\n";
-    }    
-    
-    getsockname(sockfd, &my_Addr.addr, &addrLength);
-    myPort = ntohs(my_Addr.addr_in.sin_port);        
-}    
+XC::UDP_Socket::UDP_Socket(bool checkendianness) 
+  : TCP_UDP_Socket_base(0, checkendianness), shadow_inetAddr(nullptr), shadow_port(0) 
+  {
+    this->setup(0, SOCK_DGRAM);
+  }    
 
 
 
@@ -102,27 +81,11 @@ XC::UDP_Socket::UDP_Socket(void)
 // UDP_Socket(unsigned int port): 
 //	constructor to open a socket with my inet_addr and with a port number port.
 
-XC::UDP_Socket::UDP_Socket(unsigned int port) 
-  :sockfd(0), connectType(0), shadow_inetAddr(0), shadow_port(0)
-{
-    // set up my_Addr.addr_in 
-    my_Addr.addr_in.sin_family = AF_INET;
-    my_Addr.addr_in.sin_addr.s_addr = htonl(INADDR_ANY);
-    my_Addr.addr_in.sin_port = htons(port);
-    addrLength = sizeof(my_Addr.addr_in);
-    
-    // open a socket
-    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	std::cerr << "XC::UDP_Socket::UDP_Socket - could not open socket\n";
-    }
-    
-    // bind local address to it
-    if (bind(sockfd, (struct sockaddr *) &my_Addr.addr_in,sizeof(my_Addr.addr_in)) < 0) {
-	std::cerr << "XC::UDP_Socket::UDP_Socket - could not bind local address\n";
-    }    
-    getsockname(sockfd, &my_Addr.addr, &addrLength);    
-    myPort = ntohs(my_Addr.addr_in.sin_port);        
-}    
+XC::UDP_Socket::UDP_Socket(unsigned int port, bool checkendianness) 
+  : TCP_UDP_Socket_base(0, checkendianness), shadow_inetAddr(nullptr), shadow_port(0)
+  {
+    this->setup(port, SOCK_DGRAM);
+  }    
 
 
 
@@ -132,35 +95,39 @@ XC::UDP_Socket::UDP_Socket(unsigned int port)
 //! given by the OS. It then sends a message comprising of a single character
 //! to an address given by other_InetAddr and other_Port. This is to allow
 //! a shadow object to find address of the actor it initiates.
-XC::UDP_Socket::UDP_Socket(unsigned int other_Port, char *other_InetAddr) 
-:sockfd(0), connectType(1), shadow_inetAddr(other_InetAddr), shadow_port(other_Port)
-{
-    // set up my_Addr.addr_in 
-    my_Addr.addr_in.sin_family = AF_INET;
-    my_Addr.addr_in.sin_addr.s_addr = htonl(INADDR_ANY); 
-    my_Addr.addr_in.sin_port = htons(0);
-    addrLength = sizeof(my_Addr.addr_in);
-    
-    // open a socket
-    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-	std::cerr << "XC::UDP_Socket::UDP_Socket - could not open socket\n";
-    }
-    
-    // bind local address to it
-    if (bind(sockfd, (struct sockaddr *) &my_Addr.addr_in,sizeof(my_Addr.addr_in)) < 0) {
-	std::cerr << "XC::UDP_Socket::UDP_Socket - could not bind local address\n";
-    }    
-    getsockname(sockfd, &my_Addr.addr, &addrLength);    
-    myPort = ntohs(my_Addr.addr_in.sin_port);        
-}    
+XC::UDP_Socket::UDP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkendianness) 
+  : TCP_UDP_Socket_base(1, checkendianness), shadow_inetAddr(other_InetAddr), shadow_port(other_Port)
+  {
+    this->setup(0, SOCK_DGRAM);
+  }
 
-    
+void XC::UDP_Socket::checkForEndiannessProblem(void)
+  {
+    if(checkEndianness)
+      {
+	int i = 1;
+	int j;
 
+	int *data = &i;
+	char *gMsg = (char *)data;
+	sendto(sockfd, gMsg, 1, 0, &other_Addr.addr, addrLength);
 
-// ! @brief Destructor.
-XC::UDP_Socket::~UDP_Socket(void)
-  { close(sockfd); }
+	data = &j;
+	gMsg = (char *)data;
+	recvfrom(sockfd, gMsg, 1, 0, &other_Addr.addr, &addrLength);
 
+	if (i != j)
+	  {
+	    int k = 0x41424344;
+	    char *c = (char *)&k;
+
+	    if (*c == 0x41)
+	      {
+		endiannessProblem = true;
+	      }
+	  }
+      }
+  }
 
 int XC::UDP_Socket::setUpConnection(void)
   {
@@ -176,19 +143,19 @@ int XC::UDP_Socket::setUpConnection(void)
     SocketAddress other(shadow_inetAddr, shadow_port);
     char charData = 'a';
     sendto(sockfd, &charData, 1, 0, &other.address.addr, other.addrLength);    
-    bcopy((char *) &other.address.addr, (char *) &last_Addr, addrLength);
+    bcopy((char *) &other.address.addr, (char *) &other_Addr, addrLength);
     
     // receive a message from other
-    recvfrom(sockfd, &charData, 1, 0, &last_Addr.addr, &addrLength);    
+    recvfrom(sockfd, &charData, 1, 0, &other_Addr.addr, &addrLength);    
 
   } else {
 
     // wait for remote process to send message;
     char charData = 'b';
-    recvfrom(sockfd, &charData, 1, 0, &last_Addr.addr, &addrLength);    
+    recvfrom(sockfd, &charData, 1, 0, &other_Addr.addr, &addrLength);    
     
     // then send a message back
-    sendto(sockfd, &charData, 1, 0, &last_Addr.addr, addrLength);        
+    sendto(sockfd, &charData, 1, 0, &other_Addr.addr, addrLength);        
   }
 
   return 0;    
@@ -202,7 +169,7 @@ int XC::UDP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
 	theSocketAddress = (SocketAddress *)(&theAddress);    
 	// set up the address of the Socket to which data will be sent
 	
-	bcopy((char *) &theSocketAddress->address.addr, (char *) &last_Addr, 
+	bcopy((char *) &theSocketAddress->address.addr, (char *) &other_Addr, 
 	      theSocketAddress->addrLength);
 	addrLength = theSocketAddress->addrLength;	
 
@@ -219,7 +186,7 @@ int XC::UDP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
 //! @brief Send the object a través de éste canal.
 int XC::UDP_Socket::sendObj(int commitTag, MovableObject &theObject, ChannelAddress *theAddress) 
   {
-    // set the address of last_Addr
+    // set the address of other_Addr
     SocketAddress *theSocketAddress = 0;
     if(theAddress != 0)
       {
@@ -227,7 +194,7 @@ int XC::UDP_Socket::sendObj(int commitTag, MovableObject &theObject, ChannelAddr
           {
 	    theSocketAddress = (SocketAddress *)theAddress;
 	
-	    bcopy((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, theSocketAddress->addrLength);
+	    bcopy((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, theSocketAddress->addrLength);
 	    addrLength = theSocketAddress->addrLength;
 	  }
 	else
@@ -259,7 +226,7 @@ int XC::UDP_Socket::recvObj(int commitTag, MovableObject &theObject, FEM_ObjectB
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 
-	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		     theSocketAddress->addrLength) != 0) {
 	    
 		std::cerr << "XC::UDP_Socket::recvObj() - a UDP_Socket ";
@@ -295,11 +262,11 @@ int XC::UDP_Socket::recvMsg(int dbTag, int commitTag, Message &msg, ChannelAddre
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
-	    recvfrom(sockfd, gMsg, size, 0, &last_Addr.addr, &addrLength);
+	    recvfrom(sockfd, gMsg, size, 0, &other_Addr.addr, &addrLength);
 	    size = 0;
 	}
 	else {
-	  recvfrom(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &last_Addr.addr, &addrLength);
+	  recvfrom(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &other_Addr.addr, &addrLength);
 		   
 	    
 	  gMsg += MAX_UDP_DATAGRAM;
@@ -314,7 +281,7 @@ int XC::UDP_Socket::recvMsg(int dbTag, int commitTag, Message &msg, ChannelAddre
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	    
-	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		     theSocketAddress->addrLength) != 0) {
 		
 		std::cerr << "XC::UDP_Socket::recvMsg() - a UDP_Socket ";
@@ -345,7 +312,7 @@ int XC::UDP_Socket::sendMsg(int dbTag, int commitTag, const Message &msg, Channe
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	
-	    bcopy((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    bcopy((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		  theSocketAddress->addrLength);
 	    addrLength = theSocketAddress->addrLength;	
 	}
@@ -365,11 +332,11 @@ int XC::UDP_Socket::sendMsg(int dbTag, int commitTag, const Message &msg, Channe
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
-	    sendto(sockfd, gMsg, size, 0, &last_Addr.addr, addrLength);
+	    sendto(sockfd, gMsg, size, 0, &other_Addr.addr, addrLength);
 	    size = 0;
 	}
 	else {	
-	  sendto(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &last_Addr.addr, addrLength);
+	  sendto(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &other_Addr.addr, addrLength);
 	  gMsg += MAX_UDP_DATAGRAM;
 	  size -= MAX_UDP_DATAGRAM;
 	}
@@ -396,12 +363,12 @@ int XC::UDP_Socket::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, Chan
       {
 	if(size <= MAX_UDP_DATAGRAM)
           {
-	    recvfrom(sockfd, gMsg, size, 0, &last_Addr.addr, &addrLength);
+	    recvfrom(sockfd, gMsg, size, 0, &other_Addr.addr, &addrLength);
 	    size = 0;
 	  }
 	else
           {
-	    recvfrom(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &last_Addr.addr, &addrLength);
+	    recvfrom(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &other_Addr.addr, &addrLength);
 	    gMsg += MAX_UDP_DATAGRAM;
 	    size -= MAX_UDP_DATAGRAM;
 	  }
@@ -414,7 +381,7 @@ int XC::UDP_Socket::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, Chan
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	    
-	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		     theSocketAddress->addrLength) != 0) {
 		
 		std::cerr << "XC::UDP_Socket::recvMsg() - a UDP_Socket ";
@@ -447,7 +414,7 @@ int XC::UDP_Socket::sendMatrix(int dbTag, int commitTag, const XC::Matrix &theMa
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	
-	    bcopy((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    bcopy((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		  theSocketAddress->addrLength);
 	    addrLength = theSocketAddress->addrLength;	
 	}
@@ -466,11 +433,11 @@ int XC::UDP_Socket::sendMatrix(int dbTag, int commitTag, const XC::Matrix &theMa
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
-	    sendto(sockfd, gMsg, size, 0, &last_Addr.addr, addrLength);
+	    sendto(sockfd, gMsg, size, 0, &other_Addr.addr, addrLength);
 	    size = 0;
 	}
 	else {
-	    sendto(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &last_Addr.addr, addrLength);
+	    sendto(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &other_Addr.addr, addrLength);
 			
 	    gMsg += MAX_UDP_DATAGRAM;
 	    size -= MAX_UDP_DATAGRAM;
@@ -498,11 +465,11 @@ int XC::UDP_Socket::recvVector(int dbTag, int commitTag, Vector &theVector, Chan
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
-	    recvfrom(sockfd, gMsg, size, 0, &last_Addr.addr, &addrLength);
+	    recvfrom(sockfd, gMsg, size, 0, &other_Addr.addr, &addrLength);
 	    size = 0;
 	}
 	else {
-	    recvfrom(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &last_Addr.addr, &addrLength);
+	    recvfrom(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &other_Addr.addr, &addrLength);
 	    
 	    gMsg += MAX_UDP_DATAGRAM;
 	    size -= MAX_UDP_DATAGRAM;
@@ -516,7 +483,7 @@ int XC::UDP_Socket::recvVector(int dbTag, int commitTag, Vector &theVector, Chan
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	    
-	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		     theSocketAddress->addrLength) != 0) {
 		
 		std::cerr << "XC::UDP_Socket::recvMsg() - a UDP_Socket ";
@@ -548,7 +515,7 @@ int XC::UDP_Socket::sendVector(int dbTag, int commitTag, const XC::Vector &theVe
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	
-	    bcopy((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    bcopy((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		  theSocketAddress->addrLength);
 	    addrLength = theSocketAddress->addrLength;	
 	}
@@ -568,11 +535,11 @@ int XC::UDP_Socket::sendVector(int dbTag, int commitTag, const XC::Vector &theVe
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
-	    sendto(sockfd, gMsg, size, 0, &last_Addr.addr, addrLength);
+	    sendto(sockfd, gMsg, size, 0, &other_Addr.addr, addrLength);
 	    size = 0;
 	}
 	else {
-	    sendto(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &last_Addr.addr, addrLength);
+	    sendto(sockfd, gMsg, MAX_UDP_DATAGRAM, 0, &other_Addr.addr, addrLength);
 	    gMsg += MAX_UDP_DATAGRAM;
 	    size -= MAX_UDP_DATAGRAM;
 	}
@@ -598,11 +565,11 @@ int XC::UDP_Socket::recvID(int dbTag, int commitTag, ID &theID, ChannelAddress *
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
-	    recvfrom(sockfd,gMsg,size,0,&last_Addr.addr,&addrLength);
+	    recvfrom(sockfd,gMsg,size,0,&other_Addr.addr,&addrLength);
 	    size = 0;
 	}
 	else {
-	    recvfrom(sockfd,gMsg,MAX_UDP_DATAGRAM,0, &last_Addr.addr,&addrLength);
+	    recvfrom(sockfd,gMsg,MAX_UDP_DATAGRAM,0, &other_Addr.addr,&addrLength);
 			  
 	    
 	    gMsg += MAX_UDP_DATAGRAM;
@@ -617,7 +584,7 @@ int XC::UDP_Socket::recvID(int dbTag, int commitTag, ID &theID, ChannelAddress *
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	    
-	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    if (bcmp((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		     theSocketAddress->addrLength) != 0) {
 		
 		std::cerr << "XC::UDP_Socket::recvMsg() - a UDP_Socket ";
@@ -648,7 +615,7 @@ int XC::UDP_Socket::sendID(int dbTag, int commitTag, const XC::ID &theID, Channe
 	if (theAddress->getType() == SOCKET_TYPE) {
 	    theSocketAddress = (SocketAddress *)theAddress;	
 	
-	    bcopy((char *) &theSocketAddress->address.addr, (char *) &last_Addr.addr, 
+	    bcopy((char *) &theSocketAddress->address.addr, (char *) &other_Addr.addr, 
 		  theSocketAddress->addrLength);
 	    addrLength = theSocketAddress->addrLength;	
 	}
@@ -667,24 +634,17 @@ int XC::UDP_Socket::sendID(int dbTag, int commitTag, const XC::ID &theID, Channe
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
-	    sendto(sockfd,gMsg,size,0,&last_Addr.addr,addrLength);
+	    sendto(sockfd,gMsg,size,0,&other_Addr.addr,addrLength);
 	    size = 0;
 	}
 	else {
 	    sendto(sockfd,gMsg,MAX_UDP_DATAGRAM,0,
-			&last_Addr.addr, addrLength);
+			&other_Addr.addr, addrLength);
 	    gMsg += MAX_UDP_DATAGRAM;
 	    size -= MAX_UDP_DATAGRAM;
 	}
     }
     return 0;
-}
-
-
-unsigned int 
-XC::UDP_Socket::getPortNumber(void) const
-{
-    return myPort;
 }
 
 
@@ -699,9 +659,10 @@ char *XC::UDP_Socket::addToProgram(void)
     unsigned int thePort = this->getPortNumber();
 
     int start = 0;
-    inttoa(thePort,myPortNum,&start);
-    const std::string me= boost::asio::ip::host_name(); //gethostname(me,MAX_INET_ADDR);
-    GetHostAddr(me,my_InetAddr);
+    int2a(thePort,myPortNum,&start);
+    const std::string me= getHostName(); //gethostname(me,MAX_INET_ADDR);
+
+    getHostAddress(me,my_InetAddr);
 
     strcpy(add,tcp);
     strcat(add," ");          
@@ -714,43 +675,4 @@ char *XC::UDP_Socket::addToProgram(void)
   }
 
 
-
-//! @brief GetHostAddr is a function to get the internet address of a host
-//! Takes machine name host & Returns 0 if o.k,  -1 if gethostbyname 
-//! error, -2 otherwise. The internet address is returned in IntAddr
-
-static int GetHostAddr(const std::string &host, char *IntAddr)
-  {
-    struct hostent *hostptr;
-
-    if ( (hostptr = gethostbyname(host.c_str())) == nullptr) 
-	return (-1);
-
-    switch(hostptr->h_addrtype)
-      {
-      case AF_INET:
-	strcpy(IntAddr,inet_ntoa(*(struct in_addr *)*hostptr->h_addr_list));
-	return (0);
-
-      default:
-	return (-2);
-      }
-}
-
-
-    
-/*
- *  i n t t o a
- *
- *  Function to convert int to ascii
- *  
- */
-
-static void inttoa(unsigned int no, char *string, int *cnt) {
-    if (no /10) {
-        inttoa(no/10, string, cnt);
-        *cnt = *cnt+1;
-    }
-    string[*cnt] = no % 10 + '0';
-}
 

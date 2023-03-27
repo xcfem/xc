@@ -64,8 +64,7 @@
 #ifndef UDP_Socket_h
 #define UDP_Socket_h
 
-#include "utility/actor/channel/Socket.h"
-#include "utility/actor/channel/Channel.h"
+#include "utility/actor/channel/TCP_UDP_Socket_base.h"
 namespace XC {
 class SocketAddress;
 
@@ -74,32 +73,17 @@ class SocketAddress;
 //! @brief DP_Socket is a sub-class of channel. It is implemented with
 //! Berkeley datagram sockets using the UDP protocol. Messages delivery
 //! is thus unreliable.
-class UDP_Socket: public Channel
+class UDP_Socket: public TCP_UDP_Socket_base
   {
   private:
-    int sockfd;
-    int connectType;
-    union {
-	  struct sockaddr    addr;
-	  struct sockaddr_in addr_in;
-    } my_Addr;
-    union {
-      struct sockaddr    addr;
-      struct sockaddr_in addr_in;
-    } last_Addr;
-
-    socklen_t addrLength;
     char *shadow_inetAddr;
     unsigned int shadow_port;
-    unsigned int myPort;    
-    char add[40];    
   protected:
-    unsigned int getPortNumber(void) const;
+    virtual void checkForEndiannessProblem(void);
   public:
-    UDP_Socket(void);
-    UDP_Socket(unsigned int port);   
-    UDP_Socket(unsigned int other_Port, char *other_InetAddr);  
-    ~UDP_Socket(void);
+    UDP_Socket(bool checkEndianness = false);
+    UDP_Socket(unsigned int port, bool checkEndianness = false);   
+    UDP_Socket(unsigned int other_Port, char *other_InetAddr, bool checkEndianness = false);  
     
     char *addToProgram(void);
     

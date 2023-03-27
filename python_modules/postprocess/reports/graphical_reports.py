@@ -31,7 +31,7 @@ class OuputUnits(object):
     :ivar unitsScaleDispl: factor to apply to displacements if we want to change
                      the units (defaults to 1).
     :ivar unitsDispl: text to especify the units in which displacements are 
-                     represented (defaults to '[m]'
+                     represented (defaults to '[m])'
     :ivar scaleDispBeamIntForc: tuple (escN,escQ,escM) correponding to the scales
                      to apply to displays of, respectively, axial forces (N),
                      shear forces (Q) or bending moments (M) in beam elements
