@@ -63,16 +63,29 @@
 XC::ViscousMaterial::ViscousMaterial(int tag, double c, double a)
 :UniaxialMaterial(tag,MAT_TAG_Viscous), trialRate(0.0), C(c), Alpha(a)
   {
-    if (Alpha < 0.0) {
-      std::cerr << "ViscousMaterial::ViscousMaterial -- Alpha < 0.0, setting to 1.0\n";
-      Alpha = 1.0;
-    }
+    if (Alpha < 0.0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; Alpha < 0.0, setting to 1.0\n";
+        Alpha = 1.0;
+      }
   }
 
-XC::ViscousMaterial::ViscousMaterial(int tag)
-  :UniaxialMaterial(tag,MAT_TAG_Viscous),  trialRate(0.0), C(0.0), Alpha(0.0)
-  {}
+//! @brief Set the value of the damping coefficient.
+void XC::ViscousMaterial::setDampingCoeff(const double &d)
+  { C= d; }
 
+//! @brief Return the value of the damping coefficient.
+double XC::ViscousMaterial::getDampingCoeff(void) const
+  { return C; }
+//! @brief Set the value of the power factor (alpha=1.0 means linear
+//! damping).
+void XC::ViscousMaterial::setAlpha(const double &d)
+  {  Alpha= d; }
+//! @brief Return the value of the power factor (alpha=1.0 means linear
+//! damping).
+double XC::ViscousMaterial::getAlpha(void) const
+  { return Alpha; }
 
 int XC::ViscousMaterial::setTrialStrain(double strain, double strainRate)
   {

@@ -71,14 +71,18 @@ class ViscousMaterial: public UniaxialMaterial
   {
   private:
     double trialRate;
-    double C;
-    double Alpha;
+    double C; //!< damping coefficient.
+    double Alpha; //!< power factor (=1 means linear damping).
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    ViscousMaterial(int tag= 0); 
-    ViscousMaterial(int tag, double C, double Alpha);    
+    ViscousMaterial(int tag= 0, double C= 0.0, double Alpha= 1.0);
+
+    void setDampingCoeff(const double &);
+    double getDampingCoeff(void) const;
+    void setAlpha(const double &);
+    double getAlpha(void) const;
 
     int setTrialStrain(double velocity, double strainRate = 0.0); 
     double getStrain(void) const; 

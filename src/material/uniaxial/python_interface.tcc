@@ -125,7 +125,10 @@ class_<XC::HystereticMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >
 
 
 
-class_<XC::ViscousMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("ViscousMaterial", no_init);
+class_<XC::ViscousMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("ViscousMaterial", no_init)
+  .add_property("dampingCoeff", &XC::ViscousMaterial::getDampingCoeff, &XC::ViscousMaterial::setDampingCoeff,"damping coefficient.")
+  .add_property("alpha", &XC::ViscousMaterial::getAlpha, &XC::ViscousMaterial::setAlpha,"power factor (=1 means linear damping).")
+  ;
 
 typedef std::deque<XC::UniaxialMaterial *> dq_ptr_uniaxial_material;
 class_<dq_ptr_uniaxial_material, boost::noncopyable>("dq_ptr_uniaxial_material")

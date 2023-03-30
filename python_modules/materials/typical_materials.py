@@ -778,6 +778,20 @@ def defPressureDependentMultiYield02Material(preprocessor, name, nd, rho, refShe
     retval.setup(parameterDict)
     return retval
 
+def defViscousMaterial(preprocessor, name, C, Alpha= 1.0):
+    '''Constructs a viscous material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name for the new material.
+    :param C: damping coeficient.
+    :param Alpha: power factor (=1 means linear damping).
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("viscous_material", name)
+    retval.dampingCoeff= C
+    retval.alpha= Alpha
+    return retval
+
 class MaterialData(BasicElasticMaterial):
     '''Base class to construct some material definition classes
 

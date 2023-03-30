@@ -289,7 +289,7 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::Steel02(tag_mat);
     else if(cmd == "steel03")
       retval= new XC::Steel03(tag_mat);
-    else if(cmd == "viscous_material")
+    else if((cmd == "viscous") or (cmd == "viscous_material"))
       retval= new XC::ViscousMaterial(tag_mat);
     else if(cmd == "multi_linear")
       retval= new XC::MultiLinear(tag_mat);

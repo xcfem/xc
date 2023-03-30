@@ -772,6 +772,7 @@ python tests/materials/xc_materials/uniaxial/test_HP45_02.py
 python tests/materials/xc_materials/uniaxial/test_init_strain_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
+python tests/materials/xc_materials/uniaxial/test_viscous_material_01.py
 echo "$BLEU" "      EHE reinforcing steel." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_B400S_01.py
 python tests/materials/xc_materials/uniaxial/test_B400S_02.py
