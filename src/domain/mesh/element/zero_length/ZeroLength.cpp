@@ -1002,5 +1002,5 @@ void XC::ZeroLength::setUp(int Nd1, int Nd2,const Vector &x,const Vector &y)
       setTran1d(elemType, theMaterial1d.size());
   }
 
-void XC::ZeroLength::updateDir(const XC::Vector& x, const XC::Vector& y)
+void XC::ZeroLength::updateDir(const Vector& x, const Vector& y)
   { setUp(theNodes.getTagNode(0), theNodes.getTagNode(1), x, y); }

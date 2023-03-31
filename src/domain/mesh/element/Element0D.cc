@@ -63,7 +63,8 @@ bool XC::Element0D::Vxy::check(void) const
     const double nx= x.Norm();
     if(nx<1e-6)
       {
-        std::cerr << "Element0D::check; vector I= " << x
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; vector I= " << x
                   << " has a very small modulus: "
                   << nx << std::endl;
         retval= false;
@@ -71,7 +72,8 @@ bool XC::Element0D::Vxy::check(void) const
     const double ny= y.Norm();
     if(ny<1e-6)
       {
-        std::cerr << "Element0D::check; vector J= " << y
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; vector J= " << y
                   << " has a very small modulus: "
                   << ny << std::endl;
         retval= false;
@@ -80,7 +82,8 @@ bool XC::Element0D::Vxy::check(void) const
     Vector3d vy(y[0],y[1],y[2]);
     if(parallel(vx,vy))
       {
-        std::cerr << "Element0D::check; vector I= " << x
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; vector I= " << x
                   << " and J= " << y << " are almost parallel, angle: "
                   << angle(vx,vy) << " radians." << std::endl;
         retval= false;
@@ -228,9 +231,10 @@ void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
     const double yn= y.Norm();
     const double zn= z.Norm();
 
-    // check valid x and y vectors, i.e. not parallel and of zero length
+    // check valid x and y vectors, i.e. not parallel and not of zero length
     if(xn == 0 || yn == 0 || zn == 0)
-      std::cerr << "Element0D::setUp -- invalid vectors to constructor\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; invalid vectors (parallel or zero length vectors).\n";
     
     // create transformation matrix of direction cosines
     for(int i= 0;i<3;i++)
@@ -279,7 +283,8 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
     const size_t dimf2= f2.Dimension();
     if(dimf1!=dimf2)
       {
-	std::cerr << "the sets: " << f1.getName() << " y " << f2.getName()
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the sets: " << f1.getName() << " y " << f2.getName()
                   << " have different dimension (" << dimf1  << " y " << dimf2
                   << ")." << std::endl;
         return retval;
