@@ -80,7 +80,7 @@ class TzLiq1: public TzSimple1
     double meanConsolStress;
     double ru;
 
-    static int loadStage;
+    static int loadStage; //!< load stage 0:linear 1: plastic.
     int    lastLoadStage;
     std::string elemFlag; 
     Domain *theDomain;
@@ -110,6 +110,8 @@ class TzLiq1: public TzSimple1
     double getDampTangent(void) const;
     double getInitialTangent(void) const;
 
+    static int getMaterialStage(void);
+    static void updateMaterialStage(int);
     int commitState(void);
     int revertToLastCommit(void);    
     int revertToStart(void);        

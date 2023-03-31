@@ -80,7 +80,7 @@ class PyLiq1: public PySimple1
     int solidElem1;
     int solidElem2;
     double meanConsolStress;
-    static int loadStage;
+    static int loadStage; //!< load stage 0:linear 1: plastic.
     int lastLoadStage;
     std::string elemFlag;
     Domain *theDomain;
@@ -110,6 +110,8 @@ class PyLiq1: public PySimple1
     double getDampTangent(void) const;
     double getInitialTangent(void) const;
 
+    static int getMaterialStage(void);
+    static void updateMaterialStage(int);
     int commitState(void);
     int revertToLastCommit(void);    
     int revertToStart(void);        

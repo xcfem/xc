@@ -52,7 +52,10 @@ class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no
   .add_property("suction", &XC::QzSimple1::get_suction,  &XC::QzSimple1::set_suction,"Get/set the suction parameter (Uplift resistance is equal to suction*qult). The value of suction must be 0.0 to 0.1.")
   ;
 
-class_<XC::PyLiq1 , bases<XC::PySimple1>, boost::noncopyable >("PyLiq1", no_init);
+class_<XC::PyLiq1 , bases<XC::PySimple1>, boost::noncopyable >("PyLiq1", no_init)
+  .add_property("stage", &XC::PyLiq1::getMaterialStage,  &XC::PyLiq1::updateMaterialStage,"variable that sets the stage of the material; 0:elastic, 1:plastic.")
+  .def("updateMaterialStage", &XC::PyLiq1::updateMaterialStage, "Update the stage of the material; 0:elastic, 1:plastic.")
+  ;
 
 //Generators.
 class_<XC::Simple1GenBase, bases<CommandEntity>, boost::noncopyable >("Simple1GenBase", no_init);

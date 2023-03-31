@@ -397,29 +397,42 @@ double XC::PyLiq1::getEffectiveStress(void)
         return meanStress;
   }
 
+//! @breif return the material stage (0:elastic 1:plastic).
+int XC::PyLiq1::getMaterialStage(void)
+  { return loadStage; }
+
+//! @brief Update material stage.
+//! @param stage: stage number if stage==0 running linear elastic for soil
+//!               elements, so excess pore pressure should be zero. If stage==1
+//!               running plastic soil element behavior, so this marks the end
+//!               of the "consol" gravity loading.
+void XC::PyLiq1::updateMaterialStage(int stage)
+  {
+    if(stage !=0 && stage !=1)
+      {
+        std::cerr << "PyLiq1::" << __FUNCTION__
+		  << "; WARNING stage must be 0 or 1"
+		  << std::endl;
+        exit(-1);
+      }
+    loadStage = stage;
+  }
+
 /////////////////////////////////////////////////////////////////////
-int 
-XC::PyLiq1::updateParameter(int snum,Information &eleInformation)
-{
-        // TclUpdateMaterialStageCommand will call this routine with the
-        // command:
-        //
-        //      updateMaterialStage - material tag -stage snum
-        //
-        // If snum = 0; running linear elastic for soil elements,
-        //              so excess pore pressure should be zero.
-        // If snum = 1; running plastic soil element behavior,
-        //              so this marks the end of the "consol" gravity loading.
-
-        if(snum !=0 && snum !=1){
-                std::cerr << "WARNING updateMaterialStage for XC::PyLiq1 material must be 0 or 1";
-                std::cerr << std::endl;
-                exit(-1);
-        }
-        loadStage = snum;
-
-        return 0;
-}
+int XC::PyLiq1::updateParameter(int snum,Information &eleInformation)
+  {
+    // TclUpdateMaterialStageCommand will call this routine with the
+    // command:
+    //
+    //      updateMaterialStage - material tag -stage snum
+    //
+    // If snum = 0; running linear elastic for soil elements,
+    //              so excess pore pressure should be zero.
+    // If snum = 1; running plastic soil element behavior,
+    //              so this marks the end of the "consol" gravity loading.
+    updateMaterialStage(snum);
+    return 0;
+  }
 
 /////////////////////////////////////////////////////////////////////
 XC::UniaxialMaterial *XC::PyLiq1::getCopy(void) const
