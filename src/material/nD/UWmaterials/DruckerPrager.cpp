@@ -748,7 +748,7 @@ XC::Response *XC::DruckerPrager::setResponse(const std::vector<std::string> &arg
       return nullptr;
   }
 
-int XC::DruckerPrager::getResponse (int responseID, Information &matInfo)
+int XC::DruckerPrager::getResponse(int responseID, Information &matInfo)
 {
 	switch (responseID) {
 		case -1:
@@ -768,76 +768,117 @@ int XC::DruckerPrager::getResponse (int responseID, Information &matInfo)
 		default:
 			return -1;
 	}
-}
+  }
 
-// int XC::DruckerPrager::setParameter(const char **argv, int argc, Parameter &param)
-// {
-// 	if (strcmp(argv[0],"materialState") == 0) {
-//         // switch elastic/plastic state
-// 		return param.addObject(5,this);
-// 	} else if (strcmp(argv[0],"frictionalStrength") == 0) {
-//         // update rho parameter
-// 		return param.addObject(7,this);
-// 	} else if (strcmp(argv[0],"nonassociativeTerm") == 0) {
-//         // update nonassociative rho_bar parameter
-// 		return param.addObject(8,this);
-// 	} else if (strcmp(argv[0],"cohesiveIntercept") == 0) {
-//         // update zero confinement yield strength
-// 		return param.addObject(9,this);
-// 	} else if (strcmp(argv[0],"shearModulus") == 0) {
-//         // update shear modulus
-// 		return param.addObject(10,this);
-// 	} else if (strcmp(argv[0],"bulkModulus") == 0) {
-//         // update bulk modulus
-// 		return param.addObject(11,this);
-//     } else if (strcmp(argv[0],"updateMaterialStage") == 0) {
-//         return -1;
-// 	} else {
-//         // invalid parameter type
-//         std::cerr << "WARNING: invalid parameter command for DruckerPrager nDMaterial with tag: " << this->getTag() << std::endl;
-//         return -1;
-//     }
-    
-//     return -1;
-// }
+int XC::DruckerPrager::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    if(argv[0]=="materialState")
+      {
+        // switch elastic/plastic state
+	return param.addObject(5,this);
+      }
+    else if(argv[0]=="frictionalStrength")
+      {
+        // update rho parameter
+	return param.addObject(7,this);
+      }
+    else if(argv[0]=="nonassociativeTerm")
+      {
+        // update nonassociative rho_bar parameter
+	return param.addObject(8,this);
+      }
+    else if(argv[0]=="cohesiveIntercept")
+      {
+        // update zero confinement yield strength
+	return param.addObject(9,this);
+      }
+    else if(argv[0]=="shearModulus")
+      {
+        // update shear modulus
+        return param.addObject(10,this);
+      }
+    else if(argv[0]=="bulkModulus")
+      {
+        // update bulk modulus
+	return param.addObject(11,this);
+      }
+    else if(argv[0]=="updateMaterialStage")
+      { return -1; }
+    else
+      {
+        // invalid parameter type
+	std::cerr << "WARNING: invalid parameter command for DruckerPrager nDMaterial with tag: " << this->getTag() << std::endl;
+        return -1;
+      }
+    return -1;
+  }
 
-// int
-// XC::DruckerPrager::updateParameter(int responseID, Information &info)
-// {
-// 	if (responseID == 5) {
-//         // materialState called - update mElasticFlag
-// 		mElastFlag = (int)info.theDouble;
-// 	} else if (responseID == 7) {
-//         // frictionalStrength called - update rho and tension cutoff
-// 		mrho = info.theDouble;
-// 		if (mrho == 0.0) { 
-// 			mTo = 1e10;
-// 		} else { 
-// 		    mTo = root23*msigma_y/mrho; 
-// 	    }
-// 	} else if (responseID == 8) {
-//         // nonassociativeTerm called - update rho_bar
-// 		mrho_bar = info.theDouble;
-// 	} else if (responseID == 9) {
-//         // cohesiveIntercept called - update sigma_y and tension cutoff
-// 		msigma_y = info.theDouble;
-// 		if (mrho == 0.0) { 
-// 			mTo = 1e10;
-// 		} else { 
-// 		    mTo = root23*msigma_y/mrho; 
-// 	    }
-// 	} else if (responseID == 10) {
-//         // shearModulus called - update G and Ce
-//     	mG = info.theDouble;
-// 		mCe  = mK*mIIvol + 2*mG*mIIdev;
-// 	} else if (responseID == 11) {
-//         // bulkModulus called - update K and Ce
-//     	mK = info.theDouble;
-// 		mCe  = mK*mIIvol + 2*mG*mIIdev;
-//   	}
 
-// 	return 0;
-// }
+//! @brief return the material stage (0:elastic 1:plastic).
+int XC::DruckerPrager::getMaterialStage(void) const
+  { return mElastFlag; }
+
+//! @brief Update material stage.
+//! @param stage: stage number if stage==0 running linear elastic for soil
+//!               elements, so excess pore pressure should be zero. If stage==1
+//!               running plastic soil element behavior, so this marks the end
+//!               of the "consol" gravity loading.
+void XC::DruckerPrager::updateMaterialStage(int stage)
+  {
+    if(stage !=0 && stage !=1)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING stage must be 0 or 1"
+		  << std::endl;
+        exit(-1);
+      }
+    mElastFlag= stage;
+  }
+
+int XC::DruckerPrager::updateParameter(int responseID, Information &info)
+  {
+    if(responseID == 5)
+      {
+        // materialState called - update mElasticFlag
+	updateMaterialStage(static_cast<int>(info.theDouble));
+      }
+    else if(responseID == 7)
+      {
+        // frictionalStrength called - update rho and tension cutoff
+	mrho = info.theDouble;
+	if(mrho == 0.0)
+	  { mTo = 1e10; }
+	else
+	  { mTo = root23*msigma_y/mrho;	}
+      }
+    else if(responseID == 8)
+      {
+        // nonassociativeTerm called - update rho_bar
+	mrho_bar = info.theDouble;
+      }
+    else if(responseID == 9)
+      {
+        // cohesiveIntercept called - update sigma_y and tension cutoff
+	msigma_y = info.theDouble;
+	if(mrho == 0.0)
+	  { mTo = 1e10; }
+	else
+	  { mTo = root23*msigma_y/mrho; }
+      }
+    else if(responseID == 10)
+      {
+        // shearModulus called - update G and Ce
+        mG = info.theDouble;
+	mCe  = mK*mIIvol + 2*mG*mIIdev;
+      }
+    else if(responseID == 11)
+      {
+        // bulkModulus called - update K and Ce
+        mK = info.theDouble;
+	mCe  = mK*mIIvol + 2*mG*mIIdev;
+      }
+    return 0;
+  }
 
 int XC::DruckerPrager::sendSelf(Communicator &)
   {
@@ -897,7 +938,7 @@ int XC::DruckerPrager::sendSelf(Communicator &)
 // 	data(44) = mState(4);
 	
 // 	res = comm.sendVector(this->getDbTag(), commitTag, data);
-// 	if (res < 0) {
+// 	if(res < 0) {
 // 		std::cerr << "WARNING: XC::DruckerPrager::sendSelf - failed to send vector to communicator" << std::endl;
 // 		return -1;
 //     }
@@ -913,7 +954,7 @@ int XC::DruckerPrager::recvSelf(const Communicator &)
 // 	// receive data
 // 	static Vector data(45);
 // 	res = comm.recvVector(this->getDbTag(), commitTag, data);
-// 	if (res < 0) {
+// 	if(res < 0) {
 // 		std::cerr << "WARNING: XC::DruckerPrager::recvSelf - failed to receive vector from communicator" << std::endl;
 // 		return -1;
 // 	}
