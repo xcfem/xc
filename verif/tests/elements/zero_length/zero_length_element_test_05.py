@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-''' home made test. Verifica that "ZeroLength" element gives right results
+''' home made test. Verify that "ZeroLength" element gives right results
  when not aligned with global axes. '''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -40,10 +41,10 @@ elements.defaultMaterial= k.name
 elements.dimElem= 3 # Dimension of element space
 zl= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 zl.clearMaterials()
+## Define vector local axes.
 zl.setupVectors(xc.Vector([0,1,0]),xc.Vector([-1,0,0]))
+## Define material 
 zl.setMaterial(0,"k")
-
-
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler

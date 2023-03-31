@@ -60,7 +60,7 @@ result= analysis.analyze(1)
 nodeHandler.calculateNodalReactions(True,1e-7)
 
 deltax= n2.getDisp[0] 
-R= n1.getReaction[0] 
+R= n1.getReaction[0]
 
 ratio1= -R/F
 ratio2= abs(((K*deltax)-F)/F)
