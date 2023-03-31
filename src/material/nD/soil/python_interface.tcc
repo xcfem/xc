@@ -20,10 +20,15 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.tcc
+class_<XC::SoilMaterialBase, bases<XC::NDMaterial>, boost::noncopyable >("SoilMaterialBase", no_init)
+  .add_property("stage", &XC::SoilMaterialBase::getMaterialStage,  &XC::SoilMaterialBase::updateMaterialStage,"variable that sets the stage of the material; 0:elastic, 1:plastic.")
+  .def("updateMaterialStage", &XC::SoilMaterialBase::updateMaterialStage, "Update the stage of the material; 0:elastic, 1:plastic.")
+  ;
 
-class_<XC::FluidSolidPorousMaterial, bases<XC::NDMaterial>, boost::noncopyable >("FluidSolidPorousMaterial", no_init);
+class_<XC::FluidSolidPorousMaterial, bases<XC::SoilMaterialBase>, boost::noncopyable >("FluidSolidPorousMaterial", no_init);
 
-class_<XC::PressureMultiYieldBase, bases<XC::NDMaterial>, boost::noncopyable >("PressureMultiYieldBase", no_init);
+class_<XC::PressureMultiYieldBase, bases<XC::SoilMaterialBase>, boost::noncopyable >("PressureMultiYieldBase", no_init)
+  ;
 
 class_<XC::PressureDependMultiYieldBase, bases<XC::PressureMultiYieldBase>, boost::noncopyable >("PressureDependMultiYieldBase", no_init);
 

@@ -39,9 +39,6 @@
 #include <utility/matrix/nDarray/stresst.h>
 #include "material/nD/NDMaterialType.h"
 
-int XC::PressureMultiYieldBase::matCount= 0;
-std::vector<int> XC::PressureMultiYieldBase::loadStagex;  //=0 if elastic; =1 if plastic
-std::vector<int> XC::PressureMultiYieldBase::ndmx;  //num of dimensions (2 or 3)
 std::vector<double> XC::PressureMultiYieldBase::rhox;
 std::vector<double> XC::PressureMultiYieldBase::frictionAnglex;
 std::vector<double> XC::PressureMultiYieldBase::peakShearStrainx;
@@ -144,19 +141,19 @@ void XC::PressureMultiYieldBase::setup(int nd, double r, double frictionAng,doub
   }
 
 XC::PressureMultiYieldBase::PressureMultiYieldBase(int tag, int classTag, int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf)
- :XC::NDMaterial(tag,classTag), theSurfaces(), committedSurfaces(), currentStress(),trialStress(), currentStrain(), strainRate()
+ :XC::SoilMaterialBase(tag,classTag), theSurfaces(), committedSurfaces(), currentStress(),trialStress(), currentStrain(), strainRate()
   {
     setup(nd,r,frictionAng,peakShearStra,refPress,pressDependCoe,cohesi,numberOfYieldSurf);
   }
    
 XC::PressureMultiYieldBase::PressureMultiYieldBase(int tag, int classTag) 
- : XC::NDMaterial(tag,classTag), 
+ : XC::SoilMaterialBase(tag,classTag), 
    theSurfaces(), committedSurfaces(),currentStress(), trialStress(), currentStrain(), 
    strainRate() {}
 
 
 XC::PressureMultiYieldBase::PressureMultiYieldBase(const PressureMultiYieldBase & a)
- : XC::NDMaterial(a), currentStress(a.currentStress), trialStress(a.trialStress), 
+ : XC::SoilMaterialBase(a), currentStress(a.currentStress), trialStress(a.trialStress), 
   currentStrain(a.currentStrain), strainRate(a.strainRate)
   {
     matN = a.matN;
@@ -171,14 +168,12 @@ XC::PressureMultiYieldBase::PressureMultiYieldBase(const PressureMultiYieldBase 
     strainRate= a.strainRate;
   }
 
-
 //! @brief Send object members through the communicator argument.
 int XC::PressureMultiYieldBase::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(comm);
-    res+= comm.sendInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
+    int res= SoilMaterialBase::sendData(comm);
     //theSurfaces; // XXX not send (position 2 reserved).
-    //committedSurfaces;  // XXX not send (position 2 reserved).
+    //committedSurfaces;  // XXX not send (position 3 reserved).
     res+= comm.sendMovable(currentStress,getDbTagData(),CommMetaData(4));
     res+= comm.sendMovable(trialStress,getDbTagData(),CommMetaData(5));
     res+= comm.sendMovable(currentStrain,getDbTagData(),CommMetaData(6));
@@ -189,8 +184,7 @@ int XC::PressureMultiYieldBase::sendData(Communicator &comm)
 //! @brief Receives object members through the communicator argument.
 int XC::PressureMultiYieldBase::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(comm);
-    res+= comm.receiveInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
+    int res= SoilMaterialBase::recvData(comm);
     //theSurfaces; // XXX not received (position 2 reserved).
     //committedSurfaces;  // XXX not received (position 3 reserved).
     res+= comm.receiveMovable(currentStress,getDbTagData(),CommMetaData(4));

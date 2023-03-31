@@ -47,10 +47,7 @@
 
 #include "material/nD/NDMaterialType.h"
 
-std::vector<int> XC::FluidSolidPorousMaterial::loadStagex;
-std::vector<int> XC::FluidSolidPorousMaterial::ndmx;
 std::vector<double> XC::FluidSolidPorousMaterial::combinedBulkModulusx;
-int XC::FluidSolidPorousMaterial::matCount = 0;
 double XC::FluidSolidPorousMaterial::pAtm = 101;
 
 XC::Vector XC::FluidSolidPorousMaterial::workV3(3);
@@ -72,7 +69,7 @@ void XC::FluidSolidPorousMaterial::alloc(const NDMaterial *s)
   }
 
 XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(int tag, int nd,const NDMaterial &soilMat,double combinedBulkModul, double atm)
-  :NDMaterial(tag, ND_TAG_FluidSolidPorousMaterial), theSoilMaterial(nullptr)
+  :SoilMaterialBase(tag, ND_TAG_FluidSolidPorousMaterial), theSoilMaterial(nullptr)
   {
     if(combinedBulkModul < 0)
       {
@@ -105,40 +102,35 @@ XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(int tag, int nd,const NDM
   }
    
 XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(int tag) 
- : NDMaterial(tag,ND_TAG_FluidSolidPorousMaterial), theSoilMaterial(nullptr)
+ : SoilMaterialBase(tag,ND_TAG_FluidSolidPorousMaterial), theSoilMaterial(nullptr)
   {
     trialExcessPressure = currentExcessPressure = 0.;
     trialVolumeStrain = currentVolumeStrain = 0.;
     initMaxPress = 0.;
-    e2p = 0;
   }
 
 //! @brief Copy constructor.
 XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(const FluidSolidPorousMaterial &a)
- : NDMaterial(a), theSoilMaterial(nullptr)
+ : SoilMaterialBase(a), theSoilMaterial(nullptr)
   {
-    matN = a.matN;
     alloc(a.theSoilMaterial);
     trialExcessPressure = a.trialExcessPressure;
     currentExcessPressure = a.currentExcessPressure;
     trialVolumeStrain = a.trialVolumeStrain;
     currentVolumeStrain = a.currentVolumeStrain;
     initMaxPress = a.initMaxPress;
-    e2p = a.e2p;
   }
 
 //! @brief Assignment operator.
 XC::FluidSolidPorousMaterial &XC::FluidSolidPorousMaterial::operator=(const FluidSolidPorousMaterial &a)
   {
-    NDMaterial::operator=(a);
-    matN = a.matN;
+    SoilMaterialBase::operator=(a);
     alloc(a.theSoilMaterial);
     trialExcessPressure = a.trialExcessPressure;
     currentExcessPressure = a.currentExcessPressure;
     trialVolumeStrain = a.trialVolumeStrain;
     currentVolumeStrain = a.currentVolumeStrain;
     initMaxPress = a.initMaxPress;
-    e2p = a.e2p;
     return *this;
   }
 
@@ -148,21 +140,22 @@ XC::FluidSolidPorousMaterial::~FluidSolidPorousMaterial(void)
 
 
 int XC::FluidSolidPorousMaterial::setTrialStrain(const Vector &strain)
-{
-    int ndm = ndmx[matN];
+  {
+    const int ndm = ndmx[matN];
 
     if(ndm==2 && strain.Size()==3)
             trialVolumeStrain = strain[0]+strain[1];
     else if(ndm==3 && strain.Size()==6)
             trialVolumeStrain = strain[0]+strain[1]+strain[2];
-    else {
+    else
+      {
             std::cerr << "Fatal:XC::FluidSolidPorousMaterial:: Material dimension is: " << ndm << std::endl;
             std::cerr << "But strain vector size is: " << strain.Size() << std::endl;
             exit(-1);
-    }
+      }
 
-  return theSoilMaterial->setTrialStrain(strain);
-}
+    return theSoilMaterial->setTrialStrain(strain);
+  }
 
 
 int XC::FluidSolidPorousMaterial::setTrialStrain(const XC::Vector &strain, const XC::Vector &rate)
@@ -286,15 +279,15 @@ const XC::Vector & XC::FluidSolidPorousMaterial::getStress(void) const
 
 
 int XC::FluidSolidPorousMaterial::updateParameter(int responseID, Information &info)
-{
+  {
     if(responseID<10)
-            loadStagex[matN] = responseID;
-    else {
-            if(responseID==11) combinedBulkModulusx[matN]=info.theDouble;
-    }
-
-  return 0;
-}
+      updateMaterialStage(info.theInt);
+    else
+      {
+        if(responseID==11) combinedBulkModulusx[matN]=info.theDouble;
+      }
+    return 0;
+  }
 
 
 const XC::Vector & XC::FluidSolidPorousMaterial::getCommittedStress(void)
@@ -346,7 +339,7 @@ int XC::FluidSolidPorousMaterial::revertToLastCommit(void)
 //! @brief Revert the material to its initial state.
 int XC::FluidSolidPorousMaterial::revertToStart(void)
   {
-    int retval= NDMaterial::revertToStart();
+    int retval= SoilMaterialBase::revertToStart();
     retval+= theSoilMaterial->revertToStart();
     return retval;
   }
@@ -366,28 +359,12 @@ XC::NDMaterial * XC::FluidSolidPorousMaterial::getCopy(const std::string &code) 
   }
 
 
-const std::string &XC::FluidSolidPorousMaterial::getType(void) const
-  {
-    int ndm = ndmx[matN];
-    return (ndm == 2) ? strTypePlaneStrain : strTypeThreeDimensional;
-  }
-
-
-int XC::FluidSolidPorousMaterial::getOrder(void) const
-{
-    int ndm = ndmx[matN];
-
-    return (ndm == 2) ? 3 : 6;
-}
-
-
 //! @brief Send object members through the communicator argument.
 int XC::FluidSolidPorousMaterial::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(comm);
-    res+= comm.sendDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(1));
-    res+= comm.sendDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(2));
-    res+= comm.sendInts(matN,e2p,getDbTagData(),CommMetaData(3));
+    int res= SoilMaterialBase::sendData(comm);
+    res+= comm.sendDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(3));
     res+= comm.sendBrokedPtr(theSoilMaterial,getDbTagData(),BrokedPtrCommMetaData(4,5,6));
     return res;
   }
@@ -395,10 +372,9 @@ int XC::FluidSolidPorousMaterial::sendData(Communicator &comm)
 //! @brief Receives object members through the communicator argument.
 int XC::FluidSolidPorousMaterial::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(comm);
-    res+= comm.receiveDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(1));
-    res+= comm.receiveDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(2));
-    res+= comm.receiveInts(matN,e2p,getDbTagData(),CommMetaData(3));
+    int res= SoilMaterialBase::recvData(comm);
+    res+= comm.receiveDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(3));
     theSoilMaterial= comm.getBrokedMaterial(theSoilMaterial,getDbTagData(),BrokedPtrCommMetaData(4,5,6));
     return res;
   }

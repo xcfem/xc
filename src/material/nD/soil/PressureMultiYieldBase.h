@@ -30,7 +30,7 @@
 #ifndef PressureMultiYieldBase_h
 #define PressureMultiYieldBase_h
 
-#include <material/nD/NDMaterial.h>
+#include <material/nD/soil/SoilMaterialBase.h>
 #include "T2Vector.h"
 
 
@@ -41,49 +41,44 @@ class MultiYieldSurface;
 //! @ingroup NDMat
 //
 //! @brief ??.
-class PressureMultiYieldBase: public NDMaterial
+class PressureMultiYieldBase: public SoilMaterialBase
   {
   protected:
-  // user supplied 
-     static int matCount;
-     static std::vector<int> ndmx;  //num of dimensions (2 or 3)
-     static std::vector<int> loadStagex;  //=0 if elastic; =1 or 2 if plastic
-     static std::vector<double> rhox;  //mass density
-     static std::vector<double> frictionAnglex;
-     static std::vector<double> peakShearStrainx;
-     static std::vector<double> refPressurex;
-     static std::vector<double> cohesionx;
-     static std::vector<double> pressDependCoeffx;
-     static std::vector<int> numOfSurfacesx;
+    // user supplied 
+    static std::vector<double> rhox;  //mass density
+    static std::vector<double> frictionAnglex;
+    static std::vector<double> peakShearStrainx;
+    static std::vector<double> refPressurex;
+    static std::vector<double> cohesionx;
+    static std::vector<double> pressDependCoeffx;
+    static std::vector<int> numOfSurfacesx;
 
-     // internal
-     static std::vector<double> residualPressx;
-     static std::vector<double> stressRatioPTx;
-     static Matrix theTangent;
-     static T2Vector subStrainRate;
+    // internal
+    static std::vector<double> residualPressx;
+    static std::vector<double> stressRatioPTx;
+    static Matrix theTangent;
+    static T2Vector subStrainRate;
 
-     int matN;
-     mutable int e2p;
-     mutable std::vector<MultiYieldSurface> theSurfaces; // NOTE: surfaces[0] is not used  
-     mutable std::vector<MultiYieldSurface> committedSurfaces;  
-     mutable int activeSurfaceNum;  
-     mutable int committedActiveSurf;
-     mutable T2Vector currentStress;
-     mutable T2Vector trialStress;
-     T2Vector currentStrain;
-     T2Vector strainRate;
+    mutable std::vector<MultiYieldSurface> theSurfaces; // NOTE: surfaces[0] is not used  
+    mutable std::vector<MultiYieldSurface> committedSurfaces;  
+    mutable int activeSurfaceNum;  
+    mutable int committedActiveSurf;
+    mutable T2Vector currentStress;
+    mutable T2Vector trialStress;
+    T2Vector currentStrain;
+    T2Vector strainRate;
 
   protected:
-     void setup(int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf);
+    void setup(int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf);
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
      // Initialization constructor
-     PressureMultiYieldBase (int tag, int classTag, int nd, double rho, double frictionAng, double peakShearStra, double refPress, double pressDependCoe, double cohesi = 0.1,int numberOfYieldSurf = 20),
+    PressureMultiYieldBase (int tag, int classTag, int nd, double rho, double frictionAng, double peakShearStra, double refPress, double pressDependCoe, double cohesi = 0.1,int numberOfYieldSurf = 20),
 
-     PressureMultiYieldBase(int tag, int classTag);
-     PressureMultiYieldBase(const PressureMultiYieldBase &);
-     PressureMultiYieldBase &operator=(const PressureMultiYieldBase &);
+    PressureMultiYieldBase(int tag, int classTag);
+    PressureMultiYieldBase(const PressureMultiYieldBase &);
+    PressureMultiYieldBase &operator=(const PressureMultiYieldBase &);
   };
 } // end of XC namespace
 

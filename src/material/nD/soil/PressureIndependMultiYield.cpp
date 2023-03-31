@@ -449,20 +449,43 @@ const std::string &XC::PressureIndependMultiYield::getType(void) const
 
 
 int XC::PressureIndependMultiYield::getOrder(void) const
-{
-  int ndm = ndmx[matN];
+  {
+    int ndm = ndmx[matN];
 
-  return (ndm == 2) ? 3 : 6;
-}
+    return (ndm == 2) ? 3 : 6;
+  }
 
 
 int XC::PressureIndependMultiYield::updateParameter(int responseID, Information &info)
-{
-        if(responseID<10)
-                loadStagex[matN] = responseID;
+  {
+    if(responseID==1)
+      updateMaterialStage(info.theInt);
 
-  return 0;
-}
+    else if(responseID==10)
+      { refShearModulus = info.theDouble; }
+    else if(responseID==11)
+      { refBulkModulus = info.theDouble; }
+    else if(responseID==12)
+      {
+        frictionAnglex[matN] = info.theDouble;
+	std::vector<double> g;
+        setUpSurfaces(g);
+        paramScaling();
+        initSurfaceUpdate();
+      }
+    else if(responseID==13)
+      {
+        cohesionx[matN] = info.theDouble;
+	std::vector<double> g;
+        setUpSurfaces(g);
+        paramScaling();
+        initSurfaceUpdate();
+      }
+    // used by BBarFourNodeQuadUP element
+    else if (responseID==20 && ndmx[matN] == 2)
+		  ndmx[matN] = 0;
+    return 0;
+  }
 
 //! @brief Send object members through the communicator argument.
 int XC::PressureIndependMultiYield::sendData(Communicator &comm)

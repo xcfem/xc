@@ -40,7 +40,7 @@
 #ifndef FluidSolidPorousMaterial_h
 #define FluidSolidPorousMaterial_h
 
-#include "material/nD/NDMaterial.h"
+#include "material/nD/soil/SoilMaterialBase.h"
 
 namespace XC {
 class Response;
@@ -54,24 +54,19 @@ class Response;
 //! @brief Material that couples the responses of two phases: fluid and solid.
 //!
 //! The fluid phase response is only volumetric and linear elastic. The solid
-//! phase can be any NDMaterial. This material is developed to simulate the
+//! phase can be any SoilMaterialBase. This material is developed to simulate the
 //! response of saturated porous media under fully undrained condition. 
-class FluidSolidPorousMaterial: public NDMaterial
+class FluidSolidPorousMaterial: public SoilMaterialBase
   {
   private:
-    static int matCount;
-    static std::vector<int> ndmx;
-    static std::vector<int> loadStagex;
     static std::vector<double> combinedBulkModulusx;
     static double pAtm;
-    int matN;
     NDMaterial *theSoilMaterial;
     mutable double trialExcessPressure;
     double currentExcessPressure;
     double trialVolumeStrain;
     double currentVolumeStrain;
     mutable double initMaxPress;
-    mutable int e2p;
 
     static Vector workV3;
     static Vector workV6;
@@ -129,12 +124,6 @@ class FluidSolidPorousMaterial: public NDMaterial
 
      // Return a copy of itself if "code"="PlaneStrain" or "ThreeDimensional", otherwise return null.
      NDMaterial *getCopy(const std::string &) const;
-
-     // Return the string "PlaneStrain" or "ThreeDimensional".
-     const std::string &getType(void) const ;
-
-     // Return 3 or 6.
-     int getOrder(void) const ;
 
      int sendSelf(Communicator &);  
      int recvSelf(const Communicator &);     
