@@ -1202,7 +1202,7 @@ class PlainLinearNewmark(SolutionProcedure):
             result= nodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
-class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
+class PenaltyNewmarkNewtonRaphson(SolutionProcedure):
     ''' Newmark solution procedure with a Newton Raphson algorithm
         and a penalty constraint handler.'''
     def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test'):
@@ -1217,7 +1217,7 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
-        super(PenaltyNewmarkNewtonRapshon,self).__init__(name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver')
+        super(PenaltyNewmarkNewtonRaphson,self).__init__(name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver')
         self.feProblem= prb
         self.setPenaltyFactors(alphaSP= 1.0e18, alphaMP= 1.0e18)
         
@@ -1225,7 +1225,7 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
         ''' Defines the solution procedure in the finite element 
             problem object.
         '''
-        super(PenaltyNewmarkNewtonRapshon,self).setup()
+        super(PenaltyNewmarkNewtonRaphson,self).setup()
         self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo', integratorType= 'newmark_integrator')
         self.sysOfEqnSetup()
         self.analysisSetup('direct_integration_analysis')
