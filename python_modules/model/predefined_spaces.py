@@ -889,7 +889,6 @@ class PredefinedSpace(object):
         retval= self.preprocessor.getDomain.currentCombinationName
         return retval
         
-        
     def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str):
         '''Defines a new combination and add it to the domain.
 
@@ -1329,6 +1328,14 @@ class PredefinedSpace(object):
         :param inputFileName: name of the input file containing the data.
         '''
         control_vars.readControlVars(preprocessor= self.preprocessor, inputFileName= inputFileName)
+
+    def newRecorder(self, recorderType, outputHandler= None):
+        ''' Creates a new recorder on the problem domain.
+
+        :param recorderType: recorder type.
+        :param outputHandler: object that will manage the recorder output.
+        '''
+        return self.preprocessor.getDomain.newRecorder(recorderType,None)
         
                 
 def getModelSpace(preprocessor: xc.Preprocessor):

@@ -24,6 +24,9 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [OpenSees: Static, Cyclic, and Dynamic Analysis Examples](https://opensees.berkeley.edu/workshop/OpenSeesDays2008/A10_UsersExampleAnalysis.pdf)
 - [Transient Analysis of a Cantilever Beam](https://sites.ualberta.ca/~wmoussa/AnsysTutorial/IT/Transient/Transient.html)
 - [The time-domain transient method in structural finite element analysis](https://getwelsim.medium.com/the-time-domain-transient-method-in-structural-finite-element-analysis-3666dd066d81)
+- [Newmark method](https://opensees.github.io/OpenSeesDocumentation/user/manual/analysis/Newmark.html)
+- [Newmark method](https://opensees.berkeley.edu/wiki/index.php/Newmark_Method)
+- [Newmark-beta method](https://en.wikipedia.org/wiki/Newmark-beta_method)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)

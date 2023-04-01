@@ -168,7 +168,7 @@ class SolutionProcedure(object):
         if(integratorType in ['load_control_integrator','eigen_integrator','standard_eigen_integrator', 'ill-conditioning_integrator', 'linear_buckling_integrator']):
             self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
         elif(integratorType=='newmark_integrator'):
-            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([0.5,0.25]))
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([self.gamma, self.beta]))
         elif(integratorType=='displacement_control_integrator'):
             self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
             self.integrator.nodeTag= self.dispControlNode.tag
@@ -198,7 +198,7 @@ class SolutionProcedure(object):
         solutionStrategyName= self.getSolutionStrategyName()
         self.solutionStrategy= solutionStrategies.newSolutionStrategy(solutionStrategyName, modelWrapperName)
         self.solAlgo= self.solutionStrategy.newSolutionAlgorithm(solAlgType)
-        self.integratorSetup(integratorType)
+        self.integratorSetup(integratorType= integratorType)
         if(self.convTestType):
             self.ctest= self.solutionStrategy.newConvergenceTest(self.convTestType)
             if(self.ctest):
@@ -1156,34 +1156,35 @@ class PenaltyKrylovNewton(SolutionProcedure):
 
 
 ## Dynamic analysis        
-class PlainLinearNewmark(SolutionProcedure):
-    ''' Return a linear Newmark solution algorithm
-        with a plain constraint handler.
+class NewmarkBase(SolutionProcedure):
+    ''' Base class for Newmark solvers.
+
+    :ivar gamma: gamma factor (used only for Nemwark integrator).
+    :ivar beta: beta factor (used only for Newmark integrator).
     '''
-    def __init__(self, prb, timeStep, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'simple'):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, gamma= 0.5, beta= 0.25):
         ''' Constructor.
 
         :param prb: XC finite element problem.
         :param timeStep: time step.
         :param name: identifier for the solution procedure.
+        :param constraintHandlerType: type of the constraint handler (plain, penalty, transformation or langrange).
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
+        :param gamma: gamma factor (for Nemwark integrator).
+        :param beta: beta factor (for Newmark integrator).
         '''
-        super(PlainLinearNewmark,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
+        super(NewmarkBase,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType)
         self.feProblem= prb
         self.timeStep= timeStep
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PlainLinearNewmark,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo', integratorType= 'newmark_integrator')
-        self.sysOfEqnSetup()
-        self.analysisSetup('direct_integration_analysis')
+        self.gamma= gamma
+        self.beta= beta
         
     def solve(self, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
         ''' Compute the solution (run the analysis).
@@ -1201,14 +1202,44 @@ class PlainLinearNewmark(SolutionProcedure):
             nodeHandler= self.feProblem.getPreprocessor.getNodeHandler
             result= nodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
-
-class PenaltyNewmarkNewtonRaphson(SolutionProcedure):
-    ''' Newmark solution procedure with a Newton Raphson algorithm
-        and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test'):
+    
+class PlainLinearNewmark(NewmarkBase):
+    ''' Return a linear Newmark solution algorithm
+        with a plain constraint handler.
+    '''
+    def __init__(self, prb, timeStep, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'simple', gamma= 0.5, beta= 0.25):
         ''' Constructor.
 
         :param prb: XC finite element problem.
+        :param timeStep: time step.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param gamma: gamma factor (for Nemwark integrator).
+        :param beta: beta factor (for Newmark integrator).
+        '''
+        super(PlainLinearNewmark,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= None, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', gamma= gamma, beta= beta)
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(PlainLinearNewmark,self).setup()
+        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo', integratorType= 'newmark_integrator')
+        self.sysOfEqnSetup()
+        self.analysisSetup('direct_integration_analysis')
+        
+class PenaltyNewmarkNewtonRaphson(NewmarkBase):
+    ''' Newmark solution procedure with a Newton Raphson algorithm
+        and a penalty constraint handler.'''
+    def __init__(self, prb, timeStep, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver', gamma= 0.5, beta= 0.25):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param timeStep: time step.
         :param name: identifier for the solution procedure.
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
@@ -1216,9 +1247,12 @@ class PenaltyNewmarkNewtonRaphson(SolutionProcedure):
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
+        :param gamma: gamma factor (for Nemwark integrator).
+        :param beta: beta factor (for Newmark integrator).
         '''
-        super(PenaltyNewmarkNewtonRaphson,self).__init__(name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver')
-        self.feProblem= prb
+        super(PenaltyNewmarkNewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, gamma= gamma, beta= beta)
         self.setPenaltyFactors(alphaSP= 1.0e18, alphaMP= 1.0e18)
         
     def setup(self):
