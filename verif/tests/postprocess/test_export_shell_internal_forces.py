@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Verification test taken from example 2-005 of 
    the SAP 2000 verification manual.'''
+
+from __future__ import print_function
 
 # feProblem.setVerbosityLevel(0)
 
