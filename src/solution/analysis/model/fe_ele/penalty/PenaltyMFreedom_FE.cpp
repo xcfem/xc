@@ -73,6 +73,7 @@
 #include <domain/mesh/node/Node.h>
 #include <domain/constraints/MFreedom_Constraint.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 //!
@@ -110,11 +111,12 @@ XC::PenaltyMFreedom_FE::PenaltyMFreedom_FE(int tag, Domain &theDomain,
 
     if(theRetainedNode == nullptr || theConstrainedNode == nullptr)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - Constrained or Retained"
 		  << " Node does not exist in Domain\n"
 		  << theMFreedom->getNodeRetained() << " "
-		  << theMFreedom->getNodeConstrained() << std::endl;
+		  << theMFreedom->getNodeConstrained()
+		  << Color::def << std::endl;
 	exit(-1);
       }
 
@@ -145,10 +147,18 @@ XC::PenaltyMFreedom_FE::PenaltyMFreedom_FE(int tag, Domain &theDomain,
 int XC::PenaltyMFreedom_FE::setID(void)
   {
     // first determine the IDs in myID for those DOFs marked
-    // as constrained DOFs, this is obtained from the XC::DOF_Group
+    // as constrained DOFs, this is obtained from the DOF_Group
     // associated with the constrained node
     const int size1= determineConstrainedDOFsIDs(0);
-    
+    if(size1<0)
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL - Something went wrong when determining"
+		  << " constrained DOFs. determineConstrainedDOFsIDs returned: "
+		  << size1
+		  << Color::def << std::endl;
+	exit(-1);
+      }
     // then determine the IDs for the retained dof's
     int result= determineRetainedDOFsIDs(size1);
     return result;
@@ -176,36 +186,36 @@ const XC::Vector &XC::PenaltyMFreedom_FE::getResidual(Integrator *theNewIntegrat
 //! ELE-BY-ELE SOLVERS. 
 const XC::Vector &XC::PenaltyMFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; WARNING - not yet implemented."
-              << std::endl;
+              << Color::def << std::endl;
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltyMFreedom_FE::getK_Force(const Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; WARNING - not yet implemented."
-              << std::endl;
+              << Color::def << std::endl;
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltyMFreedom_FE::getC_Force(const Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; WARNING - not yet implemented."
-              << std::endl;
+              << Color::def << std::endl;
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltyMFreedom_FE::getM_Force(const Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; WARNING - not yet implemented."
-              << std::endl;
+              << Color::def << std::endl;
     resid.Zero(); //Added by LCPT.
     return resid;
   }
