@@ -122,7 +122,12 @@ eig1= solProc.analysis.getEigenvalue(1)
 freq= math.sqrt(eig1)
 
 dampRatio= 0.02
-rayleigh= xc.RayleighDampingFactors(0.0,0.0,0.0,2.0*dampRatio/freq)
+# Rayleigh damping factors.
+alphaM= 0.0 # factor applied to elements or nodes mass matrix
+betaK= 0.0 # factor applied to elements current stiffness matrix.
+betaKinit= 0.0 # factor applied to elements initial stiffness matrix.
+betaKcomm= 2.0*dampRatio/freq # factor applied to elements committed stiffness matrix. 
+rayleigh= xc.RayleighDampingFactors(alphaM, betaK, betaKinit, betaKcomm)
 # print('damping factors: ', rayleigh)
 prep.getDomain.setRayleighDampingFactors(rayleigh)
 
