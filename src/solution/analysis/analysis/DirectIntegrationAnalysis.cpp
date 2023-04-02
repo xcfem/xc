@@ -161,7 +161,6 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
     CommandEntity *old= solution_strategy->Owner();
     solution_strategy->set_owner(this);
     Domain *the_Domain = solution_strategy->getDomainPtr();
-
     for(int i=0; i<numSteps; i++)
       {
         if(newStepDomain(solution_strategy->getModelWrapperPtr()->getAnalysisModelPtr(),dT) < 0)
@@ -183,7 +182,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 	    if(this->domainChanged() < 0)
               {
 	        std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; domainChanged() failed\n";
+			  << "; domainChanged() failed.\n";
 	        return -1;
               }	
           }

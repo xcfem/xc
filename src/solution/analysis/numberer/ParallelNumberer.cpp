@@ -427,7 +427,7 @@ int XC::ParallelNumberer::recvSelf(const Communicator &comm)
 
 
 int XC::ParallelNumberer::numberDOF(ID &lastDOFs)
-{
+  {
 
   int result= 0;
   

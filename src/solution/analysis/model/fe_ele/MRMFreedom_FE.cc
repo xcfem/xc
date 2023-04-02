@@ -31,6 +31,7 @@
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <domain/constraints/MRMFreedom_Constraint.h>
 #include <domain/domain/Domain.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::MRMFreedom_FE::MRMFreedom_FE(int tag, int numDOF_Group, int ndof, MRMFreedom_Constraint &TheMP,const double &Alpha)
@@ -62,8 +63,8 @@ int XC::MRMFreedom_FE::determineRetainedDOFsIDs(const int &offset)
 	    std::cerr << "WARNING XC::MRMFreedom_FE::setID(void)";
 	    std::cerr << " - no XC::DOF_Group with Retained XC::Node\n";
 	    return -2;
-          }    
-    
+          }
+
         const ID &theRetainedNodesID = theRetainedNodesDOFs->getID();    
 
         int size2 = RetainedDOFs.Size();
@@ -72,8 +73,10 @@ int XC::MRMFreedom_FE::determineRetainedDOFsIDs(const int &offset)
 	    const int retained = RetainedDOFs(j);
 	    if(retained < 0 || retained >= theRetainedNode->getNumberDOF())
               {
-	        std::cerr << "WARNING XC::MRMFreedom_FE::setID(void) - unknown DOF ";
-	        std::cerr << retained << " at XC::Node\n";
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING unknown DOF: "
+			  << retained << " at retained node: "
+			  << theRetainedNode->getTag() << Color::def << std::endl;
 	        myID(conta) = -1; // modify so nothing will be added
 	        retval = -3;
 	      }    	

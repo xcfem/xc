@@ -69,6 +69,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 const int MAX_NUM_DOF= 64;
 
@@ -121,7 +122,7 @@ XC::FE_Element::FE_Element(int tag, Element *ele)
   {
     if(numDOF<=0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "element must have at least 1 dof " << *ele;
         exit(-1);
       }
@@ -130,7 +131,7 @@ XC::FE_Element::FE_Element(int tag, Element *ele)
     Domain *theDomain= ele->getDomain();
     if(!theDomain)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - element has no domain "<< *ele;
         exit(-1);
       }
@@ -144,9 +145,9 @@ XC::FE_Element::FE_Element(int tag, Element *ele)
         Node *nodePtr =theDomain->getNode(nodes(i));
         if(nodePtr == 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; FATAL - node: "
-		      <<  nodes(i) <<  "does not exist in the domain.\n";
+		      <<  nodes(i) <<  "does not exist in the domain." << Color::def << std::endl;
             std::cerr << *ele;
             exit(-1);
           }
@@ -156,10 +157,10 @@ XC::FE_Element::FE_Element(int tag, Element *ele)
           myDOF_Groups(i)= dofGrpPtr->getTag();
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; FATAL node: "
 		      <<  *nodePtr
-		      <<  " has no DOF_Group associated with it.\n";
+		      <<  " has no DOF_Group associated with it." << Color::def << std::endl;
             exit(-1);
           }
       }
@@ -249,14 +250,15 @@ void XC::FE_Element::setAnalysisModel(AnalysisModel &theAnalysisModel)
 //! FE\_Element.
 int XC::FE_Element::setID(void)
   {
+    
     if(!theModel)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; WARNING - no AnalysisModel set.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - no AnalysisModel set." << Color::def << std::endl;
         return -1;
       }
 
-    int numGrps= myDOF_Groups.Size();
+    const int numGrps= myDOF_Groups.Size();
     int current= 0;
     for(int i=0;i<numGrps;i++)
       {
@@ -264,8 +266,8 @@ int XC::FE_Element::setID(void)
         DOF_Group *dofPtr= theModel->getDOF_GroupPtr(tag);
         if(!dofPtr)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING null DOF_Group pointer.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING null DOF_Group pointer." << Color::def << std::endl;
             return -2;
           }
 
@@ -276,7 +278,7 @@ int XC::FE_Element::setID(void)
             myID(current++)= theDOFid(j);
           else
             {
-              std::cerr << getClassName() << "::" << __FUNCTION__
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; WARNING -  numDOF and"
 			<< " number of dof at the DOF_Groups\n";
               return -3;
@@ -301,10 +303,10 @@ const XC::Matrix &XC::FE_Element::getTangent(Integrator *theNewIntegrator)
 
     if(myEle == nullptr)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - no Element *given "
 		  << "- subclasses must provide implementation - "
-		  << " - a 1x1 error matrix will be returned.\n";
+		  << " - a 1x1 error matrix will be returned." << Color::def << std::endl;
         exit(-1);
       }
 
@@ -343,10 +345,10 @@ const XC::Vector &XC::FE_Element::getResidual(Integrator *theNewIntegrator)
 
     if(!myEle)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - no element *given "
 		  << "- subclasses must provide implementation - "
-		  << " - an error Vector of order 1 will be returned.\n";
+		  << " - an error Vector of order 1 will be returned." << Color::def << std::endl;
         exit(-1);
       }
     else
@@ -381,15 +383,15 @@ void XC::FE_Element::zeroTangent(void)
           unbalAndTangent.getTangent().Zero();
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 //! @brief Adds the product of \p fact times the element's tangent stiffness
@@ -413,15 +415,15 @@ void XC::FE_Element::addKtToTang(double fact)
           unbalAndTangent.getTangent().addMatrix(1.0, myEle->getTangentStiff(),fact);
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else 
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 //! @brief  Adds the product of \p fact times the element's damping
@@ -444,15 +446,15 @@ void XC::FE_Element::addCtoTang(double fact)
           unbalAndTangent.getTangent().addMatrix(1.0, myEle->getDamp(),fact);
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 //! @brief Adds the product of \p fact times the element's mass
@@ -478,15 +480,15 @@ void XC::FE_Element::addMtoTang(double fact)
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 
@@ -508,15 +510,15 @@ void XC::FE_Element::addKiToTang(double fact)
 	  unbalAndTangent.getTangent().addMatrix(1.0, myEle->getInitialStiff(), fact);
 	else
 	  {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
 	  }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 
@@ -535,15 +537,15 @@ void XC::FE_Element::zeroResidual(void)
           unbalAndTangent.getResidual().Zero();
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 //! Adds to the residual vector the product of the elements residual load
@@ -570,15 +572,15 @@ void XC::FE_Element::addRtoResidual(double fact)
           }
         else 
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 //! Adds to the residual vector the product of the elements residual load
@@ -606,15 +608,15 @@ void XC::FE_Element::addRIncInertiaToResidual(double fact)
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-	        << ", subclasses must provide implementation.\n";
+	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 
@@ -660,9 +662,9 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
             theIntegrator->formEleTangent(this);
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, unbalAndTangent.getTangent(),tmp,fact) < 0) 
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; WARNING - "
-			  << "addMatrixVector returned error.\n";
+			  << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
@@ -670,18 +672,18 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
 	    Subdomain *theSub= dynamic_cast<Subdomain *>(myEle);
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, theSub->getTang(),tmp,fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; WARNING - "
-			  << "addMatrixVector returned error.\n";
+			  << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         return unbalAndTangent.getResidual();
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING - no element *given "
-                  << ", subclasses must provide implementation.\n";
+                  << ", subclasses must provide implementation." << Color::def << std::endl;
         return errVector;
       }
   }
@@ -713,17 +715,17 @@ const XC::Vector &XC::FE_Element::getK_Force(const Vector &disp, double fact)
 
         if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getTangentStiff(), tmp, fact) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                       << "; WARNING - "
-	              << "addMatrixVector returned error.\n";
+	              << "addMatrixVector returned error." << Color::def << std::endl;
           }
         return unbalAndTangent.getResidual();
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING - no element *given "
-                  << ", subclasses must provide implementation.\n";
+                  << ", subclasses must provide implementation." << Color::def << std::endl;
         return errVector;
       }
   }
@@ -759,17 +761,17 @@ const XC::Vector &XC::FE_Element::getM_Force(const Vector &disp, double fact)
           }
         if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                       << "; WARNING - "
-	              << "addMatrixVector returned error.\n";
+	              << "addMatrixVector returned error." << Color::def << std::endl;
           }
         return unbalAndTangent.getResidual();
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING - no element *given "
-                  << ", subclasses must provide implementation.\n";
+                  << ", subclasses must provide implementation." << Color::def << std::endl;
         return errVector;
       }
   }
@@ -798,17 +800,17 @@ const XC::Vector &XC::FE_Element::getC_Force(const XC::Vector &disp, double fact
           }
         if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                       << "; WARNING - "
-	              << "addMatrixVector returned error.\n";
+	              << "addMatrixVector returned error." << Color::def << std::endl;
           }
         return unbalAndTangent.getResidual();
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING - no element *given "
-                  << ", subclasses must provide implementation.\n";
+                  << ", subclasses must provide implementation." << Color::def << std::endl;
         return errVector;
       }
   }
@@ -836,15 +838,15 @@ const XC::Vector &XC::FE_Element::getLastResponse(void)
           {
             if(theIntegrator->getLastResponse(unbalAndTangent.getResidual(),myID) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << " - the integrator had problems with"
-		          << " getLastResponse().\n";
+		          << " getLastResponse()." << Color::def << std::endl;
               }
           }
         else
           {
             unbalAndTangent.getResidual().Zero();
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - no integrator yet passed\n";
           }
         Vector &result= unbalAndTangent.getResidual();
@@ -852,7 +854,7 @@ const XC::Vector &XC::FE_Element::getLastResponse(void)
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - no element passed in constructor\n";
         return errVector;
       }
@@ -887,22 +889,22 @@ void XC::FE_Element::addM_Force(const XC::Vector &accel, double fact)
               }
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
-	                  << "addMatrixVector returned error.\n";
+	                  << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-                << ", subclasses must provide implementation.\n";
+                << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 //! Adds to the residual the product of elements current damping matrix
@@ -934,22 +936,22 @@ void XC::FE_Element::addD_Force(const XC::Vector &accel, double fact)
               }
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
-	                  << "addMatrixVector returned error.\n";
+	                  << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-                << ", subclasses must provide implementation.\n";
+                << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 void XC::FE_Element::addLocalM_Force(const XC::Vector &accel, double fact)
@@ -963,22 +965,22 @@ void XC::FE_Element::addLocalM_Force(const XC::Vector &accel, double fact)
           {
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(),accel, fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
-	                  << "addMatrixVector returned error.\n";
+	                  << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-                << ", subclasses must provide implementation.\n";
+                << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 void XC::FE_Element::addLocalD_Force(const XC::Vector &accel, double fact)
@@ -992,22 +994,22 @@ void XC::FE_Element::addLocalD_Force(const XC::Vector &accel, double fact)
           {
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(),accel, fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
-	                  << "addMatrixVector returned error.\n";
+	                  << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-                << ", subclasses must provide implementation.\n";
+                << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 //! @brief Returns a pointer to the associated element.
@@ -1034,9 +1036,9 @@ void XC::FE_Element::addM_ForceSensitivity(int gradNumber, const XC::Vector &vec
       }
     if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMassSensitivity(gradNumber),tmp,fact) < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING - "
-                  << "addMatrixVector returned error.\n";
+                  << "addMatrixVector returned error." << Color::def << std::endl;
       }
   }
 
@@ -1062,22 +1064,22 @@ void XC::FE_Element::addD_ForceSensitivity(int gradNumber, const XC::Vector &vec
               }
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDampSensitivity(gradNumber), tmp, fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
-                          << "addMatrixVector returned error.\n";
+                          << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-                << ", subclasses must provide implementation.\n";
+                << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 void XC::FE_Element::addLocalD_ForceSensitivity(int gradNumber, const XC::Vector &accel, double fact)
@@ -1091,22 +1093,22 @@ void XC::FE_Element::addLocalD_ForceSensitivity(int gradNumber, const XC::Vector
           {
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDampSensitivity(gradNumber),accel, fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
-                          << "addMatrixVector returned error.\n";
+                          << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-                << ", subclasses must provide implementation.\n";
+                << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 void XC::FE_Element::addLocalM_ForceSensitivity(int gradNumber, const XC::Vector &accel, double fact)
@@ -1120,22 +1122,22 @@ void XC::FE_Element::addLocalM_ForceSensitivity(int gradNumber, const XC::Vector
           {
             if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMassSensitivity(gradNumber),accel, fact) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
-                          << "addMatrixVector returned error.\n";
+                          << "addMatrixVector returned error." << Color::def << std::endl;
               }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - "
 		      << "this should not be called on a subdomain!\n";
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; WARNING - no element *given "
-                << ", subclasses must provide implementation.\n";
+                << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
 int XC::FE_Element::commitSensitivity(int gradNum, int numGrads)

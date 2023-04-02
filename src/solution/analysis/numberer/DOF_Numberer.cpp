@@ -80,6 +80,7 @@
 #include <domain/constraints/MFreedom_ConstraintIter.h>
 #include <domain/constraints/MRMFreedom_ConstraintIter.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Create the graph numberer (
 void XC::DOF_Numberer::alloc(const std::string &str)
@@ -92,9 +93,10 @@ void XC::DOF_Numberer::alloc(const std::string &str)
     else if(str=="simple")
       theGraphNumberer=new SimpleNumberer();
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; numerator type: '" << str
-                << "' unknown." << std::endl;
+                << "' unknown."
+		<< Color::def << std::endl;
   }
 
 //! @brief Copy the graph numberer.
@@ -189,17 +191,19 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
       theDomain= am->getDomainPtr();
     if(theDomain == nullptr)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING - "
-		  << "Pointers are not set\n";
+		  << "Pointers are not set."
+		  << Color::def << std::endl;
         return -1;
       }
     
     if(!theGraphNumberer)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING - "
-		  << "subclasses must provide own implementation\n";
+		  << "subclasses must provide its own implementation."
+		  << Color::def << std::endl;
         return -2;
       }
 
@@ -213,11 +217,12 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
     // we now iterate through the DOFs first time setting -2 values  
     if(orderedRefs.Size() != am->getNumDOF_Groups())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING - "
 		  << "incompatible sizes; orderedRefs "
                   << orderedRefs.Size() << " numDOF_Groups "
-                  << am->getNumDOF_Groups() << std::endl;
+                  << am->getNumDOF_Groups()
+		  << Color::def << std::endl;
         return -3;
       }
     int result= 0;
@@ -237,9 +242,10 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; WARNING - DOF_Group "
-		      << dofGroupTag << "not in AnalysisModel!\n";
+		      << dofGroupTag << "not in AnalysisModel!"
+		      << Color::def << std::endl;
             result= -4;
           }
       }
@@ -306,9 +312,9 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
             MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
+	        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; code loop through the MRMFreedom_Constraints."
-			  << std::endl;
+			  << Color::def << std::endl;
               }
           }        
       }
@@ -321,13 +327,12 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
     while((elePtr= theEle()) != 0)
       elePtr->setID();
 
-
     // set the numOfEquation in the Model
     am->setNumEqn(numEqn);
 
 
     if(result == 0)
-      return numEqn;
+      result= numEqn;
     return result;
   }
 
@@ -359,15 +364,17 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
       theDomain= am->getDomainPtr();
     if(!theDomain)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; WARNING - pointers are not set\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - pointers are not set."
+		  << Color::def << std::endl;
         return -1;
       }
     
     if((theGraphNumberer == nullptr))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; WARNING - subclasses must provide own implementation\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - subclasses must provide own implementation."
+		  << Color::def << std::endl;
         return -2;
       }
 
@@ -384,8 +391,9 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
     int eqnNumber= 0;
     if(orderedRefs.Size() != am->getNumDOF_Groups())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; WARNING - incompatible Sizes\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - incompatible Sizes."
+		  << Color::def << std::endl;
         return -3;
       }
 
@@ -397,9 +405,10 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
         DOF_Group *dofGroupPtr= am->getDOF_GroupPtr(dofGroupTag);
         if(!dofGroupPtr)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING - DOF_Group "
-		      << dofGroupTag << "not in AnalysisModel!\n";
+		      << dofGroupTag << "not in AnalysisModel!"
+		      << Color::def << std::endl;
             result= -4;
           } 
         else
@@ -474,9 +483,9 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
             MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-		std::cerr << getClassName() << "::" << __FUNCTION__
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; code loop through the MRMFreedom_Constraints."
-			  << std::endl;
+			  << Color::def << std::endl;
               }
 	  }
       }
@@ -540,8 +549,9 @@ int XC::DOF_Numberer::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -553,15 +563,17 @@ int XC::DOF_Numberer::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName()  << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName()  << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }

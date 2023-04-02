@@ -142,7 +142,7 @@ class FE_Element: public TaggedObject
     virtual const ID &getDOFtags(void) const;
     virtual const ID &getID(void) const;
     void setAnalysisModel(AnalysisModel &theModel);
-    virtual int  setID(void);
+    virtual int setID(void);
     
     // methods to form and obtain the tangent and residual
     virtual const Matrix &getTangent(Integrator *theIntegrator);

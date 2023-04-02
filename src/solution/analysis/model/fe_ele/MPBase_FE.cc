@@ -30,6 +30,7 @@
 #include <domain/mesh/node/Node.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <domain/constraints/MFreedom_ConstraintBase.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::MPBase_FE::MPBase_FE(int tag, int numDOF_Group, int ndof,const double &Alpha)
@@ -59,11 +60,13 @@ int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &th
     retval+= size1;
     for(int i=0; i<size1; i++)
       {
-	int constrained = constrainedDOFs(i);
+	const int constrained = constrainedDOFs(i);
 	if(constrained < 0 || constrained >= theConstrainedNode->getNumberDOF())
           {	    
-	    std::cerr << "WARNING MPBase_FE::setID(void) - unknown DOF ";
-	    std::cerr << constrained << " at Node\n";
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	              << "; WARNING unknown DOF: "
+		      << constrained << " at constrained node: "
+		      << theConstrainedNode->getTag() << Color::def << std::endl;
 	    myID(i+offset) = -1; // modify so nothing will be added to equations
 	    retval = -3;
 	  }    	

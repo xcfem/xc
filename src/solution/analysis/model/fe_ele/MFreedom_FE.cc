@@ -30,6 +30,7 @@
 #include <domain/mesh/node/Node.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <domain/constraints/MFreedom_Constraint.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -66,8 +67,10 @@ int XC::MFreedom_FE::determineRetainedDOFsIDs(const int &offset)
 	int retained = RetainedDOFs(j);
 	if(retained < 0 || retained >= theRetainedNode->getNumberDOF())
           {
-	    std::cerr << "WARNING XC::PenaltyMFreedom_FE::setID(void) - unknown DOF ";
-	    std::cerr << retained << " at XC::Node\n";
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	              << "; WARNING unknown DOF: "
+		      << retained << " at retained node: "
+		      << theRetainedNode->getTag() << Color::def << std::endl;
 	    myID(j+offset) = -1; // modify so nothing will be added
 	    retval= -3;
 	  }    	
