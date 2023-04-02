@@ -58,7 +58,7 @@ lPatterns.addToDomain(lp0.name)
 # Static solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-nodeHandler.calculateNodalReactions(True, 1e-7)
+nodeHandler.calculateNodalReactions(True,1e-7)
 
 # Dynamic analysis.
 ## Define recorders
@@ -70,7 +70,7 @@ recDFree.callbackRecord= "dFree.append([self.getDomain.getTimeTracker.getCurrent
 duration= 10
 dT= 0.1
 numberOfSteps= int(duration/dT)
-solProc= predefined_solutions.PenaltyNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dT)
+solProc= predefined_solutions.TransformationNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dT)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()
