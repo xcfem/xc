@@ -1263,6 +1263,37 @@ class PenaltyNewmarkNewtonRaphson(NewmarkBase):
         self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo', integratorType= 'newmark_integrator')
         self.sysOfEqnSetup()
         self.analysisSetup('direct_integration_analysis')
+        
+class TransformationNewmarkNewtonRaphson(NewmarkBase):
+    ''' Newmark solution procedure with a Newton Raphson algorithm
+        and a transformation constraint handler.'''
+    def __init__(self, prb, timeStep, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver', gamma= 0.5, beta= 0.25):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param timeStep: time step.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
+        :param gamma: gamma factor (for Nemwark integrator).
+        :param beta: beta factor (for Newmark integrator).
+        '''
+        super(TransformationNewmarkNewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='transformation', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, gamma= gamma, beta= beta)
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(TransformationNewmarkNewtonRaphson,self).setup()
+        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo', integratorType= 'newmark_integrator')
+        self.sysOfEqnSetup()
+        self.analysisSetup('direct_integration_analysis')
 
 
 ## Eigen analysis
