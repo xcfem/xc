@@ -26,7 +26,8 @@ class_<XC::Analysis, XC::Analysis *, bases<CommandEntity>, boost::noncopyable >(
   .add_property("getAnalysisResult", &XC::Analysis::getAnalysisResult)
   .add_property("analysisAggregation",make_function(&XC::Analysis::getSolutionStrategyPtr, return_internal_reference<>() ),"return a reference to the analysis aggregation.")
   .add_property("getDomain", make_function( getAnalysisDomain, return_internal_reference<>() ),"return a reference to the domain.")
-;
+  .add_property("linearSOE", make_function(&XC::Analysis::getLinearSOEPtr, return_internal_reference<>() ),"return a reference to the system of equations.")
+  ;
 
 class_<XC::StaticAnalysis, bases<XC::Analysis>, boost::noncopyable >("StaticAnalysis", no_init)
   .def("analyze", &XC::StaticAnalysis::analyze,"Performs the analysis. A number of steps greater than 1 is useless if the loads are constant.")
