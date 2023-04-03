@@ -163,7 +163,6 @@ int XC::IncrementalIntegrator::formUnbalance(void)
 		  << "; WARNING: this->formElementResidual failed\n";
 	return -1;
       }
-    
     if(formNodalUnbalance() < 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -339,7 +338,7 @@ int XC::IncrementalIntegrator::formNodalUnbalance(void)
 int XC::IncrementalIntegrator::formElementResidual(void)
   {
     // loop through the FE_Elements and add the residual
-    FE_Element *elePtr;
+    FE_Element *elePtr= nullptr;
 
     int res = 0;    
 
@@ -348,7 +347,8 @@ int XC::IncrementalIntegrator::formElementResidual(void)
     FE_EleIter &theEles2 = mdl->getFEs();
     while((elePtr= theEles2()) != nullptr)
       {
-	if(theSOE->addB(elePtr->getResidual(this),elePtr->getID()) <0)
+	const Vector &eleResidual= elePtr->getResidual(this);
+	if(theSOE->addB(eleResidual,elePtr->getID()) <0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING failed in addB for ID: "
