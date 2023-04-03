@@ -84,11 +84,13 @@ typedef XC::TriBase3N<XC::SolidMech2D> TriBase3N_Mech2D;
 
 
 // Four nodes.
+typedef XC::ElementBase<4> ElementBase4N;
 typedef XC::ElemWithMaterial<4,XC::SolidMech2D> ElemWithMaterial4N_Mech2D;
 typedef XC::PlaneElement<4,XC::SolidMech2D> PlaneElement4N_Mech2D;
 typedef XC::QuadBase4N<XC::SolidMech2D> QuadBase4N_Mech2D;
 
 // Nine nodes.
+typedef XC::ElementBase<9> ElementBase9N;
 typedef XC::ElemWithMaterial<9,XC::SolidMech2D> ElemWithMaterial9N_Mech2D;
 
 //Shell
