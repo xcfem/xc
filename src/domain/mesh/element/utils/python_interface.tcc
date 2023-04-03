@@ -66,3 +66,4 @@ class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsW
 #include "physical_properties/python_interface.tcc"
 #include "fvectors/python_interface.tcc"
 #include "gauss_models/python_interface.tcc"
+#include "body_forces/python_interface.tcc"
