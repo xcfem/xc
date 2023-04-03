@@ -55,40 +55,25 @@
 
 XC::Matrix XC::NineFourNodeQuadUP::K(22,22);
 XC::Vector XC::NineFourNodeQuadUP::P(22);
-
 double XC::NineFourNodeQuadUP::shgu[3][9][9];
-
 double XC::NineFourNodeQuadUP::shgp[3][4][4];
-
 double XC::NineFourNodeQuadUP::shgq[3][9][4];
-
 double XC::NineFourNodeQuadUP::shlu[3][9][9];
-
 double XC::NineFourNodeQuadUP::shlp[3][4][4];
-
 double XC::NineFourNodeQuadUP::shlq[3][9][4];
-
 double XC::NineFourNodeQuadUP::wu[9];
-
 double XC::NineFourNodeQuadUP::wp[4];
-
 double XC::NineFourNodeQuadUP::dvolu[9];
-
 double XC::NineFourNodeQuadUP::dvolp[4];
-
 double XC::NineFourNodeQuadUP::dvolq[4];
-
 const int XC::NineFourNodeQuadUP::nintu=9;
-
 const int XC::NineFourNodeQuadUP::nintp=4;
-
 const int XC::NineFourNodeQuadUP::nenu=9;
-
 const int XC::NineFourNodeQuadUP::nenp=4;
 
 XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,const NDMaterial *ptr_mat)
   :ElemWithMaterial<9,SolidMech2D>(tag,ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,ptr_mat,1.0)),
-  Ki(nullptr), kc(0.0), applyLoad(0), initNodeDispl(nullptr)
+   Ki(nullptr), kc(0.0), fluidRho(0.0), applyLoad(0), initNodeDispl(nullptr)
   {
     load.reset(22);
 
@@ -100,9 +85,9 @@ XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,const NDMaterial *ptr_mat)
 
 XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,
 	int nd1, int nd2, int nd3, int nd4,int nd5, int nd6, int nd7, int nd8,int nd9,
-	NDMaterial &m, const char *type, double t, double bulk, double p1, double p2, const BodyForces2D &bForces)
+	NDMaterial &m, const char *type, double t, double bulk, double frho, double p1, double p2, const BodyForces2D &bForces)
   :ElemWithMaterial<9,SolidMech2D>(tag, ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,&m,t)), bf(bForces), Ki(nullptr),
-  kc(bulk), applyLoad(0), initNodeDispl(nullptr)
+   kc(bulk), fluidRho(frho), applyLoad(0), initNodeDispl(nullptr)
   {
     load.reset(22);
     this->shapeFunction(wu, nintu, nenu, 0);
@@ -513,95 +498,69 @@ const XC::Matrix &XC::NineFourNodeQuadUP::getDamp(void) const
 
 
 
+//! @brief stores the mass matrix in the K member.
 const XC::Matrix &XC::NineFourNodeQuadUP::getMass() const
+  {
 
-{
+    K.Zero();
 
-  K.Zero();
+    int ik= 0, jk= 0;
+    double Nrho= 0.0;
 
+    // Determine Jacobian for this integration point
+    this->globalShapeFunction(dvolu, wu, nintu, nenu, 0);
 
+    // Compute consistent mass matrix
+    for(int i = 0; i < nenu; i++)
+      {
+        if(i<nenp)
+	  ik = i*3;
 
-  int i, j, m, ik, jk;
-
-  double Nrho;
-
-
-
-  // Determine Jacobian for this integration point
-
-  this->globalShapeFunction(dvolu, wu, nintu, nenu, 0);
-
-
-
-  // Compute consistent mass matrix
-
-  for(i = 0; i < nenu; i++) {
-
-	  if(i<nenp) ik = i*3;
-
-      if(i>=nenp) ik = nenp*3 + (i-nenp)*2;
+	if(i>=nenp)
+	  ik = nenp*3 + (i-nenp)*2;
 
 
 
-	  for(j = 0; j < nenu; j++) {
+	for(int j = 0; j < nenu; j++)
+	  {
+	    if(j<nenp)
+	      jk = j*3;
 
-		  if(j<nenp) jk = j*3;
+	    if(j>=nenp)
+	      jk = nenp*3 + (j-nenp)*2;
+	    for(int m = 0; m < nintu; m++)
+	      {
+		Nrho = dvolu[m]*mixtureRho(m)*shgu[2][i][m]*shgu[2][j][m];
+		K(ik,jk) += Nrho;
+		K(ik+1,jk+1) += Nrho;
 
-	      if(j>=nenp) jk = nenp*3 + (j-nenp)*2;
-
-
-
-          for(m = 0; m < nintu; m++) {
-
-              Nrho = dvolu[m]*mixtureRho(m)*shgu[2][i][m]*shgu[2][j][m];
-
-              K(ik,jk) += Nrho;
-
-              K(ik+1,jk+1) += Nrho;
-
-		  }
+	      }
 
 	  }
+      }
 
+    // Compute compressibility matrix
+    if(abs(kc)<1e-6)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; bulk modulus too small: kc= "
+		<< kc
+		<< Color::def << std::endl;
+    double oneOverKc = 1./kc;
+    this->globalShapeFunction(dvolp, wp, nintp, nenp, 1);
+
+    for(int i = 0; i < nenp; i++)
+      {
+	ik = i*3+2;
+        for(int j = 0; j < nenp; j++)
+	  {
+	    jk = j*3+2;
+            for(int m = 0; m < nintp; m++)
+	      { K(ik,jk) += -dvolp[m]*oneOverKc*shgp[2][i][m]*shgp[2][j][m]; }
+          }
+
+      }
+    return K;
   }
-
-
-
-  // Compute compressibility matrix
-
-  double oneOverKc = 1./kc;
-
-  this->globalShapeFunction(dvolp, wp, nintp, nenp, 1);
-
-
-
-  for(i = 0; i < nenp; i++) {
-
-       ik = i*3+2;
-
-
-
-       for(j = 0; j < nenp; j++) {
-
-	       jk = j*3+2;
-
-
-
-           for(m = 0; m < nintp; m++) {
-
-	          K(ik,jk) += -dvolp[m]*oneOverKc*shgp[2][i][m]*shgp[2][j][m];
-
-	  }
-
-    }
-
-  }
-
-
-
-  return K;
-
-}
 
 //! @brief Makes zero the loads on the element.
 void XC::NineFourNodeQuadUP::zeroLoad(void)
@@ -617,25 +576,25 @@ void XC::NineFourNodeQuadUP::zeroLoad(void)
 
 int XC::NineFourNodeQuadUP::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-	// Added option for applying body forces in load pattern: C.McGann, U.Washington
-	int type;
-	const Vector &data = theLoad->getData(type, loadFactor);
-	if(type == LOAD_TAG_SelfWeight)
-	  {
-		applyLoad = 1;
-		appliedB[0] += loadFactor*data(0)*bf[0];
-		appliedB[1] += loadFactor*data(1)*bf[1];
-		return 0;
-	  }
-	else
-	  {
-	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; load type unknown for ele with tag: "
-		      << this->getTag()
-		      << Color::def << std::endl;
-	    return -1;
-	  } 
+    // Added option for applying body forces in load pattern: C.McGann, U.Washington
+    int type;
+    const Vector &data = theLoad->getData(type, loadFactor);
+    if(type == LOAD_TAG_SelfWeight)
+      {
+	    applyLoad = 1;
+	    appliedB[0] += loadFactor*data(0)*bf[0];
+	    appliedB[1] += loadFactor*data(1)*bf[1];
+	    return 0;
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; load type unknown for ele with tag: "
+		  << this->getTag()
+		  << Color::def << std::endl;
 	return -1;
+      } 
+    return -1;
   }
 
 
@@ -716,233 +675,171 @@ int XC::NineFourNodeQuadUP::addInertiaLoadToUnbalance(const Vector &accel)
 
 const XC::Vector &XC::NineFourNodeQuadUP::getResistingForce(void) const
   {
+    P.Zero();
 
-  P.Zero();
-
-
-
-  int i, j, jk;
+    int jk= 0;
 
 
-
-  // Determine Jacobian for this integration point
-
-  this->globalShapeFunction(dvolu, wu, nintu, nenu, 0);
-
-  this->globalShapeFunction(dvolp, wp, nintp, nenp, 1);
+    // Determine Jacobian for this integration point
+    this->globalShapeFunction(dvolu, wu, nintu, nenu, 0);
+    this->globalShapeFunction(dvolp, wp, nintp, nenp, 1);
 
 
 
-  // Loop over the integration points
+    // Loop over the integration points
 
-  for(i = 0; i < nintu; i++) {
+    for(int i = 0; i < nintu; i++)
+      {
+	// Get material stress response
 
-
-
-    // Get material stress response
-
-    const Vector &sigma = physicalProperties[i]->getStress();
+	const Vector &sigma = physicalProperties[i]->getStress();
 
 
 
-    // Perform numerical integration on internal force
+	// Perform numerical integration on internal force
 
-    //P = P + (B^ sigma) * intWt(i)*intWt(j) * detJ;
+	//P = P + (B^ sigma) * intWt(i)*intWt(j) * detJ;
 
-    //P.addMatrixTransposeVector(1.0, B, sigma, intWt(i)*intWt(j)*detJ);
+	//P.addMatrixTransposeVector(1.0, B, sigma, intWt(i)*intWt(j)*detJ);
 
-	for(j = 0; j < nenu; j++) {
+	for(int j= 0; j < nenu; j++)
+	  {
+	    if(j<nenp)
+	      jk = j*3;
+            if(j>=nenp)
+	      jk = nenp*3 + (j-nenp)*2;
+  	    P(jk) += dvolu[i]*(shgu[0][j][i]*sigma(0) + shgu[1][j][i]*sigma(2));
+	    P(jk+1) += dvolu[i]*(shgu[1][j][i]*sigma(1) + shgu[0][j][i]*sigma(2));
 
-		if(j<nenp) jk = j*3;
+  	    // Subtract equiv. body forces from the nodes
 
-	    if(j>=nenp) jk = nenp*3 + (j-nenp)*2;
+	    //P = P - (N^ b) * intWt(i)*intWt(j) * detJ;
 
+	    //P.addMatrixTransposeVector(1.0, N, b, -intWt(i)*intWt(j)*detJ);
 
+	    const double r= mixtureRho(i);
+	    if(applyLoad == 0)
+	      {
+		P(jk) -= dvolu[i]*(shgu[2][j][i]*r*bf[0]);
+		P(jk+1) -= dvolu[i]*(shgu[2][j][i]*r*bf[1]);
 
-        P(jk) += dvolu[i]*(shgu[0][j][i]*sigma(0) + shgu[1][j][i]*sigma(2));
+	      }
+	    else
+	      {
+	        P(jk) -= dvolu[i]*(shgu[2][j][i]*r*appliedB[0]);
+	        P(jk+1) -= dvolu[i]*(shgu[2][j][i]*r*appliedB[1]);
+	      }
 
-        P(jk+1) += dvolu[i]*(shgu[1][j][i]*sigma(1) + shgu[0][j][i]*sigma(2));
+	  }
+      }
+    //  std::cerr <<"K -body"<<P<<std::endl;
 
+    // Subtract fluid body force
+    for(int j = 0; j < nenp; j++)
+      {
+	jk= j*3+2;
 
+         for(int i = 0; i < nintp; i++)
+	   {
+	     if(applyLoad == 0)
+	       { P(jk) += dvolp[i]*fluidRho*(perm[0]*bf[0]*shgp[0][j][i]+perm[1]*bf[1]*shgp[1][j][i]); }
+	     else
+	       { P(jk) += dvolp[i]*fluidRho*(perm[0]*appliedB[0]*shgp[0][j][i] + perm[1]*appliedB[1]*shgp[1][j][i]); }
 
-        // Subtract equiv. body forces from the nodes
+	   }
+      }
+    //  std::cerr<<"K -fluid "<<P<<std::endl;
 
-        //P = P - (N^ b) * intWt(i)*intWt(j) * detJ;
-
-        //P.addMatrixTransposeVector(1.0, N, b, -intWt(i)*intWt(j)*detJ);
-
-        const double r = mixtureRho(i);
-
-		if(applyLoad == 0) {
-			P(jk) -= dvolu[i]*(shgu[2][j][i]*r*bf[0]);
-			P(jk+1) -= dvolu[i]*(shgu[2][j][i]*r*bf[1]);
-		} else {
-			P(jk) -= dvolu[i]*(shgu[2][j][i]*r*appliedB[0]);
-			P(jk+1) -= dvolu[i]*(shgu[2][j][i]*r*appliedB[1]);
-		}
-
-    }
-
+    // Subtract other external nodal loads ... P_res = P_int - P_ext
+    //P = P - Q;
+    P.addVector(1.0, load, -1.0);
+    return P;
   }
-
-//  std::cerr <<"K -body"<<P<<std::endl;
-
-
-
-  // Subtract fluid body force
-
-  for(j = 0; j < nenp; j++) {
-
-	 jk = j*3+2;
-
-     for(i = 0; i < nintp; i++) {
-
-		if(applyLoad == 0) {
-        	P(jk) += dvolp[i]*physicalProperties.getRho()*(perm[0]*bf[0]*shgp[0][j][i] +
-             	    perm[1]*bf[1]*shgp[1][j][i]);
-		} else {
-			P(jk) += dvolp[i]*physicalProperties.getRho()*(perm[0]*appliedB[0]*shgp[0][j][i] +
-             	    perm[1]*appliedB[1]*shgp[1][j][i]);
-		}
-
-     }
-
-  }
-
-
-
-//  std::cerr<<"K -fluid "<<P<<std::endl;
-
-
-
-  // Subtract other external nodal loads ... P_res = P_int - P_ext
-
-  //P = P - Q;
-
-  P.addVector(1.0, load, -1.0);
-
-
-
-  return P;
-
-}
 
 
 
 const XC::Vector &XC::NineFourNodeQuadUP::getResistingForceIncInertia(void) const
   {
+    static double a[22];
+    
+    int ik= 0;
+    for(int i=0; i<nenu; i++)
+      {
 
-  int i, j, ik;
+        const Vector &accel= theNodes[i]->getTrialAccel();
 
-  static double a[22];
+	if((i<nenp && 3 != accel.Size()) || (i>=nenp && 2 != accel.Size()))
+	  {
+ 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; matrix and vector sizes are incompatible."
+		      << Color::def << std::endl;
+	    return P;
+	  }
 
+	if(i<nenp)
+	  ik = i*3;
 
+	if(i>=nenp)
+	  ik = nenp*3 + (i-nenp)*2;
 
-  for(i=0; i<nenu; i++) {
-
-    const Vector &accel = theNodes[i]->getTrialAccel();
-
-    if((i<nenp && 3 != accel.Size()) || (i>=nenp && 2 != accel.Size())) {
-
-      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		<< "; matrix and vector sizes are incompatible."
-		<< Color::def << std::endl;
-
-         return P;
-
-    }
-
-
-
-    if(i<nenp) ik = i*3;
-
-    if(i>=nenp) ik = nenp*3 + (i-nenp)*2;
-
-    a[ik] = accel(0);
-
-      a[ik+1] = accel(1);
-
-      if(i<nenp) a[ik+2] = accel(2);
-
-  }
-
-
-
-  // Compute the current resisting force
-
-  this->getResistingForce();
-
-  //  std::cerr<<"K "<<P<<std::endl;
-
-
-
-  // Compute the mass matrix
-
-  this->getMass();
-
-
-
-  for(i = 0; i < 22; i++) {
-
-    for(j = 0; j < 22; j++)
-
-      P(i) += K(i,j)*a[j];
-
-  }
-
-//  std::cerr<<"K+M "<<P<<std::endl;
-
-
-
-  for(i=0; i<nenu; i++) {
-
-      const Vector &vel = theNodes[i]->getTrialVel();
-
-      if((i<nenp && 3 != vel.Size()) || (i>=nenp && 2 != vel.Size())) {
-
-         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		   << "; matrix and vector sizes are incompatible."
-		<< Color::def << std::endl;
-
-         return P;
-
+	a[ik] = accel(0);
+	a[ik+1] = accel(1);
+	if(i<nenp)
+	  { a[ik+2] = accel(2); }
       }
 
+    // Compute the current resisting force
+    this->getResistingForce();
+
+    //  std::cerr<<"K "<<P<<std::endl;
 
 
-      if(i<nenp) ik = i*3;
 
-      if(i>=nenp) ik = nenp*3 + (i-nenp)*2;
+    // Compute the mass matrix
+    this->getMass();
 
-      a[ik] = vel(0);
+    for(int i = 0; i < 22; i++)
+      {
+        for(int j = 0; j < 22; j++)
+  	  P(i) += K(i,j)*a[j];
+      }
 
-      a[ik+1] = vel(1);
+  //  std::cerr<<"K+M "<<P<<std::endl;
 
-      if(i<nenp) a[ik+2] = vel(2);
 
+
+    for(int i=0; i<nenu; i++)
+      {
+	const Vector &vel= theNodes[i]->getTrialVel();
+
+	if((i<nenp && 3 != vel.Size()) || (i>=nenp && 2 != vel.Size()))
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	 	      << "; matrix and vector sizes are incompatible."
+		      << Color::def << std::endl;
+	    return P;
+	  }
+
+	if(i<nenp)
+	  ik = i*3;
+	if(i>=nenp)
+	  ik = nenp*3 + (i-nenp)*2;
+	a[ik] = vel(0);
+	a[ik+1] = vel(1);
+	if(i<nenp)
+	  a[ik+2] = vel(2);
+      }
+
+    this->getDamp();
+
+    for(int i = 0; i < 22; i++)
+      {
+        for(int j = 0; j < 22; j++)
+	  { P(i) += K(i,j)*a[j]; }
+      }
+
+    return P;
   }
-
-
-
-  this->getDamp();
-
-
-
-  for(i = 0; i < 22; i++) {
-
-    for(j = 0; j < 22; j++) {
-
-      P(i) += K(i,j)*a[j];
-
-    }
-
-  }
-
-//  std::cerr<<"final "<<P<<std::endl;
-
-  return P;
-
-}
 
 
 //! @brief Send object members through the communicator argument.

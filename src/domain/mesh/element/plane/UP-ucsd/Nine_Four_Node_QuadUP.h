@@ -61,8 +61,9 @@ class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
     BodyForces2D bf; //!< Body forces
     mutable Matrix *Ki;
 
-    double kc;   //!< combined bulk modulus
-    double perm[2];  //!< lateral/vertical permeability
+    double kc;   //!< combined bulk modulus.
+    double fluidRho; //!< Fluid mass per unit volume.
+    double perm[2];  //!< lateral/vertical permeability.
     double appliedB[2]; // Body forces applied with load pattern, C.McGann, U.Washington
 
     int applyLoad;      // flag for body force in load, C.McGann, U.Washington
@@ -101,12 +102,33 @@ class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
     NineFourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4,
 		  int nd5, int nd6, int nd7, int nd8, int nd9,
 		  NDMaterial &m, const char *type,
-		  double t, double bulk, double perm1, double perm2,
+		  double t, double bulk, double frho, double perm1, double perm2,
 		  const BodyForces2D &bForces= BodyForces2D());
 
     Element *getCopy(void) const;    
     virtual ~NineFourNodeQuadUP(void);
 
+    inline double getCombinedBulkModulus(void) const
+      { return kc; }
+    void setCombinedBulkModulus(const double &d)
+      { kc= d; }
+    inline double getHorizontalPermeability(void) const
+      { return perm[0]; }
+    void setHorizontalPermeability(const double &d)
+      { perm[0]= d; }
+    inline double getVerticalPermeability(void) const
+      { return perm[1]; }
+    void setVerticalPermeability(const double &d)
+      { perm[1]= d; }
+    inline double getFluidRho(void) const
+      { return fluidRho; }
+    void setFluidRho(const double &d)
+      { fluidRho= d; }
+    inline const BodyForces2D &getBodyForces(void) const
+      { return bf; }
+    void setBodyForces(const BodyForces2D &f)
+      { bf= f; }
+    
     int getNumDOF(void) const;
     void setDomain(Domain *theDomain);
 

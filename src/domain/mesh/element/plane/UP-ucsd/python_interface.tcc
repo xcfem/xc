@@ -23,4 +23,9 @@
 
 class_<XC::NineFourNodeQuadUP, bases<ElemWithMaterial9N_Mech2D>, boost::noncopyable >("NineFourNodeQuadUP", no_init)
 //.def("detJ", &XC::NineFourNodeQuadUP::detJ)
+  .add_property("bulk", &XC::NineFourNodeQuadUP::getCombinedBulkModulus, &XC::NineFourNodeQuadUP::setCombinedBulkModulus,"combined bulk modulus.")
+  .add_property("horizontalPermeability", &XC::NineFourNodeQuadUP::getHorizontalPermeability, &XC::NineFourNodeQuadUP::setHorizontalPermeability,"horizontal permeability.")
+  .add_property("verticalPermeability", &XC::NineFourNodeQuadUP::getVerticalPermeability, &XC::NineFourNodeQuadUP::setVerticalPermeability,"vertical permeability.")
+  .add_property("fluidRho", &XC::NineFourNodeQuadUP::getFluidRho, &XC::NineFourNodeQuadUP::setFluidRho,"fluid mass per unit volume.")
+  .add_property("bodyForces", make_function(&XC::NineFourNodeQuadUP::getBodyForces,return_internal_reference<>() ), &XC::NineFourNodeQuadUP::setBodyForces,"body forces.")
    ;
