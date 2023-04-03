@@ -45,13 +45,13 @@ class PressureMultiYieldBase: public SoilMaterialBase
   {
   protected:
     // user supplied 
-    static std::vector<double> rhox;  //mass density
-    static std::vector<double> frictionAnglex;
-    static std::vector<double> peakShearStrainx;
-    static std::vector<double> refPressurex;
-    static std::vector<double> cohesionx;
-    static std::vector<double> pressDependCoeffx;
-    static std::vector<int> numOfSurfacesx;
+    static std::vector<double> rhox; //!< mass density
+    static std::vector<double> frictionAnglex; //!< internal friction angle.
+    static std::vector<double> peakShearStrainx; //!< peak shear strain.
+    static std::vector<double> refPressurex; //!< reference pressure.
+    static std::vector<double> cohesionx; //!< apparent cohesion.
+    static std::vector<double> pressDependCoeffx; //!< pressure dependency coefficient
+    static std::vector<int> numOfSurfacesx; //!< number of yield surfaces.
 
     // internal
     static std::vector<double> residualPressx;
@@ -69,6 +69,7 @@ class PressureMultiYieldBase: public SoilMaterialBase
     T2Vector strainRate;
 
   protected:
+    void resizeIfNeeded(void);
     void setup(int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf);
     int sendData(Communicator &);
     int recvData(const Communicator &);
@@ -79,6 +80,29 @@ class PressureMultiYieldBase: public SoilMaterialBase
     PressureMultiYieldBase(int tag, int classTag);
     PressureMultiYieldBase(const PressureMultiYieldBase &);
     PressureMultiYieldBase &operator=(const PressureMultiYieldBase &);
+    
+    inline double getRho(void) const
+      {return rhox[matN];}
+    void setRho(const double &);
+    
+    inline double getFrictionAngle(void) const
+      { return frictionAnglex[matN];}
+    void setFrictionAngle(const double &); 
+    inline double getRefPressure(void) const
+      { return refPressurex[matN]; }
+    void setRefPressure(const double &);
+    inline double getPeakShearStrain(void) const
+      { return peakShearStrainx[matN]; }
+    void setPeakShearStrain(const double &);
+    inline double getCohesion(void) const
+      { return cohesionx[matN]; }
+    void setCohesion(const double &);
+    inline double getPressDependCoeff(void) const
+      { return pressDependCoeffx[matN]; }
+    void setPressDependCoeff(const double &);
+    inline int getNumberOfSurfaces(void) const
+      { return numOfSurfacesx[matN]; }
+    void setNumberOfSurfaces(const int &); 
   };
 } // end of XC namespace
 

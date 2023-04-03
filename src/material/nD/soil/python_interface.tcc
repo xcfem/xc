@@ -28,7 +28,13 @@ class_<XC::SoilMaterialBase, bases<XC::NDMaterial>, boost::noncopyable >("SoilMa
 class_<XC::FluidSolidPorousMaterial, bases<XC::SoilMaterialBase>, boost::noncopyable >("FluidSolidPorousMaterial", no_init);
 
 class_<XC::PressureMultiYieldBase, bases<XC::SoilMaterialBase>, boost::noncopyable >("PressureMultiYieldBase", no_init)
-  ;
+  .add_property("frictionAngle", &XC::PressureMultiYieldBase::getFrictionAngle, &XC::PressureMultiYieldBase::setFrictionAngle,"internal friction angle of the soil.")
+  .add_property("cohesion", &XC::PressureMultiYieldBase::getCohesion, &XC::PressureMultiYieldBase::setCohesion,"soil cohesion.")
+  .add_property("pressDependCoeff", &XC::PressureMultiYieldBase::getPressDependCoeff, &XC::PressureMultiYieldBase::setPressDependCoeff,"pressure dependency coefficient.")
+  .add_property("peakShearStrain", &XC::PressureMultiYieldBase::getPeakShearStrain, &XC::PressureMultiYieldBase::setPeakShearStrain, "peak shear strain.")
+  .add_property("refPressure", &XC::PressureMultiYieldBase::getRefPressure, &XC::PressureMultiYieldBase::setRefPressure, "reference pressure.")
+  .add_property("numberOfSurfaces", &XC::PressureMultiYieldBase::getNumberOfSurfaces, &XC::PressureMultiYieldBase::setNumberOfSurfaces, "number of yield surfaces.")
+ ;
 
 class_<XC::PressureDependMultiYieldBase, bases<XC::PressureMultiYieldBase>, boost::noncopyable >("PressureDependMultiYieldBase", no_init);
 
@@ -41,6 +47,8 @@ class_<XC::PressureDependMultiYield02, bases<XC::PressureDependMultiYieldBase>, 
 
 class_<XC::PressureIndependMultiYield, bases<XC::PressureMultiYieldBase>, boost::noncopyable >("PressureIndependMultiYield", no_init)
   .def("setup",&XC::PressureIndependMultiYield::setupPy)
+  .add_property("refShearModulus", &XC::PressureIndependMultiYield::getRefShearModulus, &XC::PressureIndependMultiYield::setRefShearModulus,"Reference low-strain shear modulus, specified at a reference mean effective confining pressure refPress.")
+  .add_property("refBulkModulus", &XC::PressureIndependMultiYield::getRefBulkModulus, &XC::PressureIndependMultiYield::setRefBulkModulus,"Reference bulk modulus, specified at a reference mean effective confining pressure refPress.")
   ;
 
 class_<XC::T2Vector, bases<XC::MovableObject>, boost::noncopyable >("T2Vector", no_init);

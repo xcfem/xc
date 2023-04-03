@@ -38,6 +38,7 @@
 #include <utility/matrix/nDarray/Tensor.h>
 #include <utility/matrix/nDarray/stresst.h>
 #include "material/nD/NDMaterialType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 std::vector<double> XC::PressureMultiYieldBase::rhox;
 std::vector<double> XC::PressureMultiYieldBase::frictionAnglex;
@@ -54,61 +55,13 @@ XC::T2Vector XC::PressureMultiYieldBase::subStrainRate;
 
 const double pi= 3.14159265358979;
 
-void XC::PressureMultiYieldBase::setup(int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf)
+void XC::PressureMultiYieldBase::resizeIfNeeded(void)
   {
-    if(nd !=2 && nd !=3)
+    const int sz= rhox.size();
+    if(matCount>=sz)
       {
-        std::cerr << "FATAL:XC::PressureMultiYieldBase:: dimension error" << std::endl;
-        std::cerr << "Dimension has to be 2 or 3, you give nd= " << nd << std::endl;
-        exit(-1);
-      }
-
-    if(cohesi < 0)
-      {
-	std::cerr << "WARNING:XC::PressureMultiYieldBase:: cohesion < 0" << std::endl;
-	std::cerr << "Will reset cohesion to zero." << std::endl;
-	cohesi = 0.;
-      } 
-    if(peakShearStra <= 0)
-      {
-	std::cerr << "FATAL:XC::PressureMultiYieldBase:: peakShearStra <= 0" << std::endl;
-       exit(-1);
-      }
-    if(refPress <= 0)
-      {
-	std::cerr << "FATAL:XC::PressureMultiYieldBase:: refPress <= 0" << std::endl;
-	exit(-1);
-      }
-    if(pressDependCoe < 0)
-      {
-	std::cerr << "WARNING:XC::PressureMultiYieldBase:: pressDependCoe < 0" << std::endl;
-	std::cerr << "Will reset pressDependCoe to zero." << std::endl;
-	pressDependCoe = 0.;
-      }
-    if(numberOfYieldSurf <= 0)
-      {
-	std::cerr << "WARNING:XC::PressureMultiYieldBase:: numberOfSurfaces <= 0" << std::endl;
-	std::cerr << "Will use 10 yield surfaces." << std::endl;
-	numberOfYieldSurf = 10;
-      }
-    if(numberOfYieldSurf > 100)
-      {
-	std::cerr << "WARNING:XC::PressureMultiYieldBase::PressureMultiYieldBase: numberOfSurfaces > 40" << std::endl;
-	std::cerr << "Will use 100 yield surfaces." << std::endl;
-	numberOfYieldSurf = 100;
-      }
-    if(r < 0)
-      {
-	std::cerr << "FATAL:XC::PressureMultiYieldBase:: rho <= 0" << std::endl;
-       exit(-1);
-      }
-    
-    const int vSize= loadStagex.size();
-    if(matCount>=vSize)
-      {
-	loadStagex.resize(matCount+20);
-	ndmx.resize(matCount+20);
-	rhox.resize(matCount+20);
+	SoilMaterialBase::resizeIfNeeded();
+        rhox.resize(matCount+20);
 	frictionAnglex.resize(matCount+20);
 	peakShearStrainx.resize(matCount+20);
 	refPressurex.resize(matCount+20);
@@ -117,40 +70,129 @@ void XC::PressureMultiYieldBase::setup(int nd, double r, double frictionAng,doub
 	numOfSurfacesx.resize(matCount+20);
 	residualPressx.resize(matCount+20);
 	stressRatioPTx.resize(matCount+20);
+      }    
+  }
+
+void XC::PressureMultiYieldBase::setRho(const double &d)
+  {
+    if(d < 0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL rho <= 0" << std::endl;
+        exit(-1);
       }
+    rhox[matN]= d;
+  }
 
-    ndmx[matCount] = nd;
-    loadStagex[matCount] = 0;   //default
-    frictionAnglex[matCount]= frictionAng;
-    peakShearStrainx[matCount]= peakShearStra;
-    refPressurex[matCount]= -refPress;  //compression is negative
-    cohesionx[matCount]= cohesi;
-    pressDependCoeffx[matCount] = pressDependCoe;
-    numOfSurfacesx[matCount] = numberOfYieldSurf;
-    rhox[matCount]= r;
-  
-    matN= matCount;
-    matCount++;
+void XC::PressureMultiYieldBase::setFrictionAngle(const double &d)
+  { frictionAnglex[matN]= d; }
 
-    int numOfSurfaces = numOfSurfacesx[matN];
+void XC::PressureMultiYieldBase::setRefPressure(const double &d)
+  {
+    if(d >= 0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL refPress >= 0 (so tension)"
+		  << Color::def << std::endl;
+	exit(-1);
+      }
+    else
+      refPressurex[matN]= d;
+  }
 
-    e2p = committedActiveSurf = activeSurfaceNum = 0; 
+void XC::PressureMultiYieldBase::setPeakShearStrain(const double &d)
+  {
+    if(d <= 0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL peakShearStra <= 0"
+		  << Color::def << std::endl;
+        exit(-1);
+      }
+    else
+      peakShearStrainx[matN]= d;
+  }
+
+void XC::PressureMultiYieldBase::setCohesion(const double &d)
+  {
+    if(d<0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING cohesion < 0. "
+		  << "Will reset cohesion to zero."
+		  << Color::def << std::endl;
+        cohesionx[matN]= 0.;
+      }
+    else
+       cohesionx[matN]= d;
+  }
+void XC::PressureMultiYieldBase::setPressDependCoeff(const double &d)
+  {
+    if(d < 0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING pressDependCoe < 0. "
+		  << "Will reset pressDependCoeff to zero." << std::endl;
+	pressDependCoeffx[matN]= 0.;
+      }
+    else
+      pressDependCoeffx[matN]= d;
+  }
+void XC::PressureMultiYieldBase::setNumberOfSurfaces(const int &i)
+  {
+    if(i <= 0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: numberOfSurfaces <= 0. "
+		  << "Will use 10 yield surfaces."
+		  << Color::def << std::endl;
+	numOfSurfacesx[matN]= 10;
+      }
+    if(i> 100)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: numberOfSurfaces > 100. "
+		  << "Will use 100 yield surfaces." 
+                  << Color::def << std::endl;
+	numOfSurfacesx[matN]= 100;
+      }
+    numOfSurfacesx[matN]= i;
+  }
+
+void XC::PressureMultiYieldBase::setup(int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf)
+  {
+    setDimension(nd);
+    setMaterialStage(0); //default
+    setFrictionAngle(frictionAng);
+    setCohesion(cohesi);
+    setPeakShearStrain(peakShearStra);
+    setRefPressure(refPress);
+    setPressDependCoeff(pressDependCoe);
+    setNumberOfSurfaces(numberOfYieldSurf);
+    setRho(r);
+    
+    const int numOfSurfaces= numOfSurfacesx[matN];
+
+    e2p= committedActiveSurf = activeSurfaceNum = 0; 
   
     theSurfaces.resize(numOfSurfaces+1); //first surface not used
     committedSurfaces.resize(numOfSurfaces+1); 
   }
 
-XC::PressureMultiYieldBase::PressureMultiYieldBase(int tag, int classTag, int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf)
- :XC::SoilMaterialBase(tag,classTag), theSurfaces(), committedSurfaces(), currentStress(),trialStress(), currentStrain(), strainRate()
-  {
-    setup(nd,r,frictionAng,peakShearStra,refPress,pressDependCoe,cohesi,numberOfYieldSurf);
-  }
-   
 XC::PressureMultiYieldBase::PressureMultiYieldBase(int tag, int classTag) 
  : XC::SoilMaterialBase(tag,classTag), 
    theSurfaces(), committedSurfaces(),currentStress(), trialStress(), currentStrain(), 
-   strainRate() {}
+   strainRate()
+  {
+    resizeIfNeeded();
+  }
 
+XC::PressureMultiYieldBase::PressureMultiYieldBase(int tag, int classTag, int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf)
+ :XC::SoilMaterialBase(tag,classTag), theSurfaces(), committedSurfaces(), currentStress(),trialStress(), currentStrain(), strainRate()
+  {
+    resizeIfNeeded();
+    setup(nd,r,frictionAng,peakShearStra,refPress,pressDependCoe,cohesi,numberOfYieldSurf);
+  }
 
 XC::PressureMultiYieldBase::PressureMultiYieldBase(const PressureMultiYieldBase & a)
  : XC::SoilMaterialBase(a), currentStress(a.currentStress), trialStress(a.trialStress), 

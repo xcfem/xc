@@ -43,7 +43,6 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <material/nD/soil/MultiYieldSurface.h>
 #include <utility/matrix/Matrix.h>
-
 #include "material/nD/NDMaterialType.h"
 
 void XC::PressureIndependMultiYield::setupLocalMembers(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const std::vector<double> &gredu)

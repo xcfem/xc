@@ -51,6 +51,7 @@
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/ElementalLoad.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::NineFourNodeQuadUP::K(22,22);
 XC::Vector XC::NineFourNodeQuadUP::P(22);
@@ -165,9 +166,10 @@ void XC::NineFourNodeQuadUP::setDomain(Domain *theDomain)
 	dof = theNodes[i]->getNumberDOF();
 	if((i<nenp && dof != 3) || (i>=nenp && dof != 2))
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; FATAL ERROR: wrong number of DOFs at Nodes tag: "
-		      << this->getTag();
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL ERROR: wrong number of DOFs at node tag: "
+		      << this->getTag()
+		      << Color::def << std::endl;
 
 	    return;
 	  }
@@ -367,8 +369,9 @@ const XC::Matrix &XC::NineFourNodeQuadUP::getInitialStiff(void) const
 
 	if(!Ki)
 	  {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; FATAL ran out of memory\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL ran out of memory."
+		      << Color::def << std::endl;
 	    exit(-1);
 	  }
       }
@@ -626,9 +629,10 @@ int XC::NineFourNodeQuadUP::addLoad(ElementalLoad *theLoad, double loadFactor)
 	  }
 	else
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; load type unknown for ele with tag: "
-		      << this->getTag() << std::endl;
+		      << this->getTag()
+		      << Color::def << std::endl;
 	    return -1;
 	  } 
 	return -1;
@@ -664,8 +668,9 @@ int XC::NineFourNodeQuadUP::addInertiaLoadToUnbalance(const Vector &accel)
 
       if((i<nenp && 3 != Raccel.Size()) || (i>=nenp && 2 != Raccel.Size())) {
 
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; matrix and vector sizes are incompatible.\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and vector sizes are incompatible."
+		<< Color::def << std::endl;
 
          return -1;
 
@@ -839,8 +844,9 @@ const XC::Vector &XC::NineFourNodeQuadUP::getResistingForceIncInertia(void) cons
 
     if((i<nenp && 3 != accel.Size()) || (i>=nenp && 2 != accel.Size())) {
 
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; matrix and vector sizes are incompatible.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; matrix and vector sizes are incompatible."
+		<< Color::def << std::endl;
 
          return P;
 
@@ -894,8 +900,9 @@ const XC::Vector &XC::NineFourNodeQuadUP::getResistingForceIncInertia(void) cons
 
       if((i<nenp && 3 != vel.Size()) || (i>=nenp && 2 != vel.Size())) {
 
-         std::cerr << getClassName() << "::" << __FUNCTION__
-		   << "; matrix and vector sizes are incompatible\n";
+         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		   << "; matrix and vector sizes are incompatible."
+		<< Color::def << std::endl;
 
          return P;
 
@@ -968,7 +975,9 @@ int XC::NineFourNodeQuadUP::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -979,13 +988,17 @@ int XC::NineFourNodeQuadUP::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; failed to receive data."
+		<< Color::def << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; failed to receive data."
+		<< Color::def << std::endl;
       }
     return res;
   }
@@ -1231,10 +1244,10 @@ void XC::NineFourNodeQuadUP::globalShapeFunction(double *dvol, double *w, int ni
 
 	    if(det < 0.0) {
 
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "WARNING NineFourNodeQuadUP: Determinant<=0 in tag "
-
-		       << this->getTag();
+		      << this->getTag()
+		      << Color::def << std::endl;
 
 		    exit(-1);
 

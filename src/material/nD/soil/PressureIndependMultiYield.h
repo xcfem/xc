@@ -50,12 +50,9 @@ namespace XC {
 class PressureIndependMultiYield: public PressureMultiYieldBase
   {
   private:
-
-    // user supplied
-
     // internal
-    mutable double refShearModulus;
-    mutable double refBulkModulus;
+    mutable double refShearModulus; //!< Reference low-strain shear modulus, specified at a reference mean effective confining pressure refPress.
+    mutable double refBulkModulus; //!< Reference bulk modulus, specified at a reference mean effective confining pressure refPress.
 
      void setupLocalMembers(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const std::vector<double> &gredu);
     
@@ -106,64 +103,71 @@ class PressureIndependMultiYield: public PressureMultiYieldBase
                                  int   numberOfYieldSurf = 20,
 			       const std::vector<double> &gredu= std::vector<double>());
 
-     PressureIndependMultiYield(int tag= 0);
+    PressureIndependMultiYield(int tag= 0);
 
-     void setup(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const std::vector<double> &gredu);
-     void setupPy(const boost::python::dict &);
+    void setup(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, const std::vector<double> &gredu);
+    void setupPy(const boost::python::dict &);
 
-     inline double getRho(void) const
-       {return rhox[matN];}
+    inline double getRefShearModulus(void) const
+      { return refShearModulus; }
+    inline void setRefShearModulus(const double &d)
+      { refShearModulus= d; }
+    
+    inline double getRefBulkModulus(void) const
+      { return refBulkModulus; }
+    inline void setRefBulkModulus(const double &d)
+      { refBulkModulus= d; }
      
-     // Sets the values of the trial strain tensor.
-     int setTrialStrain(const Vector &strain);
+    // Sets the values of the trial strain tensor.
+    int setTrialStrain(const Vector &strain);
 
-     // Sets the values of the trial strain and strain rate tensors.
-     int setTrialStrain(const Vector &v, const Vector &r);
+    // Sets the values of the trial strain and strain rate tensors.
+    int setTrialStrain(const Vector &v, const Vector &r);
 
-     int setTrialStrainIncr(const Vector &v);
-     int setTrialStrainIncr(const Vector &v, const Vector &r);
+    int setTrialStrainIncr(const Vector &v);
+    int setTrialStrainIncr(const Vector &v, const Vector &r);
 
-     // Calculates current tangent stiffness.
-     const Matrix &getTangent(void) const;
-     const Matrix &getInitialTangent(void) const;
-        
-     void getBackbone(Matrix &);
+    // Calculates current tangent stiffness.
+    const Matrix &getTangent(void) const;
+    const Matrix &getInitialTangent(void) const;
 
-     // Calculates the corresponding stress increment(rate), for a given strain increment. 
-     const Vector &getStress(void) const;
-     const Vector &getStrain(void) const;
-     const Vector &getCommittedStress(void) const;
-     const Vector &getCommittedStrain(void) const;
+    void getBackbone(Matrix &);
 
-     // Accepts the current trial strain values as being on the solution path, and updates 
-     // all model parameters related to stress/strain states. Return 0 on success.
-     int commitState(void);
+    // Calculates the corresponding stress increment(rate), for a given strain increment. 
+    const Vector &getStress(void) const;
+    const Vector &getStrain(void) const;
+    const Vector &getCommittedStress(void) const;
+    const Vector &getCommittedStrain(void) const;
 
-     // Revert the stress/strain states to the last committed states. Return 0 on success.
-     int revertToLastCommit(void);
+    // Accepts the current trial strain values as being on the solution path, and updates 
+    // all model parameters related to stress/strain states. Return 0 on success.
+    int commitState(void);
 
-     int revertToStart(void) {return 0;}
+    // Revert the stress/strain states to the last committed states. Return 0 on success.
+    int revertToLastCommit(void);
 
-     // Return an exact copy of itself.
-     NDMaterial *getCopy(void) const;
+    int revertToStart(void) {return 0;}
 
-     // Return a copy of itself if "code"="PressureIndependMultiYield", otherwise return null.
-     NDMaterial *getCopy(const std::string &) const;
+    // Return an exact copy of itself.
+    NDMaterial *getCopy(void) const;
 
-     // Return the string "PressureIndependMultiYield".
-     const std::string &getType(void) const ;
+    // Return a copy of itself if "code"="PressureIndependMultiYield", otherwise return null.
+    NDMaterial *getCopy(const std::string &) const;
 
-     // Return ndm.
-     int getOrder(void) const ;
+    // Return the string "PressureIndependMultiYield".
+    const std::string &getType(void) const ;
 
-     int sendSelf(Communicator &);  
-     int recvSelf(const Communicator &);    
+    // Return ndm.
+    int getOrder(void) const ;
 
-     Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
-     int getResponse(int responseID, Information &matInformation);
-     void Print(std::ostream &s, int flag =0) const;
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);    
 
-     //void setCurrentStress(const Vector stress) { currentStress=T2Vector(stress); }
+    Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
+    int getResponse(int responseID, Information &matInformation);
+    void Print(std::ostream &s, int flag =0) const;
+
+    //void setCurrentStress(const Vector stress) { currentStress=T2Vector(stress); }
     int updateParameter(int responseID, Information &eleInformation);        
 
     // RWB; PyLiq1 & TzLiq1 need to see the excess pore pressure and initial stresses.

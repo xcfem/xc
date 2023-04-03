@@ -67,17 +67,22 @@ class SoilMaterialBase: public NDMaterial
 
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    void resizeIfNeeded(void);
   public:
-     // Initialization constructor
-     SoilMaterialBase(int tag, int classTag);
-    
-     const std::string &getType(void) const;
-     int getOrder(void) const;
+    // Initialization constructor
+    SoilMaterialBase(int tag, int classTag);
 
-     int getMaterialStage(void) const;
-     void updateMaterialStage(int);
-    
-     void Print(std::ostream &s, int flag =0) const;
+    inline int getDimension(void) const
+      { return ndmx[matN]; }
+    void setDimension(const int &);
+    const std::string &getType(void) const;
+    int getOrder(void) const;
+
+    int getMaterialStage(void) const;
+    void setMaterialStage(const int &);
+    void updateMaterialStage(int);
+
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

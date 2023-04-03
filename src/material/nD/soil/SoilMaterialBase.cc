@@ -44,17 +44,29 @@
 #include <material/nD/soil/MultiYieldSurface.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/nDarray/Tensor.h>
-
 #include "material/nD/NDMaterialType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 std::vector<int> XC::SoilMaterialBase::loadStagex;
 std::vector<int> XC::SoilMaterialBase::ndmx;
 int XC::SoilMaterialBase::matCount = 0;
 
-XC::SoilMaterialBase::SoilMaterialBase(int tag, int classTag) 
- : NDMaterial(tag, classTag)
+void XC::SoilMaterialBase::resizeIfNeeded(void)
   {
-    e2p = 0;
+    const int sz= loadStagex.size();
+    if(matCount>=sz)
+      {
+	loadStagex.resize(matCount+20);
+	ndmx.resize(matCount+20);
+      }
+  }
+
+XC::SoilMaterialBase::SoilMaterialBase(int tag, int classTag) 
+  : NDMaterial(tag, classTag), matN(0), e2p(0)
+  {
+    matCount++;
+    resizeIfNeeded();
+    matN= matCount;
   }
 
 //! @brief return the material stage (0:elastic 1:plastic).
@@ -70,14 +82,31 @@ void XC::SoilMaterialBase::updateMaterialStage(int stage)
   {
     if(stage !=0 && stage !=1)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING stage must be 0 or 1"
-		  << std::endl;
+		  << Color::def << std::endl;
         exit(-1);
       }
     loadStagex[matN]= stage;
   }
 
+void XC::SoilMaterialBase::setMaterialStage(const int &i)
+  { updateMaterialStage(i); }
+
+void XC::SoilMaterialBase::setDimension(const int &i)
+  {
+    if(i !=2 && i !=3)
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL dimension error: "
+		  << " dimension has to be 2 or 3, you give nd= "
+		  << i
+		  << Color::def << std::endl;
+        exit(-1);
+      }
+    else
+      ndmx[matN]= i;
+  }
 
 const std::string &XC::SoilMaterialBase::getType(void) const
   {
