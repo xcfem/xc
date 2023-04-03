@@ -173,6 +173,7 @@ class FE_Element: public TaggedObject
     virtual Integrator *getLastIntegrator(void);
     virtual const Vector &getLastResponse(void);
     Element *getElement(void);
+    std::string getElementClassName(void) const;
 
     virtual void Print(std::ostream &, int = 0) {return;};
 

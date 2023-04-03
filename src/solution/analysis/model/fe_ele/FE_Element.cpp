@@ -1016,6 +1016,14 @@ void XC::FE_Element::addLocalD_Force(const XC::Vector &accel, double fact)
 XC::Element *XC::FE_Element::getElement(void)
   { return myEle; }
 
+//! @brief Returns the name of the associated element (if any).
+std::string XC::FE_Element::getElementClassName(void) const
+  {
+    std::string retval;
+    if(myEle)
+      retval= myEle->getClassName();
+    return retval;
+  }
 
 // AddingSensitivity:BEGIN /////////////////////////////////
 void XC::FE_Element::addResistingForceSensitivity(int gradNumber, double fact)
