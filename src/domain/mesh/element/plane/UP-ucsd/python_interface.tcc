@@ -21,3 +21,6 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+class_<XC::NineFourNodeQuadUP, bases<ElemWithMaterial9N_Mech2D>, boost::noncopyable >("NineFourNodeQuadUP", no_init)
+//.def("detJ", &XC::NineFourNodeQuadUP::detJ)
+   ;

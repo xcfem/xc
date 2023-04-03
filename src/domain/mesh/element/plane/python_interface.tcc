@@ -89,6 +89,15 @@ class_<PlaneElement9N_SFD, bases<ElemWithMaterial9N_SFD>, boost::noncopyable >("
   .def("orientation", &PlaneElement9N_SFD::orientation, "orientation(initialGeometry) return the orientation of the element.")
    ;
 
+// 9 nodes solid mechanics plane element.
+XC::SolidMech2D &(ElemWithMaterial9N_Mech2D::*getMech2D9NPhysicalProp)(void)= &ElemWithMaterial9N_Mech2D::getPhysicalProperties;
+class_<ElemWithMaterial9N_Mech2D, bases<XC::ElementBase<9> >, boost::noncopyable >("ElemWithMaterial9N_Mech2D", no_init)
+  .add_property("physicalProperties", make_function(getMech2D9NPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
+//  .add_property("extrapolationMatrix",make_function(&ElemWithMaterial9N_Mech2D::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
+//  .def("getExtrapolatedValues", &ElemWithMaterial9N_Mech2D::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
+  .def("setMaterial", &ElemWithMaterial9N_Mech2D::setMaterial,"Set the element material.")
+   ;
 
+#include "UP-ucsd/python_interface.tcc"
 //Shell
 #include "shell/python_interface.tcc"

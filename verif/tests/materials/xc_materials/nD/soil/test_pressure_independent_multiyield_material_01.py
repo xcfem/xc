@@ -11,8 +11,6 @@ __email__= "l.pereztato@gmail.com"
 
 import xc
 from materials import typical_materials
-from solution import predefined_solutions
-from misc_utils import log_messages as lmsg
 
 # Define finite element problem.
 feProblem= xc.FEProblem()

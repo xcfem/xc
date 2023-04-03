@@ -817,6 +817,7 @@ python tests/materials/xc_materials/nD/test_j2_plate_fibre.py
 python tests/materials/xc_materials/nD/test_j2_plate_fibre_strain_load.py
 echo "$BLEU" "      Soil materials tests." "$NORMAL"
 python tests/materials/xc_materials/nD/soil/test_pressure_independent_multiyield_material_01.py
+python tests/materials/xc_materials/nD/soil/test_pressure_independent_multiyield_material_02.py
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
 python tests/materials/xc_materials/sections/test_material_elastic_membrane_plate_section_01.py
 python tests/materials/xc_materials/sections/test_material_elastic_plate_section_01.py
