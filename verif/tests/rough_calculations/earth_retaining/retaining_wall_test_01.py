@@ -12,6 +12,7 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 import os
+import sys
 from rough_calculations import ng_retaining_wall
 from materials.sia262 import SIA262_materials
 from materials.sia262 import SIA262_limit_state_checking
@@ -62,10 +63,13 @@ HwaterAcc= 1.5
 concrete= SIA262_materials.c30_37
 #concrete= EHE_materials.HA30
 reinfSteel= EHE_materials.B500S
-pthAux= os.path.dirname(__file__)
-if(not pthAux):
-  pthAux= "."
-exec(open(pthAux+"/../../aux/rebar_types.py").read())
+pth= os.path.dirname(__file__)
+if(not pth):
+  pth= "."
+auxModulePath= pth+"/../../aux"
+sys.path.append(auxModulePath)
+import rebar_types
+rebar_types.define_types(reinfSteel= reinfSteel, cover= cover)
 
 sectionName= "mur10m"
 wall= ng_retaining_wall.RetainingWall(sectionName,cover,stemBottomWidth,stemTopWidth, stemBackSlope= 1/10.0, footingThickness= footingThickness, concrete= concrete, steel= reinfSteel)
@@ -74,20 +78,20 @@ wall.bToe= bToe
 wall.bHeel= bHeel
 wall.concrete= concrete
 #wall.exigeanceFisuration= 'A'
-wall.stemReinforcement.setReinforcement(1,A25_10.getCopy())  # vert. trasdós (esperas)
-wall.stemReinforcement.setReinforcement(2,A25_10.getCopy()) # vert. trasdós (contacto terreno)
-wall.stemReinforcement.setReinforcement(11,A16_20.getCopy()) #horiz. trasdós
+wall.stemReinforcement.setReinforcement(1, rebar_types.A25_10.getCopy())  # vert. trasdós (esperas)
+wall.stemReinforcement.setReinforcement(2, rebar_types.A25_10.getCopy()) # vert. trasdós (contacto terreno)
+wall.stemReinforcement.setReinforcement(11, rebar_types.A16_20.getCopy()) #horiz. trasdós
 
-wall.stemReinforcement.setReinforcement(4,A16_20.getCopy()) # vert. intradós (esperas)
-wall.stemReinforcement.setReinforcement(5,A16_20.getCopy()) # vert. intradós (exterior)
-wall.stemReinforcement.setReinforcement(12,A16_20.getCopy()) #horiz. intradós
+wall.stemReinforcement.setReinforcement(4, rebar_types.A16_20.getCopy()) # vert. intradós (esperas)
+wall.stemReinforcement.setReinforcement(5, rebar_types.A16_20.getCopy()) # vert. intradós (exterior)
+wall.stemReinforcement.setReinforcement(12, rebar_types.A16_20.getCopy()) #horiz. intradós
 
-wall.footingReinforcement.setReinforcement(3,A25_10.getCopy()) #tr. sup. zapata
-wall.footingReinforcement.setReinforcement(9,A16_10.getCopy()) # ln. sup. zapata
-wall.footingReinforcement.setReinforcement(7,A20_10.getCopy()) # tr. inf. zapata
-wall.footingReinforcement.setReinforcement(8,A16_20.getCopy()) # ln. inf. zapata
+wall.footingReinforcement.setReinforcement(3, rebar_types.A25_10.getCopy()) #tr. sup. zapata
+wall.footingReinforcement.setReinforcement(9, rebar_types.A16_10.getCopy()) # ln. sup. zapata
+wall.footingReinforcement.setReinforcement(7, rebar_types.A20_10.getCopy()) # tr. inf. zapata
+wall.footingReinforcement.setReinforcement(8, rebar_types.A16_20.getCopy()) # ln. inf. zapata
 
-wall.stemReinforcement.setReinforcement(6,A12_20.getCopy())  #coronación
+wall.stemReinforcement.setReinforcement(6, rebar_types.A12_20.getCopy())  #coronación
 
 wallFEModel= wall.createFEProblem('Retaining wall '+sectionName)
 preprocessor= wallFEModel.getPreprocessor
@@ -200,7 +204,6 @@ wall.drawSchema(pth)
 #notes= ["Overturning: "+fmt.Factor.format(sr.Foverturning), "Sliding: "+fmt.Factor.format(sr.Fsliding), "Bearing: "+fmt.Factor.format(sr.Fbearing), "Allow. press. ratio: "+fmt.Factor.format(sr.FadmPressure)] 
 #wall.draw(notes)
 
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(err)<1e-9):

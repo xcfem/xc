@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
+import sys
 import math
 from rough_calculations import ng_retaining_wall
 from materials.sia262 import SIA262_materials
@@ -64,31 +65,34 @@ HwaterAcc=2.0 # height of water over the top face of the footing
 concrete= SIA262_materials.c30_37
 #concrete= EHE_materials.HA30
 reinfSteel= EHE_materials.B500S
-pthAux= os.path.dirname(__file__)
-if(not pthAux):
-  pthAux= "."
-exec(open(pthAux+"/../../aux/rebar_types.py").read())
-#exec(open("./armatures_type.py").read())
+pth= os.path.dirname(__file__)
+if(not pth):
+  pth= "."
+auxModulePath= pth+"/../../aux"
+sys.path.append(auxModulePath)
+import rebar_types
+rebar_types.define_types(reinfSteel= reinfSteel, cover= cover)
+
 wall= ng_retaining_wall.RetainingWall(sectionName,cover,stemBottomWidth,stemTopWidth, stemBackSlope= stemBackSlope, footingThickness= footingThickness, concrete= concrete, steel= reinfSteel,title=title)
 wall.stemHeight= stemHeight
 wall.bToe= bToe
 wall.bHeel= bHeel
 wall.concrete= concrete
-wall.stemReinforcement.setReinforcement(1,A12_15.getCopy())  # vert. trasdós (esperas)
-wall.stemReinforcement.setReinforcement(2,A12_15.getCopy()) # vert. trasdós (contacto terreno)
-wall.stemReinforcement.setReinforcement(6,A12_15.getCopy())  #coronación
-wall.stemReinforcement.setReinforcement(11,A12_15.getCopy()) #horiz. trasdós
+wall.stemReinforcement.setReinforcement(1, rebar_types.A12_15.getCopy())  # vert. trasdós (esperas)
+wall.stemReinforcement.setReinforcement(2, rebar_types.A12_15.getCopy()) # vert. trasdós (contacto terreno)
+wall.stemReinforcement.setReinforcement(6, rebar_types.A12_15.getCopy())  #coronación
+wall.stemReinforcement.setReinforcement(11, rebar_types.A12_15.getCopy()) #horiz. trasdós
 
-wall.stemReinforcement.setReinforcement(4,A12_15.getCopy()) # vert. intradós (esperas)
-wall.stemReinforcement.setReinforcement(5,A12_15.getCopy()) # vert. intradós (exterior)
-wall.stemReinforcement.setReinforcement(12,A12_15.getCopy()) #horiz. intradós
+wall.stemReinforcement.setReinforcement(4, rebar_types.A12_15.getCopy()) # vert. intradós (esperas)
+wall.stemReinforcement.setReinforcement(5, rebar_types.A12_15.getCopy()) # vert. intradós (exterior)
+wall.stemReinforcement.setReinforcement(12, rebar_types.A12_15.getCopy()) #horiz. intradós
 
-wall.footingReinforcement.setReinforcement(3,A12_15.getCopy()) #tr. sup. zapata
-wall.footingReinforcement.setReinforcement(9,A12_15.getCopy()) # ln. sup. zapata
-wall.footingReinforcement.setReinforcement(7,A12_15.getCopy()) # tr. inf. zapata
-wall.footingReinforcement.setReinforcement(8,A12_15.getCopy()) # ln. inf. zapata
+wall.footingReinforcement.setReinforcement(3, rebar_types.A12_15.getCopy()) #tr. sup. zapata
+wall.footingReinforcement.setReinforcement(9, rebar_types.A12_15.getCopy()) # ln. sup. zapata
+wall.footingReinforcement.setReinforcement(7, rebar_types.A12_15.getCopy()) # tr. inf. zapata
+wall.footingReinforcement.setReinforcement(8, rebar_types.A12_15.getCopy()) # ln. inf. zapata
 
-wall.footingReinforcement.setReinforcement(10,A12_15.getCopy()) # lateral zapata
+wall.footingReinforcement.setReinforcement(10, rebar_types.A12_15.getCopy()) # lateral zapata
 
 wallFEModel= wall.createFEProblem('Retaining wall '+sectionName)
 preprocessor= wallFEModel.getPreprocessor
