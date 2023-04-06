@@ -44,10 +44,10 @@ def buildFourFiberSection(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4):
     z1= -widthOverZ/2.0
     fourFibersSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fourFibersSection")
 
-    f1= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,z1]))
-    f2= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,z1]))
-    f3= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,-z1]))
-    f4= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,-z1]))
+    global f1; f1= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,z1]))
+    global f2; f2= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,z1]))
+    global f3; f3= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,-z1]))
+    global f4; f4= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,-z1]))
 
 
     f1.getMaterial().setTrialStrain(epsilon1,0.0)
@@ -66,8 +66,8 @@ def buildFourFiberSection(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4):
     fourFibersSection.setTrialDeformationPlane(deformationPlane0)
     #fourFibersSection.setTrialSectionDeformation(xc.Vector([epsilon,0.0,0.0]))
     DD= fourFibersSection.getSectionDeformation()
-    D0= xc.Vector([DD[0],DD[2],DD[1]]) # epsilon= DD[0], Ky= DD[2], Kz= DD[1]
-    N0S= fourFibersSection.getN()
-    My0S= fourFibersSection.getMy()
-    Mz0S= fourFibersSection.getMz()
+    global D0; D0= xc.Vector([DD[0],DD[2],DD[1]]) # epsilon= DD[0], Ky= DD[2], Kz= DD[1]
+    global N0S; N0S= fourFibersSection.getN()
+    global My0S; My0S= fourFibersSection.getMy()
+    global Mz0S; Mz0S= fourFibersSection.getMz()
     return fourFibersSection

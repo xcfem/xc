@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import xc
 from model import predefined_spaces
 from postprocess import prop_statistics
@@ -32,10 +33,13 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../../../../aux/four_fiber_section.py").read())
+auxModulePath= pth+"/../../../../../aux"
+sys.path.append(auxModulePath)
+import four_fiber_section
+fourFibersSection= four_fiber_section.buildFourFiberSection(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4)
 
-sigma= E*epsilon
-F= sigma*fiberArea
+sigma= four_fiber_section.E*epsilon
+F= sigma*four_fiber_section.fiberArea
 N0Teor= 4*F
 My0Teor= 0.0
 Mz0Teor= 0.0
@@ -43,14 +47,14 @@ R0Teor=xc.Vector([N0Teor,My0Teor,Mz0Teor])
 D0Teor=xc.Vector([epsilon,0.0,0.0])
 
 
-ratioN0= abs(N0-N0Teor)/N0Teor
-ratioN0S= abs(N0S-N0Teor)/N0Teor
-ratioMy0= abs(My0-My0Teor)
-ratioMy0S= abs(My0S-My0Teor)
-ratioMz0= abs(Mz0-Mz0Teor)
-ratioMz0S= abs(Mz0S-Mz0Teor)
-ratioR0= (R0Teor-R0).Norm()
-ratioD0= (D0Teor-D0).Norm()
+ratioN0= abs(four_fiber_section.N0-N0Teor)/N0Teor
+ratioN0S= abs(four_fiber_section.N0S-N0Teor)/N0Teor
+ratioMy0= abs(four_fiber_section.My0-My0Teor)
+ratioMy0S= abs(four_fiber_section.My0S-My0Teor)
+ratioMz0= abs(four_fiber_section.Mz0-Mz0Teor)
+ratioMz0S= abs(four_fiber_section.Mz0S-Mz0Teor)
+ratioR0= (R0Teor-four_fiber_section.R0).Norm()
+ratioD0= (D0Teor-four_fiber_section.D0).Norm()
 
 fourFibersSection.revertToStart()
 # Positive My (section)
@@ -58,10 +62,10 @@ epsilon1= -epsilon
 epsilon2= -epsilon
 epsilon3= epsilon
 epsilon4= epsilon
-f1.getMaterial().setTrialStrain(epsilon1,0.0)
-f2.getMaterial().setTrialStrain(epsilon2,0.0)
-f3.getMaterial().setTrialStrain(epsilon3,0.0)
-f4.getMaterial().setTrialStrain(epsilon4,0.0)
+four_fiber_section.f1.getMaterial().setTrialStrain(epsilon1,0.0)
+four_fiber_section.f2.getMaterial().setTrialStrain(epsilon2,0.0)
+four_fiber_section.f3.getMaterial().setTrialStrain(epsilon3,0.0)
+four_fiber_section.f4.getMaterial().setTrialStrain(epsilon4,0.0)
 N1= fourFibersSection.getFibers().getResultant()
 My1= fourFibersSection.getFibers().getMy(0.0)
 Mz1= fourFibersSection.getFibers().getMz(0.0)
@@ -78,10 +82,10 @@ My1S= fourFibersSection.getMy()
 Mz1S= fourFibersSection.getMz()
 
 N1Teor= 0.0
-My1Teor= 2*F*widthOverZ
+My1Teor= 2*F*four_fiber_section.widthOverZ
 Mz1Teor= 0.0
 R1Teor=xc.Vector([N1Teor,My1Teor,Mz1Teor])
-Ky1Teor= 2*epsilon/widthOverZ
+Ky1Teor= 2*epsilon/four_fiber_section.widthOverZ
 D1Teor=xc.Vector([0.0,Ky1Teor,0.0])
 
 ratioN1= abs(N1-N1Teor)
@@ -99,10 +103,10 @@ epsilon1= epsilon
 epsilon2= -epsilon
 epsilon3= -epsilon
 epsilon4= epsilon
-f1.getMaterial().setTrialStrain(epsilon1,0.0)
-f2.getMaterial().setTrialStrain(epsilon2,0.0)
-f3.getMaterial().setTrialStrain(epsilon3,0.0)
-f4.getMaterial().setTrialStrain(epsilon4,0.0)
+four_fiber_section.f1.getMaterial().setTrialStrain(epsilon1,0.0)
+four_fiber_section.f2.getMaterial().setTrialStrain(epsilon2,0.0)
+four_fiber_section.f3.getMaterial().setTrialStrain(epsilon3,0.0)
+four_fiber_section.f4.getMaterial().setTrialStrain(epsilon4,0.0)
 N2= fourFibersSection.getFibers().getResultant()
 My2= fourFibersSection.getFibers().getMy(0.0)
 Mz2= fourFibersSection.getFibers().getMz(0.0)
@@ -120,9 +124,9 @@ Mz2S= fourFibersSection.getMz()
 
 N2Teor= 0.0
 My2Teor= 0.0
-Mz2Teor= -4*F*depthOverY/2.0 #Mz positive is in the opposite direction with respecto to the positive y-axis. ???
+Mz2Teor= -4*F*four_fiber_section.depthOverY/2.0 #Mz positive is in the opposite direction with respecto to the positive y-axis. ???
 R2Teor=xc.Vector([N2Teor,My2Teor,Mz2Teor])
-Kz2Teor= 2*epsilon/depthOverY
+Kz2Teor= 2*epsilon/four_fiber_section.depthOverY
 D2Teor=xc.Vector([0.0,0.0,-Kz2Teor]) #Negative ???
 
 ratioN2= abs(N2-N2Teor)
@@ -141,10 +145,10 @@ epsilon1= epsilon
 epsilon2= 0.0
 epsilon3= -epsilon
 epsilon4= 0.0
-f1.getMaterial().setTrialStrain(epsilon1,0.0)
-f2.getMaterial().setTrialStrain(epsilon2,0.0)
-f3.getMaterial().setTrialStrain(epsilon3,0.0)
-f4.getMaterial().setTrialStrain(epsilon4,0.0)
+four_fiber_section.f1.getMaterial().setTrialStrain(epsilon1,0.0)
+four_fiber_section.f2.getMaterial().setTrialStrain(epsilon2,0.0)
+four_fiber_section.f3.getMaterial().setTrialStrain(epsilon3,0.0)
+four_fiber_section.f4.getMaterial().setTrialStrain(epsilon4,0.0)
 N3= fourFibersSection.getFibers().getResultant()
 My3= fourFibersSection.getFibers().getMy(0.0)
 Mz3= fourFibersSection.getFibers().getMz(0.0)
@@ -161,11 +165,11 @@ My3S= fourFibersSection.getMy()
 Mz3S= fourFibersSection.getMz()
 
 N3Teor= 0.0
-My3Teor= -2*F*widthOverZ/2.0
-Mz3Teor= -2*F*depthOverY/2.0
+My3Teor= -2*F*four_fiber_section.widthOverZ/2.0
+Mz3Teor= -2*F*four_fiber_section.depthOverY/2.0
 R3Teor=xc.Vector([N3Teor,My3Teor,Mz3Teor])
-Ky3Teor= -epsilon/widthOverZ
-Kz3Teor= epsilon/depthOverY
+Ky3Teor= -epsilon/four_fiber_section.widthOverZ
+Kz3Teor= epsilon/four_fiber_section.depthOverY
 D3Teor=xc.Vector([0.0,Ky3Teor,-Kz3Teor]) #Negative ???
 
 ratioN3= abs(N3-N3Teor)
