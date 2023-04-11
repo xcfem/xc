@@ -12,7 +12,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import math
 import geom
 
-plg=geom.Polygon2d()
+plg=geom.Polygon2d([geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(1,1), geom.Pos2d(0,1)])
 
 #        +--------+
 #        |        |
@@ -21,10 +21,6 @@ plg=geom.Polygon2d()
 #        |        |
 #        +--------+
 
-plg.appendVertex(geom.Pos2d(0,0))
-plg.appendVertex(geom.Pos2d(1,0))
-plg.appendVertex(geom.Pos2d(1,1))
-plg.appendVertex(geom.Pos2d(0,1))
 area= plg.getArea()
 
 p= geom.Pos2d(0.5,0.5)

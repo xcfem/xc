@@ -22,12 +22,7 @@ barArea= math.pi*(barDiameter/2.0)**2 # Bar area in square meters.
 h= 274e-3 # Concrete element thickness.
 hef= 210e-3 # Effective anchor depth.
 anchorPosition=  geom.Pos2d(.135,0) # Anchor position
-baseMaterialContour=  geom.Polygon2d() # Contour of concrete element.
-baseMaterialContour.appendVertex(geom.Pos2d(0,-1))
-baseMaterialContour.appendVertex(geom.Pos2d(1,-1))
-baseMaterialContour.appendVertex(geom.Pos2d(1,1))
-baseMaterialContour.appendVertex(geom.Pos2d(0,1))    
-
+baseMaterialContour=  geom.Polygon2d([geom.Pos2d(0,-1), geom.Pos2d(1,-1), geom.Pos2d(1,1), geom.Pos2d(0,1)]) # Contour of concrete element.
 
 fuk= 550e6 # Characteristic steel ultimate tensile strength (Pa).
 tauRk= 7.5e6 # Characteristic bond strength (taken from ETA-05/0051 table 11).

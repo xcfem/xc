@@ -12,20 +12,12 @@ import math
 
 referencePerimeter=4+math.sqrt(2)
 
-pol1=geom.Polygon2d()
-pol1.appendVertex(geom.Pos2d(-1.,-1.))
-pol1.appendVertex(geom.Pos2d(1.,-1.))
-pol1.appendVertex(geom.Pos2d(1.,1.))
-pol1.appendVertex(geom.Pos2d(-1.,1.))
+pol1=geom.Polygon2d([geom.Pos2d(-1.,-1.), geom.Pos2d(1.,-1.), geom.Pos2d(1.,1.), geom.Pos2d(-1.,1.)])
 
 pol2=geom.Polygon2d(pol1)
 pol2.move(geom.Vector2d(1,1))
 
-pol3=geom.Polygon2d()
-pol3.appendVertex(geom.Pos2d(0.,-1.))
-pol3.appendVertex(geom.Pos2d(1.,-1.))
-pol3.appendVertex(geom.Pos2d(1.,2.))
-pol3.appendVertex(geom.Pos2d(0.,2.))
+pol3=geom.Polygon2d([geom.Pos2d(0.,-1.), geom.Pos2d(1.,-1.), geom.Pos2d(1.,2.), geom.Pos2d(0.,2.)])
 
 list1=[pol1,pol2]
 list1=geom.particiona(list1)

@@ -10,10 +10,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 
 import geom
-# import matplotlib.pyplot as plt
-
-pol=geom.Polygon2d()
-
 #        +----+
 #        |    |
 #        |    |
@@ -25,18 +21,11 @@ pol=geom.Polygon2d()
 #        |    |
 #        +----+
 
-pol.appendVertex(geom.Pos2d(1,0))
-pol.appendVertex(geom.Pos2d(2,0))
-pol.appendVertex(geom.Pos2d(2,1))
-pol.appendVertex(geom.Pos2d(3,1))
-pol.appendVertex(geom.Pos2d(3,2))
-pol.appendVertex(geom.Pos2d(2,2))
-pol.appendVertex(geom.Pos2d(2,3))
-pol.appendVertex(geom.Pos2d(1,3))
-pol.appendVertex(geom.Pos2d(1,2))
-pol.appendVertex(geom.Pos2d(0,2))
-pol.appendVertex(geom.Pos2d(0,1))
-pol.appendVertex(geom.Pos2d(1,1))
+pol=geom.Polygon2d([geom.Pos2d(1,0), geom.Pos2d(2,0), geom.Pos2d(2,1), geom.Pos2d(3,1),
+                    geom.Pos2d(3,2), geom.Pos2d(2,2), geom.Pos2d(2,3), geom.Pos2d(1,3),
+                    geom.Pos2d(1,2), geom.Pos2d(0,2), geom.Pos2d(0,1), geom.Pos2d(1,1)])
+
+
 area= pol.getArea()
 
 
@@ -56,6 +45,7 @@ if(abs(area)<1e-15):
 else:
     lmsg.error('test: '+fname+' ERROR.')
 
+# import matplotlib.pyplot as plt
 # def getXYVertices(plg):
 #     x= list()
 #     y= list()

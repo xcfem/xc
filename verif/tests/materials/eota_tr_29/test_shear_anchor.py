@@ -26,11 +26,7 @@ boltArea= math.pi*(boltDiameter/2.0)**2 # Bar area in square meters.
 h= 100e-3 # Concrete element thickness.
 hef= 70e-3 # Effective anchor depth.
 anchorPosition=  geom.Pos2d(.100,0) # Anchor position
-baseMaterialContour=  geom.Polygon2d() # Contour of concrete element.
-baseMaterialContour.appendVertex(geom.Pos2d(0,-1))
-baseMaterialContour.appendVertex(geom.Pos2d(1,-1))
-baseMaterialContour.appendVertex(geom.Pos2d(1,1))
-baseMaterialContour.appendVertex(geom.Pos2d(0,1))
+baseMaterialContour=  geom.Polygon2d([geom.Pos2d(0,-1), geom.Pos2d(1,-1), geom.Pos2d(1,1), geom.Pos2d(0,1)]) # Contour of concrete element.
 spacing= 150e-3
 
 

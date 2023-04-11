@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Test tributary areas computation.'''
+
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
@@ -8,11 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-pol1=geom.Polygon2d()
-pol1.appendVertex(geom.Pos2d(0.,0.))
-pol1.appendVertex(geom.Pos2d(4.,0.))
-pol1.appendVertex(geom.Pos2d(4.,1.))
-pol1.appendVertex(geom.Pos2d(0.,1.))
+pol1=geom.Polygon2d([geom.Pos2d(0.,0.), geom.Pos2d(4.,0.), geom.Pos2d(4.,1.), geom.Pos2d(0.,1.)])
 
 areasTrib=pol1.getTributaryAreas()
 

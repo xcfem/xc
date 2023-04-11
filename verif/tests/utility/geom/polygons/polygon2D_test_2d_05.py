@@ -12,11 +12,7 @@ import math
 
 referencePerimeter=6+math.sqrt(2)
 
-pol1=geom.Polygon2d()
-pol1.appendVertex(geom.Pos2d(-1.,-1.))
-pol1.appendVertex(geom.Pos2d(1.,-1.))
-pol1.appendVertex(geom.Pos2d(1.,1.))
-pol1.appendVertex(geom.Pos2d(-1.,1.))
+pol1=geom.Polygon2d([geom.Pos2d(-1.,-1.), geom.Pos2d(1.,-1.), geom.Pos2d(1.,1.), geom.Pos2d(-1.,1.)])
 
 pol2=geom.Polygon2d(pol1)
 pol2.move(geom.Vector2d(1,1))
