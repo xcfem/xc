@@ -25,34 +25,34 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-
-//################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           OpenSees                                                  #
-//# PURPOSE:           Triaxial Failure Criterion for Concrete - yield criterion #
-//# CLASS:             TriFCYieldSurface                                         #
-//#                                                                              #
-//# VERSION:           1.0                                                       #
-//# LANGUAGE:          C++ (ili tako nesto)                                      #
-//# TARGET OS:                                                                   #
-// DESIGNER(S):       Boris Jeremic and Zhaohui Yang [jeremic,zhyang]@ucdavis.edu|
-// PROGRAMMER(S):     Vlado Vukadin                                              |
-//#                                                                              #
-//#                                                                              #
-//# DATE:             June 01, 2002                                              #
-//# UPDATE HISTORY:    bice tako dobr da nece biti potreban update :)            #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION:                                                           #
-//#                                                                              #
-//# Yield surface is based on article by Menetrey, P. and William, K.J.          #
-//# published in 1995 in  ACI Structural Journal pp 311-318. Purpose of the     #
-//# Yield surface is to model triaxial strength of concrete                      #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+/*
+################################################################################
+# COPYRIGHT (C):     :-))                                                      #
+# PROJECT:           OpenSees                                                  #
+# PURPOSE:           Triaxial Failure Criterion for Concrete - yield criterion #
+# CLASS:             TriFCYieldSurface                                         #
+#                                                                              #
+# VERSION:           1.0                                                       #
+# LANGUAGE:          C++ (ili tako nesto)                                      #
+# TARGET OS:                                                                   #
+# DESIGNER(S):     Boris Jeremic and Zhaohui Yang [jeremic,zhyang]@ucdavis.edu #
+# PROGRAMMER(S):   Vlado Vukadin                                               #
+#                                                                              #
+#                                                                              #
+# DATE:             June 01, 2002                                              #
+# UPDATE HISTORY:    bice tako dobr da nece biti potreban update :)            #
+#                                                                              #
+#                                                                              #
+#                                                                              #
+#                                                                              #
+# SHORT EXPLANATION:                                                           #
+#                                                                              #
+# Yield surface is based on article by Menetrey, P. and William, K.J.          #
+# published in 1995 in  ACI Structural Journal pp 311-318. Purpose of the      #
+# Yield surface is to model triaxial strength of concrete                      #
+#                                                                              #
+#                                                                              #
+################################################################################
 //*/
 
 #ifndef Tri_a_fail_crit_YieldSurface_H
@@ -102,7 +102,7 @@ class TriFCYieldSurface: public YieldSurface
     double getC(void) const;
     void setC(const double &);
 
-    void print() { std::cerr << *this; }; 
+    void print() { std::cout << *this; }; 
   
     //================================================================================
     // Overloaded Insertion Operator

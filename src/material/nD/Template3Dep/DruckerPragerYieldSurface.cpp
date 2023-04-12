@@ -82,7 +82,6 @@ double XC::DruckerPragerYieldSurface::f(const EPState *EPS) const
     double k= EPS->getScalarVar(2);
     
     double f= temp2 + temp5 - k;
-
     return f;
   }
 

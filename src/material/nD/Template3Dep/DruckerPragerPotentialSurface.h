@@ -79,11 +79,15 @@ class DruckerPragerPotentialSurface: public PotentialSurface
     double alfa2;	  // potential surface orientation angle  
   
   public:
-    DruckerPragerPotentialSurface( double a2d = 0.0 ) : alfa2(a2d) {}   // Default constructor
-    virtual ~DruckerPragerPotentialSurface() { }; //Virtual functions not all redefined
+    DruckerPragerPotentialSurface( double a2d = 0.0 )
+      : alfa2(a2d) {}   // Default constructor
+    virtual ~DruckerPragerPotentialSurface()
+      { }; //Virtual functions not all redefined
     DruckerPragerPotentialSurface( const DruckerPragerPotentialSurface &); //Copy constructor
     PotentialSurface *getCopy(void); // create a clone of itself
+  
     double getalfa2() const;
+    void setAlfa2(const double &);
 
     BJtensor dQods(const EPState *EPS) const;
     BJtensor d2Qods2(const EPState *EPS) const;

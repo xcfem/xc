@@ -112,7 +112,6 @@
 // nDarray.cc
 
 #include "nDarray.h"
-#include <iostream>
 
 //! @brief Initialize dimensions vector.
 void XC::nDarray_rep::init_dim(const size_t &sz, const int &default_dim)
@@ -834,25 +833,27 @@ bool XC::nDarray::operator==(const nDarray &rval) const
 
 
 //! @brief nDarray print function
-void XC::nDarray::print(const std::string &name ,const std::string &msg) const
+void XC::nDarray::print(const std::string &name ,const std::string &msg, std::ostream &os) const
   {
-    std::cerr << msg << std::endl;
+    os << msg << std::endl;
 
     switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
-            ::printf("%s(1)=%+8.4e  ", name.c_str(), (*this)(1));
-            ::printf("\n");
+            // ::printf("%s(1)=%+8.4e  ", name.c_str(), (*this)(1));
+            // ::printf("\n");
+            os << name << "(1)= " << (*this)(1) << std::endl;
             break;
           }
 
         case 1:
           {
-            for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
+            for( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
-                ::printf("%s(%2d)=%+8.4e  ", name.c_str(), i, (*this)(i));
-                ::printf("\n");
+                // ::printf("%s(%2d)=%+8.4e  ", name.c_str(), i, (*this)(i));
+                // ::printf("\n");
+                os << name << "(" << i << ")= " << (*this)(i) << std::endl;
               }
             break;
           }
@@ -863,40 +864,42 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
               {
                 for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
-                    ::printf("%s(%2d,%2d)=%+12.8e ", name.c_str(), i2, j2, (*this)(i2, j2));
-                  }
-                ::printf("\n");
-              }
-            break;
-          }
-
+                    //::printf("%s(%2d,%2d)=%+12.8e ", name.c_str(), i2, j2, (*this)(i2, j2));
+                    os << name << "(" << i2 << "," << j2 << ")= " << (*this)(i2,j2) << std::endl;
+		  }
+	        //::printf("\n");
+		os << std::endl;
+	      }
+	    break;
+	  }
         case 3:
           {
-            for ( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
-              for ( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
+            for( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
+              for( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
                 {
-                  for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
+                  for( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
-                      ::printf("%s(%d,%d,%d)=%+8.4e  ", name.c_str(), i3, j3, k3,
-                        (*this)(i3, j3, k3));
+                      //::printf("%s(%d,%d,%d)=%+8.4e  ", name.c_str(), i3, j3, k3, (*this)(i3, j3, k3));
+		      os << name << "(" << i3 << "," << j3 << "," << k3 << ")= " << (*this)(i3,j3,k3) << std::endl;
                     }
-                  ::printf("\n");
+                  //::printf("\n");
+		  os << std::endl;
                 }
             break;
           }
-
         case 4:
           {
-            for ( int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
-              for ( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
-                for ( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
+            for(int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
+              for( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
+                for( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
                   {
-                    for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
+                    for( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
-                        ::printf("%s(%d,%d,%d,%d)=%+8.4e  ",name.c_str(),i4,j4,k4,l4,
-                          (*this)(i4, j4, k4, l4));
+                        //::printf("%s(%d,%d,%d,%d)=%+8.4e  ",name.c_str(),i4,j4,k4,l4, (*this)(i4, j4, k4, l4));
+			os << name << "(" << i4 << "," << j4 << "," << k4  << "," << l4 << ")= " << (*this)(i4,j4,k4,l4) << std::endl;
                       }
-                    ::printf("\n");
+                    //::printf("\n");
+		    os << std::endl;
                    }
             break;
           }
@@ -905,6 +908,11 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
 //
   }
 
+std::ostream &XC::operator<<(std::ostream &os, const XC::nDarray &arr)
+  {
+    arr.print("","", os);
+    return os;
+  }
 
 // nDarray print function
 void XC::nDarray::printshort(const std::string &msg) const

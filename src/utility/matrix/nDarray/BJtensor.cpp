@@ -136,12 +136,12 @@ XC::BJtensor::BJtensor(const std::string &flag)
 //ZhaoOct2005 re-wrote the copy constructor 
 //##############################################################################
 XC::BJtensor::BJtensor(const BJtensor & x)
-  : nDarray(x) {}
+  : nDarray(x), indices1(x.indices1), indices2(x.indices2) {}
 
 
 //##############################################################################
 XC::BJtensor::BJtensor(const nDarray &x)
-  : nDarray(x) {} // copy-initializer
+  : nDarray(x), indices1(""), indices2("") {} // copy-initializer
                   // DO NOT delete ( nullptr ) indices because return
                   // from operator*( BJtensor & arg ) this one
                   // is invoked and so I need this indices.
@@ -158,6 +158,8 @@ XC::BJtensor &XC::BJtensor::operator=(const BJtensor & rval)
     
     nDarray::operator=(rval);
     this->null_indices();
+    this->indices1= rval.indices1;
+    this->indices2= rval.indices2;
     return *this;
   }
 
@@ -177,32 +179,24 @@ XC::BJtensor &XC::BJtensor::operator-=(const BJtensor &rval)
 
 
 
-//##############################################################################
-// this is supposed to fill in the string indices1 or the string indices2
-// array in XC::BJtensor object
-// so that they can be checked for matching later on when operations like
-// single contraction (.), double contraction (:), dyadic product (otimes)
-// are performed the object can choose the right operator.
-// Also when multiplying XC::BJtensor by itself ( like for example:
-//               D("ij")*D("kl")
-// the other string indices2 is defined to take the other array of
-// indices
-// so that mulitplication will be O.K.
-// Since only two BJtensors can be multiplied at the time ( binary operation )
-// only indices1 and indices2 are needed #
-// WATCH OUT THIS IS NOT STANDRAD AS YOU CANNOT QUARANTY THE ORDER OF EXECUTION!!!!
+//! This is supposed to fill in the string indices1 or the string indices2
+//! strings in BJtensor object so that they can be checked for matching later
+//! on when operations like single contraction (.), double contraction (:),
+//! dyadic product (otimes) are performed the object can choose the right
+//! operator.
+//! Also when multiplying XC::BJtensor by itself ( like for example:
+//!               D("ij")*D("kl")
+//! the other string indices2 is defined to take the other array of
+//! indices
+//! so that mulitplication will be O.K.
+//! Since only two BJtensors can be multiplied at the time ( binary operation )
+//! only indices1 and indices2 are needed.
 const XC::BJtensor &XC::BJtensor::operator()(const std::string &indices_from_user) const
   {
     if(indices1.empty())
-      {
-        indices1= indices_from_user;
-        return *this;
-      }
+      indices1= indices_from_user;
     else
-      {
-        indices2= indices_from_user;
-        return *this;
-      }
+      indices2= indices_from_user;
     return *this;
   }
 
@@ -237,67 +231,10 @@ XC::BJtensor &XC::BJtensor::operator*=(const double &rval)
 //
 XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const here!
  {
-//ZC// construct XC::BJtensor using the same control numbers as for the
-//ZC// original one.
-//ZC    BJtensor mult(this->rank(), dim(), 0.0);
-//ZC
-//ZC    mult.indices1 = this->indices1;
-//ZC
-//ZC    switch(this->rank())
-//ZC      {
-//ZC        case 0:
-//ZC          {
-//ZC            mult(1) = val(1) * rval;
-//ZC            break;
-//ZC          }
-//ZC
-//ZC        case 1:
-//ZC          {
-//ZC            for ( int i1=1 ; i1<=this->dim()[0] ; i1++ )
-//ZC              mult(i1) = val(i1) * rval;
-//ZC            break;
-//ZC          }
-//ZC
-//ZC        case 2:
-//ZC          {
-//ZC            for ( int i2=1 ; i2<=this->dim()[0] ; i2++ )
-//ZC              for ( int j2=1 ; j2<=this->dim()[1] ; j2++ )
-//ZC                mult(i2, j2) = val(i2, j2) * rval;
-//ZC            break;
-//ZC          }
-//ZC
-//ZC        case 3:
-//ZC          {
-//ZC            for ( int i3=1 ; i3<=this->dim()[0] ; i3++ )
-//ZC              for ( int j3=1 ; j3<=this->dim()[1] ; j3++ )
-//ZC                for ( int k3=1 ; k3<=this->dim()[2] ; k3++ )
-//ZC                  mult(i3, j3, k3) = val(i3, j3, k3) * rval;
-//ZC            break;
-//ZC          }
-//ZC
-//ZC        case 4:
-//ZC          {
-//ZC            for ( int i4=1 ; i4<=this->dim()[0] ; i4++ )
-//ZC              for ( int j4=1 ; j4<=this->dim()[1] ; j4++ )
-//ZC                for ( int k4=1 ; k4<=this->dim()[2] ; k4++ )
-//ZC                  for ( int l4=1 ; l4<=this->dim()[3] ; l4++ )
-//ZC                    mult(i4,j4,k4,l4)=val(i4,j4,k4,l4)*rval;
-//ZC            break;
-//ZC          }
-//ZC      }
-//ZC
-//ZC    null_indices();
-//ZC
-//ZC    return mult;
-
     BJtensor mult(*this);
     mult *= rval;
     return mult;
  }
-
-// //! @brief scalar multiplication
-// XC::BJtensor XC::operator*(const double &lval,const XC::BJtensor &rval)
-//   { return rval*lval; }
 
 //##############################################################################
 //##############################################################################
@@ -316,34 +253,18 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
   {
-    //XC::DEBUGprint::printf("before block in operator* coreleft is: %lu bytes\n", (unsigned long) ::coreleft());
+
     //   const int MAX_TENS_ORD = 8;
     const int MAX_TENS_ORD = 4;
     //....   int results_rank = 0;
 
-    //XC::DEBUGprint::printf("this->rank()=%d\n",
-    //DEBUGprint          this->rank());
-    //XC::DEBUGprint::printf("arg.rank()=%d\n",
-    //DEBUGprint          arg.rank());
-
     // space for CONTRACTED indices
-    std::vector<int> this_contr(MAX_TENS_ORD);
-    std::vector<int> arg_contr(MAX_TENS_ORD);
+    std::vector<int> this_contr(MAX_TENS_ORD, 0);
+    std::vector<int> arg_contr(MAX_TENS_ORD, 0);
 
     // space for UN-CONTRACTED indices
-    std::vector<int> this_uncontr(MAX_TENS_ORD);
-    std::vector<int> arg_uncontr(MAX_TENS_ORD);
-
-    for(int this_ic=0 ; this_ic<MAX_TENS_ORD ; this_ic++ )
-      {
-        this_contr[this_ic] = 0;
-        this_uncontr[this_ic] = 0;
-      }
-    for( int arg_ic=0 ; arg_ic<MAX_TENS_ORD ; arg_ic++ )
-      {
-        arg_contr[arg_ic]  = 0;
-        arg_uncontr[arg_ic]  = 0;
-      }
+    std::vector<int> this_uncontr(MAX_TENS_ORD, 0);
+    std::vector<int> arg_uncontr(MAX_TENS_ORD, 0);
 
 // now make the right choice for indices for this and arg XC::BJtensor !!!
 //
@@ -351,14 +272,14 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //                 (0 0)         (0 0)         (0 0)
 //--------------ooO-(_)-Ooo---ooO-(_)-Ooo---ooO-(_)-Ooo----------------------
 //
-// WATCH OUT THIS IS NOT STANDRAD AS YOU CANNOT QUARANTY THE ORDER OF EXECUTION!!!!
+// WATCH OUT THIS IS NOT STANDARD AS YOU CANNOT QUARANTY THE ORDER OF EXECUTION!!!!
 
-    std::string this_indices = this->indices1;
-    std::string arg_indices  = arg.indices1;
+    std::string this_indices= this->indices1;
+    std::string arg_indices= arg.indices1;
+    
 
-//fprintf(stdout,"\n\n\n\n  this->indices1 = %s   ; this->indices2 = %s\n", this->indices1,this->indices2);
 // if the BJtensors are same then split indices :-)
-   if( this == &arg )
+   if(this == &arg)
      {
 // WATCH OUT THIS IS NOT STANDRAD AS YOU CANNOT QUARANTY THE ORDER OF EXECUTION!!!!
        this_indices= this->indices2; // this is changed because
@@ -376,19 +297,12 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //                                 //  
 // WATCH OUT THIS IS NOT STANDRAD AS YOU CANNOT QUARANTY THE ORDER OF EXECUTION!!!!
      }
-//XC::DEBUGprint::printf("this_indices=%s\n", this_indices);
-//XC::DEBUGprint::printf("arg_indices=%s\n",  arg_indices);
 
 
    int this_indices_number= this_indices.size();
-   int  arg_indices_number = arg_indices.size();
+   int arg_indices_number= arg_indices.size();
 
-//XC::DEBUGprint::printf("this_indices_number=%d\n",
-//DEBUGprint          this_indices_number);
-//XC::DEBUGprint::printf("arg_indices_number=%d\n",
-//DEBUGprint          arg_indices_number);
-
-// check for indices number: should be EQUAL than rank of XC::BJtensor
+    // check for indices number: should be EQUAL than rank of BJtensor
    if(this_indices_number != this->rank() )
      {
        std::cerr << "\a\n 'this' has more/less indices than expected:\n"
@@ -408,18 +322,18 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
      }
 
 // counter for contracted indices
-   int contr_counter = contracted_ind(this_indices,
+   const int contr_counter = contracted_ind(this_indices,
                                       arg_indices,
                                       this_contr,
                                       arg_contr,
                                       this_indices_number,
                                       arg_indices_number  );
 
-   int this_uni_count = uncontracted_ind( this_uncontr,
+   const int this_uni_count = uncontracted_ind( this_uncontr,
                                           this_contr,
                                           this_indices_number);
 
-   int arg_uni_count = uncontracted_ind( arg_uncontr,
+   const int arg_uni_count = uncontracted_ind( arg_uncontr,
                                          arg_contr,
                                          arg_indices_number);
 
@@ -434,50 +348,30 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
        ::exit(1);
      }
 
-//DEBUGprint ::printf("..... this_uni_count = %d, arg_uni_count = %d\n",
-//DEBUGprint                 this_uni_count,      arg_uni_count);
-//DEBUGprint ::printf(" uncontr_counter %d\n",uncontr_counter);
-//DEBUGprint for( int pthis_ic=0 ;
-//DEBUGprint      pthis_ic<(this->rank()+1) ;
-//DEBUGprint      pthis_ic++ )
-//DEBUGprint   ::printf("this_uncontr[%d]=%d\n",pthis_ic,this_uncontr[pthis_ic]);
-//DEBUGprint for( int parg_ic=0 ;
-//DEBUGprint      parg_ic<(arg.rank()+1) ;
-//DEBUGprint      parg_ic++ )
-//DEBUGprint   ::printf("             arg_uncontr[%d]=%d\n",parg_ic,arg_uncontr[parg_ic]);
-
-/////////////////////////////////////////////////////
-// let's make result BJtensor
-
-   int t = 0;
-   int a = 0;
-   std::vector<int> results_dims(uncontr_counter);
-   for( t=0 ; t < this_uni_count ; t++ )
+   // let's make result BJtensor
+   std::vector<int> results_dims(MAX_TENS_ORD,1);
+   int t= 0;
+   for(t=0 ; t < this_uni_count ; t++ )
      results_dims[t]=this->dim()[this_uncontr[t]-1];
-   for( a=0 ; a < arg_uni_count ; a++ )
+   for(int a=0 ; a < arg_uni_count ; a++ )
      results_dims[a+t]=arg.dim()[arg_uncontr[a]-1];
 
-// Indices  pa sada indeksi ( index )
-   std::string results_indices(uncontr_counter+1, '\0');
-   for( t=0 ; t < this_uni_count ; t++ )
-     results_indices[t]= this_indices[this_uncontr[t]-1];
-   for( a=0 ; a < arg_uni_count ; a++ )
-     results_indices[a+t]= arg_indices[arg_uncontr[a]-1];
+   // Indices  pa sada indeksi ( index )
+   std::string results_indices; //(uncontr_counter+1, '\0');
+   for(int t=0 ; t < this_uni_count ; t++ )
+     results_indices+= this_indices[this_uncontr[t]-1];
+   for(int a=0 ; a < arg_uni_count ; a++ )
+     results_indices+= arg_indices[arg_uncontr[a]-1];
 // the last one . . .
-   results_indices[uncontr_counter]= '\0';
-
-
-//DEBUGprint  ::printf("\n\n......  uncontr_counter+1=%d\n", uncontr_counter+1);
-//DEBUGprintfor( int pa=0 ; pa < MAX_TENS_ORD ; pa++ )
-//DEBUGprint  ::printf("   results_dims[%d]=%d\n",pa,results_dims[pa]);
+   //results_indices[uncontr_counter]= '\0';
 
    BJtensor result(results_dims, 0.0);
    result(results_indices);  // initialize indices in result
-//DEBUGprint  ::printf("\n\n..................   results_indices=%s\n",results_indices);
+
 
 //////////////////////////////////////////////////
-// check dimensions in each XC::BJtensor order
-   for( t=0 ; t<contr_counter ; t++ )
+// check dimensions in each BJtensor order
+   for(int t=0 ; t<contr_counter ; t++ )
      if( this->dim()[this_contr[t]-1] != arg.dim()[arg_contr[t]-1] )
        {
          std::cerr << "\a\a\n t = " << t << std::endl
@@ -488,193 +382,94 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
          ::exit(1);
        }
 
-/////////////////////////////////////////////////////#*%
-//////////////////////////////////////////////////#*%
-///////////////////////////////////////////////#*%
-////////////////////////////////////////////#*%
-/////////////////////////////////////////#*%
-//////////////////////////////////////#*%
-///////////////////////////////////#*%
-////////////////////////////////#*%
-/////////////////////////////#*%
-//////////////////////////#*%
-///////////////////////#*%
-////////////////////#*%
-/////////////////#*%
-//////////////#*%
-///////////#*%
-////////#*%
-/////#*%
-//#*%
-
-   std::vector<int> inerr_dims(MAX_TENS_ORD);
-   for( t=0 ; t<contr_counter ; t++ )
+   std::vector<int> inerr_dims(MAX_TENS_ORD, 1);
+   for(int t=0 ; t<contr_counter ; t++ )
      {
        inerr_dims[t] = this->dim()[this_contr[t]-1];
 //DEBUGprint       ::printf("    inerr_dims[%d] = %d\n",t,inerr_dims[t]);
      }
-   for( ; t<MAX_TENS_ORD ; t++ )
-     {
-       inerr_dims[t] = 1;
-//DEBUGprint       ::printf("          the rest of inerr_dims[%d] = %d\n",t,inerr_dims[t]);
-     }
 
-
-   std::vector<int> lid(MAX_TENS_ORD);
-   for( t=0 ; t<MAX_TENS_ORD ; t++ )
-     {
-       lid[t] = 1;
-//DEBUGprint       ::printf("    lid[%d] = %d\n",t,lid[t]);
-     }
-
-   std::vector<int> rid(MAX_TENS_ORD);
-   for( t=0 ;  t<MAX_TENS_ORD ; t++ )
-     {
-       rid[t] = 1;
-//DEBUGprint       ::printf("    rid[%d] = %d\n",t,rid[t]);
-     }
-
+   std::vector<int> lid(MAX_TENS_ORD, 1);
+   std::vector<int> rid(MAX_TENS_ORD, 1);
    std::vector<int> cd(MAX_TENS_ORD);
    std::vector<int> rd(MAX_TENS_ORD);
+   std::vector<int> resd(MAX_TENS_ORD, 1);
 
-   std::vector<int> resd(MAX_TENS_ORD);
-   for( t=0 ;  t<MAX_TENS_ORD ; t++ )
-     {
-       resd[t] = 1;
-//DEBUGprint       ::printf("    resd[%d] = %d\n",t,resd[t]);
-     }
-
-  double inerr=0.0;
-
+   double inerr=0.0;
 // obrnuti red zbog brzeg izvrsenja ( rd[0] ide do najveceg broja . . . )
 //  for ( rd[7]=1 ; rd[7]<=results_dims[7] ; rd[7]++ )
 //   for ( rd[6]=1 ; rd[6]<=results_dims[6] ; rd[6]++ )
 //    for ( rd[5]=1 ; rd[5]<=results_dims[5] ; rd[5]++ )
 //     for ( rd[4]=1 ; rd[4]<=results_dims[4] ; rd[4]++ )
       for ( rd[3]=1 ; rd[3]<=results_dims[3] ; rd[3]++ )
-       for ( rd[2]=1 ; rd[2]<=results_dims[2] ; rd[2]++ )
-        for ( rd[1]=1 ; rd[1]<=results_dims[1] ; rd[1]++ )
-         for ( rd[0]=1 ; rd[0]<=results_dims[0] ; rd[0]++ )
-          {
-            inerr = 0.0;
+	{
+	  for ( rd[2]=1 ; rd[2]<=results_dims[2] ; rd[2]++ )
+	    {
+	      for ( rd[1]=1 ; rd[1]<=results_dims[1] ; rd[1]++ )
+		{
+		   for ( rd[0]=1 ; rd[0]<=results_dims[0] ; rd[0]++ )
+		    {
+		      inerr = 0.0;
+	  //            for ( cd[7]=1 ; cd[7]<=inerr_dims[7] ; cd[7]++ )
+	  //             for ( cd[6]=1 ; cd[6]<=inerr_dims[6] ; cd[6]++ )
+	  //              for ( cd[5]=1 ; cd[5]<=inerr_dims[5] ; cd[5]++ )
+	  //               for ( cd[4]=1 ; cd[4]<=inerr_dims[4] ; cd[4]++ )
+			  for ( cd[3]=1 ; cd[3]<=inerr_dims[3] ; cd[3]++ )
+			    {
+			       for ( cd[2]=1 ; cd[2]<=inerr_dims[2] ; cd[2]++ )
+				 {
+				    for ( cd[1]=1 ; cd[1]<=inerr_dims[1] ; cd[1]++ )
+				      {
+					for ( cd[0]=1 ; cd[0]<=inerr_dims[0] ; cd[0]++ )
+					  {
+					    // contracted indices
+					    for ( t=0 ; t<contr_counter ; t++ )
+					      {
+						lid[ this_contr[t]-1 ]  = cd[t];
+					      }
+					    for ( t=0 ; t<contr_counter ; t++ )
+					      {
+						rid[ arg_contr[t]-1 ]  = cd[t];
+					      }
 
-//            for ( cd[7]=1 ; cd[7]<=inerr_dims[7] ; cd[7]++ )
-//             for ( cd[6]=1 ; cd[6]<=inerr_dims[6] ; cd[6]++ )
-//              for ( cd[5]=1 ; cd[5]<=inerr_dims[5] ; cd[5]++ )
-//               for ( cd[4]=1 ; cd[4]<=inerr_dims[4] ; cd[4]++ )
-                for ( cd[3]=1 ; cd[3]<=inerr_dims[3] ; cd[3]++ )
-                 for ( cd[2]=1 ; cd[2]<=inerr_dims[2] ; cd[2]++ )
-                  for ( cd[1]=1 ; cd[1]<=inerr_dims[1] ; cd[1]++ )
-                   for ( cd[0]=1 ; cd[0]<=inerr_dims[0] ; cd[0]++ )
-                    {
+					    // uncontracted indices
+					    for ( t=0 ; t<this_uni_count ; t++ )
+					      {
+						lid[ this_uncontr[t]-1 ]  = rd[t];
+					      }
+					    for ( ; t<(this_uni_count+arg_uni_count) ; t++ )
+					      {
+						rid[ arg_uncontr[t-this_uni_count]-1 ] = rd[t];
+					      }
+					    inerr = inerr +
+					      (*this)(lid[0],lid[1],lid[2],lid[3]) * arg(rid[0],rid[1],rid[2],rid[3]);
+					  } // for cd[0]
+				      } // for cd[1]
+				 } // for cd[2]
+			    } // for cd[3]
 
-// contracted indices
-                      for ( t=0 ; t<contr_counter ; t++ )
-                        {
-                          lid[ this_contr[t]-1 ]  = cd[t];
-//DEBUGprint                          ::printf("this contracted  t=%d  lid[%d]=%d     ",
-//DEBUGprint                                    t,this_contr[t]-1,lid[this_contr[t]-1]);
-                        }
-//DEBUGprint                      ::printf("\n");
-                      for ( t=0 ; t<contr_counter ; t++ )
-                        {
-                          rid[ arg_contr[t]-1 ]  = cd[t];
-//DEBUGprint                          ::printf("arg contracted  t=%d  rid[%d]=%d    ",
-//DEBUGprint                                    t,arg_contr[t]-1,rid[arg_contr[t]-1]);
-                        }
-//DEBUGprint                      ::printf("\n");
+		      // might be optimized 
+		      for ( t=0 ; t<this_uni_count ; t++ )           // put first on in second
+			{                                            // loop TS
+	  //..                resd[ this_uncontr[t]-1 ] = rd[t];
+			  resd[t] = rd[t];
+			}
+		      for ( ; t<(this_uni_count+arg_uni_count) ; t++ )
+			{
+	  //..                resd[ arg_uncontr[t]-1 ] = rd[t];
+			  resd[t] = rd[t];
+			}
+		      result(resd[0],resd[1],resd[2],resd[3]) = inerr ;
+		    } // for rd[0]
+		} // for rd[1]
+	    } // for rd[2]
+	} // for rd[3]
 
-
-// uncontracted indices
-                      for ( t=0 ; t<this_uni_count ; t++ )
-                        {
-                          lid[ this_uncontr[t]-1 ]  = rd[t];
-//DEBUGprint                          ::printf("this uncontracted ----- t=%d lid[%d]=%d  ",
-//DEBUGprint                                    t,this_uncontr[t]-1,lid[this_uncontr[t]-1]);
-                        }
-//DEBUGprint                      ::printf("\n");
-
-//                      for ( t=0 ; t<arg_uni_count ; t++ )
-                      for ( ; t<(this_uni_count+arg_uni_count) ; t++ )
-                        {
-                          rid[ arg_uncontr[t-this_uni_count]-1 ] = rd[t];
-//DEBUGprint                          ::printf("arg uncontracted ----- t=%d  rid[%d]=%d  ",
-//DEBUGprint                                    t,
-//DEBUGprint                                    arg_uncontr[t-this_uni_count]-1,
-//DEBUGprint                                    rid[arg_uncontr[t-this_uni_count]-1]);
-                        }
-//DEBUGprint                      ::printf("\n");
-
-
-
-//                      inerr =
-//                      this->val(lid[0],lid[1],lid[2],lid[3],
-//                                       lid[4],lid[5],lid[6],lid[7]) *
-//                      arg.val(rid[0],rid[1],rid[2],rid[3],
-//                                     rid[4],rid[5],rid[6],rid[7]);
-
-                      inerr = inerr +
-			(*this)(lid[0],lid[1],lid[2],lid[3]) * arg(rid[0],rid[1],rid[2],rid[3]);
-//::printf(" inerr = %12.4lf \n   this[%1d,%1d,%1d,%1d,%1d,%1d,%1d,%1d] = %12.4lf arg[%1d,%1d,%1d,%1d,%1d,%1d,%1d,%1d] = %12.4lf\n",
-//      inerr,lid[0],lid[1],lid[2],lid[3],lid[4],lid[5],lid[6],lid[7],
-//      this->val(lid[0],lid[1],lid[2],lid[3],lid[4],lid[5],lid[6],lid[7]),
-//      rid[0],rid[1],rid[2],rid[3],rid[4],rid[5],rid[6],rid[7],
-//      arg.val(rid[0],rid[1],rid[2],rid[3],rid[4],rid[5],rid[6],rid[7]));
-
-//XC::DEBUGprint::printf("inerr=%6.2lf this[%1d,%1d,%1d,%1d]=%6.2lf arg[%1d,%1d,%1d,%1d]=%6.2lf\n",
-//DEBUGprint      inerr,lid[0],lid[1],lid[2],lid[3],
-//DEBUGprint      (*this)(lid[0],lid[1],lid[2],lid[3]),
-//DEBUGprint      rid[0],rid[1],rid[2],rid[3],
-//DEBUGprint      arg(rid[0],rid[1],rid[2],rid[3]));
-
-                    }
-
-                                                           // might be optimized 
-            for ( t=0 ; t<this_uni_count ; t++ )           // put first on in second
-              {                                            // loop TS
-//..                resd[ this_uncontr[t]-1 ] = rd[t];
-                resd[t] = rd[t];
-//DEBUGprint                ::printf("##### t=%d  resd[%d]=%d\n",
-//DEBUGprint                          t,this_uncontr[t]-1,resd[t]);
-//DEBUGprint                          t,t,resd[t]);
-              }
-            for ( ; t<(this_uni_count+arg_uni_count) ; t++ )
-              {
-//..                resd[ arg_uncontr[t]-1 ] = rd[t];
-                resd[t] = rd[t];
-//DEBUGprint                ::printf("##### t=%d  resd[%d]=%d\n",
-//DEBUGprint                          t,arg_uncontr[t]-1,resd[t]);
-//DEBUGprint                          t,t,resd[t]);
-              }
-
-//          result(resd[0],resd[1],resd[2],resd[3],
-//                 resd[4],resd[5],resd[6],resd[7]) = inerr ;
-//::printf(" -----------result[%1d,%1d,%1d,%1d,%1d,%1d,%1d,%1d] = %lf\n",
-
-
-
-//      resd[0],resd[1],resd[2],resd[3],resd[4],resd[5],resd[6],resd[7],
-//      result(resd[0],resd[1],resd[2],resd[3],resd[4],resd[5],resd[6],resd[7]));
-
-          result(resd[0],resd[1],resd[2],resd[3]) = inerr ;
-//XC::DEBUGprint::printf("##################################### result[%1d,%1d,%1d,%1d]=%8.2lf\n",
-//DEBUGprint             resd[0],resd[1],resd[2],resd[3],
-//DEBUGprint      result(resd[0],resd[1],resd[2],resd[3]));
-
-
-          }
-
-// nullptrification of indices
-
+    // nullification of indices
     null_indices();
     arg.null_indices();
 
-//XC::DEBUGprint::printf("     after delete in operator* coreleft is: %lu bytes\n", (unsigned long) ::coreleft());
-
-    return result; // Returning a local variable ??
-                   // copy-initializer happens before the destructor,
-                   // so reference count is 2 when destructor is called,
-                   // thus destructor doesn't free the memory.
+    return result;
   }
 
 
@@ -756,25 +551,23 @@ int XC::BJtensor::uncontracted_ind(std::vector<int> &tens_uncontr,
                                      int tens_ind_numb) const
   {
 // counter for UNcontracted indices
-    int tens_uni_count = 0;
+    int tens_uni_count= 0;
 
-    for ( int tens_unindices_counter = 1 ;
+    for(int tens_unindices_counter = 1 ;
           tens_unindices_counter<=tens_ind_numb ;
           tens_unindices_counter++ )
       {
         tens_uncontr[tens_uni_count] = tens_unindices_counter;
-        for ( int tens_indices_counter = 1 ;
-              tens_indices_counter<=tens_ind_numb ;
-              tens_indices_counter++ )
+        for(int tens_indices_counter = 1; tens_indices_counter<=tens_ind_numb; tens_indices_counter++ )
           {
-            int t_i_c = tens_indices_counter - 1;
+            const int t_i_c = tens_indices_counter - 1;
 //XC::DEBUGprint::printf("CHECK tens_uncontr[%d]=%d",tens_uni_count, tens_uncontr[tens_uni_count]);
 //XC::DEBUGprint::printf("  WITH tens_contr[%d]=%d\n", t_i_c,tens_contr[t_i_c]);
             if ( tens_uncontr[tens_uni_count] == tens_contr[t_i_c] )
               {
                 tens_uncontr[tens_uni_count] = 0;
                 tens_uni_count--;
-                tens_indices_counter=tens_ind_numb;//out of inner for loop
+                break;//out of inner for loop
               }
           }
         tens_uni_count++;

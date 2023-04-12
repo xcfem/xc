@@ -94,6 +94,7 @@
 
 #include "utility/matrix/nDarray/basics.h"
 #include <string>
+#include <iostream>
 #include <boost/python.hpp>
 #include "tmpl_operators.h"
 
@@ -139,6 +140,22 @@ class nDarray_rep
                           //      dim[0] = dimension in direction 1
                           //      dim[1] = dimension in direction 2
                           //      dim[2] = dimension in direction 3  */
+    
+    inline size_t get_index(int first, int second) const
+      {
+        //assert(nDarray_rank==3);
+        return (first - 1)*dim[1]+second - 1;
+      }
+    inline size_t get_index(int first, int second, int third) const
+      {
+        //assert(nDarray_rank==3);
+        return ((first - 1)*dim[1]+second - 1)*dim[2]+third - 1;
+      }
+    inline size_t get_index(int first, int second, int third, int fourth) const
+      {
+        //assert(nDarray_rank==4);
+        return (((first - 1)*dim[1]+second - 1)*dim[2]+third - 1)*dim[3]+fourth - 1;
+      }
   public:
     void init_dim(const size_t &, const int &default_dim= 1);
     void init_dim(const std::vector<int> &pdim);
@@ -158,15 +175,9 @@ class nDarray_rep
       { return pd_nDdata.data(); }
     bool equal_data(const std::vector<double> &other_data) const;
     inline const double &val(const size_t &where) const
-      {
-        const double *p_value = pd_nDdata.data() + where;
-        return (*p_value);
-      }
+      { return pd_nDdata[where]; }
     inline double &val(const size_t &where)
-      {
-        double *p_value = pd_nDdata.data() + where;
-        return (*p_value);
-      }
+      { return pd_nDdata[where]; }
     inline void clear_data(void)
       { pd_nDdata.clear(); }
 
@@ -188,40 +199,41 @@ class nDarray_rep
       }
     inline double &operator()(int first)
       {
-	nDarray_rep *this_no_const= const_cast<nDarray_rep *>(this);
-	return this_no_const->operator()(first);
+	if(nDarray_rank==0)
+	  return (pd_nDdata[0]);
+	return val(static_cast<size_t>(first - 1));
       }
     inline const double &operator()(int first, int second) const
       {
-        //assert(nDarray_rank==2);
-	return val((first - 1)*dim[1]+second - 1);
+        const size_t i= get_index(first, second);
+	return val(i);
       }
     inline double &operator()(int first, int second)
       {
-	nDarray_rep *this_no_const= const_cast<nDarray_rep *>(this);
-	return this_no_const->operator()(first, second);
+        const size_t i= get_index(first, second);
+	return val(i);
       }
     inline const double &operator()(int first, int second, int third) const
       {
         //assert(nDarray_rank==3);
-
-	return val((((first - 1)*dim[1]+second - 1)*dim[2]+third - 1));
+        const size_t i= get_index(first, second, third);
+	return val(i);
       }
     inline double &operator()(int first, int second, int third)
       {
-	nDarray_rep *this_no_const= const_cast<nDarray_rep *>(this);
-	return this_no_const->operator()(first, second, third);
+        const size_t i= get_index(first, second, third);
+	return val(i);
       }
     inline const double &operator()(int first, int second, int third, int fourth) const
       {
         //assert(nDarray_rank==4);
-
-	return val((((first - 1)*dim[1]+second - 1)*dim[2]+third - 1)*dim[3]+fourth - 1);
+        const size_t i= get_index(first, second, third, fourth);
+	return val(i);
       }
     inline double &operator()(int first, int second, int third, int fourth)
       {
-	nDarray_rep *this_no_const= const_cast<nDarray_rep *>(this);
-	return this_no_const->operator()(first, second, third, fourth);
+        const size_t i= get_index(first, second, third, fourth);
+	return val(i);
       }
   };
 
@@ -305,8 +317,7 @@ class nDarray
     
     inline double &operator()(int first, int second, int third, int fourth)
       {
-	nDarray *this_no_const= const_cast<nDarray *>(this);
-	return this_no_const->operator()(first, second, third, fourth);
+	return pc_nDarray_rep(first, second, third, fourth);
       }
 
     const double &val(int subscript, ...) const;
@@ -346,7 +357,7 @@ class nDarray
     nDarray eigenvalues(void);
     nDarray eigenvectors(void);
 
-    void print(const std::string &name = "t",const std::string &msg = "Hi there#") const;
+    void print(const std::string &name = "t",const std::string &msg = "Hi there#", std::ostream &os= std::cout) const;
     void printshort(const std::string &msg = "Hi there#") const;
     void mathprint(void) const;
      // print nDarray with a "name" and the "message"
@@ -370,6 +381,7 @@ class nDarray
 template nDarray operator*(const double & , const nDarray & );
 template nDarray operator+(const nDarray & , const nDarray & );
 template nDarray operator-(const nDarray & , const nDarray & );
+std::ostream& operator<<(std::ostream &, const nDarray &);
 
 } // end of XC namespace
 

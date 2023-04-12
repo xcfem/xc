@@ -24,7 +24,7 @@
 // class_<XC::MatPoint3D, XC::MatPoint3D *, bases<CommandEntity>, boost::noncopyable >("MatPoint3D", no_init)
 //   ;
 
-class_<XC::EPState, XC::EPState *, bases<CommandEntity>, boost::noncopyable >("EPState", no_init)
+class_<XC::EPState, XC::EPState *, bases<CommandEntity>, boost::noncopyable >("EPState")
   ;
 
 class_<XC::YieldSurface, XC::YieldSurface *, bases<CommandEntity>, boost::noncopyable >("YieldSurface", no_init)
@@ -67,7 +67,10 @@ class_<XC::PotentialSurface, XC::PotentialSurface *, bases<CommandEntity>, boost
 class_<XC::CamClayPotentialSurface, XC::CamClayPotentialSurface *, bases<XC::PotentialSurface> >("CamClayPotentialSurface")
   ;
 class_<XC::DruckerPragerPotentialSurface, XC::DruckerPragerPotentialSurface *, bases<XC::PotentialSurface> >("DruckerPragerPotentialSurface")
+  .def(init<double>())
+  .add_property("alpha2", &XC::DruckerPragerPotentialSurface::getalfa2, &XC::DruckerPragerPotentialSurface::setAlfa2,"Potential surface orientation angle.")
   ;
+
 class_<XC::ManzariDafaliasPotentialSurface, XC::ManzariDafaliasPotentialSurface *, bases<XC::PotentialSurface> >("ManzariDafaliasPotentialSurface")
   ;
 class_<XC::RoundedMohrCoulomb01PotentialSurface, XC::RoundedMohrCoulomb01PotentialSurface *, bases<XC::PotentialSurface> >("RoundedMohrCoulomb01PotentialSurface")

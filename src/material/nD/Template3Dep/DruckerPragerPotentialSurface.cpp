@@ -71,18 +71,18 @@
 // Copy constrstructor  === not necessary for no pointer member
 //================================================================================
 
-XC::DruckerPragerPotentialSurface::DruckerPragerPotentialSurface(const DruckerPragerPotentialSurface &DruckerPragerPS ) {
-
+XC::DruckerPragerPotentialSurface::DruckerPragerPotentialSurface(const DruckerPragerPotentialSurface &DruckerPragerPS )
+  {
     alfa2 =  DruckerPragerPS.getalfa2();
-
-}
+  }
 
 
 //! @brief Virtual constructor.
 XC::PotentialSurface * XC::DruckerPragerPotentialSurface::getCopy(void)
   {  return new DruckerPragerPotentialSurface(*this); }
 
-
+void XC::DruckerPragerPotentialSurface::setAlfa2(const double &d)
+  { alfa2= d; }
 
 //================================================================================
 // BJtensor dQ/dsigma_ij
