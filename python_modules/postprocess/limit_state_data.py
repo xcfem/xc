@@ -109,6 +109,10 @@ class LimitStateData(object):
                                        display.
     :ivar designSituation: design situation; permanent, quasi-permanent,
                            frequent, rare, earthquake. 
+    :ivar woodArmerAlsoForAxialForces: if true, use Wood-Armer method for
+                                       both axial and bending internal
+                                       forces otherwise, use it only for 
+                                       bending moments.
     '''
     
     envConfig= None
