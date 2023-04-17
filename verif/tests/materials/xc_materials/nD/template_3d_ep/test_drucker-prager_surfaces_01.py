@@ -29,15 +29,22 @@ druckerPragerYieldSurface= xc.DruckerPragerYieldSurface()
 f= druckerPragerYieldSurface.f(epState)
 ratio2= abs(f)
 
+# Scalar evolution law: linear hardening coef = 1.1
+es1= xc.EvolutionLaw_L_Eeq(1.1)
+a= es1.a
+ratio3= abs(a-1.1)/1.1
+
 '''
 print("alpha2= ", alpha2)
 print("f= ", f)
+print('a= ', a)
 '''
+
 # Check results.
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-15) and (abs(ratio2)<1e-15):
+if (abs(ratio1)<1e-15) and (abs(ratio2)<1e-15) and (abs(ratio3)<1e-15):
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')

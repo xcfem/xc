@@ -66,7 +66,7 @@
 #include "domain/mesh/node/Node.h"
 #include <domain/load/ElementalLoad.h>
 #include "domain/load/volumetric/BrickSelfWeight.h"
-#include <material/nD/Template3Dep/MatPoint3D.h>
+#include <material/nD/template_3d_ep/MatPoint3D.h>
 #include <utility/matrix/nDarray/straint.h>
 #include <utility/matrix/nDarray/stresst.h>
 #include <cstring>

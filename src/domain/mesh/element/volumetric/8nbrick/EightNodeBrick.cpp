@@ -63,10 +63,10 @@
 #include <domain/mesh/element/volumetric/8nbrick/EightNodeBrick.h>
 #include "domain/mesh/node/Node.h"
 
-#include <material/nD/Template3Dep/MatPoint3D.h>
+#include <material/nD/template_3d_ep/MatPoint3D.h>
 
 #include <material/nD/NDMaterial.h>
-#include <material/nD/Template3Dep/Template3Dep.h>
+#include <material/nD/template_3d_ep/Template3Dep.h>
 
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 

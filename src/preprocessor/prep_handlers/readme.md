@@ -10,3 +10,6 @@ This folder contains the classes that manage the creation, storage and destructi
     - Coordinate transformation handler: coordinate transformations to use in element definition.
 	- Beam integrator handler: beam integrators to use in beam element definition.
 - Boundary condition handler: constraints. 
+
+# References
+- [Drucker–Prager yield criterion](https://en.wikipedia.org/wiki/Drucker%E2%80%93Prager_yield_criterion)
