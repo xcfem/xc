@@ -69,6 +69,6 @@ class_<material_vector_NDMat, bases<vectorNDMaterial, CommandEntity>, boost::non
   .def("getValues",&material_vector_NDMat::getValues,"Ask the materials for the values corresponding to the argument code (stress, strain, ...).")
   ;
 
-#include "Template3Dep/python_interface.tcc"
+#include "template_3d_ep/python_interface.tcc"
 #include "UWmaterials/python_interface.tcc"
 
