@@ -22,32 +22,55 @@
 //python_interface.tcc
 
 class_<XC::nDarray>("nDarray")
+  .def(init<list, list>())
+  .def(init<int, double>())
+  .def(init<int, int, list>())
+  ;
+
+class_<XC::BJmatrix , bases<XC::nDarray>>("BJmatrix")
+  .def(init<int, int, list>())
+  ;
+
+class_<XC::BJvector, bases<XC::BJmatrix>>("BJvector")
+  .def(init<list>())
   .def(init<int, double>())
   ;
 
-class_<XC::BJmatrix , bases<XC::nDarray>, boost::noncopyable >("BJmatrix", no_init);
+class_<XC::BJtensor, bases<XC::nDarray> >("BJtensor")
+  .def(init<list, list>())
+  ;
 
-class_<XC::BJtensor, bases<XC::nDarray>, boost::noncopyable >("BJtensor", no_init);
+class_<XC::Cosseratstraintensor , bases<XC::BJtensor> >("Cosseratstraintensor")
+  .def(init<double>())
+  .def(init<list>())
+  ;
 
-class_<XC::Cosseratstraintensor , bases<XC::BJtensor>, boost::noncopyable >("Cosseratstraintensor", no_init);
+class_<XC::Cosseratstresstensor , bases<XC::BJtensor> >("Cosseratstresstensor")
+  .def(init<double>())
+  .def(init<list>())
+  ;
 
-class_<XC::Cosseratstresstensor , bases<XC::BJtensor>, boost::noncopyable >("Cosseratstresstensor", no_init);
-
-class_<XC::straintensor , bases<XC::BJtensor> >("straintensor");
-
-class_<XC::stresstensor , bases<XC::BJtensor> >("stresstensor")
+class_<XC::stressstraintensor , bases<XC::BJtensor> >("stressstraintensor")
   .def(init<double>())
   .def(init<boost::python::list>())
   .def(self_ns::str(self_ns::self))
-  .def("Iinvariant1",&XC::stresstensor::Iinvariant1)
-  .def("Iinvariant2",&XC::stresstensor::Iinvariant2)
-  .def("Iinvariant3",&XC::stresstensor::Iinvariant3)
-  .def("Jinvariant1",&XC::stresstensor::Jinvariant1)
-  .def("Jinvariant2",&XC::stresstensor::Jinvariant2)
-  .def("Jinvariant3",&XC::stresstensor::Jinvariant3)
+  .def("Iinvariant1",&XC::stressstraintensor::Iinvariant1)
+  .def("Iinvariant2",&XC::stressstraintensor::Iinvariant2)
+  .def("Iinvariant3",&XC::stressstraintensor::Iinvariant3)
+  .def("Jinvariant1",&XC::stressstraintensor::Jinvariant1)
+  .def("Jinvariant2",&XC::stressstraintensor::Jinvariant2)
+  .def("Jinvariant3",&XC::stressstraintensor::Jinvariant3)
+  .def("sigma_octahedral",&XC::stressstraintensor::sigma_octahedral)
+  .def("tau_octahedral",&XC::stressstraintensor::tau_octahedral)
+  ;
+
+class_<XC::straintensor , bases<XC::stressstraintensor> >("straintensor")
+  ;
+
+class_<XC::stresstensor , bases<XC::stressstraintensor> >("stresstensor")
+  .def(init<double>())
+  .def(init<boost::python::list>())
   .def("deviator",&XC::stresstensor::deviator)
   .def("principal",&XC::stresstensor::principal)
-  .def("sigma_octahedral",&XC::stresstensor::sigma_octahedral)
-  .def("tau_octahedral",&XC::stresstensor::tau_octahedral)
   ;
 

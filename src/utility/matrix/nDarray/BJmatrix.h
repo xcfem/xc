@@ -25,9 +25,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-// $Revision: 1.1 $                                                              
-// $Date: 2001/08/23 16:45:50 $                                                                  
-// $Source: /usr/local/cvs/OpenSees/SRC/nDarray/BJmatrix.h,v $                                                                
+// $Revision: 1.1 $
+// $Date: 2001/08/23 16:45:50 $
+// $Source: /usr/local/cvs/OpenSees/SRC/nDarray/BJmatrix.h,v $
 
 //#############################################################################
 //                                                                            #
@@ -55,34 +55,34 @@
 //#############################################################################
 //#############################################################################
 ///*
-//################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:                                                                     #
-//# CLASS:             BJmatrix                                                    #
-//#                                                                              #
-//# VERSION:                                                                     #
+//############################################################################
+//# COPYRIGHT (C):     :-))                                              #
+//# PROJECT:           Object Oriented Finite Element Program                #
+//# PURPOSE:                                                                 #
+//# CLASS:             BJmatrix                                                #
+//#                                                                          #
+//# VERSION:                                                                 #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.10, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic                                             #
-//# PROGRAMMER(S):     Boris Jeremic                                             #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              November '92                                              #
-//# UPDATE HISTORY:    05 - 07 avgust '93.  redefined as derived class from      #
-//#                                 nDarray class                                #
-//#                    january 06 '93  added BJmatrix2tensor_1, BJmatrix2tensor_2    #
+//# TARGET OS:         DOS || UNIX || . . .                                  #
+//# DESIGNER(S):       Boris Jeremic                                         #
+//# PROGRAMMER(S):     Boris Jeremic                                         #
+//#                                                                          #
+//#                                                                          #
+//# DATE:              November '92                                          #
+//# UPDATE HISTORY:    05 - 07 avgust '93.  redefined as derived class from  #
+//#                                 nDarray class                            #
+//#                    january 06 '93  added BJmatrix2tensor_1, BJmatrix2tensor_2#
 //#                    August 22-29 '94 choped to separate files and worked on   #
-//#                                   const and & issues                         #
-//#                    August 30-31 '94 added use_def_dim to full the CC         #
-//#                                   resolved problem with temoraries for       #
-//#                                   operators + and - ( +=, -= )               #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//#                                   const and & issues                     #
+//#                    August 30-31 '94 added use_def_dim to full the CC     #
+//#                                   resolved problem with temoraries for   #
+//#                                   operators + and - ( +=, -= )           #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//############################################################################
 //*/
 //
 
@@ -115,6 +115,8 @@ class BJmatrix: public nDarray
     public:
       BJmatrix(int mrows = 1, int columns = 1, double initval = 0.0);
       BJmatrix(int mrows, int columns, double *initvalues);
+      BJmatrix(int mrows, int columns, const std::vector<double> &);
+      BJmatrix(int mrows, int columns, const boost::python::list &);
 
       BJmatrix(const std::string &flag, int dimension ); // create an ident BJmatrix
       BJmatrix(const std::string &matfile); // read from a "standard" BJmatrix file

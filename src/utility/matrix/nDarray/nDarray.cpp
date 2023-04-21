@@ -341,6 +341,29 @@ XC::nDarray::nDarray(const std::vector<int> &pdim, const boost::python::list &l)
     pc_nDarray_rep.init_data(l);
   }
 
+//! @brief Constructor.
+XC::nDarray::nDarray(const boost::python::list &ldim, const boost::python::list &lvalues)
+  {
+    // create the pdim vector.
+    const size_t sz= len(ldim);
+    std::vector<int> pdim(sz);
+    // store the dimensions.
+    for(size_t i=0 ; i<sz; i++ )
+      pdim[i] =boost::python::extract<double>(lvalues[i]);
+    
+    // create the structure:
+    pc_nDarray_rep.nDarray_rank= sz;  //rank_of_nDarray;
+
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep.init_dim(pdim);
+
+    // allocate memory for the actual nDarray as nDarray
+    pc_nDarray_rep.init_data(lvalues);
+  }
+
 //##############################################################################
 XC::nDarray::nDarray(const std::vector<int> &pdim, double initvalue)
   {
@@ -359,8 +382,7 @@ XC::nDarray::nDarray(const std::vector<int> &pdim, double initvalue)
 
 
 
-//##############################################################################
-// special case for XC::BJmatrix and XC::BJvector . . .
+//! @brief Constructor. Special case for BJmatrix and BJvector
 XC::nDarray::nDarray(int rows, int cols, double *values)
   {
     // create the structure:
@@ -378,6 +400,40 @@ XC::nDarray::nDarray(int rows, int cols, double *values)
     pc_nDarray_rep.init_data(values);
   }
 
+//! @brief Constructor. Special case for BJmatrix and BJvector
+XC::nDarray::nDarray(int rows, int cols, const std::vector<double> &values)
+  {
+    // create the structure:
+    pc_nDarray_rep.nDarray_rank= 2;  //rank_of_nDarray;
+
+    // not needed for BJmatrix or BJvector but who knows #
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    const std::vector<int> pdim= {rows, cols};
+    pc_nDarray_rep.init_dim(pdim);
+
+    // allocate memory for the actual XC::nDarray as nDarray
+    pc_nDarray_rep.init_data(values);
+  }
+
+//! @brief Constructor. Special case for BJmatrix and BJvector
+XC::nDarray::nDarray(int rows, int cols, const boost::python::list &l)
+  {
+    // create the structure:
+    pc_nDarray_rep.nDarray_rank= 2;  //rank_of_nDarray;
+
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    const std::vector<int> pdim= {rows, cols};
+    pc_nDarray_rep.init_dim(pdim);
+
+    // allocate memory for the actual nDarray as nDarray
+    pc_nDarray_rep.init_data(l);
+  }
 //##############################################################################
 // special case for XC::BJmatrix and XC::BJvector . . .
 XC::nDarray::nDarray(int rows, int cols, double value)

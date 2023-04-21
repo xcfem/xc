@@ -64,6 +64,16 @@ XC::Cosseratstresstensor::Cosseratstresstensor(double initval):
 XC::Cosseratstresstensor::Cosseratstresstensor ( double *values )
   : BJtensor(Cosserat_def_dim_2, values) {  }
 
+//! @brief Constructor.
+XC::Cosseratstresstensor::Cosseratstresstensor(const std::vector<double> &values)
+  : BJtensor(Cosserat_def_dim_2, values)
+    {  }
+  
+//! @brief Constructor.
+XC::Cosseratstresstensor::Cosseratstresstensor(const boost::python::list &values)
+  : BJtensor(Cosserat_def_dim_2, values)
+    {  }
+
 //! @brief Copy constructor.
 XC::Cosseratstresstensor::Cosseratstresstensor(const Cosseratstresstensor &x)
   : BJtensor(x) {}

@@ -71,6 +71,8 @@ class Cosseratstresstensor: public BJtensor
     // just send appropriate arguments to the base constructor
     Cosseratstresstensor(double initval=0.0); // default constructor
     Cosseratstresstensor( double *values );
+    Cosseratstresstensor(const std::vector<double> &);
+    Cosseratstresstensor(const boost::python::list &);
 
     Cosseratstresstensor(const Cosseratstresstensor & x );
     Cosseratstresstensor(const BJtensor & x); // copy-initializer

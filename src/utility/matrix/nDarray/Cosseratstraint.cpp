@@ -60,13 +60,23 @@
 #include <iostream>
 
 //##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor(double initval):
-  BJtensor(Cosserat_def_dim_2, initval)
+XC::Cosseratstraintensor::Cosseratstraintensor(double initval)
+  : BJtensor(Cosserat_def_dim_2, initval)
     {   } // default constructor
 
 //##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor ( double *values ):
-  BJtensor(Cosserat_def_dim_2, values)
+XC::Cosseratstraintensor::Cosseratstraintensor ( double *values )
+  : BJtensor(Cosserat_def_dim_2, values)
+    {  }
+
+//! @brief Constructor.
+XC::Cosseratstraintensor::Cosseratstraintensor(const std::vector<double> &values)
+  : BJtensor(Cosserat_def_dim_2, values)
+    {  }
+  
+//! @brief Constructor.
+XC::Cosseratstraintensor::Cosseratstraintensor(const boost::python::list &values)
+  : BJtensor(Cosserat_def_dim_2, values)
     {  }
 
 //##############################################################################

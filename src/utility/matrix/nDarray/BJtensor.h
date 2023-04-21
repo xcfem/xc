@@ -124,6 +124,7 @@ class BJtensor: public nDarray
     BJtensor(const std::vector<int> &pdim, const double *values);
     BJtensor(const std::vector<int> &pdim, const std::vector<double> &values);
     BJtensor(const std::vector<int> &pdim, const boost::python::list &l);    
+    BJtensor(const boost::python::list &, const boost::python::list &);    
     BJtensor(const std::vector<int> &pdim,const double &initvalue);
     BJtensor(const std::string &flag, const std::vector<int> &pdim);  // create a unit nDarray
     BJtensor(const std::string &flag);   //this one used to send "NO" message

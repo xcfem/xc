@@ -74,10 +74,12 @@ class Cosseratstraintensor: public BJtensor
 //    Cosseratstraintensor (int rank_of_tensor=2, double initval=0.00000003141528);
     Cosseratstraintensor(double initval=0.0);
 
-    Cosseratstraintensor ( double *values );
+    Cosseratstraintensor(double *values);
+    Cosseratstraintensor(const std::vector<double> &);
+    Cosseratstraintensor(const boost::python::list &);
 
     Cosseratstraintensor(const Cosseratstraintensor & x );
-    Cosseratstraintensor(const BJtensor & x); // copy-initializer
+    Cosseratstraintensor(const BJtensor &x); // copy-initializer
     
     Cosseratstraintensor operator=(const Cosseratstraintensor & rval); // Cosseratstraintensor assignment
     Cosseratstraintensor operator=(const BJtensor & rval);// tensor assignment to Cosseratstraintensor

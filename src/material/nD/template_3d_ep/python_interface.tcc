@@ -24,7 +24,16 @@
 // class_<XC::MatPoint3D, XC::MatPoint3D *, bases<CommandEntity>, boost::noncopyable >("MatPoint3D", no_init)
 //   ;
 
-class_<XC::EPState, XC::EPState *, bases<CommandEntity>, boost::noncopyable >("EPState")
+class_<XC::state_vars>("ep_state_vars")
+//.def(init<XC::stresstensor, XC::straintensor, XC::straintensor>(), (arg("Stressp"), arg("Strainp"), arg("ElasticStrainp")))
+  .def(init<XC::stresstensor, XC::straintensor, XC::straintensor>())
+  ;
+
+class_<XC::trial_state_vars, bases<XC::state_vars> >("ep_trial_state_vars")
+  .def(init<XC::stresstensor, XC::straintensor, XC::straintensor, XC::straintensor>())
+  ;
+
+class_<XC::EPState, XC::EPState *, bases<CommandEntity> >("EPState")
   ;
 
 class_<XC::YieldSurface, XC::YieldSurface *, bases<CommandEntity>, boost::noncopyable >("YieldSurface", no_init)

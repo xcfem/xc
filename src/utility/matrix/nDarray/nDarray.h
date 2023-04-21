@@ -263,10 +263,13 @@ class nDarray
     nDarray(const std::vector<int> &pdim, const double *values);
     nDarray(const std::vector<int> &pdim, const std::vector<double> &);
     nDarray(const std::vector<int> &pdim, const boost::python::list &);
+    nDarray(const boost::python::list &, const boost::python::list &);
     nDarray(const std::vector<int> &pdim, double initvalue);
 
     // special case for BJmatrix and BJvector . . .
     nDarray(int rows, int cols, double *values);
+    nDarray(int rows, int cols, const std::vector<double> &values);
+    nDarray(int rows, int cols, const boost::python::list &);
     nDarray(int rows, int cols, double initvalue);
 
 // special case when I don't want any initialization at all##

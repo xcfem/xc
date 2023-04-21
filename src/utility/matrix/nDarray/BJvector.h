@@ -103,8 +103,9 @@ class BJvector: virtual public BJmatrix
   {
     public:
       BJvector(int order_n = 1, double initvalue = 0.0);  // default constructor
-
       BJvector(int order_n, double *initval);
+      BJvector(const std::vector<double> &);
+      BJvector(const boost::python::list &);
 
       explicit BJvector(const nDarray &x); // copy-initializer
 

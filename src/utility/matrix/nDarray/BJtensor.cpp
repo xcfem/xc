@@ -119,6 +119,10 @@ XC::BJtensor::BJtensor(const std::vector<int> &pdim, const boost::python::list &
   : nDarray(pdim, l), indices1(""), indices2("") {}
 
 //! @brief Constructor
+XC::BJtensor::BJtensor(const boost::python::list &ldim, const boost::python::list &lvalues)
+  : nDarray(ldim, lvalues), indices1(""), indices2("") {}
+
+//! @brief Constructor
 XC::BJtensor::BJtensor(const std::vector<int> &pdim,const double &initvalue)
   : nDarray(pdim, initvalue), indices1(""), indices2("") {}
 

@@ -96,14 +96,23 @@
 
 #include "BJvector.h"
 
-//##############################################################################
+//! @brief Constructor.
 XC::BJvector::BJvector(int order_n, double initvalue):
   BJmatrix(order_n, 1, initvalue)  {  }  // default constructor
 // rank 2 ^ just to be consistent with rank of XC::BJmatrix
-//##############################################################################
+
+//! @brief Constructor.
 XC::BJvector::BJvector(int order_n, double *initval)
   : BJmatrix(order_n, 1, initval)  {  }
 //rank 2 ^ just to be consistent with rank of XC::BJmatrix
+
+//! @brief Constructor.
+XC::BJvector::BJvector(const std::vector<double> &initval)
+  : BJmatrix(initval.size(), 1, initval)  {  }
+
+//! @brief Constructor.
+XC::BJvector::BJvector(const boost::python::list &initval)
+  : BJmatrix(len(initval), 1, initval)  {  }
 
 //##############################################################################
 XC::BJvector::BJvector(const nDarray & x)

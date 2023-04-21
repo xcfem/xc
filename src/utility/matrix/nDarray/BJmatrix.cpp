@@ -24,45 +24,45 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-                                                                        
-// $Revision: 1.2 $                                                              
-// $Date: 2003/02/14 23:01:48 $                                                                  
-// $Source: /usr/local/cvs/OpenSees/SRC/nDarray/BJmatrix.cpp,v $                                                                
 
-                                                                        
-                                                                        
+// $Revision: 1.2 $
+// $Date: 2003/02/14 23:01:48 $
+// $Source: /usr/local/cvs/OpenSees/SRC/nDarray/BJmatrix.cpp,v $
+
+
+
 ///*
-//################################################################################
-//# COPY-YES  (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:                                                                     #
-//# CLASS:             BJmatrix                                                  #
-//#                                                                              #
-//# VERSION:                                                                     #
+//#############################################################################
+//# COPY-YES  (C):     :-))                                                  #
+//# PROJECT:           Object Oriented Finite XC::Element Program                #
+//# PURPOSE:                                                                 #
+//# CLASS:             BJmatrix                                              #
+//#                                                                          #
+//# VERSION:                                                                 #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.10, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic                                             #
-//# PROGRAMMER(S):     Boris Jeremic                                             #
-//#                    Bruce Eckel { changed/improved a lot by BJ }              #
-//#                                                                              #
-//# DATE:              November '92                                              #
-//# UPDATE HISTORY:    05 - __ avgust '93.  redefined as derived class from      #
-//#                                 nDarray class                                #
-//#                    january 06 '93  added BJmatrix2BJtensor_1, BJmatrix2BJtensor_2    #
-//#                                   BJmatrix2BJtensor_3                        #
+//# TARGET OS:         DOS || UNIX || . . .                                  #
+//# DESIGNER(S):       Boris Jeremic                                         #
+//# PROGRAMMER(S):     Boris Jeremic                                         #
+//#                    Bruce Eckel { changed/improved a lot by BJ }          #
+//#                                                                          #
+//# DATE:              November '92                                          #
+//# UPDATE HISTORY:    05 - __ avgust '93.  redefined as derived class from  #
+//#                                 nDarray class                            #
+//#                    january 06 '93  added BJmatrix2BJtensor_1, BJmatrix2BJtensor_2#
+//#                                   BJmatrix2BJtensor_3                    #
 //#                    August 22-29 '94 choped to separate files and worked on   #
-//#                                   const and & issues                         #
-//#                    August 30-31 '94 added use_def_dim to full the CC         #
-//#                                   resolved problem with temoraries for       #
-//#                                   operators + and - ( +=, -= )               #
-//#                                                                              #
+//#                                   const and & issues                     #
+//#                    August 30-31 '94 added use_def_dim to full the CC     #
+//#                                   resolved problem with temoraries for   #
+//#                                   operators + and - ( +=, -= )           #
+//#                                                                          #
 //#                    May 10 2000 Xiaoyan found a bug with 			 #
-//#        XC::BJmatrix::BJmatrix(int rows, int columns, double *initvalues):        #
+//#        XC::BJmatrix::BJmatrix(int rows, int columns, double *initvalues):    #
 //#           nDarray( 2, rows, columns, initvalues){ } 			 #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//############################################################################
 //*/
 
 #include "utility/matrix/nDarray/BJmatrix.h"
@@ -76,15 +76,22 @@ void XC::BJmatrix::error(const std::string &msg1, const std::string &msg2)
     exit(1);
   }
 
-//##############################################################################
+//! @brief Constructor.
 XC::BJmatrix::BJmatrix(int rows, int columns, double initval)
-  : nDarray(rows, columns, initval){ } // calling the appropriate
-                                          // base constructor
-//##############################################################################
+  : nDarray(rows, columns, initval){ }
+
+//! @brief Constructor.
 XC::BJmatrix::BJmatrix(int rows, int columns, double *initvalues)
-  : nDarray(rows, columns, initvalues){ } // calling the appropriate
-                                             // base constructor
-//##############################################################################
+  : nDarray(rows, columns, initvalues){ }
+
+//! @brief Constructor.
+XC::BJmatrix::BJmatrix(int rows, int columns, const std::vector<double> &initvalues)
+  : nDarray(rows, columns, initvalues){ }
+
+XC::BJmatrix::BJmatrix(int rows, int columns, const boost::python::list &initvalues)
+  : nDarray(rows, columns, initvalues){ }
+
+//! @brief Constructor.
 XC::BJmatrix::BJmatrix(const std::string &flag, int dimension )
   : nDarray("NO") // create an ident XC::BJmatrix
                   // with base class constructor cancellation
@@ -274,7 +281,7 @@ XC::BJmatrix &XC::BJmatrix::operator=( const BJmatrix & rval)
   {
     if(&rval == this) // if assign an BJvector to itself
       return *this;
-    
+
     nDarray::operator=(rval);
     return *this;
   }
@@ -593,17 +600,17 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 
 //..  //  int m41 = 0;
 //..  //  int m42 = 0;
-//..  
+//..
 //..  // filling back the XC::BJmatrix to XC::BJtensor
 //..     for ( int c22=1 ; c22<=back_conv.dim(2) ; c22++ )
 //..       for ( int c21=1 ; c21<=back_conv.dim(1) ; c21++ )
 //..         {
 //..  //         m41 = back_conv.dim(1)*(c41-1)+c42;
 //..  //         m42 = back_conv.dim(3)*(c43-1)+c44;
-//..       
+//..
 //..           back_conv(c21,c22) = (*this)(m41,m42);
 //..         }
-//..  
+//..
 //..  //    back_conv.print("t","back to XC::BJtensor back_conv");
 
     return back_conv;
@@ -859,7 +866,7 @@ XC::BJmatrix XC::BJmatrix::lu_decompose(BJmatrix & indx, int & d )
   // also interchange the scale factor:
             dum = scale_vector.mval(col_max,0);
 	    // scale_vector.mval(col_max,0) = scale_vector.mval(col,0); is wrong
-	    // Bug! busted by Frank McKenna (fmckenna@ce.berkeley.edu)  
+	    // Bug! busted by Frank McKenna (fmckenna@ce.berkeley.edu)
 
 	    scale_vector.mval(col_max,0) = scale_vector.mval(row,0); // this is OK
             scale_vector.mval(row,0) = dum;
@@ -884,7 +891,7 @@ XC::BJmatrix XC::BJmatrix::lu_decompose(BJmatrix & indx, int & d )
           }
 
       }
-    
+
     if( lu_decomp.mval(rows()-1, cols()-1 ) == 0 )
       lu_decomp.mval(rows()-1, cols()-1 ) = TINY;
 
