@@ -155,13 +155,13 @@ XC::Matrix::Matrix(const Vector &v)
 XC::Matrix::Matrix(const boost::python::list &l)
   :numRows(len(l)), numCols(0)
   {
-    boost::python::list row0= boost::python::extract<boost::python::list>(l[0]);
+    const boost::python::list &row0= boost::python::extract<boost::python::list>(l[0]);
     numCols= len(row0);
     // copy the components
     resize(numRows,numCols);
     for(int i=0; i<numRows; i++)
       {
-        boost::python::list rowI= boost::python::extract<boost::python::list>(l[i]);
+        const boost::python::list &rowI= boost::python::extract<boost::python::list>(l[i]);
         for(int j= 0; j<numCols;j++)
           (*this)(i,j)= boost::python::extract<double>(rowI[j]);
       }

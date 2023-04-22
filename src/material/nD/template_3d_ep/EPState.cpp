@@ -106,17 +106,125 @@ XC::state_vars::state_vars(const std::vector<double> &Scalarp, const std::vector
 const XC::stresstensor &XC::state_vars::getStress(void) const
   { return Stress; }
 
+void XC::state_vars::setStress(const stresstensor &stress)
+  { Stress= stress; }
+
 const XC::straintensor &XC::state_vars::getStrain(void) const
   { return Strain; }
+
+void XC::state_vars::setStrain(const straintensor &strain)
+  { Strain= strain; }
 
 const XC::straintensor &XC::state_vars::getElasticStrain(void) const
   { return ElasticStrain; }
 
+void XC::state_vars::setElasticStrain(const straintensor &strain)
+  { ElasticStrain= strain; }
+
 const std::vector<double> &XC::state_vars::getScalarVar(void) const
   { return ScalarVar; }
 
+const double &XC::state_vars::getScalarVar(size_t WhichOne) const
+  {
+    static double retval= 0.0;
+    if( WhichOne <= getNScalarVar() )
+      return ScalarVar[ WhichOne - 1 ];
+    else
+      {
+	std::cerr << "state_vars::" << __FUNCTION__
+		  << "; Out of ScalarVar's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
+      }
+    return retval;
+  }
+
+boost::python::list XC::state_vars::getScalarVarPy(void) const
+  {
+    boost::python::list retval;
+    for(std::vector<double>::const_iterator i= ScalarVar.begin();
+	i!= ScalarVar.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+void XC::state_vars::setScalarVar(const std::vector<double> &rval)
+  { ScalarVar= rval; }
+
+void XC::state_vars::setScalarVarPy(const boost::python::list &rval)
+  {
+    const size_t sz= len(rval);
+    ScalarVar.resize(sz);
+    // copy the components
+    for(size_t i=0; i<sz; i++)
+      ScalarVar[i]= boost::python::extract<double>(rval[i]);
+  }
+
+void XC::state_vars::setScalarVar(size_t WhichOne, const double &rval)
+  {
+    if(WhichOne <= getNScalarVar())
+       ScalarVar[WhichOne-1]= rval;
+    else
+      {
+	std::cerr << "state_vars::" << __FUNCTION__
+		  << "; Out of ScalarVar's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
+      }
+  }
+
 const std::vector<XC::stresstensor> &XC::state_vars::getTensorVar(void) const
   { return TensorVar; }
+
+//! @brief Return the nth Tensor Var.... Starting from 1!!
+const XC::stresstensor &XC::state_vars::getTensorVar(size_t WhichOne) const
+  {
+    static stresstensor retval;
+    if(WhichOne <= getNTensorVar() )
+       return TensorVar[ WhichOne - 1 ];
+    else
+      {
+	std::cerr << "state_vars::" << __FUNCTION__
+		  << "; Out of ScalarVar's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
+      }
+    return retval;
+  }
+
+boost::python::list XC::state_vars::getTensorVarPy(void) const
+  {
+    boost::python::list retval;
+    for(std::vector<stresstensor>::const_iterator i= TensorVar.begin();
+	i!= TensorVar.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+void XC::state_vars::setTensorVar(const std::vector<stresstensor> &rval)
+  { TensorVar= rval; }
+
+void XC::state_vars::setTensorVar(size_t WhichOne, const stresstensor &rval)
+  {
+    if(WhichOne <= getNTensorVar())
+       TensorVar[WhichOne-1]= rval;
+    else
+      {
+	std::cerr << "state_vars::" << __FUNCTION__
+		  << "; Out of TensorVar's range "
+		  <<  getNTensorVar() << std::endl;
+	exit(1);
+      }
+  }
+
+void XC::state_vars::setTensorVarPy(const boost::python::list &rval)
+  {
+    const size_t sz= len(rval);
+    TensorVar.resize(sz);
+    // copy the components
+    for(size_t i=0; i<sz; i++)
+      TensorVar[i]= boost::python::extract<stresstensor>(rval[i]);
+  }
 
 const XC::BJtensor &XC::state_vars::getEep(void) const
   { return Eep; }
@@ -166,8 +274,6 @@ void XC::trial_state_vars::init(const state_vars &initStateVars)
 
 //! @brief Normal Constructor 1
 XC::EPState::EPState(const trial_state_vars &trialSt,
-                 int                  NScalarp,
-                 int                  NTensorp,
 		 const state_vars &commitSt,
 		 const state_vars &initSt,
                  bool                 Convergedp,
@@ -190,8 +296,7 @@ XC::EPState::EPState(const trial_state_vars &trialSt,
 //ZC05/2004  Converged (Convergedp),
 //ZC05/2004  Elasticflag(Elasticflagp),Ev(Evp),nuhv(nuhvp),Ghv(Ghvp),
 //ZC05/2004  eo(eop), ec(ecp), Lambda(Lamp), po(pop), e(ep), psi(psip), a(ap)
-: NScalarVar(NScalarp), NTensorVar(NTensorp),
-  trialStateVars(trialSt), commitStateVars(commitSt), initStateVars(initSt),
+: trialStateVars(trialSt), commitStateVars(commitSt), initStateVars(initSt),
   Converged (Convergedp), Delta_lambda(0.0),
   e(ep), psi(psip),
   integratorFlag(flag)
@@ -210,8 +315,6 @@ XC::EPState::EPState(const trial_state_vars &trialSt,
 //ZC05/2004                 double              rho,
 XC::EPState::EPState(const trial_state_vars &trialSt,
                  const straintensor  Pstrainp,
-                 int                 NScalarp,
-                 int                 NTensorp,
 		 double             ep,
 		 double             psip,
 		 int flag )
@@ -230,8 +333,7 @@ XC::EPState::EPState(const trial_state_vars &trialSt,
 //  PlasticStrain(Pstrainp),
 //  Elasticflag(Elasticflagp),Ev(Evp),nuhv(nuhvp),Ghv(Ghvp),
 //  eo(eop), ec(ecp), Lambda(Lamp),po(pop), e(eop), a(ap)
-  : NScalarVar(NScalarp), NTensorVar(NTensorp),
-    trialStateVars(trialSt),
+  : trialStateVars(trialSt),
     commitStateVars(trialSt),
     initStateVars(trialSt)
   {
@@ -276,9 +378,7 @@ XC::EPState::EPState(const trial_state_vars &trialSt,
 
 //Normal Constructor 2
 XC::EPState::EPState(
-           int                 NScalarp,
            const std::vector<double> &Scalarp,
-           int                 NTensorp,
            const std::vector<stresstensor> &Tensorp
 //ZC05/2004           int                 Elasticflagp,
 //ZC05/2004           double        Evp,
@@ -293,8 +393,7 @@ XC::EPState::EPState(
 //: Eo(Eod), E_Young(Ed), nu_Poisson(nu), rho_mass_density(rho),
 //  Elasticflag(Elasticflagp),Ev(Evp),nuhv(nuhvp),Ghv(Ghvp),
 //  eo(eop), ec(ecp), Lambda(Lamp), po(pop), e(eop), a(ap)
-  : NScalarVar(NScalarp), NTensorVar(NTensorp),
-    trialStateVars(Scalarp, Tensorp),
+  : trialStateVars(Scalarp, Tensorp),
     commitStateVars(Scalarp, Tensorp),
     initStateVars(Scalarp, Tensorp)
   {
@@ -334,9 +433,7 @@ XC::EPState::EPState(void)
 //ZC05/2004  Converged(false),
 //ZC05/2004  Elasticflag(0),Ev(0.0),nuhv(0.0),Ghv(0.0),
 //ZC05/2004  eo(0.85), ec(0.80), Lambda(0.025), po(100.0), e(0.85), psi(0.05), a(0.5)
-  : NScalarVar(MaxNScalarVar),
-    NTensorVar(MaxNTensorVar),
-    trialStateVars(),
+  : trialStateVars(),
     commitStateVars(),
     initStateVars(),
     Converged(false), e(0.85), psi(0.05) //ZC05/2004    
@@ -403,13 +500,12 @@ XC::EPState::~EPState(void)
 //ZC05/2004 };
 
 
-int XC::EPState::getNScalarVar() const
-  { return NScalarVar; }
+size_t XC::EPState::getNScalarVar() const
+  { return this->trialStateVars.getNScalarVar(); }
 
 
-int XC::EPState::getNTensorVar() const
-  { return NTensorVar; }
-
+size_t XC::EPState::getNTensorVar() const
+  { return this->trialStateVars.getNTensorVar(); }
 
 bool XC::EPState::getConverged() const
   { return Converged; }
@@ -455,7 +551,6 @@ int XC::EPState::getIntegratorFlag() const
 
 const XC::stresstensor &XC::EPState::getStress(void) const
   { return trialStateVars.Stress; }
-
 
 const XC::stresstensor &XC::EPState::getStress_commit(void) const
   { return commitStateVars.Stress; }
@@ -642,52 +737,20 @@ void XC::EPState::setpsi( double psid )
 
 // Return the nth Scalar Var.... Starting from 1!!
 
-double XC::EPState::getScalarVar( int WhichOne) const
-  {
-    if( WhichOne <= getNScalarVar() )
-      return trialStateVars.ScalarVar[ WhichOne - 1 ];
-    else
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Out of ScalarVar's range "
-		  <<  getNScalarVar() << std::endl;
-	exit(1);
-      }
-    return 0.0;
-  }
-
-
+const double &XC::EPState::getScalarVar(size_t WhichOne) const
+  { return trialStateVars.getScalarVar(WhichOne); }
 
 //! @brief Return the nth Tensor Var.... Starting from 1!!
-const XC::stresstensor &XC::EPState::getTensorVar(int WhichOne) const
-  {
-    static stresstensor retval;
-    if( WhichOne <= getNTensorVar() )
-       return trialStateVars.TensorVar[ WhichOne - 1 ];
-    else
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Out of ScalarVar's range "
-		  <<  getNScalarVar() << std::endl;
-	exit(1);
-      }
-    return retval;
-  }
-
+const XC::stresstensor &XC::EPState::getTensorVar(size_t WhichOne) const
+  { return trialStateVars.getTensorVar(WhichOne); }
 
 // Return Scalar pointer
 
 const std::vector<double> &XC::EPState::getScalarVar() const
   { return trialStateVars.ScalarVar; }
 
-
-void XC::EPState::setNScalarVar(int rval)
-  { NScalarVar = rval; }
-
-
-void XC::EPState::setNTensorVar(int rval)
-  { NTensorVar = rval; }
-
+boost::python::list XC::EPState::getScalarVarPy(void) const
+  { return trialStateVars.getScalarVarPy(); }
 
 const std::vector<double> & XC::EPState::getScalarVar_commit(void) const
   { return commitStateVars.ScalarVar; }
@@ -710,6 +773,8 @@ double XC::EPState::getScalarVar_init(int i) const
 const std::vector<XC::stresstensor> &XC::EPState::getTensorVar(void) const
   { return trialStateVars.TensorVar; }
 
+boost::python::list XC::EPState::getTensorVarPy(void) const
+  { return trialStateVars.getTensorVarPy(); }
 
 const std::vector<XC::stresstensor> &XC::EPState::getTensorVar_commit() const
   { return commitStateVars.TensorVar; }
@@ -729,97 +794,42 @@ const std::vector<XC::stresstensor> & XC::EPState::getTensorVar_init() const
 
 // set nth Scalar Var.... Starting from 1!!
 
-void XC::EPState::setScalarVar(int WhichOne, double rval)
-  {
-    if( WhichOne <= getNScalarVar() )
-       trialStateVars.ScalarVar[ WhichOne - 1 ] = rval;
-    else
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Out of ScalarVar's range "
-		  <<  getNScalarVar() << std::endl;
-	exit(1);
-      }
-  }
+void XC::EPState::setScalarVar(size_t WhichOne, const double &rval)
+  { trialStateVars.setScalarVar(WhichOne, rval); }
+ 
 
-void XC::EPState::setScalarVar_commit(int WhichOne, double rval)
-  {
+void XC::EPState::setScalarVar_commit(size_t WhichOne, const double &rval)
+  { commitStateVars.setScalarVar(WhichOne, rval); }
 
-      if(WhichOne <= getNScalarVar())
-         commitStateVars.ScalarVar[ WhichOne - 1 ] = rval;
-      else
-        {
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; Out of ScalarVar's range "
-		    <<  getNScalarVar() << std::endl;
-          exit(1);
-        }
-  }
-
-void XC::EPState::setScalarVar_init(int WhichOne, double rval)
-  {
-      if( WhichOne <= getNScalarVar() )
-         initStateVars.ScalarVar[ WhichOne - 1 ] = rval;
-      else
-        {
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; Out of ScalarVar's range "
-		    <<  getNScalarVar() << std::endl;
-          exit(1);
-        }
-  }
-
+void XC::EPState::setScalarVar_init(size_t WhichOne, const double &rval)
+  { initStateVars.setScalarVar(WhichOne, rval); }
 
 
 //! @brief set nth Tensor Var.... Starting from 1!!
-void XC::EPState::setTensorVar(int WhichOne, const stresstensor &rval)
-  {
-      if( WhichOne <= getNTensorVar() )
-         trialStateVars.TensorVar[ WhichOne - 1 ] = rval;
-      else
-        {
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; Out of TensorVars's range "
-		    <<  getNScalarVar() << std::endl;
-          exit(1);
-        }
-  }
+void XC::EPState::setTensorVar(size_t WhichOne, const stresstensor &rval)
+  { trialStateVars.setTensorVar(WhichOne, rval); }
 
-void XC::EPState::setTensorVar_commit(int WhichOne, const stresstensor &rval)
-  {
-    if ( WhichOne <= getNTensorVar() )
-       commitStateVars.TensorVar[ WhichOne - 1 ] = rval;
-    else
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Out of TensorVars's range "
-		  <<  getNScalarVar() << std::endl;
-	exit(1);
-      }
-  }
+void XC::EPState::setTensorVar_commit(size_t WhichOne, const stresstensor &rval)
+  { commitStateVars.setTensorVar(WhichOne, rval); }
 
-void XC::EPState::setTensorVar_init(int WhichOne, const stresstensor &rval)
-  {
-    if ( WhichOne <= getNTensorVar() )
-      initStateVars.TensorVar[ WhichOne - 1 ] = rval;
-    else
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Out of TensorVars's range "
-		  <<  getNScalarVar() << std::endl;
-	exit(1);
-      }
-  }
+void XC::EPState::setTensorVar_init(size_t WhichOne, const stresstensor &rval)
+  { initStateVars.setTensorVar(WhichOne, rval); }
 
-//! @brief set all Scalar Vars ..No boundary checking!
+//! @brief set all scalar vars ..No boundary checking!
 void XC::EPState::setScalarVar(const std::vector<double> &rval)
   { trialStateVars.ScalarVar= rval; }
 
+//! @brief set all scalar vars ..No boundary checking!
+void XC::EPState::setScalarVarPy(const boost::python::list &rval)
+  { trialStateVars.setScalarVarPy(rval); }
 
-//! @brief set all Scalar Vars
+//! @brief set all scalar vars
 void XC::EPState::setTensorVar(const std::vector<stresstensor> &rval)
   { trialStateVars.TensorVar= rval; }
 
+//! @brief set all tensor Vars ..No boundary checking!
+void XC::EPState::setTensorVarPy(const boost::python::list &rval)
+  { trialStateVars.setTensorVarPy(rval); }
 
 void XC::EPState::print() const
   { std::cerr << *this; }

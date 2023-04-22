@@ -89,8 +89,8 @@
 // MATRIX.hhH: fully functional BJmatrix class based on
 // design in chapter 9.   ( Bruce Eckel: " Using C++ " )
 // improved a lot by Boris Jeremic
-#ifndef MATRIX_HH
-#define MATRIX_HH
+#ifndef BJMATRIX_HH
+#define BJMATRIX_HH
 
 #include "utility/matrix/nDarray/nDarray.h"
 
@@ -117,6 +117,7 @@ class BJmatrix: public nDarray
       BJmatrix(int mrows, int columns, double *initvalues);
       BJmatrix(int mrows, int columns, const std::vector<double> &);
       BJmatrix(int mrows, int columns, const boost::python::list &);
+      BJmatrix(const boost::python::list &l);
 
       BJmatrix(const std::string &flag, int dimension ); // create an ident BJmatrix
       BJmatrix(const std::string &matfile); // read from a "standard" BJmatrix file
@@ -189,16 +190,22 @@ class BJmatrix: public nDarray
       void lu_back_subst(BJmatrix & indx, BJmatrix & b);
            // Uses L-U decomposition for BJmatrix inverse
 
-      double & mval (int row, int col);  // I am still keeping mval
-                                         // operator for compatibility
-                                         // with old BJmatrix class members
-                                         // and they start from 0 ###
+    double & mval (int row, int col);  // I am still keeping mval
+                                       // operator for compatibility
+                                       // with old BJmatrix class members
+                                       // and they start from 0 ###
           // used by BJmatrix functions which KNOW they aren't
           // exceeding the boundaries
 
-		 public:
+  public:
 // Tiejun Li Jan 2000
-     double *BJmatrixtoarray(int &);
+    double *BJmatrixtoarray(int &);
+    
+    void Output(std::ostream &s) const;
+    friend std::ostream &operator<<(std::ostream &, const BJmatrix &);
+    friend std::string to_string(const BJmatrix &);
+    inline std::string toString(void) const
+      { return to_string(*this); }
  
 
 // // prebacen u nDarray 14 oktobra 1996
@@ -212,5 +219,8 @@ class BJmatrix: public nDarray
 //       void tred2(double ** a, int n, double * d, double * e);
 //       void eigsrt(double * d, double ** v, int n);
   };
+
+  std::ostream &operator<<(std::ostream &, const BJmatrix &);
+  std::string to_string(const BJmatrix &);
 } // end of XC namespace
 #endif 

@@ -973,29 +973,29 @@ const XC::straintensor &XC::Template3Dep::getPlasticStrainTensor(void) const
 
 //================================================================================
 double XC::Template3Dep::getpsi(void)
-{
+  {
      //this function cannot be moved,
      //leave here for compiling..., Zhao04/22/04
      return 0.05;
-}
+  }
 
-//================================================================================
+//! @brief Commit material state.
 int XC::Template3Dep::commitState(void)
-{
+  {
     int err;
     theElasticMat->commitState();
     err = EPS.commitState();
     return err;
-}
+  }
 
-//================================================================================
+//! @brief Revert the material to its last commited state.
 int XC::Template3Dep::revertToLastCommit(void)
-{
-  int err;
-  theElasticMat->revertToLastCommit();
-  err = EPS.revertToLastCommit();
-  return err;
-}
+  {
+    int err;
+    theElasticMat->revertToLastCommit();
+    err = EPS.revertToLastCommit();
+    return err;
+  }
 
 //! @brief Revert the material to its initial state.
 int XC::Template3Dep::revertToStart(void)

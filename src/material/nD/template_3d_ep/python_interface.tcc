@@ -34,6 +34,9 @@ class_<XC::trial_state_vars, bases<XC::state_vars> >("ep_trial_state_vars")
   ;
 
 class_<XC::EPState, XC::EPState *, bases<CommandEntity> >("EPState")
+  .add_property("stress", make_function( &XC::EPState::getStress, return_internal_reference<>() ), &XC::EPState::setStress,"Get/set the trial stress.")
+  .add_property("scalarVars", &XC::EPState::getScalarVarPy, &XC::EPState::setScalarVarPy,"Get/set the scalar vars.")
+  .add_property("tensorVars", &XC::EPState::getTensorVarPy, &XC::EPState::setTensorVarPy,"Get/set the tensor vars.")
   ;
 
 class_<XC::YieldSurface, XC::YieldSurface *, bases<CommandEntity>, boost::noncopyable >("YieldSurface", no_init)
@@ -74,7 +77,10 @@ class_<XC::PotentialSurface, XC::PotentialSurface *, bases<CommandEntity>, boost
   ;
 
 class_<XC::CamClayPotentialSurface, XC::CamClayPotentialSurface *, bases<XC::PotentialSurface> >("CamClayPotentialSurface")
+  .def(init<double>())
+  .add_property("M", &XC::CamClayPotentialSurface::getM, &XC::CamClayPotentialSurface::setM,"Get/set the slope of critical state line.")
   ;
+
 class_<XC::DruckerPragerPotentialSurface, XC::DruckerPragerPotentialSurface *, bases<XC::PotentialSurface> >("DruckerPragerPotentialSurface")
   .def(init<double>())
   .add_property("alpha2", &XC::DruckerPragerPotentialSurface::getalfa2, &XC::DruckerPragerPotentialSurface::setAlfa2,"Potential surface orientation angle.")
@@ -95,7 +101,12 @@ class_<XC::EvolutionLaw_L_Eeq, XC::EvolutionLaw_L_Eeq *, bases<XC::EvolutionLaw_
   .add_property("a", &XC::EvolutionLaw_L_Eeq::geta, &XC::EvolutionLaw_L_Eeq::seta, "Coefficient to define the linear hardening rule.")
   ;
 class_<XC::EvolutionLaw_NL_Ep, XC::EvolutionLaw_NL_Ep *, bases<XC::EvolutionLaw_S> >("EvolutionLaw_NL_Ep")
+  .def(init<double, double, double>())
+  .add_property("eo", &XC::EvolutionLaw_NL_Ep::geteo, &XC::EvolutionLaw_NL_Ep::seteo,"Get/set the void ratio.")
+  .add_property("lmbda", &XC::EvolutionLaw_NL_Ep::getlambda, &XC::EvolutionLaw_NL_Ep::setlambda,"Get/set lambda.")
+  .add_property("kappa", &XC::EvolutionLaw_NL_Ep::getkappa, &XC::EvolutionLaw_NL_Ep::setkappa,"Get/set kappa.")
   ;
+
 class_<XC::EvolutionLaw_NL_Eeq, XC::EvolutionLaw_NL_Eeq *, bases<XC::EvolutionLaw_S> >("EvolutionLaw_NL_Eeq")
   ;
 class_<XC::ManzariDafaliasEvolutionLaw, XC::ManzariDafaliasEvolutionLaw *, bases<XC::EvolutionLaw_S> >("ManzariDafaliasEvolutionLaw")
@@ -112,5 +123,17 @@ class_<XC::EvolutionLaw_NL_EijMD, XC::EvolutionLaw_NL_EijMD *, bases<XC::Evoluti
   ;
 
 class_<XC::Template3Dep, XC::Template3Dep *, bases<XC::NDMaterial>, boost::noncopyable >("Template3Dep", no_init)
+  .add_property("elasticMaterial", make_function( &XC::Template3Dep::getElMat, return_internal_reference<>() ), &XC::Template3Dep::setElMat,"Get/set the elastic material.")
+  .add_property("yieldSurface", make_function( &XC::Template3Dep::getYS, return_internal_reference<>() ), &XC::Template3Dep::setYS,"Get/set the yield surface.")
+  .add_property("potentialSurface", make_function( &XC::Template3Dep::getPS, return_internal_reference<>() ), &XC::Template3Dep::setPS,"Get/set the potential surface.")
+  .add_property("elasticPlasticState", make_function( &XC::Template3Dep::getEPS, return_internal_reference<>() ), &XC::Template3Dep::setEPS,"Get/set the elastic-plastic state.")
+  .add_property("scalarEvolutionLaw1", make_function( &XC::Template3Dep::getELS1, return_internal_reference<>() ), &XC::Template3Dep::setELS1,"Get/set the first scalar evolution law.")
+  .add_property("scalarEvolutionLaw2", make_function( &XC::Template3Dep::getELS2, return_internal_reference<>() ), &XC::Template3Dep::setELS2,"Get/set the second scalar evolution law.")
+  .add_property("scalarEvolutionLaw3", make_function( &XC::Template3Dep::getELS3, return_internal_reference<>() ), &XC::Template3Dep::setELS3,"Get/set the third scalar evolution law.")
+  .add_property("scalarEvolutionLaw4", make_function( &XC::Template3Dep::getELS4, return_internal_reference<>() ), &XC::Template3Dep::setELS4,"Get/set the fourth scalar evolution law.")
+  .add_property("tensorialEvolutionLaw1", make_function( &XC::Template3Dep::getELT1, return_internal_reference<>() ), &XC::Template3Dep::setELT1,"Get/set the first tensorial evolution law.")
+  .add_property("tensorialEvolutionLaw2", make_function( &XC::Template3Dep::getELT2, return_internal_reference<>() ), &XC::Template3Dep::setELT2,"Get/set the second tensorial evolution law.")
+  .add_property("tensorialEvolutionLaw3", make_function( &XC::Template3Dep::getELT3, return_internal_reference<>() ), &XC::Template3Dep::setELT3,"Get/set the third tensorial evolution law.")
+  .add_property("tensorialEvolutionLaw4", make_function( &XC::Template3Dep::getELT4, return_internal_reference<>() ), &XC::Template3Dep::setELT4,"Get/set the fourth tensorial evolution law.")
   ;
 

@@ -62,8 +62,8 @@
 #include "utility/kernel/CommandEntity.h"
 
 // Constants
-#define MaxNScalarVar 4
-#define MaxNTensorVar 4
+const size_t MaxNScalarVar= 4;
+const size_t MaxNTensorVar= 4;
 
 namespace XC {
 
@@ -93,10 +93,27 @@ struct state_vars
 	       const std::vector<double> &Scalarp,
 	       const std::vector<stresstensor> &Tensorp);
     const stresstensor &getStress(void) const;
+    void setStress(const stresstensor &);
     const straintensor &getStrain(void) const;
+    void setStrain(const straintensor &);
     const straintensor &getElasticStrain(void) const;
+    void setElasticStrain(const straintensor &);
+    inline size_t getNScalarVar() const
+      { return ScalarVar.size(); }
     const std::vector<double> &getScalarVar(void) const;
+    const double &getScalarVar(size_t WhichOne) const;
+    boost::python::list getScalarVarPy(void) const;
+    void setScalarVar(const std::vector<double> &);
+    void setScalarVarPy(const boost::python::list &);
+    void setScalarVar(size_t WhichOne, const double &rval);
+    inline size_t getNTensorVar() const
+      { return TensorVar.size(); }
     const std::vector<stresstensor> &getTensorVar(void) const;
+    const stresstensor &getTensorVar(size_t WhichOne) const;
+    boost::python::list getTensorVarPy(void) const;
+    void setTensorVar(const std::vector<stresstensor> &);
+    void setTensorVarPy(const boost::python::list &);
+    void setTensorVar(size_t WhichOne, const stresstensor &);
     const BJtensor &getEep(void) const;
   };
 
@@ -141,8 +158,6 @@ class EPState: public CommandEntity
 //ZC05/2004    double rho_mass_density;      // Mass density               
             
     
-    int NScalarVar; //!< Actual Number of internal scalar vars 
-    int NTensorVar; //!< Actual Number of internal tensor vars 
     trial_state_vars trialStateVars; //!< Trial state    
     state_vars commitStateVars; //!< Committed state    
     state_vars initStateVars; //!< Initial state
@@ -266,8 +281,6 @@ class EPState: public CommandEntity
 
     //Normal Constructor1
     EPState(const trial_state_vars &trialSt,
-            int                 NScalarp,
-            int                 NTensorp,
 	    const state_vars &commitSt,
 	    const state_vars &initSt,
             bool                Convergedp, 
@@ -278,16 +291,12 @@ class EPState: public CommandEntity
     //Normal Constructor11
     EPState(const trial_state_vars &trialSt,
             const straintensor  Pstrainp,
-            int                 NScalarp,
-            int                 NTensorp,
 	    double              ep = 0.85,
 	    double              psip = 0.05, 
 	    int flag = 0); //Guanzhou
 
     //Normal Constructor2
-    EPState(int                 NScalarp,
-            const std::vector<double> &Scalarp,
-            int                 NTensorp,
+    EPState(const std::vector<double> &Scalarp,
             const std::vector<stresstensor> &Tensorp );
 
     EPState *getCopy(void) const; //create a clone of itself
@@ -302,8 +311,8 @@ class EPState: public CommandEntity
 //ZC05/2004    double getGhv() const;
 //ZC05/2004    double getrho() const;
 
-    int getNScalarVar() const;
-    int getNTensorVar() const;
+    size_t getNScalarVar() const;
+    size_t getNTensorVar() const;
     bool getConverged() const;
 
 //ZC05/2004    // Added Joey 02-12-03
@@ -380,27 +389,29 @@ class EPState: public CommandEntity
 //ZC05/2004    void setpo( double pod );
 //ZC05/2004    void seta( double ad );
 
-    // WhichOne starts from 1 and ends up to  NScalarVar
-    double getScalarVar( int WhichOne) const;
-    const stresstensor &getTensorVar(int WhichOne) const;
+    // WhichOne starts from 1 and ends up to getNScalarVar()
+    const double &getScalarVar(size_t WhichOne) const;
+    const stresstensor &getTensorVar(size_t WhichOne) const;
 
     // return the pointers
-    const std::vector<double> &getScalarVar() const;
+    const std::vector<double> &getScalarVar(void) const;
+    boost::python::list getScalarVarPy(void) const;
     const std::vector<stresstensor> &getTensorVar() const;
+    boost::python::list getTensorVarPy(void) const;
 
     // WhichOne starts from 1 and ends up to NTensorVar
-    void setNScalarVar(int rval);
-    void setScalarVar(int WhichOne, double rval);
-    void setScalarVar_commit(int WhichOne, double rval);
-    void setScalarVar_init(int WhichOne, double rval);
+    void setScalarVar(size_t WhichOne, const double &rval);
+    void setScalarVar_commit(size_t WhichOne, const double &rval);
+    void setScalarVar_init(size_t WhichOne, const double &rval);
 
-    void setNTensorVar(int rval);
-    void setTensorVar(int WhichOne, const stresstensor &rval);
-    void setTensorVar_commit(int WhichOne, const stresstensor &rval);
-    void setTensorVar_init(int WhichOne, const stresstensor &rval);
+    void setTensorVar(size_t WhichOne, const stresstensor &rval);
+    void setTensorVar_commit(size_t WhichOne, const stresstensor &rval);
+    void setTensorVar_init(size_t WhichOne, const stresstensor &rval);
 
-    void setScalarVar(const std::vector<double> &rval);
+    void setScalarVar(const std::vector<double> &);
+    void setScalarVarPy(const boost::python::list &);
     void setTensorVar(const std::vector<stresstensor> &rval);
+    void setTensorVarPy(const boost::python::list &);
     void setInit();
 
     //added for OpenSees _Zhaohui 02-10-2000

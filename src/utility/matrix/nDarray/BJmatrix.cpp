@@ -91,6 +91,20 @@ XC::BJmatrix::BJmatrix(int rows, int columns, const std::vector<double> &initval
 XC::BJmatrix::BJmatrix(int rows, int columns, const boost::python::list &initvalues)
   : nDarray(rows, columns, initvalues){ }
 
+//! @brief Constructor (Python interface).
+XC::BJmatrix::BJmatrix(const boost::python::list &l)
+  : nDarray(len(l), len(boost::python::extract<boost::python::list>(l[0])), 0.0)
+  {
+    const int &nRows= dim(1); 
+    const int &nCols= dim(2);
+    for(int i=1; i<=nRows; i++)
+      {
+        const boost::python::list &rowI= boost::python::extract<boost::python::list>(l[i-1]);
+        for(int j= 1; j<=nCols;j++)
+          val(i,j)= boost::python::extract<double>(rowI[j-1]);
+      }
+  }
+
 //! @brief Constructor.
 XC::BJmatrix::BJmatrix(const std::string &flag, int dimension )
   : nDarray("NO") // create an ident XC::BJmatrix
@@ -964,8 +978,43 @@ double *XC::BJmatrix::BJmatrixtoarray(int &num)
     return pc_nDarray_rep.get_data_ptr();
   }
 
+//! @brief Write to the argument stream.
+void XC::BJmatrix::Output(std::ostream &s) const
+  {
+    const int &nr= dim(1);
+    if(nr>0)
+      {
+        const int &nc= dim(2);
+        if(nc>0)
+          {
+            for(int j=1; j<=nc; j++)
+              s <<  val(1,j) << " ";
+            for(int i=2; i<=nr; i++)
+              {
+                s << std::endl;
+	        for(int j=1; j<=nc; j++)
+                  s <<  val(i,j) << " ";
+              }
+          }
+      }
+  }
 
+//! @brief Returns a string that represents the matrix.
+std::string XC::to_string(const XC::BJmatrix &V)
+  {
+    //Doing this way clients will be able to manage the formatting
+    //with things like 'std::scientific << std::setprecision(10)' 
+    std::ostringstream ss; 
+    ss << V;
+    return ss.str();
+  }
 
+//! @brief Output operator.
+std::ostream &XC::operator<<(std::ostream &s, const XC::BJmatrix &m)
+  {
+    m.Output(s);
+    return s;
+  }
 
 
 

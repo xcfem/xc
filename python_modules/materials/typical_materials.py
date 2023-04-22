@@ -515,7 +515,7 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu, rho= 0.0):
     retval.rho= rho
     return retval
 
-#Linear elastic isotropic 3d material.
+# Linear elastic isotropic 3d material.
 def defElasticIsotropic3d(preprocessor, name, E, nu, rho= 0.0):
     '''Constructs an linear elastic isotropic 3D material.
 
@@ -790,6 +790,43 @@ def defViscousMaterial(preprocessor, name, C, Alpha= 1.0):
     retval= materialHandler.newMaterial("viscous_material", name)
     retval.dampingCoeff= C
     retval.alpha= Alpha
+    return retval
+
+# Create nDMaterial using Template Elastic-Plastic Model
+def defTemplate3Dep(preprocessor, name, elasticMaterial, yieldSurface, potentialSurface, elasticPlasticState, scalarEvolutionLaws, tensorialEvolutionLaws):
+    '''Constructs an linear elastic isotropic 3D material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name:         name identifying the material
+    :param elasticMaterial: elastic material.
+    :param yieldSurface: yield surface.
+    :param potentialSurface: potential surface.
+    :param elasticPlasticState: elastic-plastic state.
+    :param scalarEvolutionLaws: list with up to four scalar evolution laws.
+    :param tensorialEvolutionLaws: list with up to four tensorial evolution laws.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("template_3d_ep",name)
+    retval.elasticMaterial= elasticMaterial
+    retval.yieldSurface= yieldSurface
+    retval.potentialSurface= potentialSurface
+    retval.elasticPlasticState= elasticPlasticState
+    if(len(scalarEvolutionLaws)):
+      retval.scalarEvolutionLaw1= scalarEvolutionLaws.pop(0)
+    if(len(scalarEvolutionLaws)):
+      retval.scalarEvolutionLaw2= scalarEvolutionLaws.pop(0)
+    if(len(scalarEvolutionLaws)):
+      retval.scalarEvolutionLaw3= scalarEvolutionLaws.pop(0)
+    if(len(scalarEvolutionLaws)):
+      retval.scalarEvolutionLaw4= scalarEvolutionLaws.pop(0)
+    if(len(tensorialEvolutionLaws)):
+      retval.tensorialEvolutionLaw1= tensorialEvolutionLaws.pop(0)
+    if(len(tensorialEvolutionLaws)):
+      retval.tensorialEvolutionLaw2= tensorialEvolutionLaws.pop(0)
+    if(len(tensorialEvolutionLaws)):
+      retval.tensorialEvolutionLaw3= tensorialEvolutionLaws.pop(0)
+    if(len(tensorialEvolutionLaws)):
+      retval.tensorialEvolutionLaw4= tensorialEvolutionLaws.pop(0)
     return retval
 
 class MaterialData(BasicElasticMaterial):

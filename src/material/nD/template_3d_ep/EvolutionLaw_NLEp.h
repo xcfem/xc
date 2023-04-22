@@ -99,16 +99,15 @@ class EvolutionLaw_NL_Ep: public EvolutionLaw_S
 
     void print();
 
-  private:
     // some accessor functions
-    double geteo() const;      
-    //void   seteo( double eod);
+    double geteo(void) const;      
+    void seteo(const double &);
     
-    double getlambda() const;      
-    //void   setlambda( double lambdad);
+    double getlambda(void) const;      
+    void setlambda(const double &);
     
-    double getkappa() const;      
-    //void   setkappad( double kappad);
+    double getkappa(void) const;      
+    void setkappa(const double &);
 
     //================================================================================
     // Overloaded Insertion Operator	  Zhaohui Added Aug. 13, 2000

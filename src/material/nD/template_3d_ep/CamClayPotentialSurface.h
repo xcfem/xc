@@ -67,8 +67,8 @@ class CamClayPotentialSurface: public PotentialSurface
     double M;//!< the slope of critical state line
 
   public:
-    PotentialSurface *getCopy(void) const; // create a clone of itself
     CamClayPotentialSurface(double Mp = 1.2); // Default constructor
+    PotentialSurface *getCopy(void) const; // create a clone of itself
 
     BJtensor dQods(const EPState *EPS) const;
     BJtensor d2Qods2(const EPState *EPS) const;
@@ -77,6 +77,7 @@ class CamClayPotentialSurface: public PotentialSurface
 
     void print() { std::cerr << *this; };
     double getM() const;
+    void setM(const double &);
     
 
 // moved to stresstensor Boris Jeremic@ucdavis.edu 21Aug2001

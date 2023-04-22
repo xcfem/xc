@@ -71,11 +71,11 @@ XC::EvolutionLaw_NL_Ep::EvolutionLaw_NL_Ep( double eod, double lambdad, double k
 //================================================================================
 
 XC::EvolutionLaw_NL_Ep::EvolutionLaw_NL_Ep(const EvolutionLaw_NL_Ep &LE ) 
-{
+  {
     this->eo     = LE.geteo();
     this->lambda = LE.getlambda();
     this->kappa  = LE.getkappa();
-}
+  }
 
 //! @brief Virtual constructor.
 XC::EvolutionLaw_S * XC::EvolutionLaw_NL_Ep::getCopy(void) const 
@@ -144,24 +144,29 @@ void XC::EvolutionLaw_NL_Ep::print()
   { std::cerr << (*this); }
 
 
-//================================================================================
-double XC::EvolutionLaw_NL_Ep::geteo() const
-{       
-    return eo;
-}
+//! @brief Return value of void ratio.
+double XC::EvolutionLaw_NL_Ep::geteo(void) const
+  { return eo; }
 
-//================================================================================
-double XC::EvolutionLaw_NL_Ep::getlambda() const
-{       
-    return lambda;
-}
+//! @brief Set void ratio.
+void XC::EvolutionLaw_NL_Ep::seteo(const double &d)
+  { eo= d; }
 
-//================================================================================
-double XC::EvolutionLaw_NL_Ep::getkappa() const
-{       
-    return kappa;
-}
+//! @brief Return value of lambda.
+double XC::EvolutionLaw_NL_Ep::getlambda(void) const
+  { return lambda; }
 
+//! @brief Set value of lambda.
+void XC::EvolutionLaw_NL_Ep::setlambda(const double &d)
+  { lambda= d; }
+
+//! @brief Return value of kappa.
+double XC::EvolutionLaw_NL_Ep::getkappa(void) const
+  { return kappa; }
+
+//! @brief Set value of kappa.
+void XC::EvolutionLaw_NL_Ep::setkappa(const double &d)
+  { kappa= d; }
 
 //================================================================================
 std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_NL_Ep & LEL)

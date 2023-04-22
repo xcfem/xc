@@ -413,9 +413,11 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 //   }
 
 //================================================================================
-double XC:: CamClayPotentialSurface::getM() const
+double XC::CamClayPotentialSurface::getM() const
   { return M; }
 
+void XC::CamClayPotentialSurface::setM(const double &d)
+  { M= d; }
 
 std::ostream& XC::operator<<(std::ostream &os, const XC::CamClayPotentialSurface & YS)
   {

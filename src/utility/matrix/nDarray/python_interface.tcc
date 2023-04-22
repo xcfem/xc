@@ -28,7 +28,9 @@ class_<XC::nDarray>("nDarray")
   ;
 
 class_<XC::BJmatrix , bases<XC::nDarray>>("BJmatrix")
+  .def(init<list>())
   .def(init<int, int, list>())
+  .def(self_ns::str(self_ns::self))
   ;
 
 class_<XC::BJvector, bases<XC::BJmatrix>>("BJvector")
@@ -64,12 +66,12 @@ class_<XC::stressstraintensor , bases<XC::BJtensor> >("stressstraintensor")
   .def("tau_octahedral",&XC::stressstraintensor::tau_octahedral)
   ;
 
-class_<XC::straintensor , bases<XC::stressstraintensor> >("straintensor")
+class_<XC::straintensor, XC::straintensor *, bases<XC::stressstraintensor> >("straintensor")
   ;
 
-class_<XC::stresstensor , bases<XC::stressstraintensor> >("stresstensor")
+class_<XC::stresstensor, XC::stresstensor *, bases<XC::stressstraintensor> >("stresstensor")
   .def(init<double>())
-  .def(init<boost::python::list>())
+  .def(init<list>())
   .def("deviator",&XC::stresstensor::deviator)
   .def("principal",&XC::stresstensor::principal)
   ;

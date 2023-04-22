@@ -84,7 +84,7 @@ class Tensor;
 class Template3Dep: public NDMaterial
   {
    private:
-    NDMaterial  *theElasticMat;
+    NDMaterial *theElasticMat;
     YieldSurface *YS;
     PotentialSurface *PS;
     EPState EPS;
