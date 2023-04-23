@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial test checking the creation of Drucker-Prager material by means
+''' Trivial test checking the creation of Cam-Clay material by means
     of the Template3Dep material.'''
 
 from __future__ import print_function
