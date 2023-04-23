@@ -27,54 +27,54 @@
 //----------------------------------------------------------------------------
 //
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Manzari-Dafalias potential criterion 01 (with Pc)         #
-//# CLASS:             ManzariDafaliasPotentialSurface01                                      #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           Manzari-Dafalias potential criterion 01 (with Pc)      #
+//# CLASS:             ManzariDafaliasPotentialSurface01                                   #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 08 '00                                             #
-//# UPDATE HISTORY:    December 13 '00                                           #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION:                                                           #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 08 '00                                          #
+//# UPDATE HISTORY:    December 13 '00                                        #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//# SHORT EXPLANATION:                                                        #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 //
 
 #ifndef ManzariDafaliasPotentialSurface01_H    
 #define ManzariDafaliasPotentialSurface01_H
 
-#include "material/nD/template_3d_ep/PotentialSurface.h"
+#include "material/nD/template_3d_ep/ManzariDafaliasPotentialSurface.h"
 
 namespace XC {
 //! @ingroup MatPS
 //!
 //! @brief Manzari-Dafalias model potential surface.
-class ManzariDafaliasPotentialSurface01: public PotentialSurface
-{
+class ManzariDafaliasPotentialSurface01: public ManzariDafaliasPotentialSurface
+  {
   private:
     double Pc;
 
   public:
-    PotentialSurface *getCopy(void) const; // create a clone of itself
     ManzariDafaliasPotentialSurface01(double pc); // Default constructor
+    PotentialSurface *getCopy(void) const; // create a clone of itself
 
     BJtensor dQods(const EPState *EPS) const; 
     BJtensor d2Qods2(const EPState *EPS) const ;   
@@ -85,16 +85,9 @@ class ManzariDafaliasPotentialSurface01: public PotentialSurface
     double dgoverdt(double theta, double c) const;
     BJtensor apqdnods(const EPState *EPS) const;
     
-    void print()
-      { std::cout << *this; };
-
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an PotentialSurface's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const ManzariDafaliasPotentialSurface01 &);
+    virtual void print(std::ostream &os) const;  
   };
-std::ostream& operator<<(std::ostream &, const ManzariDafaliasPotentialSurface01 &);
+
 } // end of XC namespace
 
 #endif

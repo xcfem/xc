@@ -27,27 +27,27 @@
 //----------------------------------------------------------------------------
 ///*
 //################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Von Mises         potential criterion                     #
-//# CLASS:             VonMisesPotentialSurface                                        #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           Von Mises         potential criterion                  #
+//# CLASS:             VonMisesPotentialSurface                                     #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '93                                             #
-//# UPDATE HISTORY:    September 01 '00                                          #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION: Von Mises potential surface                               #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 03 '93                                          #
+//# UPDATE HISTORY:    September 01 '00                                       #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//# SHORT EXPLANATION: Von Mises potential surface                            #
+//#                                                                           #
+//#                                                                           #
+//#############################################################################
 //*/
 
 #ifndef VonMisesPotentialSurface_H
@@ -62,29 +62,19 @@ namespace XC {
 //!
 //! @brief Von Mises model potential surface.
 class VonMisesPotentialSurface: public PotentialSurface
-{
-  // Private vars to define the Von Mises Potential Surface
-  private:		  
-  
+  {
   public:
+    VonMisesPotentialSurface(void) {} // Default constructor
     PotentialSurface *getCopy(void) const; // create a clone of itself
-    VonMisesPotentialSurface ( ) {} // Default constructor
-    //VonMisesPotentialSurface (const VonMisesPotentialSurface & );   // copy constructor
 
     BJtensor dQods(const EPState *EPS) const;
     BJtensor d2Qods2(const EPState *EPS) const;
        
     BJtensor d2Qodsdt1(const EPState *EPS) const; // For Consistent Algorithm, Z Cheng, Jan 2004
     
-    void print() { std::cerr << *this; }; 
-  
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an VonMises PotentialSurface's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const VonMisesPotentialSurface &);
+    virtual void print(std::ostream &) const;
   };
-std::ostream& operator<<(std::ostream &, const VonMisesPotentialSurface &);
+
 } // end of XC namespace
 
 #endif

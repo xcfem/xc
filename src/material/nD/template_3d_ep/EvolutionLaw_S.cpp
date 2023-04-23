@@ -26,33 +26,30 @@
 //----------------------------------------------------------------------------
 /*
 //================================================================================
-# COPYRIGHT (C):     :-))                                                        #
-# PROJECT:           Object Oriented Finite XC::Element Program                      #
-# PURPOSE:           General platform for elaso-plastic constitutive model       #
-#                    implementation                                              #
-#                                                                                #
-# CLASS:             EvolutionLaw_S(base Evolution Law class for scalar var      #
-#                                                                                #
-# VERSION:                                                                       #
-# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )    #
-# TARGET OS:         DOS || UNIX || . . .                                        #
-# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                                 #
-# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                                 #
-#                                                                                #
-#                                                                                #
-# DATE:              09-02-2000                                                  #
-# UPDATE HISTORY:    09-12-2000                                                  #
-#                                                                                #
-#                                                                                #
-#                                                                                #
-# SHORT EXPLANATION: Here are some initial definitions of some virtual funs,     #
-#                    some of which will be redefined in derived classes.         #
-#                                                                                #
-//================================================================================
+# COPYRIGHT (C):     :-))                                                    #
+# PROJECT:           Object Oriented Finite XC::Element Program                  #
+# PURPOSE:           General platform for elaso-plastic constitutive model   #
+#                    implementation                                          #
+#                                                                            #
+# CLASS:             EvolutionLaw_S(base Evolution Law class for scalar var  #
+#                                                                            #
+# VERSION:                                                                   #
+# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )#
+# TARGET OS:         DOS || UNIX || . . .                                    #
+# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                             #
+# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                             #
+#                                                                            #
+#                                                                            #
+# DATE:              09-02-2000                                              #
+# UPDATE HISTORY:    09-12-2000                                              #
+#                                                                            #
+#                                                                            #
+#                                                                            #
+# SHORT EXPLANATION: Here are some initial definitions of some virtual funs, #
+#                    some of which will be redefined in derived classes.     #
+#                                                                            #
+//============================================================================
 */
-
-#ifndef EvolutionLaw_CPP
-#define EvolutionLaw_CPP
 
 #include "material/nD/template_3d_ep/EvolutionLaw_S.h"
 #include "utility/matrix/nDarray/basics.h"
@@ -84,20 +81,14 @@ double XC::EvolutionLaw_S::h_s( EPState *EPS, PotentialSurface *PS){
 //================================================================================
 //  Print content of the base class, might be overwritten! 
 //================================================================================
-void XC::EvolutionLaw_S::print()
-  { std::cerr << *this; }
-
-//================================================================================
-// Overloaded Insertion Operator
-// prints an Evolution Law_S's contents 
-//================================================================================
-std::ostream &XC::operator<< (std::ostream &os, const XC::EvolutionLaw_S & EL)
+void XC::EvolutionLaw_S::print(std::ostream &os) const
   {
     os << "Scalar Evolution Law's Parameters: " << std::endl;
-    return os;
   }
 
-
-
-#endif
+std::ostream &XC::operator<< (std::ostream &os, const XC::EvolutionLaw_S & EL)
+  {
+    EL.print(os);
+    return os;
+  }
 

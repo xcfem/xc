@@ -419,11 +419,10 @@ double XC::CamClayPotentialSurface::getM() const
 void XC::CamClayPotentialSurface::setM(const double &d)
   { M= d; }
 
-std::ostream& XC::operator<<(std::ostream &os, const XC::CamClayPotentialSurface & YS)
+void XC::CamClayPotentialSurface::print(std::ostream &os) const
   {
     os << "Cam Clay Potential Surface Parameters: " << std::endl;
-    os << "M = " << YS.getM() << std::endl;
-    return os;
+    os << "M = " << getM() << std::endl;
   }
 
 #endif

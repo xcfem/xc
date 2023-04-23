@@ -201,12 +201,23 @@ double XC::EvolutionLaw_NL_Eeq::h_s( EPState *EPS, PotentialSurface *PS)
 }
 
 
-//================================================================================
-//  Print vars defined in NLinear Evolution Law
-//================================================================================
-void XC::EvolutionLaw_NL_Eeq::print()
-  { std::cerr << (*this); }
 
+//! @brief Print vars defined in NLinear Evolution Law
+void XC::EvolutionLaw_NL_Eeq::print(std::ostream &os) const
+  {
+
+    os.precision(5);
+
+    //os.width(10);       
+    os << std::endl << "Nonlinear Evolution(plastic equivalent strain ) Law's parameters:" << std::endl;
+    os << "eeqEtaPeak = " << geteeqEtaPeak() << "; ";
+    os << "etaResidual = " << getetaResidual() << "; " << std::endl;
+    os << "etaStart = " << getetaStart() << "; ";
+    os << "etaPeak = " << getetaPeak() << "; ";
+    os << "e = " << gete() << "; ";
+    os << "d = " << getd() << "; " << std::endl;
+    //os.width(10);
+  }  
 
 //================================================================================
 double XC::EvolutionLaw_NL_Eeq::geteeqEtaPeak() const
@@ -244,24 +255,6 @@ double XC::EvolutionLaw_NL_Eeq::getd() const
     return d;
 }
 
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const EvolutionLaw_NL_Eeq & NLEL)
-{
-  //    os.unsetf( ios::scientific );
-    os.precision(5);
-
-    //os.width(10);       
-    os << std::endl << "Nonlinear Evolution(plastic equivalent strain ) Law's parameters:" << std::endl;
-    os << "eeqEtaPeak = " << NLEL.geteeqEtaPeak() << "; ";
-    os << "etaResidual = " << NLEL.getetaResidual() << "; " << std::endl;
-    os << "etaStart = " << NLEL.getetaStart() << "; ";
-    os << "etaPeak = " << NLEL.getetaPeak() << "; ";
-    os << "e = " << NLEL.gete() << "; ";
-    os << "d = " << NLEL.getd() << "; " << std::endl;
-    //os.width(10);       
-           
-    return os;
-}  
 
 #endif
 

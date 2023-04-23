@@ -26,38 +26,35 @@
 //----------------------------------------------------------------------------
 /*
 //================================================================================
-# COPYRIGHT (C):     :-))                                                        #
-# PROJECT:           Object Oriented Finite XC::Element Program                      #
-# PURPOSE:           General platform for elaso-plastic constitutive model       #
-#                    implementation                                              #
-#                                                                                #
-# CLASS:             EvolutionLaw_NL_Eij (on plastic strain)                     #
-#                                                                                #
-# VERSION:                                                                       #
-# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )    #
-# TARGET OS:         DOS || UNIX || . . .                                        #
-# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                                 #
-# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                                 #
-#                                                                                #
-#                                                                                #
-# DATE:              09-13-2000                                                  #
-# UPDATE HISTORY:    18May2004 Zhao fixed equation                               #
-#                    BJtensor h = dQods * (2.0/3.0) * ha - alpha * Cr * temp2;     #
-#                    so it is consistent with XC::BJtensor multiplication (revised)    #
-#                                                                                #
-#                                                                                #
-# SHORT EXPLANATION: This is a nonlinear evolution law for the evoltion of a     #
-#                    tensorial variable alpha which depends on plastic strain    #
+# COPYRIGHT (C):     :-))                                                    #
+# PROJECT:           Object Oriented Finite XC::Element Program                  #
+# PURPOSE:           General platform for elaso-plastic constitutive model   #
+#                    implementation                                          #
+#                                                                            #
+# CLASS:             EvolutionLaw_NL_Eij (on plastic strain)                 #
+#                                                                            #
+# VERSION:                                                                   #
+# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )#
+# TARGET OS:         DOS || UNIX || . . .                                    #
+# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                             #
+# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                             #
+#                                                                            #
+#                                                                            #
+# DATE:              09-13-2000                                              #
+# UPDATE HISTORY:    18May2004 Zhao fixed equation                           #
+#                    BJtensor h = dQods * (2.0/3.0) * ha - alpha * Cr * temp2; #
+#                    so it is consistent with XC::BJtensor multiplication (revised)#
+#                                                                            #
+#                                                                            #
+# SHORT EXPLANATION: This is a nonlinear evolution law for the evoltion of a #
+#                    tensorial variable alpha which depends on plastic strain#
 #                    i.e. dalpha_ij = 2/3*ha*dE_ij -Cr*de_eq*alpha_ij( Amstrong- #
-//                   Frederick Model)                                            #
-#                                                                                #
-#                                                                                #
-#                                                                                #
-//================================================================================
+//                   Frederick Model)                                        #
+#                                                                            #
+#                                                                            #
+#                                                                            #
+//============================================================================
 */
-
-#ifndef EvolutionLaw_NLEij_CPP
-#define EvolutionLaw_NLEij_CPP
 
 #include "material/nD/template_3d_ep/EvolutionLaw_NLEij.h"
 #include <utility/matrix/nDarray/basics.h>
@@ -155,11 +152,18 @@ XC::BJtensor XC::EvolutionLaw_NL_Eij::h_t( EPState *EPS, PotentialSurface *PS)
   }
 
 
-//================================================================================
-//  Print vars defined in Linear Evolution Law
-//================================================================================
-void XC::EvolutionLaw_NL_Eij::print()
-  { std::cerr << (*this); }
+//! @brief  Print vars defined in Linear Evolution Law
+void XC::EvolutionLaw_NL_Eij::print(std::ostream &os) const
+  {
+  //    os.unsetf( ios::scientific );
+    os.precision(5);
+
+    os.width(10);       
+    os << std::endl << "NonLinear Tensorial Evolution Law(A-F model)'s parameters:" << std::endl;
+    os << "ha = " << getha() << "; ";
+    os << "Cr = " << getCr() << std::endl;
+           
+  }  
 
 
 //================================================================================
@@ -174,19 +178,5 @@ double XC::EvolutionLaw_NL_Eij::getCr() const
     return Cr;
 }
 
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_NL_Eij & LEL)
-  {
-  //    os.unsetf( ios::scientific );
-    os.precision(5);
 
-    os.width(10);       
-    os << std::endl << "NonLinear Tensorial Evolution Law(A-F model)'s parameters:" << std::endl;
-    os << "ha = " << LEL.getha() << "; ";
-    os << "Cr = " << LEL.getCr() << std::endl;
-           
-    return os;
-  }  
-
-#endif
 

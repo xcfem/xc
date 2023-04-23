@@ -1010,7 +1010,7 @@ std::string XC::to_string(const XC::BJmatrix &V)
   }
 
 //! @brief Output operator.
-std::ostream &XC::operator<<(std::ostream &s, const XC::BJmatrix &m)
+std::ostream &XC::operator<<(std::ostream &s, const BJmatrix &m)
   {
     m.Output(s);
     return s;

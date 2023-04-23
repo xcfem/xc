@@ -26,34 +26,31 @@
 //----------------------------------------------------------------------------
 /*
 //================================================================================
-# COPYRIGHT (C):     :-))                                                        #
-# PROJECT:           Object Oriented Finite Element Program                      #
-# PURPOSE:           General platform for elaso-plastic constitutive model       #
-#                    implementation                                              #
-#                                                                                #
-# CLASS:             EvolutionLaw_NL_EijMD (on plastic strain)                   #
-#                                                                                #
-# VERSION:                                                                       #
-# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )    #
-# TARGET OS:         DOS || UNIX || . . .                                        #
-# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                                 #
-# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                                 #
-#                                                                                #
-#                                                                                #
-# DATE:              09-13-2000                                                  #
-# UPDATE HISTORY:                                                                #
-#                                                                                #
-#                                                                                #
-#                                                                                #
-# SHORT EXPLANATION: This is a nonlinear evolution law for the evolution of a    #
-#                    tensorial variable alpha which depends on plastic strain    #
+# COPYRIGHT (C):     :-))                                                    #
+# PROJECT:           Object Oriented Finite Element Program                  #
+# PURPOSE:           General platform for elaso-plastic constitutive model   #
+#                    implementation                                          #
+#                                                                            #
+# CLASS:             EvolutionLaw_NL_EijMD (on plastic strain)               #
+#                                                                            #
+# VERSION:                                                                   #
+# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )#
+# TARGET OS:         DOS || UNIX || . . .                                    #
+# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                             #
+# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                             #
+#                                                                            #
+#                                                                            #
+# DATE:              09-13-2000                                              #
+# UPDATE HISTORY:                                                            #
+#                                                                            #
+#                                                                            #
+#                                                                            #
+# SHORT EXPLANATION: This is a nonlinear evolution law for the evolution of a#
+#                    tensorial variable alpha which depends on plastic strain#
 #                    i.e. dalpha_ij = 2/3*ha*dE_ij -Cr*de_eq*alpha_ij( Armstrong-#
-//                   Frederick Model)                                            #
-//================================================================================
+//                   Frederick Model)                                        #
+//============================================================================
 */
-
-#ifndef EvolutionLaw_NLEIJManzariDafalias_CPP
-#define EvolutionLaw_NLEIJManzariDafalias_CPP
 
 #include <cmath>
 #include "material/nD/template_3d_ep/EvolutionLaw_NLEijMD.h"
@@ -255,66 +252,52 @@ XC::BJtensor XC::EvolutionLaw_NL_EijMD::h_t( EPState *EPS, PotentialSurface *PS)
 }
 
 
-//================================================================================
-//  Print vars defined in Linear Evolution Law
-//================================================================================
-void XC::EvolutionLaw_NL_EijMD::print()
-{
-    std::cerr << (*this);
-}
-    
-//================================================================================
-// prints Manzari-Dafalia EvolutionLaw's contents 
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_NL_EijMD & MDEL)
-//ostream& operator<<(ostream &os, const EvolutionLaw_NL_EijMD & MDEL)
-{
+//! @brief Print vars defined in Linear Evolution Law
+void XC::EvolutionLaw_NL_EijMD::print(std::ostream &os) const
+  {
   //    os.unsetf( ios::scientific );
     os.precision(5);
 
     //os.width(10);       
     os << std::endl << "Manzari-Dafalias Evolution Law's parameters:" << std::endl;
-    //os << "a = " << MDEL.geta() << "; ";
-    os << "Mc = " << MDEL.getMc() << "; ";
+    //os << "a = " << geta() << "; ";
+    os << "Mc = " << getMc() << "; ";
     //os.width(10);       
-    os << "Me = "  << MDEL.getMe() << "; ";
+    os << "Me = "  << getMe() << "; ";
     //os.width(10);       
-    os << "Lambda = " << MDEL.getLambda() << "; ";
+    os << "Lambda = " << getLambda() << "; ";
     //os.width(10);       
-    os << "ec_ref = " << MDEL.getec_ref() << "; ";
+    os << "ec_ref = " << getec_ref() << "; ";
     //os.width(10);       
-    os << "p_ref = " << MDEL.getp_ref() << "kPa"  << "; " << std::endl;
+    os << "p_ref = " << getp_ref() << "kPa"  << "; " << std::endl;
 
     //os.width(10);       
-    os << "kc_b = " << MDEL.getkc_b() << "; ";
+    os << "kc_b = " << getkc_b() << "; ";
     //os.width(10);       
-    os << "kc_d = " << MDEL.getkc_d() << "; ";
+    os << "kc_d = " << getkc_d() << "; ";
     //os.width(10);       
-    os << "ke_b = " << MDEL.getke_b() << "; ";
+    os << "ke_b = " << getke_b() << "; ";
     //os.width(10);       
-    os << "ke_d = " << MDEL.getke_d() << "; " << std::endl;
+    os << "ke_d = " << getke_d() << "; " << std::endl;
 
     //os.width(10);       
     //os << "h = " << ManzariDafaliasEvolutionLaw.h << "; ";
     //os.width(10);       
-    os << "ho = " << MDEL.getho() << "; ";
+    os << "ho = " << getho() << "; ";
     //os.width(10);       
-    os << "Cm = " << MDEL.getCm() << "; " << std::endl;
+    os << "Cm = " << getCm() << "; " << std::endl;
 
     //os.width(10);       
-    os << "D = " << MDEL.getD() << "; ";
+    os << "D = " << getD() << "; ";
     //os.width(10);       
-    os << "Ao = " << MDEL.getAo() << "; ";
+    os << "Ao = " << getAo() << "; ";
     //os.width(10);       
-    //os << "Fmax = " << MDEL.getFmax() << "; ";
+    //os << "Fmax = " << getFmax() << "; ";
     ////os.width(10);       
-    //os << "Cf = " << MDEL.getCf() << "; " << std::endl; 
-    //os << "F = " << MDEL.getF() << std::endl; 
-           
-    return os;
-}  
-
-
+    //os << "Cf = " << getCf() << "; " << std::endl; 
+    //os << "F = " << getF() << std::endl; 
+  }
+    
 //================================================================================
 //  Initialize some  vars in XC::EPState				        
 //================================================================================
@@ -665,6 +648,4 @@ double XC::EvolutionLaw_NL_EijMD::g_WW(double theta, double e)
 
     return temp;
 }
-
-#endif
 

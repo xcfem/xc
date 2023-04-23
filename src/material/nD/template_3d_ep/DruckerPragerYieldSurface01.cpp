@@ -26,27 +26,27 @@
 //----------------------------------------------------------------------------
 
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           Drucker-Prager yield criterion 01 (with Pc)	         #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite XC::Element Program                 #
+//# PURPOSE:           Drucker-Prager yield criterion 01 (with Pc)	      #
 //#                      (Ref. Geotechnique                    			 #
-//#                      V.47 No.2 255-272, 1997)                                #
-//# CLASS:             DruckerPragerYieldSurface01                                          #
-//#                                                                              #
-//# VERSION:                                                                     #
+//#                      V.47 No.2 255-272, 1997)                             #
+//# CLASS:             DruckerPragerYieldSurface01                                       #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '00                                             #
-//# UPDATE HISTORY:    December 13, '00                                             #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 03 '00                                          #
+//# UPDATE HISTORY:    December 13, '00                                       #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 
 
 #include "material/nD/template_3d_ep/DruckerPragerYieldSurface01.h"
@@ -56,7 +56,7 @@
 // Normal constructor
 //! @brief Default constructor.
 XC::DruckerPragerYieldSurface01::DruckerPragerYieldSurface01(const double &pc)
-  : Pc(pc) {}
+  : DruckerPragerYieldSurface(), Pc(pc) {}
 
 
 //! @brief Virtual constructor.
@@ -202,10 +202,9 @@ const double &XC::DruckerPragerYieldSurface01::getPc(void) const
 void XC::DruckerPragerYieldSurface01::setPc(const double &d)
   { Pc= d; }
 
-std::ostream& operator<<(std::ostream &os,const XC::DruckerPragerYieldSurface01 &YS)
+void XC::DruckerPragerYieldSurface01::print(std::ostream &os) const
   {
      os << "Drucker-Prager Yield Surface 01 Parameters: " << std::endl;
-     os << "Pc = " << YS.getPc() << std::endl;
-     return os;
+     os << "Pc = " << getPc() << std::endl;
   }
 

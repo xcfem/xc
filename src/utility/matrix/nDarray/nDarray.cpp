@@ -112,6 +112,7 @@
 // nDarray.cc
 
 #include "nDarray.h"
+#include "utility/utils/text/text_string.h"
 
 //! @brief Initialize dimensions vector.
 void XC::nDarray_rep::init_dim(const size_t &sz, const int &default_dim)
@@ -482,13 +483,13 @@ XC::nDarray::nDarray(const std::string &flag, const std::vector<int> &pdim)
       {
 	case 0:
 	  {
-	    ::printf("\a\n Unit nDarray of rank 0 ???\n");
+	    std::cerr << "\a\n Unit nDarray of rank 0 ???\n";
 	    break;
 	  }
 
 	case 1:
 	  {
-	    ::printf("\a\n Unit nDarray of rank 1 ???\n");
+	    std::cerr << "\a\n Unit nDarray of rank 1 ???\n";
 	    break;
 	  }
 
@@ -704,7 +705,7 @@ XC::nDarray& XC::nDarray::operator+=(const nDarray & rval)
 
     if(this_rank_of_nDarray != rval_rank_of_nDarray)
       {
-        ::printf("\a\nnDarrays of different ranks: += not possible\n");
+        std::cerr << "\a\nnDarrays of different ranks: += not possible\n";
         ::exit ( 1 );
       }
 
@@ -760,7 +761,7 @@ XC::nDarray& XC::nDarray::operator-=(const nDarray & rval)
     int rval_rank_of_nDarray =  rval.pc_nDarray_rep.nDarray_rank;
             if(this_rank_of_nDarray != rval_rank_of_nDarray)
       {
-        ::printf("\a\nnDarrays of different ranks: -= not possible\n");
+        std::cerr << "\a\nnDarrays of different ranks: -= not possible\n";
         ::exit ( 1 );
       }
 
@@ -827,7 +828,7 @@ double XC::nDarray::trace() const
           {
             if(dim()[0] != 1)
               {
-		::printf("\a\nERROR in trace function : not a squared 1-st rank XC::BJtensor\n");
+		std::cerr << "\a\nERROR in trace function : not a squared 1-st rank XC::BJtensor\n";
 		::exit( 1 );
               }
             tr = (*this)(1);
@@ -838,7 +839,7 @@ double XC::nDarray::trace() const
           {
             if(dim()[0] != dim()[1])
               {
-		::printf("\a\nERROR in trace function : not a sqared 2nd-rank XC::BJtensor\n");
+		std::cerr << "\a\nERROR in trace function : not a sqared 2nd-rank XC::BJtensor\n";
 		::exit( 1 );
               }
             for ( int i2=1 ; i2<=dim()[0] ; i2++ )
@@ -852,7 +853,7 @@ double XC::nDarray::trace() const
                 dim()[1] != dim()[2] ||
                 dim()[2] != dim()[0]    )
               {
-		::printf("\a\nERROR in trace function : not a sqared 3nd-rank XC::BJtensor\n");
+		std::cerr << "\a\nERROR in trace function : not a sqared 3nd-rank XC::BJtensor\n";
 		::exit( 1 );
               }
             for ( int i3=1 ; i3<=dim()[0] ; i3++ )
@@ -867,7 +868,7 @@ double XC::nDarray::trace() const
                 dim()[2] != dim()[3] ||
                 dim()[3] != dim()[0]    )
               {
-		::printf("\a\nERROR in trace function : not a sqared 4nd-rank XC::BJtensor\n");
+		std::cerr << "\a\nERROR in trace function : not a sqared 4nd-rank XC::BJtensor\n";
 		::exit( 1 );
               }
             for ( int i4=1 ; i4<=dim()[0] ; i4++ )
@@ -887,19 +888,16 @@ bool XC::nDarray::operator==(const nDarray &rval) const
     return (this->pc_nDarray_rep== rval.pc_nDarray_rep);
   }
 
-
-//! @brief nDarray print function
-void XC::nDarray::print(const std::string &name ,const std::string &msg, std::ostream &os) const
+//! @brief Write this object to the argument stream.
+void XC::nDarray::output(std::ostream &os) const
   {
-    os << msg << std::endl;
-
     switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
             // ::printf("%s(1)=%+8.4e  ", name.c_str(), (*this)(1));
             // ::printf("\n");
-            os << name << "(1)= " << (*this)(1) << std::endl;
+            os  << "(1)= " << (*this)(1) << std::endl;
             break;
           }
 
@@ -909,7 +907,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg, std::os
               {
                 // ::printf("%s(%2d)=%+8.4e  ", name.c_str(), i, (*this)(i));
                 // ::printf("\n");
-                os << name << "(" << i << ")= " << (*this)(i) << std::endl;
+                os  << "(" << i << ")= " << (*this)(i) << std::endl;
               }
             break;
           }
@@ -921,7 +919,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg, std::os
                 for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
                     //::printf("%s(%2d,%2d)=%+12.8e ", name.c_str(), i2, j2, (*this)(i2, j2));
-                    os << name << "(" << i2 << "," << j2 << ")= " << (*this)(i2,j2) << std::endl;
+                    os  << "(" << i2 << "," << j2 << ")= " << (*this)(i2,j2) << std::endl;
 		  }
 	        //::printf("\n");
 		os << std::endl;
@@ -936,7 +934,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg, std::os
                   for( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
                       //::printf("%s(%d,%d,%d)=%+8.4e  ", name.c_str(), i3, j3, k3, (*this)(i3, j3, k3));
-		      os << name << "(" << i3 << "," << j3 << "," << k3 << ")= " << (*this)(i3,j3,k3) << std::endl;
+		      os  << "(" << i3 << "," << j3 << "," << k3 << ")= " << (*this)(i3,j3,k3) << std::endl;
                     }
                   //::printf("\n");
 		  os << std::endl;
@@ -952,7 +950,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg, std::os
                     for( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
                         //::printf("%s(%d,%d,%d,%d)=%+8.4e  ",name.c_str(),i4,j4,k4,l4, (*this)(i4, j4, k4, l4));
-			os << name << "(" << i4 << "," << j4 << "," << k4  << "," << l4 << ")= " << (*this)(i4,j4,k4,l4) << std::endl;
+			os << "(" << i4 << "," << j4 << "," << k4  << "," << l4 << ")= " << (*this)(i4,j4,k4,l4) << std::endl;
                       }
                     //::printf("\n");
 		    os << std::endl;
@@ -960,27 +958,41 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg, std::os
             break;
           }
       }
-////*    ::printf("\n");
-//
   }
 
-std::ostream &XC::operator<<(std::ostream &os, const XC::nDarray &arr)
+//! @brief nDarray print function
+void XC::nDarray::print(const std::string &name ,const std::string &msg, std::ostream &os) const
+  {
+    os << msg << std::endl;
+    os << name;
+    this->output(os);
+  }
+
+//! @brief Returns a string that represents the matrix.
+std::string XC::to_string(const nDarray &arr)
+  {
+    //Doing this way clients will be able to manage the formatting
+    //with things like 'std::scientific << std::setprecision(10)' 
+    std::ostringstream ss; 
+    ss << arr;
+    return ss.str();
+  }
+
+std::ostream &XC::operator<<(std::ostream &os, const nDarray &arr)
   {
     arr.print("","", os);
     return os;
   }
 
-// nDarray print function
-void XC::nDarray::printshort(const std::string &msg) const
+//! @brief nDarray print function
+void XC::nDarray::outputshort(std::ostream &os) const
   {
-    std::cerr << msg << std::endl;
-
     switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
-            ::printf("%+6.2e ",(*this)(1));
-            ::printf("\n");
+	      //::printf("%+6.2e ",(*this)(1));
+	    os << format_number("%+6.2e ", (*this)(1)) << std::endl;
             break;
           }
 
@@ -988,8 +1000,8 @@ void XC::nDarray::printshort(const std::string &msg) const
           {
             for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
-                ::printf("%+6.2e ",(*this)(i));
-                ::printf("\n");
+                os << format_number("%+6.2e ",(*this)(i));
+                os << std::endl;
               }
             break;
           }
@@ -1000,9 +1012,9 @@ void XC::nDarray::printshort(const std::string &msg) const
               {
                 for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
-                    ::printf("%+6.2e ", (*this)(i2, j2));
+                    os << format_number("%+6.2e ", (*this)(i2, j2));
                   }
-                ::printf("\n");
+                os << std::endl;
               }
             break;
           }
@@ -1014,9 +1026,9 @@ void XC::nDarray::printshort(const std::string &msg) const
                 {
                   for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
-                      ::printf("%+6.2e  ", (*this)(i3, j3, k3));
+                      os << format_number("%+6.2e  ", (*this)(i3, j3, k3));
                     }
-                  ::printf("\n");
+                  os << std::endl;
                 }
             break;
           }
@@ -1029,87 +1041,91 @@ void XC::nDarray::printshort(const std::string &msg) const
                   {
                     for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
-                        ::printf("%+6.2e  ", (*this)(i4, j4, k4, l4));
+                        os << format_number("%+6.2e  ", (*this)(i4, j4, k4, l4));
                       }
-                    ::printf("\n");
+                    os << std::endl;
                    }
             break;
           }
       }
-////*    ::printf("\n");
-//
+  }
+
+//! @brief nDarray print function
+void XC::nDarray::printshort(std::ostream &os, const std::string &msg) const
+  {
+    os << msg << std::endl;
+    this->outputshort(os);
   }
 
 
-// nDarray print function for mathematica
-void XC::nDarray::mathprint(void) const
+//! @brief nDarray print function for mathematica
+void XC::nDarray::mathprint(std::ostream &os) const
   {
-
     switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
-            ::printf("{");
-            ::printf("%12f, ", (*this)(1));
-            ::printf("},\n");
+            os << "{";
+            os << format_number("%12f, ", (*this)(1));
+            os << "},\n";
             break;
           }
 
         case 1:
           {
-            ::printf("{");
+            os << "{";
             int i = 1;
             for ( i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
-                ::printf("%12f, ", (*this)(i));
-                ::printf("\n");
-                if (i<pc_nDarray_rep.dim[0]) ::printf(", ");
-                if (i==pc_nDarray_rep.dim[0]) ::printf(" \n");
+                os << format_number("%12f, ", (*this)(i));
+                os << "\n";
+                if (i<pc_nDarray_rep.dim[0]) os << ", ";
+                if (i==pc_nDarray_rep.dim[0]) os << " \n";
               }
-            if (i<(pc_nDarray_rep.dim[0]+1)) ::printf("},\n");
-            if (i==(pc_nDarray_rep.dim[0]+1)) ::printf("}\n");
+            if (i<(pc_nDarray_rep.dim[0]+1)) os << "},\n";
+            if (i==(pc_nDarray_rep.dim[0]+1)) os << "}\n";
             break;
           }
 
         case 2:
           {
-            ::printf("{\n");
+            os << "{\n";
             for ( int i2=1 ; i2<=pc_nDarray_rep.dim[0]  ; i2++ )
               {
                 if (pc_nDarray_rep.dim[1]!=1)
                   {
-                    ::printf("{");
+                    os << "{";
                   }
                 for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
-                    ::printf("%12f", (*this)(i2, j2));
+                    os << format_number("%12f", (*this)(i2, j2));
                     if (j2<pc_nDarray_rep.dim[1]  )
                       {
-                         ::printf(", ");
+                         os << ", ";
                       }
-//                    if (j2==pc_nDarray_rep.dim[1]) ::printf("");
+//                    if (j2==pc_nDarray_rep.dim[1]) os << "";
                   }
 //                if (i2<pc_nDarray_rep.dim[1] && pc_nDarray_rep.dim[1]!=1 )
 //                  {
-//                    ::printf(",\n");
+//                    os << ",\n";
 //                  }
                 if ( pc_nDarray_rep.dim[1]==1 && i2<pc_nDarray_rep.dim[0] )
                   {
-                         ::printf(", ");
+                         os << ", ";
                   }
                 if (i2<pc_nDarray_rep.dim[1] )
                   {
-                    ::printf("},\n");
+                    os << "},\n";
                   }
                 if (i2==pc_nDarray_rep.dim[1] && pc_nDarray_rep.dim[1]!=1 )
                   {
-                    ::printf("}\n");
+                    os << "}\n";
                   }
               }
-//            if (i2<(pc_nDarray_rep.dim[0]+1)) ::printf("},\n");
+//            if (i2<(pc_nDarray_rep.dim[0]+1)) os << "},\n";
 //            if (i2==(pc_nDarray_rep.dim[0]+1))
 //              {
-                ::printf("}\n");
+                os << "}\n";
 //              }
             break;
           }
@@ -1121,9 +1137,9 @@ void XC::nDarray::mathprint(void) const
                 {
                   for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
-                      ::printf("%12f,  ", (*this)(i3, j3, k3));
+                      os << format_number("%12f,  ", (*this)(i3, j3, k3));
                     }
-                  ::printf("\n");
+                  os << "\n";
                 }
             break;
           }
@@ -1136,15 +1152,13 @@ void XC::nDarray::mathprint(void) const
                   {
                     for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
-                        ::printf("%12f,  ", (*this)(i4, j4, k4, l4));
+                        os << format_number("%12f,  ", (*this)(i4, j4, k4, l4));
                       }
-                    ::printf("\n");
+                    os << "\n";
                    }
             break;
           }
       }
-////*    ::printf("\n");
-//
   }
 
 
@@ -1331,7 +1345,7 @@ XC::nDarray XC::nDarray::eigenvectors(void)
     int cols = this->dim(2);
     if ( rows != cols && this->rank() != 2 )
       {
-        ::printf("rows!=cols in eigenBJvectors and rank != 2 \n");
+        std::cerr << "rows!=cols in eigenBJvectors and rank != 2 \n";
         ::exit(1);
       }
 
@@ -1394,7 +1408,10 @@ void XC::nDarray::tqli(std::vector<double> &d, std::vector<double> &e, int n, st
 	if(m != l)
 	  {
 	    if(iter++ == 30)
-	      { ::printf("Too many iterations in TQLI\n"); ::exit(1); }
+	      {
+		std::cerr << "Too many iterations in TQLI\n";
+		::exit(1);
+	      }
 	  g=(d[l+1]-d[l])/(2.0*e[l]);
 	  r=sqrt((g*g)+1.0);
 	  g=d[m]-d[l]+e[l]/(g+SIGN(r,g));

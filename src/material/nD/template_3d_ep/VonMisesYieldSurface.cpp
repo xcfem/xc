@@ -141,10 +141,9 @@ XC::BJtensor XC::VonMisesYieldSurface::xi_t1(const EPState *EPS) const
   }
 
 //! @brief Print stuff.
-std::ostream& XC::operator<<(std::ostream &os, const VonMisesYieldSurface & YS)
+void XC::VonMisesYieldSurface::print(std::ostream &os) const
   {
     os << "Von Mises Yield Surface Parameters: " << std::endl;
-    return os;
   }
 
 

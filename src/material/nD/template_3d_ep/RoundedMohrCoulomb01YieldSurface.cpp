@@ -25,40 +25,40 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //================================================================================
-//# COPY LEFT and RIGHT:                                                         #
-//# Commercial    use    of    this  program without express permission of the   #
-//# University  of  California, is strictly encouraged. Copyright and Copyleft   #
-//# are covered by the following clause:                                         #
-//#                                                                              #
-//# Woody's license:                                                             #
-//# ``This    source    code is Copyrighted in U.S., by the The Regents of the   #
-//# University  of  California,  for  an indefinite period, and anybody caught   #
-//# using  it  without  our  permission,  will be mighty good friends of ourn,   #
-//# cause  we  don't give a darn. Hack it. Compile it. Debug it. Run it. Yodel   #
-//# it. Enjoy it. We wrote it, that's all we wanted to do.'' bj                  #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           Rounded Mohr Coulomb Potential Surface                    #
-//# CLASS:             RoundedMohrCoulomb01YieldSurface                                         #
-//#                                                                              #
-//# VERSION:                                                                     #
-//# LANGUAGE:          C++                                                       #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic jeremic@ucdavis.edu                         #
-//#                    Zhao Cheng,                                               #
-//# PROGRAMMER(S):     Zhao Cheng, Boris Jeremic                                 #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              12 Feb. 2003                                              #
+//# COPY LEFT and RIGHT:                                                      #
+//# Commercial    use    of    this  program without express permission of the#
+//# University  of  California, is strictly encouraged. Copyright and Copyleft#
+//# are covered by the following clause:                                      #
+//#                                                                           #
+//# Woody's license:                                                          #
+//# ``This    source    code is Copyrighted in U.S., by the The Regents of the#
+//# University  of  California,  for  an indefinite period, and anybody caught#
+//# using  it  without  our  permission,  will be mighty good friends of ourn,#
+//# cause  we  don't give a darn. Hack it. Compile it. Debug it. Run it. Yodel#
+//# it. Enjoy it. We wrote it, that's all we wanted to do.'' bj               #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//# PROJECT:           Object Oriented Finite XC::Element Program                 #
+//# PURPOSE:           Rounded Mohr Coulomb Potential Surface                 #
+//# CLASS:             RoundedMohrCoulomb01YieldSurface                                      #
+//#                                                                           #
+//# VERSION:                                                                  #
+//# LANGUAGE:          C++                                                    #
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# DESIGNER(S):       Boris Jeremic jeremic@ucdavis.edu                      #
+//#                    Zhao Cheng,                                            #
+//# PROGRAMMER(S):     Zhao Cheng, Boris Jeremic                              #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              12 Feb. 2003                                           #
 //# UPDATE HISTORY:   Feb 25th 2003  
-//#                                                                              #
-//# Short Explanation:                                                           #
-//#              Willam & Warnke (1974) deviatoric shape                    #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//#                                                                           #
+//# Short Explanation:                                                        #
+//#              Willam & Warnke (1974) deviatoric shape                 #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 //
 
 #include "material/nD/template_3d_ep/RoundedMohrCoulomb01YieldSurface.h"
@@ -171,10 +171,9 @@ double XC::RoundedMohrCoulomb01YieldSurface::xi_s2( const EPState *EPS ) const
 //{
 //}
 
-std::ostream& XC::operator<<(std::ostream &os, const RoundedMohrCoulomb01YieldSurface & YS)
+void XC::RoundedMohrCoulomb01YieldSurface::print(std::ostream &os) const
   {
     os << "Rounded Mohr Coulomb Surface Parameters: " << std::endl;
-    return os;
   }
 
 

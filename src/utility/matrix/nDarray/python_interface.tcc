@@ -25,6 +25,11 @@ class_<XC::nDarray>("nDarray")
   .def(init<list, list>())
   .def(init<int, double>())
   .def(init<int, int, list>())
+  .def(self_ns::str(self_ns::self))
+  .def(self + self)
+  .def(self - self)
+  .def("frobeniusNorm",&XC::nDarray::Frobenius_norm,"Returns the Frobenius norm.")
+  .def("generalNorm",&XC::nDarray::General_norm,"Returns the general p-th norm.")
   ;
 
 class_<XC::BJmatrix , bases<XC::nDarray>>("BJmatrix")

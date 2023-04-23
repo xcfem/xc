@@ -831,8 +831,82 @@ void XC::EPState::setTensorVar(const std::vector<stresstensor> &rval)
 void XC::EPState::setTensorVarPy(const boost::python::list &rval)
   { trialStateVars.setTensorVarPy(rval); }
 
-void XC::EPState::print() const
-  { std::cerr << *this; }
+void XC::EPState::print(std::ostream &os) const
+  {
+        //        os.setf( ios::showpos | ios::scientific);
+    os.precision(4);
+    os.width(10);
+//ZC05/2004         os << std::endl << "Elastic plastic state parameters: "  << std::endl;
+//ZC05/2004 
+//ZC05/2004   int ef = getElasticflag();
+//ZC05/2004   os << "\tElastic Flag = " << ef << ";";
+//ZC05/2004   if (ef == 1)
+//ZC05/2004      os << " pressure dependent isotropic material (default case, for soil)." << std::endl;
+//ZC05/2004   else if (ef == 2)
+//ZC05/2004      os << " pressure independent isotropic material." << std::endl;
+//ZC05/2004   else if (ef == 3)
+//ZC05/2004      os << " pressure independent cross-anisotropic material." << std::endl;
+//ZC05/2004   else if (ef == 4)
+//ZC05/2004      os << " pressure dependent cross-anisotropic material." << std::endl;
+//ZC05/2004   else
+//ZC05/2004      os << " elastic portion code not correct. Flag must be 1, 2, 3 or 4." << std::endl;
+
+
+//ZC05/2004         os << "\tEo = " << getEo() << ";";
+//ZC05/2004         os << " E_Young = " << getE() << ";";
+//ZC05/2004         //os.width(10);
+//ZC05/2004   os << " nu_Poisson = " << getnu() << ";";
+//ZC05/2004         os << " \tE_v = " << getEv() << ";";
+//ZC05/2004         os << " nu_hv = " << getnuhv() << ";";
+//ZC05/2004   os << " G_hv = " << getGhv() << ";";
+//ZC05/2004   os << " rho = " << getrho() << std::endl;
+//ZC05/2004 
+//ZC05/2004         os << "\teo = " << geteo() << ";";
+//ZC05/2004         os << " ec = " << getec() << ";";
+//ZC05/2004         os << " Lambda = " << getLam() << ";";
+//ZC05/2004         os << " po = " << getpo() << ";";
+    os << " e = " << gete() << std::endl;
+    os << " psi = " << getpsi() << std::endl;
+//ZC05/2004         os << " a = " << geta() << ";";
+
+    if ( getConverged() )
+       os << "\tConverged = ok! ";
+    else
+       os << "\tConverged = no! " << std::endl;
+
+    //os.width(10);
+    os << std::endl << "\tCurrent Stress:" << getStress() << std::endl;
+    os << "\tIterati Stress:" << getIterativeStress() << std::endl;
+
+    os << "\tCurrent Strain:" << getStrain() << std::endl;
+    os << "\tElasticStrain :" << getElasticStrain() << std::endl;
+    os << "\tPlasticStrain :" << getPlasticStrain() << std::endl;
+    os << "\tdElasticStrain:" << getdElasticStrain() << std::endl;
+    os << "\tdPlasticStrain:" << getdPlasticStrain() << std::endl;
+    os << "\tEep.rank():" << getEep().rank() << std::endl;
+
+    //        os.unsetf( ios::showpos );
+    int NS = getNScalarVar();
+    int NT = getNTensorVar();
+
+    os << std::endl << "\tNScalarVar = " << NS << std::endl;
+
+    for(int i = 0; i < NS; i++)
+      {
+        os << "\tNo." << i+1 << " " << trialStateVars.ScalarVar[i] << "; ";
+      }
+    os << std::endl << std::endl;
+
+    os << "\tNTensorVar = " << NT;
+    for(int i = 0; i < NT; i++)
+      {
+	 // os.unsetf( ios::showpos);
+	 os << std::endl << "\tNo." << i+1 << " tensorial var:";
+	 // os.setf( ios::showpos);
+	 os << trialStateVars.TensorVar[i];
+      }
+    os << std::endl;
+  }
 
 
 
@@ -889,79 +963,8 @@ int XC::EPState::revertToStart(void)
 //! @brief prints an XC::EPState's contents
 std::ostream &XC::operator<<(std::ostream &os, const EPState & EPS)
   {
-    //        os.setf( ios::showpos | ios::scientific);
-    os.precision(4);
-    os.width(10);
-//ZC05/2004         os << std::endl << "Elastic plastic state parameters: "  << std::endl;
-//ZC05/2004 
-//ZC05/2004   int ef = EPS.getElasticflag();
-//ZC05/2004   os << "\tElastic Flag = " << ef << ";";
-//ZC05/2004   if (ef == 1)
-//ZC05/2004      os << " pressure dependent isotropic material (default case, for soil)." << std::endl;
-//ZC05/2004   else if (ef == 2)
-//ZC05/2004      os << " pressure independent isotropic material." << std::endl;
-//ZC05/2004   else if (ef == 3)
-//ZC05/2004      os << " pressure independent cross-anisotropic material." << std::endl;
-//ZC05/2004   else if (ef == 4)
-//ZC05/2004      os << " pressure dependent cross-anisotropic material." << std::endl;
-//ZC05/2004   else
-//ZC05/2004      os << " elastic portion code not correct. Flag must be 1, 2, 3 or 4." << std::endl;
-
-
-//ZC05/2004         os << "\tEo = " << EPS.getEo() << ";";
-//ZC05/2004         os << " E_Young = " << EPS.getE() << ";";
-//ZC05/2004         //os.width(10);
-//ZC05/2004   os << " nu_Poisson = " << EPS.getnu() << ";";
-//ZC05/2004         os << " \tE_v = " << EPS.getEv() << ";";
-//ZC05/2004         os << " nu_hv = " << EPS.getnuhv() << ";";
-//ZC05/2004   os << " G_hv = " << EPS.getGhv() << ";";
-//ZC05/2004   os << " rho = " << EPS.getrho() << std::endl;
-//ZC05/2004 
-//ZC05/2004         os << "\teo = " << EPS.geteo() << ";";
-//ZC05/2004         os << " ec = " << EPS.getec() << ";";
-//ZC05/2004         os << " Lambda = " << EPS.getLam() << ";";
-//ZC05/2004         os << " po = " << EPS.getpo() << ";";
-  os << " e = " << EPS.gete() << std::endl;
-  os << " psi = " << EPS.getpsi() << std::endl;
-//ZC05/2004         os << " a = " << EPS.geta() << ";";
-
-  if ( EPS.getConverged() )
-     os << "\tConverged = ok! ";
-  else
-     os << "\tConverged = no! " << std::endl;
-
-        //os.width(10);
-        os << std::endl << "\tCurrent Stress:" << EPS.getStress() << std::endl;
-        os << "\tIterati Stress:" << EPS.getIterativeStress() << std::endl;
-
-  os << "\tCurrent Strain:" << EPS.getStrain() << std::endl;
-  os << "\tElasticStrain :" << EPS.getElasticStrain() << std::endl;
-  os << "\tPlasticStrain :" << EPS.getPlasticStrain() << std::endl;
-  os << "\tdElasticStrain:" << EPS.getdElasticStrain() << std::endl;
-  os << "\tdPlasticStrain:" << EPS.getdPlasticStrain() << std::endl;
-  os << "\tEep.rank():" << EPS.getEep().rank() << std::endl;
-
-  //        os.unsetf( ios::showpos );
-  int NS = EPS.getNScalarVar();
-  int NT = EPS.getNTensorVar();
-
-  os << std::endl << "\tNScalarVar = " << NS << std::endl;
-
-        for (int i = 0; i < NS; i++) {
-            os << "\tNo." << i+1 << " " << EPS.trialStateVars.ScalarVar[i] << "; ";
+    EPS.print(os);
+    return os;
   }
-        os << std::endl << std::endl;
-
-        os << "\tNTensorVar = " << NT;
-        for(int i = 0; i < NT; i++) {
-    //           os.unsetf( ios::showpos);
-           os << std::endl << "\tNo." << i+1 << " tensorial var:";
-     //           os.setf( ios::showpos);
-           os << EPS.trialStateVars.TensorVar[i];
-        }
-
-        os << std::endl;
-        return os;
-    }
 
 

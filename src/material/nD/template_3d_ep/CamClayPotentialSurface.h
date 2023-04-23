@@ -75,26 +75,12 @@ class CamClayPotentialSurface: public PotentialSurface
     
     BJtensor d2Qodsds1(const EPState *EPS) const; // For Consistent Algorithm, Z Cheng, Jan 2004
 
-    void print() { std::cerr << *this; };
     double getM() const;
     void setM(const double &);
     
+    void print(std::ostream &os) const;
 
-// moved to stresstensor Boris Jeremic@ucdavis.edu 21Aug2001
-//  private:
-//    BJtensor dpoverds( ) const;
-//    BJtensor dqoverds(const EPState *EPS) const;
-//    BJtensor dthetaoverds(const EPState *EPS) const;
-//    BJtensor d2poverds2( void ) const;
-//    BJtensor d2qoverds2(const EPState *EPS) const;
-//    BJtensor d2thetaoverds2(const EPState *EPS) const;
-//	     	          
-    //================================================================================
-};
-
-// Overloaded Insertion Operator
-std::ostream &operator<<(std::ostream &,const CamClayPotentialSurface &);
-
+  };
 } // end of XC namespace
 
 #endif

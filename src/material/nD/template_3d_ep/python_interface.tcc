@@ -74,6 +74,16 @@ class_<XC::VonMisesYieldSurface, XC::VonMisesYieldSurface *, bases<XC::YieldSurf
   ;
 
 class_<XC::PotentialSurface, XC::PotentialSurface *, bases<CommandEntity>, boost::noncopyable >("PotentialSurface", no_init)
+  .def("dQods",&XC::PotentialSurface::dQods,"dQ/dsigma_ij = 3*( S_ij )")
+  .def("d2Qods2",&XC::PotentialSurface::d2Qods2,"d2Qods2 = d[ 3*(S_ij - alpha_ij) ] /dsigma_ij")
+  .def("d2Qodsds1",&XC::PotentialSurface::d2Qodsds1,"The d(dQ/dsigma_ij)/ds1")
+  .def("d2Qodsds2",&XC::PotentialSurface::d2Qodsds2,"The d(dQ/dsigma_ij)/ds2")
+  .def("d2Qodsds3",&XC::PotentialSurface::d2Qodsds3,"The d(dQ/dsigma_ij)/ds3")
+  .def("d2Qodsds4",&XC::PotentialSurface::d2Qodsds4,"The d(dQ/dsigma_ij)/ds4")
+  .def("d2Qodsdt1",&XC::PotentialSurface::d2Qodsdt1,"The d(dQ/dsigma_ij)/dt1_mn")
+  .def("d2Qodsdt2",&XC::PotentialSurface::d2Qodsdt2,"The d(dQ/dsigma_ij)/dt2_mn")
+  .def("d2Qodsdt3",&XC::PotentialSurface::d2Qodsdt3,"The d(dQ/dsigma_ij)/dt3_mn")
+  .def("d2Qodsdt4",&XC::PotentialSurface::d2Qodsdt4,"The d(dQ/dsigma_ij)/dt4_mn")
   ;
 
 class_<XC::CamClayPotentialSurface, XC::CamClayPotentialSurface *, bases<XC::PotentialSurface> >("CamClayPotentialSurface")

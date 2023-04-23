@@ -122,11 +122,10 @@ void XC::CamClayYieldSurface::setM(const double &d)
   { M= d; }
 
 //! @brief Print stuff.
-std::ostream& XC::operator<<(std::ostream &os, const XC::CamClayYieldSurface &YS)
+void XC::CamClayYieldSurface::print(std::ostream &os) const
   {
     os << "Cam Clay Yield Surface Parameters: " << std::endl
-       << "M = " << YS.getM() << std::endl;
-    return os;
+       << "M = " << getM() << std::endl;
   }
 
 

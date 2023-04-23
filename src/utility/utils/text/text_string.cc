@@ -27,6 +27,16 @@
 #include <cctype>
 #include "utility/utils/misc_utils/matem.h"
 
+std::string format_number(const std::string &fmt, const double &number)
+  {
+    std::string retval;
+    static char buffer[100];
+    const int cx= snprintf( buffer, 100, fmt.c_str(), number);
+    if(cx>=0 && cx<100)
+      retval= std::string(buffer);
+    return retval;
+  }
+
 //! Ajusta una text string a la derecha dentro de other de
 //! tamaño n rellena de characters 'c'.
 const std::string &ajusta_dcha(const std::string &s,const size_t &n,const char &fill_char)

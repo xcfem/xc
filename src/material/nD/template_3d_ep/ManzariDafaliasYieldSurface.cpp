@@ -26,27 +26,27 @@
 //----------------------------------------------------------------------------
 
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Manzari-Dafalias  yield criterion                          #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           Manzari-Dafalias  yield criterion                       #
 //#                      (Ref. Geotechnique                    			 #
-//#                      V.47 No.2 255-272, 1997)                                #
-//# CLASS:             ManzariDafaliasYieldSurface01                                          #
-//#                                                                              #
-//# VERSION:                                                                     #
+//#                      V.47 No.2 255-272, 1997)                             #
+//# CLASS:             ManzariDafaliasYieldSurface01                                       #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '00                                             #
-//# UPDATE HISTORY:    December 13, '00                                             #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 03 '00                                          #
+//# UPDATE HISTORY:    December 13, '00                                          #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 
 
 #include "material/nD/template_3d_ep/ManzariDafaliasYieldSurface.h"
@@ -56,7 +56,8 @@
 #define sqrt23rd 0.8165
 
 //! @brief Normal constructor
-XC::ManzariDafaliasYieldSurface::ManzariDafaliasYieldSurface(void) {} 
+XC::ManzariDafaliasYieldSurface::ManzariDafaliasYieldSurface(void)
+  {} 
 
 //! @brief Virtual constructor.
 XC::YieldSurface * XC::ManzariDafaliasYieldSurface::getCopy(void) const
@@ -206,10 +207,9 @@ XC::BJtensor XC::ManzariDafaliasYieldSurface::xi_t1( const EPState *EPS) const
   }
 
 
-std::ostream& XC::operator<<(std::ostream &os, const ManzariDafaliasYieldSurface & YS)
+void XC::ManzariDafaliasYieldSurface::print(std::ostream &os) const
   {
     os << "Manzari-Dafalias Yield Surface Parameters: " << std::endl;
-    return os;
   }
 
 

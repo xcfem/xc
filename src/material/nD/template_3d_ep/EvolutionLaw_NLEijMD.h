@@ -137,7 +137,7 @@ class EvolutionLaw_NL_EijMD: public EvolutionLaw_T
     //void UpdateVar( EPState *EPS, double dlamda );  // Evolve corresponding var linearly using de_eq_p
     //Moved to CDriver.cpp
 
-    void print();
+    virtual void print(std::ostream &) const;
     //g++ complaining if don't have this line
     virtual ~EvolutionLaw_NL_EijMD() {}
 
@@ -178,13 +178,7 @@ class EvolutionLaw_NL_EijMD: public EvolutionLaw_T
     // Interpolation function  by Willan-Warkne
     double g_WW(double theta, double e); 
 	       
-    //================================================================================
-    // Overloaded Insertion Operator	  Zhaohui Added Aug. 13, 2000
-    // prints Linear EvolutionLaw's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_EijMD &);
   };
-std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_EijMD &);
 } // end of XC namespace
 
 

@@ -25,115 +25,108 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 /*
-//================================================================================
-# COPYRIGHT (C):     :-))                                                        #
-# PROJECT:           Object Oriented Finite XC::Element Program                      #
-# PURPOSE:           General platform for elasto-plastic constitutive model      #
-#                    implementation                                              #
-# CLASS:             PS (the base class for all Potential Surfaces)              #
-#                                                                                #
-# VERSION:                                                                       #
-# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )    #
-# TARGET OS:         DOS || UNIX || . . .                                        #
-# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                                 #
-# PROGRAMMER(S):     Boris Jeremic, Zhao Cheng                                   #
-#                                                                                #
-# Date:           Jan 2004                                                       #
-# UPDATE HISTORY:                                                                #
-#                                                                                #
-#                                                                                #
-#                                                                                #
-#                                                                                #
-# SHORT EXPLANATION: This is the base class of all Potential surfaces.           #
-#                                                                                #
-//================================================================================
+//============================================================================
+# COPYRIGHT (C):     :-))                                                    #
+# PROJECT:           Object Oriented Finite XC::Element Program                  #
+# PURPOSE:           General platform for elasto-plastic constitutive model  #
+#                    implementation                                          #
+# CLASS:             PS (the base class for all Potential Surfaces)          #
+#                                                                            #
+# VERSION:                                                                   #
+# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )#
+# TARGET OS:         DOS || UNIX || . . .                                    #
+# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                             #
+# PROGRAMMER(S):     Boris Jeremic, Zhao Cheng                               #
+#                                                                            #
+# Date:           Jan 2004                                                   #
+# UPDATE HISTORY:                                                            #
+#                                                                            #
+#                                                                            #
+#                                                                            #
+#                                                                            #
+# SHORT EXPLANATION: This is the base class of all Potential surfaces.       #
+#                                                                            #
+//============================================================================
 */
-
-#ifndef PS_CPP
-#define PS_CPP
 
 #include "material/nD/template_3d_ep/PotentialSurface.h"
 #include "utility/matrix/nDarray/BJtensor.h"
 
 // At least 4 scalar and/or XC::BJtensor internal variables are allowed at current time
 
-//================================================================================
-// The d(dQ/dsigma_ij)/ds1
-//================================================================================
+//! @brief The d(dQ/dsigma_ij)/ds1
 XC::BJtensor XC::PotentialSurface::d2Qodsds1( const XC::EPState *EPS ) const
   { 
     BJtensor temp(def_dim_2,0.0);
     return temp;
   }
 
-//================================================================================
-// The d(dQ/dsigma_ij)/ds2
-//================================================================================
+//! @brief The d(dQ/dsigma_ij)/ds2
 XC::BJtensor XC::PotentialSurface::d2Qodsds2( const XC::EPState *EPS ) const
 { 
      BJtensor temp(def_dim_2,0.0);
      return temp;
 }
 
-//================================================================================
-// The d(dQ/dsigma_ij)/ds3
-//================================================================================
+
+//! @brief The d(dQ/dsigma_ij)/ds3
 XC::BJtensor XC::PotentialSurface::d2Qodsds3( const XC::EPState *EPS ) const
 { 
      BJtensor temp(def_dim_2,0.0);
      return temp;
 }
 
-//================================================================================
-// The d(dQ/dsigma_ij)/ds4
-//================================================================================
+
+//! @brief The d(dQ/dsigma_ij)/ds4
 XC::BJtensor XC::PotentialSurface::d2Qodsds4( const XC::EPState *EPS ) const
 { 
      BJtensor temp(def_dim_2,0.0);
      return temp;
 }
           
-//================================================================================
-// The d(dQ/dsigma_ij)/dt1_mn
-//================================================================================
+
+//! @brief The d(dQ/dsigma_ij)/dt1_mn
 XC::BJtensor XC::PotentialSurface::d2Qodsdt1( const XC::EPState *EPS ) const
 { 
      BJtensor temp(def_dim_4,0.0);
      return temp;
 }
 
-//================================================================================
-// The d(dQ/dsigma_ij)/dt2_mn
-//================================================================================
+
+//! @brief The d(dQ/dsigma_ij)/dt2_mn
 XC::BJtensor XC::PotentialSurface::d2Qodsdt2( const XC::EPState *EPS ) const
 { 
      BJtensor temp(def_dim_4,0.0);
      return temp;
 }
 
-//================================================================================
-// The d(dQ/dsigma_ij)/dt3_mn
-//================================================================================
+
+//! @brief The d(dQ/dsigma_ij)/dt3_mn
 XC::BJtensor XC::PotentialSurface::d2Qodsdt3( const XC::EPState *EPS ) const
 { 
      BJtensor temp(def_dim_4,0.0);
      return temp;
 }
 
-//================================================================================
-// The d(dQ/dsigma_ij)/dt4_mn
-//================================================================================
-XC::BJtensor XC::PotentialSurface::d2Qodsdt4( const XC::EPState *EPS ) const
+
+//! @brief The d(dQ/dsigma_ij)/dt4_mn
+XC::BJtensor XC::PotentialSurface::d2Qodsdt4(const EPState *EPS ) const
   { 
      BJtensor temp(def_dim_4,0.0);
      return temp;
   }
 
+void XC::PotentialSurface::print(std::ostream &os) const
+  {
+    os << getClassName() << "::" << __FUNCTION__
+       << "; not implemented yet."
+       << std::endl;
+  }; 
+
 //! @brief Print stuff.
 std::ostream& XC::operator<<(std::ostream &os, const XC::PotentialSurface & PS)
   {
-    os << "Potential Surface Parameters: " << std::endl;
+    PS.print(os);
     return os;
   }
 
-#endif

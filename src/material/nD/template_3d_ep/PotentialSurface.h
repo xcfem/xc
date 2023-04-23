@@ -78,10 +78,8 @@ class PotentialSurface: public CommandEntity
   public:
     virtual PotentialSurface *getCopy(void) const=0; // create a clone of itself
     virtual ~PotentialSurface() {};	      // Codewizard requires virtual destructor
-    double  q() const { return 0.0; }; // Codewizard does not like function defined in class definition
-    virtual BJtensor dQods(const EPState *EPS ) const =  0;  //pure virtual func
-    virtual BJtensor d2Qods2(const EPState *EPS ) const = 0; //pure virtual func   
-    virtual void print() = 0; //pure virtual func
+    virtual BJtensor dQods(const EPState *EPS ) const= 0;  //pure virtual func
+    virtual BJtensor d2Qods2(const EPState *EPS ) const= 0; //pure virtual func   
     
     // Added for Consistent Algorithm, Z. Cheng, Jan 2004
     // Ref. Jeremic & Sture, Mechanics of Cohesive-Frictional Materials, Vol.2 165-183 (1997) 
@@ -94,11 +92,7 @@ class PotentialSurface: public CommandEntity
     virtual BJtensor d2Qodsdt3(const EPState *EPS ) const;
     virtual BJtensor d2Qodsdt4(const EPState *EPS ) const;
                                  
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an PotentialSurface's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const PotentialSurface &);
+    virtual void print(std::ostream &) const;
   };
 
 std::ostream& operator<<(std::ostream &os, const PotentialSurface & PS);

@@ -26,42 +26,42 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 ///*
-//################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Drucker - Prager  yield criterion                         #
-//# CLASS:             DruckerPragerYieldSurface                                            #
-//#                                                                              #
-//# VERSION:                                                                     #
+//############################################################################
+//# COPYRIGHT (C):     :-))                                                  #
+//# PROJECT:           Object Oriented Finite Element Program                #
+//# PURPOSE:           Drucker - Prager  yield criterion                     #
+//# CLASS:             DruckerPragerYieldSurface                                        #
+//#                                                                          #
+//# VERSION:                                                                 #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '93                                             #
-//# UPDATE HISTORY:    August 08 '00                                                          #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION:                                                           #
-//#                                                                              #
-//# if alfa1#=0 && alfa2#=0 && alfa1#=alfa2 =>                                   #
-//#              Drucker-Prager with non-associated flow rule                    #
-//#                                                                              #
-//# if alfa1#=0 && alfa2#=0 && alfa1==alfa2 =>                                   #
-//#              Drucker-Prager with associated flow rule                        #
-//#                                                                              #
-//# if alfa1==0 && alfa2#=0 =>                                                   #
-//#              Von Mises with non-associated Drucker-Prager flow rule          #
-//#                                                                              #
-//# if alfa1#=0 && alfa2==0 =>                                                   #
-//#              Drucker-Prager with non-associated Von Mises flow rule          #
-//#                                                                              #
-//# if alfa1==0 && alfa2==0 =>                                                   #
-//#              Von Mises with associated flow rule                             #
-//#                                                                              #
-//################################################################################
+//# TARGET OS:         DOS || UNIX || . . .                                  #
+//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                           #
+//#                                                                          #
+//#                                                                          #
+//# DATE:              August 03 '93                                         #
+//# UPDATE HISTORY:    August 08 '00                                                      #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//# SHORT EXPLANATION:                                                       #
+//#                                                                          #
+//# if alfa1#=0 && alfa2#=0 && alfa1#=alfa2 =>                               #
+//#              Drucker-Prager with non-associated flow rule                #
+//#                                                                          #
+//# if alfa1#=0 && alfa2#=0 && alfa1==alfa2 =>                               #
+//#              Drucker-Prager with associated flow rule                    #
+//#                                                                          #
+//# if alfa1==0 && alfa2#=0 =>                                               #
+//#              Von Mises with non-associated Drucker-Prager flow rule      #
+//#                                                                          #
+//# if alfa1#=0 && alfa2==0 =>                                               #
+//#              Drucker-Prager with non-associated Von Mises flow rule      #
+//#                                                                          #
+//# if alfa1==0 && alfa2==0 =>                                               #
+//#              Von Mises with associated flow rule                         #
+//#                                                                          #
+//############################################################################
 //*/
 
 #ifndef DruckerPragerYieldSurface_H
@@ -91,11 +91,8 @@ class DruckerPragerYieldSurface: public YieldSurface
     // Redefine 1st derivative of F over tensorial internal variables
     BJtensor xi_t1(const EPState *EPS) const;
 
-    void print() { std::cerr << *this; }; 
-  
-    friend std::ostream& operator<<(std::ostream &, const DruckerPragerYieldSurface &);
+    virtual void print(std::ostream &os) const;  
   };
-std::ostream& operator<<(std::ostream &, const DruckerPragerYieldSurface &);
 } // end of XC namespace
 
 #endif

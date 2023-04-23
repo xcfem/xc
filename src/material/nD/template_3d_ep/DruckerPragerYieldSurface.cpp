@@ -25,24 +25,24 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 ///*
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           Drucker - Prager  yield criterion                         #
-//# CLASS:             DruckerPragerYieldSurface                                            #
-//#                                                                              #
-//# VERSION:                                                                     #
-//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 08 '00                                             #
-//# UPDATE HISTORY:    20Aug2004 ZC added kinematic hardening part               #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           Drucker - Prager  yield criterion                      #
+//# CLASS:             DruckerPragerYieldSurface                              #
+//#                                                                           #
+//# VERSION:                                                                  #
+//# LANGUAGE:       C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 08 '00                                          #
+//# UPDATE HISTORY:    20Aug2004 ZC added kinematic hardening part            #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
 //*/
 
 #include "material/nD/template_3d_ep/DruckerPragerYieldSurface.h"
@@ -168,12 +168,9 @@ XC::BJtensor XC::DruckerPragerYieldSurface::xi_t1( const EPState *EPS) const
     return xi;
   }
 
-//===========================================================================
-std::ostream& XC::operator<<(std::ostream &os, const DruckerPragerYieldSurface &YS)
+//! @brief Print stuff.
+void XC::DruckerPragerYieldSurface::print(std::ostream &os) const
   {
-   os << "Drucker-Prager Yield Surface Parameters: " << std::endl;
-   os.precision(4);
-   //os << "alfa1 = " << YS.getalfa1() << std::endl;
-   return os;
+    os << "Drucker-Prager Yield Surface Parameters: " << std::endl;
   }
 

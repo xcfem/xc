@@ -97,7 +97,7 @@ class EvolutionLaw_NL_Eij: public EvolutionLaw_T
     //void UpdateVar( EPState *EPS, double dlamda );  // Evolve corresponding var linearly using de_eq_p
     //Moved to CDriver.cpp
 
-    void print();
+    virtual void print(std::ostream &) const;
 
     // some accessor functions
     double getha() const;      
@@ -105,13 +105,8 @@ class EvolutionLaw_NL_Eij: public EvolutionLaw_T
     void   setha( double had);
     void   setCr( double Crd);
 
-    //================================================================================
-    // Overloaded Insertion Operator	  Zhaohui Added Aug. 13, 2000
-    // prints Linear EvolutionLaw's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_Eij &);
  };
-std::ostream &operator<<(std::ostream &, const EvolutionLaw_NL_Eij &);
+
 } // end of XC namespace
 
 

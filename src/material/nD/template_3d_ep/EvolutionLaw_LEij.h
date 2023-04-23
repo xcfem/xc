@@ -72,8 +72,7 @@ class EvolutionLaw_L_Eij: public EvolutionLaw_T
   {
   // Private vars to define the evolution law
   private:
-    double  a;  //coefficient to define the linear hardening rule of a scalar hardening var
-
+    double  a; //!< coefficient to define the linear hardening rule of a scalar hardening var
   public:    
     EvolutionLaw_L_Eij( double ad = 10.0);                
     EvolutionLaw_L_Eij(const EvolutionLaw_L_Eij &LEL );   // Copy constructor
@@ -82,16 +81,12 @@ class EvolutionLaw_L_Eij: public EvolutionLaw_T
     
     BJtensor h_t( EPState *EPS, PotentialSurface *PS);    // Evaluating hardening function h
     
-    void print();
+    virtual void print(std::ostream &) const;
 
-  private:
     // some accessor functions
-    double geta() const;      // Linear coefficient used to evolve internal var
-    void   seta(double ad);
-
-    friend std::ostream& operator<<(std::ostream &, const EvolutionLaw_L_Eij &);
+    double geta() const; // Linear coefficient used to evolve internal var
+    void seta(double ad);
   };
-std::ostream& operator<<(std::ostream &, const EvolutionLaw_L_Eij &);
 } // end of XC namespace
 
 

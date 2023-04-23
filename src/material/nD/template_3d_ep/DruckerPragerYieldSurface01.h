@@ -53,13 +53,13 @@
 #ifndef DruckerPragerYieldSurface01_H
 #define DruckerPragerYieldSurface01_H
 
-#include "material/nD/template_3d_ep/YieldSurface.h"
+#include "material/nD/template_3d_ep/DruckerPragerYieldSurface.h"
 
 namespace XC {
 //! @ingroup MatPS
 //!
 //! @brief Drucker-Prager model yield surface.
-class DruckerPragerYieldSurface01: public YieldSurface
+class DruckerPragerYieldSurface01: public DruckerPragerYieldSurface
   {
   private:
     double Pc;
@@ -80,11 +80,8 @@ class DruckerPragerYieldSurface01: public YieldSurface
     const double &getPc(void) const;
     void setPc(const double &);
 
-    void print() {std::cerr << *this; };
+    virtual void print(std::ostream &os) const;
   };
-
-// Overloaded Insertion Operator
-std::ostream &operator<<(std::ostream &, const DruckerPragerYieldSurface01 &);
 
 } // end of XC namespace
 

@@ -64,7 +64,7 @@ class VonMisesYieldSurface: public YieldSurface
   {
   public:
     // Default constructor
-    VonMisesYieldSurface ( ) {}     
+    VonMisesYieldSurface(void) {}     
     // Create a clone of itself
     YieldSurface *getCopy(void) const;  
 
@@ -78,12 +78,9 @@ class VonMisesYieldSurface: public YieldSurface
 
     BJtensor xi_t1(const EPState *EPS) const;
 
-    void print() { std::cerr << *this; }; 
-  
-    friend std::ostream& operator<<(std::ostream &, const VonMisesYieldSurface &);
+    void print(std::ostream &os) const; 
   };
  
-std::ostream& operator<<(std::ostream &, const VonMisesYieldSurface &);
 } // end of XC namespace
 
 #endif

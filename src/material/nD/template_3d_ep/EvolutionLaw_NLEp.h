@@ -97,7 +97,7 @@ class EvolutionLaw_NL_Ep: public EvolutionLaw_S
     //void UpdateVar( EPState *EPS, double dlamda );  // Evolve corresponding var linearly using de_eq_p
     //Moved to CDriver.cpp
 
-    void print();
+    virtual void print(std::ostream &) const;
 
     // some accessor functions
     double geteo(void) const;      

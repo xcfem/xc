@@ -78,7 +78,7 @@ class EvolutionLaw_S: public CommandEntity
     // Not necessary since the increment of internal var can be evalulated in constitutive driver!
     //virtual void UpdateVar( EPState *EPS, double dlamda ) = 0; // Evolve only one internal variable
     
-    virtual void print(); 	//Print the contents of the evolution law
+    virtual void print(std::ostream &) const;
     
     //virtual void InitVars( EPState *EPS) = 0;  // Initializing eo and E for Manzari-Dafalias model, 
     //                                  // other model might not need it!
@@ -90,14 +90,8 @@ class EvolutionLaw_S: public CommandEntity
     //virtual double h( EPState *EPS, double d ) = 0;    // Evaluating hardening function h
     virtual double h_s(EPState *EPS, PotentialSurface *PS);    // Evaluating hardening function h
 
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an Evolution Law_S's contents 
-    //================================================================================
-    friend std::ostream &operator<<(std::ostream &, const EvolutionLaw_S &);
   };
-
-std::ostream &operator<<(std::ostream &, const EvolutionLaw_S &);
+std::ostream& operator<<(std::ostream &, const EvolutionLaw_S &);
 
 } // end of XC namespace
 

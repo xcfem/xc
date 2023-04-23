@@ -90,13 +90,16 @@ double XC::EvolutionLaw_L_Eeq::h_s( EPState *EPS, PotentialSurface *PS)
 
   }
 
-
-//================================================================================
 //! @brief Print vars defined in Linear Evolution Law
-//================================================================================
-void XC::EvolutionLaw_L_Eeq::print()
-  { std::cerr << (*this); }
+void XC::EvolutionLaw_L_Eeq::print(std::ostream &os) const
+  {
+  //    os.unsetf( ios::scientific );
+    os.precision(5);
 
+    os.width(10);       
+    os << std::endl << "Linear Scalar Evolution Law's parameters:" << std::endl;
+    os << "a= " << geta() << "; " << std::endl;
+  }
 
 //================================================================================
 double XC::EvolutionLaw_L_Eeq::geta(void) const
@@ -105,18 +108,7 @@ double XC::EvolutionLaw_L_Eeq::geta(void) const
 void XC::EvolutionLaw_L_Eeq::seta(const double &d)
   { a= d; }
 
-//================================================================================
-std::ostream &XC::operator<<(std::ostream &os,const XC::EvolutionLaw_L_Eeq &LEL)
-  {
-  //    os.unsetf( ios::scientific );
-    os.precision(5);
 
-    os.width(10);       
-    os << std::endl << "Linear Scalar Evolution Law's parameters:" << std::endl;
-    os << "a= " << LEL.geta() << "; " << std::endl;
-           
-    return os;
-  }
 
 #endif
 

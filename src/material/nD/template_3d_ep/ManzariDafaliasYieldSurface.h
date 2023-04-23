@@ -27,27 +27,27 @@
 //----------------------------------------------------------------------------
 ///*
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Manzari - Dafalias  yield criterion                        #
-//# CLASS:             ManzariDafaliasYieldSurface                                            #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           Manzari - Dafalias  yield criterion                     #
+//# CLASS:             ManzariDafaliasYieldSurface                                         #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '93                                             #
-//# UPDATE HISTORY:    August 08 '00                                             #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION:                                                           #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 03 '93                                          #
+//# UPDATE HISTORY:    August 08 '00                                          #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//# SHORT EXPLANATION:                                                        #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 //*/
 
 #ifndef ManzariDafaliasYieldSurface_H
@@ -75,13 +75,9 @@ class ManzariDafaliasYieldSurface: public YieldSurface
     // Redefine 1st derivative of F over tensorial internal variables
     BJtensor xi_t1(const EPState *EPS) const; // dF / d alpha_ij
 
-    void print()
-      { std::cout << *this; };
-  
-    friend std::ostream& operator<<(std::ostream &, const ManzariDafaliasYieldSurface &);
+    virtual void print(std::ostream &os) const;  
   };
  
-std::ostream& operator<<(std::ostream &, const ManzariDafaliasYieldSurface &);
 } // end of XC namespace
 
 #endif

@@ -360,10 +360,6 @@ class nDarray
     nDarray eigenvalues(void);
     nDarray eigenvectors(void);
 
-    void print(const std::string &name = "t",const std::string &msg = "Hi there#", std::ostream &os= std::cout) const;
-    void printshort(const std::string &msg = "Hi there#") const;
-    void mathprint(void) const;
-     // print nDarray with a "name" and the "message"
 
     double Frobenius_norm( void ); // return the Frobenius norm of
                                    // BJmatrix, BJtensor, BJvector
@@ -372,6 +368,15 @@ class nDarray
   public:
     int rank(void) const;
     int dim(int which) const;
+    
+    void output(std::ostream &os) const;
+    void outputshort(std::ostream &os) const;
+    void print(const std::string &name = "t",const std::string &msg = "Hi there#", std::ostream &os= std::cout) const;
+    void printshort(std::ostream &os, const std::string &msg = "Hi there#") const;
+    void mathprint(std::ostream &os) const;
+    friend std::string to_string(const nDarray &);
+    inline std::string toString(void) const
+      { return to_string(*this); }
 
 // from Numerical recipes in C
   private:
@@ -385,6 +390,7 @@ template nDarray operator*(const double & , const nDarray & );
 template nDarray operator+(const nDarray & , const nDarray & );
 template nDarray operator-(const nDarray & , const nDarray & );
 std::ostream& operator<<(std::ostream &, const nDarray &);
+std::string to_string(const  nDarray &);
 
 } // end of XC namespace
 

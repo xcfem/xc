@@ -25,44 +25,41 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //================================================================================
-//# COPY LEFT and RIGHT:                                                         #
-//# Commercial    use    of    this  program without express permission of the   #
-//# University  of  California, is strictly encouraged. Copyright and Copyleft   #
-//# are covered by the following clause:                                         #
-//#                                                                              #
-//# Woody's license:                                                             #
-//# ``This    source    code is Copyrighted in U.S., by the The Regents of the   #
-//# University  of  California,  for  an indefinite period, and anybody caught   #
-//# using  it  without  our  permission,  will be mighty good friends of ourn,   #
-//# cause  we  don't give a darn. Hack it. Compile it. Debug it. Run it. Yodel   #
-//# it. Enjoy it. We wrote it, that's all we wanted to do.'' bj                  #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           Rounded Mohr Coulomb Potential Surface                    #
-//# CLASS:                                                                       #
-//#                                                                              #
-//# VERSION:                                                                     #
-//# LANGUAGE:          C++                                                       #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic jeremic@ucdavis.edu                         #
-//#                    Zhao Cheng,                                               #
-//# PROGRAMMER(S):     Zhao Cheng, Boris Jeremic                                 #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              12 Feb. 2003                                              #
-//# UPDATE HISTORY:    Feb 25 2003                                               #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//# COPY LEFT and RIGHT:                                                      #
+//# Commercial    use    of    this  program without express permission of the#
+//# University  of  California, is strictly encouraged. Copyright and Copyleft#
+//# are covered by the following clause:                                      #
+//#                                                                           #
+//# Woody's license:                                                          #
+//# ``This    source    code is Copyrighted in U.S., by the The Regents of the#
+//# University  of  California,  for  an indefinite period, and anybody caught#
+//# using  it  without  our  permission,  will be mighty good friends of ourn,#
+//# cause  we  don't give a darn. Hack it. Compile it. Debug it. Run it. Yodel#
+//# it. Enjoy it. We wrote it, that's all we wanted to do.'' bj               #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//# PROJECT:           Object Oriented Finite XC::Element Program                 #
+//# PURPOSE:           Rounded Mohr Coulomb Potential Surface                 #
+//# CLASS:                                                                    #
+//#                                                                           #
+//# VERSION:                                                                  #
+//# LANGUAGE:          C++                                                    #
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# DESIGNER(S):       Boris Jeremic jeremic@ucdavis.edu                      #
+//#                    Zhao Cheng,                                            #
+//# PROGRAMMER(S):     Zhao Cheng, Boris Jeremic                              #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              12 Feb. 2003                                           #
+//# UPDATE HISTORY:    Feb 25 2003                                            #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#############################################################################
 //*/
-
-#ifndef RoundedMohrCoulomb01PotentialSurface_CPP
-#define RoundedMohrCoulomb01PotentialSurface_CPP
 
 #include "material/nD/template_3d_ep/RoundedMohrCoulomb01PotentialSurface.h"
 #include "material/nD/template_3d_ep/RoundedMohrCoulomb01.h"
@@ -179,16 +176,10 @@ XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::d2Qodsds1(const XC::EPSta
   return d2Qoverdsds1;
 }
 
-//================================================================================
-// friend ostream functions for output
-//================================================================================
-
-std::ostream & XC::operator<<(std::ostream & os, const XC::RoundedMohrCoulomb01PotentialSurface & PS)
+//! @brief Print stuff.
+void XC::RoundedMohrCoulomb01PotentialSurface::print(std::ostream &os) const 
   {
     os << "ROUNDED MC Potential Surface Parameters: " << std::endl;
-    return os;
   }
 
-
-#endif
 

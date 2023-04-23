@@ -26,30 +26,27 @@
 //----------------------------------------------------------------------------
 
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           Manzari-Dafalias  potential surface 01(with Pc)           #
-//#                    (Ref. Geotechnique v.47 No.2 255-272, 1997)               #
-//# CLASS:             ManzariDafaliasPotentialSurface01                                      #
-//#                                                                              #
-//# VERSION:                                                                     #
-//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '93                                             #
-//# UPDATE HISTORY:    August 08 '00                                             #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite XC::Element Program                 #
+//# PURPOSE:           Manzari-Dafalias  potential surface 01(with Pc)        #
+//#                    (Ref. Geotechnique v.47 No.2 255-272, 1997)            #
+//# CLASS:             ManzariDafaliasPotentialSurface01                      #
+//#                                                                           #
+//# VERSION:                                                                  #
+//# LANGUAGE:       C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 03 '93                                          #
+//# UPDATE HISTORY:    August 08 '00                                          #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 
-
-#ifndef ManzariDafaliasPotentialSurface01_CPP
-#define ManzariDafaliasPotentialSurface01_CPP
 
 #include "material/nD/template_3d_ep/ManzariDafaliasPotentialSurface01.h"
 #include <utility/matrix/nDarray/basics.h>
@@ -57,14 +54,10 @@
 #include "material/nD/template_3d_ep/EPState.h"
 #include <cmath>
 
-//================================================================================
-// Normal constructor
-//================================================================================
-
-XC::ManzariDafaliasPotentialSurface01::ManzariDafaliasPotentialSurface01(double pc ) 
-{
-  Pc = pc;
-} 
+//! @brief  Normal constructor
+XC::ManzariDafaliasPotentialSurface01::ManzariDafaliasPotentialSurface01(double pc )
+  : ManzariDafaliasPotentialSurface()
+  { Pc = pc; } 
 
 //! @brief Virtual constructor.
 XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface01::getCopy(void) const
@@ -73,7 +66,6 @@ XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface01::getCopy(void) cons
 //================================================================================
 //  BJtensor dQ/dsigma_ij: the normal to the potential surface
 //================================================================================
-
 XC::BJtensor XC::ManzariDafaliasPotentialSurface01::dQods(const XC::EPState *EPS) const
   { 
     BJtensor dQoverds( def_dim_2, 0.0);
@@ -346,14 +338,10 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface01::dthetaoverds(const XC::EPSta
    return ret;
 }
 
-std::ostream& XC::operator<<(std::ostream &os, const XC::ManzariDafaliasPotentialSurface01 &PS)
+void XC::ManzariDafaliasPotentialSurface01::print(std::ostream &os) const
   {
-    os << "Manzari-Dafalias Potential Surface 01( with Pc) Parameters: " << std::endl;
-    os << "Pc = " << PS.Pc << std::endl;
-    return os;
+    os << "Manzari-Dafalias Potential Surface 01( with Pc) Parameters: "
+       << std::endl;
+    os << "Pc = " << Pc << std::endl;
   }
-
-
-
-#endif
 

@@ -91,21 +91,16 @@ int XC::EvolutionLaw_T::updateEeDm( EPState *EPS, double st_vol, double dLamda)
    return 0;
 }  
 
+//! @brief Print vars defined in Linear Evolution Law_T
+void XC::EvolutionLaw_T::print(std::ostream &os) const
+  {
+    os << getClassName() << "::" << __FUNCTION__
+       << "; not implemented yet." << std::endl;
+  }
 
-
-//================================================================================
-//  Print vars defined in Linear Evolution Law_T
-//================================================================================
-void XC::EvolutionLaw_T::print()
-  { std::cerr << (*this); }
-
-//================================================================================
-// Overloaded Insertion Operator
-// prints base Evolution Law_T's contents 
-//================================================================================
 std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_T & EL)
   {
-    os << "Base of Tensorial Evolution Law's Parameters: Nothing" << std::endl;
+    EL.print(os);
    return os;
   }
 

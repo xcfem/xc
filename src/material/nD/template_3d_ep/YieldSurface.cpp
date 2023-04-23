@@ -133,22 +133,25 @@ XC::BJtensor XC::YieldSurface::xi_t1( const XC::EPState *EPS ) const
      return temp;
 }
 
-//================================================================================
-//First derivative of F over the 4th scalar var
-//================================================================================
- XC::BJtensor XC::YieldSurface::xi_t4( const XC::EPState *EPS ) const
-{ 
-     XC::stresstensor temp;
+//! @brief First derivative of F over the 4th scalar var
+XC::BJtensor XC::YieldSurface::xi_t4( const XC::EPState *EPS ) const
+  { 
+     stresstensor temp;
     // clog << " inside XC::YieldSurface::xi_t4 "  << temp;
      return temp;
-}
+  }
 
-//================================================================================
-// friend XC::std::ostream functions for output
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const YieldSurface & YS)
+void XC::YieldSurface::print(std::ostream &os) const
   {
-    os << "Yield Surface Parameters: " << std::endl;
+    os << getClassName() << "::" << __FUNCTION__
+       << "; not implemented yet."
+       << std::endl;
+  }; 
+
+//! @brief Overload ostream insertion operator.
+std::ostream &XC::operator<<(std::ostream &os, const YieldSurface & YS)
+  {
+    YS.print(os);
     return os;
   }
 

@@ -75,7 +75,6 @@ class YieldSurface: public CommandEntity
   
     virtual double f( const EPState *EPS ) const = 0;	 //pure virtual func
     virtual BJtensor dFods( const EPState *EPS ) const = 0;  //pure virtual func
-    virtual void print() = 0; //pure virtual func
 
     // 1st derivative of F over scalar internal variables (at most 4 scalar internal vars allowed currently)
     virtual double xi_s1( const EPState *EPS ) const;	 
@@ -90,11 +89,7 @@ class YieldSurface: public CommandEntity
     virtual BJtensor xi_t4( const EPState *EPS ) const;
 
 
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an YieldSurface's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const YieldSurface &);
+    virtual void print(std::ostream &os) const;
   };
 std::ostream& operator<<(std::ostream &, const YieldSurface &);
 } // end of XC namespace

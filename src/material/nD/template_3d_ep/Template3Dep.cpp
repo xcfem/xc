@@ -1050,11 +1050,10 @@ int XC::Template3Dep::recvSelf(const Communicator &)
   }
 
 //================================================================================
-void
-XC::Template3Dep::Print(std::ostream &s, int flag) const
-{
+void XC::Template3Dep::Print(std::ostream &s, int flag) const
+  {
      s << (*this);
-}
+  }
 
 
 
@@ -3259,48 +3258,48 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
     os << std::endl << "Template3Dep: " << std::endl;
     os << "\ttag: " << MP.getTag() << std::endl;
     os << "=================================================================" << std::endl;
-    MP.getYS()->print();
-    MP.getPS()->print();
-    MP.getEPS().print();
+    MP.getYS()->print(os);
+    MP.getPS()->print(os);
+    MP.getEPS().print(os);
 
     os << std::endl << "Scalar Evolution Laws: " << std::endl;
     if( MP.ELS1 ){
        os << "\nFor 1st scalar var:\n";
-       MP.ELS1->print();
+       MP.ELS1->print(os);
     }
 
     if( MP.ELS2 ){
        os << "\nFor 2nd scalar var:\n";
-       MP.ELS2->print();
+       MP.ELS2->print(os);
     }
 
     if( MP.ELS3 ){
        os << "\nFor 3rd scalar var:\n";
-       MP.ELS3->print();
+       MP.ELS3->print(os);
     }
 
     if( MP.ELS4 ){
        os << "\nFor 4th scalar var:\n";
-       MP.ELS4->print();
+       MP.ELS4->print(os);
     }
 
 
     os << std::endl << "Tensorial Evolution Laws: " << std::endl;
     if( MP.ELT1 ){
        os << "\nFor 1st tensorial var:\n";
-       MP.ELT1->print();
+       MP.ELT1->print(os);
     }
     if( MP.ELT2 ){
        os << "\nFor 2nd tensorial var:\n";
-       MP.ELT2->print();
+       MP.ELT2->print(os);
     }
     if( MP.ELT3 ){
        os << "\nFor 3rd tensorial var:\n";
-       MP.ELT3->print();
+       MP.ELT3->print(os);
     }
     if( MP.ELT4 ){
        os << "\nFor 4th tensorial var:\n";
-       MP.ELT4->print();
+       MP.ELT4->print(os);
     }
 
     os << std::endl;

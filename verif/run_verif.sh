@@ -823,6 +823,7 @@ python tests/materials/xc_materials/nD/soil/test_pressure_independent_multiyield
 echo "$BLEU" "      Template 3D elastoplastic materials." "$NORMAL"
 python tests/materials/xc_materials/nD/template_3d_ep/test_drucker-prager_material_01.py
 python tests/materials/xc_materials/nD/template_3d_ep/test_cam-clay_material_01.py
+python tests/materials/xc_materials/nD/template_3d_ep/test_von_mises_material_01.py
 
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
 python tests/materials/xc_materials/sections/test_material_elastic_membrane_plate_section_01.py

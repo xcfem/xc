@@ -27,42 +27,41 @@
 //----------------------------------------------------------------------------
 //
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Manzari - Dafalias  potential criterion                    #
-//# CLASS:             ManzariDafaliasPotentialSurface                                        #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           Manzari - Dafalias  potential criterion                 #
+//# CLASS:             ManzariDafaliasPotentialSurface                                     #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 08 '00                                             #
-//# UPDATE HISTORY:                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION:                                                           #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 08 '00                                          #
+//# UPDATE HISTORY:                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//# SHORT EXPLANATION:                                                        #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 //
 
 #ifndef ManzariDafaliasPotentialSurface_H    
 #define ManzariDafaliasPotentialSurface_H
 
 #include "material/nD/template_3d_ep/PotentialSurface.h"
-
 
 namespace XC {
 //! @ingroup MatPS
@@ -84,20 +83,9 @@ class ManzariDafaliasPotentialSurface: public PotentialSurface
     double dgoverdt(double theta, double c) const;
     BJtensor apqdnods(const EPState *EPS) const;
     
-    void print() { std::cerr << *this; };
-
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an PotentialSurface's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const ManzariDafaliasPotentialSurface &);
+    virtual void print(std::ostream &os) const;
   };
  
-inline std::ostream& operator<<(std::ostream &os, const ManzariDafaliasPotentialSurface &PS)
-  {
-    os << "Manzari-Dafalias Potential Surface Parameters: " << std::endl;
-     return os;
-  }
 } // end of XC namespace
 
 #endif

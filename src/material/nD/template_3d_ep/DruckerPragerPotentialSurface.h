@@ -74,17 +74,15 @@ namespace XC {
 //!
 //! @brief Drucker-Prager model potential surface.
 class DruckerPragerPotentialSurface: public PotentialSurface
-{
-  private:		  // Private vars to define the Drucker-Prager Potential Surface
-    double alfa2;	  // potential surface orientation angle  
-  
+  {
+  private:
+    double alfa2; // potential surface orientation angle.
   public:
     DruckerPragerPotentialSurface( double a2d = 0.0 )
       : alfa2(a2d) {}   // Default constructor
     virtual ~DruckerPragerPotentialSurface()
       { }; //Virtual functions not all redefined
-    DruckerPragerPotentialSurface( const DruckerPragerPotentialSurface &); //Copy constructor
-    PotentialSurface *getCopy(void) const; // create a clone of itself
+    PotentialSurface *getCopy(void) const; // virtual constructor.
   
     double getalfa2() const;
     void setAlfa2(const double &);
@@ -94,10 +92,8 @@ class DruckerPragerPotentialSurface: public PotentialSurface
     
     BJtensor d2Qodsds1(const EPState *EPS) const; // For Consistent Algorithm, Z Cheng, Jan 2004        
     
-    void print() { std::cerr << *this; };
-
-
-};
+    virtual void print(std::ostream &) const;
+  };
 
 //================================================================================
 // Overloaded Insertion Operator

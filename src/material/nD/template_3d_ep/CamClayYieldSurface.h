@@ -79,11 +79,8 @@ class CamClayYieldSurface: public YieldSurface
 
     double getM() const;
     void setM(const double &);
-    void print() { std::cerr << *this; };    
+    void print(std::ostream &os) const;
   };
-
-// Overloaded Insertion Operator
-std::ostream &operator<<(std::ostream &, const CamClayYieldSurface &);
 
 } // end of XC namespace
 

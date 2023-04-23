@@ -26,26 +26,26 @@
 //----------------------------------------------------------------------------
 ///*
 //################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Drucker - Prager  yield criterion                         #
-//# CLASS:             DruckerPragerPotentialSurface                                        #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           Drucker - Prager  yield criterion                      #
+//# CLASS:             DruckerPragerPotentialSurface                                     #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '93                                             #
-//# UPDATE HISTORY:    August 08 '00                                             #
-//# UPDATE HISTORY:    20Aug2004 ZC added kinematic hardening part               #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              August 03 '93                                          #
+//# UPDATE HISTORY:    August 08 '00                                          #
+//# UPDATE HISTORY:    20Aug2004 ZC added kinematic hardening part            #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#############################################################################
 //*/
 
 #ifndef DruckerPragerPotentialSurface_CPP
@@ -70,12 +70,6 @@
 //================================================================================
 // Copy constrstructor  === not necessary for no pointer member
 //================================================================================
-
-XC::DruckerPragerPotentialSurface::DruckerPragerPotentialSurface(const DruckerPragerPotentialSurface &DruckerPragerPS )
-  {
-    alfa2 =  DruckerPragerPS.getalfa2();
-  }
-
 
 //! @brief Virtual constructor.
 XC::PotentialSurface * XC::DruckerPragerPotentialSurface::getCopy(void) const
@@ -198,18 +192,14 @@ XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qodsds1(const XC::EPState *EPS
 
 //================================================================================
 
-double XC::DruckerPragerPotentialSurface::getalfa2() const {
+double XC::DruckerPragerPotentialSurface::getalfa2() const
+  { return alfa2; }
 
-    return alfa2; 
-
-}
-
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const XC::DruckerPragerPotentialSurface &PS)
+//! @brief Print stuff.
+void XC::DruckerPragerPotentialSurface::print(std::ostream &os) const
   {
      os << "Drucker-Prager Potential Surface Parameters: " << std::endl;
-     os << "alfa2 = " << PS.getalfa2() << std::endl;
-     return os;
+     os << "alfa2 = " << getalfa2() << std::endl;
   }
 
 

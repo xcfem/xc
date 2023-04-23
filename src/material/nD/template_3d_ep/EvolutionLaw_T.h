@@ -82,7 +82,7 @@ class EvolutionLaw_T: public CommandEntity
     //virtual void UpdateVar( EPState *EPS, double dlamda ) = 0; // Evolve only one internal variable
     
     //Print the contents of the evolution law
-    virtual void print(); 	
+    virtual void print(std::ostream &) const; 	
     
     // updating E, e, D and m for Manzari-Dafalias model, 
     virtual int updateEeDm( EPState *EPS, double st_vol, double dLamda);  
@@ -95,13 +95,8 @@ class EvolutionLaw_T: public CommandEntity
     // Evaluating hardening function h_t
     virtual BJtensor h_t(EPState *EPS, PotentialSurface *PS);    
 
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an Evolution Law_T's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const EvolutionLaw_T &);
-
   };
+  
 std::ostream& operator<<(std::ostream &, const EvolutionLaw_T &);
 } // end of XC namespace
 

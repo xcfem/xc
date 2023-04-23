@@ -137,11 +137,19 @@ double XC::EvolutionLaw_NL_Ep::h_s( EPState *EPS, PotentialSurface *PS)
 }
 
 
-//================================================================================
-//  Print vars defined in Linear Evolution Law
-//================================================================================
-void XC::EvolutionLaw_NL_Ep::print()
-  { std::cerr << (*this); }
+//! @brief Print vars defined in Linear Evolution Law
+void XC::EvolutionLaw_NL_Ep::print(std::ostream &os) const
+  {
+  //    os.unsetf( ios::scientific );
+    os.precision(5);
+
+    os.width(10);       
+    os << std::endl << "Nonlinear Scalar Evolution Law(Cam Clay model)'s parameters:" << std::endl;
+    os << "eo = " << geteo() << "; " << std::endl;
+    os << "lambda = " << getlambda() << "; " << std::endl;
+    os << "kappa = " << getkappa() << "; " << std::endl;
+  }  
+
 
 
 //! @brief Return value of void ratio.
@@ -168,20 +176,6 @@ double XC::EvolutionLaw_NL_Ep::getkappa(void) const
 void XC::EvolutionLaw_NL_Ep::setkappa(const double &d)
   { kappa= d; }
 
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_NL_Ep & LEL)
-{
-  //    os.unsetf( ios::scientific );
-    os.precision(5);
-
-    os.width(10);       
-    os << std::endl << "Nonlinear Scalar Evolution Law(Cam Clay model)'s parameters:" << std::endl;
-    os << "eo = " << LEL.geteo() << "; " << std::endl;
-    os << "lambda = " << LEL.getlambda() << "; " << std::endl;
-    os << "kappa = " << LEL.getkappa() << "; " << std::endl;
-           
-    return os;
-}  
 
 #endif
 

@@ -25,26 +25,26 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 ///*
-//================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           Von Mises  yield criterion                                #
-//# CLASS:             VonMisesPotentialSurface                                        #
-//#                                                                              #
-//# VERSION:                                                                     #
+//============================================================================
+//# COPYRIGHT (C):     :-))                                                  #
+//# PROJECT:           Object Oriented Finite XC::Element Program                #
+//# PURPOSE:           Von Mises  yield criterion                            #
+//# CLASS:             VonMisesPotentialSurface                                    #
+//#                                                                          #
+//# VERSION:                                                                 #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 31 '00                                             #
-//# UPDATE HISTORY:                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//# TARGET OS:         DOS || UNIX || . . .                                  #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                           #
+//#                                                                          #
+//#                                                                          #
+//# DATE:              August 31 '00                                         #
+//# UPDATE HISTORY:                                                          #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//#                                                                          #
+//============================================================================
 //*/
 
 #ifndef VonMisesPotentialSurface_CPP
@@ -66,12 +66,9 @@ XC::PotentialSurface * XC::VonMisesPotentialSurface::getCopy(void) const
   { return new VonMisesPotentialSurface(*this); }
 
 
-//================================================================================
-// BJtensor dQ/dsigma_ij = 3*( S_ij )        c.f. pp.274 XC::W.F.Chen
-//================================================================================
-
-XC::BJtensor XC::VonMisesPotentialSurface::dQods(const XC::EPState *EPS) const   {
-    
+//! @brief BJtensor dQ/dsigma_ij = 3*( S_ij )        c.f. pp.274 W.F.Chen
+XC::BJtensor XC::VonMisesPotentialSurface::dQods(const EPState *EPS) const
+  {  
     // Deviatoric stress XC::BJtensor of sigma - alpha
     stresstensor sigma = EPS->getStress();
     int nod = EPS->getNTensorVar();
@@ -91,12 +88,9 @@ XC::BJtensor XC::VonMisesPotentialSurface::dQods(const XC::EPState *EPS) const  
     return dQods;
   }
 
-//================================================================================
-// BJtensor d2Qods2 = d[ 3*(S_ij - alpha_ij) ] /dsigma_ij 
-//================================================================================
-
-XC::BJtensor XC::VonMisesPotentialSurface::d2Qods2(const XC::EPState *EPS) const {
-
+//! @brief BJtensor d2Qods2 = d[ 3*(S_ij - alpha_ij) ] /dsigma_ij 
+XC::BJtensor XC::VonMisesPotentialSurface::d2Qods2(const EPState *EPS) const
+  {
     BJtensor I("I", def_dim_2);
     BJtensor temp1 = I("im") * I("jn");
     temp1.null_indices();
@@ -113,27 +107,25 @@ XC::BJtensor XC::VonMisesPotentialSurface::d2Qods2(const XC::EPState *EPS) const
     d2Qods2.null_indices();
     
     return d2Qods2;
-}
+  }
 
 // For Consistent Algorithm, Z Cheng, Jan 2004
-XC::BJtensor XC::VonMisesPotentialSurface::d2Qodsdt1(const XC::EPState *EPS) const 
-{  
-  BJtensor d2Qoverdsdt1(def_dim_4, 0.0);
-  BJtensor I2("I", def_dim_2);
-  BJtensor I4 = I2("ij") * I2("mn");
-  I2.null_indices();
-  d2Qoverdsdt1 = ( I4.transpose0110() + I4.transpose0111() ) * (-1.5);
-  return d2Qoverdsdt1;
-}
+XC::BJtensor XC::VonMisesPotentialSurface::d2Qodsdt1(const EPState *EPS) const 
+  {  
+    BJtensor d2Qoverdsdt1(def_dim_4, 0.0);
+    BJtensor I2("I", def_dim_2);
+    BJtensor I4 = I2("ij") * I2("mn");
+    I2.null_indices();
+    d2Qoverdsdt1 = ( I4.transpose0110() + I4.transpose0111() ) * (-1.5);
+    return d2Qoverdsdt1;
+  }
 
-//================================================================================
-// friend XC::std::ostream functions for output
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const XC::VonMisesPotentialSurface & YS)
+
+void XC::VonMisesPotentialSurface::print(std::ostream &os) const
   {
     os << "Von Mises Potential Surface Parameters: " << std::endl;
-    return os;
-  }
+  }; 
+
 
 #endif
 

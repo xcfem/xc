@@ -26,30 +26,27 @@
 //----------------------------------------------------------------------------
 
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           Manzari-Dafalias  potential surface                       #
-//#                    (Ref. Geotechnique v.47 No.2 255-272, 1997)               #
-//# CLASS:             ManzariDafaliasPotentialSurface                                        #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite XC::Element Program                 #
+//# PURPOSE:           Manzari-Dafalias  potential surface                    #
+//#                    (Ref. Geotechnique v.47 No.2 255-272, 1997)            #
+//# CLASS:             ManzariDafaliasPotentialSurface                                     #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                            #
+//#                                                                           #
+//#                                                                           #
 //# DATE:              
 //# UPDATE HISTORY:    
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//================================================================================
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//=============================================================================
 
-
-#ifndef ManzariDafaliasPotentialSurface_CPP
-#define ManzariDafaliasPotentialSurface_CPP
 
 #include "material/nD/template_3d_ep/ManzariDafaliasPotentialSurface.h"
 #include <utility/matrix/nDarray/basics.h>
@@ -416,8 +413,10 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::dthetaoverds(const XC::EPState
     return ret;
   }
 
+//! @brief Print stuff.
+void XC::ManzariDafaliasPotentialSurface::print(std::ostream &os) const
+  {
+    os << "Manzari-Dafalias Potential Surface Parameters: " << std::endl;
+  }
 
-
-
-#endif
 

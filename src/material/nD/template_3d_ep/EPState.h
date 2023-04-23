@@ -419,13 +419,7 @@ class EPState: public CommandEntity
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    void print(void) const;
-
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an EPState's contents 
-    //================================================================================
-    friend std::ostream & operator<<(std::ostream &, const EPState &);
+    void print(std::ostream &) const;
   };
 std::ostream & operator<<(std::ostream &, const EPState &);
 } // end of XC namespace

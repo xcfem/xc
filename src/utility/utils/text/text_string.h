@@ -28,6 +28,8 @@
 #include <iostream>
 #include <deque>
 
+std::string format_number(const std::string &, const double &);
+
 const std::string &ajusta_dcha(const std::string &s,const size_t &n,const char &fill_char= ' ');
 
 const std::string &ajusta_izda(const std::string &s,const size_t &n,const char &fill_char= ' ');

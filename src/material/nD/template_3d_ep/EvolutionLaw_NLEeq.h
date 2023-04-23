@@ -99,7 +99,7 @@ class EvolutionLaw_NL_Eeq: public EvolutionLaw_S
     
     //void UpdateVar( EPState *EPS, double dlamda );  // Evolve corresponding var linearly using de_eq_p
 
-    void print();
+    virtual void print(std::ostream &) const;
 
     // some accessor functions
     // some accessor functions
@@ -110,13 +110,8 @@ class EvolutionLaw_NL_Eeq: public EvolutionLaw_S
     double gete() const;
     double getd() const;
 
-    //================================================================================
-    // Overloaded Insertion Operator	 
-    // prints nonlinear EvolutionLaw's contents 
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_Eeq &);
   };
-std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_Eeq &);
+
 } // end of XC namespace
 
 

@@ -83,11 +83,9 @@ class EvolutionLaw_L_Eeq: public EvolutionLaw_S
 
     double h_s( EPState *EPS, PotentialSurface *PS);    // Evaluating hardening function h
     
-    void print();
+    virtual void print(std::ostream &) const;
 
-    friend std::ostream& operator<<(std::ostream &,const EvolutionLaw_L_Eeq &);
   };
-std::ostream& operator<<(std::ostream &,const EvolutionLaw_L_Eeq &);
 } // end of XC namespace
 
 

@@ -51,9 +51,6 @@
 //================================================================================
 */
 
-#ifndef EvolutionLaw_LEij_CPP
-#define EvolutionLaw_LEij_CPP
-
 #include "material/nD/template_3d_ep/EvolutionLaw_LEij.h"
 #include "utility/matrix/nDarray/basics.h"
 #include "material/nD/template_3d_ep/EPState.h"
@@ -128,28 +125,20 @@ XC::BJtensor XC::EvolutionLaw_L_Eij::h_t( EPState *EPS, PotentialSurface *PS)
   }
 
 
-//================================================================================
-//  Print vars defined in Linear Evolution Law
-//================================================================================
-void XC::EvolutionLaw_L_Eij::print()
-  { std::cerr << (*this); }
-
-
-//================================================================================
-double XC::EvolutionLaw_L_Eij::geta() const
-  { return a; }
-
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_L_Eij & LEL)
+//! @brief Print vars defined in Linear Evolution Law
+void XC::EvolutionLaw_L_Eij::print(std::ostream &os) const
   {
     //    os.unsetf(ios::scientific );
     os.precision(5);
 
     os.width(10);       
     os << std::endl << "Linear Tensorial Evolution Law's parameters:" << std::endl;
-    os << "a = " << LEL.geta() << "; " << std::endl;
-    return os;
-  }  
+    os << "a = " << geta() << "; " << std::endl;
+  }
 
-#endif
+
+//================================================================================
+double XC::EvolutionLaw_L_Eij::geta() const
+  { return a; }
+
 

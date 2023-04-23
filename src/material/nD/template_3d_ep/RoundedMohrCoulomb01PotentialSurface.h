@@ -84,16 +84,9 @@ class RoundedMohrCoulomb01PotentialSurface: public PotentialSurface
 
     BJtensor d2Qodsds1(const EPState *EPS) const; // For Consistent Algorithm, Z Cheng, Jan 2004
 
-    void print()
-      { std::cout << *this; };
-
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an RoundedMohrCoulomb01-PotentialSurface's contents
-    //================================================================================
-    friend std::ostream& operator<<(std::ostream &, const RoundedMohrCoulomb01PotentialSurface &);
+    virtual void print(std::ostream &os) const;  
   };
-std::ostream& operator<<(std::ostream &, const RoundedMohrCoulomb01PotentialSurface &);
+
 } // end of XC namespace
 
 #endif
