@@ -54,48 +54,42 @@ namespace XC {
 //
 //! @brief Drucker-Prager plane strain material.
 class DruckerPragerPlaneStrain: public DruckerPrager
- {
+  {
+  private :
+    // static vectors and matrices
+    static Vector strain;
+    static Vector stress;
+    static Matrix tangent;
 
   public : 
-
-  //null constructor
-  DruckerPragerPlaneStrain();
-
-  //full constructor
-  DruckerPragerPlaneStrain(int tag, double bulk, double shear,
+    DruckerPragerPlaneStrain(int tag= 0);
+    DruckerPragerPlaneStrain(int tag, double bulk, double shear,
 		  double s_y, double r, double r_bar, double Kinfinity, double Kinit, 
 		  double d1, double d2, double H, double t, double massDens, double atm);
 
 
-  //destructor
-  ~DruckerPragerPlaneStrain();
+    //destructor
+    ~DruckerPragerPlaneStrain(void);
 
-  NDMaterial *getCopy(void) const;
-  const std::string &getType(void) const;
-  int getOrder() const;
+    NDMaterial *getCopy(void) const;
+    const std::string &getType(void) const;
+    int getOrder() const;
 
-  int setTrialStrain(const Vector &strain_from_element);
+    int setTrialStrain(const Vector &strain_from_element);
 
-  // Unused trialStrain functions
-  int setTrialStrain(const Vector &v, const Vector &r);
-    
-  //send back the strain
-  const Vector& getStrain();
+    // Unused trialStrain functions
+    int setTrialStrain(const Vector &v, const Vector &r);
 
-  //send back the stress 
-  const Vector& getStress();
+    //send back the strain
+    const Vector& getStrain();
 
-  //send back the tangent 
-  const Matrix& getTangent();
-  const Matrix& getInitialTangent();
+    //send back the stress 
+    const Vector& getStress();
 
-  private :
-
-  // static vectors and matrices
-  static Vector strain;
-  static Vector stress;
-  static Matrix tangent;
-}; 
+    //send back the tangent 
+    const Matrix& getTangent();
+    const Matrix& getInitialTangent();
+  }; 
 } // end XC namespace
 
 

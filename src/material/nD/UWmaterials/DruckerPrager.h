@@ -78,23 +78,23 @@ class DruckerPrager: public NDMaterial
   protected:
 
     //material parameters
-    double mKref;	//!< reference Bulk Modulus 
+    double mKref; //!< reference Bulk Modulus 
     double mGref; //!< reference Shear Modulus
     double mPatm; //!< reference stress first invariant (pressure)
     double mK; //!< bulk modulus 
     double mG; //!< shear modulus
-    double msigma_y; //!< yield strength 
-    double mrho; //!< volumetric term
-    double mrho_bar; //!< nonassociative flow term
+    double msigma_y; //!< yield stress 
+    double mrho; //!< volumetric term (failure surface and associativity)
+    double mrho_bar; //!< nonassociative flow term (failure surface and associativity)
     double mKinf; //!< nonlinear isotropic hardening term
     double mKo; //!< nonlinear isotropic hardening term
-    double mdelta1; //!< exponential hardening term for drucker prager surface
-    double mdelta2; //!<exponential hardening term for tension cutoff surface
-    double mHard; //!< hardening constant
-    double mtheta; //!< hardening constant
+    double mdelta1; //!< exponential hardening term for Drucker-Prager surface
+    double mdelta2; //!< Tension softening. Exponential hardening term for tension cutoff surface
+    double mHard; //!< isotropic hardening constant
+    double mtheta; //!< isotropic hardening constant
     double mTo; //!< initial tension cutoff strength
 
-    double massDen;
+    double massDen; //!< density
 
     //internal variables
     Vector mEpsilon;
@@ -142,7 +142,7 @@ class DruckerPrager: public NDMaterial
     static const double two3 ;
     static const double root23 ;
   public:
-    // Full Constructor
+    DruckerPrager(int tag, int classTag);
     DruckerPrager(int tag, int classTag, double bulk, double shear,
 		  double s_y, double r, double r_bar, double Kinfinity, double Kinit, 
 		  double d1, double d2, double H, double t, double massDen = 0.0, double atm = 101.0);
@@ -150,10 +150,6 @@ class DruckerPrager: public NDMaterial
     // Elastic Constructor
     //	  DruckerPrager(int tag, double bulk, double shear);
 
-    //Null Constructor
-    DruckerPrager();
-
-    //Destructor
     ~DruckerPrager();
 
     NDMaterial *getCopy(const std::string &type) const;
@@ -179,10 +175,45 @@ class DruckerPrager: public NDMaterial
     int setParameter(const std::vector<std::string> &, Parameter &);
     int updateParameter(int parameterID, Information &info);
 
-    inline double getRho(void) const
-      { return massDen; }
-    inline void setRho(const double &r)
-      { massDen= r; }  
+    void setup(void);
+    // Density.
+    double getRho(void) const;
+    void setRho(const double &r);
+    // Bulk modulus.
+    double getBulkModulus(void) const;
+    void setBulkModulus(const double &);
+    // Shear modulus.
+    double getShearModulus(void) const;
+    void setShearModulus(const double &);
+    // Reference pressure.
+    double getReferencePressure(void) const;
+    void setReferencePressure(const double &);
+    // Yield stress.
+    double getYieldStress(void) const;
+    void setYieldStress(const double &);
+    // Failure surface and associativity. Volumetric term. 
+    double getFailureSurfaceRho(void) const;
+    void setFailureSurfaceRho(const double &);
+    // Failure surface and associativity. Nonassociative flow term.
+    double getFailureSurfaceRhoBar(void) const;
+    void setFailureSurfaceRhoBar(const double &);
+    // Isotropic hardening.
+    double getIsotropicHardeningKinf(void) const;
+    void setIsotropicHardeningKinf(const double &);
+    double getIsotropicHardeningKo(void) const;
+    void setIsotropicHardeningKo(const double &);
+    double getIsotropicHardeningDelta(void) const;
+    void setIsotropicHardeningDelta(const double &);
+    // Kinematic hardening.
+    double getKinematicHardeningH(void) const;
+    void setKinematicHardeningH(const double &);
+    double getKinematicHardeningTheta(void) const;
+    void setKinematicHardeningTheta(const double &);
+    // Tension softening.
+    double getTensionSofteningDelta(void) const;
+    void setTensionSofteningDelta(const double &);     
+    double getMTo(void) const;
+    void setMTo(const double &);     
   };
 } // end XC namespace
 

@@ -156,7 +156,6 @@
 #include "material/nD/UWmaterials/DruckerPragerPlaneStrain.h"
 #include "material/nD/UWmaterials/DruckerPrager3D.h"
 
-
 //Section
 #include "material/section/Bidirectional.h"
 #include "material/section/elastic_section/ElasticSection1d.h"
@@ -372,6 +371,10 @@ XC::Material *load_nD_material(int tag_mat,const std::string &cmd)
       retval= new XC::PressureDependentElastic3D(tag_mat);
     else if(cmd == "template_3d_ep")
       retval= new XC::Template3Dep(tag_mat);
+    else if(cmd == "drucker-prager_plane_strain")
+      retval= new XC::DruckerPragerPlaneStrain(tag_mat);
+    else if(cmd == "drucker-prager_3d")
+      retval= new XC::DruckerPrager3D(tag_mat);
     return retval;
   }
 

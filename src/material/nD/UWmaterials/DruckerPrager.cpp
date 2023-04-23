@@ -109,75 +109,61 @@ const double XC::DruckerPrager::root23= sqrt(2.0/3.0) ;
 //   return theMaterial;
 // }
 
-
+//! @brief Compute derived quantities.
+void XC::DruckerPrager::setup(void)
+  {
+    mK= mKref; // bulk modulus.
+    mG= mGref;
+    if(mrho == 0.0)
+      { mTo= 1e10; }
+    else
+      { mTo= root23*msigma_y/mrho; }
+  }
 
 //full constructor
 XC::DruckerPrager::DruckerPrager(int tag, int classTag, double bulk, double shear, double s_y, double r,
 			                                        double r_bar, double Kinfinity, double Kinit, double d1,
 			                                        double d2, double H, double t, double mDen, double atm)
   : NDMaterial(tag,classTag),
-    mEpsilon(6), 
-    mEpsilon_n_p(6),
-    mEpsilon_n1_p(6),
-    mSigma(6),
-    mBeta_n(6),
-    mBeta_n1(6),
-    mCe(6,6),
-    mCep(6,6),
-    mI1(6),
-    mIIvol(6,6),
-    mIIdev(6,6),
-    mState(5)
-{
-	massDen  =  mDen;
-    mKref    =  bulk;
-    mGref    =  shear;
-    mPatm	 =  atm;
-    mK       =  bulk;
-    mG       =  shear;
-    msigma_y =  s_y;
-    mrho     =  r;
-    mrho_bar =  r_bar;
-	mKinf    =  Kinfinity;
-	mKo      =  Kinit;
-	mdelta1  =  d1; 
-	mdelta2  =  d2;
-    mHard    =  H;
-    mtheta   =  t;
-	if (mrho == 0.0) { 
-		mTo = 1e10;
-	}
-	else { 
-		mTo = root23*msigma_y/mrho; 
-	}
-	// set the elastic flag
-	//  0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default)
-	mElastFlag = 2;
+    mEpsilon(6), mEpsilon_n_p(6), mEpsilon_n1_p(6), mSigma(6),
+    mBeta_n(6), mBeta_n1(6), mCe(6,6), mCep(6,6),
+    mI1(6), mIIvol(6,6), mIIdev(6,6), mState(5)
+  {
+    massDen= mDen; // density.
+    mPatm= atm; // reference stress first invariant (pressure)
+    mK=  bulk; // bulk modulus.
+    mG=  shear;
+    msigma_y=  s_y; // yield stress.
+    mrho= r; // volumetric term (failure surface and associativity)
+    mrho_bar=  r_bar; // nonassociative flow term (failure surface and associativity)
+    mKinf= Kinfinity; // isotropic hardening
+    mKo= Kinit; // isotropic hardening
+    mdelta1=  d1; // isotropic hardening
+    mdelta2=  d2;
+    mHard=  H;
+    mtheta=  t;
+    setup();
+    // set the elastic flag
+    //  0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default)
+    mElastFlag = 2;
 
-	// Use these values to deactivate yield surface 1 - Create Pure Tension Cutoff
-	//msigma_y = 1e10;
-	//mTo      = 100;
+    // Use these values to deactivate yield surface 1 - Create Pure Tension Cutoff
+    //msigma_y = 1e10;
+    //mTo      = 100;
 
     this->initialize();
-}
-   
+  }
+
+
 //null constructor
-XC::DruckerPrager::DruckerPrager  () 
-    : NDMaterial(),
-    mEpsilon(6), 
-    mEpsilon_n_p(6),
-    mEpsilon_n1_p(6),
-    mSigma(6),
-    mBeta_n(6),
-    mBeta_n1(6),
-	mCe(6,6),
-	mCep(6,6),
-	mI1(6),
-    mIIvol(6,6),
-    mIIdev(6,6),
-	mState(5)
-{
-	massDen  =  0.0;
+XC::DruckerPrager::DruckerPrager(int tag, int classTag) 
+  : NDMaterial(tag, classTag),
+    mEpsilon(6),  mEpsilon_n_p(6), mEpsilon_n1_p(6),
+    mSigma(6), mBeta_n(6), mBeta_n1(6),
+    mCe(6,6), mCep(6,6), mI1(6),
+    mIIvol(6,6), mIIdev(6,6),mState(5)
+  {
+    massDen  =  0.0;
     mKref    =  0.0;
     mGref    =  0.0;
     mPatm	 =  101.0;
@@ -186,10 +172,10 @@ XC::DruckerPrager::DruckerPrager  ()
     msigma_y =  1e+10;
     mrho     =  0.0;
     mrho_bar =  0.0;
-	mKinf    =  0.0;
-	mKo      =  0.0;
-	mdelta1  =  0.0;
-	mdelta2  =  0.0;
+    mKinf    =  0.0;
+    mKo      =  0.0;
+    mdelta1  =  0.0;
+    mdelta2  =  0.0;
     mHard    =  0.0;
     mtheta   =  0.0;
 	mTo      =  0.0;
@@ -199,14 +185,13 @@ XC::DruckerPrager::DruckerPrager  ()
     this->initialize();
 }
 
-//destructor
-XC::DruckerPrager::~DruckerPrager  ()
-{
-}
+//! @brief Destructor.
+XC::DruckerPrager::~DruckerPrager(void)
+  {}
 
 //zero internal variables
 void XC::DruckerPrager::initialize( )
-{
+  {
     mEpsilon.Zero();
     mEpsilon_n_p.Zero();
     mEpsilon_n1_p.Zero();
@@ -262,8 +247,8 @@ void XC::DruckerPrager::initialize( )
 
     mCe  = mK * mIIvol + 2*mG*mIIdev;
     mCep = mCe;
-	mState.Zero();
-}
+    mState.Zero();
+  }
 
 
 XC::NDMaterial *XC::DruckerPrager::getCopy(const std::string &type) const
@@ -284,6 +269,108 @@ XC::NDMaterial *XC::DruckerPrager::getCopy(const std::string &type) const
   	return nullptr;
       }
   }
+
+//! @brief get density.
+double XC::DruckerPrager::getRho(void) const
+  { return massDen; }
+
+//! @brief set density.
+void XC::DruckerPrager::setRho(const double &r)
+  { massDen= r; }  
+
+//! @brief get bulk modulus.
+double XC::DruckerPrager::getBulkModulus(void) const
+  { return mKref; }
+
+//! @brief set bulk modulus.
+void XC::DruckerPrager::setBulkModulus(const double &d)
+  { mKref= d; }
+
+//! @brief get shear modulus.
+double XC::DruckerPrager::getShearModulus(void) const
+  { return mGref; }
+
+//! @brief set shear modulus.
+void XC::DruckerPrager::setShearModulus(const double &d)
+  { mGref= d; }
+
+//! @brief get reference pressure.
+double XC::DruckerPrager::getReferencePressure(void) const
+  { return mPatm; }
+
+//! @brief set reference pressure.
+void XC::DruckerPrager::setReferencePressure(const double &d)
+  { mPatm= d; }
+
+//! @brief get yield stress.
+double XC::DruckerPrager::getYieldStress(void) const
+  { return msigma_y; }
+
+//! @brief set yield stress.
+void XC::DruckerPrager::setYieldStress(const double &d)
+  { msigma_y= d; }
+
+//! @brief Failure surface and associativity. Get volumetric term.
+double XC::DruckerPrager::getFailureSurfaceRho(void) const
+  { return mrho; }
+
+//! @brief Failure surface and associativity. Set volumetric term.
+void XC::DruckerPrager::setFailureSurfaceRho(const double &d)
+  { mrho= d; }
+
+//! @brief Failure surface and associativity. Get nonassociative flow term.
+double XC::DruckerPrager::getFailureSurfaceRhoBar(void) const
+  { return mrho_bar; }
+
+//! @brief Failure surface and associativity. Set nonassociative flow term.
+void XC::DruckerPrager::setFailureSurfaceRhoBar(const double &d)
+  { mrho_bar= d; }
+
+//! @brief Isotropic hardening. Get Kinf.
+double XC::DruckerPrager::getIsotropicHardeningKinf(void) const
+  { return mKinf; }
+//! @brief Isotropic hardening. Set Kinf.
+void XC::DruckerPrager::setIsotropicHardeningKinf(const double &d)
+  { mKinf= d; }
+//! @brief Isotropic hardening. Get Ko.
+double XC::DruckerPrager::getIsotropicHardeningKo(void) const
+  { return mKo; }
+//! @brief Isotropic hardening. Set Ko.
+void XC::DruckerPrager::setIsotropicHardeningKo(const double &d)
+  { mKo= d; }
+//! @brief Isotropic hardening. Get delta1.
+double XC::DruckerPrager::getIsotropicHardeningDelta(void) const
+  { return mdelta1; }
+//! @brief Isotropic hardening. Set delsta1.
+void XC::DruckerPrager::setIsotropicHardeningDelta(const double &d)
+  { mdelta1= d; }
+
+//! @brief Kinematic hardening. Get H.
+double XC::DruckerPrager::getKinematicHardeningH(void) const
+  { return mHard; }
+//! @brief Kinematic hardening. Set H.
+void XC::DruckerPrager::setKinematicHardeningH(const double &d)
+  { mHard= d; }
+//! @brief Kinematic hardening. Get theta.
+double XC::DruckerPrager::getKinematicHardeningTheta(void) const
+  { return mtheta; }
+//! @brief Kinematic hardening. Set theta.
+void XC::DruckerPrager::setKinematicHardeningTheta(const double &d)
+  { mtheta= d; }
+
+//! @brief Get tension softening delta.
+double XC::DruckerPrager::getTensionSofteningDelta(void) const
+  { return mdelta2; }
+//! @brief Set tension softening delta.
+void XC::DruckerPrager::setTensionSofteningDelta(const double &d)
+  { mdelta2= d; }
+
+//! @brief Get mTo.
+double XC::DruckerPrager::getMTo(void) const
+  { return mTo; }
+//! @brief Set tension softening delta.
+void XC::DruckerPrager::setMTo(const double &d)
+  { mTo= d; }
 
 //! @brief Commit the state of the material.
 int XC::DruckerPrager::commitState (void)

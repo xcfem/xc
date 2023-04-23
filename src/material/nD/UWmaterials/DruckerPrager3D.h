@@ -57,42 +57,38 @@ namespace XC {
 //! @ingroup UWMat
 //
 //! @brief Drucker-Prager 3D material.
-class DruckerPrager3D: public DruckerPrager {
+class DruckerPrager3D: public DruckerPrager
+  {
 
 //-------------------Declarations-------------------------------
 
-  public : 
+  public: 
+    DruckerPrager3D(int tag= 0);
 
-  //null constructor
-  DruckerPrager3D( ) ;
-
-  //full constructor
-  DruckerPrager3D(int tag, double bulk, double shear,
+    DruckerPrager3D(int tag, double bulk, double shear,
 		  double s_y, double r, double r_bar, double Kinfinity, double Kinit, 
 		  double d1, double d2, double H, double t, double massDen, double atm);
 
 
-  //destructor
-  ~DruckerPrager3D( ) ;
+    ~DruckerPrager3D(void);
 
-  NDMaterial *getCopy(void) const;
-  const std::string &getType(void) const;
-  int getOrder(void) const;
+    NDMaterial *getCopy(void) const;
+    const std::string &getType(void) const;
+    int getOrder(void) const;
 
-  int setTrialStrain(const Vector &strain_from_element);
+    int setTrialStrain(const Vector &strain_from_element);
 
-  // Unused trialStrain functions
-  int setTrialStrain(const Vector &v, const Vector &r);
-    
-  //send back the strain
-  const Vector& getStrain( ) ;
+    // Unused trialStrain functions
+    int setTrialStrain(const Vector &v, const Vector &r);
 
-  //send back the stress 
-  const Vector& getStress( ) ;
+    //send back the strain
+    const Vector& getStrain(void);
 
-  //send back the tangent 
-  const Matrix& getTangent( ) ;
-  const Matrix& getInitialTangent( ) ;
+    //send back the stress 
+    const Vector& getStress(void);
 
+    //send back the tangent 
+    const Matrix& getTangent(void);
+    const Matrix& getInitialTangent(void);
   };
 } // end XC namespace

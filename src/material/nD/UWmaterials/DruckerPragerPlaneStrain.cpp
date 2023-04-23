@@ -29,35 +29,30 @@ XC::Vector XC::DruckerPragerPlaneStrain::stress(3);
 XC::Matrix XC::DruckerPragerPlaneStrain::tangent(3,3);
 
 //null constructor
-XC::DruckerPragerPlaneStrain::DruckerPragerPlaneStrain() : 
-DruckerPrager( )
-{  
-}
+XC::DruckerPragerPlaneStrain::DruckerPragerPlaneStrain(int tag)
+  : DruckerPrager(tag, ND_TAG_DruckerPragerPlaneStrain) {}
 
 //full constructor
 XC::DruckerPragerPlaneStrain::DruckerPragerPlaneStrain(int tag, double bulk, double shear,
 		  double s_y, double r, double r_bar, double Kinfinity, double Kinit, 
 		  double d1, double d2, double H, double t, double mDen, double atm) : 
 DruckerPrager(tag, ND_TAG_DruckerPragerPlaneStrain, bulk, shear, s_y, r, r_bar, Kinfinity,
-	                                                Kinit, d1, d2, H, t, mDen, atm)
-{
-}
+	                                                Kinit, d1, d2, H, t, mDen, atm) {}
 
 //destructor
-XC::DruckerPragerPlaneStrain::~DruckerPragerPlaneStrain() 
-{ 
-} 
+XC::DruckerPragerPlaneStrain::~DruckerPragerPlaneStrain(void) 
+  {} 
 
 //make a clone of this material
-XC::NDMaterial *XC::DruckerPragerPlaneStrain::getCopy() const
+XC::NDMaterial *XC::DruckerPragerPlaneStrain::getCopy(void) const
   { return new DruckerPragerPlaneStrain(*this); }
 
 //send back type of material
-const std::string &XC::DruckerPragerPlaneStrain::getType() const 
-{
-  static const std::string retval= "PlaneStrain";
-  return retval;
-}
+const std::string &XC::DruckerPragerPlaneStrain::getType(void) const 
+  {
+    static const std::string retval= "PlaneStrain";
+    return retval;
+  }
 
 //send back order of strain in vector form
 int XC::DruckerPragerPlaneStrain::getOrder() const 
