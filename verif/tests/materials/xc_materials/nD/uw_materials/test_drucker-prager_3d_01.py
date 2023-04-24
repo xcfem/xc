@@ -34,9 +34,11 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
-# Define materials
+# Define problem
 feProblem= xc.FEProblem()
 preprocessor= feProblem.getPreprocessor
+
+# Define material.
 mat= typical_materials.defDruckerPrager3d(preprocessor, "druckerPrager3d",k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen)
 
 mTo= mat.mTo
