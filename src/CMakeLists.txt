@@ -362,7 +362,7 @@ SET(nD_elastic_isotropic material/nD/elastic_isotropic/ElasticIsotropic3D.cpp ma
 
 SET(nD_j2_plasticity material/nD/j2_plasticity/J2AxiSymm.cpp material/nD/j2_plasticity/J2PlaneStrain.cpp material/nD/j2_plasticity/J2PlaneStress.cpp material/nD/j2_plasticity/J2Plasticity.cpp material/nD/j2_plasticity/J2PlateFiber.cpp material/nD/j2_plasticity/J2PlateFibre.cpp material/nD/j2_plasticity/J2ThreeDimensional.cpp)
 
-SET(nD_uvmaterial material/nD/UWmaterials/DruckerPrager.cpp material/nD/UWmaterials/DruckerPragerPlaneStrain.cpp material/nD/UWmaterials/DruckerPrager3D.cpp)
+SET(nD_uvmaterial material/nD/uw_materials/DruckerPrager.cpp material/nD/uw_materials/DruckerPragerPlaneStrain.cpp material/nD/uw_materials/DruckerPrager3D.cpp)
 
 
 SET(nd_adaptor_material material/nD/nd_adaptor/NDAdaptorMaterial.cc material/nD/nd_adaptor/PlaneStressMaterial.cpp material/nD/nd_adaptor/PlateFiberMaterial.cpp material/nD/nd_adaptor/BeamFiberMaterial.cpp)

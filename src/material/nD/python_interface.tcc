@@ -70,5 +70,5 @@ class_<material_vector_NDMat, bases<vectorNDMaterial, CommandEntity>, boost::non
   ;
 
 #include "template_3d_ep/python_interface.tcc"
-#include "UWmaterials/python_interface.tcc"
+#include "uw_materials/python_interface.tcc"
 

@@ -172,9 +172,9 @@
 #include "material/nD/template_3d_ep/VonMisesYieldSurface.h"
 #include "material/nD/template_3d_ep/YieldSurface.h"
 
-#include "material/nD/UWmaterials/DruckerPrager.h"
-#include "material/nD/UWmaterials/DruckerPragerPlaneStrain.h"
-#include "material/nD/UWmaterials/DruckerPrager3D.h"
+#include "material/nD/uw_materials/DruckerPrager.h"
+#include "material/nD/uw_materials/DruckerPragerPlaneStrain.h"
+#include "material/nD/uw_materials/DruckerPrager3D.h"
 
 // Fibers
 #include "material/section/fiber_section/fiber/UniaxialFiber2d.h"
