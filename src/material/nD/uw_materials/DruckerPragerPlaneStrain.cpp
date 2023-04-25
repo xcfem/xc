@@ -79,28 +79,26 @@ int XC::DruckerPragerPlaneStrain::setTrialStrain(const Vector &v, const Vector &
     return this->setTrialStrain (v);
 }
 
-//send back the strain
-const XC::Vector &XC::DruckerPragerPlaneStrain::getStrain() 
-{
-	strain(0) = mEpsilon(0);
-	strain(1) = mEpsilon(1);
-	strain(2) = mEpsilon(3);
-	
+//! @brief Return the strain.
+const XC::Vector &XC::DruckerPragerPlaneStrain::getStrain(void) const 
+  {
+    strain(0) = mEpsilon(0);
+    strain(1) = mEpsilon(1);
+    strain(2) = mEpsilon(3);
     return strain;
-} 
+  } 
 
-//send back the stress 
-const XC::Vector &XC::DruckerPragerPlaneStrain::getStress() 
-{
-	stress(0) = mSigma(0);
-	stress(1) = mSigma(1);
-	stress(2) = mSigma(3);
-	
- 	return stress;
-}
+//! @brief Return the stress.
+const XC::Vector &XC::DruckerPragerPlaneStrain::getStress(void) const 
+  {
+     stress(0) = mSigma(0);
+     stress(1) = mSigma(1);
+     stress(2) = mSigma(3);	
+     return stress;
+  }
 
 //! @brief Return the material tangent stiffness.
-const XC::Matrix &XC::DruckerPragerPlaneStrain::getTangent() 
+const XC::Matrix &XC::DruckerPragerPlaneStrain::getTangent(void) const 
   {
     tangent(0,0) = mCep(0,0);
     tangent(0,1) = mCep(0,1);
@@ -115,7 +113,7 @@ const XC::Matrix &XC::DruckerPragerPlaneStrain::getTangent()
   } 
 
 //! @brief Return the material initial stiffness.
-const XC::Matrix& XC::DruckerPragerPlaneStrain::getInitialTangent() 
+const XC::Matrix& XC::DruckerPragerPlaneStrain::getInitialTangent(void) const 
   {
     tangent(0,0)= mCep(0,0);
     tangent(0,1)= mCep(0,1);

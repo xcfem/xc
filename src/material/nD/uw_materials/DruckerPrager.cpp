@@ -812,16 +812,29 @@ double XC::DruckerPrager:: T(double alpha2)
 
 
 double XC::DruckerPrager::deltaH(double dGamma)
-{
-	return mHprime * root23 * dGamma;
-}
+  { return mHprime * root23 * dGamma; }
 
+//! @brief Return vector of state variables for output
+const XC::Vector &XC::DruckerPrager::getState(void) const
+  { return mState; }
 
-XC::Vector XC::DruckerPrager::getState()
-{
-	return mState;
-}
-
+//! @brief Returns material response.
+//! @param cod: name of the requested value.
+//! @param silent: if true don't complain about non-existen property.
+XC::Matrix XC::DruckerPrager::getValues(const std::string &cod, bool silent) const
+  {
+    Matrix retval;
+    if(cod == "state")
+      {
+	const Vector state= this->getState();
+	const size_t sz= state.Size();
+	retval.resize(1,sz);
+	retval.putRow(0,state);
+      }
+    else
+      retval= NDMaterial::getValues(cod, silent);
+    return retval;
+  }
 
 XC::Response *XC::DruckerPrager::setResponse(const std::vector<std::string> &argv, Information &matInfo)
   {

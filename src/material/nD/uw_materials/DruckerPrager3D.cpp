@@ -66,28 +66,28 @@ int XC::DruckerPrager3D::setTrialStrain( const Vector &strain_from_element)
   }
 
 
-//unused trial strain functions
-int XC::DruckerPrager3D::setTrialStrain (const Vector &v, const Vector &r)
+//! @brief unused trial strain functions
+int XC::DruckerPrager3D::setTrialStrain(const Vector &v, const Vector &r)
   {
     std::cerr << "YOU SHOULD NOT SEE THIS: DruckerPrager::setTrialStrain (const Vector &v, const Vector &r)" << std::endl;
     return this->setTrialStrain (v);
   }
 
 
-//send back the strain
-const XC::Vector& XC::DruckerPrager3D::getStrain(void) 
+//! @brief Return the strain.
+const XC::Vector& XC::DruckerPrager3D::getStrain(void)  const
   { return mEpsilon; } 
 
 
-//send back the stress 
-const XC::Vector& XC::DruckerPrager3D::getStress(void) 
+//! @brief Return the stress. 
+const XC::Vector& XC::DruckerPrager3D::getStress(void) const 
   { return mSigma; }
 
 //! @brief Return the material tangent stiffness.
-const XC::Matrix& XC::DruckerPrager3D::getTangent(void) 
+const XC::Matrix& XC::DruckerPrager3D::getTangent(void) const
   { return mCep; } 
 
 //! @brief Return the material initial stiffness.
-const XC::Matrix& XC::DruckerPrager3D::getInitialTangent(void) 
+const XC::Matrix& XC::DruckerPrager3D::getInitialTangent(void) const 
   { return mCe; } 
 

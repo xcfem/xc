@@ -135,7 +135,6 @@ class DruckerPrager: public NDMaterial
     double T(double alpha2);
     double deltaH(double dGamma);
 
-    Vector getState();  // fills vector of state variables for output
 
     //parameters
     static const double one3 ;
@@ -166,6 +165,8 @@ class DruckerPrager: public NDMaterial
 
     Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
     int getResponse (int responseID, Information &matInformation);
+    const Vector &getState(void) const;
+    Matrix getValues(const std::string &, bool silent= false) const;
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &); 

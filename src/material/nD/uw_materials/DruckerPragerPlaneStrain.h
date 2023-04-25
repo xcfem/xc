@@ -81,14 +81,14 @@ class DruckerPragerPlaneStrain: public DruckerPrager
     int setTrialStrain(const Vector &v, const Vector &r);
 
     //send back the strain
-    const Vector& getStrain();
+    const Vector& getStrain(void) const;
 
     //send back the stress 
-    const Vector& getStress();
+    const Vector& getStress(void) const;
 
     //send back the tangent 
-    const Matrix& getTangent();
-    const Matrix& getInitialTangent();
+    const Matrix& getTangent(void) const;
+    const Matrix& getInitialTangent(void) const;
   }; 
 } // end XC namespace
 
