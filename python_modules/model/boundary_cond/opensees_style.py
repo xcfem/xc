@@ -18,6 +18,6 @@ def fix(constraintHandler, idNode, gdls):
     :param gdls: degrees of freedom to fix (0: free, 1 fixed).
     '''
     sz= len(gdls)
-    for i in range(0,sz):
-        if i!=0:
+    for i, gdl in enumerate(gdls):
+        if gdl!=0:
             constraintHandler.newSPConstraint(idNode,i,0.0) # Node id: idNode
