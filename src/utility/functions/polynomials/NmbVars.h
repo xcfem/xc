@@ -23,7 +23,7 @@
 #ifndef NMBVARS_H
 #define NMBVARS_H
 
-#include "assert.h"
+#include <assert.h>
 #include <set>
 #include <string>
 #include "utility/matrices/vectorZ.h"
