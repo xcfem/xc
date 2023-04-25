@@ -21,8 +21,10 @@
 
 #include "LabelContainer.h"
 #include <iostream>
+#include <assert.h>
 
-//! @brief Devuelve el valor de la etiqueta de índice i.
+//! @brief Return the value of the label with index i.
+//! @param i: label index.
 const std::string &LabelDictionary::get_etiqueta_indice(const int &i) const
   {
     static std::string retval;
@@ -31,13 +33,13 @@ const std::string &LabelDictionary::get_etiqueta_indice(const int &i) const
     if(it!=bm.end())
       retval= it->second;
     else
-      std::cerr << "LabelContainer::get_etiqueta_indice; indice "
-                << i << " fuera de rango." << std::endl;
+      std::cerr << "LabelContainer::get_etiqueta_indice; index "
+                << i << " out of range." << std::endl;
     return retval;
   }
 
-//! @brief Devuelve el valor del indice de la etiqueta que se pasa como
-//! parámetro.
+//! @brief Return the value of the label index.
+//! @param e: label to get the index of.
 int LabelDictionary::get_indice_etiqueta(const std::string &e) const
   {
     int retval= -1;
