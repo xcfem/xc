@@ -41,14 +41,23 @@ preprocessor= feProblem.getPreprocessor
 # Define material.
 mat= typical_materials.defDruckerPrager3d(preprocessor, "druckerPrager3d",k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen)
 
+# Check some quantities.
 mTo= mat.mTo
 refValue=  math.sqrt(2.0/3.0)*mat.sigY/mat.mrho
 ratio1= abs(mTo-refValue)/refValue
+materialTangent= mat.getTangent()
+materialTangentNorm= materialTangent.Norm()
+ratio2= abs(materialTangentNorm-88811.70198109705)/88811.70198109705
+
+'''
+print('material tangent: ', materialTangent)
+print('material norm: ', materialTangentNorm)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-15):
+if (ratio1<1e-12) and (ratio2<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

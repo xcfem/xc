@@ -124,7 +124,6 @@ class DruckerPrager: public NDMaterial
     Vector mState; //!< state vector for output
 
     //functions
-    void initialize(); // initializes variables
     int  updateElasticParam(void); //updated Elastic Parameters based on mean stress 
 
     //plasticity integration routine
@@ -177,6 +176,7 @@ class DruckerPrager: public NDMaterial
     int updateParameter(int parameterID, Information &info);
 
     void setup(void);
+    void initialize(); // initializes variables
     // Density.
     double getRho(void) const;
     void setRho(const double &r);

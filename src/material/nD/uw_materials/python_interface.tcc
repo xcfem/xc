@@ -38,7 +38,8 @@ class_<XC::DruckerPrager, bases<XC::NDMaterial>, boost::noncopyable >("DruckerPr
   .add_property("stage", &XC::DruckerPrager::getMaterialStage,  &XC::DruckerPrager::updateMaterialStage,"variable that sets the stage of the material; 0:elastic, 1:plastic.")
   .def("updateMaterialStage", &XC::DruckerPrager::updateMaterialStage, "Update the stage of the material; 0:elastic, 1:plastic.")
   .def("setup", &XC::DruckerPrager::setup, "Compute values of derived parameters.")
-.add_property("state", make_function(&XC::DruckerPrager::getState,return_internal_reference<>()), "Return vector of state variables for output.")
+  .def("initialize", &XC::DruckerPrager::initialize, "Initialize stiffness matrix.")
+  .add_property("state", make_function(&XC::DruckerPrager::getState,return_internal_reference<>()), "Return vector of state variables for output.")
   ;
 
 class_<XC::DruckerPragerPlaneStrain , bases<XC::DruckerPrager>, boost::noncopyable >("DruckerPragerPlaneStrain", no_init)

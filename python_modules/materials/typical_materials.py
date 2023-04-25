@@ -846,6 +846,7 @@ def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, 
     retval.delta2= delta2
     retval.rho= mDen
     retval.setup()
+    retval.initialize()
     return retval
 
 class MaterialData(BasicElasticMaterial):

@@ -826,6 +826,7 @@ python tests/materials/xc_materials/nD/template_3d_ep/test_cam-clay_material_01.
 python tests/materials/xc_materials/nD/template_3d_ep/test_von_mises_material_01.py
 echo "$BLEU" "      UW materials." "$NORMAL"
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_01.py
+python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_02.py
 
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
 python tests/materials/xc_materials/sections/test_material_elastic_membrane_plate_section_01.py

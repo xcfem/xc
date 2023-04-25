@@ -190,7 +190,7 @@ XC::DruckerPrager::~DruckerPrager(void)
   {}
 
 //zero internal variables
-void XC::DruckerPrager::initialize( )
+void XC::DruckerPrager::initialize(void)
   {
     mEpsilon.Zero();
     mEpsilon_n_p.Zero();
