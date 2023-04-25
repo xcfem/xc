@@ -52,13 +52,12 @@ spc3= constraints.newSPConstraint(n2.tag,1,0.0) # Node 2
 
 
 # Load case definition.
-lPattern= '0'
-lp0= modelSpace.newLoadPattern(name= lPattern)
+lp0= modelSpace.newLoadPattern(name= '0')
 
 # we check that loads are cummulated by the way.
 lp0.newNodalLoad(n2.tag,xc.Vector([F/2.0,0]))
 lp0.newNodalLoad(n2.tag,xc.Vector([F/2.0,0]))
-modelSpace.addLoadCaseToDomain(lPattern) # Append load pattern to domain.
+modelSpace.addLoadCaseToDomain(lp0.name) # Append load pattern to domain.
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 

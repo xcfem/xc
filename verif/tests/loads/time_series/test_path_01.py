@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test constant time series. '''
+''' Test path time series. '''
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

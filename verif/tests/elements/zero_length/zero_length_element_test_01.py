@@ -46,7 +46,7 @@ loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
 ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
+lPatterns.currentTimeSeries= ts.name
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
