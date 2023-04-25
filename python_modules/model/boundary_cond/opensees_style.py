@@ -10,14 +10,13 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es "
 
 # Impone movimiento nulo en todos los DOF of the node.
-def fix(constraintHandler, idNode, gdls):
+def fix(constraintHandler, idNode, dofs):
     ''' Simulates OpenSees fix command.
 
     :param constraintHandler: constraint handler.
     :param idNode: identifier of the node to constraint.
-    :param gdls: degrees of freedom to fix (0: free, 1 fixed).
+    :param dofs: degrees of freedom to fix (0: free, 1 fixed).
     '''
-    sz= len(gdls)
-    for i, gdl in enumerate(gdls):
+    for i, gdl in enumerate(dofs):
         if gdl!=0:
             constraintHandler.newSPConstraint(idNode,i,0.0) # Node id: idNode
