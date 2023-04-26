@@ -45,6 +45,7 @@ class_<XC::PropRecorder, bases<XC::Recorder>, boost::noncopyable >("PropRecorder
   .add_property("getCommitTag",&XC::PropRecorder::getCommitTag)
   .add_property("getCurrentCombinationName",&XC::PropRecorder::getCurrentCombinationName)
   .add_property("getDomain", make_function( &XC::PropRecorder::getDomain, return_internal_reference<>() ),"Returns a reference to the domain.")
+  .add_property("deltaT",&XC::PropRecorder::getDeltaT,&XC::PropRecorder::setDeltaT,"Get/set the time step.")
   ;
 
 class_<XC::NodePropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("NodePropRecorder", no_init)

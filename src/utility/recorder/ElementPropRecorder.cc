@@ -54,7 +54,12 @@ void XC::ElementPropRecorder::setElements(const ID &iElements)
 //! @brief Records object properties when commit is achieved.
 int XC::ElementPropRecorder::record(int commitTag, double timeStamp)
   {
-    callRecordCallback(elements,commitTag,timeStamp);
+    if(deltaT == 0.0 || timeStamp >= nextTimeStampToRecord)
+      {
+        if(deltaT != 0.0) 
+          nextTimeStampToRecord= timeStamp + deltaT; // update time stamp.
+        callRecordCallback(elements,commitTag,timeStamp);
+      }
     return 0;
   }
 

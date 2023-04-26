@@ -35,7 +35,7 @@
 //! @brief Constructor.
 XC::PropRecorder::PropRecorder(int classTag,Domain *ptr_dom)
   : DomainRecorderBase(classTag,ptr_dom), CallbackRecord(), CallbackRestart(),
-  lastCommitTag(-1),lastTimeStamp(-1.0) {}
+  lastCommitTag(-1),lastTimeStamp(-1.0), deltaT(0.0), nextTimeStampToRecord(0.0) {}
 
 double XC::PropRecorder::getCurrentTime(void) const
   { return theDomain->getTimeTracker().getCurrentTime(); }
@@ -66,14 +66,19 @@ void XC::PropRecorder::callSetupCallback(const int &commitTag,const double &time
 
 void XC::PropRecorder::setCallbackRecord(const std::string &str)
   { CallbackRecord= str; }
-std::string XC::PropRecorder::getCallbackRecord(void)
+std::string XC::PropRecorder::getCallbackRecord(void) const
   { return CallbackRecord; }
 void XC::PropRecorder::setCallbackSetup(const std::string &str)
   { CallbackSetup= str; }
-std::string XC::PropRecorder::getCallbackSetup(void)
+std::string XC::PropRecorder::getCallbackSetup(void) const
   { return CallbackSetup; }
 void XC::PropRecorder::setCallbackRestart(const std::string &str)
   { CallbackRestart= str; }
-std::string XC::PropRecorder::getCallbackRestart(void)
+std::string XC::PropRecorder::getCallbackRestart(void) const
   { return CallbackRestart; }
 
+void XC::PropRecorder::setDeltaT(const double &d)
+  { deltaT= d; }
+
+double XC::PropRecorder::getDeltaT(void) const
+  { return this->deltaT; }

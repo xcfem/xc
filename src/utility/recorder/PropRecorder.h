@@ -45,7 +45,10 @@ class PropRecorder: public DomainRecorderBase
     std::string CallbackRestart; //!< Python script to execute on each restart call.
     int lastCommitTag; //!< CommitTag of the last record call.
     double lastTimeStamp; //!< TimeStamp of the last record call.
-
+    
+    double deltaT; //!< increment between records.
+    double nextTimeStampToRecord; //! next time to trigger the record process.
+    
     void callSetupCallback(const int &,const double &);
     template <class Container>
     void callRecordCallback(Container &c,const int &,const double &);
@@ -65,11 +68,13 @@ class PropRecorder: public DomainRecorderBase
     int getCommitTag(void) const;
 
     void setCallbackSetup(const std::string &);
-    std::string getCallbackSetup(void);
+    std::string getCallbackSetup(void) const;
     void setCallbackRecord(const std::string &);
-    std::string getCallbackRecord(void);
+    std::string getCallbackRecord(void) const;
     void setCallbackRestart(const std::string &);
-    std::string getCallbackRestart(void);
+    std::string getCallbackRestart(void) const;
+    void setDeltaT(const double &);
+    double getDeltaT(void) const;
 
   };
 

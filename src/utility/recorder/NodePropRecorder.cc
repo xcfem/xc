@@ -55,7 +55,12 @@ void XC::NodePropRecorder::setNodes(const ID &iNodes)
 //! @brief Records object properties when commit is triggered.
 int XC::NodePropRecorder::record(int commitTag, double timeStamp)
   {
-    callRecordCallback(nodes,commitTag,timeStamp);
+    if(deltaT == 0.0 || timeStamp >= nextTimeStampToRecord)
+      {
+        if(deltaT != 0.0) 
+          nextTimeStampToRecord= timeStamp + deltaT; // update time stamp.
+        callRecordCallback(nodes,commitTag,timeStamp);
+      }
     return 0;
   }
 
