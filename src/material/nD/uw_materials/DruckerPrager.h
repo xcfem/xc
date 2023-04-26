@@ -136,9 +136,9 @@ class DruckerPrager: public NDMaterial
 
 
     //parameters
-    static const double one3 ;
-    static const double two3 ;
-    static const double root23 ;
+    const double one3= 1.0 / 3.0 ;
+    const double two3= 2.0 / 3.0 ;
+    const double root23= sqrt(2.0/3.0) ;
   public:
     DruckerPrager(int tag, int classTag);
     DruckerPrager(int tag, int classTag, double bulk, double shear,

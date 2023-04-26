@@ -43,9 +43,6 @@
 #include <domain/component/Parameter.h>
 
 
-const double XC::DruckerPrager::one3= 1.0 / 3.0 ;
-const double XC::DruckerPrager::two3= 2.0 / 3.0 ;
-const double XC::DruckerPrager::root23= sqrt(2.0/3.0) ;
 
 // #include <elementAPI.h>
 // #define OPS_Export 
