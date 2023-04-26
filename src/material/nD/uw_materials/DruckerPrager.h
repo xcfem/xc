@@ -112,7 +112,7 @@ class DruckerPrager: public NDMaterial
     double mAlpha2_n; //!< alpha2_n
     double mAlpha2_n1; //!< alpha2_n+1
 
-    int mElastFlag; //!< Flag to determine elastic behavior
+    int mElastFlag; //!< Flag to determine elastic behavior 0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default)
     int mFlag;
 
     Matrix mCe; //!< elastic tangent stiffness matrix

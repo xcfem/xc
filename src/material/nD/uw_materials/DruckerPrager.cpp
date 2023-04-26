@@ -52,62 +52,6 @@ const double XC::DruckerPrager::root23= sqrt(2.0/3.0) ;
 
 // static int numDruckerPragerMaterials = 0;
 
-// OPS_Export void *
-// OPS_NewDruckerPragerMaterial(void)
-// {
-//   if (numDruckerPragerMaterials == 0) {
-//     numDruckerPragerMaterials++;
-//     std::cerr << "DruckerPrager nDmaterial - Written: K.Petek, P.Mackenzie-Helnwein, P.Arduino, U.Washington\n";
-//   }
-
-//   // Pointer to a uniaxial material that will be returned
-//   NDMaterial *theMaterial = 0;
-
-//   int numArgs = OPS_GetNumRemainingInputArgs();
-
-//   if (numArgs < 12) {
-//     std::cerr << "Want: nDMaterial DruckerPrager tag? K? G? sigma_y? rho? rho_bar? Kinf? Ko? delta1? delta2? H? theta? <massDensity? atm?>" << std::endl;
-//     return 0;	
-//   }
-  
-//   int tag;
-//   double dData[14];
-
-//   int numData = 1;
-//   if (OPS_GetInt(&numData, &tag) != 0) {
-//     std::cerr << "WARNING invalid nDMaterial DruckerPrager material  tag" << std::endl;
-//     return 0;
-//   }
-//   if (numArgs == 12) {
-//       numData = 11;
-//   } else if (numArgs == 13) {
-//       numData = 12;
-//   } else {
-// 	  numData = 13;
-//   }
-
-//   if (OPS_GetDouble(&numData, dData) != 0) {
-//     std::cerr << "WARNING invalid material data for nDMaterial DruckerPrager material  with tag: " << tag << std::endl;
-//     return 0;
-//   }
-
-//   if (numArgs == 12) {
-// 	theMaterial = new DruckerPrager(tag, 0, dData[0], dData[1], dData[2], dData[3], dData[4], dData[5],
-// 				    dData[6], dData[7], dData[8], dData[9], dData[10]);
-//   } else if (numArgs  == 13) {
-//     theMaterial = new DruckerPrager(tag, 0, dData[0], dData[1], dData[2], dData[3], dData[4], dData[5],
-// 				    dData[6], dData[7], dData[8], dData[9], dData[10], dData[11]);
-//   } else {
-//     theMaterial = new DruckerPrager(tag, 0, dData[0], dData[1], dData[2], dData[3], dData[4], dData[5],
-// 				    dData[6], dData[7], dData[8], dData[9], dData[10], dData[11], dData[12]);
-//   }
-
-//   if (theMaterial == 0) {
-//     std::cerr << "WARNING ran out of memory for nDMaterial DruckerPrager material  with tag: " << tag << std::endl;
-//   }
-
-//   return theMaterial;
-// }
 
 //! @brief Compute derived quantities.
 void XC::DruckerPrager::computeMTo(void)
@@ -190,13 +134,13 @@ void XC::DruckerPrager::initialize(void)
     mBeta_n.Zero();
     mBeta_n1.Zero();
 
-	mAlpha1_n = 0.0;
-	mAlpha1_n1 = 0.0;
-	mAlpha2_n = 0.0;
-	mAlpha2_n1 = 0.0;
+    mAlpha1_n = 0.0;
+    mAlpha1_n1 = 0.0;
+    mAlpha2_n = 0.0;
+    mAlpha2_n1 = 0.0;
     mFlag = 1;
 
- 	mHprime = (1-mtheta)*mHard;
+    mHprime = (1-mtheta)*mHard;
 
     // 2nd order Identity Tensor
     mI1.Zero();
@@ -418,14 +362,18 @@ XC::NDMaterial *XC::DruckerPrager::getCopy(void) const
 const std::string &XC::DruckerPrager::getType(void) const
   {
     static std::string retval= "";
-    std::cerr << "XC::DruckerPrager::getType -- subclass responsibility\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet."
+              << std::endl; 
     exit(-1);
     return retval;
   }
 
 int XC::DruckerPrager::getOrder (void) const
   {
-    std::cerr << "XC::DruckerPrager::getOrder -- subclass responsibility\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet."
+              << std::endl; 
     exit(-1);
     return 0;
   }
@@ -779,22 +727,23 @@ void XC::DruckerPrager:: plastic_integrator( )
 }
 
 int XC::DruckerPrager::updateElasticParam( )
-{
+  {
     double Sigma_mean = 0.0;
-	if ( mElastFlag == 1 && mFlag == 1){
-		Sigma_mean = -one3*(mSigma(0)+mSigma(1)+mSigma(2));
-        if (Sigma_mean < 0.0) Sigma_mean = 0.0;  // prevents modulus update for cases where tension exists 
-        mK = mKref * pow(1+(Sigma_mean/mPatm), 0.5);
-        mG = mGref * pow(1+(Sigma_mean/mPatm), 0.5);
-   		mCe  = mK * mIIvol + 2*mG*mIIdev;
-        mFlag = 0;
-		//std::cerr << "Plastic Integrator -->" << "K = " << mK  << "  G =" << mG << std::endl;
-	} else if ( mElastFlag != 1 ){
-        mFlag = 1;
-	}
-
-	return 0;
-}
+    if( mElastFlag == 1 && mFlag == 1)
+      {
+        Sigma_mean = -one3*(mSigma(0)+mSigma(1)+mSigma(2));
+        if (Sigma_mean < 0.0)
+	  Sigma_mean= 0.0;  // prevents modulus update for cases where tension exists 
+        mK= mKref * pow(1+(Sigma_mean/mPatm), 0.5);
+        mG= mGref * pow(1+(Sigma_mean/mPatm), 0.5);
+	mCe= mK * mIIvol + 2*mG*mIIdev;
+        mFlag= 0;
+	    //std::cerr << "Plastic Integrator -->" << "K = " << mK  << "  G =" << mG << std::endl;
+      }
+    else if ( mElastFlag != 1 )
+      { mFlag = 1; }
+    return 0;
+  }
 
 double XC::DruckerPrager::Kiso(double alpha1)
 {
@@ -832,6 +781,12 @@ XC::Matrix XC::DruckerPrager::getValues(const std::string &cod, bool silent) con
 	const size_t sz= state.Size();
 	retval.resize(1,sz);
 	retval.putRow(0,state);
+      }
+    else if(cod == "stage")
+      {
+	const int stage= this->getMaterialStage();
+	retval.resize(1,1);
+	retval(0,0)= static_cast<double>(stage);
       }
     else
       retval= NDMaterial::getValues(cod, silent);
@@ -909,7 +864,9 @@ int XC::DruckerPrager::setParameter(const std::vector<std::string> &argv, Parame
     else
       {
         // invalid parameter type
-	std::cerr << "WARNING: invalid parameter command for DruckerPrager nDMaterial with tag: " << this->getTag() << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: invalid parameter command for DruckerPrager nDMaterial with tag: "
+		  << this->getTag() << std::endl;
         return -1;
       }
     return -1;
@@ -921,16 +878,13 @@ int XC::DruckerPrager::getMaterialStage(void) const
   { return mElastFlag; }
 
 //! @brief Update material stage.
-//! @param stage: stage number if stage==0 running linear elastic for soil
-//!               elements, so excess pore pressure should be zero. If stage==1
-//!               running plastic soil element behavior, so this marks the end
-//!               of the "consol" gravity loading.
+//! @param stage: 0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default).
 void XC::DruckerPrager::updateMaterialStage(int stage)
   {
-    if(stage !=0 && stage !=1)
+    if(stage !=0 && stage !=1 && stage !=2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING stage must be 0 or 1"
+		  << "; WARNING stage must be 0, 1 or 2."
 		  << std::endl;
         exit(-1);
       }
