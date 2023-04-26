@@ -175,8 +175,10 @@ class DruckerPrager: public NDMaterial
     int setParameter(const std::vector<std::string> &, Parameter &);
     int updateParameter(int parameterID, Information &info);
 
-    void setup(void);
+    void computeMTo(void);
     void initialize(); // initializes variables
+    void setup(const int &elastFlag= 2);
+    
     // Density.
     double getRho(void) const;
     void setRho(const double &r);

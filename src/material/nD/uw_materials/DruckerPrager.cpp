@@ -110,7 +110,7 @@ const double XC::DruckerPrager::root23= sqrt(2.0/3.0) ;
 // }
 
 //! @brief Compute derived quantities.
-void XC::DruckerPrager::setup(void)
+void XC::DruckerPrager::computeMTo(void)
   {
     mK= mKref; // bulk modulus.
     mG= mGref;
@@ -142,16 +142,7 @@ XC::DruckerPrager::DruckerPrager(int tag, int classTag, double bulk, double shea
     mdelta2=  d2;
     mHard=  H;
     mtheta=  t;
-    setup();
-    // set the elastic flag
-    //  0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default)
-    mElastFlag = 2;
-
-    // Use these values to deactivate yield surface 1 - Create Pure Tension Cutoff
-    //msigma_y = 1e10;
-    //mTo      = 100;
-
-    this->initialize();
+    setup(2);
   }
 
 
@@ -178,12 +169,11 @@ XC::DruckerPrager::DruckerPrager(int tag, int classTag)
     mdelta2  =  0.0;
     mHard    =  0.0;
     mtheta   =  0.0;
-	mTo      =  0.0;
-
-	mElastFlag = 2;
-
+    
+    mTo      =  0.0;
+    mElastFlag = 2;
     this->initialize();
-}
+  }
 
 //! @brief Destructor.
 XC::DruckerPrager::~DruckerPrager(void)
@@ -250,6 +240,18 @@ void XC::DruckerPrager::initialize(void)
     mState.Zero();
   }
 
+void XC::DruckerPrager::setup(const int &elastFlag)
+  {
+    computeMTo();
+    // set the elastic flag
+    //  0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default)
+    mElastFlag = 2;
+
+    // Use these values to deactivate yield surface 1 - Create Pure Tension Cutoff
+    //msigma_y = 1e10;
+    //mTo      = 100;
+    this->initialize();    
+  } 
 
 XC::NDMaterial *XC::DruckerPrager::getCopy(const std::string &type) const
   {

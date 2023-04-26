@@ -830,7 +830,7 @@ def defTemplate3Dep(preprocessor, name, elasticMaterial, yieldSurface, potential
     return retval
 
 # Create nDMaterial using Template Elastic-Plastic Model
-def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, delta1, H, theta, delta2, mDen):
+def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, delta1, H, theta, delta2, mDen, elastFlag= 2):
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("drucker-prager_3d", name)
     retval.k= k
@@ -845,8 +845,7 @@ def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, 
     retval.theta= theta
     retval.delta2= delta2
     retval.rho= mDen
-    retval.setup()
-    retval.initialize()
+    retval.setup(elastFlag)
     return retval
 
 class MaterialData(BasicElasticMaterial):
