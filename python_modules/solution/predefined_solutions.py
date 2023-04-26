@@ -99,6 +99,7 @@ class SolutionProcedure(object):
         self.solutionStrategy= None
         self.solAlgo= None
         self.integrator= None
+        self.integratorParameters= xc.Vector([])
         self.soe= None
         self.solver= None
         self.analysis= None
@@ -166,11 +167,11 @@ class SolutionProcedure(object):
         :param integratorType: type of integrator to use.
         '''
         if(integratorType in ['load_control_integrator','eigen_integrator','standard_eigen_integrator', 'ill-conditioning_integrator', 'linear_buckling_integrator']):
-            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType, self.integratorParameters)
         elif(integratorType=='newmark_integrator'):
             self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([self.gamma, self.beta]))
         elif(integratorType=='displacement_control_integrator'):
-            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType, self.integratorParameters)
             self.integrator.nodeTag= self.dispControlNode.tag
             self.integrator.dof= self.dispControlDof
             self.integrator.increment= self.dispControlIncrement
