@@ -49,15 +49,20 @@ materialTangent= mat.getTangent()
 materialTangentNorm= materialTangent.Norm()
 ratio2= abs(materialTangentNorm-88811.70198109705)/88811.70198109705
 
+err= (mat.k-k)**2+(mat.G-G)**2+(mat.sigY-sigY)**2+(mat.mrho-rho)**2+(mat.mrhoBar-rhoBar)**2+(mat.Kinf-Kinf)**2+(mat.Ko-Ko)**2+(mat.delta1-delta1)**2+(mat.Hard-H)**2+(mat.theta-theta)**2+(mat.delta2-delta2)**2+(mat.rho-mDen)**2
+
+err= math.sqrt(err)
+
 '''
 print('material tangent: ', materialTangent)
 print('material norm: ', materialTangentNorm)
+print(err)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-12) and (ratio2<1e-12):
+if (ratio1<1e-12) and (ratio2<1e-12) and err<1e-12:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
