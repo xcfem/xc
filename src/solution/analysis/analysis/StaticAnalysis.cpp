@@ -125,7 +125,7 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
 		  << " after " << getConvergenceTest()->getCurrentIter()-1
 		  << " iterations." << std::endl;
 	if(num_step>1)
-	  std::cerr << stepNumberMessage;
+	  std::cerr << stepNumberMessage << std::endl;
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -151,7 +151,7 @@ int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
 		      << " at step " << num_step << " of "
 		      << numSteps << std::endl;
 	    if(num_step>1)
-    	      std::cerr << stepNumberMessage;
+    	      std::cerr << stepNumberMessage << std::endl;
             return -1;
           }
       }
@@ -170,7 +170,7 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
 	if(num_step>1)
-          std::cerr << stepNumberMessage;
+          std::cerr << stepNumberMessage << std::endl;
         getDomainPtr()->revertToLastCommit();
         retval= -2;
       }
@@ -189,7 +189,7 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
 	if(num_step>1)
-          std::cerr << stepNumberMessage;
+          std::cerr << stepNumberMessage << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -3;
@@ -214,7 +214,7 @@ int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
 		      << getDomainPtr()->getTimeTracker().getCurrentTime()
 		      << std::endl;
 	    if(num_step>1)
-              std::cerr << stepNumberMessage;
+              std::cerr << stepNumberMessage << std::endl;
             getStaticIntegratorPtr()->revertToLastStep();
             return -5;
           }
@@ -235,7 +235,7 @@ int XC::StaticAnalysis::commit_step(int num_step)
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
 	if(num_step>1)
-          std::cerr << stepNumberMessage;
+          std::cerr << stepNumberMessage << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -4;
