@@ -143,30 +143,31 @@ void XC::SolutionStrategy::free_integrator(void)
 bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector &params)
   {
     free_integrator();
+    const int numberOfParameters= params.Size();
 
     if(nmb=="arc_length_integrator")
       {
         double arc_length= 1.0;
-        if(params.Size()>0)
+        if(numberOfParameters>0)
           arc_length= params[0];
         double alpha= 1.0;
-        if(params.Size()>1)
+        if(numberOfParameters>1)
           alpha= params[1];
         theIntegrator= new ArcLength(this,arc_length,alpha);
       }
     else if(nmb=="arc_length1_integrator")
       {
         double arc_length= 1.0;
-        if(params.Size()>0)
+        if(numberOfParameters>0)
           arc_length= params[0];
         double alpha= 1.0;
-        if(params.Size()>1)
+        if(numberOfParameters>1)
           alpha= params[1];
         theIntegrator= new ArcLength1(this,arc_length,alpha);
       }
     else if(nmb=="displacement_control_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -174,7 +175,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="distributed_displacement_control_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -183,30 +184,42 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     else if(nmb=="HS_constraint_integrator")
       {
         double arc_length= 1.0;
-        if(params.Size()>0)
+        if(numberOfParameters>0)
           arc_length= params[0];
         double psi_u= 1.0;
-        if(params.Size()>1)
+        if(numberOfParameters>1)
           psi_u= params[1];
         double psi_f= 1.0;
-        if(params.Size()>2)
+        if(numberOfParameters>2)
           psi_f= params[2];
         double u_ref= 1.0;
-        if(params.Size()>3)
+        if(numberOfParameters>3)
           u_ref= params[3];
         theIntegrator= new HSConstraint(this,arc_length,psi_u,psi_f,u_ref);
       }
     else if(nmb=="load_control_integrator")
       {
-	if(params.Size()>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
-	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
-        theIntegrator= new LoadControl(this);
+	double deltaLambda= 1.0;
+	int numIncr= 1;
+	double minLambda=1.0;
+	double maxLambda=1.0;
+	if(numberOfParameters>0)
+	  {
+	    deltaLambda= params[0];
+	    minLambda= deltaLambda;
+	    maxLambda= deltaLambda;
+	  }
+	if(numberOfParameters>1)
+	  numIncr= static_cast<int>(params[1]);
+	if(numberOfParameters>2)
+	  minLambda= params[2];
+	if(numberOfParameters>3)
+	  maxLambda= params[3];
+        theIntegrator= new LoadControl(this,deltaLambda, numIncr, minLambda, maxLambda);
       }
     else if(nmb=="load_path_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -215,22 +228,22 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     else if(nmb=="min_unbal_disp_norm_integrator")
       {
         double lambda1= 1.0;
-        if(params.Size()>0)
+        if(numberOfParameters>0)
           lambda1= params[0];
         int specnum_iter_step= 1;
-        if(params.Size()>1)
+        if(numberOfParameters>1)
           specnum_iter_step= params[1];
         double dlambda1min= 1.0;
-        if(params.Size()>2)
+        if(numberOfParameters>2)
           dlambda1min= params[2];
         double dlambda1max= 1.0;
-        if(params.Size()>3)
+        if(numberOfParameters>3)
           dlambda1max= params[3];
         theIntegrator= new MinUnbalDispNorm(this,lambda1,specnum_iter_step,dlambda1min,dlambda1max);
       }
     else if(nmb=="eigen_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -238,7 +251,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="linear_buckling_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -246,7 +259,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="ill-conditioning_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -254,7 +267,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="standard_eigen_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -262,7 +275,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="alpha_os_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -270,7 +283,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="alpha_os_generalized_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -278,7 +291,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="central_difference_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -286,7 +299,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="central_difference_alternative_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -294,7 +307,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="central_difference_no_damping_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -302,7 +315,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="collocation_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -310,7 +323,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="collocation_hybrid_simulation_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -318,7 +331,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="HHT_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -326,7 +339,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="HHT1_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -334,7 +347,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="HHT_explicit_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -342,7 +355,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="HHT_generalized_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -350,7 +363,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="HHT_generalized_explicit_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -358,7 +371,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="HHT_hybrid_simulation_integrator")
       {
-        if(params.Size()>0)
+        if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -367,33 +380,33 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     else if(nmb=="newmark_integrator")
       {
         double gamma= 0.5;
-        if(params.Size()>0)
+        if(numberOfParameters>0)
           gamma= params[0];
         double beta= .25;
-        if(params.Size()>1)
+        if(numberOfParameters>1)
           beta= params[1];
         theIntegrator= new Newmark(this,gamma,beta);
       }
     else if(nmb=="newmark1_integrator")
       {
         double gamma= 0.5;
-        if(params.Size()>0)
+        if(numberOfParameters>0)
           gamma= params[0];
         double beta= .25;
-        if(params.Size()>1)
+        if(numberOfParameters>1)
           beta= params[1];
         theIntegrator= new Newmark1(this,gamma,beta);
       }
     else if(nmb=="newmark_explicit_integrator")
       {
         double gamma= 0.5;
-        if(params.Size()>0)
+        if(numberOfParameters>0)
           gamma= params[0];
         theIntegrator= new NewmarkExplicit(this,gamma);
       }
     else if(nmb=="newmark_hybrid_simulation_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
@@ -401,7 +414,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="wilson_theta_integrator")
       {
-	if(params.Size()>0)
+	if(numberOfParameters>0)
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
