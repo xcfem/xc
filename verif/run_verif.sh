@@ -665,6 +665,7 @@ python tests/loads/time_series/test_ground_motion_08.py
 echo "$BLEU" "    Path time series tests." "$NORMAL"
 python tests/loads/time_series/test_path_01.py
 python tests/loads/time_series/test_path_time_01.py
+python tests/loads/time_series/test_path_time_02.py
 echo "$BLEU" "  Loads tests." "$NORMAL"
 python tests/loads/beam2dNodalLoad.py
 python tests/loads/beam2dNodalLoad02.py
@@ -739,6 +740,8 @@ python tests/loads/dynamic_loads/test_node_load_history_01.py
 python tests/loads/dynamic_loads/test_node_load_history_02.py
 python tests/loads/dynamic_loads/test_node_load_history_03.py
 python tests/loads/dynamic_loads/test_node_load_history_04.py
+echo "$BLEU" "    Path time loads." "$NORMAL"
+python tests/loads/path_time_loads/test_path_time_load_01.py
 echo "$BLEU" "    Computing load combination tests." "$NORMAL"
 python tests/loads/combinations/add_loads_01.py
 python tests/loads/combinations/test_add_load_cases.py
@@ -827,6 +830,7 @@ python tests/materials/xc_materials/nD/template_3d_ep/test_von_mises_material_01
 echo "$BLEU" "      UW materials." "$NORMAL"
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_01.py
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_02.py
+python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_03.py
 
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
 python tests/materials/xc_materials/sections/test_material_elastic_membrane_plate_section_01.py

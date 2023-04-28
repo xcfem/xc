@@ -320,7 +320,7 @@ int XC::DruckerPrager::commitState(void)
   {
     mEpsilon_n_p= mEpsilon_n1_p;
     mAlpha1_n= mAlpha1_n1; 
-	mAlpha2_n= mAlpha2_n1; 
+    mAlpha2_n= mAlpha2_n1; 
     mBeta_n= mBeta_n1;
 
     return 0;
@@ -366,7 +366,7 @@ const std::string &XC::DruckerPrager::getType(void) const
     return retval;
   }
 
-int XC::DruckerPrager::getOrder (void) const
+int XC::DruckerPrager::getOrder(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet."
@@ -378,30 +378,7 @@ int XC::DruckerPrager::getOrder (void) const
 //! @brief Plasticity integration routine
 void XC::DruckerPrager::plastic_integrator(void) 
   {
-    double Invariant_1;
-    double Invariant_ep;
-    double norm_ep;
-    double norm_dev_ep;
-    Vector epsilon_e(6);
-    Vector s(6);
-    Vector eta(6);
-    Vector dev_ep(6);
-    Vector Jact(2);
-
-    double fTOL;
-    double gTOL;
-    fTOL= 0.0;
-    gTOL= -1.0e-10;
 		
-    double alpha1;			// hardening parameter for DP surface
-    double alpha2;			// hardening parameter for tension cut-off
-    Vector n(6);			// normal to the yield surface in strain space
-    Vector R(2);			// residual vector
-    Vector gamma(2);		// vector of consistency parameters
-    Vector dgamma(2);		// incremental vector of consistency parameters
-    Matrix g(2,2);			// jacobian of the corner region (return map)
-    Matrix g_contra(2,2);	// inverse of jacobian of the corner region
-
     // set trial state:
 
     // epsilon_n1_p_trial= ..._n1_p= ..._n_p
@@ -416,20 +393,21 @@ void XC::DruckerPrager::plastic_integrator(void)
     mBeta_n1= mBeta_n;
 
     // epsilon_elastic= epsilon_n+1 - epsilon_n_p
-    epsilon_e= mEpsilon - mEpsilon_n1_p;
+    Vector epsilon_e= mEpsilon - mEpsilon_n1_p;
 
     // trial stress
     mSigma= mCe*epsilon_e;
 
     // deviator stress tensor: s= 2G * IIdev * epsilon_e
     //I1_trial
-    Invariant_1= ( mSigma(0) + mSigma(1) + mSigma(2) );
+    double Invariant_1= ( mSigma(0) + mSigma(1) + mSigma(2) );
+    
 
     // s_n+1_trial
-    s= mSigma - (Invariant_1/3.0)*mI1;
+    Vector s= mSigma - (Invariant_1/3.0)*mI1;
 
     //eta_trial= s_n+1_trial - beta_n;
-    eta= s - mBeta_n;
+    Vector eta= s - mBeta_n;
 		
     // compute yield function value (contravariant norm)
     double norm_eta= sqrt(eta(0)*eta(0) + eta(1)*eta(1) + eta(2)*eta(2) + 2*(eta(3)*eta(3) + eta(4)*eta(4) + eta(5)*eta(5)));
@@ -447,6 +425,11 @@ void XC::DruckerPrager::plastic_integrator(void)
     bool okay;	// boolean variable to ensure satisfaction of multisurface kuhn tucker conditions
 
     int count= 1;
+    Vector Jact(2);
+    double Invariant_ep;
+    double norm_ep, norm_dev_ep;
+    const double fTOL= 0.0;
+    const double gTOL= -1.0e-10;
     if(((f1<=fTOL) && (f2<=fTOL)) || (mElastFlag < 2))
       {
 	okay= true;
@@ -459,7 +442,7 @@ void XC::DruckerPrager::plastic_integrator(void)
 
 	norm_ep= sqrt(mEpsilon_n1_p(0)*mEpsilon_n1_p(0) + mEpsilon_n1_p(1)*mEpsilon_n1_p(1) + mEpsilon_n1_p(2)*mEpsilon_n1_p(2) + 0.5*(mEpsilon_n1_p(3)*mEpsilon_n1_p(3) + mEpsilon_n1_p(4)*mEpsilon_n1_p(4) + mEpsilon_n1_p(5)*mEpsilon_n1_p(5)));
 
-	dev_ep= mEpsilon_n1_p - one3*Invariant_ep*mI1;
+        Vector dev_ep= mEpsilon_n1_p - one3*Invariant_ep*mI1;
 
         norm_dev_ep= sqrt(dev_ep(0)*dev_ep(0) + dev_ep(1)*dev_ep(1) + dev_ep(2)*dev_ep(2) + 0.5*(dev_ep(3)*dev_ep(3) + dev_ep(4)*dev_ep(4) + dev_ep(5)*dev_ep(5)));
 
@@ -478,30 +461,36 @@ void XC::DruckerPrager::plastic_integrator(void)
 	// determine number of active surfaces.  size & fill Jact
 	if( (f1 > fTOL ) && (f2 <= fTOL) )
 	  {
-		// f1 surface only
-		Jact(0)= 1;
-		Jact(1)= 0;
+	    // f1 surface only
+	    Jact(0)= 1;
+	    Jact(1)= 0;
 	  }
 	else if( (f1 <= fTOL ) && (f2 > fTOL) )
 	  {
-		// f2 surface only
-		Jact(0)= 0;
-		Jact(1)= 1;
+	    // f2 surface only
+	    Jact(0)= 0;
+	    Jact(1)= 1;
 	  }
 	else if( (f1 > fTOL ) && (f2 > fTOL) )
 	  {
-		// both surfaces active
-		Jact(0)= 1;
-		Jact(1)= 1;
+	    // both surfaces active
+	    Jact(0)= 1;
+	    Jact(1)= 1;
 	  }
       } 
 
-    //-----------------MultiSurface Placity Return Map--------------------------------------
-    while (!okay)
+    int loopCounter= 0;
+    double alpha1= mAlpha1_n; // hardening parameter for DP surface
+    double alpha2= mAlpha2_n; // hardening parameter for tension cut-off
+    Matrix g(2,2); // jacobian of the corner region (return map)
+    Matrix g_contra(2,2); // inverse of jacobian of the corner region
+    Vector n(6); // normal to the yield surface in strain space
+    Vector R(2); // residual vector    
+    Vector gamma(2); // vector of consistency parameters
+    Vector dgamma(2);	// incremental vector of consistency parameters
+    //-----------------MultiSurface Placity Return Map-------------------------
+    while(!okay)
       {
-	alpha1= mAlpha1_n;
-	alpha2= mAlpha2_n;
-
 	//  n= eta / norm_eta;  (contravaraint)
 	if(norm_eta < 1.0e-13)
 	  { n.Zero(); }
@@ -513,10 +502,8 @@ void XC::DruckerPrager::plastic_integrator(void)
 	gamma.Zero(); 
 	dgamma.Zero();
 	// initialize g such that det(g)= 1
-	g(0,0)= 1; 
-	g(1,1)= 1;
-	g(1,0)= 0;
-	g(0,1)= 0;
+	g(0,0)= 1; g(1,0)= 0;
+	g(1,1)= 1; g(0,1)= 0;
 
 	// Newton procedure to compute nonlinear gamma1 and gamma2
 	//initialize terms
@@ -615,10 +602,10 @@ void XC::DruckerPrager::plastic_integrator(void)
 	  {
 	    if((gamma(0) <= gTOL) && (gamma(1) > gTOL))
 	      {
-		    // okay= false;
-		    Jact(0)= 0;
-		    Jact(1)= 1;
-		    count += 1;
+		// okay= false;
+		Jact(0)= 0;
+		Jact(1)= 1;
+		count += 1;
 	      }
 	    else if((gamma(0) > gTOL) && (gamma(1) <= gTOL))
 	      {
@@ -639,12 +626,20 @@ void XC::DruckerPrager::plastic_integrator(void)
 
 	if( count > 3 )
 	  {
-	    std::cerr << "Jact= " << Jact;
-	    std::cerr << "count= " << count << std::endl;
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; Jact= " << Jact
+		      << "count= " << count << std::endl;
 	  }
-
+	loopCounter++;
+	if(loopCounter>100)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; too much loops. Something went wrong. Exiting"
+		      << "count= " << count
+		      << "loop counter: " << loopCounter << std::endl;
+	    exit(-1);
+	  }
       } // end of while(!okay) loop
-
 
     //update everything and exit!
 
@@ -662,10 +657,7 @@ void XC::DruckerPrager::plastic_integrator(void)
     n_covar(3)= 2*n(3);
     n_covar(4)= 2*n(4);
     n_covar(5)= 2*n(5);
-    std::cout << std::endl << "before: mEpsilon_n1_p= " << mEpsilon_n1_p << std::endl;
-    std::cout << "mrho_bar= " << mrho_bar << std::endl;
     mEpsilon_n1_p= mEpsilon_n_p + (mrho_bar*gamma(0) + gamma(1))*mI1 + gamma(0)*n_covar;
-    std::cout << "after: mEpsilon_n1_p= " << mEpsilon_n1_p << std::endl << std::endl;
 
            
     Invariant_ep= mEpsilon_n1_p(0)+mEpsilon_n1_p(1)+mEpsilon_n1_p(2);
@@ -673,12 +665,12 @@ void XC::DruckerPrager::plastic_integrator(void)
     norm_ep= sqrt(mEpsilon_n1_p(0)*mEpsilon_n1_p(0) + mEpsilon_n1_p(1)*mEpsilon_n1_p(1) + mEpsilon_n1_p(2)*mEpsilon_n1_p(2)
 	       + 0.5*(mEpsilon_n1_p(3)*mEpsilon_n1_p(3) + mEpsilon_n1_p(4)*mEpsilon_n1_p(4) + mEpsilon_n1_p(5)*mEpsilon_n1_p(5)));
 
-    dev_ep= mEpsilon_n1_p - one3*Invariant_ep*mI1;
+    Vector dev_ep= mEpsilon_n1_p - one3*Invariant_ep*mI1;
 
     norm_dev_ep= sqrt(dev_ep(0)*dev_ep(0) + dev_ep(1)*dev_ep(1) + dev_ep(2)*dev_ep(2) + 0.5*(dev_ep(3)*dev_ep(3) + dev_ep(4)*dev_ep(4) + dev_ep(5)*dev_ep(5)));
 
     // update sigma
-    mSigma -= (3*mK*mrho_bar*gamma(0) + 3*mK*gamma(1))*mI1 + 2*mG*gamma(0)*n;
+    mSigma-= (3*mK*mrho_bar*gamma(0) + 3*mK*gamma(1))*mI1 + 2*mG*gamma(0)*n;
 
     s-= 2*mG*gamma(0) * n;
     Invariant_1-= 9*mK*mrho_bar*gamma(0) + 9*mK*gamma(1);
@@ -711,9 +703,18 @@ void XC::DruckerPrager::plastic_integrator(void)
 	b2= 3*mK*mI1;
       }
 
-    Vector temp1= g_contra(0,0)*b1 + g_contra(0,1)*b2;  
-    Vector temp2= mrho_bar*temp1 + g_contra(1,0)*b1 + g_contra(1,1)*b2;
+    const Vector temp1= g_contra(0,0)*b1 + g_contra(0,1)*b2;  
+    const Vector temp2= mrho_bar*temp1 + g_contra(1,0)*b1 + g_contra(1,1)*b2;
 
+    // Avoid zero division error.
+    double gamma0_norm_eta= gamma(0); 
+    if(norm_eta==0)
+      {
+	if(gamma0_norm_eta<gTOL)
+	  { gamma0_norm_eta= 0.0; }
+	else
+	  { gamma0_norm_eta*= 6.023e23; } // Very big number.
+      }
     double NormCep= 0.0;
     for(int i= 0; i < 6; i++)
       {
@@ -722,11 +723,10 @@ void XC::DruckerPrager::plastic_integrator(void)
 	    mCep(i,j)= mCe(i,j)
 			      + 3*mK * mI1(i)*temp2(j)  
 			      + 2*mG * n(i)*temp1(j)
-			      - 4*mG*mG/norm_eta*gamma(0) * (mIIdev(i,j) - n(i)*n(j));
+			      - 4*mG*mG*gamma0_norm_eta * (mIIdev(i,j) - n(i)*n(j));
 	    NormCep += mCep(i,j)*mCep(i,j);
 	  }
       }
-
     if( NormCep < 1e-10)
       {
 	mCep= 1.0e-3 * mCe;

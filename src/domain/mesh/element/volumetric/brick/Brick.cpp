@@ -613,21 +613,21 @@ int XC::Brick::update(void)
 	    //      B(5,0) = shp[2][node];
 	    //      B(5,2) = shp[0][node];
 
-	    const double b00 = shp[0][j];
-	    const double b11 = shp[1][j];
-	    const double b22 = shp[2][j];
-	    const double b30 = shp[1][j];
-	    const double b31 = shp[0][j];
-	    const double b41 = shp[2][j];
-	    const double b42 = shp[1][j];
-	    const double b50 = shp[2][j];
-	    const double b52 = shp[0][j];
+	    const double &b00 = shp[0][j];
+	    const double &b11 = shp[1][j];
+	    const double &b22 = shp[2][j];
+	    const double &b30 = shp[1][j];
+	    const double &b31 = shp[0][j];
+	    const double &b41 = shp[2][j];
+	    const double &b42 = shp[1][j];
+	    const double &b50 = shp[2][j];
+	    const double &b52 = shp[0][j];
 
 	    const Vector &ul = theNodes[j]->getTrialDisp();
 
-	    const double ul0 = ul(0);
-	    const double ul1 = ul(1);
-	    const double ul2 = ul(2);
+	    const double &ul0 = ul(0);
+	    const double &ul1 = ul(1);
+	    const double &ul2 = ul(2);
 
 	    strain(0)+= b00 * ul0;
 	    strain(1)+= b11 * ul1;
@@ -699,12 +699,12 @@ void  XC::Brick::formResidAndTangent( int tang_flag ) const
 	} //end if tang_flag
 
 
-      const double stress0= stress(0);
-      const double stress1= stress(1);
-      const double stress2= stress(2);
-      const double stress3= stress(3);
-      const double stress4= stress(4);
-      const double stress5= stress(5);
+      const double &stress0= stress(0);
+      const double &stress1= stress(1);
+      const double &stress2= stress(2);
+      const double &stress3= stress(3);
+      const double &stress4= stress(4);
+      const double &stress5= stress(5);
 
       //residual and tangent calculations node loops
 
@@ -732,15 +732,15 @@ void  XC::Brick::formResidAndTangent( int tang_flag ) const
 	  //      B(5,0) = shp[2][node];
 	  //      B(5,2) = shp[0][node];
 
-	  const double b00 = shp[0][j];
-	  const double b11 = shp[1][j];
-	  const double b22 = shp[2][j];
-	  const double b30 = shp[1][j];
-	  const double b31 = shp[0][j];
-	  const double b41 = shp[2][j];
-	  const double b42 = shp[1][j];
-	  const double b50 = shp[2][j];
-	  const double b52 = shp[0][j];
+	  const double &b00 = shp[0][j];
+	  const double &b11 = shp[1][j];
+	  const double &b22 = shp[2][j];
+	  const double &b30 = shp[1][j];
+	  const double &b31 = shp[0][j];
+	  const double &b41 = shp[2][j];
+	  const double &b42 = shp[1][j];
+	  const double &b50 = shp[2][j];
+	  const double &b52 = shp[0][j];
 
 	  residJ(0) = b00 * stress0 + b30 * stress3 + b50 * stress5;
 	  residJ(1) = b11 * stress1 + b31 * stress3 + b41 * stress4;

@@ -526,12 +526,42 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator')
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
-
+        
 ### Convenience function
 def plain_newton_raphson_band_gen(prb, maxNumIter= 10):
     solProc= PlainNewtonRaphsonBandGen(prb, maxNumIter= maxNumIter)
     solProc.setup()
     return solProc.analysis
+        
+class TransformationNewtonRaphsonBandGen(SolutionProcedure):
+    ''' Newton-Raphson solution algorithm with a
+        plain constraint handler and a band general
+        SOE solver.
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        '''
+        super(TransformationNewtonRaphsonBandGen,self).__init__(name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
+        self.feProblem= prb
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(TransformationNewtonRaphsonBandGen,self).setup()
+        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator')
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+
 
 class PenaltyNewtonRaphsonBase(SolutionProcedure):
     ''' Base class for penalty modified Newton solution aggregation.'''

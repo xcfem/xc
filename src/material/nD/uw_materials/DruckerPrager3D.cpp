@@ -60,9 +60,9 @@ int XC::DruckerPrager3D::getOrder(void) const
 //get the strain and integrate plasticity equations
 int XC::DruckerPrager3D::setTrialStrain( const Vector &strain_from_element) 
   {
-	mEpsilon = strain_from_element;
-	this->plastic_integrator( ) ;
-	return 0 ;
+    mEpsilon = strain_from_element;
+    this->plastic_integrator( ) ;
+    return 0 ;
   }
 
 
