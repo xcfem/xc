@@ -123,6 +123,8 @@ class LoadPattern: public NodeLocker
     virtual ~LoadPattern(void);
 
     // method to set the associated TimeSeries and Domain
+    const TimeSeries *getTimeSeries(void) const;
+    TimeSeries *getTimeSeries(void);
     virtual void setTimeSeries(TimeSeries *theSeries);
     virtual void setDomain(Domain *theDomain);
     bool addToDomain(void);

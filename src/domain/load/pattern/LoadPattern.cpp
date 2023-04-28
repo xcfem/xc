@@ -152,6 +152,14 @@ std::string XC::LoadPattern::getFactoredName(void) const
     return retval;
   }
 
+//! @brief Return the time series pointer (const version).
+const XC::TimeSeries *XC::LoadPattern::getTimeSeries(void) const
+  { return theSeries; }
+
+//! @brief Return the time series pointer.
+XC::TimeSeries *XC::LoadPattern::getTimeSeries(void)
+  { return theSeries; }
+
 //! @brief Set the time series for the pattern.
 void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
   {

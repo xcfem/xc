@@ -61,7 +61,7 @@ lp0.newNodalLoad(nod2.tag, xc.Vector([0,-1]))
 ## We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-### Define RECORDERS
+### Define recorders
 rBase= []
 recRBase= preprocessor.getDomain.newRecorder("node_prop_recorder",None)
 recRBase.setNodes(xc.ID([nod1.tag]))
@@ -108,8 +108,12 @@ else:
 
 # # Display results
 # import matplotlib.pyplot as plt
-# plt.plot(ti, interpolatedLoadValues,'o')
-# plt.plot(ti, Rzi)
+# plt.plot(ti, interpolatedLoadValues,'o', label='Reference values')
+# plt.plot(ti, Rzi, label='Computed values')
+# plt.legend() # display labels.
+# plt.title("Nodal reaction.")
+# plt.xlabel('T')
+# plt.ylabel('Reaction')
 # plt.show()
 
 

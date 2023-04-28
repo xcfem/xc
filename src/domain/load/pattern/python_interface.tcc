@@ -37,6 +37,18 @@ class_<XC::LoadContainer, bases<CommandEntity>, boost::noncopyable >("LoadContai
   .def("empty",&XC::LoadContainer::empty,"return true if there is no loads.")
   ;
 
+class_<XC::TimeSeries, XC::TimeSeries*, bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
+  .add_property("name", make_function(&XC::TimeSeries::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
+  .def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
+  .def("getDuration",&XC::TimeSeries::getDuration,"Returns time series duration.")
+
+  .def("getPeakFactor",&XC::TimeSeries::getPeakFactor,"Returns time series peak factor")
+  .def("getTimeIncr", &XC::TimeSeries::getTimeIncr)
+  ;
+
+#include "time_series/python_interface.tcc"
+
+XC::TimeSeries *(XC::LoadPattern::*getTimeSeries)(void)= &XC::LoadPattern::getTimeSeries;
 double &(XC::LoadPattern::*getGammaFRef)(void)= &XC::LoadPattern::GammaF;
 XC::ElementalLoad *(XC::LoadPattern::*defElementalLoad)(const std::string &)= &XC::LoadPattern::newElementalLoad;
 XC::LoadContainer &(XC::LoadPattern::*getLoadsRef)(void)= &XC::LoadPattern::getLoads;
@@ -44,8 +56,9 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
   .def("getName", make_function(&XC::LoadPattern::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
   .add_property("name", make_function(&XC::LoadPattern::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
   .add_property("description", make_function( &XC::LoadPattern::getDescription, return_value_policy<return_by_value>() ), &XC::LoadPattern::setDescription,"load case description.")
-.add_property("loadFactor", make_function( &XC::LoadPattern::getLoadFactor, return_value_policy<return_by_value>() ), "Return the current load factor.")
-.add_property("gammaF", make_function( getGammaFRef, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF,"Get/set the partial safety factor for this load pattern.")
+  .add_property("loadFactor", make_function( &XC::LoadPattern::getLoadFactor, return_value_policy<return_by_value>() ), "Return the current load factor.")
+  .add_property("gammaF", make_function( getGammaFRef, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF,"Get/set the partial safety factor for this load pattern.")
+  .add_property("timeSeries",  make_function( getTimeSeries, return_value_policy<return_by_value>() ), &XC::LoadPattern::setTimeSeries,"Get/set the time modulation of the load pattern.")
   .add_property("constant", &XC::LoadPattern::getIsConstant, &XC::LoadPattern::setIsConstant,"determines if the load is constant in time or not.")
   .def("newNodalLoad", &XC::LoadPattern::newNodalLoad,return_internal_reference<>(),"Create a nodal load.")
   .add_property("getNumNodalLoads",&XC::LoadPattern::getNumNodalLoads,"return the number of nodal loads.")
@@ -106,16 +119,6 @@ class_<XC::LoadCombinationGroup, bases<XC::LoadHandlerMember,XC::LoadCombination
   .def("clear", &XC::LoadCombinationGroup::clear)
   ;
 
-class_<XC::TimeSeries, bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
-  .add_property("name", make_function(&XC::TimeSeries::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
-  .def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
-  .def("getDuration",&XC::TimeSeries::getDuration,"Returns time series duration.")
-
-  .def("getPeakFactor",&XC::TimeSeries::getPeakFactor,"Returns time series peak factor")
-  .def("getTimeIncr", &XC::TimeSeries::getTimeIncr)
-  ;
-
-#include "time_series/python_interface.tcc"
 
 class_<XC::TimeSeriesIntegrator , bases<XC::MovableObject>, boost::noncopyable >("TimeSeriesIntegrator", no_init);
 
