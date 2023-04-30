@@ -98,7 +98,7 @@ XC::DruckerPrager::DruckerPrager(int tag, int classTag)
     massDen=  0.0;
     mKref=  0.0;
     mGref=  0.0;
-    mPatm	=  101.0;
+    mPatm=  101.325e3; // one atmosphere of pressure.
     mK=  0.0;
     mG=  0.0;
     msigma_y=  1e+10;
