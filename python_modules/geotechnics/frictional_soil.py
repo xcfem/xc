@@ -19,10 +19,12 @@ __email__= "l.pereztato@gmail.com"
 class FrictionalSoil(object):
     '''Free-running type of soil, such as sand or gravel, whose strength depends on friction between particles.
 
-    :ivar phi:    internal friction angle of the soil
-    :ivar rho:   soil density (mass per unit volume)
+    :ivar phi: internal friction angle of the soil.
+    :ivar rho: soil density (mass per unit volume).
+    :ivar E: Young's modulus.
+    :ivar nu: Poisson's ratio.
     '''
-    def __init__(self, phi:float, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0):
+    def __init__(self, phi:float, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0, E= 1e8, nu= 0.3):
         '''Constructor.
 
         :param phi: (float) internal friction angle of the soil
@@ -30,11 +32,15 @@ class FrictionalSoil(object):
         :param rhoSat: saturated density of the soil (mass per unit volume)
         :param gammaMPhi: (float) partial reduction factor for internal 
                           friction angle of the soil.
+        :param E: Young's modulus (defaults to 1e8 Pa).
+        :param nu: Poisson's ratio (defaults to 0.3).
         '''
         self.phi= phi
         self.gammaMPhi= gammaMPhi
         self.rho= rho
         self.rhoSat= rhoSat
+        self.E= E
+        self.nu= nu
 
     def K0Jaky(self):
         '''Returns Jaky's coefficient (earth pressure at rest).'''
@@ -149,19 +155,29 @@ class FrictionalSoil(object):
         return 0.0
       
     def getMononobeOkabeDryOverpressure(self,H,kv,kh,psi= math.radians(90),delta_ad= 0.0,beta= 0.0,Kas= None,g= 9.81):
-      ''' Overpressure due to seismic action according to Mononobe-Okabe
+        ''' Overpressure due to seismic action according to Mononobe-Okabe
 
-          Args:
-          :H: height of the structure.
-          :kv: seismic coefficient of vertical acceleration.
-          :kh: seismic coefficient of horizontal acceleration.
-          :psi: back face inclination of the structure (< PI/2)
-          :beta: slope inclination of backfill.
-          :delta_ad: angle of friction soil - structure.
-          :Kas: static earth pressure coefficient 
-      '''
-      gamma_soil= self.rho*g
-      phi_d= math.atan(math.tan(self.phi)/1.25)
-      if(Kas is None):
-        Kas= self.Ka()
-      return mononobe_okabe.overpressure_dry(H, gamma_soil, kv, kh, psi, phi_d, delta_ad,beta,Kas)
+            Args:
+            :H: height of the structure.
+            :kv: seismic coefficient of vertical acceleration.
+            :kh: seismic coefficient of horizontal acceleration.
+            :psi: back face inclination of the structure (< PI/2)
+            :beta: slope inclination of backfill.
+            :delta_ad: angle of friction soil - structure.
+            :Kas: static earth pressure coefficient 
+        '''
+        gamma_soil= self.rho*g
+        phi_d= math.atan(math.tan(self.phi)/1.25)
+        if(Kas is None):
+            Kas= self.Ka()
+        return mononobe_okabe.overpressure_dry(H, gamma_soil, kv, kh, psi, phi_d, delta_ad,beta,Kas)
+  
+    def getBulkModulus(self):
+        ''' Return the bulk modulus of the soil.
+        See https://en.wikipedia.org/wiki/Bulk_modulus
+        '''
+        return self.E / (3 * (1 - 2 * self.nu))
+
+    def getShearModulus(self):
+        ''' Return the shear modulus of the soil.'''
+        return self.E / (2 * (1 + self.nu))

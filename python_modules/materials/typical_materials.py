@@ -829,12 +829,30 @@ def defTemplate3Dep(preprocessor, name, elasticMaterial, yieldSurface, potential
       retval.tensorialEvolutionLaw4= tensorialEvolutionLaws.pop(0)
     return retval
 
-# Create nDMaterial using Template Elastic-Plastic Model
-def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, delta1, H, theta, delta2, mDen, elastFlag= 2):
+def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, delta1, H, theta, delta2, mDen, elastFlag= 2, pAtm= 101.325e3):
+    ''' Create Drucker-Prager material.
+
+    :param preprocessor: pre-processor or the finite element problem.
+    :param name: material identifier.
+    :param k: bulk modulus (see https://en.wikipedia.org/wiki/Bulk_modulus).
+    :param G: shear modulus.
+    :param mRho: Drucker-Prager failure surface and associativity volumetric term.
+    :param mRhoBar: related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho
+    :param sigY: Drucker-Prager yield stress.
+    :param Kinf: isotropic hardening Kinf ≥ 0 (defaults to 0.0).
+    :param Ko: nonlinear isotropic strain hardening parameter, Ko ≥ 0 (defaults to 0).
+    :param delta1: nonlinear isotropic strain hardening parameter, delta1 ≥ 0 (defaults to 0).
+    :param H: linear strain hardening parameter, H ≥ 0 (defaults to 0)
+    :param theta: controls relative proportions of isotropic and kinematic hardening, 0 ≤ theta ≤ 1 (defaults to 0).
+    :param delta2: tension softening parameter, delta2 ≥ 0 (defaults to 0).
+    :param mDen: material mass density.
+    :param elastFlag: Flag to determine elastic behavior 0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default)
+    :param pAtm: reference pressure (defaults to one atmosphere).
+    '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("drucker-prager_3d", name)
-    retval.k= k
-    retval.G= G
+    retval.k= k # bulk modulus.
+    retval.G= G # shear modulus.
     retval.sigY= sigY
     retval.mrho= mRho
     retval.mrhoBar= mRhoBar
@@ -845,6 +863,7 @@ def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, 
     retval.theta= theta
     retval.delta2= delta2
     retval.rho= mDen
+    retval.referencePressure= pAtm
     retval.setup(elastFlag)
     return retval
 

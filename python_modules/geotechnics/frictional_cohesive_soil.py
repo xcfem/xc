@@ -20,6 +20,7 @@ import math
 from geotechnics import frictional_soil as fs
 from misc_utils import log_messages as lmsg
 from scipy.optimize import fminbound
+from materials import typical_materials
 
 
 class FrictionalCohesiveSoil(fs.FrictionalSoil):
@@ -27,7 +28,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
 
     :ivar c:    soil cohesion
     '''
-    def __init__(self, phi, c, rho= 2100.0, gammaMPhi= 1.0, gammaMc= 1.0):
+    def __init__(self, phi, c, rho= 2100.0, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
         '''Constructor.
 
         :param phi: (float) internal friction angle of the soil
@@ -36,8 +37,10 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param gammaMPhi: (float) partial reduction factor for internal 
                           friction angle of the soil.
         :param gammaMc: (float) partial reduction factor for soil cohesion.
+        :param E: Young's modulus (defaults to 1e8 Pa).
+        :param nu: Poisson's ratio (defaults to 0.3).
         '''
-        super(FrictionalCohesiveSoil,self).__init__(phi= phi, rho= rho, gammaMPhi= gammaMPhi)
+        super(FrictionalCohesiveSoil,self).__init__(phi= phi, rho= rho, gammaMPhi= gammaMPhi, E= E, nu= nu)
         self.c= c
         self.gammaMc= gammaMc
 
@@ -466,6 +469,55 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         cComp= self.quCohesion(D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
         qComp= self.quQ(q,D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
         return gammaComp+cComp+qComp
+
+    def getDruckerPragerYieldStress(self):
+        ''' Convert Mohr-Coulomb cohesion and friction angle to Drucker-Prager yield stress (sigma_y).'''
+        # convert Mohr-Coulomb phi and c to Drucker-Prager
+        return (6 * self.c * math.cos(self.phi)) / (math.sqrt(3) * (3 - math.sin(self.phi))     )
+    
+    def getDruckerPragerRho(self):
+        ''' Convert Mohr-Coulomb cohesion and friction angle to Drucker-Prager rho.'''
+        # convert Mohr-Coulomb phi and c to Drucker-Prager failure surface and associativity volumetric term (rho).
+        return (2 * math.sqrt(2) * math.sin(self.phi)) / (math.sqrt(3) * (3 - math.sin(self.phi)) )
+
+    def getDruckerPragerMaterial(self, preprocessor, rhoBar= 0.0, Kinf= 0.0, Ko= 0.0, delta1= 0.0, H= 0.0, theta= 0.0, delta2= 0.0, elastFlag= 2, pAtm= 101.325e3):
+        ''' Defines returns a Drucker-Prager material.
+
+        :param preprocessor: pre-processor or the finite element problem.
+        :param rhoBar: related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho (defaults to 0).
+        :param Kinf: isotropic hardening Kinf ≥ 0 (defaults to 0).
+        :param Ko: nonlinear isotropic strain hardening parameter, Ko ≥ 0 (defaults to 0).
+        :param delta1: nonlinear isotropic strain hardening parameter, delta1 ≥ 0 (defaults to 0).
+        :param H: linear strain hardening parameter, H ≥ 0 (defaults to 0)
+        :param theta: controls relative proportions of isotropic and kinematic hardening, 0 ≤ theta ≤ 1 (defaults to 0).
+        :param delta2: tension softening parameter, delta2 ≥ 0 (defaults to 0).
+        :param elastFlag: Flag to determine elastic behavior 0 = elastic+no param update; 1 = elastic+param update; 2 = elastoplastic+no param update (default)
+        :param pAtm: reference pressure (defaults to one atmosphere).
+        '''
+        #---bulk modulus
+        k= self.getBulkModulus()
+        #---shear modulus
+        G= self.getShearModulus()
+        #---yield stress
+        sigY= self.getDruckerPragerYieldStress()
+        #---failure surface and associativity
+        rho= self.getDruckerPragerRho()
+        rhoBar= 0.0 # related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho
+        #---isotropic hardening
+        Kinf= Kinf 
+        Ko= Ko
+        delta1= delta1
+        #---kinematic hardening
+        H= 0.0 # linear strain hardening parameter
+        theta= theta # controls relative proportions of isotropic and kinematic hardening, 0 ≤ theta ≤ 1
+        #---tension softening
+        delta2= delta2 # tension softening parameter, delta2 ≥ 0
+        #---mass density
+        mDen= self.rho
+        if(self.rhoSat):
+            mDen= self.rhoSat
+
+        return typical_materials.defDruckerPrager3d(preprocessor, "druckerPrager3d",k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, elastFlag= elastFlag, pAtm= pAtm)
 
 class StratifiedSoil(object):
     '''Soil with layers with different properties.
