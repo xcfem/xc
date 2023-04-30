@@ -74,7 +74,7 @@ selfWeight= loads.InertialLoad(name='selfWeight', lstSets=[ring], vAccel=xc.Vect
 D=lcases.LoadCase(preprocessor=prep,name="D",loadPType="default",timeSType="constant_ts")
 D.create()
 D.addLstLoads([selfWeight])
-modelSpace.addLoadCaseToDomain("D")
+modelSpace.addLoadCaseToDomain(D.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
