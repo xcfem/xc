@@ -69,7 +69,7 @@ spc6= constraints.newSPConstraint(n2.tag,2,0.0)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 accel= xc.Vector([0,gravity])
 truss.createInertiaLoad(accel)
 
