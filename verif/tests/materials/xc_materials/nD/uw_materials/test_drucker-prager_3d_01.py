@@ -43,7 +43,7 @@ feProblem= xc.FEProblem()
 preprocessor= feProblem.getPreprocessor
 
 # Define material.
-mat= typical_materials.defDruckerPrager3d(preprocessor, "druckerPrager3d",k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen)
+mat= typical_materials.defDruckerPrager3d(preprocessor, "druckerPrager3d",k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, pAtm= 101)
 
 # Check some quantities.
 mTo= mat.mTo

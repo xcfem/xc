@@ -30,9 +30,9 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 ## Define material.
 
 #---bulk modulus
-k= 27777.78
+k= 27777.78 # soil bulk modulus
 #---shear modulus
-G= 9259.26
+G= 9259.26 # soil shear modulus
 #---yield stress
 sigY= 5.0
 #---failure surface and associativity
@@ -50,7 +50,7 @@ delta2= 0.0
 #---mass density
 mDen= 1.7
 
-druckerPragerMaterial= typical_materials.defDruckerPrager3d(preprocessor, "druckerPrager3d",k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen)
+druckerPragerMaterial= typical_materials.defDruckerPrager3d(preprocessor, "druckerPrager3d",k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, pAtm= 101)
 
 ## Define mesh.
 ### Define nodes.
