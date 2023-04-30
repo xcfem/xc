@@ -481,7 +481,7 @@ void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
 	tmpAccel.Zero();
         for(int i= 0; i<dim;i++)
 	  tmpAccel(i)= accel(i);
-	// Create 24 rows acceleration vector.
+	// Create 4x6= 24 rows acceleration vector.
         Vector nodeAccel(24);
 	nodeAccel.Zero();
 	for(int i= 0; i<4; i++)
@@ -715,7 +715,7 @@ XC::Vector XC::Shell4NBase::getInterpolatedDisplacements(const ParticlePos3d &po
 XC::Vector XC::Shell4NBase::getInterpolatedDisplacements(const Pos3d &pos) const
   { return getInterpolatedDisplacements(getNaturalCoordinates(pos)); }
 
-//! @brief form inertia terms
+//! @brief Form inertia terms
 void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
   {
 
@@ -733,7 +733,6 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
     static Vector momentum(ndf);
 
 
-    double temp, massJK;
     double sx[2][2]; //inverse jacobian matrix.
 
 
@@ -769,6 +768,7 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
 
 
         //residual and tangent calculations node loops
+	double temp, massJK;
         for(int j=0, jj=0; j<numberOfNodes; j++, jj+=ndf )
           {
             temp= shp[massIndex][j] * dvol;

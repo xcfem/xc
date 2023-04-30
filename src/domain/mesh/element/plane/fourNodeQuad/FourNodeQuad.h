@@ -62,6 +62,7 @@
 #include "domain/mesh/element/utils/physical_properties/SolidMech2D.h"
 #include "domain/mesh/element/utils/body_forces/BodyForces2D.h"
 #include "domain/mesh/element/ElemWithMaterial.h"
+#include "domain/mesh/element/utils/fvectors/FVectorQuad.h"
 
 namespace XC {
 class NDMaterial;
@@ -79,15 +80,20 @@ class FourNodeQuad: public SolidMech4N
     Vector pressureLoad; //!< Pressure load at nodes
 
     double pressure; //!< Normal surface traction (pressure) over entire element (note: positive for outward normal).
+    FVectorQuad p0; //!< Reactions in the basic system due to element loads
 
     static double matrixData[64]; //!< array data for matrix
-    static Matrix K; //!< Element stiffness, damping, and mass Matrix
+    static Matrix K; //!< Element stiffness, and damping matrix.
+    static Matrix mass; //!< mass matrix.
     static Vector P; //!< Element resisting force vector
     static double shp[3][4]; //!< Stores shape functions and derivatives (overwritten)
 
     // private member functions - only objects of this class can call these
     double shapeFunction(const GaussPoint &gp) const;
     void setPressureLoadAtNodes(void);
+    
+    //inertia terms
+    void formInertiaTerms(int tangFlag) const;
 
   protected:
     int sendData(Communicator &);
@@ -111,11 +117,13 @@ class FourNodeQuad: public SolidMech4N
 
     const GaussModel &getGaussModel(void) const;
 
+    void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
+    virtual void createInertiaLoad(const Vector &);
 
     // public methods for element output
     int sendSelf(Communicator &);

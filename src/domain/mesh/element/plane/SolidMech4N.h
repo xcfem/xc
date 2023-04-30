@@ -68,6 +68,7 @@ class NDMaterial;
 class Material;
 class Response;
 class GaussPoint;
+class QuadRawLoad;
 
 //! @ingroup PlaneElements
 //
@@ -84,6 +85,9 @@ class SolidMech4N: public QuadBase4N<SolidMech2D>
     SolidMech4N(int tag, int classTag, const SolidMech2D &);
     SolidMech4N(int tag, int classTag, int nd1, int nd2, int nd3, int nd4, const SolidMech2D &);
 
+    const QuadRawLoad *vector2dRawLoadLocal(const std::vector<Vector> &);
+    const QuadRawLoad *vector2dRawLoadGlobal(const std::vector<Vector> &);
+    
     void checkElem(void);
   };
 } // end of XC namespace

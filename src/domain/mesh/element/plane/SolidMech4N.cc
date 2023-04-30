@@ -61,6 +61,7 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
+#include "domain/load/plane/QuadRawLoad.h"
 
 //! @brief Default constructor.
 XC::SolidMech4N::SolidMech4N(int tag, int classTag, const SolidMech2D &pp)
@@ -96,6 +97,73 @@ void XC::SolidMech4N::checkElem(void)
         if(this->clockwise(vPoint, false)) // if not reverse them.
 	  { this->getNodePtrs().reverse(); }
       }
+  }
+//! @brief Defines a load over the element from a vector of nodal loads
+//! in local coordinates.
+//!
+//! @param nLoads: loads on each element node.
+const XC::QuadRawLoad *XC::SolidMech4N::vector2dRawLoadLocal(const std::vector<Vector> &nLoads)
+  {
+    QuadRawLoad *retval= nullptr;
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
+        static ID eTags(1);
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
+
+        const size_t sz= nLoads.size();
+	const size_t nn= getNumExternalNodes();
+        if(sz==nn)
+          {
+            LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
+            if(lp)
+              {
+                retval= new QuadRawLoad(loadTag,nLoads,eTags);
+                lp->addElementalLoad(retval);
+                lPatterns.setCurrentElementLoadTag(loadTag+1);
+              }
+            else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+                        << " there is no current load pattern."
+                        << " Load ignored." << std::endl; 
+          }
+        else
+          std::cerr << getClassName() << "::" << __FUNCTION__
+                    << "; a vector of dimension " << nn
+	            << " was expected." << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; modeler not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Defines a load over the element from a vector of nodal loads
+//! in global coordinates.
+//!
+//! @param nLoads: loads on each element node.
+const XC::QuadRawLoad *XC::SolidMech4N::vector2dRawLoadGlobal(const std::vector<Vector> &nLoads)
+  {
+    const QuadRawLoad *retval= nullptr;
+    const size_t sz= nLoads.size();
+    const size_t nn= getNumExternalNodes();
+    if(sz==nn)
+      {
+        assert(theCoordTransf);
+	std::vector<Vector> tmp(nn);
+	for(size_t i= 0;i<nn;i++)
+	  {
+	    tmp[i]= nLoads[i]; // No transformation needed.
+	  }
+        retval= vector2dRawLoadLocal(tmp);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; a vector of dimension " << nn
+                << " was expected." << std::endl;
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

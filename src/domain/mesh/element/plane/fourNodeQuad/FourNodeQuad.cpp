@@ -66,17 +66,20 @@
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
+#include "domain/load/volumetric/SelfWeight.h"
+#include "domain/load/plane/QuadRawLoad.h"
 
 
 
 double XC::FourNodeQuad::matrixData[64];
 XC::Matrix XC::FourNodeQuad::K(matrixData, 8, 8);
+XC::Matrix XC::FourNodeQuad::mass(8,8);
 XC::Vector XC::FourNodeQuad::P(8);
 double XC::FourNodeQuad::shp[3][4]; //Values of shape functions.
 
 //! @brief Constructor.
 XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
-  :SolidMech4N(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0)), pressureLoad(8), pressure(0.0)
+  :SolidMech4N(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0)), pressureLoad(8), pressure(0.0), p0()
   {load.reset(8);}
 
 //! @brief Constructor.
@@ -93,7 +96,7 @@ XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
 XC::FourNodeQuad::FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4,
                                NDMaterial &m, const std::string &type, double t,
                            double p, const BodyForces2D &bForces)
-  : SolidMech4N(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t)), bf(bForces), pressureLoad(8), pressure(p)
+  : SolidMech4N(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t)), bf(bForces), pressureLoad(8), pressure(p), p0()
   {
     load.reset(8);
   }
@@ -292,56 +295,59 @@ const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
 //! @brief Return the mass matrix.
 const XC::Matrix &XC::FourNodeQuad::getMass(void) const
   {
-    K.Zero();
-
-    static Vector rhoi(4);
-    const double sum= physicalProperties.getRho();    
-
-    if(sum != 0.0)
-      {
-        double rhodvol, Nrho;
-        rhoi= physicalProperties.getRhoi();
-
-        // Compute a lumped mass matrix
-        for(size_t i= 0;i<physicalProperties.size();i++)
-          {
-            // Determine Jacobian for this integration point
-            const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
-            rhodvol = this->shapeFunction(gp);
-
-            // Element plus material density ... MAY WANT TO REMOVE ELEMENT DENSITY
-            double tmp = physicalProperties.getRho() + rhoi[i];
-            rhodvol*= (tmp*physicalProperties.getThickness()*gp.weight());
-
-            for(int alpha = 0, ia = 0; alpha<numNodes(); alpha++, ia++)
-              {
-                Nrho = shp[2][alpha]*rhodvol;
-                K(ia,ia) += Nrho;
-                ia++;
-                K(ia,ia) += Nrho;
-              }
-          }
-      }
+    int tangFlag= 1;
+    this->formInertiaTerms(tangFlag);
     if(isDead())
-      K*= dead_srf;
-    return K;
+      mass*= dead_srf;
+    return mass;
   }
 
 //! @brief Return the Gauss points of the element.
 const XC::GaussModel &XC::FourNodeQuad::getGaussModel(void) const
   { return gauss_model_quad4; }
 
+//! @brief Sets loads to zero.
+void XC::FourNodeQuad::zeroLoad(void)
+  {
+    SolidMech4N::zeroLoad();
+    bf[0] = 0.0;
+    bf[1] = 0.0;
+    bf[2] = 0.0;
+    p0.zero();
+  }
+
 //! @brief Adds a load over element.
 int XC::FourNodeQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; load type unknown for ele with tag: "
-	      << this->getTag() << std::endl;
-    return -1;
+    if(isDead())
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << "; load over inactive element: "
+                << getTag() << std::endl;
+    else
+      {
+        if(SelfWeight *quadLoad= dynamic_cast<SelfWeight *>(theLoad))
+	  {
+	    // added compatability with selfWeight class implemented
+	    // for all continuum elements, C.McGann, U.W.
+	    //applyLoad = 1;
+	    bf[0]+= loadFactor*quadLoad->getXFact();
+	    bf[1]+= loadFactor*quadLoad->getYFact();
+	    bf[2]+= loadFactor*quadLoad->getZFact();
+	  }
+        else if(QuadMecLoad *quadMecLoad= dynamic_cast<QuadMecLoad *>(theLoad))
+          {
+   	    computeTributaryAreas();
+            const std::vector<double> areas= getTributaryAreas();
+            quadMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
+          }	
+        else
+          return SolidMech4N::addLoad(theLoad,loadFactor);
+      }
+    return 0;
   }
 
 //! @brief Adds inertia loads.
-int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
+int XC::FourNodeQuad::addInertiaLoadToUnbalance(const Vector &accel)
   {
     const double sum = this->physicalProperties.getRho();
     
@@ -378,7 +384,7 @@ int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
     // Want to add ( - fact * M R * accel ) to unbalance
     // Take advantage of lumped mass matrix
     for(int i= 0; i < 2*numNodes(); i++)
-      load(i)+= -K(i,i)*ra[i];
+      load(i)+= -mass(i,i)*ra[i];
     return 0;
   }
 
@@ -427,6 +433,9 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
     // Subtract other external nodal loads ... P_res = P_int - P_ext
     //P = P - load;
     P.addVector(1.0, load, -1.0);
+
+    P+= p0.getVector();
+
     if(isDead())
       P*=dead_srf;
     return P;
@@ -472,7 +481,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
 
     //Take advantage of lumped mass matrix
     for(int i= 0;i<8;i++)
-      P(i)+= K(i,i)*a[i];
+      P(i)+= mass(i,i)*a[i];
 
     // add the damping forces if rayleigh damping
     if(!rayFactors.nullValues())
@@ -482,12 +491,88 @@ const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
     return P;
   }
 
+//! @brief form inertia terms
+void XC::FourNodeQuad::formInertiaTerms(int tangFlag) const
+  {
+    mass.Zero();
+
+    static Vector rhoi(4);
+    const double sum= physicalProperties.getArealRho();
+
+    if(sum != 0.0)
+      {
+        double rhodvol, Nrho;
+        rhoi= physicalProperties.getRhoi();
+	const double thickness= physicalProperties.getThickness();
+
+        // Compute a lumped mass matrix
+        for(size_t i= 0;i<physicalProperties.size();i++)
+          {
+            // Determine Jacobian for this integration point
+            const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
+            rhodvol = this->shapeFunction(gp);
+
+            // Element plus material density ... MAY WANT TO REMOVE ELEMENT DENSITY
+            //const double tmp = physicalProperties.getRho() + rhoi[i];
+            const double tmp = rhoi[i];
+            rhodvol*= (tmp*thickness*gp.weight());
+
+            for(int alpha = 0, ia = 0; alpha<numNodes(); alpha++, ia++)
+              {
+                Nrho = shp[2][alpha]*rhodvol;
+                mass(ia,ia)+= Nrho;
+                ia++;
+                mass(ia,ia)+= Nrho;
+              }
+          }
+      }
+  }
+
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+//!
+//! @param accel: acceleration vector.
+void XC::FourNodeQuad::createInertiaLoad(const Vector &accel)
+  {
+    const bool haveRho= physicalProperties.haveRho();
+    if(haveRho)
+      {
+	// Create 4x2= 8 rows acceleration vector.
+        Vector nodeAccel(8);
+	nodeAccel.Zero();
+	for(int i= 0; i<4; i++)
+	  for(int j= 0; j<2;j++)
+	    {
+	      const int k= 2*i+j;
+	      nodeAccel(k)= accel(j);
+	    }
+	const int tangFlag= 1;
+	formInertiaTerms(tangFlag);
+	Vector force(8);
+	force.addMatrixVector(1.0, mass, nodeAccel, -1.0);//= -mass*nodeAccel;
+	// Extract nodal loads.
+	std::vector<Vector> nLoads(4);
+	for(int i=0;i<4;i++)
+	  {
+	    Vector nLoad(2);
+	    for(int j= 0; j<2;j++)
+	       {
+ 	         const int k= 2*i+j;
+	         nLoad(j)+= force(k);
+	       }
+	    nLoads[i]= nLoad;
+	  }
+        vector2dRawLoadGlobal(nLoads);
+      }
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::FourNodeQuad::sendData(Communicator &comm)
   {
     int res= SolidMech4N::sendData(comm);
     res+=comm.sendDoubles(bf[0],bf[1],pressure,getDbTagData(),CommMetaData(9));
     res+= comm.sendVector(pressureLoad,getDbTagData(),CommMetaData(10));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(11));
     return res;
   }
 
@@ -497,6 +582,7 @@ int XC::FourNodeQuad::recvData(const Communicator &comm)
     int res= SolidMech4N::recvData(comm);
     res+=comm.receiveDoubles(bf[0],bf[1],pressure,getDbTagData(),CommMetaData(9));
     res+= comm.receiveVector(pressureLoad,getDbTagData(),CommMetaData(10));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(11));
     return res;
   }
 

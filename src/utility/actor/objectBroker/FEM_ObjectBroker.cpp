@@ -358,6 +358,8 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
         return new TrussStrainLoad();
       case LOAD_TAG_BidimStrainLoad:
         return new BidimStrainLoad();
+      case LOAD_TAG_QuadRawLoad:
+        return new QuadRawLoad();
       case LOAD_TAG_ShellRawLoad:
         return new ShellRawLoad();
       case LOAD_TAG_ShellUniformLoad:

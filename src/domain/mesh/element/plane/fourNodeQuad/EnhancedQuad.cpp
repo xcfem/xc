@@ -536,30 +536,13 @@ const XC::Vector &XC::EnhancedQuad::getResistingForceIncInertia(void) const
 //! @brief form inertia terms
 void XC::EnhancedQuad::formInertiaTerms( int tangFlag ) const
   {
-
     static const int ndf = 2;
-
     static const int numberNodes = 4;
-
     static const int numberGauss = 4;
-
     static const int nShape = 3;
-
     static const int massIndex = nShape - 1;
-
-    double xsj;  // determinant jacobian matrix
-
-    double dvol; //volume element
-
     static double shp[nShape][numberNodes];  //shape functions at a gauss point
-
-    static XC::Vector momentum(ndf);
-
-    int i, j, k, p;
-    int jj, kk;
-
-    double temp, massJK;
-
+    static Vector momentum(ndf);
 
     //zero mass
     mass.Zero( );
@@ -568,61 +551,58 @@ void XC::EnhancedQuad::formInertiaTerms( int tangFlag ) const
     computeBasis( );
 
     //gauss loop
-    for( i = 0; i < numberGauss; i++ ) {
+    double xsj;  // determinant jacobian matrix
+    for(int i= 0;i<numberGauss; i++)
+      {
+	//get shape functions
+	shape2d( sg[i], tg[i], xl, shp, xsj );
 
-      //get shape functions
-      shape2d( sg[i], tg[i], xl, shp, xsj );
+	//volume element
+	const double dvol= wg[i] * xsj; //volume element
 
-      //volume element
-      dvol = wg[i] * xsj;
+	//node loop to compute acceleration
+	momentum.Zero( );
+	for(int j = 0; j < numberNodes; j++ )
+	  //momentum += shp[massIndex][j] * ( theNodes[j]->getTrialAccel()  );
+	  momentum.addVector( 1.0,
+			      theNodes[j]->getTrialAccel(),
+			      shp[massIndex][j] );
 
-      //node loop to compute acceleration
-      momentum.Zero( );
-      for( j = 0; j < numberNodes; j++ )
-	//momentum += shp[massIndex][j] * ( theNodes[j]->getTrialAccel()  );
-	momentum.addVector( 1.0,
-			    theNodes[j]->getTrialAccel(),
-			    shp[massIndex][j] );
+	//density
+	const double rho= physicalProperties[i]->getRho();
 
-      //density
-      const double rho= physicalProperties[i]->getRho();
+	//multiply acceleration by density to form momentum
+	momentum *= rho;
 
-      //multiply acceleration by density to form momentum
-      momentum *= rho;
+	//residual and tangent calculations node loops
+	int jj = 0;
+	double temp, massJK;
+	for(int j = 0; j < numberNodes; j++ )
+	  {
+	    temp = shp[massIndex][j] * dvol;
 
+	    for(int p = 0; p < ndf; p++ )
+	      resid( jj+p ) += ( temp * momentum(p) ) ;
 
-      //residual and tangent calculations node loops
-      jj = 0;
-      for( j = 0; j < numberNodes; j++ ) {
+	    if( tangFlag == 1 )
+	      {
+		//multiply by density
+		temp *= rho;
 
-	temp = shp[massIndex][j] * dvol;
+		//node-node mass
+		int kk = 0;
+		for(int k= 0; k < numberNodes; k++ )
+		  {
+		    massJK = temp * shp[massIndex][k];
+		    for(int p = 0; p < ndf; p++ )
+		      mass( jj+p, kk+p ) += massJK;
+		    kk += ndf;
+		  } // end for k loop
+	      } // end if tang_flag
 
-	for( p = 0; p < ndf; p++ )
-	  resid( jj+p ) += ( temp * momentum(p) ) ;
-
-
-	if( tangFlag == 1 ) {
-
-	   //multiply by density
-	   temp *= rho;
-
-	   //node-node mass
-	   kk = 0;
-	   for( k = 0; k < numberNodes; k++ ) {
-
-	      massJK = temp * shp[massIndex][k];
-
-	      for( p = 0; p < ndf; p++ )
-		mass( jj+p, kk+p ) += massJK;
-
-	      kk += ndf;
-	    } // end for k loop
-
-	} // end if tang_flag
-
-	jj += ndf;
-      } // end for j loop
-    } //end for i gauss loop
+	    jj += ndf;
+	  } // end for j loop
+      } //end for i gauss loop
   }
 
 //! @brief Form residual and tangent
