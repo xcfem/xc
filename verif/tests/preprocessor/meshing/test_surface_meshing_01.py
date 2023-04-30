@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+''' Trivial test of meshing capabilites.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import geom
 import xc
@@ -8,12 +14,6 @@ import sys
 from model import predefined_spaces
 from materials import typical_materials
 # from postprocess import output_handler
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 CooMaxX= 2
 CooMaxY= 1
@@ -41,6 +41,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
 # Problem geometry.
+## K-points.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d(CooMaxX/2,0.0,0.0))
@@ -48,7 +49,7 @@ pt3= points.newPoint(geom.Pos3d(CooMaxX,0.0,0.0))
 pt4= points.newPoint(geom.Pos3d(0.0,CooMaxY,0.0))
 pt5= points.newPoint(geom.Pos3d(CooMaxX/2,CooMaxY,0.0))
 pt6= points.newPoint(geom.Pos3d(CooMaxX,CooMaxY,0.0))
-
+## Surface.
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s1= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt5.tag,pt4.tag)
 s1.nDivI= 1
