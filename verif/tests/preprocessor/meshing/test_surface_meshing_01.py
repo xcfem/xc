@@ -13,7 +13,6 @@ import os
 import sys
 from model import predefined_spaces
 from materials import typical_materials
-# from postprocess import output_handler
 
 CooMaxX= 2
 CooMaxY= 1
@@ -97,6 +96,7 @@ else:
     lmsg.error(fname+' ERROR.')
     
 #Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # oh.displayBlocks()#setToDisplay= )
