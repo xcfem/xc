@@ -54,7 +54,7 @@ r_seq1= seq1.getReversed()
 diff= (seq2[0]-r_seq1[0])**2+(seq2[1]-r_seq1[1])**2+(seq2[2]-r_seq1[2])**2+(seq2[3]-r_seq1[3])**2
 
 ratio2= 0.0
-for side in s.getSides:
+for side in s.getSides: # iterate through surface sides.
     p1= side.getEdge.getCentroid()
     oppEdge= s.getOppositeEdge(side.getEdge)
     p2= oppEdge.getCentroid()
