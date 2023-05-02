@@ -309,6 +309,34 @@ class OutputHandler(object):
         captionText= self.getCaptionText(vMisesCode, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
+    def displayState(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+        '''displays the strains on the elements.
+
+        :param itemToDisp: component of the state vector as defined in DruckerPrager.cpp (Invariant_1, norm_eta, Invariant_ep, norm_dev_ep, norm_ep)
+        :param setToDisplay: set of entities to be represented.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                    None, in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
+              of the field to be represented  (in units of calculation, 
+              not units of display). All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+
+        '''
+        # Define the property at nodes.
+        if(setToDisplay is None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStateComponentFromName, propToDefine= 'state')
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+
+        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        
     def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
         ''' Display reactions.
 
