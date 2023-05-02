@@ -518,7 +518,7 @@ void XC::DruckerPrager::plastic_integrator(void)
 	dgamma.Zero();
 	// initialize g such that det(g)= 1
 	g(0,0)= 1; g(1,0)= 0;
-	g(1,1)= 1; g(0,1)= 0;
+	g(0,1)= 0; g(1,1)= 1; 
 
 	// Newton procedure to compute nonlinear gamma1 and gamma2
 	//initialize terms
@@ -730,6 +730,8 @@ void XC::DruckerPrager::plastic_integrator(void)
 	else
 	  { gamma0_norm_eta*= 6.023e23; } // Very big number.
       }
+    else
+      gamma0_norm_eta/=norm_eta;
     double NormCep= 0.0;
     for(int i= 0; i < 6; i++)
       {
