@@ -470,17 +470,25 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         qComp= self.quQ(q,D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
         return gammaComp+cComp+qComp
 
+    def getElasticIsotropicMaterialPlaneStrain(self, preprocessor, name):
+        ''' Defines returns a Drucker-Prager material.
+
+        :param preprocessor: pre-processor or the finite element problem.
+        :param name: material identifier.
+        '''
+        return typical_materials.defElasticIsotropicPlaneStrain(preprocessor, name= name, E= self.E , nu= self.nu, rho= self.rho)
+
     def getDruckerPragerYieldStress(self):
         ''' Convert Mohr-Coulomb cohesion and friction angle to Drucker-Prager yield stress (sigma_y).'''
         # convert Mohr-Coulomb phi and c to Drucker-Prager
-        return (6 * self.c * math.cos(self.phi)) / (math.sqrt(3) * (3 - math.sin(self.phi))     )
+        return (6 * self.c * math.cos(self.phi)) / (math.sqrt(3) * (3 - math.sin(self.phi)) )
     
     def getDruckerPragerRho(self):
         ''' Convert Mohr-Coulomb cohesion and friction angle to Drucker-Prager rho.'''
         # convert Mohr-Coulomb phi and c to Drucker-Prager failure surface and associativity volumetric term (rho).
         return (2 * math.sqrt(2) * math.sin(self.phi)) / (math.sqrt(3) * (3 - math.sin(self.phi)) )
 
-    def getDruckerPragerMaterial3d(self, preprocessor, name, rhoBar= 0.0, Kinf= 0.0, Ko= 0.0, delta1= 0.0, H= 0.0, theta= 0.0, delta2= 0.0, elastFlag= 2, pAtm= 101.325e3):
+    def getDruckerPragerMaterial3d(self, preprocessor, name, rhoBar= None, Kinf= 0.0, Ko= 0.0, delta1= 0.0, H= 0.0, theta= 0.0, delta2= 0.0, elastFlag= 2, pAtm= 101.325e3):
         ''' Defines returns a Drucker-Prager material.
 
         :param preprocessor: pre-processor or the finite element problem.
@@ -503,7 +511,10 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         sigY= self.getDruckerPragerYieldStress()
         #---failure surface and associativity
         rho= self.getDruckerPragerRho()
-        rhoBar= 0.0 # related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho
+        if(rhoBar is None):
+            rhoB= rho
+        else:
+            rhoB= rhoBar # related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho
         #---isotropic hardening
         Kinf= Kinf 
         Ko= Ko
@@ -518,7 +529,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         if(self.rhoSat):
             mDen= self.rhoSat
 
-        return typical_materials.defDruckerPrager3d(preprocessor, name= name,k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, elastFlag= elastFlag, pAtm= pAtm)
+        return typical_materials.defDruckerPrager3d(preprocessor, name= name,k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoB, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, elastFlag= elastFlag, pAtm= pAtm)
     
     def getDruckerPragerMaterialPlaneStrain(self, preprocessor, name, rhoBar= 0.0, Kinf= 0.0, Ko= 0.0, delta1= 0.0, H= 0.0, theta= 0.0, delta2= 0.0, elastFlag= 2, pAtm= 101.325e3):
         ''' Defines returns a Drucker-Prager material.
@@ -544,6 +555,10 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         #---failure surface and associativity
         rho= self.getDruckerPragerRho()
         rhoBar= 0.0 # related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho
+        if(rhoBar is None):
+            rhoB= rho
+        else:
+            rhoB= rhoBar # related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho
         #---isotropic hardening
         Kinf= Kinf 
         Ko= Ko
@@ -558,7 +573,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         if(self.rhoSat):
             mDen= self.rhoSat
 
-        return typical_materials.defDruckerPragerPlaneStrain(preprocessor, name= name, k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoBar, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, elastFlag= elastFlag, pAtm= pAtm)
+        return typical_materials.defDruckerPragerPlaneStrain(preprocessor, name= name, k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoB, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, elastFlag= elastFlag, pAtm= pAtm)
 
 class StratifiedSoil(object):
     '''Soil with layers with different properties.
