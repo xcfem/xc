@@ -1337,6 +1337,27 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getDomain.newRecorder(recorderType,None)
         
+    def getStateComponentFromName(self, compName: str):
+        '''Return the component index from the state component name (defined in DruckerPrager.cpp).
+
+        :param compName: state component name.
+        '''
+        retval= 0
+        if((compName == 'Invariant_1') or (compName == 'invariant_1')):
+            retval= 0
+        elif(compName == 'norm_eta'):
+            retval= 1
+        elif((compName == 'Invariant_ep') or (compName == 'invariant_ep')):
+            retval= 2
+        elif(compName == 'norm_dev_ep'):
+            retval= 3
+        elif(compName == 'norm_ep'):
+            retval= 4
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: invariant_1, norm_eta, invariant_ep, norm_dev_ep, norm_ep')
+        return retval
                 
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
