@@ -262,8 +262,8 @@ double XC::PlaneStressMaterial::getVonMisesStress(void) const
     //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
     if(sz==3) // 2D material order = 11, 22, 12
       {
-	const double sg11= sg[0]; const double sg22= sg[1]; 
-	const double sg12= sg[2]; 
+	const double &sg11= sg[0]; const double &sg22= sg[1]; 
+	const double &sg12= sg[2]; 
 	retval= sqrt(sg11*sg11+sg11*sg22+sg22*sg22+3.0*sg12*sg12);
       }
     else
