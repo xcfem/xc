@@ -35,9 +35,8 @@ XC::DruckerPragerPlaneStrain::DruckerPragerPlaneStrain(int tag)
 //full constructor
 XC::DruckerPragerPlaneStrain::DruckerPragerPlaneStrain(int tag, double bulk, double shear,
 		  double s_y, double r, double r_bar, double Kinfinity, double Kinit, 
-		  double d1, double d2, double H, double t, double mDen, double atm) : 
-DruckerPrager(tag, ND_TAG_DruckerPragerPlaneStrain, bulk, shear, s_y, r, r_bar, Kinfinity,
-	                                                Kinit, d1, d2, H, t, mDen, atm) {}
+		  double d1, double d2, double H, double t, double mDen, double atm)
+  : DruckerPrager(tag, ND_TAG_DruckerPragerPlaneStrain, bulk, shear, s_y, r, r_bar, Kinfinity, Kinit, d1, d2, H, t, mDen, atm) {}
 
 //destructor
 XC::DruckerPragerPlaneStrain::~DruckerPragerPlaneStrain(void) 
@@ -62,22 +61,22 @@ int XC::DruckerPragerPlaneStrain::getOrder() const
 
 //get the strain and integrate plasticity equations
 int XC::DruckerPragerPlaneStrain::setTrialStrain(const Vector &strain_from_element) 
-{
-	mEpsilon.Zero();
-	mEpsilon(0) = strain_from_element(0);
-	mEpsilon(1) = strain_from_element(1);
-	mEpsilon(3) = strain_from_element(2);
+  {
+    mEpsilon.Zero();
+    mEpsilon(0) = strain_from_element(0);
+    mEpsilon(1) = strain_from_element(1);
+    mEpsilon(3) = strain_from_element(2);
 
     this->plastic_integrator();
-	
-	return 0;
-}
+    return 0;
+  }
 
 //unused trial strain function
 int XC::DruckerPragerPlaneStrain::setTrialStrain(const Vector &v, const Vector &r)
-{
+  {
+    std::cerr << "YOU SHOULD NOT SEE THIS: DruckerPrager::setTrialStrain (const Vector &v, const Vector &r)" << std::endl;
     return this->setTrialStrain (v);
-}
+  }
 
 //! @brief Return the strain.
 const XC::Vector &XC::DruckerPragerPlaneStrain::getStrain(void) const 
