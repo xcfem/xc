@@ -204,9 +204,15 @@ double XC::NDMaterial::getVonMisesStress(void) const
     //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
     if(sz==6) // 3D material
       {
-	const double sg11= sg[0]; const double sg22= sg[1]; const double sg33= sg[2];
-	const double sg12= sg[3]; const double sg23= sg[4]; const double sg31= sg[5];
+	const double &sg11= sg[0]; const double &sg22= sg[1]; const double &sg33= sg[2];
+	const double &sg12= sg[3]; const double &sg23= sg[4]; const double &sg31= sg[5];
 	retval= sqrt(0.5*(pow(sg11-sg22,2)+pow(sg22-sg33,2)+pow(sg33-sg11,2)+6*(sg12*sg12+sg23+sg23+sg31+sg31)));
+      }
+    else if(sz==3) // 2D material.
+      {
+	const double &sg11= sg[0]; const double &sg22= sg[1]; 
+	const double &sg12= sg[2]; 
+	retval= sqrt(sg11*sg11+sg11*sg22+sg22*sg22+3.0*sg12*sg12);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
