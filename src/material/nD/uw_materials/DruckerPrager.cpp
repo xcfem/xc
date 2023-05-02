@@ -327,9 +327,7 @@ int XC::DruckerPrager::commitState(void)
   }
  
 int XC::DruckerPrager::revertToLastCommit (void)
-{
-    return 0;
-}
+  { return 0; }
 
 //! @brief Revert the material to its initial state.
 int XC::DruckerPrager::revertToStart(void)
@@ -366,6 +364,7 @@ const std::string &XC::DruckerPrager::getType(void) const
     return retval;
   }
 
+// ! @brief Return the order of the material.
 int XC::DruckerPrager::getOrder(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -373,6 +372,22 @@ int XC::DruckerPrager::getOrder(void) const
               << std::endl; 
     exit(-1);
     return 0;
+  }
+
+//! @brief Return the initial strain.
+const XC::Vector &XC::DruckerPrager::getInitialGeneralizedStrain(void) const
+  {
+    static Vector retval(6,0.0); //No initial strain implemented yet.
+    return retval;
+  }
+
+void XC::DruckerPrager::setInitialGeneralizedStrain(const Vector &eps)
+  {
+    // Initial strain not implemented yet, so:
+    if(eps.NormInf()>1e-8) // if not zero issue an error message.
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; this material doesn't implement intitial strain."
+                << std::endl; 
   }
 
 //! @brief Plasticity integration routine
@@ -739,7 +754,7 @@ void XC::DruckerPrager::plastic_integrator(void)
     mState(4)= norm_ep;
   }
 
-int XC::DruckerPrager::updateElasticParam( )
+int XC::DruckerPrager::updateElasticParam(void)
   {
     double Sigma_mean= 0.0;
     if(mElastFlag == 1 && mFlag == 1)
@@ -759,20 +774,20 @@ int XC::DruckerPrager::updateElasticParam( )
   }
 
 double XC::DruckerPrager::Kiso(double alpha1)
-{
-	return msigma_y + mtheta * mHard * alpha1 + (mKinf - mKo) * (1 - exp(-mdelta1 * alpha1));
+  {
+    return msigma_y + mtheta * mHard * alpha1 + (mKinf - mKo) * (1 - exp(-mdelta1 * alpha1));
 }
 
 
 double XC::DruckerPrager::Kisoprime(double alpha1)
-{
-	return mtheta * mHard + (mKinf - mKo) * mdelta1*  exp(-mdelta1 * alpha1);
-}
+  {
+    return mtheta * mHard + (mKinf - mKo) * mdelta1*  exp(-mdelta1 * alpha1);
+  }
 
 double XC::DruckerPrager:: T(double alpha2) 
-{
-	return mTo * exp(-mdelta2 * alpha2);
-}
+  {
+    return mTo * exp(-mdelta2 * alpha2);
+  }
 
 
 double XC::DruckerPrager::deltaH(double dGamma)

@@ -161,6 +161,8 @@ class DruckerPrager: public NDMaterial
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;
     int getOrder(void) const;
+    const Vector &getInitialGeneralizedStrain(void) const;
+    void setInitialGeneralizedStrain(const Vector &);
 
     Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
     int getResponse (int responseID, Information &matInformation);
