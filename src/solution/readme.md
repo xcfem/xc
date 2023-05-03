@@ -17,7 +17,11 @@ This folder contains the code that deals with the solution of the finite element
  - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
  - [Negative Feedback Loop](https://portwooddigital.com/2022/07/17/negative-feedback-loop/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
- 
+
+### Continuation methods
+
+- [Arc Length Parameters](https://portwooddigital.com/2023/05/02/arc-length-parameters/)
+
 ### Modal analysis
 - [Modal analysis of rigid multy-storey frames](https://structville.com/2016/04/on-modal-analysis-of-rigid-multi-storey-frames.html)
 
