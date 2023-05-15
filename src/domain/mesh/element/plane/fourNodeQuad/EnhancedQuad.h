@@ -152,6 +152,9 @@ class EnhancedQuad: public SolidMech4N
     //get residual and residual with inertia terms
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
+    
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
 
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

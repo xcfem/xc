@@ -1281,6 +1281,46 @@ int XC::EnhancedQuad::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Set parameter value.
+int XC::EnhancedQuad::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    const size_t argc= argv.size();
+    if(argc < 1)
+      { return -1; }
+
+    int res = -1;
+
+    // no element parameters, call setParameter in the material
+    int matRes= res;
+    for(int i = 0; i < 4; i++)
+      {
+        matRes = setMaterialParameter(physicalProperties[i],argv,0,param);
+        if(matRes != -1)
+	  { res = matRes; }
+      }
+    return res;
+  }
+
+//! @brief Update parameter value.
+int XC::EnhancedQuad::updateParameter(int parameterID, Information &info)
+  {
+    int res = -1;
+    int matRes = res;
+
+    if(parameterID == res)
+      { return -1; }
+    else
+      {
+        for(int i = 0; i < 4; i++)
+	  {
+            matRes = physicalProperties[i]->updateParameter(parameterID, info);
+            if(matRes != -1)
+	      { res = matRes; }
+	  }
+	return res;
+      }
+  }
+
 //! @brief Sends object through the communicator argument.
 int  XC::EnhancedQuad::sendSelf(Communicator &comm)
   {
