@@ -999,13 +999,16 @@ XC::Response* XC::Element::setMaterialResponse(Material *theMaterial,const std::
     return retval;
   }
 
+//! @brief Set the value of a parameter of the material.
+//! @param theMaterial: material to modify.
+//! @param argv: argument values.
+//! @param offset: argument to discard for the material parameters.
 int XC::Element::setMaterialParameter(Material *theMaterial,const std::vector<std::string> &argv,const size_t &offset, Parameter &param)
   {
     int retval= -1;
     if(theMaterial)
       {
-        std::vector<std::string> argvOffset(argv);
-        argvOffset.erase(argvOffset.begin(),argvOffset.begin()+offset);
+        std::vector<std::string> argvOffset(argv.begin()+offset, argv.end());
         retval= theMaterial->setParameter(argvOffset,param);
       }
     return retval;
