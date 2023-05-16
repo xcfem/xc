@@ -554,7 +554,6 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         sigY= self.getDruckerPragerYieldStress()
         #---failure surface and associativity
         rho= self.getDruckerPragerRho()
-        rhoBar= 0.0 # related to dilation? controls evolution of plastic volume change, 0 ≤ rhoBar ≤ rho
         if(rhoBar is None):
             rhoB= rho
         else:
