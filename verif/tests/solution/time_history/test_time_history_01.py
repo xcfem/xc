@@ -32,6 +32,7 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 import math
+import json
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -44,7 +45,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-accelFilePath= pth+'/../../aux/A10000.py'
+accelFilePath= pth+'/../../aux/A10000.json'
 openSeesResultsPath= pth+'/../../aux/test_time_history_01_opensees_results.py'
 
 # *** PROBLEM
@@ -140,7 +141,10 @@ mr= gm.motionRecord
 hist= mr.history
 hist.accel= loadPatterns.newTimeSeries("path_ts","accel")
 hist.accel.setFactor(G)
-exec(open(accelFilePath).read()) #define acceleration vector from file
+# Read accelerations from JSON file.
+data= open(accelFilePath, 'r')
+accelValues= json.load(data)
+hist.accel.path= xc.Vector(accelValues)
 hist.accel.setTimeIncr(0.005) #define time step of the acceleration data.
 duration= mr.getDuration()
 #print('duration: ', mr.getDuration())
