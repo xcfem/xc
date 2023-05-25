@@ -46,7 +46,7 @@ if(not pth):
   pth= "."
 #print("pth= ", pth)
 accelFilePath= pth+'/../../aux/A10000.json'
-openSeesResultsPath= pth+'/../../aux/test_time_history_01_opensees_results.py'
+openSeesResultsPath= pth+'/../../aux/test_time_history_01_opensees_results.json'
 
 # *** PROBLEM
 FEcase= xc.FEProblem()
@@ -142,8 +142,8 @@ hist= mr.history
 hist.accel= loadPatterns.newTimeSeries("path_ts","accel")
 hist.accel.setFactor(G)
 # Read accelerations from JSON file.
-data= open(accelFilePath, 'r')
-accelValues= json.load(data)
+accelData= open(accelFilePath, 'r')
+accelValues= json.load(accelData)
 hist.accel.path= xc.Vector(accelValues)
 hist.accel.setTimeIncr(0.005) #define time step of the acceleration data.
 duration= mr.getDuration()
@@ -163,7 +163,10 @@ if(solProc.solve()!=0):
 
 ratio0= (eig1-25.02037)/25.02037
 ratio1= (freq-5.002)/5.002
-exec(open(openSeesResultsPath).read())
+
+# Read test data from JSON file.
+resultsData= open(openSeesResultsPath, 'r')
+openSeesRBase= json.load(resultsData)
 
 t= list()
 Rx= list()
