@@ -32,13 +32,11 @@ scc10x20= section_properties.RectangularSection('scc10x20',b,h)
 scc10x20.nDivIJ= 1 # 2D discretization
 scc10x20.nDivJK= 32 # number of cells in JK direction
 
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
-    pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/../fiber_section_test_macros.py").read())
-
+  pth= "."
+sys.path.append(pth+"/../../../../../../aux/")
+import fiber_section_test_macros
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young’s modulus of the material (kp/cm2).
@@ -60,7 +58,7 @@ sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr() # Create fiber representation of the section.
 fiberSectionRepr.setGeomNamed(geomRectang.name) # Assign the geometry.
 sa.setupFibers()
-extractFiberSectionProperties(sa,scc10x20)
+fiber_section_test_macros.extractFiberSectionProperties(sa, scc10x20, fy)
 sa.setRespVyByName(respVy.name)
 
 zlElement, nodA, nodB= scc2d_testing_bench.sectionModel(preprocessor, sa.name)

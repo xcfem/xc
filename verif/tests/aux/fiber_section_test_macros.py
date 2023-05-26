@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-def extractFiberSectionProperties(fiberSec,scc):
+def extractFiberSectionProperties(fiberSec,scc, fy):
     fibers= fiberSec.getFibers()
     global nFibers; nFibers= fibers.getNumFibers()
     global sumAreas; sumAreas= fibers.getArea(1.0)

@@ -1,23 +1,24 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 ''' Verification test of a fiber section with shear and torsion
 stiffnesses. Home made test.
 '''
 
-
-from materials.sections import section_properties
-from misc import scc3d_testing_bench
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
-from materials import typical_materials
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+import os
+import sys
+import xc
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
+from materials.sections import section_properties
+from misc import scc3d_testing_bench
 
 # Rectangular cross-section definition
 b= 1 # Cross section width [cm]
@@ -26,12 +27,11 @@ scc1x1= section_properties.RectangularSection('scc1x1',b,h)
 scc1x1.nDivIJ= 32 # number of cells in IJ direction  
 scc1x1.nDivJK= 32 # number of cells in JK direction
 
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/../fiber_section_test_macros.py").read())
+sys.path.append(pth+"/../../../../../../aux/")
+import fiber_section_test_macros
 
 fy= 2600 # yield strength [kp/cm2].
 E= 1e6   # elastic moculus [kp/cm2].
@@ -53,7 +53,7 @@ sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomRectang.name)
 sa.setupFibers()
-extractFiberSectionProperties(sa,scc1x1)
+fiber_section_test_macros.extractFiberSectionProperties(sa,scc1x1, fy)
 sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")

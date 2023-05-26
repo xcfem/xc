@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Verification test of a rectangular fiber section with an
- elasto plastic material model.'''
-#    written from "Nociones de cálculo plástico." Carlos Benito Hernández.
-#    page 26 and following.
-#  url={https://books.google.es/books?id=v7bbMwEACAAJ},
+ elasto plastic material model.
+
+    written from "Nociones de cálculo plástico." Carlos Benito Hernández.
+    page 26 and following.
+  url={https://books.google.es/books?id=v7bbMwEACAAJ},
+'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -13,11 +16,11 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
+import os
+import sys
+import xc
 from materials.sections import section_properties
 from misc import scc3d_testing_bench
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
@@ -34,13 +37,11 @@ scc10x20= section_properties.RectangularSection('scc10x20',b,h)
 scc10x20.nDivIJ= 32 # number of cells in IJ direction  
 scc10x20.nDivJK= 32 # number of cells in JK direction
 
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/../fiber_section_test_macros.py").read())
-
+sys.path.append(pth+"/../../../../../../aux/")
+import fiber_section_test_macros
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young modulus of the material en kp/cm2.
@@ -58,7 +59,7 @@ rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","rectang
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomRectang.name)
 rectang.setupFibers()
-extractFiberSectionProperties(rectang,scc10x20)
+fiber_section_test_macros.extractFiberSectionProperties(rectang,scc10x20, fy)
 
 zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "rectang")
 # Constraints
@@ -93,17 +94,17 @@ esfMz= scc.getFibers().getMz(0.0)
 
 referenceCenterOfMassY= 0.0
 referenceCenterOfMassZ= 0.0
-ratio1= (sumAreas-scc10x20.A())/scc10x20.A()
-ratio2= centerOfMassY-referenceCenterOfMassY
-ratio3= centerOfMassZ-referenceCenterOfMassZ
-ratio4= (I1-scc10x20.Iz())/scc10x20.Iz()
-ratio5= (I2-scc10x20.Iy())/scc10x20.Iy()
-ratio6= (i1-scc10x20.iz())/scc10x20.iz()
-ratio7= (i2-scc10x20.iy())/scc10x20.iy()
-ratio8= (Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
-ratio9= (Me2-scc10x20.getYieldMomentY(fy))/scc10x20.getYieldMomentY(fy)
-ratio10= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
-ratio11= (SyPosG-scc10x20.getPlasticSectionModulusY())/scc10x20.getPlasticSectionModulusY()
+ratio1= (fiber_section_test_macros.sumAreas-scc10x20.A())/scc10x20.A()
+ratio2= fiber_section_test_macros.centerOfMassY-referenceCenterOfMassY
+ratio3= fiber_section_test_macros.centerOfMassZ-referenceCenterOfMassZ
+ratio4= (fiber_section_test_macros.I1-scc10x20.Iz())/scc10x20.Iz()
+ratio5= (fiber_section_test_macros.I2-scc10x20.Iy())/scc10x20.Iy()
+ratio6= (fiber_section_test_macros.i1-scc10x20.iz())/scc10x20.iz()
+ratio7= (fiber_section_test_macros.i2-scc10x20.iy())/scc10x20.iy()
+ratio8= (fiber_section_test_macros.Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
+ratio9= (fiber_section_test_macros.Me2-scc10x20.getYieldMomentY(fy))/scc10x20.getYieldMomentY(fy)
+ratio10= (fiber_section_test_macros.SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
+ratio11= (fiber_section_test_macros.SyPosG-scc10x20.getPlasticSectionModulusY())/scc10x20.getPlasticSectionModulusY()
 ratio12= (RM+loadMz)/loadMz
 ratio13= (esfMz-loadMz)/loadMz
 
