@@ -98,12 +98,12 @@ esfMz= scc.getStressResultantComponent("Mz")
 
 referenceCenterOfMassY= 0.0
 referenceCenterOfMassZ= 0.0
-ratio1= (sumAreas-scc10x20.A())/scc10x20.A()
-ratio2= centerOfMassY-referenceCenterOfMassY
-ratio3= (I1-scc10x20.Iz())/scc10x20.Iz()
-ratio4= (i1-scc10x20.iz())/scc10x20.iz()
-ratio5= (Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
-ratio6= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
+ratio1= (fiber_section_test_macros.sumAreas-scc10x20.A())/scc10x20.A()
+ratio2= fiber_section_test_macros.centerOfMassY-referenceCenterOfMassY
+ratio3= (fiber_section_test_macros.I1-scc10x20.Iz())/scc10x20.Iz()
+ratio4= (fiber_section_test_macros.i1-scc10x20.iz())/scc10x20.iz()
+ratio5= (fiber_section_test_macros.Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
+ratio6= (fiber_section_test_macros.SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
 ratio7= (RMz+loadMz)/loadMz
 ratio8= (esfMz-loadMz)/loadMz
 

@@ -7,23 +7,22 @@
 '''
 from __future__ import print_function
 
-from materials.sections import section_properties
-from misc import scc2d_testing_bench
-from solution import predefined_solutions
-
-
-from materials.ehe import EHE_materials
-from materials.ehe import EHE_limit_state_checking
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
-from materials import typical_materials
-
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import os
+import sys
+import xc
+from materials.sections import section_properties
+from misc import scc2d_testing_bench
+from materials.ehe import EHE_materials
+from materials.ehe import EHE_limit_state_checking
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
 
 # Rectangular cross-section definition
 b= 10 # Cross section width  [cm]
@@ -99,12 +98,12 @@ esfMz= scc.getStressResultantComponent("Mz")
 
 referenceCenterOfMassY= 0.0
 referenceCenterOfMassZ= 0.0
-ratio1= (sumAreas-scc10x20.A())/scc10x20.A()
-ratio2= centerOfMassY-referenceCenterOfMassY
-ratio3= (I1-scc10x20.Iz())/scc10x20.Iz()
-ratio4= (i1-scc10x20.iz())/scc10x20.iz()
-ratio5= (Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
-ratio6= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
+ratio1= (fiber_section_test_macros.sumAreas-scc10x20.A())/scc10x20.A()
+ratio2= fiber_section_test_macros.centerOfMassY-referenceCenterOfMassY
+ratio3= (fiber_section_test_macros.I1-scc10x20.Iz())/scc10x20.Iz()
+ratio4= (fiber_section_test_macros.i1-scc10x20.iz())/scc10x20.iz()
+ratio5= (fiber_section_test_macros.Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
+ratio6= (fiber_section_test_macros.SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
 ratio7= (RMz+loadMz)/loadMz
 ratio8= (esfMz-loadMz)/loadMz
 
