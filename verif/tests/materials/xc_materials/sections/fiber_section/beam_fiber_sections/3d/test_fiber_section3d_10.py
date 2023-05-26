@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -13,6 +14,8 @@ __email__= "l.pereztato@gmail.com"
 
 # feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
 
+import os
+import sys
 import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions
@@ -29,12 +32,14 @@ preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 tag= EHE_materials.HA25.defDiagD(preprocessor)
-import os
+
+# Create RC section model.
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/concrete_section_01.py").read())
+sys.path.append(pth+"/../../../../../../aux/")
+import concrete_section_01
+concreteSectionGeom01= concrete_section_01.gmSecHA01(preprocessor, nmbGeomSecc="concreteSectionGeom01",defSec= concrete_section_01.defSec,concrDiagName= EHE_materials.HA25.nmbDiagD,reinfSteelDiagramName= EHE_materials.B500S.nmbDiagD)
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -59,9 +64,6 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution procedure
 analysis= predefined_solutions.plain_newton_raphson(feProblem)
 analOk= analysis.analyze(10)
-
-
-
 
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
@@ -128,8 +130,6 @@ miscOk= (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 1) & (analOk
 # print("ratiosOk= ", ratiosOk)
 # print("miscOk= ", miscOk)
 
-
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratiosOk & miscOk :

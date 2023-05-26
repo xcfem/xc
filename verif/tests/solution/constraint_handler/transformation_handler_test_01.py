@@ -16,6 +16,8 @@ b= 0.3*l # Length of tranche b
 F1= 1000 # Force magnitude 1 (pounds)
 F2= 1000/2 # Force magnitude 2 (pounds)
 
+import os
+import sys
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -72,12 +74,15 @@ lp0.newNodalLoad(n3.tag,xc.Vector([0,-F1]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
-import os
 pth= os.path.dirname(__file__)
-# print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/solu_transf_handler.py").read())
+sys.path.append(pth+"/../../aux")
+import solu_transf_handler
+analysis= solu_transf_handler.get_analysis(feProblem)
+result= analysis.analyze(1)
+
+
 
 nodes.calculateNodalReactions(True,1e-7)
 R1= n4.getReaction[1] 

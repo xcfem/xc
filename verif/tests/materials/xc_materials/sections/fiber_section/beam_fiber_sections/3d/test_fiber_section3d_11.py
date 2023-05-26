@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
-# feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
+from __future__ import print_function
 
+import os
+import sys
 import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions
@@ -31,12 +32,14 @@ tag= EHE_materials.B500S.defDiagD(preprocessor)
 concr= EHE_materials.HA25
 concr.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 tag= concr.defDiagD(preprocessor)
-import os
+
+# Create RC section model.
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/concrete_section_01.py").read())
+    pth= "."
+sys.path.append(pth+"/../../../../../../aux/")
+import concrete_section_01
+concreteSectionGeom01= concrete_section_01.gmSecHA01(preprocessor, nmbGeomSecc="concreteSectionGeom01",defSec= concrete_section_01.defSec,concrDiagName= EHE_materials.HA25.nmbDiagD,reinfSteelDiagramName= EHE_materials.B500S.nmbDiagD)
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -122,8 +125,6 @@ print("defN= ",(defN))
 print("analOk= ",(analOk))
  '''
 
-
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<5e-10) & ratio4 & (abs(ratio5)<5e-10) & (abs(ratio6)<0.001) & (abs(RN2)<5e-10) & (abs(esfMy)<1e-10) & (solicitationType == 2)  & (analOk == 0.0) :

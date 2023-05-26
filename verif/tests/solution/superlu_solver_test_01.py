@@ -3,6 +3,8 @@ from __future__ import print_function
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 26, problem 10
 
+import os
+import sys
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -71,14 +73,14 @@ lp0.newNodalLoad(n3.tag,xc.Vector([0,-F1]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
-import os
 pth= os.path.dirname(__file__)
-# print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../aux/sol_superlu.py").read())
+sys.path.append(pth+"/../aux")
+import sol_superlu
 
-
+solProc= sol_superlu.SuperLU(feProblem)
+result= solProc.solve()
 
 nodes.calculateNodalReactions(True,1e-7)
 R1= n4.getReaction[1] 
@@ -95,7 +97,6 @@ print("ratio1= ",(ratio1))
 print("ratio2= ",(ratio2))
 '''
     
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5):

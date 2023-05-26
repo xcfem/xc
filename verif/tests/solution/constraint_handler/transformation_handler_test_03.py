@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
-from __future__ import print_function
-# Testing multi-freedom conditions with transformation constraint handler.
+''' Home made test.Testing multi-freedom conditions with transformation constraint handler. '''
 
+from __future__ import print_function
+
+import sys
+import os
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -68,11 +70,13 @@ lp0.newNodalLoad(nod2.tag,xc.Vector([F,0,0,0,0,0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/solu_transf_handler2.py").read())
+sys.path.append(pth+"/../../aux")
+import solu_transf_handler2
+analysis= solu_transf_handler2.get_analysis(feProblem)
+result= analysis.analyze(1)
 
 delta= nod3.getDisp[0] # x displacement of node 3.
 beam3d.getResistingForce()

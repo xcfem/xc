@@ -9,8 +9,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
-
+import os
+import sys
 import xc
 from misc import scc3d_testing_bench
 
@@ -28,12 +28,14 @@ preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
-import os
+
+# Create RC section model.
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/prestressed_concrete_section_01.py").read())
+    pth= "."
+sys.path.append(pth+"/../../../../../../aux/")
+import prestressed_concrete_section_01
+geomSecPret01= prestressed_concrete_section_01.gmSecHP01(preprocessor, "prestressedConcretSectionGeom01",EHE_materials.HP45.nmbDiagD,EHE_materials.Y1860S7.nmbDiagD)
 materialHandler= preprocessor.getMaterialHandler
 secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
 fiberSectionRepr= secHP.getFiberSectionRepr()
@@ -118,7 +120,6 @@ print("defMz= ",(defMz))
 print("defN= ",(defN))
  '''
 
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 2) & (abs(ratio4)<1e-6) & (analOk == 0.0) :

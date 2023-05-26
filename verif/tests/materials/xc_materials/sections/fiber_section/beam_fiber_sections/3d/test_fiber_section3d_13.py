@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-# Prestressed concrete section verification test.
+'''Prestressed concrete section verification test.'''
+
 from __future__ import print_function
 from __future__ import division
 
+import sys
+import os
 import xc
 from misc import scc3d_testing_bench
 
@@ -29,12 +32,13 @@ preprocessor=  feProblem.getPreprocessor
 tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
 tag= EHE_materials.B500S.defDiagD(preprocessor)
-import os
+# Create RC section model.
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/prestressed_concrete_section_02.py").read())
+    pth= "."
+sys.path.append(pth+"/../../../../../../aux/")
+import prestressed_concrete_section_02
+geomSecPret02= prestressed_concrete_section_02.gmSecHP02(preprocessor, "prestressedConcretSectionGeom02",EHE_materials.HP45.nmbDiagD,EHE_materials.B500S.nmbDiagD,EHE_materials.Y1860S7.nmbDiagD)
 
 materialHandler= preprocessor.getMaterialHandler
 secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
@@ -133,7 +137,6 @@ print("epsCMax= ",epsCMax)
 print("yEpsCMax= ",(yEpsCMax))
  '''
 
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-6) & (abs(ratio3)<1e-6) & (abs(ratio5)<1e-6) & (abs(RN2)<1e-6) & (abs(esfMy)<1e-6) & (solicitationType == 3) & (abs(ratio4)<1e-6) & (analOk == 0.0) & (yEpsCMax>0.0) & (yEpsCMin<0.0) : #(yEpsCMax<0.0) & (yEpsCMin>0.0) 2014.11.21

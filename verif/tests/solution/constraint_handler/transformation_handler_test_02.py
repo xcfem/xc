@@ -17,6 +17,8 @@ A= 50.65 # Beam cross-section area in square inches.
 I= 7892 # Inertia of the beam section in inches to the fourth power.
 w= 10000/12 # Load per unit length (pounds)/pulgada.
 
+import sys
+import os
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -75,13 +77,13 @@ eleLoad.transComponent= -w
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
-import os
 pth= os.path.dirname(__file__)
-# print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/solu_transf_handler2.py").read())
-    
+sys.path.append(pth+"/../../aux")
+import solu_transf_handler2
+analysis= solu_transf_handler2.get_analysis(feProblem)
+result= analysis.analyze(1)
 
 delta= n3.getDisp[1] 
 

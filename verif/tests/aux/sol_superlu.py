@@ -37,5 +37,3 @@ class SuperLU(predefined_solutions.SolutionProcedure):
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
 
-solProc= SuperLU(feProblem)
-result= solProc.solve()

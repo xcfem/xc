@@ -7,6 +7,8 @@ from __future__ import print_function
 
 # feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
 
+import os
+import sys
 import xc
 from misc import scc3d_testing_bench
 from materials.ehe import EHE_materials
@@ -30,12 +32,12 @@ concr= EHE_materials.HA25
 concr.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 tag= concr.defDiagD(preprocessor)
 
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/concrete_section_01.py").read())
+sys.path.append(pth+"/../../../../../../aux/")
+import concrete_section_01
+concreteSectionGeom01= concrete_section_01.gmSecHA01(preprocessor, nmbGeomSecc="concreteSectionGeom01",defSec= concrete_section_01.defSec,concrDiagName= EHE_materials.HA25.nmbDiagD,reinfSteelDiagramName= EHE_materials.B500S.nmbDiagD)
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -136,7 +138,6 @@ print("ratio6= ", ratio6)
 print("               Cumple ratio6: ",abs(ratio6)<0.01)
  '''
 
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 3) & (abs(ratio4)<1e-6) & (abs(ratio6)<0.01) & (analOk == 0.0) :

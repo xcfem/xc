@@ -7,10 +7,11 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 import geom
+from materials.ehe import EHE_materials
 
 strandsArea= 140e-6 # Strands area expressed in square meters.
 areaFiLong= 0.5e-4 # Fi8 longitudinal reinforcement area expressed in square meters.
-def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelDiagramName):
+def gmSecHP02(preprocessor, nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelDiagramName):
     # Concrete
     geomSecc= preprocessor.getMaterialHandler.newSectionGeometry(nmbGeomSecc)
     regions= geomSecc.getRegions
@@ -97,5 +98,4 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelD
     return geomSecc
 
 
-geomSecPret02= gmSecHP02("prestressedConcretSectionGeom02",EHE_materials.HP45.nmbDiagD,EHE_materials.B500S.nmbDiagD,EHE_materials.Y1860S7.nmbDiagD)
 

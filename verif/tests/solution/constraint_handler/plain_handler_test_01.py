@@ -16,6 +16,8 @@ b= 0.3*l # Length of tranche b
 F1= 1000 # Force magnitude 1 (pounds)
 F2= 1000/2 # Force magnitude 2 (pounds)
 
+import os
+import sys
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -72,11 +74,15 @@ lp0.newNodalLoad(n3.tag, xc.Vector([0,-F1]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/sol_sparse.py").read())
+sys.path.append(pth+"/../../aux")
+import sol_sparse
+
+analysis= sol_sparse.get_analysis(feProblem)
+result= analysis.analyze(1)
+
 
 
 nodes.calculateNodalReactions(True,1e-7)
@@ -94,7 +100,6 @@ print("ratio1= ",(ratio1))
 print("ratio2= ",(ratio2))
 '''
     
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5):

@@ -7,13 +7,14 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import geom
+from materials.ehe import EHE_materials
 
 width= 0.2 # Section width expressed in meters.
 depth= 0.4 # Section width expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
 strandsArea= 140e-6 # Área de los cordones expressed in square meters.
 
-def gmSecHP01(nmbGeomSecc,concrDiagName,prestressingSteelDiagramName):
+def gmSecHP01(preprocessor, nmbGeomSecc, concrDiagName, prestressingSteelDiagramName):
     # Concrete
     geomSecc= preprocessor.getMaterialHandler.newSectionGeometry(nmbGeomSecc)
     regions= geomSecc.getRegions
@@ -37,5 +38,4 @@ def gmSecHP01(nmbGeomSecc,concrDiagName,prestressingSteelDiagramName):
     reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,width/2.0-cover)
     return geomSecc
 
-geomSecPret01= gmSecHP01("prestressedConcretSectionGeom01",EHE_materials.HP45.nmbDiagD,EHE_materials.Y1860S7.nmbDiagD)
 
