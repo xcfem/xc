@@ -247,12 +247,7 @@ int XC::FE_Datastore::getDbTag(void) const
 
 //! @brief Returns the name passed as argument to the constructor.
 const std::string &XC::FE_Datastore::getName(void) const
-  {
-    static const std::string retval("");
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; ERROR - not implemented yet.\n";
-    return retval;
-  }
+  { return name; }
 
 std::string XC::FE_Datastore::getTypeId(void) const
   {
