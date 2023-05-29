@@ -40,7 +40,7 @@ namespace XC {
 class DBDatastore: public FE_Datastore
   {
   public:
-    DBDatastore(Preprocessor &, FEM_ObjectBroker &theBroker);    
+    DBDatastore(const std::string &, Preprocessor &, FEM_ObjectBroker &);
   };
 } // end of XC namespace
 

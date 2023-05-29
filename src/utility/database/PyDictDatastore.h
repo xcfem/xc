@@ -43,14 +43,18 @@ namespace XC {
 class PyDictDatastore: public FE_Datastore
   {
   private:
-    std::string fileName;
+    const std::string &getFileName(void) const
+      { return getName(); }
     boost::python::dict pyDict; //!< python dictionary.
     void insertData(const std::string &,const int &,const int &,const double *,const int &);
     void insertData(const std::string &,const int &,const int &,const int *,const int &);
     std::vector<double> retrieveDoubleData(const std::string &,const int &,const int &);
     std::vector<int> retrieveIntData(const std::string &,const int &,const int &);
   public:
-    PyDictDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);    
+    PyDictDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);
+    
+    std::string getTypeId(void) const
+      { return "PyDict"; }
 
     // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int , int , const Message &, ChannelAddress *a= nullptr);    

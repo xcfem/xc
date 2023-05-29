@@ -64,7 +64,7 @@
 #define MAX_BLOB_SIZE 16777215
 
 XC::MySqlDatastore::MySqlDatastore(const std::string &projectName, Preprocessor &preprocessor, FEM_ObjectBroker &theObjectBroker, int run)
-  :DBDatastore(preprocessor, theObjectBroker), dbRun(run), connection(true), sizeColumnString(0)
+  :DBDatastore(projectName, preprocessor, theObjectBroker), dbRun(run), connection(true), sizeColumnString(0)
   {
     // initialise the mysql structure
     mysql_init(&mysql);
@@ -100,7 +100,7 @@ XC::MySqlDatastore::MySqlDatastore(const std::string &projectName, Preprocessor 
 XC::MySqlDatastore::MySqlDatastore(const std::string &databaseName, const std::string &host, const std::string &user, const std::string &passwd,
                                unsigned int port, const std::string &socket, unsigned int clientFlag,Preprocessor &preprocessor, FEM_ObjectBroker &theObjectBroker,
                                int run)
-  :DBDatastore(preprocessor, theObjectBroker), dbRun(run), connection(true), sizeColumnString(0)
+  :DBDatastore(databaseName, preprocessor, theObjectBroker), dbRun(run), connection(true), sizeColumnString(0)
   {
     // initialise the mysql structure
     mysql_init(&mysql);
@@ -138,7 +138,7 @@ XC::MySqlDatastore::MySqlDatastore(const std::string &databaseName, const std::s
   }
 
 
-XC::MySqlDatastore::~MySqlDatastore()
+XC::MySqlDatastore::~MySqlDatastore(void)
   {
     if(connection)
       mysql_close(&mysql);

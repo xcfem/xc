@@ -145,7 +145,7 @@ class Parameter;
 //! passed as an argument to the method. Once the object has been created, 
 //! recvSelf() can be invoked on the object to instantiate the object
 //! with it's data.
-class FEM_ObjectBroker
+class FEM_ObjectBroker: public ObjectBroker
   {
   private:
     LinearSOESolver *lastLinearSolver;

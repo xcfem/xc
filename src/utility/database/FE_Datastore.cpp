@@ -73,8 +73,8 @@
 //!
 //! @param prep: preprocessor used to build the finite element model.
 //! @param theBroker: deals with object serialization.
-XC::FE_Datastore::FE_Datastore(Preprocessor &prep, FEM_ObjectBroker &theBroker) 
-  : Channel(&prep), theObjectBroker(&theBroker), savedStates(), lastDbTag(0) {}
+XC::FE_Datastore::FE_Datastore(const std::string &name, Preprocessor &prep, FEM_ObjectBroker &theBroker) 
+  : Channel(&prep), name(name), theObjectBroker(&theBroker), savedStates(), lastDbTag(0) {}
 
 //! @brief Returns a pointer to \p theBroker object passed in the constructor. 
 XC::FEM_ObjectBroker *XC::FE_Datastore::getObjectBroker(void)
@@ -243,6 +243,22 @@ int XC::FE_Datastore::getDbTag(void) const
   {
     lastDbTag++;
     return lastDbTag;
+  }
+
+//! @brief Returns the name passed as argument to the constructor.
+const std::string &XC::FE_Datastore::getName(void) const
+  {
+    static const std::string retval("");
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR - not implemented yet.\n";
+    return retval;
+  }
+
+std::string XC::FE_Datastore::getTypeId(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR - not implemented yet.\n";
+    return "None";
   }
 
 int XC::FE_Datastore::save(const int &commitTag)

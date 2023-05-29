@@ -42,14 +42,14 @@
 //! @brief Default constructor.
 XC::Preprocessor::Preprocessor(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
   : CommandEntity(owr), MovableObject(0), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this), 
-    nodes(this), elements(this), loads(this), constraints(this),
+    nodeHandler(this), elementHandler(this), loadHandler(this), constraintHandler(this),
     mbt(this),sets(this)
   { domain= new Domain(this,oh); }
 
 //! @brief Copy constructor (prohibited).
 XC::Preprocessor::Preprocessor(const Preprocessor &other)
   : CommandEntity(other), MovableObject(other), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
-    nodes(this), elements(this), loads(this), constraints(this),
+    nodeHandler(this), elementHandler(this), loadHandler(this), constraintHandler(this),
     mbt(this),sets(this)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -162,12 +162,12 @@ void XC::Preprocessor::clearAll(void)
     mbt.clearAll();
     transf.clearAll();
     beamIntegrators.clearAll();
-    nodes.clearAll();
-    elements.clearAll();
+    nodeHandler.clearAll();
+    elementHandler.clearAll();
     if(domain)
       domain->clearAll();
-    loads.clearAll();
-    constraints.clearAll();
+    loadHandler.clearAll();
+    constraintHandler.clearAll();
     materialHandler.clearAll();
   }
 
@@ -195,10 +195,10 @@ int XC::Preprocessor::sendData(Communicator &comm)
     //res+= comm.sendMovable(materialHandler,getDbTagData(),CommMetaData(0));
     //res+= comm.sendMovable(transf,getDbTagData(),CommMetaData(1));
     //res+= comm.sendMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
-    //res+= comm.sendMovable(nodes,getDbTagData(),CommMetaData(3));
-    //res+= comm.sendMovable(elements,getDbTagData(),CommMetaData(4));
-    int res= comm.sendMovable(loads,getDbTagData(),CommMetaData(5));
-    //res+= comm.sendMovable(constraints,getDbTagData(),CommMetaData(6));
+    //res+= comm.sendMovable(nodeHandler,getDbTagData(),CommMetaData(3));
+    //res+= comm.sendMovable(elementHandler,getDbTagData(),CommMetaData(4));
+    int res= comm.sendMovable(loadHandler,getDbTagData(),CommMetaData(5));
+    //res+= comm.sendMovable(constraintHandler,getDbTagData(),CommMetaData(6));
     res+= comm.sendMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
     res+= sendDomain(*domain,8,getDbTagData(),comm);
@@ -212,10 +212,10 @@ int XC::Preprocessor::recvData(const Communicator &comm)
     //res+= comm.receiveMovable(materialHandler,getDbTagData(),CommMetaData(0));
     //res+= comm.receiveMovable(transf,getDbTagData(),CommMetaData(1));
     //res+= comm.receiveMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
-    //res+= comm.receiveMovable(nodes,getDbTagData(),CommMetaData(3));
-    //res+= comm.receiveMovable(elements,getDbTagData(),CommMetaData(4));
-    int res= comm.receiveMovable(loads,getDbTagData(),CommMetaData(5));
-    //res+= comm.receiveMovable(constraints,getDbTagData(),CommMetaData(6));
+    //res+= comm.receiveMovable(nodeHandler,getDbTagData(),CommMetaData(3));
+    //res+= comm.receiveMovable(elementHandler,getDbTagData(),CommMetaData(4));
+    int res= comm.receiveMovable(loadHandler,getDbTagData(),CommMetaData(5));
+    //res+= comm.receiveMovable(constraintHandler,getDbTagData(),CommMetaData(6));
     res+= comm.receiveMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
     res+= receiveDomain(*domain,8,getDbTagData(),comm);
@@ -259,3 +259,43 @@ int XC::Preprocessor::recvSelf(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Preprocessor::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    if(domain)
+      retval["domain"]= domain->getPyDict();
+    retval["material_handler"]=  materialHandler.getPyDict();
+    retval["transf_coo_handler"]= transf.getPyDict();
+    retval["beam_integrators"]= beamIntegrators.getPyDict();
+    retval["node_handler"]= nodeHandler.getPyDict();
+    retval["element_handler"]= elementHandler.getPyDict();
+    retval["load_handler"]= loadHandler.getPyDict();
+    retval["constraint_handler"]= constraintHandler.getPyDict();
+    retval["multi_block_topology"]= mbt.getPyDict();
+    retval["sets"]= sets.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Preprocessor::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    if(d.has_key("domain"))
+      {
+	if(domain)
+	  domain->setPyDict(boost::python::extract<boost::python::dict>(d["domain"]));
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; ERROR; domain creation from Python dictionary"
+	            << " implemented yet." << std::endl;
+      }
+    transf.setPyDict(boost::python::extract<boost::python::dict>(d["transf_coo_handler"]));
+    beamIntegrators.setPyDict(boost::python::extract<boost::python::dict>(d["beam_integrators"]));
+    nodeHandler.setPyDict(boost::python::extract<boost::python::dict>(d["node_handler"]));
+    elementHandler.setPyDict(boost::python::extract<boost::python::dict>(d["element_handler"]));
+    loadHandler.setPyDict(boost::python::extract<boost::python::dict>(d["load_handler"]));
+    constraintHandler.setPyDict(boost::python::extract<boost::python::dict>(d["constraint_handler"]));
+    mbt.setPyDict(boost::python::extract<boost::python::dict>(d["multi_block_topology"]));
+    sets.setPyDict(boost::python::extract<boost::python::dict>(d["sets"]));    
+  }

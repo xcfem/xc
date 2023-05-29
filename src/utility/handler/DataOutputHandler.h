@@ -77,6 +77,9 @@ class DataOutputHandler: public MovableObject, public CommandEntity
     //virtual int open(const std::vector<std::string> &dataDescription, int numData) =0;
     virtual int open(const std::vector<std::string> &dataDescription) =0;
     virtual int write(Vector &data) =0;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 } // end of XC namespace
 

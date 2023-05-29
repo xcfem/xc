@@ -88,7 +88,6 @@ class FEM_ObjectBroker;
 class NEESData: public FE_Datastore
   {
   private:
-    std::string dataBase;
     NEES_table *tables;
     int          numTables;
   public:
@@ -100,7 +99,7 @@ class NEESData: public FE_Datastore
    *
    * @author fmk
    */
-    NEESData(const std::string &dataBase,Preprocessor &preprocessor, FEM_ObjectBroker &theBroker);
+    NEESData(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theBroker);
     ~NEESData(void);
 
     // method to get a database tag

@@ -89,6 +89,60 @@ XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const s
     return dataBase; 
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::FEProblem::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    boost::python::dict oh_dict;
+    DataOutputHandler::map_output_handlers::const_iterator it;
+    for(it= output_handlers.begin(); it != output_handlers.end(); it++)
+      { oh_dict[it->first]= it->second->getPyDict(); }
+    retval["output_handlers"]= oh_dict;
+    retval["preprocessor"]= preprocessor.getPyDict();
+    retval["sol_proc"]= proc_solu.getPyDict();
+    if(dataBase)
+      {
+        retval["data_base"]= dataBase->getPyDict();
+        retval["data_base_name"]= dataBase->getName();
+	retval["data_base_type"]= dataBase->getTypeId();
+      }
+    retval["object_broker"]= theBroker.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::FEProblem::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    const boost::python::dict &oh_dict= boost::python::extract<boost::python::dict>(d["output_handlers"]);
+    boost::python::list items= oh_dict.items();
+    if(len(items)>0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; reading of output handlers not implemented yet."
+	          << std::endl;
+	for(boost::python::ssize_t i=0; i<len(items); i++)
+	  {
+	    const std::string key= boost::python::extract<std::string>(items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+	    std::cerr << " ouput hander: " << key << " ignored." << std::endl;
+	  }
+      }
+    preprocessor.setPyDict(boost::python::extract<boost::python::dict>(d["preprocessor"]));
+    proc_solu.setPyDict(boost::python::extract<boost::python::dict>(d["sol_proc"]));
+    if(d.has_key("data_base"))
+      {
+	if(!dataBase)
+	  {
+	    const std::string dbName= boost::python::extract<std::string>(d["data_base_name"]);
+	    const std::string dbType= boost::python::extract<std::string>(d["data_base_type"]);
+	    defineDatabase(dbType, dbName);
+	  }
+        if(dataBase)
+	  dataBase->setPyDict(boost::python::extract<boost::python::dict>(d["data_base"]));
+      }
+  }
+
 //! @brief Destructor.
 XC::FEProblem::~FEProblem(void)
   {

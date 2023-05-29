@@ -66,10 +66,10 @@ class Preprocessor: public CommandEntity, public MovableObject
     MaterialHandler materialHandler; //!< Material creation tools.
     TransfCooHandler transf; //!< Coordinate transformation.
     BeamIntegratorHandler beamIntegrators; //!< Beam integrator schemes.
-    NodeHandler nodes; //! Node creation tools.
-    ElementHandler elements; //!< Element creation tools.
-    LoadHandler loads; //!< Load creation tools.
-    BoundaryCondHandler constraints; //! Constraint creation tools.
+    NodeHandler nodeHandler; //! Node creation tools.
+    ElementHandler elementHandler; //!< Element creation tools.
+    LoadHandler loadHandler; //!< Load creation tools.
+    BoundaryCondHandler constraintHandler; //! Constraint creation tools.
 
     MultiBlockTopology mbt; //!< Geometric entities: points, lines,...
 
@@ -119,21 +119,21 @@ class Preprocessor: public CommandEntity, public MovableObject
     const MaterialHandler &getMaterialHandler(void) const
       { return materialHandler; }
     inline NodeHandler &getNodeHandler(void)
-      { return nodes; }
+      { return nodeHandler; }
     inline const NodeHandler &getNodeHandler(void) const
-      { return nodes; }
+      { return nodeHandler; }
     ElementHandler &getElementHandler(void)
-      { return elements; }
+      { return elementHandler; }
     const ElementHandler &getElementHandler(void) const
-      { return elements; }
+      { return elementHandler; }
     LoadHandler &getLoadHandler(void)
-      { return loads; }
+      { return loadHandler; }
     const LoadHandler &getLoadHandler(void) const
-      { return loads; }
+      { return loadHandler; }
     BoundaryCondHandler &getBoundaryCondHandler(void)
-      { return constraints; }
+      { return constraintHandler; }
     const BoundaryCondHandler &getBoundaryCondHandler(void) const
-      { return constraints; }
+      { return constraintHandler; }
     TransfCooHandler &getTransfCooHandler(void)
       { return transf; }
     const TransfCooHandler &getTransfCooHandler(void) const
@@ -156,6 +156,8 @@ class Preprocessor: public CommandEntity, public MovableObject
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
 
     virtual ~Preprocessor(void);
   };

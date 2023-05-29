@@ -60,11 +60,10 @@ class OracleDatastore: public DBDatastore
     
     // private attributes
     int projTag;
-    std::string dataBase;
 
     int lastDomainChangeStamp;
   public:
-    OracleDatastore(const std::string &dataBase,Preprocessor &preprocessor, FEM_ObjectBroker &theBroker);    
+    OracleDatastore(const std::string &, Preprocessor &, FEM_ObjectBroker &);    
     
     ~OracleDatastore(void);
 
@@ -84,6 +83,9 @@ class OracleDatastore: public DBDatastore
     
     int commitState(int commitTag);        
 
+     std::string getTypeId(void) const
+      { return "Oracle"; }
+    
     // methods for sending and receiving the data
     int sendObj(int commitTag,MovableObject &,ChannelAddress *theAddress= nullptr);
     int recvObj(int commitTag,MovableObject &theObject, FEM_ObjectBroker &,ChannelAddress *theAddress= nullptr);
