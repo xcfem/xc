@@ -95,8 +95,7 @@ class BerkeleyDbDatastore: public DBDatastore
     int open(const DBTYPE &type);
     void close(void);
 
-    const std::string &getProjectName(void) const
-      { return getName(); }
+    const std::string &getProjectName(void) const;
   public:
     BerkeleyDbDatastore(const std::string &projectName, Preprocessor &preprocessor, FEM_ObjectBroker &theBroker,const std::string &type= "");
     ~BerkeleyDbDatastore(void);

@@ -269,6 +269,10 @@ XC::BerkeleyDbDatastore::~BerkeleyDbDatastore(void)
     close();
   }
 
+const std::string &XC::BerkeleyDbDatastore::getProjectName(void) const
+  {
+    return getName();
+  }
 
 int XC::BerkeleyDbDatastore::sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress)
   {
