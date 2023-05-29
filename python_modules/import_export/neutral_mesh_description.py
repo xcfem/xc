@@ -33,8 +33,11 @@ class GroupRecord(object):
         '''
         return
 
-    def writeToXCFile(self,xcImportExportData):
-        ''' writes the XC commands to define the group in a file.'''
+    def writeToXCFile(self, xcImportExportData):
+        ''' writes the XC commands to define the group in a file.
+
+        :param xcImportExportData:Data used when importing and/or exporting XC models.
+        '''
         if(not self.empty()):
             f= xcImportExportData.outputFile
             strCommand= self.name + '= ' + xcImportExportData.setHandlerName + '.defSet("' + self.name +'")'
