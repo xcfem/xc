@@ -8,10 +8,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
+import os
+import sys
+import geom
+import xc
 from import_export import dxf_reader
 from import_export import neutral_mesh_description as nmd
-import os
-import xc
 from model import predefined_spaces
 # from postprocess import output_handler
 import logging
@@ -55,7 +57,6 @@ ieData= importMultiBlockTopology(dxfFileName= dxfFilePath, outputFileName= xcBlo
 FEcase= xc.FEProblem()
 FEcase.title= 'Split lines test'
 xcBlocksPath= './'+xcBlocksFileName+'.py'
-import geom
 exec(open(xcBlocksPath).read())
 
 numberOfLinesBeforeSplitting= len(lines)
@@ -89,11 +90,11 @@ print(ratio2)
 
 # oh.displayBlocks()
 
-os.system('rm -f '+xcBlocksPath) # Your garbage you clean it
-
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-15) and (abs(ratio2)<1e-15)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+os.system('rm -f '+xcBlocksPath) # Your garbage you clean it
