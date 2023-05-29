@@ -183,8 +183,6 @@ def solveStaticLinearComb(tagComb,comb,tagSaveFase0):
     preprocessor.resetLoadCase()
     db.restore(tagSaveFase0)
 
-    #exec(open("solution/database_helper_solve.xci").read())
-
     ''' 
     print("previousName= ",previousName)
     print("tag= ",tagComb)
