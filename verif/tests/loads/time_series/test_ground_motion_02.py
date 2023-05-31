@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import json
 import xc
 
 feProblem= xc.FEProblem()
@@ -26,7 +27,8 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"//data/BM68elc_path.py").read())
+accelFilePath= pth+'/data/BM68elc_path.json'
+accel.path= xc.Vector(json.load( open(accelFilePath, 'r')))
 hist.accel= accel
 
 motionDuration= mr.getDuration() 
