@@ -104,7 +104,8 @@ analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)
 
 
-exec(open(pth+"/test_vector3d_uniform_load_global.py").read())
+import test_vector3d_uniform_load_global
+ratio1, ratio2, ratio3= test_vector3d_uniform_load_global.check_values(modelSpace, f, E, A, L, n1, n2, el)
 
 ''' 
 print("delta: ",delta)
