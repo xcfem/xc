@@ -391,6 +391,17 @@ class NodeSupportRecord(be.SupportRecord):
     :ivar nodeId: identifier of the supported node.
     '''
     def __init__(self, ident, nodeId, xComp= be.ComponentSupportRecord(), yComp= be.ComponentSupportRecord(), zComp= be.ComponentSupportRecord(), rxComp= be.ComponentSupportRecord('Free'), ryComp= be.ComponentSupportRecord('Free'), rzComp= be.ComponentSupportRecord('Free')):
+        ''' Constructor.
+
+        :param ident: object identifier.
+        :param nodeId: identifier of the supported node.
+        :param xComp: x displacement constraint definition.
+        :param yComp: y displacement constraint definition.
+        :param zComp: z displacement constraint definition.
+        :param rxComp: x rotation constraint definition.
+        :param ryComp: y rotation constraint definition.
+        :param rzComp: z rotation constraint definition.
+        '''
         super(NodeSupportRecord,self).__init__(ident,xComp,yComp,zComp,rxComp,ryComp,rzComp)
         self.nodeId= nodeId
         

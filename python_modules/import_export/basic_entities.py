@@ -11,9 +11,18 @@ __email__= "l.pereztato@gmail.com"
 from misc_utils import log_messages as lmsg
 
 class ComponentSupportRecord(object):
-    '''Constraints for x,y,z,rx,ry,rz displacements of a node/kPoint.'''
+    '''Constraints for x,y,z,rx,ry,rz displacements of a node/kPoint.
+
+     :ivar typ: constraint component type.
+     :ivar k: stiffness.
+    '''
     
-    def __init__(self,typ= 'Rigid', k= 0.0):
+    def __init__(self, typ= 'Rigid', k= 0.0):
+        ''' Constructor.
+
+        :param typ: constraint component type.
+        :param k: stiffness.
+        '''
         self.typ= typ #Free","Rigid", "Flexible"
         self.k= k
       
@@ -48,8 +57,27 @@ class ComponentSupportRecord(object):
         
 
 class SupportRecord(object):
-    ''' Constraints for displacements'''
+    ''' Constraints for displacements.
+
+    :ivar id: object identifier.
+    :ivar xComp: x displacement constraint definition.
+    :ivar yComp: y displacement constraint definition.
+    :ivar zComp: z displacement constraint definition.
+    :ivar rxComp: x rotation constraint definition.
+    :ivar ryComp: y rotation constraint definition.
+    :ivar rzComp: z rotation constraint definition.
+    '''
     def __init__(self, id, xComp= ComponentSupportRecord(), yComp= ComponentSupportRecord(), zComp= ComponentSupportRecord(), rxComp= ComponentSupportRecord('Free'), ryComp= ComponentSupportRecord('Free'), rzComp= ComponentSupportRecord('Free')):
+        ''' Constructor.
+
+        :param id: object identifier.
+        :param xComp: x displacement constraint definition.
+        :param yComp: y displacement constraint definition.
+        :param zComp: z displacement constraint definition.
+        :param rxComp: x rotation constraint definition.
+        :param ryComp: y rotation constraint definition.
+        :param rzComp: z rotation constraint definition.
+        '''
         self.id= id
         self.typ= 'Standard'
         self.xComp= xComp

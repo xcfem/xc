@@ -269,6 +269,7 @@ class BlockRecord(me.CellRecord):
     '''Block type entities: line, face, body,...
 
     :ivar blockProperties: labels and attributes of the block.
+    :ivar matId: material identifier.
     '''    
     def __init__(self, blkId, typ, kPoints, blockProperties= None, thk= 0.0, matId= None):
         '''
@@ -389,6 +390,26 @@ class BlockRecord(me.CellRecord):
         ''' Return the attribute corresponding to the 
             key argument in the dictionary.'''
         return self.blockProperties.getAttribute(key)
+    
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= super().getDict()
+        blockProperties= dict()
+        if(self.blockProperties):
+            blockProperties= self.blockProperties.getDict()
+        retval.extend({'blockProperties':blockProperties})
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        blockProperties= dct['blockProperties']
+        if(blockProperties):
+            self.blockProperties= BlockProperties()
+            self.blockProperties.setFromDict(dct)   
 
 class BlockDict(dict):
     '''Block container.'''    
@@ -476,18 +497,56 @@ class BlockDict(dict):
         retval= ''
         for key in self:
             retval+= str(self[key]) + '\n'
+          
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= dict()
+        for key in self.keys():
+            block= self[key]
+            retval[key]= block.getDict()
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
 
-class PointSupportRecord(be.SupportRecord):
+        :param dct: dictionary containing the values of the object members.
+        '''
+        for key in dct.keys():
+            values= dct[key]            
+            newBlock= BlockRecord(blkId= values['ident'], typ= values['cellType'], kPoints= values['nodeIds'])
+            newBlock.setFromDict(values)
+            self.append(newBlock)
+
+class PointSupportRecord(me.NodeSupportRecord):
     ''' Constraints for node displacements.'''
-    def __init__(self, id, pointId, nsr):
-        super(PointSupportRecord,self).__init__(id,nsr.xComp, nsr.yComp, nsr.zComp, nsr.rxComp, nsr.ryComp, nsr.rzComp)
-        self.nodeId= pointId
-    def __str__(self):
-        ''' Return a string representing the object.'''
-        return str(self.ident) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
+    
+    def __init__(self, ident, pointId, nsr):
+        ''' Constructor.
+
+        :param ident: object identifier.
+        :param pointId: constrained point identifier.
+        :param nsr: NodeSupportRecord object containing the values of the constraints.
+        '''
+        # Constraint values.
+        if(nsr):
+            xComp= nsr.xComp
+            yComp= nsr.yComp
+            zComp= nsr.zComp
+            rxComp= nsr.rxComp
+            ryComp= nsr.ryComp
+            rzComp= nsr.rzComp
+        else:
+            xComp= be.ComponentSupportRecord()
+            yComp= be.ComponentSupportRecord()
+            zComp= be.ComponentSupportRecord()
+            rxComp= be.ComponentSupportRecord('Free')
+            ryComp= be.ComponentSupportRecord('Free')
+            rzComp= be.ComponentSupportRecord('Free')
+        super(PointSupportRecord,self).__init__(ident= ident, nodeId= pointId, xComp= xComp, yComp= yComp, zComp= zComp, rxComp= rxComp, ryComp= ryComp, rzComp= rzComp)
 
 class PointSupportDict(dict):
-    '''Point to put constraints on.'''
+    '''Point support container.'''
+    
     def append(self, ps):
         if(ps.nodeId in self):
             className= type(self).__name__
@@ -515,6 +574,25 @@ class PointSupportDict(dict):
                   self.append(psr)
                   supportId+= 1
         return len(self)
+          
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= dict()
+        for key in self.keys():
+            support= self[key]
+            retval[key]= support.getDict()
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        for key in dct.keys():
+            values= dct[key]
+            newPointSupport= PointSupportRecord(ident= values['ident'], pointId= values['pointId'])
+            newPointSupport.setFromDict(values)
+            self.append(newPointSupport)
 
 class BlockData(object):
     '''Block topology entities container: points, lines, faces, solids,...
@@ -739,3 +817,19 @@ class BlockData(object):
         for key in self.blocks:
             retval+= str(self.blocks[key]) + '\n'
         return retval
+    
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        return {'name':self.name, 'materials': self.materials.getDict(), 'points': self.points.getDict(), 'blocks': self.blocks.getDict(), 'pointSupports': self.pointSupports.getDict(), 'verbosity': self.verbosity}
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.name= dct['name']
+        self.materials.setFromDict(dct['materials'])
+        self.points.setFromDict(dct['points'])
+        self.blocks.setFromDict(dct['blocks'])
+        self.pointSupports.setFromDict(['pointSupports'])
+        self.verbosity= dct['verbosity']
