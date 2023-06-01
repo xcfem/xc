@@ -2,17 +2,20 @@
 # Tomado del example A47 del SOLVIA Verification Manual
 from __future__ import print_function
 from __future__ import division
-import geom
-import xc
-from model import predefined_spaces
-from materials import typical_materials
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import os
+import sys
+import geom
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+import math
 
 L= 1 # Cantilever length in meters
 b= 0.05 # Cross section width in meters
@@ -70,11 +73,15 @@ spc= constraints.newSPConstraint(nTag,2,0.0) # gdl 2
 
 
 # Solution procedure
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/arpackpp_solver.py").read())
+sys.path.append(pth+"/../../aux")
+import arpackpp_solver
+
+analysis= arpackpp_solver.get_analysis(feProblem)
+analOk= analysis.analyze(2)
+eig1= analysis.getEigenvalue(1)
 
 
 omega= eig1**0.5
