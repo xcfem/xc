@@ -162,7 +162,10 @@ class ControlVarsBase(object):
         return {'combName': self.combName, 'CF':self.getCF()}
 
     def setFromDict(self, dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         self.combName= dct['combName']
         self.CF= dct['CF']
        

@@ -47,7 +47,7 @@ class BlockProperties(object):
         '''
         retval= None
         if(blockProperties):
-            retval= BlockProperties(blockProperties.labels, blockProperties.attributes)
+            retval= BlockProperties(labels= blockProperties.labels, attributes= blockProperties.attributes)
         else:
             retval= BlockProperties()
         return retval
@@ -117,20 +117,32 @@ class BlockProperties(object):
     def __str__(self):
         return 'labels: '+str(self.labels)+' attributes: '+str(self.attributes)
 
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        return {'labels':self.labels, 'attributes':self.attributes}
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.labels= dct['labels']
+        self.attributes= dct['attributes']
     
 class PointRecord(me.NodeRecord):
     '''kPoint type entity
 
+    :ivar blockProperties: labels and attributes of the point.
     '''
-    def __init__(self,id, coords, blockProperties= None):
+    def __init__(self, ident, coords, blockProperties= None):
         '''
         Key point constructor.
 
-        :param id: identifier for the point.
+        :param ident: identifier for the point.
         :param coords: coordinates of the point.
         :param blockProperties: labels and attributes of the point.
         '''    
-        super(PointRecord,self).__init__(id,coords)
+        super(PointRecord,self).__init__(ident,coords)
         if(blockProperties):
             self.blockProperties= blockProperties
         else:
@@ -163,10 +175,39 @@ class PointRecord(me.NodeRecord):
             key argument in the dictionary.'''
         return self.blockProperties.getAttribute(key)
 
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= super().getDict()
+        blockProperties= dict()
+        if(self.blockProperties):
+            blockProperties= self.blockProperties.getDict()
+        retval.extend({'blockProperties':blockProperties})
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        blockProperties= dct['blockProperties']
+        if(blockProperties):
+            self.blockProperties= BlockProperties()
+            self.blockProperties.setFromDict(dct)
+    
 class PointDict(me.NodeDict):
     ''' Point container.'''
-    def append(self,id,x,y,z):
-        pr= PointRecord(int(id),[x,y,z])
+    
+    def append(self, ident , x, y, z, blockProperties= None):
+        ''' Append a new point to the container.
+
+        :param ident: identifier for the point.
+        :param x: x-coordinate of the point.
+        :param y: y-coordinate of the point.
+        :param z: z-coordinate of the point.
+        :param blockProperties: labels and attributes of the point.
+        '''
+        pr= PointRecord(ident= int(ident), coords= [x,y,z], blockProperties= blockProperties)
         self[pr.ident]= pr
         return pr.ident
         
@@ -198,7 +239,31 @@ class PointDict(me.NodeDict):
         ''' Write the XC commands that define nodes.'''
         xcCommandString= self.getXCCommandString(xcImportExportData)
         f.write(xcCommandString)
-            
+                        
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= dict()
+        for key in self.keys():
+            point= self[key]
+            retval[key]= point.getDict()
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        for key in dct.keys():
+            values= dct[key]
+            ident= values['ident']
+            coords= values['coords']
+            [x, y, z]= values['coords']
+            blocProperties= None
+            tmp= values['blockProperties']
+            if(tmp):
+                blockProperties= BlockProperties()
+                blockProperties.setFromDict(tmp)
+            self.append(ident= ident, x= x, y= y, z= z, blockProperties= blockProperties)
 
 class BlockRecord(me.CellRecord):
     '''Block type entities: line, face, body,...
