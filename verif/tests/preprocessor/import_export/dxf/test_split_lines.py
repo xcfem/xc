@@ -10,10 +10,12 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import os
 import sys
+import json
 import geom
 import xc
 from import_export import dxf_reader
 from import_export import neutral_mesh_description as nmd
+from import_export import block_topology_entities as bte
 from model import predefined_spaces
 # from postprocess import output_handler
 import logging
@@ -41,7 +43,8 @@ def importMultiBlockTopology(dxfFileName, outputFileName, layerNamesToImport, ge
     ieData.problemName= 'FEcase'
     ieData.blockData= blocks
 
-    ieData.writeToXCFile()
+    #ieData.writeToXCFile()
+    ieData.writeToJSON()
     return ieData
 
 #baseName= 'wireframe_model_rev01'
@@ -56,13 +59,25 @@ ieData= importMultiBlockTopology(dxfFileName= dxfFilePath, outputFileName= xcBlo
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Split lines test'
-xcBlocksPath= './'+xcBlocksFileName+'.py'
-exec(open(xcBlocksPath).read())
+jsonBlocksPath= './'+xcBlocksFileName+'.json'
+f= open(jsonBlocksPath,'r') # Open JSON file
+data= json.load(f) # returns JSON object as a dictionary.
+bData= nmd.XCImportExportData()
+bData.setFromDict(data)
+
+
+# Create xc problem.
+feProblem= xc.FEProblem()
+# Dump the topology into this problem.
+bData.dumpToXC(feProblem.getPreprocessor)
+
+points= feProblem.getPreprocessor.getMultiBlockTopology.getPoints
+lines= feProblem.getPreprocessor.getMultiBlockTopology.getLines
 
 numberOfLinesBeforeSplitting= len(lines)
 numberOfPointsBeforeSplitting= len(points)
 numberOfClips= numberOfLinesBeforeSplitting/4.0
-xcTotalSet= preprocessor.getSets.getSet('total')
+xcTotalSet= feProblem.getPreprocessor.getSets.getSet('total')
 xcTotalSet.getEntities.splitLinesAtIntersections(1e-3)
 numberOfLinesAfterSplitting= len(lines)
 numberOfPointsAfterSplitting= len(points)
@@ -97,4 +112,4 @@ if((abs(ratio1)<1e-15) and (abs(ratio2)<1e-15)):
 else:
     lmsg.error(fname+' ERROR.')
     
-os.system('rm -f '+xcBlocksPath) # Your garbage you clean it
+os.system('rm -f '+jsonBlocksPath) # Your garbage you clean it

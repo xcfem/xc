@@ -101,6 +101,18 @@ class NodeRecord(object):
         strId= str(self.ident)
         strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
         return 'n' + strId + '= ' + nodeHandlerName + strCommand
+    
+    def dumpToXC(self, preprocessor):
+        ''' Dump the node into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        # Create point.
+        nodeHandler= preprocessor.getNodeHandler()
+        newNode= nodeHandler.newNodeIDXYZ(self.ident, self.coords[0],self.coords[1],self.coords[2])
+        # Assing properties.
+        self.blockProperties.dumpToXC(preprocessor, newNode)
+        return newNode
 
     def writeDxf(self,drawing,layerName):
         msp= drawing.modelspace()
@@ -163,6 +175,16 @@ class NodeDict(dict):
             strCommand= self[key].getXCCommandString(xcImportExportData.nodeHandlerName)
             retval+= (strCommand+'\n')
         return retval
+    
+    def dumpToXC(self, preprocessor):
+        ''' Dump the nodes of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        retval= list()
+        for key in self:
+            newNode= self[key].dumpToXC(preprocessor)
+            retval.append(newNode)
         
     def writeToXCFile(self,f,xcImportExportData):
         ''' Write the XC commands that define nodes.'''
@@ -242,11 +264,27 @@ class CellRecord(object):
         
     def getXCCommandString(self,xcImportExportData):
         strId= str(self.ident)
-        type= xcImportExportData.convertCellType(self.cellType)
-        strType= "'"+type+"'"
+        cellType= xcImportExportData.convertCellType(self.cellType)
+        strType= "'"+cellType+"'"
         strCommand= xcImportExportData.cellHandlerName + ".defaultTag= "+ strId +'; '
         strCommand+= 'e' + strId + '= ' + xcImportExportData.cellHandlerName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
         return strCommand
+
+    def dumpToXC(self, preprocessor):
+        ''' Defines the corresponding (line, surface or volume) entity in XC.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        # Create line or surface.
+        newElement= None
+        elementHandler= preprocessor.getElementHandler()
+        cellType= xcImportExportData.convertCellType(self.cellType)
+        strType= "'"+cellType+"'"
+        elementHandler.defaultTag= self.ident
+        newElement= elementHandler.newElement(cellType, xc.ID(self.nodeIds))
+        # Assign properties.
+        self.blockProperties.dumpToXC(preprocessor, newElement)
+        return newElement
     
     def writeDxf(self,nodeDict,drawing,layerName):
         numNodes= len(self.nodeIds)
@@ -287,7 +325,7 @@ class CellRecord(object):
 
     def getDict(self):
         ''' Return the object members in a Python dictionary.'''
-        return {'ident':self.ident, 'cellType':self.cellType, 'nodeIds': nodeIds, 'thickness': self.thickness}
+        return {'ident':self.ident, 'cellType':self.cellType, 'nodeIds': self.nodeIds, 'thickness': self.thickness}
     
     def setFromDict(self, dct):
         ''' Set the data values from the dictionary argument.
@@ -350,6 +388,18 @@ class CellDict(dict):
                 strCommand= self[key].getXCCommandString(xcImportExportData)
                 retval+= (strCommand+'\n')
         return retval
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the elementss of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        retval= list()
+        for key in self:
+            element= self[key]
+            xcElement= element.dumpToXC(preprocessor)
+            retval.append(xcElement)
+        return retval    
           
     def writeToXCFile(self,f,xcImportExportData):
         '''Write the XC commands that define the cells (elements).'''
@@ -411,7 +461,7 @@ class NodeSupportRecord(be.SupportRecord):
     def getDict(self):
         ''' Return the object members in a Python dictionary.'''
         retval= super().getDict()
-        retval.extend({'nodeId':self.nodeId})
+        retval.update({'nodeId':self.nodeId})
         return retval
     
     def setFromDict(self, dct):
@@ -556,12 +606,37 @@ class MeshData(object):
         for g in self.groups:
             retval+= g.getXCCommandString(xcImportExportData)
         return retval
-       
-    def writeToXCFile(self,xcImportExportData):
-        '''Write the XC commands that define the mesh.'''
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the objects in this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        nodes= self.nodes.dumpToXC(preprocessor)
+        elements= self.cells.dumpToXC(preprocessor)
+        groups= list()
+        for g in self.groups:
+            groups+= g.dumpToXC(preprocessor)
+        return nodes, elements, groups
+                 
+    def writeToXCFile(self, xcImportExportData):
+        '''Write the XC commands that define the mesh.
+
+        :param xcImportExportData: import/export parameters.
+        '''
         f= xcImportExportData.outputFile
         xcCommandString= self.getXCCommandString(xcImportExportData)
         f.write(xcCommandString)
+
+    def writeToJSON(self, xcImportExportData):
+        '''Write the objects that define the mesh.
+
+        :param xcImportExportData: import/export parameters.
+        '''
+        f= xcImportExportData.outputFile
+        meshDict= self.getDict()
+        jsonString= json.dumps(meshDict)
+        f.write(jsonString)
           
     def __str__(self):
         retval= "numberOfNodes= " +' '+str(self.numberOfNodes) + '\n'

@@ -114,6 +114,15 @@ class BlockProperties(object):
         retval+= strId+'.setProp("attributes",'+str(self.attributes)+')'
         return retval
 
+    def dumpToXC(self, preprocessor, entity):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        :param entity: entity which receives the properties.
+        '''
+        entity.setProp('labels', self.labels)
+        entity.setProp('attributes', self.attributes)        
+
     def __str__(self):
         return 'labels: '+str(self.labels)+' attributes: '+str(self.attributes)
 
@@ -126,8 +135,10 @@ class BlockProperties(object):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        self.labels= dct['labels']
-        self.attributes= dct['attributes']
+        if('labels' in dct):
+            self.labels= dct['labels']
+        if('attributes' in dct):
+            self.attributes= dct['attributes']
     
 class PointRecord(me.NodeRecord):
     '''kPoint type entity
@@ -159,6 +170,18 @@ class PointRecord(me.NodeRecord):
         if(len(propCommand)>0):
           strCommand+= '; '+propCommand
         return 'pt' + strId + '= ' + pointHandlerName + strCommand
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        # Create point.
+        pointHandler= preprocessor.getMultiBlockTopology.getPoints
+        newPoint= pointHandler.newPoint(self.ident, geom.Pos3d(self.coords[0],self.coords[1],self.coords[2]))
+        # Assing properties.
+        self.blockProperties.dumpToXC(preprocessor, newPoint)
+        return newPoint
     
     def hasLabel(self, label):
         ''' Return true if the label argument is the label
@@ -181,7 +204,7 @@ class PointRecord(me.NodeRecord):
         blockProperties= dict()
         if(self.blockProperties):
             blockProperties= self.blockProperties.getDict()
-        retval.extend({'blockProperties':blockProperties})
+        retval.update({'blockProperties':blockProperties})
         return retval
     
     def setFromDict(self, dct):
@@ -214,7 +237,11 @@ class PointDict(me.NodeDict):
     def getName(self):
         return 'points'
       
-    def readFromXCSet(self,xcSet):
+    def readFromXCSet(self, xcSet):
+        ''' Read the points from the XC set and append them to this container.
+
+        :param xcSet: xc set.
+        '''
         pointSet= xcSet.getPoints
         for p in pointSet:
             pos= p.getPos
@@ -234,6 +261,16 @@ class PointDict(me.NodeDict):
         # Write a dictionary to access those points from its id.
         retval+= '\nxcPointsDict= {'+strDict[:-1]+'}\n\n'
         return retval;
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the points of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        retval= list()
+        for key in self:
+            newPoint= self[key].dumpToXC(preprocessor)
+            retval.append(newPoint)
             
     def writeToXCFile(self,f, xcImportExportData):
         ''' Write the XC commands that define nodes.'''
@@ -375,6 +412,31 @@ class BlockRecord(me.CellRecord):
           strCommand+= '; '+propCommand
         strCommand+= self.getStrThicknessCommand(strId)
         return strCommand
+
+    def dumpToXC(self, preprocessor):
+        ''' Defines the corresponding (line, surface or volume) entity in XC.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        # Create line or surface.
+        newBlock= None
+        pointIds= self.nodeIds
+        if(self.cellType=='line'): # Create line.
+            lines= preprocessor.getMultiBlockTopology.getLines
+            newBlock= lines.newLine(pointIds[0], pointIds[1])
+        elif(self.cellType=='face'): # Create surface.
+            surfaces= preprocessor.getMultiBlockTopology.getSurfaces
+            if(len(pointIds)==4 and (not self.hasHoles()) and (not self.isHole())): # quad surface.
+                newBlock= surfaces.newQuadSurfacePts(pointIds[0], pointIds[1], pointIds[2], pointIds[3])
+            else: # polygonal surface.
+                newBlock= surfaces.newPolygonalFacePts(pointIds)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for blocks of type: '+ self.cellType)
+        # Assign properties.
+        self.blockProperties.dumpToXC(preprocessor, newBlock)
+        return newBlock        
     
     def hasLabel(self, label):
         ''' Return true if the label argument is the label
@@ -397,7 +459,7 @@ class BlockRecord(me.CellRecord):
         blockProperties= dict()
         if(self.blockProperties):
             blockProperties= self.blockProperties.getDict()
-        retval.extend({'blockProperties':blockProperties})
+        retval.update({'blockProperties':blockProperties})
         return retval
     
     def setFromDict(self, dct):
@@ -416,7 +478,7 @@ class BlockDict(dict):
     def append(self,cell):
         self[cell.ident]= cell
         
-    def readFromXCSet(self,xcSet):
+    def readFromXCSet(self, xcSet):
         ''' Read blocks from XC set.'''
         surfaces= xcSet.getSurfaces
         for s in surfaces:
@@ -478,6 +540,31 @@ class BlockDict(dict):
             ownerName= holeDict[holeId] # name of the block with the hole.
             ownerId= blocksWithHoles[ownerName] # id of the block with the hole.
             retval+= ('f'+str(ownerId)+'.addHole(f'+holeId+')\n')
+        return retval
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        retval= list()
+        holeDict= dict() # Blocks which are holes.
+        blocksWithHoles= dict() # blocks which have holes.
+        for key in self:
+            block= self[key]
+            xcBlock= block.dumpToXC(preprocessor)
+            retval.append(xcBlock)
+            # Check for holes.
+            holeNames= block.getAttribute('holeNames')
+            if(holeNames!=None): # Block has holes.
+                blocksWithHoles[block.getAttribute('name')]= block
+            if(block.isHole()): # Block is a hole.
+                holeDict[block.ident]= (xcBlock, block.getAttribute('ownerName'))           
+        # Loop on holes.
+        for holeId in holeDict:
+            (hole, ownerName)= holeDict[holeId] # hole block and name of the block with the hole.
+            owner= blocksWithHoles[ownerName] # id of the block with the hole.
+            owner.addHole(hole.name)
         return retval
 
     def writeToXCFile(self,f,xcImportExportData):
@@ -751,13 +838,32 @@ class BlockData(object):
         retval+= self.points.getXCCommandString(xcImportExportData)
         retval+= self.blocks.getXCCommandString(xcImportExportData)
         return retval
-        
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        points= self.points.dumpToXC(preprocessor)
+        blocks= self.blocks.dumpToXC(preprocessor)
+        return blocks
+
     def writeToXCFile(self,xcImportExportData):
         ''' Write a Python file with XC commands.'''
         f= xcImportExportData.outputFile
         xcCommandString= self.getXCCommandString(xcImportExportData)
         f.write(xcCommandString)
         f.close()
+
+    def writeToJSON(self, xcImportExportData):
+        '''Write the objects that define the mesh.
+
+        :param xcImportExportData: import/export parameters.
+        '''
+        f= xcImportExportData.outputFile
+        blockDict= self.getDict()
+        jsonString= json.dumps(blockDict)
+        f.write(jsonString)
 
     def getPointTags(self):
         ''' Return the identifiers of the points.'''
@@ -831,5 +937,5 @@ class BlockData(object):
         self.materials.setFromDict(dct['materials'])
         self.points.setFromDict(dct['points'])
         self.blocks.setFromDict(dct['blocks'])
-        self.pointSupports.setFromDict(['pointSupports'])
+        self.pointSupports.setFromDict(dct['pointSupports'])
         self.verbosity= dct['verbosity']
