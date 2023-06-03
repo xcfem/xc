@@ -62,6 +62,7 @@ refResult= {0: ['xc_comp'], 1: ['xc_comp'], 2: ['xc_grp'], 3: ['xc_grp']}
 print('number of points: ', num_points)
 print('number of lines: ', num_lines)
 print(result)
+print(refResult)
 print(result==refResult)
 '''
 

@@ -147,7 +147,12 @@ class XCImportExportData(object):
             grp.readFromDATFile(fName)
             self.meshDesc.groups.append(grp)
 
-    def readDxfFile(self,fName,preprocessor):
+    def readDxfFile(self, fName, preprocessor):
+        ''' Read from DXF file.
+
+        :param fName: file name.
+        :param preprocessor: xc preprocessor for the FE problem.
+        '''
         self.blockData= bte.BlockData()
         self.blockData.name= fName
         self.blockData.readFromDxfFile(fName,preprocessor,self.dxfLayers)
@@ -155,6 +160,16 @@ class XCImportExportData(object):
             grp= GroupRecord()
             grp.setUp(l,self.blockData.pointsInLayer[l],self.blockData.blocksInLayer[l])
             self.blockData.groups.append(grp)
+
+    def readJSONFile(self, fName):
+        ''' Read from JSON file.
+
+        :param fName: file name.
+        '''
+        f= open(fName,'r') # Open JSON file
+        dataDict= json.load(f) # returns JSON object as a dictionary.
+        self.setFromDict(dataDict)
+        f.close()
 
     def writeDxfFile(self,fileName):
         self.blockData.writeDxfFile(fileName)

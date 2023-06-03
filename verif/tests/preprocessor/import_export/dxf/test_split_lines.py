@@ -43,11 +43,9 @@ def importMultiBlockTopology(dxfFileName, outputFileName, layerNamesToImport, ge
     ieData.problemName= 'FEcase'
     ieData.blockData= blocks
 
-    #ieData.writeToXCFile()
     ieData.writeToJSON()
     return ieData
 
-#baseName= 'wireframe_model_rev01'
 baseName= 'test_split_lines_01'
 dxfFName= baseName+'.dxf'
 xcBlocksFileName= baseName+'_blocks'
@@ -59,11 +57,8 @@ ieData= importMultiBlockTopology(dxfFileName= dxfFilePath, outputFileName= xcBlo
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Split lines test'
-jsonBlocksPath= './'+xcBlocksFileName+'.json'
-f= open(jsonBlocksPath,'r') # Open JSON file
-data= json.load(f) # returns JSON object as a dictionary.
 bData= nmd.XCImportExportData()
-bData.setFromDict(data)
+bData.readJSONFile(fName= ieData.getJSONFileName()) # Read from the previous output.
 
 
 # Create xc problem.
@@ -112,4 +107,4 @@ if((abs(ratio1)<1e-15) and (abs(ratio2)<1e-15)):
 else:
     lmsg.error(fname+' ERROR.')
     
-os.system('rm -f '+jsonBlocksPath) # Your garbage you clean it
+os.system('rm -f '+ieData.getJSONFileName()) # Your garbage you clean it

@@ -35,11 +35,14 @@ ieData.outputFileName= '/tmp/'+baseName+'_blocks'
 ieData.problemName= 'FEcase'
 ieData.blockData= blocks
 
-ieData.writeToXCFile()
+ieData.writeToJSON()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Test IFC points.'
-exec(open(ieData.outputFileName+'.py').read())
+preprocessor= FEcase.getPreprocessor
+bData= nmd.XCImportExportData()
+bData.readJSONFile(fName= ieData.getJSONFileName()) # Read from the previous output.
+bData.dumpToXC(FEcase.getPreprocessor)
 
 xcTotalSet= preprocessor.getSets.getSet('total')
 
