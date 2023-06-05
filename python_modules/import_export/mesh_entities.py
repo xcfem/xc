@@ -325,7 +325,7 @@ class CellRecord(object):
 
     def getDict(self):
         ''' Return the object members in a Python dictionary.'''
-        return {'ident':self.ident, 'cellType':self.cellType, 'nodeIds': self.nodeIds, 'thickness': self.thickness}
+        return {'ident':self.ident, 'cellType':self.cellType, 'nodeIds': self.nodeIds, 'thickness': float(self.thickness)}
     
     def setFromDict(self, dct):
         ''' Set the data values from the dictionary argument.

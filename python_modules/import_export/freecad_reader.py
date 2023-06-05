@@ -85,7 +85,7 @@ def get_ifc_attributes(obj):
     # Read attributes that correspond to a lenght measurement.
     for attrName in ifcLengthAttributes:
         if hasattr(obj,attrName):
-            retval[attrName]= getattr(obj,attrName).getValueAs('m') # meter
+            retval[attrName]= float(getattr(obj,attrName).getValueAs('m')) # meter
     # Read attributes that correspond to an area measurement.
     for attrName in ifcAreaAttributes:
         if hasattr(obj,attrName):
