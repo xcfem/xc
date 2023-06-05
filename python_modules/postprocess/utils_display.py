@@ -205,6 +205,10 @@ class TakePhotos(object):
     '''
     
     def __init__(self,xcSet):
+        ''' Constructor.
+
+        :param xcSet: set containing the objects that will be displayed.
+        '''
         self.displaySettings= None
         self.xcSet= xcSet
         self.displaySettings= vtk_FE_graphic.DisplaySettingsFE()
