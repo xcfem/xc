@@ -36,7 +36,6 @@ ieData.blockData= blocks
 
 # Write block topology data.
 ieData.writeToJSON()
-#ieData.writeToXCFile()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Test IFC lines.'
