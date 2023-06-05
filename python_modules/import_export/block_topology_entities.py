@@ -558,14 +558,14 @@ class BlockDict(dict):
             # Check for holes.
             holeNames= block.getAttribute('holeNames')
             if(holeNames!=None): # Block has holes.
-                blocksWithHoles[block.getAttribute('name')]= block
+                blocksWithHoles[block.getAttribute('name')]= xcBlock
             if(block.isHole()): # Block is a hole.
                 holeDict[block.ident]= (xcBlock, block.getAttribute('ownerName'))           
         # Loop on holes.
         for holeId in holeDict:
             (hole, ownerName)= holeDict[holeId] # hole block and name of the block with the hole.
             owner= blocksWithHoles[ownerName] # id of the block with the hole.
-            owner.addHole(hole.name)
+            owner.addHole(hole)
         return retval
 
     def writeToXCFile(self,f,xcImportExportData):
