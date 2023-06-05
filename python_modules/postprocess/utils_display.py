@@ -37,33 +37,49 @@ class setToDisplay(object):
     :ivar genDescr: general description
     :ivar sectDescr: ordered list with the descriptions that apply to each of the sections that configures the element.
     '''
-    def __init__(self,elSet,genDescr='',sectDescr=[]):
+    def __init__(self, elSet, genDescr='', sectDescr=[]):
+        ''' Constructor.
+
+        :param elSet:    set of elements
+        :param genDescr: general description
+        :param sectDescr: ordered list with the descriptions that apply to each of the sections that configures the element.
+        '''
         self.elSet=elSet
         self.elSet.fillDownwards()
         self.genDescr=genDescr
         self.sectDescr=sectDescr
 
 class FigureBase(object):
-    def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
-      ''' Figure base constructor.
+    ''' Base of the objects used to create figures.
 
-      :ivar pLabel: part label; something like 'wall' or '2ndFloorDeck'
-      :ivar limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
-      :ivar figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
-      :ivar units: units displayed; something like '[MPa]' or 'radians'...
-      :ivar reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
-      :ivar sz: LaTeX size for the figure.
-      '''
-      self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
-      self.limitStateLabel= limitStateLabel #Something like "Fatigue" or "CrackControl"
-      self.attributeName= ''
-      self.figDescription= figDescr #Text to insert as caption in the LaTeX file.
-      self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
-      self.reinforcementDescription= reinfDescr #Something like "horizontal reinforcement."
-      self.figSize= sz #LaTeX size for the figure.
-      self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
+    :ivar pLabel: part label; something like 'wall' or '2ndFloorDeck'
+    :ivar limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
+    :ivar figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+    :ivar units: units displayed; something like '[MPa]' or 'radians'...
+    :ivar reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+    :ivar sz: LaTeX size for the figure.
+    '''
+    def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+        ''' Figure base constructor.
+
+        :param pLabel: part label; something like 'wall' or '2ndFloorDeck'
+        :param limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
+        :param figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+        :param units: units displayed; something like '[MPa]' or 'radians'...
+        :param reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+        :param sz: LaTeX size for the figure.
+        '''
+        self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
+        self.limitStateLabel= limitStateLabel #Something like "Fatigue" or "CrackControl"
+        self.attributeName= ''
+        self.figDescription= figDescr #Text to insert as caption in the LaTeX file.
+        self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
+        self.reinforcementDescription= reinfDescr #Something like "horizontal reinforcement."
+        self.figSize= sz #LaTeX size for the figure.
+        self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
       
     def getCaption(self):
+        ''' Return the figure caption.'''
         retval= self.partLabel+'. '+self.figDescription
         if(self.unitsLabel!=None):
             retval+= ' ['+ self.unitsLabel +']'
@@ -72,6 +88,7 @@ class FigureBase(object):
         return retval
     
     def getFileName(self):
+        ''' Return the file name to store the bitmap.'''
         return su.slugify(self.partLabel+self.limitStateLabel+self.attributeName)
     
     def insertIntoLatex(self, fichLatexFigs, fichLatexList, fichFig, labelText):
@@ -137,8 +154,12 @@ class SlideDefinition(FigureBase):
   
 
 class FigureDefinition(SlideDefinition):
+    ''' Definition of a figure.
 
-    def __init__(self,pLabel,limitStateLabel,attrName,argument,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+    :ivar attributeName: name of the attribute to display.
+    :ivar argument: argument for the attribute.
+    '''
+    def __init__(self, pLabel, limitStateLabel, attrName, argument, figDescr, reinfDescr=None, units=None, sz= "90mm"):
         ''' Figure constructor.
 
         :param pLabel: part label as defined in model; something like 'wall' or '2ndFloorDeck'
@@ -175,7 +196,13 @@ class FigureDefinition(SlideDefinition):
             convert_to_eps(jpegName,epsName)
  
 class TakePhotos(object):
-    '''Generation of bitmaps with analysis and design results.'''
+    '''Generation of bitmaps with analysis and design results.
+
+    :ivar pthGraphOutput: path to the directory to put the graphics in.
+    :ivar pthTextOutput: path to the directory to put the texts in.
+    :ivar fichLatexFigs: Latex file to include figures (defaults to None).
+    :ivar fichLatexList: Latex file with figures list (defaults to None).
+    '''
     
     def __init__(self,xcSet):
         self.displaySettings= None
