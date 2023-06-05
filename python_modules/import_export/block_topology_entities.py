@@ -409,7 +409,7 @@ class BlockRecord(me.CellRecord):
             lmsg.error(className+'.'+methodName+'; not implemented for blocks of type: '+ self.cellType)
         propCommand= self.blockProperties.getXCCommandString(strId)
         if(len(propCommand)>0):
-          strCommand+= '; '+propCommand
+            strCommand+= '; '+propCommand
         strCommand+= self.getStrThicknessCommand(strId)
         return strCommand
 
@@ -436,6 +436,7 @@ class BlockRecord(me.CellRecord):
             lmsg.error(className+'.'+methodName+'; not implemented for blocks of type: '+ self.cellType)
         # Assign properties.
         self.blockProperties.dumpToXC(preprocessor, newBlock)
+        newBlock.setProp("thickness",self.thickness)
         return newBlock        
     
     def hasLabel(self, label):
