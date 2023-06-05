@@ -16,6 +16,7 @@ from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import fields
 from postprocess.control_vars import *
+from postprocess import control_vars
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -244,7 +245,11 @@ class PartToDisplay(object):
                 retval.append(elem)
         return retval
     
-    def getElementSet(self,preprocessor):
+    def getElementSet(self, preprocessor):
+        ''' Return the elements contained in this object in a XC set.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         elementSetName= self.getShortName()+'_elementSet'
         elems= self.elements
         # Define the set
@@ -254,9 +259,11 @@ class PartToDisplay(object):
         self.xcSet.fillDownwards()
         return self.xcSet
     
-    def display(self,preprocessor,tp,resultsToDisplay):
+    def display(self,preprocessor, tp, resultsToDisplay):
         '''Generate an image for every result to display
 
+        :param preprocessor: preprocessor of the finite element problem.
+        :param tp: TakePhoto object to use to capture the image.
         :param resultToDisplay: collection of results to be displayed.
         '''
         elementSet= self.getElementSet(preprocessor)
@@ -274,19 +281,19 @@ class PartToDisplayContainer(dict):
     def add(self,part):
         self[part.getShortName()]= part
       
-    def display(self,preprocessor,tp,resultsToDisplay):
+    def display(self, preprocessor, tp, resultsToDisplay):
         '''Display results for each part.
 
+        :param preprocessor: preprocessor of the finite element problem.
+        :param tp: TakePhoto object to use to capture the image.
         :param resultToDisplay: collection of results to be displayed.
         '''
         #Load properties to display:
         fName= resultsToDisplay.limitStateData.getOutputDataFileName()
-        print('******* calling: ', fName)
-        with open(fName) as infile:
-            exec(infile.read())
+        control_vars.readControlVars(preprocessor= preprocessor, inputFileName= fName)
         for k in self.keys():
             part= self[k]
-            part.display(preprocessor,tp,resultsToDisplay)
+            part.display(preprocessor, tp, resultsToDisplay)
 
 def plotStressStrainFibSet(fiberSet,title,fileName=None,nContours=100,pointSize=50, fiberShape='o'):
     '''Represents graphically the cross-section current stresses and strains.
