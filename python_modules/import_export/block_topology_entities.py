@@ -471,7 +471,7 @@ class BlockRecord(me.CellRecord):
         blockProperties= dct['blockProperties']
         if(blockProperties):
             self.blockProperties= BlockProperties()
-            self.blockProperties.setFromDict(dct)   
+            self.blockProperties.setFromDict(blockProperties)        
 
 class BlockDict(dict):
     '''Block container.'''    
