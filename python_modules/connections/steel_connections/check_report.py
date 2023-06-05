@@ -397,7 +397,7 @@ def display_weld_results(modelSpace,welds2Check,ULS,set2displ=None):
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess import limit_state_data as lsd
 
-def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
+def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm, resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
     '''Generates the graphics corresponding to results of vonmises verification
     (efficiency and vonmises stresses)
     together with the tex file to include them in a report.
