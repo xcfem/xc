@@ -8,3 +8,4 @@ Verification test for the checkings made according to [Eurocode 3](https://euroc
  - [Eurocode applied. Design of Steel Structures](https://eurocodeapplied.com/design/en1993)
  - [Buckling](https://en.wikipedia.org/wiki/Buckling)
  - [SDC Eurocode 3 Benchmarks](https://sdcverifier.com/benchmarks/eurocode3-design-examples)
+ 
