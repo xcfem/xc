@@ -78,7 +78,7 @@ void XC::IntegratorVectors::distribDetermineUhat(const int &pID,LinearSOE &theLi
       theLinSOE.zeroB();
 
     if(theLinSOE.solve() < 0)
-      std::cerr << "XC::IntegratorVectors::" << __FUNCTION__
+      std::cerr << "IntegratorVectors::" << __FUNCTION__
 	        << "; failed in solver." << std::endl;
     deltaUhat= theLinSOE.getX();
   }
@@ -89,7 +89,7 @@ void XC::IntegratorVectors::determineUhat(LinearSOE &theLinSOE)
     // determine dUhat    
     theLinSOE.setB(phat);
     if(theLinSOE.solve() < 0)
-      std::cerr << "XC::IntegratorVectors::" << __FUNCTION__
+      std::cerr << "IntegratorVectors::" << __FUNCTION__
 	        << "; failed in solver." << std::endl;
     deltaUhat= theLinSOE.getX();
   }
@@ -139,7 +139,9 @@ void XC::IntegratorVectors::domainChanged(const size_t &sz,IncrementalIntegrator
         }
     if(!haveLoad)
       {
-        std::cerr << "WARNING IntegratorVectors::domainChanged() - zero reference load";
+        std::cerr << "IntegratorVectors::" << __FUNCTION__
+	          << "; WARNING zero reference load"
+	          << std::endl;
       }
   }
 
@@ -176,7 +178,8 @@ int XC::IntegratorVectors::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "IntegratorVectors::sendSelf() - failed to send data\n";
+      std::cerr << "IntegratorVectors::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -188,13 +191,15 @@ int XC::IntegratorVectors::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << "IntegratorVectors::recvSelf - failed to receive ids.\n";
+      std::cerr << "IntegratorVectors::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << "IntegratorVectors::recvSelf - failed to receive data.\n";
+          std::cerr << "IntegratorVectors::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
