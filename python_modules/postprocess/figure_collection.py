@@ -150,7 +150,13 @@ class FigsCollectionPlotter(object):
         '''
         self.plotCrackingControlVars(preprocessor= preprocessor, partName= partName, elemSetName= elemSetName, slsStr= 'quasi-permanent')
 
-    def plotFatigue(self,preprocessor,partName,elemSetName):
+    def plotFatigue(self,preprocessor, partName, elemSetName):
+        ''' Plot fatigue results.
+
+        :param preprocessor: preprocessor of the finite element model.
+        :param partName: name of the model part.
+        :param elemSetName: name of the set to display.
+        '''
         figureList= []
         eluStr= "Fatigue"
         figureList.append(utils_display.FigureDefinition(partName,eluStr,"inc_sg_s1",txtIncSgS,self.reinforcementText1,self.sUnits))
