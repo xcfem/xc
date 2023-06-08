@@ -37,7 +37,7 @@ steelBeam.title= 'Example F.1-1A'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
-#Materials
+# Materials
 ## Steel material
 steel= ASTM_materials.A992
 steel.gammaM= 1.00
@@ -85,7 +85,7 @@ deadLoad= xc.Vector([0.0,0.0,-0.45e3*kip2kN/units_utils.footToMeter])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
     e.vector3dUniformLoadGlobal(deadLoad)
-  
+
 ## Live load.
 liveLoad= xc.Vector([0.0,0.0,-0.75e3*kip2kN/units_utils.footToMeter])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
@@ -112,17 +112,17 @@ loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
 limitStates= [lsd.steelNormalStressesResistance, # Normal stresses resistance.
-lsd.steelShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
-] 
+              lsd.steelShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
+              ]
 
 ## Create AISC Member objects.
 aiscCalcSet= modelSpace.defSet('aiscCalcSet') # Elements to be checked as AISC members.
 aiscMembers= list() # AISC members.
-for l in xcTotalSet.getLines:
-    #Lx= l.getLength()
+for ln in xcTotalSet.getLines:
+    # Lx= ln.getLength()
     Lx= 0.5 # continuously braced.
-    member= aisc.Member(name= l.name, section= shape,unbracedLengthX= Lx, lstLines= [l])
-    #member.setControlPoints()
+    member= aisc.Member(name= ln.name, section= shape,unbracedLengthX= Lx, lstLines= [ln])
+    # member.setControlPoints()
     member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= aiscCalcSet)
     aiscMembers.append(member)
 
