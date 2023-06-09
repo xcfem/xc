@@ -1047,7 +1047,8 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
 python tests/materials/ec3/test_cross_section_verification.py
-python tests/materials/ec3/test_beam_control_points.py
+python tests/materials/ec3/test_beam_control_points_01.py
+python tests/materials/ec3/test_beam_control_points_02.py
 python tests/materials/ec3/test_biax_bend_coeff.py
 python tests/materials/ec3/test_section_classification_01.py
 python tests/materials/ec3/test_section_classification_02.py

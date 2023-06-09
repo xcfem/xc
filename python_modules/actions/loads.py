@@ -326,7 +326,7 @@ class PointLoadOverShellElems(BaseVectorLoad):
         return factor*self.loadVector.Norm()
 
             
-class EarthPressLoad(BaseVectorLoad):
+class EarthPressLoad():
     '''Earth pressure applied on the elements (shell or beams)
     included in the set xcSet. 
     
@@ -354,9 +354,11 @@ class EarthPressLoad(BaseVectorLoad):
 
     '''
     def __init__(self,name, xcSet,soilData, vDir):
-        super(EarthPressLoad,self).__init__(name,vDir)
+#        super(EarthPressLoad,self).__init__(name,vDir)
+        self.name=name
         self.xcSet=xcSet
         self.soilData=soilData
+        self.vDir=vDir
         self.stripLoads=list()
         self.lineLoads=list()
         self.horzLoads=list()
@@ -364,13 +366,17 @@ class EarthPressLoad(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         if(self.soilData!=None):
-            self.soilData.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
+            self.soilData.xcSet=self.xcSet; self.soilData.vDir=self.vDir
+            self.soilData.appendLoadToCurrentLoadPattern()#xcSet=self.xcSet,vDir=self.loadVector)
         for stripL in self.stripLoads:
-            stripL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
+            stripL.xcSet=self.xcSet ; stripL.vDir=self.vDir
+            stripL.appendLoadToCurrentLoadPattern()#self.xcSet,self.loadVector)
         for lineL in self.lineLoads:
-            lineL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
+            lineL.xcSet=self.xcSet; lineL.vDir=self.vDir
+            lineL.appendLoadToCurrentLoadPattern()#self.xcSet,self.loadVector)
         for horzL in self.horzLoads:
-            horzL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
+            horzL.xcSet=self.xcSet; horzL.vDir=self.vDir
+            horzL.appendLoadToCurrentLoadPattern(self.xcSet,self.vDir)
 
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
