@@ -488,6 +488,10 @@ python tests/solution/geom_nl/aisc_360_benchmark_problem_case_06.py
 python tests/solution/geom_nl/aisc_360_benchmark_problem_case_07.py
 python tests/solution/geom_nl/aisc_360_benchmark_problem_case_08.py
 
+echo "$BLEU" "  Examples from Crisfield book." "$NORMAL"
+python tests/solution/geom_nl/crisfield_1_2_example_displacement_control.py
+
+
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
 python tests/solution/time_history/test_time_history_00.py
