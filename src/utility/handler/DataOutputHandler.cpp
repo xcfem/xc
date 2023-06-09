@@ -62,4 +62,19 @@ XC::DataOutputHandler::DataOutputHandler(int classTag)
   :MovableObject(classTag)
   {}
 
- 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::DataOutputHandler::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR. Not implemented yet." << std::endl;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::DataOutputHandler::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR. Not implemented yet." << std::endl;
+  }

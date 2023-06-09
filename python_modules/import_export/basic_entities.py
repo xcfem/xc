@@ -10,10 +10,19 @@ __email__= "l.pereztato@gmail.com"
 
 from misc_utils import log_messages as lmsg
 
-class ComponentSupportRecord:
-    '''Constraints for x,y,z,rx,ry,rz displacements of a node/kPoint.'''
+class ComponentSupportRecord(object):
+    '''Constraints for x,y,z,rx,ry,rz displacements of a node/kPoint.
+
+     :ivar typ: constraint component type.
+     :ivar k: stiffness.
+    '''
     
-    def __init__(self,typ= 'Rigid', k= 0.0):
+    def __init__(self, typ= 'Rigid', k= 0.0):
+        ''' Constructor.
+
+        :param typ: constraint component type.
+        :param k: stiffness.
+        '''
         self.typ= typ #Free","Rigid", "Flexible"
         self.k= k
       
@@ -34,28 +43,74 @@ class ComponentSupportRecord:
             retval+= '('+str(self.k)+')'
         return retval
 
-class SupportRecord(object):
-  ''' Constraints for displacements'''
-  def __init__(self, id, xComp= ComponentSupportRecord(), yComp= ComponentSupportRecord(), zComp= ComponentSupportRecord(), rxComp= ComponentSupportRecord('Free'), ryComp= ComponentSupportRecord('Free'), rzComp= ComponentSupportRecord('Free')):
-      self.id= id
-      self.typ= 'Standard'
-      self.xComp= xComp
-      self.yComp= yComp
-      self.zComp= zComp
-      self.rxComp= rxComp
-      self.ryComp= ryComp
-      self.rzComp= rzComp
-      
-  def setupFromComponentLabels(self,componentLabels):
-      self.xComp= ComponentSupportRecord(componentLabels[0])
-      self.yComp= ComponentSupportRecord(componentLabels[1])
-      self.zComp= ComponentSupportRecord(componentLabels[2])
-      self.rxComp= ComponentSupportRecord(componentLabels[3])
-      self.ryComp= ComponentSupportRecord(componentLabels[4])
-      self.rzComp= ComponentSupportRecord(componentLabels[5])
-      
-  def getStrConstraints(self):
-      return 'type: ' + self.typ + ' x: ' + str(self.xComp)+ ' y: ' + str(self.yComp) + ' z: ' + str(self.zComp)+ ' rx: ' + str(self.rxComp)+ ' ry: ' + str(self.ryComp) + ' rz: ' + str(self.rzComp)
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        return {'typ':self.typ, 'k':self.k}
     
-  def __str__(self):
-      return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.typ= dct['typ']
+        self.k= dct['k']
+        
+
+class SupportRecord(object):
+    ''' Constraints for displacements.
+
+    :ivar id: object identifier.
+    :ivar xComp: x displacement constraint definition.
+    :ivar yComp: y displacement constraint definition.
+    :ivar zComp: z displacement constraint definition.
+    :ivar rxComp: x rotation constraint definition.
+    :ivar ryComp: y rotation constraint definition.
+    :ivar rzComp: z rotation constraint definition.
+    '''
+    def __init__(self, id, xComp= ComponentSupportRecord(), yComp= ComponentSupportRecord(), zComp= ComponentSupportRecord(), rxComp= ComponentSupportRecord('Free'), ryComp= ComponentSupportRecord('Free'), rzComp= ComponentSupportRecord('Free')):
+        ''' Constructor.
+
+        :param id: object identifier.
+        :param xComp: x displacement constraint definition.
+        :param yComp: y displacement constraint definition.
+        :param zComp: z displacement constraint definition.
+        :param rxComp: x rotation constraint definition.
+        :param ryComp: y rotation constraint definition.
+        :param rzComp: z rotation constraint definition.
+        '''
+        self.id= id
+        self.typ= 'Standard'
+        self.xComp= xComp
+        self.yComp= yComp
+        self.zComp= zComp
+        self.rxComp= rxComp
+        self.ryComp= ryComp
+        self.rzComp= rzComp
+
+    def setupFromComponentLabels(self, componentLabels):
+        self.xComp= ComponentSupportRecord(componentLabels[0])
+        self.yComp= ComponentSupportRecord(componentLabels[1])
+        self.zComp= ComponentSupportRecord(componentLabels[2])
+        self.rxComp= ComponentSupportRecord(componentLabels[3])
+        self.ryComp= ComponentSupportRecord(componentLabels[4])
+        self.rzComp= ComponentSupportRecord(componentLabels[5])
+
+    def getStrConstraints(self):
+        return 'type: ' + self.typ + ' x: ' + str(self.xComp)+ ' y: ' + str(self.yComp) + ' z: ' + str(self.zComp)+ ' rx: ' + str(self.rxComp)+ ' ry: ' + str(self.ryComp) + ' rz: ' + str(self.rzComp)
+
+    def __str__(self):
+        return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
+
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        components= [self.xComp, self.yComp, self.zComp, self.rxComp, self.ryComp, self.rzComp]
+        return {'id':self.id, 'typ':self.typ, 'components': components}
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.id= dct['id']
+        self.typ= dct['typ']
+        [self.xComp, self.yComp, self.zComp, self.rxComp, self.ryComp, self.rzComp]= dct['components']

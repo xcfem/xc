@@ -162,7 +162,10 @@ class ControlVarsBase(object):
         return {'combName': self.combName, 'CF':self.getCF()}
 
     def setFromDict(self, dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         self.combName= dct['combName']
         self.CF= dct['CF']
        
@@ -243,7 +246,9 @@ class N(ControlVarsBase):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.'''
         super(N,self).setFromDict(dct)
         self.N= dct['N']
   
@@ -280,7 +285,10 @@ class NMy(N):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(NMy,self).setFromDict(dct)
         self.My= dct['My']
 
@@ -318,7 +326,9 @@ class NMyMz(NMy):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.'''
         super(NMyMz,self).setFromDict(dct)
         self.Mz= dct['Mz']
 
@@ -395,7 +405,10 @@ class ShVy(ControlVarsBase):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(ShVy,self).setFromDict(dct)
         self.Vy= dct['Vy']
 
@@ -443,7 +456,10 @@ class ShearYControlVars(CFVy):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(ShearYControlVars,self).setFromDict(dct)
         self.idSection= dct['idSection']
 
@@ -472,7 +488,10 @@ class UniaxialBendingControlVars(CFNMy):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the data values.
+        '''
         super(UniaxialBendingControlVars,self).setFromDict(dct)
         self.idSection= dct['idSection']
 
@@ -510,8 +529,11 @@ class CFNMyMz(CFNMy):
         retval.update({'Mz':self.Mz})
         return retval
        
-    def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(CFNMyMz,self).setFromDict(dct)
         self.Mz= dct['Mz']
 
@@ -548,7 +570,10 @@ class AxialForceControlVars(CFN):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(AxialForceControlVars,self).setFromDict(dct)
         self.idSection= dct['idSection']
 
@@ -589,7 +614,10 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(BiaxialBendingControlVars,self).setFromDict(dct)
         self.Mz= dct['Mz']
     
@@ -633,7 +661,10 @@ class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
         self.Ncrd= dct['Ncrd']
         self.McRdy= dct['McRdy']
@@ -677,7 +708,10 @@ class SteelShapeBiaxialBendingControlVars(BiaxialBendingStrengthControlVars):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(SteelShapeBiaxialBendingControlVars,self).setFromDict(dct)
         self.MvRdz= dct['MvRdz']
         self.MbRdz= dct['MbRdz']
@@ -735,7 +769,10 @@ class RCShearControlVars(BiaxialBendingControlVars):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(RCShearControlVars,self).setFromDict(dct)
         self.Mu= dct['Mu']
         self.Vy= dct['Vy']
@@ -789,7 +826,10 @@ class SIATypeRCShearControlVars(RCShearControlVars):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(SIATypeRCShearControlVars,self).setFromDict(dct)
         self.Vcu= dct['Vcu']
         self.Vsu= dct['Vsu']
@@ -832,7 +872,10 @@ class CrackControlBaseVars(CFNMyMz):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(CrackControlBaseVars,self).setFromDict(dct)
         self.steelStress= dct['steelStress']
 
@@ -891,7 +934,10 @@ class CrackControlVars(ControlVarsBase):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         self.idSection= dct['idSection']
         self.crackControlVarsPos= eval(dct['crackControlBaseVarsPos'])
         self.crackControlVarsNeg= eval(dct['crackControlBaseVarsNeg'])
@@ -933,7 +979,10 @@ class RCCrackStraightControlVars(NMyMz):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(RCCrackStraightControlVars,self).setFromDict(dct)
         self.s_rmax= dct['s_rmax']
         self.eps_sm= dct['eps_sm']
@@ -992,7 +1041,10 @@ class FatigueControlBaseVars(NMyMz):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(FatigueControlBaseVars,self).setFromDict(dct)
         self.Vy= dct['Vy']
         self.negSteelStress= dct['negSteelStress']
@@ -1084,7 +1136,10 @@ class FatigueControlVars(ControlVarsBase):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         self.idSection= dct['idSection']
         self.controlBaseVars0= eval(dct['controlBaseVars0'])
         self.controlBaseVars1= eval(dct['controlBaseVars1'])
@@ -1119,7 +1174,10 @@ class VonMisesControlVars(ControlVarsBase):
         return retval
        
     def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.'''
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
         super(VonMisesControlVars,self).setFromDict(dct)
         self.vm_stress= dct['vm_stress']
 
@@ -1136,7 +1194,7 @@ def readControlVars(preprocessor, inputFileName):
     '''
     try:
         with open(inputFileName) as f:
-               dataDict= json.load(f)
+            dataDict= json.load(f)
     except IOError:
         lmsg.error("can't read from file: "+str(inputFileName))
         return

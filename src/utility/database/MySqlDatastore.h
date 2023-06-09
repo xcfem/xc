@@ -92,6 +92,9 @@ class MySqlDatastore: public DBDatastore
     MySqlDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);    
     MySqlDatastore(const std::string &,const std::string &, const std::string &, const std::string &, unsigned int port, const std::string &, unsigned int clientFlag, Preprocessor &, FEM_ObjectBroker &, int dbRun = 0);
     ~MySqlDatastore();
+    
+     std::string getTypeId(void) const
+      { return "MySql"; }
 
     // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr);    

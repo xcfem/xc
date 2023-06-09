@@ -12,6 +12,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 from misc_utils import log_messages as lmsg
 from model.geometry import geom_utils as gu
 
+import sys
 import xc
 
 class MemberConnection(object):
@@ -76,13 +77,17 @@ class Member(object):
         self.lstLines= lstLines
         self.elemSet= None # elements along the member.
         
-    def getPreprocessor(self):
+    def getPreprocessor(self, silent= False):
         ''' Return the XC preprocessor.'''
         retval= None
         if self.lstLines:
-            retval=self.lstLines[0].getPreprocessor
-        else:
-            lmsg.error('No lines.')
+            retval= self.lstLines[0].getPreprocessor
+        elif(self.elemSet):
+            retval= self.elemSet.getPreprocessor
+        if(not retval and not silent):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; No lines or elements')
         return retval
 
     def getMemberGeometry(self):

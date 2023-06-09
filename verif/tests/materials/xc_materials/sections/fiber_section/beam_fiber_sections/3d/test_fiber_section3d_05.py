@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
-
-import xc
-from misc import scc3d_testing_bench
-from solution import predefined_solutions
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -16,12 +12,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-areaFi16= 2.01e-4 # Rebar area expressed in square meters.
-brazo= 0.5 # Rebar lever arm with respect to the section axis.
-
-
-from materials.ehe import EHE_materials
+import os
+import sys
+import xc
+from misc import scc3d_testing_bench
+from solution import predefined_solutions
 from model import predefined_spaces
+from materials.ehe import EHE_materials
+
+barDiam= 16e-3
+areaFi16= 2.01e-4 # Rebar area expressed in square meters.
+leverArm= 0.5 # Rebar lever arm with respect to the section axis.
 
 MzDato= 10e3
 NDato= 0.0
@@ -32,12 +33,14 @@ preprocessor=  feProblem.getPreprocessor
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 
-import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/barsSectionGeometry.py").read())
+sys.path.append(pth+"/../../../../../../aux/")
+import barsSectionGeometry as bsg
+
+barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam, areaFi16)
+
 
 barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","barsSection")
 fiberSectionRepr= barsSection.getFiberSectionRepr()

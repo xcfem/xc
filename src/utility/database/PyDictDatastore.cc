@@ -35,7 +35,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 XC::PyDictDatastore::PyDictDatastore(const std::string &fName, Preprocessor &preprocessor, FEM_ObjectBroker &theObjectBroker, int run)
-  : FE_Datastore(preprocessor, theObjectBroker), fileName(fName), pyDict()
+  : FE_Datastore(fName, preprocessor, theObjectBroker), pyDict()
   {}
 
 int XC::PyDictDatastore::sendMsg(int dataTag, int commitTag,const XC::Message &,ChannelAddress *theAddress)
@@ -322,7 +322,7 @@ int XC::PyDictDatastore::save(const int &commitTag)
   {
     const int retval= FE_Datastore::save(commitTag);
     std::filebuf fb;
-    fb.open(fileName,std::ios::out);
+    fb.open(getFileName(),std::ios::out);
     std::ostream os(&fb);
     jsonWrite(os);
     return retval;
@@ -331,7 +331,7 @@ int XC::PyDictDatastore::save(const int &commitTag)
 int XC::PyDictDatastore::restore(const int &commitTag)
   {
     std::filebuf fb;
-    fb.open(fileName,std::ios::in);
+    fb.open(getFileName(),std::ios::in);
     std::istream os(&fb);
     jsonRead(os);    
     const int retval= FE_Datastore::restore(commitTag);

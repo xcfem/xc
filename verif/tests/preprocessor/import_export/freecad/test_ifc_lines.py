@@ -35,14 +35,14 @@ ieData.problemName= 'FEcase'
 ieData.blockData= blocks
 
 # Write block topology data.
-ieData.writeToXCFile()
+ieData.writeToJSON()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Test IFC lines.'
-import geom
-
-# Read block topology data.
-exec(open(ieData.outputFileName+'.py').read())
+preprocessor= FEcase.getPreprocessor
+bData= nmd.XCImportExportData()
+bData.readJSONFile(fName= ieData.getJSONFileName()) # Read from the previous output.
+bData.dumpToXC(FEcase.getPreprocessor)
 
 xcTotalSet= preprocessor.getSets.getSet('total')
 

@@ -70,7 +70,21 @@
 XC::ObjectBroker::ObjectBroker(void)
   {}
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ObjectBroker::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    std::cerr << "ObjectBroker::" << __FUNCTION__
+              << "; ERROR. Not implemented yet." << std::endl;
+    return retval;
+  }
 
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ObjectBroker::setPyDict(const boost::python::dict &d)
+  {
+    std::cerr << "ObjectBroker::" << __FUNCTION__
+              << "; ERROR. Not implemented yet." << std::endl;
+  }
 
 
 

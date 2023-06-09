@@ -30,5 +30,5 @@
 #include "DBDatastore.h"
 
 
-XC::DBDatastore::DBDatastore(Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(preprocessor, theObjBroker) {}
+XC::DBDatastore::DBDatastore(const std::string &name, Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
+  :FE_Datastore(name, preprocessor, theObjBroker) {}

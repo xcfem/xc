@@ -34,7 +34,7 @@
 #include "boost/lexical_cast.hpp"
 
 XC::SQLiteDatastore::SQLiteDatastore(const std::string &projectName, Preprocessor &preprocessor, FEM_ObjectBroker &theObjectBroker, int run)
-  :DBDatastore(preprocessor, theObjectBroker), connection(false), db(projectName)
+  :DBDatastore(projectName, preprocessor, theObjectBroker), connection(false), db(projectName)
   {
     if(this->createOpenSeesDatabase(projectName) == 0)
       connection= true;

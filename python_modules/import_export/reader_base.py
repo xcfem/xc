@@ -69,7 +69,13 @@ class ReaderBase(object):
         self.facesTree= dict()
 
     def getIndexNearestPoint(self, pt):
-        return cdist([pt], self.kPoints).argmin()
+        ''' Return the index of the point that is nearest to the argument.
+
+        :param pt: point to compute the distance to.
+        '''
+        # Convert the index to Python regular int to avoid problems
+        # with serialization.
+        return int(cdist([pt], self.kPoints).argmin())
 
     def getNearestPoint(self, pt):
         return self.kPoints[self.getIndexNearestPoint(pt)]

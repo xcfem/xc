@@ -44,12 +44,15 @@ ieData.outputFileName= outputFileName
 ieData.problemName= 'FEcase'
 ieData.blockData= blocks
 
-ieData.writeToXCFile()
+ieData.writeToJSON()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Stair tower structure'
-import geom
-exec(open(outputFileName+'.py').read())
+preprocessor= FEcase.getPreprocessor
+bData= nmd.XCImportExportData()
+bData.readJSONFile(fName= ieData.getJSONFileName()) # Read from the previous output.
+bData.dumpToXC(FEcase.getPreprocessor)
+
 
 # Import block topology information
 supportSet= preprocessor.getSets.defSet('supportSet')

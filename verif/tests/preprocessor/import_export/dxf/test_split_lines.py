@@ -8,10 +8,14 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
+import os
+import sys
+import json
+import geom
+import xc
 from import_export import dxf_reader
 from import_export import neutral_mesh_description as nmd
-import os
-import xc
+from import_export import block_topology_entities as bte
 from model import predefined_spaces
 # from postprocess import output_handler
 import logging
@@ -39,10 +43,9 @@ def importMultiBlockTopology(dxfFileName, outputFileName, layerNamesToImport, ge
     ieData.problemName= 'FEcase'
     ieData.blockData= blocks
 
-    ieData.writeToXCFile()
+    ieData.writeToJSON()
     return ieData
 
-#baseName= 'wireframe_model_rev01'
 baseName= 'test_split_lines_01'
 dxfFName= baseName+'.dxf'
 xcBlocksFileName= baseName+'_blocks'
@@ -54,14 +57,22 @@ ieData= importMultiBlockTopology(dxfFileName= dxfFilePath, outputFileName= xcBlo
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Split lines test'
-xcBlocksPath= './'+xcBlocksFileName+'.py'
-import geom
-exec(open(xcBlocksPath).read())
+bData= nmd.XCImportExportData()
+bData.readJSONFile(fName= ieData.getJSONFileName()) # Read from the previous output.
+
+
+# Create xc problem.
+feProblem= xc.FEProblem()
+# Dump the topology into this problem.
+bData.dumpToXC(feProblem.getPreprocessor)
+
+points= feProblem.getPreprocessor.getMultiBlockTopology.getPoints
+lines= feProblem.getPreprocessor.getMultiBlockTopology.getLines
 
 numberOfLinesBeforeSplitting= len(lines)
 numberOfPointsBeforeSplitting= len(points)
 numberOfClips= numberOfLinesBeforeSplitting/4.0
-xcTotalSet= preprocessor.getSets.getSet('total')
+xcTotalSet= feProblem.getPreprocessor.getSets.getSet('total')
 xcTotalSet.getEntities.splitLinesAtIntersections(1e-3)
 numberOfLinesAfterSplitting= len(lines)
 numberOfPointsAfterSplitting= len(points)
@@ -89,11 +100,11 @@ print(ratio2)
 
 # oh.displayBlocks()
 
-os.system('rm -f '+xcBlocksPath) # Your garbage you clean it
-
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-15) and (abs(ratio2)<1e-15)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+os.system('rm -f '+ieData.getJSONFileName()) # Your garbage you clean it

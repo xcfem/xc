@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Verification test based on the paper: "Exercise 13-Point Bending 
+'''Verification test based on the paper: "Exercise 13-Point Bending
 Using the GUI and the Bottom-up-Method" Dr.-Ing. Ulrich Simon. Ulm University.
 '''
 
@@ -22,7 +22,6 @@ from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 from materials.astm_aisc import ASTM_materials
 from materials.astm_aisc import AISC_limit_state_checking as aisc
-#from postprocess import output_handler
 
 # Data
 F= 5e3 # Applied (full!) force (N)
@@ -32,8 +31,8 @@ t= 20e-3 # Thickness of the beam cross section (m)
 
 # Problem type
 feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeHandler 
+preprocessor= feProblem.getPreprocessor
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 
@@ -46,7 +45,7 @@ sg_yield= steel.fy # Allowable stress: yield stress of steel (Pa)
 ## XC material model
 steel3d= typical_materials.defElasticIsotropic3d(preprocessor, "steel3d", steel.E,steel.nu,rho= steel.rho)
 
-plateFiber= typical_materials.defMembranePlateFiberSection(preprocessor, name= "plateFiber", h= t, nDMaterial= steel3d);
+plateFiber= typical_materials.defMembranePlateFiberSection(preprocessor, name= "plateFiber", h= t, nDMaterial= steel3d)
 
 # Problem geometry
 # The “bottom-up method” generates the geometry of the system
@@ -60,8 +59,8 @@ p4= modelSpace.newKPoint(0.0,-h/2.0)
 
 s= modelSpace.newSurface([p1,p2,p3,p4])
 s.setElemSizeIJ(1.5*10e-3,10e-3)
-#s.nDivI= 50 # Number of divisions on p1->p2 and p3->p4
-#s.nDivJ= 10 # Number of divisions on p2->p3 and p4->p1
+# s.nDivI= 50 # Number of divisions on p1->p2 and p3->p4
+# s.nDivJ= 10 # Number of divisions on p2->p3 and p4->p1
 
 # Meshing
 
@@ -147,18 +146,18 @@ print('ratio= ', ratio)
 '''
 
 cfg.cleandirs() # Clean after yourself.
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-  
+
 # Graphic stuff.
-#oh= output_handler.OutputHandler(modelSpace)
-#oh.displayFEMesh()
-#oh.displayField(limitStateLabel= limitState.label, section= None, argument= 'CF', component= None, setToDisplay= None, fileName= None)
-#oh.displayLoads()
-#oh.displayDispRot('uY')
-#oh.displayVonMisesStresses(vMisesCode= 'max_von_mises_stress')
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayField(limitStateLabel= limitState.label, section= None, argument= 'CF', component= None, setToDisplay= None, fileName= None)
+# # oh.displayLoads()
+# oh.displayDispRot('uY')
+# oh.displayVonMisesStresses(vMisesCode= 'max_von_mises_stress')

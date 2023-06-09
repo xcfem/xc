@@ -54,13 +54,15 @@ class BucklingMember(Member):
         self.contrPnt= None # control points along the member.
         self.pline= None # member axis.
         
-    def getPreprocessor(self):
+    def getPreprocessor(self, silent= False):
         ''' Return the XC preprocessor.'''
-        retval= super(BucklingMember,self).getPreprocessor()
+        retval= super(BucklingMember,self).getPreprocessor(silent= True)
         if((not retval) and self.lstPoints):
             retval= self.lstPoints[0].getPreprocessor
-        if(not retval):
-            lmsg.error('No lines nor points set.')
+        if(not retval and not silent):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; No lines, points or elements')
         return retval
 
     def getMemberGeometry(self):

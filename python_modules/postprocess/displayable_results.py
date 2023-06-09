@@ -86,9 +86,10 @@ class ResultsDescriptionContainer(dict):
             retval.append(figDef)
         return retval
 
-    def display(self,tp,partToDisplay):
+    def display(self, tp, partToDisplay):
         '''Calls TakePhoto object tp to display figures corresponding to part.
 
+        :param tp: TakePhoto object to use to capture the image.
         :param partToDisplay: part of the model that will be displayed.
         '''
         latexFigsFilename= self.getLaTeXOutputFileName(partToDisplay.getShortName())

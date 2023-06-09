@@ -56,6 +56,9 @@ class SQLiteDatastore: public DBDatastore
   public:
     SQLiteDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);    
 
+    std::string getTypeId(void) const
+      { return "SQLite"; }
+    
     // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int , int , const Message &, ChannelAddress *a= nullptr);    
     int recvMsg(int , int , Message &, ChannelAddress *a= nullptr);        

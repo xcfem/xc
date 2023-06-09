@@ -16,6 +16,7 @@ from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import fields
 from postprocess.control_vars import *
+from postprocess import control_vars
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -36,33 +37,49 @@ class setToDisplay(object):
     :ivar genDescr: general description
     :ivar sectDescr: ordered list with the descriptions that apply to each of the sections that configures the element.
     '''
-    def __init__(self,elSet,genDescr='',sectDescr=[]):
+    def __init__(self, elSet, genDescr='', sectDescr=[]):
+        ''' Constructor.
+
+        :param elSet:    set of elements
+        :param genDescr: general description
+        :param sectDescr: ordered list with the descriptions that apply to each of the sections that configures the element.
+        '''
         self.elSet=elSet
         self.elSet.fillDownwards()
         self.genDescr=genDescr
         self.sectDescr=sectDescr
 
 class FigureBase(object):
-    def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
-      ''' Figure base constructor.
+    ''' Base of the objects used to create figures.
 
-      :ivar pLabel: part label; something like 'wall' or '2ndFloorDeck'
-      :ivar limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
-      :ivar figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
-      :ivar units: units displayed; something like '[MPa]' or 'radians'...
-      :ivar reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
-      :ivar sz: LaTeX size for the figure.
-      '''
-      self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
-      self.limitStateLabel= limitStateLabel #Something like "Fatigue" or "CrackControl"
-      self.attributeName= ''
-      self.figDescription= figDescr #Text to insert as caption in the LaTeX file.
-      self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
-      self.reinforcementDescription= reinfDescr #Something like "horizontal reinforcement."
-      self.figSize= sz #LaTeX size for the figure.
-      self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
+    :ivar pLabel: part label; something like 'wall' or '2ndFloorDeck'
+    :ivar limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
+    :ivar figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+    :ivar units: units displayed; something like '[MPa]' or 'radians'...
+    :ivar reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+    :ivar sz: LaTeX size for the figure.
+    '''
+    def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+        ''' Figure base constructor.
+
+        :param pLabel: part label; something like 'wall' or '2ndFloorDeck'
+        :param limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
+        :param figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+        :param units: units displayed; something like '[MPa]' or 'radians'...
+        :param reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+        :param sz: LaTeX size for the figure.
+        '''
+        self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
+        self.limitStateLabel= limitStateLabel #Something like "Fatigue" or "CrackControl"
+        self.attributeName= ''
+        self.figDescription= figDescr #Text to insert as caption in the LaTeX file.
+        self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
+        self.reinforcementDescription= reinfDescr #Something like "horizontal reinforcement."
+        self.figSize= sz #LaTeX size for the figure.
+        self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
       
     def getCaption(self):
+        ''' Return the figure caption.'''
         retval= self.partLabel+'. '+self.figDescription
         if(self.unitsLabel!=None):
             retval+= ' ['+ self.unitsLabel +']'
@@ -71,6 +88,7 @@ class FigureBase(object):
         return retval
     
     def getFileName(self):
+        ''' Return the file name to store the bitmap.'''
         return su.slugify(self.partLabel+self.limitStateLabel+self.attributeName)
     
     def insertIntoLatex(self, fichLatexFigs, fichLatexList, fichFig, labelText):
@@ -136,8 +154,12 @@ class SlideDefinition(FigureBase):
   
 
 class FigureDefinition(SlideDefinition):
+    ''' Definition of a figure.
 
-    def __init__(self,pLabel,limitStateLabel,attrName,argument,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+    :ivar attributeName: name of the attribute to display.
+    :ivar argument: argument for the attribute.
+    '''
+    def __init__(self, pLabel, limitStateLabel, attrName, argument, figDescr, reinfDescr=None, units=None, sz= "90mm"):
         ''' Figure constructor.
 
         :param pLabel: part label as defined in model; something like 'wall' or '2ndFloorDeck'
@@ -174,9 +196,19 @@ class FigureDefinition(SlideDefinition):
             convert_to_eps(jpegName,epsName)
  
 class TakePhotos(object):
-    '''Generation of bitmaps with analysis and design results.'''
+    '''Generation of bitmaps with analysis and design results.
+
+    :ivar pthGraphOutput: path to the directory to put the graphics in.
+    :ivar pthTextOutput: path to the directory to put the texts in.
+    :ivar fichLatexFigs: Latex file to include figures (defaults to None).
+    :ivar fichLatexList: Latex file with figures list (defaults to None).
+    '''
     
     def __init__(self,xcSet):
+        ''' Constructor.
+
+        :param xcSet: set containing the objects that will be displayed.
+        '''
         self.displaySettings= None
         self.xcSet= xcSet
         self.displaySettings= vtk_FE_graphic.DisplaySettingsFE()
@@ -244,7 +276,11 @@ class PartToDisplay(object):
                 retval.append(elem)
         return retval
     
-    def getElementSet(self,preprocessor):
+    def getElementSet(self, preprocessor):
+        ''' Return the elements contained in this object in a XC set.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         elementSetName= self.getShortName()+'_elementSet'
         elems= self.elements
         # Define the set
@@ -254,9 +290,11 @@ class PartToDisplay(object):
         self.xcSet.fillDownwards()
         return self.xcSet
     
-    def display(self,preprocessor,tp,resultsToDisplay):
+    def display(self,preprocessor, tp, resultsToDisplay):
         '''Generate an image for every result to display
 
+        :param preprocessor: preprocessor of the finite element problem.
+        :param tp: TakePhoto object to use to capture the image.
         :param resultToDisplay: collection of results to be displayed.
         '''
         elementSet= self.getElementSet(preprocessor)
@@ -274,19 +312,19 @@ class PartToDisplayContainer(dict):
     def add(self,part):
         self[part.getShortName()]= part
       
-    def display(self,preprocessor,tp,resultsToDisplay):
+    def display(self, preprocessor, tp, resultsToDisplay):
         '''Display results for each part.
 
+        :param preprocessor: preprocessor of the finite element problem.
+        :param tp: TakePhoto object to use to capture the image.
         :param resultToDisplay: collection of results to be displayed.
         '''
         #Load properties to display:
         fName= resultsToDisplay.limitStateData.getOutputDataFileName()
-        print('******* calling: ', fName)
-        with open(fName) as infile:
-            exec(infile.read())
+        control_vars.readControlVars(preprocessor= preprocessor, inputFileName= fName)
         for k in self.keys():
             part= self[k]
-            part.display(preprocessor,tp,resultsToDisplay)
+            part.display(preprocessor, tp, resultsToDisplay)
 
 def plotStressStrainFibSet(fiberSet,title,fileName=None,nContours=100,pointSize=50, fiberShape='o'):
     '''Represents graphically the cross-section current stresses and strains.

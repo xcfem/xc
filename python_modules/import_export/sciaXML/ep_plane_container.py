@@ -22,37 +22,37 @@ tEPPlaneContainerTb= 'EP_DSG_Elements.EP_Plane.1'
 elementPrefix= 'EPPlane'
 
 def getEPPlaneObject(cell):
-  retval= obj.SCXMLObject()
-  id= str(cell.id)
-  #retval.setId(id)
-  name= elementPrefix+id
-  retval.setNm(name)
+    retval= obj.SCXMLObject()
+    id= str(cell.id)
+    #retval.setId(id)
+    name= elementPrefix+id
+    retval.setNm(name)
 
-  retval.setP1(oI.SCXMLObjectItem('2')) #Shell
-  retval.setP3(oI.SCXMLObjectItem('0'))
-  retval.setP4(oI.SCXMLObjectItem('0')) #Constant thickness.
-  retval.setP5(oI.SCXMLObjectItem('1')) #Member system plane at prop (center).
-  retval.setP6(oI.SCXMLObjectItem('0.0')) #Eccentricity Z.
-  retval.setP7(oI.SCXMLObjectItem(str(cell.thickness))) #Thickness.
-  retval.setP8(oI.SCXMLObjectItem('0')) #Direction.
-  oi12= oI.SCXMLObjectItem()
-  row= rw.SCXMLRowP012("0", oI.SCXMLObjectItem("1", None, None, None,None,None), oI.SCXMLObjectItem('', str(cell.nodeIds[0]), nc.nodePrefix+str(cell.nodeIds[0]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
-  oi12.rows.append(row)
-  row= rw.SCXMLRow("1",oI.SCXMLObjectItem('', str(cell.nodeIds[1]), nc.nodePrefix+str(cell.nodeIds[1]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
-  oi12.rows.append(row)
-  row= rw.SCXMLRow("2",oI.SCXMLObjectItem('', str(cell.nodeIds[2]), nc.nodePrefix+str(cell.nodeIds[2]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
-  oi12.rows.append(row)
-  row= rw.SCXMLRow("3",oI.SCXMLObjectItem('', str(cell.nodeIds[3]), nc.nodePrefix+str(cell.nodeIds[3]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
-  oi12.rows.append(row)
-  retval.setP12(oi12) #Cell nodes.
-  return retval
+    retval.setP1(oI.SCXMLObjectItem('2')) #Shell
+    retval.setP3(oI.SCXMLObjectItem('0'))
+    retval.setP4(oI.SCXMLObjectItem('0')) #Constant thickness.
+    retval.setP5(oI.SCXMLObjectItem('1')) #Member system plane at prop (center).
+    retval.setP6(oI.SCXMLObjectItem('0.0')) #Eccentricity Z.
+    retval.setP7(oI.SCXMLObjectItem(str(cell.thickness))) #Thickness.
+    retval.setP8(oI.SCXMLObjectItem('0')) #Direction.
+    oi12= oI.SCXMLObjectItem()
+    row= rw.SCXMLRowP012("0", oI.SCXMLObjectItem("1", None, None, None,None,None), oI.SCXMLObjectItem('', str(cell.nodeIds[0]), nc.nodePrefix+str(cell.nodeIds[0]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
+    oi12.rows.append(row)
+    row= rw.SCXMLRow("1",oI.SCXMLObjectItem('', str(cell.nodeIds[1]), nc.nodePrefix+str(cell.nodeIds[1]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
+    oi12.rows.append(row)
+    row= rw.SCXMLRow("2",oI.SCXMLObjectItem('', str(cell.nodeIds[2]), nc.nodePrefix+str(cell.nodeIds[2]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
+    oi12.rows.append(row)
+    row= rw.SCXMLRow("3",oI.SCXMLObjectItem('', str(cell.nodeIds[3]), nc.nodePrefix+str(cell.nodeIds[3]), None,None,None), oI.SCXMLObjectItem("0", None, None, None,None,None))
+    oi12.rows.append(row)
+    retval.setP12(oi12) #Cell nodes.
+    return retval
 
 class EPPlaneContainer(ctr.SCXMLTableContainer):
-  def __init__(self,cellsDict):
-    super(EPPlaneContainer,self).__init__(idEPPlaneContainer,tEPPlaneContainer)
-    cells= list()
-    for key in cellsDict:
-      cell= cellsDict[key]
-      cells.append(getEPPlaneObject(cell))
-    self.appendTable(tb.SCXMLTableXMLNodes(idEPPlaneContainerTb,tEPPlaneContainerTb, '', None,cells))
+    def __init__(self,cellsDict):
+      super(EPPlaneContainer,self).__init__(idEPPlaneContainer,tEPPlaneContainer)
+      cells= list()
+      for key in cellsDict:
+          cell= cellsDict[key]
+          cells.append(getEPPlaneObject(cell))
+      self.appendTable(tb.SCXMLTableXMLNodes(idEPPlaneContainerTb,tEPPlaneContainerTb, '', None,cells))
   

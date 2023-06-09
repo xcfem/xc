@@ -65,6 +65,9 @@
 #ifndef ObjectBroker_h
 #define ObjectBroker_h
 
+#include <boost/python.hpp>
+#include <boost/python/dict.hpp>
+
 namespace XC {
 
 //! @ingroup IPComm
@@ -77,6 +80,9 @@ class ObjectBroker
   {
     public:
       ObjectBroker(void);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 } // end of XC namespace
 

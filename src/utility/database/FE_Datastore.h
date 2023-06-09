@@ -84,6 +84,7 @@ class FEM_ObjectBroker;
 class FE_Datastore: public Channel
   {
   private:
+    std::string name; //!< Identifier of the data base.
     FEM_ObjectBroker *theObjectBroker; //!< Deals with the object serialization.
     std::set<int> savedStates;
   protected:
@@ -92,8 +93,9 @@ class FE_Datastore: public Channel
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
   public:
-    FE_Datastore(Preprocessor &, FEM_ObjectBroker &theBroker);
-    inline virtual ~FE_Datastore(void) {} 
+    FE_Datastore(const std::string &, Preprocessor &, FEM_ObjectBroker &theBroker);
+    inline virtual ~FE_Datastore(void) {}
+
 
     // methods defined in the Channel class interface which mean nothing for a Datastore
     std::string addToProgram(void);
@@ -109,6 +111,8 @@ class FE_Datastore: public Channel
     // pure virtual functions in addition to those defined
     // in the ModelBuilder and Channel classes for database applications
     int getDbTag(void) const;
+    virtual const std::string &getName(void) const;
+    virtual std::string getTypeId(void) const;
     virtual bool isDatastore(void) const;
 
     virtual int commitState(int commitTag);

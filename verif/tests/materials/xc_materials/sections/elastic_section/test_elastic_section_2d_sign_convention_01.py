@@ -10,6 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import os
+import sys
 import geom
 import xc
 from model import predefined_spaces
@@ -28,15 +30,25 @@ epsilon3= epsilon
 epsilon4= epsilon
 
 
-#Read section definition from file.
-import os
+# Material properties
+E= 2.1e6 # Elastic modulus (Pa)
+##  Cross section properties
+widthOverZ= 4
+depthOverY= 2
+A= widthOverZ*depthOverY # Area (m2)
+Iy= 1/12.0*depthOverY*widthOverZ**3 # Cross section moment of inertia (m4)
+Iz= 1/12.0*widthOverZ*depthOverY**3 # Cross section moment of inertia (m4)
+y1= -depthOverY/2.0
+z1= -widthOverZ/2.0
+
+# Import section definition from file.
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../../../aux/elastic_section_2d.py").read())
+sys.path.append(pth+"/../../../../aux/")
+import elastic_section_2d
+elasticSection2d, N0, My0, Mz0, RR, R0, DD, D0, N0S, My0S, Mz0S, sigma= elastic_section_2d.compute_internal_forces(preprocessor, A, E, Iz, y1, z1, epsilon, epsilon1, epsilon2, epsilon3, epsilon4)
 
-sigma= E*epsilon
 N0Teor= (epsilon1+epsilon2+epsilon3+epsilon4)/4.0*E*A
 Mz0Teor= 0.0
 R0Teor=xc.Vector([N0Teor,Mz0Teor])

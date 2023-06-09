@@ -83,7 +83,6 @@ class BerkeleyDbDatastore: public DBDatastore
 
     DBT key, data;  // structures for the key data pair
 
-    std::string project;
     static const size_t sz_dbl= sizeof(double);
     static const size_t sz_int= sizeof(int);
 
@@ -95,9 +94,14 @@ class BerkeleyDbDatastore: public DBDatastore
     int createDB(void);
     int open(const DBTYPE &type);
     void close(void);
+
+    const std::string &getProjectName(void) const;
   public:
     BerkeleyDbDatastore(const std::string &projectName, Preprocessor &preprocessor, FEM_ObjectBroker &theBroker,const std::string &type= "");
     ~BerkeleyDbDatastore(void);
+
+    std::string getTypeId(void) const
+      { return "BerkeleyDB"; }
 
     // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr);    

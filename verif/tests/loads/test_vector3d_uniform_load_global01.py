@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import sys
+import os
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -54,7 +55,6 @@ respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Torsion
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
 # Sections
-import os
 pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
@@ -100,7 +100,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)
 
-exec(open(pth+"/test_vector3d_uniform_load_global.py").read())
+import test_vector3d_uniform_load_global
+ratio1, ratio2, ratio3= test_vector3d_uniform_load_global.check_values(modelSpace, f, E, A, L, n1, n2, el)
 
 ''' 
 print("delta: ",delta)

@@ -148,7 +148,6 @@ class FileDatastore: public FE_Datastore
     void resetFilePointers(void);
 
     // private attributes
-    std::string dataBase;
     FilesMap theIDFiles;
     FilesMap theVectFiles;
     FilesMap theMatFiles;
@@ -175,6 +174,9 @@ class FileDatastore: public FE_Datastore
     
     ~FileDatastore(void);
 
+     std::string getTypeId(void) const
+      { return "File"; }
+   
     // methods for sending and receiving the data
     int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress =0);    
     int recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress =0);        

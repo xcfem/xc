@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Reinforced concrete section verification test empleando
    el material fiber_section_GJ. '''
 
-
-import xc
-from misc import scc3d_testing_bench
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -13,13 +10,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-areaFi16= 2.01e-4 # Rebar area expressed in square meters.
-brazo= 0.5 # Rebar lever arm with respect to section axis.
-
-
+import os
+import sys
+import xc
+from misc import scc3d_testing_bench
 from materials.ehe import EHE_materials
 from model import predefined_spaces
 from solution import predefined_solutions
+
+barDiam= 16e-3 # Rebar diameter.
+areaFi16= 2.01e-4 # Rebar area expressed in square meters.
+leverArm= 0.5 # Rebar lever arm with respect to section axis.
 
 MzDato= 15e3
 NDato= 0.0
@@ -28,12 +29,15 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
-import os
+
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/barsSectionGeometry.py").read())
+sys.path.append(pth+"/../../../../../../aux/")
+import barsSectionGeometry as bsg
+
+barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam, areaFi16)
+
 barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_GJ","barsSection")
 fiberSectionRepr= barsSection.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(barsSectionGeometry.name)

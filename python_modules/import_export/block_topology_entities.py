@@ -47,7 +47,7 @@ class BlockProperties(object):
         '''
         retval= None
         if(blockProperties):
-            retval= BlockProperties(blockProperties.labels, blockProperties.attributes)
+            retval= BlockProperties(labels= blockProperties.labels, attributes= blockProperties.attributes)
         else:
             retval= BlockProperties()
         return retval
@@ -114,23 +114,46 @@ class BlockProperties(object):
         retval+= strId+'.setProp("attributes",'+str(self.attributes)+')'
         return retval
 
+    def dumpToXC(self, preprocessor, entity):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        :param entity: entity which receives the properties.
+        '''
+        entity.setProp('labels', self.labels)
+        entity.setProp('attributes', self.attributes)        
+
     def __str__(self):
         return 'labels: '+str(self.labels)+' attributes: '+str(self.attributes)
 
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        return {'labels':self.labels, 'attributes':self.attributes}
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        if('labels' in dct):
+            self.labels= dct['labels']
+        if('attributes' in dct):
+            self.attributes= dct['attributes']
     
 class PointRecord(me.NodeRecord):
     '''kPoint type entity
 
+    :ivar blockProperties: labels and attributes of the point.
     '''
-    def __init__(self,id, coords, blockProperties= None):
+    def __init__(self, ident, coords, blockProperties= None):
         '''
         Key point constructor.
 
-        :param id: identifier for the point.
+        :param ident: identifier for the point.
         :param coords: coordinates of the point.
         :param blockProperties: labels and attributes of the point.
         '''    
-        super(PointRecord,self).__init__(id,coords)
+        super(PointRecord,self).__init__(ident,coords)
         if(blockProperties):
             self.blockProperties= blockProperties
         else:
@@ -147,6 +170,18 @@ class PointRecord(me.NodeRecord):
         if(len(propCommand)>0):
           strCommand+= '; '+propCommand
         return 'pt' + strId + '= ' + pointHandlerName + strCommand
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        # Create point.
+        pointHandler= preprocessor.getMultiBlockTopology.getPoints
+        newPoint= pointHandler.newPoint(self.ident, geom.Pos3d(self.coords[0],self.coords[1],self.coords[2]))
+        # Assing properties.
+        self.blockProperties.dumpToXC(preprocessor, newPoint)
+        return newPoint
     
     def hasLabel(self, label):
         ''' Return true if the label argument is the label
@@ -163,17 +198,50 @@ class PointRecord(me.NodeRecord):
             key argument in the dictionary.'''
         return self.blockProperties.getAttribute(key)
 
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= super().getDict()
+        blockProperties= dict()
+        if(self.blockProperties):
+            blockProperties= self.blockProperties.getDict()
+        retval.update({'blockProperties':blockProperties})
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        blockProperties= dct['blockProperties']
+        if(blockProperties):
+            self.blockProperties= BlockProperties()
+            self.blockProperties.setFromDict(dct)
+    
 class PointDict(me.NodeDict):
     ''' Point container.'''
-    def append(self,id,x,y,z):
-        pr= PointRecord(int(id),[x,y,z])
+    
+    def append(self, ident , x, y, z, blockProperties= None):
+        ''' Append a new point to the container.
+
+        :param ident: identifier for the point.
+        :param x: x-coordinate of the point.
+        :param y: y-coordinate of the point.
+        :param z: z-coordinate of the point.
+        :param blockProperties: labels and attributes of the point.
+        '''
+        pr= PointRecord(ident= int(ident), coords= [x,y,z], blockProperties= blockProperties)
         self[pr.ident]= pr
         return pr.ident
         
     def getName(self):
         return 'points'
       
-    def readFromXCSet(self,xcSet):
+    def readFromXCSet(self, xcSet):
+        ''' Read the points from the XC set and append them to this container.
+
+        :param xcSet: xc set.
+        '''
         pointSet= xcSet.getPoints
         for p in pointSet:
             pos= p.getPos
@@ -193,17 +261,52 @@ class PointDict(me.NodeDict):
         # Write a dictionary to access those points from its id.
         retval+= '\nxcPointsDict= {'+strDict[:-1]+'}\n\n'
         return retval;
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the points of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        retval= list()
+        for key in self:
+            newPoint= self[key].dumpToXC(preprocessor)
+            retval.append(newPoint)
             
     def writeToXCFile(self,f, xcImportExportData):
         ''' Write the XC commands that define nodes.'''
         xcCommandString= self.getXCCommandString(xcImportExportData)
         f.write(xcCommandString)
-            
+                        
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= dict()
+        for key in self.keys():
+            point= self[key]
+            retval[key]= point.getDict()
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        for key in dct.keys():
+            values= dct[key]
+            ident= values['ident']
+            coords= values['coords']
+            [x, y, z]= values['coords']
+            blocProperties= None
+            tmp= values['blockProperties']
+            if(tmp):
+                blockProperties= BlockProperties()
+                blockProperties.setFromDict(tmp)
+            self.append(ident= ident, x= x, y= y, z= z, blockProperties= blockProperties)
 
 class BlockRecord(me.CellRecord):
     '''Block type entities: line, face, body,...
 
     :ivar blockProperties: labels and attributes of the block.
+    :ivar matId: material identifier.
     '''    
     def __init__(self, blkId, typ, kPoints, blockProperties= None, thk= 0.0, matId= None):
         '''
@@ -306,9 +409,35 @@ class BlockRecord(me.CellRecord):
             lmsg.error(className+'.'+methodName+'; not implemented for blocks of type: '+ self.cellType)
         propCommand= self.blockProperties.getXCCommandString(strId)
         if(len(propCommand)>0):
-          strCommand+= '; '+propCommand
+            strCommand+= '; '+propCommand
         strCommand+= self.getStrThicknessCommand(strId)
         return strCommand
+
+    def dumpToXC(self, preprocessor):
+        ''' Defines the corresponding (line, surface or volume) entity in XC.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        # Create line or surface.
+        newBlock= None
+        pointIds= self.nodeIds
+        if(self.cellType=='line'): # Create line.
+            lines= preprocessor.getMultiBlockTopology.getLines
+            newBlock= lines.newLine(pointIds[0], pointIds[1])
+        elif(self.cellType=='face'): # Create surface.
+            surfaces= preprocessor.getMultiBlockTopology.getSurfaces
+            if(len(pointIds)==4 and (not self.hasHoles()) and (not self.isHole())): # quad surface.
+                newBlock= surfaces.newQuadSurfacePts(pointIds[0], pointIds[1], pointIds[2], pointIds[3])
+            else: # polygonal surface.
+                newBlock= surfaces.newPolygonalFacePts(pointIds)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for blocks of type: '+ self.cellType)
+        # Assign properties.
+        self.blockProperties.dumpToXC(preprocessor, newBlock)
+        newBlock.setProp("thickness",self.thickness)
+        return newBlock        
     
     def hasLabel(self, label):
         ''' Return true if the label argument is the label
@@ -324,13 +453,33 @@ class BlockRecord(me.CellRecord):
         ''' Return the attribute corresponding to the 
             key argument in the dictionary.'''
         return self.blockProperties.getAttribute(key)
+    
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= super().getDict()
+        blockProperties= dict()
+        if(self.blockProperties):
+            blockProperties= self.blockProperties.getDict()
+        retval.update({'blockProperties':blockProperties})
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        blockProperties= dct['blockProperties']
+        if(blockProperties):
+            self.blockProperties= BlockProperties()
+            self.blockProperties.setFromDict(blockProperties)        
 
 class BlockDict(dict):
     '''Block container.'''    
     def append(self,cell):
         self[cell.ident]= cell
         
-    def readFromXCSet(self,xcSet):
+    def readFromXCSet(self, xcSet):
         ''' Read blocks from XC set.'''
         surfaces= xcSet.getSurfaces
         for s in surfaces:
@@ -394,6 +543,31 @@ class BlockDict(dict):
             retval+= ('f'+str(ownerId)+'.addHole(f'+holeId+')\n')
         return retval
 
+    def dumpToXC(self, preprocessor):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        retval= list()
+        holeDict= dict() # Blocks which are holes.
+        blocksWithHoles= dict() # blocks which have holes.
+        for key in self:
+            block= self[key]
+            xcBlock= block.dumpToXC(preprocessor)
+            retval.append(xcBlock)
+            # Check for holes.
+            holeNames= block.getAttribute('holeNames')
+            if(holeNames!=None): # Block has holes.
+                blocksWithHoles[block.getAttribute('name')]= xcBlock
+            if(block.isHole()): # Block is a hole.
+                holeDict[block.ident]= (xcBlock, block.getAttribute('ownerName'))           
+        # Loop on holes.
+        for holeId in holeDict:
+            (hole, ownerName)= holeDict[holeId] # hole block and name of the block with the hole.
+            owner= blocksWithHoles[ownerName] # id of the block with the hole.
+            owner.addHole(hole)
+        return retval
+
     def writeToXCFile(self,f,xcImportExportData):
         '''Write the XC commands that define the cells (elements).'''
         xcCommandString= self.getXCCommandString(xcImportExportData)
@@ -411,18 +585,56 @@ class BlockDict(dict):
         retval= ''
         for key in self:
             retval+= str(self[key]) + '\n'
+          
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= dict()
+        for key in self.keys():
+            block= self[key]
+            retval[key]= block.getDict()
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
 
-class PointSupportRecord(be.SupportRecord):
+        :param dct: dictionary containing the values of the object members.
+        '''
+        for key in dct.keys():
+            values= dct[key]            
+            newBlock= BlockRecord(blkId= values['ident'], typ= values['cellType'], kPoints= values['nodeIds'])
+            newBlock.setFromDict(values)
+            self.append(newBlock)
+
+class PointSupportRecord(me.NodeSupportRecord):
     ''' Constraints for node displacements.'''
-    def __init__(self, id, pointId, nsr):
-        super(PointSupportRecord,self).__init__(id,nsr.xComp, nsr.yComp, nsr.zComp, nsr.rxComp, nsr.ryComp, nsr.rzComp)
-        self.nodeId= pointId
-    def __str__(self):
-        ''' Return a string representing the object.'''
-        return str(self.ident) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
+    
+    def __init__(self, ident, pointId, nsr):
+        ''' Constructor.
+
+        :param ident: object identifier.
+        :param pointId: constrained point identifier.
+        :param nsr: NodeSupportRecord object containing the values of the constraints.
+        '''
+        # Constraint values.
+        if(nsr):
+            xComp= nsr.xComp
+            yComp= nsr.yComp
+            zComp= nsr.zComp
+            rxComp= nsr.rxComp
+            ryComp= nsr.ryComp
+            rzComp= nsr.rzComp
+        else:
+            xComp= be.ComponentSupportRecord()
+            yComp= be.ComponentSupportRecord()
+            zComp= be.ComponentSupportRecord()
+            rxComp= be.ComponentSupportRecord('Free')
+            ryComp= be.ComponentSupportRecord('Free')
+            rzComp= be.ComponentSupportRecord('Free')
+        super(PointSupportRecord,self).__init__(ident= ident, nodeId= pointId, xComp= xComp, yComp= yComp, zComp= zComp, rxComp= rxComp, ryComp= ryComp, rzComp= rzComp)
 
 class PointSupportDict(dict):
-    '''Point to put constraints on.'''
+    '''Point support container.'''
+    
     def append(self, ps):
         if(ps.nodeId in self):
             className= type(self).__name__
@@ -450,6 +662,25 @@ class PointSupportDict(dict):
                   self.append(psr)
                   supportId+= 1
         return len(self)
+          
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        retval= dict()
+        for key in self.keys():
+            support= self[key]
+            retval[key]= support.getDict()
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        for key in dct.keys():
+            values= dct[key]
+            newPointSupport= PointSupportRecord(ident= values['ident'], pointId= values['pointId'])
+            newPointSupport.setFromDict(values)
+            self.append(newPointSupport)
 
 class BlockData(object):
     '''Block topology entities container: points, lines, faces, solids,...
@@ -608,13 +839,32 @@ class BlockData(object):
         retval+= self.points.getXCCommandString(xcImportExportData)
         retval+= self.blocks.getXCCommandString(xcImportExportData)
         return retval
-        
+
+    def dumpToXC(self, preprocessor):
+        ''' Dump the entities of this container into the preprocessor argument.
+
+        :param preprocessor: XC finite element problem preprocessor.
+        '''
+        points= self.points.dumpToXC(preprocessor)
+        blocks= self.blocks.dumpToXC(preprocessor)
+        return blocks
+
     def writeToXCFile(self,xcImportExportData):
         ''' Write a Python file with XC commands.'''
         f= xcImportExportData.outputFile
         xcCommandString= self.getXCCommandString(xcImportExportData)
         f.write(xcCommandString)
         f.close()
+
+    def writeToJSON(self, xcImportExportData):
+        '''Write the objects that define the mesh.
+
+        :param xcImportExportData: import/export parameters.
+        '''
+        f= xcImportExportData.outputFile
+        blockDict= self.getDict()
+        jsonString= json.dumps(blockDict)
+        f.write(jsonString)
 
     def getPointTags(self):
         ''' Return the identifiers of the points.'''
@@ -674,3 +924,19 @@ class BlockData(object):
         for key in self.blocks:
             retval+= str(self.blocks[key]) + '\n'
         return retval
+    
+    def getDict(self):
+        ''' Return the object members in a Python dictionary.'''
+        return {'name':self.name, 'materials': self.materials.getDict(), 'points': self.points.getDict(), 'blocks': self.blocks.getDict(), 'pointSupports': self.pointSupports.getDict(), 'verbosity': self.verbosity}
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.name= dct['name']
+        self.materials.setFromDict(dct['materials'])
+        self.points.setFromDict(dct['points'])
+        self.blocks.setFromDict(dct['blocks'])
+        self.pointSupports.setFromDict(dct['pointSupports'])
+        self.verbosity= dct['verbosity']

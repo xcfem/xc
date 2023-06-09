@@ -189,14 +189,14 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
   {
     // create the directory if the database directory does not exist
     struct stat sb;
-    if(stat(project.c_str(), &sb) != 0)
+    if(stat(getProjectName().c_str(), &sb) != 0)
       {
         // Create the directory, read/write/access owner only.
-        if(mkdir(project.c_str(), S_IRWXU) != 0)
+        if(mkdir(getProjectName().c_str(), S_IRWXU) != 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; failed mkdir: "
-		      << project << " " << strerror(errno);
+		      << getProjectName() << " " << strerror(errno);
             connection = false;
             return false;
           }
@@ -213,7 +213,7 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
       }
 
     // Set up error handling.
-    dbenv->set_errpfx(dbenv, project.c_str());
+    dbenv->set_errpfx(dbenv, getProjectName().c_str());
 
     //Set up cache size.
     const Preprocessor *preprocessor= getPreprocessor();
@@ -237,7 +237,7 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
       }
 
     // now create the environment
-    ret= dbenv->open(dbenv, project.c_str(),DB_CREATE | DB_INIT_LOG | DB_PRIVATE | DB_INIT_MPOOL, S_IRUSR | S_IWUSR);
+    ret= dbenv->open(dbenv, getProjectName().c_str(),DB_CREATE | DB_INIT_LOG | DB_PRIVATE | DB_INIT_MPOOL, S_IRUSR | S_IWUSR);
     if(ret!= 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -251,7 +251,7 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
 
 //! @brief Constructor
 XC::BerkeleyDbDatastore::BerkeleyDbDatastore(const std::string &projectName, Preprocessor &preprocessor,FEM_ObjectBroker &theObjectBroker,const std::string &dbType)
-  :DBDatastore(preprocessor, theObjectBroker), connection(true), project(projectName)
+  :DBDatastore(projectName, preprocessor, theObjectBroker), connection(true)
   {
     if(create_aux_entities())
       {
@@ -262,7 +262,6 @@ XC::BerkeleyDbDatastore::BerkeleyDbDatastore(const std::string &projectName, Pre
       }
   }
 
-
 XC::BerkeleyDbDatastore::~BerkeleyDbDatastore(void)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -270,6 +269,10 @@ XC::BerkeleyDbDatastore::~BerkeleyDbDatastore(void)
     close();
   }
 
+const std::string &XC::BerkeleyDbDatastore::getProjectName(void) const
+  {
+    return getName();
+  }
 
 int XC::BerkeleyDbDatastore::sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress)
   {

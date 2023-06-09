@@ -193,9 +193,9 @@ class EC3Shape(object):
                         compressed part (defaults to widthToThicknessWeb)
         
         '''
-        ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessWeb()
-        eps=math.sqrt(235e6/self.steelType.fy)
-        limits=[33*eps,38*eps,42*eps]
+        ratioCT= ratioCT if ratioCT is not None else self.widthToThicknessWeb()
+        eps= math.sqrt(235e6/self.steelType.fy)
+        limits=[33*eps, 38*eps, 42*eps]
         classif=0
         while ratioCT>limits[classif]:
             classif+=1
@@ -251,6 +251,24 @@ class EC3Shape(object):
         while ratioCT>limits[classif]:
             classif+=1
         return (classif+1)
+
+    def getClassInCompression(self, ratioCT=None):
+        '''Return the cross-section classification in compression. 
+           Clause 5.5 EC3-1-1
+
+        :param ratioCT: ratio c/t width-to-thickness of the compressed 
+                        part.
+        '''
+        return max(self.getClassOutstandPartInCompression(ratioCT= ratioCT), self.getClassInternalPartInCompression(ratioCT= ratioCT))
+    
+    def getClassInBending(self, ratioCT=None):
+        '''Return the cross-section classification in bending. 
+           Clause 5.5 EC3-1-1
+
+        :param ratioCT: ratio c/t width-to-thickness of the compressed 
+                        part.        
+        '''
+        return max(self.getClassOutstandPartInCompression(ratioCT= ratioCT), self.getClassInternalPartInBending(ratioCT= ratioCT))
     
     def getCfactIntPart(self):
         '''Return the C length of internal part in compression used to 

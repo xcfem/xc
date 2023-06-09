@@ -178,7 +178,7 @@ void XC::FileDatastore::alloc(const size_t &sz)
 //! memory for the arrays an error message is printed and the program
 //! is terminated.
 XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), charPtrData(), currentMaxInt(0), currentMaxDouble(0)
+  :FE_Datastore(dataBaseName, preprocessor, theObjBroker), charPtrData(), currentMaxInt(0), currentMaxDouble(0)
   { resizeDouble(1024); }
 
 //! @brief Destructor.
@@ -242,7 +242,7 @@ int XC::FileDatastore::recvMsg(int dBTag, int commitTag, Message &, ChannelAddre
 
 
 std::string XC::FileDatastore::getFileName(const std::string &tp, int idSize,int commitTag) const
-  { return dataBase + tp + boost::lexical_cast<std::string>(idSize)+"."+boost::lexical_cast<std::string>(commitTag); }
+  { return getName() + tp + boost::lexical_cast<std::string>(idSize)+"."+boost::lexical_cast<std::string>(commitTag); }
 
 XC::FileDatastoreOutputFile *XC::FileDatastore::getFileStruct(FilesMap &filesMap, const std::string &tp, int objSize, int stepSize, int commitTag)
   {    
@@ -886,7 +886,7 @@ int XC::FileDatastore::createTable(const std::string &tableName,const std::vecto
     const int numColumns= columns.size();
     // open the file
     int res= 0;
-    const std::string fileName= dataBase + "." + tableName;
+    const std::string fileName= getName() + "." + tableName;
 
     std::ofstream table;
     table.open(fileName.c_str(), std::ios::out | std::ios::trunc);
@@ -909,7 +909,7 @@ int XC::FileDatastore::createTable(const std::string &tableName,const std::vecto
 int XC::FileDatastore::insertData(const std::string &tableName,const std::vector<std::string> &columns,int commitTag, const XC::Vector &vectorData)
   {
     // open the file
-    const std::string fileName= dataBase + "." + tableName;
+    const std::string fileName= getName() + "." + tableName;
 
     std::ofstream table;
     table.open(fileName.c_str(), std::ios::app);

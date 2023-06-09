@@ -148,20 +148,20 @@ def solveStaticLinearComb(comb):
 
 
 def procesResultVerif(comb):
-  tagSave= comb.tag*100
-  db.save(tagSave)
-  elements= preprocessor.getElementHandler
-  beam1.getResistingForce()
-  global NMin1
-  NMin1=min(NMin1,beam1.getN1)
-  global NMin2
-  NMin2=min(NMin2,beam1.getN2)
-  ''' 
-    print("tagComb= ",comb.tag)
-    print("nmbComb= ",comb.getName)
-    print("N1= ",(beam1.getN1/1e3))
-    print("N2= ",(beam1.getN2/1e3))
-  '''
+    tagSave= comb.tag*100
+    db.save(tagSave)
+    elements= preprocessor.getElementHandler
+    beam1.getResistingForce()
+    global NMin1
+    NMin1=min(NMin1,beam1.getN1)
+    global NMin2
+    NMin2=min(NMin2,beam1.getN2)
+    ''' 
+      print("tagComb= ",comb.tag)
+      print("nmbComb= ",comb.getName)
+      print("N1= ",(beam1.getN1/1e3))
+      print("N2= ",(beam1.getN2/1e3))
+    '''
 
 
 NMin1= 1e9
