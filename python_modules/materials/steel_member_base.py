@@ -20,25 +20,25 @@ class Member(member_base.Member):
     
     :ivar shape: cross-section steel shape (e.g. IPNShape, IPEShape, ...)
     '''
-    def __init__(self,name,shape, lstLines=None):
+    def __init__(self,name,shape, lstLines=None, lstPoints= None):
         '''Constructor.
 
         :param name: object name.
         :param shape: cross-section steel shape.
         :param lstLines: ordered list of lines that make up the member 
                         (defaults to None).
+        :param lstPoints: ordered list of points that make up the member. 
+                          Ignored if lstLines is given (defaults to None)
         '''
-        super(Member,self).__init__(name, lstLines)
+        super(Member,self).__init__(name, lstLines= lstLines, lstPoints= lstPoints)
         self.shape= shape
         
 
 class BucklingMember(Member):
     '''Base class for steel members that could buckle.
     
-    :ivar lstPoints: ordered list of points that make up the member. Ignored if 
-          lstLines is given (defaults to None) 
     :ivar contrPnt: control points along the member.
-    '''
+s    '''
     def __init__(self, name, shape, lstLines=None, lstPoints=None):
         '''Constructor.
 
@@ -49,22 +49,10 @@ class BucklingMember(Member):
         :param lstPoints: ordered list of points that make up the member. 
                           Ignored if lstLines is given (defaults to None)
         '''
-        super(BucklingMember,self).__init__(name, shape, lstLines)
-        self.lstPoints= lstPoints
+        super(BucklingMember,self).__init__(name, shape, lstLines= lstLines, lstPoints= lstPoints)
         self.contrPnt= None # control points along the member.
         self.pline= None # member axis.
         
-    def getPreprocessor(self, silent= False):
-        ''' Return the XC preprocessor.'''
-        retval= super(BucklingMember,self).getPreprocessor(silent= True)
-        if((not retval) and self.lstPoints):
-            retval= self.lstPoints[0].getPreprocessor
-        if(not retval and not silent):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; No lines, points or elements')
-        return retval
-
     def getMemberGeometry(self):
         ''' Return the lines and points along the member.'''
         lstLn= None
@@ -72,11 +60,10 @@ class BucklingMember(Member):
         if self.lstLines:
             lstLn= self.lstLines
             lstP3d= gu.get_pos3d_sequence_from_line_sequence(lstLn)
-        elif self.lstPoints:
-            lstP3d= [p.getPos for p in self.lstPoints]
-            lstLn= gu.get_line_sequence_from_point_sequence(self.lstPoints)
         else:
-            lmsg.warning('Incomplete member definition: list of lines or points  required')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; incomplete member definition: list of lines required')
         # member representation
         pol= geom.Polyline3d()
         for p in lstP3d:

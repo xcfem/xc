@@ -210,7 +210,7 @@ class Member(steel_member_base.BucklingMember):
         :param lstPoints: ordered list of points that make up the beam. 
                           Ignored if Cb or lstLines is given (defaults to None)
         '''
-        super(Member,self).__init__(name, section, lstLines, lstPoints)
+        super(Member,self).__init__(name, section, lstLines= lstLines, lstPoints= lstPoints)
         self.unbracedLengthX= unbracedLengthX
         if(unbracedLengthY):
             self.unbracedLengthY= unbracedLengthY
@@ -282,7 +282,7 @@ class Member(steel_member_base.BucklingMember):
         if(self.Cb):
             Cb= self.Cb
         else:
-            if(self.lstLines or self.lstPoints):
+            if(self.lstLines):
                 Cb= self.getLateralTorsionalBucklingModificationFactor()
             else:
                 lmsg.error('Can\'t compute lateral-torsional buckling modification factor, taken as: '+str(Cb))

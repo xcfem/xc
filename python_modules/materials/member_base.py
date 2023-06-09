@@ -14,6 +14,7 @@ from model.geometry import geom_utils as gu
 
 import sys
 import xc
+from model.geometry import geom_utils as gu
 
 class MemberConnection(object):
     '''Member connection
@@ -66,7 +67,7 @@ class Member(object):
           (defaults to None).
     :ivar elemSet: elements along the member.
     '''
-    def __init__(self, name, lstLines=None):
+    def __init__(self, name, lstLines= None, lstPoints= None):
         '''Constructor.
 
         :param name: object name.
@@ -74,7 +75,10 @@ class Member(object):
                         (defaults to None).
         '''
         self.name= name
-        self.lstLines= lstLines
+        if(lstLines):
+            self.lstLines= lstLines
+        elif(lstPoints):
+            self.lstLines= gu.get_line_sequence_from_point_sequence(lstPoints)
         self.elemSet= None # elements along the member.
         
     def getPreprocessor(self, silent= False):

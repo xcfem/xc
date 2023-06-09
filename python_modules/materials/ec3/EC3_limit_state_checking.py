@@ -290,7 +290,7 @@ class Member(steel_member_base.BucklingMember):
         :param lstPoints: ordered list of points that make up the beam. 
                           Ignored if lstLines is given (defaults to None)
         '''
-        super(Member,self).__init__(name, ec3Shape, lstLines, lstPoints)
+        super(Member,self).__init__(name, ec3Shape, lstLines= lstLines, lstPoints= lstPoints)
         self.beamSupportCoefs= beamSupportCoefs
         self.typo=typo
 
