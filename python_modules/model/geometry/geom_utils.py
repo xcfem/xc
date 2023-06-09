@@ -154,48 +154,65 @@ def def_rg_cooLim(XYZLists,Xcoo,Ycoo,Zcoo):
     rg=gm.IJKRange((xLst.index(Xcoo[0]),yLst.index(Ycoo[0]),zLst.index(Zcoo[0])),(xLst.index(Xcoo[1]),yLst.index(Ycoo[1]),zLst.index(Zcoo[1])))
     return rg
 
-def lstP3d_from_lstLns(lstLns):
+def get_point_sequence_from_line_sequence(lstLns):
     '''Return an ordered list of vertex (3DPos) from the ordered list of 
     consecutive lines 'lstLns' given as parameter. 
-    '''
-    prep=lstLns[0].getPreprocessor
-    pointsHandler=prep.getMultiBlockTopology.getPoints
-    # Append the positions of the first K-point of the lines.
-    lstP3d=[pointsHandler.get(l.getKPoints()[0]).getPos for l in lstLns]
-    # Append the position of the last K-point.
-    lstP3d.append(pointsHandler.get(lstLns[-1].getKPoints()[1]).getPos)
-    return lstP3d
 
-def lstLns_from_lstPnts(lstPnts):
+    :param lstLns: list of consecutive lines.
+    '''
+    retval= list()
+    if(lstLns):
+        for l in lstLns:
+            retval.append(l.getP1()) # Append the first point of the line.
+        lastPnt= lstLns[-1].getP2()
+        retval.append(lastPnt) # Append the last point of the last line.
+    return retval
+
+def get_pos3d_sequence_from_line_sequence(lstLns):
+    '''Return an ordered list of vertex positions from the ordered list of 
+    consecutive lines 'lstLns' given as parameter. 
+
+    :param lstLns: list of consecutive lines.
+    '''
+    retval= list()
+    lstPoints= get_point_sequence_from_line_sequence(lstLns)
+    if(lstPoints):
+        for p in lstPoints:
+            retval.append(p.getPos)
+    return retval
+
+def get_line_sequence_from_point_sequence(lstPnts):
     '''Return an ordered list of consecutive lines from the ordered list of 
-    points 'lstPnts' given as parameter. 
+    points 'lstPnts' given as argument.
+
+    :param lstPnts: point sequence.
     '''
-    #prep=lstPnts[0].getPreprocessor
-    lstLn=[get_lin_2Pts(lstPnts[i],lstPnts[i+1]) for i in range (len(lstPnts)-1)]
-    lstLn.append(get_lin_2Pts(lstPnts[-2],lstPnts[-1]))
-    return lstLn
+    retval= list()
+    if(len(lstPnts)>1):
+        firstPoint= lstPnts[0]
+        for p in lstPnts[1:]:
+            ln= get_lin_2Pts(firstPoint,p)
+            retval.append(ln)
+            firstPoint= p
+    return retval
 
 
-def get_lin_2Pts(pnt1,pnt2,setSrchLin=None):
-    '''return the line that belongs to the set `,setSrchLin` and whose
+def get_lin_2Pts(pnt1, pnt2, setSrchLin= None):
+    '''return the line that belongs to the set `setSrchLin` and whose
     starting and ending points are `pnt1` and `pnt2` (in this order)
-    If no set is defined, total set is adopted
+    If no set is defined, total set is adopted.
+
+    :param pnt1: first end point.
+    :param pnt2: second end point.
+    :param setSrchLin: set to search the line into.
     '''
-    broke_out= False
-    tgp1=pnt1.tag
-    tgp2=pnt2.tag
-    if not setSrchLin:
-        setSrchLin=pnt1.getPreprocessor.getSets.getSet('total').getLines
-    for l in setSrchLin:
-        extr= l.getKPoints()
-        if (extr[0]== tgp1 and extr[1]== tgp2):
-            broke_out= True
-            break
-    if not broke_out:
-#        print("Can't find the line")
-        return
-    else:
-        return l
+    preprocessor= pnt1.getPreprocessor
+    retval= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pnt1, pnt2)
+    # Check if the line belongs to the set.
+    if(retval and setSrchLin):
+        if(not setSrchLin.In(retval)):
+            retval= None
+    return retval
     
 def lstEquPnts_from_polyline(pol,nDiv):
     '''Return a list of nDiv+1 equally spaced points (3dPos) in polyline 'pol'
@@ -227,8 +244,9 @@ def lstEquPnts_from_polyline(pol,nDiv):
     
   
 def lines_on_path(preprocessor, path, elementLength):
-    '''Return a list of lines between the points on the path
+    '''Return a list of newly created lines between the points on the path
     
+    :param preprocessor: preprocessor for the finite element problem.
     :param path: point sequence
     :param elementLength: length of the element for the lines
     '''

@@ -512,6 +512,7 @@ python tests/preprocessor/geom_entities/k_points.py
 python tests/preprocessor/geom_entities/linea_tramos.py
 python tests/preprocessor/geom_entities/test_line_seq_01.py
 python tests/preprocessor/geom_entities/test_line_seq_02.py
+python tests/preprocessor/geom_entities/test_point_lines_sequences.py
 python tests/preprocessor/geom_entities/circumference_arc_01.py
 python tests/preprocessor/geom_entities/circumference_arc_02.py
 python tests/preprocessor/geom_entities/circumference_arc_03.py

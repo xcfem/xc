@@ -71,10 +71,10 @@ class BucklingMember(Member):
         lstP3d= None
         if self.lstLines:
             lstLn= self.lstLines
-            lstP3d= gu.lstP3d_from_lstLns(lstLn)
+            lstP3d= gu.get_pos3d_sequence_from_line_sequence(lstLn)
         elif self.lstPoints:
             lstP3d= [p.getPos for p in self.lstPoints]
-            lstLn= gu.lstLns_from_lstPnts(self.lstPoints)
+            lstLn= gu.get_line_sequence_from_point_sequence(self.lstPoints)
         else:
             lmsg.warning('Incomplete member definition: list of lines or points  required')
         # member representation

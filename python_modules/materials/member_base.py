@@ -96,7 +96,7 @@ class Member(object):
         lstP3d= None
         if(self.lstLines):
             lstLn= self.lstLines
-            lstP3d= gu.lstP3d_from_lstLns(lstLn)
+            lstP3d= gu.get_pos3d_sequence_from_line_sequence(lstLn)
         else:
             lmsg.warning('Incomplete member definition: list of lines required')
         return lstLn, lstP3d
