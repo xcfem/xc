@@ -1128,7 +1128,7 @@ class PredefinedSpace(object):
         :param pA: from point.
         :param pB: to point.
         '''
-        return self.preprocessor.getMultiBlockTopology.getLineWithEndPoints(pA.tag, pB.tag)
+        return self.preprocessor.getMultiBlockTopology.getLineWithEndPoints(pA, pB)
         
     def newSurface(self, pointList: Sequence[xc.Pnt]):
         ''' Creates a surface whose vertices are the argument points.
