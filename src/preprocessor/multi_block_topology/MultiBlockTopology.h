@@ -92,6 +92,8 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
     //! @brief Constructor.
     MultiBlockTopology(Preprocessor *mod= nullptr);
 
+    Edge *find_edge_by_endpoints(const Pnt &,const Pnt &);
+    const Edge *find_edge_by_endpoints(const Pnt &,const Pnt &) const;
     Edge *find_edge_by_endpoints(const PntMap::Indice &,const PntMap::Indice &);
     const Edge *find_edge_by_endpoints(const PntMap::Indice &,const PntMap::Indice &) const;
     

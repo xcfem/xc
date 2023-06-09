@@ -74,13 +74,23 @@ void XC::MultiBlockTopology::numerate(void)
 
 //! @brief Return the «edge» that has as end points those
 //! whose indices are passed as parameters.
+XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const Pnt &pA,const Pnt &pB)
+  { return find_edge_ptr_by_endpoints(pA,pB); }
+
+//! @brief Returns the «edge» that has as end points those
+//! whose indices are passed as parameter.
+const XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const Pnt &pA,const Pnt &pB) const
+  { return find_edge_const_ptr_by_endpoints(pA,pB); }
+
+//! @brief Return the «edge» that has as end points those
+//! whose indices are passed as parameters.
 XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const PntMap::Indice &pA,const PntMap::Indice &pB)
   {
     Edge *retval= nullptr;
     const Pnt *p1= points.busca(pA);
     const Pnt *p2= points.busca(pB);
     if(p1 && p2)
-      { retval= find_edge_ptr_by_endpoints(*p1,*p2); }
+      { retval= this->find_edge_by_endpoints(*p1,*p2); }
     else
       {
         if(!p1)
@@ -103,7 +113,7 @@ const XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const PntMap::Ind
     const Pnt *p1= points.busca(pA);
     const Pnt *p2= points.busca(pB);
     if(p1 && p2)
-      { retval= find_edge_ptr_by_endpoints(*p1,*p2); }
+      { retval= this->find_edge_by_endpoints(*p1,*p2); }
     else
       {
         if(!p1)

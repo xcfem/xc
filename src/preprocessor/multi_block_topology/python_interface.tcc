@@ -55,7 +55,8 @@ XC::BodyMap &(XC::MultiBlockTopology::*getBodyMapRef)(void)= &XC::MultiBlockTopo
 XC::Framework2d &(XC::MultiBlockTopology::*getRefToFramework2d)(void)= &XC::MultiBlockTopology::getFramework2d;
 XC::Framework3d &(XC::MultiBlockTopology::*getRefToFramework3d)(void)= &XC::MultiBlockTopology::getFramework3d;
 XC::UniformGridMap &(XC::MultiBlockTopology::*getUniformGridsRef)(void)= &XC::MultiBlockTopology::getUniformGrids;
-XC::Edge *(XC::MultiBlockTopology::*getLineWithEndPoints)(const XC::PntMap::Indice &,const XC::PntMap::Indice &) = &XC::MultiBlockTopology::find_edge_by_endpoints;
+XC::Edge *(XC::MultiBlockTopology::*getLineWithEndPointsTags)(const XC::PntMap::Indice &,const XC::PntMap::Indice &) = &XC::MultiBlockTopology::find_edge_by_endpoints;
+XC::Edge *(XC::MultiBlockTopology::*getLineWithEndPoints)(const XC::Pnt &,const XC::Pnt &) = &XC::MultiBlockTopology::find_edge_by_endpoints;
 class_<XC::MultiBlockTopology, bases<XC::PreprocessorContainer>, boost::noncopyable >("MultiBlockTopology", no_init)
   .add_property("getReferenceSystems", make_function( getReferenceSystems, return_internal_reference<>() ))
   .add_property("getPoints", make_function( getPntMapRef, return_internal_reference<>() ), "Return the point container.")
@@ -66,7 +67,8 @@ class_<XC::MultiBlockTopology, bases<XC::PreprocessorContainer>, boost::noncopya
   .add_property("get3DNets", make_function( getRefToFramework3d, return_internal_reference<>() ))
   .add_property("getUniformGrids", make_function( getUniformGridsRef, return_internal_reference<>() ))
   .def("conciliaNDivs", &XC::MultiBlockTopology::conciliaNDivs)
-  .def("getLineWithEndPoints",make_function( getLineWithEndPoints, return_internal_reference<>() ))
+  .def("getLineWithEndPoints",make_function( getLineWithEndPoints, return_internal_reference<>() ), "Return the line which connects the argument points.")
+  .def("getLineWithEndPoints",make_function( getLineWithEndPointsTags, return_internal_reference<>() ), "Return the line which connects the argument points identified by its index.")
   .def("getAverageSize", &XC::MultiBlockTopology::getAverageSize, "Return the average size of the geometric entities.")
    ;
 
