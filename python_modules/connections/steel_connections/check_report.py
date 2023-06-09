@@ -14,7 +14,7 @@ __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2020, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
+__email__= "ana.ortega.ort@gmail.com l.pereztato@gmail.com"
 
 # Functions to check bolts and welds according to AISC-16
 def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None, solutionProcedureType= predefined_solutions.SimpleStaticLinearUMF,warningsFile=None,Phi=0.75):
