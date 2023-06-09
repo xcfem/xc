@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
+''' Test the newLineSequence method. Creates a line sequence from a list of points.'''
+
 from __future__ import print_function
 from __future__ import division
-import geom
-import xc
-import math
-import os
-from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+import math
+import os
+from model import predefined_spaces
+from materials import typical_materials
 
 NumDiv= 8
 CooMax= 10
@@ -62,8 +65,8 @@ ratio1= 0.0
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
 for e in elements:
-  #print("  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",e.getLength(True))
-  ratio1+= (e.getLength(True)-lteor)/lteor
+    #print("  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",e.getLength(True))
+    ratio1+= (e.getLength(True)-lteor)/lteor
 
 ratio2= (nnodPline-(NumDiv+1))
 ratio3= (nelemPline-NumDiv)

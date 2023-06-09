@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+''' Test the newLineSequence method. Creates a line sequence from a list of lines.'''
 
+from __future__ import print_function
 from __future__ import division
-import geom
-import xc
-import math
-import os
-from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+import math
+import os
+from model import predefined_spaces
+from materials import typical_materials
 
 NumDiv= 6
 CooMax= 10
