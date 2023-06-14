@@ -13,3 +13,5 @@ The classes on this folder implement the algorithms needed so solve standard ane
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
+ - [Modal Assurance Criterion](https://doi.org/10.1016/j.proeng.2012.09.551)
+ - [Universal File Format](https://en.wikipedia.org/wiki/Universal_File_Format)
