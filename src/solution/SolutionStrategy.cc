@@ -145,7 +145,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     free_integrator();
     const int numberOfParameters= params.Size();
 
-    if(nmb=="arc_length_integrator")
+    if(nmb=="arc-length_integrator")
       {
         double arc_length= 1.0;
         if(numberOfParameters>0)
@@ -155,7 +155,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
           alpha= params[1];
         theIntegrator= new ArcLength(this,arc_length,alpha);
       }
-    else if(nmb=="arc_length1_integrator")
+    else if(nmb=="arc-length1_integrator")
       {
         double arc_length= 1.0;
         if(numberOfParameters>0)

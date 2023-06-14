@@ -67,110 +67,110 @@ XC::LineSearch *XC::RegulaFalsiLineSearch::getCopy(void) const
   { return new RegulaFalsiLineSearch(*this); }
 
 int XC::RegulaFalsiLineSearch::search(double s0, double s1, LinearSOE &theSOE, IncrementalIntegrator &theIntegrator)
-{
-  double r0 = 0.0;
+  {
+    double r0 = 0.0;
 
-  if ( s0 != 0.0 ) 
-    r0 = fabs( s1 / s0 );
-	
-  if  (r0 <= tolerance )
-    return 0; // Line Search Not Required Residual Decrease Less Than Tolerance
+    if ( s0 != 0.0 ) 
+      r0 = fabs( s1 / s0 );
 
-  if (s1 == s0)
-    return 0;  // RegulaFalsi will have a divide-by-zero error if continue
+    if  (r0 <= tolerance )
+      return 0; // Line Search Not Required Residual Decrease Less Than Tolerance
 
-  // set some variables
-  double eta    = 1.0;
-  double s      = s1;
-  double etaU   = 1.0;
-  double etaL   = 0.0;
-  double sU     = s1;
-  double sL     = s0;
-  double r      = r0;
-  double etaJ   = 1.0;
+    if (s1 == s0)
+      return 0;  // RegulaFalsi will have a divide-by-zero error if continue
 
-
-  const Vector &dU = theSOE.getX();
-
-  if (printFlag == 0) {
-    std::cerr << "RegulaFalsi Line Search - initial: "
-	 << "      eta(0) : " << eta << " , Ratio |s/s0| = " << r0 << std::endl;
-  }
-
-  // perform the secant iterations:
-  //
-  //                eta(j+1) = eta(u) -  s(u) * (eta(l) -eta(u))
-  //                                     ------------------------
-  //                                           s(l) - s(u)
-
-  int count = 0; //initial value of iteration counter 
-  while ( r > tolerance  &&  count < maxIter ) {
-    
-    count++;
-
-    eta = etaU - sU * (etaL-etaU) / (sL - sU);
+    // set some variables
+    double eta    = 1.0;
+    double s      = s1;
+    double etaU   = 1.0;
+    double etaL   = 0.0;
+    double sU     = s1;
+    double sL     = s0;
+    double r      = r0;
+    double etaJ   = 1.0;
 
 
-    //-- want to put limits on eta(i)
-    if (eta > maxEta)  eta = maxEta;
-    if (  r >  r0   )  eta =  1.0;
-    if (eta < minEta)  eta = minEta;
+    const Vector &dU = theSOE.getX();
 
-    
-    //Updates la diferencia incremental and 
-    //computes the new unbalanced vector.
+    if (printFlag == 0) {
+      std::cerr << "RegulaFalsi Line Search - initial: "
+	   << "      eta(0) : " << eta << " , Ratio |s/s0| = " << r0 << std::endl;
+    }
+
+    // perform the secant iterations:
+    //
+    //                eta(j+1) = eta(u) -  s(u) * (eta(l) -eta(u))
+    //                                     ------------------------
+    //                                           s(l) - s(u)
+
+    int count = 0; //initial value of iteration counter 
+    while ( r > tolerance  &&  count < maxIter ) {
+
+      count++;
+
+      eta = etaU - sU * (etaL-etaU) / (sL - sU);
+
+
+      //-- want to put limits on eta(i)
+      if (eta > maxEta)  eta = maxEta;
+      if (  r >  r0   )  eta =  1.0;
+      if (eta < minEta)  eta = minEta;
+
+
+      //Updates la diferencia incremental and 
+      //computes the new unbalanced vector.
+      x= dU;
+      x*= eta-etaJ;
+
+      const int tmp= updateAndUnbalance(theIntegrator);
+      if(tmp!=0)
+	return tmp;
+
+      //new unbalanced vector
+      const Vector &ResidJ= theSOE.getB();
+
+      //new value for s
+      s= dU ^ ResidJ;
+
+      //new value for r 
+      r= fabs( s / s0 ); 
+
+
+      if(printFlag == 0)
+	{
+	  std::cerr << "RegulaFalsi Line Search - iteration: " << count 
+	       << " , eta(j) : " << eta 
+	       << " , Ratio |sj/s0| = " << r << std::endl;
+	}
+
+
+      if (etaJ == eta)
+	count = maxIter;
+
+      // set variables for next iteration
+      etaJ = eta;
+
+      if (s*sU < 0.0) {
+	etaL = eta;
+	sL   = s;
+      } else if (s*sU == 0.0)
+	count = maxIter;
+      else {
+	etaU = eta;
+	sU   = s;
+      } 
+
+      if (sL == sU)
+	count = maxIter;
+
+    } //end while
+
+    // set X in the SOE for the revised dU, needed for convergence tests
     x= dU;
-    x*= eta-etaJ;
-	    
-    const int tmp= updateAndUnbalance(theIntegrator);
-    if(tmp!=0)
-      return tmp;
+    x*= eta;
+    theSOE.setX(x);
 
-    //new unbalanced vector
-    const Vector &ResidJ= theSOE.getB();
-    
-    //new value for s
-    s= dU ^ ResidJ;
-    
-    //new value for r 
-    r= fabs( s / s0 ); 
-
-
-    if(printFlag == 0)
-      {
-        std::cerr << "RegulaFalsi Line Search - iteration: " << count 
-	     << " , eta(j) : " << eta 
-             << " , Ratio |sj/s0| = " << r << std::endl;
-      }
-    
-
-    if (etaJ == eta)
-      count = maxIter;
-
-    // set variables for next iteration
-    etaJ = eta;
-    
-    if (s*sU < 0.0) {
-      etaL = eta;
-      sL   = s;
-    } else if (s*sU == 0.0)
-      count = maxIter;
-    else {
-      etaU = eta;
-      sU   = s;
-    } 
-
-    if (sL == sU)
-      count = maxIter;
-
-  } //end while
-
-  // set X in the SOE for the revised dU, needed for convergence tests
-  x= dU;
-  x*= eta;
-  theSOE.setX(x);
-  
-  return 0;
-}
+    return 0;
+  }
 
 
