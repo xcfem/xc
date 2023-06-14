@@ -131,6 +131,14 @@ class SolutionProcedure(object):
                 AssertionError('Can\'t set up the model wrapper.')            
         self.constraintHandlerSetup()
 
+    def setArcLengthIntegratorParameters(arcLength, alpha= 1.0):
+        ''' Set the values of the Arc-Length integrator.
+
+        :param arcLength: radius of desired intersection with the equilibrium path.
+        :param alpha: scaling factor on the reference loads.
+        '''
+        self.integratorParameters= xc.Vector([arcLength, alpha])
+
     def getModelWrapperName(self):
         ''' Return the name for the model wrapper.'''
         retval= 'sm_'+self.name
@@ -175,7 +183,8 @@ class SolutionProcedure(object):
             self.integrator.nodeTag= self.dispControlNode.tag
             self.integrator.dof= self.dispControlDof
             self.integrator.increment= self.dispControlIncrement
-            
+        elif(integratorType in ["arc-length_integrator", "arc-length1_integrator"]): # Arc-Length control.
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([self.arcLength, self.alpha]))
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -838,8 +847,13 @@ class PenaltyModifiedNewtonMUMPS(PenaltyModifiedNewtonBase):
         self.analysisSetup('static_analysis')
 
 class LineSearchBase(SolutionProcedure):
-    ''' Base class for line search solution aggregations.'''
-    def __init__(self, prb, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType):
+    ''' Base class for line search solution aggregations.
+
+
+    :ivar lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+    :ivar integratorType: integrator type (see integratorSetup).
+    '''
+    def __init__(self, prb, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -853,14 +867,16 @@ class LineSearchBase(SolutionProcedure):
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
+        :param integratorType: integrator type (see integratorSetup).
         '''
         super(LineSearchBase,self).__init__(name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType)
         self.feProblem= prb
         self.lineSearchMethod= lineSearchMethod
+        self.integratorType= integratorType
 
 class PenaltyNewtonLineSearchBase(LineSearchBase):
     ''' Base class for penalty Newton line search solution aggregation.'''
-    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType):
+    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -874,8 +890,9 @@ class PenaltyNewtonLineSearchBase(LineSearchBase):
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyNewtonLineSearchBase,self).__init__(prb, name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, lineSearchMethod=lineSearchMethod, soeType=soeType, solverType= solverType)
+        super(PenaltyNewtonLineSearchBase,self).__init__(prb, name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, lineSearchMethod= lineSearchMethod, soeType=soeType, solverType= solverType, integratorType= integratorType)
         self.setPenaltyFactors()
         
     def setup(self):
@@ -883,13 +900,13 @@ class PenaltyNewtonLineSearchBase(LineSearchBase):
             problem object.
         '''
         super(PenaltyNewtonLineSearchBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_line_search_soln_algo', integratorType= 'load_control_integrator')
+        self.solutionAlgorithmSetup(solAlgType= 'newton_line_search_soln_algo', integratorType= self.integratorType)
         self.solAlgo.setLineSearchMethod(self.lineSearchMethod)
 
 class PenaltyNewtonLineSearch(PenaltyNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm
         and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -901,8 +918,9 @@ class PenaltyNewtonLineSearch(PenaltyNewtonLineSearchBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        super(PenaltyNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -916,7 +934,7 @@ class PenaltyNewtonLineSearchUMF(PenaltyNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a penalty constraint handler and a UMF
         (Unsimmetric multi-frontal method) solver.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -928,8 +946,9 @@ class PenaltyNewtonLineSearchUMF(PenaltyNewtonLineSearchBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        super(PenaltyNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType= integratorType)
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -943,7 +962,7 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a penalty constraint handler and a MUMPS
         (parallel sparse direct solver) solver.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -955,8 +974,9 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver')
+        super(PenaltyNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -967,20 +987,21 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
         self.analysisSetup('static_analysis')
         
 ### Convenience function
-def penalty_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+def penalty_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
+    :param integratorType: integrator type (see integratorSetup).
     '''
-    solProc= PenaltyNewtonLineSearchMUMPS(prb,maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType, lineSearchMethod= lineSearchMethod)
+    solProc= PenaltyNewtonLineSearchMUMPS(prb,maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType, lineSearchMethod= lineSearchMethod, integratorType= integratorType)
     solProc.setup()
     return solProc.analysis
  
 class TransformationNewtonLineSearchBase(LineSearchBase):
     ''' Base class for transformation Newton line search solution aggregation.'''
-    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType):
+    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -994,8 +1015,9 @@ class TransformationNewtonLineSearchBase(LineSearchBase):
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(TransformationNewtonLineSearchBase,self).__init__(prb, name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType)
+        super(TransformationNewtonLineSearchBase,self).__init__(prb, name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType= integratorType)
         #self.setTransformationFactors()
         
     def setup(self):
@@ -1003,13 +1025,13 @@ class TransformationNewtonLineSearchBase(LineSearchBase):
             problem object.
         '''
         super(TransformationNewtonLineSearchBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_line_search_soln_algo', integratorType= 'load_control_integrator')
+        self.solutionAlgorithmSetup(solAlgType= 'newton_line_search_soln_algo', integratorType= self.integratorType)
         self.solAlgo.setLineSearchMethod(self.lineSearchMethod)
 
 class TransformationNewtonLineSearch(TransformationNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm
         and a transformation constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1021,8 +1043,9 @@ class TransformationNewtonLineSearch(TransformationNewtonLineSearchBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(TransformationNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        super(TransformationNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -1036,7 +1059,7 @@ class TransformationNewtonLineSearchUMF(TransformationNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a transformation constraint handler and a UMF
         (Unsimmetric multi-frontal method) solver.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1048,8 +1071,9 @@ class TransformationNewtonLineSearchUMF(TransformationNewtonLineSearchBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(TransformationNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        super(TransformationNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType= integratorType)
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -1063,7 +1087,7 @@ class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a transformation constraint handler and a MUMPS
         (parallel sparse direct solver) solver.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1075,8 +1099,9 @@ class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        :param integratorType: integrator type (see integratorSetup).
         '''
-        super(TransformationNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver')
+        super(TransformationNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -1087,14 +1112,16 @@ class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
         self.analysisSetup('static_analysis')
         
 ### Convenience function
-def transformation_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
+def transformation_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', integratorType= 'load_control_integrator'):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
+    :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+    :param integratorType: integrator type (see integratorSetup).
     '''
-    solProc= TransformationNewtonLineSearchMUMPS(prb,maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
+    solProc= TransformationNewtonLineSearchMUMPS(prb,maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType, integratorType= integratorType)
     solProc.setup()
     return solProc.analysis
 
