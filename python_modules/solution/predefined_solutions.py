@@ -131,7 +131,7 @@ class SolutionProcedure(object):
                 AssertionError('Can\'t set up the model wrapper.')            
         self.constraintHandlerSetup()
 
-    def setArcLengthIntegratorParameters(arcLength, alpha= 1.0):
+    def setArcLengthIntegratorParameters(self, arcLength, alpha= 1.0):
         ''' Set the values of the Arc-Length integrator.
 
         :param arcLength: radius of desired intersection with the equilibrium path.
@@ -184,7 +184,7 @@ class SolutionProcedure(object):
             self.integrator.dof= self.dispControlDof
             self.integrator.increment= self.dispControlIncrement
         elif(integratorType in ["arc-length_integrator", "arc-length1_integrator"]): # Arc-Length control.
-            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([self.arcLength, self.alpha]))
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType, self.integratorParameters)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
