@@ -112,6 +112,8 @@ recDFree.setNodes(xc.ID([n2.tag]))
 ##### Define the Python code that will be executed each time that
 ##### convergence is achieved:
 recDFree.callbackRecord= "dFree.append([self.getDomain.getTimeTracker.getCurrentTime,self.getDisp])"
+#####                          ^                                     ^                   ^
+##### Append to dFree list ----|        get current time ------------|  get displacement-|
 
 #### Record node 1 reactions.
 rBase= list() # Create a list to store (time, reaction) pairs.
@@ -123,9 +125,14 @@ recRBase.setNodes(xc.ID([n1.tag]))
 ##### Define the Python code that will be executed each time that
 ##### convergence is achieved:
 recRBase.callbackRecord= "rBase.append([self.getDomain.getTimeTracker.getCurrentTime,self.getReaction])"
+#####                          ^                                     ^                   ^
+##### Append to rBase list ----|        get current time ------------|  get reaction ----|
+
 ##### Define the Python code that will be executed before any
 ##### record calls:
 recRBase.callbackSetup= "self.getDomain.calculateNodalReactions(True,1e-4)"
+#####                                  ^
+#####        compute nodal reactions --|
 
 ### Eigen analysis.
 solProc.clear()
