@@ -285,6 +285,17 @@ int XC::Newmark::formEleTangent(FE_Element *theEle)
         theEle->addCtoTang(c2);
         theEle->addMtoTang(c3);
       }
+    else if(statusFlag == HALL_TANGENT)
+      {
+        theEle->addKtToTang(c1*cFactor);
+        theEle->addKiToTang(c1*iFactor);
+        theEle->addCtoTang(c2);
+        theEle->addMtoTang(c3);
+      }
+    else
+      {
+	std::cerr << "Newmark::formEleTangent - unknown FLAG\n";
+      }
     return 0;
   }
 
@@ -499,3 +510,6 @@ int XC::Newmark::revertToStart(void)
   }
 // AddingSensitivity:END ////////////////////////////////
 
+//! @brief Function related to modal damping (not implemented yet).
+double XC::Newmark::getCFactor(void)
+  { return c2; }

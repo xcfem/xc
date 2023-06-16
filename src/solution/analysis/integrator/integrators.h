@@ -53,6 +53,8 @@
 #include <solution/analysis/integrator/transient/CentralDifferenceAlternative.h>
 #include <solution/analysis/integrator/transient/CentralDifferenceNoDamping.h>
 #include <solution/analysis/integrator/transient/HHT1.h>
+#include <solution/analysis/integrator/transient/TRBDF2.h>
+#include <solution/analysis/integrator/transient/TRBDF3.h>
 #include <solution/analysis/integrator/transient/newmark/Newmark.h>
 #include <solution/analysis/integrator/transient/newmark/Newmark1.h>
 #include <solution/analysis/integrator/transient/newmark/NewmarkExplicit.h>

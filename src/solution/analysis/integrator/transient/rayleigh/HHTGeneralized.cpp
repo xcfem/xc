@@ -176,18 +176,25 @@ int XC::HHTGeneralized::revertToLastStep()
 int XC::HHTGeneralized::formEleTangent(FE_Element *theEle)
 {
     theEle->zeroTangent();
-    if (statusFlag == CURRENT_TANGENT)  {
+    if (statusFlag == CURRENT_TANGENT)
+      {
         theEle->addKtToTang(alphaF*c1);
         theEle->addCtoTang(alphaF*c2);
         theEle->addMtoTang(alphaI*c3);
-    } else if (statusFlag == INITIAL_TANGENT)  {
+      }
+    else if (statusFlag == INITIAL_TANGENT)
+      {
         theEle->addKiToTang(alphaF*c1);
         theEle->addCtoTang(alphaF*c2);
         theEle->addMtoTang(alphaI*c3);
-    }
-    
+      }
+    else if (statusFlag == HALL_TANGENT)
+      {
+        theEle->addKtToTang(alphaF*c1*cFactor);
+        theEle->addKiToTang(alphaF*c1*iFactor);    
+      }  
     return 0;
-}    
+  }    
 
 
 int XC::HHTGeneralized::formNodTangent(DOF_Group *theDof)

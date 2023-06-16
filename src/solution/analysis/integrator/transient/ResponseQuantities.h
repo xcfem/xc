@@ -49,6 +49,8 @@ class ResponseQuantities: public MovableObject
   public:
     ResponseQuantities(const int &size= 0);
 
+    inline size_t size(void) const
+      { return R.Size(); }
     inline const Vector &get(void) const
       { return R; }
     inline const Vector &getDot(void) const

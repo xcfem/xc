@@ -79,6 +79,9 @@ class Vector;
 #define INITIAL_TANGENT 1
 #define CURRENT_SECANT  2
 #define INITIAL_THEN_CURRENT_TANGENT  3
+#define NO_TANGENT  4
+#define SECOND_TANGENT 5
+#define HALL_TANGENT 6
 
 //! @ingroup AnalysisIntegrator
 //
@@ -97,6 +100,9 @@ class Vector;
 class IncrementalIntegrator: public Integrator
   {
   protected:
+    double iFactor;
+    double cFactor;
+    
     LinearSOE *getLinearSOEPtr(void);
     const LinearSOE *getLinearSOEPtr(void) const;
 
@@ -109,6 +115,9 @@ class IncrementalIntegrator: public Integrator
   public:
     // methods to set up the system of equations
     virtual int formTangent(int statusFlag = CURRENT_TANGENT);    
+    virtual int  formTangent(int statusFlag, 
+			     const double &iFactor,
+			     const double &cFactor);    
     virtual int formUnbalance(void);
 
     // pure virtual methods to define the FE_ELe and DOF_Group contributions
@@ -143,6 +152,8 @@ class IncrementalIntegrator: public Integrator
 // AddingSensitivity:BEGIN //////////////////////////////////
     virtual int revertToStart();
 // AddingSensitivity:END ////////////////////////////////////
+    
+    virtual double getCFactor(void);
     
     // method introduced for domain decomposition
     virtual int getLastResponse(Vector &result, const ID &id);

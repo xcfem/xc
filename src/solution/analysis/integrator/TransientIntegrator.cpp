@@ -152,6 +152,13 @@ int XC::TransientIntegrator::formTangent(int statFlag)
     return result;
   }
 
+int XC::TransientIntegrator::formTangent(int statFlag, const double &iFact, const double &cFact)
+  {
+    iFactor = iFact;
+    cFactor = cFact;
+    return this->formTangent(statFlag);
+  }
+
 //! @brief Assembles the unbalanced vector of the element
 //! being passed as parameter.
 //!

@@ -37,6 +37,11 @@ class_<XC::RayleighBase , bases<XC::DampingFactorsIntegrator>, boost::noncopyabl
 
 class_<XC::HHT1, bases<XC::DampingFactorsIntegrator>, boost::noncopyable >("HHT1", no_init);
 
+class_<XC::TRBDFBase, bases<XC::TransientIntegrator>, boost::noncopyable >("TRBDFBase", no_init);
+
+class_<XC::TRBDF2, bases<XC::TRBDFBase>, boost::noncopyable >("TRBDF2", no_init);
+class_<XC::TRBDF3, bases<XC::TRBDFBase>, boost::noncopyable >("TRBDF3", no_init);
+
 #include "newmark/python_interface.tcc"
 #include "rayleigh/python_interface.tcc"
 

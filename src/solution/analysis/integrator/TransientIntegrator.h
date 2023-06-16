@@ -181,8 +181,11 @@ class TransientIntegrator: public IncrementalIntegrator
   protected:
     TransientIntegrator(SolutionStrategy *,int classTag);
   public:
-
     virtual int formTangent(int statFlag);
+    virtual int formTangent(int statusFlag, 
+			    const double &iFactor,
+			    const double &cFactor);
+    
     virtual int formEleResidual(FE_Element *theEle);
     virtual int formNodUnbalance(DOF_Group *theDof);    
     virtual int initialize(void) {return 0;};    

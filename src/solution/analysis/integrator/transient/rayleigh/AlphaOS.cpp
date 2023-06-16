@@ -140,7 +140,15 @@ int XC::AlphaOS::formEleTangent(FE_Element *theEle)
   {
     theEle->zeroTangent();
     
-    theEle->addKiToTang(alpha*c1);
+    if(statusFlag == CURRENT_TANGENT)
+      theEle->addKtToTang(alpha*c1);
+    else if(statusFlag == INITIAL_TANGENT)
+      theEle->addKiToTang(alpha*c1);
+    else if(statusFlag == HALL_TANGENT)
+      {
+        theEle->addKtToTang(alpha*c1*cFactor);
+        theEle->addKiToTang(alpha*c1*iFactor);
+      }
     theEle->addCtoTang(alpha*c2);
     theEle->addMtoTang(c3);
     

@@ -231,7 +231,16 @@ int XC::WilsonTheta::newStep(double _deltaT)
 int XC::WilsonTheta::formEleTangent(FE_Element *theEle)
   {
     theEle->zeroTangent();
-    theEle->addKtToTang(c1);
+    
+    if(statusFlag == CURRENT_TANGENT)
+      theEle->addKtToTang(c1);
+    else if(statusFlag == INITIAL_TANGENT)
+      theEle->addKiToTang(c1);
+    else if(statusFlag == HALL_TANGENT)
+      {
+        theEle->addKtToTang(c1*cFactor);
+        theEle->addKiToTang(c1*iFactor);   
+      }
     theEle->addCtoTang(c2);
     theEle->addMtoTang(c3);
     return 0;

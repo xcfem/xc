@@ -264,6 +264,17 @@ int XC::HHT::formEleTangent(FE_Element *theEle)
         theEle->addCtoTang(alpha*c2);
         theEle->addMtoTang(c3);
       }
+    else if(statusFlag == HALL_TANGENT)
+      {
+        theEle->addKtToTang(alpha*c1*cFactor);
+        theEle->addKiToTang(alpha*c1*iFactor);
+        theEle->addCtoTang(alpha*c2);
+        theEle->addMtoTang(c3);
+      }
+    else
+      {
+	std::cerr << "HHT::formEleTangent - unknown FLAG\n";
+      }
     return 0;
   }
  

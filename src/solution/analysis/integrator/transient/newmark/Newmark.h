@@ -168,6 +168,8 @@ class Newmark: public NewmarkBase2
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
     
+    double getCFactor(void);
+    
     void Print(std::ostream &s, int flag = 0) const;        
     
     // AddingSensitivity:BEGIN //////////////////////////////////

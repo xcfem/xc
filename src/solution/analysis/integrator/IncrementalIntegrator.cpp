@@ -129,6 +129,13 @@ int XC::IncrementalIntegrator::formTangent(int statFlag)
     return result;
   }
 
+int XC::IncrementalIntegrator::formTangent(int statFlag, const double &iFact, const double &cFact)
+  {
+    iFactor = iFact;
+    cFactor = cFact;
+    return this->formTangent(statFlag);
+  }
+
 //! @brief Builds the unbalanced load vector (right hand side of the equation).
 //!
 //! Invoked to form the unbalance. The method fist zeros out the \f$B\f$
@@ -359,3 +366,6 @@ int XC::IncrementalIntegrator::formElementResidual(void)
     return res;	    
   }
 
+//! @brief Function related to modal damping (not implemented yet).
+double XC::IncrementalIntegrator::getCFactor(void)
+  { return 0; }

@@ -146,8 +146,7 @@ int XC::HHT1::newStep(double deltaT)
     theModel->setResponse(Ualpha.get(),Ualpha.getDot(),U.getDotDot());        
 
     // increment the time and apply the load
-    double time = getCurrentModelTime();
-    time +=deltaT;
+    const double time = getCurrentModelTime()+deltaT;
     if(updateModel(time, deltaT) < 0)
       {
 	std::cerr << "XC::HHT::newStep() - failed to update the domain\n";
@@ -188,28 +187,28 @@ int XC::HHT1::formNodTangent(DOF_Group *theDof)
 
 
 int XC::HHT1::domainChanged()
-{
-  AnalysisModel *myModel = this->getAnalysisModelPtr();
-  LinearSOE *theLinSOE = this->getLinearSOEPtr();
-  const XC::Vector &x = theLinSOE->getX();
-  int size = x.Size();
+  {
+    AnalysisModel *myModel = this->getAnalysisModelPtr();
+    LinearSOE *theLinSOE = this->getLinearSOEPtr();
+    const XC::Vector &x = theLinSOE->getX();
+    int size = x.Size();
 
-  setRayleighDampingFactors();
+    setRayleighDampingFactors();
 
-  // create the new_ Vector objects
-  if(Ut.get().Size() != size)
-    {
-      // create the new
-      Ut.resize(size);
-      U.resize(size);
-      Ualpha.resize(size);
-    }
-    
-  // now go through and populate U, Udot and Udotdot by iterating through
-  // the DOF_Groups and getting the last committed velocity and accel
+    // create the new_ Vector objects
+    if(Ut.get().Size() != size)
+      {
+	// create the new
+	Ut.resize(size);
+	U.resize(size);
+	Ualpha.resize(size);
+      }
 
-  DOF_GrpIter &theDOFGroups = myModel->getDOFGroups();
-  DOF_Group *dofGroupPtr= nullptr;
+    // now go through and populate U, Udot and Udotdot by iterating through
+    // the DOF_Groups and getting the last committed velocity and accel
+
+    DOF_GrpIter &theDOFGroups = myModel->getDOFGroups();
+    DOF_Group *dofGroupPtr= nullptr;
 
     while((dofGroupPtr = theDOFGroups()) != 0)
       {

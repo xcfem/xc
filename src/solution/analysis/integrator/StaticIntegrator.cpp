@@ -101,6 +101,12 @@ int XC::StaticIntegrator::formEleTangent(FE_Element *theEle)
         theEle->zeroTangent();
         theEle->addKiToTang();
       }
+    else if(statusFlag == HALL_TANGENT)
+      {
+        theEle->zeroTangent();
+        theEle->addKtToTang(cFactor);
+        theEle->addKiToTang(iFactor);
+      } 
     return 0;
   }
 
