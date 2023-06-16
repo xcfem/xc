@@ -102,16 +102,30 @@ prep.getDomain.setLoadConstant()
 prep.getDomain.setTime(0.0)
 
 ### Define RECORDERS
-dFree= []
+#### Record node 2 displacements.
+dFree= list() # Create a list to store (time, displacement) pairs.
+##### Create the recorder that will be called each time that
+##### convergence is achieved:
 recDFree= prep.getDomain.newRecorder("node_prop_recorder",None)
+##### Tell the recorders which nodes will be tracked.
 recDFree.setNodes(xc.ID([n2.tag]))
+##### Define the Python code that will be executed each time that
+##### convergence is achieved:
 recDFree.callbackRecord= "dFree.append([self.getDomain.getTimeTracker.getCurrentTime,self.getDisp])"
-rBase= []
+
+#### Record node 1 reactions.
+rBase= list() # Create a list to store (time, reaction) pairs.
+##### Create the recorder that will be called each time that
+##### convergence is achieved:
 recRBase= prep.getDomain.newRecorder("node_prop_recorder",None)
+##### Tell the recorders which nodes will be tracked.
 recRBase.setNodes(xc.ID([n1.tag]))
+##### Define the Python code that will be executed each time that
+##### convergence is achieved:
 recRBase.callbackRecord= "rBase.append([self.getDomain.getTimeTracker.getCurrentTime,self.getReaction])"
+##### Define the Python code that will be executed before any
+##### record calls:
 recRBase.callbackSetup= "self.getDomain.calculateNodalReactions(True,1e-4)"
-#Drift recorder not implemented yet. It can be emulated though.
 
 ### Eigen analysis.
 solProc.clear()
