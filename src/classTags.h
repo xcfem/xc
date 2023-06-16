@@ -458,6 +458,8 @@
 #define INTEGRATOR_TAGS_AlphaOSGeneralized              25
 #define INTEGRATOR_TAGS_Collocation 	          	    26
 #define INTEGRATOR_TAGS_CollocationHybridSimulation 	27
+#define INTEGRATOR_TAGS_TRBDF2                          43
+#define INTEGRATOR_TAGS_TRBDF3                          47
 #define INTEGRATOR_TAGS_EQPath			        56
 
 

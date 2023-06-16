@@ -377,6 +377,22 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
 	            << std::endl;
         theIntegrator= new HHTHybridSimulation(this);
       }
+    else if(nmb=="TRBDF2_integrator")
+      {
+	if(numberOfParameters>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator= new TRBDF2(this);
+      }
+    else if(nmb=="TRBDF3_integrator")
+      {
+	if(numberOfParameters>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator= new TRBDF3(this);
+      }
     else if(nmb=="newmark_integrator")
       {
         double gamma= 0.5;
