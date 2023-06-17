@@ -33,7 +33,7 @@ class SuperLU(predefined_solutions.SolutionProcedure):
             problem object.
         '''
         super(SuperLU,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator')
+        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo')
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
 
