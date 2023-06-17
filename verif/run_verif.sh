@@ -427,6 +427,8 @@ python tests/solution/integrator/test_displacement_control_integrator_02.py
 python tests/solution/integrator/test_plain_linear_newmark_integrator.py
 python tests/solution/integrator/test_penalty_newton_raphson_newmark_integrator.py
 python tests/solution/integrator/test_transformation_newton_raphson_newmark_integrator.py
+python tests/solution/integrator/test_transformation_newton_raphson_trbdf2_integrator.py
+python tests/solution/integrator/test_transformation_newton_raphson_trbdf3_integrator.py
 
 echo "$BLEU" "  Geometric imperfections." "$NORMAL"
 python tests/solution/initial_imperfection/test_geometric_imperfection_00.py
