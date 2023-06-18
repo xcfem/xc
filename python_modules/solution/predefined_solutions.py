@@ -581,7 +581,7 @@ class TransformationNewtonRaphsonBandGen(SolutionProcedure):
 
 
 class PenaltyNewtonRaphsonBase(SolutionProcedure):
-    ''' Base class for penalty modified Newton solution aggregation.'''
+    ''' Base class for penalty Newton-Raphson solution aggregation.'''
     def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, integratorType:str= 'load_control_integrator'):
         ''' Constructor.
 
@@ -1128,7 +1128,7 @@ class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
         
 ### Convenience function
 def transformation_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', integratorType= 'load_control_integrator'):
-    ''' Return a simple static modified Newton solution procedure.
+    ''' Return a simple static Newton-Raphson solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
