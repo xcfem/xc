@@ -183,7 +183,7 @@ class SolutionProcedure(object):
             self.integrator.nodeTag= self.dispControlNode.tag
             self.integrator.dof= self.dispControlDof
             self.integrator.increment= self.dispControlIncrement
-        elif(self.integratorType in ["arc-length_integrator", "arc-length1_integrator"]): # Arc-Length control.
+        elif(self.integratorType in ["arc-length_integrator", "arc-length1_integrator", "HS_constraint_integrator"]): # Arc-Length control.
             self.integrator= self.solutionStrategy.newIntegrator(self.integratorType, self.integratorParameters)
         else:
             className= type(self).__name__
