@@ -8,6 +8,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import json
+import os
 import xc
 
 feProblem= xc.FEProblem()
@@ -22,7 +23,6 @@ gm= lPatterns.newLoadPattern("uniform_excitation","gm")
 mr= gm.motionRecord
 hist= mr.history
 accel= lPatterns.newTimeSeries("path_ts","accel")
-import os
 pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
@@ -62,7 +62,6 @@ print("path size= ",motionPathSize)
 print("ratio6= ",ratio6)
   '''
 
-import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-15) & (abs(ratio5)<1e-15) & (abs(ratio6)<1e-15):
