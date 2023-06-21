@@ -146,7 +146,7 @@ int XC::MinUnbalDispNorm::newStep(void)
     if (signCurrentWork != signLastDeltaStep)
     */
 
-    vectors.newStep(dLambda,vectors.getDeltaUhat());
+    vectors.newStep(dLambda);
     numIncrLastStep= 0;
 
     // update model with delta lambda and delta U

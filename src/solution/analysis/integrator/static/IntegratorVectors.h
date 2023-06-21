@@ -88,7 +88,7 @@ class IntegratorVectors: public MovableObject
     inline void setCurrentLambda(const double &d)
       { currentLambda= d; }
 
-    void newStep(const double &dLambda,const Vector &);
+    void newStep(const double &);
     void determineUhat(LinearSOE &);
     void distribDetermineUhat(const int &,LinearSOE &);
     void solve(const Vector &,LinearSOE &);

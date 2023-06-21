@@ -58,13 +58,13 @@ void XC::IntegratorVectors::resize(const int &size)
   }
 
 //! @brief Performs a new step.
-void XC::IntegratorVectors::newStep(const double &dLambda,const Vector &dUhat)
+void XC::IntegratorVectors::newStep(const double &dLambda)
   {
     deltaLambdaStep= dLambda;
     currentLambda+= dLambda;
 
     // determine delta U(1) == dU
-    deltaU= dUhat;
+    deltaU= this->deltaUhat;
     deltaU*= dLambda;
     deltaUstep= deltaU;
   }
@@ -127,7 +127,7 @@ void XC::IntegratorVectors::domainChanged(const size_t &sz,IncrementalIntegrator
     I.applyLoadModel(currentLambda);
     I.formUnbalance(); // NOTE: this assumes unbalance at last was 0
     phat= theLinSOE.getB();
-    currentLambda-= 1.0;
+    currentLambda-= 1.0; // remove the increment.
     I.setCurrentModelTime(currentLambda);
 
     // check there is a reference load

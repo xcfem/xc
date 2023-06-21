@@ -74,7 +74,7 @@ int XC::ProtoArcLength::newStep(void)
     // determine delta lambda(1) == dlambda
     const double dLambda= getDLambdaNewStep();
 
-    vectors.newStep(dLambda,vectors.getDeltaUhat());
+    vectors.newStep(dLambda);
 
     // update model with delta lambda and delta U
     mdl->incrDisp(vectors.getDeltaU());

@@ -211,7 +211,7 @@ int XC::DisplacementControl::newStep(void)
     // determine delta lambda(1) == dlambda    
     const double dLambda = theIncrement/dUahat;
 
-    vectors.newStep(dLambda,vectors.getDeltaUhat());
+    vectors.newStep(dLambda);
 
     // update model with delta lambda and delta U
     theModel->incrDisp(vectors.getDeltaU());
