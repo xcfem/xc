@@ -18,7 +18,7 @@ __version__= "3.0"
 __email__= "ana.ortega.ort@gmail.com l.pereztato@gmail.com"
 
 # Functions to check bolts and welds according to AISC-16
-def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None, solutionProcedureType= predefined_solutions.SimpleStaticLinearUMF,warningsFile=None,Phi=0.75):
+def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None, solutionProcedureType= predefined_solutions.SimpleStaticLinearUMF,reactionCheckTolerance=1e-4,warningsFile=None,Phi=0.75):
     '''Verification of bolts and welds according to AISC-16
     Checking of bolts uses the capacity factor # formula proposed by Rugarli
     https://www.steelchecks.com/CONNECTIONS-GUIDE/index.html?check_welds.htm
@@ -35,6 +35,7 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
     :param resFile: file to which dump the results (path and name without extension)
                     (if None-> print to terminal)
     :param solutionProcedureType: solution procedure type (defaults to SimpleStaticLinearUMF).
+    :param reactionCheckTolerance: tolerance to check reactions (defaults to 1e-4)
     :param warningsFile: name of the file of warnings (defaults to None)
     :param Phi: resistance factor (defaults to 0.75)
     '''
@@ -48,7 +49,7 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()
         modelSpace.addLoadCaseToDomain(ULS)
-        result= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance= 1e-4)
+        result= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance=reactionCheckTolerance)
         if(result!=0):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(methodName+'; can\'t solve for load case: '+str(ULS)+'.')
@@ -93,13 +94,13 @@ def write_check_warnings(warningsFile,boltSets2Check,singlWelds):
     for sw in singlWelds:
         w=sw[0]
         par=sw[1]
-        txtW='Weld: '+ w.descr + ' between plates with t1= ' + str(w.tWS1) + ' and t2=' + str(w.tWS2) + ' szMin='+ str(w.minSz) + ' szMax=' + str(w.maxSz)
+        txtW='Weld: '+ w.descr + ' between plates with t1= ' + str(w.tWS1) + ' and t2=' + str(w.tWS2) + ' szMin='+ str(round(w.minSz,4)) + ' szMax=' + str(round(w.maxSz,4))
         if w.weldSz < w.minSz:
-            f.write(txtW + ' has a size=' + str(w.weldSz) + ' less than minimum=' + str(w.minSz) +'\n \n')
+            f.write(txtW + ' has a size=' + str(round(w.weldSz,4)) + ' less than minimum=' + str(round(w.minSz,4)) +'\n \n')
         if w.weldSz > w.maxSz:
-            f.write(txtW + ' has a size=' + str(w.weldSz) + ' greater than maximum=' + str(round(w.maxSz,3)) +'\n \n')
+            f.write(txtW + ' has a size=' + str(round(w.weldSz,4)) + ' greater than maximum=' + str(round(w.maxSz,4)) +'\n \n')
         if par[1] > 1:
-            f.write(txtW + ' with size=' + str(w.weldSz) + ' has a CF=' +  str(round(par[1],2)) +' > 1 minSZ=' + str(round(w.minSz,3)) +' maxSz=' + str(round(w.maxSz,4)) +'\n \n')
+            f.write(txtW + ' with size=' + str(w.weldSz) + ' has a CF=' +  str(round(par[1],2)) +' > 1 minSZ=' + str(round(w.minSz,4)) +' maxSz=' + str(round(w.maxSz,4)) +'\n \n')
     f.close()
                       
         
@@ -354,9 +355,10 @@ def print_welds_results(singlWelds):
 #        retval.append( '(' + str(round(weld.weldP1[0],3)) + ',' + str(round(weld.weldP1[1],3)) + ',' + str(round(weld.weldP1[2],3)) + ')  & ' +  par[0]  +  ' & ' +  str(round(par[1]*1e-3,2))  +  ' & ' +  str(round(par[2]*1e-3,2))  +  ' & ' +  str(round(par[3]*1e-3,2))  +  ' & ' + str(round(par[-1],3)) +  '\\\\ \n')
 #        retval.append( '(' + str(round(weld.weldP2[0],3)) + ',' + str(round(weld.weldP2[1],3)) + ',' + str(round(weld.weldP2[2],3)) + ')  & & & & & \\\\ \n')
         retval.append('\\multicolumn{6}{|l|}{CF=' + str(round(par[1],2)) + '   in load case:' + par[0]+'} \\\\')
-        retval.append('\\hline \n')
-        retval.append('\\multicolumn{3}{|c|}{\includegraphics[height=50mm]{'+par[2]+'_N}} & \\multicolumn{3}{|c|}{\includegraphics[height=50mm]{'+ par[2]+'_Vy}} \\\\')
-        retval.append('\\hline \n')
+        if len(par)>2: # graphics have been generated
+            retval.append('\\hline \n')
+            retval.append('\\multicolumn{3}{|c|}{\includegraphics[height=50mm]{'+par[2]+'_N}} & \\multicolumn{3}{|c|}{\includegraphics[height=50mm]{'+ par[2]+'_Vy}} \\\\')
+            retval.append('\\hline \n')
     retval.append('\\end{longtable} \n')
     retval.append('\\end{center} \n')
     return retval
