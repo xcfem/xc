@@ -23,15 +23,7 @@
 
 // class_<XC::IntegratorVectors, bases<XC::MovableObject>, boost::noncopyable >("IntegratorVectors", no_init);
 
-class_<XC::ProtoArcLength, bases<XC::StaticIntegrator>, boost::noncopyable >("ProtoArcLength", no_init);
-
-class_<XC::ArcLengthBase, bases<XC::ProtoArcLength>, boost::noncopyable >("ArcLengthBase", no_init);
-
-class_<XC::HSConstraint, bases<XC::ProtoArcLength>, boost::noncopyable >("HSConstraint", no_init);
-
-class_<XC::ArcLength , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength", no_init);
-
-class_<XC::ArcLength1 , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength1", no_init);
+#include "arc-length/python_interface.tcc"
 
 class_<XC::BaseControl , bases<XC::StaticIntegrator>, boost::noncopyable >("BaseControl", no_init)
   ;

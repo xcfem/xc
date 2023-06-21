@@ -27,7 +27,7 @@
 //ArcLengthBase.cpp
 
 
-#include <solution/analysis/integrator/static/ArcLengthBase.h>
+#include <solution/analysis/integrator/static/arc-length/ArcLengthBase.h>
 #include <utility/matrix/Vector.h>
 
 #include "utility/actor/actor/CommMetaData.h"

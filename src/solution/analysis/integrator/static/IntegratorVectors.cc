@@ -84,6 +84,7 @@ void XC::IntegratorVectors::distribDetermineUhat(const int &pID,LinearSOE &theLi
   }
 
 //! @brief Computes the solution for the new load vector.
+//! @param theLinSOE: linear system of equations.
 void XC::IntegratorVectors::determineUhat(LinearSOE &theLinSOE)
   {
     // determine dUhat    

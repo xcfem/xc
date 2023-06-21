@@ -46,10 +46,10 @@
 
 // $Revision: 1.7 $
 // $Date: 2005/10/19 21:53:57 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/ArcLength.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/static/arc-length/ArcLength.cpp,v $
 
 
-// File: ~/analysis/integrator/ArcLength.C
+// File: ~/analysis/integrator/static/arc-length/ArcLength.C
 //
 // Written: fmk
 // Created: 07/98
@@ -65,7 +65,7 @@
 // What: "@(#) ArcLength.C, revA"
 
 
-#include <solution/analysis/integrator/static/ArcLength.h>
+#include <solution/analysis/integrator/static/arc-length/ArcLength.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
@@ -91,8 +91,7 @@ double XC::ArcLength::getDLambdaUpdate(void) const
     const Vector &dUbar= vectors.getDeltaUbar();
     // determine the coeeficients of our quadratic equation
     const double a = alpha2 + (dUhat^dUhat);
-    double b = alpha2*dLStep + (dUhat^dUbar) + (dUstep^dUhat);
-    b *= 2.0;
+    const double b = 2.0*(alpha2*dLStep + (dUhat^dUbar) + (dUstep^dUhat));
     const double c = 2*(dUstep^dUbar) + (dUbar^dUbar);
     // check for a solution to quadratic
     double b24ac = b*b - 4.0*a*c;
@@ -115,7 +114,7 @@ double XC::ArcLength::getDLambdaUpdate(void) const
       }
 
     // determine the roots of the quadratic
-    const double sqrtb24ac = sqrt(b24ac);
+    const double sqrtb24ac= sqrt(b24ac);
     const double dlambda1= (-b + sqrtb24ac)/a2;
     const double dlambda2= (-b - sqrtb24ac)/a2;
 

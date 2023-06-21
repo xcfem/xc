@@ -31,7 +31,7 @@
 #define ProtoArcLength_h
 
 #include "solution/analysis/integrator/StaticIntegrator.h"
-#include "IntegratorVectors.h"
+#include "solution/analysis/integrator/static/IntegratorVectors.h"
 #include "utility/matrix/Vector.h"
 
 namespace XC {

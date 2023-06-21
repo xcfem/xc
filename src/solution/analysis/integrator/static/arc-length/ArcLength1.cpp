@@ -46,16 +46,16 @@
                                                                         
 // $Revision: 1.4 $
 // $Date: 2003/02/14 23:00:46 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/ArcLength1.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/static/arc-length/ArcLength1.cpp,v $
                                                                         
                                                                         
-// File: ~/analysis/integrator/ArcLength1.C
+// File: ~/analysis/integrator/static/arc-length/ArcLength1.C
 // 
 // Written: fmk 
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class definition for XC::ArcLength1.
+// Description: This file contains the class definition for ArcLength1.
 // ArcLength1 is an algorithmic class for performing a static analysis
 // using the arc length scheme, that is within a load step the following
 // constraint is enforced: dU^TdU + alpha^2*dLambda^2 = ArcLength1^2
@@ -65,7 +65,7 @@
 // What: "@(#) ArcLength1.C, revA"
 
 
-#include <solution/analysis/integrator/static/ArcLength1.h>
+#include <solution/analysis/integrator/static/arc-length/ArcLength1.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>

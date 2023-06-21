@@ -1,0 +1,35 @@
+//----------------------------------------------------------------------------
+//  XC program; finite element analysis code
+//  for structural analysis and design.
+//
+//  Copyright (C)  Luis C. Pérez Tato
+//
+//  XC is free software: you can redistribute it and/or modify 
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or 
+//  (at your option) any later version.
+//
+//  This software is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of 
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details. 
+//
+//
+// You should have received a copy of the GNU General Public License 
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
+//python_interface.tcc
+
+// class_<XC::IntegratorVectors, bases<XC::MovableObject>, boost::noncopyable >("IntegratorVectors", no_init);
+
+class_<XC::ProtoArcLength, bases<XC::StaticIntegrator>, boost::noncopyable >("ProtoArcLength", no_init);
+
+class_<XC::ArcLengthBase, bases<XC::ProtoArcLength>, boost::noncopyable >("ArcLengthBase", no_init);
+
+class_<XC::HSConstraint, bases<XC::ProtoArcLength>, boost::noncopyable >("HSConstraint", no_init);
+
+class_<XC::ArcLength , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength", no_init);
+
+class_<XC::ArcLength1 , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength1", no_init);
+

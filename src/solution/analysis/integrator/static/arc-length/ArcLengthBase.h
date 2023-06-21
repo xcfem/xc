@@ -30,7 +30,7 @@
 #ifndef ArcLengthBase_h
 #define ArcLengthBase_h
 
-#include "solution/analysis/integrator/static/ProtoArcLength.h"
+#include "solution/analysis/integrator/static/arc-length/ProtoArcLength.h"
 
 namespace XC {
 class LinearSOE;

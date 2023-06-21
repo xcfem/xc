@@ -54,7 +54,7 @@
 #ifndef HSConstraint_h
 #define HSConstraint_h
 
-#include "solution/analysis/integrator/static/ProtoArcLength.h"
+#include "solution/analysis/integrator/static/arc-length/ProtoArcLength.h"
 #include "utility/matrix/Matrix.h"
 
 namespace XC {

@@ -33,11 +33,11 @@
 #include <solution/analysis/integrator/TransientIntegrator.h>
 
 //static
-#include <solution/analysis/integrator/static/ArcLength.h>
-#include <solution/analysis/integrator/static/ArcLength1.h>
+#include <solution/analysis/integrator/static/arc-length/ArcLength.h>
+#include <solution/analysis/integrator/static/arc-length/ArcLength1.h>
+#include <solution/analysis/integrator/static/arc-length/HSConstraint.h>
 #include <solution/analysis/integrator/static/DisplacementControl.h>
 #include <solution/analysis/integrator/static/DistributedDisplacementControl.h>
-#include <solution/analysis/integrator/static/HSConstraint.h>
 #include <solution/analysis/integrator/static/LoadControl.h>
 #include <solution/analysis/integrator/static/LoadPath.h>
 #include <solution/analysis/integrator/static/MinUnbalDispNorm.h>

@@ -47,10 +47,10 @@
                                                                         
 // $Revision: 1.2 $
 // $Date: 2003/02/14 23:00:46 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/ArcLength1.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/static/arc-length/ArcLength1.h,v $
                                                                         
                                                                         
-// File: ~/analysis/integrator/ArcLength1.h
+// File: ~/analysis/integrator/static/arc-length/ArcLength1.h
 // 
 // Written: fmk 
 // Created: 07/98
@@ -70,7 +70,7 @@
 #ifndef ArcLength1_h
 #define ArcLength1_h
 
-#include <solution/analysis/integrator/static/ArcLengthBase.h>
+#include <solution/analysis/integrator/static/arc-length/ArcLengthBase.h>
 
 namespace XC {
 class LinearSOE;

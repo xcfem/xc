@@ -47,10 +47,10 @@
                                                                         
 // $Revision: 1.2 $
 // $Date: 2003/02/14 23:00:46 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/ArcLength.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/static/arc-length/ArcLength.h,v $
                                                                         
                                                                         
-// File: ~/analysis/integrator/ArcLength.h
+// File: ~/analysis/integrator/static/arc-length/ArcLength.h
 // 
 // Written: fmk 
 // Created: 07/98
@@ -70,7 +70,7 @@
 #ifndef ArcLength_h
 #define ArcLength_h
 
-#include <solution/analysis/integrator/static/ArcLengthBase.h>
+#include "solution/analysis/integrator/static/arc-length/ArcLengthBase.h"
 
 namespace XC {
 

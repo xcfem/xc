@@ -27,7 +27,7 @@
 //ProtoArcLength.cpp
 
 
-#include <solution/analysis/integrator/static/ProtoArcLength.h>
+#include "solution/analysis/integrator/static/arc-length/ProtoArcLength.h"
 #include "solution/analysis/model/AnalysisModel.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
 
@@ -72,7 +72,7 @@ int XC::ProtoArcLength::newStep(void)
     vectors.determineUhat(*theLinSOE);
 
     // determine delta lambda(1) == dlambda
-    const double dLambda = getDLambdaNewStep();
+    const double dLambda= getDLambdaNewStep();
 
     vectors.newStep(dLambda,vectors.getDeltaUhat());
 
@@ -82,7 +82,7 @@ int XC::ProtoArcLength::newStep(void)
     if(updateModel() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; update failed for the new dU\n";
+	          << "; update failed for the new dU.\n";
         return -1;
       }
 
