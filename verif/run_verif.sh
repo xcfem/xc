@@ -657,6 +657,7 @@ python tests/constraints/test_glue_node_to_element_09.py
 echo "$BLEU" "Loads tests." "$NORMAL"
 echo "$BLEU" "  Load time series tests." "$NORMAL"
 python tests/loads/time_series/test_linear_01.py
+python tests/loads/time_series/test_linear_02.py
 python tests/loads/time_series/test_constant_01.py
 python tests/loads/time_series/test_trig_01.py
 python tests/loads/time_series/test_triang_01.py
