@@ -97,7 +97,6 @@ class SetEstruct: public SetBase
     boost::python::list getNodes(void);
     std::set<int> getElementTags(void) const;
     boost::python::list getElements(void);
-    ElementEdges getElementEdges(void);
     
     void createInertiaLoads(const Vector &);
   };

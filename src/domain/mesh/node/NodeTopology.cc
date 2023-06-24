@@ -27,7 +27,6 @@
 
 #include "NodeTopology.h"
 #include "Node.h"
-#include "domain/mesh/element/utils/ElementEdges.h"
 #include "domain/mesh/element/Element.h"
 
 //! @brief Returns the elements that are connected to both nodes.
@@ -46,23 +45,6 @@ std::set<XC::Element *> XC::getElementsBetweenNodes(Node &n1, Node &n2)
     return retval;
   }
 
-//! @brief Returns the element edges that have both nodes as ends.
-XC::ElementEdges XC::getElementEdgesBetweenNodes(Node *n1, Node *n2)
-  {
-    ElementEdges retval;
-    if(n1 && n2)
-      {
-        const std::set<Element *> elems= getElementsBetweenNodes(*n1,*n2);
-        for(std::set<Element *>::const_iterator i= elems.begin();i!=elems.end();i++)
-          {
-            const int edge= (*i)->getEdgeNodes(n1,n2);
-            if(edge>=0)
-              retval.push_back(ElementEdge(*i,edge));
-          }
-      }
-    return retval;
-  }
-
 //! @brief Returns the elements connected to any of the set nodes.
 std::set<XC::Element *> XC::getConnectedElements(const NodePtrSet &nodes)
   {
@@ -71,22 +53,6 @@ std::set<XC::Element *> XC::getConnectedElements(const NodePtrSet &nodes)
       {
         std::set<Element *> tmp= (*i)->getConnectedElements();
         retval.insert(tmp.begin(),tmp.end());
-      }
-    return retval;
-  }
-
-//! @brief Returns the element edges with both end nodes
-//! included in the container being passed as parameter.
-XC::ElementEdges XC::getElementEdgesBetweenNodes(const NodePtrSet &nodes)
-  {
-    ElementEdges retval;
-    std::set<Element *> elems= getConnectedElements(nodes);
-    for(std::set<Element *>::const_iterator i= elems.begin();i!=elems.end();i++)
-      {
-        Element *elem_ptr= *i;
-        const std::set<int> idEdges= elem_ptr->getEdgesNodes(nodes);
-        for(std::set<int>::const_iterator j= idEdges.begin();j!=idEdges.end();j++)
-          retval.push_back(ElementEdge(elem_ptr,*j));
       }
     return retval;
   }

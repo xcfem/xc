@@ -31,10 +31,6 @@
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "domain/mesh/element/utils/ElementEdges.h"
-
-
-
 
 
 //! @brief Constructor.
@@ -127,14 +123,6 @@ XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
         for(size_t k= 1;k<=numberOfColumns;k++)
           retval.insert(getNode(i,j,k));
     return retval;    
-  }
-
-//! @brief Returns the element edges with both end nodes
-//! belong to the nodes of the set.
-XC::ElementEdges XC::SetEstruct::getElementEdges(void)
-  {
-    const NodePtrSet nodes= getNodePtrSet();
-    return getElementEdgesBetweenNodes(nodes);
   }
 
 //! @brief Adds the elements to the element handler.
