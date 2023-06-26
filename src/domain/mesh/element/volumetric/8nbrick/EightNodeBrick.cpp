@@ -2421,9 +2421,11 @@ int XC::EightNodeBrick::commitState(void)
 
 
     // call element commitState to do any base class stuff
-    if((retVal= this->XC::Element::commitState()) != 0) {
-      std::cerr << "XC::EightNodeBrick::commitState () - failed in base class";
-    }
+    if((retVal= this->XC::ElementBase<8>::commitState()) != 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; failed in base class";
+      }
 
     // int order= theQuadRule->getOrder();     // Commented by Xiaoyan
 

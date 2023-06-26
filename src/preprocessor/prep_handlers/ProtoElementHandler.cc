@@ -90,6 +90,8 @@
 #include "domain/mesh/element/zero_length/ZeroLengthContact2D.h"
 #include "domain/mesh/element/zero_length/ZeroLengthContact3D.h"
 
+#include "domain/mesh/element/utils/surface_pressures/BrickSurfaceLoad.h"
+
 #include "preprocessor/Preprocessor.h"
 
 
@@ -443,6 +445,12 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	if(cmd=="brick")
 	  deprecatedElementNameMsg(errHeader,cmd,"Brick");
         retval= new_element_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
+        if(!retval)
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
+      }
+    else if((cmd == "brick_surface_load")||(cmd == "BrickSurfaceLoad"))
+      {
+        retval= new_element<BrickSurfaceLoad>(tag_elem);
         if(!retval)
 	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }

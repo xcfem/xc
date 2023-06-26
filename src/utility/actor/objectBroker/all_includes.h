@@ -200,6 +200,10 @@
 #include "domain/mesh/element/utils/physical_properties/ElasticSection2dPhysicalProperties.h"
 #include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
 
+// surface pressures
+#include "domain/mesh/element/utils/surface_pressures/BrickSurfaceLoad.h"
+
+
 // element header files
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementIter.h"

@@ -302,6 +302,8 @@
 #define ELE_TAG_TripleFPSimple3d    5113
 #define ELE_TAG_TripleFP2d          5114
 #define ELE_TAG_TripleFP3d          5115
+#define ELE_TAG_QuadSurfaceLoad     5116
+#define ELE_TAG_BrickSurfaceLoad    5117
 
 #define FRN_TAG_CoulombFriction     1
 #define FRN_TAG_VDependentFriction  2
