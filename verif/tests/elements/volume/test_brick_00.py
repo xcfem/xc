@@ -37,8 +37,7 @@ elements.defaultMaterial= elast3d.name
 brick= elements.newElement("Brick",xc.ID([nod9.tag,nod10.tag,nod11.tag,nod12.tag,nod13.tag,nod14.tag,nod15.tag,nod16.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler
-# Constrain the displacement of node 1.
-
+# Constrain the displacement of the nodes in the base.
 nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod10.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod11.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
