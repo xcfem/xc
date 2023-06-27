@@ -66,6 +66,7 @@ eleLoad.eps2= alpha*AT
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
+# Compute solution.
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
