@@ -366,8 +366,8 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
         return new ShellUniformLoad();
       case LOAD_TAG_BrickSelfWeight:
         return new BrickSelfWeight();
-      case LOAD_TAG_SurfaceLoader:
-	return new SurfaceLoader();
+      case LOAD_TAG_SurfaceLoad:
+	return new SurfaceLoad();
       default:
         std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; no NodalLoad type exists for class tag "

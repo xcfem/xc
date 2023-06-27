@@ -47,10 +47,10 @@
 // Written: Chris McGann, U.Washington
 //          02.2011
 //
-// Description: This file contains the class definition for SurfaceLoader.
+// Description: This file contains the class definition for SurfaceLoad.
 
-#ifndef SurfaceLoader_h
-#define SurfaceLoader_h
+#ifndef SurfaceLoad_h
+#define SurfaceLoad_h
 
 #include "ElementBodyLoad.h"
 #include "utility/matrix/Vector.h"
@@ -60,19 +60,22 @@ namespace XC {
 //! @ingroup ElemLoads
 //
 //! @brief Load due to a pressure on the element surface.
-class SurfaceLoader: public ElementBodyLoad
+class SurfaceLoad: public ElementBodyLoad
   {
   private:
-    static Vector data;
+    double pressure; //!< Pressure on the surface.
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    SurfaceLoader(int tag= 0);
-    SurfaceLoader(int tag,const ID &tags_elems);
+    SurfaceLoad(int tag= 0, const double &pressure= 0.0);
+    SurfaceLoad(int tag,const ID &tags_elems, const double &pressure= 0.0);
 
     const Vector &getData(int &type, const double &loadFactor) const;
+    
+    double getPressure(void) const;
+    void setPressure(const double &);
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);

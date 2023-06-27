@@ -366,7 +366,7 @@
 #include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
-#include "domain/load/SurfaceLoader.h"
+#include "domain/load/SurfaceLoad.h"
 #include "domain/load/volumetric/BrickSelfWeight.h"
 #include "domain/load/pattern/NodeLocker.h"
 #include "domain/load/pattern/NodeLockerIter.h"

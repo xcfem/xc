@@ -1,3 +1,29 @@
+//----------------------------------------------------------------------------
+//  XC program; finite element analysis code
+//  for structural analysis and design.
+//
+//  Copyright (C)  Luis C. Pérez Tato
+//
+//  This program derives from OpenSees <http://opensees.berkeley.edu>
+//  developed by the  «Pacific earthquake engineering research center».
+//
+//  Except for the restrictions that may arise from the copyright
+//  of the original program (see copyright_opensees.txt)
+//  XC is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or 
+//  (at your option) any later version.
+//
+//  This software is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details. 
+//
+//
+// You should have received a copy of the GNU General Public License 
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
 /* ****************************************************************** **
 **    OpenSees - Open System for Earthquake Engineering Simulation    **
 **          Pacific Earthquake Engineering Research Center            **
@@ -34,10 +60,9 @@ double XC::BrickSurfaceLoad::GsPts[SL_NUM_NODE][2];
 
 //! @brief Constructor.
 XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag, int Nd1, int Nd2, int Nd3, int Nd4, double pressure)
- : ElementBase<SL_NUM_NODE>(tag, ELE_TAG_BrickSurfaceLoad),     
+  : SurfaceLoadBase<SL_NUM_NODE>(tag, ELE_TAG_BrickSurfaceLoad, pressure, 1.0),     
    tangentStiffness(SL_NUM_DOF, SL_NUM_DOF),
    internalForces(SL_NUM_DOF),
-   my_pressure(pressure),
    g1(SL_NUM_NDF), 
    g2(SL_NUM_NDF),
    myNhat(SL_NUM_NDF), 
@@ -45,8 +70,7 @@ XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag, int Nd1, int Nd2, int Nd3, int N
    dcrd1(SL_NUM_NDF),
    dcrd2(SL_NUM_NDF),
    dcrd3(SL_NUM_NDF),
-   dcrd4(SL_NUM_NDF),
-   mLoadFactor(1.0)
+   dcrd4(SL_NUM_NDF)
   {
     theNodes.set_id_nodes(Nd1,Nd2,Nd3,Nd4);
 
@@ -64,10 +88,9 @@ XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag, int Nd1, int Nd2, int Nd3, int N
 
 //! @brief Default constructor.
 XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag)
-  :ElementBase<SL_NUM_NODE>(tag, ELE_TAG_BrickSurfaceLoad),     
+  :SurfaceLoadBase<SL_NUM_NODE>(tag, ELE_TAG_BrickSurfaceLoad, 0.0, 1.0),     
    tangentStiffness(SL_NUM_DOF, SL_NUM_DOF),
    internalForces(SL_NUM_DOF),
-   my_pressure(0.0),
    g1(SL_NUM_NDF), 
    g2(SL_NUM_NDF),
    myNhat(SL_NUM_NDF), 
@@ -75,8 +98,7 @@ XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag)
    dcrd1(SL_NUM_NDF),
    dcrd2(SL_NUM_NDF),
    dcrd3(SL_NUM_NDF),
-   dcrd4(SL_NUM_NDF),
-   mLoadFactor(1.0)
+   dcrd4(SL_NUM_NDF)
   {}
 
 XC::BrickSurfaceLoad::~BrickSurfaceLoad(void)
@@ -88,7 +110,7 @@ XC::Element *XC::BrickSurfaceLoad::getCopy(void) const
     
 void XC::BrickSurfaceLoad::setDomain(Domain *theDomain)
   {
-    ElementBase<SL_NUM_NODE>::setDomain(theDomain);
+    SurfaceLoadBase<SL_NUM_NODE>::setDomain(theDomain);
     theNodes.checkNumDOF(3,getTag());
 
     dcrd1= theNodes[0]->getCrds();
@@ -101,28 +123,6 @@ void XC::BrickSurfaceLoad::setDomain(Domain *theDomain)
 //! @brief return number of dofs
 int XC::BrickSurfaceLoad::getNumDOF(void) const
   { return SL_NUM_DOF; }
-
-int XC::BrickSurfaceLoad::commitState(void)
-  {
-    int retVal = 0;
-    // call element commitState to do any base class stuff
-    if((retVal = this->ElementBase<SL_NUM_NODE>::commitState()) != 0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; failed in base class";
-      }
-
-    return retVal; 
-  }
-
-int XC::BrickSurfaceLoad::revertToLastCommit(void)
-  { return 0; }
-
-int XC::BrickSurfaceLoad::revertToStart(void)
-  { return 0; }
-
-int XC::BrickSurfaceLoad::update(void)
-  { return 0; }
 
 //! @brief this function calculates g1, g2, NI, and nHat for given Xi and Eta
 int XC::BrickSurfaceLoad::UpdateBase(double Xi, double Eta) const
@@ -157,44 +157,6 @@ const XC::Matrix &XC::BrickSurfaceLoad::getTangentStiff(void) const
 const XC::Matrix & XC::BrickSurfaceLoad::getInitialStiff(void) const
   { return getTangentStiff(); }
     
-void XC::BrickSurfaceLoad::zeroLoad(void)
-  {}
-
-double XC::BrickSurfaceLoad::getLoadFactor(void) const
-  { return this->mLoadFactor; }
-
-void XC::BrickSurfaceLoad::setLoadFactor(const double &d)
-  { this->mLoadFactor= d; }
-
-double XC::BrickSurfaceLoad::getPressure(void) const
-  { return this->my_pressure; }
-
-void XC::BrickSurfaceLoad::setPressure(const double &d)
-  { this->my_pressure= d; }
-
-int XC::BrickSurfaceLoad::addLoad(ElementalLoad *theLoad, double loadFactor)
-  {
-    int type(0);
-    //const Vector &data= theLoad->getData(type, loadFactor);
-    theLoad->getData(type, loadFactor);
-
-    if(type == LOAD_TAG_SurfaceLoader)
-      {
-	mLoadFactor = loadFactor;
-	return 0;
-      }
-    else
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ele with tag: " << this->getTag()
-		  << " does not accept load type: " << type << std::endl;
-	return -1;
-      }
-    return -1;
-  }
-
-int XC::BrickSurfaceLoad::addInertiaLoadToUnbalance(const Vector &accel)
-  { return 0; }
 
 const XC::Vector &XC::BrickSurfaceLoad::getResistingForce(void) const
   {
@@ -232,7 +194,7 @@ XC::DbTagData &XC::BrickSurfaceLoad::getDbTagData(void) const
 //! @brief Send object members through the communicator argument.
 int XC::BrickSurfaceLoad::sendData(Communicator &comm)
   {
-    int res= ElementBase<SL_NUM_NODE>::sendData(comm);
+    int res= SurfaceLoadBase<SL_NUM_NODE>::sendData(comm);
     res+=comm.sendDoubles(mLoadFactor,my_pressure,getDbTagData(),CommMetaData(7));
     res+= comm.sendVector(internalForces,getDbTagData(),CommMetaData(8));
     res+= comm.sendVector(theVector,getDbTagData(),CommMetaData(9));
@@ -250,7 +212,7 @@ int XC::BrickSurfaceLoad::sendData(Communicator &comm)
 //! @brief Receives object members through the communicator argument.
 int XC::BrickSurfaceLoad::recvData(const Communicator &comm)
   {
-    int res= ElementBase<SL_NUM_NODE>::recvData(comm);
+    int res= SurfaceLoadBase<SL_NUM_NODE>::recvData(comm);
     res+=comm.receiveDoubles(mLoadFactor,my_pressure,getDbTagData(),CommMetaData(7));
     res+= comm.receiveVector(internalForces,getDbTagData(),CommMetaData(8));
     res+= comm.receiveVector(theVector,getDbTagData(),CommMetaData(9));

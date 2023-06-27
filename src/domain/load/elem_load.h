@@ -42,7 +42,7 @@
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
-#include "domain/load/SurfaceLoader.h"
+#include "domain/load/SurfaceLoad.h"
 #include "domain/load/pattern/LoadPattern.h"
 
 namespace XC {
