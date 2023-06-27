@@ -419,6 +419,17 @@ class PredefinedSpace(object):
             self.newTimeSeries()
         lp= lPatterns.newLoadPattern(lpType, name)
         return lp
+
+    def newLoadCombination(self, name:str, loadCaseExpression:str):
+        '''Defines a new combination and add it to the domain.
+
+           :param name: name of the load combination.
+           :param loadCaseExpression: expression that defines de load case as a
+                                      combination of previously defined actions
+                                      e.g. '1.0*GselfWeight+1.0*GearthPress'
+        '''
+        combs= self.getLoadHandler().getLoadCombinations
+        return combs.newLoadCombination(name,loadCaseExpression)
         
     def getCurrentLoadPatternName(self):
         ''' Return the current load pattern.'''
@@ -888,6 +899,10 @@ class PredefinedSpace(object):
         ''' Return the name of the current combination (if any).'''
         retval= self.preprocessor.getDomain.currentCombinationName
         return retval
+
+    def resetLoadCase(self):
+        ''' Remove all the load cases from the domain.'''
+        self.preprocessor.resetLoadCase()        
         
     def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str):
         '''Defines a new combination and add it to the domain.
@@ -897,8 +912,7 @@ class PredefinedSpace(object):
                                       combination of previously defined actions
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
         '''
-        combs= self.getLoadHandler().getLoadCombinations
-        lCase= combs.newLoadCombination(loadCaseName,loadCaseExpression)
+        lCase= self.newLoadCombination(loadCaseName,loadCaseExpression)
         self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(lCase.name)
 
