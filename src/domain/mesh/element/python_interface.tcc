@@ -111,21 +111,21 @@ class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
   .def("next", &XC::ElementIter::operator(), return_internal_reference<>(),"Return next node.")
    ;
 
-class_<XC::ElementBase<2>, bases<XC::Element >, boost::noncopyable >("ElementBase2N","Base class for 2 node elements.", no_init);
+class_<ElementBase2N, bases<XC::Element >, boost::noncopyable >("ElementBase2N","Base class for 2 node elements.", no_init);
 
-class_<XC::ElementBase<3>, bases<XC::Element >, boost::noncopyable >("ElementBase3N","Base class for 3 node elements.", no_init);
+class_<ElementBase3N, bases<XC::Element >, boost::noncopyable >("ElementBase3N","Base class for 3 node elements.", no_init);
 
-class_<XC::ElementBase<4>, bases<XC::Element >, boost::noncopyable >("ElementBase4N","Base class for 4 node elements.", no_init);
+class_<ElementBase4N, bases<XC::Element >, boost::noncopyable >("ElementBase4N","Base class for 4 node elements.", no_init);
 
-class_<XC::ElementBase<8>, bases<XC::Element >, boost::noncopyable >("ElementBase8N","Base class for 8 node elements.", no_init);
+class_<ElementBase8N, bases<XC::Element >, boost::noncopyable >("ElementBase8N","Base class for 8 node elements.", no_init);
 
-class_<XC::ElementBase<9>, bases<XC::Element >, boost::noncopyable >("ElementBase9N","Base class for 9 node elements.", no_init);
+class_<ElementBase9N, bases<XC::Element >, boost::noncopyable >("ElementBase9N","Base class for 9 node elements.", no_init);
 
-class_<XC::ElementBase<20>, bases<XC::Element >, boost::noncopyable >("ElementBase20N","Base class for 20 node elements.", no_init);
+class_<ElementBase20N, bases<XC::Element >, boost::noncopyable >("ElementBase20N","Base class for 20 node elements.", no_init);
 
-class_<XC::ElementBase<27>, bases<XC::Element >, boost::noncopyable >("ElementBase27N","Base class for 27 node elements.", no_init);
+class_<ElementBase27N, bases<XC::Element >, boost::noncopyable >("ElementBase27N","Base class for 27 node elements.", no_init);
 
-class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0D", no_init)
+class_<XC::Element0D , bases<ElementBase2N >, boost::noncopyable >("Element0D", no_init)
   .def("setupVectors",&XC::Element0D::setUpVectors,"setupVectors(x,yp); set element orientation; x: axis of the element, yp: vector that lies on the xy plane of the element.")
   .add_property("getNumDOF",&XC::Element0D::getNumDOF,"Return element number of DOFs (6 or 12).")
   .add_property("getDimension",&XC::Element0D::getDimension,"Return element dimension.")
@@ -138,7 +138,7 @@ class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0
 
 
 XC::CrdTransf *(XC::Element1D::*getCrdTransf)(void)= &XC::Element1D::getCoordTransf;
-class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1D", no_init)
+class_<XC::Element1D, bases<ElementBase2N >, boost::noncopyable >("Element1D", no_init)
     .add_property("getCoordTransf", make_function( getCrdTransf, return_internal_reference<>() ))
     .def("initializeCoordTransf",&XC::Element1D::initializeCoordTransf,"Initialize the coordinate transformation (i.e. after a change in the coordinates of the nodes).")
     .def("getLineSegment", &XC::Element1D::getLineSegment)

@@ -90,7 +90,7 @@
 #include "domain/mesh/element/zero_length/ZeroLengthContact2D.h"
 #include "domain/mesh/element/zero_length/ZeroLengthContact3D.h"
 
-#include "domain/mesh/element/utils/surface_pressures/BrickSurfaceLoad.h"
+#include "domain/mesh/element/plane/surface_pressures/BrickSurfaceLoad.h"
 
 #include "preprocessor/Preprocessor.h"
 

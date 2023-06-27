@@ -101,3 +101,6 @@ class_<ElemWithMaterial9N_Mech2D, bases<ElementBase9N >, boost::noncopyable >("E
 #include "UP-ucsd/python_interface.tcc"
 //Shell
 #include "shell/python_interface.tcc"
+
+// Surface pressures.
+#include "surface_pressures/python_interface.tcc"

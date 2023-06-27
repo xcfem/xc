@@ -211,7 +211,7 @@ const XC::Vector &XC::BrickSurfaceLoad::getResistingForce(void) const
 	    // loop over dof
 	    for(int k = 0; k < 3; k++)
 	      {
-		internalForces[j*3+k] = internalForces[j*3+k] - mLoadFactor*my_pressure*myNhat(k)*myNI(j);
+		internalForces[j*3+k]-=  mLoadFactor*my_pressure*myNhat(k)*myNI(j);
 	      }
 	  }
       }

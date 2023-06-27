@@ -67,7 +67,9 @@ XC::ElementalLoad *XC::process_element_load(XC::LoadPattern *lp,int &tag_el,cons
         retval= new_elem_load<TrussStrainLoad>(lp,tag_el);
       }
     else if(loadType == "truss_strain_load")
-      retval= new_elem_load<TrussStrainLoad>(lp,tag_el);
+      retval= new_elem_load<TrussStrainLoad>(lp, tag_el);
+    else if(loadType == "surface_load")
+      retval= new_elem_load<SurfaceLoader>(lp, tag_el);
     else
       std::cerr << __FUNCTION__ << "; load type: '"
 	        << loadType << "' unknown." << std::endl;

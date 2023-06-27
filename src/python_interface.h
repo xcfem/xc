@@ -76,8 +76,10 @@ typedef PhysicalProperties_NDMat::material_vector material_vector_NDMat;
 
 
 //Elements.
-// Plane elements.
+// Two nodes.
+typedef XC::ElementBase<2> ElementBase2N;
 // Three nodes.
+typedef XC::ElementBase<3> ElementBase3N;
 typedef XC::ElemWithMaterial<3,XC::SolidMech2D> ElemWithMaterial3N_Mech2D;
 typedef XC::PlaneElement<3,XC::SolidMech2D> PlaneElement3N_Mech2D;
 typedef XC::TriBase3N<XC::SolidMech2D> TriBase3N_Mech2D;
@@ -89,9 +91,18 @@ typedef XC::ElemWithMaterial<4,XC::SolidMech2D> ElemWithMaterial4N_Mech2D;
 typedef XC::PlaneElement<4,XC::SolidMech2D> PlaneElement4N_Mech2D;
 typedef XC::QuadBase4N<XC::SolidMech2D> QuadBase4N_Mech2D;
 
+// Eigth nodes.
+typedef XC::ElementBase<8> ElementBase8N;
+
 // Nine nodes.
 typedef XC::ElementBase<9> ElementBase9N;
 typedef XC::ElemWithMaterial<9,XC::SolidMech2D> ElemWithMaterial9N_Mech2D;
+
+// Twenty nodes.
+typedef XC::ElementBase<20> ElementBase20N;
+
+// Twenty seven nodes.
+typedef XC::ElementBase<27> ElementBase27N;
 
 //Shell
 typedef XC::ElemWithMaterial<4,XC::SectionFDPhysicalProperties> ElemWithMaterial4N_SFD;

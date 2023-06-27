@@ -201,7 +201,7 @@
 #include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
 
 // surface pressures
-#include "domain/mesh/element/utils/surface_pressures/BrickSurfaceLoad.h"
+#include "domain/mesh/element/plane/surface_pressures/BrickSurfaceLoad.h"
 
 
 // element header files
@@ -362,11 +362,11 @@
 #include "domain/load/beam_loads/Beam3dPointLoad.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
-#include "domain/load/beam_loads/TrussStrainLoad.h"
 #include "domain/load/plane/QuadRawLoad.h"
 #include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
+#include "domain/load/SurfaceLoader.h"
 #include "domain/load/volumetric/BrickSelfWeight.h"
 #include "domain/load/pattern/NodeLocker.h"
 #include "domain/load/pattern/NodeLockerIter.h"

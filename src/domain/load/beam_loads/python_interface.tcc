@@ -82,4 +82,7 @@ class_<XC::Beam3dUniformLoad, bases<XC::BeamUniformLoad>, boost::noncopyable >("
   .add_property("transZComponent", &XC::Beam3dUniformLoad::getTransZComponent, &XC::Beam3dUniformLoad::setTransZComponent)
   ;
 
+class_<XC::SurfaceLoader, bases<XC::ElementalLoad>, boost::noncopyable >("SurfaceLoader", no_init)
+  ;
+
 

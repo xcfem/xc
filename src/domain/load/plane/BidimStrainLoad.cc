@@ -143,7 +143,8 @@ int XC::BidimStrainLoad::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "TrussStrainLoad::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; data could not be received.\n" ;
     else
       res+= recvData(comm);
     return res;

@@ -21,7 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-//class_<XC::BrickSurfaceLoad, bases<XC::ElementBase<4> >, boost::noncopyable  >("BrickSurfaceLoad", no_init)
-//   .add_property("pressure",&XC::BrickSurfaceLoad::getPressure, &XC::BrickSurfaceLoad::setPressure,"Get/set the pressure load.")
+
+class_<XC::BrickSurfaceLoad, bases<ElementBase4N > >("BrickSurfaceLoad")
+   .add_property("pressure",&XC::BrickSurfaceLoad::getPressure, &XC::BrickSurfaceLoad::setPressure,"Get/set the pressure load.")
    ;
 
