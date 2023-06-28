@@ -61,6 +61,7 @@ class_<Circle2d, bases<Surface2d> >("Circle2d")
   .def("getDiameter",&Circle2d::getDiameter, "Return the object diameter.")
   .def("getPerimeter",&Circle2d::getPerimeter, "Return the object perimeter.")
   .def("getInscribedPolygon",&Circle2d::getInscribedPolygon,"getInscribedPolygon(n,theta_inic) return an inscribed regular polygon with n sides starting in the angle argument")
+  .def("getAngle", &Circle2d::getAngle, "Return the angle of the point with respect to the circle.")
   .def("getArea", &Circle2d::getArea, "Return the object area.")
   .def("getIx", &Circle2d::Ix)
   .def("getIy", &Circle2d::Iy)
@@ -73,6 +74,13 @@ double (*curvature_radius_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvat
 def("curvatureRadius", curvature_radius_2d, "curvatureRadius(ptA, ptB, ptC): return the curvature radius of the circumscribed circle");
 double (*curvature_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvature;
 def("curvature", curvature_2d, "curvature(ptA, ptB, ptC): return the curvature of the circumscribed circle");
+
+class_<CircularSector2d, bases<Circle2d > >("CircularSector2d")
+  .def(init<>())
+  .def(init<Pos2d, Pos2d, Pos2d>())
+  .def(init<Circle2d,double, double>())
+  .def(init<CircularSector2d>())
+  ;
 
 #include "2d_polygons/python_interface.tcc"
 

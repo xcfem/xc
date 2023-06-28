@@ -48,6 +48,7 @@
 #include "utility/geom/d2/HalfPlane2d.h"
 #include "utility/geom/d2/GeomGroup2d.h"
 #include "utility/geom/d2/Circle2d.h"
+#include "utility/geom/d2/CircularSector2d.h"
 #include "utility/geom/d2/ConvexHull2d.h"
 #include "utility/geom/d2/BasicAlphaShape2d.h"
 #include "utility/geom/d2/2d_polygons/PolygonalSurface2d.h"
