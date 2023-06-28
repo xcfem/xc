@@ -9,13 +9,14 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 import geom
+from misc_utils import log_messages as lmsg
 
 vaultExtDiameter= 1.5 # upper vault external diameter.
 vaultExtRadius= vaultExtDiameter/2.0 # upper vault external radius.
 
-p0= geom.Pos2d(-vaultExtRadius,-vaultExtRadius)
+p0= geom.Pos2d(vaultExtRadius,-vaultExtRadius)
 p1= geom.Pos2d(0.0,0.0)
-p2= geom.Pos2d(vaultExtRadius,-vaultExtRadius)
+p2= geom.Pos2d(-vaultExtRadius,-vaultExtRadius)
 
 vaultExt= geom.CircularSector2d(p0, p1, p2)
 center= vaultExt.getCenter()
@@ -25,7 +26,7 @@ th2= vaultExt.getAngle(p2)
 
 # Check values.
 err0= center.dist2(geom.Pos2d(0.0,-.75))
-err1= math.sqrt((th0-math.pi)**2+(th1-math.pi/2.0)**2+(th2)**2)
+err1= math.sqrt((th0)**2+(th1-math.pi/2.0)**2+(th2-math.pi)**2)
 
 '''
 print('vault center: ', center)

@@ -31,22 +31,30 @@
 CircularSector2d CircularSector2dThreepoints(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3)
   {
     const Circle2d tmp= Circle2d(p1,p2,p3);
-    const double th1= tmp.getAngle(p1);
-    const double th3= tmp.getAngle(p3);
+    double th1= tmp.getAngle(p1);
+    double th3= tmp.getAngle(p3);
+    // if(th3<th1)
+    //   std::swap(th1, th3);
     CircularSector2d retval(tmp,th1,th3);
-    const double alpha1= 0;
+    double alpha1= 0.0;
     const double alpha2= retval.getAngle(p2);
     const double alpha3= retval.getAngle(p3);
-    if((alpha1>=alpha2) || (alpha3<=alpha2))
+    // Check if the angles are sorted:
+    if(((alpha1>=alpha2) && (alpha3>=alpha2)) || ((alpha1<=alpha2) && (alpha3<=alpha2)))
       {
-	std::cerr << __FUNCTION__
-		  << "; error when defining circular sector: " << std::endl
-                  << "  p1= " << p1
-		  << "  alpha1= " << RadToDeg(alpha1) <<std::endl
-                  << "  p2= " << p2
-		  << "  alpha2= " << RadToDeg(alpha2) <<std::endl
-                  << "  p3= " << p3
-		  << "  alpha3= " << RadToDeg(alpha3) <<std::endl;
+	// Check again with alpha1= 360 degrees.
+	alpha1= 2.0*M_PI;
+	if(((alpha1>=alpha2) && (alpha3>=alpha2)) || ((alpha1<=alpha2) && (alpha3<=alpha2)))
+          {
+	    std::cerr << __FUNCTION__
+		      << "; error when defining circular sector: " << std::endl
+		      << "  p1= " << p1
+		      << "  alpha1= " << RadToDeg(alpha1) <<std::endl
+		      << "  p2= " << p2
+		      << "  alpha2= " << RadToDeg(alpha2) <<std::endl
+		      << "  p3= " << p3
+		      << "  alpha3= " << RadToDeg(alpha3) <<std::endl;
+	  }
       }
     return retval;
   }
@@ -61,6 +69,14 @@ CircularSector2d::CircularSector2d(const Circle2d &c,const double &th1,const dou
   {
     if(theta1>theta2)
       theta1-= 2*M_PI;
+  }
+
+//! @brief Build the circle from three points.
+CircularSector2d::CircularSector2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3)
+  : Circle2d(), theta1(0), theta2(M_PI/2)
+  {
+    CircularSector2d tmp(CircularSector2dThreepoints(p1, p2, p3));
+    (*this)= tmp;
   }
 
 //! @brief Comparison operator.

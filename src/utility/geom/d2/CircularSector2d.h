@@ -38,6 +38,7 @@ class CircularSector2d : public Circle2d
   public:
     CircularSector2d(void);
     CircularSector2d(const Circle2d &c,const double &th1,const double &th2);
+    CircularSector2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3);
     
     virtual bool operator==(const CircularSector2d &) const;
     virtual Surface2d *getCopy(void) const;
