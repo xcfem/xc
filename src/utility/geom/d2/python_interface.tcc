@@ -67,6 +67,7 @@ class_<Circle2d, bases<Surface2d> >("Circle2d")
   .def("getIy", &Circle2d::Iy)
   .def("getPxy", &Circle2d::Pxy)
   .def("getCenterOfMass", &Circle2d::getCenterOfMass, " return the center of mass.")
+  .def("offset",&Circle2d::offset,"returns a parallel circle obtained by adding argument to the radius of this object.")
   ;
 Vector2d (*curvature_vector_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvatureVector;
 def("curvatureVector", curvature_vector_2d, "curvatureVector(ptA, ptB, ptC): return the curvature vector of the circumscribed circle");
@@ -80,6 +81,11 @@ class_<CircularSector2d, bases<Circle2d > >("CircularSector2d")
   .def(init<Pos2d, Pos2d, Pos2d>())
   .def(init<Circle2d,double, double>())
   .def(init<CircularSector2d>())
+  .def("getFromPoint", &CircularSector2d::PInic,"return the back endpoint of the arc.")
+  .def("getToPoint", &CircularSector2d::PFin,"return the front endpoint of the arc.")
+  .def("getMidPoint",&CircularSector2d::PMed,"return the mid point on the arc.")
+  .def("getArcPoints",&CircularSector2d::getArcPointsPy,"return points along the arc")
+  .def("offset",&CircularSector2d::offset,"returns a parallel circular sector obtained by adding argument to the radius of this object.")
   ;
 
 #include "2d_polygons/python_interface.tcc"
