@@ -207,10 +207,16 @@ void Circle2d::Transform(const Trf2d &trf2d)
     (*this)= Circle2d(pA,getRadius());
   }
 
+//! @brief Return a circle parallel to this one at the distance
+//! being passed as parameter. The new circle will be exterior
+//! if the distance is positive.
+Circle2d Circle2d::offset(const GEOM_FT &d) const
+  { return Circle2d(this->Centro(), this->getRadius()+d); }
+
 void Circle2d::Print(std::ostream &os) const
   {
-    os << "x centro: " << Centro().x() 
-       << " y centro: " << Centro().y()
+    os << "x center: " << Centro().x() 
+       << " y center: " << Centro().y()
        << " radius: " << getRadius();
   }
 void Circle2d::Plot(Plotter &plotter) const

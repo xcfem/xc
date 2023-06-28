@@ -80,12 +80,14 @@ class Circle2d : public Surface2d
     Polygon2d getInscribedPolygon(const size_t &n,const double &theta_inic= 0.0) const;
 
     void Transform(const Trf2d &trf2d);
+    Circle2d offset(const GEOM_FT &) const;
 
     friend int operator ==(const Circle2d &a,const Circle2d &b)
       { return ( a.cgcirc == b.cgcirc ); };
     
     void Print(std::ostream &os) const;
     void Plot(Plotter &) const;
+
   };
 
 Circle2d Circle2dRTT(const GEOM_FT &,const Line2d &,const Line2d &,const bool &left,const bool &far);
