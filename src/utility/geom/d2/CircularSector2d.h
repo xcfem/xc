@@ -33,11 +33,12 @@ class Pos2dArray;
 //! @brief 2D circular sector.
 class CircularSector2d : public Circle2d
   {
+    bool ckwise; //!< True if the arc runs clockwise.
     double theta1; //!< Angle that defines the start point of the arc.
     double theta2; //!< Angle that defines the end point of the arc.
   public:
     CircularSector2d(void);
-    CircularSector2d(const Circle2d &c,const double &th1,const double &th2);
+    CircularSector2d(const Circle2d &c,const double &th1,const double &th2, bool ckwise= false);
     CircularSector2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3);
     
     virtual bool operator==(const CircularSector2d &) const;

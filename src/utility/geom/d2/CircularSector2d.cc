@@ -33,9 +33,18 @@ CircularSector2d CircularSector2dThreepoints(const Pos2d &p1,const Pos2d &p2,con
     const Circle2d tmp= Circle2d(p1,p2,p3);
     double th1= tmp.getAngle(p1);
     double th3= tmp.getAngle(p3);
-    // if(th3<th1)
-    //   std::swap(th1, th3);
-    CircularSector2d retval(tmp,th1,th3);
+    const double twoPI= 2.0*M_PI;
+    if(fabs(th1-twoPI)<1e-6)
+      th1= 0.0;
+    if(fabs(th3-twoPI)<1e-6)
+      th3= 0.0;
+    bool ckwise= false;
+    if(th3<th1)
+      {
+        std::swap(th1, th3);
+	ckwise= true;
+      }
+    CircularSector2d retval(tmp,th1,th3, ckwise);
     double alpha1= 0.0;
     const double alpha2= retval.getAngle(p2);
     const double alpha3= retval.getAngle(p3);
@@ -61,11 +70,11 @@ CircularSector2d CircularSector2dThreepoints(const Pos2d &p1,const Pos2d &p2,con
 
 //! @brief Default constructor.
 CircularSector2d::CircularSector2d(void)
-  : Circle2d(), theta1(0), theta2(M_PI/2) {}
+  : Circle2d(), ckwise(false), theta1(0), theta2(M_PI/2) {}
 
 //! @brief Build the circle from its center and its radius.
-CircularSector2d::CircularSector2d(const Circle2d &c,const double &th1,const double &th2)
-  : Circle2d(c), theta1(th1), theta2(th2) 
+CircularSector2d::CircularSector2d(const Circle2d &c,const double &th1,const double &th2, bool cw)
+  : Circle2d(c), ckwise(cw), theta1(th1), theta2(th2)
   {
     if(theta1>theta2)
       theta1-= 2*M_PI;
@@ -89,7 +98,7 @@ bool CircularSector2d::operator==(const CircularSector2d &other) const
       {
         retval= Circle2d::operator==(other);
         if(retval)
-          retval= ((theta1==other.theta1) && (theta2==other.theta2));
+          retval= ((theta1==other.theta1) && (theta2==other.theta2) && (ckwise==other.ckwise));
        }
     return retval;
   }
@@ -97,7 +106,6 @@ bool CircularSector2d::operator==(const CircularSector2d &other) const
 //! @brief Constructor virtual.
 Surface2d *CircularSector2d::getCopy(void) const
   { return new CircularSector2d(*this); }
-
 
 //! @brief Return the position of the center of mass.
 Pos2d CircularSector2d::getCenterOfMass(void) const
@@ -120,11 +128,18 @@ Pos2d CircularSector2d::ArcCentroid(void) const
 
 //! @brief Return the point inicial del arco.
 Pos2d CircularSector2d::PInic(void) const
-  { return Point(theta1); }
+  {
+    double th= ckwise ? theta2 : theta1;
+    return Point(th);
+  }
 
 //! @brief Return the point final del arco.
 Pos2d CircularSector2d::PFin(void) const
-  { return Point(theta2); }
+  {
+    double th= ckwise ? theta1 : theta2;
+    return Point(th);
+  }
+
 
 //! @brief Return the mid-point of the arc.
 Pos2d CircularSector2d::PMed(void) const
@@ -151,7 +166,7 @@ GEOM_FT CircularSector2d::getArcLength(void) const
 
 //! @brief Return the length of the circular sector.
 GEOM_FT CircularSector2d::getLength(void) const
-  { return getArcLength()+ getDiameter(); }
+  { return getArcLength()+getDiameter(); }
 
 //! @brief Return the area of the circular sector.
 GEOM_FT CircularSector2d::getArea(void) const
@@ -236,7 +251,10 @@ Pos2dArray CircularSector2d::getArcPoints(const size_t &n) const
         else
           {
             const double delta_theta= getIncludedAngle()/(n-1);
-            arc_points(theta1,delta_theta,retval);
+	    if(ckwise)
+	      arc_points(theta2,-delta_theta,retval);
+	    else
+              arc_points(theta1,delta_theta,retval);
           }
       }
     else
@@ -272,7 +290,8 @@ void CircularSector2d::Print(std::ostream &os) const
   {
     Circle2d::Print(os);
     os << " theta1= " << theta1
-       << " theta2= " << theta2;
+       << " theta2= " << theta2
+       << " clockwise= " << ckwise;
   }
 void CircularSector2d::Plot(Plotter &plotter) const
   {

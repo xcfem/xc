@@ -138,6 +138,7 @@ python tests/utility/geom/circles/test_curvature_vector_2d_01.py
 python tests/utility/geom/circles/test_curvature_vector_3d_01.py
 python tests/utility/geom/circles/circular_sector_2d_test_01.py
 python tests/utility/geom/circles/circular_sector_2d_test_02.py
+python tests/utility/geom/circles/circular_sector_2d_test_03.py
 echo "$BLEU" "    Parabolas." "$NORMAL"
 python tests/utility/geom/parabola_test_01.py
 echo "$BLEU" "    Sliding vectors." "$NORMAL"
