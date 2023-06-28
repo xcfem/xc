@@ -56,7 +56,7 @@ class Circle2d : public Surface2d
     GEOM_FT getRadius(void) const;
     inline GEOM_FT getDiameter(void) const
       { return 2*getRadius(); }
-    double getAngle(const Pos2d &p) const;
+    virtual double getAngle(const Pos2d &p) const;
     virtual GEOM_FT getLength(void) const;
     //! @brief Return the perimeter of the object.
     inline GEOM_FT getPerimeter(void) const
