@@ -126,7 +126,7 @@ Pos2d CircularSector2d::PInic(void) const
 Pos2d CircularSector2d::PFin(void) const
   { return Point(theta2); }
 
-//! @brief Return the point medio del arco.
+//! @brief Return the mid-point of the arc.
 Pos2d CircularSector2d::PMed(void) const
   { return Point((theta1+theta2)/2); }
 
@@ -221,6 +221,7 @@ bool CircularSector2d::In(const Pos2d &p, const double &tol) const
   }
 
 //! @brief Return n points equally spaced over the arc of the circular sector.
+//! @brief n: number of points (at least 2).
 Pos2dArray CircularSector2d::getArcPoints(const size_t &n) const
   {
     Pos2dArray retval;
@@ -243,6 +244,28 @@ Pos2dArray CircularSector2d::getArcPoints(const size_t &n) const
 		<< "; the number of points must be greater than two."
 		<< std::endl;
     return retval;
+  }
+
+//! @brief Return a Python list containing the points that results
+//! from the division of the arc.
+//!
+//! @param n: number of points.
+boost::python::list CircularSector2d::getArcPointsPy(const size_t &n) const
+  {
+    Pos2dArray tmp= this->getArcPoints(n);
+    boost::python::list retval;
+    for(Pos2dArray::const_iterator i= tmp.begin();i!=tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return a circular sector parallel to this one at the distance
+//! being passed as parameter. The new circular sector will be exterior
+//! if the distance is positive.
+CircularSector2d CircularSector2d::offset(const GEOM_FT &d) const
+  {
+    Circle2d tmp(this->Centro(), this->getRadius()+d);
+    return CircularSector2d(tmp, this->theta1, this->theta2);
   }
 
 void CircularSector2d::Print(std::ostream &os) const

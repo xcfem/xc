@@ -69,6 +69,9 @@ class CircularSector2d : public Circle2d
     virtual GEOM_FT GetMin(unsigned short int i) const;
     virtual bool In(const Pos2d &p, const double &tol= 0.0) const;
     Pos2dArray getArcPoints(const size_t &n) const;
+    boost::python::list getArcPointsPy(const size_t &n) const;
+
+    CircularSector2d offset(const GEOM_FT &) const;
 
     void Print(std::ostream &os) const;
     void Plot(Plotter &) const;
