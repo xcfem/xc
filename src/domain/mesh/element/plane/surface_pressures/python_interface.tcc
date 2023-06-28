@@ -21,6 +21,9 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+class_<XC::QuadSurfaceLoad, bases<ElementBase4N > >("QuadSurfaceLoad")
+   .add_property("pressure",&XC::QuadSurfaceLoad::getPressure, &XC::QuadSurfaceLoad::setPressure,"Get/set the pressure load.")
+   ;
 
 class_<XC::BrickSurfaceLoad, bases<ElementBase4N > >("BrickSurfaceLoad")
    .add_property("pressure",&XC::BrickSurfaceLoad::getPressure, &XC::BrickSurfaceLoad::setPressure,"Get/set the pressure load.")

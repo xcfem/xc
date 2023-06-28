@@ -201,6 +201,7 @@
 #include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
 
 // surface pressures
+#include "domain/mesh/element/plane/surface_pressures/QuadSurfaceLoad.h"
 #include "domain/mesh/element/plane/surface_pressures/BrickSurfaceLoad.h"
 
 

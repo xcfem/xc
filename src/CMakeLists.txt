@@ -336,7 +336,7 @@ SET(physical_properties domain/mesh/element/utils/physical_properties/PhysicalPr
 
 SET(body_forces domain/mesh/element/utils/body_forces/BodyForces.cc domain/mesh/element/utils/body_forces/BodyForces2D.cc domain/mesh/element/utils/body_forces/BodyForces3D.cc)
 
-SET(surface_pressures domain/mesh/element/plane/surface_pressures/BrickSurfaceLoad.cpp)
+SET(surface_pressures domain/mesh/element/plane/surface_pressures/QuadSurfaceLoad.cc domain/mesh/element/plane/surface_pressures/BrickSurfaceLoad.cpp)
 
 SET(element ${physical_properties} ${body_forces} ${surface_pressures} domain/mesh/element/Element.cpp domain/mesh/element/utils/ParticlePos3d.cc domain/mesh/element/utils/KDTreeElements.cc domain/mesh/element/utils/RayleighDampingFactors.cc domain/mesh/element/Element0D.cc domain/mesh/element/Element1D.cc domain/mesh/element/utils/NodePtrs.cc domain/mesh/element/utils/NodePtrsWithIDs.cc domain/mesh/element/utils/Information.cpp domain/mesh/element/NewElement.cpp ${beams} ${beam_integration} ${volumetric_elements} ${plane_element} domain/mesh/element/special/joint/BeamColumnJoint2d.cpp domain/mesh/element/special/joint/BeamColumnJoint3d.cpp domain/mesh/element/special/joint/Joint2D.cpp domain/mesh/element/special/joint/Joint3D.cpp ${trusses} domain/mesh/element/zero_length/ZeroLength.cpp domain/mesh/element/zero_length/ZeroLengthContact.cc domain/mesh/element/zero_length/ZeroLengthContact2D.cpp domain/mesh/element/zero_length/ZeroLengthContact3D.cpp domain/mesh/element/zero_length/ZeroLengthSection.cpp ${frictionBearing})
 

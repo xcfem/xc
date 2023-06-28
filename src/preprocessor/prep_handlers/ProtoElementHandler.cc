@@ -91,6 +91,7 @@
 #include "domain/mesh/element/zero_length/ZeroLengthContact3D.h"
 
 #include "domain/mesh/element/plane/surface_pressures/BrickSurfaceLoad.h"
+#include "domain/mesh/element/plane/surface_pressures/QuadSurfaceLoad.h"
 
 #include "preprocessor/Preprocessor.h"
 
@@ -445,6 +446,12 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	if(cmd=="brick")
 	  deprecatedElementNameMsg(errHeader,cmd,"Brick");
         retval= new_element_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
+        if(!retval)
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
+      }
+    else if((cmd == "quad_surface_load")||(cmd == "QuadSurfaceLoad"))
+      {
+        retval= new_element<QuadSurfaceLoad>(tag_elem);
         if(!retval)
 	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
