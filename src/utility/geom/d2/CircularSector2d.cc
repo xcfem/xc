@@ -283,7 +283,7 @@ boost::python::list CircularSector2d::getArcPointsPy(const size_t &n) const
 CircularSector2d CircularSector2d::offset(const GEOM_FT &d) const
   {
     Circle2d tmp(this->Centro(), this->getRadius()+d);
-    return CircularSector2d(tmp, this->theta1, this->theta2);
+    return CircularSector2d(tmp, this->theta1, this->theta2, this->ckwise);
   }
 
 void CircularSector2d::Print(std::ostream &os) const
