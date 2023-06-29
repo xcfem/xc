@@ -7,7 +7,6 @@ import math
 import os
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -77,7 +76,8 @@ else:
     lmsg.error(fname+' ERROR.')
   
 # Graphic stuff.
-#oh= output_handler.OutputHandler(modelSpace)
-#oh.displayBlocks()
-#oh.displayFEMesh()
-#oh.displayLocalAxes()
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLocalAxes()

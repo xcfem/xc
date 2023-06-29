@@ -14,7 +14,6 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-# from postprocess import output_handler
 
 A= 1.0
 B= 2.0
@@ -110,13 +109,14 @@ else:
 
        
 #Graphic stuff.
-# oh= output_handler.OutputHandler(modelSpace)
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayBlocks()#setToDisplay= )
-# oh.displayFEMesh()#setsToDisplay=[])
-# oh.displayLocalAxes()
-# oh.displayLoads()
-# oh.displayReactions()
-# oh.displayDispRot(itemToDisp='uX')
-# oh.displayDispRot(itemToDisp='uY')
-# oh.displayDispRot(itemToDisp='uZ')
+oh.displayBlocks()#setToDisplay= )
+oh.displayFEMesh()#setsToDisplay=[])
+oh.displayLocalAxes()
+oh.displayLoads()
+oh.displayReactions()
+oh.displayDispRot(itemToDisp='uX')
+oh.displayDispRot(itemToDisp='uY')
+oh.displayDispRot(itemToDisp='uZ')
