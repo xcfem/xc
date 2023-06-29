@@ -108,15 +108,15 @@ else:
     lmsg.error(fname+' ERROR.')
 
        
-#Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
+# #Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
 
-oh.displayBlocks()#setToDisplay= )
-oh.displayFEMesh()#setsToDisplay=[])
-oh.displayLocalAxes()
-oh.displayLoads()
-oh.displayReactions()
-oh.displayDispRot(itemToDisp='uX')
-oh.displayDispRot(itemToDisp='uY')
-oh.displayDispRot(itemToDisp='uZ')
+# oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX')
+# oh.displayDispRot(itemToDisp='uY')
+# oh.displayDispRot(itemToDisp='uZ')
