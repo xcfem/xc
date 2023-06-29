@@ -108,7 +108,7 @@ else:
     lmsg.error(fname+' ERROR.')
 
        
-# #Graphic stuff.
+#Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
