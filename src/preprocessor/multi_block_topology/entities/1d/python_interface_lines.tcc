@@ -104,6 +104,7 @@ class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge","Compound li
   .add_property("getNumEdges", &XC::CmbEdge::getNumberOfEdges,"Return the number of edges.")
   .add_property("getSides", make_function( getSidesCmbEdge, return_internal_reference<>()),"Return the sides of the compound edge.")
   .add_property("getEdges", &XC::CmbEdge::getEdgesPy,"Return the edges of the compound edge.")
+  .add_property("edges", &XC::CmbEdge::getEdgesPy,"Return the edges of the compound edge.")
   .def("addLines",&XC::CmbEdge::addLines, return_internal_reference<>(),"Add lines to the sequence.")
   .def("addPoints",&XC::CmbEdge::addPoints, return_internal_reference<>(),"Add points to the sequence.")
   .def("getAvgElemSize", &XC::CmbEdge::getAvgElemSize,"Return the average element size.")
