@@ -24,22 +24,25 @@ b= 0.3*l # Length of tranche b
 F1= 1000 # Force magnitude 1 (pounds)
 F2= 1000/2 # Force magnitude 2 (pounds)
 
+# Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
+
+# Create nodes.
 n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(0,l-a-b)
 n3= nodes.newNodeXY(0,l-a)
 n4= nodes.newNodeXY(0,l)
 
+# Define material.
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 ''' We define nodes at the points where loads will be applied.
     We will not compute stresses so we can use an arbitrary
     cross section of unit area.'''
-
+# Define elements.
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 # Bars defined ina a two dimensional space.
 elements.defaultMaterial= elast.name
@@ -50,6 +53,7 @@ truss.sectionArea= 1
 truss= elements.newElement("Truss",xc.ID([n3.tag,n4.tag]))
 truss.sectionArea= 1
 
+# Create constraints.
 constraints= preprocessor.getBoundaryCondHandler
 # Constrain the displacement of node 1.
 spc1= constraints.newSPConstraint(n1.tag,0,0.0)
@@ -62,7 +66,6 @@ spc5= constraints.newSPConstraint(n2.tag,0,0.0)
 # Constrain the displacement of node 3 in X axis (gdl 0).
 spc6= constraints.newSPConstraint(n3.tag,0,0.0)
 
-# time series for the load pattern:
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag,xc.Vector([0,-F2]))
@@ -74,9 +77,11 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
+# Get reactions.
 R1= n4.getReaction[1]
 R2= n1.getReaction[1]
 
+# Check values.
 ratio1= (R1-900)/900
 ratio2= (R2-600)/600
 
