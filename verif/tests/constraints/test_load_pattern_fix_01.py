@@ -52,6 +52,7 @@ modelSpace.addLoadCaseToDomain(lp0.name) # Add the load pattern to the domain.
 
 # Solution
 modelSpace.setSolutionProcedureType(predefined_solutions.PlainNewtonRaphson)
+#modelSpace.setSolutionProcedureType(predefined_solutions.PlainKrylovNewton) <- Doesn't work for this kind of problem.
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 R1x= n1.getReaction[0]
