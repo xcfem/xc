@@ -1407,7 +1407,17 @@ class SolidMechanics2D(PredefinedSpace):
         :param y: y coordinate for the new node.
         '''
         return super(SolidMechanics2D,self).newNodeXY(x,y)
-        
+
+    def getForceComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            forces.'''
+        return [0,1]
+
+    def getMomentComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            moments.'''
+        return []
+    
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
             displacement components.'''
@@ -1649,6 +1659,16 @@ class StructuralMechanics2D(StructuralMechanics):
         '''
         return super(StructuralMechanics2D,self).newNodeXY(x,y)
         
+    def getForceComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            forces.'''
+        return [0,1]
+
+    def getMomentComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            moments.'''
+        return [2]
+    
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
             displacement components.'''
@@ -1897,6 +1917,17 @@ class SolidMechanics3D(PredefinedSpace):
         '''
         return super(SolidMechanics3D,self).newNodeXYZ(x,y,z)
     
+        
+    def getForceComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            forces.'''
+        return [0, 1, 2]
+
+    def getMomentComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            moments.'''
+        return []
+    
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
             displacement components.'''
@@ -2042,6 +2073,17 @@ class StructuralMechanics3D(StructuralMechanics):
         '''
         return super(StructuralMechanics3D,self).newNodeXYZ(x,y,z)
         
+        
+    def getForceComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            forces.'''
+        return [0, 1, 2]
+
+    def getMomentComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            moments.'''
+        return [3, 4, 5]
+    
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
             displacement components.'''

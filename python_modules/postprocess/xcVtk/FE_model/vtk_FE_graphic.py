@@ -356,7 +356,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             node= preprocessor.getNodeHandler.getNode(nodeTag)
             force= load.getForce
             moment= load.getMoment
-            self.displayLoadOnNode(node, color,force,moment,fScale)    
+            self.displayLoadOnNode(node, color, force, moment,fScale)    
             load= lIter.next()
         loadPattern.removeFromDomain()
 
@@ -411,7 +411,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     def displayLoads(self, preprocessor, loadPattern):
         clrVectores= loadPattern.getProp("color")
         fScaleVectores= loadPattern.getProp("scale")
-        self.displayElementalLoads(preprocessor, loadPattern,clrVectores,fScaleVectores)
+        self.displayElementalLoads(preprocessor, loadPattern, clrVectores, fScaleVectores)
         self.displayNodalLoads(preprocessor, loadPattern,clrVectores,fScaleVectores)
 
     def appendDiagram(self,diagram,orientScbar=1,titleScbar=None):

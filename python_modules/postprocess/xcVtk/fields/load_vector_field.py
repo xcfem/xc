@@ -62,7 +62,11 @@ class LoadVectorField(LoadOnPoints):
         :param actLP: list of active load patterns.
         '''
         retval= dict()
-        comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
+        dim= len(self.components)
+        if(dim>1):
+            comp_i= self.components[0]; comp_j= self.components[1];
+        if(dim>2):
+            comp_k= self.components[2]
         for lp in actLP:
             lIter= lp.loads.getElementalLoadIter
             preprocessor= lp.getDomain.getPreprocessor
@@ -83,7 +87,10 @@ class LoadVectorField(LoadOnPoints):
                                       vLoad*= (1.0/elem.getArea(True))
                                   if(self.multiplyByElementArea):
                                       vLoad*= elem.getArea(True)
-                                  v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+                                  if(dim>2):
+                                      v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+                                  elif(dim>1):
+                                      v= xc.Vector([vLoad[comp_i],vLoad[comp_j], 0.0])
                                   if eTag in retval:
                                       retval[eTag]+= v
                                   else:
@@ -142,7 +149,8 @@ class LoadVectorField(LoadOnPoints):
         if(dim>1):
             comp_i= self.components[0];
             comp_j= self.components[1];
-            comp_k= self.components[2]
+            if(dim>2):
+                comp_k= self.components[2]
         else:
             comp_k= self.components[0]
         for lp in actLP:
@@ -158,8 +166,10 @@ class LoadVectorField(LoadOnPoints):
                         if(not node):
                             AssertionError('Can\'t create the node.')
                     vLoad= nl.getLoadVector
-                    if(dim>1):
+                    if(dim>2):
                         v= xc.Vector([vLoad[comp_i], vLoad[comp_j], vLoad[comp_k]])
+                    elif(dim>1):
+                        v= xc.Vector([vLoad[comp_i], vLoad[comp_j], 0.0])
                     else:
                         v= xc.Vector([0.0, 0.0, vLoad[comp_k]])
                     if(v.Norm()>1e-6):
