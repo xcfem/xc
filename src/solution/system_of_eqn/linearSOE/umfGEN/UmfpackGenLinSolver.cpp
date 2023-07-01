@@ -167,10 +167,10 @@ int XC::UmfpackGenLinSolver::setSize()
     // symbolic analysis
     if(Symbolic)
       { free_symbolic(); }
-    int status = umfpack_di_symbolic(n,n,Ap,Ai,Ax,&Symbolic,Control,Info);
+    const int status = umfpack_di_symbolic(n,n,Ap,Ai,Ax,&Symbolic,Control,Info);
 
     // check error
-    if (status!=UMFPACK_OK)
+    if(status!=UMFPACK_OK)
       {
 	std::cerr  << getClassName() << "::" << __FUNCTION__
 		   << "; WARNING: symbolic analysis returns "
