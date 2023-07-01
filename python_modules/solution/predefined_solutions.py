@@ -1149,7 +1149,7 @@ class PlainKrylovNewton(SolutionProcedure):
     "Finite Element Modeling of Gusset Plate Failure Using Opensees"
     Andrew J. Walker. Oregon State University
     '''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'simple', convTestType= 'energy_incr_conv_test', integratorType:str= 'load_control_integrator', maxDim= 6):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'simple', convTestType= 'energy_incr_conv_test', soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType:str= 'load_control_integrator', maxDim= 6):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1162,7 +1162,7 @@ class PlainKrylovNewton(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
-        super(PlainKrylovNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType= integratorType)
+        super(PlainKrylovNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType)
         self.feProblem= prb
         self.maxDim= maxDim
         
