@@ -131,3 +131,14 @@ if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayBlocks()
+# # oh.displayFEMesh()
+# # oh.displayLocalAxes()
+# # oh.displayReactions()
+# oh.displayLoads()
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 5.0)
+# # oh.displayDispRot(itemToDisp='uY', defFScale= 5.0)
