@@ -1,5 +1,5 @@
-# Home made test
 # -*- coding: utf-8 -*-
+''' Trivial check of quadrilateral surfaces.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -25,19 +25,6 @@ feProblem.logFileName= "/tmp/erase.log" # Nicely avoid warning messages.
 NumDivI= 3
 NumDivJ= 2
 CooMax= 10
-E= 30e6 # Young modulus (psi)
-nu= 0.3 # Poisson's ratio
-rho= 0.0 # Density
-
-
-
-
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
-elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
-
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= elast2d.name
-quad4n= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 #               
 #  4 +--------------------+ 3
@@ -47,18 +34,30 @@ quad4n= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 #  1 +--------------------+ 2
 #
 
+# Define k-points.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d(CooMax,0.0,0.0))
 pt3= points.newPoint(geom.Pos3d(CooMax,CooMax,0.0))
 pt4= points.newPoint(geom.Pos3d(0.0,CooMax,0.0))
 
+# Define quadrilateral surface.
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
 testEqualOperator= (s==s)
+
+# Define material.
+E= 30e6 # Young modulus (psi)
+nu= 0.3 # Poisson's ratio
+rho= 0.0 # Density
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
+
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= elast2d.name
+quad4n= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 s.genMesh(xc.meshDir.I)
 
