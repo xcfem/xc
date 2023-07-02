@@ -843,6 +843,21 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             retval= typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= rho, h= thickness)
         return retval
 
+    def defElasticIsotropicPlaneStrain(self, preprocessor, name:str= None, overrideRho= None):
+        '''Constructs an elastic uniaxial material appropriate 
+         for analysis of trusses.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        if(name is None):
+            name= self.materialName+'_plane_strain'
+        rho= self.density()
+        if(overrideRho!=None):
+            rho= overrideRho
+        return typical_materials.defElasticIsotropicPlaneStrain(preprocessor, name= name, E= self.getEcm(), nu= self.nuc, rho= rho)
 
 class paramTensStiffness(object):
     '''Parameters to generate a concrete02 material based on the tension-stiffening constitutive 
