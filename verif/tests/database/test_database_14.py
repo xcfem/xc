@@ -21,13 +21,19 @@ A= 50.65 # Beam cross-sectin area in square inches.
 I= 7892 # Inertia of the beam section in inches to the fourth power.
 F= 1000.0 # Force
 
+#       l                     l
+#  +---------+           +----------+
+# n1        n2          n3          n4
+#
+
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
-
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-# Create nodes.
+
+# Create mesh.
+## Create nodes.
 n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(l,0.0)
 n3= nodes.newNodeXY(2*l,0.0)
@@ -36,21 +42,17 @@ n4= nodes.newNodeXY(3*l,0.0)
 n1Tag= n1.tag
 n2Tag= n2.tag
 
-# Geometric transformations
-lin= modelSpace.newLinearCrdTransf("lin")
-    
-# Materials definition
+# Create elements.
+##  Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
-
-
-# Elements definition
+## Geometric transformations
+lin= modelSpace.newLinearCrdTransf("lin")
+## Element definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-#  sintaxis: beam2d_02[<tag>] 
 beam2dA= elements.newElement("ElasticBeam2d",xc.ID([n1Tag,n2Tag]))
 beam2dA.h= h
-        
 beam2dB= elements.newElement("ElasticBeam2d",xc.ID([n3.tag,n4.tag]))
 beam2dB.h= h
     
@@ -82,10 +84,10 @@ os.system("rm -r -f /tmp/test14.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test14.db")
 db.save(100)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) # Dont print(warning messages)
-                            # about pointers to material.
+feProblem.setVerbosityLevel(0) # Dont print warning messages
+                               # about pointers to material.
 db.restore(100)
-feProblem.setVerbosityLevel(1) # print(warnings again )
+feProblem.setVerbosityLevel(1) # print warnings again
 
 
 # Solution
@@ -102,8 +104,7 @@ deltay2= n2.getDisp[1]
 
 # Get reactions.
 R1= n1.getReaction[0] 
-R2= n2.getReaction[0] 
-
+R2= n2.getReaction[0]
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.aliveElements()
@@ -115,22 +116,26 @@ mesh.meltAliveNodes("freeze") # Reactivate inactive nodes.
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
+# Save model state.
 db.save(105)
 feProblem.clearAll()
 feProblem.setVerbosityLevel(0) # Dont print(warning messages)
                             # about pointers to material.
+
+# Restore model state.                            
 db.restore(105)
 feProblem.setVerbosityLevel(1) # print(warnings again )
 
 n1= nodes.getNode(n1Tag)
 n2= nodes.getNode(n2Tag)
 
+# Compute reactions.
 nodes.calculateNodalReactions(True,1e-7)
 
 # Get displacements.
 deltaxB1= n1.getDisp[0] 
 deltayB1= n1.getDisp[1] 
-deltaxB2= n2.getDisp[0] 
+deltaxB2= n2.getDisp[0]
 deltayB2= n2.getDisp[1]
 
 # Get reactions.
@@ -144,6 +149,7 @@ ratio4= (RB2)
 
 ''' 
 print("R1= ",R1)
+print("ratio1= ",ratio1)
 print("R2= ",R2)
 print("dx2= ",deltax2)
 print("dy2= ",deltay2)
@@ -151,7 +157,6 @@ print("RB1= ",RB1)
 print("RB2= ",RB2)
 print("dxB2= ",deltaxB2)
 print("dyB2= ",deltayB2)
-print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
 print("ratio4= ",ratio4)
