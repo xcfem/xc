@@ -539,7 +539,7 @@ void XC::Mesh::melt_alive_nodes(const std::string &lockerName)
         NodeIter &theNodeIter= getNodes();
         Node *nodPtr= nullptr;
         while((nodPtr = theNodeIter()) != nullptr)
-          nodPtr->melt_if_alive(locker);
+          nodPtr->melt_if_alive();
         lockers.borraNodeLocker(lockerName);
       }
     else

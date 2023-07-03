@@ -415,6 +415,7 @@ python tests/elements/birth_and_death/kill_elements_05.py
 python tests/elements/birth_and_death/kill_elements_06.py
 python tests/elements/birth_and_death/kill_elements_07.py
 python tests/elements/birth_and_death/kill_elements_08.py
+python tests/elements/birth_and_death/kill_elements_09.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py

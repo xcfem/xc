@@ -36,6 +36,7 @@
 #include "MovableString.h"
 #include "MovableStrings.h"
 #include "MovableVectors.h"
+#include "MovableIDs.h"
 #include "CommMetaData.h"
 #include "PtrCommMetaData.h"
 #include "ArrayCommMetaData.h"
@@ -482,6 +483,26 @@ int XC::Communicator::receiveVectors(std::vector<Vector> &vectors,DbTagData &dt,
     MovableVectors mv(vectors);
     int res= receiveMovable(mv,dt,meta);
     vectors= mv.getVectores();
+    return res;
+  }
+
+//! @brief Sends the ID container through the communicator argument.
+//!
+//! @param meta: index where the object dbTag is stored.
+int XC::Communicator::sendIDs(std::vector<ID> &ids,DbTagData &dt, const CommMetaData &meta)
+  {
+    MovableIDs mi(ids);
+    return sendMovable(mi,dt,meta);
+  }
+
+//! @brief Receives the ID container through the communicator argument.
+//!
+//! @param meta: index where the object dbTag is stored.
+int XC::Communicator::receiveIDs(std::vector<ID> &ids,DbTagData &dt, const CommMetaData &meta) const
+  {
+    MovableIDs mi(ids);
+    int res= receiveMovable(mi,dt,meta);
+    ids= mi.getIDs();
     return res;
   }
 

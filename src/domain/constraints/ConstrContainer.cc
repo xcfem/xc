@@ -676,14 +676,17 @@ const XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag) const
 //! the argument.
 //!
 //! @param tag: node locker identifier.
-XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
+XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag, bool silent)
   {
     NodeLocker *retval= nullptr;
     MapActiveLoadPatterns<NodeLocker>::iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << " - node locker with tag: "
-	        << tag << " not found\n";
+      {
+        if(!silent)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " - node locker with tag: "
+	            << tag << " not found\n";
+      }
     else
       retval= (*i).second;
     return retval;
@@ -693,14 +696,17 @@ XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
 //! the argument.
 //!
 //! @param tag: node locker identifier.
-const XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag) const
+const XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag, bool silent) const
   {
     const NodeLocker *retval= nullptr;
     MapActiveLoadPatterns<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << " - node locker with tag: "
-	        << tag << " not found\n";
+      {
+        if(!silent)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " - node locker with tag: "
+	            << tag << " not found\n";
+      }
     else
       retval= (*i).second;
     return retval;

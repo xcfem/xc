@@ -309,6 +309,8 @@ const bool XC::Node::isDead(void) const
   { return !isAlive(); }
 
 //! @brief True if node is active.
+//! @param ignoreFreezeConstraints: if true consider freeze constraints as
+//!                                 regular constraints.
 const bool XC::Node::isAlive(void) const
   {
     bool retval= false;
@@ -327,9 +329,40 @@ const bool XC::Node::isAlive(void) const
               {
                 if(ptr->isAlive())
                   {
-                    retval= true;
-                    break;
+		    retval= true;
+		    break;
                   }
+              }
+            else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; null pointer in the connected list."
+			<< std::endl;
+          }
+      }
+    return retval;
+  }
+
+//! @brief Return true if the node is fixed only by its freeze
+//! constraints (all the other constraints, if any, are dead)
+const bool XC::Node::isFixedOnlyByFreezeConstraints(void) const
+  {
+    bool retval= (this->isAlive() && this->isFrozen());
+    if(retval)
+      {
+        for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+          {
+            const ContinuaReprComponent *ptr= *i;
+            if(ptr)
+              {
+		if(ptr->isAlive()) // Constraint is alive.
+		  {
+		    // Check if it is a freeze constraint
+		    if(!is_a_freeze_constraint(ptr))
+		      {
+		        retval= false; //Not a freeze constraint. 
+		        break;
+		      }
+		  }
               }
             else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
@@ -350,43 +383,143 @@ void XC::Node::freeze_if_dead(NodeLocker *locker)
           {
             SFreedom_Constraint *sp= locker->addSFreedom_Constraint(nodeTag,dofId,0.0);
             if(sp)
-              freeze_constraints.insert(sp->getTag());
+	      {
+		const int lockerTag= locker->getTag();
+	        if(freeze_constraints.find(lockerTag)==freeze_constraints.end())
+		  { freeze_constraints[lockerTag]= std::set<int>({sp->getTag()}); }
+	        else
+	          { freeze_constraints[lockerTag].insert(sp->getTag()); }
+	      }
           }
       }
   }
 
-//! @brief Returns a vector with the constraints identifiers. 
-const XC::ID &XC::Node::get_id_constraints(void) const
+//! @brief Return the identifiers of the node lockers that affect this node.
+XC::ID XC::Node::get_node_lockers_tags(void) const
   {
-    static ID retval;
-    size_t cont= 0;
-    retval.resize(freeze_constraints.size());
-    for(std::set<int>::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++,cont++)
-      retval[cont]= *i;
+    const size_t sz= freeze_constraints.size();
+    ID retval(sz);
+    int cont= 0;
+    for(std::map<int, std::set<int> >::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++, cont++)
+      {
+	const int tag= i->first;
+	retval[cont]= tag;
+      }
+    return retval;
+  }
+
+//! @brief Returns a vector with the constraints identifiers. 
+std::vector<XC::ID> XC::Node::get_constraints_tags(void) const
+  {
+    const size_t sz= freeze_constraints.size();
+    std::vector<ID> retval(sz);
+    std::deque<int> tmp;
+    int conti= 0;
+    for(std::map<int, std::set<int> >::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++, conti++)
+      {
+	const std::set<int> &intSet= i->second;
+	XC::ID tmp(intSet.size());
+	int contj= 0;
+        for(std::set<int>::const_iterator j= intSet.begin();j!=intSet.end();j++, contj++)
+          tmp[contj]= (*j);
+	retval[conti]= tmp;
+      }
     return retval;
   }
 
 //! @brief Sets the constraints identifiers. 
-void XC::Node::set_id_constraints(const ID &constraints)
+void XC::Node::set_id_constraints(const ID &nodeLockerTags, const std::vector<ID> &constraintTags)
   {
-    const int sz= constraints.Size();
-    for(int i= 0;i<sz;i++)
-      freeze_constraints.insert(constraints(i));
+    const int sz= nodeLockerTags.Size();
+    if(sz>0)
+      {
+	for(int i= 0; i<sz; i++)
+	  {
+	    int nodeLockerTag= nodeLockerTags[i];
+	    const ID &cTags= constraintTags[i];
+	    std::set<int> tmp;
+	    const int numConstraints= cTags.Size();
+	    for(int j= 0; j<numConstraints; j++)
+	      tmp.insert(cTags[j]);
+	    freeze_constraints[nodeLockerTag]= tmp;
+	  }
+      }
+  }
+
+//! @brief Returns true if the constraint pointer is a single freedom
+//! constraint contained in freeze_constraints.
+bool XC::Node::is_a_freeze_constraint(const ContinuaReprComponent *ptr) const
+  {
+    bool retval= false;
+    const SFreedom_Constraint *sfConstraint= dynamic_cast<const SFreedom_Constraint *>(ptr);
+    if(sfConstraint)
+      {
+        if(!freeze_constraints.empty())
+          {
+            for(std::map<int, std::set<int> >::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++)
+	      {
+		const int nodeLockerTag= i->first;
+		Domain *dom= this->getDomain();
+		if(dom)
+		  {
+		    ConstrContainer &constrContainer= dom->getConstraints();
+		    NodeLocker *locker= constrContainer.getNodeLocker(nodeLockerTag, true);
+		    if(locker)
+		      {
+			const std::set<int> &cTags= i->second;
+			for(std::set<int>::const_iterator j= cTags.begin(); j!= cTags.end(); j++)
+			  {
+			    const int constraintTag= sfConstraint->getTag();
+			    const bool exists= locker->hasSPWithTag(constraintTag);
+			    if(exists)
+			      {
+			        const SFreedom_Constraint *tmp= locker->getSFreedomConstraint(constraintTag);
+				if(tmp==sfConstraint)
+				  {
+				    retval= true;
+				    break;
+				  }
+			      }
+			  }
+		      }
+		  }
+		if(retval)
+		  break;
+	      }
+	  }
+      }
+    return retval;
   }
 
 //! @brief Deletes the constraint over the node DOFs
 //! previously created by the freeze method.
-void XC::Node::melt_if_alive(NodeLocker *locker)
+void XC::Node::melt_if_alive(void)
   {
-    if(isAlive())
+    // Check if fixed by others than freeze constraints.
+    if(!this->isFixedOnlyByFreezeConstraints())
       {
-        if(!freeze_constraints.empty())
-          {
-            for(std::set<int>::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++)
-              locker->removeSFreedom_Constraint(*i);
-            freeze_constraints.clear();
-	    reaction.Zero();
-          }
+	for(std::map<int, std::set<int> >::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++)
+	  {
+	    const int nodeLockerTag= i->first;
+	    Domain *dom= this->getDomain();
+	    if(dom)
+	      {
+		ConstrContainer &constrContainer= dom->getConstraints();
+		NodeLocker *locker= constrContainer.getNodeLocker(nodeLockerTag, true);
+		if(locker)
+		  {
+		    const std::set<int> &cTags= i->second;
+		    for(std::set<int>::const_iterator j= cTags.begin(); j!= cTags.end(); j++)
+		      {
+			const bool exists= locker->hasSPWithTag(*j);
+			if(exists)
+			  locker->removeSFreedom_Constraint(*j);
+		      }
+		  }
+	      }
+	  }
+	freeze_constraints.clear();
+	reaction.Zero();
       }
   }
 
@@ -1705,7 +1838,10 @@ int XC::Node::sendData(Communicator &comm)
     res+=comm.sendMovable(disp,getDbTagData(),CommMetaData(13));
     res+=comm.sendMovable(vel,getDbTagData(),CommMetaData(14));
     res+=comm.sendMovable(accel,getDbTagData(),CommMetaData(15));
-    res+= comm.sendID(get_id_constraints(),getDbTagData(),CommMetaData(16));
+    const ID nodeLockersTags= get_node_lockers_tags();
+    res+= comm.sendID(nodeLockersTags,getDbTagData(),CommMetaData(16));
+    std::vector<ID> constraintsTags= get_constraints_tags();
+    res+= comm.sendIDs(constraintsTags, getDbTagData(),CommMetaData(17));
     return res;
   }
 
@@ -1726,9 +1862,11 @@ int XC::Node::recvData(const Communicator &comm)
     res+= comm.receiveMovable(disp,getDbTagData(),CommMetaData(13));
     res+= comm.receiveMovable(vel,getDbTagData(),CommMetaData(14));
     res+= comm.receiveMovable(accel,getDbTagData(),CommMetaData(15));
-    ID tmp;
-    res+= comm.receiveID(tmp,getDbTagData(),CommMetaData(16));
-    set_id_constraints(tmp);
+    ID nodeLockersTags;
+    res+= comm.receiveID(nodeLockersTags,getDbTagData(),CommMetaData(16));
+    std::vector<ID> constraintsTags;
+    res+= comm.receiveIDs(constraintsTags, getDbTagData(),CommMetaData(17));
+    set_id_constraints(nodeLockersTags, constraintsTags);
     setup_matrices(theMatrices,numberDOF);
     return res;
   }

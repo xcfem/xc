@@ -144,9 +144,11 @@ class Node: public MeshComponent
 
     mutable std::set<ContinuaReprComponent *> connected; //!< Components (elements, constraints,...) that are connected with this node.
 
-    std::set<int> freeze_constraints;//!< Tags of the constraints created by freeze() method.
-    const ID &get_id_constraints(void) const;
-    void set_id_constraints(const ID &);
+    std::map<int, std::set<int> > freeze_constraints;//!< Tags of the constraints created by freeze() method.
+    ID get_node_lockers_tags(void) const;
+    std::vector<ID> get_constraints_tags(void) const;
+    void set_id_constraints(const ID &, const std::vector<ID> &);
+    bool is_a_freeze_constraint(const ContinuaReprComponent *) const;
     
     Matrix get_element_stiff(const ElementConstPtrSet &,bool initial) const;
     Matrix get_constraints_stiff(void) const;
@@ -194,10 +196,11 @@ class Node: public MeshComponent
     const bool isAlive(void) const;
     const bool isFrozen(void) const;
     const bool isFree(void) const;
+    const bool isFixedOnlyByFreezeConstraints(void) const;
     void kill(void);
     void alive(void);
     void freeze_if_dead(NodeLocker *locker);
-    void melt_if_alive(NodeLocker *locker);
+    void melt_if_alive(void);
 
     SFreedom_Constraint *fix(const SFreedom_Constraint &);
     void fix(const std::vector<int> &, const std::vector<double> &);

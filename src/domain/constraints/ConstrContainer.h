@@ -137,8 +137,8 @@ class ConstrContainer: public MeshComponentContainer
     virtual Constraint *getConstraint(int tag);
     LoadPattern *getLoadPattern(const int &);
     const LoadPattern *getLoadPattern(const int &) const;
-    NodeLocker *getNodeLocker(const int &);
-    const NodeLocker *getNodeLocker(const int &) const;
+    NodeLocker *getNodeLocker(const int &, bool silent= false);
+    const NodeLocker *getNodeLocker(const int &, bool silent= false) const;
 
      // methods to update the domain
     virtual void applyLoad(double pseudoTime);

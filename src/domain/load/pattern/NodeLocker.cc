@@ -189,6 +189,35 @@ int XC::NodeLocker::getNumSPs(void) const
     return retval;
   }
 
+//! @brief Returns true if it contains a single freedom constraint
+//! with the identifier passes as parameter.
+bool XC::NodeLocker::hasSPWithTag(const int &tag) const
+  {
+    bool retval= false;
+    if(theSPs)
+      {
+	const TaggedObject *tmp= theSPs->getComponentPtr(tag);
+	if(tmp)
+	  retval= true;
+      }
+    return retval;
+  }
+
+//! @brief Return the constraint identified by the tag argument.
+const XC::SFreedom_Constraint *XC::NodeLocker::getSFreedomConstraint(const int &tag) const
+  {
+    const SFreedom_Constraint *retval= nullptr;
+    if(theSPs)
+      {
+	const TaggedObject *tmp= theSPs->getComponentPtr(tag);
+	if(tmp)
+	  {
+	    retval= dynamic_cast<const SFreedom_Constraint *>(tmp);
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Deletes all constraints.
 void XC::NodeLocker::clearAll(void)
   {

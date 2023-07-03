@@ -120,6 +120,8 @@ class Communicator
     int receiveVector(Vector &v,DbTagData &, const CommMetaData &) const;
     int sendVectors(std::vector<Vector> &,DbTagData &, const CommMetaData &);
     int receiveVectors(std::vector<Vector> &v,DbTagData &, const CommMetaData &) const;
+    int sendIDs(std::vector<ID> &,DbTagData &, const CommMetaData &);
+    int receiveIDs(std::vector<ID> &v,DbTagData &, const CommMetaData &) const;
     int sendVector(const std::vector<double> &,DbTagData &, const CommMetaData &);
     int receiveVector(std::vector<double> &v,DbTagData &, const CommMetaData &) const;
     int sendVectorPtr(Vector *ptr,DbTagData &, const ArrayCommMetaData &);
