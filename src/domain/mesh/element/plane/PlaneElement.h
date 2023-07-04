@@ -325,10 +325,7 @@ std::string XC::PlaneElement<NNODES, PhysProp>::orientation(const Pos3d &vPoint,
   }
 
 
-//! @brief Returns a lado of the element. 
-// Redefine for elements with more than two nodes by face.
-//! @tparam NNODES number of nodes.
-//! @tparam PhysProp material properties.
+//! @brief Returns a side of the element. 
 template <int NNODES,class PhysProp>
 Segment3d XC::PlaneElement<NNODES, PhysProp>::getSide(const size_t &i,bool initialGeometry) const
   {
