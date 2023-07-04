@@ -41,6 +41,7 @@
 #include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/BidimStrainLoad.h"
+#include "domain/load/plane/QuadStrainLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
 #include "domain/load/SurfaceLoad.h"
 #include "domain/load/pattern/LoadPattern.h"

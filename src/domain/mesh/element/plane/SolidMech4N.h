@@ -87,8 +87,12 @@ class SolidMech4N: public QuadBase4N<SolidMech2D>
 
     const QuadRawLoad *vector2dRawLoadLocal(const std::vector<Vector> &);
     const QuadRawLoad *vector2dRawLoadGlobal(const std::vector<Vector> &);
+    void strainLoad(const Matrix &);
     
     void checkElem(void);
+    
+    double getMeanInternalForce(const std::string &) const;
+    double getMeanInternalDeformation(const std::string &) const;
   };
 } // end of XC namespace
 

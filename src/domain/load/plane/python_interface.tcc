@@ -66,6 +66,9 @@ class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStr
   .def("setStrainComp",&XC::BidimStrainLoad::setStrainComp)
   ;
 
+class_<XC::QuadStrainLoad, bases<XC::BidimStrainLoad>, boost::noncopyable >("QuadStrainLoad", no_init)
+  ;
+
 class_<XC::ShellStrainLoad, bases<XC::BidimStrainLoad>, boost::noncopyable >("ShellStrainLoad", no_init)
   ;
 

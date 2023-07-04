@@ -57,6 +57,8 @@ XC::ElementalLoad *XC::process_element_load(XC::LoadPattern *lp,int &tag_el,cons
       retval= new_elem_load<ShellUniformLoad>(lp,tag_el);
     else if(loadType == "bidim_strain_load")
       retval= new_elem_load<BidimStrainLoad>(lp,tag_el);
+    else if(loadType == "quad_strain_load")
+      retval= new_elem_load<QuadStrainLoad>(lp,tag_el);
     else if(loadType == "shell_strain_load")
       retval= new_elem_load<ShellStrainLoad>(lp,tag_el);
     else if(loadType == "truss_temp_load")
