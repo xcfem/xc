@@ -62,6 +62,7 @@
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
 #include "domain/load/plane/QuadRawLoad.h"
+#include "domain/load/plane/QuadStrainLoad.h"
 
 //! @brief Default constructor.
 XC::SolidMech4N::SolidMech4N(int tag, int classTag, const SolidMech2D &pp)
@@ -165,6 +166,47 @@ const XC::QuadRawLoad *XC::SolidMech4N::vector2dRawLoadGlobal(const std::vector<
                 << " was expected." << std::endl;
     return retval;
   }
+
+//! @brief Defines a strain load on this element.
+//! 
+void XC::SolidMech4N::strainLoad(const Matrix &strains)
+  {
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
+        static ID eTags(1);
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
+        LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
+        if(lp)
+          {
+            QuadStrainLoad *tmp= new QuadStrainLoad(loadTag,eTags);
+            tmp->setStrains(strains);
+            if(tmp)
+              {
+                tmp->set_owner(this);
+                lp->addElementalLoad(tmp);
+              }
+            else
+              std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; can't create load." << std::endl;
+          }
+        else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; there is no current load pattern."
+                    << " Load ignored." << std::endl; 
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mdeler not defined." << std::endl;
+  }
+
+double XC::SolidMech4N::getMeanInternalForce(const std::string &code) const
+  { return physicalProperties.getMeanInternalForce(code); }
+
+double XC::SolidMech4N::getMeanInternalDeformation(const std::string &code) const
+  { return physicalProperties.getMeanInternalDeformation(code); }
 
 //! @brief Send object members through the communicator argument.
 int XC::SolidMech4N::sendData(Communicator &comm)
