@@ -370,7 +370,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
   {
     double retval= 0.0;
     const Vector &e= getMeanGeneralizedStrain(); //generalized strains vector.
-    const ResponseId &code= (*this)[0]->getType();
+    const ResponseId &code= (*this)[0]->getResponseType();
     const int order= code.Size();
     for(int i= 0;i<order;i++)
       if(code(i) == defID)
@@ -384,7 +384,7 @@ template <class MAT>
 XC::Vector MaterialVector<MAT>::getGeneralizedStrainAtGaussPoints(const int &defID) const
   {
     const size_t nMat= this->size();
-    const ResponseId &code= (*this)[0]->getType();
+    const ResponseId &code= (*this)[0]->getResponseType();
     const int order= code.Size();
     Vector retval(nMat);
     for(size_t i= 0;i<nMat;i++)
@@ -405,7 +405,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
   {
     double retval= 0.0;
     const Vector &f= getMeanGeneralizedStress(); //Vector de esfuerzos.
-    const ResponseId &code= (*this)[0]->getType();
+    const ResponseId &code= (*this)[0]->getResponseType();
     const int order= code.Size();
     for(int i= 0;i<order;i++)
       if(code(i) == defID)
@@ -419,7 +419,7 @@ template <class MAT>
 XC::Vector MaterialVector<MAT>::getGeneralizedStressAtGaussPoints(const int &defID) const
   {
     const size_t nMat= this->size();
-    const ResponseId &code= (*this)[0]->getType();
+    const ResponseId &code= (*this)[0]->getResponseType();
     const int order= code.Size();
     Vector retval(nMat);
     for(size_t i= 0;i<nMat;i++)
@@ -439,7 +439,7 @@ Matrix MaterialVector<MAT>::getGeneralizedStress(const int &defID) const
   {
     const size_t nMat= this->size();
     Matrix retval(nMat,1);
-    const ResponseId &code= (*this)[0]->getType();
+    const ResponseId &code= (*this)[0]->getResponseType();
     const int order= code.Size();
     for(size_t i= 0;i<nMat;i++)
       {
@@ -458,7 +458,7 @@ Matrix MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
   {
     const size_t nMat= this->size();
     Matrix retval(nMat,1);
-    const ResponseId &code= (*this)[0]->getType();
+    const ResponseId &code= (*this)[0]->getResponseType();
     const int order= code.Size();
     for(size_t i= 0;i<nMat;i++)
       {
