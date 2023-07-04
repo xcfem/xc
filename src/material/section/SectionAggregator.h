@@ -134,7 +134,7 @@ class SectionAggregator: public PrismaticBarCrossSection
     int revertToStart(void);
  
     SectionForceDeformation *getCopy(void) const;
-    const ResponseId &getType(void) const;
+    const ResponseId &getResponseType(void) const;
     int getOrder(void) const;
 
     int sendSelf(Communicator &);

@@ -329,7 +329,7 @@ XC::SectionForceDeformation* XC::Bidirectional::getCopy(void) const
   }
 
 //! @brief Get material type.
-const XC::ResponseId &XC::Bidirectional::getType(void) const
+const XC::ResponseId &XC::Bidirectional::getResponseType(void) const
   { return RespBidirectional; }
 
 int XC::Bidirectional::getOrder(void) const

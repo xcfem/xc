@@ -234,7 +234,7 @@ int XC::GenericSection1d::revertToStart ()
 //!
 //! Returns the section ID code that indicates the type of response quantity 
 //! returned by this instance of GenericSection1D.
-const XC::ResponseId &XC::GenericSection1d::getType(void) const
+const XC::ResponseId &XC::GenericSection1d::getResponseType(void) const
   {
     c(0)= code;
     return c;

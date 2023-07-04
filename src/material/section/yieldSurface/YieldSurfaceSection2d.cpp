@@ -229,7 +229,7 @@ const XC::Matrix &XC::YieldSurfaceSection2d::getSectionFlexibility(void) const
     return fs;
   }
 
-const XC::ResponseId &XC::YieldSurfaceSection2d::getType(void) const
+const XC::ResponseId &XC::YieldSurfaceSection2d::getResponseType(void) const
   { return RespElasticSection2d; }
 
 int XC::YieldSurfaceSection2d::getOrder(void) const

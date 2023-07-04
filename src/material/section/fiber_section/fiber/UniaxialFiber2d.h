@@ -100,7 +100,7 @@ class UniaxialFiber2d: public UniaxialFiber
 
     Fiber *getCopy(void) const;
     int getOrder(void) const;
-    const ResponseId &getType(void) const;
+    const ResponseId &getResponseType(void) const;
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

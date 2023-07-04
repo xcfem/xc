@@ -107,7 +107,7 @@ class Fiber: public TaggedObject, public MovableObject
     
     virtual Fiber *getCopy(void) const= 0;
     virtual int getOrder(void) const= 0;
-    virtual const ResponseId &getType(void) const= 0;
+    virtual const ResponseId &getResponseType(void) const= 0;
 
     virtual const bool isDead(void) const
       { return dead; }

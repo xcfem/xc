@@ -226,7 +226,7 @@ XC::SectionForceDeformation *XC::FiberSectionShear2d::getCopy(void) const
   { return new FiberSectionShear2d(*this); }
 
 //! @brief Section stiffness contribution response identifiers.
-const XC::ResponseId &XC::FiberSectionShear2d::getType(void) const
+const XC::ResponseId &XC::FiberSectionShear2d::getResponseType(void) const
   { return RespFiberSectionSh2d; }
 
 int XC::FiberSectionShear2d::getOrder(void) const
@@ -344,7 +344,7 @@ int XC::FiberSectionShear2d::getVariable(int variableID, double &info)
     const int order= getOrder();
 
     const Vector &e= getSectionDeformation();
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
 
     switch (variableID)
       {

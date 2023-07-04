@@ -117,7 +117,7 @@ const XC::SectionGeometry *XC::SectionRepres::getGeom(void) const
 //! @brief Printing...
 void XC::SectionRepres::Print(std::ostream &s, int flag) const
   {
-    s << "\nSection representation type: " << getType();
+    s << "\nSection representation type: " << getType() << std::endl;
   }
 
 

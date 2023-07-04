@@ -218,7 +218,7 @@ int XC::GenericSectionNd::revertToStart()
 
 //! @brief Returns the section ID code that indicates the type
 //! of response quantities returned by this instance of GenericSectionND.
-const XC::ResponseId &XC::GenericSectionNd::getType(void) const
+const XC::ResponseId &XC::GenericSectionNd::getResponseType(void) const
   { return *code; }
 
 //! @brief Returns the result of invoking getOrder() on the NDMaterial.

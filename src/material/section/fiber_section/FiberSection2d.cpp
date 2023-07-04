@@ -159,11 +159,11 @@ const XC::Matrix &XC::FiberSection2d::getInitialTangent(void) const
 XC::SectionForceDeformation *XC::FiberSection2d::getCopy(void) const
   { return new FiberSection2d(*this); }
 
-const XC::ResponseId &XC::FiberSection2d::getType(void) const
+const XC::ResponseId &XC::FiberSection2d::getResponseType(void) const
   { return RespElasticSection2d; }
 
 int XC::FiberSection2d::getOrder(void) const
-  { return getType().Size(); }
+  { return getResponseType().Size(); }
 
 //! @brief Returns the section to its last committed state.
 int XC::FiberSection2d::revertToLastCommit(void)
@@ -237,7 +237,7 @@ int XC::FiberSection2d::recvSelf(const Communicator &comm)
 void XC::FiberSection2d::Print(std::ostream &s, int flag) const
   {
     s << "\nFiberSection2d, tag: " << this->getTag() << std::endl;
-    s << "\tSection code: " << getType();
+    s << "\tSection code: " << getResponseType();
     if(flag == 1)
       fibers.Print(s,flag);
   }

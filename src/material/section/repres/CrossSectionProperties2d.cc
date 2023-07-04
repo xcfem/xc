@@ -83,7 +83,7 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeforma
   : CrossSectionProperties1d(section), g(1.0), i(0.0), alpha(0)
   {
     const Matrix &sectTangent= section.getInitialTangent();
-    const ResponseId &sectCode= section.getType();
+    const ResponseId &sectCode= section.getResponseType();
     for(int i=0; i<sectCode.Size(); i++)
       {
 	int code = sectCode(i);

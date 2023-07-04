@@ -96,7 +96,7 @@ XC::SectionForceDeformation*  XC::ElasticMembranePlateSection::getCopy(void) con
 
 //! @brief Returns the abels of the DOFs for which the elements
 //! adds stiffness.
-const XC::ResponseId &XC::ElasticMembranePlateSection::getType(void) const 
+const XC::ResponseId &XC::ElasticMembranePlateSection::getResponseType(void) const 
   { return RespShellMat; }
 
 //! @brief Return the cross-section stress resultant.

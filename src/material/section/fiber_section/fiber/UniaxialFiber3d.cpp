@@ -172,7 +172,7 @@ XC::Fiber *XC::UniaxialFiber3d::getCopy(void) const
 int XC::UniaxialFiber3d::getOrder(void) const
   { return 3; }
 
-const XC::ResponseId &XC::UniaxialFiber3d::getType(void) const
+const XC::ResponseId &XC::UniaxialFiber3d::getResponseType(void) const
   { return RespFiberSection3d; }
 
 //! @brief Send data through the communicator argument.

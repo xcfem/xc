@@ -74,7 +74,7 @@ XC::CrossSectionProperties1d::CrossSectionProperties1d(const SectionForceDeforma
   : CommandEntity(), MovableObject(0), e(1.0), a(0.0), rho(0)
   {
     const Matrix &sectTangent= section.getInitialTangent();
-    const ResponseId &sectCode= section.getType();
+    const ResponseId &sectCode= section.getResponseType();
     for(int i=0; i<sectCode.Size(); i++)
       {
 	int code = sectCode(i);

@@ -71,7 +71,7 @@ class ElasticPlateSection: public ElasticPlateProto<5>
     ElasticPlateSection(int tag, double E, double nu,double h = 1.0, double rho= 0.0);
     SectionForceDeformation *getCopy(void) const;
 
-    const ResponseId &getType(void) const;
+    const ResponseId &getResponseType(void) const;
 
     const Vector &getStressResultant(void) const;
     const Matrix& getSectionTangent(void) const;

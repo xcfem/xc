@@ -84,8 +84,8 @@ XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,Mater
   : Material(tag,classTag), material_handler(mat_ldr) {}
 
 //! @brief Comma separated internal forces names to with the section contributes with stiffness.
-std::string XC::SectionForceDeformation::getTypeString(void) const
-  { return getType().getString(); }
+std::string XC::SectionForceDeformation::getResponseTypeString(void) const
+  { return getResponseType().getString(); }
 
 //! @brief Adds to the generalized initial strains vector inicial the vector
 //! being passed as parameter.
@@ -325,7 +325,7 @@ double XC::SectionForceDeformation::getSectionDeformation(const int &defID) cons
     double retval= 0.0;
     const int order= getOrder();
     const Vector &e= getSectionDeformation(); //Generalized strain vector.
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     for(int i= 0;i<order;i++)
       if(code(i) == defID)
         retval+= e(i);
@@ -338,7 +338,7 @@ double XC::SectionForceDeformation::getStressResultant(const int &defID) const
     double retval= 0.0;
     const int order= getOrder();
     const Vector &f= getStressResultant(); //Vector de esfuerzos.
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     for(int i= 0;i<order;i++)
       if(code(i) == defID)
         retval+= f(i);

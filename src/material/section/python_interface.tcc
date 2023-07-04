@@ -27,7 +27,7 @@ class_<XC::SectionForceDeformation, XC::SectionForceDeformation *, bases<XC::Mat
   .add_property("rho",&XC::SectionForceDeformation::getRho,"Return the material density.")
   .add_property("linearRho",&XC::SectionForceDeformation::getLinearRho,"Return the material linear density (mass/lengt).")
   .add_property("arealRho",&XC::SectionForceDeformation::getArealRho,"Return the material areal density (mass/surf. area).")
-  .add_property("getType",make_function(&XC::SectionForceDeformation::getType, return_internal_reference<>()),"Returns section type.")
+  .add_property("getResponseType",make_function(&XC::SectionForceDeformation::getResponseType, return_internal_reference<>()),"Returns the type of response of the section.")
   .def("getStressResultantComponent",&XC::SectionForceDeformation::getStressResultantByName)
   .def("getStressResultant",make_function(getStressResultantVector, return_internal_reference<>()))
   .def("getSectionDeformationByName",&XC::SectionForceDeformation::getSectionDeformationByName)

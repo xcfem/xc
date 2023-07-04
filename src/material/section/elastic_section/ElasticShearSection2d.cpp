@@ -91,7 +91,7 @@ const XC::Matrix &XC::ElasticShearSection2d::getInitialFlexibility(void) const
 XC::SectionForceDeformation *XC::ElasticShearSection2d::getCopy(void) const
   { return new ElasticShearSection2d(*this); }
 
-const XC::ResponseId &XC::ElasticShearSection2d::getType(void) const
+const XC::ResponseId &XC::ElasticShearSection2d::getResponseType(void) const
   { return RespElasticShSection2d; }
 
 int XC::ElasticShearSection2d::getOrder(void) const

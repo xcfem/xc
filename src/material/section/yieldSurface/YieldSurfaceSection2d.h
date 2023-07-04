@@ -87,7 +87,7 @@ class YieldSurfaceSection2d: public PrismaticBarCrossSection
     const Matrix &getSectionTangent(void) const;
     const Matrix &getSectionFlexibility(void) const;
   
-    const ResponseId &getType(void) const;
+    const ResponseId &getResponseType(void) const;
     int getOrder(void) const;
   
     int sendSelf(Communicator &);

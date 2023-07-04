@@ -121,7 +121,7 @@ XC::SectionForceDeformation *XC::FiberSection3d::getCopy(void) const
   { return new FiberSection3d(*this); }
 
 //! @brief Returns the type.
-const XC::ResponseId &XC::FiberSection3d::getType(void) const
+const XC::ResponseId &XC::FiberSection3d::getResponseType(void) const
   { return RespFiberSection3d; }
 
 int XC::FiberSection3d::getOrder(void) const
@@ -159,7 +159,7 @@ void XC::FiberSection3d::Print(std::ostream &s, int flag) const
     else
       {
         s << "\nFiberSection3d, tag: " << getTag() << std::endl;
-        s << "\tSection code: " << getType();
+        s << "\tSection code: " << getResponseType();
 
         if(flag == 1)
           fibers.Print(s,flag);

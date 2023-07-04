@@ -189,7 +189,7 @@ XC::SectionForceDeformation *XC::ElasticSection2d::getCopy(void) const
  \right]
  \f]
 */
-const XC::ResponseId &XC::ElasticSection2d::getType(void) const
+const XC::ResponseId &XC::ElasticSection2d::getResponseType(void) const
   { return RespElasticSection2d; }
 
 //! @brief Return 3.

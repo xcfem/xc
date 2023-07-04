@@ -62,7 +62,7 @@ void XC::AggregatorAdditions::putMatCodes(const ResponseId &codes)
   { matCodes= codes; }
 
 //! @brief Response identifiers for material stiffness contributions.
-void XC::AggregatorAdditions::getType(ResponseId &retval,const size_t &offset) const
+void XC::AggregatorAdditions::getResponseType(ResponseId &retval,const size_t &offset) const
   {
     const size_t n= size();
     for( size_t i=0;i<n;i++)

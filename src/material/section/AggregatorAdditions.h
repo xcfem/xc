@@ -62,7 +62,7 @@ class AggregatorAdditions: public DqUniaxialMaterial
 
     void putMatCodes(const ResponseId &codes);
 
-    void getType(ResponseId &retval,const size_t &offset) const;
+    void getResponseType(ResponseId &retval,const size_t &offset) const;
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

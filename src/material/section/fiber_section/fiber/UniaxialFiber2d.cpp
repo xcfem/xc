@@ -148,7 +148,7 @@ XC::Fiber *XC::UniaxialFiber2d::getCopy(void) const
 int XC::UniaxialFiber2d::getOrder(void) const
   { return 2; }
 
-const XC::ResponseId &XC::UniaxialFiber2d::getType(void) const
+const XC::ResponseId &XC::UniaxialFiber2d::getResponseType(void) const
   { return RespElasticSection2d; }
 
 //! @brief Send data through the communicator argument.

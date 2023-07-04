@@ -87,7 +87,7 @@ class ElasticShearSection3d: public BaseElasticSection3d
     const Matrix &getInitialFlexibility(void) const;
   
     SectionForceDeformation *getCopy(void) const;
-    const ResponseId &getType(void) const;
+    const ResponseId &getResponseType(void) const;
     int getOrder(void) const;
   
     int sendSelf(Communicator &);

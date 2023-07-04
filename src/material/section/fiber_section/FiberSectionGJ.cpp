@@ -114,7 +114,7 @@ const XC::Matrix &XC::FiberSectionGJ::getInitialTangent(void) const
 XC::SectionForceDeformation *XC::FiberSectionGJ::getCopy(void) const
   { return new FiberSectionGJ(*this); }
 
-const XC::ResponseId &XC::FiberSectionGJ::getType(void) const
+const XC::ResponseId &XC::FiberSectionGJ::getResponseType(void) const
   { return RespElasticSection3d; }
 
 int XC::FiberSectionGJ::getOrder(void) const
@@ -146,7 +146,7 @@ int XC::FiberSectionGJ::recvSelf(const Communicator &)
 void XC::FiberSectionGJ::Print(std::ostream &s, int flag) const
   {
     s << "\nFiberSectionGJ, tag: " << this->getTag() << std::endl;
-    s << "\tSection code: " << getType();
+    s << "\tSection code: " << getResponseType();
     s << "\tTorsional Stiffness: " << GJ << std::endl;
 
     if(flag == 1)

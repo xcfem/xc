@@ -234,7 +234,7 @@ int XC::MembranePlateFiberSection::getOrder(void) const
 
 //! @brief Returns the labels of the DOFs for which the element
 //! adds (assembles) stiffness.
-const XC::ResponseId &XC::MembranePlateFiberSection::getType(void) const 
+const XC::ResponseId &XC::MembranePlateFiberSection::getResponseType(void) const 
   { return RespShellMat; }
 
 

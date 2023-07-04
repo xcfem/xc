@@ -80,7 +80,7 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(vo
 const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plane) const
   {
     const int order= getOrder();
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     return plane.getDeformation(order,code);
   }
 
@@ -115,7 +115,7 @@ Pos2d XC::PrismaticBarCrossSection::getCenterOfMass(void) const
 bool XC::PrismaticBarCrossSection::hayAxil(const double &tol) const
   {
     bool retval= false;
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     if(code.hasResponse(SECTION_RESPONSE_P))
       retval= std::abs(getStressResultant(SECTION_RESPONSE_P))>=tol;
     return retval;
@@ -183,7 +183,7 @@ Vector2d XC::PrismaticBarCrossSection::getVDirWeakAxis(void) const
 bool XC::PrismaticBarCrossSection::isSubjectedToBending(const double &tol) const
   {
     bool retval= false;
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     if(code.hasResponse(SECTION_RESPONSE_MY))
       retval= std::abs(getStressResultant(SECTION_RESPONSE_MY))>=tol;
     else if(code.hasResponse(SECTION_RESPONSE_MZ))
@@ -195,7 +195,7 @@ bool XC::PrismaticBarCrossSection::isSubjectedToBending(const double &tol) const
 bool XC::PrismaticBarCrossSection::isSubjectedToShear(const double &tol) const
   {
     bool retval= false;
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     if(code.hasResponse(SECTION_RESPONSE_VY))
       retval= std::abs(getStressResultant(SECTION_RESPONSE_VY))>=tol;
     else if(code.hasResponse(SECTION_RESPONSE_VZ))
@@ -207,7 +207,7 @@ bool XC::PrismaticBarCrossSection::isSubjectedToShear(const double &tol) const
 bool XC::PrismaticBarCrossSection::hayTorsor(const double &tol) const
   {
     bool retval= false;
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     if(code.hasResponse(SECTION_RESPONSE_T))
       retval= std::abs(getStressResultant(SECTION_RESPONSE_T))>=tol;
     return retval;
@@ -222,7 +222,7 @@ Line2d XC::PrismaticBarCrossSection::getNeutralAxis(void) const
 Line2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
   {
     Line2d retval(getCenterOfMass(),Vector2d(1,0));
-    const ResponseId &code= getType();
+    const ResponseId &code= getResponseType();
     if(isSubjectedToBending()) //Direction of the bending moment.
       {
         if(code.hasResponse(SECTION_RESPONSE_MY) && code.hasResponse(SECTION_RESPONSE_MZ))

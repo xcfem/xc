@@ -122,7 +122,7 @@ class MembranePlateFiberSection: public PlateBase
     double getArealRho(void) const;
     void setArealRho(const double &);
     int getOrder(void) const;
-    const ResponseId &getType(void) const;
+    const ResponseId &getResponseType(void) const;
     
     int commitState(void); //swap history variables
     int revertToLastCommit(void); //revert to last saved state

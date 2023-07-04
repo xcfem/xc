@@ -211,7 +211,7 @@ bool XC::PrismaticBarCrossSectionsVector::isTorsion(void) const
     for(const_iterator i= begin();i!=end();i++)
       {
         int order= (*i)->getOrder();
-        const XC::ID &code= (*i)->getType();
+        const ID &code= (*i)->getResponseType();
         for(int j= 0;j<order;j++)
           {
             if(code(j) == SECTION_RESPONSE_T)
@@ -248,7 +248,7 @@ bool XC::PrismaticBarCrossSectionsVector::setSections(const std::vector<Prismati
             exit(-1);
           }
         int order= (*this)[i]->getOrder();
-        const ID &code= (*this)[i]->getType();
+        const ID &code= (*this)[i]->getResponseType();
         for(int j= 0;j<order;j++)
           {
             if(code(j) == SECTION_RESPONSE_T)

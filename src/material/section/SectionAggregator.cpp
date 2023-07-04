@@ -451,17 +451,17 @@ const XC::Vector &XC::SectionAggregator::getStressResultant(void) const
   }
 
 //! @brief Section stiffness contribution response identifiers.
-const XC::ResponseId &XC::SectionAggregator::getType(void) const
+const XC::ResponseId &XC::SectionAggregator::getResponseType(void) const
   {
     int theSectionOrder= 0;
     if(theSection)
       {
-        const XC::ResponseId &secType= theSection->getType();
+        const ResponseId &secType= theSection->getResponseType();
         theSectionOrder= theSection->getOrder();
         for(int i= 0; i < theSectionOrder; i++)
           theCode(i)= secType(i);
       }
-    theAdditions.getType(theCode,theSectionOrder);
+    theAdditions.getResponseType(theCode,theSectionOrder);
     return theCode;
   }
 
@@ -642,7 +642,7 @@ int XC::SectionAggregator::getVariable(int variableID, double &info)
     const int order= getOrder();
 
     const Vector &e= getSectionDeformation();
-    const ResponseId &code= this->getType();
+    const ResponseId &code= this->getResponseType();
 
     switch (variableID)
       {

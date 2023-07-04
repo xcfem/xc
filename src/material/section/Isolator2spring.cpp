@@ -375,7 +375,7 @@ int XC::Isolator2spring::revertToStart(void)
 XC::SectionForceDeformation *XC::Isolator2spring::getCopy(void) const
   { return new Isolator2spring(*this); }
 
-const XC::ResponseId &XC::Isolator2spring::getType(void) const
+const XC::ResponseId &XC::Isolator2spring::getResponseType(void) const
   { return RespIsolator2spring; }
 
 int XC::Isolator2spring::getOrder(void) const

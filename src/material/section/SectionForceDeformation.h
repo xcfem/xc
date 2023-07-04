@@ -157,8 +157,8 @@ class SectionForceDeformation: public Material
     //! by the section. Lets the calling object
     //! (e.g. an Element) know how to interpret the quantites returned by this
     //! object.
-    virtual const ResponseId &getType(void) const= 0;
-    std::string getTypeString(void) const;
+    virtual const ResponseId &getResponseType(void) const= 0;
+    std::string getResponseTypeString(void) const;
     //! @brief Return the number of response quantities provided by the section.
     virtual int getOrder(void) const = 0;
 
