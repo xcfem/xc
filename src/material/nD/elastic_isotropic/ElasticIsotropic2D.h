@@ -42,8 +42,9 @@ class ElasticIsotropic2D: public ElasticIsotropicMaterial
   public:
     ElasticIsotropic2D(int tag, int classTag, double E, double nu, double rho);
     ElasticIsotropic2D(int tag, int classTag);
-
+    
     int getOrder (void) const;
+    const ResponseId &getResponseType(void) const;
   };
 } // end of XC namespace
 

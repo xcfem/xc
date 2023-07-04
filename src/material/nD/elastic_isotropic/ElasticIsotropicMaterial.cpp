@@ -300,6 +300,13 @@ const XC::Vector &XC::ElasticIsotropicMaterial::getStrain(void) const
 void XC::ElasticIsotropicMaterial::zeroInitialGeneralizedStrain(void)
   { epsilon0.Zero(); }
 
+//! @brief Return the initial strain.
+const XC::Vector &XC::ElasticIsotropicMaterial::getInitialGeneralizedStrain(void) const
+  { return epsilon0; }
+
+void XC::ElasticIsotropicMaterial::setInitialGeneralizedStrain(const Vector &eps)
+  { epsilon0= eps; }
+
 //! @brief To accept the current value of the trial strain vector
 //! as being on the solution path. To return \f$0\f$ if
 //! successful, a negative number if not.

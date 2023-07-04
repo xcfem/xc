@@ -33,12 +33,16 @@ class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable
     .add_property("getVonMisesStress", &XC::NDMaterial::getVonMisesStress)
     .def("setTrialStrain",setNDTrialStrain, "Set the trial strains for the material (the order of the components depends on the subclass) [eps_11, eps_22, eps_33, eps_12, eps_23, eps_31].") 
     .def("getStress",make_function(&XC::NDMaterial::getStress,return_internal_reference<>()), "Return the material stresses (the order of the components depends on the subclass) [sigma_11, sigma_22, sigma_33, sigma_12, sigma_23, sigma_31].") 
+    .def("getStrain",make_function(&XC::NDMaterial::getStrain,return_internal_reference<>()), "Return the material strains (the order of the components depends on the subclass) [eps_11, eps_22, eps_33, eps_12, eps_23, eps_31].") 
   ;
 
 class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >("ElasticIsotropicMaterial", no_init)
-    .add_property("rho", &XC::ElasticIsotropicMaterial::getRho, &XC::ElasticIsotropicMaterial::setRho)
-    .add_property("E", &XC::ElasticIsotropicMaterial::getE, &XC::ElasticIsotropicMaterial::setE)
-    .add_property("nu", &XC::ElasticIsotropicMaterial::getnu, &XC::ElasticIsotropicMaterial::setnu)
+  .add_property("rho", &XC::ElasticIsotropicMaterial::getRho, &XC::ElasticIsotropicMaterial::setRho)
+  .add_property("E", &XC::ElasticIsotropicMaterial::getE, &XC::ElasticIsotropicMaterial::setE)
+  .add_property("nu", &XC::ElasticIsotropicMaterial::getnu, &XC::ElasticIsotropicMaterial::setnu)
+  .add_property("initialStrain", make_function(&XC::ElasticIsotropicMaterial::getInitialStrain, return_internal_reference<>()), &XC::ElasticIsotropicMaterial::setInitialStrain, "Get/set the initial strain.")
+  .def("setInitialStrain", &XC::ElasticIsotropicMaterial::setInitialStrain, "Set the value of the initial strain.")
+  .def("getInitialStrain", make_function(&XC::ElasticIsotropicMaterial::getInitialStrain, return_internal_reference<>()), "Return the value of the initial strain.")
   ;
 #include "elastic_isotropic/python_interface.tcc"
 

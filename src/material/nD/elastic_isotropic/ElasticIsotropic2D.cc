@@ -53,6 +53,7 @@
 
 #include <utility/matrix/Matrix.h>
 #include "material/nD/NDMaterialType.h"
+#include "material/section/ResponseId.h"
 
 XC::Matrix XC::ElasticIsotropic2D::D(3,3);
 
@@ -68,4 +69,15 @@ XC::ElasticIsotropic2D::ElasticIsotropic2D(int tag, int classTag)
 
 int XC::ElasticIsotropic2D::getOrder(void) const
   { return 3; }
+
+//! @brief Return the ordering and type of response quantities
+//! returned by this material.
+//!
+//! Return the section ResponseId code that indicates
+//! the ordering and type of response quantities returned
+//! by the material. Lets the calling object
+//! (e.g. an Element) know how to interpret the quantites returned by this
+//! object.
+const XC::ResponseId &XC::ElasticIsotropic2D::getResponseType(void) const
+  { return RespMembraneMat; }
 

@@ -137,6 +137,8 @@ class ElasticIsotropicMaterial: public NDMaterial
     virtual const Vector &getStress(void) const;
     virtual const Vector &getStrain(void) const;
 
+    const Vector &getInitialGeneralizedStrain(void) const;
+    void setInitialGeneralizedStrain(const Vector &);
     void zeroInitialGeneralizedStrain(void);
     virtual int commitState(void);
     virtual int revertToLastCommit(void);

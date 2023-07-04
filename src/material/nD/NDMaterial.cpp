@@ -70,6 +70,7 @@
 #include "utility/matrix/nDarray/straint.h"
 #include "utility/matrix/nDarray/Tensor.h"
 #include "utility/recorder/response/MaterialResponse.h"
+#include "material/section/ResponseId.h"
 
 XC::Matrix XC::NDMaterial::errMatrix(1,1);
 XC::Vector XC::NDMaterial::errVector(1);
@@ -319,6 +320,22 @@ const XC::Tensor &XC::NDMaterial::getTangentTensor(void) const
               << "; not implemented." << std::endl;
     static Tensor errTensor;    
     return errTensor;    
+  }
+
+//! @brief Return the ordering and type of response quantities
+//! returned by this material.
+//!
+//! Return the section ResponseId code that indicates
+//! the ordering and type of response quantities returned
+//! by the material. Lets the calling object
+//! (e.g. an Element) know how to interpret the quantites returned by this
+//! object.
+const XC::ResponseId &XC::NDMaterial::getResponseType(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
+    static ResponseId err;    
+    return err;    
   }
 
 XC::Response* XC::NDMaterial::setResponse(const std::vector<std::string> &argv, Information &matInfo)

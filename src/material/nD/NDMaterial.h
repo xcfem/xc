@@ -71,7 +71,7 @@
 //
 // What: "@(#) NDMaterial.h, revA"
 
-#include <material/Material.h>
+#include "material/Material.h"
 #include "utility/matrix/nDarray/stresst.h"
 
 namespace XC {
@@ -160,6 +160,7 @@ class NDMaterial: public Material
     virtual NDMaterial *getCopy(void) const= 0;
     virtual NDMaterial *getCopy(const std::string &) const= 0;
 
+    virtual const ResponseId &getResponseType(void) const;
     virtual const std::string &getType(void) const = 0;
     virtual int getOrder(void) const = 0;
 
