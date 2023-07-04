@@ -433,7 +433,7 @@ int XC::ForceBeamColumn3d::update(void)
                    for(size_t i=0; i<numSections; i++)
                      {
                        const int order= theSections[i]->getOrder();
-                       const ID &code = theSections[i]->getType();
+                       const ID &code= theSections[i]->getResponseType();
 
                        static Vector Ss;
                        static Vector dSs;
@@ -1062,7 +1062,7 @@ int XC::ForceBeamColumn3d::getInitialFlexibility(Matrix &fe) const
     for(size_t i= 0; i < numSections; i++)
       {
         int order= theSections[i]->getOrder();
-        const ID &code = theSections[i]->getType();
+        const ID &code= theSections[i]->getResponseType();
 
         Matrix fb(workArea, order, NEBD);
 
@@ -1204,7 +1204,7 @@ void XC::ForceBeamColumn3d::compSectionDisplacements(std::vector<Vector> &sectio
         // THIS IS VERY INEFFICIENT ... CAN CHANGE IF RUNS TOO SLOW
         int sectionKey1 = 0;
         int sectionKey2 = 0;
-        const XC::ID &code = theSections[i]->getType();
+        const XC::ID &code= theSections[i]->getResponseType();
         for(int j = 0; j < code.Size(); j++)
           {
             if(code(j) == SECTION_RESPONSE_MZ)
@@ -1571,7 +1571,7 @@ int XC::ForceBeamColumn3d::getResponse(int responseID, Information &eleInfo)
 
     for(size_t i = 0; i < numSections; i++) {
       double x = pts[i]*L;
-      const XC::ID &type = theSections[i]->getType();
+      const ID &type= theSections[i]->getResponseType();
       int order = theSections[i]->getOrder();
       double kappa = 0.0;
       if(x < LIz) {
@@ -1596,7 +1596,7 @@ int XC::ForceBeamColumn3d::getResponse(int responseID, Information &eleInfo)
 
     for(size_t i = numSections-1; i >= 0; i--) {
       double x = pts[i]*L;
-      const XC::ID &type = theSections[i]->getType();
+      const ID &type= theSections[i]->getResponseType();
       int order = theSections[i]->getOrder();
       double kappa = 0.0;
       if(x > LIz) {

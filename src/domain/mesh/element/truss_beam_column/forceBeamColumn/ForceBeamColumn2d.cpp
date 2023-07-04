@@ -448,7 +448,7 @@ int XC::ForceBeamColumn2d::update(void)
                     for(size_t i=0;i<numSections; i++)
                       {
                         const int order= theSections[i]->getOrder();
-                        const ID &code = theSections[i]->getType();
+                        const ID &code = theSections[i]->getResponseType();
                         static Vector Ss;
                         static Vector dSs;
                         static Vector dvs;
@@ -981,7 +981,7 @@ int XC::ForceBeamColumn2d::getInitialFlexibility(Matrix &fe) const
     for(size_t i = 0; i < numSections; i++)
       {
         int order      = theSections[i]->getOrder();
-        const XC::ID &code = theSections[i]->getType();
+        const ID &code = theSections[i]->getResponseType();
     
         Matrix fb(workArea, order, NEBD);
     
@@ -1084,7 +1084,7 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
       {
         // THIS IS VERY INEFFICIENT ... CAN CHANGE LATER
         int sectionKey = 0;
-        const XC::ID &code = theSections[i]->getType();
+        const ID &code = theSections[i]->getResponseType();
         int ii;
         for(ii = 0; ii < code.Size(); ii++)
           if(code(ii) == SECTION_RESPONSE_MZ)
@@ -1343,7 +1343,7 @@ int XC::ForceBeamColumn2d::getResponse(int responseID, Information &eleInfo)
             double x = pts[i]*L;
             if(x > LI)
               continue;
-            const XC::ID &type = theSections[i]->getType();
+            const ID &type = theSections[i]->getResponseType();
             int order = theSections[i]->getOrder();
             double kappa = 0.0;
             for(int j = 0; j < order; j++)
@@ -1360,7 +1360,7 @@ int XC::ForceBeamColumn2d::getResponse(int responseID, Information &eleInfo)
             double x = pts[i]*L;
             if(x < LI)
               continue;
-            const XC::ID &type = theSections[i]->getType();
+            const ID &type = theSections[i]->getResponseType();
             int order = theSections[i]->getOrder();
             double kappa = 0.0;
             for(int j = 0; j < order; j++)

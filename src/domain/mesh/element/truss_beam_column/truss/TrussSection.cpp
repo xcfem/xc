@@ -80,7 +80,7 @@ XC::TrussSection::TrussSection(int tag, int dim, int Nd1, int Nd2, SectionForceD
     // get a copy of the material and check we obtained a valid copy
     SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
-    const ID &code = theSection->getType();
+    const ID &code = theSection->getResponseType();
 
     int i;
     for(i = 0; i < order; i++)
@@ -225,7 +225,7 @@ int XC::TrussSection::update(void)
 
     SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
-    const ID &code = theSection->getType();
+    const ID &code = theSection->getResponseType();
 
     Vector e (order);
 
@@ -248,7 +248,7 @@ const XC::Matrix &XC::TrussSection::getTangentStiff(void) const
 
     const SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
-    const ID &code = theSection->getType();
+    const ID &code = theSection->getResponseType();
 
     const Matrix &k = theSection->getSectionTangent();
     double AE = 0.0;
@@ -290,7 +290,7 @@ const XC::Matrix &XC::TrussSection::getInitialStiff(void) const
 
     const SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
-    const ID &code = theSection->getType();
+    const ID &code = theSection->getResponseType();
 
     const Matrix &k = theSection->getInitialTangent();
     double AE = 0.0;
@@ -446,7 +446,7 @@ double XC::TrussSection::getAxialForce(void) const
       {
         const SectionForceDeformation *theSection= physicalProperties[0];
 	const int order= theSection->getOrder();
-	const ID &code= theSection->getType();
+	const ID &code= theSection->getResponseType();
 
 	const Vector &s = theSection->getStressResultant();
 	for(int i = 0; i < order; i++)
@@ -466,7 +466,7 @@ double XC::TrussSection::getInitialStrain(void) const
     double retval= 0.0;
     const SectionForceDeformation *theSection= physicalProperties[0];
     const int order= theSection->getOrder();
-    const ID &code= theSection->getType();
+    const ID &code= theSection->getResponseType();
     const Vector &s= theSection->getInitialSectionDeformation();
     for(int i = 0;i<order;i++)
       {
@@ -593,7 +593,7 @@ void XC::TrussSection::Print(std::ostream &s, int flag) const
 
          const SectionForceDeformation *theSection= physicalProperties[0];
 	 int order = theSection->getOrder();
-	 const ID &code = theSection->getType();
+	 const ID &code = theSection->getResponseType();
 
 	 Vector e(order);
 
@@ -705,7 +705,7 @@ int XC::TrussSection::getResponse(int responseID, Information &eleInformation)
 	  {
 	    strain = this->computeCurrentStrain();
 	    int order = theSection->getOrder();
-	    const ID &code = theSection->getType();
+	    const ID &code = theSection->getResponseType();
    	    Vector e(order);
 
 	    for(int i = 0; i < order; i++)

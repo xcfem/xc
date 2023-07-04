@@ -297,7 +297,7 @@ const XC::Matrix &XC::NLBeamColumn3d::getInitialStiff(void) const
     for(size_t i=0; i<nSections; i++)
       {
         int order= theSections[i]->getOrder();
-        const XC::ID &code= theSections[i]->getType();
+        const ID &code= theSections[i]->getResponseType();
 
         Vector Ss(workArea, order);
         Vector dSs(&workArea[order], order);
@@ -482,7 +482,7 @@ int XC::NLBeamColumn3d::update(void)
         for(size_t i=0; i<nSections; i++)
           {
             int order= theSections[i]->getOrder();
-            const XC::ID &code = theSections[i]->getType();
+            const XC::ID &code= theSections[i]->getResponseType();
 
             Vector Ss(workArea, order);
             Vector dSs(&workArea[order], order);
@@ -1026,7 +1026,7 @@ void XC::NLBeamColumn3d::compSectionDisplacements(std::vector<Vector> &sectionCo
        // THIS IS VERY INEFFICIENT ... CAN CHANGE IF RUNS TOO SLOW
         int sectionKey1 = 0;
         int sectionKey2 = 0;
-        const XC::ID &code = theSections[i]->getType();
+        const ID &code= theSections[i]->getResponseType();
         int j;
         for(j = 0; j < code.Size(); j++)
           {

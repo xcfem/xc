@@ -313,7 +313,7 @@ const XC::Matrix &XC::NLBeamColumn2d::getInitialStiff(void) const
         for(size_t i=0; i<nSections; i++)
           {
             int order= theSections[i]->getOrder();
-            const ID &code = theSections[i]->getType();
+            const ID &code= theSections[i]->getResponseType();
             Matrix fb(workArea, order, NEBD);
             double xL  = xi_pt(i,0);
             double xL1 = xL-1.0;
@@ -500,7 +500,7 @@ int XC::NLBeamColumn2d::update(void)
 		  for(size_t i=0; i<nSections; i++)
 		    {
 		      const int order= theSections[i]->getOrder();
-		      const ID &code = theSections[i]->getType();
+		      const ID &code= theSections[i]->getResponseType();
 
 		      static Vector Ss;
 		      static Vector dSs;
@@ -1048,7 +1048,7 @@ void XC::NLBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectionCo
    {
        // THIS IS VERY INEFFICIENT ... CAN CHANGE LATER
        int sectionKey = 0;
-       const XC::ID &code = theSections[i]->getType();
+       const XC::ID &code= theSections[i]->getResponseType();
        int ii;
        for(ii = 0; ii < code.Size(); ii++)
            if(code(ii) == SECTION_RESPONSE_MZ)

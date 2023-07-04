@@ -97,7 +97,7 @@ int XC::DispBeamColumnNL2d::update(void)
       {
 
       int order = theSections[i]->getOrder();
-      const ID &code = theSections[i]->getType();
+      const ID &code= theSections[i]->getResponseType();
 
       Vector e(workArea, order);
 
@@ -155,7 +155,7 @@ void XC::DispBeamColumnNL2d::getBasicStiff(Matrix &kb, int initial) const
     for(size_t i = 0; i < numSections; i++) {
 
       int order = theSections[i]->getOrder();
-      const ID &code = theSections[i]->getType();
+      const ID &code= theSections[i]->getResponseType();
 
       Matrix ka(workArea, order, 3);
       ka.Zero();
@@ -311,7 +311,7 @@ const XC::Matrix &XC::DispBeamColumnNL2d::getTangentStiff(void)
     for(size_t i = 0; i < numSections; i++) {
 
       int order = theSections[i]->getOrder();
-      const ID &code = theSections[i]->getType();
+      const ID &code= theSections[i]->getResponseType();
 
       double xi6 = 6.0*pts(i,0);
       //double xi6 = 6.0*pts(i,0);
@@ -384,7 +384,7 @@ const XC::Vector &XC::DispBeamColumnNL2d::getResistingForce(void)
     for(size_t i = 0; i < numSections; i++) {
 
       size_t order = theSections[i]->getOrder();
-      const ID &code = theSections[i]->getType();
+      const ID &code= theSections[i]->getResponseType();
 
       double xi6 = 6.0*pts(i,0);
       double zeta = pts(i,0);
@@ -661,7 +661,7 @@ int XC::DispBeamColumnNL2d::getResponse(int responseID, Information &eleInfo)
 	  // Loop over the integration points
 	  for(int i = 0; i < numSections; i++) {
 	    int order = theSections[i]->getOrder();
-	    const ID &code = theSections[i]->getType();
+	    const ID &code= theSections[i]->getResponseType();
 	    //double xi6 = 6.0*pts(i,0);
 	    double xi6 = 6.0*pts[i];
 	    curv(i) = oneOverL*((xi6-4.0)*v(1) + (xi6-2.0)*v(2));
@@ -676,7 +676,7 @@ int XC::DispBeamColumnNL2d::getResponse(int responseID, Information &eleInfo)
 	// Loop over the integration points
 	for(int i = 0; i < numSections; i++) {
 	  int order = theSections[i]->getOrder();
-	  const ID &code = theSections[i]->getType();
+	  const ID &code= theSections[i]->getResponseType();
 	  const Vector &dedh = theSections[i]->getdedh();
 	  for(int j = 0; j < order; j++) {
 	    if (code(j) == SECTION_RESPONSE_MZ)
@@ -739,7 +739,7 @@ int XC::DispBeamColumnNL2d::getResponseSensitivity(int responseID, int gradNumbe
 
     int sectionNum = eleInfo.theInt;
     int order = theSections[sectionNum-1]->getOrder();
-    const ID &code = theSections[sectionNum-1]->getType();
+    const ID &code= theSections[sectionNum-1]->getResponseType();
 
     Vector dsdh(order);
     dsdh = theSections[sectionNum-1]->getStressResultantSensitivity(gradNumber, true);
@@ -901,7 +901,7 @@ const XC::Matrix &XC::DispBeamColumnNL2d::getInitialStiffSensitivity(int gradNum
   for(size_t i = 0; i < numSections; i++) {
     
     int order = theSections[i]->getOrder();
-    const ID &code = theSections[i]->getType();
+    const ID &code= theSections[i]->getResponseType();
   
     Matrix ka(workArea, order, 3);
     ka.Zero();
@@ -992,7 +992,7 @@ const XC::Vector &XC::DispBeamColumnNL2d::getResistingForceSensitivity(int gradN
     {
     
     int order = theSections[i]->getOrder();
-    const ID &code = theSections[i]->getType();
+    const ID &code= theSections[i]->getResponseType();
     
     //double xi6 = 6.0*pts(i,0);
     double xi6 = 6.0*pts(i,0);
@@ -1046,7 +1046,7 @@ const XC::Vector &XC::DispBeamColumnNL2d::getResistingForceSensitivity(int gradN
       double dptLdh = pts(i,0)*dLdh + dptsdh[i]*L;
 
       int order = theSections[i]->getOrder();
-      const ID &code = theSections[i]->getType();
+      const ID &code= theSections[i]->getResponseType();
 
       double xi6 = 6.0*pts(i,0);
       double zeta = pts(i,0);
@@ -1199,7 +1199,7 @@ int XC::DispBeamColumnNL2d::commitSensitivity(int gradNumber, int numGrads)
   for(size_t i = 0; i < numSections; i++) {
     
     int order = theSections[i]->getOrder();
-    const ID &code = theSections[i]->getType();
+    const ID &code= theSections[i]->getResponseType();
     
     Vector e(workArea, order);
     

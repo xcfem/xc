@@ -405,7 +405,7 @@ const XC::Matrix &XC::BeamWithHinges2d::getInitialStiff(void) const
 
         // Get section information
         int order = theSections[i]->getOrder();
-        const ID &code = theSections[i]->getType();
+        const ID &code = theSections[i]->getResponseType();
 
         Vector s(workArea, order);
         Vector ds(&workArea[order], order);
@@ -913,7 +913,7 @@ int XC::BeamWithHinges2d::update(void)
 
             // Get section information
             int order = theSections[i]->getOrder();
-            const XC::ID &code = theSections[i]->getType();
+            const ID &code= theSections[i]->getResponseType();
 
             Vector s(workArea, order);
             Vector ds(&workArea[order], order);

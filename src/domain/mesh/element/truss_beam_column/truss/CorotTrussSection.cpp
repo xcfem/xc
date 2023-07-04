@@ -258,7 +258,7 @@ int XC::CorotTrussSection::update(void)
 
     SectionForceDeformation *theSection= physicalProperties[0];
     int order= theSection->getOrder();
-    const ID &code = theSection->getType();
+    const ID &code= theSection->getResponseType();
 
     static double data[10];
     Vector e(data, order);
@@ -282,8 +282,8 @@ const XC::Matrix &XC::CorotTrussSection::getTangentStiff(void) const
     //
     // Get material tangent
     const SectionForceDeformation *theSection= physicalProperties[0];
-    int order = theSection->getOrder();
-    const ID &code = theSection->getType();
+    int order= theSection->getOrder();
+    const ID &code= theSection->getResponseType();
 
     const Matrix &ks = theSection->getSectionTangent();
     const Vector &s  = theSection->getStressResultant();
@@ -348,7 +348,7 @@ const XC::Matrix &XC::CorotTrussSection::getInitialStiff(void) const
     // Get material tangent
     const SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
-    const ID &code = theSection->getType();
+    const ID &code= theSection->getResponseType();
 
     const Matrix &ks = theSection->getInitialTangent();
 
@@ -468,7 +468,7 @@ double XC::CorotTrussSection::getAxialForce(void) const
     double retval= 0.0;
     const SectionForceDeformation *theSection= physicalProperties[0];
     const int order= theSection->getOrder();
-    const ID &code= theSection->getType();
+    const ID &code= theSection->getResponseType();
     const Vector &s= theSection->getStressResultant();
     for(int i = 0;i<order;i++)
       {
@@ -486,7 +486,7 @@ double XC::CorotTrussSection::getInitialStrain(void) const
     double retval= 0.0;
     const SectionForceDeformation *theSection= physicalProperties[0];
     const int order= theSection->getOrder();
-    const ID &code= theSection->getType();
+    const ID &code= theSection->getResponseType();
     const Vector &s= theSection->getInitialSectionDeformation();
     for(int i = 0;i<order;i++)
       {

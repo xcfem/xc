@@ -229,7 +229,7 @@ int XC::DispBeamColumn3d::update(void)
     for(size_t i = 0; i < numSections; i++)
       {
         int order= theSections[i]->getOrder();
-        const ID &code = theSections[i]->getType();
+        const ID &code= theSections[i]->getResponseType();
 
         Vector e(workArea, order);
 
@@ -282,7 +282,7 @@ const XC::Matrix &XC::DispBeamColumn3d::getTangentStiff(void) const
     for(size_t i = 0; i < numSections; i++)
       {
         int order = theSections[i]->getOrder();
-        const XC::ID &code = theSections[i]->getType();
+        const XC::ID &code= theSections[i]->getResponseType();
 
         Matrix ka(workArea, order, 6);
         ka.Zero();
@@ -414,7 +414,7 @@ const XC::Matrix &XC::DispBeamColumn3d::getInitialBasicStiff(void) const
       {
 
       int order = theSections[i]->getOrder();
-      const XC::ID &code = theSections[i]->getType();
+      const XC::ID &code= theSections[i]->getResponseType();
 
       Matrix ka(workArea, order, 6);
       ka.Zero();
@@ -598,7 +598,7 @@ const XC::Vector &XC::DispBeamColumn3d::getResistingForce(void) const
     for(size_t i = 0; i < numSections; i++) {
 
       int order = theSections[i]->getOrder();
-      const XC::ID &code = theSections[i]->getType();
+      const XC::ID &code= theSections[i]->getResponseType();
 
       double xi6 = 6.0*pts(i,0);
 
@@ -1095,7 +1095,7 @@ const XC::Vector &XC::DispBeamColumn3d::getResistingForceSensitivity(int gradNum
     for(size_t i= 0; i < numSections; i++) {
 
       int order = theSections[i]->getOrder();
-      const XC::ID &code = theSections[i]->getType();
+      const XC::ID &code= theSections[i]->getResponseType();
 
 	    double xi6 = 6.0*pts(i,0);
 	    double wti = wts(i);
@@ -1260,7 +1260,7 @@ int XC::DispBeamColumn3d::commitSensitivity(int gradNumber, int numGrads)
         for(size_t i = 0; i < numSections; i++) {
 
                 int order = theSections[i]->getOrder();
-                const XC::ID &code = theSections[i]->getType();
+                const XC::ID &code= theSections[i]->getResponseType();
 
                 Vector e(workArea, order);
 

@@ -105,7 +105,7 @@ int XC::DispBeamColumn2d::update(void)
     for(size_t i = 0; i < numSections; i++)
       {
       int order = theSections[i]->getOrder();
-      const ID &code = theSections[i]->getType();
+      const ID &code= theSections[i]->getResponseType();
 
       Vector e(workArea, order);
 
@@ -146,7 +146,7 @@ void XC::DispBeamColumn2d::getBasicStiff(Matrix &kb, int initial) const
     for(size_t i = 0; i < numSections; i++)
       {
         const int order = theSections[i]->getOrder();
-        const ID &code = theSections[i]->getType();
+        const ID &code= theSections[i]->getResponseType();
 
       Matrix ka(workArea, order, 3);
       ka.Zero();
@@ -218,7 +218,7 @@ const XC::Matrix &XC::DispBeamColumn2d::getTangentStiff(void) const
       {
 
       int order = theSections[i]->getOrder();
-      const XC::ID &code = theSections[i]->getType();
+      const XC::ID &code= theSections[i]->getResponseType();
 
       Matrix ka(workArea, order, 3);
       ka.Zero();
@@ -316,7 +316,7 @@ const XC::Matrix &XC::DispBeamColumn2d::getInitialBasicStiff(void) const
     for(size_t i= 0;i<numSections;i++) {
 
       int order = theSections[i]->getOrder();
-      const XC::ID &code = theSections[i]->getType();
+      const XC::ID &code= theSections[i]->getResponseType();
 
       Matrix ka(workArea, order, 3);
       ka.Zero();
@@ -396,7 +396,7 @@ const XC::Vector &XC::DispBeamColumn2d::getResistingForce(void) const
     for(size_t i= 0; i < numSections; i++) {
 
       int order = theSections[i]->getOrder();
-      const ID &code = theSections[i]->getType();
+      const ID &code= theSections[i]->getResponseType();
 
       double xi6 = 6.0*pts(i,0);
 
@@ -812,7 +812,7 @@ const XC::Vector &XC::DispBeamColumn2d::getResistingForceSensitivity(int gradNum
     for(size_t i= 0; i < numSections; i++) {
 
       int order = theSections[i]->getOrder();
-      const XC::ID &code = theSections[i]->getType();
+      const XC::ID &code= theSections[i]->getResponseType();
 
 	    double xi6 = 6.0*pts(i,0);
 	    double wti = wts(i);
@@ -977,7 +977,7 @@ int XC::DispBeamColumn2d::commitSensitivity(int gradNumber, int numGrads)
         for(size_t i = 0; i < numSections; i++) {
 
                 int order = theSections[i]->getOrder();
-                const XC::ID &code = theSections[i]->getType();
+                const XC::ID &code= theSections[i]->getResponseType();
 
                 Vector e(workArea, order);
 
