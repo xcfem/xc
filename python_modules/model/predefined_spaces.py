@@ -192,6 +192,7 @@ class PredefinedSpace(object):
     :ivar numDOFs: number of degrees of freedom for each node (1, 2, 3 or 6).
     :ivar solProcType: type of the solution procedure.
     :ivar fixedNodesTags: tags of the constrained nodes.
+    :ivar createdNodeLockersNames: list containing the names of the node lockers created by the methods that activate/deactivate a set of elements.
     :ivar dBase: current database.
     '''
     def __init__(self, nodes, dimSpace, numDOFs, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
@@ -209,6 +210,7 @@ class PredefinedSpace(object):
         self.solutionProcedureType= solProcType
         self.analysis= None
         self.fixedNodesTags= set()
+        self.createdNodeLockersNames= list()
     
     def getProblem(self):
         ''' Return the XC finite element problem object.
@@ -1028,7 +1030,7 @@ class PredefinedSpace(object):
         self.analysis= predefined_solutions.ill_conditioning_analysis(problem)
         return self.analysis.analyze(numModes)
 
-    def deactivateElements(self, elemSet: xc.Set, srf= 1e-6):
+    def deactivateElements(self, elemSet: xc.Set, srf= 1e-6, freezeDeadNodes= True):
         ''' Deactivate the elements on the set argument.
 
         :param elemSet: set of elements to be deactivated.
@@ -1038,8 +1040,10 @@ class PredefinedSpace(object):
         mesh= self.preprocessor.getDomain.getMesh
         mesh.setDeadSRF(srf) # set stress reduction factor for
                              # element deactivation.
-        lockerName= elemSet.name+'_locker'
-        mesh.freezeDeadNodes(lockerName)
+        if(freezeDeadNodes):
+            lockerName= elemSet.name+'_locker'
+            mesh.freezeDeadNodes(lockerName) # froze nodes surrounded by dead elements.
+            self.createdNodeLockersNames.append(lockerName)
 
     def activateElements(self, elemSet: xc.Set):
         ''' Activate the (previoulsy deactivated) elements on the set argument.
@@ -1049,7 +1053,9 @@ class PredefinedSpace(object):
         elemSet.aliveElements()
         mesh= self.preprocessor.getDomain.getMesh
         lockerName= elemSet.name+'_locker'
-        mesh.meltAliveNodes(lockerName)
+        # Check if the nodes have been frozen.
+        if(lockerName in self.createdNodeLockersNames):
+            mesh.meltAliveNodes(lockerName) # melt frozen nodes.
 
     def getValuesAtNodes(self, element, code: str, silent= False):
         ''' Return the values corresponding to code at each of the element nodes.
