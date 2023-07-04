@@ -55,7 +55,9 @@ class_<XC::NDMaterialPhysicalProperties, bases<PhysicalProperties_NDMat>, boost:
    ;
 
 class_<XC::SolidMech2D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopyable  >("SolidMech2D", no_init)
-  .add_property("thickness",&XC::SolidMech2D::getThickness,&XC::SolidMech2D::setThickness,"Returns a vector with average strain values for gauss points.")
+  .add_property("thickness",&XC::SolidMech2D::getThickness,&XC::SolidMech2D::setThickness,"Returns the material thickness.")
+  .def("getMeanInternalForce",&XC::SolidMech2D::getMeanInternalForce)
+  .def("getMeanInternalDeformation",&XC::SolidMech2D::getMeanInternalDeformation)
    ;
 
 

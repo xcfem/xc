@@ -58,6 +58,9 @@ class SolidMech2D: public NDMaterialPhysicalProperties
     inline void setThickness(const double &t)
       { thickness= t; }
     
+    double getMeanInternalForce(const std::string &) const;
+    double getMeanInternalDeformation(const std::string &) const;
+    
     //! @brief Return density per unit area
     double getArealRho(void) const
       { return NDMaterialPhysicalProperties::getRho()*thickness; }

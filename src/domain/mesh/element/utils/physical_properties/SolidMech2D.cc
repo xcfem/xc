@@ -55,6 +55,40 @@ size_t  XC::SolidMech2D::getComponentIndexFromCode(const std::string &code) cons
 	        << std::endl;
     return 0;
   }
+//! Returns mean value of internal force.
+double XC::SolidMech2D::getMeanInternalForce(const std::string &cod) const
+  {
+    double retval= 0.0;
+    if(cod == "n1") //Average axial force per unit length, parallel to the axis 1.
+      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n1);
+    else if(cod == "n2") //Average axial force per unit length, parallel to the axis 2.
+      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n2);
+    else if(cod == "n12")
+      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n12);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; unknown internal force: '"
+                << cod << "'\n";
+    retval*= this->thickness;
+    return retval;
+  }
+
+//! Returns mean value of internal force.
+double XC::SolidMech2D::getMeanInternalDeformation(const std::string &cod) const
+  {
+    double retval= 0.0;
+    if(cod == "n1") //Average axial force per unit length, parallel to the axis 1.
+      retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n1);
+    else if(cod == "n2") //Average axial force per unit length, parallel to the axis 2.
+      retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n2);
+    else if(cod == "n12")
+      retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n12);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< " unknown internal deformation: '"
+                << cod << "'\n";
+    return retval;
+  }
 
 #define DBTAGS_SIZE 3
 //! @brief Returns a vector to store the dbTags
