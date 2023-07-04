@@ -602,7 +602,7 @@ void XC::ZeroLengthSection::setTransformation(void)
     inicAv();
 
     // Get the section code
-    const ID &code= theSection->getType();
+    const ID &code= theSection->getResponseType();
 
     // Set a reference to make the syntax nicer
     Matrix &tran= A;
