@@ -74,6 +74,7 @@ class DruckerPragerPlaneStrain: public DruckerPrager
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;
     int getOrder(void) const;
+    const ResponseId &getResponseType(void) const;
 
     int setTrialStrain(const Vector &strain_from_element);
 

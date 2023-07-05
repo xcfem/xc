@@ -22,6 +22,7 @@
 //          February 2011
 
 #include "DruckerPragerPlaneStrain.h"
+#include "material/section/ResponseId.h"
 
 //static vectors and matrices
 XC::Vector XC::DruckerPragerPlaneStrain::strain(3);
@@ -57,7 +58,18 @@ const std::string &XC::DruckerPragerPlaneStrain::getType(void) const
 int XC::DruckerPragerPlaneStrain::getOrder() const 
   { 
     return 3; 
-  } 
+  }
+
+//! @brief Return the ordering and type of response quantities
+//! returned by this material.
+//!
+//! Return the section ResponseId code that indicates
+//! the ordering and type of response quantities returned
+//! by the material. Lets the calling object
+//! (e.g. an Element) know how to interpret the quantites returned by this
+//! object.
+const XC::ResponseId &XC::DruckerPragerPlaneStrain::getResponseType(void) const
+  { return RespMembraneMat; }
 
 //get the strain and integrate plasticity equations
 int XC::DruckerPragerPlaneStrain::setTrialStrain(const Vector &strain_from_element) 
