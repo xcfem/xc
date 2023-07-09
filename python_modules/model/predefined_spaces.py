@@ -1396,7 +1396,7 @@ class SolidMechanics2D(PredefinedSpace):
          :param nodes: preprocessor nodes handler
          :param solProcType: type of the solution procedure.
         '''
-        super(SolidMechanics2D,self).__init__(nodes,2,2, solProcType= solProcType)
+        super(SolidMechanics2D,self).__init__(nodes, dimSpace= 2, numDOFs= 2, solProcType= solProcType)
         self.Ux= 0 # Displacement components
         self.Uy= 1
         self.epsilon_11= 0 # Strain components
@@ -1897,7 +1897,7 @@ class SolidMechanics3D(PredefinedSpace):
          :param nodes: preprocessor nodes handler
          :param solProcType: type of the solution procedure.
         '''
-        super(SolidMechanics3D,self).__init__(nodes,3,3, solProcType)
+        super(SolidMechanics3D,self).__init__(nodes,dimSpace= 3, numDOFs= 3, solProcType= solProcType)
         self.Ux= 0 # displacement components.
         self.Uy= 1
         self.Uz= 2
