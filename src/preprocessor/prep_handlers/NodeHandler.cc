@@ -39,10 +39,34 @@
 #include "domain/mesh/element/Element.h"
 #include "utility/tagged/DefaultTag.h"
 
-void XC::NodeHandler::free_mem(void)
+//! @brief Clear seed node.
+void XC::NodeHandler::freeSeedNode(void)
   {
-    if(seed_node) delete seed_node;
-    seed_node= nullptr; 
+    if(this->seed_node)
+      {
+	delete this->seed_node;
+        this->seed_node= nullptr;
+      }
+  }
+
+//! @brief Defines the seed node.
+XC::Node *XC::NodeHandler::newSeedNode(const size_t &dim, const size_t ndof)
+  {
+    const int tg= getDefaultTag(); //Before seed node creation.
+    if(!seed_node)
+      seed_node= new_node(-1,dim,ndof,0.0,0.0,0.0);
+    else
+      {
+	const size_t oldDim= seed_node->getDim();
+	const size_t oldNDOFs= seed_node->getNumberDOF();
+	if((dim!=oldDim) || (ndof!=oldNDOFs))
+	  {
+            freeSeedNode();
+            seed_node= new_node(-1,dim,ndof,0.0,0.0,0.0);
+	  }
+      }
+    setDefaultTag(tg); // seed node doesn't change current node tag. 
+    return seed_node;
   }
 
 XC::NodeHandler::NodeHandler(Preprocessor *preprocessor)
@@ -51,7 +75,7 @@ XC::NodeHandler::NodeHandler(Preprocessor *preprocessor)
 
 //! @brief Destructor.
 XC::NodeHandler::~NodeHandler(void)
-  { free_mem(); }
+  { freeSeedNode(); }
 
 //! @brief Return the default value for next node.
 int XC::NodeHandler::getDefaultTag(void) const
@@ -64,7 +88,7 @@ void XC::NodeHandler::setDefaultTag(const int &tag)
 //! @brief Clear all nodes.
 void XC::NodeHandler::clearAll(void)
   {
-    free_mem();
+    freeSeedNode();
     setDefaultTag(0);
   }
 
@@ -225,26 +249,6 @@ size_t XC::NodeHandler::getNumDOFs(void) const
     if(seed_node)
       retval= seed_node->getNumberDOF();
     return retval;
-  }
-
-//! @brief Defines the seed node.
-XC::Node *XC::NodeHandler::newSeedNode(const size_t &dim, const size_t ndof)
-  {
-    const int tg= getDefaultTag(); //Before seed node creation.
-    if(!seed_node)
-      seed_node= new_node(-1,dim,ndof,0.0,0.0,0.0);
-    else
-      {
-	const size_t oldDim= seed_node->getDim();
-	const size_t oldNDOFs= seed_node->getNumberDOF();
-	if((dim!=oldDim) || (ndof!=oldNDOFs))
-	  {
-            free_mem();
-            seed_node= new_node(-1,dim,ndof,0.0,0.0,0.0);
-	  }
-      }
-    setDefaultTag(tg); // seed node doesn't change current node tag. 
-    return seed_node;
   }
 
 XC::Node *XC::NodeHandler::newNodeIDV(const int &tag,const Vector &coo)
