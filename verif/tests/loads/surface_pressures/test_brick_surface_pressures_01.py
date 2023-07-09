@@ -14,7 +14,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
 from misc_utils import log_messages as lmsg
-# from postprocess import output_handler
 
 # Problem type
 feProblem= xc.FEProblem()
