@@ -37,23 +37,16 @@
 #include "domain/load/ElementalLoad.h"
 #include "domain/mesh/node/Node.h"
 
-double XC::QuadSurfaceLoad::GsPts[QSL_NUM_NODE][1];
-
 //! @brief Constructor.
 XC::QuadSurfaceLoad::QuadSurfaceLoad(int tag, int Nd1, int Nd2, double pressure)
   : SurfaceLoadBase<QSL_NUM_NODE>(tag, ELE_TAG_QuadSurfaceLoad, pressure, 1.0),     
    tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF),
    internalForces(QSL_NUM_DOF),
    g(QSL_NUM_NDF), 
-   myNhat(QSL_NUM_NDF), 
-   myNI(QSL_NUM_NODE),
-   dcrd1(QSL_NUM_NDF),
-   dcrd2(QSL_NUM_NDF)
+   myNhat(QSL_NUM_NDF)
   {
     theNodes.set_id_nodes(Nd1,Nd2);
 
-    GsPts[0][0]= 0.5;
-    
     tangentStiffness.Zero();
   }
 
@@ -63,11 +56,10 @@ XC::QuadSurfaceLoad::QuadSurfaceLoad(int tag)
    tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF),
    internalForces(QSL_NUM_DOF),
    g(QSL_NUM_NDF), 
-   myNhat(QSL_NUM_NDF), 
-   myNI(QSL_NUM_NODE),
-   dcrd1(QSL_NUM_NDF),
-   dcrd2(QSL_NUM_NDF)
-  {}
+   myNhat(QSL_NUM_NDF)
+  {
+    tangentStiffness.Zero();
+  }
 
 XC::QuadSurfaceLoad::~QuadSurfaceLoad(void)
   {}
@@ -81,8 +73,10 @@ void XC::QuadSurfaceLoad::setDomain(Domain *theDomain)
     SurfaceLoadBase<QSL_NUM_NODE>::setDomain(theDomain);
     theNodes.checkNumDOF(QSL_NUM_NDF,getTag());
 
-    dcrd1= theNodes[0]->getCrds();
-    dcrd2= theNodes[1]->getCrds();
+    // calculate vector g
+    const Vector &dcrd1= theNodes[0]->getCrds();
+    const Vector &dcrd2= theNodes[1]->getCrds();
+    g= (dcrd2 - dcrd1).Normalized();
   }
 
 //! @brief return number of dofs
@@ -92,16 +86,6 @@ int XC::QuadSurfaceLoad::getNumDOF(void) const
 //! @brief this function calculates g1, g2, NI, and nHat for given Xi and Eta
 int XC::QuadSurfaceLoad::UpdateBase(double Xi) const
   {
-    const double oneMinusXi= 1 - Xi;
-    const double onePlusXi= 1 + Xi;
-
-    // calculate vectors g1 and g2
-    // g1 = d(x_Xi)/dXi, g2 = d(x_Xi)/dEta
-    g= (dcrd2 - dcrd1).Normalized();
-
-    // shape functions
-    myNI(0) = 0.5 * oneMinusXi;
-    myNI(1) = 0.5 * onePlusXi;
 
     // normal vector to primary surface as cross product of g1 and g2
     myNhat(0)= -g(1);
@@ -121,19 +105,16 @@ const XC::Vector &XC::QuadSurfaceLoad::getResistingForce(void) const
   {
     internalForces.Zero();
 
-    // loop over Gauss points
-    for(int i = 0; i < QSL_NUM_NODE; i++)
-      {
-	this->UpdateBase(GsPts[i][0]);
+    // Only one Gauss point -> no Loop.
+    this->UpdateBase(0.0);
 
-	// loop over nodes
-	for(int j = 0; j < QSL_NUM_NODE; j++)
+    // loop over nodes
+    for(int j = 0; j < QSL_NUM_NODE; j++)
+      {
+	// loop over dof
+	for(int k = 0; k < QSL_NUM_NDF; k++)
 	  {
-	    // loop over dof
-	    for(int k = 0; k < 3; k++)
-	      {
-		internalForces[j*3+k]-=  mLoadFactor*my_pressure*myNhat(k)*myNI(j);
-	      }
+	    internalForces[j*2+k]-=  mLoadFactor*my_pressure*myNhat(k)*0.5;
 	  }
       }
     return internalForces;
@@ -146,7 +127,7 @@ const XC::Vector &XC::QuadSurfaceLoad::getResistingForceIncInertia(void) const
 //! of the class members.
 XC::DbTagData &XC::QuadSurfaceLoad::getDbTagData(void) const
   {
-    static DbTagData retval(18); 
+    static DbTagData retval(12); 
     return retval;
   }
 
@@ -159,9 +140,6 @@ int XC::QuadSurfaceLoad::sendData(Communicator &comm)
     res+= comm.sendVector(theVector,getDbTagData(),CommMetaData(9));
     res+= comm.sendVector(g,getDbTagData(),CommMetaData(10));
     res+= comm.sendVector(myNhat,getDbTagData(),CommMetaData(11));
-    res+= comm.sendVector(myNI,getDbTagData(),CommMetaData(12));
-    res+= comm.sendVector(dcrd1,getDbTagData(),CommMetaData(13));
-    res+= comm.sendVector(dcrd2,getDbTagData(),CommMetaData(14));
     return res;
   }
 
@@ -174,9 +152,6 @@ int XC::QuadSurfaceLoad::recvData(const Communicator &comm)
     res+= comm.receiveVector(theVector,getDbTagData(),CommMetaData(9));
     res+= comm.receiveVector(g,getDbTagData(),CommMetaData(10));
     res+= comm.receiveVector(myNhat,getDbTagData(),CommMetaData(11));
-    res+= comm.receiveVector(myNI,getDbTagData(),CommMetaData(12));
-    res+= comm.receiveVector(dcrd1,getDbTagData(),CommMetaData(13));
-    res+= comm.receiveVector(dcrd2,getDbTagData(),CommMetaData(14));
     return res;
   }
 
