@@ -62,13 +62,6 @@ class QuadSurfaceLoad: public SurfaceLoadBase<QSL_NUM_NODE>
     mutable Vector g; //!< tangent vector  = d(x_Xi)/d_xi
     mutable Vector myNhat; //!< normal Vector 
 
-    mutable Vector myNI; //!< shape functions
-
-    Vector dcrd1; //!< current coordinates of node 1
-    Vector dcrd2; //!< current coordinates of node 2
-
-    static double GsPts[QSL_NUM_NODE][1];
-
   protected:   
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
