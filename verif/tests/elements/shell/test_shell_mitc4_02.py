@@ -56,3 +56,11 @@ if (ratio1 < 1e-12) & (ratio2 < 1e-12):
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayLocalAxes()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)

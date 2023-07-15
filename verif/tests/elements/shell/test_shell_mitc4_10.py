@@ -120,3 +120,12 @@ if (abs(ratio1)<0.18) & (abs(ratio2)<1e-9):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayLocalAxes()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)

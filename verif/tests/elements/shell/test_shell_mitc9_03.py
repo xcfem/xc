@@ -140,3 +140,11 @@ if (error < 0.6/100.0) :
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayLocalAxes()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
