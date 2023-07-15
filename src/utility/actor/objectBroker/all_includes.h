@@ -139,6 +139,8 @@
 #include "material/nD/j2_plasticity/J2ThreeDimensional.h"
 //#include "material/nD/feap/FeapMaterial03.h"
 
+#include "material/nD/rc_multilayer/PlateRebarMaterial.h"
+
 #include "material/nD/soil/FluidSolidPorousMaterial.h"
 #include "material/nD/soil/PressureDependMultiYield.h"
 #include "material/nD/soil/PressureDependMultiYield02.h"

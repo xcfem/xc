@@ -55,6 +55,8 @@ class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >
 
 #include "nd_adaptor/python_interface.tcc"
 
+#include "rc_multilayer/python_interface.tcc"
+
 #include "soil/python_interface.tcc"
 
 typedef std::vector<XC::NDMaterial *> vectorNDMaterial;
