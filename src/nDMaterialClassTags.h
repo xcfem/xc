@@ -78,4 +78,10 @@
 #define ND_TAG_DruckerPrager3D	                14006
 #define ND_TAG_DruckerPragerPlaneStrain         14007
 
+// Multilayer reinforce concrete materials.
+#define ND_TAG_PlaneStressUserMaterial          28
+#define ND_TAG_PlateFromPlaneStressMaterial     29
+#define ND_TAG_PlateRebarMaterial               30
+
+
 #endif

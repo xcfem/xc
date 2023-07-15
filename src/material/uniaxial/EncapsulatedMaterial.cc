@@ -28,14 +28,14 @@
 #include <utility/matrix/ID.h>
 #include "utility/matrix/Vector.h"
 
-
+//! @brief Free memory allocated for the uniaxial material.
 void XC::EncapsulatedMaterial::free_mem(void)
   {
     if(theMaterial) delete theMaterial;
     theMaterial= nullptr;
   }
 
-//! brief Copy object members.!
+//! brief Copy object members.
 void XC::EncapsulatedMaterial::copy(const UniaxialMaterial *other)
   {
     free_mem();
@@ -97,10 +97,12 @@ XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag)
 XC::EncapsulatedMaterial::~EncapsulatedMaterial(void)
   { free_mem(); }
 
+//! @brief Copy constructor.
 XC::EncapsulatedMaterial::EncapsulatedMaterial(const EncapsulatedMaterial &other)
   :UniaxialMaterial(other), theMaterial(nullptr)
   { copy(other.theMaterial); }
 
+//! @brief Assignment operator.
 XC::EncapsulatedMaterial &XC::EncapsulatedMaterial::operator=(const EncapsulatedMaterial &other)
   {
     UniaxialMaterial::operator=(other);

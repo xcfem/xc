@@ -297,14 +297,14 @@ int XC::FiberSectionShear2d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";
       }
     return res;
