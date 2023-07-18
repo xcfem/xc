@@ -691,16 +691,21 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     b= 1.0
     numberOfStemSets= 4
     
-    def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25, stemBackSlope= 0.0,footingThickness= 0.25, concrete= None, steel= None,title=None):
+    def __init__(self,name= 'prb',concreteCover= 40e-3, stemHeight= 2.5, stemBottomWidth=0.25, stemTopWidth=0.25, stemBackSlope= 0.0, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, concrete= None, steel= None,title=None):
         '''Constructor
 
+        :param name: identifier for the retaining wall.
+        :param concreteCover: cover of the concrete reinforcement.
+        :param stemHeight: (float) Height of the stem.
         :param stemBottomWidth: (float) Stem width at his contact with the footing.
         :param stemTopWidth: (float) Stem width at his top.
         :param stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
         :param footingThickness: (float) Thickness of the footing.
+        :param bToe: (float) Toe length.
+        :param bHeel: (float) Heel length.
         :param title: title for the report tables.
         '''
-        super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness,stemBackSlope)
+        super(RetainingWall,self).__init__(name= name, stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, stemBackSlope= stemBackSlope)
         #Materials.
         self.concrete= concrete
         self.stemReinforcement= StemReinforcement(self,concreteCover, steel)
@@ -928,6 +933,26 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             self.fixedNodes.append(fixedNode)
         self.stemSet.fillDownwards()
         self.wallSet.fillDownwards()
+
+    def createLinearElasticFEModel(self, prbName, kS):
+        ''' Create a linear elastic FE model.
+
+        :param prbName: name of the finite element problem.
+        :param kS: subgrade reaction modulus.
+        '''
+        retval= self.createFEProblem(prbName)
+        preprocessor= retval.getPreprocessor
+        nodes= preprocessor.getNodeHandler
+
+        #Soils
+        kX= typical_materials.defElasticMaterial(preprocessor, "kX",kS/10.0)
+        kY= typical_materials.defElasticMaterial(preprocessor, "kY",kS)
+        #kY= typical_materials.defElastNoTensMaterial(preprocessor, "kY",kS)
+        
+        #Mesh.
+        self.genMesh(nodes,[kX,kY])
+        return retval
+        
 
     def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
         '''Create the loads of the concrete weight.'''
