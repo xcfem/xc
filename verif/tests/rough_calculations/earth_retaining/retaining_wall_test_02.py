@@ -33,7 +33,7 @@ zTopWall=282.69
 zTopFooting=280.09
 
 stemBackSlope=0 # H/V
-b= 1.0   #length of wall to analyze
+b= 1.0 # length of wall to analyze
 stemTopWidth= 0.25
 stemHeight=zTopWall-zTopFooting
 stemBottomWidth= stemTopWidth+stemBackSlope*stemHeight
@@ -94,23 +94,9 @@ wall.footingReinforcement.setReinforcement(8, rebar_types.A12_15.getCopy()) # ln
 
 wall.footingReinforcement.setReinforcement(10, rebar_types.A12_15.getCopy()) # lateral zapata
 
-wallFEModel= wall.createFEProblem('Retaining wall '+sectionName)
+# Create wall FE model.
+wallFEModel= wall.createLinearElasticFEModel(prbName= 'Retaining wall '+sectionName, kS= kS)
 preprocessor= wallFEModel.getPreprocessor
-nodes= preprocessor.getNodeHandler
-
-#Soils
-kX= typical_materials.defElasticMaterial(preprocessor, "kX",kS/10.0)
-kY= typical_materials.defElasticMaterial(preprocessor, "kY",kS)
-#kY= typical_materials.defElastNoTensMaterial(preprocessor, "kY",kS)
-#Backfill soil properties
-backFillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
-#Foundation stratified soil properties
-stratifiedSoil= fcs.StratifiedSoil(hi,rhoi,phii,ci)
-
-foundationSoilModel= stratifiedSoil.getEquivalentSoil(Beff= 5,gMPhi= 1.2,gMc= 1.5) #Design values.
-
-#Mesh.
-wall.genMesh(nodes,[kX,kY])
 
 #Sets.
 totalSet= preprocessor.getSets.getSet("total")
@@ -121,11 +107,13 @@ loadCaseManager= load_cases.LoadCaseManager(preprocessor)
 loadCaseNames= ['selfWeight','earthPress','earthPressAcc']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
-#Self weight.
+## Self weight.
 selfWeight= loadCaseManager.setCurrentLoadCase('selfWeight')
 wall.createSelfWeightLoads(rho= concrete.density(),grav= gravity)
 
-# Earth pressure. (drainage ok)
+## Earth pressure. (drainage ok)
+### Backfill soil properties
+backFillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
 gSoil= backFillSoilModel.rho*gravity
 earthPress= loadCaseManager.setCurrentLoadCase('earthPress')
 wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backFillSoilModel.rho, grav= gravity)
@@ -136,7 +124,7 @@ zGroundFrontFill= zGroundBackFill-wall.stemHeight+frontFillDepth #Front fill
 frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFrontFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createFrontFillPressures(frontFillPressureModel)
 
-#Accidental: earth pressure failure drainage system.
+## Accidental: earth pressure failure drainage system.
 gSoil= backFillSoilModel.rho*gravity
 earthPressAcc= loadCaseManager.setCurrentLoadCase('earthPressAcc')
 wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backFillSoilModel.rho, grav= gravity)
@@ -199,3 +187,6 @@ if(abs(ratio1)<1e-9 and abs(ratio2)<1e-9):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# Graphic output.
+# wall.draw()
