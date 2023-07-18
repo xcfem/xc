@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import geom
 from model import predefined_spaces
 from postprocess.reports import common_formats as fmt
@@ -37,20 +38,26 @@ class CantileverRetainingWallGeometry(object):
           :ivar bHeel: (float) Heel length.
     '''
 
-    def __init__(self,name= 'prb',stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, stemBackSlope= 0.0):
+    def __init__(self,name= 'prb', stemHeight= 2.5, stemBottomWidth=0.25,stemTopWidth=0.25, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, stemBackSlope= 0.0):
         '''Constructor 
 
         :param name: (string) Identifier.
+        :param stemHeight: (float) Height of the stem.
         :param stemBottomWidth: (float) Stem width at his contact with the footing.
         :param stemTopWidth: (float) Stem width at his top.
         :param footingThickness: (float) Thickness of the footing.
+        :param bToe: (float) Toe length.
+        :param bHeel: (float) Heel length.
         :param stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
         '''
         self.name= name
+        self.stemHeight= stemHeight
         self.stemBottomWidth= stemBottomWidth
         self.stemTopWidth= stemTopWidth
         self.stemBackSlope= stemBackSlope
         self.footingThickness= footingThickness
+        self.bToe= bToe
+        self.bHeel= bHeel
         self.stemTopPosition= geom.Pos2d(0.0,0.0) #Default position of stem top.
 
     def defaultDimensions(self,totalHeight):
@@ -170,6 +177,47 @@ class CantileverRetainingWallGeometry(object):
         retval.append(stemOutsideBottom)
         retval.append(stemOutsideTop) # stem top
         return retval
+
+    def getArea(self):
+        ''' Return the area of the retaining wall.'''
+        plg= geom.Polygon2d(self.getContourPoints())
+        return plg.getArea()
+
+    def getBackfillAvobeHeelContour(self, beta, zGround= 0.0):
+        ''' Return the contour of the backfill that rests on the wall heel.
+
+        :param beta: slope of the backfill.
+        :param zGround: level of the backfill in its contact with the stem
+                        with respect the top of the stem.
+        '''
+        retval= list()
+        stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top
+        backfillOutsideTop= stemOutsideTop-geom.Vector2d(zGround*self.stemBackSlope, zGround)
+        retval.append(backfillOutsideTop)
+        stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
+        retval.append(stemOutsideBottom)
+        heelEndPosTop= stemOutsideBottom+geom.Vector2d(self.bHeel, 0.0) # heel end
+        retval.append(heelEndPosTop)
+        slope= geom.Line2d(backfillOutsideTop,geom.Vector2d(math.cos(beta), math.sin(beta)))
+        vLine= geom.Line2d(heelEndPosTop, geom.Vector2d(0,1))
+        intersection= vLine.getIntersection(slope)
+        if(len(intersection)):
+            lastPoint= vLine.getIntersection(slope)[0]
+            retval.append(lastPoint)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; intersection with the terrain not found.')
+        return retval
+        
+    def getBackfillAvobeHeelArea(self, beta, zGround= 0.0):
+        ''' Return the area of the backfill that rests on the wall heel.
+
+        :param beta: slope of the backfill.
+        :param zGround: level of the backfill in its contact with the stem
+                        with respect the top of the stem.
+        '''
+        return geom.Polygon2d(self.getBackfillAvobeHeelContour(beta= beta)).getArea()
     
     def getXYVertices(self):
         ''' Return the contour X,Y coordinates in two separate
