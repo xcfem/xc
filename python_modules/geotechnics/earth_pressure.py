@@ -36,17 +36,29 @@ class RankineSoil(fs.FrictionalSoil):
         super(RankineSoil,self).__init__(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
         self.beta= beta
         
-    def Ka(self):
-        '''Returns Rankine's active earth pressure coefficient.'''
+    def Ka(self, designValue= False):
+        '''Returns Rankine's active earth pressure coefficient.
+
+        :param designValue: if true use the design value of the internal friction.
+        '''
         cBeta= math.cos(self.beta)
-        cPhi= math.cos(self.phi)
+        if(designValue):
+            cPhi= math.cos(self.getDesignPhi())
+        else:
+            cPhi= math.cos(self.phi)
         r= math.sqrt(cBeta**2-cPhi**2)
         return cBeta*(cBeta-r)/(cBeta+r)
       
-    def Kp(self):
-        '''Returns Rankine's passive earth pressure coefficient.'''
+    def Kp(self, designValue= False):
+        '''Returns Rankine's passive earth pressure coefficient.
+
+        :param designValue: if true use the design value of the internal friction.
+        '''
         cBeta= math.cos(self.beta)
-        cPhi= math.cos(self.phi)
+        if(designValue):
+            cPhi= math.cos(self.getDesignPhi())
+        else:
+            cPhi= math.cos(self.phi)
         r= math.sqrt(cBeta**2-cPhi**2)
         return cBeta*(cBeta+r)/(cBeta-r)
 
