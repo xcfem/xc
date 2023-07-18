@@ -25,29 +25,45 @@ from actions import load_cases
 from actions import combinations
 from actions.earth_pressure import earth_pressure
 #from postprocess.reports import common_formats as fmt
-#from postprocess import output_handler
 
-#Geometry
+#
+#       --  zTopWall
+#       | \
+#       |  \
+#       |  \
+#       |   \  stemSlope 
+#       |   \  
+#       |    \  
+#       |    \  
+#  +----     ----------+  zTopFooting
+#  |Toe          Heel  |
+#  +-------------------+
+#
+
+# Retaining wall geometry
 zTopWall= 9.2 # z coordinate of the wall top.
 zTopFooting= 0.0 # z coordinate of the footing upper surface.
 
+## Stem
 stemSlope= 1/10.0 # H/V
 b= 1.0   #length of wall to analyze
 stemTopWidth= 0.40 # width of the wall at its top.
 stemHeight= zTopWall-zTopFooting # height of the stem.
 stemBottomWidth= stemTopWidth+stemSlope*stemHeight # width of the wall at its bottom.
+## Foundation.
 bToe= 1.6 # width of the toe.
 bHeel= 6.0-stemBottomWidth # width of the heel.
 footingThickness= 1.5 # thickness of the footing.
 cover= 60e-3 # rebars cover.
 
-#Backfill soil properties
+# Backfill soil properties
 kS= 15e6 # Winkler modulus.
 phiS= 30  # internal frictional angle
 rhoS= 2000  # density (kg/m3)
 backFillDelta= math.radians(18.4)
 frontFillDepth= 1.0
-zGroundBackFill= -0.2 # back fill
+zGroundBackFill= -0.2 # level of the back fill surface with respect to the
+                      # top of the wall.
 
 # Foundation stratified soil properties
 hi=[1,3,5,8,100]  #cuaternario (QG), QT3L, QT3G,formación  Dueñas
@@ -72,11 +88,8 @@ import rebar_types
 rebar_types.define_types(reinfSteel= reinfSteel, cover= cover)
 
 sectionName= "mur10m"
-wall= ng_retaining_wall.RetainingWall(sectionName,cover,stemBottomWidth,stemTopWidth, stemBackSlope= 1/10.0, footingThickness= footingThickness, concrete= concrete, steel= reinfSteel)
-wall.stemHeight= stemHeight
-wall.bToe= bToe
-wall.bHeel= bHeel
-wall.concrete= concrete
+wall= ng_retaining_wall.RetainingWall(name= sectionName, concreteCover= cover, stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= 1/10.0, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= reinfSteel)
+
 #wall.exigeanceFisuration= 'A'
 wall.stemReinforcement.setReinforcement(1, rebar_types.A25_10.getCopy())  # vert. trasdós (esperas)
 wall.stemReinforcement.setReinforcement(2, rebar_types.A25_10.getCopy()) # vert. trasdós (contacto terreno)
@@ -93,23 +106,9 @@ wall.footingReinforcement.setReinforcement(8, rebar_types.A16_20.getCopy()) # ln
 
 wall.stemReinforcement.setReinforcement(6, rebar_types.A12_20.getCopy())  #coronación
 
-wallFEModel= wall.createFEProblem('Retaining wall '+sectionName)
+# Create FE model.
+wallFEModel= wall.createLinearElasticFEModel(prbName= 'Retaining wall '+sectionName, kS= kS)
 preprocessor= wallFEModel.getPreprocessor
-nodes= preprocessor.getNodeHandler
-
-#Soils
-kX= typical_materials.defElasticMaterial(preprocessor, "kX",kS/10.0)
-kY= typical_materials.defElasticMaterial(preprocessor, "kY",kS)
-#kY= typical_materials.defElastNoTensMaterial(preprocessor, "kY",kS)
-#Backfill soil properties
-backFillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
-#Foundation stratified soil properties
-stratifiedSoil= fcs.StratifiedSoil(hi,rhoi,phii,ci)
-
-foundationSoilModel= stratifiedSoil.getEquivalentSoil(Beff= 5,gMPhi= 1.2,gMc= 1.5) #Design values.
-
-#Mesh.
-wall.genMesh(nodes,[kX,kY])
 
 #Sets.
 totalSet= preprocessor.getSets.getSet("total")
@@ -124,9 +123,11 @@ selfWeight= loadCaseManager.setCurrentLoadCase('selfWeight')
 wall.createSelfWeightLoads(rho= concrete.density(),grav= gravity)
 
 # Earth pressure. (drainage ok)
+## Backfill soil properties
+backFillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
 gSoil= backFillSoilModel.rho*gravity
 earthPress= loadCaseManager.setCurrentLoadCase('earthPress')
-wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backFillSoilModel.rho, grav= gravity)
+wall.createDeadLoad(heelFillDepth= wall.stemHeight, toeFillDepth= frontFillDepth,rho= backFillSoilModel.rho, grav= gravity)
 Ka= backFillSoilModel.Ka()
 backFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundBackFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createBackFillPressures(backFillPressureModel, Delta= backFillDelta)
@@ -178,6 +179,9 @@ sls_results= wall.performSLSAnalysis(slsCombinations)
 wall.setSLSInternalForcesEnvelope(sls_results.internalForces)
 
 ## ULS stability analysis.
+### Foundation stratified soil properties
+stratifiedSoil= fcs.StratifiedSoil(hi,rhoi,phii,ci)
+foundationSoilModel= stratifiedSoil.getEquivalentSoil(Beff= 5,gMPhi= 1.2,gMc= 1.5) #Design values.
 sr= wall.performStabilityAnalysis(stabilityULSCombinations,foundationSoilModel,sg_adm=0.281e6)
 
 ## ULS strength analysis.
@@ -185,8 +189,7 @@ uls_results= wall.performULSAnalysis(strengthULSCombinations)
 wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
 
-
-err= math.sqrt((sr.Foverturning-5.66890156886)**2+(sr.Fsliding-1.5114794229848487)**2+(sr.Fbearing-0.4295954000449587)**2+(sr.FadmPressure-0.906533104128)**2)
+err= math.sqrt((sr.Foverturning-5.66890156886)**2+(sr.Fsliding-1.5490012269492306)**2+(sr.Fbearing-0.441480920738347)**2+(sr.FadmPressure-0.906533104128)**2)
 
 '''
 print("Overturning: ",sr.Foverturning)
@@ -215,7 +218,8 @@ os.system("rm -rf "+pth) # Your garbage you clean it
 
 #########################################################
 # Graphic stuff.
-#oh= output_handler.OutputHandler(wall.modelSpace)
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(wall.modelSpace)
 
 ## Uncomment to display blocks
 #oh.displayBlocks()

@@ -148,7 +148,7 @@ class FrictionalSoil(object):
       
     def getDesignPhi(self):
         '''Return the design value of the soil internal friction angle.'''
-        return self.phi/self.gammaMPhi
+        return math.atan(math.tan(self.phi)/self.gammaMPhi)
       
     def getDesignC(self):
         '''Return the design value of the soil cohesion.'''
