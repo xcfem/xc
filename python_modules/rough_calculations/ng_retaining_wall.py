@@ -983,14 +983,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         for e in self.toeSet.elements:
             e.vector2dUniformLoadGlobal(toeFillLoad)
 
-    def createEarthPressureLoadOnStem(self,pressureModel,vDir= xc.Vector([-1.0,0.0]),Delta= 0.0):
+    def createEarthPressureLoadOnStem(self,pressureModel, vDir= xc.Vector([-1.0,0.0]),Delta= 0.0):
         '''Create the loads of the earth pressure over the stem.
 
            :param pressureModel: (obj) earth pressure model.
            :param vDir: (xc.Vector) direction for the pressures.
         '''
-        pressureModel.xcSet=self.stemSet
-        pressureModel.vDir=vDir
+        pressureModel.xcSet= self.stemSet
+        pressureModel.vDir= vDir
         return pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1,delta= Delta)
 
     def createEarthPressureLoadOnHeelEnd(self,pressureModel):
@@ -1021,13 +1021,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         n.newLoad(loadVector)
         return geom.SlidingVector2d(nodePos, geom.Vector2d(loadVector[0], loadVector[1]))
 
-    def createBackFillPressures(self,pressureModel,Delta= 0.0):
+    def createBackfillPressures(self,pressureModel, Delta= 0.0):
         '''Create backfill earth pressures over the wall.
 
            :param pressureModel: (obj) earth pressure model for the backfill.
         '''
-        retval= self.createEarthPressureLoadOnStem(pressureModel,Delta= Delta)
-        return self.createEarthPressureLoadOnHeelEnd(pressureModel)
+        retval= self.createEarthPressureLoadOnStem(pressureModel, Delta= Delta)
+        retval+= self.createEarthPressureLoadOnHeelEnd(pressureModel)
+        return retval
 
     def createFrontFillPressures(self,pressureModel,Delta= 0.0):
         '''Create front fill earth pressures over the wall.
@@ -1037,22 +1038,22 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.createEarthPressureLoadOnStem(pressureModel,xc.Vector([1.0,0.0]),Delta= Delta)
         self.createEarthPressureLoadOnToeEnd(pressureModel)
 
-    def createVerticalLoadOnHeel(self,loadOnBackFill):
+    def createVerticalLoadOnHeel(self,loadOnBackfill):
         '''Create the loads over the heel dues to a load acting on the backfill.
 
-           :param loadOnBackFill: (obj) load acting on the backfill.
+           :param loadOnBackfill: (obj) load acting on the backfill.
         '''
-        loadOnBackFill.appendVerticalLoadToCurrentLoadPattern(xcSet= self.heelSet, vDir= xc.Vector([0.0,-1.0]), iXCoo= 0, iZCoo= 1)
+        loadOnBackfill.appendVerticalLoadToCurrentLoadPattern(xcSet= self.heelSet, vDir= xc.Vector([0.0,-1.0]), iXCoo= 0, iZCoo= 1)
 
-    def createPressuresFromLoadOnBackFill(self, loadOnBackFill,Delta= 0.0):
+    def createPressuresFromLoadOnBackfill(self, loadOnBackfill,Delta= 0.0):
         '''Create the pressures on the stem and on the heel dues to 
            a load acting on the backfill.
 
-           :param loadOnBackFill: (obj) load acting on the backfill.
+           :param loadOnBackfill: (obj) load acting on the backfill.
         '''
-        self.createEarthPressureLoadOnStem(loadOnBackFill,Delta= Delta) #Pressures on stem.
-        self.createEarthPressureLoadOnHeelEnd(loadOnBackFill) #Force on heel end.
-        self.createVerticalLoadOnHeel(loadOnBackFill) #Vertical load on heel.
+        self.createEarthPressureLoadOnStem(loadOnBackfill,Delta= Delta) #Pressures on stem.
+        self.createEarthPressureLoadOnHeelEnd(loadOnBackfill) #Force on heel end.
+        self.createVerticalLoadOnHeel(loadOnBackfill) #Vertical load on heel.
 
     def createLoadOnTopOfStem(self,loadVector):
         '''Create a load acting on the node at the top of the stem.
@@ -1062,10 +1063,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         n= self.wireframeModelPoints['stemTop'].getNode()
         n.newLoad(loadVector)
         
-    def getMononobeOkabeDryOverpressure(self,backFillModel,kv,kh,delta_ad= 0,beta= 0, Kas= None, g= 9.81):
+    def getMononobeOkabeDryOverpressure(self,backfillModel,kv,kh,delta_ad= 0,beta= 0, Kas= None, g= 9.81):
         ''' Return overpressure due to seismic action according to Mononobe-Okabe
 
-          :param backFillModel: back fill terrain model
+          :param backfillModel: back fill terrain model
           :param kv: seismic coefficient of vertical acceleration.
           :param kh: seismic coefficient of horizontal acceleration.
           :param delta_ad: angle of friction soil - structure.
@@ -1073,7 +1074,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         H= self.getTotalHeight()
         psi= math.radians(90) #back face inclination of the structure (< PI/2)
-        return backFillModel.getMononobeOkabeDryOverpressure(H, kv, kh, psi, delta_ad, beta, Kas,g)/H
+        return backfillModel.getMononobeOkabeDryOverpressure(H, kv, kh, psi, delta_ad, beta, Kas,g)/H
 
     def getReactions(self):
         '''Return the reactions on the foundation.'''
