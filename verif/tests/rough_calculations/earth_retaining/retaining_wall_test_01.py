@@ -60,9 +60,9 @@ cover= 60e-3 # rebars cover.
 kS= 15e6 # Winkler modulus.
 phiS= 30  # internal frictional angle
 rhoS= 2000  # density (kg/m3)
-backFillDelta= math.radians(18.4)
+backfillDelta= math.radians(18.4)
 frontFillDepth= 1.0 # Depth of the soil over the wall toe.
-zGroundBackFill= -0.2 # level of the back fill surface with respect to the
+zGroundBackfill= -0.2 # level of the back fill surface with respect to the
                       # top of the wall.
 
 # Foundation stratified soil properties
@@ -124,26 +124,26 @@ wall.createSelfWeightLoads(rho= concrete.density(),grav= gravity)
 
 # Earth pressure. (drainage ok)
 ## Backfill soil properties
-backFillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
-gSoil= backFillSoilModel.rho*gravity
+backfillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
+gSoil= backfillSoilModel.rho*gravity
 earthPress= loadCaseManager.setCurrentLoadCase('earthPress')
 ### Dead load on the wall heel.
-wall.createDeadLoad(heelFillDepth= wall.stemHeight, toeFillDepth= frontFillDepth,rho= backFillSoilModel.rho, grav= gravity)
-Ka= backFillSoilModel.Ka()
+wall.createDeadLoad(heelFillDepth= wall.stemHeight, toeFillDepth= frontFillDepth,rho= backfillSoilModel.rho, grav= gravity)
+Ka= backfillSoilModel.Ka()
 ### Earth pressure on back of wall stem.
-backFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundBackFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
-wall.createBackFillPressures(backFillPressureModel, Delta= backFillDelta)
-zGroundFrontFill= zGroundBackFill-wall.stemHeight+frontFillDepth #Front fill
+backfillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundBackfill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
+wall.createBackfillPressures(backfillPressureModel, Delta= backfillDelta)
+zGroundFrontFill= zGroundBackfill-wall.stemHeight+frontFillDepth #Front fill
 frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFrontFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createFrontFillPressures(frontFillPressureModel)
 #Accidental: earth pressure failure drainage system.
-gSoil= backFillSoilModel.rho*gravity
+gSoil= backfillSoilModel.rho*gravity
 earthPressAcc= loadCaseManager.setCurrentLoadCase('earthPressAcc')
-wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backFillSoilModel.rho, grav= gravity)
-Ka= backFillSoilModel.Ka()
-backFillPressureModelAcc=  earth_pressure.EarthPressureModel(zGround= zGroundBackFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater=zGroundBackFill-stemHeight+HwaterAcc, gammaWater= 1000*gravity,qUnif=0)
-wall.createBackFillPressures(backFillPressureModelAcc, Delta= backFillDelta)
-zGroundFrontFill= zGroundBackFill-wall.stemHeight+frontFillDepth #Front fill
+wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backfillSoilModel.rho, grav= gravity)
+Ka= backfillSoilModel.Ka()
+backfillPressureModelAcc=  earth_pressure.EarthPressureModel(zGround= zGroundBackfill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater=zGroundBackfill-stemHeight+HwaterAcc, gammaWater= 1000*gravity,qUnif=0)
+wall.createBackfillPressures(backfillPressureModelAcc, Delta= backfillDelta)
+zGroundFrontFill= zGroundBackfill-wall.stemHeight+frontFillDepth #Front fill
 frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFrontFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createFrontFillPressures(frontFillPressureModel)
 

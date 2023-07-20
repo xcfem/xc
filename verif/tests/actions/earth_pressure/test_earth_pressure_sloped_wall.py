@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Home-made test on earth pressures on a sloped wall
+'''Home-made test on earth pressures on a wall with sloped backfill
 '''
 
 from __future__ import print_function
@@ -13,16 +13,16 @@ __email__= "ana.ortega@ciccp.es"
 
 from actions.earth_pressure import earth_pressure as ep
 
-Ksoil=0.5    #pressure coefficient of the soil
-gammaSoil=2  #weight density of the soil
-zGroundPnt1=4 #global Z coordinate of ground level at point 1
+Ksoil=0.5    # pressure coefficient of the soil
+gammaSoil=2  # weight density of the soil
+zGroundPnt1=4 # global Z coordinate of ground level at point 1
 xPnt1=1       # X coordinate of point 1
 yPnt1=-3      # Y coordinate of point 1
-zGroundPnt2=8 #global Z coordinate of ground level at point 2
+zGroundPnt2=8 # global Z coordinate of ground level at point 2
 xPnt2=6       # X coordinate of point 2
 yPnt2=-5      # Y coordinate of point 2
 
-soil=ep.EarthPressureSlopedWall(Ksoil=Ksoil,gammaSoil=gammaSoil,zGroundPnt1=zGroundPnt1,XYpnt1=(xPnt1,yPnt1),zGroundPnt2=zGroundPnt2,XYpnt2=(xPnt2,yPnt2))
+soil= ep.EarthPressureSlopedBackfill(Ksoil=Ksoil,gammaSoil=gammaSoil,zGroundPnt1=zGroundPnt1,XYpnt1=(xPnt1,yPnt1),zGroundPnt2=zGroundPnt2,XYpnt2=(xPnt2,yPnt2))
 z=1
 pres1=soil.getPressure(xPnt1,yPnt1,z)
 pres2=soil.getPressure(xPnt1+1/3.*(xPnt2-xPnt1),yPnt1+1/3.*(yPnt2-yPnt1),z)

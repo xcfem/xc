@@ -190,6 +190,7 @@ echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_prestressing.py
 echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
+python tests/actions/earth_pressure/test_uniform_pressure_on_ground.py
 python tests/actions/earth_pressure/test_earth_pressure.py
 python tests/actions/earth_pressure/test_earth_pressure_sloped_wall.py
 python tests/actions/earth_pressure/culmann_method_test_01.py
@@ -1288,6 +1289,7 @@ python tests/rough_calculations/test_simple_beam_oscillation.py
 echo "$BLEU" "  Earth retaining structures..." "$NORMAL"
 python tests/rough_calculations/earth_retaining/retaining_wall_test_01.py
 python tests/rough_calculations/earth_retaining/retaining_wall_test_02.py
+python tests/rough_calculations/earth_retaining/retaining_wall_test_03.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_01.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_02.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_03.py
