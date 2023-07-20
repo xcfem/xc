@@ -300,10 +300,10 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
 
     ### Compute points
     pointsAlongBackfill= list()
-    raysToBackFill= list()
+    raysToBackfill= list()
     for angle in angles:
         ray= geom.Ray2d(ptB, geom.Vector2d(math.cos(angle), math.sin(angle)))
-        raysToBackFill.append(ray)
+        raysToBackfill.append(ray)
         intersections= backfillProfile.getIntersection(ray)
         if(len(intersections)>0):
             pt= intersections[0]
@@ -337,7 +337,7 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     ### Compute pressure points.
     pressurePoints= list()
     pressureDistances= list() # distances to natural slope line
-    for ray, pt in zip(raysToBackFill, weightPoints):
+    for ray, pt in zip(raysToBackfill, weightPoints):
         ln= geom.Line2d(pt, directionLine.getVDir())
         intersections= ray.getIntersection(ln)
         if(len(intersections)>0):
