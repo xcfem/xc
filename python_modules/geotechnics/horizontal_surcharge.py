@@ -19,7 +19,7 @@ import geom
 import xc
 from misc_utils import log_messages as lmsg
 
-class HorizontalLoadOnBackFill(object):
+class HorizontalLoadOnBackfill(object):
     ''' Base class for horizontal loads on backfill surface.
 
     :ivar H: horizontal load vector.
@@ -204,7 +204,7 @@ class HorizontalLoadOnBackFill(object):
                e.vector3dUniformLoadLocal(xc.Vector([pData[1],pData[2],pData[3]]))
         return loadedAreaRatio
 
-class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
+class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackfill):
     ''' Horizontal concentrated surcharge on backfill surface. This load 
         can be used on general 3D problems.
 
@@ -275,7 +275,7 @@ class HorizontalConcentratedLoadOnBackfill3D(HorizontalLoadOnBackFill):
             retval= None
         return retval
 
-class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
+class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackfill):
     ''' Horizontal linear surcharge on backfill surface. This load 
         can be used on general 3D problems.
 
@@ -360,7 +360,7 @@ class HorizontalLinearLoadOnBackfill3D(HorizontalLoadOnBackFill):
             lmsg.error(className+'.'+methodName+'; contour list is empty.')
         return retval
         
-class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackFill):
+class HorizontalLoadedAreaOnBackfill3D(HorizontalLoadOnBackfill):
     ''' Horizontal surcharge on backfill surface. This load can be used 
         on general 3D problems.
 
