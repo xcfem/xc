@@ -977,7 +977,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         pressureModel.xcSet=self.stemSet
         pressureModel.vDir=vDir
-        pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1,delta= Delta)
+        return pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1,delta= Delta)
 
     def createEarthPressureLoadOnHeelEnd(self,pressureModel):
         '''Create the loads of the earth pressure over the vertical face
@@ -986,10 +986,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
            :param pressureModel: (obj) earth pressure model.
         '''
         n= self.wireframeModelPoints['heelEnd'].getNode()
-        z= n.getInitialPos2d.y
+        nodePos= n.getInitialPos2d
+        z= nodePos.y
         force= pressureModel.getPressure(z)*self.footingThickness
         loadVector= force*xc.Vector([-1.0,0.0,0.0])
         n.newLoad(loadVector)
+        return geom.SlidingVector2d(nodePos, geom.Vector2d(loadVector[0], loadVector[1]))
 
     def createEarthPressureLoadOnToeEnd(self,pressureModel):
         '''Create the loads of the earth pressure over the vertical face
@@ -998,18 +1000,20 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
            :param pressureModel: (obj) earth pressure model.
         '''
         n= self.wireframeModelPoints['toeEnd'].getNode()
-        z= n.getInitialPos2d.y
+        nodePos= n.getInitialPos2d
+        z= nodePos.y
         force= pressureModel.getPressure(z)*self.footingThickness
         loadVector= force*xc.Vector([1.0,0.0,0.0])
         n.newLoad(loadVector)
+        return geom.SlidingVector2d(nodePos, geom.Vector2d(loadVector[0], loadVector[1]))
 
     def createBackFillPressures(self,pressureModel,Delta= 0.0):
         '''Create backfill earth pressures over the wall.
 
            :param pressureModel: (obj) earth pressure model for the backfill.
         '''
-        self.createEarthPressureLoadOnStem(pressureModel,Delta= Delta)
-        self.createEarthPressureLoadOnHeelEnd(pressureModel)
+        retval= self.createEarthPressureLoadOnStem(pressureModel,Delta= Delta)
+        return self.createEarthPressureLoadOnHeelEnd(pressureModel)
 
     def createFrontFillPressures(self,pressureModel,Delta= 0.0):
         '''Create front fill earth pressures over the wall.
