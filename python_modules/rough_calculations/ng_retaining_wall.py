@@ -26,6 +26,20 @@ import geom
 import xc
 from solution import predefined_solutions
 
+#
+#       --  zTopWall
+#       | \
+#       |  \
+#       |  \
+#       |   \  stemSlope 
+#       |   \  
+#       |    \  
+#       |    \  
+#  +----     ----------+  zTopFooting
+#  |Toe          Heel  |
+#  +-------------------+
+#
+
 def filterRepeatedValues(yList,mList,vList):
     ''' Filter values that are repeated 
         in the list.
