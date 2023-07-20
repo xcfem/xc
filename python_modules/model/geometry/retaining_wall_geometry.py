@@ -28,14 +28,14 @@ import matplotlib.pyplot as plt
 class CantileverRetainingWallGeometry(object):
     '''Geometry of a cantilever retaining wall.
 
-          :ivar name: (string) Identifier.
-          :ivar stemHeight: (float) Height of the stem.
-          :ivar stemBottomWidth: (float) Stem width at his contact with the footing.
-          :ivar stemTopWidth: (float) Stem width at his top.
-          :ivar stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
-          :ivar footingThickness: (float) Thickness of the footing.
-          :ivar bToe: (float) Toe length.
-          :ivar bHeel: (float) Heel length.
+    :ivar name: (string) Identifier.
+    :ivar stemHeight: (float) Height of the stem.
+    :ivar stemBottomWidth: (float) Stem width at his contact with the footing.
+    :ivar stemTopWidth: (float) Stem width at his top.
+    :ivar stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
+    :ivar footingThickness: (float) Thickness of the footing.
+    :ivar bToe: (float) Toe length.
+    :ivar bHeel: (float) Heel length.
     '''
 
     def __init__(self,name= 'prb', stemHeight= 2.5, stemBottomWidth=0.25,stemTopWidth=0.25, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, stemBackSlope= 0.0):
@@ -218,6 +218,16 @@ class CantileverRetainingWallGeometry(object):
                         with respect the top of the stem.
         '''
         return geom.Polygon2d(self.getBackfillAvobeHeelContour(beta= beta)).getArea()
+
+    def getBackfillAvobeHeelAvgHeight(self, beta, zGround= 0.0):
+        ''' Return the average height of the backfill that rests on the wall
+        heel.
+
+        :param beta: slope of the backfill.
+        :param zGround: level of the backfill in its contact with the stem
+                        with respect the top of the stem.
+        '''
+        return geom.Polygon2d(self.getBackfillAvobeHeelContour(beta= beta)).getArea()/self.bHeel
     
     def getXYVertices(self):
         ''' Return the contour X,Y coordinates in two separate
