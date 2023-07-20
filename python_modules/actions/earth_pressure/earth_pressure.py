@@ -39,7 +39,7 @@ class PressureModelBase(object):
         lmsg.error(className+'.'+methodName+'; error: getPressure must be overloaded in derived classes.')
         return 0.0
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2,delta= 0.0):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir,iCoo= 2,delta= 0.0):
         '''Append earth thrust on a set of elements to the current
         load pattern.
 
@@ -76,33 +76,72 @@ class PressureModelBase(object):
                     retval+= geom.SlidingVector2d(geom.Pos2d(centroid[0], centroid[1]), geom.Vector2d(totalLoad[0], totalLoad[1]))
         return retval # Sliding vector system
 
-        
+class UnifPressureOnGround(PressureModelBase):
+    '''Parameters to define a uniform pressure over the backfill surface
+        type earth pressure
 
-class EarthPressureBase(PressureModelBase):
-    '''Parameters to define a load of type earth pressure
-
-      :ivar zGround:   global Z coordinate of ground level
-      :ivar gammaSoil: weight density of soil .
+    :ivar zGround: global Z coordinate of ground level
+    :ivar zBottomSoils: list of global Z coordinates of the bottom level
+          for each soil (from top to bottom)
+    :ivar KSoils: list of pressure coefficients for each soil (from top 
+          to bottom)
+    :ivar qUnif: uniform load over the backfill surface (defaults to 0)
     '''
-    def __init__(self, zGround, gammaSoil):
+    def __init__(self, zGround, zBottomSoils, KSoils, qUnif, xcSet, vDir):
         ''' Constructor.
 
-        :param zGround:   global Z coordinate of ground level
-        :param gammaSoil: weight density of soil 
+        :param zGround: global Z coordinate of ground level
+        :param zBottomSoils: list of global Z coordinates of the bottom level
+              for each soil (from top to bottom)
+        :param KSoils: list of pressure coefficients for each soil (from top 
+              to bottom)
+        :param qUnif: uniform load over the backfill surface (defaults to 0)
+        :ivar xcSet: set that contains the elements (shells and/or beams)
+        :ivar vDir: unit xc vector defining pressures direction
         '''
-        super(EarthPressureBase,self).__init__()
+        super(UnifPressureOnGround,self).__init__()
         self.zGround= zGround
-        self.gammaSoil= gammaSoil
+        self.zBottomSoils= zBottomSoils
+        self.zTopLev= [zGround]+zBottomSoils
+        self.KSoils= KSoils
+        self.qUnif=qUnif
+        self.xcSet=xcSet
+        self.vDir=vDir
+
+    def getLayerIndex(self, z):
+        ''' Return the soil layer that corresponds to z.
+
+        :param z: global z coordinate.
+        '''
+        self.zTopLev.reverse()
+        retval=len(self.zTopLev)-bisect.bisect_left(self.zTopLev,z)-1
+        self.zTopLev.reverse()
+        return retval
+        
+    def getPressure(self,z):
+        '''Return the earth pressure acting on the points at global coordinate z.
+        :param z: global z coordinate.
+        '''
+        ret_press= 0.0
+        if z <= self.zGround:
+            ind= self.getLayerIndex(z) # index of the soil layer that correspond to z.
+            ret_press= self.KSoils[ind]*self.qUnif # Compute pressure.
+        return ret_press
+    
+    def appendLoadToCurrentLoadPattern(self, iCoo=2, delta=0):
+        '''Append earth thrust on a set of elements to the current
+        load pattern.
 
 
-class EarthPressureModel(PressureModelBase):
+        :param iCoo: index of the coordinate that represents depth.
+        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
+        '''
+        super(EarthPressureModel,self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir,iCoo,delta)
+
+class EarthPressureModel(UnifPressureOnGround):
     '''Parameters to define a load of type earth pressure
 
       :ivar zGround: global Z coordinate of ground level
-      :ivar zBottomSoils: list of global Z coordinates of the bottom level
-            for each soil (from top to bottom)
-      :ivar KSoils: list of pressure coefficients for each soil (from top 
-            to bottom)
       :ivar gammaSoils: list of weight density for each soil (from top to
             bottom)
       :ivar zWater: global Z coordinate of groundwater level 
@@ -129,13 +168,10 @@ class EarthPressureModel(PressureModelBase):
         Note: xcSet and vDir have a default value None for compatibility with
           old definitions (through loads module)
         '''
-        super(EarthPressureModel,self).__init__()
-        self.zGround= zGround
-        self.zBottomSoils= zBottomSoils
-        self.KSoils= KSoils
+        super(EarthPressureModel,self).__init__(zGround= zGround, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif, xcSet= xcSet, vDir= vDir)
         self.gammaSoils= gammaSoils
-        self.zWater= zWater
-        self.zTopLev= [zGround]+zBottomSoils
+        self.zWater= zWater # global Z coordinate of groundwater level 
+        # Insert zWater level at the proper position.
         self.zTopLev.reverse()
         bisect.insort_left(self.zTopLev,zWater)
         self.zTopLev.reverse()
@@ -145,41 +181,43 @@ class EarthPressureModel(PressureModelBase):
             self.gammaSoils.insert(indWat-1,self.gammaSoils[indWat-1])
             for i in range(indWat,len(self.gammaSoils)):
                 self.gammaSoils[i]-=gammaWater
-            self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
-                
-        self.qUnif=qUnif
-        self.xcSet=xcSet
-        self.vDir=vDir
+            self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)                
 
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.
         :param z: global z coordinate.
         '''
-        ret_press=0
+        ret_press= super(EarthPressureModel,self).getPressure(z)
         if z <= self.zGround:
-            self.zTopLev.reverse()
-            ind=len(self.zTopLev)-bisect.bisect_left(self.zTopLev,z)-1
-            self.zTopLev.reverse()
-            ret_press= 0.0
+            ind= self.getLayerIndex(z) # soil layer that correspond to z.
+            # Compute pressure.
+            ## Pressure of the upper soil layers.
             for i in range(ind):
-                ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+                ret_press+= self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+            ## Pressure of the layer that correspond to z.
             ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)
+            ## Water pressure.
             if(self.zWater>self.zBottomSoils[-1]):
                 for i in range(ind):
                     ret_press+= self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
                 ret_press+= self.gammaWater[ind]*(self.zTopLev[ind]-z)
-            ret_press+=self.KSoils[ind]*self.qUnif
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,iCoo=2,delta=0):
-        '''Append earth thrust on a set of elements to the current
-        load pattern.
+class EarthPressureBase(PressureModelBase):
+    '''Parameters to define a load of type earth pressure
 
+      :ivar zGround:   global Z coordinate of ground level
+      :ivar gammaSoil: weight density of soil .
+    '''
+    def __init__(self, zGround, gammaSoil):
+        ''' Constructor.
 
-        :param iCoo: index of the coordinate that represents depth.
-        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
+        :param zGround:   global Z coordinate of ground level
+        :param gammaSoil: weight density of soil 
         '''
-        super(EarthPressureModel,self).appendLoadToCurrentLoadPattern(self.xcSet,self.vDir,iCoo,delta)
+        super(EarthPressureBase,self).__init__()
+        self.zGround= zGround
+        self.gammaSoil= gammaSoil
         
 class PeckPressureEnvelope(EarthPressureBase):
     ''' Envelope of apparent lateral pressure diagrams for design 
@@ -763,8 +801,8 @@ class IskanderPressureDistribution(SeismicPressureDistribution):
         return retval
         
         
-class EarthPressureSlopedWall(object):
-    '''Earth pressure on a sloped wall. A single soil type with no water table.
+class EarthPressureSlopedBackfill(object):
+    '''Earth pressure on a wall with sloped backfill. A single soil type with no water table.
 
     :ivar Ksoil: pressure coefficient of the soil.
     :ivar gammaSoil: weight density of the soil
