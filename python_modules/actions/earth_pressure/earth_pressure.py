@@ -51,19 +51,30 @@ class PressureModelBase(object):
         tanDelta= math.tan(delta)
         tanVector= xc.Vector([-vDir[1],vDir[0]]) #iCoo= 1 => 2D
         if(iCoo==2): #3D
-          tanVector= xc.Vector([vDir[2],vDir[1],-vDir[0]])
+            tanVector= xc.Vector([vDir[2],vDir[1],-vDir[0]])
         if(len(vDir)==3): #3D load.
-          for e in xcSet.elements:
-              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-              loadVector= presElem*(vDir+tanDelta*tanVector)
-              if(presElem!=0.0):
-                  e.vector3dUniformLoadGlobal(loadVector)
+            retval= geom.SlidingVector3d()
+            for e in xcSet.elements:
+                centroid= e.getCooCentroid(False)
+                presElem= self.getPressure(centroid[iCoo])
+                loadVector= presElem*(vDir+tanDelta*tanVector)
+                if(presElem!=0.0):
+                    e.vector3dUniformLoadGlobal(loadVector)
+                    area= e.getArea(False)
+                    totalLoad= loadVector*area
+                    retval+= geom.SlidingVector3d(geom.Pos3d(centroid[0], centroid[1], centroid[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))
         else: #2D load.
-          for e in xcSet.elements:
-              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-              loadVector= presElem*(vDir+tanDelta*tanVector)
-              if(presElem!=0.0):
-                  e.vector2dUniformLoadGlobal(loadVector)
+            retval= geom.SlidingVector2d()
+            for e in xcSet.elements:
+                centroid= e.getCooCentroid(False)
+                presElem= self.getPressure(centroid[iCoo])
+                loadVector= presElem*(vDir+tanDelta*tanVector)
+                if(presElem!=0.0):
+                    e.vector2dUniformLoadGlobal(loadVector)
+                    length= e.getLength(False)
+                    totalLoad= loadVector*length
+                    retval+= geom.SlidingVector2d(geom.Pos2d(centroid[0], centroid[1]), geom.Vector2d(totalLoad[0], totalLoad[1]))
+        return retval # Sliding vector system
 
         
 
