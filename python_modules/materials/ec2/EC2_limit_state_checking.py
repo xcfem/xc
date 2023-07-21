@@ -500,7 +500,22 @@ class EC2RebarFamily(rf.RebarFamily):
     def getCopy(self):
         return EC2RebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover, pos= self.pos)
 
+def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
+    ''' Creates a dictionary with predefined rebar families.
 
+    :param steel: rebars steel material.
+    :param cover: concrete cover for the families.
+    :param diameters: list of diameters.
+    :param spacings: list of spacings between bars. 
+    '''
+    retval= dict()
+    for diameter in diameters:
+        diameterText= str(int(diameter*1e3))
+        for spacing in spacings:
+            spacingText= str(int(spacing*1e2))
+            familyName= 'A'+diameterText+'_'+spacingText
+            retval[familyName]= EC2RebarFamily(steel= steel, diam= diameter, spacing= spacing, concreteCover= cover)
+    return retval
 
 
 # EC2:2004 6.2 Shear

@@ -2134,3 +2134,19 @@ class EHERebarFamily(rf.RebarFamily):
         outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
         rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
+def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
+    ''' Creates a dictionary with predefined rebar families.
+
+    :param steel: rebars steel material.
+    :param cover: concrete cover for the families.
+    :param diameters: list of diameters.
+    :param spacings: list of spacings between bars. 
+    '''
+    retval= dict()
+    for diameter in diameters:
+        diameterText= str(int(diameter*1e3))
+        for spacing in spacings:
+            spacingText= str(int(spacing*1e2))
+            familyName= 'A'+diameterText+'_'+spacingText
+            retval[familyName]= EHERebarFamily(steel= steel, diam= diameter, spacing= spacing, concreteCover= cover)
+    return retval
