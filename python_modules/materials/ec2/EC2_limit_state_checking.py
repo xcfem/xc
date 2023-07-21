@@ -499,6 +499,14 @@ class EC2RebarFamily(rf.RebarFamily):
 
     def getCopy(self):
         return EC2RebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover, pos= self.pos)
+    
+    def getRebarController(self):
+        return RebarController(concreteCover= self.concreteCover, spacing= self.spacing)
+    
+    def getBasicAnchorageLength(self,concrete):
+      ''' Return the basic anchorage length of the bars.'''
+      rebarController= self.getRebarController()
+      return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
     ''' Creates a dictionary with predefined rebar families.
