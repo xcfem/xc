@@ -373,6 +373,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.
+
         :param z: global z coordinate.
         '''
         ret_press=0.0
