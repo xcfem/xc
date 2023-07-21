@@ -15,7 +15,6 @@ import os
 import sys
 from rough_calculations import ng_retaining_wall
 from materials.sia262 import SIA262_materials
-from materials.sia262 import SIA262_limit_state_checking
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 from materials import typical_materials
@@ -79,32 +78,26 @@ HwaterAcc= 1.5
 concrete= SIA262_materials.c30_37
 #concrete= EHE_materials.HA30
 reinfSteel= EHE_materials.B500S
-pth= os.path.dirname(__file__)
-if(not pth):
-  pth= "."
-auxModulePath= pth+"/../../aux"
-sys.path.append(auxModulePath)
-import rebar_types
-rebar_types.define_types(reinfSteel= reinfSteel, cover= cover)
+reinf_types= EHE_limit_state_checking.define_rebar_families(steel= reinfSteel, cover= cover)
 
 sectionName= "mur10m"
 wall= ng_retaining_wall.RetainingWall(name= sectionName, concreteCover= cover, stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= 1/10.0, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= reinfSteel)
 
 #wall.exigeanceFisuration= 'A'
-wall.stemReinforcement.setReinforcement(1, rebar_types.A25_10.getCopy())  # vert. trasdós (esperas)
-wall.stemReinforcement.setReinforcement(2, rebar_types.A25_10.getCopy()) # vert. trasdós (contacto terreno)
-wall.stemReinforcement.setReinforcement(11, rebar_types.A16_20.getCopy()) #horiz. trasdós
+wall.stemReinforcement.setReinforcement(1, reinf_types['A25_10'].getCopy())  # vert. trasdós (esperas)
+wall.stemReinforcement.setReinforcement(2, reinf_types['A25_10'].getCopy()) # vert. trasdós (contacto terreno)
+wall.stemReinforcement.setReinforcement(11, reinf_types['A16_20'].getCopy()) #horiz. trasdós
 
-wall.stemReinforcement.setReinforcement(4, rebar_types.A16_20.getCopy()) # vert. intradós (esperas)
-wall.stemReinforcement.setReinforcement(5, rebar_types.A16_20.getCopy()) # vert. intradós (exterior)
-wall.stemReinforcement.setReinforcement(12, rebar_types.A16_20.getCopy()) #horiz. intradós
+wall.stemReinforcement.setReinforcement(4, reinf_types['A16_20'].getCopy()) # vert. intradós (esperas)
+wall.stemReinforcement.setReinforcement(5, reinf_types['A16_20'].getCopy()) # vert. intradós (exterior)
+wall.stemReinforcement.setReinforcement(12, reinf_types['A16_20'].getCopy()) #horiz. intradós
 
-wall.footingReinforcement.setReinforcement(3, rebar_types.A25_10.getCopy()) #tr. sup. zapata
-wall.footingReinforcement.setReinforcement(9, rebar_types.A16_10.getCopy()) # ln. sup. zapata
-wall.footingReinforcement.setReinforcement(7, rebar_types.A20_10.getCopy()) # tr. inf. zapata
-wall.footingReinforcement.setReinforcement(8, rebar_types.A16_20.getCopy()) # ln. inf. zapata
+wall.footingReinforcement.setReinforcement(3, reinf_types['A25_10'].getCopy()) #tr. sup. zapata
+wall.footingReinforcement.setReinforcement(9, reinf_types['A16_10'].getCopy()) # ln. sup. zapata
+wall.footingReinforcement.setReinforcement(7, reinf_types['A20_10'].getCopy()) # tr. inf. zapata
+wall.footingReinforcement.setReinforcement(8, reinf_types['A16_20'].getCopy()) # ln. inf. zapata
 
-wall.stemReinforcement.setReinforcement(6, rebar_types.A12_20.getCopy())  #coronación
+wall.stemReinforcement.setReinforcement(6, reinf_types['A12_20'].getCopy())  #coronación
 
 # Create FE model.
 wallFEModel= wall.createLinearElasticFEModel(prbName= 'Retaining wall '+sectionName, kS= kS)
