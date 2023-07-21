@@ -19,6 +19,7 @@ from postprocess import get_reactions
 import scipy.interpolate
 from materials import typical_materials
 from materials.sections import section_properties
+from materials.sections.fiber_section import def_simple_RC_section
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rc_section
 from misc_utils import log_messages as lmsg
@@ -870,6 +871,32 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.feProblem= xc.FEProblem()
         self.feProblem.title= title
         return self.feProblem
+
+    def getFoundationSections(self):
+        ''' Create the XC section material for the foundation.
+        '''
+        rcSection= def_simple_RC_section.RCRectangularSection(name= self.name+"FoundationSection", width= self.b, depth= self.footingThickness, concrType= self.concrete, reinfSteelType= self.footingReinforcement.steel)
+        preprocessor= self.modelSpace.preprocessor 
+        elasticSection= rcSection.defElasticShearSection2d(preprocessor) #Foundation elements material.
+        if(__debug__):
+            if(not elasticSection):
+                AssertionError('Can\'t create section for foundation.')
+        return rcSection, elasticSection
+    
+    def getStemXCSection(self, y):
+        ''' Create the XC section material for the foundation.
+
+        :param y: distance from the top of the stem.
+        '''
+        depth= self.getDepth(y)
+        name= self.name+"StemSection"+str(y)
+        rcSection= def_simple_RC_section.RCRectangularSection(name= name, width= self.b, depth= depth, concrType= self.concrete, reinfSteelType= self.stemReinforcement.steel)
+        preprocessor= self.modelSpace.preprocessor 
+        retval= rcSection.defElasticShearSection2d(preprocessor) #Foundation elements material.
+        if(__debug__):
+            if(not retval):
+                AssertionError('Can\'t create section for foundation.')
+        return retval
         
     def genMesh(self,nodes,springMaterials):
         '''Generate finite element mesh.'''
@@ -878,15 +905,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         trfs= preprocessor.getTransfCooHandler
         transformationName= self.name+'LinearTrf'
         self.trf= trfs.newLinearCrdTransf2d(transformationName)
-        wallMatData= typical_materials.MaterialData(name=self.name+'Concrete',E=self.concrete.getEcm(),nu=0.2,rho=2500)
-        foundationSection= section_properties.RectangularSection(self.name+"FoundationSection",self.b,self.footingThickness)
-        foundationMaterial= foundationSection.defElasticShearSection2d(preprocessor,wallMatData) #Foundation elements material.
-        if(__debug__):
-            if(not foundationMaterial):
-                AssertionError('Can\'t create section for foundation.')
+        foundationRCSection, foundationXCSection= self.getFoundationSections() # foundation elements XC section material.
         elementSize= 0.2
         seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= foundationSection.name
+        seedElemHandler.defaultMaterial= foundationXCSection.name
         seedElemHandler.defaultTransformation= transformationName
         seedElem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
         if(__debug__):
@@ -896,11 +918,16 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.heelSet= preprocessor.getSets.defSet("heelSet")
         self.toeSet= preprocessor.getSets.defSet("toeSet")
         self.foundationSet= preprocessor.getSets.defSet("foundationSet")
+        reinforcementUpVector= geom.Vector3d(0,1,0) # Y+. This vector defines the
+                                                    # meaning of "top reinforcement"
+                                                    # or "bottom reinforcement".
         for lineName in ['heel','toe']:
             l= self.wireframeModelLines[lineName]
             l.setElemSize(elementSize)
             l.genMesh(xc.meshDir.I)
             for e in l.elements:
+                e.setProp("baseSection", foundationRCSection)
+                e.setProp("reinforcementUpVector", reinforcementUpVector) # Y+
                 self.foundationSet.elements.append(e)
                 self.wallSet.elements.append(e)
                 if(lineName=='heel'):
@@ -909,11 +936,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
                     self.toeSet.elements.append(e)
         self.foundationSet.fillDownwards()
 
-        stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
-        stemMaterial= stemSection.defElasticShearSection2d(preprocessor,wallMatData) #Stem elements material.
-        if(__debug__):
-            if(not stemMaterial):
-                AssertionError('Can\'t create section for stem.')
+        # Stem mesh.
+        stemSection= self.getStemXCSection(self.stemHeight/2.0) # stem elements XC section material.
         self.stemSet= preprocessor.getSets.defSet("stemSet")
         for lineName in ['stem']:
             l= self.wireframeModelLines[lineName]
@@ -922,9 +946,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             l.genMesh(xc.meshDir.I)
             for e in l.elements:
                 y= -e.getPosCentroid(True).y
-                h= self.getDepth(y)
-                stemSection.h= h
-                e.sectionProperties= stemSection.getCrossSectionProperties2D(wallMatData)
+                stemSection= self.getStemXCSection(y) # stem elements XC section material.
+                e.setMaterial(stemSection.name)
                 self.stemSet.elements.append(e)
                 self.wallSet.elements.append(e)
         # Springs on nodes.
@@ -1035,8 +1058,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
            :param pressureModel: (obj) earth pressure model for the backfill.
         '''
-        self.createEarthPressureLoadOnStem(pressureModel,xc.Vector([1.0,0.0]),Delta= Delta)
-        self.createEarthPressureLoadOnToeEnd(pressureModel)
+        retval= self.createEarthPressureLoadOnStem(pressureModel,xc.Vector([1.0,0.0]),Delta= Delta)
+        retval+= self.createEarthPressureLoadOnToeEnd(pressureModel)
+        return retval
 
     def createVerticalLoadOnHeel(self,loadOnBackfill):
         '''Create the loads over the heel dues to a load acting on the backfill.
