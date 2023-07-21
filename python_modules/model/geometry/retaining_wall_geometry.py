@@ -183,6 +183,55 @@ class CantileverRetainingWallGeometry(object):
         plg= geom.Polygon2d(self.getContourPoints())
         return plg.getArea()
 
+    def getVirtualBack(self, beta, zGround= 0.0):
+        ''' Return a vertical segment passing through the heel of the wall.
+
+        :param beta: slope of the backfill.
+        :param zGround: level of the backfill in its contact with the stem
+                        with respect the top of the stem.
+        '''
+        retval= None
+        stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top
+        backfillOutsideTop= stemOutsideTop-geom.Vector2d(zGround*self.stemBackSlope, zGround)
+        stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
+        heelEndPosBottom= stemOutsideBottom+geom.Vector2d(self.bHeel, -self.footingThickness) # heel end
+        slope= geom.Line2d(backfillOutsideTop,geom.Vector2d(math.cos(beta), math.sin(beta)))
+        vLine= geom.Line2d(heelEndPosBottom, geom.Vector2d(0,1)) # vertical line through the heel of the wall.
+        intersection= vLine.getIntersection(slope)
+        if(len(intersection)):
+            lastPoint= vLine.getIntersection(slope)[0]
+            retval= geom.Segment2d(heelEndPosBottom, lastPoint)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; intersection with the terrain not found.')
+        return retval
+    
+    def getHeightOfBackfillAboveHeel(self, beta, zGround= 0.0):
+        ''' Return a vertical segment from the top corner of the heeel to
+            the intersection with the backfill surface.
+
+        :param beta: slope of the backfill.
+        :param zGround: level of the backfill in its contact with the stem
+                        with respect the top of the stem.
+        '''
+        retval= None
+        stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top
+        backfillOutsideTop= stemOutsideTop-geom.Vector2d(zGround*self.stemBackSlope, zGround)
+        stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
+        heelEndPosTop= stemOutsideBottom+geom.Vector2d(self.bHeel, 0.0) # heel end
+        slope= geom.Line2d(backfillOutsideTop,geom.Vector2d(math.cos(beta), math.sin(beta)))
+        vLine= geom.Line2d(heelEndPosTop, geom.Vector2d(0,1)) # vertical line through the heel of the wall.
+        intersection= vLine.getIntersection(slope)
+        if(len(intersection)):
+            lastPoint= vLine.getIntersection(slope)[0]
+            retval= geom.Segment2d(heelEndPosTop, lastPoint)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; intersection with the terrain not found.')
+        return retval    
+
     def getBackfillAvobeHeelContour(self, beta, zGround= 0.0):
         ''' Return the contour of the backfill that rests on the wall heel.
 
@@ -196,18 +245,14 @@ class CantileverRetainingWallGeometry(object):
         retval.append(backfillOutsideTop)
         stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
         retval.append(stemOutsideBottom)
-        heelEndPosTop= stemOutsideBottom+geom.Vector2d(self.bHeel, 0.0) # heel end
-        retval.append(heelEndPosTop)
-        slope= geom.Line2d(backfillOutsideTop,geom.Vector2d(math.cos(beta), math.sin(beta)))
-        vLine= geom.Line2d(heelEndPosTop, geom.Vector2d(0,1))
-        intersection= vLine.getIntersection(slope)
-        if(len(intersection)):
-            lastPoint= vLine.getIntersection(slope)[0]
-            retval.append(lastPoint)
+        heightOfBackfill= self.getHeightOfBackfillAboveHeel(beta= beta, zGround= zGround)
+        if(heightOfBackfill):
+            retval.append(heightOfBackfill.getFromPoint())
+            retval.append(heightOfBackfill.getToPoint())
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; intersection with the terrain not found.')
+            lmsg.error(className+'.'+methodName+'; virtual back not found.')
         return retval
         
     def getBackfillAvobeHeelArea(self, beta, zGround= 0.0):
