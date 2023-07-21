@@ -26,6 +26,7 @@ from misc_utils import log_messages as lmsg
 import geom
 import xc
 from solution import predefined_solutions
+from postprocess import RC_material_distribution
 
 #
 #       --  zTopWall
@@ -531,11 +532,18 @@ class StemReinforcement(ReinforcementMap):
         '''Returns RC section for reinforcement at stem top.'''
         return ng_rc_section.RCSection(self[self.topStemIndex],self.wallGeom.concrete, self.wallGeom.b,self.wallGeom.stemTopWidth)
     def getSectionStemLongExt(self):
-        '''Returns RC section for loingitudinal reinforcement in stem exterior.'''
+        '''Returns RC section for longitudinal reinforcement in stem exterior.'''
         return ng_rc_section.RCSection(self[self.longExtStemIndex],self.wallGeom.concrete,self.wallGeom.b,(self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0)
     def getSectionStemLongInt(self):
-        '''Returns RC section for loingitudinal reinforcement in stem interior.'''
+        '''Returns RC section for longitudinal reinforcement in stem interior.'''
         return ng_rc_section.RCSection(self[self.longIntStemIndex],self.wallGeom.concrete,self.wallGeom.b,(self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0)
+
+    def getYExtReinfChange(self):
+        ''' Returns the depth where the exterior reinforcement of the stem chantes.
+        '''
+        anchorageLength= self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete)
+        return self.wallGeom.internalForcesULS.getYStem(anchorageLength)
+        
     def writeResult(self, outputFile):
         '''Write stem reinforcement verification results in LaTeX format.'''
 
@@ -549,8 +557,7 @@ class StemReinforcement(ReinforcementMap):
         CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
 
         # Exterior reinforcement in stem.
-        anchorageLength= self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete)
-        yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(anchorageLength)
+        yCoupeExtStem= self.getYExtReinfChange()
         CExtStem= self.getSectionExtStem(yCoupeExtStem)
         NdExtStem= 0.0 #we neglect axial force
         VdExtStem= self.wallGeom.internalForcesULS.VdMax(yCoupeExtStem)
@@ -883,7 +890,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
                 AssertionError('Can\'t create section for foundation.')
         return rcSection, elasticSection
     
-    def getStemXCSection(self, y):
+    def getStemSections(self, y):
         ''' Create the XC section material for the foundation.
 
         :param y: distance from the top of the stem.
@@ -892,11 +899,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         name= self.name+"StemSection"+str(y)
         rcSection= def_simple_RC_section.RCRectangularSection(name= name, width= self.b, depth= depth, concrType= self.concrete, reinfSteelType= self.stemReinforcement.steel)
         preprocessor= self.modelSpace.preprocessor 
-        retval= rcSection.defElasticShearSection2d(preprocessor) #Foundation elements material.
+        elasticSection= rcSection.defElasticShearSection2d(preprocessor) #Foundation elements material.
         if(__debug__):
-            if(not retval):
+            if(not elasticSection):
                 AssertionError('Can\'t create section for foundation.')
-        return retval
+        return rcSection, elasticSection
         
     def genMesh(self,nodes,springMaterials):
         '''Generate finite element mesh.'''
@@ -918,16 +925,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.heelSet= preprocessor.getSets.defSet("heelSet")
         self.toeSet= preprocessor.getSets.defSet("toeSet")
         self.foundationSet= preprocessor.getSets.defSet("foundationSet")
-        reinforcementUpVector= geom.Vector3d(0,1,0) # Y+. This vector defines the
-                                                    # meaning of "top reinforcement"
-                                                    # or "bottom reinforcement".
         for lineName in ['heel','toe']:
             l= self.wireframeModelLines[lineName]
             l.setElemSize(elementSize)
             l.genMesh(xc.meshDir.I)
             for e in l.elements:
                 e.setProp("baseSection", foundationRCSection)
-                e.setProp("reinforcementUpVector", reinforcementUpVector) # Y+
                 self.foundationSet.elements.append(e)
                 self.wallSet.elements.append(e)
                 if(lineName=='heel'):
@@ -937,19 +940,20 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.foundationSet.fillDownwards()
 
         # Stem mesh.
-        stemSection= self.getStemXCSection(self.stemHeight/2.0) # stem elements XC section material.
+        stemRCSection, stemXCSection= self.getStemSections(self.stemHeight/2.0) # stem elements XC section material.
         self.stemSet= preprocessor.getSets.defSet("stemSet")
         for lineName in ['stem']:
             l= self.wireframeModelLines[lineName]
             l.setElemSize(elementSize)
-            seedElemHandler.defaultMaterial= stemSection.name
+            seedElemHandler.defaultMaterial= stemXCSection.name
             l.genMesh(xc.meshDir.I)
             for e in l.elements:
                 y= -e.getPosCentroid(True).y
-                stemSection= self.getStemXCSection(y) # stem elements XC section material.
-                e.setMaterial(stemSection.name)
+                stemRCSection, stemXCSection= self.getStemSections(y) # stem elements XC section material.
+                e.setMaterial(stemXCSection.name)
                 self.stemSet.elements.append(e)
                 self.wallSet.elements.append(e)
+                e.setProp("baseSection", stemRCSection)
         # Springs on nodes.
         self.foundationSet.computeTributaryLengths(False)
         self.fixedNodes= []
@@ -970,7 +974,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             self.fixedNodes.append(fixedNode)
         self.stemSet.fillDownwards()
         self.wallSet.fillDownwards()
-
+        
     def createLinearElasticFEModel(self, prbName, kS):
         ''' Create a linear elastic FE model.
 
@@ -989,6 +993,82 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         #Mesh.
         self.genMesh(nodes,[kX,kY])
         return retval
+
+    def getFoundationReinforcement(self):
+        ''' Return the reinforcement of the foundation in the form of LongReinfLayers
+            objects that will be used the check the reinforcement of the finite
+            elements.
+        '''
+        bottomReinf= self.footingReinforcement.getReinforcement(self.footingReinforcement.bottomFootingIndex)
+        if(bottomReinf):
+            foundationBottomReinforcement= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.RebarRow2ReinfRow(bottomReinf)])
+        else:
+            foundationBottomReinforcement= def_simple_RC_section.LongReinfLayers([])
+        topReinf= self.footingReinforcement.getReinforcement(self.footingReinforcement.topFootingIndex)
+        if(topReinf):
+            foundationTopReinforcement= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.RebarRow2ReinfRow(topReinf)])
+        else:
+            foundationTopReinforcement= def_simple_RC_section.LongReinfLayers([])
+        return foundationBottomReinforcement, foundationTopReinforcement
+
+    def getStemReinforcement(self):
+        ''' Return the reinforcement of the wall stem in the form of LongReinfLayers
+            objects that will be used the check the reinforcement of the finite
+            elements.
+        '''
+        extBottomReinf= self.stemReinforcement.getReinforcement(self.stemReinforcement.extStemBottomIndex)
+        extReinf= self.stemReinforcement.getReinforcement(self.stemReinforcement.extStemIndex)
+        if(extBottomReinf and extReinf):
+            stemExtBottomReinforcement= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.RebarRow2ReinfRow(extBottomReinf), def_simple_RC_section.RebarRow2ReinfRow(extReinf)])
+            stemExtReinforcement= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.RebarRow2ReinfRow(extReinf)])
+        else:
+            stemExtBottomReinforcement= def_simple_RC_section.LongReinfLayers([])
+            stemExtReinforcement= def_simple_RC_section.LongReinfLayers([])
+        intReinf= self.stemReinforcement.getReinforcement(self.stemReinforcement.intStemIndex)
+        if(intReinf):
+            stemIntReinforcement= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.RebarRow2ReinfRow(intReinf)])
+        else:
+            stemIntReinforcement= def_simple_RC_section.LongReinfLayers([])
+        return stemExtBottomReinforcement, stemExtReinforcement, stemIntReinforcement
+        
+    
+    def transferReinforcementToFEModel(self):
+        ''' Transfer the reinforcement definition in foundationReinforcement 
+            and stemReinforcement to the corresponding properties of the
+            model elements.
+        '''
+        reinforcementUpVector= geom.Vector3d(0,1,0) # Y+. This vector defines
+                                                    # the meaning of
+                                                    # "top reinforcement"
+                                                    # or "bottom reinforcement".
+        # foundation reinforcement.
+        foundationBottomReinforcement, foundationTopReinforcement= self.getFoundationReinforcement()
+        for e in self.foundationSet.elements:
+            e.setProp("reinforcementUpVector", reinforcementUpVector) # Y+
+            e.setProp("bottomReinforcement", foundationBottomReinforcement)
+            e.setProp("topReinforcement", foundationTopReinforcement)
+        # stem reinforcement.
+        reinforcementUpVector= geom.Vector3d(-1,0,0) # X-. This vector defines
+                                                    # the meaning of
+                                                    # "top reinforcement"
+                                                    # or "bottom reinforcement".
+        stemExtBottomReinforcement, stemExtReinforcement, stemIntReinforcement= self.getStemReinforcement()
+        yExtReinfChange= self.stemReinforcement.getYExtReinfChange()
+        for e in self.stemSet.elements:
+            y= -e.getPosCentroid(True).y
+            e.setProp("reinforcementUpVector", reinforcementUpVector) # X-
+            if(y>yExtReinfChange):
+                e.setProp("bottomReinforcement", stemExtBottomReinforcement)
+            else:
+                e.setProp("bottomReinforcement", stemExtReinforcement)
+            e.setProp("topReinforcement", stemIntReinforcement)
+
+    def createConcreteSectionDistribution(self):
+        ''' Define spatial distribution of reinforced concrete sections from the
+            properties assingned to the elements.'''
+        self.transferReinforcementToFEModel()
+        reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
+        reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= self.wallSet.elements)
         
 
     def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
