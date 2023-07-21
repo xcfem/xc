@@ -326,7 +326,11 @@ def RebarRow2ReinfRow(rebarRow, width= 1.0, nominalLatCover= 0.03):
     :param width: width of the cross-section (defautls to 1 m)
     :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
     '''
-    return ReinfRow(rebarsDiam= rebarRow.diam,rebarsSpacing= rebarRow.spacing,width= width, nominalCover= rebarRow.cover, nominalLatCover= nominalLatCover)
+    retval= None
+    if(rebarRow):
+        retval= ReinfRow(rebarsDiam= rebarRow.diam,rebarsSpacing= rebarRow.spacing,width= width, nominalCover= rebarRow.concreteCover, nominalLatCover= nominalLatCover)
+    return retval
+    
 
 class LongReinfLayers(object):
     ''' Layers of longitudinal reinforcement.'''
