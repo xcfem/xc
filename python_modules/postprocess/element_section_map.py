@@ -674,13 +674,13 @@ class ElementSectionMap(dict):
             d, m = divmod(n,len(b))
             return n2a(d-1,b)+b[m] if d else b[m]
         
-        if len(elemSet)== 0:
+        if(len(elemSet)==0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; element set is empty.')
             
         # Compute the different sections from the element properties.
-        # propName: name of the element properties that stores the section name
+        # propName: name of the element property that stores the section name
         rcSections= def_simple_RC_section.get_element_rc_sections(elemSet, propName= self.propName)
         # Compute section pairs.
         sectionPairs= list()
