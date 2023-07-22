@@ -80,11 +80,10 @@ class SectionContainer(object):
                 s.lstRCSects[i].defRCSection(preprocessor,matDiagType)
 
 
-    def calcInteractionDiagrams(self,preprocessor,matDiagType, diagramType= 'NMyMz'):
+    def calcInteractionDiagrams(self, preprocessor, diagramType= 'NMyMz'):
         '''Calculates 3D interaction diagrams for each section.
 
         :param preprocessor:   XC preprocessor for the finite element model.
-        :param matDiagType:    'k' for characteristic, 'd' for design
         :param diagramType:    three dimensional diagram: NMyMz
                                bi-dimensional diagram: NMy
                                bi-dimensional diagram: NMz
@@ -96,9 +95,9 @@ class SectionContainer(object):
                 if(diagramType=='NMyMz'):
                     diag= rcs.defInteractionDiagram(preprocessor)
                 elif(diagramType=='NMy'):
-                    diag= rcs.defInteractionDiagramNMy(preprocessor,matDiagType)
+                    diag= rcs.defInteractionDiagramNMy(preprocessor)
                 elif(diagramType=='NMz'):
-                    diag= rcs.defInteractionDiagramNMz(preprocessor,matDiagType)
+                    diag= rcs.defInteractionDiagramNMz(preprocessor)
                 else:
                     lmsg.error("calcInteractionDiagrams; interaction diagram type: " + diagramType + "' unknown.")
                 self.mapInteractionDiagrams[rcs.name]= diag
