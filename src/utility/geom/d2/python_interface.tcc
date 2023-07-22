@@ -20,7 +20,9 @@
 //----------------------------------------------------------------------------
 //python_interface.cxx
 
-class_<Surface2d, bases<GeomObj2d>, boost::noncopyable  >("Surface2d", no_init);
+class_<Surface2d, bases<GeomObj2d>, boost::noncopyable  >("Surface2d", no_init)
+  .def("getDimension", &Surface2d::Dimension, "Return the dimension of the object.")
+  ;
 
 class_<HalfPlane2d, bases<Surface2d> >("HalfPlane2d")
   .def(init<>())
