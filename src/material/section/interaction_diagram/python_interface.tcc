@@ -27,7 +27,7 @@ class_<XC::DeformationPlane, bases<Plane> >("DeformationPlane")
   .def(init<Pos2d,double,Pos2d,double,Pos2d,double>())
   .def(init<Pos3d,Pos3d,Pos3d>())
   .def("constantStrain",&XC::DeformationPlane::ConstantStrain)
-.def("getDeformation",&XC::DeformationPlane::Strain,"DEPRECATED; returns strain at position.")
+  .def("getDeformation",&XC::DeformationPlane::Strain,"DEPRECATED; returns strain at position.")
   .def("getStrain",&XC::DeformationPlane::Strain,"returns strain at position.")
   ;
 
