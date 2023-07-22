@@ -88,6 +88,7 @@ lPatterns.addToDomain(lp0.getName())
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lp0')
 totalSet= preprocessor.getSets.getSet('total')
+## Compute internal forces.
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 lsd.shearResistance.saveAll(combContainer,totalSet) 
