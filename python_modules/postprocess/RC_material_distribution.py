@@ -179,9 +179,9 @@ class RCMaterialDistribution(object):
                           #for each element in the container the fiber sections
                           #(RCsimpleSections) associated with it.
         if(threeDim):
-            self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
+            self.sectionDefinition.calcInteractionDiagrams(preprocessor)
         else:
-            self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
+            self.sectionDefinition.calcInteractionDiagrams(preprocessor, 'NMz')
         outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
         phantomModel= phm.PhantomModel(preprocessor,self)
         result= phantomModel.runChecking(limitStateData,outputCfg)
