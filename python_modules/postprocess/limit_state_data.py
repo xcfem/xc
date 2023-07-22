@@ -358,7 +358,7 @@ class ULS_LimitStateData(LimitStateData):
         '''
         super(ULS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
 
-    def check(self, crossSections,outputCfg= VerifOutVars()):
+    def check(self, crossSections, outputCfg= VerifOutVars(), threeDim= True):
         '''Checking of normal stresses in ultimate limit states
         (see self.dumpCombinations).
 
@@ -367,8 +367,13 @@ class ULS_LimitStateData(LimitStateData):
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
         '''
-        return crossSections.internalForcesVerification3D(self, "d",outputCfg)
+        if(threeDim):
+            return crossSections.internalForcesVerification3D(self, "d",outputCfg)
+        else:
+            return crossSections.internalForcesVerification2D(self, "d",outputCfg)
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
