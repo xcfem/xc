@@ -1067,8 +1067,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         ''' Define spatial distribution of reinforced concrete sections from the
             properties assingned to the elements.'''
         self.transferReinforcementToFEModel()
-        reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
-        reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= self.wallSet.elements)
+        retval= RC_material_distribution.RCMaterialDistribution()
+        retval.assignFromElementProperties(elemSet= self.wallSet.elements)
+        return retval
         
 
     def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
