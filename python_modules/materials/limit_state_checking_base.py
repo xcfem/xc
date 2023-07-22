@@ -407,17 +407,28 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
         '''
         if(self.verbose):
             lmsg.log("Postprocessing combination: "+combName)
-        for e in elements:
-            e.getResistingForce()
-            scc= e.getSection() # Element section in the phantom model.
-            idSection= e.getProp("idSection") # Element section in the "real" model.
-            Ntmp= scc.getStressResultantComponent("N")
-            MyTmp= scc.getStressResultantComponent("My")
-            posEsf= geom.Pos2d(Ntmp,MyTmp)
-            diagInt= e.getProp("diagInt")
-            CFtmp= diagInt.getCapacityFactor(posEsf)
-            if(CFtmp>e.getProp(self.limitStateLabel).CF):
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,CFtmp,Ntmp,MyTmp)) # Worst case.
+        if(len(elements)>0):
+            # Check dimension of the interaction diagrams.
+            firstElement= elements[0]
+            diagInt= firstElement.getProp("diagInt")
+            dimension= diagInt.getDimension()
+            if(dimension!= 2):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; a two-dimensional interaction diagram was expected, got a: '+str(dimension)+'-dimensional one instead.')
+                exit(1)
+            # Compute efficiencies.
+            for e in elements:
+                e.getResistingForce()
+                scc= e.getSection() # Element section in the phantom model.
+                idSection= e.getProp("idSection") # Element section in the "real" model.
+                Ntmp= scc.getStressResultantComponent("N")
+                MyTmp= scc.getStressResultantComponent("My")
+                posEsf= geom.Pos2d(Ntmp,MyTmp)
+                diagInt= e.getProp("diagInt")
+                CFtmp= diagInt.getCapacityFactor(posEsf)
+                if(CFtmp>e.getProp(self.limitStateLabel).CF):
+                    e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,CFtmp,Ntmp,MyTmp)) # Worst case.
 
 class ShearControllerBase(LimitStateControllerBase):
     '''Base class for shear controller classes.'''
