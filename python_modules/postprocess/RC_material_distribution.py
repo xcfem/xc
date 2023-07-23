@@ -181,7 +181,7 @@ class RCMaterialDistribution(object):
         if(threeDim):
             self.sectionDefinition.calcInteractionDiagrams(preprocessor)
         else:
-            self.sectionDefinition.calcInteractionDiagrams(preprocessor, 'NMz')
+            self.sectionDefinition.calcInteractionDiagrams(preprocessor, 'NMy')
         outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
         phantomModel= phm.PhantomModel(preprocessor,self)
         result= phantomModel.runChecking(limitStateData,outputCfg)
