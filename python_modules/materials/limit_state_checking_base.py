@@ -390,7 +390,7 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
     '''Base class for object that controls normal stresses 
        limit state (uniaxial bending).
     '''
-    ControlVars= cv.BiaxialBendingControlVars
+    ControlVars= cv.UniaxialBendingControlVars
     def __init__(self,limitStateLabel):
         ''' Constructor.
         
@@ -423,12 +423,12 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
                 scc= e.getSection() # Element section in the phantom model.
                 idSection= e.getProp("idSection") # Element section in the "real" model.
                 Ntmp= scc.getStressResultantComponent("N")
-                MyTmp= scc.getStressResultantComponent("My")
-                posEsf= geom.Pos2d(Ntmp,MyTmp)
+                MzTmp= scc.getStressResultantComponent("Mz")
+                posEsf= geom.Pos2d(Ntmp,MzTmp)
                 diagInt= e.getProp("diagInt")
                 CFtmp= diagInt.getCapacityFactor(posEsf)
                 if(CFtmp>e.getProp(self.limitStateLabel).CF):
-                    e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,CFtmp,Ntmp,MyTmp)) # Worst case.
+                    e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,CFtmp,Ntmp,MzTmp)) # Worst case.
 
 class ShearControllerBase(LimitStateControllerBase):
     '''Base class for shear controller classes.'''
