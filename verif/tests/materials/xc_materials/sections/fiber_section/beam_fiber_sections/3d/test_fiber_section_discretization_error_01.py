@@ -40,7 +40,7 @@ z1= depth/2.0
 regions= geomSCC.getRegions
 #generation of a quadrilateral region of the specified sizes and number of
 #divisions for the cells (fibers) generation
-rg= regions.newQuadRegion("elast")
+rg= regions.newQuadRegion(elast.name)
 rg.nDivIJ= 1
 rg.nDivJK= 23
 nFibTeor= rg.nDivIJ*rg.nDivJK

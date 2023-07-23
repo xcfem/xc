@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Example from the page 258 of the book "Hormiǵon Armado. Jiménez Montoya (14a. edición) (url={https://books.google.ch/books?id=JWggPwAACAAJ}).
 '''
-import geom
-import xc
-from model import predefined_spaces
-from materials import typical_materials
-import math
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+import math
 
 Es= 2.1e11
 n= 7.365
@@ -33,10 +34,10 @@ steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 regions= sectionGeometryTest.getRegions
 
-flange= regions.newQuadRegion('concrete')# Flange
+flange= regions.newQuadRegion(concrete.name)# Flange
 flange.pMin= geom.Pos2d(d-hf,0.0)
 flange.pMax= geom.Pos2d(d,b)
-web= regions.newQuadRegion('concrete')# Web
+web= regions.newQuadRegion(concrete.name)# Web
 web.pMin= geom.Pos2d(0.0,b/2-bw/2)
 web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 

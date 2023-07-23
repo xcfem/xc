@@ -42,7 +42,7 @@ z1= depth/2.0
 regions= geomRectang.getRegions
 #generation of a quadrilateral region of the specified sizes and number of
 #divisions for the cells (fibers) generation
-steelRegion= regions.newQuadRegion("steel")   
+steelRegion= regions.newQuadRegion(steel.name)   
 steelRegion.nDivIJ= nDivIJ
 steelRegion.nDivJK= nDivJK
 steelRegion.pMin= geom.Pos2d(y0-y1,z0-z1)

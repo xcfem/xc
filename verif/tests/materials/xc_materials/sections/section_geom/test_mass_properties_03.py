@@ -31,15 +31,15 @@ steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 
 regions= sectionGeometryTest.getRegions
-flange= regions.newQuadRegion('concrete')# Flange
+flange= regions.newQuadRegion(concrete.name)# Flange
 flange.pMin= geom.Pos2d(d-hf,0.0)
 flange.pMax= geom.Pos2d(d,b)
-web= regions.newQuadRegion('concrete')# Web
+web= regions.newQuadRegion(concrete.name)# Web
 web.pMin= geom.Pos2d(0.0,b/2-bw/2)
 web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
 reinforcement= sectionGeometryTest.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer("steel")
+reinforcementA= reinforcement.newStraightReinfLayer(steel.name)
 reinforcementA.numReinfBars= 5
 reinforcementA.barArea= areaBar
 reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)

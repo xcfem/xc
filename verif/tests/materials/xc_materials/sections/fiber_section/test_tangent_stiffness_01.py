@@ -29,7 +29,7 @@ geomScc= preprocessor.getMaterialHandler.newSectionGeometry("geomScc")
 regions= geomScc.getRegions
 #generation of a quadrilateral region with the specified size and number of
 #divisions for the cells (fibers) generation
-regEla= regions.newQuadRegion("ela")
+regEla= regions.newQuadRegion(ela.name)
 regEla.nDivIJ= 11
 regEla.nDivJK= 11
 regEla.pMin= geom.Pos2d(-depth/2.0,-width/2.0)

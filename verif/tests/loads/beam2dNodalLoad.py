@@ -64,7 +64,7 @@ P= 1e3 # punctual load.
 
 ## Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 nod2.newLoad(xc.Vector([0,-P,0]))
 ## We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
