@@ -77,16 +77,10 @@ lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","lp0")
 lp0.newNodalLoad(n3.tag,xc.Vector([Fx,Fy,Fz,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.getName())
-
-# # Solution
-# analysis= predefined_solutions.simple_static_linear(feProblem)
-# result= analysis.analyze(1)
 
 # Load combinations
 combContainer= combs.CombContainer()
-combContainer.ULS.perm.add('allLoads', '1.0*lp0')
+combContainer.ULS.perm.add('allLoads', '1.0*'+lp0.name)
 totalSet= preprocessor.getSets.getSet('total')
 ## Compute internal forces.
 cfg= default_config.get_temporary_env_config()
