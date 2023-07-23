@@ -64,6 +64,10 @@ concrete= EC2_materials.C25
 steel= EC2_materials.S500B
 
 wall= ng_retaining_wall.RetainingWall(name= 'A.4_worked_example', stemHeight= retainedHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= 0.0, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= steel)
+# Virtual back.
+virtualBack= wall.getVirtualBack(beta= slopeOfBackfillSurface)
+ratio0= abs(virtualBack.getLength()-7.62)/virtualBack.getLength()
+
 # Characteristic total self-weight of wall.
 wallWeight= concrete.density()*wall.getArea()*g
 refWallWeight= 183e3/10*g
@@ -98,16 +102,22 @@ gammaWater= 1000*g
 vDir= xc.Vector([-math.sin(slopeOfBackfillSurface), -math.cos(slopeOfBackfillSurface)])
 ### Partial safety factors.
 gammaG= 1.35
-gammaQ= 1.5
+gammaQ= 1.3
 ### Set current load case.
 earthPress= loadCaseManager.setCurrentLoadCase('earthPress')
 ### Uniform load on the backfill surface.
-unifLoadPressure= earth_pressure.UniformPressureOnBackfill(zGround= 0.0, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= 5e3, vDir= vDir)
-EaQd= wall.createEarthPressureLoadOnStem(unifLoadPressure)
-# print(EaQd)
+qUnif= 5e3
+unifLoadPressure= earth_pressure.UniformPressureOnBackfill(zGround= 0.0, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif, vDir= vDir)
+EaQd= gammaQ*wall.createBackfillPressures(unifLoadPressure)
+EaQdRef= geom.Vector2d(-gammaQ*Ka[1]*qUnif*virtualBack.getLength()*math.cos(granularFill.beta), 0)
+ratio4= (EaQd.getResultant()-EaQdRef).getModulus()/EaQdRef.getModulus()
 ### Earth pressure on back of wall stem.
-backfillPressureModel=  earth_pressure.EarthPressureModel(zGround= 0.0, zBottomSoils= zBottomSoils, KSoils= KSoils, gammaSoils= gammaSoils, zWater= zWater, gammaWater= gammaWater,qUnif=0)
-slidingVectorSystem= wall.createBackfillPressures(backfillPressureModel, Delta= 0.0)
+zGroundToSimulateBeta= 0.33*wall.bHeel*math.tan(granularFill.beta)
+backfillPressureModel= earth_pressure.EarthPressureModel(zGround= zGroundToSimulateBeta, zBottomSoils= zBottomSoils, KSoils= [Ka[0]], gammaSoils= gammaSoils, zWater= zWater, gammaWater= gammaWater,qUnif=0)
+EaGd= gammaG*wall.createBackfillPressures(backfillPressureModel, Delta= 0.0)
+EaGdRef= geom.Vector2d(-gammaG*Ka[0]*0.5*gSoil*virtualBack.getLength()**2*math.cos(granularFill.beta), 0)
+ratio5= (EaGd.getResultant()-EaGdRef).getModulus()/EaGdRef.getModulus()
+
 ### Dead load on the wall heel.
 wall.createDeadLoad(heelFillDepth= wall.getBackfillAvobeHeelAvgHeight(beta= granularFill.beta), toeFillDepth= 0.0,rho= granularFill.rho, grav= g)
 
@@ -116,20 +126,29 @@ wall.createDeadLoad(heelFillDepth= wall.getBackfillAvobeHeelAvgHeight(beta= gran
 
 # Verification of drained strength.
 
+print('virtual back height: ', virtualBack.getLength())
+print('ratio0= ', ratio0)
 '''
 print('bHeel= ',bHeel, 'm')
 print('wall weight: ', wallWeight/1e3, 'kN/m')
 print('reference wall weight: ', refWallWeight/1e3, 'kN/m')
-print(ratio1)
+print('ratio1= ',ratio1)
 print('weight of the backfill above the wall heel: ', backfillAboveHeelWeight/1e3, 'kN/m')
-print(ratio2)
-print('Ka= ', Ka)
-print(ratio3)
+print('ratio2= ',ratio2)
 '''
+print('gSoil= ', gSoil)
+print('Ka= ', Ka)
+print('ratio3= ', ratio3)
+print('EaQd= ', EaQd)
+print('EaQdRef= ', EaQdRef)
+print('ratio4= ', ratio4)
+print('EaGd= ', EaGd)
+print('EaGdRef= ', EaGdRef)
+print('ratio5= ', ratio5)
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(abs(ratio1)<1e-9 and abs(ratio2)<1e-4 and abs(ratio3)<1e-3):
+if(abs(ratio0)<1e-3 and abs(ratio1)<1e-9 and abs(ratio2)<1e-4 and abs(ratio3)<1e-3) and abs(ratio4)<.01 and abs(ratio5)<.05 :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
