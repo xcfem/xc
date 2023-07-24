@@ -39,6 +39,35 @@ class PressureModelBase(object):
         lmsg.error(className+'.'+methodName+'; error: getPressure must be overloaded in derived classes.')
         return 0.0
 
+    def getForces2D(self, segment2d, numDiv= 10, beta= 0.0):
+        ''' Return the sliding vector system which is equivalent to the 
+            pressures acting on the surface represented by the 2D segment
+            argument.
+
+        :param segment2d: two-dimensional segment that represents the surface
+                          under pressure.
+        :param numDiv: number of sample points along the segment.
+        :param beta: slope inclination of backfill.
+        '''
+        points= segment2d.Divide(numDiv)
+        divLength= segment2d.getLength()/numDiv
+        # Compute sample points.
+        samplePoints= list()
+        p0= points[0]
+        for p in points[1:]:
+            v= (p-p0)*0.5 # vector to division midpoint.
+            samplePoints.append(p0+v) # append midpoint.
+            p0= p
+        dirVector= geom.Vector2d(-math.cos(beta), -math.sin(beta)) # direction of the pressure.
+        tributaryAreas= numDiv*[divLength]
+        # Compute sliding vector system.
+        retval= geom.SlidingVectorsSystem2d()
+        for p, area in zip(samplePoints, tributaryAreas):
+            pressure= self.getPressure(z= p.y)
+            forceVector= geom.SlidingVector2d(p, pressure*area*dirVector)
+            retval+= forceVector
+        return retval
+
     def appendLoadToCurrentLoadPattern(self, xcSet, vDir,iCoo= 2,delta= 0.0):
         '''Append earth thrust on a set of elements to the current
         load pattern.
@@ -53,7 +82,7 @@ class PressureModelBase(object):
         if(iCoo==2): #3D
             tanVector= xc.Vector([vDir[2],vDir[1],-vDir[0]])
         if(len(vDir)==3): #3D load.
-            retval= geom.SlidingVector3d()  # checking purposes.
+            retval= geom.SlidingVectorsSystem3d()  # checking purposes.
             for e in xcSet.elements:
                 centroid= e.getCooCentroid(False)
                 presElem= self.getPressure(centroid[iCoo])
@@ -64,7 +93,7 @@ class PressureModelBase(object):
                     totalLoad= loadVector*area
                     retval+= geom.SlidingVector3d(geom.Pos3d(centroid[0], centroid[1], centroid[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))
         else: #2D load.
-            retval= geom.SlidingVector2d()  # checking purposes.
+            retval= geom.SlidingVectorsSystem2d()  # checking purposes.
             for e in xcSet.elements:
                 centroid= e.getCooCentroid(False)
                 presElem= self.getPressure(centroid[iCoo])
@@ -160,6 +189,10 @@ class UniformPressureOnBackfill(PressureModelBase):
         if z <= self.zGround:
             ind= self.getLayerIndex(z) # index of the soil layer that correspond to z.
             ret_press= self.KSoils[ind]*self.qUnif # Compute pressure.
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; asking for pressure of point above zGround (z= '+str(z)+', zGround= '+str(self.zGround)+')')
         return ret_press
     
     def appendLoadToCurrentLoadPattern(self, iCoo=2, delta=0):
