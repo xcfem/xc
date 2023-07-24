@@ -21,6 +21,25 @@ import math
 import geom
 from actions.earth_pressure import earth_pressure as ep
 
+#
+#                             /+
+#                           /  | V
+#                         /    | i
+#     Backfill slope -> /      | r            
+#                     /        | t
+#      zTopWall --- /          | u
+#               |  |           | a
+#               |  |           | l
+#               |  |           |
+#               |  |           | b
+#               |  |           | a
+#               |  |           | c
+#               |  |           | k
+#          +----   ------------+    <- zTopFooting
+#          |Toe          Heel  |
+#          +-------------------+
+#
+
 # Define wall virtual back.
 virtualBack= geom.Segment2d(geom.Pos2d(2.95,0.818933), geom.Pos2d(2.95, -6.8))
 
