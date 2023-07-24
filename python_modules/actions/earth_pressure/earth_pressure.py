@@ -189,10 +189,10 @@ class UniformPressureOnBackfill(PressureModelBase):
         if z <= self.zGround:
             ind= self.getLayerIndex(z) # index of the soil layer that correspond to z.
             ret_press= self.KSoils[ind]*self.qUnif # Compute pressure.
-        else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; asking for pressure of point above zGround (z= '+str(z)+', zGround= '+str(self.zGround)+')')
+        # else:
+        #     className= type(self).__name__
+        #     methodName= sys._getframe(0).f_code.co_name
+        #     lmsg.warning(className+'.'+methodName+'; asking for pressure of point above zGround (z= '+str(z)+', zGround= '+str(self.zGround)+')')
         return ret_press
     
     def appendLoadToCurrentLoadPattern(self, iCoo=2, delta=0):
