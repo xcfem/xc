@@ -46,6 +46,14 @@ for f1, f2 in zip(forces, distributedForces):
     err+= (f1-f2).getModulus2()
 err= math.sqrt(err)
 
+# Check SVS weighted distribution
+weights= len(positions)*[1.0]
+distributedForces2= svs.distribute(positions)
+err2= 0.0
+for f1, f2 in zip(forces, distributedForces2):
+    err+= (f1-f2).getModulus2()
+err2= math.sqrt(err2)
+
 '''
 print('load values: ', loadValues)
 print('svs= ', svs)
@@ -57,12 +65,13 @@ print('depthEqRef= ', depthEqRef)
 print('ratio2= ', ratio2)
 print('distributed forces: ', distributedForces)
 print('err= ', err)
+print('err2= ', err2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-6 and abs(ratio2)<1e-6 and err<1e-6:
+if abs(ratio1)<1e-6 and abs(ratio2)<1e-6 and err<1e-6 and err2<1e-6:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
