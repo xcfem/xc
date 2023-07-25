@@ -59,12 +59,12 @@ class PressureModelBase(object):
             samplePoints.append(p0+v) # append midpoint.
             p0= p
         dirVector= geom.Vector2d(-math.cos(beta), -math.sin(beta)) # direction of the pressure.
-        tributaryAreas= numDiv*[divLength]
+        tributaryArea= divLength
         # Compute sliding vector system.
         retval= geom.SlidingVectorsSystem2d()
-        for p, area in zip(samplePoints, tributaryAreas):
+        for p in samplePoints:
             pressure= self.getPressure(z= p.y)
-            forceVector= geom.SlidingVector2d(p, pressure*area*dirVector)
+            forceVector= geom.SlidingVector2d(p, pressure*tributaryArea*dirVector)
             retval+= forceVector
         return retval
 
