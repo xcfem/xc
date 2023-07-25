@@ -199,8 +199,8 @@ class CantileverRetainingWallGeometry(object):
         vLine= geom.Line2d(heelEndPosBottom, geom.Vector2d(0,1)) # vertical line through the heel of the wall.
         intersection= vLine.getIntersection(slope)
         if(len(intersection)):
-            lastPoint= vLine.getIntersection(slope)[0]
-            retval= geom.Segment2d(heelEndPosBottom, lastPoint)
+            topPoint= vLine.getIntersection(slope)[0]
+            retval= geom.Segment2d(topPoint, heelEndPosBottom)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
