@@ -937,6 +937,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
                     self.heelSet.elements.append(e)
                 else:
                     self.toeSet.elements.append(e)
+        self.heelSet.fillDownwards()
+        self.toeSet.fillDownwards()
         self.foundationSet.fillDownwards()
 
         # Stem mesh.
@@ -1149,15 +1151,54 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param Delta: angle of the earth pressure with respect to the stem back face.
         :param beta: slope inclination of backfill.
         '''
-        # Compute virtual back.
-        # print('beta= ', beta)
-        # virtualBack= self.getVirtualBack(beta= beta)
-        # print('virtualBack= ', virtualBack)
-        retval= self.createEarthPressureLoadOnStem(pressureModel, Delta= Delta)
-        retval+= self.createEarthPressureLoadOnHeelEnd(pressureModel, Delta= Delta)
+        if(beta!=0.0): 
+            # Compute virtual back.
+            print('beta= ', math.degrees(beta))
+            virtualBack= self.getVirtualBack(beta= beta, footingIncluded= True)
+            print('virtualBack= ', virtualBack)
+            virtualBackSVS= pressureModel.getForces2D(virtualBack, beta= beta)
+            zeroMomentLine= virtualBackSVS.zeroMomentLine()
+            zeroMomentPt= virtualBack.getIntersection(zeroMomentLine)[0]
+            R= virtualBackSVS.getResultant()
+            H= geom.SlidingVectorsSystem2d(zeroMomentPt, geom.Vector2d(R.x, 0), 0.0) # Horizontal component.
+            V= geom.SlidingVectorsSystem2d(zeroMomentPt, geom.Vector2d(0, R.y),0.0) # Vertical component.
+            # Distribute horizontal compoent on the stem.
+            ptList= list()
+            nodeList= list()
+            for n in self.stemSet.nodes:
+                ptList.append(n.getInitialPos2d)
+                nodeList.append(n)
+            loadVectors= H.distribute(ptList)
+            retval= geom.SlidingVectorsSystem2d(zeroMomentPt, geom.Vector2d(), 0.0)
+            for n, v in zip(nodeList, loadVectors):
+                f= v.getVector2d()
+                retval+= geom.SlidingVector2d(n.getInitialPos2d, f)
+                n.newLoad(xc.Vector([f.x,f.y,0.0]))
+            print('H= ', H)
+            print('retval= ', retval)
+            # Distribute vertical component on the heel
+            ptList= list()
+            nodeList= list()
+            # heelEndPosition= self.getHeelEndNodePosition()
+            # limit= 1/2*self.bHeel
+            for n in self.heelSet.nodes:
+                nPos= n.getInitialPos2d
+                #if(nPos.dist(heelEndPosition)<limit):
+                ptList.append(nPos)
+                nodeList.append(n)
+            loadVectors= V.distribute(ptList)
+            for n, v in zip(nodeList, loadVectors):
+                f= v.getVector2d()
+                retval+= geom.SlidingVector2d(n.getInitialPos2d, f)
+                n.newLoad(xc.Vector([f.x,f.y,0.0]))
+            print('V= ', V)
+            
+        else:
+            retval= self.createEarthPressureLoadOnStem(pressureModel, Delta= Delta)
+            retval+= self.createEarthPressureLoadOnHeelEnd(pressureModel, Delta= Delta)
         return retval
 
-    def createFrontFillPressures(self,pressureModel,Delta= 0.0):
+    def createFrontFillPressures(self, pressureModel,Delta= 0.0):
         '''Create front fill earth pressures over the wall.
 
         :param pressureModel: (obj) earth pressure model for the backfill.
