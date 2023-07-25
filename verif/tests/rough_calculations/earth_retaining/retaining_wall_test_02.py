@@ -160,18 +160,20 @@ wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
 
 topFootingDesignBendingMoment= wall.footingReinforcement.wallGeom.internalForcesULS.MdFooting.getAbsMaximum()
-topFootingDesignBendingMomentRef= 21.162479010178583e3 # Reference value.
+topFootingDesignBendingMomentRef= 21.574364549489538e3 # Reference value.
 ratio1= abs(topFootingDesignBendingMoment-topFootingDesignBendingMomentRef)/topFootingDesignBendingMomentRef
 
 topFootingDesignShear= wall.footingReinforcement.wallGeom.internalForcesULS.VdFooting.getAbsMaximum()
-topFootingDesignShearRef= -9.432470975549364e3
+topFootingDesignShearRef= -8.602465128332227e3
 ratio2= abs(topFootingDesignShear-topFootingDesignShearRef)/abs(topFootingDesignShearRef)
 
 '''
-print(topFootingDesignBendingMoment/1e3)
-print(ratio1)
-print(topFootingDesignShear/1e3)
-print(ratio2)
+print('top footing design bending moment (reference value): ', topFootingDesignBendingMomentRef/1e3,'kN.m/m')
+print('top footing design bending moment (computed value): ',topFootingDesignBendingMoment/1e3,'kN.m/m')
+print('ratio1= ', ratio1)
+print('top footing design shear (reference value): ', topFootingDesignShearRef/1e3,'kN/m')
+print('top footing design shear (reference value): ', topFootingDesignShear/1e3,'kN/m')
+print('ratio2= ', ratio2)
 '''
 
 from misc_utils import log_messages as lmsg

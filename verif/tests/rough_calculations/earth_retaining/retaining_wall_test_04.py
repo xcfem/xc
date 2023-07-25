@@ -160,11 +160,11 @@ wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
 
 topFootingDesignBendingMoment= wall.footingReinforcement.wallGeom.internalForcesULS.MdFooting.getAbsMaximum()
-topFootingDesignBendingMomentRef= 21.162479010178583e3 # Reference value.
+topFootingDesignBendingMomentRef= 21.574364549489538e3 # Reference value.
 ratio1= abs(topFootingDesignBendingMoment-topFootingDesignBendingMomentRef)/topFootingDesignBendingMomentRef
 
 topFootingDesignShear= wall.footingReinforcement.wallGeom.internalForcesULS.VdFooting.getAbsMaximum()
-topFootingDesignShearRef= -9.432470975549364e3
+topFootingDesignShearRef= -8.602465128332227e3
 ratio2= abs(topFootingDesignShear-topFootingDesignShearRef)/abs(topFootingDesignShearRef)
 
 # Check RC sections using XC standard routines.
@@ -195,15 +195,15 @@ for e in wall.wallSet.elements:
     ULS_normalStressesResistanceSect2= e.getProp('ULS_normalStressesResistanceSect2')
     maxCF= max(maxCF,ULS_normalStressesResistanceSect2.CF)
 
-ratio3= abs(maxCF-0.279256831446576)/0.279256831446576
+ratio3= abs(maxCF-0.2841033830044392)/0.2841033830044392
 
 '''
-print(topFootingDesignBendingMoment/1e3)
-print(ratio1)
-print(topFootingDesignShear/1e3)
-print(ratio2)
-print(maxCF)
-print(ratio3)
+print('top footing design bending moment: ', topFootingDesignBendingMoment/1e3)
+print('ratio1= ', ratio1)
+print('top footing design shear: ', topFootingDesignShear/1e3)
+print('ratio3= ', ratio2)
+print('maximum efficienci: ', maxCF)
+print('ratio3= ', ratio3)
 '''
 
 from misc_utils import log_messages as lmsg
