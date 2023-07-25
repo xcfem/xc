@@ -183,7 +183,7 @@ class CantileverRetainingWallGeometry(object):
         plg= geom.Polygon2d(self.getContourPoints())
         return plg.getArea()
 
-    def getVirtualBack(self, beta, zGround= 0.0):
+    def getVirtualBack(self, beta, footingIncluded= True, zGround= 0.0):
         ''' Return a vertical segment passing through the heel of the wall.
 
         :param beta: slope of the backfill.
@@ -194,13 +194,17 @@ class CantileverRetainingWallGeometry(object):
         stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top
         backfillOutsideTop= stemOutsideTop-geom.Vector2d(zGround*self.stemBackSlope, zGround)
         stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
-        heelEndPosBottom= stemOutsideBottom+geom.Vector2d(self.bHeel, -self.footingThickness) # heel end
+        if(footingIncluded):
+            thickness= -self.footingThickness
+        else:
+            thickness= 0.0
+        heelEndPos= stemOutsideBottom+geom.Vector2d(self.bHeel, thickness) # heel end
         slope= geom.Line2d(backfillOutsideTop,geom.Vector2d(math.cos(beta), math.sin(beta)))
-        vLine= geom.Line2d(heelEndPosBottom, geom.Vector2d(0,1)) # vertical line through the heel of the wall.
+        vLine= geom.Line2d(heelEndPos, geom.Vector2d(0,1)) # vertical line through the heel of the wall.
         intersection= vLine.getIntersection(slope)
         if(len(intersection)):
             topPoint= vLine.getIntersection(slope)[0]
-            retval= geom.Segment2d(topPoint, heelEndPosBottom)
+            retval= geom.Segment2d(topPoint, heelEndPos)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
