@@ -679,7 +679,7 @@ class SlidingVectorLoad(BaseVectorLoad):
                 if len(self.loadedNodes)>0:
                     for n in self.loadedNodes:
                         ptList.append(n.getInitialPos3d)
-                        loadVectors= loadSVS.distribute(ptList)
+                    loadVectors= loadSVS.distribute(ptList)
                     for n, v in zip(nodeList,loadVectors):
                         f= v.getVector3d()
                         n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
@@ -693,7 +693,7 @@ class SlidingVectorLoad(BaseVectorLoad):
                 if len(self.loadedNodes)>0:
                     for n in self.loadedNodes:
                         ptList.append(n.getInitialPos2d)
-                        loadVectors= loadSVS.distribute(ptList)
+                    loadVectors= loadSVS.distribute(ptList)
                     for n, v in zip(nodeList,loadVectors):
                         f= v.getVector2d()
                         n.newLoad(xc.Vector([f.x,f.y,0.0]))
