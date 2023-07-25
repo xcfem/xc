@@ -155,7 +155,7 @@ std::vector<SlidingVector2d> SlidingVectorsSystem2d::distribute(const std::vecto
 	f_i[i]= Fcg*w_i/W; // force distribution.
 	const Pos2d pt_i= point_list[i];
 	const Vector2d r_i= pt_i-cg;
-	p_i[i]= w_i*(Mcg*Vector2d(r_i.y(),r_i.x())); // moment distribution.
+	p_i[i]= w_i*(Mcg*Vector2d(-r_i.y(),r_i.x())); // moment distribution.
 	denom+= w_i*dot(r_i,r_i);
       }
     std::vector<SlidingVector2d> retval(sz);
