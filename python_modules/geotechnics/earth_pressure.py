@@ -36,32 +36,45 @@ class RankineSoil(fs.FrictionalSoil):
         super(RankineSoil,self).__init__(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
         self.beta= beta
         
-    def Ka(self, designValue= False):
+    def Ka(self, alphaAngle= 0.0, designValue= False):
         '''Returns Rankine's active earth pressure coefficient.
 
+        :param alphaAngle: inclination of the back face.
         :param designValue: if true use the design value of the internal friction.
         '''
         cBeta= math.cos(self.beta)
         if(designValue):
-            cPhi= math.cos(self.getDesignPhi())
+            phi= self.getDesignPhi()
         else:
-            cPhi= math.cos(self.phi)
-        r= math.sqrt(cBeta**2-cPhi**2)
-        return cBeta*(cBeta-r)/(cBeta+r)
+            phi= self.phi
+        cPhi= math.cos(phi)
+        if(alphaAngle==0.0):
+            r= math.sqrt(cBeta**2-cPhi**2)
+            retval= cBeta*(cBeta-r)/(cBeta+r)
+        else:
+            # See figure 3.7.13 in ROM 0.5-05 chapter 3
+            # https://www.puertos.es/es-es/BibliotecaV2/ROM%200.5-05%20(EN).pdf
+            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(phi))
+            sPhi= math.sin(phi)
+            r= math.sqrt(sPhi**2- math.sin(self.beta)**2)
+            n= math.sqrt(1+sPhi**2-2*sPhi*math.cos(rhoAngle))
+            retval= math.cos(alphaAngle-self.beta)/(math.cos(alphaAngle)**2)*n/(math.cos(self.beta)*r)
+        return retval
+
+    def getDeltaAngleActivePressure(self, alphaAngle= 0.0):
+        '''Returns the angle of the earth pressure with respect to the
+           wall back face.
+
+        :param alphaAngle: inclination of the back face.
+        '''
+        if(alphaAngle==0.0):
+            retval= self.beta
+        else:
+            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(phi))
+            sPhi= math.sin(phi)
+            retval= math.atan(sPhi*math.sin(rhoAngle)/(1-sPhi*math.cos(rhoAngle)))
+        return retval
       
-    def Kp(self, designValue= False):
-        '''Returns Rankine's passive earth pressure coefficient.
-
-        :param designValue: if true use the design value of the internal friction.
-        '''
-        cBeta= math.cos(self.beta)
-        if(designValue):
-            cPhi= math.cos(self.getDesignPhi())
-        else:
-            cPhi= math.cos(self.phi)
-        r= math.sqrt(cBeta**2-cPhi**2)
-        return cBeta*(cBeta+r)/(cBeta-r)
-
     def getActivePressureAtDepth(self, z, waterTableDepth= 6.023e23):
         ''' Returns the active presure at depth z
 
@@ -76,6 +89,18 @@ class RankineSoil(fs.FrictionalSoil):
             retval*= self.Ka()
         return retval
           
+    def Kp(self, designValue= False):
+        '''Returns Rankine's passive earth pressure coefficient.
+
+        :param designValue: if true use the design value of the internal friction.
+        '''
+        cBeta= math.cos(self.beta)
+        if(designValue):
+            cPhi= math.cos(self.getDesignPhi())
+        else:
+            cPhi= math.cos(self.phi)
+        r= math.sqrt(cBeta**2-cPhi**2)
+        return cBeta*(cBeta+r)/(cBeta-r)
       
 
 # Earth pressure according to Coulomb's Theory.
