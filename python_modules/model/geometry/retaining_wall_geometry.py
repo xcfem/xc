@@ -266,7 +266,7 @@ class CantileverRetainingWallGeometry(object):
         :param zGround: level of the backfill in its contact with the stem
                         with respect the top of the stem.
         '''
-        return geom.Polygon2d(self.getBackfillAvobeHeelContour(beta= beta)).getArea()
+        return geom.Polygon2d(self.getBackfillAvobeHeelContour(beta= beta, zGround= zGround)).getArea()
 
     def getBackfillAvobeHeelAvgHeight(self, beta, zGround= 0.0):
         ''' Return the average height of the backfill that rests on the wall
@@ -276,7 +276,7 @@ class CantileverRetainingWallGeometry(object):
         :param zGround: level of the backfill in its contact with the stem
                         with respect the top of the stem.
         '''
-        return geom.Polygon2d(self.getBackfillAvobeHeelContour(beta= beta)).getArea()/self.bHeel
+        return self.getBackfillAvobeHeelArea(beta= beta, zGround= zGround)/self.bHeel
     
     def getXYVertices(self):
         ''' Return the contour X,Y coordinates in two separate
