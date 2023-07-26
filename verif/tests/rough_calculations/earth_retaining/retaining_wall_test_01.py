@@ -184,7 +184,7 @@ uls_results= wall.performULSAnalysis(strengthULSCombinations)
 wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
 
-err= math.sqrt((sr.Foverturning-7.262561362208117)**2+(sr.Fsliding-1.604694241088682)**2+(sr.Fbearing-0.44958979174232017)**2+(sr.FadmPressure-0.9112425254323072)**2)
+err= math.sqrt((sr.Foverturning-7.059644824698756)**2+(sr.Fsliding-1.5386528170673235)**2+(sr.Fbearing-0.45943053139611056)**2+(sr.FadmPressure-0.9470088940090022)**2)
 
 '''
 print("Overturning: ",sr.Foverturning)

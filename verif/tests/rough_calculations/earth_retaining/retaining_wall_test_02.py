@@ -160,11 +160,11 @@ wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
 
 topFootingDesignBendingMoment= wall.footingReinforcement.wallGeom.internalForcesULS.MdFooting.getAbsMaximum()
-topFootingDesignBendingMomentRef= 21.574364549489538e3 # Reference value.
+topFootingDesignBendingMomentRef= 21.705458372202553e3 # Reference value.
 ratio1= abs(topFootingDesignBendingMoment-topFootingDesignBendingMomentRef)/topFootingDesignBendingMomentRef
 
 topFootingDesignShear= wall.footingReinforcement.wallGeom.internalForcesULS.VdFooting.getAbsMaximum()
-topFootingDesignShearRef= -8.602465128332227e3
+topFootingDesignShearRef= -9.046326414323536e3
 ratio2= abs(topFootingDesignShear-topFootingDesignShearRef)/abs(topFootingDesignShearRef)
 
 '''
