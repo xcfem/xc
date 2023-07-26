@@ -141,7 +141,12 @@ frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFront
 wall.createFrontFillPressures(frontFillPressureModel)
 
 
-#Load combinations
+#   ___           _    _           _   _             
+#  / __|___ _ __ | |__(_)_ _  __ _| |_(_)___ _ _  ___
+# | (__/ _ \ '  \| '_ \ | ' \/ _` |  _| / _ \ ' \(_-<
+# \___\___/_|_|_|_.__/_|_||_\__,_|\__|_\___/_||_/__/
+#
+# Load combinations
 combContainer= combinations.CombContainer()
 
 ## Quasi-permanent situations.
