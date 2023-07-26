@@ -1074,20 +1074,45 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         return retval
         
 
-    def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
-        '''Create the loads of the concrete weight.'''
+    def createSelfWeightLoads(self, rho= 2500, grav= 9.81):
+        '''Create the loads of the concrete weight.
+
+        :param rho: density of the concrete material.
+        :param grav: gravitational acceleration.
+        '''
+        retval= geom.SlidingVectorsSystem2d() # With checking purposes only.
         for e in self.wallSet.elements:
             selfWeightLoad= xc.Vector([0.0, -grav*rho*e.sectionProperties.A])
             e.vector2dUniformLoadGlobal(selfWeightLoad)
+            pos= e.getPosCentroid(False)
+            length= e.getLength(False)
+            retval+= geom.SlidingVector2d(geom.Pos2d(pos.x, pos.y), length*geom.Vector2d(selfWeightLoad[0], selfWeightLoad[1]))
+        return retval
         
-    def createDeadLoad(self,heelFillDepth,toeFillDepth,rho= 2000, grav= 9.81):
-        '''Create the loads of earth self weigth.'''
-        heelFillLoad= xc.Vector([0.0, -grav*rho*heelFillDepth])
+    def createDeadLoad(self, heelFillDepth, toeFillDepth, rho= 2000, grav= 9.81):
+        '''Create the loads of earth self weigth.
+
+        :param heelFillDepth: depth of the fill that rests on the wall heel.
+        :param toeFillDepth: depth of the fill that rests on the wall toe.
+        :param rho: density of the concrete material.
+        :param grav: gravitational acceleration.
+        '''
+        retval= geom.SlidingVectorsSystem2d() # With checking purposes only.
+        heelLengthFactor= self.bHeel/self.wireframeModelLines['heel'].getLength()
+        heelFillLoad= xc.Vector([0.0, -grav*rho*heelFillDepth*heelLengthFactor])
         for e in self.heelSet.elements:
             e.vector2dUniformLoadGlobal(heelFillLoad)
-        toeFillLoad= xc.Vector([0.0, -grav*rho*toeFillDepth])
+            pos= e.getPosCentroid(False)
+            length= e.getLength(False)
+            retval+= geom.SlidingVector2d(geom.Pos2d(pos.x, pos.y), length*geom.Vector2d(heelFillLoad[0], heelFillLoad[1]))
+        toeLengthFactor= self.bToe/self.wireframeModelLines['toe'].getLength()
+        toeFillLoad= xc.Vector([0.0, -grav*rho*toeFillDepth*toeLengthFactor])
         for e in self.toeSet.elements:
             e.vector2dUniformLoadGlobal(toeFillLoad)
+            pos= e.getPosCentroid(False)
+            length= e.getLength(False)
+            retval+= geom.SlidingVector2d(geom.Pos2d(pos.x, pos.y), length*geom.Vector2d(toeFillLoad[0], toeFillLoad[1]))
+        return retval
 
     def createEarthPressureLoadOnStem(self,pressureModel, vDir= xc.Vector([-1.0,0.0]), Delta= 0.0):
         '''Create the loads of the earth pressure over the stem.
@@ -1099,6 +1124,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         pressureModel.xcSet= self.stemSet
         pressureModel.vDir= vDir
         return pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1, delta= Delta)
+    
     def getHeelEndNode(self):
         ''' Return the node at the heel end.'''
         return self.wireframeModelPoints['heelEnd'].getNode()
@@ -1153,9 +1179,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         if(beta!=0.0): 
             # Compute virtual back.
-            print('beta= ', math.degrees(beta))
             virtualBack= self.getVirtualBack(beta= beta, footingIncluded= True)
-            print('virtualBack= ', virtualBack)
             virtualBackSVS= pressureModel.getForces2D(virtualBack, beta= beta)
             zeroMomentLine= virtualBackSVS.zeroMomentLine()
             zeroMomentPt= virtualBack.getIntersection(zeroMomentLine)[0]
@@ -1174,8 +1198,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
                 f= v.getVector2d()
                 retval+= geom.SlidingVector2d(n.getInitialPos2d, f)
                 n.newLoad(xc.Vector([f.x,f.y,0.0]))
-            print('H= ', H)
-            print('retval= ', retval)
             # Distribute vertical component on the heel
             ptList= list()
             nodeList= list()
@@ -1190,9 +1212,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             for n, v in zip(nodeList, loadVectors):
                 f= v.getVector2d()
                 retval+= geom.SlidingVector2d(n.getInitialPos2d, f)
-                n.newLoad(xc.Vector([f.x,f.y,0.0]))
-            print('V= ', V)
-            
+                n.newLoad(xc.Vector([f.x,f.y,0.0]))            
         else:
             retval= self.createEarthPressureLoadOnStem(pressureModel, Delta= Delta)
             retval+= self.createEarthPressureLoadOnHeelEnd(pressureModel, Delta= Delta)
