@@ -336,6 +336,12 @@ class WallStabilityResults(object):
                 if(FadmPressure<self.FadmPressure):
                     self.FadmPressure= FadmPressure
                     self.FadmPressureComb= comb
+
+    def getDegreeOfUtilizationForSliding(self):
+        ''' Return the degree of utilization obtained in the verification 
+            of resistance to sliding.
+        '''
+        return 1.0/self.Fsliding
                     
     def writeOutput(self,outputFile,name):
         '''Write results in LaTeX format.
