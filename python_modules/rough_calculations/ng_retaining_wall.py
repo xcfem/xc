@@ -300,13 +300,16 @@ class ReinforcementMap(dict):
     
 class WallStabilityResults(object):
     ''' Results of the wall stability analysis.'''
-    def __init__(self,wall,combinations,foundationSoilModel,sg_adm= None, gammaR= 1):
+    def __init__(self,wall,combinations,foundationSoilModel, toeFillDepth, sg_adm= None, gammaRSliding= 1.0, gammaRBearing= 1.0, ignoreAdhesion= True):
         ''' Constructor.
 
         :param wall: retaining wall to analyze.
         :param foundationSoilModel: soil model foundation.
         :param sg_adm: maximum allowable soil pressure.
         :param gammaR: partial safety factor.
+        :param gammaRSliding: partial factor for sliding resistance.
+        :param gammaRBearing: partial factor for bearing resistance.
+        :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil for sliding resistance.
         '''
         self.Foverturning= 1e15
         self.FoverturningComb= ''
@@ -319,15 +322,15 @@ class WallStabilityResults(object):
         for comb in combinations:
             reactions= wall.resultComb(comb)
             R= reactions.getResultantSVS()
-            Foverturning= wall.getOverturningSafetyFactor(R,gammaR)
+            Foverturning= wall.getOverturningSafetyFactor(R ,gammaR= 1.0)
             if(Foverturning<self.Foverturning):
                 self.Foverturning= Foverturning
                 self.FoverturningComb= comb
-            Fsliding= wall.getSlidingSafetyFactor(R,gammaR,foundationSoilModel)
+            Fsliding= wall.getSlidingSafetyFactor(R,foundationSoilModel= foundationSoilModel,gammaR= gammaRSliding, ignoreAdhesion= ignoreAdhesion)
             if(Fsliding<self.Fsliding):
                 self.Fsliding= Fsliding
                 self.FslidingComb= comb
-            Fbearing= wall.getBearingPressureSafetyFactor(R,foundationSoilModel,1.0)
+            Fbearing= wall.getBearingPressureSafetyFactor(R= R, foundationSoilModel= foundationSoilModel, toeFillDepth= toeFillDepth, q= 0.0, gammaR= gammaRBearing)
             if(Fbearing<self.Fbearing):
                 self.Fbearing= Fbearing
                 self.FbearingComb= comb
@@ -342,6 +345,12 @@ class WallStabilityResults(object):
             of resistance to sliding.
         '''
         return 1.0/self.Fsliding
+
+    def getDegreeOfUtilizationForBearingResistance(self):
+        ''' Return the degree of utilization obtained in the verification 
+            of resistance to sliding.
+        '''
+        return 1.0/self.Fbearing
                     
     def writeOutput(self,outputFile,name):
         '''Write results in LaTeX format.
@@ -714,12 +723,13 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     :ivar stemBottomWidth: (float) Stem width at his contact with the footing.
     :ivar stemTopWidth: (float) Stem width at his top.
     :ivar stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
-    :ivar footingThickness: (float) Thickness of the footing.    
+    :ivar footingThickness: (float) Thickness of the footing.
+    :ivar smoothPrecastFoundation: true if the wall has a precast foundation with a smooth contact with the soil.    
     '''
     b= 1.0
     numberOfStemSets= 4
     
-    def __init__(self,name= 'prb',concreteCover= 40e-3, stemHeight= 2.5, stemBottomWidth=0.25, stemTopWidth=0.25, stemBackSlope= 0.0, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, concrete= None, steel= None,title=None):
+    def __init__(self,name= 'prb',concreteCover= 40e-3, stemHeight= 2.5, stemBottomWidth=0.25, stemTopWidth=0.25, stemBackSlope= 0.0, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, concrete= None, steel= None,title=None, smoothPrecastFoundation= False):
         '''Constructor
 
         :param name: identifier for the retaining wall.
@@ -732,6 +742,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param bToe: (float) Toe length.
         :param bHeel: (float) Heel length.
         :param title: title for the report tables.
+        :param smoothPrecastFoundation: true if the wall has a precast foundation with a smooth contact with the soil.    
         '''
         super(RetainingWall,self).__init__(name= name, stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, stemBackSlope= stemBackSlope)
         #Materials.
@@ -739,6 +750,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.stemReinforcement= StemReinforcement(self,concreteCover, steel)
         self.footingReinforcement= FootingReinforcement(self,concreteCover, steel)
         self.title=title if title else name
+        self.smoothPrecastFoundation= False
         
 
     def setULSInternalForcesEnvelope(self,wallInternalForces):
@@ -1239,7 +1251,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
            :param loadOnBackfill: (obj) load acting on the backfill.
         '''
-        loadOnBackfill.appendVerticalLoadToCurrentLoadPattern(xcSet= self.heelSet, vDir= xc.Vector([0.0,-1.0]), iXCoo= 0, iZCoo= 1)
+        heelLengthFactor= self.bHeel/self.wireframeModelLines['heel'].getLength()
+        return heelLengthFactor*loadOnBackfill.appendVerticalLoadToCurrentLoadPattern(xcSet= self.heelSet, vDir= xc.Vector([0.0,-1.0]), iXCoo= 0, iZCoo= 1, alph= 0.0)
 
     def createPressuresFromLoadOnBackfill(self, loadOnBackfill,Delta= 0.0):
         '''Create the pressures on the stem and on the heel dues to 
@@ -1285,7 +1298,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         foundationPlane= self.getFoundationPlane()
         zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
         p= foundationPlane.getIntersection(zml)[0] # Intersection with
-                                                           # foundation plane.
+                                                   # foundation plane.
         foundationCenterPos2D= self.getFoundationCenterPosition()
         return p.x-foundationCenterPos2D.x #eccentricity
 
@@ -1309,14 +1322,13 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             e= -.001*b
         return b/(3*(-e)*gammaR)
 
-    def getSlidingSafetyFactor(self,R,gammaR,foundationSoilModel):
+    def getSlidingSafetyFactor(self, R, gammaR, foundationSoilModel, ignoreAdhesion= True):
         '''Return the factor of safety against sliding.
 
-         :param R: (SlidingVectorsSystem3d) resultant of the loads acting on the retaining wall.
-         :param gammaR: partial resistance reduction factor.
-         :param foundationSoilModel: (FrictionalCohesiveSoil) soil model.
-         :param gammaMPhi: (float) partial reduction factor for internal friction angle of the soil.
-         :param gammaMc: (float) partial reduction factor for soil cohesion.
+        :param R: (SlidingVectorsSystem3d) resultant of the loads acting on the retaining wall.
+        :param gammaR: partial resistance reduction factor.
+        :param foundationSoilModel: (FrictionalCohesiveSoil) soil model.
+        :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil.
         '''
         foundationPlane= self.getFoundationPlane()
         alphaAngle= math.atan(foundationPlane.getSlope())
@@ -1325,11 +1337,22 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         Ftang= foundationPlane.getVector2dProj(F2D)
         Fnormal= F2D-Ftang
         #Sliding strength
-        e= self.getEccentricity(R) #eccentricity
-        b= self.getFootingWidth()
-        bReduced= 2*(b/2.0+e)
-        Rd= Fnormal.getModulus()*math.tan(foundationSoilModel.getDesignPhi())+foundationSoilModel.getDesignC()*bReduced/math.cos(alphaAngle)
-        return Rd/Ftang.getModulus()/gammaR
+        # Get the critical state (constant volume) angle of shearing
+        # resistance of the soil.
+        if(foundationSoilModel.phi_cv): # if explicitly defined.
+            phi_cv= foundationSoilModel.phi_cv
+        else: # otherwise assume it's equal to the internal friction angle.
+            phi_cv= foundationSoilModel.getDesignPhi()
+        Rd= Fnormal.getModulus()*math.tan(phi_cv)
+        if(self.smoothPrecastFoundation):
+            Rd*= 2/3.0
+        if(not ignoreAdhesion):
+            e= self.getEccentricity(R) #eccentricity
+            b= self.getFootingWidth()
+            bReduced= 2*(b/2.0+e)
+            Rd+= +foundationSoilModel.getDesignC()*bReduced/math.cos(alphaAngle)
+        retval= Rd/Ftang.getModulus()/gammaR
+        return retval
 
     def getBearingPressure(self,R):
         ''' Return the bearing pressure.
@@ -1343,13 +1366,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         sigma= F.y/bReduced
         return sigma
       
-    def getBearingPressureSafetyFactor(self, R, foundationSoilModel, toeFillDepth, q= 0.0):
+    def getBearingPressureSafetyFactor(self, R, foundationSoilModel, toeFillDepth, gammaR= 1.0, q= 0.0):
         ''' Return the factor of safety against bearing capacity of the soil.
 
-         :param R: force on the bearing plane.
-         :param foundationSoilModel: soil model for the Brinch-Hansen analysis.
-         :param toeFillDepth: (float) depht of the soil filling over the toe.
-         :param q: (float) uniform load over the filling.
+        :param R: force on the bearing plane.
+        :param foundationSoilModel: soil model for the Brinch-Hansen analysis.
+        :param toeFillDepth: (float) depht of the soil filling over the toe.
+        :param q: (float) uniform load over the filling.
+        :param gammaR: partial factor for bearing resistance.
         '''
         D= self.getFoundationDepth(toeFillDepth)
         e= self.getEccentricity(R) #eccentricity
@@ -1357,14 +1381,13 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         bReduced= 2*(b/2.0+e)
         F= R.getResultant()
         sigma= F.y/bReduced
-        qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)
+        qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)/gammaR
         return qu/sigma
 
     def getAdmissiblePressureSafetyFactor(self,R,sg_adm):
         ''' Return the factor of safety against bearing capacity of the soil.
 
          :param R: force on the bearing plane.
-         :param toeFillDepth: (float) depht of the soil filling over the toe.
          :param q_adm: (float) admissible bearing pressure.
         '''
         sigma= self.getBearingPressure(R)
@@ -1427,14 +1450,29 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         #preprocessor.getLoadHandler.removeFromDomain(nmbComb)
         return reactions
 
-    def performStabilityAnalysis(self,combinations,foundationSoilModel, sg_adm= None): 
+    def performStabilityAnalysis(self,combinations, foundationSoilModel, toeFillDepth, sg_adm= None, ignoreAdhesion= True): 
         ''' Perform stability limit state analysis.
 
         :param combinations: load combinations to use in the analysis.
         :param foundationSoilModel: model of the foundation soil.
+        :param toeFillDepth: depth of the fill that rests on the wall toe.
         :param sg_adm: admissible stress of the terrain (optional).
+        :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil for sliding resistance.
         '''
-        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, sg_adm)
+        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel= foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= sg_adm, ignoreAdhesion= ignoreAdhesion)
+        return self.stability_results
+
+    def performGEOVerifications(self,combinations, foundationSoilModel, toeFillDepth, gammaRSliding, gammaRBearing, ignoreAdhesion= True): 
+        ''' Perform stability limit state analysis.
+
+        :param combinations: load combinations to use in the analysis.
+        :param foundationSoilModel: model of the foundation soil.
+        :param toeFillDepth: depth of the fill that rests on the wall toe.
+        :param gammaRSliding: partial factor for sliding resistance.
+        :param gammaRBearing: partial factor for bearing resistance.
+        :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil for sliding resistance.
+        '''
+        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= None, gammaRSliding= gammaRSliding, gammaRBearing= gammaRBearing, ignoreAdhesion= ignoreAdhesion)
         return self.stability_results
 
     def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
