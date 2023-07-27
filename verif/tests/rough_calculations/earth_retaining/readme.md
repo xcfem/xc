@@ -10,6 +10,7 @@ Verification tests concerning earth retaining structures.
 - [Culmann’s Graphical Method](https://civilengineeringnotes.com/culmanns-graphical-method)
 - [Culmann method worked example](https://www.geoengineer.org/education/online-lecture-notes-on-soil-mechanics/75-example-problems#problem-72)
 - [Rankine’s Theory of Active Earth Pressure](https://www.soilmanagementindia.com/lateral-earth-pressure/rankines-theory/rankines-theory-of-active-earth-pressure-soil/14031)
+- [Shear strength](https://en.wikipedia.org/wiki/Shear_strength_(soil))
 ### Norms
 - [Eurocode 7: Geotechnical design](https://eurocodes.jrc.ec.europa.eu/EN-Eurocodes/eurocode-7-geotechnical-design)
 - [Eurocode 7: Geotechnical Design. Worked examples](https://publications.jrc.ec.europa.eu/repository/handle/JRC85029)

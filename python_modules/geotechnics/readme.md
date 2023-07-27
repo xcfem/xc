@@ -7,6 +7,7 @@ Python modules related to geotechnical calculations.
 
 ### Soil model.
 - [Drucker-Prager yield criterion. Wikipedia](https://en.wikipedia.org/wiki/Drucker%E2%80%93Prager_yield_criterion)
+- [Shear strength](https://en.wikipedia.org/wiki/Shear_strength_(soil))
 
 ### Earth pressure.
 The reference [Earth pressure theory and application](https://dot.ca.gov/-/media/dot-media/programs/engineering/documents/structureconstruction/ts/ts-chpt-4-a11y.pdf) contains some examples of the Culmann Graphical Method that could be used to write verification tests (see example 4-1 in page 4-33).
