@@ -71,14 +71,13 @@ bHeel= footingWidth-stemBottomWidth-bToe
 # | |\/| / _` |  _/ -_) '_| / _` | (_-<
 # |_|  |_\__,_|\__\___|_| |_\__,_|_/__/
 
-# Partial factors (M)
+# Partial factors (M1)
 gammaMPhiM1= 1.0
-gammaMPhiM2= 1.25
 
 # Granular fill.
 slopeOfBackfillSurface= math.radians(20)
-## Design approach 1.
-granularFillM2= ep.RankineSoil(phi= math.radians(32.5), rho= 19e3/g, gammaMPhi= gammaMPhiM2, beta= slopeOfBackfillSurface) 
+## Design approach 2 (A1+M1+R2).
+granularFillM1= ep.RankineSoil(phi= math.radians(32.5), rho= 19e3/g, gammaMPhi= gammaMPhiM1, beta= slopeOfBackfillSurface) 
 
 # Define wall.
 concrete= EC2_materials.C25
@@ -95,12 +94,13 @@ wall= ng_retaining_wall.RetainingWall(name= 'A.4_worked_example', stemHeight= re
 # Characteristic total self-weight of wall.
 wallWeight= concrete.density()*wall.getArea()*g
 refWallWeight= 183e3/10*g
-ratio0= abs(wallWeight-refWallWeight)/refWallWeight
+ratioWallWeight= abs(wallWeight-refWallWeight)/refWallWeight
 # Characteristic self-weight of the backfill above the heel.
-backfillAboveHeelArea= wall.getBackfillAvobeHeelArea(beta= granularFillM2.beta)
-backfillAboveHeelWeight= granularFillM2.rho*g*backfillAboveHeelArea
+backfillAboveHeelArea= wall.getBackfillAvobeHeelArea(beta= granularFillM1.beta)
+backfillAboveHeelWeight= granularFillM1.rho*g*backfillAboveHeelArea
 refBackfillAboveHeelWeight= 274e3
-ratio1= abs(backfillAboveHeelWeight-refBackfillAboveHeelWeight)/refBackfillAboveHeelWeight
+ratioBFWeight= abs(backfillAboveHeelWeight-refBackfillAboveHeelWeight)/refBackfillAboveHeelWeight
+wallWeightOK= (abs(ratioWallWeight)<1e-9 and abs(ratioBFWeight)<1e-4)
 
 # Create wall FE model.
 wallFEModel= wall.createLinearElasticFEModel(prbName= 'Retaining wall '+wall.name, kS= 15e6) # assumed value for subgrade reaction modulus.
@@ -121,9 +121,7 @@ loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ### Partial safety factors on actions (A).
 gammaGA1= 1.35 # Set A1.
-gammaGA2= 1.0 # Set A2.
 gammaQA1= 1.5 # Set A1.
-gammaQA2= 1.3 # Set A2.
 
 #    _      _   _                 ___                                 _     
 #   /_\  __| |_(_)___ _ _  ___   | _ \___ _ _ _ __  __ _ _ _  ___ _ _| |_   
@@ -133,22 +131,22 @@ gammaQA2= 1.3 # Set A2.
 ## Self weight of the wall.
 selfWeight= loadCaseManager.setCurrentLoadCase('selfWeight')
 Wselfk= wall.createSelfWeightLoads(rho= concrete.density(),grav= g)
-WselfdA1= gammaGA1*Wselfk
 ### Check characteristic total self-weight of wall:
 ratioWselfk= abs(Wselfk.getResultant().y+183e3)/183e3
 
 ## Dead load on the heel.
-heelFillDepth= wall.getBackfillAvobeHeelAvgHeight(beta= granularFillM2.beta, zGround= 0.0)
-Wfillk= wall.createDeadLoad(heelFillDepth= heelFillDepth, toeFillDepth= 0.0, rho= granularFillM2.rho, grav= g)
-WfilldA1= gammaGA1*Wfillk
+heelFillDepth= wall.getBackfillAvobeHeelAvgHeight(beta= granularFillM1.beta, zGround= 0.0)
+Wfillk= wall.createDeadLoad(heelFillDepth= heelFillDepth, toeFillDepth= 0.0, rho= granularFillM1.rho, grav= g)
 ### Check characteristic self weight of backfill
 ratioWfillk= abs(Wfillk.getResultant().y+refBackfillAboveHeelWeight)/refBackfillAboveHeelWeight
+weightLoadsOK= (abs(ratioWselfk)<.05 and abs(ratioWfillk)<.01)
 
 ## Earth pressure.
 ### Backfill soil properties
-(KaM1, KaM2)= (granularFillM2.Ka(designValue= False), granularFillM2.Ka(designValue= True))
-ratio2= math.sqrt((KaM1-0.365)**2+(KaM2-0.486)**2)
-gSoil= granularFillM2.rho*g
+KaM1= granularFillM1.Ka()
+ratioKa= abs(KaM1-0.365)/0.365
+earthPressureOK= (abs(ratioKa)<1e-2)
+gSoil= granularFillM1.rho*g
 zBottomSoils=[-1e3]
 KSoils= [KaM1]
 gammaSoils= [gSoil]
@@ -159,20 +157,23 @@ vDir= xc.Vector([-math.sin(slopeOfBackfillSurface), -math.cos(slopeOfBackfillSur
 earthPress= loadCaseManager.setCurrentLoadCase('earthPress')
 
 ## Define virtual back.
-virtualBack= wall.getVirtualBack(beta= granularFillM2.beta)
-ratio3= abs(virtualBack.getLength()-7.62)/virtualBack.getLength()
+virtualBack= wall.getVirtualBack(beta= granularFillM1.beta)
+ratioVirtualBack= abs(virtualBack.getLength()-7.62)/virtualBack.getLength()
+virtualBackOK= (abs(ratioVirtualBack)<1e-3)
 
 ### Earth pressure on back of wall stem.
 backfillPressureModel= earth_pressure.EarthPressureModel(zGround= virtualBack.getFromPoint().y, zBottomSoils= zBottomSoils, KSoils= KSoils, gammaSoils= gammaSoils, zWater= zWater, gammaWater= gammaWater,qUnif=0)
-EaGk= wall.createBackfillPressures(backfillPressureModel, Delta= granularFillM2.beta, beta= granularFillM2.beta)
-EaGdA1= gammaGA1*EaGk
+EaGk= wall.createBackfillPressures(backfillPressureModel, Delta= granularFillM1.beta, beta= granularFillM1.beta)
 virtualBackThirdPoint= virtualBack.getToPoint()+virtualBack.getLength()/3.0*geom.Vector2d(0,1)
-EaGkRef= geom.SlidingVectorsSystem2d(virtualBackThirdPoint,-KaM1*0.5*gSoil*virtualBack.getLength()**2*geom.Vector2d(math.cos(granularFillM2.beta), math.sin(granularFillM2.beta)),0.0)
-EaGdA1Ref= gammaGA1*EaGkRef
-ratioEaGdA1= (EaGdA1.getResultant()-EaGdA1Ref.getResultant()).getModulus()/EaGdA1Ref.getResultant().getModulus()
-MGdA1= EaGdA1.getMoment(toeEndPos)
-MGdA1Ref= EaGdA1Ref.getMoment(toeEndPos)
-ratioMGdA1= abs(MGdA1-MGdA1Ref)/MGdA1Ref
+EaGkRef= geom.SlidingVectorsSystem2d(virtualBackThirdPoint,-KaM1*0.5*gSoil*virtualBack.getLength()**2*geom.Vector2d(math.cos(granularFillM1.beta), math.sin(granularFillM1.beta)),0.0)
+ratioEaGk= (EaGk.getResultant()-EaGkRef.getResultant()).getModulus()/EaGkRef.getResultant().getModulus()
+#### Compare with the result in the book.
+EaGkBook= 201e3
+ratioEaGkBook= abs(EaGk.getModulus()-EaGkBook)/EaGkBook 
+MGk= EaGk.getMoment(toeEndPos)
+MGkRef= EaGkRef.getMoment(toeEndPos)
+ratioMGk= abs(MGk-MGkRef)/MGkRef
+earthPressureGOK= (abs(ratioEaGk)<1e-3 and abs(ratioEaGkBook)<1e-3 and abs(ratioMGk)<.05)
 
 #    _      _   _                __   __        _      _    _     
 #   /_\  __| |_(_)___ _ _  ___   \ \ / /_ _ _ _(_)__ _| |__| |___ 
@@ -184,30 +185,51 @@ earthPress= loadCaseManager.setCurrentLoadCase('liveLoad')
 ### Uniform load on the backfill surface.
 qUnif= 5e3
 unifLoadPressure= earth_pressure.UniformPressureOnBackfill(zGround= virtualBack.getFromPoint().y, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif)
-EaQk= wall.createBackfillPressures(pressureModel= unifLoadPressure, Delta= granularFillM2.beta, beta= granularFillM2.beta)
-EaQdA1= gammaQA1*EaQk
+EaQk= wall.createBackfillPressures(pressureModel= unifLoadPressure, Delta= granularFillM1.beta, beta= granularFillM1.beta)
 virtualBackMidPoint= virtualBack.getMidPoint()
 
-EaQkRef= geom.SlidingVectorsSystem2d(virtualBackMidPoint, -KaM1*qUnif*virtualBack.getLength()*geom.Vector2d(math.cos(granularFillM2.beta), math.sin(granularFillM2.beta)),0.0)
-EaQdA1Ref= gammaQA1*EaQkRef
-ratioEaQdA1= (EaQdA1.getResultant()-EaQdA1Ref.getResultant()).getModulus()/EaQdA1Ref.getResultant().getModulus()
-MQdA1= EaQdA1.getMoment(toeEndPos)
-MQdA1Ref= EaQdA1Ref.getMoment(toeEndPos)
-ratioMQdA1= abs(MQdA1-MQdA1Ref)/MQdA1Ref
+EaQkRef= geom.SlidingVectorsSystem2d(virtualBackMidPoint, -KaM1*qUnif*virtualBack.getLength()*geom.Vector2d(math.cos(granularFillM1.beta), math.sin(granularFillM1.beta)),0.0)
+ratioEaQk= (EaQk.getResultant()-EaQkRef.getResultant()).getModulus()/EaQkRef.getResultant().getModulus()
+EaQkBook= 13.9e3
+ratioEaQkBook= abs(EaQk.getModulus()-EaQkBook)/EaQkBook 
+MQk= EaQk.getMoment(toeEndPos)
+MQkRef= EaQkRef.getMoment(toeEndPos)
+ratioMQk= abs(MQk-MQkRef)/MQkRef
+earthPressureQOK= (abs(ratioEaQk)<1e-3 and abs(ratioEaQkBook)<.005 and abs(ratioMQk)<1e-3)
 
-Ead= EaGdA1+EaQdA1
-
-# Vertical component of design weight
-NEd= WselfdA1.getResultant().y+WfilldA1.getResultant().y+Ead.getResultant().y
-ratioNEd= abs(NEd+716.9e3)/716.9e3
+# ### Uniform load on the heel of the wall
+# VQk= wall.createVerticalLoadOnHeel(unifLoadPressure)
+# ratioVQk= abs(VQk.getResultant().y+11.3e3)/11.3e3
+# MVQk= VQk.getMoment(toeEndPos)
+# QQk= qUnif*wall.bHeel
+# MVQkRef= QQk*(wall.getFootingWidth()-wall.bHeel/2) # There is an error in the arm lever they use in the book. See page 123.
+# ratioMVQk= abs(MVQk+MVQkRef)/MVQkRef
+# uniformLoadOnHeelOK= (abs(ratioVQk)<.01 and abs(ratioMVQk)<.1)
+uniformLoadOnHeelOK= True # Not considered in the book for approach 2.
 
 # Compute design thrust.
-Ead= EaQdA1+EaGdA1
+Eak= EaGk+EaQk
+EakBook= 214.9e3 # There is an error in the subindices
+ratioEakBook= abs(Eak.getResultant().getModulus()-EakBook)/EakBook
+
+# Vertical component of design weight
+NEk= Wselfk.getResultant().y+Wfillk.getResultant().y+Eak.getResultant().y
+NEkBook= 530.5e3
+ratioNEk= abs(NEk+NEkBook)/NEkBook
+
 # Compute horizontal component of design thrust.
-HEd= Ead.getResultant().x
-ratioHEd= abs(HEd+274.6e3)/274.6e3
+HEk= Eak.getResultant().x
+HEkBook= 202e3
+ratioHEk= abs(HEk+HEkBook)/HEkBook
 
+resultantOK= (ratioEakBook<1e-3) and abs(ratioHEk)<1e-3 and abs(ratioNEk)<.02
 
+# totalLoad= Eak+Wselfk+Wfillk
+# MtotalLoad= totalLoad.getMoment(toeEndPos)
+# MtotalLoadRef= 332.5e3-1068e3
+# print('total load (A1 set): ', totalLoad)
+# print('design moment about wall toe (A1 set): ', MtotalLoad/1e3, 'kN.m/m')
+# print('reference value of design moment about wall toe (A1 set): ', MtotalLoadRef/1e3, 'kN.m/m')
 
 #   ___           _    _           _   _             
 #  / __|___ _ __ | |__(_)_ _  __ _| |_(_)___ _ _  ___
@@ -231,64 +253,120 @@ def composeCombnationString(gammaG, gammaQ):
     return retval
 
 ## GEO ultimate states. (type 1)
-combContainer.ULS.perm.add('ULS01', composeCombnationString(gammaG= gammaGA1, gammaQ= 0.0))
+#combContainer.ULS.perm.add('ULS01', composeCombnationString(gammaG= gammaGA1, gammaQ= 0.0))
 combContainer.ULS.perm.add('ULS02', composeCombnationString(gammaG= gammaGA1, gammaQ= gammaQA1))
 combContainer.dumpCombinations(preprocessor)
 
-geoULSCombinations= ['ULS01','ULS02']
-foundationSoilModel= fcs.FrictionalCohesiveSoil(phi= granularFillM2.phi, c= 0.0, rho= granularFillM2.rho, gammaMPhi= gammaMPhiM1) 
-sr= wall.performStabilityAnalysis(geoULSCombinations, foundationSoilModel,sg_adm= None)
+#geoULSCombinations= ['ULS01','ULS02']
+geoULSCombinations= ['ULS02']
 
-slidingDegreeOfUtilization= sr.getDegreeOfUtilizationForSliding()
-#print(slidingDegreeOfUtilization)
+# GEO verifications
+gammaR2Sliding= 1.1
+gammaR2Bearing= 1.4
+
+## Critical state (constant volume) angle of shearing resistance of the soil.
+## See clause 6.5.3 (10) of Eurocode 7 part 1. 
+phi_cv= math.radians(30)
+foundationSoilModel= fcs.FrictionalCohesiveSoil(phi= granularFillM1.phi, c= 0.0, rho= granularFillM1.rho, phi_cv= phi_cv, gammaMPhi= gammaMPhiM1) 
+sr= wall.performGEOVerifications(geoULSCombinations, foundationSoilModel= foundationSoilModel, toeFillDepth= wall.footingThickness, gammaRSliding= gammaR2Sliding, gammaRBearing= gammaR2Bearing)
 
 
+## Verification of resistance to sliding
+slidingResistanceDegreeOfUtilization= sr.getDegreeOfUtilizationForSliding()
+### There is an error in the book. We repeat the operations here:
+HEdBook= 274.6e3
+NEdBook= 716.9e3
+HRdBook= NEdBook*math.tan(math.radians(30))/gammaR2Sliding
+slidingResistanceDegreeOfUtilizationBook= HEdBook/HRdBook
+### End of book correction.
+ratioSDOfU= abs(slidingResistanceDegreeOfUtilization-slidingResistanceDegreeOfUtilizationBook)/slidingResistanceDegreeOfUtilizationBook
 
+# Verification of bearing resistance
+bearingResistanceDegreeOfUtilization= sr.getDegreeOfUtilizationForBearingResistance()
+#ratioBRDOfU= 
+geoVerificationsOK= (abs(ratioSDOfU)<.05)
 
-# print('virtual back: ', virtualBack)
-# print('virtual back height: ', virtualBack.getLength())
-# print('ratio3= ', ratio3)
-# '''
-# print('bHeel= ',bHeel, 'm')
-# print('wall weight: ', wallWeight/1e3, 'kN/m')
-# print('reference wall weight: ', refWallWeight/1e3, 'kN/m')
-# print('ratio0= ',ratio0)
-# print('weight of the backfill above the wall heel: ', backfillAboveHeelWeight/1e3, 'kN/m')
-# print('ratio1= ',ratio1)
-# '''
-# print(Wselfk.getResultant()*1e-3, ratioWselfk)
-# print('gSoil= ', gSoil)
-# print('KaM1= ', KaM1)
-# print('KaM2= ', KaM2)
-# print('ratio2= ', ratio2)
+'''
+print('\nCheck computation of virtual back.')
+print('virtual back: ', virtualBack)
+print('virtual back height: ', virtualBack.getLength())
+print('ratioVirtualBack= ', ratioVirtualBack)
+print('virtual back OK: ', virtualBackOK)
 
-# print('Wselfd (A1 set)= ', WselfdA1)
-# print('ratioWselfk= ', ratioWselfk)
-# print('Wfilld (A1 set)= ', WfilldA1)
-# print('ratioWfillk= ', ratioWfillk)
+print('\nCheck computation of the weight of the backfill above the wall heel.')
+print('bHeel= ',bHeel, 'm')
+print('wall weight: ', wallWeight/1e3, 'kN/m')
+print('reference wall weight: ', refWallWeight/1e3, 'kN/m')
+print('ratioWallWeight= ',ratioWallWeight)
+print('weight of the backfill above the wall heel: ', backfillAboveHeelWeight/1e3, 'kN/m')
+print('ratioBFWeight= ',ratioBFWeight)
+print('Wall weight OK: ', wallWeightOK)
 
-# print('EaQdA1= ', EaQdA1, 'modulus: ', EaQdA1.getModulus()/1e3, 'zero moment line: ', EaQdA1.zeroMomentLine())
-# print('EaQdA1Ref= ', EaQdA1Ref, 'modulus: ', EaQdA1Ref.getModulus()/1e3, 'zero moment line: ', EaQdA1Ref.zeroMomentLine())
-# print('ratioEaQdA1= ', ratioEaQdA1)
-# print('MQd (A1 set)= ', MQdA1/1e3)
-# print('MQdRef (A1 set)= ', MQdA1Ref/1e3)
-# print('ratioMQd (A1 set)= ', ratioMQdA1)
+print('\nCheck earth pressure coefficients.')
+print('gSoil= ', gSoil)
+print('KaM1= ', KaM1)
+print('ratioKa= ', ratioKa)
+print('Earte pressure OK: ', earthPressureOK)
 
-# print('EaGd (A1 set)= ', EaGdA1)
-# print('EaGdRef (A1 set)= ', EaGdA1Ref)
-# print('ratioEaGd (A1 set)= ', ratioEaGdA1)
-# print('MGd (A1 set)= ', MGdA1/1e3)
-# print('MGdRef (A1 set)= ', MGdA1Ref/1e3)
-# print('ratioMGd (A1 set)= ', ratioMGdA1)
-# print('HEd= ', HEd/1e3, 'kN/m')
-# print('ratioHEd= ', ratioHEd)
-# print('NEd= ', NEd/1e3, 'kN/m')
-# print('ratioNEd= ', ratioNEd)
+print('\nCheck weight loads.')
+print('Wselfk= ', Wselfk.getResultant()*1e-3, 'kN/m')
+print('ratioWselfk= ', ratioWselfk)
+print('Wselfd (A1 set)= ', Wselfk)
+print('Wfilld (A1 set)= ', Wfillk)
+print('ratioWfillk= ', ratioWfillk)
+print('Weight loads OK: ', weightLoadsOK)
 
+print('\nCheck earth pressure due to backfill weight.')
+print('EaGk= ', EaGk)
+print('EaGkRef= ', EaGkRef)
+print('ratioEaGk= ', ratioEaGk)
+print('ratioEaGkBook= ', ratioEaGkBook)
+print('MGk= ', MGk/1e3)
+print('MGkRef= ', MGkRef/1e3)
+print('ratioMGk= ', ratioMGk)
+print('Earth pressure G OK: ', earthPressureGOK)
+
+print('\nCheck earth pressure due to surface load.')
+print('EaQk= ', EaQk, 'modulus: ', EaQk.getModulus()/1e3, 'zero moment line: ', EaQk.zeroMomentLine())
+print('EaQkRef= ', EaQkRef, 'modulus: ', EaQkRef.getModulus()/1e3, 'zero moment line: ', EaQkRef.zeroMomentLine())
+print('ratioEaQk= ', ratioEaQk)
+print('ratioEaQkBook= ', ratioEaQkBook)
+print('MQk= ', MQk/1e3)
+print('MQkRef= ', MQkRef/1e3)
+print('ratioMQk= ', ratioMQk)
+print('Earth pressure Q OK: ', earthPressureQOK)
+
+# print('\nCheck uniform load on the heel of the wall.')
+# print('VQk= ', VQk)
+# print('ratioVQk= ', ratioVQk)
+# print('MVQk= ', MVQk/1e3, 'kN.m/m')
+# print('MVQkRef=', MVQkRef/1e3, 'kN.m/m')
+# print('ratioMVQk= ', ratioMVQk)
+# print('Uniform load on heel OK: ', uniformLoadOnHeelOK)
+
+print('\nCheck resultant (A1 set).')
+print('Eak= ', Eak)
+print('|Eak|= ', Eak.getResultant().getModulus()/1e3,'kN/m')
+print('EakBook= ', EakBook)
+print('ratioEakBook= ', ratioEakBook)
+print('HEk= ', HEk/1e3, 'kN/m')
+print('ratioHEk= ', ratioHEk)
+print('NEk= ', NEk/1e3, 'kN/m')
+print('ratioNEk= ', ratioNEk)
+print('Resultant OK: ', resultantOK)
+
+print('\nCheck sliding degree of utilization.')
+print('sliding degree of utilization: ', slidingResistanceDegreeOfUtilization)
+print('sliding degree of utilization book: ', slidingResistanceDegreeOfUtilizationBook)
+print('ratioSDOfU= ', ratioSDOfU)
+print('\nCheck bearing degree of utilization.')
+print('bearing degree of utilization: ', bearingResistanceDegreeOfUtilization)
+print('GEO verifications OK: ', geoVerificationsOK)
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(abs(ratio0)<1e-9 and abs(ratio1)<1e-4 and abs(ratioWselfk)<.05 and abs(ratioWfillk)<.01 and abs(ratio2)<1e-3) and abs(ratio3)<1e-3 and abs(ratioEaQdA1)<.01 and abs(ratioMQdA1)<1e-3 and abs(ratioEaGdA1)<1e-3 and abs(ratioMGdA1)<.05 and abs(ratioHEd)<.05 and abs(ratioNEd)<.02:
+if(wallWeightOK and weightLoadsOK and earthPressureOK and virtualBackOK and earthPressureQOK and uniformLoadOnHeelOK and earthPressureGOK and resultantOK and geoVerificationsOK):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
