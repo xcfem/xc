@@ -750,7 +750,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.stemReinforcement= StemReinforcement(self,concreteCover, steel)
         self.footingReinforcement= FootingReinforcement(self,concreteCover, steel)
         self.title=title if title else name
-        self.smoothPrecastFoundation= False
+        self.smoothPrecastFoundation= smoothPrecastFoundation
         
 
     def setULSInternalForcesEnvelope(self,wallInternalForces):
