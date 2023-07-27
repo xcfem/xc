@@ -24,12 +24,13 @@ class FrictionalSoil(object):
     :ivar E: Young's modulus.
     :ivar nu: Poisson's ratio.
     '''
-    def __init__(self, phi:float, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0, E= 1e8, nu= 0.3):
+    def __init__(self, phi:float, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, E= 1e8, nu= 0.3):
         '''Constructor.
 
-        :param phi: (float) internal friction angle of the soil
-        :param rho: (float) soil density (mass per unit volume)
-        :param rhoSat: saturated density of the soil (mass per unit volume)
+        :param phi: (float) internal friction angle of the soil.
+        :param rho: (float) soil density (mass per unit volume).
+        :param rhoSat: saturated density of the soil (mass per unit volume).
+        :param phi_cv: critical state (constant volume) angle of shearing resistance of the soil. See clause 6.5.3 (10) of Eurocode 7 part 1. 
         :param gammaMPhi: (float) partial reduction factor for internal 
                           friction angle of the soil.
         :param E: Young's modulus (defaults to 1e8 Pa).
@@ -39,6 +40,7 @@ class FrictionalSoil(object):
         self.gammaMPhi= gammaMPhi
         self.rho= rho
         self.rhoSat= rhoSat
+        self.phi_cv= phi_cv
         self.E= E
         self.nu= nu
 

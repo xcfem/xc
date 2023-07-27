@@ -28,19 +28,21 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
 
     :ivar c:    soil cohesion
     '''
-    def __init__(self, phi, c, rho= 2100.0, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
+    def __init__(self, phi, c, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
         '''Constructor.
 
         :param phi: (float) internal friction angle of the soil
-        :param rho: (float) soil density (mass per unit volume)
         :param c: (float) soil cohesion.
+        :param rho: (float) soil density (mass per unit volume)
+        :param rhoSat: saturated density of the soil (mass per unit volume).
+        :param phi_cv: critical state (constant volume) angle of shearing resistance of the soil. See clause 6.5.3 (10) of Eurocode 7 part 1. 
         :param gammaMPhi: (float) partial reduction factor for internal 
                           friction angle of the soil.
         :param gammaMc: (float) partial reduction factor for soil cohesion.
         :param E: Young's modulus (defaults to 1e8 Pa).
         :param nu: Poisson's ratio (defaults to 0.3).
         '''
-        super(FrictionalCohesiveSoil,self).__init__(phi= phi, rho= rho, gammaMPhi= gammaMPhi, E= E, nu= nu)
+        super(FrictionalCohesiveSoil,self).__init__(phi= phi, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, E= E, nu= nu)
         self.c= c
         self.gammaMc= gammaMc
 
