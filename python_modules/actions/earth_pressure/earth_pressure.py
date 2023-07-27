@@ -107,9 +107,7 @@ class PressureModelBase(object):
     
     def appendVerticalLoadToCurrentLoadPattern(self, vLoad, xcSet, vDir, iXCoo= 0,iZCoo= 2, alph= math.radians(30)):
         '''Append to the current load pattern the vertical pressures on 
-           a set of elements due to the strip load. According to
-           11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
-           isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix\_EC)
+           a set of elements due to this load. 
 
         :param vLoad: vertical load.
         :param xcSet: set that contains the elements.
@@ -126,16 +124,18 @@ class PressureModelBase(object):
                 for e in xcSet.elements:
                     centroid= e.getCooCentroid(False)
                     area= e.getArea(False)
-                    totalLoad= loadVector*area
                     e.vector3dUniformLoadGlobal(loadVector)
+                    # Return sliding vector system for checking purposes.
+                    totalLoad= loadVector*area
                     retval+= geom.SlidingVector3d(geom.Pos3d(centroid[0], centroid[1], centroid[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))
             else: #2D load.
                 retval= geom.SlidingVector2d()
                 for e in xcSet.elements:
                     centroid= e.getCooCentroid(False)
                     length= e.getLength(False)
-                    totalLoad= loadVector*length
                     e.vector2dUniformLoadGlobal(loadVector)
+                    # Return sliding vector system for checking purposes.
+                    totalLoad= loadVector*length
                     retval+= geom.SlidingVector2d(geom.Pos2d(centroid[0], centroid[1]), geom.Vector2d(totalLoad[0], totalLoad[1]))
         return retval
 
@@ -207,7 +207,7 @@ class UniformPressureOnBackfill(PressureModelBase):
         
     def appendVerticalLoadToCurrentLoadPattern(self, xcSet, vDir, iXCoo= 0,iZCoo= 2, alph= math.radians(30)):
         '''Append to the current load pattern the vertical pressures on 
-           a set of elements due to the strip load. According to
+           a set of elements due to the uniform load. According to
            11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
            isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix\_EC)
 
