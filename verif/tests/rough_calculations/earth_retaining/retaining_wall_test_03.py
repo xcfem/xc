@@ -253,12 +253,11 @@ def composeCombnationString(gammaG, gammaQ):
     return retval
 
 ## GEO ultimate states. (type 1)
-#combContainer.ULS.perm.add('ULS01', composeCombnationString(gammaG= gammaGA1, gammaQ= 0.0))
+combContainer.ULS.perm.add('ULS01', composeCombnationString(gammaG= gammaGA1, gammaQ= 0.0))
 combContainer.ULS.perm.add('ULS02', composeCombnationString(gammaG= gammaGA1, gammaQ= gammaQA1))
 combContainer.dumpCombinations(preprocessor)
 
-#geoULSCombinations= ['ULS01','ULS02']
-geoULSCombinations= ['ULS02']
+geoULSCombinations= ['ULS01','ULS02']
 
 # GEO verifications
 gammaR2Sliding= 1.1
@@ -283,8 +282,13 @@ ratioSDOfU= abs(slidingResistanceDegreeOfUtilization-slidingResistanceDegreeOfUt
 
 # Verification of bearing resistance
 bearingResistanceDegreeOfUtilization= sr.getDegreeOfUtilizationForBearingResistance()
-#ratioBRDOfU= 
-geoVerificationsOK= (abs(ratioSDOfU)<.05)
+bearingResistanceDegreeOfUtilizationRef= 0.8442207731905604
+# The value calculated in the book is 99% (and we obtain 84%) the difference
+# is mainly due to the fact that the annex D of the EC7 part 1 (informative)
+# does not consider the depth factos in the Brinch-Hansen formula.
+# bearingResistanceDegreeOfUtilizationBook= 0.99
+ratioBRDOfU= abs(bearingResistanceDegreeOfUtilization-bearingResistanceDegreeOfUtilizationRef)/bearingResistanceDegreeOfUtilizationRef
+geoVerificationsOK= (abs(ratioSDOfU)<.05 and abs(ratioBRDOfU)<1e-3)
 
 '''
 print('\nCheck computation of virtual back.')
@@ -361,6 +365,7 @@ print('sliding degree of utilization book: ', slidingResistanceDegreeOfUtilizati
 print('ratioSDOfU= ', ratioSDOfU)
 print('\nCheck bearing degree of utilization.')
 print('bearing degree of utilization: ', bearingResistanceDegreeOfUtilization)
+print('ratioBRDOfU= ', ratioBRDOfU)
 print('GEO verifications OK: ', geoVerificationsOK)
 '''
 
