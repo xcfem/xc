@@ -182,7 +182,7 @@ wall.setSLSInternalForcesEnvelope(sls_results.internalForces)
 ### Foundation stratified soil properties
 stratifiedSoil= fcs.StratifiedSoil(hi,rhoi,phii,ci)
 foundationSoilModel= stratifiedSoil.getEquivalentSoil(Beff= 5,gMPhi= 1.2,gMc= 1.5) #Design values.
-sr= wall.performStabilityAnalysis(stabilityULSCombinations,foundationSoilModel, toeFillDepth= 1.0, sg_adm=0.281e6, ignoreAdhesion= False)
+sr= wall.performStabilityAnalysis(stabilityULSCombinations,foundationSoilModel, toeFillDepth= 1.0, sg_adm=0.281e6, ignoreAdhesion= False, NgammaCoef= 1.5)
 
 ## ULS strength analysis.
 uls_results= wall.performULSAnalysis(strengthULSCombinations)
