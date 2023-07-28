@@ -1218,8 +1218,8 @@ echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
 python tests/geotechnics/soil_mechanics/test_coulomb.py
 python tests/geotechnics/soil_mechanics/test_janssen_limited_backfill_widht.py
 python tests/geotechnics/soil_mechanics/test_rankine.py
-python tests/geotechnics/soil_mechanics/test_brinch_hansen01.py
-python tests/geotechnics/soil_mechanics/test_brinch_hansen02.py
+python tests/geotechnics/soil_mechanics/test_brinch_hansen_01.py
+python tests/geotechnics/soil_mechanics/test_brinch_hansen_02.py
 python tests/geotechnics/soil_mechanics/test_stratified_soil.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_01.py
 python tests/geotechnics/soil_mechanics/test_mononobe_okabe_01.py
