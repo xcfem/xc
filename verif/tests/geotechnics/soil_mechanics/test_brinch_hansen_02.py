@@ -34,7 +34,7 @@ NqSTS= shortTermSoil.Nq()
 NcSTS= shortTermSoil.Nc()
 dcSTS= shortTermSoil.dc(D,Beff)
 scSTS= shortTermSoil.sc(Beff,Leff)
-icSTS= shortTermSoil.ic(deltaB,deltaL,H,Beff,Leff)
+icSTS= shortTermSoil.ic(Vload= V, HloadB= H, HloadL= 0.0,Beff= Beff, Leff= Leff)
 quSTS= shortTermSoil.qu(q,D,Beff,Leff,V,H,0.0,1.8)
 
 err= abs(NgammaSTS)**2 
@@ -57,14 +57,14 @@ dcLTS= longTermSoil.dc(D,Beff)
 scLTS= longTermSoil.sc(Beff,Leff)
 sgammaLTS= longTermSoil.sgamma(Beff,Leff)
 dgammaLTS= longTermSoil.dgamma()
-iqLTS= longTermSoil.iq(deltaB,deltaL)
+iqLTS= longTermSoil.iq(Vload= V, HloadB= H, HloadL= 0.0)
 sqLTS= longTermSoil.sq(Beff,Leff)
 dqLTS= longTermSoil.dq(D,Beff)
-igammaLTS= longTermSoil.igamma(deltaB,deltaL)
-icLTS= longTermSoil.ic(deltaB,deltaL,H,Beff,Leff)
+igammaLTS= longTermSoil.igamma(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff)
+icLTS= longTermSoil.ic(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff)
 quGammaLTS= longTermSoil.quGamma(D,Beff,Leff,V,H,0.0,1.8)
 quGammaTeorLTS= 0.5*1.2*Beff*NgammaLTS*sgammaLTS*dgammaLTS*igammaLTS
-quCohesionLTS= longTermSoil.quCohesion(D,Beff,Leff,V,H,0.0)
+quCohesionLTS= longTermSoil.quCohesion(D= D, Beff= Beff, Leff= Leff, Vload= V, HloadB= H, HloadL= 0.0, psi= 0.0, eta= 0.0)
 quCohesionTeorLTS= 1.7*NcLTS*scLTS*dcLTS*icLTS
 quQLTS= longTermSoil.quQ(q,D,Beff,Leff,V,H,0.0)
 quQTeorLTS= q*NqLTS*sqLTS*dqLTS*iqLTS
@@ -78,17 +78,16 @@ err+= (abs(dcLTS-1.11)/1.11)**2 #dc calculated as in reference [3]
                                 #(see module documentation).
 err+= (abs(scLTS-1.37)/1.37)**2 #sc calculated as in reference [3]
                                 #(see module documentation).
-err+= (abs(sgammaLTS-0.82)/0.82)**2 #sgamma calculated as in reference [3]
+err+= (abs(sgammaLTS-0.82)/0.82)**2 # sgamma calculated as in reference [3]
+                                    # (see module documentation).
+err+= (abs(iqLTS-0.87)/0.87)**2
+err+= (abs(igammaLTS-0.80)/0.80)**2 #igamma calculated as in reference [3]
                                     #(see module documentation).
-err+= (abs(iqLTS-0.86)/0.86)**2
-err+= (abs(igammaLTS-0.79)/0.79)**2 #igamma calculated as in reference [3]
-                                    #(see module documentation).
-err+= (abs(icLTS-0.85)/0.85)**2
+err+= (abs(icLTS-0.86)/0.86)**2
 err+= (abs(quGammaLTS-quGammaTeorLTS)/quGammaTeorLTS)**2
 err+= (abs(quCohesionLTS-quCohesionTeorLTS)/quCohesionTeorLTS)**2
 err+= (abs(quQLTS-quQTeorLTS)/quQTeorLTS)**2
 err+= (abs(quLTS-quTeorLTS)/quTeorLTS)**2
-
 
 '''
 print('NgammaSTS= ', NgammaSTS)
