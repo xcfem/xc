@@ -6,6 +6,7 @@ References:
 [1] Chapter 4-3 of Foundation Analysis and Design, Ed. 5 by Joseph E. Bowles.
 [2] Brinch Hansen. A general formula for bearing capacity. The Danish Geotechnical Institute. Bulletin 11. Copenhagen 1961.
 [3] Guía de cimentaciones en obras de carretera. Ministerio de Fomento (spain). 2002 (https://books.google.ch/books?id=a0eoygAACAAJ).
+[4] Eurocódigo 7. Proyecto geotécnico. Parte 1: reglas generales.
 '''
 from __future__ import division
 
@@ -377,12 +378,12 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
     def Ngamma(self,NgammaCoef= 1.5):
         '''Returns the wedge weight multiplier for the Brinch-Hasen formula.
 
-           :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
-                              and 2 in reference 3
+        :param NgammaCoef: 1.5 in reference [1], 1.8 in reference [2] 
+                           and 2 in references [3] and [4].
         '''
         return NgammaCoef*(self.Nq()-1.0)*math.tan(self.getDesignPhi())
 
-    def quGamma(self,D,Beff,Leff,Vload,HloadB,HloadL,NgammaCoef= 1.5,psi= 0.0,eta= 0.0):
+    def quGamma(self,D,Beff,Leff,Vload,HloadB,HloadL, NgammaCoef= 1.5, psi= 0.0,eta= 0.0):
         '''Gamma "component" of the ultimate bearing capacity pressure of 
            the soil.
 
@@ -394,8 +395,8 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param Vload: Vertical load. 
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
-        :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
-                           and 2 in reference 3
+        :param NgammaCoef: 1.5 in reference [1], 1.8 in reference [2] 
+                           and 2 in references [3] and [4]
         :param psi: angle of the line on which the q load acts 
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
@@ -467,10 +468,13 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         if(Vload<0.0):
              lmsg.warning('Negative vertical load (V= '+str(Vload)+') means pulling upwards.')
+        # Body mass component.
         gammaComp= self.quGamma(D,Beff,Leff,Vload,HloadB,HloadL,NgammaCoef,psi,eta)
+        # Overburden component.
         cComp= self.quCohesion(D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
         qComp= self.quQ(q,D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
-        return gammaComp+cComp+qComp
+        retval= gammaComp+cComp+qComp
+        return retval
 
     def getElasticIsotropicMaterialPlaneStrain(self, preprocessor, name):
         ''' Defines returns a Drucker-Prager material.

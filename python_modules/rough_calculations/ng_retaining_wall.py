@@ -300,7 +300,7 @@ class ReinforcementMap(dict):
     
 class WallStabilityResults(object):
     ''' Results of the wall stability analysis.'''
-    def __init__(self,wall,combinations,foundationSoilModel, toeFillDepth, sg_adm= None, gammaRSliding= 1.0, gammaRBearing= 1.0, ignoreAdhesion= True):
+    def __init__(self,wall,combinations,foundationSoilModel, toeFillDepth, sg_adm= None, gammaRSliding= 1.0, gammaRBearing= 1.0, ignoreAdhesion= True, NgammaCoef= 2.0):
         ''' Constructor.
 
         :param wall: retaining wall to analyze.
@@ -310,6 +310,9 @@ class WallStabilityResults(object):
         :param gammaRSliding: partial factor for sliding resistance.
         :param gammaRBearing: partial factor for bearing resistance.
         :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil for sliding resistance.
+        :param NgammaCoef: Coefficient to compute Ngamma value with the
+                           Brinch-Hansen formulas (see FrictionalCohesiveSoil
+                           class). See also D.4 in EC7 part 1.
         '''
         self.Foverturning= 1e15
         self.FoverturningComb= ''
@@ -330,7 +333,7 @@ class WallStabilityResults(object):
             if(Fsliding<self.Fsliding):
                 self.Fsliding= Fsliding
                 self.FslidingComb= comb
-            Fbearing= wall.getBearingPressureSafetyFactor(R= R, foundationSoilModel= foundationSoilModel, toeFillDepth= toeFillDepth, q= 0.0, gammaR= gammaRBearing)
+            Fbearing= wall.getBearingPressureSafetyFactor(R= R, foundationSoilModel= foundationSoilModel, toeFillDepth= toeFillDepth, q= 0.0, gammaR= gammaRBearing, NgammaCoef= NgammaCoef)
             if(Fbearing<self.Fbearing):
                 self.Fbearing= Fbearing
                 self.FbearingComb= comb
@@ -1366,14 +1369,17 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         sigma= F.y/bReduced
         return sigma
       
-    def getBearingPressureSafetyFactor(self, R, foundationSoilModel, toeFillDepth, gammaR= 1.0, q= 0.0):
+    def getBearingPressureSafetyFactor(self, R, foundationSoilModel, toeFillDepth, gammaR= 1.0, q= 0.0, NgammaCoef= 2.0):
         ''' Return the factor of safety against bearing capacity of the soil.
 
         :param R: force on the bearing plane.
         :param foundationSoilModel: soil model for the Brinch-Hansen analysis.
         :param toeFillDepth: (float) depht of the soil filling over the toe.
-        :param q: (float) uniform load over the filling.
         :param gammaR: partial factor for bearing resistance.
+        :param q: (float) uniform load over the filling.
+        :param NgammaCoef: Coefficient to compute Ngamma value with the
+                           Brinch-Hansen formulas (see FrictionalCohesiveSoil
+                           class).
         '''
         D= self.getFoundationDepth(toeFillDepth)
         e= self.getEccentricity(R) #eccentricity
@@ -1381,7 +1387,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         bReduced= 2*(b/2.0+e)
         F= R.getResultant()
         sigma= F.y/bReduced
-        qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)/gammaR
+        # qu(NgammaCoef= 1.5,psi= 0.0,eta= 0.0)
+        qu= foundationSoilModel.qu(q= q, D= D,Beff= self.b, Leff= bReduced, Vload= F.y,HloadB= 0.0, HloadL= F.x, NgammaCoef= NgammaCoef)/gammaR
         return qu/sigma
 
     def getAdmissiblePressureSafetyFactor(self,R,sg_adm):
@@ -1450,7 +1457,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         #preprocessor.getLoadHandler.removeFromDomain(nmbComb)
         return reactions
 
-    def performStabilityAnalysis(self,combinations, foundationSoilModel, toeFillDepth, sg_adm= None, ignoreAdhesion= True): 
+    def performStabilityAnalysis(self,combinations, foundationSoilModel, toeFillDepth, sg_adm= None, ignoreAdhesion= True, NgammaCoef= 2.0): 
         ''' Perform stability limit state analysis.
 
         :param combinations: load combinations to use in the analysis.
@@ -1458,11 +1465,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param toeFillDepth: depth of the fill that rests on the wall toe.
         :param sg_adm: admissible stress of the terrain (optional).
         :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil for sliding resistance.
-        '''
-        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel= foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= sg_adm, ignoreAdhesion= ignoreAdhesion)
+        :param NgammaCoef: Coefficient to compute Ngamma value with the
+                           Brinch-Hansen formulas (see FrictionalCohesiveSoil
+                           class). See also D.4 in EC7 part 1.
+         '''
+        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel= foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= sg_adm, ignoreAdhesion= ignoreAdhesion, NgammaCoef= NgammaCoef)
         return self.stability_results
 
-    def performGEOVerifications(self,combinations, foundationSoilModel, toeFillDepth, gammaRSliding, gammaRBearing, ignoreAdhesion= True): 
+    def performGEOVerifications(self,combinations, foundationSoilModel, toeFillDepth, gammaRSliding, gammaRBearing, ignoreAdhesion= True, NgammaCoef= 2.0): 
         ''' Perform stability limit state analysis.
 
         :param combinations: load combinations to use in the analysis.
@@ -1472,7 +1482,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param gammaRBearing: partial factor for bearing resistance.
         :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil for sliding resistance.
         '''
-        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= None, gammaRSliding= gammaRSliding, gammaRBearing= gammaRBearing, ignoreAdhesion= ignoreAdhesion)
+        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= None, gammaRSliding= gammaRSliding, gammaRBearing= gammaRBearing, ignoreAdhesion= ignoreAdhesion, NgammaCoef= NgammaCoef)
         return self.stability_results
 
     def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
