@@ -1376,7 +1376,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param foundationSoilModel: soil model for the Brinch-Hansen analysis.
         :param toeFillDepth: (float) depht of the soil filling over the toe.
         :param gammaR: partial factor for bearing resistance.
-        :param q: (float) uniform load over the filling.
+        :param q: (float) overburden uniform load over the foundation plane.
         :param NgammaCoef: Coefficient to compute Ngamma value with the
                            Brinch-Hansen formulas (see FrictionalCohesiveSoil
                            class).
@@ -1387,8 +1387,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         bReduced= 2*(b/2.0+e)
         F= R.getResultant()
         sigma= F.y/bReduced
-        # qu(NgammaCoef= 1.5,psi= 0.0,eta= 0.0)
-        qu= foundationSoilModel.qu(q= q, D= D,Beff= self.b, Leff= bReduced, Vload= F.y,HloadB= 0.0, HloadL= F.x, NgammaCoef= NgammaCoef)/gammaR
+        Leff= 100*self.b # for an infnitely long footing.
+        # Overburden load.
+        overburdenLoad= q+toeFillDepth*foundationSoilModel.gamma()
+        qu= foundationSoilModel.qu(q= overburdenLoad, D= D,Beff= bReduced, Leff= Leff, Vload= F.y, HloadB= F.x, HloadL= 0.0, NgammaCoef= NgammaCoef)/gammaR
         return qu/sigma
 
     def getAdmissiblePressureSafetyFactor(self,R,sg_adm):
