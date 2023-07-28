@@ -23,6 +23,33 @@ from misc_utils import log_messages as lmsg
 from scipy.optimize import fminbound
 from materials import typical_materials
 
+#   Schema for Brinch-Hansen formulas
+#
+#                           B
+#              Beff
+#         +-----------+-----------------------+
+#         |             |                     |  
+#         |     ^HloadL |                     |
+#       L |     |       |                     |  
+#       e | <-- +       |                     |
+#       f | HloadB      |                     |  
+#       f |             |                     |
+#         |             |                     |  
+#         +-------------+---------------------+
+#         |             |                     |
+#         |             |                     |  
+#         |             |                     |
+#   L     |             |                     |  
+#         |             |                     |
+#         |             |                     |  
+#         |             |                     |
+#         |             |                     |  
+#         |             |                     |
+#         |             |                     |  
+#         |             |                     |
+#         |             |                     |  
+#         +-----------+-----------------------+
+#
 
 class FrictionalCohesiveSoil(fs.FrictionalSoil):
     '''Soil with friction and cohesion
@@ -206,16 +233,34 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return 1.0+Beff/Leff*self.Nq()/self.Nc()
 
-    def iq(self,deltaB,deltaL):
+    def iq(self, Vload, HloadB, HloadL):
         '''Factor that introduces the effect of load inclination on
-           the overburden component.
+           the overburden component. Computed according the expression
+        (11) of the reference [2].
 
-        :param deltaB: angle between the load and the foundation width
-                       atan(HloadB/VLoad).
-        :param deltaL: angle between the load and the foundation length
-                       atan(HloadL/VLoad). 
+        :param Vload: Vertical load. 
+        :param HloadB: Horizontal load on Beff direction. 
+        :param HloadL: Horizontal load on Leff direction. 
         '''
-        return (1.0-0.7*math.tan(deltaB))**3*(1.0-math.tan(deltaL))
+        #return (1.0-0.7*math.tan(deltaB))**3*(1.0-math.tan(deltaL))
+        # Compute the alpha angle.
+        Hload= math.sqrt(HloadB**2+HloadL**2)
+        delta= math.atan(Hload/Vload)
+        tanDelta= math.tan(delta)
+        cotPhi= 0.0
+        sinPhi= 0.0
+        if(abs(self.phi)>1e-6):
+            cotPhi= 1.0/math.tan(self.phi)
+            sinPhi= math.sin(self.phi)
+        tg= 0.0
+        square= (tanDelta*cotPhi)**2
+        if(square<1):
+            sqrt= math.sqrt(1-square)
+            if(sinPhi!=0.0):
+                tg= math.atan((sqrt-tanDelta)/(1+tanDelta/sinPhi))
+        alphaAngle= tg+self.phi/2.0
+        retval= (1+sinPhi*math.sin(2*alphaAngle-self.phi))/(1+sinPhi)*math.exp(-(0.5*math.pi+self.phi-2*alphaAngle)*math.tan(self.phi))
+        return retval
 
     def dq(self,D,Beff):
         '''Overburden factor for foundation depth.
@@ -263,24 +308,23 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return self.sq(Beff,Leff)
 
-    def ic(self,deltaB,deltaL,Hload,Beff,Leff):
+    def ic(self,Vload, HloadB, HloadL, Beff, Leff):
         '''Factor that introduces the effect of load inclination on
            the cohesion component.
 
-        :param deltaB: angle between the load and the foundation width
-                       atan(HloadB/VLoad).
-        :param deltaL: angle between the load and the foundation length
-                       atan(HloadL/VLoad).
-        :param Hload: Horizontal load. 
+        :param Vload: Vertical load. 
+        :param HloadB: Horizontal load on Beff direction. 
+        :param HloadL: Horizontal load on Leff direction. 
         :param Beff: Width of the effective foundation area
                      (see figure 12 in page 44 of reference[2]).
         :param Leff: Length of the effective foundation area
                     (see figure 12 in page 44 of reference[2]).
         '''
         if(self.getDesignPhi()!=0.0):
-            iq= self.iq(deltaB,deltaL)
+            iq= self.iq(Vload= Vload, HloadB= HloadB, HloadL= HloadL)
             return (iq*self.Nq()-1.0)/(self.Nq()-1.0)
         else: #See expresion (15) in reference [2]
+            Hload= math.sqrt(HloadB**2+HloadL**2)
             resist= Beff*Leff*self.getDesignC()
             if(Hload<=resist):
                 twoAlpha= math.acos(Hload/resist)
@@ -330,6 +374,30 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         else:
             return math.pi+2.0
 
+    def m(self, HloadB, HloadL, Beff, Leff):
+        ''' Return the value of the parameter m as defined in section
+            D.4 of Eurocode 7 part 1.
+
+        :param HloadB: Horizontal load on Beff direction. 
+        :param HloadL: Horizontal load on Leff direction. 
+        :param Beff: Width of the effective foundation area
+                    (see figure 12 in page 44 of reference[2]).
+        :param Leff: Length of the effective foundation area
+                    (see figure 12 in page 44 of reference[2]).
+        '''
+        B_L= Beff/Leff
+        mB= (2+B_L)/(1+B_L)
+        L_B= 1.0/B_L
+        mL= (2+L_B)/(1+L_B)        
+        if(abs(HloadL)<1e-6): # H acts in the direction of Beff
+            retval= mB
+        elif(abs(HloadB)<1e-6): # H acts in the direction of Leff
+            retval= mL
+        else:
+            theta= math.atan(HloadL/HloadB)
+            retval= mL*math.cos(theta)**2+mB*math.sin(theta)**2
+        return retval
+    
     def sgamma(self,Beff,Leff):
         '''Factor that introduces the effect of foundation shape on
            the self weight component.
@@ -341,16 +409,24 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return 1.0-0.3*Beff/Leff
 
-    def igamma(self,deltaB,deltaL):
+    def igamma(self, Vload, HloadB, HloadL, Beff, Leff):
         '''Factor that introduces the effect of load inclination on
-           the self weight component.
+           the self weight component. Computed according to section
+           D.4 of Eurocode 7 part 1.
 
-        :param deltaB: angle between the load and the foundation width
-                       atan(HloadB/VLoad).
-        :param deltaL: angle between the load and the foundation length
-                       atan(HloadL/VLoad). 
+        :param Vload: Vertical load. 
+        :param HloadB: Horizontal load on Beff direction. 
+        :param HloadL: Horizontal load on Leff direction. 
+        :param Beff: Width of the effective foundation area
+                    (see figure 12 in page 44 of reference[2]).
+        :param Leff: Length of the effective foundation area
+                    (see figure 12 in page 44 of reference[2]).
         '''
-        return (1-math.tan(deltaB))**3*(1-math.tan(deltaL))
+        #return (1-math.tan(deltaB))**3*(1-math.tan(deltaL))
+        m= self.m(HloadB, HloadL, Beff, Leff)
+        iq= self.iq(Vload= Vload, HloadB= HloadB, HloadL= HloadL)
+        retval= pow(iq, (m+1)/m)
+        return retval 
 
     def dgamma(self):
         '''Factor that introduces the effect of foundation depth on
@@ -401,9 +477,8 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
         '''
-        deltaB= math.atan(HloadB/Vload)
-        deltaL= math.atan(HloadL/Vload)
-        return 0.5*self.gamma()*Beff*self.Ngamma(NgammaCoef)*self.dgamma()*self.igamma(deltaB,deltaL)*self.sgamma(Beff,Leff)*self.tgamma(psi)*self.rgamma(eta)
+        igamma= self.igamma(Vload= Vload, HloadB= HloadB, HloadL= HloadL, Beff= Beff, Leff= Leff) # inclination factor.
+        return 0.5*self.gamma()*Beff*self.Ngamma(NgammaCoef)*self.dgamma()*igamma*self.sgamma(Beff,Leff)*self.tgamma(psi)*self.rgamma(eta)
 
     def quCohesion(self,D,Beff,Leff,Vload,HloadB,HloadL,psi= 0.0,eta= 0.0):
         '''Cohesion "component" of the ultimate bearing capacity pressure of the soil.
@@ -422,15 +497,13 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
         '''
-        deltaB= math.atan(HloadB/Vload)
-        deltaL= math.atan(HloadL/Vload)
-        Hload= math.sqrt(HloadB**2+HloadL**2)
-        return self.getDesignC()*self.Nc()*self.dc(D,Beff)*self.ic(deltaB,deltaL,Hload,Beff,Leff)*self.sc(Beff,Leff)*self.tc(psi)*self.rc(eta)
+        return self.getDesignC()*self.Nc()*self.dc(D,Beff)*self.ic(Vload= Vload, HloadB= HloadB, HloadL= HloadL, Beff= Beff, Leff= Leff)*self.sc(Beff,Leff)*self.tc(psi)*self.rc(eta)
 
-    def quQ(self,q,D,Beff,Leff,Vload,HloadB,HloadL,psi= 0.0,eta= 0.0):
-        '''Overburden "component of the ultimate bearing capacity pressure 
+    def quQ(self, q, D, Beff, Leff, Vload, HloadB, HloadL, psi= 0.0, eta= 0.0):
+        '''Overburden component of the ultimate bearing capacity pressure 
            of the soil.
 
+        :param q: overburden load.
         :param D: foundation depth.
         :param Beff: Width of the effective foundation area
                      (see figure 12 in page 44 of reference[2]).
@@ -439,15 +512,15 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param Vload: Vertical load. 
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
-        :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
-                           and 2 in reference 3
         :param psi: angle of the line on which the q load acts 
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
         '''
-        deltaB= math.atan(HloadB/Vload)
-        deltaL= math.atan(HloadL/Vload)
-        return q*self.Nq()*self.dq(D,Beff)*self.iq(deltaB,deltaL)*self.sq(Beff,Leff)*self.tq(psi)*self.rq(eta)
+        retval= 0.0
+        if(q!=0.0):
+            iq= self.iq(Vload= Vload, HloadB= HloadB, HloadL= HloadL)
+            retval= q*self.Nq()*self.dq(D,Beff)*iq*self.sq(Beff,Leff)*self.tq(psi)*self.rq(eta)
+        return retval
 
     def qu(self,q,D,Beff,Leff,Vload,HloadB,HloadL,NgammaCoef= 1.5,psi= 0.0,eta= 0.0):
         '''Ultimate bearing capacity pressure of the soil.
@@ -470,9 +543,9 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
              lmsg.warning('Negative vertical load (V= '+str(Vload)+') means pulling upwards.')
         # Body mass component.
         gammaComp= self.quGamma(D,Beff,Leff,Vload,HloadB,HloadL,NgammaCoef,psi,eta)
-        # Overburden component.
         cComp= self.quCohesion(D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
-        qComp= self.quQ(q,D,Beff,Leff,Vload,HloadB,HloadL,psi,eta)
+        # Overburden component.
+        qComp= self.quQ(q= q, D= D, Beff= Beff, Leff= Leff, Vload= Vload, HloadB= HloadB, HloadL= HloadL, psi= psi, eta= eta)
         retval= gammaComp+cComp+qComp
         return retval
 
