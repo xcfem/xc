@@ -280,7 +280,7 @@ slidingResistanceDegreeOfUtilizationBook= HEdBook/HRdBook
 ### End of book correction.
 ratioSDOfU= abs(slidingResistanceDegreeOfUtilization-slidingResistanceDegreeOfUtilizationBook)/slidingResistanceDegreeOfUtilizationBook
 
-# Verification of bearing resistance
+## Verification of bearing resistance
 bearingResistanceDegreeOfUtilization= sr.getDegreeOfUtilizationForBearingResistance()
 bearingResistanceDegreeOfUtilizationRef= 0.8442207731905604
 # The value calculated in the book is 99% (and we obtain 84%) the difference
@@ -288,7 +288,13 @@ bearingResistanceDegreeOfUtilizationRef= 0.8442207731905604
 # does not consider the depth factos in the Brinch-Hansen formula.
 # bearingResistanceDegreeOfUtilizationBook= 0.99
 ratioBRDOfU= abs(bearingResistanceDegreeOfUtilization-bearingResistanceDegreeOfUtilizationRef)/bearingResistanceDegreeOfUtilizationRef
-geoVerificationsOK= (abs(ratioSDOfU)<.05 and abs(ratioBRDOfU)<1e-3)
+
+## Verification of resistance to toppling
+topplingResistanceDegreeOfUtilization= sr.getDegreeOfUtilizationForOverturning()
+topplingResistanceDegreeOfUtilizationBook= 0.32
+ratioTDOfU= abs(topplingResistanceDegreeOfUtilization-topplingResistanceDegreeOfUtilizationBook)/topplingResistanceDegreeOfUtilizationBook
+
+geoVerificationsOK= (abs(ratioSDOfU)<.05 and abs(ratioBRDOfU)<1e-3 and abs(ratioTDOfU)<.1)
 
 '''
 print('\nCheck computation of virtual back.')
@@ -366,6 +372,10 @@ print('ratioSDOfU= ', ratioSDOfU)
 print('\nCheck bearing degree of utilization.')
 print('bearing degree of utilization: ', bearingResistanceDegreeOfUtilization)
 print('ratioBRDOfU= ', ratioBRDOfU)
+print('\nCheck toppling degree of utilization.')
+print('toppling degree of utilization: ', topplingResistanceDegreeOfUtilization)
+print('toppling degree of utilization book: ', topplingResistanceDegreeOfUtilizationBook)
+print('ratioSDOfU= ', ratioTDOfU)
 print('GEO verifications OK: ', geoVerificationsOK)
 '''
 
