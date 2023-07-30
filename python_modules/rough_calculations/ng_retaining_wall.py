@@ -355,6 +355,12 @@ class WallStabilityResults(object):
         '''
         return 1.0/self.Fbearing
                     
+    def getDegreeOfUtilizationForOverturning(self):
+        ''' Return the degree of utilization obtained in the verification 
+            of resistance to overturning.
+        '''
+        return 1.0/self.Foverturning
+    
     def writeOutput(self,outputFile,name):
         '''Write results in LaTeX format.
 
