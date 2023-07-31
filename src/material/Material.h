@@ -91,14 +91,13 @@ class ID;
 //! in the domain. 
 class Material: public TaggedObject, public MovableObject
   {
-  protected:
-    const Material *get_material_ptr(const std::string &) const;    
   public:
     Material(int tag, int classTag);
 
     const MaterialHandler *getMaterialHandler(void) const;
     MaterialHandler *getMaterialHandler(void);
     std::string getName(void) const;
+    const Material *getMaterialByName(const std::string &) const;    
 
     virtual int setVariable(const std::string &argv);
     virtual int getVariable(int variableID, double &info);

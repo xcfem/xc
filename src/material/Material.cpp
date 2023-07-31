@@ -66,7 +66,7 @@
 #include "utility/matrix/ID.h"
 
 //! @param matName: name of the material.
-const XC::Material *XC::Material::get_material_ptr(const std::string &matName) const
+const XC::Material *XC::Material::getMaterialByName(const std::string &matName) const
   {
     const Material *retval= nullptr; 
     const MaterialHandler *material_handler= getMaterialHandler();
