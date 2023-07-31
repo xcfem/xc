@@ -57,10 +57,11 @@
 void XC::InitStrainMaterial::setMaterial(const UniaxialMaterial &material)
   {
     InitStrainBaseMaterial::setMaterial(material);
-    if(theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
       {
-	theMaterial->setTrialStrain(epsInit);
-        theMaterial->commitState();
+	tmp->setTrialStrain(epsInit);
+        tmp->commitState();
       }    
   }
 
@@ -68,10 +69,11 @@ XC::InitStrainMaterial::InitStrainMaterial(int tag, const UniaxialMaterial &mate
   : InitStrainBaseMaterial(tag,MAT_TAG_InitStrain, material, epsini),
     localStrain(0.0)
   {
-    if(theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
       {
-	theMaterial->setTrialStrain(epsInit);
-        theMaterial->commitState();
+	tmp->setTrialStrain(epsInit);
+        tmp->commitState();
       }
   }
 
@@ -82,10 +84,11 @@ XC::InitStrainMaterial::InitStrainMaterial(int tag)
 int XC::InitStrainMaterial::setInitialStrain(const double &initStrain)
   {
     InitStrainBaseMaterial::setInitialStrain(initStrain);
-    if(theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
       {
-	theMaterial->setTrialStrain(epsInit);
-        theMaterial->commitState();
+	tmp->setTrialStrain(epsInit);
+        tmp->commitState();
       }
     return 0;
   }
@@ -94,8 +97,9 @@ int XC::InitStrainMaterial::setTrialStrain(double strain, double strainRate)
   {
     localStrain = strain;
 
-    if (theMaterial)
-      return theMaterial->setTrialStrain(strain+epsInit, strainRate);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->setTrialStrain(strain+epsInit, strainRate);
     else
       return -1;
   }
@@ -165,7 +169,7 @@ XC::Response *XC::InitStrainMaterial::setResponse(const std::vector<std::string>
       else if(argv[0]=="material")
 	{
 	  const std::vector<std::string> newArgv(argv.begin()+1, argv.end());
-	  theResponse = theMaterial->setResponse(newArgv, info);
+	  theResponse = this->getMaterial()->setResponse(newArgv, info);
 	}
       else
         theResponse= InitStrainBaseMaterial::setResponse(argv, info);
@@ -184,7 +188,7 @@ int XC::InitStrainMaterial::getResponse(int responseID, Information &matInformat
 void XC::InitStrainMaterial::Print(std::ostream &s, int flag) const
   {
     s << "InitStrainMaterial tag: " << this->getTag() << std::endl;
-    s << "\tMaterial: " << theMaterial->getTag() << std::endl;
+    s << "\tMaterial: " << this->getMaterial()->getTag() << std::endl;
     s << "\tinitial strain: " << epsInit << std::endl;
     s << "\tlocal strain: " << localStrain << std::endl;
   }
@@ -198,8 +202,11 @@ int XC::InitStrainMaterial::setParameter(const std::vector<std::string> &argv, P
         retval= param.addObject(1, this);
       }
     else //Otherwise, pass it on to the wrapped material
-      if(theMaterial)
-	retval= theMaterial->setParameter(argv, param);
+      {
+	UniaxialMaterial *tmp= this->getMaterial();
+        if(tmp)
+	  retval= tmp->setParameter(argv, param);
+      }
     return retval;
   }
 
@@ -209,10 +216,11 @@ int XC::InitStrainMaterial::updateParameter(int parameterID, Information &info)
     if(parameterID==1)
       {
         epsInit = info.theDouble;
-	if(theMaterial)
+	UniaxialMaterial *tmp= this->getMaterial();
+	if(tmp)
 	  {
-	    theMaterial->setTrialStrain(localStrain+epsInit);
-	    theMaterial->commitState();
+	    tmp->setTrialStrain(localStrain+epsInit);
+	    tmp->commitState();
 	    retval= 0;
 	  }
       }

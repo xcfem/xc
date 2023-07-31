@@ -88,7 +88,7 @@ class InitStrainBaseMaterial: public EncapsulatedMaterial
     double getTangent(void) const;
     double getDampTangent(void) const;
     inline double getInitialTangent(void) const
-      { return theMaterial->getInitialTangent();}
+      { return this->getMaterial()->getInitialTangent();}
 
     int commitState(void);
     int revertToLastCommit(void);    

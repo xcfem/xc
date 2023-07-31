@@ -70,7 +70,7 @@ XC::TensionOnlyMaterial::TensionOnlyMaterial(int tag)
 //! @brief Return the material stress.
 double XC::TensionOnlyMaterial::getStress(void) const
   {
-    const double f= theMaterial->getStress();
+    const double f= this->getMaterial()->getStress();
     if (f < 0.0)
       return factor*f;
     else
@@ -80,8 +80,9 @@ double XC::TensionOnlyMaterial::getStress(void) const
 //! @brief Return the tangent stiffness.
 double XC::TensionOnlyMaterial::getTangent(void) const
   {
-    const double E= theMaterial->getTangent();
-    const double f= theMaterial->getStress();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    const double E= tmp->getTangent();
+    const double f= tmp->getStress();
     if(f < 0.0)
       return factor*E;
     else
@@ -90,20 +91,21 @@ double XC::TensionOnlyMaterial::getTangent(void) const
 
 double XC::TensionOnlyMaterial::getDampTangent(void) const
   {
-    const double D= theMaterial->getDampTangent();
-    const double f= theMaterial->getStress();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    const double D= tmp->getDampTangent();
+    const double f= tmp->getStress();
     if (f < 0.0)
       return factor*D;
     else
       return D;
   }
 
-
 int XC::TensionOnlyMaterial::commitState(void)
   {
-    const double f= theMaterial->getStress();
+    UniaxialMaterial *tmp= this->getMaterial();
+    const double f= tmp->getStress();
     if(f >= 0.0)
-      return theMaterial->commitState();
+      return tmp->commitState();
     else
       return 0;
   }
@@ -112,31 +114,32 @@ XC::UniaxialMaterial *XC::TensionOnlyMaterial::getCopy(void) const
   { return new TensionOnlyMaterial(*this); }
 
 double XC::TensionOnlyMaterial::getStressSensitivity(int gradIndex, bool conditional)
-{
-  double f = theMaterial->getStress();
-  if (f < 0.0)
-    return 0.0;
-  else 
-    return theMaterial->getStressSensitivity(gradIndex, conditional);
-}
+  {
+    UniaxialMaterial *tmp= this->getMaterial();
+    const double f = tmp->getStress();
+    if (f < 0.0)
+      return 0.0;
+    else 
+      return tmp->getStressSensitivity(gradIndex, conditional);
+  }
 
-double
-XC::TensionOnlyMaterial::getDampTangentSensitivity(int gradIndex)
-{
-  double f = theMaterial->getStress();
-  if (f < 0.0)
-    return 0.0;
-  else
-    return theMaterial->getDampTangentSensitivity(gradIndex);
-}
+double XC::TensionOnlyMaterial::getDampTangentSensitivity(int gradIndex)
+  {
+    UniaxialMaterial *tmp= this->getMaterial();
+    const double f = tmp->getStress();
+    if (f < 0.0)
+      return 0.0;
+    else
+      return tmp->getDampTangentSensitivity(gradIndex);
+  }
 
-int   
-XC::TensionOnlyMaterial::commitSensitivity(double strainGradient,
+int XC::TensionOnlyMaterial::commitSensitivity(double strainGradient,
 				       int gradIndex, int numGrads)
-{
-  double f = theMaterial->getStress();
-  if (f >= 0.0)
-    return theMaterial->commitSensitivity(strainGradient, gradIndex, numGrads);
-  else
-    return 0;
-}
+  {
+    UniaxialMaterial *tmp= this->getMaterial();
+    const double f = tmp->getStress();
+    if(f >= 0.0)
+      return tmp->commitSensitivity(strainGradient, gradIndex, numGrads);
+    else
+      return 0;
+  }

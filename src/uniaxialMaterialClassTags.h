@@ -110,4 +110,5 @@
 #define MAT_TAG_CompressionOnly		       1602
 #define MAT_TAG_Invert                         1603
 
+#define MAT_TAG_UniaxialMaterialWrapper        2000
 #endif

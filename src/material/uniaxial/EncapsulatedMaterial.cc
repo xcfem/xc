@@ -28,50 +28,19 @@
 #include <utility/matrix/ID.h>
 #include "utility/matrix/Vector.h"
 
-//! @brief Free memory allocated for the uniaxial material.
-void XC::EncapsulatedMaterial::free_mem(void)
-  {
-    if(theMaterial) delete theMaterial;
-    theMaterial= nullptr;
-  }
-
-//! brief Copy object members.
-void XC::EncapsulatedMaterial::copy(const UniaxialMaterial *other)
-  {
-    free_mem();
-    if(other)
-      theMaterial= other->getCopy();
-  }
-
-//! @brief Return a pointer to the material.
-const XC::UniaxialMaterial *XC::EncapsulatedMaterial::getMaterial(void) const
-  { return theMaterial; }
-
-//! @brief Return a pointer to the material.
-XC::UniaxialMaterial *XC::EncapsulatedMaterial::getMaterial(void)
-  { return theMaterial; }
-
 //! @brief Sets the encapsulated material.
 void XC::EncapsulatedMaterial::setMaterial(const UniaxialMaterial &material)
-  {
-    copy(&material);
-    if(!theMaterial)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  <<  "; failed to get copy of material\n";
-        exit(-1);
-      }    
-  }
+  { theMaterial.setMaterial(material); }
 
 //! @brief Sets the encapsulated material.
 void XC::EncapsulatedMaterial::setMaterial(const std::string &matName)
   {
-    const Material *ptr_mat= get_material_ptr(matName);
+    const Material *ptr_mat= getMaterialByName(matName);
     if(ptr_mat)
       {
 	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
 	if(tmp)
-	  setMaterial(*tmp);
+	  theMaterial.setMaterial(*tmp);
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
 		    << "material identified by: '" << matName
@@ -85,48 +54,29 @@ void XC::EncapsulatedMaterial::setMaterial(const std::string &matName)
 
 //! @brief Constructor.
 XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag, const UniaxialMaterial &material)
-  :UniaxialMaterial(tag,classTag), theMaterial(nullptr)
-  {
-    setMaterial(material);
-  }
+  :UniaxialMaterial(tag,classTag), theMaterial(material)
+  {}
 
 //! @brief Constructor.
 XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag)
-  : UniaxialMaterial(tag,classTag), theMaterial(nullptr) {}
-
-XC::EncapsulatedMaterial::~EncapsulatedMaterial(void)
-  { free_mem(); }
-
-//! @brief Copy constructor.
-XC::EncapsulatedMaterial::EncapsulatedMaterial(const EncapsulatedMaterial &other)
-  :UniaxialMaterial(other), theMaterial(nullptr)
-  { copy(other.theMaterial); }
-
-//! @brief Assignment operator.
-XC::EncapsulatedMaterial &XC::EncapsulatedMaterial::operator=(const EncapsulatedMaterial &other)
-  {
-    UniaxialMaterial::operator=(other);
-    copy(other.theMaterial);
-    return *this;
-  }
+  : UniaxialMaterial(tag,classTag), theMaterial() {}
 
 double XC::EncapsulatedMaterial::getStrain(void) const
-  { return theMaterial->getStrain(); }
+  { return theMaterial.getStrain(); }
 
 double XC::EncapsulatedMaterial::getStrainRate(void) const
-  { return theMaterial->getStrainRate(); }
+  { return theMaterial.getStrainRate(); }
 
 int XC::EncapsulatedMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= sendMaterialPtr(theMaterial,getDbTagData(),comm,BrokedPtrCommMetaData(1,2,3));
+    int res= comm.sendMovable(theMaterial, getDbTagData(), CommMetaData(1));
     return res;
   }
 
 int XC::EncapsulatedMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
-    theMaterial= dynamic_cast<UniaxialMaterial *>(receiveMaterialPtr(theMaterial,getDbTagData(),comm,BrokedPtrCommMetaData(1,2,3)));
-    
+    res+= comm.receiveMovable(theMaterial, getDbTagData(),CommMetaData(1));
     return res;
   }

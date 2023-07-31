@@ -56,7 +56,8 @@ XC::InitStrainBaseMaterial::InitStrainBaseMaterial(int tag, int classTag, const 
   : EncapsulatedMaterial(tag, classTag, material),
    epsInit(epsini)
   {
-    if(!theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(!tmp)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; failed to get copy of material" << std::endl;
@@ -89,8 +90,9 @@ double XC::InitStrainBaseMaterial::getInitialStrain(void) const
 
 double XC::InitStrainBaseMaterial::getStress(void) const
   {
-    if(theMaterial)
-      return theMaterial->getStress();
+    const UniaxialMaterial *tmp= theMaterial.getMaterial();
+    if(tmp)
+      return tmp->getStress();
     else
       return 0.0;
   }
@@ -98,24 +100,27 @@ double XC::InitStrainBaseMaterial::getStress(void) const
 //! @brief Return the material tangent stiffness.
 double XC::InitStrainBaseMaterial::getTangent(void) const
   {
-    if(theMaterial)
-      return theMaterial->getTangent();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getTangent();
     else
       return 0.0;
   }
 
 double XC::InitStrainBaseMaterial::getDampTangent(void) const
   {
-    if(theMaterial)
-      return theMaterial->getDampTangent();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getDampTangent();
     else
       return 0.0;
   }
 
 double XC::InitStrainBaseMaterial::getStrainRate(void) const
   {
-    if(theMaterial)
-      return theMaterial->getStrainRate();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getStrainRate();
     else
       return 0.0;
   }
@@ -123,16 +128,18 @@ double XC::InitStrainBaseMaterial::getStrainRate(void) const
 //! @brief Commit the state of the material.
 int XC::InitStrainBaseMaterial::commitState(void)
   {        
-    if(theMaterial)
-      return theMaterial->commitState();
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->commitState();
     else
       return -1;
   }
 
 int XC::InitStrainBaseMaterial::revertToLastCommit(void)
   {
-    if(theMaterial)
-      return theMaterial->revertToLastCommit();
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->revertToLastCommit();
     else
       return -1;
   }
@@ -140,11 +147,12 @@ int XC::InitStrainBaseMaterial::revertToLastCommit(void)
 int XC::InitStrainBaseMaterial::revertToStart(void)
   {
     int retval= -1;
-    if(theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
       {
-        retval= theMaterial->revertToStart();
-        retval+= theMaterial->setTrialStrain(epsInit);
-        retval+= theMaterial->commitState();
+        retval= tmp->revertToStart();
+        retval+= tmp->setTrialStrain(epsInit);
+        retval+= tmp->commitState();
       }
     return retval;
   }
@@ -167,24 +175,27 @@ int XC::InitStrainBaseMaterial::recvData(const Communicator &comm)
 
 double XC::InitStrainBaseMaterial::getStressSensitivity(int gradIndex, bool conditional)
   {
-    if (theMaterial)
-      return theMaterial->getStressSensitivity(gradIndex, conditional);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if (tmp)
+      return tmp->getStressSensitivity(gradIndex, conditional);
     else
       return 0.0;
   }
 
 double XC::InitStrainBaseMaterial::getInitialTangentSensitivity(int gradIndex)
   {
-    if (theMaterial)
-      return theMaterial->getInitialTangentSensitivity(gradIndex);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getInitialTangentSensitivity(gradIndex);
     else
       return 0.0;
   }
 
 int XC::InitStrainBaseMaterial::commitSensitivity(double strainGradient,  int gradIndex, int numGrads)
   {
-    if (theMaterial)
-      return theMaterial->commitSensitivity(strainGradient, gradIndex, numGrads);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->commitSensitivity(strainGradient, gradIndex, numGrads);
     else
       return -1;
   }

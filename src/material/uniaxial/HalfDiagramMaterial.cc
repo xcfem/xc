@@ -69,20 +69,20 @@ XC::HalfDiagramMaterial::HalfDiagramMaterial(int tag, int classTag)
 
 int XC::HalfDiagramMaterial::setTrialStrain(double strain, double strainRate)
   {
-    return theMaterial->setTrialStrain(strain, strainRate);
+    return this->getMaterial()->setTrialStrain(strain, strainRate);
   }
 
 
 // int XC::HalfDiagramMaterial::setTrialStrain(double strain, double temp, double strainRate)
 //   {
-//     return theMaterial->setTrialStrain(strain, temp, strainRate);
+//     return this->getMaterial()->setTrialStrain(strain, temp, strainRate);
 //   }
 
 int XC::HalfDiagramMaterial::revertToLastCommit(void)
-  { return theMaterial->revertToLastCommit(); }
+  { return this->getMaterial()->revertToLastCommit(); }
 
 int XC::HalfDiagramMaterial::revertToStart(void)
-  { return theMaterial->revertToStart(); }
+  { return this->getMaterial()->revertToStart(); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
@@ -121,32 +121,28 @@ int XC::HalfDiagramMaterial::recvSelf(const Communicator &comm)
 void XC::HalfDiagramMaterial::Print(std::ostream &s, int flag) const
   {
     s << getClassName() << ", tag: " << this->getTag() << std::endl
-      << "  material: " << theMaterial->getTag() << std::endl;
+      << "  material: " << this->getMaterial()->getTag() << std::endl;
   }
 
 int XC::HalfDiagramMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     int retval= -1;
-    if(theMaterial)
-      retval= theMaterial->setParameter(argv, param);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      retval= tmp->setParameter(argv, param);
     return retval;
   }
 
 int XC::HalfDiagramMaterial::updateParameter(int parameterID, Information &info)
   { return 0; }
 
-double
-XC::HalfDiagramMaterial::getStrainSensitivity(int gradIndex)
-{
-  return theMaterial->getStrainSensitivity(gradIndex);
-}
+double XC::HalfDiagramMaterial::getStrainSensitivity(int gradIndex)
+  { return this->getMaterial()->getStrainSensitivity(gradIndex); }
 
 double XC::HalfDiagramMaterial::getInitialTangentSensitivity(int gradIndex)
-{
-  return theMaterial->getInitialTangentSensitivity(gradIndex);
-}
+  { return this->getMaterial()->getInitialTangentSensitivity(gradIndex); }
 
 double XC::HalfDiagramMaterial::getRhoSensitivity(int gradIndex)
-  { return theMaterial->getRhoSensitivity(gradIndex); }
+  { return this->getMaterial()->getRhoSensitivity(gradIndex); }
 
 

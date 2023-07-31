@@ -26,39 +26,45 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 
-#ifndef EncapsulatedMaterial_h
-#define EncapsulatedMaterial_h
+#ifndef UniaxialMaterialWrapper_h
+#define UniaxialMaterialWrapper_h
 
-#include "material/uniaxial/UniaxialMaterial.h"
-#include "material/uniaxial/UniaxialMaterialWrapper.h"
+#include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Encapsulates a copy to an uniaxial material.
-class EncapsulatedMaterial: public UniaxialMaterial
+class UniaxialMaterialWrapper: public MovableObject
   {
   protected:
-    UniaxialMaterialWrapper theMaterial;
+    UniaxialMaterial *theMaterial;
 
+    void free_mem(void);
+    void copy(const UniaxialMaterial *);
   public:
-    EncapsulatedMaterial(int tag, int classTag, const UniaxialMaterial &material); 
-    EncapsulatedMaterial(int tag= 0,int classTag= 0);
+    UniaxialMaterialWrapper(void);
+    UniaxialMaterialWrapper(const UniaxialMaterial &material); 
+    UniaxialMaterialWrapper(const UniaxialMaterialWrapper &);
+    UniaxialMaterialWrapper &operator=(const UniaxialMaterialWrapper &);
+    ~UniaxialMaterialWrapper(void);
 
-    //! @brief Return a pointer to the encapsulated material.
+    //! @brief Return a pointer to the wrapped material.
     inline const UniaxialMaterial *getMaterial(void) const
-      { return theMaterial.getMaterial(); }
-    //! @brief Return a pointer to the encapsulated material.
+      { return theMaterial; }
+    //! @brief Return a pointer to the wrapped material.
     inline UniaxialMaterial *getMaterial(void)
-      { return theMaterial.getMaterial(); }
+      { return theMaterial; }
     virtual void setMaterial(const UniaxialMaterial &);
-    void setMaterial(const std::string &);
     
     double getStrain(void) const;          
     double getStrainRate(void) const;
     
     int sendData(Communicator &);  
     int recvData(const Communicator &);
+    
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

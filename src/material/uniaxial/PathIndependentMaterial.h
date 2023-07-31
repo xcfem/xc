@@ -73,9 +73,8 @@ namespace XC {
 class PathIndependentMaterial: public EncapsulatedMaterial
   {
   public:
+    PathIndependentMaterial(int tag= 0);
     PathIndependentMaterial(int tag, UniaxialMaterial &material); 
-    PathIndependentMaterial(int tag);
-    PathIndependentMaterial();
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStrain(void);          

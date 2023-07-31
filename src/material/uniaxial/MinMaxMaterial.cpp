@@ -82,7 +82,7 @@ int XC::MinMaxMaterial::setTrialStrain(double strain, double strainRate)
     else
       {
         Tfailed = false;
-        return theMaterial->setTrialStrain(strain, strainRate);
+        return this->getMaterial()->setTrialStrain(strain, strainRate);
       }
   }
 
@@ -91,17 +91,18 @@ double XC::MinMaxMaterial::getStress(void) const
     if(Tfailed)
       return 0.0;
     else
-      return theMaterial->getStress();
+      return this->getMaterial()->getStress();
   }
 
 //! @brief Return the material tangent stiffness.
 double XC::MinMaxMaterial::getTangent(void) const
   {
+    const UniaxialMaterial *tmp= this->getMaterial();
     if(Tfailed)
       //return 0.0;
-      return 1.0e-8*theMaterial->getInitialTangent();
+      return 1.0e-8*tmp->getInitialTangent();
     else
-      return theMaterial->getTangent();
+      return tmp->getTangent();
   }
 
 double XC::MinMaxMaterial::getDampTangent(void) const
@@ -109,7 +110,7 @@ double XC::MinMaxMaterial::getDampTangent(void) const
     if(Tfailed)
       return 0.0;
     else
-      return theMaterial->getDampTangent();
+      return this->getMaterial()->getDampTangent();
   }
 
 //! @brief Commit the state of the material.
@@ -121,7 +122,7 @@ int XC::MinMaxMaterial::commitState(void)
     if(Tfailed)
       return 0;
     else
-      return theMaterial->commitState();
+      return this->getMaterial()->commitState();
   }
 
 int XC::MinMaxMaterial::revertToLastCommit(void)
@@ -130,7 +131,7 @@ int XC::MinMaxMaterial::revertToLastCommit(void)
     if(Cfailed)
       return 0;
     else
-      return theMaterial->revertToLastCommit();
+      return this->getMaterial()->revertToLastCommit();
   }
 
 int XC::MinMaxMaterial::revertToStart(void)
@@ -138,7 +139,7 @@ int XC::MinMaxMaterial::revertToStart(void)
     int retval= EncapsulatedMaterial::revertToStart();
     Cfailed = false;
     Tfailed = false;
-    retval+= theMaterial->revertToStart();
+    retval+= this->getMaterial()->revertToStart();
     return retval;
   }
 
@@ -199,7 +200,7 @@ int XC::MinMaxMaterial::recvSelf(const Communicator &comm)
 void XC::MinMaxMaterial::Print(std::ostream &s, int flag) const
   {
     s << "MinMaxMaterial tag: " << this->getTag() << std::endl;
-    s << "\tMaterial: " << theMaterial->getTag() << std::endl;
+    s << "\tMaterial: " << this->getMaterial()->getTag() << std::endl;
     s << "\tMin strain: " << minStrain << std::endl;
     s << "\tMax strain: " << maxStrain << std::endl;
   }

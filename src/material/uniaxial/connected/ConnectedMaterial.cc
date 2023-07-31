@@ -91,7 +91,7 @@ XC::ConnectedMaterial &XC::ConnectedMaterial::operator=(const ConnectedMaterial 
 //! @param dir: direction 
 void XC::ConnectedMaterial::appendMaterial(const std::string &matName)
   {
-    const Material *ptr_mat= get_material_ptr(matName);
+    const Material *ptr_mat= getMaterialByName(matName);
     if(ptr_mat)
       {
 	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);

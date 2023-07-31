@@ -77,7 +77,7 @@ class HalfDiagramMaterial : public EncapsulatedMaterial
     //int setTrialStrain(double strain, double FiberTemperature, double strainRate); 
 
     inline double getInitialTangent(void) const
-      { return theMaterial->getInitialTangent();}
+      { return this->getMaterial()->getInitialTangent();}
 
     int revertToLastCommit(void);    
     int revertToStart(void);        

@@ -61,29 +61,21 @@
 #include <material/uniaxial/PathIndependentMaterial.h>
 #include <utility/matrix/ID.h>
 
-//! @brief Constructor.
-XC::PathIndependentMaterial::PathIndependentMaterial(int tag, UniaxialMaterial &material)
-:EncapsulatedMaterial(tag,MAT_TAG_PathIndependent)
-  {
-    theMaterial = material.getCopy();
-    if(theMaterial == nullptr)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; failed to get copy of material\n";
-        //exit(-1);
-      }
-  }
-
+//! @brief Default constructor.
 XC::PathIndependentMaterial::PathIndependentMaterial(int tag)
   : EncapsulatedMaterial(tag,MAT_TAG_PathIndependent) {}
 
-XC::PathIndependentMaterial::PathIndependentMaterial(void)
-  :EncapsulatedMaterial(0,MAT_TAG_PathIndependent) {}
+//! @brief Constructor.
+XC::PathIndependentMaterial::PathIndependentMaterial(int tag, UniaxialMaterial &material)
+  : EncapsulatedMaterial(tag,MAT_TAG_PathIndependent, material)
+  {}
+
 
 int XC::PathIndependentMaterial::setTrialStrain(double strain, double strainRate)
   {
-    if(theMaterial)
-      return theMaterial->setTrialStrain(strain, strainRate);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->setTrialStrain(strain, strainRate);
     else
       return -1;
   }
@@ -91,16 +83,18 @@ int XC::PathIndependentMaterial::setTrialStrain(double strain, double strainRate
 //! @brief Return the material strain.
 double XC::PathIndependentMaterial::getStrain(void)
   {
-    if (theMaterial)
-      return theMaterial->getStrain();
+    UniaxialMaterial *tmp= this->getMaterial();
+    if (tmp)
+      return tmp->getStrain();
     else
       return 0.0;
   }
 
 double XC::PathIndependentMaterial::getStrainRate(void)
   {
-    if (theMaterial)
-      return theMaterial->getStrainRate();
+    UniaxialMaterial *tmp= this->getMaterial();
+    if (tmp)
+      return tmp->getStrainRate();
     else
       return 0.0;
   }
@@ -108,8 +102,9 @@ double XC::PathIndependentMaterial::getStrainRate(void)
 //! @brief Return the material stress.
 double XC::PathIndependentMaterial::getStress(void) const
   {
-    if(theMaterial)
-      return theMaterial->getStress();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getStress();
     else
       return 0.0;
   }
@@ -117,16 +112,18 @@ double XC::PathIndependentMaterial::getStress(void) const
 //! @brief Return the material tangent stiffness.
 double XC::PathIndependentMaterial::getTangent(void) const
   {
-    if(theMaterial)
-      return theMaterial->getTangent();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getTangent();
     else
       return 0.0;
   }
 
 double XC::PathIndependentMaterial::getDampTangent(void) const
   {
-    if(theMaterial)
-      return theMaterial->getDampTangent();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getDampTangent();
     else
       return 0.0;
   }
@@ -134,8 +131,9 @@ double XC::PathIndependentMaterial::getDampTangent(void) const
 //! @brief Return the material initial stiffness.
 double XC::PathIndependentMaterial::getInitialTangent(void) const
   {
-    if(theMaterial)
-      return theMaterial->getInitialTangent();
+    const UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->getInitialTangent();
     else
       return 0.0;
   }
@@ -151,7 +149,7 @@ int XC::PathIndependentMaterial::revertToLastCommit(void)
 int XC::PathIndependentMaterial::revertToStart(void)
   {
     int retval= EncapsulatedMaterial::revertToStart();
-    retval+= theMaterial->revertToStart();
+    retval+= this->getMaterial()->revertToStart();
     return retval;
   }
 
@@ -190,5 +188,5 @@ int XC::PathIndependentMaterial::recvSelf(const Communicator &comm)
 void XC::PathIndependentMaterial::Print(std::ostream &s, int flag) const
   {
     s << "PathIndependentMaterial tag: " << this->getTag() << std::endl;
-    s << "\tmaterial: " << theMaterial->getTag() << std::endl;
+    s << "\tmaterial: " << this->getMaterial()->getTag() << std::endl;
   }

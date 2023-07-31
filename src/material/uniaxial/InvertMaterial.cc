@@ -68,33 +68,33 @@ XC::InvertMaterial::InvertMaterial(int tag)
   {}
 
 int XC::InvertMaterial::setTrialStrain(double strain, double strainRate)
-  { return theMaterial->setTrialStrain(-strain, -strainRate); }
+  { return this->getMaterial()->setTrialStrain(-strain, -strainRate); }
 
 
 // int XC::InvertMaterial::setTrialStrain(double strain, double temp, double strainRate)
 //   {
-//     return theMaterial->setTrialStrain(strain, temp, strainRate);
+//     return this->getMaterial()->setTrialStrain(strain, temp, strainRate);
 //   }
 
 //! @brief Return the material stress.
 double XC::InvertMaterial::getStress(void) const
-  { return -theMaterial->getStress(); }
+  { return -this->getMaterial()->getStress(); }
 
 //! @brief Return the tangent stiffness.
 double XC::InvertMaterial::getTangent(void) const
-  { return theMaterial->getTangent();  }
+  { return this->getMaterial()->getTangent();  }
 
 double XC::InvertMaterial::getDampTangent(void) const
-  { return theMaterial->getDampTangent(); }
+  { return this->getMaterial()->getDampTangent(); }
 
 int XC::InvertMaterial::commitState(void)
-  { return theMaterial->commitState(); }
+  { return this->getMaterial()->commitState(); }
 
 int XC::InvertMaterial::revertToLastCommit(void)
-  { return theMaterial->revertToLastCommit(); }
+  { return this->getMaterial()->revertToLastCommit(); }
 
 int XC::InvertMaterial::revertToStart(void)
-  { return theMaterial->revertToStart(); }
+  { return this->getMaterial()->revertToStart(); }
 
 XC::UniaxialMaterial *XC::InvertMaterial::getCopy(void) const
   { return new InvertMaterial(*this); }
@@ -136,14 +136,15 @@ int XC::InvertMaterial::recvSelf(const Communicator &comm)
 void XC::InvertMaterial::Print(std::ostream &s, int flag) const
   {
     s << "InvertMaterial, tag: " << this->getTag() << std::endl
-      << "  material: " << theMaterial->getTag() << std::endl;
+      << "  material: " << this->getMaterial()->getTag() << std::endl;
   }
 
 int XC::InvertMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     int retval= -1;
-    if(theMaterial)
-      retval= theMaterial->setParameter(argv, param);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      retval= tmp->setParameter(argv, param);
     return retval;
   }
 
@@ -151,21 +152,21 @@ int XC::InvertMaterial::updateParameter(int parameterID, Information &info)
   { return 0; }
 
 double XC::InvertMaterial::getStressSensitivity(int gradIndex, bool conditional)
-  { return theMaterial->getStressSensitivity(gradIndex, conditional); }
+  { return this->getMaterial()->getStressSensitivity(gradIndex, conditional); }
 
 double XC::InvertMaterial::getStrainSensitivity(int gradIndex)
-  { return theMaterial->getStrainSensitivity(gradIndex); }
+  { return this->getMaterial()->getStrainSensitivity(gradIndex); }
 
 double XC::InvertMaterial::getInitialTangentSensitivity(int gradIndex)
-  { return theMaterial->getInitialTangentSensitivity(gradIndex); }
+  { return this->getMaterial()->getInitialTangentSensitivity(gradIndex); }
 
 double XC::InvertMaterial::getDampTangentSensitivity(int gradIndex)
-  { return theMaterial->getDampTangentSensitivity(gradIndex); }
+  { return this->getMaterial()->getDampTangentSensitivity(gradIndex); }
 
 double XC::InvertMaterial::getRhoSensitivity(int gradIndex)
-  { return theMaterial->getRhoSensitivity(gradIndex); }
+  { return this->getMaterial()->getRhoSensitivity(gradIndex); }
 
 int XC::InvertMaterial::commitSensitivity(double strainGradient, int gradIndex, int numGrads)
   {
-    return theMaterial->commitSensitivity(strainGradient, gradIndex, numGrads);
+    return this->getMaterial()->commitSensitivity(strainGradient, gradIndex, numGrads);
   }

@@ -61,14 +61,15 @@ int XC::InitStressMaterial::findInitialStrain(void)
     double tStrain = 0.0, tStress = 0.0;
     int count = 0;
 
+    UniaxialMaterial *tmp= this->getMaterial();
     do
       {
         count++;
-        double K = theMaterial->getTangent();
+        double K = tmp->getTangent();
         double dStrain = dSig/K;
         tStrain += dStrain;
-        theMaterial->setTrialStrain(tStrain);
-        tStress = theMaterial->getStress();
+        tmp->setTrialStrain(tStrain);
+        tStress = tmp->getStress();
         dSig= sigInit-tStress;
       }
     while ((fabs(tStress-sigInit) > tol) && (count <= 100));
@@ -76,12 +77,12 @@ int XC::InitStressMaterial::findInitialStrain(void)
     epsInit = tStrain;
 
     if ((fabs(tStress-sigInit) < tol)) 
-      theMaterial->setTrialStrain(epsInit);
+      tmp->setTrialStrain(epsInit);
     else
       {
-	std::cerr << "WARNING: InitStressMaterial - could not find initStrain to within tol for material: " << theMaterial->getTag()
+	std::cerr << "WARNING: InitStressMaterial - could not find initStrain to within tol for material: " << tmp->getTag()
 		  << " wanted sigInit: " << sigInit
-		  << " using tStress: " << theMaterial->getStress()
+		  << " using tStress: " << tmp->getStress()
 		  << std::endl;
         return -1;
       }
@@ -92,10 +93,11 @@ int XC::InitStressMaterial::findInitialStrain(void)
 void XC::InitStressMaterial::setMaterial(const UniaxialMaterial &material)
   {
     InitStrainBaseMaterial::setMaterial(material);
-    if(theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
       {
 	if(this->findInitialStrain() == 0)
-	  theMaterial->commitState();
+	  tmp->commitState();
       }    
   }
 
@@ -103,10 +105,11 @@ XC::InitStressMaterial::InitStressMaterial(int tag, const UniaxialMaterial &mate
   : InitStrainBaseMaterial(tag,MAT_TAG_InitStress, material, 0.0),
     sigInit(sigini)
   {
-    if(theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
       {
 	if(this->findInitialStrain() == 0)
-	  theMaterial->commitState();
+	  tmp->commitState();
       }
   }
 
@@ -117,24 +120,26 @@ XC::InitStressMaterial::InitStressMaterial(int tag)
 int XC::InitStressMaterial::setInitialStrain(const double &initStrain)
   {
     InitStrainBaseMaterial::setInitialStrain(initStrain);
-    if(theMaterial)
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
       {
 	if(this->findInitialStrain() == 0)
-	  theMaterial->commitState();
+	  tmp->commitState();
       }    
     return 0;
   }
 
 int XC::InitStressMaterial::setTrialStrain(double strain, double strainRate)
   {
-    if (theMaterial)
-      return theMaterial->setTrialStrain(strain+epsInit, strainRate);
+    UniaxialMaterial *tmp= this->getMaterial();
+    if(tmp)
+      return tmp->setTrialStrain(strain+epsInit, strainRate);
     else
       return -1;
   }
 
 double XC::InitStressMaterial::getStrain(void) const
-  { return theMaterial->getStrain(); }
+  { return this->getMaterial()->getStrain(); }
 
 XC::UniaxialMaterial *XC::InitStressMaterial::getCopy(void) const
   { return new InitStressMaterial(*this); }
@@ -191,7 +196,7 @@ int XC::InitStressMaterial::recvSelf(const Communicator &comm)
 void XC::InitStressMaterial::Print(std::ostream &s, int flag) const
   {
     s << "InitStressMaterial tag: " << this->getTag() << std::endl;
-    s << "\tMaterial: " << theMaterial->getTag() << std::endl;
+    s << "\tMaterial: " << this->getMaterial()->getTag() << std::endl;
     s << "\tinitial strain: " << epsInit << std::endl;
     s << "\tinitial stress: " << sigInit << std::endl;
   }
@@ -205,8 +210,11 @@ int XC::InitStressMaterial::setParameter(const std::vector<std::string> &argv, P
         retval= param.addObject(1, this);
       }
     else //Otherwise, pass it on to the wrapped material
-      if(theMaterial)
-	retval= theMaterial->setParameter(argv, param);
+      {
+        UniaxialMaterial *tmp= this->getMaterial();
+        if(tmp)
+	  retval= tmp->setParameter(argv, param);
+      }
     return retval;
   }
 
