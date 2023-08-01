@@ -180,10 +180,11 @@ double XC::LayeredShellFiberSection::getRho(void) const
 
     double weight;
     double rhoH = 0.0;
+    const double h_2= 0.5*h;
     const size_t sz= theFibers.size();
     for(size_t i = 0; i < sz; i++ )
       {
-        weight = ( 0.5*h ) * wg[i];
+        weight = h_2 * wg[i];
         rhoH += ( theFibers[i]->getRho() ) * weight;
       }
     return rhoH;
@@ -266,13 +267,14 @@ const XC::Vector &XC::LayeredShellFiberSection::getStressResultant(void) const
     double z, weight;
 
     stressResultant.Zero( );
+    const double h_2= 0.5*h;
     const size_t sz= theFibers.size();
     for(size_t i= 0; i < sz; i++ )
       {
 
-	z = ( 0.5*h ) * sg[i];
+	z = h_2 * sg[i];
 
-	weight = ( 0.5*h ) * wg[i];
+	weight = h_2 * wg[i];
 
 	stress = theFibers[i]->getStress( );
 
@@ -306,12 +308,13 @@ const XC::Matrix &XC::LayeredShellFiberSection::getSectionTangent(void) const
 
     double z, weight;
     tangent.Zero( );
+    const double h_2= 0.5*h;
     const size_t sz= theFibers.size();
     for(size_t i = 0; i < sz; i++ )
       {
-	z = ( 0.5*h ) * sg[i];
+	z= h_2 * sg[i];
 
-	weight = (0.5*h) * wg[i];
+	weight= h_2 * wg[i];
 
   /*      //compute Aeps
 
