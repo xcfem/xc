@@ -65,60 +65,6 @@ Earthquake Engineering & Structural Dynamics, 2013, 42(5): 705-723*/
 XC::Vector XC::PlateRebarMaterial::stress(5);
 XC::Matrix XC::PlateRebarMaterial::tangent(5,5);
 
-//! @brief Free memory allocated for the uniaxial material.
-void XC::PlateRebarMaterial::free_mem(void)
-  {
-    if(theMaterial) delete theMaterial;
-    theMaterial= nullptr;
-  }
-
-//! brief Copy object members.
-void XC::PlateRebarMaterial::copy(const UniaxialMaterial *other)
-  {
-    free_mem();
-    if(other)
-      theMaterial= other->getCopy();
-  }
-
-//! @brief Return a pointer to the material.
-const XC::UniaxialMaterial *XC::PlateRebarMaterial::getMaterial(void) const
-  { return theMaterial; }
-
-//! @brief Return a pointer to the material.
-XC::UniaxialMaterial *XC::PlateRebarMaterial::getMaterial(void)
-  { return theMaterial; }
-
-//! @brief Sets the encapsulated material.
-void XC::PlateRebarMaterial::setMaterial(const UniaxialMaterial &material)
-  {
-    copy(&material);
-    if(!theMaterial)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  <<  "; failed to get copy of material\n";
-        exit(-1);
-      }    
-  }
-
-//! @brief Sets the encapsulated material.
-void XC::PlateRebarMaterial::setMaterial(const std::string &matName)
-  {
-    const Material *ptr_mat= get_material_ptr(matName);
-    if(ptr_mat)
-      {
-	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
-	if(tmp)
-	  setMaterial(*tmp);
-	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-		    << "material identified by: '" << matName
-		    << "' is not an uniaxial material." << std::endl;
-      }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-		<< "material identified by: '" << matName
-		<< "' not found." << std::endl;
-  }
 
 void XC::PlateRebarMaterial::setAngle(const double &angle)
   {
@@ -129,41 +75,18 @@ void XC::PlateRebarMaterial::setAngle(const double &angle)
 
 //null constructor
 XC::PlateRebarMaterial::PlateRebarMaterial(int tag)
-  : NDMaterial(tag, ND_TAG_PlateRebarMaterial ), 
-   theMaterial(nullptr), angle(0.0), c(0.0), s(0.0), strain(5) 
+  : PlateAdaptorMaterial<UniaxialMaterialWrapper>(tag, ND_TAG_PlateRebarMaterial ), 
+   angle(0.0), c(0.0), s(0.0), strain(5) 
   { }
 
 
 //full constructor
 XC::PlateRebarMaterial::PlateRebarMaterial(int tag, const UniaxialMaterial &uniMat, const double &ang):
-  NDMaterial(tag, ND_TAG_PlateRebarMaterial ),
-  theMaterial(nullptr), angle(ang), strain(5)
+  PlateAdaptorMaterial<UniaxialMaterialWrapper>(tag, ND_TAG_PlateRebarMaterial, uniMat),
+  angle(ang), c(0.0), s(0.0), strain(5)
   {
-    theMaterial = uniMat.getCopy();
     this->setAngle(angle);
   }
-
-//! @brief Copy constructor.
-XC::PlateRebarMaterial::PlateRebarMaterial(const PlateRebarMaterial &other)
-  : NDMaterial(other), theMaterial(nullptr), angle(other.angle), c(other.c), s(other.s), strain(other.strain) 
-  { copy(other.theMaterial); }
-
-//! @brief Assignment operator.
-XC::PlateRebarMaterial &XC::PlateRebarMaterial::operator=(const PlateRebarMaterial &other)
-  {
-    NDMaterial::operator=(other);
-    copy(other.theMaterial);
-    angle= other.angle;
-    c= other.c;
-    s= other.s;
-    strain= other.strain;
-    return *this;
-  }
-
-//destructor
-XC::PlateRebarMaterial::~PlateRebarMaterial(void) 
-  { free_mem(); }
-
 
 //! @brief Virtual constructor.
 XC::NDMaterial *XC::PlateRebarMaterial::getCopy(void) const 
@@ -180,39 +103,23 @@ XC::NDMaterial *XC::PlateRebarMaterial::getCopy(const std::string &type) const
   }
 
 
-//send back order of strain in vector form
-int XC::PlateRebarMaterial::getOrder(void) const
-  { return 5; }
-
-const std::string &XC::PlateRebarMaterial::getType(void) const 
-  {
-    static const std::string retval("PlateFiber");
-    return retval;
-  }
-
 //swap history variables
 int XC::PlateRebarMaterial::commitState(void) 
-  { return theMaterial->commitState( ); }
+  { return this->getMaterial()->commitState( ); }
 
 
 
 //revert to last saved state
 int XC::PlateRebarMaterial::revertToLastCommit(void)
-  { return theMaterial->revertToLastCommit( ); }
+  { return this->getMaterial()->revertToLastCommit( ); }
 
 
 //revert to start
 int XC::PlateRebarMaterial::revertToStart(void)
   {
     strain.Zero();
-    return theMaterial->revertToStart( );
+    return this->getMaterial()->revertToStart( );
   }
-
-
-//mass per unit volume
-double XC::PlateRebarMaterial::getRho(void) const
-  { return theMaterial->getRho(); }
-
 
 //receive the strain
 int XC::PlateRebarMaterial::setTrialStrain(const Vector &strainFromElement)
@@ -223,12 +130,13 @@ int XC::PlateRebarMaterial::setTrialStrain(const Vector &strainFromElement)
     strain(3) = strainFromElement(3);
     strain(4) = strainFromElement(4);
 
+    UniaxialMaterial *tmp= this->getMaterial();
     if(angle == 0.0)
-      return theMaterial->setTrialStrain(strain(0));
+      return tmp->setTrialStrain(strain(0));
     else if (angle == M_PI/2.0)
-      return theMaterial->setTrialStrain(strain(1));
+      return tmp->setTrialStrain(strain(1));
 
-    return theMaterial->setTrialStrain(   strain(0) * c * c
+    return tmp->setTrialStrain(   strain(0) * c * c
 				     + strain(1) * s * s
 				     + strain(2) * c * s,
 				     0);
@@ -243,7 +151,7 @@ const XC::Vector &XC::PlateRebarMaterial::getStrain(void) const
 //send back the stress 
 const XC::Vector &XC::PlateRebarMaterial::getStress(void) const
   {
-    double sig = theMaterial->getStress();
+    double sig = this->getMaterial()->getStress();
 
     stress.Zero();
     if (angle == 0) 
@@ -263,7 +171,7 @@ const XC::Vector &XC::PlateRebarMaterial::getStress(void) const
 //send back the tangent 
 const XC::Matrix &XC::PlateRebarMaterial::getTangent(void) const
   {
-    const double tan = theMaterial->getTangent( );
+    const double tan = this->getMaterial()->getTangent( );
 
     tangent.Zero();
     if(angle == 0.0) 
@@ -272,22 +180,22 @@ const XC::Matrix &XC::PlateRebarMaterial::getTangent(void) const
       tangent(1,1) = tan;
     else
       {
-        tangent(0,0) = tan * c * c * c * c;
-        tangent(0,1) = tan * c * c * s * s;
-        tangent(0,2) = tan * c * c * c * s;
-        tangent(1,0) = tangent(0,1);
-        tangent(1,1) = tan * s * s * s * s;
-        tangent(1,2) = tan * c * s * s * s;
-        tangent(2,0) = tangent(0,2);
-        tangent(2,1) = tangent(1,2);
-        tangent(2,2) = tangent(0,1);
+        tangent(0,0)= tan * c * c * c * c;
+        tangent(0,1)= tan * c * c * s * s;
+        tangent(0,2)= tan * c * c * c * s;
+        tangent(1,0)= tangent(0,1);
+        tangent(1,1)= tan * s * s * s * s;
+        tangent(1,2)= tan * c * s * s * s;
+        tangent(2,0)= tangent(0,2);
+        tangent(2,1)= tangent(1,2);
+        tangent(2,2)= tangent(0,1);
       }
     return tangent;
   }
 
 const XC::Matrix &XC::PlateRebarMaterial::getInitialTangent(void) const
   {
-    const double tan = theMaterial->getInitialTangent( );
+    const double tan = this->getMaterial()->getInitialTangent( );
     tangent.Zero();
     if (angle == 0) 
       tangent(0,0) = tan;
@@ -305,7 +213,6 @@ const XC::Matrix &XC::PlateRebarMaterial::getInitialTangent(void) const
         tangent(2,1) = tangent(1,2);
         tangent(2,2) = tangent(0,1);
       }
-
     return tangent;
   }
 
@@ -313,38 +220,33 @@ const XC::Matrix &XC::PlateRebarMaterial::getInitialTangent(void) const
 //! @brief print out data
 void XC::PlateRebarMaterial::Print(std::ostream &s, int flag) const
   {
-    s << "PlateRebar Material tag: " << this->getTag() << std::endl;
+    PlateAdaptorMaterial<UniaxialMaterialWrapper>::Print(s, flag);
     s << "angle: " << angle << std::endl;
-    s << "using uniaxial material: " << std::endl;
-    theMaterial->Print(s, flag);
   }
 
 //! @brief Send material data.
 int XC::PlateRebarMaterial::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(comm);
-    res+= sendMaterialPtr(theMaterial,getDbTagData(),comm,BrokedPtrCommMetaData(1,2,3));
-    res+= comm.sendDoubles(angle, c, s,getDbTagData(),CommMetaData(4));
-    res+= comm.sendVector(strain, getDbTagData(),CommMetaData(5));
+    int res= PlateAdaptorMaterial<UniaxialMaterialWrapper>::sendData(comm);
+    res+= comm.sendDoubles(angle, c, s,getDbTagData(),CommMetaData(2));
+    res+= comm.sendVector(strain, getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receive material data.
 int XC::PlateRebarMaterial::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(comm);
-    theMaterial= dynamic_cast<UniaxialMaterial *>(receiveMaterialPtr(theMaterial,getDbTagData(),comm,BrokedPtrCommMetaData(1,2,3)));
-    res+= comm.receiveDoubles(angle, c, s,getDbTagData(),CommMetaData(4));
-    res+= comm.receiveVector(strain, getDbTagData(),CommMetaData(5));
+    int res= PlateAdaptorMaterial<UniaxialMaterialWrapper>::recvData(comm);
+    res+= comm.receiveDoubles(angle, c, s,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveVector(strain, getDbTagData(),CommMetaData(3));
     return res;
   }
-
 
 int XC::PlateRebarMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(6);
+    inicComm(4);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -356,7 +258,7 @@ int XC::PlateRebarMaterial::sendSelf(Communicator &comm)
 
 int XC::PlateRebarMaterial::recvSelf(const Communicator &comm)
   {
-    inicComm(6);
+    inicComm(4);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 

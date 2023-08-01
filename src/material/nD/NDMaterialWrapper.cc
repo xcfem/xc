@@ -24,22 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 
-#include "UniaxialMaterialWrapper.h"
-#include <material/uniaxial/UniaxialMaterial.h>
+#include "NDMaterialWrapper.h"
 
 //! @brief Default constructor.
-XC::UniaxialMaterialWrapper::UniaxialMaterialWrapper(void)
-  : MaterialWrapper<UniaxialMaterial, MAT_TAG_UniaxialMaterialWrapper>() {}
+XC::NDMaterialWrapper::NDMaterialWrapper(void)
+  : MaterialWrapper<NDMaterial, MAT_TAG_NDMaterialWrapper>() {}
 
 //! @brief Constructor.
-XC::UniaxialMaterialWrapper::UniaxialMaterialWrapper(const UniaxialMaterial &material)
-  :MaterialWrapper<UniaxialMaterial, MAT_TAG_UniaxialMaterialWrapper>(material)
+XC::NDMaterialWrapper::NDMaterialWrapper(const NDMaterial &material)
+  : MaterialWrapper<NDMaterial, MAT_TAG_NDMaterialWrapper>(material)
   {}
 
 
-double XC::UniaxialMaterialWrapper::getStrain(void) const
-  { return theMaterial->getStrain(); }
-
-double XC::UniaxialMaterialWrapper::getStrainRate(void) const
-  { return theMaterial->getStrainRate(); }
 

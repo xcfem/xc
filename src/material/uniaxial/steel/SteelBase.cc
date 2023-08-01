@@ -81,6 +81,34 @@ void XC::SteelBase::setFy(const double &d)
 double XC::SteelBase::getFy(void) const
   { return fy; }
 
+//! @brief Get first coefficient for isotropic hardening in compression (a1)
+double XC::SteelBase::getA1(void) const
+  { return a1; }
+//! @brief Set first coefficient for isotropic hardening in compression (a1)
+void XC::SteelBase::setA1(const double &d)
+  { a1= d;}
+
+//! @brief Get second coefficient for isotropic hardening in compression (a2)
+double XC::SteelBase::getA2(void) const
+  { return a2; }
+//! @brief Set second coefficient for isotropic hardening in compression (a2)
+void XC::SteelBase::setA2(const double &d)
+  { a2= d; }
+
+//! @brief Get first coefficient for isotropic hardening in tension (a3).
+double XC::SteelBase::getA3(void) const
+  { return a3; }
+//! @brief Set first coefficient for isotropic hardening in tension (a3).
+void XC::SteelBase::setA3(const double &d)
+  { a3= d; }
+
+//! @brief Get second coefficient for isotropic hardening in tension (a4).
+double XC::SteelBase::getA4(void) const
+  { return a4; }
+//! @brief Set second coefficient for isotropic hardening in tension (a4).
+void XC::SteelBase::setA4(const double &d)
+  { a4= d; }
+
 //! @brief Revert the material to its initial state.
 int XC::SteelBase::revertToStart(void)
   {

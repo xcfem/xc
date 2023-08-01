@@ -23,23 +23,9 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
 
-#include "UniaxialMaterialWrapper.h"
-#include <material/uniaxial/UniaxialMaterial.h>
-
-//! @brief Default constructor.
-XC::UniaxialMaterialWrapper::UniaxialMaterialWrapper(void)
-  : MaterialWrapper<UniaxialMaterial, MAT_TAG_UniaxialMaterialWrapper>() {}
-
-//! @brief Constructor.
-XC::UniaxialMaterialWrapper::UniaxialMaterialWrapper(const UniaxialMaterial &material)
-  :MaterialWrapper<UniaxialMaterial, MAT_TAG_UniaxialMaterialWrapper>(material)
-  {}
+#include "PlateAdaptorMaterial.h"
 
 
-double XC::UniaxialMaterialWrapper::getStrain(void) const
-  { return theMaterial->getStrain(); }
-
-double XC::UniaxialMaterialWrapper::getStrainRate(void) const
-  { return theMaterial->getStrainRate(); }
-
+ 

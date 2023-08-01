@@ -112,10 +112,10 @@ class PlasticDamageConcretePlaneStress : public NDMaterial
     double nu; //!< Poisson ratio 
     double ft; //!< tensile yield strength
     double fc; //!< compressive yield strength
-    double beta; //!< plastic deformation rate
-    double Ap; //!< damage parameter
-    double An; //!< damage parameter
-    double Bn; //!< damage parameter
+    double beta; //!< plastic deformation rate. Parameter controlling plastic strain rate/post-yield hardening parameter
+    double Ap; //!< parameter controlling tensile fracture energy.
+    double An; //!< parameter controlling ductility of the compressive response.
+    double Bn; //!< parameter controlling ductility and peak strength of the compressive response.
 
     double sig[3];
     double eps[3];
@@ -154,6 +154,7 @@ class PlasticDamageConcretePlaneStress : public NDMaterial
     int sendData(Communicator &);  
     int recvData(const Communicator &);
   public:
+    PlasticDamageConcretePlaneStress(int tag= 0);
     PlasticDamageConcretePlaneStress(int tag, 
 				     double E, 
 				     double nu, 
@@ -163,7 +164,25 @@ class PlasticDamageConcretePlaneStress : public NDMaterial
 				     double Ap = 0.5, 
 				     double An = 2.0, 
 				     double Bn = 0.75);
-    PlasticDamageConcretePlaneStress(int tag= 0);
+    double getE(void) const;
+    double getNu(void) const;
+    double getFt(void) const;
+    double getFc(void) const;
+    double getBeta(void) const;
+    double getAp(void) const;
+    double getAn(void) const;
+    double getBn(void) const;
+
+    void setE(const double &);
+    void setNu(const double &);
+    void setFt(const double &);
+    void setFc(const double &);
+    void setBeta(const double &);
+    void setAp(const double &);
+    void setAn(const double &);
+    void setBn(const double &);
+
+    void setup(void);
 
     int setTrialStrain(const Vector &v);
     int setTrialStrain(const Vector &v, const Vector &r);

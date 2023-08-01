@@ -48,7 +48,6 @@ template <class MAT>
 class MaterialVector: public std::vector<MAT *>, public CommandEntity, public MovableObject
   {
   protected:
-    void clear_materials(void);
     void clearAll(void);
     void alloc(const std::vector<MAT *> &mats);
 
@@ -69,6 +68,7 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     ~MaterialVector(void)
       { clearAll(); }
 
+    void clearMaterials(void);
     void setMaterial(const MAT *);
     void setMaterial(size_t i,MAT *);
     void setMaterial(const MAT *,const std::string &);
@@ -158,7 +158,7 @@ MaterialVector<MAT> &MaterialVector<MAT>::operator=(const MaterialVector<MAT> &o
 template <class MAT>
 void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
   {
-    clear_materials();
+    clearMaterials();
     if(new_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
@@ -174,7 +174,7 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
 template <class MAT>
 void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &type)
   {
-    clear_materials();
+    clearMaterials();
     if(new_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
@@ -196,12 +196,15 @@ void MaterialVector<MAT>::setMaterial(size_t i,MAT *new_mat)
   }
 
 template <class MAT>
-void MaterialVector<MAT>::clear_materials(void)
+void MaterialVector<MAT>::clearMaterials(void)
   {
     for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
       {
-        if(*i) delete (*i);
-          (*i)= nullptr;
+        if(*i)
+	  {
+	    delete (*i);
+            (*i)= nullptr;
+	  }
       }
   }
 
@@ -218,7 +221,7 @@ bool MaterialVector<MAT>::empty(void) const
 template <class MAT>
 void MaterialVector<MAT>::clearAll(void)
   {
-    clear_materials();
+    clearMaterials();
     std::vector<MAT *>::clear();
   }
 
@@ -549,7 +552,7 @@ int MaterialVector<MAT>::recvData(const Communicator &comm)
         const size_t nMat= this->size();
         DbTagData cpMat(nMat*3);
         res+= cpMat.receive(getDbTagData(),comm,CommMetaData(1));
-	clear_materials(); // erase existing materials if any.
+	clearMaterials(); // erase existing materials if any.
         for(size_t i= 0;i<nMat;i++)
           {
             const BrokedPtrCommMetaData meta(i,i+nMat,i+2*nMat);

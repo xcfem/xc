@@ -25,6 +25,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
+//===============================================================================
 /* ****************************************************************** **
 **    OpenSees - Open System for Earthquake Engineering Simulation    **
 **          Pacific Earthquake Engineering Research Center            **
@@ -45,92 +46,94 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.6 $
-// $Date: 2003/02/14 23:01:34 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/section/MembranePlateFiberSection.h,v $
+// $Revision: 1.0 $
+// $Date: 2012-05-27 21:11:45 $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/PlateFromPlaneStressMaterial.h,v $
 
-// Ed "C++" Love
+// Yuli Huang (yulihuang@gmail.com) & Xinzheng Lu (luxz@tsinghua.edu.cn)
 //
-// Generic Plate Section with membrane
+// Generic Plate Material from Plane Stress Material
 //
+/* Ref: Lu X, Lu XZ, Guan H, Ye LP, Collapse simulation of reinforced 
+concrete high-rise building induced by extreme earthquakes, 
+Earthquake Engineering & Structural Dynamics, 2013, 42(5): 705-723*/
 
-#ifndef MEMBRANEPLATEFIBERSECTION_H
-#define MEMBRANEPLATEFIBERSECTION_H
+#ifndef PlateFromPlaneStressMaterial_h
+#define PlateFromPlaneStressMaterial_h
 
-#include <utility/matrix/Vector.h>
-#include <utility/matrix/Matrix.h>
-#include "MembranePlateFiberSectionBase.h"
-
+#include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
+#include "material/nD/NDMaterialWrapper.h"
+#include "material/nD/rc_multilayer/PlateAdaptorMaterial.h"
 
 namespace XC {
 
-class NDMaterial;
-
-//! @brief Fiber model for plate/membrane materials.
-//! @ingroup MATPLAC
-class MembranePlateFiberSection: public MembranePlateFiberSectionBase
+//
+//! @brief Reinforcing steel in multilayer reinforced concrete materials.
+//! @ingroup NDMat
+class PlateFromPlaneStressMaterial: public PlateAdaptorMaterial<NDMaterialWrapper>
   {
   private:
-    static constexpr int numFibers= 5;
-    static constexpr int order= 8;
-    
-    //quadrature data
-    static const std::string lobattoLabel;
-    static const double sgLobatto[numFibers]; //Lobatto integration
-    static const double wgLobatto[numFibers];
-    static const std::string gaussLabel;
-    static const double sgGauss[numFibers]; //Gauss integration.
-    static const double wgGauss[numFibers];
-    
-    static const double root56; //shear correction
-    static Vector stressResultant;
+    Vector strain;
+    double gmod; //! out of plane shear modulus.
+
+    static Vector stress;
     static Matrix tangent;
-
-    
-    int integrationType; // 0= Lobatto, 1= Gauss
-
   protected:
-    int sendData(Communicator &);
+    int sendData(Communicator &);  
     int recvData(const Communicator &);
-  public: 
-    MembranePlateFiberSection(int tag= 0);
-    MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber, const std::string &integrType= "Lobatto");
+  public : 
+    PlateFromPlaneStressMaterial(int tag= 0);
+    PlateFromPlaneStressMaterial(int tag, NDMaterial &ndMat, const double &g);
 
-    inline void setMaterial(const NDMaterial &ndmat)
-      { MembranePlateFiberSectionBase::setMaterial(ndmat); }
-    void setIntegrationType(const std::string &);
-    const std::string &getIntegrationType(void) const;
+    inline double getGmod(void) const
+      { return this->gmod; }
+    void setGmod(const double &);
     
-    std::vector<double> getFiberZs(void) const;
-    std::vector<double> getFiberWeights(void) const;
-    std::vector<std::pair<double, double> > getFiberZsAndWeights(void) const;
+    //make a clone of this material
+    NDMaterial *getCopy(void) const;
+    NDMaterial *getCopy(const std::string &) const;
 
-    SectionForceDeformation *getCopy(void) const;
-    double getRho(void) const;
-    void setRho(const double &);
-    double getArealRho(void) const;
-    void setArealRho(const double &);
-    
-    int setInitialSectionDeformation(const Vector &strain_from_element);
-    void zeroInitialSectionDeformation(void);
-    int setTrialSectionDeformation(const Vector &strain_from_element);
-    const Vector &getStressResultant(void) const; //send back the stress 
-    const Matrix &getSectionTangent(void) const; //send back the tangent 
-    const Matrix &getInitialTangent(void) const //send back the initial tangent 
-      {return this->getSectionTangent();}
+    //swap history variables
+    int commitState(void); 
+
+    //revert to last saved state
+    int revertToLastCommit(void);
+
+    //revert to start
+    int revertToStart(void);
+
+    //get the strain 
+    int setTrialStrain(const Vector &strainFromElement );
+
+    //send back the strain
+    const Vector &getStrain(void) const;
+
+    //send back the stress 
+    const Vector &getStress(void) const;
+
+    //send back the tangent 
+    const Matrix &getTangent(void) const;
+
+    const Matrix &getInitialTangent(void) const;  // AV Not Sure if it works
 
     //print out data
-    void Print( std::ostream &s, int flag ) const;
+    void Print(std::ostream &s, int flag = 0) const;
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
-    
-    Response *setResponse(const std::vector<std::string> &, Information &);
 
-    // parameters
-    int setParameter(const std::vector<std::string> &, Parameter &);
-  }; //end of MembranePlateFiberSection declarations
+    //setResponse - added by V.K. Papanikolaou [AUTh] - start
+    Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
+    //setResponse - added by V.K. Papanikolaou [AUTh] - end
+
+  };
 
 } // end of XC namespace
 
 #endif
+
+
+
+
+

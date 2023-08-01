@@ -114,6 +114,7 @@
 #include "material/section/plate_section/ElasticPlateSection.h"
 #include "material/section/plate_section/ElasticMembranePlateSection.h"
 #include "material/section/plate_section/MembranePlateFiberSection.h"
+#include "material/section/plate_section/LayeredShellFiberSection.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
 #include "material/section/Bidirectional.h"
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
@@ -139,7 +140,10 @@
 #include "material/nD/j2_plasticity/J2ThreeDimensional.h"
 //#include "material/nD/feap/FeapMaterial03.h"
 
+// RC multilayer.
 #include "material/nD/rc_multilayer/PlateRebarMaterial.h"
+#include "material/nD/rc_multilayer/PlateFromPlaneStressMaterial.h"
+#include "material/nD/rc_multilayer/PlasticDamageConcretePlaneStress.h"
 
 #include "material/nD/soil/FluidSolidPorousMaterial.h"
 #include "material/nD/soil/PressureDependMultiYield.h"

@@ -62,7 +62,64 @@ static const signed char b_A[3]= { -1, 1, 0 };
 static const signed char c_a[9]= { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
 static const signed char iv1[3]= { 0, 0, 1 };
 
+void XC::PlasticDamageConcretePlaneStress::setup(void)
+  {
+    stress.Zero();
+    strain.Zero();
+    Cstress.Zero();
+    Cstrain.Zero();
 
+    const double f2c = 1.16 * fc;
+    const double k = 1.4142135623730951 * (f2c - fc) / (2.0 * f2c - fc);
+
+    //  initial damage threshold
+    const double rn0 = (-k + 1.4142135623730951) * fc / 1.7320508075688772;
+
+    //  some useful constants
+    //  shear modulus
+    const double G = E / 2.0 / (1.0 + nu);
+
+    // initial tangent
+    Ce0(0,0) = E / (1.0 - nu * nu);
+    Ce0(0,1) = nu * E / (1.0 - nu * nu);
+    Ce0(0,2) = 0.0;
+    Ce0(1,0) = nu * E / (1.0 - nu * nu);
+    Ce0(1,1) = E / (1.0 - nu * nu);
+    Ce0(1,2) = 0.0;
+    Ce0(2,0) = 0.0;
+    Ce0(2,1) = 0.0;
+    Ce0(2,2) = G;  
+
+    for(int i=0; i<3; i++)
+      for (int j=0; j<3; j++)
+	Ce(i,j) = Ce0(i,j);
+
+    for(int i=0; i<3; i++)
+      {
+	sig[i]=0.;
+	eps[i]=0.;
+	Deps[i] = 0;
+	eps_p[i] = 0;
+      }
+    eps_p[3] = 0;
+    rn = rn0;
+    rp = ft;
+    dp = 0.;
+    dn = 0.;
+
+    this->commitState();
+  }
+
+//! @brief Constructor.
+XC::PlasticDamageConcretePlaneStress::PlasticDamageConcretePlaneStress(int tag)
+   :NDMaterial(tag, ND_TAG_PlasticDamageConcretePlaneStress),
+    E(0.0), nu(0.0), ft(0.0), fc(0.0), beta(0.0), Ap(0.0), An(0.0), Bn(0.0),
+    Ce(3,3), Ce0(3,3),CeCommitted(3,3),
+    stress(3),strain(3), Cstress(3), Cstrain(3)
+   {}
+
+
+//! @brief Constructor.
 XC::PlasticDamageConcretePlaneStress::PlasticDamageConcretePlaneStress(int tag,
 						  double _e, 
 						  double _nu, 
@@ -72,62 +129,65 @@ XC::PlasticDamageConcretePlaneStress::PlasticDamageConcretePlaneStress(int tag,
 						  double _Ap, 
 						  double _An, 
 						  double _Bn)
-   :NDMaterial(tag,100),
+   :NDMaterial(tag,ND_TAG_PlasticDamageConcretePlaneStress),
     E(_e), nu(_nu), ft(_ft), fc(_fc), beta(_beta), Ap(_Ap), An(_An), Bn(_Bn),
     Ce(3,3), Ce0(3,3),CeCommitted(3,3),
     stress(3),strain(3), Cstress(3), Cstrain(3)
- {
-   stress.Zero();
-   strain.Zero();
-   Cstress.Zero();
-   Cstrain.Zero();
-   
-   const double f2c = 1.16 * fc;
-   const double k = 1.4142135623730951 * (f2c - fc) / (2.0 * f2c - fc);
+  { setup(); }
 
-   //  initial damage threshold
-   const double rn0 = (-k + 1.4142135623730951) * fc / 1.7320508075688772;
+//!< @brief Get elastic modulus
+double XC::PlasticDamageConcretePlaneStress::getE(void) const
+  { return E; }
+//! @brief Get Poisson ratio
+double XC::PlasticDamageConcretePlaneStress::getNu(void) const
+  { return nu; }
+//! @brief Get tensile yield strength
+double XC::PlasticDamageConcretePlaneStress::getFt(void) const
+  { return ft; }
+//! @brief Get compressive yield strength
+double XC::PlasticDamageConcretePlaneStress::getFc(void) const
+  { return fc; }
+//! @brief Get plastic deformation rate. Parameter controlling plastic
+//! strain rate/post-yield hardening parameter
+double XC::PlasticDamageConcretePlaneStress::getBeta(void) const
+  { return beta; }
+//! @brief Get parameter controlling tensile fracture energy.
+double XC::PlasticDamageConcretePlaneStress::getAp(void) const
+  { return Ap; }
+//! @brief Get parameter controlling ductility of the compressive response.
+double XC::PlasticDamageConcretePlaneStress::getAn(void) const
+  { return An; }
+//! @brief Get parameter controlling ductility and peak strength of
+//! the compressive response.
+double XC::PlasticDamageConcretePlaneStress::getBn(void) const
+  { return Bn; }
 
-   //  some useful constants
-   //  shear modulus
-   const double G = E / 2.0 / (1.0 + nu);
-
-   // initial tangent
-   Ce0(0,0) = E / (1.0 - nu * nu);
-   Ce0(0,1) = nu * E / (1.0 - nu * nu);
-   Ce0(0,2) = 0.0;
-   Ce0(1,0) = nu * E / (1.0 - nu * nu);
-   Ce0(1,1) = E / (1.0 - nu * nu);
-   Ce0(1,2) = 0.0;
-   Ce0(2,0) = 0.0;
-   Ce0(2,1) = 0.0;
-   Ce0(2,2) = G;  
-
-   for (int i=0; i<3; i++)
-     for (int j=0; j<3; j++)
-       Ce(i,j) = Ce0(i,j);
-   
-   for (int i=0; i<3; i++)
-     {
-       sig[i]=0.;
-       eps[i]=0.;
-       Deps[i] = 0;
-       eps_p[i] = 0;
-     }
-   eps_p[3] = 0;
-   rn = rn0;
-   rp = ft;
-   dp = 0.;
-   dn = 0.;
-
-     this->commitState();
- }
-
-XC::PlasticDamageConcretePlaneStress::PlasticDamageConcretePlaneStress(int tag)
-   :NDMaterial(tag, 0),
-    stress(3),strain(3), Cstress(3), Cstrain(3)
-   {}
-
+//!< @brief Set elastic modulus
+void XC::PlasticDamageConcretePlaneStress::setE(const double &d)
+  { this->E= d; }
+//! @brief Set Poisson ratio
+void XC::PlasticDamageConcretePlaneStress::setNu(const double &d)
+  { this->nu= d; }
+//! @brief Set tensile yield strength
+void XC::PlasticDamageConcretePlaneStress::setFt(const double &d)
+  { this->ft= d; }
+//! @brief Set compressive yield strength
+void XC::PlasticDamageConcretePlaneStress::setFc(const double &d)
+  { this->fc= d; }
+//! @brief Set plastic deformation rate. Parameter controlling plastic
+//! strain rate/post-yield hardening parameter
+void XC::PlasticDamageConcretePlaneStress::setBeta(const double &d)
+  { this->beta= d; }
+//! @brief Set parameter controlling tensile fracture energy.
+void XC::PlasticDamageConcretePlaneStress::setAp(const double &d)
+  { this->Ap= d; }
+//! @brief Set parameter controlling ductility of the compressive response.
+void XC::PlasticDamageConcretePlaneStress::setAn(const double &d)
+  { this->An= d; }
+//! @brief Set parameter controlling ductility and peak strength of
+//! the compressive response.
+void XC::PlasticDamageConcretePlaneStress::setBn(const double &d)
+  { this->Bn= d; }
 
 int XC::PlasticDamageConcretePlaneStress::setTrialStrain(Vector const&v1, Vector const&v2)
    {  return this->setTrialStrain(v1); }

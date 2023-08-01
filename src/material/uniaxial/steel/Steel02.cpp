@@ -117,6 +117,50 @@ XC::Steel02::Steel02(int tag, double _fy, double _E0,double _b)
     sigini(0.0), R0(15.0), cR1(0.925), cR2(0.15),konP(0), kon(0) //Default values for elastic to hardening transitions
   { setup_parameters(); }
 
+//! @brief Get the first parameter that controls the transition from elastic to plastic branches.
+double XC::Steel02::getR0(void) const
+  { return R0; }
+//! @brief Set the first parameter that controls the transition from elastic to plastic branches.
+void XC::Steel02::setR0(const double &d)
+  { R0= d;}
+
+//! @brief Get second parameter that controls the transition from elastic to plastic branches.
+double XC::Steel02::getCR1(void) const
+  { return cR1; }
+//! @brief Set second parameter that controls the transition from elastic to plastic branches.
+void XC::Steel02::setCR1(const double &d)
+  { cR1= d; }
+
+//! @brief Get third parameter that controls the transition from elastic to plastic branches.
+double XC::Steel02::getCR2(void) const
+  { return cR2; }
+//! @brief Set third parameter that controls the transition from elastic to plastic branches.
+void XC::Steel02::setCR2(const double &d)
+  { cR2= d; }
+
+//! @brief Set coefficients for isotropic hardening [a1, a2, a3, a4].
+void XC::Steel02::setParams(const std::vector<double> &params)
+  {
+    const size_t sz= params.size();
+    if(sz>0)
+      setR0(params[0]);
+    if(sz>1)
+      setCR1(params[1]);
+    if(sz>2)
+      setCR2(params[2]);
+  }
+//! @brief Set coefficients for isotropic hardening [a1, a2, a3, a4].
+void XC::Steel02::setParamsPy(const boost::python::list &params)
+  {
+    const size_t sz= boost::python::len(params);
+    std::vector<double> tmp(sz);
+    for(size_t i= 0;i<sz;i++)
+      {
+	tmp[i]= boost::python::extract<double>(params[i]);
+      }
+    setParams(tmp);
+  }
+
 //! @brief Sets initial strain.
 int XC::Steel02::setInitialStrain(const double &strain)
   {

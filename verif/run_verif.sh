@@ -859,8 +859,10 @@ python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_02.py
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_03.py
 
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
-python tests/materials/xc_materials/sections/test_material_elastic_membrane_plate_section_01.py
-python tests/materials/xc_materials/sections/test_material_elastic_plate_section_01.py
+python tests/materials/xc_materials/sections/plate_section/test_material_elastic_membrane_plate_section_01.py
+python tests/materials/xc_materials/sections/plate_section/test_material_elastic_plate_section_01.py
+python tests/materials/xc_materials/sections/plate_section/test_membrane_plate_fiber_section_01.py
+python tests/materials/xc_materials/sections/plate_section/test_layered_shell_fiber_section_material_01.py
 
 #Cross sections.
 echo "$BLEU" "    Sections." "$NORMAL"

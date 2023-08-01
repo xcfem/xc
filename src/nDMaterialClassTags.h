@@ -82,6 +82,8 @@
 #define ND_TAG_PlaneStressUserMaterial          28
 #define ND_TAG_PlateFromPlaneStressMaterial     29
 #define ND_TAG_PlateRebarMaterial               30
+#define ND_TAG_PlasticDamageConcretePlaneStress 100
 
+#define MAT_TAG_NDMaterialWrapper        20010
 
 #endif

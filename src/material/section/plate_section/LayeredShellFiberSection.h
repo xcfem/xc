@@ -45,92 +45,85 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.6 $
-// $Date: 2003/02/14 23:01:34 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/section/MembranePlateFiberSection.h,v $
+// $Revision: 1.0 $
+// $Date: 2012-05-21 23:49:46 $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/section/LayeredShellFiberSection.h,v $
 
-// Ed "C++" Love
+// Yuli Huang (yulihuang@gmail.com) & Xinzheng Lu (luxz@tsinghua.edu.cn)
 //
-// Generic Plate Section with membrane
+// Layered Shell Section
 //
+/* Ref: Lu X, Lu XZ, Guan H, Ye LP, Collapse simulation of reinforced 
+concrete high-rise building induced by extreme earthquakes, 
+Earthquake Engineering & Structural Dynamics, 2013, 42(5): 705-723*/
 
-#ifndef MEMBRANEPLATEFIBERSECTION_H
-#define MEMBRANEPLATEFIBERSECTION_H
+#ifndef LayeredShellFiberSection_h
+#define LayeredShellFiberSection_h
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include "MembranePlateFiberSectionBase.h"
-
-
 namespace XC {
-
-class NDMaterial;
 
 //! @brief Fiber model for plate/membrane materials.
 //! @ingroup MATPLAC
-class MembranePlateFiberSection: public MembranePlateFiberSectionBase
+class LayeredShellFiberSection : public MembranePlateFiberSectionBase
   {
   private:
-    static constexpr int numFibers= 5;
-    static constexpr int order= 8;
-    
     //quadrature data
-    static const std::string lobattoLabel;
-    static const double sgLobatto[numFibers]; //Lobatto integration
-    static const double wgLobatto[numFibers];
-    static const std::string gaussLabel;
-    static const double sgGauss[numFibers]; //Gauss integration.
-    static const double wgGauss[numFibers];
-    
-    static const double root56; //shear correction
-    static Vector stressResultant;
-    static Matrix tangent;
+    std::vector<double> sg; //Gauss integration.
+    std::vector<double> wg;
 
-    
-    int integrationType; // 0= Lobatto, 1= Gauss
-
+    static ResponseId array;
   protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
-  public: 
-    MembranePlateFiberSection(int tag= 0);
-    MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber, const std::string &integrType= "Lobatto");
+    void setHWgSg(const std::vector<double> &);
+  public:
+    //null constructor
+    LayeredShellFiberSection(int tag= 0);
 
-    inline void setMaterial(const NDMaterial &ndmat)
-      { MembranePlateFiberSectionBase::setMaterial(ndmat); }
-    void setIntegrationType(const std::string &);
-    const std::string &getIntegrationType(void) const;
-    
-    std::vector<double> getFiberZs(void) const;
-    std::vector<double> getFiberWeights(void) const;
-    std::vector<std::pair<double, double> > getFiberZsAndWeights(void) const;
+    //full constructor
+    LayeredShellFiberSection(int tag, const std::vector<double> &, const std::vector<NDMaterial *> &);
 
+    //make a clone of this material
     SectionForceDeformation *getCopy(void) const;
+
+    void setThicknesses(const boost::python::list &);
+    void setupPy(const boost::python::list &);
+
+    //mass per unit area
     double getRho(void) const;
-    void setRho(const double &);
-    double getArealRho(void) const;
-    void setArealRho(const double &);
-    
-    int setInitialSectionDeformation(const Vector &strain_from_element);
-    void zeroInitialSectionDeformation(void);
-    int setTrialSectionDeformation(const Vector &strain_from_element);
-    const Vector &getStressResultant(void) const; //send back the stress 
-    const Matrix &getSectionTangent(void) const; //send back the tangent 
-    const Matrix &getInitialTangent(void) const //send back the initial tangent 
-      {return this->getSectionTangent();}
+
+    Response *setResponse(const std::vector<std::string> &, Information &);
+    int getResponse(int responseID, Information &info);
+
+    // parameters
+    int setParameter(const std::vector<std::string> &, Parameter &);
+    int updateParameter(int parameterID, Information& info);
+
+    //send back order of strain in vector form
+    const ResponseId &getResponseType(void) const;
+
+     //get the strain and integrate plasticity equations
+    int setTrialSectionDeformation(const Vector &strain_from_element );
+
+    //send back the stress 
+    const Vector &getStressResultant(void) const;
+
+    //send back the tangent 
+    const Matrix &getSectionTangent(void) const;
+
+    //send back the initial tangent 
+    const Matrix& getInitialTangent(void) const
+      { return this->getSectionTangent(); }
 
     //print out data
     void Print( std::ostream &s, int flag ) const;
 
-    int sendSelf(Communicator &);
-    int recvSelf(const Communicator &);
-    
-    Response *setResponse(const std::vector<std::string> &, Information &);
-
-    // parameters
-    int setParameter(const std::vector<std::string> &, Parameter &);
-  }; //end of MembranePlateFiberSection declarations
+  }; //end of LayeredShellFiberSection declarations
 
 } // end of XC namespace
 
 #endif
+
+
+

@@ -55,5 +55,6 @@
 #define SEC_TAG_FiberSection2dInt               1023
 #define SEC_TAG_FiberSectionShear3d	        1024
 #define SEC_TAG_FiberSectionShear2d	        1025
+#define SEC_TAG_LayeredShellFiberSection        1026
 
 #endif

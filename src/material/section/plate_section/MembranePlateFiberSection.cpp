@@ -106,89 +106,20 @@ const double XC::MembranePlateFiberSection::wgGauss[] = { 0.236926885056189,
       break;
 */
 
-//! @brief Initializes material pointers.
-void XC::MembranePlateFiberSection::init(void)
-  { 
-    for(int i= 0;i<numFibers;i++ )
-      theFibers[i]= nullptr;
-  }
-
-//! @brief Allocates material pointers.
-void XC::MembranePlateFiberSection::alloc(const NDMaterial &templ)
-  {
-    free();
-    for(int i= 0;i<numFibers;i++ )
-      theFibers[i]= templ.getCopy("PlateFiber");
-  }
-
-//! @brief Copy the material pointers.
-void XC::MembranePlateFiberSection::copy_fibers(const MembranePlateFiberSection &other)
-  
-  {
-    free();
-    for(int i= 0;i<numFibers;i++ )
-      {
-	const NDMaterial *ndMatPtr= other.theFibers[i];
-	if(ndMatPtr)
-          theFibers[i]= ndMatPtr->getCopy();
-      }
-  }
-
-//! @brief Releases material pointers.
-void XC::MembranePlateFiberSection::free(void)
-  { 
-    for(int i= 0;i<numFibers;i++ )
-      if(theFibers[i])
-	{
-	  delete theFibers[i];
-          theFibers[i]= nullptr;
-	}
-  }
-
 //! @brief Default constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
-  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection ),
-    strainResultant(order), initialStrain(order), integrationType(0)
-  { init(); }
+  : MembranePlateFiberSectionBase( tag, SEC_TAG_MembranePlateFiberSection, numFibers), integrationType(0)
+  {}
 
 //! @brief full constructor
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber, const std::string &integrType)
-  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness, Afiber.getRho()),
-    strainResultant(order), initialStrain(order), integrationType(0)
+  : MembranePlateFiberSectionBase(tag, SEC_TAG_MembranePlateFiberSection,thickness, 5, Afiber), integrationType(0)
   {
-    alloc(Afiber);
     setIntegrationType(integrType);
   }
 
-//! @brief Copy constructor.
-XC::MembranePlateFiberSection::MembranePlateFiberSection(const MembranePlateFiberSection &other)
-  : PlateBase(other),
-    strainResultant(other.strainResultant), initialStrain(other.initialStrain),
-    integrationType(other.integrationType)
-  {
-    init();
-    copy_fibers(other);
-  }
-
-//! @brief Assignment operator.
-XC::MembranePlateFiberSection &XC::MembranePlateFiberSection::operator=(const MembranePlateFiberSection &other)
-  {
-    PlateBase::operator=(other);
-    strainResultant= other.strainResultant;
-    initialStrain= other.initialStrain;
-    integrationType= other.integrationType;
-    copy_fibers(other);
-    return *this;
-  }
-
-
-//! @brief Destructor
-XC::MembranePlateFiberSection::~MembranePlateFiberSection(void) 
-  { free(); }
-
-
 //! @brief make a clone of this material
-XC::SectionForceDeformation  *XC::MembranePlateFiberSection::getCopy(void) const 
+XC::SectionForceDeformation *XC::MembranePlateFiberSection::getCopy(void) const 
   { return new MembranePlateFiberSection(*this); }
 
 //! @brief Return the z coordinate for each fiber (layer if you prefer).
@@ -226,45 +157,6 @@ std::vector<std::pair<double, double> > XC::MembranePlateFiberSection::getFiberZ
     return retval;
   }
 
-
-//! @brief send back order of strainResultant in vector form
-int XC::MembranePlateFiberSection::getOrder(void) const
-  { return order; }
-
-
-//! @brief Returns the labels of the DOFs for which the element
-//! adds (assembles) stiffness.
-const XC::ResponseId &XC::MembranePlateFiberSection::getResponseType(void) const 
-  { return RespShellMat; }
-
-
-
-//! @brief Swap history variables.
-int XC::MembranePlateFiberSection::commitState(void) 
-  {
-    int success = 0;
-    for(int i= 0; i < numFibers; i++ )
-      success += theFibers[i]->commitState( );
-    return success;
-  }
-
-//! @brief Revert to last committed state.
-int XC::MembranePlateFiberSection::revertToLastCommit(void)
-  {
-    int success = 0;
-    for(int i= 0; i < numFibers; i++ )
-      success+= theFibers[i]->revertToLastCommit();
-    return success;
-  }
-
-//! @brief Revert to start.
-int XC::MembranePlateFiberSection::revertToStart(void)
-  {
-    int success = 0;
-    for(int i= 0;i<numFibers;i++ )
-      success += theFibers[i]->revertToStart( );
-    return success;
-  }
 
 void XC::MembranePlateFiberSection::setIntegrationType(const std::string &integrType)
   {
@@ -351,12 +243,6 @@ void XC::MembranePlateFiberSection::zeroInitialSectionDeformation(void)
 	      << "; not implemented." << std::endl;
   }
 
-//! @brief Return initial deformation.
-const XC::Vector &XC::MembranePlateFiberSection::getInitialSectionDeformation(void) const
-  {
-    return initialStrain;
-  }
-
 //! @brief Set trial deformation. 
 int XC::MembranePlateFiberSection::setTrialSectionDeformation(const Vector &strainResultant_from_element)
   {
@@ -376,15 +262,6 @@ int XC::MembranePlateFiberSection::setTrialSectionDeformation(const Vector &stra
         success+= theFibers[i]->setTrialStrain(strain);
       } //end for i
     return success;
-  }
-
-
-//! @brief Returns section deformation.
-const XC::Vector &XC::MembranePlateFiberSection::getSectionDeformation(void) const
-  {
-    static Vector retval;
-    retval= strainResultant-initialStrain;
-    return retval;
   }
 
 //! @brief Return stress resultant.
@@ -573,115 +450,25 @@ const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
   return this->tangent;
   }
 
-//! @brief Return the Von Mises stress at each fiber.
-XC::Vector XC::MembranePlateFiberSection::getVonMisesStressAtFibers(void) const
-  {
-    Vector retval(numFibers);
-    for(int i= 0;i<numFibers; i++)
-      retval[i]= theFibers[i]->getVonMisesStress();
-    return retval;
-  }
-
-//! @brief Return the minimum Von Mises stress at fibers.
-double XC::MembranePlateFiberSection::getMinVonMisesStress(void) const
-  {
-    const Vector tmp= getVonMisesStressAtFibers();
-    double retval= tmp[0];
-    for(int i= 1;i<numFibers; i++)
-      retval= std::min(retval, tmp[i]);
-    return retval;
-  }
-
-//! @brief Return the maximum Von Mises stress at fibers.
-double XC::MembranePlateFiberSection::getMaxVonMisesStress(void) const
-  {
-    const Vector tmp= getVonMisesStressAtFibers();
-    double retval= tmp[0];
-    for(int i= 1;i<numFibers; i++)
-      retval= std::max(retval, tmp[i]);
-    return retval;
-  }
-  
-//! @brief Return the maximum Von Mises stress at fibers.
-double XC::MembranePlateFiberSection::getAvgVonMisesStress(void) const
-  {
-    const Vector tmp= getVonMisesStressAtFibers();
-    double retval= 0.0;
-    for(int i= 0;i<numFibers; i++)
-      retval+= tmp[i];
-    retval/=numFibers;
-    return retval;
-  }
-
-//! @brief Return values of internal forces, deformations...
-//! @param cod: name of the requested value.
-//! @param silent: if true don't complain about non-existen property.
-XC::Matrix XC::MembranePlateFiberSection::getValues(const std::string &cod, bool silent) const
-  {
-    Matrix retval;
-    if(cod == "max_von_mises_stress")
-      {
-	retval.resize(1,1);
-	retval(0,0)= getMaxVonMisesStress();
-      }
-    else if(cod == "min_von_mises_stress")
-      {
-	retval.resize(1,1);
-	retval(0,0)= getMinVonMisesStress();
-      }
-    else if((cod == "avg_von_mises_stress") || (cod == "mean_von_mises_stress"))
-      {
-	retval.resize(1,1);
-	retval(0,0)= getAvgVonMisesStress();
-      }
-    else if((cod == "von_mises_stresses") || (cod == "Von_Mises_stresses"))
-      {
-	retval.resize(5,1);
-	const Vector vm= getVonMisesStressAtFibers();
-	retval.putCol(0,vm);
-      }
-    else
-      retval= PlateBase::getValues(cod, silent);
-    return retval;
-  }
-
 //! @brief Print out data
 void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag ) const
   {
-    s << "MembranePlateFiberSection: \n ";
-    s <<  "  Thickness h = "        <<  h  <<  std::endl;
-    for(int i = 0; i < numFibers; i++)
-      { theFibers[i]->Print( s, flag ) ; }
-    return;
+    MembranePlateFiberSectionBase::Print(s,flag);
   }
 
 //! @brief Send object members through the communicator argument.
 int XC::MembranePlateFiberSection::sendData(Communicator &comm)
   {
-    int res= PlateBase::sendData(comm);
-    res+= comm.sendBrokedPtr(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
-    res+= comm.sendBrokedPtr(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
-    res+= comm.sendBrokedPtr(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
-    res+= comm.sendBrokedPtr(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
-    res+= comm.sendBrokedPtr(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
-    res+= comm.sendVector(strainResultant,getDbTagData(),CommMetaData(22));
-    res+= comm.sendVector(initialStrain,getDbTagData(),CommMetaData(23));
-    res+= comm.sendInt(integrationType,getDbTagData(),CommMetaData(24));
+    int res= MembranePlateFiberSectionBase::sendData(comm);
+    res+= comm.sendInt(integrationType,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
 int XC::MembranePlateFiberSection::recvData(const Communicator &comm)
   {
-    int res= PlateBase::recvData(comm);
-    theFibers[0]= comm.getBrokedMaterial(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
-    theFibers[1]= comm.getBrokedMaterial(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
-    theFibers[2]= comm.getBrokedMaterial(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
-    theFibers[3]= comm.getBrokedMaterial(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
-    theFibers[4]= comm.getBrokedMaterial(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
-    res+= comm.receiveVector(strainResultant,getDbTagData(),CommMetaData(22));
-    res+= comm.receiveVector(initialStrain,getDbTagData(),CommMetaData(23));
-    res+= comm.receiveInt(integrationType,getDbTagData(),CommMetaData(24));
+    int res= MembranePlateFiberSectionBase::recvData(comm);
+    res+= comm.receiveInt(integrationType,getDbTagData(),CommMetaData(10));
     return res;
   }
 
@@ -690,7 +477,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(25);
+    inicComm(11);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -704,7 +491,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
 //! @brief Receive object itself through the communicator argument.
 int XC::MembranePlateFiberSection::recvSelf(const Communicator &comm)
   {
-    inicComm(25);
+    inicComm(11);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
@@ -724,82 +511,12 @@ int XC::MembranePlateFiberSection::recvSelf(const Communicator &comm)
  
 XC::Response *XC::MembranePlateFiberSection::setResponse(const std::vector<std::string> &argv, Information &info)
   {
-    Response *theResponse= nullptr;
-    const int argc= argv.size();
-    if(argc > 2 && (argv[0]=="fiber"))
-      {
-        const int passarg = 2;
-        const int key = atoi(argv[1]);    
-
-	if(key > 0 && key <= numFibers)
-	  {
-	    //info.tag("FiberOutput");
-	    //info.attr("number", key);
-	    //const double *sg= (integrationType == 0) ? sgLobatto : sgGauss;
-	    //const double *wg= (integrationType == 0) ? wgLobatto : wgGauss;      
-	    //info.attr("zLoc", 0.5 * h * sg[key - 1]);
-	    //info.attr("thickness", 0.5 * h * wg[key - 1]);
-            // Slice arguments.
-	    const std::vector<std::string> argv2= std::vector<std::string>(argv.begin()+passarg, argv.end());
-	    theResponse= theFibers[key-1]->setResponse(argv2, info);
-	    //info.endTag();
-	  }
-      }
-    if(!theResponse)
-      return SectionForceDeformation::setResponse(argv, info);
-    return theResponse;
+    return MembranePlateFiberSectionBase::setResponse(argv, info); 
   }
 
 int XC::MembranePlateFiberSection::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
-    // if the user explicitly wants to update a material in this section...
-    const int argc= argv.size();
-    if(argc > 1)
-      {
-        // case 1: fiber value (all fibers)
-        // case 2: fiber id value (one specific fiber)
-        if((argv[0]=="fiber") || (argv[0]=="Fiber"))
-	  {
-            // test case 2 (one specific fiber) ...
-            if(argc > 2)
-	      {
-                const int pointNum = atoi(argv[1]);
-                if(pointNum > 0 && pointNum <= numFibers)
-		  {
-		    // Slice arguments.
-		    const std::vector<std::string> argv2= std::vector<std::string>(argv.begin()+2, argv.end());
-                    return theFibers[pointNum - 1]->setParameter(argv2, param);
-                  }
-              }
-            // ... otherwise case 1 (all fibers), if the argv[1] is not a valid id
-            int mixed_result = -1;
-            for(int i = 0; i < numFibers; ++i)
-	      {
-		// Slice arguments.
-		const std::vector<std::string> argv1= std::vector<std::string>(argv.begin()+1, argv.end());
-                if(theFibers[i]->setParameter(argv1, param) == 0)
-                    mixed_result = 0; // if at least one fiber handles the param, make it successful
-              }
-            return mixed_result;
-	  }
-      }
-    // if we are here, the first keyword is not "fiber", so we can check for parameters
-    // specific to this section (if any) or forward the request to all fibers.
-    if(argc > 0)
-      {
-        // we don't have parameters for this section, so we directly forward it to all fibers.
-        // placeholder for future implementations: if we will have parameters for this class, check them here
-        // before forwarding to all fibers
-        int mixed_result = -1;
-        for(int i = 0; i < numFibers; ++i)
-	  {
-            if (theFibers[i]->setParameter(argv, param) == 0)
-                mixed_result = 0; // if at least one fiber handles the param, make it successful
-          }
-        return mixed_result;
-      }
-    // fallback to base class implementation
-    return SectionForceDeformation::setParameter(argv, param);
+    return MembranePlateFiberSectionBase::setParameter(argv, param); 
   }
 
 

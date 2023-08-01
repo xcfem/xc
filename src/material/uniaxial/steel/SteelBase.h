@@ -42,10 +42,10 @@ class SteelBase: public UniaxialMaterial
     double fy;  //!< Yield stress
     double E0;  //!< Initial stiffness
     double b;   //!< Hardening ratio (b = Esh/E0)
-    double a1;  //!< coefficient for isotropic hardening in compression
-    double a2;  //!< coefficient for isotropic hardening in compression
-    double a3;  //!< coefficient for isotropic hardening in tension
-    double a4;  //!< coefficient for isotropic hardening in tension
+    double a1;  //!< increase of compression yield envelope as proportion of yield strength after a plastic strain of a2∗(Fy/E0) (optional)
+    double a2;  //!< coefficient for isotropic hardening in compression (see a1).
+    double a3;  //!< isotropic hardening parameter, increase of tension yield envelope as proportion of yield strength after a plastic strain of a4∗(Fy/E0). (optional)
+    double a4;  //!< coefficient for isotropic hardening in tension (see a3)
     double ezero; //!< Initial strain.
 
     int sendData(Communicator &);
@@ -65,6 +65,15 @@ class SteelBase: public UniaxialMaterial
     double getInitialTangent(void) const;
     void setFy(const double &);
     double getFy(void) const;
+
+    double getA1(void) const;
+    void setA1(const double &);
+    double getA2(void) const;
+    void setA2(const double &);
+    double getA3(void) const;
+    void setA3(const double &);
+    double getA4(void) const;
+    void setA4(const double &);
 
     inline void setHardeningRatio(const double &d)
       { b= d; }

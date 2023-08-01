@@ -61,56 +61,39 @@ Earthquake Engineering & Structural Dynamics, 2013, 42(5): 705-723*/
 #ifndef PlateRebarMaterial_h
 #define PlateRebarMaterial_h
 
+#include "PlateAdaptorMaterial.h"
+#include "material/uniaxial/UniaxialMaterialWrapper.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "material/nD/NDMaterial.h"
 
 namespace XC {
-  class UniaxialMaterial;
 
-//! @ingroup NDMat
 //
 //! @brief Reinforcing steel in multilayer reinforced concrete materials.
-class PlateRebarMaterial: public NDMaterial
+//! @ingroup NDMat
+class PlateRebarMaterial: public PlateAdaptorMaterial<UniaxialMaterialWrapper>
   {
   private :
-    UniaxialMaterial *theMaterial;
     double angle, c, s;
 
     Vector strain;
     static Vector stress;
     static Matrix tangent;
   protected:
-    void free_mem(void);
-    void copy(const UniaxialMaterial *);    
     int sendData(Communicator &);  
     int recvData(const Communicator &);
   public: 
     PlateRebarMaterial(int tag= 0);
     PlateRebarMaterial(int tag, const UniaxialMaterial &uniMat, const double &ang );
 
-    PlateRebarMaterial(const PlateRebarMaterial &);
-    PlateRebarMaterial &operator=(const PlateRebarMaterial &);
-    virtual ~PlateRebarMaterial(void);
-
     //make a clone of this material
     NDMaterial *getCopy(void) const;
     NDMaterial *getCopy(const std::string &) const;
 
-    const UniaxialMaterial *getMaterial(void) const;
-    UniaxialMaterial *getMaterial(void);
-    virtual void setMaterial(const UniaxialMaterial &);
-    void setMaterial(const std::string &);
     inline double getAngle(void) const
       { return this->angle; }
     void setAngle(const double &);
     
-    //send back order of strain in vector form
-    int getOrder(void) const;
-
-    //send back order of strain in vector form
-    const std::string &getType(void) const;
-
     //swap history variables
     int commitState(void); 
 
@@ -133,9 +116,6 @@ class PlateRebarMaterial: public NDMaterial
     const Matrix &getTangent(void) const;
 
     const Matrix &getInitialTangent(void) const;  // AV Not Sure if it works
-
-    //density
-    double getRho(void) const;
 
     void Print(std::ostream &s, int flag = 0) const;
 

@@ -203,7 +203,7 @@ def defSteel01(preprocessor,name,E,fy,b):
     return retval
 
 #Steel 02.
-def defSteel02(preprocessor,name,E,fy,b,initialStress):
+def defSteel02(preprocessor,name,E,fy,b, initialStress= 0.0, params= None, a1= None, a2= None, a3= None, a4= None):
     '''Constructs a uniaxial bilinear Giuffre-Menegotto-Pinto steel material with 
     isotropic strain hardening
 
@@ -214,12 +214,31 @@ def defSteel02(preprocessor,name,E,fy,b,initialStress):
     :param b:  strain-hardening ratio: ratio between post-yield tangent
                and initial elastic tangent
     :param initialStress: initial stress
+    :param params: parameters to control the transition from elastic to plastic branches. params=[R0,cR1,cR2]. Recommended values: R0=between 10 and 20, cR1=0.925, cR2=0.15
+    :param a1: increase of compression yield envelope as proportion of yield strength after a plastic strain of a2∗(Fy/E0) (optional)
+    :param a2: coefficient for isotropic hardening in compression (see a1).
+    :param a3: isotropic hardening parameter, increase of tension yield envelope as proportion of yield strength after a plastic strain of a4∗(Fy/E0). (optional)
+    :param a4: coefficient for isotropic hardening in tension (see a3)
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("steel02",name)
     retval.E= E
     retval.fy= fy
     retval.b= b
+    if(params):
+        retval.setParams(params)
+    if(a2):
+        retval.a2= a2
+        if(a1):
+            retval.a1= a1
+        else:
+            retval.a1= a2*fy/E
+    if(a4):
+        retval.a4= a4
+        if(a3):
+            retval.a3= a3
+        else:
+            retval.a3= a4*fy/E
     retval.initialStress= initialStress
     return retval
 
@@ -615,6 +634,18 @@ def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
     retval.h= h
     return retval
 
+def defLayeredShellFiberSection(preprocessor, name:str, materialThicknessPairs):
+    ''' Constructs a multiple layer section for shell elements.
+
+    :param  preprocessor: preprocessor of the finite element problem.
+    :param  name:         name identifying the section
+    :param  materialThicknessPairs:   pairs defining the material and thickness for each layer.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("layered_shell_fiber_section", name)
+    retval.setLayers(materialThicknessPairs)
+    return retval
+
 def defMultiLinearMaterial(preprocessor, name, points):
     '''Constructs an elastic perfectly-plastic uniaxial material.
 
@@ -903,6 +934,60 @@ def defDruckerPragerPlaneStrain(preprocessor, name, k, G, sigY, mRho, mRhoBar, K
     retval.rho= mDen
     retval.referencePressure= pAtm
     retval.setup(elastFlag)
+    return retval
+
+def defPlasticDamageConcretePlaneStress(preprocessor, name, E, nu, ft, fc, beta= 0.6, Ap= 0.5, An= 2.0, Bn= 0.75):
+    ''' Create plane stress concrete material.
+
+    :param preprocessor: pre-processor or the finite element problem.
+    :param name: material identifier.
+    :param E: elastic modulus.
+    :param nu: Poisson's ratio.
+    :param ft: tensile yield strength
+    :param fc: compressive yield strength
+    :param beta: plastic deformation rate. Parameter controlling plastic strain rate/post-yield hardening parameter
+    :param Ap: parameter controlling tensile fracture energy.
+    :param An: parameter controlling ductility of the compressive response.
+    :param Bn: parameter controlling ductility and peak strength of the compressive response.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("plastic_damage_concrete_plane_stress", name)
+    retval.E= E
+    retval.nu= nu
+    retval.ft= ft
+    retval.fc= fc
+    retval.beta= beta
+    retval.Ap= Ap
+    retval.An= An
+    retval.Bn= Bn
+    retval.setup() # Call after any change in the material parameters.
+    return retval
+
+def defPlateFromPlaneStress(preprocessor, name, underlyingMaterial, outOfPlaneShearModulus):
+    ''' Create plane stress concrete material.
+
+    :param preprocessor: pre-processor or the finite element problem.
+    :param name: material identifier.
+    :param outOfPlaneShearModulus: elastic modulus.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("plate_from_plane_stress", name)
+    retval.setEncapsulatedMaterial(underlyingMaterial)
+    retval.outOfPlaneShearModulus= outOfPlaneShearModulus
+    return retval
+
+def defPlateRebar(preprocessor, name, uniaxialMaterial, angle):
+    ''' Create material deriving from pre-defined uniaxial material.
+
+    :param preprocessor: pre-processor or the finite element problem.
+    :param name: material identifier.
+    :param uniaxialMaterial: uniaxial material 
+    :param angle: elastic modulus.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("plate_rebar", name)
+    retval.setEncapsulatedMaterial(uniaxialMaterial)
+    retval.angle= angle
     return retval
 
 class MaterialData(BasicElasticMaterial):

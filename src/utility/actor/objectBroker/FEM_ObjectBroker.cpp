@@ -668,6 +668,9 @@ XC::SectionForceDeformation *XC::FEM_ObjectBroker::getNewSection(int classTag)
       case SEC_TAG_MembranePlateFiberSection:
 	retval= new MembranePlateFiberSection();
 	break;
+      case SEC_TAG_LayeredShellFiberSection:
+	retval= new LayeredShellFiberSection();
+	break;
       case SEC_TAG_Bidirectional:
 	retval= new Bidirectional();
 	break;

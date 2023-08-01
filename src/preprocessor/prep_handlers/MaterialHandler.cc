@@ -156,6 +156,11 @@
 #include "material/nD/uw_materials/DruckerPragerPlaneStrain.h"
 #include "material/nD/uw_materials/DruckerPrager3D.h"
 
+// RC multilayer.
+#include "material/nD/rc_multilayer/PlateRebarMaterial.h"
+#include "material/nD/rc_multilayer/PlateFromPlaneStressMaterial.h"
+#include "material/nD/rc_multilayer/PlasticDamageConcretePlaneStress.h"
+
 //Section
 #include "material/section/Bidirectional.h"
 #include "material/section/elastic_section/ElasticSection1d.h"
@@ -183,6 +188,7 @@
 #include "material/section/plate_section/ElasticPlateSection.h"
 #include "material/section/plate_section/ElasticMembranePlateSection.h"
 #include "material/section/plate_section/MembranePlateFiberSection.h"
+#include "material/section/plate_section/LayeredShellFiberSection.h"
 
 //Yield surface
 #include "material/yieldSurface/plasticHardeningMaterial/ExponReducing.h"
@@ -375,6 +381,12 @@ XC::Material *load_nD_material(int tag_mat,const std::string &cmd)
       retval= new XC::DruckerPragerPlaneStrain(tag_mat);
     else if(cmd == "drucker-prager_3d")
       retval= new XC::DruckerPrager3D(tag_mat);
+    else if(cmd == "plastic_damage_concrete_plane_stress")
+      retval= new XC::PlasticDamageConcretePlaneStress(tag_mat);
+    else if(cmd == "plate_rebar")
+      retval= new XC::PlateRebarMaterial(tag_mat);
+    else if(cmd == "plate_from_plane_stress")
+      retval= new XC::PlateFromPlaneStressMaterial(tag_mat);
     return retval;
   }
 
@@ -430,6 +442,8 @@ XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC:
       retval= new XC::ElasticPlateSection(tag_mat);
     else if(cmd == "membrane_plate_fiber_section")
       retval= new XC::MembranePlateFiberSection(tag_mat);
+    else if(cmd == "layered_shell_fiber_section")
+      retval= new XC::LayeredShellFiberSection(tag_mat);
     return retval;
   }
 

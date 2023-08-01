@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -23,23 +24,27 @@
 // You should have received a copy of the GNU General Public License 
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
 
-#include "UniaxialMaterialWrapper.h"
-#include <material/uniaxial/UniaxialMaterial.h>
+#ifndef NDMaterialWrapper_h
+#define NDMaterialWrapper_h
 
-//! @brief Default constructor.
-XC::UniaxialMaterialWrapper::UniaxialMaterialWrapper(void)
-  : MaterialWrapper<UniaxialMaterial, MAT_TAG_UniaxialMaterialWrapper>() {}
+#include "material/MaterialWrapper.h"
+#include "material/nD/NDMaterial.h"
 
-//! @brief Constructor.
-XC::UniaxialMaterialWrapper::UniaxialMaterialWrapper(const UniaxialMaterial &material)
-  :MaterialWrapper<UniaxialMaterial, MAT_TAG_UniaxialMaterialWrapper>(material)
-  {}
+namespace XC {
+  
+//! @ingroup MatUnx
+//
+//! @brief Encapsulates a copy to an uniaxial material.
+class NDMaterialWrapper: public MaterialWrapper<NDMaterial, MAT_TAG_NDMaterialWrapper>
+  {
+  public:
+    NDMaterialWrapper(void);
+    NDMaterialWrapper(const NDMaterial &material);
+  };
+} // end of XC namespace
 
 
-double XC::UniaxialMaterialWrapper::getStrain(void) const
-  { return theMaterial->getStrain(); }
-
-double XC::UniaxialMaterialWrapper::getStrainRate(void) const
-  { return theMaterial->getStrainRate(); }
+#endif
 

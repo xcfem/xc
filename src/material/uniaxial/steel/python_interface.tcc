@@ -25,10 +25,18 @@ class_<XC::SteelBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("SteelBa
   .add_property("E", &XC::SteelBase::getInitialTangent, &XC::SteelBase::setInitialTangent,"Initial Young's modulus.")
   .add_property("fy", &XC::SteelBase::getFy, &XC::SteelBase::setFy,"Yield stress.")
   .add_property("b", &XC::SteelBase::getHardeningRatio, &XC::SteelBase::setHardeningRatio,"Hardening ratio.")
+  .add_property("a1", &XC::SteelBase::getA1, &XC::SteelBase::setA1,"Get/set first coefficient for isotropic hardening in compression (a1).")
+  .add_property("a2", &XC::SteelBase::getA2, &XC::SteelBase::setA2,"Get/set second coefficient for isotropic hardening in compression (a2).")
+  .add_property("a3", &XC::SteelBase::getA3, &XC::SteelBase::setA3,"Get/set first coefficient for isotropic hardening in tension (a3).")
+  .add_property("a4", &XC::SteelBase::getA4, &XC::SteelBase::setA4,"Get/set second coefficient for isotropic hardening in tension (a4).")
    ;
 
 class_<XC::Steel02, bases<XC::SteelBase> >("Steel02")
   .add_property("initialStress", &XC::Steel02::getInitialStress, &XC::Steel02::setInitialStress,"Initial stress.")
+  .add_property("R0", &XC::Steel02::getR0, &XC::Steel02::setR0,"Get/set the first parameter that controls the transition from elastic to plastic branches (R0).")
+  .add_property("cR1", &XC::Steel02::getCR1, &XC::Steel02::setCR1,"Get/set the second parameter that controls the transition from elastic to plastic branches (cR1).")
+  .add_property("cR2", &XC::Steel02::getCR2, &XC::Steel02::setCR2,"Get/set the third parameter that controls the transition from elastic to plastic branches (R0).")
+  .def("setParams", &XC::Steel02::setParamsPy, "parameters to control the transition from elastic to plastic branches. params=[R0,cR1,cR2]. Recommended values: R0=between 10 and 20, cR1=0.925, cR2=0.15.")
    ;
 
 class_<XC::SteelBase0103, bases<XC::SteelBase>, boost::noncopyable >("SteelBase0103", no_init);

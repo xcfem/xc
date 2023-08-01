@@ -139,6 +139,15 @@ class Steel02: public SteelBase
     void setInitialStress(const double &);
     inline double getInitialStress(void) const
       { return sigini; }
+    
+    double getR0(void) const;
+    void setR0(const double &d= 15);
+    double getCR1(void) const;
+    void setCR1(const double &d= 0.925);
+    double getCR2(void) const;
+    void setCR2(const double &d= 0.15);
+    void setParams(const std::vector<double> &);
+    void setParamsPy(const boost::python::list &);
 
 
     int sendSelf(Communicator &);

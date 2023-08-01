@@ -29,42 +29,22 @@
 #ifndef UniaxialMaterialWrapper_h
 #define UniaxialMaterialWrapper_h
 
-#include "utility/actor/actor/MovableObject.h"
+#include "material/MaterialWrapper.h"
+#include "material/uniaxial/UniaxialMaterial.h"
 
 namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Encapsulates a copy to an uniaxial material.
-class UniaxialMaterialWrapper: public MovableObject
+class UniaxialMaterialWrapper: public MaterialWrapper<UniaxialMaterial, MAT_TAG_UniaxialMaterialWrapper>
   {
-  protected:
-    UniaxialMaterial *theMaterial;
-
-    void free_mem(void);
-    void copy(const UniaxialMaterial *);
   public:
     UniaxialMaterialWrapper(void);
     UniaxialMaterialWrapper(const UniaxialMaterial &material); 
-    UniaxialMaterialWrapper(const UniaxialMaterialWrapper &);
-    UniaxialMaterialWrapper &operator=(const UniaxialMaterialWrapper &);
-    ~UniaxialMaterialWrapper(void);
-
-    //! @brief Return a pointer to the wrapped material.
-    inline const UniaxialMaterial *getMaterial(void) const
-      { return theMaterial; }
-    //! @brief Return a pointer to the wrapped material.
-    inline UniaxialMaterial *getMaterial(void)
-      { return theMaterial; }
-    virtual void setMaterial(const UniaxialMaterial &);
     
     double getStrain(void) const;          
     double getStrainRate(void) const;
     
-    int sendData(Communicator &);  
-    int recvData(const Communicator &);
-    
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 
