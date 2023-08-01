@@ -89,6 +89,8 @@ class LayeredShellFiberSection : public MembranePlateFiberSectionBase
 
     void setThicknesses(const boost::python::list &);
     void setupPy(const boost::python::list &);
+    
+    std::vector<double> getFiberZs(void) const;
 
     //mass per unit area
     double getRho(void) const;
@@ -103,6 +105,7 @@ class LayeredShellFiberSection : public MembranePlateFiberSectionBase
     //send back order of strain in vector form
     const ResponseId &getResponseType(void) const;
 
+    int setInitialSectionDeformation(const Vector &);
      //get the strain and integrate plasticity equations
     int setTrialSectionDeformation(const Vector &strain_from_element );
 

@@ -162,7 +162,19 @@ const XC::ResponseId &XC::LayeredShellFiberSection::getResponseType(void) const
       }
     return array;
   }
-//mass per unit area
+
+//! @brief Return the z coordinate for each fiber (layer if you prefer).
+std::vector<double> XC::LayeredShellFiberSection::getFiberZs(void) const
+  {
+    const size_t sz= theFibers.size();
+    std::vector<double> retval(sz,0.0);
+    const double h_2= 0.5*h;
+    for(size_t i = 0; i < sz; i++ )
+      { retval[i]= h_2*sg[i]; }
+    return retval;
+  }
+
+//! @brief Mass per unit area
 double XC::LayeredShellFiberSection::getRho(void) const 
   {
 
@@ -196,8 +208,29 @@ int XC::LayeredShellFiberSection::updateParameter(int parameterID, Information& 
     return MembranePlateFiberSectionBase::updateParameter(parameterID, info);
   }
 
+//! @brief Set initial values for deformation.
+int XC::LayeredShellFiberSection::setInitialSectionDeformation(const Vector &initialStrain_from_element)
+  {
+    this->initialStrain = initialStrain_from_element;
 
-//receive the strainResultant 
+    const size_t sz= theFibers.size();
+    static Vector strain(sz);
+    int success= 0;
+    const std::vector<double> fiberZ= getFiberZs();
+    for(size_t i = 0; i < sz; i++ )
+      {
+        const double &z= fiberZ[i];
+        strain(0)= initialStrain(0)-z*initialStrain(3);
+        strain(1)= initialStrain(1)-z*initialStrain(4);
+        strain(2)= initialStrain(2)-z*initialStrain(5);
+        strain(3)= initialStrain(6); // No shear correction for this material.
+        strain(4)= initialStrain(7); // No shear correction for this material.
+        success+= theFibers[i]->setInitialStrain(strain);
+      } //end for i
+    return success;
+  }
+
+//! @brief Receive the strainResultant and propagate it to the layers. 
 int XC::LayeredShellFiberSection::setTrialSectionDeformation(const Vector &strainResultant_from_element)
   {
     this->strainResultant = strainResultant_from_element;
@@ -208,9 +241,10 @@ int XC::LayeredShellFiberSection::setTrialSectionDeformation(const Vector &strai
 
     double z;
     const size_t sz= theFibers.size();
+    const double h_2= 0.5*h;
     for(size_t i = 0; i < sz; i++ )
       {
-	z = ( 0.5*h ) * sg[i];
+	z = h_2*sg[i];
 
 	strain(0) =  strainResultant(0)  - z*strainResultant(3);
 	strain(1) =  strainResultant(1)  - z*strainResultant(4);
