@@ -639,7 +639,7 @@ bool XC::Domain::removeAllLoadPatterns(void)
     bool retval= true;
     for(std::set<int>::iterator it= tags_to_remove.begin();
 	it!=tags_to_remove.end();it++)
-      { retval*= removeLoadPattern(*it); }
+      { retval= (retval && removeLoadPattern(*it)); }
     // Clear also active combinations (there are not active anymore).
     activeCombinations.clear();
     return retval;
