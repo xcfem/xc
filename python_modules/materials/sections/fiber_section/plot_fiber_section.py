@@ -36,8 +36,12 @@ def eps2png(inputFileName, outputFileName= None):
 
     
 
-def plotReinforcement(reinforcement, ctx):
-    '''draw section rebars in a postcript file.'''
+def plot_reinforcement(reinforcement, ctx):
+    '''draw section rebars in a postcript file.
+
+    :param reinforcement: reinforcement to plot.
+    :param ctx: cairo context.
+    '''
     for reinfLayer in reinforcement:
         rebars= reinfLayer.getReinfBars
         for b in rebars:
@@ -53,7 +57,11 @@ def plotReinforcement(reinforcement, ctx):
             ctx.stroke()
 
 def plot_section_geometry(geomSection, path):
-    ''' draws section geometry in a postscript file'''
+    ''' draws section geometry in a postscript file.
+
+    :param geomSection: section geometry to draw.
+    :param path: output file path.
+    '''
     WIDTH, HEIGHT = 256, 256
     surface = cairo.PSSurface(path, WIDTH, HEIGHT)
     ctx = cairo.Context(surface)
@@ -68,7 +76,7 @@ def plot_section_geometry(geomSection, path):
     ctx.stroke()
     ctx.set_line_width(trf.scale/300000)
     reinforcement= geomSection.getReinfLayers
-    plotReinforcement(reinforcement,ctx)
+    plot_reinforcement(reinforcement,ctx)
     trf.plotYZAxis(ctx)
     surface.set_eps(True)
     ctx.show_page()
