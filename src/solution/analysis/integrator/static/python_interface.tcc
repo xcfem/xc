@@ -26,6 +26,8 @@
 #include "arc-length/python_interface.tcc"
 
 class_<XC::BaseControl , bases<XC::StaticIntegrator>, boost::noncopyable >("BaseControl", no_init)
+  .def("setNumIncr", &XC::BaseControl::setNumIncr,"Set the number of iterations the user would like to occur in the solution algorithm.")
+  
   ;
 
 class_<XC::DispBase, bases<XC::BaseControl>, boost::noncopyable >("DispBase", no_init);
