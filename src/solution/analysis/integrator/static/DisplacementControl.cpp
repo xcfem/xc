@@ -94,9 +94,9 @@ XC::DisplacementControl::DisplacementControl(SolutionStrategy *owr)
 //! @param min: minimum value of deltaU at i-th step.
 //! @param max: maximum value of deltaU at i-th step.
 XC::DisplacementControl::DisplacementControl(SolutionStrategy *owr,int nodeTag, int dof, double increment, int numIncr, double min, double max) 
-  :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,numIncr),
-   theNodeTag(nodeTag), theDof(dof), theDofID(0),
-   theIncrement(increment), minIncrement(min), maxIncrement(max) {}
+  : DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,numIncr),
+    theNodeTag(nodeTag), theDof(dof), theDofID(0),
+    theIncrement(increment), minIncrement(min), maxIncrement(max) {}
 
 //! @brief Virtual constructor.
 XC::Integrator *XC::DisplacementControl::getCopy(void) const
