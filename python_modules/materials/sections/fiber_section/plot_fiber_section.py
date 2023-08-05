@@ -74,7 +74,7 @@ def plotSectionGeometry(geomSection, path):
     ctx.show_page()
     surface.finish()
 
-class fibSectFeaturesToplot(object):
+class FibSectFeaturesToplot(object):
     '''Class to generate python plots of the selected features associated with 
     a fiber section.
 

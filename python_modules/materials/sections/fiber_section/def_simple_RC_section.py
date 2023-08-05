@@ -887,7 +887,13 @@ class RCSectionBase(object):
                 ax.annotate(labelPlot, (ptPlot.x+rPlot, ptPlot.y+rPlot))
 
     def plot(self, preprocessor, matDiagType= 'k'):
-        ''' Get a drawing of the section using matplotlib.'''
+        ''' Get a drawing of the section using matplotlib.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                            ("k" for characteristic diagram, 
+                             "d" for design diagram)
+        '''
         fig = plt.figure()
         ax = fig.add_subplot(111)
         self.subplot(ax, preprocessor= preprocessor, matDiagType= matDiagType)

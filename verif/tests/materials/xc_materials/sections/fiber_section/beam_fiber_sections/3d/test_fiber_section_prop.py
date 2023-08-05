@@ -17,7 +17,7 @@ The properties checked include:
 - effective depth
 - effective concrete area
 
-This properties can be shown in a figure plotted using fibSectFeaturesToplot 
+This properties can be shown in a figure plotted using FibSectFeaturesToplot 
 function.
 '''
 
@@ -279,8 +279,8 @@ else:
 '''
 from materials.sections.fiber_section import plot_fiber_section as pfs
 
-fsPlot=pfs.fibSectFeaturesToplot(fiberSection=sccEl1)
-fsPlot.colorNeutralAxis = 'r'
+fsPlot= pfs.FibSectFeaturesToplot(fiberSection=sccEl1)
+fsPlot.colorNeutralAxis= 'r'
 fsPlot.colorBendingPlane='g'
 fsPlot.colorCompressionPlane='b'
 fsPlot.colorTensionPlane='m'
