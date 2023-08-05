@@ -93,10 +93,9 @@ int EntityWithOwner::getVerbosityLevel(void)
 void EntityWithOwner::setVerbosityLevel(const int &vl)
   { verbosity= vl; }
 
-//! @brief Asigna el propietario del objeto.
+//! @brief Assigns the owner of the object.
 void EntityWithOwner::set_owner(EntityWithOwner *owr)
   { owner= owr; }
-
 
 //! @brief Return a Python dictionary with the object members values.
 boost::python::dict EntityWithOwner::getPyDict(void) const
