@@ -20,7 +20,9 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.tcc
-class_<XC::Integrator, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Integrator", no_init);
+class_<XC::Integrator, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Integrator", no_init)
+  .def("domainChanged", &XC::Integrator::domainChanged,"Make required changes when a change in the domain occurs.")
+  ;
 
 class_<XC::EigenIntegrator, bases<XC::Integrator>, boost::noncopyable >("EigenIntegrator", no_init);
 
