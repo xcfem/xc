@@ -873,18 +873,7 @@ class RCSectionBase(object):
         if(not hasattr(self, 'geomSection')):
             self.defSectionGeometry(preprocessor, matDiagType)
         reinforcement= self.geomSection.getReinfLayers
-        reinfLayersColors= ['black', 'blue', 'darkblue', 'red', 'darkred', 'darkgreen', 'purple']
-        numColors= len(reinfLayersColors)
-        for idx, reinfLayer in enumerate(reinforcement):
-            rebars= reinfLayer.getReinfBars
-            rebarColor= reinfLayersColors[idx % numColors]
-            for b in rebars:
-                ptPlot= b.getPos2d # bar position.
-                rPlot= b.diameter/2.0 # bar radius.
-                labelPlot= str(int(round(b.diameter*1e3))) # bar label.
-                circle= plt.Circle((ptPlot.x, ptPlot.y), rPlot, color= rebarColor)
-                ax.add_patch(circle)
-                ax.annotate(labelPlot, (ptPlot.x+rPlot, ptPlot.y+rPlot))
+        pfs.mplot_section_reinforcement(ax, reinforcement)
 
     def plot(self, preprocessor, matDiagType= 'k'):
         ''' Get a drawing of the section using matplotlib.

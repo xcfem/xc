@@ -34,7 +34,44 @@ def eps2png(inputFileName, outputFileName= None):
     eps_image.save(outputFileName)
     
 
+def mplot_section_reinforcement(ax, reinforcement):
+    ''' Plot the geometry of the section using matplotlib.
+
+    :param ax: matplotlib subplot.
+    :param reinforcement: reinforcement layers to draw.
+    '''
+    # Plot reinforcement.
+    reinfLayersColors= ['black', 'blue', 'darkblue', 'red', 'darkred', 'darkgreen', 'purple']
+    numColors= len(reinfLayersColors)
+    for idx, reinfLayer in enumerate(reinforcement):
+        rebars= reinfLayer.getReinfBars
+        rebarColor= reinfLayersColors[idx % numColors]
+        for b in rebars:
+            ptPlot= b.getPos2d # bar position.
+            rPlot= b.diameter/2.0 # bar radius.
+            labelPlot= str(int(round(b.diameter*1e3))) # bar label.
+            circle= plt.Circle((ptPlot.x, ptPlot.y), rPlot, color= rebarColor)
+            ax.add_patch(circle)
+            ax.annotate(labelPlot, (ptPlot.x+rPlot, ptPlot.y+rPlot))
     
+def mplot_section_geometry(ax, sectionGeometry):
+    ''' Plot the geometry of the section using matplotlib.
+
+    :param ax: matplotlib subplot.
+    :param sectionGeometry: geometry of the RC section.
+    '''
+    ax.axis('equal')
+    ax.set_title('Section: '+sectionGeometry.name)
+    ax.grid(visible= True, linestyle='dotted')
+    # Plot contour.
+    contour= sectionGeometry.getRegionsContour()
+    x= list(); y= list()
+    for p in contour.getVertices():
+        x.append(p.x)
+        y.append(p.y)
+    ax.fill(x,y,'tab:gray')
+    # Plot reinforcement.
+    mplot_section_reinforcement(ax, sectionGeometry.getReinfLayers)    
 
 def plot_reinforcement(reinforcement, ctx):
     '''draw section rebars in a postcript file.
