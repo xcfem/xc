@@ -100,20 +100,6 @@ recorder.setElements(xc.ID([spring.tag]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print(\"Restart method called.\")"
 
-
-'''
-        \prop_recorder
-
-nodes= preprocessor.getNodeHandler{2}
-            \callback_record
-
-                
-d= .getDisp[0]
-                print(d*1000)
-
-            \callback_restart{print("Restart method called."}
-'''
-
 # Solution procedure
 solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
