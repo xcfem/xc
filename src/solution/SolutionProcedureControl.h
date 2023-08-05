@@ -55,6 +55,8 @@ class SolutionProcedureControl: public CommandEntity
 
     Domain *getDomain(void);
     const Domain *getDomain(void) const;
+    Analysis *getAnalysis(void);
+    const Analysis *getAnalysis(void) const;
     Integrator *getIntegratorPtr(void);
     const Integrator *getIntegratorPtr(void) const;
 

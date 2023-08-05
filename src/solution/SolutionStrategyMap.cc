@@ -98,7 +98,8 @@ XC::SolutionStrategy &XC::SolutionStrategyMap::createSolutionStrategy(const std:
       retval= getSolutionStrategy(cod);
     else
       {
-        retval= &(solu_methods[cod]= SolutionStrategy(nullptr,sm));
+	SolutionStrategy newSS= SolutionStrategy(this,sm);
+        retval= &(solu_methods[cod]= newSS);
 	retval->set_owner(this);
       }
     return *retval;

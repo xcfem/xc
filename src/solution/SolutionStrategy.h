@@ -66,6 +66,7 @@ class FEM_ObjectBroker;
 class ID;
 
 class SolutionStrategyMap;
+class SolutionProcedureControl;
 
 //! @brief Solution strategy for the finite element problem.
 //! 
@@ -98,10 +99,11 @@ class SolutionStrategy: public CommandEntity
     SystemOfEqn *theSOE; //!< System of equations.
     ConvergenceTest *theTest; //!< Convergence test.
 
-    Analysis *getAnalysis(void);
-    const Analysis *getAnalysis(void) const;    
+    Analysis *getAnalysisPtr(void);
+    const Analysis *getAnalysisPtr(void) const;    
   protected:
     friend class FEProblem;
+    
     void free_soln_algo(void);
     bool alloc_soln_algo(const std::string &);
     void copy_soln_algo(SolutionAlgorithm *);
@@ -122,13 +124,15 @@ class SolutionStrategy: public CommandEntity
     void copy(const SolutionStrategy &);
 
   public:
-    SolutionStrategy(Analysis *a= nullptr,ModelWrapper *b= nullptr);
+    SolutionStrategy(SolutionStrategyMap *owr= nullptr, ModelWrapper *b= nullptr);
     SolutionStrategy(const SolutionStrategy &);
     SolutionStrategy &operator=(const SolutionStrategy &);
     ~SolutionStrategy(void);
 
     const SolutionStrategyMap *getSolutionStrategyMap(void) const;
     SolutionStrategyMap *getSolutionStrategyMap(void);
+    const SolutionProcedureControl *getSolutionProcedureControl(void) const;
+    SolutionProcedureControl *getSolutionProcedureControl(void);
     std::string getName(void) const;
     const std::string &getModelWrapperName(void) const;
 

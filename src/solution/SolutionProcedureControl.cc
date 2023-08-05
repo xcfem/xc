@@ -65,6 +65,24 @@ const XC::Domain *XC::SolutionProcedureControl::getDomain(void) const
     return ps->getDomainPtr();
   }
 
+//! @brief Return a pointer to the analysis on which
+//! the solution algorithm operates.
+XC::Analysis *XC::SolutionProcedureControl::getAnalysis(void)
+  {
+    SolutionProcedure *ps= getSolutionProcedure();
+    assert(ps); 
+    return ps->getAnalysisPtr();
+  }
+
+//! @brief Return a pointer to the analysis on which
+//! the solution algorithm operates.
+const XC::Analysis *XC::SolutionProcedureControl::getAnalysis(void) const
+  {
+    const SolutionProcedure *ps= getSolutionProcedure();
+    assert(ps); 
+    return ps->getAnalysisPtr();
+  }
+
 //! @brief Return a pointer to the integrator.
 XC::Integrator *XC::SolutionProcedureControl::getIntegratorPtr(void)
   {

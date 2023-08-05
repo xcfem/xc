@@ -27,6 +27,7 @@
 //SolutionStrategy.cc
 
 #include "SolutionStrategy.h"
+#include "SolutionProcedureControl.h"
 #include "analysis/ModelWrapper.h"
 
 
@@ -167,11 +168,25 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="displacement_control_integrator")
       {
+	int node_tag= 0;
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
-	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
-        theIntegrator= new DisplacementControl(this);
+          node_tag= static_cast<int>(params[0]);
+	int dof= 0;
+	if(numberOfParameters>1)
+          dof= static_cast<int>(params[1]);
+	double increment= 1.0;
+	if(numberOfParameters>2)
+          increment= params[2];
+	int numIncr= 1;
+	if(numberOfParameters>3)
+          numIncr= static_cast<int>(params[3]);
+	double minInc= increment;
+	if(numberOfParameters>4)
+          minInc= params[4];
+	double maxInc= increment;
+	if(numberOfParameters>5)
+          maxInc= params[5];
+        theIntegrator= new DisplacementControl(this, node_tag, dof, increment, numIncr, minInc, maxInc);
       }
     else if(nmb=="distributed_displacement_control_integrator")
       {
@@ -441,8 +456,10 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
 		<< "; integrator: '"
                 << nmb << "' unknown." << std::endl;
     if(theIntegrator)
-      theIntegrator->set_owner(this);
-
+      {
+        theIntegrator->set_owner(this);
+      }
+    
     return (theIntegrator!=nullptr);
   }
 
@@ -656,7 +673,7 @@ void XC::SolutionStrategy::copy(const SolutionStrategy &other)
   }
 
 //! @brief Default constructor.
-XC::SolutionStrategy::SolutionStrategy(Analysis *owr,ModelWrapper *b)
+XC::SolutionStrategy::SolutionStrategy(SolutionStrategyMap *owr,ModelWrapper *b)
   : CommandEntity(owr), theModelWrapper(b), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
@@ -691,23 +708,67 @@ XC::SolutionStrategy &XC::SolutionStrategy::operator=(const SolutionStrategy &ot
 XC::SolutionStrategy::~SolutionStrategy(void)
   { free_mem(); }
 
-//! @brief Returns a pointer to the material handler (if possible).
+//! @brief Returns a pointer to the solution strategy map that contains this
+//! object.
 const XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void) const
   {
-    const SolutionStrategyMap *retval= dynamic_cast<const SolutionStrategyMap *>(Owner());
-    if(!retval)
+    const SolutionStrategyMap *retval= nullptr;
+    const CommandEntity *owr= Owner();
+    if(owr)
+      {
+        retval= dynamic_cast<const SolutionStrategyMap *>(owr);
+        if(!retval)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; container not defined."
+	            << " Owner type: " << owr->getClassName()
+		    << std::endl;
+      }
+    else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; container not defined." << std::endl;
+	            << "; owner not set." << std::endl;
     return retval;
   }
 
-//! @brief Returns a pointer to the material handler (if possible).
+//! @brief Returns a pointer to the solution strategy map that contains this
+//! object.
 XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void)
   {
-    SolutionStrategyMap *retval= dynamic_cast<SolutionStrategyMap *>(Owner());
-    if(!retval)
+    SolutionStrategyMap *retval= nullptr;
+    CommandEntity *owr= Owner();
+    if(owr)
+      {
+	retval= dynamic_cast<SolutionStrategyMap *>(Owner());
+	if(!retval)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; container not defined." 
+	            << " Owner type: " << owr->getClassName()
+		    << std::endl;
+      }
+    else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; container not defined." << std::endl;
+	            << "; owner not set." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a pointer to the solution procedure control object that
+//! contains this object.
+const XC::SolutionProcedureControl *XC::SolutionStrategy::getSolutionProcedureControl(void) const
+  {
+    const SolutionProcedureControl *retval= nullptr;
+    const SolutionStrategyMap *ssm= getSolutionStrategyMap();
+    if(ssm)
+      { retval= ssm->getSolutionProcedureControl(); }
+    return retval;
+  }
+
+//! @brief Returns a pointer to the solution procedure control object that
+//! contains this object.
+XC::SolutionProcedureControl *XC::SolutionStrategy::getSolutionProcedureControl(void)
+  {
+    SolutionProcedureControl *retval= nullptr;
+    SolutionStrategyMap *ssm= getSolutionStrategyMap();
+    if(ssm)
+      { retval= ssm->getSolutionProcedureControl(); }
     return retval;
   }
 
@@ -745,17 +806,35 @@ const std::string &XC::SolutionStrategy::getModelWrapperName(void) const
 void XC::SolutionStrategy::clearAll(void)
   { free_mem(); }
 
-XC::Analysis *XC::SolutionStrategy::getAnalysis(void)
-  { return dynamic_cast<Analysis *>(Owner()); }
+XC::Analysis *XC::SolutionStrategy::getAnalysisPtr(void)
+  {
+    Analysis *retval= dynamic_cast<Analysis *>(Owner());
+    if(!retval)
+      {
+	SolutionProcedureControl *spc= getSolutionProcedureControl();
+	if(spc)
+	  { retval= spc->getAnalysis(); }
+      }
+    return retval;
+  }
 
-const XC::Analysis *XC::SolutionStrategy::getAnalysis(void) const
-  { return dynamic_cast<const Analysis *>(Owner()); }
+const XC::Analysis *XC::SolutionStrategy::getAnalysisPtr(void) const
+  {
+    const Analysis *retval= dynamic_cast<const Analysis *>(Owner());
+    if(!retval)
+      {
+        const SolutionProcedureControl *spc= getSolutionProcedureControl();
+        if(spc)
+          { retval= spc->getAnalysis(); }
+      }
+    return retval;
+  }
 
 //! @brief Returns a pointer to the domain.
 XC::Domain *XC::SolutionStrategy::getDomainPtr(void)
   {
     Domain *retval= nullptr;
-    Analysis *an= getAnalysis();
+    Analysis *an= getAnalysisPtr();
     if(an)
       retval= an->getDomainPtr();
     return retval;
@@ -765,8 +844,7 @@ XC::Domain *XC::SolutionStrategy::getDomainPtr(void)
 const XC::Domain *XC::SolutionStrategy::getDomainPtr(void) const
   {
     const Domain *retval= nullptr;
-    const Analysis *an= getAnalysis();
-    assert(an);
+    const Analysis *an= getAnalysisPtr();
     if(an)
       retval= an->getDomainPtr();
     return retval;
@@ -775,7 +853,7 @@ const XC::Domain *XC::SolutionStrategy::getDomainPtr(void) const
 //! @brief Returns a pointer to the DomainSolver.
 const XC::DomainSolver *XC::SolutionStrategy::getDomainSolverPtr(void) const
   {
-    const Analysis *an= getAnalysis();
+    const Analysis *an= getAnalysisPtr();
     assert(an);
     return an->getDomainSolver();
   }
@@ -783,7 +861,7 @@ const XC::DomainSolver *XC::SolutionStrategy::getDomainSolverPtr(void) const
 //! @brief Returns a pointer to the DomainSolver.
 XC::DomainSolver *XC::SolutionStrategy::getDomainSolverPtr(void)
   {
-    Analysis *an= getAnalysis();
+    Analysis *an= getAnalysisPtr();
     assert(an);
     return an->getDomainSolver();
   }
@@ -791,7 +869,7 @@ XC::DomainSolver *XC::SolutionStrategy::getDomainSolverPtr(void)
 //! @brief Returns a pointer to the subdomain.
 const XC::Subdomain *XC::SolutionStrategy::getSubdomainPtr(void) const
   {
-    const Analysis *an= getAnalysis();
+    const Analysis *an= getAnalysisPtr();
     assert(an);
     return an->getSubdomain();
   }
@@ -799,7 +877,7 @@ const XC::Subdomain *XC::SolutionStrategy::getSubdomainPtr(void) const
 //! @brief Returns a pointer to the subdomain.
 XC::Subdomain *XC::SolutionStrategy::getSubdomainPtr(void)
   {
-    Analysis *an= getAnalysis();
+    Analysis *an= getAnalysisPtr();
     assert(an);
     return an->getSubdomain();
   }
