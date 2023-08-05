@@ -51,6 +51,8 @@ class BaseControl: public StaticIntegrator
     BaseControl(SolutionStrategy *,int classTag,int numIncr= 1);
   public:
 
+    inline void setNumIncr(const int &d)
+      { setup_numIncr(d); }
     inline double factor(void) const
       { return specNumIncrStep/numIncrLastStep; }
   };
