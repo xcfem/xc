@@ -30,7 +30,7 @@ XC::Node *(XC::NodeHandler::*newNodeFromVector)(const XC::Vector &)= &XC::NodeHa
 class_<XC::NodeHandler, bases<XC::PrepHandler>, boost::noncopyable >("NodeHandler", no_init)
   .add_property("numDOFs", &XC::NodeHandler::getNumDOFs, &XC::NodeHandler::setNumDOFs,"Number of degrees ocf freedom per node.")
   .add_property("dimSpace", &XC::NodeHandler::getSpaceDim, &XC::NodeHandler::setSpaceDim, "Space dimension.")
-  .add_property("defaultTag", &XC::NodeHandler::getDefaultTag, &XC::NodeHandler::setDefaultTag,"Starting ID number to apply to the next creation of nodes ")
+  .add_property("defaultTag", &XC::NodeHandler::getDefaultTag, &XC::NodeHandler::setDefaultTag,"Starting ID number to apply to the next creation of a node.")
   .def("calculateNodalReactions", &XC::NodeHandler::calculateNodalReactions,"\n""calculateNodalReactions(inclInertia, tolerance)\n""Calculate nodal reaction forces and moments.\n""If inclInertia is True, the unbalance load vector for each node is calculated including inertial forces.\n" "A tolerance of 1e-4 is taken as default value for the checking of the reaction forces and moments. \n")
   .def("getNode", &XC::NodeHandler::getNode,return_internal_reference<>(),"\n""getNode(tag)\n""Return the node whose ID is the value tag passed as parameter.")
   .def("newNodeXYZ", newNodeFromXYZ,return_internal_reference<>(),"\n""newNodeXYZ(x,y,z)\n""Create a node from global coordinates (x,y,z).")
@@ -87,7 +87,7 @@ class_<XC::ElementHandler::SeedElemHandler, bases<XC::ProtoElementHandler>, boos
 class_<XC::ElementHandler, bases<XC::ProtoElementHandler>, boost::noncopyable >("ElementHandler", no_init)
   .add_property("seedElemHandler", make_function( &XC::ElementHandler::getSeedElemHandler, return_internal_reference<>() ))
   .def("getElement", &XC::ElementHandler::getElement,return_internal_reference<>(),"Returns the element identified by the parameter.")
-  .add_property("defaultTag", &XC::ElementHandler::getDefaultTag, &XC::ElementHandler::setDefaultTag)
+  .add_property("defaultTag", &XC::ElementHandler::getDefaultTag, &XC::ElementHandler::setDefaultTag,"Starting ID number to apply to the next creation of an element.")
    ;
 
 class_<XC::BoundaryCondHandler, bases<XC::PrepHandler>, boost::noncopyable >("BoundaryCondHandler", no_init)
