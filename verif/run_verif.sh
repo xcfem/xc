@@ -520,6 +520,7 @@ python tests/preprocessor/integra_simpson_fila_j.py
 python tests/preprocessor/integra_simpson_fila_k.py
 echo "$BLEU" "  Preprocessor clear tests." "$NORMAL"
 python tests/preprocessor/clear/test_problem_clear_nodes_01.py
+python tests/preprocessor/clear/test_problem_clear_nodes_02.py
 python tests/preprocessor/clear/test_problem_clear_elements_01.py
 echo "$BLEU" "  Preprocessor entities tests." "$NORMAL"
 python tests/preprocessor/geom_entities/line.py
