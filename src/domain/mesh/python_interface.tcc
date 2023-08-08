@@ -30,12 +30,15 @@
 class_<XC::MeshComponentContainer, bases<CommandEntity>, boost::noncopyable >("MeshComponentContainer", no_init)
   ;
 
+XC::NodeIter &(XC::Mesh::*getNodeIter)(void)= &XC::Mesh::getNodes;
 XC::Node *(XC::Mesh::*getNodePtr)(int tag)= &XC::Mesh::getNode;
 XC::Node *(XC::Mesh::*getNearestNodePtrMesh)(const Pos3d &)= &XC::Mesh::getNearestNode;
-XC::Element *(XC::Mesh::*getNearestElementPtrMesh)(const Pos3d &)= &XC::Mesh::getNearestElement;
+XC::ElementIter &(XC::Mesh::*getElementIter)(void)= &XC::Mesh::getElements;
 XC::Element *(XC::Mesh::*getElementPtr)(int tag)= &XC::Mesh::getElement;
+XC::Element *(XC::Mesh::*getNearestElementPtrMesh)(const Pos3d &)= &XC::Mesh::getNearestElement;
 class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh", no_init)
-  .add_property("getNodeIter", make_function( &XC::Mesh::getNodes, return_internal_reference<>() ))
+  .add_property("getNodeIter", make_function( getNodeIter, return_internal_reference<>() ))
+  .def("getDefaultNodeTag", &XC::Mesh::getDefaultNodeTag, "Return the default tag for the next node.")
   .def("getNumNodes", &XC::Mesh::getNumNodes,"Returns the number of nodes.")
   .def("getNode", make_function(getNodePtr, return_internal_reference<>() ),"Returns a node from its identifier.")
   .def("removeNode", &XC::Mesh::removeNode,"removeNode(tag); remove the node.")
@@ -48,7 +51,8 @@ class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh",
   .def("meltAliveNodes",&XC::Mesh::melt_alive_nodes,"freezeDeadNodes(lockerName) allows movement of melted nodes.")
   .def("calculateNodalReactions",&XC::Mesh::calculateNodalReactions,"triggers nodal reaction calculation.")
   .def("checkNodalReactions",&XC::Mesh::checkNodalReactions,"checkNodalReactions(tolerance): check that reactions at nodes correspond to constrained degrees of freedom.")
-  .add_property("getElementIter", make_function( &XC::Mesh::getElements, return_internal_reference<>() ),"returns an iterator over the elements of the mesh.")
+  .add_property("getElementIter", make_function( getElementIter, return_internal_reference<>() ),"returns an iterator over the elements of the mesh.")
+  .def("getDefaultElementTag", &XC::Mesh::getDefaultElementTag, "Return the default tag for the next element.")
   .def("getElement", make_function(getElementPtr, return_internal_reference<>() ),"Returns an element from its identifier.")
   .def("removeElement", &XC::Mesh::removeElement,"removeElement(tag); remove the node.")
   .def("getNumElements", &XC::Mesh::getNumElements,"Returns the number of elements.")

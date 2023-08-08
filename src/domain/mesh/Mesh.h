@@ -134,12 +134,16 @@ class Mesh: public MeshComponentContainer
       { return theNodes; }
     inline TaggedObjectStorage *nodes(void)
       { return theNodes; }
+    virtual NodeIter &getNodes(void);
+    virtual const NodeIter &getNodes(void) const;
+    int getDefaultNodeTag(void) const;
     inline const TaggedObjectStorage *elements(void) const
       { return theElements; }
     inline TaggedObjectStorage *elements(void)
       { return theElements; }
-    virtual ElementIter &getElements();
-    virtual NodeIter &getNodes();
+    virtual ElementIter &getElements(void);
+    virtual const ElementIter &getElements(void) const;
+    int getDefaultElementTag(void) const;
     inline const NodeLockers &getNodeLockers(void) const
       { return lockers; }
     inline NodeLockers &getNodeLockers(void)

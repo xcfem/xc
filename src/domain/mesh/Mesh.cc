@@ -50,8 +50,8 @@
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include <climits>
 #include "utility/geom/pos_vec/Pos3d.h"
-
 #include "utility/actor/actor/MovableVector.h"
+#include "utility/tagged/DefaultTag.h"
 
 
 const double XC::Mesh::reactionValueThreshold= 1.0e-6; //Reactions with norm under this value can be considered zero.
@@ -171,7 +171,9 @@ void XC::Mesh::clearAll(void)
   {
     // clean out the containers
     if(theElements) theElements->clearAll();
+    Element::getDefaultTag().setTag(0);
     if(theNodes) theNodes->clearAll();
+    Node::getDefaultTag().setTag(0);
     lockers.clearAll();
 
     // set the bounds around the origin
@@ -407,17 +409,55 @@ void XC::Mesh::clearDOF_GroupPtr(void)
   }
 
 //! @brief Returns an iterator to the mesh elements.
-XC::ElementIter &XC::Mesh::getElements()
+XC::ElementIter &XC::Mesh::getElements(void)
+  {
+    theEleIter->reset();
+    return *theEleIter;
+  }
+
+//! @brief Returns an iterator to the mesh elements.
+const XC::ElementIter &XC::Mesh::getElements(void) const
   {
     theEleIter->reset();
     return *theEleIter;
   }
 
 //! @brief Returns an iterator a the nodes del domain.
-XC::NodeIter &XC::Mesh::getNodes()
+XC::NodeIter &XC::Mesh::getNodes(void)
   {
     theNodIter->reset();
     return *theNodIter;
+  }
+
+//! @brief Returns an iterator a the nodes del domain.
+const XC::NodeIter &XC::Mesh::getNodes(void) const
+  {
+    theNodIter->reset();
+    return *theNodIter;
+  }
+
+//! @brief Get the default tag for the next node.
+int XC::Mesh::getDefaultNodeTag(void) const
+  {
+    int retval= -1;
+    const NodeIter &theNodeIter= this->getNodes();
+    
+    const Node *nodePtr= theNodeIter();
+    if(nodePtr)
+      retval=  nodePtr->getDefaultTag().getTag();
+    return retval;
+  }
+
+//! @brief Get the default tag for the next element.
+int XC::Mesh::getDefaultElementTag(void) const
+  {
+    int retval= -1;
+    const ElementIter &theElementIter= this->getElements();
+    
+    const Element *nodePtr= theElementIter();
+    if(nodePtr)
+      retval=  nodePtr->getDefaultTag().getTag();
+    return retval;
   }
 
 //! @brief Returns true if the mesh has an element with the tag being passed as parameter.
