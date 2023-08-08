@@ -1328,6 +1328,9 @@ python tests/rough_calculations/reinforced_concrete/ng_pile_cap_test.py
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
 python tests/postprocess/test_export_shell_internal_forces.py
+echo "$BLEU" "  clear problem." "$NORMAL"
+python tests/postprocess/clear/test_problem_clear_nodes_01.py
+python tests/postprocess/clear/test_problem_clear_elements_01.py
 echo "$BLEU" "  limit state checking." "$NORMAL"
 echo "$BLEU" "    SIA 262 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_uls_checking.py
