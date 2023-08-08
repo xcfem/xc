@@ -100,7 +100,13 @@ def CzIAPF(gae,z):
     else:
         return kzCzIAPF*math.log(zminCzIAPF/z0CzIAPF)
       
-  
+def CrIAPF(T):
+    ''' Factor de riesgo en función del período de retorno T
+    art. 2.3.7.2 IAPF
+    '''
+    Cr=math.sqrt(0.562*(1-0.2*math.log(-math.log(1-1/T))))
+    return Cr
+ 
 
 def CgIAPF(kz,Cz,Ct):
     '''
@@ -120,6 +126,10 @@ def CdTableroAlmaLlenaIAPF(B,h,angAlma):
     tmpCdIAPF=2.5-0.3*B/h
     tmpCdIAPF= max(tmpCdIAPF,0.3)
     tmpCdIAPF= min(tmpCdIAPF,2.4)*coefRedCdIAPF
+    if tmpCdIAPF < 1.3:
+        tmpCdIAPF =1.3
+    elif tmpCdIAPF > 2.4:
+        tmpCdIAPF = 2.4
     return tmpCdIAPF
   
 
@@ -138,4 +148,12 @@ def FVkPorMetroIAPF(b,Vc):
     '''
     rhoAire= 1.25
     return 0.5*b*0.5*rhoAire*Vc**2
+
+    
+descr_entorno={0:'mar o zona costera expuesta al mar abierto',
+               1: 'lagos o áreas planas y horizontales con vegetación despreciable y sin obstáculos',
+               2: 'zona rural con vegetación baja y obstáculos aislados (árboles, construcciones pequeñas, etc), con separaciones de al menos 20 veces la altura de los obstáculos.',
+               3: 'zona suburbana, forestal o industrial con construcciones y obstáculos aislados con una separación máxima de 20 veces la altura de los obstáculos.',
+               4: 'zona urbana en la que al menos el quince por ciento (15%) de la superficie esté edificada y la altura media de los edificios exceda de quince metros (15 m)'
+               }
 
