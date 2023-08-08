@@ -138,6 +138,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getMaxModalAccelerationForDOFs",getMaxModalAccelerationForDOFs)
    ;
 
+XC::Node *(XC::NodeIter::*op_node_iter_parenthesis)(void)= &XC::NodeIter::operator();
 class_<XC::NodeIter, boost::noncopyable >("NodeIter", no_init)
-  .def("next", &XC::NodeIter::operator(), return_internal_reference<>(),"Returns next node.")
+  .def("next", op_node_iter_parenthesis, return_internal_reference<>(),"Returns next node.")
    ;

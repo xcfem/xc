@@ -77,7 +77,15 @@ class NodeIter
     NodeIter() {};
     virtual ~NodeIter() {};
     virtual Node *operator()(void) =0;
+    virtual const Node *operator()(void) const;
   };
+
+inline const Node *NodeIter::operator()(void) const
+  {
+    NodeIter *this_no_const= const_cast<NodeIter *>(this);
+    const Node *retval= (*this_no_const)();
+    return retval;
+  }
 } // end of XC namespace
 
 #endif
