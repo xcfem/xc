@@ -518,7 +518,9 @@ echo "$BLEU" "  Simpson rule tests." "$NORMAL"
 python tests/preprocessor/integra_simpson_fila_i.py
 python tests/preprocessor/integra_simpson_fila_j.py
 python tests/preprocessor/integra_simpson_fila_k.py
-
+echo "$BLEU" "  Preprocessor clear tests." "$NORMAL"
+python tests/preprocessor/clear/test_problem_clear_nodes_01.py
+python tests/preprocessor/clear/test_problem_clear_elements_01.py
 echo "$BLEU" "  Preprocessor entities tests." "$NORMAL"
 python tests/preprocessor/geom_entities/line.py
 python tests/preprocessor/geom_entities/line_02.py
@@ -1328,9 +1330,6 @@ python tests/rough_calculations/reinforced_concrete/ng_pile_cap_test.py
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
 python tests/postprocess/test_export_shell_internal_forces.py
-echo "$BLEU" "  clear problem." "$NORMAL"
-python tests/postprocess/clear/test_problem_clear_nodes_01.py
-python tests/postprocess/clear/test_problem_clear_elements_01.py
 echo "$BLEU" "  limit state checking." "$NORMAL"
 echo "$BLEU" "    SIA 262 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_uls_checking.py
