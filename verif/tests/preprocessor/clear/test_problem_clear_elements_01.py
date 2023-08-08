@@ -20,6 +20,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
 elements= preprocessor.getElementHandler
+nodeDefaultTagM1=  preprocessor.getDomain.getMesh.getDefaultNodeTag() # -1
+elementDefaultTagM1=  preprocessor.getDomain.getMesh.getDefaultElementTag() # -1
 
 # Define nodes.
 n1= nodeHandler.newNodeXY(0,0)
@@ -35,6 +37,8 @@ truss.sectionArea= 1
 ## Get number of nodes and elements.
 nn0= preprocessor.getDomain.getMesh.getNumNodes()
 ne0= preprocessor.getDomain.getMesh.getNumElements()
+nodeDefaultTag0=  preprocessor.getDomain.getMesh.getDefaultNodeTag()
+elementDefaultTag0=  preprocessor.getDomain.getMesh.getDefaultElementTag()
 
 # Clear all.
 feProblem.clearAll()
@@ -42,6 +46,8 @@ feProblem.clearAll()
 ## Get number of nodes and elements.
 nn1= preprocessor.getDomain.getMesh.getNumNodes()
 ne1= preprocessor.getDomain.getMesh.getNumElements()
+nodeDefaultTag1=  preprocessor.getDomain.getMesh.getDefaultNodeTag()
+elementDefaultTag1=  preprocessor.getDomain.getMesh.getDefaultElementTag()
 
 # Define new nodes.
 nA= nodeHandler.newNodeXY(2,0)
@@ -60,13 +66,19 @@ trussB.sectionArea= 1
 
 nn2= preprocessor.getDomain.getMesh.getNumNodes()
 ne2= preprocessor.getDomain.getMesh.getNumElements()
+nodeDefaultTag2=  preprocessor.getDomain.getMesh.getDefaultNodeTag()
+elementDefaultTag2=  preprocessor.getDomain.getMesh.getDefaultElementTag()
 
 err= abs(nn0-2)+abs(nn1)+abs(nn2-3)
-err= abs(ne0-1)+abs(ne1)+abs(ne2-2)
+err+= abs(ne0-1)+abs(ne1)+abs(ne2-2)
+err+= abs(nodeDefaultTagM1+1)+abs(nodeDefaultTag0-2)+abs(nodeDefaultTag1+1)+abs(nodeDefaultTag2-3)
+err+= abs(elementDefaultTagM1+1)+abs(elementDefaultTag0-1)+abs(elementDefaultTag1+1)+abs(elementDefaultTag2-2)
 
 '''
 print(nA.tag, nB.tag, nC.tag)
 print(trussA.tag, trussB.tag)
+print(nodeDefaultTagM1, nodeDefaultTag0, nodeDefaultTag1, nodeDefaultTag2)
+print(elementDefaultTagM1, elementDefaultTag0, elementDefaultTag1, elementDefaultTag2)
 print(nn0, nn1, nn2, err)
 '''
 
