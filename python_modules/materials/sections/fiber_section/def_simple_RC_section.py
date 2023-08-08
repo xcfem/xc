@@ -56,7 +56,6 @@ class ShearReinforcement(object):
                                     struts and the axis of the member
                                     expressed in radians.
         '''
- 
         # If no name provided, generate it.
         if(not familyName):
             familyName= str(uuid.uuid1())
@@ -1118,13 +1117,15 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         section_properties.RectangularSection.__init__(self, name= name, b= width, h= depth)
 
+            
         # Transverse reinforcement (z direction)
-        self.shReinfZ= ShearReinforcement()
-        self.shReinfZ.familyName= "Vz"
+        self.shReinfZ= ShearReinforcement(familyName= 'Vz')
+        #self.shReinfZ.familyName= "Vz"
+        
 
         # Transverse reinforcement (y direction)
-        self.shReinfY= ShearReinforcement()
-        self.shReinfY.familyName= "Vy"
+        self.shReinfY= ShearReinforcement(familyName= 'Vy')
+       # self.shReinfY.familyName= "Vy"
                 
     def __eq__(self, other):
         '''Overrides the default implementation'''
@@ -1309,11 +1310,12 @@ class RCRectangularSection(BasicRectangularRCSection):
         :param reinfSteelType: type of reinforcement steel.
         '''
         super(RCRectangularSection,self).__init__(name= name, sectionDescr= sectionDescr, width= width, depth= depth, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
-
+            
         # Longitudinal reinforcement
         self.minCover= 0.0 
         self.positvRebarRows= LongReinfLayers() # list of ReinfRow data (positive face)
         self.negatvRebarRows= LongReinfLayers() # list of ReinfRow data (negative face)
+            
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
