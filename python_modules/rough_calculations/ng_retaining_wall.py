@@ -906,6 +906,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.feProblem.title= title
         return self.feProblem
 
+    def clearFEProblem(self):
+        self.modelSpace.clearAll()
+        self.feProblem= None
+        self.modelSpace= None
+
     def getFoundationSections(self):
         ''' Create the XC section material for the foundation.
         '''
@@ -924,18 +929,39 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         depth= self.getDepth(y)
         name= self.name+"StemSection"+str(y)
+        nodeTagBefore= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultNodeTag()
+        elementTagBefore= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultElementTag()
         rcSection= def_simple_RC_section.RCRectangularSection(name= name, width= self.b, depth= depth, concrType= self.concrete, reinfSteelType= self.stemReinforcement.steel)
-        preprocessor= self.modelSpace.preprocessor 
-        elasticSection= rcSection.defElasticShearSection2d(preprocessor) #Foundation elements material.
+        nodeTagAfter= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultNodeTag()
+        elementTagAfter= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultElementTag()
+        # Workaround to avoid crashing due to wrong values of default tags
+        # for nodes and elements. I (LP) haven't detected the origin of the
+        # error yet.
+        if(nodeTagBefore!=nodeTagAfter):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; node tag has changed (and it may not). Restoring previous value.')
+            self.modelSpace.preprocessor.getNodeHandler.defaultTag= nodeTagBefore
+        if(elementTagBefore!=elementTagAfter):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; element tag has changed (and it may not). Restoring previous value.')
+            self.modelSpace.preprocessor.getElementHandler.defaultTag= elementTagBefore
+
+        elasticSection= rcSection.defElasticShearSection2d(self.modelSpace.preprocessor) #Foundation elements material.
         if(__debug__):
             if(not elasticSection):
                 AssertionError('Can\'t create section for foundation.')
         return rcSection, elasticSection
         
-    def genMesh(self,nodes,springMaterials):
-        '''Generate finite element mesh.'''
-        self.defineWireframeModel(nodes)
-        preprocessor= self.modelSpace.preprocessor    
+    def genMesh(self, springMaterials):
+        '''Generate finite element mesh.
+
+        :param springMaterials: spring materials for foundation winkler model.
+        '''
+        preprocessor= self.feProblem.getPreprocessor
+        nodeHandler= preprocessor.getNodeHandler
+        self.defineWireframeModel(nodeHandler)
         trfs= preprocessor.getTransfCooHandler
         transformationName= self.name+'LinearTrf'
         self.trf= trfs.newLinearCrdTransf2d(transformationName)
@@ -964,6 +990,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
                     self.heelSet.elements.append(e)
                 else:
                     self.toeSet.elements.append(e)
+
         self.heelSet.fillDownwards()
         self.toeSet.fillDownwards()
         self.foundationSet.fillDownwards()
@@ -1012,7 +1039,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         retval= self.createFEProblem(prbName)
         preprocessor= retval.getPreprocessor
-        nodes= preprocessor.getNodeHandler
 
         #Soils
         kX= typical_materials.defElasticMaterial(preprocessor, "kX",kS/10.0)
@@ -1020,7 +1046,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         #kY= typical_materials.defElastNoTensMaterial(preprocessor, "kY",kS)
         
         #Mesh.
-        self.genMesh(nodes,[kX,kY])
+        self.genMesh([kX,kY])
         return retval
 
     def getFoundationReinforcement(self):
