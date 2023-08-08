@@ -518,7 +518,9 @@ echo "$BLEU" "  Simpson rule tests." "$NORMAL"
 python tests/preprocessor/integra_simpson_fila_i.py
 python tests/preprocessor/integra_simpson_fila_j.py
 python tests/preprocessor/integra_simpson_fila_k.py
-
+echo "$BLEU" "  Preprocessor clear tests." "$NORMAL"
+python tests/preprocessor/clear/test_problem_clear_nodes_01.py
+python tests/preprocessor/clear/test_problem_clear_elements_01.py
 echo "$BLEU" "  Preprocessor entities tests." "$NORMAL"
 python tests/preprocessor/geom_entities/line.py
 python tests/preprocessor/geom_entities/line_02.py

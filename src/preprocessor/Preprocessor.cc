@@ -162,12 +162,12 @@ void XC::Preprocessor::clearAll(void)
     mbt.clearAll();
     transf.clearAll();
     beamIntegrators.clearAll();
-    nodeHandler.clearAll();
+    loadHandler.clearAll();
     elementHandler.clearAll();
+    constraintHandler.clearAll();
+    nodeHandler.clearAll();
     if(domain)
       domain->clearAll();
-    loadHandler.clearAll();
-    constraintHandler.clearAll();
     materialHandler.clearAll();
   }
 
