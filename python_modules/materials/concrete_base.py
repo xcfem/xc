@@ -476,7 +476,12 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
         '''
         #epscd: drying shrinkage strain
-        return self.getShrBetadstts(t,ts,h0)*self.getShrKh(h0)*self.getShrEpscd0(RH)
+        if t<ts:
+            shrEpscd=0.0
+        else:
+            shrEpscd=self.getShrBetadstts(t,ts,h0)*self.getShrKh(h0)*self.getShrEpscd0(RH)
+        return shrEpscd 
+    
 
     def getShrKh(self,h0):
         '''coefficient depending on the notional size h0
@@ -509,7 +514,11 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                    - Ac= cross sectional area
                    - u= perimeter of the member in contact with the atmosphere
         '''
-        return (t-ts)/(t-ts+0.04*math.pow(h0*1e3,3.0/2.0))
+        if t<ts:
+            shrBetadstts=0
+        else:
+            shrBetadstts=(t-ts)/(t-ts+0.04*math.pow(h0*1e3,3.0/2.0))
+        return shrBetadstts 
 
 #   Autogenous shrinkage strain
     def getShrEpsca(self,t):
@@ -538,6 +547,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
         :param t: age of concrete in days at the moment considered
         '''
+        t=max(0,t)
         betaast=1-math.exp(-0.2*t**0.5)
         return betaast
 
