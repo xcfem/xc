@@ -217,6 +217,12 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getProblem
 
+    def clearAll(self):
+        ''' Clear the finite element model.'''
+        prb= self.getProblem()
+        prb.clearAll()
+        self.setPreprocessor(preprocessor= None)
+
     def setVerbosityLevel(self, level):
         ''' Set the verbosity level (0 to 1000). A higher verbosity
             level means more info printed out.
@@ -366,8 +372,12 @@ class PredefinedSpace(object):
 
          :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.preprocessor= preprocessor
-        self.constraints= self.preprocessor.getBoundaryCondHandler
+        if(preprocessor):
+            self.preprocessor= preprocessor
+            self.constraints= self.preprocessor.getBoundaryCondHandler
+        else:
+            self.preprocessor= None
+            self.constraints= None
 
     def getMaterialHandler(self):
         ''' Return the preprocessor material handler.'''
