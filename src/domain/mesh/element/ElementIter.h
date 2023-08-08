@@ -77,7 +77,16 @@ class ElementIter
     ElementIter() {};
     virtual ~ElementIter() {};
     virtual Element *operator()(void) =0;
+    virtual const Element *operator()(void) const;
   };
+
+inline const Element *ElementIter::operator()(void) const
+  {
+    ElementIter *this_no_const= const_cast<ElementIter *>(this);
+    const Element *retval= (*this_no_const)();
+    return retval;
+  }
+  
 } // end of XC namespace
 
 #endif

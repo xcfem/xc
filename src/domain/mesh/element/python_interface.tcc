@@ -107,8 +107,9 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("createInertiaLoad", &XC::Element::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
    ;
 
+XC::Element *(XC::ElementIter::*element_iter_parenthesis_op)(void)= &XC::ElementIter::operator();
 class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
-  .def("next", &XC::ElementIter::operator(), return_internal_reference<>(),"Return next node.")
+  .def("next", element_iter_parenthesis_op, return_internal_reference<>(),"Return next node.")
    ;
 
 class_<ElementBase2N, bases<XC::Element >, boost::noncopyable >("ElementBase2N","Base class for 2 node elements.", no_init);
