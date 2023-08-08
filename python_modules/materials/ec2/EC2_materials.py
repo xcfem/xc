@@ -321,12 +321,15 @@ class EC2Concrete2021(EC2Concrete):
                - Ac= cross sectional area
                - u = perimeter of the member in contact with the atmosphere
         '''
-        return math.pow((t-ts)/(0.035*((h0*1e3)**2)+(t-ts)),0.5)
+        if t<ts:
+            shrBetadstts=0.0
+        else:
+            shrBetadstts=math.pow((t-ts)/(0.035*((h0*1e3)**2)+(t-ts)),0.5)
+        return shrBetadstts
     
     def getShrEpscdsfcm(self):
         '''notional drying shrinkage coefficient according to expression
-           according to expression B28 of clause B.6 of Eurocode 2:2021
-           part 1-1.
+           B28 of clause B.6 of Eurocode 2:2021 part 1-1.
         '''
         alpha_ds= self.getShrAlphads()
         fcm28= abs(self.getFcm())/1e6
@@ -345,10 +348,13 @@ class EC2Concrete2021(EC2Concrete):
         :param RH: ambient relative humidity(%)
         :param alpha_ndp_d: 1.0 unless otherwise stated in the national annex.
         '''
-        retval= self.getShrEpscdsfcm()
-        retval*= self.getShrBetaRH(RH)
-        retval*= self.getShrBetadstts(t= t, ts= ts, h0= h0)
-        retval*= -alpha_ndp_d
+        if t<ts:
+            retval=0.0
+        else:
+            retval= self.getShrEpscdsfcm()
+            retval*= self.getShrBetaRH(RH)
+            retval*= self.getShrBetadstts(t= t, ts= ts, h0= h0)
+            retval*= -alpha_ndp_d
         return retval
 
     def getShrEpscs(self,t, ts, RH, h0, alpha_ndp_b= 1.0, alpha_ndp_d= 1.0):

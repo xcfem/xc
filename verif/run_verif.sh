@@ -736,6 +736,7 @@ python tests/loads/strain_loads/beam_strain_load_06.py
 python tests/loads/strain_loads/beam_strain_load_07.py
 python tests/loads/strain_loads/beam_strain_load_08.py
 python tests/loads/strain_loads/beam_strain_load_09.py
+python tests/loads/strain_loads/beam_shrinkage_load_01.py
 python tests/loads/strain_loads/quad_strain_load_01.py
 python tests/loads/strain_loads/shell_strain_load_01.py
 python tests/loads/strain_loads/shell_strain_load_02.py
