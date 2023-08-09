@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
+''' This test addresses a  time-series calculation of shrinkage
+  Two beams are built with the following sequence:
+  day 0: beam-1 is built (authogenus shrinkage of beam-1 starts)
+  day 3: end of beam-1 curing (drying shrinkage of beam-1 starts)
+  day 15:  beam-2 is built (authogenus shrinkage of beam-2 starts) 
+  day 18: end of beam-2 curing (drying shrinkage of beam-2 starts)
+'''
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2021, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
-
-# This test addresses a  time-series calculation of shrinkage
-# Two beams are built with the following sequence:
-# day 0: beam-1 is built (authogenus shrinkage of beam-1 starts)
-# day 3: end of beam-1 curing (drying shrinkage of beam-1 starts)
-# day 15:  beam-2 is built (authogenus shrinkage of beam-2 starts) 
-# day 18: end of beam-2 curing (drying shrinkage of beam-2 starts)
 
 import math
 import geom
