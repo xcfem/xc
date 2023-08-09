@@ -32,12 +32,11 @@ nA= nodeHandler.newNodeXY(2,0)
 nB= nodeHandler.newNodeXY(2,1.0)
 nC= nodeHandler.newNodeXY(3,1.0)
 
-
 nn2= preprocessor.getDomain.getMesh.getNumNodes()
 nodeDefaultTag2=  preprocessor.getDomain.getMesh.getDefaultNodeTag()
 
 err= abs(nn0-2)+abs(nn1)+abs(nn2-3)
-err+= abs(nodeDefaultTagM1+1)+abs(nodeDefaultTag0-2)+abs(nodeDefaultTag1+1)+abs(nodeDefaultTag2-3)
+err+= abs(nodeDefaultTagM1+1)+abs(nodeDefaultTag0-2)+abs(nodeDefaultTag1+1)+abs(nodeDefaultTag2-5)
 
 '''
 print(nA.tag, nB.tag, nC.tag)

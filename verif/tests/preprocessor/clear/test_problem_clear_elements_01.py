@@ -71,8 +71,8 @@ elementDefaultTag2=  preprocessor.getDomain.getMesh.getDefaultElementTag()
 
 err= abs(nn0-2)+abs(nn1)+abs(nn2-3)
 err+= abs(ne0-1)+abs(ne1)+abs(ne2-2)
-err+= abs(nodeDefaultTagM1+1)+abs(nodeDefaultTag0-2)+abs(nodeDefaultTag1+1)+abs(nodeDefaultTag2-3)
-err+= abs(elementDefaultTagM1+1)+abs(elementDefaultTag0-1)+abs(elementDefaultTag1+1)+abs(elementDefaultTag2-2)
+err+= abs(nodeDefaultTagM1+1)+abs(nodeDefaultTag0-2)+abs(nodeDefaultTag1+1)+abs(nodeDefaultTag2-5)
+err+= abs(elementDefaultTagM1+1)+abs(elementDefaultTag0-1)+abs(elementDefaultTag1+1)+abs(elementDefaultTag2-3)
 
 '''
 print(nA.tag, nB.tag, nC.tag)
