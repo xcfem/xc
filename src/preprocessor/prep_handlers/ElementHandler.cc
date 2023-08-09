@@ -129,7 +129,9 @@ void XC::ElementHandler::add(Element *e)
 void XC::ElementHandler::clearAll(void)
   {
     seed_elem_handler.clearAll();
-    Element::getDefaultTag().setTag(0);
+    // Don't reset the tags, they can be already in use by other
+    // FEProblem objects.
+    // setDefaultTag(0);
   }
 
 //! @brief Adds the element and set its identifier (tag),

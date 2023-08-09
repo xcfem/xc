@@ -45,11 +45,19 @@ class DefaultTag
 
     inline DefaultTag &operator=(const int &i)
       {
-        default_tag= i;
+        setTag(i);
         return *this;
       }
     inline void setTag(const int &tag)
-      { default_tag= tag; }
+      {
+	if(tag<default_tag)
+	  std::cerr << "DefaultTag::" << __FUNCTION__
+	            << "; WARNING new tag: " << tag
+	            << " is smaller than the old one: " << default_tag
+	            << " This can led to repeated tags, which is not possible."
+	            << std::endl;
+	default_tag= tag;
+      }
     inline const int &getTag(void) const
       { return default_tag; }
     inline void incTag(void)

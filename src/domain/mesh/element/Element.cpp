@@ -100,7 +100,12 @@ XC::DefaultTag XC::Element::defaultTag;
 //! @param cTag: element class identifier.
 XC::Element::Element(int tag, int cTag)
   :MeshComponent(tag, cTag), nodeIndex(-1), rayFactors() 
-  { defaultTag= tag+1; }
+  {
+    // tag= -1 is reserved for the seed element, don't modify the default tag
+    // in this case.
+    if(tag>=0) 
+      defaultTag= tag+1;
+  }
 
 //! @brief Returns next element's tag value by default.
 XC::DefaultTag &XC::Element::getDefaultTag(void)

@@ -130,7 +130,10 @@ XC::Node::Node(int tag, int theClassTag)
    unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
    alphaM(0.0), tributary(0.0)
   {
-    defaultTag= tag+1;
+    // tag= -1 is reserved for the seed node, don't modify the default tag
+    // in this case.
+    if(tag>=0) 
+        defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
     // AddingSensitivity:END ///////////////////////////////////////////
@@ -150,13 +153,16 @@ XC::Node::Node(int tag, int theClassTag)
 //! quantities, mass, load quantities; these are created as needed to
 //! reduce the memory demands on the system in certain situations.
 XC::Node::Node(int tag, int ndof, double Crd1)
-  :MeshComponent(tag,NOD_TAG_Node),
-   numberDOF(ndof), theDOF_GroupPtr(nullptr),
-   Crd(1), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
-   reaction(numberDOF), alphaM(0.0), tributary(0.0)
+  : MeshComponent(tag,NOD_TAG_Node),
+    numberDOF(ndof), theDOF_GroupPtr(nullptr),
+    Crd(1), disp(), vel(), accel(),
+    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+    reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
-    defaultTag= tag+1;
+    // tag= -1 is reserved for the seed node, don't modify the default tag
+    // in this case.
+    if(tag>=0) 
+      defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
     // AddingSensitivity:END ///////////////////////////////////////////
@@ -188,7 +194,10 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
    reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
-    defaultTag= tag+1;
+    // tag= -1 is reserved for the seed node, don't modify the default tag
+    // in this case.
+    if(tag>=0) 
+      defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
     // AddingSensitivity:END ///////////////////////////////////////////
@@ -222,7 +231,10 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2, double Crd3)
    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
    reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
-    defaultTag= tag+1;
+    // tag= -1 is reserved for the seed node, don't modify the default tag
+    // in this case.
+    if(tag>=0) 
+      defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
     // AddingSensitivity:END ///////////////////////////////////////////
@@ -246,7 +258,10 @@ XC::Node::Node(int tag, int ndof, const Vector &crds)
    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
    reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
-    defaultTag= tag+1;
+    // tag= -1 is reserved for the seed node, don't modify the default tag
+    // in this case.
+    if(tag>=0) 
+      defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
     // AddingSensitivity:END ///////////////////////////////////////////

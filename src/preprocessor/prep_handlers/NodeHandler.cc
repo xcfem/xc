@@ -50,6 +50,8 @@ void XC::NodeHandler::freeSeedNode(void)
   }
 
 //! @brief Defines the seed node.
+//! @param dim: dimension of the coordinate space.
+//! @param ndof: number of degrees of freedom for each node.
 XC::Node *XC::NodeHandler::newSeedNode(const size_t &dim, const size_t ndof)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
@@ -89,9 +91,18 @@ void XC::NodeHandler::setDefaultTag(const int &tag)
 void XC::NodeHandler::clearAll(void)
   {
     freeSeedNode();
-    setDefaultTag(0);
+    // Don't reset the tags, they can be already in use by other
+    // FEProblem objects.
+    //setDefaultTag(0);
   }
 
+//! @brief Creates a new node.
+//! @brief tag: identifier for the new node.
+//! @param dim: dimension of the coordinate space.
+//! @param ndof: number of degrees of freedom for each node.
+//! @param x: x coordinate.
+//! @param y: y coordinate.
+//! @param z: z coordinate.
 XC::Node *XC::NodeHandler::new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y,const double &z)
   {
     Node *retval= nullptr;

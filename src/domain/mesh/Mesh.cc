@@ -166,14 +166,18 @@ XC::Mesh::Mesh(CommandEntity *owr,TaggedObjectStorage &theStorage)
 //!   downward casts (while bad) are o.k. as only the type
 //!  of components can be added to the storage objects, e.g.
 //!  only elements can be added to theElements therefore
-//!  casting a XC::MeshComponent from theElements to an XC::Element is o.k.
+//!  casting a MeshComponent from theElements to an Element is o.k.
 void XC::Mesh::clearAll(void)
   {
     // clean out the containers
     if(theElements) theElements->clearAll();
-    Element::getDefaultTag().setTag(0);
+    // Don't reset the element tags, they can be already in use by other
+    // FEProblem objects.
+    // Element::getDefaultTag().setTag(0);
     if(theNodes) theNodes->clearAll();
-    Node::getDefaultTag().setTag(0);
+    // Don't reset the node tags, they can be already in use by other
+    // FEProblem objects.
+    // Node::getDefaultTag().setTag(0);
     lockers.clearAll();
 
     // set the bounds around the origin
