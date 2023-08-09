@@ -62,6 +62,11 @@ combination_factors.insert('road_bridge_construction_loads',loadCombinations.Com
 # Combination factors for railway bridges
 combination_factors.insert('LM71_alone_uls',loadCombinations.CombinationFactors(0.8,0.8,0.0))
 
+# Importance factors for bridges (See Spanish National Annex AN/UNE-EN 1998-2 clause 2.1(6))
+lessImportantBridgesImportanceFactor= None # Must be fixed by the competent authority.
+normalBridgesImportanceFactor= 1.0
+specialBridgesImportanceFactor= 1.3
+
 class CombGenerator(utils.CombGenerator):
     ''' Generate combinations corresponding to Eurocode 0 (Spanish annex).
 
@@ -262,18 +267,39 @@ class CombGenerator(utils.CombGenerator):
         raise NotImplementedError()
         return None
     
+    def newAccidentalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= None):
+        ''' Creates an accidental action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param context: context for the action (building, railway_bridge, footbridge,...)
+        '''
+
+        return self.newAction(family= "accidental", actionName= actionName, actionDescription= actionDescription, combinationFactorsName= '', partialSafetyFactorsName= 'accidentales', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
     def newSeismicAction(self, actionName: str, actionDescription: str, ulsImportanceFactor, slsImportanceFactor= 0.0, dependsOn= None, incompatibleActions= None, context= None):
-        ''' Creates a snow action and appends it to the combinations 
+        ''' Creates a seismic action and appends it to the combinations 
             generator.
 
         :param actionName: name of the action.
         :param actionDescription: description of the action.
         :param ulsImportanceFactor: importance factor (partial safety factor)
                                     to use with seismic action in ultimate
-                                    limit states.
+                                    limit states. The importance factor is used
+                                    to introduce in the analysis the differences
+                                    in the return period according to the importance
+                                    class of the structure. See EC-8 part 1 clauses 2.1 
+                                    and 4.2.5 and EC-8 part 2 clause 2.1.
         :param slsImportanceFactor: importance factor (partial safety factor) 
                                     to use with seismic action in
-                                    serviceability limit states.
+                                    serviceability limit states. The importance factor is used
+                                    to introduce in the analysis the differences
+                                    in the return period according to the importance
+                                    of the structure. See EC-8 part 1 clauses 2.1 
+                                    and 4.2.5 and EC-8 part 2 clause 2.1.
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
