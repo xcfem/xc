@@ -152,7 +152,6 @@ KSoils= [KaM1]
 gammaSoils= [gSoil]
 zWater= -1e3
 gammaWater= 1000*g
-vDir= xc.Vector([-math.sin(slopeOfBackfillSurface), -math.cos(slopeOfBackfillSurface)])
 ### Set current load case.
 earthPress= loadCaseManager.setCurrentLoadCase('earthPress')
 
@@ -238,7 +237,7 @@ resultantOK= (ratioEakBook<1e-3) and abs(ratioHEk)<1e-3 and abs(ratioNEk)<.02
                                                     
 combContainer= combinations.CombContainer()
 
-def composeCombnationString(gammaG, gammaQ):
+def composeCombinationString(gammaG, gammaQ):
     ''' Compose the combination string corresponding to the arguments.
 
     :param gammaG: partial factor for permanent loads.
@@ -253,8 +252,8 @@ def composeCombnationString(gammaG, gammaQ):
     return retval
 
 ## GEO ultimate states. (type 1)
-combContainer.ULS.perm.add('ULS01', composeCombnationString(gammaG= gammaGA1, gammaQ= 0.0))
-combContainer.ULS.perm.add('ULS02', composeCombnationString(gammaG= gammaGA1, gammaQ= gammaQA1))
+combContainer.ULS.perm.add('ULS01', composeCombinationString(gammaG= gammaGA1, gammaQ= 0.0))
+combContainer.ULS.perm.add('ULS02', composeCombinationString(gammaG= gammaGA1, gammaQ= gammaQA1))
 combContainer.dumpCombinations(preprocessor)
 
 geoULSCombinations= ['ULS01','ULS02']
