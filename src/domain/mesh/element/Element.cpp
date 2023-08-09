@@ -99,7 +99,7 @@ XC::DefaultTag XC::Element::defaultTag;
 //! @param tag: element identifier.
 //! @param cTag: element class identifier.
 XC::Element::Element(int tag, int cTag)
-  :MeshComponent(tag, cTag), nodeIndex(-1), rayFactors() 
+  : MeshComponent(tag, cTag), nodeIndex(-1), rayFactors() 
   {
     // tag= -1 is reserved for the seed element, don't modify the default tag
     // in this case.
