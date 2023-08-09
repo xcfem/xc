@@ -9,6 +9,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
 import sys
+import json
 import loadCombinations
 from actions import combinations
 from misc_utils import log_messages as lmsg
@@ -218,9 +219,9 @@ class CombGenerator(object):
         else:
             f= open(outputFileName,'w')
         f.write("combs= preprocessor.getLoadHandler.getLoadCombinations\n")
-        loadCombinations= self.getLoadCombinationsDict(situations)
-        for sitKey in loadCombinations:
-            sitCombinations= loadCombinations[sitKey]
+        loadCombs= self.getLoadCombinationsDict(situations)
+        for sitKey in loadCombs:
+            sitCombinations= loadCombs[sitKey]
             for key in sitCombinations:
                 comb= sitCombinations[key]
                 output= 'comb= combs.newLoadCombination('
@@ -230,6 +231,38 @@ class CombGenerator(object):
             f.flush()
         else:
             f.close()
+
+    def getPlainDict(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
+        ''' Return a dictionary of plain strings containing the load
+        combinations for each of the situations of interes.
+
+        :param situations: project situations of interest.
+        '''
+        loadCombs= self.getLoadCombinationsDict(situations)
+        retval= dict()
+        for sitKey in loadCombs:
+            sitDict= dict()
+            retval[sitKey]= sitDict
+            sitCombinations= loadCombs[sitKey]
+            for key in sitCombinations:
+                comb= sitCombinations[key]
+                sitDict[key]= comb.name
+        return retval
+        
+    def writeJSONLoadCombinations(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic'], outputFileName= None):
+        ''' Write the load combinations in a JSON file.
+
+        :param situations: project situations of interest.
+        :param outputFileName: name of the output file (if None use standard output).
+        '''
+        outputDict= self.getPlainDict(situations)
+        if(outputFileName is None):
+            f= sys.stdout
+        else:
+            f= open(outputFileName,'w')
+        json.dump(outputDict, f)
+        f.close()
+
 
 def getCombinationDict(loadCombination:str):
     ''' Return a Python dictionary whose keys are the names of the actions
@@ -361,3 +394,21 @@ def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
         f.flush()
     else:
         f.close()
+
+def jsonToXCLoadHandler(self, inputFileName, preprocessor, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
+    ''' Read the combinations stored in the input file (JSON format)
+        and stores them in the FE problem whose pre-processor is passed as
+        parameter.
+
+    :param inputFileName: JSON file name to read the combinations from.
+    :param preprocessor: preprocessor for the finite element problem.
+    '''
+    with open(inputFileName) as f:
+       loadCombs= json.load(f)
+    xcCombinations= preprocessor.getLoadHandler.getLoadCombinations
+    for sitKey in loadCombs: # for each situation.
+        if(sitKey in situations):
+            sitCombinations= loadCombs[sitKey]
+            for combKey in sitCombinations: # for each combination.
+                combExpr= sitCombinations[combKey]
+                comb= xcCombinations.newLoadCombination(combKey, combExpr)
