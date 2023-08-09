@@ -50,12 +50,14 @@ class DefaultTag
       }
     inline void setTag(const int &tag)
       {
-	if(tag<default_tag)
-	  std::cerr << "DefaultTag::" << __FUNCTION__
-	            << "; WARNING new tag: " << tag
-	            << " is smaller than the old one: " << default_tag
-	            << " This can led to repeated tags, which is not possible."
-	            << std::endl;
+	// Commented out because it gives "false positives" when
+	// restoring databases.
+	// if(tag<default_tag)
+	//   std::cerr << "DefaultTag::" << __FUNCTION__
+	//             << "; WARNING new tag: " << tag
+	//             << " is smaller than the old one: " << default_tag
+	//             << " This can led to repeated tags, which is not possible."
+	//             << std::endl;
 	default_tag= tag;
       }
     inline const int &getTag(void) const
