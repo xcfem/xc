@@ -42,12 +42,17 @@ class RankineSoil(fs.FrictionalSoil):
         :param alphaAngle: inclination of the back face.
         :param designValue: if true use the design value of the internal friction.
         '''
-        cBeta= math.cos(self.beta)
         if(designValue):
             phi= self.getDesignPhi()
         else:
             phi= self.phi
+        if(phi<self.beta):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; backfill soil internal friction angle: '+str(math.degrees(phi))+" can't be smaller than the slope of the backfill: "+str(math.degrees(self.beta))+' otherwise the backfill slope is not stable. Assuming a big enough internal friction angle: '+str(math.degrees(self.beta))+' for the purpose of determine the active pressure coefficient only.')
+            phi= self.beta
         cPhi= math.cos(phi)
+        cBeta= math.cos(self.beta)
         if(alphaAngle==0.0):
             r= math.sqrt(cBeta**2-cPhi**2)
             retval= cBeta*(cBeta-r)/(cBeta+r)
