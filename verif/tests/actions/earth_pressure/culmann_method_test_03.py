@@ -5,6 +5,12 @@ according to Rankine, Culmann and Coulomb.'''
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2021, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
+
 import math
 import geom
 from geotechnics import frictional_soil

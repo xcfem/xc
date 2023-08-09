@@ -12,7 +12,7 @@ from __future__ import division
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2016, LCPT and AO_O"
+__copyright__= "Copyright 2021, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
@@ -44,11 +44,12 @@ for i in range(0,10):
 backfillPoints.append(ptA+1e3*backfillSlopeVDir)
 backfillProfile=geom.Polyline2d(backfillPoints)
 
-# Culmann method.
+# Compute active pressure coefficient.
+## According to Culmann method.
 maxPressureCulmann, pressureFunction, minWeight, maxWeight= earth_pressure.active_pressure_culmann_method(soil= soil, wallBack= wallBack, backfillProfile= backfillProfile, delta= delta)
 KaCulmann= maxPressureCulmann/(0.5*soil.gamma()*wallHeight**2)
 
-# Coulomb method.
+## According to Coulomb method.
 KaCoulomb= earth_pressure.ka_coulomb(a= 0.0, b= backfillSlopeAngle, phi=  soil.phi, d= delta)
 maxPressureCoulomb= 0.5*soil.gamma()*wallHeight**2*KaCoulomb
 
