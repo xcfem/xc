@@ -15,16 +15,16 @@ __email__= "l.pereztato@gmail.com"
 import math
 from actions.earth_pressure import earth_pressure
 
-zGround= 0.0 #m z coordinate of the ground surface.
-gammaSoil= 21e3 #N/m3 unit weight of soil (backfill)
+zGround= 0.0 # m z coordinate of the ground surface.
+gammaSoil= 21e3 # N/m3 unit weight of soil (backfill)
 H= 4 #m height of the structure.
-kh= 0.086 #seismic coefficient of horizontal acceleration.
-kv= kh/2.0 #seismic coefficient of vertical acceleration.
-psi= math.radians(90) #back face inclination of the structure (<= PI/2)
-phi= math.radians(30.0) #angle of internal friction of soil.
-delta_ad= 0.0 #angle of friction soil - structure.
-beta= 0.0 #slope inclination of backfill.
-Kas= 1/3.0 #static earth pressure coefficient 
+kh= 0.086 # seismic coefficient of horizontal acceleration.
+kv= kh/2.0 # seismic coefficient of vertical acceleration.
+psi= math.radians(90) # back face inclination of the structure (<= PI/2)
+phi= math.radians(30.0) # angle of internal friction of soil.
+delta_ad= 0.0 # angle of friction soil - structure.
+beta= 0.0 # slope inclination of backfill.
+Kas= 1/3.0 # static earth pressure coefficient 
 
 mononobeOkabe= earth_pressure.MononobeOkabePressureDistribution(zGround, gammaSoil, H, kv, kh, psi, phi, delta_ad, beta, Kas)
 
