@@ -69,13 +69,15 @@ class Vector2d: public ProtoGeom
     void SetY(const GEOM_FT &vy);
     void Set(unsigned short int i,const GEOM_FT &v);
 
-    inline const GEOM_FT operator()(const size_t &i) const //Base 1.
-      { return cgvct.cartesian(i-1); }
-    inline const GEOM_FT operator[](const size_t &j) const //Base 0.
-      { return cgvct.cartesian(j); }
-    inline const GEOM_FT x() const
+    inline GEOM_FT at(const size_t &i) const
+      { return cgvct.cartesian(i); }
+    inline GEOM_FT operator()(const size_t &i) const //Base 1.
+      { return at(i-1); }
+    inline GEOM_FT operator[](const size_t &j) const //Base 0.
+      { return at(j); }
+    inline GEOM_FT x() const
       { return Vector2d::operator()(1); }
-    inline const GEOM_FT y() const
+    inline GEOM_FT y() const
       { return Vector2d::operator()(2); }
     FT_matrix getMatrix(void) const;
     Vector2d &operator+=(const Vector2d &);

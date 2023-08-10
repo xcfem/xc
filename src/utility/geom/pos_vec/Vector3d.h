@@ -58,13 +58,17 @@ class Vector3d: public ProtoGeom
     void SetY(const GEOM_FT &vy);
     void SetZ(const GEOM_FT &vz);
     void Set(unsigned short int i,const GEOM_FT &v);
-    inline const GEOM_FT operator()(const size_t &i) const
-      { return cgvct.cartesian(i-1); }
-    inline const GEOM_FT x(void) const
+    inline GEOM_FT at(const size_t &i) const
+      { return cgvct.cartesian(i); }
+    inline GEOM_FT operator()(const size_t &i) const //Base 1.
+      { return at(i-1); }
+    inline GEOM_FT operator[](const size_t &i) const //Base 0.
+      { return at(i); }
+    inline GEOM_FT x(void) const
       { return cgvct.x(); }
-    inline const GEOM_FT y(void) const
+    inline GEOM_FT y(void) const
       { return cgvct.y(); }
-    inline const GEOM_FT z(void) const
+    inline GEOM_FT z(void) const
       { return cgvct.z(); }
     FT_matrix getMatrix(void) const;
     Dir3d getDirection(void) const;
