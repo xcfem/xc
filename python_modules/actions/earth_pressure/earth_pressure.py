@@ -781,44 +781,6 @@ class MononobeOkabePressureDistribution(SeismicPressureDistribution):
             retval= (z-zInf)/(zSup-zInf)*self.max_stress
         return retval
 
-    def appendLoadToCurrentLoadPattern(self, elements, vDir, iCoo= 2):
-        '''Append earth thrust on a set of elements to the current
-        load pattern.
-
-        :param elements: elements to apply the load on.
-        :param vDir: unit xc vector defining pressures direction
-        :param iCoo: index of the coordinate that represents depth.
-        '''
-        if(vDir.getDimension()==3): #3D load.
-            retval= geom.SlidingVector3d()  # checking purposes.
-            for e in elements:
-                centroid= e.getCooCentroid(False)
-                presElem= self.getPressure(centroid[iCoo])
-                if(presElem!=0.0):
-                    loadVector= presElem*e.getKVector3d(True)
-                    orientation= loadVector.dot(vDir)
-                    if(orientation<0.0):
-                        loadVector= -loadVector
-                    e.vector3dUniformLoadGlobal(xc.Vector(loadVector))
-                    area= e.getArea(False)
-                    totalLoad= loadVector*area
-                    retval+= geom.SlidingVector3d(geom.Pos3d(centroid[0], centroid[1], centroid[2]), totalLoad)
-        else: # 2D load.
-            retval= geom.SlidingVector2d()  # checking purposes.
-            for e in elements:
-                centroid= e.getCooCentroid(False)
-                presElem=self.getPressure(centroid[iCoo])
-                if(presElem!=0.0):
-                    loadVector= presElem*e.getJVector2d(True)
-                    orientation= loadVector.dot(vDir)
-                    if(orientation<0.0):
-                        loadVector= -loadVector
-                    e.vector2dUniformLoadGlobal(xc.Vector(loadVector))
-                    length= e.getLength(False)
-                    totalLoad= loadVector*length
-                    retval+= geom.SlidingVector2d(geom.Pos2d(centroid[0], centroid[1]), totalLoad)
-        return retval # Sliding vector system (checking purposes)
-
 class IskanderPressureDistribution(SeismicPressureDistribution):
     '''Overpressure due to seismic action according to Iskander et al.
        (Active static and seismic earth pressure for c–φ soils Magued Iskander, 
