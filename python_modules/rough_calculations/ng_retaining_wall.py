@@ -1160,6 +1160,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         pressureModel.xcSet= self.stemSet
         pressureModel.vDir= vDir
         return pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1, delta= Delta)
+    
     def getStemTopNode(self):
         ''' Return the node at the top of the stem.'''
         return self.wireframeModelPoints['stemTop'].getNode()
