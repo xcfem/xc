@@ -1150,16 +1150,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             retval+= geom.SlidingVector2d(geom.Pos2d(pos.x, pos.y), length*geom.Vector2d(toeFillLoad[0], toeFillLoad[1]))
         return retval
 
-    def createEarthPressureLoadOnStem(self,pressureModel, vDir= xc.Vector([-1.0,0.0]), Delta= 0.0):
+    def createEarthPressureLoadOnStem(self, pressureModel, vDir= xc.Vector([-1.0,0.0]), Delta= 0.0):
         '''Create the loads of the earth pressure over the stem.
 
         :param pressureModel: (obj) earth pressure model.
         :param vDir: (xc.Vector) direction for the pressures.
         :param Delta: angle of the earth pressure with respect to the stem back face.
         '''
-        pressureModel.xcSet= self.stemSet
-        pressureModel.vDir= vDir
-        return pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1, delta= Delta)
+        return pressureModel.appendLoadToCurrentLoadPattern(iCoo= 1, xcSet= self.stemSet, vDir= vDir, delta= Delta)
     
     def getStemTopNode(self):
         ''' Return the node at the top of the stem.'''
