@@ -102,7 +102,7 @@ Kas= 1/3.0 #static earth pressure coefficient
 
 mononobeOkabe= earth_pressure.MononobeOkabePressureDistribution(zGround= wallHeight, gammaSoil= gammaSoil, H= H, kv= kv, kh= kh, psi= psi, phi= phi, delta_ad= delta_ad, beta= 0.0, Kas= Kas)
 
-mononobeOkabe.appendLoadToCurrentLoadPattern(elements= s.elements, vDir= geom.Vector3d(0,-1,0), iCoo= 2)
+mononobeOkabe.appendLoadToCurrentLoadPattern(xcSet= s, vDir= xc.Vector([0,-1,0]), iCoo= 2)
 modelSpace.addLoadCaseToDomain(cLC.name)
 
 # Solution
