@@ -349,17 +349,45 @@ class WallStabilityResults(object):
         '''
         return 1.0/self.Fsliding
 
+    def getWorstCombinationForSliding(self):
+        ''' Return the worst case for the verification of resistance 
+            to sliding.
+        '''
+        return self.FslidingComb    
+
     def getDegreeOfUtilizationForBearingResistance(self):
+        ''' Return the degree of utilization obtained in the verification 
+            of bearing resistance.
+        '''
+        return 1.0/self.Fbearing
+
+    def getWorstCombinationForBearingResistance(self):
+        ''' Return the worst case for the verification of bearing resistance.
+        '''
+        return self.FbearingComb
+    
+    def getDegreeOfUtilizationForAdmissiblePressure(self):
         ''' Return the degree of utilization obtained in the verification 
             of resistance to sliding.
         '''
-        return 1.0/self.Fbearing
+        return 1.0/self.FadmPressure
+
+    def getWorstCombinationForAdmissiblePressure(self):
+        ''' Return the worst case for the verification of admissible pressure.
+        '''
+        return self.FadmPressureComb    
                     
     def getDegreeOfUtilizationForOverturning(self):
         ''' Return the degree of utilization obtained in the verification 
             of resistance to overturning.
         '''
         return 1.0/self.Foverturning
+    
+
+    def getWorstCombinationForOverturning(self):
+        ''' Return the worst case for the verification for overturning.
+        '''
+        return self.FoverturningComb
     
     def writeOutput(self,outputFile,name):
         '''Write results in LaTeX format.
@@ -1491,7 +1519,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel= foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= sg_adm, ignoreAdhesion= ignoreAdhesion, NgammaCoef= NgammaCoef)
         return self.stability_results
 
-    def performGEOVerifications(self,combinations, foundationSoilModel, toeFillDepth, gammaRSliding, gammaRBearing, ignoreAdhesion= True, NgammaCoef= 2.0): 
+    def performGEOVerifications(self,combinations, foundationSoilModel, toeFillDepth, gammaRSliding, gammaRBearing, sg_adm= None, ignoreAdhesion= True, NgammaCoef= 2.0): 
         ''' Perform stability limit state analysis.
 
         :param combinations: load combinations to use in the analysis.
@@ -1499,9 +1527,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param toeFillDepth: depth of the fill that rests on the wall toe.
         :param gammaRSliding: partial factor for sliding resistance.
         :param gammaRBearing: partial factor for bearing resistance.
+        :param sg_adm: admissible stress of the terrain (optional).
         :param ignoreAdhesion: if true don't consider the adhesion of the foundation to the soil for sliding resistance.
         '''
-        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= None, gammaRSliding= gammaRSliding, gammaRBearing= gammaRBearing, ignoreAdhesion= ignoreAdhesion, NgammaCoef= NgammaCoef)
+        self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= sg_adm, gammaRSliding= gammaRSliding, gammaRBearing= gammaRBearing, ignoreAdhesion= ignoreAdhesion, NgammaCoef= NgammaCoef)
         return self.stability_results
 
     def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
