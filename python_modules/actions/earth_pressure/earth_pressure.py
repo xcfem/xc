@@ -68,7 +68,7 @@ class PressureModelBase(object):
             retval+= forceVector
         return retval
 
-    def appendLoadToCurrentLoadPattern(self, xcSet, vDir,iCoo= 2,delta= 0.0):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0):
         '''Append earth thrust on a set of elements to the current
         load pattern.
 
@@ -150,7 +150,7 @@ class UniformPressureOnBackfill(PressureModelBase):
           to bottom)
     :ivar qUnif: uniform load over the backfill surface (defaults to 0)
     '''
-    def __init__(self, zGround, zBottomSoils, KSoils, qUnif, xcSet= None, vDir= None):
+    def __init__(self, zGround, zBottomSoils, KSoils, qUnif):
         ''' Constructor.
 
         :param zGround: global Z coordinate of ground level
@@ -159,8 +159,6 @@ class UniformPressureOnBackfill(PressureModelBase):
         :param KSoils: list of pressure coefficients for each soil (from top 
               to bottom)
         :param qUnif: uniform load over the backfill surface (defaults to 0)
-        :ivar xcSet: set that contains the elements (shells and/or beams)
-        :ivar vDir: unit xc vector defining pressures direction
         '''
         super(UniformPressureOnBackfill,self).__init__()
         self.zGround= zGround
@@ -168,8 +166,6 @@ class UniformPressureOnBackfill(PressureModelBase):
         self.zTopLev= [zGround]+zBottomSoils
         self.KSoils= KSoils
         self.qUnif=qUnif
-        self.xcSet=xcSet
-        self.vDir=vDir
 
     def getLayerIndex(self, z):
         ''' Return the soil layer that corresponds to z.
@@ -194,17 +190,7 @@ class UniformPressureOnBackfill(PressureModelBase):
         #     methodName= sys._getframe(0).f_code.co_name
         #     lmsg.warning(className+'.'+methodName+'; asking for pressure of point above zGround (z= '+str(z)+', zGround= '+str(self.zGround)+')')
         return ret_press
-    
-    def appendLoadToCurrentLoadPattern(self, iCoo=2, delta=0):
-        '''Append earth thrust on a set of elements to the current
-        load pattern.
-
-
-        :param iCoo: index of the coordinate that represents depth.
-        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
-        '''
-        return super(UniformPressureOnBackfill,self).appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir, iCoo= iCoo, delta= delta)
-        
+            
     def appendVerticalLoadToCurrentLoadPattern(self, xcSet, vDir, iXCoo= 0,iZCoo= 2, alph= math.radians(30)):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to the uniform load. According to
@@ -232,7 +218,7 @@ class UniformLoadOnBackfill(UniformPressureOnBackfill): # Probably to DEPRECATE 
         :param K: pressure coefficient.
         :param qLoad: surcharge load (force per unit area).
         '''
-        super(UniformLoadOnBackfill,self).__init__(zGround=0, zBottomSoils=[-1e3],KSoils=[K], qUnif= qLoad, xcSet= None, vDir= None)
+        super(UniformLoadOnBackfill,self).__init__(zGround=0, zBottomSoils=[-1e3],KSoils=[K], qUnif= qLoad)
         
 class EarthPressureModel(UniformPressureOnBackfill):
     '''Parameters to define a load of type earth pressure
@@ -245,7 +231,7 @@ class EarthPressureModel(UniformPressureOnBackfill):
       :ivar gammaWater: weight density of water
       :ivar qUnif: uniform load over the backfill surface (defaults to 0)
     '''
-    def __init__(self, zGround, zBottomSoils, KSoils, gammaSoils, zWater, gammaWater,qUnif=0,xcSet=None,vDir=None):
+    def __init__(self, zGround, zBottomSoils, KSoils, gammaSoils, zWater, gammaWater,qUnif=0):
         ''' Constructor.
 
         :param zGround: global Z coordinate of ground level
@@ -259,12 +245,8 @@ class EarthPressureModel(UniformPressureOnBackfill):
               (if zGroundwater<minimum z of model => there is no groundwater)
         :param gammaWater: weight density of water
         :param qUnif: uniform load over the backfill surface (defaults to 0)
-        :ivar xcSet: set that contains the elements (shells and/or beams)
-        :ivar vDir: unit xc vector defining pressures direction
-        Note: xcSet and vDir have a default value None for compatibility with
-          old definitions (through loads module)
         '''
-        super(EarthPressureModel,self).__init__(zGround= zGround, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif, xcSet= xcSet, vDir= vDir)
+        super(EarthPressureModel,self).__init__(zGround= zGround, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif)
         self.gammaSoils= gammaSoils
         self.zWater= zWater # global Z coordinate of groundwater level 
         # Insert zWater level at the proper position.
@@ -369,16 +351,6 @@ class UniformLoadOnStem(PressureModelBase):
         '''
         return self.qLoad
 
-    def appendLoadToCurrentLoadPattern(self,iCoo=2,delta=0):
-        '''Append earth thrust on a set of elements to the current
-        load pattern.
-
-
-        :param iCoo: index of the coordinate that represents depth.
-        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
-        '''
-        return super(UniformLoadOnStem, self).appendLoadToCurrentLoadPattern(xcSEt= self.xcSet, vDir= self.vDir, iCoo= iCoo, delta= delta)
-
 class StripLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a strip surcharge 
     load on the backfill. (J.Calavera, pg.40)
@@ -419,7 +391,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
             ret_press=self.coef*self.qLoad/math.pi*(beta-math.sin(beta)*math.cos(2*omega))
         return ret_press
 
-    def appendVerticalLoadToCurrentLoadPattern(self,xcSet,vDir,iXCoo= 0,iZCoo= 2,alph= math.radians(30)):
+    def appendVerticalLoadToCurrentLoadPattern(self, xcSet, vDir, iXCoo= 0, iZCoo= 2, alph= math.radians(30)):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to the strip load. According to
            11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
@@ -456,7 +428,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
               if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
                   e.vector2dUniformLoadGlobal(sigma_v*vDir)
 
-    def getMaxMagnitude(self,xcSet):
+    def getMaxMagnitude(self, xcSet):
         '''Return an estimation of the maximum magnitude of the vector loads 
         (it's supposed to occur in a point placed 1/3L from the top)
 
@@ -477,12 +449,8 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
     :ivar zLoad: global Z coordinate where the line load acts
     :ivar distWall: horizontal distance between the wall and the line 
                     surcharge load
-    :ivar xcSet: set that contains the elements (shells and/or beams)
-    :ivar vDir: unit xc vector defining pressures direction
-    Note: xcSet and vDir have a default value None for compatibility with
-          old definitions (through loads module)
     '''
-    def __init__(self,qLoad, zLoad,distWall,xcSet=None,vDir=None):
+    def __init__(self,qLoad, zLoad,distWall):
         ''' Constructor.
 
         :param qLoad: surcharge load (force per unit length)
@@ -494,8 +462,6 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
         self.qLoad=qLoad
         self.zLoad=zLoad
         self.distWall=abs(distWall)
-        self.xcSet=xcSet
-        self.vDir=vDir
         
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.
@@ -508,7 +474,7 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
         return ret_press
 
-    def getMaxMagnitude(self,xcSet):
+    def getMaxMagnitude(self, xcSet):
         '''Return an estimation of the maximum magnitude of the vector loads 
         (it's supposed to occur in a point placed 1/3L from the top).
 
@@ -520,14 +486,11 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
         maxEstValue=self.getPressure(zcontrol)
         return maxEstValue
     
-    def appendLoadToCurrentLoadPattern(self):
-        return super(LineVerticalLoadOnBackfill,self).appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir)
 
 class PointVerticalLoadOnBackfill(object):
     '''Lateral earth pressure on a retaining wall due to a point 
     load acting in vertical direction on the backfill. (J.Calavera)
 
-    :ivar xcSet: set of elements to which apply the loads
     :ivar Qload: value of the point load 
     :ivar loadAppPnt: load application point (xc.Vector([x,y,z])
     :ivar zBaseWall: global Z coordinate of the base of the wall
@@ -539,7 +502,6 @@ class PointVerticalLoadOnBackfill(object):
     def __init__(self, xcSet, Qload, loadAppPnt, zBaseWall, distWall, vdir):
         ''' Constructor.
 
-        :param xcSet: set of elements to which apply the loads
         :param Qload: value of the point load 
         :param loadAppPnt: load application point (xc.Vector([x,y,z])
         :param zBaseWall: global Z coordinate of the base of the wall
@@ -548,21 +510,20 @@ class PointVerticalLoadOnBackfill(object):
         :param vdir: xc unit vector prependicular to the wall pointing to its
                      back (xc.Vector([ux,uy,0])
         '''
-        self.xcSet=xcSet
         self.Qload=Qload
         self.loadAppPnt=loadAppPnt
         self.zBaseWall=zBaseWall
         self.distWall=distWall
         self.vdir=vdir
         
-    def getAngPsi(self,x,y):
+    def getAngPsi(self, x, y):
         '''Return the angle used to distribute pressures horizontally'''
         auxV=geom.Vector2d(x-self.loadAppPnt[0],y-self.loadAppPnt[1])
         auxVperp=geom.Vector2d(self.vdir[0],self.vdir[1])
         angPsi=auxV.getAngle(auxVperp)
         return angPsi 
         
-    def getPressure(self,x,y,z):
+    def getPressure(self, x, y, z):
         '''Return the earth pressure acting on the point of the wall
            placed at global coordinates (x,y,z).
         '''
@@ -580,15 +541,19 @@ class PointVerticalLoadOnBackfill(object):
             ret_press=PN0*(math.cos(psi))**2
         return ret_press
     
-    def appendLoadToCurrentLoadPattern(self):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir):
         '''Append earth thrust on a set of elements to the current
-           load pattern.'''
+           load pattern.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
         retval= geom.SlidingVector3d() # checking purposes.
-        for e in self.xcSet.elements:
+        for e in xcSet.elements:
             coo=e.getCooCentroid(False)
             presElem=self.getPressure(coo[0],coo[1],coo[2])
             if(presElem!=0.0):
-                loadVector= presElem*self.vdir
+                loadVector= presElem*vDir
                 e.vector3dUniformLoadGlobal(loadVector)
                 area= e.getArea(False)
                 totalLoad= loadVector*area
@@ -663,7 +628,7 @@ class HorizontalLoadOnBackfill(PressureModelBase):
             ret_press=self.presmax/(self.zpresmax-self.zpresmin)*(z-self.zpresmin)
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2, delta= 0.0):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0):
         '''Append to the current load pattern the earth thrust on a set of 
         elements due to the horizontal load.
 
@@ -875,7 +840,13 @@ class EarthPressureSlopedBackfill(object):
             ret_press=0.0
         return ret_press
         
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir):
+        '''Append pressure on a set of elements to the current
+           load pattern.
+
+        :param xcSet: set of elements to which apply the loads
+        :param vDir: unit xc vector defining pressures direction
+        '''
         retval= geom.SlidingVector3d()  # checking purposes.
         for e in xcSet.elements:
             coo= e.getCooCentroid(False)
@@ -897,7 +868,6 @@ class WeightDistrEmbankment(object):
        where xp coordinates are expressed in a coordinate system obtained 
        rotating theta radians the global system.
 
-    :ivar xcSet: set of elements to which apply the loads
     :ivar gammaSoil: weight density of the soil
     :ivar theta: angle counterclockwise in radians that forms the transversal
                  section of the embankment with the global X-axis
@@ -906,10 +876,9 @@ class WeightDistrEmbankment(object):
           vertices of a transversal section in the surface, expressed in 
           the rotated reference system.
     '''
-    def __init__(self, xcSet, gammaSoil, theta, coordSoilSurf):
+    def __init__(self, gammaSoil, theta, coordSoilSurf):
         ''' Constructor.
 
-        :param xcSet: set of elements to which apply the loads
         :param gammaSoil: weight density of the soil
         :param theta: angle counterclockwise in radians that forms the transversal
                      section of the embankment with the global X-axis
@@ -918,7 +887,6 @@ class WeightDistrEmbankment(object):
               the vertices of a transversal section in the surface, expressed
               in the rotated reference system.
         '''
-        self.xcSet=xcSet
         self.gammaSoil=gammaSoil
         self.theta=theta
         self.coordSoilSurf=sorted(coordSoilSurf)
@@ -939,15 +907,19 @@ class WeightDistrEmbankment(object):
             ret_press=0.0
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir= xc.Vector([0,0,-1])):
         '''Append pressure on a set of elements to the current
-           load pattern.'''
+           load pattern.
+
+        :param xcSet: set of elements to which apply the loads
+        :param vDir: unit xc vector defining pressures direction
+        '''
         retval= geom.SlidingVector3d() # checking purposes.
-        for e in self.xcSet.elements:
+        for e in xcSet.elements:
             coo=e.getCooCentroid(False)
             presElem=max(0,self.getPressure(coo[0],coo[1],coo[2]))
             if(presElem!=0.0):
-                loadVector= xc.Vector([0,0,-presElem])
+                loadVector= presElem*vDir
                 e.vector3dUniformLoadGlobal(loadVector)
                 area= e.getArea(False)
                 totalLoad= loadVector*area
