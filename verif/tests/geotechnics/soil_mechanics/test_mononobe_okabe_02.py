@@ -17,7 +17,7 @@ import geom
 import math
 from geotechnics import mononobe_okabe
 
-phi= math.radians(30) # design value of the angle of shearing resistance of soil.
+phi= math.radians(30) # design value of the angle of shear resistance of soil.
 delta_ad= 0.0 # design value of the friction angle between the soil and the structure.
 psi= math.radians(90) #inclination angle of the wall back surface.
 beta= 0 # inclination angle of the backfill top surface.
