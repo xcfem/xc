@@ -35,6 +35,8 @@ partial_safety_factors['railway_traffic']= loadCombinations.PartialSafetyFactors
 partial_safety_factors['thermal']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 # Hydrostatic pressure
 partial_safety_factors['hydrostatic_pressure']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
+# Eurocode 7 variable load. Table AN.9 [table A2.4(B)]. Live load on backfill surfaces.
+partial_safety_factors['load_on_backfill']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 
 # Partial safety factors for accidental actions.
 partial_safety_factors['accidentales']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,0,0,1),loadCombinations.SLSPartialSafetyFactors(0,0))
@@ -176,6 +178,8 @@ class CombGenerator(utils.CombGenerator):
         retval= None
         if(context=='road_bridge'): # uniformly distributed load (UDL system)
             retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_traffic_loads_gr1a_udl', partialSafetyFactorsName= 'road_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        elif(context=='load_on_backfill'):
+            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_traffic_loads_gr1a_udl', partialSafetyFactorsName= context, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
