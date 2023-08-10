@@ -929,24 +929,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         depth= self.getDepth(y)
         name= self.name+"StemSection"+str(y)
-        nodeTagBefore= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultNodeTag()
-        elementTagBefore= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultElementTag()
         rcSection= def_simple_RC_section.RCRectangularSection(name= name, width= self.b, depth= depth, concrType= self.concrete, reinfSteelType= self.stemReinforcement.steel)
-        nodeTagAfter= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultNodeTag()
-        elementTagAfter= self.modelSpace.preprocessor.getDomain.getMesh.getDefaultElementTag()
-        # Workaround to avoid crashing due to wrong values of default tags
-        # for nodes and elements. I (LP) haven't detected the origin of the
-        # error yet.
-        if(nodeTagBefore!=nodeTagAfter):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; node tag has changed (and it may not). Restoring previous value.')
-            self.modelSpace.preprocessor.getNodeHandler.defaultTag= nodeTagBefore
-        if(elementTagBefore!=elementTagAfter):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; element tag has changed (and it may not). Restoring previous value.')
-            self.modelSpace.preprocessor.getElementHandler.defaultTag= elementTagBefore
 
         elasticSection= rcSection.defElasticShearSection2d(self.modelSpace.preprocessor) #Foundation elements material.
         if(__debug__):
