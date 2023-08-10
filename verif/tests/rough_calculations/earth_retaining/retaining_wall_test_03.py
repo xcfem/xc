@@ -265,7 +265,8 @@ gammaR2Bearing= 1.4
 ## Critical state (constant volume) angle of shearing resistance of the soil.
 ## See clause 6.5.3 (10) of Eurocode 7 part 1. 
 phi_cv= math.radians(30)
-foundationSoilModel= fcs.FrictionalCohesiveSoil(phi= granularFillM1.phi, c= 0.0, rho= granularFillM1.rho, phi_cv= phi_cv, gammaMPhi= gammaMPhiM1) 
+foundationSoilModel= fcs.FrictionalCohesiveSoil(phi= granularFillM1.phi, c= 0.0, rho= granularFillM1.rho, phi_cv= phi_cv, gammaMPhi= gammaMPhiM1)
+## Perform GEO verifications.
 sr= wall.performGEOVerifications(geoULSCombinations, foundationSoilModel= foundationSoilModel, toeFillDepth= wall.footingThickness, gammaRSliding= gammaR2Sliding, gammaRBearing= gammaR2Bearing)
 
 
