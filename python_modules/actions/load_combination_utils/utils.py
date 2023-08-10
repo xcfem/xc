@@ -395,7 +395,7 @@ def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
     else:
         f.close()
 
-def jsonToXCLoadHandler(self, inputFileName, preprocessor, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
+def jsonToXC(inputFileName, preprocessor, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
     ''' Read the combinations stored in the input file (JSON format)
         and stores them in the FE problem whose pre-processor is passed as
         parameter.
