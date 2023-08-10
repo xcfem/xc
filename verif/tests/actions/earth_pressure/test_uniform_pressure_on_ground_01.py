@@ -20,7 +20,7 @@ from actions.earth_pressure import earth_pressure as ep
 qUnif= 5e3
 kSoils= [0.25, 0.5] # earth pressure coefficients.
 zBottomSoils= [-5,-1e3]
-soil= ep.UniformPressureOnBackfill(zGround=0, zBottomSoils= zBottomSoils, KSoils= kSoils, qUnif= qUnif, xcSet= None, vDir= None)
+soil= ep.UniformPressureOnBackfill(zGround=0, zBottomSoils= zBottomSoils, KSoils= kSoils, qUnif= qUnif)
 
 # Compute pressure values at some depths.
 depths= [0, -4.9, -5, -5.1, -10, -15]

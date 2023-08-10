@@ -47,7 +47,7 @@ virtualBack= geom.Segment2d(geom.Pos2d(2.95,0.818933), geom.Pos2d(2.95, -6.8))
 qUnif= 5e3
 zBottomSoils=[-1e3]
 kSoils= [0.486]
-soil= ep.UniformPressureOnBackfill(zGround=virtualBack.getFromPoint().y, zBottomSoils= zBottomSoils, KSoils= kSoils, qUnif= qUnif, xcSet= None, vDir= None)
+soil= ep.UniformPressureOnBackfill(zGround=virtualBack.getFromPoint().y, zBottomSoils= zBottomSoils, KSoils= kSoils, qUnif= qUnif)
 slopeOfBackfillSurface= math.radians(20)
 
 # Compute force on a surface.
