@@ -1010,17 +1010,17 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         stemRCSection, stemXCSection= self.getStemSections(self.stemHeight/2.0) # stem elements XC section material.
         self.stemSet= preprocessor.getSets.defSet("stemSet")
         for lineName in ['stem']:
-            l= self.wireframeModelLines[lineName]
-            l.setElemSize(elementSize)
-            seedElemHandler.defaultMaterial= stemXCSection.name
-            l.genMesh(xc.meshDir.I)
-            for e in l.elements:
-                y= -e.getPosCentroid(True).y
-                stemRCSection, stemXCSection= self.getStemSections(y) # stem elements XC section material.
-                e.setMaterial(stemXCSection.name)
-                self.stemSet.elements.append(e)
-                self.wallSet.elements.append(e)
-                e.setProp("baseSection", stemRCSection)
+            for l in self.wireframeModelLines[lineName]:
+                l.setElemSize(elementSize)
+                seedElemHandler.defaultMaterial= stemXCSection.name
+                l.genMesh(xc.meshDir.I)
+                for e in l.elements:
+                    y= -e.getPosCentroid(True).y
+                    stemRCSection, stemXCSection= self.getStemSections(y) # stem elements XC section material.
+                    e.setMaterial(stemXCSection.name)
+                    self.stemSet.elements.append(e)
+                    self.wallSet.elements.append(e)
+                    e.setProp("baseSection", stemRCSection)
         # Springs on nodes.
         self.foundationSet.computeTributaryLengths(False)
         self.fixedNodes= []
