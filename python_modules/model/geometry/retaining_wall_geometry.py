@@ -120,12 +120,42 @@ class CantileverRetainingWallGeometry(object):
         :param points: point handler of the FE preprocessor.
         :param lines: line handler of the FE preprocessor.
         '''
-        pos= self.getWFStemTopPosition()
-        self.wireframeModelPoints['stemTop']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
+        stemTopPos= self.getWFStemTopPosition()
+        self.wireframeModelPoints['stemTop']= points.newPoint(geom.Pos3d(stemTopPos.x, stemTopPos.y,0.0))
+        stemWidthIncrement= 0.0
+        currentDepth= 0.0
+        remainingHeight= self.stemHeight
+        stepPoints= list()
+        if(self.stemBackSteps):
+            for step in self.stemBackSteps:
+                depth= step[0]
+                width= step[1]
+                currentDepth-= depth
+                stemWidthIncrement+= 0.5*depth*self.stemBackSlope
+                stemBackPointA= stemTopPos+geom.Vector2d(stemWidthIncrement, currentDepth)
+                stemWidthIncrement+= 0.5*width
+                stemBackPointB= stemBackPointA+geom.Vector2d(stemWidthIncrement, 0.0)
+                remainingHeight-= depth
+                stepPoints.append(stemBackPointA)
+                stepPoints.append(stemBackPointB)
+                stepPoints.reverse()
+        if(stepPoints):
+            stepKPoints= list()
+            for p in stepPoints:
+                stepKPoints.append(points.newPoint(p))
+            self.wireframeModelPoints['stemStepPoints']= stepKPoints
         pos= self.getWFStemBottomPosition()
         self.wireframeModelPoints['stemBottom']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
-
-        self.wireframeModelLines['stem']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag, self.wireframeModelPoints['stemTop'].tag)
+        if(stepPoints):
+            kPoints= [self.wireframeModelPoints['stemBottom']]+self.wireframeModelPoints['stemStepPoints']+[self.wireframeModelPoints['stemTop']]
+        else:
+            kPoints= [self.wireframeModelPoints['stemBottom'], self.wireframeModelPoints['stemTop']]
+        stemLines= list()
+        k0= kPoints[0]
+        for kp in kPoints[1:]:
+            stemLines.append(lines.newLine(k0.tag, kp.tag))
+            k0= kp
+        self.wireframeModelLines['stem']= stemLines
 
     
     def defineWireframeModel(self,nodes):
@@ -185,16 +215,16 @@ class CantileverRetainingWallGeometry(object):
         stemInsideBottom= self.stemTopPosition-geom.Vector2d(0.0,self.stemHeight)
         stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top outside.
         stemWidthIncrement= 0.0
-        currentHeight= 0.0
+        currentDepth= 0.0
         remainingHeight= self.stemHeight
         stepPoints= list()
         if(self.stemBackSteps):
             for step in self.stemBackSteps:
                 depth= step[0]
                 width= step[1]
-                currentHeight-= depth
+                currentDepth-= depth
                 stemWidthIncrement+= depth*self.stemBackSlope
-                stemBackPointA= stemOutsideTop+geom.Vector2d(stemWidthIncrement, currentHeight)
+                stemBackPointA= stemOutsideTop+geom.Vector2d(stemWidthIncrement, currentDepth)
                 stemWidthIncrement+= width
                 stemBackPointB= stemBackPointA+geom.Vector2d(stemWidthIncrement, 0.0)
                 remainingHeight-= depth
