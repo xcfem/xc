@@ -188,7 +188,7 @@ class OutputHandler(object):
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.displayMesh(xcSets=setToDisplay, field= field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
         
-    def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+    def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
         '''displays the component of the displacement or rotations in the 
         set of entities.
 
@@ -207,7 +207,8 @@ class OutputHandler(object):
               not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
-
+       :param captionText: caption text. Defaults to None, in which case the default 
+                                 caption text (internal force +  units + set name) is created
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
@@ -218,11 +219,11 @@ class OutputHandler(object):
         for n in nodSet:
             n.setProp(propertyName,n.getDisp[vCompDisp])
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-
-        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        if not captionText:
+            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
 
-    def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+    def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
         '''display the stresses on the elements.
 
         :param itemToDisp: component of the stress ('sigma_11', 'sigma_22'...)
@@ -237,20 +238,20 @@ class OutputHandler(object):
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
               of the field to be represented  (in units of calculation, 
               not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
-
+              displayed in blue and those greater than vmax in red (defaults to None)
+        :param captionText: caption text. Defaults to None, in which case the default 
+                                 caption text (internal force +  units + set name) is created
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'stress')
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-
-        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        if not captionText:
+            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
 
-    def displayStrains(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+    def displayStrains(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
         '''displays the strains on the elements.
 
         :param itemToDisp: component of the stress ('eps_11', 'eps_22'...)
@@ -267,18 +268,19 @@ class OutputHandler(object):
               not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
-
+        :param captionText: caption text. Defaults to None, in which case the default 
+                                 caption text (internal force +  units + set name) is created
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentFromName, propToDefine= 'strain')
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-
-        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        if not captionText:
+            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
-    def displayVonMisesStresses(self, vMisesCode= 'von_mises_stress', setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+    def displayVonMisesStresses(self, vMisesCode= 'von_mises_stress', setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
         '''display the stresses on the elements.
 
         :param vMisesCode: string that will be passed to the element
@@ -298,15 +300,16 @@ class OutputHandler(object):
               not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
-
+        :param captionText: caption text. Defaults to None, in which case the default 
+                                 caption text (internal force +  units + set name) is created
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= vMisesCode)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
-
-        captionText= self.getCaptionText(vMisesCode, unitDescription, setToDisplay)
+        if not captionText:
+            captionText= self.getCaptionText(vMisesCode, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
     def displayState(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
@@ -337,7 +340,7 @@ class OutputHandler(object):
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
-    def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
+    def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7,captionText=None):
         ''' Display reactions.
 
         :param setToDisplay: set of entities to be represented.
@@ -350,7 +353,9 @@ class OutputHandler(object):
                 initial/undeformed shape)
         :param inclInertia: include inertia effects (defaults to false).
         :param reactionCheckTolerance: relative tolerance when checking reaction values.
-        '''
+        :param captionText: caption text. Defaults to None, in which case the default 
+                                 caption text (internal force +  units + set name) is created
+         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         self.modelSpace.preprocessor.getNodeHandler.calculateNodalReactions(inclInertia, reactionCheckTolerance)
@@ -379,8 +384,8 @@ class OutputHandler(object):
         scaleFactor= self.outputStyle.reactionVectorsScaleFactor
         if(maxAbs>0):
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
-
-        captionText= self.getCaptionText('Reactions', unitDescription, setToDisplay)
+        if not captionText:
+            captionText= self.getCaptionText('Reactions', unitDescription, setToDisplay)
         vFieldF= vf.VectorField(name='Freact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
         vFieldM= vf.VectorField(name='Mreact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
         vFieldF.populateFromPairList(forcePairs)
@@ -452,7 +457,7 @@ class OutputHandler(object):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption=caption,fileName=fileName)
 
-    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1, titleScbar=None, defaultDirection= 'J'):
+    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1, titleScbar=None, defaultDirection= 'J',captionText=None):
         '''displays the component of internal forces in the set of entities as a 
          diagram over lines (i.e. appropriated for beam elements).
 
@@ -471,6 +476,8 @@ class OutputHandler(object):
         :param titleScbar: title for the scalar bar (defaults to None)
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
+        :param captionText: caption text. Defaults to None, in which case the default 
+                                 caption text (internal force +  units + set name) is created
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -483,7 +490,8 @@ class OutputHandler(object):
         maxAbs= diagAux.getMaxAbsComp()
         if maxAbs > 0:
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
-        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        if not captionText:
+            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
@@ -494,7 +502,7 @@ class OutputHandler(object):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption= captionText,fileName= fileName)
         
-    def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None):
+    def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
         '''displays the component of internal forces in the 
         set of entities as a scalar field (i.e. appropriated for 2D elements; 
         shells...).
@@ -515,7 +523,9 @@ class OutputHandler(object):
               not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
-        '''
+        :param captionText: caption text. Defaults to None, in which case the default 
+                                 caption text (internal force +  units + set name) is created
+           '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         vCompDisp= self.modelSpace.getIntForceComponentFromName(itemToDisp)
@@ -534,7 +544,7 @@ class OutputHandler(object):
             field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
             displaySettings= vtk_FE_graphic.DisplaySettingsFE()
             displaySettings.cameraParameters= self.getCameraParameters()
-            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+            if not captionText: captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
             field.display(displaySettings=displaySettings,caption= captionText,fileName=fileName, defFScale=defFScale)
             
     def displayLoadVectors(self, setToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
@@ -942,7 +952,7 @@ class OutputHandler(object):
         self.displayField(limitStateLabel, section= 1, argument= argument, component= component, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         self.displayField(limitStateLabel, section=2, argument= argument, component= component, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
-    def displayField(self, limitStateLabel, section,argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
+    def displayField(self, limitStateLabel, section,argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None,):
         '''Display a field defined over bi-dimensional elements in its two 
            directions.
 
