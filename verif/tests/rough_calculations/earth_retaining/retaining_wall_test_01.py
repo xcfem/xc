@@ -49,6 +49,7 @@ b= 1.0   #length of wall to analyze
 stemTopWidth= 0.40 # width of the wall at its top.
 stemHeight= zTopWall-zTopFooting # height of the stem.
 stemBottomWidth= stemTopWidth+stemSlope*stemHeight # width of the wall at its bottom.
+
 ## Foundation.
 bToe= 1.6 # width of the toe.
 bHeel= 6.0-stemBottomWidth # width of the heel.
@@ -81,7 +82,7 @@ reinfSteel= EHE_materials.B500S
 reinf_types= EHE_limit_state_checking.define_rebar_families(steel= reinfSteel, cover= cover)
 
 sectionName= "mur10m"
-wall= ng_retaining_wall.RetainingWall(name= sectionName, concreteCover= cover, stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= 1/10.0, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= reinfSteel)
+wall= ng_retaining_wall.RetainingWall(name= sectionName, concreteCover= cover, stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= stemSlope, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= reinfSteel)
 
 #wall.exigeanceFisuration= 'A'
 wall.stemReinforcement.setReinforcement(1, reinf_types['A25_10'].getCopy())  # vert. trasdós (esperas)
@@ -102,6 +103,13 @@ wall.stemReinforcement.setReinforcement(6, reinf_types['A12_20'].getCopy())  #co
 # Create FE model.
 wallFEModel= wall.createLinearElasticFEModel(prbName= 'Retaining wall '+sectionName, kS= kS)
 preprocessor= wallFEModel.getPreprocessor
+
+# Check wireframe stem positions.
+stemWFTopPosition= wall.getWFStemTopPosition()
+stemWFBottomPosition= wall.getWFStemBottomPosition()
+stemWFHeight= wall.getWFStemHeigth()
+incXStemPositions= (stemWFBottomPosition.x-stemWFTopPosition.x)
+ratioStemPositions= abs(incXStemPositions-stemSlope*stemWFHeight/2.0)
 
 #Sets.
 totalSet= preprocessor.getSets.getSet("total")
@@ -188,10 +196,11 @@ sr= wall.performStabilityAnalysis(stabilityULSCombinations,foundationSoilModel, 
 uls_results= wall.performULSAnalysis(strengthULSCombinations)
 wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
-
-err= math.sqrt((sr.Foverturning-7.059644824698756)**2+(sr.Fsliding-1.5386528170673235)**2+(sr.Fbearing-1.137597931224354)**2+(sr.FadmPressure-0.9470088940090022)**2)
+err= ratioStemPositions**2+math.sqrt((sr.Foverturning-7.126392782772212)**2+(sr.Fsliding-1.5388825671842905)**2+(sr.Fbearing-1.1391242090325084)**2+(sr.FadmPressure-0.9478396196024435)**2)
+err= math.sqrt(err)
 
 '''
+print('ratioStemPositions= ', ratioStemPositions)
 print("Overturning: ",sr.Foverturning)
 print("Sliding: ",sr.Fsliding)
 print("Bearing: ",sr.Fbearing)
@@ -216,26 +225,26 @@ else:
 
 os.system("rm -rf "+pth) # Your garbage you clean it
 
-#########################################################
-# Graphic stuff.
+# #########################################################
+# # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(wall.modelSpace)
 
-## Uncomment to display blocks
-#oh.displayBlocks()
-## Uncomment to display the mesh
-#oh.displayFEMesh()
+# ## Uncomment to display blocks
+# oh.displayBlocks()
+# ## Uncomment to display the mesh
+# oh.displayFEMesh()
 
-## Uncomment to display the loads
-#oh.displayLoads()
+# ## Uncomment to display the loads
+# oh.displayLoads()
 
-## Uncomment to display the vertical displacement
-#oh.displayDispRot(itemToDisp='uX')
-#oh.displayNodeValueDiagram(itemToDisp='uX')
+# ## Uncomment to display the vertical displacement
+# oh.displayDispRot(itemToDisp='uX')
+# oh.displayNodeValueDiagram(itemToDisp='uX')
 
-## Uncomment to display the reactions
-#oh.displayReactions()
+# ## Uncomment to display the reactions
+# oh.displayReactions()
 
-## Uncomment to display the internal force
-#oh.displayIntForcDiag('Mz')
+# ## Uncomment to display the internal force
+# oh.displayIntForcDiag('Mz')
 
