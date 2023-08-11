@@ -79,7 +79,7 @@ slopeOfBackfillSurface= math.radians(20)
 ## Design approach 2 (A1+M1+R2).
 granularFillM1= ep.RankineSoil(phi= math.radians(32.5), rho= 19e3/g, gammaMPhi= gammaMPhiM1, beta= slopeOfBackfillSurface) 
 
-# Define wall.
+# Wall materials.
 concrete= EC2_materials.C25
 steel= EC2_materials.S500B
 
