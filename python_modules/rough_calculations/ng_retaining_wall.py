@@ -13,6 +13,7 @@ __email__= "l.pereztato@gmail.com"
 import os
 import sys
 import math
+from scipy.constants import g
 from postprocess.reports import common_formats as fmt
 from postprocess.reports import draw_wall_reinforcement_scheme as draw_schema
 from postprocess import get_reactions
@@ -894,8 +895,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         # Structural strength results.
         self.writeStrengthResults(outputFile)
 
-    def drawSchema(self,pth):
-        '''Retaining wall scheme drawing in LaTeX format.'''
+    def drawSchema(self, pth):
+        '''Retaining wall scheme drawing in LaTeX format.
+ 
+        :param pth: path for the output file.
+        '''
         outputFile= open(pth+'schema_'+self.name+".tex","w")
         outputFile.write("\\begin{figure}\n")
         outputFile.write("\\begin{center}\n")
@@ -1138,7 +1142,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         return retval
         
 
-    def createSelfWeightLoads(self, rho= 2500, grav= 9.81):
+    def createSelfWeightLoads(self, rho= 2500, grav= g):
         '''Create the loads of the concrete weight.
 
         :param rho: density of the concrete material.
@@ -1153,7 +1157,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             retval+= geom.SlidingVector2d(geom.Pos2d(pos.x, pos.y), length*geom.Vector2d(selfWeightLoad[0], selfWeightLoad[1]))
         return retval
         
-    def createDeadLoad(self, heelFillDepth, toeFillDepth, rho= 2000, grav= 9.81):
+    def createDeadLoad(self, heelFillDepth, toeFillDepth, rho= 2000, grav= g):
         '''Create the loads of earth self weigth.
 
         :param heelFillDepth: depth of the fill that rests on the wall heel.
@@ -1321,7 +1325,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         n= self.wireframeModelPoints['stemTop'].getNode()
         n.newLoad(loadVector)
         
-    def getMononobeOkabeDryOverpressure(self,backfillModel,kv,kh,delta_ad= 0,beta= 0, Kas= None, g= 9.81):
+    def getMononobeOkabeDryOverpressure(self,backfillModel,kv,kh,delta_ad= 0,beta= 0, Kas= None, g= g):
         ''' Return overpressure due to seismic action according to Mononobe-Okabe
 
           :param backfillModel: back fill terrain model
