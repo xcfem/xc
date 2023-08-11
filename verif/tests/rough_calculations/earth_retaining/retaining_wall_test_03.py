@@ -254,6 +254,12 @@ combContainer.ULS.perm.add('ULS01', composeCombinationString(gammaG= gammaGA1, g
 combContainer.ULS.perm.add('ULS02', composeCombinationString(gammaG= gammaGA1, gammaQ= gammaQA1))
 combContainer.dumpCombinations(preprocessor)
 
+
+#    ___ ___ ___                _  __ _         _   _             
+#   / __| __/ _ \  __ _____ _ _(_)/ _(_)__ __ _| |_(_)___ _ _  ___
+#  | (_ | _| (_) | \ V / -_) '_| |  _| / _/ _` |  _| / _ \ ' \(_-<
+#  \___|___\___/   \_/\___|_| |_|_| |_\__\__,_|\__|_\___/_||_/__/
+#                                                                
 geoULSCombinations= ['ULS01','ULS02']
 
 # GEO verifications
