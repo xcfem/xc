@@ -795,6 +795,7 @@ echo "$BLEU" "Materials tests." "$NORMAL"
 python tests/materials/test_get_material_names.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
 python tests/materials/xc_materials/test_change_element_material.py
+python tests/materials/xc_materials/test_change_element_material_properties.py
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_elasticpp_material_01.py
 python tests/materials/xc_materials/uniaxial/test_steel01.py
