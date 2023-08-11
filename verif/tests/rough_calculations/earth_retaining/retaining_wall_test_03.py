@@ -106,9 +106,6 @@ wallWeightOK= (abs(ratioWallWeight)<1e-9 and abs(ratioBFWeight)<1e-4)
 wallFEModel= wall.createLinearElasticFEModel(prbName= 'Retaining wall '+wall.name, kS= 15e6) # assumed value for subgrade reaction modulus.
 preprocessor= wallFEModel.getPreprocessor
 
-toeEndPos= wall.getToeEndNodePosition()
-
-
 #    _      _   _             
 #   /_\  __| |_(_)___ _ _  ___
 #  / _ \/ _|  _| / _ \ ' \(_-<
@@ -169,6 +166,7 @@ ratioEaGk= (EaGk.getResultant()-EaGkRef.getResultant()).getModulus()/EaGkRef.get
 #### Compare with the result in the book.
 EaGkBook= 201e3
 ratioEaGkBook= abs(EaGk.getModulus()-EaGkBook)/EaGkBook 
+toeEndPos= wall.getToeEndNodePosition()
 MGk= EaGk.getMoment(toeEndPos)
 MGkRef= EaGkRef.getMoment(toeEndPos)
 ratioMGk= abs(MGk-MGkRef)/MGkRef
