@@ -100,9 +100,14 @@ class CantileverRetainingWallGeometry(object):
         return self.stemTopPosition-geom.Vector2d(self.stemTopWidth/2.0,0.0)
     
     def getWFStemBottomPosition(self):
-        ''' Returns the position of the stem bottom in the wireframe model.'''
+        ''' Returns tself.stemTopWidth/2.0he position of the stem bottom in the wireframe model.'''
         h= self.getWFStemHeigth()
-        return geom.Pos2d(self.stemTopPosition.x+self.stemBackSlope*h-self.stemBottomWidth/2.0,self.stemTopPosition.y-h)
+        x= self.stemTopPosition.x-self.stemTopWidth/2.0
+        if(self.stemBackSteps):
+            for step in self.stemBackSteps:
+                x+= step[1]/2.0 # Add half the step width.
+        x+= self.stemBackSlope*h/2.0 # Add half the increment due to the slope.
+        return geom.Pos2d(x,self.stemTopPosition.y-h)
 
     def getWFToeEndPosition(self):
         ''' Returns the position of the toe end in the wireframe model.'''
