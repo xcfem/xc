@@ -58,7 +58,8 @@ class CantileverRetainingWallGeometry(object):
         self.footingThickness= footingThickness
         self.bToe= bToe
         self.bHeel= bHeel
-        self.stemTopPosition= geom.Pos2d(0.0,0.0) #Default position of stem top.
+        self.stemTopPosition= geom.Pos2d(0.0,0.0) # Default position of stem top.
+        self.stemBackSteps= None # No steps in the stem back face by default.
 
     def defaultDimensions(self,totalHeight):
         '''Computes default dimension from the total height.'''
@@ -82,6 +83,14 @@ class CantileverRetainingWallGeometry(object):
         '''Return stem section depth for height "y").'''
         return (self.stemBottomWidth-self.stemTopWidth)/self.stemHeight*y+self.stemTopWidth
       
+    def setStemBackSteps(self, steps):
+        ''' Set the step in the stem back defined as a list of (depth, width)
+            pairs.
+
+        :param steps: list of (depth, width) pairs.
+        '''
+        self.stemBackSteps= steps
+        
     def getWFStemHeigth(self):
         ''' Return the height of the stem in the wireframe model.'''
         return self.stemHeight+self.footingThickness/2.0
@@ -105,23 +114,36 @@ class CantileverRetainingWallGeometry(object):
         stemBottomPos= self.getWFStemBottomPosition()
         return geom.Pos2d(stemBottomPos.x+self.stemTopWidth/2.0+self.bHeel,stemBottomPos.y)
 
-    def defineWireframeModel(self,nodes):
-        self.modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-        preprocessor= self.modelSpace.preprocessor
-        points= preprocessor.getMultiBlockTopology.getPoints
-        self.wireframeModelPoints= dict()
+    def defineStemWireframeModel(self, points, lines):
+        ''' Create the midlines of the stem.
+
+        :param points: point handler of the FE preprocessor.
+        :param lines: line handler of the FE preprocessor.
+        '''
         pos= self.getWFStemTopPosition()
         self.wireframeModelPoints['stemTop']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
         pos= self.getWFStemBottomPosition()
         self.wireframeModelPoints['stemBottom']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
+
+        self.wireframeModelLines['stem']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag, self.wireframeModelPoints['stemTop'].tag)
+
+    
+    def defineWireframeModel(self,nodes):
+        self.modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
+        preprocessor= self.modelSpace.preprocessor
+        points= preprocessor.getMultiBlockTopology.getPoints
+        lines= preprocessor.getMultiBlockTopology.getLines
+        self.wireframeModelPoints= dict()
+        self.wireframeModelLines= dict()
+        
+        # Stem.
+        self.defineStemWireframeModel(points, lines)
+        # Foundation.
         pos= self.getWFToeEndPosition()
         self.wireframeModelPoints['toeEnd']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
         pos= self.getWFHeelEndPosition()
         self.wireframeModelPoints['heelEnd']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
 
-        lines= preprocessor.getMultiBlockTopology.getLines
-        self.wireframeModelLines= dict()
-        self.wireframeModelLines['stem']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag, self.wireframeModelPoints['stemTop'].tag)
         self.wireframeModelLines['toe']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag, self.wireframeModelPoints['toeEnd'].tag)
         self.wireframeModelLines['heel']= lines.newLine(self.wireframeModelPoints['heelEnd'].tag, self.wireframeModelPoints['stemBottom'].tag)
 
@@ -157,12 +179,42 @@ class CantileverRetainingWallGeometry(object):
         '''
         return toeFillDepth+self.footingThickness
 
+    def getStemContourPoints(self):
+        ''' Return a list with the points that form the stem contour.'''
+        retval= list()
+        stemInsideBottom= self.stemTopPosition-geom.Vector2d(0.0,self.stemHeight)
+        stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top outside.
+        stemWidthIncrement= 0.0
+        currentHeight= 0.0
+        remainingHeight= self.stemHeight
+        stepPoints= list()
+        if(self.stemBackSteps):
+            for step in self.stemBackSteps:
+                depth= step[0]
+                width= step[1]
+                currentHeight-= depth
+                stemWidthIncrement+= depth*self.stemBackSlope
+                stemBackPointA= stemOutsideTop+geom.Vector2d(stemWidthIncrement, currentHeight)
+                stemWidthIncrement+= width
+                stemBackPointB= stemBackPointA+geom.Vector2d(stemWidthIncrement, 0.0)
+                remainingHeight-= depth
+                stepPoints.append(stemBackPointA)
+                stepPoints.append(stemBackPointB)
+            stepPoints.reverse() # from bottom to top.
+            stemOutsideBottom= stemOutsideTop+geom.Vector2d(stemWidthIncrement+remainingHeight*self.stemBackSlope,-self.stemHeight)
+        else:
+            stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom outside.
+        retval.append(stemOutsideBottom) # outside stem bottom.
+        retval+= stepPoints
+        retval.append(stemOutsideTop) # outside stem top.
+        retval.append(self.stemTopPosition) # inside stem top.
+        retval.append(stemInsideBottom) # inside step bottom.
+        return retval
+
     def getContourPoints(self):
         ''' Return a list with the points that form the wall contour.'''
-        retval= list()
-        retval.append(self.stemTopPosition)
-        stemInsideBottom= self.stemTopPosition-geom.Vector2d(0.0,self.stemHeight)
-        retval.append(stemInsideBottom)
+        retval= self.getStemContourPoints()
+        stemInsideBottom= retval[-1]
         toePosTop= stemInsideBottom+geom.Vector2d(-self.bToe, 0.0) # toe
         retval.append(toePosTop)
         
@@ -173,9 +225,6 @@ class CantileverRetainingWallGeometry(object):
         heelEndPosTop= heelEndPosBottom+geom.Vector2d(0.0, self.footingThickness)
         retval.append(heelEndPosTop)        
         stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top
-        stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
-        retval.append(stemOutsideBottom)
-        retval.append(stemOutsideTop) # stem top
         return retval
 
     def getArea(self):
