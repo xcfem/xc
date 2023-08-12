@@ -88,7 +88,7 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
 # Material in the first Gauss point
-mat= elem1.getPhysicalProperties.getVectorMaterials[0]
+mat= elem1.physicalProperties.getVectorMaterials[0]
 initialStrain= mat.initialSectionDeformation[0]
 refInitialStrain= factor*alpha*AT
 ratio0= abs(initialStrain-refInitialStrain)/refInitialStrain

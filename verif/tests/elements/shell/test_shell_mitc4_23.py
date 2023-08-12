@@ -68,7 +68,7 @@ n2MedioElem= 0.0
 n12MedioElem= 0.0
 
 elem.getResistingForce()
-mats= elem.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+mats= elem.physicalProperties.getVectorMaterials # Materials at gauss points.
 # Edge iterator
 for m in mats:
   n1MedioElem= n1MedioElem+m.getStressResultantComponent("n1")

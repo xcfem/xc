@@ -364,7 +364,7 @@ class CellDict(dict):
           numNodes= len(nodes)
           if(numNodes==4):
             tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
-            thickness= e.getPhysicalProperties.getVectorMaterials[0].h
+            thickness= e.physicalProperties.getVectorMaterials[0].h
             cell= CellRecord(ident= e.tag, typ= str(e.tag), nodes= tagNodes, thk= thickness)
           elif(numNodes==2):
             tagNodes= [nodes[0],nodes[1]]

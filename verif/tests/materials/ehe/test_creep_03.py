@@ -244,7 +244,7 @@ for e in setTotal.getElements:
 
 for e in setShells.getElements:
   averageSideLength= e.getPerimeter(True)/4.0
-  mat= e.getPhysicalProperties.getVectorMaterials[0]
+  mat= e.physicalProperties.getVectorMaterials[0]
   grueso= mat.h
   Ac= averageSideLength*grueso
   u= 2*averageSideLength+grueso

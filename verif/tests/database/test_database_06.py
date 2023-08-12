@@ -65,7 +65,7 @@ lp0.newNodalLoad(n8.tag, xc.Vector([0,-F,0,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-mat= elemA.getPhysicalProperties.getVectorMaterials[0]
+mat= elemA.physicalProperties.getVectorMaterials[0]
 K11A= mat.getTangentStiffness().at(1,1)
 
 # Store node and element tags

@@ -489,7 +489,7 @@ class BlockDict(dict):
                 tagPoints= [points[0],points[1],points[2],points[3]]
                 thickness= 0.0
                 if(len(s.elements)>0):
-                    thickness= s.getElement(1,1,1).getPhysicalProperties.getVectorMaterials[0].h
+                    thickness= s.getElement(1,1,1).physicalProperties.getVectorMaterials[0].h
                 block= BlockRecord(blkId= s.tag, typ= 'surface',kPoints= tagPoints,thk= thickness)
             else:
                 className= type(self).__name__

@@ -201,7 +201,7 @@ class ShellMaterialInternalForces:
     def setFromAverageInShellElement(self,element,fConv= 1.0):
         '''Extracts the average internal forces from the element.'''
         element.getResistingForce()
-        physProp= element.getPhysicalProperties
+        physProp= element.physicalProperties
         self.n1= physProp.getMeanGeneralizedStressByName("n1")*fConv
         self.n2= physProp.getMeanGeneralizedStressByName("n2")*fConv
         self.n12= physProp.getMeanGeneralizedStressByName("n12")*fConv

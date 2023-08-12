@@ -151,7 +151,7 @@ def getConcreteStress():
     stresses= list()
     for e in concreteSet.elements:
         e.getResistingForce()
-        mats= e.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+        mats= e.physicalProperties.getVectorMaterials # Materials at gauss points.
         for m in mats:
             stresses.append(m.getStressResultantComponent('n1'))
     return statistics.mean(stresses)
@@ -160,7 +160,7 @@ def getConcreteStrain():
     strains= list()
     initialStrains= list()
     for e in concreteSet.elements:
-        mats= e.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+        mats= e.physicalProperties.getVectorMaterials # Materials at gauss points.
         for m in mats:
             strains.append(m.getSectionDeformation()[0])
             initialStrains.append(m.initialSectionDeformation[0])

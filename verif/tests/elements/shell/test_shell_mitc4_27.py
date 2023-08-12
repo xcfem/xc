@@ -59,7 +59,7 @@ q13MedioElem= 0.0
 q23MedioElem= 0.0
 elements= preprocessor.getElementHandler
 elem.getResistingForce()
-mats= elem.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+mats= elem.physicalProperties.getVectorMaterials # Materials at gauss points.
 # Gauss points iterator
 for m in mats:
   q13MedioElem= q13MedioElem+m.getStressResultantComponent("q13")

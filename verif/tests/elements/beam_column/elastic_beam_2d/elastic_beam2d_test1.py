@@ -31,7 +31,7 @@ I= 2810e-8 # Inertia of the beam section.
 sry= 2.42 # Shear coefficient.
 Ay= A/sry
 nu= 0.3 # Poisson's ratio.
-G= E/(2.0*(1+nu))
+G= E/(2.0*(1+nu)) # Shear modulus.
 p= 1e5 # Transverse load.
 
 feProblem= xc.FEProblem()

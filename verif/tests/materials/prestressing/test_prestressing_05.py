@@ -96,12 +96,12 @@ def getConcreteStress():
     stresses= list()
     for e in s1.elements:
         e.getResistingForce()
-        mats= e.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+        mats= e.physicalProperties.getVectorMaterials # Materials at gauss points.
         for m in mats:
             stresses.append(m.getStressResultantComponent('n1'))
     for e in s2.elements:
         e.getResistingForce()
-        mats= e.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+        mats= e.physicalProperties.getVectorMaterials # Materials at gauss points.
         for m in mats:
             stresses.append(m.getStressResultantComponent('n1'))
 

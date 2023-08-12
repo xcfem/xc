@@ -27,7 +27,8 @@ XC::ElasticSection2dPhysicalProperties &(XC::ProtoBeam2d::*getElasticSection2dPh
 XC::CrossSectionProperties2d &(XC::ProtoBeam2d::*getCrossSectionProperties2d)(void)= &XC::ProtoBeam2d::getSectionProperties;
 class_<XC::ProtoBeam2d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam2d", no_init)
   .add_property("sectionProperties", make_function(getCrossSectionProperties2d, return_internal_reference<>()), &XC::ProtoBeam2d::setSectionProperties,"Access to section properties.")
-  .add_property("getPhysicalProperties", make_function(getElasticSection2dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
+  .add_property("physicalProperties", make_function(getElasticSection2dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
+  .add_property("getPhysicalProperties", make_function(getElasticSection2dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setSectionProperties",&XC::ProtoBeam2d::setSectionProperties,"Set cross section properties.")
   .def("setMaterial", &XC::ProtoBeam2d::setMaterial,"Assigns a different material to the element.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam2d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
@@ -40,7 +41,8 @@ XC::ElasticSection3dPhysicalProperties &(XC::ProtoBeam3d::*getElasticSection3dPh
 XC::CrossSectionProperties3d &(XC::ProtoBeam3d::*getCrossSectionProperties3d)(void)= &XC::ProtoBeam3d::getSectionProperties;
 class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d", no_init)
   .add_property("sectionProperties", make_function(getCrossSectionProperties3d, return_internal_reference<>()), &XC::ProtoBeam3d::setSectionProperties,"Access to section properties.")
-  .add_property("getPhysicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
+  .add_property("physicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
+  .add_property("getPhysicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setSectionProperties",&XC::ProtoBeam3d::setSectionProperties,"Set cross section properties.")
   .def("setMaterial", &XC::ProtoBeam3d::setMaterial,"Assigns a different material to the element.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam3d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")

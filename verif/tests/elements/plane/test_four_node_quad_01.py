@@ -46,7 +46,7 @@ quad4n= elements.newElement("FourNodeQuad",xc.ID([1,2,3,4]))
 
 preprocessor.getDomain.commit()
 detJ= quad4n.detJ(0.0,0.0)
-avgStress= quad4n.getPhysicalProperties.getCommittedAvgStress
+avgStress= quad4n.physicalProperties.getCommittedAvgStress
 sgMed1= avgStress[0]
 sgMed2= avgStress[1]
 sgMed3= avgStress[2]

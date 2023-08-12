@@ -330,8 +330,8 @@ class BaseWeld(object):
         self.weldSet= prep.getSets.defSet(self.setName)
 
         # surfaces thickness
-        self.tWS1= self.setWS1.getElements[0].getPhysicalProperties.getVectorMaterials[0].h   # thickness of surface 1 is taken from its first element (constant thickness is assumed).
-        self.tWS2= self.setWS2.getElements[0].getPhysicalProperties.getVectorMaterials[0].h   # thickness of surface 2 is taken from its first element (constant thickness is assumed).
+        self.tWS1= self.setWS1.getElements[0].physicalProperties.getVectorMaterials[0].h   # thickness of surface 1 is taken from its first element (constant thickness is assumed).
+        self.tWS2= self.setWS2.getElements[0].physicalProperties.getVectorMaterials[0].h   # thickness of surface 2 is taken from its first element (constant thickness is assumed).
         self.minSz= ASTM_materials.getFilletWeldMinimumLegSheets(self.tWS1,self.tWS2)
         self.maxSz= ASTM_materials.getFilletWeldMaximumLegSheets(self.tWS1,self.tWS2)
         # select the elements of WS1 and WS2 near to the weld
@@ -518,7 +518,7 @@ class FilletWeld(BaseWeld):
         :param WS2sign: face of welding surface 2 to place the weld 
                         1 for positive face, -1 for negative face (defaults to 1)
         '''
-        self.tWS1= self.setWS1.getElements[0].getPhysicalProperties.getVectorMaterials[0].h   # thickness of surface 1is taken from only first element (constant thickness is supossed)
+        self.tWS1= self.setWS1.getElements[0].physicalProperties.getVectorMaterials[0].h   # thickness of surface 1is taken from only first element (constant thickness is supossed)
         weldElSz= self.weldSz/2
         distWeldEl_WS1= self.tWS1/2+self.weldSz/2
         super(FilletWeld,self).generateWeld(weldElSz,distWeldEl_WS1,nDiv,WS1sign,WS2sign)
@@ -627,7 +627,7 @@ class PenetrationWeld(BaseWeld):
         :param WS2sign: face of welding surface 2 to place the weld 
                         1 for positive face, -1 for negative face (defaults to 1)
         '''
-        self.tWS1= self.setWS1.getElements[0].getPhysicalProperties.getVectorMaterials[0].h # thickness of surface 1is taken from the first element only (constant thickness is supossed)
+        self.tWS1= self.setWS1.getElements[0].physicalProperties.getVectorMaterials[0].h # thickness of surface 1is taken from the first element only (constant thickness is supossed)
         weldElSz= self.weldSz
         distWeldEl_WS1= self.tWS1/4
         super(PenetrationWeld,self).generateWeld(weldElSz,distWeldEl_WS1,nDiv,WS1sign,WS2sign)
@@ -805,14 +805,14 @@ def gen_welds_xc_conn_model(welds , weldMetal, weldSzFactor= None, avlbWeldSz= N
             print(l.name)
         vWS1el= w.memberToWeld.elements[0].getKVector3d(True)
         WS1_corrfact= 1 if ((vWS1-vWS1el).getModulus()<1e-2) else -1
-        tWS1= w.memberToWeld.elements[0].getPhysicalProperties.getVectorMaterials[0].h  #thickness of member to weld
+        tWS1= w.memberToWeld.elements[0].physicalProperties.getVectorMaterials[0].h  #thickness of member to weld
         for fk in w.faceWelds.keys():
             f= w.faceWelds[fk]
             WS1= f.memberToWeld
             WS2= f.face
             if avlbWeldSz:
-                tWS1= WS1.elements[0].getPhysicalProperties.getVectorMaterials[0].h
-                tWS2= WS2.elements[0].getPhysicalProperties.getVectorMaterials[0].h
+                tWS1= WS1.elements[0].physicalProperties.getVectorMaterials[0].h
+                tWS2= WS2.elements[0].physicalProperties.getVectorMaterials[0].h
                 minSz= ASTM_materials.getFilletWeldMinimumLegSheets(tWS1,tWS2)
                 maxSz= ASTM_materials.getFilletWeldMaximumLegSheets(tWS1,tWS2)
                 weightedSz= minSz+weldSzFactor*(maxSz-minSz)
@@ -865,7 +865,7 @@ def change_weld_size(xcWelds,welds2change):
         for w in xcWelds:
             methodName= sys._getframe(0).f_code.co_name
             lmsg.info(methodName+'; weld size changed')
-            wt1= w.memberToWeld.elements[0].getPhysicalProperties.getVectorMaterials[0].h
+            wt1= w.memberToWeld.elements[0].physicalProperties.getVectorMaterials[0].h
             if (name in w.getDescription().lower()) and (abs(oldSize-w.legSize)<1e-4) and (abs(t1-wt1)<1e-4):
                 w.setLegSize(newSize)
                         

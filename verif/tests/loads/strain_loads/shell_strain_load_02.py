@@ -64,7 +64,7 @@ modelSpace.analysis= predefined_solutions.penalty_newton_raphson(feProblem)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 # Material in the first Gauss point
-mat= elem1.getPhysicalProperties.getVectorMaterials[0]
+mat= elem1.physicalProperties.getVectorMaterials[0]
 initialStrain= mat.initialSectionDeformation[0]
 refInitialStrain= factor*alpha*AT
 ratio0= abs(initialStrain-refInitialStrain)/refInitialStrain

@@ -2606,7 +2606,7 @@ class StructuralMechanics3D(StructuralMechanics):
         :param nodesToRelease: indexes of the element nodes to release.
         '''
         if(len(nodesToRelease)>0):
-            beamMaterial= beamElement.getPhysicalProperties.getVectorMaterials[0]
+            beamMaterial= beamElement.physicalProperties.getVectorMaterials[0]
             # Read stiffnesses from element material
             tangent= beamMaterial.getInitialTangentStiffness()
             if(tangent.noRows!=4):

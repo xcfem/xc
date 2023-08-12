@@ -544,7 +544,7 @@ def backupStiffness(elementSet):
         if(hasattr(e,"getMaterial")): # Trusses
             Ebackup= e.getMaterial().E
         else: # Beam elements.
-            mat= e.getPhysicalProperties.getVectorMaterials[0]
+            mat= e.physicalProperties.getVectorMaterials[0]
             Ebackup= mat.sectionProperties.E
             if(mat.sectionProperties.dimension==2): # 2D section
                 e.setProp('IzBackup', mat.sectionProperties.I)
@@ -567,7 +567,7 @@ def softenElements(elementSet):
                 mat= e.getMaterial()
                 mat.E= 0.8*Ebackup
             else: # Beam elements.
-                mat= e.getPhysicalProperties.getVectorMaterials[0]
+                mat= e.physicalProperties.getVectorMaterials[0]
                 # print('mat= ',mat.name)
                 mat.sectionProperties.E= .8*Ebackup # Axial stiffness
                 #print('properties: ', e.getPropNames())
@@ -594,7 +594,7 @@ def restoreStiffness(elementSet):
             if(hasattr(e,"getMaterial")): # Trusses
                 e.getMaterial().E= Ebackup
             else: # Beam elements.
-                mat= e.getPhysicalProperties.getVectorMaterials[0]
+                mat= e.physicalProperties.getVectorMaterials[0]
                 mat.sectionProperties.E= Ebackup
                 IzBackup= e.getProp('IzBackup')
                 if(mat.sectionProperties.dimension==2): # 2D section
