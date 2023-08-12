@@ -15,8 +15,6 @@ h= 0.8 # Beam cross-section depth expressed in inches.
 t= 1 # Beam cross-section width expressed in inches. In the article t= 0.2 was written by mistake.
 E= 30000 # Young modulus of the material expressed in ksi.
 nu= 0.3 # Poisson's ratio.
-# Load
-F= 10 # Load magnitude en kips
 
 import xc
 from model import predefined_spaces
