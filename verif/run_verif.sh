@@ -282,6 +282,11 @@ python tests/elements/crd_transf/test_element_axis_03.py
 python tests/elements/crd_transf/test_element_point_01.py
 python tests/elements/crd_transf/test_crd_transf2d_01.py
 python tests/elements/crd_transf/test_crd_transf3d_01.py
+echo "$BLEU" "  Change element material tests." "$NORMAL"
+python tests/elements/change_material_properties/test_change_element_material.py
+python tests/elements/change_material_properties/test_change_element_material_properties_01.py
+python tests/elements/change_material_properties/test_change_element_material_properties_02.py
+python tests/elements/change_material_properties/test_change_element_material_properties_03.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_2d/beam_test1.py
@@ -794,8 +799,6 @@ python tests/loads/combinations/test_davit_02.py
 echo "$BLEU" "Materials tests." "$NORMAL"
 python tests/materials/test_get_material_names.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
-python tests/materials/xc_materials/test_change_element_material.py
-python tests/materials/xc_materials/test_change_element_material_properties_01.py
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_elasticpp_material_01.py
 python tests/materials/xc_materials/uniaxial/test_steel01.py
