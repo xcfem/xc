@@ -53,9 +53,9 @@ ratio1= (newE-2*E)/E
 ratio2= (new_nu-0.9*nu)/nu
 
 '''
-print('old young modulus: ', oldE, ' ksi')
+print('old Young modulus: ', oldE, ' ksi')
 print('old poisson ratio: ', old_nu)
-print('new young modulus: ', newE, ' ksi')
+print('new Young modulus: ', newE, ' ksi')
 print('new poisson ratio: ', new_nu)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
