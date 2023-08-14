@@ -205,8 +205,10 @@ int XC::EigenAnalysis::setAlgorithm(EigenAlgorithm &theAlgo)
 int XC::EigenAnalysis::setIntegrator(EigenIntegrator &theIntegrator)
   {
     Analysis::setIntegrator(theIntegrator);
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; does nothing yet\n";    
+
+    // Written for future use.
+    // std::cerr << getClassName() << "::" << __FUNCTION__
+    // 	      << "; does nothing yet\n";    
     return 0;
   }
 
