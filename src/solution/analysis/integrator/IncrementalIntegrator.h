@@ -115,10 +115,13 @@ class IncrementalIntegrator: public Integrator
   public:
     // methods to set up the system of equations
     virtual int formTangent(int statusFlag = CURRENT_TANGENT);    
-    virtual int  formTangent(int statusFlag, 
-			     const double &iFactor,
-			     const double &cFactor);    
+    virtual int formTangent(int statusFlag,
+			    const double &iFactor,
+			    const double &cFactor);    
     virtual int formUnbalance(void);
+
+    int getTangFlag(void) const;
+    void setTangFlag(const int &);
 
     // pure virtual methods to define the FE_ELe and DOF_Group contributions
     //! @brief To inform the FE\_Element how to build its tangent matrix for
@@ -134,7 +137,7 @@ class IncrementalIntegrator: public Integrator
     virtual int formEleResidual(FE_Element *theEle) =0;
     //! @brief To inform the DOF\_Group how to build its residual vector for
     //! addition to the system of equations.
-    virtual int formNodUnbalance(DOF_Group *theDof) =0;    
+    virtual int formNodUnbalance(DOF_Group *theDof) =0;
 
     // methods to update the domain
     //! @brief Invoked to inform the integrator that the transient analysis is

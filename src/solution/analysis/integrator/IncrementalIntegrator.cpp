@@ -70,9 +70,16 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
-XC::IncrementalIntegrator::IncrementalIntegrator(SolutionStrategy *owr,int clasTag)
-  : Integrator(owr,clasTag), statusFlag(CURRENT_TANGENT) {}
+XC::IncrementalIntegrator::IncrementalIntegrator(SolutionStrategy *owr,int classTag)
+  : Integrator(owr,classTag), statusFlag(CURRENT_TANGENT) {}
 
+//! @brief Get the value of the flag to compute the tangent stiffness: CURRENT_TANGENT: 0; INITIAL_TANGENT: 1; CURRENT_SECANT: 2; INITIAL_THEN_CURRENT_TANGENT: 3; NO_TANGENT: 4; SECOND_TANGENT: 5; HALL_TANGENT: 6
+int XC::IncrementalIntegrator::getTangFlag(void) const
+  { return statusFlag; }
+
+//! @brief Set the value of the flag to compute the tangent stiffness: CURRENT_TANGENT: 0; INITIAL_TANGENT: 1; CURRENT_SECANT: 2; INITIAL_THEN_CURRENT_TANGENT: 3; NO_TANGENT: 4; SECOND_TANGENT: 5; HALL_TANGENT: 6
+void XC::IncrementalIntegrator::setTangFlag(const int &i)
+  { statusFlag= i; }
 
 //! @brief Builds tangent stiffness matrix.
 //!
@@ -96,8 +103,8 @@ XC::IncrementalIntegrator::IncrementalIntegrator(SolutionStrategy *owr,int clasT
 //! parallel programming. THIS MAY CHANGE TO REDUCE MEMORY DEMANDS.  
 int XC::IncrementalIntegrator::formTangent(int statFlag)
   {
-    int result = 0;
-    statusFlag = statFlag;
+    int result= 0;
+    statusFlag= statFlag;
     AnalysisModel *mdl= getAnalysisModelPtr();
     LinearSOE *theSOE= getLinearSOEPtr();
 
