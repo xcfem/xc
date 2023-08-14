@@ -104,14 +104,14 @@ class MapLoadPatterns: public LoadHandlerMember
     void removeFromDomain(const std::string &);
     void removeAllFromDomain(void);
 
-    TimeSeries *buscaTS(const int &);
-    const TimeSeries *buscaTS(const int &) const;
-    TimeSeries *buscaTS(const std::string &);
-    const TimeSeries *buscaTS(const std::string &) const;
-    LoadPattern *buscaLoadPattern(const std::string &);
-    const LoadPattern *buscaLoadPattern(const std::string &) const;
-    LoadPattern *buscaLoadPattern(const int &);
-    const LoadPattern *buscaLoadPattern(const int &) const;
+    TimeSeries *findTS(const int &);
+    const TimeSeries *findTS(const int &) const;
+    TimeSeries *findTS(const std::string &);
+    const TimeSeries *findTS(const std::string &) const;
+    LoadPattern *findLoadPattern(const std::string &);
+    const LoadPattern *findLoadPattern(const std::string &) const;
+    LoadPattern *findLoadPattern(const int &);
+    const LoadPattern *findLoadPattern(const int &) const;
     const std::string &getLoadPatternName(const LoadPattern *) const;
     TimeSeries *newTimeSeries(const std::string &,const std::string &);
     inline const std::string &getCurrentTimeSeries(void) const
@@ -142,7 +142,7 @@ class MapLoadPatterns: public LoadHandlerMember
 template <class TS>
 TimeSeries *XC::MapLoadPatterns::create_time_series(const std::string &cod_ts)
   {
-    TimeSeries *ts= buscaTS(cod_ts);
+    TimeSeries *ts= findTS(cod_ts);
     if(!ts) //Doesn't exist.
       {
         TS *nts= new TS();
@@ -160,7 +160,7 @@ template <class LP>
 LoadPattern *XC::MapLoadPatterns::create_load_pattern(const std::string &cod_lp)
   {
     int &tag_lp= this->getTagLP();
-    LoadPattern *lp= buscaLoadPattern(cod_lp);
+    LoadPattern *lp= findLoadPattern(cod_lp);
     if(!lp) //Doesn't exist.
       {
 	std::map<std::string,TimeSeries *>::const_iterator its= tseries.find(time_series_name);

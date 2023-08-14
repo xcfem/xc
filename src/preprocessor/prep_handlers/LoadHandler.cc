@@ -47,7 +47,7 @@ XC::LoadHandler::LoadHandler(Preprocessor *owr)
 //! @brief Adds the load pattern to the domain.
 void XC::LoadHandler::addToDomain(const std::string &lp_code)
   {
-    LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);
+    LoadPattern *lp= lpatterns.findLoadPattern(lp_code);
     if(lp)
       {
         bool result= getDomain()->addLoadPattern(lp);
@@ -63,7 +63,7 @@ void XC::LoadHandler::addToDomain(const std::string &lp_code)
 //! @brief Remove load pattern from domain.
 void XC::LoadHandler::removeFromDomain(const std::string &lp_code)
   {
-    LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);
+    LoadPattern *lp= lpatterns.findLoadPattern(lp_code);
     if(lp)
       getDomain()->removeLoadPattern(lp);
     else

@@ -205,7 +205,7 @@ bool XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
             const std::string hypothesis_name= q_blancos(str_prod[1]);
             if(handler)
               {
-                LoadPattern *lp= handler->getLoadPatterns().buscaLoadPattern(hypothesis_name);
+                LoadPattern *lp= handler->getLoadPatterns().findLoadPattern(hypothesis_name);
                 if(lp)
                   add_component(summand(factor,lp));
                 else
