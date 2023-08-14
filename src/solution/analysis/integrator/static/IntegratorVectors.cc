@@ -65,7 +65,7 @@ void XC::IntegratorVectors::newStep(const double &dLambda)
 
     // determine delta U(1) == dU
     deltaU= this->deltaUhat;
-    deltaU*= dLambda;
+    deltaU*= dLambda; // this is eq(4) in the paper {dU}_1=dLAmbda1*Uft.
     deltaUstep= deltaU;
   }
 
@@ -87,7 +87,7 @@ void XC::IntegratorVectors::distribDetermineUhat(const int &pID,LinearSOE &theLi
 //! @param theLinSOE: linear system of equations.
 void XC::IntegratorVectors::determineUhat(LinearSOE &theLinSOE)
   {
-    // determine dUhat    
+    // determine dUhat
     theLinSOE.setB(phat);
     if(theLinSOE.solve() < 0)
       std::cerr << "IntegratorVectors::" << __FUNCTION__
@@ -115,8 +115,8 @@ void XC::IntegratorVectors::update(const double &dLambda)
     currentLambda+= dLambda;
   }
 
-//! @brief Respuesta a un cambio en el domain.
-void XC::IntegratorVectors::domainChanged(const size_t &sz,IncrementalIntegrator &I,LinearSOE &theLinSOE)
+//! @brief Response to a domain change.
+void XC::IntegratorVectors::domainChanged(const size_t &sz, IncrementalIntegrator &I,LinearSOE &theLinSOE)
   {
     resize(sz);
 
