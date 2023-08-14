@@ -693,6 +693,7 @@ echo "$BLEU" "    Path time series tests." "$NORMAL"
 python tests/loads/time_series/test_path_01.py
 python tests/loads/time_series/test_path_time_01.py
 python tests/loads/time_series/test_path_time_02.py
+python tests/loads/time_series/constant_and_path_load_test.py
 echo "$BLEU" "  Loads tests." "$NORMAL"
 python tests/loads/beam2dNodalLoad.py
 python tests/loads/beam2dNodalLoad02.py
