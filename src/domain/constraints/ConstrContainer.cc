@@ -1104,7 +1104,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
             const size_t sz= loadPatternsTags.Size();
             for(size_t i=0;i<sz;i++)
               {
-                load= loadHandler.getLoadPatterns().buscaLoadPattern(loadPatternsTags[i]);
+                load= loadHandler.getLoadPatterns().findLoadPattern(loadPatternsTags[i]);
                 if(load)
                   {
                     if(addLoadPattern(load))
