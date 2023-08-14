@@ -68,7 +68,7 @@ XC::MapLoadPatterns::MapLoadPatterns(LoadHandler *owr)
 
 //! @brief Returns a pointer to the TS cuyo dbTag being passed as parameter.
 //! se usa en LoadPattern::recvData.
-XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag)
+XC::TimeSeries *XC::MapLoadPatterns::findTS(const int &dbTag)
   {
     TimeSeries *retval= nullptr;
     for(map_timeseries::iterator i= tseries.begin();i!=tseries.end();i++)
@@ -81,7 +81,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag)
   }
 
 //! @brief Returns a pointer to the TS which name is being passed as parameter.
-const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
+const XC::TimeSeries *XC::MapLoadPatterns::findTS(const int &dbTag) const
   {
     const TimeSeries *retval= nullptr;
     for(map_timeseries::const_iterator i= tseries.begin();i!=tseries.end();i++)
@@ -94,7 +94,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
   }
 
 //! @brief Returns a pointer to the TimeSeries which name being passed as parameter.
-XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
+XC::TimeSeries *XC::MapLoadPatterns::findTS(const std::string &ts_code)
   {
     TimeSeries *retval= nullptr;
     map_timeseries::const_iterator its= tseries.find(ts_code);
@@ -104,7 +104,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
   }
 
 //! @brief Returns a pointer to the TimeSeries which name being passed as parameter.
-const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) const
+const XC::TimeSeries *XC::MapLoadPatterns::findTS(const std::string &ts_code) const
   {
     const TimeSeries *retval= nullptr;
     map_timeseries::const_iterator its= tseries.find(ts_code);
@@ -114,7 +114,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) c
   }
 
 //! @brief Returns a pointer to the load pattern which name being passed as parameter.
-XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code)
+XC::LoadPattern *XC::MapLoadPatterns::findLoadPattern(const std::string &lp_code)
   {
     LoadPattern *retval= nullptr;
     const_iterator ilp= loadpatterns.find(lp_code);
@@ -124,7 +124,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_cod
   }
 
 //! @brief Returns a pointer to the load pattern which name being passed as parameter.
-const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code) const
+const XC::LoadPattern *XC::MapLoadPatterns::findLoadPattern(const std::string &lp_code) const
   {
     const LoadPattern *retval= nullptr;
     const_iterator ilp= loadpatterns.find(lp_code);
@@ -135,7 +135,7 @@ const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &
 
 //! @brief Returns a pointer to the load pattern identified by the
 //! tag being passed as parameter.
-XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag)
+XC::LoadPattern *XC::MapLoadPatterns::findLoadPattern(const int &tag)
   {
     LoadPattern *retval= nullptr;
     for(iterator ilp= begin();ilp!=end();ilp++)
@@ -149,7 +149,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag)
 
 //! @brief Returns a pointer to the load pattern with the tag
 //! being passed as parameter.
-const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag) const
+const XC::LoadPattern *XC::MapLoadPatterns::findLoadPattern(const int &tag) const
   {
     const LoadPattern *retval= nullptr;
     for(const_iterator ilp= begin();ilp!=end();ilp++)
@@ -178,7 +178,7 @@ const std::string &XC::MapLoadPatterns::getLoadPatternName(const LoadPattern *pt
 //! @brief Adds the load pattern to the domain.
 void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
   {
-    LoadPattern *lp= buscaLoadPattern(lp_code);
+    LoadPattern *lp= findLoadPattern(lp_code);
     if(lp)
       {
         bool result= getDomain()->addLoadPattern(lp);
@@ -196,7 +196,7 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
 //! @brief Remove the load pattern del domain.
 void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
   {
-    LoadPattern *lp= buscaLoadPattern(lp_code);
+    LoadPattern *lp= findLoadPattern(lp_code);
     if(lp)
       getDomain()->removeLoadPattern(lp);
     else
@@ -225,7 +225,12 @@ void XC::MapLoadPatterns::removeAllFromDomain(void)
 //! - trig_ts: Defines a trigonometric time series (TrigSeries).
 XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, const std::string &cod_ts)
   {
-    TimeSeries *ts= nullptr;
+    TimeSeries *ts= this->findTS(cod_ts);
+    if(ts)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING time series: '" << cod_ts
+                << "' already_exists. This command redefines it."
+		<< std::endl;
     if(type == "constant_ts")
       ts= create_time_series<ConstantSeries>(cod_ts);
     else if(type == "linear_ts")
@@ -271,7 +276,7 @@ const std::string &XC::MapLoadPatterns::getTimeSeriesName(const TimeSeries *ptr)
 //! name being passed as parameters.
 XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &type,const std::string &cod_lp)
   {
-    LoadPattern *retval= buscaLoadPattern(cod_lp);
+    LoadPattern *retval= findLoadPattern(cod_lp);
     if(!retval)
       {
 	if(type == "load_pattern" || type == "default" )
@@ -322,10 +327,10 @@ const std::string XC::MapLoadPatterns::getCurrentLoadPatternId(void) const
   { return lpcode; }
 
 XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void)
-  { return buscaLoadPattern(lpcode); }
+  { return findLoadPattern(lpcode); }
 
 const XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void) const
-  { return buscaLoadPattern(lpcode); }
+  { return findLoadPattern(lpcode); }
 
 //! @brief Return a vector to store the dbTags
 //! of the class members.
