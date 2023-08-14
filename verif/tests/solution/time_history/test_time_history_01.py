@@ -86,7 +86,7 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 ### define GRAVITY -------------------------------------------------------------
 loadPatterns= prep.getLoadHandler.getLoadPatterns
 gravityTS= loadPatterns.newTimeSeries("constant_ts","ts")
-loadPatterns.currentTimeSeries= "ts"
+loadPatterns.currentTimeSeries= gravityTS.name
 lp0= loadPatterns.newLoadPattern("default","0")
 # by the way we check that the loads cummulate
 lp0.newNodalLoad(n2.tag,xc.Vector([0.0,-2000,0]))
