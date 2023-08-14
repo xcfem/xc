@@ -22,6 +22,7 @@ from postprocess import extrapolate_elem_attr
 from postprocess import get_reactions
 from postprocess import control_vars
 from actions.load_combination_utils import utils
+from actions import time_series
 from solution import predefined_solutions
 from import_export import reader_base
 from import_export import neutral_mesh_description as nmd
@@ -404,6 +405,14 @@ class PredefinedSpace(object):
         ''' Return the preprocessor material handler.'''
         return self.preprocessor.getLoadHandler
 
+    def getCurrentTime(self):
+        ''' Return the value of the current pseudo-time.'''
+        return self.preprocessor.getDomain.currentTime
+
+    def getCommittedTime(self):
+        ''' Return the value of the committed pseudo-time.'''
+        return self.preprocessor.getDomain.commitedTime
+
     def newTimeSeries(self, name= 'ts', tsType= 'constant_ts'):
         ''' Creates a times series -modulation of the load
             in time-.
@@ -417,7 +426,16 @@ class PredefinedSpace(object):
         ts= lPatterns.newTimeSeries(tsType,name)
         lPatterns.currentTimeSeries= name
         return ts
-    
+
+    def plotTimeSeries(self, timeSeries, timeIncrement= None):
+        ''' Shows a diagram of the time series.
+
+        :param name: name of the time series to display.
+        :param timeIncrement: time increment to use in the diagram
+                              if None then timeIncrement= duration/100.0
+        '''
+        time_series.plot_time_series(timeSeries= ts, timeIncrement= timeIncrement)
+        
     def newLoadPattern(self, name: str, lpType= 'default'):
         ''' Creates a times series -modulation of the load
             in time-.
