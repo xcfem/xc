@@ -22,11 +22,14 @@
 //python_interface.tcc
 class_<XC::Integrator, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Integrator", no_init)
   .def("domainChanged", &XC::Integrator::domainChanged,"Make required changes when a change in the domain occurs.")
+  .add_property("currentModelTime",&XC::Integrator::getCurrentModelTime,&XC::Integrator::setCurrentModelTime,"Get/set the current time of the analysis model.")
   ;
 
 class_<XC::EigenIntegrator, bases<XC::Integrator>, boost::noncopyable >("EigenIntegrator", no_init);
 
-class_<XC::IncrementalIntegrator, bases<XC::Integrator>, boost::noncopyable >("IncrementalIntegrator", no_init);
+class_<XC::IncrementalIntegrator, bases<XC::Integrator>, boost::noncopyable >("IncrementalIntegrator", no_init)
+  .add_property("tangFlag",&XC::IncrementalIntegrator::getTangFlag,&XC::IncrementalIntegrator::setTangFlag,"Get/set the value of the flag to compute the tangent stiffness: CURRENT_TANGENT: 0; INITIAL_TANGENT: 1; CURRENT_SECANT: 2; INITIAL_THEN_CURRENT_TANGENT: 3; NO_TANGENT: 4; SECOND_TANGENT: 5; HALL_TANGENT: 6")
+  ;
 
 class_<XC::StaticIntegrator, bases<XC::IncrementalIntegrator>, boost::noncopyable >("StaticIntegrator", no_init);
 

@@ -100,14 +100,12 @@ class SolutionStrategy ;
 class Integrator: public MovableObject, public CommandEntity
   {
   protected:
-    SolutionStrategy  *getSolutionStrategy (void);
-    const SolutionStrategy  *getSolutionStrategy (void) const;
+    SolutionStrategy  *getSolutionStrategy(void);
+    const SolutionStrategy  *getSolutionStrategy(void) const;
     void applyLoadModel(double newTime);
     int updateModel(void);
     int updateModel(double newTime, double dT);
     int commitModel(void);
-    double getCurrentModelTime(void) const;
-    void setCurrentModelTime(const double &t);
     void setRayleighDampingFactors(const RayleighDampingFactors &rF);
     int sendData(Communicator &);
     int recvData(const Communicator &);
@@ -122,6 +120,9 @@ class Integrator: public MovableObject, public CommandEntity
     inline virtual ~Integrator(void) {}
     virtual int domainChanged(void);
 
+    double getCurrentModelTime(void) const;
+    void setCurrentModelTime(const double &t);
+    
     //! @brief Called upon to determine the FE\_Element \p theEles matrix
     //! contribution to the SystemOfEqn object. To return \f$0\f$ if successful,
     //! a negative number otherwise. 
