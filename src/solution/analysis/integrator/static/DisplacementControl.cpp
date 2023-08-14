@@ -60,7 +60,7 @@
 // using the arc length scheme, that is within a load step the following
 // constraint is enforced: dU^TdU + alpha^2*dLambda^2 = DisplacementControl^2
 // where dU is change in nodal displacements for step, dLambda is
-// change in applied load and XC::DisplacementControl is a control parameter.
+// change in applied load and DisplacementControl is a control parameter.
 //
 // What: "@(#) DisplacementControl.C, revA"
 
@@ -80,9 +80,9 @@
 //!
 //! @param owr: set of objects used to perform the analysis.
 XC::DisplacementControl::DisplacementControl(SolutionStrategy *owr) 
-  :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,1),
-   theNodeTag(-1), theDof(-1), theDofID(0),
-   theIncrement(1.0), minIncrement(1.0), maxIncrement(1.0) {}
+  : DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,1),
+    theNodeTag(-1), theDof(-1), theDofID(0),
+    theIncrement(1.0), minIncrement(1.0), maxIncrement(1.0) {}
 
 //! @brief Constructor.
 //!
@@ -153,7 +153,7 @@ int XC::DisplacementControl::commit(void)
 //! @brief Returns a pointer to the domain.
 XC::Domain *XC::DisplacementControl::getDomainPtr(void)
   {
-    SolutionStrategy  *sm= getSolutionStrategy();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainPtr();
   }
@@ -172,7 +172,7 @@ int XC::DisplacementControl::newStep(void)
     // get pointers to AnalysisModel and LinearSOE
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();    
-    if(!theModel || theLinSOE == 0)
+    if(!theModel || !theLinSOE)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - no AnalysisModel"
@@ -181,24 +181,21 @@ int XC::DisplacementControl::newStep(void)
       }
 
     // determine increment for this iteration
-    theIncrement*=factor();
-
+    theIncrement*= factor();
     if(theIncrement < minIncrement)
       theIncrement = minIncrement;
     else if(theIncrement > maxIncrement)
       theIncrement = maxIncrement;
 
-
-
     // get the current load factor
     vectors.setCurrentLambda(getCurrentModelTime());
 
     // determine dUhat
-    this->formTangent();
+    this->formTangent(statusFlag);
     vectors.determineUhat(*theLinSOE);
 
     const Vector &dUhat= vectors.getDeltaUhat();
-
+    
     const double dUahat= dUhat(theDofID);
     if(dUahat == 0.0)
       {
@@ -209,7 +206,7 @@ int XC::DisplacementControl::newStep(void)
       }
     
     // determine delta lambda(1) == dlambda    
-    const double dLambda = theIncrement/dUahat;
+    const double dLambda= theIncrement/dUahat;
 
     vectors.newStep(dLambda);
 
@@ -238,7 +235,7 @@ int XC::DisplacementControl::update(const Vector &dU)
       } 
     AnalysisModel *theModel= this->getAnalysisModelPtr();
     LinearSOE *theLinSOE= this->getLinearSOEPtr();    
-    if(!theModel || theLinSOE == 0)
+    if(!theModel || !theLinSOE)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - no AnalysisModel "
@@ -247,11 +244,12 @@ int XC::DisplacementControl::update(const Vector &dU)
       }
 
     vectors.setDeltaUbar(dU); // have to do this as the SOE is gonna change
-    const double dUabar= vectors.getDeltaUbar()(theDofID);
+    const double &dUabar= vectors.getDeltaUbar()(theDofID);
     
+    // determine dUhat    
     vectors.determineUhat(*theLinSOE);
 
-    const double dUahat= vectors.getDeltaUhat()(theDofID);
+    const double &dUahat= vectors.getDeltaUhat()(theDofID);
     if(dUahat == 0.0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -261,13 +259,13 @@ int XC::DisplacementControl::update(const Vector &dU)
       }
     
     // determine delta lambda(1) == dlambda    
-    const double dLambda = -dUabar/dUahat;
+    const double dLambda= -dUabar/dUahat;
     
     vectors.update(dLambda);
 
     // update the model
     theModel->incrDisp(vectors.getDeltaU());
-    //applyLoadModel(currentLambda); XXX Commented out by LCPT 3-07-2009 (If executed pseudoTime becomes wrong).
+    applyLoadModel(vectors.getCurrentLambda());
 
     if(updateModel() < 0)
       {
@@ -301,14 +299,15 @@ int XC::DisplacementControl::domainChanged(void)
 
     vectors.domainChanged(sz,*this,*theLinSOE);
 
-
     // lastly we determine the id of the nodal dof
     // EXTRA CODE TO DO SOME ERROR CHECKING REQUIRED
-    
     Domain *dom= getDomainPtr();
     if(dom)
       {
         Node *theNodePtr= dom->getNode(theNodeTag);
+	if(!theNodePtr)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; no node." << std::endl;
         DOF_Group *theGroup= theNodePtr->getDOF_GroupPtr();
         const ID &theID= theGroup->getID();
         theDofID= theID(theDof);
@@ -316,7 +315,6 @@ int XC::DisplacementControl::domainChanged(void)
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; domain has not been set." << std::endl;
-    
     return 0;
   }
 
