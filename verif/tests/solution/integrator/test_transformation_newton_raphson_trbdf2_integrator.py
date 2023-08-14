@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial test to check plain linear Newmark solver. Home made test.'''
+''' Trivial test to check plain linear TRBF2 solver. Home made test.'''
 
 from __future__ import print_function
 
