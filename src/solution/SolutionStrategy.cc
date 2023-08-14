@@ -50,6 +50,7 @@
 #include <solution/analysis/analysis/Analysis.h>
 #include <solution/analysis/analysis/EigenAnalysis.h>
 #include <solution/analysis/analysis/StaticAnalysis.h>
+#include <solution/analysis/analysis/LinearBucklingAnalysis.h>
 #include <solution/analysis/analysis/DirectIntegrationAnalysis.h>
 #include <solution/analysis/analysis/VariableTimeStepDirectIntegrationAnalysis.h>
 
@@ -491,17 +492,37 @@ void XC::SolutionStrategy::set_integrator(void)
       {
 	if(this->theIntegrator)
 	  {
+	    LinearBucklingAnalysis *linearBucklingAnalysis= dynamic_cast<LinearBucklingAnalysis *>(an);
 	    StaticAnalysis *staticAnalysis= dynamic_cast<StaticAnalysis *>(an);
 	    TransientAnalysis *transientAnalysis= dynamic_cast<TransientAnalysis *>(an);
 	    EigenAnalysis *eigenAnalysis= dynamic_cast<EigenAnalysis *>(an);
-	    if(staticAnalysis)
+	    if(linearBucklingAnalysis)
+	      {
+  	        LinearBucklingIntegrator *linearBucklingIntegrator= dynamic_cast<LinearBucklingIntegrator *>(this->theIntegrator);
+		if(linearBucklingIntegrator)
+		  {
+		    LinearBucklingEigenAnalysis &eigenPart= linearBucklingAnalysis->getEigenAnalysis();
+                    eigenPart.setIntegrator(*linearBucklingIntegrator);
+		  }
+		else
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; wrong integrator type: "
+		            << this->theIntegrator->getClassName()
+		            << " for linearBuckling analysis: "
+		            << an->getClassName()
+			    << std::endl;
+	      }
+	    else if(staticAnalysis)
 	      {
   	        StaticIntegrator *staticIntegrator= dynamic_cast<StaticIntegrator *>(this->theIntegrator);
 		if(staticIntegrator)
                   staticAnalysis->setIntegrator(*staticIntegrator);
 		else
 		  std::cerr << getClassName() << "::" << __FUNCTION__
-			    << "; wrong integrator for static analysis."
+			    << "; wrong integrator type: "
+		            << this->theIntegrator->getClassName()
+		            << " for static analysis: "
+		            << an->getClassName()
 			    << std::endl;
 	      }
 	    else if(transientAnalysis)
@@ -511,7 +532,10 @@ void XC::SolutionStrategy::set_integrator(void)
                   transientAnalysis->setIntegrator(*transientIntegrator);
 		else
 		  std::cerr << getClassName() << "::" << __FUNCTION__
-			    << "; wrong integrator for transient analysis."
+			    << "; wrong integrator type: "
+		            << this->theIntegrator->getClassName()
+		            << " for transient analysis: "
+		            << an->getClassName()
 			    << std::endl;
 	      }
 	    else if(eigenAnalysis)
@@ -521,7 +545,10 @@ void XC::SolutionStrategy::set_integrator(void)
                   eigenAnalysis->setIntegrator(*eigenIntegrator);
 		else
 		  std::cerr << getClassName() << "::" << __FUNCTION__
-			    << "; wrong integrator for eigen analysis."
+			    << "; wrong integrator type: "
+		            << this->theIntegrator->getClassName()
+			    << "; for eigen analysis: "
+		            << an->getClassName()
 			    << std::endl;
 	      }
 	  }
