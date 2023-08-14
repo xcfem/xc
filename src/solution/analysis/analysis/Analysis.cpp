@@ -326,10 +326,14 @@ int XC::Analysis::setEigenSOE(EigenSOE &theSOE)
 //! @brief Sets the integrator to use in the analysis.
 int XC::Analysis::setIntegrator(Integrator &theNewIntegrator)
   {
+    int retval= 0;
     if(solution_strategy)
-      return solution_strategy->setIntegrator(theNewIntegrator);
-    else
-      return 0;
+      {
+	const Integrator *oldIntegratorPtr= this->getIntegratorPtr();
+	if(oldIntegratorPtr!=&theNewIntegrator)
+            retval= solution_strategy->setIntegrator(theNewIntegrator);
+      }
+    return retval;
   }
 
 //! @brief Set the solution algorithm to be used in the analysis.
