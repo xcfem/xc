@@ -221,8 +221,17 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual const Parameter *getParameter(int tag) const;        
 
     // methods to query the state of the domain
+    //! @brief Return a constant reference to the internal time tracker.
     inline const PseudoTimeTracker &getTimeTracker(void) const
       { return timeTracker; }
+    //! @brief Return the committed value of the pseudo-time.
+    inline double getCommittedTime(void) const
+      { return timeTracker.getCommittedTime(); }
+    //! @brief Return the current value fo the pseudo-time.
+    inline double getCurrentTime(void) const
+      { return timeTracker.getCurrentTime(); }
+    
+    
     inline int getCurrentGeoTag(void) const
       { return currentGeoTag; }
     virtual int getCommitTag(void) const;
