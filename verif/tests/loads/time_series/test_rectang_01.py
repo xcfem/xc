@@ -61,6 +61,6 @@ if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4
 else:
     lmsg.error(fname+' ERROR.')
     
-# Plot diagram.
-from actions import time_series
-time_series.plot_time_series(timeSeries= ts)
+# # Plot diagram.
+# from actions import time_series
+# time_series.plot_time_series(timeSeries= ts)
