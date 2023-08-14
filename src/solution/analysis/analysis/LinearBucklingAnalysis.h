@@ -73,6 +73,10 @@ class LinearBucklingAnalysis: public StaticAnalysis
       { return numModes; }
     void setNumModes(const int &nm)
       { numModes= nm; }
+    inline const LinearBucklingEigenAnalysis &getEigenAnalysis(void) const
+      { return linearBucklingEigenAnalysis; }
+    inline LinearBucklingEigenAnalysis &getEigenAnalysis(void)
+      { return linearBucklingEigenAnalysis; }
 
     int setLinearBucklingAlgorithm(LinearBucklingAlgo &);
     int setLinearBucklingIntegrator(LinearBucklingIntegrator &);
