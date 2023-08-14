@@ -96,7 +96,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
-linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 2, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solnAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "band_arpackpp_soe", eigenSolverType= "band_arpackpp_solver")
+linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 2, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "band_arpackpp_soe", eigenSolverType= "band_arpackpp_solver")
 linearBucklingAnalysis.setup()
 analOk= linearBucklingAnalysis.solve()
 

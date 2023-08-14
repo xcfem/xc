@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Linear buckling analysis of a column under axial load.
     Taken from figure 6.22 of "Finite Element Procedures"
      "Klaus Jurgen Bathe". 
@@ -12,6 +11,14 @@ from __future__ import print_function
 
     See the article 'Meshing for Column Loads <https://portwooddigital.com/2020/05/10/meshing-for-column-loads/amp/>'
 '''
+from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import geom
 import xc
 
@@ -20,12 +27,6 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 # from postprocess import output_handler
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 
 ''' NO DA MUY BUENOS RESULTADOS
@@ -96,7 +97,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
-linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 2, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solnAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "band_arpackpp_soe", eigenSolverType= "band_arpackpp_solver")
+linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 2, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "band_arpackpp_soe", eigenSolverType= "band_arpackpp_solver")
 linearBucklingAnalysis.setup()
 analOk= linearBucklingAnalysis.solve()
 

@@ -80,11 +80,11 @@ solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
 ctest= solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
 ctest.tol= 1e-8
 ctest.maxNumIter= 100
-integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
-integ.dLambda1= DInc
 soe= solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
+integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+integ.dLambda1= DInc
 result= analysis.analyze(Nstep)
 
 elements= preprocessor.getElementHandler
@@ -105,10 +105,10 @@ numberer.useAlgorithm("rcm")
 solutionStrategies= solCtrl.getSolutionStrategyContainer
 solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
 solAlgo= solutionStrategy.newSolutionAlgorithm("frequency_soln_algo")
-integ= solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
 soe= solutionStrategy.newSystemOfEqn("sym_band_eigen_soe")
 solver= soe.newSolver("sym_band_eigen_solver")
 analysis= solu.newAnalysis("eigen_analysis","solutionStrategy","")
+integ= solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
 
 
 analOk= analysis.analyze(3)
