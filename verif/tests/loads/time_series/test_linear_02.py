@@ -34,7 +34,11 @@ print("err ",err)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (err<1e-15):
+if(err<1e-15):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Plot diagram.
+# from actions import time_series
+# time_series.plot_time_series(timeSeries= ts)

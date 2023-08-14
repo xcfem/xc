@@ -34,3 +34,7 @@ if (abs(err)<1e-15):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Plot diagram.
+# from actions import time_series
+# time_series.plot_time_series(timeSeries= ts)

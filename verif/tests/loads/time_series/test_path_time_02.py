@@ -77,3 +77,8 @@ if (abs(ratio11)<1e-15) and (abs(ratio12)<1e-15) and (abs(ratio13)<1e-15) and (a
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Plot diagram.
+# from actions import time_series
+# time_series.plot_time_series(timeSeries= ts1)
+# time_series.plot_time_series(timeSeries= ts2)
