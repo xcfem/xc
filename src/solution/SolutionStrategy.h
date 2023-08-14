@@ -111,6 +111,7 @@ class SolutionStrategy: public CommandEntity
     void free_integrator(void);
     bool alloc_integrator(const std::string &,const Vector &);
     void copy_integrator(Integrator *);
+    void set_integrator(void);
 
     void free_system_of_equations(void);
     bool alloc_system_of_equations(const std::string &,AnalysisModel *);

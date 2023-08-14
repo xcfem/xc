@@ -458,6 +458,7 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     if(theIntegrator)
       {
         theIntegrator->set_owner(this);
+	set_integrator();
       }
     
     return (theIntegrator!=nullptr);
@@ -475,10 +476,59 @@ void XC::SolutionStrategy::copy_integrator(Integrator *ptr)
         free_integrator();
         theIntegrator= ptr->getCopy();
         theIntegrator->set_owner(this);
+	set_integrator();
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
  	        << "; null pointer to integrator." << std::endl;
+  }
+
+//! @brief Informs the analysis object of the new integrator.
+void XC::SolutionStrategy::set_integrator(void)
+  {
+    Analysis *an= getAnalysisPtr();
+    if(an)
+      {
+	if(this->theIntegrator)
+	  {
+	    StaticAnalysis *staticAnalysis= dynamic_cast<StaticAnalysis *>(an);
+	    TransientAnalysis *transientAnalysis= dynamic_cast<TransientAnalysis *>(an);
+	    EigenAnalysis *eigenAnalysis= dynamic_cast<EigenAnalysis *>(an);
+	    if(staticAnalysis)
+	      {
+  	        StaticIntegrator *staticIntegrator= dynamic_cast<StaticIntegrator *>(this->theIntegrator);
+		if(staticIntegrator)
+                  staticAnalysis->setIntegrator(*staticIntegrator);
+		else
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; wrong integrator for static analysis."
+			    << std::endl;
+	      }
+	    else if(transientAnalysis)
+	      {
+		TransientIntegrator *transientIntegrator= dynamic_cast<TransientIntegrator *>(this->theIntegrator);
+		if(transientIntegrator)
+                  transientAnalysis->setIntegrator(*transientIntegrator);
+		else
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; wrong integrator for transient analysis."
+			    << std::endl;
+	      }
+	    else if(eigenAnalysis)
+	      {
+		EigenIntegrator *eigenIntegrator= dynamic_cast<EigenIntegrator *>(this->theIntegrator);
+		if(eigenIntegrator)
+                  eigenAnalysis->setIntegrator(*eigenIntegrator);
+		else
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; wrong integrator for eigen analysis."
+			    << std::endl;
+	      }
+	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+ 	        << "; no integrator to set." << std::endl;
+      }
   }
 
 //! @brief Defines a new integrator.
@@ -1159,12 +1209,13 @@ bool XC::SolutionStrategy::CheckPointers(void)
 		  << "; error, system of equations not defined." << std::endl;
         return false;
       }
-    if(!theIntegrator)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error, integrator not defined." << std::endl;
-        return false;
-      }
+    // THE INTEGRATOR MUST BE ABLE TO BE DEFINED LATER. LP 14/08/2023
+    // if(!theIntegrator)
+    //   {
+    //     std::cerr << getClassName() << "::" << __FUNCTION__
+    // 		  << "; error, integrator not defined." << std::endl;
+    //     return false;
+    //   }
     return true;
   }
 
