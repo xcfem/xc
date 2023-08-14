@@ -29,6 +29,7 @@ class SolutionProcedure(object):
                      iteration
                    - determine the corrective step based on the displacement 
                      increment
+    :ivar solutionAlgorithmType: type of the solution algorithm.
     :ivar solAlgo: solution algorithm, which determines the sequence of steps
           taken to solve the non-linear equation:
 
@@ -61,7 +62,7 @@ class SolutionProcedure(object):
     '''
     _counter = 0 # Counts the objects of this type.
     
-    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str = None, shift:float= None, integratorType:str= 'load_control_integrator'):
+    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str = None, shift:float= None, integratorType:str= 'load_control_integrator', solutionAlgorithmType= 'linear_soln_algo', analysisType= 'static_analysis'):
         ''' Constructor.
 
         :param name: identifier for the solution procedure.
@@ -76,6 +77,8 @@ class SolutionProcedure(object):
         :param solverType: type of the solver.
         :param shift: shift-and-invert mode (used with ARPACK).
         :param integratorType: integrator type (see integratorSetup).
+        :param solutionAlgorithmType: type of the solution algorithm.
+        :param analysisType: type of the analysis.
         '''
         SolutionProcedure._counter += 1
         self.id = SolutionProcedure._counter
@@ -100,11 +103,13 @@ class SolutionProcedure(object):
         self.numberer= None
         self.cHandler= None
         self.solutionStrategy= None
+        self.solutionAlgorithmType= solutionAlgorithmType
         self.solAlgo= None
         self.integrator= None
         self.integratorParameters= xc.Vector([])
         self.soe= None
         self.solver= None
+        self.analysisType= analysisType
         self.analysis= None
         
     def clear(self):
@@ -131,8 +136,12 @@ class SolutionProcedure(object):
         modelWrapperName= self.modelWrapperSetup()
         if(__debug__):
             if(not modelWrapperName):
-                AssertionError('Can\'t set up the model wrapper.')            
+                AssertionError('Can\'t set up the model wrapper.')
         self.constraintHandlerSetup()
+        self.solutionAlgorithmSetup()
+        self.sysOfEqnSetup()
+        self.analysisSetup()
+        self.integratorSetup()
 
     def setArcLengthIntegratorParameters(self, arcLength, alpha= 1.0):
         ''' Set the values of the Arc-Length integrator.
@@ -197,17 +206,13 @@ class SolutionProcedure(object):
         else:
             return 'se_'+self.name
     
-    def solutionAlgorithmSetup(self, solAlgType= 'linear_soln_algo'):
-        ''' Define the solution strategy.
-        
-        :param solAlgType: type of the solution algorithm (linear, Newton, modified Newton, ...)
-        '''
+    def solutionAlgorithmSetup(self):
+        ''' Define the solution strategy.'''
         solutionStrategies= self.solCtrl.getSolutionStrategyContainer
         modelWrapperName= self.getModelWrapperName()
         solutionStrategyName= self.getSolutionStrategyName()
         self.solutionStrategy= solutionStrategies.newSolutionStrategy(solutionStrategyName, modelWrapperName)
-        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm(solAlgType)
-        self.integratorSetup()
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm(self.solutionAlgorithmType)
         if(self.convTestType):
             self.ctest= self.solutionStrategy.newConvergenceTest(self.convTestType)
             if(self.ctest):
@@ -261,12 +266,10 @@ class SolutionProcedure(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; unknown constraint handler type: '+self.cHandlerType)
 
-    def analysisSetup(self, analysisType= 'static_analysis'):
-        ''' Define the analysis object.
-
-        :param analysisType: type of the analysis to perform.
-        '''
-        self.analysis= self.solu.newAnalysis(analysisType, self.getSolutionStrategyName(),"")
+    def analysisSetup(self):
+        ''' Create the analysis object. '''
+        
+        self.analysis= self.solu.newAnalysis(self.analysisType, self.getSolutionStrategyName(),"")
 
     def solve(self, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
         ''' Compute the solution (run the analysis).
@@ -334,19 +337,10 @@ class PenaltyStaticLinearBase(SolutionProcedure):
         :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyStaticLinearBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= 1, convergenceTestTol= 1e-9, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType, integratorType= integratorType)
+        super(PenaltyStaticLinearBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= 1, convergenceTestTol= 1e-9, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= 'linear_soln_algo')
         self.feProblem= prb
         self.setPenaltyFactors()
 
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyStaticLinearBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-        
 class SimpleStaticLinear(PenaltyStaticLinearBase):
     ''' Return a linear static solution algorithm
         with a penalty constraint handler.
@@ -438,17 +432,8 @@ class SimpleLagrangeStaticLinear(SolutionProcedure):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(SimpleLagrangeStaticLinear,self).__init__(name, 'lagrange', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
+        super(SimpleLagrangeStaticLinear,self).__init__(name, 'lagrange', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'linear_soln_algo')
         self.feProblem= prb
-
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(SimpleLagrangeStaticLinear,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
 
 class SimpleTransformationStaticLinear(SolutionProcedure):
     ''' Linear static solution algorithm with a 
@@ -465,18 +450,9 @@ class SimpleTransformationStaticLinear(SolutionProcedure):
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(SimpleTransformationStaticLinear,self).__init__(name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
+        super(SimpleTransformationStaticLinear,self).__init__(name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'linear_soln_algo')
         self.feProblem= prb
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(SimpleTransformationStaticLinear,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
 ## Non-linear static analysis.
 class PlainNewtonRaphson(SolutionProcedure):
     ''' Newton-Raphson solution algorithm with a 
@@ -495,18 +471,9 @@ class PlainNewtonRaphson(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PlainNewtonRaphson,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
+        super(PlainNewtonRaphson,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PlainNewtonRaphson,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
 ### Convenience function
 def plain_newton_raphson(prb, maxNumIter= 10, convergenceTestTol= 1e-9):
     solProc= PlainNewtonRaphson(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol)
@@ -531,17 +498,8 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PlainNewtonRaphsonBandGen,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType)
+        super(PlainNewtonRaphsonBandGen,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PlainNewtonRaphsonBandGen,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
         
 ### Convenience function
 def plain_newton_raphson_band_gen(prb, maxNumIter= 10):
@@ -567,19 +525,9 @@ class TransformationNewtonRaphsonBandGen(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(TransformationNewtonRaphsonBandGen,self).__init__(name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType)
+        super(TransformationNewtonRaphsonBandGen,self).__init__(name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationNewtonRaphsonBandGen,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
-
 class PenaltyNewtonRaphsonBase(SolutionProcedure):
     ''' Base class for penalty Newton-Raphson solution aggregation.'''
     def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, integratorType:str= 'load_control_integrator'):
@@ -597,16 +545,9 @@ class PenaltyNewtonRaphsonBase(SolutionProcedure):
         :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyNewtonRaphsonBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType)
+        super(PenaltyNewtonRaphsonBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
         self.setPenaltyFactors()
-
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonRaphsonBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
 
 class PenaltyNewtonRaphson(PenaltyNewtonRaphsonBase):
     ''' Return a static solution procedure with a Newton Raphson algorithm
@@ -625,15 +566,6 @@ class PenaltyNewtonRaphson(PenaltyNewtonRaphsonBase):
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(PenaltyNewtonRaphson,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType)
-
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonRaphson,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-        
 
 ### Convenience function
 def penalty_newton_raphson(prb, maxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
@@ -666,14 +598,6 @@ class PenaltyNewtonRaphsonUMF(PenaltyNewtonRaphsonBase):
         '''
         super(PenaltyNewtonRaphsonUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType= integratorType)
 
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonRaphsonUMF,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-        
 class PenaltyNewtonRaphsonMUMPS(PenaltyNewtonRaphsonBase):
     ''' Static solution procedure with a Newton algorithm,
         a penalty constraint handler and a MUMPS
@@ -693,14 +617,6 @@ class PenaltyNewtonRaphsonMUMPS(PenaltyNewtonRaphsonBase):
         '''
         super(PenaltyNewtonRaphsonMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
 
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonRaphsonMUMPS,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
 class PlainStaticModifiedNewton(SolutionProcedure):
     ''' Static solution procedure with a modified Newton
         solution algorithm with a plain constraint handler.
@@ -718,18 +634,15 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PlainStaticModifiedNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
+        super(PlainStaticModifiedNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'modified_newton_soln_algo')
         self.feProblem= prb
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
             problem object.
         '''
-        super(PlainStaticModifiedNewton,self).setup()
         self.maxNumIter= 150 #Make this configurable
-        self.solutionAlgorithmSetup(solAlgType= 'modified_newton_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
+        super(PlainStaticModifiedNewton,self).setup()
     
 ### Convenience function
 def plain_static_modified_newton(prb, maxNumIter= 10, convergenceTestTol= .01, printFlag= 0):
@@ -760,16 +673,9 @@ class PenaltyModifiedNewtonBase(SolutionProcedure):
         :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyModifiedNewtonBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType)
+        super(PenaltyModifiedNewtonBase,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= 'modified_newton_soln_algo')
         self.feProblem= prb
         self.setPenaltyFactors()
-
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyModifiedNewtonBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'modified_newton_soln_algo')
 
 class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
     ''' Static solution procedure with a modified Newton algorithm
@@ -788,14 +694,6 @@ class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(PenaltyModifiedNewton,self).__init__(prb= prb, name= name, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
-
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyModifiedNewton,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')        
 
 ### Convenience function
 def penalty_modified_newton(prb, maxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
@@ -828,14 +726,6 @@ class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
         '''
         super(PenaltyModifiedNewtonUMF,self).__init__(prb= prb, name= name, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType= integratorType)
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyModifiedNewtonUMF,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-        
 class PenaltyModifiedNewtonMUMPS(PenaltyModifiedNewtonBase):
     ''' Static solution procedure with a modified Newton algorithm,
         a penalty constraint handler and a MUMPS
@@ -855,21 +745,13 @@ class PenaltyModifiedNewtonMUMPS(PenaltyModifiedNewtonBase):
         '''
         super(PenaltyModifiedNewtonMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyModifiedNewtonMUMPS,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
 class LineSearchBase(SolutionProcedure):
     ''' Base class for line search solution aggregations.
 
 
     :ivar lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
     '''
-    def __init__(self, prb, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType):
+    def __init__(self, prb, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType, solutionAlgorithmType):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -884,10 +766,18 @@ class LineSearchBase(SolutionProcedure):
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
+        :param solutionAlgorithmType: type of the solution algorithm.
         '''
-        super(LineSearchBase,self).__init__(name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType)
+        super(LineSearchBase,self).__init__(name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= solutionAlgorithmType)
         self.feProblem= prb
         self.lineSearchMethod= lineSearchMethod
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(LineSearchBase,self).setup()
+        self.solAlgo.setLineSearchMethod(self.lineSearchMethod)
 
 class PenaltyNewtonLineSearchBase(LineSearchBase):
     ''' Base class for penalty Newton line search solution aggregation.'''
@@ -907,17 +797,9 @@ class PenaltyNewtonLineSearchBase(LineSearchBase):
         :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PenaltyNewtonLineSearchBase,self).__init__(prb, name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, lineSearchMethod= lineSearchMethod, soeType=soeType, solverType= solverType, integratorType= integratorType)
+        super(PenaltyNewtonLineSearchBase,self).__init__(prb, name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, lineSearchMethod= lineSearchMethod, soeType=soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType=  'newton_line_search_soln_algo')
         self.setPenaltyFactors()
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonLineSearchBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_line_search_soln_algo')
-        self.solAlgo.setLineSearchMethod(self.lineSearchMethod)
-
 class PenaltyNewtonLineSearch(PenaltyNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm
         and a penalty constraint handler.'''
@@ -937,14 +819,6 @@ class PenaltyNewtonLineSearch(PenaltyNewtonLineSearchBase):
         '''
         super(PenaltyNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonLineSearch,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
 class PenaltyNewtonLineSearchUMF(PenaltyNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a penalty constraint handler and a UMF
@@ -965,14 +839,6 @@ class PenaltyNewtonLineSearchUMF(PenaltyNewtonLineSearchBase):
         '''
         super(PenaltyNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType= integratorType)
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonLineSearchUMF,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-        
 class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a penalty constraint handler and a MUMPS
@@ -992,14 +858,6 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(PenaltyNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewtonLineSearchMUMPS,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
         
 ### Convenience function
 def penalty_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search', integratorType= 'load_control_integrator'):
@@ -1032,17 +890,9 @@ class TransformationNewtonLineSearchBase(LineSearchBase):
         :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(TransformationNewtonLineSearchBase,self).__init__(prb, name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType= integratorType)
+        super(TransformationNewtonLineSearchBase,self).__init__(prb, name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType, integratorType= integratorType, solutionAlgorithmType=  'newton_line_search_soln_algo')
         #self.setTransformationFactors()
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationNewtonLineSearchBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_line_search_soln_algo')
-        self.solAlgo.setLineSearchMethod(self.lineSearchMethod)
-
 class TransformationNewtonLineSearch(TransformationNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm
         and a transformation constraint handler.'''
@@ -1062,14 +912,6 @@ class TransformationNewtonLineSearch(TransformationNewtonLineSearchBase):
         '''
         super(TransformationNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType)
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationNewtonLineSearch,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
 class TransformationNewtonLineSearchUMF(TransformationNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a transformation constraint handler and a UMF
@@ -1090,14 +932,6 @@ class TransformationNewtonLineSearchUMF(TransformationNewtonLineSearchBase):
         '''
         super(TransformationNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver', integratorType= integratorType)
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationNewtonLineSearchUMF,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-        
 class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
     ''' Static solution procedure with a Newton line search algorithm,
         a transformation constraint handler and a MUMPS
@@ -1117,14 +951,6 @@ class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(TransformationNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationNewtonLineSearchMUMPS,self).setup()
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
         
 ### Convenience function
 def transformation_newton_line_search_mumps(prb, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', integratorType= 'load_control_integrator'):
@@ -1162,7 +988,7 @@ class PlainKrylovNewton(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
-        super(PlainKrylovNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType)
+        super(PlainKrylovNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= 'krylov_newton_soln_algo')
         self.feProblem= prb
         self.maxDim= maxDim
         
@@ -1171,10 +997,7 @@ class PlainKrylovNewton(SolutionProcedure):
             problem object.
         '''
         super(PlainKrylovNewton,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'krylov_newton_soln_algo')
         self.solAlgo.maxDimension= self.maxDim
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
 
 ### Convenience function
 def plain_krylov_newton(prb, maxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0, maxDim= 6):
@@ -1211,7 +1034,7 @@ class PenaltyKrylovNewton(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
-        super(PenaltyKrylovNewton,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
+        super(PenaltyKrylovNewton,self).__init__(name, constraintHandlerType='penalty', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType, solutionAlgorithmType= 'krylov_newton_soln_algo')
         self.feProblem= prb
         self.maxDim= maxDim
         self.setPenaltyFactors()
@@ -1221,12 +1044,8 @@ class PenaltyKrylovNewton(SolutionProcedure):
             problem object.
         '''
         super(PenaltyKrylovNewton,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'krylov_newton_soln_algo')
         self.integrator.dLambda1= 1.0/self.numSteps
         self.solAlgo.maxDimension= self.maxDim
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
 
 ## Dynamic analysis        
 class NewmarkBase(SolutionProcedure):
@@ -1235,7 +1054,7 @@ class NewmarkBase(SolutionProcedure):
     :ivar gamma: gamma factor (used only for Newmark integrator).
     :ivar beta: beta factor (used only for Newmark integrator).
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, gamma= 0.5, beta= 0.25):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, gamma= 0.5, beta= 0.25, solutionAlgorithmType= 'newton_raphson_soln_algo', analysisType= 'direct_integration_analysis'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1252,8 +1071,10 @@ class NewmarkBase(SolutionProcedure):
         :param solverType: type of the solver.
         :param gamma: gamma factor (for Newmark integrator).
         :param beta: beta factor (for Newmark integrator).
+        :param solutionAlgorithmType: type of the solution algorithm.
+        :param analysisType: type of the analysis.
         '''
-        super(NewmarkBase,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'newmark_integrator')
+        super(NewmarkBase,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'newmark_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= analysisType)
         self.feProblem= prb
         self.timeStep= timeStep
         self.gamma= gamma
@@ -1294,16 +1115,7 @@ class PlainLinearNewmark(NewmarkBase):
         :param gamma: gamma factor (for Newmark integrator).
         :param beta: beta factor (for Newmark integrator).
         '''
-        super(PlainLinearNewmark,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= None, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', gamma= gamma, beta= beta)
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PlainLinearNewmark,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('direct_integration_analysis')
+        super(PlainLinearNewmark,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= None, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', gamma= gamma, beta= beta, solutionAlgorithmType= 'linear_soln_algo', analysisType= 'direct_integration_analysis')
         
 class PenaltyNewmarkNewtonRaphson(NewmarkBase):
     ''' Newmark solution procedure with a Newton Raphson algorithm
@@ -1325,17 +1137,8 @@ class PenaltyNewmarkNewtonRaphson(NewmarkBase):
         :param gamma: gamma factor (for Newmark integrator).
         :param beta: beta factor (for Newmark integrator).
         '''
-        super(PenaltyNewmarkNewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, gamma= gamma, beta= beta)
+        super(PenaltyNewmarkNewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='penalty', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, gamma= gamma, beta= beta, analysisType= 'direct_integration_analysis', solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.setPenaltyFactors(alphaSP= 1.0e18, alphaMP= 1.0e18)
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(PenaltyNewmarkNewtonRaphson,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('direct_integration_analysis')
         
 class TransformationNewmarkNewtonRaphson(NewmarkBase):
     ''' Newmark solution procedure with a Newton Raphson algorithm
@@ -1357,22 +1160,13 @@ class TransformationNewmarkNewtonRaphson(NewmarkBase):
         :param gamma: gamma factor (for Newmark integrator).
         :param beta: beta factor (for Newmark integrator).
         '''
-        super(TransformationNewmarkNewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='transformation', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, gamma= gamma, beta= beta)
+        super(TransformationNewmarkNewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='transformation', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, gamma= gamma, beta= beta, solutionAlgorithmType= 'newton_raphson_soln_algo', analysisType= 'direct_integration_analysis')
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationNewmarkNewtonRaphson,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('direct_integration_analysis')
-
 class TRBDF2Base(SolutionProcedure):
     ''' Base class for TRBDF2 solvers.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1387,8 +1181,10 @@ class TRBDF2Base(SolutionProcedure):
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
+        :param solutionAlgorithmType: type of the solution algorithm.
+        :param analysisType: type of the analysis.
         '''
-        super(TRBDF2Base,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'TRBDF2_integrator')
+        super(TRBDF2Base,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'TRBDF2_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= analysisType)
         self.feProblem= prb
         self.timeStep= timeStep
         
@@ -1427,22 +1223,13 @@ class TransformationTRBDF2NewtonRaphson(TRBDF2Base):
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         '''
-        super(TransformationTRBDF2NewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='transformation', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType)
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationTRBDF2NewtonRaphson,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('direct_integration_analysis')
+        super(TransformationTRBDF2NewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='transformation', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, solutionAlgorithmType= 'newton_raphson_soln_algo', analysisType= 'direct_integration_analysis')
         
 class TRBDF3Base(SolutionProcedure):
     ''' Base class for TRBDF3 solvers.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1457,8 +1244,10 @@ class TRBDF3Base(SolutionProcedure):
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
+        :param solutionAlgorithmType: type of the solution algorithm.
+        :param analysisType: type of the analysis.
         '''
-        super(TRBDF3Base,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'TRBDF3_integrator')
+        super(TRBDF3Base,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'TRBDF3_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= analysisType)
         self.feProblem= prb
         self.timeStep= timeStep
         
@@ -1497,17 +1286,8 @@ class TransformationTRBDF3NewtonRaphson(TRBDF3Base):
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         '''
-        super(TransformationTRBDF3NewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='transformation', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType)
+        super(TransformationTRBDF3NewtonRaphson,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType='transformation', maxNumIter=maxNumIter, convergenceTestTol=convergenceTestTol, printFlag=printFlag, numSteps=numSteps, numberingMethod=numberingMethod, convTestType=convTestType, soeType= soeType, solverType= solverType, solutionAlgorithmType= 'newton_raphson_soln_algo', analysisType= 'direct_integration_analysis')
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(TransformationTRBDF3NewtonRaphson,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'newton_raphson_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('direct_integration_analysis')
-
 ## Eigen analysis
 class OrdinaryEigenvalues(SolutionProcedure):
     ''' Procedure to obtain the ordinary eigenvalues of the stiffness matrix
@@ -1521,19 +1301,10 @@ class OrdinaryEigenvalues(SolutionProcedure):
         :param printFlag: if not zero print convergence results on each step.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         '''        
-        super(OrdinaryEigenvalues, self).__init__(name= name, constraintHandlerType= 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift, integratorType= 'standard_eigen_integrator')
+        super(OrdinaryEigenvalues, self).__init__(name= name, constraintHandlerType= 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift, integratorType= 'standard_eigen_integrator', solutionAlgorithmType= 'standard_eigen_soln_algo', analysisType= 'ill-conditioning_analysis')
         self.feProblem= prb
         self.setPenaltyFactors()
 
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(OrdinaryEigenvalues, self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'standard_eigen_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('ill-conditioning_analysis')
-        
 ### Convenience function
 def ordinary_eigenvalues(prb):
     ''' Return a solution procedure that computes the ordinary eigenvalues
@@ -1557,17 +1328,8 @@ class FrequencyAnalysis(SolutionProcedure):
         self.systemPrefix= systemPrefix
         soe_string= self.systemPrefix+'_eigen_soe'
         solver_string= self.systemPrefix+'_eigen_solver'
-        super(FrequencyAnalysis,self).__init__(name, 'transformation', printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string, shift= shift, integratorType= 'eigen_integrator')
+        super(FrequencyAnalysis,self).__init__(name, 'transformation', printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string, shift= shift, integratorType= 'eigen_integrator', solutionAlgorithmType= 'frequency_soln_algo', analysisType= 'modal_analysis')
         self.feProblem= prb
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(FrequencyAnalysis,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'frequency_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('modal_analysis')
         
 ### Convenience function
 def frequency_analysis(prb, systemPrefix= 'sym_band', shift:float= None):
@@ -1590,19 +1352,10 @@ class IllConditioningAnalysisBase(SolutionProcedure):
         :param systemPrefix: string that identifies the SOE and Solver types.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         '''        
-        super(IllConditioningAnalysisBase,self).__init__(name, constraintHandlerType='penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift, integratorType= 'ill-conditioning_integrator')
+        super(IllConditioningAnalysisBase,self).__init__(name, constraintHandlerType='penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift, integratorType= 'ill-conditioning_integrator', solutionAlgorithmType= 'ill-conditioning_soln_algo', analysisType= 'ill-conditioning_analysis')
         self.feProblem= prb
         self.setPenaltyFactors()
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(IllConditioningAnalysisBase,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= 'ill-conditioning_soln_algo')
-        self.sysOfEqnSetup()
-        self.analysisSetup('ill-conditioning_analysis')
-    
 class ZeroEnergyModes(IllConditioningAnalysisBase):
     ''' Procedure to obtain the zero energy modes
         of the finite element model.'''
@@ -1687,8 +1440,9 @@ class BucklingAnalysisEigenPart(SolutionProcedure):
         :param solverType: type of the solver.
         :param shift: shift-and-invert mode (used with ARPACK).
         '''        
-        super(BucklingAnalysisEigenPart,self).__init__(name, constraintHandlerType= None, printFlag= printFlag, numberingMethod= None, soeType= soeType, solverType= solverType, shift= shift, integratorType= 'linear_buckling_integrator')
-        modelWrapper= staticAnalysisPart.getModelWrapper
+        super(BucklingAnalysisEigenPart,self).__init__(name, constraintHandlerType= None, printFlag= printFlag, numberingMethod= None, soeType= soeType, solverType= solverType, shift= shift, integratorType= 'linear_buckling_integrator', solutionAlgorithmType= 'linear_buckling_soln_algo', analysisType= 'linear_buckling_analysis')
+        self.staticPart= staticAnalysisPart
+        modelWrapper= self.staticPart.solutionStrategy.getModelWrapper
         if(modelWrapper is not None):
             self.modelWrapper= modelWrapper
         else:
@@ -1696,19 +1450,19 @@ class BucklingAnalysisEigenPart(SolutionProcedure):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; model wrapper not set.')
         self.feProblem= prb
-                
+                        
     def setup(self):
         ''' Defines the solution procedure in the finite element 
             problem object.
         '''
         self.soluControlSetup()
-        self.solutionAlgorithmSetup(solAlgType= 'linear_buckling_soln_algo')
+        self.solutionAlgorithmSetup()
         self.sysOfEqnSetup()
 
 class BucklingAnalysisStaticPart(SolutionProcedure):
     ''' Static analysis part of a linear buckling analysis.'''
 
-    def __init__(self, prb, name= None, constraintHandlerType= 'transformation', maxNumIter= 100, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str= None, solnAlgorithmType= 'krylov_newton_soln_algo'):
+    def __init__(self, prb, name= None, constraintHandlerType= 'transformation', maxNumIter= 100, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str= None, solutionAlgorithmType= 'krylov_newton_soln_algo'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1718,21 +1472,9 @@ class BucklingAnalysisStaticPart(SolutionProcedure):
         :param solverType: type of the solver.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         '''        
-        super(BucklingAnalysisStaticPart,self).__init__(name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'load_control_integrator')
+        super(BucklingAnalysisStaticPart,self).__init__(name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'load_control_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= 'static_analysis')
         self.feProblem= prb
-        self.solnAlgorithmType= solnAlgorithmType
                 
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super(BucklingAnalysisStaticPart,self).setup()
-        self.solutionAlgorithmSetup(solAlgType= self.solnAlgorithmType)
-        # self.solAlgo.maxDimension= self.maxDim
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
-
-
 class LinearBucklingAnalysis(object):
     ''' Linear buckling analysis.
 
@@ -1740,7 +1482,7 @@ class LinearBucklingAnalysis(object):
     :ivar eigenPart: solution for the eigen problem.
     :ivar numModes: number of buckling modes to compute.
     '''
-    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solnAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'band_arpackpp_soe', eigenSolverType= 'band_arpackpp_solver'):
+    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'band_arpackpp_soe', eigenSolverType= 'band_arpackpp_solver'):
         ''' Constructor.
 
         '''
@@ -1753,7 +1495,7 @@ class LinearBucklingAnalysis(object):
         self.maxNumIter= maxNumIter 
         self.soeType= soeType 
         self.solverType= solverType 
-        self.solnAlgorithmType= solnAlgorithmType 
+        self.solutionAlgorithmType= solutionAlgorithmType 
         self.eigenSOEType= eigenSOEType 
         self.eigenSolverType= eigenSolverType 
                 
@@ -1761,26 +1503,27 @@ class LinearBucklingAnalysis(object):
         ''' Defines the solution control object.'''
         self.solu= self.feProblem.getSoluProc
         self.solCtrl= self.solu.getSoluControl
-        
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        self.staticPart= BucklingAnalysisStaticPart(prb= self.feProblem, constraintHandlerType= self.constraintHandlerType , numberingMethod= self.numberingMethod , convTestType= self.convTestType , convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, soeType= self.soeType , solverType= self.solverType , solnAlgorithmType= self.solnAlgorithmType )
-        self.staticPart.setup()
-
-        self.eigenPart= BucklingAnalysisEigenPart(prb= self.feProblem, staticAnalysisPart= self.staticPart.solutionStrategy, soeType= self.eigenSOEType, solverType= self.eigenSolverType)
-        self.eigenPart.setup()
-        self.soluControlSetup()
-        self.analysisSetup()
-        self.analysis.numModes= self.numModes
 
     def analysisSetup(self):
         ''' Define the analysis object.
 
         :param analysisType: type of the analysis to perform.
         '''
-        self.analysis= self.solu.newAnalysis('linear_buckling_analysis',self.staticPart.getSolutionStrategyName(),self.eigenPart.getSolutionStrategyName())
+        self.analysis= self.eigenPart.solu.newAnalysis('linear_buckling_analysis', self.staticPart.getSolutionStrategyName(), self.eigenPart.getSolutionStrategyName())
+        self.analysis.numModes= self.numModes
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        self.staticPart= BucklingAnalysisStaticPart(prb= self.feProblem, constraintHandlerType= self.constraintHandlerType, numberingMethod= self.numberingMethod , convTestType= self.convTestType, convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, soeType= self.soeType, solverType= self.solverType , solutionAlgorithmType= self.solutionAlgorithmType)
+        self.staticPart.setup()
+
+        self.eigenPart= BucklingAnalysisEigenPart(prb= self.feProblem, staticAnalysisPart= self.staticPart, soeType= self.eigenSOEType, solverType= self.eigenSolverType)
+        self.eigenPart.setup()
+        self.soluControlSetup()
+        self.analysisSetup()
+        self.eigenPart.integratorSetup()
         
     def solve(self):
         ''' Compute the linear buckling modes.'''
@@ -1795,7 +1538,7 @@ class DisplacementControlBase(SolutionProcedure):
     :ivar dispControlDof: degree of freedom that controls solution.
     :ivar dispControlIncrement: first displacement increment.
     '''
-    def __init__(self, prb, node, dof, increment, numSteps, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numberingMethod, convTestType, soeType, solverType):
+    def __init__(self, prb, node, dof, increment, numSteps, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1809,21 +1552,13 @@ class DisplacementControlBase(SolutionProcedure):
         :param printFlag: if not zero print convergence results on each step.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param solutionAlgorithmType: type of the solution algorithm.
         '''
-        super().__init__(name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'displacement_control_integrator')
+        super().__init__(name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'displacement_control_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= 'static_analysis')
         self.feProblem= prb
         self.dispControlNode= node
         self.dispControlDof= dof
         self.dispControlIncrement= increment
-        
-    def setup(self, solAlgType):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super().setup()
-        self.solutionAlgorithmSetup(solAlgType= solAlgType)
-        self.sysOfEqnSetup()
-        self.analysisSetup('static_analysis')
         
 class SimpleNewtonRaphsonDisplacementControl(DisplacementControlBase):
     ''' Newton-Raphson solution algorithm with a
@@ -1845,14 +1580,9 @@ class SimpleNewtonRaphsonDisplacementControl(DisplacementControlBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
-        super().__init__(prb= prb, node= node, dof= dof, increment= increment, name= name, constraintHandlerType= 'transformation', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
+        super().__init__(prb= prb, node= node, dof= dof, increment= increment, name= name, constraintHandlerType= 'transformation', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
         self.dispControlNode= node
         self.dispControlDof= dof
         self.dispControlIncrement= increment
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        super().setup(solAlgType= 'newton_raphson_soln_algo')
