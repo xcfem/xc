@@ -425,6 +425,11 @@ python tests/elements/birth_and_death/kill_elements_06.py
 python tests/elements/birth_and_death/kill_elements_07.py
 python tests/elements/birth_and_death/kill_elements_08.py
 python tests/elements/birth_and_death/kill_elements_09.py
+python tests/elements/birth_and_death/test_awakening_in_hot_model_corot_truss.py
+python tests/elements/birth_and_death/test_awakening_in_hot_model_corot_truss_section.py
+python tests/elements/birth_and_death/test_awakening_in_hot_model_truss.py
+python tests/elements/birth_and_death/test_awakening_in_hot_model_truss_section.py
+
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
