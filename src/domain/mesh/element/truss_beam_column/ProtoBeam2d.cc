@@ -248,6 +248,17 @@ double XC::ProtoBeam2d::getWeakAxisAngle(void) const
     return atan2(eD(2),eD(1));
   }
 
+//! @brief Reactivates the element.
+void XC::ProtoBeam2d::alive(void)
+  {
+    if(isDead())
+      {
+        SectionForceDeformation *theSection= physicalProperties[0];
+        //Remove the current element total strain:
+        theSection->setInitialGeneralizedStrain(theSection->getGeneralizedStrain());
+      }
+  }
+
 //! @brief Removes the element loads.
 void XC::ProtoBeam2d::zeroLoad(void)
   {
