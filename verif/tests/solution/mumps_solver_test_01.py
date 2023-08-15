@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-''' Test from Ansys manual
+''' Test the MUMPS solver.
+
+    Test from Ansys manual
     Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 26, problem 10
 
-    Test the UMFPACK solver.
 '''
+from __future__ import print_function
 
 import xc
 from model import predefined_spaces
@@ -58,7 +59,6 @@ truss.sectionArea= 1
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-#
 spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1
 spc= constraints.newSPConstraint(n1.tag,1,0.0)
 spc= constraints.newSPConstraint(n4.tag,0,0.0) # Node 4
@@ -75,12 +75,6 @@ lp0.newNodalLoad(n3.tag,xc.Vector([0,-F1]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
-import os
-pth= os.path.dirname(__file__)
-# print("pth= ", pth)
-if(not pth):
-  pth= "."
-
 solProc= predefined_solutions.PenaltyModifiedNewtonMUMPS(feProblem)
 result= solProc.solve()
 
