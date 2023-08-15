@@ -5,3 +5,4 @@ The test in this folder check the accuracy of the formulas in `ng_cantilever` an
 ## References
 
 - [Euler-Bernouilli beam theory](https://en.wikipedia.org/wiki/Euler%E2%80%93Bernoulli_beam_theory)
+- [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant)
