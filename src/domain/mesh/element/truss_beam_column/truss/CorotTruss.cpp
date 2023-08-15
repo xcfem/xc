@@ -430,6 +430,16 @@ const XC::Matrix &XC::CorotTruss::getMass(void) const
     return *theMatrix;
   }
 
+//! @brief Reactivates the element.
+void XC::CorotTruss::alive(void)
+  {
+    if(isDead())
+      {
+        //Remove the current element total strain:
+        theMaterial->setInitialStrain(theMaterial->getStrain());
+      }
+  }
+
 //! @brief Zeroes loads on element.
 void XC::CorotTruss::zeroLoad(void)
   {

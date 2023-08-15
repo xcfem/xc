@@ -223,7 +223,7 @@ void XC::Truss::setDomain(Domain *theDomain)
       }
 
     // if can't find both - send a warning message
-    if((theNodes[0] == 0) || (theNodes[1] == 0))
+    if((theNodes[0] == nullptr) || (theNodes[1] == nullptr))
       {
         // fill this in so don't segment fault later
         numDOF = 2;
@@ -468,6 +468,16 @@ const XC::Matrix &XC::Truss::getMass(void) const
     if(isDead())
       mass*=dead_srf;
     return mass;
+  }
+
+//! @brief Reactivates the element.
+void XC::Truss::alive(void)
+  {
+    if(isDead())
+      {
+        //Remove the current element total strain:
+        theMaterial->setInitialStrain(theMaterial->getStrain());
+      }
   }
 
 //! @brief Zeroes loads on element.
