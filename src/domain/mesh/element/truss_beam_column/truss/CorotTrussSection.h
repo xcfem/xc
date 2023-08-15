@@ -98,6 +98,7 @@ class CorotTrussSection: public CorotTrussBase
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
+    void alive(void);
     void zeroLoad(void);
     int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);

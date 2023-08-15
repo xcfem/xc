@@ -422,6 +422,17 @@ const XC::Matrix &XC::CorotTrussSection::getMass(void) const
     return *theMatrix;
   }
 
+//! @brief Reactivates the element.
+void XC::CorotTrussSection::alive(void)
+  {
+    if(isDead())
+      {
+        SectionForceDeformation *theSection= physicalProperties[0];
+        //Remove the current element total strain:
+        theSection->setInitialGeneralizedStrain(theSection->getGeneralizedStrain());
+      }
+  } 
+
 //! @brief Make loads zero.
 void XC::CorotTrussSection::zeroLoad(void)
   {

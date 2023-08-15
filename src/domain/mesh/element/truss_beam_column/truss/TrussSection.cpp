@@ -364,6 +364,17 @@ const XC::Matrix &XC::TrussSection::getMass(void) const
     return mass;
   }
 
+//! @brief Reactivates the element.
+void XC::TrussSection::alive(void)
+  {
+    if(isDead())
+      {
+        SectionForceDeformation *theSection= physicalProperties[0];
+        //Remove the current element total strain:
+        theSection->setInitialGeneralizedStrain(theSection->getGeneralizedStrain());
+      }
+  }
+
 //! @brief Make loads zero.
 void XC::TrussSection::zeroLoad(void)
   {
