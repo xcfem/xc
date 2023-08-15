@@ -87,6 +87,7 @@ class ProtoBeam3d: public Element1D
     int revertToLastCommit(void);
     int revertToStart(void);
 
+    void alive(void);
     void zeroLoad(void);	
     virtual void createInertiaLoad(const Vector &);
 

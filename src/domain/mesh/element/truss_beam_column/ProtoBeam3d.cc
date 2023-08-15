@@ -277,6 +277,17 @@ void XC::ProtoBeam3d::createInertiaLoad(const Vector &accel)
     vector3dUniformLoadGlobal(load);
   }
 
+//! @brief Reactivates the element.
+void XC::ProtoBeam3d::alive(void)
+  {
+    if(isDead())
+      {
+        SectionForceDeformation *theSection= physicalProperties[0];
+        //Remove the current element total strain:
+        theSection->setInitialGeneralizedStrain(theSection->getGeneralizedStrain());
+      }
+  }
+
 //! @brief Removes the element loads.
 void XC::ProtoBeam3d::zeroLoad(void)
   {
