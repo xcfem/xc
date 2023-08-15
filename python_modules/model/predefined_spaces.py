@@ -779,12 +779,39 @@ class PredefinedSpace(object):
            entities.'''
         return self.getSet('total')
 
-    def defSet(self, setName: str):
+    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None):
         ''' Defines a set with the name argument.
 
         :param setName: name of the set to define.
+        :param nodes: node container to initizalize the nodes of the set.
+        :param element: element container to initizalize the elements of the set.
+        :param points: point container to initizalize the points of the set.
+        :param lines: line container to initizalize the lines of the set.
+        :param surfaces: surface container to initizalize the surfaces of the set.
+        :param bodies: body container to initizalize the bodies of the set.
         '''
-        return self.preprocessor.getSets.defSet(setName)
+        if(setName is None):
+            setName= uuid.uuid4().hex
+        retval= self.preprocessor.getSets.defSet(setName)
+        if(nodes):
+            for n in nodes:
+                retval.nodes.append(n)
+        if(elements):
+            for e in elements:
+                retval.elements.append(e)
+        if(points):
+            for p in points:
+                retval.points.append(p)
+        if(lines):
+            for l in lines:
+                retval.lines.append(l)
+        if(surfaces):
+            for s in surfaces:
+                retval.surfaces.append(s)
+        if(bodies):
+            for b in bodies:
+                retval.bodies.append(b)
+        return retval
     
     def removeSet(self, setName: str):
         ''' Remove the set whose name corresponds to the argument.
