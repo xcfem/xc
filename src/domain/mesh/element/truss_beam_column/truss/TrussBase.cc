@@ -93,8 +93,8 @@ XC::TrussBase &XC::TrussBase::operator=(const TrussBase &other)
 void XC::TrussBase::setup_L_cos_dir(void)
   {
     // NOTE t = -t(every one else uses for residual calc)
-    const Vector &end1Crd = theNodes[0]->getCrds();
-    const Vector &end2Crd = theNodes[1]->getCrds();	
+    const Vector &end1Crd= theNodes[0]->getCrds();
+    const Vector &end2Crd= theNodes[1]->getCrds();	
     if(getNumDIM() == 1)
       {
 	double dx = end2Crd(0)-end1Crd(0);	
@@ -102,7 +102,10 @@ void XC::TrussBase::setup_L_cos_dir(void)
 	
 	if(L == 0.0)
           {
-	    std::cerr << "WARNING XC::TrussBase::setDomain() - truss " << this->getTag() << " has zero length\n";
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING, element with tag: "
+		      << this->getTag()
+		      << " has zero length\n";
 	    return;
 	  }	
 	cosX[0] = 1.0;
@@ -115,19 +118,21 @@ void XC::TrussBase::setup_L_cos_dir(void)
     	L = sqrt(dx*dx + dy*dy);
     	if(L == 0.0)
           {
-	    std::cerr << "WARNING XC::TrussBase::setDomain() - truss " << this->getTag() << " has zero length\n";
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING, element with tag: "
+		      << this->getTag()
+		      << " has zero length\n";
 	    return;
 	  }
 	cosX[0] = dx/L;
 	cosX[1] = dy/L;
-
       }
     else
       {
 	double dx = end2Crd(0)-end1Crd(0);
 	double dy = end2Crd(1)-end1Crd(1);	
 	double dz = end2Crd(2)-end1Crd(2);		
-	L = sqrt(dx*dx + dy*dy + dz*dz);
+	L= sqrt(dx*dx + dy*dy + dz*dz);
 	if(L == 0.0)
           {
 	    std::cerr << "WARNING XC::TrussBase::setDomain() - truss " << this->getTag() << " has zero length\n";
