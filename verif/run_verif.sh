@@ -432,6 +432,7 @@ python tests/elements/birth_and_death/test_awakening_in_hot_model_truss_section.
 python tests/elements/birth_and_death/test_awakening_in_hot_model_elastic_beam_2d.py
 python tests/elements/birth_and_death/test_awakening_in_hot_model_elastic_beam_3d.py
 python tests/elements/birth_and_death/test_awakening_in_hot_model_force_beam_column_2d.py
+python tests/elements/birth_and_death/test_awakening_in_hot_model_force_beam_column_3d.py
 
 
 echo "$BLEU" "Solution tests." "$NORMAL"

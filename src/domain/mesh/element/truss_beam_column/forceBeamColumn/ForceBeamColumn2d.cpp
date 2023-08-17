@@ -384,7 +384,7 @@ int XC::ForceBeamColumn2d::update(void)
     static Vector v(NEBD), dv(NEBD), vin(NEBD);
     this->getCurrentDisplacements(v, dv);
     if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && (sp.isEmpty()))
-      return false;
+      return 0;
 
     vin= v;
     vin-= dv;

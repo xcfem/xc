@@ -152,6 +152,31 @@ XC::Element* XC::ForceBeamColumn3d::getCopy(void) const
 XC::ForceBeamColumn3d::~ForceBeamColumn3d(void)
   { free_mem(); }
 
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the element.
+const std::vector<XC::Vector> &XC::ForceBeamColumn3d::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see for example ForceBeamColumn3d::alive()).
+void XC::ForceBeamColumn3d::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  {
+    static Vector v(NEBD), dv(NEBD);
+    this->getCurrentDisplacements(v, dv);
+    if(persistentInitialDeformation.empty()) // Not yet initialized.
+      {
+        persistentInitialDeformation.resize(2);
+        persistentInitialDeformation[0]= v;
+        persistentInitialDeformation[1]= dv;
+      }
+    else // increment the current values.
+      {
+        persistentInitialDeformation[0]+= v;
+        persistentInitialDeformation[1]+= dv;
+      }
+  }
 void XC::ForceBeamColumn3d::setDomain(Domain *theDomain)
   {
     NLForceBeamColumn3dBase::setDomain(theDomain);
@@ -309,6 +334,25 @@ const XC::Matrix &XC::ForceBeamColumn3d::getInitialStiff(void) const
     return Ki;
   }
 
+//! @brief Retrieves curreont displacements from the the coordinate transformation
+//! and returns them in the vector arguments.
+void XC::ForceBeamColumn3d::getCurrentDisplacements(Vector &v, Vector &dv)
+  {
+    // update the transformation
+    theCoordTransf->update();
+
+    // get basic displacements and increments
+    v= theCoordTransf->getBasicTrialDisp();
+
+    dv= theCoordTransf->getBasicIncrDeltaDisp();
+
+    if(!persistentInitialDeformation.empty()) // Have being inactive.
+      {
+        v-= persistentInitialDeformation[0]; // substracts the parts during inactive period.
+        dv-= persistentInitialDeformation[1];
+      }
+  }
+
 //! @brief Newton, subdivide and initial iterations
 int XC::ForceBeamColumn3d::update(void)
   {
@@ -317,19 +361,11 @@ int XC::ForceBeamColumn3d::update(void)
     if(initialFlag == 2)
       this->revertToLastCommit();
 
-    // update the transformation
-    theCoordTransf->update();
-
-    // get basic displacements and increments
-    const Vector &v = theCoordTransf->getBasicTrialDisp();
-
-    static Vector dv(NEBD);
-    dv = theCoordTransf->getBasicIncrDeltaDisp();
-
+    static Vector v(NEBD), dv(NEBD), vin(NEBD);
+    this->getCurrentDisplacements(v, dv);
     if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.isEmpty())
       return 0;
 
-    static Vector vin(NEBD);
     vin = v;
     vin -= dv;
     const double L= theCoordTransf->getInitialLength();
@@ -891,6 +927,18 @@ const XC::Matrix &XC::ForceBeamColumn3d::getMass(void) const
     return theMatrix;
   }
 
+//! @brief Reactivates the element.
+void XC::ForceBeamColumn3d::alive(void)
+  {
+    if(isDead())
+      {
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	NLForceBeamColumn3dBase::alive(); // Not dead anymore.
+      }
+  }
+
+//! @brief Removes the loads on the element.
 void XC::ForceBeamColumn3d::zeroLoad(void)
   {
     NLForceBeamColumn3dBase::zeroLoad();
