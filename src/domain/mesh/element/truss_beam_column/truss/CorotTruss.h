@@ -76,14 +76,20 @@ class CorotTruss: public CorotTrussBase
     UniaxialMaterial *theMaterial; //!< pointer to a material
 
     double A;//!< area of CorotTruss element.
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    
   protected:
+    void free_material(void);
+    void free_mem(void);
+    void set_material(const UniaxialMaterial &);
+    
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
 
   public:
-    CorotTruss(int tag, int dim,int Nd1, int Nd2, UniaxialMaterial &theMaterial,double A);
+    CorotTruss(int tag= 0);
+    CorotTruss(int tag, int dim,int Nd1, int Nd2, const UniaxialMaterial &theMaterial,double A);
     CorotTruss(int tag,int dimension,const Material *ptr_mat);
-    CorotTruss(void);
     CorotTruss(const CorotTruss &);
     CorotTruss &operator=(const CorotTruss &);
     Element *getCopy(void) const;
@@ -91,6 +97,10 @@ class CorotTruss: public CorotTrussBase
 
     // public methods to obtain information about dof & connectivity    
     void setDomain(Domain *theDomain);
+
+    // Element birth and death stuff.
+    const double &getPersistentInitialSectionDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
 
     // public methods to set the state of the element    
     int commitState(void);

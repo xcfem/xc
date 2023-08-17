@@ -66,41 +66,66 @@
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 #include "utility/actor/actor/MovableVector.h"
 
-// constructor:
-//  responsible for allocating the necessary space needed by each object
-//  and storing the tags of the CorotTruss end nodes.
-XC::CorotTruss::CorotTruss(int tag, int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,double a)
-  :CorotTrussBase(tag,ELE_TAG_CorotTruss,dim,Nd1,Nd2), theMaterial(nullptr), A(a)
+//! @brief Free the material pointer.
+void XC::CorotTruss::free_material(void)
   {
+    if(theMaterial)
+      {
+        delete theMaterial;
+        theMaterial= nullptr;
+      }
+  }
+
+//! @brief Assign the material.
+void XC::CorotTruss::set_material(const UniaxialMaterial &mat)
+  {
+    free_material();
     // get a copy of the material and check we obtained a valid copy
-    theMaterial = theMat.getCopy();
-    if(theMaterial == 0)
+    theMaterial= mat.getCopy();
+    if(!theMaterial)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; FATAL error in element: " <<  tag
-		  << "failed to get a copy of material with tag "
-		  << theMat.getTag() << std::endl;
+		  << "; FATAL truss - " << getTag()
+		  << " failed to get a copy of material with tag "
+	          << mat.getTag() << std::endl;
         exit(-1);
       }
   }
 
 //! @brief Constructor.
-XC::CorotTruss::CorotTruss(int tag,int dim,const Material *ptr_mat)
-  :CorotTrussBase(tag,ELE_TAG_CorotTruss,dim,0,0), theMaterial(nullptr),A(0.0)
-  { theMaterial= cast_material<UniaxialMaterial>(ptr_mat); }
+XC::CorotTruss::CorotTruss(int tag)
+  : CorotTrussBase(tag,ELE_TAG_CorotTruss,0,0,0), theMaterial(nullptr),
+    A(0.0), persistentInitialDeformation(0.0) {}
 
-// constructor:
-//   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
-//   to be invoked upon
-XC::CorotTruss::CorotTruss(void)
-  :CorotTrussBase(0,ELE_TAG_CorotTruss,0,0,0), theMaterial(nullptr), A(0.0) {}
+//! @brief Constructor.
+XC::CorotTruss::CorotTruss(int tag, int dim,int Nd1, int Nd2, const UniaxialMaterial &theMat,double a)
+  : CorotTrussBase(tag,ELE_TAG_CorotTruss,dim,Nd1,Nd2), theMaterial(nullptr),
+    A(a), persistentInitialDeformation(0.0)
+  {
+    // get a copy of the material and check we obtained a valid copy
+    set_material(theMat);
+  }
+
+//! @brief Constructor.
+XC::CorotTruss::CorotTruss(int tag,int dim, const Material *ptr_mat)
+  :CorotTrussBase(tag,ELE_TAG_CorotTruss,dim,0,0), theMaterial(nullptr),
+   A(0.0), persistentInitialDeformation(0.0)
+  {
+    UniaxialMaterial *tmp= cast_material<UniaxialMaterial>(ptr_mat);
+    if(tmp)
+      set_material(*tmp);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; not a suitable material." << std::endl;
+  }
 
 //! @brief Copy constructor.
 XC::CorotTruss::CorotTruss(const CorotTruss &other)
-  : CorotTrussBase(other), theMaterial(nullptr), A(other.A)
+  : CorotTrussBase(other), theMaterial(nullptr), A(other.A),
+    persistentInitialDeformation(other.persistentInitialDeformation)
   {
     if(other.theMaterial)
-      theMaterial= other.theMaterial->getCopy();
+      set_material(*other.theMaterial);
   }
 
 //! @brief Assignment operator.
@@ -108,16 +133,27 @@ XC::CorotTruss &XC::CorotTruss::operator=(const CorotTruss &other)
   {
     CorotTrussBase::operator=(other);
     A= other.A;
-    if(theMaterial) delete theMaterial;
-    theMaterial= nullptr;
     if(other.theMaterial)
-      theMaterial= other.theMaterial->getCopy();
+      set_material(*other.theMaterial);
+    this->persistentInitialDeformation= other.persistentInitialDeformation;
     return *this;
   }
 
 //! @brief Virtual constructor.
 XC::Element* XC::CorotTruss::getCopy(void) const
   { return new CorotTruss(*this); }
+
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the section.
+const double &XC::CorotTruss::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which the elements are deactivated
+//! (see for example XC::BeamColumnWithSectionFD::alive().
+void XC::CorotTruss::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  { persistentInitialDeformation+= this->theMaterial->getStrain(); }
 
 //! @brief Destructor.
 //!     delete must be invoked on any objects created by the object
@@ -126,16 +162,15 @@ XC::CorotTruss::~CorotTruss()
   {
     // invoke the destructor on any objects created by the object
     // that the object still holds a pointer to
-    if(theMaterial != 0)
-      delete theMaterial;
+    free_material();
   }
 
-// method: setDomain()
-//    to set a link to the enclosing XC::Domain and to set the node pointers.
-//    also determines the number of dof associated
-//    with the XC::CorotTruss element, we set matrix and vector pointers,
-//    allocate space for t matrix, determine the length
-//    and set the transformation matrix.
+//! @brief setDomain()
+//! to set a link to the enclosing XC::Domain and to set the node pointers.
+//! also determines the number of dof associated
+//! with the XC::CorotTruss element, we set matrix and vector pointers,
+//! allocate space for t matrix, determine the length
+//! and set the transformation matrix.
 void XC::CorotTruss::setDomain(Domain *theDomain)
   {
     // check Domain is not null - invoked when object removed from a domain
@@ -290,12 +325,13 @@ int XC::CorotTruss::update(void)
     Ln= d21[0]*d21[0] + d21[1]*d21[1] + d21[2]*d21[2];
     Ln= sqrt(Ln);
 
+    // Update materila.
     CableMaterial *ptrCableMaterial= dynamic_cast<CableMaterial *>(theMaterial);
     if(ptrCableMaterial)
       ptrCableMaterial->setLength(Ln);
 
-    // Compute engineering strain
-    const double strain= (Ln-Lo)/Lo;
+    // Compute engineering strain and substract persistent deformation (if any)
+    const double strain= (Ln-Lo)/Lo - persistentInitialDeformation;
 
     // Set material trial strain
     return theMaterial->setTrialStrain(strain);
@@ -435,8 +471,9 @@ void XC::CorotTruss::alive(void)
   {
     if(isDead())
       {
-        //Remove the current element total strain:
-        theMaterial->setInitialStrain(theMaterial->getStrain());
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	CorotTrussBase::alive();
       }
   }
 

@@ -72,7 +72,10 @@ namespace XC {
 class CorotTrussSection: public CorotTrussBase
   {
   private:
-    SectionFDPhysicalProperties physicalProperties;
+    SectionFDPhysicalProperties physicalProperties; //!< Element material.
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    
+    double computeCurrentStrain(void) const;    
   public:
     CorotTrussSection(int tag, int dim,int Nd1, int Nd2, SectionForceDeformation &theMaterial);
     CorotTrussSection(int tag,int dimension,const Material *ptr_mat);
@@ -81,6 +84,10 @@ class CorotTrussSection: public CorotTrussBase
     inline virtual ~CorotTrussSection(void) {}
 
     void setDomain(Domain *theDomain);
+
+    // Element birth and death stuff.
+    const double &getPersistentInitialSectionDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
 
     // public methods to set the state of the element    
     int commitState(void);

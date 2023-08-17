@@ -60,7 +60,6 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/section/SectionForceDeformation.h>
-
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -70,36 +69,48 @@
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 
 
-// constructor:
-//  responsible for allocating the necessary space needed by each object
-//  and storing the tags of the XC::CorotTrussSection end nodes.
+//! @brief Constructor:
 XC::CorotTrussSection::CorotTrussSection(int tag, int dim,int Nd1, int Nd2, SectionForceDeformation &theSec)
-  :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,Nd1,Nd2), physicalProperties(1, &theSec)
+  :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,Nd1,Nd2),
+   physicalProperties(1, &theSec), persistentInitialDeformation(0.0)
   {}
 
 
 //! @brief Constructor.
 XC::CorotTrussSection::CorotTrussSection(int tag,int dim,const Material *ptr_mat)
-  : CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,0,0), physicalProperties(1,ptr_mat)
+  : CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,0,0),
+    physicalProperties(1,ptr_mat), persistentInitialDeformation(0.0)
   {}
 
-// constructor:
-//   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
-//   to be invoked upon
+//! @brief Constructor:
 XC::CorotTrussSection::CorotTrussSection(void)
-  :CorotTrussBase(0,ELE_TAG_CorotTrussSection,0,0,0), physicalProperties(1)
+  :CorotTrussBase(0,ELE_TAG_CorotTrussSection,0,0,0),
+   physicalProperties(1), persistentInitialDeformation(0.0)
   {}
 
 //! @brief Virtual constructor.
 XC::Element* XC::CorotTrussSection::getCopy(void) const
   { return new CorotTrussSection(*this); }
 
-// method: setDomain()
-//    to set a link to the enclosing XC::Domain and to set the node pointers.
-//    also determines the number of dof associated
-//    with the XC::CorotTrussSection element, we set matrix and vector pointers,
-//    allocate space for t matrix, determine the length
-//    and set the transformation matrix.
+
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the section.
+const double &XC::CorotTrussSection::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which the element is deactivated
+//! (see for example XC::BeamColumnWithSectionFD::alive().
+void XC::CorotTrussSection::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  { persistentInitialDeformation+= this->computeCurrentStrain(); }
+
+//! @brief setDomain()
+//!    to set a link to the enclosing XC::Domain and to set the node pointers.
+//!    also determines the number of dof associated
+//!    with the XC::CorotTrussSection element, we set matrix and vector pointers,
+//!    allocate space for t matrix, determine the length
+//!    and set the transformation matrix.
 void XC::CorotTrussSection::setDomain(Domain *theDomain)
   {
     // check XC::Domain is not null - invoked when object removed from a domain
@@ -112,87 +123,87 @@ void XC::CorotTrussSection::setDomain(Domain *theDomain)
      }
 
 
-  // now determine the number of dof and the dimension
-  int dofNd1 = theNodes[0]->getNumberDOF();
-  int dofNd2 = theNodes[1]->getNumberDOF();
+    // now determine the number of dof and the dimension
+    int dofNd1 = theNodes[0]->getNumberDOF();
+    int dofNd2 = theNodes[1]->getNumberDOF();
 
-  // if differing dof at the ends - print a warning message
-  if(dofNd1 != dofNd2)
-    {
-      std::cerr << "WARNING XC::CorotTrussSection::setDomain(): nodes have differing dof at ends for XC::CorotTrussSection" <<
-      this->getTag() << std::endl;
-      // fill this in so don't segment fault later
-      numDOF = 6;
-      return;
-    }
+    // if differing dof at the ends - print a warning message
+    if(dofNd1 != dofNd2)
+      {
+	std::cerr << "WARNING XC::CorotTrussSection::setDomain(): nodes have differing dof at ends for XC::CorotTrussSection" <<
+	this->getTag() << std::endl;
+	// fill this in so don't segment fault later
+	numDOF = 6;
+	return;
+      }
 
-   setup_matrix_vector_ptrs(dofNd1);
+     setup_matrix_vector_ptrs(dofNd1);
 
-   // call the base class method
-   CorotTrussBase::setDomain(theDomain);
+     // call the base class method
+     CorotTrussBase::setDomain(theDomain);
 
-   // now determine the length, cosines and fill in the transformation
-        // NOTE t = -t(every one else uses for residual calc)
-        const Vector &end1Crd = theNodes[0]->getCrds();
-        const Vector &end2Crd = theNodes[1]->getCrds();
+     // now determine the length, cosines and fill in the transformation
+	  // NOTE t = -t(every one else uses for residual calc)
+	  const Vector &end1Crd = theNodes[0]->getCrds();
+	  const Vector &end2Crd = theNodes[1]->getCrds();
 
-        // Determine global offsets
-    double cosX[3];
-    cosX[0] = 0.0;  cosX[1] = 0.0;  cosX[2] = 0.0;
-    int i;
-    for(i = 0; i < getNumDIM(); i++) {
-        cosX[i] += end2Crd(i)-end1Crd(i);
-    }
+	  // Determine global offsets
+      double cosX[3];
+      cosX[0] = 0.0;  cosX[1] = 0.0;  cosX[2] = 0.0;
+      int i;
+      for(i = 0; i < getNumDIM(); i++) {
+	  cosX[i] += end2Crd(i)-end1Crd(i);
+      }
 
-        // Set undeformed and initial length
-        Lo = cosX[0]*cosX[0] + cosX[1]*cosX[1] + cosX[2]*cosX[2];
-        Lo = sqrt(Lo);
-        Ln = Lo;
+	  // Set undeformed and initial length
+	  Lo = cosX[0]*cosX[0] + cosX[1]*cosX[1] + cosX[2]*cosX[2];
+	  Lo = sqrt(Lo);
+	  Ln = Lo;
 
-    // Initial offsets
-           d21[0] = Lo;
-        d21[1] = 0.0;
-        d21[2] = 0.0;
+      // Initial offsets
+	     d21[0] = Lo;
+	  d21[1] = 0.0;
+	  d21[2] = 0.0;
 
-        // Set global orientation
-        cosX[0] /= Lo;
-        cosX[1] /= Lo;
-        cosX[2] /= Lo;
+	  // Set global orientation
+	  cosX[0] /= Lo;
+	  cosX[1] /= Lo;
+	  cosX[2] /= Lo;
 
-        R(0,0) = cosX[0];
-        R(0,1) = cosX[1];
-        R(0,2) = cosX[2];
+	  R(0,0) = cosX[0];
+	  R(0,1) = cosX[1];
+	  R(0,2) = cosX[2];
 
-        // Element lies outside the YZ plane
-        if(fabs(cosX[0]) > 0.0) {
-                R(1,0) = -cosX[1];
-                R(1,1) =  cosX[0];
-                R(1,2) =  0.0;
+	  // Element lies outside the YZ plane
+	  if(fabs(cosX[0]) > 0.0) {
+		  R(1,0) = -cosX[1];
+		  R(1,1) =  cosX[0];
+		  R(1,2) =  0.0;
 
-                R(2,0) = -cosX[0]*cosX[2];
-                R(2,1) = -cosX[1]*cosX[2];
-                R(2,2) =  cosX[0]*cosX[0] + cosX[1]*cosX[1];
-        }
-        // Element is in the YZ plane
-        else {
-                R(1,0) =  0.0;
-                R(1,1) = -cosX[2];
-                R(1,2) =  cosX[1];
+		  R(2,0) = -cosX[0]*cosX[2];
+		  R(2,1) = -cosX[1]*cosX[2];
+		  R(2,2) =  cosX[0]*cosX[0] + cosX[1]*cosX[1];
+	  }
+	  // Element is in the YZ plane
+	  else {
+		  R(1,0) =  0.0;
+		  R(1,1) = -cosX[2];
+		  R(1,2) =  cosX[1];
 
-                R(2,0) =  1.0;
-                R(2,1) =  0.0;
-                R(2,2) =  0.0;
-        }
+		  R(2,0) =  1.0;
+		  R(2,1) =  0.0;
+		  R(2,2) =  0.0;
+	  }
 
-        // Orthonormalize last two rows of R
-        double norm;
-        for(i = 1; i < 3; i++) {
-                norm = sqrt(R(i,0)*R(i,0) + R(i,1)*R(i,1) + R(i,2)*R(i,2));
-                R(i,0) /= norm;
-                R(i,1) /= norm;
-                R(i,2) /= norm;
-        }
-}
+	  // Orthonormalize last two rows of R
+	  double norm;
+	  for(i = 1; i < 3; i++) {
+		  norm = sqrt(R(i,0)*R(i,0) + R(i,1)*R(i,1) + R(i,2)*R(i,2));
+		  R(i,0) /= norm;
+		  R(i,1) /= norm;
+		  R(i,2) /= norm;
+	  }
+  }
 
 //! @brief Commit element state.
 int XC::CorotTrussSection::commitState(void)
@@ -229,20 +240,19 @@ int XC::CorotTrussSection::revertToStart()
   }
 
 //! @brief Update element state.
-int XC::CorotTrussSection::update(void)
+double XC::CorotTrussSection::computeCurrentStrain(void) const
   {
     // Nodal displacements
     const Vector &end1Disp = theNodes[0]->getTrialDisp();
     const Vector &end2Disp = theNodes[1]->getTrialDisp();
 
     // Initial offsets
-        d21[0] = Lo;
-        d21[1] = 0.0;
-        d21[2] = 0.0;
+    d21[0] = Lo;
+    d21[1] = 0.0;
+    d21[2] = 0.0;
 
-           // Update offsets in basic system due to nodal displacements
-        int i;
-    for(i = 0; i < getNumDIM(); i++)
+    // Update offsets in basic system due to nodal displacements
+    for(int i = 0; i < getNumDIM(); i++)
       {
         d21[0] += R(0,i)*(end2Disp(i)-end1Disp(i));
         d21[1] += R(1,i)*(end2Disp(i)-end1Disp(i));
@@ -254,7 +264,14 @@ int XC::CorotTrussSection::update(void)
     Ln = sqrt(Ln);
 
     // Compute engineering strain
-    const double strain = (Ln-Lo)/Lo;
+    return (Ln-Lo)/Lo - persistentInitialDeformation;
+  }
+
+//! @brief Update element state.
+int XC::CorotTrussSection::update(void)
+  {
+    // Compute engineering strain
+    const double strain= computeCurrentStrain();
 
     SectionForceDeformation *theSection= physicalProperties[0];
     int order= theSection->getOrder();
@@ -262,7 +279,7 @@ int XC::CorotTrussSection::update(void)
 
     static double data[10];
     Vector e(data, order);
-    for(i = 0; i < order; i++)
+    for(int i = 0; i < order; i++)
       {
 	if(code(i) == SECTION_RESPONSE_P)
 	  e(i)= strain;
@@ -427,9 +444,9 @@ void XC::CorotTrussSection::alive(void)
   {
     if(isDead())
       {
-        SectionForceDeformation *theSection= physicalProperties[0];
-        //Remove the current element total strain:
-        theSection->setInitialGeneralizedStrain(theSection->getGeneralizedStrain());
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	CorotTrussBase::alive(); // Not dead anymore.
       }
   } 
 
