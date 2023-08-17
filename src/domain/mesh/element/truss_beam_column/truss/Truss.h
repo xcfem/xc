@@ -90,6 +90,8 @@ class Truss: public TrussBase
     int parameterID;
     Vector *theLoadSens;
 // AddingSensitivity:END ///////////////////////////////////////////
+    
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
 
     void initialize(void);
   protected:
@@ -104,7 +106,7 @@ class Truss: public TrussBase
 
   public:
     Truss(int tag, int dimension, int Nd1, int Nd2, UniaxialMaterial &theMaterial, double A);
-    Truss(int tag,int dimension,const Material *ptr_mat);
+    Truss(int tag,int dimension, const Material *ptr_mat);
     Truss(void);
     Truss(const Truss &);
     Truss &operator=(const Truss &);
@@ -113,6 +115,10 @@ class Truss: public TrussBase
 
     // public methods to obtain information about dof & connectivity    
     void setDomain(Domain *theDomain);
+
+    // Element birth and death stuff.
+    const double &getPersistentInitialSectionDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
 
     // public methods to set the state of the element    
     int commitState(void);

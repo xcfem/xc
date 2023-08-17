@@ -66,6 +66,7 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/uniaxial/UniaxialMaterial.h>
+#include <material/uniaxial/PredeformedUniaxialMaterial.h>
 #include <material/uniaxial/CableMaterial.h>
 #include <domain/load/ElementalLoad.h>
 #include "domain/load/beam_loads/TrussStrainLoad.h"
@@ -146,7 +147,8 @@ void XC::Truss::initialize(void)
 //!  responsible for allocating the necessary space needed by each object
 //!  and storing the tags of the truss end nodes.
 XC::Truss::Truss(int tag,int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,double a)
-  :TrussBase(ELE_TAG_Truss,tag,dim,Nd1,Nd2), theMaterial(nullptr),A(a),theLoadSens(nullptr)
+  :TrussBase(ELE_TAG_Truss,tag,dim,Nd1,Nd2), theMaterial(nullptr),A(a),
+   theLoadSens(nullptr), persistentInitialDeformation(0.0)
   {
     set_material(theMat);
     initialize();
@@ -156,7 +158,8 @@ XC::Truss::Truss(int tag,int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,doub
 //!  responsible for allocating the necessary space needed by each object
 //!  and storing the tags of the truss end nodes.
 XC::Truss::Truss(int tag,int dim,const Material *ptr_mat)
-  :TrussBase(ELE_TAG_Truss,tag,dim), theMaterial(nullptr), A(0.0),theLoadSens(nullptr)
+  :TrussBase(ELE_TAG_Truss,tag,dim), theMaterial(nullptr), A(0.0),
+   theLoadSens(nullptr), persistentInitialDeformation(0.0)
   {
     UniaxialMaterial *tmp= cast_material<UniaxialMaterial>(ptr_mat);
     if(tmp)
@@ -172,12 +175,14 @@ XC::Truss::Truss(int tag,int dim,const Material *ptr_mat)
 //!   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
 //!   to be invoked upon
 XC::Truss::Truss(void)
-  :TrussBase(ELE_TAG_Truss), theMaterial(nullptr), A(0.0),theLoadSens(nullptr)
+  :TrussBase(ELE_TAG_Truss), theMaterial(nullptr), A(0.0),
+   theLoadSens(nullptr), persistentInitialDeformation(0.0)
   { initialize(); }
 
 //! @brief Copy constructor.
 XC::Truss::Truss(const Truss &other)
-  :TrussBase(other), theMaterial(nullptr), A(other.A),theLoadSens(nullptr)
+  :TrussBase(other), theMaterial(nullptr), A(other.A),
+   theLoadSens(nullptr), persistentInitialDeformation(other.persistentInitialDeformation)
   {
     if(other.theMaterial)
       set_material(*other.theMaterial);
@@ -191,12 +196,12 @@ XC::Truss &XC::Truss::operator=(const Truss &other)
     TrussBase::operator=(other);
     if(other.theMaterial)
       set_material(*other.theMaterial);
-    A= other.A;
+    this->A= other.A;
     if(other.theLoadSens)
       set_load_sens(*other.theLoadSens);
+    this->persistentInitialDeformation= other.persistentInitialDeformation;
     return *this;
   }
-
 
 //! @brief Virtual constructor.
 XC::Element* XC::Truss::getCopy(void) const
@@ -207,6 +212,19 @@ XC::Element* XC::Truss::getCopy(void) const
 //!     and on the matertial object.
 XC::Truss::~Truss(void)
   { free_mem(); }
+
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the section.
+const double &XC::Truss::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see for example XC::BeamColumnWithSectionFD::alive().
+void XC::Truss::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  { persistentInitialDeformation+= this->computeCurrentStrain(); }
+
 
 //! @brief Set a link to the enclosing Domain and to set the node pointers.
 //!    also determines the number of dof associated
@@ -475,8 +493,9 @@ void XC::Truss::alive(void)
   {
     if(isDead())
       {
-        //Remove the current element total strain:
-        theMaterial->setInitialStrain(theMaterial->getStrain());
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	TrussBase::alive(); // Not dead anymore.
       }
   }
 
@@ -484,7 +503,7 @@ void XC::Truss::alive(void)
 void XC::Truss::zeroLoad(void)
   {
     TrussBase::zeroLoad();
-    theMaterial->zeroInitialStrain(); //Removes initial strains.
+    theMaterial->zeroInitialStrain(); //Removes initial strains (Mandatory).
     return;
   }
 
@@ -819,17 +838,21 @@ double XC::Truss::getInitialStrain(void) const
 double XC::Truss::computeCurrentStrain(void) const
   {
     // NOTE method will not be called if L == 0
-
     // determine the strain
     const Vector &disp1= theNodes[0]->getTrialDisp();
     const Vector &disp2= theNodes[1]->getTrialDisp();
-    
-    double dLength = 0.0;
-    for(int i = 0; i < getNumDIM(); i++)
-      { dLength+= (disp2(i)-disp1(i))*cosX[i]; }
+
+    // Compute length increment.
+    double retval= 0.0;
+    const int sz= getNumDIM();
+    for(int i= 0; i<sz; i++)
+      { retval+= (disp2(i)-disp1(i))*cosX[i]; }
 
     // this method should never be called with L == 0
-    return dLength/L;
+    retval/= L; //Compute strain.
+    if(persistentInitialDeformation!=0.0)
+      retval-= persistentInitialDeformation;
+    return retval;
   }
 
 double XC::Truss::computeCurrentStrainRate(void) const
@@ -837,8 +860,8 @@ double XC::Truss::computeCurrentStrainRate(void) const
     // NOTE method will not be called if L == 0
 
     // determine the strain
-    const XC::Vector &vel1 = theNodes[0]->getTrialVel();
-    const XC::Vector &vel2 = theNodes[1]->getTrialVel();
+    const Vector &vel1 = theNodes[0]->getTrialVel();
+    const Vector &vel2 = theNodes[1]->getTrialVel();
 
     double dLength = 0.0;
     for(int i = 0; i < getNumDIM(); i++)
