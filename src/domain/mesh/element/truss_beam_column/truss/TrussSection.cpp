@@ -66,7 +66,6 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/section/SectionForceDeformation.h>
-#include <material/section/PredeformedSFDMaterial.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
@@ -128,11 +127,10 @@ const double &XC::TrussSection::getPersistentInitialSectionDeformation(void) con
 
 //! @brief Increments the persistent (does not get wiped out by zeroLoad)
 //! initial deformation of the section. It's used to store the deformation
-//! of the material during the periods in which their elements are deactivated
+//! of the material during the periods in which the element is deactivated
 //! (see for example XC::BeamColumnWithSectionFD::alive().
 void XC::TrussSection::incrementPersistentInitialDeformationWithCurrentDeformation(void)
   { persistentInitialDeformation+= this->computeCurrentStrain(); }
-
 
 // method: setDomain()
 //    to set a link to the enclosing XC::Domain and to set the node pointers.
@@ -240,7 +238,7 @@ int XC::TrussSection::update(void)
       }
 
     // determine the current strain given trial displacements at nodes
-    double strain = this->computeCurrentStrain();
+    const double strain= this->computeCurrentStrain();
 
     SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
@@ -693,7 +691,7 @@ double XC::TrussSection::computeCurrentStrain(void) const
     // this method should never be called with L == 0
     retval/=L; // Compute strain.
     if(persistentInitialDeformation!=0.0)
-      retval-= persistentInitialDeformation;
+      retval-= persistentInitialDeformation; // substracts persistent deformation 
     return retval;
   }
 

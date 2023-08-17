@@ -66,7 +66,6 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/uniaxial/UniaxialMaterial.h>
-#include <material/uniaxial/PredeformedUniaxialMaterial.h>
 #include <material/uniaxial/CableMaterial.h>
 #include <domain/load/ElementalLoad.h>
 #include "domain/load/beam_loads/TrussStrainLoad.h"
@@ -843,15 +842,15 @@ double XC::Truss::computeCurrentStrain(void) const
     const Vector &disp2= theNodes[1]->getTrialDisp();
 
     // Compute length increment.
-    double retval= 0.0;
+    double retval= 0.0; // Length increment.
     const int sz= getNumDIM();
     for(int i= 0; i<sz; i++)
       { retval+= (disp2(i)-disp1(i))*cosX[i]; }
 
     // this method should never be called with L == 0
-    retval/= L; //Compute strain.
+    retval/= L; // Compute strain.
     if(persistentInitialDeformation!=0.0)
-      retval-= persistentInitialDeformation;
+      retval-= persistentInitialDeformation; // substract persistent deformation.
     return retval;
   }
 
