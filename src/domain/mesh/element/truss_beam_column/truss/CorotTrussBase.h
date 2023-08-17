@@ -41,9 +41,9 @@ namespace XC {
 class CorotTrussBase: public ProtoTruss
   {
   protected:
-    double Lo;	        //!< initial length of truss
-    double Ln;		//!< current length of truss
-    double d21[3];	//!< current displacement offsets in basic system
+    double Lo; //!< initial length of truss
+    mutable double Ln;	//!< current length of truss
+    mutable double d21[3]; //!< current displacement offsets in basic system
 
     Matrix R;//!< Rotation matrix
 
