@@ -59,13 +59,13 @@
 #ifndef MinMaxMaterial_h
 #define MinMaxMaterial_h
 
-#include "material/uniaxial/EncapsulatedMaterial.h"
+#include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
 
 namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Stores max and min strain values.
-class MinMaxMaterial: public EncapsulatedMaterial
+class MinMaxMaterial: public EncapsulatedUniaxialMaterial
   {
   private:
     double minStrain;

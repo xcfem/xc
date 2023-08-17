@@ -58,12 +58,12 @@
 #ifndef HalfDiagramMaterial_h
 #define HalfDiagramMaterial_h
 
-#include "material/uniaxial/EncapsulatedMaterial.h"
+#include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
 
 namespace XC {
 //! @brief Removes negative part of the stress-strain diagram.
 //! @ingroup MatUnx
-class HalfDiagramMaterial : public EncapsulatedMaterial
+class HalfDiagramMaterial : public EncapsulatedUniaxialMaterial
   {
   protected:
     const double factor= 0.0001;

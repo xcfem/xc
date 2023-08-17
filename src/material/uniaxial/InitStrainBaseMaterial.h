@@ -59,14 +59,14 @@
 #ifndef InitStrainBaseMaterial_h
 #define InitStrainBaseMaterial_h
 
-#include <material/uniaxial/EncapsulatedMaterial.h>
+#include <material/uniaxial/EncapsulatedUniaxialMaterial.h>
 
 namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief InitStrainBaseMaterial wraps a UniaxialMaterial
 //! and imposes an initial strain
-class InitStrainBaseMaterial: public EncapsulatedMaterial
+class InitStrainBaseMaterial: public EncapsulatedUniaxialMaterial
   {
   protected:
     double epsInit;

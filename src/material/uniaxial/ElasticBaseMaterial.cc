@@ -33,7 +33,7 @@
 
 //! @brief Constructor.
 XC::ElasticBaseMaterial::ElasticBaseMaterial(int tag, int classtag, double e,double e0)
-  : UniaxialMaterial(tag,classtag), trialStrain(0.0), E(e), ezero(e0) {}
+  : UniaxialMaterial(tag,classtag), ezero(e0), trialStrain(0.0), E(e) {}
 
 //! @brief Sets initial stress.
 int XC::ElasticBaseMaterial::setInitialStrain(const double &strain)
@@ -91,7 +91,7 @@ int XC::ElasticBaseMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(3); 
+    inicComm(3);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);

@@ -60,11 +60,11 @@
 
 //! @brief Constructor.
 XC::InvertMaterial::InvertMaterial(int tag, UniaxialMaterial &material)
-  :EncapsulatedMaterial(tag,MAT_TAG_Invert, material)
+  :EncapsulatedUniaxialMaterial(tag,MAT_TAG_Invert, material)
   {}
 
 XC::InvertMaterial::InvertMaterial(int tag)
-  :EncapsulatedMaterial(tag,MAT_TAG_Invert)
+  :EncapsulatedUniaxialMaterial(tag,MAT_TAG_Invert)
   {}
 
 int XC::InvertMaterial::setTrialStrain(double strain, double strainRate)

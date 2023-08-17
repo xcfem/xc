@@ -63,11 +63,11 @@
 
 //! @brief Default constructor.
 XC::PathIndependentMaterial::PathIndependentMaterial(int tag)
-  : EncapsulatedMaterial(tag,MAT_TAG_PathIndependent) {}
+  : EncapsulatedUniaxialMaterial(tag,MAT_TAG_PathIndependent) {}
 
 //! @brief Constructor.
 XC::PathIndependentMaterial::PathIndependentMaterial(int tag, UniaxialMaterial &material)
-  : EncapsulatedMaterial(tag,MAT_TAG_PathIndependent, material)
+  : EncapsulatedUniaxialMaterial(tag,MAT_TAG_PathIndependent, material)
   {}
 
 
@@ -148,7 +148,7 @@ int XC::PathIndependentMaterial::revertToLastCommit(void)
 //! @brief Revert the material to its initial state.
 int XC::PathIndependentMaterial::revertToStart(void)
   {
-    int retval= EncapsulatedMaterial::revertToStart();
+    int retval= EncapsulatedUniaxialMaterial::revertToStart();
     retval+= this->getMaterial()->revertToStart();
     return retval;
   }
@@ -162,7 +162,7 @@ int XC::PathIndependentMaterial::sendSelf(Communicator &comm)
     setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4); 
-    int res= EncapsulatedMaterial::sendData(comm);
+    int res= EncapsulatedUniaxialMaterial::sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
@@ -181,7 +181,7 @@ int XC::PathIndependentMaterial::recvSelf(const Communicator &comm)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to get the ID\n";
     else
-      res+= EncapsulatedMaterial::recvData(comm);
+      res+= EncapsulatedUniaxialMaterial::recvData(comm);
     return res;
   }
 

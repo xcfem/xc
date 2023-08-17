@@ -61,7 +61,7 @@
 #ifndef PathIndependentMaterial_h
 #define PathIndependentMaterial_h
 
-#include <material/uniaxial/EncapsulatedMaterial.h>
+#include <material/uniaxial/EncapsulatedUniaxialMaterial.h>
 
 namespace XC {
 //! @ingroup MatUnx
@@ -70,7 +70,7 @@ namespace XC {
 //! object to represent a path-independent uniaxial material.  Since
 //! it is path-independent, no state information is stored by
 //! PathIndependentMaterial.
-class PathIndependentMaterial: public EncapsulatedMaterial
+class PathIndependentMaterial: public EncapsulatedUniaxialMaterial
   {
   public:
     PathIndependentMaterial(int tag= 0);

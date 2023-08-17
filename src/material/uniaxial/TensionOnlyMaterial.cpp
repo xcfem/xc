@@ -63,9 +63,14 @@ XC::TensionOnlyMaterial::TensionOnlyMaterial(int tag, UniaxialMaterial &material
   :HalfDiagramMaterial(tag,MAT_TAG_TensionOnly, material)
   {}
 
+//! @brief Constructor.
 XC::TensionOnlyMaterial::TensionOnlyMaterial(int tag)
   :HalfDiagramMaterial(tag,MAT_TAG_TensionOnly)
   {}
+
+//! @brief Virtual constructor.
+XC::UniaxialMaterial *XC::TensionOnlyMaterial::getCopy(void) const
+  { return new TensionOnlyMaterial(*this); }
 
 //! @brief Return the material stress.
 double XC::TensionOnlyMaterial::getStress(void) const
@@ -110,8 +115,6 @@ int XC::TensionOnlyMaterial::commitState(void)
       return 0;
   }
 
-XC::UniaxialMaterial *XC::TensionOnlyMaterial::getCopy(void) const
-  { return new TensionOnlyMaterial(*this); }
 
 double XC::TensionOnlyMaterial::getStressSensitivity(int gradIndex, bool conditional)
   {

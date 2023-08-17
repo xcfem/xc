@@ -66,8 +66,8 @@ namespace XC {
 class TensionOnlyMaterial : public HalfDiagramMaterial
   {
   public:
+    TensionOnlyMaterial(int tag= 0);
     TensionOnlyMaterial(int tag, UniaxialMaterial &material); 
-    TensionOnlyMaterial(int tagl= 0);
     UniaxialMaterial *getCopy(void) const;
 
     double getStress(void) const;

@@ -60,11 +60,11 @@
 
 //! @brief Constructor.
 XC::HalfDiagramMaterial::HalfDiagramMaterial(int tag, int classTag, UniaxialMaterial &material)
-  :EncapsulatedMaterial(tag, classTag, material)
+  :EncapsulatedUniaxialMaterial(tag, classTag, material)
   {}
 
 XC::HalfDiagramMaterial::HalfDiagramMaterial(int tag, int classTag)
-  :EncapsulatedMaterial(tag, classTag)
+  :EncapsulatedUniaxialMaterial(tag, classTag)
   {}
 
 int XC::HalfDiagramMaterial::setTrialStrain(double strain, double strainRate)

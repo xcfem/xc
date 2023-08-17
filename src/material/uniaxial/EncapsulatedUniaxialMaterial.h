@@ -26,8 +26,8 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 
-#ifndef EncapsulatedMaterial_h
-#define EncapsulatedMaterial_h
+#ifndef EncapsulatedUniaxialMaterial_h
+#define EncapsulatedUniaxialMaterial_h
 
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "material/uniaxial/UniaxialMaterialWrapper.h"
@@ -36,14 +36,14 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Encapsulates a copy to an uniaxial material.
-class EncapsulatedMaterial: public UniaxialMaterial
+class EncapsulatedUniaxialMaterial: public UniaxialMaterial
   {
   protected:
     UniaxialMaterialWrapper theMaterial;
 
   public:
-    EncapsulatedMaterial(int tag, int classTag, const UniaxialMaterial &material); 
-    EncapsulatedMaterial(int tag= 0,int classTag= 0);
+    EncapsulatedUniaxialMaterial(int tag, int classTag, const UniaxialMaterial &material); 
+    EncapsulatedUniaxialMaterial(int tag= 0,int classTag= 0);
 
     //! @brief Return a pointer to the encapsulated material.
     inline const UniaxialMaterial *getMaterial(void) const

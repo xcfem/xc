@@ -53,7 +53,7 @@
 #include "domain/component/Parameter.h"
 
 XC::InitStrainBaseMaterial::InitStrainBaseMaterial(int tag, int classTag, const UniaxialMaterial &material, double epsini)
-  : EncapsulatedMaterial(tag, classTag, material),
+  : EncapsulatedUniaxialMaterial(tag, classTag, material),
    epsInit(epsini)
   {
     UniaxialMaterial *tmp= this->getMaterial();
@@ -66,7 +66,7 @@ XC::InitStrainBaseMaterial::InitStrainBaseMaterial(int tag, int classTag, const 
   }
 
 XC::InitStrainBaseMaterial::InitStrainBaseMaterial(int tag, int classTag)
-  :EncapsulatedMaterial(tag, classTag),
+  :EncapsulatedUniaxialMaterial(tag, classTag),
    epsInit(0.0) {}
 
 int XC::InitStrainBaseMaterial::setInitialStrain(const double &initStrain)
@@ -160,7 +160,7 @@ int XC::InitStrainBaseMaterial::revertToStart(void)
 //! @brief Send object members through the communicator argument.
 int XC::InitStrainBaseMaterial::sendData(Communicator &comm)
   {
-    int res= EncapsulatedMaterial::sendData(comm);
+    int res= EncapsulatedUniaxialMaterial::sendData(comm);
     res+= comm.sendDouble(epsInit,getDbTagData(),CommMetaData(4));
     return res;
   }
@@ -168,7 +168,7 @@ int XC::InitStrainBaseMaterial::sendData(Communicator &comm)
 //! @brief Receives object members through the communicator argument.
 int XC::InitStrainBaseMaterial::recvData(const Communicator &comm)
   {
-    int res= EncapsulatedMaterial::recvData(comm);
+    int res= EncapsulatedUniaxialMaterial::recvData(comm);
     res+= comm.receiveDouble(epsInit, getDbTagData(),CommMetaData(4));
     return res;
   }

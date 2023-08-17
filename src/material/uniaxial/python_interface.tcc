@@ -70,38 +70,38 @@ class_<XC::CableMaterial, bases<XC::ElasticBaseMaterial> >("CableMaterial")
   .add_property("length", &XC::CableMaterial::getLength, &XC::CableMaterial::setLength, "Return the length of the cable.")
   ;
 
-XC::UniaxialMaterial *(XC::EncapsulatedMaterial::*getMaterialPtr)(void)= &XC::EncapsulatedMaterial::getMaterial;
-void (XC::EncapsulatedMaterial::*setEncapsulatedMaterial)(const std::string &)= &XC::EncapsulatedMaterial::setMaterial;
-class_<XC::EncapsulatedMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("EncapsulatedMaterial", no_init)
+XC::UniaxialMaterial *(XC::EncapsulatedUniaxialMaterial::*getMaterialPtr)(void)= &XC::EncapsulatedUniaxialMaterial::getMaterial;
+void (XC::EncapsulatedUniaxialMaterial::*setEncapsulatedUniaxialMaterial)(const std::string &)= &XC::EncapsulatedUniaxialMaterial::setMaterial;
+class_<XC::EncapsulatedUniaxialMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("EncapsulatedUniaxialMaterial", no_init)
   .add_property("material", make_function(getMaterialPtr,return_internal_reference<>()), "Return the encapsulated material.")
-  .def("setMaterial", setEncapsulatedMaterial, "Assigns the encapsulated material.")
+  .def("setMaterial", setEncapsulatedUniaxialMaterial, "Assigns the encapsulated material.")
   ;
 
-class_<XC::HalfDiagramMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("HalfDiagramMaterial", no_init)
+class_<XC::HalfDiagramMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("HalfDiagramMaterial", no_init)
   ;
 class_<XC::TensionOnlyMaterial, bases<XC::HalfDiagramMaterial>, boost::noncopyable >("TensionOnlyMaterial", no_init)
   ;
 class_<XC::CompressionOnlyMaterial, bases<XC::HalfDiagramMaterial>, boost::noncopyable >("CompressionOnlyMaterial", no_init)
   ;
 
-class_<XC::InvertMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("InvertMaterial", no_init)
+class_<XC::InvertMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("InvertMaterial", no_init)
   ;
 
-class_<XC::InitStrainBaseMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("InitStrainBaseMaterial", no_init)
+class_<XC::InitStrainBaseMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("InitStrainBaseMaterial", no_init)
   ;
 
 class_<XC::InitStrainMaterial, bases<XC::InitStrainBaseMaterial>, boost::noncopyable >("InitStrainMaterial", no_init);
 
 class_<XC::InitStressMaterial, bases<XC::InitStrainBaseMaterial>, boost::noncopyable >("InitStressMaterial", no_init);
 
-class_<XC::MinMaxMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("MinMaxMaterial", no_init);
+class_<XC::MinMaxMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("MinMaxMaterial", no_init);
 
 class_<XC::MultiLinear, bases<XC::UniaxialMaterial>, boost::noncopyable >("MultiLinear", no_init)
   .def("setValues", &XC::MultiLinear::setupPyList,"Set values using a list of tuples [(u1, f1), (u2,f2),...].")
   .add_property("numPoints", &XC::MultiLinear::getNumPoints,"Return the number of points used to define the material.")
   ;
 
-class_<XC::PathIndependentMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("PathIndependentMaterial", no_init);
+class_<XC::PathIndependentMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("PathIndependentMaterial", no_init);
 
 //class_<XC::BarSlipMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("BarSlipMaterial", no_init);
 

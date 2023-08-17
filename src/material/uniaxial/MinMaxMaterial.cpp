@@ -62,12 +62,12 @@
 #include "utility/matrix/Vector.h"
 
 XC::MinMaxMaterial::MinMaxMaterial(int tag, UniaxialMaterial &material, double min, double max)
-  :EncapsulatedMaterial(tag,MAT_TAG_MinMax,material),
+  :EncapsulatedUniaxialMaterial(tag,MAT_TAG_MinMax,material),
    minStrain(min), maxStrain(max), Tfailed(false), Cfailed(false)
   {}
 
 XC::MinMaxMaterial::MinMaxMaterial(int tag)
-  :EncapsulatedMaterial(tag,MAT_TAG_MinMax),
+  :EncapsulatedUniaxialMaterial(tag,MAT_TAG_MinMax),
    minStrain(0.0), maxStrain(0.0), Tfailed(false), Cfailed(false) {}
 
 int XC::MinMaxMaterial::setTrialStrain(double strain, double strainRate)
@@ -136,7 +136,7 @@ int XC::MinMaxMaterial::revertToLastCommit(void)
 
 int XC::MinMaxMaterial::revertToStart(void)
   {
-    int retval= EncapsulatedMaterial::revertToStart();
+    int retval= EncapsulatedUniaxialMaterial::revertToStart();
     Cfailed = false;
     Tfailed = false;
     retval+= this->getMaterial()->revertToStart();
@@ -157,7 +157,7 @@ XC::DbTagData &XC::MinMaxMaterial::getDbTagData(void) const
 //! @brief Send object members through the communicator argument.
 int XC::MinMaxMaterial::sendData(Communicator &comm)
   {
-    int res= EncapsulatedMaterial::sendData(comm);
+    int res= EncapsulatedUniaxialMaterial::sendData(comm);
     res+= comm.sendDoubles(minStrain,maxStrain,getDbTagData(),CommMetaData(4));
     res+= comm.sendBools(Tfailed, Cfailed, getDbTagData(),CommMetaData(5));
     return res;
@@ -166,7 +166,7 @@ int XC::MinMaxMaterial::sendData(Communicator &comm)
 //! @brief Receives object members through the communicator argument.
 int XC::MinMaxMaterial::recvData(const Communicator &comm)
   {
-    int res= EncapsulatedMaterial::recvData(comm);
+    int res= EncapsulatedUniaxialMaterial::recvData(comm);
     res+= comm.receiveDoubles(minStrain,maxStrain, getDbTagData(),CommMetaData(4));
     res+= comm.receiveBools(Tfailed, Cfailed, getDbTagData(), CommMetaData(5));
     return res;

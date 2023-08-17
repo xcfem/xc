@@ -58,12 +58,12 @@
 #ifndef InvertMaterial_h
 #define InvertMaterial_h
 
-#include "material/uniaxial/EncapsulatedMaterial.h"
+#include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
 
 namespace XC {
 //! @brief Removes negative part of the stress-strain diagram.
 //! @ingroup MatUnx
-class InvertMaterial : public EncapsulatedMaterial
+class InvertMaterial : public EncapsulatedUniaxialMaterial
   {
   protected:
     DbTagData &getDbTagData(void) const;

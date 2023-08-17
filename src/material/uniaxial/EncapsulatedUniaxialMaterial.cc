@@ -24,16 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 
-#include "EncapsulatedMaterial.h"
+#include "EncapsulatedUniaxialMaterial.h"
 #include <utility/matrix/ID.h>
 #include "utility/matrix/Vector.h"
 
 //! @brief Sets the encapsulated material.
-void XC::EncapsulatedMaterial::setMaterial(const UniaxialMaterial &material)
+void XC::EncapsulatedUniaxialMaterial::setMaterial(const UniaxialMaterial &material)
   { theMaterial.setMaterial(material); }
 
 //! @brief Sets the encapsulated material.
-void XC::EncapsulatedMaterial::setMaterial(const std::string &matName)
+void XC::EncapsulatedUniaxialMaterial::setMaterial(const std::string &matName)
   {
     const Material *ptr_mat= getMaterialByName(matName);
     if(ptr_mat)
@@ -53,28 +53,28 @@ void XC::EncapsulatedMaterial::setMaterial(const std::string &matName)
   }
 
 //! @brief Constructor.
-XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag, const UniaxialMaterial &material)
+XC::EncapsulatedUniaxialMaterial::EncapsulatedUniaxialMaterial(int tag, int classTag, const UniaxialMaterial &material)
   :UniaxialMaterial(tag,classTag), theMaterial(material)
   {}
 
 //! @brief Constructor.
-XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag)
+XC::EncapsulatedUniaxialMaterial::EncapsulatedUniaxialMaterial(int tag, int classTag)
   : UniaxialMaterial(tag,classTag), theMaterial() {}
 
-double XC::EncapsulatedMaterial::getStrain(void) const
+double XC::EncapsulatedUniaxialMaterial::getStrain(void) const
   { return theMaterial.getStrain(); }
 
-double XC::EncapsulatedMaterial::getStrainRate(void) const
+double XC::EncapsulatedUniaxialMaterial::getStrainRate(void) const
   { return theMaterial.getStrainRate(); }
 
-int XC::EncapsulatedMaterial::sendData(Communicator &comm)
+int XC::EncapsulatedUniaxialMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
     int res= comm.sendMovable(theMaterial, getDbTagData(), CommMetaData(1));
     return res;
   }
 
-int XC::EncapsulatedMaterial::recvData(const Communicator &comm)
+int XC::EncapsulatedUniaxialMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
     res+= comm.receiveMovable(theMaterial, getDbTagData(),CommMetaData(1));

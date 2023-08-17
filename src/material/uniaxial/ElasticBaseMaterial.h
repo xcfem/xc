@@ -38,10 +38,11 @@ namespace XC {
 //! @brief Base class for uniaxial elastic materials.
 class ElasticBaseMaterial: public UniaxialMaterial
   {
+  private:
+    double ezero; //!< Initial strain.
   protected:
     double trialStrain; //!< Material trial strain.
     double E; //!< Elastic modulus.
-    double ezero; //!< Initial strain.
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
