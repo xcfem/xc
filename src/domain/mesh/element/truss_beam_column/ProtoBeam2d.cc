@@ -92,6 +92,25 @@ XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double alpha, dou
 int XC::ProtoBeam2d::getNumDOF(void) const
   { return 6; }
 
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the section.
+const XC::Vector &XC::ProtoBeam2d::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see for example XC::BeamColumnWithSectionFD::alive().
+void XC::ProtoBeam2d::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  {
+    const Vector &v= getSectionDeformation();
+    const size_t sz= persistentInitialDeformation.Size();
+    if(sz==0) // Not yet initialized.
+      persistentInitialDeformation= v; // not yet initialized.
+    else
+      persistentInitialDeformation+= v; // increment the current value.
+  }
+
 //! @brief Return section properties.
 const XC::CrossSectionProperties2d &XC::ProtoBeam2d::getSectionProperties(void) const
   { return (*physicalProperties[0]).getCrossSectionProperties(); }
@@ -182,6 +201,8 @@ const XC::Vector &XC::ProtoBeam2d::getSectionDeformation(void) const
   {
     static Vector retval;
     retval= computeCurrentStrain();
+    if(!persistentInitialDeformation.isEmpty())  // Have being inactive.
+      retval-= persistentInitialDeformation;
     const Vector &e0= getInitialSectionDeformation();
     // retval(0)= (dx2-dx1)/L: Element elongation/L.
     // retval(1)= (dy1-dy2)/L: Rotation about z/L.
@@ -253,9 +274,9 @@ void XC::ProtoBeam2d::alive(void)
   {
     if(isDead())
       {
-        SectionForceDeformation *theSection= physicalProperties[0];
-        //Remove the current element total strain:
-        theSection->setInitialGeneralizedStrain(theSection->getGeneralizedStrain());
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	Element1D::alive(); // Not dead anymore.
       }
   }
 

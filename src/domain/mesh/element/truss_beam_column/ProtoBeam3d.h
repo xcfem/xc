@@ -43,6 +43,7 @@ class ProtoBeam3d: public Element1D
     typedef ElasticSection3dPhysicalProperties PhysProp;
   protected:
     PhysProp physicalProperties; //!< pointers to the material objects and physical properties.
+    Vector persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
     int sendData(Communicator &);
     int recvData(const Communicator &);
     void set_material(const Material *m);
@@ -53,6 +54,10 @@ class ProtoBeam3d: public Element1D
     ProtoBeam3d(int tag, int class_tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2);
     ProtoBeam3d(int tag, int class_tag, double A, double alpha_y, double alpha_z, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2);
     int getNumDOF(void) const;
+    
+    // Element birth and death stuff.
+    const Vector &getPersistentInitialSectionDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
     
     const CrossSectionProperties3d &getSectionProperties(void) const;
     CrossSectionProperties3d &getSectionProperties(void);
