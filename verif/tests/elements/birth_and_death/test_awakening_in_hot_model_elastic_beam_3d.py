@@ -105,6 +105,28 @@ Ux1b= n2.getDisp[0] # Horizontal displacement.
 Ux1bRef= Ux1aRef # No additional displacement.
 ratio6= abs(Ux1b-Ux1bRef)/Ux1bRef
 
+# Define a new load.
+lp1= modelSpace.newLoadPattern(name= '1')
+lp1.newNodalLoad(n2.tag,xc.Vector([F,0,0,M,M,0]))
+## We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp1.name)
+
+## Solve again.
+result= solProc.solve(calculateNodalReactions= True)
+
+# Check results.
+R1c= n1.getReaction[0] # Horizontal reaction.
+ratio7= abs(R1c+2*F)/F/2
+N1Ac= beamA.getN() # Axial force in the first element.
+M1Ac= beamA.getMz2 # Bending moment at the frontal node.
+ratio8= abs(N1Ac-1.5*F)/F/1.5+abs(M1Ac-1.5*M)/M/1.5
+N1Bc= beamB.getN() # Axial force in the awakened element.
+M1Bc= beamB.getMz2 # Bending moment at the frontal node.
+ratio9= abs(N1Bc-0.5*F)/F/0.5+abs(M1Bc-0.5*M)/M/0.5 # No axial force nor bending moment in the awakened element.
+Ux1c= n2.getDisp[0] # Horizontal displacement.
+Ux1cRef= 1.5*Ux1bRef # 1.5 times the previous displacement.
+ratio10= abs(Ux1b-Ux1bRef)/Ux1bRef
+
 '''
 print('R1a= ', R1a, ' ratio0= ', ratio0)
 print('N1a= ', N1a, 'Mz1a= ', Mz1a, ' ratio1= ', ratio1)
@@ -113,12 +135,16 @@ print('R1b= ', R1b, ' ratio3= ', ratio3)
 print('N1Ab= ', N1Ab, ' ratio4= ', ratio4)
 print('N1Bb= ', N1Bb, ' ratio5= ', ratio5)
 print('Ux1b= ', Ux1b, ' ratio6= ', ratio6)
+print('R1c= ', R1c, ' ratio7= ', ratio7)
+print(beamA.tag, 'N1Ac= ', N1Ac, 'M1Ac= ', M1Ac, ' ratio8= ', ratio8)
+print(beamB.tag, 'N1Bc= ', N1Bc, 'M1Bc= ', M1Bc, ' ratio9= ', ratio9)
+print('Ux1c= ', Ux1c, ' ratio10= ', ratio10)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio0)<1e-8) &(abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-8) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5):
+if (abs(ratio0)<1e-8) &(abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-8) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-8) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
