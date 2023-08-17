@@ -71,6 +71,7 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     void clearMaterials(void);
     void setMaterial(const MAT *);
     void setMaterial(size_t i,MAT *);
+    void setMaterial(size_t i, const MAT &);
     void setMaterial(const MAT *,const std::string &);
     bool empty(void) const;
     int commitState(void);
@@ -194,6 +195,10 @@ void MaterialVector<MAT>::setMaterial(size_t i,MAT *new_mat)
       delete (*this)[i];
     (*this)[i]= new_mat;
   }
+
+template <class MAT>
+void MaterialVector<MAT>::setMaterial(size_t i, const MAT &new_mat)
+  { setMaterial(i, new_mat.getCopy()); }
 
 template <class MAT>
 void MaterialVector<MAT>::clearMaterials(void)
