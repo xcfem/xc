@@ -64,6 +64,7 @@ modelSpace.fixNode("F00FFF", n2.tag)
 # Deactivate beamB element.
 beamBSet= modelSpace.defSet(elements=[beamB])
 modelSpace.deactivateElements(beamBSet, freezeDeadNodes= False)
+beamBSet.fillDownwards()
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -148,3 +149,15 @@ if (abs(ratio0)<1e-8) &(abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLocalAxes()
+# # oh.displayReactions()
+# oh.displayLoads()
+# # oh.displayDispRot(itemToDisp='uX')
+# # oh.displayIntForcDiag(itemToDisp='Vy')
+# oh.displayIntForcDiag(itemToDisp='Mz', setToDisplay= beamBSet)
