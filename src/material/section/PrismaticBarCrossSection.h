@@ -50,11 +50,13 @@ class DeformationPlane;
 //! Constitutive equations of the section.
 class PrismaticBarCrossSection: public SectionForceDeformation
   {
+    
   public:
     PrismaticBarCrossSection(int tag,int classTag,MaterialHandler *mat_ldr= nullptr);
     PrismaticBarCrossSection(const PrismaticBarCrossSection &);
     PrismaticBarCrossSection &operator=(const PrismaticBarCrossSection &);
 
+    
     int setTrialDeformationPlane(const DeformationPlane &);
     int setInitialDeformationPlane(const DeformationPlane &);
     virtual const Vector &getGeneralizedStrainVector(const DeformationPlane &) const;

@@ -77,8 +77,8 @@ class YieldSurfaceSection2d: public PrismaticBarCrossSection
     virtual int revertToLastCommit(void);
     virtual int revertToStart(void);
   
-    virtual int setInitialSectionDeformation (const Vector&);
-    virtual int setTrialSectionDeformation (const Vector&);
+    virtual int setInitialSectionDeformation(const Vector&);
+    virtual int setTrialSectionDeformation(const Vector&);
     void zeroInitialSectionDeformation(void);
     virtual const Vector &getInitialSectionDeformation(void) const;
     virtual const Vector &getSectionDeformation(void) const;
