@@ -91,7 +91,7 @@ class Truss: public TrussBase
     Vector *theLoadSens;
 // AddingSensitivity:END ///////////////////////////////////////////
     
-    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
 
     void initialize(void);
   protected:

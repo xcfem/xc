@@ -76,7 +76,7 @@ class CorotTruss: public CorotTrussBase
     UniaxialMaterial *theMaterial; //!< pointer to a material
 
     double A;//!< area of CorotTruss element.
-    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
     
   protected:
     void free_material(void);
