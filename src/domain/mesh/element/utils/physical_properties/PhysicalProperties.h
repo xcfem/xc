@@ -62,6 +62,7 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     void setMaterial(const MAT *);
     void setMaterial(const MAT *,const std::string &);
     void setMaterial(size_t i,const MAT *);
+    void setMaterial(size_t i,const MAT &);
 
     // public methods to set the state of the properties
     int commitState(void);
@@ -126,6 +127,10 @@ void PhysicalProperties<MAT>::setMaterial(const MAT *matModel, const std::string
 
 template <class MAT>
 void PhysicalProperties<MAT>::setMaterial(size_t i,const MAT *matModel)
+  { theMaterial.setMaterial(i,matModel); }
+
+template <class MAT>
+void PhysicalProperties<MAT>::setMaterial(size_t i,const MAT &matModel)
   { theMaterial.setMaterial(i,matModel); }
 
 //! @brief Returns a vector to store the dbTags

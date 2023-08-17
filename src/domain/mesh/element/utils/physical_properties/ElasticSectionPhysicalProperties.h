@@ -86,7 +86,7 @@ XC::Vector XC::ElasticSectionPhysicalProperties<ElasticSection>::getRhoi(void) c
       retval[i]= this->theMaterial[i]->getRho();
     return retval;
   }
-
+  
 //! @brief print out element data
 template <class ElasticSection>
 void XC::ElasticSectionPhysicalProperties<ElasticSection>::Print(std::ostream &s, int flag ) const
