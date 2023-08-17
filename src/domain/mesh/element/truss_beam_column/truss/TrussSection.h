@@ -80,6 +80,8 @@ class TrussSection: public TrussBase
   private:
     SectionFDPhysicalProperties physicalProperties;
     
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    
     double computeCurrentStrain(void) const;    
   protected:
     DbTagData &getDbTagData(void) const;
@@ -94,6 +96,10 @@ class TrussSection: public TrussBase
 
     // public methods to obtain information about dof & connectivity    
     void setDomain(Domain *theDomain);
+
+    // Element birth and death stuff.
+    const double &getPersistentInitialSectionDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
 
     // public methods to set the state of the element    
     int commitState(void);

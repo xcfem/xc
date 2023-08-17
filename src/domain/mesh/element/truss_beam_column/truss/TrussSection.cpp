@@ -66,6 +66,7 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/section/SectionForceDeformation.h>
+#include <material/section/PredeformedSFDMaterial.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
@@ -73,9 +74,11 @@
 
 #include <cmath>
 
+//! @brief Constructor.
 XC::TrussSection::TrussSection(int tag, int dim, int Nd1, int Nd2, SectionForceDeformation &theSect)
-  : TrussBase(ELE_TAG_TrussSection,tag,dim,Nd1,Nd2),
-    physicalProperties(1,&theSect)
+  :TrussBase(ELE_TAG_TrussSection,tag,dim,Nd1,Nd2),
+   physicalProperties(1,&theSect),
+   persistentInitialDeformation(0.0)
   {
     // get a copy of the material and check we obtained a valid copy
     SectionForceDeformation *theSection= physicalProperties[0];
@@ -95,8 +98,10 @@ XC::TrussSection::TrussSection(int tag, int dim, int Nd1, int Nd2, SectionForceD
     initialize();
   }
 
+//! @brief Constructor.
 XC::TrussSection::TrussSection(int tag,int dim,const Material *ptr_mat)
-  :TrussBase(ELE_TAG_TrussSection,tag,dim,0,0), physicalProperties(1,ptr_mat)
+  :TrussBase(ELE_TAG_TrussSection,tag,dim,0,0), physicalProperties(1,ptr_mat),
+   persistentInitialDeformation(0.0)
   {
     initialize();
   }
@@ -106,7 +111,8 @@ XC::TrussSection::TrussSection(int tag,int dim,const Material *ptr_mat)
 //! invoked by a FEM_ObjectBroker - blank object that recvSelf needs
 //! to be invoked upon
 XC::TrussSection::TrussSection(void)
-  :TrussBase(ELE_TAG_TrussSection),  physicalProperties(1)
+  :TrussBase(ELE_TAG_TrussSection),  physicalProperties(1),
+   persistentInitialDeformation(0.0)
   {
     initialize();
   }
@@ -114,6 +120,19 @@ XC::TrussSection::TrussSection(void)
 //! @brief Virtual constructor.
 XC::Element* XC::TrussSection::getCopy(void) const
   { return new TrussSection(*this); }
+
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the section.
+const double &XC::TrussSection::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see for example XC::BeamColumnWithSectionFD::alive().
+void XC::TrussSection::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  { persistentInitialDeformation+= this->computeCurrentStrain(); }
+
 
 // method: setDomain()
 //    to set a link to the enclosing XC::Domain and to set the node pointers.
@@ -369,9 +388,9 @@ void XC::TrussSection::alive(void)
   {
     if(isDead())
       {
-        SectionForceDeformation *theSection= physicalProperties[0];
-        //Remove the current element total strain:
-        theSection->setInitialGeneralizedStrain(theSection->getGeneralizedStrain());
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	TrussBase::alive(); // Not dead anymore.
       }
   }
 
@@ -664,15 +683,18 @@ double XC::TrussSection::computeCurrentStrain(void) const
     const Vector &disp1= theNodes[0]->getTrialDisp();
     const Vector &disp2= theNodes[1]->getTrialDisp();
 
-    double dLength= 0.0;
+    // Compute length increment.
+    double retval= 0.0; // Length increment.
     for(int i=0; i<getNumDIM(); i++)
       {
-        dLength += (disp2(i)-disp1(i))*cosX[i];
+        retval += (disp2(i)-disp1(i))*cosX[i];
       }
 
     // this method should never be called with L == 0
-    dLength/=L;
-    return dLength;
+    retval/=L; // Compute strain.
+    if(persistentInitialDeformation!=0.0)
+      retval-= persistentInitialDeformation;
+    return retval;
   }
 
 XC::Response *XC::TrussSection::setResponse(const std::vector<std::string> &argv, Information &eleInformation)
