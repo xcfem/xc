@@ -128,7 +128,7 @@ const double &XC::TrussSection::getPersistentInitialSectionDeformation(void) con
 //! @brief Increments the persistent (does not get wiped out by zeroLoad)
 //! initial deformation of the section. It's used to store the deformation
 //! of the material during the periods in which the element is deactivated
-//! (see for example XC::BeamColumnWithSectionFD::alive().
+//! (see for alive() method).
 void XC::TrussSection::incrementPersistentInitialDeformationWithCurrentDeformation(void)
   { persistentInitialDeformation+= this->computeCurrentStrain(); }
 
