@@ -159,19 +159,19 @@ dXMin=1e9
 dXMax=-1e9
 
 def procesResultVerif(comb):
-  nodes= preprocessor.getNodeHandler
+    nodes= preprocessor.getNodeHandler
 
-  deltaX= n8.getDisp[0] # x displacement of node 8
-  global dXMin
-  dXMin=min(dXMin,deltaX)
-  global dXMax
-  dXMax=max(dXMax,deltaX)
-  ''' 
-    print("tagComb= ",comb.tagComb)
-    print("nmbComb= ",nmbComb)
-    print("dXMin= ",(dXMin*1e3)," mm\n")
-    print("dXMax= ",(dXMax*1e3)," mm\n")
-   '''
+    deltaX= n8.getDisp[0] # x displacement of node 8
+    global dXMin
+    dXMin=min(dXMin,deltaX)
+    global dXMax
+    dXMax=max(dXMax,deltaX)
+    ''' 
+      print("tagComb= ",comb.tagComb)
+      print("nmbComb= ",nmbComb)
+      print("dXMin= ",(dXMin*1e3)," mm\n")
+      print("dXMax= ",(dXMax*1e3)," mm\n")
+     '''
 
 import os
 os.system("rm -r -f /tmp/test_combinacion_05.db")
@@ -184,16 +184,22 @@ previousName=""
 tagPrevia= 0 
 tagSave= 0
 for key in combs.getKeys():
-  comb= combs[key]
-  helper.solveComb(comb,solProc)
-  procesResultVerif(comb)
+    comb= combs[key]
+    helper.solveComb(comb,solProc)
+    procesResultVerif(comb)
 
 ## Small differences after changing
 ## setSectionArea
 # 2019.12.22 Values changed when initial displacements were accounted
-# Maybe there is some error here.
-ratio1= abs(dXMax-0.143641332276e-3)/0.143641332276e-3
-ratio2= abs(dXMin+0.162147274048e-3)/0.162147274048e-3
+# dXMax changed from 0.115734e-3 to 0.143641332276e-3
+# dXMin changed from -0.0872328e-3 to -0.162147274048e-3
+# 2023.08.19 Values changed again when initial displacements were replaced
+# by initial strains (persistentInitialDeformation).
+# dXMax changed from 0.143641332276e-3 to 0.11210576644595938e-3
+# dXMin changed from -0.162147274048e-3 to -0.090798198638404e-3
+# Maybe there was some error here.
+ratio1= abs(dXMax-0.11210576644595938e-3)/0.11210576644595938e-3
+ratio2= abs(dXMin+0.090798198638404e-3)/0.090798198638404e-3
 
 '''
 print("dXMax= ",(dXMax*1e3)," mm\n")

@@ -74,10 +74,11 @@
 
 //static data
 XC::ShellBData XC::ShellMITC4Base::BData;
+const int XC::ShellMITC4Base::nstress(8); //three membrane, three moment, two shear
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int classTag, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(classTag,crdTransf), Ktt(0.0)
+  : Shell4NBase(classTag,crdTransf), Ktt(0.0), strains(ngauss)
   { }
 
 //! @brief Constructor
@@ -87,13 +88,32 @@ XC::ShellMITC4Base::ShellMITC4Base(int classTag, const ShellCrdTransf3dBase *crd
 //! @param ptr_mat: pointer to the material object.
 //! @param crdTransf: coordinate transformation.
 XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(tag,classTag,ptr_mat,crdTransf), Ktt(0.0)
+  : Shell4NBase(tag,classTag,ptr_mat,crdTransf), Ktt(0.0), strains(ngauss)
   { }
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,int node1,int node2,int node3,int node4,const SectionFDPhysicalProperties &physProp, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(tag,node1,node2,node3,node4,classTag,physProp,crdTransf), Ktt(0.0)
+  : Shell4NBase(tag,node1,node2,node3,node4,classTag,physProp,crdTransf), Ktt(0.0), strains(ngauss)
   { }
+
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the element.
+const std::vector<XC::Vector> &XC::ShellMITC4Base::getPersistentInitialDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see alive() method).
+void XC::ShellMITC4Base::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  {
+    if(persistentInitialDeformation.empty()) // Not yet initialized.
+      persistentInitialDeformation= this->strains; // not yet initialized.
+    else
+      for(int i= 0; i<ngauss; i++)
+        persistentInitialDeformation[i]+= this->strains[i]; // increment the current value.
+  }
+
 
 //! @brief Set the element domain.
 void XC::ShellMITC4Base::setDomain(Domain *theDomain)
@@ -130,16 +150,10 @@ void XC::ShellMITC4Base::alive(void)
   {
     if(isDead())
       {
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
         Shell4NBase::alive();
-        Ki.Zero();
-        revertToStart(); //Eliminate possible strains and stresses
-	                 //on the element (melt and then solidify).
-        catchInitDisp(); //Node displacements at element activation.
       }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; trying to activate an element already active."
-                << std::endl;
   }
 
 //! @brief Computes the matrix G.
@@ -194,8 +208,6 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
       return Ki;
 
     static const int ndf= 6; //two membrane plus three bending plus one drill
-    static const int nstress= 8; //three membrane, three moment, two shear
-    static const int ngauss= 4;
     static const int numnodes= 4;
 
     int i,  j,  k, p, q;
@@ -454,8 +466,6 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
     //
 
     static const int ndf= 6; //two membrane plus three bending plus one drill
-    static const int nstress= 8; //three membrane, three moment, two shear
-    static const int ngauss= 4;
     static const int numnodes= 4;
 
     int i,  j,  k, p, q;
@@ -467,7 +477,6 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
 
     static double xsj;  // determinant jacobian matrix 
     static double dvol[ngauss]; //volume element
-    static Vector strain(nstress);  //strain
     static double shp[3][numnodes];  //shape functions at a gauss point
 
     //  static double Shape[3][numnodes][ngauss]; //all the shape functions
@@ -564,8 +573,10 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
           }
         Bs=Rot*Bsv;
 
-        //zero the strains
-        strain.Zero( );
+	//! @brief Get the strain at Gauss point i.
+	Vector &strain= this->strains[i];
+	strain= Vector(nstress, 0.0); //zero the strains.
+	
         epsDrill= 0.0;
 
         // j-node loop to compute strain 
@@ -590,7 +601,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
               }//end for p
 
             //nodal "displacements" 
-            const Vector &ul= theCoordTransf->getBasicTrialDisp(j)-initDisp[j];
+            const Vector &ul= theCoordTransf->getBasicTrialDisp(j);
 
             //compute the strain
             //strain += (BJ*ul); 
@@ -610,8 +621,11 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
           } // end for j
     
 
-        //send the strain to the material
-        success= const_cast<SectionForceDeformation *>(physicalProperties[i])->setTrialSectionDeformation( strain );
+        // send the strain to the material
+	// Check if there are initial strains.
+	if(!persistentInitialDeformation.empty())
+	  { strain-= persistentInitialDeformation[i]; }		 
+        success= const_cast<SectionForceDeformation *>(physicalProperties[i])->setTrialSectionDeformation(strain);
 
         //compute the stress
         stress= physicalProperties[i]->getStressResultant( );
@@ -970,6 +984,7 @@ const XC::Matrix &XC::ShellMITC4Base::computeBbend( int node, const double shp[3
 int XC::ShellMITC4Base::sendData(Communicator &comm)
   {
     int res= Shell4NBase::sendData(comm);
+    res+= comm.sendVectors(strains, getDbTagData(), CommMetaData(16));
     res+=comm.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(17));
     return res;
   }
@@ -978,6 +993,7 @@ int XC::ShellMITC4Base::sendData(Communicator &comm)
 int XC::ShellMITC4Base::recvData(const Communicator &comm)
   {
     int res= Shell4NBase::recvData(comm);
+    res+= comm.receiveVectors(strains, getDbTagData(), CommMetaData(16));
     res+=comm.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(17));
     return res;
   }

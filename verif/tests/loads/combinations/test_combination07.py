@@ -244,9 +244,15 @@ for key in combs.getKeys():
   procesResultVerif(comb)
 
 # 2019.12.22 Values changed when initial displacements were accounted
-# Maybe there is some error here.
-ratio1= abs((dXMax-0.0252486379903e-3)/0.0252486379903e-3)
-ratio2= abs((dXMin+0.293653533883e-3)/0.293653533883e-3)
+# dXMax changed from 0.115734e-3 to 0.0252486379903e-3
+# dXMin changed from -0.0872328e-3 to -0.293653533883e-3
+# 2023.08.19 Values changed again to the old values when initial displacements
+# were replaced by initial strains (persistentInitialDeformation).
+# dXMax changed from 0.0252486379903e-3 to 0.11573400959124706e-3
+# dXMin changed from -0.293653533883e-3 to -0.08723276034009012 
+# Maybe there was some error here.
+ratio1= abs(dXMax-0.11573400959124706e-3)/0.11573400959124706e-3
+ratio2= abs(dXMin+0.08723276034009012e-3)/0.08723276034009012e-3
 
 ''' 
 print("dXMin= ",(dXMin*1e3)," mm\n")

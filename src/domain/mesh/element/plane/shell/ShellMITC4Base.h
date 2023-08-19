@@ -42,6 +42,10 @@ class ShellMITC4Base: public Shell4NBase
   protected:
     double Ktt; //!<drilling stiffness
 
+    static const int ngauss= 4; //!< Number of gauss points.
+    static const int nstress; //!< (8): three membrane, three moment, two shear
+    mutable std::vector<Vector> strains; //!< strains at gauss points.
+    std::vector<Vector> persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
     static ShellBData BData; //!< B-bar data
 
 
@@ -60,6 +64,10 @@ class ShellMITC4Base: public Shell4NBase
     ShellMITC4Base(int tag,int classTag,const SectionForceDeformation *ptr_mat,const ShellCrdTransf3dBase *); 
     //full constructor
     ShellMITC4Base(int tag,int classTag, int node1, int node2, int node3, int node4, const SectionFDPhysicalProperties &,const ShellCrdTransf3dBase *);
+    
+    // Element birth and death stuff.
+    const std::vector<Vector> &getPersistentInitialDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
 
     //set domain because frank is a dumb ass 
     void setDomain(Domain *theDomain);
