@@ -125,11 +125,35 @@ void XC::ForceBeamColumn2d::alloc(const BeamIntegration &bi)
       }
   }
 
-// constructor:
-// invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
+// ! @brief Constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag)
   : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d), beamIntegr(nullptr), v0()
   {}
+
+//! @brief Constructor.
+XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf,const BeamIntegration *integ):
+  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,numSec,m,trf), beamIntegr(nullptr), v0()
+  {
+    if(integ) alloc(*integ);
+  }
+
+//! @brief Constructor.
+XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
+                                          int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
+                                          BeamIntegration &bi,
+                                          CrdTransf2d &coordTransf, double massDensPerUnitLength,
+                                          int maxNumIters, double tolerance):
+  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,0),beamIntegr(nullptr), v0()
+  {
+    theNodes.set_id_nodes(nodeI,nodeJ);
+
+    alloc(bi);
+
+    // get copy of the transformation object
+    set_transf(&coordTransf);
+
+    this->setSectionPointers(sec);
+ }
 
 //! @brief Copy constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d(const ForceBeamColumn2d &other)
@@ -153,34 +177,6 @@ XC::ForceBeamColumn2d &XC::ForceBeamColumn2d::operator=(const ForceBeamColumn2d 
     return *this;    
   }
 
-//! @brief Constructor.
-XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf,const BeamIntegration *integ):
-  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,numSec,m,trf), beamIntegr(nullptr), v0()
-  {
-    if(integ) alloc(*integ);
-  }
-
-// constructor which takes the unique element tag, sections,
-// and the node XC::ID's of it's nodal end points.
-// allocates the necessary space needed by each object
-XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
-                                          int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
-                                          BeamIntegration &bi,
-                                          CrdTransf2d &coordTransf, double massDensPerUnitLength,
-                                          int maxNumIters, double tolerance):
-  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,0),beamIntegr(nullptr), v0()
-  {
-    theNodes.set_id_nodes(nodeI,nodeJ);
-
-    alloc(bi);
-
-    // get copy of the transformation object
-    set_transf(&coordTransf);
-
-    this->setSectionPointers(sec);
- }
-
-
 //! @brief Virtual constructor.
 XC::Element* XC::ForceBeamColumn2d::getCopy(void) const
   { return new ForceBeamColumn2d(*this); }
@@ -188,6 +184,32 @@ XC::Element* XC::ForceBeamColumn2d::getCopy(void) const
 //! @brief Destructor
 XC::ForceBeamColumn2d::~ForceBeamColumn2d(void)
   { free_mem(); }
+
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the element.
+const std::vector<XC::Vector> &XC::ForceBeamColumn2d::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see for example ForceBeamColumn2d::alive()).
+void XC::ForceBeamColumn2d::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  {
+    static Vector v(NEBD), dv(NEBD);
+    this->getCurrentDisplacements(v, dv);
+    if(persistentInitialDeformation.empty()) // Not yet initialized.
+      {
+        persistentInitialDeformation.resize(2);
+        persistentInitialDeformation[0]= v;
+        persistentInitialDeformation[1]= dv;
+      }
+    else // increment the current values.
+      {
+        persistentInitialDeformation[0]+= v;
+        persistentInitialDeformation[1]+= dv;
+      }
+  }
 
 void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
   {
@@ -332,7 +354,26 @@ const XC::Matrix &XC::ForceBeamColumn2d::getInitialStiff(void) const
     return Ki;
   }
 
-//NEWTON , SUBDIVIDE AND INITIAL ITERATIONS
+//! @brief Retrieves curreont displacements from the the coordinate transformation
+//! and returns them in the vector arguments.
+void XC::ForceBeamColumn2d::getCurrentDisplacements(Vector &v, Vector &dv)
+  {
+    // update the transformation
+    theCoordTransf->update();
+
+    // get basic displacements and increments
+    v= theCoordTransf->getBasicTrialDisp();
+
+    dv= theCoordTransf->getBasicIncrDeltaDisp();
+
+    if(!persistentInitialDeformation.empty()) // Have being inactive.
+      {
+        v-= persistentInitialDeformation[0]; // substracts the parts during inactive period.
+        dv-= persistentInitialDeformation[1];
+      }
+  }
+
+//! @brief NEWTON, SUBDIVIDE AND INITIAL ITERATIONS
 int XC::ForceBeamColumn2d::update(void)
   {
     // if have completed a recvSelf() - do a revertToLastCommit
@@ -340,21 +381,14 @@ int XC::ForceBeamColumn2d::update(void)
     if(initialFlag == 2)
       this->revertToLastCommit();
 
-    // update the transformation
-    theCoordTransf->update();
-
-    // get basic displacements and increments
-    const Vector &v= theCoordTransf->getBasicTrialDisp();
-
-    static Vector dv(NEBD);
-    dv= theCoordTransf->getBasicIncrDeltaDisp();
-
+    static Vector v(NEBD), dv(NEBD), vin(NEBD);
+    this->getCurrentDisplacements(v, dv);
     if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && (sp.isEmpty()))
       return 0;
 
-    static Vector vin(NEBD);
     vin= v;
     vin-= dv;
+    
     const double L= theCoordTransf->getInitialLength();
     const double oneOverL= 1.0/L;
 
@@ -805,6 +839,19 @@ const XC::Matrix &XC::ForceBeamColumn2d::getMass(void) const
     return theMatrix;
   }
 
+//! @brief Reactivates the element.
+void XC::ForceBeamColumn2d::alive(void)
+  {
+    if(isDead())
+      {
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	NLForceBeamColumn2dBase::alive(); // Not dead anymore.
+      }
+  }
+
+
+//! @brief Removes the loads on the element.
 void XC::ForceBeamColumn2d::zeroLoad(void)
   {
     NLForceBeamColumn2dBase::zeroLoad();

@@ -328,11 +328,22 @@ for key in combs.getKeys():
     procesResultVerif(preprocessor, comb)
 
 # 2015.07.06 Values changed when zeroed initial strains in revertToStart
+# dXMax changed from -1.04244692895e-3 to 0.115734009591e-3
+# dXMin changed from -1.24522898798e-3 to -0.0872327603415e-3
 # 2019.12.22 Values changed again when initial displacements were accounted
-# 2019.12.22 Values changed again when initial displacements were accounted
-# 2020.01.25 Values changed again when notional size expressed in m in getCreepDeformation.
-dXMaxTeor= -0.26498373792738855e-3 #-0.254204581384e-3 #0.115734009591e-3 #-1.04244692895e-3
-dXMinTeor= -0.5904250199155021e-3 #-0.579396575376e-3 #-0.0872327603415e-3 #-1.24522898798e-3
+# dXMax changed from 0.115734009591e-3 to -0.254204581384e-3e-3
+# dXMin changed from -0.0872327603415e-3 to -0.579396575376e-3
+# 2020.01.25 Values changed again when notional size expressed in m
+# in getCreepDeformation.
+# dXMax changed from -0.254204581384e-3e-3 to -0.26498373792738855e-3
+# dXMin changed from -0.579396575376e-3 to -0.5904250199155021e-3
+# 2023.08.19 Values changed again when initial displacements were replaced
+# by initial strains (persistentInitialDeformation).
+# dXMax changed from -0.26498373792738855e-3 to 0.1157340095912471e-3
+# dXMin changed from -0.5904250199155021e-3 to -0.08723276034008745e-3
+# The new values are the same than those of 2015.07.06 that were correct.
+dXMaxTeor= 0.1157340095912471e-3 # -0.26498373792738855e-3 #-0.254204581384e-3 #0.115734009591e-3 #-1.04244692895e-3
+dXMinTeor= -0.08723276034008745e-3 #-0.579396575376e-3 #-0.0872327603415e-3 #-1.24522898798e-3
 # End of change
 
 dYMaxTeor= 0
@@ -343,18 +354,10 @@ ratio3= abs(((dYMax-dYMaxTeor)))
 ratio4= abs(((dYMin-dYMinTeor)))
 
 ''' 
-print("dXMax= ",dXMax*1e3," mm")
-print("dXMaxTeor= ",dXMaxTeor*1e3," mm")
-print("ratio1= ",ratio1)
-print("dXMin= ",dXMin*1e3," mm")
-print("dXMinTeor= ",dXMinTeor*1e3," mm")
-print("ratio2= ",ratio2)
-print("dYMin= ",(dYMin*1e3)," mm")
-print("dYMinTeor= ",(dYMin*1e3)," mm")
-print("ratio3= ",ratio3)
-print("dYMax= ",(dYMax*1e3)," mm")
-print("dYMaxTeor= ",(dYMaxTeor*1e3)," mm")
-print("ratio4= ",ratio4)
+print("dXMax= ",dXMax*1e3," mm", " dXMaxTeor= ",dXMaxTeor*1e3," mm", " ratio1= ",ratio1 )
+print("dXMin= ",dXMin*1e3," mm", " dXMinTeor= ",dXMinTeor*1e3," mm", " ratio2= ",ratio2)
+print("dYMin= ",(dYMin*1e3)," mm", " dYMinTeor= ",(dYMin*1e3)," mm", " ratio3= ",ratio3)
+print("dYMax= ",(dYMax*1e3)," mm", " dYMaxTeor= ",(dYMaxTeor*1e3)," mm", " ratio4= ",ratio4)
 '''
 
 import os

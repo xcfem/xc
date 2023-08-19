@@ -46,7 +46,7 @@ if(not pth):
 auxModulePath= pth+"/../../aux"
 sys.path.append(auxModulePath)
 import four_fiber_section
-fourFibersSection= four_fiber_section.buildFourFiberSection(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4)
+fourFibersSection= four_fiber_section.build_four_fiber_section(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4)
 
 sigma= four_fiber_section.E*epsilon
 F= sigma*four_fiber_section.fiberArea

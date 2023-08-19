@@ -73,7 +73,7 @@ class CorotTrussSection: public CorotTrussBase
   {
   private:
     SectionFDPhysicalProperties physicalProperties; //!< Element material.
-    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
     
     double computeCurrentStrain(void) const;    
   public:

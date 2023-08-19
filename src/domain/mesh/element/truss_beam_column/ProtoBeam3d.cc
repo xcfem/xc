@@ -117,12 +117,11 @@ const XC::Vector &XC::ProtoBeam3d::getPersistentInitialSectionDeformation(void) 
 //! @brief Increments the persistent (does not get wiped out by zeroLoad)
 //! initial deformation of the section. It's used to store the deformation
 //! of the material during the periods in which their elements are deactivated
-//! (see for example XC::BeamColumnWithSectionFD::alive().
+//! (see alive() method).
 void XC::ProtoBeam3d::incrementPersistentInitialDeformationWithCurrentDeformation(void)
   {
     const Vector &v= getSectionDeformation();
-    const size_t sz= persistentInitialDeformation.Size();
-    if(sz==0) // Not yet initialized.
+    if(persistentInitialDeformation.isEmpty()) // Not yet initialized.
       persistentInitialDeformation= v; // not yet initialized.
     else
       persistentInitialDeformation+= v; // increment the current value.

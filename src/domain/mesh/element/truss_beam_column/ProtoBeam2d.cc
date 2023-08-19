@@ -104,8 +104,7 @@ const XC::Vector &XC::ProtoBeam2d::getPersistentInitialSectionDeformation(void) 
 void XC::ProtoBeam2d::incrementPersistentInitialDeformationWithCurrentDeformation(void)
   {
     const Vector &v= getSectionDeformation();
-    const size_t sz= persistentInitialDeformation.Size();
-    if(sz==0) // Not yet initialized.
+    if(persistentInitialDeformation.isEmpty()) // Not yet initialized.
       persistentInitialDeformation= v; // not yet initialized.
     else
       persistentInitialDeformation+= v; // increment the current value.

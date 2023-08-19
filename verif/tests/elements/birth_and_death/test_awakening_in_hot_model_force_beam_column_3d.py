@@ -3,13 +3,15 @@
     been already analyzed gives the correct results. Check 3D elastic 
     beam element.
 '''
-
 from __future__ import print_function
 
+import os
+import sys
 import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
+
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2023, LCPT"
@@ -17,17 +19,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-
-E= 30e6 # Young modulus (psi)
-l= 10 # Bar length in inches
-F= 1000 # Force magnitude (pounds)
-M= 5*F # Bending moment (pounds inches)
-b= 1 # Section side in inches.
-A= b*b # Section area in square inches.
-I= 1/12.0*b**4 # Section inertia in inches^4.
-nu= 0.3 # Poisson's ratio
-G= E/(2*(1+nu)) # Shear modulus
-J= 2.25*b**4 # Torsion constant.
+l= 4 # Beam length
+F= 1e3 # Force magnitude
+M= 0.5*F # Bending moment
 
 # Model definition
 feProblem= xc.FEProblem()
@@ -43,19 +37,26 @@ n1= nodes.newNodeXYZ(0,0,0)
 n2= nodes.newNodeXYZ(l,0,0)
 
 # Geometric transformations
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))
+# XXX Check coherence in axis orientation with elastic beams.
 
 ### Materials definition
-scc= typical_materials.defElasticSection3d(preprocessor, "scc", A= A, E= E, Iy= I, Iz= I, G= G, J= J)
+pth= os.path.dirname(__file__)
+# print("pth= ", pth)
+if(not pth):
+    pth= "."
+auxModulePath= pth+"/../../aux"
+sys.path.append(auxModulePath)
+import four_fiber_section
+rcSection, staticParams, fibers= four_fiber_section.create_four_fiber_section(preprocessor) # Reinforced concrete fiber section.
+
 
 ### Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= scc.name
-beamA= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
-beamA.sectionArea= A
-beamB= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
-beamB.sectionArea= A
+elements.defaultMaterial= rcSection.name
+beamA= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag,n2.tag]))
+beamB= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag,n2.tag]))
 
 ### Constraints
 modelSpace.fixNode("0000FF", n1.tag)
@@ -64,7 +65,6 @@ modelSpace.fixNode("F00FFF", n2.tag)
 # Deactivate beamB element.
 beamBSet= modelSpace.defSet(elements=[beamB])
 modelSpace.deactivateElements(beamBSet, freezeDeadNodes= False)
-beamBSet.fillDownwards()
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -75,6 +75,11 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 ## Compute solution
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, printFlag= 0)
 result= solProc.solve(calculateNodalReactions= True)
+
+### Get static parameters.
+A= staticParams[1]
+I= staticParams[3]
+E= staticParams[0]
 
 R1a= n1.getReaction[0]
 ratio0= abs(R1a+F)/F
@@ -88,6 +93,7 @@ ratio2= abs(Ux1a-Ux1aRef)/Ux1aRef
 
 ## Activate the second element (nothing must change).
 modelSpace.activateElements(beamBSet)
+beamBSet.fillDownwards()
 
 # Solve again.
 result= solProc.solve(calculateNodalReactions= True)
@@ -130,8 +136,8 @@ ratio10= abs(Ux1b-Ux1bRef)/Ux1bRef
 
 '''
 print('R1a= ', R1a, ' ratio0= ', ratio0)
-print('N1a= ', N1a, 'Mz1a= ', Mz1a, ' ratio1= ', ratio1)
-print('Ux1a= ', Ux1a, ' ratio2= ', ratio2)
+print('N1a= ', N1a, 'N1a= ', N1a, 'Mx1a= ', Mx1a, 'Mz1a= ', Mz1a, ' ratio1= ', ratio1)
+print('Ux1a= ', Ux1a, 'Ux1aRef= ', Ux1aRef, ' ratio2= ', ratio2)
 print('R1b= ', R1b, ' ratio3= ', ratio3)
 print('N1Ab= ', N1Ab, ' ratio4= ', ratio4)
 print('N1Bb= ', N1Bb, ' ratio5= ', ratio5)
@@ -149,7 +155,7 @@ if (abs(ratio0)<1e-8) &(abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-
+    
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
@@ -158,6 +164,8 @@ else:
 # oh.displayLocalAxes()
 # # oh.displayReactions()
 # oh.displayLoads()
-# # oh.displayDispRot(itemToDisp='uX')
-# # oh.displayIntForcDiag(itemToDisp='Vy')
+# # oh.displayDispRot(itemToDisp='uX',setToDisplay=pile)
+# # oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile)
 # oh.displayIntForcDiag(itemToDisp='Mz', setToDisplay= beamBSet)
+# oh.displayIntForcDiag(itemToDisp='My', setToDisplay= beamBSet)
+

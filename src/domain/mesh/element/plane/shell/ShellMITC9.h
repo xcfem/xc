@@ -97,8 +97,9 @@ class ShellMITC9: public QuadBase9N<SectionFDPhysicalProperties>
 
     const GaussModel &getGaussModel(void) const;
 
-    // methods for applying loads
+    void alive(void);
     void zeroLoad(void);
+    // methods for applying loads
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

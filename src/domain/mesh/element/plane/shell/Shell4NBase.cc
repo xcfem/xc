@@ -106,13 +106,12 @@ void XC::Shell4NBase::alloc(const ShellCrdTransf3dBase *crdTransf)
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf)
   : QuadBase4N<SectionFDPhysicalProperties>(0,classTag, SectionFDPhysicalProperties(4)),
-  theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()
+  theCoordTransf(nullptr), applyLoad(0), p0()
   {
     alloc(crdTransf);
     appliedB[0]= 0.0;
     appliedB[1]= 0.0;
     appliedB[2]= 0.0;
-    zeroInitDisp();
   }
 
 //! @brief Constructor.
@@ -123,19 +122,18 @@ XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf
 //! @param crdTransf: coordinate transformation.
 XC::Shell4NBase::Shell4NBase(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
   : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,SectionFDPhysicalProperties(4,ptr_mat)),
-  theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()
+  theCoordTransf(nullptr), applyLoad(0), p0()
   {
     alloc(crdTransf);
     appliedB[0]= 0.0;
     appliedB[1]= 0.0;
     appliedB[2]= 0.0;
-    zeroInitDisp();
   }
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int tag, int classTag,int node1,int node2,int node3,int node4,const SectionFDPhysicalProperties &physProp, const ShellCrdTransf3dBase *crdTransf)
   : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,physProp),
-  theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()
+  theCoordTransf(nullptr), applyLoad(0), p0()
   {
     theNodes.set_id_nodes(node1,node2,node3,node4);
     alloc(crdTransf);
@@ -143,18 +141,16 @@ XC::Shell4NBase::Shell4NBase(int tag, int classTag,int node1,int node2,int node3
     appliedB[0]= 0.0;
     appliedB[1]= 0.0;
     appliedB[2]= 0.0;
-    zeroInitDisp();
   }
 
 //! @brief Copy constructor.
 XC::Shell4NBase::Shell4NBase(const Shell4NBase &other)
-  : QuadBase4N<SectionFDPhysicalProperties>(other), theCoordTransf(nullptr), applyLoad(other.applyLoad), initDisp(4,Vector(6)), p0(other.p0)
+  : QuadBase4N<SectionFDPhysicalProperties>(other), theCoordTransf(nullptr), applyLoad(other.applyLoad), p0(other.p0)
   {
     alloc(other.theCoordTransf);
     appliedB[0]= other.appliedB[0];
     appliedB[1]= other.appliedB[1];
     appliedB[2]= other.appliedB[2];
-    initDisp= other.initDisp;
   }
 
 //! @brief Assignment operator.
@@ -166,7 +162,6 @@ XC::Shell4NBase &XC::Shell4NBase::operator=(const Shell4NBase &other)
     appliedB[0]= other.appliedB[0];
     appliedB[1]= other.appliedB[1];
     appliedB[2]= other.appliedB[2];
-    initDisp= other.initDisp;
     p0= other.p0;
     return *this;
   }
@@ -345,51 +340,6 @@ int XC::Shell4NBase::getNumDOF(void) const
   { return 24; }
 
 
-//! @brief print out element data
-void XC::Shell4NBase::Print(std::ostream &s, int flag ) const
-  {
-    if(flag == -1)
-      {
-        int eleTag= this->getTag();
-        s << "EL_QUAD4\t" << eleTag << "\t";
-        s << eleTag << "\t" << 1;
-        s  << "\t" << theNodes.getTagNode(0) << "\t" << theNodes.getTagNode(1);
-        s  << "\t" << theNodes.getTagNode(2) << "\t" << theNodes.getTagNode(3) << "\t0.00";
-        s << std::endl;
-        s << "PROP_2D\t" << eleTag << "\t";
-        s << eleTag << "\t" << 1;
-        s  << "\t" << -1 << "\tSHELL\t1.0\0.0";
-        s << std::endl;
-      }
-    else if(flag < -1)
-      {
-        int counter= (flag + 1) * -1;
-        int eleTag= this->getTag();
-        int i,j;
-        for(i= 0;i < 4;i++)
-          {
-            const Vector &stress= physicalProperties[i]->getStressResultant();
-            s << "STRESS\t" << eleTag << "\t" << counter << "\t" << i << "\tTOP";
-            for(j=0; j<6; j++)
-              s << "\t" << stress(j);
-            s << std::endl;
-          }
-      }
-    else
-      {
-        s << std::endl;
-        s << getClassName() << " Four Node Shell \n";
-        s << "Element Number: " << this->getTag() << std::endl;
-        s << "Node 1 : " << theNodes.getTagNode(0) << std::endl;
-        s << "Node 2 : " << theNodes.getTagNode(1) << std::endl;
-        s << "Node 3 : " << theNodes.getTagNode(2) << std::endl;
-        s << "Node 4 : " << theNodes.getTagNode(3) << std::endl;
-
-        s << "Material Information : \n ";
-        physicalProperties.Print( s, flag );
-        s << std::endl;
-      }
-  }
 
 //! @brief Update state variables.
 int XC::Shell4NBase::update(void)
@@ -703,8 +653,8 @@ XC::Vector XC::Shell4NBase::getInterpolatedDisplacements(const ParticlePos3d &po
     const Vector factors= getInterpolationFactors(pos);
 
     //node loop to compute displacements
-    displacement.Zero( );
-    for(int j= 0; j < numberOfNodes; j++ )
+    displacement.Zero();
+    for(int j= 0; j < numberOfNodes; j++)
       //displacement += ( factor[j] * theNodes[j]->getTrialAccel() );
       displacement.addVector(1.0, theCoordTransf->getBasicTrialAccel(j), factors[j] );
 
@@ -797,24 +747,9 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
       } //end for i gauss loop
   }
 
-//! @brief Get the displacement of the nodes at element birth.
-void XC::Shell4NBase::catchInitDisp(void)
-  {
-    for(size_t i= 0;i<4;i++)
-      initDisp[i]= theNodes[i]->getTrialDisp();
-  }
-
-//! @brief Set initial displacements to zero.
-void XC::Shell4NBase::zeroInitDisp(void)
-  {
-    for(std::vector<Vector>::iterator i= initDisp.begin();i!=initDisp.end();i++)
-      (*i).Zero();
-  }
-
 //! @brief compute local coordinates and basis
 void XC::Shell4NBase::computeBasis(void)
   {
-    catchInitDisp();
     theCoordTransf->initialize(theNodes);
     theCoordTransf->setup_nodal_local_coordinates();
   }
@@ -927,8 +862,7 @@ int XC::Shell4NBase::sendData(Communicator &comm)
     res+= sendCoordTransf(10,11,12,comm);
     res+= comm.sendInt(applyLoad,getDbTagData(),CommMetaData(13));
     res+= comm.sendDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
-    res+= comm.sendVectors(initDisp,getDbTagData(),CommMetaData(15));
-    res+= p0.sendData(comm,getDbTagData(),CommMetaData(16));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(15));
     return res;
   }
 
@@ -941,8 +875,7 @@ int XC::Shell4NBase::recvData(const Communicator &comm)
     res+= recvCoordTransf(10,11,12,comm);
     res+= comm.receiveInt(applyLoad,getDbTagData(),CommMetaData(13));
     res+= comm.receiveDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
-    res+= comm.receiveVectors(initDisp,getDbTagData(),CommMetaData(15));
-    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(16));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(15));
     return res;
   }
 
@@ -1011,4 +944,50 @@ int XC::Shell4NBase::getResponse(int responseID, Information &eleInfo)
 	  }
       }
     return retval;
+  }
+
+//! @brief print out element data
+void XC::Shell4NBase::Print(std::ostream &s, int flag ) const
+  {
+    if(flag == -1)
+      {
+        int eleTag= this->getTag();
+        s << "EL_QUAD4\t" << eleTag << "\t";
+        s << eleTag << "\t" << 1;
+        s  << "\t" << theNodes.getTagNode(0) << "\t" << theNodes.getTagNode(1);
+        s  << "\t" << theNodes.getTagNode(2) << "\t" << theNodes.getTagNode(3) << "\t0.00";
+        s << std::endl;
+        s << "PROP_2D\t" << eleTag << "\t";
+        s << eleTag << "\t" << 1;
+        s  << "\t" << -1 << "\tSHELL\t1.0\0.0";
+        s << std::endl;
+      }
+    else if(flag < -1)
+      {
+        int counter= (flag + 1) * -1;
+        int eleTag= this->getTag();
+        int i,j;
+        for(i= 0;i < 4;i++)
+          {
+            const Vector &stress= physicalProperties[i]->getStressResultant();
+            s << "STRESS\t" << eleTag << "\t" << counter << "\t" << i << "\tTOP";
+            for(j=0; j<6; j++)
+              s << "\t" << stress(j);
+            s << std::endl;
+          }
+      }
+    else
+      {
+        s << std::endl;
+        s << getClassName() << " Four Node Shell \n";
+        s << "Element Number: " << this->getTag() << std::endl;
+        s << "Node 1 : " << theNodes.getTagNode(0) << std::endl;
+        s << "Node 2 : " << theNodes.getTagNode(1) << std::endl;
+        s << "Node 3 : " << theNodes.getTagNode(2) << std::endl;
+        s << "Node 4 : " << theNodes.getTagNode(3) << std::endl;
+
+        s << "Material Information : \n ";
+        physicalProperties.Print( s, flag );
+        s << std::endl;
+      }
   }

@@ -1574,8 +1574,4 @@ class SimpleNewtonRaphsonDisplacementControl(DisplacementControlBase):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
         super().__init__(prb= prb, node= node, dof= dof, increment= increment, name= name, constraintHandlerType= 'transformation', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'newton_raphson_soln_algo')
-        self.feProblem= prb
-        self.dispControlNode= node
-        self.dispControlDof= dof
-        self.dispControlIncrement= increment
         

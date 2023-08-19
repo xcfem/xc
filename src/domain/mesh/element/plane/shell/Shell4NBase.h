@@ -58,7 +58,6 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     ShellCrdTransf3dBase *theCoordTransf; //!< Coordinate transformation.
     int applyLoad;
     double appliedB[3]; //!< Body forces applied with load
-    std::vector<Vector> initDisp; //!< Initial displacements.
 
     mutable Matrix Ki;
     FVectorShell p0; //!< Reactions in the basic system due to element loads
@@ -86,8 +85,6 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
       { return xl; }
     inline pointer_to_xl get_xl(void)
       { return xl; }
-    void catchInitDisp(void);
-    void zeroInitDisp(void);
   public:
     //null constructor
     Shell4NBase(int classTag,const ShellCrdTransf3dBase *);
@@ -142,9 +139,6 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     ParticlePos3d getLocalCoordinatesOfNode(const int &) const;
     ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;
     Pos3d getCartesianCoordinates(const ParticlePos3d &,bool initialGeometry= true) const;    
-    //! @brief Return initial displacements.
-    inline const std::vector<Vector> &getInitDisp(void) const
-      { return initDisp; }
     
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

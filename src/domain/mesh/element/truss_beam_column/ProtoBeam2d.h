@@ -49,7 +49,7 @@ class ProtoBeam2d: public Element1D
     typedef ElasticSection2dPhysicalProperties PhysProp;
   protected:
     PhysProp physicalProperties; //!< pointers to the material objects and physical properties.
-    Vector persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    Vector persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
     int sendData(Communicator &);
     int recvData(const Communicator &);
     void set_material(const Material *m);

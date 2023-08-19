@@ -148,6 +148,8 @@ class ZeroLengthSection: public Element0D
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
 
+    void alive(void);
+    
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

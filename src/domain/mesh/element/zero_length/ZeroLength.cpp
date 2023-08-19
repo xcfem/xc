@@ -76,6 +76,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
+#include "domain/load/ElementalLoad.h"
 
 // initialise the class wide variables
 XC::Matrix XC::ZeroLength::ZeroLengthM2(2,2);
@@ -86,6 +87,13 @@ XC::Vector XC::ZeroLength::ZeroLengthV2(2);
 XC::Vector XC::ZeroLength::ZeroLengthV4(4);
 XC::Vector XC::ZeroLength::ZeroLengthV6(6);
 XC::Vector XC::ZeroLength::ZeroLengthV12(12);
+
+//! @brief Default constructor:
+XC::ZeroLength::ZeroLength(int tag)
+  :Element0D(tag,ELE_TAG_ZeroLength,0,0,0),theMatrix(nullptr),
+   theVector(nullptr), theMaterial1d(this),
+   persistentInitialDeformation()
+  {}
 
 //!  @brief Constructor.
 //!
@@ -106,7 +114,9 @@ XC::Vector XC::ZeroLength::ZeroLengthV12(12);
 //! @param direction: local direction on which the material works.
 XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, const Vector &yp,UniaxialMaterial &theMat, int direction)
   : Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp),
-    theMatrix(nullptr), theVector(nullptr), theMaterial1d(this,theMat,direction)
+    theMatrix(nullptr), theVector(nullptr),
+    theMaterial1d(this,theMat,direction),
+    persistentInitialDeformation()
     {}
 
 
@@ -126,7 +136,8 @@ XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, con
 XC::ZeroLength::ZeroLength(int tag,int dim,const Material *ptr_mat,int direction)
   :Element0D(tag,ELE_TAG_ZeroLength,0,0,dim),
    theMatrix(nullptr), theVector(nullptr),
-   theMaterial1d(this,cast_material<UniaxialMaterial>(ptr_mat),direction) {}
+   theMaterial1d(this,cast_material<UniaxialMaterial>(ptr_mat),direction),
+   persistentInitialDeformation() {}
 
 //! @brief Construct element with multiple unidirectional materials
 //!
@@ -147,13 +158,10 @@ XC::ZeroLength::ZeroLength(int tag,int dim,const Material *ptr_mat,int direction
 //! @param theMat: material container.
 //! @param direction: direction container.
 XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector& x, const Vector& yp,const DqUniaxialMaterial &theMat,const ID& direction )
-  :Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp), theMatrix(nullptr), theVector(nullptr), theMaterial1d(this,theMat,direction) {}
-
-
-//! @brief Default constructor:
-XC::ZeroLength::ZeroLength(void)
-  :Element0D(0,ELE_TAG_ZeroLength,0,0,0),theMatrix(nullptr), theVector(nullptr),
-   theMaterial1d(this) {}
+  :Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp),
+   theMatrix(nullptr), theVector(nullptr),
+   theMaterial1d(this,theMat,direction),
+   persistentInitialDeformation() {}
 
 //! @brief Return a pointer to the material that corresponds to the name.
 //!
@@ -303,6 +311,23 @@ void XC::ZeroLength::setUpType(const size_t &numDOFsNodes)
       }
   }
 
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the section.
+const XC::Vector &XC::ZeroLength::getPersistentInitialSectionDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see alive() method).
+void XC::ZeroLength::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  {
+    if(persistentInitialDeformation.isEmpty())
+      persistentInitialDeformation= this->getCurrentDispDiff();
+    else
+      persistentInitialDeformation+= this->getCurrentDispDiff();
+  }
+
 //! @brief Set the elemento domain.
 //!
 //! to set a link to the enclosing Domain and to set the node pointers.
@@ -404,6 +429,29 @@ int XC::ZeroLength::revertToStart(void)
     return retval;
   }
 
+//! @brief Compute the current difference in displacements
+//! between the nodes.
+const XC::Vector &XC::ZeroLength::getCurrentDispDiff(void) const
+  {
+    static Vector retval;
+    const Vector &disp1= theNodes[0]->getTrialDisp();
+    const Vector &disp2= theNodes[1]->getTrialDisp();
+    retval= disp2-disp1;
+    if(!persistentInitialDeformation.isEmpty())
+      retval-= persistentInitialDeformation;
+    return retval;
+  }
+//! @brief Compute the current difference in displacements
+//! between the nodes.
+const XC::Vector &XC::ZeroLength::getCurrentVelDiff(void) const
+  {
+    static Vector retval;
+    const Vector &vel1= theNodes[0]->getTrialVel();
+    const Vector &vel2= theNodes[1]->getTrialVel();
+    retval= vel2-vel1;
+    return retval;
+  }
+
 //! @brief Update element state.
 int XC::ZeroLength::update(void)
   {
@@ -420,12 +468,8 @@ int XC::ZeroLength::update(void)
     int ret = 0;
     if(theNodes[0] && theNodes[1])
       {
-        const Vector& disp1= theNodes[0]->getTrialDisp();
-        const Vector& disp2= theNodes[1]->getTrialDisp();
-        Vector  diff  = disp2-disp1;
-        const Vector& vel1= theNodes[0]->getTrialVel();
-        const Vector& vel2= theNodes[1]->getTrialVel();
-        Vector  diffv = vel2-vel1;
+        const Vector &diff= getCurrentDispDiff();
+        const Vector &diffv= getCurrentVelDiff();
 
         // loop over 1d materials
 
@@ -435,7 +479,7 @@ int XC::ZeroLength::update(void)
         for(size_t mat=0; mat<theMaterial1d.size(); mat++)
           {
             // compute strain and rate; set as current trial for material
-            strain     = this->computeCurrentStrain1d(mat,diff );
+            strain= this->computeCurrentStrain1d(mat, diff);
             strainRate = this->computeCurrentStrain1d(mat,diffv);
             ret += theMaterial1d[mat]->setTrialStrain(strain,strainRate);
           }
@@ -565,12 +609,24 @@ const XC::Matrix &XC::ZeroLength::getMass(void) const
   }
 
 
+//! @brief Reactivates the element.
+void XC::ZeroLength::alive(void)
+  {
+    if(isDead())
+      {
+	// Store the current "deformation".
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	Element0D::alive(); // Not dead anymore.
+      }
+  }
+
 //! @brief The element has no loads, so this operation has no effect
 //! and returns 0.
 int XC::ZeroLength::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; load type unknown for ZeroLength with tag: "
+	      << "; load type: " << theLoad->getClassName()
+              << " unknown for ZeroLength with tag: "
 	      << this->getTag() << std::endl;
     return -1;
   }

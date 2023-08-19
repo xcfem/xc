@@ -107,6 +107,7 @@ class ZeroLength: public Element0D
     ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials and related directionss.
 
     Matrix t1d; //!< hold the transformation matrix.
+    Vector persistentInitialDeformation; //!< Persistent initial displacement difference at element level. Used to store the deformation during the inactive phase of the element (if any).
 
     // private methods
     void checkDirection(ID &dir) const;
@@ -137,17 +138,21 @@ class ZeroLength: public Element0D
     const Material *get_material_ptr(const std::string &) const;
 
   public:
+    ZeroLength(int tag= 0);
     // Constructor for a single 1d material model
     ZeroLength(int tag,int dimension,int Nd1, int Nd2,const Vector &,const Vector &,UniaxialMaterial &,int direction );
     // Constructor for a multiple 1d material models
     ZeroLength(int tag,int dimension,int Nd1, int Nd2, const Vector &,const Vector &,const DqUniaxialMaterial &,const ID &direction);
     ZeroLength(int tag,int dimension,const Material *ptr_mat,int direction);
-    ZeroLength(void);
     Element *getCopy(void) const;
     ~ZeroLength(void);
 
     void setDomain(Domain *theDomain);
 
+    // Element birth and death stuff.
+    const Vector &getPersistentInitialSectionDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
+    
     inline void clearMaterials(void)
       { theMaterial1d.clear(); }
     void setMaterial(const int &,const std::string &);
@@ -159,6 +164,9 @@ class ZeroLength: public Element0D
     int revertToLastCommit(void);        
     int revertToStart(void);        
     int update(void);
+    
+    const Vector &getCurrentDispDiff(void) const;
+    const Vector &getCurrentVelDiff(void) const;
 
     // public methods to obtain stiffness, mass, damping and residual information    
     std::string getElementType(void) const;
@@ -166,6 +174,8 @@ class ZeroLength: public Element0D
     const Matrix &getInitialStiff(void) const;
     const Matrix &getDamp(void) const;
     const Matrix &getMass(void) const;
+
+    void alive(void);
 
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);    

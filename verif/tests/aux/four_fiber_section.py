@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-#Very simple fiber section (only four fibers)
-#made to develop tests over it (mostly about sign of strains/stress/curvatures/internal forces)
-#Section scheme:
+''' Very simple fiber section (only four fibers) 
+    made to develop tests over it (mostly about sign of strains/stress/curvatures/internal forces)
+'''
+# Section scheme:
 
 #             y
 #             ^
@@ -25,8 +26,7 @@ __email__= "l.pereztato@gmail.com"
 import xc
 from materials import typical_materials
 
-
-def buildFourFiberSection(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4):
+def create_four_fiber_section(preprocessor):
     # Material properties
     global E; E= 2.1e6 # Elastic modulus (Pa)
     # Cross section properties
@@ -44,11 +44,21 @@ def buildFourFiberSection(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4):
     z1= -widthOverZ/2.0
     fourFibersSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fourFibersSection")
 
-    global f1; f1= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,z1]))
-    global f2; f2= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,z1]))
-    global f3; f3= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,-z1]))
-    global f4; f4= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,-z1]))
+    f1= fourFibersSection.addFiber(elast.name,fiberArea,xc.Vector([y1,z1]))
+    f2= fourFibersSection.addFiber(elast.name,fiberArea,xc.Vector([-y1,z1]))
+    f3= fourFibersSection.addFiber(elast.name,fiberArea,xc.Vector([-y1,-z1]))
+    f4= fourFibersSection.addFiber(elast.name,fiberArea,xc.Vector([y1,-z1]))
 
+    return fourFibersSection, [E, A, Iy, Iz], [f1, f2, f3, f4]
+
+def build_four_fiber_section(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4):
+
+    fourFibersSection, staticParams, fibers= create_four_fiber_section(preprocessor)
+
+    global f1; f1= fibers[0]
+    global f2; f2= fibers[1]
+    global f3; f3= fibers[2]
+    global f4; f4= fibers[3]
 
     f1.getMaterial().setTrialStrain(epsilon1,0.0)
     f2.getMaterial().setTrialStrain(epsilon2,0.0)

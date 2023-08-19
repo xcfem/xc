@@ -68,12 +68,10 @@ int XC::ShellUpBasisCrdTransf3d::update(void)
 
     //get two vectors (v1, v2) in plane of shell by 
     // nodal coordinate differences
-    const ShellMITC4Base *element= dynamic_cast<const ShellMITC4Base *>(Owner());
-    const std::vector<Vector> &initDisp= element->getInitDisp();
-    const Vector &coor0= (*theNodes)[0]->getCrds( ) + (*theNodes)[0]->getTrialDisp() - initDisp[0];
-    const Vector &coor1= (*theNodes)[1]->getCrds( ) + (*theNodes)[1]->getTrialDisp() - initDisp[1];
-    const Vector &coor2= (*theNodes)[2]->getCrds( ) + (*theNodes)[2]->getTrialDisp() - initDisp[2];
-    const Vector &coor3= (*theNodes)[3]->getCrds( ) + (*theNodes)[3]->getTrialDisp() - initDisp[3];
+    const Vector &coor0= (*theNodes)[0]->getCrds( ) + (*theNodes)[0]->getTrialDisp();
+    const Vector &coor1= (*theNodes)[1]->getCrds( ) + (*theNodes)[1]->getTrialDisp();
+    const Vector &coor2= (*theNodes)[2]->getCrds( ) + (*theNodes)[2]->getTrialDisp();
+    const Vector &coor3= (*theNodes)[3]->getCrds( ) + (*theNodes)[3]->getTrialDisp();
 
     v1.Zero( );
     //v1= 0.5 * ( coor2 + coor1 - coor3 - coor0 );
@@ -115,6 +113,7 @@ int XC::ShellUpBasisCrdTransf3d::update(void)
     v3= LovelyCrossProduct( v1, v2 );
 
     //local nodal coordinates in plane of shell
+    const ShellMITC4Base *element= dynamic_cast<const ShellMITC4Base *>(Owner());
     Shell4NBase::pointer_to_xl xl= element->get_xl();
     for(int i= 0; i < 4; i++ )
       {

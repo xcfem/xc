@@ -82,7 +82,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     // following are added for subdivision of displacement increment
     int maxSubdivisions;       // maximum number of subdivisons of dv for local iterations
   
-
+    std::vector<Vector> persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
   protected:
     void setSectionPointers(const std::vector<PrismaticBarCrossSection *> &secPtrs);
     int getInitialFlexibility(Matrix &) const;
@@ -102,15 +102,23 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     virtual ~ForceBeamColumn3d(void);
   
   
+    // Element birth and death stuff.
+    const std::vector<Vector> &getPersistentInitialSectionDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
+  
     void setDomain(Domain *theDomain);
+    
     int commitState(void);
     int revertToLastCommit(void);        
     int revertToStart(void);
+    
+    void getCurrentDisplacements(Vector &, Vector &);
     int update(void);    
   
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;    
   
+    void alive(void);
     void zeroLoad(void);	
     int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);

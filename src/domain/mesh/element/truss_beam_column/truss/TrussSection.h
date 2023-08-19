@@ -80,7 +80,7 @@ class TrussSection: public TrussBase
   private:
     SectionFDPhysicalProperties physicalProperties;
     
-    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store de deformation during the inactive phase of the element (if any).
+    double persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
     
     double computeCurrentStrain(void) const;    
   protected:

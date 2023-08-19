@@ -68,6 +68,8 @@ class ZeroLengthContact: public Element0D
     ZeroLengthContact(int tag= 0,int classTag= 0, int dim= 2);
     ZeroLengthContact(int tag, int classTag, int dim, int Nd1, int Nd2,double Kn, double Kt, double fRatio);
 
+    void alive(void);
+    
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &);
 

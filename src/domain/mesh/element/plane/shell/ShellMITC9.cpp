@@ -315,6 +315,18 @@ const XC::Matrix &XC::ShellMITC9::getMass(void) const
     return mass;
   }
 
+//! @brief Reactivates the element.
+void XC::ShellMITC9::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        QuadBase9N<SectionFDPhysicalProperties>::alive();
+      }
+  }
+
 //! @brief Zeroes the element load vector.
 void XC::ShellMITC9::zeroLoad(void)
   {
