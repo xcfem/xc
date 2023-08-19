@@ -32,18 +32,18 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Mesh
 #
-#                 ^ F/2
-#                 |
-#   +-------------+ --> F/2
-#   | n4       n3 |
-#   |             |
-#   |             |
-#   |             |
-#   |             |
-#   | n1       n2 |
-#   +-------------+ --> F/2
-#                 |
-#                 v F/2
+#       ^ F/2          ^ F/2
+#       |              |
+#   <-- +-------------+ --> F/2
+# F/2   | n4       n3 |
+#       |             |
+#       |             |
+#       |             |
+#       |             |
+#       | n1       n2 |
+#       +-------------+ --> F/2
+#                     |
+#                     v F/2
 #
 
 ### Nodes.
@@ -171,8 +171,8 @@ else:
 # oh.displayLocalAxes()
 # # oh.displayReactions()
 # oh.displayLoads()
-# # oh.displayDispRot(itemToDisp='uX',setToDisplay=pile)
-# # oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile)
+# # oh.displayDispRot(itemToDisp='uX')
+# # oh.displayIntForcDiag(itemToDisp='Vy')
 # oh.displayIntForcDiag(itemToDisp='Mz', setToDisplay= plateBSet)
 # oh.displayIntForcDiag(itemToDisp='My', setToDisplay= plateBSet)
 
