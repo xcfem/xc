@@ -637,22 +637,15 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         super(PlainStaticModifiedNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'modified_newton_soln_algo')
         self.feProblem= prb
         
-    def setup(self):
-        ''' Defines the solution procedure in the finite element 
-            problem object.
-        '''
-        self.maxNumIter= 150 #Make this configurable
-        super(PlainStaticModifiedNewton,self).setup()
-    
 ### Convenience function
-def plain_static_modified_newton(prb, maxNumIter= 10, convergenceTestTol= .01, printFlag= 0):
+def plain_static_modified_newton(prb, maxNumIter= 10,  convergenceTestTol= .01, convTestType= 'relative_total_norm_disp_incr_conv_test', printFlag= 0):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
     '''
-    solProc= PlainStaticModifiedNewton(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+    solProc= PlainStaticModifiedNewton(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, convTestType= convTestType, printFlag= printFlag)
     solProc.setup()
     return solProc.analysis
 
