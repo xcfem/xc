@@ -621,7 +621,7 @@ class PlainStaticModifiedNewton(SolutionProcedure):
     ''' Static solution procedure with a modified Newton
         solution algorithm with a plain constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', integratorType:str= 'load_control_integrator'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', integratorType:str= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -638,7 +638,7 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         self.feProblem= prb
         
 ### Convenience function
-def plain_static_modified_newton(prb, maxNumIter= 10,  convergenceTestTol= .01, convTestType= 'relative_total_norm_disp_incr_conv_test', printFlag= 0):
+def plain_static_modified_newton(prb, maxNumIter= 150,  convergenceTestTol= .01, convTestType= 'relative_total_norm_disp_incr_conv_test', printFlag= 0):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
