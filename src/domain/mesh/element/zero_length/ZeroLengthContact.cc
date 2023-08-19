@@ -54,11 +54,23 @@ XC::ZeroLengthContact::ZeroLengthContact(int tag,int classTag, int dim)
    N(dim*numNodes())
   {}
 
+//! @brief Reactivates the element.
+void XC::ZeroLengthContact::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << "; not implemented yet."
+                << getTag() << std::endl;
+	Element0D::alive(); // Not dead anymore.
+      }
+  }
+
 int XC::ZeroLengthContact::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     // meaningless to addLoad to a contact !
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
                 << getTag() << std::endl;
     return 0;

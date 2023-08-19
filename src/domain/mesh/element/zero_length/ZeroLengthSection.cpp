@@ -71,6 +71,7 @@
 #include "material/section/ResponseId.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
+#include "domain/load/ElementalLoad.h"
 
 XC::Matrix XC::ZeroLengthSection::K6(6,6);
 XC::Matrix XC::ZeroLengthSection::K12(12,12);
@@ -363,11 +364,24 @@ const XC::Matrix &XC::ZeroLengthSection::getInitialStiff(void) const
     return *K;
   }
 
+//! @brief Reactivates the element.
+void XC::ZeroLengthSection::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << "; not implemented yet."
+                << getTag() << std::endl;
+	Element0D::alive(); // Not dead anymore.
+      }
+  }
+
 //! @brief The element has no loads, so this operation has no effect and returns 0.
 int XC::ZeroLengthSection::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; load type unknown for zero length section element with tag: "
+	      << "; load type: " << theLoad->getClassName()
+              << " unknown for zero length section element with tag: "
               << this->getTag() << std::endl;
     return -1;
   }
