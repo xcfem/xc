@@ -79,8 +79,10 @@ double XC::FourNodeQuad::shp[3][4]; //Values of shape functions.
 
 //! @brief Constructor.
 XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
-  :SolidMech4N(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0)), pressureLoad(8), pressure(0.0), p0()
-  {load.reset(8);}
+  :SolidMech4N(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0)), pressureLoad(8), pressure(0.0), p0(), eps(4)
+  {
+    load.reset(8);
+  }
 
 //! @brief Constructor.
 //!
@@ -96,7 +98,7 @@ XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
 XC::FourNodeQuad::FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4,
                                NDMaterial &m, const std::string &type, double t,
                            double p, const BodyForces2D &bForces)
-  : SolidMech4N(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t)), bf(bForces), pressureLoad(8), pressure(p), p0()
+  : SolidMech4N(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t)), bf(bForces), pressureLoad(8), pressure(p), p0(), eps(4)
   {
     load.reset(8);
   }
@@ -108,6 +110,24 @@ XC::Element* XC::FourNodeQuad::getCopy(void) const
 //! @brief Destructor.
 XC::FourNodeQuad::~FourNodeQuad(void)
   {}
+
+//! @brief Returns the value of the persistent (does not get wiped out by
+//! zeroLoad) initial deformation of the element.
+const std::vector<XC::Vector> &XC::FourNodeQuad::getPersistentInitialDeformation(void) const
+  { return persistentInitialDeformation; }
+
+//! @brief Increments the persistent (does not get wiped out by zeroLoad)
+//! initial deformation of the section. It's used to store the deformation
+//! of the material during the periods in which their elements are deactivated
+//! (see alive() method).
+void XC::FourNodeQuad::incrementPersistentInitialDeformationWithCurrentDeformation(void)
+  {
+    if(persistentInitialDeformation.empty()) // Not yet initialized.
+      persistentInitialDeformation= this->eps; // not yet initialized.
+    else
+      for(int i= 0; i<4; i++)
+        persistentInitialDeformation[i]+= this->eps[i]; // increment the current value.
+  }
 
 //! @brief Return the number of element DOFs.
 int XC::FourNodeQuad::getNumDOF(void) const
@@ -144,8 +164,6 @@ int XC::FourNodeQuad::update(void)
     u[0][3] = disp4(0);
     u[1][3] = disp4(1);
 
-    static Vector eps(3);
-
     int ret = 0;
 
     // Loop over the integration points
@@ -158,7 +176,8 @@ int XC::FourNodeQuad::update(void)
         // Interpolate strains
         //eps = B*u;
         //eps.addMatrixVector(0.0, B, u, 1.0);
-        eps.Zero();
+	Vector &eps= this->eps[i];
+	eps= Vector(3, 0.0); //zero the strains.	
         for(int beta= 0;beta<4;beta++)
           {
             eps(0)+= shp[0][beta]*u[0][beta];
@@ -166,7 +185,11 @@ int XC::FourNodeQuad::update(void)
             eps(2)+= shp[0][beta]*u[1][beta] + shp[1][beta]*u[0][beta];
           }
         // Set the material strain
-        ret += physicalProperties[i]->setTrialStrain(eps);
+	if(!persistentInitialDeformation.empty())
+	  {
+	    eps-= persistentInitialDeformation[i];
+	  }		 
+        ret+= physicalProperties[i]->setTrialStrain(eps);
       }
     return ret;
   }
@@ -306,6 +329,18 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
 const XC::GaussModel &XC::FourNodeQuad::getGaussModel(void) const
   { return gauss_model_quad4; }
 
+//! @brief Reactivates the element.
+void XC::FourNodeQuad::alive(void)
+  {
+    if(isDead())
+      {
+	// Store the current deformation.
+        this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	this->update();
+        SolidMech4N::alive();
+      }
+  }
+
 //! @brief Sets loads to zero.
 void XC::FourNodeQuad::zeroLoad(void)
   {
@@ -404,7 +439,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
         dvol*= (physicalProperties.getThickness()*gp.weight());
 
         // Get material stress response
-        const Vector &sigma = physicalProperties[i]->getStress();
+        const Vector &sigma= physicalProperties[i]->getStress();
 
         // Perform numerical integration on internal force
         //P = P + (B^ sigma) * intWt(i)*intWt(j) * detJ;
@@ -803,57 +838,57 @@ void XC::FourNodeQuad::setPressureLoadAtNodes(void)
   {
     pressureLoad.Zero();
 
-    if(pressure == 0.0)
-      return;
+    if(pressure != 0.0)
+      {
+	const Vector &node1 = theNodes[0]->getCrds();
+	const Vector &node2 = theNodes[1]->getCrds();
+	const Vector &node3 = theNodes[2]->getCrds();
+	const Vector &node4 = theNodes[3]->getCrds();
 
-    const XC::Vector &node1 = theNodes[0]->getCrds();
-    const XC::Vector &node2 = theNodes[1]->getCrds();
-    const XC::Vector &node3 = theNodes[2]->getCrds();
-    const XC::Vector &node4 = theNodes[3]->getCrds();
+	double x1 = node1(0);
+	double y1 = node1(1);
+	double x2 = node2(0);
+	double y2 = node2(1);
+	double x3 = node3(0);
+	double y3 = node3(1);
+	double x4 = node4(0);
+	double y4 = node4(1);
 
-    double x1 = node1(0);
-    double y1 = node1(1);
-    double x2 = node2(0);
-    double y2 = node2(1);
-    double x3 = node3(0);
-    double y3 = node3(1);
-    double x4 = node4(0);
-    double y4 = node4(1);
+	double dx12 = x2-x1;
+	double dy12 = y2-y1;
+	double dx23 = x3-x2;
+	double dy23 = y3-y2;
+	double dx34 = x4-x3;
+	double dy34 = y4-y3;
+	double dx41 = x1-x4;
+	double dy41 = y1-y4;
 
-    double dx12 = x2-x1;
-    double dy12 = y2-y1;
-    double dx23 = x3-x2;
-    double dy23 = y3-y2;
-    double dx34 = x4-x3;
-    double dy34 = y4-y3;
-    double dx41 = x1-x4;
-    double dy41 = y1-y4;
+	double pressureOver2 = pressure/2.0;
 
-    double pressureOver2 = pressure/2.0;
+	// Contribution from side 12
+	pressureLoad(0) += pressureOver2*dy12;
+	pressureLoad(2) += pressureOver2*dy12;
+	pressureLoad(1) += pressureOver2*-dx12;
+	pressureLoad(3) += pressureOver2*-dx12;
 
-    // Contribution from side 12
-    pressureLoad(0) += pressureOver2*dy12;
-    pressureLoad(2) += pressureOver2*dy12;
-    pressureLoad(1) += pressureOver2*-dx12;
-    pressureLoad(3) += pressureOver2*-dx12;
+	// Contribution from side 23
+	pressureLoad(2) += pressureOver2*dy23;
+	pressureLoad(4) += pressureOver2*dy23;
+	pressureLoad(3) += pressureOver2*-dx23;
+	pressureLoad(5) += pressureOver2*-dx23;
 
-    // Contribution from side 23
-    pressureLoad(2) += pressureOver2*dy23;
-    pressureLoad(4) += pressureOver2*dy23;
-    pressureLoad(3) += pressureOver2*-dx23;
-    pressureLoad(5) += pressureOver2*-dx23;
+	// Contribution from side 34
+	pressureLoad(4) += pressureOver2*dy34;
+	pressureLoad(6) += pressureOver2*dy34;
+	pressureLoad(5) += pressureOver2*-dx34;
+	pressureLoad(7) += pressureOver2*-dx34;
 
-    // Contribution from side 34
-    pressureLoad(4) += pressureOver2*dy34;
-    pressureLoad(6) += pressureOver2*dy34;
-    pressureLoad(5) += pressureOver2*-dx34;
-    pressureLoad(7) += pressureOver2*-dx34;
-
-    // Contribution from side 41
-    pressureLoad(6) += pressureOver2*dy41;
-    pressureLoad(0) += pressureOver2*dy41;
-    pressureLoad(7) += pressureOver2*-dx41;
-    pressureLoad(1) += pressureOver2*-dx41;
+	// Contribution from side 41
+	pressureLoad(6) += pressureOver2*dy41;
+	pressureLoad(0) += pressureOver2*dy41;
+	pressureLoad(7) += pressureOver2*-dx41;
+	pressureLoad(1) += pressureOver2*-dx41;
+      }
 
     //pressureLoad = pressureLoad*physicalProperties.getThickness();
   }

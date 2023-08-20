@@ -81,6 +81,8 @@ class FourNodeQuad: public SolidMech4N
 
     double pressure; //!< Normal surface traction (pressure) over entire element (note: positive for outward normal).
     FVectorQuad p0; //!< Reactions in the basic system due to element loads
+    mutable std::vector<Vector> eps; //!< strains at gauss points.
+    std::vector<Vector> persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
 
     static double matrixData[64]; //!< array data for matrix
     static Matrix K; //!< Element stiffness, and damping matrix.
@@ -104,6 +106,10 @@ class FourNodeQuad: public SolidMech4N
     Element *getCopy(void) const;
     virtual ~FourNodeQuad(void);
 
+    // Element birth and death stuff.
+    const std::vector<Vector> &getPersistentInitialDeformation(void) const;
+    void incrementPersistentInitialDeformationWithCurrentDeformation(void);
+    
     int getNumDOF(void) const;
     void setDomain(Domain *theDomain);
 
@@ -117,6 +123,7 @@ class FourNodeQuad: public SolidMech4N
 
     const GaussModel &getGaussModel(void) const;
 
+    void alive(void);
     void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
