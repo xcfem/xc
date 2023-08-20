@@ -601,6 +601,18 @@ void XC::TwentyEightNodeBrickUP::formDampingTerms( int tangFlag ) const
       }
   }
 
+//! @brief Reactivates the element.
+void XC::TwentyEightNodeBrickUP::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        ElemWithMaterial<20,NDMaterialPhysicalProperties>::alive();
+      }
+  }
+
 int XC::TwentyEightNodeBrickUP::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr << "TwentyEightNodeBrickUP::addLoad - load type unknown for truss with tag: "
@@ -615,7 +627,7 @@ int XC::TwentyEightNodeBrickUP::addInertiaLoadToUnbalance(const XC::Vector &acce
     ra.Zero();
 
     for( i = 0; i < nenu; i++) {
-            const XC::Vector &Raccel = theNodes[i]->getRV(accel);
+            const Vector &Raccel = theNodes[i]->getRV(accel);
             if((i<nenp && 4 != Raccel.Size()) || (i>=nenp && 3 != Raccel.Size())) {
                     std::cerr << "XC::TwentyEightNodeBrickUP::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
                     return -1;

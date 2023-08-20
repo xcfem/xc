@@ -3177,6 +3177,18 @@ const XC::Matrix &XC::TwentySevenNodeBrick::getMass(void) const
     return M;
   }
 
+//! @brief Reactivates the element.
+void XC::TwentySevenNodeBrick::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        ElementBase<27>::alive();
+      }
+  }
+
 //=============================================================================
 int XC::TwentySevenNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

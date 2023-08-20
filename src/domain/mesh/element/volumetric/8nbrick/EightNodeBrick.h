@@ -186,6 +186,7 @@ class EightNodeBrick: public ElementBase<8>
 
     const Matrix &getConsMass(void);
 
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

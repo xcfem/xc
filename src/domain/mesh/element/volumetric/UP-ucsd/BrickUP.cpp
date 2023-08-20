@@ -510,6 +510,17 @@ void XC::BrickUP::formDampingTerms(int tangFlag) const
   return ;
 }
 
+//! @brief Reactivates the element.
+void XC::BrickUP::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        BrickBase::alive();
+      }
+  }
 
 int XC::BrickUP::addLoad(ElementalLoad *theLoad, double loadFactor)
 {
@@ -552,7 +563,7 @@ int XC::BrickUP::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
 
 //get residual
-const XC::Vector&  XC::BrickUP::getResistingForce(void) const
+const XC::Vector &XC::BrickUP::getResistingForce(void) const
   {
     int tang_flag = 0 ; //don't get the tangent
     formResidAndTangent( tang_flag ) ;
@@ -566,7 +577,7 @@ const XC::Vector&  XC::BrickUP::getResistingForce(void) const
 
 
 //get residual with inertia terms
-const XC::Vector&  XC::BrickUP::getResistingForceIncInertia(void) const
+const XC::Vector &XC::BrickUP::getResistingForceIncInertia(void) const
   {
     static Vector res(32);
 
@@ -590,123 +601,123 @@ const XC::Vector&  XC::BrickUP::getResistingForceIncInertia(void) const
 //*********************************************************************
 //form inertia terms
 
-void   XC::BrickUP::formInertiaTerms(int tangFlag) const
-{
-  static const int ndm = 3 ;
-  static const int ndf = 3 ;
-  static const int ndff = 4 ;
-  static const int numberNodes = 8 ;
-  static const int numberGauss = 8 ;
-  static const int nShape = 4 ;
-  static const int massIndex = nShape - 1 ;
-  static double volume ;
-  static double xsj ;  // determinant jacobian matrix
-  static double dvol[numberGauss] ; //volume element
-  static double shp[nShape][numberNodes] ;  //shape functions at a gauss point
-  static double Shape[nShape][numberNodes][numberGauss] ; //all the shape functions
-  static double gaussPoint[ndm] ;
-  static XC::Vector a(ndff*numberNodes) ;
+void XC::BrickUP::formInertiaTerms(int tangFlag) const
+  {
+    static const int ndm = 3 ;
+    static const int ndf = 3 ;
+    static const int ndff = 4 ;
+    static const int numberNodes = 8 ;
+    static const int numberGauss = 8 ;
+    static const int nShape = 4 ;
+    static const int massIndex = nShape - 1 ;
+    static double volume ;
+    static double xsj ;  // determinant jacobian matrix
+    static double dvol[numberGauss] ; //volume element
+    static double shp[nShape][numberNodes] ;  //shape functions at a gauss point
+    static double Shape[nShape][numberNodes][numberGauss] ; //all the shape functions
+    static double gaussPoint[ndm] ;
+    static XC::Vector a(ndff*numberNodes) ;
 
-  int i, j, k, p, q ;
-  int jj, kk ;
+    int i, j, k, p, q ;
+    int jj, kk ;
 
-  double temp, rhot, massJK ;
-
-
-  //zero mass
-  mass.Zero( ) ;
-
-  //compute basis vectors and local nodal coordinates
-  computeBasis( ) ;
-
-  //zero volume
-  volume = 0.0 ;
-
-  //gauss loop to compute and save shape functions
-
-  int count = 0 ;
-
-  for( i = 0; i < 2; i++ ) {
-    for( j = 0; j < 2; j++ ) {
-      for( k = 0; k < 2; k++ ) {
-
-        gaussPoint[0] = sg[i] ;
-        gaussPoint[1] = sg[j] ;
-        gaussPoint[2] = sg[k] ;
-
-        //get shape functions
-        shp3d( gaussPoint, xsj, shp, xl ) ;
-
-        //save shape functions
-        for( p = 0; p < nShape; p++ ) {
-          for( q = 0; q < numberNodes; q++ )
-            Shape[p][q][count] = shp[p][q] ;
-        } // end for p
+    double temp, rhot, massJK ;
 
 
-        //volume element to also be saved
-        dvol[count] = wg[count] * xsj ;
+    //zero mass
+    mass.Zero( ) ;
 
-        //add to volume
-        volume += dvol[count] ;
+    //compute basis vectors and local nodal coordinates
+    computeBasis( ) ;
 
-        count++ ;
+    //zero volume
+    volume = 0.0 ;
 
-      } //end for k
-    } //end for j
-  } // end for i
+    //gauss loop to compute and save shape functions
 
-  //gauss loop
-  for( i = 0; i < numberGauss; i++ ) {
+    int count = 0 ;
 
-    //extract shape functions from saved array
-    for( p = 0; p < nShape; p++ ) {
-       for( q = 0; q < numberNodes; q++ )
-          shp[p][q]  = Shape[p][q][i] ;
-    } // end for p
+    for( i = 0; i < 2; i++ ) {
+      for( j = 0; j < 2; j++ ) {
+	for( k = 0; k < 2; k++ ) {
 
-    // average material density
-      rhot = mixtureRho(i);
+	  gaussPoint[0] = sg[i] ;
+	  gaussPoint[1] = sg[j] ;
+	  gaussPoint[2] = sg[k] ;
 
-    //mass and compressibility calculations node loops
-    jj = 0 ;
-    for( j = 0; j < numberNodes; j++ ) {
+	  //get shape functions
+	  shp3d( gaussPoint, xsj, shp, xl ) ;
 
-      temp = shp[massIndex][j] * dvol[i] ;
+	  //save shape functions
+	  for( p = 0; p < nShape; p++ ) {
+	    for( q = 0; q < numberNodes; q++ )
+	      Shape[p][q][count] = shp[p][q] ;
+	  } // end for p
 
-         //multiply by density
-         temp *= rhot ;
 
-         //node-node mass
-         kk = 0 ;
-         for( k = 0; k < numberNodes; k++ ) {
+	  //volume element to also be saved
+	  dvol[count] = wg[count] * xsj ;
 
-            massJK = temp * shp[massIndex][k] ;
+	  //add to volume
+	  volume += dvol[count] ;
 
-            for( p = 0; p < ndf; p++ )
-                  mass( jj+p, kk+p ) += massJK ;
+	  count++ ;
 
-            // Compute compressibility terms
-            mass( jj+3, kk+3 ) += -dvol[i]*Shape[3][j][i]*Shape[3][k][i]/kc;
+	} //end for k
+      } //end for j
+    } // end for i
 
-            kk += ndff ;
-          } // end for k loop
+    //gauss loop
+    for( i = 0; i < numberGauss; i++ ) {
 
-      jj += ndff ;
-    } // end for j loop
+      //extract shape functions from saved array
+      for( p = 0; p < nShape; p++ ) {
+	 for( q = 0; q < numberNodes; q++ )
+	    shp[p][q]  = Shape[p][q][i] ;
+      } // end for p
 
-  } //end for i gauss loop
+      // average material density
+	rhot = mixtureRho(i);
 
-  if( tangFlag == 0 ) {
-    for( k = 0; k < numberNodes; k++ ) {
-      const XC::Vector &acc = theNodes[k]->getTrialAccel();
-          for( p = 0; p < ndff; p++ )
-                  a( k*ndff+p ) = acc(p);
-        } // end for k loop
+      //mass and compressibility calculations node loops
+      jj = 0 ;
+      for( j = 0; j < numberNodes; j++ ) {
 
-    resid.addMatrixVector(1.0,mass,a,1.0);
-  } // end if tang_flag
-}
+	temp = shp[massIndex][j] * dvol[i] ;
+
+	   //multiply by density
+	   temp *= rhot ;
+
+	   //node-node mass
+	   kk = 0 ;
+	   for( k = 0; k < numberNodes; k++ ) {
+
+	      massJK = temp * shp[massIndex][k] ;
+
+	      for( p = 0; p < ndf; p++ )
+		    mass( jj+p, kk+p ) += massJK ;
+
+	      // Compute compressibility terms
+	      mass( jj+3, kk+3 ) += -dvol[i]*Shape[3][j][i]*Shape[3][k][i]/kc;
+
+	      kk += ndff ;
+	    } // end for k loop
+
+	jj += ndff ;
+      } // end for j loop
+
+    } //end for i gauss loop
+
+    if( tangFlag == 0 ) {
+      for( k = 0; k < numberNodes; k++ ) {
+	const Vector &acc = theNodes[k]->getTrialAccel();
+	    for( p = 0; p < ndff; p++ )
+		    a( k*ndff+p ) = acc(p);
+	  } // end for k loop
+
+      resid.addMatrixVector(1.0,mass,a,1.0);
+    } // end if tang_flag
+  }
 
 //*********************************************************************
 //form residual and tangent

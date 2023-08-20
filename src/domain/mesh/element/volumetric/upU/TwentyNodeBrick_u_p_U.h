@@ -153,6 +153,7 @@ class TwentyNodeBrick_u_p_U: public ElemWithMaterial<20,NDMaterialPhysicalProper
     const Matrix &getDamp(void) const;
     const Matrix &getMass(void) const;
 
+    void alive(void);
     void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);

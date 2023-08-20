@@ -480,6 +480,18 @@ void XC::Twenty_Node_Brick::formDampingTerms( int tangFlag ) const
 
 }
 
+//! @brief Reactivates the element.
+void XC::Twenty_Node_Brick::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        Twenty_Node_Brick_Base::alive();
+      }
+  }
+
 
 int XC::Twenty_Node_Brick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

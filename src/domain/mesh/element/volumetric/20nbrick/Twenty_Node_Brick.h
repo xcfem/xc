@@ -141,7 +141,7 @@ class Twenty_Node_Brick: public ElemWithMaterial<20,NDMaterialPhysicalProperties
     //print out element data
     void Print(std::ostream &s, int flag) const;
 
-	int update(void);
+    int update(void);
 
     //return stiffness matrix
     const Matrix &getTangentStiff(void) const;
@@ -149,6 +149,7 @@ class Twenty_Node_Brick: public ElemWithMaterial<20,NDMaterialPhysicalProperties
     const Matrix &getDamp(void) const;
     const Matrix &getMass(void) const;
 
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

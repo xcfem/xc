@@ -2748,6 +2748,18 @@ const XC::Matrix &XC::EightNodeBrick::getMass(void) const
     return M;
   }
 
+//! @brief Reactivates the element.
+void XC::EightNodeBrick::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        ElementBase<8>::alive();
+      }
+  }
+
 //=============================================================================
 int XC::EightNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

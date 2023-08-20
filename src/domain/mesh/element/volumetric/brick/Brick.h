@@ -138,6 +138,7 @@ class Brick: public BrickBase
     Vector getAvgStrain(void) const;
     double getAvgStrain(const size_t &,const size_t &) const;
 
+    void alive(void);
     void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);

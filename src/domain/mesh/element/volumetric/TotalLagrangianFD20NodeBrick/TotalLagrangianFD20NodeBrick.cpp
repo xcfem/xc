@@ -508,9 +508,20 @@ const XC::Matrix &XC::TotalLagrangianFD20NodeBrick::getMass(void) const
     return total_disp;
 }
 
+//! @brief Reactivates the element.
+void XC::TotalLagrangianFD20NodeBrick::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        ElemWithMaterial<20,NDMaterialPhysicalProperties>::alive();
+      }
+  }
+
 //=============================================================================
-int
-XC::TotalLagrangianFD20NodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
+int XC::TotalLagrangianFD20NodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
 {
     std::cerr<<"XC::TotalLagrangianFD20NodeBrick::addLoad - load type unknown for ele with tag: "<<this->getTag();
     return -1;

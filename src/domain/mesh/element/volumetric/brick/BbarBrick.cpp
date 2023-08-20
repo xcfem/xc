@@ -334,6 +334,17 @@ const XC::Matrix&  XC::BbarBrick::getMass(void) const
     return mass ;
   }
 
+//! @brief Reactivates the element.
+void XC::BbarBrick::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        BrickBase::alive();
+      }
+  }
 
 int XC::BbarBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

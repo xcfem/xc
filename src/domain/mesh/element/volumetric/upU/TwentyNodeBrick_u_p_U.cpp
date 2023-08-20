@@ -261,6 +261,18 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getMass(void) const
     return M;
   }
 
+//! @brief Reactivates the element.
+void XC::TwentyNodeBrick_u_p_U::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        ElemWithMaterial<20,NDMaterialPhysicalProperties>::alive();
+      }
+  }
+
 //======================================================================
 void XC::TwentyNodeBrick_u_p_U::zeroLoad()
   {

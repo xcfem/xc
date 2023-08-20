@@ -124,6 +124,7 @@ class TotalLagrangianFD20NodeBrick: public ElemWithMaterial<20,NDMaterialPhysica
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

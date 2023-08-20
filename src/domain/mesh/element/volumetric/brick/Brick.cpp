@@ -350,6 +350,18 @@ const XC::Matrix &XC::Brick::getMass(void) const
     return mass;
   }
 
+//! @brief Reactivates the element.
+void XC::Brick::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        BrickBase::alive();
+      }
+  }
+
 //! Remove element loads. 
 void XC::Brick::zeroLoad(void)
   {

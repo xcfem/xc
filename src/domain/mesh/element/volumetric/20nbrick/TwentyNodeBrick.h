@@ -211,6 +211,7 @@ class TwentyNodeBrick: public ElementBase<20>
     const Matrix &getConsMass(void) const; 
     const Matrix &getLumpedMass(void) const; 
 
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);    
     //int addLoad(const Vector &addP);
     int addInertiaLoadToUnbalance(const Vector &accel);
