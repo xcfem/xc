@@ -548,11 +548,27 @@ const XC::Matrix& XC::ConstantPressureVolumeQuad::getMass(void) const
     return mass;
   }
 
+//! @brief Reactivates the element.
+void XC::ConstantPressureVolumeQuad::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; not implemented yet."
+	          << std::endl;
+	// // Store the current deformation.
+        // this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	// this->update();
+        QuadBase4N<NDMaterialPhysicalProperties>::alive();
+      }
+  }
 
 
 int XC::ConstantPressureVolumeQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::ConstantPressureVolumeQuad::addLoad - load type unknown for ele with tag: " << this->getTag() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; load type unknown for ele with tag: "
+	      << this->getTag() << std::endl;
     return -1;
   }
 

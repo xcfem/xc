@@ -410,9 +410,26 @@ const XC::Matrix &XC::FourNodeQuadUP::getMass(void) const
   return K;
 }
 
+//! @brief Reactivates the element.
+void XC::FourNodeQuadUP::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; not implemented yet."
+	          << std::endl;
+	// // Store the current deformation.
+        // this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	// this->update();
+        QuadBase4N<SolidMech2D>::alive();
+      }
+  }
+
 int XC::FourNodeQuadUP::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::FourNodeQuadUP::addLoad - load type unknown for ele with tag: " << this->getTag() << "\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; load type unknown for ele with tag: "
+	      << this->getTag() << "\n";
     return -1;
   }
 

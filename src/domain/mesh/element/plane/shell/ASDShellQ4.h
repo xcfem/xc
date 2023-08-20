@@ -198,6 +198,7 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
     const Matrix &getMass(void) const;
 
     // methods for applying loads
+    void alive(void);
     void zeroLoad(void);
     int addLoad(ElementalLoad* theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector& accel);

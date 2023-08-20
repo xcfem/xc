@@ -892,6 +892,21 @@ const XC::Matrix &XC::ASDShellQ4::getMass(void) const
     return LHS;
   }
 
+//! @brief Reactivates the element.
+void XC::ASDShellQ4::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  	          << "; not implemented yet."
+	          << std::endl;
+	// // Store the current deformation.
+        // this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	// this->update();
+        QuadBase4N<SectionFDPhysicalProperties>::alive();
+      }
+  }
+
 void XC::ASDShellQ4::zeroLoad()
   { m_load.Zero(); }
 

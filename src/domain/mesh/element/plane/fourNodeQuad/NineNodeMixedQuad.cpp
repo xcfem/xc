@@ -73,9 +73,9 @@ XC::Matrix  XC::NineNodeMixedQuad::mass(18,18);
 double  XC::NineNodeMixedQuad::xl[2][9];
 
 //quadrature data
-double   XC::NineNodeMixedQuad::root06 = sqrt(0.6);
-double   XC::NineNodeMixedQuad::sg[] = { -root06,   0.0,      root06  };
-double   XC::NineNodeMixedQuad::wg[] = {  5.0/9.0,  8.0/9.0,  5.0/9.0 };
+double XC::NineNodeMixedQuad::root06 = sqrt(0.6);
+double XC::NineNodeMixedQuad::sg[] = { -root06,   0.0,      root06  };
+double XC::NineNodeMixedQuad::wg[] = {  5.0/9.0,  8.0/9.0,  5.0/9.0 };
 
 
 //null constructor
@@ -372,12 +372,26 @@ const XC::Matrix &XC::NineNodeMixedQuad::getMass(void) const
     return mass;
   }
 
-
-
+//! @brief Reactivates the element.
+void XC::NineNodeMixedQuad::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; not implemented yet."
+	          << std::endl;
+	// // Store the current deformation.
+        // this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	// this->update();
+        ElemWithMaterial<9,NDMaterialPhysicalProperties>::alive();
+      }
+  }
 
 int XC::NineNodeMixedQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::NineNodeMixedQuad::addLoad - load type unknown for ele with tag: " << this->getTag() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; load type unknown for ele with tag: "
+	      << this->getTag() << std::endl;
     return -1;
   }
 

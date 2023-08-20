@@ -118,7 +118,7 @@ const std::vector<XC::Vector> &XC::FourNodeQuad::getPersistentInitialDeformation
 
 //! @brief Increments the persistent (does not get wiped out by zeroLoad)
 //! initial deformation of the section. It's used to store the deformation
-//! of the material during the periods in which their elements are deactivated
+//! of the material during the periods in which their elements are deactivated.
 //! (see alive() method).
 void XC::FourNodeQuad::incrementPersistentInitialDeformationWithCurrentDeformation(void)
   {

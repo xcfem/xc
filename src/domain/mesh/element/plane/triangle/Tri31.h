@@ -128,6 +128,7 @@ class Tri31: public TriBase3N<SolidMech2D>
     void setThickness(const double &t)
       { physicalProperties.setThickness(t); }
 
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

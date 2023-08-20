@@ -339,6 +339,21 @@ const XC::Matrix &XC::Tri31::getMass(void) const
 const XC::GaussModel &XC::Tri31::getGaussModel(void) const
   { return gauss_model_tria1; }
 
+//! @brief Reactivates the element.
+void XC::Tri31::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; not implemented yet."
+	          << std::endl;
+	// // Store the current deformation.
+        // this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	// this->update();
+        TriBase3N<SolidMech2D>::alive();
+      }
+  }
+
 int XC::Tri31::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

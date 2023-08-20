@@ -146,6 +146,7 @@ class EnhancedQuad: public SolidMech4N
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

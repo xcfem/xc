@@ -118,6 +118,7 @@ class ConstantPressureVolumeQuad: public QuadBase4N<NDMaterialPhysicalProperties
     const Matrix &getMass(void) const;
 
     // public methods for updating ele load information
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

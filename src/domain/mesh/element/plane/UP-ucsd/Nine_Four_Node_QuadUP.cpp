@@ -572,7 +572,20 @@ void XC::NineFourNodeQuadUP::zeroLoad(void)
     return;
   }
 
-
+//! @brief Reactivates the element.
+void XC::NineFourNodeQuadUP::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; not implemented yet."
+	          << std::endl;
+	// // Store the current deformation.
+        // this->incrementPersistentInitialDeformationWithCurrentDeformation();
+	// this->update();
+        ElemWithMaterial<9,SolidMech2D>::alive();
+      }
+  }
 
 int XC::NineFourNodeQuadUP::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

@@ -114,6 +114,7 @@ class FourNodeQuadUP: public QuadBase4N<SolidMech2D>
     const Matrix &getDamp(void) const;
     const Matrix &getMass(void) const;
 
+    void alive(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
     const Vector &getResistingForce(void) const;

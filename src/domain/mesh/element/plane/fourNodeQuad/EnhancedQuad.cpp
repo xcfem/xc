@@ -449,6 +449,17 @@ const XC::Matrix &XC::EnhancedQuad::getMass(void) const
   }
 
 
+//! @brief Reactivates the element.
+void XC::EnhancedQuad::alive(void)
+  {
+    if(isDead())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+  		  << "; not implemented yet."
+                  << std::endl;
+        SolidMech4N::alive();
+      }
+  }
 
 int XC::EnhancedQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
