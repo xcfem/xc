@@ -14,7 +14,7 @@ import math
 from misc_utils import log_messages as lmsg
 import matplotlib.pyplot as plt
 
-def plot_time_series(timeSeries, timeIncrement= None):
+def plot_time_series(timeSeries, timeIncrement= None, timeUnits= None):
     ''' Shows a diagram of the time series.
 
     :param name: name of the time series to display.
@@ -41,8 +41,13 @@ def plot_time_series(timeSeries, timeIncrement= None):
     plt.plot(ti, vi, "-b")
     ## Add title and axis names
     plt.title('time series: '+ timeSeries.name)
-    plt.xlabel('time')
+    xLabel= 'time'
+    if(timeUnits):
+        xLabel+= ' ('+timeUnits+')'
+    plt.xlabel(xLabel)
     plt.xticks(rotation = 90)
     plt.ylabel('factor')
+    plt.grid()
+    plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
     plt.show()
 

@@ -427,14 +427,16 @@ class PredefinedSpace(object):
         lPatterns.currentTimeSeries= name
         return ts
 
-    def plotTimeSeries(self, timeSeries, timeIncrement= None):
+    def plotTimeSeries(self, timeSeries, timeIncrement= None, timeUnits= None):
         ''' Shows a diagram of the time series.
 
         :param timeSeries: the time series to display.
         :param timeIncrement: time increment to use in the diagram
                               if None then timeIncrement= duration/100.0
+        :param timeUnits: string representing the time units 
+                          ('days' or 's' or ...).
         '''
-        time_series.plot_time_series(timeSeries= timeSeries, timeIncrement= timeIncrement)
+        time_series.plot_time_series(timeSeries= timeSeries, timeIncrement= timeIncrement, timeUnits= timeUnits)
         
     def newLoadPattern(self, name: str, lpType= 'default'):
         ''' Creates a times series -modulation of the load
