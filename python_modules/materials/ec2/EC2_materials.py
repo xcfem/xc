@@ -373,6 +373,23 @@ class EC2Concrete2021(EC2Concrete):
         :param alpha_ndp_d: 1.0 unless otherwise stated in the national annex.
         '''
         return self.getShrEpscds(t= t,ts= ts, h0= h0, RH= RH)+self.getShrEpscbs(t= t)
+
+    def getCreepDeformation(self, t,t0,RH,h0, sigmaT0):
+        '''
+        return the creep deformation between t0 and t according
+        to clause 5.1 and Annex B of Eurocode 2 part 1-1 : 2004 (Eq. 5.2)
+        
+        :param t:   age of concrete in days at the moment considered
+        :param t0:  age of concrete in days at loading
+        :param RH:  ambient relative humidity(%)
+        :param h0:  notional size of the member.
+ 
+                       - h0=2*Ac/u, where:
+                       - Ac= cross sectional area
+                       - u = perimeter of the member in contact with the atmosphere
+        :param sigmaT0: constant compressive stress appliend in t0.
+        '''
+        return self.getCreepFitt0(t,t0,RH,h0)*sigmaT0/self.getEcm()
     
 #EC2 concretes 
 #1.5: recommended partial factor for concrete in persistent and transient 

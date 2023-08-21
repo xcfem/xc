@@ -572,7 +572,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 #Creep
     def getCreepFitt0(self,t,t0,RH,h0):
         '''Creep coefficient  
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.1)
 
         :param t: age of concrete in days at the moment considered
         :param t0: age of concrete in days at loading
@@ -588,7 +588,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getCreepAlfa1(self):
         '''Coefficient for the calculation of the creep coefficient
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.8c)
         '''
         fcmMPa=abs(self.getFcm())/1e6
         alfa1=(35/fcmMPa)**0.7
@@ -596,7 +596,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getCreepAlfa2(self):
         '''Coefficient for the calculation of the creep coefficient
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.8c)
         '''
         fcmMPa=abs(self.getFcm())/1e6
         alfa2=(35/fcmMPa)**0.2
@@ -604,7 +604,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getCreepAlfa3(self):
         '''Coefficient for the calculation of the creep coefficient
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.8c)
         '''
         fcmMPa=abs(self.getFcm())/1e6
         alfa3=(35/fcmMPa)**0.5
@@ -613,7 +613,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     def getCreepFiRH(self,RH,h0):
         '''factor to allow for the effect of relative humidity 
         on the notional creep coefficient
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.2)
 
         :param RH:    ambient relative humidity(%)
         :param h0:  notional size of the member.
@@ -632,7 +632,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getCreepBetafcm(self):
         '''factor to allow for the effect of concrete strength on the notational creep coefficient
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.4)
         '''
         fcmMPa=abs(self.getFcm())/1e6
         betafcm=16.8/fcmMPa**(1/2.0)
@@ -640,7 +640,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getCreepBetat0(self,t0):
         '''factor to allow for the effect of concrete age at loading on the notational creep coefficient 
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.5)
 
         :param t0:    age of concrete in days at loading
         '''
@@ -649,7 +649,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getCreepFi0(self,t0,RH,h0):
         '''notational creep coefficient for the calculation of the creep coefficient
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004)
 
         :param t0:    age of concrete in days at loading
         :param RH:    ambient relative humidity(%)
@@ -664,7 +664,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def getCreepBetactt0(self,t,t0,RH,h0):
         '''coefficient to describe the development of creep with time after loading, used to calculate the creep coefficient
-        (Annex B Eurocode 2 part 1-1)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.2)
  
         :param t:     age of concrete in days at the moment considered
         :param t0:    age of concrete in days at loading
