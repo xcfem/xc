@@ -341,9 +341,9 @@ class EHEConcrete(concrete_base.Concrete):
                        - h0=2*Ac/u, where:
                        - Ac= cross sectional area
                        - u = perimeter of the member in contact with the atmosphere
-        :param sigmaT0: Constant compressive stress appliend on day t0.
+        :param sigmaT0: constant compressive stress appliend on day t0  (negative sign).
         '''
-        return sigmaT0*(1.0/self.getEcmT(t0)+self.getCreepFitt0(t,t0,RH,h0)/self.getEcm())
+        return -1*sigmaT0*self.getCreepFitt0(t,t0,RH,h0)/self.getEcm()
  
 
 # EHE concretes
