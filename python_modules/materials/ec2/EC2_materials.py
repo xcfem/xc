@@ -387,7 +387,7 @@ class EC2Concrete2021(EC2Concrete):
                        - h0=2*Ac/u, where:
                        - Ac= cross sectional area
                        - u = perimeter of the member in contact with the atmosphere
-        :param sigmaT0: constant compressive stress appliend in t0.
+        :param sigmaT0: constant compressive stress applied on day t0.
         '''
         return self.getCreepFitt0(t,t0,RH,h0)*sigmaT0/self.getEcm()
     
