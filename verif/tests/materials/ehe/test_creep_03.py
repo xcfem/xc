@@ -239,17 +239,17 @@ tagSaveFase0= -1
 setTotal= preprocessor.getSets["total"]
 setShells= preprocessor.getSets.defSet("shells")
 for e in setTotal.getElements:
-  if(e.getDimension==2):
-    setShells.getElements.append(e)
+    if(e.getDimension==2):
+        setShells.getElements.append(e)
 
 for e in setShells.getElements:
-  averageSideLength= e.getPerimeter(True)/4.0
-  mat= e.physicalProperties.getVectorMaterials[0]
-  grueso= mat.h
-  Ac= averageSideLength*grueso
-  u= 2*averageSideLength+grueso
-  espMedio= 2*Ac/u
-  e.setProp("epsShrinkage",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
+    averageSideLength= e.getPerimeter(True)/4.0
+    mat= e.physicalProperties.getVectorMaterials[0]
+    grueso= mat.h
+    Ac= averageSideLength*grueso
+    u= 2*averageSideLength+grueso
+    espMedio= 2*Ac/u
+    e.setProp("epsShrinkage",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
 
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
@@ -285,8 +285,8 @@ db.save(tagSaveFase0)
 for e in setShells.getElements:
     tension1Media= e.getMeanInternalForce("n1")/Ac
     tension2Media= e.getMeanInternalForce("n2")/Ac
-    epsFluencia1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension1Media)
-    epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension2Media)
+    epsShrinkage1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension1Media)
+    epsShrinkage2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension2Media)
 
 
 loadHandler= preprocessor.getLoadHandler
@@ -295,14 +295,14 @@ lPatterns= loadHandler.getLoadPatterns
 for e in setShells.getElements:
     eleLoad= lpFLU.newElementalLoad("shell_strain_load")
     eleLoad.elementTags= xc.ID([e.tag]) 
-    eleLoad.setStrainComp(0,0,epsFluencia1) #(id of Gauss point, id of component, value)
-    eleLoad.setStrainComp(1,0,epsFluencia1)
-    eleLoad.setStrainComp(2,0,epsFluencia1)
-    eleLoad.setStrainComp(3,0,epsFluencia1)
-    eleLoad.setStrainComp(0,1,epsFluencia2) 
-    eleLoad.setStrainComp(1,1,epsFluencia2)
-    eleLoad.setStrainComp(2,1,epsFluencia2)
-    eleLoad.setStrainComp(3,1,epsFluencia2)
+    eleLoad.setStrainComp(0,0,epsShrinkage1) #(id of Gauss point, id of component, value)
+    eleLoad.setStrainComp(1,0,epsShrinkage1)
+    eleLoad.setStrainComp(2,0,epsShrinkage1)
+    eleLoad.setStrainComp(3,0,epsShrinkage1)
+    eleLoad.setStrainComp(0,1,epsShrinkage2) 
+    eleLoad.setStrainComp(1,1,epsShrinkage2)
+    eleLoad.setStrainComp(2,1,epsShrinkage2)
+    eleLoad.setStrainComp(3,1,epsShrinkage2)
 
 preprocessor.resetLoadCase()
 loadHandler= preprocessor.getLoadHandler
