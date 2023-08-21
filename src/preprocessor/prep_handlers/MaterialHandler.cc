@@ -37,6 +37,7 @@
 #include "material/uniaxial/concrete/Concrete01.h"
 #include "material/uniaxial/concrete/Concrete02.h"
 #include "material/uniaxial/concrete/Concrete04.h"
+#include "material/uniaxial/concrete/TDConcrete.h"
 #include "material/uniaxial/ENTMaterial.h"
 #include "material/uniaxial/TensionOnlyMaterial.h"
 #include "material/uniaxial/CompressionOnlyMaterial.h"
@@ -268,6 +269,7 @@ XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
 //! - concrete01_material: Concrete01 uniaxial material.
 //! - concrete02_material: Concrete02 uniaxial material.
 //! - concrete04_material: Concrete04 uniaxial material.
+//! - tdconcrete_material: TDConcrete uniaxial material.
 //! - steel01: Steel01 material.
 //! - steel02: Steel02 material.
 //! - steel03: Steel03 material.
@@ -285,6 +287,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::Concrete02(tag_mat);
     else if(cmd == "concrete04_material")
       retval= new XC::Concrete04(tag_mat);
+    else if(cmd == "tdconcrete_material")
+      retval= new XC::TDConcrete(tag_mat);
     else if((cmd == "elastic_no_traction_material") or (cmd == "elastic_no_tension_material"))
       retval= new XC::ENTMaterial(tag_mat);
     else if(cmd == "tension_only_material")

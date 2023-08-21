@@ -389,7 +389,7 @@ SET(nD_material material/nD/template_3d_ep/CamClayPotentialSurface.cpp material/
 
 SET(uniaxial_steel_material material/uniaxial/steel/SteelBase.cc material/uniaxial/steel/SteelBase0103.cc material/uniaxial/steel/Steel01.cpp material/uniaxial/steel/Steel02.cpp material/uniaxial/steel/Steel03.cpp)
 
-SET(uniaxial_concrete_material material/uniaxial/concrete/RawConcrete.cc material/uniaxial/concrete/ConcreteBase.cpp material/uniaxial/concrete/Concrete01.cpp material/uniaxial/concrete/Concrete02.cpp material/uniaxial/concrete/Concrete04.cpp)
+SET(uniaxial_concrete_material material/uniaxial/concrete/RawConcrete.cc material/uniaxial/concrete/ConcreteBase.cpp material/uniaxial/concrete/Concrete01.cpp material/uniaxial/concrete/Concrete02.cpp material/uniaxial/concrete/Concrete04.cpp material/uniaxial/concrete/TDConcrete.cpp)
 
 SET(uniaxial_py_material material/uniaxial/soil_structure_interaction/InternalParamsA.cc material/uniaxial/soil_structure_interaction/InternalParamsIn.cc material/uniaxial/soil_structure_interaction/InternalParamsLR.cc material/uniaxial/soil_structure_interaction/InternalParamsLRIn.cc material/uniaxial/soil_structure_interaction/PYBase.cc material/uniaxial/soil_structure_interaction/PQyzBase.cc material/uniaxial/soil_structure_interaction/PyLiq1.cpp material/uniaxial/soil_structure_interaction/PySimple1.cpp material/uniaxial/soil_structure_interaction/generators/Simple1GenBase.cc material/uniaxial/soil_structure_interaction/generators/PySimple1Gen.cpp material/uniaxial/soil_structure_interaction/QzSimple1.cpp material/uniaxial/soil_structure_interaction/TzLiq1.cpp material/uniaxial/soil_structure_interaction/TzSimple1.cpp material/uniaxial/soil_structure_interaction/generators/TzSimple1Gen.cpp)
 

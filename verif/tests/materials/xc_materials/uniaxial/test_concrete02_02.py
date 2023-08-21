@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+''' Test of material concrete02 constitutive model.  
+
+In the tensile Branch, the post-cracking range is initially approximated with a exponential  decay curve, according to the model proposed by Stramandinoli and La Rovere, to take into account  the tension-stiffening effect. Since the concrete02 implementation requires a straight line, a  linear regression of this curve is used for this purpose.
+'''
+
 from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O) "
@@ -6,14 +11,6 @@ __copyright__= "Copyright 2016, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
-
-
-''' Test of material concrete02 constitutive model. 
-In the tensile Branch, the post-cracking range is initially approximated with a exponential 
-decay curve, according to the model proposed by Stramandinoli and La Rovere, to take into account 
-the tension-stiffening effect. Since the concrete02 implementation requires a straight line, a 
-linear regression of this curve is used for this purpose.
-'''
 
 import xc
 from materials import concrete_base

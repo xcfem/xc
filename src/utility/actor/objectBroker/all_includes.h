@@ -24,6 +24,7 @@
 #include "material/uniaxial/concrete/Concrete01.h"
 #include "material/uniaxial/concrete/Concrete02.h"
 #include "material/uniaxial/concrete/Concrete04.h"
+#include "material/uniaxial/concrete/TDConcrete.h"
 #include "material/uniaxial/steel/Steel01.h"
 #include "material/uniaxial/steel/Steel02.h"
 #include "material/uniaxial/HardeningMaterial.h"

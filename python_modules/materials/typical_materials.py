@@ -301,6 +301,44 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
         lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
     return retval
 
+#TDConcrete.
+def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr, epscru, epscra, epscrd, tcast):
+    ''''Constructs an uniaxial concrete material concrete is linear in 
+        compression with nonlinear tension softening; creep and shrinkage ç
+        evolution equations are based on ACI 209R-92 models.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name:         name identifying the material
+    :param fpc:          concrete compressive strength at 28 days (compression is negative)
+    :param ft: concrete tensile strength.
+    :param Ec: concrete stiffness.
+    :param beta: beta parameter.
+    :param age: concrete age at first loading.
+    :param epsshu: ultimate shrinkage
+    :param epssha: shrinkage parameter
+    :param tcr: creep relationship age
+    :param epscru: ultimate concrete creep
+    :param epscra: concrete creep exponent parameter.
+    :param epscrd: creep d parameter.
+    :param tcast: tcast
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("tdconcrete_material",name)
+    retval.fpc= fpc # concrete compressive strength at 28 days (compression is negative)
+    retval.ft= ft # concrete tensile strength.
+    retval.Ec= Ec # concrete stiffness.
+    retval.beta= beta # beta parameter.
+    retval.age= age # concrete age at first loading.
+    retval.epsshu= epsshu # ultimate shrinkage
+    retval.epssha= epssha # shrinkage parameter
+    retval.tcr= tcr # creep relationship age
+    retval.epscru= epscru # ultimate concrete creep
+    retval.epscra= epscra # concrete creep exponent parameter.
+    retval.epscrd= epscrd # creep d parameter.
+    retval.tcast= tcast # tcast
+    retval.setup()
+    return retval
+
 #Elastic section 1d.
 def defElasticSection1d(preprocessor,name,A,E, linearRho= 0.0):
     '''Constructs an elastic section appropriate for 1D beam analysis.

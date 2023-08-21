@@ -525,6 +525,8 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
         return new Concrete02();
       case MAT_TAG_Concrete04:
         return new Concrete04();
+      case MAT_TAG_TDConcrete:
+        return new TDConcrete();
 //         case MAT_TAG_Concrete06:
 //              return new Concrete06();
       case MAT_TAG_Steel01:

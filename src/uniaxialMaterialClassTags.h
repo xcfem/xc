@@ -110,5 +110,11 @@
 #define MAT_TAG_CompressionOnly		       1602
 #define MAT_TAG_Invert                         1603
 
+#define MAT_TAG_TDConcrete                      224
+#define MAT_TAG_TDConcreteNL                   2240
+#define MAT_TAG_TDConcreteEXP                   225
+#define MAT_TAG_TDConcreteMC10                  226
+#define MAT_TAG_TDConcreteMC10NL                227
+
 #define MAT_TAG_UniaxialMaterialWrapper        2000
 #endif

@@ -67,7 +67,6 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
-//! @ingroup MatUnx
 //
 //! @brief Uniaxial Kent-Scott-Park concrete model with linear
 //! unloading/reloading according to the work of Karsan-Jirsa and no
@@ -79,6 +78,8 @@ namespace XC {
 //! failure strains through the -min and -max switches is optional. The
 //! argument matTag is used to uniquely identify the material object among
 //! material objects in the BasicBuilder object.
+//
+//! @ingroup MatUnx
 class Concrete01: public ConcreteBase
   {
   private:

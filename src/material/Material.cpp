@@ -64,6 +64,7 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
+#include "domain/mesh/element/Element.h"
 
 //! @param matName: name of the material.
 const XC::Material *XC::Material::getMaterialByName(const std::string &matName) const
@@ -113,11 +114,34 @@ XC::MaterialHandler *XC::Material::getMaterialHandler(void)
     return retval;
   }
 
+//! @brief Returns (if possible) a pointer to the material handler (owner).
+const XC::Element *XC::Material::getElement(void) const
+  {
+    const Element *retval= dynamic_cast<const Element *>(Owner());
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; no connection with owner element." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a pointer to the material handler (if possible).
+XC::Element *XC::Material::getElement(void)
+  {
+    XC::Element *retval= dynamic_cast<Element *>(Owner());
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; no connection with owner element." << std::endl;
+    return retval;
+  }
+
 //! @brief Returns the name of the material.
 std::string XC::Material::getName(void) const
   {
+    std::string retval;
     const MaterialHandler *mhandler= getMaterialHandler();
-    return mhandler->getName(getTag());
+    if(mhandler)
+      retval= mhandler->getName(getTag());
+    return retval;
   }
 
 int XC::Material::setVariable(const std::string &argv)
