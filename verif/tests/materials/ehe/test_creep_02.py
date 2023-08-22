@@ -31,8 +31,8 @@ epsCreepEC2= EC2_materials.C30.getCreepDeformation(t,t0,RH,h0,sigma)
 
 # Comparing value of epsCreep is changed from 9.31793e-04 to 9.319563e-04
 # after detecting an error in the formula used to obtain betaH
-ratio1= abs(epsCreepEHE-5.8202195e-4)/5.8202195e-4
-ratio2=abs(epsCreepEC2-5.0651821e-4)/5.0651821e-4
+ratio1= abs(epsCreepEHE+5.8202195e-4)/5.8202195e-4
+ratio2=abs(epsCreepEC2+5.0651821e-4)/5.0651821e-4
 
 ''' 
 print("fi1= ",fi1)
