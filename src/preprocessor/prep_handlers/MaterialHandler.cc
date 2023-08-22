@@ -972,3 +972,15 @@ boost::python::list XC::MaterialHandler::getMaterialNamesPy(void) const
         retval.append(*i);
     return retval;
   }
+
+void  XC::MaterialHandler::setCreepOn(void)
+  { TDConcrete::setCreepOn(); }
+
+void  XC::MaterialHandler::setCreepOff(void)
+  { TDConcrete::setCreepOff(); }
+
+void  XC::MaterialHandler::setCreepDt(const double &d)
+  { TDConcrete::setCreepDt(d); }
+
+double  XC::MaterialHandler::getCreepDt(void)
+  { return TDConcrete::getCreepDt(); }

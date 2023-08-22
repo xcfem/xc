@@ -162,13 +162,9 @@ double XC::TDConcrete::getCurrentTime(void) const
   {
     double currentTime= -1.0;
 
-    const Element *elem= this->getElement();
-    if(elem)
-      {
-        const Domain *theDomain= elem->getDomain();
-        if(theDomain)
-	  { currentTime = theDomain->getCurrentTime(); }
-      }
+    const Domain *theDomain= this->getDomain();
+    if(theDomain)
+      { currentTime = theDomain->getCurrentTime(); }
     return currentTime;
   }    
 
@@ -179,10 +175,11 @@ double XC::TDConcrete::setCreepStrain(double time, double stress)
     
     DTIME_i[count] = creepDt;
     
-    for (int i = 1; i<=count; i++) {
-                PHI_i[i] = setPhi(time,TIME_i[i]); //Determine PHI
-                runSum += PHI_i[i]*DSIG_i[i]/Ec; //CONSTANT STRESS within Time interval
-    }
+    for (int i = 1; i<=count; i++)
+      {
+        PHI_i[i] = setPhi(time,TIME_i[i]); //Determine PHI
+        runSum += PHI_i[i]*DSIG_i[i]/Ec; //CONSTANT STRESS within Time interval
+      }
     
     phi_i = PHI_i[count];
     creep = runSum;
@@ -233,30 +230,35 @@ int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
     */
         
         // Check casting age:
-        if(t-tcast<(2.0-0.0001)) { //Assumed that concrete can only carry load once hardened at 2 days following casting
+        if(t-tcast<(2.0-0.0001))
+	  { //Assumed that concrete can only carry load once hardened at 2 days following casting
                 eps_cr = 0.0;
                 eps_sh = 0.0;
                 eps_m = 0.0;
                 eps_total = trialStrain;
                 sig = 0.0;
-        } else { // Concrete has hardened and is ready to accept load
-                // Initialize total strain:
-                eps_total = trialStrain;
+          }
+	else
+	  { // Concrete has hardened and is ready to accept load
+            // Initialize total strain:
+            eps_total = trialStrain;
         
-                // Calculate shrinkage Strain:
-            if(iter < 1) {
-                eps_sh = setShrink(t);
-            }
-
+            // Calculate shrinkage Strain:
+            if(iter < 1)
+	      { eps_sh = setShrink(t); }
             // Calculate creep and mechanical strain, assuming stress remains constant in a time step:
-            if(creepControl == 1) {
-                if(fabs(t-TIME_i[count]) <= 0.0001) { //If t = t(i-1), use creep/shrinkage from last calculated time step
+            if(creepControl == 1)
+	      {
+                if(fabs(t-TIME_i[count]) <= 0.0001)
+		  { //If t = t(i-1), use creep/shrinkage from last calculated time step
                     eps_cr = epsP_cr;
                     eps_sh = epsP_sh;
                     eps_m = eps_total - eps_cr - eps_sh;
                     sig = setStress(eps_m, e);
             
-                } else { // if the current calculation is a new time step
+                  }
+		else
+		  { // if the current calculation is a new time step
                         //if(crackP_flag == 1 && sigP >= 0.0) { //if cracking occurs and previous stress is positive, 
                         // creep strain should not increase
                         //        eps_cr = epsP_cr;
@@ -270,32 +272,32 @@ int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
                         //        eps_m = eps_total - eps_cr - eps_sh;
                         //        sig = setStress(eps_m, e);
                         //} else {        
-                if(iter < 1) {
-                    eps_cr = setCreepStrain(t,sig); 
-                }
-                        eps_m = eps_total - eps_cr - eps_sh;
-                        sig = setStress(eps_m, e);
-                        //}
-                }
-            } else { //Static Analysis using previously converged time-dependent strains
-                    eps_cr = epsP_cr;
-                    eps_sh = epsP_sh;
-                    eps_m = eps_total-eps_cr-eps_sh;
+                    if(iter < 1)
+		      { eps_cr = setCreepStrain(t,sig); }
+                    eps_m = eps_total - eps_cr - eps_sh;
                     sig = setStress(eps_m, e);
-            }
+                        //}
+                  }
+              }
+	    else // no more creep no more shrinkage.
+	      { //Static Analysis using previously converged time-dependent strains
+                eps_cr = epsP_cr;
+                eps_sh = epsP_sh;
+                eps_m = eps_total-eps_cr-eps_sh;
+                sig = setStress(eps_m, e);
+	      }
                 //
                 //std::cerr<<"\n   eps_cr = "<<eps_cr;
                 //std::cerr<<"\n   eps_sh = "<<eps_sh;
                 //std::cerr<<"\n   eps_m = "<<eps_m;
                 //std::cerr<<"\n   sig = "<<sig;
         }
-    iter ++;
-        return 0;
-}
+    iter++;
+    return 0;
+  }
 
-double
-XC::TDConcrete::setStress(double strain, double &stiff)
-{
+double XC::TDConcrete::setStress(double strain, double &stiff)
+  {
 // Determine proper load path (comp load, comp unload, tens load, tens unload):
     double stress=0.0;
     crack_flag = crackP_flag;
@@ -577,35 +579,35 @@ int XC::TDConcrete::revertToLastCommit(void)
 }
 
 int XC::TDConcrete::revertToStart(void)
-{
-  ecminP = 0.0;
-  deptP = 0.0;
+  {
+    ecminP = 0.0;
+    deptP = 0.0;
 
-        eP = Ec;
-  epsP = 0.0;
-  sigP = 0.0;
-  eps = 0.0;
-  sig = 0.0;
-        e = Ec;
-  
-        if(creepControl==0)
-	  { count = 0; }
-	else
-	  { count = 1; }
-        
-  return 0;
-}
+    eP = Ec;
+    epsP = 0.0;
+    sigP = 0.0;
+    eps = 0.0;
+    sig = 0.0;
+    e = Ec;
 
-void XC::TDConcrete::setCreepControl(const int &i)
-  { creepControl= i; }
+    if(creepControl==0)
+      { count = 0; }
+    else
+      { count = 1; }
 
-int XC::TDConcrete::getCreepControl(void)
-  { return creepControl; }
+    return 0;
+  }
+
+void XC::TDConcrete::setCreepOn(void)
+  { creepControl= 1; }
+
+void XC::TDConcrete::setCreepOff(void)
+  { creepControl= 0; }
 
 void XC::TDConcrete::setCreepDt(const double &d)
   { creepDt= d; }
 
-int XC::TDConcrete::getCreepDt(void)
+double XC::TDConcrete::getCreepDt(void)
   { return creepDt; }
 
 //! @brief Send object members through the communicator argument.

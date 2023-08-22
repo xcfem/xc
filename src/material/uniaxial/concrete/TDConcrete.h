@@ -233,11 +233,20 @@ class TDConcrete : public RawConcrete
     Response *setResponse(const std::vector<std::string> &, Information &);
     int getResponse(int responseID, Information &matInformation);
 
-    static void setCreepControl(const int &);
-    static int getCreepControl(void);
+    static void setCreepOn(void);
+    static void setCreepOff(void);
     static void setCreepDt(const double &);
-    static int getCreepDt(void);
+    static double getCreepDt(void);
   };
+
+  inline void set_creep_on(void)
+    { TDConcrete::setCreepOn(); }
+  inline void set_creep_off(void)
+    { TDConcrete::setCreepOff(); }
+  inline void set_creep_dt(const double &d)
+    { TDConcrete::setCreepDt(d); }
+  inline double get_creep_dt(void)
+    { return TDConcrete::getCreepDt(); }
 
 } // end of XC namespace
 

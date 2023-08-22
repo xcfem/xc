@@ -56,6 +56,10 @@ class_<XC::TDConcrete, bases<XC::RawConcrete>, boost::noncopyable >("TDConcrete"
   .add_property("epscrd", &XC::TDConcrete::getCreepDParameter,  &XC::TDConcrete::setCreepDParameter,"creep d parameter.")
   .add_property("tcast", &XC::TDConcrete::getTCast,  &XC::TDConcrete::setTCast,"tcast.")
   .add_property("Et", &XC::TDConcrete::getEt,  &XC::TDConcrete::setEt,"concrete current stiffness.")
+  .def("setCreepOn", &XC::TDConcrete::setCreepOn,"Activate creep.").staticmethod("setCreepOn")
+  .def("setCreepOff", &XC::TDConcrete::setCreepOff,"Deactivate creep.").staticmethod("setCreepOff")
+  .def("getCreepDt", &XC::TDConcrete::getCreepDt,"Get time increment for creep.").staticmethod("getCreepDt")
+  .def("setCreepDt", &XC::TDConcrete::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
   ;
 
 

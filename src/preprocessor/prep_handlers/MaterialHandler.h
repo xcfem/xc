@@ -71,6 +71,9 @@ class MaterialHandler: public PrepHandler
     friend class ElementHandler;
   public:
     MaterialHandler(Preprocessor *owr);
+    ~MaterialHandler(void);
+    void clearAll(void);
+    
     const map_materials &Map(void) const;
     const_iterator begin(void) const;
     const_iterator end(void) const;
@@ -109,9 +112,11 @@ class MaterialHandler: public PrepHandler
     std::set<std::string> getMaterialNames(void) const;
     boost::python::list getMaterialNamesPy(void) const;
     
-    ~MaterialHandler(void);
-    void clearAll(void);
 
+    static void setCreepOn(void);
+    static void setCreepOff(void);
+    static void setCreepDt(const double &);
+    static double getCreepDt(void);
   };
 
 } // end of XC namespace
