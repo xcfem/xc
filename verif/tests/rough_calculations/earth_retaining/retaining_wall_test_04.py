@@ -71,6 +71,12 @@ wall.stemHeight= stemHeight
 wall.bToe= bToe
 wall.bHeel= bHeel
 wall.concrete= concrete
+
+#    ___     _       __                              _   
+#   | _ \___(_)_ _  / _|___ _ _ __ ___ _ __  ___ _ _| |_ 
+#   |   / -_) | ' \|  _/ _ \ '_/ _/ -_) '  \/ -_) ' \  _|
+#   |_|_\___|_|_||_|_| \___/_| \__\___|_|_|_\___|_||_\__|
+#                                                      
 wall.stemReinforcement.setReinforcement(1, reinf_types['A12_15'].getCopy())  # vert. trasdós (esperas)
 wall.stemReinforcement.setReinforcement(2, reinf_types['A12_15'].getCopy()) # vert. trasdós (contacto terreno)
 wall.stemReinforcement.setReinforcement(6, reinf_types['A12_15'].getCopy())  # coronación
