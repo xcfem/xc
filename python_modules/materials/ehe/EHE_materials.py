@@ -343,7 +343,7 @@ class EHEConcrete(concrete_base.Concrete):
                        - u = perimeter of the member in contact with the atmosphere
         :param sigmaT0: constant compressive stress appliend on day t0  (negative sign).
         '''
-        return -1*sigmaT0*self.getCreepFitt0(t,t0,RH,h0)/self.getEcm()
+        return self.getCreepFitt0(t,t0,RH,h0)*sigmaT0/self.getEcm()
  
 
 # EHE concretes
