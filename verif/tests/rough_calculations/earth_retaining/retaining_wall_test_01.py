@@ -84,6 +84,11 @@ reinf_types= EHE_limit_state_checking.define_rebar_families(steel= reinfSteel, c
 sectionName= "mur10m"
 wall= ng_retaining_wall.RetainingWall(name= sectionName, concreteCover= cover, stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= stemSlope, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= reinfSteel)
 
+#    ___     _       __                              _   
+#   | _ \___(_)_ _  / _|___ _ _ __ ___ _ __  ___ _ _| |_ 
+#   |   / -_) | ' \|  _/ _ \ '_/ _/ -_) '  \/ -_) ' \  _|
+#   |_|_\___|_|_||_|_| \___/_| \__\___|_|_|_\___|_||_\__|
+#                                                      
 #wall.exigeanceFisuration= 'A'
 wall.stemReinforcement.setReinforcement(1, reinf_types['A25_10'].getCopy())  # vert. trasdós (esperas)
 wall.stemReinforcement.setReinforcement(2, reinf_types['A25_10'].getCopy()) # vert. trasdós (contacto terreno)
@@ -115,7 +120,11 @@ ratioStemPositions= abs(incXStemPositions-stemSlope*stemWFHeight/2.0)
 totalSet= preprocessor.getSets.getSet("total")
 
 
-#Actions.
+#      _      _   _             
+#     /_\  __| |_(_)___ _ _  ___
+#    / _ \/ _|  _| / _ \ ' \(_-<
+#   /_/ \_\__|\__|_\___/_||_/__/
+# Actions.
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
 loadCaseNames= ['selfWeight','earthPress','earthPressAcc']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
@@ -123,6 +132,12 @@ loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 selfWeight= loadCaseManager.setCurrentLoadCase('selfWeight')
 wall.createSelfWeightLoads(rho= concrete.density(),grav= gravity)
 
+
+#        ___                                 _             _   _             
+#       | _ \___ _ _ _ __  __ _ _ _  ___ _ _| |_   __ _ __| |_(_)___ _ _  ___
+#       |  _/ -_) '_| '  \/ _` | ' \/ -_) ' \  _| / _` / _|  _| / _ \ ' \(_-<
+#       |_| \___|_| |_|_|_\__,_|_||_\___|_||_\__| \__,_\__|\__|_\___/_||_/__/
+#                                                                          
 # Earth pressure. (drainage ok)
 ## Backfill soil properties
 backfillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
@@ -137,6 +152,12 @@ wall.createBackfillPressures(backfillPressureModel, Delta= backfillDelta)
 zGroundFrontFill= zGroundBackfill-wall.stemHeight+frontFillDepth #Front fill
 frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFrontFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createFrontFillPressures(frontFillPressureModel)
+
+#        _         _    _         _        _           _   _             
+#       /_\  __ __(_)__| |___ _ _| |_ __ _| |  __ _ __| |_(_)___ _ _  ___
+#      / _ \/ _/ _| / _` / -_) ' \  _/ _` | | / _` / _|  _| / _ \ ' \(_-<
+#     /_/ \_\__\__|_\__,_\___|_||_\__\__,_|_| \__,_\__|\__|_\___/_||_/__/
+#                                                                        
 #Accidental: earth pressure failure drainage system.
 gSoil= backfillSoilModel.rho*gravity
 earthPressAcc= loadCaseManager.setCurrentLoadCase('earthPressAcc')
@@ -186,12 +207,22 @@ combContainer.dumpCombinations(preprocessor)
 sls_results= wall.performSLSAnalysis(slsCombinations)
 wall.setSLSInternalForcesEnvelope(sls_results.internalForces)
 
+#    ___ ___ ___                _  __ _         _   _             
+#   / __| __/ _ \  __ _____ _ _(_)/ _(_)__ __ _| |_(_)___ _ _  ___
+#  | (_ | _| (_) | \ V / -_) '_| |  _| / _/ _` |  _| / _ \ ' \(_-<
+#  \___|___\___/   \_/\___|_| |_|_| |_\__\__,_|\__|_\___/_||_/__/
+#                                                                
 ## ULS stability analysis.
 ### Foundation stratified soil properties
 stratifiedSoil= fcs.StratifiedSoil(hi,rhoi,phii,ci)
 foundationSoilModel= stratifiedSoil.getEquivalentSoil(Beff= 5,gMPhi= 1.2,gMc= 1.5) #Design values.
 sr= wall.performStabilityAnalysis(stabilityULSCombinations,foundationSoilModel, toeFillDepth= 1.0, sg_adm=0.281e6, ignoreAdhesion= False, NgammaCoef= 1.5)
 
+#     ___ _____ ___                _  __ _         _   _             
+#    / __|_   _| _ \  __ _____ _ _(_)/ _(_)__ __ _| |_(_)___ _ _  ___
+#    \__ \ | | |   /  \ V / -_) '_| |  _| / _/ _` |  _| / _ \ ' \(_-<
+#    |___/ |_| |_|_\   \_/\___|_| |_|_| |_\__\__,_|\__|_\___/_||_/__/
+#
 ## ULS strength analysis.
 uls_results= wall.performULSAnalysis(strengthULSCombinations)
 wall.setULSInternalForcesEnvelope(uls_results.internalForces)
