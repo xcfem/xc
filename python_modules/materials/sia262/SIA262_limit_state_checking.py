@@ -111,7 +111,7 @@ class RebarController(lsc.RebarController):
         '''
         return AsMinTensionStressLimit(concrete,sgAdm,t)
 
-    def getMinReinfAreaUnderTension(self, concrete,spacing,t):
+    def getMinReinfAreaInTension(self, concrete,spacing,t):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
@@ -121,7 +121,7 @@ class RebarController(lsc.RebarController):
         '''
         return MinReinfAreaUnderTension(concrete,self.crackControlRequirement,spacing,t)
 
-    def getMinReinfAreaUnderFlexion(self, concrete, concreteCover, spacing,t):
+    def getMinReinfAreaInBending(self, concrete, concreteCover, spacing,t):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion.
 
@@ -690,23 +690,23 @@ class SIARebarFamily(rf.RebarFamily):
             of SIA 262:2014.'''
         return self.crackControlRequirement
     
-    def getMinReinfAreaUnderFlexion(self,concrete,thickness):
+    def getMinReinfAreaInBending(self,concrete,thickness):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion.
 
         :param concrete: concrete material.
         :param thickness: thickness of the bended member.
         '''
-        return self.getRebarController().getMinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.spacing,thickness)
+        return self.getRebarController().getMinReinfAreaInBending(concrete,self.getEffectiveCover(),self.spacing,thickness)
 
-    def getMinReinfAreaUnderTension(self,concrete,thickness):
+    def getMinReinfAreaInTension(self,concrete,thickness):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
         :param concrete: concrete material.
         :param thickness: thickness of the tensioned member.
         '''
-        return self.getRebarController().getMinReinfAreaUnderTension(concrete,self.spacing,thickness)
+        return self.getRebarController().getMinReinfAreaInTension(concrete,self.spacing,thickness)
 
     def getVR(self,concrete,Nd,Md,b,thickness):
         '''Return the shear resistance of the (b x thickness) rectangular section.

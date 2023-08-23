@@ -314,24 +314,27 @@ class DoubleRebarFamily(object):
         l1= self.f1.getBasicAnchorageLength(concrete)
         l2= self.f2.getBasicAnchorageLength(concrete)
         return max(l1,l2)
-    def getMinReinfAreaUnderFlexion(self,concrete,thickness):
+    
+    def getMinReinfAreaInBending(self,concrete,thickness):
         '''Return the minimun amount of bonded reinforcement to control cracking
-           for reinforced concrete sections under flexion.
+           for reinforced concrete sections under bending.
 
         :param concrete: concrete material.
         :param thickness: thickness of the bended member.
         '''
-        retval= self.f1.getMinReinfAreaUnderFlexion(concrete= concrete,thickness= thickness)
+        Retval= self.f1.getMinReinfAreaInBending(concrete= concrete,thickness= thickness)
         return retval
-    def getMinReinfAreaUnderTension(self,concrete,thickness):
+    
+    def getMinReinfAreaInTension(self,concrete,thickness):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
         :param concrete: concrete material.
         :param thickness: thickness of the tensioned member.
         '''
-        retval= self.f1.getMinReinfAreaUnderTension(concrete= concrete,thickness= thickness)
+        retval= self.f1.getMinReinfAreaInTension(concrete= concrete,thickness= thickness)
         return retval
+    
     def getMR(self,concrete,b,thickness):
         '''Return the bending resistance of the (b x thickness) rectangular section.
 
