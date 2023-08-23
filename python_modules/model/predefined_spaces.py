@@ -924,6 +924,15 @@ class PredefinedSpace(object):
         ''' Remove all load patterns from domain.'''
         self.preprocessor.getDomain.removeAllLoadPatterns()
 
+    def removeAllLoadsAndCombinationsFromDomain(self):
+        ''' Remove all the load patterns and load combinations from the
+            domain.'''
+        self.preprocessor.getDomain.removeAllLoadsAndCombinations()
+
+    def clearCombinationsFromLoadHandler(self):
+        ''' Remove the combinations currently defined in the load handler.'''
+        self.getLoadHandler().getLoadCombinations.clear()
+
     def getActiveLoadPatterns(self):
         ''' Return a list of the active load patterns.'''
         activeLoadPatterns= self.preprocessor.getDomain.getConstraints.getLoadPatterns
