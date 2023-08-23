@@ -56,11 +56,11 @@ class RCSection(object):
     def setReinforcement(self,tensionRebars):
         self.tensionRebars= tensionRebars
         
-    def getMinReinfAreaUnderFlexion(self):
-        return self.tensionRebars.getMinReinfAreaUnderFlexion(concrete= self.concrete, thickness= self.h)
+    def getMinReinfAreaInBending(self):
+        return self.tensionRebars.getMinReinfAreaInBending(concrete= self.concrete, thickness= self.h)
     
-    def getMinReinfAreaUnderTension(self):
-        return self.tensionRebars.getMinReinfAreaUnderTension(concrete= self.concrete,thickness= self.h)
+    def getMinReinfAreaInTension(self):
+        return self.tensionRebars.getMinReinfAreaInTension(concrete= self.concrete,thickness= self.h)
     
     def getMR(self, z= None):
         ''' Return the resisting moment of the section.
@@ -73,7 +73,7 @@ class RCSection(object):
         return self.tensionRebars.getVR(self.concrete,Nd,Md,self.b,self.h)
     
     def writeResultFlexion(self,outputFile,Nd,Md,Vd):
-        AsMin= self.getMinReinfAreaUnderFlexion()
+        AsMin= self.getMinReinfAreaInBending()
         outputFile.write("  RC section dimensions; b= "+ fmt.Length.format(self.b)+ " m, h= "+ fmt.Length.format(self.h)+ " m\\\\\n")
         self.tensionRebars.writeRebars(outputFile, self.concrete, AsMin)
         if(abs(Md)>0):
@@ -86,7 +86,7 @@ class RCSection(object):
             rebar_family.writeF(outputFile,"  F(V)",VR/Vd)
           
     def writeResultTraction(self,outputFile,Nd):
-        AsMin= self.getMinReinfAreaUnderTension()/2.0
+        AsMin= self.getMinReinfAreaInTension()/2.0
         self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
         if(abs(Nd)>0):
           lmsg.error("ERROR; tension not implemented.")
