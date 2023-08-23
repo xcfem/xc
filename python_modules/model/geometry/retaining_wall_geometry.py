@@ -38,7 +38,7 @@ class CantileverRetainingWallGeometry(object):
     :ivar bHeel: (float) Heel length.
     '''
 
-    def __init__(self,name= 'prb', stemHeight= 2.5, stemBottomWidth=0.25,stemTopWidth=0.25, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, stemBackSlope= 0.0):
+    def __init__(self,name= 'prb', stemHeight= 2.5, stemBottomWidth=0.25, stemTopWidth=0.25, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, stemBackSlope= 0.0):
         '''Constructor 
 
         :param name: (string) Identifier.
@@ -79,9 +79,22 @@ class CantileverRetainingWallGeometry(object):
         '''Return total width of the footing.'''
         return self.bToe+self.stemBottomWidth+self.bHeel
     
-    def getDepth(self,y):
-        '''Return stem section depth for height "y").'''
-        return (self.stemBottomWidth-self.stemTopWidth)/self.stemHeight*y+self.stemTopWidth
+    def getDepth(self, y):
+        '''Return stem section depth for height "y").
+
+        :param y: height of the section measured from the stem top.
+        '''
+        retval= self.stemTopWidth
+        if(self.stemBackSteps):
+            for step in self.stemBackSteps:
+                if(y>step[0]): # if depth greater than depth of the step
+                    retval+= step[1]
+                    break;
+            if(self.stemBackSlope!=0):
+                retval+= y*self.stemBackSlope
+        else:
+            retval+= (self.stemBottomWidth-self.stemTopWidth)/self.stemHeight*y
+        return retval
       
     def setStemBackSteps(self, steps):
         ''' Set the step in the stem back defined as a list of (depth, width)
