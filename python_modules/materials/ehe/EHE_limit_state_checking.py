@@ -2117,7 +2117,7 @@ class EHERebarFamily(rf.RebarFamily):
         :param b: width of concrete section.
         :param concrete: concrete material.
         '''
-        retval= min(thickness,0.5)*b # see talbe 42.3.5 remarks.
+        retval= min(thickness,0.5)*b # see table 42.3.5 remarks.
         fy= self.steel.fyk
         limit= 450e6
         if(fy<limit):
