@@ -107,7 +107,7 @@ stressDistribution= fiberSection.getStrClaseEsfuerzo(1e-4)
 
 # EC2:2004 7.3.2 Minimum reinforcement areas
 Act= b*(h-xc_x)
-AsMinCrackControl= EC2_limit_state_checking.getAsMinCrackControl(concrete, steel, h, Act, stressDistribution)
+AsMinCrackControl= EC2_limit_state_checking.getAsMinCrackControl(concrete, steel, h, Act, sigmaC= 0.0)
 checkAsMinCrackControl= okString if(As>=AsMinCrackControl) else koString
 # EC2:2004 9.2.1.1 Minimum reinforcement area for beams
 AsMinBeams= EC2_limit_state_checking.getAsMinBeams(concrete, steel, h= h, z= xc_z, bt= b, d= d, nationalAnnex= None)
