@@ -484,7 +484,7 @@ class EC2RebarFamily(rf.RebarFamily):
        :ivar pos: reinforcement position according to clause 66.5.1
                   of EC2.
     '''
-    def __init__(self,steel, diam, spacing, concreteCover, pos= 'II'):
+    def __init__(self,steel, diam, spacing, concreteCover, pos= 'II', nationalAnnex= None):
         ''' Constructor.
 
         :param steel: reinforcing steel material.
@@ -496,6 +496,7 @@ class EC2RebarFamily(rf.RebarFamily):
         '''
         super(EC2RebarFamily,self).__init__(steel,diam,spacing,concreteCover)
         self.pos= pos
+        self.nationalAnnex= nationalAnnex
 
     def getCopy(self):
         return EC2RebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover, pos= self.pos)
@@ -507,6 +508,67 @@ class EC2RebarFamily(rf.RebarFamily):
       ''' Return the basic anchorage length of the bars.'''
       rebarController= self.getRebarController()
       return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
+    def getMinReinfAreaInBending(self, thickness, b= 1.0, typo= 'slab', concrete= None, steelStressLimit= 450e6, sigmaC= 0.0, effectiveCover= 45e-3):
+        '''Return the minimun amount of bonded reinforcement to control cracking
+           for reinforced concrete sections under flexion per unit length 
+           according to clauses 7.3.2, 9.2.1.1 (beams), 9.3.1.1 (slabs),
+           9.5.2 (columns) and 9.6.2 (walls).
+
+        :param thickness: gross thickness of concrete section (doesn't include 
+                          the area of the voids).
+        :param b: width of concrete section.
+        :param typo: member type; slab, wall, beam or column.
+        :param concrete: concrete material.
+        :param steelStressLimit: maximum stress permitted in the reinforcement 
+                                 immediately after formation of the crack. This
+                                 may be taken as the yield strength of the 
+                                 reinforcement, fyk. A lower value may, 
+                                 however, be needed to satisfy the crack width 
+                                 limits according to the maximum bar size or
+                                 spacing.
+        :param sigmaC: is the mean stress of the concrete acting on the part 
+                       of the section under consideration: sigmaC= NEd/(bh).
+        :param effectiveCover: the distance between the exposed concrete surface
+                               to the centroid of the main reinforcement.
+        '''
+        fct_eff= concrete.fctm() # mean value of the tensile strength of the
+        # concrete effective at the time when the cracks may first be expected
+        # to occur: fct,eff = fctm or lower, (fctm(t)), if cracking is expected
+        # earlier than 28 days
+        
+        # Clause 7.3.2 minimum reinforcement areas:
+        steelStressLimit= min(self.steel.fyk, steelStressLimit)
+        # area of concrete within tensile zone computed using (Jones Method)
+        # and assuming there is only one reinforcement layer (zero vertical
+        # spacing between reinforcement bars).
+        hc_eff= 2.5*effectiveCover
+        Ac_t= hc_eff*b
+        retval= getAsMinCrackControl(concrete= concrete, reinfSteel= self.steel, h= thickness, Act= Ac_t, sigmaC= sigmaC, sigma_s= steelStressLimit)
+        d= thickness-effectiveCover # effective depth.
+        if(typo=='beam' or type=='slab'): # Clauses 9.2.1.1 and 9.3.1.1 (1)
+            
+            Asmin= getAsMinBeams(concrete= concrete, reinfSteel= self.steel, h= thickness, bt= b, d= d, nationalAnnex= self.nationalAnnex) 
+            retval= max(Asmin, retval)
+        elif(typo=='column'):
+            if(b>4*thickness):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= className+'.'+methodName+"; column too wide; b= " + str(b) + ", h= "+str(thickness)+'\n'
+                lmsg.error(errMsg)
+            Ac= thickness*b
+            NEd= sigmaC*Ac
+            Asmin= getAsMinColumns(concrete= concrete, reinfSteel= self.steel, NEd= NEd, Ac= Ac, nationalAnnex= self.nationalAnnex)
+            retval= max(Asmin, retval)
+        elif(typo=='wall'): # Clause 9.6.2
+            # We assume that only the vertical reinforcement is subjected
+            # to bending.
+            Asmin= getAsMinWalls(concrete= concrete, reinfSteel= self.steel, Ac= thickness*b, vertical= True, compressedSide= False, verticalReinforcementArea= None, nationalAnnex= self.nationalAnnex)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"; member type: " + str(typo) + " not implemented.\n"
+            lmsg.error(errMsg)
+        return retval
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
     ''' Creates a dictionary with predefined rebar families.
@@ -833,7 +895,7 @@ def getFlangeShearResistanceShearReinfStress(concrete, hf, Asf, sf, shearReinfSt
 
 # 7.3.2 Minimum reinforcement areas
 
-def getAsMinCrackControl(concrete, reinfSteel, h, Act, stressDistribution, sigma_s= None):
+def getAsMinCrackControl(concrete, reinfSteel, h, Act, sigmaC= 0.0, sigma_s= None):
     ''' Return the minimum area of reinforcing steel within the tensile zone
         according to expression 7.1 of clause 7.3.2 of EC2:2004.
 
@@ -843,8 +905,8 @@ def getAsMinCrackControl(concrete, reinfSteel, h, Act, stressDistribution, sigma
     :param Act: area of concrete within tensile zone. The tensile zone is 
                 that part of the section which is calculated to be in tension 
                 just before formation of the first crack.
-    :param stressDistribution: string indentifying the stress distribution
-                               (bending or pure tension) of the cross-section.
+    :param sigmaC: is the mean stress of the concrete acting on the part 
+                   of the section under consideration: sigmaC= NEd/(bh).
     :param sigma_s: absolute value of the maximum stress permitted in the 
                     reinforcement immediately after formation of the crack. 
                     This may be taken as the yield strength of the 
@@ -856,8 +918,21 @@ def getAsMinCrackControl(concrete, reinfSteel, h, Act, stressDistribution, sigma
     kc= 0.4 # coefficient which takes account of the stress distribution
             # within the section immediately prior to cracking and of the
             # change of the lever arm
-    if(stressDistribution=='simple_tension'):
+    if(sigmaC<0.0):
         kc= 1.0
+    elif(sigmaC==0.0):
+        kc= 0.4
+    else: # (sigmaC>0)
+        h_aster= min(thickness, 1.0)
+        k1= 1.5 if (sigmaC<0.0) else 2.0*h_aster/(3*thickness)
+        if(typo=='flange'):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"; member type: " + str(typo) + " not implemented.\n"
+            lmsg.error(errMsg)
+            kc= 0.5
+        else:
+            kc= min(1, 0.4*(sigmaC/(k1*thickness/h_aster*fct_eff)))
     k= 1.0 # coefficient which allows for the effect of non-uniform
            # self-equilibrating stresses, which lead to a reduction of
            # restraint forces.
@@ -887,7 +962,7 @@ def getAsMinBeams(concrete, reinfSteel, h, z, bt, d, nationalAnnex= None):
         W= bt*h**2/6.0
         fctmfl= max(1.6-h,1.0)*concrete.fctm()
         return W/z*fctmfl/reinfSteel.fyd()
-    else:
+    else: # recommended values.
         return max(0.26*concrete.fctm()/reinfSteel.fyk,0.0013)*bt*d
     
 def getAsMaxBeams(Ac, nationalAnnex= None):
@@ -898,6 +973,92 @@ def getAsMaxBeams(Ac, nationalAnnex= None):
     :param nationalAnnex: identifier of the national annex.
     '''
     return .04*Ac
+
+def getAsMinColumns(concrete, reinfSteel, NEd, Ac, nationalAnnex= None):
+    ''' Return the minimum area of longitudinal reinforcement
+        according to expression 9.12N of EC2:2004.
+
+    :param concrete: concrete material.
+    :param reinfSteel: reinforcing steel material.
+    :param NEd: sdesign axial compression force.
+    :param Ac: area of the concrete section.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    if(nationalAnnex=='Spain'):
+        fycd= min(self.steel.fyd(),400e6)
+        retval= max(0.1*NEd/fycd, 0.004*Ac)
+    else: # recommended values.
+        retval= max(0.1*NEd/self.steel.fyd(), 0.002*Ac)
+    return retval
+
+def getAsMaxColumns(concrete, reinfSteel, Ac, nationalAnnex= None):
+    ''' Return the minimum area of longitudinal reinforcement
+        according to clause 9.5.2 (3) of EC2:2004.
+
+    :param concrete: concrete material.
+    :param reinfSteel: reinforcing steel material.
+    :param NEd: sdesign axial compression force.
+    :param Ac: area of the concrete section.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    if(nationalAnnex=='Spain'): # Clause 9.5.2 (3)
+        fycd= min(self.steel.fyd(),400e6)
+        retval= 1.0*concrete.fcd()/fycd*Ac
+    else: # Clause 9.5.2 (3) recommended values.
+        retval= 0.04*Ac
+    return retval
+
+def getAsMinWalls(concrete, reinfSteel, Ac, thickness, vertical= True, compressedSide= False, verticalReinforcementArea= None, nationalAnnex= None):
+    ''' Return the minimum area of longitudinal reinforcement in 
+        the tensile zone (or in the compressed one if compressedSide==True)
+        according to clause 9.6.2 and 9.6.3 of EC2:2004.
+
+    :param concrete: concrete material.
+    :param reinfSteel: reinforcing steel material.
+    :param Ac: area of the concrete section.
+    :param thickness: wall thickness.
+    :param vertical: if true compute the minimum for the vertical reinforcement,
+                     otherwise return the minimum for the horizontal one.
+    :param compressedSide: if true compute the minimum for the vertical
+                           reinforcement in the compressed side, otherwise
+                           return the minimum reinforcement for the tensile
+                           zone.
+    :param verticalReinforcementArea: area of the vertical reinforcement used
+                                      to calculate the horizontal reinforcement
+                                      at the same side.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    if(nationalAnnex=='Spain'):
+        fyk= self.steel.fyk
+        if(vertical): # 9.6.2 (1)
+            if(fyk>=500e6):
+                retval= 0.0009*Ac
+            else:
+                retval= 0.0012*Ac
+            retval= max(retval, 0.04*Ac*concrete.fcd()/reinfSteel.fyd())
+            if(compressedSide):
+                retval*=0.3
+        else: # 9.6.3 (1)
+            Ac_eff= Ac
+            if(thickness>0.5):
+                Ac_eff= Ac/thickness*0.5
+            if(fyk>=500e6):
+                retval= 0.0032*Ac_eff
+            else:
+                retval= 0.004*Ac_eff
+    else: # Recommended values.
+        if(vertical): # 9.6.2
+            retval= 0.001*Ac # Note 1
+        else: # 9.6.3
+            retval= 0.001*Ac
+            if(verticalReinforcementArea):
+                retval= max(retval, 0.25*verticalReinforcementArea)
+            else:
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= methodName+"; the area of the vertical reinforcement is needed to compute the minimum area of the horizontal one.\n"
+                lmsg.error(errMsg)
+                retval= None
+    return retval
 
 # Check normal stresses limit state.
 class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):

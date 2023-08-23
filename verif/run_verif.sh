@@ -1035,6 +1035,7 @@ python tests/materials/ehe/test_steel_relaxation_01.py
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
 python tests/materials/ec2/test_EC2_max_min_reinforcement_area_01.py
+python tests/materials/ec2/test_EC2_max_min_reinforcement_area_02.py
 python tests/materials/ec2/test_lap_length_01.py
 python tests/materials/ec2/test_EC2Concrete.py
 echo "$BLEU" "    EC2 misc. shrinkage and creep tests." "$NORMAL"
