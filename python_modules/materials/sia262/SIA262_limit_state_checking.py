@@ -719,12 +719,6 @@ class SIARebarFamily(rf.RebarFamily):
         '''
         return VuNoShearRebars(concrete,self.steel,Nd,Md,self.getAs(),b,self.d(thickness))
 
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
-
 class SIAFamNBars(SIARebarFamily):
     n= 2 #Number of bars.
     def __init__(self,steel,n,diam,spacing,concreteCover):
@@ -766,11 +760,6 @@ class SIADoubleRebarFamily(rf.DoubleRebarFamily):
         '''
         assert self.f1.steel==self.f2.steel
         return VuNoShearRebars(concrete,self.f1.steel,Nd,Md,self.getAs(),b,self.d(thickness))  
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 
 def copy_rebar_family(reinfToCopy, newCrackingRequirement):

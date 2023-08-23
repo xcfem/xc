@@ -2139,12 +2139,6 @@ class EHERebarFamily(rf.RebarFamily):
         retval= getFcvEH91(concrete.fcd())*b*0.9*thickness
         return retval
 
-    
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
     ''' Creates a dictionary with predefined rebar families.

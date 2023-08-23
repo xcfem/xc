@@ -343,12 +343,6 @@ class ACIRebarFamily(rf.RebarFamily):
         '''
         return VcNoShearRebars(concrete,Nd,b,0.9*thickness)
 
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
-
 class ACIFamNBars(ACIRebarFamily):
     n= 2 #Number of bars.
     
@@ -380,12 +374,6 @@ class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
         '''
         return self.f1.getVR(concrete,Nd,Md,b,thickness)
     
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
-
 class ShearPlane(object):
     ''' Shear plane according to seciont 22.9 of ACI 318-14
 

@@ -170,6 +170,17 @@ class RebarFamily(RebarRow):
         outputFile.write("  diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
         reinfDevelopment= self.getBasicAnchorageLength(concrete)
         outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
+    
+    def writeRebars(self, outputFile, concrete, AsMin):
+        '''Write rebar family data.
+ 
+        :param outputFile: output file.
+        :param concrete: concrete object.
+        :param AsMin: minimum required reinforcement area.
+        '''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
+        writeF(outputFile,"  F(As)", self.getAs()/AsMin)
         
 class FamNBars(RebarFamily):
     ''' Family of "n" rebars.
@@ -359,6 +370,12 @@ class DoubleRebarFamily(object):
     def writeDef(self,outputFile,concrete):
         self.f1.writeDef(outputFile,concrete)
         self.f2.writeDef(outputFile,concrete)
+        
+    def writeRebars(self, outputFile,concrete,AsMin):
+        '''Write rebar family data.'''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
+        writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 def writeF(outputFile,text,F):
     fmt= "{:4.2f}"
