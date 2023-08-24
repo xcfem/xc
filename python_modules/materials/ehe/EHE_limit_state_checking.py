@@ -2061,16 +2061,16 @@ class EHERebarFamily(rf.RebarFamily):
       rebarController= self.getRebarController()
       return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
   
-    def getMinReinfAreaInBending(self, thickness, b= 1.0, typo= 'slab', concrete= None, steelStressLimit= 450e6):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, typo= 'slab', steelStressLimit= 450e6):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clause 42.3.5. 
 
+        :param concrete: concrete material.
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param b: width of concrete section.
         :param typo: member type; slab, wall, beam or column.
-        :param concrete: concrete material.
         :param steelStressLimit: maximum stress permitted in the reinforcement 
                                  immediately after formation of the crack. This
                                  may be taken as the yield strength of the 
@@ -2109,13 +2109,13 @@ class EHERebarFamily(rf.RebarFamily):
             lmsg.error(errMsg)
         return retval
 
-    def getMinReinfAreaInTension(self,thickness, b= 1.0, concrete= None):
+    def getMinReinfAreaInTension(self, concrete, thickness, b= 1.0):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
+        :param concrete: concrete material.
         :param thickness: gross thickness of concrete section.
         :param b: width of concrete section.
-        :param concrete: concrete material.
         '''
         retval= min(thickness,0.5)*b # see table 42.3.5 remarks.
         fy= self.steel.fyk
