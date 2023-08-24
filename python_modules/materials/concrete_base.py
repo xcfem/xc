@@ -1100,6 +1100,11 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     def eyd(self):
         ''' Design strain at yield point. '''
         return self.fyd()/self.Es
+
+    def epsilon_ud(self):
+        ''' Return the steel strain limit.'''
+        retval= 0.9*self.emax
+        return retval
     
     def Esh(self):
         ''' Slope of the curve in the yielding region. '''
@@ -1108,6 +1113,20 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     def bsh(self):
         ''' Ratio between post-yield tangent and initial elastic tangent. '''
         return self.Esh()/self.Es
+
+    def getStressK(self, eps):
+        ''' Return the stress corresponding to the characterístic diagram.
+
+        :param eps: deformation.
+        '''
+        return sigmas(eps, fy= self.fyk, ey= self.eyk(), Es= self.Es, Esh= self.Esh())
+
+    def getStressD(self, eps):
+        ''' Return the stress corresponding to the characterístic diagram.
+
+        :param eps: deformation.
+        '''
+        return sigmas(eps, fy= self.fyd(), ey= self.eyd(), Es= self.Es, Esh= self.Esh())
     
     def defDiagK(self,preprocessor):
         ''' Returns XC uniaxial material (characteristic values). '''
