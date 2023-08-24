@@ -134,11 +134,31 @@ class EC2Concrete(concrete_base.Concrete):
         epscu3: nominal ultimate strain [-] at bi-linear diagram 
         (table 3.1 EC2, figure 3.4 EC2)
         """
-        if self.fckMPa()<=50:
+        fckMPa= self.fckMPa()
+        if fckMPa<=50:
             return 3.5*(-1e-3)
         else:
-            return (2.6+35*((90-self.fckMPa())/100)**4)*(-1e-3)
+            return (2.6+35*((90-fckMPa)/100)**4)*(-1e-3)
 
+    def getLambdaC(self):
+        ''' Return the value of λ according to expressions (3.19) and (3.20)
+            of EC2:2004 part 1.'''
+        retval= 0.8
+        fckMPa= self.fckMPa()
+        if(fckMPa>50):
+            retval-= (fckMPa-50)/400 # for 50 < fck ≤ 90 MPa
+        return retval
+
+    def getEtaC(self):
+        ''' Return the value of η according to expressions (3.21) and (3.22)
+            of EC2:2004 part 1.
+        '''
+        retval= 1.0
+        fckMPa=  self.fckMPa()
+        if(fckMPa>50):
+            retval-= (fckMPa-50)/200 # for 50 < fck ≤ 90 MPa
+        return retval
+        
     def getShearStrengthReductionFactor(self, nationalAnnex= None):
         ''' Return the strength reduction factor for concrete cracked in shear
             according to expression 6.6N of EC2:2004.
