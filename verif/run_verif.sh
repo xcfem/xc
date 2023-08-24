@@ -1056,6 +1056,7 @@ echo "$BLEU" "    EC2 bending resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_interaction_diagram.py
 python tests/materials/ec2/test_EC2_bending_01.py
 python tests/materials/ec2/test_EC2_bending_02.py
+python tests/materials/ec2/test_EC2_bending_03.py
 echo "$BLEU" "    EC2 shear resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_EC2_shear_01.py
 python tests/materials/ec2/test_EC2_shear_02.py
@@ -1348,6 +1349,8 @@ python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_sia262.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ehe.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ec2.py
 python tests/rough_calculations/reinforced_concrete/ng_pile_cap_test.py
+python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_01.py
+python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_02.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
