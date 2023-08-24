@@ -13,6 +13,7 @@ __email__= "l.pereztato@gmail.com"
 
 from rough_calculations import ng_retaining_wall as rw
 from rough_calculations import ng_rc_section
+from misc_utils import path_utils
 import xc
 
 class BasementWall(rw.RetainingWall):
@@ -41,7 +42,8 @@ class BasementWall(rw.RetainingWall):
         :param convertToEPS: if true, create a postscript version of the 
                              graphic output.
         '''
-        outputFile= open(pth+self.name+".tex","w")
+        file_name_string= path_utils.get_valid_filename(self.name)
+        outputFile= open(pth+file_name_string+".tex","w")
         self.writeDef(pth= pth, outputFile= outputFile, includeGraphicsPath= includeGraphicsPath, convertToEPS= convertToEPS)
         self.stability_results.writeOutput(outputFile,self.name)
         self.sls_results.writeOutput(outputFile,self.name)

@@ -6,6 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
 from materials.sections import rebar_family
@@ -42,8 +43,15 @@ class RCSection(object):
 
     def getAc(self):
         ''' Return the concrete area.'''
-        return self.b*self.h-self.tensionRebars.getAs()
+        return self.b*self.h-self.getAs()
 
+    def getAs(self):
+        ''' Return the tension reinforcement area.'''
+        if(hasattr(self.tensionRebars,'spacing')):
+           return self.tensionRebars.getAs(width= self.b)
+        else:
+           return self.tensionRebars.getAs()
+           
     def getDimensionlessMomentRatio(self, MEd):
         ''' Return the ratio: MEd/(fcd*b*d^2).'''
         return -MEd/self.concrete.fcd()/self.b/self.d()**2
@@ -62,30 +70,110 @@ class RCSection(object):
     def getMinReinfAreaInTension(self):
         return self.tensionRebars.getMinReinfAreaInTension(concrete= self.concrete,thickness= self.h)
     
-    def getMR(self, z= None):
+    def getCompressionReinforcementArea(self, dp, Nd, Md):
+        ''' Return the required compression reinforcement area according
+            to expression for U' in section 15.5 3º of the book:
+            Hormigón Armado Jiménez Montoya et al. ISBN: 84-252-1825-X
+
+        :param dp: effective cover of the compression reinforcement.
+        :param Nd: axial force (negative if compression).
+        :param Md: bending moment (positive if the returned area in compression).
+        '''
+        NNd= -Nd
+        d= self.d() # effective depth of the cross-section.
+        # Eccentricity of the axial force with respect to the tensioned
+        # (or less compressed) reinforcement.
+        e0= Md/NNd
+        e= e0+(d-dp)/2.0
+
+        C= 0.35*self.b*d**2*-self.concrete.fcd()
+        retval= NNd*e-C
+        if(retval<0.0): # No need of compression reinforcement.
+            retval= 0.0
+        else:
+            retval/= (d-dp)
+            retval/= self.tensionRebars.steel.fyd()        
+        return retval
+    
+    def getTensionReinforcementArea(self, Ap, dp, Nd, Md):
+        ''' Return the required tension reinforcement area according
+            to expression for U' in section 15.5 3º of the book:
+            Hormigón Armado Jiménez Montoya et al. ISBN: 84-252-1825-X
+
+        :param Ap: area of the compression reinforcement.
+        :param dp: effective cover of the compression reinforcement.
+        :param Nd: axial force.
+        :param Md: bending moment (positive if the returned area in compression).
+        '''
+        retval= 0.0
+        NNd= -Nd
+        d= self.d() # effective depth of the cross-section.
+        # Eccentricity of the axial force with respect to the tensioned
+        # (or less compressed) reinforcement.
+        e0= Md/NNd
+        e= e0+(d-dp)/2.0
+
+        fcd= -self.concrete.fcd()
+        fyd= self.tensionRebars.steel.fyd()
+        Up= Ap*fyd
+        C= self.b*d*fcd
+        C1= 0.7*C+Up
+        C2= 0.45*C+Up
+        if(NNd>C1):
+            retval= (NNd-C1)/fyd
+        elif(NNd>C2): # No need of tension reinforcement.
+            retval= 0.0
+        else:
+            num= NNd*e-Up*(d-dp)
+            denom= self.b*d**2*fcd
+            root= math.sqrt(1-2*num/denom)
+            y= d*(1-root)
+            retval= (self.b*y*fcd+Up+Nd)/fyd
+        return retval
+
+    def getMR(self, Nd= 0.0, Md= 0.0, z= None):
         ''' Return the resisting moment of the section.
 
-        :param z: inner lever arm.
+        :param Nd: axial force.
+        :param Md: bending moment.
+        :param z: inner lever arm (if None z= 0.9*d).
         '''
-        return self.tensionRebars.getMR(self.concrete,self.b,self.h)
+        if(Nd==0.0):
+            return self.tensionRebars.getMR(concrete= self.concrete, b= self.b, thickness= self.h, z= z)
+        else:
+            Ap= 0.0 # compression reinforcement area.
+            d= self.d() # effective depth of the cross-section.
+            dp= self.h-d # effective cover of the compression reinforcement.
+            AsReq= self.getTensionReinforcementArea(Ap= Ap, dp= dp, Nd= Nd, Md= Md)
+            As= self.getAs()
+            AsDiff= AsReq-As
+            F= AsDiff*self.tensionRebars.steel.fyd()
+            M= F*(d-dp)
+            retval= min(Md-M, 1.1*Md) # Be cautious about this somewhat "invented" moment. 
+            return retval
     
-    def getVR(self,Nd,Md):
-        return self.tensionRebars.getVR(self.concrete,Nd,Md,self.b,self.h)
+    def getVR(self, Nd, Md):
+        ''' Get the the shear resistance carried by the concrete.
+
+        :param Nd: design axial force.
+        :param Md: design bending moment.
+        '''
+        return self.tensionRebars.getVR(self.concrete, Nd= Nd, Md= Md,b= self.b, thickness= self.h)
     
     def writeResultFlexion(self,outputFile,Nd,Md,Vd):
         AsMin= self.getMinReinfAreaInBending()
         outputFile.write("  RC section dimensions; b= "+ fmt.Length.format(self.b)+ " m, h= "+ fmt.Length.format(self.h)+ " m\\\\\n")
         self.tensionRebars.writeRebars(outputFile, self.concrete, AsMin)
         if(abs(Md)>0):
-            MR= self.getMR()
-            outputFile.write("  Bending check: Md= "+ fmt.Esf.format(Md/1e3)+ " kN m, MR= "+ fmt.Esf.format(MR/1e3)+ "kN m")
+            MR= self.getMR(Nd= Nd, Md= Md)
+            outputFile.write("  Bending check: Nd= "+ fmt.Esf.format(Nd/1e3) +" kN, Md= "+ fmt.Esf.format(Md/1e3)+ " kN m, MR= "+ fmt.Esf.format(MR/1e3)+ "kN m")
             rebar_family.writeF(outputFile,"  F(M)", MR/Md)
         if(abs(Vd)>0):
             VR= self.getVR(Nd,Md)
-            outputFile.write("  Shear check: Vd= "+ fmt.Esf.format(Vd/1e3)+ " kN,  VR= "+ fmt.Esf.format(VR/1e3)+ " kN")
+            outputFile.write("  Shear check: Nd= "+ fmt.Esf.format(Nd/1e3) +" kN, Vd= "+ fmt.Esf.format(Vd/1e3)+ " kN,  VR= "+ fmt.Esf.format(VR/1e3)+ " kN")
             rebar_family.writeF(outputFile,"  F(V)",VR/Vd)
           
-    def writeResultTraction(self,outputFile,Nd):
+    def writeResultTraction(self, outputFile, Nd):
         AsMin= self.getMinReinfAreaInTension()/2.0
         self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
         if(abs(Nd)>0):
@@ -104,7 +192,7 @@ class RCSection(object):
     def writeResultStress(self,outputFile,M):
       '''Cheking of stresses under permanent loads (SIA 262 fig. 31)'''
       if(abs(M)>0):
-          stress= M/(0.9*self.h*self.tensionRebars.getAs())
+          stress= M/(0.9*self.h*self.getAs())
           outputFile.write("  Stress check: M= "+ fmt.Esf.format(M/1e3)+ " kN m, $\sigma_s$= "+ fmt.Esf.format(stress/1e6)+ " MPa\\\\\n")
           outputFile.write("    $\sigma_{lim}$= "+ fmt.Esf.format(self.stressLimitUnderPermanentLoads/1e6)+ " MPa")
           rebar_family.writeF(outputFile,"  F($\sigma_s$)", self.stressLimitUnderPermanentLoads/stress)

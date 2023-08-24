@@ -24,6 +24,7 @@ from materials.sections.fiber_section import def_simple_RC_section
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rc_section
 from misc_utils import log_messages as lmsg
+from misc_utils import path_utils
 import geom
 import xc
 from solution import predefined_solutions
@@ -74,22 +75,25 @@ def filterRepeatedValues(yList,mList,vList):
 class InternalForces(object):
     '''Internal forces for a retaining wall.
 
+    :ivar ndEnvelope: stem axial force design values.
     :ivar mdEnvelope: stem bending moment design values.
     :ivar vdEnvelope: stem shear force design values.
     :ivar MdFooting: footing bending moment design value.
     :ivar VdFooting: footing shear force design value.
     '''
-    def __init__(self,y,mdEnvelope,vdEnvelope,MdFooting,VdFooting):
+    def __init__(self,y, ndEnvelope, mdEnvelope, vdEnvelope,MdFooting,VdFooting):
         ''' Constructor.
         
+        :param ndEnvelope: stem axial force design values.
         :param mdEnvelope: stem bending moment design values.
         :param vdEnvelope: stem shear force design values.
         :param MdFooting: footing bending moment design value.
         :param VdFooting: footing shear force design value.
         '''
-
+        self.ndEnvelope= ndEnvelope
         self.mdEnvelope= mdEnvelope
         self.vdEnvelope= vdEnvelope
+        self.ndEnvelope.filterRepeatedValues()
         self.mdEnvelope.filterRepeatedValues()
         self.vdEnvelope.filterRepeatedValues()
         self.interpolate()
@@ -99,12 +103,18 @@ class InternalForces(object):
         
     def interpolate(self):
         self.y= self.mdEnvelope.yValues
+        self.ndMaxStem= scipy.interpolate.interp1d(self.y,self.ndEnvelope.positive)
+        self.ndMinStem= scipy.interpolate.interp1d(self.y,self.ndEnvelope.negative)
+        
         self.mdMaxStem= scipy.interpolate.interp1d(self.y,self.mdEnvelope.positive)
         self.mdMinStem= scipy.interpolate.interp1d(self.y,self.mdEnvelope.negative)
+        
         self.vdMaxStem= scipy.interpolate.interp1d(self.y,self.vdEnvelope.positive)    
         self.vdMinStem= scipy.interpolate.interp1d(self.y,self.vdEnvelope.negative)
         
     def __imul__(self,f):
+        for n in self.ndMax:
+          n*=f
         for m in self.mdMax:
           m*=f
         for v in self.vdMax:
@@ -116,7 +126,7 @@ class InternalForces(object):
     
     def clone(self):
         ''' Return a copy of this object.'''
-        return InternalForces(y= self.y, mdEnvelope= self.mdEnvelope, vdEnvelope= self.vdEnvelope, MdFooting= self.MdFooting, VdFooting= self.VdFooting)
+        return InternalForces(y= self.y, ndEnvelope= self.ndEnvelope, mdEnvelope= self.mdEnvelope, vdEnvelope= self.vdEnvelope, MdFooting= self.MdFooting, VdFooting= self.VdFooting)
     
     def __mul__(self, f):
         retval= self.clone()
@@ -126,6 +136,22 @@ class InternalForces(object):
     def __rmul__(self,f):
         return self*f
     
+    def NdMaxEncastrement(self,footingThickness):
+        '''Bending moment (envelope) at stem base.
+
+        :param footingThickness: thickness of the footing.
+        '''
+        yEncastrement= self.stemHeight-footingThickness/2.0
+        return self.NdMax(yEncastrement)
+    
+    def NdMinEncastrement(self,footingThickness):
+        '''Bending moment (envelope) at stem base.
+
+        :param footingThickness: thickness of the footing.
+        '''
+        yEncastrement= self.stemHeight-footingThickness/2.0
+        return self.NdMin(yEncastrement)
+    
     def MdMaxEncastrement(self,footingThickness):
         '''Bending moment (envelope) at stem base.
 
@@ -134,12 +160,12 @@ class InternalForces(object):
         yEncastrement= self.stemHeight-footingThickness/2.0
         return self.MdMax(yEncastrement)
     
-    def VdMaxEncastrement(self,epaisseurEncastrement):
+    def VdMaxEncastrement(self, footingThickness, epaisseurEncastrement):
         '''Shear force (envelope) at stem base.
 
         :param epaisseurEncastrement: thickness of the stem bottom.
         '''
-        yV= self.stemHeight-epaisseurEncastrement
+        yV= self.stemHeight-footingThickness/2.0-epaisseurEncastrement
         return abs(self.vdMaxStem(yV))
     
     def MdMaxMidStem(self,footingThickness):
@@ -174,31 +200,45 @@ class InternalForces(object):
         yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
         return self.VdMin(yMidStem)
     
+    def NdMax(self, y):
+        '''Max. axial force (envelope) at height y.
+  
+        :param y: height to compute the shear force at.
+        '''
+        return self.ndMaxStem(y)
+    
+    def NdMin(self, y):
+        '''Max. axial force (envelope) at height y.
+  
+        :param y: height to compute the shear force at.
+        '''
+        return self.ndMinStem(y)
+    
     def VdMax(self, y):
         '''Max. shear (envelope) at height y.
   
-        :param y: height to compyte the shear force at.
+        :param y: height to compute the shear force at.
         '''
         return abs(self.vdMaxStem(y))
-    
-    def MdMax(self, y):
-        '''Max. bending moment (envelope) at height y.
-  
-        :param y: height to compyte the shear force at.
-        '''
-        return abs(self.mdMaxStem(y))
     
     def VdMin(self, y):
         '''Min. shear (envelope) at height y.
   
-        :param y: height to compyte the shear force at.
+        :param y: height to compute the shear force at.
         '''
         return abs(self.vdMinStem(y))
+    
+    def MdMax(self, y):
+        '''Max. bending moment (envelope) at height y.
+  
+        :param y: height to compute the shear force at.
+        '''
+        return abs(self.mdMaxStem(y))
     
     def MdMin(self, y):
         '''Min bending moment (envelope) at height y.
   
-        :param y: height to compyte the shear force at.
+        :param y: height to compute the shear force at.
         '''
         return abs(self.mdMinStem(y))
     
@@ -574,10 +614,16 @@ class StemReinforcement(ReinforcementMap):
     def getSectionExtStemBottom(self):
         '''Returns RC section for exterior reinforcement at stem bottom.'''
         return ng_rc_section.RCSection(self[self.extStemBottomIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.stemBottomWidth)
-    def getSectionExtStem(self,y):
-        '''Returns RC section for exterior reinforcement at stem.'''
+    
+    def getSectionStem(self, y, reinforcementIndex):
+        '''Returns RC section of the stem.
+
+        :param y: depth of the section.
+        :param reinforcementIndex: index of the reinforcement for the section.
+        '''
         c= self.wallGeom.getDepth(y)
-        return ng_rc_section.RCSection(self[self.extStemIndex],self.wallGeom.concrete,self.wallGeom.b,c)
+        return ng_rc_section.RCSection(self[reinforcementIndex],self.wallGeom.concrete,self.wallGeom.b,c)
+    
     def getSectionIntStemBottom(self):
         '''Returns RC section for interior reinforcement at stem bottom.'''
         return ng_rc_section.RCSection(self[self.intStemBottomIndex],self.wallGeom.concrete, self.wallGeom.b,self.wallGeom.stemBottomWidth)
@@ -602,22 +648,39 @@ class StemReinforcement(ReinforcementMap):
 
         # Exterior reinforcement in stem bottom.
         CExtStemBottom= self.getSectionExtStemBottom()
-        VdMaxEncastrement= self.wallGeom.internalForcesULS.VdMaxEncastrement(self.wallGeom.stemBottomWidth)
+        VdMaxEncastrement= self.wallGeom.internalForcesULS.VdMaxEncastrement(self.wallGeom.footingThickness, self.wallGeom.stemBottomWidth)
         MdMaxEncastrement= self.wallGeom.internalForcesULS.MdMaxEncastrement(self.wallGeom.footingThickness)
         outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (back reinforcement dowels) :} \\\\\n")
-        NdEncastrement= 0.0 #we neglect axial force
-        CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
-        CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
+        NdEncastrement= self.wallGeom.internalForcesULS.NdMinEncastrement(self.wallGeom.footingThickness)
+        CExtStemBottom.writeResultFlexion(outputFile, NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
+        # CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement) # LP commented out 24/08/2023
 
         # Exterior reinforcement in stem.
         yCoupeExtStem= self.getYExtReinfChange()
-        CExtStem= self.getSectionExtStem(yCoupeExtStem)
-        NdExtStem= 0.0 #we neglect axial force
+        stemReinforcementIndex= self.extStemIndex
+        CExtStem= self.getSectionStem(y= yCoupeExtStem, reinforcementIndex= stemReinforcementIndex)
+        NdExtStem= self.wallGeom.internalForcesULS.NdMin(yCoupeExtStem) #
         VdExtStem= self.wallGeom.internalForcesULS.VdMax(yCoupeExtStem)
         MdExtStem= self.wallGeom.internalForcesULS.MdMax(yCoupeExtStem)
         outputFile.write("\\textbf{Reinforcement "+str(self.extStemIndex)+" (back vertical stem reinforcement):}\\\\\n")
         CExtStem.writeResultFlexion(outputFile,NdExtStem,MdExtStem,VdExtStem)
-        CExtStem.writeResultStress(outputFile,MdExtStem)
+        # CExtStem.writeResultStress(outputFile,MdExtStem) # LP commented out 24/08/2023
+
+        steps= None
+        if(self.wallGeom.stemBackSteps):
+            steps= self.wallGeom.stemBackSteps[::-1] # Reverse step list.
+        if(steps):
+            for i, step in enumerate(steps):
+                depth= step[0]-0.01
+                stemReinforcementIndex= (i+1)*100+self.extStemIndex
+                CExtStem= self.getSectionStem(y= depth, reinforcementIndex= stemReinforcementIndex)
+                NdExtStem= self.wallGeom.internalForcesULS.NdMin(depth) #
+                VdExtStem= self.wallGeom.internalForcesULS.VdMax(depth)
+                MdExtStem= self.wallGeom.internalForcesULS.MdMax(depth)
+                outputFile.write("\\textbf{Reinforcement "+str(stemReinforcementIndex)+" (back vertical stem reinforcement step:" +str(i+1)+"):}\\\\\n")
+                CExtStem.writeResultFlexion(outputFile,NdExtStem,MdExtStem,VdExtStem)
+                # CExtStem.writeResultStress(outputFile,MdExtStem) # LP commented out 24/08/2023
+                
 
         # Interior reinforcement at stem bottom 
         CIntStemBottom= self.getSectionIntStemBottom()
@@ -629,9 +692,19 @@ class StemReinforcement(ReinforcementMap):
         outputFile.write("\\textbf{Reinforcement "+str(self.intStemBottomIndex)+" (front reinforcement dowels):}\\\\\n")
         CIntStemBottom.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
 
-        # Exterior reinforcement at stem.
+        # Interior reinforcement at stem.
         outputFile.write("\\textbf{Reinforcement "+str(self.intStemIndex)+" (front vertical stem reinforcement):}\\\\\n")
         CIntStem.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
+        
+        if(steps):
+            for i, step in enumerate(steps):
+                depth= step[0]-0.01
+                stemReinforcementIndex= (i+1)*100+self.intStemIndex
+                print('stemReinforcementIndex= ', stemReinforcementIndex)
+                CIntStem= self.getSectionStem(y= depth, reinforcementIndex= stemReinforcementIndex)
+                outputFile.write("\\textbf{Reinforcement "+str(stemReinforcementIndex)+" (front vertical stem reinforcement step:" +str(i+1)+"):}\\\\\n")
+                CIntStem.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
+                
 
         # Reinforcement at stem top.
         outputFile.write("\\textbf{Reinforcement "+str(self.topStemIndex)+" (top stem reinforcement):}\\\\\n")
@@ -639,12 +712,29 @@ class StemReinforcement(ReinforcementMap):
 
         # Stem exterior longitudinal reinforcement.
         outputFile.write("\\textbf{Reinforcement "+str(self.longExtStemIndex)+" (back longitudinal stem reinforcement):}\\\\\n")
-        CSectionStemLongExt.writeResultTraction(outputFile,0.0)
+        CSectionStemLongExt.writeResultTraction(outputFile= outputFile, Nd= 0.0)
+        
+        if(steps):
+            for i, step in enumerate(steps):
+                depth= step[0]-0.01
+                stemReinforcementIndex= (i+1)*100+self.longExtStemIndex
+                print('stemReinforcementIndex= ', stemReinforcementIndex)
+                CExtStem= self.getSectionStem(y= depth, reinforcementIndex= stemReinforcementIndex)
+                outputFile.write("\\textbf{Reinforcement "+str(stemReinforcementIndex)+" (back longitudinal stem reinforcement step:" +str(i+1)+"):}\\\\\n")
+                CExtStem.writeResultTraction(outputFile= outputFile, Nd= 0.0)
 
         # Stem interior longitudinal reinforcement.
         outputFile.write("\\textbf{Reinforcement  "+str(self.longIntStemIndex)+" (front longitudinal stem reinforcement):}\\\\\n")
-        CSectionStemLongInt.writeResultTraction(outputFile,0.0)
+        CSectionStemLongInt.writeResultTraction(outputFile= outputFile, Nd= 0.0)
 
+        if(steps):
+            for i, step in enumerate(steps):
+                depth= step[0]-0.01
+                stemReinforcementIndex= (i+1)*100+self.longIntStemIndex
+                CIntStem= self.getSectionStem(y= depth, reinforcementIndex= stemReinforcementIndex)
+                outputFile.write("\\textbf{Reinforcement "+str(stemReinforcementIndex)+" (front longitudinal stem reinforcement step:" +str(i+1)+"):}\\\\\n")
+                CIntStem.writeResultTraction(outputFile= outputFile, Nd= 0.0)
+                
         # Stem top skin reinforcement.
         outputFile.write("\\textbf{Reinforcement "+str(self.topSkinIndex)+" (top longitudinal stem reinforcement):}\\\\\n")
         outputFile.write("  --\\\\\n")
@@ -655,7 +745,7 @@ class StemReinforcement(ReinforcementMap):
 
         defStrings[self.extStemBottomIndex]= self.getSectionExtStemBottom().tensionRebars.getDefStrings()
         yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete))
-        defStrings[self.extStemIndex]= self.getSectionExtStem(yCoupeExtStem).tensionRebars.getDefStrings()
+        defStrings[self.extStemIndex]= self.getSectionStem(y= yCoupeExtStem, reinforcementIndex= self.extStemIndex).tensionRebars.getDefStrings()
         defStrings[self.intStemBottomIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings()
         defStrings[self.intStemIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings() #CIntStem==CIntStemBottom
         defStrings[self.topStemIndex]= self.getSectionStemTop().tensionRebars.getDefStrings()
@@ -720,7 +810,7 @@ class FootingReinforcement(ReinforcementMap):
         MdTopFooting= self.wallGeom.internalForcesULS.MdFooting.getAbsMaximum() # Concomitant??
         outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (top transverse footing reinforcement):}\\\\\n")
         CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
-        CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdFooting.getAbsMaximum())
+        # CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdFooting.getAbsMaximum()) # LP commented out 24/08/2023
 
         CSectionFootingBottom= self.getSectionFootingBottom()
         CSectionFootingBottomLongitudinal= self.getSectionFootingBottomLongitudinal()
@@ -739,7 +829,7 @@ class FootingReinforcement(ReinforcementMap):
         CSectionFootingTopLongitudinal.writeResultTraction(outputFile,0.0)
 
         # Footing skin reinforcement.
-        outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (skin fooging reinforcement):}\\\\\n")
+        outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (skin footing reinforcement):}\\\\\n")
         outputFile.write("  --\\\\\n")
         #self[self.skinFootingIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
 
@@ -787,7 +877,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.concrete= concrete
         self.stemReinforcement= StemReinforcement(self,concreteCover, steel)
         self.footingReinforcement= FootingReinforcement(self,concreteCover, steel)
-        self.title=title if title else name
+        self.title=title if title else name.replace('_',' ')
         self.smoothPrecastFoundation= smoothPrecastFoundation
         
 
@@ -818,7 +908,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param convertToEPS: if true, create a postscript version of the 
                              graphic output.
         '''
-        figurePath= pth+self.name
+        valid_filename= path_utils.get_valid_filename(self.name)
+        figurePath= pth+valid_filename
         figurePathPNG= figurePath+".png"
         self.internalForcesULS.writeGraphic(figurePathPNG)
         if(convertToEPS):
@@ -834,7 +925,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\begin{minipage}{85mm}\n")
         outputFile.write("\\vspace{2mm}\n")
         outputFile.write("\\begin{center}\n")
-        outputFile.write("\\includegraphics[width=80mm]{"+includeGraphicsPath+self.name+"}\n")
+        outputFile.write("\\includegraphics[width=80mm]{"+includeGraphicsPath+valid_filename+"}\n")
         outputFile.write("\\end{center}\n")
         outputFile.write("\\vspace{1pt}\n")
         outputFile.write("\\end{minipage} & \n")
@@ -850,7 +941,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.write("\\end{tabular} \\\\\n")
         outputFile.write("\\hline\n")
         outputFile.write("\\end{tabular}\n")
-        outputFile.write("\\caption{Wall materials and dimensions "+ self.title +"} \\label{tb_def_"+self.name+"}\n")
+        outputFile.write("\\caption{Wall materials and dimensions "+ self.title +"} \\label{tb_def_"+valid_filename+"}\n")
         outputFile.write("\\end{center}\n")
         outputFile.write("\\end{table}\n")
 
@@ -886,7 +977,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         if(includeGraphicsPath is None):
             includeGraphicsPath= pth
-        outputFile= open(pth+self.name+".tex","w") # LaTeX output file.
+        file_name_string= path_utils.get_valid_filename(self.name)
+        outputFile= open(pth+file_name_string+".tex","w") # LaTeX output file.
         self.writeDef(pth= pth, outputFile= outputFile, includeGraphicsPath= includeGraphicsPath, convertToEPS= convertToEPS)
         # Stability ULS results.
         self.stability_results.writeOutput(outputFile,self.title)
@@ -900,7 +992,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
  
         :param pth: path for the output file.
         '''
-        outputFile= open(pth+'schema_'+self.name+".tex","w")
+        file_name_string= path_utils.get_valid_filename(self.name)
+        outputFile= open(pth+'schema_'+file_name_string+".tex","w")
         outputFile.write("\\begin{figure}\n")
         outputFile.write("\\begin{center}\n")
         outputFile.write(draw_schema.hdr)
@@ -1461,14 +1554,17 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         return y
 
     def getStemInternalForces(self):
+        nd= list()
         md= list()
         vd= list()
         for e in self.stemSet.elements:
+            nd.append(e.getN1)
             md.append(e.getMz1)
             vd.append(e.getVy1)
+        nd.append(e.getN2)
         md.append(e.getMz2)
         vd.append(e.getVy2)
-        return md, vd
+        return nd, md, vd
 
     def getHeelInternalForces(self):
         ''' Return the maximum bending moment and shear force at the wall
@@ -1537,14 +1633,15 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= sg_adm, gammaRSliding= gammaRSliding, gammaRBearing= gammaRBearing, ignoreAdhesion= ignoreAdhesion, NgammaCoef= NgammaCoef)
         return self.stability_results
 
-    def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
-        md, vd= self.getStemInternalForces()
+    def getEnvelopeInternalForces(self, envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
+        nd, md, vd= self.getStemInternalForces()
+        envelopeNd.update(nd)
         envelopeMd.update(md)
         envelopeVd.update(vd)
         mdHeel, vdHeel= self.getHeelInternalForces()
         envelopeMdHeel.update([mdHeel])
         envelopeVdHeel.update([vdHeel])
-        return envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel 
+        return envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel 
 
     def performSLSAnalysis(self,combinations):
         ''' Perform serviceability limit state analysis.
@@ -1554,6 +1651,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         rotation= 1e15
         rotationComb= ''
         y= self.getStemYCoordinates()
+        envelopeNd= Envelope(y)
         envelopeMd= Envelope(y)
         envelopeVd= Envelope(y)
         envelopeMdHeel= Envelope([0.0])
@@ -1563,12 +1661,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             if(__debug__):
                 if(not reactions):
                     AssertionError('Can\'t obtain the reactions.')
-            envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+            envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
             rot= self.getFoundationRotation()
             if(rot<rotation):
                 rotation= rot
                 rotationComb= comb
-        internalForces= InternalForces(y,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+        internalForces= InternalForces(y,envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
         self.sls_results= WallSLSResults(internalForces,rotation, rotationComb)
         return self.sls_results
 
@@ -1578,6 +1676,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param combinations: load combinations to use in the analysis.
         '''
         y= self.getStemYCoordinates()
+        envelopeNd= Envelope(y)
         envelopeMd= Envelope(y)
         envelopeVd= Envelope(y)
         envelopeMdHeel= Envelope([0.0])
@@ -1587,8 +1686,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             if(__debug__):
                 if(not reactions):
                     AssertionError('Can\'t obtain the reactions.')
-            envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
-        internalForces= InternalForces(y,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+            envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+        internalForces= InternalForces(y,envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
         self.uls_results= WallULSResults(internalForces)
         return self.uls_results
 
