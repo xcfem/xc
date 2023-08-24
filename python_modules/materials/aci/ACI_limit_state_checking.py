@@ -290,17 +290,17 @@ class ACIRebarFamily(rf.RebarFamily):
         rebarController= self.getRebarController()
         return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
     
-    def getMinReinfAreaInBending(self, thickness, b= 1.0, typo= 'slab', concrete= None):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, typo= 'slab'):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clauses 7.6.1.1, 8.6.1.1, 9.6.1.2, 10.6.1.1, 11.6.1,
            12.6.1 
 
+        :param concrete: concrete material
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param b: width of concrete section.
         :param typo: member type; slab, wall, beam or column.
-        :param concrete: concrete material
         '''
         retval= 0.0025*thickness*b
         fy= self.steel.fyk
@@ -321,16 +321,16 @@ class ACIRebarFamily(rf.RebarFamily):
             retval= 0.01*thickness*b
         return retval
 
-    def getMinReinfAreaInTension(self,thickness, typo= 'slab', concrete= None):
+    def getMinReinfAreaInTension(self, concrete, thickness, typo= 'slab'):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
+        :param concrete: concrete material
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param typo: member type; slab, wall, beam or column.
-        :param concrete: concrete material
         '''
-        return 2.0*self.getMinReinfAreaInBending(thickness= thickness, typo= typo, concrete= concrete)
+        return 2.0*self.getMinReinfAreaInBending(concrete= concrete, thickness= thickness, typo= typo)
 
     def getVR(self,concrete,Nd,Md,b,thickness):
         '''Return the shear resistance carried by the concrete on a (b x thickness) rectangular section according to clause 22.5.5.1 of ACI 318-14.

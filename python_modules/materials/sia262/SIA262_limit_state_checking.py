@@ -111,7 +111,7 @@ class RebarController(lsc.RebarController):
         '''
         return AsMinTensionStressLimit(concrete,sgAdm,t)
 
-    def getMinReinfAreaInTension(self, concrete,spacing,t):
+    def getMinReinfAreaInTension(self, concrete, spacing, t):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
@@ -690,7 +690,7 @@ class SIARebarFamily(rf.RebarFamily):
             of SIA 262:2014.'''
         return self.crackControlRequirement
     
-    def getMinReinfAreaInBending(self,concrete,thickness):
+    def getMinReinfAreaInBending(self, concrete, thickness):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion.
 
