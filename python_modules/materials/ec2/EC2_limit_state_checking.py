@@ -484,7 +484,7 @@ class EC2RebarFamily(rf.RebarFamily):
        :ivar pos: reinforcement position according to clause 66.5.1
                   of EC2.
     '''
-    def __init__(self,steel, diam, spacing, concreteCover, pos= 'II', nationalAnnex= None):
+    def __init__(self, steel, diam, spacing, concreteCover, pos= 'II', nationalAnnex= None):
         ''' Constructor.
 
         :param steel: reinforcing steel material.
@@ -508,7 +508,7 @@ class EC2RebarFamily(rf.RebarFamily):
       ''' Return the basic anchorage length of the bars.'''
       rebarController= self.getRebarController()
       return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
-    def getMinReinfAreaInBending(self, thickness, b= 1.0, typo= 'slab', concrete= None, steelStressLimit= 450e6, sigmaC= 0.0, effectiveCover= 45e-3):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, typo= 'slab', steelStressLimit= 450e6, sigmaC= 0.0, effectiveCover= 45e-3):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clauses 7.3.2, 9.2.1.1 (beams), 9.3.1.1 (slabs),
@@ -545,9 +545,9 @@ class EC2RebarFamily(rf.RebarFamily):
         Ac_t= hc_eff*b
         retval= getAsMinCrackControl(concrete= concrete, reinfSteel= self.steel, h= thickness, Act= Ac_t, sigmaC= sigmaC, sigma_s= steelStressLimit)
         d= thickness-effectiveCover # effective depth.
-        if(typo=='beam' or type=='slab'): # Clauses 9.2.1.1 and 9.3.1.1 (1)
+        if(typo=='beam' or typo=='slab'): # Clauses 9.2.1.1 and 9.3.1.1 (1)
             
-            Asmin= getAsMinBeams(concrete= concrete, reinfSteel= self.steel, h= thickness, bt= b, d= d, nationalAnnex= self.nationalAnnex) 
+            Asmin= getAsMinBeams(concrete= concrete, reinfSteel= self.steel, h= thickness, bt= b, d= d, z= 0.9*d, nationalAnnex= self.nationalAnnex) 
             retval= max(Asmin, retval)
         elif(typo=='column'):
             if(b>4*thickness):
@@ -569,6 +569,46 @@ class EC2RebarFamily(rf.RebarFamily):
             errMsg= className+'.'+methodName+"; member type: " + str(typo) + " not implemented.\n"
             lmsg.error(errMsg)
         return retval
+    
+    def getMinReinfAreaInTension(self, concrete, thickness, b = 1.0, stressLimit= 350e6):
+        '''Return the minimun amount of bonded reinforcement to control cracking
+           for reinforced concrete sections under tension according to
+           expressionn (7.1) in clause 7.3.2 of EC2:2004 part 1.
+
+        :param concrete: concrete material.
+        :param thickness: gross thickness of concrete section.
+        :param b: width of concrete section.
+        :param stressLimit: limit 
+        '''
+        kc= 1 # pure tension.
+        k= 1.0 # coefficient which allows for the effect of non-uniform
+               # self-equilibrating stresses, which lead to a reduction of
+               # restraint forces.
+        if(thickness>=0.8):
+            k= 0.65
+        elif(thickness>0.3):
+            k= -0.7*thickness+1.21 # linear interpolation.
+        Act= thickness*b  # All the section is in tension.
+        fct_eff= concrete.fctm() # mean value of the tensile strength of the
+        # concrete effective at the time when the cracks may first be expected
+        # to occur: fct,eff = fctm or lower, (fctm(t)), if cracking is expected
+        # earlier than 28 days
+        retval= kc*k*fct_eff*Act/min(stressLimit, self.steel.fyk)
+        return retval
+     
+    def getVR(self, concrete, Nd, Md, b, thickness):
+        '''Return the shear resistance carried by the concrete on a
+           (b x thickness) rectangular section according to expressions 6.2.a 
+           and 6.2.b of EC2:2004.
+
+        :param concrete: concrete material.
+        :param Nd: design axial force.
+        :param Md: design bending moment.
+        :param b: width of the rectangular section.
+        :param thickness: height of the rectangular section.
+        '''
+        return getShearResistanceCrackedNoShearReinf(concrete= concrete, NEd= Nd, Ac=thickness*b, Asl= self.getAs(), bw= b, d=0.8*thickness, nationalAnnex= self.nationalAnnex)
+    
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
     ''' Creates a dictionary with predefined rebar families.
@@ -1329,3 +1369,70 @@ class ShearController(lscb.ShearControllerBase):
             Mu= 0.0 #Apparently EC2 doesn't use Mu
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection= idSection, combName= combName, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= self.theta, Vu=VuTmp)) # Worst case
+                
+def get_nu_mu(concrete, steel, b, h, d, dp, x, As1, As2):
+    ''' Return internal forces at failure for a rectangular section according
+        to clause 6.1 of EC2:2004 part 1.
+
+    :param concrete: concrete of the section.
+    :param steel: reinforcement steel material.
+    :param b: section width.
+    :param h: section depth.
+    :param d: effective depth of the cross-section.
+    :param dp: effective cover of the compression reinforcement.
+    :param x: depth of the neutral axis.
+    :param As1: area of the tension reinforcement.
+    :param As2: area of the compression reinforcement.
+    '''
+
+    eps_cu= -concrete.getEpscu3()
+    eps_ud= steel.epsilon_ud()
+    limRange2= d*eps_cu/(eps_cu+eps_ud)
+    xlim= eps_cu*d/(eps_cu+steel.fyd()/steel.Es)
+    eta= concrete.getEtaC()
+    fcd= -concrete.fcd()
+    lmbd= concrete.getLambdaC()
+    xb= x*b
+    h_2= h/2.0
+    h_2md= h_2-d
+    if(x<0): # Range 1
+        eps_s2= eps_ud*(dp-x)/(d-x)
+        sigma_s2_eps_s2= steel.getStressD(eps_s2)
+        Nu= - As2*sigma_s2_eps_s2 - As1*sigma_s1_eps_ud
+        Mu= - As2*sigma_s2_eps_s2*(h_2-dp) - As1*sigma_s1_eps_ud*h_2md
+    elif(x<=limRange2): # Range 2:
+        eps_s2= eps_ud*(x-dp)/(d-x)
+        sigma_s2_eps_s2= steel.getStressD(eps_s2)
+        Nu= eta*fcd*lmbd*xb + As2*sigma_s2_eps_s2 - As1*sigma_s1_eps_ud
+        Mu= eta*fcd*lmbd*xb*(h_2-lmbd*x/2) + As2*sigma_s2_eps_s2*(h_2-dp) - As1*sigma_s1_eps_ud*h_2md
+    elif(x<=xlim): # Range 3
+        eps_s2= eps_cu*(x-dp)/x
+        sigma_s2_eps_s2= steel.getStressD(eps_s2)
+        eps_s1= eps_cu*(d-x)/x
+        sigma_s1_eps_s1= steel.getStressD(eps_s1)
+        Nu= eta*fcd*lmbd*xb + As2*sigma_s2_eps_s2 - As1*sigma_s1_eps_s1
+        Mu= eta*fcd*lmbd*xb*(h_2-lmbd*x/2) + As2*sigma_s2_eps_s2*(h_2-dp) - As1*sigma_s1_eps_s1*h_2md
+    elif(x<=d): # Range 4
+        eps_s2= eps_cu*(x-dp)/x
+        sigma_s2_eps_s2= steel.getStressD(eps_s2)
+        eps_s1= eps_cu*(d-x)/x
+        sigma_s1_eps_s1= steel.getStressD(eps_s1)
+        Nu= eta*fcd*lmbd*xb + As2*sigma_s2_eps_s2 - As1*sigma_s1_eps_s1
+        Mu= eta*fcd*lmbd*xb*(h_2-lmbd*x/2) + As2*sigma_s2_eps_s2*(h_2-dp) - As1*sigma_s1_eps_s1*h_2md
+    elif(x<=h): # Range 4a:
+        eps_s2= eps_cu*(x-dp)/x
+        sigma_s2_eps_s2= steel.getStressD(eps_s2)
+        eps_s1= eps_cu*(x-d)/x
+        sigma_s1_eps_s1= steel.getStressD(eps_s1)
+        Nu= eta*fcd*lmbd*xb + As2*sigma_s2_eps_s2 + As1*sigma_s1_eps_s1
+        Mu= eta*fcd*lmbd*xb*(h_2-lmbd*x/2) + As2*sigma_s2_eps_s2*(h_2-dp) + As1*sigma_s1_eps_s1*h_2md
+    else: # Range 5:
+        eps_s2= εc3*(x-dp)/(x-h_2)
+        sigma_s2_eps_s2= steel.getStressD(eps_s2)
+        eps_s1= εc3*(x-d)/(x-h_2)
+        sigma_s1_eps_s1= steel.getStressD(eps_s1)
+        h_x= h/x
+        Nu= eta*fcd*(1- (1-lmbd)*h_x)*h*b + As2*sigma_s2_eps_s2 + As1*sigma_s1_eps_s1
+        Mu= eta*fcd*(1- (1-lmbd)*h_x)*h*b*(h_2-(1-(1-lmbd)*h_x)*h_2) + As2*sigma_s2_eps_s2*(h_2-dp) + As1*sigma_s1_eps_s1*h_2md
+
+    return Nu, Mu
