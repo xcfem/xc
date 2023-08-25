@@ -290,7 +290,7 @@ class ACIRebarFamily(rf.RebarFamily):
         rebarController= self.getRebarController()
         return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
     
-    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, typo= 'slab'):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clauses 7.6.1.1, 8.6.1.1, 9.6.1.2, 10.6.1.1, 11.6.1,
@@ -300,37 +300,37 @@ class ACIRebarFamily(rf.RebarFamily):
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param b: width of concrete section.
-        :param typo: member type; slab, wall, beam or column.
+        :param memberType: member type; slab, wall, beam or column.
         '''
         retval= 0.0025*thickness*b
         fy= self.steel.fyk
-        if(typo=='slab'):
+        if(memberType=='slab'):
             limit= ACI_materials.toPascal*60e3
             retval= thickness # b= 1
             if(fy<limit):
                 retval*= 0.0020
             else:
                 retval*= max(0.0018*limit/fy,0.0014)
-        elif(typo=='wall'):
+        elif(memberType=='wall'):
             retval= 0.0025*thickness # b= 1
-        elif(typo=='beam'):
+        elif(memberType=='beam'):
             d= 0.9*thickness
             retval= d*b
             retval*= max(3.0*concrete.getSqrtFck(),ACI_materials.toPascal*200)
-        elif(typo=='column'):
+        elif(memberType=='column'):
             retval= 0.01*thickness*b
         return retval
 
-    def getMinReinfAreaInTension(self, concrete, thickness, typo= 'slab'):
+    def getMinReinfAreaInTension(self, concrete, thickness, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
         :param concrete: concrete material
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
-        :param typo: member type; slab, wall, beam or column.
+        :param memberType: member type; slab, wall, beam or column.
         '''
-        return 2.0*self.getMinReinfAreaInBending(concrete= concrete, thickness= thickness, typo= typo)
+        return 2.0*self.getMinReinfAreaInBending(concrete= concrete, thickness= thickness, memberType= memberType)
 
     def getVR(self,concrete,Nd,Md,b,thickness):
         '''Return the shear resistance carried by the concrete on a (b x thickness) rectangular section according to clause 22.5.5.1 of ACI 318-14.
