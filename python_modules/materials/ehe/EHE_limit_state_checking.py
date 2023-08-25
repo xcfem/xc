@@ -2061,7 +2061,7 @@ class EHERebarFamily(rf.RebarFamily):
       rebarController= self.getRebarController()
       return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
   
-    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, typo= 'slab', steelStressLimit= 450e6):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, steelStressLimit= 450e6, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clause 42.3.5. 
@@ -2070,7 +2070,7 @@ class EHERebarFamily(rf.RebarFamily):
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param b: width of concrete section.
-        :param typo: member type; slab, wall, beam or column.
+        :param memberType: member type; slab, wall, beam, column, etc.
         :param steelStressLimit: maximum stress permitted in the reinforcement 
                                  immediately after formation of the crack. This
                                  may be taken as the yield strength of the 
@@ -2082,40 +2082,41 @@ class EHERebarFamily(rf.RebarFamily):
         retval= 4e-3*thickness*b
         fy= self.steel.fyk
         limit= min(450e6, steelStressLimit)
-        if(typo=='slab'):
+        if(memberType=='slab'):
             retval= thickness # b= 1
             if(fy<limit):
                 retval*= 2e-3
             else:
                 retval*= 1.8e-3
-        elif(typo=='wall'):
+        elif(memberType=='wall'):
             retval= thickness # b= 1
             if(fy<limit):
                 retval*= 1.2e-3
             else:
                 retval*= 0.98e-3
-        elif(typo=='beam'):
+        elif(memberType=='beam'):
             retval= thickness*b
             if(fy<limit):
                 retval*= 3.3e-3
             else:
                 retval*= 2.8e-3
-        elif(typo=='column'):
+        elif(memberType=='column'):
             retval= 4e-3*thickness*b
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            errMsg= className+'.'+methodName+"; member type: " + str(typo) + " not implemented.\n"
+            errMsg= className+'.'+methodName+"; member type: " + str(memberType) + " not implemented.\n"
             lmsg.error(errMsg)
         return retval
 
-    def getMinReinfAreaInTension(self, concrete, thickness, b= 1.0):
+    def getMinReinfAreaInTension(self, concrete, thickness, b= 1.0, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
         :param concrete: concrete material.
         :param thickness: gross thickness of concrete section.
         :param b: width of concrete section.
+        :param memberType: member type; slab, wall, beam, column, etc.
         '''
         retval= min(thickness,0.5)*b # see table 42.3.5 remarks.
         fy= self.steel.fyk
