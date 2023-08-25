@@ -244,7 +244,7 @@ class CantileverRetainingWallGeometry(object):
                 stemWidthIncrement+= depth*self.stemBackSlope
                 stemBackPointA= stemOutsideTop+geom.Vector2d(stemWidthIncrement, currentDepth)
                 stemWidthIncrement+= width
-                stemBackPointB= stemBackPointA+geom.Vector2d(stemWidthIncrement, 0.0)
+                stemBackPointB= stemBackPointA+geom.Vector2d(width, 0.0)
                 remainingHeight-= depth
                 stepPoints.append(stemBackPointA)
                 stepPoints.append(stemBackPointB)
