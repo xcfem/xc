@@ -80,7 +80,7 @@ def overpressure_dry(H, gamma_soil, kv, kh, psi, phi, delta_ad, beta, Kas):
     '''
     theta= math.atan(kh/(1+kv)) #angle of weight with vertical:
                                 #tan(theta)= kh/(1+kv) AND tan(theta)= kh/(1-kv)
-    K_ad= active_earth_pressure_coefficient_Kad(psi, phi, theta, delta_ad,beta)
+    K_ad= active_earth_pressure_coefficient_Kad(psi, phi, theta, delta_ad, beta)
     minuendo= (1+kv)*K_ad
-    factor= minuendo-Kas
+    factor= abs(minuendo-Kas)
     return 0.5*gamma_soil*H**2*factor
