@@ -6,6 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import math
 from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
@@ -126,7 +127,14 @@ class RCSection(object):
         else:
             num= NNd*e-Up*(d-dp)
             denom= self.b*d**2*fcd
-            root= math.sqrt(1-2*num/denom)
+            radicand= 1-2*num/denom
+            if(radicand>=0):
+                root= math.sqrt(radicand)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; section depth: '+str(self.h)+' is too small.')
+                exit(1)
             y= d*(1-root)
             retval= (self.b*y*fcd+Up+Nd)/fyd
         return retval
@@ -149,7 +157,7 @@ class RCSection(object):
             AsDiff= AsReq-As
             F= AsDiff*self.tensionRebars.steel.fyd()
             M= F*(d-dp)
-            retval= min(Md-M, 1.1*Md) # Be cautious about this somewhat "invented" moment. 
+            retval= min(Md-M, 1.25*Md) # Be cautious about this somewhat "invented" moment. 
             return retval
     
     def getVR(self, Nd, Md):
@@ -177,7 +185,9 @@ class RCSection(object):
         AsMin= self.getMinReinfAreaInTension()/2.0
         self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
         if(abs(Nd)>0):
-          lmsg.error("ERROR; tension not implemented.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for axial loads.')
           
     def writeResultCompression(self,outputFile,Nd,AsTrsv):
         ''' Results for compressed rebars.
@@ -187,7 +197,9 @@ class RCSection(object):
         AsMin= 0.2*AsTrsv # 20% of the transversal area.
         self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
         if(abs(Nd)!=0.0):
-          lmsg.error("ERROR; not implemented.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for axial loads.')
 
     def writeResultStress(self,outputFile,M):
       '''Cheking of stresses under permanent loads (SIA 262 fig. 31)'''
