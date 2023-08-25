@@ -111,17 +111,18 @@ class RebarController(lsc.RebarController):
         '''
         return AsMinTensionStressLimit(concrete,sgAdm,t)
 
-    def getMinReinfAreaInTension(self, concrete, spacing, t):
+    def getMinReinfAreaInTension(self, concrete, spacing, t, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
         :param concrete: concrete material.
         :param spacing: rebar spacing.
         :param t: smallest dimension of the tensioned member.
+        :param memberType: member type; slab, wall, beam or column.
         '''
         return MinReinfAreaUnderTension(concrete,self.crackControlRequirement,spacing,t)
 
-    def getMinReinfAreaInBending(self, concrete, concreteCover, spacing,t):
+    def getMinReinfAreaInBending(self, concrete, concreteCover, spacing,t, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion.
 
@@ -129,6 +130,7 @@ class RebarController(lsc.RebarController):
         :param concreteCover: concrete cover of the tensioned bars.
         :param spacing: rebar spacing.
         :param t: smallest dimension of the tensioned member.
+        :param memberType: member type; slab, wall, beam or column.
         '''
         return MinReinfAreaUnderFlexion(concrete,concreteCover,self.crackControlRequirement,spacing,t)
   
