@@ -80,7 +80,15 @@ def overpressure_dry(H, gamma_soil, kv, kh, psi, phi, delta_ad, beta, Kas):
     '''
     theta= math.atan(kh/(1+kv)) #angle of weight with vertical:
                                 #tan(theta)= kh/(1+kv) AND tan(theta)= kh/(1-kv)
-    K_ad= active_earth_pressure_coefficient_Kad(psi, phi, theta, delta_ad, beta)
+    K_ad= active_earth_pressure_coefficient_Kad(psi= psi, phi= phi, theta= theta, delta_ad= delta_ad, beta= beta)
     minuendo= (1+kv)*K_ad
-    factor= abs(minuendo-Kas)
+    factor= minuendo-Kas
+    if(factor<0.0):
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= methodName+'; negative factor in Mononobe-Okabe overpressure.'
+        errMsg+= '\n Active earth pressure coefficient. K_ad= '+str(K_ad) 
+        errMsg+= '\n Static earth pressure coefficient. Kas: '+str(Kas) 
+        errMsg+= '\n Seismic coefficient of horizontal acceleration. kh: '+str(kh) 
+        lmsg.error(errMsg)
+        
     return 0.5*gamma_soil*H**2*factor
