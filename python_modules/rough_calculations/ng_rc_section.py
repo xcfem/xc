@@ -21,19 +21,21 @@ class RCSection(object):
     :ivar concrete: concrete material.
     :ivar tensionRebars: main reinforcement.
     '''
-    def __init__(self, tensionRebars, concrete, b, h):
+    def __init__(self, tensionRebars, concrete, b, h, memberType= None):
         ''' Constructor.
 
         :param b: section width.
         :param h: section depth.
         :param concrete: concrete material.
         :param tensionRebars: main reinforcement.
+        :param memberType: element type (wall, slab, foundation,...).
         '''
         self.tensionRebars= tensionRebars
         self.concrete= concrete
         self.b= b
         self.h= h
         self.stressLimitUnderPermanentLoads= 230e6
+        self.memberType= memberType
 
     def d(self):
         ''' Return the effective depth of the reinforcement.
@@ -66,10 +68,11 @@ class RCSection(object):
         self.tensionRebars= tensionRebars
         
     def getMinReinfAreaInBending(self):
-        return self.tensionRebars.getMinReinfAreaInBending(concrete= self.concrete, thickness= self.h)
+        return self.tensionRebars.getMinReinfAreaInBending(concrete= self.concrete, thickness= self.h, memberType= self.memberType)
     
     def getMinReinfAreaInTension(self):
-        return self.tensionRebars.getMinReinfAreaInTension(concrete= self.concrete,thickness= self.h)
+        '''Return the minimun amount of bonded reinforcement.'''
+        return self.tensionRebars.getMinReinfAreaInTension(concrete= self.concrete,thickness= self.h, memberType= self.memberType)
     
     def getCompressionReinforcementArea(self, dp, Nd, Md):
         ''' Return the required compression reinforcement area according
@@ -157,7 +160,7 @@ class RCSection(object):
             AsDiff= AsReq-As
             F= AsDiff*self.tensionRebars.steel.fyd()
             M= F*(d-dp)
-            retval= min(Md-M, 1.25*Md) # Be cautious about this somewhat "invented" moment. 
+            retval= Md-M # Be cautious about this somewhat "invented" moment. 
             return retval
     
     def getVR(self, Nd, Md):
@@ -183,7 +186,7 @@ class RCSection(object):
           
     def writeResultTraction(self, outputFile, Nd):
         AsMin= self.getMinReinfAreaInTension()/2.0
-        self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
+        self.tensionRebars.writeRebars(outputFile= outputFile, concrete= self.concrete, AsMin= AsMin)
         if(abs(Nd)>0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
