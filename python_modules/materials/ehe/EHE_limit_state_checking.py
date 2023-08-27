@@ -2083,13 +2083,13 @@ class EHERebarFamily(rf.RebarFamily):
         fy= self.steel.fyk
         limit= min(450e6, steelStressLimit)
         if(memberType=='slab'):
-            retval= thickness # b= 1
+            retval= thickness*b
             if(fy<limit):
                 retval*= 2e-3
             else:
                 retval*= 1.8e-3
-        elif(memberType=='wall'):
-            retval= thickness # b= 1
+        elif(memberType=='wall' or memberType=='short_wall'):
+            retval= thickness*b
             if(fy<limit):
                 retval*= 1.2e-3
             else:
@@ -2102,6 +2102,12 @@ class EHERebarFamily(rf.RebarFamily):
                 retval*= 2.8e-3
         elif(memberType=='column'):
             retval= 4e-3*thickness*b
+        elif(memberType=='footing'): # see remark (1) in table 42.3.5
+            retval= thickness*b
+            if(fy<limit):
+                retval*= 1e-3
+            else:
+                retval*= 0.9e-3
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
