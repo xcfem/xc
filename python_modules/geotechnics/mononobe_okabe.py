@@ -8,7 +8,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import math
+from misc_utils import log_messages as lmsg
 
 def theta_values(kh, kv):
     ''' Return the values of the auxiliary angle theta for the case of water
@@ -22,7 +24,7 @@ def theta_values(kh, kv):
     v2= math.atan2(kh, 1+kv)
     return v1, v2
 
-def active_earth_pressure_coefficient_Kad(psi, phi, theta, delta_ad,beta):
+def active_earth_pressure_coefficient_Kad(psi, phi, theta, delta_ad, beta):
     ''' Return the active earth pressure coefficient according
         to Mononobe-Okabe according to EN1998-5 §E.4.
 
@@ -88,7 +90,9 @@ def overpressure_dry(H, gamma_soil, kv, kh, psi, phi, delta_ad, beta, Kas):
         errMsg= methodName+'; negative factor in Mononobe-Okabe overpressure.'
         errMsg+= '\n Active earth pressure coefficient. K_ad= '+str(K_ad) 
         errMsg+= '\n Static earth pressure coefficient. Kas: '+str(Kas) 
-        errMsg+= '\n Seismic coefficient of horizontal acceleration. kh: '+str(kh) 
+        errMsg+= '\n Seismic coefficient of horizontal acceleration. kh: '+str(kh)
+        factor= -factor
+        errMsg+= '\n Using absolute value: '+str(factor)
         lmsg.error(errMsg)
         
     return 0.5*gamma_soil*H**2*factor
