@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Reinforced concrete section rough calculations test EC2 version.'''
+''' Reinforced concrete section rough calculations test EC2 version.
+    Check that  the effect of compressive axial load is favourable.'''
 
 from __future__ import division
 from __future__ import print_function
