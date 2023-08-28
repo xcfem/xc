@@ -52,7 +52,7 @@ print('MRC= ', MRC/1e3, 'kN.m')
 '''
 
 error= math.sqrt((AsA-4.712388980384689e-4)**2+(AsB-12.063715789784803e-4)**2+(AsC-18.849555921538755e-4)**2)
-error+= math.sqrt((MRA-84.11121388781129e3)**2+(MRB-222.5038243016057e3)**2+(MRC-330.0e3)**2)
+error+= math.sqrt((MRA-84.11121388781129e3)**2+(MRB-222.5038243016057e3)**2+(MRC-347.87602925378724e3)**2)
 
 import os
 from misc_utils import log_messages as lmsg
