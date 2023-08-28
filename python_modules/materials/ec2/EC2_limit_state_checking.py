@@ -508,7 +508,7 @@ class EC2RebarFamily(rf.RebarFamily):
       ''' Return the basic anchorage length of the bars.'''
       rebarController= self.getRebarController()
       return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
-    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, typo= 'slab', steelStressLimit= 450e6, sigmaC= 0.0, effectiveCover= 45e-3):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, steelStressLimit= 450e6, memberType= None, sigmaC= 0.0, effectiveCover= 45e-3):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clauses 7.3.2, 9.2.1.1 (beams), 9.3.1.1 (slabs),
@@ -517,7 +517,7 @@ class EC2RebarFamily(rf.RebarFamily):
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param b: width of concrete section.
-        :param typo: member type; slab, wall, beam or column.
+        :param memberType: member type; slab, wall, beam or column.
         :param concrete: concrete material.
         :param steelStressLimit: maximum stress permitted in the reinforcement 
                                  immediately after formation of the crack. This
@@ -545,11 +545,11 @@ class EC2RebarFamily(rf.RebarFamily):
         Ac_t= hc_eff*b
         retval= getAsMinCrackControl(concrete= concrete, reinfSteel= self.steel, h= thickness, Act= Ac_t, sigmaC= sigmaC, sigma_s= steelStressLimit)
         d= thickness-effectiveCover # effective depth.
-        if(typo=='beam' or typo=='slab'): # Clauses 9.2.1.1 and 9.3.1.1 (1)
+        if(memberType=='beam' or memberType=='slab'): # Clauses 9.2.1.1 and 9.3.1.1 (1)
             
             Asmin= getAsMinBeams(concrete= concrete, reinfSteel= self.steel, h= thickness, bt= b, d= d, z= 0.9*d, nationalAnnex= self.nationalAnnex) 
             retval= max(Asmin, retval)
-        elif(typo=='column'):
+        elif(memberType=='column'):
             if(b>4*thickness):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -559,41 +559,68 @@ class EC2RebarFamily(rf.RebarFamily):
             NEd= sigmaC*Ac
             Asmin= getAsMinColumns(concrete= concrete, reinfSteel= self.steel, NEd= NEd, Ac= Ac, nationalAnnex= self.nationalAnnex)
             retval= max(Asmin, retval)
-        elif(typo=='wall'): # Clause 9.6.2
+        elif(memberType=='wall' or memberType=='short_wall'): # Clause 9.6.2
             # We assume that only the vertical reinforcement is subjected
             # to bending.
-            Asmin= getAsMinWalls(concrete= concrete, reinfSteel= self.steel, Ac= thickness*b, vertical= True, compressedSide= False, verticalReinforcementArea= None, nationalAnnex= self.nationalAnnex)
+            Asmin= getAsMinWalls(concrete= concrete, reinfSteel= self.steel, Ac= thickness*b, thickness= thickness, vertical= True, compressedSide= False, verticalReinforcementArea= None, nationalAnnex= self.nationalAnnex)
+            retval= max(Asmin, retval)
+        elif(memberType=='footing'):
+            pass # Nothing to add here.        
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            errMsg= className+'.'+methodName+"; member type: " + str(typo) + " not implemented.\n"
+            errMsg= className+'.'+methodName+"; member type: " + str(memberType) + " not implemented.\n"
             lmsg.error(errMsg)
         return retval
     
-    def getMinReinfAreaInTension(self, concrete, thickness, b = 1.0, stressLimit= 350e6):
+    def getMinReinfAreaInTension(self, concrete, thickness, b = 1.0, stressLimit= 350e6, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension according to
-           expressionn (7.1) in clause 7.3.2 of EC2:2004 part 1.
+           clauses 9.6.3 and expressionn (7.1) in clause 7.3.2 of EC2:2004 part 1.
 
         :param concrete: concrete material.
         :param thickness: gross thickness of concrete section.
         :param b: width of concrete section.
         :param stressLimit: limit 
+        :param memberType: member type; slab, wall, beam or column.
         '''
-        kc= 1 # pure tension.
-        k= 1.0 # coefficient which allows for the effect of non-uniform
-               # self-equilibrating stresses, which lead to a reduction of
-               # restraint forces.
-        if(thickness>=0.8):
-            k= 0.65
-        elif(thickness>0.3):
-            k= -0.7*thickness+1.21 # linear interpolation.
-        Act= thickness*b  # All the section is in tension.
-        fct_eff= concrete.fctm() # mean value of the tensile strength of the
-        # concrete effective at the time when the cracks may first be expected
-        # to occur: fct,eff = fctm or lower, (fctm(t)), if cracking is expected
-        # earlier than 28 days
-        retval= kc*k*fct_eff*Act/min(stressLimit, self.steel.fyk)
+        if(memberType=='wall'):
+            if(self.nationalAnnex=='Spain'): # 9.6.3 (1) Cuantías mínimas de la armadura horizontal en muros
+                if(self.steel.fyk<500e6):
+                    retval= 0.004*min(thickness,0.5)*b
+                elif(self.steel.fyk==500e6):
+                    retval= 0.0032*min(thickness,0.5)*b
+                else:
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    errMsg= className+'.'+methodName+"; steel fyk= : " + str(self.steel.fyk) + " not implemented.\n"
+                    lmsg.error(errMsg)
+            else:
+                retval= 0.002*thickness*b # 0.001 for each side.
+        elif(memberType=='short_wall'):
+            if(self.nationalAnnex=='Spain'): # 9.6.3 (1) Cuantías mínimas de la armadura horizontal en muros
+                retval= 0.002*min(thickness,0.5)*b
+            else: # 9.6.3 Horizontal reinforcement.
+                retval= 0.002*min(thickness,0.5)*b # 0.001 for each side.
+        elif(memberType=='footing'):
+            # EC2 establishes a minimum diameter but there is no easy
+            # way to implement this here.
+            retval= 0.0005*thickness*b
+        else: # expressionn (7.1) in clause 7.3.2 of EC2:2004 part 1.
+            kc= 1 # pure tension.
+            k= 1.0 # coefficient which allows for the effect of non-uniform
+                   # self-equilibrating stresses, which lead to a reduction of
+                   # restraint forces.
+            if(thickness>=0.8):
+                k= 0.65
+            elif(thickness>0.3):
+                k= -0.7*thickness+1.21 # linear interpolation.
+            Act= thickness*b  # All the section is in tension.
+            fct_eff= concrete.fctm() # mean value of the tensile strength of the
+            # concrete effective at the time when the cracks may first be expected
+            # to occur: fct,eff = fctm or lower, (fctm(t)), if cracking is expected
+            # earlier than 28 days
+            retval= kc*k*fct_eff*Act/min(stressLimit, self.steel.fyk)
         return retval
      
     def getVR(self, concrete, Nd, Md, b, thickness):
@@ -935,7 +962,7 @@ def getFlangeShearResistanceShearReinfStress(concrete, hf, Asf, sf, shearReinfSt
 
 # 7.3.2 Minimum reinforcement areas
 
-def getAsMinCrackControl(concrete, reinfSteel, h, Act, sigmaC= 0.0, sigma_s= None):
+def getAsMinCrackControl(concrete, reinfSteel, h, Act, sigmaC= 0.0, sigma_s= None, memberType= None):
     ''' Return the minimum area of reinforcing steel within the tensile zone
         according to expression 7.1 of clause 7.3.2 of EC2:2004.
 
@@ -965,10 +992,10 @@ def getAsMinCrackControl(concrete, reinfSteel, h, Act, sigmaC= 0.0, sigma_s= Non
     else: # (sigmaC>0)
         h_aster= min(thickness, 1.0)
         k1= 1.5 if (sigmaC<0.0) else 2.0*h_aster/(3*thickness)
-        if(typo=='flange'):
+        if(memberType=='flange'):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            errMsg= className+'.'+methodName+"; member type: " + str(typo) + " not implemented.\n"
+            errMsg= className+'.'+methodName+"; member type: " + str(memberType) + " not implemented.\n"
             lmsg.error(errMsg)
             kc= 0.5
         else:
