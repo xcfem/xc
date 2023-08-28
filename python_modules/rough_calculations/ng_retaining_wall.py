@@ -78,15 +78,17 @@ class InternalForces(object):
     :ivar ndEnvelope: stem axial force design values.
     :ivar mdEnvelope: stem bending moment design values.
     :ivar vdEnvelope: stem shear force design values.
+    :ivar NdFooting: footing axial load design value.
     :ivar MdFooting: footing bending moment design value.
     :ivar VdFooting: footing shear force design value.
     '''
-    def __init__(self,y, ndEnvelope, mdEnvelope, vdEnvelope,MdFooting,VdFooting):
+    def __init__(self,y, ndEnvelope, mdEnvelope, vdEnvelope, NdFooting, MdFooting, VdFooting):
         ''' Constructor.
         
         :param ndEnvelope: stem axial force design values.
         :param mdEnvelope: stem bending moment design values.
         :param vdEnvelope: stem shear force design values.
+        :param NdFooting: footing axial load design value.
         :param MdFooting: footing bending moment design value.
         :param VdFooting: footing shear force design value.
         '''
@@ -98,6 +100,7 @@ class InternalForces(object):
         self.vdEnvelope.filterRepeatedValues()
         self.interpolate()
         self.stemHeight= self.y[-1]
+        self.NdFooting= NdFooting
         self.MdFooting= MdFooting
         self.VdFooting= VdFooting
         
@@ -120,13 +123,14 @@ class InternalForces(object):
         for v in self.vdMax:
           v*=f
         self.interpolate()
+        self.NdFooting*=f
         self.MdFooting*=f
         self.VdFooting*=f
         return self
     
     def clone(self):
         ''' Return a copy of this object.'''
-        return InternalForces(y= self.y, ndEnvelope= self.ndEnvelope, mdEnvelope= self.mdEnvelope, vdEnvelope= self.vdEnvelope, MdFooting= self.MdFooting, VdFooting= self.VdFooting)
+        return InternalForces(y= self.y, ndEnvelope= self.ndEnvelope, mdEnvelope= self.mdEnvelope, vdEnvelope= self.vdEnvelope, NdFooting= self.NdFooting, MdFooting= self.MdFooting, VdFooting= self.VdFooting)
     
     def __mul__(self, f):
         retval= self.clone()
@@ -242,7 +246,11 @@ class InternalForces(object):
         '''
         return abs(self.mdMinStem(y))
     
-    def getYStem(self,hCoupe):
+    def getYStem(self, hCoupe):
+        ''' Return the depth corresponding to the height argument.
+
+        :param hCoupe: height with respect to the footing midplane.
+        '''
         return self.stemHeight-hCoupe
     
     def writeGraphic(self,fileName):
@@ -585,6 +593,16 @@ class StemReinforcement(ReinforcementMap):
         if(retval):
             retval= self.wallGeom == other.wallGeom
         return retval
+
+    def getStemMemberType(self):
+        ''' Return the member type of the stem ('wall' or 'short wall')
+            depending on the joint spacing.
+        '''
+        jointSpacing= self.wallGeom.jointSpacing
+        if(jointSpacing<7.5):
+            return 'short_wall'
+        else:
+            return 'wall'
         
     # def getRCSections(self,stemSets):
     #     '''Create reinforced concrete sections for the stem.
@@ -613,7 +631,7 @@ class StemReinforcement(ReinforcementMap):
       
     def getSectionExtStemBottom(self):
         '''Returns RC section for exterior reinforcement at stem bottom.'''
-        return ng_rc_section.RCSection(self[self.extStemBottomIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.stemBottomWidth)
+        return ng_rc_section.RCSection(self[self.extStemBottomIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.stemBottomWidth, memberType= self.getStemMemberType())
     
     def getSectionStem(self, y, reinforcementIndex):
         '''Returns RC section of the stem.
@@ -621,27 +639,41 @@ class StemReinforcement(ReinforcementMap):
         :param y: depth of the section.
         :param reinforcementIndex: index of the reinforcement for the section.
         '''
-        c= self.wallGeom.getDepth(y)
-        return ng_rc_section.RCSection(self[reinforcementIndex],self.wallGeom.concrete,self.wallGeom.b,c)
+        thickness= self.wallGeom.getSectionDepth(y)
+        return ng_rc_section.RCSection(tensionRebars= self[reinforcementIndex], concrete= self.wallGeom.concrete,b= self.wallGeom.b, h= thickness, memberType= self.getStemMemberType())
+              
     
     def getSectionIntStemBottom(self):
         '''Returns RC section for interior reinforcement at stem bottom.'''
-        return ng_rc_section.RCSection(self[self.intStemBottomIndex],self.wallGeom.concrete, self.wallGeom.b,self.wallGeom.stemBottomWidth)
+        return ng_rc_section.RCSection(tensionRebars= self[self.intStemBottomIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= self.wallGeom.stemBottomWidth, memberType= self.getStemMemberType())
+    
     def getSectionStemTop(self):
         '''Returns RC section for reinforcement at stem top.'''
-        return ng_rc_section.RCSection(self[self.topStemIndex],self.wallGeom.concrete, self.wallGeom.b,self.wallGeom.stemTopWidth)
+        return ng_rc_section.RCSection(tensionRebars= self[self.topStemIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= self.wallGeom.stemTopWidth, memberType= self.getStemMemberType())
+    
     def getSectionStemLongExt(self):
         '''Returns RC section for longitudinal reinforcement in stem exterior.'''
-        return ng_rc_section.RCSection(self[self.longExtStemIndex],self.wallGeom.concrete,self.wallGeom.b,(self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0)
+        reinforcementIndex= self.longExtStemIndex
+        if(self.wallGeom.stemBackSteps is None):
+            return ng_rc_section.RCSection(tensionRebars= self[reinforcementIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= (self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0, memberType= self.getStemMemberType())
+        else:
+            depth= (self.wallGeom.stemBackSteps[0][0]+self.wallGeom.stemHeight)/2.0
+            return self.getSectionStem(y= depth, reinforcementIndex= reinforcementIndex) 
+    
     def getSectionStemLongInt(self):
         '''Returns RC section for longitudinal reinforcement in stem interior.'''
-        return ng_rc_section.RCSection(self[self.longIntStemIndex],self.wallGeom.concrete,self.wallGeom.b,(self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0)
+        reinforcementIndex= self.longIntStemIndex
+        if(self.wallGeom.stemBackSteps is None):
+            return ng_rc_section.RCSection(tensionRebars= self[reinforcementIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= (self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0, memberType= self.getStemMemberType())
+        else:
+            depth= (self.wallGeom.stemBackSteps[0][0]+self.wallGeom.stemHeight)/2.0
+            return self.getSectionStem(y= depth, reinforcementIndex= reinforcementIndex) 
 
     def getYExtReinfChange(self):
         ''' Returns the depth where the exterior reinforcement of the stem chantes.
         '''
         anchorageLength= self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete)
-        return self.wallGeom.internalForcesULS.getYStem(anchorageLength)
+        return self.wallGeom.getYStem(anchorageLength)
         
     def writeResult(self, outputFile):
         '''Write stem reinforcement verification results in LaTeX format.'''
@@ -700,7 +732,6 @@ class StemReinforcement(ReinforcementMap):
             for i, step in enumerate(steps):
                 depth= step[0]-0.01
                 stemReinforcementIndex= (i+1)*100+self.intStemIndex
-                print('stemReinforcementIndex= ', stemReinforcementIndex)
                 CIntStem= self.getSectionStem(y= depth, reinforcementIndex= stemReinforcementIndex)
                 outputFile.write("\\textbf{Reinforcement "+str(stemReinforcementIndex)+" (front vertical stem reinforcement step:" +str(i+1)+"):}\\\\\n")
                 CIntStem.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
@@ -718,7 +749,6 @@ class StemReinforcement(ReinforcementMap):
             for i, step in enumerate(steps):
                 depth= step[0]-0.01
                 stemReinforcementIndex= (i+1)*100+self.longExtStemIndex
-                print('stemReinforcementIndex= ', stemReinforcementIndex)
                 CExtStem= self.getSectionStem(y= depth, reinforcementIndex= stemReinforcementIndex)
                 outputFile.write("\\textbf{Reinforcement "+str(stemReinforcementIndex)+" (back longitudinal stem reinforcement step:" +str(i+1)+"):}\\\\\n")
                 CExtStem.writeResultTraction(outputFile= outputFile, Nd= 0.0)
@@ -744,7 +774,7 @@ class StemReinforcement(ReinforcementMap):
         '''Stem data for wall scheme drawing in LaTeX format.'''
 
         defStrings[self.extStemBottomIndex]= self.getSectionExtStemBottom().tensionRebars.getDefStrings()
-        yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete))
+        yCoupeExtStem= self.getYExtReinfChange()
         defStrings[self.extStemIndex]= self.getSectionStem(y= yCoupeExtStem, reinforcementIndex= self.extStemIndex).tensionRebars.getDefStrings()
         defStrings[self.intStemBottomIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings()
         defStrings[self.intStemIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings() #CIntStem==CIntStemBottom
@@ -790,26 +820,40 @@ class FootingReinforcement(ReinforcementMap):
       
     def getSectionTopFooting(self):
         '''Returns RC section for reinforcement on footing top.'''
-        return ng_rc_section.RCSection(self[self.topFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
+        return ng_rc_section.RCSection(tensionRebars= self[self.topFootingIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= self.wallGeom.footingThickness, memberType='footing')
       
     def getSectionFootingBottom(self):
         '''Returns RC section for reinforcement at footing bottom.'''
-        return ng_rc_section.RCSection(self[self.bottomFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
+        return ng_rc_section.RCSection(tensionRebars= self[self.bottomFootingIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= self.wallGeom.footingThickness, memberType='footing')
       
     def getSectionFootingBottomLongitudinal(self):
         '''Returns RC section for longitudinal reinforcement at footing bottom.'''
-        return ng_rc_section.RCSection(self[self.longBottomFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
+        return ng_rc_section.RCSection(tensionRebars= self[self.longBottomFootingIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= self.wallGeom.footingThickness, memberType='footing')
+
+    def getShearForceAtFootingStemCorner(self):
+        ''' Return the shear force at the vertical plane that passes through
+            the corner formed by the footing top surface and the stem internal
+            face.
+        '''
+        # It will be much better to get the internal forces envelopes at the
+        # footing instead of using the following trick:
+        VdTopFooting= abs(self.wallGeom.internalForcesULS.VdFooting.getAbsMaximum())
+        # Assume shear decreases linearly to reach zero at the end of the heel.
+        interpolationFactor= VdTopFooting/self.wallGeom.bHeel
+        retval= VdTopFooting - interpolationFactor*self.wallGeom.stemBottomWidth/2.0
+        return retval
     
     def writeResult(self, outputFile):
         '''Write reinforcement verification results in LaTeX format.'''
 
         # Reinforcement on footing top
         CTopFooting= self.getSectionTopFooting()
-        NdTopFooting= 0.0 #we neglect axial force
-        VdTopFooting= abs(self.wallGeom.internalForcesULS.VdFooting.getAbsMaximum())
+        # Consider the minimum compressive axial force (favorable effect):
+        NdTopFooting= self.wallGeom.internalForcesULS.NdFooting.getAbsMaximum()
+        VdTopFooting= self.getShearForceAtFootingStemCorner()
         MdTopFooting= self.wallGeom.internalForcesULS.MdFooting.getAbsMaximum() # Concomitant??
         outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (top transverse footing reinforcement):}\\\\\n")
-        CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
+        CTopFooting.writeResultFlexion(outputFile, NdTopFooting, MdTopFooting, VdTopFooting)
         # CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdFooting.getAbsMaximum()) # LP commented out 24/08/2023
 
         CSectionFootingBottom= self.getSectionFootingBottom()
@@ -881,8 +925,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.smoothPrecastFoundation= smoothPrecastFoundation
         
 
-    def setULSInternalForcesEnvelope(self,wallInternalForces):
-        '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
+    def setULSInternalForcesEnvelope(self, wallInternalForces):
+        '''Assigns the ultimate limit state infernal forces envelope 
+           for the stem.
+
+        :param wallInternalForces: container for the wall internal forces.
+        '''
         if(hasattr(self,'stemHeight')):
             if(self.getWFStemHeigth()!=wallInternalForces.stemHeight):
                 lmsg.warning('stem height (' + str(self.getWFStemHeigth()) + ' m) different from length of internal forces envelope law ('+ str(wallInternalForces.stemHeight)+ ' m)') 
@@ -890,8 +938,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             self.stemHeight= wallInternalForces.stemHeight-self.footingThickness/2.0
         self.internalForcesULS= wallInternalForces
 
-    def setSLSInternalForcesEnvelope(self,wallInternalForces):
-        '''Assigns the serviceability limit state infernal forces envelope for the stem.'''
+    def setSLSInternalForcesEnvelope(self, wallInternalForces):
+        '''Assigns the serviceability limit state infernal forces envelope 
+           for the stem.
+
+        :param wallInternalForces: container for the wall internal forces.
+        '''
         if(hasattr(self,'stemHeight')):
             if(self.getWFStemHeigth()!=wallInternalForces.stemHeight):
                 lmsg.warning('stem height (' + str(self.getWFStemHeigth()) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m)') 
@@ -1052,7 +1104,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
         :param y: distance from the top of the stem.
         '''
-        depth= self.getDepth(y)
+        depth= self.getSectionDepth(y)
         name= self.name+"StemSection"+str(y)
         rcSection= def_simple_RC_section.RCRectangularSection(name= name, width= self.b, depth= depth, concrType= self.concrete, reinfSteelType= self.stemReinforcement.steel)
 
@@ -1567,25 +1619,39 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         return nd, md, vd
 
     def getHeelInternalForces(self):
-        ''' Return the maximum bending moment and shear force at the wall
-            heel.
+        ''' Return the minimum axial force and the maximum bending moment 
+            and shear force at the wall heel.
         '''
+        retvalNd= 0.0
         retvalMd= 0.0
         retvalVd= 0.0
         heelElements= self.heelSet.elements.getPythonList()
         # Values from the first element.
         if(len(heelElements)>0):
             e0= heelElements[0]
+            retvalNd= e0.getN1
+            if(abs(e0.getN2)>abs(retvalMd)): # max. value (minimum compresion).
+                retvalMd= e0.getN2
             retvalMd= e0.getMz1
+            if(abs(e0.getMz2)>abs(retvalMd)): # maximum value.
+                retvalMd= e0.getMz2
             retvalVd= e0.getVy1
+            if(abs(e0.getVy2)>abs(retvalVd)): # maximum value.    
+                retvalVd= e0.getVy2
             for e in heelElements[1:]:
-                if(abs(e.getMz1)>abs(retvalMd)):
+                if(abs(e.getN1)>abs(retvalMd)): # max. value (minimum compresion).
+                    retvalMd= e.getN1
+                if(abs(e.getN2)>abs(retvalMd)): # max. value (minimum compresion).
+                    retvalMd= e.getN2
+                if(abs(e.getMz1)>abs(retvalMd)): # maximum value.
                     retvalMd= e.getMz1
-                if(abs(e.getMz2)>abs(retvalMd)):
+                if(abs(e.getMz2)>abs(retvalMd)): # maximum value.
                     retvalMd= e.getMz2
-                if(abs(e.getVy1)>abs(retvalVd)):    
+                if(abs(e.getVy1)>abs(retvalVd)): # maximum value.    
                     retvalVd= e.getVy1
-        return retvalMd, retvalVd
+                if(abs(e.getVy2)>abs(retvalVd)): # maximum value.    
+                    retvalVd= e.getVy2
+        return retvalNd, retvalMd, retvalVd
 
     def resultComb(self,nmbComb):
         '''Solution and result retrieval routine.'''
@@ -1633,15 +1699,16 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, toeFillDepth= toeFillDepth, sg_adm= sg_adm, gammaRSliding= gammaRSliding, gammaRBearing= gammaRBearing, ignoreAdhesion= ignoreAdhesion, NgammaCoef= NgammaCoef)
         return self.stability_results
 
-    def getEnvelopeInternalForces(self, envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
+    def getEnvelopeInternalForces(self, envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel):
         nd, md, vd= self.getStemInternalForces()
         envelopeNd.update(nd)
         envelopeMd.update(md)
         envelopeVd.update(vd)
-        mdHeel, vdHeel= self.getHeelInternalForces()
+        ndHeel, mdHeel, vdHeel= self.getHeelInternalForces()
+        envelopeNdHeel.update([ndHeel])
         envelopeMdHeel.update([mdHeel])
         envelopeVdHeel.update([vdHeel])
-        return envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel 
+        return envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel 
 
     def performSLSAnalysis(self,combinations):
         ''' Perform serviceability limit state analysis.
@@ -1654,6 +1721,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         envelopeNd= Envelope(y)
         envelopeMd= Envelope(y)
         envelopeVd= Envelope(y)
+        envelopeNdHeel= Envelope([0.0])
         envelopeMdHeel= Envelope([0.0])
         envelopeVdHeel= Envelope([0.0])
         for comb in combinations:
@@ -1661,12 +1729,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             if(__debug__):
                 if(not reactions):
                     AssertionError('Can\'t obtain the reactions.')
-            envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+            envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel)
             rot= self.getFoundationRotation()
             if(rot<rotation):
                 rotation= rot
                 rotationComb= comb
-        internalForces= InternalForces(y,envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+        internalForces= InternalForces(y,envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel)
         self.sls_results= WallSLSResults(internalForces,rotation, rotationComb)
         return self.sls_results
 
@@ -1679,6 +1747,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         envelopeNd= Envelope(y)
         envelopeMd= Envelope(y)
         envelopeVd= Envelope(y)
+        envelopeNdHeel= Envelope([0.0])
         envelopeMdHeel= Envelope([0.0])
         envelopeVdHeel= Envelope([0.0])
         for comb in combinations:
@@ -1686,8 +1755,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             if(__debug__):
                 if(not reactions):
                     AssertionError('Can\'t obtain the reactions.')
-            envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
-        internalForces= InternalForces(y,envelopeNd, envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+            envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel)
+        internalForces= InternalForces(y,envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel)
         self.uls_results= WallULSResults(internalForces)
         return self.uls_results
 
