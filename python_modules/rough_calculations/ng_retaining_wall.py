@@ -656,8 +656,8 @@ class StemReinforcement(ReinforcementMap):
         reinforcementIndex= self.longExtStemIndex
         if(self.wallGeom.stemBackSteps is None):
             return ng_rc_section.RCSection(tensionRebars= self[reinforcementIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= (self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0, memberType= self.getStemMemberType())
-        else:
-            depth= (self.wallGeom.stemBackSteps[0][0]+self.wallGeom.stemHeight)/2.0
+        else: # Compute the thickness at the middle of the lowest step. 
+            depth= (self.wallGeom.stemBackSteps[-1][0]+self.wallGeom.stemHeight)/2.0
             return self.getSectionStem(y= depth, reinforcementIndex= reinforcementIndex) 
     
     def getSectionStemLongInt(self):
@@ -665,8 +665,8 @@ class StemReinforcement(ReinforcementMap):
         reinforcementIndex= self.longIntStemIndex
         if(self.wallGeom.stemBackSteps is None):
             return ng_rc_section.RCSection(tensionRebars= self[reinforcementIndex], concrete= self.wallGeom.concrete, b= self.wallGeom.b, h= (self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0, memberType= self.getStemMemberType())
-        else:
-            depth= (self.wallGeom.stemBackSteps[0][0]+self.wallGeom.stemHeight)/2.0
+        else: # Compute the thickness at the middle of the lowest step. 
+            depth= (self.wallGeom.stemBackSteps[-1][0]+self.wallGeom.stemHeight)/2.0
             return self.getSectionStem(y= depth, reinforcementIndex= reinforcementIndex) 
 
     def getYExtReinfChange(self):
