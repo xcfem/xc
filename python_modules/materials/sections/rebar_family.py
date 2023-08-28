@@ -333,25 +333,26 @@ class DoubleRebarFamily(object):
         l2= self.f2.getBasicAnchorageLength(concrete)
         return max(l1,l2)
     
-    def getMinReinfAreaInBending(self, concrete, thickness):
+    def getMinReinfAreaInBending(self, concrete, thickness, memberType):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under bending.
 
         :param concrete: concrete material.
         :param thickness: thickness of the bended member.
+        :param memberType: type of member (slab, wall,...).
         '''
-        Retval= self.f1.getMinReinfAreaInBending(concrete= concrete,thickness= thickness)
+        retval= self.f1.getMinReinfAreaInBending(concrete= concrete,thickness= thickness, memberType= memberType)
         return retval
     
-    def getMinReinfAreaInTension(self, concrete, thickness):
+    def getMinReinfAreaInTension(self, concrete, thickness, memberType):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
         :param concrete: concrete material.
         :param thickness: thickness of the tensioned member.
+        :param memberType: type of member (slab, wall,...).
         '''
-        retval= self.f1.getMinReinfAreaInTension(concrete= concrete, thickness= thickness)
-        return retval
+        return self.f1.getMinReinfAreaInTension(concrete= concrete, thickness= thickness, memberType= memberType)
     
     def getMR(self, concrete, b, thickness, z= None):
         '''Return the bending resistance of the (b x thickness) rectangular section.
@@ -382,8 +383,13 @@ class DoubleRebarFamily(object):
         self.f1.writeDef(outputFile,concrete)
         self.f2.writeDef(outputFile,concrete)
         
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
+    def writeRebars(self, outputFile, concrete, AsMin):
+        '''Write rebar family data.
+
+        :param outputFile: output file.
+        :param concrete: concrete material.
+        :param AsMin: minimum amount of reinforcement.
+        '''
         self.writeDef(outputFile,concrete)
         outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
         writeF(outputFile,"  F(As)", self.getAs()/AsMin)
