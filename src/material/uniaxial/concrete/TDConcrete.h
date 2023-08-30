@@ -87,85 +87,35 @@
 #ifndef TDConcrete_h
 #define TDConcrete_h
 
-#include "material/uniaxial/concrete/RawConcrete.h"
+#include "material/uniaxial/concrete/TDConcreteBase.h"
 
 namespace XC {
 
-class TDConcrete : public RawConcrete
+class TDConcrete : public TDConcreteBase
   {
   private:
-
     // matpar : Concrete FIXED PROPERTIES
-    //	double fcT;  //Time Dependent Strength
-    double fcu;   // stress at ultimate (crushing) strain    : mp(3)
-    double tcr;   // creep relationship age
-    double ft;    // concrete tensile strength               : mp(6)
-    //	double ftT;	//Time dependent strength (tension)
-    double Ets;   // tension stiffening slope                : mp(7)
-    double Ec;  //Concrete stiffness, Added by AMK
-	//	double EcT; //Time dependent stiffness
-    double age;   // concrete age at first loading, Added by AMK
-    double epsshu; // ultimate shrinkage
-    double epssha; // shrinkage parameter
-    double epscra; // concrete creep exponent parameter
-    double epscru; // ultimate concrete creep
-    double sigCr; // stress that creep curve is based on
-    double beta;
+    //	double fcT; // Time Dependent Strength
+    double tcr; //!< creep relationship age
+    double epsshu; //!< ultimate shrinkage
+    double epssha; //!< shrinkage parameter
+    double epscra; //!< concrete creep exponent parameter
+    double epscru; //!< ultimate concrete creep
     double epscrd;
-    double tcast;
 
-    // hstvP : Concerete HISTORY VARIABLES last committed step
-    double ecminP;  //  hstP(1)
-    double ecmaxP;  // added by AMK
-    double deptP;   //  hstP(2)
-    double epsP;  //  = strain at previous converged step
-    double sigP;  //  = stress at previous converged step
-    double eP;    //   stiffness modulus at last converged step;
-
-    // hstv : Concerete HISTORY VARIABLES  current step
-    double ecmin;
-    double ecmax; // added by AMK  
-    double dept;   
-    double sig;   
-    double e;     
-    double eps;
-	
     //Added by AMK:
-    int count;
-    double epsInit;
-    double sigInit;
     double eps_cr;
     double eps_sh;
-    double eps_T;
-    double eps_m;
-    double epsP_m;
     double epsP_cr;
     double epsP_sh;
-    double eps_total;
-    double epsP_total;
-    double e_total;
-    double eP_total;
-    double t; //Time
-    double t_load; //loaded time
     double phi_i;
-    double Et;
-    int crack_flag;
-    int crackP_flag;
-    int iter; //Iteration number
     
-    float PHI_i[5000];
-    float E_i[5000];
-    float DSIG_i[5000];
-    float dsig_i[5000];
-    float TIME_i[5000]; //Time from the previous time step
-    float DTIME_i[5000];
-
-    static int creepControl; //!< Controls creep calculation (see setTrialStrain).
-    static double creepDt; 
+    std::vector<float> PHI_i;
 
     void Tens_Envlp (double epsc, double &sigc, double &Ect);
     void Compr_Envlp (double epsc, double &sigc, double &Ect);    
   protected:
+    size_t resize(void);
     int sendData(Communicator &);
     int recvData(const Communicator &);
     
@@ -175,32 +125,17 @@ class TDConcrete : public RawConcrete
     virtual ~TDConcrete(void);
     void setup_parameters(void);
 
-    double getInitialTangent(void) const;
     UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double setCreepStrain(double time, double stress); //Added by AMK
     double setStress(double strain, double &stiff); //Added by AMK
-    double getCurrentTime(void) const; //Added by AMK
-    double getStrain(void) const;
     double getPHI_i(void) const; //Added by AMK      
-    double getStress(void) const;
-    double getTangent(void) const;
     double getCreep(void) const; //Added by AMK
-    double getMech(void) const; //Added by AMK
     double setPhi(double time, double tp); //Added by AMK
     double setShrink(double time); //Added by AMK
     double getShrink(void) const; //Added by AMK
-    void setFt(const double &);
-    double getFt(void) const;
-    void setEc(const double &);
-    double getEc(void) const;
-    void setEt(const double &);
-    double getEt(void) const;
-    void setBeta(const double &);
-    double getBeta(void) const;
-    void setAge(const double &);
-    double getAge(void) const;
+    
     void setUltimateShrinkage(const double &);
     double getUltimateShrinkage(void) const;
     void setShrinkageParameter(const double &);
@@ -213,8 +148,6 @@ class TDConcrete : public RawConcrete
     double getCreepExponentParameter(void) const;
     void setCreepDParameter(const double &);
     double getCreepDParameter(void) const;
-    void setTCast(const double &);
-    double getTCast(void) const;
 
     
     int commitState(void);
@@ -233,20 +166,7 @@ class TDConcrete : public RawConcrete
     Response *setResponse(const std::vector<std::string> &, Information &);
     int getResponse(int responseID, Information &matInformation);
 
-    static void setCreepOn(void);
-    static void setCreepOff(void);
-    static void setCreepDt(const double &);
-    static double getCreepDt(void);
   };
-
-  inline void set_creep_on(void)
-    { TDConcrete::setCreepOn(); }
-  inline void set_creep_off(void)
-    { TDConcrete::setCreepOff(); }
-  inline void set_creep_dt(const double &d)
-    { TDConcrete::setCreepDt(d); }
-  inline double get_creep_dt(void)
-    { return TDConcrete::getCreepDt(); }
 
 } // end of XC namespace
 

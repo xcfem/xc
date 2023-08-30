@@ -43,23 +43,32 @@ class_<XC::Concrete02, bases<XC::RawConcrete>, boost::noncopyable >("Concrete02"
 
 class_<XC::Concrete04, bases<XC::ConcreteBase>, boost::noncopyable >("Concrete04", no_init);
 
-class_<XC::TDConcrete, bases<XC::RawConcrete>, boost::noncopyable >("TDConcrete", no_init)
+class_<XC::TDConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("TDConcreteBase", no_init)
+  .add_property("ft", &XC::TDConcreteBase::getFt,  &XC::TDConcreteBase::setFt,"tensile strength.")
+  .add_property("Ec", &XC::TDConcreteBase::getEc,  &XC::TDConcreteBase::setEc,"concrete stiffness.")
+  .add_property("Et", &XC::TDConcreteBase::getEt,  &XC::TDConcreteBase::setEt,"concrete current stiffness.")
+  .add_property("age", &XC::TDConcreteBase::getAge,  &XC::TDConcreteBase::setAge, "concrete age.")
+  .add_property("beta", &XC::TDConcreteBase::getBeta,  &XC::TDConcreteBase::setBeta,"concrete beta parameter.")
+  .add_property("tcast", &XC::TDConcreteBase::getTCast,  &XC::TDConcreteBase::setTCast,"tcast.")
+  .def("setCreepOn", &XC::TDConcreteBase::setCreepOn,"Activate creep.").staticmethod("setCreepOn")
+  .def("setCreepOff", &XC::TDConcreteBase::setCreepOff,"Deactivate creep.").staticmethod("setCreepOff")
+  .def("getCreepDt", &XC::TDConcreteBase::getCreepDt,"Get time increment for creep.").staticmethod("getCreepDt")
+  .def("setCreepDt", &XC::TDConcreteBase::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
+  ;
+
+class_<XC::TDConcrete, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcrete", no_init)
   .def("setup", &XC::TDConcrete::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
-  .add_property("ft", &XC::TDConcrete::getFt,  &XC::TDConcrete::setFt,"tensile strength.")
-  .add_property("Ec", &XC::TDConcrete::getEc,  &XC::TDConcrete::setEc,"concrete stiffness.")
-  .add_property("beta", &XC::TDConcrete::getBeta,  &XC::TDConcrete::setBeta,"concrete beta parameter.")
   .add_property("epsshu", &XC::TDConcrete::getUltimateShrinkage,  &XC::TDConcrete::setUltimateShrinkage,"ultimate shrinkage.")
   .add_property("epssha", &XC::TDConcrete::getShrinkageParameter,  &XC::TDConcrete::setShrinkageParameter,"shrinkage parameter.")
   .add_property("tcr", &XC::TDConcrete::getCreepRelationshipAge,  &XC::TDConcrete::setCreepRelationshipAge,"creep relationship age.")
   .add_property("epscru", &XC::TDConcrete::getUltimateConcreteCreep,  &XC::TDConcrete::setUltimateConcreteCreep,"ultimate concrete creep.")
   .add_property("epscra", &XC::TDConcrete::getCreepExponentParameter,  &XC::TDConcrete::setCreepExponentParameter,"creep exponent parameter.")
   .add_property("epscrd", &XC::TDConcrete::getCreepDParameter,  &XC::TDConcrete::setCreepDParameter,"creep d parameter.")
-  .add_property("tcast", &XC::TDConcrete::getTCast,  &XC::TDConcrete::setTCast,"tcast.")
-  .add_property("Et", &XC::TDConcrete::getEt,  &XC::TDConcrete::setEt,"concrete current stiffness.")
-  .def("setCreepOn", &XC::TDConcrete::setCreepOn,"Activate creep.").staticmethod("setCreepOn")
-  .def("setCreepOff", &XC::TDConcrete::setCreepOff,"Deactivate creep.").staticmethod("setCreepOff")
-  .def("getCreepDt", &XC::TDConcrete::getCreepDt,"Get time increment for creep.").staticmethod("getCreepDt")
-  .def("setCreepDt", &XC::TDConcrete::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
   ;
 
+class_<XC::TDConcreteMC10, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcreteMC10", no_init)
+  .def("setup", &XC::TDConcreteMC10::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
+  ;
+class_<XC::TDConcreteMC10NL, bases<XC::TDConcreteMC10>, boost::noncopyable >("TDConcreteMC10NL", no_init)
+  ;
 
