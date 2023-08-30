@@ -506,13 +506,16 @@ class Envelope(object):
         self.negative= [1.0e23]*size
         
     def __str__(self):
-        retval= str(self.yValues)+'\n'
-        retval+= str(self.positive)+'\n'
-        retval+= str(self.negative)+'\n'
+        retval= 'yi= '+str(self.yValues)+'\n'
+        retval+= 'maxima: '+str(self.positive)+'\n'
+        retval+= 'minima: '+str(self.negative)+'\n'
         return retval
       
-    def update(self,values):
-        '''Update envelopes.'''
+    def update(self, values):
+        '''Update envelopes.
+
+        :param values: values to update the current envelope.
+        '''
         self.positive= [max(l1, l2) for l1, l2 in zip(self.positive, values)]
         self.negative= [min(l1, l2) for l1, l2 in zip(self.negative, values)]
         
@@ -1718,12 +1721,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         rotation= 1e15
         rotationComb= ''
         y= self.getStemYCoordinates()
-        envelopeNd= Envelope(y)
-        envelopeMd= Envelope(y)
-        envelopeVd= Envelope(y)
-        envelopeNdHeel= Envelope([0.0])
-        envelopeMdHeel= Envelope([0.0])
-        envelopeVdHeel= Envelope([0.0])
+        envelopeNd= Envelope(yValues= y)
+        envelopeMd= Envelope(yValues= y)
+        envelopeVd= Envelope(yValues= y)
+        envelopeNdHeel= Envelope(yValues= [0.0])
+        envelopeMdHeel= Envelope(yValues= [0.0])
+        envelopeVdHeel= Envelope(yValues= [0.0])
         for comb in combinations:
             reactions= self.resultComb(comb)
             if(__debug__):
@@ -1744,22 +1747,18 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         :param combinations: load combinations to use in the analysis.
         '''
         y= self.getStemYCoordinates()
-        envelopeNd= Envelope(y)
-        envelopeMd= Envelope(y)
-        envelopeVd= Envelope(y)
-        envelopeNdHeel= Envelope([0.0])
-        envelopeMdHeel= Envelope([0.0])
-        envelopeVdHeel= Envelope([0.0])
+        envelopeNd= Envelope(yValues= y)
+        envelopeMd= Envelope(yValues= y)
+        envelopeVd= Envelope(yValues= y)
+        envelopeNdHeel= Envelope(yValues= [0.0])
+        envelopeMdHeel= Envelope(yValues= [0.0])
+        envelopeVdHeel= Envelope(yValues= [0.0])
         for comb in combinations:
             reactions= self.resultComb(comb)
             if(__debug__):
                 if(not reactions):
                     AssertionError('Can\'t obtain the reactions.')
             envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel)
-        internalForces= InternalForces(y,envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel)
+        internalForces= InternalForces(y, envelopeNd, envelopeMd, envelopeVd, envelopeNdHeel, envelopeMdHeel, envelopeVdHeel)
         self.uls_results= WallULSResults(internalForces)
         return self.uls_results
-
-        
-
-
