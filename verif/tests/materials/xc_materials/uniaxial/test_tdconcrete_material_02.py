@@ -145,21 +145,23 @@ errorForces= math.sqrt(errorForces)
 avgConcreteStress/=len(concreteStresses)
 avgSteelStress/=len(steelStresses)
 
-# lastConcreteStress= concreteStresses[-1]
-# lastSteelStress= steelStresses[-1]
+lastConcreteStress= concreteStresses[-1]
+lastSteelStress= steelStresses[-1]
 
-ratio1= abs(avgConcreteStress+0.005977563268594735)/0.005977563268594735
-ratio2= abs(avgSteelStress+0.31399043381957703)/0.31399043381957703
+avgConcreteStressRef= 0.005974877488588469
+ratio1= abs(avgConcreteStress+avgConcreteStressRef)/avgConcreteStressRef
+avgSteelStressRef= 0.31414889483994685
+ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
 '''
 print('time: ', ti)
 print('concrete stresses: ', concreteStresses)
 print('steel stresses: ', steelStresses)
-print('Reactions= ', reactions)
+# print('Reactions= ', reactions)
 print(errorDt)
 print(errorForces)
-print('average concrete stress: ', avgConcreteStress, ratio1)
-print('average steel stress: ', avgSteelStress, ratio2)
+print('average concrete stress: ', avgConcreteStress, avgConcreteStressRef, ratio1)
+print('average steel stress: ', avgSteelStress, avgSteelStressRef, ratio2)
 print('time: ', modelSpace.getCurrentTime(), 'days')
 print('last concrete stress: ', lastConcreteStress*1e3, 'MPa')
 print('last steel stress: ', lastSteelStress*1e3, 'MPa')
