@@ -66,9 +66,27 @@ class_<XC::TDConcrete, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcre
   .add_property("epscrd", &XC::TDConcrete::getCreepDParameter,  &XC::TDConcrete::setCreepDParameter,"creep d parameter.")
   ;
 
-class_<XC::TDConcreteMC10, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcreteMC10", no_init)
-  .def("setup", &XC::TDConcreteMC10::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
+class_<XC::TDConcreteMC10Base, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcreteMC10Base", no_init)
+  .add_property("Ecm", &XC::TDConcreteMC10Base::getEcm, &XC::TDConcreteMC10Base::setEcm, "28-day modulus, necessary for normalizing creep coefficient.")
+
+  .add_property("epsba", &XC::TDConcreteMC10Base::getEpsba, &XC::TDConcreteMC10Base::setEpsba, "ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010")
+  .add_property("epsbb", &XC::TDConcreteMC10Base::getEpsbb, &XC::TDConcreteMC10Base::setEpsbb, "fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
+  .add_property("epsda", &XC::TDConcreteMC10Base::getEpsda, &XC::TDConcreteMC10Base::setEpsda, "product of εcds,0 and βRH, as per Model Code 2010.")
+  .add_property("epsdb", &XC::TDConcreteMC10Base::getEpsdb, &XC::TDConcreteMC10Base::setEpsdb, "fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
+
+  .add_property("phiba", &XC::TDConcreteMC10Base::getPhiba, &XC::TDConcreteMC10Base::setPhiba, "parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.")
+  .add_property("phibb", &XC::TDConcreteMC10Base::getPhibb, &XC::TDConcreteMC10Base::setPhibb, "fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
+  .add_property("phida", &XC::TDConcreteMC10Base::getPhida, &XC::TDConcreteMC10Base::setPhida, "product of βdc(fcm) and β(RH), as per Model Code 2010.")
+  .add_property("phidb", &XC::TDConcreteMC10Base::getPhidb, &XC::TDConcreteMC10Base::setPhidb, "fitting constant within the drying creep time evolution function as per Model Code 2010.")
+
+  .add_property("cem", &XC::TDConcreteMC10Base::getCem, &XC::TDConcreteMC10Base::setCem, "coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.")
   ;
+
+class_<XC::TDConcreteMC10, bases<XC::TDConcreteMC10Base>, boost::noncopyable >("TDConcreteMC10", no_init)
+  .def("setup", &XC::TDConcreteMC10::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
+
+  ;
+
 class_<XC::TDConcreteMC10NL, bases<XC::TDConcreteMC10>, boost::noncopyable >("TDConcreteMC10NL", no_init)
   ;
 

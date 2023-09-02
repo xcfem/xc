@@ -122,9 +122,21 @@ XC::TDConcrete::TDConcrete(int tag)
   {}
 
 //! @brief Constructor.
+//! @param _fpc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
+//! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+//! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
+//! @param _beta: tension softening parameter.
+//! @param _age: analysis time at initiation of drying (in days).
+//! @param _epsshu: ultimate shrinkage strain εsh,u, as per ACI 209R-92.
+//! @param _epssha: fitting parameter within the shrinkage time evolution function as per ACI 209R-92.
+//! @param _tcr: creep model age in days.
+//! @param _epscru: ultimate creep coefficient φu, as per ACI 209R-92.
+//! @param _epscra: fitting constant within the creep time evolution function as per ACI 209R-92.
+//! @param _epscrd: fitting constant within the creep time evolution function as per ACI 209R-92.
+//! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
 XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast)
   : TDConcreteBase(tag, MAT_TAG_TDConcrete, _fpc, _ft, _Ec, _beta, _age, _tcast),
-    tcr(_tcr), epsshu(_epsshu), epssha(_epssha), epscra(_epscra), epscru(_epscru), epscrd(_epscrd)
+    tcr(_tcr), epsshu(_epsshu), epssha(_epssha), epscru(_epscru), epscrd(_epscrd), epscra(_epscra)
   {
     setup_parameters();
   }

@@ -323,10 +323,10 @@ int XC::TDConcreteMC10NL::commitState(void)
 	  epsP_crb = eps_crb; //ntosic
 	  epsP_crd = eps_crd; //ntosic
 	  epsP_m = eps_m;
-	  //ntosic: strain compression limit changed to 0.4fc/Ec; Include nonlinear creep coefficient?
-      if (eps_m < 0 && fabs(eps_m)>0.40*fabs(fc/Ec)) {
-	  double s = fabs(eps_m/fc)*Ec;
-	  s = 0.4*fabs(fc/Ec);
+	  //ntosic: strain compression limit changed to 0.4fpc/Ec; Include nonlinear creep coefficient?
+      if (eps_m < 0 && fabs(eps_m)>0.40*fabs(fpc/Ec)) {
+	  double s = fabs(eps_m/fpc)*Ec;
+	  s = 0.4*fabs(fpc/Ec);
 	  std::cerr << "Strain Compression Limit Exceeded: " << eps_m << ' ' << -s << std::endl;
       }
 		  //Cracking flags:
@@ -429,7 +429,7 @@ void XC::TDConcreteMC10NL::Compr_Envlp(double epsc, double &sigc, double &Ect)
     /*-----------------------------------------------------------------------
     ! monotonic envelope of concrete in compression (negative envelope)
     !
-    !   fc    = concrete compressive strength
+    !   fpc    = concrete compressive strength
     !   fcu   = stress at ultimate (crushing) strain
     !   epscu = ultimate (crushing) strain
     !   Ec0   = initial concrete tangent modulus
@@ -441,12 +441,12 @@ void XC::TDConcreteMC10NL::Compr_Envlp(double epsc, double &sigc, double &Ect)
     -----------------------------------------------------------------------*/
 
     const double &Ec0= Ec; //ntosic
-    const double epsc0 = 2.0*fc / Ec0; //ntosic
+    const double epsc0 = 2.0*fpc / Ec0; //ntosic
 
     const double ratLocal = epsc / epsc0;
     if(epsc >= epsc0)
       {
-	    sigc = fc * ratLocal*(2.0 - ratLocal);
+	    sigc = fpc * ratLocal*(2.0 - ratLocal);
 	    Ect = Ec0 * (1.0 - ratLocal);
       }
     else
@@ -454,8 +454,8 @@ void XC::TDConcreteMC10NL::Compr_Envlp(double epsc, double &sigc, double &Ect)
 	//   linear descending branch between epsc0 and epscu
 	if(epsc > epscu)
 	  {
-		sigc = (fcu - fc)*(epsc - epsc0) / (epscu - epsc0) + fc;
-		Ect = (fcu - fc) / (epscu - epsc0);
+		sigc = (fcu - fpc)*(epsc - epsc0) / (epscu - epsc0) + fpc;
+		Ect = (fcu - fpc) / (epscu - epsc0);
 	  }
 	else
 	  {

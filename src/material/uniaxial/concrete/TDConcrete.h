@@ -96,12 +96,12 @@ class TDConcrete : public TDConcreteBase
   private:
     // matpar : Concrete FIXED PROPERTIES
     //	double fcT; // Time Dependent Strength
-    double tcr; //!< creep relationship age
-    double epsshu; //!< ultimate shrinkage
-    double epssha; //!< shrinkage parameter
-    double epscra; //!< concrete creep exponent parameter
-    double epscru; //!< ultimate concrete creep
-    double epscrd;
+    double tcr; //!< creep model age in days.
+    double epsshu; //!< ultimate shrinkage strain εsh,u, as per ACI 209R-92
+    double epssha; //!< fitting parameter within the shrinkage time evolution function as per ACI 209R-92.
+    double epscru; //!< ultimate creep coefficient φu, as per ACI 209R-92.
+    double epscra; //!< concrete creep exponent fitting constant as per ACI 209R-92.
+    double epscrd; //!< fitting constant within the creep time evolution function as per ACI 209R-92
 
     //Added by AMK:
     double eps_cr;

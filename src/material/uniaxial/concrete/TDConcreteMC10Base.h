@@ -56,19 +56,16 @@ class TDConcreteMC10Base : public TDConcreteBase
   {
   protected:
     // matpar : Concrete FIXED PROPERTIES
-    double fc; //!< concrete compression strength           : mp(1)
-    double epsc0; //!< strain at compression strength          : mp(2)
-    double epscu; //!< ultimate (crushing) strain              : mp(4)       
-    double Ecm; //! 28-day modulus, necessary for normalizing creep coefficient
-    double epsba; //ntosic
-    double epsbb; //ntosic
-    double epsda; //ntosic
-    double epsdb; //ntosic
-    double phiba; //ntosic
-    double phibb; //ntosic
-    double phida; //ntosic
-    double phidb; //ntosic
-    double cem; //ntosic
+    double Ecm; //! 28-day modulus, necessary for normalizing creep coefficient.
+    double epsba; //!< ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010
+    double epsbb; //!< fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    double epsda; //!< product of εcds,0 and βRH, as per Model Code 2010.
+    double epsdb; //!< fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    double phiba; //!< parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+    double phibb; //!< fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    double phida; //!< product of βdc(fcm) and β(RH), as per Model Code 2010.
+    double phidb; //!< fitting constant within the drying creep time evolution function as per Model Code 2010.
+    double cem; //!< coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
 
     // hstv : Concrete HISTORY VARIABLES  current step
 	
@@ -98,6 +95,30 @@ class TDConcreteMC10Base : public TDConcreteBase
     TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
     void setup_parameters(void);
 
+    double getEcm(void) const;
+    void setEcm(const double &);
+
+    double getEpsba(void) const;
+    void setEpsba(const double &);
+    double getEpsbb(void) const;
+    void setEpsbb(const double &);
+    double getEpsda(void) const;
+    void setEpsda(const double &);
+    double getEpsdb(void) const;
+    void setEpsdb(const double &);
+
+    double getPhiba(void) const;
+    void setPhiba(const double &);
+    double getPhibb(void) const;
+    void setPhibb(const double &);
+    double getPhida(void) const;
+    void setPhida(const double &);
+    double getPhidb(void) const;
+    void setPhidb(const double &);
+
+    double getCem(void) const;
+    void setCem(const double &);
+    
     double getPHIB_i(void) const; //Added by AMK //ntosic: split into basic and drying creep
     double getPHID_i(void) const; //Added by AMK //ntosic: split into basic and drying creep
     double getCreepBasic(void) const; //Added by AMK //ntosic: split into basic and drying creep

@@ -158,6 +158,12 @@ XC::TDConcreteBase::TDConcreteBase(int tag, int classTag)
   : RawConcrete(tag, classTag) {}
 
 //! @brief Constructor.
+//! @param _fpc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
+//! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+//! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
+//! @param _beta: tension softening parameter.
+//! @param _age: analysis time at initiation of drying (in days).
+//! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
 XC::TDConcreteBase::TDConcreteBase(int tag, int classTag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _tcast): 
   RawConcrete(tag, classTag, _fpc, 0.0, 0.0),
   ft(_ft), Ec(_Ec), age(_age), beta(_beta), tcast(_tcast)

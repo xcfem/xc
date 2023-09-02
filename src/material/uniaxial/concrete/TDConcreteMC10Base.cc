@@ -70,7 +70,6 @@ void XC::TDConcreteMC10Base::setup_parameters(void)
     epsP_m = 0.0; //Added by AMK
 	
     //Change inputs into the proper sign convention: ntosic: changed
-    fc = -1.0*fabs(fc); 
     epsba = -1.0*fabs(epsba);
     epsda = -1.0*fabs(epsda);
     phiba = 1.0*fabs(phiba);
@@ -94,13 +93,110 @@ XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag)
   {}
 
 //! @brief Constructor.
+//! @param _fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
+//! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+//! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
+//! @param _Ecm: 28-day modulus, necessary for normalizing creep coefficient.
+//! @param _beta: tension softening parameter.
+//! @param _age: analysis time at initiation of drying (in days).
+//! @param _epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
+//! @param _epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+//! @param _epsda: product of εcds,0 and βRH, as per Model Code 2010.
+//! @param _epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+//! @param _phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+//! @param _phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+//! @param _phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
+//! @param _phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
+//! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+//! @param _cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
 XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
   : TDConcreteBase(tag, classTag, _fc, _ft, _Ec, _beta, _age, _tcast),
-  fc(_fc), Ecm(_Ecm), epsba(_epsba), epsbb(_epsbb), epsda(_epsda), epsdb(_epsdb), phiba(_phiba), phibb(_phibb), phida(_phida), phidb(_phidb), cem(_cem)
+  Ecm(_Ecm), epsba(_epsba), epsbb(_epsbb), epsda(_epsda), epsdb(_epsdb), phiba(_phiba), phibb(_phibb), phida(_phida), phidb(_phidb), cem(_cem)
   {
     setup_parameters();
   }
 
+//! @brief Get 28-day modulus, necessary for normalizing creep coefficient.
+double XC::TDConcreteMC10Base::getEcm(void) const
+  { return Ecm; }
+
+//! @brief Set 28-day modulus, necessary for normalizing creep coefficient.
+void XC::TDConcreteMC10Base::setEcm(const double &d)
+  { Ecm= d; }
+
+
+//! @brief Get ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010
+double XC::TDConcreteMC10Base::getEpsba(void) const
+  { return epsba; }
+
+//! @brief Set ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010
+void XC::TDConcreteMC10Base::setEpsba(const double &d)
+  { epsba= d; }
+
+//! @brief Get fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+double XC::TDConcreteMC10Base::getEpsbb(void) const
+  { return epsbb; }
+
+//! @brief Set fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+void XC::TDConcreteMC10Base::setEpsbb(const double &d)
+  { epsbb= d; }
+
+//! @brief Get the value of epsda: product of εcds,0 and βRH, as per Model Code 2010.
+double XC::TDConcreteMC10Base::getEpsda(void) const
+  { return epsda; }
+
+//! @brief Set the value of epsda: product of εcds,0 and βRH, as per Model Code 2010.
+void XC::TDConcreteMC10Base::setEpsda(const double &d)
+  { epsda= d; }
+
+//! @brief Get fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+double XC::TDConcreteMC10Base::getEpsdb(void) const
+  { return epsdb; }
+
+//! @brief Set fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+void XC::TDConcreteMC10Base::setEpsdb(const double &d)
+  { epsdb= d; }
+
+
+//! @brief Get parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+double XC::TDConcreteMC10Base::getPhiba(void) const
+  { return phiba; }
+
+//! @brief Set parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+void XC::TDConcreteMC10Base::setPhiba(const double &d)
+  { phiba= d; }
+
+//! @brief Get fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+double XC::TDConcreteMC10Base::getPhibb(void) const
+  { return phibb; }
+
+//! @brief Set fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+void XC::TDConcreteMC10Base::setPhibb(const double &d)
+  { phibb= d; }
+
+//! @brief Get product of βdc(fcm) and β(RH), as per Model Code 2010
+double XC::TDConcreteMC10Base::getPhida(void) const
+  { return phida; }
+
+//! @brief Set product of βdc(fcm) and β(RH), as per Model Code 2010
+void XC::TDConcreteMC10Base::setPhida(const double &d)
+  { phida= d; }
+
+//! @brief Get fitting constant within the drying creep time evolution function as per Model Code 2010.
+double XC::TDConcreteMC10Base::getPhidb(void) const
+  { return phidb; }
+
+//! @brief Set fitting constant within the drying creep time evolution function as per Model Code 2010.
+void XC::TDConcreteMC10Base::setPhidb(const double &d)
+  { phidb= d; }
+
+//! @brief Get coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+double XC::TDConcreteMC10Base::getCem(void) const
+  { return cem; }
+
+//! @brief Set coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+void XC::TDConcreteMC10Base::setCem(const double &d)
+  { cem= d; }
 
 //ntosic
 double XC::TDConcreteMC10Base::setPhiBasic(double time, double tp)

@@ -66,8 +66,8 @@ class TDConcreteBase : public RawConcrete
     // double EcT; //Time dependent stiffness
     double age; //!< concrete age at first loading, Added by AMK
     double sigCr; //!< stress that creep curve is based on
-    double beta;
-    double tcast;
+    double beta; //!< tension softening parameter
+    double tcast; //!< the analysis time corresponding to concrete casting in days
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
     double ecminP; //!<  hstP(1)

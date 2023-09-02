@@ -27,9 +27,6 @@ mm = 1
 GPa = kN/mm**2
 MPa = 0.001*GPa
  
-Es = 200*GPa
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",Es)
- 
 Ec = 25*GPa # concrete modulus of elasticity
 fc = -28*MPa # concrete compressive strength (compression is negative)
 ft = 3*MPa # concrete tensile strength (tension is positive)
@@ -59,7 +56,7 @@ error+= (tdConcrete.epscrd-psicr2)**2 # 11
 error+= (tdConcrete.tcast-tcast)**2 # 12
 error= math.sqrt(error)
 
-# Check Et value.
+# Check Et value (setup() has been called).
 ratio0= abs(tdConcrete.Et-Ec)/Ec
 
 import os
