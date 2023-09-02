@@ -88,5 +88,6 @@ class_<XC::TDConcreteMC10, bases<XC::TDConcreteMC10Base>, boost::noncopyable >("
   ;
 
 class_<XC::TDConcreteMC10NL, bases<XC::TDConcreteMC10>, boost::noncopyable >("TDConcreteMC10NL", no_init)
+  .add_property("fcu", &XC::TDConcreteMC10NL::getFcu, &XC::TDConcreteMC10NL::setFcu, "stress at ultimate (crushing) strain.")
   ;
 

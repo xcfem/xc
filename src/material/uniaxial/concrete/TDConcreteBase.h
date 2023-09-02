@@ -58,7 +58,6 @@ class TDConcreteBase : public RawConcrete
   protected:
     // matpar : Concrete FIXED PROPERTIES
     //	double fcT; // Time Dependent Strength
-    double fcu; //!< stress at ultimate (crushing) strain    : mp(3)
     double ft; //!< concrete tensile strength               : mp(6)
     // double ftT;	//Time dependent strength (tension)
     double Ets; //!< tension stiffening slope                : mp(7)

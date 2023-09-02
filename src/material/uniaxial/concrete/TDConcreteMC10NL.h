@@ -93,16 +93,22 @@ namespace XC {
 class TDConcreteMC10NL : public TDConcreteMC10Base
   {
   private:
+    double fcu; //!< stress at ultimate (crushing) strain.
+    
     void Tens_Envlp (double epsc, double &sigc, double &Ect);
     void Compr_Envlp (double epsc, double &sigc, double &Ect);
   public:
     TDConcreteMC10NL(int tag= 0);
     TDConcreteMC10NL(int tag, double _fc, double _fcu, double _espcu, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
+    void setup_parameters(void);
 
     virtual ~TDConcreteMC10NL(void);
 
     UniaxialMaterial *getCopy(void) const;
 
+    double getFcu(void) const;
+    void setFcu(const double &);
+    
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double setCreepBasicStrain(double time, double stress); //Added by AMK //ntosic: split into basic and drying creep
     double setCreepDryingStrain(double time, double stress); //Added by AMK //ntosic: split into basic and drying creep

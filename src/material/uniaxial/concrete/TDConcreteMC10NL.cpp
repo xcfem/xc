@@ -87,14 +87,25 @@
 
 #include "TDConcreteMC10NL.h"
 
+//! @brief Sets initial values for the concrete parameters.
+void XC::TDConcreteMC10NL::setup_parameters(void)
+  {
+    TDConcreteMC10Base::setup_parameters();
+
+    //Change inputs into the proper sign convention: ntosic: changed
+    fcu= -1.0*fabs(fcu);
+    epscu= -1.0*fabs(epscu);
+  }
+
 XC::TDConcreteMC10NL::TDConcreteMC10NL(int tag)
   : TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10NL)
   {}
 
 XC::TDConcreteMC10NL::TDConcreteMC10NL(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem): 
-  TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10NL, _fc, _ft, _Ec, _Ecm, _beta, _age, _epsba, _epsbb, _epsda, _epsdb, _phiba, _phibb, _phida, _phidb, _tcast, _cem)
+  TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10NL, _fc, _ft, _Ec, _Ecm, _beta, _age, _epsba, _epsbb, _epsda, _epsdb, _phiba, _phibb, _phida, _phidb, _tcast, _cem), fcu(_fcu)
   {
-    // setup_parameters(); Called in the constructors of derived classes.
+    epscu= _epscu;
+    setup_parameters();
   }
 
 
@@ -106,6 +117,13 @@ XC::TDConcreteMC10NL::~TDConcreteMC10NL(void)
 XC:: UniaxialMaterial *XC::TDConcreteMC10NL::getCopy(void) const
   { return new TDConcreteMC10NL(*this); }
 
+//! @brief Get stress at ultimate (crushing) strain.
+double XC::TDConcreteMC10NL::getFcu(void) const
+  { return fcu; }
+
+//! @brief Set stress at ultimate (crushing) strain.
+void XC::TDConcreteMC10NL::setFcu(const double &d)
+  { fcu= d; }
 
 //ntosic
 double XC::TDConcreteMC10NL::setCreepBasicStrain(double time, double stress)
