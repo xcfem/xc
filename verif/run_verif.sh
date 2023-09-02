@@ -822,16 +822,16 @@ python tests/materials/xc_materials/uniaxial/test_multilinear_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
 python tests/materials/xc_materials/uniaxial/test_viscous_material_01.py
 echo "$BLEU" "      Uniaxial concrete materials tests." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/test_concrete01.py
-python tests/materials/xc_materials/uniaxial/test_concrete02_01.py
-python tests/materials/xc_materials/uniaxial/test_concrete02_02.py
-python tests/materials/xc_materials/uniaxial/test_tdconcrete_material_01.py
-python tests/materials/xc_materials/uniaxial/test_tdconcrete_material_02.py
-python tests/materials/xc_materials/uniaxial/test_tdconcrete_mc10_material_01.py
-python tests/materials/xc_materials/uniaxial/test_HA25_01.py
-python tests/materials/xc_materials/uniaxial/test_HA25_02.py
-python tests/materials/xc_materials/uniaxial/test_HP45_01.py
-python tests/materials/xc_materials/uniaxial/test_HP45_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HA25_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HA25_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HP45_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HP45_02.py
 echo "$BLEU" "      EHE reinforcing steel." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_B400S_01.py
 python tests/materials/xc_materials/uniaxial/test_B400S_02.py
