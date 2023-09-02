@@ -12,6 +12,3 @@ Verifications tests for XC uniaxial material objects.
 - [Series material](https://opensees.berkeley.edu/wiki/index.php/Series_Material)
 - [Parallel material](https://opensees.berkeley.edu/wiki/index.php/Parallel_Material)
 - [Elastic-Perfectly Plastic Material](https://opensees.berkeley.edu/wiki/index.php/Elastic-Perfectly_Plastic_Material)
-- [Concrete Zero](https://portwooddigital.com/2023/07/09/concrete-zero/)
-- [Minimal Creep and Shrinkage Example](https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/)
-- [Supporting documentation for time-dependent concrete material models in OpenSees](https://data.mendeley.com/datasets/z4gxnhchky/4)
