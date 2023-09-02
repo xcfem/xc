@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial test of TDConcreteMC10 material constitutive model.  
+''' Trivial test of TDConcreteMC10NL material constitutive model.  
 
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
@@ -22,17 +22,21 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 fc = -24.80  
+fcu= -2.48
+epscu= -0.00350
 fct= 2.00
 Ec= 22820.0
 Ecm= 24950.0
+wgt= 0.000024
 
 
-# Creep Input from CreepParameters.txt
+# Creep parameters.
 epsba= -0.000046 
 epsbb= 1.0
 epsda= -0.001329
 epsdb= 726.77
 
+# Shrinkage parameters.
 phiba= 0.1379 
 phibb= 1.0 
 phida= 2.544  
@@ -45,24 +49,26 @@ tDry = 14.0
 beta = 0.7 # can be changed (softening parameter)
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, fcu= fcu, epscu= epscu, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
 
 error= (tdConcrete.fpc-fc)**2 # 1
-error+= (tdConcrete.ft-fct)**2 # 2
-error+= (tdConcrete.Ec-Ec)**2 # 3
-error+= (tdConcrete.Ecm-Ecm)**2 # 4
-error+= (tdConcrete.beta-beta)**2 # 5
-error+= (tdConcrete.age-tDry)**2 # 6
-error+= (tdConcrete.epsba-epsba)**2 # 7
-error+= (tdConcrete.epsbb-epsbb)**2 # 8
-error+= (tdConcrete.epsda-epsda)**2 # 9
-error+= (tdConcrete.epsdb-epsdb)**2 # 10
-error+= (tdConcrete.phiba-phiba)**2 # 11
-error+= (tdConcrete.phibb-phibb)**2 # 12
-error+= (tdConcrete.phida-phida)**2 # 13
-error+= (tdConcrete.phidb-phidb)**2 # 14
-error+= (tdConcrete.tcast)**2 # 15
-error+= (tdConcrete.cem-cem)**2 # 15
+error+= (tdConcrete.fcu-fcu)**2 # 2
+error+= (tdConcrete.epscu-epscu)**2 # 3
+error+= (tdConcrete.ft-fct)**2 # 4
+error+= (tdConcrete.Ec-Ec)**2 # 5
+error+= (tdConcrete.Ecm-Ecm)**2 # 6
+error+= (tdConcrete.beta-beta)**2 # 7
+error+= (tdConcrete.age-tDry)**2 # 8
+error+= (tdConcrete.epsba-epsba)**2 # 9
+error+= (tdConcrete.epsbb-epsbb)**2 # 10
+error+= (tdConcrete.epsda-epsda)**2 # 11
+error+= (tdConcrete.epsdb-epsdb)**2 # 12
+error+= (tdConcrete.phiba-phiba)**2 # 13
+error+= (tdConcrete.phibb-phibb)**2 # 14
+error+= (tdConcrete.phida-phida)**2 # 15
+error+= (tdConcrete.phidb-phidb)**2 # 16
+error+= (tdConcrete.tcast)**2 # 17
+error+= (tdConcrete.cem-cem)**2 # 18
 error= math.sqrt(error)
 
 # Check Et value.

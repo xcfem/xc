@@ -828,6 +828,9 @@ python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HA25_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HA25_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HP45_01.py

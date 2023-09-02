@@ -409,6 +409,8 @@ def defTDConcreteMC10NL(preprocessor,name, fc, fcu, epscu, ft, Ec, Ecm, beta, ag
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("tdconcrete_mc10_material",name)
     retval.fpc= fc # concrete compressive strength at 28 days (compression is negative)
+    retval.fcu= fcu # stress at ultimate (crushing) strain.
+    retval.epscu= epscu # strain at crushing strength.
     retval.ft= ft # concrete tensile strength.
     retval.Ec= Ec # concrete stiffness.
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
@@ -425,6 +427,7 @@ def defTDConcreteMC10NL(preprocessor,name, fc, fcu, epscu, ft, Ec, Ecm, beta, ag
     retval.phidb= phidb # fitting constant within the drying creep time evolution function as per Model Code 2010.
     retval.tcast= tcast # analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
     retval.cem= cem # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    retval.setup()
     return retval
 
 #Elastic section 1d.
