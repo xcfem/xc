@@ -367,6 +367,7 @@ HP35= EHEConcrete(nmbConcrete="HP35",fck=-35e6,gammaC=1.5)
 HP40= EHEConcrete(nmbConcrete="HP40",fck=-40e6,gammaC=1.5)
 HP45= EHEConcrete(nmbConcrete="HP45",fck=-45e6,gammaC=1.5)
 HP50= EHEConcrete(nmbConcrete="HP50",fck=-50e6,gammaC=1.5)
+HP55= EHEConcrete(nmbConcrete="HP55",fck=-55e6,gammaC=1.5)
 HP60= EHEConcrete(nmbConcrete="HP60",fck=-60e6,gammaC=1.5)
 
 concrOfName={"HA20":HA20,"HA25":HA25,"HA30":HA30,"HA35":HA35,"HA40":HA40,"HA45":HA45,"HA50":HA50,"HA55":HA55,"HA60":HA60,"HA70":HA70,"HA80":HA80,"HA90":HA90,"HA100":HA100,"HP25":HP25,"HP30":HP30,"HP35":HP35,"HP40":HP40,"HP45":HP45,"HP50":HP50,"HP60":HP60}
