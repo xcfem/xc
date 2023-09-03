@@ -181,7 +181,7 @@ XC::Fiber *XC::FiberPtrDeque::getClosestFiber(const int matTag, const double &yC
 	if((*i)->getMaterial()->getTag()==matTag)
 	  {
 	    dy = (*i)->getLocY()-yCoord;
-	    closestDist = fabs(dy);
+	    closestDist = dy*dy;
 	    retval= *i;
 	    break;
 	  }
@@ -192,7 +192,7 @@ XC::Fiber *XC::FiberPtrDeque::getClosestFiber(const int matTag, const double &yC
 	if((*i)->getMaterial()->getTag()==matTag)
 	  {
 	    dy= (*i)->getLocY()-yCoord;
-	    distance= fabs(dy);
+	    distance= dy*dy;
 	    if(distance < closestDist)
 	      {
 		closestDist = distance;

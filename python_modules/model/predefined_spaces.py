@@ -320,6 +320,13 @@ class PredefinedSpace(object):
     #     mesh= self.preprocessor.getDomain.getMesh
     #     return mesh.removeElement(eTag)
     
+    def newNodeX(self, x):
+        ''' Create a new node.
+
+        :param x: x coordinate for the new node.
+        '''
+        return self.getNodeHandler().newNodeX(x)
+    
     def newNodeXY(self, x, y):
         ''' Create a new node.
 
@@ -384,6 +391,22 @@ class PredefinedSpace(object):
         ''' Return the preprocessor material handler.'''
         return self.preprocessor.getMaterialHandler
 
+    def setCreepOn(self):
+        ''' Activates creep for TD concrete materials.'''
+        self.getMaterialHandler().setCreepOn()
+
+    def setCreepOff(self):
+        ''' Deactivates creep for TD concrete materials.'''
+        self.getMaterialHandler().setCreepOff()
+
+    def setCreepDt(self, dt):
+        ''' Set the creep gime increment for TD concrete materials.'''
+        self.getMaterialHandler().setCreepDt(dt)
+
+    def getCreepDt(self):
+        ''' get the creep gime increment for TD concrete materials.'''
+        return self.getMaterialHandler().getCreepDt()
+
     def conciliaNDivs(self):
         '''Conciliate the number of divisions of the lines.'''
         return self.preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
@@ -408,6 +431,13 @@ class PredefinedSpace(object):
     def getCurrentTime(self):
         ''' Return the value of the current pseudo-time.'''
         return self.preprocessor.getDomain.currentTime
+
+    def setCurrentTime(self, t):
+        ''' Set the value of the current pseudo-time.
+
+        :parma t: time to set.
+        '''
+        self.preprocessor.getDomain.currentTime= t
 
     def getCommittedTime(self):
         ''' Return the value of the committed pseudo-time.'''
@@ -893,6 +923,15 @@ class PredefinedSpace(object):
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''
         self.preprocessor.getDomain.removeAllLoadPatterns()
+
+    def removeAllLoadsAndCombinationsFromDomain(self):
+        ''' Remove all the load patterns and load combinations from the
+            domain.'''
+        self.preprocessor.getDomain.removeAllLoadsAndCombinations()
+
+    def clearCombinationsFromLoadHandler(self):
+        ''' Remove the combinations currently defined in the load handler.'''
+        self.getLoadHandler().getLoadCombinations.clear()
 
     def getActiveLoadPatterns(self):
         ''' Return a list of the active load patterns.'''
@@ -1444,6 +1483,35 @@ def getModelSpace(preprocessor: xc.Preprocessor):
       dimSpace= nodes.dimSpace
       numDOFs= nodes.numDOFs
       return PredefinedSpace(nodes,dimSpace,numDOFs)
+  
+class SolidMechanics1D(PredefinedSpace):
+    def __init__(self, nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
+        '''Defines the dimension of the space: nodes by two coordinates (x,y) 
+         and two DOF for each node (Ux,Uy)
+
+         :param nodes: preprocessor nodes handler
+         :param solProcType: type of the solution procedure.
+        '''
+        super(SolidMechanics1D,self).__init__(nodes, dimSpace= 1, numDOFs= 1, solProcType= solProcType)
+        self.Ux= 0 # Displacement components
+        self.epsilon_11= 0 # Strain components
+        self.sigma_11= 0 # Stress components
+ 
+    def newNode(self, x):
+        ''' Create a new node.
+
+        :param x: x coordinate for the new node.
+        '''
+        return super(SolidMechanics1D,self).newNodeX(x)
+    
+    def fixNode0(self, nodeTag: int, restrainedNodeId: str= None):
+        '''Restrain both node DOFs (i. e. make them zero).
+
+         :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
+        '''
+        self.fixNode('0', nodeTag, restrainedNodeId)
 
 class SolidMechanics2D(PredefinedSpace):
     def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):

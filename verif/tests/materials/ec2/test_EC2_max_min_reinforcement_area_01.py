@@ -21,13 +21,20 @@ from materials.ec2 import EC2_limit_state_checking
 # Cross-section geometry
 b= .3 # beam width.
 h= .3 # beam depth.
-
+effectiveCover= 35e-3
 # Materials.
 concrete= EC2_materials.C25
 steel= EC2_materials.S500C
 
 # Design bending moment
 MEd= 70e3 
+
+# EC2:2004 7.3.2 Minimum reinforcement areas
+Act= b*h/2.0
+d= h-effectiveCover
+AsMinCrackControl= EC2_limit_state_checking.getAsMinCrackControl(concrete= concrete, reinfSteel= steel, h= h, Act= Act, sigmaC= 0.0)
+refAsMinCrackControl= 0.92e-4
+ratio0= abs(AsMinCrackControl-refAsMinCrackControl)/refAsMinCrackControl
 
 # EC2:2004 9.2.1.1 Minimum reinforcement area for beams
 # h: section depth.
@@ -45,6 +52,9 @@ refAsMaxBeams= 0.04*300*300/1e6
 ratio2= abs(AsMaxBeams-refAsMaxBeams)/refAsMaxBeams
 
 '''
+print('  Crack control minimum reinforcement (EC2:2004 7.3.2): ', AsMinCrackControl*1e6, 'mm2')
+print('Reference value: ', refAsMinCrackControl*1e6, 'mm2')
+print('ratio0= ', ratio0)
 print('Minimum reinforcement for beams (EC2:2004 9.2.1.1 -Spanish annex-): ', AsMinBeams*1e6, 'mm2')
 print('Reference value: ', refAsMinBeams*1e6, 'mm2')
 print('ratio1= ', ratio1)
@@ -56,7 +66,7 @@ print('ratio2= ', ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-3) and (ratio2<1e-6):
+if (ratio0<1e-2) and (ratio1<1e-3) and (ratio2<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

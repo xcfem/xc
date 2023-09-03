@@ -36,9 +36,10 @@ class CantileverRetainingWallGeometry(object):
     :ivar footingThickness: (float) Thickness of the footing.
     :ivar bToe: (float) Toe length.
     :ivar bHeel: (float) Heel length.
+    :ivar jointSpacing: joint spacing (defaults to 7.0 m).
     '''
 
-    def __init__(self,name= 'prb', stemHeight= 2.5, stemBottomWidth=0.25,stemTopWidth=0.25, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, stemBackSlope= 0.0):
+    def __init__(self,name= 'prb', stemHeight= 2.5, stemBottomWidth=0.25, stemTopWidth=0.25, footingThickness= 0.25, bToe= 0.5, bHeel= 1.0, stemBackSlope= 0.0, jointSpacing= 7.0):
         '''Constructor 
 
         :param name: (string) Identifier.
@@ -49,6 +50,7 @@ class CantileverRetainingWallGeometry(object):
         :param bToe: (float) Toe length.
         :param bHeel: (float) Heel length.
         :param stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
+        :param jointSpacing: joint spacing (defaults to 7.0 m).
         '''
         self.name= name
         self.stemHeight= stemHeight
@@ -60,6 +62,7 @@ class CantileverRetainingWallGeometry(object):
         self.bHeel= bHeel
         self.stemTopPosition= geom.Pos2d(0.0,0.0) # Default position of stem top.
         self.stemBackSteps= None # No steps in the stem back face by default.
+        self.jointSpacing= jointSpacing
 
     def defaultDimensions(self,totalHeight):
         '''Computes default dimension from the total height.'''
@@ -79,9 +82,30 @@ class CantileverRetainingWallGeometry(object):
         '''Return total width of the footing.'''
         return self.bToe+self.stemBottomWidth+self.bHeel
     
-    def getDepth(self,y):
-        '''Return stem section depth for height "y").'''
-        return (self.stemBottomWidth-self.stemTopWidth)/self.stemHeight*y+self.stemTopWidth
+    def getSectionDepth(self, y):
+        '''Return stem section depth for height "y").
+
+        :param y: height of the section measured from the stem top.
+        '''
+        retval= self.stemTopWidth
+        if(self.stemBackSteps):
+            for step in self.stemBackSteps:
+                if(y>step[0]): # if depth greater than depth of the step
+                    retval+= step[1] # increment section thickness.
+                if(y<step[0]): # if depth smaller than depth of the step  
+                    break; # we have finished -> stop.
+            if(self.stemBackSlope!=0):
+                retval+= y*self.stemBackSlope
+        else:
+            retval+= (self.stemBottomWidth-self.stemTopWidth)/self.stemHeight*y
+        return retval
+    
+    def getYStem(self, h):
+        ''' Return the depth corresponding to the height argument.
+
+        :param hCoupe: height with respect to the footing top surface.
+        '''
+        return self.stemHeight-h
       
     def setStemBackSteps(self, steps):
         ''' Set the step in the stem back defined as a list of (depth, width)
@@ -224,17 +248,18 @@ class CantileverRetainingWallGeometry(object):
         remainingHeight= self.stemHeight
         stepPoints= list()
         if(self.stemBackSteps):
+            numSteps= len(self.stemBackSteps)
             for step in self.stemBackSteps:
-                depth= step[0]
+                depthIncrement= step[0]+currentDepth
+                currentDepth-= depthIncrement
                 width= step[1]
-                currentDepth-= depth
-                stemWidthIncrement+= depth*self.stemBackSlope
+                stemWidthIncrement+= depthIncrement*self.stemBackSlope
                 stemBackPointA= stemOutsideTop+geom.Vector2d(stemWidthIncrement, currentDepth)
                 stemWidthIncrement+= width
-                stemBackPointB= stemBackPointA+geom.Vector2d(stemWidthIncrement, 0.0)
-                remainingHeight-= depth
+                stemBackPointB= stemBackPointA+geom.Vector2d(width, 0.0)
                 stepPoints.append(stemBackPointA)
                 stepPoints.append(stemBackPointB)
+                remainingHeight-= depthIncrement
             stepPoints.reverse() # from bottom to top.
             stemOutsideBottom= stemOutsideTop+geom.Vector2d(stemWidthIncrement+remainingHeight*self.stemBackSlope,-self.stemHeight)
         else:

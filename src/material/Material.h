@@ -76,7 +76,7 @@ namespace XC {
 class Information;
 class Response;
 class MaterialHandler;
-class Element;
+class Domain;
 class ID;
 
 //!  @defgroup Mat Material models (constitutive equations).
@@ -97,8 +97,8 @@ class Material: public TaggedObject, public MovableObject
 
     const MaterialHandler *getMaterialHandler(void) const;
     MaterialHandler *getMaterialHandler(void);
-    const Element *getElement(void) const;
-    Element *getElement(void);
+    const Domain *getDomain(void) const;
+    Domain *getDomain(void);
     std::string getName(void) const;
     const Material *getMaterialByName(const std::string &) const;    
 

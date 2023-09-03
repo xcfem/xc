@@ -691,7 +691,19 @@ void XC::Domain::removeLoadCombination(LoadCombination *comb)
       }
   }
 
-//! @brief Remove from domain todos los load patterns.
+//! @brief Remove all the load combinations currently in activeCombinations.
+void XC::Domain::removeAllLoadCombinations(void)
+  { activeCombinations.clear(); }
+
+//! @brief Remove all the load patterns and load combinations currently
+//! in this domain.
+void XC::Domain::removeAllLoadsAndCombinations(void)
+  {
+    this->removeAllLoadCombinations();
+    this->removeAllLoadPatterns();
+  }
+
+//! @brief Remove all the load patterns from this domain.
 void XC::Domain::removeLPs(void)
   {
     int numSPs= constraints.removeLPs();

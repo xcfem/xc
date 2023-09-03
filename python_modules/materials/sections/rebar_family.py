@@ -146,7 +146,7 @@ class RebarFamily(RebarRow):
         :param thickness: height of the rectangular section.
         :param z: inner lever arm (if None z= 0.9*d).
         '''
-        return ng_simple_bending_reinforcement.Mu(As= self.getAs(), fcd= concrete.fcd(), fsd= self.steel.fyd(), b= b, d= self.d(thickness), z= z, c_depth= concrete.getCDepth())
+        return ng_simple_bending_reinforcement.Mu(As= self.getAs(width= b), fcd= concrete.fcd(), fsd= self.steel.fyd(), b= b, d= self.d(thickness), z= z, c_depth= concrete.getCDepth())
       
     def d(self, thickness):
         ''' Return the effective depth of the reinforcement.
@@ -170,6 +170,17 @@ class RebarFamily(RebarRow):
         outputFile.write("  diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
         reinfDevelopment= self.getBasicAnchorageLength(concrete)
         outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
+    
+    def writeRebars(self, outputFile, concrete, AsMin):
+        '''Write rebar family data.
+ 
+        :param outputFile: output file.
+        :param concrete: concrete object.
+        :param AsMin: minimum required reinforcement area.
+        '''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
+        writeF(outputFile,"  F(As)", self.getAs()/AsMin)
         
 class FamNBars(RebarFamily):
     ''' Family of "n" rebars.
@@ -288,13 +299,20 @@ class DoubleRebarFamily(object):
         return self.f1.__repr__() + " + " + self.f2.__repr__()
     def getCopy(self):
         return DoubleRebarFamily(self.f1.getCopy(),self.f2.getCopy())
-    def getAs(self):
-      ''' Return the total area of the bars.'''
-      return self.f1.getAs()+self.f2.getAs()
-    def getSpacing(self):
-        ''' Return the average spacing of the bars.'''
-        n1= self.f1.getAs()/self.f1.getBarArea()
-        n2= self.f2.getAs()/self.f2.getBarArea()
+    def getAs(self, width= 1.0):
+      ''' Return the total area of the bars.
+
+      :param width: width of the reinforcement.
+      '''
+      return self.f1.getAs(width= width)+self.f2.getAs(width= width)
+  
+    def getSpacing(self, width= 1.0):
+        ''' Return the average spacing of the bars.
+
+        :param width: width of the reinforcement.
+        '''
+        n1= self.f1.getAs(width= width)/self.f1.getBarArea()
+        n2= self.f2.getAs(width= width)/self.f2.getBarArea()
         return 1/(n1+n2)
     def getEffectiveCover(self):
         ''' returns the effective cover of the rebar family.
@@ -314,34 +332,42 @@ class DoubleRebarFamily(object):
         l1= self.f1.getBasicAnchorageLength(concrete)
         l2= self.f2.getBasicAnchorageLength(concrete)
         return max(l1,l2)
-    def getMinReinfAreaUnderFlexion(self,concrete,thickness):
+    
+    def getMinReinfAreaInBending(self, concrete, thickness, memberType):
         '''Return the minimun amount of bonded reinforcement to control cracking
-           for reinforced concrete sections under flexion.
+           for reinforced concrete sections under bending.
 
         :param concrete: concrete material.
         :param thickness: thickness of the bended member.
+        :param memberType: type of member (slab, wall,...).
         '''
-        retval= self.f1.getMinReinfAreaUnderFlexion(concrete= concrete,thickness= thickness)
+        retval= self.f1.getMinReinfAreaInBending(concrete= concrete,thickness= thickness, memberType= memberType)
         return retval
-    def getMinReinfAreaUnderTension(self,concrete,thickness):
+    
+    def getMinReinfAreaInTension(self, concrete, thickness, memberType):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
         :param concrete: concrete material.
         :param thickness: thickness of the tensioned member.
+        :param memberType: type of member (slab, wall,...).
         '''
-        retval= self.f1.getMinReinfAreaUnderTension(concrete= concrete,thickness= thickness)
-        return retval
-    def getMR(self,concrete,b,thickness):
+        return self.f1.getMinReinfAreaInTension(concrete= concrete, thickness= thickness, memberType= memberType)
+    
+    def getMR(self, concrete, b, thickness, z= None):
         '''Return the bending resistance of the (b x thickness) rectangular section.
 
         :param concrete: concrete material.
         :param b: width of the rectangular section.
         :param thickness: height of the rectangular section.
+        :param z: inner lever arm (if None z= 0.9*d).
         '''
-        MR1= self.f1.getMR(concrete,b,thickness)
-        MR2= self.f2.getMR(concrete,b,thickness)
-        return MR1+MR2
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; not implemented yet.\n')
+        MR1= self.f1.getMR(concrete= concrete, b= b, thickness= thickness, z= z)
+        MR2= self.f2.getMR(concrete= concrete, b= b, thickness= thickness, z= z)
+        return max(MR1,MR2)
     
     def d(self,thickness):
         return thickness-self.getEffectiveCover()
@@ -356,6 +382,17 @@ class DoubleRebarFamily(object):
     def writeDef(self,outputFile,concrete):
         self.f1.writeDef(outputFile,concrete)
         self.f2.writeDef(outputFile,concrete)
+        
+    def writeRebars(self, outputFile, concrete, AsMin):
+        '''Write rebar family data.
+
+        :param outputFile: output file.
+        :param concrete: concrete material.
+        :param AsMin: minimum amount of reinforcement.
+        '''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
+        writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 def writeF(outputFile,text,F):
     fmt= "{:4.2f}"

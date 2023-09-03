@@ -16,8 +16,8 @@ from materials.sections import rebar_family
 from rough_calculations import ng_rc_section as rc
 
 beton= EC2_materials.C30
-acier= EC2_materials.S500B
-A10_15= EC2_limit_state_checking.EC2RebarFamily(acier,10e-3,0.15,0.05)
+steel= EC2_materials.S500B
+A10_15= EC2_limit_state_checking.EC2RebarFamily(steel,10e-3,0.15,0.05)
 
 
 section= rc.RCSection(A10_15,beton,1.0,0.3)

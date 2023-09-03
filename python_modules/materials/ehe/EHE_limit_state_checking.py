@@ -2061,51 +2061,70 @@ class EHERebarFamily(rf.RebarFamily):
       rebarController= self.getRebarController()
       return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
   
-    def getMinReinfAreaUnderFlexion(self, thickness, b= 1.0, type= 'slab', concrete= None):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, steelStressLimit= 450e6, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clause 42.3.5. 
 
+        :param concrete: concrete material.
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param b: width of concrete section.
-        :param type: member type; slab, wall, beam or column.
-        :param concrete: concrete material.
+        :param memberType: member type; slab, wall, beam, column, etc.
+        :param steelStressLimit: maximum stress permitted in the reinforcement 
+                                 immediately after formation of the crack. This
+                                 may be taken as the yield strength of the 
+                                 reinforcement, fyk. A lower value may, 
+                                 however, be needed to satisfy the crack width 
+                                 limits according to the maximum bar size or
+                                 spacing.
         '''
         retval= 4e-3*thickness*b
         fy= self.steel.fyk
-        limit= 450e6
-        if(type=='slab'):
-            retval= thickness # b= 1
+        limit= min(450e6, steelStressLimit)
+        if(memberType=='slab'):
+            retval= thickness*b
             if(fy<limit):
                 retval*= 2e-3
             else:
                 retval*= 1.8e-3
-        elif(type=='wall'):
-            retval= thickness # b= 1
+        elif(memberType=='wall' or memberType=='short_wall'):
+            retval= thickness*b
             if(fy<limit):
                 retval*= 1.2e-3
             else:
                 retval*= 0.98e-3
-        elif(type=='beam'):
+        elif(memberType=='beam'):
             retval= thickness*b
             if(fy<limit):
                 retval*= 3.3e-3
             else:
                 retval*= 2.8e-3
-        elif(type=='column'):
+        elif(memberType=='column'):
             retval= 4e-3*thickness*b
+        elif(memberType=='footing'): # see remark (1) in table 42.3.5
+            retval= thickness*b
+            if(fy<limit):
+                retval*= 1e-3
+            else:
+                retval*= 0.9e-3
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"; member type: " + str(memberType) + " not implemented.\n"
+            lmsg.error(errMsg)
         return retval
 
-    def getMinReinfAreaUnderTension(self,thickness, b= 1.0, concrete= None):
+    def getMinReinfAreaInTension(self, concrete, thickness, b= 1.0, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
+        :param concrete: concrete material.
         :param thickness: gross thickness of concrete section.
         :param b: width of concrete section.
-        :param concrete: concrete material.
+        :param memberType: member type; slab, wall, beam, column, etc.
         '''
-        retval= min(thickness,0.5)*b # see talbe 42.3.5 remarks.
+        retval= min(thickness,0.5)*b # see table 42.3.5 remarks.
         fy= self.steel.fyk
         limit= 450e6
         if(fy<limit):
@@ -2127,12 +2146,6 @@ class EHERebarFamily(rf.RebarFamily):
         retval= getFcvEH91(concrete.fcd())*b*0.9*thickness
         return retval
 
-    
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
     ''' Creates a dictionary with predefined rebar families.

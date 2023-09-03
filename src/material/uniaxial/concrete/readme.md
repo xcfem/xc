@@ -6,6 +6,7 @@ Uniaxial materials for concrete modelization.
  - [Making Sense Out of Concrete02](https://portwooddigital.com/2021/08/22/making-sense-out-of-concrete02/)
  - [Concrete02 with Control of the Initial Stiffness](https://portwooddigital.com/2021/11/06/concrete02-with-control-of-the-initial-stiffness/)
  - [Minimal Creep and Shrinkage Example](https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/)
+ - [Supporting documentation for time-dependent concrete material models in OpenSees](https://data.mendeley.com/datasets/z4gxnhchky/4)
 
 ### Design codes
  - [Eurocode 2](https://eurocodes.jrc.ec.europa.eu/showpage.php?id=132)

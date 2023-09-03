@@ -64,7 +64,7 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
-#include "domain/mesh/element/Element.h"
+#include "domain/domain/Domain.h"
 
 //! @param matName: name of the material.
 const XC::Material *XC::Material::getMaterialByName(const std::string &matName) const
@@ -107,7 +107,7 @@ const XC::MaterialHandler *XC::Material::getMaterialHandler(void) const
 //! @brief Returns a pointer to the material handler (if possible).
 XC::MaterialHandler *XC::Material::getMaterialHandler(void)
   {
-    XC::MaterialHandler *retval= dynamic_cast<MaterialHandler *>(Owner());
+    MaterialHandler *retval= dynamic_cast<MaterialHandler *>(Owner());
     if(!retval)
       std::cerr << "Material::" << __FUNCTION__
 	        << "; material handler not defined." << std::endl;
@@ -115,22 +115,28 @@ XC::MaterialHandler *XC::Material::getMaterialHandler(void)
   }
 
 //! @brief Returns (if possible) a pointer to the material handler (owner).
-const XC::Element *XC::Material::getElement(void) const
+const XC::Domain *XC::Material::getDomain(void) const
   {
-    const Element *retval= dynamic_cast<const Element *>(Owner());
+    const Domain *retval= nullptr;
+    const MaterialHandler *mHandler= this->getMaterialHandler();
+    if(mHandler)
+      retval= mHandler->getDomain();
     if(!retval)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; no connection with owner element." << std::endl;
+	        << "; no connection with problem domain." << std::endl;
     return retval;
   }
 
 //! @brief Returns a pointer to the material handler (if possible).
-XC::Element *XC::Material::getElement(void)
+XC::Domain *XC::Material::getDomain(void)
   {
-    XC::Element *retval= dynamic_cast<Element *>(Owner());
+    Domain *retval= nullptr;
+    MaterialHandler *mHandler= this->getMaterialHandler();
+    if(mHandler)
+      retval= mHandler->getDomain();
     if(!retval)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; no connection with owner element." << std::endl;
+	        << "; no connection with problem domain." << std::endl;
     return retval;
   }
 

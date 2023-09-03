@@ -71,6 +71,12 @@ wall.stemHeight= stemHeight
 wall.bToe= bToe
 wall.bHeel= bHeel
 wall.concrete= concrete
+
+#    ___     _       __                              _   
+#   | _ \___(_)_ _  / _|___ _ _ __ ___ _ __  ___ _ _| |_ 
+#   |   / -_) | ' \|  _/ _ \ '_/ _/ -_) '  \/ -_) ' \  _|
+#   |_|_\___|_|_||_|_| \___/_| \__\___|_|_|_\___|_||_\__|
+#                                                      
 wall.stemReinforcement.setReinforcement(1, reinf_types['A12_15'].getCopy())  # vert. trasdós (esperas)
 wall.stemReinforcement.setReinforcement(2, reinf_types['A12_15'].getCopy()) # vert. trasdós (contacto terreno)
 wall.stemReinforcement.setReinforcement(6, reinf_types['A12_15'].getCopy())  # coronación
@@ -95,11 +101,20 @@ preprocessor= wallFEModel.getPreprocessor
 totalSet= preprocessor.getSets.getSet("total")
 
 
+#      _      _   _             
+#     /_\  __| |_(_)___ _ _  ___
+#    / _ \/ _|  _| / _ \ ' \(_-<
+#   /_/ \_\__|\__|_\___/_||_/__/
 #Actions.
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
 loadCaseNames= ['selfWeight','earthPress','earthPressAcc']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
+#        ___                                 _             _   _             
+#       | _ \___ _ _ _ __  __ _ _ _  ___ _ _| |_   __ _ __| |_(_)___ _ _  ___
+#       |  _/ -_) '_| '  \/ _` | ' \/ -_) ' \  _| / _` / _|  _| / _ \ ' \(_-<
+#       |_| \___|_| |_|_|_\__,_|_||_\___|_||_\__| \__,_\__|\__|_\___/_||_/__/
+#                                                                          
 ## Self weight.
 selfWeight= loadCaseManager.setCurrentLoadCase('selfWeight')
 wall.createSelfWeightLoads(rho= concrete.density(),grav= gravity)
@@ -117,6 +132,11 @@ zGroundFrontFill= zGroundBackfill-wall.stemHeight+frontFillDepth #Front fill
 frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFrontFill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createFrontFillPressures(frontFillPressureModel)
 
+#        _         _    _         _        _           _   _             
+#       /_\  __ __(_)__| |___ _ _| |_ __ _| |  __ _ __| |_(_)___ _ _  ___
+#      / _ \/ _/ _| / _` / -_) ' \  _/ _` | | / _` / _|  _| / _ \ ' \(_-<
+#     /_/ \_\__\__|_\__,_\___|_||_\__\__,_|_| \__,_\__|\__|_\___/_||_/__/
+#                                                                        
 ## Accidental: earth pressure failure drainage system.
 gSoil= backfillSoilModel.rho*gravity
 earthPressAcc= loadCaseManager.setCurrentLoadCase('earthPressAcc')
@@ -160,11 +180,11 @@ wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
 
 topFootingDesignBendingMoment= wall.footingReinforcement.wallGeom.internalForcesULS.MdFooting.getAbsMaximum()
-topFootingDesignBendingMomentRef= 21.705458372202553e3 # Reference value.
+topFootingDesignBendingMomentRef= 24.75757323965488e3 # Reference value.
 ratio1= abs(topFootingDesignBendingMoment-topFootingDesignBendingMomentRef)/topFootingDesignBendingMomentRef
 
 topFootingDesignShear= wall.footingReinforcement.wallGeom.internalForcesULS.VdFooting.getAbsMaximum()
-topFootingDesignShearRef= -9.046326414323536e3
+topFootingDesignShearRef= -22.170936174257868e3
 ratio2= abs(topFootingDesignShear-topFootingDesignShearRef)/abs(topFootingDesignShearRef)
 
 # Check RC sections using XC standard routines.
@@ -198,9 +218,11 @@ for e in wall.wallSet.elements:
 ratio3= abs(maxCF-0.28555840533609295)/0.28555840533609295
 
 '''
-print('top footing design bending moment: ', topFootingDesignBendingMoment/1e3)
+print('top footing design bending moment (reference value): ', topFootingDesignBendingMomentRef/1e3,'kN.m/m')
+print('top footing design bending moment (computed value): ',topFootingDesignBendingMoment/1e3,'kN.m/m')
 print('ratio1= ', ratio1)
-print('top footing design shear: ', topFootingDesignShear/1e3)
+print('top footing design shear (reference value): ', topFootingDesignShearRef/1e3,'kN/m')
+print('top footing design shear (reference value): ', topFootingDesignShear/1e3,'kN/m')
 print('ratio2= ', ratio2)
 print('maximum efficiency: ', maxCF)
 print('ratio3= ', ratio3)

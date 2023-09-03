@@ -37,7 +37,6 @@ class_<XC::Fiber,XC::Fiber*, bases<XC::TaggedObject>, boost::noncopyable >("Fibe
   .def("isDead",&XC::Fiber::isDead)
   .def("isAlive",&XC::Fiber::isAlive)
   .def("kill",&XC::Fiber::kill)
-
   .def("alive",&XC::Fiber::alive)
 
   .def("getFiberLocation",&XC::Fiber::getFiberLocation)
@@ -69,12 +68,14 @@ XC::Matrix &(XC::FiberPtrDeque::*getHomogenizedSectionITensor)(const double &) c
 XC::Matrix &(XC::FiberPtrDeque::*getHomogenizedSectionITensorRelToPoint)(const double &,const Pos2d &) const= &XC::FiberPtrDeque::getIHomogenizedSection;
 double (XC::FiberPtrDeque::*getHomogenizedSectionIRelTo)(const double &,const Pos2d &,const XC::Vector &) const= &XC::FiberPtrDeque::getIHomogenizedSection;
 double (XC::FiberPtrDeque::*getHomogenizedSectionIRelToLine)(const double &, const Line2d &) const= &XC::FiberPtrDeque::getIHomogenizedSection;
+XC::Fiber *(XC::FiberPtrDeque::*findFiberFromTag)(const int &)= &XC::FiberPtrDeque::findFiber;
 class_<XC::FiberPtrDeque, bases<CommandEntity,fiber_ptrs_dq>, boost::noncopyable >("FiberPtrDeque", no_init)
 //.def("__iter__", boost::python::iterator<XC::FiberPtrDeque >())
   .def("insert",&XC::FiberPtrDeque::push_back,"inserts fiber pointer.")
   .def("empty",&XC::FiberPtrDeque::empty,"Return true if there are no fibers.")
   .def("clear",&XC::FiberPtrDeque::clear,"Removes all the fibers.")
   .def("getNumFibers",&XC::FiberPtrDeque::getNumFibers)
+  .def("findFiber", make_function(findFiberFromTag,return_internal_reference<>()),"findFiber(tag): return the fiber identified by the tag argument")
   .def("getCenterOfMassY",&XC::FiberPtrDeque::getCenterOfMassY,return_value_policy<copy_const_reference>())
   .def("getCenterOfMassZ",&XC::FiberPtrDeque::getCenterOfMassZ,return_value_policy<copy_const_reference>())
   .def("getCenterOfMass",&XC::FiberPtrDeque::getCenterOfMass)

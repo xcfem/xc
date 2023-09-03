@@ -103,7 +103,7 @@ el.vector2dUniformLoadGlobal(loadVector)
 
 
 loadHandler= preprocessor.getLoadHandler
-loadHandler.addToDomain("0") # Append load pattern to domain.
+loadHandler.addToDomain(lp0.name) # Append load pattern to domain.
 
 # Solution procedure
 analysis= predefined_solutions.plain_newton_raphson(feProblem)

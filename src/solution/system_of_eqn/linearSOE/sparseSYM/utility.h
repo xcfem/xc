@@ -44,6 +44,10 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Function:  clear_real
  * =====================
@@ -137,6 +141,9 @@ void  move_real(double *from, double *to, int n);
 int  icomp( int *p1, int *p2 );
 int  fcomp( float *p1, float *p2 );
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

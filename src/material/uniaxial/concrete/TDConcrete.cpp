@@ -92,55 +92,51 @@
 #include <boost/algorithm/string.hpp>
 #include "domain/mesh/element/Element.h"
 
-int XC::TDConcrete::creepControl= 0;
-double XC::TDConcrete::creepDt= 0.0;
-
 //! @brief Sets initial values for the concrete parameters.
 void XC::TDConcrete::setup_parameters(void)
   {
-    ecminP = 0.0;
-    deptP = 0.0;
-
-    sigCr= fabs(sigCr);
-    eP = Ec; //Added by AMK
-    epsP = 0.0;
-    sigP = 0.0;
-    eps = 0.0;
-    sig = 0.0;
-    e = Ec; //Added by AMK
-    Et = Ec;
-    count = 0; //Added by AMK
-    epsInit = 0.0; //Added by AMK
-    sigInit = 0.0; //Added by AMK
-    eps_total = 0.0; //Added by AMK
-    epsP_total = 0.0; //Added by AMK
-
-    eps_m = 0.0; //Added by AMK
+    TDConcreteBase::setup_parameters();
+    
     eps_cr = 0.0; //Added by AMK
     eps_sh = 0.0;
     epsP_cr = 0.0; //Added by AMK
     epsP_sh = 0.0; 
     epsP_m = 0.0; //Added by AMK
 
-    t_load = -1.0; //Added by AMK
-    crack_flag = 0;
-    iter = 0;
-        
     //Change inputs into the proper sign convention:
-    fpc = -1.0*fabs(fpc); 
     epsshu = -1.0*fabs(epsshu);
     epscru = 1.0*fabs(epscru); 
   }
-  
+
+size_t XC::TDConcrete::resize(void)
+  {
+    const size_t newSize= TDConcreteBase::resize();
+    if(newSize!=PHI_i.size()) // restart.
+      { PHI_i.resize(newSize); }
+    return newSize;
+  }
+
 //! @brief Constructor.
-XC::TDConcrete::TDConcrete(int tag):
-  RawConcrete(tag, MAT_TAG_TDConcrete)
+XC::TDConcrete::TDConcrete(int tag)
+  : TDConcreteBase(tag, MAT_TAG_TDConcrete)
   {}
 
 //! @brief Constructor.
-XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast): 
-  RawConcrete(tag, MAT_TAG_TDConcrete, _fpc, 0.0, 0.0),
-  tcr(_tcr), ft(_ft), Ec(_Ec), age(_age), epsshu(_epsshu), epssha(_epssha), epscra(_epscra), epscru(_epscru), beta(_beta), epscrd(_epscrd), tcast(_tcast)
+//! @param _fpc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
+//! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+//! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
+//! @param _beta: tension softening parameter.
+//! @param _age: analysis time at initiation of drying (in days).
+//! @param _epsshu: ultimate shrinkage strain εsh,u, as per ACI 209R-92.
+//! @param _epssha: fitting parameter within the shrinkage time evolution function as per ACI 209R-92.
+//! @param _tcr: creep model age in days.
+//! @param _epscru: ultimate creep coefficient φu, as per ACI 209R-92.
+//! @param _epscra: fitting constant within the creep time evolution function as per ACI 209R-92.
+//! @param _epscrd: fitting constant within the creep time evolution function as per ACI 209R-92.
+//! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast)
+  : TDConcreteBase(tag, MAT_TAG_TDConcrete, _fpc, _ft, _Ec, _beta, _age, _tcast),
+    tcr(_tcr), epsshu(_epsshu), epssha(_epssha), epscru(_epscru), epscrd(_epscrd), epscra(_epscra)
   {
     setup_parameters();
   }
@@ -153,25 +149,6 @@ XC::TDConcrete::~TDConcrete(void)
 XC::UniaxialMaterial *XC::TDConcrete::getCopy(void) const
   { return new TDConcrete(*this); }
 
-double XC::TDConcrete::getInitialTangent(void) const
-  {
-        return Ec; //Added by AMK
-  }
-
-double XC::TDConcrete::getCurrentTime(void) const
-  {
-    double currentTime= -1.0;
-
-    const Element *elem= this->getElement();
-    if(elem)
-      {
-        const Domain *theDomain= elem->getDomain();
-        if(theDomain)
-	  { currentTime = theDomain->getCurrentTime(); }
-      }
-    return currentTime;
-  }    
-
 double XC::TDConcrete::setCreepStrain(double time, double stress)
   {
     double creep;
@@ -179,10 +156,11 @@ double XC::TDConcrete::setCreepStrain(double time, double stress)
     
     DTIME_i[count] = creepDt;
     
-    for (int i = 1; i<=count; i++) {
-                PHI_i[i] = setPhi(time,TIME_i[i]); //Determine PHI
-                runSum += PHI_i[i]*DSIG_i[i]/Ec; //CONSTANT STRESS within Time interval
-    }
+    for (int i = 1; i<=count; i++)
+      {
+        PHI_i[i] = setPhi(time,TIME_i[i]); //Determine PHI
+        runSum += PHI_i[i]*DSIG_i[i]/Ec; //CONSTANT STRESS within Time interval
+      }
     
     phi_i = PHI_i[count];
     creep = runSum;
@@ -225,38 +203,43 @@ int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
     
         // Need to initialize count and initial stress/strain:
     /*
-    if(creep == 0) {
-                count = 0;
-        } else if(creepControl==1 && count == 0){
-                count = 1;
-    }
+    if(creep == 0)
+      { count= 0; }
+    else if(creepControl==1 && count == 0)
+      { count= 1; }
+    resize();
     */
         
         // Check casting age:
-        if(t-tcast<(2.0-0.0001)) { //Assumed that concrete can only carry load once hardened at 2 days following casting
+        if(t-tcast<(2.0-0.0001))
+	  { //Assumed that concrete can only carry load once hardened at 2 days following casting
                 eps_cr = 0.0;
                 eps_sh = 0.0;
                 eps_m = 0.0;
                 eps_total = trialStrain;
                 sig = 0.0;
-        } else { // Concrete has hardened and is ready to accept load
-                // Initialize total strain:
-                eps_total = trialStrain;
+          }
+	else
+	  { // Concrete has hardened and is ready to accept load
+            // Initialize total strain:
+            eps_total = trialStrain;
         
-                // Calculate shrinkage Strain:
-            if(iter < 1) {
-                eps_sh = setShrink(t);
-            }
-
+            // Calculate shrinkage Strain:
+            if(iter < 1)
+	      { eps_sh = setShrink(t); }
             // Calculate creep and mechanical strain, assuming stress remains constant in a time step:
-            if(creepControl == 1) {
-                if(fabs(t-TIME_i[count]) <= 0.0001) { //If t = t(i-1), use creep/shrinkage from last calculated time step
+            if(creepControl == 1)
+	      {
+                if(fabs(t-TIME_i[count]) <= 0.0001)
+		  { //If t = t(i-1), use creep/shrinkage from last calculated time step
                     eps_cr = epsP_cr;
                     eps_sh = epsP_sh;
                     eps_m = eps_total - eps_cr - eps_sh;
                     sig = setStress(eps_m, e);
             
-                } else { // if the current calculation is a new time step
+                  }
+		else
+		  { // if the current calculation is a new time step
                         //if(crackP_flag == 1 && sigP >= 0.0) { //if cracking occurs and previous stress is positive, 
                         // creep strain should not increase
                         //        eps_cr = epsP_cr;
@@ -270,32 +253,32 @@ int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
                         //        eps_m = eps_total - eps_cr - eps_sh;
                         //        sig = setStress(eps_m, e);
                         //} else {        
-                if(iter < 1) {
-                    eps_cr = setCreepStrain(t,sig); 
-                }
-                        eps_m = eps_total - eps_cr - eps_sh;
-                        sig = setStress(eps_m, e);
-                        //}
-                }
-            } else { //Static Analysis using previously converged time-dependent strains
-                    eps_cr = epsP_cr;
-                    eps_sh = epsP_sh;
-                    eps_m = eps_total-eps_cr-eps_sh;
+                    if(iter < 1)
+		      { eps_cr = setCreepStrain(t,sig); }
+                    eps_m = eps_total - eps_cr - eps_sh;
                     sig = setStress(eps_m, e);
-            }
+                        //}
+                  }
+              }
+	    else // no more creep no more shrinkage.
+	      { //Static Analysis using previously converged time-dependent strains
+                eps_cr = epsP_cr;
+                eps_sh = epsP_sh;
+                eps_m = eps_total-eps_cr-eps_sh;
+                sig = setStress(eps_m, e);
+	      }
                 //
                 //std::cerr<<"\n   eps_cr = "<<eps_cr;
                 //std::cerr<<"\n   eps_sh = "<<eps_sh;
                 //std::cerr<<"\n   eps_m = "<<eps_m;
                 //std::cerr<<"\n   sig = "<<sig;
         }
-    iter ++;
-        return 0;
-}
+    iter++;
+    return 0;
+  }
 
-double
-XC::TDConcrete::setStress(double strain, double &stiff)
-{
+double XC::TDConcrete::setStress(double strain, double &stiff)
+  {
 // Determine proper load path (comp load, comp unload, tens load, tens unload):
     double stress=0.0;
     crack_flag = crackP_flag;
@@ -335,25 +318,9 @@ XC::TDConcrete::setStress(double strain, double &stiff)
     return stress;
 }
 
-double XC::TDConcrete::getStrain(void) const
-  {
-        return eps_total; //Added by AMK
-  //return eps;
-  }
-
 double XC::TDConcrete::getPHI_i(void) const
   {
         return phi_i;
-  }
-
-double XC::TDConcrete::getStress(void) const
-  {
-        return sig;
-  }
-
-double XC::TDConcrete::getTangent(void) const
-  {
-        return e;
   }
 
 double XC::TDConcrete::getCreep(void) const
@@ -363,60 +330,6 @@ double XC::TDConcrete::getShrink(void) const
   {
         return eps_sh;
   }
-
-double XC::TDConcrete::getMech(void) const
-  {
-        return eps_m;
-  }
-
-//! @brief Assigns concrete tensile strength.
-void XC::TDConcrete::setFt(const double &d)
-  {
-    ft= d;
-    if(ft < 0.0)
-      {
-        ft= -ft;
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Warning!, tensile strength must be positive."
-		  << std::endl;
-      }
-  }
-
-//! @brief Returns concrete tensile strength.
-double XC::TDConcrete::getFt(void) const
-  { return ft; }
-
-//! @brief Assigns concrete stiffness.
-void XC::TDConcrete::setEc(const double &d)
-  { Ec= d; }
-
-//! @brief Returns concrete stiffness.
-double XC::TDConcrete::getEc(void) const
-  { return Ec; }
-
-//! @brief Assign current concrete stiffness.
-void XC::TDConcrete::setEt(const double &d)
-  { Et= d; }
-
-//! @brief Returns current concrete stiffness.
-double XC::TDConcrete::getEt(void) const
-  { return Et; }
-
-//! @brief Assigns beta.
-void XC::TDConcrete::setBeta(const double &d)
-  { beta= d; }
-
-//! @brief Returns beta.
-double XC::TDConcrete::getBeta(void) const
-  { return beta; }
-
-//! @brief Assigns age.
-void XC::TDConcrete::setAge(const double &d)
-  { age= d; }
-
-//! @brief Returns age.
-double XC::TDConcrete::getAge(void) const
-  { return age; }
 
 //! @brief Assigns ultimate shrinkage.
 void XC::TDConcrete::setUltimateShrinkage(const double &d)
@@ -466,163 +379,149 @@ void XC::TDConcrete::setCreepDParameter(const double &d)
 double XC::TDConcrete::getCreepDParameter(void) const
   { return epscrd; }
 
-//! @brief Assign tcast.
-void XC::TDConcrete::setTCast(const double &d)
-  { tcast= d; }
-
-//! @brief Return tcast.
-double XC::TDConcrete::getTCast(void) const
-  { return tcast; }
-
 int XC::TDConcrete::commitState(void)
   {
-  iter = 0;
-  ecminP = ecmin;
-  ecmaxP = ecmax;
-  deptP = dept;
-  
-  dsig_i[count]=sig-sigP;
-  /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-sigP;*/
-  //if(crack_flag == 1) {// DSIG_i will be different depending on how the fiber is cracked
-  //        if(sig < 0 && sigP > 0) { //if current step puts concrete from tension to compression, DSIG_i will be only the comp. stress
-  //                DSIG_i[count+1] = sig;
-  //        }
-  //        if(sig > 0) {// Concrete should not creep when crack is opened
-  //                DSIG_i[count+1] = 0.0;
-  //        }
-  //        if(sig > 0 && sigP < 0) {//if current step goes from compression to tension, DSIG_i will be the stress difference
-  //                DSIG_i[count+1] = sig-sigP;
-  //        }
-  //} else { //concrete is uncracked, DSIG = sig - sigP
-  //        DSIG_i[count+1] = sig-sigP;
-  //}
-  DSIG_i[count+1] = sig-sigP;
-  
-  //Secant Stiffness for determination of creep strain:
-      if(fabs(eps_m/sig)>Ec) {
-          E_i[count+1] = Ec;
-      } else {
-          E_i[count+1] = fabs(sig/eps_m); //ADDED 7/22
-      }
-  
-      if(isnan(E_i[count+1])) {
-          E_i[count+1] = Ec;
-      }
-  
-  
-  TIME_i[count+1] = getCurrentTime();
-    
-  eP = e;
-  sigP = sig;
-  epsP = eps;
-        
- //Added by AMK:
-        epsP_total = eps_total; //Added by AMK;
+    iter = 0;
+    ecminP = ecmin;
+    ecmaxP = ecmax;
+    deptP = dept;
+
+    dsig_i[count]=sig-sigP;
+    /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-sigP;*/
+    //if(crack_flag == 1) {// DSIG_i will be different depending on how the fiber is cracked
+    //        if(sig < 0 && sigP > 0) { //if current step puts concrete from tension to compression, DSIG_i will be only the comp. stress
+    //                DSIG_i[count+1] = sig;
+    //        }
+    //        if(sig > 0) {// Concrete should not creep when crack is opened
+    //                DSIG_i[count+1] = 0.0;
+    //        }
+    //        if(sig > 0 && sigP < 0) {//if current step goes from compression to tension, DSIG_i will be the stress difference
+    //                DSIG_i[count+1] = sig-sigP;
+    //        }
+    //} else { //concrete is uncracked, DSIG = sig - sigP
+    //        DSIG_i[count+1] = sig-sigP;
+    //}
+    DSIG_i[count+1] = sig-sigP;
+
+    //Secant Stiffness for determination of creep strain:
+    if(fabs(eps_m/sig)>Ec)
+      { E_i[count+1] = Ec; }
+    else
+      { E_i[count+1] = fabs(sig/eps_m); } //ADDED 7/22
+
+    if(isnan(E_i[count+1]))
+      { E_i[count+1] = Ec; }
+
+    TIME_i[count+1] = getCurrentTime();
+
+    eP = e;
+    sigP = sig;
+    epsP = eps;
+
+    //Added by AMK:
+    epsP_total = eps_total; //Added by AMK;
     epsP_sh = eps_sh;
-        epsP_cr = eps_cr;
-        epsP_m = eps_m;
-    if(eps_m < 0 && fabs(eps_m)>0.50*fabs(fpc/Ec)) {
-        double s = fabs(eps_m/fpc)*Ec;
-        s = 0.5*fabs(fpc/Ec);
-        std::cerr << "Strain Compression Limit Exceeded: " << eps_m << ' ' << -s << std::endl;
-    }
-        
-        //Cracking flags:
-                crackP_flag = crack_flag;
-                
-        //cracked reloading/unloading stiffness:
-        if(crackP_flag==1) {
-                if(sig/eps_m<Et) {
-                        Et = sig/eps_m;
-                }
-        }
-        
-        if(count==0) {
-                epsInit = epsP_total;
-                sigInit = sigP;
-        }
-        
-        if(sigInit<0.0 && t_load<0.0) {
-                t_load = getCurrentTime();
-                sigInit = sigP;
-                epsInit = epsP_m;
-        } else if(sigInit>0.0 && sigP<0.0 && t_load<0.0) {
-                t_load = getCurrentTime();
-                sigInit = sigP;
-                epsInit = epsP_m;
-        }
-        
-        //if(creepControl==1) {
-        //        count++;
-        //}
-        count++;
-        
-  return 0;
-}
+    epsP_cr = eps_cr;
+    epsP_m = eps_m;
+    if(eps_m < 0 && fabs(eps_m)>0.50*fabs(fpc/Ec))
+      {
+	double s = fabs(eps_m/fpc)*Ec;
+	s = 0.5*fabs(fpc/Ec);
+	std::cerr << "Strain Compression Limit Exceeded: "
+		  << eps_m << ' ' << -s << std::endl;
+      }
+
+    //Cracking flags:
+    crackP_flag = crack_flag;
+
+    //cracked reloading/unloading stiffness:
+    if(crackP_flag==1)
+      {
+	if(sig/eps_m<Et)
+	  { Et = sig/eps_m; }
+      }
+    if(count==0)
+      {
+        epsInit = epsP_total;
+		  sigInit = sigP;
+      }
+
+    if(sigInit<0.0 && t_load<0.0)
+      {
+        t_load = getCurrentTime();
+        sigInit = sigP;
+	epsInit = epsP_m;
+
+      }
+    else if(sigInit>0.0 && sigP<0.0 && t_load<0.0)
+      {
+        t_load = getCurrentTime();
+        sigInit = sigP;
+        epsInit = epsP_m;
+      }
+
+    //if(creepControl==1) {
+    //   count++;
+    //   resize();
+    //}
+    count++;
+    resize();
+
+    return 0;
+  }
 
 int XC::TDConcrete::revertToLastCommit(void)
-{
-          eps_total = epsP_total; //Added by AMK;
+  {
+    eps_total = epsP_total; //Added by AMK;
     eps_sh = epsP_sh;
-        eps_cr = epsP_cr;
-        eps_m = epsP_m;  
-    
-  ecmin = ecminP;;
-  dept = deptP;
-  
-  e = eP;
-  sig = sigP;
-  eps = epsP;
-  return 0;
-}
+    eps_cr = epsP_cr;
+    eps_m = epsP_m;  
+
+    ecmin= ecminP;
+    ecmax= ecmaxP;
+    dept= deptP;
+
+    e = eP;
+    sig = sigP;
+    eps = epsP;
+    return 0;
+  }
 
 int XC::TDConcrete::revertToStart(void)
-{
-  ecminP = 0.0;
-  deptP = 0.0;
+  {
+    ecminP= 0.0;
+    ecmaxP= 0.0;
+    deptP= 0.0;
 
-        eP = Ec;
-  epsP = 0.0;
-  sigP = 0.0;
-  eps = 0.0;
-  sig = 0.0;
-        e = Ec;
-  
-        if(creepControl==0)
-	  { count = 0; }
-	else
-	  { count = 1; }
-        
-  return 0;
-}
+    eP = Ec;
+    epsP = 0.0;
+    sigP = 0.0;
+    eps = 0.0;
+    sig = 0.0;
+    e = Ec;
 
-void XC::TDConcrete::setCreepControl(const int &i)
-  { creepControl= i; }
+    if(creepControl==0)
+      { count= 0; }
+    else
+      { count= 1; }
+    resize();
 
-int XC::TDConcrete::getCreepControl(void)
-  { return creepControl; }
-
-void XC::TDConcrete::setCreepDt(const double &d)
-  { creepDt= d; }
-
-int XC::TDConcrete::getCreepDt(void)
-  { return creepDt; }
+    return 0;
+  }
 
 //! @brief Send object members through the communicator argument.
 int XC::TDConcrete::sendData(Communicator &comm)
   {
-    int res= RawConcrete::sendData(comm);
-    res+= comm.sendDoubles(ft, Ec, beta, age, epsshu, epssha,getDbTagData(),CommMetaData(2));
-    res+= comm.sendDoubles(tcr, epscru, epscra, epscrd,getDbTagData(),CommMetaData(3));
+    int res= TDConcreteBase::sendData(comm);
+    res+= comm.sendDoubles(epsshu, epssha, tcr, epscru, epscra, epscrd,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
 int XC::TDConcrete::recvData(const Communicator &comm)
   {
-    int res= RawConcrete::recvData(comm);
-    res+= comm.receiveDoubles(ft, Ec, beta, age, epsshu, epssha,getDbTagData(),CommMetaData(2));
-    res+= comm.receiveDoubles(tcr, epscru, epscra, epscrd,getDbTagData(),CommMetaData(8));
+    int res= TDConcreteBase::recvData(comm);
+    res+= comm.receiveDoubles(epsshu, epssha, tcr, epscru, epscra, epscrd,getDbTagData(),CommMetaData(3));
     return res;
   }
 //! @brief Sends object through the communicator argument.

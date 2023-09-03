@@ -60,6 +60,10 @@ class_<XC::MaterialHandler, bases<XC::PrepHandler>, boost::noncopyable >("Materi
   .def("calcInteractionDiagramNMy", &XC::MaterialHandler::calcInteractionDiagramNMy,return_internal_reference<>())
   .def("calcInteractionDiagramNMz", &XC::MaterialHandler::calcInteractionDiagramNMz,return_internal_reference<>())
   .def("getMaterialNames", &XC::MaterialHandler::getMaterialNamesPy, "Return the names of the defined materials.")
+  .def("setCreepOn", &XC::MaterialHandler::setCreepOn,"Activate creep.").staticmethod("setCreepOn")
+  .def("setCreepOff", &XC::MaterialHandler::setCreepOff,"Deactivate creep.").staticmethod("setCreepOff")
+  .def("getCreepDt", &XC::MaterialHandler::getCreepDt,"Get time increment for creep.").staticmethod("getCreepDt")
+  .def("setCreepDt", &XC::MaterialHandler::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
    ;
 
 class_<XC::BeamIntegratorHandler, bases<XC::PrepHandler>, boost::noncopyable >("BeamIntegratorHandler", no_init)

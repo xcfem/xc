@@ -190,6 +190,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     bool removeAllLoadPatterns(void); 
     bool removeNodeLocker(NodeLocker *lp);
     void removeLoadCombination(LoadCombination *comb);
+    void removeAllLoadCombinations(void);
+    void removeAllLoadsAndCombinations(void);
     void removeLPs(void);
     void removeNLs(void);
 

@@ -817,18 +817,24 @@ python tests/materials/xc_materials/uniaxial/test_elasticpp_material_01.py
 python tests/materials/xc_materials/uniaxial/test_steel01.py
 python tests/materials/xc_materials/uniaxial/test_steel02.py
 python tests/materials/xc_materials/uniaxial/test_steel02_prestressing.py
-python tests/materials/xc_materials/uniaxial/test_concrete01.py
-python tests/materials/xc_materials/uniaxial/test_concrete02_01.py
-python tests/materials/xc_materials/uniaxial/test_concrete02_02.py
-python tests/materials/xc_materials/uniaxial/test_td_concrete_material.py
-python tests/materials/xc_materials/uniaxial/test_HA25_01.py
-python tests/materials/xc_materials/uniaxial/test_HA25_02.py
-python tests/materials/xc_materials/uniaxial/test_HP45_01.py
-python tests/materials/xc_materials/uniaxial/test_HP45_02.py
 python tests/materials/xc_materials/uniaxial/test_init_strain_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
 python tests/materials/xc_materials/uniaxial/test_viscous_material_01.py
+echo "$BLEU" "      Uniaxial concrete materials tests." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HA25_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HA25_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HP45_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_HP45_02.py
 echo "$BLEU" "      EHE reinforcing steel." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_B400S_01.py
 python tests/materials/xc_materials/uniaxial/test_B400S_02.py
@@ -1034,6 +1040,7 @@ python tests/materials/ehe/test_steel_relaxation_01.py
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
 python tests/materials/ec2/test_EC2_max_min_reinforcement_area_01.py
+python tests/materials/ec2/test_EC2_max_min_reinforcement_area_02.py
 python tests/materials/ec2/test_lap_length_01.py
 python tests/materials/ec2/test_EC2Concrete.py
 echo "$BLEU" "    EC2 misc. shrinkage and creep tests." "$NORMAL"
@@ -1054,6 +1061,7 @@ echo "$BLEU" "    EC2 bending resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_interaction_diagram.py
 python tests/materials/ec2/test_EC2_bending_01.py
 python tests/materials/ec2/test_EC2_bending_02.py
+python tests/materials/ec2/test_EC2_bending_03.py
 echo "$BLEU" "    EC2 shear resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_EC2_shear_01.py
 python tests/materials/ec2/test_EC2_shear_02.py
@@ -1318,6 +1326,7 @@ python tests/rough_calculations/earth_retaining/retaining_wall_test_01.py
 python tests/rough_calculations/earth_retaining/retaining_wall_test_02.py
 python tests/rough_calculations/earth_retaining/retaining_wall_test_03.py
 python tests/rough_calculations/earth_retaining/retaining_wall_test_04.py
+python tests/rough_calculations/earth_retaining/retaining_wall_test_05.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_01.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_02.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_03.py
@@ -1344,8 +1353,11 @@ python tests/rough_calculations/reinforced_concrete/test_punching_shear_02.py
 python tests/rough_calculations/reinforced_concrete/test_punching_shear_03.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_sia262.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ehe.py
-python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ec2.py
+python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ec2_01.py
+python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ec2_02.py
 python tests/rough_calculations/reinforced_concrete/ng_pile_cap_test.py
+python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_01.py
+python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_02.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"

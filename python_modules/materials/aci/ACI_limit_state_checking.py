@@ -290,47 +290,47 @@ class ACIRebarFamily(rf.RebarFamily):
         rebarController= self.getRebarController()
         return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
     
-    def getMinReinfAreaUnderFlexion(self, thickness, b= 1.0, type= 'slab', concrete= None):
+    def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
            according to clauses 7.6.1.1, 8.6.1.1, 9.6.1.2, 10.6.1.1, 11.6.1,
            12.6.1 
 
+        :param concrete: concrete material
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
         :param b: width of concrete section.
-        :param type: member type; slab, wall, beam or column.
-        :param concrete: concrete material
+        :param memberType: member type; slab, wall, beam or column.
         '''
         retval= 0.0025*thickness*b
         fy= self.steel.fyk
-        if(type=='slab'):
+        if(memberType=='slab'):
             limit= ACI_materials.toPascal*60e3
             retval= thickness # b= 1
             if(fy<limit):
                 retval*= 0.0020
             else:
                 retval*= max(0.0018*limit/fy,0.0014)
-        elif(type=='wall'):
+        elif(memberType=='wall'):
             retval= 0.0025*thickness # b= 1
-        elif(type=='beam'):
+        elif(memberType=='beam'):
             d= 0.9*thickness
             retval= d*b
             retval*= max(3.0*concrete.getSqrtFck(),ACI_materials.toPascal*200)
-        elif(type=='column'):
+        elif(memberType=='column'):
             retval= 0.01*thickness*b
         return retval
 
-    def getMinReinfAreaUnderTension(self,thickness, type= 'slab', concrete= None):
+    def getMinReinfAreaInTension(self, concrete, thickness, memberType= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
+        :param concrete: concrete material
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
-        :param type: member type; slab, wall, beam or column.
-        :param concrete: concrete material
+        :param memberType: member type; slab, wall, beam or column.
         '''
-        return 2.0*self.getMinReinfAreaUnderFlexion(thickness= thickness, type= type, concrete= concrete)
+        return 2.0*self.getMinReinfAreaInBending(concrete= concrete, thickness= thickness, memberType= memberType)
 
     def getVR(self,concrete,Nd,Md,b,thickness):
         '''Return the shear resistance carried by the concrete on a (b x thickness) rectangular section according to clause 22.5.5.1 of ACI 318-14.
@@ -342,12 +342,6 @@ class ACIRebarFamily(rf.RebarFamily):
         :param thickness: height of the rectangular section.
         '''
         return VcNoShearRebars(concrete,Nd,b,0.9*thickness)
-
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 class ACIFamNBars(ACIRebarFamily):
     n= 2 #Number of bars.
@@ -380,12 +374,6 @@ class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
         '''
         return self.f1.getVR(concrete,Nd,Md,b,thickness)
     
-    def writeRebars(self, outputFile,concrete,AsMin):
-        '''Write rebar family data.'''
-        self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
-        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
-
 class ShearPlane(object):
     ''' Shear plane according to seciont 22.9 of ACI 318-14
 

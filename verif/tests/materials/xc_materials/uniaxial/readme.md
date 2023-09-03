@@ -12,4 +12,3 @@ Verifications tests for XC uniaxial material objects.
 - [Series material](https://opensees.berkeley.edu/wiki/index.php/Series_Material)
 - [Parallel material](https://opensees.berkeley.edu/wiki/index.php/Parallel_Material)
 - [Elastic-Perfectly Plastic Material](https://opensees.berkeley.edu/wiki/index.php/Elastic-Perfectly_Plastic_Material)
-- [Concrete Zero](https://portwooddigital.com/2023/07/09/concrete-zero/)
