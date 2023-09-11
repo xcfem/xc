@@ -344,6 +344,13 @@ class PredefinedSpace(object):
         '''
         return self.getNodeHandler().newNodeXYZ(x,y,z)
     
+    def newNodeFromVector(self, v):
+        ''' Create a new node from vector
+
+        :param v: xc vector
+        '''
+        return self.getNodeHandler().newNodeFromVector(v)
+    
     def getNodes(self, tags: Sequence[int]):
         ''' Return the nodes that correspond to the argument
             tags.
