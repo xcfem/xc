@@ -1020,7 +1020,7 @@ class ISection(SectionProperties):
         return retval
   
     def J(self):
-        '''Return torsional constant of the section'''
+        '''Return torsional constant of the section (pág. 800 Puentes II. Apuntes para su diseño, cálculo y construcción. Javier Manterola'''
         hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
         retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
         retval*= self.torsionalStiffnessFactor
