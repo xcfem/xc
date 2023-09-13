@@ -20,16 +20,16 @@ neop= bridge_bearings.ElastomericBearing(G,a,b,e)
 E= neop.getEbearing()
 Kv= neop.getKvert()
 Kh= neop.getKhoriz()
-KrotationX= neop.getKrotationLintelAxis()
-KrotationZ= neop.getKrotationLintelAxis()
-KrotationY= neop.getKrotationVerticalAxis()
+KrotationX= neop.getKrotationLongBridgeAxis()
+KrotationY= neop.getKrotationTransvBridgeAxis()
+KrotationZ= neop.getKrotationVerticalAxis()
 
 ratio1= abs( 600000000.0-E)/ 600000000.0
 ratio2= abs(27000000000.0-Kv)/27000000000.0
 ratio3= abs(40500000.0-Kh)/40500000.0
 ratio4= abs(956971000.0-KrotationX)/956971000.0
-ratio5= abs(956972000.0-KrotationZ)/956972000.0
-ratio6= abs(510192.0-KrotationY)/510192.0
+ratio5= abs(956972000.0-KrotationY)/956972000.0
+ratio6= abs(510192.0-KrotationZ)/510192.0
 
 
 ''' 

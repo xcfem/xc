@@ -105,8 +105,8 @@ class ElastomericBearing(Bearing):
     Attributes:
 
     :ivar G: (float) Elastomer shear modulus.
-    :ivar a: (float) Width of the bearing (parallel to bridge axis).
-    :ivar b: (float) Length of the bearing (parallel to lintel axis).
+    :ivar a: (float) Width of the bearing (parallel to bridge longitudinal axis).
+    :ivar b: (float) Length of the bearing (parallel to the bridge transverse axis)
     :ivar e: (float) Net thickness of the bearing (without steel plates).
     '''
     # ENHANCE (FOR ALL THE INTERPOLATIONS): it will be great
@@ -142,8 +142,8 @@ class ElastomericBearing(Bearing):
         '''Class constructor.
 
         :param G: elastomer shear modulus.
-        :param a: width of the bearing (parallel to bridge axis).
-        :param b: length of the bearing (parallel to lintel axis).
+        :param a: width of the bearing (parallel to bridge longitudinal axis).
+        :param b: length of the bearing (parallel to the bridge transverse axis)
         :param e: net thickness of the bearing (without steel plates).
         '''
         super(ElastomericBearing,self).__init__()
@@ -179,15 +179,15 @@ class ElastomericBearing(Bearing):
         ''' Return the v4 shape factor of the bearing.'''
         return self.v4table(self.b/self.a)
     
-    def getKrotationLintelAxis(self):
+    def getKrotationTransvBridgeAxis(self):
         ''' Stiffness with respect to the rotation around an axis
-            parallel to the lintel by the center of the bearing.
+            parallel to the transverse bridge direction by the center of the bearing.
         '''
         return self.G*self.a*pow(self.b,5.0)/(self.getV4()*pow(self.e,3.0))
     
-    def getKrotationBridgeAxis(self):
-        ''' Stiffness with respect to the rotation around an axis
-            parallel to the bridge by the center of the bearing.
+    def getKrotationLongBridgeAxis(self):
+        ''' Stiffness with respect to the rotation around the longitudinal bridge axis
+            by the center of the bearing.
         '''
         return self.G*self.b*pow(self.a,5.0)/(self.getV4()*pow(self.e,3.0))
     
@@ -204,9 +204,19 @@ class ElastomericBearing(Bearing):
         return self.getBeta()*self.G*self.a*pow(self.b,3.0)/self.e
     
     def defineMaterials(self,preprocessor):
-        '''Define the materials to modelize the elastomeric bearing.
+        '''Define the following six materials to modelize the elastomeric bearing:
+        KX: translation along the element X axis, that must match the 
+               bridge longitudinal axis direction
+        KY: translation along the element Y axis, that must match the 
+               bridge transverse axis direction
+        KZ: translation along vertical direction
+        THX: rotation about the element X axis, that must match the 
+               bridge longitudinal axis direction
+        THY: rotation about the element Y axis, that must match the 
+               bridge transverse axis direction
+        THZ: rotation about vertical direction
 
-            :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
+       :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
         '''
         self.materialHandler= preprocessor.getMaterialHandler
         # Material names.
@@ -223,17 +233,25 @@ class ElastomericBearing(Bearing):
         self.matKX= typical_materials.defElasticMaterial(preprocessor, self.matXName, self.getKhoriz())
         self.matKY= typical_materials.defElasticMaterial(preprocessor, self.matYName, self.getKhoriz())
         self.matKZ= typical_materials.defElasticMaterial(preprocessor, self.matZName, self.getKvert())
-        self.matKTHX= typical_materials.defElasticMaterial(preprocessor, self.matTHXName, self.getKrotationLintelAxis())
-        self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, self.getKrotationBridgeAxis())
+        self.matKTHX= typical_materials.defElasticMaterial(preprocessor, self.matTHXName, self.getKrotationLongBridgeAxis())
+        self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, self.getKrotationTransvBridgeAxis()) 
         self.matKTHZ= typical_materials.defElasticMaterial(preprocessor, self.matTHZName, self.getKrotationVerticalAxis())
 
     def putBetweenNodes(self,modelSpace,iNodA:int, iNodB:int, orientation= None):
-        ''' Puts the bearing between the nodes.
+        ''' Puts the bearing between the nodes. The element must be oriented so that its local x axis is in the direction of the longitudinal axis of the bridge and its local y axis parallel to the transverse axis of the transverse axis of the bridge.
+
 
             :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
             :param iNodA (int): first node identifier (tag).
             :param iNodB (int): second node identifier (tag).
-
+            :param orientation: (list) of two vectors [x,yp] used to orient 
+        the zero length element, where: 
+        x: are the vector components in global coordinates defining 
+        local x-axis, that must be parallel to the bridge longitudinal axis (optional)
+        yp: vector components in global coordinates defining a  vector
+        that lies in the local x-y plane of the element (optional).
+        If the optional orientation vector are not specified, the local
+        element axes coincide with the global axes
         '''
         return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
 
