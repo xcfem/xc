@@ -55,13 +55,13 @@ class QuadSurfaceLoad: public SurfaceLoadBase<QSL_NUM_NODE>
     // method to update base vector g
     int UpdateBase(double Xi) const;
 
-    Matrix tangentStiffness; //!< Tangent Stiffness matrix
     mutable Vector internalForces; //!< vector of Internal Forces
-    Vector theVector; //!< vector to return the residual
+    //Vector theVector; //!< vector to return the residual
 
     mutable Vector g; //!< tangent vector  = d(x_Xi)/d_xi
     mutable Vector myNhat; //!< normal Vector 
 
+    static Matrix tangentStiffness; //!< Tangent Stiffness matrix
   protected:   
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);

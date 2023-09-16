@@ -57,11 +57,11 @@
 #include "domain/mesh/node/Node.h"
 
 double XC::BrickSurfaceLoad::GsPts[SL_NUM_NODE][2];
+XC::Matrix XC::BrickSurfaceLoad::tangentStiffness(SL_NUM_DOF, SL_NUM_DOF);
 
 //! @brief Constructor.
 XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag, int Nd1, int Nd2, int Nd3, int Nd4, double pressure)
   : SurfaceLoadBase<SL_NUM_NODE>(tag, ELE_TAG_BrickSurfaceLoad, pressure, 1.0),     
-   tangentStiffness(SL_NUM_DOF, SL_NUM_DOF),
    internalForces(SL_NUM_DOF),
    g1(SL_NUM_NDF), 
    g2(SL_NUM_NDF),
@@ -83,13 +83,11 @@ XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag, int Nd1, int Nd2, int Nd3, int N
     GsPts[3][0] = -oneOverRoot3;
     GsPts[3][1] = oneOverRoot3;
 
-    tangentStiffness.Zero();
   }
 
 //! @brief Default constructor.
 XC::BrickSurfaceLoad::BrickSurfaceLoad(int tag)
   :SurfaceLoadBase<SL_NUM_NODE>(tag, ELE_TAG_BrickSurfaceLoad, 0.0, 1.0),     
-   tangentStiffness(SL_NUM_DOF, SL_NUM_DOF),
    internalForces(SL_NUM_DOF),
    g1(SL_NUM_NDF), 
    g2(SL_NUM_NDF),
@@ -197,7 +195,7 @@ int XC::BrickSurfaceLoad::sendData(Communicator &comm)
     int res= SurfaceLoadBase<SL_NUM_NODE>::sendData(comm);
     res+=comm.sendDoubles(mLoadFactor,my_pressure,getDbTagData(),CommMetaData(7));
     res+= comm.sendVector(internalForces,getDbTagData(),CommMetaData(8));
-    res+= comm.sendVector(theVector,getDbTagData(),CommMetaData(9));
+    //res+= comm.sendVector(theVector,getDbTagData(),CommMetaData(9));
     res+= comm.sendVector(g1,getDbTagData(),CommMetaData(10));
     res+= comm.sendVector(g2,getDbTagData(),CommMetaData(11));
     res+= comm.sendVector(myNhat,getDbTagData(),CommMetaData(12));
@@ -215,7 +213,7 @@ int XC::BrickSurfaceLoad::recvData(const Communicator &comm)
     int res= SurfaceLoadBase<SL_NUM_NODE>::recvData(comm);
     res+=comm.receiveDoubles(mLoadFactor,my_pressure,getDbTagData(),CommMetaData(7));
     res+= comm.receiveVector(internalForces,getDbTagData(),CommMetaData(8));
-    res+= comm.receiveVector(theVector,getDbTagData(),CommMetaData(9));
+    //res+= comm.receiveVector(theVector,getDbTagData(),CommMetaData(9));
     res+= comm.receiveVector(g1,getDbTagData(),CommMetaData(10));
     res+= comm.receiveVector(g2,getDbTagData(),CommMetaData(11));
     res+= comm.receiveVector(myNhat,getDbTagData(),CommMetaData(12));

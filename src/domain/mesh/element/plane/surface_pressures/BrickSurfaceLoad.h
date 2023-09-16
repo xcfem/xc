@@ -74,9 +74,8 @@ class BrickSurfaceLoad: public SurfaceLoadBase<SL_NUM_NODE>
     // method to update base vectors g1 & g2
     int UpdateBase(double Xi, double Eta) const;
 
-    Matrix tangentStiffness; //!< Tangent Stiffness matrix
     mutable Vector internalForces; //!< vector of Internal Forces
-    Vector theVector; //!< vector to return the residual
+    //Vector theVector; //!< vector to return the residual
 
     mutable Vector g1; //!< tangent vector  = d(x_Xi)/d_xi
     mutable Vector g2; //!< tangent vector  = d(x_Xi)/d_eta 
@@ -92,6 +91,7 @@ class BrickSurfaceLoad: public SurfaceLoadBase<SL_NUM_NODE>
     const double oneOverRoot3= 1.0/sqrt(3.0);
     static double GsPts[SL_NUM_NODE][2];
 
+    static Matrix tangentStiffness; //!< Tangent Stiffness matrix
   protected:   
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
