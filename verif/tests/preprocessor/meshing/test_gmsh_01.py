@@ -14,7 +14,6 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-# from postprocess import output_handler
 
 pos1= geom.Pos3d(0,0,0)
 pos2= geom.Pos3d(1,0,0)
@@ -82,14 +81,10 @@ else:
     lmsg.error(fname+' ERROR.')
 
        
-#Graphic stuff.
+# Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # oh.displayBlocks()#setToDisplay= )
 # oh.displayFEMesh()#setsToDisplay=[])
 # oh.displayLocalAxes()
-# oh.displayLoads()
-# oh.displayReactions()
-# oh.displayDispRot(itemToDisp='uX')
-# oh.displayDispRot(itemToDisp='uY')
-# oh.displayDispRot(itemToDisp='uZ')

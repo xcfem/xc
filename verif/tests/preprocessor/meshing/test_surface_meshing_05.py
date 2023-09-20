@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Mesh of cylindrical surface.'''
+
 from __future__ import print_function
 from __future__ import division
 

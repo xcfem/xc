@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Mesh of cylindrical surface.'''
+
 from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import geom
 import xc
@@ -7,12 +15,6 @@ import math
 import os
 from model import predefined_spaces
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 R= 2.0
 cos45= math.cos(math.radians(45))
@@ -75,3 +77,11 @@ if(ratio1<=5e-5):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()

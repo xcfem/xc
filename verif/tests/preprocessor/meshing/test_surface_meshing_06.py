@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import print_function
 
-import geom
-import xc
-import os
-from model import predefined_spaces
-from materials import typical_materials
+from __future__ import print_function
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+import os
+from model import predefined_spaces
+from materials import typical_materials
 
 CooMaxX= 10
 CooMaxY= 10
@@ -35,8 +36,6 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast2d.name
 elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
-
-
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt0= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
@@ -75,3 +74,10 @@ if(ratio<=1e-15) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLocalAxes()

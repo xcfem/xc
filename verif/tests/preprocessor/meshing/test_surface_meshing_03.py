@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-import geom
-import xc
-import os
-from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+import os
+from model import predefined_spaces
+from materials import typical_materials
 
 E= 30e6 # Young modulus (psi)
 nu= 0.3 # Poisson's ratio
@@ -99,3 +100,11 @@ if((ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-15)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
