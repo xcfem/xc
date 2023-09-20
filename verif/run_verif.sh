@@ -589,6 +589,7 @@ python tests/preprocessor/meshing/test_surface_meshing_03.py
 python tests/preprocessor/meshing/test_surface_meshing_04.py
 python tests/preprocessor/meshing/test_surface_meshing_05.py
 python tests/preprocessor/meshing/test_surface_meshing_06.py
+python tests/preprocessor/meshing/test_surface_meshing_07.py
 python tests/preprocessor/meshing/test_imposed_meshing.py
 python tests/preprocessor/meshing/test_truss_generator_01.py
 python tests/preprocessor/meshing/test_paving_01.py
