@@ -33,7 +33,7 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("setElemSizeI",&XC::Face::SetElemSizeI,"setElementSizeI(sz) set the element size on the even sides of the surface.")
   .def("setElemSizeJ",&XC::Face::SetElemSizeJ,"setElementSizeJ(sz) set the element size on the odd sides of the surface.")
   .def("setElemSizeIJ",&XC::Face::SetElemSizeIJ,"setElementSizeIJ(szI, szJ) set the element size on the even and odd sides of the surface.")
-  .def("setElemSize",&XC::Face::SetElemSize,"setElementSizeJ(sz, mustBeEven) set the element size on the sides of the surface; if mustBeEven is true the number of divisions in each side is forced to the next even number.")
+  .def("setElemSize",&XC::Face::SetElemSize,"setElementSize(sz, mustBeEven) set the element size on the sides of the surface; if mustBeEven is true the number of divisions in each side is forced to the next even number.")
   .def("getPlane",&XC::Face::getPlane,"Return the plane containing the face.")
   .def("getPolygon",&XC::Face::getPolygon,"Return the contour as a 3D polygon.")
   .def("addHole", &XC::Face::addHole, "Add a hole to the face.")
