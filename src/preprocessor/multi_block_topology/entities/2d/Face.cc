@@ -835,6 +835,33 @@ Plane XC::Face::getPlane(void) const
     return retval;
   }
 
+//! @brief return true if the surface is flat.
+//! @param tol: tolerance for the maximum distance from the vertexes to the theoretical plane.
+bool XC::Face::isFlat(const double &tol) const
+  {
+    const Plane plane= this->getPlane();
+    // Compute the maximum distance from the plane to the vertices.
+    Polyline3d polyline= getPolyline();
+    double maxDist2= 0.0;
+    const GeomObj::list_Pos3d &vertexes= polyline.getVertexList();
+    const size_t sz= vertexes.size();
+    if(sz>3)
+	for(GeomObj::list_Pos3d::const_iterator i= vertexes.begin();i!=vertexes.end();i++)
+	  {
+	    const Pos3d &pos= *i;
+	    const double d2= plane.dist2(pos);
+	    if(d2>maxDist2)
+	      { maxDist2= d2; }
+	  }
+    bool retval= (sqrt(maxDist2)<=tol);
+    return retval;
+  }
+
+//! @brief return true if the surface is warped.
+//! @param tol: tolerance for the maximum distance from the vertexes to the theoretical plane.
+bool XC::Face::isWarped(const double &tol) const
+  { return !isFlat(tol); }
+
 //! @brief Return the surface contour as a polygon.
 Polygon3d XC::Face::getPolygon(void) const
   {
