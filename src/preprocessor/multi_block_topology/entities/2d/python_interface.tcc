@@ -35,6 +35,8 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("setElemSizeIJ",&XC::Face::SetElemSizeIJ,"setElementSizeIJ(szI, szJ) set the element size on the even and odd sides of the surface.")
   .def("setElemSize",&XC::Face::SetElemSize,"setElementSize(sz, mustBeEven) set the element size on the sides of the surface; if mustBeEven is true the number of divisions in each side is forced to the next even number.")
   .def("getPlane",&XC::Face::getPlane,"Return the plane containing the face.")
+  .def("isFlat", &XC::Face::isFlat,"Return true if the face is flat.")
+  .def("isWarped", &XC::Face::isWarped,"Return true if the face is not flat.")
   .def("getPolygon",&XC::Face::getPolygon,"Return the contour as a 3D polygon.")
   .def("addHole", &XC::Face::addHole, "Add a hole to the face.")
   .def("getHoles", &XC::Face::getPyHoles, "Return a list with the face holes in it.")
