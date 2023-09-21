@@ -127,6 +127,8 @@ class Face: public CmbEdge
     Pnt *findVertex(const Pos3d &);
     Pos3d getCentroid(void) const;
     Plane getPlane(void) const;
+    bool isFlat(const double &tol= 1e-6) const;
+    bool isWarped(const double &tol= 1e-6) const;
     Polyline3d getContour(void) const;
     Polygon3d getPolygon(void) const;
     double getSquaredDistanceTo(const Pos3d &pt) const;    
