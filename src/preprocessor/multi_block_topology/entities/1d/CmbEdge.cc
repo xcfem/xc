@@ -820,19 +820,20 @@ boost::python::list XC::CmbEdge::getEdgesPy(void) const
     return retval;
   }
 
-//! @brief Return a pointer to the side at the position
-//! argument. If not found returns nullptr.
+//! @brief Return the pointers to the sides at the position
+//! argument. If not found returns an empty container.
 std::deque<XC::CmbEdge::Side *> XC::CmbEdge::findSides(const Pos3d &pos)
   {
     std::deque<XC::CmbEdge::Side *> retval;
     const double elemSize= getAvgElemSize();
+    double tolerance= elemSize/1e4; // Default value.
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
       {
 	Side *s= &(*i);
 	const Pos3d p1= s->P1()->getPos();
 	const Pos3d p2= s->P2()->getPos();
 	const double d= dist(Segment3d(p1,p2), pos);
-        if(d<elemSize/1e4)
+        if(d<tolerance)
 	  { retval.push_back(s); }
       }
     return retval;
@@ -886,16 +887,18 @@ void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
 
 //! @brief Return a pointer to the vertex at the position
 //! argument. If not found returns nullptr.
+//! @param pos: position to search for the vertex.
 XC::Pnt *XC::CmbEdge::findVertex(const Pos3d &pos)
   {
     XC::Pnt *retval= nullptr;
     const double elemSize= getAvgElemSize();
+    double tol2= elemSize/1e6;
     std::deque<Pnt *> vertices= getVertices();
     for(std::deque<Pnt *>::iterator i= vertices.begin();i!=vertices.end();i++)
       {
 	Pnt *p= *i;
         const double d2= dist2(p->getPos(), pos);
-        if(d2<elemSize/1e6)
+        if(d2<tol2)
 	  {
 	    retval= p;
 	    break;
