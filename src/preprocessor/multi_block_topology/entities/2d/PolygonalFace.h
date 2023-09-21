@@ -33,6 +33,7 @@
 #include "Face.h"
 #include "preprocessor/multi_block_topology/matrices/PntPtrArray.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"
+#include "utility/geom/d2/Triangle3d.h"
 
 namespace XC {
 
@@ -45,9 +46,14 @@ class PolygonalFace: public Face
   {
   protected:
     Ref2d3d ref; //!< local reference system.
+    
     void create_nodes_from_paving(Paver &paver);
     int create_elements_from_paving(const Paver &paver);
     void gen_mesh_paving(meshing_dir dm);
+    std::vector<std::tuple<int, Pos3d> > get_vertices_positions_for_gmsh(void) const;
+    //std::set<size_t> get_gmshtags_of_nodes_at_vertices(void) const;
+    //std::set<size_t> get_gmshtags_of_nodes_at_lines(void) const;
+    std::vector<std::tuple<std::size_t, Pos3d> > get_gmsh_positions(void) const;
     void create_gmsh_points(const double &) const;
     void create_gmsh_lines(void) const;
     std::map<int, const Node *> create_nodes_from_gmsh(void);

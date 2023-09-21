@@ -261,30 +261,37 @@ int XC::PolygonalFace::create_elements_from_paving(const Paver &paver)
 //! @brief Creates mesh using paving algorithm.
 void XC::PolygonalFace::gen_mesh_paving(meshing_dir dm)
   {
-    Paver paver;
-    if(verbosity>3)
-      std::clog << "Meshing polygonal surface...("
-		<< getName() << ")...";
+    if(this->isFlat()) // Flat surface.
+      {
+	Paver paver;
+	if(verbosity>3)
+	  std::clog << "Meshing polygonal surface...("
+		    << getName() << ")...";
 
-    create_nodes_from_paving(paver);
-    if(ttzElements.Null())
-      { create_elements_from_paving(paver); }
+	create_nodes_from_paving(paver);
+	if(ttzElements.Null())
+	  { create_elements_from_paving(paver); }
+	else
+	  if(verbosity>2)
+	    std::clog << getClassName() << "::" << __FUNCTION__
+		      << "; elements for surface: '" << getName()
+		      << "' already exist." << std::endl;
+	if(verbosity>3)
+	  std::clog << "done." << std::endl;
+      }
     else
-      if(verbosity>2)
-        std::clog << getClassName() << "::" << __FUNCTION__
-	          << "; elements for surface: '" << getName()
-		  << "' already exist." << std::endl;      
-    if(verbosity>3)
-      std::clog << "done." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; surfaces: '" << getName()
+	        << "' is not flat. Can't use paving algorithm."
+		<< std::endl;      
   }
 
-//! @brief Create Gmsh points from its vertices.
-//!
-//! @param elemSize: target mesh size (the "characteristic  length")
-//! close to the point
-void XC::PolygonalFace::create_gmsh_points(const double &elemSize) const
+//! @brief Return the contour vertices to be used by Gmsh.
+std::vector<std::tuple<int, Pos3d> > XC::PolygonalFace::get_vertices_positions_for_gmsh(void) const
   {
     const std::deque<const Pnt *> vertices= getVertices();
+    const size_t sz= vertices.size();
+    std::vector<std::tuple<int, Pos3d> > retval(sz);
     for(std::deque<const Pnt *>::const_iterator i= vertices.begin();i!=vertices.end();i++)
       {
 	const Pnt *pnt= *i;
@@ -292,11 +299,61 @@ void XC::PolygonalFace::create_gmsh_points(const double &elemSize) const
 	  {
 	    const int gmshTag= pnt->getTag()+1; // Gmsh tags must be strictly positive.
 	    const Pos3d pos= pnt->getPos();
-            gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, gmshTag);
+	    std::tuple<int, Pos3d> tmp= std::make_tuple(gmshTag, pos);
+	    const size_t index= i-vertices.begin();
+	    retval[index]= tmp;
 	  }
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
                     << "; null vertex pointer." << std::endl;
+      }
+    return retval;
+  }
+
+// //! @brief Return the gmshTags of the nodes at the vertices.  
+// std::set<size_t> XC::PolygonalFace::get_gmshtags_of_nodes_at_vertices(void) const
+//   {
+//     const std::deque<const Pnt *> vertices= getVertices();
+//     std::set<size_t> retval;
+//     std::vector<std::size_t> nodeTags;
+//     std::vector<double> coord;
+//     for(std::deque<const Pnt *>::const_iterator i= vertices.begin();i!=vertices.end();i++)
+//       {
+// 	const Pnt *pnt= *i;
+// 	if(pnt)
+// 	  {
+// 	    const int gmshTag= pnt->getTag()+1; // Gmsh tags must be strictly positive.
+// 	    gmsh::model::mesh::getNodesForPhysicalGroup(0, gmshTag, nodeTags, coord);
+// 	    const size_t sz= nodeTags.size();
+// 	    if(sz==1)
+// 	      retval.insert(nodeTags[0]);
+// 	    else
+//   	      std::cerr << getClassName() << "::" << __FUNCTION__
+//                         << "; wrong size of tag vector: "
+// 			<< sz << std::endl;
+// 	  }
+// 	else
+// 	  std::cerr << getClassName() << "::" << __FUNCTION__
+//                     << "; null vertex pointer." << std::endl;
+//       }
+//     return retval;
+//   }
+
+//! @brief Create Gmsh points from its vertices.
+//!
+//! @param elemSize: target mesh size (the "characteristic  length")
+//! close to the point
+void XC::PolygonalFace::create_gmsh_points(const double &elemSize) const
+  {
+    const std::vector<std::tuple<int, Pos3d> > positions= get_vertices_positions_for_gmsh();
+    for(std::vector<std::tuple<int, Pos3d> >::const_iterator i= positions.begin();i!=positions.end();i++)
+      {
+	const std::tuple<int, Pos3d> &tuple= *i;
+        const int gmshTag= std::get<0>(tuple);
+        const Pos3d &pos= std::get<1>(tuple);
+        gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, gmshTag);
+	std::vector<int> tmp= {gmshTag};
+	//gmsh::model::addPhysicalGroup(0,tmp,gmshTag);
       }
   }
 
@@ -311,9 +368,60 @@ void XC::PolygonalFace::create_gmsh_lines(void) const
 	const int p1GmshTag= side.P1()->getTag()+1;
 	const int p2GmshTag= side.P2()->getTag()+1;
 	gmsh::model::geo::addLine(p1GmshTag, p2GmshTag, gmshLineTag);
+	std::vector<int> tmp= {gmshLineTag};
+	//gmsh::model::addPhysicalGroup(1,tmp,gmshLineTag);
       }
     for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
-      { (*i)->create_gmsh_lines(); }
+      {
+	(*i)->create_gmsh_lines();
+      }
+  }
+
+// //! @brief Return the gmshTags of the nodes at the vertices.  
+// std::set<size_t> XC::PolygonalFace::get_gmshtags_of_nodes_at_lines(void) const
+//   {
+//     const std::deque<const Pnt *> vertices= getVertices();
+//     std::set<size_t> retval;
+//     std::vector<std::size_t> nodeTags;
+//     std::vector<double> coord;
+//     const size_t numSides= getNumberOfEdges();
+//     for(size_t i= 0;i<numSides; i++)
+//       {
+// 	const Side &side= lines[i];
+// 	const int xcTag= side.getTag();
+// 	const int gmshLineTag= xcTag+1; // Gmsh tags must be strictly positive.
+// 	gmsh::model::mesh::getNodesForPhysicalGroup(1, gmshLineTag, nodeTags, coord);
+// 	for(std::vector<std::size_t>::const_iterator i= nodeTags.begin(); i!= nodeTags.end(); i++)
+// 	  { retval.insert(*i); }
+//       }
+//     for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
+//       { retval.merge((*i)->get_gmshtags_of_nodes_at_lines()); }
+//     return retval;
+//   }
+
+//! @brief Extracts the positions of the nodes computed by Gmsh.
+std::vector<std::tuple<std::size_t, Pos3d> > XC::PolygonalFace::get_gmsh_positions(void) const
+  {
+    // Gmsh nodes
+    std::vector<std::size_t> nodeTags;
+    std::vector<double> nodeCoord;
+    std::vector<double> nodeParametricCoord;
+
+    gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord);
+    const size_t nNodes= nodeTags.size();
+    std::vector<std::tuple<std::size_t, Pos3d> > retval(nNodes);
+    for(size_t i= 0;i<nNodes; i++)
+      {
+	const size_t gmshTag= nodeTags[i];
+	const size_t j= i*3;
+	const double &x= nodeCoord[j];
+	const double &y= nodeCoord[j+1];
+	const double &z= nodeCoord[j+2];
+	const Pos3d gmshPos(x,y,z);
+	
+	retval[i]= std::make_tuple(gmshTag, gmshPos);
+      }
+    return retval;
   }
 
 //! @brief Create the nodes on this surface from the positions
@@ -321,7 +429,6 @@ void XC::PolygonalFace::create_gmsh_lines(void) const
 std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
   {
     std::map<int, const Node *> mapNodeTags;
-    size_t nNodes;
     if(ttzNodes.Null())
       {
 	std::map<int, int> mapVertexNodes;
@@ -329,44 +436,57 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 	MapEdgeNodes mapEdgeNodes;
 	typedef std::deque< std::pair<int, Pos3d> > DqInteriorNodes;
 	DqInteriorNodes dqInteriorNodes;
-        std::deque<Pnt *> vertices= getVertices();
 	// Nodes
-	std::vector<std::size_t> nodeTags;
-	std::vector<double> nodeCoord;
-	std::vector<double> nodeParametricCoord;
-
-	gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord);
-	nNodes= nodeTags.size();
+	
+	// Classify the nodes as interior nodes, edge nodes or vertex nodes
+	// XXX There is a mechanism in Gmsh to get the nodes at the boundaries
+	// (vertices and edges) without the need of searching for proximity to each
+	// vertex and edge: addPhysicalGroup/getNodesForPhysicalGroup but for now
+	// is disables because there must be an error: TO ENHANCE.
+       
+	// const std::set<size_t> gmshTagsOfVertexNodes= get_gmshtags_of_nodes_at_vertices();
+	// std::set<size_t> gmshTagsOfEdgeNodes=  get_gmshtags_of_nodes_at_lines();
+	  
+	const std::vector<std::tuple<std::size_t, Pos3d> >gmshPositions= this->get_gmsh_positions();
+	size_t nNodes= gmshPositions.size();
 	for(size_t i= 0;i<nNodes; i++)
 	  {
-	    const size_t gmshTag= nodeTags[i];
-	    const size_t j= i*3;
-	    const double x= nodeCoord[j];
-	    const double y= nodeCoord[j+1];
-	    const double z= nodeCoord[j+2];
-	    const Pos3d gmshPos(x,y,z);
+	    const std::tuple<std::size_t, Pos3d> &tuple= gmshPositions[i];
+	    const size_t &gmshTag= std::get<0>(tuple); // Get node tag.
+	    const Pos3d &gmshPos= std::get<1>(tuple); // Get node position.
 	    //Check if it's a vertex node:
-  	    Pnt *p= findVertex(gmshPos);
-	    if(p)
-	      {	mapVertexNodes[p->getTag()]= gmshTag; }
-	    std::deque<Side *> posSides= findSides(gmshPos);
-	    const size_t nSides= posSides.size();
-	    if(nSides>0)
-	      {
-	        for(std::deque<Side *>::const_iterator i= posSides.begin();i!=posSides.end();i++)
+	    bool cornerNode= false;
+	    // if(gmshTagsOfVertexNodes.find(gmshTag)!= gmshTagsOfVertexNodes.end())
+	    //   {
+	        Pnt *p= findVertex(gmshPos);
+		if(p)
 		  {
-		    Side *s= (*i);
-		    if(s->getEdge()->hasNodes())
-		      std::cerr << getClassName() << "::" << __FUNCTION__
-				<< "; edge: " << s->getName()
-				<< " already meshed. Side node ignored."
-				<< std::endl;
-		    else
-		      {	mapEdgeNodes[s->getTag()].push_back(std::pair(gmshTag, gmshPos)); }
+		    cornerNode= true;
+		    mapVertexNodes[p->getTag()]= gmshTag;
 		  }
-	      }
-	    else // not a side node.
-	      if(!p)
+	    //  }
+	    bool sideNode= false;
+	    // if(gmshTagsOfEdgeNodes.find(gmshTag)!= gmshTagsOfEdgeNodes.end())
+	    //   {
+		std::deque<Side *> posSides= findSides(gmshPos);
+		const size_t nSides= posSides.size();
+		if(nSides>0)
+		  {
+		    sideNode= true;
+		    for(std::deque<Side *>::const_iterator i= posSides.begin();i!=posSides.end();i++)
+		      {
+			Side *s= (*i);
+			if(s->getEdge()->hasNodes())
+			  std::cerr << getClassName() << "::" << __FUNCTION__
+				    << "; edge: " << s->getName()
+				    << " already meshed. Side node ignored."
+				    << std::endl;
+			else
+			  { mapEdgeNodes[s->getTag()].push_back(std::pair(gmshTag, gmshPos)); }
+		      }
+		  }
+	    //    }
+	    if(!sideNode and !cornerNode) // not a side node, not a corner node.
 	        { dqInteriorNodes.push_back(std::pair(gmshTag, gmshPos)); }
 	  } // End Gmsh positions.
 
@@ -385,6 +505,7 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 	    mapNodeTags[gmshTag]= nodePtr;
 	  }
         const double elemSize= getAvgElemSize();
+	const double distTol= elemSize/1e6;
 	// Put nodes in the Edges.
         for(MapEdgeNodes::const_iterator i= mapEdgeNodes.begin();i!=mapEdgeNodes.end();i++)
 	  {
@@ -406,24 +527,24 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 		    bool interior= true;
 		    const LineBase *cl= l;
 		    const Pnt *p1= cl->P1();
-		    interior= (interior && (dist2(gmshPos,p1->getPos())>elemSize/1e6));
+		    interior= (interior && (dist2(gmshPos,p1->getPos())>distTol));
 		    const Pnt *p2= cl->P2();
-		    interior= (interior && (dist2(gmshPos,p2->getPos())>elemSize/1e6));
+		    interior= (interior && (dist2(gmshPos,p2->getPos())>distTol));
 		    if(interior) // is an interior (to the edge) node.
-		      {		    
-			 Node *nodePtr= l->getNearestNode(gmshPos);
-			 const Pos3d nodePos= nodePtr->getInitialPosition3d();
-			 //Node *nodePtr= l->getNode(i+1);
-			 mapNodeTags[gmshTag]= nodePtr;
-			 ttzNodes(1,1,nCount++)= nodePtr;
-			 const double d= dist2(tmp[i],nodePos);
-			 if(d>1e-6)
-			   std::cerr << getClassName() << "::" << __FUNCTION__
-				     << "; error node i= " << i
-				     << " gmshTag= " << gmshTag
-				     << "d= " << d << std::endl;
+		      {
+			Node *nodePtr= l->getNearestNode(gmshPos);
+			const Pos3d nodePos= nodePtr->getInitialPosition3d();
+			//Node *nodePtr= l->getNode(i+1);
+			mapNodeTags[gmshTag]= nodePtr;
+			ttzNodes(1,1,nCount++)= nodePtr;
+			const double d= dist2(tmp[i],nodePos);
+			if(d>1e-6)
+			  std::cerr << getClassName() << "::" << __FUNCTION__
+				    << "; error node i= " << i
+				    << " gmshTag= " << gmshTag
+				    << " d= " << d << std::endl;
 		      }
-		  }		
+		  }
 	      }
 	    else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
@@ -548,6 +669,10 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     // Extract mesh data.
     const std::map<int, const Node *> mapNodes= create_nodes_from_gmsh();
     const int numElements= create_elements_from_gmsh(mapNodes);
+    if(numElements==0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no elements generated for face: "
+		<< getName() << std::endl;
     
     // This should be called when you are done using the Gmsh C++ API:
     gmsh::finalize();
