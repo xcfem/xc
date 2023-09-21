@@ -33,7 +33,7 @@ class Triangle2d;
 //! @brief Triangle in a three-dimensional space.
 class Triangle3d: public Polygon3d
   {
-    Triangle3d(const Ref2d3d &rf,const Triangle2d &p);
+    Triangle3d(const Ref2d3d &rf, const Triangle2d &p);
 
     inline void push_back(const Pos3d &p)
       { Polygon3d::push_back(p); }
