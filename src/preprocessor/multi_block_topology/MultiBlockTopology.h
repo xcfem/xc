@@ -140,6 +140,8 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
     
     double getAverageSize(void) const;
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
   };

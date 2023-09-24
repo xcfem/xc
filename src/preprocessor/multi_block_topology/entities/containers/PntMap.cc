@@ -196,6 +196,24 @@ XC::Pnt *XC::PntMap::New(void)
     return retval;
   }
 
+//! @brief Creates a new point with the tag being passed as parameter.
+XC::Pnt *XC::PntMap::New(const size_t &tag)
+  {
+    size_t old_tag= getTag();
+    Pnt *retval= nullptr;
+    setTag(tag); //Point identifier.
+    retval= busca(getTag());
+    if(retval)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; point with identifier: " << tag
+		  << " already exists. Command ignored." << std::endl;
+      }
+    else
+      {	retval= Crea(); }
+    setTag(old_tag);
+    return retval;
+  }
 
 //! @brief Creates a new point at the position being passed as parameter.
 XC::Pnt *XC::PntMap::New(const Pos3d &pos)
@@ -336,4 +354,44 @@ double XC::PntMap::Dist(const Indice &i,const Indice &j) const
     else
       retval= pA->getDistanceTo(pB->getPos());
     return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PntMap::getPyDict(void) const
+  {
+    boost::python::dict retval= EntityMap<Pnt>::getPyDict();
+    boost::python::dict point_dict;
+    for(const_iterator i= this->begin(); i!= this->end(); i++)
+      {
+	const Pnt *pt= (*i).second;
+	const int &tag= pt->getTag();
+	const boost::python::dict item_dict= pt->getPyDict();
+	point_dict[tag]= item_dict;
+      }
+    retval["points"]= point_dict; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PntMap::setPyDict(const boost::python::dict &d)
+  {
+    EntityMap<Pnt>::setPyDict(d);
+    const boost::python::dict &point_dict= boost::python::extract<boost::python::dict>(d["points"]);
+    boost::python::list items= point_dict.items();
+    const boost::python::ssize_t sz= len(items);
+    if(sz>0)
+      {
+	for(boost::python::ssize_t i=0; i<sz; i++)
+	  {
+	    const int tag= boost::python::extract<int>(items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+	    Pnt *tmp= New(tag);
+	    if(tmp)
+	      { tmp->setPyDict(itemDict); }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+		        << "; something went wrong when reading point: " << tag
+		        << ". Command ignored." << std::endl;
+	  }
+      }
   }

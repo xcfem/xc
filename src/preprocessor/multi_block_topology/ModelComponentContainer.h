@@ -55,6 +55,7 @@ class ModelComponentContainer: public ModelComponentContainerBase, public std::m
     typedef typename map_base::const_iterator const_iterator;
 
     ModelComponentContainer(MultiBlockTopology *mbt= nullptr);
+    virtual ~ModelComponentContainer(void);
 
     T * busca(const Indice &);
     const T * busca(const Indice &) const;
@@ -63,7 +64,7 @@ class ModelComponentContainer: public ModelComponentContainerBase, public std::m
     boost::python::list getKeys(void) const;
 
     void clearAll(void);
-    virtual ~ModelComponentContainer(void);
+    
   };
 
 //! @brief Constructor.
@@ -214,6 +215,6 @@ int ModelComponentContainer<T>::recvData(const Communicator &comm)
       { res+= receiveObjects(sz, comm); }
     return res;
   }
-
+  
 } //end of XC namespace
 #endif

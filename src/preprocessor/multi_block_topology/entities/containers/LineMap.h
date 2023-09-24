@@ -54,7 +54,6 @@ class LineMap: public EntityMap<Edge>
     template <class E>
     Edge *Crea(void);
 
-
   public:
     LineMap(MultiBlockTopology *mbt= nullptr);
 
@@ -64,6 +63,9 @@ class LineMap: public EntityMap<Edge>
 
     template <class E>
     Edge *New(void);
+    template <class E>
+    Edge *New(const size_t &);
+    Edge *New(const size_t &, const std::string &);
     Edge *createLine(Pnt *,Pnt *);
     Edge *createDividedLine(Pnt *,Pnt *);
     Edge *createArc(Pnt *,Pnt *,Pnt *);
@@ -76,6 +78,9 @@ class LineMap: public EntityMap<Edge>
     CmbEdge *newLineSequence(void);
     
     double getAverageLength(void) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 //! @brief Creates a new line.
@@ -102,5 +107,25 @@ Edge *LineMap::New(void)
     return retval;
   }
 
+//! @brief Creates a new edge with the given identifier.
+template <class E>
+Edge *LineMap::New(const size_t &tag)
+  {
+    size_t old_tag= getTag();
+    Edge *retval= nullptr;
+    setTag(tag); // Edge identifier.
+    retval= busca(getTag());
+    if(retval)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; edge with identifier: " << tag
+		  << " already exists. Command ignored." << std::endl;
+      }
+    else
+      {	retval= Crea<E>(); }
+    setTag(old_tag);
+    return retval;
+  }
+  
 } //end of XC namespace
 #endif

@@ -57,6 +57,9 @@ class PreprocessorContainer: public CommandEntity
     inline const Preprocessor *getPreprocessor(void) const
       { return preprocessor; }
     void checkPreprocessor(void);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 } // end of XC namespace

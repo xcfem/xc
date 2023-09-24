@@ -234,6 +234,35 @@ XC::DbTagData &XC::MultiBlockTopology::getDbTagData(void) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MultiBlockTopology::getPyDict(void) const
+  {
+    boost::python::dict retval= PreprocessorContainer::getPyDict();
+    retval["reference_systems"]= reference_systems.getPyDict();
+    retval["framework2d"]= framework2d.getPyDict();
+    retval["framework3d"]= framework3d.getPyDict();
+    retval["unif_grid"]= unif_grid.getPyDict();
+    retval["bodies"]= bodies.getPyDict();
+    retval["faces"]= faces.getPyDict();
+    retval["edges"]= edges.getPyDict();
+    retval["points"]= points.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MultiBlockTopology::setPyDict(const boost::python::dict &d)
+  {
+    PreprocessorContainer::setPyDict(d);
+    reference_systems.setPyDict(boost::python::extract<boost::python::dict>(d["reference_systems"]));
+    framework2d.setPyDict(boost::python::extract<boost::python::dict>(d["framework2d"]));
+    framework3d.setPyDict(boost::python::extract<boost::python::dict>(d["framework3d"]));
+    unif_grid.setPyDict(boost::python::extract<boost::python::dict>(d["unif_grid"]));
+    bodies.setPyDict(boost::python::extract<boost::python::dict>(d["bodies"]));
+    faces.setPyDict(boost::python::extract<boost::python::dict>(d["faces"]));
+    edges.setPyDict(boost::python::extract<boost::python::dict>(d["edges"]));
+    points.setPyDict(boost::python::extract<boost::python::dict>(d["points"]));
+  }
+
 //! @brief Send data through the communicator argument.
 int XC::MultiBlockTopology::sendData(Communicator &comm)
   {

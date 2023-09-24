@@ -63,3 +63,15 @@ XC::Domain *XC::PreprocessorContainer::getDomain(void)
       }
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PreprocessorContainer::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PreprocessorContainer::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+  }

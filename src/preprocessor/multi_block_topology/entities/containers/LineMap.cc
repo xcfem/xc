@@ -45,6 +45,21 @@
 XC::LineMap::LineMap(MultiBlockTopology *mbt)
   : EntityMap<Edge>(mbt) {}
 
+//! @brief Creates a new edge with the given identifier and the given type.
+XC::Edge *XC::LineMap::New(const size_t &tag, const std::string &className)
+  {
+    Edge *retval= nullptr;
+    if(className=="Line")
+      retval= New<Line>(tag);
+    else if(className=="DividedLine")
+      retval= New<DividedLine>(tag);
+    else if(className=="CmbEdge")
+      retval= New<CmbEdge>(tag);
+    else if(className=="CircularArc")
+      retval= New<CircularArc>(tag);
+    return retval;
+  }
+
 //! @brief Line segment.
 XC::Line *XC::LineMap::newLine(const size_t &id_p1, const size_t &id_p2)
   {
@@ -259,4 +274,45 @@ double XC::LineMap::getAverageLength(void) const
       retval+= (*i).second->getLength();
     retval/=(size());
     return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::LineMap::getPyDict(void) const
+  {
+    boost::python::dict retval= EntityMap<Edge>::getPyDict();
+    boost::python::dict edge_dict;
+    for(const_iterator i= this->begin(); i!= this->end(); i++)
+      {
+	const Edge *edge= (*i).second;
+	const int &tag= edge->getTag();
+	const boost::python::dict item_dict= edge->getPyDict();
+	edge_dict[tag]= item_dict;
+      }
+    retval["edges"]= edge_dict; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::LineMap::setPyDict(const boost::python::dict &d)
+  {
+    EntityMap<Edge>::setPyDict(d);
+    const boost::python::dict &edge_dict= boost::python::extract<boost::python::dict>(d["edges"]);
+    boost::python::list items= edge_dict.items();
+    const boost::python::ssize_t sz= len(items);
+    if(sz>0)
+      {
+	for(boost::python::ssize_t i=0; i<sz; i++)
+	  {
+	    const int tag= boost::python::extract<int>(items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    Edge *tmp= New(tag, className);
+	    if(tmp)
+	      { tmp->setPyDict(itemDict); }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+		        << "; something went wrong when reading line: " << tag
+		        << ". Command ignored." << std::endl;
+	  }
+      }
   }

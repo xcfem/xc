@@ -67,6 +67,7 @@ class PntMap: public EntityMap<Pnt>
 
     bool checkPosition(const Pos3d &);
     Pnt *New(void);
+    Pnt *New(const size_t &);
     Pnt *New(const Pos3d &);
     Pnt *New(const size_t &,const Pos3d &);
     Pnt *New(const Pos2d &);
@@ -76,6 +77,9 @@ class PntMap: public EntityMap<Pnt>
     void Copy(const std::vector<PntMap::Indice> &);
     void Transform(const TrfGeom &trf,const std::vector<PntMap::Indice> &);
     double Dist(const Indice &i,const Indice &j) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 } //end of XC namespace

@@ -116,12 +116,13 @@ void XC::FEProblem::setPyDict(const boost::python::dict &d)
     CommandEntity::setPyDict(d);
     const boost::python::dict &oh_dict= boost::python::extract<boost::python::dict>(d["output_handlers"]);
     boost::python::list items= oh_dict.items();
-    if(len(items)>0)
+    const size_t sz= len(items);
+    if(sz>0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; reading of output handlers not implemented yet."
 	          << std::endl;
-	for(boost::python::ssize_t i=0; i<len(items); i++)
+	for(boost::python::ssize_t i=0; i<sz; i++)
 	  {
 	    const std::string key= boost::python::extract<std::string>(items[i][0]);
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
