@@ -656,6 +656,10 @@ python tests/preprocessor/import_export/freecad/test_ifc_pinned_member.py
 python tests/preprocessor/import_export/freecad/test_ifc_mixed_blocks_01.py
 echo "$BLEU" "    JSON tests." "$NORMAL"
 python tests/preprocessor/import_export/json/test_export_topology_01.py
+python tests/preprocessor/import_export/json/test_export_xc_model_01.py
+python tests/preprocessor/import_export/json/test_export_xc_model_02.py
+python tests/preprocessor/import_export/json/test_export_xc_model_03.py
+python tests/preprocessor/import_export/json/test_export_xc_model_04.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
