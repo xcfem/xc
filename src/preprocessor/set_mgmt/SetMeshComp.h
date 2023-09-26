@@ -100,6 +100,8 @@ class SetMeshComp: public SetBase
   public:
     SetMeshComp(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     SetMeshComp(const SetMeshComp &);
+    ~SetMeshComp(void);
+    
     SetMeshComp &operator=(const SetMeshComp &);
     SetMeshComp &operator+=(const SetMeshComp &);
     SetMeshComp &operator-=(const SetMeshComp &);
@@ -140,7 +142,7 @@ class SetMeshComp: public SetBase
     size_t getNumberOfElements(void) const
       { return elements.size(); }
     //! @brief Adds an element.
-    void addElement(Element *ePtr);
+    void addElement(Element *);
     //! @brief Returns the element container.
     virtual const DqPtrsElem &getElements(void) const
       { return elements; }
@@ -166,6 +168,11 @@ class SetMeshComp: public SetBase
       { return elements.getMaterialNamesPy(); }
     SetMeshComp pickElemsOfMaterial(const std::string &, const std::string &);
 
+    //! @brief Returns the number of constraints.
+    size_t getNumberOfConstraints(void) const
+      { return constraints.size(); }
+    //! @brief Adds a constraint.
+    void addConstraint(Constraint *);
     //! @brief Return the constraints container.
     virtual const DqPtrsConstraint &getConstraints(void) const
       { return constraints; }
@@ -247,7 +254,8 @@ class SetMeshComp: public SetBase
     SetMeshComp operator-(const SetMeshComp &) const;
     SetMeshComp operator*(const SetMeshComp &) const;
 
-    ~SetMeshComp(void);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 

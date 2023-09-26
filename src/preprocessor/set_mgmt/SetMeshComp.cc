@@ -693,6 +693,10 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsOfMaterial(const std::string &newSetNa
     return retval;
   }
 
+//! @brief Add constraint to the set.
+void XC::SetMeshComp::addConstraint(Constraint *c)
+  { constraints.push_back(c); }
+
 //! @brief Select the constraints identified by the tags.
 //!
 //! @param tags: identifiers of the constraints.
@@ -811,4 +815,65 @@ XC::SetMeshComp XC::SetMeshComp::operator*(const SetMeshComp &b) const
     SetMeshComp retval(*this);
     retval*=b;
     return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::SetMeshComp::getPyDict(void) const
+  {
+    boost::python::dict retval= SetBase::getPyDict();
+    boost::python::list nodeTags;
+    for(nod_const_iterator i= nodes.begin(); i!=nodes.end(); i++)
+      {
+	const Node *n= *i;
+        nodeTags.append(n->getTag());
+      }
+    retval["nodeTags"]= nodeTags;
+    boost::python::list elementTags;
+    for(elem_const_iterator i= elements.begin(); i!=elements.end(); i++)
+      {
+	const Element *e= *i;
+        elementTags.append(e->getTag());
+      }
+    retval["elementTags"]= elementTags;
+    boost::python::list constraintTags;
+    for(constraint_const_iterator i= constraints.begin(); i!=constraints.end(); i++)
+      {
+	const Constraint *e= *i;
+        constraintTags.append(e->getTag());
+      }
+    retval["constraintTags"]= constraintTags;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SetMeshComp::setPyDict(const boost::python::dict &d)
+  {
+    SetBase::setPyDict(d);
+    boost::python::list nodeTags= boost::python::extract<boost::python::list>(d["nodeTags"]);
+    const size_t numNodes= boost::python::len(nodeTags);
+    boost::python::list elementTags= boost::python::extract<boost::python::list>(d["elementTags"]);
+    const size_t numElements= boost::python::len(elementTags);
+    boost::python::list constraintTags= boost::python::extract<boost::python::list>(d["constraintTags"]);
+    const size_t numConstraints= boost::python::len(constraintTags);
+    ID nIds(numNodes);
+    for(size_t i= 0; i<numNodes; i++)
+      {
+	const size_t nodeTag= boost::python::extract<int>(nodeTags[i]);
+	nIds[i]= nodeTag;
+      }
+    sel_nodes_from_list(nIds);
+    ID eIds(numElements);
+    for(size_t i= 0; i<numElements; i++)
+      {
+	const size_t elementTag= boost::python::extract<int>(elementTags[i]);
+	eIds[i]= elementTag;
+      }
+    sel_elements_from_list(eIds);   
+    ID cIds(numConstraints);
+    for(size_t i= 0; i<numConstraints; i++)
+      {
+	const size_t constraintTag= boost::python::extract<int>(constraintTags[i]);
+	cIds[i]= constraintTag;
+      }
+    sel_constraints_from_list(cIds);
   }

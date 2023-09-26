@@ -714,6 +714,9 @@ void XC::SetEntities::gen_mesh_gmsh(const std::string &modelName)
     // Extract mesh data.
     const std::map<int, const Node *> mapNodes= create_nodes_from_gmsh();
     const int numElements= create_elements_from_gmsh(mapNodes);
+    if(numElements<=0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; Gmsh returned no elements." << std::endl;
 
     // This should be called when you are done using the Gmsh C++ API:
     gmsh::finalize();
@@ -1106,7 +1109,7 @@ XC::SetEntities XC::SetEntities::pickEntitiesInside(const GeomObj3d &geomObj, co
 //! @brief Select the points identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
-void XC::SetEntities::sel_points_lista(const ID &tags)
+void XC::SetEntities::sel_points_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -1134,7 +1137,7 @@ void XC::SetEntities::sel_points_lista(const ID &tags)
 //! @brief Select the lines identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
-void XC::SetEntities::sel_lines_list(const ID &tags)
+void XC::SetEntities::sel_lines_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -1160,7 +1163,7 @@ void XC::SetEntities::sel_lines_list(const ID &tags)
   }
 
 //! @brief Selects the surfaces with the identifiers being passed as parameter.
-void XC::SetEntities::sel_surfaces_lst(const ID &tags)
+void XC::SetEntities::sel_surfaces_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -1176,6 +1179,56 @@ void XC::SetEntities::sel_surfaces_lst(const ID &tags)
                   surfaces.push_back(iface);
                 else
 		  std::cerr << "Surface with tag: " << tags(i) << " not found." << std::endl;
+              }
+          }
+        else
+          std::cerr << getClassName() << __FUNCTION__
+	            << "; preprocessor needed." << std::endl;
+      }
+  }
+
+//! @brief Selects the bodies with the identifiers being passed as parameter.
+void XC::SetEntities::sel_bodies_from_list(const ID &tags)
+  {
+    const size_t sz= tags.Size();
+    if(sz>0)
+      {
+        Preprocessor *preprocessor= getPreprocessor();
+        if(preprocessor)
+          {
+            MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+            for(size_t i= 0;i<sz;i++)
+              {
+	        Body *ibody= mbt.getBodies().busca(tags(i)); 
+                if(ibody)
+                  bodies.push_back(ibody);
+                else
+		  std::cerr << "Body with tag: " << tags(i) << " not found." << std::endl;
+              }
+          }
+        else
+          std::cerr << getClassName() << __FUNCTION__
+	            << "; preprocessor needed." << std::endl;
+      }
+  }
+
+//! @brief Selects the uniform grids with the identifiers being passed as parameter.
+void XC::SetEntities::sel_ugrids_from_list(const ID &tags)
+  {
+    const size_t sz= tags.Size();
+    if(sz>0)
+      {
+        Preprocessor *preprocessor= getPreprocessor();
+        if(preprocessor)
+          {
+            MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+            for(size_t i= 0;i<sz;i++)
+              {
+	        UniformGrid *iugrid= mbt.getUniformGrids().busca(tags(i)); 
+                if(iugrid)
+                  uniform_grids.push_back(iugrid);
+                else
+		  std::cerr << "Body with tag: " << tags(i) << " not found." << std::endl;
               }
           }
         else
@@ -1214,14 +1267,15 @@ int XC::SetEntities::recvData(const Communicator &comm)
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
 //     tmp= points.receiveTags(9,10,getDbTagData(),comm);
-//     sel_points_lista(tmp);
+//     sel_points_from_list(tmp);
 //     tmp= lines.receiveTags(11,12,getDbTagData(),comm);
-//     sel_lines_list(tmp);
+//     sel_lines_from_list(tmp);
 //     tmp= surfaces.receiveTags(13,14,getDbTagData(),comm);
-//     sel_surfaces_list(tmp);
+//     sel_surfaces_from_list(tmp);
 //     tmp= bodies.receiveTags(15,16,getDbTagData(),comm);
-//     sel_bodies_list(tmp);
+//     sel_bodies_from_list(tmp);
 //     tmp= uniform_grids.receiveTags(17,18,getDbTagData(),comm);
+//     sel_uniform_grids_from_list(tmp);
     return res;
   }
 
@@ -1263,4 +1317,100 @@ int XC::SetEntities::recvSelf(const Communicator &comm)
 		    << "; failed to receive data.\n";
       }
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::SetEntities::getPyDict(void) const
+  {
+    boost::python::dict retval= PreprocessorContainer::getPyDict();
+    boost::python::list pointTags;
+    for(pnt_const_iterator i= points.begin(); i!=points.end(); i++)
+      {
+	const Pnt *p= *i;
+        pointTags.append(p->getTag());
+      }
+    retval["pointTags"]= pointTags;
+    boost::python::list lineTags;
+    for(lin_const_iterator i= lines.begin(); i!=lines.end(); i++)
+      {
+	const Edge *l= *i;
+        lineTags.append(l->getTag());
+      }
+    retval["lineTags"]= lineTags;
+    boost::python::list faceTags;
+    for(sup_const_iterator i= surfaces.begin(); i!=surfaces.end(); i++)
+      {
+	const Face *f= *i;
+        faceTags.append(f->getTag());
+      }
+    retval["faceTags"]= faceTags;
+    boost::python::list bodyTags;
+    for(body_const_iterator i= bodies.begin(); i!=bodies.end(); i++)
+      {
+	const Body *b= *i;
+        bodyTags.append(b->getTag());
+      }
+    retval["bodyTags"]= bodyTags;
+    boost::python::list ugridTags;
+    for(ugrid_const_iterator i= uniform_grids.begin(); i!=uniform_grids.end(); i++)
+      {
+	const UniformGrid *b= *i;
+        ugridTags.append(b->getTag());
+      }
+    retval["ugridTags"]= ugridTags;    
+    retval["useGmsh"]= useGmsh;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SetEntities::setPyDict(const boost::python::dict &d)
+  {
+    PreprocessorContainer::setPyDict(d);
+    boost::python::list pointTags= boost::python::extract<boost::python::list>(d["pointTags"]);
+    const size_t numPoints= boost::python::len(pointTags);
+    boost::python::list lineTags= boost::python::extract<boost::python::list>(d["lineTags"]);
+    const size_t numLines= boost::python::len(lineTags);
+    boost::python::list surfaceTags= boost::python::extract<boost::python::list>(d["faceTags"]);
+    const size_t numSurfaces= boost::python::len(surfaceTags);
+    boost::python::list bodyTags= boost::python::extract<boost::python::list>(d["faceTags"]);
+    const size_t numBodies= boost::python::len(bodyTags);
+    boost::python::list ugridTags= boost::python::extract<boost::python::list>(d["faceTags"]);
+    const size_t numUGrids= boost::python::len(ugridTags);
+    
+    ID nIds(numPoints);
+    for(size_t i= 0; i<numPoints; i++)
+      {
+	const size_t pointTag= boost::python::extract<int>(pointTags[i]);
+	nIds[i]= pointTag;
+      }
+    sel_points_from_list(nIds);
+    ID eIds(numLines);
+    for(size_t i= 0; i<numLines; i++)
+      {
+	const size_t lineTag= boost::python::extract<int>(lineTags[i]);
+	eIds[i]= lineTag;
+      }
+    sel_lines_from_list(eIds);   
+    ID sIds(numSurfaces);
+    for(size_t i= 0; i<numSurfaces; i++)
+      {
+	const size_t faceTag= boost::python::extract<int>(surfaceTags[i]);
+	sIds[i]= faceTag;
+      }
+    sel_surfaces_from_list(sIds);
+    ID bIds(numBodies);
+    for(size_t i= 0; i<numBodies; i++)
+      {
+	const size_t bodyTag= boost::python::extract<int>(bodyTags[i]);
+	bIds[i]= bodyTag;
+      }
+    sel_bodies_from_list(bIds);
+    ID ugIds(numUGrids);
+    for(size_t i= 0; i<numUGrids; i++)
+      {
+	const size_t ugridTag= boost::python::extract<int>(ugridTags[i]);
+	ugIds[i]= ugridTag;
+      }
+    sel_bodies_from_list(ugIds);
+    useGmsh= boost::python::extract<bool>(d["useGmsh"]);
   }

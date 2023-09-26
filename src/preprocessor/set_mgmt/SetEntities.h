@@ -94,6 +94,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     typedef lst_body_pointers::const_iterator body_const_iterator; //!< body set const iterator.
     
     typedef DqPtrsEntities<UniformGrid> lst_ptr_uniform_grids; //!< Unifrom grid set.
+    typedef lst_ptr_uniform_grids::iterator ugrid_iterator; //!< Uniform grid iterator.
+    typedef lst_ptr_uniform_grids::const_iterator ugrid_const_iterator; //!< Uniform grid const iterator.
 
   protected:
     lst_ptr_points points; //!< point set.
@@ -134,6 +136,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     SetEntities(Preprocessor *preprocessor= nullptr);
     SetEntities(const SetEntities &);
     SetEntities &operator=(const SetEntities &);
+    ~SetEntities(void);
 
     void clear(void);
     bool empty(void) const;    
@@ -147,7 +150,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     //! @brief Assigns the points set.
     void setPoints(const lst_ptr_points &pts)
       { points= pts; }
-    void sel_points_lista(const ID &);
+    void sel_points_from_list(const ID &);
     bool In(const Pnt *) const;
     SetEntities pickPointsInside(const GeomObj3d &, const double &tol= 0.0) const;
     Pnt *getNearestPoint(const Pos3d &);
@@ -163,7 +166,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     //! @brief Assigns the edge set.
     void setLines(const lst_line_pointers &lns)
       { lines= lns; }
-    void sel_lines_list(const ID &);
+    void sel_lines_from_list(const ID &);
     bool In(const Edge *) const;
     SetEntities pickLinesInside(const GeomObj3d &, const double &tol= 0.0) const;
     edge_intersection_pairs getLineIntersections(const double &tol= 1e-6) const;
@@ -178,7 +181,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     //! @brief Assigns the surface set.
     void setSurfaces(const lst_surface_ptrs &sfs)
       { surfaces= sfs; }
-    void sel_surfaces_lst(const ID &);
+    void sel_surfaces_from_list(const ID &);
     bool In(const Face *) const;
     SetEntities pickSurfacesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
@@ -191,6 +194,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     //! @brief Assigns the bodies set.
     void setBodies(const lst_body_pointers &bds)
       { bodies= bds; }
+    void sel_bodies_from_list(const ID &);
     bool In(const Body *) const;
     SetEntities pickBodiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
@@ -200,6 +204,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     //! @brief Return a reference to the UniformGrids container.
     virtual lst_ptr_uniform_grids &getUniformGrids(void)
       { return uniform_grids; }
+    void sel_ugrids_from_list(const ID &);
     bool In(const UniformGrid *) const;
 
     BND3d Bnd(void) const;
@@ -238,7 +243,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     SetEntities operator-(const SetEntities &) const;
     SetEntities operator*(const SetEntities &) const;
 
-    ~SetEntities(void);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } //end of XC namespace
 #endif

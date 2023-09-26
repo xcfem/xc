@@ -50,6 +50,10 @@
 XC::Set::Set(const std::string &nmb,Preprocessor *prep)
   : SetMeshComp(nmb,prep), entities(prep) {}
 
+//!  @brief Destructor.
+XC::Set::~Set(void)
+  { clearAll(); }
+
 //! @brief Extend this set with the points of the argument.
 void XC::Set::extend(const SetEntities::lst_ptr_points &pts)
   { entities.extend(pts); }
@@ -387,18 +391,18 @@ void XC::Set::fillUpwards(void)
 //! @brief Select the points identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
-void XC::Set::sel_points_lista(const ID &tags)
-  { entities.sel_points_lista(tags); }
+void XC::Set::sel_points_from_list(const ID &tags)
+  { entities.sel_points_from_list(tags); }
 
 //! @brief Select the lines identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
-void XC::Set::sel_lines_list(const ID &tags)
-  { entities.sel_lines_list(tags); }
+void XC::Set::sel_lines_from_list(const ID &tags)
+  { entities.sel_lines_from_list(tags); }
 
 //! @brief Selects the surfaces with the identifiers being passed as parameter.
-void XC::Set::sel_surfaces_lst(const ID &tags)
-  { entities.sel_surfaces_lst(tags); }
+void XC::Set::sel_surfaces_from_list(const ID &tags)
+  { entities.sel_surfaces_from_list(tags); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
@@ -424,10 +428,6 @@ int XC::Set::recvData(const Communicator &comm)
     //res+= entities.recvData(comm);
     return res;
   }
-
-//!  @brief Destructor.
-XC::Set::~Set(void)
-  { clearAll(); }
 
 //! @brief Sends object through the communicator argument.
 int XC::Set::sendSelf(Communicator &comm)
@@ -463,4 +463,21 @@ int XC::Set::recvSelf(const Communicator &comm)
 		    << "; failed to receive data.\n";
       }
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Set::getPyDict(void) const
+  {
+    boost::python::dict retval= SetMeshComp::getPyDict();
+    retval["description"]= this->description;
+    retval["entities"]= this->entities.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Set::setPyDict(const boost::python::dict &d)
+  {
+    SetMeshComp::setPyDict(d);
+    this->description= boost::python::extract<std::string>(d["description"]);
+    this->entities.setPyDict(boost::python::extract<boost::python::dict>(d["entities"]));
   }

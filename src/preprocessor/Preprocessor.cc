@@ -288,7 +288,7 @@ void XC::Preprocessor::setPyDict(const boost::python::dict &d)
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; ERROR; domain creation from Python dictionary"
-	            << " implemented yet." << std::endl;
+	            << " not implemented yet." << std::endl;
       }
     transf.setPyDict(boost::python::extract<boost::python::dict>(d["transf_coo_handler"]));
     beamIntegrators.setPyDict(boost::python::extract<boost::python::dict>(d["beam_integrators"]));

@@ -76,6 +76,7 @@ class Set: public SetMeshComp
     void move(const Vector3d &);
   public:
     Set(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    ~Set(void);
 
     inline void setDescription(const std::string &d)
       { description= d; }
@@ -114,7 +115,7 @@ class Set: public SetMeshComp
     //! @brief Assigns the points set.
     void setPoints(const SetEntities::lst_ptr_points &pts)
       { entities.setPoints(pts); }
-    void sel_points_lista(const ID &);
+    void sel_points_from_list(const ID &);
     bool In(const Pnt *) const;
     Set pickPointsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
@@ -127,7 +128,7 @@ class Set: public SetMeshComp
     //! @brief Assigns the edge set.
     void setLines(const SetEntities::lst_line_pointers &lns)
       { entities.setLines(lns); }
-    void sel_lines_list(const ID &);
+    void sel_lines_from_list(const ID &);
     bool In(const Edge *) const;
     Set pickLinesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
@@ -140,7 +141,7 @@ class Set: public SetMeshComp
     //! @brief Assigns the surface set.
     void setSurfaces(const SetEntities::lst_surface_ptrs &sfs)
       { entities.setSurfaces(sfs); }
-    void sel_surfaces_lst(const ID &);
+    void sel_surfaces_from_list(const ID &);
     bool In(const Face *) const;
     Set pickSurfacesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
@@ -195,7 +196,8 @@ class Set: public SetMeshComp
     Set &operator-(const Set &) const;
     Set &operator*(const Set &) const;
 
-    ~Set(void);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } //end of XC namespace
 #endif
