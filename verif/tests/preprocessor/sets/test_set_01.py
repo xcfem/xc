@@ -51,7 +51,7 @@ beam3dL= elements.newElement("ElasticBeam3d",xc.ID([n6.tag,n8.tag]))
 # Trial set definition
 trialSet1= preprocessor.getSets.defSet("trialSet1")
 
-#Color property get/set test.
+# Color property get/set test.
 colorA= trialSet1.color
 ratioA= colorA[0]**2+colorA[1]**2+colorA[2]**2
 trialSet1.color= xc.Vector([1.0,2.0,3.0])
@@ -63,8 +63,6 @@ for n in nodes:
   coord= n.getCoo
   if(abs(coord[1]-0.0)<1e-2):
     trialSet1.getNodes.append(n)
-
-
 
 '''
 nodes= trialSet1.getNodes
