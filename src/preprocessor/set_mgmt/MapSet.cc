@@ -34,6 +34,7 @@
 
 
 #include "utility/actor/actor/MovableID.h"
+#include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
@@ -525,3 +526,50 @@ int XC::MapSet::recvSelf(const Communicator &comm)
     return res;
   }
 
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MapSet::getPyDict(void) const
+  {
+    boost::python::dict retval= PreprocessorContainer::getPyDict();
+    retval["sets"]= MapSetBase::getPyDict();
+    // The entities are populated automatically.
+    // boost::python::list entitiesList;
+    // for(map_ent_mdlr::const_iterator i= entities.begin(); i!= entities.end(); i++)
+    //   {
+    // 	const std::string name= (*i).first;
+    // 	const EntMdlr *ent_mdlr= (*i).second;
+    // 	const std::string className= ent_mdlr->getClassName();
+    // 	const int tag= ent_mdlr->getTag();
+    // 	boost::python::tuple tagClassNamePair= boost::python::make_tuple(className, tag);
+    // 	entitiesList.append(tagClassNamePair);
+    //   }
+    // retval["entities"]= entitiesList;
+    boost::python::list openSetsNames;
+    if(!open_sets.empty())
+      {
+        for(const_iterator i= open_sets.begin();i!=open_sets.end();i++)
+          openSetsNames.append((*i).first);
+      }
+    retval["open_sets"]= openSetsNames; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MapSet::setPyDict(const boost::python::dict &d)
+  {
+    PreprocessorContainer::setPyDict(d);
+    boost::python::dict setsDict= boost::python::extract<boost::python::dict>(d["sets"]);
+    MapSetBase::setPyDict(getPreprocessor(), setsDict);
+    boost::python::list openSetsNames= boost::python::extract<boost::python::list>(d["open_sets"]);
+    const boost::python::ssize_t sz= len(openSetsNames);
+    if(sz>0)
+      {
+	for(boost::python::ssize_t i=0; i<sz; i++)
+	  {
+	    const std::string name= boost::python::extract<std::string>(openSetsNames[i]);
+	    abre_set(name);
+	  }
+      }
+    // The entities are populated automatically.
+    //this->entities.setPyDict(boost::python::extract<boost::python::dict>(d["entities"]));
+  }

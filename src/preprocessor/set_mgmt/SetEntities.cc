@@ -1372,9 +1372,9 @@ void XC::SetEntities::setPyDict(const boost::python::dict &d)
     const size_t numLines= boost::python::len(lineTags);
     boost::python::list surfaceTags= boost::python::extract<boost::python::list>(d["faceTags"]);
     const size_t numSurfaces= boost::python::len(surfaceTags);
-    boost::python::list bodyTags= boost::python::extract<boost::python::list>(d["faceTags"]);
+    boost::python::list bodyTags= boost::python::extract<boost::python::list>(d["bodyTags"]);
     const size_t numBodies= boost::python::len(bodyTags);
-    boost::python::list ugridTags= boost::python::extract<boost::python::list>(d["faceTags"]);
+    boost::python::list ugridTags= boost::python::extract<boost::python::list>(d["ugridTags"]);
     const size_t numUGrids= boost::python::len(ugridTags);
     
     ID nIds(numPoints);

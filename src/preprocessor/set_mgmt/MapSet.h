@@ -42,10 +42,8 @@ namespace XC {
 
 class Domain;
 
-//!  @ingroup Set
-//! 
 //!  @brief Sets container.
-//!  
+//!  @ingroup Set
 class MapSet: public PreprocessorContainer, public MovableObject, public MapSetBase
   {
     static ID setsDbTags;//! dbTags para the sets.
@@ -121,6 +119,8 @@ class MapSet: public PreprocessorContainer, public MovableObject, public MapSetB
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

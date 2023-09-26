@@ -357,3 +357,46 @@ std::set<XC::SetBase *> XC::MapSetBase::get_sets(const UniformGrid *ug)
       if((*i).second->In(ug)) retval.insert((*i).second);
     return retval;
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MapSetBase::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    for(const_iterator i= begin(); i!= end(); i++)
+      {
+	const std::string name= (*i).first;
+	const Set *set= dynamic_cast<const Set *>((*i).second);
+        if(set)
+	  {
+	    if(name!="total") // total set is populated automatically.
+	       retval[name]= set->getPyDict();
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MapSetBase::setPyDict(Preprocessor *preprocessor, const boost::python::dict &d)
+  {
+    boost::python::list items= d.items();
+    const boost::python::ssize_t sz= len(items);
+    if(sz>0)
+      {
+	for(boost::python::ssize_t i=0; i<sz; i++)
+	  {
+	    const std::string name= boost::python::extract<std::string>(items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    Set *set= new Set(name,preprocessor);
+	    if(set)
+	      {
+		set->setPyDict(itemDict);
+		operator[](name)= set;
+	      }
+	    else
+	      std::cerr << "MapSetBase::" << __FUNCTION__
+		        << "; something went wrong when reading set: " << name
+		        << ". Command ignored." << std::endl;
+	  }
+      }    
+  }

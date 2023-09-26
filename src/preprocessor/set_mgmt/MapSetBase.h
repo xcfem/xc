@@ -31,11 +31,10 @@
 #ifndef MAPSETBASE_H
 #define MAPSETBASE_H
 
-#include "preprocessor/PreprocessorContainer.h"
-#include "domain/domain/Domain.h"
-#include "utility/actor/actor/MovableObject.h"
 #include <map>
 #include <deque>
+#include <string>
+#include "utility/actor/actor/MovableObject.h"
 
 
 namespace XC {
@@ -49,6 +48,7 @@ class Edge;
 class Face;
 class Body;
 class UniformGrid;
+class Preprocessor;
 
 //!  @ingroup Set
 //! 
@@ -77,7 +77,6 @@ class MapSetBase: public std::map<std::string,SetBase *>
     DbTagData &getDbTagData(void) const;
     const ID &getSetsDBTags(Communicator &comm);
 
-    friend class Preprocessor;
   public:
     MapSetBase(void)
       :map_sets() {}
@@ -100,6 +99,8 @@ class MapSetBase: public std::map<std::string,SetBase *>
     std::set<SetBase *> get_sets(const Body *);
     std::set<SetBase *> get_sets(const UniformGrid *);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(Preprocessor *, const boost::python::dict &);
   };
 } // end of XC namespace
 
