@@ -154,8 +154,8 @@ bool XC::LineBase::check_points(void) const
       retval= true;
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; entity: '" << getName()
-                << " is not defined." << std::endl;
+	        << "; points for entity: '" << getName()
+                << " are not defined." << std::endl;
     return retval;
   }
 
@@ -227,9 +227,9 @@ void XC::LineBase::setPyDict(const boost::python::dict &d)
 	MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
 	PntMap &points= mbt.getPoints();
 	if(tagP1>=0)
-	  p1= points.busca(tagP1);
+	  this->p1= points.busca(tagP1);
 	if(tagP2>=0)
-	  p2= points.busca(tagP2);
+	  this->p2= points.busca(tagP2);
       }
     else
       std::cerr << getClassName() << __FUNCTION__
