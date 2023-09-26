@@ -81,6 +81,9 @@ class Block: public Body
     bool checkNDivs(void) const;
     void create_nodes(void);
     void genMesh(meshing_dir dm);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } //end of XC namespace
 

@@ -38,7 +38,7 @@ actionGroup.relationships.appendMain('MainAction1')
 actionGroup.relationships.appendMain('MainAction2')
 
 actionGroupData= actionGroup.getDict()
-refDict= {'ownerAddress': 0, 'actions': {'TestActionA': {'ownerAddress': 0, 'name': 'TestActionA', 'description': 'Test action description A.', 'relations': {'ownerAddress': 0, 'incompatibles': ['IncompA.*', 'IncompB.*'], 'main_actions': ['MainAction1', 'MainAction2'], 'contiene_incomp': False}, 'nodet': False, 'f_pond': 1.0}, 'TestActionB': {'ownerAddress': 0, 'name': 'TestActionB', 'description': 'Test action description B.', 'relations': {'ownerAddress': 0, 'incompatibles': [], 'main_actions': [], 'contiene_incomp': False}, 'nodet': False, 'f_pond': 1.0}}}
+refDict= {'ownerAddress': 0, 'className': 'cmb_acc::GroupActionWrapper', 'actions': {'TestActionA': {'ownerAddress': 0, 'className': 'cmb_acc::ActionRepresentativeValues', 'name': 'TestActionA', 'description': 'Test action description A.', 'relations': {'ownerAddress': 0, 'className': 'cmb_acc::ActionRelationships', 'incompatibles': ['IncompA.*', 'IncompB.*'], 'main_actions': ['MainAction1', 'MainAction2'], 'contiene_incomp': False}, 'nodet': False, 'f_pond': 1.0}, 'TestActionB': {'ownerAddress': 0, 'className': 'cmb_acc::ActionRepresentativeValues', 'name': 'TestActionB', 'description': 'Test action description B.', 'relations': {'ownerAddress': 0, 'className': 'cmb_acc::ActionRelationships', 'incompatibles': [], 'main_actions': [], 'contiene_incomp': False}, 'nodet': False, 'f_pond': 1.0}}}
 actionGroupData['ownerAddress']= 0 # Owner address can't be the same.
 ok= (actionGroupData==refDict)
 

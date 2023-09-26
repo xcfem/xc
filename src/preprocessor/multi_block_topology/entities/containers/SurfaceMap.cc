@@ -43,6 +43,20 @@
 XC::SurfaceMap::SurfaceMap(MultiBlockTopology *mbt)
   : EntityMap<Face>(mbt), edgeGraph() {}
 
+//! @brief Creates a new face with the given identifier and the given type.
+XC::Face *XC::SurfaceMap::New(const size_t &tag, const std::string &className)
+  {
+    Face *retval= nullptr;
+    if(className=="QuadSurface")
+      retval= New<QuadSurface>(tag);
+    else if(className=="PolygonalFace")
+      retval= New<PolygonalFace>(tag);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; unknown class: '" << className << "'\n";
+    return retval;
+  }
+
 void XC::SurfaceMap::Graph::add_vertex(const Edge *e)
   { edges.insert(Graph::map_pair(e,Graph::vertex_list())); }
 
@@ -208,3 +222,43 @@ void XC::SurfaceMap::reverse(void)
       (*i).second->reverse();
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::SurfaceMap::getPyDict(void) const
+  {
+    boost::python::dict retval= EntityMap<Face>::getPyDict();
+    boost::python::dict face_dict;
+    for(const_iterator i= this->begin(); i!= this->end(); i++)
+      {
+	const Face *face= (*i).second;
+	const int &tag= face->getTag();
+	const boost::python::dict item_dict= face->getPyDict();
+	face_dict[tag]= item_dict;
+      }
+    retval["faces"]= face_dict; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SurfaceMap::setPyDict(const boost::python::dict &d)
+  {
+    EntityMap<Face>::setPyDict(d);
+    const boost::python::dict &face_dict= boost::python::extract<boost::python::dict>(d["faces"]);
+    boost::python::list items= face_dict.items();
+    const boost::python::ssize_t sz= len(items);
+    if(sz>0)
+      {
+	for(boost::python::ssize_t i=0; i<sz; i++)
+	  {
+	    const int tag= boost::python::extract<int>(items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    Face *tmp= New(tag, className);
+	    if(tmp)
+	      { tmp->setPyDict(itemDict); }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+		        << "; something went wrong when reading surface: " << tag
+		        << ". Command ignored." << std::endl;
+	  }
+      }
+  }

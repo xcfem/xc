@@ -256,6 +256,23 @@ int XC::EntMdlrBase::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::EntMdlrBase::getPyDict(void) const
+  {
+    boost::python::dict retval= NamedEntity::getPyDict();
+    retval["labels"]= labels.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::EntMdlrBase::setPyDict(const boost::python::dict &d)
+  {
+    NamedEntity::setPyDict(d);
+    const boost::python::dict &label_dict= boost::python::extract<boost::python::dict>(d["labels"]);
+    labels.setPyDict(label_dict);
+  }
+
+
 //! @brief Send objects through the communicator argument.
 int XC::EntMdlrBase::sendSelf(Communicator &comm)
   {

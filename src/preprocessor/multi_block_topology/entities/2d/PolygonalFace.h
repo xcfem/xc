@@ -73,6 +73,9 @@ class PolygonalFace: public Face
 
     // Mesh generation.
     void genMesh(meshing_dir dm, bool paving= false);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 } //end of XC namespace

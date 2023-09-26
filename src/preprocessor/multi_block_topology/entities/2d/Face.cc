@@ -1071,3 +1071,70 @@ std::set<const XC::Pnt *> XC::getCommonVertex(const Face &f1,const Face &f2, con
                   std::inserter(retval,retval.begin()));
     return retval;
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Face::getPyDict(void) const
+  {
+    boost::python::dict retval= CmbEdge::getPyDict();
+    boost::python::list bodyTags;
+    for(std::set<const Body *>::const_iterator i= bodies_surf.begin(); i!=bodies_surf.end(); i++)
+      {
+	const Body *b= *i;
+        bodyTags.append(b->getTag());
+      }
+    retval["bodyTags"]= bodyTags;
+    retval["ndivj"]= this->ndivj;
+    boost::python::list holeTags;
+    for(dq_holes::const_iterator i= holes.begin(); i!= holes.end(); i++)
+      {
+	const PolygonalFace *hole= *i;
+	holeTags.append(hole->getTag());
+      }
+    retval["holeTags"]= holeTags;
+    retval["hole"]= this->hole;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Face::setPyDict(const boost::python::dict &d)
+  {
+    CmbEdge::setPyDict(d);
+    boost::python::list bodyTags= boost::python::extract<boost::python::list>(d["bodyTags"]);
+    const size_t numBodies= boost::python::len(bodyTags);
+    const Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+	const MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
+	const BodyMap &bodies= mbt.getBodies();
+	for(size_t i= 0; i<numBodies; i++)
+	  {
+	    const size_t tag= boost::python::extract<size_t>(bodyTags[i]);
+	    const Body *b= bodies.busca(tag);
+	    bodies_surf.insert(b);
+	  }
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
+    this->ndivj=  boost::python::extract<size_t>(d["ndivj"]);
+    boost::python::list holeTags= boost::python::extract<boost::python::list>(d["holeTags"]);
+    const size_t numHoles= boost::python::len(holeTags);
+    Preprocessor *prep= getPreprocessor();
+    if(prep)
+      {
+	MultiBlockTopology &mbt= prep->getMultiBlockTopology();
+	SurfaceMap &surfaces= mbt.getSurfaces();
+	for(size_t i= 0; i<numHoles; i++)
+	  {
+	    const size_t holeTag= boost::python::extract<size_t>(holeTags[i]);
+	    Face *f= surfaces.busca(holeTag);
+	    PolygonalFace *pf= dynamic_cast<PolygonalFace *>(f);
+	    this->holes.push_back(pf);
+	  }
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
+    this->hole= boost::python::extract<bool>(d["hole"]);
+  }
+

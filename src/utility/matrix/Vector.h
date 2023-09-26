@@ -196,6 +196,7 @@ class Vector: public CommandEntity
     friend std::string to_string(const Vector &);
     inline std::string toString(void) const
       { return to_string(*this); }
+    boost::python::list getPyList(void) const;
     // friend istream &operator>>(istream &s, Vector &V);    
     friend Vector operator*(double , const Vector &);
     

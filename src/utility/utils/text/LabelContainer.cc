@@ -77,6 +77,30 @@ void LabelDictionary::Print(std::ostream &os) const
       os << i->first << " " << i->second << std::endl;
   }
 
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict LabelDictionary::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    bm_type::index_iterator<to>::type i=boost::multi_index::get<to>(bm).begin();
+    for(;i!=boost::multi_index::get<to>(bm).end();i++)
+      retval[i->first]= i->second;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void LabelDictionary::setPyDict(const boost::python::dict &d)
+  {
+    auto items = boost::python::list(d.items());
+    const size_t sz= boost::python::len(items);
+    for(size_t i= 0; i<sz; i++)
+      {
+	const int id= boost::python::extract<int>(items[i][0]);
+	const std::string &e=  boost::python::extract<std::string>(items[i][0]);
+        bm.insert(bm_type::value_type(id,e));
+      }
+  }
+
 std::ostream &operator<<(std::ostream &os,const LabelDictionary &d)
   {
     d.Print(os);
@@ -215,3 +239,30 @@ LabelContainer operator*(const LabelContainer &s1,const LabelContainer &s2)
     retval*=s2;
     return retval;    
   }
+
+//! @brief Return a Python dict with the object members values.
+boost::python::dict LabelContainer::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    retval["dic"]= dic.getPyDict();
+    boost::python::list idList;
+    for(std::set<int>::const_iterator i= labels.begin(); i!=labels.end(); i++)
+      idList.append(*i);
+    retval["labels"]= idList;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dict.
+void LabelContainer::setPyDict(const boost::python::dict &d)
+  {
+    const boost::python::dict &label_dict= boost::python::extract<boost::python::dict>(d["dic"]);
+    dic.setPyDict(label_dict);
+    boost::python::list idList= boost::python::extract<boost::python::list>(d["labels"]);
+    const size_t sz= len(idList);
+    for(size_t i= 0; i<sz; i++)
+      {
+	const int id= boost::python::extract<int>(idList[i]);
+        labels.insert(id);
+      }
+  }
+

@@ -29,7 +29,7 @@ actionB.setFromDict(actionAData)
 actionBData= actionB.getDict()
 
 
-refDict= {'ownerAddress': 0, 'name': 'TestAction', 'description': 'Test action description.', 'relations': {'ownerAddress': 0, 'incompatibles': ['IncompA.*', 'IncompB.*'], 'main_actions': ['MainAction1', 'MainAction2'], 'contiene_incomp': False}, 'nodet': False, 'f_pond': 3.141592}
+refDict= {'ownerAddress': 0, 'className': 'cmb_acc::Action', 'name': 'TestAction', 'description': 'Test action description.', 'relations': {'ownerAddress': 0, 'className': 'cmb_acc::ActionRelationships', 'incompatibles': ['IncompA.*', 'IncompB.*'], 'main_actions': ['MainAction1', 'MainAction2'], 'contiene_incomp': False}, 'nodet': False, 'f_pond': 3.141592}
 
 ok1= (actionAData==refDict)
 ok2= (actionBData==refDict)

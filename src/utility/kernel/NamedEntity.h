@@ -60,6 +60,7 @@ class NamedEntity: public CommandEntity
     NamedEntity &operator+=(const NamedEntity &);
     NamedEntity &operator-=(const NamedEntity &);
     NamedEntity &operator*=(const NamedEntity &);
+    
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
   };

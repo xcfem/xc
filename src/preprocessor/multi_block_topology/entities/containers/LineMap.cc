@@ -57,6 +57,9 @@ XC::Edge *XC::LineMap::New(const size_t &tag, const std::string &className)
       retval= New<CmbEdge>(tag);
     else if(className=="CircularArc")
       retval= New<CircularArc>(tag);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; unknown class: '" << className << "'\n";
     return retval;
   }
 

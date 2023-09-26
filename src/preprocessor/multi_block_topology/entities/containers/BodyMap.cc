@@ -43,6 +43,18 @@
 XC::BodyMap::BodyMap(MultiBlockTopology *mbt)
   : EntityMap<Body>(mbt) {}
 
+//! @brief Creates a new body with the given identifier and the given type.
+XC::Body *XC::BodyMap::New(const size_t &tag, const std::string &className)
+  {
+    Body *retval= nullptr;
+    if(className=="Block")
+      retval= New<Block>(tag);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; unknown class: '" << className << "'\n";
+    return retval;
+  }
+
 //! @brief Inserts the new body in the total set and in the set
 //! that are open.
 void XC::BodyMap::updateSets(Body *newBody) const
@@ -97,4 +109,45 @@ double XC::BodyMap::getAverageVolume(void) const
       retval+= (*i).second->getVolume();
     retval/=(size());
     return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::BodyMap::getPyDict(void) const
+  {
+    boost::python::dict retval= EntityMap<Body>::getPyDict();
+    boost::python::dict body_dict;
+    for(const_iterator i= this->begin(); i!= this->end(); i++)
+      {
+	const Body *body= (*i).second;
+	const int &tag= body->getTag();
+	const boost::python::dict item_dict= body->getPyDict();
+	body_dict[tag]= item_dict;
+      }
+    retval["bodies"]= body_dict; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::BodyMap::setPyDict(const boost::python::dict &d)
+  {
+    EntityMap<Body>::setPyDict(d);
+    const boost::python::dict &body_dict= boost::python::extract<boost::python::dict>(d["bodies"]);
+    boost::python::list items= body_dict.items();
+    const boost::python::ssize_t sz= len(items);
+    if(sz>0)
+      {
+	for(boost::python::ssize_t i=0; i<sz; i++)
+	  {
+	    const int tag= boost::python::extract<int>(items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    Body *tmp= New(tag, className);
+	    if(tmp)
+	      { tmp->setPyDict(itemDict); }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+		        << "; something went wrong when reading body: " << tag
+		        << ". Command ignored." << std::endl;
+	  }
+      }
   }

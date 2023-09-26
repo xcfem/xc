@@ -1222,6 +1222,15 @@ void XC::Vector::write(std::ofstream &os)
       os.write(reinterpret_cast<char *>(theData),nb);
   }
 
+boost::python::list XC::Vector::getPyList(void) const
+  {
+    boost::python::list retval;
+    const size_t sz= Size();
+    for(size_t i=0; i<sz; i++) 
+      retval.append((*this)(i));
+    return retval;
+  }
+
 //! @brief Read vector from a binary file.
 void XC::Vector::read(std::ifstream &is)
   {
@@ -1263,7 +1272,6 @@ std::string XC::to_string(const Vector &V)
     ss << V;
     return ss.str();
   }
-
 
 //! @brief A function is defined to allow user to print the vectors
 //! using std::ostream.

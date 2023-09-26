@@ -41,6 +41,7 @@ namespace XC {
 
 class Face;
 class Pnt;
+class SurfaceMap;
 
 //! @ingroup MultiBlockTopologyEnt
 //!
@@ -59,6 +60,9 @@ struct SideSequence
     //! @brief Return true if the edge sequence is direct (edge1 -> edge4).
     const bool &isDirect(void) const
       { return forward; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 //! @ingroup MultiBlockTopologyEnt
@@ -73,7 +77,7 @@ class Body: public EntMdlr
     class BodyFace: public CommandEntity
       {
         Face *surface; //!< Face geometry.
-        SideSequence sec_lados; //!< Edge sequence.
+        SideSequence side_seq; //!< Edge sequence.
       public:
         BodyFace(Body *b= nullptr, Face *ptr= nullptr,const size_t &p=1,const bool &d=true);
         virtual bool operator==(const BodyFace &) const;
@@ -95,6 +99,9 @@ class Body: public EntMdlr
         bool checkNDivs(void) const;
 	
         Node *getNode(const size_t &,const size_t &);
+	
+        boost::python::dict getPyDict(void) const;
+        void setPyDict(SurfaceMap &, const boost::python::dict &);
       };
 
   protected:

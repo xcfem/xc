@@ -37,6 +37,9 @@
 class Polyline3d;
 
 namespace XC {
+
+class LineMap;
+  
 //! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Compound line.
@@ -104,6 +107,8 @@ class CmbEdge: public Edge
         void genMesh(meshing_dir dm);
         friend bool operator==(const Side &il1,const Side &il2);
     
+        boost::python::dict getPyDict(void) const;
+        void setPyDict(LineMap &, const boost::python::dict &);
       };
   protected:
     std::deque<Side> lines; //!< Lines that compose the object.
@@ -192,8 +197,9 @@ class CmbEdge: public Edge
     void genMesh(meshing_dir dm);
 
     friend bool operator==(const Side &il1,const Side &il2);
- 
-
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
  };
 
 //! @brief Comparison operator.

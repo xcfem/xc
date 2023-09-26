@@ -74,6 +74,9 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     const Face *BuscaFace(const size_t &) const;
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
+
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
   };
 
 EntMdlrBase operator+(const EntMdlrBase &,const EntMdlrBase &);

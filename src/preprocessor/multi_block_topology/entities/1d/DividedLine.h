@@ -49,6 +49,8 @@ class DividedLine: public Line
     void setLengths(const Vector &);
     virtual SetEstruct *getCopy(void) const;
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 } //end of XC namespace

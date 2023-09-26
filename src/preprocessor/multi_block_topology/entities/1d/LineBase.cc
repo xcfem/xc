@@ -199,3 +199,40 @@ void XC::LineBase::SetVertices(Pnt *pA,Pnt *pB)
                 << getName() << "'." << std::endl;
     update_topology();
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::LineBase::getPyDict(void) const
+  {
+    boost::python::dict retval= Edge::getPyDict();
+    int tmp= -1;
+    if(p1)
+      tmp= p1->getTag();
+    retval["p1"]= tmp;
+    tmp= -1;
+    if(p2)
+      tmp= p2->getTag();
+    retval["p2"]= tmp;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::LineBase::setPyDict(const boost::python::dict &d)
+  {
+    Edge::setPyDict(d);
+    const int tagP1= boost::python::extract<int>(d["p1"]);
+    const int tagP2= boost::python::extract<int>(d["p2"]);
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+	MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
+	PntMap &points= mbt.getPoints();
+	if(tagP1>=0)
+	  p1= points.busca(tagP1);
+	if(tagP2>=0)
+	  p2= points.busca(tagP2);
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
+  }
+

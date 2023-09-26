@@ -47,6 +47,7 @@ class EntityWithProperties: public EntityWithOwner
     void setPyProp(std::string str, boost::python::object val);
     void copyPropsFrom(const EntityWithProperties &);
     boost::python::list getPropNames(void) const;
+    
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
   };

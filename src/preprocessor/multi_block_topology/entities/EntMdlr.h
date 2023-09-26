@@ -56,7 +56,7 @@ class EntMdlr: public SetEstruct
   {
   private:
     size_t idx; //!< @brief Object index (to be used as index for VTK arrays).
-    bool doGenMesh; //!< True if the point must be meshed (node will be created). For example is false when it's the middle point of a line.
+    bool doGenMesh; //!< True if the object must be meshed (node will be created). For example is false when it's the middle point of a line.
   protected:
     NodePtrArray3d ttzNodes;
     ElemPtrArray3d ttzElements;
@@ -168,6 +168,9 @@ class EntMdlr: public SetEstruct
     //! @brief Returns the index of the object for it use in VTK arrays.
     inline size_t getIdx(void) const
       { return idx; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 } //end of XC namespace

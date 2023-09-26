@@ -109,6 +109,9 @@ class SurfaceMap: public EntityMap<Face>
     
     template <class F>
     Face *New(void);
+    template <class F>
+    Face *New(const size_t &);
+    Face *New(const size_t &, const std::string &);
     Face *findOrCreateFace(Pnt *,Pnt *,Pnt *,Pnt *);
 
     QuadSurface *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
@@ -120,6 +123,9 @@ class SurfaceMap: public EntityMap<Face>
 
     // Surface orientation.
     void reverse(void);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 
@@ -142,6 +148,26 @@ Face *SurfaceMap::New(void)
       }
     return retval;
   }
-
+  
+//! @brief Creates a new surface with the given identifier.
+template <class F>
+XC::Face *SurfaceMap::New(const size_t &tag)
+  {
+    size_t old_tag= getTag();
+    Face *retval= nullptr;
+    setTag(tag); // Edge identifier.
+    retval= busca(getTag());
+    if(retval)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; surface with identifier: " << tag
+		  << " already exists. Command ignored." << std::endl;
+      }
+    else
+      {	retval= New<F>(); }
+    setTag(old_tag);
+    return retval;
+  }
+  
 } //end of XC namespace
 #endif

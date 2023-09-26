@@ -59,9 +59,32 @@ XC::SideSequence::SideSequence(const size_t first,const bool &_forward)
       }
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::SideSequence::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    retval["l1"]= l1;
+    retval["l2"]= l2;
+    retval["l3"]= l3;
+    retval["l4"]= l4;
+    retval["forward"]= forward;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SideSequence::setPyDict(const boost::python::dict &d)
+  {
+    l1= boost::python::extract<size_t>(d["l1"]);
+    l2= boost::python::extract<size_t>(d["l2"]);
+    l3= boost::python::extract<size_t>(d["l3"]);
+    l4= boost::python::extract<size_t>(d["l4"]);
+    forward= boost::python::extract<bool>(d["forward"]);
+  }
+
+
 //! @brief Constructor.
 XC::Body::BodyFace::BodyFace(Body *owr, Face *face_ptr,const size_t &p,const bool &d)
-  : CommandEntity(owr), surface(face_ptr), sec_lados(p,d) {}
+  : CommandEntity(owr), surface(face_ptr), side_seq(p,d) {}
 
 //! @brief Comparison operator.
 bool XC::Body::BodyFace::operator==(const BodyFace &other) const
@@ -75,7 +98,7 @@ bool XC::Body::BodyFace::operator==(const BodyFace &other) const
         if(retval)
           retval= (surface==other.surface);
          if(retval)
-          retval= (sec_lados==other.sec_lados);
+          retval= (side_seq==other.side_seq);
       }
     return retval;
   }
@@ -112,16 +135,16 @@ const XC::CmbEdge::Side *XC::Body::BodyFace::getSide(const size_t &i) const
 	switch(idx)
 	  {
 	    case 1:
-	      retval= surface->getSide(sec_lados.l1);
+	      retval= surface->getSide(side_seq.l1);
 	      break;
 	    case 2:
-	      retval= surface->getSide(sec_lados.l2);
+	      retval= surface->getSide(side_seq.l2);
 	      break;
 	    case 3:
-	      retval= surface->getSide(sec_lados.l3);
+	      retval= surface->getSide(side_seq.l3);
 	      break;
 	    case 4:
-	      retval= surface->getSide(sec_lados.l4);
+	      retval= surface->getSide(side_seq.l4);
 	      break;
 	    default:
 	      retval= nullptr;
@@ -142,7 +165,7 @@ const XC::Pnt *XC::Body::BodyFace::getVertex(const size_t &i) const
     const CmbEdge::Side *l= getSide(i);
     if(l)
       {
-        if(sec_lados.isDirect())
+        if(side_seq.isDirect())
           retval= l->P1();
         else
           retval= l->P2();
@@ -219,6 +242,30 @@ void XC::Body::BodyFace::create_nodes(void)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; pointer to surface is null." << std::endl;
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Body::BodyFace::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    int tmp= -1;
+    if(surface)
+      tmp= surface->getTag();
+    retval["surface"]= tmp;
+    retval["side_seq"]= this->side_seq.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Body::BodyFace::setPyDict(SurfaceMap &surfaces, const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    const int tagFace= boost::python::extract<int>(d["surface"]);
+    if(tagFace>=0)
+      surface= surfaces.busca(tagFace);
+    boost::python::dict side_seq_dict= boost::python::extract<boost::python::dict>(d["side_seq"]);
+    side_seq.setPyDict(side_seq_dict);
+  }
+
 
 //! @brief Constructor.
 XC::Body::Body(Preprocessor *m,const std::string &name)

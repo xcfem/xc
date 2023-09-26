@@ -37,6 +37,7 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
+#include "utility/kernel/python_utils.h"
 
 //! @brief Constructor.
 XC::SetBase::SetBase(const std::string &nmb,Preprocessor *md)
@@ -252,4 +253,19 @@ void XC::SetBase::computeTributaryVolumes(bool initialGeometry) const
       std::cerr << "domain not set." << std::endl;
   }
 
+//! @brief Return a Python dictionary containing the object members values.
+boost::python::dict XC::SetBase::getPyDict(void) const
+  {
+    boost::python::dict retval= EntMdlrBase::getPyDict();
+    // Retrieve properties.
+    retval["colors"]= color.getPyList();
+    return retval;
+  }
 
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SetBase::setPyDict(const boost::python::dict &d)
+  {
+    EntMdlrBase::setPyDict(d);
+    boost::python::list tmp= boost::python::extract<boost::python::list>(d["colors"]);
+    color= Vector(tmp);
+  }

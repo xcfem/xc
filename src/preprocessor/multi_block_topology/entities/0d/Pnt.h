@@ -116,6 +116,9 @@ class Pnt: public EntMdlr
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
+
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 Vector &operator-(const Pnt &b,const Pnt &a);

@@ -58,6 +58,10 @@ class UniformGridMap: public EntityMap<UniformGrid>
     Plane getPlane(const Indice &i,const Indice &j,const Indice &k) const;
 
     UniformGrid *New(void);
+    UniformGrid *New(const size_t &);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 } //end of XC namespace

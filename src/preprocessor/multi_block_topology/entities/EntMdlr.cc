@@ -526,3 +526,20 @@ Pos3d XC::EntMdlr::getCentroid(void) const
 //! @brief Destructor.
 XC::EntMdlr::~EntMdlr(void)
   { clearAll(); }
+
+
+//! @brief Return a Python dictionary containing the object members values.
+boost::python::dict XC::EntMdlr::getPyDict(void) const
+  {
+    boost::python::dict retval= SetEstruct::getPyDict();
+    // Retrieve properties.
+    retval["doGenMesh"]= doGenMesh;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::EntMdlr::setPyDict(const boost::python::dict &d)
+  {
+    SetEstruct::setPyDict(d);
+    doGenMesh= boost::python::extract<bool>(d["doGenMesh"]);
+  }

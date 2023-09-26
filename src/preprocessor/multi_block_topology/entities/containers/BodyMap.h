@@ -55,10 +55,16 @@ class BodyMap: public EntityMap<Body>
 
     template <class B>
     Body *New(void);
+    template <class B>
+    Body *New(const size_t &);
+    Body *New(const size_t &, const std::string &);
 
     Block *newBlockPts(const size_t &, const size_t &,const size_t &,const size_t &,const size_t &, const size_t &,const size_t &,const size_t &);
     double getAverageVolume(void) const;
-  };
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
+   };
 
 
 //! @brief Creates a new body
@@ -80,6 +86,25 @@ Body *BodyMap::New(void)
       }
     return retval;
   }
-
+  
+//! @brief Creates a new body with the given identifier.
+template <class B>
+XC::Body *BodyMap::New(const size_t &tag)
+  {
+    size_t old_tag= getTag();
+    Body *retval= nullptr;
+    setTag(tag); // Edge identifier.
+    retval= busca(getTag());
+    if(retval)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; body with identifier: " << tag
+		  << " already exists. Command ignored." << std::endl;
+      }
+    else
+      {	retval= New<B>(); }
+    setTag(old_tag);
+    return retval;
+  }
 } //end of XC namespace
 #endif

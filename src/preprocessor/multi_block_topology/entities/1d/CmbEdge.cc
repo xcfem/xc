@@ -278,6 +278,29 @@ double XC::CmbEdge::Side::getElemSize(void) const
 size_t XC::CmbEdge::Side::getTag(void) const
   { return edge->getTag(); }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::CmbEdge::Side::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    int tmp= -1;
+    if(edge)
+      tmp= edge->getTag();
+    retval["edge"]= tmp;
+    retval["forward"]= forward;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::CmbEdge::Side::setPyDict(LineMap &lines, const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    const int tagEdge= boost::python::extract<int>(d["edge"]);
+    if(tagEdge>=0)
+      edge= lines.busca(tagEdge);
+    forward= boost::python::extract<bool>(d["forward"]);
+  }
+
+
 //! @brief Constructor.
 XC::CmbEdge::CmbEdge(void)
   : Edge(),lines(0) {}
@@ -955,3 +978,39 @@ BND3d XC::CmbEdge::Bnd(void) const
       }
     return retval;
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::CmbEdge::getPyDict(void) const
+  {
+    boost::python::dict retval= Edge::getPyDict();
+    boost::python::list sideList;
+    for(std::deque<Side>::const_iterator i= lines.begin(); i!= lines.end(); i++)
+      sideList.append((*i).getPyDict());
+    retval["sides"]= sideList; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::CmbEdge::setPyDict(const boost::python::dict &d)
+  {
+    Edge::setPyDict(d);
+    boost::python::list sideList= boost::python::extract<boost::python::list>(d["sides"]);
+    const size_t sz= boost::python::len(sideList);
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+	MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
+	LineMap &lines= mbt.getLines();
+	for(size_t i= 0; i<sz; i++)
+	  {
+	    Side s;
+	    const boost::python::dict sideData= boost::python::extract<boost::python::dict>(sideList[i]);
+	    s.setPyDict(lines, sideData);
+	    this->lines.push_back(s);
+	  }
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
+  }
+

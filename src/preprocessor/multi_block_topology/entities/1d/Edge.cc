@@ -826,3 +826,42 @@ boost::python::list XC::Edge::getVerticesPy(void)
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Edge::getPyDict(void) const
+  {
+    boost::python::dict retval= EntMdlr::getPyDict();
+    retval["ndiv"]= ndiv; 
+    boost::python::list faceTags;
+    for(std::set<const Face *>::const_iterator i= surfaces_line.begin(); i!=surfaces_line.end(); i++)
+      {
+	const Face *f= *i;
+        faceTags.append(f->getTag());
+      }
+    retval["faceTags"]= faceTags;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Edge::setPyDict(const boost::python::dict &d)
+  {
+    EntMdlr::setPyDict(d);
+    ndiv= boost::python::extract<size_t>(d["ndiv"]);
+    boost::python::list faceTags= boost::python::extract<boost::python::list>(d["faceTags"]);
+    const size_t sz= boost::python::len(faceTags);
+    const Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+	const MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
+	const SurfaceMap &faces= mbt.getSurfaces();
+	for(size_t i= 0; i<sz; i++)
+	  {
+	    const size_t tag= boost::python::extract<size_t>(faceTags[i]);
+	    const Face *f= faces.busca(tag);
+	    surfaces_line.insert(f);
+	  }
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
+  }
+

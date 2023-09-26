@@ -56,7 +56,7 @@ class EntityWithOwner
     inline EntityWithOwner *Owner(void)
       { return owner; }
     inline const EntityWithOwner *Owner(void) const
-      { return owner; }    
+      { return owner; } 
   };
 
 #endif

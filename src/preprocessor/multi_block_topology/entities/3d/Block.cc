@@ -626,3 +626,42 @@ void XC::Block::setPoints(const ID &point_indexes)
       }
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Block::getPyDict(void) const
+  {
+    boost::python::dict retval= Body::getPyDict();
+    boost::python::list faces;
+    for(size_t i= 0; i<6; i++)
+      {
+	const BodyFace &bodyFace= sups[i];
+	faces.append(bodyFace.getPyDict());
+      }
+    retval["faces"]= faces;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Block::setPyDict(const boost::python::dict &d)
+  {
+    Body::setPyDict(d);
+    boost::python::list faceList= boost::python::extract<boost::python::list>(d["faces"]);
+    const size_t numFaces= boost::python::len(faceList);
+    if(numFaces!=6)
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; six faces expected, got: "
+		<< numFaces << std::endl;
+    Preprocessor *prep= getPreprocessor();
+    if(prep)
+      {
+	MultiBlockTopology &mbt= prep->getMultiBlockTopology();
+	SurfaceMap &surfaces= mbt.getSurfaces();
+	for(size_t i= 0; i<numFaces; i++)
+	  {
+	    const boost::python::dict faceDict= boost::python::extract<boost::python::dict>(faceList[i]);
+	    sups[i].setPyDict(surfaces, faceDict);
+	  }
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
+  }

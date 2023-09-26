@@ -254,3 +254,33 @@ std::deque<Segment3d> XC::CircularArc::getSegments(void) const
               << "; not implemented." << std::endl;
     return retval;
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::CircularArc::getPyDict(void) const
+  {
+    boost::python::dict retval= LineBase::getPyDict();
+    int tmp= -1;
+    if(p3)
+      tmp= p3->getTag();
+    retval["p3"]= tmp;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::CircularArc::setPyDict(const boost::python::dict &d)
+  {
+    LineBase::setPyDict(d);
+    const int tagP3= boost::python::extract<int>(d["p3"]);
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+	MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
+	PntMap &points= mbt.getPoints();
+	if(tagP3>=0)
+	  p3= points.busca(tagP3);
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
+  }
+

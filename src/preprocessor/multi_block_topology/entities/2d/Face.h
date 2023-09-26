@@ -158,6 +158,9 @@ class Face: public CmbEdge
     void setOrientation(const Vector3d &);
 
     int getVtkCellType(void) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 std::set<const Face *> getConnectedSurfaces(const Edge &l);

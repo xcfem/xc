@@ -82,3 +82,28 @@ Pos3dArray XC::DividedLine::get_positions(void) const
     return retval;
   }
 
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::DividedLine::getPyDict(void) const
+  {
+    boost::python::dict retval= Line::getPyDict();
+    boost::python::list lengthList;
+    for(std::vector<double>::const_iterator i= lengths.begin(); i!= lengths.end(); i++)
+      lengthList.append(*i);
+    retval["lengths"]= lengthList; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::DividedLine::setPyDict(const boost::python::dict &d)
+  {
+    Line::setPyDict(d);
+    boost::python::list lengthList= boost::python::extract<boost::python::list>(d["sides"]);
+    const size_t sz= boost::python::len(lengthList);
+    lengths.resize(sz);
+    for(size_t i= 0; i<sz; i++)
+      {
+	const double l= boost::python::extract<double>(lengthList[i]);
+	this->lengths[i]= l;
+      }
+  }

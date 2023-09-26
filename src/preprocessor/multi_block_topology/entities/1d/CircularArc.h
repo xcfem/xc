@@ -78,6 +78,9 @@ class CircularArc: public LineBase
     int getVtkCellType(void) const;
     virtual ID getKPoints(void) const;
     virtual std::deque<Segment3d> getSegments(void) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 } //end of XC namespace

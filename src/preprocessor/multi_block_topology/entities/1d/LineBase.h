@@ -71,6 +71,9 @@ class LineBase: public Edge
     virtual void SetVertice(const size_t &,Pnt *);
     void SetVertice(const size_t &,const size_t &);
     void SetVertices(Pnt *,Pnt *);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 } //end of XC namespace

@@ -27,6 +27,7 @@
 #include <set>
 #include "bimap.h"
 #include <iostream>
+#include "boost/python.hpp"
 
 //! @brief Label dictionary
 class LabelDictionary
@@ -46,6 +47,9 @@ class LabelDictionary
     int operator()(const std::string &) const;
   
     void Print(std::ostream &os) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
   };
 
 std::ostream &operator<<(std::ostream &os,const LabelDictionary &lc);
@@ -80,6 +84,8 @@ class LabelContainer
     friend LabelContainer operator-(const LabelContainer &,const LabelContainer &);
     friend LabelContainer operator*(const LabelContainer &,const LabelContainer &);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
   };
 
 std::ostream &operator<<(std::ostream &os,const LabelContainer &lc);

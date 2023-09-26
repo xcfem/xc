@@ -686,3 +686,19 @@ void XC::PolygonalFace::genMesh(meshing_dir dm, bool paving)
     else
       gen_mesh_gmsh(dm);
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PolygonalFace::getPyDict(void) const
+  {
+    boost::python::dict retval= Face::getPyDict();
+    retval["ref"]= ref.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PolygonalFace::setPyDict(const boost::python::dict &d)
+  {
+    Face::setPyDict(d);
+    boost::python::dict refDict= boost::python::extract<boost::python::dict>(d["ref"]);
+    ref.setPyDict(refDict);
+  }
