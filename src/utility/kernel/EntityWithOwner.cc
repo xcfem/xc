@@ -116,7 +116,5 @@ void EntityWithOwner::setPyDict(const boost::python::dict &d)
     // 	        << "; mechanism to restore the owner from its address"
     // 	        << " not implemented yet."
     // 	        << std::endl;
-    // else
-      owner= nullptr;
   }
 
