@@ -257,10 +257,10 @@ void XC::MultiBlockTopology::setPyDict(const boost::python::dict &d)
     framework2d.setPyDict(boost::python::extract<boost::python::dict>(d["framework2d"]));
     framework3d.setPyDict(boost::python::extract<boost::python::dict>(d["framework3d"]));
     unif_grid.setPyDict(boost::python::extract<boost::python::dict>(d["unif_grid"]));
-    bodies.setPyDict(boost::python::extract<boost::python::dict>(d["bodies"]));
-    faces.setPyDict(boost::python::extract<boost::python::dict>(d["faces"]));
-    edges.setPyDict(boost::python::extract<boost::python::dict>(d["edges"]));
     points.setPyDict(boost::python::extract<boost::python::dict>(d["points"]));
+    edges.setPyDict(boost::python::extract<boost::python::dict>(d["edges"]));
+    faces.setPyDict(boost::python::extract<boost::python::dict>(d["faces"]));
+    bodies.setPyDict(boost::python::extract<boost::python::dict>(d["bodies"]));
   }
 
 //! @brief Send data through the communicator argument.
