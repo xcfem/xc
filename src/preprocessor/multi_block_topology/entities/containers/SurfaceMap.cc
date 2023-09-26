@@ -47,9 +47,9 @@ XC::SurfaceMap::SurfaceMap(MultiBlockTopology *mbt)
 XC::Face *XC::SurfaceMap::New(const size_t &tag, const std::string &className)
   {
     Face *retval= nullptr;
-    if(className=="QuadSurface")
+    if(className=="XC::QuadSurface")
       retval= New<QuadSurface>(tag);
-    else if(className=="PolygonalFace")
+    else if(className=="XC::PolygonalFace")
       retval= New<PolygonalFace>(tag);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

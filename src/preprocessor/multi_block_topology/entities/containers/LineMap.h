@@ -90,8 +90,9 @@ Edge *XC::LineMap::Crea(void)
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
     Edge *retval= new E(preprocessor);
-    retval->Name()= "l"+boost::lexical_cast<std::string>(getTag());
-    (*this)[getTag()]= retval;
+    const size_t tg= this->getTag();
+    retval->Name()= "l"+boost::lexical_cast<std::string>(tg);
+    (*this)[tg]= retval;
     updateSets(retval);
     tag++;
     return retval;
@@ -102,7 +103,7 @@ template <class E>
 Edge *LineMap::New(void)
   {
     Edge *retval= busca(getTag());
-    if(!retval) //El edge is new.
+    if(!retval) // the edge is new.
       retval= Crea<E>();
     return retval;
   }

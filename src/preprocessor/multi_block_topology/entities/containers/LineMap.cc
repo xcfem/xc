@@ -49,13 +49,13 @@ XC::LineMap::LineMap(MultiBlockTopology *mbt)
 XC::Edge *XC::LineMap::New(const size_t &tag, const std::string &className)
   {
     Edge *retval= nullptr;
-    if(className=="Line")
+    if(className=="XC::Line")
       retval= New<Line>(tag);
-    else if(className=="DividedLine")
+    else if(className=="XC::DividedLine")
       retval= New<DividedLine>(tag);
-    else if(className=="CmbEdge")
+    else if(className=="XC::CmbEdge")
       retval= New<CmbEdge>(tag);
-    else if(className=="CircularArc")
+    else if(className=="XC::CircularArc")
       retval= New<CircularArc>(tag);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -115,8 +115,7 @@ XC::CmbEdge *XC::LineMap::newLineSequence(void)
 //! @brief Insert the new line in the total and the opened sets.
 void XC::LineMap::updateSets(Edge *nueva_linea) const
   {
-    MultiBlockTopology *mbt= const_cast<MultiBlockTopology *>(dynamic_cast<const MultiBlockTopology *>(Owner()));
-    Preprocessor *preprocessor= mbt->getPreprocessor();
+    Preprocessor *preprocessor= const_cast<Preprocessor *>(this->getPreprocessor());
     preprocessor->get_sets().get_set_total()->getLines().push_back(nueva_linea);
     preprocessor->get_sets().insert_ent_mdlr(nueva_linea);
     MapSet::map_sets &open_sets= preprocessor->get_sets().get_open_sets();

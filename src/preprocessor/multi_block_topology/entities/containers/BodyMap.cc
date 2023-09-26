@@ -47,7 +47,7 @@ XC::BodyMap::BodyMap(MultiBlockTopology *mbt)
 XC::Body *XC::BodyMap::New(const size_t &tag, const std::string &className)
   {
     Body *retval= nullptr;
-    if(className=="Block")
+    if(className=="XC::Block")
       retval= New<Block>(tag);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
