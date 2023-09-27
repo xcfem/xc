@@ -12,3 +12,33 @@ The most common mistake that leads to a singular stiffness matrix is that the mo
 If there is a node that has no constraints at all, i.e. it's not attached to any element or constraint, we can detect it using the `getFloatingNodes()` method of the [`PredefinedSpace`](https://github.com/xcfem/xc/blob/master/python_modules/model/predefined_spaces.py) class. This method returns a list of the nodes that will certainly produce a singular stiffness matrix. If that list is not empty, you can ask the nodes about their identifier (`tag`), their position (`getInitialPos3d`), or any other attribute that could be useful to identify the problem. You can find an example of using this technique in the [`get_floating_nodes_01.py'](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/get_floating_nodes_01.py) verification test.
 
 
+### Find the unconstrained node from the "zero pivot" row number
+Some solvers you can use, store the number of the offending equation when the solver crashes in a property called “info”. This value can be retrieved using the`getProp` method of the solver as follows:
+
+```
+result= analysis.analyze(1)  # Run the analysis.
+
+info= None
+solver= analysis.linearSOE.solver
+if(solver.hasProp("info")):
+    info= solver.getProp("info")
+```
+Once you have the equation number, you can use the `locateEquationNumber` method of `PredefinedSpace` to get the node that has the DOF which corresponds to it:
+
+```
+unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
+```
+
+We subtract 1 from the value of info because C (and C++ and Python) arrays always start at zero, but by default FORTRAN arrays start at 1.
+
+You can find an example of this technique in the [`locate_equation_number_01.py`](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/locate_equation_number_01.py) verification test.
+
+
+## References
+
+ - [Like spinning nodes](https://portwooddigital.com/2021/09/19/like-spinning-nodes)
+ - [See the Convergence](https://portwooddigital.com/2022/01/24/see-the-convergence/)
+ - [Failure to Solve](https://portwooddigital.com/2021/09/12/failure-to-solve)
+ - [OpenSees Spy](https://portwooddigital.com/2022/03/13/opensees-spy)
+ - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
+ - [Failures detected by LAPACK routines](https://www.netlib.org/lapack/lug/node136.html)
