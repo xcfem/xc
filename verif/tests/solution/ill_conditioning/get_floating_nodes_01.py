@@ -27,9 +27,6 @@ n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(1,1)
 n3= nodes.newNodeXY(2,2) # Floating node.
 
-setTotal= preprocessor.getSets.getSet("total")
-setTotal.genMesh(xc.meshDir.I)
-
 ### Constraints
 constraints= preprocessor.getBoundaryCondHandler
 spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1,gdl 0 translation X
