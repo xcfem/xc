@@ -757,13 +757,13 @@ class PredefinedSpace(object):
 
         :param xcSet: search only on the nodes in this set.
         '''
-        floatingNodes= self.getFloatingNodes()
+        floatingNodes= self.getFloatingNodes(xcSet= xcSet)
         if(len(floatingNodes)>0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; there are floating nodes in the model.')
+            lmsg.error(className+'.'+methodName+'; there are floating nodes in the model:')
             for n in floatingNodes:
-                print(n.tag, n.getInitialPos3d)
+                lmsg.error('   node: '+str(n.tag)+ ' position: '+str(n.getInitialPos3d)+'\n')
         return floatingNodes
         
     def locateEquationNumber(self, eqNumber, xcSet= None):
