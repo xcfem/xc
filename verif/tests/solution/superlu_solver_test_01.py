@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+'''Test from Ansys manual
+
+   Reference:  Strength of Materials, Part I, Elementary Theory & Problems, pg. 26, problem 10
+'''
+
 from __future__ import print_function
-# Test from Ansys manual
-# Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 26, problem 10
 
 import os
 import sys
