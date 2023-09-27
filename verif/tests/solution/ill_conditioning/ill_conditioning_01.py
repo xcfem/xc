@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Trival example of the use of zeroEnergyModes.'''
+
 from __future__ import print_function
 from __future__ import division
 import xc
@@ -29,11 +31,10 @@ spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 2,gdl 0 translation X
 spc= constraints.newSPConstraint(n2.tag,1,0.0) # Node 2,gdl 1 translation Y
 #spc= constraints.newSPConstraint(n2.tag,2,0.0) # Node 2,gdl 2 rotation.
 
-
-analOk= modelSpace.zeroEnergyModes(1)
-eig1= modelSpace.analysis.getEigenvalue(1)
-v1= n1.getEigenvector(1)
-v2= n2.getEigenvector(1)
+analOk= modelSpace.zeroEnergyModes(1) # Compute one zero energy mode.
+eig1= modelSpace.analysis.getEigenvalue(1) # Get the eignvalue.
+v1= n1.getEigenvector(1) # eigenvector 1 of node n1
+v2= n2.getEigenvector(1) # eigenvector 1 of node n2
 
 ratio1= eig1
 ratio2= v2[0]**2+v2[1]**2+(v2[2]-1)**2
@@ -54,3 +55,11 @@ if (abs(ratio1)<1e-5) & (abs(ratio2)<0.06):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# #########################################################
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# ## Uncomment to display the eigenvectors
+# oh.displayEigenvectors()
