@@ -23,6 +23,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
+# Mechanical properties.
 E= 2.0e11 # Young modulus.
 l= 1.44 # Bar length in inches.
 A= 31e-4 # Beam cross-section area.
@@ -34,16 +35,17 @@ nu= 0.3 # Poisson's ratio.
 G= E/(2.0*(1+nu)) # Shear modulus.
 p= 1e5 # Transverse load.
 
+# Create FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
-# Problem type
+## Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Materials definition
 scc= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,alpha= Ay/A)
 
-# Problem geometry
+## Problem geometry
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0,0,0))
 pt2= points.newPoint(geom.Pos3d(l,0,0))
@@ -52,7 +54,7 @@ lines= preprocessor.getMultiBlockTopology.getLines
 ln= lines.newLine(pt1.tag,pt2.tag)
 ln.nDiv= 2
 
-# Mesh generation
+## Mesh generation
 
 ## Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
