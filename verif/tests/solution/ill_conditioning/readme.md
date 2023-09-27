@@ -33,6 +33,27 @@ We subtract 1 from the value of info because C (and C++ and Python) arrays alway
 
 You can find an example of this technique in the [`locate_equation_number_01.py`](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/locate_equation_number_01.py) verification test.
 
+### Compute the zero energy modes of the stiffness matrix.
+When the stiffness matrix is singular, at least one of its eigenvalues is zero. That means that the system offers no resistance to a displacement that follows the corresponding eigenvector.
+
+To compute those eigenvalues and eigenvectors you can use the `zeroEnergyModes` method of the `PredefinedSpace` object:
+
+```
+analOk= modelSpace.zeroEnergyModes(1) # Compute one zero energy mode.
+eig1= modelSpace.analysis.getEigenvalue(1) # Get the eignvalue.
+v1= n1.getEigenvector(1) # eigenvector 1 of node n1
+v2= n2.getEigenvector(1) # eigenvector 1 of node n2
+```
+
+A trivial example of this technique is use in the [`ill_conditioning_01.py`](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/ill_conditioning_01.py) verification test. You can also display the eigenvectors to get an indea of what is going on:
+
+```
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+
+oh.displayEigenvectors()
+
+```
 
 ## References
 
@@ -42,3 +63,4 @@ You can find an example of this technique in the [`locate_equation_number_01.py`
  - [OpenSees Spy](https://portwooddigital.com/2022/03/13/opensees-spy)
  - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
  - [Failures detected by LAPACK routines](https://www.netlib.org/lapack/lug/node136.html)
+ - [Examining finite element characteristics by eigen modes](http://www.visualfea.com/manual-cbt/chapter/05_02chap.htm)
