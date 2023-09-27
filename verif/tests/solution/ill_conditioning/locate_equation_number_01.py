@@ -68,10 +68,10 @@ lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0])) # Positive force along x axis
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-# Solution 0 N
+# Solution.
 analysis= predefined_solutions.simple_static_linear(feProblem)
 feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
-result= analysis.analyze(1)
+result= analysis.analyze(1)  # Run the analysis.
 feProblem.errFileName= "cerr" # Print errors if any
 
 # Some solvers store the error information returned by the underlying
@@ -81,14 +81,15 @@ solver= analysis.linearSOE.solver
 if(solver.hasProp("info")):
     info= solver.getProp("info")
 
-# Search for the node that corresponds to the equation number.
-unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= -result)
+# Search for the node that corresponds to the equation number. We substract
+# 1 because the FORTRAN indexes start at 1.
+unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
 
 # Check result
 ok= (unconstrainedNode.tag==n2.tag)
 
 modelSpace.fixNodeF0F(unconstrainedNode.tag) # Add constraint.
-result= analysis.analyze(1) # Solve again.
+result2= analysis.analyze(1) # Solve again.
 
 # Check result after fixing the constraints.
 dx= n2.getDisp[0]
@@ -99,7 +100,7 @@ err= abs(dx-dxRef)/dxRef
 
 '''
 print('result: ', result)
-print('info: ', info)
+print('info: ', info-1)
 print('ok: ', ok)
 print('unconstrained node tag: ', unconstrainedNode.tag)
 print('n2.tag: ', n2.tag)
