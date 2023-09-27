@@ -287,7 +287,8 @@ int XC::ItpackLinSolver::solve(void)
     break;
   default:
     std::cerr << method  << " -- unknown method type %d"
-	      << "XC::ItpackLinSolver::solve()" << std::endl;
+	      << getClassName() << "::" << __FUNCTION__
+	      << std::endl;
     break;    
   }
 
@@ -296,7 +297,9 @@ int XC::ItpackLinSolver::solve(void)
 
     if(ier > 0)
       {
-        std::cerr << "XC::ItpackLinSolver::solve() -- returned ier = " << ier << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; returned ier = " << ier << std::endl;
+        this->setPyProp("info", boost::python::object(ier));
         return -ier;
       }
     else

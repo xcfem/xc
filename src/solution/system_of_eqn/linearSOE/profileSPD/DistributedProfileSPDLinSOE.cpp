@@ -320,7 +320,7 @@ int XC::DistributedProfileSPDLinSOE::addA(const Matrix &m, const ID &id, double 
 
 int XC::DistributedProfileSPDLinSOE::solve(void)
   {
-    static XC::ID result(1);
+    static ID result(1);
 
     //
     // if subprocess send B and A and receive back result X, B & result

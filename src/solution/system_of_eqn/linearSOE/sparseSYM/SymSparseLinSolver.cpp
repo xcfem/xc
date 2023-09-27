@@ -59,7 +59,7 @@ XC::SymSparseLinSolver::SymSparseLinSolver()
 
 
 int XC::SymSparseLinSolver::solve(void)
-{ 
+  { 
     if (theSOE == 0) {
 	std::cerr << "WARNING XC::SymSparseLinSolver::solve(void)- ";
 	std::cerr << " No XC::LinearSOE object has been set\n";
@@ -95,7 +95,9 @@ int XC::SymSparseLinSolver::solve(void)
 	factor = pfsfct(neq, diag, penv, nblks, xblk, begblk, first, rowblks);
 	if(factor > 0)
           {
-	    std::cerr << "In XC::SymSparseLinSolver: error in factorization.\n";
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error in factorization.\n";
+	    this->setPyProp("info", boost::python::object(factor));
 	    return -1;
 	  }
 	theSOE->factored = true;

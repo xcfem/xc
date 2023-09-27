@@ -185,15 +185,16 @@ int XC::SymArpackSolver::solve(void)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; with _saupd info = " << info <<std::endl;
+        this->setPyProp("info", boost::python::object(info));
         return info;
       }
     else
       {
         if(info == 1)
-         {
-	   std::cerr << getClassName() << "::" << __FUNCTION__
-		     << "; maximum number of iteration reached." << std::endl;
-	 }
+          {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	 	      << "; maximum number of iteration reached." << std::endl;
+	  }
         else if(info == 3)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
@@ -210,6 +211,7 @@ int XC::SymArpackSolver::solve(void)
               {
                 std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; error with dseupd_" << info;
+                this->setPyProp("info", boost::python::object(info));
                 return -1;
               }
           }

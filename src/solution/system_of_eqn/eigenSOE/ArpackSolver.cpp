@@ -366,6 +366,7 @@ int XC::ArpackSolver::solve(void)
 	    if(info != 0)
 	      {
 		seupd_error_msg(info);
+                this->setPyProp("info", boost::python::object(info));
 		return info;
 	      }
 	  }

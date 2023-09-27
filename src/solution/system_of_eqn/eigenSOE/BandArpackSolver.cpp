@@ -345,6 +345,7 @@ int XC::BandArpackSolver::solve(void)
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; error with dsaupd loop info = " 
                   << info << ' ' << dsaupd_err_string(info) << std::endl;
+	this->setPyProp("info", boost::python::object(info));
         return info;
       }
     else
@@ -358,8 +359,8 @@ int XC::BandArpackSolver::solve(void)
         else if (info == 3)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; no Shifts could be applied during implicit,";
-            std::cerr << " Arnoldi update, try increasing NCV." << std::endl;
+		      << "; no Shifts could be applied during implicit,"
+		      << " Arnoldi update, try increasing NCV." << std::endl;
           }
 
         double sigma = theSOE->shift;
@@ -378,6 +379,7 @@ int XC::BandArpackSolver::solve(void)
                 std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; error with dseupd_" << info << ' '
 			  << dseupd_err_string(info) << std::endl;
+   	        this->setPyProp("info", boost::python::object(info));
                 return info;
               }
           }

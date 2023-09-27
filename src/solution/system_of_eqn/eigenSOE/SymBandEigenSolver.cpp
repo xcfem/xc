@@ -237,6 +237,7 @@ int XC::SymBandEigenSolver::solve(void)
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; invalid argument number " << -info
 		  << " passed to LAPACK dsbevx\n";
+	this->setPyProp("info", boost::python::object(info));
         return info;
       }
 
@@ -244,14 +245,16 @@ int XC::SymBandEigenSolver::solve(void)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; LAPACK dsbevx returned error code " << info << std::endl;
+	this->setPyProp("info", boost::python::object(info));
         return -info;
       }
 
     if(m < numModes)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; LAPACK dsbevx only computed " << m << " eigenvalues, " <<
-        numModes << "were requested\n";
+		  << "; LAPACK dsbevx only computed " << m
+		  << " eigenvalues, "
+		  << numModes << "were requested\n";
         numModes = m;
       }
 

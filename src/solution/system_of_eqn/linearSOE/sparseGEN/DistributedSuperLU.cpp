@@ -86,8 +86,8 @@ XC::DistributedSuperLU::~DistributedSuperLU(void)
 int XC::DistributedSuperLU::solve(void)
   {
   if (theSOE == 0) {
-    std::cerr << "WARNING XC::DistributedSuperLU::solve(void)- ";
-    std::cerr << " No XC::LinearSOE object has been set\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING, no XC::LinearSOE object has been set\n";
     return -1;
   }
 

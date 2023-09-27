@@ -221,7 +221,6 @@ int XC::DistributedBandSPDLinSOE::addA(const Matrix &m, const ID &id, double fac
 
 int XC::DistributedBandSPDLinSOE::solve(void)
   {
-
     static ID result(1);
 
     //

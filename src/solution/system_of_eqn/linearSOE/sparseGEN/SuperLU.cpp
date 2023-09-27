@@ -340,6 +340,7 @@ int XC::SuperLU::solve(void)
 				  << "; WARNING - "
 				  << " error " << info
 				  << " returned in substitution dgstrs()\n";
+			this->setPyProp("info", boost::python::object(info));
                         retval= -info;
                       }
                   }

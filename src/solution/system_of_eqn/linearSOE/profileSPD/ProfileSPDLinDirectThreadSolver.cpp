@@ -306,7 +306,7 @@ int XC::ProfileSPDLinDirectThreadSolver::solve(void)
       }   	 
     }    
     return 0;
-}
+  }
 
 int 
 XC::ProfileSPDLinDirectThreadSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)

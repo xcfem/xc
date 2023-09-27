@@ -89,12 +89,11 @@ XC::ThreadedSuperLU::~ThreadedSuperLU(void)
     StatFree(&gStat);
   }
 
-int
-XC::ThreadedSuperLU::solve(void)
-{
+int XC::ThreadedSuperLU::solve(void)
+  {
     if (theSOE == 0) {
-	std::cerr << "WARNING XC::ThreadedSuperLU::solve(void)- ";
-	std::cerr << " No XC::LinearSOE object has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << " WARNING, no LinearSOE object has been set\n";
 	return -1;
     }
     
@@ -104,11 +103,12 @@ XC::ThreadedSuperLU::solve(void)
     if (n == 0)
 	return 0;
 
-    if (sizePerm == 0) {
-	std::cerr << "WARNING XC::ThreadedSuperLU::solve(void)- ";
-	std::cerr << " size for row and col permutations 0 - has setSize() been called?\n";
+    if(sizePerm == 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; size for row and col permutations 0 - has setSize() been called?\n";
 	return -1;
-    }
+      }
 
     // first copy B into X
     double *Xptr = theSOE->X;
@@ -128,9 +128,12 @@ XC::ThreadedSuperLU::solve(void)
 
 	pdgstrf(&pdgstrf_options, &AC, perm_r, &L, &U, &gStat, &info);
 
-	if (info != 0) {	
-	   std::cerr << "WARNING XC::ThreadedSuperLU::solve(void)- ";
-	   std::cerr << " Error " << info << " returned in factorization pdgstrf()\n";
+	if(info != 0)
+	  {	
+	   std::cerr << getClassName() << "::" << __FUNCTION__
+		     << " Error " << info
+		     << " returned in factorization pdgstrf()\n";
+	   this->setPyProp("info", boost::python::object(info));
 	   return info;
 	}
 

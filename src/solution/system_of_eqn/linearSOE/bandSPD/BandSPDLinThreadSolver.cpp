@@ -205,11 +205,14 @@ int XC::BandSPDLinThreadSolver::solve(void)
 
     // check if successful
     if (info != 0)
+      {
 	return info;
+	this->setPyProp("info", boost::python::object(info));
+      }
 
     theSOE->factored = true;
     return 0;
-}
+  }
     
 
 

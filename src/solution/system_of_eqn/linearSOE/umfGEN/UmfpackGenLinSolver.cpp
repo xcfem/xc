@@ -142,6 +142,7 @@ int XC::UmfpackGenLinSolver::solve(void)
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: solving returns "<< status
 		  << std::endl;
+	this->setPyProp("info", boost::python::object(status));
 	return -1;
       }
 

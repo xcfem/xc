@@ -26,6 +26,7 @@ class_<XC::LinearSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("LinearSOE", 
   .add_property("numEqn", &XC::LinearSOE::getNumEqn, "Return the number of equations.")
   .add_property("b", make_function(&XC::LinearSOE::getB, return_internal_reference<>() ), "Return the rigth hand side of the equation.")
   .add_property("x", make_function(&XC::LinearSOE::getX, return_internal_reference<>() ), "Return the vector of unknowns.")
+  .add_property("solver", make_function(&XC::LinearSOE::getSolver, return_internal_reference<>() ), "Return a pointer to the solver.")
   ;
 
 class_<XC::LinearSOEData, bases<XC::LinearSOE>, boost::noncopyable >("LinearSOEData", no_init);

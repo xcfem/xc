@@ -244,6 +244,7 @@ int XC::FullGenEigenSolver::solve(void)
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; invalid argument number "
                   << -info << " passed to LAPACK dggev routine\n";
+	this->setPyProp("info", boost::python::object(info));
         return info;
       }
 
@@ -251,7 +252,8 @@ int XC::FullGenEigenSolver::solve(void)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the LAPACK dggev routine "
-            << "returned error code " << info << std::endl;
+		  << "returned error code " << info << std::endl;
+	this->setPyProp("info", boost::python::object(info));
         return -info;
       }
 

@@ -164,12 +164,14 @@ int XC::BandSPDLinLapackSolver::solve(void)
 	}
 
 	// check if successful
-	if(info != 0)
+	if(info != 0) // not succesful.
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - the LAPACK"
 		      << " routines returned " << info << std::endl;
 	    retval= -info;
+	    // Store the value of info in a property reachable by Python.
+	    this->setPyProp("info", boost::python::object(info));
 	  }
 	theSOE->factored = true;
       }

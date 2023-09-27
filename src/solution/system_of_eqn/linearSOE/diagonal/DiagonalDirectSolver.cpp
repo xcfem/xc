@@ -111,15 +111,15 @@ int XC::DiagonalDirectSolver::solve(void)
 	    // check that the diag > the tolerance specified
 	    if(aii == 0.0)
 	      {
-	        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-	        std::cerr << " aii = 0 (i, aii): (" << i << ", " << aii << ")\n"; 
+	        std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+			  << " aii = 0 (i, aii): (" << i << ", " << aii << ")\n"; 
 	        return(-2);
 	      }
 	    if (fabs(aii) <= minDiagTol)
 	      {
-	        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-	        std::cerr << " aii < minDiagTol (i, aii): (" << i;
-	        std::cerr << ", " << aii << ")\n"; 
+	        std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+			  << " aii < minDiagTol (i, aii): (" << i
+			  << ", " << aii << ")\n"; 
 	        return(-2);
 	      }		
  	    // store the inverse 1/Aii in A; and solve for Xi

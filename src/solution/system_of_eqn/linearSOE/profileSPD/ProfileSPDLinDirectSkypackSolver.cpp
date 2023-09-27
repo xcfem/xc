@@ -245,9 +245,9 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; error value returned from skyss().\n";
+	this->setPyProp("info", boost::python::object(INFO));
       }
     return INFO;
-
   }
 
 

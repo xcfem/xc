@@ -157,7 +157,8 @@ int XC::BandGenLinLapackSolver::solve(void)
 	if(info != 0)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << ";LAPACK routine returned " << info << std::endl;
+		      << "; LAPACK routine returned " << info << std::endl;
+	    this->setPyProp("info", boost::python::object(info));
 	    return -info;
 	  }
 

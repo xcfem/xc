@@ -139,14 +139,16 @@ int XC::FullGenLinLapackSolver::solve(void)
     if(info != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; lapack solver failed - " << info
+	          << "; LAPACK solver failed - " << info
 		  << " returned.\n";
+	this->setPyProp("info", boost::python::object(info));
 	return -info;
-    }
+      }
     
     theSOE->factored = true;
     return 0;
   }
+
 //! @brief Sets the size of #iPiv from the size of the system of equations.
 //!
 //! Is used to construct a 1d integer array, #iPiv that is needed by
