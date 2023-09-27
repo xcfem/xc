@@ -74,7 +74,7 @@ feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
 result= analysis.analyze(1)
 feProblem.errFileName= "cerr" # Print errors if any
 
-# Some solvers store the information returned by the underlying
+# Some solvers store the error information returned by the underlying
 # FORTRAN or C libraries in a property called "info"
 info= None
 solver= analysis.linearSOE.solver
