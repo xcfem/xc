@@ -74,11 +74,10 @@ namespace XC {
 
 //!  @ingroup SOE
 //! 
-//! \defgroup Solver Equation solver.
-//
-//! @ingroup Solver
+//! @defgroup Solver Equation solver.
 //
 //! @brief Solver for a system of equations.
+//! @ingroup Solver
 //!
 //! object is responsible for performing
 //! the numerical operations on its associated SystemOfEqn object.
