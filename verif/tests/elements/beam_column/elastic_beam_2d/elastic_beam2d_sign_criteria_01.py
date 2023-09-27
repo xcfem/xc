@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Sign criteria for the internal forces o a elastic beam 2d element.
+    2D cantilever beam, start node  with all its 3DOF fixed, point loads on the 
+    end node (L). Home made test.'''
+
 from __future__ import print_function
-# Sign criteria for the internal forces o a elastic beam 2d element.
-# 2D cantilever beam, start node  with all its 3DOF fixed, point loads on the 
-# end node (L)
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -51,27 +51,35 @@ L= 1.5 # Bar length (m)
 # Load
 F= 1.5e3 # Load magnitude (kN)
 
+# Create problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-# Problem type
+##  Set problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
+
+## Define mesh.
+
+### Define nodes.
 n1= nodes.newNodeXY(0,0.0)
 n2= nodes.newNodeXY(L,0.0)
 
-lin= modelSpace.newLinearCrdTransf("lin")
-# Materials
+### Define elements.
+lin= modelSpace.newLinearCrdTransf("lin") # Coordinate transformation.
+
+#### Define material.
 sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.I= Iz; 
-section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
+section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section", sectionProperties)
 
-# Elements definition
+#### Define element.
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= lin.name
-elements.defaultMaterial= section.name
+elements.defaultTransformation= lin.name # Set coordinate transformation.
+elements.defaultMaterial= section.name # Set material.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 
+### Define constraints.
 modelSpace.fixNode000(n1.tag)
 
 # Load case definition.
