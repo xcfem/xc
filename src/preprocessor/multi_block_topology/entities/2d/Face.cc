@@ -809,7 +809,8 @@ void XC::Face::reverse(void)
 void XC::Face::revolve(const int &advance)
   {
     CmbEdge::revolve(advance);
-    close();
+    if(advance!=0)
+      close();
   }
 
 //! @brief Set the orientation of the face normal according to the vector
@@ -827,12 +828,20 @@ void XC::Face::setKOrientation(const Vector3d &v)
 //! @brief Set the orientation of the face i unit vector as close as possible
 //! to the given vector.
 //! @param v: orientation vector.
-void XC::Face::setIOrientation(const Vector3d &v)
+int XC::Face::setIOrientation(const Vector3d &v)
   {
     const Vector3d iVector= this->getIVector();
     const double angle= v.getAngle(iVector);
     const int advance= int(round(2*angle/M_PI));
-    this->revolve(advance);
+    if(advance!=0)
+      {
+	this->revolve(advance);
+	const double newAngle= v.getAngle(this->getIVector());
+	const int newAdvance= int(round(2*newAngle/M_PI));
+	if(newAdvance!=0)
+	  this->revolve(newAdvance);
+      }
+    return advance;
   }
 
 
@@ -997,7 +1006,7 @@ std::set<XC::SetBase *> XC::Face::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }

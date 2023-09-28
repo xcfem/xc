@@ -157,7 +157,7 @@ class Face: public CmbEdge
     virtual void reverse(void);
     void revolve(const int &);
     void setKOrientation(const Vector3d &);
-    void setIOrientation(const Vector3d &);
+    int setIOrientation(const Vector3d &);
 
     int getVtkCellType(void) const;
     
