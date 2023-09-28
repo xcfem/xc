@@ -297,6 +297,37 @@ const XC::Node *XC::Pnt::getNode(void) const
     return nod;
   }
 
+//! @brief Set the point node.
+const XC::Node *XC::Pnt::setNode(Node *nodePtr)
+  {
+    const Node *oldNode= EntMdlr::getNode();
+    if(nodePtr)
+      {
+	if(!oldNode)
+	  { this->ttzNodes= NodePtrArray3d(1,1,1); }
+	else
+	  {
+	    std::clog << getClassName() << "::" << __FUNCTION__ << "; the point: '"
+		      << getName()
+		      << "' has already a node. Assigning the new one anyway."
+		      << std::endl;
+	  }
+	// Check the positions of the node and the point.
+	const Pos3d nodePos= nodePtr->getInitialPosition3d();
+	const double d= nodePos.dist(p);
+	if(d>1e-6)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; the position of the point: '"
+		    << p
+		    << "' is " << d
+		    << " units length apart from the position of the node: "
+		    << nodePos << std::endl;
+	ttzNodes(1,1,1)= nodePtr;
+      }
+    return oldNode;
+  }
+  
+
 //! @brief Return the sets to which this point belongs.
 std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
   {

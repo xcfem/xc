@@ -409,7 +409,7 @@ XC::CmbEdge XC::CmbEdge::getReversed(void) const
     return retval;
   }
 
-//! @brief Reverse the verrtex sequence.
+//! @brief Reverse the vertex sequence.
 //! 
 //! Changes the orientation of the object (I->J->K->L => L->K->J->I)
 void XC::CmbEdge::reverse(void)
@@ -418,6 +418,25 @@ void XC::CmbEdge::reverse(void)
     lines.clear();
     std::reverse(tags.begin(), tags.end());
     addPoints(tags);
+  }
+
+//! @brief Move forward or backwards the sequence of vertexes.
+//! 
+//! Move forward or backwards the sequence of vertexes. For example if
+//! the given advance is 2. Changes the vertex sequence as follows
+//! newI= K, newJ= L, newK= I, newL= J.
+void XC::CmbEdge::revolve(const int &advance)
+  {
+    if(advance!=0)
+      {
+        ID tags= getKPoints();
+        if(advance>0) // rotate left.
+	  std::rotate(tags.begin(), tags.begin()+advance, tags.end());
+        else // rotate right.
+	  std::rotate(tags.begin(), tags.begin()+tags.size()+advance, tags.end());
+        lines.clear();
+        addPoints(tags);
+      }
   }
 
 //! @brief Return the length of the line.

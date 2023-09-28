@@ -66,6 +66,7 @@ class EntMdlr: public SetEstruct
     virtual void update_topology(void)= 0;
     void create_nodes(const Pos3dArray3d &);
     Node *create_node(const Pos3d &pos,size_t i=1,size_t j=1, size_t k=1);
+    const Node *set_node(size_t i,size_t j, size_t k, Node *);
     bool create_elements(meshing_dir dm);
     Pnt *create_point(const Pos3d &);
     Pnt *create_point_if_needed(const Pos3d &, const double &tol= 1e-6);

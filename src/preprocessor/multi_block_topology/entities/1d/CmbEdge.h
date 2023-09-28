@@ -123,10 +123,10 @@ class CmbEdge: public Edge
     const Pnt *first_point(void) const;
     const Pnt *last_point(void) const;
 
-  protected:
     virtual void create_line_nodes(void);
     void line_meshing(meshing_dir dm);
-    void close(void); 
+    void close(void);
+    void revolve(const int &);
   public:
     CmbEdge(void);
     CmbEdge(Preprocessor *m,const size_t &nd= 4);

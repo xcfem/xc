@@ -364,6 +364,26 @@ void XC::EntMdlr::create_nodes(const Pos3dArray3d &positions)
       }
   }
 
+//! @brief Set the (i,j,k) node. Issue a warning if there is already
+//! a node there.
+const XC::Node *XC::EntMdlr::set_node(size_t i,size_t j, size_t k, Node *nodePtr)
+  {
+    const Node *oldNode= nullptr;
+    if(!ttzNodes.empty())
+      {
+        oldNode= this->getNode(i,j,k);
+	if(oldNode)
+	  {
+	    std::clog << getClassName() << "::" << __FUNCTION__
+	              << "; node at position: ("
+		      << i << ", " << j << ", " << k 
+		      << ") already exist." << std::endl;
+	  }
+        ttzNodes(i,j,k)= nodePtr;
+      }
+    return oldNode;
+  }
+
 //! @brief Creates elements on the nodes created
 //! in create_nodes.
 bool XC::EntMdlr::create_elements(meshing_dir dm)
