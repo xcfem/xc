@@ -155,7 +155,9 @@ class Face: public CmbEdge
     bool counterclockwise(const Pos3d &) const;
     std::string orientation(const Pos3d &) const;
     virtual void reverse(void);
+    void revolve(const int &);
     void setKOrientation(const Vector3d &);
+    void setIOrientation(const Vector3d &);
 
     int getVtkCellType(void) const;
     

@@ -569,6 +569,8 @@ python tests/preprocessor/geom_entities/test_quadrilateral_surface_01.py
 python tests/preprocessor/geom_entities/test_quadrilateral_surface_02.py
 python tests/preprocessor/geom_entities/test_quadrilateral_surface_03.py
 python tests/preprocessor/geom_entities/test_quadrilateral_surface_04.py
+python tests/preprocessor/geom_entities/test_quadrilateral_surface_05.py
+python tests/preprocessor/geom_entities/test_quadrilateral_surface_06.py
 python tests/preprocessor/geom_entities/test_surface_set_orientation.py
 python tests/preprocessor/geom_entities/test_polygonal_surface_01.py
 python tests/preprocessor/geom_entities/test_cross-stitch_01.py

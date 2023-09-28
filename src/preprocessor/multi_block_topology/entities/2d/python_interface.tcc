@@ -28,6 +28,8 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::setNDivJ,"get/set the number of divisions of the odd sides of the surface.")
   .def("orientation", &XC::Face::orientation, "Return the orientation of the face.")
   .def("setKOrientation", &XC::Face::setKOrientation, "Set the orientation of the face normal according to the vector argument.")
+  .def("setIOrientation", &XC::Face::setIOrientation, "Set the face i vector as close as possible to the given vector.")
+  .def("revolve", &XC::Face::revolve,"Revolve the vertex sequence.")
   .def("getContour",&XC::Face::getContour,"Return the face contour as a 3D polyline.")
   .def("getArea",&XC::Face::getArea,"Return the face area.")
   .def("setElemSizeI",&XC::Face::SetElemSizeI,"setElementSizeI(sz) set the element size on the even sides of the surface.")

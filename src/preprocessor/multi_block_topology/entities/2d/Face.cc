@@ -801,6 +801,17 @@ void XC::Face::reverse(void)
     close();
   }
 
+//! @brief Move forward or backwards the sequence of vertexes.
+//! 
+//! Move forward or backwards the sequence of vertexes. For example if
+//! the given advance is 2. Changes the vertex sequence as follows
+//! newI= K, newJ= L, newK= I, newL= J.
+void XC::Face::revolve(const int &advance)
+  {
+    CmbEdge::revolve(advance);
+    close();
+  }
+
 //! @brief Set the orientation of the face normal according to the vector
 //! argument. If the dot product of the vector and the surface normal vector is
 //! negative the method flips the surface.
@@ -810,6 +821,18 @@ void XC::Face::setKOrientation(const Vector3d &v)
     const double d= dot(this->getKVector(), v);    
     if(d<0.0)
       this->reverse();
+  }
+
+
+//! @brief Set the orientation of the face i unit vector as close as possible
+//! to the given vector.
+//! @param v: orientation vector.
+void XC::Face::setIOrientation(const Vector3d &v)
+  {
+    const Vector3d iVector= this->getIVector();
+    const double angle= v.getAngle(iVector);
+    const int advance= int(round(2*angle/M_PI));
+    this->revolve(advance);
   }
 
 
