@@ -54,7 +54,7 @@ class DqPtrsFaces: public DqPtrsEntities<Face>
 
     // Surface orientation.
     void reverse(void);
-    void setOrientation(const Vector3d &);
+    void setKOrientation(const Vector3d &);
   };
  
 } //end of XC namespace

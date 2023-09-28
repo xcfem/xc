@@ -48,17 +48,17 @@ void XC::DqPtrsFaces::reverse(void)
       }
   }
 
-//! @brief Set the orientation according to the vector argument. If the dot
-//! product of the vector and the surface normal vector is negative the
-//! method changes the surface orientation.
+//! @brief Set the orientation of the face normals according to the vector
+//! argument. If the dot product of the vector and the surface normal vector
+//! is negative the method flips the surface.
 //! @param v: orientation vector.
-void XC::DqPtrsFaces::setOrientation(const Vector3d &v)
+void XC::DqPtrsFaces::setKOrientation(const Vector3d &v)
   {
     for(iterator i= this->begin();i!= this->end();i++)
       {
         Face *t= (*i);
         assert(t);
-	t->setOrientation(v);
+	t->setKOrientation(v);
       }
   }
 

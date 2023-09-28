@@ -56,7 +56,7 @@ xcTotalSet= modelSpace.getTotalSet()
 #xcTotalSet.surfaces.reverse()
 
 orientationVector= geom.Vector3d(0.0,0.0,1.0)
-xcTotalSet.surfaces.setOrientation(orientationVector)
+xcTotalSet.surfaces.setKOrientation(orientationVector)
 
 err= 0.0
 for s in xcTotalSet.surfaces:

@@ -254,7 +254,7 @@ class_<dq_ptrs_faces, bases<dq_ptrs_surfaces> >("dq_ptrs_faces",no_init)
 
 class_<XC::DqPtrsFaces, bases<dq_ptrs_faces> >("DqPtrsFaces",no_init)
   .def("reverse", &XC::DqPtrsFaces::reverse, "Reverse surfaces.")
-  .def("setOrientation", &XC::DqPtrsFaces::setOrientation, "Set the orientation of the face according to the vector argument.")
+  .def("setKOrientation", &XC::DqPtrsFaces::setKOrientation, "Set the orientation of the face normals according to the vector argument.")
   .def("pickSurfacesInside",&XC::DqPtrsFaces::pickSurfacesInside,"pickSurfacesInside(geomObj,tol) return the faces inside the geometric object.") 
   ;
 
