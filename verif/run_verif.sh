@@ -56,6 +56,7 @@ python tests/utility/geom/vector2d_test_01.py
 python tests/utility/geom/vector2d_test_02.py
 python tests/utility/geom/vector3d_test_01.py
 python tests/utility/geom/vector3d_test_02.py
+python tests/utility/geom/vector3d_test_03.py
 python tests/utility/geom/vector3d_angle_test_01.py
 echo "$BLEU" "    Points." "$NORMAL"
 python tests/utility/geom/pos2d_test_01.py
