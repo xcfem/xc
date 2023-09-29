@@ -58,6 +58,7 @@ prepB= fePrbB.getPreprocessor
 # Populate from the previous dictionary.
 prepB.setFromDict(prepDict)
 
+# Check results.
 testSet1B= prepA.getSets.getSet(testSet1.name)
 testSet1B.fillDownwards()
 numPoints= len(testSet1B.points)
