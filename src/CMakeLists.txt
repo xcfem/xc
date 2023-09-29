@@ -151,6 +151,8 @@ INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable ${MPI_CXX_COMPILE_OPTIONS} ${OpenMP_CXX_FLAGS}")
 # Avoid pragma message about Boost placeholders
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_BIND_GLOBAL_PLACEHOLDERS")
+# ignore BOOST deprecated headers
+add_definitions("-DBOOST_ALLOW_DEPRECATED_HEADERS")
 # Fortran flags.
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_RELEASE} -fPIC -std=f95")
 # C flags.
