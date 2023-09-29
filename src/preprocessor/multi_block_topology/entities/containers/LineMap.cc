@@ -38,8 +38,7 @@
 #include "preprocessor/multi_block_topology/entities/1d/CmbEdge.h"
 #include "preprocessor/multi_block_topology/entities/1d/CircularArc.h"
 #include "preprocessor/set_mgmt/Set.h"
-
-
+#include "utility/kernel/python_utils.h"
 
 //! @brief Constructor.
 XC::LineMap::LineMap(MultiBlockTopology *mbt)
@@ -305,7 +304,8 @@ void XC::LineMap::setPyDict(const boost::python::dict &d)
       {
 	for(boost::python::ssize_t i=0; i<sz; i++)
 	  {
-	    const int tag= boost::python::extract<int>(items[i][0]);
+	    const boost::python::object obj= boost::python::extract<boost::python::object>(items[i][0]);
+	    const int tag= tag_integer_from_py_object(obj);
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
 	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
 	    Edge *tmp= New(tag, className);

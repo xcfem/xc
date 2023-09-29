@@ -35,8 +35,7 @@
 #include "preprocessor/multi_block_topology/entities/3d/UniformGrid.h"
 #include "preprocessor/multi_block_topology/entities/2d/QuadSurface.h"
 #include "preprocessor/set_mgmt/Set.h"
-
-
+#include "utility/kernel/python_utils.h"
 
 //! @brief Constructor.
 XC::UniformGridMap::UniformGridMap(MultiBlockTopology *mbt)
@@ -118,7 +117,8 @@ void XC::UniformGridMap::setPyDict(const boost::python::dict &d)
       {
 	for(boost::python::ssize_t i=0; i<sz; i++)
 	  {
-	    const int tag= boost::python::extract<int>(items[i][0]);
+	    const boost::python::object obj= boost::python::extract<boost::python::object>(items[i][0]);
+	    const int tag= tag_integer_from_py_object(obj);
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
 	    UniformGrid *tmp= New(tag);
 	    if(tmp)

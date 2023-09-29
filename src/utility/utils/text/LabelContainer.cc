@@ -22,6 +22,7 @@
 #include "LabelContainer.h"
 #include <iostream>
 #include <assert.h>
+#include "utility/kernel/python_utils.h"
 
 //! @brief Return the value of the label with index i.
 //! @param i: label index.
@@ -95,7 +96,8 @@ void LabelDictionary::setPyDict(const boost::python::dict &d)
     const size_t sz= boost::python::len(items);
     for(size_t i= 0; i<sz; i++)
       {
-	const int id= boost::python::extract<int>(items[i][0]);
+	const boost::python::object obj= boost::python::extract<boost::python::object>(items[i][0]);
+	const int id= tag_integer_from_py_object(obj);
 	const std::string &e=  boost::python::extract<std::string>(items[i][0]);
         bm.insert(bm_type::value_type(id,e));
       }

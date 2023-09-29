@@ -126,7 +126,7 @@ void XC::FEProblem::setPyDict(const boost::python::dict &d)
 	  {
 	    const std::string key= boost::python::extract<std::string>(items[i][0]);
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
-	    std::cerr << " ouput hander: " << key << " ignored." << std::endl;
+	    std::cerr << " ouput handler: " << key << " ignored." << std::endl;
 	  }
       }
     preprocessor.setPyDict(boost::python::extract<boost::python::dict>(d["preprocessor"]));

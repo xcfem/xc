@@ -26,6 +26,28 @@
 #include "utility/matrices/ProtoMatrix.h"
 #include "CImg.h"
 
+//! @brief Tries to return an integer tag identifier from a Python string
+//! or integer objects. (JSON dictionary keys are strings so we need this
+//! function to import models from JSON).
+int tag_integer_from_py_object(const boost::python::object &obj)
+  {
+    int retval= -1; // if negative we have not succeeded.
+    const std::string obj_classname= boost::python::extract<std::string>(obj.attr("__class__").attr("__name__"));
+    if(obj_classname=="str") // is a string.
+      {
+        const boost::python::str py_string= boost::python::extract<boost::python::str>(obj);
+        const std::string cpp_string= boost::python::extract<std::string>(py_string);
+	retval= stoi(cpp_string);
+      }
+    else if(obj_classname=="int") // is an integer
+      retval= boost::python::extract<int>(obj);
+    else
+      std::cerr << __FUNCTION__
+		<< "; class: '" << obj_classname
+		<< "' unknown." << std::endl;
+    return retval; 
+  }
+
 typedef std::vector<int> std_vector_int;
 
 std::vector<int> vector_int_from_py_list(const boost::python::list &l)

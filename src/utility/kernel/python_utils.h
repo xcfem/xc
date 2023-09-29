@@ -32,6 +32,7 @@
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 
+int tag_integer_from_py_object(const boost::python::object &);
 
 std::vector<int> vector_int_from_py_list(const boost::python::list &);
 std::vector<double> vector_double_from_py_list(const boost::python::list &);
