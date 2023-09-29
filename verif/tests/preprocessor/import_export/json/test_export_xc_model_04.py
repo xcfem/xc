@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
+import json
 import math
 import geom
 import xc
@@ -44,6 +45,12 @@ testSet1.surfaces.append(s)
 
 # Get dictionary.
 prepDict= prepA.getDict()
+## Save it as JSON file for import it in another example.
+fname= os.path.basename(__file__)
+jsonFileName= fname.replace('.py', '.json')
+jsonFileName= '/tmp/'+jsonFileName
+with open(jsonFileName, 'w') as f:
+    json.dump(prepDict, f)
 
 fePrbB= xc.FEProblem()
 prepB= fePrbB.getPreprocessor
@@ -65,7 +72,6 @@ print(err)
 '''
 
 from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
 if(err<1e-15):
     print('test '+fname+': ok.')
 else:

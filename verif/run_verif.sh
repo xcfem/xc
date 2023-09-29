@@ -664,6 +664,7 @@ python tests/preprocessor/import_export/json/test_export_xc_model_01.py
 python tests/preprocessor/import_export/json/test_export_xc_model_02.py
 python tests/preprocessor/import_export/json/test_export_xc_model_03.py
 python tests/preprocessor/import_export/json/test_export_xc_model_04.py
+python tests/preprocessor/import_export/json/test_import_xc_model_01.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
