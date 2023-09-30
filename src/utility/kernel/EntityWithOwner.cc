@@ -101,7 +101,7 @@ void EntityWithOwner::set_owner(EntityWithOwner *owr)
 boost::python::dict EntityWithOwner::getPyDict(void) const
   {
     boost::python::dict retval;
-    retval["ownerAddress"]= reinterpret_cast<size_t>(owner);
+    //retval["ownerAddress"]= reinterpret_cast<size_t>(owner); NOT USED.
     retval["className"]= getClassName();
     return retval;
   }

@@ -104,11 +104,16 @@ void EntityWithProperties::copyPropsFrom(const EntityWithProperties &other)
 boost::python::dict EntityWithProperties::getPyDict(void) const
   {
     boost::python::dict retval= EntityWithOwner::getPyDict();
-    // Retrieve properties.
-    for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
+    if(!python_dict.empty()) // if there are properties.
       {
-	const std::string key= py_prop_prefix+(*i).first;
-        retval[key]= (*i).second;
+	// Populate the properties dictionary.
+	boost::python::dict properties_dict;
+	for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
+	  {
+	    const std::string key= (*i).first;
+	    properties_dict[key]= (*i).second;
+	  }
+	retval[py_prop_prefix]= properties_dict;
       }
     return retval;
   }
@@ -117,17 +122,16 @@ boost::python::dict EntityWithProperties::getPyDict(void) const
 void EntityWithProperties::setPyDict(const boost::python::dict &d)
   {
     EntityWithOwner::setPyDict(d);
-    auto items = d.attr("items")(); // just plain d.items or d.iteritems for Python 2!
-    for(auto it = boost::python::stl_input_iterator<boost::python::tuple>(items); it != boost::python::stl_input_iterator<boost::python::tuple>(); ++it)
+    if(d.has_key(py_prop_prefix))
       {
-	boost::python::tuple kv = *it;
-	std::string key= boost::python::extract<std::string>(kv[0]);
-	if(key.rfind(py_prop_prefix, 0) == 0) // it's a property.
+	boost::python::dict properties_dict= boost::python::extract<boost::python::dict>(d[py_prop_prefix]);
+	auto property_items= boost::python::list(properties_dict.items());
+	for(auto it = boost::python::stl_input_iterator<boost::python::tuple>(property_items); it != boost::python::stl_input_iterator<boost::python::tuple>(); ++it)
 	  {
-	    const int sz= py_prop_prefix.size();
-	    key.erase(0,sz); // remove prefix
-            auto value= kv[1];
+	    boost::python::tuple kv = *it;
+	    std::string key= boost::python::extract<std::string>(kv[0]);
+	    auto value= kv[1];
 	    setPyProp(key, value);
-          }    
+	  }
       }
   }
