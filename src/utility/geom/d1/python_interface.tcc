@@ -97,6 +97,7 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("downwards", &Segment2d::downwards,"return true if the segment goes down.")
   .def("getXAxisAngle", &Segment2d::XAxisAngle,"return the segment angle with respect to the X axis.")
   .def("getYAxisAngle", &Segment2d::YAxisAngle,"return the segment angle with respect to the Y axis.")
+  .def("getVDir",&Segment2d::VDir,"return the segment direction vector.")
   .def("getNormal", &Segment2d::Normal,"return a vector perpendicular to the segment.")
   .def("dist", &Segment2d::dist,"return the distance to the point.")
   .def("dist2", &Segment2d::dist2,"return the squared distance to the point.")
@@ -126,15 +127,15 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
 
 class_<Linear3d, bases<GeomObj3d>, boost::noncopyable  >("Linear3d", no_init);
 
-Pos3d (Line3d::*Pos3dProj)(const Pos3d &) const= &Line3d::Projection;
+Pos3d (Line3d::*LinePos3dProj)(const Pos3d &) const= &Line3d::Projection;
 Vector3d (Line3d::*Vector3dProj)(const Vector3d &) const= &Line3d::Projection;
-
 class_<Line3d, bases<Linear3d> >("Line3d")
   .def(init<Pos3d, Pos3d>()) //Constructs the line from two points.
   .def(init<Pos3d, Dir3d>()) //Constructs the line from a point and a direction.
   .def(init<Pos3d, Vector3d>()) //Constructs the line from a point and a vector.
   .def(init<Line3d>()) //Copy constructor.
-  .def("getPos3dProj",Pos3dProj,"return the projection of a point onto the line.")
+  .def("getPos3dProj",LinePos3dProj,"TO DEPRECATE return the projection of a point onto the line.")
+  .def("getProjection",LinePos3dProj,"return the projection of a point onto the line.")
   .def("getVector3dProj",Vector3dProj,"return the projection of a vector onto the line.")
   .def("getVDir",&Line3d::VDir,"return the line direction vector.")
   .def("getPoint",&Line3d::PtoParametricas,"return a point on the line.")
@@ -153,6 +154,7 @@ class_<Line3d, bases<Linear3d> >("Line3d")
   .def("swap", &Line3d::swap,"changes the orientation of the line.")
  ;
 
+Pos3d (Ray3d::*Ray3dPos3dProj)(const Pos3d &) const= &Ray3d::Projection;
 class_<Ray3d, bases<Linear3d> >("Ray3d")
   .def(init<Ray3d>())
   .def(init<Pos3d, Pos3d>())
@@ -166,6 +168,7 @@ class_<Ray3d, bases<Linear3d> >("Ray3d")
   .def("getSlope", &Ray3d::getSlope,"return the ray slope.")
   .def("upwards", &Ray3d::upwards,"return true if the ray goes up.")
   .def("downwards", &Ray3d::downwards,"return true if the ray goes down.")
+  .def("getProjection",Ray3dPos3dProj,"return the projection of a point onto the line.")
   .def("getSupportLine", &Ray3d::getSupportLine, "Return the supporting line.")
   .def("getPoint",&Ray3d::PtoParametricas,"return a point on the line.")
   ;
@@ -179,6 +182,7 @@ GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithRay)(const Ray3d &) co
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithSegment)(const Segment3d &) const= &Segment3d::getIntersection;
 boost::python::list (Segment3d::*dividePyEq3d)(int) const= &Segment3d::DividePy;
 boost::python::list (Segment3d::*dividePyProp3d)(const boost::python::list &) const= &Segment3d::DividePy;
+Pos3d (Segment3d::*Segment3dPos3dProj)(const Pos3d &) const= &Segment3d::Projection;
 class_<Segment3d, bases<Linear3d> >("Segment3d")
   .def(init<>())
   .def(init<Pos3d,Pos3d>())
@@ -197,6 +201,7 @@ class_<Segment3d, bases<Linear3d> >("Segment3d")
   .def("getAngle",AngleLine3D,"Returns the angle between the line segment and the line.")
   .def("getAngle",AngleRay3D,"Returns the angle between the line segment and the ray.")
   .def("getAngle",AngleSegment3D,"Returns the angle between both line segments.")
+  .def("getProjection",Segment3dPos3dProj,"return the projection of a point onto the line.")
   .def("getIntersection", segment3dIntersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersection", segment3dIntersectionWithRay, "Return the intersection with the ray argument.")
   .def("getIntersection", segment3dIntersectionWithSegment, "Return the intersection with the segment argument.")
