@@ -50,6 +50,8 @@ class DqPtrsFaces: public DqPtrsEntities<Face>
     DqPtrsFaces &operator*=(const DqPtrsFaces &);
 
     DqPtrsFaces pickSurfacesInside(const GeomObj3d &, const double &tol= 0.0) const;
+    Face *getNearest(const Pos3d &);
+    const Face *getNearest(const Pos3d &) const;
     
 
     // Surface orientation.

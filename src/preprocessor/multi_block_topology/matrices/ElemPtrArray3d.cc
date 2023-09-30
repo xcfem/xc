@@ -74,7 +74,7 @@ const XC::Element *XC::ElemPtrArray3d::findElement(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the element closest to the point being passed as parameter.
+//! @brief Returns the element closest to the given point.
 XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p)
   {
     Element *retval= nullptr, *ptrElem= nullptr;
@@ -101,7 +101,7 @@ XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p)
     return retval;
   }
 
-//! @brief Returns the element closest to the point being passed as parameter.
+//! @brief Returns the element closest to the given point.
 const XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p) const
   {
     ElemPtrArray3d *this_no_const= const_cast<ElemPtrArray3d *>(this);

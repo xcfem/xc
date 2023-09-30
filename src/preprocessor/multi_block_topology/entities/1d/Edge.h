@@ -90,10 +90,12 @@ class Edge: public EntMdlr
     boost::python::list getVerticesPy(void);
     virtual ID getKPoints(void) const;
     virtual std::deque<Segment3d> getSegments(void) const;
+    boost::python::list getSegmentsPy(void) const;
     virtual Pos3dArray get_positions(void) const= 0;
     virtual Pos3dArray get_nodes_pos(void) const;
     virtual BND3d Bnd(void) const= 0;
     virtual const Vector &getTang(const double &) const;
+    virtual double getDist(const Pos3d &) const;
     void divide(void);
 
     // Meshing.

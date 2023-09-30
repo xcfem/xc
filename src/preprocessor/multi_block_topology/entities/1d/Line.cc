@@ -121,6 +121,11 @@ Segment3d XC::Line::getLineSegment(void) const
 double XC::Line::getSquaredDistanceTo(const Pos3d &pt) const
   { return getLineSegment().dist2(pt); }
 
+//! @brief Returns the distance to the
+//! position being passed as parameter.
+double XC::Line::getDist(const Pos3d &pos) const
+  { return getLineSegment().dist(pos); }
+
 //! @brief Divides the line by the point being passed as parameter.
 XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &length)
   {

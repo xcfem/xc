@@ -222,12 +222,14 @@ class_<dq_line_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_line_ptrs",n
   .def("clear",&dq_line_ptrs::clear,"Removes all items.")
    ;
 
+XC::Edge *(XC::SetEntities::lst_line_pointers::*getNearestLine)(const Pos3d &)= &XC::SetEntities::lst_line_pointers::getNearest;
 class_<XC::SetEntities::lst_line_pointers, bases<dq_line_ptrs>>("lstLines",no_init)
   .def("append", &XC::SetEntities::lst_line_pointers::push_back,"Appends line at the end of the list.")
   .def("pushFront", &XC::SetEntities::lst_line_pointers::push_front,"Push line at the beginning of the list.")
   .def("pickLinesInside",&XC::SetEntities::lst_line_pointers::pickEntitiesInside,"pickLinesInside(geomObj,tol) return the nodes inside the geometric object.") 
   .def("getBnd", &XC::SetEntities::lst_line_pointers::Bnd, "Returns lines boundary.")
   .def("findTag",make_function(&XC::SetEntities::lst_line_pointers::findTag, return_internal_reference<>() ),"Returns the line identified by the tag argument.")
+  .def("getNearest",make_function(getNearestLine, return_internal_reference<>() ),"Return the nearest line to the given position.")
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_surfaces;
@@ -252,10 +254,12 @@ class_<dq_ptrs_faces, bases<dq_ptrs_surfaces> >("dq_ptrs_faces",no_init)
   .def("getCentroid", &dq_ptrs_faces::getCentroid, "Returns the centroid of the points.")
    ;
 
+XC::Face *(XC::DqPtrsFaces::*getNearestFace)(const Pos3d &)= &XC::DqPtrsFaces::getNearest;
 class_<XC::DqPtrsFaces, bases<dq_ptrs_faces> >("DqPtrsFaces",no_init)
   .def("reverse", &XC::DqPtrsFaces::reverse, "Reverse surfaces.")
   .def("setKOrientation", &XC::DqPtrsFaces::setKOrientation, "Set the orientation of the face normals according to the vector argument.")
-  .def("pickSurfacesInside",&XC::DqPtrsFaces::pickSurfacesInside,"pickSurfacesInside(geomObj,tol) return the faces inside the geometric object.") 
+  .def("pickSurfacesInside",&XC::DqPtrsFaces::pickSurfacesInside,"pickSurfacesInside(geomObj,tol) return the faces inside the geometric object.")
+  .def("getNearest", make_function(getNearestFace, return_internal_reference<>() ),"Return the nearest face to the given position.")
   ;
 
 
@@ -269,6 +273,7 @@ class_<dq_body_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_body_ptrs",n
   .def("clear",&dq_body_ptrs::clear,"Removes all items.")
    ;
 
+XC::Body *(XC::SetEntities::lst_body_pointers::*getNearestBody)(const Pos3d &)= &XC::SetEntities::lst_body_pointers::getNearest;
 class_<XC::SetEntities::lst_body_pointers, bases<dq_body_ptrs> >("lstBodies",no_init)
   .def("append", &XC::SetEntities::lst_body_pointers::push_back,"Appends body at the end of the list.")
   .def("pushFront", &XC::SetEntities::lst_body_pointers::push_front,"Push body at the beginning of the list.")
@@ -277,6 +282,7 @@ class_<XC::SetEntities::lst_body_pointers, bases<dq_body_ptrs> >("lstBodies",no_
   .def("pickBodiesInside",&XC::SetEntities::lst_body_pointers::pickEntitiesInside,"pickBodiesInside(geomObj,tol) return the nodes inside the geometric object.") 
   .def("getBnd", &XC::SetEntities::lst_body_pointers::Bnd, "Returns bodies boundary.")
   .def("findTag",make_function(&XC::SetEntities::lst_body_pointers::findTag, return_internal_reference<>() ),"Returns the body identified by the tag argument.")
+  .def("getNearest",make_function(getNearestBody, return_internal_reference<>() ),"Return the nearest body to the given position.")
    ;
 
 void (XC::SetEntities::*fillDownwardsMesh)(XC::SetMeshComp &)= &XC::SetEntities::fillDownwards;

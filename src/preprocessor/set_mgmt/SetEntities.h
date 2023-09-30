@@ -171,6 +171,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     SetEntities pickLinesInside(const GeomObj3d &, const double &tol= 0.0) const;
     edge_intersection_pairs getLineIntersections(const double &tol= 1e-6) const;
     void splitLinesAtIntersections(const double &tol= 1e-6);
+    Edge *getNearestLine(const Pos3d &);
+    const Edge *getNearestLine(const Pos3d &) const;
 
     //! @brief Returns a const reference to the surface container.
     virtual const lst_surface_ptrs &getSurfaces(void) const

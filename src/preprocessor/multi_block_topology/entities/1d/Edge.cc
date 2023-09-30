@@ -30,6 +30,7 @@
 #include "preprocessor/multi_block_topology/entities/2d/Face.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 #include "utility/matrix/util_matrix.h"
 #include "utility/matrices/m_int.h"
 #include "utility/geom/d3/BND3d.h"
@@ -37,9 +38,8 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
 
-
+#include <limits>
 #include "boost/any.hpp"
-#include "domain/mesh/element/Element.h"
 
 //! @brief Constructor.
 //! 
@@ -785,6 +785,29 @@ std::deque<Segment3d> XC::Edge::getSegments(void) const
     return retval;
   }
 
+//! @brief Return the segments in a Python list.
+boost::python::list XC::Edge::getSegmentsPy(void) const
+  {
+    boost::python::list retval;
+    std::deque<Segment3d> tmpList= getSegments();
+    for(std::deque<Segment3d>::const_iterator i= tmpList.begin();i!=tmpList.end();i++)
+      {
+	Segment3d tmp= *i;
+	boost::python::object pyObj(tmp);
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return the distance to the edge.
+double XC::Edge::getDist(const Pos3d &) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this function must be redefined on"
+              << " derived classes, NaN returned;" << std::endl;
+    return std::numeric_limits<double>::quiet_NaN();
+  }
+
 //! @brief Return k-points.
 XC::ID XC::Edge::getKPoints(void) const
   {
@@ -861,7 +884,7 @@ void XC::Edge::setPyDict(const boost::python::dict &d)
 	  }
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
   }
 

@@ -151,6 +151,11 @@ Pos3d XC::CmbEdge::Side::getCentroid(void) const
 const XC::Vector &XC::CmbEdge::Side::getTang(const double &s) const
   { return edge->getTang(s); }
 
+//! @brief Returns the distance to the
+//! position being passed as parameter.
+double XC::CmbEdge::Side::getDist(const Pos3d &p) const
+  { return edge->getDist(p); }
+
 //! @brief Return the positions on the line.
 Pos3dArray XC::CmbEdge::Side::get_positions(void) const
   {
@@ -461,6 +466,19 @@ Pos3d XC::CmbEdge::getCentroid(void) const
         totalLength+= l;
       }
     retval+= v*1.0/totalLength;
+    return retval;
+  }
+//! @brief Returns the distance to the
+//! position being passed as parameter.
+double XC::CmbEdge::getDist(const Pos3d &p) const
+  {
+    double retval= DBL_MAX;
+    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
+      {
+	const double d= (*i).getDist(p);
+	if(d<retval)
+	  { retval= d; }
+      }
     return retval;
   }
 

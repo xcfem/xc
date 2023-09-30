@@ -98,6 +98,7 @@ class CmbEdge: public Edge
         bool In(const GeomObj3d &, const double &tol= 0.0) const;
         bool Out(const GeomObj3d &, const double &tol= 0.0) const;
         const Vector &getTang(const double &) const;
+        double getDist(const Pos3d &) const;
 
 	// Mesh
         Node *getNodeForward(const size_t &i);
@@ -161,6 +162,7 @@ class CmbEdge: public Edge
 
     double getLength(void) const;
     Pos3d getCentroid(void) const;	
+    virtual double getDist(const Pos3d &) const;
 
     //! @brief Return the number of vertices.
     virtual size_t getNumberOfVertices(void) const

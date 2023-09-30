@@ -86,3 +86,11 @@ XC::DqPtrsFaces XC::DqPtrsFaces::pickSurfacesInside(const GeomObj3d &geomObj, co
     DqPtrsEntities<Face> tmp= DqPtrsEntities<Face>::pickEntitiesInside(geomObj, tol);
     return DqPtrsFaces(tmp);
   }
+
+//! @brief Return the edge closest to the given point.
+XC::Face *XC::DqPtrsFaces::getNearest(const Pos3d &p)
+  { return DqPtrsEntities<Face>::getNearest(p); }
+
+//! @brief Return the edge closest to the given point.
+const XC::Face *XC::DqPtrsFaces::getNearest(const Pos3d &p) const
+  { return DqPtrsEntities<Face>::getNearest(p); }

@@ -33,6 +33,7 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
   .add_property("getNumConnectedSurfaces", &XC::Edge::getNumConnectedSurfaces,"Return the number of connected surfaces.")
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices,"Return the IDs of the vertices")
   .add_property("getVertices",&XC::Edge::getVerticesPy,"Return the vertices")
+  .add_property("segments",&XC::Edge::getSegmentsPy,"Return the segments")
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
   .def("getVertex",make_function(&XC::Edge::getVertex, return_internal_reference<>()),"Return i-th vertex.")

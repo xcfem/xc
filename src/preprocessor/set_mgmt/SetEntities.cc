@@ -954,6 +954,15 @@ XC::SetEntities XC::SetEntities::pickLinesInside(const GeomObj3d &geomObj, const
     return retval;
   }
 
+//! @brief Return the edge closest to the given point.
+XC::Edge *XC::SetEntities::getNearestLine(const Pos3d &p)
+  { return lines.getNearest(p); }
+
+//! @brief Return the edge closest to the given point.
+const XC::Edge *XC::SetEntities::getNearestLine(const Pos3d &p) const
+  { return lines.getNearest(p); }
+
+
 //! @brief Returns true if the surface belongs to the set.
 bool XC::SetEntities::In(const Face *f) const
   { return surfaces.in(f); }
