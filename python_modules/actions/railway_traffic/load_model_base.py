@@ -382,6 +382,12 @@ class UniformRailLoad(DynamicFactorLoad):
                 layerSpreadToDepthRatio= sl[1]
                 spread+= layerDepth*layerSpreadToDepthRatio
         railProjection= self.getRailAxisProjection(midplane)
+        # Remove collinear contiguous segments from the polyline
+        # otherwise there are vertexes that are not in a "corner"
+        # so the buffer algorithm cannot found the interseccion
+        # between the "offseted" lines.
+        epsilon= railProjection.getLength()/1e3 # compute a reasonable epsilon.
+        railProjection.simplify(epsilon) # simplify the projected axis.
         return railProjection.getBufferPolygon(spread, 8)
 
     def getDeckLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
