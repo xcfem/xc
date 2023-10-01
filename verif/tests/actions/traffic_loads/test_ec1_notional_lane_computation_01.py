@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Bridge loads. Notional lane computation.'''
+'''Roadway bridge loads. Notional lane computation.'''
 
 from __future__ import print_function
 from __future__ import division
