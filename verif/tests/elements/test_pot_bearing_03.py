@@ -59,8 +59,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
+nodes.calculateNodalReactions(False, 1e-7)
 
-R= bridge_bearings.get_reaction_on_pot(preprocessor, newElement.tag)
+reac= newElement.nodes[0].getReaction
+R= xc.Vector([reac[0],reac[1],reac[2]])
 
 ratio1= abs(R[0]+FX)/FX
 ratio2= abs(R[1]+FY)/FY

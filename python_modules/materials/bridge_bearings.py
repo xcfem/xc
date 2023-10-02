@@ -38,10 +38,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
+import sys
+import math
 import scipy.interpolate
 from itertools import count
 from materials import typical_materials
-import math
 import xc
 
 
@@ -288,18 +289,18 @@ class PTFEPotBearing(Bearing):
     '''PTFE slide bearing.
 
         Attibutes:
-            :d: (float) Pot diameter.
-
+    :ivar d: (float) Pot diameter.
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
     def __init__(self,d):
         '''Class constructor.
 
-
+        :param d: pot diameter.
         '''
         super(PTFEPotBearing,self).__init__()
         self.d= d
+        
     def getHorizontalStiffness(self):
         '''Returns the fictitious stiffness with respect to the horizontal displacement of a PTFE slide bearing.
 
@@ -312,7 +313,7 @@ class PTFEPotBearing(Bearing):
         '''
         return self.teflonMuTable(35e6)*math.pi*(self.d/2.0)**2*35e6/20e-3
 
-    def defineMaterials(self,preprocessor):
+    def defineMaterials(self, preprocessor):
         '''Define the materials to modelize the pot (Teflon).
 
             :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
@@ -327,15 +328,20 @@ class PTFEPotBearing(Bearing):
         self.matKX= typical_materials.defElasticMaterial(preprocessor, self.matXName, self.getHorizontalStiffness())
         self.matKY= typical_materials.defElasticMaterial(preprocessor, self.matYName, self.getHorizontalStiffness())
 
-    def putBetweenNodes(self,modelSpace,iNodA, iNodB):
-        ''' Puts the bearing between the nodes.
+    def putBetweenNodes(self, modelSpace, iNodA, iNodB):
+        ''' Puts the bearing between the nodes. Set the springs between the 
+            nodes in X and Y directions and imposes equal displacement in Z
+            direction.
 
-            :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
-            :param iNodA: (int) first node identifier (tag).
-            :param iNodB: (int) second node identifier (tag).
+        :param modelSpace: (:obj:'PredefinedSpace') space dimension and 
+                           number of DOFs.
+        :param iNodA: (int) first node identifier (tag).
+        :param iNodB: (int) second node identifier (tag).
         '''
-        newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials)
-        eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([2]))
+        # Set the springs in the X and Y directions.
+        newElement= modelSpace.setBearingBetweenNodes(iNodA, iNodB, self.materials)
+        # Impose equal displacement in the Z directions.
+        eDofs= modelSpace.constraints.newEqualDOF(iNodA, iNodB, xc.ID([2])) # 2 DOF -> Uz
         if(__debug__):
             if(not eDofs):
                 AssertionError('Can\'t create constraints.')
@@ -344,12 +350,14 @@ class PTFEPotBearing(Bearing):
     def putOnXBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction X.
 
-            :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
-            :param iNodA: (int) first node identifier (tag).
-            :param iNodB: (int) second node identifier (tag).
+        :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
+        :param iNodA: (int) first node identifier (tag).
+        :param iNodB: (int) second node identifier (tag).
         '''
+        # Set the spring in the X direction.
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[self.matXName])
-        eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([1,2]))
+        # Impose equal displacement in the Y and Z directions.
+        eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([1,2])) # 1 and 2 DOFs -> Uy and Uz
         if(__debug__):
             if(not eDofs):
                 AssertionError('Can\'t create constraints.')
@@ -358,12 +366,14 @@ class PTFEPotBearing(Bearing):
     def putOnYBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction Y.
 
-            :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
-            :param iNodA: (int) first node identifier (tag).
-            :param iNodB: (int) second node identifier (tag).
+        :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
+        :param iNodA: (int) first node identifier (tag).
+        :param iNodB: (int) second node identifier (tag).
         '''
+        # Set the spring in the Y direction.
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[None,self.matYName])
-        eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([0,2]))
+        # Impose equal displacement in the X and Z directions.
+        eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([0,2])) # 0 and 2 DOFs -> Ux and Uz
         if(__debug__):
             if(not eDofs):
                 AssertionError('Can\'t create constraints.')
@@ -372,10 +382,12 @@ class PTFEPotBearing(Bearing):
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     ''' Return the element reaction.
 
-            :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
-            :param iElem: (int) new zero length elem identifier (tag).
-            :param inclInertia: (bool) true if the reaction must include inertia forces.
+    :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
+    :param iElem: (int) new zero length elem identifier (tag).
+    :param inclInertia: (bool) true if the reaction must include inertia forces.
     '''
+    methodName= sys._getframe(0).f_code.co_name
+    lmsg.warning(methodName+"; don't use this function, is very inefficient: TO DEPRECATE.")
     nodes= preprocessor.getNodeHandler
     nodes.calculateNodalReactions(inclInertia, 1e-7)
   
