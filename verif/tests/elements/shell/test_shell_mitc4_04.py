@@ -35,21 +35,14 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
-
-
-
-# Define materials
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
-
-
+# Define seed element.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
-
-
+# Define problem geometry.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d(CooMaxX,0.0,0.0))
