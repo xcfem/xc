@@ -390,6 +390,28 @@ class UniformRailLoad(DynamicFactorLoad):
         railProjection.simplify(epsilon) # simplify the projected axis.
         return railProjection.getBufferPolygon(spread, 8)
 
+    def getDeckLoadedContourThroughLayers(self, spreadingLayers, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Return the loaded contour of the rail taking into account
+            the dispersal through the different pavement, earth and
+            concrete layers between the wheel contact area and the
+            middle surface of the bridge deck.
+
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param deckMidplane: mid-plane of the bridge deck.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        ## Append the deck spreading to the list.
+        spreadingLayers.append((deckThickness/2.0, deckSpreadingRatio))
+        # Call the regular method.
+        return self.getLoadedContour(midplane= deckMidplane, spreadingLayers= spreadingLayers)
+    
     def getDeckLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
         ''' Return the loaded contour of the rail taking into account
             the dispersal through the different pavement, earth and
@@ -418,10 +440,8 @@ class UniformRailLoad(DynamicFactorLoad):
         spreadingLayers= list()
         for thk, layer in zip(layerThicknesses, embankment.layers):
             spreadingLayers.append((thk, layer.loadSpreadingRatio))
-        ## Append the deck spreading too.
-        spreadingLayers.append((halfDeckThickness, deckSpreadingRatio))
         # Call the regular method.
-        return self.getLoadedContour(midplane= deckMidplane, spreadingLayers= spreadingLayers)
+        return self.getLoadedContourThroughLayers(spreadingLayers= spreadingLayers, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRation)
 
     def getNodalLoadVector(self, numNodes, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Return the load vector at the contact surface.
@@ -438,6 +458,65 @@ class UniformRailLoad(DynamicFactorLoad):
             retval+= nodalLoad*xc.Vector(brakingDir)
         return retval
 
+    def pickLoadedNodes(self, loadedContour, originSet, deckMidplane):
+        ''' Define uniform loads on the tracks with the argument values:
+
+        :param loadedContour: 2D polygon defining the loaded region.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckMidplane: midplane of the loaded surface.
+        '''
+        # Pick loaded nodes.
+        retval= list()
+        tol= .01
+        ref= deckMidplane.getRef()
+        for n in originSet.nodes:
+            posProj= deckMidplane.getProjection(n.getInitialPos3d)
+            nodePos2d= ref.getLocalPosition(posProj)
+            if(loadedContour.In(nodePos2d, tol)):  # node in loaded contour.
+                retval.append(n)
+        return retval
+
+    def applyNodalLoads(self, loadedNodes, gravityDir, brakingDir):
+        ''' Apply the load in the given node list.
+
+        :param loadedNodes: nodes that will be loaded.
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        # Compute load vector
+        numLoadedNodes= len(loadedNodes)
+        vLoad= self.getNodalLoadVector(numLoadedNodes, gravityDir= gravityDir, brakingDir= brakingDir)
+        loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
+        # Apply nodal loads.
+        retval= list()
+        for n in loadedNodes:
+            retval.append(n.newLoad(loadVector))
+        return retval
+        
+    def defDeckRailUniformLoadsThroughLayers(self, spreadingLayers, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define uniform loads on the tracks with the argument values:
+
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckMidplane: midplane of the loaded surface.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        loadedContour= self.getDeckLoadedContourThroughLayers(spreadingLayers= spreadingLayers, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
+        # Pick loaded nodes.
+        loadedNodes= self.pickLoadedNodes(loadedContour= loadedContour, originSet= originSet, deckMidplane= deckMidplane)
+        # Apply nodal loads.
+        retval= self.applyNodalLoads(loadedNodes= loadedNodes, gravityDir= gravityDir, brakingDir= brakingDir)
+        return retval
+    
     def defDeckRailUniformLoadsThroughEmbankment(self, embankment, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define uniform loads on the tracks with the argument values:
 
@@ -454,22 +533,9 @@ class UniformRailLoad(DynamicFactorLoad):
         '''
         loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         # Pick loaded nodes.
-        loadedNodes= list()
-        tol= .01
-        ref= deckMidplane.getRef()
-        for n in originSet.nodes:
-            posProj= deckMidplane.getProjection(n.getInitialPos3d)
-            nodePos2d= ref.getLocalPosition(posProj)
-            if(loadedContour.In(nodePos2d, tol)):  # node in loaded contour.
-                loadedNodes.append(n)
-        # Compute load vector
-        numLoadedNodes= len(loadedNodes)
-        vLoad= self.getNodalLoadVector(numLoadedNodes, gravityDir= gravityDir, brakingDir= brakingDir)
-        loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
+        loadedNodes= self.pickLoadedNodes(loadedContour= loadedContour, originSet= originSet, deckMidplane= deckMidplane)
         # Apply nodal loads.
-        retval= list()
-        for n in loadedNodes:
-            retval.append(n.newLoad(loadVector))
+        retval= self.applyNodalLoads(loadedNodes= loadedNodes, gravityDir= gravityDir, brakingDir= brakingDir)
         return retval
 
     def defBackfillUniformLoads(self, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
