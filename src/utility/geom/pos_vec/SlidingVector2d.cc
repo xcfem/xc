@@ -51,6 +51,21 @@ const Vector2d &SlidingVector2d::getVector(void) const
 Vector2d SlidingVector2d::getVector2d(void) const
   { return *this; }
 
+//! @brief Comparison operator.
+bool SlidingVector2d::operator==(const SlidingVector2d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= Vector2d::operator==(other);
+        if(retval)
+          retval= (org==other.org); 
+       }
+    return retval;
+  }
+
 GEOM_FT inverso(const GEOM_FT &p)
   { return GEOM_FT(1.0/p); }
 

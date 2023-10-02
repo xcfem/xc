@@ -40,6 +40,8 @@ class SlidingVector2d : public Vector2d
       : Vector2d(v), org(o) {}
     SlidingVector2d(const Pos2d &o,const Pos2d &p);
 
+    bool operator==(const SlidingVector2d &) const;
+
     virtual GEOM_FT getMoment(const Pos2d &o) const;
     virtual const Pos2d &getOrg(void) const
       { return org; }

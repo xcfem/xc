@@ -35,6 +35,21 @@ SlidingVector3d::SlidingVector3d(const Pos3d &o,const Vector3d &v)
 SlidingVector3d::SlidingVector3d(const Pos3d &o,const Pos3d &p)
   : Vector3d(p-o), org(o) {}
 
+//! @brief Comparison operator.
+bool SlidingVector3d::operator==(const SlidingVector3d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= Vector3d::operator==(other);
+        if(retval)
+          retval= (org==other.org); 
+       }
+    return retval;
+  }
+
 //! @brief Moment of a sliding vector with respect to an axis.
 //! Is the moment with respect to an axis point
 //! projected onto the axis.

@@ -42,6 +42,7 @@ class Dir2d
     explicit Dir2d(const double &ang);
     explicit Dir2d(const Vector2d &v);
     virtual bool operator==(const Dir2d &) const;
+    bool operator!=(const Dir2d &) const;
     const CGDirection_2 &ToCGAL(void) const
       { return cgd; }
     inline int dimension(void) const

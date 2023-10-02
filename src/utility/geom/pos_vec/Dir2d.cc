@@ -48,6 +48,10 @@ bool Dir2d::operator==(const Dir2d &other) const
     return retval;
   }
 
+//! @brief Comparison operator.
+bool Dir2d::operator!=(const Dir2d &other) const
+  { return !(this->operator==(other)); }
+
 //! @brief returns the x and y components in a row matrix.
 FT_matrix Dir2d::getMatrix(void) const
   {

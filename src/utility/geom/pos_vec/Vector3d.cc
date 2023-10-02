@@ -60,6 +60,10 @@ bool Vector3d::operator==(const Vector3d &other) const
     return retval;
   }
 
+//! @brief Comparison operator.
+bool Vector3d::operator!=(const Vector3d &other) const
+  { return !(this->operator==(other)); }
+
 bool Vector3d::Nulo(void) const
   { return ((*this)==VectorNulo3d); }
 FT_matrix Vector3d::getMatrix(void) const

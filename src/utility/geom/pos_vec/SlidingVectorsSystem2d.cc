@@ -32,6 +32,21 @@ SlidingVectorsSystem2d::SlidingVectorsSystem2d(const Pos2d &O,const Vector2d &R,
 SlidingVectorsSystem2d::SlidingVectorsSystem2d(const SlidingVector2d &v)
   : SlidingVector2d(v), mom(0.0) {}
 
+//! @brief Comparison operator.
+bool SlidingVectorsSystem2d::operator==(const SlidingVectorsSystem2d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= SlidingVector2d::operator==(other);
+        if(retval)
+          retval= (mom==other.mom); 
+       }
+    return retval;
+  }
+
 //! @brief Return the moment about P.
 GEOM_FT SlidingVectorsSystem2d::getMoment(const Pos2d &P) const
   {

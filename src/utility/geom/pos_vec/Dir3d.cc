@@ -44,6 +44,10 @@ bool Dir3d::operator==(const Dir3d &other) const
     return retval;
   }
 
+//! @brief Comparison operator.
+bool Dir3d::operator!=(const Dir3d &other) const
+  { return !(this->operator==(other)); }
+
 //! @brief Returns the x, y and z components in a row matrix.
 FT_matrix Dir3d::getMatrix(void) const
   {

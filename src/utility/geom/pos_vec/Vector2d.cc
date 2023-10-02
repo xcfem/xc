@@ -57,6 +57,9 @@ bool Vector2d::operator==(const Vector2d &other) const
     return retval;
   }
 
+bool Vector2d::operator!=(const Vector2d &other) const
+  { return !(this->operator==(other)); }
+
 bool Vector2d::Nulo(void) const
   { return ((*this)==VectorNulo2d); }
 void Vector2d::SetX(const GEOM_FT &vx)

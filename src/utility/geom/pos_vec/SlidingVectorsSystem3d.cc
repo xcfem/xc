@@ -56,6 +56,21 @@ SlidingVectorsSystem3d::SlidingVectorsSystem3d(const Pos3d &O,const Vector3d &R,
 SlidingVectorsSystem3d::SlidingVectorsSystem3d(const SlidingVector3d &v)
   : SlidingVector3d(v), mom(0,0,0) {}
 
+//! @brief Comparison operator.
+bool SlidingVectorsSystem3d::operator==(const SlidingVectorsSystem3d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= SlidingVector3d::operator==(other);
+        if(retval)
+          retval= (mom==other.mom); 
+       }
+    return retval;
+  }
+
 //! @brief Moment field of the SlidingVectorsSystem3d.
 //! Return themoment of the SlidingVectorsSystem3d with respect to the point P.
 SlidingVector3d SlidingVectorsSystem3d::getMoment(const Pos3d &P) const

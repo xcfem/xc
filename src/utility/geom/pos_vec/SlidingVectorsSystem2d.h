@@ -41,6 +41,9 @@ class SlidingVectorsSystem2d: public SlidingVector2d
   public:
     SlidingVectorsSystem2d(const Pos2d &O= Pos2d(),const Vector2d &R= Vector2d(),const GEOM_FT &Mo= 0.0);
     explicit SlidingVectorsSystem2d(const SlidingVector2d &v);
+
+    bool operator==(const SlidingVectorsSystem2d &) const;
+
     //Resultant and moment.
     Vector2d getResultant(void) const
       { return getVector(); }

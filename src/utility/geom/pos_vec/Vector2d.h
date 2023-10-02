@@ -52,6 +52,7 @@ class Vector2d: public ProtoGeom
     Vector2d(const Pos2d &p1,const Pos2d &p2);
 
     virtual bool operator==(const Vector2d &) const;
+    bool operator!=(const Vector2d &) const;
     const CGVector_2 &ToCGAL(void) const
       { return cgvct; }
     inline int dimension(void) const

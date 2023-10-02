@@ -41,6 +41,7 @@ class Dir3d
     Dir3d(GEOM_FT x,GEOM_FT y,GEOM_FT z);
     explicit Dir3d(const Vector3d &v);
     virtual bool operator==(const Dir3d &) const;
+    bool operator!=(const Dir3d &) const;
     const CGDirection_3 &ToCGAL(void) const
       { return cgd; }
     inline int dimension(void) const
