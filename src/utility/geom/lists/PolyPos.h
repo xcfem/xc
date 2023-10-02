@@ -105,6 +105,7 @@ class PolyPos : public std::deque<pos>
     virtual iterator getFarthestPointFromSegment(iterator it1, iterator it2, GEOM_FT &pMaxDist);
     void simplify(GEOM_FT epsilon, iterator it1, iterator it2);
     void simplify(GEOM_FT epsilon);
+    PolyPos<pos> getSimplified(GEOM_FT epsilon) const;
 
     void Cat(const PolyPos<pos> &l);
     template <class inputIterator>
@@ -482,6 +483,9 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon, iterator it1, iterator it2)
   }
 
 /**
+ * Douglas Peucker algorithm implementation. 
+ * Recursively delete points that are within epsilon.
+ * @param epsilon the higher the more aggressive.
  * @param epsilon The higher, the more points gotten rid of.
  */
 template <class pos>
@@ -503,6 +507,19 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon)
         iterator j= this->end(); --j; //Last point.
         simplify(epsilon,i,j);
       }
+  }
+
+/**
+ * !@brief Return simplified point sequence using Douglas Peucker algorithm. 
+ * Recursively delete points that are within epsilon.
+ * @param epsilon the higher the more aggressive.
+ */
+template <class pos>
+PolyPos<pos> PolyPos<pos>::getSimplified(GEOM_FT epsilon) const
+  {
+    PolyPos<pos> retval(*this);
+    retval->simplify(epsilon);
+    return retval;
   }
 
 template <class pos>
