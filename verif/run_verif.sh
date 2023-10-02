@@ -748,10 +748,11 @@ echo "$BLEU" "    Load distribution." "$NORMAL"
 python tests/loads/load_distribution/test_sliding_vector_load_01.py
 python tests/loads/load_distribution/test_sliding_vector_load_02.py
 python tests/loads/load_distribution/test_surf_unif_load_distributed.py
-python tests/loads/load_distribution/test_wheel_load_distribution.py
+python tests/loads/load_distribution/test_wheel_load_distribution_01.py
 python tests/loads/load_distribution/test_notional_lane_load_distribution.py
 python tests/loads/load_distribution/test_uniform_rail_load_01.py
 python tests/loads/load_distribution/test_uniform_rail_load_02.py
+python tests/loads/load_distribution/test_rail_wheel_load_distribution_01.py
 echo "$BLEU" "    Strain loads." "$NORMAL"
 python tests/loads/strain_loads/truss_strain_load_01.py
 python tests/loads/strain_loads/truss_strain_load_02.py

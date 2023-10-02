@@ -46,7 +46,6 @@ class WheelLoad(object):
         self.position= pos
         self.load= ld
         self.localCooSystem= localCooSystem
-        self.nodes= nodes
 
     def getLocalReferenceSystem(self):
         ''' Return a local reference system for the wheel with origin in
@@ -99,18 +98,12 @@ class WheelLoad(object):
 
     def getDict(self):
         ''' Return a dictionary with the object values.'''
-        nodeTags= list()
-        if(self.nodes):
-            for n in self.nodes:
-                nodeTags.append(n.tag)
-        return {'pos':self.position,'load':self.load, 'nodeTags': nodeTags}
+        return {'pos':self.position,'load':self.load}
 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
         self.position= dct['pos']
         self.load= dct['ld']
-        self.nodeTags= None  # Loaded nodes reading from dict not implemented yet.
-        # self.nodeTags= dct['nodeTag']
 
     def __str__(self):
         return str(self.getDict())
@@ -125,17 +118,39 @@ class WheelLoad(object):
                                 area and the middle surface of the
                                 bridge deck.
         '''
+        retval= list()
         if(self.localCooSystem):
             reference, loadedContour= self.getLoadedContour(spreadingLayers= spreadingLayers)
             tol= .01
-            self.nodes= list()
             for n in originSet.nodes:
                 nodePos2d= reference.getLocalPosition(n.getInitialPos3d)
                 if(loadedContour.In(nodePos2d, tol)):  # node in loaded contour.
-                    self.nodes.append(n)
+                    retval.append(n)
         else:
             n= originSet.getNearestNode(self.position)
-            self.nodes= [n]
+            retval= [n]
+        return retval
+
+    def getDeckLoadedContourThroughLayers(self, spreadingLayers, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Return the loaded contour of the wheel taking into account
+            the dispersal through the different pavement, earth and
+            concrete layers between the wheel contact area and the
+            middle surface of the bridge deck.
+
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        ## Append the deck spreading too.
+        spreadingLayers.append((deckThickness/2.0, deckSpreadingRatio))
+        # Call the regular method.
+        return self.getLoadedContour(spreadingLayers= spreadingLayers)
 
     def getDeckLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
         ''' Return the loaded contour of the wheel taking into account
@@ -164,10 +179,8 @@ class WheelLoad(object):
         spreadingLayers= list()
         for thk, layer in zip(layerThicknesses, embankment.layers):
             spreadingLayers.append((thk, layer.loadSpreadingRatio))
-        ## Append the deck spreading too.
-        spreadingLayers.append((halfDeckThickness, deckSpreadingRatio))
         # Call the regular method.
-        return self.getLoadedContour(spreadingLayers= spreadingLayers)
+        return self.getLoadedContourThroughLayers(spreadingLayers= spreadingLayers, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
 
     def pickDeckNodesThroughEmbankment(self, originSet, embankment, deckThickness, deckSpreadingRatio= 1/1):
         ''' Pick the nodes loaded by the wheel.
@@ -181,6 +194,7 @@ class WheelLoad(object):
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
         nNodes= len(originSet.nodes)  # Number of nodes in the origin set.
+        retval= list()
         if(nNodes>3):
             if(self.localCooSystem):
                 # Compute the deck mid-plane as the regression plane
@@ -189,18 +203,18 @@ class WheelLoad(object):
                 # Compute the loaded contour.
                 reference, loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
                 tol= .01
-                self.nodes= list()
                 for n in originSet.nodes:
                     nodePos2d= reference.getLocalPosition(n.getInitialPos3d)
                     if(loadedContour.In(nodePos2d, tol)):  # node in loaded contour.
-                        self.nodes.append(n)
+                        retval.append(n)
             else:
                 n= originSet.getNearestNode(self.position)
-                self.nodes= [n]
+                retval= [n]
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; the set: \''+originSet.name+'\' must have at least 3 nodes, it has: '+str(nNodes))
+        return retval
 
     def getLoadVector(self, gravityDir= xc.Vector([0, 0, -1]), brakingDir= None):
         ''' Return the load vector at the contact surface.
@@ -215,26 +229,27 @@ class WheelLoad(object):
             retval+= self.load*xc.Vector(brakingDir)
         return retval
 
-    def defNodalLoads(self, gravityDir= xc.Vector([0, 0, -1]), brakingDir= None):
+    def applyNodalLoads(self, loadedNodes, gravityDir= xc.Vector([0, 0, -1]), brakingDir= None):
         ''' Create the nodal loads corresponding to the contact pressure.
 
+        :param loadedNodes: nodes that will be loaded.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load (properly factored).
         '''
         retval= list()
         numLoadedNodes= 0
-        if(self.nodes):
-            numLoadedNodes= len(self.nodes)
+        if(loadedNodes):
+            numLoadedNodes= len(loadedNodes)
         if(numLoadedNodes>0):
             # Compute load vector.
             vLoad= self.getLoadVector(gravityDir= gravityDir, brakingDir= brakingDir)
             loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
             if(numLoadedNodes==1):
-                retval.append(self.nodes[0].newLoad(loadVector))
+                retval.append(loadedNodes[0].newLoad(loadVector))
             else:
                 ptCoo= [self.position.x, self.position.y, self.position.z]
-                slidingVectorLoad= loads.SlidingVectorLoad(name= 'wheelLoad', nodes= self.nodes, pntCoord= ptCoo, loadVector= loadVector)
-                slidingVectorLoad.appendLoadToCurrentLoadPattern()
+                slidingVectorLoad= loads.SlidingVectorLoad(name= 'wheelLoad', nodes= loadedNodes, pntCoord= ptCoo, loadVector= loadVector)
+                retval.extend(slidingVectorLoad.appendLoadToCurrentLoadPattern())
         return retval
 
     def getBackfillConcentratedLoad(self, gravityDir= xc.Vector([0, 0, -1]), brakingDir= None):
@@ -252,6 +267,28 @@ class WheelLoad(object):
         boussinesqLoad= boussinesq.ConcentratedLoad(p= self.position, Q=vLoad[2])
         horizontalLoad= hs.HorizontalConcentratedLoadOnBackfill3D(pos= self.position, H= geom.Vector3d(vLoad[0],vLoad[1],0))
         return (horizontalLoad, boussinesqLoad)
+    
+    def defDeckConcentratedLoadsThroughLayers(self, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define uniform loads on the tracks with the argument values:
+
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        # Pick loaded nodes.
+        loadedNodes= self.pickDeckNodesThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet)
+        # Apply nodal loads.
+        retval= self.applyNodalLoads(loadedNodes= loadedNodes, gravityDir= gravityDir, brakingDir= brakingDir)
+        return retval
 
 
 class DynamicFactorLoad(object):
@@ -869,6 +906,32 @@ class TrackAxis(object):
             retval.append(unifRailLoad)
         return retval
 
+    def defDeckRailUniformLoadsThroughLayers(self, trainModel, relativePosition, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define uniform loads on the tracks with the argument values:
+
+        :param trainModel: trainModel on this track.
+        :param relativePosition: relative position of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        :param gravityDir: direction of the gravity field.
+        :param brakingDir: direction of the braking load.
+        '''
+        deckMidplane= originSet.nodes.getRegressionPlane(0.0)
+        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir, brakingDir= brakingDir)
+        for rul in railUniformLoads:
+            rul.defDeckRailUniformLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
+            
     def defDeckRailUniformLoadsThroughEmbankment(self, trainModel, relativePosition, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define uniform loads on the tracks with the argument values:
 
@@ -966,8 +1029,8 @@ class TrackAxes(object):
             retval.extend(locomotiveLoads)
         return retval
 
-    def getDeckWheelLoadsThroughLayers(self, trainModels, relativePositions, originSet= None, spreadingLayers= None):
-        ''' Return the wheel loads due to the locomotives argument placed at
+    def defDeckWheelLoadsThroughLayers(self, trainModels, relativePositions, spreadingLayers= None, originSet= None, deckThickness= 0.0, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+        ''' Define the wheel loads due to the locomotives argument placed at
             the positions argument.
 
         :param trainModels: trainModels on each track (train model 1 -> track 1,
@@ -976,17 +1039,23 @@ class TrackAxes(object):
                                   the track axis (0 -> beginning of
                                   the axis, 0.5-> middle of the axis, 1-> end
                                   of the axis).
-        :param originSet: pick the loaded nodes for each wheel load.
         :param spreadingLayers: list of tuples containing the depth
                                 and the spread-to-depth ratio of
                                 the layers between the wheel contact
                                 area and the middle surface of the
                                 concrete slab.
+        :param originSet: pick the loaded nodes for each wheel load.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        :param gravityDir: direction of the gravity field.
         '''
-        retval= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= None)
+        wheelLoads= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= None)
+        retval= list()
         if(originSet):  # pick the loaded by each wheel
-            for wheelLoad in retval:
-                wheelLoad.pickDeckNodesThroughLayers(originSet= originSet, spreadingLayers= spreadingLayers)
+            for wheelLoad in wheelLoads:
+                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
 
     def getBackfillConcentratedLoads(self, trainModels, relativePositions, wallMidplane, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
@@ -1034,7 +1103,7 @@ class TrackAxes(object):
             if(abs(q)>0.0):
                 ta.defDeckRailUniformLoadsThroughEmbankment(trainModel= tm, relativePosition= rp, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
 
-    def defDeckPunctualLoadsThroughLayers(self, trainModels, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+    def defDeckConcentratedLoadsThroughLayers(self, trainModels, relativePositions, originSet= None, deckThickness= 0.0, deckSpreadingRation= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual loads under the wheels.
 
         :param trainModels: trainModels on each track (train model 1 -> track 1,
@@ -1044,6 +1113,7 @@ class TrackAxes(object):
                                   the axis, 0.5-> middle of the axis, 1-> end
                                   of the axis).
         :param originSet: set with the nodes to pick from.
+        :param deckThickness: thickness of the bridge deck.
         :param gravityDir: direction of the gravity field.
         :param brakingDir: direction of the braking load.
         :param spreadingLayers: list of tuples containing the depth
@@ -1052,11 +1122,7 @@ class TrackAxes(object):
                                 area and the middle surface of the
                                 bridge deck.
         '''
-        wheelLoads= self.getDeckWheelLoadsThroughLayers(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
-        retval= list()
-        for wl in wheelLoads:
-            retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
-        return retval
+        return self.defDeckWheelLoadsThroughLayers(trainModels= trainModels, relativePositions= relativePositions, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= 1/1, gravityDir= gravityDir, brakingDir= brakingDir)
 
     def defDeckLoadsThroughEmbankment(self, trainModels, relativePositions, trackUniformLoads, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual and uniform loads.
@@ -1084,7 +1150,7 @@ class TrackAxes(object):
                                 bridge deck.
         '''
         # punctual loads.
-        self.defDeckPunctualLoadsThroughLayers(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
+        self.defDeckConcentratedLoadsThroughLayers(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
         # uniform load.
         self.defDeckRailUniformLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
 
@@ -1112,7 +1178,7 @@ class TrackAxes(object):
                 load.pickDeckNodesThroughEmbankment(originSet= originSet, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         return retval
 
-    def defDeckPunctualLoadsThroughEmbankment(self, trainModels, relativePositions, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckConcentratedLoadsThroughEmbankment(self, trainModels, relativePositions, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define punctual loads under the wheels.
 
         :param trainModels: train models on each track (train model 1-> track 1,
@@ -1157,11 +1223,11 @@ class TrackAxes(object):
         :param brakingDir: direction of the braking load.
         '''
         # punctual loads.
-        self.defDeckPunctualLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio=deckSpreadingRatio, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defDeckConcentratedLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio=deckSpreadingRatio, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
         # uniform load.
         self.defDeckRailUniformLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
 
-    def defBackfillPunctualLoads(self, trainModels, relativePositions, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0, 0, -1]), brakingDir= None):
+    def defBackfillConcentratedLoads(self, trainModels, relativePositions, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0, 0, -1]), brakingDir= None):
         ''' Define punctual loads under the wheels.
         :param trainModels: train models on each track (trainModel1 -> track 1,
                             trainModel2 -> track 2 and so on).
@@ -1232,6 +1298,6 @@ class TrackAxes(object):
         :param brakingDir: direction of the braking load.
         '''
         # punctual loads.
-        self.defBackfillPunctualLoads(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defBackfillConcentratedLoads(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)
         # uniform load.
         self.defBackfillUniformLoads(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir, brakingDir= brakingDir)

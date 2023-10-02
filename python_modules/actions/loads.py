@@ -666,6 +666,7 @@ class SlidingVectorLoad(BaseVectorLoad):
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append the loads to the current load pattern.'''
+        retval= list()
         if(len(self.loadedNodes)>0):
             n0= self.loadedNodes[0]
             numDOFs= n0.getNumberDOF
@@ -682,7 +683,7 @@ class SlidingVectorLoad(BaseVectorLoad):
                     loadVectors= loadSVS.distribute(ptList)
                     for n, v in zip(nodeList,loadVectors):
                         f= v.getVector3d()
-                        n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
+                        retval.append(n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0])))
             elif(numDOFs==3):
                 O=geom.Pos2d(self.pntCoord[0],self.pntCoord[1])
                 force= geom.Vector2d(self.loadVector[0],self.loadVector[1])
@@ -696,11 +697,12 @@ class SlidingVectorLoad(BaseVectorLoad):
                     loadVectors= loadSVS.distribute(ptList)
                     for n, v in zip(nodeList,loadVectors):
                         f= v.getVector2d()
-                        n.newLoad(xc.Vector([f.x,f.y,0.0]))
+                        retval.append(n.newLoad(xc.Vector([f.x,f.y,0.0])))
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; algorithm for '+str(numDOFs)+' degrees of freedom not implemented yet.')
+        return retval
 
         
 class MovableLoad(object):
