@@ -246,7 +246,6 @@ python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_01.py
 python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_02.py
 python tests/actions/traffic_loads/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/test_ec1_railway_centrifugal_force.py
-python tests/actions/traffic_loads/test_uniform_rail_load_01.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
@@ -751,6 +750,7 @@ python tests/loads/load_distribution/test_sliding_vector_load_02.py
 python tests/loads/load_distribution/test_surf_unif_load_distributed.py
 python tests/loads/load_distribution/test_wheel_load_distribution.py
 python tests/loads/load_distribution/test_notional_lane_load_distribution.py
+python tests/loads/load_distribution/test_uniform_rail_load_01.py
 echo "$BLEU" "    Strain loads." "$NORMAL"
 python tests/loads/strain_loads/truss_strain_load_01.py
 python tests/loads/strain_loads/truss_strain_load_02.py

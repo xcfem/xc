@@ -115,7 +115,7 @@ class WheelLoad(object):
     def __str__(self):
         return str(self.getDict())
 
-    def pickDeckNodes(self, originSet, spreadingLayers= None):
+    def pickDeckNodesThroughLayers(self, originSet, spreadingLayers= None):
         ''' Pick the deck nodes loaded by the wheel.
 
         :param originSet: set to pick the loaded nodes from.
@@ -920,7 +920,7 @@ class TrackAxes(object):
         retval= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= None)
         if(originSet):  # pick the loaded by each wheel
             for wheelLoad in retval:
-                wheelLoad.pickDeckNodes(originSet= originSet, spreadingLayers= spreadingLayers)
+                wheelLoad.pickDeckNodesThroughLayers(originSet= originSet, spreadingLayers= spreadingLayers)
         return retval
 
     def getBackfillConcentratedLoads(self, trainModels, relativePositions, wallMidplane, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
