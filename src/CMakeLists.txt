@@ -195,7 +195,7 @@ SET(functions_misc utility/functions/statistics/statlib.cc utility/functions/sta
 
 SET(functions ${algebra} ${functions_misc})
 
-SET(KERNEL utility/kernel/EntityWithProperties.cc utility/kernel/CommandEntity.cc utility/kernel/NamedEntity.cc utility/kernel/EntityWithOwner.cc utility/kernel/StandardStreamWrapper.cc utility/kernel/StandardOutputWrapper.cc utility/kernel/python_utils.cc)
+SET(KERNEL utility/kernel/EntityWithProperties.cc utility/kernel/CommandEntity.cc utility/kernel/NamedEntity.cc utility/kernel/EntityWithOwner.cc utility/kernel/StandardStreamWrapper.cc utility/kernel/StandardOutputWrapper.cc utility/kernel/python_utils.cc utility/kernel/broke_property.cc)
 
 #SET(VtkAux vtk_aux/vtkShStrArray vtk_aux/vtkLabeledShStrMapper vtk_aux/vtkTakePhotoDefs vtk_aux/vtkTakePhoto vtk_aux/vtkXOpenGLOffScreenRenderWindow vtk_aux/vtkDoubleHeadedArrowSource vtk_aux/vtkArcSource)
 

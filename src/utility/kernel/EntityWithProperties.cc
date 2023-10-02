@@ -21,6 +21,7 @@
 //EntityWithProperties.cc
 
 #include "EntityWithProperties.h"
+#include "broke_property.h"
 #include <iostream>
 
 //! @brief Default constructor.
@@ -111,7 +112,16 @@ boost::python::dict EntityWithProperties::getPyDict(void) const
 	for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
 	  {
 	    const std::string key= (*i).first;
-	    properties_dict[key]= (*i).second;
+	    // check if the object class is derived of EntityWithProperties.
+	    boost::python::object obj= (*i).second;
+	    boost::python::extract<const EntityWithProperties &> ent(obj);
+	    if(ent.check()) // yes, it is
+	      {
+		const EntityWithProperties &ewp= ent();
+		properties_dict[key]= ewp.getPyDict(); 
+	      }
+	    else // no it is not.
+	      properties_dict[key]= obj;
 	  }
 	retval[py_prop_prefix]= properties_dict;
       }
@@ -130,8 +140,15 @@ void EntityWithProperties::setPyDict(const boost::python::dict &d)
 	  {
 	    boost::python::tuple kv = *it;
 	    std::string key= boost::python::extract<std::string>(kv[0]);
-	    auto value= kv[1];
-	    setPyProp(key, value);
+	    boost::python::object obj= kv[1];
+	    boost::python::extract<boost::python::dict> ent(obj);
+	    if(ent.check()) // it is a Python dictionary.
+	      {
+		boost::python::dict itemDict= ent();
+		// extract the object from the dictionary.
+	        obj= broke_property_from_python_dict(itemDict);
+	      }
+	    setPyProp(key, obj);
 	  }
       }
   }
