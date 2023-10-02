@@ -339,13 +339,13 @@ class PTFEPotBearing(Bearing):
         :param iNodB: (int) second node identifier (tag).
         '''
         # Set the springs in the X and Y directions.
-        newElement= modelSpace.setBearingBetweenNodes(iNodA, iNodB, self.materials)
+        self.potElement= modelSpace.setBearingBetweenNodes(iNodA, iNodB, self.materials)
         # Impose equal displacement in the Z directions.
         eDofs= modelSpace.constraints.newEqualDOF(iNodA, iNodB, xc.ID([2])) # 2 DOF -> Uz
         if(__debug__):
             if(not eDofs):
                 AssertionError('Can\'t create constraints.')
-        return newElement
+        return self.potElement
 
     def putOnXBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction X.
@@ -355,13 +355,13 @@ class PTFEPotBearing(Bearing):
         :param iNodB: (int) second node identifier (tag).
         '''
         # Set the spring in the X direction.
-        newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[self.matXName])
+        self.potElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[self.matXName])
         # Impose equal displacement in the Y and Z directions.
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([1,2])) # 1 and 2 DOFs -> Uy and Uz
         if(__debug__):
             if(not eDofs):
                 AssertionError('Can\'t create constraints.')
-        return newElement
+        return self.potElement
 
     def putOnYBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction Y.
@@ -371,13 +371,18 @@ class PTFEPotBearing(Bearing):
         :param iNodB: (int) second node identifier (tag).
         '''
         # Set the spring in the Y direction.
-        newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[None,self.matYName])
+        self.potElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[None,self.matYName])
         # Impose equal displacement in the X and Z directions.
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([0,2])) # 0 and 2 DOFs -> Ux and Uz
         if(__debug__):
             if(not eDofs):
                 AssertionError('Can\'t create constraints.')
-        return newElement
+        return self.potElement
+
+    def getReaction(self):
+        ''' Return the reaction in the fixed node.'''
+        return self.potElement.nodes[0].getReaction
+    
 
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     ''' Return the element reaction.
@@ -389,7 +394,8 @@ def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     methodName= sys._getframe(0).f_code.co_name
     lmsg.warning(methodName+"; don't use this function, is very inefficient: TO DEPRECATE.")
     nodes= preprocessor.getNodeHandler
-    nodes.calculateNodalReactions(inclInertia, 1e-7)
+    nodes.calculateNodalReactions(inclInertia, 1e-7) # It has NO sense to compute the reactions
+                                                     # each time you call this function.
   
     elem= preprocessor.getElementHandler.getElement(iElem)
     reac0= elem.getNodes[0].getReaction

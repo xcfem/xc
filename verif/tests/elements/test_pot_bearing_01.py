@@ -59,7 +59,8 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 nodes.calculateNodalReactions(False, 1e-7)
 
-reac= newElement.nodes[0].getReaction
+# Compute the reaction vector.
+reac= pot.getReaction()
 R= xc.Vector([reac[0],reac[1],reac[2]])
 
 ratio1= abs(R[0]+FX)/FX
