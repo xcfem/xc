@@ -8,9 +8,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-FX= 1.0 # Force magnitude
-FY= 2.0 
-FZ= 3.0
+FX= 1.0e4 # Force magnitude
+FY= 2.0e4 
+FZ= 3.0e4
 MX= 4.0
 MY= 5.0 
 MZ= 6.0
@@ -28,17 +28,16 @@ diamPot= 993e-3
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-
-pot= bridge_bearings.PTFEPotBearing(diamPot)
-
-pot.defineMaterials(preprocessor)
+# Multi-directional pot material 
+pot_mat= bridge_bearings.PTFEPotBearingMat(d=diamPot,unidirX=False,unidirY=False)
+pot_mat.defineMaterials(preprocessor)
 
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod1= nodes.newNodeXYZ(1,1,1)
 nod2= nodes.newNodeXYZ(1,1,1)
 
-newElement= pot.putBetweenNodes(modelSpace, nod1.tag,nod2.tag)
+potBearing= bridge_bearings.potBearing(pot_mat,nod1,nod2)
 
 # Constraints
 modelSpace.fixNode000_000(nod1.tag)
@@ -60,12 +59,17 @@ result= analysis.analyze(1)
 nodes.calculateNodalReactions(False, 1e-7)
 
 # Compute the reaction vector.
-reac= pot.getReaction()
+reac= potBearing.getReaction()
 R= xc.Vector([reac[0],reac[1],reac[2]])
+FXres=potBearing.getFXlocal()
+FYres=potBearing.getFYlocal()
+
 
 ratio1= abs(R[0]+FX)/FX
 ratio2= abs(R[1]+FY)/FY
 ratio3= abs(R[2]+FZ)/FZ
+ratio4=abs(FXres-FX)/FX
+ratio5=abs(FYres-FY)/FY
 
 ''' 
 print("RX= ",R[0])
@@ -79,7 +83,7 @@ print("ratio3= ",(ratio3))
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15):
+if (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15) & (ratio4<1e-15) & (ratio5<1e-15):
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')
