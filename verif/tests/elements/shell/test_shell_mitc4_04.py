@@ -3,12 +3,17 @@ from __future__ import print_function
 '''Verification test taken from example 2-005 of 
    the SAP 2000 verification manual.'''
 
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
 
 # feProblem.setVerbosityLevel(0)
 NumDivI= 8
@@ -22,12 +27,6 @@ thickness= 0.0001 # Cross section depth expressed in inches.
 unifLoad= 0.0001 # Uniform load in lb/in2.
 ptLoad= 0.0004 # Punctual load in lb.
 
-import geom
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
-from materials import typical_materials
-
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
@@ -35,21 +34,14 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
-
-
-
-# Define materials
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
-
-
+# Define seed element.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
-
-
+# Define problem geometry.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d(CooMaxX,0.0,0.0))
@@ -64,9 +56,8 @@ s.nDivJ= NumDivJ
 s.genMesh(xc.meshDir.I)
 
 # Constraints
-sides= s.getSides
 # Edge iterator
-for l in sides:
+for l in s.getSides: # Iterate through the perimeter.
     for i in l.getEdge.getNodeTags():
         modelSpace.fixNode000_FFF(i)
 

@@ -124,7 +124,7 @@ class WheelLoad(object):
     def __str__(self):
         return str(self.getDict())
 
-    def pickDeckNodes(self, originSet, spreadingLayers= None):
+    def pickDeckNodesThroughLayers(self, originSet, spreadingLayers= None):
         ''' Pick the deck nodes loaded by the wheel.
 
         :param originSet: set to pick the loaded nodes from.
@@ -796,7 +796,7 @@ class NotionalLanes(object):
             retval.extend(tandemLoads)
         return retval
     
-    def getDeckWheelLoads(self, tandems, relativePositions, originSet= None, spreadingLayers= None):
+    def getDeckWheelLoadsThroughLayers(self, tandems, relativePositions, originSet= None, spreadingLayers= None):
         ''' Return the wheel loads due to the tandems argument placed at
             the positions argument.
 
@@ -816,7 +816,7 @@ class NotionalLanes(object):
         retval= self.getWheelLoads(tandems= tandems, relativePositions= relativePositions)
         if(originSet): # pick the loaded by each wheel
             for wheelLoad in retval:
-                wheelLoad.pickDeckNodes(originSet= originSet, spreadingLayers= spreadingLayers)
+                wheelLoad.pickDeckNodesThroughLayers(originSet= originSet, spreadingLayers= spreadingLayers)
         return retval
     
     def getBackfillConcentratedLoads(self, tandems, relativePositions, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
@@ -871,7 +871,7 @@ class NotionalLanes(object):
                     retval.append(e.vector3dUniformLoadGlobal(loadVector))
         return retval
 
-    def defDeckPunctualLoads(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+    def defDeckPunctualLoadsThroughLayers(self, tandems, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual loads under the wheels.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -888,14 +888,13 @@ class NotionalLanes(object):
                                 area and the middle surface of the 
                                 bridge deck.
         '''
-        wheelLoads= self.getDeckWheelLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
+        wheelLoads= self.getDeckWheelLoadsThroughLayers(tandems= tandems, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
         retval= list()
         for wl in wheelLoads:
             retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
     
-    
-    def defDeckLoads(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+    def defDeckLoadsThroughLayers(self, tandems, relativePositions, laneUniformLoads, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual and uniform loads.
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
@@ -914,7 +913,7 @@ class NotionalLanes(object):
                                 bridge deck.
         '''
         # punctual loads.
-        self.defDeckPunctualLoads(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
+        self.defDeckPunctualLoadsThroughLayers(tandems= tandems, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
         # uniform load.
         self.defDeckUniformLoads(laneUniformLoads= laneUniformLoads, gravityDir= gravityDir, brakingDir= brakingDir)
 
@@ -967,7 +966,8 @@ class NotionalLanes(object):
         return retval
     
     def defDeckLoadsThroughEmbankment(self, tandems, relativePositions, laneUniformLoads, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
-        ''' Define punctual and uniform loads.
+        ''' Define punctual and uniform loads on the bridge deck.
+
         :param tandems: tandems on each notional lane (tandem1 -> notional 
                         lane 1, tandem 2 -> notional lane 2 and so on).
         :param relativePositions: relative positions of each tandem center in
