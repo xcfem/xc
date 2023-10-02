@@ -19,6 +19,7 @@ import xc
 
 testValueA= geom.Vector3d(1,0,0)
 testValueB= "test"
+testValueC= geom.Vector2d(0,1)
 
 # Test problem.
 fePrbA= xc.FEProblem()
@@ -29,6 +30,7 @@ points= prepA.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0,0,0))
 pt1.setProp("testValueA", testValueA)
 pt1.setProp("testValueB", testValueB)
+pt1.setProp("testValueC", testValueC)
 
 # Get dictionary.
 mbtDict= prepA.getMultiBlockTopology.getDict()
@@ -44,14 +46,16 @@ mbt.setFromDict(mbtDict)
 # Get the corresponding points.
 pointsB=  prepB.getMultiBlockTopology.getPoints
 ptB1= pointsB.get(pt1.tag)
+
 propValueA= ptB1.getProp('testValueA')
 propValueB= ptB1.getProp('testValueB')
+propValueC= ptB1.getProp('testValueC')
 
-ok= (propValueA==testValueA) and (propValueB==testValueB)
+ok= (propValueA==testValueA) and (propValueB==testValueB) and (propValueC==testValueC)
 
 '''
 print(mbtDict)
-print(propValueA)
+print(propValueA, testValueA, propValueA==testValueA)
 print(propValueB)
 '''
 
