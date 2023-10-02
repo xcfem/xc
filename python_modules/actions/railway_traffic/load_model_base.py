@@ -438,7 +438,7 @@ class UniformRailLoad(DynamicFactorLoad):
             retval+= nodalLoad*xc.Vector(brakingDir)
         return retval
 
-    def defDeckRailUniformLoads(self, embankment, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckRailUniformLoadsThroughEmbankment(self, embankment, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param embankment: embankment object as defined in
@@ -803,7 +803,7 @@ class TrackAxis(object):
             retval.append(unifRailLoad)
         return retval
 
-    def defDeckRailUniformLoads(self, trainModel, relativePosition, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckRailUniformLoadsThroughEmbankment(self, trainModel, relativePosition, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param trainModel: trainModel on this track.
@@ -824,7 +824,7 @@ class TrackAxis(object):
         deckMidplane= originSet.nodes.getRegressionPlane(0.0)
         railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir, brakingDir= brakingDir)
         for rul in railUniformLoads:
-            rul.defDeckRailUniformLoads(embankment= embankment, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
+            rul.defDeckRailUniformLoadsThroughEmbankment(embankment= embankment, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
 
     def defBackfillUniformLoads(self, trainModel, relativePosition, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define backfill loads due the uniform load on the track.
@@ -900,7 +900,7 @@ class TrackAxes(object):
             retval.extend(locomotiveLoads)
         return retval
 
-    def getDeckWheelLoads(self, trainModels, relativePositions, originSet= None, spreadingLayers= None):
+    def getDeckWheelLoadsThroughLayers(self, trainModels, relativePositions, originSet= None, spreadingLayers= None):
         ''' Return the wheel loads due to the locomotives argument placed at
             the positions argument.
 
@@ -944,7 +944,7 @@ class TrackAxes(object):
             retval.append(wheelLoad.getBackfillConcentratedLoad(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
 
-    def defDeckRailUniformLoads(self, trainModels, relativePositions, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
+    def defDeckRailUniformLoadsThroughEmbankment(self, trainModels, relativePositions, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), brakingDir= None):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param trainModels: trainModels on each track (train model 1 -> track 1,
@@ -966,9 +966,9 @@ class TrackAxes(object):
         for ta, tm, rp in zip(self.trackAxes, trainModels, relativePositions):
             q= tm.getDynamicUniformLoad()
             if(abs(q)>0.0):
-                ta.defDeckRailUniformLoads(trainModel= tm, relativePosition= rp, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
+                ta.defDeckRailUniformLoadsThroughEmbankment(trainModel= tm, relativePosition= rp, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
 
-    def defDeckPunctualLoads(self, trainModels, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+    def defDeckPunctualLoadsThroughLayers(self, trainModels, relativePositions, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual loads under the wheels.
 
         :param trainModels: trainModels on each track (train model 1 -> track 1,
@@ -986,13 +986,13 @@ class TrackAxes(object):
                                 area and the middle surface of the
                                 bridge deck.
         '''
-        wheelLoads= self.getDeckWheelLoads(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
+        wheelLoads= self.getDeckWheelLoadsThroughLayers(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, spreadingLayers= spreadingLayers)
         retval= list()
         for wl in wheelLoads:
             retval.append(wl.defNodalLoads(gravityDir= gravityDir, brakingDir= brakingDir))
         return retval
 
-    def defDeckLoads(self, trainModels, relativePositions, trackUniformLoads, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
+    def defDeckLoadsThroughEmbankment(self, trainModels, relativePositions, trackUniformLoads, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1]), brakingDir= None, spreadingLayers= None):
         ''' Define punctual and uniform loads.
 
         :param trainModels: trainModels on each track (train model 1 -> track 1,
@@ -1018,9 +1018,9 @@ class TrackAxes(object):
                                 bridge deck.
         '''
         # punctual loads.
-        self.defDeckPunctualLoads(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
+        self.defDeckPunctualLoadsThroughLayers(trainModels= trainModels, relativePositions= relativePositions, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir, spreadingLayers= spreadingLayers)
         # uniform load.
-        self.defDeckRailUniformLoads(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defDeckRailUniformLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
 
     def getDeckWheelLoadsThroughEmbankment(self, trainModels, relativePositions, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None):
         ''' Return a dictionary containing the wheel loads due to the locomotives
@@ -1093,7 +1093,7 @@ class TrackAxes(object):
         # punctual loads.
         self.defDeckPunctualLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio=deckSpreadingRatio, originSet= originSet, gravityDir= gravityDir, brakingDir= brakingDir)
         # uniform load.
-        self.defDeckRailUniformLoads(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
+        self.defDeckRailUniformLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir, brakingDir= brakingDir)
 
     def defBackfillPunctualLoads(self, trainModels, relativePositions, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0, 0, -1]), brakingDir= None):
         ''' Define punctual loads under the wheels.
