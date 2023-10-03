@@ -379,7 +379,7 @@ class potBearing(object):
                     x: are the vector components in global coordinates defining 
                         local x-axis
                     yp: vector components in global coordinates defining a  vector
-                          that lies in the local x-y plane of the element.
+                          that lies in the local x-y plane of the element. (local y-axis)
                     If the optional orientation vector are not specified, the local
                     element axes coincide with the global axes
          '''
@@ -406,6 +406,18 @@ class potBearing(object):
         ''' Return the reaction in the fixed node.'''
         return self.potElem.nodes[0].getReaction
     
+    def getMatXlocal(self):
+        m=self.potElem.getMaterials()[0]
+        return m
+ 
+    def getMatYlocal(self):
+        m=self.potElem.getMaterials()[1]
+        return m
+    
+    def getMatZlocal(self):
+        m=self.potElem.getMaterials()[2]
+        return m
+
     def getFXlocal(self):
         ''' Returns the force in local-X direction 
         '''
@@ -419,18 +431,49 @@ class potBearing(object):
         m=self.getMatYlocal()
         Fy=m.getStress()
         return Fy
-
-    def getMatXlocal(self):
-        m=self.potElem.getMaterials()[0]
-        return m
- 
-    def getMatYlocal(self):
-        m=self.potElem.getMaterials()[1]
-        return m
     
-    def getMatZlocal(self):
-        m=self.potElem.getMaterials()[2]
-        return m
+    def getFZlocal(self):
+        ''' Returns the force in local-Z direction 
+        '''
+        m=self.getMatZlocal()
+        Fz=m.getStress()
+        return Fz
+
+    def getElongXlocal(self):
+        ''' Returns the elongation of the bearing in local-X direction 
+        '''
+        m=self.getMatXlocal()
+        Elx=m.getStrain()
+        return Elx
+        
+    def getElongYlocal(self):
+        ''' Returns the elongation of the bearing in local-Y direction 
+        '''
+        m=self.getMatYlocal()
+        Ely=m.getStrain()
+        return Ely
+        
+    def getElongZlocal(self):
+        ''' Returns the elongation of the bearing in local-Z direction 
+        '''
+        m=self.getMatZlocal()
+        Elz=m.getStrain()
+        return Elz
+    
+    def getVdispNodA(self):
+        ''' Return the nodA displacement vector'''
+        vDispA=self.nodA.getDisp
+        return vDispA
+
+    def getVdispNodB(self):
+        ''' Return the nodB displacement vector'''
+        vDispB=self.nodB.getDisp
+        return vDispB
+
+   
+            
+            
+        
  
     
 

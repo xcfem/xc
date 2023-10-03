@@ -9,9 +9,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-FX= 1.0 # Force magnitude
-FY= 2.0 
-FZ= 3.0
+FX= 1.0e4 # Force magnitude
+FY= 2.0e4 
+FZ= 3.0e4
 MX= 4.0
 MY= 5.0 
 MZ= 6.0
@@ -71,10 +71,13 @@ FXres=potBearing.getFXlocal()
 FYres=potBearing.getFYlocal()
 FXglobal=FXres*math.cos(angRad)-FYres*math.sin(angRad)
 FYglobal=FXres*math.sin(angRad)+FYres*math.cos(angRad)
+ElongXlres=potBearing.getElongXlocal()
+ElongYlres=potBearing.getElongYlocal()
+uNod2=potBearing.getVdispNodB()
 
 ratio1= abs(FXglobal-FX)/FX
 ratio2= abs(FYglobal-FY)/FY
-
+ratio3=abs(uNod2.dot(vDirYlocal.Normalized())-ElongYlres)
 
 ''' 
 print("ratio1= ",(ratio1))
@@ -84,7 +87,7 @@ print("ratio2= ",(ratio2))
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-15) & (ratio2<1e-15):
+if (ratio1<1e-15) & (ratio2<1e-15) &  (ratio3<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
