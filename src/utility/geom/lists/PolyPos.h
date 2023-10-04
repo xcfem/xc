@@ -36,7 +36,6 @@ class PolyPos : public std::deque<pos>
   {
   protected:
     typedef std::deque<pos> deque_pos;
-  protected:
     //Auxiliary function.
     static GEOM_FT g(GEOM_FT v1, GEOM_FT v2)
       { return (sqr(v1) + v1 * v2 + sqr(v2)); }
@@ -44,6 +43,10 @@ class PolyPos : public std::deque<pos>
     typedef typename deque_pos::iterator iterator;
     typedef typename deque_pos::const_iterator const_iterator;
     typedef typename pos::vector vector;
+
+  protected:
+    void simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::list<iterator> &selected);
+  public:
 
     PolyPos(void): deque_pos() {}
     
@@ -456,9 +459,10 @@ typename PolyPos<pos>::iterator PolyPos<pos>::getFarthestPointFromSegment(iterat
    * @param epsilon the higher the more aggressive.
    * @param iterator of the first point in a segment.
    * @param iterator of the last point in a segment.
+   * @param selected: list containing the vertexes to be removed. 
    */
 template <class pos>
-void PolyPos<pos>::simplify(GEOM_FT epsilon, iterator it1, iterator it2)
+void PolyPos<pos>::simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::list<iterator> &selected)
   {
     if (distance(it1, it2) <= 1) return;
 
@@ -467,19 +471,40 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon, iterator it1, iterator it2)
     iterator index= getFarthestPointFromSegment(it1, it2, dist);
 
     // If the farthest point exceeds epsilon, recurse, with index as pivot.
-    if (dist > epsilon)
+    if(dist > epsilon)
       {
-        simplify(epsilon, it1, index);
-        simplify(epsilon, index, it2);
+        simplify_select(epsilon, it1, index, selected);
+        simplify_select(epsilon, index, it2, selected);
       }
     else
       {
-        // Delete everything except it1 and it2.
+        // Mark to delete everything except it1 and it2.
         auto it = it1;
         it++;
-        for (; it != it2; )
-	  { this->erase(it++); }
+        for(; it < it2; it++)
+	  {
+	    selected.push_back(it); // add it to the deletion list.
+	  }
       }
+  }
+
+/**
+   * Douglas Peucker algorithm implementation. 
+   * Recursively delete points that are within epsilon.
+   * @param epsilon the higher the more aggressive.
+   * @param iterator of the first point in a segment.
+   * @param iterator of the last point in a segment.
+   */
+template <class pos>
+void PolyPos<pos>::simplify(GEOM_FT epsilon, iterator it1, iterator it2)
+  {
+    if (distance(it1, it2) <= 1) return;
+
+    std::list<iterator> selected;
+    simplify_select(epsilon, it1, it2, selected);
+    // Erase the simplified vertexes.
+    for(typename std::list<iterator>::const_iterator i= selected.begin(); i!= selected.end(); i++)
+      this->erase(*i);
   }
 
 /**
@@ -494,12 +519,16 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon)
     const bool closed= this->isClosed();
     if(closed)
       {
+        std::list<iterator> selected;
         iterator i= this->begin();
 	iterator j= this->getFarthestPoint(*i);
-	simplify(epsilon,i,j);
+	simplify_select(epsilon,i,j, selected);
 	i= j;
         j= this->end(); --j; //Last point.
-        simplify(epsilon,i,j);
+        simplify_select(epsilon,i,j, selected);
+	// Erase the simplified vertexes.
+	for(typename std::list<iterator>::const_iterator i= selected.begin(); i!= selected.end(); i++)
+	  this->erase(*i);	
       }
     else
       {
