@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''Railway bridge loads. Rail uniform load.'''
 
+
 import math
 import geom
 import xc
@@ -9,13 +10,11 @@ from model import predefined_spaces
 from materials import typical_materials
 
 # Problem geometry.
-side= 10.0
+side= 15.0
 p0= geom.Pos3d(0.0, 0.0, 0.0)
 p1= geom.Pos3d(side, 0.0, 0.0)
 p2= geom.Pos3d(side, side, 0.0)
 p3= geom.Pos3d(0.0, side, 0.0)
-
-pA= geom.Pos3d(side/2.0, side/2.0, 0.0)
 
 deckMidplane= geom.Plane3d(p0, p1, p3)
 
@@ -25,7 +24,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-## Define problem geometry.
+## Define FE problem geometry.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt0= points.newPoint(p0)
 pt1= points.newPoint(p1)
@@ -33,11 +32,11 @@ pt2= points.newPoint(p2)
 pt3= points.newPoint(p3)
 s= modelSpace.newSurface([pt0, pt1, pt2, pt3])
 s.setElemSizeIJ(0.5,0.5)
-deckThickness= 0.3
 
 ## Define materials
-E= 20e9 # Elastic modulus
+E= 30e9 # Elastic modulus
 nu= 0.2 # Poisson's ratio
+deckThickness= 0.3 # Deck thickness.
 mat= typical_materials.defElasticMembranePlateSection(preprocessor, "mat",E= E, nu= nu, rho= 0.0, h= deckThickness)
 
 ## Define seed element.
@@ -60,25 +59,31 @@ standardGauge= 1.435
 lateralWidth= sleeperLength-standardGauge
 sleeperSpreadToDepthRatio= lateralWidth/sleeperThickness
 
-ballastThickness= 0.6 # Thickness of the ballast under the sleeper.
+ballastThickness= 0.3 # Thickness of the ballast under the sleeper.
 ballastSpreadToDepthRatio= 1/4.0 # See Eurocode 1 part 2 figure 6.5.
 
 spreadingLayers= [(sleeperThickness, sleeperSpreadToDepthRatio), (ballastThickness, ballastSpreadToDepthRatio)]
 
-## Rail axis.
-zRail= ballastThickness+sleeperThickness
-railUpVector= geom.Vector3d(0,0,zRail)
-railAxis= geom.Polyline3d([p0+railUpVector, pA+railUpVector, p2+railUpVector])
-load= 40e3
+## Locomotive load.
+### Locomotive load model.
 dynamicFactor= 1.2
 classificationFactor= 1.0
-uniformRailLoad= load_model_base.UniformRailLoad(railAxis, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+#### Wheel spacing is exaggerated to get separate loads for each wheel
+#### (only for demonstration purposes).
+locomotiveLoad= load_model_base.LocomotiveLoad(xSpacing= 3, ySpacing= 3.0, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+### Locomotive position and orientation.
+zRail= ballastThickness+sleeperThickness
+railUpVector= geom.Vector3d(0,0,zRail)
+dirVector= p1-p0
+midPoint= p0+0.5*(p2-p0)+railUpVector
+normalVector= geom.Vector3d(-dirVector.y, dirVector.x, 0.0) 
+ref= geom.Ref2d3d(midPoint, dirVector, normalVector)
 
 ## Define load pattern.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern(lp0.name)
 loadedSet= modelSpace.getTotalSet()
-nodalLoads= uniformRailLoad.defDeckRailUniformLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= loadedSet, deckMidplane= deckMidplane, deckThickness= deckThickness)
+nodalLoads= locomotiveLoad.defDeckWheelLoadsThroughLayers(ref= ref, spreadingLayers= spreadingLayers, originSet= loadedSet, deckThickness= deckThickness, deckSpreadingRatio= 1/1)
 
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -87,7 +92,7 @@ totalLoad= 0.0
 for nl in nodalLoads:
     totalLoad-= nl.getLoadVector[2] # z component.
 
-refTotalLoad= uniformRailLoad.getDynamicLoad()*uniformRailLoad.railAxis.getLength()
+refTotalLoad= locomotiveLoad.getTotalLoad()
 
 err= abs(totalLoad-refTotalLoad)/refTotalLoad
 
