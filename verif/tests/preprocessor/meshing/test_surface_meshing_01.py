@@ -61,9 +61,6 @@ elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 s1.genMesh(xc.meshDir.I)
 total= preprocessor.getSets.getSet("total")
 
-
-
-
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s2= surfaces.newQuadSurfacePts(pt2.tag,pt3.tag,pt6.tag,pt5.tag)
 s2.nDivI= 2

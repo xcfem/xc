@@ -69,15 +69,15 @@ s.nDivJ= 4
 
 divsOk= surfaces.conciliaNDivs()
 
-
-setTotal= preprocessor.getSets.getSet("total")
+# Mesh generation. 
+xcTotalSet= preprocessor.getSets.getSet("total")
 feProblem.setVerbosityLevel(0) #Dont print(warning messages about element seed.)
-setTotal.genMesh(xc.meshDir.I)
+xcTotalSet.genMesh(xc.meshDir.I)
 feProblem.setVerbosityLevel(1) #print(warnings again )
 
 
-numNodes= setTotal.getNodes.size
-numElem= setTotal.getElements.size
+numNodes= xcTotalSet.getNodes.size
+numElem= xcTotalSet.getElements.size
 
 
 
