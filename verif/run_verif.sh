@@ -416,6 +416,7 @@ python tests/elements/test_elastomeric_bearing_01.py
 python tests/elements/test_pot_bearing_01.py
 python tests/elements/test_pot_bearing_02.py
 python tests/elements/test_pot_bearing_03.py
+python tests/elements/test_pot_bearing_04.py
 
 echo "$BLEU" "    Element birth and death tests." "$NORMAL"
 python tests/elements/birth_and_death/kill_elements_01.py

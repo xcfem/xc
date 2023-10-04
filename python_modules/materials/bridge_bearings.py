@@ -65,30 +65,34 @@ class Bearing(object):
         self.materials= list()
         self.materialHandler= None
         self.id= next(self._ids) #Object identifier.
+        
     def getMaterial(self,i):
         ''' Returns the i-th uniaxial material that modelizes the response in the i-th direction.'''
         return self.materialHandler.getMaterial(self.materials[i])
+    
     def getMaterialNames(self):
         '''Return material names for each DOF in a list.'''
         return self.materials
-    def setBearingBetweenNodes(self,predefinedSpace, iNodA,iNodB, orientation= None):
-      '''Modelize a bearing between the nodes and return newly created zero 
-       length element that represents the bearing.
+    
+    # def setBearingBetweenNodes(self,predefinedSpace, iNodA,iNodB, orientation= None):
+    #   '''Modelize a bearing between the nodes and return newly created zero 
+    #    length element that represents the bearing.
 
-       :param predefinedSpace: model space (object).
-       :param iNodA: (int) first node identifier (tag).
-       :param iNodB: (int) second node identifier (tag).
-      '''
-      return predefinedSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
-    def setBearing(self,predefinedSpace, iNodA, orientation= None):
-      '''Modelize a bearing on X, XY or XYZ directions.
+    #    :param predefinedSpace: model space (object).
+    #    :param iNodA: (int) first node identifier (tag).
+    #    :param iNodB: (int) second node identifier (tag).
+    #   '''
+    #   return predefinedSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
+  
+    # def setBearing(self,predefinedSpace, iNodA, orientation= None):
+    #   '''Modelize a bearing on X, XY or XYZ directions.
 
-         :param predefinedSpace: model space (object).
-         :param iNod: (int) node identifier (tag).
-         :param bearingMaterials (list): material names for the zero length element.
-         :return rtype: (int, int) new node tag, new element tag.
-      '''
-      return predefinedSpace.setBearing(iNodA,self.materials, orientation)
+    #      :param predefinedSpace: model space (object).
+    #      :param iNod: (int) node identifier (tag).
+    #      :param bearingMaterials (list): material names for the zero length element.
+    #      :return rtype: (int, int) new node tag, new element tag.
+    #   '''
+    #   return predefinedSpace.setBearing(iNodA,self.materials, orientation)
     
 class ElastomericBearing(Bearing):
     '''Rectangular elastomeric bearing.
@@ -242,17 +246,17 @@ class ElastomericBearing(Bearing):
         ''' Puts the bearing between the nodes. The element must be oriented so that its local x axis is in the direction of the longitudinal axis of the bridge and its local y axis parallel to the transverse axis of the transverse axis of the bridge.
 
 
-            :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
-            :param iNodA (int): first node identifier (tag).
-            :param iNodB (int): second node identifier (tag).
-            :param orientation: (list) of two vectors [x,yp] used to orient 
-        the zero length element, where: 
-        x: are the vector components in global coordinates defining 
-        local x-axis, that must be parallel to the bridge longitudinal axis (optional)
-        yp: vector components in global coordinates defining a  vector
-        that lies in the local x-y plane of the element (optional).
-        If the optional orientation vector are not specified, the local
-        element axes coincide with the global axes
+        :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
+        :param iNodA (int): first node identifier (tag).
+        :param iNodB (int): second node identifier (tag).
+        :param orientation: (list) of two vectors [x,yp] used to orient 
+                    the zero length element, where: 
+                    x: are the vector components in global coordinates defining 
+                        local x-axis, that must be parallel to the bridge longitudinal axis (optional)
+                    yp: vector components in global coordinates defining a  vector
+                          that lies in the local x-y plane of the element (optional).
+                          If the optional orientation vector are not specified, the local
+                          element axes coincide with the global axes
         '''
         return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
 
@@ -285,22 +289,31 @@ xT= [5e6,10e6,20e6,30e6,45e6,1000e6]
 yT= [0.08,0.06,0.04,0.03,0.025,0.024]
 
 
-class PTFEPotBearing(Bearing):
-    '''PTFE slide bearing.
+class PTFEPotBearingMat(Bearing):
+    '''PTFE slide bearing material.
 
-        Attibutes:
+     Attibutes:
     :ivar d: (float) Pot diameter.
+    :ivar unidirX: unidirectional POT in local-X direction (uY constrained) (defaults to False)
+    :ivar unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
+    :ivar factStiff: factor to increase stiffness in constrained locad directions  (defaults to 1e4)
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
-    def __init__(self,d):
+    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e4):
         '''Class constructor.
 
         :param d: pot diameter.
+        :param unidirX: unidirectional POT in local-X direction (uY constrained) (defaults to False)
+        :param unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
+        :param factStiff: factor to increase stiffness in constrained locad directions (defaults to 1e4)
         '''
-        super(PTFEPotBearing,self).__init__()
+        super(PTFEPotBearingMat,self).__init__()
         self.d= d
-        
+        self.unidirX=unidirX
+        self.unidirY=unidirY
+        self.factStiff=factStiff
+         
     def getHorizontalStiffness(self):
         '''Returns the fictitious stiffness with respect to the horizontal displacement of a PTFE slide bearing.
 
@@ -323,65 +336,145 @@ class PTFEPotBearing(Bearing):
         nameRoot= 'pot'+str(self.id)
         self.matXName= nameRoot+'X'
         self.matYName= nameRoot+'Y'
-        self.materials.extend([self.matXName, self.matYName])
+        self.matZName= nameRoot+'Z'
+        self.materials.extend([self.matXName, self.matYName,self.matZName])
         # Material objects.
-        self.matKX= typical_materials.defElasticMaterial(preprocessor, self.matXName, self.getHorizontalStiffness())
-        self.matKY= typical_materials.defElasticMaterial(preprocessor, self.matYName, self.getHorizontalStiffness())
+        horizStiff=self.getHorizontalStiffness()
+        if self.unidirY:
+            self.matKX= typical_materials.defElasticMaterial(preprocessor, name=self.matXName, E=self.factStiff*horizStiff)
+        else:
+            self.matKX= typical_materials.defElasticMaterial(preprocessor, name=self.matXName,E=horizStiff)
+        if self.unidirX:
+            self.matKY= typical_materials.defElasticMaterial(preprocessor, name=self.matYName, E=self.factStiff*horizStiff)
+        else:
+             self.matKY= typical_materials.defElasticMaterial(preprocessor, name=self.matYName, E=horizStiff)
+        self.matKZ= typical_materials.defElasticMaterial(preprocessor, name=self.matZName, E=self.factStiff*horizStiff)
+        
 
-    def putBetweenNodes(self, modelSpace, iNodA, iNodB):
-        ''' Puts the bearing between the nodes. Set the springs between the 
-            nodes in X and Y directions and imposes equal displacement in Z
-            direction.
 
-        :param modelSpace: (:obj:'PredefinedSpace') space dimension and 
-                           number of DOFs.
-        :param iNodA: (int) first node identifier (tag).
-        :param iNodB: (int) second node identifier (tag).
-        '''
-        # Set the springs in the X and Y directions.
-        self.potElement= modelSpace.setBearingBetweenNodes(iNodA, iNodB, self.materials)
-        # Impose equal displacement in the Z directions.
-        eDofs= modelSpace.constraints.newEqualDOF(iNodA, iNodB, xc.ID([2])) # 2 DOF -> Uz
-        if(__debug__):
-            if(not eDofs):
-                AssertionError('Can\'t create constraints.')
-        return self.potElement
+class potBearing(object):
+    '''POT structural bearing
 
-    def putOnXBetweenNodes(self,modelSpace,iNodA, iNodB):
-        ''' Puts the bearing between the nodes only in direction X.
+        :ivar potMat: : (:obj:'PTFEPotBearingMat') POT material.
+        :ivar nodA: first node.
+        :ivar nodB: second node .
+        :ivar orientation: (list) of two vectors [x,yp] used to orient 
+                    the zero length element, where: 
+                    x: are the vector components in global coordinates defining 
+                        local x-axis
+                    yp: vector components in global coordinates defining a  vector
+                          that lies in the local x-y plane of the element.
+                    If the optional orientation vector are not specified, the local
+                    element axes coincide with the global axes
+    '''
 
-        :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
-        :param iNodA: (int) first node identifier (tag).
-        :param iNodB: (int) second node identifier (tag).
-        '''
-        # Set the spring in the X direction.
-        self.potElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[self.matXName])
-        # Impose equal displacement in the Y and Z directions.
-        eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([1,2])) # 1 and 2 DOFs -> Uy and Uz
-        if(__debug__):
-            if(not eDofs):
-                AssertionError('Can\'t create constraints.')
-        return self.potElement
+    def __init__(self,potMat,nodA,nodB,orientation= None):
+        '''Class constructor. Creates the pot element between nodA and nodB
 
-    def putOnYBetweenNodes(self,modelSpace,iNodA, iNodB):
-        ''' Puts the bearing between the nodes only in direction Y.
-
-        :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
-        :param iNodA: (int) first node identifier (tag).
-        :param iNodB: (int) second node identifier (tag).
-        '''
-        # Set the spring in the Y direction.
-        self.potElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[None,self.matYName])
-        # Impose equal displacement in the X and Z directions.
-        eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([0,2])) # 0 and 2 DOFs -> Ux and Uz
-        if(__debug__):
-            if(not eDofs):
-                AssertionError('Can\'t create constraints.')
-        return self.potElement
-
+        :param potMat: : (:obj:'PTFEPotBearingMat') POT material.
+        :param nodA: first node.
+        :param nodB: second node .
+        :param orientation: (list) of two vectors [x,yp] used to orient 
+                    the zero length element, where: 
+                    x: are the vector components in global coordinates defining 
+                        local x-axis
+                    yp: vector components in global coordinates defining a  vector
+                          that lies in the local x-y plane of the element. (local y-axis)
+                    If the optional orientation vector are not specified, the local
+                    element axes coincide with the global axes
+         '''
+        self.potMat=potMat
+        self.nodA=nodA
+        self.nodB=nodB
+        self.orientation=orientation
+        # generate the pot element
+        prep=self.nodA.getDomain.getPreprocessor
+        elems= prep.getElementHandler
+        elems.dimElem= prep.getNodeHandler.dimSpace
+        elems.defaultMaterial= next((item for item in self.potMat.materials if item is not None), 'All are Nones')
+        self.potElem= elems.newElement("ZeroLength",xc.ID([self.nodA.tag,self.nodB.tag]))
+        self.potElem.clearMaterials()
+        if(self.orientation): #Orient element.
+            self.potElem.setupVectors(self.orientation[0],self.orientation[1])
+        numMats= len(self.potMat.materials)
+        for i in range(0,numMats):
+            material= self.potMat.materials[i]
+            if(material!=None):
+                self.potElem.setMaterial(i,material)
+       
     def getReaction(self):
         ''' Return the reaction in the fixed node.'''
-        return self.potElement.nodes[0].getReaction
+        return self.potElem.nodes[0].getReaction
+    
+    def getMatXlocal(self):
+        m=self.potElem.getMaterials()[0]
+        return m
+ 
+    def getMatYlocal(self):
+        m=self.potElem.getMaterials()[1]
+        return m
+    
+    def getMatZlocal(self):
+        m=self.potElem.getMaterials()[2]
+        return m
+
+    def getFXlocal(self):
+        ''' Returns the force in local-X direction 
+        '''
+        m=self.getMatXlocal()
+        Fx=m.getStress()
+        return Fx
+    
+    def getFYlocal(self):
+        ''' Returns the force in local-Y direction 
+        '''
+        m=self.getMatYlocal()
+        Fy=m.getStress()
+        return Fy
+    
+    def getFZlocal(self):
+        ''' Returns the force in local-Z direction 
+        '''
+        m=self.getMatZlocal()
+        Fz=m.getStress()
+        return Fz
+
+    def getElongXlocal(self):
+        ''' Returns the elongation of the bearing in local-X direction 
+        '''
+        m=self.getMatXlocal()
+        Elx=m.getStrain()
+        return Elx
+        
+    def getElongYlocal(self):
+        ''' Returns the elongation of the bearing in local-Y direction 
+        '''
+        m=self.getMatYlocal()
+        Ely=m.getStrain()
+        return Ely
+        
+    def getElongZlocal(self):
+        ''' Returns the elongation of the bearing in local-Z direction 
+        '''
+        m=self.getMatZlocal()
+        Elz=m.getStrain()
+        return Elz
+    
+    def getVdispNodA(self):
+        ''' Return the nodA displacement vector'''
+        vDispA=self.nodA.getDisp
+        return vDispA
+
+    def getVdispNodB(self):
+        ''' Return the nodB displacement vector'''
+        vDispB=self.nodB.getDisp
+        return vDispB
+
+   
+            
+            
+        
+ 
     
 
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):

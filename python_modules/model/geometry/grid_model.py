@@ -442,7 +442,7 @@ class GridModel(object):
         xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         to a new position by applying a 3D displacement.
 
-        :param ijkRange: range for the search
+        :param XYZRange: range for the search
         :param vDisp: xc vector displacement
         '''
         ijkRange=self.getIJKrangeFromXYZrange(XYZrange)
