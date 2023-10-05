@@ -19,7 +19,7 @@ Lf=  5.0 # influence length of the loaded part of curved track on the bridge, wh
 
 # Compute reduction factor of the centrifugal force according to
 # expression 6.19 of Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
-f= EC1_rail_load_models.centrifugalForceReductionFactor(v= v, Lf= Lf)
+f= EC1_rail_load_models.centrifugal_force_reduction_factor(v= v, Lf= Lf)
 
 # characteristic value of the vertical concentrated load 
 # specified in clause 6.3 (alpha= 1.21)
@@ -32,7 +32,7 @@ qvk= 80e3*1.21 # per meter
 r= 2200 # radius of curvature.
 
 # Compute centrifugal forces.
-(Qtk, qtk)= EC1_rail_load_models.getCentrifugalForces(v= v, Lf= Lf, r= r, Qvk= Qvk, qvk= qvk)
+(Qtk, qtk)= EC1_rail_load_models.get_centrifugal_forces(v= v, Lf= Lf, r= r, Qvk= Qvk, qvk= qvk)
 
 # Check results.
 ratio1= abs(f-0.8877655548578554)/0.8877655548578554
