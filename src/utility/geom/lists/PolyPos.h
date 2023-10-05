@@ -45,10 +45,14 @@ class PolyPos : public std::deque<pos>
     typedef typename pos::vector vector;
 
   protected:
-    void simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::list<iterator> &selected);
+    void simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::set<const_iterator> &selected);
+    void remove_selected(std::set<const_iterator> &selected);
   public:
 
     PolyPos(void): deque_pos() {}
+
+    explicit PolyPos(const std::deque<pos> &dq_pos)
+      : std::deque<pos>(dq_pos) {}
     
     pos getFromPoint(void) const
       { return this->front(); }
@@ -462,7 +466,7 @@ typename PolyPos<pos>::iterator PolyPos<pos>::getFarthestPointFromSegment(iterat
    * @param selected: list containing the vertexes to be removed. 
    */
 template <class pos>
-void PolyPos<pos>::simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::list<iterator> &selected)
+void PolyPos<pos>::simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::set<const_iterator> &selected)
   {
     if (distance(it1, it2) <= 1) return;
 
@@ -483,9 +487,23 @@ void PolyPos<pos>::simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, 
         it++;
         for(; it < it2; it++)
 	  {
-	    selected.push_back(it); // add it to the deletion list.
+	    selected.insert(it); // add it to the deletion list.
 	  }
       }
+  }
+
+//! @brief Removes the selected items.
+//! @param selected: iterators pointing to the items to be removed.
+template <class pos>
+void PolyPos<pos>::remove_selected(std::set<const_iterator> &selected)
+  {
+    static std::deque<pos> tmp;
+    tmp.clear();
+    for(const_iterator i= this->begin(); i!= this->end(); i++)
+      if(selected.find(i)==selected.end()) // not selected to remove.
+	tmp.push_back(*i);
+    this->clear();
+    this->assign(tmp.begin(), tmp.end());
   }
 
 /**
@@ -500,11 +518,9 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon, iterator it1, iterator it2)
   {
     if (distance(it1, it2) <= 1) return;
 
-    std::list<iterator> selected;
+    std::set<const_iterator> selected;
     simplify_select(epsilon, it1, it2, selected);
-    // Erase the simplified vertexes.
-    for(typename std::list<iterator>::const_iterator i= selected.begin(); i!= selected.end(); i++)
-      this->erase(*i);
+    remove_selected(selected);
   }
 
 /**
@@ -519,7 +535,7 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon)
     const bool closed= this->isClosed();
     if(closed)
       {
-        std::list<iterator> selected;
+        std::set<const_iterator> selected;
         iterator i= this->begin();
 	iterator j= this->getFarthestPoint(*i);
 	simplify_select(epsilon,i,j, selected);
@@ -527,8 +543,7 @@ void PolyPos<pos>::simplify(GEOM_FT epsilon)
         j= this->end(); --j; //Last point.
         simplify_select(epsilon,i,j, selected);
 	// Erase the simplified vertexes.
-	for(typename std::list<iterator>::const_iterator i= selected.begin(); i!= selected.end(); i++)
-	  this->erase(*i);	
+	remove_selected(selected);
       }
     else
       {
