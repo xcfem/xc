@@ -248,6 +248,7 @@ echo "$BLEU" "    Traffic loads tests. Railway traffic." "$NORMAL"
 python tests/actions/traffic_loads/railway_traffic/test_derailment_SIA.py
 python tests/actions/traffic_loads/railway_traffic/test_ec1_slipstream_effect.py
 python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force.py
+python tests/actions/traffic_loads/railway_traffic/test_ec1_traction_and_braking_force.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
