@@ -27,8 +27,7 @@ class TrackAxes(lmb.TrackAxes):
         '''
         super().__init__(trackAxesPolylines)
 
-
-def centrifugalForceReductionFactor(v, Lf):
+def centrifugal_force_reduction_factor(v, Lf):
     '''Returns the reduction factor of the centrifugal force according to 
        expression (6.19) of Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
 
@@ -47,7 +46,7 @@ def centrifugalForceReductionFactor(v, Lf):
     coefFIAPF= max(coefFIAPF,0.35)
     return coefFIAPF
 
-def getCentrifugalForces(v, Lf, r, Qvk, qvk):
+def get_centrifugal_forces(v, Lf, r, Qvk, qvk):
     ''' Compute the characteristic values of the concentrated (Qtk) and 
         distributed (qtk) centrifugal forces according to equations (6.17) and
         (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
@@ -64,7 +63,7 @@ def getCentrifugalForces(v, Lf, r, Qvk, qvk):
                 specified in clause 6.3 (excluding any enhancement for 
                 dynamic effects).
     '''
-    ff= v*v/constants.g/r*centrifugalForceReductionFactor(v= v, Lf= Lf)
+    ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
     Qtk= ff*Qvk
     qtk= ff*qvk
     return (Qtk, qtk)
