@@ -17,7 +17,8 @@ from actions.roadway_traffic import EC1_load_models as EC1lm
 
 # Define notional lane
 notionalLaneContourPoints= [geom.Pos3d(0,2,0), geom.Pos3d(0,5,0), geom.Pos3d(10,5,0), geom.Pos3d(10,2,0)]
-notionalLane= lmb.NotionalLane(name= 'test', contour= geom.Polygon3d(notionalLaneContourPoints))
+contour= geom.Polygon3d(notionalLaneContourPoints)
+notionalLane= lmb.NotionalLane(name= 'test', contour= contour)
 
 # Compute wheel load positions.
 ## Compute notional lane axis.
@@ -28,7 +29,9 @@ lmbdArcLength= -0.5 # parameter (0.0->start of the axis, 1.0->end of the axis),
                     # so the point is OUTSIDE the lane contour.
                     # 
 loadFactor= 1.0 # factor to apply to the loads.
+contour.logFileName= "/tmp/erase.log" # Don't print error messages.
 wheelLoads= axis.getWheelLoads(loadModel= loadModel, lmbdArcLength= lmbdArcLength, loadFactor= loadFactor)
+contour.logileName= "clog" # Display errors if any.
 
 # Check results.
 ## Reference values.

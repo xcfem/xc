@@ -262,6 +262,7 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("Divide", pline2dDividePyProp2d,"Divide(proportions); returns the points that divide the polyline in the proportions of the list.")
   .def("dist", &Polyline2d::dist,"return the distance to the point.")
   .def("dist2", &Polyline2d::dist2,"return the squared distance to the point.")
+  .def("removeRepeatedVertexes",  &Polyline2d::removeRepeated,"remove the vertices that are closer than the specified tolerance.")
   ;
 
 void (PlanePolyline3d::*simplifyPP3DPoly)(GEOM_FT epsilon)= &PlanePolyline3d::simplify;
@@ -335,7 +336,8 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("split", &PlanePolyline3d::split,"split(point) returns the result of splitting the polyline by the point argument.")
   .def("offset", &PlanePolyline3d::offset)
   .def("getBufferPolygon", &PlanePolyline3d::getBufferPolygon, "Return a buffer polygon around the polyline.")
-;
+  .def("removeRepeatedVertexes", &PlanePolyline3d::removeRepeated,"remove the vertices that are closer than the specified tolerance.")
+  ;
 
 
 void (Polyline3d::*simplify3DPoly)(GEOM_FT epsilon)= &Polyline3d::simplify;
@@ -373,8 +375,9 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("getLeftChunk", &Polyline3d::getLeftChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from its beginning to the point argument. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("getRightChunk", &Polyline3d::getRightChunk,"getChunk(point, tol) returns the chunk of the polyline that goes from the point argument to its end. If distance from the point to the nearest vertex is greater than tol, append p to the resulting polyline.")
   .def("split", &Polyline3d::split,"split(point) returns the result of splitting the polyline by the point argument.")
-  .def("dist", &Polyline2d::dist,"return the distance to the point.")
-  .def("dist2", &Polyline2d::dist2,"return the squared distance to the point.")
+  .def("dist", &Polyline3d::dist,"return the distance to the point.")
+  .def("dist2", &Polyline3d::dist2,"return the squared distance to the point.")
+  .def("removeRepeatedVertexes", &Polyline3d::removeRepeated,"remove the vertices that are closer than the specified tolerance.")
   ;
 
 typedef std::deque<Polyline3d> dq_polyline3D;

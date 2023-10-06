@@ -139,6 +139,7 @@ class PlanePolyline3d: public D2to3d
     
     void simplify(GEOM_FT epsilon, iterator it1, iterator it2);
     void simplify(GEOM_FT epsilon);
+    void removeRepeated(const GEOM_FT &tol= 0.0);
     PlanePolyline3d getChunk(const Pos3d &,const short int &, const GEOM_FT &) const;
     PlanePolyline3d getLeftChunk(const Pos3d &, const GEOM_FT &tol) const;
     PlanePolyline3d getRightChunk(const Pos3d &, const GEOM_FT &tol) const;

@@ -643,3 +643,7 @@ void PlanePolyline3d::simplify(GEOM_FT epsilon, iterator it1, iterator it2)
  */
 void PlanePolyline3d::simplify(GEOM_FT epsilon)
   { this->pline2d.simplify(epsilon); }
+
+//! @brief Remove vertices that are closer than the given tolerance.
+void PlanePolyline3d::removeRepeated(const GEOM_FT &tol)
+  { this->pline2d.removeRepeated(tol); }

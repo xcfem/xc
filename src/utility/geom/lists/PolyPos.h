@@ -47,6 +47,7 @@ class PolyPos : public std::deque<pos>
   protected:
     void simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::set<const_iterator> &selected);
     void remove_selected(std::set<const_iterator> &selected);
+    void select_repeated(std::set<const_iterator> &selected, const GEOM_FT &tol= 0.0);
   public:
 
     PolyPos(void): deque_pos() {}
@@ -113,6 +114,7 @@ class PolyPos : public std::deque<pos>
     void simplify(GEOM_FT epsilon, iterator it1, iterator it2);
     void simplify(GEOM_FT epsilon);
     PolyPos<pos> getSimplified(GEOM_FT epsilon) const;
+    void removeRepeated(const GEOM_FT &tol= 0.0);
 
     void Cat(const PolyPos<pos> &l);
     template <class inputIterator>
@@ -199,33 +201,45 @@ typename PolyPos<pos>::const_iterator PolyPos<pos>::getSegmentAtLength(const GEO
       }
     else
       {
-	GEOM_FT totalLength= this->getLength();
-	if(s<=totalLength)
+	if(s<=0.0)
 	  {
-	    GEOM_FT temp = 0; //Distance from origin.
 	    retval= this->begin();
-	    const_iterator j;
-	    for(const_iterator i=this->begin(); i != this->end(); i++)
-	      {
-		j= i;j++;
-		if(j!=this->end())
-		  {
-		    temp+= dist(*i,*j); // increment distance.
-		    if(temp>=s) //we found it.
-		      {
-			retval= i;
-		        break;
-		      }
-		  }
-	      }
+	    if(s<0.0)
+	      std::clog << "PolyPos<>::" << __FUNCTION__
+			  << ";WARNING: length argument: " << s
+			  << " negative. First segment returned."
+			  << std::endl;
 	  }
 	else
 	  {
-	    std::clog << "PolyPos<>::" << __FUNCTION__
-		      << ";WARNING: length argument: " << s
-	              << " greater than total length: " << totalLength
-	              << std::endl;
-	    retval= this->end()-2; // return last segment.
+	    GEOM_FT totalLength= this->getLength();
+	    if(s<=totalLength)
+	      {
+		GEOM_FT temp = 0; //Distance from origin.
+		retval= this->begin();
+		const_iterator j;
+		for(const_iterator i=this->begin(); i != this->end(); i++)
+		  {
+		    j= i;j++;
+		    if(j!=this->end())
+		      {
+			temp+= dist(*i,*j); // increment distance.
+			if(temp>=s) //we found it.
+			  {
+			    retval= i;
+			    break;
+			  }
+		      }
+		  }
+	      }
+	    else
+	      {
+		std::clog << "PolyPos<>::" << __FUNCTION__
+			  << ";WARNING: length argument: " << s
+			  << " greater than total length: " << totalLength
+			  << std::endl;
+		retval= this->end()-2; // return last segment.
+	      }
 	  }
       }
     return retval;
@@ -350,12 +364,12 @@ std::deque<GEOM_FT> &PolyPos<pos>::GetSeparaciones(void) const
     const size_t sz= this->size();
     static std::deque<GEOM_FT> retval;
     retval.resize(sz);
-    const double grande= 10.0*getBnd((*this)).Diagonal().GetModulus();
+    const GEOM_FT grande= 10.0*getBnd((*this)).Diagonal().GetModulus();
     for(size_t i= 0;i<sz;i++)
       retval[i]= grande;
     if(sz>1)
       {
-        double d;
+        GEOM_FT d;
         for(size_t i= 0;i<sz;i++)
           {
             const pos &pi= (*this)[i];
@@ -455,6 +469,45 @@ typename PolyPos<pos>::iterator PolyPos<pos>::getFarthestPointFromSegment(iterat
     std::cerr << "PolyPos<>::" << __FUNCTION__
 	      << ";must be redefined in derived classes." << std::endl;
     return this->begin();
+  }
+
+/**
+   * Select repeated vertexes.
+   * @param selected: list containing the repeated vertexes. 
+   * @param tol: minimum distance between vertices to be considered equal.
+   */
+template <class pos>
+void PolyPos<pos>::select_repeated(std::set<const_iterator> &selected, const GEOM_FT &tol)
+  {
+    GEOM_FT localTol= 10*DBL_EPSILON; // default tolerance.
+    if(tol>0.0)
+      localTol= tol;
+    const size_t sz= this->size();
+    if(sz>1) // if more than one vertex.
+      {
+        iterator i= this->begin();
+        pos p0= *i; i++;
+        for(; i!= this->end(); i++)
+	  {
+	    const pos &p1= *i;
+	    const GEOM_FT d= dist(p1, p0);
+	    if(d<localTol)
+	      selected.insert(i);
+	    p0= p1;
+	  }
+      }
+  }
+
+/**
+   * remove repeated vertexes.
+   * @param tol: minimum distance between vertices to be considered equal.
+   */
+template <class pos>
+void PolyPos<pos>::removeRepeated(const GEOM_FT &tol)
+  {
+    std::set<const_iterator> repeated;
+    select_repeated(repeated, tol);
+    remove_selected(repeated);
   }
 
 /**
