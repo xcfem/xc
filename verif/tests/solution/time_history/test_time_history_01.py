@@ -165,6 +165,8 @@ hist.accel.setFactor(G)
 # Read accelerations from JSON file.
 accelData= open(accelFilePath, 'r')
 accelValues= json.load(accelData)
+accelData.close()
+
 hist.accel.path= xc.Vector(accelValues)
 hist.accel.setTimeIncr(0.005) #define time step of the acceleration data.
 duration= mr.getDuration()
