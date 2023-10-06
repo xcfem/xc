@@ -525,24 +525,25 @@ Vector3d Polyline3d::getIVectorAtLength(const GEOM_FT &s) const
 //! @param s: distance measured along the polyline from its origin.
 Vector3d Polyline3d::getJVectorAtLength(const GEOM_FT &s) const
   {
-    const GEOM_FT angleTol= 1e-3;
     const GEOM_FT pi_2= M_PI/2.0;
     Vector3d retval;
     const int i= getIndexOfSegmentAtLength(s);
     if(i>=0) // found it
       {
 	const Segment3d sg= getSegment(i+1);
-	const Vector3d sgJVector= sg.getJVector();
-	const Vector3d sgKVector= sg.getKVector();
+        const Vector3d sgJVector= sg.getJVector();
 	// Get orientation from the approximated curvature vector.
 	const Vector3d vK= getCurvatureVectorAtLength(s);
 	if(Abs(vK)>0.0)
 	  {
+	    const Vector3d sgKVector= sg.getKVector();
 	    const GEOM_FT sgJAngle= sgJVector.getSignedAngle(vK);
+	    const double minJAngle= std::min(abs(sgJAngle-pi_2), abs(sgJAngle+pi_2));
 	    const GEOM_FT sgKAngle= sgKVector.getSignedAngle(vK);
-	    if(abs(sgKAngle-pi_2)<angleTol or abs(sgKAngle+pi_2)<angleTol)
+	    const double minKAngle= std::min(abs(sgKAngle-pi_2), abs(sgKAngle+pi_2));
+	    if(minKAngle<minJAngle)
 	      { retval= sgJVector; }
-	    if(abs(sgJAngle-pi_2)<angleTol or abs(sgJAngle+pi_2)<angleTol)
+	    else
 	      { retval= sgKVector; }
 	    const GEOM_FT dt= dot(retval, vK);
 	    if(dt<0)
