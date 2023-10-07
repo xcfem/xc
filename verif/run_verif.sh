@@ -768,6 +768,7 @@ echo "$BLEU" "    Load distribution. Railway traffic." "$NORMAL"
 python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_01.py
 python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_02.py
 python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_03.py
+python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_04.py
 python tests/loads/load_distribution/railway_traffic/test_locomotive_load_01.py
 python tests/loads/load_distribution/railway_traffic/test_rail_wheel_load_distribution_01.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_01.py
