@@ -1,6 +1,8 @@
 # Actions due to railway traffic on bridges.
 Imposed loads (models and representative values) associated with rail traffic which include dynamic effects and centrifugal, braking and acceleration actions and actions for accidental design situations.
 
+![Railway traffic load distribution](https://github.com/xcfem/xc/blob/master/doc/screenshots/railway_traffic_load_distribution.png)
+
 ### Dynamic load factors.
 Dynamic load factors (ϕ) relate the magnitude of vertical wheel-to-rail loads in operation (dynamic loads) to static loads resulting from the weight of the vehicle and its contents, as a function of train speed.
 
