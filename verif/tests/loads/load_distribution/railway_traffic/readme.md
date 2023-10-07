@@ -1,6 +1,8 @@
 # Load tests
 Tests that verify different techniques to distribute railway traffic loads over nodes or elements.
 
+[Railway traffic load distribution](https://github.com/xcfem/xc/blob/master/doc/screenshots/railway_traffic_load_distribution.png)
+
 ## References
 
 - [Structural load](https://en.wikipedia.org/wiki/Structural_load)
