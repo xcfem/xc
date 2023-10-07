@@ -208,6 +208,36 @@ GEOM_FT PlanePolyline3d::GetZMin(void) const
     return retval;
   }
 
+//! @brief Return the nearest 2D segment (the name getNearestSegment is already taken in Polyline2d and Polyline3d).
+//! @param p: point to which the returned segment is the closest one.
+Segment3d PlanePolyline3d::getNearestLink(const Pos3d &p) const
+  {
+    Segment3d retval;
+    const Plane plane= getPlane(); // Get the plane containing the polyline.
+    const Pos3d prj= plane.Projection(p); // Compute projection.
+    const Pos2d p2d(to_2d(prj)); // Convert to 2D.
+    Polyline2d::const_iterator i= pline2d.getNearestSegment(p2d);
+    Polyline2d::const_iterator j= i+1;
+    if((i!=pline2d.end()) and (j!=pline2d.end()))
+      {
+	const Pos3d p1= to_3d(*i);
+	const Pos3d p2= to_3d(*j);
+        retval= Segment3d(p1,p2);
+      }
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; nearest segment to:" << p
+	          << " not found. ";
+        if(pline2d.size()>2)
+	  std::cerr << " Unknown error.";
+	else
+	  std::cerr << " Polyline is empty.";
+	std::cerr << std::endl;
+      }
+    return retval;
+  }
+
 //! @brief Append the projection of the vertex to the polyline.
 const Pos3d PlanePolyline3d::appendVertex(const Pos3d &p)
   {

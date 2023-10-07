@@ -173,6 +173,29 @@ Polyline2d::const_iterator Polyline2d::getNearestSegment(const Pos2d &p) const
     return retval;
   }
 
+//! @brief Return the nearest 2D segment (the name getNearestSegment is already taken).
+//! @param p: point to which the returned segment is the closest one.
+Segment2d Polyline2d::getNearestLink(const Pos2d &p) const
+  {
+    Segment2d retval;
+    const_iterator i= this->getNearestSegment(p);
+    const_iterator j= i+1;
+    if((i!=this->end()) and (j!=this->end()))
+      retval= Segment2d(*i,*j);
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; nearest segment to:" << p
+	          << " not found. ";
+        if(this->size()>2)
+	  std::cerr << " Unknown error.";
+	else
+	  std::cerr << " Polyline is empty.";
+	std::cerr << std::endl;
+      }
+    return retval;
+  }
+
 
 //! @brief Return the maximum value of the i coordinate.
 GEOM_FT Polyline2d::GetMax(unsigned short int i) const

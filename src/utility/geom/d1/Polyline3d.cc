@@ -206,6 +206,29 @@ Polyline3d::const_iterator Polyline3d::getNearestSegment(const Pos3d &p) const
       }
     return retval;
   }
+ 
+//! @brief Return the nearest 3D segment (the name getNearestSegment is already taken).
+//! @param p: point to which the returned segment is the closest one.
+Segment3d Polyline3d::getNearestLink(const Pos3d &p) const
+  {
+    Segment3d retval;
+    const_iterator i= this->getNearestSegment(p);
+    const_iterator j= i+1;
+    if((i!=this->end()) and (j!=this->end()))
+      retval= Segment3d(*i,*j);
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; nearest segment to:" << p
+	          << " not found. ";
+        if(this->size()>2)
+	  std::cerr << " Unknown error.";
+	else
+	  std::cerr << " Polyline is empty.";
+	std::cerr << std::endl;
+      }
+    return retval;
+  }
 
 //! @brief Return the points of intersection of the polyline with
 //! the argument.

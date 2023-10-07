@@ -92,6 +92,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     Segment3d getSegment(const list_Pos3d::const_iterator &) const;
     Segment3d getSegment(const size_t &) const;
     const_iterator getNearestSegment(const Pos3d &) const;    
+    Segment3d getNearestLink(const Pos3d &) const;
     //list_Pos3d Int(unsigned short int i,const GEOM_FT &d) const;
     list_Pos3d getIntersection(const Plane &) const;
     //Polyline3d Corta(unsigned short int i,const GEOM_FT &d) const;

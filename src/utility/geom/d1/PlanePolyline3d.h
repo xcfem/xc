@@ -126,6 +126,7 @@ class PlanePolyline3d: public D2to3d
     GEOM_FT GetMin(unsigned short int i) const;
     bool In(const Pos3d &p,const double &tol) const;
     bool TocaCuadrante(const int &) const;
+    Segment3d getNearestLink(const Pos3d &) const;
 
     // GEOM_FT distSigno(const Pos3d &p) const;
     // GEOM_FT dist(const Pos3d &p) const;
