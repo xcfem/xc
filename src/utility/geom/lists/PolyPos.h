@@ -531,7 +531,7 @@ void PolyPos<pos>::select_backward_segments(std::set<const_iterator> &selected, 
       }
     if(10*selected.size()>2*sz)
       std::clog << "PolyPos<>::" << __FUNCTION__
-	        << ";ERROR: many backwards segments (" << selected.size()
+	        << ";WARNING: many backwards segments (" << selected.size()
 	        << "/" << sz << "), check input data."
 		<< std::endl; 
   }
