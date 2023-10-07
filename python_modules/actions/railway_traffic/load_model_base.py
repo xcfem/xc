@@ -418,13 +418,19 @@ class UniformRailLoad(DynamicFactorLoad):
                 layerSpreadToDepthRatio= sl[1]
                 spread+= layerDepth*layerSpreadToDepthRatio
         railProjection= self.getRailAxisProjection(midplane)
+        rLength= railProjection.getLength()
+        # Remove consecutive vertices that are too close
+        railProjection.removeRepeatedVertexes(1e-3)
+        # Remove backward segments.
+        railProjection.removeBackwardSegments(-0.1)
         # Remove collinear contiguous segments from the polyline
         # otherwise there are vertexes that are not in a "corner"
         # so the buffer algorithm cannot found the interseccion
         # between the "offseted" lines.
         epsilon= railProjection.getLength()/1e3 # compute a reasonable epsilon.
         railProjection.simplify(epsilon) # simplify the projected axis.
-        return railProjection.getBufferPolygon(spread, 8)
+        retval= railProjection.getBufferPolygon(spread, 8)
+        return retval
 
     def getDeckLoadedContourThroughLayers(self, spreadingLayers, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
         ''' Return the loaded contour of the rail taking into account
@@ -785,6 +791,8 @@ class TrackAxis(object):
         :param trackAxis: 3D polyline defining the axis of the track.
         '''
         self.trackAxis= trackAxis
+        tol= self.trackAxis.getLength()/1e4
+        self.trackAxis.removeRepeatedVertexes(tol)
 
     def getLength(self):
         ''' Return the length of the axis track segment.'''
@@ -806,10 +814,10 @@ class TrackAxis(object):
                               the axis).
         '''
         lng= lmbdArcLength*self.trackAxis.getLength()
-        Org= self.trackAxis.getPointAtLength(lng)
+        org= self.trackAxis.getPointAtLength(lng)
         iVector= self.trackAxis.getIVectorAtLength(lng)
         jVector= self.trackAxis.getJVectorAtLength(lng)
-        return geom.Ref2d3d(Org, iVector, jVector)
+        return geom.Ref2d3d(org, iVector, jVector)
 
     def getVDir(self, relativePosition= 0.5):
         ''' Return the direction vector of the track axis.
