@@ -9,44 +9,47 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-import geom
 import math
+import geom
+import numpy as np
+
+def get_points():
+    '''Compute the x and y coordinates for points on a sine curve.'''
+    xi= np.arange(0, 3 * np.pi, 0.2)
+    yi= np.sin(xi)
+    retval= list()
+    for x, y in zip(xi, yi):
+        retval.append(geom.Pos2d(x,y))
+    return retval
 
 # Create test polyline.
-pol1=geom.Polyline2d([geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(1,1)])
+points= get_points()
+pline= geom.Polyline2d(points)
+bufferOffset= 0.55
+plineBuffer= pline.getBufferPolygon(bufferOffset, 8)
 
-# Compute buffer polygon.
-contour= pol1.getBufferPolygon(0.25, 8)
+# Check results
+area= plineBuffer.getArea()
+refArea= pline.getLength()*bufferOffset*2+math.pi*bufferOffset**2
+ratio= abs(area-refArea)/refArea
 
-# Check result.
-refContour= [geom.Pos2d(-0.25, 0), geom.Pos2d(-0.17677, -0.17677), geom.Pos2d(0, -0.24999), geom.Pos2d(0, -0.25), geom.Pos2d(1.25, -0.25), geom.Pos2d(1.25, 1), geom.Pos2d(1.17677, 1.17677), geom.Pos2d(1, 1.25), geom.Pos2d(0.82322, 1.17677), geom.Pos2d(0.75, 1), geom.Pos2d(0.75, 0.25), geom.Pos2d(0, 0.25), geom.Pos2d(-0.17677, 0.17677)]
-
-err= 0
-for p, refP in zip(contour.getVertexList(), refContour):
-    err+= p.dist2(refP)
-err= math.sqrt(err)
-
-'''
-print(contour)
-print(err)
-'''
+# print(area, refArea, ratio)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if err<1e-6:
+if ratio<2e-2:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
-
-
+    
 # # Graphic stuff
 # import matplotlib.pyplot as plt
 
 # # polyline
 # xi= list()
 # yi= list()
-# for v in pol1.getVertexList():
+# for v in pline.getVertexList():
 #     xi.append(v.x)
 #     yi.append(v.y)
     
@@ -57,11 +60,12 @@ else:
 # # polygon
 # xs= list()
 # ys= list()
-# vertices= contour.getVertexList()
-# for v in contour.getVertexList():
+# vertices= plineBuffer.getVertexList()
+# vertices.append(vertices[0]) # Close the polygon.
+# for v in vertices:
 #     xs.append(v.x)
 #     ys.append(v.y)
 
-# plt.fill(xs,ys)
+# plt.plot(xs,ys)
 
 # plt.show()

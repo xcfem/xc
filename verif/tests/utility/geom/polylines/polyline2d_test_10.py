@@ -13,28 +13,29 @@ import geom
 import math
 
 # Create test polyline.
-pol1=geom.Polyline2d([geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(1,1)])
+points= [geom.Pos2d(11.0738, 20.218), geom.Pos2d(-22.9508, 15.2622)]
+pol1= geom.Polyline2d(points)
 
-# Compute buffer polygon.
-contour= pol1.getBufferPolygon(0.25, 8)
+# Compute offset.
+offsetDist= 0.55
+pol1Offset= pol1.offset(offsetDist)
 
-# Check result.
-refContour= [geom.Pos2d(-0.25, 0), geom.Pos2d(-0.17677, -0.17677), geom.Pos2d(0, -0.24999), geom.Pos2d(0, -0.25), geom.Pos2d(1.25, -0.25), geom.Pos2d(1.25, 1), geom.Pos2d(1.17677, 1.17677), geom.Pos2d(1, 1.25), geom.Pos2d(0.82322, 1.17677), geom.Pos2d(0.75, 1), geom.Pos2d(0.75, 0.25), geom.Pos2d(0, 0.25), geom.Pos2d(-0.17677, 0.17677)]
-
+# Check results.
+testVector= offsetDist*pol1.getJVectorAtLength(0.5*pol1.getLength())
 err= 0
-for p, refP in zip(contour.getVertexList(), refContour):
-    err+= p.dist2(refP)
+for pA, pB in zip(pol1.getVertexList(), pol1Offset.getVertexList()):
+    v= pB-pA
+    err+= (v.x-testVector.x)**2+(v.y-testVector.y)**2
 err= math.sqrt(err)
 
 '''
-print(contour)
 print(err)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if err<1e-6:
+if err<1e-12:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
@@ -54,14 +55,14 @@ else:
 # plt.axis('equal')
 # plt.plot(xi,yi)
 
-# # polygon
-# xs= list()
-# ys= list()
-# vertices= contour.getVertexList()
-# for v in contour.getVertexList():
-#     xs.append(v.x)
-#     ys.append(v.y)
+# # positive offset
+# xs1= list()
+# ys1= list()
+# for v in pol1Offset.getVertexList():
+#     xs1.append(v.x)
+#     ys1.append(v.y)
 
-# plt.fill(xs,ys)
+
+# plt.plot(xs1,ys1)
 
 # plt.show()

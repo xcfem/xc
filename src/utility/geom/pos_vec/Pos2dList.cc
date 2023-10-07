@@ -75,26 +75,37 @@ Pos2dList Pos2dList::offset(const GEOM_FT &d) const
       {
         point_const_iterator i= points_begin();
         point_const_iterator j= i;j++;
-        const Segment2d s1= Segment2d(*i,*j).offset(d);
+        Segment2d s1= Segment2d(*i,*j).offset(d);
         Line2d r1= s1.getSupportLine();
         retval.appendPoint(s1.getFromPoint());
-        Segment2d s2= s1;
         i++;j++;//Next segment.
-        for(;j != points_end();i++,j++)
-          {
-            s2= Segment2d(*i,*j).offset(d);
-            Line2d r2= s2.getSupportLine();
-            Pos2d ptIntersection= intersection_point(r1,r2);
-            retval.appendPoint(ptIntersection);
-            if(!ptIntersection.exists())
-	      std::cerr << getClassName() << "::" << __FUNCTION__
-		        << "; itersection of lines"
-                        << " r1: "
-                        << r1 << " andr2: " << r2
-			<< " not found." << std::endl;
-            r1= r2;
-          }
-        retval.appendPoint(s2.getToPoint());
+	Pos2d lastPoint= s1.getToPoint();
+	if(nv>2) // three or more vertexes.
+	  {
+	    for(;j != points_end();i++,j++)
+	      {
+		const Segment2d s2= Segment2d(*i,*j).offset(d);
+		Line2d r2= s2.getSupportLine();
+		Pos2d ptIntersection= intersection_point(r1,r2);
+		GEOM_FT dist= 0;
+		if(!ptIntersection.exists())
+		  dist= std::abs(1000*d); // big enough.
+		else
+		  dist= (*i).dist(ptIntersection);
+		const GEOM_FT limit= std::abs(5*d);
+		if(dist>limit)
+		  {
+		    const Vector2d jVector1= s1.getJVector();
+		    const Vector2d jVector2= s2.getJVector();
+		    ptIntersection= lastPoint+d*(jVector1+jVector2);
+		  }
+		retval.appendPoint(ptIntersection); // append computed intersection.
+		r1= r2; // update support line.
+		s1= s2; // update segment.
+		lastPoint= s2.getToPoint(); // update last point.
+	      }
+	  }
+        retval.appendPoint(lastPoint);
       }
     return retval;
   }

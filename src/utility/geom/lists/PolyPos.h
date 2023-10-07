@@ -48,6 +48,7 @@ class PolyPos : public std::deque<pos>
     void simplify_select(GEOM_FT epsilon, iterator it1, iterator it2, std::set<const_iterator> &selected);
     void remove_selected(std::set<const_iterator> &selected);
     void select_repeated(std::set<const_iterator> &selected, const GEOM_FT &tol= 0.0);
+    void select_backward_segments(std::set<const_iterator> &selected, const GEOM_FT &tol);
   public:
 
     PolyPos(void): deque_pos() {}
@@ -115,6 +116,7 @@ class PolyPos : public std::deque<pos>
     void simplify(GEOM_FT epsilon);
     PolyPos<pos> getSimplified(GEOM_FT epsilon) const;
     void removeRepeated(const GEOM_FT &tol= 0.0);
+    void removeBackwardSegments(const GEOM_FT &tol);
 
     void Cat(const PolyPos<pos> &l);
     template <class inputIterator>
@@ -499,6 +501,42 @@ void PolyPos<pos>::select_repeated(std::set<const_iterator> &selected, const GEO
   }
 
 /**
+   * Select backward segments.
+   * @param selected: list containing the vertexes that generate backward segments. 
+   * @param tol: minimum accepted value for the dot product (<0) of consecutive direction vectors.
+   */
+template <class pos>
+void PolyPos<pos>::select_backward_segments(std::set<const_iterator> &selected, const GEOM_FT &tol)
+  {
+    const size_t sz= this->size();
+    if(sz>2) // if more than one segment.
+      {
+        iterator i= this->begin();
+        pos p0= *i; i++;
+	pos p1= *i; i++;
+	vector iVector0= (p1-p0).getNormalized();
+	GEOM_FT dot= 0.0;
+        for(; i!= this->end(); i++)
+	  {
+	    if(dot>=tol) // don't update p0 if the vertex will be removed.
+	      p0= p1;
+	    p1= *i;
+	    vector iVector1= (p1-p0).getNormalized();
+	    dot= iVector1.GetDot(iVector0);
+	    if(dot<tol)
+	      selected.insert(i);
+	    else // don't update iVector0 if the vertex will be removed.
+	      iVector0= iVector1;
+	  }
+      }
+    if(10*selected.size()>2*sz)
+      std::clog << "PolyPos<>::" << __FUNCTION__
+	        << ";ERROR: many backwards segments (" << selected.size()
+	        << "/" << sz << "), check input data."
+		<< std::endl; 
+  }
+
+/**
    * remove repeated vertexes.
    * @param tol: minimum distance between vertices to be considered equal.
    */
@@ -508,6 +546,18 @@ void PolyPos<pos>::removeRepeated(const GEOM_FT &tol)
     std::set<const_iterator> repeated;
     select_repeated(repeated, tol);
     remove_selected(repeated);
+  }
+
+/**
+   * remove backward segments.
+   * @param tol: minimum accepted value for the dot product (<0) of consecutive direction vectors.
+   */
+template <class pos>
+void PolyPos<pos>::removeBackwardSegments(const GEOM_FT &tol)
+  {
+    std::set<const_iterator> backwards;
+    select_backward_segments(backwards, tol);
+    remove_selected(backwards);
   }
 
 /**

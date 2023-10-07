@@ -193,8 +193,7 @@ Segment2d Segment2d::offset(const Vector2d &v) const
 //! be on the right from this one.
 Segment2d Segment2d::offset(const GEOM_FT &d) const
   {
-    const Vector2d v= d*getSupportLine().VersorDir();
-    const Vector2d n(v.y(),-v.x());
+    const Vector2d n= d*getJVector();
     return offset(n);
   }
 

@@ -77,6 +77,7 @@ python tests/utility/geom/segments/segment2d_test_01.py
 python tests/utility/geom/segments/segment2d_test_02.py
 python tests/utility/geom/segments/segment2d_test_03.py
 python tests/utility/geom/segments/segment2d_test_04.py
+python tests/utility/geom/segments/segment2d_test_05.py
 python tests/utility/geom/segments/segment2d_connect_01.py
 python tests/utility/geom/segments/segment2d_connect_02.py
 python tests/utility/geom/segments/segment3d_test_00.py
@@ -87,6 +88,7 @@ python tests/utility/geom/segments/segment3d_connect_01.py
 python tests/utility/geom/segments/segment3d_connect_02.py
 echo "$BLEU" "    Polylines." "$NORMAL"
 echo "$BLEU" "      Polylines. 2D" "$NORMAL"
+python tests/utility/geom/polylines/polyline2d_test_00.py
 python tests/utility/geom/polylines/polyline2d_test_01.py
 python tests/utility/geom/polylines/polyline2d_test_02.py
 python tests/utility/geom/polylines/polyline2d_test_03.py
@@ -96,6 +98,11 @@ python tests/utility/geom/polylines/polyline2d_test_06.py
 python tests/utility/geom/polylines/polyline2d_test_07.py
 python tests/utility/geom/polylines/polyline2d_test_08.py
 python tests/utility/geom/polylines/polyline2d_test_09.py
+python tests/utility/geom/polylines/polyline2d_test_10.py
+python tests/utility/geom/polylines/polyline2d_test_11.py
+python tests/utility/geom/polylines/polyline2d_test_12.py
+python tests/utility/geom/polylines/polyline2d_test_13.py
+python tests/utility/geom/polylines/polyline2d_test_14.py
 echo "$BLEU" "      Polylines. 3D" "$NORMAL"
 python tests/utility/geom/polylines/polyline3d_test_01.py
 python tests/utility/geom/polylines/polyline3d_test_02.py

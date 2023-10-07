@@ -647,3 +647,8 @@ void PlanePolyline3d::simplify(GEOM_FT epsilon)
 //! @brief Remove vertices that are closer than the given tolerance.
 void PlanePolyline3d::removeRepeated(const GEOM_FT &tol)
   { this->pline2d.removeRepeated(tol); }
+
+//! @brief Remove emove the vertices that generate backward segments.
+//! @param tol: minimum accepted value for the dot product (<0) of consecutive direction vectors.
+void PlanePolyline3d::removeBackwardSegments(const GEOM_FT &tol)
+  { this->pline2d.removeBackwardSegments(tol); }

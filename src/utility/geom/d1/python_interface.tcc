@@ -263,6 +263,7 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("dist", &Polyline2d::dist,"return the distance to the point.")
   .def("dist2", &Polyline2d::dist2,"return the squared distance to the point.")
   .def("removeRepeatedVertexes",  &Polyline2d::removeRepeated,"remove the vertices that are closer than the specified tolerance.")
+  .def("removeBackwardSegments",  &Polyline2d::removeBackwardSegments,"remove the vertices that generate backwards segments (the tolerance is the minimum accepted value for the dot product (<0) of consecutive direction vectors).")
   ;
 
 void (PlanePolyline3d::*simplifyPP3DPoly)(GEOM_FT epsilon)= &PlanePolyline3d::simplify;
@@ -337,6 +338,7 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("offset", &PlanePolyline3d::offset)
   .def("getBufferPolygon", &PlanePolyline3d::getBufferPolygon, "Return a buffer polygon around the polyline.")
   .def("removeRepeatedVertexes", &PlanePolyline3d::removeRepeated,"remove the vertices that are closer than the specified tolerance.")
+  .def("removeBackwardSegments",  &PlanePolyline3d::removeBackwardSegments,"remove the vertices that generate backward segments (the tolerance is the minimum accepted value for the dot product (<0) of consecutive direction vectors).")
   ;
 
 
@@ -378,6 +380,7 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("dist", &Polyline3d::dist,"return the distance to the point.")
   .def("dist2", &Polyline3d::dist2,"return the squared distance to the point.")
   .def("removeRepeatedVertexes", &Polyline3d::removeRepeated,"remove the vertices that are closer than the specified tolerance.")
+  .def("removeBackwardSegments",  &Polyline3d::removeBackwardSegments,"remove the vertices that generate backwards segments (the tolerance is the minimum accepted value for the dot product (<0) of consecutive direction vectors).")
   ;
 
 typedef std::deque<Polyline3d> dq_polyline3D;
