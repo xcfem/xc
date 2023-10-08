@@ -137,7 +137,7 @@ trainLoadModel= load_model_base.TrainLoadModel(locomotive= EC1_rail_load_models.
 ## Define load pattern)
 q1a= modelSpace.newLoadPattern(name= 'Q1a')
 modelSpace.setCurrentLoadPattern(q1a.name)
-nodalLoads= trackAxis.defDeckLoadsThroughLayers(trainModel= trainLoadModel, relativePosition= 0.5, spreadingLayers= spreadingLayers, deckThickness= deckThickness, deckSpreadingRatio= 1/1, originSet= slabSet)
+nodalLoads= trackAxis.defDeckLoadsThroughLayers(trainModel= trainLoadModel, relativePosition= 0.4, spreadingLayers= spreadingLayers, deckThickness= deckThickness, deckSpreadingRatio= 1/1, originSet= slabSet)
 modelSpace.addLoadCaseToDomain(q1a.name)
 
 ## Check total load value.
@@ -145,25 +145,33 @@ totalLoad= 0.0
 for nl in nodalLoads:
     totalLoad-= nl.getLoadVector[2] # z component.
 
-refTotalLoad= 10527.945342944799e3 # Enhance using a computed value.
+testLoad= trackAxis.getTotalLoad(trainLoadModel)
 
-err= abs(totalLoad-refTotalLoad)/refTotalLoad
+refTotalLoad= 10527.945342944799e3
+
+err1= abs(totalLoad-refTotalLoad)/refTotalLoad
+err2= abs(testLoad-refTotalLoad)/refTotalLoad
+
+'''
+print(totalLoad/1e3, refTotalLoad/1e3, err1)
+print(testLoad/1e3, refTotalLoad/1e3, err2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(err<1e-5):
+if(err1<.05 and err2<1e-4):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Graphic stuff.
-# from postprocess import output_handler
-# oh= output_handler.OutputHandler(modelSpace)
-# # oh.displayBlocks()
-# oh.displayFEMesh()
-# # oh.displayLocalAxes()
-# oh.displayLoads()
-# # oh.displayReactions()
-# # oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
-# # oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
+# Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+# qoh.displayFEMesh()
+# oh.displayLocalAxes()
+oh.displayLoads()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)

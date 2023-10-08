@@ -808,6 +808,16 @@ class TrainLoadModel(object):
         :param loadFactor: factor to apply to the loads.
         '''
         return self.locomotive.getWheelLoads(ref= ref, loadFactor= loadFactor)
+
+    def getTotalLoad(self, trackLength):
+        ''' Return the total load of the train over the given length.
+
+        :param trackLength: length of the track that supports the train.
+        '''
+        locomotiveLoad= self.locomotive.getTotalLoad()
+        uniformLoadedLength= trackLength-self.locomotive.getTotalLength()
+        uniformLoad= self.getDynamicUniformLoad()*uniformLoadedLength
+        return locomotiveLoad+uniformLoad
     
 # Rudimentary implementation of the track axis concept.
 
@@ -828,6 +838,13 @@ class TrackAxis(object):
     def getLength(self):
         ''' Return the length of the axis track segment.'''
         return self.trackAxis.getLength()
+
+    def getTotalLoad(self, trainModel):
+        ''' Return the total load of the given train over this track.
+
+        :param trainModel: trainModel on this track.
+        '''
+        return trainModel.getTotalLoad(trackLength= self.getLength())
 
     def getReferenceAt(self, lmbdArcLength):
         ''' Return a 3D reference system with origin at the point
@@ -1066,6 +1083,24 @@ class TrackAxis(object):
         # uniform load.
         retval.extend(self.defDeckRailUniformLoadsThroughLayers(trainModel= trainModel, relativePosition= relativePosition, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
         return retval
+
+    def defDeckRailBrakingLoadsThroughLayers(self, brakingLoad, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Define uniform loads on the tracks with the argument values:
+
+        :param brakingLoad: total rail load due to braking.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        return self.defDeckBrakingLoadsThroughLayers(brakingLoad= brakingLoad, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
+
 
     def defBackfillUniformLoads(self, trainModel, relativePosition, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1])):
         ''' Define backfill loads due the uniform load on the track.
