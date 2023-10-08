@@ -165,13 +165,13 @@ if(err1<.05 and err2<1e-4):
 else:
     lmsg.error(fname+' ERROR.')
 
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-# oh.displayBlocks()
-# qoh.displayFEMesh()
-# oh.displayLocalAxes()
-oh.displayLoads()
-# oh.displayReactions()
-# oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
-# oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayBlocks()
+# # qoh.displayFEMesh()
+# # oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayReactions()
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+# # oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
