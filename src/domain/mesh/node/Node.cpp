@@ -2143,6 +2143,7 @@ double XC::Node::getAccSensitivity(int dof, int gradNum) const
   }
 // AddingSensitivity:END /////////////////////////////////////////
 
+//! @brief Return the nunber of connected constraints.
 size_t XC::Node::getNumberOfConnectedConstraints(void) const
   {
     size_t retval= 0;
@@ -2153,6 +2154,66 @@ size_t XC::Node::getNumberOfConnectedConstraints(void) const
           retval++;
       }
     return retval;    
+  }
+
+//! @brief Return a set of const pointers the constraints connected to the node.
+std::set<const XC::Constraint *> XC::Node::getConnectedConstraints(void) const
+  {
+    std::set<const Constraint *> retval;
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+      {
+        const Constraint *ptr= dynamic_cast<const Constraint *>(*i);
+        if(ptr)
+          retval.insert(ptr);
+      }
+    return retval;    
+  }
+
+//! @brief Return a set of pointers the constraints connected to the node.
+std::set<XC::Constraint *> XC::Node::getConnectedConstraints(void)
+  {
+    std::set<Constraint *> retval;
+    for(std::set<ContinuaReprComponent *>::iterator i= connected.begin();i!=connected.end();i++)
+      {
+        Constraint *ptr= dynamic_cast<Constraint *>(*i);
+        if(ptr)
+          retval.insert(ptr);
+      }
+    return retval;    
+  }
+
+//! @brief Return a Python list of pointers to the constraints connected to the node.
+boost::python::list XC::Node::getConnectedConstraintsPy(void)
+  {
+    boost::python::list retval;
+    std::set<Constraint *> constraints= getConnectedConstraints();
+    for(std::set<ContinuaReprComponent *>::iterator i= connected.begin();i!=connected.end();i++)
+      {
+        Constraint *ptrConstraint= dynamic_cast<Constraint *>(*i);
+	if(ptrConstraint)
+	  {
+	    boost::python::object pyObj(boost::ref(*ptrConstraint));
+	    retval.append(pyObj);
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list with the tags of the constraints connected to the node.
+boost::python::list XC::Node::getConnectedConstraintTags(void) const
+  {
+    boost::python::list retval;
+    std::set<const Constraint *> constraints= getConnectedConstraints();
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+      {
+        const Constraint *ptrConstraint= dynamic_cast<const Constraint *>(*i);
+	if(ptrConstraint)
+	  {
+	    const int tag= ptrConstraint->getTag();
+	    retval.append(tag);
+	  }
+      }
+    return retval;
   }
 
 //! @brief Return the number of elements that are connected with this node.
@@ -2212,13 +2273,13 @@ boost::python::list XC::Node::getConnectedElementsPy(void)
 
 //! @brief Return a python list containing the tags of the elements that
 //! are connected with this node.
-boost::python::list XC::Node::getConnectedElementTags(void)
+boost::python::list XC::Node::getConnectedElementTags(void) const
   {
     boost::python::list retval;
-    std::set<Element *> elements= getConnectedElements();
-    for(std::set<Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+    std::set<const Element *> elements= getConnectedElements();
+    for(std::set<const Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
       {
-        Element *ptrElem= *i;
+        const Element *ptrElem= *i;
         retval.append(ptrElem->getTag());
       }
     return retval;

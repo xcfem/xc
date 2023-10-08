@@ -1396,6 +1396,7 @@ python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_c
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
 python tests/postprocess/test_export_shell_internal_forces.py
+python tests/postprocess/test_get_connected_constraints.py
 echo "$BLEU" "  limit state checking." "$NORMAL"
 echo "$BLEU" "    SIA 262 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_uls_checking.py

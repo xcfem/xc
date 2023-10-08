@@ -26,6 +26,7 @@ class_<XC::Constraint, bases<XC::ContinuaReprComponent>, boost::noncopyable >("C
   .add_property("getNode",make_function(&XC::Constraint::getNode, return_internal_reference<>()),"gets node.")
   .add_property("getNodeIdx",&XC::Constraint::getNodeIdx,"Returns node idxmfor Vtk graphics.")
   .add_property("getVtkCellType",&XC::Constraint::getVtkCellType,"Returns cell type for Vtk graphics.")
+  .def("affectsNodeAndDOF",&XC::Constraint::affectsNodeAndDOF,"Returns true if the constraint affect the specified DOF of the specified node.")
   ;
 
 class_<XC::SFreedom_Constraint, XC::SFreedom_Constraint *, bases<XC::Constraint>, boost::noncopyable >("SFreedom_Constraint", no_init)

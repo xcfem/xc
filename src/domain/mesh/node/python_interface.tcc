@@ -126,6 +126,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
 
   .def("getNumberOfConnectedConstraints",&XC::Node::getNumberOfConnectedConstraints,"Returns the number of constraints that affect the node.")
+  .def("getConnectedConstraints",&XC::Node::getConnectedConstraintsPy,"Returns the constraints connected to the node.")
+  .def("getConnectedConstraintTags",&XC::Node::getConnectedConstraintTags,"Returns the tags of the constraints connected to the node.")
   .def("getNumberOfConnectedElements",&XC::Node::getNumberOfConnectedElements,"Returns the number of elements connected to the node.")
   .def("getConnectedElements",&XC::Node::getConnectedElementsPy,"Returns the elements connected to the node.")
   .def("getConnectedElementTags",&XC::Node::getConnectedElementTags,"Returns the tags of the elements connected to the node.")

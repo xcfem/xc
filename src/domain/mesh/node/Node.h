@@ -90,6 +90,7 @@ class SetBase;
 class MeshEdge;
 class DOF_Group;
 class DqPtrsElem;
+class Constraint;
 
 //! @ingroup Mesh
 //!
@@ -182,6 +183,10 @@ class Node: public MeshComponent
     const ID &getDOFs(void) const;
 
     size_t getNumberOfConnectedConstraints(void) const;
+    std::set<const Constraint *>getConnectedConstraints(void) const;
+    std::set<Constraint *>getConnectedConstraints(void);
+    boost::python::list getConnectedConstraintsPy(void);    
+    boost::python::list getConnectedConstraintTags(void) const;
 
     void connect(ContinuaReprComponent *el) const;
     void disconnect(ContinuaReprComponent *el) const;
@@ -189,7 +194,7 @@ class Node: public MeshComponent
     ElementConstPtrSet getConnectedElements(void) const;
     ElementPtrSet getConnectedElements(void);
     boost::python::list getConnectedElementsPy(void);    
-    boost::python::list getConnectedElementTags(void);
+    boost::python::list getConnectedElementTags(void) const;
     const MeshEdge *next(const std::deque<MeshEdge> &, const std::set<const MeshEdge *> &) const;
 
     const bool isDead(void) const;
