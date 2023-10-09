@@ -42,7 +42,6 @@ class LocomotiveLoad(ll.LocomotiveLoad):
                    structural element under consideration (m).
         :param r: radius of curvature (m).
         :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
-        :param ignoreVerticalLoad: if true, consider
         '''
         ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
         classifiedWheelLoad= self.getClassifiedWheelLoad()
