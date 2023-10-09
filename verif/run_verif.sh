@@ -765,6 +765,7 @@ python tests/loads/load_distribution/test_surf_unif_load_distributed.py
 python tests/loads/load_distribution/test_wheel_load_distribution_01.py
 python tests/loads/load_distribution/test_notional_lane_load_distribution.py
 echo "$BLEU" "    Load distribution. Railway traffic." "$NORMAL"
+python tests/loads/load_distribution/railway_traffic/test_load_distribution_due_to_cant.py
 python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_01.py
 python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_02.py
 python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_03.py
