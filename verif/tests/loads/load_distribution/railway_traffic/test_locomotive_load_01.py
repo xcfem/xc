@@ -5,7 +5,7 @@
 import math
 import geom
 import xc
-from actions.railway_traffic import load_model_base
+from actions.railway_traffic import locomotive_load
 from model import predefined_spaces
 from materials import typical_materials
 
@@ -70,7 +70,7 @@ dynamicFactor= 1.2
 classificationFactor= 1.0
 #### Wheel spacing is exaggerated to get separate loads for each wheel
 #### (only for demonstration purposes).
-locomotiveLoad= load_model_base.LocomotiveLoad(xSpacing= 3, ySpacing= 3.0, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+locomotiveLoad= locomotive_load.LocomotiveLoad(xSpacing= 3, ySpacing= 3.0, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
 ### Locomotive position and orientation.
 zRail= ballastThickness+sleeperThickness
 railUpVector= geom.Vector3d(0,0,zRail)

@@ -649,33 +649,6 @@ class UniformRailLoad(DynamicFactorLoad):
                 loadedLine.appendLoadToCurrentLoadPattern(elements= originSet.elements, eta= eta, delta= delta)
                 v0= v1
 
-
-
-    def defDeckWheelLoadsThroughLayers(self, ref, spreadingLayers= None, originSet= None, deckThickness= 0.0, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), loadFactor= 1.0):
-        ''' Define the wheel loads due to the locomotives argument placed at
-            the positions argument.
-
-        :param ref: reference system at the center of the locomotive.
-        :param spreadingLayers: list of tuples containing the depth
-                                and the spread-to-depth ratio of
-                                the layers between the wheel contact
-                                area and the middle surface of the
-                                concrete slab.
-        :param originSet: pick the loaded nodes for each wheel load.
-        :param deckThickness: thickness of the bridge deck.
-        :param deckSpreadingRatio: spreading ratio of the load between the deck
-                                   surface and the deck mid-plane (see
-                                   clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
-        :param loadFactor: factor to apply to the loads.
-        '''
-        wheelLoads= self.getWheelLoads(ref= ref, loadFactor= loadFactor)
-        retval= list()
-        if(originSet):  # pick the loaded by each wheel
-            for wheelLoad in wheelLoads:
-                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
-        return retval
-
 class TrainLoadModel(object):
     ''' Model for the loads of a train.
 
