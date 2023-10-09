@@ -15,6 +15,13 @@ import xc
 from misc_utils import log_messages as lmsg
 from actions.railway_traffic import load_model_base as lmb
 
+# Locomotive load.
+#     ____
+#     |DD|____T_
+#     |_ |_____|<
+#     @-@-@-oo\
+#
+
 class LocomotiveLoad(lmb.DynamicFactorLoad):
     ''' Locomotive load.
 
