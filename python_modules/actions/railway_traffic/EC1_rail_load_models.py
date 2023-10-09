@@ -10,10 +10,62 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
+import geom
 from scipy import constants
+from actions.railway_traffic import locomotive_load as ll
 from actions.railway_traffic import load_model_base as lmb
 
-locomotiveLM1= lmb.LocomotiveLoad(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435)
+class LocomotiveLoad(ll.LocomotiveLoad):
+    ''' Locomotive load as defined in EC-1.'''
+    def __init__(self, nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435, dynamicFactor= 1.0, classificationFactor= 1.21):
+        ''' Constructor.
+
+        :param nAxes: defaults to 4 (Eurocode 1, load model 1)
+        :param axleLoad: axle load.
+        :param xSpacing: tandem axle spacing (defaults to 1.6 m, Eurocode 1, load model 1).
+        :param ySpacing: distance between wheels of the same axle (defaults to nternational standard gauge 1435 mm).
+        :param dynamicFactor: dynamic factor.
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
+        '''
+        super().__init__(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+        
+    def getCentrifugalWheelLoads(self, v, Lf, r, trackCrossSection= None, h= 1.8):
+        ''' Compute the characteristic values of the concentrated (Qtk) and 
+            distributed (qtk) centrifugal forces according to equations (6.17)
+            and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+
+        :param v: speed (m/s).
+        :param Lf: influence length of the loaded part of curved track on the 
+                   bridge, which is most unfavourable for the design of the 
+                   structural element under consideration (m).
+        :param r: radius of curvature (m).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        :param ignoreVerticalLoad: if true, consider
+        '''
+        ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
+        classifiedWheelLoad= self.getClassifiedWheelLoad()
+        centrifugalWheelLoad= ff*classifiedWheelLoad
+        if(trackCrossSection):
+            # Distribute the load
+            Q= [2*centrifugalWheelLoad,0,0] # Centrifugal load.
+            railLoads= trackCrossSection.getRailLoads(Q= Q, h= h)
+            leftRailLoad= geom.Vector2d(railLoads[0], railLoads[1])
+            rightRailLoad= geom.Vector2d(railLoads[2], railLoads[3])
+            wheelPositions= self.getWheelPositions()
+            retval= list()
+            for wp in wheelPositions:
+                if(wp.y<0): # right rail
+                    retval.append(rightRailLoad)
+                else:
+                    retval.append(leftRailLoad)
+        else:
+            retval= (self.getNumWheels())*[centrifugalWheelLoad]
+        return retval
+
+
+locomotiveLM1= LocomotiveLoad(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435)
 
 class TrackAxes(lmb.TrackAxes):
     ''' Notional lanes for a road section according to clause 4.2.3 
@@ -66,15 +118,15 @@ def centrifugal_force_reduction_factor(v, Lf):
                bridge, which is most unfavourable for the design of the 
                structural element under consideration (m).
     '''
-    vkmhIAPF= v*3.6
-    if(vkmhIAPF<120):
-        coefFIAPF= 1
-    elif(vkmhIAPF<300):
-        coefFIAPF= 1-(vkmhIAPF-120)/1000*(814/vkmhIAPF+1.75)*(1-math.sqrt(2.88/Lf)) 
+    vkmh= v*3.6
+    if(vkmh<120):
+        coefF= 1
+    elif(vkmh<300):
+        coefF= 1-(vkmh-120)/1000*(814/vkmh+1.75)*(1-math.sqrt(2.88/Lf)) 
     else:
-       coefFIAPF= 0.197+0.803*(math.sqrt(2.88/Lf))
-    coefFIAPF= max(coefFIAPF,0.35)
-    return coefFIAPF
+       coefF= 0.197+0.803*(math.sqrt(2.88/Lf))
+    coefF= max(coefF,0.35)
+    return coefF
 
 def get_centrifugal_forces(v, Lf, r, Qvk, qvk):
     ''' Compute the characteristic values of the concentrated (Qtk) and 

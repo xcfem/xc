@@ -13,8 +13,9 @@ import geom
 from actions.railway_traffic import track_cross_section_geometry as tcs
 
 
-h= 1.8
-s= 1.435+80e-3
+h= 1.8 # height of the train center of gravity with respect to the reference
+       # plane.
+s= 1.435+80e-3 # distance between rail axes.
 
 # No cant, no height, horizontal load.
 [qlh, qlv, qrh, qrv]= tcs.get_rail_loads(Q= [1, 0, 0], h= 0.0, s= s, u= 0.0)

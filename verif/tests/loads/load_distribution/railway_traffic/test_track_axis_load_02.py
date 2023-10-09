@@ -154,8 +154,8 @@ while(nLoad):
 
 err= abs(totalLoad-totalBrakingLoad)/totalBrakingLoad
 
-print(totalLoad/1e3, totalBrakingLoad/1e3, err)
 '''
+print(totalLoad/1e3, totalBrakingLoad/1e3, err)
 '''
 
 import os

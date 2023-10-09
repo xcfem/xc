@@ -257,7 +257,9 @@ python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_02.py
 echo "$BLEU" "    Traffic loads tests. Railway traffic." "$NORMAL"
 python tests/actions/traffic_loads/railway_traffic/test_derailment_SIA.py
 python tests/actions/traffic_loads/railway_traffic/test_ec1_slipstream_effect.py
-python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force.py
+python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_01.py
+python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_02.py
+python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_03.py
 python tests/actions/traffic_loads/railway_traffic/test_ec1_traction_and_braking_force.py
 
 # Load combinations tests.
@@ -773,6 +775,7 @@ python tests/loads/load_distribution/railway_traffic/test_uniform_rail_load_04.p
 python tests/loads/load_distribution/railway_traffic/test_locomotive_load_01.py
 python tests/loads/load_distribution/railway_traffic/test_rail_wheel_load_distribution_01.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_01.py
+python tests/loads/load_distribution/railway_traffic/test_track_axis_load_02.py
 
 echo "$BLEU" "    Strain loads." "$NORMAL"
 python tests/loads/strain_loads/truss_strain_load_01.py
