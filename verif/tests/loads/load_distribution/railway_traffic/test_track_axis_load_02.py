@@ -4,7 +4,7 @@
 import math
 import geom
 import xc
-from actions.railway_traffic import load_model_base
+from actions.railway_traffic import track_axis as ta
 from actions.railway_traffic import EC1_rail_load_models
 from model import predefined_spaces
 from materials import typical_materials
@@ -112,6 +112,7 @@ for l in constrainedLines:
         modelSpace.fixNode000_FFF(n.tag)
     
 # Define load.
+## Define spreading parameters.
 sleeperThickness= 22e-2
 sleeperLength= 2.6
 standardGauge= 1.435
@@ -129,7 +130,7 @@ for p in axisPoints2d:
     axisPoints3d.append(to_3d(p, zDeck+ballastThickness+sleeperThickness))
 axisPolyline3d= geom.Polyline3d(axisPoints3d)
 
-trackAxis= load_model_base.TrackAxis(trackAxis= axisPolyline3d)
+trackAxis= ta.TrackAxis(trackAxis= axisPolyline3d)
 
 ## Define braking load.
 totalBrakingLoad= 6000e3

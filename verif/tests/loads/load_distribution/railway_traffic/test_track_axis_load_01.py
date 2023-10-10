@@ -4,7 +4,8 @@
 import math
 import geom
 import xc
-from actions.railway_traffic import load_model_base
+from actions.railway_traffic import track_axis as ta
+from actions.railway_traffic import train_load_model as tlm
 from actions.railway_traffic import EC1_rail_load_models
 from model import predefined_spaces
 from materials import typical_materials
@@ -112,6 +113,7 @@ for l in constrainedLines:
         modelSpace.fixNode000_FFF(n.tag)
     
 # Define load.
+## Define spreading parameters.
 sleeperThickness= 22e-2
 sleeperLength= 2.6
 standardGauge= 1.435
@@ -129,10 +131,10 @@ for p in axisPoints2d:
     axisPoints3d.append(to_3d(p, zDeck+ballastThickness+sleeperThickness))
 axisPolyline3d= geom.Polyline3d(axisPoints3d)
 
-trackAxis= load_model_base.TrackAxis(trackAxis= axisPolyline3d)
+trackAxis= ta.TrackAxis(trackAxis= axisPolyline3d)
 
 ## Define train model.
-trainLoadModel= load_model_base.TrainLoadModel(locomotive= EC1_rail_load_models.locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
+trainLoadModel= tlm.TrainLoadModel(locomotive= EC1_rail_load_models.locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
 
 ## Define load pattern)
 q1a= modelSpace.newLoadPattern(name= 'Q1a')

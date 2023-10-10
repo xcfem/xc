@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+''' Generic locomotive load model.'''
 
 from __future__ import division
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
-__copyright__= "Copyright 2018,  LCPT AO_O "
+__copyright__= "Copyright 2023,  LCPT AO_O "
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
@@ -14,7 +15,7 @@ import geom
 import xc
 from misc_utils import log_messages as lmsg
 from actions.railway_traffic import wheel_load
-from actions.railway_traffic import load_model_base as lmb
+from actions.railway_traffic import dynamic_factor_load as dfl
 
 # Locomotive load.
 #     ____
@@ -23,7 +24,7 @@ from actions.railway_traffic import load_model_base as lmb
 #     @-@-@-oo\
 #
 
-class LocomotiveLoad(lmb.DynamicFactorLoad):
+class LocomotiveLoad(dfl.DynamicFactorLoad):
     ''' Locomotive load.
 
     :ivar nAxes: number of axes.

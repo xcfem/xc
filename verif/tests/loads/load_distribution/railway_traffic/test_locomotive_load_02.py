@@ -54,6 +54,7 @@ for l in s.getSides: # Iterate through the perimeter.
         modelSpace.fixNode000_FFF(i)
 
 # Define load.
+## Define spreading parameters.
 sleeperThickness= 22e-2
 sleeperLength= 2.6
 standardGauge= 1.435
@@ -65,7 +66,21 @@ ballastSpreadToDepthRatio= 1/4.0 # See Eurocode 1 part 2 figure 6.5.
 
 spreadingLayers= [(sleeperThickness, sleeperSpreadToDepthRatio), (ballastThickness, ballastSpreadToDepthRatio)]
 
-## Locomotive load.
+## Locomotive centrifugal load.
+
+### Centrifugal load parameters.
+#### Define speed, radius and influence length.
+V= 200 # Maximum train speed (km/h)
+v= V/3.6 # Maximum train speed (m/s)
+r= 2200 # radius of curvature.
+Lf=  5.0 # influence length of the loaded part of curved track on the bridge, which is most unfavourable for the design of the structural element under consideration [m].
+#### Define track cross-section parameters.
+h= 2.8 # height of the train center of gravity with respect to the reference
+       # plane.
+s= 3.0 # exaggerated with demonstration purposes.
+u= 0.15 # cant.
+cs= tcs.TrackCrossSection(s= s, u= u)
+
 ### Locomotive load model.
 #### Wheel spacing is exaggerated to get separate loads for each wheel
 #### (only for demonstration purposes).
@@ -77,19 +92,6 @@ dirVector= p1-p0
 midPoint= p0+0.5*(p2-p0)+railUpVector
 normalVector= geom.Vector3d(-dirVector.y, dirVector.x, 0.0) 
 ref= geom.Ref2d3d(midPoint, dirVector, normalVector)
-### Compute centrifugal loads.
-#### Define speed, radius and influence length.
-V= 200 # Maximum train speed (km/h)
-v= V/3.6 # Maximum train speed (m/s)
-r= 2200 # radius of curvature.
-Lf=  5.0 # influence length of the loaded part of curved track on the bridge, which is most unfavourable for the design of the structural element under consideration [m].
-#### Define track cross-section parameters.
-h= 2.8 # height of the train center of gravity with respect to the reference
-       # plane.
-s= 3.0 # exaggerated with demonstration purposes.
-u= 0.15 # cant.
-
-cs= tcs.TrackCrossSection(s= s, u= u) 
 
 locomotiveCentrifugalLoads= locomotiveLoad.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r, trackCrossSection= cs, h= h)
 

@@ -92,6 +92,23 @@ class TrackAxes(lmb.TrackAxes):
         '''
         super().__init__(trackAxesPolylines)
 
+    def getCentrifugalLoadPerMeter(self, trainModel, v, Lf, r):
+        ''' Compute the characteristic values of the concentrated (Qtk) and 
+            distributed (qtk) centrifugal forces according to equations (6.17)
+            and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param v: speed (m/s).
+        :param Lf: influence length of the loaded part of curved track on the 
+                   bridge, which is most unfavourable for the design of the 
+                   structural element under consideration (m).
+        :param r: radius of curvature (m).
+        '''
+        ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
+        classifiedWheelLoad= trainModel.getClassifiedUniformLoad()
+        return ff*classifiedWheelLoad
+
+        
 def get_traction_force(Lab:float):
     ''' Return the traction force according to expression (6.20) of 
         Eurocode 1 part 2 (clause 6.5.3 paragraph 2).
