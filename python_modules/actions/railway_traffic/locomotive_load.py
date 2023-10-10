@@ -100,12 +100,12 @@ class LocomotiveLoad(lmb.DynamicFactorLoad):
         :param static: if true don't apply the dynamic factor.
         :param loadDirectionVector: load direction vector.
         '''
-        positions= self.getWheelPositions()
         if(static):
             wheelLoad= self.getClassifiedWheelLoad()*loadFactor
         else:
             wheelLoad= self.getDynamicWheelLoad()*loadFactor
         # Compute local positions.
+        positions= self.getWheelPositions()
         wheelLoads= list()
         for p in positions:
             wl= wheel_load.WheelLoad(pos= p, ld=wheelLoad, directionVector= loadDirectionVector)
@@ -121,6 +121,44 @@ class LocomotiveLoad(lmb.DynamicFactorLoad):
         else: # return the loads in local coordinates.
             retval= wheelLoads 
         return retval
+
+    def getCentrifugalWheelLoads(self, centrifugalLoads, centrifugalDirection, ref):
+        ''' Define the wheel loads due to the locomotives argument placed at
+            the positions argument.
+
+        .param centrifugalLoads: centrifugal loads for each locomotive wheel.
+        :param centrifugalDirection: direction of the centrifugal force.
+        :param ref: reference system at the center of the locomotive.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                concrete slab.
+        :param originSet: pick the loaded nodes for each wheel load.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        :param loadFactor: factor to apply to the loads.
+        '''
+        positions= self.getWheelPositions()
+        wheelLoads= list()
+        for p, cl in zip(positions, centrifugalLoads):
+            if(ref):
+                pos3d= ref.getGlobalPosition(p)
+                load3d= cl.x*centrifugalDirection+cl.y*ref.getKVector()
+                wheelLoad= load3d.getModulus()
+                directionVector= load3d.normalized()
+                print(wheelLoad, directionVector)
+                wl= wheel_load.WheelLoad(pos= pos3d, ld= wheelLoad, directionVector= directionVector)
+                wl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector())
+                wheelLoads.append(wl)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; need a locomotive reference system.')
+                lmsg.error()
+        return wheelLoads
     
     def defDeckWheelLoadsThroughLayers(self, ref, spreadingLayers= None, originSet= None, deckThickness= 0.0, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1]), loadFactor= 1.0):
         ''' Define the wheel loads due to this locomotive placed at the
@@ -147,11 +185,12 @@ class LocomotiveLoad(lmb.DynamicFactorLoad):
                 retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
     
-    def defDeckCentrifugalWheelLoadsThroughLayers(self, centrifugalLoads, ref, spreadingLayers= None, originSet= None, deckThickness= 0.0, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckCentrifugalWheelLoadsThroughLayers(self, centrifugalLoads, centrifugalDirection, ref, spreadingLayers= None, originSet= None, deckThickness= 0.0, deckSpreadingRatio= 1/1):
         ''' Define the wheel loads due to the locomotives argument placed at
             the positions argument.
 
         .param centrifugalLoads: centrifugal loads for each locomotive wheel.
+        :param centrifugalDirection: direction of the centrifugal force.
         :param ref: reference system at the center of the locomotive.
         :param spreadingLayers: list of tuples containing the depth
                                 and the spread-to-depth ratio of
@@ -163,15 +202,32 @@ class LocomotiveLoad(lmb.DynamicFactorLoad):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
         :param loadFactor: factor to apply to the loads.
         '''
         positions= self.getWheelPositions()
-        for pos, cl in zip(positions, centrifugalLoads):
-            print(pos, cl)
-        # wheelLoads= self.getCentrifugalWheelLoads(ref= ref, centrifugalLoadsloadFactor= loadFactor)
-        # retval= list()
-        # if(originSet):  # pick the loaded by each wheel
-        #     for wheelLoad in wheelLoads:
-        #         retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
-        # return retval
+        wheelLoads= list()
+        for p, cl in zip(positions, centrifugalLoads):
+            if(ref):
+                pos3d= ref.getGlobalPosition(p)
+                load3d= cl.x*centrifugalDirection+cl.y*ref.getKVector()
+                wheelLoad= load3d.getModulus()
+                directionVector= load3d.normalized()
+                wl= wheel_load.WheelLoad(pos= pos3d, ld= wheelLoad, directionVector= directionVector)
+                wl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector())
+                wheelLoads.append(wl)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; need a locomotive reference system.')
+                lmsg.error()
+
+        retval= list()
+        if(originSet):  # pick the loaded by each wheel
+            for wheelLoad in wheelLoads:
+                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; need a locomotive reference system.')
+            lmsg.error()
+        return retval

@@ -30,7 +30,22 @@ class LocomotiveLoad(ll.LocomotiveLoad):
                                      than normal rail traffic).
         '''
         super().__init__(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
-        
+
+    def getCentrifugalLoadPerWheel(self, v, Lf, r):
+        ''' Compute the characteristic values of the concentrated (Qtk) and 
+            distributed (qtk) centrifugal forces according to equations (6.17)
+            and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+
+        :param v: speed (m/s).
+        :param Lf: influence length of the loaded part of curved track on the 
+                   bridge, which is most unfavourable for the design of the 
+                   structural element under consideration (m).
+        :param r: radius of curvature (m).
+        '''
+        ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
+        classifiedWheelLoad= self.getClassifiedWheelLoad()
+        return ff*classifiedWheelLoad
+                                   
     def getCentrifugalWheelLoads(self, v, Lf, r, trackCrossSection= None, h= 1.8):
         ''' Compute the characteristic values of the concentrated (Qtk) and 
             distributed (qtk) centrifugal forces according to equations (6.17)
@@ -42,10 +57,9 @@ class LocomotiveLoad(ll.LocomotiveLoad):
                    structural element under consideration (m).
         :param r: radius of curvature (m).
         :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        :param h: height of the locomotive center of gravity.
         '''
-        ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
-        classifiedWheelLoad= self.getClassifiedWheelLoad()
-        centrifugalWheelLoad= ff*classifiedWheelLoad
+        centrifugalWheelLoad= self.getCentrifugalLoadPerWheel(v= v, Lf= Lf, r= r)
         if(trackCrossSection):
             # Distribute the load
             Q= [2*centrifugalWheelLoad,0,0] # Centrifugal load.
