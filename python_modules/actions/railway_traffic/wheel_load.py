@@ -208,13 +208,15 @@ class WheelLoadBase(object):
 class WheelLoad(WheelLoadBase):
     ''' Loaded railway wheel.
 
-    :ivar load: load
+    :ivar load: absolute value of the load.
+    :ivar directionVector: unitary vector in the direction of the load.
     '''
-    def __init__(self, pos, ld, localCooSystem= None, nodes= None):
+    def __init__(self, pos, ld, directionVector= xc.Vector([0, 0, -1]), localCooSystem= None, nodes= None):
         ''' Constructor.
 
         :param pos: position of the wheel
         :param ld: load
+        :param directionVector: unitary vector in the direction of the load.
         :param localCooSystem: local coordinate system whose I vector
                                is aligned with the track axis and
                                its XY plane contains the road surface
@@ -223,32 +225,29 @@ class WheelLoad(WheelLoadBase):
         '''
         super().__init__(pos= pos, localCooSystem= localCooSystem, nodes= nodes)
         self.load= ld
+        self.directionVector= directionVector
 
     def getDict(self):
         ''' Return a dictionary with the object values.'''
         retval= super().getDict()
-        retval.update({'load':self.load})
+        retval.update({'load':self.load, 'directionVector':[directionVector[0], directionVector[1], directionVector[2]]})
         return retval
 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
         super().setFromDict(dct)
         self.load= dct['ld']
+        self.directionVector= xc.Vector(dct['directionVector'])
 
-    def getLoadVector(self, gravityDir= xc.Vector([0, 0, -1])):
-        ''' Return the load vector at the contact surface.
-
-
-        :param gravityDir: direction of the gravity field (unit vector).
-        '''
+    def getLoadVector(self):
+        ''' Return the load vector at the contact surface. '''
         # Compute load vector.
-        return self.load*gravityDir
+        return self.load*self.directionVector
 
-    def applyNodalLoads(self, loadedNodes, gravityDir= xc.Vector([0, 0, -1])):
+    def applyNodalLoads(self, loadedNodes):
         ''' Create the nodal loads corresponding to the contact pressure.
 
         :param loadedNodes: nodes that will be loaded.
-        :param gravityDir: direction of the gravity field (unit vector).
         '''
         retval= list()
         numLoadedNodes= 0
@@ -256,7 +255,7 @@ class WheelLoad(WheelLoadBase):
             numLoadedNodes= len(loadedNodes)
         if(numLoadedNodes>0):
             # Compute load vector.
-            vLoad= self.getLoadVector(gravityDir= gravityDir)
+            vLoad= self.getLoadVector()
             loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
             if(numLoadedNodes==1):
                 retval.append(loadedNodes[0].newLoad(loadVector))
@@ -266,22 +265,20 @@ class WheelLoad(WheelLoadBase):
                 retval.extend(slidingVectorLoad.appendLoadToCurrentLoadPattern())
         return retval
 
-    def getBackfillConcentratedLoad(self, gravityDir= xc.Vector([0, 0, -1])):
+    def getBackfillConcentratedLoad(self):
         ''' Return the concentrated loads on the backfill corresponding to
             the wheel loads.
-
-        :param gravityDir: direction of the gravity field (unit vector).
         '''
-        if(abs(gravityDir[0])>1e-3) or (abs(gravityDir[1])>1e-3):
+        if(abs(self.directionVector[0])>1e-3) or (abs(self.directionVector[1])>1e-3):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; gravity directions different from (0,0,-1) not supported yet.')
-        vLoad= self.getLoadVector(gravityDir= gravityDir)
+        vLoad= self.getLoadVector()
         boussinesqLoad= boussinesq.ConcentratedLoad(p= self.position, Q=vLoad[2])
         horizontalLoad= hs.HorizontalConcentratedLoadOnBackfill3D(pos= self.position, H= geom.Vector3d(vLoad[0],vLoad[1],0))
         return (horizontalLoad, boussinesqLoad)
     
-    def defDeckConcentratedLoadsThroughLayers(self, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckConcentratedLoadsThroughLayers(self, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param spreadingLayers: list of tuples containing the depth
@@ -294,11 +291,10 @@ class WheelLoad(WheelLoadBase):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
         '''
         # Pick loaded nodes.
         loadedNodes= self.pickDeckNodesThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet)
         # Apply nodal loads.
-        retval= self.applyNodalLoads(loadedNodes= loadedNodes, gravityDir= gravityDir)
+        retval= self.applyNodalLoads(loadedNodes= loadedNodes)
         return retval
 

@@ -91,13 +91,14 @@ class LocomotiveLoad(lmb.DynamicFactorLoad):
         ''' Return the load on each wheel affected by the dynamic factor.'''
         return self.getClassifiedWheelLoad()*self.dynamicFactor
 
-    def getWheelLoads(self, ref= None, loadFactor= 1.0, static= False):
+    def getWheelLoads(self, ref= None, loadFactor= 1.0, static= False, loadDirectionVector= xc.Vector([0, 0, -1])):
         ''' Return the loads of the wheels of the tandem along with its
             positions.
 
         :param ref: reference system at the center of the locomotive.
         :param loadFactor: factor to apply to the loads.
         :param static: if true don't apply the dynamic factor.
+        :param loadDirectionVector: load direction vector.
         '''
         positions= self.getWheelPositions()
         if(static):
@@ -107,7 +108,7 @@ class LocomotiveLoad(lmb.DynamicFactorLoad):
         # Compute local positions.
         wheelLoads= list()
         for p in positions:
-            wl= wheel_load.WheelLoad(pos= p, ld=wheelLoad)
+            wl= wheel_load.WheelLoad(pos= p, ld=wheelLoad, directionVector= loadDirectionVector)
             wheelLoads.append(wl)
         if(ref): # return the loads in global coordinates.
             retval= list()
@@ -139,11 +140,11 @@ class LocomotiveLoad(lmb.DynamicFactorLoad):
         :param gravityDir: direction of the gravity field (unit vector).
         :param loadFactor: factor to apply to the loads.
         '''
-        wheelLoads= self.getWheelLoads(ref= ref, loadFactor= loadFactor)
+        wheelLoads= self.getWheelLoads(ref= ref, loadFactor= loadFactor, loadDirectionVector= gravityDir)
         retval= list()
         if(originSet):  # pick the loaded by each wheel
             for wheelLoad in wheelLoads:
-                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
+                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
     
     def defDeckCentrifugalWheelLoadsThroughLayers(self, centrifugalLoads, ref, spreadingLayers= None, originSet= None, deckThickness= 0.0, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):

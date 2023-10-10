@@ -429,14 +429,14 @@ class TrainLoadModel(object):
         ''' Return the uniform load affected by the dynamic factor.'''
         return self.getClassificationFactor()*self.getDynamicFactor()*self.uniformLoad
     
-    def getWheelLoads(self, ref, loadFactor= 1.0):
-        ''' Return the loads of the wheels of the tandem along with its
+    def getWheelLoads(self, ref, loadFactor= 1.0, gravityDir= xc.Vector([0,0,-1])):
+        ''' Return the loads of the wheels of the locomotive along with its
             positions.
 
         :param ref: reference system at the center of the locomotive.
         :param loadFactor: factor to apply to the loads.
         '''
-        return self.locomotive.getWheelLoads(ref= ref, loadFactor= loadFactor)
+        return self.locomotive.getWheelLoads(ref= ref, loadFactor= loadFactor, loadDirectionVector= gravityDir)
 
     def getTotalLoad(self, trackLength):
         ''' Return the total load of the train over the given length.
@@ -504,7 +504,7 @@ class TrackAxis(object):
         '''
         return self.trackAxis.getIVectorAtLength(relativePosition*self.trackAxis.getLength())
 
-    def getWheelLoads(self, trainModel:TrainLoadModel, relativePosition, loadFactor= 1.0):
+    def getWheelLoads(self, trainModel:TrainLoadModel, relativePosition, loadFactor= 1.0, gravityDir= xc.Vector([0,0,-1])):
         ''' Return the wheel loads of load model argument in the position
             specified by the relativePosition parameter.
 
@@ -517,7 +517,7 @@ class TrackAxis(object):
         posSides= list()
         sideSum= 0
         ref= self.getReferenceAt(lmbdArcLength= relativePosition)
-        return trainModel.getWheelLoads(ref= ref, loadFactor= loadFactor)
+        return trainModel.getWheelLoads(ref= ref, loadFactor= loadFactor, gravityDir= gravityDir)
 
     def getRailAxes(self, trackGauge= 1.435):
         ''' Return a 3D polyline representing the rail axis.
@@ -640,11 +640,11 @@ class TrackAxis(object):
                                    clause 4.3.6 on Eurocode 1-2:2003).
         :param gravityDir: direction of the gravity field (unit vector).
         '''
-        wheelLoads= self.getWheelLoads(trainModel= trainModel, relativePosition= relativePosition)
+        wheelLoads= self.getWheelLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir)
         retval= list()
         if(originSet):  # pick the loaded by each wheel
             for wheelLoad in wheelLoads:
-                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
+                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
     
     def defDeckRailUniformLoadsThroughLayers(self, trainModel:TrainLoadModel, relativePosition, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
@@ -815,7 +815,7 @@ class TrackAxes(object):
         ''' Return the number of tracks.'''
         return len(self.trackAxes)
 
-    def getWheelLoads(self, trainModels, relativePositions, wallMidplane):
+    def getWheelLoads(self, trainModels, relativePositions, wallMidplane, gravityDir= xc.Vector([0,0,-1])):
         ''' Return a the wheel loads due to the locomotives of the trains
             in the argument placed at the positions argument.
 
@@ -836,7 +836,7 @@ class TrackAxes(object):
         for ta,rpos,td in zip(self.trackAxes, relativePositions, locomotives):
             locomotiveLoads= list()
             if(td is not None):
-                locomotiveLoads= ta.getWheelLoads(loadModel= td, relativePosition= rpos, wallMidplane= wallMidplane)
+                locomotiveLoads= ta.getWheelLoads(loadModel= td, relativePosition= rpos, wallMidplane= wallMidplane, gravityDir= gravityDir)
             retval.extend(locomotiveLoads)
         return retval
 
@@ -862,11 +862,11 @@ class TrackAxes(object):
                                    clause 4.3.6 on Eurocode 1-2:2003).
         :param gravityDir: direction of the gravity field (unit vector).
         '''
-        wheelLoads= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= None)
+        wheelLoads= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= None, gravityDir= gravityDir)
         retval= list()
         if(originSet):  # pick the loaded by each wheel
             for wheelLoad in wheelLoads:
-                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
+                retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
 
     def getBackfillConcentratedLoads(self, trainModels, relativePositions, wallMidplane, gravityDir= xc.Vector([0,0,-1])):
@@ -883,10 +883,10 @@ class TrackAxes(object):
                              at one side of the wall).
         :param gravityDir: direction of the gravity field (unit vector).
         '''
-        wheelLoads= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= wallMidplane)
+        wheelLoads= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= wallMidplane, gravityDir= gravityDir)
         retval= list()
         for wheelLoad in wheelLoads:
-            retval.append(wheelLoad.getBackfillConcentratedLoad(gravityDir= gravityDir))
+            retval.append(wheelLoad.getBackfillConcentratedLoad())
         return retval
 
     def defDeckRailUniformLoadsThroughEmbankment(self, trainModels, relativePositions, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
@@ -961,7 +961,7 @@ class TrackAxes(object):
         # uniform load.
         self.defDeckRailUniformLoadsThroughEmbankment(trainModels= trainModels, relativePositions= relativePositions, embankment= embankment, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir)
 
-    def getDeckWheelLoadsThroughEmbankment(self, trainModels, relativePositions, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None):
+    def getDeckWheelLoadsThroughEmbankment(self, trainModels, relativePositions, embankment, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1])):
         ''' Return a dictionary containing the wheel loads due to the locomotives
             argument in the positions argument.
 
@@ -978,8 +978,9 @@ class TrackAxes(object):
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
         :param originSet: set containing the nodes to pick from.
+        :param gravityDir: direction of the gravity field (unit vector).
         '''
-        retval= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= None)
+        retval= self.getWheelLoads(trainModels= trainModels, relativePositions= relativePositions, wallMidplane= None, gravityDir= gravityDir)
         if(originSet):  # pick the loaded by each wheel
             for load in retval:
                 load.pickDeckNodesThroughEmbankment(originSet= originSet, embankment= embankment, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
