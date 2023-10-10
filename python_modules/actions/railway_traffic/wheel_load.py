@@ -17,18 +17,16 @@ from misc_utils import log_messages as lmsg
 from geotechnics import horizontal_surcharge as hs
 from geotechnics import boussinesq
 
-class WheelLoad(object):
-    ''' Load of a wheel.
+class WheelLoadBase(object):
+    ''' Base class for loaded railway wheels.
 
     :ivar position: position of the wheel
-    :ivar load: load
     :ivar nodes: nodes under the wheel.
     '''
-    def __init__(self, pos, ld, localCooSystem= None, nodes= None):
+    def __init__(self, pos, localCooSystem= None, nodes= None):
         ''' Constructor.
 
         :param pos: position of the wheel
-        :param ld: load
         :param localCooSystem: local coordinate system whose I vector
                                is aligned with the track axis and
                                its XY plane contains the road surface
@@ -36,7 +34,6 @@ class WheelLoad(object):
         :param nodes: nodes under the wheel.
         '''
         self.position= pos
-        self.load= ld
         self.localCooSystem= localCooSystem
 
     def getLocalReferenceSystem(self):
@@ -90,12 +87,11 @@ class WheelLoad(object):
 
     def getDict(self):
         ''' Return a dictionary with the object values.'''
-        return {'pos':self.position,'load':self.load}
+        return {'pos':self.position}
 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
         self.position= dct['pos']
-        self.load= dct['ld']
 
     def __str__(self):
         return str(self.getDict())
@@ -208,6 +204,37 @@ class WheelLoad(object):
             lmsg.error(className+'.'+methodName+'; the set: \''+originSet.name+'\' must have at least 3 nodes, it has: '+str(nNodes))
         return retval
 
+
+class WheelLoad(WheelLoadBase):
+    ''' Loaded railway wheel.
+
+    :ivar load: load
+    '''
+    def __init__(self, pos, ld, localCooSystem= None, nodes= None):
+        ''' Constructor.
+
+        :param pos: position of the wheel
+        :param ld: load
+        :param localCooSystem: local coordinate system whose I vector
+                               is aligned with the track axis and
+                               its XY plane contains the road surface
+                               at the wheel position.
+        :param nodes: nodes under the wheel.
+        '''
+        super().__init__(pos= pos, localCooSystem= localCooSystem, nodes= nodes)
+        self.load= ld
+
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        retval= super().getDict()
+        retval.update({'load':self.load})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        super().setFromDict(dct)
+        self.load= dct['ld']
+
     def getLoadVector(self, gravityDir= xc.Vector([0, 0, -1])):
         ''' Return the load vector at the contact surface.
 
@@ -274,3 +301,4 @@ class WheelLoad(object):
         # Apply nodal loads.
         retval= self.applyNodalLoads(loadedNodes= loadedNodes, gravityDir= gravityDir)
         return retval
+
