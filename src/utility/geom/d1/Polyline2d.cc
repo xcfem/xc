@@ -296,11 +296,13 @@ Polygon2d Polyline2d::getBufferPolygon(const GEOM_FT &d, const size_t &numVertic
     for(const_reverse_iterator i= s2.rbegin(); i!=s2.rend(); i++)
         s1.push_back(*i);
     Polygon2d retval(s1);
-    // Buffers around the endpoints.
-    Polygon2d b1= this->getFromPoint().getBufferPolygon(d, numVertices);
-    retval.une(b1);
-    Polygon2d b2= this->getToPoint().getBufferPolygon(d, numVertices);
-    retval.une(b2);
+    if(numVertices>1) // create buffers around the endpoints.
+      {
+	Polygon2d b1= this->getFromPoint().getBufferPolygon(d, numVertices);
+	retval.une(b1);
+	Polygon2d b2= this->getToPoint().getBufferPolygon(d, numVertices);
+	retval.une(b2);
+      }
     return retval;
   }
 
