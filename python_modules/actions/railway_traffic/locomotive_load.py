@@ -203,10 +203,14 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param loadFactor: factor to apply to the loads.
         '''
         positions= self.getWheelPositions()
         wheelLoads= list()
+        if(ref):
+            refKVector= ref.getKVector()
+            if(refKVector[2]<0): # Swap interior and exterior wheels.
+                positions.reverse()
+       
         for p, cl in zip(positions, centrifugalLoads):
             if(ref):
                 pos3d= ref.getGlobalPosition(p)
