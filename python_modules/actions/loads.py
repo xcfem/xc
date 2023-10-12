@@ -408,7 +408,7 @@ class StrainLoadOnShells(object):
     :ivar DOFstrain: degree of freedom to which apply the strain 
                      0: strain along local x
                      1: strain along local y
-                     3: strain along local z
+                     2: strain along local z
     :ivar strain: strain (e.g.: alpha x deltaT for thermal expansion)
 
     '''

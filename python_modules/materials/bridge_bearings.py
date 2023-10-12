@@ -285,8 +285,8 @@ class ElastomericBearing(Bearing):
 # See the book «Aparatos de apoyo en puentes» from AIPCR page 46
 
 # Table 59.8.2 of clase 59.8.2 of EAE (page 256)
-xT= [5e6,10e6,20e6,30e6,45e6,1000e6]
-yT= [0.08,0.06,0.04,0.03,0.025,0.024]
+xT= [0,5e6,10e6,20e6,30e6,45e6,1000e6]
+yT= [0.08,0.08,0.06,0.04,0.03,0.025,0.024]
 
 
 class PTFEPotBearingMat(Bearing):
@@ -300,37 +300,40 @@ class PTFEPotBearingMat(Bearing):
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
-    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e4):
+    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e5,deltaFrict=20e-3,Fperp=None):
         '''Class constructor.
 
         :param d: pot diameter.
         :param unidirX: unidirectional POT in local-X direction (uY constrained) (defaults to False)
         :param unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
-        :param factStiff: factor to increase stiffness in constrained locad directions (defaults to 1e4)
+        :param factStiff: factor to increase stiffness in constrained locad directions (defaults to 1e5)
+        :param deltaFrict: Displacement when the friction force is reached (defaults to 20 mm).
+        :parma Fperp: compressive force perperdicular to the pot surface. If Fperp is not given, the 
+                      compressive stress is taken as 35Mpa
         '''
         super(PTFEPotBearingMat,self).__init__()
         self.d= d
         self.unidirX=unidirX
         self.unidirY=unidirY
         self.factStiff=factStiff
+        self.deltaFrict=deltaFrict
+        self.Fperp=Fperp
          
     def getHorizontalStiffness(self):
         '''Returns the fictitious stiffness with respect to the horizontal displacement of a PTFE slide bearing.
-
-        Stiffness is calculated so that when the displacement reach 20 mm
-        the spring reaction equals the force of friction.
-
-        sg_media= 35 MPa mean compressive stress.
-        mov= 20e-3 Displacement when the friction force is reached.
-
         '''
-        return self.teflonMuTable(35e6)*math.pi*(self.d/2.0)**2*35e6/20e-3
+        Apot=math.pi*(self.d/2.0)**2
+        if self.Fperp is None: self.Fperp=35e6*Apot
+        sigma=self.Fperp/Apot
+        mu=self.teflonMuTable(sigma)
+        K=mu*self.Fperp/self.deltaFrict
+        return K
 
     def defineMaterials(self, preprocessor):
         '''Define the materials to modelize the pot (Teflon).
 
             :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
-        '''
+       '''
         self.materialHandler= preprocessor.getMaterialHandler
         # Material names.
         nameRoot= 'pot'+str(self.id)
