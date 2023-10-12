@@ -13,6 +13,8 @@ import math
 import geom
 from scipy import constants
 from actions.railway_traffic import locomotive_load as ll
+from actions.railway_traffic import train_load_model as tlm
+from actions.railway_traffic import track_axis as ta
 from actions.railway_traffic import load_model_base as lmb
 
 class LocomotiveLoad(ll.LocomotiveLoad):
@@ -80,35 +82,109 @@ class LocomotiveLoad(ll.LocomotiveLoad):
 
 locomotiveLM1= LocomotiveLoad(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435)
 
-class TrackAxes(lmb.TrackAxes):
-    ''' Notional lanes for a road section according to clause 4.2.3 
-    of EC1-2:2003.
-
-    '''
-    def __init__(self, trackAxesPolylines):
-        ''' Constructor.
-
-        :param railAxesPolylines: 3D polylines defining the axis of track.
-        '''
-        super().__init__(trackAxesPolylines)
-
-    def getCentrifugalLoadPerMeter(self, trainModel, v, Lf, r):
+class TrainLoadModel(tlm.TrainLoadModel):
+    ''' Model for the loads of a according to EC-1.'''
+    
+    def getCentrifugalWheelLoads(self, v, Lf, r, trackCrossSection):
         ''' Compute the characteristic values of the concentrated (Qtk) and 
             distributed (qtk) centrifugal forces according to equations (6.17)
             and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
 
-        :param trainModel: load model of the train (see TrainLoadModel class).
         :param v: speed (m/s).
         :param Lf: influence length of the loaded part of curved track on the 
                    bridge, which is most unfavourable for the design of the 
                    structural element under consideration (m).
         :param r: radius of curvature (m).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        '''
+        return self.locomotive.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection, h= self.h)
+
+    def getCentrifugalLoadPerMeter(self, v, Lf, r, trackCrossSection):
+        ''' Compute the characteristic values of the concentrated (Qtk) and 
+            distributed (qtk) centrifugal forces according to equations (6.17)
+            and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+
+        :param v: speed (m/s).
+        :param Lf: influence length of the loaded part of curved track on the 
+                   bridge, which is most unfavourable for the design of the 
+                   structural element under consideration (m).
+        :param r: radius of curvature (m).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
         '''
         ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
-        classifiedWheelLoad= trainModel.getClassifiedUniformLoad()
-        return ff*classifiedWheelLoad
-
+        classifiedUniformLoad= self.getClassifiedUniformLoad()
+        q= ff*classifiedUniformLoad
+        if(trackCrossSection):
+            # Distribute the load
+            Q= [q,0,0] # Centrifugal load.
+            railLoads= trackCrossSection.getRailLoads(Q= Q, h= self.h)
+            leftRailLoad= geom.Vector2d(railLoads[0], railLoads[1])
+            rightRailLoad= geom.Vector2d(railLoads[2], railLoads[3])
+            retval= (leftRailLoad, rightRailLoad)
+        else:
+            retval= (q/2, q/2)
+        return retval
         
+
+class TrackAxis(ta.TrackAxis):
+    ''' Track axis according to EC-1.'''
+    
+    def getRailCentrifugalLoads(self, leftRailCentrifugalLoad, rightRailCentrifugalLoad, trainModel, relativePosition):
+        ''' Return the uniform loads on the track rails due to the given
+            centrifugal loads.
+
+        :param leftCentrifugalLoad: centrifugal load on the left rail.
+        :param rightCentrifugalLoad: centrifugal load on the right rail.
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: relative position of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        '''
+        dynamicFactor= 1.0 # no dynamic factor for centrifugal loads in EC-1.
+        return super().getRailCentrifugalLoads(leftRailCentrifugalLoad, rightRailCentrifugalLoad, trainModel, relativePosition, overrideDynamicFactor= dynamicFactor)
+    
+    def defDeckCentrifugalLoadThroughLayers(self, trainModel, relativePosition, v, Lf, r, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Define uniform loads on the tracks with the argument values:
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: relative positions of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param v: speed (m/s).
+        :param Lf: influence length of the loaded part of curved track on the 
+                   bridge, which is most unfavourable for the design of the 
+                   structural element under consideration (m).
+        :param r: radius of curvature (m).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        # Locomotive centrifugal load.
+        trackCrossSection= self.getTrackCrossSection()
+        locomotiveCentrifugalLoads= trainModel.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection)
+        ref= self.getReferenceAt(lmbdArcLength= relativePosition)
+        retval= trainModel.locomotive.defDeckCentrifugalWheelLoadsThroughLayers(centrifugalLoads= locomotiveCentrifugalLoads, centrifugalDirection= -ref.getJVector(), ref= ref, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
+        # Uniform centrifugal load on the rails.
+        railCentrifugalLoadsPerMeter= trainModel.getCentrifugalLoadPerMeter(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection)
+        # Create the centrifugal rail loads.
+        railCentrifugalLoads= self.getRailCentrifugalLoads(leftRailCentrifugalLoad= railCentrifugalLoadsPerMeter[0], rightRailCentrifugalLoad= railCentrifugalLoadsPerMeter[1], trainModel= trainModel, relativePosition= relativePosition)
+        # Apply loads to the originSet nodes.
+        deckMidplane= originSet.nodes.getRegressionPlane(0.0)
+        for rcl in railCentrifugalLoads:
+            retval.extend(rcl.defDeckRailLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
+        return retval
+    
+    
 def get_traction_force(Lab:float):
     ''' Return the traction force according to expression (6.20) of 
         Eurocode 1 part 2 (clause 6.5.3 paragraph 2).

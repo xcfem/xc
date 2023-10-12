@@ -22,7 +22,7 @@ class TrainLoadModel(object):
     :ivar locomotive: locomotive model.
     :ivar uniformLoad: uniform load on the track.
     '''
-    def __init__(self, locomotive, uniformLoad, dynamicFactor, classificationFactor= 1.21):
+    def __init__(self, locomotive, uniformLoad, dynamicFactor, classificationFactor= 1.21, h= 1.8):
         ''' Constructor:
 
         :param locomotive: locomotive model.
@@ -32,12 +32,14 @@ class TrainLoadModel(object):
         :param classificationFactor: classification factor (on lines carrying
                                      rail traffic which is heavier or lighter
                                      than normal rail traffic).
+        :param h: height of the center of gravity.
         '''
         self.locomotive= locomotive
         # The dynamic factor is stored in the locomotive.
         self.locomotive.setDynamicFactor(dynamicFactor)
         self.locomotive.setClassificationFactor(classificationFactor)
         self.uniformLoad= uniformLoad
+        self.h= h
 
     def getDynamicFactor(self):
         ''' Return the dynamic factor.'''
@@ -59,14 +61,14 @@ class TrainLoadModel(object):
         ''' Return the uniform load affected by the dynamic factor.'''
         return self.getClassificationFactor()*self.getDynamicFactor()*self.uniformLoad
     
-    def getWheelLoads(self, ref, loadFactor= 1.0, gravityDir= xc.Vector([0,0,-1])):
+    def getWheelLoads(self, ref, loadFactor= 1.0, directionVector= xc.Vector([0,0,-1])):
         ''' Return the loads of the wheels of the locomotive along with its
             positions.
 
         :param ref: reference system at the center of the locomotive.
         :param loadFactor: factor to apply to the loads.
         '''
-        return self.locomotive.getWheelLoads(ref= ref, loadFactor= loadFactor, loadDirectionVector= gravityDir)
+        return self.locomotive.getWheelLoads(ref= ref, loadFactor= loadFactor, loadDirectionVector= directionVector)
 
     def getTotalLoad(self, trackLength):
         ''' Return the total load of the train over the given length.
@@ -77,3 +79,4 @@ class TrainLoadModel(object):
         uniformLoadedLength= trackLength-self.locomotive.getTotalLength()
         uniformLoad= self.getDynamicUniformLoad()*uniformLoadedLength
         return locomotiveLoad+uniformLoad
+    

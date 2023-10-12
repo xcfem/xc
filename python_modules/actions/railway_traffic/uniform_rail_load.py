@@ -27,25 +27,22 @@ from geotechnics import boussinesq
 #     |_ |_____|<
 #     @-@-@-oo\
 #
-
-class UniformRailLoad(dfl.DynamicFactorLoad):
-    ''' Uniform load along a rail.
+class RailLoadBase(dfl.DynamicFactorLoad):
+    ''' Base class for loads along a rail.
 
     :ivar railAxis: 3D polyline defining the axis of the rail.
-    :ivar load: value of the uniform load.
     '''
-    def __init__(self, railAxis, load, dynamicFactor= 1.0, classificationFactor= 1.21):
+    def __init__(self, railAxis, dynamicFactor= 1.0, classificationFactor= 1.21):
         ''' Constructor.
 
         :param railAxis: 3D polyline defining the axis of the rail.
-        :param load: value of the uniform load.
+        :param directionVector: unitary vector in the direction of the load.
         :param classificationFactor: classification factor (on lines carrying
                                      rail traffic which is heavier or lighter
                                      than normal rail traffic).
         '''
         super().__init__(dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
         self.railAxis= railAxis
-        self.load= load
 
     def getMidpoint(self):
         ''' Return the midpoint of the rail axis.'''
@@ -187,18 +184,6 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
         # Call the regular method.
         return self.getLoadedContourThroughLayers(spreadingLayers= spreadingLayers, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRation)
 
-    def getNodalLoadVector(self, numNodes, gravityDir= xc.Vector([0,0,-1])):
-        ''' Return the load vector at the contact surface.
-
-        :param numNodes: number of loaded nodes.
-        :param gravityDir: direction of the gravity field (unit vector).
-        '''
-        # Compute load vector.
-        totalLoad= self.getDynamicLoad()*self.railAxis.getLength()
-        nodalLoad= totalLoad/numNodes
-        retval= nodalLoad*gravityDir
-        return retval
-
     def pickLoadedNodes(self, loadedContour, originSet, deckMidplane):
         ''' Define uniform loads on the tracks with the argument values:
 
@@ -215,22 +200,6 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
             nodePos2d= ref.getLocalPosition(posProj)
             if(loadedContour.In(nodePos2d, tol)):  # node in loaded contour.
                 retval.append(n)
-        return retval
-
-    def applyNodalLoads(self, loadedNodes, gravityDir):
-        ''' Apply the load in the given node list.
-
-        :param loadedNodes: nodes that will be loaded.
-        :param gravityDir: direction of the gravity field (unit vector).
-        '''
-        # Compute load vector
-        numLoadedNodes= len(loadedNodes)
-        vLoad= self.getNodalLoadVector(numLoadedNodes, gravityDir= gravityDir)
-        loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
-        # Apply nodal loads.
-        retval= list()
-        for n in loadedNodes:
-            retval.append(n.newLoad(loadVector))
         return retval
 
     def computeNodalBrakingLoads(self, loadedNodes, brakingLoad):
@@ -251,7 +220,7 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
             retval.append(loadVector)
         return retval
         
-    def defDeckRailUniformLoadsThroughLayers(self, spreadingLayers, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckRailUniformLoadsThroughLayers(self, spreadingLayers, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param spreadingLayers: list of tuples containing the depth
@@ -265,16 +234,15 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
         '''
         loadedContour= self.getDeckLoadedContourThroughLayers(spreadingLayers= spreadingLayers, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         # Pick loaded nodes.
         loadedNodes= self.pickLoadedNodes(loadedContour= loadedContour, originSet= originSet, deckMidplane= deckMidplane)
         # Apply nodal loads.
-        retval= self.applyNodalLoads(loadedNodes= loadedNodes, gravityDir= gravityDir)
+        retval= self.applyNodalLoads(loadedNodes= loadedNodes)
         return retval
     
-    def defDeckRailUniformLoadsThroughEmbankment(self, embankment, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckRailUniformLoadsThroughEmbankment(self, embankment, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param embankment: embankment object as defined in
@@ -285,13 +253,12 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
         '''
         loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         # Pick loaded nodes.
         loadedNodes= self.pickLoadedNodes(loadedContour= loadedContour, originSet= originSet, deckMidplane= deckMidplane)
         # Apply nodal loads.
-        retval= self.applyNodalLoads(loadedNodes= loadedNodes, gravityDir= gravityDir)
+        retval= self.applyNodalLoads(loadedNodes= loadedNodes)
         return retval
 
     def defDeckRailBrakingLoadsThroughLayers(self, brakingLoad, spreadingLayers, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
@@ -321,7 +288,7 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
             retval.append(n.newLoad(brakingLoad))
         return retval
     
-    def defBackfillUniformLoads(self, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1])):
+    def defBackfillUniformLoads(self, originSet, embankment, delta, eta= 1.0):
         ''' Define backfill loads due the uniform loads on the rail.
 
         :param originSet: set containing the elements to pick from.
@@ -330,7 +297,6 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
         :param delta: friction angle between the soil and the element material.
         :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see
                     implementation remarks in boussinesq module).
-        :param gravityDir: direction of the gravity field (unit dir).
         '''
         dynamicLoad= self.getDynamicLoad()
         vertexList= self.railAxis.getVertexList()
@@ -357,3 +323,140 @@ class UniformRailLoad(dfl.DynamicFactorLoad):
                 # Compute loads on elements.
                 loadedLine.appendLoadToCurrentLoadPattern(elements= originSet.elements, eta= eta, delta= delta)
                 v0= v1
+
+class UniformRailLoad(RailLoadBase):
+    ''' Uniform load along a rail.
+
+    :ivar load: value of the uniform load.
+    :ivar directionVector: unitary vector in the direction of the load.
+    '''
+    def __init__(self, railAxis, load, directionVector= xc.Vector([0, 0, -1]),dynamicFactor= 1.0, classificationFactor= 1.21):
+        ''' Constructor.
+
+        :param railAxis: 3D polyline defining the axis of the rail.
+        :param load: value of the uniform load.
+        :param directionVector: unitary vector in the direction of the load.
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
+        '''
+        super().__init__(railAxis= railAxis, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+        self.load= load
+        self.directionVector= directionVector
+
+    def getNodalLoadVector(self, numNodes):
+        ''' Return the load vector at the contact surface.
+
+        :param numNodes: number of loaded nodes.
+        '''
+        # Compute load vector.
+        totalLoad= self.getDynamicLoad()*self.railAxis.getLength()
+        nodalLoad= totalLoad/numNodes
+        retval= nodalLoad*self.directionVector
+        return retval
+
+    def applyNodalLoads(self, loadedNodes):
+        ''' Apply the load in the given node list.
+
+        :param loadedNodes: nodes that will be loaded.
+        '''
+        # Compute load vector
+        numLoadedNodes= len(loadedNodes)
+        vLoad= self.getNodalLoadVector(numLoadedNodes)
+        loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
+        # Apply nodal loads.
+        retval= list()
+        for n in loadedNodes:
+            retval.append(n.newLoad(loadVector))
+        return retval
+
+class VariableDirectionRailLoad(RailLoadBase):
+    ''' Uniform load along a rail with its direction expressed as
+        components in the local reference system of each segment.
+
+    :ivar loadComponents: values of the load components in the local
+                          reference system of each segment.
+    '''
+    def __init__(self, railAxis, loadComponents, dynamicFactor= 1.0, classificationFactor= 1.21):
+        ''' Constructor.
+
+        :param railAxis: 3D polyline defining the axis of the rail.
+        :param loadComponents: values of the load components in the local
+                               reference system of each segment.
+        :param directionVector: unitary vector in the direction of the load.
+        :param classificationFactor: classification factor (on lines carrying
+                                     rail traffic which is heavier or lighter
+                                     than normal rail traffic).
+        '''
+        super().__init__(railAxis= railAxis, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+        self.loadComponents= loadComponents
+
+    def getCoordinateSystems(self):
+        ''' Return the local coordinate systems along the rail axis.'''
+        retval= list()
+        vertices= self.railAxis.getVertexList()
+        currentLength= 0.0
+        lastVertex= vertices[0]
+        for currentVertex in vertices[1:]:
+            segmentLength= currentVertex.dist(lastVertex)
+            currentLength+= segmentLength/2.0
+            iVector= self.railAxis.getIVectorAtLength(currentLength)
+            jVector= self.railAxis.getJVectorAtLength(currentLength)
+            retval.append(geom.CooSysRect3d3d(iVector, jVector))
+            currentLength+= segmentLength/2.0
+            lastVertex= currentVertex
+        return retval
+
+    def computeLoadVectors(self, loadedNodes):
+        ''' Compute the load vectors for each segment in global coordinates.'''
+        # Compute the load that correspond to each node.
+        localLoadVector= geom.Vector3d(self.loadComponents[0], self.loadComponents[1], self.loadComponents[2])
+        numLoadedNodes= len(loadedNodes)
+        loadFactor= self.railAxis.getLength()/numLoadedNodes
+        localLoadVector*= loadFactor
+
+        # Compute load vectors.
+        coordinateSystems= self.getCoordinateSystems()
+        retval= list()
+        for cs in coordinateSystems:
+            globalLoadVector= cs.getGlobalCoordinates(localLoadVector)
+            retval.append(globalLoadVector)
+        return retval
+
+    def applyNodalLoads(self, loadedNodes):
+        ''' Apply the load in the given node list.
+
+        :param loadedNodes: nodes that will be loaded.
+        '''
+        loadVectors= self.computeLoadVectors(loadedNodes)
+        
+        # Apply nodal loads.
+        retval= list()
+        for n in loadedNodes:
+            pos= n.getInitialPos3d
+            nearestSegmentIndex= self.railAxis.getNearestSegmentIndex(pos)
+            vLoad= loadVectors[nearestSegmentIndex]
+            loadVector= xc.Vector([vLoad[0],vLoad[1],vLoad[2],0.0,0.0,0.0])
+            retval.append(n.newLoad(loadVector))
+        return retval
+    
+    def defDeckRailLoadsThroughLayers(self, spreadingLayers, originSet, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Define uniform loads on the tracks with the argument values:
+
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckMidplane: midplane of the loaded surface.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        loadedContour= self.getDeckLoadedContourThroughLayers(spreadingLayers= spreadingLayers, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
+        # Pick loaded nodes.
+        loadedNodes= self.pickLoadedNodes(loadedContour= loadedContour, originSet= originSet, deckMidplane= deckMidplane)
+        # Apply nodal loads.
+        return self.applyNodalLoads(loadedNodes= loadedNodes)

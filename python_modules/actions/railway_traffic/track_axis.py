@@ -17,20 +17,25 @@ from actions import loads
 from misc_utils import log_messages as lmsg
 from actions.railway_traffic import train_load_model as tm
 from actions.railway_traffic import uniform_rail_load as url
+from actions.railway_traffic import track_cross_section_geometry as tcs
 
 class TrackAxis(object):
     ''' Track axis.
 
-    :ivar segment: 3D segment defining the axis.
+    :ivar segment: 3D polyline defining the axis of the track.
     '''
-    def __init__(self, trackAxis):
+    def __init__(self, trackAxis, trackGauge= 1.435, u= 0.0):
         ''' Constructor.
 
         :param trackAxis: 3D polyline defining the axis of the track.
+        :param trackGauge: track gauge (defaults to the international standard gauge 1435 mm).
+        :param u: # cant. Defaults to zero.
         '''
         self.trackAxis= trackAxis
         tol= self.trackAxis.getLength()/1e4
         self.trackAxis.removeRepeatedVertexes(tol)
+        self.trackGauge= trackGauge
+        self.u= u
 
     def getLength(self):
         ''' Return the length of the axis track segment.'''
@@ -72,7 +77,11 @@ class TrackAxis(object):
         '''
         return self.trackAxis.getIVectorAtLength(relativePosition*self.trackAxis.getLength())
 
-    def getWheelLoads(self, trainModel:tm.TrainLoadModel, relativePosition, loadFactor= 1.0, gravityDir= xc.Vector([0,0,-1])):
+    def getTrackCrossSection(self):
+        ''' Return the cross-section of the track.'''
+        return tcs.TrackCrossSection(s= self.trackGauge+.04, u= self.u)
+
+    def getWheelLoads(self, trainModel:tm.TrainLoadModel, relativePosition, loadFactor= 1.0, directionVector= xc.Vector([0,0,-1])):
         ''' Return the wheel loads of load model argument in the position
             specified by the relativePosition parameter.
 
@@ -85,14 +94,13 @@ class TrackAxis(object):
         posSides= list()
         sideSum= 0
         ref= self.getReferenceAt(lmbdArcLength= relativePosition)
-        return trainModel.getWheelLoads(ref= ref, loadFactor= loadFactor, gravityDir= gravityDir)
+        return trainModel.getWheelLoads(ref= ref, loadFactor= loadFactor, directionVector= directionVector)
 
-    def getRailAxes(self, trackGauge= 1.435):
+    def getRailAxes(self):
         ''' Return a 3D polyline representing the rail axis.
 
-        :param trackGauge: track gauge (defaults to the international standard gauge 1435 mm).
         '''
-        offsetDist= trackGauge/2.0
+        offsetDist= self.trackGauge/2.0
         vertexList= self.trackAxis.getVertexList()
         sz= len(vertexList)
         if(sz>2):
@@ -155,7 +163,7 @@ class TrackAxis(object):
                         intPoint= None
         return railChunks
 
-    def getRailUniformLoads(self, trainModel: tm.TrainLoadModel, relativePosition, gravityDir= xc.Vector([0,0,-1])):
+    def getRailUniformLoads(self, trainModel: tm.TrainLoadModel, relativePosition, directionVector= xc.Vector([0,0,-1])):
         ''' Return the uniform loads on the track rails.
 
         :param trainModel: load model of the train (see TrainLoadModel class).
@@ -163,7 +171,7 @@ class TrackAxis(object):
                                   the track axis (0 -> beginning of
                                   the axis, 0.5-> middle of the axis, 1-> end
                                   of the axis).
-        :param gravityDir: direction of the gravity field (unit vector).
+        :param directionVector: unitary vector in the direction of the load.
         '''
         # Get the rails that are outside the locomotive.
         railChunks= self.getRailChunks(trainModel, relativePosition)  # Uniform loaded rail chunks.
@@ -171,8 +179,39 @@ class TrackAxis(object):
         qRail= trainModel.getRailUniformLoad()
         retval= list()
         for rc in railChunks:
-            unifRailLoad= url.UniformRailLoad(railAxis= rc.getPolyline3d(), load= qRail, dynamicFactor= trainModel.getDynamicFactor(), classificationFactor= trainModel.getClassificationFactor())
+            unifRailLoad= url.UniformRailLoad(railAxis= rc.getPolyline3d(), load= qRail, directionVector= directionVector, dynamicFactor= trainModel.getDynamicFactor(), classificationFactor= trainModel.getClassificationFactor())
             retval.append(unifRailLoad)
+        return retval
+
+    def getRailCentrifugalLoads(self, leftRailCentrifugalLoad, rightRailCentrifugalLoad, trainModel, relativePosition, overrideDynamicFactor= None):
+        ''' Return the uniform loads on the track rails due to the given
+            centrifugal loads.
+
+        :param leftCentrifugalLoad: centrifugal load on the left rail.
+        :param rightCentrifugalLoad: centrifugal load on the right rail.
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: relative position of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        '''
+        # Get the rails that are outside the locomotive.
+        railChunks= self.getRailChunks(trainModel, relativePosition)  # Uniform loaded rail chunks.
+        # Create the centrifugal rail loads.
+        retval= list()
+        dynamicFactor= trainModel.getDynamicFactor()
+        if(overrideDynamicFactor):
+            dynamicFactor= overrideDynamicFactor
+        numLeftRailChunks= len(railChunks)/2
+        print('left: ', leftRailCentrifugalLoad.x/1e3, leftRailCentrifugalLoad.y/1e3)
+        print('right: ', rightRailCentrifugalLoad.x/1e3, rightRailCentrifugalLoad.y/1e3)
+        for i, rc in enumerate(railChunks):
+            if(i<numLeftRailChunks):
+                loadComponents= [0.0, -rightRailCentrifugalLoad.x, -rightRailCentrifugalLoad.y]
+            else:
+                loadComponents= [0.0, -leftRailCentrifugalLoad.x, -leftRailCentrifugalLoad.y]
+            centrifugalRailLoad= url.VariableDirectionRailLoad(railAxis= rc.getPolyline3d(), loadComponents= loadComponents, dynamicFactor= dynamicFactor, classificationFactor= trainModel.getClassificationFactor())
+            retval.append(centrifugalRailLoad)
         return retval
     
     def getRailsBrakingLoads(self):
@@ -187,7 +226,7 @@ class TrackAxis(object):
             retval.append(brakingRailLoad)
         return retval
 
-    def defDeckWheelLoadsThroughLayers(self, trainModel:tm.TrainLoadModel, relativePosition, spreadingLayers, originSet, deckThickness, deckSpreadingRatio, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckWheelLoadsThroughLayers(self, trainModel:tm.TrainLoadModel, relativePosition, spreadingLayers, originSet, deckThickness, deckSpreadingRatio, directionVector= xc.Vector([0,0,-1])):
         ''' Define the wheel loads due to the locomotives argument placed at
             the positions argument.
 
@@ -206,16 +245,18 @@ class TrackAxis(object):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
+        :param directionVector: unitary vector in the direction of the load.
         '''
-        wheelLoads= self.getWheelLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir)
+        # Compute the loads on the wheels.
+        wheelLoads= self.getWheelLoads(trainModel= trainModel, relativePosition= relativePosition, directionVector= directionVector)
+        # Distribute the loads over the nodes in originSet.
         retval= list()
         if(originSet):  # pick the loaded by each wheel
             for wheelLoad in wheelLoads:
                 retval.extend(wheelLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
     
-    def defDeckRailUniformLoadsThroughLayers(self, trainModel:tm.TrainLoadModel, relativePosition, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckRailUniformLoadsThroughLayers(self, trainModel:tm.TrainLoadModel, relativePosition, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, directionVector= xc.Vector([0,0,-1])):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param trainModel: trainModel on this track (see TrainLoadModel class).
@@ -233,13 +274,15 @@ class TrackAxis(object):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
+        :param directionVector: unitary vector in the direction of the load.
         '''
+        # Compute rail uniform loads.
+        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, directionVector= directionVector)
+        # Distribute the load over deck nodes.
         deckMidplane= originSet.nodes.getRegressionPlane(0.0)
-        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir)
         retval= list()
         for rul in railUniformLoads:
-            retval.extend(rul.defDeckRailUniformLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
+            retval.extend(rul.defDeckRailUniformLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
     
     def defDeckRailsBrakingLoadThroughLayers(self, brakingLoad:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
@@ -258,15 +301,17 @@ class TrackAxis(object):
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
         deckMidplane= originSet.nodes.getRegressionPlane(0.0)
+        # Get braking loads on each rail.
         railBrakingLoads= self.getRailsBrakingLoads()
         numRails= len(railBrakingLoads)
         brakingLoadPerRail= brakingLoad/numRails
+        # Apply loads to the originSet nodes.
         retval= list()
         for rbl in railBrakingLoads:
             retval.extend(rbl.defDeckRailBrakingLoadsThroughLayers(brakingLoad= brakingLoadPerRail, spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
             
-    def defDeckRailUniformLoadsThroughEmbankment(self, trainModel, relativePosition, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckRailUniformLoadsThroughEmbankment(self, trainModel, relativePosition, embankment, originSet, deckThickness, deckSpreadingRatio= 1/1, directionVector= xc.Vector([0,0,-1])):
         ''' Define uniform loads on the tracks with the argument values:
 
         :param trainModel: trainModel on this track.
@@ -281,16 +326,18 @@ class TrackAxis(object):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
-        :param gravityDir: direction of the gravity field (unit vector).
+        :param directionVector: unitary vector in the direction of the load.
         '''
+        # Compute rail uniform loads.
+        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, directionVector= directionVector)
+        # Distribute the load over deck nodes.
         deckMidplane= originSet.nodes.getRegressionPlane(0.0)
-        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir)
         retval= list()
         for rul in railUniformLoads:
-            retval.extend(rul.defDeckRailUniformLoadsThroughEmbankment(embankment= embankment, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
+            retval.extend(rul.defDeckRailUniformLoadsThroughEmbankment(embankment= embankment, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
             
-    def defDeckLoadsThroughLayers(self, trainModel, relativePosition, spreadingLayers, deckThickness, deckSpreadingRatio= 1/1, originSet= None, gravityDir= xc.Vector([0,0,-1])):
+    def defDeckLoadsThroughLayers(self, trainModel, relativePosition, spreadingLayers, deckThickness, deckSpreadingRatio= 1/1, originSet= None, directionVector= xc.Vector([0,0,-1])):
         ''' Define punctual and uniform loads.
 
         :param trainModels: trainModels on each track (train model 1 -> track 1,
@@ -309,12 +356,12 @@ class TrackAxis(object):
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
         :param originSet: set containing the nodes to pick from.
-        :param gravityDir: direction of the gravity field (unit vector).
+        :param directionVector: unitary vector in the direction of the load.
         '''
         # concentrated loads.
-        retval= self.defDeckWheelLoadsThroughLayers(trainModel= trainModel, relativePosition= relativePosition, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir)
+        retval= self.defDeckWheelLoadsThroughLayers(trainModel= trainModel, relativePosition= relativePosition, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, directionVector= directionVector)
         # uniform load.
-        retval.extend(self.defDeckRailUniformLoadsThroughLayers(trainModel= trainModel, relativePosition= relativePosition, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, gravityDir= gravityDir))
+        retval.extend(self.defDeckRailUniformLoadsThroughLayers(trainModel= trainModel, relativePosition= relativePosition, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, directionVector= directionVector))
         return retval
 
     def defDeckBrakingLoadThroughLayers(self, brakingLoad, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
@@ -334,8 +381,7 @@ class TrackAxis(object):
         '''
         return self.defDeckRailsBrakingLoadThroughLayers(brakingLoad= brakingLoad, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
 
-
-    def defBackfillUniformLoads(self, trainModel, relativePosition, originSet, embankment, delta, eta= 1.0, gravityDir= xc.Vector([0,0,-1])):
+    def defBackfillUniformLoads(self, trainModel, relativePosition, originSet, embankment, delta, eta= 1.0, directionVector= xc.Vector([0,0,-1])):
         ''' Define backfill loads due the uniform load on the track.
 
         :param trainModel: trainModel on this track.
@@ -349,10 +395,11 @@ class TrackAxis(object):
         :param delta: friction angle between the soil and the element material.
         :param eta: Poisson's ratio (ATTENTION: defaults to 1.0: see
                     implementation remarks in boussinesq module).
-        :param gravityDir: direction of the gravity field (unit vector).
+        :param directionVector: unitary vector in the direction of the load.
         '''
-        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, gravityDir= gravityDir)
+        railUniformLoads= self.getRailUniformLoads(trainModel= trainModel, relativePosition= relativePosition, directionVector= directionVector)
         setMidplane= originSet.nodes.getRegressionPlane(0.0)
         for rul in railUniformLoads:
             rul.clip(setMidplane)  # Avoid "negative" pressures over the wall.
-            rul.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta, gravityDir= gravityDir)
+            rul.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta)
+            
