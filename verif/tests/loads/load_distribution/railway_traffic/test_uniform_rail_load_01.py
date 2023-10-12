@@ -4,7 +4,7 @@
 
 import math
 import geom
-from actions.railway_traffic import load_model_base
+from actions.railway_traffic import uniform_rail_load
 
 # Problem geometry.
 side= 10.0
@@ -35,20 +35,21 @@ railAxis= geom.Polyline3d([p0+railUpVector, pA+railUpVector, p2+railUpVector])
 load= 40e3
 dynamicFactor= 1.2
 classificationFactor= 1.0
-uniformRailLoad= load_model_base.UniformRailLoad(railAxis, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+uniformRailLoad= uniform_rail_load.UniformRailLoad(railAxis, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
 
 axisProjection= uniformRailLoad.getRailAxisProjection(midplane= deckMidplane)
 
 loadedContour= uniformRailLoad.getLoadedContour(midplane= deckMidplane, spreadingLayers= spreadingLayers)
 
 loadedContourArea= loadedContour.getArea()
-loadedContourAreaRefValue= 42.084662251599994
+loadedContourAreaRefValue= 37.193816690412405 # loaded contour with flat extremities.
 ratio1= abs(loadedContourArea-loadedContourAreaRefValue)/loadedContourAreaRefValue
 
 '''
 print(lateralWidth)
 print(sleeperSpreadToDepthRatio)
 print(loadedContourArea)
+print(ratio1)
 '''
 
 import os

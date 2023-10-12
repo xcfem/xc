@@ -128,7 +128,7 @@ class RailLoadBase(dfl.DynamicFactorLoad):
         # between the "offseted" lines.
         epsilon= railProjection.getLength()/1e3 # compute a reasonable epsilon.
         railProjection.simplify(epsilon) # simplify the projected axis.
-        retval= railProjection.getBufferPolygon(spread, 8)
+        retval= railProjection.getBufferPolygon(spread, 0)
         return retval
 
     def getDeckLoadedContourThroughLayers(self, spreadingLayers, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
