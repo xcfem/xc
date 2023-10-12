@@ -4,7 +4,7 @@
 import math
 import geom
 import xc
-from actions.railway_traffic import load_model_base
+from actions.railway_traffic import uniform_rail_load
 from model import predefined_spaces
 from materials import typical_materials
 
@@ -147,8 +147,8 @@ rail2= axisPlanePolyline3d.offset(offsetDist)
 load= 40e3
 dynamicFactor= 1.2
 classificationFactor= 1.0
-uniformRailLoad1= load_model_base.UniformRailLoad(rail1, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
-uniformRailLoad2= load_model_base.UniformRailLoad(rail2, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+uniformRailLoad1= uniform_rail_load.UniformRailLoad(rail1, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+uniformRailLoad2= uniform_rail_load.UniformRailLoad(rail2, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
 
 ## Define load pattern.
 lp0= modelSpace.newLoadPattern(name= '0')

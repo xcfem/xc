@@ -4,7 +4,7 @@
 import math
 import geom
 import xc
-from actions.railway_traffic import load_model_base
+from actions.railway_traffic import uniform_rail_load
 from model import predefined_spaces
 from materials import typical_materials
 
@@ -72,7 +72,7 @@ railAxis= geom.Polyline3d([p0+railUpVector, pA+railUpVector, p2+railUpVector])
 load= 40e3
 dynamicFactor= 1.2
 classificationFactor= 1.0
-uniformRailLoad= load_model_base.UniformRailLoad(railAxis, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
+uniformRailLoad= uniform_rail_load.UniformRailLoad(railAxis, load, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
 
 ## Define load pattern.
 lp0= modelSpace.newLoadPattern(name= '0')
