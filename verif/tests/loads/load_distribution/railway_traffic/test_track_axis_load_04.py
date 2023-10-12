@@ -5,8 +5,6 @@ import math
 import geom
 import xc
 from actions.railway_traffic import EC1_rail_load_models
-from actions.railway_traffic import uniform_rail_load as url
-from actions.railway_traffic import track_cross_section_geometry as tcs
 from model import predefined_spaces
 from materials import typical_materials
 
@@ -126,42 +124,17 @@ trainLoadModel= EC1_rail_load_models.TrainLoadModel(locomotive= EC1_rail_load_mo
 
 ## Define centrifugal load.
 
-### Define spreading parameters.
-sleeperThickness= 22e-2
-sleeperLength= 2.6
-standardGauge= 1.435
-lateralWidth= sleeperLength-standardGauge
-sleeperSpreadToDepthRatio= lateralWidth/sleeperThickness
-
-ballastThickness= 0.8 # Thickness of the ballast under the sleeper.
-ballastSpreadToDepthRatio= 1/4.0 # See Eurocode 1 part 2 figure 6.5.
-
-spreadingLayers= [(sleeperThickness, sleeperSpreadToDepthRatio), (ballastThickness, ballastSpreadToDepthRatio)]
-
-#### Rail axis.
-leftRailAxisPoints= [geom.Pos3d(-149.8262, -8.0765, 0), geom.Pos3d(-122.6781, -5.1716, 0), geom.Pos3d(-95.4741, -2.8461, 0), geom.Pos3d(-68.2268, -1.1011, 0), geom.Pos3d(-40.9485, 0.0627, 0), geom.Pos3d(-13.6516, 0.6447, 0), geom.Pos3d(13.6516, 0.6447, 0), geom.Pos3d(40.9485, 0.0627, 0), geom.Pos3d(68.2268, -1.1011, 0), geom.Pos3d(95.4741, -2.8461, 0), geom.Pos3d(122.6781, -5.1716, 0), geom.Pos3d(149.8262, -8.0765, 0)]
-leftRailAxis= geom.Polyline3d(leftRailAxisPoints)
-#### Track cross section
-trackCrossSection= tcs.TrackCrossSection(s= 1.435+.04, u= 0.0)
-
 ### Centrifugal load parameters.
 #### Define speed, radius and influence length.
 V= 160 # Maximum train speed (km/h)
 v= V/3.6 # Maximum train speed (m/s)
 r= 1280.0 # radius of curvature.
 Lf=  trackAxis.getLength() # influence length of the loaded part of curved track on the bridge, which is most unfavourable for the design of the structural element under consideration [m].
-#### Uniform centrifugal load on the rails.
-railCentrifugalLoadsPerMeter= trainLoadModel.getCentrifugalLoadPerMeter(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection)
-loadComponents=  [0.0, -railCentrifugalLoadsPerMeter[0].x, -railCentrifugalLoadsPerMeter[0].y]
-centrifugalRailLoad= url.VariableDirectionRailLoad(railAxis= leftRailAxis, loadComponents= loadComponents, dynamicFactor= 1.0, classificationFactor= trainLoadModel.getClassificationFactor())
-deckMidplane= slabSet.nodes.getRegressionPlane(0.0)
-
 ### Define load pattern.
 q1a= modelSpace.newLoadPattern(name= 'Q1a')
 modelSpace.setCurrentLoadPattern(q1a.name)
-#### Define nodal loads.
-nodalLoads= centrifugalRailLoad.defDeckRailLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= slabSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= 1/1)
-
+trackCrossSection= trackAxis.getTrackCrossSection()
+nodalLoads= trackAxis.defDeckCentrifugalLoadThroughLayers(trainModel= trainLoadModel, relativePosition= 0.5, v= v, Lf= Lf, r= r, spreadingLayers= spreadingLayers, deckThickness= deckThickness, deckSpreadingRatio= 1/1, originSet= slabSet)
 modelSpace.addLoadCaseToDomain(q1a.name)
 
 ## Check total load value.
@@ -176,25 +149,39 @@ while(nLoad):
     totalLoadNorm+= loadVector.Norm()
     nLoad= lIter.next()
 
-totalLoadNormRef= math.sqrt((loadComponents[1])**2+(loadComponents[2])**2)*leftRailAxis.getLength()
+# Compute reference value.
+## Rails.
+totalLength= 2*(trackAxis.getLength()-trainLoadModel.locomotive.getTotalLength())
+railCentrifugalLoadsPerMeter= trainLoadModel.getCentrifugalLoadPerMeter(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection)
+loadComponents=  [0.0, -railCentrifugalLoadsPerMeter[0].x, -railCentrifugalLoadsPerMeter[0].y]
+totalLoadNormRef= math.sqrt((loadComponents[1])**2+(loadComponents[2])**2)*totalLength
+## Locomotive
+locomotiveCentrifugalLoad= trainLoadModel.locomotive.getCentrifugalLoadPerWheel(v, Lf, r)* trainLoadModel.locomotive.getNumWheels()
+totalLoadNormRef+= locomotiveCentrifugalLoad
 
 err1= abs(totalLoadNorm-totalLoadNormRef)/totalLoadNormRef
 err2= abs(totalLoad[0]/totalLoadNormRef)
+err3= abs(totalLoad[2]/totalLoadNormRef)
+testOK= (totalLoadNorm>=totalLoadNormRef) # greater or equal the ref. value.
+testOK= testOK and (err1<.05) # but not too big.
+testOK= testOK and (err2<1e-3) # x component almost zero (simmetry).
+testOK= testOK and (err3<1e-2) # z component almost zero (equilibrium).
 
 '''
-print('left rail axis length= ', leftRailAxis.getLength())
+print('total length= ', totalLength)
 print('load components: ', loadComponents[1], loadComponents[2])
 print('total load: ', totalLoad*1e-3, ' norm: ', totalLoad.Norm()*1e-3)
 print('total load norm: ', totalLoadNorm/1e3)
 print('reference total load norm: ',totalLoadNormRef/1e3)
 print('err1: ', err1)
 print('err2: ', err2)
+print('err3: ', err3)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(err1<1e-8 and err2<.005):
+if(testOK):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

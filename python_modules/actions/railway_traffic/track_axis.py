@@ -203,8 +203,6 @@ class TrackAxis(object):
         if(overrideDynamicFactor):
             dynamicFactor= overrideDynamicFactor
         numLeftRailChunks= len(railChunks)/2
-        print('left: ', leftRailCentrifugalLoad.x/1e3, leftRailCentrifugalLoad.y/1e3)
-        print('right: ', rightRailCentrifugalLoad.x/1e3, rightRailCentrifugalLoad.y/1e3)
         for i, rc in enumerate(railChunks):
             if(i<numLeftRailChunks):
                 loadComponents= [0.0, -rightRailCentrifugalLoad.x, -rightRailCentrifugalLoad.y]

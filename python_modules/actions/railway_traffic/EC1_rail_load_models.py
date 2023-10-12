@@ -16,6 +16,77 @@ from actions.railway_traffic import locomotive_load as ll
 from actions.railway_traffic import train_load_model as tlm
 from actions.railway_traffic import track_axis as ta
 from actions.railway_traffic import load_model_base as lmb
+    
+def get_traction_force(Lab:float):
+    ''' Return the traction force according to expression (6.20) of 
+        Eurocode 1 part 2 (clause 6.5.3 paragraph 2).
+
+    :param Lab: influence length of the loaded part of track on the 
+               bridge, which is most unfavourable for the design of the 
+               structural element under consideration (m).
+    '''
+    return min(33e3*Lab, 1000e3)
+
+def get_braking_force(Lab:float, loadModel:str):
+    ''' Return the braking force according to expressions (6.21) and (6.22) of 
+        Eurocode 1 part 2 (clause 6.5.3 paragraph 2).
+
+    :param Lab: influence length of the loaded part of track on the 
+               bridge, which is most unfavourable for the design of the 
+               structural element under consideration (m).
+    :param loadModel: string identifier for the load model (71, SW/O, SW/2 or HSLM).
+    '''
+    if(loadModel=='SW/2'):
+        retval= 35e3
+    elif(loadModel in ['71', 'SW/O', 'HSLM']):
+        retval= min(20e3*Lab, 6000e3)
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= methodName+"; unknown load model: '"+str(loadModel)
+        errMsg+= "'; known load models are: '71', 'SW/O', 'SW/2' and 'HSLM'."
+        lmsg.error(errMsg)
+    return retval
+
+def centrifugal_force_reduction_factor(v, Lf):
+    '''Returns the reduction factor of the centrifugal force according to 
+       expression (6.19) of Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+
+    :param v: speed (m/s).
+    :param Lf: influence length of the loaded part of curved track on the 
+               bridge, which is most unfavourable for the design of the 
+               structural element under consideration (m).
+    '''
+    vkmh= v*3.6
+    if(vkmh<120):
+        coefF= 1
+    elif(vkmh<300):
+        coefF= 1-(vkmh-120)/1000*(814/vkmh+1.75)*(1-math.sqrt(2.88/Lf)) 
+    else:
+       coefF= 0.197+0.803*(math.sqrt(2.88/Lf))
+    coefF= max(coefF,0.35)
+    return coefF
+
+def get_centrifugal_forces(v, Lf, r, Qvk, qvk):
+    ''' Compute the characteristic values of the concentrated (Qtk) and 
+        distributed (qtk) centrifugal forces according to equations (6.17) and
+        (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+
+    :param v: speed (m/s).
+    :param Lf: influence length of the loaded part of curved track on the 
+               bridge, which is most unfavourable for the design of the 
+               structural element under consideration (m).
+    :param r: radius of curvature (m).
+    :param Qvk: characteristic value of the vertical concentrated load 
+                specified in clause 6.3 (excluding any enhancement for 
+                dynamic effects).
+    :param qvk: characteristic value of the vertical distributed load 
+                specified in clause 6.3 (excluding any enhancement for 
+                dynamic effects).
+    '''
+    ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
+    Qtk= ff*Qvk
+    qtk= ff*qvk
+    return (Qtk, qtk)
 
 class LocomotiveLoad(ll.LocomotiveLoad):
     ''' Locomotive load as defined in EC-1.'''
@@ -144,6 +215,43 @@ class TrackAxis(ta.TrackAxis):
         dynamicFactor= 1.0 # no dynamic factor for centrifugal loads in EC-1.
         return super().getRailCentrifugalLoads(leftRailCentrifugalLoad, rightRailCentrifugalLoad, trainModel, relativePosition, overrideDynamicFactor= dynamicFactor)
     
+    def defDeckCentrifugalLoadOnRailsThroughLayers(self, trainModel, relativePosition, v, Lf, r, trackCrossSection, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Define the nodal loads that correspond tot uniform centrifugal
+           loads on the rails.
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: relative positions of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param v: speed (m/s).
+        :param Lf: influence length of the loaded part of curved track on the 
+                   bridge, which is most unfavourable for the design of the 
+                   structural element under consideration (m).
+        :param r: radius of curvature (m).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        # Uniform centrifugal load on the rails.
+        railCentrifugalLoadsPerMeter= trainModel.getCentrifugalLoadPerMeter(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection)
+        # Create the centrifugal rail loads.
+        railCentrifugalLoads= self.getRailCentrifugalLoads(leftRailCentrifugalLoad= railCentrifugalLoadsPerMeter[0], rightRailCentrifugalLoad= railCentrifugalLoadsPerMeter[1], trainModel= trainModel, relativePosition= relativePosition)
+        retval= list()
+        # Apply loads to the originSet nodes.
+        deckMidplane= originSet.nodes.getRegressionPlane(0.0)
+        for rcl in railCentrifugalLoads:
+            retval.extend(rcl.defDeckRailLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
+        return retval
+    
     def defDeckCentrifugalLoadThroughLayers(self, trainModel, relativePosition, v, Lf, r, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
         ''' Define uniform loads on the tracks with the argument values:
 
@@ -175,83 +283,6 @@ class TrackAxis(ta.TrackAxis):
         ref= self.getReferenceAt(lmbdArcLength= relativePosition)
         retval= trainModel.locomotive.defDeckCentrifugalWheelLoadsThroughLayers(centrifugalLoads= locomotiveCentrifugalLoads, centrifugalDirection= -ref.getJVector(), ref= ref, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         # Uniform centrifugal load on the rails.
-        railCentrifugalLoadsPerMeter= trainModel.getCentrifugalLoadPerMeter(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection)
-        # Create the centrifugal rail loads.
-        railCentrifugalLoads= self.getRailCentrifugalLoads(leftRailCentrifugalLoad= railCentrifugalLoadsPerMeter[0], rightRailCentrifugalLoad= railCentrifugalLoadsPerMeter[1], trainModel= trainModel, relativePosition= relativePosition)
-        # Apply loads to the originSet nodes.
-        deckMidplane= originSet.nodes.getRegressionPlane(0.0)
-        for rcl in railCentrifugalLoads:
-            retval.extend(rcl.defDeckRailLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
+        retval.extend(self.defDeckCentrifugalLoadOnRailsThroughLayers(trainModel= trainModel, relativePosition= relativePosition, v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
     
-    
-def get_traction_force(Lab:float):
-    ''' Return the traction force according to expression (6.20) of 
-        Eurocode 1 part 2 (clause 6.5.3 paragraph 2).
-
-    :param Lab: influence length of the loaded part of track on the 
-               bridge, which is most unfavourable for the design of the 
-               structural element under consideration (m).
-    '''
-    return min(33e3*Lab, 1000e3)
-
-def get_braking_force(Lab:float, loadModel:str):
-    ''' Return the braking force according to expressions (6.21) and (6.22) of 
-        Eurocode 1 part 2 (clause 6.5.3 paragraph 2).
-
-    :param Lab: influence length of the loaded part of track on the 
-               bridge, which is most unfavourable for the design of the 
-               structural element under consideration (m).
-    :param loadModel: string identifier for the load model (71, SW/O, SW/2 or HSLM).
-    '''
-    if(loadModel=='SW/2'):
-        retval= 35e3
-    elif(loadModel in ['71', 'SW/O', 'HSLM']):
-        retval= min(20e3*Lab, 6000e3)
-    else:
-        methodName= sys._getframe(0).f_code.co_name
-        errMsg= methodName+"; unknown load model: '"+str(loadModel)
-        errMsg+= "'; known load models are: '71', 'SW/O', 'SW/2' and 'HSLM'."
-        lmsg.error(errMsg)
-    return retval
-
-def centrifugal_force_reduction_factor(v, Lf):
-    '''Returns the reduction factor of the centrifugal force according to 
-       expression (6.19) of Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
-
-    :param v: speed (m/s).
-    :param Lf: influence length of the loaded part of curved track on the 
-               bridge, which is most unfavourable for the design of the 
-               structural element under consideration (m).
-    '''
-    vkmh= v*3.6
-    if(vkmh<120):
-        coefF= 1
-    elif(vkmh<300):
-        coefF= 1-(vkmh-120)/1000*(814/vkmh+1.75)*(1-math.sqrt(2.88/Lf)) 
-    else:
-       coefF= 0.197+0.803*(math.sqrt(2.88/Lf))
-    coefF= max(coefF,0.35)
-    return coefF
-
-def get_centrifugal_forces(v, Lf, r, Qvk, qvk):
-    ''' Compute the characteristic values of the concentrated (Qtk) and 
-        distributed (qtk) centrifugal forces according to equations (6.17) and
-        (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
-
-    :param v: speed (m/s).
-    :param Lf: influence length of the loaded part of curved track on the 
-               bridge, which is most unfavourable for the design of the 
-               structural element under consideration (m).
-    :param r: radius of curvature (m).
-    :param Qvk: characteristic value of the vertical concentrated load 
-                specified in clause 6.3 (excluding any enhancement for 
-                dynamic effects).
-    :param qvk: characteristic value of the vertical distributed load 
-                specified in clause 6.3 (excluding any enhancement for 
-                dynamic effects).
-    '''
-    ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
-    Qtk= ff*Qvk
-    qtk= ff*qvk
-    return (Qtk, qtk)
