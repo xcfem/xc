@@ -781,6 +781,7 @@ python tests/loads/load_distribution/railway_traffic/test_track_axis_load_01.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_02.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_03.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_04.py
+python tests/loads/load_distribution/railway_traffic/test_track_axis_load_05.py
 
 echo "$BLEU" "    Strain loads." "$NORMAL"
 python tests/loads/strain_loads/truss_strain_load_01.py
