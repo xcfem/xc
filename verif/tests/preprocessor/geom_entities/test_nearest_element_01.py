@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+''' getNearestElement method test.'''
+
 from __future__ import print_function
-# getNearestElement method test.
+
 import geom
 import xc
 from model import predefined_spaces
