@@ -28,7 +28,7 @@ n1= nodeHandler.newNodeX(1)
 n2= nodeHandler.newNodeX(1.0+l)
 
 # Materials definition
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
+elast= typical_materials.defElasticMaterial(preprocessor= preprocessor, name= "elast", E= K)
 
 # Elements definition
 elements= preprocessor.getElementHandler
