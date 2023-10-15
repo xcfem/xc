@@ -12,6 +12,8 @@ Load factor used normally to introduce future variations in the loads introduced
 ### Slipstream
 A slipstream is a region behind a moving object in which a wake of fluid (typically air or water) is moving at velocities comparable to that of the moving object, relative to the ambient fluid through which the object is moving.
 
+### Centrifugal forces
+The values of the centrifugal forces depend on the code you are using, so they are defined in the derived classes inside the module for the specific code (for the time being, EC1_rail_load_models). The methods that create the corresponding nodal loads in the generic classes (TrackAxis, LocomotiveLoad) receive the values of the centrifugal forces already computed according to the code.
 
 ## References
 
