@@ -593,7 +593,7 @@ class PredefinedSpace(object):
         :param nodeTagA: tag of the master node.
         :param nodeTagB: tag of the slave node.
         :param dofs: degrees of freedom to be glued 
-                   (e.g.: dofs=xc.ID([0,3,6]) means to equal ux,uz,rotz)
+                   (e.g.: dofs=xc.ID([0,2,5]) means to equal ux,uz,rotz)
         '''
         return self.constraints.newEqualDOF(nodeTagA,nodeTagB,dofs)
     
