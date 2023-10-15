@@ -29,7 +29,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 # unidirectional X POT material
-pot_mat= bridge_bearings.PTFEPotBearingMat(d=diamPot,unidirX=True,unidirY=False,factStiff=1e4)
+pot_mat= bridge_bearings.PTFEPotBearingMat(d=diamPot,unidirX=True,unidirY=False)
 pot_mat.defineMaterials(preprocessor)
 
 nodes= preprocessor.getNodeHandler
@@ -73,21 +73,28 @@ ratio2= abs(R[1]+FY)/FY
 ratio3= abs(R[2]+FZ)/FZ
 ratio4=abs(FXres-FX)/FX
 ratio5=abs(FYres-FY)/FY
-ratio6=abs(Ey/Ex-1e4)
+ratio6=abs(Ey/Ex-pot_mat.factStiff)
 ratio7=abs(uy+uz)
+
 ''' 
-print("RX= ",R[0])
-print("RY= ",R[1])
-print("RZ= ",R[2])
-print("ratio1= ",(ratio1))
-print("ratio2= ",(ratio2))
-print("ratio3= ",(ratio3))
-   '''
+print('RX= ',R[0])
+print('RY= ',R[1])
+print('RZ= ',R[2])
+print('ratio1= ',ratio1)
+print('ratio2= ',ratio2)
+print('ratio3= ',ratio3)
+print('ratio4= ',ratio4)
+print('ratio5= ',ratio5)
+print('Ex= ', Ex)
+print('Ey= ', Ey)
+print('ratio6= ',ratio6)
+print('ratio7= ',ratio7)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15) &  (ratio4<1e-15) & (ratio5<1e-15) & (ratio6<1e-15)and (ratio7<1e-5):
+if (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15) & (ratio4<1e-15) & (ratio5<1e-15) & (ratio6<1e-15) and (ratio7<1e-5):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
