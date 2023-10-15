@@ -38,7 +38,7 @@ class BasicElasticMaterial(object):
         return self.E/(2*(1+self.nu))
 
     def defElasticMaterial(self, preprocessor, name= None, overrideRho= None):
-        ''' Return an elastic material appropriate for example for
+        ''' Return an elastic uniaxial material appropriate for example for
             truss elements
 
         :param preprocessor: preprocessor of the finite element problem.
