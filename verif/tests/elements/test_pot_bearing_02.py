@@ -29,7 +29,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 # unidirectional X POT material
-pot_mat= bridge_bearings.PTFEPotBearingMat(d=diamPot,unidirX=True,unidirY=False)
+pot_mat= bridge_bearings.PTFEPotBearingMat(d=diamPot,unidirX=True,unidirY=False,factStiff=1e4)
 pot_mat.defineMaterials(preprocessor)
 
 nodes= preprocessor.getNodeHandler

@@ -296,7 +296,7 @@ class PTFEPotBearingMat(Bearing):
     :ivar d: (float) Pot diameter.
     :ivar unidirX: unidirectional POT in local-X direction (uY constrained) (defaults to False)
     :ivar unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
-    :ivar factStiff: factor to increase stiffness in constrained locad directions  (defaults to 1e4)
+    :ivar factStiff: factor to increase stiffness in constrained locad directions  (defaults to 1e5)
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
