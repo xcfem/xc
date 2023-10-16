@@ -42,7 +42,7 @@ class BasicElasticMaterial(object):
             truss elements
 
         :param preprocessor: preprocessor of the finite element problem.
-        :param name: name for the new material.
+        :param name: name for the new material (if None compute a suitable name).
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''        
@@ -63,7 +63,7 @@ class BasicElasticMaterial(object):
             brick elements
 
         :param preprocessor: preprocessor of the finite element problem.
-        :param name: name for the new material.
+        :param name: name for the new material (if None compute a suitable name).
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''        
@@ -82,7 +82,7 @@ class BasicElasticMaterial(object):
 
         :param preprocessor: preprocessor of the finite element problem.
         :param thickness: plate thickness.
-        :param name: name for the new material.
+        :param name: name for the new material (if None compute a suitable name).
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''        
@@ -100,7 +100,7 @@ class BasicElasticMaterial(object):
 
         :param preprocessor: preprocessor of the finite element problem.
         :param thickness: plate thickness.
-        :param name: name for the new material.
+        :param name: name for the new material (if None compute a suitable name).
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
@@ -139,13 +139,16 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
     '''Constructs an elastic perfectly-plastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param E:            tangent in the elastic zone of the stress-strain diagram
     :param fyp:          stress at which material reaches plastic state in tension
     :param fyn:          stress at which material reaches plastic state in compression
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elasticpp_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elasticpp_material", matName)
     retval.E= E
     retval.fyp= fyp
     retval.fyn= fyn
@@ -156,28 +159,34 @@ def defElastNoTensMaterial(preprocessor,name,E):
     '''Constructs a uniaxial elastic - no tension material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param E:            tangent in the elastic zone of the stress-strain diagram
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_no_traction_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_no_traction_material", matName)
     retval.E= E
     return retval
 
 #Cable material.
-def defCableMaterial(preprocessor,name,E,prestress,rho):
+def defCableMaterial(preprocessor, name, E, prestress, rho):
     '''Constructs a uniaxial bilinear prestressed material. 
     The stress strain ranges from slack (large strain at zero stress) 
     to taught (linear with modulus E).
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param E:            elastic modulus
     :param prestress:    prestress
     :param rho:          mass density
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("cable_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("cable_material", matName)
     retval.E= E
     retval.prestress= prestress
     retval.rho= rho
@@ -189,14 +198,17 @@ def defSteel01(preprocessor,name,E,fy,b):
     '''Constructs a uniaxial bilinear steel material object with kinematic hardening
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param E:            initial elastic tangent 
     :param fy:           yield strength 
     :param b:            strain-hardening ratio: ratio between post-yield tangent
                     and initial elastic tangent
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("steel01",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("steel01", matName)
     retval.E= E
     retval.fy= fy
     retval.b= b
@@ -208,7 +220,7 @@ def defSteel02(preprocessor,name,E,fy,b, initialStress= 0.0, params= None, a1= N
     isotropic strain hardening
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name identifying the material
+    :param name: name identifying the material (if None compute a suitable name)
     :param E:  initial elastic tangent 
     :param fy: yield strength 
     :param b:  strain-hardening ratio: ratio between post-yield tangent
@@ -221,7 +233,10 @@ def defSteel02(preprocessor,name,E,fy,b, initialStress= 0.0, params= None, a1= N
     :param a4: coefficient for isotropic hardening in tension (see a3)
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("steel02",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("steel02", matName)
     retval.E= E
     retval.fy= fy
     retval.b= b
@@ -250,14 +265,17 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
     the work of Karsan-Jirsa and no tensile strength
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param epsc0:        concrete strain at maximum strength 
     :param fpc:          concrete compressive strength at 28 days (compression is negative)
     :param fpcu:         concrete crushing strength 
     :param epscu:        concrete strain at crushing strength 
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("concrete01_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("concrete01_material", matName)
     retval.epsc0= epsc0
     retval.fpc= fpc
     retval.fpcu= fpcu
@@ -272,7 +290,7 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
     The initial slope for this model is (2*fpc/epsc0) 
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param epsc0:        concrete strain at maximum strength 
     :param fpc:          concrete compressive strength at 28 days (compression is negative)
     :param fpcu:         concrete crushing strength 
@@ -283,7 +301,10 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
 
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("concrete02_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("concrete02_material", matName)
     retval.epsc0= epsc0
     retval.fpc= fpc
     retval.fpcu= fpcu
@@ -308,7 +329,7 @@ def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr
         evolution equations are based on ACI 209R-92 models.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param fpc:          concrete compressive strength at 28 days (compression is negative)
     :param ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
     :param Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
@@ -323,7 +344,10 @@ def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr
     :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("tdconcrete_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("tdconcrete_material", matName)
     retval.fpc= fpc # concrete compressive strength at 28 days (compression is negative)
     retval.ft= ft # concrete tensile strength.
     retval.Ec= Ec # concrete stiffness.
@@ -362,7 +386,10 @@ def defTDConcreteMC10(preprocessor,name, fc, ft, Ec, Ecm, beta, age, epsba, epsb
     :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("tdconcrete_mc10_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("tdconcrete_mc10_material", matName)
     retval.fpc= fc # concrete compressive strength at 28 days (compression is negative)
     retval.ft= ft # concrete tensile strength.
     retval.Ec= Ec # concrete stiffness.
@@ -407,7 +434,10 @@ def defTDConcreteMC10NL(preprocessor,name, fc, fcu, epscu, ft, Ec, Ecm, beta, ag
     :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("tdconcrete_mc10_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("tdconcrete_mc10_material", matName)
     retval.fpc= fc # concrete compressive strength at 28 days (compression is negative)
     retval.fcu= fcu # stress at ultimate (crushing) strain.
     retval.epscu= epscu # strain at crushing strength.
@@ -441,7 +471,10 @@ def defElasticSection1d(preprocessor,name,A,E, linearRho= 0.0):
     :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_section_1d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_section_1d", matName)
     retval.sectionProperties.A= A
     retval.sectionProperties.E= E
     retval.sectionProperties.linearRho= linearRho
@@ -459,7 +492,10 @@ def defElasticSection2d(preprocessor,name,A,E,I, linearRho= 0.0):
     :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_section_2d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_section_2d", matName)
     retval.sectionProperties.A= A
     retval.sectionProperties.E= E
     retval.sectionProperties.I= I
@@ -481,7 +517,10 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, linearRho= 0.0):
     :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elasticShearSection2d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elasticShearSection2d", matName)
     retval.sectionProperties.A= A
     retval.sectionProperties.E= E
     retval.sectionProperties.G= G
@@ -556,7 +595,10 @@ def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J, linearRho= 0.0):
     :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_section_3d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_section_3d", matName)
     retval.sectionProperties.A= A
     retval.sectionProperties.E= E
     retval.sectionProperties.G= G
@@ -616,7 +658,10 @@ def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, al
     :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elasticShearSection3d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elasticShearSection3d", matName)
     retval.sectionProperties.A= A
     retval.sectionProperties.E= E
     retval.sectionProperties.G= G
@@ -634,13 +679,16 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu, rho= 0.0):
     '''Constructs an linear elastic isotropic plane-strain material.
 
     :param  preprocessor: preprocessor of the finite element problem.
-    :param  name:         name identifying the material
+    :param  name:         name identifying the material (if None compute a suitable name)
     :param  E:            Young’s modulus of the material
     :param  nu:           Poisson’s ratio
     :param  rho:          mass density, optional (defaults to 0.0)
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_isotropic_plane_strain_2d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_isotropic_plane_strain_2d", matName)
     retval.E= E
     retval.nu= nu
     retval.rho= rho
@@ -651,13 +699,16 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu, rho= 0.0):
     '''Constructs an linear elastic isotropic plane-stress material.
 
     :param  preprocessor: preprocessor of the finite element problem.
-    :param  name:         name identifying the material
+    :param  name:         name identifying the material (if None compute a suitable name)
     :param  E:            Young’s modulus of the material
     :param  nu:           Poisson’s ratio
     :param  rho:          mass density, optional (defaults to 0.0)
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_isotropic_plane_stress_2d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_isotropic_plane_stress_2d", matName)
     retval.E= E
     retval.nu= nu
     retval.rho= rho
@@ -668,13 +719,16 @@ def defElasticIsotropic3d(preprocessor, name, E, nu, rho= 0.0):
     '''Constructs an linear elastic isotropic 3D material.
 
     :param  preprocessor: preprocessor of the finite element problem.
-    :param  name:         name identifying the material
+    :param  name:         name identifying the material (if None compute a suitable name)
     :param  E:            Young’s modulus of the material
     :param  nu:           Poisson’s ratio
     :param  rho:          mass density, optional (defaults to 0.0)
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_isotropic_3d",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_isotropic_3d", matName)
     retval.E= E
     retval.nu= nu
     retval.rho= rho
@@ -693,7 +747,10 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
     :param  h:            overall depth of the section
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_plate_section",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_plate_section", matName)
     retval.E= E
     retval.nu= nu
     retval.rho= rho
@@ -706,7 +763,7 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
        hardening rule appropriate for plate analysis.
 
     :param  preprocessor: preprocessor of the finite element problem.
-    :param  name:         name identifying the material.
+    :param  name:         name identifying the material (if None compute a suitable name).
     :param  E:            Young’s modulus of the material.
     :param  nu:           Poisson’s ratio.
     :param  fy:           material yield stress.
@@ -715,7 +772,10 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
     :param  rho:          mass density (defaults to 0.0).
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("J2_plate_fibre",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("J2_plate_fibre", matName)
     retval.E= E
     retval.nu= nu
     retval.fy= fy
@@ -738,7 +798,10 @@ def defElasticMembranePlateSection(preprocessor, name:str, E:float, nu:float, rh
     :param  h:            overall depth of the section
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("elastic_membrane_plate_section",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_membrane_plate_section", matName)
     retval.E= E
     if(nu>0.5):
         lmsg.warning('Poisson\'s ratio: '+str(nu)+' is very high.') 
@@ -758,7 +821,10 @@ def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
     :param  h:            overall depth of the section
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("membrane_plate_fiber_section",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("membrane_plate_fiber_section", matName)
     retval.setMaterial(nDMaterial)
     retval.h= h
     return retval
@@ -771,7 +837,10 @@ def defLayeredShellFiberSection(preprocessor, name:str, materialThicknessPairs):
     :param  materialThicknessPairs:   pairs defining the material and thickness for each layer.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("layered_shell_fiber_section", name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("layered_shell_fiber_section", matName)
     retval.setLayers(materialThicknessPairs)
     return retval
 
@@ -779,12 +848,15 @@ def defMultiLinearMaterial(preprocessor, name, points):
     '''Constructs an elastic perfectly-plastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param points:       list of tuples defining the (strain, stress) or
                          (displacement, force) points.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("multi_linear",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("multi_linear", matName)
     retval.setValues(points)
     return retval
 
@@ -792,11 +864,14 @@ def defInitStrainMaterial(preprocessor, name, materialToEncapsulate):
     '''Constructs an initial strain uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name for the new material.
+    :param name: name for the new material (if None compute a suitable name).
     :param materialToEncapsulate: material that will name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("init_strain_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("init_strain_material", matName)
     retval.setMaterial(materialToEncapsulate)
     return retval
 
@@ -804,11 +879,14 @@ def defInitStressMaterial(preprocessor, name, materialToEncapsulate):
     '''Constructs an initial strain uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name for the new material.
+    :param name: name for the new material (if None compute a suitable name).
     :param materialToEncapsulate: material that will name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("init_stress_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("init_stress_material", matName)
     retval.setMaterial(materialToEncapsulate)
     return retval
 
@@ -816,11 +894,14 @@ def defInvertMaterial(preprocessor, name, materialToEncapsulate):
     '''Constructs an inverted uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name for the new material.
+    :param name: name for the new material (if None compute a suitable name).
     :param materialToEncapsulate: material that will name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("invert_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("invert_material", matName)
     retval.setMaterial(materialToEncapsulate)
     return retval
 
@@ -828,11 +909,14 @@ def defCompressionOnlyMaterial(preprocessor, name, materialToEncapsulate):
     '''Constructs a compression-only material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name for the new material.
+    :param name: name for the new material (if None compute a suitable name).
     :param materialToEncapsulate: material that will name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("compression_only_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("compression_only_material", matName)
     retval.setMaterial(materialToEncapsulate)
     return retval
 
@@ -840,11 +924,14 @@ def defTensionOnlyMaterial(preprocessor, name, materialToEncapsulate):
     '''Constructs a compression-only material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name for the new material.
+    :param name: name for the new material (if None compute a suitable name).
     :param materialToEncapsulate: material that will name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("tension_only_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("tension_only_material", matName)
     retval.setMaterial(materialToEncapsulate)
     return retval
 
@@ -852,11 +939,14 @@ def defSeriesMaterial(preprocessor, name, materialsToConnect):
     '''Constructs an series material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name for the new material.
+    :param name: name for the new material (if None compute a suitable name).
     :param materialsToConnect: name of the materials to be connected.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("series_material",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("series_material", matName)
     retval.setMaterials(materialsToConnect)
     return retval
 
@@ -892,7 +982,7 @@ def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStra
 def defPressureIndependentMultiYieldMaterial(preprocessor, name, nd, rho, refShearModul,refBulkModul,cohesi,peakShearStra,frictionAng = 0.,refPress = 100, pressDependCoe = 0.0, numberOfYieldSurf = 20, gredu= []):
     ''' Define a pressure independent yield material for soil analysis.
 
-    :param name: name identifying the material.
+    :param name: name identifying the material (if None compute a suitable name).
     :param nd: number of dimensions, 2 for plane-strain, and 3 for 3D analysis.
     :param rho: Saturated soil mass density.
     :param refShearModul: Reference low-strain shear modulus, specified at a reference mean effective confining pressure refPress.
@@ -907,7 +997,10 @@ def defPressureIndependentMultiYieldMaterial(preprocessor, name, nd, rho, refShe
     '''
     parameterDict= {'nd':nd, 'rho':rho, 'refShearModul':refShearModul,'refBulkModul':refBulkModul,'cohesi':cohesi,'peakShearStra':peakShearStra,'frictionAng':frictionAng, 'refPress':refPress, 'pressDependCoe':pressDependCoe, 'numberOfYieldSurf':numberOfYieldSurf, 'gredu':gredu}
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("pressure_independ_multi_yield",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("pressure_independ_multi_yield", matName)
     retval.setup(parameterDict)
     return retval
 
@@ -934,7 +1027,10 @@ def defPressureDependentMultiYield02Material(preprocessor, name, nd, rho, refShe
     '''
     parameterDict= {'nd':nd, 'rho':rho, 'refShearModul':refShearModul, 'refBulkModul':refBulkModul, 'frictionAng':frictionAng, 'peakShearStra':peakShearStra, 'refPress':refPress, 'pressDependCoe':pressDependCoe, 'phaseTransformAngle':phaseTransformAngle, 'contractionParams':[contractionParam1, contractionParam2, contractionParam3], 'dilationParams':[dilationParam1, dilationParam2, dilationParam3], 'numberOfYieldSurf':numberOfYieldSurf, 'gredu':gredu, 'dilationParam2':dilationParam2, 'liquefactionParams':[liquefactionParam1, liquefactionParam2], 'e':e, 'volLimits':[volLimit1,volLimit2, volLimit3], 'atm':atm, 'cohesi':cohesi, 'hv':hv, 'pv':pv}
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("pressure_depend_multi_yield02",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("pressure_depend_multi_yield02", matName)
     retval.setup(parameterDict)
     return retval
 
@@ -942,12 +1038,15 @@ def defViscousMaterial(preprocessor, name, C, Alpha= 1.0):
     '''Constructs a viscous material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name for the new material.
+    :param name: name for the new material (if None compute a suitable name).
     :param C: damping coeficient.
     :param Alpha: power factor (=1 means linear damping).
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("viscous_material", name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("viscous_material", matName)
     retval.dampingCoeff= C
     retval.alpha= Alpha
     return retval
@@ -957,7 +1056,7 @@ def defTemplate3Dep(preprocessor, name, elasticMaterial, yieldSurface, potential
     '''Constructs an linear elastic isotropic 3D material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the material
+    :param name:         name identifying the material (if None compute a suitable name)
     :param elasticMaterial: elastic material.
     :param yieldSurface: yield surface.
     :param potentialSurface: potential surface.
@@ -966,7 +1065,10 @@ def defTemplate3Dep(preprocessor, name, elasticMaterial, yieldSurface, potential
     :param tensorialEvolutionLaws: list with up to four tensorial evolution laws.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("template_3d_ep",name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("template_3d_ep", matName)
     retval.elasticMaterial= elasticMaterial
     retval.yieldSurface= yieldSurface
     retval.potentialSurface= potentialSurface
@@ -1010,7 +1112,10 @@ def defDruckerPrager3d(preprocessor, name, k, G, sigY, mRho, mRhoBar, Kinf, Ko, 
     :param pAtm: reference pressure (defaults to one atmosphere).
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("drucker-prager_3d", name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("drucker-prager_3d", matName)
     retval.k= k # bulk modulus.
     retval.G= G # shear modulus.
     retval.sigY= sigY
@@ -1048,7 +1153,10 @@ def defDruckerPragerPlaneStrain(preprocessor, name, k, G, sigY, mRho, mRhoBar, K
     :param pAtm: reference pressure (defaults to one atmosphere).
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("drucker-prager_plane_strain", name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("drucker-prager_plane_strain", matName)
     retval.k= k # bulk modulus.
     retval.G= G # shear modulus.
     retval.sigY= sigY
@@ -1080,7 +1188,10 @@ def defPlasticDamageConcretePlaneStress(preprocessor, name, E, nu, ft, fc, beta=
     :param Bn: parameter controlling ductility and peak strength of the compressive response.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("plastic_damage_concrete_plane_stress", name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("plastic_damage_concrete_plane_stress", matName)
     retval.E= E
     retval.nu= nu
     retval.ft= ft
@@ -1100,7 +1211,10 @@ def defPlateFromPlaneStress(preprocessor, name, underlyingMaterial, outOfPlaneSh
     :param outOfPlaneShearModulus: elastic modulus.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("plate_from_plane_stress", name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("plate_from_plane_stress", matName)
     retval.setEncapsulatedMaterial(underlyingMaterial)
     retval.outOfPlaneShearModulus= outOfPlaneShearModulus
     return retval
@@ -1114,7 +1228,10 @@ def defPlateRebar(preprocessor, name, uniaxialMaterial, angle):
     :param angle: elastic modulus.
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("plate_rebar", name)
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("plate_rebar", matName)
     retval.setEncapsulatedMaterial(uniaxialMaterial)
     retval.angle= angle
     return retval
@@ -1128,7 +1245,7 @@ class MaterialData(BasicElasticMaterial):
     def __init__(self, name, E, nu, rho):
         '''Base class to construct some material definition classes
 
-         :param name:         name identifying the material
+         :param name:         name identifying the material.
          :param E:            Young’s modulus of the material
          :param nu:           Poisson’s ratio
          :param rho:          mass density
