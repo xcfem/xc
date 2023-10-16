@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Base classes for reinforced concrete materials.'''
+
 from __future__ import division
 from __future__ import print_function
-
-''' Base classes for reinforced concrete materials.'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
