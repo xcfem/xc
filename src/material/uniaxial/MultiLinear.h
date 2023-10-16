@@ -89,6 +89,7 @@ class MultiLinear : public UniaxialMaterial
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    void setup_data(void);
     void setup(const Vector &, const Vector &);
   public:
     MultiLinear(int tag= 0);

@@ -56,40 +56,63 @@
 #include "domain/component/Parameter.h"
 #include "domain/mesh/element/utils/Information.h"
 
-void XC::MultiLinear::setup(const Vector &s, const Vector &e)
+void XC::MultiLinear::setup_data(void)
   {
-    numSlope = e.Size();
-    data.resize(numSlope, 6);
-
-    e0= e; //strain
-    s0= s; //stress
+    
+    data(0, 0)= -e0(0); // neg yield strain
+    data(0, 1)= e0(0);  // pos yield strain
+    data(0, 2)= -s0(0); // neg yield stress
+    data(0, 3)= s0(0);  // pos yield stress
+    data(0, 4)= s0(0) / e0(0);  // slope
+    data(0, 5)= e0(0);  // dist - (0-1)/2
     
     for(int i = 1; i < numSlope; i++)
       {
-        if (e(i) < e(i - 1))
+        data(i, 0) = -e0(i);
+        data(i, 1) = e0(i);
+        data(i, 2) = -s0(i);
+        data(i, 3) = s0(i);
+        data(i, 4) = (s0(i) - s0(i - 1)) / (e0(i) - e0(i - 1));
+        data(i, 5) = e0(i) - e0(i - 1);
+      }
+  }
+
+void XC::MultiLinear::setup(const Vector &ss, const Vector &ee)
+  {
+    if(fabs(ee[0])<1e-8)
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: (0, 0) is always the first point of"
+		  << " the material response. Data ignored."
+	          << std::endl;
+	const int sz= ee.Size();
+	this->e0.resize(sz-1);
+	this->s0.resize(sz-1);
+	for(int i= 1;i<sz;i++)
+	  {
+	    e0[i-1]= ee[i];
+	    s0[i-1]= ss[i];
+	  }
+      }
+    else
+      {
+        this->e0= ee; //strain
+        this->s0= ss; //stress
+      }
+    this->numSlope = this->e0.Size();
+    data.resize(numSlope, 6);
+    
+    for(int i = 1; i < numSlope; i++)
+      {
+        if (e0(i) < e0(i - 1))
 	  {
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; ERROR: MultiLinear strain_i+1 < strain_i\n"
 		      << "Continuing with strain_i+1 = 1.2*strain_1\n";
           }
       }
-    
-    data(0, 0)= -e(0);      // neg yield strain
-    data(0, 1)= e(0);       // pos yield strain
-    data(0, 2)= -s(0);      // neg yield stress
-    data(0, 3)= s(0);       // pos yield stress
-    data(0, 4)= s(0) / e(0);  // slope
-    data(0, 5)= e(0);       // dist - (0-1)/2
-    
-    for(int i = 1; i < numSlope; i++)
-      {
-        data(i, 0) = -e(i);
-        data(i, 1) = e(i);
-        data(i, 2) = -s(i);
-        data(i, 3) = s(i);
-        data(i, 4) = (s(i) - s(i - 1)) / (e(i) - e(i - 1));
-        data(i, 5) = e(i) - e(i - 1);
-      }
+    this->setup_data();
+
     // Trial values.
     tStrain = 0.0;
     tStress = 0.0;
@@ -134,9 +157,7 @@ XC::MultiLinear::MultiLinear(int tag, const Vector& s, const Vector& e)
   :UniaxialMaterial(tag, MAT_TAG_MultiLinear), numSlope(0)
   { setup(s, e); }
 
-
-
-
+//! @brief Destructor.
 XC::MultiLinear::~MultiLinear(void)
   {
     // does nothing
@@ -149,33 +170,34 @@ int XC::MultiLinear::setTrialStrain(double strain, double strainRate)
     
     tStrain = strain;
     tSlope = 0;
-    
-    if (tStrain >= data(0, 0) && tStrain <= data(0, 1)) { // elastic
+    if(tStrain >= data(0, 0) && tStrain <= data(0, 1))
+      { // elastic
         tSlope = 0;
         tStress = data(0, 2) + (tStrain - data(0, 0)) * data(0, 4);
         tTangent = data(0, 4);
-    }
-    else if (tStrain < data(0, 0)) { // search neg of data
+      }
+    else if(tStrain < data(0, 0))
+      { // search neg side of data
         tSlope = 1;
-        while (tSlope < numSlope && tStrain < data(tSlope, 0))
+        while(tSlope < numSlope && tStrain < data(tSlope, 0))
+            tSlope++;
+        if(tSlope == numSlope)
+            tSlope = numSlope - 1;
+        tTangent = data(tSlope, 4);
+        tStress = data(tSlope, 2) + (tStrain - data(tSlope, 0)) * tTangent;
+      }
+    else
+      { // search pos side of data
+        tSlope = 1;
+        while(tSlope < numSlope && tStrain > data(tSlope, 1))
             tSlope++;
         if (tSlope == numSlope)
             tSlope = numSlope - 1;
-        tStress = data(tSlope, 2) + (tStrain - data(tSlope, 0)) * data(tSlope, 4);
         tTangent = data(tSlope, 4);
-    }
-    else { // search pos side of data
-        tSlope = 1;
-        while (tSlope < numSlope && tStrain > data(tSlope, 1))
-            tSlope++;
-        if (tSlope == numSlope)
-            tSlope = numSlope - 1;
-        tStress = data(tSlope, 3) + (tStrain - data(tSlope, 1)) * data(tSlope, 4);
-        tTangent = data(tSlope, 4);
-    }
-    
+        tStress = data(tSlope, 3) + (tStrain - data(tSlope, 1)) * tTangent;
+      }
     return 0;
-}
+  }
 
 double XC::MultiLinear::getStrain(void) const
   { return tStrain; }
