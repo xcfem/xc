@@ -44,7 +44,7 @@ for f, rf in zip(forces, referenceForces):
     err+= (rf-f)**2
 err= math.sqrt(err)
 
-print(err)
+# print(err)
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
