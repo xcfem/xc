@@ -95,6 +95,47 @@ bool XC::SurfaceMap::conciliaNDivs(void)
     return checkNDivs();
   }
 
+//! @brief Returns a list with the edges that have an incompatible number of divisions.
+std::deque<const XC::Edge *> XC::SurfaceMap::getNDivErrors(void) const
+  {
+    std::deque<const Edge *> retval;
+    if(!empty())
+      for(const_iterator i= begin();i!=end();i++)
+	{
+	  std::deque<const Edge *> tmp= (*i).second->getNDivErrors();
+          for(std::deque<const Edge *>::const_iterator j= tmp.begin(); j!= tmp.end(); j++)
+	
+	    retval.push_back(*j);
+	}
+    return retval;
+  }
+
+//! @brief Returns the indentifiers of the edges that have an incompatible number of divisions.
+std::deque<int> XC::SurfaceMap::getNDivErrorTags(void) const
+  {
+    std::deque<int> retval;
+    const std::deque<const Edge *> tmp= this->getNDivErrors();
+    for(std::deque<const Edge *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const int tag= (*i)->getTag();
+        retval.push_back(tag);
+      }
+    return retval;
+  }
+
+//! @brief Returns the indentifiers of the edges that have an incompatible number of divisions.
+boost::python::list XC::SurfaceMap::getNDivErrorTagsPy(void) const
+  {
+    boost::python::list retval;
+    const std::deque<int> tmp= this->getNDivErrorTags();
+    for(std::deque<int>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	const int tag= *i;
+        retval.append(tag);
+      }
+    return retval;
+  }
+
 //! @brief Verifies that number of divisions of the edges
 //! are compatible.
 bool XC::SurfaceMap::checkNDivs(void) const
@@ -254,7 +295,10 @@ void XC::SurfaceMap::setPyDict(const boost::python::dict &d)
 	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
 	    Face *tmp= New(tag, className);
 	    if(tmp)
-	      { tmp->setPyDict(itemDict); }
+	      {
+		tmp->setPyDict(itemDict);
+		updateGraph(*tmp);
+	      }
 	    else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; something went wrong when reading surface: " << tag

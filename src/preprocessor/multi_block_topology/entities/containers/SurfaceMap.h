@@ -104,6 +104,9 @@ class SurfaceMap: public EntityMap<Face>
     SurfaceMap(MultiBlockTopology *mbt= nullptr);
 
     bool conciliaNDivs(void);
+    std::deque<const Edge *> getNDivErrors(void) const;
+    std::deque<int> getNDivErrorTags(void) const;
+    boost::python::list getNDivErrorTagsPy(void) const;
     bool checkNDivs(void) const;
     std::set<const XC::Edge *> getHomologousSides(const Edge *) const;
     
