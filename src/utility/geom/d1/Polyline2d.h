@@ -30,6 +30,7 @@ class Segment2d;
 class Ray2d;
 class Line2d;
 class Pos2dList;
+class Polygon2d;
 class Circle2d;
 class VectorPos2d;
 
@@ -43,6 +44,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     explicit Polyline2d(const GeomObj::list_Pos2d &);
     explicit Polyline2d(const Pos2dList &);
     explicit Polyline2d(const boost::python::list &);
+    explicit Polyline2d(const Polygon2d &);
 
     virtual GeomObj *getCopy(void) const
       { return new Polyline2d(*this); }

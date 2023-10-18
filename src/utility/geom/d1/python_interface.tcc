@@ -21,6 +21,8 @@
 //python_interface.cxx
 
 class_<Linear2d, bases<GeomObj2d>, boost::noncopyable  >("Linear2d", no_init)
+  .def("getArea", &Linear2d::getArea, "return the object area.")
+  .def("getVolume", &Linear2d::getVolume, "return the object volume.")
   ;
 
 Line2d (Line2d::*OffsetVector)(const Vector2d &v) const= &Line2d::offset;
@@ -235,6 +237,7 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("getFromPoint", &Polyline2d::getFromPoint,"return the first point of the polyline.")
   .def("getToPoint", &Polyline2d::getToPoint,"return the last point of the polyline.")
   .def("getVertexList",&Polyline2d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
+  .def("getVertices",&Polyline2d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
   .def("getIx", &Polyline2d::Ix)
   .def("getIy", &Polyline2d::Iy)
   .def("getIz", &Polyline2d::Iz)
@@ -315,6 +318,7 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("getFromPoint", &PlanePolyline3d::getFromPoint,"return the first point of the polyline.")
   .def("getToPoint", &PlanePolyline3d::getToPoint,"return the last point of the polyline.")
   .def("getVertexList",&PlanePolyline3d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
+  .def("getVertices",&PlanePolyline3d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
   .def("getPolyline3d", &PlanePolyline3d::getPolyline3d,"Return the corresponding 3D polyline.")
   .def("intersects", getPPLineIntersects, "Return true if this object intersects with the line argument.")
   .def("getIntersection", getPPPlaneIntersection, "Return the intersection with the plane argument.")
@@ -362,6 +366,7 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("getFromPoint", &Polyline3d::getFromPoint,"return the first point of the polyline.")
   .def("getToPoint", &Polyline3d::getToPoint,"return the last point of the polyline.")
   .def("getVertexList",&Polyline3d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
+  .def("getVertices",&Polyline3d::getVertexListPy,"Return a Python list containing the positions of the polyline vertices.")
   .def("getIntersection", &Polyline3d::getIntersection, "Return the intersection with the plane argument.")
   .def("getNearestSegmentIndex", &Polyline3d::getNearestSegmentIndex, "Return the index of the nearest segment to the given point.")
   .def("getNearestSegment", &Polyline3d::getNearestLink, "Return the nearest segment to the given point.")

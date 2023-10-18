@@ -111,9 +111,16 @@ Polygon2d Polygon2d::offset(const GEOM_FT &d) const
     if(!offset_polygons.empty())
       {
         if(offset_polygons.size()!=1)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; we get more than a polygon." << std::endl;
-        retval.cgpol= *offset_polygons[0];
+	  {
+	    // Try using a 2D polyline.	    
+	    Polyline2d tmp(*this);
+	    retval= Polygon2d(tmp.offset(d));
+            // std::cerr << getClassName() << "::" << __FUNCTION__
+	    // 	    << "; we get more than a polygon." << std::endl;
+            // retval.cgpol= *offset_polygons[0];
+	  }
+	else
+	  retval.cgpol= *offset_polygons[0];
       }
     return retval;
   }

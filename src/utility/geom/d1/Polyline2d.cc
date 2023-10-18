@@ -44,6 +44,14 @@ Polyline2d::Polyline2d(const GeomObj::list_Pos2d &l)
 Polyline2d::Polyline2d(const Pos2dList &l)
   : Linear2d(), GeomObj::list_Pos2d(l.getPoints()){}
 
+//! @brief Constructor.
+Polyline2d::Polyline2d(const Polygon2d &plg)
+  : Linear2d(), GeomObj::list_Pos2d(plg.getVertexList())
+  {
+    if(!isClosed(1e-12))
+      close();
+  }
+
 //! @brief Constructor (Python interface).
 Polyline2d::Polyline2d(const boost::python::list &l)
   {
@@ -89,7 +97,7 @@ const GeomObj::list_Pos2d &Polyline2d::getVertexList(void) const
   { return *this; }
 
 //! @brief Return a Python list containing the positions
-//! of the polygon vertices.
+//! of the polyline vertices.
 boost::python::list Polyline2d::getVertexListPy(void) const
   {
     boost::python::list retval;
