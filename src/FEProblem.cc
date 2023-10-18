@@ -122,7 +122,7 @@ void XC::FEProblem::setPyDict(const boost::python::dict &d)
 	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; reading of output handlers not implemented yet."
 	          << std::endl;
-	for(boost::python::ssize_t i=0; i<sz; i++)
+	for(size_t i=0; i<sz; i++)
 	  {
 	    const std::string key= boost::python::extract<std::string>(items[i][0]);
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
