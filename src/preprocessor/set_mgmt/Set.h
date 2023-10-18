@@ -116,6 +116,7 @@ class Set: public SetMeshComp
     void setPoints(const SetEntities::lst_ptr_points &pts)
       { entities.setPoints(pts); }
     void sel_points_from_list(const ID &);
+    void selPointsFromListPy(const boost::python::list &);
     bool In(const Pnt *) const;
     Set pickPointsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
@@ -129,6 +130,7 @@ class Set: public SetMeshComp
     void setLines(const SetEntities::lst_line_pointers &lns)
       { entities.setLines(lns); }
     void sel_lines_from_list(const ID &);
+    void selLinesFromListPy(const boost::python::list &);
     bool In(const Edge *) const;
     Set pickLinesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
@@ -142,6 +144,7 @@ class Set: public SetMeshComp
     void setSurfaces(const SetEntities::lst_surface_ptrs &sfs)
       { entities.setSurfaces(sfs); }
     void sel_surfaces_from_list(const ID &);
+    void selSurfacesFromListPy(const boost::python::list &);
     bool In(const Face *) const;
     Set pickSurfacesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
@@ -154,6 +157,8 @@ class Set: public SetMeshComp
     //! @brief Assigns the bodies set.
     void setBodies(const SetEntities::lst_body_pointers &bds)
       { entities.setBodies(bds); }
+    void sel_bodies_from_list(const ID &);
+    void selBodiesFromListPy(const boost::python::list &);
     bool In(const Body *) const;
     Set pickBodiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
@@ -163,6 +168,8 @@ class Set: public SetMeshComp
     //! @brief Return a reference to the UniformGrids container.
     virtual SetEntities::lst_ptr_uniform_grids &getUniformGrids(void)
       { return entities.getUniformGrids(); }
+    void sel_ugrids_from_list(const ID &);
+    void selUgridsFromListPy(const boost::python::list &);
     bool In(const UniformGrid *) const;
 
     BND3d Bnd(const double &) const;

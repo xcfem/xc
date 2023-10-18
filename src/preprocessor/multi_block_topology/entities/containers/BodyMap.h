@@ -51,6 +51,9 @@ class BodyMap: public EntityMap<Body>
     BodyMap(MultiBlockTopology *mbt= nullptr);
 
     bool conciliaNDivs(void);
+    std::deque<const Edge *> getNDivErrors(void) const;
+    std::deque<int> getNDivErrorTags(void) const;
+    boost::python::list getNDivErrorTagsPy(void) const;
     bool checkNDivs(void) const;
 
     template <class B>

@@ -1143,6 +1143,14 @@ void XC::SetEntities::sel_points_from_list(const ID &tags)
       }
   }
 
+//! @brief Select the points identified by the given tags.
+//! @param tags: identifiers of the points to select.
+void XC::SetEntities::selPointsFromListPy(const boost::python::list &tags)
+  {
+    const ID tmp(tags);
+    sel_points_from_list(tmp);
+  }
+
 //! @brief Select the lines identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
@@ -1171,7 +1179,16 @@ void XC::SetEntities::sel_lines_from_list(const ID &tags)
       }
   }
 
+//! @brief Select the points identified by the given tags.
+//! @param tags: identifiers of the points to select.
+void XC::SetEntities::selLinesFromListPy(const boost::python::list &tags)
+  {
+    const ID tmp(tags);
+    sel_lines_from_list(tmp);
+  }
+
 //! @brief Selects the surfaces with the identifiers being passed as parameter.
+//! @param tags: identifiers of the points to select.
 void XC::SetEntities::sel_surfaces_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -1196,7 +1213,16 @@ void XC::SetEntities::sel_surfaces_from_list(const ID &tags)
       }
   }
 
+//! @brief Select the surfaces identified by the given tags.
+//! @param tags: identifiers of the points to select.
+void XC::SetEntities::selSurfacesFromListPy(const boost::python::list &tags)
+  {
+    const ID tmp(tags);
+    sel_surfaces_from_list(tmp);
+  }
+
 //! @brief Selects the bodies with the identifiers being passed as parameter.
+//! @param tags: identifiers of the points to select.
 void XC::SetEntities::sel_bodies_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -1221,7 +1247,16 @@ void XC::SetEntities::sel_bodies_from_list(const ID &tags)
       }
   }
 
+//! @brief Select the bodies identified by the given tags.
+//! @param tags: identifiers of the points to select.
+void XC::SetEntities::selBodiesFromListPy(const boost::python::list &tags)
+  {
+    const ID tmp(tags);
+    sel_bodies_from_list(tmp);
+  }
+
 //! @brief Selects the uniform grids with the identifiers being passed as parameter.
+//! @param tags: identifiers of the points to select.
 void XC::SetEntities::sel_ugrids_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -1244,6 +1279,14 @@ void XC::SetEntities::sel_ugrids_from_list(const ID &tags)
           std::cerr << getClassName() << __FUNCTION__
 	            << "; preprocessor needed." << std::endl;
       }
+  }
+
+//! @brief Select the bodies identified by the given tags.
+//! @param tags: identifiers of the points to select.
+void XC::SetEntities::selUgridsFromListPy(const boost::python::list &tags)
+  {
+    const ID tmp(tags);
+    sel_ugrids_from_list(tmp);
   }
 
 //! @brief Returns a vector to store the dbTags

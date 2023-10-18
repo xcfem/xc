@@ -95,6 +95,18 @@ XC::SetEstruct *XC::Block::getCopy(void) const
 int XC::Block::getVtkCellType(void) const
   { return VTK_HEXAHEDRON; }
 
+//! @brief Returns a list with the edges that have an incompatible number of divisions.
+std::deque<const XC::Edge *> XC::Block::getNDivErrors(void) const
+  {
+    std::deque<const Edge *> retval;
+    for(int i= 0; i<6; i++)
+      {
+        std::deque<const Edge *> tmp= this->sups[i].getNDivErrors();
+        for(std::deque<const Edge *>::const_iterator j= tmp.begin(); j!= tmp.end(); j++)
+	      retval.push_back(*j);
+      }
+    return retval;
+  }
 //! @brief Check that number of divisions of the lines are compatible.
 bool XC::Block::checkNDivs(void) const
   {

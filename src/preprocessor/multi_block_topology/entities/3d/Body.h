@@ -96,6 +96,7 @@ class Body: public EntMdlr
         virtual Pos3dArray get_positions(void) const;
         void create_nodes(void);
 	
+        std::deque<const Edge *> getNDivErrors(void) const;
         bool checkNDivs(void) const;
 	
         Node *getNode(const size_t &,const size_t &);
@@ -130,6 +131,7 @@ class Body: public EntMdlr
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 
+    virtual std::deque<const Edge *> getNDivErrors(void) const= 0;
     virtual bool checkNDivs(void) const= 0;
 
     std::set<SetBase *> get_sets(void) const;

@@ -77,6 +77,21 @@ bool XC::BodyMap::conciliaNDivs(void)
     return checkNDivs();
   }
 
+//! @brief Returns a list with the edges that have an incompatible number of divisions.
+std::deque<const XC::Edge *> XC::BodyMap::getNDivErrors(void) const
+  {
+    std::deque<const Edge *> retval;
+    if(!empty())
+      for(const_iterator i= begin();i!=end();i++)
+	{
+	  std::deque<const Edge *> tmp= (*i).second->getNDivErrors();
+          for(std::deque<const Edge *>::const_iterator j= tmp.begin(); j!= tmp.end(); j++)
+	
+	    retval.push_back(*j);
+	}
+    return retval;
+  }
+
 //! @brief Checks that the number of divisions of the edges
 //! are compatible.
 bool XC::BodyMap::checkNDivs(void) const
@@ -86,6 +101,27 @@ bool XC::BodyMap::checkNDivs(void) const
       for(const_iterator i= begin();i!=end();i++)
         if(!(*i).second->checkNDivs()) conta++;
     return (conta==0);
+  }
+//! @brief Returns the indentifiers of the edges that have an incompatible number of divisions.
+std::deque<int> XC::BodyMap::getNDivErrorTags(void) const
+  {
+    std::deque<int> retval;
+    std::deque<const Edge *> tmp= this->getNDivErrors();
+    for(std::deque<const Edge *>::const_iterator j= tmp.begin(); j!= tmp.end(); j++)
+      retval.push_back((*j)->getTag());
+    return retval;
+  }
+
+//! @brief Returns the indentifiers of the edges that have an incompatible number of divisions.
+boost::python::list XC::BodyMap::getNDivErrorTagsPy(void) const
+  {
+    boost::python::list retval;
+    std::deque<int> tmp= tmp= this->getNDivErrorTags();
+    for(std::deque<int>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+        retval.append(*i);
+      }
+    return retval;
   }
 
 //! @brief New block.

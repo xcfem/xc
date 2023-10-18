@@ -280,19 +280,37 @@ void XC::Face::set_ndiv_opposite_sides(const size_t &A,const size_t &nd)
                 << lines.size() << " there is no opposite side." << std::endl;
   }
 
+//! @brief If the i-th edge and its opposite edges are incompatibles return a
+//! list containing a pointer to each of them. Otherwise returns an empty list.
+std::deque<const XC::Edge *> XC::Face::getNDivErrors(const size_t &i) const
+  {
+    std::deque<const Edge *> retval;
+    const Edge *edgeI= lines[i].getEdge();
+    const size_t ndivA= edgeI->NDiv();
+    const size_t j= get_index_opposite_side(i);
+    const Edge *edgeJ= lines[j].getEdge();
+    const size_t ndivB= edgeJ->NDiv();
+    if(ndivA!=ndivB)
+      {
+	retval.push_back(edgeI);
+	retval.push_back(edgeJ);
+      }
+    return retval;
+  }
+
 //! @brief Verifies that the number of divisions of the lines are
 //! compatible.
 bool XC::Face::checkNDivs(const size_t &i) const
   {
-    const size_t ndivA= lines[i].getEdge()->NDiv();
-    const size_t j= get_index_opposite_side(i);
-    const size_t ndivB= lines[j].getEdge()->NDiv();
-    if(ndivA!=ndivB)
+    std::deque<const Edge *> tmp= this->getNDivErrors(i);
+    if(!tmp.empty())
       {
+        const size_t ndivA= tmp[0]->NDiv();
+        const size_t ndivB= tmp[1]->NDiv();
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; lines: "
-                  << lines[i].getEdge()->getName() << " and "
-                  << lines[j].getEdge()->getName() 
+                  << tmp[0]->getName() << " and "
+                  << tmp[1]->getName() 
                   << " of surface: " << getName()
                   << " have different number of divisions ("
                   << ndivA << " y " << ndivB << ')' << std::endl;
@@ -300,6 +318,24 @@ bool XC::Face::checkNDivs(const size_t &i) const
       }
     else
       return true;
+  }
+
+//! @brief Returns a list with the edges that have an incompatible number of divisions.
+std::deque<const XC::Edge *> XC::Face::getNDivErrors(void) const
+  {
+    std::deque<const Edge *> retval;
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+	const size_t n_2= getNumberOfEdges()/2;
+	for(size_t i= 0;i<n_2;i++)
+	  {
+	    std::deque<const Edge *> tmp= getNDivErrors(i);
+            for(std::deque<const Edge *>::const_iterator j= tmp.begin(); j!= tmp.end(); j++)
+	      retval.push_back(*j);
+	  }
+      }
+    return retval;
   }
 
 //! @brief Verifies that the number of divisions of the lines are

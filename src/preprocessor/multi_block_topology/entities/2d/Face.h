@@ -139,7 +139,9 @@ class Face: public CmbEdge
     size_t CommonEdge(const Face &other) const;
     int SenseOfEdge(const Edge *l,const Face &other) const;
     bool isConnectedTo(const Body &b) const;
+    std::deque<const Edge *> getNDivErrors(const size_t &) const;
     bool checkNDivs(const size_t &) const;
+    std::deque<const Edge *> getNDivErrors(void) const;
     virtual bool checkNDivs(void) const;
 
     virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k);

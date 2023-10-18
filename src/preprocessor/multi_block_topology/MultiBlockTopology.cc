@@ -140,44 +140,6 @@ void XC::MultiBlockTopology::conciliaNDivs(void)
     for(LineMap::iterator i=edges.begin();i!=edges.end();i++, j++)
       edge_ptrs[j]= (*i).second;
     conciliate_divisions(face_ptrs, edge_ptrs);
-    // if(!faces.empty())
-    //   {
-    //     std::set<const Edge *> tmp_edges;
-    //     for(LineMap::iterator i=edges.begin();i!=edges.end();i++)
-    //       tmp_edges.insert((*i).second);
-    //     const size_t max_num_iter= 1000; 
-    //     size_t conta= 0;
-    //     while(!tmp_edges.empty())
-    //       {
-    //         const Edge *lado= *tmp_edges.begin();
-    // 	    std::set<const Edge *> homologous= lado->getHomologousSides();
-    // 	    if(homologous.empty()) // nothing to do
-    // 	      {
-    // 		Edge *tmp= const_cast<Edge *>(lado);
-    // 	        tmp_edges.erase(tmp);
-    // 	      }
-    // 	    else
-    // 	      {
-    // 		homologous.insert(lado);
-    // 		const size_t nd= calcula_ndiv_lados(homologous);
-    // 		for(std::set<const Edge *>::const_iterator i= homologous.begin();i!=homologous.end();i++)
-    // 		  {
-    // 		    Edge *tmp= const_cast<Edge *>(*i);
-    // 		    tmp->setNDiv(nd);
-    // 		    tmp_edges.erase(tmp);
-    // 		  }
-    // 		conta++;
-    // 		if(conta>max_num_iter)
-    // 		  {
-    // 		    std::cerr << getClassName() << "::" << __FUNCTION__
-    // 			      << "; too much iterations." << std::endl;
-    // 		    break;
-    // 		  }
-    // 	      }
-    //       }
-    //     for(SurfaceMap::iterator i=faces.begin();i!= faces.end();i++)
-    //       (*i).second->ConciliaNDivIJ();        
-    //   }
   }
 
 //! @brief Search for the entity whose name is passed as a parameter.

@@ -228,6 +228,10 @@ Pos3dArray XC::Body::BodyFace::get_positions(void) const
     return Pos3dArray(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
   }
 
+//! @brief Returns a list with the edges that have an incompatible number of divisions.
+std::deque<const XC::Edge *> XC::Body::BodyFace::getNDivErrors(void) const
+  { return surface->getNDivErrors(); }
+
 //! @brief Check the number of divisions.
 bool XC::Body::BodyFace::checkNDivs(void) const
   { return surface->checkNDivs(); }

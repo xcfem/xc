@@ -151,6 +151,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void setPoints(const lst_ptr_points &pts)
       { points= pts; }
     void sel_points_from_list(const ID &);
+    void selPointsFromListPy(const boost::python::list &);
     bool In(const Pnt *) const;
     SetEntities pickPointsInside(const GeomObj3d &, const double &tol= 0.0) const;
     Pnt *getNearestPoint(const Pos3d &);
@@ -167,6 +168,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void setLines(const lst_line_pointers &lns)
       { lines= lns; }
     void sel_lines_from_list(const ID &);
+    void selLinesFromListPy(const boost::python::list &);
     bool In(const Edge *) const;
     SetEntities pickLinesInside(const GeomObj3d &, const double &tol= 0.0) const;
     edge_intersection_pairs getLineIntersections(const double &tol= 1e-6) const;
@@ -184,6 +186,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void setSurfaces(const lst_surface_ptrs &sfs)
       { surfaces= sfs; }
     void sel_surfaces_from_list(const ID &);
+    void selSurfacesFromListPy(const boost::python::list &);
     bool In(const Face *) const;
     SetEntities pickSurfacesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
@@ -197,6 +200,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void setBodies(const lst_body_pointers &bds)
       { bodies= bds; }
     void sel_bodies_from_list(const ID &);
+    void selBodiesFromListPy(const boost::python::list &);
     bool In(const Body *) const;
     SetEntities pickBodiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
@@ -207,6 +211,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     virtual lst_ptr_uniform_grids &getUniformGrids(void)
       { return uniform_grids; }
     void sel_ugrids_from_list(const ID &);
+    void selUgridsFromListPy(const boost::python::list &);
     bool In(const UniformGrid *) const;
 
     BND3d Bnd(void) const;

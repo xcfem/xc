@@ -394,15 +394,53 @@ void XC::Set::fillUpwards(void)
 void XC::Set::sel_points_from_list(const ID &tags)
   { entities.sel_points_from_list(tags); }
 
+//! @brief Select the points identified by the given tags.
+//!
+//! @param tags: identifiers of the points to select.
+void XC::Set::selPointsFromListPy(const boost::python::list &tags)
+  { entities.selPointsFromListPy(tags); }
+
 //! @brief Select the lines identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
 void XC::Set::sel_lines_from_list(const ID &tags)
   { entities.sel_lines_from_list(tags); }
 
+//! @brief Select the lines identified by the given tags.
+//!
+//! @param tags: identifiers of the points to select.
+void XC::Set::selLinesFromListPy(const boost::python::list &tags)
+  { entities.selLinesFromListPy(tags); }
+
 //! @brief Selects the surfaces with the identifiers being passed as parameter.
 void XC::Set::sel_surfaces_from_list(const ID &tags)
   { entities.sel_surfaces_from_list(tags); }
+
+//! @brief Select the surfaces identified by the given tags.
+//!
+//! @param tags: identifiers of the points to select.
+void XC::Set::selSurfacesFromListPy(const boost::python::list &tags)
+  { entities.selSurfacesFromListPy(tags); }
+
+//! @brief Selects the bodies with the identifiers being passed as parameter.
+void XC::Set::sel_bodies_from_list(const ID &tags)
+  { entities.sel_bodies_from_list(tags); }
+
+//! @brief Select the bodies identified by the given tags.
+//!
+//! @param tags: identifiers of the points to select.
+void XC::Set::selBodiesFromListPy(const boost::python::list &tags)
+  { entities.selBodiesFromListPy(tags); }
+
+//! @brief Selects the ugrids with the identifiers being passed as parameter.
+void XC::Set::sel_ugrids_from_list(const ID &tags)
+  { entities.sel_ugrids_from_list(tags); }
+
+//! @brief Select the ugrids identified by the given tags.
+//!
+//! @param tags: identifiers of the points to select.
+void XC::Set::selUgridsFromListPy(const boost::python::list &tags)
+  { entities.selUgridsFromListPy(tags); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

@@ -103,7 +103,8 @@ class_<XC::SurfaceMap, bases<map_faces>, boost::noncopyable >("SurfaceMap", no_i
    .def("get", &XC::SurfaceMap::get, return_internal_reference<>(),"Return the i-th face.")
   .def("conciliaNDivs", &XC::SurfaceMap::conciliaNDivs, "Conciliate the number of divisions of the lines.")
    .def("checkNDivs",&XC::SurfaceMap::checkNDivs,"Check the number of divisions.")
-  .def("getAverageArea",&XC::SurfaceMap::getAverageArea,"Return the average area of the surfaces.")
+  .def("getNDivErrorsTags",&XC::SurfaceMap::getNDivErrorTagsPy,"Return the identifiers of the line that have an incompatible number of divisions.")
+   .def("getAverageArea",&XC::SurfaceMap::getAverageArea,"Return the average area of the surfaces.")
    ;
 
 typedef XC::ModelComponentContainer<XC::Body> map_cm_bodies;
@@ -125,6 +126,7 @@ class_<XC::BodyMap, bases<map_bodies>, boost::noncopyable >("MapBodies", no_init
    .def("get", &XC::BodyMap::get, return_internal_reference<>(),"Return the i-th face.")
    .def("conciliaNDivs", &XC::BodyMap::conciliaNDivs)
    .def("checkNDivs",&XC::BodyMap::checkNDivs,"Check the number of divisions.")
+  .def("getNDivErrorsTags",&XC::BodyMap::getNDivErrorTagsPy,"Return the identifiers of the line that have an incompatible number of divisions.")
   .def("getAverageVolume",&XC::BodyMap::getAverageVolume,"Return the average volume of the bodies.")
    ;
 

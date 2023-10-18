@@ -417,6 +417,9 @@ class PredefinedSpace(object):
     def conciliaNDivs(self):
         '''Conciliate the number of divisions of the lines.'''
         return self.preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
+    def getNDivErrorsTags(self):
+        ''' Return the identifies of the lines that have an incomptible number of divisions.'''
+        return self.preprocessor.getMultiBlockTopology.getSurfaces.getNDivErrorsTags()
     
     def getMaterialNames(self):
         ''' Return the names of the materials.'''

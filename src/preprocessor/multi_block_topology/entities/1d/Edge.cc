@@ -524,7 +524,6 @@ std::set<const XC::Edge *> XC::Edge::getHomologousSides(void) const
     const Preprocessor *preprocessor= getPreprocessor();
     const MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
     std::set<const Edge *> retval= mbt.getHomologousSides(this);
-    //retval.erase(this);
     return retval;
   }
 
