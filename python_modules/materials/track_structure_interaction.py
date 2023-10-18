@@ -23,7 +23,8 @@ def def_ballast_friction_material(preprocessor, u0, k, tributaryLength, name= No
     :param smallSlopeFactor: small factor to get a slope sligthly greater than zero in plastic range.
     '''
     # list of tuples defining the (strain, stress) or (displacement, force) points.)
-    frictionStrainStressCurve=[(u0,k), (1,smallSlopeFactor*k)]
+    tributaryK= k*tributaryLength
+    frictionStrainStressCurve=[(u0,tributaryK), (1,smallSlopeFactor*tributaryK)]
     retval= typical_materials.defMultiLinearMaterial(
         preprocessor=preprocessor,
         name= name,
