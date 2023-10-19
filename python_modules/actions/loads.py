@@ -108,8 +108,9 @@ class UniformLoadOnBeams(BaseVectorLoad):
 
     :ivar name:       name identifying the load
     :ivar xcSet:      set that contains the elements
-    :ivar loadVector: xc.Vector with the six components of the load: 
-                      xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+    :ivar loadVector: xc.Vector with the components of the load: 
+                      xc.Vector([Fx,Fy,Fz,Mx,My,Mz]) for 3D elements,
+                      xc.Vector([Fx,Fy,Mz]) for 2D elements
     :ivar refSystem: reference system in which loadVector is defined:
                    'Local': element local coordinate system
                    'Global': global coordinate system (defaults to 'Global)
@@ -122,12 +123,20 @@ class UniformLoadOnBeams(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         retval= list()
-        for e in self.xcSet.elements:
-            if self.refSystem=='Local':
-                load= e.vector3dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
-            else:
-                load= e.vector3dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
-            retval.append(load)
+        if '3d' in (self.xcSet.elements.getTypes()[0]).lower():
+            for e in self.xcSet.elements:
+                if self.refSystem=='Local':
+                    load= e.vector3dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
+                else:
+                    load= e.vector3dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
+                retval.append(load)
+        elif '2d' in (self.xcSet.elements.getTypes()[0]).lower():
+            for e in self.xcSet.elements:
+                if self.refSystem=='Local':
+                    load= e.vector2dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
+                else:
+                    load= e.vector2dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
+                retval.append(load)
         return retval
  
     def getMaxMagnitude(self):
