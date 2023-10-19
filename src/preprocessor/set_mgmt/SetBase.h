@@ -66,6 +66,7 @@ class SetBase: public EntMdlrBase
     const ID &getIdElementTags(void) const;
 
 
+    bool interiorNode(const Node *) const;
     virtual bool In(const Node *) const= 0;
     virtual bool In(const Element *) const= 0;
     virtual bool In(const Pnt *) const;
@@ -75,6 +76,7 @@ class SetBase: public EntMdlrBase
     virtual bool In(const UniformGrid *) const;
    
     void resetTributaries(void) const;
+    bool checkTributaries(void) const;
     void computeTributaryLengths(bool initialGeometry= true) const;
     void computeTributaryAreas(bool initialGeometry= true) const;
     void computeTributaryVolumes(bool initialGeometry= true) const;
