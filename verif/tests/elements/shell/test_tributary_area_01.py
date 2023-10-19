@@ -64,6 +64,9 @@ for l in sides:
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
+# Warning: the tributary area is cumulative (to avoid discontinuities for
+# the nodes at the set boundaries), so if you call it twice, you'll get this
+# value doubled unless you call resetTributaries first.
 s.resetTributaries()
 s.computeTributaryAreas(False)
 tributaryArea= 0.0
