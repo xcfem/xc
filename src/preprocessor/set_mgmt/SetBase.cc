@@ -30,6 +30,7 @@
 
 #include <boost/any.hpp>
 #include "domain/constraints/SFreedom_Constraint.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 #include "utility/matrix/ID.h"
@@ -71,9 +72,9 @@ void XC::SetBase::setColor(const Vector &rgb)
     if(rgb.Size()>2)
       { color[0]= rgb[0]; color[1]= rgb[1]; color[2]= rgb[2]; }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << " three components needed ([red,green,blue])."
-		<< std::endl;
+		<< Color::def << std::endl;
   }
 
 //! @brief Return the color of the object [red,green,blue] as
@@ -84,23 +85,29 @@ const XC::Vector &XC::SetBase::getColor(void) const
 //! @brief Generates a finite element mesh from the set components.
 void XC::SetBase::genMesh(meshing_dir dm)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented." << std::endl;
+    std::cerr << Color::red
+	      << getClassName() << "::" << __FUNCTION__
+              << " not implemented."
+	      << Color::def << std::endl;
   }
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
 void XC::SetBase::createInertiaLoads(const Vector &)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented." << std::endl;
+    std::cerr << Color::red
+	      << getClassName() << "::" << __FUNCTION__
+              << " not implemented."
+	      << Color::def << std::endl;
   }
 
 //! @brief Impone desplazamiento nulo for all the nodes of this set.
 void XC::SetBase::fix(const SFreedom_Constraint &)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented." << std::endl;
+    std::cerr << Color::red
+	      << getClassName() << "::" << __FUNCTION__
+              << " not implemented."
+	      << Color::def << std::endl;
   }
 
 //! @brief Returns the tags of the nodes en un vector de enteros.
@@ -132,6 +139,36 @@ const XC::ID &XC::SetBase::getIdElementTags(void) const
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++,conta++)
           retval[conta]= *i;
       }
+    return retval;
+  }
+
+//! @brief Returns true if the all the elements connected to the given node
+//! belong to the set.
+bool XC::SetBase::interiorNode(const Node *n) const
+  {
+    bool retval= true;
+    if(n)
+      {
+	if(In(n))
+	  {
+            std::set<const Element *> connectedElements= n->getConnectedElements();
+	    for(std::set<const Element *>::const_iterator i= connectedElements.begin();
+		i!=connectedElements.end();
+		i++)
+	      {
+		const Element *e= *i;
+		if(!In(e))
+		  {
+		    retval= false;
+		    break;
+		  }
+	      }
+	  }
+	else
+	  retval= false;
+      }
+    else
+      retval= false;
     return retval;
   }
 
@@ -170,13 +207,56 @@ void XC::SetBase::resetTributaries(void) const
             if(elem)
               elem->resetTributaries();
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red
+			<< getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
-                        << tag_elem << " not found." << std::endl;
+                        << tag_elem << " not found."
+			<< Color::def << std::endl;
           }
       }
     else
-      std::cerr << "domain not set." << std::endl;    
+      std::cerr << Color::red
+		<< getClassName() << "::" << __FUNCTION__
+		<< ": domain not set."
+		<< Color::def << std::endl;    
+  }
+ 
+//! @brief Check if the interior nodes of the set have already a tributary
+//! area and warns the user about this circumstance.
+bool XC::SetBase::checkTributaries(void) const
+  {
+    const std::set<int> tmp= getNodeTags();
+    const Domain *dom= getPreprocessor()->getDomain();
+    int count= 0;
+    if(dom)
+      {
+        for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+          {
+            const int &tag_node= *i;
+            const Node *node= dom->getNode(tag_node);
+            if(interiorNode(node))
+	      {
+                if(node->getTributary()!= 0.0)
+		  count++;
+	      }
+          }
+      }
+    else
+      std::cerr << Color::red
+		<< getClassName() << "::" << __FUNCTION__
+		<< ": domain not set."
+		<< Color::def << std::endl;
+    if(count>0)
+      {
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	          << " " << count
+	  	  << " of the set interior nodes out of a total of "
+		  << tmp.size()
+	          << " have already a tributary area."
+	          << " Have you called the computation twice?"
+	          << Color::def << std::endl;
+      }
+    return (count==0);
   }
  
 //! @brief Computes the tributary lengths that correspond to each
@@ -185,6 +265,7 @@ void XC::SetBase::resetTributaries(void) const
 //!                         of the model. Otherwise use its current geometry.
 void XC::SetBase::computeTributaryLengths(bool initialGeometry) const
   {
+    checkTributaries();
     const std::set<int> tmp= getElementTags();
     const Domain *dom= getPreprocessor()->getDomain();
     if(dom)
@@ -196,19 +277,25 @@ void XC::SetBase::computeTributaryLengths(bool initialGeometry) const
             if(elem)
               elem->computeTributaryLengths(initialGeometry);
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red
+			<< getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
-                        << tag_elem << " not found." << std::endl;
+                        << tag_elem << " not found."
+			<< Color::def << std::endl;
           }
       }
     else
-      std::cerr << "domain not set." << std::endl;
+      std::cerr << Color::red
+		<< getClassName() << "::" << __FUNCTION__
+		<< "domain not set."
+		<< Color::def << std::endl;
   }
 
 //! @brief Computes the tributary areas that correspond to each
 //! node of the element set.
 void XC::SetBase::computeTributaryAreas(bool initialGeometry) const
   {
+    checkTributaries();
     const std::set<int> tmp= getElementTags();
     const Domain *dom= getPreprocessor()->getDomain();
     if(dom)
@@ -220,19 +307,25 @@ void XC::SetBase::computeTributaryAreas(bool initialGeometry) const
             if(elem)
               elem->computeTributaryAreas(initialGeometry);
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red
+			<< getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
-                        << tag_elem << " not found." << std::endl;
+                        << tag_elem << " not found."
+			<< Color::def << std::endl;
           }
       }
     else
-      std::cerr << "domain not set." << std::endl;
+      std::cerr << Color::red
+		<< getClassName() << "::" << __FUNCTION__
+		<< "domain not set."
+		<< Color::def << std::endl;
   }
 
 //! @brief Computes the tributary volumes that correspond to each
 //! node of the element set.
 void XC::SetBase::computeTributaryVolumes(bool initialGeometry) const
   {
+    checkTributaries();
     const std::set<int> tmp= getElementTags();
     const Domain *dom= getPreprocessor()->getDomain();
     if(dom)
@@ -244,13 +337,18 @@ void XC::SetBase::computeTributaryVolumes(bool initialGeometry) const
             if(elem)
               elem->computeTributaryVolumes(initialGeometry);
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red
+			<< getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
-                        << tag_elem << " not found." << std::endl;
+                        << tag_elem << " not found."
+			<< Color::def << std::endl;
           }
       }
     else
-      std::cerr << "domain not set." << std::endl;
+      std::cerr << Color::red
+		<< getClassName() << "::" << __FUNCTION__
+		<< "domain not set."
+		<< Color::def << std::endl;
   }
 
 //! @brief Return a Python dictionary containing the object members values.

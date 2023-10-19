@@ -29,6 +29,7 @@ enum Code
   {
     FG_RED      = 31,
     FG_GREEN    = 32,
+    FG_YELLOW   = 33,
     FG_BLUE     = 34,
     FG_DEFAULT  = 39,
     BG_RED      = 41,
@@ -48,6 +49,8 @@ class Modifier
   
 static const Modifier red(Color::FG_RED);
 static const Modifier green(Color::FG_GREEN);
+static const Modifier blue(Color::FG_BLUE);
+static const Modifier yellow(Color::FG_YELLOW);
 static const Modifier def(Color::FG_DEFAULT);
 
 } // end Color namespace.

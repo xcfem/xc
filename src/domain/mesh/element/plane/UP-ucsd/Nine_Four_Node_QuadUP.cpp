@@ -134,12 +134,11 @@ XC::NineFourNodeQuadUP::~NineFourNodeQuadUP(void)
       }
   }
 
-
+//! @brief Return the number of degrees of freedom.
 int XC::NineFourNodeQuadUP::getNumDOF(void) const
   { return 22; }
 
-
-
+//! @brief Set the domain for the element.
 void XC::NineFourNodeQuadUP::setDomain(Domain *theDomain)
   {
     ElemWithMaterial<9,SolidMech2D>::setDomain(theDomain);
