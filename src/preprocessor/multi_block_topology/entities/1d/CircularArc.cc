@@ -278,6 +278,7 @@ void XC::CircularArc::setPyDict(const boost::python::dict &d)
 	PntMap &points= mbt.getPoints();
 	if(tagP3>=0)
 	  p3= points.busca(tagP3);
+	this->update_topology();
       }
     else
       std::cerr << getClassName() << __FUNCTION__

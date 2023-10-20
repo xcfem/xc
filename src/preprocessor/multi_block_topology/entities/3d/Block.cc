@@ -672,6 +672,7 @@ void XC::Block::setPyDict(const boost::python::dict &d)
 	    const boost::python::dict faceDict= boost::python::extract<boost::python::dict>(faceList[i]);
 	    sups[i].setPyDict(surfaces, faceDict);
 	  }
+	this->update_topology();
       }
     else
       std::cerr << getClassName() << __FUNCTION__

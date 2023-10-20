@@ -230,6 +230,7 @@ void XC::LineBase::setPyDict(const boost::python::dict &d)
 	  this->p1= points.busca(tagP1);
 	if(tagP2>=0)
 	  this->p2= points.busca(tagP2);
+	this->update_topology();
       }
     else
       std::cerr << getClassName() << __FUNCTION__

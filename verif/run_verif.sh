@@ -686,6 +686,7 @@ python tests/preprocessor/import_export/json/test_export_xc_model_03.py
 python tests/preprocessor/import_export/json/test_export_xc_model_04.py
 python tests/preprocessor/import_export/json/test_export_xc_model_05.py
 python tests/preprocessor/import_export/json/test_export_xc_model_06.py
+python tests/preprocessor/import_export/json/test_export_xc_model_07.py
 python tests/preprocessor/import_export/json/test_import_xc_model_01.py
 
 #Tests about constraints.

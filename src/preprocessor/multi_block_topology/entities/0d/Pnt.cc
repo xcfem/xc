@@ -537,21 +537,7 @@ void XC::Pnt::setPyDict(const boost::python::dict &d)
     EntMdlr::setPyDict(d);
     const boost::python::dict &pos= boost::python::extract<boost::python::dict>(d["pos"]);
     p.setPyDict(pos);
-    boost::python::list lineTags= boost::python::extract<boost::python::list>(d["lineTags"]);
-    const size_t sz= boost::python::len(lineTags);
-    const Preprocessor *preprocessor= getPreprocessor();
-    if(preprocessor)
-      {
-	const MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
-	const LineMap &lines= mbt.getLines();
-	for(size_t i= 0; i<sz; i++)
-	  {
-	    const size_t tag= boost::python::extract<size_t>(lineTags[i]);
-	    const Edge *e= lines.busca(tag);
-	    lines_pt.insert(e);
-	  }
-      }
-    else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+    // The topology can't be updated here because the lines doesn't exist
+    // yet (they are readed after the points). The lineTags field is ignored.
+    // boost::python::list lineTags= boost::python::extract<boost::python::list>(d["lineTags"]);
   }
