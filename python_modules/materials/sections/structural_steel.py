@@ -25,10 +25,10 @@ class SteelShape(sp.SectionProperties):
     :ivar steelType: steel object (e.g. S275JR)
     :ivar shape: steel profile (i.e. IPE300)
     '''
-    def __init__(self,steel,name,table):
+    def __init__(self, steel, name, table):
         ''' Constructor.
 
-        :param steel: steel object (e.g. S275JR)
+        :param steel: steel material object (e.g. S275JR)
         :param name: name identifying the section in the table
         :param table: module containing a dictionary with mechanical 
                       characteristics of a series of shapes 
