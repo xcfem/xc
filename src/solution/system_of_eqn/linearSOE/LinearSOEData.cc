@@ -29,6 +29,7 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOEData.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 //!
@@ -49,9 +50,10 @@ void XC::LinearSOEData::inic(const size_t &sz)
         zero();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << "; Warning - model has zero DOFs"
-                << " add nodes or reduce constraints." << std::endl;
+                << " add nodes or reduce constraints."
+		<< Color::def << std::endl;
   }
 
 //! @brief Return the current size of the system.
@@ -105,9 +107,10 @@ int XC::LinearSOEData::setB(const Vector &v,const double &fact)
 
     if(v.Size() != size)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - incompatible sizes "
-		  << size << " and " << v.Size() << std::endl;
+		  << size << " and " << v.Size()
+		  << Color::def << std::endl;
         return -1;
       }
 
@@ -142,8 +145,9 @@ int XC::LinearSOEData::addB(const Vector &v, const double &fact)
 
     if(size != v.Size() )
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << " - Vector and B not of equal sizes.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << " - Vector and B not of equal sizes."
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -190,8 +194,9 @@ int XC::LinearSOEData::addB(const Vector &v, const ID &id,const double &fact)
     int idSize = id.Size();
     if(idSize != v.Size() )
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << " - vector and ID not of similar sizes.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << " - vector and ID not of similar sizes."
+	          << Color::def << std::endl;
         return -1;
       }
 

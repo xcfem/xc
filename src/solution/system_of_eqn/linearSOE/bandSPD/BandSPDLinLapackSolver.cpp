@@ -61,6 +61,7 @@
 
 #include <solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinLapackSolver.h>
 #include <solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinSOE.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::BandSPDLinLapackSolver::BandSPDLinLapackSolver(void)
@@ -134,8 +135,9 @@ int XC::BandSPDLinLapackSolver::solve(void)
     int retval= 0;
     if(!theSOE)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; no LinearSOE object has been set\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; no LinearSOE object has been set."
+		  << Color::def << std::endl;
 	retval= -1;
       }
     else
@@ -166,9 +168,10 @@ int XC::BandSPDLinLapackSolver::solve(void)
 	// check if successful
 	if(info != 0) // not succesful.
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - the LAPACK"
-		      << " routines returned " << info << std::endl;
+		      << " routines returned " << info
+		      << Color::def << std::endl;
 	    retval= -info;
 	    // Store the value of info in a property reachable by Python.
 	    this->setPyProp("info", boost::python::object(info));
@@ -193,8 +196,9 @@ double XC::BandSPDLinLapackSolver::getRCond(const char &c)
     double retval= 0.0;
     if(!theSOE)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; no LinearSOE object has been set\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; no LinearSOE object has been set."
+	          << Color::def << std::endl;
 	retval= -1.0;
       }
     else
@@ -213,9 +217,9 @@ double XC::BandSPDLinLapackSolver::getRCond(const char &c)
 	    theSOE->factored= true;
 	  }
 	if(info != 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; LaPack dpbtrf_ failure with error: " << info
-		    << std::endl;
+		    << Color::def << std::endl;
 	else
 	  {
 	    char norm[1];
@@ -230,9 +234,10 @@ double XC::BandSPDLinLapackSolver::getRCond(const char &c)
 	// check if successful
 	if(info != 0)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - the LAPACK"
-		      << " routines returned " << info << std::endl;
+		      << " routines returned " << info
+		      << Color::def << std::endl;
 	    retval= -info;
 	  }
       }

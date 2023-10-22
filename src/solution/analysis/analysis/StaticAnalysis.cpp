@@ -65,6 +65,7 @@
 #include <solution/analysis/integrator/StaticIntegrator.h>
 #include <domain/domain/Domain.h>
 #include "solution/SolutionStrategy.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
@@ -118,14 +119,16 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
     int result= newStepDomain(am);
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; the AnalysisModel failed"
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
-		  << " after " << getConvergenceTest()->getCurrentIter()-1
-		  << " iterations." << std::endl;
+		  << ". after " << getConvergenceTest()->getCurrentIter()-1
+		  << " iterations."
+		  << Color::def << std::endl;
 	if(num_step>1)
-	  std::cerr << stepNumberMessage << std::endl;
+	  std::cerr << Color::red << stepNumberMessage
+		    << Color::def << std::endl;
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -146,12 +149,12 @@ int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
 
         if(result < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; domainChanged failed"
 		      << " at step " << num_step << " of "
-		      << numSteps << std::endl;
+		      << numSteps << Color::def << std::endl;
 	    if(num_step>1)
-    	      std::cerr << stepNumberMessage << std::endl;
+    	      std::cerr << Color::red << stepNumberMessage << Color::def << std::endl;
             return -1;
           }
       }
@@ -164,13 +167,13 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
     int retval= getStaticIntegratorPtr()->newStep();
     if(retval < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; the Integrator failed"
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
-		  << std::endl;
+		  << "." << Color::def << std::endl;
 	if(num_step>1)
-          std::cerr << stepNumberMessage << std::endl;
+          std::cerr << Color::red << stepNumberMessage << Color::def << std::endl;
         getDomainPtr()->revertToLastCommit();
         retval= -2;
       }
@@ -183,13 +186,14 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
     const int result= getEquiSolutionAlgorithmPtr()->solveCurrentStep();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; the Algorithm failed"
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
-		  << std::endl;
+		  << "." << Color::def << std::endl;
 	if(num_step>1)
-          std::cerr << stepNumberMessage << std::endl;
+          std::cerr << Color::red << stepNumberMessage
+		    << Color::def << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -3;
@@ -207,14 +211,15 @@ int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
         result= theSensitivityAlgorithm->computeSensitivities();
         if(result < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; the XC::SensitivityAlgorithm failed"
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; the SensitivityAlgorithm failed"
 		      << " at step: " << num_step
 		      << " with domain at load factor "
 		      << getDomainPtr()->getTimeTracker().getCurrentTime()
-		      << std::endl;
+		      << "." << Color::def << std::endl;
 	    if(num_step>1)
-              std::cerr << stepNumberMessage << std::endl;
+              std::cerr << Color::red << stepNumberMessage
+			<< Color::def << std::endl;
             getStaticIntegratorPtr()->revertToLastStep();
             return -5;
           }
@@ -229,13 +234,14 @@ int XC::StaticAnalysis::commit_step(int num_step)
     int result= getStaticIntegratorPtr()->commit();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                  << "the Integrator failed to commit"
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the Integrator failed to commit"
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
-		  << std::endl;
+		  << "." << Color::def << std::endl;
 	if(num_step>1)
-          std::cerr << stepNumberMessage << std::endl;
+          std::cerr << Color::red << stepNumberMessage
+		    << Color::def << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -4;
@@ -316,15 +322,17 @@ int XC::StaticAnalysis::initialize(void)
         domainStamp= stamp;
         if(this->domainChanged() < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; domainChanged() failed\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; domainChanged() failed."
+	              << Color::def << std::endl;
             return -1;
           }
       }
     if(getStaticIntegratorPtr()->initialize() < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; integrator initialize() failed\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; integrator initialize() failed."
+	              << Color::def << std::endl;
         return -2;
       }
     else
@@ -371,8 +379,9 @@ int XC::StaticAnalysis::domainChanged(void)
     int result= getConstraintHandlerPtr()->handle();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; ConstraintHandler::handle() failed." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; ConstraintHandler::handle() failed."
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -383,17 +392,18 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getDOF_NumbererPtr()->numberDOF();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; DOF_Numberer::numberDOF() failed." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; DOF_Numberer::numberDOF() failed."
+	          << Color::def << std::endl;
         return -2;
       }
 
     result= getConstraintHandlerPtr()->doneNumberingDOF();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; constraintHandler::doneNumberingDOF() failed."
-		  << std::endl;
+	          << Color::def << std::endl;
         return -3;
       }
 
@@ -404,8 +414,9 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getLinearSOEPtr()->setSize(theGraph);
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; LinearSOE::setSize() failed." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; LinearSOE::setSize() failed."
+		  << Color::def << std::endl;
         return -4;
       }
 
@@ -415,16 +426,18 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getStaticIntegratorPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "Integrator::domainChanged() failed." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "Integrator::domainChanged() failed."
+		  << Color::def << std::endl;
         return -5;
       }
 
     result= getEquiSolutionAlgorithmPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; Algorithm::domainChanged() failed." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; Algorithm::domainChanged() failed."
+		  << Color::def << std::endl;
         return -6;
       }
 
