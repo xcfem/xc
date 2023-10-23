@@ -1323,8 +1323,8 @@ class ShearController(lscb.ShearControllerBase):
          :param Td: design value of torsional moment.
         '''
         section= sct.getProp('sectionData')
-        concreteCode= section.fiberSectionParameters.concrType
-        reinforcementCode= section.fiberSectionParameters.reinfSteelType
+        concreteCode= section.getConcreteType()
+        reinforcementCode= section.getReinfSteelType()
         shReinf= section.getShearReinfY()
         circular= section.isCircular()
         strutWidth= sct.getCompressedStrutWidth() # bw

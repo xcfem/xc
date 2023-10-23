@@ -174,15 +174,15 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
     
     def getRespT(self,preprocessor):
         '''Material for modeling torsional response of section'''
-        return section_properties.CircularSection.getRespT(self,preprocessor,self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
+        return section_properties.CircularSection.getRespT(self,preprocessor,self.getConcreteType().Gcm()) # Torsional response of the section.
 
     def getRespVy(self,preprocessor):
         '''Material for modeling Y shear response of section'''
-        return section_properties.CircularSection.getRespVy(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
+        return section_properties.CircularSection.getRespVy(self,preprocessor,self.getConcreteType().Gcm())
 
     def getRespVz(self,preprocessor):
         '''Material for modeling Z shear response of section'''
-        return section_properties.CircularSection.getRespVz(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
+        return section_properties.CircularSection.getRespVz(self,preprocessor,self.getConcreteType().Gcm())
         
     def defConcreteRegion(self,geomSection):
         regions= geomSection.getRegions
