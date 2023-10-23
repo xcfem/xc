@@ -20,13 +20,7 @@ from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 from model import predefined_spaces
 
-datosScc1LosC= def_simple_RC_section.RCRectangularSection()
-datosScc1LosC.name= "secHA1LosC"
-datosScc1LosC.sectionDescr= "Losa. Central portion. Section normal to X axis."
-datosScc1LosC.fiberSectionParameters.concrType= EHE_materials.HA25
-datosScc1LosC.depth= 0.25
-datosScc1LosC.width= 1.0
-datosScc1LosC.fiberSectionParameters.reinfSteelType= EHE_materials.B500S
+datosScc1LosC= def_simple_RC_section.RCRectangularSection(name= "secHA1LosC", sectionDescr= "Losa. Central portion. Section normal to X axis.", concrType= EHE_materials.HA25, depth= 0.25, width= 1.0, reinfSteelType= EHE_materials.B500S)
 rebNeg=def_simple_RC_section.ReinfRow(nRebars= 5, areaRebar= EHE_materials.Fi10,nominalCover=0.025+0.010,width=0.999)
 datosScc1LosC.negatvRebarRows= def_simple_RC_section.LongReinfLayers([rebNeg])
 rebPos=def_simple_RC_section.ReinfRow(nRebars= 5, areaRebar= EHE_materials.Fi10,nominalCover=0.025,width=0.999)

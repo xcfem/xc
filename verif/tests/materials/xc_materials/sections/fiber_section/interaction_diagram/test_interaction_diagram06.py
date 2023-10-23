@@ -35,13 +35,7 @@ concrete.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive streng
 
 reinfSteel= EHE_materials.B500S
 
-sccData=def_simple_RC_section.RCRectangularSection()
-sccData.name= "sccData"
-sccData.sectionDescr= "Prueba."
-sccData.fiberSectionParameters.concrType= concrete
-sccData.h= 0.5
-sccData.b= 1.0
-sccData.fiberSectionParameters.reinfSteelType= reinfSteel
+sccData= def_simple_RC_section.RCRectangularSection(name= "sccData", sectionDescr= "Prueba.", concrType= concrete, depth= 0.5, width= 1.0, reinfSteelType= reinfSteel)
 sccData.negatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=40e-3, rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)])
 sccData.positvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=6e-3, rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)])
 #sccData.setMainReinfNeg(40e-3,areaFi40,0.15,0.25-0.19)

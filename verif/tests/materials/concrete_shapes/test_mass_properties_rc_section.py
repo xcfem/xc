@@ -17,11 +17,7 @@ from materials.sections.fiber_section import def_simple_RC_section
 from materials.ehe import EHE_materials
 
 nominalCover= .025
-rcSection= def_simple_RC_section.RCRectangularSection(width= 0.25, depth= 0.5)
-rcSection.name= "Test"
-rcSection.sectionDescr= "Test reinforce concrete section."
-rcSection.fiberSectionParameters.concrType= EHE_materials.HA25
-rcSection.fiberSectionParameters.reinfSteelType= EHE_materials.B500S
+rcSection= def_simple_RC_section.RCRectangularSection(name= "Test", sectionDescr= "Test reinforce concrete section.", concrType= EHE_materials.HA25, reinfSteelType= EHE_materials.B500S, width= 0.25, depth= 0.5)
 rebNeg= def_simple_RC_section.ReinfRow(nRebars= 2, areaRebar= EHE_materials.Fi20,nominalCover= nominalCover+0.01,width= rcSection.b-nominalCover)
 rcSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([rebNeg])
 rebPos= def_simple_RC_section.ReinfRow(nRebars= 5, areaRebar= EHE_materials.Fi20,nominalCover=nominalCover,width= rcSection.b-nominalCover)
