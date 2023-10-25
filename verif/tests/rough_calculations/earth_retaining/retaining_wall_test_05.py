@@ -21,7 +21,6 @@ from materials.ec2 import EC2_limit_state_checking
 from actions import load_cases
 from actions import combinations
 from geotechnics import earth_pressure as ep
-from geotechnics import frictional_cohesive_soil as fcs
 from actions.earth_pressure import earth_pressure
 from misc_utils import log_messages as lmsg
 
