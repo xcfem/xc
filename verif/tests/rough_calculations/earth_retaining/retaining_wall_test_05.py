@@ -92,7 +92,7 @@ reinf_types= EC2_limit_state_checking.define_rebar_families(steel= steel, cover=
 # \_/\_/\__,_|_|_|  \___/_.__// \___\__|\__|
 #                            |__/            
 
-wall= ng_retaining_wall.RetainingWall(name= 'Retaining_wall_test_06', stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= 0.0, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= steel)
+wall= ng_retaining_wall.RetainingWall(name= 'Retaining_wall_test_05', stemHeight= stemHeight, stemBottomWidth= stemBottomWidth, stemTopWidth= stemTopWidth, stemBackSlope= 0.0, footingThickness= footingThickness, bToe= bToe, bHeel= bHeel, concrete= concrete, steel= steel)
 wall.setStemBackSteps(stemBackSteps)
 
 #    ___     _       __                              _   
