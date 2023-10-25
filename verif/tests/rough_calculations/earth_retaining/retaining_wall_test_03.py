@@ -178,7 +178,7 @@ earthPressureGOK= (abs(ratioEaGk)<1e-3 and abs(ratioEaGkBook)<1e-3 and abs(ratio
 # /_/ \_\__|\__|_\___/_||_/__(_)   \_/\__,_|_| |_\__,_|_.__/_\___|
                                                                  
 ### Set current load case.
-earthPress= loadCaseManager.setCurrentLoadCase('liveLoad')
+liveLoad= loadCaseManager.setCurrentLoadCase('liveLoad')
 ### Uniform load on the backfill surface.
 qUnif= 5e3
 unifLoadPressure= earth_pressure.UniformPressureOnBackfill(zGround= virtualBack.getFromPoint().y, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif)
