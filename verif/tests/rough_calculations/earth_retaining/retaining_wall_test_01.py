@@ -67,9 +67,9 @@ zGroundBackfill= -0.2 # level of the back fill surface with respect to the
 # Foundation stratified soil properties
 kS= 15e6 # Winkler modulus.
 hi=[1,3,5,8,100]  #cuaternario (QG), QT3L, QT3G,formación  Dueñas
-rhoi= [2000,1910,1690,2100,1950]
-phii= [math.radians(30),math.radians(25),math.radians(32),math.radians(35),math.radians(24)]
-ci=[20e3,2.5e3,5e3,30e3,50e3]
+rhoi= [2000,1910,1690,2100,1950] # densities
+phii= [math.radians(30),math.radians(25),math.radians(32),math.radians(35),math.radians(24)] # internal friction angles.
+ci=[20e3,2.5e3,5e3,30e3,50e3] # cohesion.
 
 #Loads
 gravity=9.81 # Gravity acceleration (m/s2)
