@@ -57,7 +57,6 @@ footingThickness= 1.5 # thickness of the footing.
 cover= 60e-3 # rebars cover.
 
 # Backfill soil properties
-kS= 15e6 # Winkler modulus.
 phiS= 30  # internal frictional angle
 rhoS= 2000  # density (kg/m3)
 backfillDelta= math.radians(18.4)
@@ -66,6 +65,7 @@ zGroundBackfill= -0.2 # level of the back fill surface with respect to the
                       # top of the wall.
 
 # Foundation stratified soil properties
+kS= 15e6 # Winkler modulus.
 hi=[1,3,5,8,100]  #cuaternario (QG), QT3L, QT3G,formación  Dueñas
 rhoi= [2000,1910,1690,2100,1950]
 phii= [math.radians(30),math.radians(25),math.radians(32),math.radians(35),math.radians(24)]
