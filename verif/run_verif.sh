@@ -129,6 +129,7 @@ python tests/utility/geom/polygons/polygon2D_test_2d_10.py
 python tests/utility/geom/polygons/polygon2D_test_2d_11.py
 python tests/utility/geom/polygons/polygon2D_test_2d_12.py
 python tests/utility/geom/polygons/polygon2D_test_2d_13.py
+python tests/utility/geom/polygons/polygon2D_test_2d_14.py
 python tests/utility/geom/polygons/polygon3D_test_01.py
 python tests/utility/geom/polygons/polygon3D_test_02.py
 python tests/utility/geom/polygons/polygon3D_test_03.py
