@@ -67,6 +67,7 @@ class_<polygon_2D_list >("polygon_2D_list")
   ;
 
 void (Polygon2d::*unePolygon2d)(const Polygon2d &) =&Polygon2d::une;
+boost::python::list (Polygon2d::*clipPolygon)(const Polygon2d &) const=&Polygon2d::ClipPy;
 class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def(init<>())
 //.def(init<GeomObj::list_Pos2d>()) # Apparently this doesn't works.
@@ -84,6 +85,10 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def("clipUsingPolygon",&Polygon2d::clipBy)
   .def("getBayazitDecomposition",&Polygon2d::getBayazitDecomposition)
   .def("getVertexList",&Polygon2d::getVertexListPy,"Return a Python list containing the positions of the polygon vertices.")
+  .def("clip",clipLine, "Clips the line.")
+  .def("clip",clipRay, "Clips the ray.")
+  .def("clip",clipSegment, "Clips the segment.")
+  .def("clip",clipPolygon, "Return the given polygon clipped by this one.")
   ;
 
 std::vector<double> (Quadrilateral2d::*get2DPointNaturalCoordinates)(const Pos2d &) const= &Quadrilateral2d::getNaturalCoordinates;

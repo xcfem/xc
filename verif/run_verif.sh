@@ -87,7 +87,7 @@ python tests/utility/geom/segments/segment3d_test_03.py
 python tests/utility/geom/segments/segment3d_connect_01.py
 python tests/utility/geom/segments/segment3d_connect_02.py
 echo "$BLEU" "    Polylines." "$NORMAL"
-echo "$BLEU" "      Polylines. 2D" "$NORMAL"
+echo "$BLEU" "      2D Polylines." "$NORMAL"
 python tests/utility/geom/polylines/polyline2d_test_00.py
 python tests/utility/geom/polylines/polyline2d_test_01.py
 python tests/utility/geom/polylines/polyline2d_test_02.py
@@ -105,7 +105,7 @@ python tests/utility/geom/polylines/polyline2d_test_13.py
 python tests/utility/geom/polylines/polyline2d_test_14.py
 python tests/utility/geom/polylines/polyline2d_test_15.py
 python tests/utility/geom/polylines/polyline2d_test_16.py
-echo "$BLEU" "      Polylines. 3D" "$NORMAL"
+echo "$BLEU" "      3D Polylines" "$NORMAL"
 python tests/utility/geom/polylines/polyline3d_test_01.py
 python tests/utility/geom/polylines/polyline3d_test_02.py
 python tests/utility/geom/polylines/polyline3d_test_03.py
@@ -116,7 +116,7 @@ python tests/utility/geom/polylines/polyline3d_test_07.py
 python tests/utility/geom/polylines/polyline3d_test_08.py
 python tests/utility/geom/polylines/plane_polyline3d_test_01.py
 echo "$BLEU" "    Polygons." "$NORMAL"
-echo "$BLEU" "    2D Polygons." "$NORMAL"
+echo "$BLEU" "      2D Polygons." "$NORMAL"
 python tests/utility/geom/polygons/2d/polygon2D_test_01.py
 python tests/utility/geom/polygons/2d/polygon2D_test_02.py
 python tests/utility/geom/polygons/2d/polygon2D_test_03.py
@@ -131,11 +131,12 @@ python tests/utility/geom/polygons/2d/polygon2D_test_11.py
 python tests/utility/geom/polygons/2d/polygon2D_test_12.py
 python tests/utility/geom/polygons/2d/polygon2D_test_13.py
 python tests/utility/geom/polygons/2d/polygon2D_test_14.py
+python tests/utility/geom/polygons/2d/polygon2D_test_15.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_04.py
-echo "$BLEU" "    3D Polygons." "$NORMAL"
+echo "$BLEU" "      3D Polygons." "$NORMAL"
 python tests/utility/geom/polygons/3d/polygon3D_test_01.py
 python tests/utility/geom/polygons/3d/polygon3D_test_02.py
 python tests/utility/geom/polygons/3d/polygon3D_test_03.py

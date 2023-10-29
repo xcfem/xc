@@ -174,12 +174,17 @@ class Polygon2d: public PolygonalSurface2d
     Segment2d Clip(const Ray2d &) const;
     Segment2d Clip(const Segment2d &) const;
     std::list<Polygon2d> Clip(const BND2d &bnd) const;
+    boost::python::list ClipPy(const BND2d &) const;
     std::list<Polygon2d> Clip(const Polygon2d &) const;
+    boost::python::list ClipPy(const Polygon2d &) const;
 
-    Segment2d getIntersection(const Line2d &l) const;
-    Segment2d getIntersection(const Ray2d &r) const;
-    Segment2d getIntersection(const Segment2d &s) const;
-    std::list<Polygon2d> getIntersection(const HalfPlane2d &sp) const;
+    Segment2d getIntersection(const Line2d &) const;
+    Segment2d getIntersection(const Ray2d &) const;
+    Segment2d getIntersection(const Segment2d &) const;
+    std::list<Polygon2d> getIntersection(const HalfPlane2d &) const;
+    boost::python::list getIntersectionPy(const HalfPlane2d &) const;
+    std::list<Polygon2d> getIntersection(const Polygon2d &) const;
+    boost::python::list getIntersectionPy(const Polygon2d &) const;
 
     std::list<Polygon2d> getBayazitDecomposition(void) const;
    
@@ -201,8 +206,8 @@ std::list<Polygon2d> corta(const Polygon2d &p,const Line2d &r);
 
 Pos2d center_of_mass(const std::list<Polygon2d> &);
 
-//!@brief Return verdadero si todos los objetos de la secuencia
-//! están contenidos en el polígono.
+//!@brief Return true if all the objects in the given sequence are inside the
+//! polygon.
 template <class inputIterator>
 bool Polygon2d::In(inputIterator begin, inputIterator end) const
   {
