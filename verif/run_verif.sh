@@ -116,35 +116,37 @@ python tests/utility/geom/polylines/polyline3d_test_07.py
 python tests/utility/geom/polylines/polyline3d_test_08.py
 python tests/utility/geom/polylines/plane_polyline3d_test_01.py
 echo "$BLEU" "    Polygons." "$NORMAL"
-python tests/utility/geom/polygons/polygon2D_test_2d_01.py
-python tests/utility/geom/polygons/polygon2D_test_2d_02.py
-python tests/utility/geom/polygons/polygon2D_test_2d_03.py
-python tests/utility/geom/polygons/polygon2D_test_2d_04.py
-python tests/utility/geom/polygons/polygon2D_test_2d_05.py
-python tests/utility/geom/polygons/polygon2D_test_2d_06.py
-python tests/utility/geom/polygons/polygon2D_test_2d_07.py
-python tests/utility/geom/polygons/polygon2D_test_2d_08.py
-python tests/utility/geom/polygons/polygon2D_test_2d_09.py
-python tests/utility/geom/polygons/polygon2D_test_2d_10.py
-python tests/utility/geom/polygons/polygon2D_test_2d_11.py
-python tests/utility/geom/polygons/polygon2D_test_2d_12.py
-python tests/utility/geom/polygons/polygon2D_test_2d_13.py
-python tests/utility/geom/polygons/polygon2D_test_2d_14.py
-python tests/utility/geom/polygons/polygon3D_test_01.py
-python tests/utility/geom/polygons/polygon3D_test_02.py
-python tests/utility/geom/polygons/polygon3D_test_03.py
-python tests/utility/geom/polygons/polygon3D_test_04.py
-python tests/utility/geom/polygons/polygon3D_test_05.py
-python tests/utility/geom/polygons/polygon3D_test_06.py
-python tests/utility/geom/polygons/polygon3D_test_07.py
-python tests/utility/geom/polygons/quadrilateral2D_test_01.py
-python tests/utility/geom/polygons/quadrilateral2D_test_02.py
-python tests/utility/geom/polygons/quadrilateral2D_test_03.py
-python tests/utility/geom/polygons/quadrilateral2D_test_04.py
-python tests/utility/geom/polygons/quadrilateral3D_test_01.py
-python tests/utility/geom/polygons/quadrilateral3D_test_02.py
-python tests/utility/geom/polygons/quadrilateral3D_test_03.py
-python tests/utility/geom/polygons/quadrilateral3D_test_04.py
+echo "$BLEU" "    2D Polygons." "$NORMAL"
+python tests/utility/geom/polygons/2d/polygon2D_test_01.py
+python tests/utility/geom/polygons/2d/polygon2D_test_02.py
+python tests/utility/geom/polygons/2d/polygon2D_test_03.py
+python tests/utility/geom/polygons/2d/polygon2D_test_04.py
+python tests/utility/geom/polygons/2d/polygon2D_test_05.py
+python tests/utility/geom/polygons/2d/polygon2D_test_06.py
+python tests/utility/geom/polygons/2d/polygon2D_test_07.py
+python tests/utility/geom/polygons/2d/polygon2D_test_08.py
+python tests/utility/geom/polygons/2d/polygon2D_test_09.py
+python tests/utility/geom/polygons/2d/polygon2D_test_10.py
+python tests/utility/geom/polygons/2d/polygon2D_test_11.py
+python tests/utility/geom/polygons/2d/polygon2D_test_12.py
+python tests/utility/geom/polygons/2d/polygon2D_test_13.py
+python tests/utility/geom/polygons/2d/polygon2D_test_14.py
+python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
+python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
+python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
+python tests/utility/geom/polygons/2d/quadrilateral2D_test_04.py
+echo "$BLEU" "    3D Polygons." "$NORMAL"
+python tests/utility/geom/polygons/3d/polygon3D_test_01.py
+python tests/utility/geom/polygons/3d/polygon3D_test_02.py
+python tests/utility/geom/polygons/3d/polygon3D_test_03.py
+python tests/utility/geom/polygons/3d/polygon3D_test_04.py
+python tests/utility/geom/polygons/3d/polygon3D_test_05.py
+python tests/utility/geom/polygons/3d/polygon3D_test_06.py
+python tests/utility/geom/polygons/3d/polygon3D_test_07.py
+python tests/utility/geom/polygons/3d/quadrilateral3D_test_01.py
+python tests/utility/geom/polygons/3d/quadrilateral3D_test_02.py
+python tests/utility/geom/polygons/3d/quadrilateral3D_test_03.py
+python tests/utility/geom/polygons/3d/quadrilateral3D_test_04.py
 echo "$BLEU" "    Alpha shapes." "$NORMAL"
 python tests/utility/geom/basic_alpha_shape2d_test.py
 echo "$BLEU" "    Circles." "$NORMAL"
