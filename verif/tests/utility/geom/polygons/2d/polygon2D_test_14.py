@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Home cooked test.'''
+'''Clip a segment by a polygon. Home cooked test.'''
 
 from __future__ import division
 from __future__ import print_function

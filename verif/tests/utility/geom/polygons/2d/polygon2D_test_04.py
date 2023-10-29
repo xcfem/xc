@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Polygon2D test.'''
+'''Polygon2D test. Clip a polygon using another one.'''
 
 from __future__ import print_function
 
@@ -10,23 +10,22 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-pol1=geom.Polygon2d([geom.Pos2d(-1.,-1.), geom.Pos2d(1.,-1.), geom.Pos2d(1.,1.), geom.Pos2d(-1.,1.)])
+plg1=geom.Polygon2d([geom.Pos2d(-1.,-1.), geom.Pos2d(1.,-1.), geom.Pos2d(1.,1.), geom.Pos2d(-1.,1.)])
 
-pol2=geom.Polygon2d(pol1)
-pol2.move(geom.Vector2d(1,1))
+plg2=geom.Polygon2d(plg1)
+plg2.move(geom.Vector2d(1,1))
 
-pol3=geom.Polygon2d(pol1)
-pol3.clipUsingPolygon(pol2)
+plg3=geom.Polygon2d(plg1)
+plg3.clipUsingPolygon(plg2)
 
-
-areaPol=pol3.getArea()
-polygonPerimeter=pol3.getPerimeter()
-polygonCenterOfMass=pol3.getCenterOfMass()
+areaPol=plg3.getArea()
+polygonPerimeter=plg3.getPerimeter()
+polygonCenterOfMass=plg3.getCenterOfMass()
 polygonCenterOfMassX=polygonCenterOfMass.x
 polygonCenterOfMassY=polygonCenterOfMass.y
-IxPol=pol3.getIx()
-IyPol=pol3.getIy()
-PxyPol=pol3.getPxy()
+IxPol=plg3.getIx()
+IyPol=plg3.getIy()
+PxyPol=plg3.getPxy()
 
 ratio1= (areaPol-1)
 ratio2= (polygonPerimeter-4)/4.
@@ -44,3 +43,25 @@ if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)
 else:
     lmsg.error('test: '+fname+' ERROR.')
 
+# # Graphic output
+# import matplotlib.pyplot as plt
+# def getXYVertices(plg):
+#     x= list()
+#     y= list()
+#     vertices= plg.getVertices()
+#     for p in vertices:
+#         x.append(p.x)
+#         y.append(p.y)
+#     x.append(vertices[0].x)
+#     y.append(vertices[0].y)
+#     return x,y
+    
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# x,y= getXYVertices(plg1)
+# ax.plot(x,y,'tab:gray')
+# x,y= getXYVertices(plg2)
+# plt.plot(x, y, 'tab:blue')
+# x,y= getXYVertices(plg3)
+# plt.plot(x, y, 'tab:red')
+# plt.show()
