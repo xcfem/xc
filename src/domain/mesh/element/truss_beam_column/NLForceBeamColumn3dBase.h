@@ -105,137 +105,170 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
       {
         return Secommit.AN1()+p0[0];
       }
+
     //! @brief Axial force which acts over the element at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAN2(void) const
       {
         return Secommit.AN2();
       }
+
     //! @brief Axial force at the front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getN1(void) const
       {                 
         return -Secommit.AN1()-p0[0];
       }
+
     //! @brief Axial force at the back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getN2(void) const
       {
         return Secommit.AN2();
       }
+
     //! @brief Mean axial force.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getN(void) const
       {
         return (-Secommit.AN1()-p0[0]+Secommit.AN2())/2.0;
       }
+
     //! @brief Moment about z axis drived over the bar at its back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAMz1(void) const
       {
         return Secommit.Mz1(); 
       }
+
     //! @brief Moment about z axis drived over the bar at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAMz2(void) const
       {
         return Secommit.Mz2(); 
       }
+
     //! @brief Moment about z axis at its back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getMz1(void) const
       {
         return -Secommit.Mz1(); 
       }
+
     //! @brief Moment about z axis at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getMz2(void) const
       {
         return -Secommit.Mz2(); 
       }
+
+    //! @brief Mean bending moment.
+    //! ¡Warning! call "calc_resisting_force" before calling this method.
+    inline double getMz(void) const
+      { return (this->getMz1()+this->getMz2())/2.0; }
+
     //! @brief y shear.
     inline double getVy(void) const
       {
         return Secommit.Vy(theCoordTransf->getInitialLength()); 
       }
+
     //! @brief y shear drived over the bar at its back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAVy1(void) const
       {
         return Secommit.Vy(theCoordTransf->getInitialLength())+p0[1]; 
       }
+
     //! @brief y shear drived over the bar at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAVy2(void) const
       {
         return -Secommit.Vy(theCoordTransf->getInitialLength())+p0[2]; 
       }
+
     //! @brief y shear at its back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVy1(void) const
       {
         return -Secommit.Vy(theCoordTransf->getInitialLength())-p0[1]; 
       }
+
     //! @brief y shear at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVy2(void) const
       {
         return Secommit.Vy(theCoordTransf->getInitialLength())-p0[2]; 
       }
+
     //! @brief z shear.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVz(void) const
       {
         return Secommit.Vz(theCoordTransf->getInitialLength()); 
       }
+
     //! @brief z shear drived over the bar at its back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAVz1(void) const
       { //¡Warning! call "calc_resisting_force" before calling this method.
         return Secommit.Vz(theCoordTransf->getInitialLength())+p0[3]; 
       }
+
     //! @brief z shear drived over the bar at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAVz2(void) const
       {
         return -Secommit.Vz(theCoordTransf->getInitialLength())+p0[4]; 
       }
+
     //! @brief z shear at its back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVz1(void) const
       {
         return -Secommit.Vz(theCoordTransf->getInitialLength())-p0[3]; 
       }
+
     //! @brief z shear at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVz2(void) const
       {
         return Secommit.Vz(theCoordTransf->getInitialLength())-p0[4];
       }
+
     //! @brief Moment about y axis at the back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getMy1(void) const
       {
         return Secommit.My1();
       }
+
     //! @brief Moment about y axis at the front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getMy2(void) const
       {
         return Secommit.My2();
       }
+    
+    //! @brief Mean bending moment.
+    //! ¡Warning! call "calc_resisting_force" before calling this method.
+    inline double getMy(void) const
+      { return (this->getMy1()+this->getMy2())/2.0; }
+    
     //! @brief Element's torque.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getT(void) const
       {
         return Secommit.T();
       }
+
     //! @brief Torsor at the back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getT1(void) const
       {
         return Secommit.T1(); //+p0[0]; 
       }
+
     //! @brief Torsor at the front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getT2(void) const

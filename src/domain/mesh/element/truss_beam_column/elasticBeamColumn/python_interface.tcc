@@ -26,14 +26,19 @@ class_<XC::ElasticBeam2dBase, bases<XC::ProtoBeam2d>, boost::noncopyable >("Elas
   .add_property("getV1", &XC::ElasticBeam2dBase::getV1, "Internal shear force at back end.")
   .add_property("getV2", &XC::ElasticBeam2dBase::getV2, "Internal shear force at front end.")
   .add_property("getVy1", &XC::ElasticBeam2dBase::getV1, "Internal shear force at back end.")
-  .add_property("getVy2", &XC::ElasticBeam2dBase::getV2, "Internal shear force at front end.") 
+  .add_property("getVy2", &XC::ElasticBeam2dBase::getV2, "Internal shear force at front end.")
+  .add_property("getV", &XC::ElasticBeam2dBase::getV, "Average shear force (V1+V2)/2 (call 'calc_resisting_force' before).")
+
   .add_property("getN1", &XC::ElasticBeam2dBase::getN1, "Internal axial force at front end.")
   .add_property("getN2", &XC::ElasticBeam2dBase::getN2, "Internal axial force at back end.")
-  .def("getN", &XC::ElasticBeam2dBase::getN,"Average axial force (call 'calc_resisting_force' before).")
+  .def("getN", &XC::ElasticBeam2dBase::getN,"Average axial force (N1+N2)/2 (call 'calc_resisting_force' before).")
+
   .add_property("getM1", &XC::ElasticBeam2dBase::getM1, "Internal bending moment at back end.")
   .add_property("getM2", &XC::ElasticBeam2dBase::getM2, "Internal bending moment at front end.")
   .add_property("getMz1", &XC::ElasticBeam2dBase::getM1, "Internal bending moment at back end.")
   .add_property("getMz2", &XC::ElasticBeam2dBase::getM2, "Internal bending moment at front end.")
+  .add_property("getMz", &XC::ElasticBeam2dBase::getM,"Average Z bending moment  (Mz1+Mz2)/2 (call 'calc_resisting_force' before).")
+  .add_property("getM", &XC::ElasticBeam2dBase::getM,"Average Z bending moment (M1+M2)/2  (call 'calc_resisting_force' before).")
   ;
 
 class_<XC::ElasticBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("ElasticBeam2d", no_init)
@@ -52,20 +57,27 @@ class_<XC::ElasticTimoshenkoBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopy
 class_<XC::ElasticBeam3dBase, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticBeam3dBase", no_init)
   .add_property("getN1", &XC::ElasticBeam3dBase::getN1,"Axial force in the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getN2", &XC::ElasticBeam3dBase::getN2,"Axial force in the front end of the element (call 'calc_resisting_force' before).")
-  .def("getN", &XC::ElasticBeam3dBase::getN,"Average axial force (call 'calc_resisting_force' before).")
+  .def("getN", &XC::ElasticBeam3dBase::getN,"Average axial force (N1+N2)/2 (call 'calc_resisting_force' before).")
+
   .add_property("getMz1", &XC::ElasticBeam3dBase::getMz1,"Z bending moment at the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getMz2", &XC::ElasticBeam3dBase::getMz2,"Z bending moment at the front end of the element (call 'calc_resisting_force' before).")
-  .def("getVy", &XC::ElasticBeam3dBase::getVy, "Average Y shear force (call 'calc_resisting_force' before).")
+  .add_property("getMz", &XC::ElasticBeam3dBase::getMz,"Average Z bending moment (Mz1+Mz2)/2 (call 'calc_resisting_force' before).")
+
   .add_property("getVy1", &XC::ElasticBeam3dBase::getVy1, "Y shear force at the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getVy2", &XC::ElasticBeam3dBase::getVy2, "Y shear force at the front end of the element (call 'calc_resisting_force' before).")
-  .def("getVz", &XC::ElasticBeam3dBase::getVz, "Average Z shear force (call 'calc_resisting_force' before).")
+  .def("getVy", &XC::ElasticBeam3dBase::getVy, "Average Y shear force (Vy1+Vy2)/2 (call 'calc_resisting_force' before).")
+
   .add_property("getVz1", &XC::ElasticBeam3dBase::getVz1, "Z shear force at the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getVz2", &XC::ElasticBeam3dBase::getVz2, "Z shear force at the front end of the element (call 'calc_resisting_force' before).")
+  .def("getVz", &XC::ElasticBeam3dBase::getVz, "Average Z shear force (Vz1+Vz2)/2 (call 'calc_resisting_force' before).")
+
   .add_property("getMy1", &XC::ElasticBeam3dBase::getMy1,"Y bending moment at the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getMy2", &XC::ElasticBeam3dBase::getMy2,"Y bending moment at the front end of the element (call 'calc_resisting_force' before).")
-  .def("getT", &XC::ElasticBeam3dBase::getT,"Average torque at the element (call 'calc_resisting_force' before).")
+  .add_property("getMy", &XC::ElasticBeam3dBase::getMy,"Average Y bending moment  (My1+My2)/2 (call 'calc_resisting_force' before).")
+
   .add_property("getT1", &XC::ElasticBeam3dBase::getT1,"Torque at the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getT2", &XC::ElasticBeam3dBase::getT2,"Torque at the front end of the element (call 'calc_resisting_force' before).")
+  .def("getT", &XC::ElasticBeam3dBase::getT,"Average torque at the element (T1+T2)/2 (call 'calc_resisting_force' before).")
   ;
 
 class_<XC::ElasticBeam3d, bases<XC::ElasticBeam3dBase>, boost::noncopyable >("ElasticBeam3d", no_init)

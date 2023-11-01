@@ -113,6 +113,11 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     //! @brief Internal bending moment at the front end.   
     inline double getM2(void) const
       { return Secommit(2); }
+    //! @brief Mean bending moment.
+    //! ¡Warning! call "calc_resisting_force" before calling this method.
+    inline double getM(void) const
+      { return (this->getM1()+this->getM2())/2.0; }
+    
     boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 } // end of XC namespace
