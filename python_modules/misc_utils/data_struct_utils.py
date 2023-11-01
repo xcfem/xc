@@ -140,3 +140,30 @@ def get_number_decimal_positions(number):
     d=decimal.Decimal(str(number))
     retval=-d.as_tuple().exponent
     return retval
+
+def get_max_lstOfLsts_by_col(lstOfLsts, col):
+    '''
+    Return the maximun value of column 'col' in the list of lists 'lstOfLsts'
+    (first column in list is col=0)
+    '''
+    return max(lstOfLsts, key=lambda x: x[col])[col]
+
+def get_min_lstOfLsts_by_col(lstOfLsts, col):
+    '''
+    Return the minimum value of column 'col' in the list of lists 'lstOfLsts'
+    (first column in list is col=0)
+    '''
+    return min(lstOfLsts, key=lambda x: x[col])[col]
+
+def sort_two_parallel_lists(list1,list2):
+    '''Returns list1 sorted and list2 sorted in parallel to list1.
+    e.g.: for list1=[3,5,1,7] and 
+              list2=[2, 4, 6, 8]
+          returns:
+              sorted_list1=[1, 3, 5, 7]
+              sorted_list2=[6, 2, 4, 8]
+
+    
+    '''
+    sorted_list1, sorted_list2=zip(*sorted(zip(list1,list2)))
+    return sorted_list1, sorted_list2
