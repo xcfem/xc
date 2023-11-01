@@ -161,6 +161,9 @@ class FiberSectionBase: public PrismaticBarCrossSection
     fiber_set_iterator sel_mat_tag(const std::string &set_name,const int &matTag);
     //fiber_set_iterator resel(const std::string &set_name,const std::string &set_name_org,const std::string &cond);
     fiber_set_iterator resel_mat_tag(const std::string &set_name,const std::string &set_name_org,const int &matTag);
+    std::set<int> getMatTags(void);
+    boost::python::list getMatTagsPy(void);
+    
     inline virtual double getCenterOfMassY(void) const
       { return fibers.getCenterOfMassY(); }
     double getArea(void) const;

@@ -51,6 +51,7 @@
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/recorder/response/MaterialResponse.h"
 #include "material/uniaxial/UniaxialMaterial.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -213,14 +214,14 @@ const XC::SectionGeometry *XC::FiberSectionBase::getSectionGeometry(void) const
       {
         retval= section_repres->getGeom();
         if(!retval)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; section geometry not defined."
-                    << std::endl;
+                    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; fiber section representation not defined."
-                << std::endl;
+                << Color::def << std::endl;
     return retval;
   }
 
@@ -265,9 +266,9 @@ double XC::FiberSectionBase::getCompressedZoneDepth(const Line2d &r) const
         else
           {
             retval= NAN;
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; can't get the compressed half-plane."
-                      << std::endl;
+                      << Color::def << std::endl;
 	  }
       }
     return retval;
@@ -287,9 +288,9 @@ double XC::FiberSectionBase::getCompressedZoneDepth(void) const
         else
           {
             retval= NAN;
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; can't get the compressed half-plane."
-                      << std::endl;
+                      << Color::def << std::endl;
           }
        }
     return retval;
@@ -326,9 +327,9 @@ double XC::FiberSectionBase::getTensionedZoneDepth(const Line2d &r) const
         else
           {
             retval= NAN;
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; can't get the compressed half-plane."
-                      << std::endl;
+                      << Color::def << std::endl;
           }
       }
     return retval;
@@ -411,37 +412,39 @@ std::list<Polygon2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(
 		      {
 			retval= contour.getIntersection(tensionedArea);
 			if(retval.empty())
-			  std::cerr << getClassName() << "::" << __FUNCTION__
+			  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				    << "; intersection of section contour: "
 				    << contour << " with tensioned area: "
-				    << tensionedArea << std::endl;
+				    << tensionedArea
+				    << Color::def << std::endl;
 		      }
 		    else
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< "; can't compute tensioned area."
 				<< " epsMin= " << epsMin << " epsMax= " << epsMax
-				<< std::endl;
+				<< Color::def << std::endl;
 		  }
 		else
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			    << "; effective concrete area limit line: "
 			    << limit << " outside section contour: " << contour
 			    << ";  hEfMax= " << hEfMax
-			    << std::endl;
+			    << Color::def << std::endl;
               }
             else
               retval.push_back(contour);
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; maximum effective height is zero." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; maximum effective height is zero."
+		    << Color::def << std::endl;
       }
     if(retval.empty())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; can't get contour of gross effective concrete area."
 	          << " epsMin= " << epsMin << " epsMax= " << epsMax
-                  << std::endl;
+                  << Color::def << std::endl;
       }
     return retval;
   }
@@ -453,10 +456,10 @@ double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax)
     if(!tmp.empty())
       retval= area(tmp.begin(),tmp.end());
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; error when computing contour of"
                   << " gross effective concrete area."
-                  << std::endl;
+                  << Color::def << std::endl;
     return retval;
   }
 
@@ -475,13 +478,15 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
             retval+= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
-                    << rebarSetName << " not found." << std::endl;
+                    << rebarSetName << " not found."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; can't compute effective area." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; can't compute effective area."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -499,13 +504,15 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
             retval= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
-                    << rebarSetName << " not found." << std::endl;
+                    << rebarSetName << " not found."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; can't compute effective area." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; can't compute effective area."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -521,9 +528,10 @@ void XC::FiberSectionBase::computeCovers(const std::string &rebarSetName) const
           rebars.computeCovers(*geom);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
-                << rebarSetName << " not found." << std::endl;
+                << rebarSetName << " not found."
+		<< Color::def << std::endl;
   }
 
 //! @brief Computes spacing of the fibers.
@@ -536,9 +544,10 @@ void XC::FiberSectionBase::computeSpacement(const std::string &rebarSetName) con
         rebars.computeSpacement();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
-                << rebarSetName << " not found." << std::endl;
+                << rebarSetName << " not found."
+		<< Color::def << std::endl;
   }
 
 //! @brief Returns the signed distance from the neutral axis
@@ -668,6 +677,15 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
       }
   }
 
+
+//! @brief Return the material tags of the fibers.
+std::set<int> XC::FiberSectionBase::getMatTags(void)
+  { return this->fibers.getMatTags(); }
+
+//! @brief Return the material tags of the fibers in a Python list.
+boost::python::list XC::FiberSectionBase::getMatTagsPy(void)
+  { return fibers.getMatTagsPy(); }
+
 //! @brief Returns the points that define the interaction diagram
 //! on the plane defined by the \f$\theta\f$ angle being passed as parameter.
 const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlane(const InteractionDiagramData &diag_data, const double &theta)
@@ -677,16 +695,48 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
     retval.setThreshold(diag_data.getThreshold());
     const FiberPtrDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; fibers for concrete material, identified by tag: "
-		<< diag_data.getConcreteTag()
-                << ", not found." << std::endl;
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; fibers for concrete material, identified by tag: "
+		  << diag_data.getConcreteTag()
+                  << ", not found."
+		  << " Concrete set name: " << diag_data.getConcreteSetName()
+		  << Color::def << std::endl;
+        const std::set<int> materialTags= this->getMatTags();
+	if(materialTags.size()>0)
+	  {
+	    std::cerr << Color::red << "Available material tags are:";
+	    std::set<int>::const_iterator i= materialTags.begin();
+	    std::cerr << "[" << *i;
+	    i++;
+	    for(; i!=materialTags.end();i++)
+	      std::cerr << ", " << *i;
+	    std::cerr << "]"
+		      << Color::def << std::endl;
+	  }
+      }
     const FiberPtrDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; fibers for steel material, identified by tag: "
-		<< diag_data.getReinforcementTag()
-                << ", not found." << std::endl;
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; fibers for steel material, identified by tag: "
+		  << diag_data.getReinforcementTag()
+		  << ", not found."
+		  << " Steel set name: " << diag_data.getRebarSetName()
+		  << Color::def << std::endl;
+        const std::set<int> materialTags= this->getMatTags();
+	if(materialTags.size()>0)
+	  {
+	    std::cerr << Color::red << "Available material tags are:";
+	    std::set<int>::const_iterator i= materialTags.begin();
+	    std::cerr << "[" << *i;
+	    i++;
+	    for(; i!=materialTags.end();i++)
+	      std::cerr << ", " << *i;
+	    std::cerr << "]"
+		      << Color::def << std::endl;
+	  }
+      }
     if(!fsC.empty() && !fsS.empty())
       {
         static NMyMzPointCloud tmp;
@@ -698,8 +748,9 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
         revertToStart();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; can't compute interaction diagram." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; can't compute interaction diagram."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -711,16 +762,18 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     lista_esfuerzos.setThreshold(diag_data.getThreshold());
     const FiberPtrDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
-                << ", not found." << std::endl;
+                << ", not found."
+		<< Color::def << std::endl;
     const FiberPtrDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for steel material, identified by tag: "
 		<< diag_data.getReinforcementTag()
-                << ", not found." << std::endl;
+                << ", not found."
+		<< Color::def << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
         for(double theta= 0.0;theta<2*M_PI;theta+=diag_data.getIncTheta())
@@ -728,8 +781,9 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
         revertToStart();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; can't compute interaction diagram." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; can't compute interaction diagram."
+		<< Color::def << std::endl;
     return lista_esfuerzos;
   }
 
@@ -743,9 +797,10 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
         retval= InteractionDiagram(Pos3d(0,0,0),Triang3dMesh(get_convex_hull(lp)));
         const double error= fabs(retval.getCapacityFactor(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("
-                    << error << ") seems too big." << std::endl;
+                    << error << ") seems too big."
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -760,9 +815,10 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(con
         retval= InteractionDiagram2d(get_convex_hull2d(lp));
         const double error= fabs(retval.getCapacityFactor(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("
-                    << error << ") seems too big." << std::endl;
+                    << error << ") seems too big."
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -846,8 +902,9 @@ Line2d XC::FiberSectionBase::getTensionedPlaneTrace(void) const
   {
     Line2d retval= fibers.getTensionedPlaneTrace();
     if(!retval.exists())
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; intercept of the tension plane not found." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; intercept of the tension plane not found."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -858,9 +915,9 @@ Line2d XC::FiberSectionBase::getCompressedPlaneTrace(void) const
   {
     Line2d retval= fibers.getCompressedPlaneTrace();
     if(!retval.exists())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; intercept of the compression plane not found."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -912,7 +969,8 @@ double XC::FiberSectionBase::getArea(void) const
 double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << "homogenization reference modulus too small; E0= " << E0
+		<< Color::def << std::endl; 
     const Line2d axis= getInternalForcesAxis();
     return fibers.getIHomogenizedSection(E0,axis);
   }
@@ -921,7 +979,8 @@ double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
 double XC::FiberSectionBase::getSPosHomogenized(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << "homogenization reference modulus too small; E0= " << E0
+		<< Color::def << std::endl; 
     const Line2d axis= getInternalForcesAxis();
     return fibers.getSPosHomogenizedSection(E0,HalfPlane2d(axis));
   }
@@ -998,16 +1057,16 @@ XC::Response *XC::FiberSectionBase::setResponse(const std::vector<std::string> &
 	    //info.endTag();
 	  }
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; fiber not found."
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     else if((argv[0]=="fiberData"))
       {
 	int numData = numFibers*5;
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; argument: " << argv[0] << " not implemented yet."
-		  << std::endl;
+		  << Color::def << std::endl;
 	// for(int j = 0; j < numFibers; j++)
 	//   {
 	//     Fiber *fiber= fibers[j];
@@ -1065,8 +1124,9 @@ int XC::FiberSectionBase::setParameter(const std::vector<std::string> &argv, Par
 	    const int ok= fibers.setParameter(paramMatTag,argv2, param);
 	    if(ok<0)
 	      {
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; could not set parameter. " << std::endl;
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; could not set parameter. "
+			  << Color::def << std::endl;
 		retval= -1;
 	      }
 	    else
@@ -1075,8 +1135,9 @@ int XC::FiberSectionBase::setParameter(const std::vector<std::string> &argv, Par
         // Check if it belongs to the section integration
 	else if(argv[0]=="integration")
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; section integration (from OpenSees) not implemented yet." << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; section integration (from OpenSees) not implemented yet."
+		      << Color::def << std::endl;
 	    // if(sectionIntegr!=nullptr)
 	    //   retval= sectionIntegr->setParameter(&argv[1], argc-1, param);
 	    // else

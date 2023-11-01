@@ -200,6 +200,8 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     Response *setResponse(const std::vector<std::string> &argv, Information &sectInfo);
 
     void SelMatTag(const int &matTag,FiberPtrDeque &,bool clear= true);
+    std::set<int> getMatTags(void);
+    boost::python::list getMatTagsPy(void);
 
     //size_t IMaxProp(const std::string &prop_name) const;
     //size_t IMinProp(const std::string &prop_name) const;

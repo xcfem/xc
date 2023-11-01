@@ -69,6 +69,7 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
 .def("computeSpacement",&XC::FiberSectionBase::computeSpacement,"Return the spacing between bars in the set of reinforcement fibers whose name is given as parameter. Syntax: computeSpacement(reinforcementSetName)")
   .def("getStrClaseEsfuerzo",&XC::FiberSectionBase::getStrClaseEsfuerzo,"Return the type of load acting at the cross-section('flexion_compuesta',...). Syntax: getStrClaseEsfuerzo(tolerance)")
   .add_property("getSectionGeometry",make_function(getSectionGeometryPtr,return_internal_reference<>()),"Return the section geometry.")
+  .def("getMatTags", &XC::FiberSectionBase::getMatTagsPy,"return the different tags of the uniaxial materials used to define the fibers.")
   ;
 
 class_<XC::FiberSection2d, bases<XC::FiberSectionBase>, boost::noncopyable >("FiberSection2d", no_init);

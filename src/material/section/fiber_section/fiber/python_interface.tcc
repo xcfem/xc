@@ -174,7 +174,8 @@ class_<XC::FiberPtrDeque, bases<CommandEntity,fiber_ptrs_dq>, boost::noncopyable
   .def("getIpolar",&XC::FiberPtrDeque::getIpolar)
   .def("getiz",&XC::FiberPtrDeque::getiz)
   .def("getiy",&XC::FiberPtrDeque::getiy)
-  .def("getTagNearestFiber",&XC::FiberPtrDeque::nearest_fiber)
+  .def("getTagNearestFiber", &XC::FiberPtrDeque::nearest_fiber)
+  .def("getMatTags", &XC::FiberPtrDeque::getMatTagsPy,"return the different tags of the uniaxial materials used to define the fibers.")
    ;
 
 class_<XC::FiberSet, bases<XC::FiberPtrDeque>, boost::noncopyable >("FiberSet", no_init)
