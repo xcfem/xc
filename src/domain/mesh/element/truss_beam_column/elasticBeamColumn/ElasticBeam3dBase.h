@@ -75,7 +75,9 @@ class ElasticBeam3dBase: public ProtoBeam3d
     virtual double getN2(void) const= 0;
     //! @brief Internal axial force at the middle of the element.
     //! Warning! call "calc_resisting_force" before calling this method.
-    virtual double getN(void) const= 0; //Mean axial force.
+    inline virtual double getN(void) const //Average axial force.
+      { return (getN1()+getN2())/2.0; }
+    
     //! @brief Internal bending moment about z axis at the back end.
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getMz1(void) const= 0;
@@ -84,37 +86,53 @@ class ElasticBeam3dBase: public ProtoBeam3d
     virtual double getMz2(void) const= 0;
     //! @brief Internal shear force in the middle of the element.
     //! Warning! call "calc_resisting_force" before calling this method.
-    virtual double getVy(void) const= 0;
+    //! @brief Mean bending moment.
+    //! ¡Warning! call "calc_resisting_force" before calling this method.
+    inline virtual double getMz(void) const
+      { return (this->getMz1()+this->getMz2())/2.0; }
+    
     //! @brief Internal y shear force at the back end.
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getVy1(void) const= 0;
     //! @brief Internal y shear force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getVy2(void) const= 0;
-    //! @brief Internal z shear force in the middle of the element.
-    //! Warning! call "calc_resisting_force" before calling this method.
-    virtual double getVz(void) const= 0;
-    //! @brief Internal z shear force at the back end.
+    //! @brief Internal shear force in the middle of the element.
+    inline virtual double getVy(void) const
+      { return (getVy1()+getVy2())/2.0; }
+    
+     //! @brief Internal z shear force at the back end.
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getVz1(void) const= 0;
     //! @brief Internal z shear force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getVz2(void) const= 0;
+    //! @brief Internal shear force in the middle of the element.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    inline virtual double getVz(void) const
+      { return (getVz1()+getVz2())/2.0; }
+    
     //! @brief Internal bending moment about y axis at the back end.   
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getMy1(void) const= 0;
     //! @brief Internal bending moment about y axis at the front end.   
     //! Warning! call "calc_resisting_force" before calling this method.
-    virtual double getMy2(void) const= 0;
-    //! @brief Internal torsional force in the middle of the element.   
-    //! Warning! call "calc_resisting_force" before calling this method.
-    virtual double getT(void) const= 0;
+    virtual double getMy2(void) const= 0;    
+    //! @brief Mean bending moment.
+    //! ¡Warning! call "calc_resisting_force" before calling this method.
+    inline virtual double getMy(void) const
+      { return (this->getMy1()+this->getMy2())/2.0; }
+    
     //! @brief Internal torsional force at the back end.   
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getT1(void) const= 0;
     //! @brief Internal torsional force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getT2(void) const= 0;
+    //! @brief Internal torsional force at midpoint.   
+    //! Warning! call "calc_resisting_force" before calling this method.
+    inline virtual double getT(void) const
+      { return (getT1()+getT2())/2.0; }
     
     boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };

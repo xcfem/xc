@@ -599,6 +599,18 @@ class PredefinedSpace(object):
                    (e.g.: dofs=xc.ID([0,2,5]) means to equal ux,uz,rotz)
         '''
         return self.constraints.newEqualDOF(nodeTagA,nodeTagB,dofs)
+
+    def glueNodeToElement(self, nodeTag:int, elemTag:int, gluedDOFs:xc.ID):
+        '''Create a constraint that glues the given node to the given element.
+
+        :param nodeTag: tag of the node.
+        :param elemTag: tag of the element.
+        :param gluedDofs: degrees of freedom to be glued 
+                   (e.g.: dofs=xc.ID([0,2,5]) means to equal ux,uz,rotz)
+        '''
+        node= self.getNodeHandler().getNode(nodeTag)
+        elem= self.getElementHandler().getElement(elemTag)
+        return self.constraints.newGlueNodeToElement(node,elem,gluedDOFs)
     
     def setFulcrumBetweenNodes(self,nodeTagA: int, pivotNodeTag: int):
         '''Create a fulcrum between the nodes passed as parameters.

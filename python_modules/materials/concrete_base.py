@@ -1128,17 +1128,45 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         '''
         return sigmas(eps, fy= self.fyd(), ey= self.eyd(), Es= self.Es, Esh= self.Esh())
     
-    def defDiagK(self,preprocessor):
-        ''' Returns XC uniaxial material (characteristic values). '''
+    def defDiagK(self, preprocessor):
+        ''' Returns an XC uniaxial material  corresponding to the characteristic
+            values of the stress-strain diagram of the reinforcing steel.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
         self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
         self.matTagK= self.materialDiagramK.tag
         return self.materialDiagramK #30160925 was 'return self.matTagK'
 
-    def defDiagD(self,preprocessor):
-        ''' Returns XC uniaxial material (design values). '''
+    def defDiagD(self, preprocessor):
+        ''' Returns XC uniaxial material corresponding to the design values
+            of the stress-strain diagram of the reinforcing steel.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
         self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
+
+    def defDiag(self, preprocessor, matDiagType):
+        ''' Returns an XC uniaxial material corresponding to the stress-strain
+            diagram of the reinforcing steel.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param matDiagType: diagram type; if "k" return the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" return the design values one.
+        '''
+        retval= None
+        if(matDiagType=='d' or matDiagType=='D'):
+            return defDiagD(preprocessor)
+        elif(matDiagType=='k' or matDiagType=='K'):
+            return defDiagK(preprocessor)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; diagram types : '+str(self.matDiagTyp)+' is not known.')
+        return retval
 
     def plotDesignStressStrainDiagram(self,preprocessor,path=''):
         '''Draws the steel design diagram.'''

@@ -134,6 +134,7 @@ class ElasticBeam2d: public ElasticBeam2dBase
     int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
+    
     //! @brief Internal shear force in the middle of the element.
     inline double getV(void) const
       { return (q(1)+q(2))/theCoordTransf->getInitialLength(); }
@@ -143,18 +144,14 @@ class ElasticBeam2d: public ElasticBeam2dBase
     //! @brief Internal shear force at the front end.   
     inline double getV2(void) const
       { return -getV()+p0[2]; }
+    
     //! @brief Internal axial force at the back end.   
     inline double getN1(void) const
       { return q(0)-p0[0]; }
     //! @brief Internal axial force at the front end.   
     inline double getN2(void) const
       { return q(0); }
-    //! @brief Internal axial force at the middle of the element.
-    //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getN(void) const //Average axial force.
-      {
-        return (getN1()+getN2())/2.0;
-      }
+    
     //! @brief Internal bending moment at the back end.   
     inline double getM1(void) const
       { return -q(1); }

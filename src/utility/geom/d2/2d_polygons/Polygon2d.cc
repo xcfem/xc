@@ -399,33 +399,83 @@ std::list<Polygon2d> Polygon2d::Clip(const BND2d &bnd) const
   { return Clip(bnd.getPolygon()); }
 
 //! @brief Return the polygons that result from clipping this one
+//! with the BND argument in a Python list.
+boost::python::list Polygon2d::ClipPy(const BND2d &bnd) const
+  {
+    const std::list<Polygon2d> tmp= this->Clip(bnd);
+    boost::python::list retval;
+    for(std::list<Polygon2d>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the polygons that result from clipping this one
 //! with the polygon argument.
 std::list<Polygon2d> Polygon2d::Clip(const Polygon2d &other) const
   { return intersection(*this,other); }
+
+//! @brief Return the polygons that result from clipping this one
+//! with the polygon argument in a Python list.
+boost::python::list Polygon2d::ClipPy(const Polygon2d &plg) const
+  {
+    const std::list<Polygon2d> tmp= this->Clip(plg);
+    boost::python::list retval;
+    for(std::list<Polygon2d>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
 
 //! @brief Clip this polygont with the polygon argument.
 void Polygon2d::clipBy(const Polygon2d &plg)
   { (*this)= Polygon2d(Clip(plg)); }
 
+//! @brief Return the intersection of the polygon with the given line.
 Segment2d Polygon2d::getIntersection(const Line2d &l) const
   { return Clip(l); }
+
+//! @brief Return the intersection of the polygon with the given ray.
 Segment2d Polygon2d::getIntersection(const Ray2d &r) const
   { return Clip(r); }
+
+//! @brief Return the intersection of the polygon with the given segment.
 Segment2d Polygon2d::getIntersection(const Segment2d &s) const
   { return Clip(s); }
 
+//! @brief Return the intersection with the given half plane.
+std::list<Polygon2d> Polygon2d::getIntersection(const HalfPlane2d &hp) const
+  { return intersection(*this, hp); }
 
-//! @brief 
+//! @brief Return the intersection with the given half plane in a Python list.
+boost::python::list Polygon2d::getIntersectionPy(const HalfPlane2d &hp) const
+  {
+    const std::list<Polygon2d> tmp= intersection(*this, hp);
+    boost::python::list retval;
+    for(std::list<Polygon2d>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the intersection with the given polygon.
+std::list<Polygon2d> Polygon2d::getIntersection(const Polygon2d &plg) const
+  { return intersection(*this, plg); }
+
+//! @brief Return the intersection with the given polygon in a Python list.
+boost::python::list Polygon2d::getIntersectionPy(const Polygon2d &plg) const
+  {
+    const std::list<Polygon2d> tmp= intersection(*this, plg);
+    boost::python::list retval;
+    for(std::list<Polygon2d>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the decomposition obtained using the Mark Bayazit algorithm.
 std::list<Polygon2d> Polygon2d::getBayazitDecomposition(void) const
   {
     std::list<Polygon2d> retval;
     decompose_poly(*this,retval);
     return retval;
   }
-
-//! @brief Return the intersection with the polygon parameter.
-std::list<Polygon2d> Polygon2d::getIntersection(const HalfPlane2d &sp) const
-  { return intersection(*this,sp); }
 
 //! @brief Return the union of this polygon with the argument.
 Polygon2d Polygon2d::getUnion(const Polygon2d &other) const

@@ -212,8 +212,8 @@ class ShearController(lsc.ShearControllerBase):
         super(ShearController,self).__init__(limitStateLabel)
 
     def setSection(self,rcSection):
-        self.concrete= rcSection.fiberSectionParameters.concrType #Arreglar
-        self.steel= rcSection.fiberSectionParameters.reinfSteelType
+        self.concrete= rcSection.getConcreteType() #Arreglar
+        self.steel= rcSection.getReinfSteelType()
         self.width= rcSection.b
         self.effectiveDepth= 0.9* rcSection.h
         self.mechanicLeverArm= 0.9*self.effectiveDepth #Mejorar
@@ -329,8 +329,8 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
     def calcRebarStress(self, scc):
         '''Returns average stress in rebars.'''
         section= scc.getProp('sectionData')
-        concreteTag= section.fiberSectionParameters.concrType.matTagK
-        reinfMatTag= section.fiberSectionParameters.reinfSteelType.matTagK
+        concreteTag= section.getConcreteType().matTagK
+        reinfMatTag= section.getReinfSteelType().matTagK
         if(not scc.hasProp("rcSets")):
           scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,concreteTag,self.concreteFibersSetName,reinfMatTag,self.rebarFibersSetName))
         rcSets= scc.getProp("rcSets")
@@ -546,7 +546,7 @@ def getSteelFatigueLimitStress(barShape, barDiameter, overlappingConnectionsOnly
     
 def getConcreteLimitStress(sccData,kc, controlVars):
     '''4.3.8.3.1 SIA 262 2013.'''
-    fcd= sccData.fiberSectionParameters.concrType.fcd()
+    fcd= sccData.getConcreteType().fcd()
     concreteStresses= controlVars.getConcreteMaxMinStresses()
     #sg_max= concreteStresses[0]
     sg_min= concreteStresses[1]

@@ -1167,30 +1167,18 @@ boost::python::dict XC::Face::getPyDict(void) const
 void XC::Face::setPyDict(const boost::python::dict &d)
   {
     CmbEdge::setPyDict(d);
-    boost::python::list bodyTags= boost::python::extract<boost::python::list>(d["bodyTags"]);
-    const size_t numBodies= boost::python::len(bodyTags);
-    const Preprocessor *preprocessor= getPreprocessor();
+    // The topology can't be updated here because the bodies doesn't exist
+    // yet (they are readed after the points). The faceTags field is ignored.
+    //boost::python::list bodyTags= boost::python::extract<boost::python::list>(d["bodyTags"]);
+    Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-	const MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
-	const BodyMap &bodies= mbt.getBodies();
-	for(size_t i= 0; i<numBodies; i++)
-	  {
-	    const size_t tag= boost::python::extract<size_t>(bodyTags[i]);
-	    const Body *b= bodies.busca(tag);
-	    bodies_surf.insert(b);
-	  }
-      }
-    else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
-    this->ndivj=  boost::python::extract<size_t>(d["ndivj"]);
-    boost::python::list holeTags= boost::python::extract<boost::python::list>(d["holeTags"]);
-    const size_t numHoles= boost::python::len(holeTags);
-    Preprocessor *prep= getPreprocessor();
-    if(prep)
-      {
-	MultiBlockTopology &mbt= prep->getMultiBlockTopology();
+	MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
+
+	this->ndivj=  boost::python::extract<size_t>(d["ndivj"]);
+	boost::python::list holeTags= boost::python::extract<boost::python::list>(d["holeTags"]);
+	const size_t numHoles= boost::python::len(holeTags);
+
 	SurfaceMap &surfaces= mbt.getSurfaces();
 	for(size_t i= 0; i<numHoles; i++)
 	  {
@@ -1199,6 +1187,7 @@ void XC::Face::setPyDict(const boost::python::dict &d)
 	    PolygonalFace *pf= dynamic_cast<PolygonalFace *>(f);
 	    this->holes.push_back(pf);
 	  }
+	this->update_topology();
       }
     else
       std::cerr << getClassName() << __FUNCTION__

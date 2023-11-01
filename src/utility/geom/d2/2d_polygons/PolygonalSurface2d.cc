@@ -585,23 +585,22 @@ list<Segment2d> intersection(const Ray2d &sr,const PolygonalSurface2d &pg)
 //! @brief Return the intersection of the polygon with the segment.
 list<Segment2d> intersection(const PolygonalSurface2d &pg,const Segment2d &sg)
   {
-    
     list<Segment2d> retval;
     if(!pg.getNumVertices()) return retval;
 
     Polyline2d pl= pg.getPolyline();
     
-    GeomObj::list_Pos2d ptos= intersection(sg,pl);
+    GeomObj::list_Pos2d points= intersection(sg,pl);
     const Pos2d org= sg.getFromPoint();
     if(pg.In(org))
-      ptos.push_front(org);
+      points.push_front(org);
     const Pos2d dest= sg.getToPoint();
-    if(pg.In(org))
-      ptos.push_back(dest);
-    if(ptos.size()<2)
+    if(pg.In(dest))
+      points.push_back(dest);
+    if(points.size()<2)
       return retval;
 
-    GeomObj::list_Pos2d ordenados= sg.Ordena(ptos);
+    GeomObj::list_Pos2d ordenados= sg.Ordena(points);
 
     Polyline2d tmp;
     tmp.assign(ordenados.begin(),ordenados.end());

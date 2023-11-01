@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+''' dimension of abutment support to avoid the risk of bridge deck falling 
+during a quake. See "Évaluation parasismique des ponts-routes 
+existants (2005)" Office féderal des routes page 48).
+
+https://doi.org/10.3929/ethz-a-005077557
+'''
 
 from __future__ import division
 from __future__ import print_function
@@ -12,28 +18,30 @@ __email__= "l.pereztato@gmail.com"
 import sys
 
 def getLg(soilClass):
-    '''
-    From a length greater than de distance "lg" the soil mouvement
-    can be considered as completely uncorrelated.
+    '''  Length lg for securing against falling, depending on the foundation 
+         ground class. Accoding to table 6.2 of the OFROU document. For a 
+         length  greater than de distance "lg" the soil mouvement can be
+         considered as completely uncorrelated.
+
+    :param soilClass: A, B, C, D or E.
     '''
     retval= 300
     if(soilClass == "A"):
-      retval= 600
+        retval= 600
     elif(soilClass == "B"):
-      retval= 500
+        retval= 500
     elif(soilClass == "C"):
-      retval= 400
+        retval= 400
     elif(soilClass == "D"):
-      retval= 300
+        retval= 300
     elif(soilClass == "E"):
-      retval= 500
+        retval= 500
     else:
-      sys.stderr.write("Unknown soil type: "+soilClass)
+        sys.stderr.write("Unknown soil type: "+soilClass)
     return retval
 
 def getUgd(soilClass, quakeZone,bridgeClass):
-    '''
-    Returns the design value for soil displacement.
+    ''' Returns the design value for soil displacement.
 
     :param soilClass: A, B, C, D or E.
     :param quakeZone: ZI, ZII, ZIIa, ZIIIb
@@ -103,9 +111,8 @@ def getUgd(soilClass, quakeZone,bridgeClass):
         retval*=1.4
     return retval
   
-def getBminPontFlotant(dAbutFixedPoint,soilClass,quakeZone,bridgeClass):
-    '''
-    Returns the minimal dimension of abutment support to avoid
+def getBminPontFlotant(dAbutFixedPoint, soilClass, quakeZone, bridgeClass):
+    ''' Returns the minimal dimension of abutment support to avoid
     the risk of bridge deck falling during a quake. See "Évaluation
     parasismique des ponts-routes existants" Office féderal des routes
     page 48).
@@ -120,8 +127,7 @@ def getBminPontFlotant(dAbutFixedPoint,soilClass,quakeZone,bridgeClass):
     return 0.2+min((1.3+2*dAbutFixedPoint/lg),3.3)*ugd
 
 def getBminPontAppuiFixe(l,a,soilClass,quakeZone,bridgeClass):
-  '''
-  Returns the minimal dimension of abutment support to avoid
+  ''' Returns the minimal dimension of abutment support to avoid
   the risk of bridge deck falling during a quake. See "Évaluation
   parasismique des ponts-routes existants" Office féderal des routes
   page 49).

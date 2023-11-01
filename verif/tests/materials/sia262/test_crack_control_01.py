@@ -25,15 +25,9 @@ from model import predefined_spaces
 areaFi22= SIA262_materials.section_barres_courantes[22e-3]
 areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
-datosScc1LosC= def_simple_RC_section.RCRectangularSection()
-datosScc1LosC.name= "secHA1LosC"
-datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= SIA262_materials.c30_37
 concr.alfacc=0.85 # f_maxd= 0.85*fcd
-datosScc1LosC.fiberSectionParameters.concrType= concr
-datosScc1LosC.h= 0.35
-datosScc1LosC.b= 1.0001
-datosScc1LosC.fiberSectionParameters.reinfSteelType= SIA262_materials.B500B
+datosScc1LosC= def_simple_RC_section.RCRectangularSection(name= "secHA1LosC", sectionDescr= "Deck. Central portion. Section normal to X axis.", concrType= concr, depth= 0.35, width= 1.0001, reinfSteelType= SIA262_materials.B500B)
 negRebRow=def_simple_RC_section.ReinfRow(nRebars=2,rebarsDiam=10e-10,width=datosScc1LosC.b)
 # negRebRow=def_simple_RC_section.ReinfRow()
 # negRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= SIA262_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)

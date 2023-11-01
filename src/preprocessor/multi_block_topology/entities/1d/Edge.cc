@@ -868,22 +868,8 @@ void XC::Edge::setPyDict(const boost::python::dict &d)
   {
     EntMdlr::setPyDict(d);
     ndiv= boost::python::extract<size_t>(d["ndiv"]);
-    boost::python::list faceTags= boost::python::extract<boost::python::list>(d["faceTags"]);
-    const size_t sz= boost::python::len(faceTags);
-    const Preprocessor *preprocessor= getPreprocessor();
-    if(preprocessor)
-      {
-	const MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
-	const SurfaceMap &faces= mbt.getSurfaces();
-	for(size_t i= 0; i<sz; i++)
-	  {
-	    const size_t tag= boost::python::extract<size_t>(faceTags[i]);
-	    const Face *f= faces.busca(tag);
-	    surfaces_line.insert(f);
-	  }
-      }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+    // The topology can't be updated here because the faces doesn't exist
+    // yet (they are readed after the lines). The faceTags field is ignored.
+    // boost::python::list faceTags= boost::python::extract<boost::python::list>(d["faceTags"]);
   }
 

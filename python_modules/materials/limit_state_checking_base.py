@@ -231,10 +231,12 @@ class fibSectLSProperties(object):
     def __init__(self,sct):
         self.sct=sct
         self.sctProp=sct.getProp('sectionData')
-        self.concrTagK= self.sctProp.fiberSectionParameters.concrType.matTagK
-        self.rsteelTagK= self.sctProp.fiberSectionParameters.reinfSteelType.matTagK
-        self.concrName= str(self.sctProp.fiberSectionParameters.concrType)
-        self.rsteelName= str(self.sctProp.fiberSectionParameters.reinfSteelType)
+        concreteType= self.sctProp.getConcreteType()
+        steelType= self.sctProp.getReinfSteelType()
+        self.concrTagK= concreteType.matTagK
+        self.rsteelTagK= self.steelType.matTagK
+        self.concrName= str(concreteType)
+        self.rsteelName= str(steelType)
         self.cover=0 #init concrete cover
         self.fiEqu=0 #init equivalent diameter
         

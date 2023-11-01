@@ -174,7 +174,7 @@ class RCMaterialDistribution(object):
         # Check if a tension-stiffening model is expected.
         if outputCfg.controller.expectsTensionStiffeningModel():
              for s in self.sectionDefinition.sections:
-                 s.fiberSectionParameters.concrType.initTensStiff= True
+                 s.getConcreteType().initTensStiff= True
         self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
                           #for each element in the container the fiber sections
                           #(RCsimpleSections) associated with it.

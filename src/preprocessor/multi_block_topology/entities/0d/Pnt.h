@@ -92,15 +92,15 @@ class Pnt: public EntMdlr
     void insert_line(Edge *l) const;
     void erase_line(Edge *l) const;
 
+    //! @brief Return the number of connected edges.
+    const size_t getNumConnectedEdges(void) const
+      { return lines_pt.size(); }
     //! @brief Return the list of the lines that begin or end at the point.
     const std::set<const Edge *> &getConnectedEdges(void) const
       { return lines_pt; }
     boost::python::list getConnectedEdgesTags(void) const;
     boost::python::list getConnectedEdgesPy(void);
 
-    //! @brief Return the number of connected edges.
-    const size_t getNLines(void) const
-      { return getConnectedEdges().size(); }
     std::set<const Edge *> getEdgesThatEndOnThisPoint(void) const;
 
     const std::string &getConnectedEdgesNames(void) const;

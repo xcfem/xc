@@ -358,13 +358,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
     def getTemplateSection(self, posReb,negReb,YShReinf,ZShReinf):
         ''' Return the template section to use with createSingleSection
             method.'''
-        sect= def_simple_RC_section.RCRectangularSection()
-        sect.name= self.name
-        sect.sectionDescr= self.sectionDescr
-        sect.fiberSectionParameters.concrType= self.concrType
-        sect.h= self.depth
-        sect.b= self.width
-        sect.fiberSectionParameters.reinfSteelType= self.reinfSteelType
+        sect= def_simple_RC_section.RCRectangularSection(name= self.name, sectionDescr= self.sectionDescr, concrType= self.concrType, reinfSteelType= self.reinfSteelType, width= self.width, depth= self.depth)
         sect.positvRebarRows= posReb
         sect.negatvRebarRows= negReb
         sect.shReinfY= YShReinf

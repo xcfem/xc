@@ -236,8 +236,8 @@ class SectionInfoHASimple(SectionInfo):
         self.scc= sectHASimple
         sectName=sectHASimple.gmSectionName()
         sectDescr=sectHASimple.sectionDescr
-        concrete=sectHASimple.fiberSectionParameters.concrType
-        rfSteel=sectHASimple.fiberSectionParameters.reinfSteelType
+        concrete=sectHASimple.getConcreteType()
+        rfSteel=sectHASimple.getReinfSteelType()
         concrDiag=sectHASimple.getConcreteDiagram(preprocessor)
         rfStDiag=sectHASimple.getSteelDiagram(preprocessor)
         geomSection= preprocessor.getMaterialHandler.getSectionGeometry(sectName)

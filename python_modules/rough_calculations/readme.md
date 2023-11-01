@@ -15,3 +15,8 @@ Python routines to automate preliminary structural calculations.
 ### Punching shear
 - [Punching shear](https://www.concretecentre.com/Codes/Eurocode-2/Punching-Shear.aspx)
 - [Punching Shear Strength of Reinforced Concrete Slabs without Transverse Reinforcement](file:///home/luis/Downloads/Muttoni08a.pdf)
+
+## Bridges
+
+- [Evaluation parasismique des ponts-routes existants (2005)](https://doi.org/10.3929/ethz-a-005077557)
+- [Évaluatin de la sécurité sismique des ponts routiers existants ASTRA 82003](https://www.astra.admin.ch/dam/astra/de/dokumente/standards_fuer_nationalstrassen/astra_82003_beurteilung_der_erdbebensicherheit_bestehender_strassenbruecken.pdf.download.pdf/astra%2082003f.pdf)

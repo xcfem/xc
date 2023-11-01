@@ -70,6 +70,7 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
 #include <utility/Timer.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor
 XC::Linear::Linear(SolutionStrategy *owr)
@@ -87,33 +88,37 @@ int XC::Linear::resuelve(void)
 
     if((!theAnalysisModel) || (!theIncIntegrator) || (!theSOE))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING undefined analysis model,"
-                  << " integrator or system of equations.\n";
+                  << " integrator or system of equations."
+	          << Color::def << std::endl;
         return -5;
       }
 
     if(theIncIntegrator->formTangent()<0) //Builds tangent stiffness matrix.
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING the XC::Integrator"
-                  << " failed in formTangent().\n";
+                  << " failed in formTangent()."
+	          << Color::def << std::endl;
         return -1;
       }
 
     if(theIncIntegrator->formUnbalance()<0) //Builds load vector.
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING the XC::Integrator"
-                  << " failed in formUnbalance().\n";
+                  << " failed in formUnbalance()."
+	          << Color::def << std::endl;
         return -2;
       }
 
     if(theSOE->solve() < 0) //launches SOE solution.
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING the " << theSOE->getClassName()
-                  << " failed in solve()\n";        
+                  << " failed in solve()."
+	          << Color::def << std::endl;        
         return -3;
       }
 
@@ -121,8 +126,9 @@ int XC::Linear::resuelve(void)
 
     if(theIncIntegrator->update(deltaU) < 0) //Updates displacements.
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "the integrator failed in update()\n";        
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "the integrator failed in update()."
+	          << Color::def << std::endl;
         return -4;
       }
     return 0;

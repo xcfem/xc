@@ -28,6 +28,7 @@
 
 #include "NodePtrsWithIDs.h"
 #include "domain/mesh/node/Node.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @ brief Default constructor.
 XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodes)
@@ -36,9 +37,11 @@ XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodes)
     // ensure the connectedExternalNode XC::ID is of correct size & set values
     if(size_t(connectedExternalNodes.Size()) != numNodes)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - "
-		  << " failed to create an ID of size " << numNodes << "\n";
+		  << " failed to create an ID of size "
+		  << numNodes << Color::def
+		  << std::endl;
         exit(-1);
       }
   }
@@ -68,9 +71,11 @@ bool XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodes)
   {
     const size_t numNodes= getNumExternalNodes();
     if(numNodes != inodes.size())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; " 
-                << numNodes << " node indexes were expected." << std::endl;
+                << numNodes << " node indexes were expected "
+		<< "(instead of " << inodes.size() << ")."
+	        << Color::def << std::endl;
     bool retval= false;
     for( size_t i= 0;i<numNodes;i++)
       retval|= set_id_node(i,inodes[i]);
@@ -82,9 +87,11 @@ bool XC::NodePtrsWithIDs::set_id_nodes(const ID &inodes)
   {
     const int numNodes= getNumExternalNodes();
     if(numNodes != inodes.Size())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; " 
-                << numNodes << " node indexes were expected." << std::endl;
+                << numNodes << " node indexes were expected "
+		<< "(instead of " << inodes.size() << ")."
+	        << Color::def << std::endl;
     bool retval= false;
     for(int i= 0;i<numNodes;i++)
       retval|= set_id_node(i,inodes(i));
@@ -98,10 +105,11 @@ bool XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
     bool retval= false;
     const int numNodes= getNumExternalNodes();
     if(i>=numNodes)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << i << ">=" << numNodes
-		<< " index out of range." << std::endl;
+		<< " index out of range."
+		<< Color::def << std::endl;
     const int oldTag= connectedExternalNodes(i);
     Node *oldNode= (*this)[i];
     if(inode!= oldTag)
@@ -267,10 +275,10 @@ bool XC::NodePtrsWithIDs::checkNumDOF(const size_t &numDOF, const size_t &elemTa
         const size_t dofNd1= (*this)[0]->getNumberDOF();
         if((dofNd1!=numDOF) || !equalNumDof)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; ERROR, element (tag: " << elemTag 
                       << "), has a different number of DOFs in its nodes."
-		      << std::endl;
+		      << Color::def << std::endl;
             retval= false;
           }
       }
@@ -316,8 +324,9 @@ int XC::NodePtrsWithIDs::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ch failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -327,8 +336,9 @@ int XC::NodePtrsWithIDs::recvSelf(const Communicator &comm)
     inicComm(1);
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ch failed to recv the initial ID\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to recv the initial ID"
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;

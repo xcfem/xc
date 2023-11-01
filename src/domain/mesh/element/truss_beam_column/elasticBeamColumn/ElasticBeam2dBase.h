@@ -68,22 +68,31 @@ class ElasticBeam2dBase: public ProtoBeam2d
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
     
-    //! @brief Internal shear force in the middle of the element.
-    virtual double getV(void) const= 0; 
     //! @brief Internal shear force at the back end.   
     virtual double getV1(void) const= 0;
     //! @brief Internal shear force at the front end.   
     virtual double getV2(void) const= 0;
+    //! @brief Internal shear force in the middle of the element.
+    inline virtual double getV(void) const
+      { return (getV1()+getV2())/2.0; }
+    
     //! @brief Internal axial force at the back end.   
     virtual double getN1(void) const= 0;
     //! @brief Internal axial force at the front end.   
     virtual double getN2(void) const= 0;
-    //! @brief Internal axial force at the middle of the element.
-    virtual double getN(void) const= 0; //Average axial force.
+    //! @brief Mean axial force.
+    //! ¡Warning! call "calc_resisting_force" before calling this method.
+    inline virtual double getN(void) const
+      { return (this->getN1()+this->getN2())/2.0; }
+    
     //! @brief Internal bending moment at the back end.   
     virtual double getM1(void) const= 0;
     //! @brief Internal bending moment at the front end.   
     virtual double getM2(void) const= 0;
+    //! @brief Mean bending moment.
+    //! ¡Warning! call "calc_resisting_force" before calling this method.
+    inline virtual double getM(void) const
+      { return (this->getM1()+this->getM2())/2.0; }
     
     boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
