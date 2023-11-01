@@ -370,6 +370,27 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
 
+    def defDiag(self, preprocessor, matDiagType):
+        ''' Returns an XC uniaxial material corresponding to the stress-strain
+            diagram of the concrete.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param matDiagType: diagram type; if "k" return the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" return the design values one.
+        '''
+        retval= None
+        if(matDiagType=='d' or matDiagType=='D'):
+            return self.defDiagD(preprocessor)
+        elif(matDiagType=='k' or matDiagType=='K'):
+            return self.defDiagK(preprocessor)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; diagram type : '+str(self.matDiagTyp)+' is not known.')
+        return retval
+
+    
     def sigmaPR(self,eps):
         ''' stress as function of strain according to parabola-rectangle diagram'''
         return self.sigmac(eps)
@@ -1159,9 +1180,9 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         '''
         retval= None
         if(matDiagType=='d' or matDiagType=='D'):
-            return defDiagD(preprocessor)
+            return self.defDiagD(preprocessor)
         elif(matDiagType=='k' or matDiagType=='K'):
-            return defDiagK(preprocessor)
+            return self.defDiagK(preprocessor)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
