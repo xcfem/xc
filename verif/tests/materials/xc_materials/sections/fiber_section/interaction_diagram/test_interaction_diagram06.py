@@ -50,10 +50,6 @@ preprocessor=  feProblem.getPreprocessor
 sccData.defRCSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)
-#from materials.sections.fiber_section import plot_fiber_section as pfs
-#pfs.plotInteractionDiagram2D(diag)
-
-
 
 fcELU13= diag.getCapacityFactor(geom.Pos2d(136.78e3,24.71e3))
 fcELU14= diag.getCapacityFactor(geom.Pos2d(1197.13e3,65.98e3))
@@ -79,3 +75,10 @@ if((abs(ratio1)<1e-2) & (abs(ratio2)<1e-2)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic output.
+# from postprocess.reports import graph_material
+# interactionDiagramGraphic= graph_material.InteractionDiagramGraphic(title= 'Test')
+# interactionDiagramGraphic.setupGraphic(diag)
+# interactionDiagramGraphic.show()
+

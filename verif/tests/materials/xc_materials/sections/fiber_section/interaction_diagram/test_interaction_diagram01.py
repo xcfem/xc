@@ -63,7 +63,7 @@ fibras= secHA.getFibers()
 param= xc.InteractionDiagramParameters()
 param.concreteTag= EHE_materials.HA25.matTagD
 param.reinforcementTag= EHE_materials.B500S.matTagD
-diagIntsecHA= materialHandler.calcInteractionDiagram("secHA",param)
+diagIntsecHA= materialHandler.calcInteractionDiagram(secHA.name,param)
 
 diagIntsecHA.writeTo("/tmp/interaction_diagram_test_01.dat") # Used in interaction_diagram_test_03
 ratio1= diagIntsecHA.getCapacityFactor(geom.Pos3d(352877,0,0))-1
