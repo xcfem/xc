@@ -381,16 +381,21 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''
         retval= None
         if(matDiagType=='d' or matDiagType=='D'):
-            return self.defDiagD(preprocessor)
+            if(self.materialDiagramD): # if already defined.
+                retval= self.materialDiagramD
+            else: # if not defined yet, do it now.
+                retval= self.defDiagD(preprocessor)
         elif(matDiagType=='k' or matDiagType=='K'):
-            return self.defDiagK(preprocessor)
+            if(self.materialDiagramK): # if already defined.
+                retval= self.materialDiagramK
+            else: # if not defined yet, do it now.
+                retval= self.defDiagK(preprocessor)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; diagram type : '+str(self.matDiagTyp)+' is not known.')
         return retval
 
-    
     def sigmaPR(self,eps):
         ''' stress as function of strain according to parabola-rectangle diagram'''
         return self.sigmac(eps)
@@ -1180,9 +1185,15 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         '''
         retval= None
         if(matDiagType=='d' or matDiagType=='D'):
-            return self.defDiagD(preprocessor)
+            if(self.materialDiagramD): # if already defined.
+                retval= self.materialDiagramD
+            else: # if not defined yet, do it now.
+                retval= self.defDiagD(preprocessor)
         elif(matDiagType=='k' or matDiagType=='K'):
-            return self.defDiagK(preprocessor)
+            if(self.materialDiagramK): # if already defined.
+                retval= self.materialDiagramK
+            else: # if not defined yet, do it now.
+                retval= self.defDiagK(preprocessor)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
