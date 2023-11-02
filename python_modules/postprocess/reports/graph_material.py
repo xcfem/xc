@@ -38,13 +38,12 @@ class MPLGraphic(object):
         self.fScale= 1e-3
         self.fig= None
       
-    def getPathPolygon(self,plg):
-        nv= plg.getNumVertices()
-        v0= plg.getVertice(0)
+    def getPathPolygon(self, plg):
+        plgVertices= plg.getVertexList()
+        v0= plgVertices[0]
         vertices= [(v0.y*self.fScale,v0.x*self.fScale)]
         codes=[Path.MOVETO]
-        for i in range(1,nv):
-          v= plg.getVertice(i)
+        for v in plgVertices[1:]:
           vertices.append((v.y*self.fScale,v.x*self.fScale))
           codes.append(Path.LINETO)
         vertices.append((v0.y*self.fScale,v0.x*self.fScale))
