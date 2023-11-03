@@ -94,6 +94,7 @@
 #include "domain/mesh/element/plane/surface_pressures/QuadSurfaceLoad.h"
 
 #include "preprocessor/Preprocessor.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Default constructor.
@@ -119,9 +120,10 @@ const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
     if(imat!= get_material_handler().end())
       retval= imat->second;
     else 
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; material: " << material_name
-		<< "' not found.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; material: '" << material_name
+		<< "' not found."
+	        << Color::def << std::endl;
     return retval;
   }
 
@@ -145,9 +147,10 @@ const XC::BeamIntegration *XC::ProtoElementHandler::get_ptr_beam_integrator(void
       retval= iInteg->second;
     else
       if(verbosity>0)
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; integrator named: '" 
-                  << integrator_name << "' not found.\n";
+                  << integrator_name << "' not found."
+	          << Color::def << std::endl;
     return retval;
   }
 
@@ -168,30 +171,32 @@ const XC::CrdTransf *XC::ProtoElementHandler::get_ptr_transf_coo(void) const
       retval= itrf->second;
     else
       if(verbosity>0)
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; coordinate transformation named: '" 
-                  << transformation_name << "' not found.\n";
+                  << transformation_name << "' not found."
+	          << Color::def << std::endl;
     return retval;
   }
 
 //! @brief Warning messages about deprecated element type names.
 void deprecatedElementNameMsg(const std::string &errHeader, const std::string &oldCmd,const std::string &newCmd)
   {
-     std::clog << errHeader
+     std::clog << Color::red << errHeader
                << "; type name: '" << oldCmd
 	       << "' is deprecated use '"
                << newCmd << "' instead."
-	       << std::endl;
+	       << Color::def << std::endl;
   }
 
 //! @brief Warning messages about materials that are not valid
 //! for an element type.
 void materialNotSuitableMsg(const std::string &errHeader, const std::string &matName, const std::string &elemType)
   {
-    std::cerr << "Error in "
+    std::cerr << Color::red <<"Error in "
               << errHeader << "; material: '"
               << matName << "' is not suitable for "
-	      << elemType << " elements." << std::endl;
+	      << elemType << " elements."
+	      << Color::def << std::endl;
   }
 
 //! @brief Process the comands used to define
@@ -468,9 +473,9 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
     // 	  materialNotSuitableMsg(errHeader,material_name,cmd);
     //   }
     else
-      std::cerr << errHeader
+      std::cerr << Color::red << errHeader
 		<< "; element type: " << cmd << " unknown."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -491,9 +496,10 @@ XC::Element *XC::ProtoElementHandler::newElement(const std::string &type,const I
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; ERROR the element: "
-                << tag_elem << " already exists.\n";
+                << tag_elem << " already exists."
+	        << Color::def << std::endl;
     return retval;
   }
 
