@@ -37,7 +37,7 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod1= nodes.newNodeXYZ(1,1,1)
 nod2= nodes.newNodeXYZ(1,1,1)
 
-potBearing= bridge_bearings.potBearing(pot_mat,nod1,nod2)
+potBearing= bridge_bearings.PotBearing(pot_mat,nod1,nod2)
 
 # Constraints
 modelSpace.fixNode000_000(nod1.tag)

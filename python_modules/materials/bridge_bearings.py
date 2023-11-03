@@ -245,7 +245,7 @@ class ElastomericBearing(Bearing):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; materials already defined, command ignored.')
+            lmsg.warning(className+'.'+methodName+'; materials already defined, command ignored.')
             
 
     def putBetweenNodes(self, modelSpace,iNodA:int, iNodB:int, orientation= None):
@@ -341,29 +341,33 @@ class PTFEPotBearingMat(Bearing):
         '''Define the materials to modelize the pot (Teflon).
 
             :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
-       '''
-        self.materialHandler= preprocessor.getMaterialHandler
-        # Material names.
-        nameRoot= 'pot'+str(self.id)
-        self.matXName= nameRoot+'X'
-        self.matYName= nameRoot+'Y'
-        self.matZName= nameRoot+'Z'
-        self.materials.extend([self.matXName, self.matYName,self.matZName])
-        # Material objects.
-        horizStiff=self.getHorizontalStiffness()
-        if self.unidirY:
-            self.matKX= typical_materials.defElasticMaterial(preprocessor, name=self.matXName, E=self.factStiff*horizStiff)
+        '''
+        if(len(self.materials)==0):
+            self.materialHandler= preprocessor.getMaterialHandler
+            # Material names.
+            nameRoot= 'pot'+str(self.id)
+            self.matXName= nameRoot+'X'
+            self.matYName= nameRoot+'Y'
+            self.matZName= nameRoot+'Z'
+            self.materials.extend([self.matXName, self.matYName,self.matZName])
+            # Material objects.
+            horizStiff=self.getHorizontalStiffness()
+            if self.unidirY:
+                self.matKX= typical_materials.defElasticMaterial(preprocessor, name=self.matXName, E=self.factStiff*horizStiff)
+            else:
+                self.matKX= typical_materials.defElasticMaterial(preprocessor, name=self.matXName,E=horizStiff)
+            if self.unidirX:
+                self.matKY= typical_materials.defElasticMaterial(preprocessor, name=self.matYName, E=self.factStiff*horizStiff)
+            else:
+                 self.matKY= typical_materials.defElasticMaterial(preprocessor, name=self.matYName, E=horizStiff)
+            self.matKZ= typical_materials.defElasticMaterial(preprocessor, name=self.matZName, E=self.factStiff*horizStiff)
         else:
-            self.matKX= typical_materials.defElasticMaterial(preprocessor, name=self.matXName,E=horizStiff)
-        if self.unidirX:
-            self.matKY= typical_materials.defElasticMaterial(preprocessor, name=self.matYName, E=self.factStiff*horizStiff)
-        else:
-             self.matKY= typical_materials.defElasticMaterial(preprocessor, name=self.matYName, E=horizStiff)
-        self.matKZ= typical_materials.defElasticMaterial(preprocessor, name=self.matZName, E=self.factStiff*horizStiff)
-        
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; materials already defined, command ignored.')
 
 
-class potBearing(object):
+class PotBearing(object):
     '''POT structural bearing
 
         :ivar potMat: : (:obj:'PTFEPotBearingMat') POT material.
@@ -399,19 +403,30 @@ class potBearing(object):
         self.nodB=nodB
         self.orientation=orientation
         # generate the pot element
-        prep=self.nodA.getDomain.getPreprocessor
+        self.createPotElement()
+
+    def createPotElement(self):
+        ''' Create the zero length element that represents the pot bearing.'''
+        prep= self.nodA.getDomain.getPreprocessor
         elems= prep.getElementHandler
         elems.dimElem= prep.getNodeHandler.dimSpace
-        elems.defaultMaterial= next((item for item in self.potMat.materials if item is not None), 'All are Nones')
-        self.potElem= elems.newElement("ZeroLength",xc.ID([self.nodA.tag,self.nodB.tag]))
-        self.potElem.clearMaterials()
-        if(self.orientation): #Orient element.
-            self.potElem.setupVectors(self.orientation[0],self.orientation[1])
-        numMats= len(self.potMat.materials)
-        for i in range(0,numMats):
-            material= self.potMat.materials[i]
-            if(material!=None):
-                self.potElem.setMaterial(i,material)
+        defaultMaterial= next((item for item in self.potMat.materials if item is not None), None)
+        if(defaultMaterial):
+            elems.defaultMaterial= defaultMaterial
+            self.potElem= elems.newElement("ZeroLength",xc.ID([self.nodA.tag,self.nodB.tag]))
+            self.potElem.clearMaterials()
+            if(self.orientation): #Orient element.
+                self.potElem.setupVectors(self.orientation[0],self.orientation[1])
+            for i, material in enumerate(self.potMat.materials):
+                material= self.potMat.materials[i]
+                if(material!=None):
+                    self.potElem.setMaterial(i,material)
+        else: # All are None.
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; all the given materials are None.')
+            self.potElem= None
+        return self.potElem
        
     def getReaction(self):
         ''' Return the reaction in the fixed node.'''

@@ -46,7 +46,7 @@ nod1= nodes.newNodeXYZ(1,1,1)
 nod2= nodes.newNodeXYZ(1,1,1)
 
 # POT bearing element with local X-axis 30 degrees counterclockwise from global X-axis
-potBearing= bridge_bearings.potBearing(pot_mat,nod1,nod2,orientation=[vDirXlocal,vDirYlocal])
+potBearing= bridge_bearings.PotBearing(pot_mat,nod1,nod2,orientation=[vDirXlocal,vDirYlocal])
 
 
 # Constraints
