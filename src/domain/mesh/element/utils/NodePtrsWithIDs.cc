@@ -40,8 +40,8 @@ XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodes)
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - "
 		  << " failed to create an ID of size "
-		  << numNodes << Color::def
-		  << std::endl;
+		  << numNodes
+		  << Color::def << std::endl;
         exit(-1);
       }
   }

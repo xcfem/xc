@@ -221,28 +221,34 @@ class ElastomericBearing(Bearing):
                bridge transverse axis direction
         THZ: rotation about vertical direction
 
-       :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
+        :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
         '''
-        self.materialHandler= preprocessor.getMaterialHandler
-        # Material names.
-        nameRoot= 'neop'+str(self.id)
-        self.matXName= nameRoot+'X'
-        self.matYName= nameRoot+'Y'
-        self.matZName= nameRoot+'Z'
-        self.matTHXName= nameRoot+'THX'
-        self.matTHYName= nameRoot+'THY'
-        self.matTHZName= nameRoot+'THZ'
-        self.materials.extend([self.matXName, self.matYName, self.matZName])
-        self.materials.extend([self.matTHXName, self.matTHYName, self.matTHZName])
-        # Material objects.
-        self.matKX= typical_materials.defElasticMaterial(preprocessor, self.matXName, self.getKhoriz())
-        self.matKY= typical_materials.defElasticMaterial(preprocessor, self.matYName, self.getKhoriz())
-        self.matKZ= typical_materials.defElasticMaterial(preprocessor, self.matZName, self.getKvert())
-        self.matKTHX= typical_materials.defElasticMaterial(preprocessor, self.matTHXName, self.getKrotationLongBridgeAxis())
-        self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, self.getKrotationTransvBridgeAxis()) 
-        self.matKTHZ= typical_materials.defElasticMaterial(preprocessor, self.matTHZName, self.getKrotationVerticalAxis())
+        if(len(self.materials)==0): # if not defined yet.
+            self.materialHandler= preprocessor.getMaterialHandler
+            # Material names.
+            nameRoot= 'neop'+str(self.id)
+            self.matXName= nameRoot+'X'
+            self.matYName= nameRoot+'Y'
+            self.matZName= nameRoot+'Z'
+            self.matTHXName= nameRoot+'THX'
+            self.matTHYName= nameRoot+'THY'
+            self.matTHZName= nameRoot+'THZ'
+            self.materials.extend([self.matXName, self.matYName, self.matZName])
+            self.materials.extend([self.matTHXName, self.matTHYName, self.matTHZName])
+            # Material objects.
+            self.matKX= typical_materials.defElasticMaterial(preprocessor, self.matXName, self.getKhoriz())
+            self.matKY= typical_materials.defElasticMaterial(preprocessor, self.matYName, self.getKhoriz())
+            self.matKZ= typical_materials.defElasticMaterial(preprocessor, self.matZName, self.getKvert())
+            self.matKTHX= typical_materials.defElasticMaterial(preprocessor, self.matTHXName, self.getKrotationLongBridgeAxis())
+            self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, self.getKrotationTransvBridgeAxis()) 
+            self.matKTHZ= typical_materials.defElasticMaterial(preprocessor, self.matTHZName, self.getKrotationVerticalAxis())
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; materials already defined, command ignored.')
+            
 
-    def putBetweenNodes(self,modelSpace,iNodA:int, iNodB:int, orientation= None):
+    def putBetweenNodes(self, modelSpace,iNodA:int, iNodB:int, orientation= None):
         ''' Puts the bearing between the nodes. The element must be oriented so that its local x axis is in the direction of the longitudinal axis of the bridge and its local y axis parallel to the transverse axis of the transverse axis of the bridge.
 
 
@@ -258,7 +264,9 @@ class ElastomericBearing(Bearing):
                           If the optional orientation vector are not specified, the local
                           element axes coincide with the global axes
         '''
-        return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
+        if(len(self.materials)==0): # No materials defined yet.
+            self.defineMaterials(modelSpace.preprocessor)
+        return modelSpace.setBearingBetweenNodes(iNodA,iNodB, self.materials, orientation)
 
     def putAsSupport(self,modelSpace, iNod:int , orientation= None):
         ''' Puts the bearing between the nodes.
@@ -472,13 +480,6 @@ class potBearing(object):
         ''' Return the nodB displacement vector'''
         vDispB=self.nodB.getDisp
         return vDispB
-
-   
-            
-            
-        
- 
-    
 
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     ''' Return the element reaction.

@@ -1074,26 +1074,33 @@ class RCSectionBase(object):
         materialHandler= self.fiberSectionRepr.getMaterialHandler
         gmSectName= self.gmSectionName()
         geomSection= materialHandler.getSectionGeometry(gmSectName)
-        regions= geomSection.getRegions
-        for r in regions:
-            vertices= r.getPolygon().getVertexList()
-            points= list()
-            for v in vertices:
-                points.append((v.x,v.y,0.0))
-            points.append(points[0]) # close region.
-            modelSpace.add_lwpolyline(points, dxfattribs={"layer": concreteLayerName})
-        # Draw reinforcement.
-        reinforcement= geomSection.getReinfLayers
-        for reinfLayer in reinforcement:
-            rebars= reinfLayer.getReinfBars
-            for b in rebars:
-                ptPlot= b.getPos2d
-                rPlot= b.diameter/2.0
-                #labelPlot= str(int(round(b.diameter*1e3)))
-                modelSpace.add_circle(center= (ptPlot.x, ptPlot.y), radius= rPlot, dxfattribs={"layer": reinforcementLayerName})
-
+        write_dxf(geomSection= geomSection, modelSpace= modelSpace, concreteLayerName= concreteLayerName, reinforcementLayerName= reinforcementLayerName)
         
-            
+def write_dxf(geomSection, modelSpace, concreteLayerName= 'concrete', reinforcementLayerName= 'reinforcement'):
+    ''' Writes the shape contour in the given DXF model space.
+
+    :param modelSpace: ezdxf model space to write into.
+    :param concretLayerName: DXF layer name for concrete material.
+    :param reinforcementLayerName: DXF layer name for steel material.
+    '''
+    regions= geomSection.getRegions
+    for r in regions:
+        vertices= r.getPolygon().getVertexList()
+        points= list()
+        for v in vertices:
+            points.append((v.x,v.y,0.0))
+        points.append(points[0]) # close region.
+        modelSpace.add_lwpolyline(points, dxfattribs={"layer": concreteLayerName})
+    # Draw reinforcement.
+    reinforcement= geomSection.getReinfLayers
+    for reinfLayer in reinforcement:
+        rebars= reinfLayer.getReinfBars
+        for b in rebars:
+            ptPlot= b.getPos2d
+            rPlot= b.diameter/2.0
+            #labelPlot= str(int(round(b.diameter*1e3)))
+            modelSpace.add_circle(center= (ptPlot.x, ptPlot.y), radius= rPlot, dxfattribs={"layer": reinforcementLayerName})
+    
 
 class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSection):
     '''

@@ -1104,6 +1104,37 @@ void XC::FiberPtrDeque::SelMatTag(const int &matTag,FiberPtrDeque &retval,bool c
 		  << "; null pointer to fiber." << std::endl;
   }
 
+//! @brief Return the material tags of the fibers.
+std::set<int> XC::FiberPtrDeque::getMatTags(void)
+  {
+    std::set<int> retval;
+    std::deque<Fiber *>::iterator i= begin();
+    for(;i!= end();i++)
+      if(*i)
+        {
+          Material *mat= (*i)->getMaterial();
+          if(mat)
+            {
+              const int tag= mat->getTag();
+	      retval.insert(tag);
+            }
+        }
+      else
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the material tags of the fibers in a Python list.
+boost::python::list XC::FiberPtrDeque::getMatTagsPy(void)
+  {
+    boost::python::list retval;
+    const std::set<int> tmp= this->getMatTags();
+    for(std::set<int>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      retval.append(*i);
+    return retval;
+  }
+
 //! @brief Return the min strain.
 double XC::FiberPtrDeque::getStrainMin(void) const
   {

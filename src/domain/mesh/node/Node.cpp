@@ -66,7 +66,6 @@
 #include "utility/actor/actor/MovableMatrix.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
-#include <cstring>
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/constraints/SFreedom_Constraint.h"
 
@@ -93,6 +92,7 @@
 #include "utility/actor/actor/CommMetaData.h"
 
 #include "utility/tagged/DefaultTag.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 std::deque<XC::Matrix> XC::Node::theMatrices;
 XC::DefaultTag XC::Node::defaultTag;
@@ -303,8 +303,9 @@ void XC::Node::connect(ContinuaReprComponent *el) const
     if(el)
       connected.insert(el);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; null argument." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; null argument."
+		<< Color::def << std::endl;
   }
 
 //! @brief Removes a component (element, constraint,...) from the connected component list.
@@ -331,8 +332,9 @@ const bool XC::Node::isAlive(void) const
     bool retval= false;
     if(connected.empty())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << ";node: " << getTag() << " is free." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << ";node: " << getTag() << " is free."
+		  << Color::def << std::endl;
         retval= true;
       }
     else
@@ -349,9 +351,9 @@ const bool XC::Node::isAlive(void) const
                   }
               }
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; null pointer in the connected list."
-			<< std::endl;
+			<< Color::def << std::endl;
           }
       }
     return retval;
@@ -380,9 +382,9 @@ const bool XC::Node::isFixedOnlyByFreezeConstraints(void) const
 		  }
               }
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; null pointer in the connected list."
-			<< std::endl;
+			<< Color::def << std::endl;
           }
       }
     return retval;
@@ -548,14 +550,16 @@ const bool XC::Node::isFree(void) const
 
 void XC::Node::kill(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; must not be called." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; must not be called."
+	      << Color::def << std::endl;
   }
 
 void XC::Node::alive(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; must not be called." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; must not be called."
+	      << Color::def << std::endl;
   }
 
 //! @brief destructor
@@ -581,22 +585,25 @@ void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &val
         BoundaryCondHandler &cl= getPreprocessor()->getBoundaryCondHandler();
         const int sz= std::min(idDOFs.size(),values.size());
         if(values.size()<idDOFs.size())
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; vector of prescribed displacements"
                     << " must be of " << idDOFs.size()
-                    << " dimension." << std::endl;
+                    << " dimension."
+		    << Color::def << std::endl;
         if(sz)
           {
             for(int i= 0;i<sz;i++)
               cl.addSFreedom_Constraint(getTag(),idDOFs[i],values[i]);
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; DOFs list is empty." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; DOFs list is empty."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; domain not defined. Constraint ignored." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined. Constraint ignored."
+		<< Color::def << std::endl;
   }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
@@ -636,11 +643,11 @@ const XC::ID &XC::Node::getDOFs(void) const
       return theDOF_GroupPtr->getID();
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; equation numbers not assigned yet."
 	          << " Probably analyze has not being called yet."
-	          << std::endl;
-	static XC::ID retval;
+	          << Color::def << std::endl;
+	static ID retval;
 	return retval;
       }
   }
@@ -771,11 +778,11 @@ Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
     Vector fd= factor*getDisp();
     if(fd.isnan()) //Something went wrong.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << " displacement vector for node: "
 	          << getTag() << " is NOT VALID"
 	          << " returning original position."
-	          << std::endl;
+	          << Color::def << std::endl;
         fd.Zero();
       }
     return getPosition2d(fd);
@@ -788,11 +795,11 @@ Pos3d XC::Node::getCurrentPosition3d(const double &factor) const
     Vector fd= factor*getDisp();
     if(fd.isnan()) //Something went wrong.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << " displacement vector for node: "
 	          << getTag() << " is NOT VALID"
 	          << " returning original position."
-	          << std::endl;
+	          << Color::def << std::endl;
         fd.Zero();
       }
     return getPosition3d(fd);
@@ -1119,13 +1126,15 @@ const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
         if(lp)
           retval= lp->newNodalLoad(nodeTag,v);
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern."
-		    << " Nodal load ignored." << std::endl; 
+		    << " Nodal load ignored."
+		    << Color::def << std::endl; 
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; a vector of dimension greater than zero was expected." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; a vector of dimension greater than zero was expected."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -1159,18 +1168,18 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
     // check vector arg is of correct size
     if(add.Size() != numberDOF)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; load to add of incorrect size "
 		  << add.Size() << " should be " <<  numberDOF
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     else
       {
         if(isDead())
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; load over dead node: "
-                      << getTag() << std::endl;
+                      << getTag() << Color::def << std::endl;
           }
         else // add fact*add to the unbalanced load
           {
@@ -1196,8 +1205,9 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
     // otherwise we must determine MR accelG
     if(accelG.Size() != R.noCols())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; accelG not of correct dimension";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; accelG not of correct dimension"
+		  << Color::def << std::endl;
         return -1;
       }
 
@@ -1219,8 +1229,9 @@ int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, dou
     // otherwise we must determine MR accelG
     if(accelG.Size() != R.noCols())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; accelG not of correct dimension";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; accelG not of correct dimension"
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -1421,11 +1432,12 @@ int XC::Node::setMass(const Matrix &newMass)
     // check right size
     if(newMass.noRows() != numberDOF || newMass.noCols() != numberDOF)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; incompatible matrices."
                   << " A matrix with dimensions: "
 		  << numberDOF << 'x' << numberDOF
-	          << " was expected." << std::endl;
+	          << " was expected."
+		  << Color::def << std::endl;
         return -1;
       }
     mass= newMass;
@@ -1454,8 +1466,9 @@ int XC::Node::setR(int row, int col, double Value)
     // ensure row, col in range (matrix assignment will catch this - extra work)
     if(row < 0 || row > numberDOF || col < 0 || col > R.noCols())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; row, col index out of range\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; row, col index out of range."
+	          << Color::def << std::endl;
         return -1;
       }
     // do the assignment
@@ -1477,9 +1490,10 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
       unbalLoadWithInertia.Zero();
     else if(R.noCols() != V.Size()) // check dimensions of R and V
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; R and V of incompatible dimensions.\n"
-                  << "R: " << R << "V: " << V;
+                  << "R: " << R << "V: " << V
+	          << Color::def << std::endl;
         unbalLoadWithInertia.Zero();
       }
     else // determine the product
@@ -1495,8 +1509,9 @@ int XC::Node::setNumEigenvectors(int numVectorsToStore)
     // ensure a positive number of vectors
     if(numVectorsToStore <= 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; " << numVectorsToStore << " < 0\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; " << numVectorsToStore << " < 0"
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -1515,14 +1530,16 @@ int XC::Node::setEigenvector(int mode, const Vector &eigenvector)
     int retval= 0;
     if(getNumModes() < mode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; mode " << mode << " invalid\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; mode " << mode << " invalid"
+	          << Color::def << std::endl;
         retval= -1;
       }
     else if(eigenvector.Size() != numberDOF)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; eigenvector of incorrect size\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; eigenvector of incorrect size"
+	          << Color::def << std::endl;
         retval= -2;
       }
     else
@@ -1647,10 +1664,11 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &dofs)
         const int sz= ev.Size();
         double num= 0;
         if((mass.noRows()!=sz) || (mass.noCols()!=sz))
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; ERROR. The eigenvector has dimension " << sz
                     << " and the mass matrix has dimension " << mass.noRows()
-                    << "x" << mass.noCols() << ".\n";
+                    << "x" << mass.noCols() << "."
+	            << Color::def << std::endl;
         Vector J(sz,0.0);
         for(std::set<int>::const_iterator i= dofs.begin();i!=dofs.end();i++)
           J[*i]= 1;
@@ -1909,8 +1927,9 @@ int XC::Node::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -1929,8 +1948,9 @@ int XC::Node::recvSelf(const Communicator &comm)
     inicComm(22);
     int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data"
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -1947,8 +1967,9 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; preprocessor needed."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -2043,9 +2064,10 @@ int XC::Node::setParameter(const std::vector<std::string> &argv, Parameter &para
           return param.addObject(direction+3, this);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; could not set parameter in node: "
-		<< getTag() << std::endl;
+		<< getTag()
+		<< Color::def << std::endl;
     return -1;
   }
 
@@ -2326,9 +2348,10 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
                     }
                 }
               else
-		std::cerr << getClassName() << "::" << __FUNCTION__
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; node: " << getTag()
-                          << " has a constraint." << std::endl;
+                          << " has a constraint."
+			  << Color::def << std::endl;
             }
       }
     return retval; 
@@ -2350,10 +2373,10 @@ SlidingVectorsSystem3d XC::Node::getResistingSlidingVectorsSystem3d(const std::s
     else
       {
         retval= SlidingVectorsSystem3d(o);
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; dof number: "
                   << numberDOF << " not covered."
-                  << std::endl;
+                  << Color::def << std::endl;
       }
     return retval; 
   }
@@ -2412,9 +2435,10 @@ XC::Matrix XC::Node::get_constraints_stiff(void) const
 		}
 	      else
 		{
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			    << "; constraint of type: " << (*i)->getClassName()
-			    << " not implemented yet." << std::endl;
+			    << " not implemented yet."
+			    << Color::def << std::endl;
 		}
             }
       }
@@ -2446,15 +2470,17 @@ const XC::Vector &XC::Node::getReaction(void) const
 //! @brief Set the node reaction
 void XC::Node::setReaction(const Vector &r)
   {
-    std::clog << getClassName() << "::" << __FUNCTION__
+    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	      << "; setting reaction value is not a standard"
-              << " procedure (you're at your own)" << std::endl;
+              << " procedure (you're at your own)"
+	      << Color::def << std::endl;
     const int sz= reaction.Size();
     if(r.Size()!=sz)
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << "; vector argument has a size of: "
 	        << r.Size() << " a vector of size: "
-	        << sz << " was expected." << std::endl;
+	        << sz << " was expected."
+		<< Color::def << std::endl;
     reaction= r;
   }
 
@@ -2478,28 +2504,31 @@ Vector3d XC::Node::get3dForceComponents(const Vector &v) const
 	else if(dim==3) // 3D solid mechanics
 	  retval= Vector3d(v[0],v[1],v[2]);
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
                     << numberDOF << " and spaceDim= "
-                    << dim << std::endl;
+                    << dim
+		    << Color::def << std::endl;
       }
     else if(numberDOF==2)
       {
 	if(dim==2) // 2D solid mechanics
 	  retval= Vector3d(v[0],v[1],0.0);
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
                     << numberDOF << " and spaceDim= "
-                    << dim << std::endl;
+                    << dim
+		    << Color::def << std::endl;
       }
     else if(numberDOF== 6) // 3D structural
       retval= Vector3d(v[0],v[1],v[2]);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	            << " not implemented for numDOFs= "	
-                    << numberDOF << " and spaceDim= "
-                    << dim << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << " not implemented for numDOFs= "	
+                << numberDOF << " and spaceDim= "
+                << dim
+		<< Color::def << std::endl;
     return retval;
   }
   
@@ -2513,26 +2542,29 @@ Vector3d XC::Node::get3dMomentComponents(const Vector &v) const
 	if(dim==2) // 2D structural
 	  retval= Vector3d(0.0, 0.0, v[2]);
 	else if(dim!=3) // NOT 3D solid mechanics => error.
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
                     << numberDOF << " and spaceDim= "
-                    << dim << std::endl;
+                    << dim
+		    << Color::def << std::endl;
       }
     else if(numberDOF==2)
       {
 	if(dim!=2) // NOT 2D solid mechanics => error.
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
                     << numberDOF << " and spaceDim= "
-                    << dim << std::endl;
+                    << dim
+		    << Color::def << std::endl;
       }
     else if(numberDOF== 6) // 3D structural
       retval= Vector3d(v[3],v[4],v[5]);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	            << " not implemented for numDOFs= "	
-                    << numberDOF << " and spaceDim= "
-                    << dim << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << " not implemented for numDOFs= "	
+                << numberDOF << " and spaceDim= "
+                << dim
+		<< Color::def << std::endl;
     return retval;
   }
  
@@ -2542,8 +2574,9 @@ int XC::Node::addReactionForce(const Vector &add, double factor)
     // check vector of appropraie size
     if(add.Size() != numberDOF)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; vector not of correct size.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; vector not of correct size."
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -2571,14 +2604,16 @@ bool XC::Node::checkReactionForce(const double &tol) const
 	    const int nTag= getTag();
 	    if(!cc.nodeAffectedByConstraints(nTag))
 	      {
-		std::cerr << errHeader << "; the node: " << getTag()
+		std::clog << Color::yellow << errHeader
+			  << "; the node: " << this->getTag()
+		          << " at position: " << this->getInitialPosition3d()
 			  << " has not constraints and however"
 			  << " it has a reaction with value: " << reaction 
 			  << " and norm: " << norm
 			  << " it seems that the solution method"
 			  << " is not well suited to the problem."
 			  << " (tol= " << tol << ")."
-			  << std::endl;
+			  << Color::def << std::endl;
 		retval= false;
 	      }
 	    else
@@ -2592,7 +2627,10 @@ bool XC::Node::checkReactionForce(const double &tol) const
 			const bool affectedDOF= cc.isDOFAffectedByConstraints(nTag,nDOF);
 			if(!affectedDOF)
 			  {
-			    std::cerr << errHeader << "; the node: " << getTag()
+			    std::clog << Color::yellow << errHeader
+				      << "; the node: " << getTag()
+		                      << " at position: "
+				      << this->getInitialPosition3d()
 				      << " has not constraints on DOF: "
 				      << nDOF << " and, however,"
 				      << " it has a reaction with value: "
@@ -2602,7 +2640,7 @@ bool XC::Node::checkReactionForce(const double &tol) const
 				      << "tolerances are not well suited"
 				      << " to the problem."
 				      << " (tol= " << tol << ")."
-				      << std::endl;
+				      << Color::def << std::endl;
 			    retval= false;
 			  }
 		      }

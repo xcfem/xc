@@ -62,7 +62,14 @@ def setWebOrientation(lines, vertBarsWebOrientationVector= geom.Vector3d(0,1,0),
         kVector= orientationVector.cross(iVector)
         l.setProp('webOrientation', kVector) # orientation of the web.
 
-def setBearingBetweenNodes(prep,iNodA,iNodB,bearingMaterialNames,orientation= None):
+def setBearingBetweenNodes(prep, iNodA, iNodB, bearingMaterialNames, orientation= None):
+    ''' To DEPRECATE. 3/11/2023 LP.'''
+
+    funcName= sys._getframe(0).f_code.co_name
+    lmsg.error(funcName+'; will be DEPRECATED soon (camel case notation is reserved for methods). Use function: set_bearing_between_nodes.')
+
+
+def set_bearing_between_nodes(prep, iNodA, iNodB, bearingMaterialNames, orientation= None):
     '''Modelize a bearing between the nodes
 
      :param prep: preprocessor
@@ -90,16 +97,22 @@ def setBearingBetweenNodes(prep,iNodA,iNodB,bearingMaterialNames,orientation= No
     # Element definition
     elems= prep.getElementHandler
     elems.dimElem= prep.getNodeHandler.dimSpace # space dimension.
-    elems.defaultMaterial= next((item for item in bearingMaterialNames if item is not None), 'All are Nones')
-    zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
-    zl.clearMaterials()
-    if(orientation): #Orient element.
-        zl.setupVectors(orientation[0],orientation[1])
-    numMats= len(bearingMaterialNames)
-    for i in range(0,numMats):
-        material= bearingMaterialNames[i]
-        if(material!=None):
-            zl.setMaterial(i,material)
+    # Search for the first material that is not None (if any).
+    defaultMaterial= next((item for item in bearingMaterialNames if item is not None), None)
+    if(defaultMaterial): # Found it.
+        elems.defaultMaterial= defaultMaterial
+        zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
+        zl.clearMaterials()
+        if(orientation): #Orient element.
+            zl.setupVectors(orientation[0],orientation[1])
+        numMats= len(bearingMaterialNames)
+        for i, materialName in enumerate(bearingMaterialNames):
+            if(materialName is not None):
+                zl.setMaterial(i,materialName)
+    else: # All are None.
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.error(funcName+'; all the given materials are None.')
+        zl= None
     return zl
 
 # Imperfections
@@ -657,7 +670,7 @@ class PredefinedSpace(object):
           :return: newly created zero length element that represents the 
                    bearing.
         '''
-        return setBearingBetweenNodes(self.preprocessor,iNodA, iNodB, bearingMaterialNames, orientation)
+        return set_bearing_between_nodes(self.preprocessor,iNodA, iNodB, bearingMaterialNames, orientation)
 
     def setBearing(self, iNod: int, bearingMaterialNames: Sequence[str], orientation= None):
         '''Modelize a bearing on X, XY or XYZ directions.
