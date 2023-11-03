@@ -301,17 +301,23 @@ def setAddOf(setA,setB):
     nSet+=(setB)
     return nSet
     
-
-def get_nodes_wire(setBusq,lstPtsWire,tol=0.01):
+def get_nodes_wire(setBusq,lstPointsWire,tol=0.01):
     '''return the list of nodes from the set `setBusq` that belong to 
-    the line defined by the successive points in list `lstPtsWire`  
+    the line defined by the successive points in list `lstPointsWire`  
+    '''
+    lstPos3DWire=[p.getPos for p in lstPointsWire]
+    retval=get_nodes_pos3D_wire(setBusq,lstPos3DWire,tol)
+    return retval
+    
+def get_nodes_pos3D_wire(setBusq,lstPos3DWire,tol=0.01):
+    '''return the list of nodes from the set `setBusq` that belong to 
+    the line defined by the successive points in list `lstPos3DWire`  
     (expressed as geom.Pos3d(x,y,z))
     '''
     nodAux= setBusq.nodes
     retval= list() 
-    for i in range(0,len(lstPtsWire)-1):
-        
-        segmAux= geom.Segment3d(lstPtsWire[i],lstPtsWire[i+1])
+    for i in range(0,len(lstPos3DWire)-1):
+        segmAux= geom.Segment3d(lstPos3DWire[i],lstPos3DWire[i+1])
         for n in nodAux:
             p= n.getInitialPos3d
             d= p.dist(segmAux)
