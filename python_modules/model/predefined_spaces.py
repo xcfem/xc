@@ -65,8 +65,8 @@ def setWebOrientation(lines, vertBarsWebOrientationVector= geom.Vector3d(0,1,0),
 def setBearingBetweenNodes(prep, iNodA, iNodB, bearingMaterialNames, orientation= None):
     ''' To DEPRECATE. 3/11/2023 LP.'''
 
-        funcName= sys._getframe(0).f_code.co_name
-        lmsg.error(funcName+'; will be DEPRECATED soon (camel case notation is reserved for methods). Use function: set_bearing_between_nodes.')
+    funcName= sys._getframe(0).f_code.co_name
+    lmsg.error(funcName+'; will be DEPRECATED soon (camel case notation is reserved for methods). Use function: set_bearing_between_nodes.')
 
 
 def set_bearing_between_nodes(prep, iNodA, iNodB, bearingMaterialNames, orientation= None):
