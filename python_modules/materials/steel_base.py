@@ -69,6 +69,6 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
         :param  name:         name identifying the material.
         :param  alpha:        strain hardening ratio (default: (0.01), 
                               range: 0 to 1).
-        :param  rho:          mass density (defaults to 0.0).
         '''
         return typical_materials.defJ2PlateFibre(preprocessor, name= name, E= self.E, nu= self.nu, fy= self.fy, alpha=alpha, rho= self.rho)
+       
