@@ -53,14 +53,22 @@ class EC2Concrete(concrete_base.Concrete):
          """
         fcmMPa=abs(self.getFcm())*1e-6
         EcmGPa=22*(fcmMPa/10)**0.3
-        if self.typeAggregate == 'L':
+        if self.typeAggregate == 'L': # limestone.
             return 0.9*EcmGPa*1e9
-        elif self.typeAggregate == 'S':
+        elif self.typeAggregate == 'S': # sandstone.
             return 0.7*EcmGPa*1e9
-        elif self.typeAggregate == 'B':
+        elif self.typeAggregate == 'B': # basalt.
             return 1.2*EcmGPa*1e9
-        else:
+        else: # quartzite.
             return EcmGPa*1e9
+        
+    def getEcmT(self, t=28):
+        '''EcmT: Value of the modulus of elasticity at an age of t days 
+        (sect. 3.1.3 EC2:2004 paragrap (3), expression 3.5)
+ 
+        :param t: age of the concrete in days.
+        '''
+        return math.pow(self.getFcmT(t)/self.getFcm(), 0.3)*self.getEcm()
 
     def getFctm(self):
         """Fctm: mean tensile strength [Pa][+] (table 3.1 EC2)."""
@@ -70,6 +78,18 @@ class EC2Concrete(concrete_base.Concrete):
             retval= 2.12*math.log(1+abs(self.getFcm())*1e-6/10)*1e6
         return retval
 
+    def getFctmT(self, t):
+        '''FctmT: Value of the tensile strength at an age of t days 
+        (sect. 3.1.3 EC2:2004 paragrap (9), expression 3.4)
+ 
+        :param t: age of the concrete in days.
+        '''
+        alph= 1.0
+        if(t>=28):
+            alph= 2/3.0
+        betacc= self.getBetaCC(t)
+        return math.pow(betacc, alph)*self.getFctm()
+        
     def getEpsc1(self):
         """
         epsc1: strain [-] at peak stress at stress-strain relation 
