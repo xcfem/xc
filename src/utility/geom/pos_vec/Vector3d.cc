@@ -27,6 +27,7 @@
 #include "utility/geom/FT_matrix.h"
 #include "utility/matrices/op_tensor.h"
 //#include "Inventor/SbVec3f.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 
@@ -45,6 +46,22 @@ Vector3d::Vector3d(const FT_matrix &m)
 Vector3d::Vector3d(const Pos3d &p1,const Pos3d &p2)
   : cgvct(p1.ToCGAL(),p2.ToCGAL()) {}
 
+//! @brief Constructor.
+Vector3d::Vector3d(const boost::python::list &l)
+  : cgvct(0,0,0)
+  {
+    if(len(l)>=3)
+      {
+        const GEOM_FT m1=  boost::python::extract<GEOM_FT>(l[0]);
+	const GEOM_FT m2=  boost::python::extract<GEOM_FT>(l[1]);
+	const GEOM_FT m3=  boost::python::extract<GEOM_FT>(l[1]);
+        cgvct= CGVector_3(m1,m2,m3);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; the list must contain at least three values."
+	        << Color::def << std::endl;
+  }
 //! @brief Comparison operator.
 bool Vector3d::operator==(const Vector3d &other) const
   {
@@ -66,13 +83,25 @@ bool Vector3d::operator!=(const Vector3d &other) const
 
 bool Vector3d::Nulo(void) const
   { return ((*this)==VectorNulo3d); }
+
+//! @brief Return a column vector.
 FT_matrix Vector3d::getMatrix(void) const
-  //Return el column vector.
   {
     FT_matrix retval(3,1,0);
     retval(1)= x(); retval(2)= y(); retval(3)= z();
     return retval;
   }
+
+//! @brief Return the point coordinates in a Python list.
+boost::python::list Vector3d::getPyList(void) const
+  {
+    boost::python::list retval;
+    retval.append(x());
+    retval.append(y());
+    retval.append(z());
+    return retval;
+  }
+
 Dir3d Vector3d::getDirection(void) const
   { return Dir3d(*this); }
 
@@ -118,7 +147,9 @@ void Vector3d::Set(unsigned short int i,const GEOM_FT &v)
         SetZ(v);
         break;
       default:
-	std::cerr << "Se esperaba que el índice fuera 1, 2 ó 3." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the index was expected to be 1, 2 or 3."
+		  << Color::def << std::endl;
         break;
       }
   }
@@ -183,18 +214,20 @@ Vector3d Vector3d::Perpendicular(const Vector3d &v) const
     Vector3d retval(0,0,0);
     if( Nulo() || v.Nulo() )
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; one of the vectors: "
                   << *this << " o " << v << " is null."
-                  << " Null vector returned." << std::endl;
+                  << " Null vector returned."
+		  << Color::def << std::endl;
       }
     else
       if(parallel(*this,v))
         {
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; vector :" << v
                     << " is parallel to this one: " << *this
-                    << ", null vector returned." << std::endl;
+                    << ", null vector returned."
+		    << Color::def << std::endl;
         }
       else
         {
@@ -209,10 +242,11 @@ GEOM_FT Vector3d::getSignedAngle(const Vector3d &v) const
   {
     if( this->Nulo() || v.Nulo() )
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		  << "(Vector3d) one of the vectors: v1= "
                   << (*this) << " or v2= " << v
-		  << " is null. Zero returned." << std::endl;
+		  << " is null. Zero returned."
+		  << Color::def << std::endl;
         return 0.0;
       }
     const GEOM_FT prod_mod= sqrt_FT(this->GetModulus2()*v.GetModulus2());
@@ -231,10 +265,11 @@ GEOM_FT Vector3d::getAngle(const Vector3d &v) const
     //como en Vector2d.
     if( Nulo() || v.Nulo() )
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; one of the vector: this= "
                   << *this << " or v= " << v 
-                  << " is null. Zero returned." << std::endl;
+                  << " is null. Zero returned."
+		  << Color::def << std::endl;
         retval= 0.0;
       }
     else

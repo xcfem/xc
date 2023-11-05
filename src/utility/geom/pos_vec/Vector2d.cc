@@ -26,12 +26,13 @@
 #include <plotter.h>
 #include "utility/matrices/giros.h"
 #include "utility/geom/FT_matrix.h"
+#include "utility/utils/misc_utils/colormod.h"
 
-// Vector2d::Vector2d(const double &x,const double &y)
-//   : ProtoGeom(), cgvct(Vector_2_from_doubles(x,y)) {}
+//! @brief Constructor.
 Vector2d::Vector2d(const GEOM_FT &x,const GEOM_FT &y)
   : ProtoGeom(), cgvct(x,y) {}
 
+//! @brief Constructor.
 Vector2d::Vector2d(const FT_matrix &m)
   : cgvct(0,0)
   {
@@ -39,6 +40,24 @@ Vector2d::Vector2d(const FT_matrix &m)
     assert(m.getNumberOfColumns()==1); 
     cgvct= CGVector_2(m(1),m(2));
   }
+
+//! @brief Constructor.
+Vector2d::Vector2d(const boost::python::list &l)
+  : cgvct(0,0)
+  {
+    if(len(l)>=2)
+      {
+        const GEOM_FT m1=  boost::python::extract<GEOM_FT>(l[0]);
+	const GEOM_FT m2=  boost::python::extract<GEOM_FT>(l[1]);
+        cgvct= CGVector_2(m1,m2);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; the list must contain at least two values."
+	        << Color::def << std::endl;
+  }
+
+//! @brief Constructor.
 Vector2d::Vector2d(const Pos2d &p1,const Pos2d &p2)
   : ProtoGeom(), cgvct(p1.ToCGAL(),p2.ToCGAL()) {}
 
@@ -77,7 +96,9 @@ void Vector2d::Set(unsigned short int i,const GEOM_FT &v)
         SetY(v);
         break;
       default:
-	std::cerr << "Se esperaba que el índice fuera 1, 2 ó 3." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the index was expected to be 1 or 2."
+		  << Color::def << std::endl;
         break;
       }
   }
@@ -111,10 +132,20 @@ Vector2d Vector2d::operator*(const GEOM_FT &d) const
 Vector2d Vector2d::operator/(const GEOM_FT &d) const
   { return Vector2d(ToCGAL()*(1/d)); }
 
+//! @brief Return the point coordinates in a matrix.
 FT_matrix Vector2d::getMatrix(void) const
   {
     FT_matrix retval(2,1,0);
     retval(1)= x(); retval(2)= y();
+    return retval;
+  }
+
+//! @brief Return the point coordinates in a Python list.
+boost::python::list Vector2d::getPyList(void) const
+  {
+    boost::python::list retval;
+    retval.append(x());
+    retval.append(y());
     return retval;
   }
 
@@ -207,18 +238,20 @@ Vector2d Vector2d::Perpendicular(const Vector2d &v) const
     Vector2d retval(0,0);
     if( Nulo() || v.Nulo() )
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; One of the vectors: "
                   << *this << " o " << v << " is null."
-                  << " La operación no tiene sentido, se devuelve un vector nulo." << std::endl;
+                  << " La operación no tiene sentido, se devuelve un vector nulo."
+		  << Color::def << std::endl;
       }
     else
       if(parallel(*this,v))
         {
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; vector :" << v
                     << " is parallel to this one: " << *this
-                    << ", null vector returned." << std::endl;
+                    << ", null vector returned."
+		    << Color::def << std::endl;
         }
       else
         {
@@ -275,10 +308,11 @@ double signedAngle(const Vector2d &v1,const Vector2d &v2)
   {
     if( v1.Nulo() || v2.Nulo() )
       {
-	std::clog << __FUNCTION__
+	std::clog << Color::yellow << __FUNCTION__
 		  << "(Vector2d,Vector2d) one of the vectors: v1= "
                   << v1 << " or v2= " << v2
-		  << " is null. Zero returned." << std::endl;
+		  << " is null. Zero returned."
+		  << Color::def << std::endl;
         return 0.0;
       }
     const GEOM_FT prod_mod= sqrt_FT(v1.GetModulus2()*v2.GetModulus2());

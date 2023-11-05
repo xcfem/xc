@@ -45,6 +45,7 @@ class Vector3d: public ProtoGeom
       : cgvct(v) {}
     Vector3d(const GEOM_FT &x,const GEOM_FT &y,const GEOM_FT &z);
     explicit Vector3d(const FT_matrix &m);
+    explicit Vector3d(const boost::python::list &);
     Vector3d(const Pos3d &p1,const Pos3d &p2);
     virtual bool operator==(const Vector3d &) const;
     bool operator!=(const Vector3d &) const;
@@ -72,6 +73,7 @@ class Vector3d: public ProtoGeom
     inline GEOM_FT z(void) const
       { return cgvct.z(); }
     FT_matrix getMatrix(void) const;
+    boost::python::list getPyList(void) const;
     Dir3d getDirection(void) const;
     Vector3d &operator+=(const Vector3d &);
     Vector3d &operator-=(const Vector3d &);
