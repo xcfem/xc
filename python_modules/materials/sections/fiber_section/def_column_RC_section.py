@@ -136,7 +136,7 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        super(RCCircularSection, self).__init__(sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= 20, nDivJK= 5)
+        super(RCCircularSection, self).__init__(sectionDescr= sectionDescr, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= 20, nDivJK= 5)
         section_properties.CircularSection.__init__(self,name,Rint= Rint,Rext= Rext)
 
         # Longitudinal reinforcement.

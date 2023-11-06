@@ -116,7 +116,7 @@ class ReinforcedConcreteLimitStrains(object):
 
 
 class Concrete(matWDKD.MaterialWithDKDiagrams):
-    ''' Concrete model according to Eurocode 2 - Base class.
+    ''' Concrete model base class.
 
     :ivar matTagD:  tag of the uni-axial material in the design diagram
     :ivar fck:       characteristic (5%) cylinder strength of the concrete [Pa]
@@ -161,7 +161,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     
     
     # Definition of «derived» properties of the material.
-    def __init__(self,nmbConcrete, fck, gammaC, alphacc= 1.0):
+    def __init__(self, nmbConcrete, fck, gammaC, alphacc= 1.0):
         ''' Constructor.
 
         :param nmbConcrete: material name.
@@ -173,8 +173,20 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete
         self.initTensStiff=False
-        self.alfacc= alphacc 
+        self.alfacc= alphacc
 
+    def setupName(self, matName):
+        ''' Material setup.
+
+        :param matName: material name.
+        '''
+        super().setupName(matName)
+        
+        # Creep model for concrete.
+        self.nmbDiagTD= "dgTD"+self.materialName # Name identifying the linear elastic stress-strain diagram.
+        self.matTagTD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
+        self.materialDiagramTD= None # Design stress-strain diagram.
+    
     def density(self,reinforced= True):
         '''Return concrete density in kg/m3.'''
         if(reinforced):
@@ -265,6 +277,36 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     def getFctk095(self):
         '''Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2).'''
         return 1.3*self.getFctm()
+
+    def defTDConcreteMC10(self, preprocessor):
+        ''' Defines a TDConcreteMC10 uniaxial material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        retval= None
+        if(hasattr(self,'creepParameters')):
+            name= self.nmbDiagTD
+           
+            cp= self.creepParameters
+            Ec= self.getEcmT(t= cp.age) # concrete modulus of elasticity at loading age.
+            fc= self.getFcmT(t= cp.age) # Compressive strength at loading age.
+            fct= self.getFctmT(t= cp.age) # Tensile strength at loading age.
+            Ecm= self.Ecm() # 28-day modulus of elasticity.
+            retval= typical_materials.defTDConcreteMC10(preprocessor= preprocessor,name= name, fc= fc, ft= fct, Ec= Ec, Ecm= Ecm, beta= cp.beta, age= cp.age, epsba= cp.epsba, epsbb= cp.epsbb, epsda= cp.epsda, epsdb= cp.epsdb, phiba= cp.phiba, phibb= cp.phibb, phida= cp.phida, phidb= cp.phidb, tcast= cp.tcast, cem= cp.cem)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; creep parameters are not defined. Command ignored.')
+        return retval
+    
+    def defDiagE(self, preprocessor):
+        ''' Returns and XC linear elastic uniaxial material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        self.materialDiagramE= typical_materials.defElasticMaterial(preprocessor= preprocessor, name= self.nmbDiagE, E= self.getEcm(), rho= self.rho)
+        self.matTagE= self.materialDiagramE.tag
+        return self.materialDiagramE
 
     def defDiagK(self,preprocessor):
         ''' Defines a uniaxial material to represent the characteristic stress-strain diagram
@@ -369,7 +411,16 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
+    
+    def defDiagTD(self, preprocessor):
+        ''' Returns and XC TDConcreteMC10 uniaxial material.
 
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        self.materialDiagramTD= self.defTDConcreteMC10(preprocessor= preprocessor)
+        self.matTagTD= self.materialDiagramTD.tag
+        return self.materialDiagramTD
+    
     def defDiag(self, preprocessor, matDiagType):
         ''' Returns an XC uniaxial material corresponding to the stress-strain
             diagram of the concrete.
@@ -390,6 +441,16 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                 retval= self.materialDiagramK
             else: # if not defined yet, do it now.
                 retval= self.defDiagK(preprocessor)
+        elif(matDiagType=='elastic'):
+            if(self.materialDiagramE): # if already defined.
+                retval= self.materialDiagramE
+            else: # if not defined yet, do it now.
+                retval= self.defDiagE(preprocessor)
+        elif(matDiagType=='td' or matDiagType=='TD'):
+            if(self.materialDiagramTD): # if already defined.
+                retval= self.materialDiagramTD
+            else: # if not defined yet, do it now.
+                retval= self.defDiagTD(preprocessor)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -401,24 +462,24 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return self.sigmac(eps)
 
 #Time-dependent properties of concrete according to Eurocode 2
-    def getBetaCC(self,t=28):
-        '''beta_cc: coefficient (sect. 3.1.2 EC2, art. 31.3 EHE-08)
+    def getBetaCC(self, t= 28):
+        '''beta_cc: coefficient (EC2:2004: sect. 3.1.2 paragraph (6) expression  (3.2), EHE-08: art. 31.3).
 
         :param t:      age of the concrete in days
         '''
-        if self.cemType=='R':    #high-strength cement
+        if self.cemType=='R': # high-strength cement
             s=0.20
-        elif self.cemType=='S':  #slow cement
+        elif self.cemType=='S': # slow cement
             s=0.38
-        else:                   #normal cement
+        else: # normal cement
             s=0.25
         return math.exp(s*(1-math.sqrt(28/t)))
 
-    def getFcmT(self,t=28):
+    def getFcmT(self, t=28):
         '''FcmT: mean concrete compressive strength [Pa][-] at an age of t days 
         (sect. 3.1.2 EC2, art. 31.3 EHE-08)
  
-        :param t: age of the concrete in days
+        :param t: age of the concrete in days.
         '''
         return self.getFcm()*self.getBetaCC(t)
 
@@ -1001,8 +1062,57 @@ class paramTensStiffness(object):
         x = x[:,np.newaxis]
         slope, _, _, _ = np.linalg.lstsq(x, y)
         return slope[0]
-    
 
+class CreepParameters(object):
+    ''' Parameters that define concrete creep for TD concrete materials.
+
+    :ivar beta: tension softening parameter.
+    :ivar age: analysis time at initiation of drying (in days).
+    :ivar epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
+    :ivar epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :ivar epsda: product of εcds,0 and βRH, as per Model Code 2010.
+    :ivar epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :ivar phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+    :ivar phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :ivar phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
+    :ivar phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
+    :ivar tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+    :ivar cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    '''
+    def __init__(self,  beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
+        '''
+        Constructor.
+
+        :param beta: tension softening parameter.
+        :param age: analysis time at initiation of drying (in days).
+        :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
+        :param epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+        :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
+        :param epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+        :param phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+        :param phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+        :param phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
+        :param phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
+        :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+        :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+        '''
+        self.beta= beta # tension softening parameter.
+        self.age= age # analysis time at initiation of drying (in days).
+        
+        self.epsba= epsba # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
+        self.epsbb= epsbb # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+        self.epsda= epsda # product of εcds,0 and βRH, as per Model Code 2010.
+        self.epsdb= epsdb # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+        
+        self.phiba= phiba # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+        self.phibb= phibb # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+        self.phida= phida # product of βdc(fcm) and β(RH), as per Model Code 2010.
+        self.phidb= phidb # fitting constant within the drying creep time evolution function as per Model Code 2010.
+        
+        self.tcast= tcast # analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+        self.cem= cem # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+        
+    
 def defDiagKConcrete(preprocessor, concreteRecord):
     ''' Define concrete stress-strain characteristic diagram.
 
@@ -1095,6 +1205,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     '''
     Es= 2e11 # Elastic modulus of the material.
     k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
+    rho= 7850 # kg/m3
     def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
         ''' Constructor.
 
@@ -1165,7 +1276,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         return self.materialDiagramK #30160925 was 'return self.matTagK'
 
     def defDiagD(self, preprocessor):
-        ''' Returns XC uniaxial material corresponding to the design values
+        ''' Returns and XC uniaxial material corresponding to the design values
             of the stress-strain diagram of the reinforcing steel.
 
         :param preprocessor: pre-processor for the finite element problem.
@@ -1174,6 +1285,15 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
 
+    def defDiagE(self, preprocessor):
+        ''' Returns and XC linear elastic uniaxial material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        self.materialDiagramE= typical_materials.defElasticMaterial(preprocessor= preprocessor, name= self.nmbDiagE, E= self.Es, rho= self.rho)
+        self.matTagE= self.materialDiagramE.tag
+        return self.materialDiagramE
+        
     def defDiag(self, preprocessor, matDiagType):
         ''' Returns an XC uniaxial material corresponding to the stress-strain
             diagram of the reinforcing steel.
@@ -1194,10 +1314,16 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
                 retval= self.materialDiagramK
             else: # if not defined yet, do it now.
                 retval= self.defDiagK(preprocessor)
+        elif(matDiagType=='elastic'):
+            if(self.materialDiagramE): # if already defined.
+                retval= self.materialDiagramE
+            else: # if not defined yet, do it now.
+                retval= self.defDiagE(preprocessor)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; diagram types : '+str(self.matDiagTyp)+' is not known.')
+            lmsg.error(className+'.'+methodName+'; diagram types : '+str(matDiagType)+' is not known.')
+            exit(1)
         return retval
 
     def plotDesignStressStrainDiagram(self,preprocessor,path=''):

@@ -12,29 +12,47 @@ class MaterialWithDKDiagrams(object):
     """Base class for materials with characteristic (K) and design (D) diagrams 
 
       :ivar materialName: name of the material.
+
       :ivar nmbDiagK: name of the characteristic diagram.
-      :ivar matTagK:  tag of the uni-axial material in the characteristic diagram.
+      :ivar matTagK:  tag of the uniaxial material in the characteristic diagram.
+      :ivar materialDiagramK: characteristic stress-strain diagram.
+
       :ivar nmbDiagD: name of the design diagram.
+      :ivar matTagD: tag of the uniaxial material in the design diagram.
+      :ivar materialDiagramD: design stress-strain diagram.
+
+      :ivar nmbDiagE: name of the elastic diagram.
+      :ivar matTagE: tag of the uniaxial material in the elastic diagram.
+      :ivar materialDiagramE: elastic stress-strain diagram.
     """
-    def __init__(self,matName):
+    def __init__(self, matName):
         ''' Constructor.
 
         :param matName: material name.
         '''
         self.setupName(matName)
 
-    def setupName(self,matName):
+    def setupName(self, matName):
         ''' Material setup.
 
         :param matName: material name.
         '''
         self.materialName= matName # Name identifying the material.
+        
+        # Characteristic stress-strain diagram.
         self.nmbDiagK= "dgK"+self.materialName # Name identifying the characteristic stress-strain diagram.
         self.matTagK= -1 # Tag of the uniaxial material with the characteristic stress-strain diagram.
         self.materialDiagramK= None # Characteristic stress-strain diagram.
+
+        # Design stress-strain diagram.
         self.nmbDiagD= "dgD"+self.materialName # Name identifying the design stress-strain diagram.
         self.matTagD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
         self.materialDiagramD= None # Design stress-strain diagram.
+        
+        # Linear elastic stress-strain diagram.
+        self.nmbDiagE= "dgE"+self.materialName # Name identifying the linear elastic stress-strain diagram.
+        self.matTagE= -1 # Tag of the uniaxial material with the design stress-strain diagram .
+        self.materialDiagramE= None # Design stress-strain diagram.
 
     def __repr__(self):
         return self.materialName

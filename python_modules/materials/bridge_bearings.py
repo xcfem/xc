@@ -383,7 +383,7 @@ class PotBearing(object):
                     element axes coincide with the global axes
     '''
 
-    def __init__(self,potMat,nodA,nodB,orientation= None):
+    def __init__(self, potMat, nodA, nodB, orientation= None):
         '''Class constructor. Creates the pot element between nodA and nodB
 
         :param potMat: : (:obj:'PTFEPotBearingMat') POT material.
@@ -410,6 +410,8 @@ class PotBearing(object):
         prep= self.nodA.getDomain.getPreprocessor
         elems= prep.getElementHandler
         elems.dimElem= prep.getNodeHandler.dimSpace
+        if(len(self.potMat.materials)==0): # If the materials are not defined yet.
+            self.potMat.defineMaterials(prep) # define them.
         defaultMaterial= next((item for item in self.potMat.materials if item is not None), None)
         if(defaultMaterial):
             elems.defaultMaterial= defaultMaterial

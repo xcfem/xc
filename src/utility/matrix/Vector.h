@@ -112,7 +112,7 @@ class Vector: public CommandEntity
     Vector(const double &,const double &,const double &);
     Vector(const Vector &);    
     Vector(double *data, int size);
-    Vector(const boost::python::list &);
+    explicit Vector(const boost::python::list &);
     virtual ~Vector(void);
 
     iterator begin(void);

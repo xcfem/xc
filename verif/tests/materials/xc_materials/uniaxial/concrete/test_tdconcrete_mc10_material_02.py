@@ -35,27 +35,28 @@ MPa = 0.001*GPa
 Es = 200*GPa
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",Es)
  
-Ec = 25*GPa # concrete modulus of elasticity
+Ec = 25*GPa # concrete modulus of elasticity at loading age.
 Ecm= 30.303*GPa # 28-day modulus of elasticity
-fc = -28*MPa # concrete compressive strength (compression is negative)
-ft = 3*MPa # concrete tensile strength (tension is positive)
+fc = -28*MPa # concrete compressive strength (compression is negative) at loading age.
+ft = 3*MPa # concrete tensile strength (tension is positive) at loading age.
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 tDry = 14 # days
 tcast = 0 # analysis time corresponding to concrete casting (in days; minimum value 2.0)
+
 # Shrinkage
-epsba= -0.000034
-epsbb= 1.000
-epsda= -0.000853
-epsdb= 787.50
+epsba= -0.000034 # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010. Row 21 column F in the TDCI_input spreadsheet.
+epsbb= 1.000 # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 22 column F in the TDCI_input spreadsheet.
+epsda= -0.000853 # product of εcds,0 and βRH, as per Model Code 2010. Row 23 column F in the TDCI_input spreadsheet.
+epsdb= 787.50 # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 24 column F in the TDCI_input spreadsheet.
 
 # Creep
-phiba= 0.1747
-phibb= 1.000
-phida= 3.651
-phidb= 504.5
+phiba= 0.1747 # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010. Row 20 column M in the TDCI_input spreadsheet.
+phibb= 1.000 # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 21 column M in the TDCI_input spreadsheet.
+phida= 3.651 # product of βdc(fcm) and β(RH), as per Model Code 2010. Row 22 column M in the TDCI_input spreadsheet.
+phidb= 504.5 # fitting constant within the drying creep time evolution function as per Model Code 2010. Row 23 column M in the TDCI_input spreadsheet.
 
 # Cement type
-cem= 1.0000
+cem= 1.0000 # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
 
 
 ## Concrete able to creep.

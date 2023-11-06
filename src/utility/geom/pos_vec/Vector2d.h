@@ -47,6 +47,7 @@ class Vector2d: public ProtoGeom
     explicit Vector2d(const CGDirection_2 &dir)
       : ProtoGeom(), cgvct(dir.vector()) {}
     Vector2d(const GEOM_FT &x,const GEOM_FT &y);
+    explicit Vector2d(const boost::python::list &);
 /*     Vector2d(const double &x,const double &y); */
     explicit Vector2d(const FT_matrix &m);
     Vector2d(const Pos2d &p1,const Pos2d &p2);
@@ -81,6 +82,7 @@ class Vector2d: public ProtoGeom
     inline GEOM_FT y() const
       { return Vector2d::operator()(2); }
     FT_matrix getMatrix(void) const;
+    boost::python::list getPyList(void) const;
     Vector2d &operator+=(const Vector2d &);
     Vector2d &operator-=(const Vector2d &);
     Vector2d operator+(const Vector2d &) const;

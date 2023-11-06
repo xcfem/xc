@@ -600,7 +600,7 @@ class RCFiberSectionParameters(object):
         tangSteel= self.getSteelDiagram(preprocessor).getTangent()
         return tangSteel/tangHorm
 
-    def defDiagrams(self,preprocessor,matDiagType):
+    def defDiagrams(self, preprocessor, matDiagType):
         '''Stress-strain diagrams definition.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -608,7 +608,7 @@ class RCFiberSectionParameters(object):
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.diagType= matDiagType
-        if(self.diagType=="d"):
+        if(self.diagType=="d"): # design diagram.
             if(self.concrType.matTagD<0):
                 concreteMatTag= self.concrType.defDiagD(preprocessor)
                 if(__debug__):
@@ -621,7 +621,7 @@ class RCFiberSectionParameters(object):
                         AssertionError('Can\'t get steel stress-strain diagram.')                    
             self.concrDiagName= self.concrType.nmbDiagD
             self.reinfDiagName= self.reinfSteelType.nmbDiagD
-        elif(self.diagType=="k"):
+        elif(self.diagType=="k"): # characteristic diagram
             if(self.concrType.matTagK<0):
                 concreteMatTag= self.concrType.defDiagK(preprocessor)
                 if(__debug__):
@@ -634,6 +634,25 @@ class RCFiberSectionParameters(object):
                         AssertionError('Can\'t get steel stress-strain diagram.')                    
             self.concrDiagName= self.concrType.nmbDiagK
             self.reinfDiagName= self.reinfSteelType.nmbDiagK
+        elif(self.diagType=='td'): # creep diagram.
+            if(self.concrType.matTagTD<0):
+                concreteMatTag= self.concrType.defDiagTD(preprocessor)
+                if(__debug__):
+                    if(concreteMatTag is None):
+                        AssertionError('Can\'t get concrete stress-strain diagram.')                    
+            if(self.reinfSteelType.matTagE<0): # linear elastic steel.
+                reinfSteelMaterialTag= self.reinfSteelType.defDiagE(preprocessor)
+                if(__debug__):
+                    if(reinfSteelMaterialTag is None):
+                        AssertionError('Can\'t get steel stress-strain diagram.')                    
+            self.concrDiagName= self.concrType.nmbDiagTD
+            self.reinfDiagName= self.reinfSteelType.nmbDiagE # linear elastic steel.
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; diagram type: '"+self.diagType+"' unknown.\n")
+            exit(1)
+            
             
     def defInteractionDiagramParameters(self, preprocessor):
         ''' Defines the parameters for interaction diagrams.

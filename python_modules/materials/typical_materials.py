@@ -365,8 +365,10 @@ def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr
 
 def defTDConcreteMC10(preprocessor,name, fc, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
     '''
+    Defines a TDConcreteMC10 uniaxial material.
+
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the section
+    :param name: name identifying the new material
     :param fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
     :param epscu: strain at crushing strength.
     :param ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
@@ -413,7 +415,7 @@ def defTDConcreteMC10(preprocessor,name, fc, ft, Ec, Ecm, beta, age, epsba, epsb
 def defTDConcreteMC10NL(preprocessor,name, fc, fcu, epscu, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
     '''
     :param preprocessor: preprocessor of the finite element problem.
-    :param name:         name identifying the section
+    :param name: name identifying the new material.
     :param fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
     :param fcu: stress at ultimate (crushing) strain.
     :param epscu: strain at crushing strength.
