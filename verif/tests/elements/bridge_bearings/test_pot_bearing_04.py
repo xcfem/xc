@@ -91,3 +91,6 @@ if (ratio1<1e-15) & (ratio2<1e-15) &  (ratio3<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    lmsg.error('ratio1= '+str(ratio1))
+    lmsg.error('ratio2= '+str(ratio2))
+    lmsg.error('ratio3= '+str(ratio3))
