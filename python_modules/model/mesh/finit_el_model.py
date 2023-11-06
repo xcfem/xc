@@ -78,7 +78,7 @@ def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfT
     trfs= preprocessor.getTransfCooHandler
     if coordTransfType.lower()=='pdelta':
         retval= trfs.newPDeltaCrdTransf3d(coordTransfName)
-    elif coordTransfType.lower()=='corot':
+    elif coordTransfType.lower()=='corotational':
         retval= trfs.newCorotCrdTransf3d(coordTransfName)
     else:
         retval= trfs.newLinearCrdTransf3d(coordTransfName)
@@ -112,7 +112,7 @@ class LinSetToMesh(RawLineSetToMesh):
           defined as width of the rectangle)
     :ivar dimElemSpace: dimension of the element space (defaults to 3)
     :ivar coordTransfType: type of coordinate transformation. Available 
-                       types: 'linear', 'PDelta' and 'corot' (defaults to 
+                       types: 'linear', 'PDelta' and 'corotational' (defaults to 
                        'linear') 
     '''
     def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='ElasticBeam3d', dimElemSpace=3, coordTransfType='linear'):
@@ -213,7 +213,7 @@ def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLA
           defined as width of the rectangle)
     :param dimElemSpace: dimension of the element space (defaults to 3)
     :param coordTransfType: type of coordinate transformation. Available 
-                       types: 'linear', 'PDelta' and 'corot' (defaults to 
+                       types: 'linear', 'PDelta' and 'corotational' (defaults to 
                        'linear') 
     :param sectGeom: ='Y' if want to create the property 'crossSection'
                   for each element (defaults to 'N')
