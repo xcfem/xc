@@ -53,13 +53,15 @@ class ElementHandler: public ProtoElementHandler
       public:
         SeedElemHandler(Preprocessor *preprocessor)
           : ProtoElementHandler(preprocessor), seed(nullptr) {}
+        ~SeedElemHandler(void);
 	Element *getSeedElement(void)
           { return seed; }
 	const Element *getSeedElement(void) const
           { return seed; }
         int getDefaultTag(void) const;
         void clearAll(void);
-        ~SeedElemHandler(void);
+        Element *newElement(const std::string &);
+        Element *newElement(const std::string &,const ID &);
       };
   private:
     SeedElemHandler seed_elem_handler; //!< Seed element for meshing.

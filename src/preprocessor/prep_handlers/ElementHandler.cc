@@ -35,6 +35,7 @@
 
 #include "domain/mesh/node/Node.h"
 #include "utility/tagged/DefaultTag.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Frees the seed element pointer.
 void XC::ElementHandler::SeedElemHandler::free(void)
@@ -87,11 +88,31 @@ int XC::ElementHandler::SeedElemHandler::getDefaultTag(void) const
     if(ldr)
       retval= ldr->getDefaultTag();
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; error: pointer to element handler is null."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
+
+//! @brief Create a new seed element.
+//! @param type: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticTimoshenkoBeam2d', 'ElasticBeam3d', 'ElasticTimoshenkoBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
+XC::Element *XC::ElementHandler::SeedElemHandler::newElement(const std::string &type)
+  {
+    ID nodeTags; // Empty int vector.
+    return ProtoElementHandler::newElement(type, nodeTags);
+  }
+
+//! @brief Create a new seed element.
+//! @param type: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticTimoshenkoBeam2d', 'ElasticBeam3d', 'ElasticTimoshenkoBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
+XC::Element *XC::ElementHandler::SeedElemHandler::newElement(const std::string &type, const ID &nodeTags)
+  {
+    // std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+    //           << "; seed element does not need to initialize its nodes."
+    //           << " Remove the node tags parameter."
+    //           << Color::def << std::endl;
+    return ProtoElementHandler::newElement(type, nodeTags);
+  }
+
 
 XC::ElementHandler::ElementHandler(Preprocessor *preprocessor)
   : ProtoElementHandler(preprocessor), seed_elem_handler(preprocessor) 
@@ -114,8 +135,9 @@ XC::Element *XC::ElementHandler::getElement(int tag)
     if(tmp)
       retval= tmp->getElement(tag);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; domain not yet defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; domain not yet defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -145,8 +167,9 @@ void XC::ElementHandler::Add(Element *e)
 	Element::getDefaultTag()++;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; null pointer to element." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; null pointer to element."
+		<< Color::def << std::endl;
   }
 
 

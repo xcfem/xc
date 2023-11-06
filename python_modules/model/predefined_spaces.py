@@ -296,6 +296,39 @@ class PredefinedSpace(object):
         ''' Return the seed element handler for this model.'''
         return self.getElementHandler().seedElemHandler
 
+    def setDefaultMaterial(self, material):
+        ''' Assigns the material to be used when creating new elements.
+
+        :param material: default material.
+        '''
+        self.preprocessor.getElementHandler.defaultMaterial= material.name
+        self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial= material.name
+
+    def setDefaultCoordTransf(self, coordinateTransformation):
+        ''' Assigns the coordinate transformation to be used when creating 
+            new elements.
+
+        :param coordinateTransformation: default coordinate transfomation.
+        '''
+        self.preprocessor.getElementHandler.defaultTransformation= coordinateTransformation.name
+        self.preprocessor.getElementHandler.seedElemHandler.defaultTransformation= coordinateTransformation.name
+
+    def newElement(self, elementType:str, nodeTags):
+        ''' Create a new element.
+
+        :param elementType: type of the new element (i.e.. 'ShellMITC4' or 'ZeroLength').
+        :param nodeTags: list of the identifiers of the element nodes.
+        '''
+        return self.preprocessor.getElementHandler.newElement(elementType, xc.ID(nodeTags))
+
+    def newSeedElement(self, elementType:str):
+        ''' Create a new element.
+
+        :param elementType: type of the new element (i.e.. 'ShellMITC4' or 'ZeroLength').
+        :param nodeTags: list of the identifiers of the element nodes.
+        '''
+        return self.preprocessor.getElementHandler.seedElemHandler.newElement(elementType)
+    
     def getElements(self, tags: Sequence[int]):
         ''' Return the elements that correspond to the argument
             tags.
