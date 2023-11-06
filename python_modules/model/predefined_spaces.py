@@ -322,7 +322,7 @@ class PredefinedSpace(object):
         return self.preprocessor.getElementHandler.newElement(elementType, xc.ID(nodeTags))
 
     def newSeedElement(self, elementType:str):
-        ''' Create a new element.
+        ''' Create a new seed element.
 
         :param elementType: type of the new element (i.e.. 'ShellMITC4' or 'ZeroLength').
         :param nodeTags: list of the identifiers of the element nodes.
