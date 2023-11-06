@@ -505,6 +505,27 @@ def rebLayerByNumFi_mm(n,fi,c,latC,L):
     rl=ReinfRow(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
     return rl
 
+def rebLayer_m(fi,s,c):
+    '''Defines a layer of main reinforcement bars, given the spacement.
+
+    :param fi: bar diameter [m]
+    :param s: spacing [m]
+    :param c: cover [m] (nominal cover)
+    '''
+    return ReinfRow(rebarsDiam=fi, rebarsSpacing=s,width=1.0,nominalCover=c)
+
+def rebLayerByNumFi_m(n,fi,c,latC,L):
+    '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated
+    so that the rebars (and two lateral covers) are inserted in the length L passed as parameter.
+
+    :param n: number of rebars
+    :param fi: bar diameter [m]
+    :param c: nominal cover [m]
+    :param latC: nominal lateral cover [m]
+    :param L: length where the n rebars and two lateral covers are inserted [m]
+    '''
+    return ReinfRow(rebarsDiam=fi,areaRebar= math.pi*(fi)**2/4.0,nRebars=n,width=L,nominalCover=c,nominalLatCover=latC)
+
 # Reinforced concrete.
 
 class RCFiberSectionParameters(object):
