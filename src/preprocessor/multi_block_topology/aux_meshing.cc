@@ -31,6 +31,7 @@
 #include <domain/mesh/node/Node.h>
 #include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @ brief Mesh one layer (i= constant) of 4-nodes quadrangles.
 void meshing_quad4N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_i_layer_variable_ref &elements)
@@ -42,15 +43,22 @@ void meshing_quad4N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constan
       for(size_t k=1;k<numberOfNodeColumns;k++)
         {
 	  XC::Element *tmp= e.getCopy();
-          const std::vector<int> indices= getNodeIdsQuad4N(nodes,j,k);
-          if((indices[0]>=0) && (indices[1]>=0) && (indices[2]>=0)  && (indices[3]>=0))
-            tmp->setIdNodes(indices);
-          else
-            {
-              delete tmp;
-              tmp= nullptr;
-            }
-          elements(j,k)= tmp;
+	  if(tmp)
+	    {
+              const std::vector<int> indices= getNodeIdsQuad4N(nodes,j,k);
+              if((indices[0]>=0) && (indices[1]>=0) && (indices[2]>=0)  && (indices[3]>=0))
+                tmp->setIdNodes(indices);
+	      else
+		{
+		  delete tmp;
+		  tmp= nullptr;
+		}
+              elements(j,k)= tmp;
+	    }
+	  else
+	    std::cerr << Color::red << __FUNCTION__
+		      << ";couldn't create a copy of the seed element."
+		      << Color::def << std::endl;
         }
   }
 
@@ -120,7 +128,8 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d 
           }
       }
     else  //There are null pointers.
-      std::cerr << "meshing_quad4N_bidimensional; one or more points to node are null." << std::endl;
+      std::cerr << Color::red << "meshing_quad4N_bidimensional; one or more points to node are null."
+		<< Color::def << std::endl;
   }
 
 //! @brief Place the elements on the mesh passed as parameter.
@@ -134,9 +143,9 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
 
     ElemPtrArray3d retval;
     if(mesh_dim<2 && (e.getVerbosityLevel() > 4))
-      std::cerr << __FUNCTION__
+      std::cerr << Color::red << __FUNCTION__
 	        << "; bidimensional mesh needed, can't create elements."
-		<< std::endl;
+		<< Color::def << std::endl;
     else
       {
         if(mesh_dim<3) //Bidimensional mesh
@@ -147,9 +156,10 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
               {
               case dirm_i:
                 if(numberOfNodeLayers<2)
-		  std::cerr << __FUNCTION__
+		  std::cerr << Color::red << __FUNCTION__
 			    << "Not enough nodes in 'i' direction."
-		            << " Elements were not created." << std::endl;
+		            << " Elements were not created."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfNodeLayers,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns-1));
@@ -162,9 +172,10 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
                 break;
               case dirm_j:
                 if(numberOfNodeRows<2)
-		  std::cerr <<  __FUNCTION__
+		  std::cerr << Color::red <<  __FUNCTION__
 			    << "Not enough nodes in 'j' direction."
-		            << " Elements were not created." << std::endl;
+		            << " Elements were not created."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows,numberOfNodeColumns-1));
@@ -177,9 +188,10 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
                 break;
               case dirm_k:
                 if(numberOfNodeColumns<2)
-		  std::cerr <<  __FUNCTION__
+		  std::cerr << Color::red <<  __FUNCTION__
 			    << "Not enough nodes in 'k' direction."
-		            << " Elements were not created." << std::endl;
+		            << " Elements were not created."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns));
@@ -226,13 +238,15 @@ void meshing_quad9N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constan
 //! @ brief Mesh one row (j= constant)  with 9-nodes elements.
 void meshing_quad9N_on_ik(const XC::Element &e,const XC::NodePtrArray3d::constant_j_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_j_layer_variable_ref &elements)
   {
-    std::cerr << __FUNCTION__ << " not implemented." << std::endl;
+    std::cerr << Color::red << __FUNCTION__ << " not implemented."
+	      << Color::def << std::endl;
   }
 
 //! @ brief Mesh one column (k= constant) with 9-nodes elements.
 void meshing_quad9N_on_ij(const XC::Element &e,const XC::NodePtrArray3d::constant_k_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_k_layer_variable_ref &elements)
   {
-    std::cerr << __FUNCTION__ << " not implemented." << std::endl;
+    std::cerr << Color::red << __FUNCTION__ << " not implemented."
+	      << Color::def << std::endl;
   }
 
 //! @ brief Mesh one quadrangle with 9-nodes elements.
@@ -265,8 +279,9 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d 
           }
       }
     else  //There are null pointers.
-      std::cerr <<  __FUNCTION__
-		<< "; there were null pointers to nodes." << std::endl;
+      std::cerr << Color::red <<  __FUNCTION__
+		<< "; there were null pointers to nodes."
+		<< Color::def << std::endl;
   }
 
 //! @brief Places the elements on the mesh passed as parameter.
@@ -280,9 +295,9 @@ XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d 
 
     ElemPtrArray3d retval;
     if(mesh_dim<2 && (e.getVerbosityLevel() > 4))
-      std::cerr <<  __FUNCTION__
+      std::cerr << Color::red <<  __FUNCTION__
 	        << "; bidimensional mesh needed, can't create elements."
-		<< std::endl;
+		<< Color::def << std::endl;
     else
       {
         if(mesh_dim<3) //Bidimensional mesh
@@ -293,9 +308,10 @@ XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d 
               {
               case dirm_i:
                 if(numberOfNodeLayers<2)
-		  std::cerr <<  __FUNCTION__
+		  std::cerr << Color::red <<  __FUNCTION__
 			    << "Not enough nodes in 'i' direction."
-		            << " Elements were not created." << std::endl;
+		            << " Elements were not created."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfNodeLayers,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns-1));
@@ -308,9 +324,10 @@ XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d 
                 break;
               case dirm_j:
                 if(numberOfNodeRows<2)
-		  std::cerr <<  __FUNCTION__
+		  std::cerr << Color::red <<  __FUNCTION__
 			    << "Not enough nodes in 'j' direction."
-		            << " Elements were not created." << std::endl;
+		            << " Elements were not created."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows,numberOfNodeColumns-1));
@@ -323,9 +340,10 @@ XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d 
                 break;
               case dirm_k:
                 if(numberOfNodeColumns<2)
-		  std::cerr <<  __FUNCTION__
+		  std::cerr << Color::red <<  __FUNCTION__
 			    << "Not enough nodes in 'k' direction."
-		            << " Elements were not created." << std::endl;
+		            << " Elements were not created."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns));

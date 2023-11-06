@@ -271,7 +271,7 @@ void XC::fix(const XC::NodePtrArray3d::box_var_ref &box_ref,const XC::SFreedom_C
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<XC::Node *> getNodePtrs(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k, const std::vector< std::pair<int,int> > &indices)
+std::vector<XC::Node *> getNodePtrs(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes, const size_t &j, const size_t &k, const std::vector< std::pair<int,int> > &indices)
   {
     const size_t sz= indices.size();
     std::vector<XC::Node *> retval(sz,nullptr);
@@ -294,7 +294,9 @@ std::vector<XC::Node *> getNodePtrs(const XC::NodePtrArray3d::constant_i_layer_c
     for(std::vector< std::pair<int,int>>::const_iterator i= indices.begin();i!=indices.end();i++)
       {
 	std::pair<int,int> v= *i;
-	XC::Node *ptr= nodes(j+v.first,k+v.second);
+	const size_t jj= j+v.first;
+	const size_t kk= k+v.second;
+	XC::Node *ptr= nodes(jj,kk);
         if(ptr)
           retval[cont]= ptr;
 	else
@@ -319,12 +321,11 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer
     size_t cont= 0; 
     for(std::vector<XC::Node *>::const_iterator i= node_pointers.begin();i!=node_pointers.end();i++)
       {
-	const XC::Node *n= *i;
+	const Node *n= *i;
         retval[cont]= n->getTag();
         positions.push_back(n->getInitialPosition3d());
 	cont++;
       }	
-
 
 //     const Vector3d v2= p2-p1;
 //     const Vector3d v3= p3-p2;
