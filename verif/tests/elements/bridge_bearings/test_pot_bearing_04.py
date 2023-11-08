@@ -73,17 +73,19 @@ FXglobal=FXres*math.cos(angRad)-FYres*math.sin(angRad)
 FYglobal=FXres*math.sin(angRad)+FYres*math.cos(angRad)
 ElongXlres=potBearing.getElongXlocal()
 ElongYlres=potBearing.getElongYlocal()
-uNod2=potBearing.getVdispNodB()
+uNod2= potBearing.getVdispNodB()
 
 ratio1= abs(FXglobal-FX)/FX
 ratio2= abs(FYglobal-FY)/FY
-ratio3=abs(uNod2.dot(vDirYlocal.Normalized())-ElongYlres)
+ratio3= abs(uNod2.dot(vDirYlocal.Normalized())-ElongYlres)
 
 ''' 
 print("ratio1= ",(ratio1))
 print("ratio2= ",(ratio2))
    '''
 
+# This test has an intermittent fault the error messages has been extended
+# to locate the variable that causes the error. LP 20231108
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
@@ -93,4 +95,7 @@ else:
     lmsg.error(fname+' ERROR.')
     lmsg.error('ratio1= '+str(ratio1))
     lmsg.error('ratio2= '+str(ratio2))
-    lmsg.error('ratio3= '+str(ratio3))
+    lmsg.error('ratio3= '+str(ratio3)) # ratio3= 1.2646541989592697e+284 08/11/2023
+    lmsg.error('  uNod2= ', uNod2)
+    lmsg.error('  vDirYlocal= ', vDirYlocal)
+    lmsg.error('  ElongYlres= ', ElongYlres)
