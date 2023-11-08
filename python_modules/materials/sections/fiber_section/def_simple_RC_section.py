@@ -502,7 +502,7 @@ def rebLayerByNumFi_mm(n,fi,c,latC,L):
     :param latC: nominal lateral cover [mm]
     :param L: length where the n rebars and two lateral covers are inserted [mm]
     '''
-    rl=ReinfRow(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
+    rl=ReinfRow(rebarsDiam=fi*1e-3,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
     return rl
 
 def rebLayer_m(fi,s,c):
@@ -524,7 +524,7 @@ def rebLayerByNumFi_m(n,fi,c,latC,L):
     :param latC: nominal lateral cover [m]
     :param L: length where the n rebars and two lateral covers are inserted [m]
     '''
-    return ReinfRow(rebarsDiam=fi,areaRebar= math.pi*(fi)**2/4.0,nRebars=n,width=L,nominalCover=c,nominalLatCover=latC)
+    return ReinfRow(rebarsDiam=fi,nRebars=n,width=L,nominalCover=c,nominalLatCover=latC)
 
 # Reinforced concrete.
 
