@@ -335,10 +335,10 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.reinfSteelType= reinfSteelType
         self.depth= depth
         self.width= width
-        self.dir1PositvRebarRows= []
-        self.dir1NegatvRebarRows= []
-        self.dir2PositvRebarRows= []
-        self.dir2NegatvRebarRows= []
+        self.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([])
+        self.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([])
+        self.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([])
+        self.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([])
         self.dir1ShReinfY= def_simple_RC_section.ShearReinforcement()
         self.dir1ShReinfZ= def_simple_RC_section.ShearReinforcement()
         self.dir2ShReinfY= def_simple_RC_section.ShearReinforcement()
