@@ -110,7 +110,9 @@ class_<XC::PrismaticBarCrossSectionsVector, bases<CommandEntity,v_sections>, boo
 class_<XC::CrossSectionKR, bases<CommandEntity>, boost::noncopyable >("CrossSectionKR", no_init);
 
 
-class_<XC::ResponseId, bases<XC::ID>, boost::noncopyable >("ResponseId", no_init);
+class_<XC::ResponseId, bases<XC::ID> >("ResponseId")
+  .def(init<boost::python::list &>())
+  ;
 
 class_<XC::RespPMz, bases<XC::ResponseId>, boost::noncopyable >("RespPMz", no_init);
 
