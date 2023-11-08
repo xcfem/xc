@@ -315,6 +315,7 @@ def get_nodes_pos3D_wire(setBusq,lstPos3DWire,tol=0.01):
     (expressed as geom.Pos3d(x,y,z))
     '''
     nodAux= setBusq.nodes
+    nodTags=set()
     retval= list() 
     for i in range(0,len(lstPos3DWire)-1):
         segmAux= geom.Segment3d(lstPos3DWire[i],lstPos3DWire[i+1])
@@ -322,8 +323,9 @@ def get_nodes_pos3D_wire(setBusq,lstPos3DWire,tol=0.01):
             p= n.getInitialPos3d
             d= p.dist(segmAux)
             if(d<tol):
-                retval.append(n)
-    retval= list(set(retval))       #clear duplicated nodes
+                if n.tag not in nodTags:
+                    nodTags.add(n.tag)
+                    retval.append(n)
     return retval
 
 
