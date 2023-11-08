@@ -61,7 +61,6 @@ class DeformationPlane: public Plane, public MovableObject
     friend class SectionForceDeformation;
     friend class FiberPtrDeque;
     friend class FiberSectionBase; //Erase this line.
-    const Vector &getDeformation(void) const;
   public:
     DeformationPlane( const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);
     explicit DeformationPlane(const Plane &);
@@ -69,10 +68,13 @@ class DeformationPlane: public Plane, public MovableObject
                       const Pos2d &yz2, const double &e_2,
                       const Pos2d &yz3, const double &e_3);
     explicit DeformationPlane(const double &eps= 0.0);
-    DeformationPlane(const Vector &e);
+    DeformationPlane(const Vector &);
 
     double Strain(const Pos2d &p) const;
-    const Vector &getDeformation(const size_t &order,const ResponseId &code) const;
+    const Vector &getDeformation(void) const;
+    void setDeformation(const Vector &);
+    const Vector &getDeformation(const size_t &,const ResponseId &) const;
+    boost::python::list getGeneralizedStrainsPy(const boost::python::list &) const;
 
     void ConstantStrain(const double &);
 
@@ -83,6 +85,7 @@ class DeformationPlane: public Plane, public MovableObject
     HalfPlane2d getTensionedHalfPlane(const Line2d &) const;
     HalfPlane2d getCompressedHalfPlane(void) const;
     HalfPlane2d getCompressedHalfPlane(const Line2d &) const;
+
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

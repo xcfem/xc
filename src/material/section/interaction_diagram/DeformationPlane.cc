@@ -102,18 +102,7 @@ XC::DeformationPlane::DeformationPlane(const double &eps)
 
 XC::DeformationPlane::DeformationPlane(const Vector &e)
   : Plane(), MovableObject(0)
-  {
-    const double e_1= e(0); //strain at (0,0)
-    const double e_2= e(0)+e(1); //Strain at (1,0)
-    double e_3= e(0); //Strain at (0,1)
-    if(e.Size()>2)
-      e_3+= e(2); //Strain at (0,1)
-    
-    const Pos3d p1(e_1,0.0,0.0);
-    const Pos3d p2(e_2,1.0,0.0);
-    const Pos3d p3(e_3,0.0,1.0);
-    ThreePoints(p1,p2,p3);
-  }
+  { setDeformation(e); }
 
 void XC::DeformationPlane::ConstantStrain(const double &e)
   {
@@ -128,18 +117,36 @@ void XC::DeformationPlane::ConstantStrain(const double &e)
 double XC::DeformationPlane::Strain(const Pos2d &p) const
   { return Plane::x(p); }
 
-//! @brief Returns the generalized strains vector.
+//! @brief Returns the generalized strains vector (epsilon, zCurvature, yCurvature).
 const XC::Vector &XC::DeformationPlane::getDeformation(void) const
   {
     static Vector retval(3);
-    retval(0)= Strain(Pos2d(0,0));
-    retval(1)= Strain(Pos2d(1,0))-retval(0);
-    retval(2)= Strain(Pos2d(0,1))-retval(0);
+    retval(0)= Strain(Pos2d(0,0)); // SECTION_RESPONSE_P
+    retval(1)= Strain(Pos2d(1,0))-retval(0); // SECTION_RESPONSE_MZ
+    retval(2)= Strain(Pos2d(0,1))-retval(0); // SECTION_RESPONSE_MY
     return retval;
   }
 
+//! @brief Set the generalized strains vector.
+//! @param genStrains: generalized strains vector (epsilon, zCurvature, yCurvature).
+void XC::DeformationPlane::setDeformation(const Vector &genStrains)
+  {
+    const double e_1= genStrains(0); //strain at (0,0)
+    const double e_2= genStrains(0)+genStrains(1); //Strain at (1,0)
+    double e_3= genStrains(0); //Strain at (0,1)
+    if(genStrains.Size()>2)
+      e_3+= genStrains(2); //Strain at (0,1)
+    
+    const Pos3d p1(e_1,0.0,0.0);
+    const Pos3d p2(e_2,1.0,0.0);
+    const Pos3d p3(e_3,0.0,1.0);
+    ThreePoints(p1,p2,p3);
+  }
+
 //! @brief Returns the generalized strains vector.
-const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const ResponseId &code) const
+//! @param order: dimension of the problem (1, 2 or 3).
+//! @param rId: stiffness material contribution response identifiers.
+const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order, const ResponseId &rId) const
   {
     static Vector retval;
     retval.resize(order);
@@ -147,13 +154,25 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
     const Vector &tmp= getDeformation();
     for( size_t i= 0;i<order;i++)
       {
-        if(code(i) == SECTION_RESPONSE_P)
+        if(rId(i) == SECTION_RESPONSE_P)
           retval[i]+= tmp(0);
-        if(code(i) == SECTION_RESPONSE_MZ)
+        if(rId(i) == SECTION_RESPONSE_MZ)
           retval[i]+= tmp(1);
-        if(code(i) == SECTION_RESPONSE_MY)
+        if(rId(i) == SECTION_RESPONSE_MY)
           retval[i]+= tmp(2);
       }
+    return retval;
+  }
+
+boost::python::list XC::DeformationPlane::getGeneralizedStrainsPy(const boost::python::list &l) const
+  {
+    const size_t order= boost::python::len(l);
+    const ResponseId rId(l);
+    const Vector &def= this->getDeformation(order, rId);
+    const size_t sz= def.Size();
+    boost::python::list retval;
+    for( size_t i= 0;i<sz;i++)
+      { retval.append(def[i]); }
     return retval;
   }
 
