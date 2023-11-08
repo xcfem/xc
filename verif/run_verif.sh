@@ -319,6 +319,8 @@ python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_0
 python tests/elements/beam_column/elastic_beam_2d/modify_section_properties.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_test1.py
 python tests/elements/beam_column/elastic_beam_2d/test_frame_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_02.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_frequency_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_01.py
@@ -340,6 +342,8 @@ python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_test2.py
 python tests/elements/beam_column/elastic_beam_3d/test_crdTransf_rotation_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_02.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_01.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_02.py
 echo "$BLEU" "    Timoshenko beam 2D tests." "$NORMAL"
 python tests/elements/beam_column/timoshenko_beam2d_test1.py
 python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
@@ -1026,6 +1030,7 @@ python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_prop.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_discretization_error_01.py
 echo "$BLEU" "        Fiber section interaction diagrams." "$NORMAL"
+python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_deformation_plane_01.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram01.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram02.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram03.py
