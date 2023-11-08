@@ -76,7 +76,7 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(vo
 
 
 //! @brief Return the generalized strains vector that corresponds
-//! to the deformation plane being passed as parameter.
+//! to the given deformation plane.
 const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plane) const
   {
     const int order= getOrder();
@@ -84,11 +84,28 @@ const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const
     return plane.getDeformation(order,code);
   }
 
-//! @brief Returns the generalized strains vector of the cross-section.
+//! @brief Returns the deformation plane of this section.
 XC::DeformationPlane XC::PrismaticBarCrossSection::getDeformationPlane(void) const
   {
-    const Vector &df= getSectionDeformation();
-    return  DeformationPlane(df);
+    const Vector &df= this->getSectionDeformation();
+    // The deformation plane is constructed from the 
+    // (epsilon, zCurvature, yCurvature) pairs which are not necessarily the
+    // first three components of the section's deformation vector
+    // (see ResponseID class).
+    const int order= this->getOrder();
+    const ResponseId &code= this->getResponseType();
+    Vector tmp(3); tmp.Zero();
+    for(int i= 0;i<order;i++)
+      {
+	const int &cdi= code(i);
+	if(cdi == SECTION_RESPONSE_P)
+	  tmp[0]+= df(i);
+	else if(cdi == SECTION_RESPONSE_MZ)
+	  tmp[1]+= df(i);
+	else if(cdi == SECTION_RESPONSE_MY)
+	  tmp[2]+= df(i);
+      }
+    return DeformationPlane(tmp);
   }
 
 //! @brief Returns strain at position being passed as parameter.
