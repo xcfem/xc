@@ -111,6 +111,9 @@ if (ratio0 < 1e-11) & (ratio1 < 1e-11) & (ratio2 < 1e-11) & (ratio3 < 1e-6) & (r
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    print('ratio1= ', ratio1)
+    print('RN1= ', RN1, 'RN2= ', RN2, 'RN3= ', RN3, 'RN4= ', RN4)
+    
 
 # # Graphic stuff.
 # from postprocess import output_handler
