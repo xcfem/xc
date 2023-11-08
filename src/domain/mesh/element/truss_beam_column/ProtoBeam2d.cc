@@ -32,6 +32,7 @@
 #include "material/section/elastic_section/BaseElasticSection2d.h"
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 
 //! @brief Set values to section mass properties.
 void XC::ProtoBeam2d::set_material(const Material *m)
@@ -218,7 +219,31 @@ int XC::ProtoBeam2d::update(void)
     int retval= Element1D::update();
     // determine the current strain given trial displacements at nodes
     const Vector strain= this->computeCurrentStrain();
-    retval+= (*physicalProperties[0]).setTrialSectionDeformation(strain);
+    const XC::CrdTransf *crdTransf= this->getCoordTransf();
+    const double oneOverL= 1.0/crdTransf->getInitialLength();  
+    ElasticSection2d *section= physicalProperties[0];
+    const int order= section->getOrder();
+    const ResponseId &code= section->getResponseType();
+    Vector localStrain(order);
+    for(int i= 0; i<order;i++)
+      {
+	switch(code(i))
+	  {
+	    case SECTION_RESPONSE_P:
+	      localStrain(i)= strain(0);
+	      break;
+	    case SECTION_RESPONSE_MZ:
+	      localStrain(i)= (strain(2)-strain(1));
+	      break;
+	    case SECTION_RESPONSE_VY:
+	      localStrain(i) = oneOverL*(strain(2)-strain(1));
+	      break;
+	    default:
+	      localStrain(i) = 0.0;
+	      break;
+	  }
+      }
+    retval+= section->setTrialSectionDeformation(localStrain);
     return retval;
   }
 
