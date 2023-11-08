@@ -189,7 +189,8 @@ const XC::Vector &XC::ProtoBeam2d::computeCurrentStrain(void) const
     return retval;
   }
 
-//! @brief Set the element initial strain.
+//! @brief Set the element initial strain. The given vector is already
+//! expressed as the section "sees" the deformations.
 int XC::ProtoBeam2d::setInitialSectionDeformation(const Vector &def)
   {
     (*physicalProperties[0]).setInitialSectionDeformation(def);
