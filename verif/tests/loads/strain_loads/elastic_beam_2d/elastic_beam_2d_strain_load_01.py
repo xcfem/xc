@@ -50,17 +50,11 @@ elements.dimElem= 2 # Dimension of element space
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
     
 # Constraints
-constraints= preprocessor.getBoundaryCondHandler
-spc= constraints.newSPConstraint(n1.tag,0,0.0)
-spc= constraints.newSPConstraint(n1.tag,1,0.0)
-spc= constraints.newSPConstraint(n1.tag,2,0.0)
-spc= constraints.newSPConstraint(n2.tag,0,0.0)
-spc= constraints.newSPConstraint(n2.tag,1,0.0)
-spc= constraints.newSPConstraint(n2.tag,2,0.0)
+modelSpace.fixNode('000', n1.tag)
+modelSpace.fixNode('000', n2.tag)
 
 # Loads definition
 
-# Load modulation.
 # Load case definition.
 factor= 0.85
 lp0= modelSpace.newLoadPattern(name= '0')

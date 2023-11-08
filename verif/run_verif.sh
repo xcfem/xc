@@ -808,11 +808,14 @@ echo "$BLEU" "      Strain loads on 2D elastic beams." "$NORMAL"
 python tests/loads/strain_loads/elastic_beam_2d/beam_shrinkage_load_01.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_01.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_02.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_03.py
 echo "$BLEU" "      Strain loads on 2D force beam column." "$NORMAL"
 python tests/loads/strain_loads/force_beam_column_2d/force_beam_column_2d_strain_load_01.py
 python tests/loads/strain_loads/force_beam_column_2d/force_beam_column_2d_strain_load_02.py
 echo "$BLEU" "      Strain loads on 3D elastic beams." "$NORMAL"
 python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_01.py
+python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_02.py
+python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_03.py
 echo "$BLEU" "      Strain loads on 3D force beam column." "$NORMAL"
 python tests/loads/strain_loads/force_beam_column_3d/force_beam_column_3d_strain_load_01.py
 python tests/loads/strain_loads/force_beam_column_3d/force_beam_column_3d_strain_load_02.py
