@@ -84,7 +84,7 @@ print("ratio1= ",(ratio1))
 print("ratio2= ",(ratio2))
    '''
 
-# This test has an intermittent fault the error messages has been extended
+# This test has an intermittent fault the error messages have been extended
 # to locate the variable that causes the error. LP 20231108
 import os
 from misc_utils import log_messages as lmsg
