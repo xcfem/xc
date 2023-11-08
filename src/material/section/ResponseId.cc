@@ -48,6 +48,14 @@ XC::ResponseId::ResponseId(const std::vector<std::string> &indices)
       (*this)[i]= StringToRespId(indices[i]);
   }
 
+XC::ResponseId::ResponseId(const boost::python::list &l)
+  : ID(boost::python::len(l))
+  {
+    const size_t sz= this->Size();
+    for(size_t i=0; i<sz; i++)
+      (*this)[i]= StringToRespId(boost::python::extract<std::string>(l[i]));
+  }
+
 // XC::ResponseId::ResponseId(int *dt, int size, bool cleanIt)
 //   : ID(dt,size,cleanIt) {}
 
@@ -67,12 +75,12 @@ bool XC::ResponseId::hasResponse(const int &ri) const
     return retval;
   }
 
-//! @brief 
+//! @brief Return the identifier corresponding to the string argument.
 int XC::ResponseId::StringToRespId(const std::string &str)
   {
     if(str == "Mz")
       return SECTION_RESPONSE_MZ;
-    else if(str =="P")
+    else if((str=="P") or (str=="N"))
       return SECTION_RESPONSE_P;
     else if(str =="Vy")
       return SECTION_RESPONSE_VY;

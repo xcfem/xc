@@ -62,8 +62,9 @@ class ResponseId: public ID
   {
   public:
     ResponseId(int sz= 0);
-    ResponseId(const std::deque<std::string> &indices);
-    ResponseId(const std::vector<std::string> &indices);
+    ResponseId(const std::deque<std::string> &);
+    ResponseId(const std::vector<std::string> &);
+    explicit ResponseId(const boost::python::list &);
     //ResponseId(int *, int size, bool cleanIt = false);
     explicit ResponseId(const ID &);
     bool hasResponse(const int &ri) const;
