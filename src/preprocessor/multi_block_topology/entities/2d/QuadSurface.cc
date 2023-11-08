@@ -35,6 +35,7 @@
 #include "domain/mesh/element/Element.h"
 #include "utility/matrices/TMatrix.h"
 #include "preprocessor/Preprocessor.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::QuadSurface::QuadSurface(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
@@ -50,24 +51,27 @@ void XC::QuadSurface::setPoints(const ID &point_indexes)
   {
     const size_t np= point_indexes.Size(); //Number of indexes.
     if(np!=4)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; surface definition needs "
-                << 4 << " points, we got: " << np << ".\n";
+                << 4 << " points, we got: " << np << "."
+		<< Color::def << std::endl;
     else
       {
         if(getNumberOfEdges()>0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; warning redefinition of surface: '"
-                    << getName() << "'.\n";
+                    << getName() << "'."
+		    << Color::def << std::endl;
 
 	Face::addPoints(point_indexes);
         close();
       }
     int tagV1= getVertex(1)->getTag();
     if(tagV1!=point_indexes(0))
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << getTag()
-                << "is inverted." << std::endl;
+                << "is inverted."
+		<< Color::def << std::endl;
   }
 
 //! @brief Creates and inserts the lines from the points being
@@ -77,17 +81,17 @@ void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
     const size_t nRows= pntPtrs.getNumberOfRows(); //No. de rows of points.
     if(nRows<2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; pointer matrix must have at least two rows."
-		  << std::endl;
+		  << Color::def << std::endl;
         return;
       }
     const size_t nColumns= pntPtrs.getNumberOfColumns(); //No. de columns of points.
     if(nColumns<2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; pointer matrix must have at least two columns."
-		  << std::endl;
+		  << Color::def << std::endl;
         return;
       }
     if(nRows==2)
@@ -141,18 +145,20 @@ void XC::QuadSurface::setPoints(const m_int &point_indexes)
     const size_t nColumns= point_indexes.getNumberOfColumns(); //No. de columns of points.
     if(nRows<2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; matrix of indexes: '"
                   << point_indexes 
-                  << "' must have at least two rows." << std::endl;
+                  << "' must have at least two rows."
+		  << Color::def << std::endl;
         return;
       }
     if(nColumns<2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; matrix of indexes: '"
                   << point_indexes 
-                  << "' must have at least two columns." << std::endl;
+                  << "' must have at least two columns."
+		  << Color::def << std::endl;
         return;
       }
     PntPtrArray points(nRows,nColumns);
@@ -166,10 +172,11 @@ void XC::QuadSurface::setPoints(const m_int &point_indexes)
               if(p)
                 points(i,j)= p;
               else
-	        std::cerr << getClassName() << "::" << __FUNCTION__
+	        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; NULL pointer to point in position: ("
                           << i << ',' << j << ") in definition of surface: '"
-                          << getName() << "'" << std::endl;
+                          << getName() << "'"
+			  << Color::def << std::endl;
             }
         }
     setPoints(points);
@@ -198,9 +205,10 @@ Pos3dArray XC::QuadSurface::get_positions(void) const
     const int numEdges= getNumberOfEdges();
     if(numEdges!=4)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; can't mesh surfaces with: "
-	          << numEdges << " edges." << std::endl;
+	          << numEdges << " edges."
+		  << Color::def << std::endl;
         return retval;
       }
 
@@ -250,8 +258,30 @@ void XC::QuadSurface::create_nodes(void)
       {
         create_line_nodes();
 
-        const size_t n_rows= NDivJ()+1;
-        const size_t n_cols= NDivI()+1;
+        Side &ll0= lines[0]; // columns.
+	Side &ll1= lines[1]; // rows.
+	Side &ll2= lines[2]; // columns.
+	Side &ll3= lines[3]; // rows.
+	if(ll0.NDiv()!=NDivI())
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	              << "; wrong number of divisions on I side of surface: "
+	              << getTag()
+	              << " (different from number of divisions in lines 0 and 2)"
+		      << ". Using nDivI= " <<  ll0.NDiv()
+		      << Color::def << std::endl;
+	  }
+	if(ll1.NDiv()!=NDivJ())
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	              << "; wrong number of divisions on J side of surface: "
+	              << getTag()
+	              << " (different from number of divisions in lines 1 and 3)"
+		      << ". Using nDivJ= " <<  ll1.NDiv()
+		      << Color::def << std::endl;
+	  }
+        const size_t n_rows= ll1.NDiv()+1;
+        const size_t n_cols= ll0.NDiv()+1;
         ttzNodes= NodePtrArray3d(1,n_rows,n_cols);
 
 
@@ -259,19 +289,25 @@ void XC::QuadSurface::create_nodes(void)
         //j=1
         for(size_t k=1;k<=n_cols;k++)
           {
-            Side &ll= lines[0];
-            Node *nn= ll.getNode(k);
+            Node *nn= ll0.getNode(k);
             ttzNodes(1,1,k)= nn;
           }
         //j=n_rows.
         for(size_t k=1;k<=n_cols;k++) // Reverse.
-          ttzNodes(1,n_rows,k)= lines[2].getNodeReverse(k);
+	  {
+	    XC::Node *ptr= ll2.getNodeReverse(k);
+            ttzNodes(1,n_rows,k)= ptr;
+	  }
+	
         //k=1
         for(size_t j=2;j<n_rows;j++) // Reverse.
-          ttzNodes(1,j,1)= lines[3].getNodeReverse(j);
+	  {
+	    XC::Node *ptr= ll3.getNodeReverse(j);
+            ttzNodes(1,j,1)= ptr;
+	  }
         //k=n_cols.
         for(size_t j=2;j<n_rows;j++)
-          ttzNodes(1,j,n_cols)= lines[1].getNode(j);
+          ttzNodes(1,j,n_cols)= ll1.getNode(j);
 
         //Populate the interior nodes.
         Pos3dArray node_pos= get_positions(); //Node positions.
@@ -281,9 +317,11 @@ void XC::QuadSurface::create_nodes(void)
       }
     else
       if(verbosity>2)
-        std::clog << getClassName() << "::" << __FUNCTION__
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
-		  << "' already exist." << std::endl;      
+		  << "' already exist."
+		  << Color::def << std::endl;
+    
   }
 
 //! @brief Triggers mesh creation.
@@ -297,9 +335,10 @@ void XC::QuadSurface::genMesh(meshing_dir dm)
       create_elements(dm);
     else
       if(verbosity>2)
-        std::clog << getClassName() << "::" << __FUNCTION__
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; elements for surface: '" << getName()
-		  << "' already exist." << std::endl;      
+		  << "' already exist."
+		  << Color::def << std::endl;      
     if(verbosity>3)
       std::clog << "done." << std::endl;
   }

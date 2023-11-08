@@ -491,7 +491,8 @@ XC::Element *XC::ProtoElementHandler::newElement(const std::string &type,const I
         retval= create_element(type,tag_elem);
         if(retval)
           {
-            retval->setIdNodes(iNodes);
+	    if(iNodes.Size()>0)
+                retval->setIdNodes(iNodes);
             add(retval);
           }
       }

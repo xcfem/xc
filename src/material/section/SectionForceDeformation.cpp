@@ -325,7 +325,7 @@ double XC::SectionForceDeformation::getSectionDeformation(const int &defID) cons
     double retval= 0.0;
     const int order= getOrder();
     const Vector &e= getSectionDeformation(); //Generalized strain vector.
-    const ResponseId &code= getResponseType();
+    const ResponseId &code= this->getResponseType();
     for(int i= 0;i<order;i++)
       if(code(i) == defID)
         retval+= e(i);

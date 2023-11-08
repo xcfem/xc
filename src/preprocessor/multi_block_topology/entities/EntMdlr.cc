@@ -39,6 +39,7 @@
 #include "preprocessor/set_mgmt/JRowSet.h"
 #include "preprocessor/set_mgmt/KRowSet.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 #include "vtkCellType.h"
 
@@ -108,9 +109,9 @@ std::string XC::EntMdlr::getDescription(void) const
 //! @brief Interfaz con VTK.
 int XC::EntMdlr::getVtkCellType(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; must be overloaded in derived classes."
-	      << std::endl;
+	      << Color::def << std::endl;
     return VTK_EMPTY_CELL;
   }
 
@@ -121,9 +122,9 @@ int XC::EntMdlr::getVtkCellType(void) const
 //! @param tol: tolerance.
 bool XC::EntMdlr::In(const GeomObj3d &geomObj, const double &tol) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet."
-	      << std::endl;
+	      << Color::def << std::endl;
     return false;
   }
 
@@ -134,9 +135,9 @@ bool XC::EntMdlr::In(const GeomObj3d &geomObj, const double &tol) const
 //! @param tol: tolerance.
 bool XC::EntMdlr::Out(const GeomObj3d &geomObj, const double &tol) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet."
-	      << std::endl;
+	      << Color::def << std::endl;
     return false;
   }
 
@@ -286,13 +287,15 @@ XC::SetEstruct *XC::EntMdlr::create_row_set(const Array3dRange &rango,const std:
             retval= map_set.create_set_estruct(getVarRefKRow(rango,nmb));
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; can't create row set." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; can't create row set."
+		    << Color::def << std::endl;
       }
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; preprocessor undefined." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; preprocessor undefined."
+		  << Color::def << std::endl;
         return nullptr;
       }
     return retval;
@@ -325,9 +328,10 @@ XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
     else if(dim==1)
       retval= nh.newNode(pos.x());
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; space dimension: " << dim
-	        << " not implemented." << std::endl;
+	        << " not implemented."
+		<< Color::def << std::endl;
     ttzNodes(i,j,k)= retval;
     return retval;
   }
@@ -351,16 +355,17 @@ void XC::EntMdlr::create_nodes(const Pos3dArray3d &positions)
 		    for( size_t k= 1;k<=n_cols;k++)
 		      create_node(positions(i,j,k),i,j,k);
 		if(verbosity>5)
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			    << "; created " << ttzNodes.NumPtrs() << " node(s)."
-			    << std::endl;
+			    << Color::def << std::endl;
 	      }
 	  }
 	else
 	  if(verbosity>2)
-	    std::clog << getClassName() << "::" << __FUNCTION__
+	    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		      << "; nodes from entity: '" << getName()
-		      << "' already exist." << std::endl;
+		      << "' already exist."
+		      << Color::def << std::endl;
       }
   }
 
@@ -374,10 +379,11 @@ const XC::Node *XC::EntMdlr::set_node(size_t i,size_t j, size_t k, Node *nodePtr
         oldNode= this->getNode(i,j,k);
 	if(oldNode)
 	  {
-	    std::clog << getClassName() << "::" << __FUNCTION__
+	    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	              << "; node at position: ("
 		      << i << ", " << j << ", " << k 
-		      << ") already exist." << std::endl;
+		      << ") already exist."
+		      << Color::def << std::endl;
 	  }
         ttzNodes(i,j,k)= nodePtr;
       }
@@ -392,9 +398,10 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
     if(!ttzNodes.empty())
       {
         if(ttzNodes.HasNull())
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; there are null pointers."
-                    << " Elements were not created." << std::endl;
+                    << " Elements were not created."
+		    << Color::def << std::endl;
         else
           if(ttzElements.Null())
             {
@@ -411,19 +418,22 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                       retval= true;
                     }
                   else if(verbosity>0)
-                    std::clog << getClassName() << "::" << __FUNCTION__
-		              << "; seed element not set." << std::endl;
+                    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		              << "; seed element not set."
+			      << Color::def << std::endl;
                   if(verbosity>4)
                     std::clog << "created." << std::endl;
                 }
               else
-                std::cerr << getClassName() << "::" << __FUNCTION__
-		          << "; preprocessor undefined." << std::endl;
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		          << "; preprocessor undefined."
+			  << Color::def << std::endl;
             }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; there is no nodes for the elements." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; there is no nodes for the elements."
+		<< Color::def << std::endl;
     const size_t numElements= ttzElements.NumPtrs();
     if(numElements==0 && verbosity>0)
       {
@@ -433,9 +443,9 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
 	if(seed)
 	  elementDimension= seed->getDimension();
 	if(elementDimension<=entDimension)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		    << "; warning 0 elements created for entity: " << getName()
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -490,8 +500,9 @@ void XC::EntMdlr::create_points(const Pos3dArray &positions)
             }
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; preprocessor needed."
+		<< Color::def << std::endl;
     if(verbosity>4)
       std::clog << "creados." << std::endl;
   }
@@ -521,8 +532,9 @@ XC::KRowSet XC::EntMdlr::getVarRefKRow(const Array3dRange &rango,const std::stri
 //! the position being passed as parameter.
 double XC::EntMdlr::getSquaredDistanceTo(const Pos3d &pt) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -539,8 +551,9 @@ void XC::EntMdlr::fix(const SFreedom_Constraint &spc)
 Pos3d XC::EntMdlr::getCentroid(void) const
   {
     Pos3d retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented."
+	      << Color::def << std::endl;
     return retval;
   }
 //! @brief Destructor.

@@ -319,6 +319,8 @@ python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_0
 python tests/elements/beam_column/elastic_beam_2d/modify_section_properties.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_test1.py
 python tests/elements/beam_column/elastic_beam_2d/test_frame_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_02.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_frequency_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_01.py
@@ -340,6 +342,8 @@ python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_test2.py
 python tests/elements/beam_column/elastic_beam_3d/test_crdTransf_rotation_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_02.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_01.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_02.py
 echo "$BLEU" "    Timoshenko beam 2D tests." "$NORMAL"
 python tests/elements/beam_column/timoshenko_beam2d_test1.py
 python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
@@ -793,30 +797,37 @@ python tests/loads/load_distribution/railway_traffic/test_track_axis_load_04.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_05.py
 
 echo "$BLEU" "    Strain loads." "$NORMAL"
-python tests/loads/strain_loads/truss_strain_load_01.py
-python tests/loads/strain_loads/truss_strain_load_02.py
-python tests/loads/strain_loads/truss_strain_load_03.py
-python tests/loads/strain_loads/truss_strain_load_04.py
-python tests/loads/strain_loads/truss_strain_load_05.py
-python tests/loads/strain_loads/truss_strain_load_06.py
-python tests/loads/strain_loads/beam_strain_load_01.py
-python tests/loads/strain_loads/beam_strain_load_02.py
-python tests/loads/strain_loads/beam_strain_load_03.py
-python tests/loads/strain_loads/beam_strain_load_04.py
-python tests/loads/strain_loads/beam_strain_load_05.py
-python tests/loads/strain_loads/beam_strain_load_06.py
-python tests/loads/strain_loads/beam_strain_load_07.py
-python tests/loads/strain_loads/beam_strain_load_08.py
-python tests/loads/strain_loads/beam_strain_load_09.py
-python tests/loads/strain_loads/beam_shrinkage_load_01.py
-python tests/loads/strain_loads/quad_strain_load_01.py
-python tests/loads/strain_loads/shell_strain_load_01.py
-python tests/loads/strain_loads/shell_strain_load_02.py
-python tests/loads/strain_loads/shell_strain_load_03.py
-python tests/loads/strain_loads/shell_strain_load_04.py
-python tests/loads/strain_loads/shell_strain_load_05.py
-python tests/loads/strain_loads/shell_grad_strain_load_02.py
-python tests/loads/strain_loads/shell_grad_strain_load_03.py
+echo "$BLEU" "      Strain loads on trusses." "$NORMAL"
+python tests/loads/strain_loads/trusses/truss_strain_load_01.py
+python tests/loads/strain_loads/trusses/truss_strain_load_02.py
+python tests/loads/strain_loads/trusses/truss_strain_load_03.py
+python tests/loads/strain_loads/trusses/truss_strain_load_04.py
+python tests/loads/strain_loads/trusses/truss_strain_load_05.py
+python tests/loads/strain_loads/trusses/truss_strain_load_06.py
+echo "$BLEU" "      Strain loads on 2D elastic beams." "$NORMAL"
+python tests/loads/strain_loads/elastic_beam_2d/beam_shrinkage_load_01.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_01.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_02.py
+echo "$BLEU" "      Strain loads on 2D force beam column." "$NORMAL"
+python tests/loads/strain_loads/force_beam_column_2d/force_beam_column_2d_strain_load_01.py
+python tests/loads/strain_loads/force_beam_column_2d/force_beam_column_2d_strain_load_02.py
+echo "$BLEU" "      Strain loads on 3D elastic beams." "$NORMAL"
+python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_01.py
+echo "$BLEU" "      Strain loads on 3D force beam column." "$NORMAL"
+python tests/loads/strain_loads/force_beam_column_3d/force_beam_column_3d_strain_load_01.py
+python tests/loads/strain_loads/force_beam_column_3d/force_beam_column_3d_strain_load_02.py
+python tests/loads/strain_loads/force_beam_column_3d/force_beam_column_3d_strain_load_03.py
+python tests/loads/strain_loads/force_beam_column_3d/force_beam_column_3d_strain_load_04.py
+echo "$BLEU" "      Strain loads on quads." "$NORMAL"
+python tests/loads/strain_loads/quads/quad_strain_load_01.py
+echo "$BLEU" "      Strain loads on shells." "$NORMAL"
+python tests/loads/strain_loads/shell/shell_strain_load_01.py
+python tests/loads/strain_loads/shell/shell_strain_load_02.py
+python tests/loads/strain_loads/shell/shell_strain_load_03.py
+python tests/loads/strain_loads/shell/shell_strain_load_04.py
+python tests/loads/strain_loads/shell/shell_strain_load_05.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_02.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_03.py
 echo "$BLEU" "    Inertia loads." "$NORMAL"
 python tests/loads/inertia_loads/test_inertia_loads_00.py
 python tests/loads/inertia_loads/test_inertia_loads_01.py
@@ -1026,6 +1037,7 @@ python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_prop.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_discretization_error_01.py
 echo "$BLEU" "        Fiber section interaction diagrams." "$NORMAL"
+python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_deformation_plane_01.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram01.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram02.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram03.py

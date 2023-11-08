@@ -74,6 +74,7 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
 # Get internal forces.
+beam3d.getResistingForce()
 axil1= beam3d.getN1
 axil2= beam3d.getN2
 
