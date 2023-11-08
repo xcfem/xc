@@ -21,14 +21,20 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+const XC::Vector &(XC::DeformationPlane::*getStrains)(void) const= &XC::DeformationPlane::getDeformation;
 class_<XC::DeformationPlane, bases<Plane> >("DeformationPlane")
   .def(init<const double&>())
   .def(init<Plane>())
   .def(init<Pos2d,double,Pos2d,double,Pos2d,double>())
   .def(init<Pos3d,Pos3d,Pos3d>())
+  .def(init<const XC::Vector &>())
   .def("constantStrain",&XC::DeformationPlane::ConstantStrain)
   .def("getDeformation",&XC::DeformationPlane::Strain,"DEPRECATED; returns strain at position.")
-  .def("getStrain",&XC::DeformationPlane::Strain,"returns strain at position.")
+  .def("getStrains", make_function(getStrains,return_value_policy<copy_const_reference>()), "Returns the generalized strains vector (epsilon, curvZ, curvY)")
+  .def("setStrains",&XC::DeformationPlane::setDeformation,"Sets the generalized strains vector (epsilon, curvZ, curvY)")
+  .add_property("strains", make_function(getStrains,return_value_policy<copy_const_reference>()), &XC::DeformationPlane::setDeformation, "Gets/sets the generalized strains vector (epsilon, curvZ, curvY)")
+  .def("getStrain",&XC::DeformationPlane::Strain,"Returns strain at the given position.")
+  .def("getGeneralizedStrains",&XC::DeformationPlane::getGeneralizedStrainsPy, "return the generalized strains in the order specified by the given list of strings")
   ;
 
 class_<XC::ComputePivots, bases<Ref3d3d>, boost::noncopyable >("ComputePivots", no_init)
