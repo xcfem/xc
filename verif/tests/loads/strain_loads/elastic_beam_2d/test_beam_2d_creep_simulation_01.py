@@ -92,7 +92,6 @@ columnM1a= column.getM1
 columnM2a= column.getM2
 
 # Get generalized strains.
-beamStrains= beam.physicalProperties.getVectorMaterials[0].getDeformationPlane().strains
 columnStrains= column.physicalProperties.getVectorMaterials[0].getDeformationPlane().strains
 columnZCurvature= columnStrains[1]
 
@@ -101,9 +100,11 @@ columnZCurvature= columnStrains[1]
 
 ## Load case definition.
 creep= modelSpace.newLoadPattern(name= 'creep')
-factor= 0.87835325
+factor= 0.87835325 # This value has no other meaning than reaching an almost zero
+                   # bending moment in the front end of the column.
 eleLoad= creep.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([column.tag])
+### set imposed strain: [epsilon, zCurvature]
 creepDeformation= xc.DeformationPlane(xc.Vector([0.0, -factor*columnZCurvature]))
 eleLoad.backEndDeformationPlane= creepDeformation
 eleLoad.frontEndDeformationPlane= creepDeformation
@@ -124,7 +125,6 @@ print('before beam M1= ', beamM1a/1e3)
 print('before beam M2= ', beamM2a/1e3)
 print('before column M1= ', columnM1a/1e3)
 print('before column M2= ', columnM2a/1e3)
-print('before beam epsilon= ', beamStrains[0], 'beam z curvature: ', beamStrains[1])
 print('before column epsilon= ', columnStrains[0], 'column z curvature: ', columnStrains[1])
 print('factor= ', factor)
 print('after column M1= ', columnM1b/1e3)

@@ -24,7 +24,7 @@ A= 4e-4 # bar area expressed in square meters
 Iz= 80.1e-8 # Cross section moment of inertia (m4)
 Iy= 8.49e-8 # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
-AT= 100 # Temperature increment (Celsius degrees)
+AT= 100 # Tqemperature increment (Celsius degrees)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -96,18 +96,20 @@ columnMz2a= column.getMz2
 columnMy1a= column.getMy1
 columnMy2a= column.getMy2
 
-# Get generalized strains.
-beamStrains= beam.physicalProperties.getVectorMaterials[0].getDeformationPlane().strains
+# Get generalized strains (epsilon, zCurvature, yCurvature).
 columnStrains= column.physicalProperties.getVectorMaterials[0].getDeformationPlane().strains
 columnZCurvature= columnStrains[1]
+
 
 # Assume that creep removes the stresses due to bending in the column.
 
 ## Load case definition.
 creep= modelSpace.newLoadPattern(name= 'creep')
-factor= 0.87835325
+factor= 0.87835325 # This value has no other meaning than reaching an almost zero
+                   # bending moment in the front end of the column.
 eleLoad= creep.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([column.tag])
+### set imposed strain: [epsilon, zCurvature, yCurvature]
 creepDeformation= xc.DeformationPlane(xc.Vector([0.0, -factor*columnZCurvature, 0.0]))
 eleLoad.backEndDeformationPlane= creepDeformation
 eleLoad.frontEndDeformationPlane= creepDeformation
@@ -128,7 +130,6 @@ print('before beam Mz1= ', beamMz1a/1e3)
 print('before beam Mz2= ', beamMz2a/1e3)
 print('before column Mz1= ', columnMz1a/1e3)
 print('before column Mz2= ', columnMz2a/1e3)
-print('before beam epsilon= ', beamStrains[0], 'beam z curvature: ', beamStrains[1], 'beam y curvature: ', beamStrains[2])
 print('before column epsilon= ', columnStrains[0], 'column z curvature: ', columnStrains[1], 'column y curvature: ', columnStrains[2])
 print('factor= ', factor)
 print('after column Mz1= ', columnMz1b/1e3)
