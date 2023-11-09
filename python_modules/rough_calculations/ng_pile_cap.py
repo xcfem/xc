@@ -33,6 +33,8 @@ class TwoPileCap(object):
     :ivar b: width of the pile cap.
     :ivar d: distance between piles.
     :ivar a: width of the supported column.
+    :ivar corbelLength: lenght of the corbel (minimum distance from the 
+                        pile contour to the pile cap contour).
     '''
 
     def __init__(self, pileDiameter, mainReinfDiameter, reinfSteel, h= None, b= None, l= None, d= None, a= 0.0, corbelLength= 0.25):
