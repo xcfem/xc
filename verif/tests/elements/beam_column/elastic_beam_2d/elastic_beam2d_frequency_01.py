@@ -89,3 +89,10 @@ if abs(error)<1e-3:
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayFEMesh()
+# oh.displayLoads()
+# #oh.displayReactions()
+# oh.displayIntForcDiag('M')
