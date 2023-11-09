@@ -31,9 +31,11 @@ bool (XC::SetBase::*isBodyIn)(const XC::Body *) const= &XC::SetBase::In;
 bool (XC::SetBase::*isUniformGridIn)(const XC::UniformGrid *) const= &XC::SetBase::In;
 class_<XC::SetBase, XC::SetBase *, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_init)
   .def("genMesh", &XC::SetBase::genMesh,"Triggers mesh generation.")
-  .def("getNodeTags",&XC::SetBase::getNodeTags,"return set of node tags.")
+  .def("getNodeTags",&XC::SetBase::getNodeTags,"return a set of node tags.")
+  .def("getNodeTagList",&XC::SetBase::getNodeTagsPy,"return a Python list containing the node tags.")
   .def("getIdNodeTags", make_function(&XC::SetBase::getIdNodeTags, return_internal_reference<>() ),"return ID containing the tags of the nodes.")
-  .def("getElementTags",&XC::SetBase::getElementTags,"return set of node tags.")
+  .def("getElementTags",&XC::SetBase::getElementTags,"return set of element tags.")
+  .def("getElementTagList",&XC::SetBase::getElementTagsPy,"return a Python list containing the element tags.")
   .def("getIdElementTags",make_function(&XC::SetBase::getIdElementTags, return_internal_reference<>() ),"return ID containing the tags of the elements.")
   .def("resetTributaries",&XC::SetBase::resetTributaries, "Assigns zero to the tributary lengths (or areas or volumes) of all the nodes in the set.")
   .def("computeTributaryLengths",&XC::SetBase::computeTributaryLengths, "Computethe tributary lengths for all the nodes in the set. WARNING: the tributary length is cumulative (to avoid discontinuities for the nodes at the set boundaries), so if you call it twice, you'll get this value doubled.")

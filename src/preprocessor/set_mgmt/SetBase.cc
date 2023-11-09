@@ -142,6 +142,34 @@ const XC::ID &XC::SetBase::getIdElementTags(void) const
     return retval;
   }
 
+//! @brief Returns the tags of the nodes in a Python list.
+boost::python::list XC::SetBase::getNodeTagsPy(void) const
+  {
+    boost::python::list retval;
+    const std::set<int> tmp= getNodeTags();
+    if(!tmp.empty())
+      {
+        size_t conta= 0;
+        for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++,conta++)
+          retval.append(*i);
+      }
+    return retval;
+  }
+
+//! @brief Returns the tags of the elements in a Python list.
+boost::python::list XC::SetBase::getElementTagsPy(void) const
+  {
+    boost::python::list retval;
+    const std::set<int> tmp= getElementTags();
+    if(!tmp.empty())
+      {
+        size_t conta= 0;
+        for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++,conta++)
+          retval.append(*i);
+      }
+    return retval;
+  }
+
 //! @brief Returns true if the all the elements connected to the given node
 //! belong to the set.
 bool XC::SetBase::interiorNode(const Node *n) const

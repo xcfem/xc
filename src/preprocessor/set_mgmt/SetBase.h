@@ -64,6 +64,8 @@ class SetBase: public EntMdlrBase
     virtual std::set<int> getElementTags(void) const= 0;
     const ID &getIdNodeTags(void) const;
     const ID &getIdElementTags(void) const;
+    boost::python::list getNodeTagsPy(void) const;
+    boost::python::list getElementTagsPy(void) const;
 
 
     bool interiorNode(const Node *) const;
