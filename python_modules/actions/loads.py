@@ -421,11 +421,27 @@ class StrainLoadOnShells(object):
     :ivar strain: strain (e.g.: alpha x deltaT for thermal expansion)
 
     '''
-    def __init__(self,name, xcSet,DOFstrain,strain):
-        self.name=name
-        self.xcSet=xcSet
-        self.strain=strain
-        self.DOFstrain=DOFstrain
+    def __init__(self,name, xcSet, DOFstrain, strain):
+        ''' Constructor.
+
+        :ivar name:  name identifying the load
+        :ivar xcSet: set that contains the elements
+        :ivar DOFstrain: list of degrees of freedom to which apply the strain 
+                         0: strain along local x
+                         1: strain along local y
+                         2: strain along local z
+        :ivar strain: strain (e.g.: alpha x deltaT for thermal expansion)
+        '''
+        self.name= name
+        self.xcSet= xcSet
+        self.strain= strain
+        if isinstance(DOFstrain, int):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; this syntax will be DEPRECATED; specify the list of degrees of freedom affected by the strain.')
+            self.DOFstrains= [DOFstrain]
+        else:
+            self.DOFstrains= DOFstrain
     
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
@@ -435,10 +451,11 @@ class StrainLoadOnShells(object):
         for e in self.xcSet.elements:
             eLoad= loadPattern.newElementalLoad("shell_strain_load")
             eLoad.elementTags= xc.ID([e.tag])
-            eLoad.setStrainComp(0,self.DOFstrain,self.strain)
-            eLoad.setStrainComp(1,self.DOFstrain,self.strain)
-            eLoad.setStrainComp(2,self.DOFstrain,self.strain)
-            eLoad.setStrainComp(3,self.DOFstrain,self.strain)
+            for dof in self.DOFstrains:
+                eLoad.setStrainComp(0, dof, self.strain)
+                eLoad.setStrainComp(1, dof, self.strain)
+                eLoad.setStrainComp(2, dof, self.strain)
+                eLoad.setStrainComp(3, dof, self.strain)
 
 class StrainLoadOnBeams(object):
     '''Strain load applied on the beam elements in xcSet
