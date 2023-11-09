@@ -51,8 +51,10 @@ def create_attribute_at_nodes(xcSet,attributeName,initialValue):
             nodeTag= n.tag
             if nodeTag not in touchedNodes:
                 touchedNodes[nodeTag]= 1
-                if(n.hasProp(attributeName)):
-                    lmsg.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
+                # 9/11/2023 LP: it's normal to redefine a property
+                # so there is no need of this message:
+                #if(n.hasProp(attributeName)):
+                    #lmsg.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
                 n.setProp(attributeName,initialValue)
             else:
                 touchedNodes[nodeTag]+=1
