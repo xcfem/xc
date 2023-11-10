@@ -75,7 +75,7 @@ class ProtoElementHandler: public PrepHandler
     ProtoElementHandler(Preprocessor *preprocessor);
     virtual int getDefaultTag(void) const= 0;
 
-    void setDefaultMaterial(const std::string &);
+    virtual void setDefaultMaterial(const std::string &);
     const std::string &getDefaultMaterial(void) const;
     void setNumSections(const int &);
     int getNumSections(void) const;

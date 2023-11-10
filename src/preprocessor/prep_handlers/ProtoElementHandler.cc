@@ -234,247 +234,247 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 //!   para solid analysis.
 //! - ZeroLength: Defines a zero length element (ZeroLength).
 //! - ZeroLengthSection: Defines a zero length element with section type material (ZeroLengthSection).
-XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int tag_elem)
+XC::Element *XC::ProtoElementHandler::create_element(const std::string &elementType,int tag_elem)
   {
     Element *retval= nullptr;
     const std::string errHeader= getClassName() + "::" + __FUNCTION__;
-    if((cmd == "truss")||(cmd=="Truss"))
+    if((elementType == "truss")||(elementType=="Truss"))
       {
-	if(cmd=="truss")
-	  deprecatedElementNameMsg(errHeader,cmd,"Truss");
+	if(elementType=="truss")
+	  deprecatedElementNameMsg(errHeader,elementType,"Truss");
         retval= new_element_dim_gen_mat<Truss>(tag_elem, dim_elem, get_ptr_material());
       }
-    else if((cmd == "truss_section")||(cmd == "TrussSection"))
+    else if((elementType == "truss_section")||(elementType == "TrussSection"))
       {
-	if(cmd=="truss_section")
-	  deprecatedElementNameMsg(errHeader,cmd,"TrussSection");
+	if(elementType=="truss_section")
+	  deprecatedElementNameMsg(errHeader,elementType,"TrussSection");
         retval=  new_element_dim_gen_mat<TrussSection>(tag_elem, dim_elem, get_ptr_material());
       }
-    else if((cmd == "corot_truss")||(cmd == "CorotTruss"))
+    else if((elementType == "corot_truss")||(elementType == "CorotTruss"))
       {
-	if(cmd=="corot_truss")
-	  deprecatedElementNameMsg(errHeader,cmd,"CorotTruss");
+	if(elementType=="corot_truss")
+	  deprecatedElementNameMsg(errHeader,elementType,"CorotTruss");
         retval=  new_element_dim_gen_mat<CorotTruss>(tag_elem, dim_elem, get_ptr_material());
       }
-    else if((cmd == "corot_truss_section")||(cmd == "CorotTrussSection"))
+    else if((elementType == "corot_truss_section")||(elementType == "CorotTrussSection"))
       {
-	if(cmd=="corot_truss_section")
-	  deprecatedElementNameMsg(errHeader,cmd,"CorotTrussSection");
+	if(elementType=="corot_truss_section")
+	  deprecatedElementNameMsg(errHeader,elementType,"CorotTrussSection");
         retval=  new_element_dim_gen_mat<CorotTrussSection>(tag_elem, dim_elem, get_ptr_material());
       }
-    else if((cmd == "spring")||(cmd == "Spring"))
+    else if((elementType == "spring")||(elementType == "Spring"))
       {
-	if(cmd=="spring")
-	  deprecatedElementNameMsg(errHeader,cmd,"Spring");
+	if(elementType=="spring")
+	  deprecatedElementNameMsg(errHeader,elementType,"Spring");
         retval=  new_element_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
       }
-    else if((cmd == "beam2d_02")||(cmd == "beam2d02"))
+    else if((elementType == "beam2d_02")||(elementType == "beam2d02"))
       {
-	if(cmd=="beam2d_02")
-	  deprecatedElementNameMsg(errHeader,cmd,"beam2d02");
+	if(elementType=="beam2d_02")
+	  deprecatedElementNameMsg(errHeader,elementType,"beam2d02");
         retval=  new_element<beam2d02>(tag_elem);
       }
-    else if((cmd == "beam2d_03")||(cmd == "beam2d03"))
+    else if((elementType == "beam2d_03")||(elementType == "beam2d03"))
       {
-	if(cmd=="beam2d_03")
-	  deprecatedElementNameMsg(errHeader,cmd,"beam2d03");
+	if(elementType=="beam2d_03")
+	  deprecatedElementNameMsg(errHeader,elementType,"beam2d03");
         retval=  new_element<beam2d03>(tag_elem);
       }
-    else if((cmd == "beam2d_04")||(cmd == "beam2d04"))
+    else if((elementType == "beam2d_04")||(elementType == "beam2d04"))
       {
-	if(cmd=="beam2d_04")
-	  deprecatedElementNameMsg(errHeader,cmd,"beam2d04");
+	if(elementType=="beam2d_04")
+	  deprecatedElementNameMsg(errHeader,elementType,"beam2d04");
         retval=  new_element<beam2d04>(tag_elem);
       }
-    else if((cmd == "beam3d_01")||(cmd == "beam3d01"))
+    else if((elementType == "beam3d_01")||(elementType == "beam3d01"))
       {
-	if(cmd=="beam3d_01")
-	  deprecatedElementNameMsg(errHeader,cmd,"beam3d01");
+	if(elementType=="beam3d_01")
+	  deprecatedElementNameMsg(errHeader,elementType,"beam3d01");
         retval=  new_element<beam3d01>(tag_elem);
       }
-    else if((cmd == "beam3d_02")||(cmd == "beam3d02"))
+    else if((elementType == "beam3d_02")||(elementType == "beam3d02"))
       {
-	if(cmd=="beam3d_02")
-	  deprecatedElementNameMsg(errHeader,cmd,"beam3d02");
+	if(elementType=="beam3d_02")
+	  deprecatedElementNameMsg(errHeader,elementType,"beam3d02");
         retval=  new_element<beam3d02>(tag_elem);
       }
-    else if((cmd == "elastic_beam_2d")||(cmd == "ElasticBeam2d"))
+    else if((elementType == "elastic_beam_2d")||(elementType == "ElasticBeam2d"))
       {
-	if(cmd=="elastic_beam_2d")
-	  deprecatedElementNameMsg(errHeader,cmd,"ElasticBeam2d");
+	if(elementType=="elastic_beam_2d")
+	  deprecatedElementNameMsg(errHeader,elementType,"ElasticBeam2d");
         retval=  new_element_mat_crd<ElasticBeam2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
       }
-    else if(cmd == "ElasticTimoshenkoBeam2d")
+    else if(elementType == "ElasticTimoshenkoBeam2d")
       {
         retval=  new_element_mat_crd<ElasticTimoshenkoBeam2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
       }
-    else if((cmd == "elastic_beam_3d")||(cmd == "ElasticBeam3d"))
+    else if((elementType == "elastic_beam_3d")||(elementType == "ElasticBeam3d"))
       {
-	if(cmd=="elastic_beam_3d")
-	  deprecatedElementNameMsg(errHeader,cmd,"ElasticBeam3d");
+	if(elementType=="elastic_beam_3d")
+	  deprecatedElementNameMsg(errHeader,elementType,"ElasticBeam3d");
         retval=  new_element_mat_crd<ElasticBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
       }
-    else if(cmd == "ElasticTimoshenkoBeam3d")
+    else if(elementType == "ElasticTimoshenkoBeam3d")
       {
         retval=  new_element_mat_crd<ElasticTimoshenkoBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
       }
-    else if((cmd == "beam_with_hinges_2d")||(cmd == "BeamWithHinges2d"))
+    else if((elementType == "beam_with_hinges_2d")||(elementType == "BeamWithHinges2d"))
       {
-	if(cmd=="beam_with_hinges_2d")
-	  deprecatedElementNameMsg(errHeader,cmd,"BeamWithHinges2d");
+	if(elementType=="beam_with_hinges_2d")
+	  deprecatedElementNameMsg(errHeader,elementType,"BeamWithHinges2d");
         retval=  new_element_gen_mat_crd<BeamWithHinges2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
       }
-    else if((cmd == "beam_with_hinges_3d")||(cmd == "BeamWithHinges3d"))
+    else if((elementType == "beam_with_hinges_3d")||(elementType == "BeamWithHinges3d"))
       {
-	if(cmd=="beam_with_hinges_3d")
-	  deprecatedElementNameMsg(errHeader,cmd,"BeamWithHinges3d");
+	if(elementType=="beam_with_hinges_3d")
+	  deprecatedElementNameMsg(errHeader,elementType,"BeamWithHinges3d");
         retval=  new_element_gen_mat_crd<BeamWithHinges3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
       }
-    else if((cmd == "disp_beam_column_2d")||(cmd == "DispBeamColumn2d"))
+    else if((elementType == "disp_beam_column_2d")||(elementType == "DispBeamColumn2d"))
       {
-	if(cmd=="disp_beam_column_2d")
-	  deprecatedElementNameMsg(errHeader,cmd,"DispBeamColumn2d");
+	if(elementType=="disp_beam_column_2d")
+	  deprecatedElementNameMsg(errHeader,elementType,"DispBeamColumn2d");
         retval=  new_element_ns_gen_mat_crd_integ<DispBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(), get_ptr_beam_integrator());
       }
-    else if((cmd == "disp_beam_column_3d")||(cmd == "DispBeamColumn3d"))
+    else if((elementType == "disp_beam_column_3d")||(elementType == "DispBeamColumn3d"))
       {
-	if(cmd=="disp_beam_column_3d")
-	  deprecatedElementNameMsg(errHeader,cmd,"DispBeamColumn3d");
+	if(elementType=="disp_beam_column_3d")
+	  deprecatedElementNameMsg(errHeader,elementType,"DispBeamColumn3d");
         retval=  new_element_ns_gen_mat_crd_integ<DispBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(), get_ptr_beam_integrator());
       }
-    else if((cmd == "nl_beam_column_2d")||(cmd == "NLBeamColumn2d"))
+    else if((elementType == "nl_beam_column_2d")||(elementType == "NLBeamColumn2d"))
       {
-	if(cmd=="nl_beam_column_2d")
-	  deprecatedElementNameMsg(errHeader,cmd,"NLBeamColumn2d");
+	if(elementType=="nl_beam_column_2d")
+	  deprecatedElementNameMsg(errHeader,elementType,"NLBeamColumn2d");
         retval=  new_element_ns_gen_mat_crd<NLBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
       }
-    else if((cmd == "nl_beam_column_3d")||(cmd == "NLBeamColumn3d"))
+    else if((elementType == "nl_beam_column_3d")||(elementType == "NLBeamColumn3d"))
       {
-	if(cmd=="nl_beam_column_3d")
-	  deprecatedElementNameMsg(errHeader,cmd,"NLBeamColumn3d");
+	if(elementType=="nl_beam_column_3d")
+	  deprecatedElementNameMsg(errHeader,elementType,"NLBeamColumn3d");
         retval=  new_element_ns_gen_mat_crd<NLBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
       }
-    else if((cmd == "force_beam_column_2d")||(cmd == "ForceBeamColumn2d"))
+    else if((elementType == "force_beam_column_2d")||(elementType == "ForceBeamColumn2d"))
       {
-	if(cmd=="force_beam_column_2d")
-	  deprecatedElementNameMsg(errHeader,cmd,"ForceBeamColumn2d");
+	if(elementType=="force_beam_column_2d")
+	  deprecatedElementNameMsg(errHeader,elementType,"ForceBeamColumn2d");
         retval=  new_element_ns_gen_mat_crd_integ<ForceBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
       }
-    else if((cmd == "force_beam_column_3d")||(cmd == "ForceBeamColumn3d"))
+    else if((elementType == "force_beam_column_3d")||(elementType == "ForceBeamColumn3d"))
       {
-	if(cmd=="force_beam_column_3d")
-	  deprecatedElementNameMsg(errHeader,cmd,"ForceBeamColumn3d");
+	if(elementType=="force_beam_column_3d")
+	  deprecatedElementNameMsg(errHeader,elementType,"ForceBeamColumn3d");
         retval=  new_element_ns_gen_mat_crd_integ<ForceBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
       }
-    else if((cmd == "zero_length")||(cmd == "ZeroLength"))
+    else if((elementType == "zero_length")||(elementType == "ZeroLength"))
       {
-	if(cmd=="zero_length")
-	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLength");
+	if(elementType=="zero_length")
+	  deprecatedElementNameMsg(errHeader,elementType,"ZeroLength");
         retval=  new_element_dim_gen_mat_dir<ZeroLength>(tag_elem, dim_elem, get_ptr_material(),dir);
       }
-    else if((cmd == "zero_length_contact_2d")||(cmd == "ZeroLengthContact2D"))
+    else if((elementType == "zero_length_contact_2d")||(elementType == "ZeroLengthContact2D"))
       {
-	if(cmd=="zero_length_contact_2d")
-	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLengthContact2D");
+	if(elementType=="zero_length_contact_2d")
+	  deprecatedElementNameMsg(errHeader,elementType,"ZeroLengthContact2D");
         retval=  new_element<ZeroLengthContact2D>(tag_elem);
       }
-    else if((cmd == "zero_length_contact_3d")||(cmd == "ZeroLengthContact3D"))
+    else if((elementType == "zero_length_contact_3d")||(elementType == "ZeroLengthContact3D"))
       {
-	if(cmd=="zero_length_contact_3d")
-	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLengthContact3D");
+	if(elementType=="zero_length_contact_3d")
+	  deprecatedElementNameMsg(errHeader,elementType,"ZeroLengthContact3D");
         retval=  new_element<ZeroLengthContact3D>(tag_elem);
       }
-    else if((cmd == "zero_length_section")||(cmd == "ZeroLengthSection"))
+    else if((elementType == "zero_length_section")||(elementType == "ZeroLengthSection"))
       {
-	if(cmd=="zero_length_section")
-	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLengthSection");
+	if(elementType=="zero_length_section")
+	  deprecatedElementNameMsg(errHeader,elementType,"ZeroLengthSection");
         retval=  new_element_dim_gen_mat<ZeroLengthSection>(tag_elem, dim_elem, get_ptr_material());
       }
-    else if((cmd == "shell_mitc4")||(cmd == "ShellMITC4"))
+    else if((elementType == "shell_mitc4")||(elementType == "ShellMITC4"))
       {
-	if(cmd=="shell_mitc4")
-	  deprecatedElementNameMsg(errHeader,cmd,"ShellMITC4");
+	if(elementType=="shell_mitc4")
+	  deprecatedElementNameMsg(errHeader,elementType,"ShellMITC4");
         retval= new_element_mat<ShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if((cmd == "shell_nl")||(cmd == "ShellMITC9"))
+    else if((elementType == "shell_nl")||(elementType == "ShellMITC9"))
       {
-	if(cmd=="shell_nl")
-	  deprecatedElementNameMsg(errHeader,cmd,"ShellMITC9");
+	if(elementType=="shell_nl")
+	  deprecatedElementNameMsg(errHeader,elementType,"ShellMITC9");
         retval= new_element_mat<ShellMITC9,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if(cmd == "ShellNLDKGQ")
+    else if(elementType == "ShellNLDKGQ")
       {
         retval= new_element_mat<ShellNLDKGQ,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if(cmd == "ASDShellQ4")
+    else if(elementType == "ASDShellQ4")
       {
         retval= new_element_mat<ASDShellQ4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if((cmd == "quad4n")||(cmd == "FourNodeQuad"))
+    else if((elementType == "quad4n")||(elementType == "FourNodeQuad"))
       {
-	if(cmd=="quad4n")
-	  deprecatedElementNameMsg(errHeader,cmd,"FourNodeQuad");
+	if(elementType=="quad4n")
+	  deprecatedElementNameMsg(errHeader,elementType,"FourNodeQuad");
         retval= new_element_mat<FourNodeQuad,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if(cmd == "NineFourNodeQuadUP")
+    else if(elementType == "NineFourNodeQuadUP")
       {
         retval= new_element_mat<NineFourNodeQuadUP, NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if(cmd == "EnhancedQuad")
+    else if(elementType == "EnhancedQuad")
       {
         retval= new_element_mat<EnhancedQuad,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if((cmd == "tri31")||(cmd == "Tri31"))
+    else if((elementType == "tri31")||(elementType == "Tri31"))
       {
-	if(cmd=="tri31")
-	  deprecatedElementNameMsg(errHeader,cmd,"Tri31");
+	if(elementType=="tri31")
+	  deprecatedElementNameMsg(errHeader,elementType,"Tri31");
         retval= new_element_mat<Tri31,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if((cmd == "brick")||(cmd == "Brick"))
+    else if((elementType == "brick")||(elementType == "Brick"))
       {
-	if(cmd=="brick")
-	  deprecatedElementNameMsg(errHeader,cmd,"Brick");
+	if(elementType=="brick")
+	  deprecatedElementNameMsg(errHeader,elementType,"Brick");
         retval= new_element_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if((cmd == "quad_surface_load")||(cmd == "QuadSurfaceLoad"))
+    else if((elementType == "quad_surface_load")||(elementType == "QuadSurfaceLoad"))
       {
         retval= new_element<QuadSurfaceLoad>(tag_elem);
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if((cmd == "brick_surface_load")||(cmd == "BrickSurfaceLoad"))
+    else if((elementType == "brick_surface_load")||(elementType == "BrickSurfaceLoad"))
       {
         retval= new_element<BrickSurfaceLoad>(tag_elem);
         if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    // else if(cmd == "TotalLagrangianFD8NodeBrick")
+    // else if(elementType == "TotalLagrangianFD8NodeBrick")
     //   {
     //     retval= new_element_mat<TotalLagrangianFD8NodeBrick,NDMaterial>(tag_elem, get_ptr_material());
     //     if(!retval)
-    // 	  materialNotSuitableMsg(errHeader,material_name,cmd);
+    // 	  materialNotSuitableMsg(errHeader,material_name,elementType);
     //   }
     else
       std::cerr << Color::red << errHeader
-		<< "; element type: " << cmd << " unknown."
+		<< "; element type: '" << elementType << "' unknown."
 		<< Color::def << std::endl;
     return retval;
   }

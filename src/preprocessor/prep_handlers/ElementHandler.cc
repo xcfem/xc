@@ -69,14 +69,31 @@ XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operat
 //! @brief Defines seed element.
 void XC::ElementHandler::SeedElemHandler::add(Element *e)
   {
+    // This function is called by ProtoElementHandler::newElement.
     free();
     assert(e);
-    seed= e;
+    seed= e; // Assign seed element.
   }
 
 //! @brief Destructor.
 XC::ElementHandler::SeedElemHandler::~SeedElemHandler(void)
   { clearAll(); }
+
+//! @brief Sets the default material name for new elements.
+//! @param name: name of the material.
+void XC::ElementHandler::SeedElemHandler::setDefaultMaterial(const std::string &name)
+  {
+    if(name!=this->getDefaultMaterial()) // If really changes.
+      {
+	if(seed) // If we have a seed element already
+	  {
+	    // The seed could be no longer valid with the new material so
+	    // we remove it and it will be create in getSeeElement if needed.
+	    free();
+	  }
+	ProtoElementHandler::setDefaultMaterial(name); //update the material name-
+      }
+  }
 
 void XC::ElementHandler::SeedElemHandler::clearAll(void)
   { free(); }
@@ -94,11 +111,38 @@ int XC::ElementHandler::SeedElemHandler::getDefaultTag(void) const
     return retval;
   }
 
+//! @brief Return a pointer to the seed element.
+XC::Element *XC::ElementHandler::SeedElemHandler::getSeedElement(void)
+  {
+    if(!seed)
+      {
+	if(!this->elementType.empty()) // It element type is defined.
+	  {
+            ID nodeTags; // Empty int vector.
+            ProtoElementHandler::newElement(this->elementType, nodeTags);
+	  }
+      }
+    return seed;
+  }
+
+//! @brief Return a pointer to the seed element.
+const XC::Element *XC::ElementHandler::SeedElemHandler::getSeedElement(void) const
+  {
+    if(seed)
+      return seed;
+    else
+      {
+	SeedElemHandler *this_no_const= const_cast<SeedElemHandler *>(this);
+	return this_no_const->getSeedElement();
+      }
+  }
+
 //! @brief Create a new seed element.
 //! @param type: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticTimoshenkoBeam2d', 'ElasticBeam3d', 'ElasticTimoshenkoBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
 XC::Element *XC::ElementHandler::SeedElemHandler::newElement(const std::string &type)
   {
     ID nodeTags; // Empty int vector.
+    this->elementType= type;
     return ProtoElementHandler::newElement(type, nodeTags);
   }
 
@@ -110,6 +154,7 @@ XC::Element *XC::ElementHandler::SeedElemHandler::newElement(const std::string &
     //           << "; seed element does not need to initialize its nodes."
     //           << " Remove the node tags parameter."
     //           << Color::def << std::endl;
+    this->elementType= type;
     return ProtoElementHandler::newElement(type, nodeTags);
   }
 

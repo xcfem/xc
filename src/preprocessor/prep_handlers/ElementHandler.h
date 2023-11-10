@@ -44,6 +44,7 @@ class ElementHandler: public ProtoElementHandler
       {
       private:
         Element *seed;
+	std::string elementType;
         SeedElemHandler(const SeedElemHandler &);
         SeedElemHandler &operator=(const SeedElemHandler &);
         void free(void);
@@ -54,10 +55,9 @@ class ElementHandler: public ProtoElementHandler
         SeedElemHandler(Preprocessor *preprocessor)
           : ProtoElementHandler(preprocessor), seed(nullptr) {}
         ~SeedElemHandler(void);
-	Element *getSeedElement(void)
-          { return seed; }
-	const Element *getSeedElement(void) const
-          { return seed; }
+        virtual void setDefaultMaterial(const std::string &);
+	Element *getSeedElement(void);
+	const Element *getSeedElement(void) const;
         int getDefaultTag(void) const;
         void clearAll(void);
         Element *newElement(const std::string &);
