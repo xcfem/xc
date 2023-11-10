@@ -52,8 +52,7 @@ class ElementHandler: public ProtoElementHandler
       protected:
         void add(Element *);
       public:
-        SeedElemHandler(Preprocessor *preprocessor)
-          : ProtoElementHandler(preprocessor), seed(nullptr) {}
+        SeedElemHandler(Preprocessor *preprocessor);
         ~SeedElemHandler(void);
         virtual void setDefaultMaterial(const std::string &);
 	Element *getSeedElement(void);

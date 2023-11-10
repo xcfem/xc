@@ -54,14 +54,19 @@ void XC::ElementHandler::SeedElemHandler::alloc(Element *e)
     e= e; // Element allocated elsewhere.
   }
 
+//! @brief Default constructor.
+XC::ElementHandler::SeedElemHandler::SeedElemHandler(Preprocessor *preprocessor)
+  : ProtoElementHandler(preprocessor), seed(nullptr), elementType() {}
+
 //! @brief Copy constructor.
 XC::ElementHandler::SeedElemHandler::SeedElemHandler(const SeedElemHandler &other)
-  : ProtoElementHandler(other), seed(other.seed->getCopy()) {}
+  : ProtoElementHandler(other), seed(other.seed->getCopy()), elementType(other.elementType) {}
 
 //! @brief Assignment operator.
 XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operator=(const SeedElemHandler &other)
   {
     ProtoElementHandler::operator=(other);
+    this->elementType= other.elementType;
     seed= other.seed->getCopy();
     return *this;
   }
