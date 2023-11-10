@@ -304,6 +304,10 @@ class PredefinedSpace(object):
         self.preprocessor.getElementHandler.defaultMaterial= material.name
         self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial= material.name
 
+    def getDefaultMaterials(self):
+        ''' Return the default materials for the element handler and the seed element handler.'''
+        return [self.preprocessor.getElementHandler.defaultMaterial, self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial]
+
     def setDefaultCoordTransf(self, coordinateTransformation):
         ''' Assigns the coordinate transformation to be used when creating 
             new elements.
