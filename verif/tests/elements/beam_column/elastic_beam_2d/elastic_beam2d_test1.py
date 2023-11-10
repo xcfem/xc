@@ -42,8 +42,6 @@ nodes= preprocessor.getNodeHandler
 ## Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-# Materials definition
-scc= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,alpha= Ay/A)
 
 ## Problem geometry
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -56,15 +54,18 @@ ln.nDiv= 2
 
 ## Mesh generation
 
-## Geometric transformations
+### Materials definition
+scc= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,alpha= Ay/A)
+modelSpace.setDefaultMaterial(scc)
+
+### Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
+modelSpace.setDefaultCoordTransf(lin)
 
 ## Seed element
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 2 # Bars defined in a two-dimensional space.
-seedElemHandler.defaultMaterial= scc.name
-seedElemHandler.defaultTransformation= lin.name
-beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ElasticBeam2d")
 beam2d.h= h
 
 xcTotalSet= preprocessor.getSets.getSet("total")
