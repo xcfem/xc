@@ -528,7 +528,7 @@ class PredefinedSpace(object):
         '''
         time_series.plot_time_series(timeSeries= timeSeries, timeIncrement= timeIncrement, timeUnits= timeUnits)
         
-    def newLoadPattern(self, name: str, lpType= 'default'):
+    def newLoadPattern(self, name:str, lpType= 'default'):
         ''' Creates a times series -modulation of the load
             in time-.
 
@@ -542,17 +542,22 @@ class PredefinedSpace(object):
         lp= lPatterns.newLoadPattern(lpType, name)
         return lp
 
-    def newLoadCombination(self, name:str, loadCaseExpression:str):
-        '''Defines a new combination and add it to the domain.
+    def removeLoadPattern(self, name:str):
+        ''' Remove the load pattern with the given name.
 
-           :param name: name of the load combination.
-           :param loadCaseExpression: expression that defines de load case as a
-                                      combination of previously defined actions
-                                      e.g. '1.0*GselfWeight+1.0*GearthPress'
+        :param name: name of the new time load pattern.
         '''
-        combs= self.getLoadHandler().getLoadCombinations
-        return combs.newLoadCombination(name,loadCaseExpression)
-        
+        currentLPName= self.getCurrentLoadPatternName()
+        if(currentLPName==name):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; can't remove load pattern: '"+str(name) + "' because it is the current load pattern.")
+        else:
+            self.removeLoadCaseFromDomain(name)
+            lPatterns= self.getLoadHandler().getLoadPatterns
+            lp= lPatterns.removeLoadPattern(name)
+        return lp
+    
     def getCurrentLoadPatternName(self):
         ''' Return the current load pattern.'''
         return self.getLoadHandler().getLoadPatterns.currentLoadPattern
@@ -576,6 +581,27 @@ class PredefinedSpace(object):
         lpName= self.getCurrentLoadPatternName()
         return self.getLoadPattern(lpName)
 
+    def newLoadCombination(self, name:str, loadCaseExpression:str):
+        '''Defines a new combination and add it to the domain.
+
+           :param name: name of the load combination.
+           :param loadCaseExpression: expression that defines de load case as a
+                                      combination of previously defined actions
+                                      e.g. '1.0*GselfWeight+1.0*GearthPress'
+        '''
+        combs= self.getLoadHandler().getLoadCombinations
+        return combs.newLoadCombination(name,loadCaseExpression)
+        
+    def removeLoadCombination(sefl, name:str):
+        ''' Remove the load combination with the given name. Returns true if
+            the combination has been succesfully removed.
+
+        :param name: name of the load combination.
+        '''
+        self.removeLoadCaseFromDomain(name)
+        combs= self.getLoadHandler().getLoadCombinations
+        return combs.remove(name)
+    
     def newSPConstraint(self, nodeTag: int, dof: int, prescribedDisp= 0.0):
         ''' Prescribe displacement for node DOFs.
 

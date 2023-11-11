@@ -75,8 +75,9 @@ const std::string &XC::LoadCombinationGroup::getNombreLoadCombination(const Load
   }
 
 //! @brief Removes the combination from the domain.
-void XC::LoadCombinationGroup::remove(const std::string &comb_code)
+bool XC::LoadCombinationGroup::remove(const std::string &comb_code)
   {
+    bool retval= false;
     LoadCombination *comb= nullptr;
     iterator icomb= find(comb_code);
     if(icomb!=end())
@@ -87,11 +88,13 @@ void XC::LoadCombinationGroup::remove(const std::string &comb_code)
         delete comb;
         (*icomb).second= nullptr;
         erase(icomb);
+	retval= true;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load combination: '" 
                 << comb_code << "' not found." << std::endl;
+    return retval;
   }
 
 //! @brief Adds the combination to the domain.

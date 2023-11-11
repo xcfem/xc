@@ -100,6 +100,7 @@ class MapLoadPatterns: public LoadHandlerMember
     inline void setCurrentLoadPattern(const std::string &nmb)
       { lpcode= nmb; }
     LoadPattern *newLoadPattern(const std::string &,const std::string &);
+    bool removeLoadPattern(const std::string &);
     void addToDomain(const std::string &);
     void removeFromDomain(const std::string &);
     void removeAllFromDomain(void);

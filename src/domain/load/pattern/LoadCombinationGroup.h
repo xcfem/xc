@@ -59,7 +59,7 @@ class LoadCombinationGroup: public LoadHandlerMember, public LoadCombinationMap
     ~LoadCombinationGroup(void);
 
     boost::python::list getKeys(void) const;
-    void remove(const std::string &);
+    bool remove(const std::string &);
     void clear(void);
 
     XC::LoadCombination *newLoadCombination(const std::string &,const std::string &);

@@ -296,6 +296,30 @@ XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &type,con
     return retval;
   }
 
+//! @brief Remove the load pattern with the given name.
+bool XC::MapLoadPatterns::removeLoadPattern(const std::string &cod_lp)
+  {
+    bool retval= false;
+    const_iterator ilp= loadpatterns.find(cod_lp);
+    if(ilp!=end())
+      {
+        LoadPattern *tmp= ilp->second;
+	if(tmp)
+	  {
+	    delete tmp;
+	    tmp= nullptr;
+	  }
+	loadpatterns.erase(ilp);
+	retval= true;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; load pattern: '" << cod_lp
+	        << "' not found. Command ignored."
+	        << std::endl;
+    return retval;
+  }
+
 //! @brief Clears all the load patterns.
 void XC::MapLoadPatterns::clear_time_series(void)
   {
