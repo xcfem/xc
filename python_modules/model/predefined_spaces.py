@@ -549,14 +549,15 @@ class PredefinedSpace(object):
         '''
         retval= False
         currentLPName= self.getCurrentLoadPatternName()
-        if(currentLPName==name):
+        if(currentLPName==name): # if it's the current load pattern.
+            # Issue a warning.
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+"; can't remove load pattern: '"+str(name) + "' because it is the current load pattern.")
-        else:
-            self.removeLoadCaseFromDomain(name)
-            lPatterns= self.getLoadHandler().getLoadPatterns
-            retval= lPatterns.removeLoadPattern(name)
+            lmsg.warning(className+'.'+methodName+"; load pattern: '"+str(name) + "' was the current load pattern. Removing anyway.")
+            self.setCurrentLoadPattern('') # No current load pattern anymore
+        self.removeLoadCaseFromDomain(name)
+        lPatterns= self.getLoadHandler().getLoadPatterns
+        retval= lPatterns.removeLoadPattern(name)
         return retval
     
     def getCurrentLoadPatternName(self):
@@ -602,7 +603,7 @@ class PredefinedSpace(object):
         self.removeLoadCaseFromDomain(name)
         combs= self.getLoadHandler().getLoadCombinations
         return combs.remove(name)
-    
+
     def newSPConstraint(self, nodeTag: int, dof: int, prescribedDisp= 0.0):
         ''' Prescribe displacement for node DOFs.
 
