@@ -547,6 +547,7 @@ class PredefinedSpace(object):
 
         :param name: name of the new time load pattern.
         '''
+        retval= False
         currentLPName= self.getCurrentLoadPatternName()
         if(currentLPName==name):
             className= type(self).__name__
@@ -555,8 +556,8 @@ class PredefinedSpace(object):
         else:
             self.removeLoadCaseFromDomain(name)
             lPatterns= self.getLoadHandler().getLoadPatterns
-            lp= lPatterns.removeLoadPattern(name)
-        return lp
+            retval= lPatterns.removeLoadPattern(name)
+        return retval
     
     def getCurrentLoadPatternName(self):
         ''' Return the current load pattern.'''
@@ -592,7 +593,7 @@ class PredefinedSpace(object):
         combs= self.getLoadHandler().getLoadCombinations
         return combs.newLoadCombination(name,loadCaseExpression)
         
-    def removeLoadCombination(sefl, name:str):
+    def removeLoadCombination(self, name:str):
         ''' Remove the load combination with the given name. Returns true if
             the combination has been succesfully removed.
 
