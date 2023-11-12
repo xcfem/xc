@@ -17,3 +17,6 @@ This directory contains the classes that define the finite elements available in
 - [Inerters everywhere](https://portwooddigital.com/2021/11/13/inerters-everywhere/)
 - [Stop Hogging All the RAM](https://portwooddigital.com/2022/11/16/stop-hogging-all-the-ram/)
 - [Efficient, three-dimensional, four-node, macroscopic element for RC walls with shear-flexural interaction](https://kkolozvari.github.io/E-SFI-MVLEM-3D/)
+
+### Inerters and tuned mass dampers.
+- [Tuned Damper Models](https://portwooddigital.com/2023/11/11/tuned-damper-models/)
