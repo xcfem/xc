@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Base classes for pile foundations.'''
 
 from __future__ import print_function
 

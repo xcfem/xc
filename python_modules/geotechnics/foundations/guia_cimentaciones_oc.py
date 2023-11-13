@@ -112,8 +112,14 @@ class PileFoundation(pile.CircularPile):
         :param alphaKh_Z: coefficient to be applied to the vertical stiffness of
                           a single pile in Z direction
         '''
-        self.computeTributaryLengths(initialGeometry= False)
-        lstNodPile= self.getNodeZs()
+        # Pile surface factor.
+        if self.getDiameter() <= 1:
+            coefKh=1
+        else:
+            coefKh=self.getDiameter()
+        self.computeTributaryLengths(initialGeometry= False) # Tributary lengths.
+        lstNodPile= self.getNodeZs() # node identifiers and depths.
+        
         soilsProp= self.soilLayers.soilProfile
         if soilsProp[-1][0] >= lstNodPile[-1][1]:
             soilsProp[-1][0]=lstNodPile[-1][1]-1
@@ -123,10 +129,6 @@ class PileFoundation(pile.CircularPile):
             zval=lstNodPile[0][1]
         #Springs horizontal stiffness
         z=lstNodPile[0][1]
-        if self.getDiameter() <= 1:
-            coefKh=1
-        else:
-            coefKh=self.getDiameter()
         retval= dict()
         for sp in soilsProp:
             zBottom= sp[0]
