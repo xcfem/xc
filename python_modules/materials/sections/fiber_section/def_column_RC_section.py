@@ -309,49 +309,61 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         '''
         self.shReinf.latexReport(width= 2.0*self.Rext, os= os)
         
-    def defElasticSection1d(self, preprocessor, overrideRho= None):
+    def defElasticSection1d(self, preprocessor, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for truss analysis.
 
         :param preprocessor: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the concrete elastic
+                                modulus to simulate the effect of cracking,
+                                normally between 1.0 and 7.0.
         '''
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
-        return super().defElasticSection1d(preprocessor, material= mat, overrideRho= overrideRho)
+        return super().defElasticSection1d(preprocessor, material= mat, overrideRho= overrideRho, reductionFactor= reductionFactor)
     
-    def defElasticSection3d(self, preprocessor, overrideRho= None):
+    def defElasticSection3d(self, preprocessor, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for 3D beam analysis
 
         :param preprocessor: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the concrete elastic
+                                modulus to simulate the effect of cracking,
+                                normally between 1.0 and 7.0.
         '''
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
-        return super().defElasticSection3d(preprocessor, material= mat, overrideRho= overrideRho)
+        return super().defElasticSection3d(preprocessor, material= mat, overrideRho= overrideRho, reductionFactor= reductionFactor)
     
-    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None, reductionFactor= 1.0):
         '''elastic section appropriate for 3D beam analysis, including shear 
            deformations
 
         :param preprocessor: XC preprocessor for the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the concrete elastic
+                                modulus to simulate the effect of cracking,
+                                normally between 1.0 and 7.0.
          '''
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
-        return super().defElasticShearSection3d(preprocessor, material= mat, overrideRho= overrideRho)
+        return super().defElasticShearSection3d(preprocessor, material= mat, overrideRho= overrideRho, reductionFactor= reductionFactor)
     
-    def defElasticSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
+    def defElasticSection2d(self, preprocessor, majorAxis= True, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for 2D beam analysis
 
         :param preprocessor: XC preprocessor for the finite element problem.
         :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the concrete elastic
+                                modulus to simulate the effect of cracking,
+                                normally between 1.0 and 7.0.
         '''
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
-        return super().defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
+        return super().defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho, reductionFactor= reductionFactor)
         
-    def defElasticShearSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
+    def defElasticShearSection2d(self, preprocessor, majorAxis= True, overrideRho= None, reductionFactor= 1.0):
         '''elastic section appropriate for 2D beam analysis, including 
            shear deformations.
 
@@ -359,6 +371,9 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the concrete elastic
+                                modulus to simulate the effect of cracking,
+                                normally between 1.0 and 7.0.
         '''
         mat= self.getElasticMaterialData(overrideRho= overrideRho)
-        return super().defElasticShearSection2d(preprocessor, material= mat, majorAxis= True, overrideRho= overrideRho)
+        return super().defElasticShearSection2d(preprocessor, material= mat, majorAxis= True, overrideRho= overrideRho, reductionFactor= reductionFactor)

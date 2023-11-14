@@ -251,7 +251,7 @@ class SectionProperties(object):
         '''
         return typical_materials.defElasticMaterial(preprocessor, self.respVzName(), self.getShearStiffnessZ(G))
 
-    def defElasticSection3d(self, preprocessor, material, overrideRho= None):
+    def defElasticSection3d(self, preprocessor, material, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for 3D beam analysis
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -259,6 +259,9 @@ class SectionProperties(object):
                          and G() the shear modulus).
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -272,14 +275,17 @@ class SectionProperties(object):
                 rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name, A= csp.A,E= csp.E,G= csp.G, Iz= csp.Iz, Iy= csp.Iy, J= csp.J, linearRho= rho)
+                E= csp.E
+                if(reductionFactor!= 1.0):
+                    E/= reductionFactor
+                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name, A= csp.A,E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy, J= csp.J, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticShearSection3d(self, preprocessor, material, overrideRho= None):
+    def defElasticShearSection3d(self, preprocessor, material, overrideRho= None, reductionFactor= 1.0):
         '''elastic section appropriate for 3D beam analysis, including shear 
            deformations
 
@@ -288,6 +294,9 @@ class SectionProperties(object):
                          and G() the shear modulus)  
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -301,14 +310,17 @@ class SectionProperties(object):
                 rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= csp.A, E= csp.E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy,J= csp.J, alpha_y= csp.AlphaY, alpha_z= csp.AlphaZ, linearRho= rho)
+                E= csp.E
+                if(reductionFactor!= 1.0):
+                    E/= reductionFactor
+                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= csp.A, E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy,J= csp.J, alpha_y= csp.AlphaY, alpha_z= csp.AlphaZ, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
 
-    def defElasticSection1d(self, preprocessor, material, overrideRho= None):
+    def defElasticSection1d(self, preprocessor, material, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for truss analysis.
 
         :param preprocessor: preprocessor object.
@@ -316,6 +328,9 @@ class SectionProperties(object):
                              (for which E is the Young's modulus)
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -329,14 +344,17 @@ class SectionProperties(object):
                 rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,A= csp.A, E= csp.E, linearRho= rho)
+                E= csp.E
+                if(reductionFactor!= 1.0):
+                    E/= reductionFactor
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,A= csp.A, E= E, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
+    def defElasticSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
@@ -345,6 +363,9 @@ class SectionProperties(object):
         :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -361,14 +382,17 @@ class SectionProperties(object):
                 rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A,E= csp.E, I= I, linearRho= rho)
+                E= csp.E
+                if(reductionFactor!= 1.0):
+                    E/= reductionFactor
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A,E= E, I= I, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
+    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None, reductionFactor= 1.0):
         '''elastic section appropriate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
@@ -377,6 +401,9 @@ class SectionProperties(object):
         :param majorAxis: true if bending occurs in the section major axis.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -393,7 +420,10 @@ class SectionProperties(object):
                 rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,csp.A,E= csp.E, G= csp.G, I= I, alpha= csp.Alpha, linearRho= rho)
+                E= csp.E
+                if(reductionFactor!= 1.0):
+                    E/= reductionFactor
+                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,csp.A,E= E, G= csp.G, I= I, alpha= csp.Alpha, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -680,7 +710,7 @@ class RectangularSection(SectionProperties):
         retval.append(geom.Pos2d(-self.b/2.0, self.h/2.0))
         return retval
     
-    def defElasticMembranePlateSection(self, preprocessor, material, overrideRho= None):
+    def defElasticMembranePlateSection(self, preprocessor, material, overrideRho= None, reductionFactor= 1.0):
         '''Elastic membrane plate section appropriate for shell analysis.
 
         :param preprocessor: preprocessor object.
@@ -688,6 +718,12 @@ class RectangularSection(SectionProperties):
                          E is the Young's modulus nu the Poisson's ratio).
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -700,7 +736,10 @@ class RectangularSection(SectionProperties):
                 rho= material.rho*self.h
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticMembranePlateSection(preprocessor,name= self.name, E= material.E, nu= material.nu, rho= rho, h= self.h)
+                E= material.E
+                if(reductionFactor!= 1.0):
+                    E/= reductionFactor
+                self.xc_material= typical_materials.defElasticMembranePlateSection(preprocessor,name= self.name, E= E, nu= material.nu, rho= rho, h= self.h)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

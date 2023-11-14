@@ -1129,7 +1129,7 @@ class PredefinedSpace(object):
             lp= self.addLoadCaseToDomain(lpName)
             lp.gammaF= factor
                 
-    def createSelfWeightLoad(self,xcSet: xc.Set, gravityVector):
+    def createSelfWeightLoad(self, xcSet: xc.Set, gravityVector):
         ''' Creates the self-weight load on the elements.
 
         :param xcSet: set with the elements to load.
