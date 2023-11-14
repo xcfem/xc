@@ -10,6 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
+import functools
 import sys
 import geom
 from materials.ehe import EHE_materials
@@ -917,8 +918,39 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
 #      | _ \ || / _| / / | | ' \/ _` |
 #      |___/\_,_\__|_\_\_|_|_||_\__, |
 #                               |___/ 
+# 
+# Check buckling approximate method. Straight combined bending (clause 43.5.1 of EHE-08).
 
-# Approximate method. Straight combined bending (clause 43.5.1 of EHE-08).
+def get_buckling_e1_e2_eccentricities(Nd:float, MdMax:float, MdMin:float):
+    ''' Compute the e1 and e2 eccentricities as defined in the clause 43.1.2 of
+        EHE-08.
+
+    :param Nd: design axial force.
+    :param MdMax: maximum bending moment on the member to be checked.
+    :param MdMin: minimum bending moment on the member to be checked.
+    '''
+    sign = functools.partial(math.copysign, 1)
+    if(Nd>0.0):
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= methodName+"; member is in tension; no need to perform buckling check.\n"
+        lmsg.error(errMsg)
+    if(MdMax<MdMin): # Make sure that MdMax>MdMin
+        MdMax, MdMin= MdMin, MdMax
+    absMdMax= abs(MdMax)
+    absMdMin= abs(MdMin)
+    if(absMdMax>absMdMin):
+        e2= -absMdMax/Nd # e2>0
+        if(sign(MdMax)==sign(MdMin)):
+            e1= -absMdMin/Nd  # e1>0
+        else:
+            e1= absMdMin/Nd # e1<0
+    else:
+        e2= -absMdMin/Nd # e2>0
+        if(math.sign(MdMax)==math.sign(MdMin)):
+            e1= -absMdMax/Nd  # e1>0
+        else:
+            e1= absMdMax/Nd # e1<0
+    return e1, e2
 
 def get_fictitious_eccentricity(sectionDepth:float, firstOrderEccentricity, reinforcementFactor:float, epsilon_y:float, radiusOfGyration:float, bucklingLength:float):
     ''' Return the fictitious eccentricity used to represent the second order 
