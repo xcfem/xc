@@ -41,10 +41,10 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
         return self.fy/self.gammaM
 
     def fmaxk(self):
-      ''' Characteristic ultimate strength. This method is added for
-          compatibility with ReinforcingSteel material as defined
-          in concrete base.'''
-      return self.fu
+        ''' Characteristic ultimate strength. This method is added for
+            compatibility with ReinforcingSteel material as defined
+            in concrete base.'''
+        return self.fu
   
     def getDict(self):
         ''' Returns a dictionary whith the values of the internal forces.
@@ -59,7 +59,6 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
         self.fy= dct['fy']
         self.fu= dct['fu']
         self.gammaM= dct['gammaM']
-
 
     def defJ2PlateFibre(self, preprocessor, name, alpha= .05):
         '''Constructs a J2 (Von Mises) material with a linear-strain

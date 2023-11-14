@@ -47,11 +47,12 @@ steel= EHE_materials.B500S
 
 # Section geometry
 section= def_simple_RC_section.RCRectangularSection(name='test', width= width, depth= depth, concrType= concr, reinfSteelType= steel)
+## Put the reinforcement in the section.
 section.positvRebarRows= def_simple_RC_section.LongReinfLayers([lowerRow])
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([upperRow])
 # section.shReinfY= shearReinf
 
-section.defRCSection(preprocessor,matDiagType= 'd')
+section.defRCSection(preprocessor, matDiagType= 'd')
 zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 

@@ -164,6 +164,49 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         ''' Return true if it's a circular section.'''
         return True
     
+    def getAc(self):
+        '''Returns the cross-sectional area of the section'''
+        return section_properties.CircularSection.A(self)#-self.mainReinf.getAs()
+    
+    def getI(self):
+        ''' Returns the second moment of area about the middle axis parallel to 
+        the width '''
+        return section_properties.CircularSection.Iy(self)
+    
+    def getReinforcementIz(self, n= 1.0):
+        ''' Return the second moment of inertia of the reinforcement.
+
+        :param hCOG: distance from the section bottom to its center of gravity.
+        :param n: homogenizatrion coefficient.
+        '''
+        retval= 0.0
+        area= self.mainReinf.getAs()
+        sectionRadius= section_properties.CircularSection.getExtRadius(self)
+        reinfRadius= sectionRadius-self.mainReinf.getRowsCGcover()
+        halfT= area/(2*math.pi*reinfRadius)/2.0
+        r2= reinfRadius+halfT
+        r1= reinfRadius-halfT
+        retval+= math.pi/4.0*(r2**4-r1**4)
+        retval*= n
+        return retval
+    
+    def getAreaHomogenizedSection(self):
+        '''Return the area of the homogenized section.'''
+        retval= self.getAc()
+        n= self.getHomogenizationCoefficient()
+        retval+= n*(self.mainReinf.getAs())
+        return retval
+    
+    def getIzHomogenizedSection(self):
+        '''returns the second moment of area about the axis parallel to 
+        the section width through the center of gravity'''
+        retval= self.getI() # Moment of inertia of the concrete section.
+        # Moment of inertia of the reinforcement.
+        n= self.getHomogenizationCoefficient()
+        # Reinforcement on the possitive side.
+        retval+= self.getReinforcementIz(n= n)
+        return retval
+    
     def getShearReinfY(self):
         '''Return the shear reinforcement for Vy.'''
         return self.shReinf

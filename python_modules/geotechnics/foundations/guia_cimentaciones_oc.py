@@ -97,7 +97,7 @@ class PileFoundation(pile.CircularPile):
     def getVerticalStiffnessSinglePile(self):
         '''Return the vertical stiffness of a single pile
         '''
-        Lc=self.getCalcLength()
+        Lc= self.getCalcLength()
         A= self.getCrossSectionArea()
         Kv=1/(self.getDiameter()/40/self.pileBearingCapacity+Lc/A/self.E)
         return Kv

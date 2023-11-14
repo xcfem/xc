@@ -53,6 +53,8 @@ numOfRebars= 12
 nCover= cover
 
 mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*cover), nominalCover= nCover)])
+## Put the reinforcement in the section.
+section.mainReinf= mainReinf
 
 
 feProblem= xc.FEProblem()
@@ -61,8 +63,6 @@ preprocessor=  feProblem.getPreprocessor
 materialHandler= preprocessor.getMaterialHandler
 
 # Section geometry
-section.mainReinf= mainReinf
-
 section.defRCSection(preprocessor,matDiagType= 'k')
 zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 

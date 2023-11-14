@@ -739,6 +739,27 @@ class RCSectionBase(object):
         '''
         return self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
     
+    def getHomogenizationCoefficient(self):
+        '''Return the homogenization coefficient of the section.'''
+        return self.fiberSectionParameters.reinfSteelType.Es/self.fiberSectionParameters.concrType.Ecm()
+    
+    def izHomogenizedSection(self):
+        '''Return the radius of gyration of the section around
+           the axis parallel to the section width that passes 
+           through section centroid.
+        '''
+        return math.sqrt(self.getIzHomogenizedSection()/self.getAreaHomogenizedSection())
+    
+    def getNonDimensionalAxialForce(self, Nd):
+        ''' Return the valud of the non-dimensional axial force corresponding 
+            to the given axial force according to clause 43.1.2 of EHE-08.
+
+        :param Nd: design value of the axial force.
+        '''
+        fcd= self.fiberSectionParameters.concrType.fcd()
+        Ac= self.getAc()
+        return Nd/Ac/fcd
+    
     def getNDivIJ(self):
         ''' Return the number of cells in IJ (width or radial) direction.'''
         return self.fiberSectionParameters.nDivIJ
@@ -1522,29 +1543,20 @@ class RCRectangularSection(BasicRectangularRCSection):
         # Reinforcement on the possitive side.
         retval+= self.getNegReinforcementIz(hCOG= hCOGH, n= n)
         return retval
-    
-    def izHomogenizedSection(self):
-        '''Return the radius of gyration of the section around
-           the axis parallel to the section width that passes 
-           through section centroid.
-        '''
-        return math.sqrt(self.getIzHomogenizedSection()/self.getAreaHomogenizedSection())
-   
+       
     def getIyHomogenizedSection(self):
         '''returns the second moment of area about the axis parallel to 
         the section depth through the center of gravity'''
         lmsg.error('getIyHomogenizedSection not implemented yet.')
         # Need to compute the steel distribution along the z axis.
-        return self.getIy()
+        return None
     
     def iyHomogenizedSection(self):
         '''Return the radius of gyration of the section around
            the axis parallel to the section depth that passes 
            through section centroid.
         '''
-        lmsg.error('iyHomogenizedSection not implemented yet.')
-        # Need to compute the steel distribution along the z axis.
-        return self.iy()
+        return math.sqrt(self.getIyHomogenizedSection()/self.getAreaHomogenizedSection())
     
     def getIz_RClocalZax(self):
         '''returns the second moment of area about the middle axis parallel to 
@@ -1665,15 +1677,12 @@ class RCRectangularSection(BasicRectangularRCSection):
     def getTorsionalThickness(self):
         '''Return the section thickness for torsion.'''
         return min(self.b,self.h)/2.0
-
-    def getHomogenizationCoefficient(self):
-        '''Return the homogenization coefficient of the section.'''
-        return self.fiberSectionParameters.reinfSteelType.Es/self.fiberSectionParameters.concrType.Ecm()
     
     def getStressCalculator(self):
         Ec= self.fiberSectionParameters.concrType.Ecm()
         Es= self.fiberSectionParameters.reinfSteelType.Es
         return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
+
 
 def compute_element_reinforcement(element):
     ''' Return a list containing the reinforced concrete sections from the

@@ -163,6 +163,12 @@ class Pile(object):
         '''
         raise Exception('Abstract method, please override')
         
+    def getVerticalStiffnessSinglePile(self):
+        '''Return the vertical stiffness of a single pile
+        '''
+        raise Exception('Abstract method, please override')
+        return None
+    
     def generateSpringsPile(self, alphaKh_x, alphaKh_y, alphaKv_z):
         '''Generate the springs that simulate the soils along the pile
 

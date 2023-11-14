@@ -746,6 +746,14 @@ class CircularSection(SectionProperties):
         '''Return the section thickness.'''
         return self.Rext-self.Rint
 
+    def getExtRadius(self):
+        ''' Return the external radius.'''
+        return self.Rext
+    
+    def getIntRadius(self):
+        ''' Return the internal radius.'''
+        return self.Rint
+    
     def getAverageRadius(self):
         ''' Return the average radius.'''
         return (self.Rext+self.Rint)/2.0

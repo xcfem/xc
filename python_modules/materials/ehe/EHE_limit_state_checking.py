@@ -909,9 +909,69 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param ue: Perimeter of the middle line of the effective hollow section.
     '''
     return  min(getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
-  
-# Check normal stresses limit state.
 
+
+
+#       ___         _   _ _           
+#      | _ )_  _ __| |_| (_)_ _  __ _ 
+#      | _ \ || / _| / / | | ' \/ _` |
+#      |___/\_,_\__|_\_\_|_|_||_\__, |
+#                               |___/ 
+
+# Approximate method. Straight combined bending (clause 43.5.1 of EHE-08).
+
+def get_fictitious_eccentricity(sectionDepth:float, firstOrderEccentricity, reinforcementFactor:float, epsilon_y:float, radiusOfGyration:float, bucklingLength:float):
+    ''' Return the fictitious eccentricity used to represent the second order 
+        effects according to clause 43.5.1 of EHE-08.
+
+    :param sectionDepth: total depth of the concrete section in the bending plane considered.
+    :param firstOrderEccentricity: equivalent first order design eccentricity.
+    :param reinforcementFactor: reinforcement factor computed as $\beta= \frac{(d-d')^2}{4*i_s^2}$ with $i_s$ being the radius of gyration of the reinforcements.
+    :param epsilon_y: deformation in the steel for the design stress fyd.
+    :param radiusOfGyration: radius of gyration of the concrete section in the direction concerned.
+    :param bucklingLength: buckling length.
+    '''
+    return (1+0.12*reinforcementFactor)*(epsilon_y+0.0035)*(sectionDepth+20*firstOrderEccentricity)/(sectionDepth+10*firstOrderEccentricity)*bucklingLength**2/50.0/radiusOfGyration
+
+def get_lower_slenderness_limit(C:float, nonDimensionalAxialForce:float, e1, e2, sectionDepth):
+    ''' Return the lower slenderness limit according to clause 43.1.2 of EHE-08.
+
+    :param C: Coefficient which depends on the configuration of reinforcements
+              whose values are: 0.24 for symmetrical reinforcement on two 
+              opposing sides in the bending plane, 0.20 for equal reinforcement on the four sides, 0.16 for symmetrical reinforcement on the lateral sides.
+    :param nonDimensionalAxialForce: design value of the non-dimensional or 
+                                     reduced axial force actuating in the 
+                                     support.
+    :param e1: First order eccentricity at the end of the support with the 
+               lower moment which is positive if it has the same sign as e2.
+    :param e2: First order eccentricity in the end of the support with the 
+               larger moment, deemed to be positive.
+
+    :param sectionDepth: total depth of the concrete section in the bending plane considered.
+    '''
+    if(e2<0.0):
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= methodName+"; e2 must be positive.\n"
+        lmsg.error(errMsg)
+    if(abs(e1)>abs(e2)):
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= methodName+"; e2 must be greater or equal that e1.\n"
+        lmsg.error(errMsg)
+    retval= 1+0.24/(e2/sectionDepth)+3.4*(e1/e2-1)**2
+    retval*= C/nonDimensionalAxialForce
+    retval= min(35.0*math.sqrt(retval),100.0)
+    return retval
+
+
+#       _    _       _ _        _        _       
+#      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
+#      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
+#      |____|_|_|_|_|_|\__| /__/\__\__,_|\__\___|
+#       __ ___ _ _| |_ _ _ ___| | |___ _ _ ___   
+#      / _/ _ \ ' \  _| '_/ _ \ | / -_) '_(_-<   
+#      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
+                                               
+# Check normal stresses limit state.
 class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''
 
@@ -1119,7 +1179,7 @@ class ShearController(lscb.ShearControllerBase):
         '''  Compute the shear strength at failure.
          XXX Presstressing contribution not implemented yet.
 
-         :param sct: reinforced concrete section object to chech shear on.
+         :param sct: reinforced concrete section object to check shear on.
          :param torsionParameters: parameters that define torsional behaviour 
                                    of the section as in clause 45.1 of EHE-08.
          :param Nd: Design value of axial force (positive if in tension)
