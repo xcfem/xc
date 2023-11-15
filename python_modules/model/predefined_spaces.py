@@ -1129,14 +1129,22 @@ class PredefinedSpace(object):
             lp= self.addLoadCaseToDomain(lpName)
             lp.gammaF= factor
                 
-    def createSelfWeightLoad(self, xcSet: xc.Set, gravityVector):
-        ''' Creates the self-weight load on the elements.
+    def createSelfWeightLoad(self, xcSet: xc.Set, gravityVector, alreadyLoaded= None):
+        ''' Creates the self-weight load on the elements. Return the 
+            identifiers of the loaded elements.
 
         :param xcSet: set with the elements to load.
         :param gravityVector: gravity acceleration vector.
         '''
+        retval= set()
+        if(alreadyLoaded):
+            retval.update(alreadyLoaded)
         for e in xcSet.getElements:
-            e.createInertiaLoad(gravityVector)
+            tag= e.tag
+            if(tag not in retval):
+                e.createInertiaLoad(gravityVector)
+                retval.add(tag)
+        return retval
 
     def setSolutionProcedureType(self, solutionProcedureType: predefined_solutions.SolutionProcedure):
         ''' Set the solution procedure that will be used
