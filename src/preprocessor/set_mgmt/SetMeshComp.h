@@ -111,6 +111,10 @@ class SetMeshComp: public SetBase
     void extend(const DqPtrsElem &);
     void extend(const lst_ptr_constraints &);
     void extend(const SetMeshComp &);
+    void substract(const DqPtrsNode &);
+    void substract(const DqPtrsElem &);
+    void substract(const lst_ptr_constraints &);
+    void substract(const SetMeshComp &);
     
     std::string getStrName(void) const;
     void newName(const std::string &);
