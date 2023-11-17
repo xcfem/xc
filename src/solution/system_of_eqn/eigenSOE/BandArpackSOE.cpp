@@ -98,11 +98,12 @@ int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, double fact)
     if(fact == 0.0)  return 0;
 
     // check that m and id are of same size
-    int idSize = id.Size();
+    const int idSize = id.Size();
     if(idSize != m.noRows() && idSize != m.noCols())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Matrix and ID not of similar sizes\n";
+		  << "; Matrix and ID not of similar sizes"
+	          << std::endl;
         return -1;
       }
 
@@ -115,18 +116,26 @@ int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, double fact)
             const int col= id(i);
             if(col < size && col >= 0)
               {
-                double *coliiPtr= A.getDataPtr() + col*ldA + numSubD + numSuperD;
+		const int offset=  col*ldA + numSubD + numSuperD;
+		if(offset<0)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; negative offset due to integer overflow."
+			      << std::endl;
+		    return -1;
+		  }
+                double *coliiPtr= A.getDataPtr() + offset;
                 for(int j=0; j<idSize; j++)
                   {
                     const int row = id(j);
                     if(row <size && row >= 0)
                       {
-                        int diff = col - row;
+                        int diff= col - row;
                         if(diff > 0)
                           {
                             if(diff <= numSuperD)
                               {
-                                double *APtr = coliiPtr - diff;
+                                double *APtr= coliiPtr - diff;
                                 *APtr += m(j,i);
                               }
                           }
@@ -135,7 +144,7 @@ int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, double fact)
                             diff*= -1;
                             if(diff <= numSubD)
                               {
-                                double *APtr = coliiPtr + diff;
+                                double *APtr= coliiPtr + diff;
                                 *APtr += m(j,i);
                               }
                           }
@@ -151,7 +160,15 @@ int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, double fact)
             const int col = id(i);
             if(col < size && col >= 0)
               {
-                double *coliiPtr = A.getDataPtr() + col*ldA + numSubD + numSuperD;
+		const int offset=  col*ldA + numSubD + numSuperD;
+		if(offset<0)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; negative offset due to integer overflow."
+			      << std::endl;
+		    return -1;
+		  }
+                double *coliiPtr= A.getDataPtr() + offset;
                 for(int j=0; j<idSize; j++)
                   {
                     const int row = id(j);
