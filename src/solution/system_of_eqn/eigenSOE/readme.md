@@ -10,7 +10,12 @@ The following methods provide the solution of the generalized eigenvalue problem
 
     -Symmetric Arpack -- Arpack solver for symmetric matrices.
     -Band Arpack -- Arpack solver for banded matrices.
-	-Full general -- Solver for dense matrix.
+	-Full general -- Solver for dense matrix (useful only for very small problems).
+
+## To do
+
+Implement a solver for really big problems, the current solvers crash when the number of elements is greater than some thousands. 
+
 	
 ## References
  - [Linear buckling analysis](https://portwooddigital.com/2021/05/29/right-under-your-nose)
@@ -22,3 +27,5 @@ The following methods provide the solution of the generalized eigenvalue problem
  - [One Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/10/one-way-to-get-bad-eigenvalues/)
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
+### Solvers
+ - [Spectra (Sparse Eigenvalue Computation Toolkit as a Redesigned ARPACK)](https://github.com/yixuan/spectra/)
