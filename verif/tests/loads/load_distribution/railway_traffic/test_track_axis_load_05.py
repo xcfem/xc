@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Railway bridge loads. Loads over a track axis.'''
+'''Railway bridge loads. Centrifugal loads over a track axis.'''
 
 import math
 import geom
