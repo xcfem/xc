@@ -1554,6 +1554,11 @@ XC::EigenSOE *XC::FEM_ObjectBroker::getNewEigenSOE(int classTagSOE)
         case EigenSOE_TAGS_BandArpackppSOE:
           theSOE = new BandArpackppSOE(nullptr);
           break;
+#ifdef USE_SPECTRA
+        case EigenSOE_TAGS_SpectraSOE:
+          theSOE = new SpectraSOE(nullptr);
+          break;
+#endif
         case EigenSOE_TAGS_FullGenEigenSOE:
           theSOE = new BandArpackppSOE(nullptr);
           break;

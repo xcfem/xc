@@ -346,6 +346,10 @@ class PredefinedSpace(object):
             retval.append(e)
         return retval
 
+    def getNumberOfElements(self):
+        ''' Return the number of elements.'''
+        return self.preprocessor.getDomain.getMesh.getNumElements()
+
     def getNodeHandler(self):
         ''' Return the node handler for this model.'''
         return self.preprocessor.getNodeHandler
@@ -414,6 +418,10 @@ class PredefinedSpace(object):
             retval.append(n)
         return retval
     
+    def getNumberOfNodes(self):
+        ''' Return the number of elements.'''
+        return self.preprocessor.getDomain.getMesh.getNumNodes()
+
     def getIntForceComponentFromName(self, componentName: str):
         ''' Return the internal force component from the name argument.
 

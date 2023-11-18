@@ -21,7 +21,6 @@
 //Pos3dList.cc
 
 #include "Pos3dList.h"
-#include <plotter.h>
 
 #include "utility/geom/trf/Translation3d.h"
 #include "utility/geom/lists/utils_list_pos3d.h"

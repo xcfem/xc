@@ -78,6 +78,7 @@
 #define EigenSOE_TAGS_SymBandEigenSOE   3
 #define EigenSOE_TAGS_BandArpackppSOE 	4
 #define EigenSOE_TAGS_FullGenEigenSOE   5
+#define EigenSOE_TAGS_SpectraSOE   106
 
 #define EigenSOLVER_TAGS_BandArpackSolver 	1
 #define EigenSOLVER_TAGS_SymArpackSolver 	2
@@ -86,6 +87,7 @@
 #define EigenSOLVER_TAGS_ArpackSolver  5
 #define EigenSOLVER_TAGS_GeneralArpackSolver  6
 #define EigenSOLVER_TAGS_BandArpackppSolver 	101
+#define EigenSOLVER_TAGS_SpectraSolver  106
 
 #define EigenALGORITHM_TAGS_Frequency 1
 #define EigenALGORITHM_TAGS_Standard  2

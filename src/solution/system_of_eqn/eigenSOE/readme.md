@@ -14,7 +14,7 @@ The following methods provide the solution of the generalized eigenvalue problem
 
 ## To do
 
-Implement a solver for really big problems, the current solvers crash when the number of elements is greater than some thousands. 
+Implement a solver for really big problems, the current solvers crash when the number of elements is greater than some thousands. [Spectra](https://spectralib.org/) could be a solution.
 
 	
 ## References
