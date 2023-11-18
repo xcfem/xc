@@ -165,6 +165,7 @@ pt2= points.newPoint(p2)
 pt3= points.newPoint(p3)
 pt4= points.newPoint(p4)
 
+print('A')
 ### Define polygonal surfaces
 surfaces= modelSpace.getSurfaceHandler()
 polyFace= surfaces.newPolygonalFacePts([pt1.tag, pt2.tag, pt3.tag, pt4.tag])
@@ -173,7 +174,9 @@ for b in bolts:
     pFace= getHoleAsPolygonalSurface(b,surfaces)
     holes.append(pFace)
     pFaceHoles.append(pFace)
-    
+
+print('B')
+
 ### Define material
 mat= typical_materials.defElasticMembranePlateSection(preprocessor, "mat",E=2.1e9,nu=0.3,rho= 7850,h= 0.015)
 
@@ -185,9 +188,12 @@ elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 ### Generate mesh.
 polyFace.setElemSize(0.75*boltDiameter, True)
 for h in pFaceHoles:
+    print('x')
     h.setNDiv(1)
     polyFace.addHole(h)
+print('C')
 polyFace.genMesh(xc.meshDir.I, True)
+print('D')
 
 xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
