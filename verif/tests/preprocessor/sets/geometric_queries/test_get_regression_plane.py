@@ -41,6 +41,8 @@ normalVector= regressionPlane.getNormal()
 
 # Check the result.
 err= (normalVector-geom.Vector3d(0,1,0)).getModulus()
+if(err>0): # maybe it's the opposite.
+    err= (normalVector-geom.Vector3d(0,-1,0)).getModulus()
 
 '''
 print(regressionPlane)
