@@ -41,9 +41,12 @@ soil= fs.FrictionalSoil(phi= math.radians(30), rho= soilRho)
 
 # Define embankment layer.
 embankmentLayer= embankment.EmbankmentLayer(pline= plane_pline_3d, soil= soil)
+print('A')
 
 # Compute depths of the surface vertices (must be zero).
 depths0= embankmentLayer.getDepths(pointList= vertices)
+print(depths0)
+print('B')
 
 
 # Try some other points
@@ -55,7 +58,6 @@ testPointsA= [geom.Pos3d(5901.36865234375e-3, 36112.4765625e-3, 0.0),
               geom.Pos3d(7165.8857421875e-3, 31553.732421875e-3, 0.0)]
 depthsA= embankmentLayer.getDepths(pointList= testPointsA)
 refDepthsA= [-2.4372614817550327, 1.327096104165939, 1.295244642361503, 1.2443776804356421, 1.4938632000600398, -0.6215704066092139]
-
 values= [depths0, depthsA]
 refValues= [5*[0.0], refDepthsA]
 err= 0.0
