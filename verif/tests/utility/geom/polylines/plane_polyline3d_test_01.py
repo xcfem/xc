@@ -39,11 +39,11 @@ vertices= [geom.Pos3d(0, 0, 0), geom.Pos3d(1, 0, 0), geom.Pos3d(1,1, 0), geom.Po
 plane_pline_3d= geom.PlanePolyline3d(vertices)
 
 # Check results at different points.
-lengths= [0.5, 1.5, 2.5, 3.5, 4.5]
+lengths= [0.5, 1.5, 2.4, 2.6, 3.5, 4.5]
 # Reference values.
-vIRef= [geom.Vector3d(1.0,0.0, 0), geom.Vector3d(0.0,1.0, 0), geom.Vector3d(-1.0,0.0, 0), geom.Vector3d(0.0,1.0, 0), geom.Vector3d(1.0,0.0, 0)]
-vJRef= [geom.Vector3d(0.0,1.0, 0), geom.Vector3d(-1.0,0.0, 0), geom.Vector3d(0.0,-1.0, 0), geom.Vector3d(1.0,0.0, 0), geom.Vector3d(0.0,-1.0, 0)]
-pointsRef= [geom.Pos3d(0.5,0.0, 0), geom.Pos3d(1.0,0.5, 0), geom.Pos3d(0.5,1.0, 0), geom.Pos3d(0.0,1.5, 0), geom.Pos3d(0.5, 2.0, 0)]
+vIRef= [geom.Vector3d(1.0,0.0, 0), geom.Vector3d(0.0,1.0, 0), geom.Vector3d(-1.0,0.0, 0), geom.Vector3d(-1.0,0.0, 0), geom.Vector3d(0.0,1.0, 0), geom.Vector3d(1.0,0.0, 0)]
+vJRef= [geom.Vector3d(0.0,1.0, 0), geom.Vector3d(-1.0,0.0, 0), geom.Vector3d(0.0,-1.0, 0), geom.Vector3d(0.0,1.0, 0), geom.Vector3d(1.0,0.0, 0), geom.Vector3d(0.0,-1.0, 0)]
+pointsRef= [geom.Pos3d(0.5,0.0, 0), geom.Pos3d(1.0,0.5, 0), geom.Pos3d(0.6,1.0, 0), geom.Pos3d(0.4,1.0, 0), geom.Pos3d(0.0,1.5, 0), geom.Pos3d(0.5, 2.0, 0)]
 err= 0.0
 
 for l, vIr in zip(lengths, vIRef):
@@ -58,7 +58,7 @@ for l, pr in zip(lengths, pointsRef):
 
 err= math.sqrt(err) # average quadratic error
 
-#print('err= ', err)
+# print('err= ', err)
 
 import os
 from misc_utils import log_messages as lmsg
