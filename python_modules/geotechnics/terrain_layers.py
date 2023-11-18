@@ -99,7 +99,6 @@ class Layer(object):
                             className= type(self).__name__
                             methodName= sys._getframe(0).f_code.co_name
                             lmsg.warning(className+'.'+methodName+'; multiple: ('+str(sz)+') intersection with layer surface. Returning depth with respect the first one.')
-                        print(dist, intPoints[0], intPoints[1])
                     v= ip-prj # Vector from the intersection to the proj. pt.
                     dist= verticalDir.dot(v) # Dot product.
                     retval.append(dist)

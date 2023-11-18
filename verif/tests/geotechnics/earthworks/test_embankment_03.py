@@ -65,11 +65,11 @@ for vRow, refRow in zip(values, refValues):
         err+= (v-vRef)**2
 err= math.sqrt(err)
 
+'''
 print(depths0)
 print(depthsA)
 print(refDepthsA)
 print(err)
-'''
 '''
 
 import os
