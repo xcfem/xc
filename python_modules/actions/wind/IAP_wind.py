@@ -14,6 +14,7 @@ import sys
 import math
 import scipy.interpolate
 from misc_utils import log_messages as lmsg
+from actions.wind import base_wind
 
 # Probability factor
 
@@ -170,27 +171,7 @@ def getVerticalForce(terrainCategory:str, z:float, v_b:float, A_refz:float, c_0:
     vp= getVerticalPressure(terrainCategory, z, v_b, c_0, k_l, c_fz, rho)
     return (vp[0]*A_refz, vp[1]*A_refz)
 
-#          a
-#      --------->|                 1    |                
-#       -------->/             ========>|     -
-#        ------->/                      |     ^        
-#         ------>/   h    <>            |     |    
-#          ----->/                      |     | hR
-#           ---->/                      |     |
-#            --->/                      |     -
-#              b
 
-def getLinearDistribution(h:float, hR:float):
-    ''' Return the values (a,b) of a linear pressure distribution whose
-        resultant passes through a point at heigth= hR.
-
-    :param h: height of the pressure distribution.
-    :param hR: height of the resultant.
-    '''
-    ratio= hR/h
-    a= 2*(3*ratio-1)
-    b= 2*(2-3*ratio)
-    return (a,b)
 
 def getVerticalPressureDistribution(terrainCategory:str, x0: float, x1: float, z:float, v_b:float, c_0:float= 1.0, k_l: float= 1.0, c_fz= (-0.9,0.9), rho= 1.25):
     ''' Return the vertical pressure distribution over a bridge deck to fullfill
@@ -215,7 +196,7 @@ def getVerticalPressureDistribution(terrainCategory:str, x0: float, x1: float, z
     '''
     averagePressure= getVerticalPressure(terrainCategory, z, v_b, c_0, k_l, c_fz, rho)
     w= x1-x0 # Deck width
-    (a,b)= getLinearDistribution(h= w, hR= 0.75*w)
+    (a,b)= base_wind.getLinearDistribution(h= w, hR= 0.75*w)
     xi= [x0, x1]
     y0i= [averagePressure[0]*a, averagePressure[0]*b]
     pressureDistrib0= scipy.interpolate.interp1d(xi, y0i, kind='linear')
@@ -328,7 +309,7 @@ def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, avera
      clause 4.2.5.1.3 of IAP-11).
     :param averagePressure: average value of the wind pressure. 
     '''
-    (topSide, bottomSide)= getLinearDistribution(h= h, hR= h*heightFraction) 
+    (topSide, bottomSide)= base_wind.getLinearDistribution(h= h, hR= h*heightFraction) 
     return scipy.interpolate.interp1d([0.0,h], [bottomSide*averagePressure, topSide*averagePressure], kind='linear')
 
 
