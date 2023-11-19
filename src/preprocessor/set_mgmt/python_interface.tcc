@@ -131,6 +131,10 @@ void (XC::SetMeshComp::*extend_nodes)(const XC::DqPtrsNode &)= &XC::SetMeshComp:
 void (XC::SetMeshComp::*extend_elements)(const XC::DqPtrsElem &)= &XC::SetMeshComp::extend;
 void (XC::SetMeshComp::*extend_constraints)(const XC::SetMeshComp::lst_ptr_constraints &)= &XC::SetMeshComp::extend;
 void (XC::SetMeshComp::*extend_mesh_comp)(const XC::SetMeshComp &)= &XC::SetMeshComp::extend;
+void (XC::SetMeshComp::*substract_nodes)(const XC::DqPtrsNode &)= &XC::SetMeshComp::substract;
+void (XC::SetMeshComp::*substract_elements)(const XC::DqPtrsElem &)= &XC::SetMeshComp::substract;
+void (XC::SetMeshComp::*substract_constraints)(const XC::SetMeshComp::lst_ptr_constraints &)= &XC::SetMeshComp::substract;
+void (XC::SetMeshComp::*substract_mesh_comp)(const XC::SetMeshComp &)= &XC::SetMeshComp::substract;
 class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no_init)
   .add_property("name", &XC::SetMeshComp::getStrName, &XC::SetMeshComp::newName,"get object name.")
   .def("rename",&XC::SetMeshComp::rename,"Change the name of the set.")
@@ -174,6 +178,10 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no
   .def("extend", extend_elements, "Appends the elements in the argument to the set.")
   .def("extend", extend_constraints, "Appends the constraints in the argument to the set.")
   .def("extend", extend_mesh_comp, "Appends the argument components to the set.")
+  .def("substract", substract_nodes, "Removes from this set the nodes in the argument.")
+  .def("substract", substract_elements, "Removes from this set the elements in the argument.")
+  .def("substract", substract_constraints, "Removes from this set the constraints in the argument.")
+  .def("substract", substract_mesh_comp, "Removes from this set the components to the given set.")
   .def("createInertiaLoads", &XC::SetMeshComp::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
   .add_property("totalMass", &XC::SetMeshComp::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::SetMeshComp::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")

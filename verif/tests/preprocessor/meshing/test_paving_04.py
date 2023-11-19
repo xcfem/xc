@@ -16,7 +16,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from materials.astm_aisc import ASTM_materials
 # import matplotlib.pyplot as plt
-# from postprocess import output_handler
 
 def getIntermediatePoints(corners, nDiv):
     ''' Return a series of intermediate points uniformly distributed
@@ -136,9 +135,9 @@ quads= paver.getQuads()
 # drawMesh(nodPos, quads)
 
 nNodPos= len(nodPos)
-ratio1= (nNodPos-302)
+ratio1= (nNodPos-324)
 nquads= len(quads)
-ratio2= (nquads-201)
+ratio2= (nquads-215)
 
 # Test paving routine inside XC modeler.
 
@@ -191,8 +190,8 @@ ratio3= (nNodes-nNodPos)
 ratio4= (nElements-nquads)
 
 '''
-print(nNodPos)
-print(nquads)
+print(nNodes, nNodPos, ratio3)
+print(nElements, nquads, ratio4)
 '''
 
 import os
@@ -203,10 +202,11 @@ if (ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) :
 else:
     lmsg.error(fname+' ERROR.')
 
-# Graphic stuff.
-#oh= output_handler.OutputHandler(modelSpace)
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
 
-#oh.displayBlocks()#setToDisplay= )
-#oh.displayFEMesh()#setsToDisplay=[])
-#oh.displayLocalAxes()
+# oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
 

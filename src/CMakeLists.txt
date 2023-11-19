@@ -132,11 +132,22 @@ message(STATUS "MPI version: ${MPI_CXX_VERSION}")
 #TCL library
 INCLUDE_DIRECTORIES(${TCL_INCLUDE_PATH})
 
-#Portable, Extensible Toolkit for Scientific Computation
+# Portable, Extensible Toolkit for Scientific Computation
 find_package(Petsc)
 SET(PETSC_LIB_DIR ${PETSC_DIR}/${PETSC_ARCH}/lib)
 INCLUDE_DIRECTORIES(${PETSC_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${PETSCCONF_INCLUDE_DIR})
+
+# Eigen3 C++ template library for linear algebra.
+find_package(Eigen3 NO_MODULE)
+#set_package_properties(Eigen3 PROPERTIES TYPE REQUIRED PURPOSE "C++ vector data structures")
+message(STATUS "Found Eigen3 Version: ${Eigen3_VERSION} path: ${Eigen3_DIR}")
+INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
+message(STATUS "Eigen3 ${Eigen3_VERSION} include files path: ${EIGEN3_INCLUDE_DIR}")
+
+find_package(Spectra NO_MODULE)
+message(STATUS "Found Spectra path: ${SPECTRA_INCLUDE_DIR}")
+
 
 #Python
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
@@ -414,6 +425,14 @@ SET(siseq_linear_distributed solution/system_of_eqn/linearSOE/DistributedLinSOE.
 SET(siseq_linear solution/system_of_eqn/linearSOE/LinearSOEData.cc solution/system_of_eqn/linearSOE/BJsolvers/profmatr.cpp solution/system_of_eqn/linearSOE/BJsolvers/skymatr.cpp solution/system_of_eqn/linearSOE/DomainSolver.cpp solution/system_of_eqn/linearSOE/LinearSOE.cpp solution/system_of_eqn/linearSOE/LinearSOESolver.cpp solution/system_of_eqn/linearSOE/itpack/ItpackLinSolver.cpp solution/system_of_eqn/linearSOE/bandGEN/BandGenLinLapackSolver.cpp solution/system_of_eqn/linearSOE/bandGEN/BandGenLinSOE.cpp solution/system_of_eqn/linearSOE/bandGEN/BandGenLinSolver.cpp solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinLapackSolver.cpp solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinSOE.cpp solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinSolver.cpp solution/system_of_eqn/linearSOE/cg/ConjugateGradientSolver.cpp solution/system_of_eqn/linearSOE/diagonal/DiagonalDirectSolver.cpp solution/system_of_eqn/linearSOE/diagonal/DiagonalSOE.cpp solution/system_of_eqn/linearSOE/diagonal/DiagonalSolver.cpp solution/system_of_eqn/linearSOE/fullGEN/FullGenLinLapackSolver.cpp solution/system_of_eqn/linearSOE/fullGEN/FullGenLinSOE.cpp solution/system_of_eqn/linearSOE/fullGEN/FullGenLinSolver.cpp solution/system_of_eqn/linearSOE/itpack/ItpackLinSOE.cpp solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectBase.cc solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectBlockSolver.cpp solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSkypackSolver.cpp solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSolver.cpp solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSOE.cpp solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSolver.cpp solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSubstrSolver.cpp solution/system_of_eqn/linearSOE/FactoredSOEBase.cc solution/system_of_eqn/linearSOE/SparseSOEBase.cc solution/system_of_eqn/linearSOE/sparseGEN/SparseGenSOEBase.cc solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSOE.cpp solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSolver.cpp solution/system_of_eqn/linearSOE/sparseGEN/SparseGenRowLinSOE.cpp solution/system_of_eqn/linearSOE/sparseGEN/SparseGenRowLinSolver.cpp solution/system_of_eqn/linearSOE/sparseGEN/SuperLU.cpp solution/system_of_eqn/linearSOE/sparseSYM/SymSparseLinSOE.cpp solution/system_of_eqn/linearSOE/sparseSYM/nmat.c solution/system_of_eqn/linearSOE/sparseSYM/symbolic.cc solution/system_of_eqn/linearSOE/sparseSYM/nest.c solution/system_of_eqn/linearSOE/sparseSYM/utility.c solution/system_of_eqn/linearSOE/sparseSYM/grcm.c solution/system_of_eqn/linearSOE/sparseSYM/newordr.c solution/system_of_eqn/linearSOE/sparseSYM/nnsim.c solution/system_of_eqn/linearSOE/sparseSYM/tim.c solution/system_of_eqn/linearSOE/sparseSYM/SymSparseLinSolver.cpp solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSOE.cpp solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.cpp solution/system_of_eqn/linearSOE/mumps/MumpsSOE.cpp solution/system_of_eqn/linearSOE/mumps/MumpsParallelSOE.cpp solution/system_of_eqn/linearSOE/mumps/MumpsSolver.cpp solution/system_of_eqn/linearSOE/mumps/MumpsSolverBase.cc solution/system_of_eqn/linearSOE/mumps/MumpsParallelSolver.cpp ${siseq_linear_distributed})
 
 SET(siseq_eigen solution/system_of_eqn/eigenSOE/ArpackSOEBase.cc solution/system_of_eqn/eigenSOE/ArpackSOE.cc solution/system_of_eqn/eigenSOE/ArpackSolver.cpp solution/system_of_eqn/eigenSOE/BandArpackSOE.cpp solution/system_of_eqn/eigenSOE/BandArpackSolver.cpp solution/system_of_eqn/eigenSOE/EigenSOE.cpp solution/system_of_eqn/eigenSOE/EigenSolver.cpp solution/system_of_eqn/eigenSOE/SymArpackSOE.cpp solution/system_of_eqn/eigenSOE/SymArpackSolver.cpp solution/system_of_eqn/eigenSOE/SymBandEigenSOE.cpp solution/system_of_eqn/eigenSOE/SymBandEigenSolver.cpp solution/system_of_eqn/eigenSOE/BandArpackppSOE.cc solution/system_of_eqn/eigenSOE/BandArpackppSolver.cc solution/system_of_eqn/eigenSOE/FullGenEigenSOE.cpp solution/system_of_eqn/eigenSOE/FullGenEigenSolver.cpp)
+
+if(EIGEN3_FOUND)
+  if(SPECTRA_FOUND)
+    SET(siseq_eigen ${siseq_eigen} solution/system_of_eqn/eigenSOE/SpectraSolver.cc solution/system_of_eqn/eigenSOE/SpectraSOE.cc)
+    add_definitions("-DUSE_SPECTRA")
+  endif(SPECTRA_FOUND)
+endif(EIGEN3_FOUND)
+
 
 SET(siseq_petsc solution/system_of_eqn/linearSOE/petsc/PetscSolver.cpp solution/system_of_eqn/linearSOE/petsc/PetscSOE.cpp solution/system_of_eqn/linearSOE/petsc/PetscSparseSeqSolver.cpp solution/system_of_eqn/linearSOE/petsc/ShadowPetscSOE.cpp solution/system_of_eqn/linearSOE/petsc/ActorPetscSOE.cpp)
 

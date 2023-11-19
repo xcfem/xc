@@ -50,6 +50,7 @@
 #include <solution/system_of_eqn/eigenSOE/SymArpackSolver.h>
 #include <solution/system_of_eqn/eigenSOE/SymBandEigenSolver.h>
 #include <solution/system_of_eqn/eigenSOE/FullGenEigenSolver.h>
+#include <solution/system_of_eqn/eigenSOE/SpectraSolver.h>
 
 
 
@@ -121,6 +122,10 @@ XC::EigenSolver &XC::EigenSOE::newSolver(const std::string &type)
       setSolver(new BandArpackSolver());
     else if((type=="band_arpackpp_solver") || (type=="band_arpackpp_eigen_solver"))
       setSolver(new BandArpackppSolver());
+#ifdef USE_SPECTRA
+    else if((type=="spectra_solver") || (type=="spectra_eigen_solver"))
+      setSolver(new SpectraSolver());
+#endif
     else if((type=="sym_band_eigen_solver") || (type=="sym_band_lapack_solver"))
       setSolver(new SymBandEigenSolver());
     else if(type=="full_gen_eigen_solver")

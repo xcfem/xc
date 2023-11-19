@@ -1,6 +1,6 @@
 # Solution algorithms for eigenproblems
 
-The classes on this folder implement the algorithms needed so solve standard ane generalized eigenvalue problems.
+The classes on this folder implement the algorithms needed so solve standard and generalized eigenvalue problems.
 
 ## References
 
@@ -15,3 +15,5 @@ The classes on this folder implement the algorithms needed so solve standard ane
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
  - [Modal Assurance Criterion](https://doi.org/10.1016/j.proeng.2012.09.551)
  - [Universal File Format](https://en.wikipedia.org/wiki/Universal_File_Format)
+ - [One and Only One](https://portwooddigital.com/2023/11/18/one-and-only-one/)
+

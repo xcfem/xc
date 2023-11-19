@@ -586,6 +586,10 @@ bool XC::SolutionStrategy::alloc_system_of_equations(const std::string &nmb,Anal
       theSOE= new BandArpackSOE(this);
     else if((nmb=="band_arpackpp_soe") || (nmb=="band_arpackpp_eigen_soe"))
       theSOE= new BandArpackppSOE(this);
+#ifdef USE_SPECTRA
+    else if((nmb=="spectra_soe") || (nmb=="spectra_eigen_soe"))
+      theSOE= new SpectraSOE(this);
+#endif
     else if((nmb=="sym_arpack_soe") || (nmb=="sym_arpack_eigen_soe"))
       theSOE= new SymArpackSOE(this);
     else if((nmb=="sym_band_eigen_soe") || (nmb=="sym_band_lapack_soe"))

@@ -406,7 +406,62 @@ class EarthPressLoad():
         return maxValue
    
 
- 
+
+#       ___ _            _        _              _    
+#      / __| |_ _ _ __ _(_)_ _   | |___  __ _ __| |___
+#      \__ \  _| '_/ _` | | ' \  | / _ \/ _` / _` (_-<
+#      |___/\__|_| \__,_|_|_||_| |_\___/\__,_\__,_/__/
+# Strain loads                                                    
+
+def isotropic_strain_load_on_set(loadPattern, xcSet, strain):
+    ''' Defines an isotropic and homogeneous strain load applied in the 
+        elements of the set.
+
+    :param loadPattern: load pattern to append the strain loads to.
+    :param xcSet: XC set that contains the elements
+    :param strain: strain (e.g.: alpha x deltaT for thermal expansion)
+    '''
+    # Classify the element by type.
+    elemByType= dict()
+    for e in xcSet.elements:
+        eType= e.tipo() # element type
+        eTag= e.tag # element identifier
+        if(eType in elemByType): # if type already in the dictionary
+            elemByType[eType].append(eTag)
+        else: # if not
+            elemByType[eType]= [eTag]
+    # Apply the adequate strain load to each element type.
+    for key in elemByType:
+        if('Shell' in key): # strain load on shell elements.
+            eLoad= loadPattern.newElementalLoad("shell_strain_load")
+            eTags= elemByType[key]
+            eLoad.elementTags= xc.ID(eTags)
+            for dof in [0,1]: # isotropic => same strain for both DOFs.
+                eLoad.setStrainComp(0, dof, strain)
+                eLoad.setStrainComp(1, dof, strain)
+                eLoad.setStrainComp(2, dof, strain)
+                eLoad.setStrainComp(3, dof, strain)
+        elif('Beam' in key): # strain load on beam elements.
+            pDef= xc.DeformationPlane(strain)
+            eLoad= loadPattern.newElementalLoad("beam_strain_load")
+            eTags= elemByType[key]
+            eLoad.elementTags= xc.ID(eTags)
+            eLoad.backEndDeformationPlane= pDef
+            eLoad.frontEndDeformationPlane= pDef
+        elif('Truss' in key): # strain load on beam elements.
+            eLoad= loadPattern.newElementalLoad("truss_strain_load")
+            eTags= elemByType[key]
+            eLoad.elementTags= xc.ID(eTags)
+            eLoad.eps1= strain
+            eLoad.eps2= strain
+        elif('Zero' in key):
+            pass # zero lenght are not treated for now.
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; isotropic strain for element type: '"+str(key)+' not implemented yet.')
+
+
 
 # TO DO: change the method in order to be able to append to current load pattern
 class StrainLoadOnShells(object):
@@ -424,13 +479,13 @@ class StrainLoadOnShells(object):
     def __init__(self,name, xcSet, DOFstrain, strain):
         ''' Constructor.
 
-        :ivar name:  name identifying the load
-        :ivar xcSet: set that contains the elements
-        :ivar DOFstrain: list of degrees of freedom to which apply the strain 
+        :param name:  name identifying the load
+        :param xcSet: set that contains the elements
+        :param DOFstrain: list of degrees of freedom to which apply the strain 
                          0: strain along local x
                          1: strain along local y
                          2: strain along local z
-        :ivar strain: strain (e.g.: alpha x deltaT for thermal expansion)
+        :param strain: strain (e.g.: alpha x deltaT for thermal expansion)
         '''
         self.name= name
         self.xcSet= xcSet
@@ -448,22 +503,21 @@ class StrainLoadOnShells(object):
         prep=self.xcSet.getPreprocessor
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
-        for e in self.xcSet.elements:
-            eLoad= loadPattern.newElementalLoad("shell_strain_load")
-            eLoad.elementTags= xc.ID([e.tag])
-            for dof in self.DOFstrains:
-                eLoad.setStrainComp(0, dof, self.strain)
-                eLoad.setStrainComp(1, dof, self.strain)
-                eLoad.setStrainComp(2, dof, self.strain)
-                eLoad.setStrainComp(3, dof, self.strain)
+        eLoad= loadPattern.newElementalLoad("shell_strain_load")
+        eLoad.elementTags= self.xcSet.elements.getTags()
+        for dof in self.DOFstrains:
+            eLoad.setStrainComp(0, dof, self.strain)
+            eLoad.setStrainComp(1, dof, self.strain)
+            eLoad.setStrainComp(2, dof, self.strain)
+            eLoad.setStrainComp(3, dof, self.strain)
 
 class StrainLoadOnBeams(object):
     '''Strain load applied on the beam elements in xcSet
     '''
     def __init__(self,name, xcSet,strain):
-        self.name=name
-        self.xcSet=xcSet
-        self.strain=strain
+        self.name= name
+        self.xcSet= xcSet
+        self.strain= strain
     
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
@@ -471,11 +525,10 @@ class StrainLoadOnBeams(object):
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
         pDef= xc.DeformationPlane(self.strain)
-        for e in self.xcSet.elements:
-            eLoad= loadPattern.newElementalLoad("beam_strain_load")
-            eLoad.elementTags= xc.ID([e.tag])
-            eLoad.backEndDeformationPlane= pDef
-            eLoad.frontEndDeformationPlane= pDef
+        eLoad= loadPattern.newElementalLoad("beam_strain_load")
+        eLoad.elementTags= self.xcSet.elements.getTags()
+        eLoad.backEndDeformationPlane= pDef
+        eLoad.frontEndDeformationPlane= pDef
     
 class StrainLoadOnTrusses(object):
     '''Strain load applied on the truss elements in xcSet
@@ -490,11 +543,10 @@ class StrainLoadOnTrusses(object):
         prep=self.xcSet.getPreprocessor
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
-        for e in self.xcSet.elements:
-            eLoad= loadPattern.newElementalLoad("truss_strain_load")
-            eLoad.elementTags= xc.ID([e.tag])
-            eLoad.eps1= self.strain
-            eLoad.eps2= self.strain
+        eLoad= loadPattern.newElementalLoad("truss_strain_load")
+        eLoad.elementTags= self.xcSet.elements.getTags()
+        eLoad.eps1= self.strain
+        eLoad.eps2= self.strain
     
 class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
     '''Apply a thermal gradient between top and bottom faces of the shell 
@@ -521,13 +573,12 @@ class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
         prep=self.elemSet.getPreprocessor
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
-        for e in self.elemSet.elements:
-            eLoad= loadPattern.newElementalLoad("shell_strain_load")
-            eLoad.elementTags= xc.ID([e.tag])
-            eLoad.setStrainComp(0,self.DOF,self.curvature)
-            eLoad.setStrainComp(1,self.DOF,self.curvature)
-            eLoad.setStrainComp(2,self.DOF,self.curvature)
-            eLoad.setStrainComp(3,self.DOF,self.curvature)
+        eLoad= loadPattern.newElementalLoad("shell_strain_load")
+        eLoad.elementTags= self.elemSet.elements.getTags()
+        eLoad.setStrainComp(0, self.DOF, self.curvature)
+        eLoad.setStrainComp(1, self.DOF, self.curvature)
+        eLoad.setStrainComp(2, self.DOF, self.curvature)
+        eLoad.setStrainComp(3, self.DOF, self.curvature)
 
 class WindLoadOnShells(BaseVectorLoad):
     '''Wind load applied on the beam elements in the set passed as 

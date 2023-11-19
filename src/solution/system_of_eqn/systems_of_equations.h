@@ -84,6 +84,11 @@
 #include <solution/system_of_eqn/eigenSOE/FullGenEigenSolver.h>
 #include <solution/system_of_eqn/eigenSOE/SymBandEigenSolver.h>
 
+#ifdef USE_SPECTRA
+#include <solution/system_of_eqn/eigenSOE/SpectraSOE.h>
+#include <solution/system_of_eqn/eigenSOE/SpectraSolver.h>
+#endif
+
 
 
 

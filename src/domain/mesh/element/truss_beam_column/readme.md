@@ -14,6 +14,9 @@ This directory contains the classes that define the truss and frame elements ava
          - truss: truss elements.
          - updatedLagrangianBeamColumn: beam elements with updated lagrangian formulation.
 
+### Geometric nonlinearity for beam column elements.
+To capture the P-little delta effecs in beam elements you need to use at least six ordinary beam column elements (ForceBeamColumn, ElasticBeam, etc.) because they are not capable of handling geometric nonlinearity _within_ the basic system. As an alternative, we need to implement [ForceBeamColumnCDBI](https://github.com/OpenSees/OpenSees/blob/master/SRC/element/forceBeamColumn/ForceBeamColumnCBDI3d.h) and [MixedBeamColumn](https://github.com/OpenSees/OpenSees/tree/master/SRC/element/mixedBeamColumn) which can handle geometric nonlinearity inside the element itself.
+
 ## References
 
 - [Euler–Bernoulli beam theory](https://en.wikipedia.org/wiki/Euler%E2%80%93Bernoulli_beam_theory)
@@ -31,3 +34,6 @@ This directory contains the classes that define the truss and frame elements ava
 - [Shear Verse, Same as the First](https://portwooddigital.com/2022/07/10/shear-verse-same-as-the-first/)
 - [Simple Loads on a Cantilever](https://portwooddigital.com/2022/11/04/simple-loads-on-a-cantilever/)
 - [Converging to Something](https://portwooddigital.com/2023/10/08/converging-to-something/)
+### Geometric nonlinearity
+- [Geometric Transformation](https://portwooddigital.com/2022/11/15/geometric-transformation/)
+- [One and Only One](https://portwooddigital.com/2023/11/18/one-and-only-one/)

@@ -34,6 +34,10 @@ class_<XC::BandArpackSOE, bases<XC::ArpackSOEBase>, boost::noncopyable >("BandAr
 
 class_<XC::BandArpackppSOE, bases<XC::ArpackSOEBase>, boost::noncopyable >("BandArpackppSOE", no_init)
   ;
+#ifdef USE_SPECTRA
+class_<XC::SpectraSOE, bases<XC::EigenSOE>, boost::noncopyable >("SpectraSOE", no_init)
+  ;
+#endif
 
 class_<XC::SymArpackSOE, bases<XC::ArpackSOEBase>, boost::noncopyable >("SymArpackSOE", no_init)
   ;
