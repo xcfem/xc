@@ -139,3 +139,24 @@ class cylindrWind(object):
         Wpress=qz*Cp
         return Wpress
     
+#          a
+#      --------->|                 1    |                
+#       -------->/             ========>|     -
+#        ------->/                      |     ^        
+#         ------>/   h    <>            |     |    
+#          ----->/                      |     | hR
+#           ---->/                      |     |
+#            --->/                      |     -
+#              b
+
+def getLinearDistribution(h:float, hR:float):
+    ''' Return the values (a,b) of a linear pressure distribution whose
+        resultant passes through a point at heigth= hR.
+
+    :param h: height of the pressure distribution.
+    :param hR: height of the resultant.
+    '''
+    ratio= hR/h
+    a= 2*(3*ratio-1)
+    b= 2*(2-3*ratio)
+    return (a,b)
