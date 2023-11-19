@@ -257,20 +257,24 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
-        halfNosingLoad= self.getNosingLoad()/2.0
+        nosingLoadValue= self.getNosingLoad()
         nosingLoads= list()
-        positions= self.getNosingLoadPositions()
-        for p in positions:
-            if(ref):
-                pos3d= ref.getGlobalPosition(p) # Center of the locomotive
-                nl= wheel_load.WheelLoad(pos= pos3d, ld= halfNosingLoad, directionVector= nosingDirection)
-                nl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector())
-                nosingLoads.append(nl)
-            else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; need a locomotive reference system.')
-                lmsg.error()
+        dY= -self.ySpacing/2.0
+        if(ref):
+            refKVector= ref.getKVector()
+            if(refKVector[2]<0): # Swap interior and exterior wheels.
+                dY= -dY
+        nosingLoadPos= geom.Pos2d(0,dY)
+        if(ref):
+            pos3d= ref.getGlobalPosition(nosingLoadPos)
+            nl= wheel_load.WheelLoad(pos= pos3d, ld= nosingLoadValue, directionVector= nosingDirection)
+            nl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector())
+            nosingLoads.append(nl)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; need a locomotive reference system.')
+            lmsg.error()
 
         retval= list()
         if(originSet): # pick the loaded by each wheel
