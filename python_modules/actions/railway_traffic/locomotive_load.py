@@ -68,10 +68,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         return self.nAxes*2
 
     def getWheelPositions(self):
-        ''' Return a list with the positions of the wheels.
-
-        :param swapAxes: if true swap X and Y axis.
-        '''
+        ''' Return a list with the positions of the wheels.'''
         dX= self.xSpacing
         dY= self.ySpacing/2.0
         axesDisp= (self.nAxes-1)*dX/2.0  # Axes positions relative to the center.
@@ -83,6 +80,12 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
             for x in axlesPos:
                 retval.append(geom.Pos2d(x,y))
         return retval
+
+    def getNosingLoadPositions(self):
+        ''' Return a list with the positions for the nosing loads: center 
+            of the rails under the locomotive.'''
+        dY= self.ySpacing/2.0
+        return [geom.Pos2d(0,-dY), geom.Pos2d(0,+dY)]
 
     def getClassifiedWheelLoad(self):
         ''' Return the load on each wheel affected by the classification factor.'''
@@ -190,7 +193,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         ''' Define the wheel loads due to the locomotives argument placed at
             the positions argument.
 
-        .param centrifugalLoads: centrifugal loads for each locomotive wheel.
+        :param centrifugalLoads: centrifugal loads for each locomotive wheel.
         :param centrifugalDirection: direction of the centrifugal force.
         :param ref: reference system at the center of the locomotive.
         :param spreadingLayers: list of tuples containing the depth
@@ -233,6 +236,49 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; need a locomotive reference system.')
+            lmsg.error(className+'.'+methodName+'; need a set to pick the nodes from it.')
+            lmsg.error()
+        return retval
+    
+    def defDeckNosingLoadThroughLayers(self, nosingDirection, ref, spreadingLayers= None, originSet= None, deckThickness= 0.0, deckSpreadingRatio= 1/1):
+        ''' Define the wheel loads due to the locomotives argument placed at
+            the positions argument.
+
+        :param nosingDirection: direction of the nosing force.
+        :param ref: reference system at the center of the locomotive.
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                concrete slab.
+        :param originSet: pick the loaded nodes for each wheel load.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        halfNosingLoad= self.getNosingLoad()/2.0
+        nosingLoads= list()
+        positions= self.getNosingLoadPositions()
+        for p in positions:
+            if(ref):
+                pos3d= ref.getGlobalPosition(p) # Center of the locomotive
+                nl= wheel_load.WheelLoad(pos= pos3d, ld= halfNosingLoad, directionVector= nosingDirection)
+                nl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector())
+                nosingLoads.append(nl)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; need a locomotive reference system.')
+                lmsg.error()
+
+        retval= list()
+        if(originSet): # pick the loaded by each wheel
+            for nosingLoad in nosingLoads:
+                retval.extend(nosingLoad.defDeckConcentratedLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; need a set to pick the nodes from it.')
             lmsg.error()
         return retval

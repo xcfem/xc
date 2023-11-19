@@ -149,6 +149,10 @@ class LocomotiveLoad(ll.LocomotiveLoad):
         else:
             retval= (self.getNumWheels())*[centrifugalWheelLoad]
         return retval
+    
+    def getNosingLoad(self):
+        ''' Return the value of the nosing load.'''
+        return 100e3*self.classificationFactor # No dynamic factor for nosing load.
 
 
 locomotiveLM1= LocomotiveLoad(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435)
@@ -216,7 +220,7 @@ class TrackAxis(ta.TrackAxis):
         return super().getRailCentrifugalLoads(leftRailCentrifugalLoad, rightRailCentrifugalLoad, trainModel, relativePosition, overrideDynamicFactor= dynamicFactor)
     
     def defDeckCentrifugalLoadOnRailsThroughLayers(self, trainModel, relativePosition, v, Lf, r, trackCrossSection, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
-        ''' Define the nodal loads that correspond tot uniform centrifugal
+        ''' Define the nodal loads that correspond to uniform centrifugal
            loads on the rails.
 
         :param trainModel: load model of the train (see TrainLoadModel class).
@@ -253,7 +257,7 @@ class TrackAxis(ta.TrackAxis):
         return retval
     
     def defDeckCentrifugalLoadThroughLayers(self, trainModel, relativePosition, v, Lf, r, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
-        ''' Define uniform loads on the tracks with the argument values:
+        ''' Define centrifugal loads on the bridge deck given:
 
         :param trainModel: load model of the train (see TrainLoadModel class).
         :param relativePosition: relative positions of the locomotive center in
@@ -265,7 +269,6 @@ class TrackAxis(ta.TrackAxis):
                    bridge, which is most unfavourable for the design of the 
                    structural element under consideration (m).
         :param r: radius of curvature (m).
-        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
         :param spreadingLayers: list of tuples containing the depth
                                 and the spread-to-depth ratio of
                                 the layers between the wheel contact
@@ -284,5 +287,29 @@ class TrackAxis(ta.TrackAxis):
         retval= trainModel.locomotive.defDeckCentrifugalWheelLoadsThroughLayers(centrifugalLoads= locomotiveCentrifugalLoads, centrifugalDirection= -ref.getJVector(), ref= ref, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         # Uniform centrifugal load on the rails.
         retval.extend(self.defDeckCentrifugalLoadOnRailsThroughLayers(trainModel= trainModel, relativePosition= relativePosition, v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
+        return retval
+    
+    def defDeckNosingLoadThroughLayers(self, trainModel, relativePosition:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Define loads on the bridge deck due to the nosing load given:
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: relative positions of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        # Locomotive centrifugal load.
+        ref= self.getReferenceAt(lmbdArcLength= relativePosition)
+        retval= trainModel.locomotive.defDeckNosingLoadThroughLayers(nosingDirection= -ref.getJVector(), ref= ref, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         return retval
     
