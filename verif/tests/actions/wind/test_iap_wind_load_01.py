@@ -12,6 +12,7 @@ __email__= "l.pereztato@ciccp.es"
 
 from actions.wind import IAP_wind
 
+# Compute wind pressure.
 c_prob= IAP_wind.getProbabilityFactor(T= 100.0, K= 0.2, n= 0.5)
 ratio1= abs(c_prob-1.0384765480213738)/1.0384765480213738
 c_fx= IAP_wind.getSolidWebBridgeDragForceCoefficient(B= 3.8, h_eq= 1.6)
