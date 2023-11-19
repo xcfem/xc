@@ -1229,7 +1229,7 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
            variables that control the output of the checking (append or not
            the results to a file, generation or not of lists, ...)
     '''
-    elems= preprocessor.getSets['total'].elements
+    elems= preprocessor.getSets['total'].elements # This total set belongs to the phantom model and contains all the calculated elements
     controlVarName= outputCfg.controller.limitStateLabel
     dataDict= None
     jsonFileName= outputFileName+'.json'

@@ -469,7 +469,7 @@ class StrainLoadOnShells(object):
     
     :ivar name:  name identifying the load
     :ivar xcSet: set that contains the elements
-    :ivar DOFstrain: degree of freedom to which apply the strain 
+    :ivar DOFstrain: list of degrees of freedom to which apply the strain 
                      0: strain along local x
                      1: strain along local y
                      2: strain along local z
