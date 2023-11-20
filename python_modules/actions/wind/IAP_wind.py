@@ -297,13 +297,13 @@ def getUnitWindLoadPier(terrainCategory:str, v_b0: float, H_max:float= 20.0):
 #              --->|                           |
 #               -->|                           |
 #                b
-
+#
 def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, averagePressure= 1.0):
     ''' Return the dimensions of the parallel sides for the trapezoidal pressure
         over the lateral surface of the bridge such as the resultant height is
         0.6*h over the bottom edge of the surface.
 
-    :param h: height of the surfacd loaded by the wind.
+    :param h: height of the surface loaded by the wind.
     :param pointOfApplicationHeight: fraction of the surface height of the 
      desired point of application (defaults to 0.6 according to 
      clause 4.2.5.1.3 of IAP-11).
