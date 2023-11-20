@@ -236,9 +236,15 @@ class SolutionProcedure(object):
             equations.
         '''
         self.soe= self.solutionStrategy.newSystemOfEqn(self.soeType)
-        if(self.shift!=None):
-            self.soe.shift= self.shift
-        self.solver= self.soe.newSolver(self.solverType)
+        if(self.soe):
+            if(self.shift!=None):
+                self.soe.shift= self.shift
+            self.solver= self.soe.newSolver(self.solverType)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; could not get a system of equations of type: '"+str(self.soeType) + "' probably is not a valid type or it is not implemented in your system.")
+            exit(1)            
 
     def setPenaltyFactors(self, alphaSP= 1e15, alphaMP= 1e15):
         ''' Define the penalty factors to use with the penalty constraint handler.
