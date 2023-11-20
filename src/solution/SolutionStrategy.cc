@@ -59,6 +59,7 @@
 #include "utility/matrix/ID.h"
 
 #include "SolutionStrategyMap.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 void XC::SolutionStrategy::free_soln_algo(void)
   {
@@ -98,9 +99,10 @@ bool XC::SolutionStrategy::alloc_soln_algo(const std::string &nmb)
     else if(nmb=="ill-conditioning_soln_algo")
       theSolnAlgo= new KEigenAlgo(this);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; solution algorithm: '"
-                << nmb << "' unknown." << std::endl;
+                << nmb << "' unknown."
+		<< Color::def << std::endl;
     if(theSolnAlgo)
       theSolnAlgo->set_owner(this);
 
@@ -121,8 +123,9 @@ void XC::SolutionStrategy::copy_soln_algo(SolutionAlgorithm *ptr)
         theSolnAlgo->set_owner(this);
       }
     else
-     std::cerr << getClassName() << "::" << __FUNCTION__
-	       << "; null pointer to solution algorithm." << std::endl;
+     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	       << "; null pointer to solution algorithm."
+	       << Color::def << std::endl;
   }
 
 //! @brief Creates a new solution algorithm with the name being passed as parameter.
@@ -192,9 +195,9 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     else if(nmb=="distributed_displacement_control_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new DistributedDisplacementControl(this);
       }
     else if(nmb=="HS_constraint_integrator")
@@ -236,9 +239,9 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     else if(nmb=="load_path_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new LoadPath(this);
       }
     else if(nmb=="min_unbal_disp_norm_integrator")
@@ -260,153 +263,153 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     else if(nmb=="eigen_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new EigenIntegrator(this);
       }
     else if(nmb=="linear_buckling_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new LinearBucklingIntegrator(this);
       }
     else if(nmb=="ill-conditioning_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
          theIntegrator= new KEigenIntegrator(this);
       }
     else if(nmb=="standard_eigen_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
          theIntegrator= new KEigenIntegrator(this);
       }
     else if(nmb=="alpha_os_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new AlphaOS(this);
       }
     else if(nmb=="alpha_os_generalized_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new AlphaOSGeneralized(this);
       }
     else if(nmb=="central_difference_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new CentralDifference(this);
       }
     else if(nmb=="central_difference_alternative_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new CentralDifferenceAlternative(this);
       }
     else if(nmb=="central_difference_no_damping_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new CentralDifferenceNoDamping(this);
       }
     else if(nmb=="collocation_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new Collocation(this);
       }
     else if(nmb=="collocation_hybrid_simulation_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new CollocationHybridSimulation(this);
       }
     else if(nmb=="HHT_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new HHT(this);
       }
     else if(nmb=="HHT1_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new HHT1(this);
       }
     else if(nmb=="HHT_explicit_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new HHTExplicit(this);
       }
     else if(nmb=="HHT_generalized_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new HHTGeneralized(this);
       }
     else if(nmb=="HHT_generalized_explicit_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new HHTGeneralizedExplicit(this);
       }
     else if(nmb=="HHT_hybrid_simulation_integrator")
       {
         if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new HHTHybridSimulation(this);
       }
     else if(nmb=="TRBDF2_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new TRBDF2(this);
       }
     else if(nmb=="TRBDF3_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new TRBDF3(this);
       }
     else if(nmb=="newmark_integrator")
@@ -439,23 +442,24 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
     else if(nmb=="newmark_hybrid_simulation_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new NewmarkHybridSimulation(this);
       }
     else if(nmb=="wilson_theta_integrator")
       {
 	if(numberOfParameters>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
+	            << Color::def << std::endl;
         theIntegrator= new WilsonTheta(this);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; integrator: '"
-                << nmb << "' unknown." << std::endl;
+                << nmb << "' unknown."
+		<< Color::def << std::endl;
     if(theIntegrator)
       {
         theIntegrator->set_owner(this);
@@ -480,8 +484,9 @@ void XC::SolutionStrategy::copy_integrator(Integrator *ptr)
 	set_integrator();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
- 	        << "; null pointer to integrator." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+ 	        << "; null pointer to integrator."
+		<< Color::def << std::endl;
   }
 
 //! @brief Informs the analysis object of the new integrator.
@@ -505,12 +510,12 @@ void XC::SolutionStrategy::set_integrator(void)
                     eigenPart.setIntegrator(*linearBucklingIntegrator);
 		  }
 		else
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			    << "; wrong integrator type: "
 		            << this->theIntegrator->getClassName()
 		            << " for linearBuckling analysis: "
 		            << an->getClassName()
-			    << std::endl;
+			    << Color::def << std::endl;
 	      }
 	    else if(staticAnalysis)
 	      {
@@ -518,12 +523,12 @@ void XC::SolutionStrategy::set_integrator(void)
 		if(staticIntegrator)
                   staticAnalysis->setIntegrator(*staticIntegrator);
 		else
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			    << "; wrong integrator type: "
 		            << this->theIntegrator->getClassName()
 		            << " for static analysis: "
 		            << an->getClassName()
-			    << std::endl;
+			    << Color::def << std::endl;
 	      }
 	    else if(transientAnalysis)
 	      {
@@ -531,12 +536,12 @@ void XC::SolutionStrategy::set_integrator(void)
 		if(transientIntegrator)
                   transientAnalysis->setIntegrator(*transientIntegrator);
 		else
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			    << "; wrong integrator type: "
 		            << this->theIntegrator->getClassName()
 		            << " for transient analysis: "
 		            << an->getClassName()
-			    << std::endl;
+			    << Color::def << std::endl;
 	      }
 	    else if(eigenAnalysis)
 	      {
@@ -544,17 +549,18 @@ void XC::SolutionStrategy::set_integrator(void)
 		if(eigenIntegrator)
                   eigenAnalysis->setIntegrator(*eigenIntegrator);
 		else
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			    << "; wrong integrator type: "
 		            << this->theIntegrator->getClassName()
 			    << "; for eigen analysis: "
 		            << an->getClassName()
-			    << std::endl;
+			    << Color::def << std::endl;
 	      }
 	  }
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
- 	        << "; no integrator to set." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+ 	        << "; no integrator to set."
+		    << Color::def << std::endl;
       }
   }
 
@@ -633,9 +639,10 @@ bool XC::SolutionStrategy::alloc_system_of_equations(const std::string &nmb,Anal
     else if(nmb=="mumps_parallel_soe")
       theSOE= new MumpsParallelSOE(this);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; system of equations: '"
-                << nmb << "' unknown." << std::endl;
+                << nmb << "' unknown."
+		<< Color::def << std::endl;
 
     if(theSOE)
       theSOE->set_owner(this);
@@ -656,8 +663,9 @@ void XC::SolutionStrategy::copy_system_of_equations(SystemOfEqn *ptr)
         theSOE->set_owner(this);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; null pointer to SOE." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; null pointer to SOE."
+		<< Color::def << std::endl;
   }
 
 //! @brief Sets the system of equations type to use.
@@ -670,8 +678,9 @@ XC::SystemOfEqn &XC::SolutionStrategy::newSystemOfEqn(const std::string &type)
         alloc_system_of_equations(type,theModel);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; analysis model is not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; analysis model is not defined."
+		<< Color::def << std::endl;
     assert(theSOE);
     return *theSOE;
   }
@@ -705,9 +714,10 @@ bool XC::SolutionStrategy::alloc_conv_test(const std::string &convTestType)
     else if(convTestType== "relative_total_norm_disp_incr_conv_test")
       theTest= new CTestRelativeTotalNormDispIncr(this);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; convergence test type: '"
-                << convTestType << "' unknown." << std::endl;
+                << convTestType << "' unknown."
+		<< Color::def << std::endl;
     return (theTest!=nullptr);
   }
 
@@ -720,8 +730,9 @@ void XC::SolutionStrategy::copy_conv_test(ConvergenceTest *ptr)
         theTest->set_owner(this);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; null pointer to convergence test." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; null pointer to convergence test."
+		<< Color::def << std::endl;
   }
 
 //! @brief Set convergence test to be used.
@@ -730,9 +741,9 @@ XC::ConvergenceTest &XC::SolutionStrategy::newConvergenceTest(const std::string 
     if(alloc_conv_test(convTestType))
       theTest->set_owner(this);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; allocation of convergence test failed."
-	        << std::endl;
+	        << Color::def << std::endl;
     assert(theTest);
     return *theTest;
   }
@@ -799,14 +810,15 @@ const XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void
       {
         retval= dynamic_cast<const SolutionStrategyMap *>(owr);
         if(!retval)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; container not defined."
 	            << " Owner type: " << owr->getClassName()
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; owner not set." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; owner not set."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -820,14 +832,15 @@ XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void)
       {
 	retval= dynamic_cast<SolutionStrategyMap *>(Owner());
 	if(!retval)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; container not defined." 
 	            << " Owner type: " << owr->getClassName()
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; owner not set." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; owner not set."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -871,12 +884,14 @@ std::string XC::SolutionStrategy::getName(void) const
 	      }
 	  }
 	if(i==(smap->end())) // pointer not found.
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; solution strategy not found." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; solution strategy not found."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; container not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; container not defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -999,10 +1014,10 @@ XC::LinearSOE *XC::SolutionStrategy::getLinearSOEPtr(void)
 	std::string cName= "nil";
 	if(theSOE)
 	  cName= theSOE->getClassName();
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	  	  << "; not a suitable system of equations ("
 	          << cName << " is not a LinearSOE)."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     return ptr;
   }
@@ -1012,9 +1027,9 @@ const XC::LinearSOE *XC::SolutionStrategy::getLinearSOEPtr(void) const
   {
     const LinearSOE *ptr= dynamic_cast<const LinearSOE *>(theSOE);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; not a suitable system of equations (not a LinearSOE)."
-		<< std::endl;
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1023,9 +1038,9 @@ XC::EigenSOE *XC::SolutionStrategy::getEigenSOEPtr(void)
   {
     EigenSOE *ptr= dynamic_cast<EigenSOE *>(theSOE);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; not a suitable system of equations (not an EigenSOE)."
-		<< std::endl;
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1034,9 +1049,9 @@ const XC::EigenSOE *XC::SolutionStrategy::getEigenSOEPtr(void) const
   {
     const EigenSOE *ptr= dynamic_cast<const EigenSOE *>(theSOE);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; not a suitable system of equations (not an EigenSOE)."
-		<< std::endl;
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1046,8 +1061,9 @@ XC::IncrementalIntegrator *XC::SolutionStrategy::getIncrementalIntegratorPtr(voi
   {
     IncrementalIntegrator *ptr= dynamic_cast<IncrementalIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not an incremental integrator." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not an incremental integrator."
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1057,8 +1073,9 @@ XC::EigenIntegrator *XC::SolutionStrategy::getEigenIntegratorPtr(void)
   {
     EigenIntegrator *ptr= dynamic_cast<EigenIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not an eigen integrator." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not an eigen integrator."
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1068,8 +1085,9 @@ XC::LinearBucklingIntegrator *XC::SolutionStrategy::getLinearBucklingIntegratorP
   {
     LinearBucklingIntegrator *ptr= dynamic_cast<LinearBucklingIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not a linear buckling integrator." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not a linear buckling integrator."
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1079,8 +1097,9 @@ XC::TransientIntegrator *XC::SolutionStrategy::getTransientIntegratorPtr(void)
   {
     TransientIntegrator *ptr= dynamic_cast<TransientIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not a transient integrator." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not a transient integrator."
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1090,8 +1109,9 @@ XC::StaticIntegrator *XC::SolutionStrategy::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *ptr= dynamic_cast<StaticIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not a static integrator." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not a static integrator."
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1101,8 +1121,9 @@ XC::EigenAlgorithm *XC::SolutionStrategy::getEigenSolutionAlgorithmPtr(void)
   {
     EigenAlgorithm *ptr= dynamic_cast<EigenAlgorithm *>(theSolnAlgo);
     if(!ptr)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; the algorithm can't compute eigenvalues." << std::endl;
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; the algorithm can't compute eigenvalues."
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1112,8 +1133,9 @@ XC::EquiSolnAlgo *XC::SolutionStrategy::getEquiSolutionAlgorithmPtr(void)
   {
     EquiSolnAlgo *ptr= dynamic_cast<EquiSolnAlgo *>(theSolnAlgo);
     if(!ptr)
-      std::clog << getClassName() << "::" << __FUNCTION__
-                << "; the algorithm can't solve for equilibrium." << std::endl;
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+                << "; the algorithm can't solve for equilibrium."
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1123,9 +1145,9 @@ XC::DomainDecompAlgo *XC::SolutionStrategy::getDomainDecompSolutionAlgorithmPtr(
   {
     DomainDecompAlgo *ptr= dynamic_cast<DomainDecompAlgo *>(theSolnAlgo);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; the algorithm can't make domain decomposition."
-		<< std::endl;
+		<< Color::def << std::endl;
     return ptr;
   }
 
@@ -1147,8 +1169,9 @@ int XC::SolutionStrategy::setLinearSOE(LinearSOE &theNewSOE)
 //! @brief Sets the eigenSOE to use in the analysis.
 int XC::SolutionStrategy::setEigenSOE(EigenSOE &theSOE)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; does nothing yet\n";    
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; does nothing yet."
+              << Color::def << std::endl;    
     return 0;
   }
 
@@ -1220,8 +1243,9 @@ bool XC::SolutionStrategy::CheckPointers(void)
   {
     if(!theModelWrapper)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; error, model not defined." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; error, model not defined."
+		  << Color::def << std::endl;
         return false;
       }
     if(!theModelWrapper->CheckPointers())
@@ -1230,21 +1254,24 @@ bool XC::SolutionStrategy::CheckPointers(void)
       }
     if(!theSolnAlgo)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error, solution algorithm not defined." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; error, solution algorithm not defined."
+		  << Color::def << std::endl;
         return false;
       }
     if(!theSOE)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error, system of equations not defined." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; error, system of equations not defined."
+		  << Color::def << std::endl;
         return false;
       }
     // THE INTEGRATOR MUST BE ABLE TO BE DEFINED LATER. LP 14/08/2023
     // if(!theIntegrator)
     //   {
-    //     std::cerr << getClassName() << "::" << __FUNCTION__
-    // 		  << "; error, integrator not defined." << std::endl;
+    //     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+    // 		  << "; error, integrator not defined."
+    //            << Color::def << std::endl;
     //     return false;
     //   }
     return true;
