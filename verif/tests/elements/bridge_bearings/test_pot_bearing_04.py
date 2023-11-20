@@ -96,6 +96,6 @@ else:
     lmsg.error('ratio1= '+str(ratio1))
     lmsg.error('ratio2= '+str(ratio2))
     lmsg.error('ratio3= '+str(ratio3)) # ratio3= 1.2646541989592697e+284 08/11/2023
-    lmsg.error('  uNod2= ', uNod2)
-    lmsg.error('  vDirYlocal= ', vDirYlocal)
-    lmsg.error('  ElongYlres= ', ElongYlres)
+    lmsg.error('  uNod2= '+str(uNod2))
+    lmsg.error('  vDirYlocal= '+str(vDirYlocal))
+    lmsg.error('  ElongYlres= '+str(ElongYlres))
