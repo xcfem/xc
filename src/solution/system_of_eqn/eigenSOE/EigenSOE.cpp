@@ -50,7 +50,9 @@
 #include <solution/system_of_eqn/eigenSOE/SymArpackSolver.h>
 #include <solution/system_of_eqn/eigenSOE/SymBandEigenSolver.h>
 #include <solution/system_of_eqn/eigenSOE/FullGenEigenSolver.h>
+#ifdef USE_SPECTRA
 #include <solution/system_of_eqn/eigenSOE/SpectraSolver.h>
+#endif
 
 
 

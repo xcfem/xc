@@ -33,7 +33,7 @@ SET(SPECTRA_SEARCH_PATHS ${CMAKE_SOURCE_DIR} /usr/include/Spectra /usr/local/inc
 # Include dir
 find_path(SPECTRA_INCLUDE_DIR NAMES DavidsonSymEigsSolver.h PATHS ${SPECTRA_SEARCH_PATHS})
 IF(NOT SPECTRA_INCLUDE_DIR)
-  MESSAGE(FATAL_ERROR "Spectra not found (DavidsonSymEigsSolver.h)")
+  MESSAGE(STATUS "Spectra not found (DavidsonSymEigsSolver.h)")
 ENDIF()
 
 SET(SPECTRA_FOUND FALSE)
