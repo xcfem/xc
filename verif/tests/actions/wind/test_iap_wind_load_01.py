@@ -21,15 +21,15 @@ f_wx= IAP_wind.getUnitWindLoadDeck(terrainCategory='III', v_b0= 29, H_max= 5.0)
 ratio3= abs(f_wx-1.83e3)/1.83e3
 
 # Pressure distribution
-percent= 0.6
+percent= 60.0
 H= 1.0
-pressureDistribution= IAP_wind.getTrapezoidalPressureDistribution(h= H, heightFraction= percent, averagePressure= f_wx)
+pressureDistribution= IAP_wind.getTrapezoidalPressureDistribution(h= H, heightFraction= percent/100.0, averagePressure= f_wx)
 a= pressureDistribution(H)
 b= pressureDistribution(0.0)
 
 A= (a+b)/2.0*H
 lever= (H-H/3.0*(2*b+a)/(b+a))/H
-ratio4= abs(lever-percent)/percent
+ratio4= abs(lever*100.0-percent)/percent
 
 '''
 print("ratio1= ",ratio1)
