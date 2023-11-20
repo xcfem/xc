@@ -521,6 +521,7 @@ python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_02.py
 python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_03.py
 python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_04.py
 python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_05.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_06.py
 echo "$BLEU" "    Linear buckling analysis tests." "$NORMAL"
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column01.py
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column02.py
