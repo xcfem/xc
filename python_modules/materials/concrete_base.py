@@ -431,12 +431,12 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                             material, if "d" return the design values one.
         '''
         retval= None
-        if(matDiagType=='d' or matDiagType=='D'):
+        if matDiagType.lower() =='d':
             if(self.materialDiagramD): # if already defined.
                 retval= self.materialDiagramD
             else: # if not defined yet, do it now.
                 retval= self.defDiagD(preprocessor)
-        elif(matDiagType=='k' or matDiagType=='K'):
+        elif matDiagType.lower() =='k':
             if(self.materialDiagramK): # if already defined.
                 retval= self.materialDiagramK
             else: # if not defined yet, do it now.
@@ -446,7 +446,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                 retval= self.materialDiagramE
             else: # if not defined yet, do it now.
                 retval= self.defDiagE(preprocessor)
-        elif(matDiagType=='td' or matDiagType=='TD'):
+        elif matDiagType.lower() =='td':
             if(self.materialDiagramTD): # if already defined.
                 retval= self.materialDiagramTD
             else: # if not defined yet, do it now.
@@ -1304,12 +1304,12 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
                             material, if "d" return the design values one.
         '''
         retval= None
-        if(matDiagType=='d' or matDiagType=='D'):
+        if matDiagType.lower() =='d':
             if(self.materialDiagramD): # if already defined.
                 retval= self.materialDiagramD
             else: # if not defined yet, do it now.
                 retval= self.defDiagD(preprocessor)
-        elif(matDiagType=='k' or matDiagType=='K'):
+        elif matDiagType.lower() =='k':
             if(self.materialDiagramK): # if already defined.
                 retval= self.materialDiagramK
             else: # if not defined yet, do it now.
