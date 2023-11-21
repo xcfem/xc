@@ -440,17 +440,27 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         #direction vectors for each DOF
         vx,vy,vz=[1,0,0],[0,1,0],[0,0,1]
         DOFdirVct=(vx,vy,vz,vx,vy,vz)
+        pointGraphicData= list()
         spIter= prep.getDomain.getConstraints.getSPs
         sp= spIter.next()
         while sp:
             nod= sp.getNode
             if nod.tag in nodInSet:
+                # Extract data.
+                vPos= nod.getInitialPos3d
                 dof= sp.getDOFNumber
+                vDir= DOFdirVct[dof]
                 if dof < 3: # This is not true in 2D problems.
-                    utils_vtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale= cScale)
+                    symbType= 'cone'
+                    color= [0,0,1]
                 else:
-                    utils_vtk.drawVtkSymb(symbType='shaftkey',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale= cScale)
+                    symbType= 'shaftkey'
+                    color= [0,1,0]
+                spGraphicData={'vPos':vPos,'vDir':vDir,'symbType':symbType,'color':color}
+                pointGraphicData.append(spGraphicData)
+                #utils_vtk.drawVtkSymb(symbType= symbType, renderer=self.renderer, RGBcolor=color, vPos= vPos, vDir= vDir, scale= cScale)
             sp= spIter.next()
+        utils_vtk.draw_vtk_symbols(pointData= pointGraphicData, renderer=self.renderer, scale= cScale)
         return
                     
 def VtkLoadIdsNodes(recordGrid):

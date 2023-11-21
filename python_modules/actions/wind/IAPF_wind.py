@@ -156,9 +156,9 @@ def getWindPressure(v_c: float, rho:float= 1.25):
     '''
     return 0.5*rho*v_c**2
 
-def getUnitWindLoadDeck(terrainCategory:str, v_ref:float, z:float, Cd:float, topographyFactor= 1.0, T= 100, K= 0.2):
-    ''' Return the wind load by square meter on bridge deck according to 
-        clause 2.3.7.3. of IAPF-10.
+def getUnitWindLoadDeck(terrainCategory:str, v_ref:float, z:float, Cd:float, topographyFactor= 1.0, T= 100, K= 0.2, rho:float= 1.25):
+    ''' Return the wind load per square meter on a bridge member according 
+        to clauses 2.3.7.3 of IAPF-10.
 
     :param terrainCategory: terrain category according to clause 2.3.7.2. 
                             of IAPF-10.
@@ -170,8 +170,11 @@ def getUnitWindLoadDeck(terrainCategory:str, v_ref:float, z:float, Cd:float, top
     :param T: return period expressed in years.
     :param K: parameter (defaults to 0.2).
     '''
+    # Compute design velocity.
     v_c= getDesignVelocity(terrainCategory= terrainCategory, v_ref= v_ref, z= z, topographyFactor= topographyFactor, T= T, K= K)
-    return Cd*getWindPressure(v_c= v_c)
+    # Compute wind pressure.
+    windPressure= getWindPressure(v_c= v_c, rho= rho)
+    return Cd*windPressure
     
 def ParamKIAPF(gae):
     '''ParamKIAPF(gae)
