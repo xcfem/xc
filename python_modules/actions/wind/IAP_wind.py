@@ -298,7 +298,7 @@ def getUnitWindLoadPier(terrainCategory:str, v_b0: float, H_max:float= 20.0):
 #               -->|                           |
 #                b
 #
-def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, averagePressure= 1.0):
+def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, averagePressure= 1.0, fill_value= "extrapolate"):
     ''' Return the dimensions of the parallel sides for the trapezoidal pressure
         over the lateral surface of the bridge such as the resultant height is
         0.6*h over the bottom edge of the surface.
@@ -310,7 +310,7 @@ def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, avera
     :param averagePressure: average value of the wind pressure. 
     '''
     (topSide, bottomSide)= base_wind.getLinearDistribution(h= h, hR= h*heightFraction) 
-    return scipy.interpolate.interp1d([0.0,h], [bottomSide*averagePressure, topSide*averagePressure], kind='linear')
+    return scipy.interpolate.interp1d([0.0,h], [bottomSide*averagePressure, topSide*averagePressure], kind='linear', fill_value= fill_value)
 
 
 srHidingFactor= [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 1e3] # solidity ratio
