@@ -39,15 +39,9 @@ class MPLGraphic(object):
         self.fig= None
       
     def getPathPolygon(self, plg):
-        plgVertices= plg.getVertexList()
-        v0= plgVertices[0]
-        vertices= [(v0.y*self.fScale,v0.x*self.fScale)]
-        codes=[Path.MOVETO]
-        for v in plgVertices[1:]:
-          vertices.append((v.y*self.fScale,v.x*self.fScale))
-          codes.append(Path.LINETO)
-        vertices.append((v0.y*self.fScale,v0.x*self.fScale))
-        codes.append(Path.CLOSEPOLY)
+        vertices = [(v.y*self.fScale,v.x*self.fScale) for v in plg.getVertexList()]
+        vertices.append(vertices[0])
+        codes=[Path.MOVETO] + (len(vertices) - 2) * [Path.LINETO] + [Path.CLOSEPOLY]
         path = Path(vertices, codes)
         return path
 
