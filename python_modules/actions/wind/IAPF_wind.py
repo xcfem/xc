@@ -12,6 +12,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 from actions.wind import IAP_wind
+import scipy.interpolate
 
 # Import common functions from IAP.
 getTrapezoidalPressureDistribution= IAP_wind.getTrapezoidalPressureDistribution
@@ -35,6 +36,18 @@ def getSolidWebBridgeDragForceCoefficient(B:float, h_eq:float, webAngle:float= 0
     reductionCoef= max(0.7,1-(5/1000*math.degrees(webAngle)))
     retval= (2.5- 0.3*(B/h_eq))*reductionCoef
     return max(min(retval, 2.4), 1.3)
+
+tb221a_B_h= [0.25, 0.33, 0.5, 0.67, 1.0, 1.5, 2.0,3,4,1e3] # B/h
+tb221a_Cd= [2.1, 2.2, 2.2, 2.2, 2.0, 1.7, 1.4, 1.2, 1.1, 1.1] # dragg coefficient.
+tb221a_CDInterp= scipy.interpolate.interp1d(tb221a_B_h, tb221a_Cd, fill_value= "extrapolate")
+
+def getRectangularShapeDragCoefficient(B:float, h:float):
+    ''' Return the drag coeffient for a rectangular shape according to figure 2.21 of IAPF-10.
+
+    :param B: dimension of the rectangle parallel to the wind.
+    :param h: dimension of the rectangle perpendicular to the wind.
+    '''
+    return tb221a_CDInterp(B/h)
 
 def CdTableroAlmaLlenaIAPF(B,h,angAlma):
     '''CdTableroAlmaLlenaIAPF(B,h,angAlma)
