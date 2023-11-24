@@ -65,17 +65,16 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 lpA= lPatterns.newLoadPattern("default","A")
 lpB= lPatterns.newLoadPattern("default","B")
-#lPatterns.currentLoadPattern= "A"
 eleLoad= lpA.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.axialComponent= f
 
-#lPatterns.currentLoadPattern= "B"
 eleLoad= lpB.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.transComponent= -f
-combs= loadHandler.getLoadCombinations
-comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
+
+# Define load combination
+comb= modelSpace.newLoadCombination('COMB',"1.33*A+1.5*B")
 
 # Solution procedure
 # Resolvemos para el caso A

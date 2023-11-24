@@ -639,21 +639,20 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return betaast
 
 #Total shrinkage
-    def getShrEpscs(self,t,ts,RH,h0):
+    def getShrEpscs(self, t:float, ts:float ,RH:float, h0:float):
         '''Total shrinkage strain = 
         autogenous + drying shrinkages
 
-        :param t:     age of concrete in days at the moment considered
-        :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
-                   Normally this is at the end of curing
-        :param RH:    ambient relative humidity(%)
-        :param h0:  notional size of the member.
+        :param t: age of concrete in days at the moment considered
+        :param ts: age of concrete in days at the beginning of drying shrinkage (or swelling) Normally this is at the end of curing
+        :param RH: ambient relative humidity(%)
+        :param h0: notional size of the member.
 
                   - h0= 2*Ac/u, where:
                   - Ac= cross sectional area
                   - u = perimeter of the member in contact with the atmosphere
         '''
-        epscs=self.getShrEpscd(t,ts,RH,h0)+self.getShrEpsca(t)
+        epscs= self.getShrEpscd(t,ts,RH,h0)+self.getShrEpsca(t)
         return epscs
 
 #Creep

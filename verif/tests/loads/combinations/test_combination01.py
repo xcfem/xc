@@ -60,21 +60,22 @@ modelSpace.fixNode000_000(n1.tag)
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
+# Load modulation.
 ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 lpA= lPatterns.newLoadPattern("default","A")
 lpB= lPatterns.newLoadPattern("default","B")
-#\set_current_load_pattern{"A"}
+
 eleLoad= lpA.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([beam3d.tag])
 eleLoad.axialComponent= f
 eleLoad= lpB.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([beam3d.tag])
 eleLoad.transComponent= -f
-combs= loadHandler.getLoadCombinations
-comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
-loadHandler.addToDomain("COMB")
+
+# Define load combination.
+comb= modelSpace.newLoadCombination('COMB',"1.33*A+1.5*B")
+modelSpace.addLoadCaseToDomain(comb.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
