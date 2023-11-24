@@ -123,46 +123,46 @@ class CameraParameters(object):
         -X-Y+Z: View from point (-1,-1,1)
         XYZNeg or -X-Y-Z: View from point (-1,-1,-1)
         '''
-        if(self.viewName=="ZPos"):
+        if(self.viewName.lower()=="zpos"):
           self.viewUpVc= [0,1,0]
           self.posCVc= [0,0,100]
-        elif(self.viewName=="ZNeg"):
+        elif(self.viewName.lower()=="zneg"):
           self.viewUpVc= [0,1,0]
           self.posCVc= [0,0,-100]
-        elif(self.viewName=="YPos"):
+        elif(self.viewName.lower()=="ypos"):
           self.viewUpVc= [0,0,1]
           self.posCVc= [0,100,0]
-        elif(self.viewName=="YNeg"):
+        elif(self.viewName.lower()=="YNeg"):
           self.viewUpVc= [0,0,1]
           self.posCVc= [0,-100,0]
-        elif(self.viewName=="XPos"):
+        elif(self.viewName.lower()=="xpos"):
           self.viewUpVc= [0,0,1]
           self.posCVc= [100,0,0]
-        elif(self.viewName=="XNeg"):
+        elif(self.viewName.lower()=="xneg"):
           self.viewUpVc= [0,0,1]
           self.posCVc= [-100,0,0]
-        elif(self.viewName=="XYZPos" or self.viewName=="+X+Y+Z"):
+        elif(self.viewName.lower()=="xyzpos" or self.viewName.lower()=="+x+y+z"):
           self.viewUpVc= [-1,-1,1]
           self.posCVc= [100,100,self.hCamFct*100]
-        elif(self.viewName=="+X+Y-Z"):
+        elif(self.viewName.lower()=="+x+y-z"):
           self.viewUpVc= [1,1,1]
           self.posCVc= [100,100,-1*self.hCamFct*100]
-        elif(self.viewName=="+X-Y+Z"):
+        elif(self.viewName.lower()=="+x-y+z"):
           self.viewUpVc= [-1,1,1]
           self.posCVc= [100,-100,self.hCamFct*100]
-        elif(self.viewName=="+X-Y-Z"):
+        elif(self.viewName.lower()=="+x-y-z"):
           self.viewUpVc= [1,-1,1]
           self.posCVc= [100,-100,-1*self.hCamFct*100]
-        elif(self.viewName=="-X+Y+Z"):
+        elif(self.viewName.lower()=="-x+y+z"):
           self.viewUpVc= [1,-1,1]
           self.posCVc= [-100,100,self.hCamFct*100]
-        elif(self.viewName=="-X+Y-Z"):
+        elif(self.viewName.lower()=="-x+y-z"):
           self.viewUpVc= [-1,+1,1]
           self.posCVc= [-100,100,-1*self.hCamFct*100]
-        elif(self.viewName=="-X-Y+Z"):
+        elif(self.viewName.lower()=="-x-y+z"):
           self.viewUpVc= [1,1,1]
           self.posCVc= [-100,-100,self.hCamFct*100]
-        elif(self.viewName=="XYZNeg" or self.viewName=="-X-Y-Z"):
+        elif(self.viewName.lower()=="xyzneg" or self.viewName.lower()=="-x-y-z"):
           self.viewUpVc= [-1,-1,1]
           self.posCVc= [-100,-100,-1*self.hCamFct*100]
         elif(self.viewName!="Custom"):
