@@ -30,7 +30,7 @@ IAP_notional_lane1_brake= lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFa
 IAP_notional_lane2_brake= lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
 IAP_notional_lane3_brake= lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
 
-def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1.0,vQbraking=None,virtLane2Set=None,xyCentPL2=None,virtLane3Set=None,xyCentPL3=None,restDrivewaySet=None,sidewalkSet=None):
+def IAP_traffic_LC(lcName, deckSet, virtLane1Set, xyCentPL1, hDistrPL, slopeDistrPL=1.0, vQbraking=None, virtLane2Set=None, xyCentPL2=None, virtLane3Set=None, xyCentPL3=None, restDrivewaySet=None, sidewalkSet=None):
     '''Return a traffic load case according to IAP.
 
     :param lcName: load case name
