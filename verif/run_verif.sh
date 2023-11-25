@@ -991,6 +991,7 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
+python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_02.py
