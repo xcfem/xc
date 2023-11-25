@@ -165,7 +165,7 @@ class RecordDisp(OuputUnits):
             for arg in self.listDspRot:
                 outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= fileName)
 
-    def displayIntForcDiag(self,itemToDisp,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
+    def displayIntForcDiag(self, itemToDisp, fileName=None, defFScale=0.0, orientScbar=1, overrideScaleFactor= None, titleScbar=None):
         '''displays the component of internal forces as a 
          diagram over lines (i.e. appropriated for beam elements).
 
@@ -179,12 +179,13 @@ class RecordDisp(OuputUnits):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+        :param overrideScaleFactor: if not none, override the scale factor in outputStyle.
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispIntForc:
-            outputHandler.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale,orientScbar=orientScbar,titleScbar=titleScbar)
+            outputHandler.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale, overrideScaleFactor= overrideScaleFactor, orientScbar=orientScbar,titleScbar=titleScbar)
 
     def dispLoadCaseBeamEl(self, setToDisplay,caption= None,fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case

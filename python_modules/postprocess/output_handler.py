@@ -457,7 +457,7 @@ class OutputHandler(object):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption=caption,fileName=fileName)
 
-    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1, titleScbar=None, defaultDirection= 'J',captionText=None):
+    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, overrideScaleFactor= None,orientScbar=1, titleScbar=None, defaultDirection= 'J',captionText=None):
         '''displays the component of internal forces in the set of entities as a 
          diagram over lines (i.e. appropriated for beam elements).
 
@@ -472,6 +472,7 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+        :param overrideScaleFactor: if not none, override the scale factor in outputStyle.
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
         :param defaultDirection: default direction of the diagram (J: element 
@@ -483,7 +484,10 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         #auto-scale parameters
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-        scaleFactor= self.outputStyle.internalForcesDiagramScaleFactor
+        if(overrideScaleFactor):
+            scaleFactor= overrideScaleFactor
+        else:
+            scaleFactor= self.outputStyle.internalForcesDiagramScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
         diagAux= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
