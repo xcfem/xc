@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
+import math
 import sys
 import geom
 import xc
@@ -438,8 +439,9 @@ class VehicleDistrLoad(object):
                   slope slopeDistr 
     :ivar slopeDistr: slope (H/V) through hDistr to distribute the load of 
                   a wheel
+    :ivar vehicleRot: vehicle rotation around Z-axis (angle in degrees, defaults to 0)
      '''
-    def __init__(self,name,xcSet,loadModel, xCentr,yCentr,hDistr,slopeDistr):
+    def __init__(self,name,xcSet,loadModel, xCentr,yCentr,hDistr,slopeDistr,vehicleRot=0):
         self.name=name
         self.xcSet=xcSet
         self.loadModel= loadModel
@@ -447,7 +449,9 @@ class VehicleDistrLoad(object):
         self.yCentr=yCentr
         self.hDistr=hDistr
         self.slopeDistr=slopeDistr
+        self.vehicleRot=vehicleRot
         self.ldsWheels=self.genLstLoadDef()
+        
 
     def genLstLoadDef(self):
         '''generates a list with the definition of all the wheel loads 
@@ -455,11 +459,16 @@ class VehicleDistrLoad(object):
         deltaL=2*self.slopeDistr*self.hDistr
         ldWheels=list()
         cont=0
+        angRad=math.radians(self.vehicleRot)
         for w in self.loadModel.wheelLoads:
             nm=self.name+str(cont)
             lVect=xc.Vector([0,0,-w.load,0,0,0])
             xCwheel=self.xCentr+w.position.x
             yCwheel=self.yCentr+w.position.y
+            if angRad != 0:
+                xp=xCwheel;yp=yCwheel
+                xCwheel=self.xCentr+math.cos(angRad)*(xp-self.xCentr)-math.sin(angRad)*(yp-self.yCentr)
+                yCwheel=self.yCentr+math.sin(angRad)*(xp-self.xCentr)+math.cos(angRad)*(yp-self.yCentr)
             basePrism=gu.rect2DPolygon(xCent=xCwheel,yCent=yCwheel,Lx=w.lx+deltaL,Ly=w.ly+deltaL)
             ldWheels.append(loads.PointLoadOverShellElems(nm,self.xcSet,lVect,basePrism,'Z','Global'))
             cont+=1

@@ -30,12 +30,14 @@ IAP_notional_lane1_brake= lmb.LoadModel(wLoads=tandem300LM1.getWheelLoads(loadFa
 IAP_notional_lane2_brake= lmb.LoadModel(wLoads=tandem200LM1.getWheelLoads(loadFactor= 0.75))
 IAP_notional_lane3_brake= lmb.LoadModel(wLoads=tandem100LM1.getWheelLoads(loadFactor= 0.75))
 
-def IAP_traffic_LC(lcName, deckSet, virtLane1Set, xyCentPL1, hDistrPL, slopeDistrPL=1.0, vQbraking=None, virtLane2Set=None, xyCentPL2=None, virtLane3Set=None, xyCentPL3=None, restDrivewaySet=None, sidewalkSet=None):
+
+def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1.0,vQbraking=None,virtLane2Set=None,xyCentPL2=None,virtLane3Set=None,xyCentPL3=None,restDrivewaySet=None,sidewalkSet=None,vehicleRot=0):
     '''Return a traffic load case according to IAP.
 
     :param lcName: load case name
     :param deckSet: deck set of elements (used to distribute point loads)
-    :param virtLane1Set: virtual lane 1 set of elements
+    :param virtLane1Set: virtual lane 1 set of elements (if None, no surface 
+                         load aplied on it)
     :param xyCentPL1: [xCent,yCent] global coord. X,Y where to place the 
                      centroid of the vehicle on virtual lane 1
     :param hDistrPL: height considered to distribute each point load with
@@ -56,6 +58,8 @@ def IAP_traffic_LC(lcName, deckSet, virtLane1Set, xyCentPL1, hDistrPL, slopeDist
                             None, not considered)
     :param sidewalkSet: sidewalk set of elements (defaults to None, not 
                         considered)
+    :param vehicleRot:  vehicle rotation around Z-axis (angle in degrees
+                      positive counterclockwise, defaults to 0)
  
     '''
     preprocessor=deckSet.getPreprocessor
@@ -68,7 +72,8 @@ def IAP_traffic_LC(lcName, deckSet, virtLane1Set, xyCentPL1, hDistrPL, slopeDist
     lc= lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
     lc.create()
     # add uniform loads
-    lc.addLstLoads([loads.UniformLoadOnSurfaces(name= lcName+'quVL1',xcSet=virtLane1Set,loadVector=xc.Vector([0,0,-qunifVL1,0,0,0]),refSystem='Global')])
+    if virtLane1Set:
+        lc.addLstLoads([loads.UniformLoadOnSurfaces(name= lcName+'quVL1',xcSet=virtLane1Set,loadVector=xc.Vector([0,0,-qunifVL1,0,0,0]),refSystem='Global')])
     if virtLane2Set:
         lc.addLstLoads([loads.UniformLoadOnSurfaces(name= lcName+'quVL2',xcSet=virtLane2Set,loadVector=xc.Vector([0,0,-qunifVL2,0,0,0]),refSystem='Global')])
     if virtLane3Set:
@@ -78,11 +83,11 @@ def IAP_traffic_LC(lcName, deckSet, virtLane1Set, xyCentPL1, hDistrPL, slopeDist
     if sidewalkSet:
         lc.addLstLoads([loads.UniformLoadOnSurfaces(name= lcName+'quVL3',xcSet=sidewalkSet,loadVector=xc.Vector([0,0,-qunifSidewalk,0,0,0]),refSystem='Global')])
     #add point loads
-    lc.addLstLoads([lmb.VehicleDistrLoad(name=lcName+'QpVL1',xcSet=deckSet,loadModel=QpointVL1, xCentr=xyCentPL1[0],yCentr=xyCentPL1[1],hDistr=hDistrPL,slopeDistr=slopeDistrPL)])
+    lc.addLstLoads([lmb.VehicleDistrLoad(name=lcName+'QpVL1',xcSet=deckSet,loadModel=QpointVL1, xCentr=xyCentPL1[0],yCentr=xyCentPL1[1],hDistr=hDistrPL,slopeDistr=slopeDistrPL,vehicleRot=vehicleRot)])
     if virtLane2Set:
-        lc.addLstLoads([lmb.VehicleDistrLoad(name=lcName+'QpVL2',xcSet=deckSet,loadModel=QpointVL2, xCentr=xyCentPL2[0],yCentr=xyCentPL2[1],hDistr=hDistrPL,slopeDistr=slopeDistrPL)])
+        lc.addLstLoads([lmb.VehicleDistrLoad(name=lcName+'QpVL2',xcSet=deckSet,loadModel=QpointVL2, xCentr=xyCentPL2[0],yCentr=xyCentPL2[1],hDistr=hDistrPL,slopeDistr=slopeDistrPL,vehicleRot=vehicleRot)])
     if virtLane3Set:
-        lc.addLstLoads([lmb.VehicleDistrLoad(name=lcName+'QpVL3',xcSet=deckSet,loadModel=QpointVL3, xCentr=xyCentPL3[0],yCentr=xyCentPL3[1],hDistr=hDistrPL,slopeDistr=slopeDistrPL)])
+        lc.addLstLoads([lmb.VehicleDistrLoad(name=lcName+'QpVL3',xcSet=deckSet,loadModel=QpointVL3, xCentr=xyCentPL3[0],yCentr=xyCentPL3[1],hDistr=hDistrPL,slopeDistr=slopeDistrPL,vehicleRot=vehicleRot)])
     #add braking load
     if vQbraking:
         lc.addLstLoads([loads.UniformLoadOnSurfaces(name= lcName+'qfren',xcSet=virtLane1Set,loadVector=xc.Vector([vQbraking[0],vQbraking[1],0,0,0,0]),refSystem='Global')])
