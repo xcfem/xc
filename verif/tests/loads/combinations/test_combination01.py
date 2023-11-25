@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-'''Cantilever load combination. Home made test'''
+'''Trivial test about defining load combinations. 
+Home made test'''
 
 from __future__ import print_function
 
