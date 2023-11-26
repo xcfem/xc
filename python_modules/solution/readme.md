@@ -13,6 +13,10 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [OpenSees Spy](https://portwooddigital.com/2022/03/13/opensees-spy)
  - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
+ 
+### Constraint handling
+- [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
+
 
 ### Modal analysis
 - [Modal analysis of rigid multy-storey frames](https://structville.com/2016/04/on-modal-analysis-of-rigid-multi-storey-frames.html)

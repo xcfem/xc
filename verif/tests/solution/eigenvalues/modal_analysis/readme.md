@@ -7,3 +7,4 @@ This folder contains the verification examples used the accuracy of such analysi
 ## References
 
 - [Modal analysis (Wikipedia)](https://en.wikipedia.org/wiki/Modal_analysis)
+- [Distributed Mass Beam Vibration](https://portwooddigital.com/2023/11/14/distributed-mass-beam-vibration/)

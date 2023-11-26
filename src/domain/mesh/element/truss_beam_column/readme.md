@@ -21,7 +21,6 @@ To capture the P-little delta effecs in beam elements you need to use at least s
 
 - [Euler–Bernoulli beam theory](https://en.wikipedia.org/wiki/Euler%E2%80%93Bernoulli_beam_theory)
 - [General beam theory](https://web.mit.edu/16.20/homepage/8_GeneralBeamTheory/GeneralBeamTheory_files/module_8_with_solutions.pdf.moved)
-- [A Vector in the x-z Plane](https://portwooddigital.com/2020/08/08/a-vector-in-the-x-z-plane/)
 - [Plastic Rotation](https://portwooddigital.com/2021/03/14/plastic-rotation/)
 - [A tale of two element formulations](https://portwooddigital.com/2020/02/23/a-tale-of-two-element-formulations/)
 - [Meshing for Column Loads](https://portwooddigital.com/2020/05/10/meshing-for-column-loads/)
@@ -34,6 +33,9 @@ To capture the P-little delta effecs in beam elements you need to use at least s
 - [Shear Verse, Same as the First](https://portwooddigital.com/2022/07/10/shear-verse-same-as-the-first/)
 - [Simple Loads on a Cantilever](https://portwooddigital.com/2022/11/04/simple-loads-on-a-cantilever/)
 - [Converging to Something](https://portwooddigital.com/2023/10/08/converging-to-something/)
+### Element orientation
+- [Flipping Rotation Axes](https://portwooddigital.com/2023/11/12/flipping-rotation-axes/)
+- [A Vector in the x-z Plane](https://portwooddigital.com/2020/08/08/a-vector-in-the-x-z-plane/)
 ### Geometric nonlinearity
 - [Geometric Transformation](https://portwooddigital.com/2022/11/15/geometric-transformation/)
 - [One and Only One](https://portwooddigital.com/2023/11/18/one-and-only-one/)

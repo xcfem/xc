@@ -18,3 +18,4 @@ The available constraint handlers are:
 ## References
 
 - [Handle Your Constraints with Care](https://portwooddigital.com/2020/06/05/handle-your-constraints-with-care)
+- [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
