@@ -11,3 +11,4 @@ Verifications tests for XC section material objects.
 - [Section properties](https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/properties/)
 - [Full Fiber Circle](https://portwooddigital.com/2022/06/15/full-fiber-circle/)
 - [Nonlinear Sections, Elastic Elements](https://portwooddigital.com/2022/07/24/nonlinear-sections-elastic-elements/)
+- [Rectangular Hollow Structural Sections](https://portwooddigital.com/2023/11/24/rectangular-hollow-structural-sections/)
