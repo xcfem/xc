@@ -6,3 +6,4 @@ A GroundMotion define the acceleration, velocity and displacement records for th
 ## References
 
 - [Interpolation of Ground Acceleration](https://portwooddigital.com/2021/11/02/interpolation-of-ground-acceleration)
+- [How to Apply Ground Motions in Multiple Directions](https://portwooddigital.com/2023/11/26/how-to-apply-ground-motions-in-multiple-directions/)
