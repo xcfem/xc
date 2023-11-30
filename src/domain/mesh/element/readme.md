@@ -20,3 +20,7 @@ This directory contains the classes that define the finite elements available in
 
 ### Inerters and tuned mass dampers.
 - [Tuned Damper Models](https://portwooddigital.com/2023/11/11/tuned-damper-models/)
+
+### PFEM
+PFEM has not been migrated from OpenSees yet.
+- [The PFEM in OpenSees](https://portwooddigital.com/2023/11/06/the-pfem-in-opensees/)
