@@ -10,3 +10,4 @@ The ConstraintHandler object determines how the constraint equations are enforce
 ## References
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
 - [MultiFreedom constraints II](https://quickfem.com/wp-content/uploads/IFEM.Ch09.pdf)
+- [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)

@@ -16,7 +16,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
  
 ### Constraint handling
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
-
+- [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)
 
 ### Modal analysis
 - [Modal analysis of rigid multy-storey frames](https://structville.com/2016/04/on-modal-analysis-of-rigid-multi-storey-frames.html)
