@@ -321,7 +321,7 @@ class TandemLoad(object):
 class LoadModel(object):
     ''' Roadway traffic load model
 
-    :ivar wheelLoads: position and loads of each wheel
+    :ivar wheelLoads: list of instaces of «WheelLoad» class defining the  position and load of each wheel
     :ivar vehicleBoundary: polygon without uniform load around the vehicle.
     '''
 
