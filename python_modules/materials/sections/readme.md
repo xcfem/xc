@@ -13,3 +13,5 @@ Tools to deal with cross-sections to be used with beams or rods or by themselves
 - [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant#Circle)
 - [Section properties](https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/properties/)
 - [List of second moments of area](https://en.wikipedia.org/wiki/List_of_second_moments_of_area)
+- [Rectangular Hollow Structural Sections](https://portwooddigital.com/2023/11/24/rectangular-hollow-structural-sections/)
+- [Flipping Rotation Axes](https://portwooddigital.com/2023/11/12/flipping-rotation-axes/)

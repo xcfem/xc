@@ -6,4 +6,5 @@ Related links:
 - [Numerical Integration Options for the Force-BasedBeam-Column Element in OpenSees](https://opensees.berkeley.edu/wiki/images/a/ab/IntegrationTypes.pdf).
 - [Force-Based Beam-Column Integration Options](https://portwooddigital.com/2020/11/02/force-based-beam-column-integration-options/)
 - [Nonlinear Elements, Elastic Sections](https://portwooddigital.com/2021/01/17/nonlinear-elements-elastic-sections/)
+- [It Takes Two](https://portwooddigital.com/2023/11/22/it-takes-two/)
 

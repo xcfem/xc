@@ -9,3 +9,5 @@ A zero length element has two nodes at the same location. A zeroLength element i
 - [Fuzzy Zero Length Logic](https://portwooddigital.com/2022/04/24/fuzzy-zero-length-logic/)
 - [Switching Sides](https://portwooddigital.com/2022/05/08/switching-sides/)
 - [A Simple Solution to a Complicated Equivalent](https://portwooddigital.com/2022/06/19/a-simple-solution-to-a-complicated-equivalent)
+### Element orientation
+- [Flipping Rotation Axes](https://portwooddigital.com/2023/11/12/flipping-rotation-axes/)

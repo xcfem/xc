@@ -13,7 +13,9 @@ Determing the next time step for an analysis can be done by one of the following
 
 
 ## References
+### Displacement control
 - [Direct displacement control](https://www.eurocode.us/finite-element-method/direct-displacement-control.html)
+- [Losing Displacement Control](https://portwooddigital.com/2023/11/21/losing-displacement-control/)
 
 ### Arc-length technique
 - [Arc-length technique for nonlinear finite element analysis](https://www.researchgate.net/publication/8618852_Arc-length_technique_for_nonlinear_finite_element_analysis)

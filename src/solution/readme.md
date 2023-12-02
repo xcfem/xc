@@ -12,11 +12,14 @@ This folder contains the code that deals with the solution of the finite element
  - [Not All at Once](https://portwooddigital.com/2021/10/26/not-all-at-once/)
  - [Finite Differences](https://portwooddigital.com/2021/11/27/finite-differences/)
  - [See the Convergence](https://portwooddigital.com/2022/01/24/see-the-convergence/)
- - [Failure to Solve](https://portwooddigital.com/2021/09/12/failure-to-solve)
  - [OpenSees Spy](https://portwooddigital.com/2022/03/13/opensees-spy)
  - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
  - [Negative Feedback Loop](https://portwooddigital.com/2022/07/17/negative-feedback-loop/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
+
+### Failure to solve
+ - [Ill-conditioning in structural finite element models](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/readme.md)
+ - [Failure to Solve](https://portwooddigital.com/2021/09/12/failure-to-solve)
 
 ### Continuation methods
 
@@ -47,3 +50,7 @@ This folder contains the code that deals with the solution of the finite element
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
+ 
+### PFEM
+PFEM has not been migrated from OpenSees yet.
+- [The PFEM in OpenSees](https://portwooddigital.com/2023/11/06/the-pfem-in-opensees/)

@@ -817,6 +817,7 @@ python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_03.p
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_04.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_05.py
 python tests/loads/strain_loads/elastic_beam_2d/test_beam_2d_creep_simulation_01.py
+python tests/loads/strain_loads/elastic_beam_2d/test_shrinkage_simulation_01.py
 echo "$BLEU" "      Strain loads on 2D force beam column." "$NORMAL"
 python tests/loads/strain_loads/force_beam_column_2d/force_beam_column_2d_strain_load_01.py
 python tests/loads/strain_loads/force_beam_column_2d/force_beam_column_2d_strain_load_02.py
@@ -991,6 +992,7 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
+python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_02.py
