@@ -224,17 +224,21 @@ class LimitStateControllerBase2Sections(LimitStateControllerBase):
                 e.setProp(self.limitStateLabel+s,self.ControlVars(idSection= s))
 
 
-class fibSectLSProperties(object):
+class FibSectLSProperties(object):
     '''Class that sets up basic properties associatted to a fiber section
     in order to be used in the checking of different limit states.
     '''
-    def __init__(self,sct):
-        self.sct=sct
-        self.sctProp=sct.getProp('sectionData')
+    def __init__(self, sct):
+        ''' Constructor.
+
+        :param sct: XC fiber section object.
+        '''
+        self.sct= sct
+        self.sctProp= sct.getProp('sectionData')
         concreteType= self.sctProp.getConcreteType()
         steelType= self.sctProp.getReinfSteelType()
         self.concrTagK= concreteType.matTagK
-        self.rsteelTagK= self.steelType.matTagK
+        self.rsteelTagK= steelType.matTagK
         self.concrName= str(concreteType)
         self.rsteelName= str(steelType)
         self.cover=0 #init concrete cover
@@ -283,6 +287,28 @@ class fibSectLSProperties(object):
         self.sct.computeCovers(setSteelFibersName)
         covers = [setSteelFibers.getFiberCover(i) for i in range(len(setSteelFibers))]
         return sum(covers) / float(len(covers))
+
+    def getAverageSigmaSR(self):
+        ''' Return the average tension sigma_sr at the reinforcement. sigma_sr
+        is the tension in the rebar when cracking occurs in its effective area.
+        '''
+        retval= 0.0
+        numberOfTensionedRebars= self.setsRC.getNumTensionRebars()
+        if(numberOfTensionedRebars>0):
+            tensionedReinforcement= self.setsRC.tensionFibers
+            tensionedRebarsArea= 0.0
+            concrFibers= self.setsRC.concrFibers.fSet
+            E0= concrFibers[0].getMaterial().getInitialTangent()
+            E= tensionedReinforcement[0].getMaterial().getInitialTangent()
+            fctm= self.sctProp.getConcreteType().fctm()
+            for i, rebar in enumerate(tensionedReinforcement):
+                rebarArea= rebar.getArea()
+                tensionedRebarsArea+= rebarArea
+                # rebarStress= rebar.getMaterial().getStress()
+                rebarSigmaSR= tensionedReinforcement.getSigmaSRAtFiber(i, E0, E, fctm)
+                retval+= rebarArea*rebarSigmaSR
+            retval/= tensionedRebarsArea
+        return retval
         
 class TensionedRebarsBasicProperties(object):
     '''Basic properties of tensioned rebars (used in shear checking).
