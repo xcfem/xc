@@ -1593,6 +1593,10 @@ const double &XC::FiberPtrDeque::getFiberSpacing(const size_t &i) const
 
 //! @brief Return the stress on the i-th fiber when cracking occurs
 //! in its effective area.
+//! @param i: index of the fiber.
+//! @param Ec: concrete elastic modulus.
+//! @param Es: steel elastic modulus.
+//! @param fctm: average tensile strength of the concrete.
 double XC::FiberPtrDeque::getSigmaSRAtFiber(const size_t &i,const double &Ec,const double &Es,const double &fctm) const
   {
     double retval= 0.0;
