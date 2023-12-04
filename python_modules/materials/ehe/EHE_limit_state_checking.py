@@ -1388,7 +1388,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             Aceff=0  #init. value
             R=e.getResistingForce()
             sct=e.getSection()
-            sctCrkProp=lscb.fibSectLSProperties(sct)
+            sctCrkProp= lscb.FibSectLSProperties(sct)
             sctCrkProp.setupStrghCrackDist()
             hceff=self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
             #Acgross=sct.getGrossEffectiveConcreteArea(hceff)
@@ -1504,21 +1504,19 @@ class CrackControl(lscb.CrackControlBaseParameters):
         os.write("Concrete tangent stiffness; E0= "+str(self.E0/1e9)+" GPa")
         os.write("Characteristic crack opening; Wk= "+str(self.Wk*1e3)+" mm")
 
-    def computeWkOnBars(self,tensionedReinforcement):
+    def computeWkOnBars(self, tensionedReinforcement):
         '''Compute the characteristic crack opening on each bar and return
            the maximum.
 
-         :param tensionedReinforcement: 
+        :param tensionedReinforcement: 
         '''
         retval= 0.0
-        sz= len(tensionedReinforcement)
-        for i in range(0,sz):
-            rebar= tensionedReinforcement[i]
+        for i, rebar in enumerate(tensionedReinforcement):
             rebarArea= rebar.getArea()
             rebarStress= rebar.getMaterial().getStress()
             rebarCover= tensionedReinforcement.getFiberCover(i)
             rebarDiameter= rebar.getEquivalentDiameter()
-            rebarSigmaSR= tensionedReinforcement.getSigmaSRAtFiber(i,self.E0,self.tensionedRebars.E,self.fctmFis)
+            rebarSigmaSR= tensionedReinforcement.getSigmaSRAtFiber(i,self.E0,self.tensionedRebars.E, self.fctmFis)
             self.tensionedRebars.averageStress+= rebarArea*rebarSigmaSR
 
             rebarEffConcArea= tensionedReinforcement.getFiberEffectiveConcreteArea(i)
