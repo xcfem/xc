@@ -258,8 +258,14 @@ class CrackController(lscb.LimitStateControllerBase):
           effectively plain surface (e.g. prestressing tendons). Defaults to 0.8
     :ivar k3: defaults to the value recommended by EC2 and in EHE k3=3.4
     :ivar k4: defaults to the value recommended by EC2 and EHE k4=0.425
+    :ivar shortTermLoading: if true, consider short therm loading 
+                            (k_t= 0.6), otherwise consider long term 
+                            loading (k_t= 0.4).
     '''
-    def __init__(self, limitStateLabel):
+    
+    ControlVars= cv.RCCrackControlVars
+    
+    def __init__(self, limitStateLabel, shortTermLoading= False):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
@@ -269,11 +275,15 @@ class CrackController(lscb.LimitStateControllerBase):
                - = 0.8 for high bond bars
                - = 1.6 for bars with an effectively plain surface (e.g. 
                       prestressing tendons)
+        :param shortTermLoading: if true, consider short therm loading 
+                                 (k_t= 0.6), otherwise consider long term 
+                                 loading (k_t= 0.4).
         '''
         super(CrackController,self).__init__(limitStateLabel,fakeSection= False)
         self.k1= 0.8
         self.k3= 3.4
         self.k4= 0.425
+        self.shortTermLoading= shortTermLoading
 
     def EC2_k2(self, eps1, eps2):
         '''Return the coefficient k2 involved in the calculation of the mean 
@@ -329,7 +339,7 @@ class CrackController(lscb.LimitStateControllerBase):
             retval= self.k3*cover + self.k1*k2*self.k4*reinfPhi/ro_eff
         return retval
 
-    def meanStrainDifference(self, sigma_s, steel, concrete, ro_eff, shortTermLoading= False):
+    def meanStrainDifference(self, sigma_s, steel, concrete, ro_eff):
         ''' Returns the mean strain difference according to expression 7.9 of
             clause 7.3.4 of EC2:2004.
 
@@ -343,12 +353,9 @@ class CrackController(lscb.LimitStateControllerBase):
         :param concrete: concrete of the section.
         :param ro_eff: effective reinforcement ratio computed according to
                        expression 7.10 of EC2:2004 part 1.
-        :param shortTermLoading: if true, consider short therm loading 
-                                 (k_t= 0.6), otherwise consider long term 
-                                 loading (k_t= 0.4).
         '''
         kt= 0.4
-        if(shortTermLoading):
+        if(self.shortTermLoading):
             kt= 0.6
         fct_eff= concrete.fctm() # mean value of the tensile strength of the
                                  # concrete effective at the time when the
@@ -359,15 +366,15 @@ class CrackController(lscb.LimitStateControllerBase):
         retval= max(retval, 0.6*sigma_s/Es)
         return retval
 
-    def computeWk(self, sigma_s, steel, concrete, ro_eff, k2, cover, reinfPhi, spacing, h= None, x= None, shortTermLoading= False):
+    def computeWk(self, sigma_s, steel, concrete, ro_eff, k2, cover, reinfPhi, spacing, h= None, x= None):
         '''Computes the characteristic value of the crack width according to the
            expression 7.8 of EC2:2004 part 1.
 
         :param sigma_s: stress in the tension reinforcement assuming a cracked
                         section. For pretensioned members, as may be replaced 
-                         by Delta(sigma_p) the stress variation in prestressing
-                         tendons from the state of zero strain of the concrete
-                         at the same level.
+                        by Delta(sigma_p) the stress variation in prestressing
+                        tendons from the state of zero strain of the concrete
+                        at the same level.
         :param steel: steel type of the reinforcement.
         :param As: steel reinforcement area 
         :param concrete: concrete of the section.
@@ -387,13 +394,53 @@ class CrackController(lscb.LimitStateControllerBase):
         :param spacing: spacing of the bonded reinforcement.
         :param h: overall depth of the section.
         :param x: depth of the neutral axis.
-        :param shortTermLoading: if true, consider short therm loading 
-                                 (k_t= 0.6), otherwise consider long term 
-                                 loading (k_t= 0.4).
         '''
         s_r_max= self.s_r_max(k2= k2, cover= cover, reinfPhi= reinfPhi, spacing= spacing, ro_eff= ro_eff)
-        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff, shortTermLoading= shortTermLoading)
+        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff, shortTermLoading= self.shortTermLoading)
         return meanStrainDifference*s_r_max
+    
+    def check(self, elements, loadCombinationName):
+        ''' For each element in the 'elememts' container passed as first 
+        parameter and  the resulting internal forces for the load combination
+       'loadCombinationName'  passed as second parameter, this method 
+        calculates all the variables involved in the crack-SLS checking and 
+        obtains the crack width.
+        In the case that the calculated crack width is greater than the 
+        biggest obtained for the element in previous load combinations, this 
+        value is saved in the element results record. 
+
+        Elements processed are those belonging to the phantom model, that is to 
+        say, of type xc.ZeroLengthSection. As we have defined the variable 
+        fakeSection as False, a reinfoced concrete fiber section is generated
+        for each of these elements.
+
+        :param elements: elements to check.
+        :param loadCombinationName: name of the load combination.
+      '''
+        if(self.verbose):
+          lmsg.log('Postprocessing combination: '+loadCombinationName)
+        for e in elements:
+            Aceff=0  #initial  value
+            R= e.getResistingForce()
+            sct= e.getSection()
+            sctCrkProp= lscb.FibSectLSProperties(sct)
+            sctCrkProp.setupStrghCrackDist()
+            hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
+            Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
+            if(Aceff<=0):
+                s_rmax= 0.0
+                wk= 0.0
+            else:
+                concrete= EC2_materials.concrOfName[sctCrkProp.concrName]
+                rfSteel= EC2_materials.steelOfName[sctCrkProp.rsteelName]
+                k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
+                ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
+                s_rmax= self.s_r_max(k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing, ro_eff= ro_s_eff)
+                sigma_s= sctCrkProp.getAverageSigmaSR()
+                meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
+                wk= meanStrainDifference*s_rmax
+                if(wk>e.getProp(self.limitStateLabel).wk):
+                    e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, wk= wk))
 
 class CrackStraightController(CrackController):
     '''Definition of variables involved in the verification of the cracking
@@ -415,40 +462,44 @@ class CrackStraightController(CrackController):
         '''
         super(CrackStraightController,self).__init__(limitStateLabel)
 
-    def check(self,elements,nmbComb):
-        ''' For each element in the set 'elememts' passed as first parameter and 
-        the resulting internal forces for the load combination 'nmbComb'  
-        passed as second parameter, this method calculates all the variables 
-        involved in the crack-SLS checking and obtains the crack width.
+    def check(self, elements, loadCombinationName):
+        ''' For each element in the 'elememts' container passed as first 
+        parameter and  the resulting internal forces for the load combination
+       'loadCombinationName'  passed as second parameter, this method 
+        calculates all the variables involved in the crack-SLS checking and 
+        obtains the crack width.
         In the case that the calculated crack width is greater than the 
-        biggest obtained for the element in previous load combinations, this value
-        is saved in the element results record. 
+        biggest obtained for the element in previous load combinations, this 
+        value is saved in the element results record. 
 
         Elements processed are those belonging to the phantom model, that is to 
         say, of type xc.ZeroLengthSection. As we have defined the variable 
         fakeSection as False, a reinfoced concrete fiber section is generated
-        for each of these elements. 
+        for each of these elements.
+
+        :param elements: elements to check.
+        :param loadCombinationName: name of the load combination.
         '''
         if(self.verbose):
-          lmsg.log('Postprocessing combination: '+nmbComb)
+          lmsg.log('Postprocessing combination: '+loadCombinationName)
         for e in elements:
             Aceff=0  #initial  value
-            R=e.getResistingForce()
-            sct=e.getSection()
-            sctCrkProp=lscb.fibSectLSProperties(sct)
+            R= e.getResistingForce()
+            sct= e.getSection()
+            sctCrkProp= lscb.FibSectLSProperties(sct)
             sctCrkProp.setupStrghCrackDist()
-            hceff=self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
+            hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
             # Acgross=sct.getGrossEffectiveConcreteArea(hceff)
-            Aceff=sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
-            concrete=EC2_materials.concrOfName[sctCrkProp.concrName]
-            rfSteel=EC2_materials.steelOfName[sctCrkProp.rsteelName]
+            Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
+            concrete= EC2_materials.concrOfName[sctCrkProp.concrName]
+            rfSteel= EC2_materials.steelOfName[sctCrkProp.rsteelName]
             k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
             # print('elem= ',e.tag, ' Aceff= ',Aceff)
             if(Aceff<=0):
                 s_rmax=0
             else:
-                ro_s_eff=sctCrkProp.As/Aceff #effective ratio of reinforcement
-                s_rmax=self.k3*sctCrkProp.cover+self.k1*k2*self.k4*sctCrkProp.fiEqu/ro_s_eff
+                ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
+                s_rmax= self.k3*sctCrkProp.cover+self.k1*k2*self.k4*sctCrkProp.fiEqu/ro_s_eff
                 #Parameters for tension stiffening of concrete
                 paramTS= concrete_base.paramTensStiffness(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
                 concrete.tensionStiffparam=paramTS #parameters for tension
@@ -459,20 +510,20 @@ class CrackStraightController(CrackController):
             e.setProp('ResF',R)   #vector resisting force
             e.setProp('s_rmax',s_rmax)  #maximum crack distance
         self.preprocessor.getDomain.revertToStart()
-        self.solutionProcedure.solveComb(nmbComb)
+        self.solutionProcedure.solveComb(loadCombinationName)
         for e in elements:
             sct=e.getSection()
             rfset=sct.getFiberSets()['reinfSetFb']
             eps_sm=rfset.getStrainMax()
-            srmax=e.getProp('s_rmax')
-#            eps_cm=concrete.fctm()/2.0/concrete.E0()
-#            wk=srmax*(eps_sm-eps_cm)
-            wk=srmax*eps_sm
-#            print(' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk)
-#            print('e.getProp(self.limitStateLabel).wk', e.getProp(self.limitStateLabel).wk)
+            srmax= e.getProp('s_rmax')
+            # eps_cm=concrete.fctm()/2.0/concrete.E0()
+            # wk=srmax*(eps_sm-eps_cm)
+            wk= srmax*eps_sm
+            # print(' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk)
+            # print('e.getProp(self.limitStateLabel).wk', e.getProp(self.limitStateLabel).wk)
             if (wk>e.getProp(self.limitStateLabel).wk):
                 R=e.getProp('ResF')
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'),combName=loadCombinationName,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
                 
 ###################
 # Rebar families. #
