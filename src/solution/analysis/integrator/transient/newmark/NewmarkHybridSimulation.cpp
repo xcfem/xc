@@ -67,6 +67,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::NewmarkHybridSimulation::NewmarkHybridSimulation(SolutionStrategy *owr)
@@ -85,15 +86,20 @@ int XC::NewmarkHybridSimulation::newStep(double deltaT)
   {
     if(beta == 0 || gamma == 0)
       {
-        std::cerr << "XC::NewmarkHybridSimulation::newStep() - error in variable\n";
-        std::cerr << "gamma = " << gamma << " beta = " << beta << std::endl;
+         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; error in variable\n"
+		  << "gamma = " << gamma
+		  << " beta = " << beta
+		  << Color::def << std::endl;
         return -1;
       }
     
     if(deltaT <= 0.0)
       {
-        std::cerr << "XC::NewmarkHybridSimulation::newStep() - error in variable\n";
-        std::cerr << "dT = " << deltaT << std::endl;
+         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; error in variable\n"
+		  << "dT = " << deltaT
+		  << Color::def << std::endl;
         return -2;	
       }
 
@@ -107,7 +113,9 @@ int XC::NewmarkHybridSimulation::newStep(double deltaT)
     
     if(U.get().Size()==0)
       {
-        std::cerr << "NewmarkHybridSimulation::newStep() - domainChange() failed or hasn't been called\n";
+         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; domainChange() failed or hasn't been called"
+	          << Color::def << std::endl;
         return -3;	
       }
     
@@ -196,44 +204,55 @@ int XC::NewmarkHybridSimulation::domainChanged()
 
 int XC::NewmarkHybridSimulation::update(const XC::Vector &deltaU)
   {
-    AnalysisModel *theModel = this->getAnalysisModelPtr();
-    if(theModel)
+    AnalysisModel *theModel= this->getAnalysisModelPtr();
+    if(!theModel)
       {
-        std::cerr << "WARNING XC::NewmarkHybridSimulation::update() - no XC::AnalysisModel set\n";
+         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no AnalysisModel set."
+	          << Color::def << std::endl;
         return -1;
       }
-    
-    // check domainChanged() has been called, i.e. Ut will not be zero
-    if(Ut.get().Size() == 0)
+    else
       {
-        std::cerr << "WARNING XC::NewmarkHybridSimulation::update() - domainChange() failed or not called\n";
-        return -2;
-      }
-    
-    // check deltaU is of correct size
-    if(deltaU.Size() != U.get().Size())
-      {
-        std::cerr << "WARNING XC::NewmarkHybridSimulation::update() - Vectors of incompatible size ";
-        std::cerr << " expecting " << U.get().Size() << " obtained " << deltaU.Size() << std::endl;
-        return -3;
-      }
-    
-    // determine the displacement increment reduction factor
-    rFact = 1.0/(theTest->getMaxNumTests() - theTest->getNumTests() + 1.0);
+	// check domainChanged() has been called, i.e. Ut will not be zero
+	if(Ut.get().Size() == 0)
+	  {
+	     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; domainChange() failed or not called."
+	              << Color::def << std::endl;
+	    return -2;
+	  }
 
-    //  determine the response at t+deltaT
-    U.get()+= rFact*deltaU;
-    
-    U.getDot().addVector(1.0, deltaU, rFact*c2);
-    
-    U.getDotDot().addVector(1.0, deltaU, rFact*c3);
-    
-    // update the response at the DOFs
-    theModel->setResponse(U.get(),U.getDot(),U.getDotDot());        
-    if(updateModel() < 0)
-      {
-        std::cerr << "XC::NewmarkHybridSimulation::update() - failed to update the domain\n";
-        return -4;
+	// check deltaU is of correct size
+	if(deltaU.Size() != U.get().Size())
+	  {
+	     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - Vectors of incompatible size "
+		      << " expecting " << U.get().Size()
+		      << " obtained " << deltaU.Size()
+		      << Color::def << std::endl;
+	    return -3;
+	  }
+
+	// determine the displacement increment reduction factor
+	rFact = 1.0/(theTest->getMaxNumTests() - theTest->getNumTests() + 1.0);
+
+	//  determine the response at t+deltaT
+	U.get()+= rFact*deltaU;
+
+	U.getDot().addVector(1.0, deltaU, rFact*c2);
+
+	U.getDotDot().addVector(1.0, deltaU, rFact*c3);
+
+	// update the response at the DOFs
+	theModel->setResponse(U.get(),U.getDot(),U.getDotDot());        
+	if(updateModel() < 0)
+	  {
+	     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to update the domain."
+	              << Color::def << std::endl;
+	    return -4;
+	  }
       }
     return 0;
   }
@@ -268,7 +287,9 @@ int XC::NewmarkHybridSimulation::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -279,13 +300,17 @@ int XC::NewmarkHybridSimulation::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << ", failed to receive data."
+	            << Color::def << std::endl;
       }
     return res;
   }

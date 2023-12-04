@@ -67,6 +67,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 //!
@@ -157,17 +158,19 @@ int XC::Newmark::newStep(double deltaT)
   {
     if(beta == 0 || gamma == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; error in variable\n"
-		  << "gamma = " << gamma << " beta = " << beta << std::endl;
+		  << "gamma = " << gamma << " beta = " << beta
+		  << Color::def << std::endl;
         return -1;
       }
     
     if(deltaT <= 0.0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; error in variable\n"
-		  << "dT = " << deltaT << std::endl;
+		  << "dT = " << deltaT
+		  << Color::def << std::endl;
         return -2;	
       }
 
@@ -190,8 +193,9 @@ int XC::Newmark::newStep(double deltaT)
     
     if(U.get().Size() == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; domainChange() failed or hasn't been called\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; domainChange() failed or hasn't been called."
+	          << Color::def << std::endl;
         return -3;	
       }
     
@@ -231,8 +235,9 @@ int XC::Newmark::newStep(double deltaT)
     time += deltaT;
     if(updateModel(time, deltaT) < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed to update the domain\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed to update the domain."
+	          << Color::def << std::endl;
         return -4;
       }
     return 0;
@@ -294,7 +299,9 @@ int XC::Newmark::formEleTangent(FE_Element *theEle)
       }
     else
       {
-	std::cerr << "Newmark::formEleTangent - unknown FLAG\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; unknown FLAG: " << statusFlag
+	          << Color::def << std::endl;
       }
     return 0;
   }
@@ -386,26 +393,29 @@ int XC::Newmark::update(const XC::Vector &deltaU)
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     if(theModel == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING - no AnalysisModel set.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no AnalysisModel set."
+	          << Color::def << std::endl;
         return -1;
       }	
     
     // check domainChanged() has been called, i.e. Ut will not be zero
     if(Ut.get().Size() == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING - domainChange() failed or not called\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - domainChange() failed or not called."
+	          << Color::def << std::endl;
         return -2;
       }
     
     // check deltaU is of correct size
     if(deltaU.Size() != U.get().Size())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - Vectors of incompatible size "
 		  << " expecting " << U.get().Size() << " obtained "
-		  << deltaU.Size() << std::endl;
+		  << deltaU.Size()
+		  << Color::def << std::endl;
         return -3;
       }
     
@@ -427,8 +437,9 @@ int XC::Newmark::update(const XC::Vector &deltaU)
     theModel->setResponse(U.get(),U.getDot(),U.getDotDot());
     if(updateModel() < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed to update the domain\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed to update the domain."
+	          << Color::def << std::endl;
         return -4;
       }
     return 0;
@@ -464,8 +475,9 @@ int XC::Newmark::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -477,15 +489,17 @@ int XC::Newmark::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+	            << Color::def << std::endl;
       }
     return res;
   }
@@ -496,8 +510,10 @@ int XC::Newmark::recvSelf(const Communicator &comm)
 void XC::Newmark::Print(std::ostream &s, int flag) const
   {
     NewmarkBase2::Print(s,flag);
-    s << "  gamma: " << gamma << "  beta: " << beta << std::endl;
-    s << " c1: " << c1 << " c2: " << c2 << " c3: " << c3 << std::endl;
+    s << "  gamma: " << gamma << "  beta: " << beta
+      << std::endl;
+    s << " c1: " << c1 << " c2: " << c2 << " c3: " << c3
+      << std::endl;
   }
 
 
