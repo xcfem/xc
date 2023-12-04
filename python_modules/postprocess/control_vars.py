@@ -943,17 +943,53 @@ class CrackControlVars(ControlVarsBase):
         self.crackControlVarsNeg= eval(dct['crackControlBaseVarsNeg'])
         
 
-class RCCrackStraightControlVars(NMyMz):
+class RCCrackControlVars(NMyMz):
+    '''Control variables for cracking serviacebility limit state verification.
+
+    :ivar idSection: section identifier.
+    :ivar s_rmax: maximum distance between cracks (otherwise a new crack could occur in-between)
+    :ivar wk: crack width
+    '''
+    def __init__(self, idSection=-1,combName= 'nil', CF=-1, N= 0.0, My= 0.0, Mz= 0.0, s_rmax= 0.0, wk= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier.
+        :param combName: name of the load combinations to deal with
+        :param N:        axial force
+        :param My:       bending moment about Y axis
+        :param Mz:       bending moment about Z axis
+        :param s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
+        :param wk:       crack width
+        '''
+        super(RCCrackControlVars,self).__init__(combName,N,My,Mz)
+        self.idSection=idSection
+        self.s_rmax=s_rmax
+        self.wk=wk
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(RCCrackControlVars,self).getDict()
+        retval.update({'s_rmax':self.s_rmax, 'wk': self.wk})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(RCCrackControlVars,self).setFromDict(dct)
+        self.s_rmax= dct['s_rmax']
+        self.wk= dct['wk']
+        
+class RCCrackStraightControlVars(RCCrackControlVars):
     '''Control variables for cracking serviacebility limit state verification
     when when considering a concrete stress-strain diagram that takes account
     of the effects of tension stiffening.
 
-    :ivar idSection: section identifier.
-    :ivar s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
     :ivar eps_sm:   mean strain in the reinforcement when taking into account the effects of tension stiffening
-    :ivar wk:       crack width
     '''
-    def __init__(self,idSection=-1,combName= 'nil',CF=-1,N= 0.0, My= 0.0, Mz= 0.0, s_rmax=0.0,eps_sm=0.0,wk=0.0):
+    def __init__(self, idSection=-1, combName= 'nil', CF=-1, N= 0.0, My= 0.0, Mz= 0.0, s_rmax=0.0, eps_sm=0.0, wk=0.0):
         '''
         Constructor.
 
@@ -966,16 +1002,13 @@ class RCCrackStraightControlVars(NMyMz):
         :param eps_sm:   mean strain in the reinforcement when taking into account the effects of tension stiffening
         :param wk:       crack width
         '''
-        super(RCCrackStraightControlVars,self).__init__(combName,N,My,Mz)
-        self.idSection=idSection
-        self.s_rmax=s_rmax
+        super(RCCrackStraightControlVars,self).__init__(idSection= idSection, combName= combName, N= N, My= My, Mz= Mz, s_rmax= s_rmax, wk= wk)
         self.eps_sm= eps_sm
-        self.wk=wk
 
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(RCCrackStraightControlVars,self).getDict()
-        retval.update({'s_rmax':self.s_rmax,'eps_sm':self.eps_sm,'wk': self.wk})
+        retval.update({'eps_sm':self.eps_sm})
         return retval
        
     def setFromDict(self,dct):
@@ -984,9 +1017,7 @@ class RCCrackStraightControlVars(NMyMz):
         :param dct: dictionary containing the values of the object members.
         '''
         super(RCCrackStraightControlVars,self).setFromDict(dct)
-        self.s_rmax= dct['s_rmax']
         self.eps_sm= dct['eps_sm']
-        self.wk= dct['wk']
         
   
 class FatigueControlBaseVars(NMyMz):
