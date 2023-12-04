@@ -57,14 +57,19 @@ def writeShearReinforcement(recordShearReinf, archTex, width):
 #    archTex.write(recordShearReinf.familyName+' & '+str(recordShearReinf.nShReinfBranches))  #04/01/21 commented out to avoid writing  nonsense family names
     archTex.write(' & '+str(recordShearReinf.nShReinfBranches))
     areaShReinfBranchs= recordShearReinf.getAs()
-    diamRamas= math.sqrt(4*areaShReinfBranchs/math.pi)
-    archTex.write(' & '+str(round(diamRamas*1e3)))
-    archTex.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches*1e4))
+#    diamRamas= math.sqrt(4*areaShReinfBranchs/math.pi)
+    diamBranch=recordShearReinf.getDiameter()
+    archTex.write(' & '+str(round(diamBranch*1e3)))
+#    archTex.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches*1e4))
+    areaBranch=recordShearReinf.areaShReinfBranch
+    archTex.write(' & '+cf.fmt4_2f.format(areaBranch*1e4))
     archTex.write(' & '+cf.fmt4_1f.format(recordShearReinf.shReinfSpacing*1e2))
-    if(abs(width)>0):
-        archTex.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches/width/recordShearReinf.shReinfSpacing*1e4))
-    else:
-        archTex.write(' & -')
+    # if(abs(width)>0):
+    #     archTex.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*recordShearReinf.nShReinfBranches/width/recordShearReinf.shReinfSpacing*1e4))
+    # else:
+    #     archTex.write(' & -')
+    areaShreinf=recordShearReinf.getAs()
+    archTex.write(' & '+cf.fmt4_2f.format(areaShreinf*1e4))
     archTex.write(' & '+cf.fmt3_1f.format(math.degrees(recordShearReinf.angAlphaShReinf)))
     archTex.write(' & '+cf.fmt3_1f.format(math.degrees(recordShearReinf.angThetaConcrStruts))+"\\\\\n")
 
@@ -164,10 +169,18 @@ class SectionInfo(object):
         fileHandler.write('\\end{minipage} & \n')
         # Write section dimensions.
         fileHandler.write('\\begin{tabular}{l}\n')
-        fileHandler.write('width: \\\\\n')
-        fileHandler.write('$b= '+'{0:.2f}'.format(self.width)+'\\ m$\\\\\n')
-        fileHandler.write('depth: \\\\\n')
-        fileHandler.write('$h= '+'{0:.2f}'.format(self.depth)+'\\ m$\\\\\n')
+        if self.scc.isCircular():
+            fileHandler.write('Outside diameter: \\\\\n')
+            fileHandler.write('$\\Phi_{ext}= '+'{0:.2f}'.format(self.width)+'\\ m$\\\\\n')
+        else:
+            fileHandler.write('width: \\\\\n')
+            fileHandler.write('$b= '+'{0:.2f}'.format(self.width)+'\\ m$\\\\\n')
+        if self.scc.isCircular():
+            fileHandler.write('Inside diameter: \\\\\n')
+            fileHandler.write('$\\Phi_{int}= '+'{0:.2f}'.format(self.depth)+'\\ m$\\\\\n')
+        else:
+            fileHandler.write('depth: \\\\\n')
+            fileHandler.write('$h= '+'{0:.2f}'.format(self.depth)+'\\ m$\\\\\n')
         fileHandler.write('\\end{tabular} \\\\\n')
         fileHandler.write('\\end{tabular} \\\\\n')
         fileHandler.write('\\hline\n')
@@ -244,9 +257,11 @@ class SectionInfoHASimple(SectionInfo):
         if(sectHASimple.isCircular()):
             width= 2*sectHASimple.Rext
             depth= sectHASimple.Rint
+            circ=True
         else:
             width=sectHASimple.b
             depth=sectHASimple.h
+            circ=False
         super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth,sectGrWth)
         self.shReinfZ= sectHASimple.getShearReinfZ()
         self.shReinfY= sectHASimple.getShearReinfY()
