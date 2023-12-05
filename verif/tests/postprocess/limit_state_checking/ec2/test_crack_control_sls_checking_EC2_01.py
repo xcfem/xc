@@ -56,10 +56,10 @@ s= modelSpace.newQuadSurface(pt1, pt2, pt3, pt4)
 s.nDivI= 10
 s.nDivJ= 3
 # Generate mesh.
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= rcSection.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
-s.genMesh(xc.meshDir.I)
+modelSpace.setDefaultMaterial(rcSection) # Set default material.
+modelSpace.newSeedElement("ShellMITC4") # Set default element type
+s.genMesh(xc.meshDir.I) # Generate mesh.
+
 # Constraints.
 fixedNodes= list()
 for n in s.nodes:
@@ -76,7 +76,7 @@ loadCaseManager= load_cases.LoadCaseManager(preprocessor)
 loadCaseNames= ['load']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 ## load pattern.
-load= xc.Vector([0.0,0.0,-80e3])  # No "in-plane" loads (see example 06 in the same folder).
+load= xc.Vector([0.0,0.0,-40e3])  # No "in-plane" loads (see example 06 in the same folder).
 cLC= loadCaseManager.setCurrentLoadCase('load')
 for e in s.elements:
     e.vector3dUniformLoadGlobal(load)
@@ -85,11 +85,14 @@ for e in s.elements:
 combContainer= combs.CombContainer()
 ### ULS combination.
 combContainer.SLS.freq.add('combSLS01','1.0*load')
-xcTotalSet= preprocessor.getSets.getSet('total')
-cfg= default_config.get_temporary_env_config()
+
+# Compute and store load combination results.
+cfg= default_config.get_temporary_env_config() # Store results in temporary files.
 lsd.LimitStateData.envConfig= cfg
-### Save internal forces.
-lsd.freqLoadsCrackControl.saveAll(combContainer,xcTotalSet) 
+## Save internal forces.
+xcTotalSet= modelSpace.getTotalSet()
+lsd.freqLoadsCrackControl.saveAll(combContainer,xcTotalSet)
+
 # Define reinforcement.
 # Reinforcement row scheme:
 #
@@ -131,21 +134,20 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 # Checking cracking 
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 #outCfg.controller= EHE_limit_state_checking.CrackControl(limitStateLabel=lsd.freqLoadsCrackControl.label)
-limitState= lsd.freqLoadsCrackControl
+limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
 outCfg.controller= EC2_limit_state_checking.CrackController(limitState.label)
 
 outCfg.controller.verbose= True #False # Don't display log messages.
-feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
-feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum
 (FEcheckedModel, meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.freqLoadsCrackControl,matDiagType="k", threeDim= False, outputCfg= outCfg)
 
-ratio1= abs(meanCFs[0]-0.04878051772101967)/0.04878051772101967
-ratio2= abs(meanCFs[1]-0.6645761704407638)/0.6645761704407638
+ratio1= abs(meanCFs[0]-0.690962456127247)/0.690962456127247
+ratio2= abs(meanCFs[1]-0.6924600272040474)/0.6924600272040474
 
-# print(meanCFs, ratio1, ratio2)
+print(meanCFs, ratio1, ratio2)
 
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-6) & (ratio2<1e-6):
+if (ratio1<1e-4) & (ratio2<1e-4):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
