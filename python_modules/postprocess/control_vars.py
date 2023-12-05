@@ -22,7 +22,7 @@ from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 
-__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'writeControlVarsFromElements', 'writeControlVarsFromElementsForAnsys', 'writeControlVarsFromPhantomElements']
+__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'writeControlVarsFromElements', 'writeControlVarsFromElementsForAnsys', 'writeControlVarsFromPhantomElements']
 
 def getDiagramDirection(elem, component, defaultDirection):
     '''Return the direction vector to represent the diagram over the element
@@ -943,7 +943,7 @@ class CrackControlVars(ControlVarsBase):
         self.crackControlVarsNeg= eval(dct['crackControlBaseVarsNeg'])
         
 
-class RCCrackControlVars(NMyMz):
+class RCCrackControlVars(CFNMyMz):
     '''Control variables for cracking serviacebility limit state verification.
 
     :ivar idSection: section identifier.
@@ -962,11 +962,11 @@ class RCCrackControlVars(NMyMz):
         :param s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
         :param wk:       crack width
         '''
-        super(RCCrackControlVars,self).__init__(combName,N,My,Mz)
+        super(RCCrackControlVars,self).__init__(combName= combName, CF= CF, N= N,My= My, Mz= Mz)
         self.idSection=idSection
         self.s_rmax=s_rmax
         self.wk=wk
-
+    
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(RCCrackControlVars,self).getDict()
@@ -1002,7 +1002,7 @@ class RCCrackStraightControlVars(RCCrackControlVars):
         :param eps_sm:   mean strain in the reinforcement when taking into account the effects of tension stiffening
         :param wk:       crack width
         '''
-        super(RCCrackStraightControlVars,self).__init__(idSection= idSection, combName= combName, N= N, My= My, Mz= Mz, s_rmax= s_rmax, wk= wk)
+        super(RCCrackStraightControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= My, Mz= Mz, s_rmax= s_rmax, wk= wk)
         self.eps_sm= eps_sm
 
     def getDict(self):

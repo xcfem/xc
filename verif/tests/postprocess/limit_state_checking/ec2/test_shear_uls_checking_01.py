@@ -139,7 +139,6 @@ print("meanFCs[1]= ", meanFCs[1])
 print("ratio2= ",ratio2)
 '''
 
-# Show logging messages.
 cfg.cleandirs()  # Clean after yourself.
 fname= os.path.basename(__file__)
 if (ratio1<0.01) & (ratio2<0.01):

@@ -1458,10 +1458,14 @@ python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_
 echo "$BLEU" "    ACI limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aci/test_shear_uls_checking_aci.py
 echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
+echo "$BLEU" "      EC2 limit state checking: bending." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_2D_bending_uls_checking_01.py
+echo "$BLEU" "      EC2 limit state checking: shear." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
+echo "$BLEU" "      EC2 limit state checking: crack control." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
 echo "$BLEU" "    EC3 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py

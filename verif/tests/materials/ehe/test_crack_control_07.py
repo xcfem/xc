@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Test for checking the shear-strength verificacion of a circular
-    reinforced concrete section.
+''' Test for checking the crack width calculation of a circular reinforced 
+    concrete section.
 
     The results seem reasonable but no tests have been found with which to compare them.
 '''

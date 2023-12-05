@@ -265,22 +265,25 @@ class CrackController(lscb.LimitStateControllerBase):
     
     ControlVars= cv.RCCrackControlVars
     
-    def __init__(self, limitStateLabel, shortTermLoading= False):
+    def __init__(self, limitStateLabel, wk_lim= 0.3e-3, k1= 0.8, shortTermLoading= False):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param wk_lim: maximum allowable crack width. 
         :param k1: coefficient which takes account of the bond properties
                    of the bonded reinforcement:
 
                - = 0.8 for high bond bars
                - = 1.6 for bars with an effectively plain surface (e.g. 
                       prestressing tendons)
+        :param 
         :param shortTermLoading: if true, consider short therm loading 
                                  (k_t= 0.6), otherwise consider long term 
                                  loading (k_t= 0.4).
         '''
         super(CrackController,self).__init__(limitStateLabel,fakeSection= False)
-        self.k1= 0.8
+        self.wk_lim= wk_lim
+        self.k1= k1
         self.k3= 3.4
         self.k4= 0.425
         self.shortTermLoading= shortTermLoading
@@ -440,7 +443,8 @@ class CrackController(lscb.LimitStateControllerBase):
                 meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
                 wk= meanStrainDifference*s_rmax
                 if(wk>e.getProp(self.limitStateLabel).wk):
-                    e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, wk= wk))
+                    CF= wk/self.wk_lim # Capacity factor.
+                    e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, wk= wk, CF= CF))
 
 class CrackStraightController(CrackController):
     '''Definition of variables involved in the verification of the cracking
