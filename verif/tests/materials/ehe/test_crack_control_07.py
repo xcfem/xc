@@ -44,12 +44,6 @@ rebarArea= EHE_materials.Fi16
 numOfRebars= 12
 
 
-# # Shear reinforcement
-# shearReinfArea= EHE_materials.Fi6
-# shearReinfDiam= 6e-3
-# numRamas= 2
-# shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShReinfBranches= numRamas, areaShReinfBranch= shearReinfArea, shReinfSpacing= 0.2, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
-
 nCover= cover
 
 mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*cover), nominalCover= nCover)])
