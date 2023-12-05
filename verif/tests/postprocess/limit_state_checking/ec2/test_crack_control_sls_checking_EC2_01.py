@@ -143,7 +143,7 @@ outCfg.controller.verbose= True #False # Don't display log messages.
 ratio1= abs(meanCFs[0]-0.690962456127247)/0.690962456127247
 ratio2= abs(meanCFs[1]-0.6924600272040474)/0.6924600272040474
 
-print(meanCFs, ratio1, ratio2)
+# print(meanCFs, ratio1, ratio2)
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

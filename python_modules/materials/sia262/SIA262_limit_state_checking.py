@@ -204,12 +204,15 @@ class ShearController(lsc.ShearControllerBase):
     '''Object that controls shear limit state according to SIA 262.'''
 
     ControlVars= cv.SIATypeRCShearControlVars
-    def __init__(self, limitStateLabel):
+    
+    def __init__(self, limitStateLabel, solutionProcedureType= lsc.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(ShearController,self).__init__(limitStateLabel)
+        super(ShearController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= True, solutionProcedureType= solutionProcedureType)
 
     def setSection(self,rcSection):
         self.concrete= rcSection.getConcreteType() #Arreglar
