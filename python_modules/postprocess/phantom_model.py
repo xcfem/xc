@@ -248,9 +248,9 @@ class PhantomModel(object):
         intForcCombFileName= limitStateData.getInternalForcesFileName()
         controller= outputCfg.controller
         if(controller):
-            self.build(intForcCombFileName,outputCfg)
+            self.build(intForcCombFileName= intForcCombFileName, outputCfg= outputCfg)
             self.check(controller)
-            retval=self.write(limitStateData.getOutputDataBaseFileName(),outputCfg)
+            retval= self.write(limitStateData.getOutputDataBaseFileName(),outputCfg)
         else:
             lmsg.error('PhantomModel::runChecking controller not defined.')
         return retval
