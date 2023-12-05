@@ -1030,12 +1030,14 @@ class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
 
     ControlVars= cv.SIATypeRCShearControlVars
-    def __init__(self, limitStateLabel):
+    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
+        super(ShearController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False)
         self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
         self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
         self.isBending= False # True if there is ar bending moment.
@@ -1324,12 +1326,15 @@ class CrackStraightController(lscb.LimitStateControllerBase):
        tension stiffening.
     '''
     ControlVars= cv.RCCrackStraightControlVars
-    def __init__(self, limitStateLabel):
+    
+    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
+        super(CrackStraightController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
         self.beta=1.7    #if only indirect actions beta must be =1.3
 
     def expectsTensionStiffeningModel(self):
