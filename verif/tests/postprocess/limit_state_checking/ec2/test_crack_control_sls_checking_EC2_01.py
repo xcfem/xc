@@ -7,7 +7,7 @@
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2023, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -52,8 +52,7 @@ pt2= points.newPoint(geom.Pos3d(span,0.0,0.0))
 pt3= points.newPoint(geom.Pos3d(span,b,0.0))
 pt4= points.newPoint(geom.Pos3d(0.0,b,0.0))
 ## Surface.
-surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
+s= modelSpace.newQuadSurface(pt1, pt2, pt3, pt4)
 s.nDivI= 10
 s.nDivJ= 3
 # Generate mesh.
