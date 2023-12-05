@@ -32,26 +32,26 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 concr= EHE_materials.HA40
 steel= EHE_materials.B500S
 
-# Section geometry
+## Section geometry
 diameter= 350e-3 # Cross-section diameter [m]
 cover= 0.025 # Cover [m]
 section= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 section.nDivIJ= 10
 
-# Longitudinal reinforcement
+## Longitudinal reinforcement
 rebarDiam= 16e-3
 rebarArea= EHE_materials.Fi16
 numOfRebars= 12
 
 
 mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*cover), nominalCover= cover)])
-## Put the reinforcement in the section.
+### Put the reinforcement in the section.
 section.mainReinf= mainReinf
 
-
+# Finite element problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-# Materials definition
+## Materials definition
 materialHandler= preprocessor.getMaterialHandler
 
 # Section geometry
@@ -65,8 +65,7 @@ modelSpace.fixNode000_000(nodA.tag)
 # Loads definition
 Nd= -550e3/1.5 # Axial force when checking crack width.
 Myd= 190e3/1.5 # # Y bending moment when checking crack width.
-Mzd= 0.0 # Z bending moment value when checking shear.
-# Vd= 148.7e3 # Shear value.
+Mzd= 0.0 # Z bending moment value when checking crack width.
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
