@@ -74,7 +74,7 @@ fakeElementSet= xcTotalSet.getElements
 # end of the fake stuff.
 
     
-# Store the section in the structure that the "phantom model" uses
+# Store the section in the data structure that the "phantom model" uses
 pierRCSects= element_section_map.RCMemberSection('test', [section, section])
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 sectContainer= reinfConcreteSectionDistribution.sectionDefinition #sectContainer container
