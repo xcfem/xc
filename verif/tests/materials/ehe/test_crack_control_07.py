@@ -44,9 +44,7 @@ rebarArea= EHE_materials.Fi16
 numOfRebars= 12
 
 
-nCover= cover
-
-mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*cover), nominalCover= nCover)])
+mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*cover), nominalCover= cover)])
 ## Put the reinforcement in the section.
 section.mainReinf= mainReinf
 
