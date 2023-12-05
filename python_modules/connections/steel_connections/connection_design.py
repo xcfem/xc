@@ -1173,12 +1173,14 @@ class BoltedPlateController(lsc.LimitStateControllerBase):
 
     :ivar boltedPlate: bolted plate to check.
     '''
-    def __init__(self, boltedPlate):
+    def __init__(self, boltedPlate, solutionProcedureType= lsc.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
 
         :param boltedPlate: bolted plate to check.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(BoltedPlateController,self).__init__(limitStateLabel= limit_state_data.normalStressesResistance.label)
+        super(BoltedPlateController,self).__init__(limitStateLabel= limit_state_data.normalStressesResistance.label, solutionProcedureType= solutionProcedureType)
         self.boltedPlate= boltedPlate
         
     def predimConnection(self, intForcCombFileName, setCalc=None):

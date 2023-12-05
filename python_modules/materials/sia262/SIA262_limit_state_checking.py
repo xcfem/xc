@@ -581,12 +581,14 @@ class FatigueController(lsc.LimitStateControllerBase):
     '''Object that controls RC fatigue limit state.'''
 
     ControlVars= cv.FatigueControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self,limitStateLabel, solutionProcedureType= lsc.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(FatigueController,self).__init__(limitStateLabel)
+        super(FatigueController,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
     def initControlVars(self,elements):
         ''' Defines limit state control variables for all the elements.'''

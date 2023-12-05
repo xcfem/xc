@@ -53,12 +53,13 @@ class BiaxialBendingControlVars(cv.BiaxialBendingControlVars):
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''
     ControlVars= BiaxialBendingControlVars
-    def __init__(self, limitStateLabel):
+    
+    def __init__(self, limitStateLabel, solutionProcedureType= lsc.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
 
         :param limitStateLabel: label that identifies the limit state.
         '''
-        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= lsc.defaultStaticLinearSolutionProcedure)
         
     def updateEfficiency(self, elem, elementInternalForces):
         ''' Compute the efficiency of the material of the element

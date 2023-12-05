@@ -19,14 +19,16 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
     '''Object that controls Von Mises stress limit state.'''
 
     ControlVars= cv.VonMisesControlVars
-    def __init__(self, limitStateLabel, vonMisesStressId= 'max_von_mises_stress'):
+    def __init__(self, limitStateLabel, vonMisesStressId= 'max_von_mises_stress', solutionProcedureType= lsc.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
 
         :param limitStateLabel: limit state identifier.
         :param vonMisesStressId: identifier of the Von Mises stress to read
                                 (see NDMaterial and MembranePlateFiberSection).
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(VonMisesStressController,self).__init__(limitStateLabel)
+        super(VonMisesStressController,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
     def initControlVars(self,setCalc):
         '''Initialize control variables over elements.
