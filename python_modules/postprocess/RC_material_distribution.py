@@ -48,7 +48,7 @@ class RCMaterialDistribution(object):
         self.sectionDistribution= element_section_map.ElementSectionMap()
         self.elementSetNames= list() #Elements sets with an assigned section.
 
-    def assign(self,elemSet,setRCSects):
+    def assign(self, elemSet, setRCSects):
         '''Assigns the sections names to the elements of the set.
 
            :param elemSet: set of elements that receive the section name property.
@@ -175,7 +175,7 @@ class RCMaterialDistribution(object):
         if outputCfg.controller.expectsTensionStiffeningModel():
              for s in self.sectionDefinition.sections:
                  s.getConcreteType().initTensStiff= True
-        self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
+        self.sectionDefinition.createRCsections(preprocessor= preprocessor,matDiagType= matDiagType) #creates
                           #for each element in the container the fiber sections
                           #(RCsimpleSections) associated with it.
         if(threeDim):
