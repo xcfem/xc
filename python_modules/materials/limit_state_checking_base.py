@@ -103,13 +103,15 @@ class EURebarController(RebarController):
         retval= min(retval, 1.0)
         return retval
         
-
+defaultStaticLinearSolutionProcedure= predefined_solutions.SimpleStaticLinear
+defaultStaticNonLinearSolutionProcedure= predefined_solutions.PlainNewtonRaphson
+    
 class LimitStateControllerBase(object):
     '''
     Basic parameters for limit state control (normal stresses, shear, crack,...)    .'''
     tensionedRebarsFiberSetName= "tensionedReinforcement" #Name of the tensiones rebar fibers set.
 
-    def __init__(self,limitStateLabel, fakeSection= True):
+    def __init__(self,limitStateLabel, fakeSection= True, solutionProcedureType= defaultStaticLinearSolutionProcedure):
         '''
         :param limitStateLabel: property name in the check results file 
                (something like 'ULS_shear' or 'SLS_crack_freq' or ...).
@@ -120,11 +122,13 @@ class LimitStateControllerBase(object):
                is set to False (shear and cracking LS checking), a true fiber 
                section of type 'xc.FiberSectionShear3d' is generated. 
         :param preprocessor: only used to perform the crack straight control.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
         self.limitStateLabel= limitStateLabel
         self.fakeSection= fakeSection
         #Linear analysis by default.
-        self.solutionProcedureType=  predefined_solutions.SimpleStaticLinear
+        self.solutionProcedureType= solutionProcedureType
         self.preprocessor=None
         self.verbose= True # display log messages by default
         
@@ -195,7 +199,7 @@ class LimitStateControllerBase2Sections(LimitStateControllerBase):
     '''
     Limit state controller 2 sections for each element..
     '''
-    def __init__(self,limitStateLabel, fakeSection= True, elementSections= ['Sect1', 'Sect2']):
+    def __init__(self,limitStateLabel, fakeSection= True, elementSections= ['Sect1', 'Sect2'], solutionProcedureType= defaultStaticLinearSolutionProcedure):
         '''
         :param limitStateLabel: property name in the check results file 
                (something like 'ULS_shear' or 'SLS_crack_freq' or ...).
@@ -205,8 +209,10 @@ class LimitStateControllerBase2Sections(LimitStateControllerBase):
                element of the phantom model. Otherwise, when fakeSection 
                is set to False (shear and cracking LS checking), a true fiber 
                section of type 'xc.FiberSectionShear3d' is generated. 
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(LimitStateControllerBase2Sections,self).__init__(limitStateLabel, fakeSection)
+        super(LimitStateControllerBase2Sections,self).__init__(limitStateLabel= limitStateLabel, fakeSection= fakeSection, solutionProcedureType= solutionProcedureType)
         self.elementSections= elementSections
 
     def getSectionLabel(self, idSection):
@@ -288,9 +294,43 @@ class FibSectLSProperties(object):
         covers = [setSteelFibers.getFiberCover(i) for i in range(len(setSteelFibers))]
         return sum(covers) / float(len(covers))
 
+    def getReinforcementElasticModulus(self):
+        ''' Return the elastic modulus of the reinforcement.'''
+        return self.sctProp.getReinfSteelType().Es
+
+    def getMaxReinforcementTensileStress(self):
+        ''' Return the average value of the tensile stress in the 
+            reinforcement.'''
+        retval= 0.0
+        numberOfTensionedRebars= self.setsRC.getNumTensionRebars()
+        if(numberOfTensionedRebars>0):
+            tensionedReinforcement= self.setsRC.tensionFibers
+            for rebar in tensionedReinforcement:
+                retval= max(retval, rebar.getStress())
+        return retval
+    
+    def getAverageReinforcementTensileStress(self):
+        ''' Return the average value of the tensile stress in the 
+            reinforcement.'''
+        retval= 0.0
+        numberOfTensionedRebars= self.setsRC.getNumTensionRebars()
+        if(numberOfTensionedRebars>0):
+            tensionedReinforcement= self.setsRC.tensionFibers
+            tensionedRebarsArea= 0.0
+            for rebar in tensionedReinforcement:
+                rebarArea= rebar.getArea()
+                tensionedRebarsArea+= rebarArea
+                rebarStress= rebar.getStress()
+                retval+= rebarArea*rebarStress
+            retval/= tensionedRebarsArea
+        return retval
+        
     def getAverageSigmaSR(self):
-        ''' Return the average tension sigma_sr at the reinforcement. sigma_sr
-        is the tension in the rebar when cracking occurs in its effective area.
+        ''' Return the average value of the stress in the reinforcement in the 
+            cracked section at the moment when the concrete cracks, which is 
+            assumed to happen when the tensile stress in the most tensioned 
+            fibre in the concrete reaches a value of fctm,fl. See 
+            clause 49.2.4 of EHE-08.
         '''
         retval= 0.0
         numberOfTensionedRebars= self.setsRC.getNumTensionRebars()
@@ -363,12 +403,14 @@ class TensionedRebarsProperties(TensionedRebarsBasicProperties):
 class CrackControlBaseParameters(LimitStateControllerBase):
     '''
     Basic parameters for crack control.'''
-    def __init__(self,limitStateLabel):
+    def __init__(self,limitStateLabel, solutionProcedureType= defaultStaticLinearSolutionProcedure):
         ''' Constructor.
 
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''        
-        super(CrackControlBaseParameters,self).__init__(limitStateLabel)
+        super(CrackControlBaseParameters,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
         self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
         self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
         self.tensionedRebars= TensionedRebarsProperties()
@@ -385,12 +427,14 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
        limit state.
     '''
     ControlVars= cv.BiaxialBendingControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel, solutionProcedureType= defaultStaticLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
+        super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
     def check(self, elements, nmbComb):
         '''Launch checking.
@@ -419,12 +463,14 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
        limit state (uniaxial bending).
     '''
     ControlVars= cv.UniaxialBendingControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel, solutionProcedureType= defaultStaticLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(UniaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
+        super(UniaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
     def check(self,elements, combName):
         '''
@@ -463,6 +509,15 @@ class ShearControllerBase(LimitStateControllerBase):
 
     ControlVars= cv.RCShearControlVars
           
+    def __init__(self, limitStateLabel, fakeSection, solutionProcedureType= defaultStaticLinearSolutionProcedure):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
+        '''
+        super(ShearControllerBase,self).__init__(limitStateLabel= limitStateLabel, fakeSection= fakeSection, solutionProcedureType= solutionProcedureType)
+        
     def check(self, elements, combName):
         '''Shear control.'''
         lmsg.error('shear limit state check not implemented.')
