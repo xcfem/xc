@@ -477,7 +477,7 @@ class PlainNewtonRaphson(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PlainNewtonRaphson,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
+        super(PlainNewtonRaphson,self).__init__(name= name, constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
         
 ### Convenience function
@@ -504,12 +504,39 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PlainNewtonRaphsonBandGen,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
+        super(PlainNewtonRaphsonBandGen,self).__init__(name, constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
         
 ### Convenience function
 def plain_newton_raphson_band_gen(prb, maxNumIter= 10):
     solProc= PlainNewtonRaphsonBandGen(prb, maxNumIter= maxNumIter)
+    solProc.setup()
+    return solProc.analysis
+
+class PlainNewtonRaphsonMUMPS(SolutionProcedure):
+    ''' Newton-Raphson solution algorithm with a
+        plain constraint handler and a band general
+        SOE solver.
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test', integratorType:str= 'load_control_integrator'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param integratorType: integrator type (see integratorSetup).
+        '''
+        super(PlainNewtonRaphsonMUMPS,self).__init__(name, constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
+        self.feProblem= prb
+        
+### Convenience function
+def plain_newton_raphson_mumps(prb, maxNumIter= 10):
+    solProc= PlainNewtonRaphsonMUMPS(prb, maxNumIter= maxNumIter)
     solProc.setup()
     return solProc.analysis
         
@@ -640,7 +667,7 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PlainStaticModifiedNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'modified_newton_soln_algo')
+        super(PlainStaticModifiedNewton,self).__init__(name= name,  constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'modified_newton_soln_algo')
         self.feProblem= prb
         
 ### Convenience function
@@ -987,7 +1014,7 @@ class PlainKrylovNewton(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
-        super(PlainKrylovNewton,self).__init__(name, 'plain', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= 'krylov_newton_soln_algo')
+        super(PlainKrylovNewton,self).__init__(name,  constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= 'krylov_newton_soln_algo')
         self.feProblem= prb
         self.maxDim= maxDim
         
