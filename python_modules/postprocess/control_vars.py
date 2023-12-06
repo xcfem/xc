@@ -950,27 +950,32 @@ class RCCrackControlVars(CFNMyMz):
     :ivar s_rmax: maximum distance between cracks (otherwise a new crack could occur in-between)
     :ivar wk: crack width
     '''
-    def __init__(self, idSection=-1,combName= 'nil', CF=-1, N= 0.0, My= 0.0, Mz= 0.0, s_rmax= 0.0, wk= 0.0):
+    def __init__(self, idSection=-1,combName= 'nil', CF=-1, N= 0.0, My= 0.0, Mz= 0.0, s_rmax= 0.0, sigma_s= 0.0, sigma_c= 0.0, wk= 0.0):
         '''
         Constructor.
 
         :param idSection: section identifier.
         :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor.
         :param N:        axial force
         :param My:       bending moment about Y axis
         :param Mz:       bending moment about Z axis
         :param s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
+        :param sigma_s: maximum tensile stress in the reinforcement.
+        :param sigma_c: compressive stress in the most compressed concrete fibre.
         :param wk:       crack width
         '''
         super(RCCrackControlVars,self).__init__(combName= combName, CF= CF, N= N,My= My, Mz= Mz)
         self.idSection=idSection
         self.s_rmax=s_rmax
+        self.sigma_s= sigma_s
+        self.sigma_c= sigma_c
         self.wk=wk
     
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(RCCrackControlVars,self).getDict()
-        retval.update({'s_rmax':self.s_rmax, 'wk': self.wk})
+        retval.update({'s_rmax':self.s_rmax, 'sigma_s':self.sigma_s, 'sigma_c':self.sigma_c, 'wk': self.wk})
         return retval
        
     def setFromDict(self,dct):
@@ -980,6 +985,8 @@ class RCCrackControlVars(CFNMyMz):
         '''
         super(RCCrackControlVars,self).setFromDict(dct)
         self.s_rmax= dct['s_rmax']
+        self.sigma_s= dct['sigma_s']
+        self.sigma_c= dct['sigma_c']
         self.wk= dct['wk']
         
 class RCCrackStraightControlVars(RCCrackControlVars):
