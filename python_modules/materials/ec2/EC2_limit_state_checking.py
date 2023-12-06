@@ -424,7 +424,7 @@ class CrackController(lscb.LimitStateControllerBase):
         if(self.verbose):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.log(className+'.'+methodName+"; postprocessing combination: "+combName)
+            lmsg.log(className+'.'+methodName+"; postprocessing combination: "+loadCombinationName)
         concreteMaxTensileStrain= 0.00015 # Used only as a threshold for very small tension strains.
         for e in elements:
             Aceff=0  #initial  value
