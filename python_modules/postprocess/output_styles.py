@@ -129,6 +129,9 @@ class OutputStyle(object):
         elif(itemToDisp=='rotX' or itemToDisp=='rotY' or itemToDisp=='rotZ'):
             fConvUnits= self.getRotationUnitsScaleFactor()
             unitDescription= self.getRotationUnitsDescription()
+        elif(itemToDisp=='wk'):
+            fConvUnits= self.getDisplacementUnitsScaleFactor()
+            unitDescription= self.getDisplacementUnitsDescription()
         elif(itemToDisp=='CF' or itemToDisp=='getCF'):
             fConvUnits= 1.0
             unitDescription= ''
