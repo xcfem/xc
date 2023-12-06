@@ -309,6 +309,20 @@ class FibSectLSProperties(object):
                 retval= max(retval, rebar.getStress())
         return retval
     
+    def getAverageReinforcementTensileStrain(self):
+        ''' Return the average value of the tensile strain in the 
+            reinforcement.'''
+        retval= self.getAverageReinforcementTensileStress()
+        retval/= self.getReinforcementElasticModulus()
+        return retval
+    
+    def getAverageReinforcementTensileStrainAndStress(self):
+        ''' Return the average value of the tensile strain in the 
+            reinforcement.'''
+        stress= self.getAverageReinforcementTensileStress()
+        strain= stress/self.getReinforcementElasticModulus()
+        return stress, strain
+    
     def getAverageReinforcementTensileStress(self):
         ''' Return the average value of the tensile stress in the 
             reinforcement.'''

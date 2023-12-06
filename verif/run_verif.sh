@@ -1473,13 +1473,17 @@ python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_03.py
 python tests/postprocess/limit_state_checking/ec3/test_simply_supported_fully_restrained_beam.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
+echo "$BLEU" "      EHE limit state checking: shear." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_02.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_03.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_04.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_06.py
-python tests/postprocess/limit_state_checking/ehe08/test_shell_normal_stresses_uls_checking.py
+echo "$BLEU" "      EHE limit state checking: normal stresses." "$NORMAL"
+pypython tests/postprocess/limit_state_checking/ehe08/test_shell_normal_stresses_uls_checking.py
+echo "$BLEU" "      EHE limit state checking: crack control." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py

@@ -1318,30 +1318,36 @@ class ShearController(lscb.ShearControllerBase):
             if(FCtmp>=e.getProp(self.limitStateLabel).CF): # new worst case.
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection= idSection, combName= combName, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= self.theta, Vcu= self.Vcu, Vsu= self.Vsu, Vu= VuTmp)) # set worst case
 
+class CrackController(lscb.LimitStateControllerBase):
+    '''Object that verifies the cracking serviceability limit state according 
+    to clause 49.2.4 of EHE-08.
 
-class CrackStraightController(lscb.LimitStateControllerBase):
-    '''Definition of variables involved in the verification of the cracking
-       serviceability limit state according to EHE-08 when considering a 
-       concrete stress-strain diagram that takes account of the effects of
-       tension stiffening.
+    :ivar beta: Coefficient which relates the mean crack opening to the 
+                characteristic value and is equal to 1.3 in the case 
+                of cracking caused by indirect actions only, and 1.7 
+                in other cases.
     '''
-    ControlVars= cv.RCCrackStraightControlVars
+    ControlVars= cv.RCCrackControlVars
     
-    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticLinearSolutionProcedure):
+    def __init__(self, limitStateLabel, wk_lim= 0.3e-3, beta= 1.7, k2= 1.0, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param wk_lim: maximum allowable crack width. 
+        :param beta: Coefficient which relates the mean crack opening to the 
+                     characteristic value and is equal to 1.3 in the case 
+                     of cracking caused by indirect actions only, and 1.7 
+                     in other cases.
+        :param k2: coefficient of value 1.0 in the case of non-repeating 
+                   temporary load and 0.5 in other cases.
         :param solutionProcedureType: type of the solution procedure to use
                                       when computing load combination results.
         '''
-        super(CrackStraightController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
-        self.beta=1.7    #if only indirect actions beta must be =1.3
+        super(CrackController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
+        self.wk_lim= wk_lim
+        self.beta= beta # if only indirect actions beta must be =1.3
+        self.k2= k2
 
-    def expectsTensionStiffeningModel(self):
-        ''' Return true if a tension-stiffening concrete fiber model must be
-            used for this limit state.'''
-        return True
-    
     def EHE_hceff(self,width,h,x):
         '''Return the maximum height to be considered in the calculation of 
            the concrete effective area in tension.
@@ -1349,7 +1355,6 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         :param width: section width.
         :param h: lever arm.
         :param x: depth of the neutral fiber.
-
         '''
         if width>2*h:   #slab, flat beam
             hceff=min(abs(h+x),h/4.)
@@ -1357,7 +1362,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             hceff=min(abs(h+x),h/2.)
         return hceff
 
-    def EHE_k1(self,eps1,eps2):
+    def EHE_k1(self, eps1, eps2):
         '''Return the coefficient k1 involved in the calculation of the mean 
         crack distance according to EHE. This coefficient represents the 
         effect of the tension diagram in the section.
@@ -1370,7 +1375,96 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         k1= (eps1+eps2)/(8.0*eps1)
         return k1
 
-    def check(self,elements,combName):
+    def check(self,elements,loadCombinationName):
+        ''' For each element in the set 'elememts' passed as first parameter 
+            and the resulting internal forces for the load combination 
+            'loadCombinationName' passed as second parameter, this method calculates 
+            all the variables involved in the crack-SLS checking and obtains 
+            the crack width. In the case that the calculated crack width is 
+            greater than the biggest obtained for the element in previous
+            load combinations, this value is saved in the element results 
+            record. 
+
+            Elements processed are those belonging to the phantom model, that 
+            is to say, of type xc.ZeroLengthSection. As we have defined the 
+            variable fakeSection as False, a reinfoced concrete fiber section
+            is generated for each of these elements.
+
+        :param elements: elements to check.
+        :param loadCombinationName: name of the load combination.
+        '''
+        if(self.verbose):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+"; postprocessing combination: "+loadCombinationName)
+        concreteMaxTensileStrain= 0.00015 # Used only as a threshold for very small tension strains.
+        for e in elements:
+            Aceff=0  #init. value
+            R= e.getResistingForce()
+            sct=e.getSection()
+            sctCrkProp= lscb.FibSectLSProperties(sct)
+            sctCrkProp.setupStrghCrackDist()
+            if(sctCrkProp.eps1<=0): # No tensile strains.
+                s_rmax= 0.0
+                wk= 0.0
+            elif(sctCrkProp.eps1<0.1*concreteMaxTensileStrain): # Very small max. strain.
+                k1= self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
+                sm= 2*sctCrkProp.cover+0.2*sctCrkProp.spacing+0.4*k1*sctCrkProp.fiEqu/ro_s_eff
+                s_rmax= self.beta*sm
+                rfset=sct.getFiberSets()["reinfSetFb"]
+                eps_sm= rfset.getStrainMax()
+                wk= s_rmax*eps_sm
+                print('A eps_sm= ', eps_sm*1e3)
+                print('A wk= ', wk*1e3, 'mm')
+            else:
+                hceff= self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
+                Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
+                if(Aceff<=0):
+                    s_rmax= 0.0
+                    wk= 0.0
+                else:
+                    ro_s_eff=sctCrkProp.As/Aceff # effective ratio of reinforcement
+                    k1= self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
+                    # median crack spacing.
+                    sm= 2*sctCrkProp.cover+0.2*sctCrkProp.spacing+0.4*k1*sctCrkProp.fiEqu/ro_s_eff
+                    sigma_sr= sctCrkProp.getAverageSigmaSR()
+                    # Service stress of the passive reinforcement in the cracked section hypothesis.
+                    sigma_s, eps_s= sctCrkProp.getAverageReinforcementTensileStrainAndStress()
+                    factor= max(1.0-self.k2*(sigma_sr/sigma_s)**2,0.4)
+                    eps_sm= factor*eps_s
+                    s_rmax= self.beta*sm
+                    wk= s_rmax*eps_sm
+            if(wk>=e.getProp(self.limitStateLabel).wk):
+                CF= wk/self.wk_lim # Capacity factor.
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, wk= wk, CF= CF))
+
+class CrackStraightController(CrackController):
+    '''Object that verifies the cracking serviceability limit state according 
+    to EHE-08 when considering a concrete stress-strain diagram that takes 
+    account of the effects of tension  stiffening.
+    '''
+
+    ControlVars= cv.RCCrackStraightControlVars
+    
+    def __init__(self, limitStateLabel, beta= 1.7, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param beta: Coefficient which relates the mean crack opening to the 
+                     characteristic value and is equal to 1.3 in the case 
+                     of cracking caused by indirect actions only, and 1.7 
+                     in other cases.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
+        '''
+        super(CrackStraightController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, beta= beta, solutionProcedureType= solutionProcedureType)
+
+    def expectsTensionStiffeningModel(self):
+        ''' Return true if a tension-stiffening concrete fiber model must be
+            used for this limit state.'''
+        return True
+    
+    def check(self, elements, combName):
         ''' For each element in the set 'elememts' passed as first parameter 
             and the resulting internal forces for the load combination 
             'combName' passed as second parameter, this method calculates 
@@ -1384,6 +1478,9 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             is to say, of type xc.ZeroLengthSection. As we have defined the 
             variable fakeSection as False, a reinfoced concrete fiber section
             is generated for each of these elements. 
+
+        :param elements: elements to check.
+        :param loadCombinationName: name of the load combination.
         '''
         if(self.verbose):
             className= type(self).__name__
@@ -1398,8 +1495,8 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             hceff=self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
             #Acgross=sct.getGrossEffectiveConcreteArea(hceff)
             Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
-            concrete=EHE_materials.concrOfName[sctCrkProp.concrName]
-            rfSteel=EHE_materials.steelOfName[sctCrkProp.rsteelName]
+            rfSteel= sctCrkProp.sctProp.getReinfSteelType()
+            concrete= sctCrkProp.sctProp.getConcreteType()
             k1=self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
             '''
             print('element= ', e.tag)
@@ -1572,25 +1669,6 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
             self.tensionedRebars.setup(tensionedReinforcement)
             self.Wk= self.computeWkOnBars(tensionedReinforcement)  
-
-# This is probably an ancient function that has become
-# a zombie (nobody seems to call it).
-# def printRebarCrackControlParameters(os= sys.stdout):
-#     '''Prints crack control parameters of a bar.'''
-#     os.write("\niRebar= "+str(iRebar))
-#     os.write("Effective area Acef= "+str(rebarEffConcArea*1e4)+" cm2")
-#     os.write("Bar area As= "+str(rebarArea*1e4)+" cm2")
-#     os.write("Bar position: ("+str(rebar_y)+")+"+str(rebar_z)+")")
-#     os.write("Bar cover c= "+str(rebarCover)+" m")
-#     os.write("Bar diameter fi= "+str(rebarDiameter)+"")
-#     os.write("Bar stress= "+str(rebarStress/1e6)+" MPa")
-#     os.write("Bar stress_SR= "+str(rebarSigmaSR/1e6)+" MPa")
-#     os.write("Bar spacement s= "+str(rebarSpacing)+" m")
-#     os.write("k1= "+str(k1)+"")
-#     os.write("rebarCrackMeanSep= "+str(rebarCrackMeanSep)+" m")
-#     os.write("Maximum bar elongation: "+str(maxBarElongation*1e3)+" per mil.")
-#     os.write("Average bar elongation: "+str(averageBarElongation*1e3)+" per mil.")
-#     os.write("Characteristic crack width= "+str(rebarWk*1e3)+" mm\n")
 
 
 class TorsionParameters(object):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 ''' Classes and functions for limit state checking according to Eurocode 2. '''
+
+from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, AO_O"
@@ -250,8 +250,8 @@ def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
     return retval
 
 class CrackController(lscb.LimitStateControllerBase):
-    '''Definition of variables involved in the verification of the cracking
-    serviceability limit state according to EC2.
+    '''Object that verifies the cracking serviceability limit state according 
+    to EC2.
 
     :ivar k1: coefficient that takes account of the bound properties of the 
           bonded reinforcement. k1=0.8 for high bond bars, k1=1.0 for bars with
@@ -265,7 +265,7 @@ class CrackController(lscb.LimitStateControllerBase):
     
     ControlVars= cv.RCCrackControlVars
     
-    def __init__(self, limitStateLabel, wk_lim= 0.3e-3, k1= 0.8, concreteMaxTensileStrain= 0.00015, shortTermLoading= False, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
+    def __init__(self, limitStateLabel, wk_lim= 0.3e-3, k1= 0.8, shortTermLoading= False, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
@@ -276,9 +276,6 @@ class CrackController(lscb.LimitStateControllerBase):
                - = 0.8 for high bond bars
                - = 1.6 for bars with an effectively plain surface (e.g. 
                       prestressing tendons)
-        :param concreteMaxTensileStrain: maximum value of the tensile strain
-                                         that the concrete can withstand 
-                                         before cracking. 
         :param shortTermLoading: if true, consider short therm loading 
                                  (k_t= 0.6), otherwise consider long term 
                                  loading (k_t= 0.4).
@@ -290,7 +287,6 @@ class CrackController(lscb.LimitStateControllerBase):
         self.k1= k1
         self.k3= 3.4
         self.k4= 0.425
-        self.concreteMaxTensileStrain= concreteMaxTensileStrain
         self.shortTermLoading= shortTermLoading
 
     def EC2_k2(self, eps1, eps2):
@@ -306,7 +302,7 @@ class CrackController(lscb.LimitStateControllerBase):
         k2= (eps1+eps2)/(2.0*eps1)
         return k2
 
-    def EC2_hceff(self, h, d,x):
+    def EC2_hceff(self, h, d, x):
         '''Return the maximum height to be considered in the calculation of the 
         concrete effective area in tension. See paragraph (3) of clause 7.3.2 
         of EC2.
@@ -426,7 +422,10 @@ class CrackController(lscb.LimitStateControllerBase):
         :param loadCombinationName: name of the load combination.
       '''
         if(self.verbose):
-          lmsg.log('Postprocessing combination: '+loadCombinationName)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+"; postprocessing combination: "+combName)
+        concreteMaxTensileStrain= 0.00015 # Used only as a threshold for very small tension strains.
         for e in elements:
             Aceff=0  #initial  value
             R= e.getResistingForce()
@@ -436,7 +435,7 @@ class CrackController(lscb.LimitStateControllerBase):
             if(sctCrkProp.eps1<=0): # No tensile strains.
                 s_rmax= 0.0
                 wk= 0.0
-            elif(sctCrkProp.eps1<0.1*self.concreteMaxTensileStrain): # Very small max. strain.
+            elif(sctCrkProp.eps1<0.1*concreteMaxTensileStrain): # Very small max. strain.
                 Aceff= 1e-4 # Very small effective area.
                 ro_s_eff= sctCrkProp.As/Aceff # effective ratio of reinforcement
                 k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
@@ -466,10 +465,9 @@ class CrackController(lscb.LimitStateControllerBase):
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, wk= wk, CF= CF))
 
 class CrackStraightController(CrackController):
-    '''Definition of variables involved in the verification of the cracking
-    serviceability limit state according to EC2 when considering a concrete
-    stress-strain diagram that takes account of the effects of tension 
-    stiffening.
+    ''' Object that verifies the cracking serviceability limit state according 
+    to EC2 when considering a concrete stress-strain diagram that takes 
+    account of the effects of tension  stiffening.
 
     :ivar k1: coefficient that takes account of the bound properties of the 
           bonded reinforcement. k1=0.8 for high bond bars, k1=1.0 for bars with
@@ -478,12 +476,14 @@ class CrackStraightController(CrackController):
     :ivar k4: defaults to the value recommended by EC2 and EHE k4=0.425
     '''
     ControlVars= cv.RCCrackStraightControlVars
-    def __init__(self, limitStateLabel):
+    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         '''
-        super(CrackStraightController,self).__init__(limitStateLabel)
+        super(CrackStraightController,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
     def check(self, elements, loadCombinationName):
         ''' For each element in the 'elememts' container passed as first 
