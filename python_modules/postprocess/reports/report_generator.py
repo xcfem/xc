@@ -31,7 +31,7 @@ class ReportGenerator(oh.OutputHandler):
         '''
         return self.outputStyle
 
-    def checksReport(self,limitStateLabel,setsShEl,argsShEl,setsBmEl=[],argsBmEl=[]):
+    def checksReport(self,limitStateLabel,setsShEl,argsShEl,setsBmEl=[],argsBmEl=[],rgMinMax=None):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
 
@@ -57,7 +57,7 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNm=fullPath+st.name+arg+'Sect1'
                 rltvgrFileNm=rltvPath+st.name+arg+'Sect1'
                 fullgrFileNmAndExt= fullgrFileNm+'.jpg'
-                self.displayField(limitStateLabel, 1,arg, None, st, fullgrFileNmAndExt)
+                self.displayField(limitStateLabel, section=1,argument=arg, component=None, setToDisplay=st, fileName=fullgrFileNmAndExt,rgMinMax=rgMinMax)
                 if not os.path.exists(fullgrFileNmAndExt):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
@@ -68,7 +68,7 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNm=fullPath+st.name+arg+'Sect2'
                 rltvgrFileNm=rltvPath+st.name+arg+'Sect2'
                 fullgrFileNmAndExt= fullgrFileNm+'.jpg'
-                self.displayField(limitStateLabel, 2,arg, None, st, fullgrFileNmAndExt)
+                self.displayField(limitStateLabel, section=2,argument=arg, component=None, setToDisplay=st, fileName=fullgrFileNmAndExt,rgMinMax=rgMinMax)
                 if not os.path.exists(fullgrFileNmAndExt):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
