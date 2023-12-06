@@ -89,6 +89,21 @@ class EC2Concrete(concrete_base.Concrete):
             alph= 2/3.0
         betacc= self.getBetaCC(t)
         return math.pow(betacc, alph)*self.getFctm()
+
+    def getFlexuralTensileStrength(self, h:float):
+        ''' Returns the concrete flexural tensile strength according to
+            clause 3.1.8 of EC2:2004. Expression (3.23).
+
+        :param h: total member depth.
+        '''
+        return max(1.6-h, 1.0)*self.getFctm()
+
+    def getFlexuralTensileStrain(self, h:float):
+        ''' Returns the strain corresponding to flexural tensile strength.
+
+        :param h: total member depth.
+        '''
+        return self.getFlexuralTensileStrength(h)/self.getEcm()
         
     def getEpsc1(self):
         """
