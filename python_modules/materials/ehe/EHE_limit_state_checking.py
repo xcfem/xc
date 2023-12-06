@@ -1414,8 +1414,6 @@ class CrackController(lscb.LimitStateControllerBase):
                 rfset=sct.getFiberSets()["reinfSetFb"]
                 eps_sm= rfset.getStrainMax()
                 wk= s_rmax*eps_sm
-                print('A eps_sm= ', eps_sm*1e3)
-                print('A wk= ', wk*1e3, 'mm')
             else:
                 hceff= self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
                 Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
