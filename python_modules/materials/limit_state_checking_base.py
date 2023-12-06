@@ -262,9 +262,10 @@ class FibSectLSProperties(object):
         self.x=self.sct.getNeutralAxisDepth()
         self.d=self.sct.getEffectiveDepth()
         self.h=self.sct.getLeverArm()
-        self.As=self.setsRC.tensionFibers.getArea(1.0)
-        self.eps1=self.setsRC.concrFibers.fSet.getStrainMax()
+        self.As= self.setsRC.tensionFibers.getArea(1.0)
+        self.eps1= self.setsRC.concrFibers.fSet.getStrainMax()
         self.eps2= max(self.setsRC.concrFibers.fSet.getStrainMin(),0.0)
+        self.sigma_c= self.setsRC.concrFibers.fSet.getStressMin()
         self.sct.computeSpacement('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
         '''
