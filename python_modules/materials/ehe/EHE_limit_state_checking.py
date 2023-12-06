@@ -1407,13 +1407,9 @@ class CrackController(lscb.LimitStateControllerBase):
             if(sctCrkProp.eps1<=0): # No tensile strains.
                 s_rmax= 0.0
                 wk= 0.0
-            elif(sctCrkProp.eps1<0.1*concreteMaxTensileStrain): # Very small max. strain.
-                k1= self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
-                sm= 2*sctCrkProp.cover+0.2*sctCrkProp.spacing+0.4*k1*sctCrkProp.fiEqu/ro_s_eff
-                s_rmax= self.beta*sm
-                rfset=sct.getFiberSets()["reinfSetFb"]
-                eps_sm= rfset.getStrainMax()
-                wk= s_rmax*eps_sm
+            elif(sctCrkProp.eps1<concreteMaxTensileStrain):  # Very small tensile strain => no cracking
+                s_rmax= 0.0
+                wk= 0.0
             else:
                 hceff= self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
                 Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
@@ -1434,7 +1430,8 @@ class CrackController(lscb.LimitStateControllerBase):
                     wk= s_rmax*eps_sm
             if(wk>=e.getProp(self.limitStateLabel).wk):
                 CF= wk/self.wk_lim # Capacity factor.
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, wk= wk, CF= CF))
+                sigma_c= sctCrkProp.sigma_c
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, sigma_s= sigma_s, sigma_c= sigma_c, wk= wk, CF= CF))
 
 class CrackStraightController(CrackController):
     '''Object that verifies the cracking serviceability limit state according 
