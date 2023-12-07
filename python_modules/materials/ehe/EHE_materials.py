@@ -223,6 +223,21 @@ class EHEConcrete(concrete_base.Concrete):
         else:
             return 0.58*(self.fckMPa()**(1.0/2.0))*1e6
 
+    def getFlexuralTensileStrength(self, h:float):
+        ''' Returns the concrete flexural tensile strength according to
+            clause 39.1 of EHE--08 (last expression in that clause).
+
+        :param h: total member depth expressed in meters.
+        '''
+        return max(1.6-h, 1.0)*self.getFctm()
+    
+    def getFlexuralTensileStrain(self, h:float):
+        ''' Returns the strain corresponding to flexural tensile strength.
+
+        :param h: total member depth.
+        '''
+        return self.getFlexuralTensileStrength(h)/self.getEcm()
+    
     def fctkInf(self):
         """Characteristic tensile strength (lower value) [Pa][+]
         (according to clause 39.1 EHE)
