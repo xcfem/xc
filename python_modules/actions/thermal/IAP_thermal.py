@@ -4,6 +4,11 @@
 from __future__ import print_function
 from __future__ import division
 
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO) "
+__copyright__= "Copyright 2019,  LCPT A_OO "
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import math
 import scipy.interpolate

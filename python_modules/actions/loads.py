@@ -2,7 +2,6 @@
 from __future__ import division
 from __future__ import print_function
 
-
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"
