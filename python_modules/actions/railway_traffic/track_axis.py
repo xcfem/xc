@@ -401,17 +401,15 @@ class TrackAxis(object):
             rul.clip(setMidplane)  # Avoid "negative" pressures over the wall.
             rul.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta)
             
-    def getRailWindLoads(self, leftRailWindLoad, rightRailWindLoad, trainModel):
+    def getRailWindLoads(self, leftRailWindLoad, rightRailWindLoad, trainModel, windDirection= None):
         ''' Return the uniform loads on the track rails due to the given
             wind loads.
 
         :param leftWindLoad: wind load on the left rail.
         :param rightWindLoad: wind load on the right rail.
         :param trainModel: load model of the train (see TrainLoadModel class).
-        :param relativePosition: relative position of the locomotive center in
-                                  the track axis (0 -> beginning of
-                                  the axis, 0.5-> middle of the axis, 1-> end
-                                  of the axis).
+        :param windDirection: wind direction vector (not necessary if the 
+                              curvature of the track does not change sign).
         '''
         # Get the rails disregarding the position of the locomotive.
         railAxes= self.getRailChunks(trainModel= None, relativePosition= None)          # Create the wind rail loads.
@@ -422,11 +420,11 @@ class TrackAxis(object):
                 loadComponents= [0.0, -rightRailWindLoad.x, -rightRailWindLoad.y]
             else:
                 loadComponents= [0.0, -leftRailWindLoad.x, -leftRailWindLoad.y]
-            windRailLoad= url.VariableDirectionRailLoad(railAxis= rc.getPolyline3d(), loadComponents= loadComponents, dynamicFactor= 1.0, classificationFactor= 1.0)
+            windRailLoad= url.VariableDirectionRailLoad(railAxis= rc.getPolyline3d(), loadComponents= loadComponents, dynamicFactor= 1.0, classificationFactor= 1.0, orientationVector= windDirection)
             retval.append(windRailLoad)
         return retval
     
-    def defDeckWindLoadOnRailsThroughLayers(self, trainModel, windPressure:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+    def defDeckWindLoadOnRailsThroughLayers(self, trainModel, windPressure:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, windDirection= None):
         ''' Define the nodal loads that correspond to uniform centrifugal
            loads on the rails.
 
@@ -442,12 +440,14 @@ class TrackAxis(object):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
+        :param windDirection: wind direction vector (not necessary if the 
+                              curvature of the track does not change sign).
         '''
         # Uniform wind load on the rails.
         trackCrossSection= self.getTrackCrossSection()
         railWindLoadsPerMeter= trainModel.getWindLoadPerMeter(windPressure= windPressure, trackCrossSection= trackCrossSection)
         # Create the wind rail loads.
-        railWindLoads= self.getRailWindLoads(leftRailWindLoad= railWindLoadsPerMeter[0], rightRailWindLoad= railWindLoadsPerMeter[1], trainModel= trainModel)
+        railWindLoads= self.getRailWindLoads(leftRailWindLoad= railWindLoadsPerMeter[0], rightRailWindLoad= railWindLoadsPerMeter[1], trainModel= trainModel, windDirection= windDirection)
         retval= list()
         # Apply loads to the originSet nodes.
         deckMidplane= originSet.nodes.getRegressionPlane(0.0)
@@ -455,7 +455,7 @@ class TrackAxis(object):
             retval.extend(rcl.defDeckRailLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
         return retval
     
-    def defDeckWindLoadThroughLayers(self, trainModel, windPressure:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+    def defDeckWindLoadThroughLayers(self, trainModel, windPressure:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1, windDirection= None):
         ''' Define wind loads on the bridge deck given:
 
         :param trainModel: load model of the train (see TrainLoadModel class).
@@ -470,6 +470,8 @@ class TrackAxis(object):
         :param deckSpreadingRatio: spreading ratio of the load between the deck
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
+        :param windDirection: wind direction vector (not necessary if the 
+                              curvature of the track does not change sign).
         '''
         # Uniform wind load on the rails.
-        return self.defDeckWindLoadOnRailsThroughLayers(trainModel= trainModel, windPressure= windPressure, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
+        return self.defDeckWindLoadOnRailsThroughLayers(trainModel= trainModel, windPressure= windPressure, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio, windDirection= windDirection)
