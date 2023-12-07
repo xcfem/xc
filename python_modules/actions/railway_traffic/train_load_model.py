@@ -86,4 +86,23 @@ class TrainLoadModel(object):
         locomotiveLoad= self.locomotive.getTotalLoad()
         uniformLoadedLength= trackLength-self.locomotive.getTotalLength()
         uniformLoad= self.getDynamicUniformLoad()*uniformLoadedLength
-        return locomotiveLoad+uniformLoad  
+        return locomotiveLoad+uniformLoad
+    
+    def getWindLoadPerMeter(self, windPressure, trackCrossSection):
+        ''' Compute the characteristic values of the distributed (qtk) 
+            forces corresponding to wind pressure.
+
+        :param windPressure: pressure of the wind on the rolling stock (N/m2).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        '''
+        q= windPressure*self.rollingStockHeight # load per unit length.
+        if(trackCrossSection):
+            # Distribute the load
+            Q= [q,0,0] # Centrifugal load.
+            railLoads= trackCrossSection.getRailLoads(Q= Q, h= self.rollingStockHeight/2.0)
+            leftRailLoad= geom.Vector2d(railLoads[0], railLoads[1])
+            rightRailLoad= geom.Vector2d(railLoads[2], railLoads[3])
+            retval= (leftRailLoad, rightRailLoad)
+        else:
+            retval= (q/2, q/2)
+        return retval
