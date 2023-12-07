@@ -141,6 +141,8 @@ trainLoadModel= EC1_rail_load_models.TrainLoadModel(locomotive= EC1_rail_load_mo
 
 ### Centrifugal load parameters.
 windPressure= -1.3176003807798742e3 # N/m2
+# The wind load will always be normal to the track axis, and it can be reversed by changing the sign of the wind pressure. Nevertheless, for those axes whose curvature sign changes along their length, you need to inform the load generator of the direction of the wind load.
+# This is done through the windDirection parameter:
 windDirection= geom.Vector3d(0,-1,0) # Orient the wind load regardless of the track curvature sign.
 ### Define load pattern.
 q3= modelSpace.newLoadPattern(name= 'Q3')
