@@ -94,7 +94,7 @@ class EC2Concrete(concrete_base.Concrete):
         ''' Returns the concrete flexural tensile strength according to
             clause 3.1.8 of EC2:2004. Expression (3.23).
 
-        :param h: total member depth.
+        :param h: total member depth expressed in meters.
         '''
         return max(1.6-h, 1.0)*self.getFctm()
 
