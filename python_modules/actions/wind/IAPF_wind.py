@@ -11,7 +11,9 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
+import sys
 from actions.wind import IAP_wind
+from misc_utils import log_messages as lmsg
 import scipy.interpolate
 
 # Import common functions from IAP.
@@ -169,7 +171,7 @@ def getWindPressure(v_c: float, rho:float= 1.25):
     '''
     return 0.5*rho*v_c**2
 
-def getUnitWindLoadDeck(terrainCategory:str, v_ref:float, z:float, Cd:float, topographyFactor= 1.0, T= 100, K= 0.2, rho:float= 1.25):
+def get_unit_wind_load(terrainCategory:str, v_ref:float, z:float, Cd:float, topographyFactor= 1.0, T= 100, K= 0.2, rho:float= 1.25):
     ''' Return the wind load per square meter on a bridge member according 
         to clauses 2.3.7.3 of IAPF-10.
 
@@ -188,6 +190,25 @@ def getUnitWindLoadDeck(terrainCategory:str, v_ref:float, z:float, Cd:float, top
     # Compute wind pressure.
     windPressure= getWindPressure(v_c= v_c, rho= rho)
     return Cd*windPressure
+
+def getUnitWindLoadDeck(terrainCategory:str, v_ref:float, z:float, Cd:float, topographyFactor= 1.0, T= 100, K= 0.2, rho:float= 1.25):
+    ''' Return the wind load per square meter on a bridge member according 
+        to clauses 2.3.7.3 of IAPF-10.
+
+    :param terrainCategory: terrain category according to clause 2.3.7.2. 
+                            of IAPF-10.
+    :param v_ref: velocity of reference to figure 2.20 of IAPF-10.
+    :param z: average height of the deck with respect to the terrain.
+    :param Cd: drag force coefficient.
+    :param topographyFactor: topography factor according to clause 2.3.7.2.
+        of IAPF-10.
+    :param T: return period expressed in years.
+    :param K: parameter (defaults to 0.2).
+    '''
+    # 07/12/2023
+    methodName= sys._getframe(0).f_code.co_name
+    lmsg.warning(methodName+'; this function will be deprecated soon; use get_unit_wind_load')
+    return get_unit_wind_load(terrainCategory= terrainCategory, v_ref= v_ref, z= z, Cd= Cd, topographyFactor= topographyFactor, T= T, K= K, rho= rho)
     
 def ParamKIAPF(gae):
     '''ParamKIAPF(gae)

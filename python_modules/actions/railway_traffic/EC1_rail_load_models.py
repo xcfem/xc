@@ -199,6 +199,25 @@ class TrainLoadModel(tlm.TrainLoadModel):
         else:
             retval= (q/2, q/2)
         return retval
+    
+    def getWindLoadPerMeter(self, windPressure, trackCrossSection):
+        ''' Compute the characteristic values of the distributed (qtk) 
+            forces corresponding to wind pressure.
+
+        :param windPressure: pressure of the wind on the rolling stock (N/m2).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        '''
+        q= windPressure*self.rollingStockHeight # load per unit length.
+        if(trackCrossSection):
+            # Distribute the load
+            Q= [q,0,0] # Centrifugal load.
+            railLoads= trackCrossSection.getRailLoads(Q= Q, h= self.rollingStockHeight/2.0)
+            leftRailLoad= geom.Vector2d(railLoads[0], railLoads[1])
+            rightRailLoad= geom.Vector2d(railLoads[2], railLoads[3])
+            retval= (leftRailLoad, rightRailLoad)
+        else:
+            retval= (q/2, q/2)
+        return retval
         
 
 class TrackAxis(ta.TrackAxis):
@@ -313,3 +332,50 @@ class TrackAxis(ta.TrackAxis):
         retval= trainModel.locomotive.defDeckNosingLoadThroughLayers(nosingDirection= -ref.getJVector(), ref= ref, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         return retval
     
+    def defDeckWindLoadOnRailsThroughLayers(self, trainModel, windPressure:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Define the nodal loads that correspond to uniform centrifugal
+           loads on the rails.
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param windPressure: pressure of the wind on the rolling stock (N/m2).
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        # Uniform wind load on the rails.
+        trackCrossSection= self.getTrackCrossSection()
+        railWindLoadsPerMeter= trainModel.getWindLoadPerMeter(windPressure= windPressure, trackCrossSection= trackCrossSection)
+        # Create the wind rail loads.
+        railWindLoads= self.getRailWindLoads(leftRailWindLoad= railWindLoadsPerMeter[0], rightRailWindLoad= railWindLoadsPerMeter[1], trainModel= trainModel)
+        retval= list()
+        # Apply loads to the originSet nodes.
+        deckMidplane= originSet.nodes.getRegressionPlane(0.0)
+        for rcl in railWindLoads:
+            retval.extend(rcl.defDeckRailLoadsThroughLayers(spreadingLayers= spreadingLayers, originSet= originSet, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio))
+        return retval
+    
+    def defDeckWindLoadThroughLayers(self, trainModel, windPressure:float, spreadingLayers, originSet, deckThickness, deckSpreadingRatio= 1/1):
+        ''' Define wind loads on the bridge deck given:
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param windPressure: pressure of the wind on the rolling stock (N/m2).
+        :param spreadingLayers: list of tuples containing the depth
+                                and the spread-to-depth ratio of
+                                the layers between the wheel contact
+                                area and the middle surface of the
+                                bridge deck.
+        :param originSet: set to pick the loaded nodes from.
+        :param deckThickness: thickness of the bridge deck.
+        :param deckSpreadingRatio: spreading ratio of the load between the deck
+                                   surface and the deck mid-plane (see
+                                   clause 4.3.6 on Eurocode 1-2:2003).
+        '''
+        # Uniform wind load on the rails.
+        return self.defDeckWindLoadOnRailsThroughLayers(trainModel= trainModel, windPressure= windPressure, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)

@@ -21,8 +21,11 @@ class TrainLoadModel(object):
 
     :ivar locomotive: locomotive model.
     :ivar uniformLoad: uniform load on the track.
+    :ivar rollingStockHeight: height of the rolling stock for wind calculations
+                              (see clause 8.3.1 paragraph 5 letter b) of 
+                               Eurocode 1 part 1-4. Wind actions).
     '''
-    def __init__(self, locomotive, uniformLoad, dynamicFactor, classificationFactor= 1.21, h= 1.8):
+    def __init__(self, locomotive, uniformLoad, dynamicFactor, classificationFactor= 1.21, h= 1.8, rollingStockHeight= 4.0):
         ''' Constructor:
 
         :param locomotive: locomotive model.
@@ -33,6 +36,10 @@ class TrainLoadModel(object):
                                      rail traffic which is heavier or lighter
                                      than normal rail traffic).
         :param h: height of the center of gravity.
+        :param rollingStockHeight: height of the rolling stock for wind 
+                                   calculations (see clause 8.3.1 paragraph 5 
+                                   letter b) of Eurocode 1 part 1-4. Wind 
+                                   actions).
         '''
         self.locomotive= locomotive
         # The dynamic factor is stored in the locomotive.
@@ -40,6 +47,7 @@ class TrainLoadModel(object):
         self.locomotive.setClassificationFactor(classificationFactor)
         self.uniformLoad= uniformLoad
         self.h= h
+        self.rollingStockHeight= rollingStockHeight
 
     def getDynamicFactor(self):
         ''' Return the dynamic factor.'''
@@ -78,5 +86,4 @@ class TrainLoadModel(object):
         locomotiveLoad= self.locomotive.getTotalLoad()
         uniformLoadedLength= trackLength-self.locomotive.getTotalLength()
         uniformLoad= self.getDynamicUniformLoad()*uniformLoadedLength
-        return locomotiveLoad+uniformLoad
-    
+        return locomotiveLoad+uniformLoad  

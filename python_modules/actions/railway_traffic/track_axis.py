@@ -215,7 +215,7 @@ class TrackAxis(object):
     def getRailsBrakingLoads(self):
         ''' Return the uniform loads object for both track rails.
         '''
-        # Get the rails that are outside the locomotive.
+        # Get the rails disregarding the position of the locomotive.
         railAxes= self.getRailChunks(trainModel= None, relativePosition= None)  # Get raw rail axes.
         # Create the uniform rail loads.
         retval= list()
@@ -401,3 +401,27 @@ class TrackAxis(object):
             rul.clip(setMidplane)  # Avoid "negative" pressures over the wall.
             rul.defBackfillUniformLoads(originSet= originSet, embankment= embankment, delta= delta, eta= eta)
             
+    def getRailWindLoads(self, leftRailWindLoad, rightRailWindLoad, trainModel):
+        ''' Return the uniform loads on the track rails due to the given
+            wind loads.
+
+        :param leftWindLoad: wind load on the left rail.
+        :param rightWindLoad: wind load on the right rail.
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: relative position of the locomotive center in
+                                  the track axis (0 -> beginning of
+                                  the axis, 0.5-> middle of the axis, 1-> end
+                                  of the axis).
+        '''
+        # Get the rails disregarding the position of the locomotive.
+        railAxes= self.getRailChunks(trainModel= None, relativePosition= None)          # Create the wind rail loads.
+        retval= list()
+        numLeftRailAxes= len(railAxes)/2
+        for i, rc in enumerate(railAxes):
+            if(i<numLeftRailAxes):
+                loadComponents= [0.0, -rightRailWindLoad.x, -rightRailWindLoad.y]
+            else:
+                loadComponents= [0.0, -leftRailWindLoad.x, -leftRailWindLoad.y]
+            windRailLoad= url.VariableDirectionRailLoad(railAxis= rc.getPolyline3d(), loadComponents= loadComponents, dynamicFactor= 1.0, classificationFactor= 1.0)
+            retval.append(windRailLoad)
+        return retval
