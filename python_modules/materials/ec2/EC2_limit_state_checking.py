@@ -431,6 +431,7 @@ class CrackController(lscb.LimitStateControllerBase):
             sct= e.getSection()
             sctCrkProp= lscb.FibSectLSProperties(sct)
             sctCrkProp.setupStrghCrackDist()
+            sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
             if(sctCrkProp.eps1<=0): # No tensile strains.
                 s_rmax= 0.0
                 wk= 0.0
@@ -451,7 +452,6 @@ class CrackController(lscb.LimitStateControllerBase):
                         k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
                         ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
                         s_rmax= self.s_r_max(k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing, ro_eff= ro_s_eff)
-                        sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
                         meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
                         wk= meanStrainDifference*s_rmax
             if(wk>=e.getProp(self.limitStateLabel).wk):
