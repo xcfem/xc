@@ -56,7 +56,7 @@ lp0= modelSpace.newLoadPattern(name= '0')
 #\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam1.tag, beam2.tag])
-temperatureGradient= 13.2 # 
+temperatureGradient= 13.2 # temperature gradient Ttop-Tbottom.
 zCurvature= -temperatureGradient*alpha/h
 # We introduce the "inverse" curvature as initial deformation to
 # get the desired effect.
