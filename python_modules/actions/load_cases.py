@@ -65,7 +65,7 @@ class LoadCaseManager(object):
            self.timeSeries[tsName]= ts
        self.loadPatterns.currentTimeSeries= tsName
        for name in names:
-           if(name not in self.loadCases): # Loas pattern not already defined.
+           if(name not in self.loadCases): # Load pattern not already defined.
                self.loadCases[name]= self.loadPatterns.newLoadPattern('default',name)
 
     def setCurrentLoadCase(self, name, newLoadCase= False):
