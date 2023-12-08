@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' Deflection of a cantilever beam due to a temperature gradient.
 
-    Strain component 3: curvature around local y axis 
-    (normal to local x axis)
+    Strain component 4: curvature around local x axis 
+    (normal to local y axis)
 
     Home made test based on the corresponding classical formulas.
 '''
@@ -38,9 +38,9 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 ## Problem geometry.
 ### K-points.
 pt1= modelSpace.newKPoint(0,0,0)
-pt2= modelSpace.newKPoint(L,0,0)
-pt3= modelSpace.newKPoint(L,b,0)
-pt4= modelSpace.newKPoint(0,b,0)
+pt2= modelSpace.newKPoint(b,0,0)
+pt3= modelSpace.newKPoint(b,L,0)
+pt4= modelSpace.newKPoint(0,L,0)
 ### Surface
 s= modelSpace.newQuadSurface(pt1, pt2, pt3, pt4)
 s.setElemSizeIJ(0.5,0.5)
@@ -57,12 +57,12 @@ s.genMesh(xc.meshDir.I)
 
 ### Constraints.
 xcTotalSet= modelSpace.getTotalSet()
-# Get the line at x= 0
+# Get the line at y= 0
 for l in xcTotalSet.lines:
     center= l.getCentroid()
-    if(center.x==0.0):
+    if(center.y==0.0):
         for n in l.nodes:
-            modelSpace.fixNode('000_F0F', n.tag)
+            modelSpace.fixNode('000_0FF', n.tag)
             
 ## Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -70,11 +70,11 @@ eleLoad= lp0.newElementalLoad("shell_strain_load")
 eleLoad.elementTags= xc.ID(xcTotalSet.getElementTags())
 temperatureGradient= 13.2 # temperature gradient Ttop-Tbottom.
 curvature= -temperatureGradient*alpha/thickness
-# strain component 3: curvature around local y axis (normal to local x axis).
-eleLoad.setStrainComp(0,3,curvature) #(id of Gauss point, id of component, value)
-eleLoad.setStrainComp(1,3,curvature)
-eleLoad.setStrainComp(2,3,curvature)
-eleLoad.setStrainComp(3,3,curvature)
+# strain component 4: curvature around local x axis (normal to local y axis).
+eleLoad.setStrainComp(0,4,curvature) #(id of Gauss point, id of component, value)
+eleLoad.setStrainComp(1,4,curvature)
+eleLoad.setStrainComp(2,4,curvature)
+eleLoad.setStrainComp(3,4,curvature)
 modelSpace.addLoadCaseToDomain(lp0.name) # We add the load case to domain.
 
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -86,7 +86,7 @@ count= 0
 # Get the line at x= L
 for l in xcTotalSet.lines:
     center= l.getCentroid()
-    if(abs(center.x-L)<1e-4):
+    if(abs(center.y-L)<1e-4):
         for n in l.nodes:
             zDisp+= n.getDisp[2]
             count+= 1
@@ -115,5 +115,5 @@ else:
 # oh= output_handler.OutputHandler(modelSpace)
 # # oh.displayFEMesh()
 # oh.displayLocalAxes()
-# # oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
 # # oh.displayReactions()
