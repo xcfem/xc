@@ -21,12 +21,10 @@ L= 1.0 # Bar length (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
-alpha= 1.2e-5 # Thermal expansion coefficient of the steel
 A= 4e-4 # bar area expressed in square meters
 Iz= 80.1e-8 # Cross section moment of inertia (m4)
 Iy= 8.49e-8 # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
-AT= 10 # Temperature increment (Celsius degrees)
 
 
 # Problem type
