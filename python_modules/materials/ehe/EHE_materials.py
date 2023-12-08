@@ -147,6 +147,7 @@ class EHEConcrete(concrete_base.Concrete):
             (defaults to 'cuarcita')
 
     """
+    linearCoefficientOfThermalExpansion= 1e-5 # linear coefficient of thermal expansion according to clause 39.10 of EHE-08.
 
     def __init__(self,nmbConcrete, fck, gammaC,typeAggregate='cuarcita'):
         ''' Constructor.
