@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test for thermal loads according to Spanihsh IAP standard.'''
+''' Test for thermal loads according to Spanihsh IAPF standard.'''
 
 from __future__ import print_function
 from __future__ import division
