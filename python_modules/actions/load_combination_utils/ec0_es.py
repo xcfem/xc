@@ -61,8 +61,16 @@ combination_factors.insert('road_bridge_thermal',loadCombinations.CombinationFac
 combination_factors.insert('road_bridge_snow',loadCombinations.CombinationFactors(0.8,0.0,0.0))
 combination_factors.insert('road_bridge_hydrostatic_pressure',loadCombinations.CombinationFactors(1.0,1.0,1.0))
 combination_factors.insert('road_bridge_construction_loads',loadCombinations.CombinationFactors(1.0,0.0,1.0))
-# Combination factors for railway bridges
+# Combination factors for railway bridges according to table A2.3 of Eurocode 0.
 combination_factors.insert('LM71_alone_uls',loadCombinations.CombinationFactors(0.8,0.8,0.0))
+combination_factors.insert('SW/0_alone_uls',loadCombinations.CombinationFactors(0.8,0.8,0.0))
+combination_factors.insert('SW/2_uls',loadCombinations.CombinationFactors(0.0,1.0,0.0))
+combination_factors.insert('unloaded_train_uls',loadCombinations.CombinationFactors(1.0,0.0,0.0))
+combination_factors.insert('railway_bridge_wind_persistent_situation',loadCombinations.CombinationFactors(0.75,0.5,0.0))
+combination_factors.insert('railway_bridge_wind_aster',loadCombinations.CombinationFactors(1.0,0.0,0.0))
+combination_factors.insert('railway_bridge_thermal',loadCombinations.CombinationFactors(0.6,0.6,0.5))
+combination_factors.insert('railway_bridge_snow',loadCombinations.CombinationFactors(0.8,0.0,0.0))
+combination_factors.insert('railway_bridge_construction_loads',loadCombinations.CombinationFactors(1.0,0.0,1.0))
 
 # Importance factors for bridges (See Spanish National Annex AN/UNE-EN 1998-2 clause 2.1(6))
 lessImportantBridgesImportanceFactor= None # Must be fixed by the competent authority.
@@ -208,8 +216,8 @@ class CombGenerator(utils.CombGenerator):
         
     
     def newWindAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= None):
-        ''' Creates a wind action on footbridge and appends it to the 
-            combinations generator.
+        ''' Creates a wind action on bridge and appends it to the combinations
+            generator.
 
         :param actionName: name of the action.
         :param actionDescription: description of the action.
@@ -217,7 +225,15 @@ class CombGenerator(utils.CombGenerator):
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
         '''
-        raise NotImplementedError()
+        retval= None
+        if(context=='road_bridge'):
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_wind_persistent_situation', partialSafetyFactorsName= 'wind', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        elif(context=='railway_bridge'):
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'railway_bridge_wind_persistent_situation', partialSafetyFactorsName= 'wind', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
         return None
     
     def newThermalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= 'road_bridge'):
