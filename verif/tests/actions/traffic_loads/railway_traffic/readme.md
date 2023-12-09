@@ -16,3 +16,4 @@ A slipstream is a region behind a moving object in which a wake of fluid (typica
 - [Pedestrian load models of footbridges](https://www.researchgate.net/publication/317132258_Pedestrian_load_models_of_footbridges)
 - [Dynamic amplification factor](https://en.wikipedia.org/wiki/Dynamic_amplification_factor)
 - [Slipstream](https://en.wikipedia.org/wiki/Slipstream)
+- [Guide to Eurocode 1: Actions on Bridges.](https://www.icevirtuallibrary.com/doi/pdf/10.1680/dgeab.31586.fm)

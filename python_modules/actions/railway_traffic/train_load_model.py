@@ -106,3 +106,4 @@ class TrainLoadModel(object):
         else:
             retval= (q/2, q/2)
         return retval
+
