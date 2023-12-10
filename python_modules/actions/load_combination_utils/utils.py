@@ -40,7 +40,7 @@ class CombGenerator(object):
         ''' Return a pointer to the container of the combination factors.'''
         return self.getFactors().getPartialSafetyFactors()
     
-    def newAction(self, family: str, actionName: str, actionDescription: str, combinationFactorsName:str, partialSafetyFactorsName:str, dependsOn= None, incompatibleActions= None):
+    def newAction(self, family: str, actionName: str, actionDescription: str, combinationFactorsName:str, partialSafetyFactorsName:str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates an action and appends it to the combinations generator.
 
         :param weighting: name of the weighting factors repository.
@@ -51,8 +51,10 @@ class CombGenerator(object):
         :param partialSafetyFactorsName: name of the partial safety factor container.
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         newAction= loadCombinations.Action(actionName, actionDescription)
+        newAction.not_determinant= notDeterminant
         retval= self.controlCombGenerator.insert(self.name, family, newAction, combinationFactorsName, partialSafetyFactorsName)
         if(dependsOn is not None):
             retval.relationships.appendMain(dependsOn)

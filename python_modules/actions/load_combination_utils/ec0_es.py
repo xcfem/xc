@@ -28,6 +28,7 @@ partial_safety_factors['settlement_linear_analysis']= loadCombinations.PartialSa
 partial_safety_factors['settlement_non_linear_analysis']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 #Partial safety factors for variable actions.
 # Traffic loads.
+partial_safety_factors['variable']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 partial_safety_factors['road_traffic']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 partial_safety_factors['pedestrian']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
 partial_safety_factors['railway_traffic']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.45,0,1),loadCombinations.SLSPartialSafetyFactors(0,1))
@@ -123,7 +124,7 @@ class CombGenerator(utils.CombGenerator):
         '''
         return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= 'permanent', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
-    def newSettlementAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, nonLinearAnalysis= True, context= None):
+    def newSettlementAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, nonLinearAnalysis= True, context= None, notDeterminant= False):
         ''' Creates a permanent action and appends it to the combinations 
             generator.
 
@@ -132,14 +133,15 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         if(nonLinearAnalysis):
             partialSafetyFactorsName= 'settlement_non_linear_analysis'
         else:
             partialSafetyFactorsName= 'settlement_linear_analysis'
-        return self.newAction(family= 'variable',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        return self.newAction(family= 'variable',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
     
-    def newHeavyVehicleAction(self, actionName: str, actionDescription: str, group:str, dependsOn= None, incompatibleActions= None, context= 'road_bridge'):
+    def newHeavyVehicleAction(self, actionName: str, actionDescription: str, group:str, dependsOn= None, incompatibleActions= None, context= 'road_bridge', notDeterminant= False):
         ''' Creates a heavy vehicle action and appends it to the combinations 
             generator.
 
@@ -149,6 +151,7 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         retval= None
         if(context=='road_bridge'):
@@ -166,14 +169,14 @@ class CombGenerator(utils.CombGenerator):
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; group: '+str(group) + ' doesn\'t correspond to vertical loads from heavy vehicles (punctual loads).')
 
-            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= cFactors, partialSafetyFactorsName= 'road_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= cFactors, partialSafetyFactorsName= 'road_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
         return retval
     
-    def newUniformLoadAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= 'road_bridge'):
+    def newUniformLoadAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= 'road_bridge', notDeterminant= False):
         ''' Creates a uniformly distributed load (UDL system) and appends it 
             to the combinations generator.
 
@@ -182,19 +185,20 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         retval= None
         if(context=='road_bridge'): # uniformly distributed load (UDL system)
-            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_traffic_loads_gr1a_udl', partialSafetyFactorsName= 'road_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_traffic_loads_gr1a_udl', partialSafetyFactorsName= 'road_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         elif(context=='load_on_backfill'):
-            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_traffic_loads_gr1a_udl', partialSafetyFactorsName= context, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_traffic_loads_gr1a_udl', partialSafetyFactorsName= context, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
         return retval
     
-    def newRailwayTrafficAction(self, actionName:str, actionDescription:str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None, context= 'railway_bridge'):
+    def newRailwayTrafficAction(self, actionName:str, actionDescription:str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None, context= 'railway_bridge', notDeterminant= False):
         ''' Creates a railway traffic action and appends it to the 
             combinations generator.
 
@@ -204,10 +208,11 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         retval= None
         if(context=='railway_bridge'):
-            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= 'railway_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= 'railway_traffic', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -215,7 +220,7 @@ class CombGenerator(utils.CombGenerator):
         return retval
         
     
-    def newWindAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= None):
+    def newWindAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= None, notDeterminant= False):
         ''' Creates a wind action on bridge and appends it to the combinations
             generator.
 
@@ -224,19 +229,20 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         retval= None
         if(context=='road_bridge'):
-            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_wind_persistent_situation', partialSafetyFactorsName= 'wind', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_wind_persistent_situation', partialSafetyFactorsName= 'variable', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         elif(context=='railway_bridge'):
-            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'railway_bridge_wind_persistent_situation', partialSafetyFactorsName= 'wind', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'railway_bridge_wind_persistent_situation', partialSafetyFactorsName= 'variable', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
         return None
     
-    def newThermalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= 'road_bridge'):
+    def newThermalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= 'road_bridge', notDeterminant= False):
         ''' Creates a thermal action and appends it to the combinations 
             generator.
 
@@ -245,29 +251,33 @@ class CombGenerator(utils.CombGenerator):
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         retval= None
         if(context=='road_bridge'):
-            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_thermal', partialSafetyFactorsName= 'thermal', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_thermal', partialSafetyFactorsName= 'thermal', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+        elif(context=='railway_bridge'):
+            retval= self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'railway_bridge_thermal', partialSafetyFactorsName= 'thermal', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
         return retval        
 
-    def newHydrostaticPressureAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= 'road_bridge'):
-        ''' Creates a thermal action and appends it to the combinations 
-            generator.
+    def newHydrostaticPressureAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, context= 'road_bridge', notDeterminant= False):
+        ''' Creates a hydrostatic pressure action and appends it to the 
+            combinations generator.
 
         :param actionName: name of the action.
         :param actionDescription: description of the action.
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         retval= None
         if(context=='road_bridge'):
-            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_hydrostatic_pressure', partialSafetyFactorsName= 'hydrostatic_pressure', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_hydrostatic_pressure', partialSafetyFactorsName= 'hydrostatic_pressure', dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
