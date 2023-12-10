@@ -45,6 +45,10 @@ std::vector<const cmb_acc::Action *> cmb_acc::SingleActionWrapper::getWrappedAct
     return retval;
   }
 
+//! @brief Return the action corresponding to the given index.
+const cmb_acc::Action *cmb_acc::SingleActionWrapper::getAction(const size_t &) const
+  { return &action; }
+
 //! @brief Get the representative value of the action in the contest being
 //! pased as parameter.
 //! @param LeadingActionInfo: information about the combination leading action.
@@ -57,3 +61,7 @@ cmb_acc::Action cmb_acc::SingleActionWrapper::getRepresentativeValue(const Leadi
 //! @brief Return the relatioships with the other actions.
 const cmb_acc::ActionRelationships &cmb_acc::SingleActionWrapper::getRelaciones(void) const
   { return action.getRelaciones(); }
+
+//! @brief Return true if the action cannot be determinant.
+bool cmb_acc::SingleActionWrapper::notDeterminant(void) const
+  { return action.notDeterminant(); }

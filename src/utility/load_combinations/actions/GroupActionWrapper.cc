@@ -69,6 +69,16 @@ std::vector<const cmb_acc::Action *> cmb_acc::GroupActionWrapper::getWrappedActi
     return retval;
   }
 
+//! @brief Return the action corresponding to the given index.
+const cmb_acc::Action *cmb_acc::GroupActionWrapper::getAction(const size_t &i) const
+  {
+    const Action *retval= nullptr;
+    const size_t sz= actions.size();
+    if(i<sz)
+      retval= &actions[i];
+    return retval;
+  }
+
 //! @brief Get the representative value of the action in the contest being
 //! pased as parameter.
 //! @param LeadingActionInfo: information about the combination leading action.
@@ -97,4 +107,20 @@ const cmb_acc::ActionRelationships &cmb_acc::GroupActionWrapper::getRelaciones(v
   {
     assert(!actions.empty());
     return actions[0].getRelaciones();
+  }
+
+//! @brief Return true if the none of the actions can be determinant.
+bool cmb_acc::GroupActionWrapper::notDeterminant(void) const
+  {
+    bool retval= true;
+    for(const_iterator i= actions.begin(); i!=actions.end(); i++)
+      {
+	const Action &a= *i;
+	if(!a.notDeterminant())
+	  {
+	    retval= false;
+	    break;
+	  }
+      }
+    return retval;
   }

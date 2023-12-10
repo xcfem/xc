@@ -35,7 +35,7 @@ class_<Action, bases<NamedEntity> >("Action")
   .add_property("getRelaciones", make_function( &Action::getRelaciones, return_internal_reference<>() ), "DEPRECATED, use relationships")
   .add_property("relationships", make_function( &Action::getRelaciones, return_internal_reference<>() ), "Return the actions relationships with other actions")
   .add_property("weightingFactor", &Action::getWeightingFactor, &Action::setWeightingFactor)
-  .add_property("not_determinant", &Action::NoDeterminante, &Action::setNoDeterminante)
+  .add_property("not_determinant", &Action::notDeterminant, &Action::setNotDeterminant, "Set to True if action cannot be determinant, otherwise it must be False.")
   .def("getExpandedName", &Action::getExpandedName)
   .def("getCoeficientes", &Action::getCoeficientes)
   .def("getComponents", &Action::getComponents)
@@ -51,6 +51,7 @@ class_<ActionWrapper, bases<EntityWithOwner>, boost::noncopyable >("ActionWrappe
   .def("setPartialSafetyFactors", &ActionWrapper::setPartialSafetyFactors, "Set the partial safety factors for this action.")
   .def("getDict", &ActionWrapper::getPyDict,"Return a Python dictionary containing the object members values.")
   .def("setFromDict", &ActionWrapper::setPyDict,"Set the values of the object members from a Python dictionary.")
+  .add_property("not_determinant", &ActionWrapper::notDeterminant, "Return True if none of the underlying actions cannot be determinant, otherwise return False.")
   ;
 
 typedef std::deque<std::shared_ptr<ActionWrapper> > dq_action_wrappers;

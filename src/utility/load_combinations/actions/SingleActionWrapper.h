@@ -42,8 +42,10 @@ class SingleActionWrapper: public ActionWrapper
     virtual std::string getName(void) const;
   public:    
     std::vector<const Action *> getWrappedActions(void) const;
+    const Action *getAction(const size_t &) const;
     virtual Action getRepresentativeValue(const LeadingActionInfo &) const;  
     const ActionRelationships &getRelaciones(void) const;
+    bool notDeterminant(void) const;
   };
   
 } //fin namespace nmb_acc.

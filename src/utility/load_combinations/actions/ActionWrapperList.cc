@@ -223,19 +223,30 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionWrapperList::getCombinationsWhenLe
     LoadCombinationVector retval;
     for(size_t i=0;i<nq;i++) //i: index of the leading action.
       {
-	if(verbosity>1)
-	  std::clog << std::endl
-		    << "    Computing combinations of variable actions with leading action: "
-		    << i << " ...";
-	LeadingActionInfo lci(i,v-1,v); //Leading action with representative value v
-					//rest of actions with representative value v-1.
-	if(sit_accidental)
-	  lci= LeadingActionInfo(i,1,2); //Leading action with frequent value
-	                                 //rest of actions with quasi-permanent value.
-	if(sit_sismica)
-	  lci= LeadingActionInfo(-1,2,2); //All actions with quasi-permanent value.
-	LoadCombinationVector temp= getCombinations(uls,sit_accidental,lci); 
-	retval= LoadCombinationVector::Concat(retval,temp,Action::zero);
+	const ActionWrapper *leadingAction= (*this)[i].get();
+	if(leadingAction->notDeterminant()) // Can't be leading action.
+	  {
+	    if(verbosity>1)
+	      std::clog << std::endl
+			<< "    Action: "
+			<< i << " cannot lead. Skipping...";
+	  }
+	else
+	  {
+	    if(verbosity>1)
+	      std::clog << std::endl
+			<< "    Computing combinations of variable actions with leading action: "
+			<< i << " ...";
+	    LeadingActionInfo lci(i,v-1,v); //Leading action with representative value v
+					    //rest of actions with representative value v-1.
+	    if(sit_accidental)
+	      lci= LeadingActionInfo(i,1,2); //Leading action with frequent value
+					     //rest of actions with quasi-permanent value.
+	    if(sit_sismica)
+	      lci= LeadingActionInfo(-1,2,2); //All actions with quasi-permanent value.
+	    LoadCombinationVector temp= getCombinations(uls,sit_accidental,lci); 
+	    retval= LoadCombinationVector::Concat(retval,temp,Action::zero);
+	  }
 	if(verbosity>1)
 	  std::clog << "done." << std::endl;
       }
