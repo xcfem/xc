@@ -110,7 +110,7 @@ class CombGenerator(utils.CombGenerator):
         '''
         return self.newAction(family= "permanentes",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanentes', partialSafetyFactorsName= "permanentes", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
-    def newHeavyVehicleAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+    def newHeavyVehicleAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates a heavy vehicle action and appends it to the combinations 
             generator.
 
@@ -118,10 +118,11 @@ class CombGenerator(utils.CombGenerator):
         :param actionDescription: description of the action.
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
-        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'vehículos_pesados', partialSafetyFactorsName= "variables_SCuso", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'vehículos_pesados', partialSafetyFactorsName= "variables_SCuso", dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
 
-    def newFootbridgeAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+    def newFootbridgeAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates a footbridge action and appends it to the combinations 
             generator.
 
@@ -129,10 +130,11 @@ class CombGenerator(utils.CombGenerator):
         :param actionDescription: description of the action.
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
-        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'SCuso_pasarelas', partialSafetyFactorsName= "variables_SCuso", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'SCuso_pasarelas', partialSafetyFactorsName= "variables_SCuso", dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
     
-    def newFootbridgeWindAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+    def newFootbridgeWindAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates a wind action on footbridge and appends it to the 
             combinations generator.
 
@@ -140,10 +142,11 @@ class CombGenerator(utils.CombGenerator):
         :param actionDescription: description of the action.
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
-        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'viento_pasarelas', partialSafetyFactorsName= "variables_climatica", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'viento_pasarelas', partialSafetyFactorsName= "variables_climatica", dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
     
-    def newThermalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+    def newThermalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates a thermal action and appends it to the combinations 
             generator.
 
@@ -151,10 +154,11 @@ class CombGenerator(utils.CombGenerator):
         :param actionDescription: description of the action.
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
-        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'termica', partialSafetyFactorsName= "variables_climatica", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'termica', partialSafetyFactorsName= "variables_climatica", dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
 
-    def newSnowAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+    def newSnowAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates a snow action and appends it to the combinations 
             generator.
 
@@ -162,8 +166,9 @@ class CombGenerator(utils.CombGenerator):
         :param actionDescription: description of the action.
         :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
-        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'nieve_construccion', partialSafetyFactorsName= "variables_climatica", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'nieve_construccion', partialSafetyFactorsName= "variables_climatica", dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
     
     def newSeismicAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
         ''' Creates a snow action and appends it to the combinations 
