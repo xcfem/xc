@@ -26,6 +26,7 @@
 
 #include "utility/kernel/CommandEntity.h"
 #include <map>
+#include "utility/utils/misc_utils/colormod.h"
 
 
 namespace cmb_acc {
@@ -68,7 +69,7 @@ bool FactorsMap<Factors>::exists(const std::string &name) const
 template <class Factors>
 void FactorsMap<Factors>::print_err_not_found(const std::string &functionName, const std::string &name) const
    {
-      std::cerr << getClassName() << "::" << functionName
+       std::cerr << Color::red << getClassName() << "::" << functionName
 		<< "; factors with name: '"
 		<< name << "' not found." << std::endl
 		<< " candidates are: ";
@@ -80,7 +81,7 @@ void FactorsMap<Factors>::print_err_not_found(const std::string &functionName, c
 	  i++;
           for(;i!=candidates.end();i++)
 	    std::cerr << ", " << *i;
-	  std::cerr << std::endl;
+	  std::cerr << Color::def << std::endl;
 	}
    }
    
