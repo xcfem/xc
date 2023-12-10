@@ -507,7 +507,6 @@ class CombContainer(object):
         :param outputFileName: name for the output file.
         '''
         data= self.getDict()
-        print(data.keys())
         with open(outputFileName, 'w') as outfile:
             json.dump(data, outfile)        
                   
