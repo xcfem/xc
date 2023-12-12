@@ -51,11 +51,10 @@ class SectionProperties(object):
     
     def getDict(self):
         ''' Put member values in a dictionary.'''
+        xcMatDict= None
         if(self.xc_material):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; cannot export xc materials yet.')
-        retval= {'name':self.name, 'xc_material':None}
+            xcMatDict= self.xc_material.getDict()
+        retval= {'name':self.name, 'xc_material':xcMatDict}
         return retval
 
     def setFromDict(self,dct):

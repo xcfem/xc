@@ -58,6 +58,29 @@ class ElementSections(object):
         self.gaussPoints= gaussPoints
         self.lstRCSects= list()
 
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= {'name': self.name, 'directions': self.directions, 'gaussPoints': self.gaussPoints}
+        tmp= list()
+        for rcs in self.lstRCSects:
+            tmp.append(rcs.getDict())
+        retval['lstRCSects']= tmp
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.name= dct['name']
+        self.directions= dct['directions']
+        self.gaussPoints= dct['gaussPoints']
+        tmp= dct['lstRCSects']
+        if(len(tmp)>0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; reading RC section list not implementd yet.")
+
     def append_section(self, RCSect):
         ''' Append the section argument to the container.
 
@@ -579,7 +602,28 @@ class RCMemberSection(ElementSections):
         '''
         super(RCMemberSection,self).__init__(name, directions, gaussPoints)
         self.templateSections= templateSections
-        
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super().getDict()
+        tmp= list()
+        for ts in self.templateSections:
+            tmp.append(ts.getDict())
+        retval['templateSections']= tmp
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        tmp= dct['templateSections']
+        if(len(tmp)>0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; reading template section list not implementd yet.")
+
     def createSections(self):
         '''create the fiber sections that represent the reinforced concrete fiber 
         section to be used for the checking on each integration point and/or each 
@@ -614,7 +658,22 @@ class ElementSectionMap(dict):
         ''' Constructor.'''
         super(ElementSectionMap, self).__init__()
         self.elementDimension= dict() # Store dimension (1, 2 or 3) of each element.
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= dict()
+        retval['base']= self
+        retval['elementDimension']= self.elementDimension
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
 
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.update(dct['base'])
+        self.elementDimension= dct['elementDimension']
+    
     def getElementDimension(self, elemTag):
         ''' Return the dimension of the element whose tag is being passed
            as parameter.

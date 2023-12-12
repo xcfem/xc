@@ -145,6 +145,24 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         # Transverse reinforcement.
         self.shReinf= def_simple_RC_section.ShearReinforcement()
         self.shReinf.familyName= "V"
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(RCCircularSection, self).getDict()
+        retval.update(section_properties.CircularSection.getDict(self))
+        retval['mainReinf']= self.mainReinf.getDict()
+        retval['shReinf']= self.shReinf.getDict()
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(RCCircularSection, self).setFromDict(dct)
+        section_properties.CircularSection.setFromDict(self, dct)
+        self.mainReinf.setFromDict(dct['mainReinf'])
+        self.shReinf.setFromDict(dct['shReinf'])
         
     def __eq__(self, other):
         ''' Redefines equal operator.'''
