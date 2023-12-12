@@ -9,6 +9,7 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import sys
 import json
+import csv
 from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 from misc_utils import log_messages as lmsg
@@ -403,7 +404,7 @@ class ULSCombinations(SituationsSet):
         self.perm.setFromDict(dct['perm'])
         self.acc.setFromDict(dct['acc'])
         self.fatigue.setFromDict(dct['fatigue'])
-        self.earthquake.setFromDict(dct['erthquake'])
+        self.earthquake.setFromDict(dct['earthquake'])
         
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.perm.getNeutralFormat(counter,'ULST2', mapLoadCases)
@@ -449,7 +450,6 @@ class CombContainer(object):
 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
-        super().setFromDict(dct)
         self.SLS.setFromDict(dct['SLS'])
         self.ULS.setFromDict(dct['ULS'])
         
@@ -488,6 +488,32 @@ class CombContainer(object):
         for ls in self.limitStates:
             ls.exportToLatex(f)
         f.close()
+
+    def getList(self):
+        ''' Return a list populated with the combinations.'''
+        retval= list()
+        combDict= self.getDict()
+        for lsKey in combDict: # limit state.
+            lsCombinations= combDict[lsKey]
+            for psKey in lsCombinations: # project situation.
+                psCombinations= lsCombinations[psKey]
+                if(psKey!='name'):
+                    description= psCombinations['description']
+                    combinations= psCombinations['combinations']
+                    for combKey in combinations: # combination.
+                        combExpr= combinations[combKey]
+                        retval.append([lsKey, psKey, combKey, combExpr])
+        return retval
+    
+    def exportToCSV(self, os= sys.stdout):
+        '''Write the load combinations as comma separated values.
+
+        :param os: output stream.
+        '''
+        combList= self.getList()
+        writer= csv.writer(os, quoting= csv.QUOTE_NONNUMERIC)
+        for row in combList:
+            writer.writerow(row)
 
     def writePythonScript(self, containerName= 'combContainer', os= sys.stdout):
         '''Write a Python script that can be used to re-create this object.
