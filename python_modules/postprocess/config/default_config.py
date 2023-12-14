@@ -6,6 +6,7 @@ import ast
 import errno
 from pathlib import Path
 import os
+import sys
 import tempfile
 import xc
 from postprocess import output_styles
@@ -111,6 +112,23 @@ class ProjectDirTree(object):
         ''' Return the full path for the files that contains
             results.'''
         return self.workingDirectory+'/'+self.getRltvResultsPath()
+
+    def newResultsPath(self, folderName:str):
+        ''' Creates a new folder inside the results directory.
+
+        :param folderName: name for the new folder.
+        '''
+        pth= self.getFullResultsPath()
+        newFolderPath= pth+folderName
+        if os.path.isfile(newFolderPath): # Name already in use for a file.
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; '"+str(folderName) + "' is already a file name inside: '"+str(pth)+"' can't create folder.")
+            newFolderPath= None
+        elif not os.path.isdir(newFolderPath): # Directory doesn't exist yet.
+            os.mkdir(newFolderPath)
+        return newFolderPath
+            
 
     def getInternalForcesResultsPath(self):
         ''' Return the path for the files that contains
