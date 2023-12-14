@@ -115,7 +115,7 @@ class SituationCombs(dict):
             retval= self.description == other.description
         return retval
             
-    def add(self,name,expr):
+    def add(self, name, expr):
         ''' Add a combination to the dictionary.
 
         :param name: combination name (i.e. "ELS01").
