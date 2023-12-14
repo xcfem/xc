@@ -2,6 +2,12 @@
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2018, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import ast
 import errno
 from pathlib import Path
@@ -52,6 +58,35 @@ def findProjectDirectory(fNameMark= '.git'):
     :param fNameMark: name of the file that marks the working directory.
     '''
     return findDirectoryUpwards(fNameMark)
+
+
+def find_files(fileName, searchPath):
+    ''' Return the occurrences of filename in search_path
+
+    :param fileName: name of the file to search.
+    :param searchPath: root directory to start the search.
+    '''
+    result = []
+
+    # Walking top-down from the root
+    for root, dirs, files in os.walk(searchPath):
+        if fileName in files:
+            result.append(os.path.join(root, fileName))
+    return result
+
+def find_directories(dirName, searchPath):
+    ''' Return the occurrences of filename in search_path
+
+    :param dirName: name of the directory to search.
+    :param searchPath: root directory to start the search.
+    '''
+    result = []
+
+    # Walking top-down from the root
+    for root, dirs, files in os.walk(searchPath):
+        if dirName in dirs:
+            result.append(os.path.join(root, dirName))
+    return result
 
 class ProjectDirTree(object):
     ''' Paths to project directories.
@@ -128,7 +163,40 @@ class ProjectDirTree(object):
         elif not os.path.isdir(newFolderPath): # Directory doesn't exist yet.
             os.mkdir(newFolderPath)
         return newFolderPath
-            
+
+    def findResultsPath(self, folderName:str):
+        ''' Search for a folder inside the results directory.
+
+        :param folderName: name for the folder to find.
+        '''
+        retval= None
+        pth= self.getFullResultsPath()
+        tmp= find_directories(dirName= folderName, searchPath= pth)
+        sz= len(tmp)
+        if(sz>0):
+            retval= tmp[0]
+            if(sz>1): # Many directories with the same name.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; ther are"+str(sz)+ " directories named: '"+str(folderName) + "' inside: '"+str(pth)+"' returning the first one.")
+        return retval
+
+    def findResultsFile(self, fileName:str):
+        ''' Search for a folder inside the results directory.
+
+        :param fileName: name for the folder to find.
+        '''
+        retval= None
+        pth= self.getFullResultsPath()
+        tmp= find_files(fileName= fileName, searchPath= pth)
+        sz= len(tmp)
+        if(sz>0):
+            retval= tmp[0]
+            if(sz>1): # Many directories with the same name.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; ther are"+str(sz)+ " files named: '"+str(fileName) + "' inside: '"+str(pth)+"' returning the first one.")
+        return retval
 
     def getInternalForcesResultsPath(self):
         ''' Return the path for the files that contains

@@ -14,20 +14,35 @@ __email__= "l.pereztato@gmail.com"
 import os
 from postprocess.config import default_config
 from misc_utils import log_messages as lmsg
+from pathlib import Path
 
 # Get a default configuration.
 cfg= default_config.get_temporary_env_config() # Store results in temporary files.
 cfg.projectDirTree.createTree() # Create project directory tree.
 
-newFolder= cfg.projectDirTree.newResultsPath('piles') # Create custom results path.
+testFolderName= 'piles'
+newFolder= cfg.projectDirTree.newResultsPath(testFolderName) # Create custom results path.
+testOK= (newFolder is not None) # Check result.
 
-# Check result.
-testOK= (newFolder is not None)
+foundFolder= cfg.projectDirTree.findResultsPath(testFolderName)
+testOK= (testOK and (newFolder==foundFolder)) # Check result.
+
+# Create a new file to test findResultsFile() method
+testFileName= 'piles_axial_force.json'
+newFileName= newFolder+'/'+testFileName
+Path(newFileName).touch() # created.
+# Search the file.
+foundFile= cfg.projectDirTree.findResultsFile(testFileName)
+
+testOK= (testOK and (newFileName==foundFile))
 
 # print(newFolder)
+# print(foundFile, newFileName)
 
 fname= os.path.basename(__file__)
 if(testOK):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
+
+cfg.cleandirs() # clean after yourself.
