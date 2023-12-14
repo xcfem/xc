@@ -592,7 +592,7 @@ class EnvConfig(output_styles.OutputStyle):
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language= 'english', resultsPath='tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
+    def __init__(self,language= 'english', resultsPath='tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/', reportPath='annex/',reportResultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
         '''
         Constructor.
 
@@ -709,7 +709,7 @@ def get_temporary_env_config(subDirName: str= None):
         dirName= tempDir.name
     else:
         dirName= '/tmp/'+subDirName
-    retval= EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='',reportResultsPath= 'annex/',grWidth='120mm')
+    retval= EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/', reportPath='annex/',reportResultsPath= 'annex/',grWidth='120mm')
     retval.projectDirTree.workingDirectory= dirName
     return retval
 
