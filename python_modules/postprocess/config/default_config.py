@@ -242,11 +242,20 @@ class ProjectDirTree(object):
     
     def getFullReportPath(self):
         ''' Return the full path for the report files.'''
-        return self.workingDirectory+'/'+self.reportPath+self.getRltvReportPath()
+        retval= self.workingDirectory+'/'+self.reportPath
+        rltvReportPath= self.getRltvReportPath()
+        if(rltvReportPath!=self.reportPath): # There is some bug here.
+            retval+= rltvReportPath # Don't repeat the same directory.
+        return retval
     
     def getFullTextReportPath(self):
         ''' Return the full path for the text report files.'''
-        return self.workingDirectory+'/'+self.reportPath+self.getRltvTextReportPath()
+        retval= self.workingDirectory+'/'+self.reportPath
+        rltvTextReportPath= self.getRltvTextReportPath()
+        if(rltvTextReportPath.startswith(self.reportPath)): # There is some bug here.
+            rltvTextReportPath= rltvTextReportPath.removeprefix(self.reportPath)
+            retval+= rltvTextReportPath # Don't repeat the same directory.
+        return retval
 
     def getFullGraphicsPath(self):
         ''' Return the full path for the graphic files.'''        
