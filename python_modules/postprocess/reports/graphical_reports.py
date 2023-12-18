@@ -337,7 +337,7 @@ class LoadCaseDispParameters(RecordDisp):
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
             #outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
-            output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            output_handler.insertGrInTex(texFile= texFile, grFileNm= rltvgrfname, grWdt= cfg.grWidth, capText= capt, labl= labl)
         for st in self.setsToDispBeamLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
@@ -345,7 +345,7 @@ class LoadCaseDispParameters(RecordDisp):
             labl= getLabelText(capt)
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
-            output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            output_handler.insertGrInTex(texFile= texFile, grFileNm= rltvgrfname, grWdt= cfg.grWidth, capText= capt, labl= labl)
 
     def loadReports(self,FEcase,texFile,cfg):
         '''Creates the graphics files of loads for the load case and insert 
