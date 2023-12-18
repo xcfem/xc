@@ -23,6 +23,7 @@ from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 from postprocess import RC_material_distribution
+from solution import predefined_solutions
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -183,9 +184,14 @@ for e in s.elements:
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
+class CustomSolver(predefined_solutions.PlainNewtonRaphson):
+
+    def __init__(self, prb):
+        super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 1, convergenceTestTol= 1e-3)
+
 # Checking shear.
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.ShearController(limitState.label)
+outCfg.controller= EC2_limit_state_checking.ShearController(limitState.label, solutionProcedureType= CustomSolver)
 #outCfg.controller= EC2_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
 outCfg.controller.verbose= False # Don't display log messages.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
@@ -196,7 +202,7 @@ feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
 relError= list() # Relative errors.
-refMeanCFs= [0.3466510216208219, 0.0803971610130269]
+refMeanCFs= [0.33687225608992705, 0.08543032671153628]
 for meanCF, refMeanCF in zip(meanCFs, refMeanCFs):
     relError.append(abs(meanCF-refMeanCF)/refMeanCF)
 
