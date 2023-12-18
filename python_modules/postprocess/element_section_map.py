@@ -696,7 +696,8 @@ class ElementSectionMap(dict):
            :param setRCSects: RC section definition, name, concrete type,
                               rebar positions,...
         '''
-        if len(elemSet)== 0:
+        retval= len(elemSet)
+        if retval== 0:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; element set is empty.')
@@ -707,11 +708,12 @@ class ElementSectionMap(dict):
                 self.elementDimension[e.tag]= e.getDimension
                 for s in setRCSects.lstRCSects:
                     self[e.tag].append(s.name)
-                e.setProp(self.propName,setRCSects.name)
+                e.setProp(self.propName, setRCSects.name)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+"; element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
+        return retval # Return the number of "assigned" elements.
 
     def assignFromElementProperties(self, elemSet, sectionWrapperName):
         '''Creates the section materials from the element properties

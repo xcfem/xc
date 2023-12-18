@@ -36,6 +36,7 @@ with open(fName) as file:
         valueData= yaml.safe_load(file)
     except yaml.YAMLError as exception:
         print(exception)
+uniformLoad= float(valueData['uniformLoad'])
 refMeanFC0= float(valueData['refMeanFC0'])
 refMeanFC1= float(valueData['refMeanFC1'])
 
@@ -96,7 +97,7 @@ loadCaseNames= ['load']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## load pattern.
-load= xc.Vector([0.0,0.0,-80e3])  # No "in-plane" loads (see example 06 in the same folder).
+load= xc.Vector([0.0,0.0,uniformLoad])  # No "in-plane" loads (see example 06 in the same folder).
 cLC= loadCaseManager.setCurrentLoadCase('load')
 for e in s.elements:
     e.vector3dUniformLoadGlobal(load)
@@ -190,6 +191,7 @@ feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
+# Check results.
 ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0
 ratio2= abs(meanCFs[1]-refMeanFC1)/refMeanFC1
 

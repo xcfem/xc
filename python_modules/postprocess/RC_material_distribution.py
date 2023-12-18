@@ -70,8 +70,9 @@ class RCMaterialDistribution(object):
            :param setRCSects: RC section definition, name, concrete type,
                               rebar positions,...
         '''
-        self.sectionDistribution.assign(elemSet,setRCSects)
+        retval= self.sectionDistribution.assign(elemSet,setRCSects)
         self.elementSetNames.append(elemSet.owner.name)
+        return retval # Return the number of "assigned" elements.
 
     def assignFromElementProperties(self, elemSet):
         '''Creates the section materials from the element properties
@@ -213,8 +214,8 @@ class RCMaterialDistribution(object):
         else:
             self.sectionDefinition.calcInteractionDiagrams(preprocessor, 'NMy')
         outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
-        phantomModel= phm.PhantomModel(preprocessor,self)
-        result= phantomModel.runChecking(limitStateData,outputCfg)
+        phantomModel= phm.PhantomModel(preprocessor, self)
+        result= phantomModel.runChecking(limitStateData, outputCfg)
         return (feProblem, result)
 
     def internalForcesVerification3D(self, limitStateData, matDiagType, outputCfg):

@@ -415,18 +415,17 @@ class SLS_LimitStateData(LimitStateData):
         '''
         super(SLS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
 
-    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
+    def check(self, crossSections,outputCfg= VerifOutVars()):
         '''Checking of crack width under frequent loads in serviceability 
            limit states (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each 
-               element.
+        :param crossSections: cross sections on each element.
         :param outputCfg: instance of class VerifOutVars which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to file,
                generation or not of lists, ...)
          '''
-        return reinfConcreteSections.internalForcesVerification3D(self, "k",outputCfg)
+        return crossSections.internalForcesVerification3D(self, "k",outputCfg)
 
 class RareLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control under rare loads limit state data.'''
@@ -444,7 +443,7 @@ class QPLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsLoadsCrackControl','verifRsl_crackingSLS_qperm', designSituation= 'quasi-permanent')
+        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl','verifRsl_crackingSLS_qperm', designSituation= 'quasi-permanent')
         
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''

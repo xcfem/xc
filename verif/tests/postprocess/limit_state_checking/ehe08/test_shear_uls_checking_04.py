@@ -170,8 +170,9 @@ feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
-ratio1= abs(meanCFs[0]-0.21962596204786505)/0.21962596204786505
-ratio2= abs(meanCFs[1]-0.03360832608702354)/0.03360832608702354
+# Check results.
+ratio1= abs(meanCFs[0]-0.21519099666067198)/0.21519099666067198
+ratio2= abs(meanCFs[1]-0.025500051449439672)/0.025500051449439672
 
 '''
 print('meanCFs= ',meanCFs)

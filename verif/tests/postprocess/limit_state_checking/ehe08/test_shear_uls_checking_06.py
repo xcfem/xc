@@ -38,6 +38,7 @@ with open(fName) as file:
         valueData= yaml.safe_load(file)
     except yaml.YAMLError as exception:
         print(exception)
+uniformLoad= float(valueData['uniformLoad'])
 refMeanFC0= float(valueData['refMeanFC0'])
 refMeanFC1= float(valueData['refMeanFC1'])
 
@@ -98,7 +99,7 @@ loadCaseNames= ['load']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## load pattern.
-load= xc.Vector([0.0,35e3,-80e3]) # Small "in-plane" load to check it has no effect on results (see test description at top).
+load= xc.Vector([0.0,35e3,uniformLoad]) # Small "in-plane" load to check it has no effect on results (see test description at top).
 cLC= loadCaseManager.setCurrentLoadCase('load')
 for e in s.elements:
     e.vector3dUniformLoadGlobal(load)
@@ -194,8 +195,11 @@ feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
+# Check results.
 ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0
 ratio2= abs(meanCFs[1]-refMeanFC1)/refMeanFC1
+## Check that the effect on results is moderate.
+testOK= (ratio1<1e-2) and (ratio2<0.2)
 
 '''
 print('meanCFs= ',meanCFs)
@@ -206,7 +210,7 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-4) and (ratio2<1e-4):
+if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

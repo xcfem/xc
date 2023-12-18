@@ -111,7 +111,7 @@ class LimitStateControllerBase(object):
     Basic parameters for limit state control (normal stresses, shear, crack,...)    .'''
     tensionedRebarsFiberSetName= "tensionedReinforcement" #Name of the tensiones rebar fibers set.
 
-    def __init__(self,limitStateLabel, fakeSection= True, solutionProcedureType= defaultStaticLinearSolutionProcedure):
+    def __init__(self, limitStateLabel, fakeSection= True, solutionProcedureType= defaultStaticLinearSolutionProcedure):
         '''
         :param limitStateLabel: property name in the check results file 
                (something like 'ULS_shear' or 'SLS_crack_freq' or ...).
@@ -131,6 +131,14 @@ class LimitStateControllerBase(object):
         self.solutionProcedureType= solutionProcedureType
         self.preprocessor=None
         self.verbose= True # display log messages by default
+
+    def checkSolverAdequacy(self):
+        ''' Check if the solver is adequate for the materials.'''
+        if(not self.fakeSection): # Will use fiber sections and probably non linear materials.
+            if(self.solutionProcedure.linearSolutionAlgorithm()): # linear algorithm.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; if the section materials are non-linear the solution algorithm must be non-linear also.')
         
     def expectsTensionStiffeningModel(self):
         ''' Return true if a tension-stiffening concrete fiber model must be

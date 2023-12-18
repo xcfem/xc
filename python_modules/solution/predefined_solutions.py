@@ -128,6 +128,13 @@ class SolutionProcedure(object):
         self.solver= None
         self.analysis= None
 
+    def linearSolutionAlgorithm(self):
+        ''' Return true if the solution algorithm is linear, false otherwise.'''
+        retval= False
+        if(self.solutionAlgorithmType=='linear_soln_algo'):
+            retval= True
+        return retval
+    
     def setup(self):
         ''' Defines the solution procedure in the finite element 
             problem object.

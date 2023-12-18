@@ -1,4 +1,5 @@
 --- # Average capacity factor for shear tests 5 and 6 using EHE-08
- refMeanFC0: 0.6165492849031013
- refMeanFC1: 0.09005319712492667
+ uniformLoad: -17.0e3
+ refMeanFC0: 0.313789139571603
+ refMeanFC1: 0.021762328053496285
 
