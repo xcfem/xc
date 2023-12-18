@@ -25,6 +25,7 @@ from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 from postprocess import RC_material_distribution
+from solution import predefined_solutions
 
 # Read reference values.
 import os
@@ -38,6 +39,7 @@ with open(fName) as file:
         valueData= yaml.safe_load(file)
     except yaml.YAMLError as exception:
         print(exception)
+span= float(valueData['span'])
 uniformLoad= float(valueData['uniformLoad'])
 refMeanFC0= float(valueData['refMeanFC0'])
 refMeanFC1= float(valueData['refMeanFC1'])
@@ -62,8 +64,6 @@ dummySection= rcSection.defElasticMembranePlateSection(preprocessor) # Elastic m
 
 
 # Problem geometry.
-span= 5
-
 ## K-points.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
@@ -185,9 +185,14 @@ reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistributio
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 #reinfConcreteSectionDistribution.report()
 
+class CustomSolver(predefined_solutions.PlainNewtonRaphson):
+
+    def __init__(self, prb):
+        super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 1, convergenceTestTol= 1e-3)
+        
 # Checking shear stresses.
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
+outCfg.controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label, solutionProcedureType= CustomSolver)
 outCfg.controller.verbose= False # Don't display log messages.
 
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
@@ -201,7 +206,7 @@ ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0
 ratio2= abs(meanCFs[1]-refMeanFC1)/refMeanFC1
 
 ## Check that the effect on results is moderate.
-testOK= (ratio1<1e-2) and (ratio2<0.2)
+testOK= (ratio1<1e-2) and (ratio2<0.01)
 
 '''
 print('meanCFs= ',meanCFs)
