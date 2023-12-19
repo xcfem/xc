@@ -166,6 +166,8 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no
   .def("pickElemsInside",&XC::SetMeshComp::pickElemsInside,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("getElementTypes",&XC::SetMeshComp::getElementTypesPy,"getElementTypes() return a list with the element types in the container.")
   .def("pickElemsOfType",&XC::SetMeshComp::pickElemsOfType,"pickElemsOfType(typeName) return the elements whose type contains the string argument.")
+  .def("getElementDimensions",&XC::SetMeshComp::getElementDimensionsPy,"getElementDimensions() return a list with the dimensions of the elements in the container.")
+  .def("pickElemsOfDimension",&XC::SetMeshComp::pickElemsOfDimension,"pickElemsOfDimension(elemDimension) return the elements of the given dimension.")
   .def("getElementMaterials",&XC::SetMeshComp::getElementMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the container.")
   .def("pickElemsOfMaterial",&XC::SetMeshComp::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
   .def("getBnd", &XC::SetMeshComp::Bnd, "Returns set boundary.")

@@ -339,6 +339,16 @@ class LimitStateData(object):
         '''
         intForcCombFileName= self.getInternalForcesFileName()
         return outputCfg.runChecking(intForcCombFileName, self.getOutputDataBaseFileName(), sections)
+    
+    def readControlVars(self, modelSpace, cfg):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param cfg: instance of EnvConfig class with config parameters
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
 
 #20181117 end
 
@@ -381,6 +391,13 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
         '''Constructor '''
         super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
 
+    def readControlVars(self, modelSpace, cfg):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param cfg: instance of EnvConfig class with config parameters
+        '''
+        modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifNormStrFile())
         
 class NormalStressesSteelLimitStateData(ULS_LimitStateData):
     ''' Steel normal stresses data for limit state checking.'''
@@ -388,17 +405,41 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
         '''Constructor '''
         super(NormalStressesSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
 
+    def readControlVars(self, modelSpace, cfg):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param cfg: instance of EnvConfig class with config parameters
+        '''
+        modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifNormStrFile())
+
 class ShearResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
         
+    def readControlVars(self, modelSpace, cfg):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param cfg: instance of EnvConfig class with config parameters
+        '''
+        modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifShearFile())
+        
 class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(ShearResistanceSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
+        
+    def readControlVars(self, modelSpace, cfg):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param cfg: instance of EnvConfig class with config parameters
+        '''
+        modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifShearFile())
 
 class SLS_LimitStateData(LimitStateData):
     ''' Serviceability limit state data for frequent load combinations.'''
@@ -439,11 +480,27 @@ class FreqLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
         '''Limit state data constructor '''
         super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl','verifRsl_crackingSLS_freq', designSituation= 'frequent')
         
+    def readControlVars(self, modelSpace, cfg):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param cfg: instance of EnvConfig class with config parameters
+        '''
+        modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifCrackFreqFile())
+        
 class QPLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl','verifRsl_crackingSLS_qperm', designSituation= 'quasi-permanent')
+        
+    def readControlVars(self, modelSpace, cfg):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        :param cfg: instance of EnvConfig class with config parameters
+        '''
+        modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifCrackQpermFile())
         
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''

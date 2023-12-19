@@ -312,7 +312,7 @@ class LoadCaseDispParameters(RecordDisp):
         :param modelSpace: model space object (see predefined_spaces.py).
         :param texFile:    laTex file where to include the graphics 
                            (e.g.:'text/report_loads.tex')
-        :param cfg:        instance of EnvConfig class with config parameters
+        :param cfg: instance of EnvConfig class with config parameters
         '''
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
         cfg.makedirs(fullPath) # Create directory if needed.

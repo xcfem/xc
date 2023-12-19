@@ -190,7 +190,7 @@ class CameraParameters(object):
         :param focalPoint: position of the focal point.
         '''
         self.focalPoint= focalPoint
-        
+
     def setView(self, vtkCamera):
         '''Sets the camera parameters.
         
@@ -243,6 +243,7 @@ class DisplaySettings(object):
         self.renderer.ResetCamera()
         cam= self.renderer.GetActiveCamera()
         self.cameraParameters.setView(cam)
+        #self.renderer.SetClippingRangeExpansion(2)
         self.renderer.ResetCameraClippingRange()
 
     def setupAxes(self):
@@ -335,7 +336,10 @@ class DisplaySettings(object):
         '''
         self.gridRecord= RecordDefGrid()
         self.gridRecord.setupSet(xcSet)
-        center= self.gridRecord.getSetBND().getCenterOfMass()
+        # Compute set boundary.
+        bnd= self.gridRecord.getSetBND()
+        # Compute focal point.
+        center= bnd.getCenterOfMass()
         self.cameraParameters.setFocalPoint([center.x, center.y, center.z])
         return self.gridRecord
 
