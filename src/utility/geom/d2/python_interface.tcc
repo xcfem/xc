@@ -51,6 +51,8 @@ class_<BND2d, bases<GeomObj2d> >("BND2d")
   .def("getCenterOfMass", &BND2d::getCenterOfMass, " return the center of mass.")
   .def("getMax", &BND2d::GetMax,"return maximum value of i coordinate.")
   .def("getMin", &BND2d::GetMin,"return minimum value of i coordinate.")
+  .def("getVertexList",&BND2d::getVertexListPy,"Return a Python list containing the positions of the vertices.")
+  .def("getVertices",&BND2d::getVertexListPy,"Return a Python list containing the positions of the vertices.")
   ;
 
 class_<Circle2d, bases<Surface2d> >("Circle2d")

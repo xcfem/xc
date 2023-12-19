@@ -66,6 +66,8 @@ class_<BND3d, bases<GeomObj3d> >("BND3d")
   .def("getCenterOfMass", &BND3d::getCenterOfMass)
   .def("getMax", &BND3d::GetMax,"returns maximum value of i coordinate.")
   .def("getMin", &BND3d::GetMin,"returns minimum value of i coordinate.")
+  .def("getVertexList",&BND3d::getVertexListPy,"Return a Python list containing the positions of the vertices.")
+  .def("getVertices",&BND3d::getVertexListPy,"Return a Python list containing the positions of the vertices.")
   ;
 
 #include "utility/geom/d3/3d_polyhedrons/python_interface.tcc"

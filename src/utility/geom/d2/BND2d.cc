@@ -97,6 +97,30 @@ Polygon2d BND2d::getPolygon(void) const
     retval.push_back(Pos2d(p1.x(),p2.y()));
     return retval;
   }
+//! @brief Return a list with the object vertices.
+const GeomObj::list_Pos2d &BND2d::getVertexList(void) const
+  {
+    static GeomObj::list_Pos2d retval;
+    retval.clear();
+    const Pos2d p1= getPMin();
+    const Pos2d p2= getPMax();
+    retval.push_back(p1);
+    retval.push_back(Pos2d(p2.x(),p1.y()));
+    retval.push_back(p2);
+    retval.push_back(Pos2d(p1.x(),p2.y()));
+    return retval;
+  }
+
+//! @brief Return a Python list with the object vertices.
+boost::python::list BND2d::getVertexListPy(void) const
+  {
+    boost::python::list retval;
+    GeomObj::list_Pos2d lst= this->getVertexList();
+    GeomObj::list_Pos2d::const_iterator i= lst.begin();
+    for(;i!=lst.end();i++)
+      retval.append(*i);
+    return retval;
+  }
 
 //! @brief Return the object area.
 GEOM_FT BND2d::getArea(void) const

@@ -277,6 +277,30 @@ Pos3d BND3d::Vertice(unsigned int i) const
     return Pos3d(cgisocub.vertex(indice));
   }
 
+//! @brief Return a list with the object vertices.
+const GeomObj::list_Pos3d &BND3d::getVertexList(void) const
+  {
+    static GeomObj::list_Pos3d retval;
+    retval.clear();
+    for(unsigned int i= 0; i<8; i++)
+      {
+	const Pos3d p= this->Vertice(i);
+	retval.push_back(p);
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list with the object vertices.
+boost::python::list BND3d::getVertexListPy(void) const
+  {
+    boost::python::list retval;
+    GeomObj::list_Pos3d lst= this->getVertexList();
+    GeomObj::list_Pos3d::const_iterator i= lst.begin();
+    for(;i!=lst.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
 unsigned short int BND3d::RegionCode(const Pos3d &p,const double &tol) const
   {
     if(undefined)

@@ -81,6 +81,8 @@ class BND3d: public GeomObj3d
     CGBbox_3 GetCGALBbox_3(void) const;
     Pos3d getCenterOfMass(void) const;
     Pos3d Vertice(unsigned int i) const;
+    const GeomObj::list_Pos3d &getVertexList(void) const;
+    boost::python::list getVertexListPy(void) const;
     unsigned short int RegionCode(const Pos3d &,const double &tol= 0.0) const;
     bool In(const Pos3d &p,const double &tol= 0.0) const;
     bool ClipLine(const Pos3d &p1,const Pos3d &p2) const;
