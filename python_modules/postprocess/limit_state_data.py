@@ -604,7 +604,7 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
 
         :param modelSpace: model space used to define the FE problem.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQPFile())
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
                 
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''
