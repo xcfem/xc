@@ -207,9 +207,10 @@ sp_capTexts={
     'getMaxSteelStress': "tensión máxima en la armadura",
     'SLS_rareLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga raros',
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
-    'SLS_quasiPermanentLoadsLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
+    'SLS_quasiPermanentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
     'vm_stress': 'tensión de Von Mises',
-    
+    'sigma_s': 'tensión en el acero',
+    'sigma_c': 'tensión en el hormigón',
   }
 
 #English caption texts
@@ -246,7 +247,7 @@ en_capTexts={
     'getMaxSteelStress': 'steel maximum stress',
     'SLS_rareLoadsCrackControl': 'SLS cracking, rare actions',
     'SLS_frequentLoadsCrackControl': 'SLS cracking, frequent actions',
-    'SLS_quasiPermanentLoadsLoadsCrackControl': 'SLS cracking, quasi-permanent actions',
+    'SLS_quasiPermanentLoadsCrackControl': 'SLS cracking, quasi-permanent actions',
     'LocalAxes': 'local axes',
     'wk': 'crack width',
     's_rmax': 'maximum crack distance',
@@ -258,6 +259,8 @@ en_capTexts={
     'MbRdz':'reduced design moment resistance about Z (strong) axis for lateral-torsional bucking',
     'chiLT': 'reduction factor for lateral-torsional buckling ',
     'vm_stress': 'Von Mises stress',
+    'sigma_s': 'steel stress',
+    'sigma_c': 'concrete stress',
   }
 
 #Caption texts in French
@@ -297,7 +300,7 @@ fr_capTexts={
     'getMaxSteelStress': "contrainte maximale dans l'armature",
     'SLS_rareLoadsCrackControl': 'Vérification ELS fissuration, cas de charge rares',
     'SLS_frequentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge fréquents',
-    'SLS_quasiPermanentLoadsLoadsCrackControl': 'Vérification ELS fissuration, cas de charge quasi-permanents',
+    'SLS_quasiPermanentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge quasi-permanents',
     'ULS_fatigueResistance': 'Vérification ELU fatigue',
     'getAbsSteelStressIncrement': "vérification de l'armature. Différence de contrainte $\delta_{sd}(Q_{fat})$ sous les actions de fatigue",
     'concreteBendingCF':'vérification du béton. Facteur de capacité contraintes de compression',
@@ -305,4 +308,6 @@ fr_capTexts={
     'concreteShearCF':'vérification du béton. Facteur de capacité effort tranchant',
     'shearLimit': 'vérification du béton. Limites effort tranchant',
     'vm_stress': 'contrainte de von Mises',    
+    'sigma_s': "contrainte dans l'acier",
+    'sigma_c': "contrainte dans le béton",
   }
