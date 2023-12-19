@@ -152,12 +152,16 @@ for e in ec3CalcSet.elements:
 ## Compute internal forces for each combination
 for ls in limitStates:
     ls.saveAll(combContainer= combContainer, setCalc= ec3CalcSet, solutionProcedureType= SolProc)
-    
-outCfg= lsd.VerifOutVars(setCalc=ec3CalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState= lsd.normalStressesResistance
-outCfg.controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
-average= limitState.runChecking(outCfg)
 
+# Check limit state.
+## Limit state to check.
+limitState= lsd.steelNormalStressesResistance
+## Build controller.
+controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel= limitState.label)
+## Perform checking.
+average= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+
+# Check results.
 ratio= ((average[0]-1.0011156454277137)/1.0011156454277137)**2
 ratio+= ((average[1]-1.0011156454277137)/1.0011156454277137)**2
 ratio= math.sqrt(ratio)

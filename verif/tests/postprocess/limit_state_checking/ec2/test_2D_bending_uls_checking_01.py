@@ -160,13 +160,26 @@ lsd.LimitStateData.envConfig= cfg
 lsd.normalStressesResistance.saveAll(combContainer,xcTotalSet)
 
 ## Check normal stresses.
-setCalc= xcTotalSet
-# variables that control the output of the checking (setCalc,
-# appendToResFile .py [defaults to 'N'], listFile .tex [defaults to 'N']
-outCfg= lsd.VerifOutVars(setCalc=setCalc,appendToResFile='N',listFile='N',calcMeanCF='N')
+## Limit state to check.
 limitState= lsd.normalStressesResistance
-outCfg.controller= EC2_limit_state_checking.UniaxialBendingNormalStressController(limitState.label)
-lsd.normalStressesResistance.check(reinfConcreteSectionDistribution,outCfg, threeDim= False)
+## Elements to check.
+setCalc= xcTotalSet
+## Build controller.
+controller= EC2_limit_state_checking.UniaxialBendingNormalStressController(limitState.label)
+## Perform checking.
+## variables that control the output of the checking:
+### setCalc: set of elements to be checked.
+### crossSections: cross sections for each element.
+### controller: object that controls the limit state checking.
+### appendToResFile:  'Yes','Y','y',.., if results are appended to 
+###                   existing file of results (defaults to 'N')
+### listFile: 'Yes','Y','y',.., if latex listing file of results 
+###           is desired to be generated (defaults to 'N')
+### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+###               meant to be calculated (defaults to 'N')
+### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+###           false if it's 2D (Fx,Fy,Mz).
+limitState.check(setCalc= setCalc, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='N', controller= controller, threeDim= False)
 
 ## Check results.
 modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifNormStrFile())

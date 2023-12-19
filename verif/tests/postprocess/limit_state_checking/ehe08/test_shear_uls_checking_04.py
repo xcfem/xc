@@ -160,15 +160,13 @@ reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistributio
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
 # Checking shear stresses.
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EHE_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
-outCfg.controller.verbose= False # Don't display log messages.
-
-feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
-feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
-feProblem.errFileName= "cerr" # From now on display errors if any.
-feProblem.logFileName= "clog" # From now on display warnings if any.
+## Limit state to check.
+limitState= lsd.shearResistance
+## Build controller
+controller= EHE_limit_state_checking.ShearController(limitStateLabel= limitState.label)
+controller.verbose= False # Don't display log messages.
+## Perform checking.
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= False, controller= controller)
 
 # Check results.
 ratio1= abs(meanCFs[0]-0.21519099666067198)/0.21519099666067198

@@ -111,8 +111,10 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
+### Set limit state.
+limitState= lsd.shearResistance
 ### Save internal forces.
-lsd.shearResistance.saveAll(combContainer,xcTotalSet) 
+limitState.saveAll(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:
@@ -188,18 +190,14 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 class CustomSolver(predefined_solutions.PlainNewtonRaphson):
 
     def __init__(self, prb):
-        super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 1, convergenceTestTol= 1e-3)
+        super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 0, convergenceTestTol= 1e-3)
         
 # Checking shear stresses.
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label, solutionProcedureType= CustomSolver)
-outCfg.controller.verbose= False # Don't display log messages.
-
-feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
-feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
-feProblem.errFileName= "cerr" # From now on display errors if any.
-feProblem.logFileName= "clog" # From now on display warnings if any.
+## Build controller.
+controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label, solutionProcedureType= CustomSolver)
+controller.verbose= False # Don't display log messages.
+## Peform checking.
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',controller= controller, threeDim= False)
 
 # Check results.
 ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0

@@ -91,8 +91,10 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
+### Limit state to check.
+limitState= lsd.normalStressesResistance
 ### Save internal forces.
-lsd.normalStressesResistance.saveAll(combContainer,xcTotalSet) 
+limitState.saveAll(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:
@@ -166,13 +168,14 @@ for e in s.elements:
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
-#Checking normal stresses.
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
-outCfg.controller.verbose= False # Don't display log messages.
+# Checking normal stresses.
+## Build the controller.
+controller= EC2_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
+controller.verbose= False # Don't display log messages.
+## Perform the checking.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= reinfConcreteSectionDistribution.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, controller= controller, listFile='N',calcMeanCF='Y', threeDim= True)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 

@@ -129,12 +129,15 @@ for m in aiscMembers:
 for ls in limitStates:
     ls.saveAll(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
 
+# Check limit state.
+## Limit state to check.
+limitState=lsd.steelNormalStressesResistance
+## Build controller.
+controller= aisc.BiaxialBendingNormalStressController(limitState.label)
+## Perform checking.
+average= limitState.check(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
-outCfg= lsd.VerifOutVars(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState=lsd.normalStressesResistance
-outCfg.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
-average= limitState.runChecking(outCfg)
-
+# Check results.
 ratio= ((average[0]-1.0067001969482556)/1.0067001969482556)**2
 ratio+= ((average[1]-1.0067001969482556)/1.0067001969482556)**2
 ratio= math.sqrt(ratio)

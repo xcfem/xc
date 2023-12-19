@@ -88,7 +88,10 @@ combContainer.ULS.perm.add('allLoads', '1.0*lp0')
 totalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.shearResistance.saveAll(combContainer,totalSet) 
+# Limit state to check.
+limitState= lsd.shearResistance
+## Save internal forces.
+limitState.saveAll(combContainer,totalSet) 
 
 # Define available sections for the elements (spatial distribution of RC sections).
 # It refers to the reinforced concrete sections associated with the element
@@ -123,17 +126,15 @@ sections.append(beamRCsect)
 # sections (assign RC sections to elements).
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
-#Checking shear.
-lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
+# Checking shear.
+## Build controller.
+controller= ACI_limit_state_checking.ShearController(limitStateLabel= limitState.label)
+controller.analysisToPerform= predefined_solutions.plain_newton_raphson
+limitState.outputDataBaseFileName= 'resVerif'
+## Perform checking.
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',threeDim= True, controller= controller)
 
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= ACI_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
-outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
-
-(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
-
-#print("mean FCs: ", meanCFs)
-
+# Check results.
 meanCF0Teor= 0.932218036004
 ratio1= abs(meanCFs[0]-meanCF0Teor)/meanCF0Teor
 meanCF1Teor= 0.932218036004

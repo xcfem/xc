@@ -190,13 +190,25 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
         super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 1, convergenceTestTol= 1e-3)
 
 # Checking shear.
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.ShearController(limitState.label, solutionProcedureType= CustomSolver)
-#outCfg.controller= EC2_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
-outCfg.controller.verbose= False # Don't display log messages.
+## Build the controller.
+controller= EC2_limit_state_checking.ShearController(limitState.label, solutionProcedureType= CustomSolver)
+controller.verbose= False # Don't display log messages.
+## Perform checking.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
 feProblem.errFileName= "/tmp/erase.err" # Ignore error messagess about maximum error in computation of the interaction diagram.
-meanCFs= lsd.shearResistance.check(reinfConcreteSectionDistribution, outCfg)
+## variables that control the output of the checking:
+### setCalc: set of elements to be checked.
+### crossSections: cross sections for each element.
+### controller: object that controls the limit state checking.
+### appendToResFile:  'Yes','Y','y',.., if results are appended to 
+###                   existing file of results (defaults to 'N')
+### listFile: 'Yes','Y','y',.., if latex listing file of results 
+###           is desired to be generated (defaults to 'N')
+### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+###               meant to be calculated (defaults to 'N')
+### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+###           false if it's 2D (Fx,Fy,Mz).
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N', calcMeanCF='Y', controller= controller)
 #meanCFs= lsd.normalStressesResistance.check(reinfConcreteSectionDistribution, outCfg)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.

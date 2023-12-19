@@ -104,7 +104,10 @@ cfg= default_config.get_temporary_env_config() # Store results in temporary file
 lsd.LimitStateData.envConfig= cfg
 ## Save internal forces.
 xcTotalSet= modelSpace.getTotalSet()
-lsd.freqLoadsCrackControl.saveAll(combContainer,xcTotalSet)
+## Limit state to check.
+limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
+## Save internal forces.
+limitState.saveAll(combContainer,xcTotalSet)
 
 # Define spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
@@ -114,13 +117,24 @@ columnRCSects= element_section_map.RCMemberSection('test', [section, section])
 sectContainer.append(columnRCSects)
 reinfConcreteSectionDistribution.assign(elemSet= xcTotalSet.elements, setRCSects= columnRCSects)
 
-# Checking cracking 
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
-outCfg.controller= EC2_limit_state_checking.CrackController(limitState.label)
+# Check cracking
+## Build controller.
+controller= EC2_limit_state_checking.CrackController(limitState.label)
+controller.verbose= True #False # Don't display log messages.
+## Perform checking.
+## variables that control the output of the checking:
+### setCalc: set of elements to be checked.
+### crossSections: cross sections for each element.
+### controller: object that controls the limit state checking.
+### appendToResFile:  'Yes','Y','y',.., if results are appended to 
+###                   existing file of results (defaults to 'N')
+### listFile: 'Yes','Y','y',.., if latex listing file of results 
+###           is desired to be generated (defaults to 'N')
+### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+###               meant to be calculated (defaults to 'N')
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile='N',calcMeanCF='Y', controller= controller)
 
-outCfg.controller.verbose= True #False # Don't display log messages.
-(FEcheckedModel, meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.freqLoadsCrackControl, matDiagType="k", threeDim= True, outputCfg= outCfg)
+#(FEcheckedModel, meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.freqLoadsCrackControl, matDiagType="k", threeDim= True, outputCfg= outCfg)
 
 ratio1= abs(meanCFs[0]-1.0000530846623346)/1.0000530846623346
 ratio2= abs(meanCFs[1]-1.0000530846614253)/1.0000530846614253

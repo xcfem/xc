@@ -139,10 +139,12 @@ for ls in limitStates:
     ls.saveAll(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
 
 ## Check limit state
-outCfg= lsd.VerifOutVars(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState=lsd.shearResistance
-outCfg.controller= aisc.ShearController(limitState.label)
-average= limitState.runChecking(outCfg)
+### Set limit state to check.
+limitState=lsd.steelShearResistance
+### Build controller.
+controller= aisc.ShearController(limitState.label)
+### Perform checking.
+average= limitState.check(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
 ratio= ((average[0]-0.47421897657321965)/0.47421897657321965)**2
 ratio+= ((average[1]-0.47421897657322309)/0.47421897657322309)**2

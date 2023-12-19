@@ -128,15 +128,16 @@ for e in s.elements:
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 #reinfConcreteSectionDistribution.report()
-# Checking cracking 
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-#outCfg.controller= EHE_limit_state_checking.CrackControl(limitStateLabel=lsd.freqLoadsCrackControl.label)
+# Checking cracking
+## Limit state to check.
 limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
-outCfg.controller= EHE_limit_state_checking.CrackController(limitState.label)
+## Build controller.
+controller= EHE_limit_state_checking.CrackController(limitState.label)
+controller.verbose= False #False # Don't display log messages.
+## Perform checking.
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller, threeDim= False)
 
-outCfg.controller.verbose= True #False # Don't display log messages.
-(FEcheckedModel, meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.freqLoadsCrackControl,matDiagType="k", threeDim= False, outputCfg= outCfg)
-
+# Check results.
 # The value obtained for the 87th element of the phantom model
 # has been tested against the results obtained for the same data
 # with this calculation tool: https://calculocivil.com/es/ehe08/fisura/calculo
