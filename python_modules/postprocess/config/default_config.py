@@ -436,7 +436,7 @@ class ProjectDirTree(object):
         '''Return the path of the verification results file
            for the limit state argument.
 
-           :param limitStateLabel: label identifying the limit state.
+        :param limitStateLabel: label identifying the limit state.
         '''
         if(limitStateLabel=='ULS_normalStressesResistance'):
             return self.getVerifNormStrFile()
@@ -446,14 +446,16 @@ class ProjectDirTree(object):
             return self.getVerifCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getVerifCrackFreqFile()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getVerifCrackQpermFile()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getVerifFatigueFile()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getVerifVonMisesStressFile()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
         
     def getReportFile(self, limitStateLabel):
@@ -470,14 +472,16 @@ class ProjectDirTree(object):
             return self.getReportCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getReportCrackFreqFile()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getReportCrackQpermFile()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getReportFatigueFile()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getReportVonMisesStressFile()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
         
     def getReportGrPath(self, limitStateLabel):
@@ -494,14 +498,16 @@ class ProjectDirTree(object):
             return self.getReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getReportCrackFreqGrPath()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getReportCrackQpermGrPath()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getReportFatigueGrPath()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getReportVonMisesStressGrPath()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
     
     def getReportRltvGrPath(self, limitStateLabel):
@@ -518,14 +524,16 @@ class ProjectDirTree(object):
             return self.getRltvReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getRltvReportCrackFreqGrPath()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getRltvReportCrackQpermGrPath()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getRltvReportFatigueGrPath()
         elif(limitStateLabel=='ULS_VonMisesStressResistanc'):
             return self.getRltvReportVonMisesStressResistancGrPath()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
     
     def getReportSimplLCFile(self):
