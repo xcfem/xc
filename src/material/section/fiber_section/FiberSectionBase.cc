@@ -762,18 +762,30 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     lista_esfuerzos.setThreshold(diag_data.getThreshold());
     const FiberPtrDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
-      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		<< "; fibers for concrete material, identified by tag: "
-		<< diag_data.getConcreteTag()
-                << ", not found."
-		<< Color::def << std::endl;
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; fibers for concrete material, identified by tag: "
+		  << diag_data.getConcreteTag()
+		  << ", not found." << std::endl
+	          << "Available materials in the fiber section are: [";
+	std::set<int> matTags= this->getMatTags();
+	for(std::set<int>::const_iterator i= matTags.begin(); i!=matTags.end();i++)
+	  std::cerr << ' ' << *i;
+	std::cerr << ']' << Color::def << std::endl;
+      }
     const FiberPtrDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
-      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		<< "; fibers for steel material, identified by tag: "
-		<< diag_data.getReinforcementTag()
-                << ", not found."
-		<< Color::def << std::endl;
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; fibers for steel material, identified by tag: "
+		  << diag_data.getReinforcementTag()
+		  << ", not found."<< std::endl
+	          << "Available materials in the fiber section are: [";
+	std::set<int> matTags= this->getMatTags();
+	for(std::set<int>::const_iterator i= matTags.begin(); i!=matTags.end();i++)
+	  std::cerr << ' ' << *i;
+	std::cerr << ']' << Color::def << std::endl;
+      }
     if(!fsC.empty() && !fsS.empty())
       {
         for(double theta= 0.0;theta<2*M_PI;theta+=diag_data.getIncTheta())
