@@ -45,7 +45,7 @@ class Action: public NamedEntity
   {
     std::string description; //!< Description de la acción p. ej. "Viento derecho".
     ActionRelationships relaciones; //!< Relations of this action with the rest of them.
-    bool nodet; //!< True if the action cannot be determinante.
+    bool nodet; //!< True if the action cannot be determinant.
     double f_pond; //!< Factor que pondera a la acción.
 
     void clean_names(void);
@@ -74,9 +74,9 @@ class Action: public NamedEntity
     inline void setWeightingFactor(const double &f)
       { f_pond= f; }
 
-    inline bool NoDeterminante(void) const
+    inline bool notDeterminant(void) const
       { return nodet; }
-    void setNoDeterminante(const bool &b)
+    void setNotDeterminant(const bool &b)
       { nodet= b; }
 
     typedef std::map<std::string,float> map_descomp;

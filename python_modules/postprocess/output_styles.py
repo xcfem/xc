@@ -199,6 +199,7 @@ sp_capTexts={
     'Vsu':'',
     'Vu':'valor último del esfuerzo cortante',
     'LocalAxes': 'ejes locales',
+    'wk': 'apertura de fisura',
     'FEmesh': 'malla de elementos',
     'ULS_normalStressesResistance': 'Comprobación ELU tensiones normales',
     'normalStressCheck': 'Comprobación ELU tensiones normales',
@@ -207,14 +208,12 @@ sp_capTexts={
     'getMaxSteelStress': "tensión máxima en la armadura",
     'SLS_rareLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga raros',
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
-    'SLS_quasiPermanentLoadsLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
+    'SLS_quasiPermanentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
     'vm_stress': 'tensión de Von Mises',
     'wk': 'abertura de fisura',
     's_rmax': 'separación entre fisuras',
     'sigma_s': 'máxima tensión en la armadura',
     'sigma_c': 'máxima tensión de compresión en el hormigón'
-
-    
   }
 
 #English caption texts
@@ -251,7 +250,7 @@ en_capTexts={
     'getMaxSteelStress': 'steel maximum stress',
     'SLS_rareLoadsCrackControl': 'SLS cracking, rare actions',
     'SLS_frequentLoadsCrackControl': 'SLS cracking, frequent actions',
-    'SLS_quasiPermanentLoadsLoadsCrackControl': 'SLS cracking, quasi-permanent actions',
+    'SLS_quasiPermanentLoadsCrackControl': 'SLS cracking, quasi-permanent actions',
     'LocalAxes': 'local axes',
     'wk': 'crack width',
     's_rmax': 'maximum crack distance',
@@ -265,7 +264,6 @@ en_capTexts={
     'vm_stress': 'Von Mises stress',
     'sigma_s': 'max. steel stress',
     'sigma_c': 'max. concrete compressive-stress',
-
   }
 
 #Caption texts in French
@@ -297,6 +295,7 @@ fr_capTexts={
     'Vsu':'',
     'Vu':"valeur ultime de l'effort tranchant",
     'LocalAxes': 'axes locaux',
+    'wk': 'ouverture de fissure',
     'FEmesh': 'maillage',
     'ULS_normalStressesResistance': 'Vérification ELU contraintes normales',
     'normalStressCheck': 'Vérification ELU contraintes normales',
@@ -305,7 +304,7 @@ fr_capTexts={
     'getMaxSteelStress': "contrainte maximale dans l'armature",
     'SLS_rareLoadsCrackControl': 'Vérification ELS fissuration, cas de charge rares',
     'SLS_frequentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge fréquents',
-    'SLS_quasiPermanentLoadsLoadsCrackControl': 'Vérification ELS fissuration, cas de charge quasi-permanents',
+    'SLS_quasiPermanentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge quasi-permanents',
     'ULS_fatigueResistance': 'Vérification ELU fatigue',
     'getAbsSteelStressIncrement': "vérification de l'armature. Différence de contrainte $\delta_{sd}(Q_{fat})$ sous les actions de fatigue",
     'concreteBendingCF':'vérification du béton. Facteur de capacité contraintes de compression',

@@ -100,13 +100,16 @@ cfg.projectDirTree.createTree() # To allow copying existing internal force data 
 limit_state_data.LimitStateData.envConfig= cfg
 shutil.copy(pth+'/intForce_ULS_shearResistance.csv',limit_state_data.shearResistance.getInternalForcesFileName())
 
-outCfg= limit_state_data.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EHE_limit_state_checking.ShearController(limitStateLabel= limit_state_data.shearResistance.label)
-outCfg.controller.verbose= False # Don't display log messages.
-outCfg.controller.solutionProcedureType= CustomNewtonRaphson
+# Check limit state.
+## Limit state to check.
+limitState= limit_state_data.shearResistance
+## Build controller.
+controller= EHE_limit_state_checking.ShearController(limitStateLabel= limitState.label, solutionProcedureType= CustomNewtonRaphson)
+controller.verbose= False # Don't display log messages.
+## Perform checking.
+meanCFs= limitState.check(setCalc= None, listFile='N',calcMeanCF='Y', controller= controller, threeDim= True, crossSections= reinfConcreteSectionDistribution)
 
-(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(limit_state_data.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
-
+# Check results.
 ratio1= abs(meanCFs[0]-0.51922390249173578)/0.51922390249173578
 ratio2= abs(meanCFs[1]-0.51808548496704088)/0.51808548496704088
 

@@ -45,12 +45,14 @@ class RecordDefGrid(object):
     def getSetBND(self):
         ''' Returns the set boundary'''
         retval= self.xcSet.getBnd(0.0)
-        points= self.xcSet.getPoints
-        if(len(points)==0):
-          warnMsg= 'there are no points in the set: '
-          warnMsg+= self.xcSet.name
-          warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
-          lmsg.warning('Warning; '+warnMsg)
+        numPoints= max(len(self.xcSet.getPoints), len(self.xcSet.getNodes))
+        if(numPoints==0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warnMsg= className+'.'+methodName+'; there are no points in the set: '
+            warnMsg+= self.xcSet.name
+            warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
+            lmsg.warning('Warning; '+warnMsg)
         return retval
 
     def getGridBND(self):
@@ -58,14 +60,14 @@ class RecordDefGrid(object):
         retval= geom.BND3d()
         points= self.uGrid.GetPoints()
         if(points.GetNumberOfPoints()>0):
-          bounds = [0]*6
-          points.GetBounds(bounds)
-          retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
+            bounds = [0]*6
+            points.GetBounds(bounds)
+            retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
         else:
-          warnMsg= 'there are no points in the grid: '
-          warnMsg+= self.uGrid.name
-          warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
-          lmsg.warning('Warning; '+warnMsg)
+            warnMsg= 'there are no points in the grid: '
+            warnMsg+= self.uGrid.name
+            warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
+            lmsg.warning(warnMsg)
         return retval
 
     def getDiagonalLength(self):
@@ -88,20 +90,34 @@ class CameraParameters(object):
 
     :ivar viewName:    name of the view that contains the renderer 
           (defaults to "XYZPos")
-    :ivar viewUpVc: vector defined as [x,y,z] to orient the view. This vector of the
-                     model is placed in vertical orientation in the display
-    :ivar posCVc:    vector defined as [x,y,z] that points to the camera position
-    :ivar zoom:        (defaults to 1.0)
-    :ivar hCamFct:     factor that applies to the height of the camera position 
-          in order to change perspective of isometric views 
-          (defaults to 1, usual values 0.1 to 10)
+    :ivar viewUpVc: vector defined as [x,y,z] to orient the view. This vector
+                    of the model is placed in vertical orientation in the
+                    display
+    :ivar posCVc: vector defined as [x,y,z] that points to the camera position.
+    :ivar zoom: scale factor, a value greater than 1 is a zoom-in, a value 
+                less than 1 is a zoom-out (defaults to 1.0).
+    :ivar hCamFct: factor that applies to the height of the camera position 
+                   in order to change perspective of isometric views 
+                   (defaults to 1, usual values 0.1 to 10)
+    :ivar focalPoint: focal of the camera in world coordinates.
     '''
-    def __init__(self, viewNm= 'XYZPos', hCamF= 1.0):
-        self.viewName= viewNm
-        self.viewUpVc= [0,1,0]
-        self.posCVc= [0,0,100]
-        self.zoom= 1.0
+    def __init__(self, viewNm= 'XYZPos', cameraPosition= [0,0,100], hCamF= 1.0, zoom= 1.0):
+        ''' Constructor.
+
+        :param viewNm: name of the view that contains the renderer 
+                       (defaults to "XYZPos")
+        :param hCamFct: factor that applies to the height of the camera 
+                        position in order to change perspective of isometric 
+                        views (defaults to 1, usual values 0.1 to 10)
+        :param zoom:  scale factor, a value greater than 1 is a zoom-in, a 
+                      value less than 1 is a zoom-out (defaults to 1.0).
+        '''
+        self.viewName= viewNm # name of the view.
+        self.viewUpVc= [0,1,0] # view up direction for the camera
+        self.posCVc= cameraPosition # position of the camera.
+        self.zoom= zoom # zoom.
         self.hCamFct= hCamF
+        self.focalPoint= [0, 0, 0] # focal point of the camera.
         self.defineViewParametersFromViewName()
 
     def defineViewParametersFromViewName(self):
@@ -168,6 +184,13 @@ class CameraParameters(object):
         elif(self.viewName!="Custom"):
           sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
+    def setFocalPoint(self, focalPoint):
+        ''' Set the focal point for the camera.
+
+        :param focalPoint: position of the focal point.
+        '''
+        self.focalPoint= focalPoint
+
     def setView(self, vtkCamera):
         '''Sets the camera parameters.
         
@@ -176,16 +199,18 @@ class CameraParameters(object):
                           object.
         '''
         if(self.viewName!="Custom"):
-          self.defineViewParametersFromViewName()
+            self.defineViewParametersFromViewName()
         vtkCamera.SetViewUp(self.viewUpVc[0],self.viewUpVc[1],self.viewUpVc[2])
-        vtkCamera.SetPosition(self.posCVc[0],self.posCVc[1],self.posCVc[2])
+        cameraPosition= [self.focalPoint[0]+self.posCVc[0],self.focalPoint[1]+self.posCVc[1],self.focalPoint[2]+self.posCVc[2]]
+        vtkCamera.SetPosition(cameraPosition)
+        vtkCamera.SetFocalPoint(self.focalPoint[0],self.focalPoint[1],self.focalPoint[2])
         vtkCamera.SetParallelProjection(1)
         vtkCamera.Zoom(self.zoom)
 
 class DisplaySettings(object):
     ''' Provides the variables to define the output device.
 
-    :ivar renderer:    specification of renderer. A renderer is an object that
+    :ivar renderer: specification of renderer. A renderer is an object that
           controls the rendering process for objects. Rendering is the 
           process of converting geometry, a specification for lights, and
           a camera view into an image. (defaults to None)
@@ -218,6 +243,7 @@ class DisplaySettings(object):
         self.renderer.ResetCamera()
         cam= self.renderer.GetActiveCamera()
         self.cameraParameters.setView(cam)
+        #self.renderer.SetClippingRangeExpansion(2)
         self.renderer.ResetCameraClippingRange()
 
     def setupAxes(self):
@@ -304,16 +330,17 @@ class DisplaySettings(object):
             iren.Start()
             self.closeWindow(iren)
 
-    def muestraEscena(self):
-        lmsg.warning('muestraEscena is deprecated. Use displayScene')
-        self.displayScene('noCaption', None)
-
-    def setupGrid(self,xcSet):
+    def setupGrid(self, xcSet):
         ''' Parameters:
            xcSet:     set to be represented
         '''
         self.gridRecord= RecordDefGrid()
         self.gridRecord.setupSet(xcSet)
+        # Compute set boundary.
+        bnd= self.gridRecord.getSetBND()
+        # Compute focal point.
+        center= bnd.getCenterOfMass()
+        self.cameraParameters.setFocalPoint([center.x, center.y, center.z])
         return self.gridRecord
 
     def plot(self,fileName):

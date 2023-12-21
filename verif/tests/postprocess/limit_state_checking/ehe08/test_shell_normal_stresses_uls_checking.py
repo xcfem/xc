@@ -78,23 +78,18 @@ cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 lsd.LimitStateData.envConfig= cfg
 shutil.copy(pth+'/intForce_ULS_normalStressesResistance.csv',lsd.normalStressesResistance.getInternalForcesFileName())
-#lsd.LimitStateData.internal_forces_results_directory= pth+'/'
-#lsd.LimitStateData.check_results_directory= '/tmp/'
-#lsd.normalStressesResistance.outputDataBaseFileName= 'ppTN'
-#intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
 
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EHE_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
-
+# Check limit state.
+## Limit state to check.
+limitState= lsd.normalStressesResistance
+## Build controller.
+controller= EHE_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
+## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-
-meanCFs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
-
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSections,listFile='N', calcMeanCF='Y', threeDim= True, controller= controller)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
-
-#print("mean FCs: ", meanCFs)
-
+# Check results.
 meanCF0Teor= 0.64702580108264973
 ratio1= abs(meanCFs[0]-meanCF0Teor)/meanCF0Teor
 meanCF1Teor= 0.84660274501497856

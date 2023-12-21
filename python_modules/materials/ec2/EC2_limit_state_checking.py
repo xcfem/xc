@@ -1225,13 +1225,15 @@ class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
 
     ControlVars= cv.RCShearControlVars
-    def __init__(self, limitStateLabel, nationalAnnex= None):
+    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure, nationalAnnex= None):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
         :param nationalAnnex: identifier of the national annex.
         '''
-        super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
+        super(ShearController,self).__init__(limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
         self.concreteFibersSetName= "concrete" # Name of the concrete fibers set.
         self.rebarFibersSetName= "reinforcement" # Name of the rebar fibers set.
         self.nationalAnnex= nationalAnnex # national annex.

@@ -312,7 +312,7 @@ class LoadCaseDispParameters(RecordDisp):
         :param modelSpace: model space object (see predefined_spaces.py).
         :param texFile:    laTex file where to include the graphics 
                            (e.g.:'text/report_loads.tex')
-        :param cfg:        instance of EnvConfig class with config parameters
+        :param cfg: instance of EnvConfig class with config parameters
         '''
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
         cfg.makedirs(fullPath) # Create directory if needed.
@@ -337,7 +337,7 @@ class LoadCaseDispParameters(RecordDisp):
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
             #outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
-            output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            output_handler.insertGrInTex(texFile= texFile, grFileNm= rltvgrfname, grWdt= cfg.grWidth, capText= capt, labl= labl)
         for st in self.setsToDispBeamLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
@@ -345,7 +345,7 @@ class LoadCaseDispParameters(RecordDisp):
             labl= getLabelText(capt)
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
-            output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            output_handler.insertGrInTex(texFile= texFile, grFileNm= rltvgrfname, grWdt= cfg.grWidth, capText= capt, labl= labl)
 
     def loadReports(self,FEcase,texFile,cfg):
         '''Creates the graphics files of loads for the load case and insert 

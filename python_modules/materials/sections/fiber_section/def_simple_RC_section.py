@@ -84,6 +84,29 @@ class ShearReinforcement(object):
             retval= True
         return retval
     
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= dict()
+        retval['familyName']= self.familyName
+        retval['nShReinfBranches']= self.nShReinfBranches
+        retval['areaShReinfBranch']= self.areaShReinfBranch
+        retval['shReinfSpacing']= self.shReinfSpacing
+        retval['angAlphaShReinf']= self.angAlphaShReinf
+        retval['angThetaConcrStruts']= self.angThetaConcrStruts
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.familyName= dct['familyName']
+        self.nShReinfBranches= dct['nShReinfBranches']
+        self.areaShReinfBranch= dct['areaShReinfBranch']
+        self.shReinfSpacing= dct['shReinfSpacing']
+        self.angAlphaShReinf= dct['angAlphaShReinf']
+        self.angThetaConcrStruts= dct['angThetaConcrStruts']
+    
     def getAs(self):
         '''returns the area per unit length of the family of shear 
            reinforcements.
@@ -200,9 +223,32 @@ class ReinfRow(object):
                 retval= (self.width == other.width)
             if(retval):
                 retval= (self.cover == other.cover)
+            if(retval and hasattr(self,'latCover')):
+                retval= (self.latCover == other.latCover)
         else:
             retval= True
         return retval
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= {'rebarsDiam':self.rebarsDiam, 'areaRebar':self.areaRebar, 'rebarsSpacing':self.rebarsSpacing, 'nRebars': self.nRebars, 'width':self.width, 'cover':self.cover}
+        if(hasattr(self,'latCover')):
+           retval['latCover']= self.latCover
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.rebarsDiam= dct['rebarsDiam']
+        self.areaRebar= dct['areaRebar']
+        self.rebarsSpacing= dct['rebarsSpacing']
+        self.nRebars= dct['nRebars']
+        self.width= dct['width']
+        self.cover= dct['cover']
+        if('latCover' in dct):
+            self.latCover= dct['latCover']
 
     def setRebarDiameter(self, rebarDiameter):
         '''Set the diameter of the rebars.
@@ -264,7 +310,7 @@ class ReinfRow(object):
       
     def centerRebars(self,width):
         '''center the row of rebars in the width of the section'''
-        self.coverLat= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
+        self.latCover= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
 
     def defStraightLayer(self, reinforcement, layerCode, diagramName, p1, p2):
         '''Definition of a straight reinforcement layer in the XC section 
@@ -362,6 +408,26 @@ class LongReinfLayers(object):
         '''Return the number of reinforcement rows.'''
         return len(self.rebarRows)
 
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        tmp= list()
+        for rr in self.rebarRows:
+            tmp.append(rr.getDict())
+        retval= {'rebarRows':tmp}
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        tmp= dct['rebarRows']
+        if(len(tmp)>0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; reading rebar rows list not implementd yet.")
+            
     def append(self, rebarRow):
         ''' Append a reinforcement row to the list.'''
         self.rebarRows.append(rebarRow)
@@ -431,7 +497,7 @@ class LongReinfLayers(object):
         '''returns a list with the lateral cover of bars for each row of bars.'''
         retval=[]
         for rbRow in self.rebarRows:
-            retval.append(rbRow.coverLat)
+            retval.append(rbRow.latCover)
         return retval
 
     def centerRebars(self, b):
@@ -1677,8 +1743,8 @@ class RCRectangularSection(BasicRectangularRCSection):
         ## Compute positions.
         for rbRow in self.negatvRebarRows.rebarRows:
             y= -self.h/2.0+rbRow.cover
-            p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
-            p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
+            p1= geom.Pos2d(-self.b/2+rbRow.latCover,y)
+            p2= geom.Pos2d(self.b/2-rbRow.latCover,y)
             negPoints.append((p1,p2))
         self.negatvRebarRows.defStraightLayers(reinforcement,"neg",self.fiberSectionParameters.reinfDiagName,negPoints)
         # Placement of the positive reinforcement.
@@ -1686,8 +1752,8 @@ class RCRectangularSection(BasicRectangularRCSection):
         ## Compute positions.
         for rbRow in self.positvRebarRows.rebarRows:
             y= self.h/2.0-rbRow.cover
-            p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
-            p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
+            p1= geom.Pos2d(-self.b/2+rbRow.latCover,y)
+            p2= geom.Pos2d(self.b/2-rbRow.latCover,y)
             posPoints.append((p1,p2))
         self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,posPoints)
         self.minCover= self.getMinCover()

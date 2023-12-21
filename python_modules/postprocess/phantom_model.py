@@ -95,7 +95,7 @@ class PhantomModel(object):
         nB= self.preprocessor.getNodeHandler.newNodeXYZ(0,0,0)
         self.modelSpace.fixNode000_000(nA.tag)
         if(not fakeSection):
-          self.preprocessor.getElementHandler.defaultMaterial= sectionName
+            self.preprocessor.getElementHandler.defaultMaterial= sectionName
         phantomElement= self.preprocessor.getElementHandler.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
         phantomElement.setProp("idElem", masterElementId) # Element to check
         phantomElement.setProp("idSection", sectionName) # Section to check
@@ -209,11 +209,11 @@ class PhantomModel(object):
         '''Runs the analysis (linear) and checking of combinations passed as
         parameters
 
-        :param elements: elements to check
         :param controller: object that controls limit state in elements.
         '''
         combs= self.preprocessor.getLoadHandler.getLoadPatterns #Here each load pattern represents a combination.
         elements= self.preprocessor.getSets.getSet("total").elements
+        controller.checkSolverAdequacy()
         for key in combs.getKeys():
             #comb= combs[key]
             controller.solutionProcedure.solveComb(key)

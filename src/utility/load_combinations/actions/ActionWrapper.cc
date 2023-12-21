@@ -27,6 +27,7 @@
 #include "utility/load_combinations/actions/factors/PartialSafetyFactorsMap.h"
 #include "utility/load_combinations/comb_analysis/Variations.h"
 #include "LeadingActionInfo.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
 cmb_acc::ActionWrapper::ActionWrapper(ActionWrapperList *list, const std::string &nmb_partial_safety_factors)
@@ -41,10 +42,10 @@ cmb_acc::ActionWrapper::ActionWrapper(ActionWrapperList *list, const std::string
 const cmb_acc::PartialSafetyFactors *cmb_acc::ActionWrapper::getPartialSafetyFactors(void) const
   {
     if(!partial_safety_factors)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; ERROR: action " << getName()
 	        << ": partial safety factors not set."
-	        << std::endl;
+	        << Color::def << std::endl;
     return partial_safety_factors;
   }
 
@@ -57,16 +58,20 @@ void cmb_acc::ActionWrapper::setPartialSafetyFactors(const std::string &nmb_fact
         if(container)
           tmp= container->getPtrPartialSafetyFactors()->getPtrCoefs(nmb_factors);
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; ERROR: pointer to actions container not set."
-		    << std::endl;
+		    << Color::def << std::endl;
         if(tmp)
            partial_safety_factors= tmp;
 	else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; ERROR: combination factors with name: '"
-		    << nmb_factors
-	            << "' not found." << std::endl;
+	  {
+             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	              << "; ERROR: combination factors with name: '"
+	  	      << nmb_factors
+	              << "' not found."
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }
       }
   }
 
@@ -135,8 +140,9 @@ boost::python::dict cmb_acc::ActionWrapper::getPyDict(void) const
 //! @brief Set the values of the object members from a Python dictionary.
 void cmb_acc::ActionWrapper::setPyDict(const boost::python::dict &d)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented yet." << std::endl;
+     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet."
+	      << Color::def << std::endl;
     // EntityWithOwner::setPyDict(d);
     // boost::python::dict actionDict= boost::python::extract<std::string>(d["actions"]);
     // auto items= actionDict.items();
@@ -223,8 +229,9 @@ std::string cmb_acc::ActionWrapper::incompatibleStringList(ActionWrapperList *aw
           retval= actionPtrsNames(incomp.begin(),incomp.end());
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; null pointer to the wrapper list." << std::endl;
+       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; null pointer to the wrapper list."
+		<< Color::def << std::endl;
     return retval; 
   }
 //! @brief Output operator.

@@ -254,7 +254,7 @@ class RailLoadBase(dfl.DynamicFactorLoad):
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
-        loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
+        loadedContour= self.getDeckLoadedContourThroughEmbankment(embankment= embankment, deckMidplane= deckMidplane, deckThicknesss= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         # Pick loaded nodes.
         loadedNodes= self.pickLoadedNodes(loadedContour= loadedContour, originSet= originSet, deckMidplane= deckMidplane)
         # Apply nodal loads.
@@ -377,7 +377,7 @@ class VariableDirectionRailLoad(RailLoadBase):
     :ivar loadComponents: values of the load components in the local
                           reference system of each segment.
     '''
-    def __init__(self, railAxis, loadComponents, dynamicFactor= 1.0, classificationFactor= 1.21):
+    def __init__(self, railAxis, loadComponents, dynamicFactor= 1.0, classificationFactor= 1.21, orientationVector= None):
         ''' Constructor.
 
         :param railAxis: 3D polyline defining the axis of the rail.
@@ -387,12 +387,19 @@ class VariableDirectionRailLoad(RailLoadBase):
         :param classificationFactor: classification factor (on lines carrying
                                      rail traffic which is heavier or lighter
                                      than normal rail traffic).
+        :param orientationVector: if not None, the orientation of the unit 
+                                  vector J of the coordinate systems is chosen
+                                  so that it's dot product with the orientation
+                                  vector is positive. See getCoordinateSystems
+                                  method.
         '''
         super().__init__(railAxis= railAxis, dynamicFactor= dynamicFactor, classificationFactor= classificationFactor)
         self.loadComponents= loadComponents
+        self.orientationVector= orientationVector
 
     def getCoordinateSystems(self):
-        ''' Return the local coordinate systems along the rail axis.'''
+        ''' Return the local coordinate systems along the rail axis.
+        '''
         retval= list()
         vertices= self.railAxis.getVertexList()
         currentLength= 0.0
@@ -402,13 +409,18 @@ class VariableDirectionRailLoad(RailLoadBase):
             currentLength+= segmentLength/2.0
             iVector= self.railAxis.getIVectorAtLength(currentLength)
             jVector= self.railAxis.getJVectorAtLength(currentLength)
+            if(self.orientationVector): # orient the system if needed.
+                if(self.orientationVector.dot(jVector)<0.0):
+                    jVector= -jVector
             retval.append(geom.CooSysRect3d3d(iVector, jVector))
             currentLength+= segmentLength/2.0
             lastVertex= currentVertex
         return retval
 
     def computeLoadVectors(self, loadedNodes):
-        ''' Compute the load vectors for each segment in global coordinates.'''
+        ''' Compute the load vectors for each segment in global coordinates.
+
+        '''
         # Compute the load that correspond to each node.
         localLoadVector= geom.Vector3d(self.loadComponents[0], self.loadComponents[1], self.loadComponents[2])
         numLoadedNodes= len(loadedNodes)
@@ -428,7 +440,7 @@ class VariableDirectionRailLoad(RailLoadBase):
 
         :param loadedNodes: nodes that will be loaded.
         '''
-        loadVectors= self.computeLoadVectors(loadedNodes)
+        loadVectors= self.computeLoadVectors(loadedNodes= loadedNodes)
         
         # Apply nodal loads.
         retval= list()

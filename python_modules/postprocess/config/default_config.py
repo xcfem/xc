@@ -2,10 +2,17 @@
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2018, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import ast
 import errno
 from pathlib import Path
 import os
+import sys
 import tempfile
 import xc
 from postprocess import output_styles
@@ -51,6 +58,35 @@ def findProjectDirectory(fNameMark= '.git'):
     :param fNameMark: name of the file that marks the working directory.
     '''
     return findDirectoryUpwards(fNameMark)
+
+
+def find_files(fileName, searchPath):
+    ''' Return the occurrences of filename in search_path
+
+    :param fileName: name of the file to search.
+    :param searchPath: root directory to start the search.
+    '''
+    result = []
+
+    # Walking top-down from the root
+    for root, dirs, files in os.walk(searchPath):
+        if fileName in files:
+            result.append(os.path.join(root, fileName))
+    return result
+
+def find_directories(dirName, searchPath):
+    ''' Return the occurrences of filename in search_path
+
+    :param dirName: name of the directory to search.
+    :param searchPath: root directory to start the search.
+    '''
+    result = []
+
+    # Walking top-down from the root
+    for root, dirs, files in os.walk(searchPath):
+        if dirName in dirs:
+            result.append(os.path.join(root, dirName))
+    return result
 
 class ProjectDirTree(object):
     ''' Paths to project directories.
@@ -112,6 +148,56 @@ class ProjectDirTree(object):
             results.'''
         return self.workingDirectory+'/'+self.getRltvResultsPath()
 
+    def newResultsPath(self, folderName:str):
+        ''' Creates a new folder inside the results directory.
+
+        :param folderName: name for the new folder.
+        '''
+        pth= self.getFullResultsPath()
+        newFolderPath= pth+folderName
+        if os.path.isfile(newFolderPath): # Name already in use for a file.
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; '"+str(folderName) + "' is already a file name inside: '"+str(pth)+"' can't create folder.")
+            newFolderPath= None
+        elif not os.path.isdir(newFolderPath): # Directory doesn't exist yet.
+            os.mkdir(newFolderPath)
+        return newFolderPath
+
+    def findResultsPath(self, folderName:str):
+        ''' Search for a folder inside the results directory.
+
+        :param folderName: name for the folder to find.
+        '''
+        retval= None
+        pth= self.getFullResultsPath()
+        tmp= find_directories(dirName= folderName, searchPath= pth)
+        sz= len(tmp)
+        if(sz>0):
+            retval= tmp[0]
+            if(sz>1): # Many directories with the same name.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; ther are"+str(sz)+ " directories named: '"+str(folderName) + "' inside: '"+str(pth)+"' returning the first one.")
+        return retval
+
+    def findResultsFile(self, fileName:str):
+        ''' Search for a folder inside the results directory.
+
+        :param fileName: name for the folder to find.
+        '''
+        retval= None
+        pth= self.getFullResultsPath()
+        tmp= find_files(fileName= fileName, searchPath= pth)
+        sz= len(tmp)
+        if(sz>0):
+            retval= tmp[0]
+            if(sz>1): # Many directories with the same name.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; ther are"+str(sz)+ " files named: '"+str(fileName) + "' inside: '"+str(pth)+"' returning the first one.")
+        return retval
+
     def getInternalForcesResultsPath(self):
         ''' Return the path for the files that contains
             the internal forces.'''
@@ -156,11 +242,20 @@ class ProjectDirTree(object):
     
     def getFullReportPath(self):
         ''' Return the full path for the report files.'''
-        return self.workingDirectory+'/'+self.reportPath+self.getRltvReportPath()
+        retval= self.workingDirectory+'/'+self.reportPath
+        rltvReportPath= self.getRltvReportPath()
+        if(rltvReportPath!=self.reportPath): # There is some bug here.
+            retval+= rltvReportPath # Don't repeat the same directory.
+        return retval
     
     def getFullTextReportPath(self):
         ''' Return the full path for the text report files.'''
-        return self.workingDirectory+'/'+self.reportPath+self.getRltvTextReportPath()
+        retval= self.workingDirectory+'/'+self.reportPath
+        rltvTextReportPath= self.getRltvTextReportPath()
+        if(rltvTextReportPath.startswith(self.reportPath)): # There is some bug here.
+            rltvTextReportPath= rltvTextReportPath.removeprefix(self.reportPath)
+            retval+= rltvTextReportPath # Don't repeat the same directory.
+        return retval
 
     def getFullGraphicsPath(self):
         ''' Return the full path for the graphic files.'''        
@@ -341,7 +436,7 @@ class ProjectDirTree(object):
         '''Return the path of the verification results file
            for the limit state argument.
 
-           :param limitStateLabel: label identifying the limit state.
+        :param limitStateLabel: label identifying the limit state.
         '''
         if(limitStateLabel=='ULS_normalStressesResistance'):
             return self.getVerifNormStrFile()
@@ -351,14 +446,16 @@ class ProjectDirTree(object):
             return self.getVerifCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getVerifCrackFreqFile()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getVerifCrackQpermFile()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getVerifFatigueFile()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getVerifVonMisesStressFile()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
         
     def getReportFile(self, limitStateLabel):
@@ -375,14 +472,16 @@ class ProjectDirTree(object):
             return self.getReportCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getReportCrackFreqFile()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getReportCrackQpermFile()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getReportFatigueFile()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getReportVonMisesStressFile()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
         
     def getReportGrPath(self, limitStateLabel):
@@ -399,14 +498,16 @@ class ProjectDirTree(object):
             return self.getReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getReportCrackFreqGrPath()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getReportCrackQpermGrPath()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getReportFatigueGrPath()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getReportVonMisesStressGrPath()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
     
     def getReportRltvGrPath(self, limitStateLabel):
@@ -423,14 +524,16 @@ class ProjectDirTree(object):
             return self.getRltvReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
             return self.getRltvReportCrackFreqGrPath()
-        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsCrackControl'):
             return self.getRltvReportCrackQpermGrPath()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getRltvReportFatigueGrPath()
         elif(limitStateLabel=='ULS_VonMisesStressResistanc'):
             return self.getRltvReportVonMisesStressResistancGrPath()
         else:
-            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; label: '"+str(limitStateLabel) + "' unknown.")
             return None
     
     def getReportSimplLCFile(self):
@@ -506,7 +609,7 @@ class EnvConfig(output_styles.OutputStyle):
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language= 'english', resultsPath='tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
+    def __init__(self,language= 'english', resultsPath='tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/', reportPath='annex/',reportResultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
         '''
         Constructor.
 
@@ -623,7 +726,7 @@ def get_temporary_env_config(subDirName: str= None):
         dirName= tempDir.name
     else:
         dirName= '/tmp/'+subDirName
-    retval= EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='',reportResultsPath= 'annex/',grWidth='120mm')
+    retval= EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/', reportPath='annex/',reportResultsPath= 'annex/',grWidth='120mm')
     retval.projectDirTree.workingDirectory= dirName
     return retval
 

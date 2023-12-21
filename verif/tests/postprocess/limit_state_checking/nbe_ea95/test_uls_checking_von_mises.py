@@ -134,10 +134,14 @@ for ls in limitStates:
     ls.saveAll(combContainer,xcTotalSet)
 
 ### Check material resistance.
-outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
+#### Limit state to check.
 limitState= lsd.vonMisesStressResistance
-outCfg.controller= NBE_EA95_limit_state_checking.VonMisesStressController(limitState.label)
-average= limitState.runChecking(outCfg)
+#### Build controller.
+controller= NBE_EA95_limit_state_checking.VonMisesStressController(limitState.label)
+#### Perform checking.
+average= limitState.check(setCalc=xcTotalSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+
+# Check results.
 ratio= ((average[0]-0.2645798938853426)/0.2645798938853426)**2
 
 '''

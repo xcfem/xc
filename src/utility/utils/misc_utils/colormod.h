@@ -22,6 +22,9 @@
 // Base on the post of Joel Sjögren in this stackoverflow discussion:
 // https://stackoverflow.com/questions/2616906/how-do-i-output-coloured-text-to-a-linux-terminal
 
+#ifndef COLORMOD_H
+#define COLORMOD_H
+
 #include <ostream>
 
 namespace Color {
@@ -54,3 +57,5 @@ static const Modifier yellow(Color::FG_YELLOW);
 static const Modifier def(Color::FG_DEFAULT);
 
 } // end Color namespace.
+
+#endif

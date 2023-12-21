@@ -8,6 +8,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import sys
+import json
+import csv
 from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 from misc_utils import log_messages as lmsg
@@ -28,6 +30,15 @@ class CombinationRecord(object):
         self.name= name
         self.expr= expr
 
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        return {'name':self.name, 'expr':self.expr}
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        self.name= dct['name']
+        self.expr= dct['expr']
+        
     def createCombination(self,xcCombHandler):
         '''Create combination and insert it into the XC combination handler.
 
@@ -104,7 +115,7 @@ class SituationCombs(dict):
             retval= self.description == other.description
         return retval
             
-    def add(self,name,expr):
+    def add(self, name, expr):
         ''' Add a combination to the dictionary.
 
         :param name: combination name (i.e. "ELS01").
@@ -115,6 +126,24 @@ class SituationCombs(dict):
     def getNames(self):
         '''returns a list of the combination names.'''
         return self.keys()
+
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        retval= dict()
+        retval['description']= self.description
+        comb_dict= dict()
+        for key in self:
+            comb= self[key]
+            comb_dict[key]= comb.expr
+        retval['combinations']= comb_dict
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        self.description= dct['description']
+        comb_dict= dct['combinations']
+        for key in comb_dict:
+            self.add(key, comb_dict[key])        
            
     def getNameExpressionPairs(self):
         ''' Return a list of (combinationName, combinationExpression) tuples.'''
@@ -202,6 +231,16 @@ class SituationCombs(dict):
             for key in sorted(self):
                 self[key].writePythonScript(prefix= prefix, os= os)
 
+    def writeJSON(self, outputFileName):
+        ''' Write the load combinations in a JSON file.
+
+        :param outputFileName: name for the output file.
+        '''
+        data= self.getDict()
+        with open(outputFileName, 'w') as outfile:
+            json.dump(data, outfile)
+        
+
 class SituationsSet(object):
     '''Set of situations as used in limit states
 
@@ -215,6 +254,14 @@ class SituationsSet(object):
         '''
         self.name= name
         self.situations= None
+        
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        return {'name':self.name}
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        self.name= dct['name']
         
     def getNames(self):
         '''returns a list of the combination names.'''
@@ -257,7 +304,16 @@ class SituationsSet(object):
             if combName in s:
                 comb= s[combName]
                 return comb.getLoadCaseDispParameters(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
-  
+            
+    def writeJSON(self, outputFileName):
+        ''' Write the load combinations in a JSON file.
+
+        :param outputFileName: name for the output file.
+        '''
+        data= self.getDict()
+        with open(outputFileName, 'w') as outfile:
+            json.dump(data, outfile)        
+
 class SLSCombinations(SituationsSet):
     '''Combinations of actions for serviceability limit states
 
@@ -274,6 +330,23 @@ class SLSCombinations(SituationsSet):
         self.qp= SituationCombs('Quasi-permanent situations.')
         self.earthquake= SituationCombs('Earthquake situations for SLS.')
         self.situations= [self.rare,self.freq,self.qp,self.earthquake]
+        
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        retval= super().getDict()
+        retval['rare']= self.rare.getDict()
+        retval['freq']= self.freq.getDict()
+        retval['qp']= self.qp.getDict()
+        retval['earthquake']= self.earthquake.getDict()
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        super().setFromDict(dct)
+        self.rare.setFromDict(dct['rare'])
+        self.freq.setFromDict(dct['freq'])
+        self.qp.setFromDict(dct['qp'])
+        self.earthquake.setFromDict(dct['earthquake'])
         
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.rare.getNeutralFormat(counter,'SLSR', mapLoadCases)
@@ -316,6 +389,23 @@ class ULSCombinations(SituationsSet):
         self.earthquake= SituationCombs('Earthquake situations for ULS.')
         self.situations= [self.perm,self.acc,self.fatigue,self.earthquake]
         
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        retval= super().getDict()
+        retval['perm']= self.perm.getDict()
+        retval['acc']= self.acc.getDict()
+        retval['fatigue']= self.fatigue.getDict()
+        retval['earthquake']= self.earthquake.getDict()
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        super().setFromDict(dct)
+        self.perm.setFromDict(dct['perm'])
+        self.acc.setFromDict(dct['acc'])
+        self.fatigue.setFromDict(dct['fatigue'])
+        self.earthquake.setFromDict(dct['earthquake'])
+        
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.perm.getNeutralFormat(counter,'ULST2', mapLoadCases)
         retval.update(self.acc.getNeutralFormat(counter+len(retval),'ULST2A', mapLoadCases))
@@ -350,6 +440,18 @@ class CombContainer(object):
         self.SLS= SLSCombinations()
         self.ULS= ULSCombinations()
         self.limitStates= [self.SLS, self.ULS]
+        
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        retval= dict()
+        retval['SLS']= self.SLS.getDict()
+        retval['ULS']= self.ULS.getDict()
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Set the fields from the values of the dictionary argument.'''
+        self.SLS.setFromDict(dct['SLS'])
+        self.ULS.setFromDict(dct['ULS'])
         
     def getNames(self):
         '''returns a list of the combination names.'''
@@ -387,6 +489,32 @@ class CombContainer(object):
             ls.exportToLatex(f)
         f.close()
 
+    def getList(self):
+        ''' Return a list populated with the combinations.'''
+        retval= list()
+        combDict= self.getDict()
+        for lsKey in combDict: # limit state.
+            lsCombinations= combDict[lsKey]
+            for psKey in lsCombinations: # project situation.
+                psCombinations= lsCombinations[psKey]
+                if(psKey!='name'):
+                    description= psCombinations['description']
+                    combinations= psCombinations['combinations']
+                    for combKey in combinations: # combination.
+                        combExpr= combinations[combKey]
+                        retval.append([lsKey, psKey, combKey, combExpr])
+        return retval
+    
+    def exportToCSV(self, os= sys.stdout):
+        '''Write the load combinations as comma separated values.
+
+        :param os: output stream.
+        '''
+        combList= self.getList()
+        writer= csv.writer(os, quoting= csv.QUOTE_NONNUMERIC)
+        for row in combList:
+            writer.writerow(row)
+
     def writePythonScript(self, containerName= 'combContainer', os= sys.stdout):
         '''Write a Python script that can be used to re-create this object.
 
@@ -398,7 +526,16 @@ class CombContainer(object):
         self.SLS.writePythonScript(prefix= newPrefix, os= os)
         newPrefix= containerName+'.ULS'
         self.ULS.writePythonScript(prefix= newPrefix, os= os)
-        
+
+    def writeJSON(self, outputFileName):
+        ''' Write the load combinations in a JSON file.
+
+        :param outputFileName: name for the output file.
+        '''
+        data= self.getDict()
+        with open(outputFileName, 'w') as outfile:
+            json.dump(data, outfile)        
+                  
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
 

@@ -1009,7 +1009,7 @@ class OutputHandler(object):
         captionBaseText= limitStateLabelCaption + ', ' + argumentCaption+ ', ' + unitDescription + '. '+ setToDisplay.description.capitalize()
         field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr, fileName= fileName, defFScale= defFScale)
 
-def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
+def insertGrInTex(texFile, grFileNm, grWdt, capText, labl=''):
     '''Include a graphic in a LaTeX file.
 
     :param texFile:    laTex file where to include the graphics 

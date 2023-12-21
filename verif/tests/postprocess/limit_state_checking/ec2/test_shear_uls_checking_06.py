@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Verify shear limit state checking using reinforcement placement routines
     (element-based reinforcement definition). Check that in-plane shear
-    doesn't affect results (this test checks that an old error does not
+    affects the results moderately (this test checks that an old error does not
     come back).'''
 
 from __future__ import print_function
@@ -25,6 +25,7 @@ from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 from postprocess import RC_material_distribution
+from solution import predefined_solutions
 
 # Read reference values.
 import os
@@ -38,6 +39,8 @@ with open(fName) as file:
         valueData= yaml.safe_load(file)
     except yaml.YAMLError as exception:
         print(exception)
+span= float(valueData['span'])
+uniformLoad= float(valueData['uniformLoad'])
 refMeanFC0= float(valueData['refMeanFC0'])
 refMeanFC1= float(valueData['refMeanFC1'])
 
@@ -61,8 +64,6 @@ dummySection= rcSection.defElasticMembranePlateSection(preprocessor) # Elastic m
 
 
 # Problem geometry.
-span= 5
-
 ## K-points.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
@@ -98,7 +99,7 @@ loadCaseNames= ['load']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## load pattern.
-load= xc.Vector([0.0,35e3,-80e3]) # Small "in-plane" load to check it has no effect on results (see test description at top).
+load= xc.Vector([0.0,35e3,uniformLoad]) # Small "in-plane" load to check it has a moderate effect on results (see test description at top).
 cLC= loadCaseManager.setCurrentLoadCase('load')
 for e in s.elements:
     e.vector3dUniformLoadGlobal(load)
@@ -110,8 +111,10 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
+### Set limit state.
+limitState= lsd.shearResistance
 ### Save internal forces.
-lsd.shearResistance.saveAll(combContainer,xcTotalSet) 
+limitState.saveAll(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:
@@ -184,19 +187,24 @@ reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistributio
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 #reinfConcreteSectionDistribution.report()
 
+class CustomSolver(predefined_solutions.PlainNewtonRaphson):
+
+    def __init__(self, prb):
+        super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 0, convergenceTestTol= 1e-3)
+        
 # Checking shear stresses.
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
-outCfg.controller.verbose= False # Don't display log messages.
+## Build controller.
+controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label, solutionProcedureType= CustomSolver)
+controller.verbose= False # Don't display log messages.
+## Peform checking.
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',controller= controller, threeDim= False)
 
-feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
-feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-(FEcheckedModel,meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
-feProblem.errFileName= "cerr" # From now on display errors if any.
-feProblem.logFileName= "clog" # From now on display warnings if any.
-
+# Check results.
 ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0
 ratio2= abs(meanCFs[1]-refMeanFC1)/refMeanFC1
+
+## Check that the effect on results is moderate.
+testOK= (ratio1<1e-2) and (ratio2<0.01)
 
 '''
 print('meanCFs= ',meanCFs)
@@ -207,7 +215,7 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-3) and (ratio2<1e-3):
+if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

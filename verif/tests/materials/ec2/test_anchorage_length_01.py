@@ -58,6 +58,9 @@ for d in diameters:
     lbd_bent_poor_cond.append(tmp)
 
 values= [lbd_straight_good_cond, lbd_straight_poor_cond,lbd_bent_good_cond,lbd_bent_poor_cond]
+# Reference values are taken from the table 2 on page 90 of the book:  
+# How to Design Concrete Structures using Eurocode 2: Detailing.
+# I've not investigated the origin of the small differences.
 refValues= [['good', 'straight', 230, 320, 410, 600, 780, 1010, 1300, 1760], ['poor', 'straight', 330, 450, 580, 850, 1110, 1450, 1850, 2510], ['good', 'bent', 320, 410, 490, 650, 810, 1010, 1300, 1760], ['poor', 'bent', 460, 580, 700, 930, 1160, 1450, 1850, 2510]]
 
 err= 0.0 

@@ -94,8 +94,10 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
+### Limit state to check.
+limitState= lsd.normalStressesResistance
 ### Save internal forces.
-lsd.normalStressesResistance.saveAll(combContainer,xcTotalSet) 
+limitState.saveAll(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:
@@ -171,13 +173,26 @@ for e in s.elements:
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
-#Checking normal stresses.
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
-outCfg.controller.verbose= False # Don't display log messages.
+# Checking normal stresses.
+## Build the controller.
+controller= EC2_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
+controller.verbose= False # Don't display log messages.
+## Perform the checking.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= reinfConcreteSectionDistribution.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
+## variables that control the output of the checking:
+### setCalc: set of elements to be checked.
+### crossSections: cross sections for each element.
+### controller: object that controls the limit state checking.
+### appendToResFile:  'Yes','Y','y',.., if results are appended to 
+###                   existing file of results (defaults to 'N')
+### listFile: 'Yes','Y','y',.., if latex listing file of results 
+###           is desired to be generated (defaults to 'N')
+### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+###               meant to be calculated (defaults to 'N')
+### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+###           false if it's 2D (Fx,Fy,Mz).
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, controller= controller, appendToResFile='N',listFile='N',calcMeanCF='Y', threeDim= True)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 

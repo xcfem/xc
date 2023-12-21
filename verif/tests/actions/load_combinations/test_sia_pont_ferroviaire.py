@@ -58,7 +58,7 @@ for (prefix, loadCombinations, outputFileName) in values:
     # Compare with reference file.
     refFile= pth+'/../../aux/reference_files/ref_'+outputFileName
     comparisonOK= comparisonOK and filecmp.cmp(refFile, outputFileName, shallow=False)
-    os.remove(outputFileName)
+    os.remove(outputFileName) # clean up after yourself.
     
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

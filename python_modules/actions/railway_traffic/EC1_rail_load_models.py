@@ -199,7 +199,20 @@ class TrainLoadModel(tlm.TrainLoadModel):
         else:
             retval= (q/2, q/2)
         return retval
-        
+            
+    def getUniformLineLoadForDesignSituationII(self, bridgeLength= 20.0):
+        ''' Return the Uniformly distributed equivalent line load for Design
+            Situation II according to paragraph (4) of clause 6.7.1 of 
+            Eurocode 1 part 2.
+
+        :param bridgeLength: length of the bridge.
+        '''
+        bridgeLength= min(bridgeLength, 20.0) # 20 m maximum.
+        locomotiveLoad= self.locomotive.getTotalLoad()
+        locomotiveLength= self.locomotive.getTotalLength()
+        remainingLength= bridgeLength-locomotiveLength
+        uniformLoad= (locomotiveLoad+self.getDynamicUniformLoad()*remainingLength)/bridgeLength
+        return 1.4*uniformLoad
 
 class TrackAxis(ta.TrackAxis):
     ''' Track axis according to EC-1.'''

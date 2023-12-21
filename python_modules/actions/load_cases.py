@@ -54,21 +54,34 @@ class LoadCaseManager(object):
        self.timeSeries= dict()
        self.loadCases= dict()
 
-    def defineSimpleLoadCases(self,names):
-       '''Define load patterns with constant time series.'''
+    def defineSimpleLoadCases(self, names):
+       '''Define load patterns with constant time series.
+
+       :param names: list of names for the load patterns to define.
+       '''
        tsName= 'ts'
-       ts= self.loadPatterns.newTimeSeries('constant_ts',tsName)
-       self.timeSeries[tsName]= ts
+       if(tsName not in self.timeSeries): # Time series not already defined.
+           ts= self.loadPatterns.newTimeSeries('constant_ts',tsName)
+           self.timeSeries[tsName]= ts
        self.loadPatterns.currentTimeSeries= tsName
        for name in names:
-          self.loadCases[name]= self.loadPatterns.newLoadPattern('default',name)
+           if(name not in self.loadCases): # Load pattern not already defined.
+               self.loadCases[name]= self.loadPatterns.newLoadPattern('default',name)
 
-    def setCurrentLoadCase(self,name):
-       '''Sets current load case.'''
+    def setCurrentLoadCase(self, name, newLoadCase= False):
+       '''Sets current load case.
+
+       :param name: name for the load case to set as current.
+       :param newLoadCase: if true, create the load case if doesn't exists.
+       '''
        self.loadPatterns.currentLoadPattern= name
        if(name not in self.loadCases):
-          lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
+           if(newLoadCase):
+               self.defineSimpleLoadCases([name])
+           else: 
+               lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
        return self.getLoadCase(name)
+    
 
     def getCurrentLoadCase(self):
        '''Returns current load case.'''

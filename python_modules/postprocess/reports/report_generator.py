@@ -31,19 +31,19 @@ class ReportGenerator(oh.OutputHandler):
         '''
         return self.outputStyle
 
-    def checksReport(self,limitStateLabel,setsShEl,argsShEl,setsBmEl=[],argsBmEl=[],rgMinMax=None):
+    def checksReport(self, limitStateLabel, setsShEl, argsShEl, setsBmEl=[], argsBmEl=[], rgMinMax=None):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
 
         :param limitStateLabel: label that identifies the limit state.
-        :param setsShEl: Ordered list of sets of shell elements to be included 
-        in the report.
-        :param argsShEl: Ordered list of arguments to be included in the r   
-                       eport for shell elements
-        :param setsBmView: Ordered list of set of beam elements to be included 
-                       in the report. 
+        :param setsShEl: Ordered list of sets of 2D elements to be
+                         included in the report.
+        :param argsShEl: Ordered list of arguments to be included in the 
+                         report for 2D elements
+        :param setsBmView: Ordered list of set of 1D elements to be included 
+                           in the report. 
         :param argsBmElScale: Ordered list of arguments to be included in the 
-                      report for beam elements
+                              report for 1D elements
         '''
         cfg= self.getEnvConfig()
         texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
@@ -53,35 +53,30 @@ class ReportGenerator(oh.OutputHandler):
         rltvPath= cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
         for st in setsShEl:
             for arg in argsShEl:
-                capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. 1'
-                fullgrFileNm=fullPath+st.name+arg+'Sect1'
-                rltvgrFileNm=rltvPath+st.name+arg+'Sect1'
-                fullgrFileNmAndExt= fullgrFileNm+'.jpg'
-                self.displayField(limitStateLabel, section=1,argument=arg, component=None, setToDisplay=st, fileName=fullgrFileNmAndExt,rgMinMax=rgMinMax)
-                if not os.path.exists(fullgrFileNmAndExt):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
-                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth, capText= capt)
+                for idSection in [1, 2]:
+                    capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. '+str(idSection)
+                    sectionName= 'Sect'+str(idSection)
+                    suffix= st.name+arg+sectionName # set name + argument identifier + section name
+                    fullgrFileNm=fullPath+suffix
+                    rltvgrFileNm=rltvPath+suffix
+                    fullgrFileNmAndExt= fullgrFileNm+'.jpg'
+                    self.displayField(limitStateLabel, section= idSection,argument=arg, component=None, setToDisplay=st, fileName=fullgrFileNmAndExt,rgMinMax=rgMinMax)
+                    if not os.path.exists(fullgrFileNmAndExt):
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
+                    label= limitStateLabel+suffix
+                    oh.insertGrInTex(texFile=report, grFileNm=rltvgrFileNm, grWdt= cfg.grWidth, capText= capt, labl= label)
                 
-                capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. 2'
-                fullgrFileNm=fullPath+st.name+arg+'Sect2'
-                rltvgrFileNm=rltvPath+st.name+arg+'Sect2'
-                fullgrFileNmAndExt= fullgrFileNm+'.jpg'
-                self.displayField(limitStateLabel, section=2,argument=arg, component=None, setToDisplay=st, fileName=fullgrFileNmAndExt,rgMinMax=rgMinMax)
-                if not os.path.exists(fullgrFileNmAndExt):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
-                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth, capText= capt)
-
         for stV in setsBmEl:
             for argS in argsBmEl:
-                capt= cfg.capTexts[limitStateLabel]  + '. '+ stV.description.capitalize() + ', ' + cfg.capTexts[argS] 
-                fullgrFileNm=fullPath+stV.name+argS
-                rltvgrFileNm=rltvPath+stV.name+argS
+                capt= cfg.capTexts[limitStateLabel]  + '. '+ stV.description.capitalize() + ', ' + cfg.capTexts[argS]
+                suffix= stV.name+argS # set name + argument identifier.
+                fullgrFileNm=fullPath+suffix
+                rltvgrFileNm=rltvPath+suffix
                 self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName=fullgrFileNm+'.jpg')
-                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
+                label= limitStateLabel+suffix
+                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt, labl= label)
         report.close()
 
     

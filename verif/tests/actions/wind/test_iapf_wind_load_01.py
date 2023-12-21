@@ -28,7 +28,7 @@ c_fx= IAPF_wind.getSolidWebBridgeDragForceCoefficient(B= deckWidth, h_eq= h_eq)
 ratio2= abs(c_fx-1.3)/1.3
 designVelocity= IAPF_wind.getDesignVelocity(terrainCategory= terrainCategory, v_ref= v_ref, z= deckHeight)
 ratio3= abs(designVelocity-39.52785121880105)/39.52785121880105
-unitWindLoadDeck= IAPF_wind.getUnitWindLoadDeck(terrainCategory= terrainCategory, v_ref= v_ref, z= deckHeight, Cd= c_fx)
+unitWindLoadDeck= IAPF_wind.get_unit_wind_load(terrainCategory= terrainCategory, v_ref= v_ref, z= deckHeight, Cd= c_fx)
 ratio4= abs(unitWindLoadDeck-1.269491455355233e3)/1.269491455355233e3
 
 '''

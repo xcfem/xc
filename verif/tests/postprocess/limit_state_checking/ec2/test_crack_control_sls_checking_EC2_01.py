@@ -128,14 +128,26 @@ for e in s.elements:
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 #reinfConcreteSectionDistribution.report()
-# Checking cracking 
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-#outCfg.controller= EHE_limit_state_checking.CrackControl(limitStateLabel=lsd.freqLoadsCrackControl.label)
+# Checking cracking
+## Limit state to check.
 limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
-outCfg.controller= EC2_limit_state_checking.CrackController(limitState.label)
-
-outCfg.controller.verbose= True #False # Don't display log messages.
-(FEcheckedModel, meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.freqLoadsCrackControl,matDiagType="k", threeDim= False, outputCfg= outCfg)
+## Build controller.
+controller= EC2_limit_state_checking.CrackController(limitState.label)
+controller.verbose= True #False # Don't display log messages.
+## Perform checking.
+## variables that control the output of the checking:
+### setCalc: set of elements to be checked.
+### crossSections: cross sections for each element.
+### controller: object that controls the limit state checking.
+### appendToResFile:  'Yes','Y','y',.., if results are appended to 
+###                   existing file of results (defaults to 'N')
+### listFile: 'Yes','Y','y',.., if latex listing file of results 
+###           is desired to be generated (defaults to 'N')
+### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+###               meant to be calculated (defaults to 'N')
+### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+###           false if it's 2D (Fx,Fy,Mz).
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile='N',calcMeanCF='Y', controller= controller, threeDim= False)
 
 ratio1= abs(meanCFs[0]-0.690962456127247)/0.690962456127247
 ratio2= abs(meanCFs[1]-0.6924600272040474)/0.6924600272040474

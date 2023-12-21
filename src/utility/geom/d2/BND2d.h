@@ -64,6 +64,8 @@ class BND2d: public GeomObj2d
       { return GetYMax()-GetYMin(); }
 
     Polygon2d getPolygon(void) const;
+    const GeomObj::list_Pos2d &getVertexList(void) const;
+    boost::python::list getVertexListPy(void) const;
     //! @brief Return the object length.
     inline virtual GEOM_FT getLength(void) const
       { return 2*getWidth()+2*getHeight(); }

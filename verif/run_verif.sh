@@ -50,6 +50,8 @@ python tests/utility/test_copy_properties.py
 python tests/utility/miscUtils/testStairCaseFunction.py
 python tests/utility/miscUtils/test_linear_interpolation.py
 python tests/utility/miscUtils/test_remove_accents.py
+echo "$BLEU" "  Config tests." "$NORMAL"
+python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
 echo "$BLEU" "    Vectors." "$NORMAL"
 python tests/utility/geom/vector2d_test_01.py
@@ -255,6 +257,8 @@ echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
 python tests/actions/thermal/test_iap_thermal.py
+python tests/actions/thermal/test_iapf_thermal.py
+python tests/actions/thermal/test_ec1_thermal.py
 echo "$BLEU" "  Traffic loads tests." "$NORMAL"
 python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
@@ -270,6 +274,7 @@ python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_
 python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_02.py
 python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_03.py
 python tests/actions/traffic_loads/railway_traffic/test_ec1_traction_and_braking_force.py
+python tests/actions/traffic_loads/railway_traffic/test_ec1_line_load_design_situation_ii.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
@@ -285,6 +290,7 @@ python tests/actions/load_combinations/test_sia_pont_ferroviaire.py
 python tests/actions/load_combinations/test_ec0_road_bridge_context.py
 python tests/actions/load_combinations/test_ec0_traffic_groups.py
 python tests/actions/load_combinations/test_ec0_seismic_combinations.py
+python tests/actions/load_combinations/test_ec0_railway_bridge_load_combinations.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
@@ -800,6 +806,8 @@ python tests/loads/load_distribution/railway_traffic/test_track_axis_load_02.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_03.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_04.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_05.py
+python tests/loads/load_distribution/railway_traffic/test_track_axis_load_06.py
+python tests/loads/load_distribution/railway_traffic/test_track_axis_load_07.py
 
 echo "$BLEU" "    Strain loads." "$NORMAL"
 echo "$BLEU" "      Strain loads on trusses." "$NORMAL"
@@ -816,6 +824,7 @@ python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_02.p
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_03.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_04.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_05.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_06.py
 python tests/loads/strain_loads/elastic_beam_2d/test_beam_2d_creep_simulation_01.py
 python tests/loads/strain_loads/elastic_beam_2d/test_shrinkage_simulation_01.py
 echo "$BLEU" "      Strain loads on 2D force beam column." "$NORMAL"
@@ -825,6 +834,7 @@ echo "$BLEU" "      Strain loads on 3D elastic beams." "$NORMAL"
 python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_01.py
 python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_02.py
 python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_03.py
+python tests/loads/strain_loads/elastic_beam_3d/elastic_beam_3d_strain_load_04.py
 python tests/loads/strain_loads/elastic_beam_3d/test_beam_3d_creep_simulation_01.py
 echo "$BLEU" "      Strain loads on 3D force beam column." "$NORMAL"
 python tests/loads/strain_loads/force_beam_column_3d/force_beam_column_3d_strain_load_01.py
@@ -839,8 +849,10 @@ python tests/loads/strain_loads/shell/shell_strain_load_02.py
 python tests/loads/strain_loads/shell/shell_strain_load_03.py
 python tests/loads/strain_loads/shell/shell_strain_load_04.py
 python tests/loads/strain_loads/shell/shell_strain_load_05.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_01.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_02.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_03.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_04.py
 echo "$BLEU" "    Inertia loads." "$NORMAL"
 python tests/loads/inertia_loads/test_inertia_loads_00.py
 python tests/loads/inertia_loads/test_inertia_loads_01.py
@@ -1482,7 +1494,7 @@ python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_04.p
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_06.py
 echo "$BLEU" "      EHE limit state checking: normal stresses." "$NORMAL"
-pypython tests/postprocess/limit_state_checking/ehe08/test_shell_normal_stresses_uls_checking.py
+python tests/postprocess/limit_state_checking/ehe08/test_shell_normal_stresses_uls_checking.py
 echo "$BLEU" "      EHE limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"

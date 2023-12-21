@@ -70,7 +70,7 @@ class CombGenerator(utils.CombGenerator):
         '''
         return self.newAction(family= "permanentes",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanents', partialSafetyFactorsName= "permanentes_ctr_intenso", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
 
-    def newVariableAction(self, actionName: str, actionDescription: str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None):
+    def newVariableAction(self, actionName: str, actionDescription: str, combinationFactorsName:str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates an variable action and appends it to the combinations 
             generator.
 
@@ -79,8 +79,9 @@ class CombGenerator(utils.CombGenerator):
         :param combinationFactorsName: name of the combination factors container.
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
-        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= "variables_ctr_intenso", dependsOn= dependsOn, incompatibleActions= incompatibleActions)    
+        return self.newAction(family= "variables",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= "variables_ctr_intenso", dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)    
     
     def newAccidentalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
         ''' Creates an accidental action and appends it to the combinations 

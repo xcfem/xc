@@ -118,14 +118,16 @@ sections.append(beamRCsect)
 # sections (assign RC sections to elements).
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
-#Checking shear.
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
-outCfg.controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
-outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
+# Checking shear.
+## Limit state to check.
+limitState= lsd.shearResistance
+## Build controller.
+controller= EC2_limit_state_checking.ShearController(limitStateLabel= limitState.label)
+controller.analysisToPerform= predefined_solutions.plain_newton_raphson
+## Perform checking.
+meanFCs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= True, controller= controller)
 
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d", threeDim= True, outputCfg=outCfg)  
-
-
+# Check results.
 refMeanFC0= 0.8576189308851021
 ratio1= abs(meanFCs[0]-refMeanFC0)/refMeanFC0
 refMeanFC1= 1.3013922288261284

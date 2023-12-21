@@ -36,6 +36,41 @@ class SectionContainer(object):
                              # section definition.
         self.mapInteractionDiagrams= None
 
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        tmp= list()
+        for s in self.sections:
+            tmp.append(s.getDict())
+        retval= {'sections':tmp}
+        tmp= list()
+        for key in self.mapSections:
+            tmp.append(key)
+        retval['mapSections']= tmp
+        if(self.mapInteractionDiagrams):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.')
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; not implemented yet.') 
+        tmp= dct['sections']
+        for sd in tmp:
+            print(sd)
+        tmp= dct['mapSections']
+        for sectionName in tmp:
+            print('search for section: ', sectionName)
+        if('mapInteractionDiagrams' in dct):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.') 
+    
     def append(self, rcSections):
         ''' Append the argument to the container.
 

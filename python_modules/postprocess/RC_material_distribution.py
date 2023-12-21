@@ -6,6 +6,7 @@ from __future__ import division
 
 import sys
 from postprocess import element_section_map
+import json
 import pickle
 from misc_utils import log_messages as lmsg
 import xc
@@ -48,6 +49,20 @@ class RCMaterialDistribution(object):
         self.sectionDistribution= element_section_map.ElementSectionMap()
         self.elementSetNames= list() #Elements sets with an assigned section.
 
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= {'sectionDefinition': self.sectionDefinition.getDict(), 'sectionDistribution': self.sectionDistribution.getDict(), 'elementSetNames':self.elementSetNames}
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        self.sectionDefinition.setFromDict(dct['sectionDefinition'])
+        self.sectionDistribution.setFromDict(dct['sectionDistribution'])
+        self.elementSetNames= dct['elementSetNames']
+
     def assign(self, elemSet, setRCSects):
         '''Assigns the sections names to the elements of the set.
 
@@ -55,8 +70,9 @@ class RCMaterialDistribution(object):
            :param setRCSects: RC section definition, name, concrete type,
                               rebar positions,...
         '''
-        self.sectionDistribution.assign(elemSet,setRCSects)
+        retval= self.sectionDistribution.assign(elemSet,setRCSects)
         self.elementSetNames.append(elemSet.owner.name)
+        return retval # Return the number of "assigned" elements.
 
     def assignFromElementProperties(self, elemSet):
         '''Creates the section materials from the element properties
@@ -145,12 +161,27 @@ class RCMaterialDistribution(object):
         with open(self.mapSectionsFileName, 'wb') as f:
             pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
 
+    def writeToJSON(self, fileName= None):
+        '''Writes this object in a JSON file.'''
+        data= self.getDict()
+        if(not fileName):
+            fileName= 'map_sections_reinforcement.json'
+        with open(fileName, 'w') as f:
+            json.dump(data, f)
+
+    def readFromJSON(self, fileName= None):
+        '''Writes object data from a JSON file.'''
+        if(not fileName):
+            fileName= 'map_sections_reinforcement.json'
+        with open(fileName, 'r') as f:
+            data= json.load(f)
+        self.setFromDict(data)
+
     def load(self):
         '''Reads this object from a pickle file.'''
         with open(self.mapSectionsFileName, 'rb') as f:
             self.sectionDistribution= pickle.load(f)
             self.sectionDefinition= pickle.load(f)
-        f.close()
 
     def runChecking(self, limitStateData, matDiagType, threeDim= True, outputCfg= lsd.VerifOutVars()):
         '''Creates the phantom model and runs the verification on it.
@@ -183,8 +214,8 @@ class RCMaterialDistribution(object):
         else:
             self.sectionDefinition.calcInteractionDiagrams(preprocessor, 'NMy')
         outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
-        phantomModel= phm.PhantomModel(preprocessor,self)
-        result= phantomModel.runChecking(limitStateData,outputCfg)
+        phantomModel= phm.PhantomModel(preprocessor, self)
+        result= phantomModel.runChecking(limitStateData, outputCfg)
         return (feProblem, result)
 
     def internalForcesVerification3D(self, limitStateData, matDiagType, outputCfg):

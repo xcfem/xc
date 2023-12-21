@@ -79,7 +79,7 @@ class VerifOutVars(object):
         :param outputDataBaseFileName: Name of the file to write the results on.
         :param sections: names of the sections to write the output for.
         '''
-        retval=None
+        retval= None
         if(self.setCalc):
             if(len(self.setCalc.elements)>0):
                 # Initialize control variables.
@@ -114,10 +114,8 @@ class LimitStateData(object):
                                        forces otherwise, use it only for 
                                        bending moments.
     '''
-    
-    envConfig= None
-
-    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation, woodArmerAlsoForAxialForces= False):
+    envConfig= None # configuration of XC environment variables.
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation, woodArmerAlsoForAxialForces= False, cfg= None):
         '''Limit state data constructor.
 
 
@@ -131,12 +129,22 @@ class LimitStateData(object):
                                             both axial and bending internal
                                             forces otherwise, use it only for 
                                             bending moments.
+        :param cfg: (STATIC) configuration of XC environment variables.
         '''
         self.label= limitStateLabel
         self.outputDataBaseFileName= outputDataBaseFileName
         self.designSituation= designSituation
         self.woodArmerAlsoForAxialForces= woodArmerAlsoForAxialForces
-       
+        LimitStateData.envConfig= cfg
+
+    @staticmethod
+    def setEnvConfig(cfg):
+        ''' Set configuration of XC environment variables.
+
+        :param cfg: configuration of XC environment variables.
+        '''
+        LimitStateData.envConfig= cfg
+        
     def getInternalForcesFileName(self):
         '''Return the name of the file where internal forces are stored.'''
         return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
@@ -339,6 +347,15 @@ class LimitStateData(object):
         '''
         intForcCombFileName= self.getInternalForcesFileName()
         return outputCfg.runChecking(intForcCombFileName, self.getOutputDataBaseFileName(), sections)
+    
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
 
 #20181117 end
 
@@ -381,6 +398,33 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
         '''Constructor '''
         super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
 
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+
+    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+        ''' Perform limit state checking.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param crossSections: cross sections on each element.
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
+        '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
+        
         
 class NormalStressesSteelLimitStateData(ULS_LimitStateData):
     ''' Steel normal stresses data for limit state checking.'''
@@ -388,17 +432,92 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
         '''Constructor '''
         super(NormalStressesSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
 
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+
+    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+        ''' Perform limit state checking.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return self.runChecking(outputCfg= outputCfg)
+    
 class ShearResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
         
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        
+    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+        ''' Perform limit state checking.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param crossSections: cross sections on each element.
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
+        '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
+        
 class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(ShearResistanceSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        
+    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+        ''' Perform limit state checking.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return self.runChecking(outputCfg= outputCfg)
 
 class SLS_LimitStateData(LimitStateData):
     ''' Serviceability limit state data for frequent load combinations.'''
@@ -415,37 +534,78 @@ class SLS_LimitStateData(LimitStateData):
         '''
         super(SLS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
 
-    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
+    def check(self, crossSections, outputCfg= VerifOutVars(), threeDim= True):
         '''Checking of crack width under frequent loads in serviceability 
            limit states (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each 
-               element.
+        :param crossSections: cross sections on each element.
         :param outputCfg: instance of class VerifOutVars which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to file,
                generation or not of lists, ...)
-         '''
-        return reinfConcreteSections.internalForcesVerification3D(self, "k",outputCfg)
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
+        '''
+        if(threeDim):
+            return crossSections.internalForcesVerification3D(self, "k",outputCfg)
+        else:
+            return crossSections.internalForcesVerification2D(self, "k",outputCfg)
 
-class RareLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
+class CrackControlRCLimitStateData(SLS_LimitStateData):
+    ''' Reinforced concrete crack control limit state data base class.'''
+        
+    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+        ''' Perform limit state checking.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param crossSections: cross sections on each element.
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
+        '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
+        
+class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under rare loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(RareLoadsCrackControlRCLimitStateData,self).__init__('SLS_rareLoadsCrackControl','verifRsl_crackingSLS_rare', designSituation= 'rare')
 
-class FreqLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
+class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl','verifRsl_crackingSLS_freq', designSituation= 'frequent')
         
-class QPLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
+        
+class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsLoadsCrackControl','verifRsl_crackingSLS_qperm', designSituation= 'quasi-permanent')
+        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl','verifRsl_crackingSLS_qperm', designSituation= 'quasi-permanent')
         
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
+                
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''
     def __init__(self):
@@ -494,7 +654,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         '''
         return readIntForcesFile(self.getInternalForcesFileName(), setCalc, vonMisesStressId= self.vonMisesStressId)
         
-    def check(self,elementsToCheck,outputCfg= VerifOutVars()):
+    def checkElements(self,elementsToCheck,outputCfg= VerifOutVars()):
         '''Checking of fatigue under fatigue combinations loads in
         ultimate limit states (see self.dumpCombinations).
 
@@ -523,6 +683,23 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         outputCfg.controller.vonMisesStressId= self.vonMisesStressId
         retval= super(VonMisesStressLimitStateData,self).runChecking(outputCfg, sections= [''])
         return retval
+    
+    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+        ''' Perform limit state checking.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return self.runChecking(outputCfg= outputCfg)
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
 
@@ -533,10 +710,12 @@ quasiPermanentLoadsCrackControl= QPLoadsCrackControlRCLimitStateData()
 # Normal stresses.
 normalStressesResistance= NormalStressesRCLimitStateData()
 steelNormalStressesResistance= NormalStressesSteelLimitStateData()
+woodNormalStressesResistance= NormalStressesSteelLimitStateData()
 
 # Shear strength.
 shearResistance= ShearResistanceRCLimitStateData()
 steelShearResistance= ShearResistanceSteelLimitStateData()
+woodShearResistance= ShearResistanceSteelLimitStateData()
 
 fatigueResistance= FatigueResistanceRCLimitStateData()
 vonMisesStressResistance= VonMisesStressLimitStateData()

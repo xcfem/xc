@@ -17,7 +17,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
 
 L= 1.0 # Size of plate edge (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus
@@ -120,11 +119,12 @@ if(error<1e-5):
 else:
     lmsg.error(fname+' ERROR.')
 
-# Graphic stuff.
-#oh= output_handler.OutputHandler(modelSpace)
-#oh.displayFEMesh()
-#oh.displayLoads()
-#oh.displayEigenvectors(1)
-#oh.displayEigenResult(1)
-#oh.displayLocalAxes()
-#oh.displayReactions()
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayLoads()
+# # oh.displayEigenvectors(1)
+# # oh.displayEigenResult(1)
+# oh.displayLocalAxes()
+# oh.displayReactions()

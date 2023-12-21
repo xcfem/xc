@@ -1,106 +1,119 @@
 # -*- coding: utf-8 -*-
-''' home made test
-    Thermal gradient strain in a shell element.
-'''
+''' Deflection of a cantilever beam due to a temperature gradient.
 
+    Strain component 3: curvature around local y axis 
+    (normal to local x axis)
+
+    Home made test based on the corresponding classical formulas.
+'''
 from __future__ import print_function
 
-__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2019, AO_O and LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2023, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com"
 
 import xc
-import math
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-L= 1.0 # Size of element edge (m)
+# Problem data.
+L= 10.0 # Length of the beam
 E= 2.1e6*9.81/1e-4 # Elastic modulus
+b= 1 # width of the beam
+
 alpha= 1.2e-5 # Thermal expansion coefficient of steel 1/ºC
-b= 1 # width of the element
-# A= h*h # bar area expressed in square meters
-# I= (h)**4/12 # Cross section moment of inertia (m4)
 Ttop=20 # Temperature at top side (Celsius degrees)
 Tbottom=10 # Temperature at bottom side (Celsius degrees)
-thickness=2e-2
+thickness= 0.2
 
+# Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nod1= nodes.newNodeXYZ(0.0,b,0.0)
-nod2= nodes.newNodeXYZ(L,b,0.0)
-nod3= nodes.newNodeXYZ(L,0.0,0.0)
-nod4= nodes.newNodeXYZ(0,0.0,0.0)
 
+## Problem geometry.
+### K-points.
+pt1= modelSpace.newKPoint(0,0,0)
+pt2= modelSpace.newKPoint(L,0,0)
+pt3= modelSpace.newKPoint(L,b,0)
+pt4= modelSpace.newKPoint(0,b,0)
+### Surface
+s= modelSpace.newQuadSurface(pt1, pt2, pt3, pt4)
+s.setElemSizeIJ(0.5,0.5)
 
-# Materials definition
+## FE mesh
+### Define seed element.
+#### Material
+mat= typical_materials.defElasticMembranePlateSection(preprocessor, name= "mat",E= E, nu= 0.3, rho= 0.0, h= thickness)
+modelSpace.setDefaultMaterial(mat)
+modelSpace.newSeedElement("ShellMITC4")
 
-memb1= typical_materials.defElasticMembranePlateSection(preprocessor=preprocessor, name="memb1",E=E,nu=0.3,rho=0.0,h=thickness)
+### Generate mesh.
+s.genMesh(xc.meshDir.I)
 
-# Elements definition
-elements= preprocessor.getElementHandler
-elements.defaultMaterial= memb1.name
-elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
-
-
-# Constraints
-constraints= preprocessor.getBoundaryCondHandler
-
-spc= constraints.newSPConstraint(nod1.tag,0,0.0)
-spc= constraints.newSPConstraint(nod1.tag,1,0.0)
-spc= constraints.newSPConstraint(nod1.tag,2,0.0)
-spc= constraints.newSPConstraint(nod1.tag,4,0.0)
-spc= constraints.newSPConstraint(nod4.tag,0,0.0)
-spc= constraints.newSPConstraint(nod4.tag,1,0.0)
-spc= constraints.newSPConstraint(nod4.tag,2,0.0)
-spc= constraints.newSPConstraint(nod4.tag,4,0.0)
-
-
-# Load case definition.
+### Constraints.
+xcTotalSet= modelSpace.getTotalSet()
+# Get the line at x= 0
+for l in xcTotalSet.lines:
+    center= l.getCentroid()
+    if(center.x==0.0):
+        for n in l.nodes:
+            modelSpace.fixNode('000_F0F', n.tag)
+            
+## Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-
 eleLoad= lp0.newElementalLoad("shell_strain_load")
-eleLoad.elementTags= xc.ID([elem1.tag])
-curvature=alpha*(Ttop-Tbottom)/thickness  # rad/m
+eleLoad.elementTags= xc.ID(xcTotalSet.getElementTags())
+temperatureGradient= 13.2 # temperature gradient Ttop-Tbottom.
+curvature= -temperatureGradient*alpha/thickness
+# strain component 3: curvature around local y axis (normal to local x axis).
 eleLoad.setStrainComp(0,3,curvature) #(id of Gauss point, id of component, value)
 eleLoad.setStrainComp(1,3,curvature)
 eleLoad.setStrainComp(2,3,curvature)
 eleLoad.setStrainComp(3,3,curvature)
-
-# We add the load case to domain.
-modelSpace.addLoadCaseToDomain(lp0.name)
+modelSpace.addLoadCaseToDomain(lp0.name) # We add the load case to domain.
 
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-elem1.getResistingForce()
+### Get displacements.
+zDisp= 0.0
+count= 0
+# Get the line at x= L
+for l in xcTotalSet.lines:
+    center= l.getCentroid()
+    if(abs(center.x-L)<1e-4):
+        for n in l.nodes:
+            zDisp+= n.getDisp[2]
+            count+= 1
+zDisp/=count
 
-# Displacements free nodes 
-uz_n2=nod2.getDispXYZ[2]
-uz_n3=nod3.getDispXYZ[2]
-
-# theoretical displacement
-R=1/curvature+thickness/2.
-deltaz_theor=-R*(1-math.cos(curvature))
-
-ratio1=uz_n2-deltaz_theor
-ratio2=uz_n3-deltaz_theor
+# Check result.
+zDispRef= -temperatureGradient*alpha*L**2/2.0/thickness# Deflection of a cantileve
+ratio= abs(zDisp-zDispRef)/zDispRef
 
 '''
-print("uz_n2= ",uz_n2)
-print("uz_n3= ",uz_n3)
-print("ratio1= ",ratio1)
-print("ratio2= ",ratio2)
+print("zDeflection= ", zDisp*1e3, 'mm')
+print("zDeflectionRef= ", zDispRef*1e3, 'mm')
+print("ratio= ", ratio)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<2e-7) & (abs(ratio2)<2e-7):
+if(ratio<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()
+# oh.displayLocalAxes()
+# # oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# # oh.displayReactions()

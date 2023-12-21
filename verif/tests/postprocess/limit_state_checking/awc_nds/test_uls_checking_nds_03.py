@@ -129,7 +129,7 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
-limitStates= [lsd.normalStressesResistance, # Normal stresses resistance.
+limitStates= [lsd.woodNormalStressesResistance, # Normal stresses resistance.
 #lsd.shearResistance, 
 ]
 
@@ -151,19 +151,22 @@ for ls in limitStates:
     #Putting combinations inside XC.
     loadCombinations= ls.dumpCombinations(combContainer,loadCombinations)
     analysisContext.calcInternalForces(loadCombinations, ls)
-    
-outCfg= lsd.VerifOutVars(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState= lsd.normalStressesResistance
-outCfg.controller= nds.BiaxialBendingNormalStressController(limitState.label)
-average= limitState.runChecking(outCfg)
+
+## Check limit state.
+### Limit state to check.
+limitState= lsd.woodNormalStressesResistance
+### Build controller.
+controller= nds.BiaxialBendingNormalStressController(limitState.label)
+### Perform checking.
+average= limitState.check(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
 ratio= ((average[0]-0.6040967008241481)/0.6040967008241481)**2
 ratio+= ((average[1]-0.604096700824146)/0.604096700824146)**2
 ratio0= math.sqrt(ratio)
 
 # Label to get the property that contains the control vars.
-label1= outCfg.controller.limitStateLabel+outCfg.controller.getSectionLabel(0)
-label2= outCfg.controller.limitStateLabel+outCfg.controller.getSectionLabel(1)
+label1= controller.limitStateLabel+controller.getSectionLabel(0)
+label2= controller.limitStateLabel+controller.getSectionLabel(1)
 maxCF= 0.0
 # Reference value obtained from verification test: test_bending_and_axial_compression.py
 refMaxCF= 0.887544474580459

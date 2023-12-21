@@ -36,6 +36,7 @@ class EC2Concrete(concrete_base.Concrete):
 
     """
     typeAggregate='Q'
+    linearCoefficientOfThermalExpansion= 10e-6 # linear coefficient of thermal expansion according to clause 3.1.3 paragraph (5) of Eurocode 2:2004.
 
     def __init__(self, nmbConcrete, fck, gammaC, alphacc= 1.0):
         ''' Constructor.

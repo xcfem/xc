@@ -114,13 +114,14 @@ columnRCSects= element_section_map.RCMemberSection('test', [section, section])
 sectContainer.append(columnRCSects)
 reinfConcreteSectionDistribution.assign(elemSet= xcTotalSet.elements, setRCSects= columnRCSects)
 
-# Checking cracking 
-outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
+# Checking cracking
+## Limit state to check.
 limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
-outCfg.controller= EHE_limit_state_checking.CrackController(limitState.label)
-
-outCfg.controller.verbose= True #False # Don't display log messages.
-(FEcheckedModel, meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.freqLoadsCrackControl, matDiagType="k", threeDim= True, outputCfg= outCfg)
+## Build controller.
+controller= EHE_limit_state_checking.CrackController(limitState.label)
+controller.verbose= True #False # Don't display log messages.
+## Perform checking.
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= True, controller= controller)
 
 ratio1= abs(meanCFs[0]-0.6327957895271032)/0.6327957895271032
 ratio2= abs(meanCFs[1]-0.6327957895271835)/0.6327957895271835

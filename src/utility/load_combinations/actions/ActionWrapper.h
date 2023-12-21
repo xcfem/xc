@@ -54,8 +54,10 @@ class ActionWrapper: public EntityWithOwner
     const ActionsFamily *getFamily(void) const;
     int getIndex(void) const;
     virtual std::string getName(void) const= 0;
+    virtual bool notDeterminant(void) const= 0;
 
     virtual std::vector<const Action *> getWrappedActions(void) const= 0;
+    virtual const Action *getAction(const size_t &) const= 0;
     virtual const ActionRelationships &getRelaciones(void) const= 0;
     virtual bool Incompatible(const ActionWrapper &f) const;
     //! @brief Return true if this actions is compatible with

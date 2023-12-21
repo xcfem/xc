@@ -113,8 +113,8 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
-limitStates= [lsd.normalStressesResistance, # Normal stresses resistance.
-lsd.shearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
+limitStates= [lsd.woodNormalStressesResistance, # Normal stresses resistance.
+lsd.woodShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
 ]
 
 ## Create NDS Member objects.
@@ -130,18 +130,21 @@ for l in xcTotalSet.getLines:
 ## Compute internal forces for each combination
 for ls in limitStates:
     ls.saveAll(combContainer, ndsCalcSet)
-outCfg= lsd.VerifOutVars(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState= lsd.normalStressesResistance
-outCfg.controller= nds.BiaxialBendingNormalStressController(limitState.label)
-average= limitState.runChecking(outCfg)
+# Check normal stresses.
+## Limit state to check.
+limitState= lsd.woodNormalStressesResistance
+## Build controller.
+controller= nds.BiaxialBendingNormalStressController(limitState.label)
+## Perform checking.
+average= limitState.check(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
 ratio= ((average[0]-0.4545055626333311)/0.4545055626333311)**2
 ratio+= ((average[1]-0.45450556263332986)/0.45450556263332986)**2
 ratio0= math.sqrt(ratio)
 
 # Label to get the property that contains the control vars.
-label1= outCfg.controller.limitStateLabel+outCfg.controller.getSectionLabel(0)
-label2= outCfg.controller.limitStateLabel+outCfg.controller.getSectionLabel(1)
+label1= controller.limitStateLabel+controller.getSectionLabel(0)
+label2= controller.limitStateLabel+controller.getSectionLabel(1)
 maxCF= 0.0
 # Reference value obtained from verification test: lvl_beam_test_01.py 
 refMaxCF= 0.6886480109745837 

@@ -153,11 +153,15 @@ for e in ec3CalcSet.elements:
 for ls in limitStates:
     ls.saveAll(combContainer= combContainer, setCalc= ec3CalcSet, solutionProcedureType= SolProc)
     
-outCfg= lsd.VerifOutVars(setCalc=ec3CalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState= lsd.normalStressesResistance
-outCfg.controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
-average= limitState.runChecking(outCfg)
+# Check limit state.
+## Limit state to check.
+limitState= lsd.steelNormalStressesResistance
+## Build controller.
+controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel= limitState.label)
+## Perform checking.
+average= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 
+# Check results.
 err= (average[0]-1)**2
 err+= (average[1]-1)**2
 err= math.sqrt(err)

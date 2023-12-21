@@ -129,11 +129,12 @@ for ln in xcTotalSet.getLines:
 ## Compute internal forces for each combination
 for ls in limitStates:
     ls.saveAll(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
-
-outCfg= lsd.VerifOutVars(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState= lsd.normalStressesResistance
-outCfg.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
-average= limitState.runChecking(outCfg)
+# Limit state to check.
+limitState= lsd.steelNormalStressesResistance
+# Build controller.
+controller= aisc.BiaxialBendingNormalStressController(limitState.label)
+# Perform checking.
+average= limitState.check(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
 ratio= ((average[0]-0.46258149840917434)/0.46258149840917434)**2
 ratio+= ((average[1]-0.46258149840917479)/0.46258149840917479)**2

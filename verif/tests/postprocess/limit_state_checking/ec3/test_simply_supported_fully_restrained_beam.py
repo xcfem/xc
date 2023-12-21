@@ -155,10 +155,12 @@ for ls in limitStates:
     ls.saveAll(combContainer,ec3CalcSet, bucklingMembers= ec3Members)
 
 ## Check normal stresses.
-outCfg= lsd.VerifOutVars(setCalc=ec3CalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState= lsd.normalStressesResistance
-outCfg.controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
-bendingAverage= limitState.runChecking(outCfg)
+### Limit state to check.
+limitState= lsd.steelNormalStressesResistance
+### Build controller.
+controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel= limitState.label)
+### Perform checking.
+bendingAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 
 ### Get the maximum efficiency.
 maxBendingCF= 0.0
@@ -168,9 +170,12 @@ for e in xcTotalSet.elements:
     maxBendingCF= max(maxBendingCF, CF1, CF2)
 
 ## Check shear.
-limitState= lsd.shearResistance
-outCfg.controller= EC3_limit_state_checking.ShearController(limitState.label)
-shearAverage= limitState.runChecking(outCfg)
+### Limit state to check.
+limitState= lsd.steelShearResistance
+### Build controller.
+controller= EC3_limit_state_checking.ShearController(limitState.label)
+### Perform checking.
+shearAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 
 ### Get the maximum efficiency.
 maxShearCF= 0.0

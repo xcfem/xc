@@ -21,8 +21,11 @@ class TrainLoadModel(object):
 
     :ivar locomotive: locomotive model.
     :ivar uniformLoad: uniform load on the track.
+    :ivar rollingStockHeight: height of the rolling stock for wind calculations
+                              (see clause 8.3.1 paragraph 5 letter b) of 
+                               Eurocode 1 part 1-4. Wind actions).
     '''
-    def __init__(self, locomotive, uniformLoad, dynamicFactor, classificationFactor= 1.21, h= 1.8):
+    def __init__(self, locomotive, uniformLoad, dynamicFactor, classificationFactor= 1.21, h= 1.8, rollingStockHeight= 4.0):
         ''' Constructor:
 
         :param locomotive: locomotive model.
@@ -33,6 +36,10 @@ class TrainLoadModel(object):
                                      rail traffic which is heavier or lighter
                                      than normal rail traffic).
         :param h: height of the center of gravity.
+        :param rollingStockHeight: height of the rolling stock for wind 
+                                   calculations (see clause 8.3.1 paragraph 5 
+                                   letter b) of Eurocode 1 part 1-4. Wind 
+                                   actions).
         '''
         self.locomotive= locomotive
         # The dynamic factor is stored in the locomotive.
@@ -40,6 +47,7 @@ class TrainLoadModel(object):
         self.locomotive.setClassificationFactor(classificationFactor)
         self.uniformLoad= uniformLoad
         self.h= h
+        self.rollingStockHeight= rollingStockHeight
 
     def getDynamicFactor(self):
         ''' Return the dynamic factor.'''
@@ -80,3 +88,22 @@ class TrainLoadModel(object):
         uniformLoad= self.getDynamicUniformLoad()*uniformLoadedLength
         return locomotiveLoad+uniformLoad
     
+    def getWindLoadPerMeter(self, windPressure, trackCrossSection):
+        ''' Compute the characteristic values of the distributed (qtk) 
+            forces corresponding to wind pressure.
+
+        :param windPressure: pressure of the wind on the rolling stock (N/m2).
+        :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
+        '''
+        q= windPressure*self.rollingStockHeight # load per unit length.
+        if(trackCrossSection):
+            # Distribute the load
+            Q= [q,0,0] # Centrifugal load.
+            railLoads= trackCrossSection.getRailLoads(Q= Q, h= self.rollingStockHeight/2.0)
+            leftRailLoad= geom.Vector2d(railLoads[0], railLoads[1])
+            rightRailLoad= geom.Vector2d(railLoads[2], railLoads[3])
+            retval= (leftRailLoad, rightRailLoad)
+        else:
+            retval= (q/2, q/2)
+        return retval
+
