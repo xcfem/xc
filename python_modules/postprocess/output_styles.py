@@ -129,7 +129,7 @@ class OutputStyle(object):
         elif(itemToDisp=='rotX' or itemToDisp=='rotY' or itemToDisp=='rotZ'):
             fConvUnits= self.getRotationUnitsScaleFactor()
             unitDescription= self.getRotationUnitsDescription()
-        elif(itemToDisp=='wk'):
+        elif(itemToDisp=='wk' or itemToDisp=='s_rmax'):
             fConvUnits= self.getDisplacementUnitsScaleFactor()
             unitDescription= self.getDisplacementUnitsDescription()
         elif(itemToDisp=='CF' or itemToDisp=='getCF'):
@@ -209,6 +209,11 @@ sp_capTexts={
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
     'SLS_quasiPermanentLoadsLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
     'vm_stress': 'tensión de Von Mises',
+    'wk': 'abertura de fisura',
+    's_rmax': 'separación entre fisuras',
+    'sigma_s': 'máxima tensión en la armadura',
+    'sigma_c': 'máxima tensión de compresión en el hormigón'
+
     
   }
 
@@ -258,6 +263,9 @@ en_capTexts={
     'MbRdz':'reduced design moment resistance about Z (strong) axis for lateral-torsional bucking',
     'chiLT': 'reduction factor for lateral-torsional buckling ',
     'vm_stress': 'Von Mises stress',
+    'sigma_s': 'max. steel stress',
+    'sigma_c': 'max. concrete compressive-stress',
+
   }
 
 #Caption texts in French
@@ -304,5 +312,8 @@ fr_capTexts={
     'concreteLimitStress':'vérification du béton. Limites contraintes de compression',
     'concreteShearCF':'vérification du béton. Facteur de capacité effort tranchant',
     'shearLimit': 'vérification du béton. Limites effort tranchant',
-    'vm_stress': 'contrainte de von Mises',    
+    'vm_stress': 'contrainte de von Mises',
+    'wk': 'overture de fissure',
+    'sigma_s':"contrainte maximale dans l'armature",
+    'sigma_c': 'contrainte de compression maximale du béton',
   }

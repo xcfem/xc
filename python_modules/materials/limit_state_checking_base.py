@@ -101,6 +101,7 @@ class EURebarController(RebarController):
                 methodName= sys._getframe(0).f_code.co_nameS
                 lmsg.error(className+'.'+methodName+'; unknown bar shape: '+str(barShape)+'.')
         retval= min(retval, 1.0)
+        
         return retval
         
 defaultStaticLinearSolutionProcedure= predefined_solutions.SimpleStaticLinear

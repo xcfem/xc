@@ -130,10 +130,13 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
                                dynamic effects.
         '''
         retval= self.getNetAnchorageLength(concrete, phi, pos, beta, efficiency, tensionedBars, dynamicEffects)
-        if(distBetweenNearestSplices<10.0*phi):
-            alph= float(self.f_alpha_leq_10phi(ratioOfOverlapedTensionBars))
+        if not tensionedBars:
+            alph=1.0
         else:
-            alph= float(self.f_alpha_gt_10phi(ratioOfOverlapedTensionBars))
+            if(distBetweenNearestSplices<10.0*phi):
+                alph= float(self.f_alpha_leq_10phi(ratioOfOverlapedTensionBars))
+            else:
+                alph= float(self.f_alpha_gt_10phi(ratioOfOverlapedTensionBars))
         retval*= alph
         return retval
 
