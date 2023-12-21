@@ -44,6 +44,9 @@ for ratio in ratioOfOverlapedTensionBars:
             row.append(tmp)
         results.append(row)
 
+# Reference values show a very good agreement with the values of the
+# table 2 on page 90 of the book:  How to Design Concrete Structures using Eurocode 2: Detailing.
+# I've not investigated the origin of the small differences.
 refValues= [[0.5, 'good', 320, 440, 570, 840, 1100, 1430, 1830, 2480], [0.5, 'poor', 460, 630, 820, 1190, 1570, 2040, 2610, 3550], [1.0, 'good', 340, 470, 610, 890, 1170, 1510, 1940, 2630], [1.0, 'poor', 480, 670, 870, 1270, 1660, 2160, 2770, 3760]]
 
 err= 0.0 
