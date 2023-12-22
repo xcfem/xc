@@ -104,7 +104,9 @@ class ElementSections(object):
         the list of sections.
         '''
         if(len(self.lstRCSects)>0):
-            lmsg.warning('Sections already created.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; sections already created in: '"+str(self.name)+"'")
         ngp= len(self.gaussPoints)
         ndir= len(self.directions)
         if(ngp>1 and ndir>1):
