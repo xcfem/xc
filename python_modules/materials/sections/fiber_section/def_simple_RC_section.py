@@ -192,9 +192,13 @@ class ReinfRow(object):
             
         if(rebarsDiam):
             self.setRebarDiameter(rebarsDiam)
-        if(areaRebar):
+        elif(areaRebar):
             self.setRebarArea(areaRebar)
-            
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; you must define either the diameter or the rebar area.')
+            exit(1)
         self.width= width
         if(nRebars and rebarsSpacing):
             className= type(self).__name__
@@ -302,6 +306,10 @@ class ReinfRow(object):
     def getNominalCover(self):
         ''' Return the nominal cover of the reinforcement bars.'''
         return self.cover-self.rebarsDiam/2.0
+
+    def getNominalLatCover(self):
+        ''' Return the nominal cover of the reinforcement bars.'''
+        return self.latCover-self.rebarsDiam/2.0
 
     def getI(self):
         ''' Return the moment of inertia around the axis containing the bar
@@ -428,8 +436,11 @@ class LongReinfLayers(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+"; reading rebar rows list not implementd yet.")
             
-    def append(self, rebarRow):
-        ''' Append a reinforcement row to the list.'''
+    def append(self, rebarRow:ReinfRow):
+        ''' Append a reinforcement row to the list.
+
+        :rebarRow: row of reinforcement bars.
+        '''
         self.rebarRows.append(rebarRow)
         
     def getAsRows(self):
@@ -494,10 +505,19 @@ class LongReinfLayers(object):
         return retval
     
     def getLatCover(self):
-        '''returns a list with the lateral cover of bars for each row of bars.'''
+        '''returns a list with the lateral cover of bars for each row of bars.
+        '''
         retval=[]
         for rbRow in self.rebarRows:
             retval.append(rbRow.latCover)
+        return retval
+    
+    def getNominalLatCover(self):
+        '''returns a list with the nominal lateral cover of bars for each 
+           row of bars. '''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.getNominalLatCover())
         return retval
 
     def centerRebars(self, b):
@@ -558,7 +578,7 @@ def rebLayer_mm(fi,s,c):
     '''
     return ReinfRow(rebarsDiam=fi*1e-3, rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
 
-def rebLayerByNumFi_mm(n,fi,c,latC,L):
+def rebLayerByNumFi_mm(n, fi, c, latC, L):
     '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated
     so that the rebars (and two lateral covers) are inserted in the length L passed as parameter.
 
@@ -580,7 +600,7 @@ def rebLayer_m(fi,s,c):
     '''
     return ReinfRow(rebarsDiam=fi, rebarsSpacing=s,width=1.0,nominalCover=c)
 
-def rebLayerByNumFi_m(n,fi,c,latC,L):
+def rebLayerByNumFi_m(n, fi, c, latC, L):
     '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated
     so that the rebars (and two lateral covers) are inserted in the length L passed as parameter.
 
@@ -590,7 +610,7 @@ def rebLayerByNumFi_m(n,fi,c,latC,L):
     :param latC: nominal lateral cover [m]
     :param L: length where the n rebars and two lateral covers are inserted [m]
     '''
-    return ReinfRow(rebarsDiam=fi,nRebars=n,width=L,nominalCover=c,nominalLatCover=latC)
+    return ReinfRow(rebarsDiam=fi, nRebars=n, width=L, nominalCover=c, nominalLatCover=latC)
 
 # Reinforced concrete.
 
@@ -1503,7 +1523,89 @@ class RCRectangularSection(BasicRectangularRCSection):
         self.positvRebarRows.report(os, indentation+'  ')
         os.write(indentation+'Top reinforcement: \n')
         self.negatvRebarRows.report(os, indentation+'  ')
+        
+    def appendRow(self, positiveReinf, rebarRow:ReinfRow):
+        ''' Constructs append the giver ReinfRow to the reinforcement in the 
+            positive (positiveReinf==True) or negative side of the section.
 
+        :param positiveReinf: if true append to positive reinforcement otherwise
+                              to negative reinforcement.
+        :rebarRow: row of reinforcement bars.
+        '''
+        if(positiveReinf):
+            self.positvRebarRows.append(rebarRow)
+        else:
+            self.negatvRebarRows.append(rebarRow)
+        
+    def appendPositiveRow(self, rebarRow:ReinfRow):
+        ''' Constructs append the giver ReinfRow to the reinforcement in the 
+            positive side of the section.
+
+        :rebarRow: row of reinforcement bars.
+        '''
+        self.appendRow(positiveReinf= True, rebarRow= rebarRow)
+        
+    def appendNegativeRow(self, rebarRow:ReinfRow):
+        ''' Constructs append the giver ReinfRow to the reinforcement in the 
+            negative side of the section.
+
+        :rebarRow: row of reinforcement bars.
+        '''
+        self.appendRow(positiveReinf= False, rebarRow= rebarRow)
+
+    def appendLayer(self, positiveReinf, nominalCover, nRebars= None, rebarsDiam= None, nominalLatCover= None):
+        ''' Constructs a ReinfRow with the given data and appends it to the
+            reinforcement in the positive side of the section.
+
+        :param positiveReinf: if true append to positive reinforcement otherwise
+                              to negative reinforcement.
+        :param nominalCover: nominal cover [m]
+        :param nRebars: number of rebars, if None pick the last one.
+        :param rebarsDiam: bar diameter [m], if None pick the last one.
+        :param nominalLatCover: nominal lateral cover [m], if None pick the last one.
+        '''
+        if(nRebars is None): # if not specified.
+            nBar= self.getNBar()
+            if(nBar): # not empty.
+                nRebars= nBar[-1] # pick the last one.
+        if(rebarsDiam is None): # if not specified.
+            diameters= self.getDiameters()
+            if(diameters): # not empty.
+                rebarsDiam= diameters[1] # pick the last one.
+        if(nominalLatCover is None): # if not specified.
+            nominalLatCovers= self.getNominalLatCover()
+            if(nominalLatCovers):# not empty.
+                nominalLatCover= nominalLatCovers[-1] # pick the last one.
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; lateral cover not defined.')
+        rr= ReinfRow(rebarsDiam= rebarsDiam, nRebars= nRebars, width= self.b, nominalCover= nominalCover, nominalLatCover= nominalLatCover)
+        self.appendRow(positiveReinf= positiveReinf, rebarRow= rr)
+        return rr
+    
+    def appendPositiveLayer(self, nominalCover, nRebars= None, rebarsDiam= None, nominalLatCover= None):
+        ''' Constructs a ReinfRow with the given data and appends it to the
+            reinforcement in the positive side of the section.
+
+        :param nominalCover: nominal cover [m]
+        :param nRebars: number of rebars, if None pick the last one.
+        :param rebarsDiam: bar diameter [m], if None pick the last one.
+        :param nominalLatCover: nominal lateral cover [m], if None pick the last one.
+        '''
+        return self.appendLayer(positiveReinf= True, nominalCover= nominalCover, nRebars= nRebars, rebarsDiam= rebarsDiam, nominalLatCover= nominalLatCover)
+        
+    def appendNegativeLayer(self, nominalCover, nRebars= None, rebarsDiam= None, nominalLatCover= None):
+        ''' Constructs a ReinfRow with the given data and appends it to the
+            reinforcement in the positive side of the section.
+
+        :param nominalCover: nominal cover [m]
+        :param nRebars: number of rebars, if None pick the last one.
+        :param rebarsDiam: bar diameter [m], if None pick the last one.
+        :param nominalLatCover: nominal lateral cover [m], if None pick the last one.
+        '''
+        return self.appendLayer(positiveReinf= False, nominalCover= nominalCover, nRebars= nRebars, rebarsDiam= rebarsDiam, nominalLatCover= nominalLatCover)
+        
     def getAsPos(self):
         '''returns the cross-sectional area of the rebars in the positive face.'''
         return self.positvRebarRows.getAs()
@@ -1513,7 +1615,7 @@ class RCRectangularSection(BasicRectangularRCSection):
         to the positive face of the section.
         '''
         return self.positvRebarRows.getRowsCGcover()
-
+    
     def hAsPos(self):
         '''Return the distance from the bottom fiber to the 
         centre of gravity of the rebars in the positive face.
@@ -1671,6 +1773,12 @@ class RCRectangularSection(BasicRectangularRCSection):
         negative face.'''
         return self.negatvRebarRows.getDiameters()
 
+    def getDiameters(self):
+        '''returns a list with the bar diameter for each row of bars.'''
+        retval= self.getDiamPos()
+        retval.extend(self.getDiamNeg())
+        return retval
+
     def getNBarPos(self):
         '''returns a list with the number of bars for each row of bars in local 
         positive face.'''
@@ -1680,6 +1788,12 @@ class RCRectangularSection(BasicRectangularRCSection):
         '''returns a list with the number of bars for each row of bars in local 
         negative face.'''
         return self.negatvRebarRows.getNBar()
+
+    def getNBar(self):
+        '''returns a list with the number of bars for each row of bars.'''
+        retval= self.positvRebarRows.getNBar()
+        retval.extend(self.negatvRebarRows.getNBar())
+        return retval
 
     def getCoverPos(self):
         '''returns a list with the cover of bars for each row of bars in local 
@@ -1691,6 +1805,13 @@ class RCRectangularSection(BasicRectangularRCSection):
         negative face.'''
         return self.negatvRebarRows.getCover()
 
+    def getCover(self):
+        '''returns a list with the cover of bars for each row of bars in local 
+        positive face.'''
+        retval= self.getCoverPos()
+        retval.extend(self.getCoverNeg())
+        return retval
+
     def getLatCoverPos(self):
         '''returns a list with the lateral cover of bars for each row of bars in local positive face.'''
         return self.positvRebarRows.getLatCover()
@@ -1699,6 +1820,20 @@ class RCRectangularSection(BasicRectangularRCSection):
         '''returns a list with the lateral cover of bars for each row of bars in 
         local negative face.'''
         return self.negatvRebarRows.getLatCover()
+    
+    def getLatCover(self):
+        '''returns a list with the lateral cover of bars for each row of bars.
+        '''
+        retval= self.positvRebarRows.getLatCover()
+        retval.extend(self.negatvRebarRows.getLatCover())
+        return retval
+    
+    def getNominalLatCover(self):
+        '''returns a list with the lateral cover of bars for each row of bars.
+        '''
+        retval= self.positvRebarRows.getNominalLatCover()
+        retval.extend(self.negatvRebarRows.getNominalLatCover())
+        return retval
 
     def centerRebarsPos(self):
         '''centers in the width of the section the rebars placed in the positive face''' 
