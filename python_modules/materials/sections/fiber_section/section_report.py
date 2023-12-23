@@ -36,10 +36,20 @@ class MainReinforcementLayer(object):
         archTex.write(' & '+cf.fmt4_1f.format(self.minEffCover*1e2))
         archTex.write(' & '+cf.fmt5_3f.format(self.barsCOG[0]) +' & '+cf.fmt5_3f.format(self.barsCOG[1]) +"\\\\\n")
 
-def writeMainReinforcement(listaFamMainReinforcement, areaHorm, archTex):
+def writeMainReinforcement(listaFamMainReinforcement, concreteArea, archTex):
+    ''' Write rows describing the layers of the main reinforcement.
+
+    :param listaFamMainReinforcement: list of reinforcement layers to describe.
+    :param concreteArea: concrete area.
+    :param archTex: output file.
+    '''
+    numRows= len(listaFamMainReinforcement)
+    if(numRows>10):
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.warning(funcName+'; number of reinforcement layers ('+str(numRows)+') too big to fit in the table.')        
     archTex.write("\\begin{tabular}{ll}\n")
     areaMainReinforcement= listaFamMainReinforcement.getAreaGrossSection()
-    archTex.write("Total area $A_s="+cf.fmt5_2f.format(areaMainReinforcement*1e4) +"\\ cm^2$ & Geometric quantity $\\rho= "+cf.fmt4_2f.format(areaMainReinforcement/areaHorm*1e3) +"\\permil$\\\\\n")
+    archTex.write("Total area $A_s="+cf.fmt5_2f.format(areaMainReinforcement*1e4) +"\\ cm^2$ & Geometric quantity $\\rho= "+cf.fmt4_2f.format(areaMainReinforcement/concreteArea*1e3) +"\\permil$\\\\\n")
     archTex.write("\\end{tabular} \\\\\n")
     archTex.write("\\hline\n")
     archTex.write("Layers of main reinforcement:\\\\\n")
@@ -47,9 +57,20 @@ def writeMainReinforcement(listaFamMainReinforcement, areaHorm, archTex):
     archTex.write("\\begin{tabular}{cccccccc}\n")
     archTex.write("Id & N$^o$ bars & $\\phi$ & area & c. geom. & eff. cover & $y_{COG}$ & $z_{COG}$\\\\\n")
     archTex.write(" &  & $(mm)$ & $(cm^2)$ & $(\\permil)$ & $(cm)$ & $(m)$ & $(m)$\\\\\n")
-    for f in listaFamMainReinforcement:
+    if(numRows>10):
+        count= 0
+        for f in listaFamMainReinforcement:
+            archTex.write("\hline\n")
+            MainReinforcementLayer(f).texWrite(archTex,concreteArea)
+            count+= 1
+            if(count>10):
+                break;
         archTex.write("\hline\n")
-        MainReinforcementLayer(f).texWrite(archTex,areaHorm)
+        archTex.write('\\multicolumn{8}{c}{../..}\\\\')
+    else:
+        for f in listaFamMainReinforcement:
+            archTex.write("\hline\n")
+            MainReinforcementLayer(f).texWrite(archTex,concreteArea)
     archTex.write("\\end{tabular} \\\\\n")
 
 def writeShearReinforcement(recordShearReinf, archTex, width):
