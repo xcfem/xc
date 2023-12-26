@@ -243,7 +243,6 @@ class DisplaySettings(object):
         self.renderer.ResetCamera()
         cam= self.renderer.GetActiveCamera()
         self.cameraParameters.setView(cam)
-        #self.renderer.SetClippingRangeExpansion(2)
         self.renderer.ResetCameraClippingRange()
 
     def setupAxes(self):
