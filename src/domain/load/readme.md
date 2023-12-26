@@ -18,3 +18,8 @@ The path to do this is as follows:
 5. Add the corresponding command to the function [process_element_load](https://github.com/xcfem/xc/blob/master/src/domain/load/elem_load.cc).
 6. Compile the code.
 7. Write at least a verification test as simple as possible to check that things are working as expected.
+
+
+## References
+
+- [Do It Your Self-Weight](https://portwooddigital.com/2023/11/05/do-it-your-self-weight/)
