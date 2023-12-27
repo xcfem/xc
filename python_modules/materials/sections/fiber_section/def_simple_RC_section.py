@@ -972,7 +972,7 @@ class RCSectionBase(object):
         :param preprocessor: preprocessor of the finite element problem.
         '''
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection method.\n")
+            lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagram(self.name,self.fiberSectionParameters.idParams)
 
@@ -982,7 +982,7 @@ class RCSectionBase(object):
         :param preprocessor: preprocessor of the finite element problem.
         '''
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection method.\n")
+            lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.name,self.fiberSectionParameters.idParams)
 
@@ -992,7 +992,7 @@ class RCSectionBase(object):
         :param preprocessor: preprocessor of the finite element problem.
         '''
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection method.\n")
+            lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.name,self.fiberSectionParameters.idParams)
 
@@ -1218,10 +1218,16 @@ class RCSectionBase(object):
         '''
         # Draw contour
         # Retrieve section geometry definition.
-        materialHandler= self.fiberSectionRepr.getMaterialHandler
-        gmSectName= self.gmSectionName()
-        geomSection= materialHandler.getSectionGeometry(gmSectName)
-        write_dxf(geomSection= geomSection, modelSpace= modelSpace, concreteLayerName= concreteLayerName, reinforcementLayerName= reinforcementLayerName)
+        if(self.fiberSectionRepr):
+            materialHandler= self.fiberSectionRepr.getMaterialHandler
+            gmSectName= self.gmSectionName()
+            geomSection= materialHandler.getSectionGeometry(gmSectName)
+            write_dxf(geomSection= geomSection, modelSpace= modelSpace, concreteLayerName= concreteLayerName, reinforcementLayerName= reinforcementLayerName)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; no fiber section representation. Have you called defRCSection (or defRCSection2d) method?')
+            
         
 def write_dxf(geomSection, modelSpace, concreteLayerName= 'concrete', reinforcementLayerName= 'reinforcement'):
     ''' Writes the shape contour in the given DXF model space.
@@ -1257,8 +1263,9 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
                            defining the shear reinforcement in Z direction
     :ivar shReinfY:        record of type ShearReinforcement
                            defining the shear reinforcement in Y direction
+    :ivar swapReinforcementAxes: if true, swap the axes of reinforcement so the positive and negative reinforcement rows are placed rotated 90 degrees.
     '''
-    def __init__(self,name= None, sectionDescr= None, width=0.25,depth=0.25,concrType=None, reinfSteelType=None, nDivIJ= 10, nDivJK= 10):
+    def __init__(self,name= None, sectionDescr= None, width=0.25,depth=0.25,concrType=None, reinfSteelType=None, nDivIJ= 10, nDivJK= 10, swapReinforcementAxes= False):
         ''' Constructor.
 
         :param name: name of the section     
@@ -1267,15 +1274,15 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param depth: section depth.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
+        :param swapReinforcementAxes: if true, swap the axes of reinforcement so the positive and negative reinforcement rows are placed rotated 90 degrees.
         '''
         RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         section_properties.RectangularSection.__init__(self, name= name, b= width, h= depth)
 
             
+        self.swapReinforcementAxes= swapReinforcementAxes
         # Transverse reinforcement (z direction)
-        self.shReinfZ= ShearReinforcement(familyName= 'Vz')
-        #self.shReinfZ.familyName= "Vz"
-        
+        self.shReinfZ= ShearReinforcement(familyName= 'Vz')        
 
         # Transverse reinforcement (y direction)
         self.shReinfY= ShearReinforcement(familyName= 'Vy')
@@ -1302,11 +1309,17 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
 
     def getShearReinfY(self):
         '''Return the shear reinforcement for Vy.'''
-        return self.shReinfY
+        retval= self.shReinfY
+        if(self.swapReinforcementAxes):
+            retval= self.shReinfZ
+        return retval
 
     def getShearReinfZ(self):
         '''Return the shear reinforcement for Vz.'''
-        return self.shReinfZ
+        retval= self.shReinfZ
+        if(self.swapReinforcementAxes):
+            retval= self.shReinfY
+        return retval
     
     def getRespT(self,preprocessor):
         '''Material for modeling torsional response of section.
@@ -1435,9 +1448,9 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         super(BasicRectangularRCSection, self).report(os, indentation)
         indentation+= '  '
         os.write(indentation+'Transverse reinforcement (z direction):\n')
-        self.shReinfZ.report(os, indentation+'  ')
+        self.getShearReinfZ().report(os, indentation+'  ')
         os.write(indentation+'Transverse reinforcement (y direction):\n')
-        self.shReinfY.report(os, indentation+'  ')
+        self.getShearReinfY().report(os, indentation+'  ')
 
     def latexReportGeometry(self, os= sys.stdout):
         ''' Write geometry data in LaTeX format.
@@ -1456,8 +1469,8 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
 
         :param os: output stream.
         '''
-        self.shReinfY.latexReport(width= self.b, os= os)
-        self.shReinfZ.latexReport(width= self.h, os= os)       
+        self.getShearReinfY().latexReport(width= self.b, os= os)
+        self.getShearReinfZ().latexReport(width= self.h, os= os)       
 
 class RCRectangularSection(BasicRectangularRCSection):
     ''' This class is used to define the variables that make up a reinforced 
@@ -1471,7 +1484,7 @@ class RCRectangularSection(BasicRectangularRCSection):
                            the section
     '''
     
-    def __init__(self, name= None, sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None, nDivIJ= 10, nDivJK= 10):
+    def __init__(self, name= None, sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None, nDivIJ= 10, nDivJK= 10, swapReinforcementAxes= False):
         ''' Constructor.
 
         :param name: name of the section 
@@ -1480,8 +1493,9 @@ class RCRectangularSection(BasicRectangularRCSection):
         :param depth: section depth.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
+        :param swapReinforcementAxes: if true, swap the axes of reinforcement so the positive and negative reinforcement rows are placed rotated 90 degrees.
         '''
-        super(RCRectangularSection,self).__init__(name= name, sectionDescr= sectionDescr, width= width, depth= depth, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
+        super(RCRectangularSection,self).__init__(name= name, sectionDescr= sectionDescr, width= width, depth= depth, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK, swapReinforcementAxes= swapReinforcementAxes)
             
         # Longitudinal reinforcement
         self.minCover= 0.0 
@@ -1509,7 +1523,7 @@ class RCRectangularSection(BasicRectangularRCSection):
     def flipReinforcement(self):
         ''' Flip the reinforcement top<-->bottom.'''
         self.positvRebarRows, self.negatvRebarRows= self.negatvRebarRows, self.positvRebarRows
-        
+
     def getCopy(self):
         ''' Returns a deep enough copy of the object.'''
         retval= RCRectangularSection(name= self.name, sectionDescr= self.sectionDescr, concrType= self.getConcreteType(), reinfSteelType= self.getReinfSteelType(), width= self.b, depth= self.h, nDivIJ= self.getNDivIJ(), nDivJK= self.getNDivJK())
@@ -1580,7 +1594,11 @@ class RCRectangularSection(BasicRectangularRCSection):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; lateral cover not defined.')
-        rr= ReinfRow(rebarsDiam= rebarsDiam, nRebars= nRebars, width= self.b, nominalCover= nominalCover, nominalLatCover= nominalLatCover)
+        if(self.swapReinforcementAxes):
+            rowWidth= self.h
+        else:
+            rowWidth= self.b
+        rr= ReinfRow(rebarsDiam= rebarsDiam, nRebars= nRebars, width= rowWidth, nominalCover= nominalCover, nominalLatCover= nominalLatCover)
         self.appendRow(positiveReinf= positiveReinf, rebarRow= rr)
         return rr
     
@@ -1861,6 +1879,42 @@ class RCRectangularSection(BasicRectangularRCSection):
             retval= min(retval, min(latNegCover))
         return retval
 
+    def computeRebarPositions(self):
+        ''' Compute the positions of the reinforcement.'''
+        # Placement of the negative reinforcement.
+        negPoints= list()
+        halfDepth= self.h/2.0
+        halfWidth= self.b/2.0
+        if(self.swapReinforcementAxes):
+            halfDepth, halfWidth= halfWidth, halfDepth
+        ## Compute positions.
+        for rbRow in self.negatvRebarRows.rebarRows:
+            y= -halfDepth+rbRow.cover
+            z1= -halfWidth+rbRow.latCover
+            z2= halfWidth-rbRow.latCover
+            if(self.swapReinforcementAxes):
+                p1= geom.Pos2d(-y, z1)
+                p2= geom.Pos2d(-y, z2)
+            else:
+                p1= geom.Pos2d(z1, y)
+                p2= geom.Pos2d(z2, y)
+            negPoints.append((p1,p2))
+        # Placement of the positive reinforcement.
+        posPoints= list()
+        ## Compute positions.
+        for rbRow in self.positvRebarRows.rebarRows:
+            y= halfDepth-rbRow.cover
+            z1= -halfWidth+rbRow.latCover
+            z2= halfWidth-rbRow.latCover
+            if(self.swapReinforcementAxes):
+                p1= geom.Pos2d(-y, z1)
+                p2= geom.Pos2d(-y, z2)
+            else:
+                p1= geom.Pos2d(z1, y)
+                p2= geom.Pos2d(z2, y)
+            posPoints.append((p1,p2))
+        return negPoints, posPoints
+
     def defSectionGeometry(self, preprocessor, matDiagType):
         '''
         Define the XC section geometry object for a reinforced concrete section 
@@ -1874,22 +1928,10 @@ class RCRectangularSection(BasicRectangularRCSection):
         self.defConcreteRegion(self.geomSection)
         reinforcement= self.geomSection.getReinfLayers
         # Placement of the negative reinforcement.
-        negPoints= list()
         ## Compute positions.
-        for rbRow in self.negatvRebarRows.rebarRows:
-            y= -self.h/2.0+rbRow.cover
-            p1= geom.Pos2d(-self.b/2+rbRow.latCover,y)
-            p2= geom.Pos2d(self.b/2-rbRow.latCover,y)
-            negPoints.append((p1,p2))
+        negPoints, posPoints= self.computeRebarPositions()
+        ## Create reinforcement layers.
         self.negatvRebarRows.defStraightLayers(reinforcement,"neg",self.fiberSectionParameters.reinfDiagName,negPoints)
-        # Placement of the positive reinforcement.
-        posPoints= list()
-        ## Compute positions.
-        for rbRow in self.positvRebarRows.rebarRows:
-            y= self.h/2.0-rbRow.cover
-            p1= geom.Pos2d(-self.b/2+rbRow.latCover,y)
-            p2= geom.Pos2d(self.b/2-rbRow.latCover,y)
-            posPoints.append((p1,p2))
         self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,posPoints)
         self.minCover= self.getMinCover()
 
@@ -1902,6 +1944,59 @@ class RCRectangularSection(BasicRectangularRCSection):
         Es= self.fiberSectionParameters.reinfSteelType.Es
         return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
+    def defineMainReinforcement(self, nominalCover, fiStirr, topLayersDiameters= [12e-3, None], bottomLayersDiameters= [12e-3, None], lateralLayersDiameters= [10e-3, None], nRebarsHoriz= 3, nRebarsVert= 2):
+        ''' Define the reinforcement of the given RC section.
+
+        :param nominalCover: nominal concrete cover.
+        :param fiStirr: diameter of the stirrups.
+        :param topLayersDiameters: diameters of the first and second top reinforcement layers (if None => no layer).
+        :param bottomLayersDiameters: diameters of the first and second bottom reinforcement layers (if None => no layer).
+        :param lateralLayersDiameters: diameters of the exterior and interior lateral reinforcement layers (if diameter[i]==None => no i-th layer).
+        :param nRebarsHoriz: number of horizontal rebars.
+        :param nRebarsVert: number of vertical rebars.
+        '''
+        # Top face.
+        firstTopLayer= self.appendPositiveLayer(nominalCover= nominalCover+fiStirr, nRebars= nRebarsHoriz, rebarsDiam= topLayersDiameters[0], nominalLatCover= nominalCover+fiStirr)
+        if(topLayersDiameters[1]):
+            newNominalCover= nominalCover+fiStirr+topLayersDiameters[0]+max(topLayersDiameters[1], 25e-3)
+            secondTopLayer= self.appendPositiveLayer(nominalCover= newNominalCover, rebarsDiam= topLayersDiameters[1])
+        else:
+            secondTopLayer= None
+        # Bottom face.
+        firstBottomLayer= self.appendNegativeLayer(nominalCover= nominalCover+fiStirr, rebarsDiam= bottomLayersDiameters[0])
+        if(bottomLayersDiameters[1]):
+            newNominalCover= nominalCover+fiStirr+bottomLayersDiameters[0]+max(bottomLayersDiameters[1], 25e-3)
+            secondBottomLayer= self.appendNegativeLayer(nominalCover= newNominalCover, rebarsDiam= bottomLayersDiameters[1])
+        else:
+            secondBottomLayer= None
+        # Lateral reinforcement.
+        covers= self.getCover()
+        latTopCover= covers[0]+covers[1]+firstTopLayer.rebarsDiam
+        if(self.swapReinforcementAxes):
+            rowWidth= self.b
+        else:
+            rowWidth= self.h
+        sLat=(rowWidth-2*latTopCover)/(nRebarsVert-1) # spacing.
+        for i in range(nRebarsVert):
+            self.appendPositiveLayer(nRebars= 2, rebarsDiam= lateralLayersDiameters[0], nominalCover= latTopCover+i*sLat)
+        if(lateralLayersDiameters[1]):
+            for i in range(nRebarsVert):
+                self.appendPositiveLayer(nRebars= 2, rebarsDiam= lateralLayersDiameters[0], nominalCover= latTopCover+i*sLat, nominalLatCover= 3*nominalCover+fiStirr)
+        return firstTopLayer, secondTopLayer, firstBottomLayer, secondBottomLayer
+    
+    def defineShearReinforcementYZ(self, nShReinfBranchesY= 2, fiStirrY= 8e-3, spacingY= 0.15, nShReinfBranchesZ= 2, fiStirrZ= 8e-3, spacingZ= 0.15):
+        ''' Define the shear reinforcement of the RC section.
+
+        :param nShReinfBranchesY: number of branches (Y direction).
+        :param fiStirrY: diameter of the stirrups (Y direction).
+        :param spacingY: stirrups spacing (Y direction).
+        :param nShReinfBranchesZ: number of branches (Z direction).
+        :param fiStirrZ: diameter of the stirrups (Z direction).
+        :param spacingZ: stirrups spacing (Z direction).
+        '''
+        # Shear reinforcement.
+        self.shReinfY= ShearReinforcement(familyName= "sh1uy", nShReinfBranches= nShReinfBranchesY, areaShReinfBranch= math.pi*(fiStirrY)**2/4., shReinfSpacing= spacingY, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+        self.shReinfZ= ShearReinforcement(familyName= "sh1z", nShReinfBranches= nShReinfBranchesZ, areaShReinfBranch= math.pi*(fiStirrZ)**2/4., shReinfSpacing= spacingZ, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
 def compute_element_reinforcement(element):
     ''' Return a list containing the reinforced concrete sections from the
