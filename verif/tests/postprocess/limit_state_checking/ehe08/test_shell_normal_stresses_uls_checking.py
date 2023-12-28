@@ -77,7 +77,8 @@ if(not pth):
 cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 lsd.LimitStateData.envConfig= cfg
-shutil.copy(pth+'/intForce_ULS_normalStressesResistance.csv',lsd.normalStressesResistance.getInternalForcesFileName())
+internalForcesFName= pth+"/../../../aux/internal_forces/intForce_ULS_normalStressesResistance.csv"
+shutil.copy(internalForcesFName, lsd.normalStressesResistance.getInternalForcesFileName())
 
 # Check limit state.
 ## Limit state to check.

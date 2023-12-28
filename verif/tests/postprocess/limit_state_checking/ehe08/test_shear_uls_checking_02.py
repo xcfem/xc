@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
-import csv
 import xc
 from materials.sections.fiber_section import def_simple_RC_section as rcs
 from materials import typical_materials
@@ -98,7 +97,8 @@ if(not pth):
 cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 limit_state_data.LimitStateData.envConfig= cfg
-shutil.copy(pth+'/intForce_ULS_shearResistance.csv',limit_state_data.shearResistance.getInternalForcesFileName())
+internalForcesFName= pth+"/../../../aux/internal_forces/intForce_ULS_shearResistance.csv"
+shutil.copy(internalForcesFName, limit_state_data.shearResistance.getInternalForcesFileName())
 
 # Check limit state.
 ## Limit state to check.
