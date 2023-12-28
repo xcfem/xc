@@ -174,6 +174,25 @@ class LimitStateData(object):
          :param elems: element set.
         '''
         return eif.getInternalForcesDict(nmbComb= nmbComb, elems= elems,  woodArmerAlsoForAxialForces= self.woodArmerAlsoForAxialForces)
+
+    def getInternalForcesSubset(self, elementsOfInterestTags):
+        ''' Return a dictionary containing the internal forces for the given
+            elements.
+
+        :param elementsOfInterestTags: identifiers of the elements of interest.
+        '''
+        fName= self.getInternalForcesFileName()
+        print(fName)
+        with open(fName) as json_data:
+            dct= json.load(json_data)
+        retval= dict()
+        for loadComb in dct: # iterate through load combinations.
+            retval[loadComb]= dict()
+            loadCombResults= dct[loadComb]
+            for key in loadCombResults:
+                if(int(key) in elementsOfInterestTags):
+                    retval[loadComb][key]= loadCombResults[key]
+        return retval
     
     def getReactionsDict(self, nmbComb, constrainedNodes):
         '''Creates a dictionary with the element's internal forces.
