@@ -51,6 +51,20 @@ def findWorkingDirectory(fNameMark= 'env_config.py'):
     '''
     return findDirectoryUpwards(fNameMark)
 
+def setWorkingDirectory(fNameMark= 'env_config.py'):
+    '''Search upwards to find the directory where the file
+       argument is.
+
+    :param fNameMark: name of the file that marks the working directory.
+    '''
+    retval= findWorkingDirectory(fNameMark= fNameMark)
+    if(retval[-1]!='/'):
+        retval= retval+'/'
+    if(not retval in sys.path):
+        sys.path.append(retval)
+    print(retval)
+    return retval
+
 def findProjectDirectory(fNameMark= '.git'):
     '''Search upwards to find the directory where the file
        argument is.
@@ -678,6 +692,8 @@ class EnvConfig(output_styles.OutputStyle):
         :param filename: name of the file to execute.
         '''
         return compileCode(self.getWorkingDirectory()+'/'+filename)
+
+
 
 #Predefined colors for sets (progressing from light to dark)
 
