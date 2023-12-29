@@ -31,7 +31,7 @@ class ReportGenerator(oh.OutputHandler):
         '''
         return self.outputStyle
 
-    def checksReport(self, limitStateLabel, setsShEl, argsShEl, setsBmEl=[], argsBmEl=[], rgMinMax=None):
+    def checksReport(self, limitStateLabel, setsShEl, argsShEl, setsBmEl=[], argsBmEl=[], rgMinMax=None, defaultDiagramDirection= 'J'):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
 
@@ -44,6 +44,9 @@ class ReportGenerator(oh.OutputHandler):
                            in the report. 
         :param argsBmElScale: Ordered list of arguments to be included in the 
                               report for 1D elements
+        :param defaultDiagramDirection: default direction of the diagrams in
+                                        1D elements (J: element local j vector 
+                                        or K: element local K vector).
         '''
         cfg= self.getEnvConfig()
         texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
@@ -74,7 +77,7 @@ class ReportGenerator(oh.OutputHandler):
                 suffix= stV.name+argS # set name + argument identifier.
                 fullgrFileNm=fullPath+suffix
                 rltvgrFileNm=rltvPath+suffix
-                self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName=fullgrFileNm+'.jpg')
+                self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName=fullgrFileNm+'.jpg', defaultDirection= defaultDiagramDirection)
                 label= limitStateLabel+suffix
                 oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt, labl= label)
         report.close()
