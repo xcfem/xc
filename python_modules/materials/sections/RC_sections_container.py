@@ -62,10 +62,10 @@ class SectionContainer(object):
         lmsg.warning(className+'.'+methodName+'; not implemented yet.') 
         tmp= dct['sections']
         for sd in tmp:
-            print(sd)
+            lmsg.log(sd)
         tmp= dct['mapSections']
         for sectionName in tmp:
-            print('search for section: ', sectionName)
+            lmsg.log('search for section: '+sectionName)
         if('mapInteractionDiagrams' in dct):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -98,7 +98,7 @@ class SectionContainer(object):
             retval= s
         return retval
 
-    def createRCsections(self,preprocessor,matDiagType):
+    def createRCsections(self, preprocessor, matDiagType):
         '''Creates for each element in the container the fiber sections 
         (RCsimpleSections) associated with it.
         Depending on the value of attribute 'initTensStiff' of the concrete 
@@ -111,8 +111,8 @@ class SectionContainer(object):
         :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, ="d" for design diagram)
         '''
         for s in self.sections:
-            for i in range(len(s.lstRCSects)):
-                s.lstRCSects[i].defRCSection(preprocessor,matDiagType)
+            for rcs in s.lstRCSects:
+                rcs.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
 
 
     def calcInteractionDiagrams(self, preprocessor, diagramType= 'NMyMz'):

@@ -923,12 +923,12 @@ class RCSectionBase(object):
         self.defSectionGeometry(preprocessor,matDiagType)
         self.defFiberSection2d(preprocessor)
         
-    def defFiberSection(self,preprocessor):
+    def defFiberSection(self, preprocessor):
         '''Define fiber section from geometry data.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.name)
+        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d", self.name)
         self.fiberSectionRepr= self.fs.getFiberSectionRepr()
         self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
         self.fs.setupFibers()
@@ -937,13 +937,13 @@ class RCSectionBase(object):
         self.fs.setRespTByName(self.respTName())
         self.fs.setProp('sectionData',self)
         
-    def defRCSection(self, preprocessor,matDiagType):
+    def defRCSection(self, preprocessor, matDiagType):
         ''' Definition of an XC reinforced concrete section.
 
         :param preprocessor: preprocessor of the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
-         '''
+        '''
         self.defShearResponse(preprocessor)
         self.defSectionGeometry(preprocessor,matDiagType)
         self.defFiberSection(preprocessor)
