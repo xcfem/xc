@@ -179,15 +179,6 @@ def getMcr(steelShape, L, Mi, beamSupportCoefs= BeamSupportCoefficients()):
     sum1= (beamSupportCoefs.ky/beamSupportCoefs.kw)**2*steelShape.Iw()/steelShape.Iy()
     sum2= GIt/Mcr0
     f2= math.sqrt(sum1+sum2)
-    # print('  L= ', L)
-    # print('  kyL2= ', kyL2)
-    # print('  GJ= ', GIt/1e3)
-    # print('  Iw= ', steelShape.Iw()*100**6, ' cm^6')
-    # print('  C1= ', C1)
-    # print('  Mcr0=', Mcr0/1e3  )
-    # print('  sum1= ', sum1)
-    # print('  sum2= ', sum2)
-    # print('  f2= ', f2)
     return C1*Mcr0*f2
 
 def getLateralBucklingNonDimensionalBeamSlenderness(steelShape, L, Mi, beamSupportCoefs= BeamSupportCoefficients()):
@@ -322,7 +313,7 @@ class Member(steel_member_base.BucklingMember):
 
         # Compute lateral buckling reduction factor.
         lrfLT= self.getFlexuralStrengthReductionFactor()
-        print(lrfLT)
+        # print(lrfLT)
 
         return self.shape.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= Vyd, chiN= lrfN, chiLT= lrfLT)
 
