@@ -632,7 +632,6 @@ class FatigueController(lsc.LimitStateControllerBase):
             sigma_sPos= stressCalc.sgs
             sigma_sNeg= stressCalc.sgsp
             sigma_c= stressCalc.sgc
-            #print("sgc0= ", stressCalc.sgc0)
             controlVars= e.getProp(self.limitStateLabel)
             resultsComb= cv.FatigueControlBaseVars(combNm,-1.0,N, My, Mz,Vy,sigma_sPos, sigma_sNeg,sigma_c)
             if(index==0):
@@ -641,10 +640,8 @@ class FatigueController(lsc.LimitStateControllerBase):
                 controlVars.state1= resultsComb
                 kc= 1.0 #XXX  SIA 262 4.2.1.7
                 controlVars.concreteLimitStress= getConcreteLimitStress(datosScc,kc,controlVars)
-                #print("concreteLimitStress= ", controlVars.concreteLimitStress/1e6)
                 controlVars.concreteBendingCF= controlVars.getConcreteMinStress()/controlVars.concreteLimitStress
 
-                #print("concreteBendingCF= ",controlVars.concreteBendingCF)
                 section= scc.getProp('sectionData')
                 concreteSectionShearParams= ShearController(self.limitStateLabel)
                 concreteSectionShearParams.setSection(section)
