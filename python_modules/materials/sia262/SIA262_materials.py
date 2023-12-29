@@ -8,6 +8,7 @@ import math
 import scipy.interpolate
 from materials.ec2 import EC2_materials as ec2
 from materials import concrete_base
+from misc_utils import log_messages as lmsg
 
 __author__= 'Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)'
 __copyright__= 'Copyright 2015, LCPT, A_OO'
@@ -133,7 +134,8 @@ def stressLimits(exigence,s):
     elif (exigence=='C'):
         return courbeC(s)
     else:
-        print("Value for exigence: '",exigence,"' unknown.")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; value for exigence: '+str(exigence) + ' unknown.')
 
 diametres= [6e-3,8e-3,10e-3,12e-3,14e-3,16e-3,18e-3,20e-3,22e-3,26e-3,30e-3,34e-3,40e-3]
 
