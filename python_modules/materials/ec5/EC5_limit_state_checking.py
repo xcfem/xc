@@ -15,8 +15,13 @@ from misc_utils import log_messages as lmsg
 from postprocess import prop_statistics as ps
 
 
-def printResultsELU(elems,crossSection):
-    '''print(ULS results.)'''
+def printResultsELU(elems, crossSection, os= sys.stdout):
+    '''print ULS results in the given output stream.
+
+    :param elems: elements to pick the worst case from.
+    :param crossSection: cross section.
+    :param os: output stream. 
+    '''
     fmt= "{:6.1f}"
     fmt2= "{:5.2f}"
     e= ps.getItemWithMaxProp(elems,"getProp",'FCTNCP')
@@ -27,14 +32,14 @@ def printResultsELU(elems,crossSection):
     sgMin= fmt.format(e.getProp("SgMin")/1e6)
     sgAdm= fmt.format(crossSection.fyd/1e6)
     fctnCP= fmt2.format(e.getProp("FCTNCP"))
-    print("tag= ", e.tag, " N= ", N , "kN  My= ", My , "kN.m  Mz= ", Mz , "kN-m   SgMax= ", sgMax , "MPa  SgMin= ", sgMin, "MPa  sgAdm= ", sgAdm , "MPa  FCTNCP= ", fctnCP , "HIPCPTN= ",e.getProp("HIPCPTN"))
+    os.write("tag= "+str(e.tag)+" N= "+str(N)+" kN  My= "+str(My)+" kN.m  Mz= "+str(Mz)+" kN.m   SgMax= "+str(sgMax)+" MPa  SgMin= "+str(sgMin)+ " MPa  sgAdm= "+str(sgAdm)+" MPa  FCTNCP= "+str(fctnCP)+" HIPCPTN= "+str(e.getProp("HIPCPTN")))
     e=  ps.getItemWithMaxProp(elems,"getProp",'FCVCP')
     Vy= fmt.format(e.getProp("VyCP")/1e3)
     Vz= fmt.format(e.getProp("VzCP")/1e3)
     tauMax=  fmt.format(e.getProp("TauMax")/1e6)
     tauAdm= fmt.format(crossSection.taud/1e6)
     fcvCP= fmt2.format(e.getProp("FCVCP"))
-    print("tag= ", e.tag, " Vy= ", Vy , "kN  Vz= ", Vz , "kN  TauMax= ", tauMax , "MPa tauAdm= ", tauAdm, "MPa FCVCP= ", fcvCP , " HIPCPV= ", e.getProp("HIPCPV"))
+    os.write("tag= "+str(e.tag)+" Vy= "+str(Vy)+" kN  Vz= "+str(Vz)+" kN  TauMax= "+str(tauMax)+" MPa tauAdm= "+str(tauAdm)+" MPa FCVCP= "+str(fcvCP)+" HIPCPV= "+str(e.getProp("HIPCPV")))
 
 # Annex B (informative) Vibrations caused by pedestrians.
 
