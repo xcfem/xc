@@ -137,7 +137,7 @@ class UniaxialMaterialDiagramGraphic:
             self.factoredStressMin= min(factoredStress,self.factoredStressMin)
             self.factoredStressMax= max(factoredStress,self.factoredStressMax)
             self.factoredStresses.append(factoredStress)
-            # print("strain= ", diag.getStrain(), " stress= ", factoredStress/1e6)
+            
         diag.revertToStart()
         return self.factoredStresses
 

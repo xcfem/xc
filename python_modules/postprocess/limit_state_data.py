@@ -182,7 +182,6 @@ class LimitStateData(object):
         :param elementsOfInterestTags: identifiers of the elements of interest.
         '''
         fName= self.getInternalForcesFileName()
-        print(fName)
         with open(fName) as json_data:
             dct= json.load(json_data)
         retval= dict()
@@ -407,9 +406,9 @@ class ULS_LimitStateData(LimitStateData):
                false if it's 2D (Fx,Fy,Mz).
         '''
         if(threeDim):
-            return crossSections.internalForcesVerification3D(self, "d",outputCfg)
+            return crossSections.internalForcesVerification3D(limitStateData= self, matDiagType= "d", outputCfg= outputCfg)
         else:
-            return crossSections.internalForcesVerification2D(self, "d",outputCfg)
+            return crossSections.internalForcesVerification2D(limitStateData= self, matDiagType= "d", outputCfg= outputCfg)
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
@@ -566,9 +565,9 @@ class SLS_LimitStateData(LimitStateData):
                false if it's 2D (Fx,Fy,Mz).
         '''
         if(threeDim):
-            return crossSections.internalForcesVerification3D(self, "k",outputCfg)
+            return crossSections.internalForcesVerification3D(limitStateData= self, matDiagType= "k", outputCfg= outputCfg)
         else:
-            return crossSections.internalForcesVerification2D(self, "k",outputCfg)
+            return crossSections.internalForcesVerification2D(limitStateData= self, matDiagType= "k", outputCfg= outputCfg)
 
 class CrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control limit state data base class.'''
