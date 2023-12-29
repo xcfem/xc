@@ -40,6 +40,7 @@
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
 
 #include "material/section/repres/section_geometry/SectionGeometry.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Release memory.
 void XC::ListReinfLayer::free_mem(void)
@@ -79,9 +80,10 @@ XC::StraightReinfLayer *XC::ListReinfLayer::newStraightReinfLayer(const std::str
   {
     XC::Material *materialPtr= material_handler->find_ptr(cod_mat);
     if(!materialPtr)
-      std::clog << getClassName() << __FUNCTION__
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING, material: '"
-	        << cod_mat << "' not found." << std::endl;
+	        << cod_mat << "' not found."
+		<< Color::def << std::endl;
     StraightReinfLayer tmp(this, materialPtr);
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);

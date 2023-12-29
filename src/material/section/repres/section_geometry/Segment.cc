@@ -32,6 +32,7 @@
 #include "utility/geom/d2/BND2d.h"
 
 #include "vtkCellType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::Segment::Segment(SectionGeometry *m,const size_t &ndiv)
@@ -60,13 +61,15 @@ void XC::Segment::setEndPoints(size_t idP1, size_t idP2)
   {
     p1= BuscaSpot(idP1);
     if(!p1)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; point: '" << idP1 << "' not found \n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; point: '" << idP1 << "' not found."
+	        << Color::def << std::endl;
     update_topology();
     p2= BuscaSpot(idP2);
     if(!p2)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; point: '" << idP2 << "' not found \n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; point: '" << idP2 << "' not found."
+	        << Color::def << std::endl;
     update_topology();
   }
 
@@ -125,8 +128,8 @@ double XC::Segment::getLength(void) const
     if(p1 && p2)
       retval= dist(p1->getPos(),p2->getPos());
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; endpoint not defined in line: '" << getName()
-                << std::endl;
+                << Color::def << std::endl;
     return retval;
   }

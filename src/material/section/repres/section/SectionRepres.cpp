@@ -57,8 +57,7 @@
 #include <material/section/repres/section/SectionRepres.h>
 #include <material/section/repres/section_geometry/SectionGeometry.h>
 #include "preprocessor/prep_handlers/MaterialHandler.h"
-
-
+#include "utility/utils/misc_utils/colormod.h"
 
 
 XC::SectionRepres::SectionRepres(int tag,MaterialHandler *ml)
@@ -101,9 +100,10 @@ void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
     if(tmp)
       setGeom(tmp);
     else
-     std::cerr << getClassName() << __FUNCTION__
+     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	       << " section geometry: '"
-               << nmbGeom << "' not found.\n";
+               << nmbGeom << "' not found."
+               << Color::def << std::endl;
   }
 
 //! @brief Sets section geometry.

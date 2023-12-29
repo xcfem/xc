@@ -52,6 +52,7 @@
 #include "utility/geom/d1/Segment2d.h"
 
 #include "boost/lexical_cast.hpp"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::SectionGeometry::SectionGeometry(MaterialHandler *ml)
   : SectionMassProperties(),material_handler(ml), regions(ml), reinforcement_layers(this,ml), tag_ref_sys(0),tag_spot(0) {}
@@ -164,9 +165,10 @@ XC::SectionReferenceFrame *XC::SectionGeometry::createReferenceFrame(const std::
             tag_ref_sys++;
           }
         else
-	  std::cerr << getClassName() << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; type: '" << type
-                    << "' unknown." << std::endl;
+                    << "' unknown."
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -195,9 +197,10 @@ XC::Spot *XC::SectionGeometry::newSpot(const Pos2d &p)
         if(sr)
           trfP= sr->getGlobalPosition(p); //Pass to global coordinates.
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; reference system with identifier: "
-		    << tag_ref_sys << " not found.\n";
+		    << tag_ref_sys << " not found."
+	            << Color::def << std::endl;
        }
     Spot *retval= creaSpot(trfP);
     return retval;
@@ -211,9 +214,9 @@ XC::Segment *XC::SectionGeometry::newSegment(size_t p1,size_t p2)
     if(s)
       s->setEndPoints(p1,p2);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; can't assign endpoints."
-                << std::endl;
+                << Color::def << std::endl;
     return s;
   }
 
@@ -226,11 +229,13 @@ double XC::SectionGeometry::DistSpots(const size_t &i,const size_t &j) const
     const Spot *pA= find_spot(i);
     const Spot *pB= find_spot(j);
     if(!pA)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; point: " << i << " not found. " << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; point: " << i << " not found. "
+		<< Color::def << std::endl;
     else if(!pB)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; point: " << j << " not found. " << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; point: " << j << " not found. "
+		<< Color::def << std::endl;
     else
       retval= pA->getDistanceTo(pB->getPos());
     return retval;
@@ -244,9 +249,9 @@ Polygon2d XC::SectionGeometry::getRegionsContour(void) const
     if(!tmp.empty())
       {
         if(tmp.size()>1)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; cross section is not a simply connected region."
-                    << std::endl;
+                    << Color::def << std::endl;
         retval= *tmp.begin();
       }
     return retval;
@@ -261,9 +266,9 @@ Polygon2d XC::SectionGeometry::getCompressedZoneContour(const HalfPlane2d &sp_co
       {
 	std::list<Polygon2d> tmpList= tmp.getIntersection(sp_compressions);
         if(tmpList.size()>1)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; is not a simply connected region."
-                    << std::endl;
+                    << Color::def << std::endl;
         retval= *tmpList.begin();
       }
     return retval;
@@ -415,9 +420,10 @@ double XC::SectionGeometry::getCover(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
     if(retval<0)
-      std::clog << getClassName() << __FUNCTION__
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; warning! position: " << p
-                << " is outside the section." << std::endl;
+                << " is outside the section."
+		<< Color::def << std::endl;
     return retval;
   }
 

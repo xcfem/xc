@@ -43,6 +43,7 @@
 #include "utility/geom/d2/BND2d.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 #include "utility/geom/d2/2d_polygons/polygon2d_bool_op.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Liberta todas las pociciones.
 void XC::RegionContainer::free_mem(void)
@@ -83,9 +84,10 @@ XC::QuadSectRegion *XC::RegionContainer::newQuadRegion(const std::string &cod_ma
   {
     Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
-      std::cerr << getClassName() << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << "; warning!, material: '"
-                << cod_mat << "' not found. Material definition pending.\n";
+                << cod_mat << "' not found. Material definition pending."
+	        << Color::def << std::endl;
     QuadSectRegion tmp(mat);
     QuadSectRegion *ptr= dynamic_cast<XC::QuadSectRegion *>(push_back(tmp));
     ptr->set_owner(this);
@@ -97,9 +99,10 @@ XC::CircularSectRegion *XC::RegionContainer::newCircularRegion(const std::string
   {
     Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; warning!, material: '"
-                << cod_mat << "' not found. Material definition pending.\n";
+                << cod_mat << "' not found. Material definition pending."
+	        << Color::def << std::endl;
     CircularSectRegion tmp(mat);
     CircularSectRegion *ptr= dynamic_cast<XC::CircularSectRegion *>(push_back(tmp));
     ptr->set_owner(this);
@@ -171,9 +174,9 @@ BND2d XC::RegionContainer::getBnd(void) const
           retval+= (*i)->getPolygon().Bnd();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; region container is empty. Boundary has no sense."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -209,10 +212,10 @@ XC::Vector XC::RegionContainer::getCenterOfMassGrossSection(void) const
             divisor+= weight;
           }
         else
-          std::cerr << getClassName() << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; region: "
                     << *i << " has zero or negative weight." 
-                    << std::endl;
+                    << Color::def << std::endl;
       }
     retval/= divisor;
     return retval;
@@ -266,8 +269,10 @@ double XC::RegionContainer::getPyzGrossSection(void) const
 double XC::RegionContainer::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -279,8 +284,9 @@ double XC::RegionContainer::getAreaHomogenizedSection(const double &E0) const
             retval+= n*(*i)->getArea();
           }
         else
-	  std::cerr << getClassName() << __FUNCTION__
-		    << "; can't get region material." << std::endl; 
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; can't get region material."
+		    << Color::def << std::endl; 
       }
     return retval;
   }
@@ -288,8 +294,10 @@ double XC::RegionContainer::getAreaHomogenizedSection(const double &E0) const
 XC::Vector XC::RegionContainer::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     Vector retval(2);
     double weight= 0.0;
     double divisor= 0.0;
@@ -305,14 +313,15 @@ XC::Vector XC::RegionContainer::getCenterOfMassHomogenizedSection(const double &
                 divisor+= weight;
               }
             else
-	      std::cerr << getClassName() << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; region: "
                         << *i << " weight is zero or negative." 
-                        << std::endl;
+                        << Color::def << std::endl;
           }
         else
-	  std::cerr << getClassName() << __FUNCTION__
-		    << "; can't get region material." << std::endl; 
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; can't get region material."
+		    << Color::def << std::endl; 
       }
     retval/= divisor;
     return retval;
@@ -323,8 +332,10 @@ XC::Vector XC::RegionContainer::getCenterOfMassHomogenizedSection(const double &
 double XC::RegionContainer::getIyHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
@@ -339,8 +350,9 @@ double XC::RegionContainer::getIyHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iy()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << getClassName() << __FUNCTION__
-	            << "; can't get section material." << std::endl; 
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; can't get section material."
+		    << Color::def << std::endl; 
       }
     return retval;
   }
@@ -350,8 +362,10 @@ double XC::RegionContainer::getIyHomogenizedSection(const double &E0) const
 double XC::RegionContainer::getIzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
@@ -366,8 +380,9 @@ double XC::RegionContainer::getIzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iz()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << getClassName() << __FUNCTION__
-	            << "; can't get region material." << std::endl; 
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; can't get region material."
+		    << Color::def << std::endl; 
       }
     return retval;
   }
@@ -377,8 +392,10 @@ double XC::RegionContainer::getIzHomogenizedSection(const double &E0) const
 double XC::RegionContainer::getPyzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d2= 0.0;
@@ -395,8 +412,9 @@ double XC::RegionContainer::getPyzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Pyz()+(*i)->getArea()*d2);
           }
         else
-	  std::cerr << getClassName() << __FUNCTION__
-	            << "; can't get region material." << std::endl; 
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; can't get region material."
+		    << Color::def << std::endl; 
       }
     return retval;
   }

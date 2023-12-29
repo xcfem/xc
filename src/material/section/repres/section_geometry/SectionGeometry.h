@@ -37,6 +37,7 @@
 #include "Axis.h"
 #include "material/section/repres/SectionMassProperties.h"
 #include <vector>
+#include "utility/utils/misc_utils/colormod.h"
 
 class HalfPlane2d;
 class Segment2d;
@@ -183,9 +184,10 @@ Axis *XC::SectionGeometry::createAxis(void)
             axis_tag++;
 	  }
         else
-	  std::cerr << getClassName() << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "Can't create axis with tag: "
-                    << axis_tag << ".\n";
+                    << axis_tag << "."
+	            << Color::def << std::endl;
       }
     return retval;
   }
