@@ -16,20 +16,21 @@ from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
 from misc_utils import log_messages as lmsg
 
+# Materials.
 structureConcrete= EHE_materials.HA30
 reinfSteel= EHE_materials.B500S
-columnNominalCover= 0.04
-columnStirrupsDiameter= 12e-3
 
 # Section geometry.
 depth= 0.45
 width= 1.4
+columnNominalCover= 0.04
+columnStirrupsDiameter= 12e-3
 
 testRCSection= def_simple_RC_section.RCRectangularSection(name= 'testRCSection', sectionDescr= 'test RC section', concrType= structureConcrete, reinfSteelType= reinfSteel, width= width, depth= depth, swapReinforcementAxes= True)
 
 ### Main reinforcement.
 firstTopLayer, secondTopLayer, firstBottomLayer, secondBottomLayer= testRCSection.defineMainReinforcement(nominalCover= columnNominalCover, fiStirr= columnStirrupsDiameter, topLayersDiameters= [32e-3, 32e-3], bottomLayersDiameters= [32e-3, 32e-3], lateralLayersDiameters= [25e-3, None], nRebarsHoriz= 6, nRebarsVert= 11)
-
+### Shear reinforcement.
 testRCSection.defineShearReinforcementYZ(nShReinfBranchesY= 4, fiStirrY= columnStirrupsDiameter, spacingY= 0.15, nShReinfBranchesZ= 8, fiStirrZ= columnStirrupsDiameter, spacingZ= 0.15)
 
 # XC material definition

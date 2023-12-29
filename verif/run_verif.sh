@@ -1496,10 +1496,14 @@ python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_03.p
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_04.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_06.py
+python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_07.py
+python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_08.py
 echo "$BLEU" "      EHE limit state checking: normal stresses." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_shell_normal_stresses_uls_checking.py
 echo "$BLEU" "      EHE limit state checking: crack control." "$NORMAL"
-python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
+python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_01.py
+python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_02.py
+python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_03.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py

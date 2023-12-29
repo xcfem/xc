@@ -29,7 +29,7 @@ testRCSection= def_simple_RC_section.RCRectangularSection(name= 'testRCSection',
 
 ### Main reinforcement.
 firstTopLayer, secondTopLayer, firstBottomLayer, secondBottomLayer= testRCSection.defineMainReinforcement(nominalCover= columnNominalCover, fiStirr= columnStirrupsDiameter, topLayersDiameters= [32e-3, 32e-3], bottomLayersDiameters= [32e-3, 32e-3], lateralLayersDiameters= [25e-3, None], nRebarsHoriz= 6, nRebarsVert= 11)
-
+### Shear reinforcement.
 testRCSection.defineShearReinforcementYZ(nShReinfBranchesY= 4, fiStirrY= columnStirrupsDiameter, spacingY= 0.15, nShReinfBranchesZ= 8, fiStirrZ= columnStirrupsDiameter, spacingZ= 0.15)
 
 # XC material definition
