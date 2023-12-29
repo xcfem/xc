@@ -1030,6 +1030,7 @@ class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
 
     ControlVars= cv.SIATypeRCShearControlVars
+    
     def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
         ''' Constructor.
         
@@ -1496,25 +1497,6 @@ class CrackStraightController(CrackController):
             rfSteel= sctCrkProp.sctProp.getReinfSteelType()
             concrete= sctCrkProp.sctProp.getConcreteType()
             k1=self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
-            '''
-            print('element= ', e.tag)
-            print('Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']')
-            print('N= ', sct.getStressResultantComponent("N"))
-            print('My= ',sct.getStressResultantComponent("My"))
-            print('Mz= ',sct.getStressResultantComponent("Mz"))
-            print('hceff= ',hceff)
-            print('Aceff= ',Aceff)
-            print('concrete=',concrete)
-            print('eps1=',sctCrkProp.eps1)
-            print('eps2=',sctCrkProp.eps2)
-            print('As= ', sctCrkProp.As)
-            print('cover= ',sctCrkProp.cover)
-            print('spacing= ',sctCrkProp.spacing)
-            print('fiEqu= ',sctCrkProp.fiEqu)
-            rfset=sct.getFiberSets()["reinfSetFb"]
-            eps_sm=rfset.getStrainMax()
-            print('max. strain= ', eps_sm)
-            '''
             if Aceff<=0:
                s_rmax=0
             else:
@@ -1527,11 +1509,6 @@ class CrackStraightController(CrackController):
                                                  #are assigned to concrete
                 ftdiag=concrete.tensionStiffparam.pointOnsetCracking()['ft']      #stress at the adopted point for concrete onset cracking
                 Etsdiag=abs(concrete.tensionStiffparam.regresLine()['slope'])
-                '''
-                print('effective ratio of reinforcement=', ro_s_eff)
-                print('ft=',ftdiag*1e-6)
-                print('Ets0=', Etsdiag*1e-6)
-                '''
                 fiber_sets.redefTensStiffConcr(setOfTenStffConcrFibSect=sctCrkProp.setsRC.concrFibers,ft=ftdiag,Ets=Etsdiag)
             e.setProp('ResF',R)   #vector resisting force
             e.setProp('s_rmax',s_rmax)  #maximum crack distance
@@ -1543,18 +1520,9 @@ class CrackStraightController(CrackController):
             eps_sm=rfset.getStrainMax()
             srmax=e.getProp("s_rmax")
             wk=srmax*eps_sm
-      #      print(' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk)
             if (wk>e.getProp(self.limitStateLabel).wk):
-      #         e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,NTmp,MyTmp,MzTmp,srmax,eps_sm,wk))
                 R=e.getProp('ResF')
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp("idSection"),combName=combName,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
-            '''
-            print('element= ', e.tag)
-            print('max. strain= ', eps_sm)
-            print('crack widths: ',wk*1e3, ' mm')
-            R=e.getResistingForce()
-            print('Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']')
-            '''
       
 class CrackControl(lscb.CrackControlBaseParameters):
     '''
@@ -2196,7 +2164,7 @@ class LongShearJoints(object):
         else:
             tao_ru=self.getUltShearStressWithoutReinf()
         if tao_rd<=tao_ru:
-            print("OK!")
+            lmsg.log("OK!")
 
 ##################
 # Rebar families.#
