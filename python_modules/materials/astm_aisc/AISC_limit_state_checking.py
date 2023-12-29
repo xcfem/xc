@@ -576,9 +576,7 @@ def softenElements(elementSet):
                 mat.E= 0.8*Ebackup
             else: # Beam elements.
                 mat= e.physicalProperties.getVectorMaterials[0]
-                # print('mat= ',mat.name)
                 mat.sectionProperties.E= .8*Ebackup # Axial stiffness
-                #print('properties: ', e.getPropNames())
                 crossSection= e.getProp('crossSection')
                 # C2.3 (b) clause (flexural stiffness): 
                 Pns= crossSection.getReferenceCompressiveStrength()

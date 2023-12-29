@@ -182,7 +182,7 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         self.reactionsDict= dict()
         self.failedCombinations= list()
         for key in loadCombinations.getKeys():
-            print(key)
+            lmsg.log(key)
             comb= loadCombinations[key]
             self.eluSolutionSteps(comb, limitState)
         limitState.writeInternalForces(self.internalForcesDict)
