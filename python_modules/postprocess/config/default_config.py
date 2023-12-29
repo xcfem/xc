@@ -62,7 +62,6 @@ def setWorkingDirectory(fNameMark= 'env_config.py'):
         retval= retval+'/'
     if(not retval in sys.path):
         sys.path.append(retval)
-    print(retval)
     return retval
 
 def findProjectDirectory(fNameMark= '.git'):
