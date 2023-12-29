@@ -512,7 +512,6 @@ class CrackStraightController(CrackController):
             concrete= EC2_materials.concrOfName[sctCrkProp.concrName]
             rfSteel= EC2_materials.steelOfName[sctCrkProp.rsteelName]
             k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
-            # print('elem= ',e.tag, ' Aceff= ',Aceff)
             if(Aceff<=0):
                 s_rmax=0
             else:
@@ -537,8 +536,6 @@ class CrackStraightController(CrackController):
             # eps_cm=concrete.fctm()/2.0/concrete.E0()
             # wk=srmax*(eps_sm-eps_cm)
             wk= srmax*eps_sm
-            # print(' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk)
-            # print('e.getProp(self.limitStateLabel).wk', e.getProp(self.limitStateLabel).wk)
             if (wk>e.getProp(self.limitStateLabel).wk):
                 R=e.getProp('ResF')
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'),combName=loadCombinationName,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
