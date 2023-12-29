@@ -1405,7 +1405,6 @@ def testReinfSteelCharacteristicDiagram(preprocessor, matRecord):
         sg= sigmaKReinfSteel(e,matRecord)
         stress= steelDiagram.getStress()
         err= abs((sg-stress)/sg)
-        #print("e= ",e," strain= ",steelDiagram.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n")
         errMax= max(err,errMax)
         e= e+incr
     return errMax
@@ -1428,7 +1427,6 @@ def testReinfSteelDesignDiagram(preprocessor, matRecord):
         steelDiagram.commitState()
         sg= sigmaDReinfSteel(e,matRecord)
         err= abs((sg-steelDiagram.getStress())/sg)
-        # print("e= ",(e)," stress= ",stress," sg= ", (sg)," err= ", (err),"\n")
         errMax= max(err,errMax)
         e= e+incr
     return errMax
