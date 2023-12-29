@@ -277,20 +277,9 @@ class FibSectLSProperties(object):
         self.sigma_c= self.setsRC.concrFibers.fSet.getStressMin()
         self.sct.computeSpacement('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
-        '''
-        print('x= ',self.x)
-        print('d= ',self.d)
-        print('h= ',self.h)
-        print('As= ',self.As)
-        print('eps1= ', self.eps1)
-        print('eps2= ',self.eps2)
-        '''
         self.sct.computeSpacement('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
         nmbFi=self.tensSetFb.getNumFibers()
-        '''
-        print('nmbFI= ', nmbFi)
-        '''
         if nmbFi>0:
             self.fiEqu=math.sqrt(4/math.pi*self.As/nmbFi)
         if len(self.tensSetFb) > 0:
@@ -416,13 +405,13 @@ class TensionedRebarsProperties(TensionedRebarsBasicProperties):
         self.E= tensionedReinforcement[0].getMaterial().getInitialTangent()
 
  
-    def printParams(self):
-        print("Number of tensioned bars: ",self.number,"")
-        print("Spacement of tensioned bars; s= ",self.spacing," m")
-        print("Area of tensioned bars; As= ",self.area*1e4," cm2")
-        print("Centroid of tensioned bars; COG= (",self.yCentroid,",",self.zCentroid,") m")
-        print("Tensioned rebars average stress: ",self.averageStress/1e6," MPa")
-        #print("Effective area; AcEf= ",self.effectiveArea*1e4," cm2")
+    def printParams(self, os= sys.stdout):
+        os.write("Number of tensioned bars: "+str(self.number))
+        os.write("Spacement of tensioned bars; s= "+str(self.spacing)+" m")
+        os.write("Area of tensioned bars; As= "+str(self.area*1e4)+" cm2")
+        os.write("Centroid of tensioned bars; COG= ("+str(self.yCentroid)+","+str(self.zCentroid)+") m")
+        os.write("Tensioned rebars average stress: "+str(self.averageStress/1e6)+" MPa")
+        #os.write("Effective area; AcEf= "+str(self.effectiveArea*1e4)+" cm2")
 
 class CrackControlBaseParameters(LimitStateControllerBase):
     '''
@@ -441,10 +430,10 @@ class CrackControlBaseParameters(LimitStateControllerBase):
         self.claseEsfuerzo= "" #Clase de esfuerzo al que está sometida la sección.
         self.rcSets= None
 
-    def printParams(self):
+    def printParams(self, os= sys.stdout):
         # Prints the section crack control parameters.
-        print("Clase esfuerzo: ",self.claseEsfuerzo)
-        self.tensionedRebars.printParams()
+        os.write("Clase esfuerzo: "+str(self.claseEsfuerzo))
+        self.tensionedRebars.printParams(os= os)
 
 class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
     '''Base class for object that controls normal stresses
@@ -537,6 +526,12 @@ class ShearControllerBase(LimitStateControllerBase):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
+        :param fakeSection: true if a fiber section model of the section is 
+               not needed to perform control. In that case a fake section 
+               of type 'xc.ElasticShearSection3d' is generated for each 
+               element of the phantom model. Otherwise, when fakeSection 
+               is set to False (shear and cracking LS checking), a true fiber 
+               section of type 'xc.FiberSectionShear3d' is generated. 
         :param solutionProcedureType: type of the solution procedure to use
                                       when computing load combination results.
         '''
