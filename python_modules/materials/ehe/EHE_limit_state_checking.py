@@ -946,7 +946,7 @@ def get_buckling_e1_e2_eccentricities(Nd:float, MdMax:float, MdMin:float):
             e1= absMdMin/Nd # e1<0
     else:
         e2= -absMdMin/Nd # e2>0
-        if(math.sign(MdMax)==math.sign(MdMin)):
+        if(sign(MdMax)==sign(MdMin)):
             e1= -absMdMax/Nd  # e1>0
         else:
             e1= absMdMax/Nd # e1<0
