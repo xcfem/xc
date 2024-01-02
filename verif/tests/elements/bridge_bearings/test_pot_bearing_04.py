@@ -73,7 +73,7 @@ FXglobal=FXres*math.cos(angRad)-FYres*math.sin(angRad)
 FYglobal=FXres*math.sin(angRad)+FYres*math.cos(angRad)
 ElongXlres=potBearing.getElongXlocal()
 ElongYlres=potBearing.getElongYlocal()
-uNod2= potBearing.getVdispNodB()
+uNod2= potBearing.getUxUyUzNodB()
 
 ratio1= abs(FXglobal-FX)/FX
 ratio2= abs(FYglobal-FY)/FY

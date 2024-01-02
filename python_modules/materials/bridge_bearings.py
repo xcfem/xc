@@ -490,13 +490,23 @@ class PotBearing(object):
     
     def getVdispNodA(self):
         ''' Return the nodA displacement vector'''
-        vDispA=self.nodA.getDisp
+        vDispA= self.nodA.getDisp
         return vDispA
 
     def getVdispNodB(self):
         ''' Return the nodB displacement vector'''
-        vDispB=self.nodB.getDisp
+        vDispB= self.nodB.getDisp
         return vDispB
+    
+    def getUxUyUzNodA(self):
+        ''' Return the displacement components of nodA displacement vector'''
+        vDispA= self.nodA.getDisp
+        return xc.Vector([vDispA[0], vDispA[1], vDispA[2]])
+    
+    def getUxUyUzNodB(self):
+        ''' Return the displacement components of nodB displacement vector'''
+        vDispB= self.nodB.getDisp
+        return xc.Vector([vDispB[0], vDispB[1], vDispB[2]])
 
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     ''' Return the element reaction.
