@@ -1188,23 +1188,21 @@ XC::Vector XC::Vector::operator-(const Vector &b) const
 //! A method to return the dot product of the current Vector and the
 //! Vector \p V. If the current Vector and \p V are not of the same
 //! size, a warning message is printed and \f$0\f$ returned. 
-double XC::Vector::operator^(const XC::Vector &V) const
+double XC::Vector::operator^(const Vector &V) const
   {
-#ifdef _G3DEBUG
+    double result= 0.0;
+    int minSz= sz;
     if(sz != V.sz)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING vectors not of same sizes: " 
                   << sz << " != "  << V.sz
 		  << Color::def << std::endl;
-        return 0.0;
+        minSz= std::min(minSz, V.sz);
       }
-#endif
-
-    double result= 0.0;
-    double *dataThis= theData;
-    double *dataV= V.theData;
-    for(int i=0; i<sz; i++)
+    const double *dataThis= theData;
+    const double *dataV= V.theData;
+    for(int i=0; i<minSz; i++)
       result+= *dataThis++ * *dataV++;
     return result;
   }
