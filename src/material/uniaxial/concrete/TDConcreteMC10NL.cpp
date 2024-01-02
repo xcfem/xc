@@ -93,8 +93,8 @@ void XC::TDConcreteMC10NL::setup_parameters(void)
     TDConcreteMC10Base::setup_parameters();
 
     //Change inputs into the proper sign convention: ntosic: changed
-    fcu= -1.0*fabs(fcu);
-    epscu= -1.0*fabs(epscu);
+    fcu= -fabs(fcu);
+    epscu= -fabs(epscu);
   }
 
 XC::TDConcreteMC10NL::TDConcreteMC10NL(int tag)

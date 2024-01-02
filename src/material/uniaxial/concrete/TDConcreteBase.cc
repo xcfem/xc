@@ -102,7 +102,7 @@ void XC::TDConcreteBase::setup_parameters(void)
     ecmaxP= 0.0;
     deptP= 0.0;
 
-    sigCr= fabs(sigCr);
+    //sigCr= fabs(sigCr);
     eP= Ec; //Added by AMK
     epsP= 0.0;
     sigP= 0.0;
@@ -124,7 +124,7 @@ void XC::TDConcreteBase::setup_parameters(void)
     iter= 0;
         
     //Change inputs into the proper sign convention:
-    fpc= -1.0*fabs(fpc); 
+    fpc= -fabs(fpc); 
   }
 
 size_t XC::TDConcreteBase::resize(void)

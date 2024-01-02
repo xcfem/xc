@@ -104,8 +104,8 @@ void XC::TDConcrete::setup_parameters(void)
     epsP_m = 0.0; //Added by AMK
 
     //Change inputs into the proper sign convention:
-    epsshu = -1.0*fabs(epsshu);
-    epscru = 1.0*fabs(epscru); 
+    epsshu = -fabs(epsshu);
+    epscru = fabs(epscru); 
   }
 
 size_t XC::TDConcrete::resize(void)
@@ -136,7 +136,7 @@ XC::TDConcrete::TDConcrete(int tag)
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
 XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast)
   : TDConcreteBase(tag, MAT_TAG_TDConcrete, _fpc, _ft, _Ec, _beta, _age, _tcast),
-    tcr(_tcr), epsshu(_epsshu), epssha(_epssha), epscru(_epscru), epscrd(_epscrd), epscra(_epscra)
+    tcr(_tcr), epsshu(_epsshu), epssha(_epssha), epscru(_epscru), epscra(_epscra), epscrd(_epscrd)
   {
     setup_parameters();
   }

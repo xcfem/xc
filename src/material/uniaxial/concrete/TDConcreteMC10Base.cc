@@ -70,10 +70,10 @@ void XC::TDConcreteMC10Base::setup_parameters(void)
     epsP_m = 0.0; //Added by AMK
 	
     //Change inputs into the proper sign convention: ntosic: changed
-    epsba = -1.0*fabs(epsba);
-    epsda = -1.0*fabs(epsda);
-    phiba = 1.0*fabs(phiba);
-    phida = 1.0*fabs(phida);
+    epsba = -fabs(epsba);
+    epsda = -fabs(epsda);
+    phiba = fabs(phiba);
+    phida = fabs(phida);
   }
 
 size_t XC::TDConcreteMC10Base::resize(void)
