@@ -7,3 +7,4 @@ The finite element reliability analysis is useful to account for uncertainties b
 - [Reliability in OpenSees](https://portwooddigital.com/2021/05/16/striking-youtube-gold/)
 - [Monte Carlo Simulation](https://portwooddigital.com/2021/11/19/monte-carlo-simulation)
 - [The Sensitivity Is in the Details](https://portwooddigital.com/2023/11/28/the-sensitivity-is-in-the-details/)
+- [Minimal DDM Examples](https://portwooddigital.com/2023/10/22/minimal-ddm-examples/)
