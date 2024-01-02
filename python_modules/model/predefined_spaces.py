@@ -884,7 +884,7 @@ class PredefinedSpace(object):
                 break;
         return retval
 
-    def getReactions(self, xcSet= None):
+    def getReactions(self, xcSet= None, tol= 1e-3):
         ''' Return a Reactions object containing the reactions
             obtained during the analysis.
 
@@ -898,9 +898,10 @@ class PredefinedSpace(object):
                     AssertionError("Can\'t get the 'total' set")
                 
         supportNodes= list()
-        for nTag in self.fixedNodesTags:
-            n= self.preprocessor.getNodeHandler.getNode(nTag)
-            supportNodes.append(n)
+        for n in xcSet.nodes:
+            R= n.getReaction.Norm()
+            if(R>tol):
+                supportNodes.append(n)
         return get_reactions.Reactions(self.preprocessor, supportNodes)
 
     def getSetsNames(self):
