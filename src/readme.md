@@ -41,6 +41,7 @@ Utility classes and functions.
 - [Post-processing](https://fem-heroes.org/postprocessing/)
 - [How to Find a Memory Leak in OpenSees](https://portwooddigital.com/2022/05/29/how-to-find-a-memory-leak-in-opensees/)
 - [Indentation style](https://en.wikipedia.org/wiki/Indentation_style)
+- [A Better Way to Find Memory Leaks in OpenSees](https://portwooddigital.com/2023/12/27/a-better-way-to-find-memory-leaks-in-opensees/)
 
 <!-- NOTES FOR MYSELF: -->
 <!-- notes for alpha cluster: -->
