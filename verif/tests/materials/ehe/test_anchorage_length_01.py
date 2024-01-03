@@ -5,16 +5,16 @@
 from __future__ import division
 from __future__ import print_function
 
-from materials.ehe import EHE_materials
-from materials.ehe import EHE_limit_state_checking
-import os
-from misc_utils import log_messages as lmsg
-
 __author__= "Luis Claudio Pérez Tato (LCPT"
 __copyright__= "Copyright 2020, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from materials.ehe import EHE_materials
+from materials.ehe import EHE_limit_state_checking
+import os
+from misc_utils import log_messages as lmsg
 
 # Rebar controller.
 cCover= .05
