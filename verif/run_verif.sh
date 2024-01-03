@@ -1103,11 +1103,17 @@ echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py
+python tests/materials/ehe/test_transmission_length_01.py
+echo "$BLEU" "    Anchorage and lap lengths (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_anchorage_length_01.py
 python tests/materials/ehe/test_anchorage_length_02.py
 python tests/materials/ehe/test_anchorage_length_03.py
 python tests/materials/ehe/test_lap_length_01.py
-python tests/materials/ehe/test_transmission_length_01.py
+echo "$BLEU" "    Minimum and maximum reinforcement areas (EHE-08)." "$NORMAL"
+python tests/materials/ehe/test_minimum_reinforcement_01.py
+python tests/materials/ehe/test_minimum_reinforcement_02.py
+python tests/materials/ehe/test_minimum_reinforcement_03.py
+
 echo "$BLEU" "    Crack amplitude determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_crack_control_01.py
 python tests/materials/ehe/test_crack_control_02.py

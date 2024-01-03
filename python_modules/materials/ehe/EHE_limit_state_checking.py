@@ -1705,19 +1705,30 @@ def computeEffectiveHollowSectionParametersRCSection(rcSection):
 class ReinforcementRatios(object):
     ''' Maximum and minimum reinforcement ratios according to EHE-08.
 
+    :ivar concrete: concrete material.
+    :ivar reinforcingSteel: reinforcing steel material.
     :ivar Ac: concrete area.
-    :ivar fyd: design value of the tensile strength of passive reinforcement steel.
+    :ivar Ap: area of the bonded active reinforcement.
+    :ivar P: pre-stressing force with instantaneous losses disregarded.
+    :ivar prestressingSteel: pre-stressing steel material.
     '''
-    def __init__(self, Ac, fyd):
+    def __init__(self, concrete, reinforcingSteel, Ac , Ap= 0.0, P= 0, prestressingSteel= None):
         '''Constructor.
 
+        :param concrete: concrete material.
+        :param reinforcingSteel: reinforcing steel material.
         :param Ac: gross concrete section area.
-        :param fyd: design value of the tensile strength of passive reinforcement steel.
+        :param Ap: area of the bonded active reinforcement.
+        :param P: pre-stressing force with instantaneous losses disregarded.
+        :param prestressingSteel: pre-stressing steel material.
         '''
+        self.concrete= concrete
+        self.reinforcingSteel= reinforcingSteel
         self.Ac= Ac
-        self.fyd= fyd
+        self.Ap= Ap
+        self.P= P
+        self.prestressingSteel= prestressingSteel
     
-
 class BeamReinforcementRatios(ReinforcementRatios):
     ''' Maximum and minimum reinforcement ratios for members subjected to
         pure or combined bending.
@@ -1725,71 +1736,102 @@ class BeamReinforcementRatios(ReinforcementRatios):
     :ivar fct_m_fl: average flexural strength of the concrete.
     :ivar W1: section modulus of the gross section relating to the fibre under greatest tension.
     :ivar z: Mechanical lever arm of the section. In the absence of more accurate calculations, this may be taken to be z = 0.8 h.
-    :ivar Ap: area of the bonded active reinforcement.
     :ivar fpd: design value of the tensile strength of bonded active reinforcement steel.
     '''
-    def __init__(self,Ac, fyd, fct_m_fl, W1, z, Ap= 0.0, fpd= 0.0, P= 0.0, dp=0.0, ds=0.0, e= 0.0):
+    def __init__(self, concrete, reinforcingSteel, Ac, W1, h, z= None, Ap= 0.0, P= 0.0, dp=0.0, ds=0.0, e= 0.0, prestressingSteel= None):
         '''Constructor.
 
+        :param concrete: concrete material.
+        :param reinforcingSteel: reinforcing steel material.
         :param Ac: concrete area.
-        :param fyd: design value of the tensile strength of passive reinforcement steel.
-        :param fct_m_fl: average flexural strength of the concrete.
         :param W1: section modulus of the gross section relating to the fibre under greatest tension.
+        :param h: section depth.
         :param z: mechanical lever arm of the section. In the absence of more accurate calculations, this may be taken to be z = 0.8 h.
         :param Ap: area of the bonded active reinforcement.
-        :param fpd: design value of the tensile strength of bonded active reinforcement steel.
         :param dp: depth of the active reinforcement from the most compressed fibre in the section.
         :param ds: depth of the passive reinforcement from the most compressed fibre in the section.
         :param e: eccentricity of the pre-stressing relative to the centre of gravity of the gross section.
         '''
-        super().__init__(Ac= Ac, fyd= fyd)
-        self.fct_m_fl= fct_m_fl
+        super().__init__(concrete= concrete, reinforcingSteel= reinforcingSteel, Ac= Ac, Ap= Ap, P= P, prestressingSteel= prestressingSteel)
         self.W1= W1
-        self.z= z
-        self.Ap= Ap
-        self.fpd= fpd
-        self.P= P
+        self.h= h
+        if(z):
+            self.z= z
+        else:
+            self.z= 0.8*h
         self.dp= dp
         self.ds= ds
         self.e= e
     
+    def getMinimumGeometricAmount(self):
+        ''' Minimum geometric reinforcement amount for columns
+            according to table 42.3.5 of EHE-08.'''
+        fyd= self.reinforcingSteel.fyd()
+        retval= self.Ac
+        if(fyd>400e6):
+            retval*= 0.0028
+        else:
+            retval*= 0.0033
+        return retval
+    
     def getMinimumMechanicalAmount(self):
         ''' Minimum mechanical reinforcement amount according to
             clause 42.3.2 of EHE-08.'''
-        retval= (self.W1/self.z*self.fct_m_fl)
+        retval= (self.W1/self.z*self.concrete.getFlexuralTensileStrength(self.h))
         if(self.Ap!=0.0): # prestressing
             retval+= self.P/self.z*(self.W1/self.Ac+self.e)
             frac= 1.0
             if(self.ds!=0.0): # Passive and active reinforcement.
                 frac= self.dp/self.ds
-            retval-= self.Ap*self.fpd*frac
-        retval/= self.fyd
+            retval-= self.Ap*self.prestressingSteel.fpd()*frac
+        retval/= self.reinforcingSteel.fyd()
         return max(retval,0.0)
 
-class ColumnReinforcementRatios(object):
-    def __init__(self,Ac,fcd,fyd):
+class ColumnReinforcementRatios(ReinforcementRatios):
+    ''' Minimum and maximum reinforcement ratios for columns.
+
+    '''
+    def __init__(self, concrete, reinforcingSteel, Ac, Ap= 0.0, P= 0):
         '''Constructor.
 
+        :param concrete: concrete material.
+        :param reinforcingSteel: reinforcing steel material.
         :param Ac: concrete area.
-        :param fcd: design value of concrete compressive strength (N/m2).
-        :param fyd: design yield strength (Pa)
+        :param Ap: area of the bonded active reinforcement.
+        :param P: pre-stressing force with instantaneous losses disregarded.
         '''
-        super().__init__(Ac= Ac, fyd= fyd)
-        self.fcd= fcd
+        super().__init__(concrete= concrete, reinforcingSteel= reinforcingSteel, Ac= Ac, Ap= Ap, P= P)
         
     def getMinimumGeometricAmount(self):
         ''' Minimum geometric reinforcement amount for columns
             according to table 42.3.5 of EHE-08.'''
         return 0.004*self.Ac 
 
-    def getMinimumMechanicalAmount(self,Nd):
+    def getMinimumMechanicalAmount(self, Nd):
         ''' Minimum mechanical reinforcement amount according to
-            clause 42.3.3 of EHE-08.'''
-        return 0.1*Nd/self.fyd
+            clause 42.3.3 of EHE-08.
+
+        :param Nd: Design value of the internal axial load. 
+        '''
+        if(Nd>0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            msg= className+'.'+methodName+'; column member in tension.'
+            lmsg.warning(msg)
+            retval= self.P+self.Ac*self.concrete.fctm()
+            if(self.prestressingSteel):
+                retval-= self.Ap*self.prestressingSteel.fpd()
+            retval/= self.reinforcingSteel.fyd()
+        else:
+            fycd= min(self.reinforcingSteel.fyd(),400e6)
+            retval= -0.1*Nd/fycd
+        return retval
 
     def getMaximumReinforcementAmount(self):
-        '''Return the maximal reinforcement amount.'''
-        return min((self.fcd*self.Ac)/self.fyd,0.08*self.Ac)
+        '''Return the maximal reinforcement amount acording to clause
+           42.3.3 of EHE-08.'''
+        fycd= min(self.reinforcingSteel.fyd(),400e6)
+        return (-self.concrete.fcd()*self.Ac)/fycd
 
     def check(self, As, Nd):
         '''Checking of main reinforcement ratio in compression.'''
@@ -1813,8 +1855,108 @@ class ColumnReinforcementRatios(object):
             methodName= sys._getframe(0).f_code.co_name
             msg= className+'.'+methodName+"; reinforcement area: "+str(As*1e4)+" cm, gives a ratio above the maximum mechanical reinforcement ratio: "+str(ctMax*1e4)+" cm2\n"
             lmsg.warning(msg)
+            
+class TieReinforcementRatios(ReinforcementRatios):
+    ''' Minimum and maximum reinforcement ratios for members that resist
+        tension forces.
 
+    '''
+    def __init__(self, concrete, reinforcingSteel, Ac, Ap= 0.0, P= 0):
+        '''Constructor.
 
+        :param concrete: concrete material.
+        :param reinforcingSteel: reinforcing steel material.
+        :param Ac: concrete area.
+        :param Ap: area of the bonded active reinforcement.
+        :param P: pre-stressing force with instantaneous losses disregarded.
+        '''
+        super().__init__(concrete= concrete, reinforcingSteel= reinforcingSteel, Ac= Ac, Ap= Ap, P= P)
+        
+    def getMinimumGeometricAmount(self):
+        ''' Minimum geometric reinforcement amount for columns
+            according to table 42.3.5 of EHE-08 (considered as a
+            rib).'''
+        fyd= self.reinforcingSteel.fyd()
+        retval= self.Ac
+        if(fyd>400e6):
+            retval*= 0.003
+        else:
+            retval*= 0.004
+        return retval
+
+    def getMinimumMechanicalAmount(self, Nd):
+        ''' Minimum mechanical reinforcement amount according to
+            clause 42.3.3 of EHE-08.
+
+        :param Nd: Design value of the internal axial load. 
+        '''
+        if(Nd>0):
+            retval= self.P+self.Ac*self.concrete.fctm()
+            if(self.prestressingSteel):
+                retval-= self.Ap*self.prestressingSteel.fpd()
+            retval/= self.reinforcingSteel.fyd()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            msg= className+'.'+methodName+'; tie member in compression.'
+            lmsg.warning(msg)
+            fycd= min(self.reinforcingSteel.fyd(),400e6)
+            retval= -0.1*Nd/fycd
+        return retval
+
+    def check(self, As, Nd):
+        '''Checking of main reinforcement ratio in compression.'''
+        ctMinGeom= self.getMinumumGeometricAmount()
+        if(As<ctMinGeom):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            msg= className+'.'+methodName+"; reinforcement area: "+str(As*1e4)+\
+                 " cm, gives a ratio below minimal geometric reinforcement amount: "+\
+                 str(ctMinGeom*1e4)+" cm2\n"
+            lmsg.warning(msg)
+        ctMinMec= self.getMinimumMechanicalAmount(Nd)
+        if(As<ctMinMec):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            msg= className+'.'+methodName+"; reinforcement area: "+str(As*1e4)+" cm, gives a ratio below minimal mechanical reinforcement amount: "+str(ctMinMec*1e4)+" cm2\n"
+            lmsg.warning(msg)
+
+def get_min_and_max_reinforcement(memberType:str, rcSection, Nd):
+    ''' Return the minimum and maximum reinforcement areas for the given 
+        section.
+
+    :param memberType: member type: 'beam', 'column', 'tie', ...
+    :param rcSection: reinforced concrete section.
+    :param Nd: design value of the internal axial load. 
+    '''
+    if(memberType=='column'):
+        columnReinfRatios= ColumnReinforcementRatios(Ac= rcSection.getAc(), concrete= rcSection.getConcreteType(), reinforcingSteel= rcSection.getReinfSteelType())
+        asMinGeom= columnReinfRatios.getMinimumGeometricAmount()
+        asMinMech= columnReinfRatios.getMinimumMechanicalAmount(Nd= Nd)
+        asMax= columnReinfRatios.getMaximumReinforcementAmount()
+    elif(memberType=='tie'):
+        tieReinfRatios= TieReinforcementRatios(Ac= rcSection.getAc(), concrete= rcSection.getConcreteType(), reinforcingSteel= rcSection.getReinfSteelType())
+        asMinGeom= tieReinfRatios.getMinimumGeometricAmount()
+        asMinMech= tieReinfRatios.getMinimumMechanicalAmount(Nd= Nd)
+        asMax= None
+    elif(memberType=='beam'):
+        Ac= rcSection.getAc()
+        W1= rcSection.getW1()
+        h= rcSection.getDepth()
+        beamReinfRatios= BeamReinforcementRatios(Ac= Ac, concrete= rcSection.getConcreteType(), reinforcingSteel= rcSection.getReinfSteelType(), W1= W1, h= h)
+        asMinGeom= beamReinfRatios.getMinimumGeometricAmount()
+        asMinMech= beamReinfRatios.getMinimumMechanicalAmount()
+        asMax= None
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        msg= methodName+"; member type: '"+str(memberType)+"' unknonw."
+        lmsg.warning(msg)
+        asMinGeom= None
+        asMinMech= None
+        asMax= None
+
+    return asMinGeom, asMinMech, asMax
+            
 class ConcreteCorbel(object):
     '''Concrete corbel as in EHE-08 design code.'''
     def __init__(self,concrete, steel, jointType):

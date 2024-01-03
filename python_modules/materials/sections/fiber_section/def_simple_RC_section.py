@@ -1276,7 +1276,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param reinfSteelType: type of reinforcement steel.
         :param swapReinforcementAxes: if true, swap the axes of reinforcement so the positive and negative reinforcement rows are placed rotated 90 degrees.
         '''
-        RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
+        RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         section_properties.RectangularSection.__init__(self, name= name, b= width, h= depth)
 
             
@@ -1319,6 +1319,25 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         retval= self.shReinfZ
         if(self.swapReinforcementAxes):
             retval= self.shReinfY
+        return retval
+
+    def getW1(self):
+        ''' Section modulus of the gross section with respect to the most tensioned fiber.'''
+        retval= self.getAc()*self.getDepth()/2.0
+        return retval
+    
+    def getDepth(self):
+        ''' Return the depth of the section that corresponds to the reinforcement axes: (width if the reinforcement axes are swapped).'''
+        retval= self.h
+        if(self.swapReinforcementAxes):
+            retval= self.b
+        return retval
+        
+    def getWidth(self):
+        ''' Return the width of the section that corresponds to the reinforcement axes: (depth if the reinforcement axes are swapped).'''
+        retval= self.b
+        if(self.swapReinforcementAxes):
+            retval= self.h
         return retval
     
     def getRespT(self,preprocessor):
