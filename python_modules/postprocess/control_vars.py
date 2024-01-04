@@ -16,6 +16,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 
 
 import os
+import sys
 import json
 import scipy
 from misc_utils import log_messages as lmsg
@@ -89,6 +90,11 @@ class ControlVarsBase(object):
         ''' Return the capacity factor.'''
         return -1.0
 
+    def getKnownArguments(self):
+        ''' Return a list of the arguments known by this object.'''
+        tmp= self.getDict()
+        return list(tmp.keys())
+
     def __call__(self,arguments):
         ''' Allow the object behave like a funcion.
 
@@ -103,7 +109,12 @@ class ControlVarsBase(object):
                 if(hasattr(obj,'__call__')):
                     obj= obj.__call__()
             else:
-                lmsg.error('argument: '+ arg+' not found')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                msg= className+'.'+methodName+'; argument: '+ arg+' not found.'
+                msg+= ' Candidates are:'+str(self.getKnownArguments())
+                lmsg.error(msg)
+                exit(1)
         retval= obj
         return retval
     
@@ -786,7 +797,7 @@ class SIATypeRCShearControlVars(RCShearControlVars):
     :ivar Vcu: Vcu component of the shear strength.
     :ivar Vsu: Vsu component of the shear strength.
     '''
-    def __init__(self,idSection=-1,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vcu= 0.0, Vsu= 0.0, Vu= 0.0):
+    def __init__(self,idSection=-1,combName= 'nil',CF= -1.0, N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vcu= 0.0, Vsu= 0.0, Vu= 0.0):
         '''
         Constructor.
 
@@ -1501,6 +1512,8 @@ def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
             controlVar= None
         for n in elemNodes:
             if(controlVar):
+                print('controlVar= ', controlVar)
+                print('argument= ', argument)
                 value= controlVar(argument)
                 oldValue= n.getProp(nodePropName)
                 n.setProp(nodePropName,oldValue+value)
