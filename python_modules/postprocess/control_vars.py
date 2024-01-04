@@ -1512,8 +1512,6 @@ def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
             controlVar= None
         for n in elemNodes:
             if(controlVar):
-                print('controlVar= ', controlVar)
-                print('argument= ', argument)
                 value= controlVar(argument)
                 oldValue= n.getProp(nodePropName)
                 n.setProp(nodePropName,oldValue+value)
