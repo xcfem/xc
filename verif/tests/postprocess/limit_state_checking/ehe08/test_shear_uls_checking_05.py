@@ -139,7 +139,7 @@ rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing=
 smallBarDiameter= 4e-3
 rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
-# Shear reinforcement at both ends.
+# Shear reinforcement.
 shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "shearReinf",nShReinfBranches= 2, areaShReinfBranch= EHE_materials.Fi8, shReinfSpacing= 0.15, angAlphaShReinf= math.pi/2.0)
 
 ## Store element reinforcement. Assign to each element the properties
