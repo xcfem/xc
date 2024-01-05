@@ -19,6 +19,7 @@ from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg
 import scipy.interpolate
+from scipy import optimize
 from materials import concrete_base
 # from scipy import interpolate
 from materials.sections import rebar_family as rf
@@ -1063,8 +1064,8 @@ class ShearController(lscb.ShearControllerBase):
         self.AsTrsv= 0.0 #Shear reinforcement area.
         self.alpha= math.radians(90) # angle of the shear reinforcement with the member axis (figure 44.2.3.1 EHE-08).
         self.theta= math.radians(45) #Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-        self.thetaMin= math.atan(0.5) #Minimal value of the theta angle.
-        self.thetaMax= math.atan(2) #Maximal value of the theta angle.
+        self.thetaMin= math.atan(0.5) # Minimal value of the theta angle.
+        self.thetaMax= math.atan(2) # Maximal value of the theta angle.
 
         self.thetaFisuras= 0.0 # angle of the cracks with the member axis.
         self.Vcu= 0.0 # contribution of the concrete to shear strength.
@@ -1086,6 +1087,7 @@ class ShearController(lscb.ShearControllerBase):
         '''
         # concrFibers= rcSets.concrFibers.fSet
         self.concreteArea= rcSets.getConcreteArea(1)
+        self.Vsu= 0.0 # No shear reinforcement.
         if(self.concreteArea<1e-6):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -1111,7 +1113,6 @@ class ShearController(lscb.ShearControllerBase):
                   else:
                       self.tensionedRebarsArea= 0.0
                   self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.tensionedRebarsArea,0.0)
-                self.Vsu= 0.0
                 self.Vu1= -1.0
             else: # Uncracked section
                 axes= scc.getInternalForcesAxes()
@@ -1227,38 +1228,26 @@ class ShearController(lscb.ShearControllerBase):
         reinforcementCode= section.getReinfSteelType()
         shReinf= section.getShearReinfY()
         circular= section.isCircular()
+        rcSets= self.extractFiberData(sct, concreteCode, reinforcementCode)
         self.AsTrsv= shReinf.getAs()
         self.alpha= shReinf.angAlphaShReinf
-        self.theta= shReinf.angThetaConcrStruts
-        #Searching for the best theta angle (concrete strut inclination).
-        #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
-        thetaVuTmp=list()
-        rcSets= self.extractFiberData(sct, concreteCode, reinforcementCode)
-        self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
-        thetaVuTmp.append([self.theta,self.Vu])
+        
+        def vu_theta(th:float):
+            self.theta= th
+            self.calcVuEHE08(sct, torsionParameters, concreteCode, reinforcementCode, Nd, Md, Vd, Td, rcSets, circular)
+            return -self.Vu
+        
+        th= math.pi/4.0
+        Vu= -vu_theta(th)
         if(self.Vu<Vd):
-            self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        if(self.Vu<Vd):
-            self.theta= (self.thetaMin+self.thetaMax)/2.0
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        if(self.Vu<Vd):
-            self.theta= 0.95*self.thetaMax
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        if(self.Vu<Vd):
-            self.theta= 1.05*self.thetaMin
-            self.calcVuEHE08(sct,torsionParameters,concreteCode,reinforcementCode,Nd,Md,Vd,Td, rcSets, circular)
-            thetaVuTmp.append([self.theta,self.Vu])
-        self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
-        VuTmp= self.Vu
-        if(VuTmp!=0.0):
-            FCtmp= Vd/VuTmp
+            options= {'maxiter':10}#{'xatol':tol}
+            result= optimize.minimize_scalar(vu_theta, bounds= [self.thetaMin, self.thetaMax], method= 'bounded', options= options)
+            # self.iterations= result.nfev
+        if(self.Vu!=0.0):
+            FCtmp= Vd/self.Vu
         else:
             FCtmp= 1e99
-        return FCtmp, VuTmp
+        return FCtmp, self.Vu
             
     def checkSection(self, sct, elementDimension, torsionParameters= None):
         ''' Check shear on the section argument.
@@ -1639,7 +1628,16 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
 class TorsionParameters(object):
     '''Methods for checking reinforced concrete section under torsion 
-       according to clause 45.1 of EHE-08.'''
+       according to clause 45.1 of EHE-08.
+
+    :ivar h0: Actual thickness of the wall in the case of hollow sections.
+    :ivar c: Covering of longitudinal reinforcements.
+
+    :ivar crossSectionContour: Cross section contour.
+    :ivar midLine: Polygon defined by the midline of the effective hollow section.
+    :ivar intLine: Polygon defined by the interior contour of the effective hollow section.
+    :ivar effectiveHollowSection: Effective hollow section contour
+    '''
     def __init__(self):
         self.h0= 0.0  # Actual thickness of the wall in the case of hollow sections.
         self.c= 0.0  # Covering of longitudinal reinforcements.
@@ -1653,19 +1651,23 @@ class TorsionParameters(object):
            external circumference including inner void areas
         '''
         return self.crossSectionContour.getArea()
+    
     def u(self):
         '''Return the external perimeter of the transverse section.
         '''
         return self.crossSectionContour.getPerimeter()
+    
     def he(self):
         '''Return the effective thickness of the wall of the design section.
         '''
         return max(2*self.c,min(self.A()/self.u(),self.h0))
+    
     def Ae(self):
         '''Return the area enclosed by the middle line of the design 
            effective hollow section
         '''
         return self.midLine.getArea()
+    
     def ue(self):
         '''Return the perimeter of the middle line in the design effective 
            hollow section Ae.

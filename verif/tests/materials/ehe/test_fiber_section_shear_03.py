@@ -33,31 +33,29 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 # Materials definition
 concr= EHE_materials.HA40
 concr.alfacc= 0.85 # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
-concr.gmmC= 1.0
+concr.gmmC= 1.0 # See tabla 5.11
 steel= EHE_materials.B500S
-steel.gammaS= 1.0
+steel.gammaS= 1.0 # See tabla 5.11
 
 # Section geometry
-diameter= 350e-3 # Cross-section diameter [m]
-cover= 0.025 # Cover [m]
+diameter= 350e-3 # Cross-section diameter [m] (see 5.1.1 geometría de los...)
+cover= 0.025 # Cover [m] (see 5.1.2 disposición de la armadura).
 section= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 section.nDivIJ= 10
 
 # Longitudinal reinforcement
-rebarDiam= 16e-3
-rebarArea= EHE_materials.Fi16
-numOfRebars= 12
+rebarDiam= 16e-3 # See 5.1.2 disposición de la armadura.
+rebarArea= math.pi*(rebarDiam/2.0)**2 
+numOfRebars= 12 # See 5.1.2 disposición de la armadura.
 
 
 # Shear reinforcement
-shearReinfArea= EHE_materials.Fi6
 shearReinfDiam= 6e-3
+shearReinfArea= math.pi*(shearReinfDiam/2.0)**2 
 nBranches= 2
-shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShReinfBranches= nBranches, areaShReinfBranch= shearReinfArea, shReinfSpacing= 0.2, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShReinfBranches= nBranches, areaShReinfBranch= shearReinfArea, shReinfSpacing= 0.2, angAlphaShReinf= math.pi/2.0, angThetaConcrStruts= math.pi/4.0)
 
-nCover= cover
-
-mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*cover), nominalCover= nCover)])
+mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*cover), nominalCover= cover)])
 
 
 feProblem= xc.FEProblem()
@@ -69,7 +67,7 @@ materialHandler= preprocessor.getMaterialHandler
 section.mainReinf= mainReinf
 section.shReinf= shearReinf
 
-section.defRCSection(preprocessor,matDiagType= 'd')
+section.defRCSection(preprocessor, matDiagType= 'd')
 
 zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
@@ -78,11 +76,11 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
-Nd= -550e3 # Axial force when checking shear.
+Nd= -550e3 # Axial force when checking shear (last row of the table 5-11).
 Myd= 190e3# 223.1e3 # Y bending moment when checking shear. Reduced
           # to achieve convergence.
 Mzd= 0.0 # Z bending moment value when checking shear.
-Vd= 148.7e3 # Shear value.
+Vd= 148.7e3 # Shear value (last row, third column of the table 5-11).
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -110,30 +108,38 @@ secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParame
 scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension, torsionParameters= secHAParamsTorsion)
 
+# Check results
+z= shearController.mechanicLeverArm
+zRef= 204.2e-3 # lever arm (last row, fifth column of the table 5-11).
 Vu1= shearController.Vu1
-Vu1Ref= 1.32e6
 Vcu= shearController.Vcu
-VcuRef= 84.2e3+67.2e3
+VcuRef= 84.2e3+67.2e3 # Sum of the values of the 7th and 8th columns, third row.
 Vsu= shearController.Vsu
-VsuRef= 25.2e3*400e6/steel.fyd() # They don't reduce the stress on shear reinf.
+VsuRef= 25.2e3*400e6/steel.fyd() # (9th column) they don't reduce the stress on shear reinf.
 Vu2= shearController.Vu2
 Vu= shearController.Vu
 VuRef= 176.7e3
 
+ratio0= ((z-zRef)/zRef)
 ratio1= ((Vcu-VcuRef)/VcuRef)
 ratio2= ((Vsu-VsuRef)/VsuRef)
 ratio3= ((Vu-VuRef)/VuRef)
 
 '''
+print("\ntheta= ", math.degrees(shearController.theta))
+print("Vu1= ",Vu1/1e3," kN")
+print("z= ", z,'m')
+print("zRef= ", zRef,'m')
+print("ratio0= ",ratio0)
 print("Vcu= ",Vcu/1e3," kN")
 print("VcuRef= ",VcuRef/1e3," kN")
-print("ratio1= ",ratio2)
+print("ratio1= ",ratio1)
 print("Vsu= ",Vsu/1e3," kN")
 print("VsuRef= ",VsuRef/1e3," kN")
-print("ratio2= ",ratio3)
+print("ratio2= ",ratio2)
 print("Vu= ",Vu/1e3," kN")
 print("VuRef= ",VuRef/1e3," kN")
-print("ratio3= ",ratio4)
+print("ratio3= ",ratio3)
 '''
 
 
@@ -141,3 +147,14 @@ if ((abs(ratio1)<0.1) & (abs(ratio2)<0.1) & (abs(ratio3)<0.01)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Matplotlib output
+# section.plot(preprocessor= preprocessor)
+    
+# # DXF output
+# import ezdxf
+# doc = ezdxf.new("R2000")
+# msp = doc.modelspace()
+# section.writeDXF(modelSpace= msp)
+# dxfFileName= fname.removesuffix('.py')
+# doc.saveas(dxfFileName+'.dxf')
