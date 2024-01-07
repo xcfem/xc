@@ -1133,6 +1133,8 @@ python tests/materials/ehe/test_shear_stress_joints_02.py
 python tests/materials/ehe/test_fiber_section_shear_01.py
 python tests/materials/ehe/test_fiber_section_shear_02.py
 python tests/materials/ehe/test_fiber_section_shear_03.py
+echo "$BLEU" "    Torsion resistance determination tests (EHE-08)." "$NORMAL"
+python tests/materials/ehe/test_torsion_check_01.py
 echo "$BLEU" "    Shrinkage and creep determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_creep_01.py
 python tests/materials/ehe/test_creep_02.py

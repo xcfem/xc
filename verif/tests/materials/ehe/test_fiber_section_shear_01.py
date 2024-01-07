@@ -87,7 +87,7 @@ shearController= EHE_limit_state_checking.ShearController('ULS_shear')
 
 scc= zlElement.getSection()
 rcSets= shearController.extractFiberData(scc, EHE_materials.HA25, EHE_materials.B500S)
-shearController.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0, rcSets= rcSets)
+shearController.calcVuEHE08(scc,"",NDato,math.sqrt(MyDato**2+MzDato**2),0,0, rcSets= rcSets)
 
 
 Vu2A= shearController.Vu2
@@ -104,7 +104,7 @@ if(analOk!=0):
     exit()
 
 
-shearController.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0, rcSets= rcSets)
+shearController.calcVuEHE08(scc,"",0,0,0,0, rcSets= rcSets)
 
 Vu2B= shearController.Vu2
 
@@ -120,7 +120,7 @@ if(analOk!=0):
     exit()
 
 
-shearController.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0, rcSets= rcSets)
+shearController.calcVuEHE08(scc,"",0,0,0,0, rcSets= rcSets)
 
 Vu2C= shearController.Vu2
 

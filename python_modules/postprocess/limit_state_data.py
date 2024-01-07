@@ -536,6 +536,40 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
         '''
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
         return self.runChecking(outputCfg= outputCfg)
+    
+class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
+    ''' Reinforced concrete torsion strength limit state data.'''
+
+    def __init__(self):
+        '''Limit state data constructor '''
+        super(TorsionResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_torsionResistance', outputDataBaseFileName= 'verifRsl_torsionULS', designSituation= 'permanent')
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
+        
+    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+        ''' Perform limit state checking.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param crossSections: cross sections on each element.
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
+        '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
 
 class SLS_LimitStateData(LimitStateData):
     ''' Serviceability limit state data for frequent load combinations.'''
@@ -734,6 +768,9 @@ woodNormalStressesResistance= NormalStressesSteelLimitStateData()
 shearResistance= ShearResistanceRCLimitStateData()
 steelShearResistance= ShearResistanceSteelLimitStateData()
 woodShearResistance= ShearResistanceSteelLimitStateData()
+
+# Torsion strength.
+torsionResistance= TorsionResistanceRCLimitStateData()
 
 fatigueResistance= FatigueResistanceRCLimitStateData()
 vonMisesStressResistance= VonMisesStressLimitStateData()

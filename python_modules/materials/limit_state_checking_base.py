@@ -561,7 +561,7 @@ class ShearControllerBase(LimitStateControllerBase):
 
     def getShearForce(self, Vy, Vz, elementDimension):
         ''' Return the shear internal force to use when checking shear 
-            strenght.
+            strength.
 
         :param Vy: shear force on "Y" axis.
         :param Vz: shear force on "Z" axis.

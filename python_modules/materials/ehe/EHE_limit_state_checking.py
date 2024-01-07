@@ -495,8 +495,8 @@ def getF1cdEHE08(fck,fcd):
     :param fcd: design value of concrete compressive strength (N/m2).
     '''
     retval=0.6
-    if fck>60e6:
-      retval=max(0.9-fck/200.e6,0.5)
+    if(fck>60e6):
+        retval=max(0.9-fck/200.e6,0.5)
     retval= retval*fcd
     return retval
 
@@ -522,15 +522,15 @@ def getKEHE08(sgpcd,fcd):
         retval=2.5*(1-s)
     return retval
 
-def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
+def getVu1EHE08(fck, fcd, Ncd, Ac, b0, d, alpha, theta):
     '''getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta) [units: N, m, rad]. Return
        the value of Vu1 (shear strength at failure due to diagonal compression in the web) 
        according to clause 44.2.3.1 of EHE-08.
 
     :param fck: concrete characteristic compressive strength.
     :param fcd: design value of concrete compressive strength (N/m2).
-    :param Ncd: design value of axial force in concrete
-                (positive if in tension).
+    :param Ncd: design value of axial force in concrete only (positive if in 
+                tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth.
@@ -538,10 +538,16 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
                   (figure 44.2.3.1 EHE-08).
     :param theta: angle between the concrete compressed struts and the 
                   member axis (figure 44.2.3.1.a EHE).
+    :param As: Total area of compressed reinforcement. In combined compression, 
+               it may be assumed that the entire reinforcement is subject 
+               to the tension fyd.
+    :param fyd: Design strength of reinforcement As.
     '''
     f1cd=getF1cdEHE08(fck,fcd)
-    sgpcd=min(Ncd/Ac,0)
-    K=getKEHE08(sgpcd,fcd)
+    K= 1
+    if(Ncd<0): # compressed section.
+        sgpcd= Ncd/Ac
+        K= getKEHE08(sgpcd,fcd)
     ctgTheta=min(max(1/math.tan(theta),0.5),2.0)
     return K*f1cd*b0*d*(ctgTheta+1/math.tan(alpha))/(1+ctgTheta**2)
 
@@ -558,9 +564,7 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
                    la transferencia.
     :param Ncd: design value of axial force in concrete 
                 (positive if in tension).
-    :param Ac: concrete section total area.
-
-    
+    :param Ac: concrete section total area.   
     '''
     tmp= fctd
     if alphal!=1.0:
@@ -730,8 +734,6 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     retvalEpsilonX= max(0,retvalEpsilonX)
     return retvalEpsilonX
   
-
-
 def getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [units: N, m, rad]
      Return the reference angle of inclination of cracks (in radians) from
@@ -885,8 +887,8 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param fcd: design value of concrete compressive strength.
     :param fyd: design yield strength of the transverse reinforcement.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: design value of axial force in 
-                concrete (positive if in tension).
+    :param Ncd: design value of axial force in concrete only (positive if 
+                in tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
@@ -1074,15 +1076,12 @@ class ShearController(lscb.ShearControllerBase):
         self.Vu2= 0.0 # Shear strength at failure due to tensile force in the web
         self.Vu= 0.0 # Shear strength at failure.
 
-    def calcVuEHE08NoAt(self, scc, concrete, reinfSteel, rcSets):
+    def calcVuEHE08NoAt(self, scc, rcSets):
         ''' Compute the shear strength at failure without shear reinforcement
          according to clause 44.2.3.2.1 of EHE-08.
          XXX Presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
-         :param reinfSteelMaterialTag: reinforcement steel material identifier.
-         :param concrete: parameters to modelize concrete.
-         :param reinfSteel: parameters to modelize reinforcement steel.
          :param rcSets: fiber sets in the reinforced concrete section.
         '''
         # concrFibers= rcSets.concrFibers.fSet
@@ -1123,15 +1122,13 @@ class ShearController(lscb.ShearControllerBase):
             self.Vcu= self.Vu2
             self.Vu= self.Vu2
 
-    def calcVuEHE08SiAt(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
+    def calcVuEHE08SiAt(self, scc, torsionParameters, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH shear reinforcement.
          XXX Presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param torsionParameters: parameters that define torsional behaviour 
                                    of the section as in clause 45.1 of EHE-08.
-         :param concrete: concrete material.
-         :param reinfSteel: reinforcement steel.
          :param Nd: Design value of axial force (here positive if in tension)
          :param Md: Absolute value of design value of bending moment.
          :param Vd: Absolute value of effective design shear (clause 42.2.2).
@@ -1165,7 +1162,7 @@ class ShearController(lscb.ShearControllerBase):
             self.strutWidth= scc.getCompressedStrutWidth() # b0
             self.effectiveDepth= scc.getEffectiveDepth() # d
             self.concreteAxialForce= concrFibers.getCompressionResultant()
-            self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.alpha,self.theta)
+            self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth, alpha= self.alpha, theta= self.theta)
             if(self.isBending):
                 self.eps1= concrFibers.getStrainMax()
                 self.reinforcementElasticModulus= reinfFibers[0].getMaterial().getInitialTangent()
@@ -1188,15 +1185,13 @@ class ShearController(lscb.ShearControllerBase):
                 self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
             self.Vu= min(self.Vu1,self.Vu2)
 
-    def calcVuEHE08(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
+    def calcVuEHE08(self, scc, torsionParameters, Nd, Md, Vd, Td, rcSets, circular= False):
         '''  Compute the shear strength at failure.
          XXX Presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param torsionParameters: parameters that define torsional behaviour 
                                    of the section as in clause 45.1 of EHE-08.
-         :param concrete: parameters to model concrete.
-         :param reinfSteel: parameters to model rebar's steel.
          :param Nd: Design value of axial force (positive if in tension)
          :param Md: Absolute value of design value of bending moment.
          :param Vd: Absolute value of effective design shear (clause 42.2.2).
@@ -1207,9 +1202,9 @@ class ShearController(lscb.ShearControllerBase):
                           its elements.
         '''
         if(self.AsTrsv==0):
-            self.calcVuEHE08NoAt(scc,concrete,reinfSteel,rcSets)
+            self.calcVuEHE08NoAt(scc= scc, rcSets= rcSets)
         else:
-            self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd, Td, rcSets, circular)
+            self.calcVuEHE08SiAt(scc= scc, torsionParameters= torsionParameters, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
 
     def checkInternalForces(self, sct, torsionParameters, Nd, Md, Vd, Td):
         '''  Compute the shear strength at failure.
@@ -1234,7 +1229,7 @@ class ShearController(lscb.ShearControllerBase):
         
         def vu_theta(th:float):
             self.theta= th
-            self.calcVuEHE08(sct, torsionParameters, concreteCode, reinforcementCode, Nd, Md, Vd, Td, rcSets, circular)
+            self.calcVuEHE08(scc= sct, torsionParameters= torsionParameters, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
             return -self.Vu
         
         th= math.pi/4.0
@@ -1308,6 +1303,106 @@ class ShearController(lscb.ShearControllerBase):
             if(FCtmp>=e.getProp(self.limitStateLabel).CF): # new worst case.
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection= idSection, combName= combName, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= self.theta, Vcu= self.Vcu, Vsu= self.Vsu, Vu= VuTmp)) # set worst case
 
+class TorsionController(lscb.ShearControllerBase):
+    '''Torsion strength control according to EHE-08.'''
+
+     # ControlVars= cv.RCTorsionControlVars
+    
+    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
+        '''
+        super(TorsionController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
+        self.thetaMin= math.atan(0.5) # Minimal value of the theta angle.
+        self.thetaMax= math.atan(2) # Maximal value of the theta angle.
+
+        self.Tu1= 0.0 # Maximum torsional moment which the concrete’s compressed struts can resist.
+        self.Tu2= 0.0 # Maximum torsional moment which transverse reinforcements can resist.
+        self.Tu3= 0.0 # Maximum torsional moment which longitudinal reinforcements can resist.
+
+    def calcTu1(self, rcSection, Ncd, Ae, he, alpha= 0.6):
+        ''' Return the maximum torsional moment which the concrete’s 
+            compressed struts can resist according to clause 45.2.2.1 of EHE-08.
+
+        :param rcSection: reinforced concrete section.
+        :param Ncd: design value of axial force in concrete only (positive if 
+                    in tension).
+        :param Ae: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 45.2.1).
+        :param he: effective thickness of the wall of the design section.
+        :param alpha: 0.60 if there are stirrups only along the external 
+                      circumference of the member; 0.75 if closed stirrups are 
+                      installed on both faces of the wall of the equivalent
+                      hollow section or the actual hollow section.
+        '''
+        concrete= rcSection.getConcreteType()
+        fck= concrete.fck
+        fcd= concrete.fcd()
+        K= 1
+        if(Ncd<0): # compressed concrete.
+            sgpcd= Ncd/Ac
+            K= getKEHE08(sgpcd,fcd)
+        f1cd= getF1cdEHE08(fck,fcd)
+        cotgtheta= 1.0/math.tan(rcSection.torsionReinf.angThetaConcrStruts)
+        retval= cotgtheta/(1+cotgtheta**2)
+        retval*= 2*K*alpha*f1cd*Ae*he
+        return -retval
+        
+    def calcTu2(self, rcSection, Ae:float):
+        ''' Compute the torsional stress which transverse reinforcements can 
+            resist according to clause 45.2.2.2 of EHE-08.
+
+        :param rcSection: reinforced concrete section.
+        :param Ae: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 45.2.1).
+        '''
+        # Do not multiply by 2 because getAs() already returns the double
+        # of At in the formula.
+        steel= rcSection.getReinfSteelType()
+        fytd= min(steel.fyd(), 400e6)
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return Ae*rcSection.torsionReinf.getAs()/rcSection.torsionReinf.shReinfSpacing*fytd/math.tan(theta)
+    
+    def calcTu3(self, rcSection, Ae:float, ue:float):
+        ''' Compute the torsional stress which longitudinal reinforcements can 
+            resist according to clause 45.2.2.3 of EHE-08.
+
+        :param rcSection: reinforced concrete section.
+        :param Ae: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 45.2.1).
+        :param ue: perimeter of the middle line in the design effective 
+                   hollow section Ae.
+        '''
+        steel= rcSection.getReinfSteelType()
+        fy1d= min(steel.fyd(), 400e6)
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return 2*Ae*rcSection.torsionReinf.A1/ue*fy1d*math.tan(theta)
+        
+    def calcTu(self, rcSection, Ncd, Ae, he, ue:float, alpha= 0.6):
+        ''' Compute the torsional strength of the given section.
+            according to clause 45.2.2 of EHE-08.
+
+        :param rcSection: reinforced concrete section.
+        :param Ncd: design value of axial force in concrete only (positive if 
+                    in tension).
+        :param Ae: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 45.2.1).
+        :param he: effective thickness of the wall of the design section.
+        :param ue: perimeter of the middle line in the design effective 
+                   hollow section Ae.
+        :param alpha: 0.60 if there are stirrups only along the external 
+                      circumference of the member; 0.75 if closed stirrups are 
+                      installed on both faces of the wall of the equivalent
+                      hollow section or the actual hollow section.
+        '''
+        Tu1= self.calcTu1(rcSection= rcSection, Ncd= Ncd, Ae= Ae, he= he, alpha= alpha)
+        Tu2= self.calcTu2(rcSection= rcSection, Ae= Ae)
+        Tu3= self.calcTu3(rcSection= rcSection, Ae= Ae, ue= ue)
+        return min(Tu1, Tu2, Tu3)
+                
 class CrackController(lscb.LimitStateControllerBase):
     '''Object that verifies the cracking serviceability limit state according 
     to clause 49.2.4 of EHE-08.
@@ -1630,7 +1725,7 @@ class TorsionParameters(object):
     '''Methods for checking reinforced concrete section under torsion 
        according to clause 45.1 of EHE-08.
 
-    :ivar h0: Actual thickness of the wall in the case of hollow sections.
+    :ivar h0: Actual thickness of the section wall in the case of hollow sections.
     :ivar c: Covering of longitudinal reinforcements.
 
     :ivar crossSectionContour: Cross section contour.
@@ -1639,13 +1734,14 @@ class TorsionParameters(object):
     :ivar effectiveHollowSection: Effective hollow section contour
     '''
     def __init__(self):
-        self.h0= 0.0  # Actual thickness of the wall in the case of hollow sections.
+        self.h0= 0.0  # Actual thickness of the sectin wall in the case of hollow sections.
         self.c= 0.0  # Covering of longitudinal reinforcements.
 
         self.crossSectionContour= geom.Polygon2d()  # Cross section contour.
         self.midLine=  geom.Polygon2d() # Polygon defined by the midline of the effective hollow section.
         self.intLine=  geom.Polygon2d() # Polygon defined by the interior contour of the effective hollow section.
         self.effectiveHollowSection= geom.PolygonWithHoles2d() # Effective hollow section contour
+        
     def A(self):
         '''Return the area of the transverse section inscribed in the 
            external circumference including inner void areas
@@ -1664,7 +1760,7 @@ class TorsionParameters(object):
     
     def Ae(self):
         '''Return the area enclosed by the middle line of the design 
-           effective hollow section
+           effective hollow section (see figure 45.2.1 of EHE-08).
         '''
         return self.midLine.getArea()
     

@@ -86,7 +86,7 @@ print('bending moment Md= ', bucklingBendingMoment/1e3, 'kN.m')
 '''
 
 fname= os.path.basename(__file__)
-if ((abs(ratio0)<1e-4) and (abs(ratio1)<1e-4) and abs(ratio2<1e-4) and abs(ratio3<1e-4)):
+if ((abs(ratio0)<1e-4) and (abs(ratio1)<1e-4) and (abs(ratio2)<1e-4) and (abs(ratio3)<1e-4)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
