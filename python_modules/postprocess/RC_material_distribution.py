@@ -70,7 +70,7 @@ class RCMaterialDistribution(object):
            :param setRCSects: RC section definition, name, concrete type,
                               rebar positions,...
         '''
-        retval= self.sectionDistribution.assign(elemSet,setRCSects)
+        retval= self.sectionDistribution.assign(elemSet, setRCSects)
         self.elementSetNames.append(elemSet.owner.name)
         return retval # Return the number of "assigned" elements.
 
