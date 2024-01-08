@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Change the material of an element.'''
+'''Change the material properties of an elastic 3D beam element.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -53,8 +53,8 @@ lin= modelSpace.newLinearCrdTransf("lin", xzVector= xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= mat.name
 elements.defaultTransformation= lin.name
-beam2d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
-beam2d.h= h
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
+beam3d.h= h
 
 ## Constraints
 modelSpace.fixNode("000_000", n1.tag) # no displacement 
@@ -76,13 +76,13 @@ ratio0= abs(uX0-uX0Ref)/uX0Ref
 
 
 # Access the materials on each integration point
-for mat in beam2d.physicalProperties.getVectorMaterials:
+for mat in beam3d.physicalProperties.getVectorMaterials:
     sectionProperties= mat.sectionProperties
     sectionProperties.E= changeFactor*E # Change material parameters.
     sectionProperties.G= 0.9*G
 
-newE= beam2d.physicalProperties.getVectorMaterials[0].sectionProperties.E
-new_nu= beam2d.physicalProperties.getVectorMaterials[0].sectionProperties.G
+newE= beam3d.physicalProperties.getVectorMaterials[0].sectionProperties.E
+new_nu= beam3d.physicalProperties.getVectorMaterials[0].sectionProperties.G
 
 # Compute new solution. 
 modelSpace.analyze(1)
