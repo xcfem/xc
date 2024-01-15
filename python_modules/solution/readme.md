@@ -31,6 +31,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [Newmark method](https://opensees.github.io/OpenSeesDocumentation/user/manual/analysis/Newmark.html)
 - [Newmark method](https://opensees.berkeley.edu/wiki/index.php/Newmark_Method)
 - [Newmark-beta method](https://en.wikipedia.org/wiki/Newmark-beta_method)
+- [No Element Required](https://portwooddigital.com/2024/01/14/no-element-required/)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
