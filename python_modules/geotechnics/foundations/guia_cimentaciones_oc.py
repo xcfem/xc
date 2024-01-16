@@ -61,7 +61,7 @@ class PileFoundation(pile.CircularPile):
                                point bearing capacity ) of the pile.
     :ivar soilLayers:  properties of the levels of soil.
     '''
-    def __init__(self, pileSet, pileDiam,E,pileType,pileBearingCapacity,soilLayers):
+    def __init__(self, pileSet, pileDiam, E, pileType, pileBearingCapacity, soilLayers):
         ''' Constructor.
 
         :param pileSet: set of nodes and elements defining a single pile.
@@ -102,8 +102,62 @@ class PileFoundation(pile.CircularPile):
         Kv=1/(self.getDiameter()/40/self.pileBearingCapacity+Lc/A/self.E)
         return Kv
 
-    def getLinearSpringsConstants(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+    def getLinearSpringsConstants2D(self, alphaKh_x= 1.0, alphaKv_y= 1.0):
         '''Compute the spring contants that simulate the soils along the pile
+           in bidimensional problems.
+
+        :param alphaKh_x: coefficient to be applied to the horizontal stiffness
+                          of a single pile in X direction
+        :param alphaKh_y: coefficient to be applied to the vertical stiffness of
+                          a single pile in Y direction
+        '''
+        # Pile surface factor.
+        if self.getDiameter() <= 1:
+            coefKh=1
+        else:
+            coefKh=self.getDiameter()
+        self.computeTributaryLengths(initialGeometry= False) # Tributary lengths.
+        lstNodPile= self.getNodeYs() # node identifiers and depths.
+        
+        soilsProp= self.soilLayers.soilProfile
+        if soilsProp[-1][0] >= lstNodPile[-1][1]:
+            soilsProp[-1][0]=lstNodPile[-1][1]-1
+        yval=lstNodPile[0][1]
+        while yval > self.soilLayers.groundLevel:  #aerial zone of pile
+            lstNodPile.pop(0)
+            yval=lstNodPile[0][1]
+        #Springs horizontal stiffness
+        y=lstNodPile[0][1]
+        retval= dict()
+        for sp in soilsProp:
+            yBottom= sp[0]
+            soilType= sp[1][:2].lower()
+            soilPrp= sp[2]
+            if soilType not in ('sa','cl'):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; wrong type of soil: '+str(soilType))
+            while(y>yBottom):
+                n= lstNodPile[0][0]
+                lnTribNod= n.getTributaryLength()
+                if(soilType == 'sa'): # sandy soil
+                    Kh_x= alphaKh_x*soilPrp*(self.soilLayers.groundLevel-y)*lnTribNod*coefKh
+                else: # cohesive soil
+                    Kh_x= 75*alphaKh_x*soilPrp*lnTribNod*coefKh
+                if len(lstNodPile)==1:
+                    #Spring vertical stiffness (end of pile)
+                    Kv_end= alphaKv_y*self.getVerticalStiffnessSinglePile()
+                    retval[n.tag]= [Kh_x, Kv_end]
+                    break
+                else:
+                    retval[n.tag]= [Kh_x, 1e-5]
+                    y= lstNodPile[1][1]
+                    lstNodPile.pop(0)
+        return retval
+    
+    def getLinearSpringsConstants3D(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+        '''Compute the spring contants that simulate the soils along the pile
+           in three-dimensionaal problems.
 
         :param alphaKh_x: coefficient to be applied to the horizontal stiffness
                           of a single pile in X direction
@@ -149,7 +203,7 @@ class PileFoundation(pile.CircularPile):
                     Kh_y= 75*alphaKh_y*soilPrp*lnTribNod*coefKh
                 if len(lstNodPile)==1:
                     #Spring vertical stiffness (end of pile)
-                    Kv_end=alphaKv_z*self.getVerticalStiffnessSinglePile()
+                    Kv_end= alphaKv_z*self.getVerticalStiffnessSinglePile()
                     retval[n.tag]= [Kh_x, Kh_y, Kv_end]
                     break
                 else:

@@ -55,7 +55,8 @@ class Micropile(guia.Micropile):
     def __init__(self, pileSet, pileDiam, unitCGroundLevel, mortarMaterial, pipeSection, axialRebar, pileType, soilAggressivity, designLife, Fe, Fuc):
         super().__init__(pileSet= pileSet, pileDiam= pileDiam, soilLayers= None, mortarMaterial= mortarMaterial, pipeSection= pipeSection, axialRebar= axialRebar, pileType= pileType, soilAggressivity= soilAggressivity, designLife= designLife, Fe= Fe, Fuc= Fuc)
         self.unitCGroundLevel= unitCGroundLevel
-    def getLinearSpringsConstants(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+        
+    def getLinearSpringsConstants3D(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
         '''Compute the spring contants that simulate the soils along the pile
 
         :param alphaKh_x: coefficient to be applied to the horizontal stiffness

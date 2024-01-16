@@ -64,7 +64,7 @@ class Bearing(object):
         '''
         self.materials= list()
         self.materialHandler= None
-        self.id= next(self._ids) #Object identifier.
+        self.id= next(self._ids) # Object identifier.
         
     def getMaterial(self,i):
         ''' Returns the i-th uniaxial material that modelizes the response in the i-th direction.'''

@@ -429,7 +429,6 @@ class SectionProperties(object):
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
         
-    
     def getCrossSectionProperties2D(self, material):
         '''Return a CrossSectionProperties object with the 2D properties of 
            the section.'''

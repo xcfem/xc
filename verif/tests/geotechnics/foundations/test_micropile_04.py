@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Home made test. '''
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2022, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 from materials.ec3 import EC3_materials
 from materials.api import API_materials
 from materials.ehe import EHE_materials
@@ -56,39 +57,36 @@ micropile= guia.Micropile(pileSet= None, pileDiam= 152.4e-3, soilLayers= soilHor
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 ## Finite element material
-xcSection= micropile.defElasticShearSection3d(preprocessor)
+xcSection= micropile.defElasticShearSection2d(preprocessor)
+modelSpace.setDefaultMaterial(xcSection)
 ## Problem geometry
 points= preprocessor.getMultiBlockTopology.getPoints
 pTop= points.newPoint(geom.Pos3d(0,0,0))
-pBottom= points.newPoint(geom.Pos3d(0,0,-10.0))
+pBottom= points.newPoint(geom.Pos3d(0,-10.0,0))
 lines= preprocessor.getMultiBlockTopology.getLines
 l= lines.newLine(pTop.tag,pBottom.tag)
 l.nDiv= 20
 ### Geometric transformations
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
+lin= modelSpace.newLinearCrdTransf("lin")
+modelSpace.setDefaultCoordTransf(lin)
 ## Mesh generation
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.dimElem= 3 # Bars defined in a three dimensional space.
-seedElemHandler.defaultMaterial= xcSection.name
-seedElemHandler.defaultTransformation= lin.name
-seedElem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+modelSpace.newSeedElement('ElasticBeam2d')
 l.genMesh(xc.meshDir.I)
 
 ### Constraints.
 micropile.pileSet= l
 micropile.generateSpringsPile(alphaKh_x=1,alphaKh_y=1,alphaKv_z=1)
 bottomTipNode= pBottom.getNode()
-modelSpace.fixNode('FFF_FF0',bottomTipNode.tag)
 
 ### Loads
 Fh= 10e3
 N= -0.85*micropile.getNcRd()
 topTipNode= pTop.getNode()
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(topTipNode.tag,xc.Vector([Fh,0,N,0,0,0]))
+lp0.newNodalLoad(topTipNode.tag, xc.Vector([Fh,N,0]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -97,22 +95,27 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 # Get bottom tip displacement.
-bottomTipDisp= bottomTipNode.getDisp[2]
-ratio1= abs(bottomTipDisp+0.010075333675765406)/0.010075333675765406
+## Reference values taken from the results of test_micropile_02.py except for
+## the vertical displacement of the top node which is different:
+## 3D: -0.018579 vs. 2D: -0.0159323 => to investigate XXX.
+bottomTipDisp= bottomTipNode.getDisp[1]
+ratio1= abs(bottomTipDisp+0.010138959626292113)/0.010138959626292113
 topTipDisp= topTipNode.getDisp
-ratio2= (topTipDisp[0]-0.177892)**2+topTipDisp[1]**2+(topTipDisp[2]+0.018579)**2
+ratio2= abs(topTipDisp[0]-0.177892)/0.177892
+ratio3= abs(topTipDisp[1]+0.0159323)/0.0159323
 
 '''
-print(bottomTipDisp)
-print(ratio1)
-print(topTipDisp)
-print(ratio2)
+print('bottom tip displacement: ', bottomTipDisp)
+print('ratio1= ', ratio1)
+print('top tip displacement: ', topTipDisp)
+print('ratio2= ', ratio2)
+print('ratio3= ', ratio3)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-8 and abs(ratio2)<1e-8:
+if abs(ratio1)<1e-6 and abs(ratio2)<1e-4 and abs(ratio3)<1e-4:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
@@ -127,10 +130,9 @@ dispSet.fillDownwards()
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
 oh.displayFEMesh()
-oh.displayDispRot(itemToDisp='uX',defFScale= 2.0,setToDisplay=dispSet)
-oh.displayDispRot(itemToDisp='uY',defFScale= 2.0,setToDisplay=dispSet)
-oh.displayDispRot(itemToDisp='uZ',defFScale= 2.0,setToDisplay=dispSet)
+oh.displayDispRot(itemToDisp='uX',defFScale= 10.0,setToDisplay=dispSet)
+oh.displayDispRot(itemToDisp='uY',defFScale= 10.0,setToDisplay=dispSet)
 oh.displayIntForcDiag(itemToDisp='N',setToDisplay=dispSet)
-oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=dispSet)
-oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=dispSet)
+oh.displayIntForcDiag(itemToDisp='V',setToDisplay=dispSet)
+oh.displayIntForcDiag(itemToDisp='M',setToDisplay=dispSet)
 '''

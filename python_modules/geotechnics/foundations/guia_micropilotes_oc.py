@@ -499,14 +499,41 @@ class Micropile(pile.CircularPile):
         k= NcRd/sN
         return k        
 
-    def getLinearSpringsConstants(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+    def getLinearSpringsConstants2D(self, alphaKh_x= 1.0, alphaKv_y= 1.0):
         '''Compute the spring contants that simulate the soils along the pile
+           in three-dimensional problems.
+
+        :param alphaKh_x: coefficient to be applied to the horizontal stiffness
+                          of a single pile in X direction
+        :param alphaKv_y: coefficient to be applied to the vertical stiffness of
+                          a single pile in Y direction
+        '''
+        # Soil reaction modulus at each node.
+        lstNodPile= self.getNodeYs()
+        self.computeTributaryLengths(False)
+        retval= dict()
+        for (n,y) in lstNodPile:
+            if(y<self.soilLayers.groundLevel):
+                 soilReactionModulus= self.soilLayers.getReactionModulus(z= y)
+                 assert(soilReactionModulus>=0)
+                 springStiffness= soilReactionModulus*n.getTributaryLength()*self.getDiameter()
+                 retval[n.tag]= [alphaKh_x*springStiffness, alphaKh_x*springStiffness, 1e-5]
+        # Compute vertical stiffness on the tip.
+        tipNode= lstNodPile[-1][0]
+        tipNodeStiffness= retval[tipNode.tag]
+        tipStiffness= self.getEstimatedTipReactionModulus()
+        tipNodeStiffness[2]= alphaKv_y*tipStiffness
+        return retval
+    
+    def getLinearSpringsConstants3D(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+        '''Compute the spring contants that simulate the soils along the pile
+           in three-dimensional problems.
 
         :param alphaKh_x: coefficient to be applied to the horizontal stiffness
                           of a single pile in X direction
         :param alphaKh_y: coefficient to be applied to the horizontal stiffness
                           of a single pile in Y direction
-        :param alphaKh_Z: coefficient to be applied to the vertical stiffness of
+        :param alphaKv_Z: coefficient to be applied to the vertical stiffness of
                           a single pile in Z direction
         '''
         # Soil reaction modulus at each node.

@@ -743,7 +743,7 @@ class PredefinedSpace(object):
           :return: newly created zero length element that represents the 
                    bearing.
         '''
-        return set_bearing_between_nodes(self.preprocessor,iNodA, iNodB, bearingMaterialNames, orientation)
+        return set_bearing_between_nodes(self.preprocessor, iNodA, iNodB, bearingMaterialNames, orientation)
 
     def setBearing(self, iNod: int, bearingMaterialNames: Sequence[str], orientation= None):
         '''Modelize a bearing on X, XY or XYZ directions.
@@ -772,10 +772,10 @@ class PredefinedSpace(object):
         nodes= self.preprocessor.getNodeHandler
         newNode= nodes.duplicateNode(iNod) # new node.
         # Element definition
-        newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterialNames,orientation)
+        newElement= self.setBearingBetweenNodes(newNode.tag, iNod, bearingMaterialNames, orientation)
         # Boundary conditions
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
-        for i in range(0,numDOFs):
+        for i in range(0, numDOFs): # Fix all the DOFs in the new node.
             spc= self.newSPConstraint(newNode.tag,i,0.0)
             if(__debug__):
                 if(not spc):

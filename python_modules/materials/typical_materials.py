@@ -1335,3 +1335,24 @@ class BeamMaterialData(MaterialData):
         else:
             lmsg.warning('Material: '+ self.name+ ' already defined.')
         return self.xc_material
+    
+    def setupElasticShear2DSection(self, preprocessor, overrideRho= None):
+        '''Return an elastic section appropriate for 2D beam linear 
+           elastic analysis.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        if(not self.xc_material):
+            materialHandler= preprocessor.getMaterialHandler
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
+            else:
+                rho= self.getRho()
+                if(overrideRho):
+                    rho= overrideRho
+                self.xc_material= defElasticShearSection2d(preprocessor,name= self.name, A= self.section.A(), E= self.material.E, G= self.material.G(), I= self.section.Iz(), alpha= self.section.alphaY(), linearRho= rho)
+        else:
+            lmsg.warning('Material: '+ self.name+ ' already defined.')
+        return self.xc_material
