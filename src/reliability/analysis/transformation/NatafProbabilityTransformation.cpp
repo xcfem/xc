@@ -1368,21 +1368,18 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
 
 
 
-double
-XC::NatafProbabilityTransformation::phi2(double z_i, 
+double XC::NatafProbabilityTransformation::phi2(double z_i, 
                                                                          double z_j,
                                                                          double rho)
-{
+  {
         double par= z_i*z_i + z_j*z_j - 2.0*rho*z_i*z_j;
 
         double theExp= exp(-par/(2.0*(1.0-rho*rho)));
 
-        double pi= 3.14159265358979;
-
-        double result= theExp/(2.0*pi*sqrt(1.0-rho*rho));
+        double result= theExp/(2.0*M_PI*sqrt(1.0-rho*rho));
 
         return result;
-}
+  }
 
 
 

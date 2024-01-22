@@ -282,14 +282,12 @@ XC::SystemAnalysis::analyze(void)
 
 
 
-double
-XC::SystemAnalysis::functionToIntegrate(double rho, double beta1, double beta2)
-{
-	double pi = 3.14159265358979;
-	return 1.0/(2.0*pi*sqrt(1.0-rho*rho)) 
-		* exp(-(beta1*beta1+beta2*beta2-2*rho*beta1*beta2)
-		/(2.0*(1.0-rho*rho)));
-}
+double XC::SystemAnalysis::functionToIntegrate(double rho, double beta1, double beta2)
+  {
+    return 1.0/(2.0*M_PI*sqrt(1.0-rho*rho)) 
+      * exp(-(beta1*beta1+beta2*beta2-2*rho*beta1*beta2)
+	    /(2.0*(1.0-rho*rho)));
+  }
 
 int
 XC::SystemAnalysis::factorial(int num)
