@@ -134,21 +134,13 @@ const std::string XC::RayleighRV::getType(void)
 }
 
 
-double 
-XC::RayleighRV::getMean()
-{
-	double pi = 3.14159265358979;
-	return 0.5*sqrt(pi) * u;
-}
+double XC::RayleighRV::getMean()
+  { return 0.5*sqrt(M_PI) * u; }
 
 
 
-double 
-XC::RayleighRV::getStdv()
-{
-	double pi = 3.14159265358979;
-	return 0.5 * sqrt(4.0-pi) * u;
-}
+double XC::RayleighRV::getStdv()
+  { return 0.5 * sqrt(4.0-M_PI) * u; }
 
 
 double 

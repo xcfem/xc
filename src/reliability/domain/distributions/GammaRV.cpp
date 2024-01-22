@@ -272,7 +272,7 @@ double XC::GammaRV::gammaFunction(double x)
                 c(6) = 8.333333333333333331554247e-02;
                 c(7) = 5.7083835261e-03;
 
-                double pi= 3.14159265358979;
+                const double pi= M_PI;
                 double y;
                 double y1;
                 double fact= 0;

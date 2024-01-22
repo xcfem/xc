@@ -156,32 +156,31 @@ XC::LognormalRV::Print(std::ostream &s, int flag) const
 }
 
 
-double
-XC::LognormalRV::getPDFvalue(double rvValue)
-{
+double XC::LognormalRV::getPDFvalue(double rvValue)
+  {
 	if (!isPositive) {
 		// The formal answer is: f(x) = f_pos(x+2|x|), but let's do it simple here
 		rvValue = -rvValue;
 	}
 
 	double result;
-	if ( 0.0 < rvValue ) {
-		double pi = 3.14159265358979;
-		result = 1/(sqrt(2*pi)*zeta*rvValue) * exp(-0.5* pow ( (log(rvValue)-lambda) / zeta, 2 )  );
-	}
-	else {
-		result = 0.0;
-	}
+	if( 0.0 < rvValue )
+	  {
+            result = 1/(sqrt(2*M_PI)*zeta*rvValue) * exp(-0.5* pow ( (log(rvValue)-lambda) / zeta, 2 )  );
+	  }
+	else
+	  {
+	    result = 0.0;
+	  }
 	return result;
-}
+  }
 
 
-double
-XC::LognormalRV::getCDFvalue(double rvValue)
-{
-	double result;
+double XC::LognormalRV::getCDFvalue(double rvValue)
+  {
+    double result;
 
-	static XC::NormalRV aStandardNormalRV( 1, 0.0, 1.0, 0.0);
+    static XC::NormalRV aStandardNormalRV( 1, 0.0, 1.0, 0.0);
 	
 	if (isPositive) {
 		if ( 0.0 < rvValue ) {

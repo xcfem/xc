@@ -62,20 +62,20 @@
 #include <string.h>
 #include <classTags.h>
 
+const double dbl_gamma= 0.5772156649;
 
 XC::Type1SmallestValueRV::Type1SmallestValueRV(int passedTag, 
 		 double passedMean,
 		 double passedStdv,
 		 double passedStartValue)
-:RandomVariable(passedTag, RANDOM_VARIABLE_type1smallestvalue)
-{
-	tag = passedTag;
-	double gamma = 0.5772156649;
-	double pi = 3.14159265358979;
-	u = passedMean + gamma * passedStdv * sqrt(6.0) / pi;
-	alpha = pi / (passedStdv*sqrt(6.0));
-	startValue = passedStartValue;
-}
+  :RandomVariable(passedTag, RANDOM_VARIABLE_type1smallestvalue)
+  {
+    tag = passedTag;
+    u = passedMean + dbl_gamma * passedStdv * sqrt(6.0) / M_PI;
+    alpha = M_PI / (passedStdv*sqrt(6.0));
+    startValue = passedStartValue;
+  }
+
 XC::Type1SmallestValueRV::Type1SmallestValueRV(int passedTag, 
 		 double passedParameter1,
 		 double passedParameter2,
@@ -93,14 +93,13 @@ XC::Type1SmallestValueRV::Type1SmallestValueRV(int passedTag,
 		 double passedMean,
 		 double passedStdv)
 :RandomVariable(passedTag, RANDOM_VARIABLE_type1smallestvalue)
-{
-	tag = passedTag;
-	double gamma = 0.5772156649;
-	double pi = 3.14159265358979;
-	u = passedMean + gamma * passedStdv * sqrt(6.0) / pi;
-	alpha = pi / (passedStdv*sqrt(6.0));
-	startValue = getMean();
-}
+  {
+    tag = passedTag;
+    u = passedMean + dbl_gamma * passedStdv * sqrt(6.0) / M_PI;
+    alpha = M_PI / (passedStdv*sqrt(6.0));
+    startValue = getMean();
+  }
+
 XC::Type1SmallestValueRV::Type1SmallestValueRV(int passedTag, 
 		 double passedParameter1,
 		 double passedParameter2,
@@ -148,21 +147,15 @@ const std::string XC::Type1SmallestValueRV::getType(void)
 }
 
 
-double 
-XC::Type1SmallestValueRV::getMean()
-{
-	double gamma = 0.5772156649;
-	return u - gamma/alpha;
-}
+double XC::Type1SmallestValueRV::getMean()
+  { return u - dbl_gamma/alpha; }
 
 
 
-double 
-XC::Type1SmallestValueRV::getStdv()
-{
-	double pi = 3.14159265358979;
-	return pi/(sqrt(6.0)*alpha);
-}
+double XC::Type1SmallestValueRV::getStdv()
+  {
+    return M_PI/(sqrt(6.0)*alpha);
+  }
 
 
 double 

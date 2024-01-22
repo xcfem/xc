@@ -70,7 +70,7 @@ XC::Type1LargestValueRV::Type1LargestValueRV(int passedTag,
 :RandomVariable(passedTag, RANDOM_VARIABLE_type1largestvalue)
 {
 	tag = passedTag ;
-	double pi = 3.14159265358979;
+	const double pi = M_PI;
 	double gamma = 0.5772156649;
 	u = passedMean - (gamma*sqrt(6.0)*passedStdv)/pi;
 	alpha = pi / ( sqrt(6.0) * passedStdv );
@@ -95,7 +95,7 @@ XC::Type1LargestValueRV::Type1LargestValueRV(int passedTag,
 :RandomVariable(passedTag, RANDOM_VARIABLE_type1largestvalue)
 {
 	tag = passedTag ;
-	double pi = 3.14159265358979;
+	const double pi = M_PI;
 	double gamma = 0.5772156649;
 	u = passedMean - (gamma*sqrt(6.0)*passedStdv)/pi;
 	alpha = pi / ( sqrt(6.0) * passedStdv );
@@ -157,12 +157,8 @@ XC::Type1LargestValueRV::getMean()
 
 
 
-double 
-XC::Type1LargestValueRV::getStdv()
-{
-	double pi = 3.14159265358979;
-	return pi/(sqrt(6.0)*alpha);
-}
+double XC::Type1LargestValueRV::getStdv()
+  { return M_PI/(sqrt(6.0)*alpha); }
 
 
 double 
@@ -172,7 +168,11 @@ XC::Type1LargestValueRV::getStartValue()
 }
 
 
-double XC::Type1LargestValueRV::getParameter1()  {return u;}
-double XC::Type1LargestValueRV::getParameter2()  {return alpha;}
-double XC::Type1LargestValueRV::getParameter3()  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
-double XC::Type1LargestValueRV::getParameter4()  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
+double XC::Type1LargestValueRV::getParameter1()
+  {return u;}
+double XC::Type1LargestValueRV::getParameter2()
+  {return alpha;}
+double XC::Type1LargestValueRV::getParameter3()
+  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
+double XC::Type1LargestValueRV::getParameter4()
+  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}

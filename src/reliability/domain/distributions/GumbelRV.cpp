@@ -70,7 +70,7 @@ XC::GumbelRV::GumbelRV(int passedTag,
 :RandomVariable(passedTag, RANDOM_VARIABLE_gumbel)
 {
 	tag = passedTag ;
-	double pi = 3.14159265358979;
+	const double pi = M_PI;
 	double gamma = 0.5772156649;
 	u = passedMean - (gamma*sqrt(6.0)*passedStdv)/pi;
 	alpha = pi / ( sqrt(6.0) * passedStdv );
@@ -95,7 +95,7 @@ XC::GumbelRV::GumbelRV(int passedTag,
 :RandomVariable(passedTag, RANDOM_VARIABLE_gumbel)
 {
 	tag = passedTag ;
-	double pi = 3.14159265358979;
+	double pi = M_PI;
 	double gamma = 0.5772156649;
 	u = passedMean - (gamma*sqrt(6.0)*passedStdv)/pi;
 	alpha = pi / ( sqrt(6.0) * passedStdv );
@@ -157,12 +157,8 @@ XC::GumbelRV::getMean()
 
 
 
-double 
-XC::GumbelRV::getStdv()
-{
-	double pi = 3.14159265358979;
-	return pi/(sqrt(6.0)*alpha);
-}
+double XC::GumbelRV::getStdv()
+  { return M_PI/(sqrt(6.0)*alpha); }
 
 
 double 
