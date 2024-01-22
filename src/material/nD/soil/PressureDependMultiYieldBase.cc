@@ -59,8 +59,6 @@ XC::T2Vector XC::PressureDependMultiYieldBase::trialStrain;
 XC::Vector XC::PressureDependMultiYieldBase::workV6(6);
 XC::T2Vector XC::PressureDependMultiYieldBase::workT2V;
 
-//const double pi= 3.14159265358979;
-
 XC::PressureDependMultiYieldBase::PressureDependMultiYieldBase(int tag, int classTag, int nd, 
                                                     double r, double refShearModul,
                                                     double refBulkModul, double frictionAng,

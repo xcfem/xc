@@ -727,7 +727,7 @@ double XC::TzSimple1Gen::GetTult(const std::string &type)
       }
     else if(type == "tz3")
       {
-        double deg = 3.141592654/180.0;
+        const double deg = M_PI/180.0;
         // convert phi, alpha and beta from degrees to radians
         const double Ko = 0.4; // Use 0.4 like LPile
         tult_0 = Ko*stress*tan(delta*deg)*p;
@@ -756,7 +756,7 @@ double XC::TzSimple1Gen::GetZ50(const std::string &type)
     if(type == "tz4")
       return Z50;
     else // Set z50 such that zult = 0.5% of pile diameter.  Calculate pile diameter from perimeter for a circular section.
-        return 0.005*p/3.14159/8.0;
+        return 0.005*p/M_PI/8.0;
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////
