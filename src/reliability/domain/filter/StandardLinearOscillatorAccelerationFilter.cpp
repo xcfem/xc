@@ -65,8 +65,7 @@
 XC::StandardLinearOscillatorAccelerationFilter::StandardLinearOscillatorAccelerationFilter(int tag, double period, double dampingRatio)
 :Filter(tag,FILTER_standardLinearOscillator)
   {
-    double pi = 3.14159265358979;
-    wn = 2*pi/period;
+    wn = 2*M_PI/period;
     xi = dampingRatio;
   }
 
