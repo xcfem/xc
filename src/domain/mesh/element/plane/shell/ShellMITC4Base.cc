@@ -262,7 +262,7 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
     const double Cy= -xl[1][0]-xl[1][1]+xl[1][2]+xl[1][3];
 
     const double alpha= atan2(Ay,Ax);
-    double beta= 3.141592653589793/2-atan2(Cx,Cy);
+    double beta= M_PI/2-atan2(Cx,Cy);
     Matrix Rot(2,2);
     Rot.Zero();
     Rot(0,0)=sin(beta);
@@ -527,7 +527,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
     const double Cy= -xl[1][0]-xl[1][1]+xl[1][2]+xl[1][3];
 
     const double alpha= atan2(Ay,Ax);
-    const double beta= 3.141592653589793/2-atan2(Cx,Cy);
+    const double beta= M_PI/2-atan2(Cx,Cy);
     Matrix Rot(2,2);
     Rot.Zero();
     Rot(0,0)=sin(beta);

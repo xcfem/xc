@@ -160,7 +160,7 @@ namespace
             Cy = -LCS.Y1() - LCS.Y2() + LCS.Y3() + LCS.Y4();
 
             double Alpha = std::atan(Ay / Ax);
-            double Beta = 3.141592653589793 * 0.5 - std::atan(Cx / Cy);
+            double Beta = M_PI * 0.5 - std::atan(Cx / Cy);
 
             transformation(0, 0) = std::sin(Beta);
             transformation(0, 1) = -std::sin(Alpha);
