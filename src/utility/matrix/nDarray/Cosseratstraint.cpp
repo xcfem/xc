@@ -356,7 +356,7 @@ double XC::Cosseratstraintensor::theta()  const             // Chen XC::W.F. "pl
     double tempabs2 = (fabs(temp7+1.0));
     if ( tempabs1 < 0.001 ) return ( 0.000001 / 3.0 );// slight perturbation because of 1/0 KERU06sep96
 //    if ( tempabs2 < 0.001 ) return ( PI / 3.0 );
-    if ( tempabs2 < 0.001 ) return ( 3.14159/3.0 );// slight perturbation because of 1/0 KERU06sep96
+    if ( tempabs2 < 0.001 ) return ( M_PI/3.0 );// slight perturbation because of 1/0 KERU06sep96
     if ( temp7>1.0 || temp7<-1.0 )
       {
         ::fprintf(stderr,"\a\n something is wrong in XC::Cosseratstraintensor::theta() (temp7>1.0||temp7<-1.0)\n");

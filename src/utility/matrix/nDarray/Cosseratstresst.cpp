@@ -343,7 +343,7 @@ double XC::Cosseratstresstensor::theta( ) const              // Chen XC::W.F. "p
     double tempabs2 = (fabs(temp7+1.0));
     if ( tempabs1 < 0.1 ) return ( 0.000001/3.0 );// slight perturbation because of 1/0 KERU06sep96
 //    if ( tempabs2 < 0.001 ) return ( PI/3.0 );
-    if ( tempabs2 < 0.1 ) return ( 3.14159/3.0 );// slight perturbation because of 1/0 KERU06sep96
+    if ( tempabs2 < 0.1 ) return (M_PI/3.0 );// slight perturbation because of 1/0 KERU06sep96
     if ( temp7>1.0 || temp7<-1.0 )
       {
         ::fprintf(stderr,"\n something is wrong in XC::Cosseratstresstensor::theta() (temp7>1.0||temp7<-1.0)\n");
@@ -372,7 +372,7 @@ double XC::Cosseratstresstensor::theta( ) const              // Chen XC::W.F. "p
         ::fprintf(stdout,"temp6 = %.20e\n", temp6);
         ::fprintf(stdout,"temp7 = %.20e\n", temp7);
 
-        return (  3.14159/ 3.0 );// slight perturbation because of 1/0 KERU06sep96
+        return (M_PI/3.0);// slight perturbation because of 1/0 KERU06sep96
 //        exit(1);
       }
     double temp8 = acos(temp7);
