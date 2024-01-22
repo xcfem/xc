@@ -63,7 +63,7 @@
 
 std::vector<double> XC::PressureDependMultiYield::liquefyParam4x;
 
-const double pi = 3.14159265358979;
+const double pi = M_PI;
 
 XC::PressureDependMultiYield::PressureDependMultiYield(int tag, int nd, 
                                                     double r, double refShearModul,

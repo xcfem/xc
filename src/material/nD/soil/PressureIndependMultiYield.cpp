@@ -697,7 +697,7 @@ void XC::PressureIndependMultiYield::setUpSurfaces(const std::vector<double> &gr
     double peakShearStrain = peakShearStrainx[matN];
 
     double  stress1, stress2, strain1, strain2, size= 0.0, elasto_plast_modul, plast_modul;
-    double pi = 3.14159265358979;
+    const double pi= M_PI;
     double refStrain= 0.0, peakShear= 0.0, coneHeight= 0.0;
 
     if(gredu.empty())

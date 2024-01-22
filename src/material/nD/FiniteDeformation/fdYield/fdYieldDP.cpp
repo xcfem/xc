@@ -53,15 +53,13 @@
 #include "material/nD/FiniteDeformation/fdYield/fdYieldDP.h"
 #include "material/nD/FiniteDeformation/FDEPState.h"
 
-const double pipi= 3.14159265358979323846;
-
-//--------------------------------------------------------------------
+//! @brief Constructor.
 XC::fdYieldDP::fdYieldDP(double FricAngle_in, double Cohesion_in, int ConeIndex_in)
  : FricAngle(FricAngle_in), Cohesion(Cohesion_in), ConeIndex(ConeIndex_in)
 {   
    double Root3 = sqrt(3.0);
    double Root1o3 = 1.0/Root3;
-   double archAngle = FricAngle*pipi/180.0;
+   double archAngle = FricAngle*M_PI/180.0;
    
    switch (ConeIndex) {
 
@@ -133,7 +131,7 @@ double XC::fdYieldDP::Yd(const XC::stresstensor &sts, const XC::FDEPState &fdeps
     //return k1*I1 + sqrt(0.5*x) - k2*(Cohesion+q);
 
     // NumRank=2, with Ki Hardeing
-    double archAngle = FricAngle*pipi/180.0;
+    double archAngle = FricAngle*M_PI/180.0;
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
     double cv = fdepstate.getStressLikeInVar();
@@ -166,7 +164,7 @@ XC::stresstensor XC::fdYieldDP::dYods(const XC::stresstensor &sts, const XC::FDE
     //return tI2*k1 + dev*(1.0/sqrt(2.0*x));
 
     // NumRank=2, with Ki Hardeing
-    double archAngle = FricAngle*pipi/180.0;
+    double archAngle = FricAngle*M_PI/180.0;
     BJtensor tI2("I", def_dim_2);
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
@@ -198,7 +196,7 @@ double XC::fdYieldDP::dYodq(const XC::stresstensor &sts, const XC::FDEPState &fd
     //return -k2;
 
     // NumRank=2, with Ki Hardeing
-    double archAngle = FricAngle*pipi/180.0;
+    double archAngle = FricAngle*M_PI/180.0;
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
     double cv = fdepstate.getStressLikeInVar();
@@ -223,7 +221,7 @@ double XC::fdYieldDP::dYodq(const XC::stresstensor &sts, const XC::FDEPState &fd
 XC::stresstensor XC::fdYieldDP::dYoda(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
   {   
     // NumRank=2, with Ki Hardeing
-    double archAngle = FricAngle*pipi/180.0;
+    double archAngle = FricAngle*M_PI/180.0;
     double cv = fdepstate.getStressLikeInVar();
     if ( tan(archAngle) < 1.0e-4 ) {
       std::cerr << "fdYieldDP-- (close) zero or invalid friction angle\n";

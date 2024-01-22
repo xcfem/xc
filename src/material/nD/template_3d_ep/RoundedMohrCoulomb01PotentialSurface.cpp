@@ -82,7 +82,7 @@ XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::dQods(const XC::EPState *
 //  double p = EPS->getStress().p_hydrostatic(); // p
   double q = EPS->getStress().q_deviatoric(); // q
   double theta = EPS->getStress().theta(); // theta
-//  double temp_phi = EPS->getScalarVar(1)*3.14159265358979/180.0; // frictional angle
+//  double temp_phi = EPS->getScalarVar(1)*M_PI/180.0; // frictional angle
 //  double temp_cohesive = EPS->getScalarVar(2); // cohesion
   BJtensor DpoDs = EPS->getStress().dpoverds(); // dp/ds
   BJtensor DqoDs = EPS->getStress().dqoverds(); // dq/ds
@@ -122,7 +122,7 @@ XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::d2Qods2( const XC::EPStat
 //  double p = EPS->getStress().p_hydrostatic(); // p
   double q = EPS->getStress().q_deviatoric(); // q
   double theta = EPS->getStress().theta(); // theta
-//  double temp_phi = EPS->getScalarVar(1)*3.14159265358979/180.0; // frictional angle
+//  double temp_phi = EPS->getScalarVar(1)*M_PI/180.0; // frictional angle
 //  double temp_cohesive = EPS->getScalarVar(2); // conhesion
   double alfa = EPS->getScalarVar(1);
 //  double k = EPS->getScalarVar(2);

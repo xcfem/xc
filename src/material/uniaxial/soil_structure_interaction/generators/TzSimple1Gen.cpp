@@ -721,17 +721,15 @@ double XC::TzSimple1Gen::GetTult(const std::string &type)
         if(depth == 0)
             return 0.00001;  // TzSimple1 does not support tult = 0;
 
-        double Ko;
-        double deg = 3.141592654/180.0;
-        Ko = 0.4; // Use 0.4 like LPile
+        const double deg = M_PI/180.0;
+        const double Ko = 0.4; // Use 0.4 like LPile
         return Ko*stress*tan(delta*deg)*p;
       }
     else if(type == "tz3")
       {
-        double Ko;
         double deg = 3.141592654/180.0;
         // convert phi, alpha and beta from degrees to radians
-        Ko = 0.4; // Use 0.4 like LPile
+        const double Ko = 0.4; // Use 0.4 like LPile
         tult_0 = Ko*stress*tan(delta*deg)*p;
 
         tult_1 = Sa*p*stress;

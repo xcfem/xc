@@ -78,7 +78,7 @@ double XC::RoundedMohrCoulomb01YieldSurface::f(const EPState *EPS) const
     double p = EPS->getStress().p_hydrostatic(); // 
     double q = EPS->getStress().q_deviatoric(); // q
     double theta = EPS->getStress().theta(); // theta
-//    double temp_phi = EPS->getScalarVar(1)*3.14159265358979/180.0; // frictional angle
+//    double temp_phi = EPS->getScalarVar(1)*M_PI/180.0; // frictional angle
 //    double temp_cohesive = EPS->getScalarVar(2); // cohesion
 //    double a1 = -6*sin(temp_phi)/(3.0-sin(temp_phi));
 //    double a2 = -6*temp_cohesive*cos(temp_phi)/(3.0-sin(temp_phi));
@@ -101,7 +101,7 @@ XC::BJtensor XC::RoundedMohrCoulomb01YieldSurface::dFods(const EPState *EPS) con
 //    double p = EPS->getStress().p_hydrostatic();
     double q = EPS->getStress().q_deviatoric();
     double theta = EPS->getStress().theta(); 
-//    double temp_phi = EPS->getScalarVar(1)*3.14159265358979/180.0;
+//    double temp_phi = EPS->getScalarVar(1)*M_PI/180.0;
 //    double temp_cohesive = EPS->getScalarVar(2);
     BJtensor DpoDs = EPS->getStress().dpoverds(); // dp/ds
     BJtensor DqoDs = EPS->getStress().dqoverds(); // dq/ds
@@ -133,7 +133,7 @@ double XC::RoundedMohrCoulomb01YieldSurface::xi_s1( const EPState *EPS ) const
     double p = EPS->getStress().p_hydrostatic();
 //    double q = EPS->getStress().q_deviatoric();
 //    double theta = EPS->getStress().theta();
-//    double temp_phi = EPS->getScalarVar(1)*3.14159265358979/180.0;
+//    double temp_phi = EPS->getScalarVar(1)*M_PI/180.0;
 //    double temp_cohesive = EPS->getScalarVar(2);
 //    double e = (3.0-a1)/(3.0+a1);
 //    double Frou = g_0(theta, e);
@@ -141,7 +141,7 @@ double XC::RoundedMohrCoulomb01YieldSurface::xi_s1( const EPState *EPS ) const
 //    double temp2 = temp1 * temp1;
 //    double temp3 = -18.0 * cos(temp_phi) / temp2;
 //    double temp4 = -6.0 * temp_cohesive * (1.0 -3.0 * sin(temp_phi)) / temp2;
-//    double temp = (temp3 * p + temp4)*3.14159265358979/180.0;
+//    double temp = (temp3 * p + temp4)*M_PI/180.0;
 //    return temp;
     return p*(-3.0);
   }
@@ -152,7 +152,7 @@ double XC::RoundedMohrCoulomb01YieldSurface::xi_s2( const EPState *EPS ) const
 //    double p = EPS->getStress().p_hydrostatic();
 //    double q = EPS->getStress().q_deviatoric();
 //    double theta = EPS->getStress().theta();
-//    double temp_phi = EPS->getScalarVar(1)*3.14159265358979/180.0;
+//    double temp_phi = EPS->getScalarVar(1)*M_PI/180.0;
 //   double temp_cohesive = EPS->getScalarVar(2);
 //   double e = (3.0-a1)/(3.0+a1);
 //    double Frou = g_0(theta, e);

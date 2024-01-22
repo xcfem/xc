@@ -807,7 +807,7 @@ void XC::PySimple1Gen::GetSoilProperties(const std::string &file)
 double XC::PySimple1Gen::GetPult(const std::string &type)
   {
     double alpha, beta, Ko, Ka, pu1, pu2, A= 0.0;
-    double deg = 3.141592654/180;
+    const double deg= M_PI/180;
     double pult_0, pult_1, pult_ru;
 
     // Calculate pult for Matlock soft clay

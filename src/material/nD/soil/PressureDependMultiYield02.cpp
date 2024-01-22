@@ -53,8 +53,6 @@ std::vector<double> XC::PressureDependMultiYield02::contractParam2x;
 std::vector<double> XC::PressureDependMultiYield02::contractParam3x;
 std::vector<double> XC::PressureDependMultiYield02::dilateParam3x;
 
-const        double pi = 3.14159265358979;
-
 //! @brief Set values of local members.
 //! @param nd: Number of dimensions, 2 for plane-strain, and 3 for 3D analysis.
 //! @param rho: Saturated soil mass density.
@@ -676,9 +674,9 @@ void XC::PressureDependMultiYield02::setUpSurfaces(const std::vector<double> &gr
 
     if(gredu.empty())
       {
-        double sinPhi = sin(frictionAngle * pi/180.);
+        double sinPhi = sin(frictionAngle * M_PI/180.);
         double Mnys = 6.*sinPhi/(3.-sinPhi);
-        double sinPhiPT = sin(phaseTransfAngle * pi/180.);
+        double sinPhiPT = sin(phaseTransfAngle * M_PI/180.);
         stressRatioPT = 6.*sinPhiPT/(3.-sinPhiPT);
                 // tao = cohesion * sqrt(8)/3.
         residualPress = 2 * cohesion / Mnys;
@@ -737,7 +735,7 @@ void XC::PressureDependMultiYield02::setUpSurfaces(const std::vector<double> &gr
      exit(-1);
 	  }
 
-        frictionAngle = asin(sinPhi)*180/pi;
+        frictionAngle = asin(sinPhi)*180/M_PI;
         std::cerr << "\nPressureDependMultiYieldBase " <<this->getTag()<<": Friction angle is "<<frictionAngle<<"\n"<<std::endl;
         if(phaseTransfAngle > frictionAngle)
 	  {
@@ -748,7 +746,7 @@ void XC::PressureDependMultiYield02::setUpSurfaces(const std::vector<double> &gr
 		      <<std::endl;
             phaseTransfAngle = frictionAngle;
 	  }
-        double sinPhiPT = sin(phaseTransfAngle * pi/180.);
+        double sinPhiPT = sin(phaseTransfAngle * M_PI/180.);
         stressRatioPT = 6.*sinPhiPT/(3.-sinPhiPT);
 
         for(int i=1; i<numOfSurfaces; i++)
@@ -1129,7 +1127,7 @@ double XC::PressureDependMultiYield02::getPPZLimits(int which, const XC::T2Vecto
 
   if(volume >= liquefyParam1) PPZLimit = 0.;
   else {
-    temp = volume*pi/liquefyParam1/2.;
+    temp = volume*M_PI/liquefyParam1/2.;
                 // liquefyParam3 = 3.0 default
     PPZLimit = liquefyParam2 * pow(cos(temp), 3.);
         //\\//

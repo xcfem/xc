@@ -53,8 +53,6 @@ std::vector<double> XC::PressureMultiYieldBase::stressRatioPTx;
 XC::Matrix XC::PressureMultiYieldBase::theTangent(6,6);
 XC::T2Vector XC::PressureMultiYieldBase::subStrainRate;
 
-const double pi= 3.14159265358979;
-
 void XC::PressureMultiYieldBase::resizeIfNeeded(void)
   {
     const int sz= rhox.size();

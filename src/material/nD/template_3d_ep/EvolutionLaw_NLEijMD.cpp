@@ -183,8 +183,8 @@ XC::BJtensor XC::EvolutionLaw_NL_EijMD::h_t( EPState *EPS, PotentialSurface *PS)
     //  if (tempd < -1.0 ) tempd = -1.0;    
     //  double theta0 = acos( tempd ) / 3.0;
     double theta = r_bar.theta( );
-    //std::cerr << "theta0 = " << theta0/3.1416*180;
-    //std::cerr << "  theta = " << theta/3.1416*180 << std::endl;
+    //std::cerr << "theta0 = " << theta0/M_PI*180;
+    //std::cerr << "  theta = " << theta/M_PI*180 << std::endl;
     
     //calculate the alpha_theta_b and alpha_theta_d
     double c = getMe() / getMc();
@@ -214,7 +214,7 @@ XC::BJtensor XC::EvolutionLaw_NL_EijMD::h_t( EPState *EPS, PotentialSurface *PS)
     //double alpha_c_b = g_WW(0.0, c) * Mc + g_WW(0.0, cb) * kc_b * (-xi) - m;
     double alpha_c_b = g_A(60.0, c) * Mc + g_A(60.0, cb) * kc_b * (-1.0*xi) - m;
     double b_ref = 2.0 * sqrt23rd * alpha_c_b;
-    //double PI = 3.1416;
+    //const double PI = M_PI;
     //double a_theta_pi_b = g_A(theta+PI, c) * Mc + g_A(theta+PI, cb) * kc_b *(-1.0*xi) - m;
     //double b_ref = sqrt23rd * ( a_theta_b_scalar + a_theta_pi_b );
     BJtensor temp1 = b("ij") * n("ij");
@@ -437,7 +437,7 @@ int XC::EvolutionLaw_NL_EijMD::updateEeDm(EPState *EPS, double st_vol, double dL
        //  if (tempd < -1.0 ) tempd = -1.0;
        //  
        double theta = r_bar.theta( );
-       //std::cerr << "Update... theta = " << theta/3.1416*180 << std::endl;
+       //std::cerr << "Update... theta = " << theta/M_PI*180 << std::endl;
        
        //Calculate alpha_theta_d
        double c = getMe() / getMc();
@@ -640,7 +640,7 @@ double XC::EvolutionLaw_NL_EijMD::g_A(double theta, double e)
 double XC::EvolutionLaw_NL_EijMD::g_WW(double theta, double e) 
 {
     //Rotate 60 degree to produce 1 at 0.0, c at 60 degrees
-    theta = theta - 3.1415926/3;
+    theta-= M_PI/3;
     double g1 = 4.0*( 1.0 - e*e ) * cos(theta) * cos(theta) + pow(2.0*e-1.0, 2.0);
     double d1 = 2.0*( 1.0 - e*e ) * cos( theta );
     double d2 = ( 2.0*e-1.0 ) * pow( (4.0*(1.0-e*e)*cos(theta)*cos(theta) + 5.0*e*e - 4.0*e), 0.5);
