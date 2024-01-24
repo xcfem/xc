@@ -535,8 +535,10 @@ python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_colum
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column03.py
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column04.py
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column05.py
+python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column06.py # Depends on spectra library.
 python tests/solution/eigenvalues/linear_buckling_analysis/micropile_buckling_reduction_factor.py
 python tests/solution/eigenvalues/linear_buckling_analysis/square_plate_buckling_01.py
+python tests/solution/eigenvalues/linear_buckling_analysis/square_plate_buckling_02.py # Depends on spectra library.
 
 ## Geometric non-linearity.
 echo "$BLEU" "  PDelta solution tests." "$NORMAL"
