@@ -43,7 +43,7 @@
 #include <solution/analysis/algorithm/eigenAlgo/KEigenAlgo.h>
 #include <solution/analysis/algorithm/domainDecompAlgo/DomainDecompAlgo.h>
 //#include "solution/analysis/algorithm/equiSolnAlgo/AcceleratedNewton.h"
-#include "solution/analysis/algorithm/equiSolnAlgo/lineSearch/BisectionLineSearch.h"
-#include "solution/analysis/algorithm/equiSolnAlgo/lineSearch/SecantLineSearch.h"
-#include "solution/analysis/algorithm/equiSolnAlgo/lineSearch/InitialInterpolatedLineSearch.h"
-#include "solution/analysis/algorithm/equiSolnAlgo/lineSearch/RegulaFalsiLineSearch.h"
+#include "solution/analysis/algorithm/equiSolnAlgo/line_search/BisectionLineSearch.h"
+#include "solution/analysis/algorithm/equiSolnAlgo/line_search/SecantLineSearch.h"
+#include "solution/analysis/algorithm/equiSolnAlgo/line_search/InitialInterpolatedLineSearch.h"
+#include "solution/analysis/algorithm/equiSolnAlgo/line_search/RegulaFalsiLineSearch.h"

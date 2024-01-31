@@ -49,4 +49,4 @@ class_<XC::NewtonRaphson, bases<XC::NewtonBased>, boost::noncopyable >("NewtonRa
 
 class_<XC::PeriodicNewton, bases<XC::NewtonBased>, boost::noncopyable >("PeriodicNewton", no_init);
 
-#include "lineSearch/python_interface.tcc"
+#include "line_search/python_interface.tcc"

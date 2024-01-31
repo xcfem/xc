@@ -57,7 +57,7 @@
 #ifndef SecantLineSearch_h
 #define SecantLineSearch_h
 
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/LineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/LineSearch.h>
 namespace XC {
 class Vector;
 

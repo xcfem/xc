@@ -58,11 +58,11 @@
 
 #include <solution/analysis/algorithm/equiSolnAlgo/NewtonLineSearch.h>
 //Line search.
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/LineSearch.h>
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/BisectionLineSearch.h>
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/InitialInterpolatedLineSearch.h>
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/RegulaFalsiLineSearch.h>
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/SecantLineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/LineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/BisectionLineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/InitialInterpolatedLineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/RegulaFalsiLineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/SecantLineSearch.h>
 
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/analysis/analysis/StaticAnalysis.h>

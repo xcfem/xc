@@ -53,7 +53,7 @@
 // 
 // What: "@(#)BisectionLineSearch.h, revA"
 
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/BisectionLineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/BisectionLineSearch.h>
 #include <solution/analysis/integrator/IncrementalIntegrator.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <cmath>

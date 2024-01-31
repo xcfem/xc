@@ -46,123 +46,131 @@
 
 // $Revision: 1.3 $
 // $Date: 2003/04/02 22:02:33 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/SecantLineSearch.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/RegulaFalsiLineSearch.cpp,v $
 
 // Written: fmk 
 // Created: 11/01
 // 
-// What: "@(#)SecantLineSearch.h, revA"
+// What: "@(#)RegulaFalsiLineSearch.h, revA"
 
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/SecantLineSearch.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/RegulaFalsiLineSearch.h>
 #include <solution/analysis/integrator/IncrementalIntegrator.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
 #include <cmath>
 
-XC::SecantLineSearch::SecantLineSearch(void)
-  :LineSearch(LINESEARCH_TAGS_SecantLineSearch) {}
+XC::RegulaFalsiLineSearch::RegulaFalsiLineSearch(void)
+  :LineSearch(LINESEARCH_TAGS_RegulaFalsiLineSearch) {}
 
 //! @brief Virtual constructor.
-XC::LineSearch *XC::SecantLineSearch::getCopy(void) const
-  { return new SecantLineSearch(*this); }
+XC::LineSearch *XC::RegulaFalsiLineSearch::getCopy(void) const
+  { return new RegulaFalsiLineSearch(*this); }
 
-int XC::SecantLineSearch::search(double s0, double s1, LinearSOE &theSOE, IncrementalIntegrator &theIntegrator)
+int XC::RegulaFalsiLineSearch::search(double s0, double s1, LinearSOE &theSOE, IncrementalIntegrator &theIntegrator)
   {
     double r0 = 0.0;
 
-    if(s0!=0.0) 
+    if ( s0 != 0.0 ) 
       r0 = fabs( s1 / s0 );
-	
-  if  (r0 <= tolerance )
-    return 0; // Line Search Not Required Residual Decrease Less Than Tolerance
 
-  if (s1 == s0)
-    return 0;  // Secant will have a divide-by-zero if continue
+    if  (r0 <= tolerance )
+      return 0; // Line Search Not Required Residual Decrease Less Than Tolerance
 
-  // set some variables
-  double eta    = 1.0;
-  double s      = s1;
-  double etaJ   = 1.0;
-  double etaJm1 = 0.0;
-  double sJ     = s1;
-  double sJm1   = s0;
-  double r = r0;
+    if (s1 == s0)
+      return 0;  // RegulaFalsi will have a divide-by-zero error if continue
 
-  const XC::Vector &dU = theSOE.getX();
+    // set some variables
+    double eta    = 1.0;
+    double s      = s1;
+    double etaU   = 1.0;
+    double etaL   = 0.0;
+    double sU     = s1;
+    double sL     = s0;
+    double r      = r0;
+    double etaJ   = 1.0;
 
-  if (printFlag == 0) {
-    std::cerr << "Secant Line Search - initial: "
-	 << "      eta(0) : " << eta << " , Ratio |s/s0| = " << r0 << std::endl;
-  }
 
-  // perform the secant iterations:
-  //
-  //                eta(j+1) = eta(j) -  s(j) * (eta(j-1)-eta(j))
-  //                                     ------------------------
-  //                                           s(j-1) - s(j)
+    const Vector &dU = theSOE.getX();
 
-  int count = 0; //initial value of iteration counter 
-  while ( r > tolerance  &&  count < maxIter ) {
-    
-    count++;
+    if (printFlag == 0) {
+      std::cerr << "RegulaFalsi Line Search - initial: "
+	   << "      eta(0) : " << eta << " , Ratio |s/s0| = " << r0 << std::endl;
+    }
 
-    eta = etaJ - sJ * (etaJm1-etaJ) / (sJm1 - sJ);
+    // perform the secant iterations:
+    //
+    //                eta(j+1) = eta(u) -  s(u) * (eta(l) -eta(u))
+    //                                     ------------------------
+    //                                           s(l) - s(u)
 
-    //-- want to put limits on eta and stop solution blowing up
-    if (eta > maxEta)  eta = maxEta;
-    if (r   > r0    )  eta =  1.0;
-    if (eta < minEta)  eta = minEta;
-    
-    //updates the diferencia incremental y 
-    //computes the new unbalanced vector.
+    int count = 0; //initial value of iteration counter 
+    while ( r > tolerance  &&  count < maxIter ) {
+
+      count++;
+
+      eta = etaU - sU * (etaL-etaU) / (sL - sU);
+
+
+      //-- want to put limits on eta(i)
+      if (eta > maxEta)  eta = maxEta;
+      if (  r >  r0   )  eta =  1.0;
+      if (eta < minEta)  eta = minEta;
+
+
+      //Updates la diferencia incremental and 
+      //computes the new unbalanced vector.
+      x= dU;
+      x*= eta-etaJ;
+
+      const int tmp= updateAndUnbalance(theIntegrator);
+      if(tmp!=0)
+	return tmp;
+
+      //new unbalanced vector
+      const Vector &ResidJ= theSOE.getB();
+
+      //new value for s
+      s= dU ^ ResidJ;
+
+      //new value for r 
+      r= fabs( s / s0 ); 
+
+
+      if(printFlag == 0)
+	{
+	  std::cerr << "RegulaFalsi Line Search - iteration: " << count 
+	       << " , eta(j) : " << eta 
+	       << " , Ratio |sj/s0| = " << r << std::endl;
+	}
+
+
+      if (etaJ == eta)
+	count = maxIter;
+
+      // set variables for next iteration
+      etaJ = eta;
+
+      if (s*sU < 0.0) {
+	etaL = eta;
+	sL   = s;
+      } else if (s*sU == 0.0)
+	count = maxIter;
+      else {
+	etaU = eta;
+	sU   = s;
+      } 
+
+      if (sL == sU)
+	count = maxIter;
+
+    } //end while
+
+    // set X in the SOE for the revised dU, needed for convergence tests
     x= dU;
-    x*= eta-etaJ;
-	    
-    const int tmp= updateAndUnbalance(theIntegrator);
-    if(tmp!=0)
-      return tmp;
+    x*= eta;
+    theSOE.setX(x);
 
-    //new residual
-    const Vector &ResidJ = theSOE.getB();
-    
-    //new_ value of s
-    s = dU ^ ResidJ;
-    
-    //new_ value of r 
-    r = fabs( s / s0 ); 
-
-    if (printFlag == 0)
-      {
-      std::cerr << "Secant Line Search - iteration: " << count 
-	   << " , eta(j) : " << eta << " , Ratio |sj/s0| = " << r << std::endl;
-      }
-
-    if (etaJ == eta)
-      count = maxIter;
-
-    // set variables for next iteration
-    etaJm1 = etaJ;
-    etaJ = eta;
-    sJm1 = sJ;
-    sJ = s;
-
-    if (sJm1 == sJ)
-      count = maxIter;
-    
-  } //end while
-
-  // set X in the SOE for the revised dU, needed for convergence tests
-  x= dU;
-  x*= eta;
-  theSOE.setX(x);
-
-  return 0;
-}
-
-
-
-
-
-
+    return 0;
+  }
 
 
