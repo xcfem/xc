@@ -47,7 +47,7 @@
 
 // $Revision: 1.4 $
 // $Date: 2005/11/29 22:42:42 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/NewtonLineSearch.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/line_search/NewtonLineSearch.h,v $
 
 // Written: fmk 
 // Created: 11/96 

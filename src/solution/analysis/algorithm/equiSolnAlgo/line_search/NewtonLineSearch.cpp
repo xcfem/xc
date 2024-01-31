@@ -46,18 +46,18 @@
 
 // $Revision: 1.5 $
 // $Date: 2005/11/29 22:42:42 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/NewtonLineSearch.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/line_search/NewtonLineSearch.cpp,v $
 
 // Written: fmk
 // Created: 11/96
 // Modified: Ed "C++" Love 10/00 to perform the line search
 //
-// Description: This file contains the implementation for XC::NewtonLineSearch.
+// Description: This file contains the implementation for NewtonLineSearch.
 //
 // What: "@(#)NewtonLineSearch.h, revA"
 
-#include <solution/analysis/algorithm/equiSolnAlgo/NewtonLineSearch.h>
 //Line search.
+#include <solution/analysis/algorithm/equiSolnAlgo/line_search/NewtonLineSearch.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/line_search/LineSearch.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/line_search/BisectionLineSearch.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/line_search/InitialInterpolatedLineSearch.h>

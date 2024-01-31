@@ -33,7 +33,6 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/KrylovNewton.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/Linear.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/ModifiedNewton.h>
-#include <solution/analysis/algorithm/equiSolnAlgo/NewtonLineSearch.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/NewtonRaphson.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/PeriodicNewton.h>
 #include <solution/analysis/algorithm/eigenAlgo/EigenAlgorithm.h>
@@ -43,6 +42,7 @@
 #include <solution/analysis/algorithm/eigenAlgo/KEigenAlgo.h>
 #include <solution/analysis/algorithm/domainDecompAlgo/DomainDecompAlgo.h>
 //#include "solution/analysis/algorithm/equiSolnAlgo/AcceleratedNewton.h"
+#include "solution/analysis/algorithm/equiSolnAlgo/line_search/NewtonLineSearch.h"
 #include "solution/analysis/algorithm/equiSolnAlgo/line_search/BisectionLineSearch.h"
 #include "solution/analysis/algorithm/equiSolnAlgo/line_search/SecantLineSearch.h"
 #include "solution/analysis/algorithm/equiSolnAlgo/line_search/InitialInterpolatedLineSearch.h"
