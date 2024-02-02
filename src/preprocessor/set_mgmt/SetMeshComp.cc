@@ -45,6 +45,7 @@
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/d3/BND3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 
@@ -119,10 +120,11 @@ void XC::SetMeshComp::rename(const std::string &newName)
         map_set.rename(oldName,newName);
 	if(newName!=getStrName())
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; something went wrong, name is: "
 	              << getStrName() << " and must be: "
-	              << newName << std::endl;
+	              << newName
+		      << Color::def << std::endl;
 	    setName(newName);
 	  }
       }
@@ -581,8 +583,9 @@ void XC::SetMeshComp::fillUpwards(void)
     const size_t numNodes= nodes.size();
     const size_t numElements= elements.size();
     if((numNodes>0) || (numElements>0))
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; implementation pending." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; implementation pending."
+		<< Color::def << std::endl;
     Node *ptrNod= nullptr;
     Node::ElementPtrSet connected_to_node;
     for(DqPtrsNode::iterator i= nodes.begin();i!=nodes.end();i++)
@@ -612,8 +615,9 @@ void XC::SetMeshComp::sel_nodes_from_list(const ID &tags)
           for(size_t i= 0;i<sz;i++)
             nodes.push_back(preprocessor->getDomain()->getNode(tags(i)));
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; preprocessor needed." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; preprocessor needed."
+		    << Color::def << std::endl;
       }
   }
 
@@ -639,9 +643,11 @@ BND3d XC::SetMeshComp::Bnd(const double &factor) const
   {
     BND3d retval= nodes.Bnd(factor);
     if(nodes.empty())
-      std::clog << getClassName() << "::" << __FUNCTION__
-	        << " node container empty. Call fillDownwards?"
-	        << std::endl;
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	        << " node container empty for set: '"
+	        << this->getName()
+	        << "'. Call fillDownwards?"
+	        << Color::def << std::endl;
     retval+= elements.Bnd(factor);
     return retval;
   }
@@ -657,8 +663,9 @@ void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
           for(size_t i= 0;i<sz;i++)
             elements.push_back(preprocessor->getDomain()->getElement(tags(i)));
         else
-          std::cerr << getClassName() << __FUNCTION__
-	            << "; preprocessor needed." << std::endl;
+          std::cerr << Color::red << getClassName() << __FUNCTION__
+	            << "; preprocessor needed."
+		    << Color::def << std::endl;
       }
   }
 
@@ -735,14 +742,16 @@ void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
               if((tmp= preprocessor->getDomain()->getConstraints().getConstraint(tags(i))))
                 constraints.push_back(tmp);
               else
-		std::cerr << getClassName() << "::" << __FUNCTION__
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; constraint identified by: "
-                          << tags(i) << " not found." << std::endl;
+                          << tags(i) << " not found."
+			  << Color::def << std::endl;
             }
 
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "preprocessor needed." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "preprocessor needed."
+		    << Color::def << std::endl;
       }
   }
 
@@ -792,7 +801,9 @@ int XC::SetMeshComp::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -804,13 +815,17 @@ int XC::SetMeshComp::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr  << getClassName() << "::" << __FUNCTION__
+		     << "; failed to receive data."
+	             << Color::def << std::endl;
       }
     return res;
   }

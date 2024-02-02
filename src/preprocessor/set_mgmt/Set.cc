@@ -44,6 +44,7 @@
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/d3/BND3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -201,9 +202,9 @@ XC::Set *XC::Set::alloc_set(void)
     MapSet &map_set= getPreprocessor()->get_sets();
     Set *retval= map_set.alloc_set(*this);
     if(!retval) //Can't allocate.
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; can't allocate this set."
-	        << std::endl;
+	        << Color::def << std::endl;
     return retval;
   }
 
@@ -216,14 +217,16 @@ void XC::Set::create_copy(const std::string &name,const Vector3d &v= Vector3d())
     Preprocessor *preprocessor= getPreprocessor();
     if(!preprocessor)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; preprocessor not assigned." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; preprocessor not assigned."
+		  << Color::def << std::endl;
 	return;
       }
     Set *new_set= getPreprocessor()->get_sets().create_set(name);
-    std::clog << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
               << "; warning! copy of nodes and elements"
-              << " not implemented." << std::endl;
+              << " not implemented."
+	      << Color::def << std::endl;
     //Copying entities.
     new_set->entities= entities.create_copy(name,v);
   }
@@ -353,8 +356,24 @@ bool XC::Set::In(const UniformGrid *ug) const
 //!                of the nodes: initPos+ factor * nodDisplacement.
 BND3d XC::Set::Bnd(const double &factor) const
   {
-    BND3d retval= SetMeshComp::Bnd(factor);
-    retval+= entities.Bnd();
+    BND3d retval;
+    const bool hasNodes= !SetMeshComp::empty();
+    const bool hasKPoints= !entities.empty();
+    if(hasNodes and hasKPoints)
+      {
+        retval= SetMeshComp::Bnd(factor);
+        retval+= entities.Bnd();
+      }
+    else if(hasNodes)
+      retval= SetMeshComp::Bnd(factor);
+    else if(hasKPoints)
+      retval= entities.Bnd();
+    else
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	        << " set: '"
+	        << this->getName()
+	        << "' has not nodes nor k-points. Call fillDownwards?"
+	        << Color::def << std::endl;      
     return retval;
   }
 
@@ -477,8 +496,9 @@ int XC::Set::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -490,15 +510,17 @@ int XC::Set::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+	            << Color::def << std::endl;
       }
     return res;
   }
