@@ -18,3 +18,6 @@ Determing the next time step for an analysis including inertial effects can be d
 - [Negative Feedback Loop](https://portwooddigital.com/2022/07/17/negative-feedback-loop/)
 - [Pseudo-Time Is Not the Load Factor](https://portwooddigital.com/2022/11/07/pseudo-time-is-not-the-load-factor/)
 - [Distributed Mass Beam Vibration](https://portwooddigital.com/2023/11/14/distributed-mass-beam-vibration/)
+- [Projectile OpenSeesing](https://portwooddigital.com/2024/01/21/projectile-openseesing/)
+- [Centripetal Acceleration](https://portwooddigital.com/2024/01/28/centripetal-acceleration/)
+- [The Hard Dynamics](https://portwooddigital.com/2024/01/07/the-hard-dynamics/)

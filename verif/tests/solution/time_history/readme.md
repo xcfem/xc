@@ -14,3 +14,6 @@ Transient dynamic analysis (also known as time-history analysis) aims at finding
 - [Negative Feedback Loop](https://portwooddigital.com/2022/07/17/negative-feedback-loop/)
 - [How to Apply a Pulse Ground Motion](https://portwooddigital.com/2023/11/01/how-to-apply-a-pulse-ground-motion/)
 - [No Element Required](https://portwooddigital.com/2024/01/14/no-element-required/)
+- [Projectile OpenSeesing](https://portwooddigital.com/2024/01/21/projectile-openseesing/)
+- [Centripetal Acceleration](https://portwooddigital.com/2024/01/28/centripetal-acceleration/)
+- [The Hard Dynamics](https://portwooddigital.com/2024/01/07/the-hard-dynamics/)
