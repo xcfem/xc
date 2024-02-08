@@ -52,7 +52,7 @@ soilAggressivity= 'unalteredNatural'
 designLife= 50
 ## Fe: influence of the execution technique taken from table 3.5.
 Fe= 1.5
-## Fuc: reduction factor of the cross-section area due to the  type of the
+## Fuc: reduction factor of the cross-section area due to the type of the
 ##      union taken from table 3.4.
 Fuc= 0.5
 ## Define soil horizons.
@@ -100,6 +100,7 @@ P= -1
 lp0.newNodalLoad(pTop.getNode().tag, xc.Vector([0,0,P,0,0,0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
+# Perform linear buckling analysis.
 linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 2, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "band_arpackpp_soe", eigenSolverType= "band_arpackpp_solver")
 linearBucklingAnalysis.setup()
 analOk= linearBucklingAnalysis.solve()
