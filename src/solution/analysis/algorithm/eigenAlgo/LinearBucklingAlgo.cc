@@ -31,6 +31,7 @@
 #include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include <utility/matrix/Vector.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Returns, si puede, a pointer al integrator adecuado.
 XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrator(void)
@@ -41,8 +42,9 @@ XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrato
       {
         retval= dynamic_cast<LinearBucklingIntegrator *>(theIntegrator);
         if(!retval)
-	  std::cerr << "LinearBucklingAlgo::getLinearBucklingIntegrator; the integrator"
-                    << " is not of the right type." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; the integrator is not of the right type."
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -59,22 +61,25 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
     EigenSOE *theSOE = getEigenSOEPtr();
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "WARNING; domain, model or integrator not assigned.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; domain, model or integrator not assigned."
+		  << Color::def << std::endl;
         return -1;
       }
 
     if(theIntegrator->formKtplusDt()<0) //Builds stiffness matrix.
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "WARNING; the Integrator failed in formKtplusDt().\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; the Integrator failed in formKtplusDt()."
+		  << Color::def << std::endl;
         return -3;
       }
 
     if(theSOE->solve(numModes) < 0) //Computes eigenmodes.
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "WARNING; the EigenSOE failed in solve().\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; the EigenSOE failed in solve()."
+		  << Color::def << std::endl;
         return -4;
       }
 
@@ -97,9 +102,10 @@ void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
           theEigenvalues[i-1]= 1.0/denom;
         else
           {
-	    std::cerr << "Error in LinearBucklingAlgo::eigen_to_model;" 
-                      << "theSOE.eigenvalue(" << i << ")= "
-                      << ev << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; error theSOE.eigenvalue(" << i << ")= "
+                      << ev
+		      << Color::def << std::endl;
 	    theEigenvalues[i-1]= 1e99;
           }
         theModel->setEigenvector(i, theSOE->getEigenvector(i));
