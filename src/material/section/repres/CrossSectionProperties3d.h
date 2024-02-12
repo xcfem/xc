@@ -121,6 +121,8 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     //! @brief Returns shear stiffness along z axis.
     inline double GAAlphaZ(void) const
       { return G()*getAvz(); }
+    double getRadiusOfGyrationZ(void) const;
+    double getRadiusOfGyrationY(void) const;
 
     double getTheta(void) const;
     double getI1(void) const;

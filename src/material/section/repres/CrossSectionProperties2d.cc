@@ -115,12 +115,17 @@ double XC::CrossSectionProperties2d::getI1(void) const
 double XC::CrossSectionProperties2d::getI2(void) const
   { return 0.0; }
 
+//! @brief Returns the section gyration radius.
+double XC::CrossSectionProperties2d::getRadiusOfGyration(void) const
+  { return sqrt(this->i/this->A()); }
+
 //! @brief Returns the principal axis of inertia.
 PrincipalAxesOfInertia2D XC::CrossSectionProperties2d::getInertiaAxes(void) const
   {
     const Pos2d center_of_mass(0,0);
     return PrincipalAxesOfInertia2D(center_of_mass,0.0,I(),0.0);
   }
+
 //! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties2d::getAxis1VDir(void) const
   { return getInertiaAxes().getAxis1VDir(); }

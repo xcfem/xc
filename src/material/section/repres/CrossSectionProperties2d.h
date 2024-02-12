@@ -103,6 +103,7 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
     //! @brief Returns shear stiffness.
     inline double GAAlpha(void) const
       { return g*getAvy(); }
+    double getRadiusOfGyration(void) const;
 
     virtual double getTheta(void) const;
     virtual double getI1(void) const;

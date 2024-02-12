@@ -122,6 +122,14 @@ double XC::CrossSectionProperties3d::getI1(void) const
 double XC::CrossSectionProperties3d::getI2(void) const
   { return I2_inertia(Iy(),Iz(),Iyz()); }
 
+//! @brief Returns the section gyration radius around the z axis.
+double XC::CrossSectionProperties3d::getRadiusOfGyrationZ(void) const
+  { return sqrt(this->Iz()/this->A()); }
+
+//! @brief Returns the section gyration radius around the y axis.
+double XC::CrossSectionProperties3d::getRadiusOfGyrationY(void) const
+  { return sqrt(this->Iy()/this->A()); }
+
 //! @brief Returns the principal axis of inertia.
 PrincipalAxesOfInertia2D XC::CrossSectionProperties3d::getInertiaAxes(void) const
   {
