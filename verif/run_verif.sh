@@ -1152,6 +1152,7 @@ python tests/materials/ehe/test_buckling_check_02.py
 python tests/materials/ehe/test_buckling_check_03.py
 python tests/materials/ehe/test_buckling_check_04.py
 python tests/materials/ehe/test_buckling_check_05.py
+python tests/materials/ehe/test_buckling_check_06.py
 
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
@@ -1230,7 +1231,7 @@ python tests/materials/ec3/test_buckling_resistance_01.py
 python tests/materials/ec3/test_buckling_resistance_02.py
 python tests/materials/ec3/test_buckling_resistance_03.py
 python tests/materials/ec3/test_buckling_resistance_04.py
-python tests/materials/ehe/test_buckling_resistance_05.py
+python tests/materials/ec3/test_buckling_resistance_05.py
 echo "$BLEU" "      lateral-torsional buckling tests." "$NORMAL"
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
 python tests/materials/ec3/test_lateral_torsional_buckling01.py
