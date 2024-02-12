@@ -43,7 +43,7 @@ modelSpace.setDefaultCoordTransf(corot)
 xcSection= steelShape.defElasticShearSection2d(preprocessor)
 modelSpace.setDefaultMaterial(xcSection)
 
-## FiniteElement.
+## Finite element type.
 modelSpace.newSeedElement("ElasticBeam2d")
 
 ## Mesh generation.
@@ -106,8 +106,8 @@ ratio2= abs(avgNbRd-2306.398883222727e3)/2306.398883222727e3
 '''
 print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
 print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
-print('effective length: ', avgLeff, 'm', ratio1)
-print('buckling resistance: ', avgNbRd/1e3, 'kN', ratio2)
+print('average effective length: ', avgLeff, 'm', ratio1)
+print('average buckling resistance: ', avgNbRd/1e3, 'kN', ratio2)
 '''
 
 import os
