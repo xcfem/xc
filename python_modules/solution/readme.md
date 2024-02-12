@@ -32,6 +32,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [Newmark method](https://opensees.berkeley.edu/wiki/index.php/Newmark_Method)
 - [Newmark-beta method](https://en.wikipedia.org/wiki/Newmark-beta_method)
 - [No Element Required](https://portwooddigital.com/2024/01/14/no-element-required/)
+- [Two Sprung Masses and Some Friction Force](https://portwooddigital.com/2024/02/10/two-sprung-masses-and-some-friction-force/)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)

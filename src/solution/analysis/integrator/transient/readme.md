@@ -21,3 +21,4 @@ Determing the next time step for an analysis including inertial effects can be d
 - [Projectile OpenSeesing](https://portwooddigital.com/2024/01/21/projectile-openseesing/)
 - [Centripetal Acceleration](https://portwooddigital.com/2024/01/28/centripetal-acceleration/)
 - [The Hard Dynamics](https://portwooddigital.com/2024/01/07/the-hard-dynamics/)
+- [Two Sprung Masses and Some Friction Force](https://portwooddigital.com/2024/02/10/two-sprung-masses-and-some-friction-force/)
