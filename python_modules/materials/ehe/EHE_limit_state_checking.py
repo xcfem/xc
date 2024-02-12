@@ -992,7 +992,10 @@ def get_lower_slenderness_limit(C:float, nonDimensionalAxialForce:float, e1, e2,
         methodName= sys._getframe(0).f_code.co_name
         errMsg= methodName+"; e2 must be greater or equal that e1.\n"
         lmsg.error(errMsg)
-    retval= 1+0.24/(e2/sectionDepth)+3.4*(e1/e2-1)**2
+    if(e2==0): # e1==0 and e2==0
+        retval= 1e9
+    else:
+        retval= 1+0.24/(e2/sectionDepth)+3.4*(e1/e2-1)**2
     retval*= C/nonDimensionalAxialForce
     retval= min(35.0*math.sqrt(retval),100.0)
     return retval
