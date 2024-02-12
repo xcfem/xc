@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Check buckling computations using the results of a linear buckling analysis.
+''' Check buckling computations using the results of a linear buckling 
+analysis. 2D structural analysis model.
 '''
 
 from __future__ import division
