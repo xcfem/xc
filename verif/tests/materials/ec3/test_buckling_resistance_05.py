@@ -52,8 +52,6 @@ l1.genMesh(xc.meshDir.I)
 ## Constraints.
 bottomNode= p1.getNode()
 topNode= p2.getNode()
-#modelSpace.fixNode('000_FF0',bottomNode.tag)
-#modelSpace.fixNode('000_FFF',topNode.tag)
 modelSpace.fixNode('000_FF0',bottomNode.tag)
 modelSpace.fixNode('00F_FFF',topNode.tag)
 
