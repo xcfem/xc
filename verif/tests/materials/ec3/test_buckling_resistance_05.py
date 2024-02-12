@@ -11,6 +11,7 @@ import math
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials.ec3 import EC3_materials
+from materials.ec3 import EC3_limit_state_checking
 
 # Material
 steel= EC3_materials.S355JR
@@ -70,6 +71,7 @@ analOk= linearBucklingAnalysis.solve()
 eulerBucklingLoadFactor1= linearBucklingAnalysis.analysis.getEigenvalue(1)
 eulerBucklingLoadFactor2= linearBucklingAnalysis.analysis.getEigenvalue(2)
 eulerBucklingLoadFactor3= linearBucklingAnalysis.analysis.getEigenvalue(3)
+bucklingLoadFactors= [eulerBucklingLoadFactor1, eulerBucklingLoadFactor2, eulerBucklingLoadFactor3]
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -77,29 +79,7 @@ avgLeff= 0.0
 avgNbRd= 0.0
 # Compute critical axial loads.
 for e in xcTotalSet.elements:
-    N= e.getN()
-    # Critical axial load.
-    Ncri= [eulerBucklingLoadFactor1*N, eulerBucklingLoadFactor2*N, eulerBucklingLoadFactor3*N]
-    # Effective length.
-    section= e.physicalProperties.getVectorMaterials[0]
-    EIz= section.sectionProperties.EIz()
-    EIy= section.sectionProperties.EIy()
-    Leffi= list()
-    for Ncr in Ncri:
-        Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr))
-        Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr))
-        if(Ncr>0):
-            Leffz= -Leffz
-            Leffy= -Leffy
-        Leffi.append((Leffz, Leffy))
-    # Buckling reduction factor and buckling resistance.
-    Xi= list()
-    NbRdi= list()
-    for (Leffz, Leffy) in Leffi:
-        Xz= steelShape.getBucklingReductionFactorZ(Leffz)
-        Xy= steelShape.getBucklingReductionFactorY(Leffy)
-        Xi.append((Xz,Xy))
-        NbRdi.append(steelShape.getBucklingResistance(Leffy,Leffz))
+    Leffi, mechLambdai, Xi, NbRdi= EC3_limit_state_checking.get_buckling_parameters(element= e, bucklingLoadFactors= bucklingLoadFactors, steelShape= steelShape)
     avgLeff+= Leffi[0][0]
     avgNbRd+= NbRdi[0]
 

@@ -99,38 +99,10 @@ avgLeff= 0.0 # Average effective length.
 avgMechLambda= 0.0 # Average mechanical slenderness.
 avgEf= 0.0 # Average fictitious eccentricity.
 for e in xcTotalSet.elements:
-    N= e.getN()
-    M1= e.getM1
-    M2= e.getM2
-    if(M1>M2):
-        e1, e2= EHE_limit_state_checking.get_buckling_e1_e2_eccentricities(Nd= Nd, MdMax= M1, MdMin= M2)
-    else:
-        e1, e2= EHE_limit_state_checking.get_buckling_e1_e2_eccentricities(Nd= Nd, MdMax= M2, MdMin= M1)
-    nu= rcSection.getNonDimensionalAxialForce(N) # Non-dimensional axial force.
-
-    lowerSlendernessLimit= EHE_limit_state_checking.get_lower_slenderness_limit(C= 0.2, nonDimensionalAxialForce= nu, e1= e1, e2= e2, sectionDepth= diameter)
     # Critical axial load.
-    Ncri= [eulerBucklingLoadFactor1*N, eulerBucklingLoadFactor2*N]
-    # Mechanical properties.
-    section= e.physicalProperties.getVectorMaterials[0]
-    EI= section.sectionProperties.EI()
-    iz= section.sectionProperties.i # Radius of gyration.
-    Leffi= list() # Effective lengths for each mode.
-    mechLambdai= list() # Mechanical slenderness for each mode.
-    Efi= list() # Fictitious eccentricity for each mode.
-    for mode, Ncr in enumerate(Ncri):
-        Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
-        if(Ncr>0):
-            Leff= -Leff
-        Leffi.append(Leff)
-        mechLambda= Leff/iz # Compute mechanical slenderness
-        mechLambdai.append(mechLambda)
-        if(mechLambda<lowerSlendernessLimit):
-            ef= 0.0
-        else:
-            reinforcementFactor= 2 # Circular section table 43.5.1
-            ef= EHE_limit_state_checking.get_fictitious_eccentricity(sectionDepth= diameter, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactor, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff)
-        Efi.append(ef)
+    bucklingLoadFactors= [eulerBucklingLoadFactor1, eulerBucklingLoadFactor2]
+    reinforcementFactor= 2 # Circular section table 43.5.1
+    Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= 0.2, reinforcementFactorZ= reinforcementFactor)
     avgLeff+= Leffi[0] # Effective length for the first mode.
     avgMechLambda+= mechLambdai[0] # Mechanical slenderness for the first mode.
     avgEf+= Efi[0] # Fictitious eccentricity for the first mode.

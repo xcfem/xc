@@ -89,6 +89,59 @@ def getLateralBucklingImperfectionFactor(steelShape):
     else:
         return 0.76
 
+def get_buckling_parameters(element, bucklingLoadFactors, steelShape):
+    ''' Return the effective length, mechanical slenderness, reduction factor and buckling resistance for the given buckling load factors.
+
+    :param element: element to compute the buckling parameters for.
+    :param bucklingLoadFactors: list containing the buckling load factors obtained from the linear buckling analysis.
+    :param steelShape: steel section of the element.
+    '''
+    N= element.getN() # Element axial load.
+    Ncri= [x * N for x in bucklingLoadFactors]
+    nDOF= element.getNumDOF() # Number of degrees of freedom.
+    section= element.physicalProperties.getVectorMaterials[0]
+    Leffi= list() # Effective lengths for each mode.
+    mechLambdai= list() # Mechanical slenderness for each mode.
+    Xi= list() # Buckling reduction factors.
+    NbRdi= list() # buckling resistance for each mode.
+    if(nDOF==6): # 2D element.
+        EI= section.sectionProperties.EI()
+        iz= section.sectionProperties.i # Radius of gyration.
+        for mode, Ncr in enumerate(Ncri):
+            Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
+            if(Ncr>0):
+                Leff= -Leff
+            Leffi.append(Leff)
+            mechLambda= Leff/iz # Compute mechanical slenderness
+            mechLambdai.append(mechLambda)
+            Xi.append(steelShape.getBucklingReductionFactorY(Leff))
+            NbRdi.append(steelShape.getBucklingResistance(Leff,Leff))
+    elif(nDOF==12):
+        EIz= section.sectionProperties.EIz()
+        EIy= section.sectionProperties.EIy()
+        iz= section.sectionProperties.iz # Radius of gyration about z axis.
+        iy= section.sectionProperties.iy # Radius of gyration about y axis.
+        for mode, Ncr in enumerate(Ncri):
+            Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
+            Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
+            if(Ncr>0):
+                Leffz= -Leffz
+                Leffy= -Leffy
+            Leffi.append((Leffz, Leffy))
+            mechLambdaZ= Leffz/iz # Compute mechanical slenderness
+            mechLambdaY= Leffy/iy # Compute mechanical slenderness
+            mechLambdai.append((mechLambdaZ, mechLambdaY))
+            Xz= steelShape.getBucklingReductionFactorZ(Leffz)
+            Xy= steelShape.getBucklingReductionFactorY(Leffy)
+            Xi.append((Xz,Xy))
+            NbRdi.append(steelShape.getBucklingResistance(Leffz,Leffy))
+    else:
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
+        lmsg.error(errMsg)
+    return Leffi, mechLambdai, Xi, NbRdi
+
 class BeamSupportCoefficients(object):
 
   def __init__(self,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0):

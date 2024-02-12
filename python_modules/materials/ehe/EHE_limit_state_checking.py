@@ -955,6 +955,42 @@ def get_buckling_e1_e2_eccentricities(Nd:float, MdMax:float, MdMin:float):
             e1= absMdMax/Nd # e1<0
     return e1, e2
 
+def get_element_buckling_eccentricities(element):
+    ''' Compute the e1 and e2 eccentricities as defined in the clause 43.1.2 of
+        EHE-08 using the internal forces of the element.
+
+    :param element: element to compute the buckling eccentricities for.
+    '''
+    nDOF= element.getNumDOF() # Number of degrees of freedom.
+    N= element.getN() # Axial load.
+    if(nDOF==6): # 2D element.
+        M1= element.getM1 # Bending moments.
+        M2= element.getM2
+        if(M1>M2):
+            ez1, ez2= get_buckling_e1_e2_eccentricities(Nd= N, MdMax= M1, MdMin= M2)
+        else:
+            ez1, ez2= get_buckling_e1_e2_eccentricities(Nd= N, MdMax= M2, MdMin= M1)
+        retval= (ez1, ez2)
+    elif(nDOF==12): # 3D element.
+        Mz1= element.getMz1; Mz2= element.getMz2
+        if(Mz1>Mz2):
+            ez1, ez2= get_buckling_e1_e2_eccentricities(Nd= N, MdMax= Mz1, MdMin= Mz2)
+        else:
+            ez1, ez2= get_buckling_e1_e2_eccentricities(Nd= N, MdMax= Mz2, MdMin= Mz1)
+        My1= element.getMy1; My2= element.getMy2
+        if(My1>My2):
+            ey1, ey2= get_buckling_e1_e2_eccentricities(Nd= N, MdMax= My1, MdMin= My2)
+        else:
+            ey1, ey2= get_buckling_e1_e2_eccentricities(Nd= N, MdMax= My2, MdMin= My1)
+        retval= (ez1, ez2, ey1, ey2)
+    else:
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
+        lmsg.error(errMsg)
+        
+    return retval
+        
 def get_fictitious_eccentricity(sectionDepth:float, firstOrderEccentricity, reinforcementFactor:float, epsilon_y:float, radiusOfGyration:float, bucklingLength:float):
     ''' Return the fictitious eccentricity used to represent the second order 
         effects according to clause 43.5.1 of EHE-08.
@@ -1000,7 +1036,86 @@ def get_lower_slenderness_limit(C:float, nonDimensionalAxialForce:float, e1, e2,
     retval= min(35.0*math.sqrt(retval),100.0)
     return retval
 
+def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDepthZ, Cz, reinforcementFactorZ, sectionDepthY= None, Cy= None, reinforcementFactorY= None):
+    ''' Return the effective length, mechanical slenderness and fictitious eccentricity for the given buckling load factors.
 
+    :param element: element to compute the buckling parameters for.
+    :param bucklingLoadFactors: list containing the buckling load factors obtained from the linear buckling analysis.
+    :param rcSection: reinforced concrete section of the element.
+    :param sectionDepthZ: depth of the reinforced concrete section measured along the z axis.
+    :param Cz: Coefficient which depends on the configuration of reinforcements
+              whose values are: 0.24 for symmetrical reinforcement on two 
+              opposing sides in the bending plane, 0.20 for equal reinforcement on the four sides, 0.16 for symmetrical reinforcement on the lateral sides.
+    :param reinforcementFactorZ: reinforcement factor computed as $\beta= \frac{(d-d')^2}{4*i_s^2}$ with $i_s$ being the radius of gyration of the reinforcements about the z axis.
+    :param sectionDepthY: depth of the reinforced concrete section measured along the y axis.
+    :param Cy: Coefficient which depends on the configuration of reinforcements
+              whose values are: 0.24 for symmetrical reinforcement on two 
+              opposing sides in the bending plane, 0.20 for equal reinforcement on the four sides, 0.16 for symmetrical reinforcement on the lateral sides.
+    :param reinforcementFactorY: reinforcement factor computed as $\beta= \frac{(d-d')^2}{4*i_s^2}$ with $i_s$ being the radius of gyration of the reinforcements about the y axis.
+    '''
+    N= element.getN() # Element axial load.
+    Ncri= [x * N for x in bucklingLoadFactors]
+    nonDimensionalAxialForce= rcSection.getNonDimensionalAxialForce(N) # Non-dimensional axial force.
+    steel= rcSection.getReinfSteelType()
+    nDOF= element.getNumDOF() # Number of degrees of freedom.
+    section= element.physicalProperties.getVectorMaterials[0]
+    Leffi= list() # Effective lengths for each mode.
+    mechLambdai= list() # Mechanical slenderness for each mode.
+    Efi= list() # Fictitious eccentricity for each mode.
+    if(nDOF==6): # 2D element.
+        e1, e2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
+        EI= section.sectionProperties.EI()
+        iz= section.sectionProperties.i # Radius of gyration.
+        # Lower slenderness limit.
+        lowerSlendernessLimit= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= e1, e2= e2, sectionDepth= sectionDepthZ)
+        for mode, Ncr in enumerate(Ncri):
+            Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
+            if(Ncr>0):
+                Leff= -Leff
+            Leffi.append(Leff)
+            mechLambda= Leff/iz # Compute mechanical slenderness
+            mechLambdai.append(mechLambda)
+            if(mechLambda<lowerSlendernessLimit):
+                ef= 0.0
+            else:
+                ef= get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff)
+            Efi.append(ef)
+
+    elif(nDOF==12):
+        ez1, ez2, ey1, ey2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
+        EIz= section.sectionProperties.EIz()
+        EIy= section.sectionProperties.EIy()
+        iz= section.sectionProperties.iz # Radius of gyration about z axis.
+        iy= section.sectionProperties.iy # Radius of gyration about y axis.
+        # Lower slenderness limit.
+        lowerSlendernessLimitZ= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ez1, e2= ez2, sectionDepth= sectionDepthZ)
+        lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
+        for mode, Ncr in enumerate(Ncri):
+            Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
+            Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
+            if(Ncr>0):
+                Leffz= -Leffz
+                Leffy= -Leffy
+            Leffi.append((Leffz, Leffy))
+            mechLambdaZ= Leffz/iz # Compute mechanical slenderness
+            mechLambdaY= Leffy/iy # Compute mechanical slenderness
+            mechLambdai.append((mechLambdaZ, mechLambdaY))
+            if(mechLambdaZ<lowerSlendernessLimitZ):
+                efz= 0.0
+            else:
+                efz= get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz)
+            if(mechLambdaY<lowerSlendernessLimitY):
+                efy= 0.0
+            else:
+                efy= get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy)
+            Efi.append((efz, efy))
+
+    else:
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
+        lmsg.error(errMsg)
+    return Leffi, mechLambdai, Efi
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
 #      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)

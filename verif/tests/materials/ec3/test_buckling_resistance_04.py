@@ -11,6 +11,7 @@ import math
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials.ec3 import EC3_materials
+from materials.ec3 import EC3_limit_state_checking
 
 # Material
 steel= EC3_materials.S355JR
@@ -69,6 +70,7 @@ analOk= linearBucklingAnalysis.solve()
 # Get results.
 eulerBucklingLoadFactor1= linearBucklingAnalysis.analysis.getEigenvalue(1)
 eulerBucklingLoadFactor2= linearBucklingAnalysis.analysis.getEigenvalue(2)
+bucklingLoadFactors= [eulerBucklingLoadFactor1, eulerBucklingLoadFactor2]
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -76,24 +78,7 @@ avgLeff= 0.0
 avgNbRd= 0.0
 # Compute critical axial loads.
 for e in xcTotalSet.elements:
-    N= e.getN()
-    # Critical axial load.
-    Ncri= [eulerBucklingLoadFactor1*N, eulerBucklingLoadFactor2*N]
-    # Effective length.
-    section= e.physicalProperties.getVectorMaterials[0]
-    EI= section.sectionProperties.EI()
-    Leffi= list()
-    for Ncr in Ncri:
-        Leff= math.sqrt((EI*math.pi**2)/abs(Ncr))
-        if(Ncr>0):
-            Leff= -Leff
-        Leffi.append(Leff)
-    # Buckling reduction factor and buckling resistance.
-    Xi= list()
-    NbRdi= list()
-    for Leff in Leffi:
-        Xi.append(steelShape.getBucklingReductionFactorY(Leff))
-        NbRdi.append(steelShape.getBucklingResistance(Leff,Leff))
+    Leffi, mechLambdai, Xi, NbRdi= EC3_limit_state_checking.get_buckling_parameters(element= e, bucklingLoadFactors= bucklingLoadFactors, steelShape= steelShape)
     avgLeff+= Leffi[0]
     avgNbRd+= NbRdi[0]
 

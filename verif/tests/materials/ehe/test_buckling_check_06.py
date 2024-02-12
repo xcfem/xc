@@ -93,6 +93,7 @@ analOk= linearBucklingAnalysis.solve()
 eulerBucklingLoadFactor1= linearBucklingAnalysis.analysis.getEigenvalue(1)
 eulerBucklingLoadFactor2= linearBucklingAnalysis.analysis.getEigenvalue(2)
 eulerBucklingLoadFactor3= linearBucklingAnalysis.analysis.getEigenvalue(3)
+bucklingLoadFactors= [eulerBucklingLoadFactor1, eulerBucklingLoadFactor2, eulerBucklingLoadFactor3]
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -100,54 +101,10 @@ avgLeff= 0.0 # Average effective length.
 avgMechLambda= 0.0 # Average mechanical slenderness.
 avgEf= 0.0 # Average fictitious eccentricity.
 for e in xcTotalSet.elements:
-    N= e.getN()
-    Mz1= e.getMz1; Mz2= e.getMz2
-    if(Mz1>Mz2):
-        ez1, ez2= EHE_limit_state_checking.get_buckling_e1_e2_eccentricities(Nd= Nd, MdMax= Mz1, MdMin= Mz2)
-    else:
-        ez1, ez2= EHE_limit_state_checking.get_buckling_e1_e2_eccentricities(Nd= Nd, MdMax= Mz2, MdMin= Mz1)
-    My1= e.getMy1; My2= e.getMy2
-    if(My1>My2):
-        ey1, ey2= EHE_limit_state_checking.get_buckling_e1_e2_eccentricities(Nd= Nd, MdMax= My1, MdMin= My2)
-    else:
-        ey1, ey2= EHE_limit_state_checking.get_buckling_e1_e2_eccentricities(Nd= Nd, MdMax= My2, MdMin= My1)
-    nu= rcSection.getNonDimensionalAxialForce(N) # Non-dimensional axial force.
-
-    # Lower slenderness limit.
-    lowerSlendernessLimitZ= EHE_limit_state_checking.get_lower_slenderness_limit(C= 0.2, nonDimensionalAxialForce= nu, e1= ez1, e2= ez2, sectionDepth= diameter)
-    lowerSlendernessLimitY= EHE_limit_state_checking.get_lower_slenderness_limit(C= 0.2, nonDimensionalAxialForce= nu, e1= ey1, e2= ey2, sectionDepth= diameter)
     # Critical axial load.
-    Ncri= [eulerBucklingLoadFactor1*N, eulerBucklingLoadFactor2*N, eulerBucklingLoadFactor3*N]
-    # Mechanical properties.
-    section= e.physicalProperties.getVectorMaterials[0]
-    EIz= section.sectionProperties.EIz()
-    EIy= section.sectionProperties.EIy()
-    iz= section.sectionProperties.iz # Radius of gyration about z axis.
-    iy= section.sectionProperties.iy # Radius of gyration about y axis.
-    Leffi= list() # Effective lengths for each mode.
-    mechLambdai= list() # Mechanical slenderness for each mode.
-    Efi= list() # Fictitious eccentricity for each mode.
-    for mode, Ncr in enumerate(Ncri):
-        Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
-        Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
-        if(Ncr>0):
-            Leffz= -Leffz
-            Leffy= -Leffy
-        Leffi.append((Leffz, Leffy))
-        mechLambdaZ= Leffz/iz # Compute mechanical slenderness
-        mechLambdaY= Leffy/iy # Compute mechanical slenderness
-        mechLambdai.append((mechLambdaZ, mechLambdaY))
-        if(mechLambdaZ<lowerSlendernessLimitZ):
-            efz= 0.0
-        else:
-            reinforcementFactorZ= 2 # Circular section table 43.5.1
-            efz= EHE_limit_state_checking.get_fictitious_eccentricity(sectionDepth= diameter, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz)
-        if(mechLambdaY<lowerSlendernessLimitY):
-            efy= 0.0
-        else:
-            reinforcementFactorY= 2 # Circular section table 43.5.1
-            efy= EHE_limit_state_checking.get_fictitious_eccentricity(sectionDepth= diameter, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy)
-        Efi.append((efz, efy))
+    reinforcementFactorZ= 2 # Circular section table 43.5.1
+    reinforcementFactorY= 2 # Circular section table 43.5.1
+    Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= 0.2, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= 0.2, reinforcementFactorY= reinforcementFactorY)
     avgLeff+= Leffi[0][0] # Effective length for the first mode Z axis.
     avgMechLambda+= mechLambdai[0][0] # Mechanical slenderness for the first mode.
     avgEf+= Efi[0][0] # Fictitious eccentricity for the first mode Z axis.
