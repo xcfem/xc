@@ -5,3 +5,5 @@ Data structures to represent cross-sections. Some or the data structures store o
 
 ## References
 - [Rectangular Patches](https://portwooddigital.com/2022/06/05/rectangular-patches/)
+- [Second moment of area](https://en.wikipedia.org/wiki/Second_moment_of_area)
+- [Radius of gyration](https://en.wikipedia.org/wiki/Radius_of_gyration)
