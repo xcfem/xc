@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Check buckling verification test.'''
+''' Check buckling computations.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -18,12 +18,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-diameter= 1.25 # Section diameter expressed in meters.
-cover= 0.05 # Concrete cover expressed in meters.
 l0= 20.36 # Buckling length.
 
 # Loads.
-Nd= -2990e3 # concomitant Nd= -1400e3
+Nd= -2990e3
 MdTop= 2000e3
 MdBottom= -1970e3
 if(MdTop>MdBottom):
@@ -35,6 +33,8 @@ else:
 concr= EHE_materials.HA30
 steel= EHE_materials.B500S
 ## Reinforced concrete section.
+diameter= 1.25 # Section diameter expressed in meters.
+cover= 0.05 # Concrete cover expressed in meters.
 section= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 
 ## Reinforcement.
@@ -61,7 +61,7 @@ ratio1= abs(lowerSlendernessLimit-100)/100
 
 ## Compute fictitious eccentricity
 ee= e2 # Equivalent first order design eccentricity (sway supports).
-reinforcementFactor= 2
+reinforcementFactor= 2 # Circular section table 43.5.1
 ef= EHE_limit_state_checking.get_fictitious_eccentricity(sectionDepth= diameter, firstOrderEccentricity= ee, reinforcementFactor= reinforcementFactor, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= l0)
 ratio2= abs(ef-33.833155801533366e-2)/33.833155801533366e-2
 
