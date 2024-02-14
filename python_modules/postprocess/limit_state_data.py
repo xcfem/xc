@@ -681,7 +681,11 @@ class FatigueResistanceRCLimitStateData(ULS_LimitStateData):
         super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance','verifRsl_fatigueULS', designSituation= 'fatigue')
             
 class VonMisesStressLimitStateData(ULS_LimitStateData):
-    ''' Steel Von Mises stress limit state data.'''
+    ''' Steel Von Mises stress limit state data.
+
+    :ivar vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
+    '''
     def __init__(self, vonMisesStressId= 'max_von_mises_stress'):
         '''Von Mises stress limit state data constructor.
 
