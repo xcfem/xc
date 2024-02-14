@@ -1123,7 +1123,8 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
 #       __ ___ _ _| |_ _ _ ___| | |___ _ _ ___   
 #      / _/ _ \ ' \  _| '_/ _ \ | / -_) '_(_-<   
 #      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
-                                               
+# Limit state controllers.
+
 # Check normal stresses limit state.
 class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''
@@ -1525,10 +1526,13 @@ class CrackController(lscb.LimitStateControllerBase):
     '''Object that verifies the cracking serviceability limit state according 
     to clause 49.2.4 of EHE-08.
 
+    :ivar wk_lim: maximum allowable crack width. 
     :ivar beta: Coefficient which relates the mean crack opening to the 
                 characteristic value and is equal to 1.3 in the case 
                 of cracking caused by indirect actions only, and 1.7 
                 in other cases.
+    :ivar k2: coefficient of value 1.0 in the case of non-repeating temporary
+              load and 0.5 in other cases.
     '''
     ControlVars= cv.RCCrackControlVars
     
@@ -1836,9 +1840,8 @@ class CrackControl(lscb.CrackControlBaseParameters):
             self.netEffectiveArea= scc.computeFibersEffectiveConcreteArea(self.hEfMax,self.tensionedRebarsFiberSetName,15)
 
             self.tensionedRebars.setup(tensionedReinforcement)
-            self.Wk= self.computeWkOnBars(tensionedReinforcement)  
-
-
+            self.Wk= self.computeWkOnBars(tensionedReinforcement)
+            
 class TorsionParameters(object):
     '''Methods for checking reinforced concrete section under torsion 
        according to clause 45.1 of EHE-08.
