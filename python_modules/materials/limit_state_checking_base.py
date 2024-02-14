@@ -106,7 +106,8 @@ class EURebarController(RebarController):
         
 defaultStaticLinearSolutionProcedure= predefined_solutions.SimpleStaticLinear
 defaultStaticNonLinearSolutionProcedure= predefined_solutions.PlainNewtonRaphson
-    
+defaultLinearBucklingAnalysisProcedure= predefined_solutions.SpectraLinearBucklingAnalysis
+
 class LimitStateControllerBase(object):
     '''
     Basic parameters for limit state control (normal stresses, shear, crack,...)    .'''

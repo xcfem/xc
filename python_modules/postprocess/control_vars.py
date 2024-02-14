@@ -23,7 +23,7 @@ from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 
-__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'writeControlVarsFromElements', 'writeControlVarsFromElementsForAnsys', 'writeControlVarsFromPhantomElements']
+__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'writeControlVarsFromElements', 'writeControlVarsFromElementsForAnsys', 'writeControlVarsFromPhantomElements']
 
 def getDiagramDirection(elem, component, defaultDirection):
     '''Return the direction vector to represent the diagram over the element
@@ -588,6 +588,14 @@ class AxialForceControlVars(CFN):
         super(AxialForceControlVars,self).setFromDict(dct)
         self.idSection= dct['idSection']
 
+
+
+#       ___              _ _           
+#      | _ ) ___ _ _  __| (_)_ _  __ _ 
+#      | _ \/ -_) ' \/ _` | | ' \/ _` |
+#      |___/\___|_||_\__,_|_|_||_\__, |
+#                                |___/ 
+# Bending control vars.
         
 class BiaxialBendingControlVars(UniaxialBendingControlVars):
     '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
@@ -727,6 +735,13 @@ class SteelShapeBiaxialBendingControlVars(BiaxialBendingStrengthControlVars):
         self.MvRdz= dct['MvRdz']
         self.MbRdz= dct['MbRdz']
 
+
+#       ___ _                 
+#      / __| |_  ___ __ _ _ _ 
+#      \__ \ ' \/ -_) _` | '_|
+#      |___/_||_\___\__,_|_|  
+# Shear control vars.
+        
 class RCShearControlVars(BiaxialBendingControlVars):
     '''Control variables for shear limit state verification in reinforced concrete elements.
 
@@ -845,6 +860,11 @@ class SIATypeRCShearControlVars(RCShearControlVars):
         self.Vcu= dct['Vcu']
         self.Vsu= dct['Vsu']
 
+#        ___             _                _           _ 
+#       / __|_ _ __ _ __| |__  __ ___ _ _| |_ _ _ ___| |
+#      | (__| '_/ _` / _| / / / _/ _ \ ' \  _| '_/ _ \ |
+#       \___|_| \__,_\__|_\_\ \__\___/_||_\__|_| \___/_|
+# Crack control control vars.     
 
 class CrackControlBaseVars(CFNMyMz):
     '''Biaxial bending. Cracking serviceability limit state variables.
@@ -1036,7 +1056,14 @@ class RCCrackStraightControlVars(RCCrackControlVars):
         '''
         super(RCCrackStraightControlVars,self).setFromDict(dct)
         self.eps_sm= dct['eps_sm']
-        
+
+
+#       ___     _   _               
+#      | __|_ _| |_(_)__ _ _  _ ___ 
+#      | _/ _` |  _| / _` | || / -_)
+#      |_|\__,_|\__|_\__, |\_,_\___|
+#                    |___/          
+# Fatigue control vars
   
 class FatigueControlBaseVars(NMyMz):
     '''Biaxial bending. Fatigue limit state variables.
@@ -1099,6 +1126,7 @@ class FatigueControlBaseVars(NMyMz):
         self.negSteelStress= dct['negSteelStress']
         self.posSteelStress= dct['posSteelStress']
         self.concreteStress= dct['concreteStress']
+
 
 class FatigueControlVars(ControlVarsBase):
     '''Fatigue limit state control variables.
@@ -1198,7 +1226,12 @@ class FatigueControlVars(ControlVarsBase):
         self.concreteShearCF= dct['concreteShearCF']
         self.Mu= dct['Mu']
         self.Vu= dct['Vu']
-  
+
+#      __   __          __  __ _            
+#      \ \ / /__ _ _   |  \/  (_)___ ___ ___
+#       \ V / _ \ ' \  | |\/| | (_-</ -_|_-<
+#        \_/\___/_||_| |_|  |_|_/__/\___/__/
+# Von mises control vars.                                   
 class VonMisesControlVars(ControlVarsBase):
     '''Von Mises stresses control vars.
 
@@ -1233,6 +1266,121 @@ class VonMisesControlVars(ControlVarsBase):
     def getCF(self):
         ''' Return the capacity factor.'''
         return self.CF
+
+
+#       ___         _   _ _           
+#      | _ )_  _ __| |_| (_)_ _  __ _ 
+#      | _ \ || / _| / / | | ' \/ _` |
+#      |___/\_,_\__|_\_\_|_|_||_\__, |
+#                               |___/ 
+# Buckling control vars.
+class BucklingControlVarsBase(NMyMz):
+    '''Control variables for buckling ultimate limit state verification.
+
+    :ivar effectiveLengths: buckling effective lengths for the elemement (first index: buckling mode, second index: axis).
+    :ivar mechLambda: mechanical slenderness of the element (first index: buckling mode, second index: axis).
+    '''
+    def __init__(self, combName= 'nil', N= 0.0,My= 0.0,Mz= 0.0, effectiveLengths= None, mechLambda= None):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param N:  axial force (defaults to 0.0)
+        :param My: bending moment about Y axis (defaults to 0.0)
+        :param Mz: bending moment about Z axis (defaults to 0.0)
+        :param effectiveLengths: buckling effective lengths for the elemement (first index: buckling mode, second index: axis).
+        :param mechLambda: mechanical slenderness of the element (first index: buckling mode, second index: axis).
+        '''
+        super(BucklingControlVarsBase,self).__init__(combName= combName, N= N, My= My, Mz= Mz)
+        self.effectiveLengths= list() if effectiveLengths is None else effectiveLengths
+        self.mechLambda= list() if mechLambda is None else mechLambda
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(BucklingControlVarsBase,self).getDict()
+        retval.update({'effectiveLengths':self.effectiveLengths, 'mechLambda':self.mechLambda})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(BucklingControlVarsBase,self).setFromDict(dct)
+        self.effectiveLengths= dct['effectiveLengths']
+        self.mechLambda= dct['mechLambda']
+
+class RCBucklingControlVars(BucklingControlVarsBase):
+    '''Control variables for buckling ultimate limit state verification on 
+       reinforced concrete elements.
+
+    '''
+    def __init__(self, combName= 'nil', N= 0.0,My= 0.0,Mz= 0.0, effectiveLengths= None, mechLambda= None, fictitiousEccentricities= None):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param N:  axial force (defaults to 0.0)
+        :param My: bending moment about Y axis (defaults to 0.0)
+        :param Mz: bending moment about Z axis (defaults to 0.0)
+        :param effectiveLengths: buckling effective lengths for the elemement (first index: buckling mode, second index: axis).
+        :param mechLambda: mechanical slenderness of the element (first index: buckling mode, second index: axis).
+        :param fictitiousEccenctricities: fictitious eccentricities for the element (first index: buckling mode, second index: axis).
+        '''
+        super(RCBucklingControlVars,self).__init__(combName= combName, N= N, My= My, Mz= Mz, effectiveLengths= effectiveLengths, mechLambda= mechLambda)
+        self.fictitiousEccenctricities= list() if fictitiousEccenctricities is None else fictitiousEccenctricities
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(RCBucklingControlVars,self).getDict()
+        retval.update({'fictitiousEccenctricities':self.fictitiousEccenctricities})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(RCBucklingControlVars,self).setFromDict(dct)
+        self.fictitiousEccenctricities= dct['fictitiousEccenctricities']
+        
+class SteelBucklingControlVars(BucklingControlVarsBase):
+    '''Control variables for buckling ultimate limit state verification on
+       steel elements.
+
+    '''
+    def __init__(self, combName= 'nil', N= 0.0,My= 0.0,Mz= 0.0, effectiveLengths= None, mechLambda= None, strengthReductionFactors= None, bucklingResistance= None):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param N:  axial force (defaults to 0.0)
+        :param My: bending moment about Y axis (defaults to 0.0)
+        :param Mz: bending moment about Z axis (defaults to 0.0)
+        :param effectiveLengths: buckling effective lengths for the elemement (first index: buckling mode, second index: axis).
+        :param mechLambda: mechanical slenderness of the element (first index: buckling mode, second index: axis).
+        :param strengthReductionFactors: buckling strength reduction factors of the element (first index: buckling mode, second index: axis).
+        :param bucklingResistance: buckling resistance of the element (first index: buckling mode, second index: axis).
+        '''
+        super(SteelBucklingControlVars,self).__init__(combName= combName, N= N, My= My, Mz= Mz, effectiveLengths= effectiveLengths, mechLambda= mechLambda)
+        self.strengthReductionFactors= list() if strengthReductionFactors is None else strengthReductionFactors
+        self.bucklingResistance= list() if bucklingResistance is None else bucklingResistance
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(SteelBucklingControlVars,self).getDict()
+        retval.update({'strengthReductionFactors':self.strengthReductionFactors})
+        retval.update({'bucklingResistance':self.bucklingResistance})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(SteelBucklingControlVars,self).setFromDict(dct)
+        self.strengthReductionFactors= dct['strengthReductionFactors']
+        self.bucklingResistance= dct['bucklingResistance']
 
 def readControlVars(preprocessor, inputFileName):
     ''' Read control var data from the input file an put them as properties

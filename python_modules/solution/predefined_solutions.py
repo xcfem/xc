@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Convenience classes and functions to define solution procedures.'''
+
 from __future__ import print_function
 from __future__ import division
 
@@ -48,7 +50,7 @@ class SolutionProcedure(object):
     :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :ivar printFlag: if not zero print convergence results on each step.
     :ivar numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-    :ivar numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+    :ivar numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
     :ivar convTestType: convergence test type for non linear analysis (norm unbalance,...).
     :ivar integratorType: integrator type (see integratorSetup).
     :ivar soeType: type of the system of equations object.
@@ -71,7 +73,7 @@ class SolutionProcedure(object):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
@@ -345,7 +347,7 @@ class PenaltyStaticLinearBase(SolutionProcedure):
         :param name: identifier for the solution procedure.
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
@@ -365,7 +367,7 @@ class SimpleStaticLinear(PenaltyStaticLinearBase):
         :param name: identifier for the solution procedure.
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(SimpleStaticLinear,self).__init__(name, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType, integratorType= integratorType)
@@ -390,7 +392,7 @@ class SimpleStaticLinearUMF(PenaltyStaticLinearBase):
         :param name: identifier for the solution procedure.
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(SimpleStaticLinearUMF,self).__init__(name, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType, integratorType= integratorType)
@@ -415,7 +417,7 @@ class SimpleStaticLinearMUMPS(PenaltyStaticLinearBase):
         :param name: identifier for the solution procedure.
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(SimpleStaticLinearMUMPS,self).__init__(name, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType, integratorType= integratorType)
@@ -442,7 +444,7 @@ class SimpleLagrangeStaticLinear(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(SimpleLagrangeStaticLinear,self).__init__(name, 'lagrange', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'linear_soln_algo')
@@ -480,7 +482,7 @@ class PlainNewtonRaphson(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -507,7 +509,7 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -534,7 +536,7 @@ class PlainNewtonRaphsonMUMPS(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -561,7 +563,7 @@ class TransformationNewtonRaphsonBandGen(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -579,7 +581,7 @@ class PenaltyNewtonRaphsonBase(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
@@ -601,7 +603,7 @@ class PenaltyNewtonRaphson(PenaltyNewtonRaphsonBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -632,7 +634,7 @@ class PenaltyNewtonRaphsonUMF(PenaltyNewtonRaphsonBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -651,7 +653,7 @@ class PenaltyNewtonRaphsonMUMPS(PenaltyNewtonRaphsonBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -670,7 +672,7 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -700,7 +702,7 @@ class PenaltyModifiedNewtonBase(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
@@ -722,7 +724,7 @@ class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -753,7 +755,7 @@ class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -772,7 +774,7 @@ class PenaltyModifiedNewtonMUMPS(PenaltyModifiedNewtonBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
@@ -793,7 +795,7 @@ class LineSearchBase(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param soeType: type of the system of equations object.
@@ -823,7 +825,7 @@ class PenaltyNewtonLineSearchBase(LineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param soeType: type of the system of equations object.
@@ -845,7 +847,7 @@ class PenaltyNewtonLineSearch(PenaltyNewtonLineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param integratorType: integrator type (see integratorSetup).
@@ -865,7 +867,7 @@ class PenaltyNewtonLineSearchUMF(PenaltyNewtonLineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param integratorType: integrator type (see integratorSetup).
@@ -885,7 +887,7 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param integratorType: integrator type (see integratorSetup).
@@ -916,7 +918,7 @@ class TransformationNewtonLineSearchBase(LineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param soeType: type of the system of equations object.
@@ -938,7 +940,7 @@ class TransformationNewtonLineSearch(TransformationNewtonLineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param integratorType: integrator type (see integratorSetup).
@@ -958,7 +960,7 @@ class TransformationNewtonLineSearchUMF(TransformationNewtonLineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param integratorType: integrator type (see integratorSetup).
@@ -978,7 +980,7 @@ class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
         :param integratorType: integrator type (see integratorSetup).
@@ -1017,7 +1019,7 @@ class PlainKrylovNewton(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
@@ -1063,7 +1065,7 @@ class PenaltyKrylovNewton(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
@@ -1098,7 +1100,7 @@ class NewmarkBase(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
@@ -1144,7 +1146,7 @@ class PlainLinearNewmark(NewmarkBase):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param gamma: gamma factor (for Newmark integrator).
         :param beta: beta factor (for Newmark integrator).
         '''
@@ -1210,7 +1212,7 @@ class TRBDF2Base(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
@@ -1273,7 +1275,7 @@ class TRBDF3Base(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
@@ -1356,7 +1358,7 @@ class FrequencyAnalysis(SolutionProcedure):
         :param prb: XC finite element problem.
         :param name: identifier for the solution procedure.
         :param printFlag: if not zero print convergence results on each step.
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         '''        
         self.systemPrefix= systemPrefix
         soe_string= self.systemPrefix+'_eigen_soe'
@@ -1383,7 +1385,7 @@ class IllConditioningAnalysisBase(SolutionProcedure):
         :param name: identifier for the solution procedure.
         :param printFlag: if not zero print convergence results on each step.
         :param systemPrefix: string that identifies the SOE and Solver types.
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         '''        
         super(IllConditioningAnalysisBase,self).__init__(name, constraintHandlerType='penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift, integratorType= 'ill-conditioning_integrator', solutionAlgorithmType= 'ill-conditioning_soln_algo', analysisType= 'ill-conditioning_analysis')
         self.feProblem= prb
@@ -1503,7 +1505,7 @@ class BucklingAnalysisStaticPart(SolutionProcedure):
         :param printFlag: if not zero print convergence results on each step.
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         '''        
         super(BucklingAnalysisStaticPart,self).__init__(name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'load_control_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= 'static_analysis')
         self.feProblem= prb
@@ -1511,13 +1513,34 @@ class BucklingAnalysisStaticPart(SolutionProcedure):
 class LinearBucklingAnalysis(object):
     ''' Linear buckling analysis.
 
-    :ivar staticPart: solution for the static problem.
-    :ivar eigenPart: solution for the eigen problem.
+    :ivar feProblem: XC finite element problem.
     :ivar numModes: number of buckling modes to compute.
+    :ivar constraintHandlerType: type of the constraint handler to use.
+    :ivar numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+    :ivar convTestType: convergence test type for non linear analysis (norm unbalance,...).
+    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-8).
+    :ivar maxNumIter: maximum number of iterations (defauts to 1000).
+    :ivar soeType: type of the system of equations object for the static part of the analysis.
+    :ivar solverType: type of the solver for the static part of the analysis.
+    :ivar solutionAlgorithmType: type of the solution algorithm for the static part of the analysis.
+    :ivar eigenSOEType: type of the system of equations object for the eigenproblem part of the analysis.
+    :ivar eigenSolverType: type of the solver for the eigenproblem part of the analysis.
     '''
     def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'band_arpackpp_soe', eigenSolverType= 'band_arpackpp_solver'):
         ''' Constructor.
 
+        :param prb: XC finite element problem.
+        :param numModes: number of buckling modes to compute.
+        :param constraintHandlerType: type of the constraint handler to use.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-8).
+        :param maxNumIter: maximum number of iterations (defauts to 1000).
+        :param soeType: type of the system of equations object for the static part of the analysis.
+        :param solverType: type of the solver for the static part of the analysis.
+        :param solutionAlgorithmType: type of the solution algorithm for the static part of the analysis.
+        :param eigenSOEType: type of the system of equations object for the eigenproblem part of the analysis.
+        :param eigenSolverType: type of the solver for the eigenproblem part of the analysis.
         '''
         self.feProblem= prb
         self.numModes= numModes
@@ -1562,6 +1585,26 @@ class LinearBucklingAnalysis(object):
         ''' Compute the linear buckling modes.'''
         return self.analysis.analyze(self.numModes)
 
+class SpectraLinearBucklingAnalysis(LinearBucklingAnalysis):
+    ''' Linear buckling analysis that uses Spectra library to solve the eigenproblem part.
+    '''
+    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'spectra_soe', eigenSolverType= 'spectra_solver'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param numModes: number of buckling modes to compute.
+        :param constraintHandlerType: type of the constraint handler to use.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-8).
+        :param maxNumIter: maximum number of iterations (defauts to 1000).
+        :param soeType: type of the system of equations object for the static part of the analysis.
+        :param solverType: type of the solver for the static part of the analysis.
+        :param solutionAlgorithmType: type of the solution algorithm for the static part of the analysis.
+        :param eigenSOEType: type of the system of equations object for the eigenproblem part of the analysis.
+        :param eigenSolverType: type of the solver for the eigenproblem part of the analysis.
+        '''
+        super().__init__(prb= prb, numModes= numModes, constraintHandlerType= constraintHandlerType, numberingMethod= numberingMethod, convTestType= convTestType, convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= soeType, solverType= solverType, solutionAlgorithmType= solutionAlgorithmType, eigenSOEType= eigenSOEType, eigenSolverType= eigenSolverType)
     
 # Displacement control analysis.
 class DisplacementControlBase(SolutionProcedure):
@@ -1583,7 +1626,7 @@ class DisplacementControlBase(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param solutionAlgorithmType: type of the solution algorithm.
         '''
@@ -1610,7 +1653,7 @@ class SimpleNewtonRaphsonDisplacementControl(DisplacementControlBase):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
         super().__init__(prb= prb, node= node, dof= dof, increment= increment, name= name, constraintHandlerType= 'transformation', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'newton_raphson_soln_algo')

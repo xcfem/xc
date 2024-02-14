@@ -63,7 +63,7 @@ lp0.newNodalLoad(topNode.tag, xc.Vector([0,-NEd,0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Perform linear buckling analysis.
-linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 3, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "spectra_soe", eigenSolverType= "spectra_solver")
+linearBucklingAnalysis= predefined_solutions.SpectraLinearBucklingAnalysis(prb= feProblem, numModes= 3)
 linearBucklingAnalysis.setup()
 analOk= linearBucklingAnalysis.solve()
 
