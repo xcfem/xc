@@ -69,8 +69,7 @@ class PressureModelBase(object):
         return retval
 
     def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0):
-        '''Append earth thrust on a set of elements to the current
-        load pattern.
+        '''Append earth thrust on a set of elements to the current load pattern.
 
         :param xcSet: set that contains the elements (shells and/or beams)
         :param vDir: unit xc vector defining pressures direction
@@ -89,9 +88,19 @@ class PressureModelBase(object):
                 loadVector= presElem*(vDir+tanDelta*tanVector)
                 if(presElem!=0.0):
                     e.vector3dUniformLoadGlobal(loadVector)
-                    area= e.getArea(False)
-                    totalLoad= loadVector*area
+                    dim= e.getDimension
+                    if(dim==2):
+                        area= e.getArea(False)
+                        totalLoad= loadVector*area
+                    elif(dim==1):
+                        length= e.getLength(False)
+                        totalLoad= loadVector*length                
+                    else:
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.warning(className+'.'+methodName+'; can\'t get the area of the length of the element: '+str(e.tag)+' of type: '+str(e.type())+'; the load over this element will be ignored in the returned sliding vector system. This has no effect on the loading of the finite element model.')
                     retval+= geom.SlidingVector3d(geom.Pos3d(centroid[0], centroid[1], centroid[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))
+                    
         else: #2D load.
             retval= geom.SlidingVectorsSystem2d()  # checking purposes.
             for e in xcSet.elements:
