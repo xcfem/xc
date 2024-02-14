@@ -122,20 +122,33 @@ class UniformLoadOnBeams(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         retval= list()
-        if '3d' in (self.xcSet.elements.getTypes()[0]).lower():
-            for e in self.xcSet.elements:
-                if self.refSystem=='Local':
-                    load= e.vector3dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
-                else:
-                    load= e.vector3dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
-                retval.append(load)
-        elif '2d' in (self.xcSet.elements.getTypes()[0]).lower():
-            for e in self.xcSet.elements:
-                if self.refSystem=='Local':
-                    load= e.vector2dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
-                else:
-                    load= e.vector2dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
-                retval.append(load)
+        elements= self.xcSet.elements
+        if(elements):
+            elementTypes= elements.getTypes()
+            firstElementType= elementTypes[0]
+            if '3d' in (firstElementType).lower():
+                for e in self.xcSet.elements:
+                    if self.refSystem=='Local':
+                        load= e.vector3dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
+                    else:
+                        load= e.vector3dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
+                    retval.append(load)
+            elif '2d' in (firstElementType).lower():
+                for e in self.xcSet.elements:
+                    if self.refSystem=='Local':
+                        load= e.vector2dUniformLoadLocal(self.loadVector) # lgtm [py/multiple-definition]
+                    else:
+                        load= e.vector2dUniformLoadGlobal(self.loadVector) # lgtm [py/multiple-definition]
+                    retval.append(load)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+"; can't deduce if the element the dimension of the element from its type: "+str(firstElementType))
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; the set: "+str(self.xcSet.name)+" has no elements. No loads to append.")
+            
         return retval
  
     def getMaxMagnitude(self):
@@ -322,7 +335,9 @@ class PointLoadOverShellElems(BaseVectorLoad):
         prep=self.xcSet.getPreprocessor
         aux_set=sets.set_included_in_orthoPrism(preprocessor=prep,setInit=self.xcSet,prismBase=self.prismBase,prismAxis=self.prismAxis,setName='aux_set'+self.name)
         if aux_set.getNumElements==0:
-            lmsg.warning('Can\'t distribute load: '+self.name+'(Elements in set = 0)')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; can\'t distribute load: '+str(self.name)+' (no elements in set: '+str(self.xcSet.name)+')')
         else:
             areaSet=float(np.sum([e.getArea(False) for e in aux_set.elements]))
             factor=1.0/areaSet
@@ -374,17 +389,17 @@ class EarthPressLoad():
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         if(self.soilData!=None):
-            self.soilData.xcSet=self.xcSet; self.soilData.vDir=self.vDir
-            self.soilData.appendLoadToCurrentLoadPattern()#xcSet=self.xcSet,vDir=self.loadVector)
+            # self.soilData.xcSet=self.xcSet; self.soilData.vDir=self.vDir
+            self.soilData.appendLoadToCurrentLoadPattern(xcSet=self.xcSet,vDir=self.vDir)
         for stripL in self.stripLoads:
-            stripL.xcSet=self.xcSet ; stripL.vDir=self.vDir
-            stripL.appendLoadToCurrentLoadPattern()#self.xcSet,self.loadVector)
+            # stripL.xcSet=self.xcSet ; stripL.vDir=self.vDir
+            stripL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir)
         for lineL in self.lineLoads:
-            lineL.xcSet=self.xcSet; lineL.vDir=self.vDir
-            lineL.appendLoadToCurrentLoadPattern()#self.xcSet,self.loadVector)
+            # lineL.xcSet=self.xcSet; lineL.vDir=self.vDir
+            lineL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir)
         for horzL in self.horzLoads:
-            horzL.xcSet=self.xcSet; horzL.vDir=self.vDir
-            horzL.appendLoadToCurrentLoadPattern(self.xcSet,self.vDir)
+            # horzL.xcSet=self.xcSet; horzL.vDir=self.vDir
+            horzL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir)
 
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
