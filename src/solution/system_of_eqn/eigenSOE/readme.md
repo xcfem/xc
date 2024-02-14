@@ -8,13 +8,10 @@ Geometrically, an eigenvector, corresponding to a real nonzero eigenvalue, point
 
 The following methods provide the solution of the generalized eigenvalue problem Kv = MvL
 
-    -Symmetric Arpack -- Arpack solver for symmetric matrices.
-    -Band Arpack -- Arpack solver for banded matrices.
-	-Full general -- Solver for dense matrix (useful only for very small problems).
-
-## To do
-
-Implement a solver for really big problems, the current solvers crash when the number of elements is greater than some thousands. [Spectra](https://spectralib.org/) could be a solution.
+	- Spectra C++ Library For Large Scale Eigenvalue Problems (optional but strongly recommended).
+    - Symmetric Arpack -- Arpack solver for symmetric matrices.
+    - Band Arpack -- Arpack solver for banded matrices.
+	- Full general -- Solver for dense matrix (useful only for very small problems).
 
 	
 ## References
