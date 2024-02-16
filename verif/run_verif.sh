@@ -162,6 +162,9 @@ python tests/utility/geom/circles/circular_sector_2d_test_02.py
 python tests/utility/geom/circles/circular_sector_2d_test_03.py
 echo "$BLEU" "    Parabolas." "$NORMAL"
 python tests/utility/geom/parabola_test_01.py
+echo "$BLEU" "    Other geometric objects." "$NORMAL"
+python tests/utility/geom/pyramidal_frustum_test_01.py
+
 echo "$BLEU" "    Sliding vectors." "$NORMAL"
 python tests/utility/geom/sliding_vectors_systems/sliding_vector_2d_test_01.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vector_3d_test_01.py
