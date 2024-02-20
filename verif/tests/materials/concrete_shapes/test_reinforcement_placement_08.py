@@ -95,7 +95,7 @@ lsd.LimitStateData.envConfig= cfg
 ### Save internal forces.
 limitState= lsd.shearResistance # Shear limit state.
 #limitState= lsd.normalStressesResistance # Normal stresses limit state.
-limitState.saveAll(combContainer,xcTotalSet) 
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:

@@ -136,7 +136,7 @@ for l in xcTotalSet.getLines:
 
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
+    ls.analyzeLoadCombinations(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
 
 ## Check limit state
 ### Set limit state to check.

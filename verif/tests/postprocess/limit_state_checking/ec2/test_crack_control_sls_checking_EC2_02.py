@@ -107,7 +107,7 @@ xcTotalSet= modelSpace.getTotalSet()
 ## Limit state to check.
 limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
 ## Save internal forces.
-limitState.saveAll(combContainer,xcTotalSet)
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 # Define spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()

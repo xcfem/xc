@@ -104,7 +104,7 @@ cfg= default_config.get_temporary_env_config() # Store results in temporary file
 lsd.LimitStateData.envConfig= cfg
 ## Save internal forces.
 xcTotalSet= modelSpace.getTotalSet()
-lsd.freqLoadsCrackControl.saveAll(combContainer,xcTotalSet)
+lsd.freqLoadsCrackControl.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 # Define spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()

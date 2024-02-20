@@ -128,7 +128,7 @@ for ln in xcTotalSet.getLines:
 
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
+    ls.analyzeLoadCombinations(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
 # Limit state to check.
 limitState= lsd.steelNormalStressesResistance
 # Build controller.

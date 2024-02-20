@@ -91,7 +91,7 @@ lsd.LimitStateData.envConfig= cfg
 # Limit state to check.
 limitState= lsd.shearResistance
 ## Save internal forces.
-limitState.saveAll(combContainer,totalSet) 
+limitState.analyzeLoadCombinations(combContainer,totalSet) 
 
 # Define available sections for the elements (spatial distribution of RC sections).
 # It refers to the reinforced concrete sections associated with the element

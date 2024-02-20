@@ -157,7 +157,7 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 ## Compute internal forces.
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.saveAll(combContainer,xcTotalSet)
+lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 ## Check normal stresses.
 ## Limit state to check.

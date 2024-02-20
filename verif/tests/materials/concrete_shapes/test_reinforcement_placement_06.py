@@ -97,7 +97,7 @@ lsd.LimitStateData.envConfig= cfg
 ### Limit state to check.
 limitState= lsd.normalStressesResistance
 ### Save internal forces.
-limitState.saveAll(combContainer,xcTotalSet) 
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:
