@@ -32,8 +32,6 @@ class AnalysisContextBase(object):
         :ivar deactivationCandidates: set of elements that could be deactivated
                                       under certain circumstances (i.e. 
                                       no compression elements...).
-        :ivar internalForcesDict: dictionary containing the internal forces for each element and each combination.
-        :ivar reactionsDict: dictionary containing the reactionsfor each restrained node and each combination.
         :ivar failedCombinations: list with the names of the combinations that have failed to solve.
         :ivar preloadPatterns: names of the load patterns that are introduced 
                                during the preload phase (normally self weight 
@@ -160,15 +158,15 @@ class AnalysisContextBase(object):
         '''
         if(not self.silent): lmsg.log('updating results for: '+comb.name)
         # Update internal forces.
-        self.internalForcesDict.update(eif.getInternalForcesDict(comb.getName,self.calcSet.elements))
+        limitState.internalForcesDict.update(eif.getInternalForcesDict(comb.getName,self.calcSet.elements))
         if(self.reactionNodeSet):
-            self.reactionsDict.update(er.getReactionsDict(comb.getName,self.reactionNodeSet.nodes))
+            limitState.reactionsDict.update(er.getReactionsDict(comb.getName,self.reactionNodeSet.nodes))
         # Write displacements.
-        limitState.writeDisplacements(comb.getName,self.calcSet.nodes)
+        limitState.writeDisplacementsLegacy(comb.getName,self.calcSet.nodes)
 
     def exportReactions(self, fName, outputStyle= output_styles.defaultOutputStyle):
         '''Writes a comma separated values file with the nodes reactions.
 
         :param fName: name of the output file.
         '''
-        er.exportReactions(self.reactionsDict, fName, outputStyle)
+        er.exportReactions(limitState.reactionsDict, fName, outputStyle)

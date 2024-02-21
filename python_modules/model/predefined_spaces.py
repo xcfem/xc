@@ -1730,7 +1730,7 @@ class SolidMechanics2D(PredefinedSpace):
 
     def getDisplacementDOFs(self):
         ''' Return the indices of the displacement DOFs.'''
-        return [self.Ux,self.Uy]
+        return [self.Ux, self.Uy]
 
     def getRotationalDOFs(self):
         ''' Return the indices of the rotational DOFs.'''

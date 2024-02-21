@@ -16,6 +16,8 @@ import sys
 from solution import predefined_solutions
 from postprocess.reports import export_internal_forces as eif
 from postprocess.reports import export_reactions as er
+from postprocess.reports import export_displacements as ed
+from postprocess.reports import export_modes as em
 from misc_utils import log_messages as lmsg
 from materials.sections import internal_forces
 from collections import defaultdict
@@ -153,6 +155,11 @@ class LimitStateData(object):
         '''Return the name of the file where reactions are stored.'''
         return self.envConfig.projectDirTree.getReactionsResultsPath()+'reactions_'+ self.label +'.json'
         
+    def getBucklingAnalysisResultsFileName(self):
+        '''Return the name of the file where results of the buckling analysis
+           are stored.'''
+        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'buckling_analysis_results_'+ self.label +'.json'
+    
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
 
@@ -174,6 +181,22 @@ class LimitStateData(object):
          :param elems: element set.
         '''
         return eif.getInternalForcesDict(nmbComb= nmbComb, elems= elems,  woodArmerAlsoForAxialForces= self.woodArmerAlsoForAxialForces)
+    
+    def getDisplacementsDict(self, nmbComb, nodes):
+        '''Creates a dictionary with the displacements of the given nodes.
+
+         :param nmbComb: combination name.
+         :param nodes: node set.
+        '''
+        return ed.getDisplacementsDict(nmbComb= nmbComb, nodes= nodes)
+    
+    def getModesDict(self, nmbComb, xcSet):
+        '''Creates a dictionary with the modes of the given nodes.
+
+         :param nmbComb: combination name.
+         :param xcSet: set containing the nodes to export the modes on.
+        '''
+        return em.getModesDict(nmbComb= nmbComb, xcSet= xcSet)
 
     def getInternalForcesSubset(self, elementsOfInterestTags):
         ''' Return a dictionary containing the internal forces for the given
@@ -263,14 +286,16 @@ class LimitStateData(object):
         self.fNameIntForc= self.getInternalForcesFileName()
         self.fNameReactions= self.getReactionsFileName()
         self.fNameDispl= self.getDisplacementsFileName()
+        self.fNameBucklingAnalysisResults= self.getBucklingAnalysisResultsFileName()
         os.system("rm -f " + self.fNameIntForc) #Clear obsolete files.
         os.system("rm -f " + self.fNameReactions)
         os.system("rm -f " + self.fNameDispl)
+        os.system("rm -f " + self.fNameBucklingAnalysisResults)
         fDisp= open(self.fNameDispl,"w")
         fDisp.write('Comb., Node, uX, uY, uZ, rotX, rotY , rotZ\n')
         fDisp.close()
 
-    def writeDisplacements(self, combNm, nodSet):
+    def writeDisplacementsLegacy(self, combNm, nodSet):
         '''Writes the resuls of displacements in a load combination 
            and set of nodes given as parameters 
 
@@ -283,27 +308,50 @@ class LimitStateData(object):
             fDisp.write(combNm+", "+str(n.tag)+", " + strDisp+'\n')
         fDisp.close()
 
-    def writeInternalForces(self, internalForcesDict):
+    def writeInternalForces(self):
         '''Write the internal forces results.
-
-        :param internalForcesDict: dictionary containing the internal forces.
         '''
         with open(self.fNameIntForc, 'w') as outfile:
-            json.dump(internalForcesDict, outfile)
+            json.dump(self.internalForcesDict, outfile)
         outfile.close()
         
-    def writeReactions(self, reactionsDict):
+    def writeReactions(self):
         '''Write the reactions.
-
-        :param reactionsDict: dictionary containing the reactions.
         '''
         with open(self.fNameReactions, 'w') as outfile:
-            json.dump(reactionsDict, outfile)
+            json.dump(self.reactionsDict, outfile)
         outfile.close()
         
-    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, constrainedNodeSet= None, bucklingMembers= None):
-        '''Write internal forces, displacements, .., for each combination
+    def writeDisplacements(self):
+        '''Write the displacements.
+        '''
+        with open(self.fNameReactions, 'w') as outfile:
+            json.dump(self.displacementsDict, outfile)
+        outfile.close()
+                
+    def prepareResultsDictionaries(self):
+        ''' Prepare the dictionaries to store the results of the analysis.'''
+        self.createOutputFiles()
+        self.internalForcesDict= dict()
+        self.reactionsDict= dict()
+        self.displacementsDict= dict()
 
+    def updateResults(self, combName, calcSet, constrainedNodes= None):
+        ''' Append the results of the current analysis to the results 
+            dictionaries.
+
+        :param combName: load combination corresponding to the current analysis.
+        :param setCalc: set of entities for which the verification is 
+                          going to be performed.
+        :param constrainedNodes: constrained nodes (defaults to None)
+        '''
+        self.internalForcesDict.update(self.getInternalForcesDict(combName,calcSet.elements))
+        self.reactionsDict.update(self.getReactionsDict(combName, constrainedNodes= constrainedNodes))
+        self.displacementsDict.update(self.getDisplacementsDict(combName, calcSet.nodes))
+        
+    def analyzeLoadCombinations(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, constrainedNodeSet= None, bucklingMembers= None):
+        '''Analize the given load combinations and write internal forces, 
+           displacements, etc. in temporary files for later use.
 
         :param combContainer: load combination container.
         :param setCalc: set of entities for which the verification is 
@@ -323,9 +371,7 @@ class LimitStateData(object):
         #Putting combinations inside XC.
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
         
-        self.createOutputFiles()
-        internalForcesDict= dict()
-        reactionsDict= dict()
+        self.prepareResultsDictionaries()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             preprocessor.resetLoadCase()
@@ -340,14 +386,36 @@ class LimitStateData(object):
             if(bucklingMembers): # Update reduction factors for buckling members
                 for bm in bucklingMembers:
                     bm.updateReductionFactors()
-            #Writing results.
-            internalForcesDict.update(self.getInternalForcesDict(comb.getName,setCalc.elements))
-            reactionsDict.update(self.getReactionsDict(comb.getName,constrainedNodeSet))
-            self.writeDisplacements(comb.getName,setCalc.nodes)
+            # Store results.
+            self.updateResults(combName= comb.getName, calcSet= setCalc, constrainedNodes= constrainedNodeSet)
+            self.writeDisplacementsLegacy(comb.getName,setCalc.nodes)
             comb.removeFromDomain() #Remove combination from the model.
-        self.writeInternalForces(internalForcesDict)
-        self.writeReactions(reactionsDict)
-#20181117
+        self.writeAnalysisResults()
+
+    def writeAnalysisResults(self):
+        ''' Write the given analysis results in the corresponding results files.
+        '''
+        self.writeInternalForces()
+        self.writeReactions()
+        self.writeDisplacements()
+        
+    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, constrainedNodeSet= None, bucklingMembers= None):
+        '''Write internal forces, displacements, .., for each combination
+
+
+        :param combContainer: load combination container.
+        :param setCalc: set of entities for which the verification is 
+                          going to be performed
+        :param solutionProcedureType: type of the solution strategy to solve
+                                      the finite element problem.
+        :param constrainedNodeSet: constrained nodes (defaults to None)
+        :param bucklingMembers: list of members whose buckling reduction
+                                factors need to be updated after each
+                                commit (defaults to None)
+        '''
+        # TO DEPRECATE LP 20230220
+        self.analyzeLoadCombinations(combContainer= combContainer, setCalc= setCalc, solutionProcedureType= solutionProcedureType, constrainedNodeSet= constrainedNodeSet, bucklingMembers= bucklingMembers)
+        
     def runChecking(self, outputCfg, sections= ['Sect1', 'Sect2']):
         '''This method reads, for the elements in setCalc,  the internal 
         forces previously calculated and saved in the corresponding file.
@@ -409,6 +477,127 @@ class ULS_LimitStateData(LimitStateData):
             return crossSections.internalForcesVerification3D(limitStateData= self, matDiagType= "d", outputCfg= outputCfg)
         else:
             return crossSections.internalForcesVerification2D(limitStateData= self, matDiagType= "d", outputCfg= outputCfg)
+        
+defaultLinearBucklingProcedureType= predefined_solutions.SpectraLinearBucklingAnalysis
+
+class BucklingParametersLimitStateData(ULS_LimitStateData):
+    ''' Buckling parameters data for limit state checking.
+
+
+    :ivar numModes: number of buckling modes to compute.
+    '''
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= 'buckling_parameters_ULS', designSituation= 'permanent'):
+        '''Constructor
+
+        :param numModes: number of buckling modes to compute.
+        '''
+        super(BucklingParametersLimitStateData, self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        self.numModes= numModes
+        
+    def prepareResultsDictionaries(self):
+        ''' Prepare the dictionaries to store the results of the analysis.'''
+        super().prepareResultsDictionaries()
+        self.modesDict= dict()
+
+    def updateResults(self, combName, calcSet, constrainedNodes= None):
+        ''' Append the results of the current analysis to the results 
+            dictionaries.
+
+        :param combName: load combination corresponding to the current analysis.
+        :param setCalc: set of entities for which the verification is 
+                          going to be performed.
+        :param constrainedNodes: constrained nodes (defaults to None)
+        '''
+        super().updateResults(combName= combName, calcSet= calcSet, constrainedNodes= constrainedNodes)
+        self.modesDict.update(self.getModesDict(combName, xcSet= calcSet))
+        
+    def analyzeLoadCombinations(self, combContainer, setCalc, solutionProcedureType= defaultLinearBucklingProcedureType, constrainedNodeSet= None, bucklingMembers= None):
+        '''Analize the given load combinations and write internal forces, 
+           displacements, etc. in temporary files for later use.
+
+        :param combContainer: load combination container.
+        :param setCalc: set of entities for which the verification is 
+                          going to be performed
+        :param solutionProcedureType: type of the solution strategy to solve
+                                      the finite element problem.
+        :param constrainedNodeSet: constrained nodes (defaults to None)
+        :param bucklingMembers: list of members whose buckling reduction
+                                factors need to be updated after each
+                                commit (defaults to None)
+        '''
+        preprocessor= setCalc.getPreprocessor
+        feProblem= preprocessor.getProblem
+        solutionProcedure= solutionProcedureType(prb= feProblem, numModes= self.numModes)
+        solutionProcedure.setup()
+        preprocessor= feProblem.getPreprocessor
+        loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
+        #Putting combinations inside XC.
+        loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
+
+        self.prepareResultsDictionaries()
+        for key in loadCombinations.getKeys():
+            comb= loadCombinations[key]
+            preprocessor.resetLoadCase()
+            preprocessor.getDomain.revertToStart()
+            comb.addToDomain() #Combination to analyze.
+            #Solution
+            result= solutionProcedure.solve()
+            if(result!=0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; can't solve.")
+            # Store results.
+            self.updateResults(combName= comb.getName, calcSet= setCalc, constrainedNodes= constrainedNodeSet)
+            comb.removeFromDomain() #Remove combination from the model.
+        
+        self.writeAnalysisResults()
+        
+    def getResultsDict(self):
+        ''' Build a dictionary containing all the analysis results.'''
+        retval= dict()
+        retval['internal_forces']= self.internalForcesDict
+        retval['reactions']= self.reactionsDict
+        retval['displacements']= self.displacementsDict
+        retval['modes']= self.modesDict
+        return retval
+        
+    def writeAnalysisResults(self):
+        '''Write the analysis results.
+
+        :param bucklingAnalysisResults: buckling analysis results.
+        '''
+        bucklingAnalysisResultsDict= self.getResultsDict()
+        with open(self.fNameBucklingAnalysisResults, 'w') as outfile:
+            json.dump(bucklingAnalysisResultsDict, outfile)
+        outfile.close()
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: model space used to define the FE problem.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
+
+    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+        ''' This class does not perform limit state checking. Issue 
+            an error message.
+
+        :param setCalc: set of elements to be checked (defaults to 'None' which 
+               means that all the elements in the file of internal forces
+               results are analyzed) 
+        :param controller: object that controls the limit state checking.
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+               is desired to be generated (defaults to 'N')
+        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+               meant to be calculated (defaults to 'N')
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; does not perform limit state checking.")
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
