@@ -115,25 +115,34 @@ int XC::LinearBucklingAnalysis::setLinearBucklingIntegrator(LinearBucklingIntegr
 int XC::LinearBucklingAnalysis::setArpackSOE(ArpackSOE &theEigenSOE)
   { return linearBucklingEigenAnalysis.setEigenSOE(theEigenSOE); }
 
-
-//! @brief Returns the autovector that corresponds to the mode
+//! @brief Returns the eigenvector that corresponds to the mode
 //! being passed as parameter.
 const XC::Vector &XC::LinearBucklingAnalysis::getEigenvector(int mode)
-  {
-    static Vector retval(1);
-    retval.Zero();
-    linearBucklingEigenAnalysis.getEigenvector(mode);
-    return retval;
-  }
+  { return linearBucklingEigenAnalysis.getEigenvector(mode); }
+
+//! @brief Returns the normalized eigenvector that corresponds to the mode
+//! being passed as parameter.
+XC::Vector XC::LinearBucklingAnalysis::getNormalizedEigenvector(int mode)
+  { return linearBucklingEigenAnalysis.getNormalizedEigenvector(mode); }
+
+//! @brief Returns a Python list with the computed eigenvectors as lists.
+boost::python::list XC::LinearBucklingAnalysis::getNormalizedEigenvectorsPy(void) const
+  { return linearBucklingEigenAnalysis.getNormalizedEigenvectorsPy(); }
+
+
+//! @brief Return a Python list with the component of the eigenvector
+//! corresponding to the given mode.
+boost::python::list XC::LinearBucklingAnalysis::getNormalizedEigenvectorPy(int mode) const
+  { return linearBucklingEigenAnalysis.getNormalizedEigenvectorPy(mode); }
 
 //! @brief Returns the eigenvalue that corresponds to the mode
 //! being passed as parameter.
 const double &XC::LinearBucklingAnalysis::getEigenvalue(int mode) const
-  {
-    static double retval= 0.0;
-    retval= linearBucklingEigenAnalysis.getEigenvalue(mode);
-    return retval;
-  }
+  { return linearBucklingEigenAnalysis.getEigenvalue(mode); }
+
+//! @brief Returns a Python list with the computed eigenvalues for each mode.
+boost::python::list XC::LinearBucklingAnalysis::getEigenvaluesPy(void) const
+  { return linearBucklingEigenAnalysis.getEigenvaluesPy(); }
 
 
 

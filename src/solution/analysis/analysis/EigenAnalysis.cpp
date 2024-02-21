@@ -255,6 +255,27 @@ XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
     return retval;
   }
 
+//! @brief Returns a Python list with the computed eigenvectors as lists.
+boost::python::list XC::EigenAnalysis::getNormalizedEigenvectorsPy(void) const
+  {
+    boost::python::list retval;
+    const size_t numModes= this->getNumModes();
+    for(size_t i= 1; i<=numModes; i++)
+      {
+	boost::python::list tmp= this->getNormalizedEigenvectorPy(i);
+	retval.append(tmp);
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list with the component of the eigenvector
+//! corrsponding to the given mode.
+boost::python::list XC::EigenAnalysis::getNormalizedEigenvectorPy(int mode) const
+  {
+    const Vector tmp= this->getNormalizedEigenvector(mode);
+    return tmp.getPyList();
+  }
+
 //! @brief Returns a matrix with the normalized eigenvectors
 //! (infinity norm) as columns of the matrix.
 XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
@@ -297,6 +318,13 @@ XC::Vector XC::EigenAnalysis::getEigenvalues(void) const
     if(ptr_soe)
       retval= ptr_soe->getEigenvalues();
     return retval;
+  }
+
+//! @brief Returns a Python list with the computed eigenvalues for each mode.
+boost::python::list XC::EigenAnalysis::getEigenvaluesPy(void) const
+  {
+    const Vector tmp= this->getEigenvalues();
+    return tmp.getPyList();
   }
 
 //! @brief Returns a vector with the computed angular frequencies for each mode.

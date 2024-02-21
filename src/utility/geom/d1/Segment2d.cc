@@ -593,6 +593,7 @@ boost::python::list Segment2d::split(const Pos2d &p) const
     retval.append(retvalB);
     return retval;
   }
+
 //! @brief Return a Python dictionary with the object members values.
 boost::python::dict Segment2d::getPyDict(void) const
   {

@@ -1079,6 +1079,13 @@ double XC::Domain::getFrequency(int i) const
 const XC::Vector &XC::Domain::getEigenvalues(void) const
   { return theEigenvalues; }
 
+//! @brief Returns a Python list with the computed eigenvalues for each mode.
+boost::python::list XC::Domain::getEigenvaluesPy(void) const
+  {
+    const Vector tmp= this->getEigenvalues();
+    return tmp.getPyList();
+  }
+
 //! @brief Returns a vector with the computed angular frequencies (for each mode).
 XC::Vector XC::Domain::getAngularFrequencies(void) const
   {
