@@ -48,6 +48,7 @@ class SoilLayers(pile.SoilLayers):
         :param groundLevel: global Z coordinate of the ground level.
         '''
         super().__init__(groundLevel= groundLevel, waterTableZ= None)
+        print('aquí groundLevel=',groundLevel)
         self.soilProfile= soilProfile
     
 
@@ -128,6 +129,7 @@ class PileFoundation(pile.CircularPile):
             yval=lstNodPile[0][1]
         #Springs horizontal stiffness
         y=lstNodPile[0][1]
+        print('y=',y)
         retval= dict()
         for sp in soilsProp:
             yBottom= sp[0]
@@ -183,6 +185,7 @@ class PileFoundation(pile.CircularPile):
             zval=lstNodPile[0][1]
         #Springs horizontal stiffness
         z=lstNodPile[0][1]
+        print('z=',z)
         retval= dict()
         for sp in soilsProp:
             zBottom= sp[0]
@@ -201,6 +204,8 @@ class PileFoundation(pile.CircularPile):
                 else: # cohesive soil
                     Kh_x= 75*alphaKh_x*soilPrp*lnTribNod*coefKh
                     Kh_y= 75*alphaKh_y*soilPrp*lnTribNod*coefKh
+                    print('grpundLevel',self.soilLayers.groundLevel,'z=',z)
+                    print('lnTribNod=',lnTribNod,'Kh=',round(Kh_x*1e-6,0))
                 if len(lstNodPile)==1:
                     #Spring vertical stiffness (end of pile)
                     Kv_end= alphaKv_z*self.getVerticalStiffnessSinglePile()
