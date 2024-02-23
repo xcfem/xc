@@ -114,7 +114,7 @@ lsd.LimitStateData.envConfig= cfg
 ### Set limit state.
 limitState= lsd.shearResistance
 ### Save internal forces.
-limitState.saveAll(combContainer,xcTotalSet) 
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:

@@ -152,7 +152,7 @@ for l in xcTotalSet.getLines:
     ec3Members.append(member)
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer,ec3CalcSet, bucklingMembers= ec3Members)
+    ls.analyzeLoadCombinations(combContainer,ec3CalcSet, bucklingMembers= ec3Members)
 
 ## Check normal stresses.
 ### Limit state to check.

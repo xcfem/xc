@@ -56,6 +56,7 @@ class LinearBucklingEigenAnalysis: public EigenAnalysis
     virtual int setIntegrator(LinearBucklingIntegrator &theIntegrator);
     virtual int setEigenSOE(ArpackSOE &theSOE);
     virtual const double &getEigenvalue(int mode) const;
+    boost::python::list getEigenvaluesPy(void) const;
   };
 } // end of XC namespace
 

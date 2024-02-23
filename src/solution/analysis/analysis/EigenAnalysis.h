@@ -96,8 +96,10 @@ class EigenAnalysis: public Analysis
     //Eigenvectors.
     virtual const Vector &getEigenvector(int mode) const;
     Vector getNormalizedEigenvector(int mode) const;
+    boost::python::list getNormalizedEigenvectorPy(int mode) const;
     Matrix getEigenvectors(void) const;
     Matrix getNormalizedEigenvectors(void) const;
+    boost::python::list getNormalizedEigenvectorsPy(void) const;
 
     //Eigenvalues.
     virtual const double &getEigenvalue(int mode) const;
@@ -105,6 +107,7 @@ class EigenAnalysis: public Analysis
     double getPeriod(int mode) const;
     double getFrequency(int mode) const;
     Vector getEigenvalues(void) const;
+    boost::python::list getEigenvaluesPy(void) const;
     Vector getAngularFrequencies(void) const;
     Vector getPeriods(void) const;
     Vector getFrequencies(void) const;
@@ -124,7 +127,7 @@ class EigenAnalysis: public Analysis
     double getTotalMass(void) const;
 
     //Equivalent static load.
-    Vector getEquivalentStaticLoad(int mode,const double &) const;
+    Vector getEquivalentStaticLoad(int mode,const double &) const;    
   };
 
 } // end of XC namespace

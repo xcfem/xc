@@ -37,16 +37,19 @@ class_<XC::StaticAnalysis, bases<XC::Analysis>, boost::noncopyable >("StaticAnal
 class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnalysis", no_init)
   //Eigenvectors.
   .def("getEigenvector", make_function(&XC::EigenAnalysis::getEigenvector, return_internal_reference<>()) )
-.def("getEigenvectors", &XC::EigenAnalysis::getEigenvectors)
+  .def("getEigenvectors", &XC::EigenAnalysis::getEigenvectors)
   .def("getNormalizedEigenvector", &XC::EigenAnalysis::getNormalizedEigenvector)
+  .def("getNormalizedEigenvectorComponents", &XC::EigenAnalysis::getNormalizedEigenvectorPy, "Return the components of the eigenvector in a Python list.")
   .def("getNormalizedEigenvectors",&XC::EigenAnalysis::getNormalizedEigenvectors)
+  .def("getNormalizedEigenvectorsList",&XC::EigenAnalysis::getNormalizedEigenvectorsPy, "Return a Python list with the computed eigenvectors for each mode.")
   //Eigenvalues.
   .def("getEigenvalue", make_function(&XC::EigenAnalysis::getEigenvalue, return_value_policy<copy_const_reference>()) )
   .def("getPulsatance",&XC::EigenAnalysis::getAngularFrequency)
   .def("getAngularFrequency",&XC::EigenAnalysis::getAngularFrequency)
   .def("getPeriod",&XC::EigenAnalysis::getPeriod)
   .def("getFrequency",&XC::EigenAnalysis::getFrequency)
-  .def("getEigenvalues",&XC::EigenAnalysis::getEigenvalues)
+  .def("getEigenvalues",&XC::EigenAnalysis::getEigenvalues,"Return the computed eigenvalues.")
+  .def("getEigenvaluesList",&XC::EigenAnalysis::getEigenvaluesPy,"Return a Python list with the computed eigenvalues.")
   .def("getPulsatances",&XC::EigenAnalysis::getAngularFrequencies)
   .def("getAngularFrequencies",&XC::EigenAnalysis::getAngularFrequencies)
   .def("getPeriods",&XC::EigenAnalysis::getPeriods)
@@ -71,6 +74,9 @@ class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnaly
 class_<XC::LinearBucklingAnalysis, bases<XC::StaticAnalysis>, boost::noncopyable >("LinearBucklingAnalysis", no_init)
   .add_property("numModes",&XC::LinearBucklingAnalysis::getNumModes,&XC::LinearBucklingAnalysis::setNumModes)
   .def("getEigenvalue", make_function(&XC::LinearBucklingAnalysis::getEigenvalue, return_value_policy<copy_const_reference>()) )
+  .def("getEigenvaluesList",&XC::LinearBucklingAnalysis::getEigenvaluesPy,"Return a Python list with the computed eigenvalues.")
+  .def("getNormalizedEigenvectorComponents", &XC::LinearBucklingAnalysis::getNormalizedEigenvectorPy, "Return the components of the eigenvector in a Python list.")
+  .def("getNormalizedEigenvectorsList",&XC::LinearBucklingAnalysis::getNormalizedEigenvectorsPy, "Return a Python list with the computed eigenvectors for each mode.")
   ;
 
 class_<XC::LinearBucklingEigenAnalysis, bases<XC::EigenAnalysis>, boost::noncopyable >("LinearBucklingEigenAnalysis", no_init)

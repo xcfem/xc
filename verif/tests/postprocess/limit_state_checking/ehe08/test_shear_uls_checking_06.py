@@ -108,11 +108,14 @@ for e in s.elements:
 combContainer= combs.CombContainer()
 ### ULS combination.
 combContainer.ULS.perm.add('combULS01','1.6*load')
-xcTotalSet= preprocessor.getSets.getSet('total')
+
+# Set environment for limit state data storage.
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-### Save internal forces.
-lsd.shearResistance.saveAll(combContainer,xcTotalSet) 
+### Analyze combinations and save internal forces for all the components
+### of the total set.
+xcTotalSet= preprocessor.getSets.getSet('total')
+lsd.shearResistance.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:

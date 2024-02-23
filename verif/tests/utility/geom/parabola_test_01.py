@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Simple tesf of the Parabola objects.'''
+''' Simple test of the Parabola objects.'''
 
 from __future__ import print_function
 

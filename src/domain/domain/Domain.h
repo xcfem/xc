@@ -273,6 +273,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     double getPeriod(int) const;
     double getFrequency(int) const;
     virtual const Vector &getEigenvalues(void) const;
+    boost::python::list getEigenvaluesPy(void) const;
     Vector getAngularFrequencies(void) const;
     Vector getPeriods(void) const;
     Vector getFrequencies(void) const;

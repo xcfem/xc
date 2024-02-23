@@ -110,7 +110,7 @@ xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 ### Save internal forces.
-lsd.shearResistance.saveAll(combContainer,xcTotalSet) 
+lsd.shearResistance.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:

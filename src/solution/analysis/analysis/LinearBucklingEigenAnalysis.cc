@@ -82,8 +82,7 @@ int XC::LinearBucklingEigenAnalysis::setIntegrator(LinearBucklingIntegrator &the
 int XC::LinearBucklingEigenAnalysis::setEigenSOE(ArpackSOE &theSOE)
   { return EigenAnalysis::setEigenSOE(theSOE); }
 
-//! @brief Returns the eigenvalue that corresponds to the mode
-//! being passed as parameter.
+//! @brief Returns the eigenvalue that corresponds to given mode.
 const double &XC::LinearBucklingEigenAnalysis::getEigenvalue(int mode) const
   {
     const double &gamma= EigenAnalysis::getEigenvalue(mode);
@@ -92,3 +91,15 @@ const double &XC::LinearBucklingEigenAnalysis::getEigenvalue(int mode) const
     return retval;
   }
 
+//! @brief Returns a Python list with the computed eigenvectors as lists.
+boost::python::list XC::LinearBucklingEigenAnalysis::getEigenvaluesPy(void) const
+  {
+    boost::python::list retval;
+    const size_t numModes= this->getNumModes();
+    for(size_t i= 1; i<=numModes; i++)
+      {
+	const double tmp= this->getEigenvalue(i);
+	retval.append(tmp);
+      }
+    return retval;
+  }

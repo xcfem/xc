@@ -16,6 +16,7 @@ import geom
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import fiber_sets
 from materials import limit_state_checking_base as lscb
+from postprocess import limit_state_data as lsd
 from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg
 import scipy.interpolate
@@ -1116,6 +1117,65 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
         lmsg.error(errMsg)
     return Leffi, mechLambdai, Efi
+
+class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
+    
+    ''' Buckling parameters data for limit state checking.
+    '''
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= 'buckling_parameters_ULS', designSituation= 'permanent'):
+        '''Constructor
+
+        :param numModes: number of buckling modes to compute.
+        '''
+        super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        
+    def getEHEBucklingParametersDict(self, nmbComb, xcSet):
+        '''Creates a dictionary with the displacements of the given nodes.
+
+        :param nmbComb: combination name.
+        :param xcSet: set containing the nodes to export the modes on.
+        '''
+        retval= dict()
+        preprocessor= xcSet.getPreprocessor
+        domain= preprocessor.getDomain
+        eigenvalues= domain.getEigenvaluesList()
+        retval['buckling_load_factors']= eigenvalues
+        elementParametersDict= dict()
+        retval['element_parameters']= elementParametersDict
+        for e in xcSet.elements:
+            # Critical axial load.
+            rcSection= e.getProp("crossSection")
+            reinforcementFactorZ= rcSection.reinforcementFactorZ
+            reinforcementFactorY= rcSection.reinforcementFactorY
+            Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= rcSection.Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= rcSection.Cy, reinforcementFactorY= reinforcementFactorY)
+            elementParametersDict['Leffi']= Leffi
+            elementParametersDict['mechLambdai']= mechLambdai
+            elementParametersDict['Efi']= Efi
+        return retval
+        
+    def prepareResultsDictionaries(self):
+        ''' Prepare the dictionaries to store the results of the analysis.'''
+        super().prepareResultsDictionaries()
+        self.eheBucklingParametersDict= dict()
+        
+    def updateResults(self, combName, calcSet, constrainedNodes= None):
+        ''' Append the results of the current analysis to the results 
+            dictionaries.
+
+        :param combName: load combination corresponding to the current analysis.
+        :param setCalc: set of entities for which the verification is 
+                          going to be performed.
+        :param constrainedNodes: constrained nodes (defaults to None)
+        '''
+        super().updateResults(combName= combName, calcSet= calcSet, constrainedNodes= constrainedNodes)
+        self.eheBucklingParametersDict.update(self.getEHEBucklingParametersDict(combName, xcSet= calcSet))
+        
+    def getResultsDict(self):
+        ''' Build a dictionary containing all the analysis results.'''
+        retval= super().getResultsDict()
+        retval['ehe_buckling_parameters']= self.eheBucklingParametersDict
+        return retval
+
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
 #      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
@@ -1123,7 +1183,8 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
 #       __ ___ _ _| |_ _ _ ___| | |___ _ _ ___   
 #      / _/ _ \ ' \  _| '_/ _ \ | / -_) '_(_-<   
 #      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
-                                               
+# Limit state controllers.
+
 # Check normal stresses limit state.
 class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''
@@ -1525,10 +1586,13 @@ class CrackController(lscb.LimitStateControllerBase):
     '''Object that verifies the cracking serviceability limit state according 
     to clause 49.2.4 of EHE-08.
 
+    :ivar wk_lim: maximum allowable crack width. 
     :ivar beta: Coefficient which relates the mean crack opening to the 
                 characteristic value and is equal to 1.3 in the case 
                 of cracking caused by indirect actions only, and 1.7 
                 in other cases.
+    :ivar k2: coefficient of value 1.0 in the case of non-repeating temporary
+              load and 0.5 in other cases.
     '''
     ControlVars= cv.RCCrackControlVars
     
@@ -1836,9 +1900,8 @@ class CrackControl(lscb.CrackControlBaseParameters):
             self.netEffectiveArea= scc.computeFibersEffectiveConcreteArea(self.hEfMax,self.tensionedRebarsFiberSetName,15)
 
             self.tensionedRebars.setup(tensionedReinforcement)
-            self.Wk= self.computeWkOnBars(tensionedReinforcement)  
-
-
+            self.Wk= self.computeWkOnBars(tensionedReinforcement)
+            
 class TorsionParameters(object):
     '''Methods for checking reinforced concrete section under torsion 
        according to clause 45.1 of EHE-08.

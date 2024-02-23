@@ -131,7 +131,7 @@ limitStates= [lsd.vonMisesStressResistance]
 
 ### Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer,xcTotalSet)
+    ls.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 ### Check material resistance.
 #### Limit state to check.

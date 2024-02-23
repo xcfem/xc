@@ -199,7 +199,7 @@ combContainer.ULS.perm.add('allLoads', '1.0*lcXbeam+1.0*lcYbeam+1.0*lcZbeam')
 totalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.saveAll(combContainer,totalSet) 
+lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,totalSet) 
 
 # Spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)

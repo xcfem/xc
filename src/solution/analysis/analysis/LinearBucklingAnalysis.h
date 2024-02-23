@@ -81,8 +81,13 @@ class LinearBucklingAnalysis: public StaticAnalysis
     int setLinearBucklingAlgorithm(LinearBucklingAlgo &);
     int setLinearBucklingIntegrator(LinearBucklingIntegrator &);
     int setArpackSOE(ArpackSOE &theSOE);
+    
     virtual const Vector &getEigenvector(int mode);
+    virtual Vector getNormalizedEigenvector(int mode);
+    boost::python::list getNormalizedEigenvectorPy(int mode) const;
+    boost::python::list getNormalizedEigenvectorsPy(void) const;
     virtual const double &getEigenvalue(int mode) const;
+    boost::python::list getEigenvaluesPy(void) const;
   };
 
 //! @brief Virtual constructor.

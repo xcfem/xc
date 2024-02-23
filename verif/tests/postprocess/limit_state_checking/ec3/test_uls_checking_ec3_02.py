@@ -154,7 +154,7 @@ for e in ec3CalcSet.elements:
     e.setProp('chiN', chiN)
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer= combContainer, setCalc= ec3CalcSet, solutionProcedureType= SolProc)
+    ls.analyzeLoadCombinations(combContainer= combContainer, setCalc= ec3CalcSet, solutionProcedureType= SolProc)
     
 # Check limit state.
 ## Limit state to check.

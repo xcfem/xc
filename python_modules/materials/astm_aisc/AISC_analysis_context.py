@@ -82,7 +82,7 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         # #Writing results.
         # if(limitState):
         #     nodSet= self.calcSet.nodes
-        #     limitState.writeDisplacements(comb.getName,nodSet)
+        #     limitState.writeDisplacementsLegacy(comb.getName,nodSet)
         comb.removeFromDomain() #Remove combination from the model.
     
     def calcDisplacements(self, loadCombinations, limitState= None):
@@ -93,12 +93,11 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         '''
         # Non linear analysis
         limitState.createOutputFiles()
-        self.internalForcesDict= dict()
         self.failedCombinations= list()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             self.slsSolutionSteps(comb= comb, limitState= limitState)
-        limitState.writeInternalForces(self.internalForcesDict)
+        limitState.writeInternalForces()
         self.failedCombinationsMessage(loadCombinations, limitState)
 
     def restoreStiffness(self):
@@ -177,16 +176,14 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         :param limitState: limit state to compute internal forces for.
         '''
         # Non linear analysis
-        limitState.createOutputFiles()
-        self.internalForcesDict= dict()
-        self.reactionsDict= dict()
+        limitState.prepareResultsDictionaries()
         self.failedCombinations= list()
         for key in loadCombinations.getKeys():
             lmsg.log(key)
             comb= loadCombinations[key]
             self.eluSolutionSteps(comb, limitState)
-        limitState.writeInternalForces(self.internalForcesDict)
-        limitState.writeReactions(self.reactionsDict)
+        limitState.writeInternalForces()
+        limitState.writeReactions()
         self.failedCombinationsMessage(loadCombinations, limitState)
 
 class SimpleAISCAnalysisContext(AISCAnalysisContext):

@@ -59,6 +59,7 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("getPeriod",&XC::Domain::getPeriod,"getPeriod(mode): return the period T corresponding to the mode.")
   .def("getFrequency",&XC::Domain::getFrequency,"getFrequency(mode): return the frequency f corresponding to the mode.")
   .def("getEigenvalues", make_function( &XC::Domain::getEigenvalues, return_internal_reference<>() ),"getEigenvalues(): return the computed eigenvalues.")
+  .def("getEigenvaluesList",&XC::Domain::getEigenvaluesPy,"Return a Python list with the computed eigenvalues.")
   .def("getAngularFrequencies",&XC::Domain::getAngularFrequencies,"getAngularFrequencies(): return the computed natural frequencies.")
   .def("getPeriods",&XC::Domain::getPeriods,"getPeriods(): return the computed periods.")
   .def("getFrequencies",&XC::Domain::getFrequencies,"getFrequencies(): return the computed frequencies.")

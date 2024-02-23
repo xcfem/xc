@@ -129,7 +129,7 @@ for l in xcTotalSet.getLines:
     
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer, ndsCalcSet)
+    ls.analyzeLoadCombinations(combContainer, ndsCalcSet)
 # Limit state to check.
 limitState= lsd.woodShearResistance
 # Build controller.

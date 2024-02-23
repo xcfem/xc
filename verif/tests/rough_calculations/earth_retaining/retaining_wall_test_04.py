@@ -192,7 +192,7 @@ ratio2= abs(topFootingDesignShear-topFootingDesignShearRef)/abs(topFootingDesign
 ## Compute internal forces.
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.saveAll(combContainer,wall.wallSet) 
+lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,wall.wallSet) 
 
 ## Transfer the reinforcement to the finite element model.
 reinfConcreteSectionDistribution= wall.createConcreteSectionDistribution()

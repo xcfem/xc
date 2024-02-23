@@ -91,7 +91,7 @@ cfg= default_config.get_temporary_env_config() # Store results in temporary file
 lsd.LimitStateData.envConfig= cfg
 ## Save internal forces.
 xcTotalSet= modelSpace.getTotalSet()
-lsd.freqLoadsCrackControl.saveAll(combContainer,xcTotalSet)
+lsd.freqLoadsCrackControl.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 # Define reinforcement.
 # Reinforcement row scheme:
