@@ -50,6 +50,7 @@ python tests/utility/test_copy_properties.py
 python tests/utility/miscUtils/testStairCaseFunction.py
 python tests/utility/miscUtils/test_linear_interpolation.py
 python tests/utility/miscUtils/test_remove_accents.py
+python tests/utility/miscUtils/test_mplgraphic.py
 echo "$BLEU" "  Config tests." "$NORMAL"
 python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
