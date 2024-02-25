@@ -31,9 +31,10 @@
 //! @brief Object that can return properties as Python objects.
 class EntityWithProperties: public EntityWithOwner
   {
+  public:
+    typedef std::map<std::string, boost::python::object> PythonDict;    
   private:
     static inline const std::string py_prop_prefix= "py_prop";
-    typedef std::map<std::string, boost::python::object> PythonDict;
     
     PythonDict python_dict; //!< Python variables.
   public:
@@ -47,7 +48,8 @@ class EntityWithProperties: public EntityWithOwner
     void setPyProp(std::string str, boost::python::object val);
     void copyPropsFrom(const EntityWithProperties &);
     boost::python::list getPropNames(void) const;
-    
+
+    const PythonDict &getPropertiesDict(void) const;
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
   };
