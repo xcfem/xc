@@ -580,13 +580,14 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+"; not implemented yet.")
 
-    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' This class does not perform limit state checking. Issue 
             an error message.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
+        :param crossSections: cross sections on each element.
         :param controller: object that controls the limit state checking.
         :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
                existing file of results (defaults to 'N')
@@ -594,10 +595,13 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                is desired to be generated (defaults to 'N')
         :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
                meant to be calculated (defaults to 'N')
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
         '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+"; does not perform limit state checking.")
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
