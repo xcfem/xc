@@ -101,6 +101,10 @@ void EntityWithProperties::copyPropsFrom(const EntityWithProperties &other)
       setPyProp((*i).first, (*i).second);
   }
 
+//! @brief Return a std::map container with the properties of the object.
+const EntityWithProperties::PythonDict &EntityWithProperties::getPropertiesDict(void) const
+  { return python_dict; }
+
 //! @brief Return a Python dictionary containing the object members values.
 boost::python::dict EntityWithProperties::getPyDict(void) const
   {
