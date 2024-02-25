@@ -1143,14 +1143,28 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         elementParametersDict= dict()
         retval['element_parameters']= elementParametersDict
         for e in xcSet.elements:
-            # Critical axial load.
-            rcSection= e.getProp("crossSection")
-            reinforcementFactorZ= rcSection.reinforcementFactorZ
-            reinforcementFactorY= rcSection.reinforcementFactorY
-            Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= rcSection.Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= rcSection.Cy, reinforcementFactorY= reinforcementFactorY)
-            elementParametersDict['Leffi']= Leffi
-            elementParametersDict['mechLambdai']= mechLambdai
-            elementParametersDict['Efi']= Efi
+            elementBucklingParameters= {'Leffi':None, 'mechLambdai':None, 'Efi':None}
+            section= e.physicalProperties.getVectorMaterials[0]
+            if(section.hasProp('sectionBucklingproperties')):
+                sectionBucklingproperties= section.getProp('sectionBucklingproperties')
+                reinforcementFactorZ= sectionBucklingproperties['reinforcementFactorZ']
+                sectionDepthZ= sectionBucklingproperties['sectionDepthZ']
+                reinforcementFactorY= sectionBucklingproperties['reinforcementFactorY']
+                sectionDepthY= sectionBucklingproperties['sectionDepthY']
+                Cz= sectionBucklingproperties['Cz']
+                Cy= sectionBucklingproperties['Cy']
+                rcSection= sectionBucklingproperties['sectionData']
+                Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+                elementBucklingParameters['Leffi']= Leffi
+                elementBucklingParameters['mechLambdai']= mechLambdai
+                elementBucklingParameters['Efi']= Efi
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= className+'.'+methodName+"; reinforced concrete for element: "+str(e.tag)+" is not defined. Can't compute buckling parameters for this element."
+                lmsg.error(errMsg)
+                
+            elementParametersDict[e.tag]= elementBucklingParameters
         return retval
         
     def prepareResultsDictionaries(self):
