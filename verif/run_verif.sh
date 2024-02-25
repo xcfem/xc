@@ -1031,6 +1031,8 @@ python tests/materials/xc_materials/sections/elastic_section/test_section_rotati
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_03.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_04.py
+python tests/materials/xc_materials/sections/elastic_section/test_section_properties_01.py
+python tests/materials/xc_materials/sections/elastic_section/test_section_properties_02.py
 echo "$BLEU" "      Fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/test_tangent_stiffness_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_reg_cuad_01.py
