@@ -2195,9 +2195,10 @@ def compute_element_reinforcement(element):
         retval= [baseSection, baseSectionII]
     return retval
     
-def get_element_rc_sections(elements, propName= None):
-    ''' Return a list containing the reinforced concrete sections from the
-        properties defined in the elements argument. Those properties are:
+def compute_element_rc_sections(elements, propName= None):
+    ''' Return a list containing the reinforced concrete sections computed
+        from the values of the properties defined in the elements argument. 
+        Those properties are:
 
         - baseSection: RCSectionBase derived object containing the geometry
                        and the material properties of the reinforcec concrete
@@ -2253,5 +2254,3 @@ def get_element_rc_sections(elements, propName= None):
                 sectionNames[sectionIdx]= sct.name
                 element.setProp(propName, sectionNames)
     return retval
-
-                                  
