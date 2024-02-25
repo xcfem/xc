@@ -745,7 +745,7 @@ class RCFiberSectionParameters(object):
         '''Alias for nDivJK when defining circular sections.'''
         return self.nDivJK
 
-    def getConcreteDiagram(self,preprocessor):
+    def getConcreteDiagram(self, preprocessor):
         ''' Return the concrete strain-stress diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -753,14 +753,14 @@ class RCFiberSectionParameters(object):
 
         return preprocessor.getMaterialHandler.getMaterial(self.concrDiagName)
       
-    def getSteelDiagram(self,preprocessor):
+    def getSteelDiagram(self, preprocessor):
         ''' Return the steel strain-stress diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
         return preprocessor.getMaterialHandler.getMaterial(self.reinfDiagName)
       
-    def getSteelEquivalenceCoefficient(self,preprocessor):
+    def getSteelEquivalenceCoefficient(self, preprocessor):
         ''' Return the equivalence coefficiente for the steel (Es/Ec).
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -937,28 +937,28 @@ class RCSectionBase(object):
         ''' Return the number of cells in JK (height or tangential) direction.'''
         return self.fiberSectionParameters.nDivJK
     
-    def getConcreteDiagram(self,preprocessor):
+    def getConcreteDiagram(self, preprocessor):
         ''' Return the concrete stress-strain diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
         return self.fiberSectionParameters.getConcreteDiagram(preprocessor)
       
-    def getSteelDiagram(self,preprocessor):
+    def getSteelDiagram(self, preprocessor):
         ''' Return the reinforcing steel stress-strain diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
         return self.fiberSectionParameters.getSteelDiagram(preprocessor)
       
-    def getSteelEquivalenceCoefficient(self,preprocessor):
+    def getSteelEquivalenceCoefficient(self, preprocessor):
         ''' Return the steel equivalence coefficient: Es/Ec.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
         return self.fiberSectionParameters.getSteelEquivalenceCoefficien(preprocessor)
 
-    def defDiagrams(self,preprocessor,matDiagType):
+    def defDiagrams(self, preprocessor, matDiagType):
         '''Stress-strain diagrams definition.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -983,7 +983,7 @@ class RCSectionBase(object):
         self.respVy= self.getRespVy(preprocessor)
         self.respVz= self.getRespVz(preprocessor)
 
-    def defFiberSection2d(self,preprocessor):
+    def defFiberSection2d(self, preprocessor):
         '''Define 2D fiber section from geometry data.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -1049,7 +1049,7 @@ class RCSectionBase(object):
         '''
         return self.fiberSectionParameters.defInteractionDiagramParameters(preprocessor)
 
-    def defInteractionDiagram(self,preprocessor):
+    def defInteractionDiagram(self, preprocessor):
         '''Defines 3D interaction diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -1059,7 +1059,7 @@ class RCSectionBase(object):
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagram(self.name,self.fiberSectionParameters.idParams)
 
-    def defInteractionDiagramNMy(self,preprocessor):
+    def defInteractionDiagramNMy(self, preprocessor):
         '''Defines N-My interaction diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -1069,7 +1069,7 @@ class RCSectionBase(object):
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.name,self.fiberSectionParameters.idParams)
 
-    def defInteractionDiagramNMz(self,preprocessor):
+    def defInteractionDiagramNMz(self, preprocessor):
         '''Defines N-Mz interaction diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -1350,7 +1350,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
                            defining the torsion reinforcement.
     :ivar swapReinforcementAxes: if true, swap the axes of reinforcement so the positive and negative reinforcement rows are placed rotated 90 degrees.
     '''
-    def __init__(self,name= None, sectionDescr= None, width=0.25,depth=0.25,concrType=None, reinfSteelType=None, nDivIJ= 10, nDivJK= 10, swapReinforcementAxes= False):
+    def __init__(self, name= None, sectionDescr= None, width=0.25,depth=0.25,concrType=None, reinfSteelType=None, nDivIJ= 10, nDivJK= 10, swapReinforcementAxes= False):
         ''' Constructor.
 
         :param name: name of the section     
@@ -1428,26 +1428,26 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
             retval= self.h
         return retval
     
-    def getRespT(self,preprocessor):
+    def getRespT(self, preprocessor):
         '''Material for modeling torsional response of section.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.getRespT(self,preprocessor,self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
+        return section_properties.RectangularSection.getRespT(self, preprocessor, self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
 
-    def getRespVy(self,preprocessor):
+    def getRespVy(self, preprocessor):
         '''Material for modeling Y shear response of section.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.getRespVy(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
+        return section_properties.RectangularSection.getRespVy(self, preprocessor, self.fiberSectionParameters.concrType.Gcm())
 
-    def getRespVz(self,preprocessor):
+    def getRespVz(self, preprocessor):
         '''Material for modeling Z shear response of section.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.getRespVz(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
+        return section_properties.RectangularSection.getRespVz(self, preprocessor, self.fiberSectionParameters.concrType.Gcm())
 
     def getContour(self):
         ''' Return the vertices of the section contour.'''
