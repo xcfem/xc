@@ -50,18 +50,17 @@ class PhantomModel(object):
         self.preprocessor= preprocessor
         self.sectionsDistribution= sectionDistribution
 
-    def setupForElementsAndCombinations(self,intForcCombFileName,setCalc=None):
+    def setupForElementsAndCombinations(self, intForcItems, setCalc=None):
         '''Extracts element and combination identifiers from the internal
            forces listing file.
 
-        :param intForcCombFileName: name of the file containing the internal
-                                    forces obtained for each element for 
-                                    the combinations analyzed
+        :param intForcItems: tuple containing the element tags, the identifiers
+                             of the load combinations and the values of the
+                             internal forces.
         :param setCalc: set of elements to be analyzed (defaults to None which 
                         means that all the elements in the file of internal forces
                         results are analyzed) 
         '''
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
         numberOfElements= len(intForcItems[0])
         if(numberOfElements>0):
             self.elementTags= intForcItems[0]
@@ -107,18 +106,18 @@ class PhantomModel(object):
         return phantomElement
 
 
-    def createElements(self, intForcCombFileName, outputCfg):
+    def createElements(self, intForcItems, outputCfg):
         '''Creates the phantom model elements from the data read on the file.
 
-        :param intForcCombFileName: name of the file containing the internal
-                                    forces obtained for each element for 
-                                    the combinations analyzed
+        :param intForcItems: tuple containing the element tags, the identifiers
+                             of the load combinations and the values of the
+                             internal forces.
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                    variables that control the output of the checking (set of 
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
-        self.setupForElementsAndCombinations(intForcCombFileName, outputCfg.setCalc)
+        self.setupForElementsAndCombinations(intForcItems= intForcItems, setCalc= outputCfg.setCalc)
 
         retval= []
         nodes= self.preprocessor.getNodeHandler
@@ -157,13 +156,8 @@ class PhantomModel(object):
         outputCfg.controller.initControlVars(retval)
         return retval
 
-    def createLoads(self,intForcCombFileName):
-        '''Creates the loads from the data read from the file.
-
-           :param intForcCombFileName: name of the file containing the forces and 
-                               bending moments obtained for each element for all 
-                               the combinations analyzed.
-        '''
+    def createLoads(self):
+        '''Creates the loads from the data read from the file.'''
         cargas= self.preprocessor.getLoadHandler
         casos= cargas.getLoadPatterns
         #Load modulation.
@@ -190,19 +184,19 @@ class PhantomModel(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; no loaded nodes for elements with tags: '+str(elementsWithoutLoadedNodes))                    
 
-    def build(self, intForcCombFileName, outputCfg):
+    def build(self, intForcItems, outputCfg):
         '''Builds the phantom model from the data read from the file.
 
-        :param intForcCombFileName: name of the file containing the forces and 
-                               bending moments obtained for each element for all 
-                               the combinations analyzed
+        :param intForcItems: tuple containing the element tags, the identifiers
+                             of the load combinations and the values of the
+                             internal forces.
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                    variables that control the output of the checking (set of 
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
-        retval= self.createElements(intForcCombFileName,outputCfg)
-        self.createLoads(intForcCombFileName)
+        retval= self.createElements(intForcItems, outputCfg)
+        self.createLoads()
         return retval
 
     def check(self, controller):
@@ -246,9 +240,10 @@ class PhantomModel(object):
         '''
         retval=None
         intForcCombFileName= limitStateData.getInternalForcesFileName()
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc= outputCfg.setCalc)
         controller= outputCfg.controller
         if(controller):
-            self.build(intForcCombFileName= intForcCombFileName, outputCfg= outputCfg)
+            self.build(intForcItems= intForcItems, outputCfg= outputCfg)
             self.check(controller)
             retval= self.write(limitStateData.getOutputDataBaseFileName(),outputCfg)
         else:
