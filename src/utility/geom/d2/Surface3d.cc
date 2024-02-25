@@ -32,7 +32,7 @@ GEOM_FT Surface3d::getArea(void) const
 //! @brief Return the distance from the point to this surface.
 GEOM_FT Surface3d::dist(const Pos3d &p) const
   {
-    std::cout << getClassName() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
     return NAN;
   }
@@ -40,7 +40,7 @@ GEOM_FT Surface3d::dist(const Pos3d &p) const
 //! @brief Return the squared distance from the point to this surface.
 GEOM_FT Surface3d::dist2(const Pos3d &p) const
   {
-    std::cout << getClassName() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
     return NAN;
   }
