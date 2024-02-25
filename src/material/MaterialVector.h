@@ -73,6 +73,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     void setMaterial(size_t i,MAT *);
     void setMaterial(size_t i, const MAT &);
     void setMaterial(const MAT *,const std::string &);
+    void copyPropsFrom(const EntityWithProperties *);
+    
     bool empty(void) const;
     int commitState(void);
     int revertToLastCommit(void);
@@ -200,6 +202,21 @@ template <class MAT>
 void MaterialVector<MAT>::setMaterial(size_t i, const MAT &new_mat)
   { setMaterial(i, new_mat.getCopy()); }
 
+//! @brief copy the user defined properties of the given object on each of
+//! the materials.  
+template <class MAT>
+void MaterialVector<MAT>::copyPropsFrom(const EntityWithProperties *other_mat)
+  {
+    if(other_mat)
+      {
+	const EntityWithProperties &tmp= *other_mat;
+        for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
+          {
+            (*i)->copyPropsFrom(tmp);
+          }
+      }
+  }
+
 template <class MAT>
 void MaterialVector<MAT>::clearMaterials(void)
   {
@@ -268,7 +285,7 @@ int MaterialVector<MAT>::revertToStart(void)
 //! @brief Ask the materials about the values that correspond to the code.
 //! @tparam MAT: material type.
 //! @param cod: identifier of the requested value.
-//! @param silent: if true don't complaint about non-existen property.
+//! @param silent: if true don't complaint about non-existent property.
 template <class MAT>
 XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code, bool silent) const
   {

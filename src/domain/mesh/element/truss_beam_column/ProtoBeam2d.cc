@@ -41,7 +41,10 @@ void XC::ProtoBeam2d::set_material(const Material *m)
       {
         const BaseElasticSection2d *scc= dynamic_cast<const BaseElasticSection2d *>(m);
         if(scc)
-          physicalProperties.set(0,scc->getCrossSectionProperties());
+	  {
+            physicalProperties.set(scc->getCrossSectionProperties());
+	    physicalProperties.copyPropsFrom(scc);
+	  }
         else
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
