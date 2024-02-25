@@ -31,10 +31,18 @@
 #include "domain/mesh/element/utils/Information.h"
 #include "utility/recorder/response/ElementResponse.h"
 
-//! @brief Assigns section properties for integration point i
+//! @brief Assigns the given section properties to the integration point i
 void XC::ElasticSection3dPhysicalProperties::set(const size_t &i, const CrossSectionProperties3d &sp)
    { theMaterial[i]->setCrossSectionProperties(sp); }
 
+//! @brief Assigns the given section properties to all the integration points.
+void XC::ElasticSection3dPhysicalProperties::set(const CrossSectionProperties3d &sp)
+   {
+     for(material_vector::iterator i= theMaterial.begin();i!= theMaterial.end();i++)
+       {
+         (*i)->setCrossSectionProperties(sp);
+       }     
+   }
 
 //! @brief Returns the components of the strain vector which has the code being passed as parameter.
 //!

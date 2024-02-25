@@ -80,6 +80,9 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     inline boost::python::list getMaterialNamesPy(void) const
       { return theMaterial.getNamesPy(); }
 
+    inline void copyPropsFrom(const EntityWithProperties *otherMat)
+      { theMaterial.copyPropsFrom(otherMat); }
+
     inline MAT *operator[](const size_t &i)
       { return theMaterial[i]; }
     inline const MAT *operator[](const size_t &i) const

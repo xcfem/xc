@@ -44,6 +44,7 @@ class ElasticSection2dPhysicalProperties: public ElasticSectionPhysicalPropertie
     inline ElasticSection2dPhysicalProperties(const size_t &nMat= 0)
       : ElasticSectionPhysicalProperties<ElasticSection2d>(nMat) {}
     void set(const size_t &i, const CrossSectionProperties2d &);
+    void set(const CrossSectionProperties2d &);
 
     Vector getGeneralizedStrainAtGaussPointsByName(const std::string &) const;
     Vector getGeneralizedStressAtGaussPointsByName(const std::string &) const;

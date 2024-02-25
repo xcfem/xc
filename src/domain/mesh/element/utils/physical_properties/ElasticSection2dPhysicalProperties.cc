@@ -35,6 +35,14 @@
 void XC::ElasticSection2dPhysicalProperties::set(const size_t &i, const CrossSectionProperties2d &sp)
    { theMaterial[i]->setCrossSectionProperties(sp); }
 
+//! @brief Assigns the given section properties to all the integration points.
+void XC::ElasticSection2dPhysicalProperties::set(const CrossSectionProperties2d &sp)
+   {
+     for(material_vector::iterator i= theMaterial.begin();i!= theMaterial.end();i++)
+       {
+         (*i)->setCrossSectionProperties(sp);
+       }     
+   }
 
 //! @brief Returns the components of the strain vector which has the code being passed as parameter.
 //! @param cod: component code.
