@@ -214,38 +214,34 @@ class PhantomModel(object):
             controller.preprocessor= self.preprocessor
             controller.check(elements, key)
 
-    def write(self,outputFileName,outputCfg):
+    def write(self, outputCfg):
         '''Writes results into the output file
 
         :param controller:     object that controls limit state in elements
-        :param outputFileName: base name of output file (extensions .py and .tex)
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (append or not
                the results to a file, generation or not of lists, ...)
         '''
+        outputFileName= outputCfg.outputDataBaseFileName
         return cv.writeControlVarsFromPhantomElements(self.preprocessor, outputFileName, outputCfg)
 
-    def runChecking(self, limitStateData, outputCfg):
+    def runChecking(self, intForcItems, outputCfg):
         '''Run the analysis, check the results and write them into a file
 
-        :param limitStateData: object that contains the name of the file
-                               containing the internal forces 
-                               obtained for each element 
-                               for the combinations analyzed and the
-                               controller to use for the checking.
+        :param intForcItems: tuple containing the element tags, the identifiers
+                             of the load combinations and the values of the
+                             internal forces.
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                    variables that control the output of the checking (set of 
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
         retval=None
-        intForcCombFileName= limitStateData.getInternalForcesFileName()
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc= outputCfg.setCalc)
         controller= outputCfg.controller
         if(controller):
             self.build(intForcItems= intForcItems, outputCfg= outputCfg)
             self.check(controller)
-            retval= self.write(limitStateData.getOutputDataBaseFileName(),outputCfg)
+            retval= self.write(outputCfg)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

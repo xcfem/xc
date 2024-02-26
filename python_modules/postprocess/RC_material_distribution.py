@@ -215,7 +215,11 @@ class RCMaterialDistribution(object):
             self.sectionDefinition.calcInteractionDiagrams(preprocessor, 'NMy')
         outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
         phantomModel= phm.PhantomModel(preprocessor, self)
-        result= phantomModel.runChecking(limitStateData, outputCfg)
+        # Read internal forces to check against.
+        intForcCombFileName= limitStateData.getInternalForcesFileName()
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc= outputCfg.setCalc)
+        outputCfg.outputDataBaseFileName= limitStateData.getOutputDataBaseFileName()
+        result= phantomModel.runChecking(intForcItems= intForcItems, outputCfg= outputCfg)
         return (feProblem, result)
 
     def internalForcesVerification3D(self, limitStateData, matDiagType, outputCfg):
