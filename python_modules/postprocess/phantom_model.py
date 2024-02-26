@@ -247,5 +247,7 @@ class PhantomModel(object):
             self.check(controller)
             retval= self.write(limitStateData.getOutputDataBaseFileName(),outputCfg)
         else:
-            lmsg.error('PhantomModel::runChecking controller not defined.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; controller not defined.')
         return retval
