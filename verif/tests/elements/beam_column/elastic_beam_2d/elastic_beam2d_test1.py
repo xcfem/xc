@@ -42,7 +42,6 @@ nodes= preprocessor.getNodeHandler
 ## Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-
 ## Problem geometry
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0,0,0))
@@ -50,7 +49,7 @@ pt2= points.newPoint(geom.Pos3d(l,0,0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 ln= lines.newLine(pt1.tag,pt2.tag)
-ln.nDiv= 2
+ln.nDiv= 2 # Number of elements along the line.
 
 ## Mesh generation
 
@@ -63,9 +62,7 @@ lin= modelSpace.newLinearCrdTransf("lin")
 modelSpace.setDefaultCoordTransf(lin)
 
 ## Seed element
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.dimElem= 2 # Bars defined in a two-dimensional space.
-beam2d= seedElemHandler.newElement("ElasticBeam2d")
+beam2d= modelSpace.newSeedElement("ElasticBeam2d")
 beam2d.h= h
 
 xcTotalSet= preprocessor.getSets.getSet("total")
