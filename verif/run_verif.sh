@@ -357,7 +357,7 @@ python tests/elements/beam_column/elastic_beam_3d/test_torsion_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_02.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_01.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_02.py
-python tests/elements/beam_column/elastic_beam_3d/test_beam2d_tributary_lengths_01.py
+python tests/elements/beam_column/elastic_beam_3d/test_beam3d_tributary_lengths_01.py
 echo "$BLEU" "    Timoshenko beam 2D tests." "$NORMAL"
 python tests/elements/beam_column/timoshenko_beam2d_test1.py
 python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
