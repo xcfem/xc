@@ -216,8 +216,10 @@ class RCMaterialDistribution(object):
         outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
         phantomModel= phm.PhantomModel(preprocessor, self)
         # Read internal forces to check against.
-        intForcCombFileName= limitStateData.getInternalForcesFileName()
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc= outputCfg.setCalc)
+        intForcItems= limitStateData.getInternalForcesTuple(setCalc= outputCfg.setCalc)
+        # intForcItems: tuple containing the element tags, the identifiers
+        # of the load combinations and the values of the
+        # internal forces.        
         outputCfg.outputDataBaseFileName= limitStateData.getOutputDataBaseFileName()
         result= phantomModel.runChecking(intForcItems= intForcItems, outputCfg= outputCfg)
         return (feProblem, result)
