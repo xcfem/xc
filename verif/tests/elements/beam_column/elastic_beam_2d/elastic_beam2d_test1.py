@@ -65,8 +65,8 @@ modelSpace.setDefaultCoordTransf(lin)
 beam2d= modelSpace.newSeedElement("ElasticBeam2d")
 beam2d.h= h
 
-xcTotalSet= preprocessor.getSets.getSet("total")
-xcTotalSet.genMesh(xc.meshDir.I)
+## Generate mesh.
+ln.genMesh(xc.meshDir.I)
 
 nA= pt1.getNode()
 nC= ln.getNearestNode(geom.Pos3d(l/2,0.0,0.0))
@@ -79,6 +79,7 @@ spc= constraints.newSPConstraint(nA.tag,1,0.0)
 spc= constraints.newSPConstraint(nB.tag,0,0.0) # Node B
 spc= constraints.newSPConstraint(nB.tag,1,0.0)
 
+xcTotalSet= preprocessor.getSets.getSet("total")
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')

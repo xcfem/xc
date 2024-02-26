@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
-Test 3D Timoshenko’s beam bending - SSLL02/89 from Autodesk Robot
+''' Test 3D Timoshenko’s beam bending - SSLL02/89 from Autodesk Robot
 Structural Analysis Professional - Verification Manual AFNOR benchmarks
 SSLL02 Poutre courte sur deux appuis articulés
 Test of the elastic beam 3D element (WITH shear deformation)
