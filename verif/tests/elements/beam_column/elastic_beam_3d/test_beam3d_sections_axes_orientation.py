@@ -232,7 +232,7 @@ matIntForc=np.array(6*[np.array([0.0,0.0,0.0])]) #array to which import the resu
                                            #local axes for the two sections of
                                            #each element
 intForcesPth= cfg.projectDirTree.getInternalForcesResultsPath()+"intForce_ULS_normalStressesResistance.json"
-internalForces= lsd.readIntForcesDict(intForcesPth)
+internalForces= lsd.readIntForcesFile(intForcesPth)
 internalForcesValues= internalForces[2]
 for key in internalForcesValues.keys():
     intForces= internalForcesValues[key]
