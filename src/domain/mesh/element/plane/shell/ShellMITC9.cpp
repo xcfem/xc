@@ -118,29 +118,7 @@ const XC::Matrix &XC::ShellMITC9::getTangentStiff(void) const
   }
 
 double XC::ShellMITC9::getArea(bool initialGeometry) const
-  {
-    // double retval= 0.0;
-    // if(getDomain())
-    //   {
-    // 	double xsj= 0.0;
-    // 	static const int ngauss= 9; 
-    // 	static const int numnodes= 9;
-    // 	static double shp[3][numnodes];  //shape functions at a gauss point
-    // 	//gauss loop 
-    // 	for(int i= 0;i<ngauss;i++)
-    // 	  {
-    // 	    //get shape functions
-    // 	    const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
-    // 	    shape2d(gp.r_coordinate(), gp.s_coordinate(),xl,shp,xsj);
-    // 	    std::cout << "i= " << i << " xsj= " << xsj << std::endl;
-    // 	    //volume element to also be saved
-    // 	    retval+= gp.weight()*xsj;
-    // 	  }
-    //   }
-    // else
-    return getPolygon(initialGeometry).getArea();
-    //return retval;
-  }
+  { return getPolygon(initialGeometry).getArea(); }
 
 //! @brief return secant matrix 
 const XC::Matrix &XC::ShellMITC9::getInitialStiff(void) const 

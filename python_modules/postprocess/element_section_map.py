@@ -716,7 +716,7 @@ class ElementSectionMap(dict):
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+"; element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
         return retval # Return the number of "assigned" elements.
-
+    
     def assignFromElementProperties(self, elemSet, sectionWrapperName):
         '''Creates the section materials from the element properties
            and assigns them to the elements of the argument set .
@@ -738,7 +738,7 @@ class ElementSectionMap(dict):
             
         # Compute the different sections from the element properties.
         # propName: name of the element property that stores the section name
-        rcSections= def_simple_RC_section.get_element_rc_sections(elemSet, propName= self.propName)
+        rcSections= def_simple_RC_section.compute_element_rc_sections(elemSet, propName= self.propName)
         # Compute section pairs.
         sectionPairs= list()
         for el in elemSet:

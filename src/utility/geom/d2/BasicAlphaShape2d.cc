@@ -91,13 +91,8 @@ void BasicAlphaShape2d::free(void)
 BasicAlphaShape2d::BasicAlphaShape2d(const GeomObj::list_Pos2d &lp, const double &alpha)
   : A(nullptr)
   {
-    //std::cout << "alpha= " << alpha << std::endl;
     alloc(lp,double2intdouble(alpha));
     std::list<Segment> segments= alpha_edges(*A);
-    // std::cout << "Alpha Shape computed" << std::endl;
-    // std::cout << segments.size() << " alpha shape edges" << std::endl;
-    // std::cout << "Optimal alpha: " << *A->find_optimal_alpha(1)/scale<<std::endl
-      ;
   }
 
 //! @brief Destructor.

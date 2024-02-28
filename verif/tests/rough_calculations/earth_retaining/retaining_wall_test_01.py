@@ -245,7 +245,7 @@ if not os.path.exists(pth):
 wall.writeResult(pth)
 wall.drawSchema(pth)
 #notes= ["Overturning: "+fmt.Factor.format(sr.Foverturning), "Sliding: "+fmt.Factor.format(sr.Fsliding), "Bearing: "+fmt.Factor.format(sr.Fbearing), "Allow. press. ratio: "+fmt.Factor.format(sr.FadmPressure)] 
-#wall.draw(notes)
+
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
@@ -255,6 +255,9 @@ else:
     lmsg.error(fname+' ERROR.')
 
 os.system("rm -rf "+pth) # Your garbage you clean it
+
+# Draw geometry.
+# wall.draw()
 
 # #########################################################
 # # Graphic stuff.

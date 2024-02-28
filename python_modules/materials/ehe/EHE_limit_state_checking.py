@@ -12,6 +12,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import math
 import functools
 import sys
+import json
 import geom
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import fiber_sets
@@ -25,6 +26,8 @@ from materials import concrete_base
 # from scipy import interpolate
 from materials.sections import rebar_family as rf
 from postprocess.reports import common_formats as fmt
+from collections import defaultdict
+from materials.sections import internal_forces
 
 class RebarController(lscb.EURebarController):
     '''Control of some parameters as development length 
@@ -1143,14 +1146,28 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         elementParametersDict= dict()
         retval['element_parameters']= elementParametersDict
         for e in xcSet.elements:
-            # Critical axial load.
-            rcSection= e.getProp("crossSection")
-            reinforcementFactorZ= rcSection.reinforcementFactorZ
-            reinforcementFactorY= rcSection.reinforcementFactorY
-            Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= rcSection.Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= rcSection.Cy, reinforcementFactorY= reinforcementFactorY)
-            elementParametersDict['Leffi']= Leffi
-            elementParametersDict['mechLambdai']= mechLambdai
-            elementParametersDict['Efi']= Efi
+            elementBucklingParameters= {'Leffi':None, 'mechLambdai':None, 'Efi':None}
+            section= e.physicalProperties.getVectorMaterials[0]
+            if(section.hasProp('sectionBucklingproperties')):
+                sectionBucklingproperties= section.getProp('sectionBucklingproperties')
+                reinforcementFactorZ= sectionBucklingproperties['reinforcementFactorZ']
+                sectionDepthZ= sectionBucklingproperties['sectionDepthZ']
+                reinforcementFactorY= sectionBucklingproperties['reinforcementFactorY']
+                sectionDepthY= sectionBucklingproperties['sectionDepthY']
+                Cz= sectionBucklingproperties['Cz']
+                Cy= sectionBucklingproperties['Cy']
+                rcSection= sectionBucklingproperties['sectionData']
+                Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+                elementBucklingParameters['Leffi']= Leffi
+                elementBucklingParameters['mechLambdai']= mechLambdai
+                elementBucklingParameters['Efi']= Efi
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= className+'.'+methodName+"; reinforced concrete for element: "+str(e.tag)+" is not defined. Can't compute buckling parameters for this element."
+                lmsg.error(errMsg)
+                
+            elementParametersDict[e.tag]= elementBucklingParameters
         return retval
         
     def prepareResultsDictionaries(self):
@@ -1175,7 +1192,37 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         retval= super().getResultsDict()
         retval['ehe_buckling_parameters']= self.eheBucklingParametersDict
         return retval
+    
+    def getInternalForcesTuple(self, setCalc):
+        ''' Read the element tags, load combinations identifiers and internal
+            forces for the elements in the given set and return them in a 
+            tuple: (eTags, loadCombinations, internalForces). The internal
+            forces are preprocessing to increase the bending moments
+            according to the results of the buckling analysis.
 
+        :param setCalc: elements to read internal forces for.
+        '''
+        bucklingAnalysisResultsFileName= self.getBucklingAnalysisResultsFileName()
+    
+        intForcItems= read_buckling_analysis_results(bucklingAnalysisResultsFileName= bucklingAnalysisResultsFileName, setCalc= setCalc)
+        # intForcItems: tuple containing the element tags, the identifiers
+        # of the load combinations and the values of the
+        # internal forces.
+        elementTags= intForcItems[0]
+        loadCombinations= intForcItems[1]
+        internalForces= intForcItems[2]
+        bucklingParameters= intForcItems[3]
+        ## Compute the new internal forces.
+        for loadComb in loadCombinations:
+            print(loadComb)
+            for eTag in elementTags:
+                print(eTag)
+                elementBucklingParameters= bucklingParameters[eTag]
+                print(elementBucklingParameters)
+                elementInternalForces= internalForces[eTag]
+                print(elementInternalForces)
+        return intForcItems
+            
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
 #      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
@@ -2723,3 +2770,81 @@ def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 1
             familyName= 'A'+diameterText+'_'+spacingText
             retval[familyName]= EHERebarFamily(steel= steel, diam= diameter, spacing= spacing, concreteCover= cover)
     return retval
+
+def read_buckling_analysis_results(bucklingAnalysisResultsFileName, setCalc=None):
+    '''Extracts element and combination identifiers from the internal
+    forces JSON file. Return elementTags, idCombs , internal forces values
+    and buckling parameters values.
+    
+    :param bucklingAnalysisResultsFileName: name of the file containing the internal
+                                forces obtained for each element for 
+                                the combinations analyzed
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed)
+    '''
+    def get_cross_section_internal_forces(internalForces, idComb, tagElem, idSection):
+        ''' Return the CrossSectionInternalForce object containing the
+            internal forces in the given dictionary.
+
+        :param internalForces: Python dictionary containing the values
+                               for the internal forces.
+        :param idComb: identifier of the load combination.
+        :param tagElem: identifier of the finite element.
+        :param idSection: identifier of the section in the element.
+        '''
+        retval= internal_forces.CrossSectionInternalForces()
+        forces= internalForces[k]
+        retval.setFromDict(forces)
+        retval.idComb= idComb
+        retval.tagElem= tagElem
+        retval.idSection= idSection
+        return retval
+    
+    elementTags= set()
+    idCombs= set()
+    with open(bucklingAnalysisResultsFileName) as json_file:
+        bucklingAnalysisResultsDict= json.load(json_file)
+    json_file.close()
+    internalForcesDict= bucklingAnalysisResultsDict['internal_forces']
+    eheBucklingParametersDict= bucklingAnalysisResultsDict['ehe_buckling_parameters']
+    bucklingLoadFactors= eheBucklingParametersDict['buckling_load_factors']
+    eheElementBucklingParameters= eheBucklingParametersDict['element_parameters']
+    
+    internalForcesValues= defaultdict(list)
+    bucklingParametersValues= dict()
+    
+    if(not setCalc):
+        for comb in internalForcesDict.keys():
+            idComb= str(comb)
+            idCombs.add(idComb)
+            elements= internalForcesDict[comb]
+            for elemId in elements.keys():
+                tagElem= eval(elemId)
+                elementData= elements[elemId]
+                #elementType= elementData['type']
+                internalForces= elementData['internalForces']
+                for k in internalForces.keys():
+                    idSection= eval(k)
+                    elementTags.add(tagElem)
+                    crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection)
+                    internalForcesValues[tagElem].append(crossSectionInternalForces)
+                bucklingParametersValues[tagElem]=  eheElementBucklingParameters[str(tagElem)]
+    else:
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+        for idComb in internalForcesDict.keys():
+            idCombs.add(idComb)
+            elements= internalForcesDict[idComb]
+            for elemId in elements.keys():
+                tagElem= eval(elemId)
+                if(tagElem in setElTags): # search element tag
+                    elementData= elements[elemId]
+                    #elementType= elementData['type']
+                    internalForces= elementData['internalForces']
+                    for k in internalForces.keys():
+                        idSection= eval(k)
+                        elementTags.add(tagElem)
+                        crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection)
+                        internalForcesValues[tagElem].append(crossSectionInternalForces)
+                    bucklingParametersValues[tagElem]=  eheElementBucklingParameters[str(tagElem)]
+    return (elementTags,idCombs,internalForcesValues, bucklingParametersValues)

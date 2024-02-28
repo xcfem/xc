@@ -51,17 +51,6 @@
 XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,MaterialHandler *mat_ldr)
   : SectionForceDeformation(tag,classTag,mat_ldr) {}
 
-//! @brief Copy constructor.
-XC::PrismaticBarCrossSection::PrismaticBarCrossSection(const PrismaticBarCrossSection &other)
-  : SectionForceDeformation(other) {}
-
-//! @brief Assignment operator.
-XC::PrismaticBarCrossSection &XC::PrismaticBarCrossSection::operator=(const PrismaticBarCrossSection &other)
-  {
-    SectionForceDeformation::operator=(other);
-    return *this;
-  }
-
 //! @brief Sets the deformation plane of the section.
 int XC::PrismaticBarCrossSection::setTrialDeformationPlane(const DeformationPlane &plane)
   { return setTrialSectionDeformation(getGeneralizedStrainVector(plane)); }

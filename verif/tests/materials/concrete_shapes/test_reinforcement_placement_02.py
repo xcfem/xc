@@ -130,7 +130,7 @@ for e in beamElements:
         e.setProp("bottomReinforcement", bottomReinforcement)
 
 #### Define sections.
-rcSections= def_simple_RC_section.get_element_rc_sections(beamElements)
+rcSections= def_simple_RC_section.compute_element_rc_sections(beamElements)
 
 ##### Create corresponding XC materials.
 for s in rcSections:

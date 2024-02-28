@@ -47,9 +47,10 @@ echo "$BLEU" "Misc. tests." "$NORMAL"
 python tests/utility/test_evalPy.py
 python tests/utility/test_execPy.py
 python tests/utility/test_copy_properties.py
-python tests/utility/miscUtils/testStairCaseFunction.py
-python tests/utility/miscUtils/test_linear_interpolation.py
-python tests/utility/miscUtils/test_remove_accents.py
+python tests/utility/misc_utils/testStairCaseFunction.py
+python tests/utility/misc_utils/test_linear_interpolation.py
+python tests/utility/misc_utils/test_remove_accents.py
+python tests/utility/misc_utils/test_mplgraphic.py
 echo "$BLEU" "  Config tests." "$NORMAL"
 python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
@@ -333,6 +334,7 @@ python tests/elements/beam_column/elastic_beam_2d/test_frame_01.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_01.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_02.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_frequency_01.py
+python tests/elements/beam_column/elastic_beam_2d/test_beam2d_tributary_lengths_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_01.py
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_02.py
@@ -355,6 +357,7 @@ python tests/elements/beam_column/elastic_beam_3d/test_torsion_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_02.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_01.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_02.py
+python tests/elements/beam_column/elastic_beam_3d/test_beam3d_tributary_lengths_01.py
 echo "$BLEU" "    Timoshenko beam 2D tests." "$NORMAL"
 python tests/elements/beam_column/timoshenko_beam2d_test1.py
 python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
@@ -1030,6 +1033,8 @@ python tests/materials/xc_materials/sections/elastic_section/test_section_rotati
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_03.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_04.py
+python tests/materials/xc_materials/sections/elastic_section/test_section_properties_01.py
+python tests/materials/xc_materials/sections/elastic_section/test_section_properties_02.py
 echo "$BLEU" "      Fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/test_tangent_stiffness_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_reg_cuad_01.py
@@ -1156,6 +1161,7 @@ python tests/materials/ehe/test_buckling_check_03.py
 python tests/materials/ehe/test_buckling_check_04.py
 python tests/materials/ehe/test_buckling_check_05.py
 python tests/materials/ehe/test_buckling_check_06.py
+python tests/materials/ehe/test_buckling_check_07.py
 
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py

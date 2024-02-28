@@ -32,22 +32,24 @@ class MPLGraphicDecorations(object):
         self.setGrid(plt)
 
 class MPLGraphic(object):
-    ''' Base calss for matplotlib graphics.'''
+    ''' Base class for matplotlib graphics.
+
+    :ivar fScale: graphics scale factor.
+    :ivar fig: matplotlib figure.
+    '''
     def __init__(self,title):
         self.decorations= MPLGraphicDecorations(title)
         self.fScale= 1e-3
         self.fig= None
       
     def getPathPolygon(self, plg):
-        plgVertices= plg.getVertexList()
-        v0= plgVertices[0]
-        vertices= [(v0.y*self.fScale,v0.x*self.fScale)]
-        codes=[Path.MOVETO]
-        for v in plgVertices[1:]:
-          vertices.append((v.y*self.fScale,v.x*self.fScale))
-          codes.append(Path.LINETO)
-        vertices.append((v0.y*self.fScale,v0.x*self.fScale))
-        codes.append(Path.CLOSEPOLY)
+        ''' Return a matplotlib Path from the given polygon.
+
+        :param plg: 2D polygon.
+        '''
+        vertices = [(v.y*self.fScale,v.x*self.fScale) for v in plg.getVertexList()]
+        vertices.append(vertices[0])
+        codes=[Path.MOVETO] + (len(vertices) - 2) * [Path.LINETO] + [Path.CLOSEPOLY]
         path = Path(vertices, codes)
         return path
 
@@ -77,7 +79,12 @@ class InteractionDiagramGraphic(MPLGraphic):
         self.decorations.xLabel= xLabel
         self.decorations.yLabel= yLabel
 
-    def setupGraphic(self,diag, internalForces= None):
+    def setupGraphic(self, diag, internalForces= None):
+        ''' Prepares the graphic of the interaction diagram.
+
+        :param diag: 2D polygon representing the contour of the interaction diagram.
+        :param internalForces: set of internal forces to be represented as dots over the interaction diagram.
+        '''
         path= self.getPathPolygon(diag)
         self.fig = plt.figure()
         ax= self.fig.add_subplot(111)

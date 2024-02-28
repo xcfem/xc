@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Check buckling computations using the results of a linear buckling 
-analysis. 3D structural analysis model.
+analysis. Same test as test_buckling_check_09.py but with the Y and Z
+axes swapped.
 '''
 
 from __future__ import division
@@ -78,10 +79,10 @@ modelSpace.fixNode('00F_FFF',topNode.tag)
 ## Loads
 lp0= modelSpace.newLoadPattern(name= 'lp0')
 Nd= -2990e3
-MdzTop= 2000e3
-MdzBottom= 1970e3
-lp0.newNodalLoad(topNode.tag, xc.Vector([0, 0, Nd, MdzTop, 0, 0]))
-lp0.newNodalLoad(bottomNode.tag, xc.Vector([0,0,0, MdzBottom, 0, 0]))
+MdyTop= 2000e3
+MdyBottom= 1970e3
+lp0.newNodalLoad(topNode.tag, xc.Vector([0, 0, Nd, 0, MdyTop, 0]))
+lp0.newNodalLoad(bottomNode.tag, xc.Vector([0,0,0, 0, MdyBottom, 0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Perform linear buckling analysis.
@@ -108,9 +109,9 @@ for e in xcTotalSet.elements:
     Cz= 0.2 # table 43.1.2 of EHE-08.
     Cy= 0.2
     Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
-    avgLeff+= Leffi[0][0] # Effective length for the first mode Z axis.
-    avgMechLambda+= mechLambdai[0][0] # Mechanical slenderness for the first mode.
-    avgEf+= Efi[0][0] # Fictitious eccentricity for the first mode Z axis.
+    avgLeff+= Leffi[0][1] # Effective length for the first mode Y axis.
+    avgMechLambda+= mechLambdai[0][1] # Mechanical slenderness for the first mode.
+    avgEf+= Efi[0][1] # Fictitious eccentricity for the first mode Y axis.
     z= e.getPosCentroid(False).z
     results[z]= (e.tag, Leffi, mechLambdai, Efi)
 

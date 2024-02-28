@@ -44,12 +44,13 @@ n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
-# Materials
+# Define material.
 sectionProperties= xc.CrossSectionProperties3d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
 
+# Define element.
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name

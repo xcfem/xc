@@ -181,7 +181,22 @@ class LimitStateData(object):
          :param elems: element set.
         '''
         return eif.getInternalForcesDict(nmbComb= nmbComb, elems= elems,  woodArmerAlsoForAxialForces= self.woodArmerAlsoForAxialForces)
+
+    def getInternalForcesTuple(self, setCalc):
+        ''' Read the element tags, load combinations identifiers and internal
+            forces for the elements in the given set and return them in a 
+            tuple: (eTags, loadCombinations, internalForces).
+
+        :param setCalc: elements to read internal forces for.
+        '''
     
+        intForcCombFileName= self.getInternalForcesFileName()
+        # intForcItems: tuple containing the element tags, the identifiers
+        # of the load combinations and the values of the
+        # internal forces.        
+        intForcItems= readIntForcesFile(intForcCombFileName, setCalc= setCalc)
+        return intForcItems 
+            
     def getDisplacementsDict(self, nmbComb, nodes):
         '''Creates a dictionary with the displacements of the given nodes.
 
@@ -579,14 +594,15 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+"; not implemented yet.")
-
-    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    
+    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' This class does not perform limit state checking. Issue 
             an error message.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
+        :param crossSections: cross sections on each element.
         :param controller: object that controls the limit state checking.
         :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
                existing file of results (defaults to 'N')
@@ -594,10 +610,14 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                is desired to be generated (defaults to 'N')
         :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
                meant to be calculated (defaults to 'N')
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
         '''
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+"; does not perform limit state checking.")
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
@@ -968,20 +988,41 @@ torsionResistance= TorsionResistanceRCLimitStateData()
 fatigueResistance= FatigueResistanceRCLimitStateData()
 vonMisesStressResistance= VonMisesStressLimitStateData()
 
-def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
+def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
     '''Extracts element and combination identifiers from the internal
-    forces JSON file. Return elementTags, idCombs and 
-    internal-forces values
+    forces JSON file. Return elementTags, idCombs and internal-forces values
     
-    :param   intForcCombFileName: name of the file containing the internal
-                                  forces obtained for each element for 
-                                  the combinations analyzed
+    :param intForcCombFileName: name of the file containing the internal
+                                forces obtained for each element for 
+                                the combinations analyzed
     :param setCalc: set of elements to be analyzed (defaults to None which 
                     means that all the elements in the file of internal forces
                     results are analyzed)
     :param vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
     '''
+    def get_cross_section_internal_forces(internalForces, idComb, tagElem, idSection, vonMisesStressId):
+        ''' Return the CrossSectionInternalForce object containing the
+            internal forces in the given dictionary.
+
+        :param internalForces: Python dictionary containing the values
+                               for the internal forces.
+        :param idComb: identifier of the load combination.
+        :param tagElem: identifier of the finite element.
+        :param idSection: identifier of the section in the element.
+        :param vonMisesStressId: identifier of the Von Mises stress to read
+                                (see NDMaterial and MembranePlateFiberSection).
+        '''
+        retval= internal_forces.CrossSectionInternalForces()
+        forces= internalForces[k]
+        retval.setFromDict(forces)
+        retval.idComb= idComb
+        retval.tagElem= tagElem
+        retval.idSection= idSection
+        if(vonMisesStressId in forces):
+            retval.vonMisesStress= forces[vonMisesStressId]
+        return retval
+        
     elementTags= set()
     idCombs= set()
     with open(intForcCombFileName) as json_file:
@@ -1003,14 +1044,7 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
                 for k in internalForces.keys():
                     idSection= eval(k)
                     elementTags.add(tagElem)
-                    crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
-                    forces= internalForces[k]
-                    crossSectionInternalForces.setFromDict(forces)
-                    crossSectionInternalForces.idComb= idComb
-                    crossSectionInternalForces.tagElem= tagElem
-                    crossSectionInternalForces.idSection= idSection
-                    if(vonMisesStressId in forces):
-                        crossSectionInternalForces.vonMisesStress= forces[vonMisesStressId]
+                    crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection, vonMisesStressId= vonMisesStressId)
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
         setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
@@ -1026,18 +1060,11 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
                     for k in internalForces.keys():
                         idSection= eval(k)
                         elementTags.add(tagElem)
-                        crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
-                        forces= internalForces[k]
-                        crossSectionInternalForces.setFromDict(forces)
-                        crossSectionInternalForces.idComb= idComb
-                        crossSectionInternalForces.tagElem= tagElem
-                        crossSectionInternalForces.idSection= idSection
-                        if(vonMisesStressId in forces):
-                            crossSectionInternalForces.vonMisesStress= forces[vonMisesStressId]
+                        crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection, vonMisesStressId= vonMisesStressId)
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
     return (elementTags,idCombs,internalForcesValues)
 
-def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
+def old_read_int_forces_file(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal
     forces listing file. Return elementTags, idCombs and 
     internal-forces values
@@ -1049,7 +1076,7 @@ def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
                     means that all the elements in the file of internal forces
                     results are analyzed) 
     '''
-    # errMsg= 'oldReadIntForcesFile will be deprecated soon.'
+    # errMsg= 'old_read_int_forces_file will be deprecated soon.'
     # lmsg.error(errMsg)
     elementTags= set()
     idCombs= set()
@@ -1108,9 +1135,9 @@ def readIntForcesFile(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_
     f= open(intForcCombFileName,"r")
     c= f.read(1)
     if(c=='{'):
-        retval= readIntForcesDict(intForcCombFileName,setCalc, vonMisesStressId)
+        retval= read_int_forces_dict(intForcCombFileName,setCalc, vonMisesStressId)
     else:
-        retval= oldReadIntForcesFile(intForcCombFileName,setCalc)
+        retval= old_read_int_forces_file(intForcCombFileName,setCalc)
     f.close()
     return retval
 
