@@ -1161,6 +1161,7 @@ python tests/materials/ehe/test_buckling_check_03.py
 python tests/materials/ehe/test_buckling_check_04.py
 python tests/materials/ehe/test_buckling_check_05.py
 python tests/materials/ehe/test_buckling_check_06.py
+python tests/materials/ehe/test_buckling_check_07.py
 
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
