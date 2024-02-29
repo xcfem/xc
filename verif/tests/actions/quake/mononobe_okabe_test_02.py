@@ -16,7 +16,6 @@ from model import predefined_spaces
 from materials.ec2 import EC2_materials
 from materials.sections.fiber_section import def_simple_RC_section
 from actions import load_cases
-from geotechnics import boussinesq
 from misc_utils import log_messages as lmsg
 from actions.earth_pressure import earth_pressure
 
