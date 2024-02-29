@@ -12,7 +12,6 @@ import math
 def deltaSigmaSoilLayer(p,area,zmean):
     '''Return the increase in the total vertical pressure, in the center of a soil-layer, in the vertical of the center of the foundation, created by the load applied to it (used to calculate the average elastic modulus and poisson coefficient).(Guía dimentaciones OC, 4.8.1)
 
-    :param area: area of the foundation
     :param p: average pressure transmitted by the foundation
     :param area: area of the foundation
     :param zmean: average depth of the soil-layer
@@ -22,14 +21,15 @@ def deltaSigmaSoilLayer(p,area,zmean):
     deltaSg=p*(1-(math.cos(ang))**3)
     return deltaSg
 
-def deltaSigmaSoilLayerLongFound(B,zmean):
+def deltaSigmaSoilLayerLongFound(p,B,zmean):
     '''Return the increase in the total vertical pressure, in long rectangular foundations (L/B>=10) in the center of a soil-layer, in the vertical of the center of the foundation, created by the load applied to it (used to calculate the average elastic modulus and poisson coefficient).(Guía dimentaciones OC, 4.8.1)
 
+    :param p: average pressure transmitted by the foundation
     :param B: width of the long foundation
     :param zmean: average depth of the soil-layer
     '''
     eps=math.atan(B/2/zmean)
-    deltaSg=(2*eps+math.sin(2*eps))/math.pi
+    deltaSg=p*(2*eps+math.sin(2*eps))/math.pi
     return deltaSg
 
 
@@ -55,7 +55,7 @@ def meanEquivE(soilLayers,area,p,widhtLongFound=None):
         hi=soil['zBottom']-soil['zTop']
         Ei=soil['E']
         if widhtLongFound:
-            deltaSgi=deltaSigmaSoilLayerLongFound(widhtLongFound,zmean)
+            deltaSgi=deltaSigmaSoilLayerLongFound(p,widhtLongFound,zmean)
         else:
             deltaSgi=deltaSigmaSoilLayer(p,area,zmean)
         num+=deltaSgi*hi
@@ -84,7 +84,7 @@ def meanEquivNu(soilLayers,area,p,widhtLongFound=None):
         hi=soil['zBottom']-soil['zTop']
         nui=soil['nu']
         if widhtLongFound:
-            deltaSgi=deltaSigmaSoilLayerLongFound(widhtLongFound,zmean)
+            deltaSgi=deltaSigmaSoilLayerLongFound(p,widhtLongFound,zmean)
         else:
             deltaSgi=deltaSigmaSoilLayer(p,area,zmean)
         num+=nui*deltaSgi*hi
@@ -109,12 +109,12 @@ def settlementFlexibleRectFound(soilLayers,L,B,p):
      '''
     if len(list(soilLayers.keys()))>1:
         area=L*B
-        if B<10*L:
+        if B>L/10:
             E=meanEquivE(soilLayers,area,p)
             nu=meanEquivNu(soilLayers,area,p)
         else: # long foundation
-             E=meanEquivE(soilLayers,area,p,B)
-             nu=meanEquivNu(soilLayers,area,p,B)
+            E=meanEquivE(soilLayers,area,p,B)
+            nu=meanEquivNu(soilLayers,area,p,B)
     else:
         soil=list(soilLayers.keys())[0]
         E=soilLayers[soil]['E']

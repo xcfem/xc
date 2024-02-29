@@ -2,7 +2,7 @@ from geotechnics.foundations import settlement_found as settle
 
 
 # Example based on settlement calculated for section R2 LAV-VP pág. 91 Anejo Nª 6 - Geotecnia Proyecto de construcción de plataforma de la integración del ferrocarril en la ciudad de Palencia. Tramo: acceso sur, fase II, pag.
-#The settlement calculated in the project is very similar to the one obtained here, but not all the variables introduced in their calculation are known
+#The settlement calculated in the project is 69 mm, aprox. half the one obtained here, but not all the variables introduced in their calculation are known. It is also not clear than the method proposed in the Guide is suitable for embankments settlement.
 
 # Data
 soilLayers={
@@ -14,21 +14,21 @@ soilLayers={
 
 Hembank=6 # embankment height
 gammaEmbank=20e3 # unit weight of the embankment
-Wembank= 7.2 # width of the top of the embankment
+Wembank= 15 # width of the top of the embankment
 Wfound=Wembank+2*Hembank
 # end data
 
 # average pressure transmitted by the embankment
-Lembank=10*Wfound-0.2 # lenght of the embankment
+Lembank=10*Wembank-0.2 # lenght of the embankment
 weigth=gammaEmbank*Hembank*(Wembank+2/1/2*Hembank)
 press=weigth/Wfound
 # settlement
 sNotLongFound=settle.settlementFlexibleRectFound(soilLayers,Lembank,Wembank,press)
-Lembank=10*Wfound+0.2 # long foundation
+Lembank=10*Wembank+0.2 # long foundation
 sLongFound=settle.settlementFlexibleRectFound(soilLayers,Lembank,Wembank,press) 
 
-ratio1=(sNotLongFound-0.06796912)/sNotLongFound
-ratio2=(sLongFound-0.06799527)/sLongFound
+ratio1=(sNotLongFound-0.12782473513)/sNotLongFound
+ratio2=(sLongFound-.13199048)/sLongFound
 
 import os
 from misc_utils import log_messages as lmsg
