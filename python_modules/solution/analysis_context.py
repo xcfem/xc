@@ -158,7 +158,7 @@ class AnalysisContextBase(object):
         '''
         if(not self.silent): lmsg.log('updating results for: '+comb.name)
         # Update internal forces.
-        limitState.internalForcesDict.update(eif.getInternalForcesDict(comb.getName,self.calcSet.elements))
+        limitState.internalForcesDict.update(eif.get_internal_forces_dict(comb.getName,self.calcSet.elements))
         if(self.reactionNodeSet):
             limitState.reactionsDict.update(er.getReactionsDict(comb.getName,self.reactionNodeSet.nodes))
         # Write displacements.

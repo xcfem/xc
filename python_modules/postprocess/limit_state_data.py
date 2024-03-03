@@ -180,7 +180,7 @@ class LimitStateData(object):
          :param nmbComb: combination name.
          :param elems: element set.
         '''
-        return eif.getInternalForcesDict(nmbComb= nmbComb, elems= elems,  woodArmerAlsoForAxialForces= self.woodArmerAlsoForAxialForces)
+        return eif.get_internal_forces_dict(nmbComb= nmbComb, elems= elems,  woodArmerAlsoForAxialForces= self.woodArmerAlsoForAxialForces)
 
     def getInternalForcesTuple(self, setCalc):
         ''' Read the element tags, load combinations identifiers and internal
@@ -910,7 +910,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         :param nmbComb: combination name.
         :param elems: element set.
         '''
-        return eif.getInternalForcesDict(nmbComb,elems, vonMisesStressId= self.vonMisesStressId, woodArmerAlsoForAxialForces= False) # Wood-Armer has no sense here.
+        return eif.get_internal_forces_dict(nmbComb,elems, vonMisesStressId= self.vonMisesStressId, woodArmerAlsoForAxialForces= False) # Wood-Armer has no sense here.
     
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.

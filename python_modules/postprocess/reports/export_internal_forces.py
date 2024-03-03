@@ -14,7 +14,7 @@ from materials.sections import internal_forces
 from misc_utils import log_messages as lmsg
 from model import model_inquiry
 
-def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stress', woodArmerAlsoForAxialForces= False):
+def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stress', woodArmerAlsoForAxialForces= False):
     '''Creates a dictionary with the element's internal forces.
 
     :param nmbComb: combination name.
@@ -26,7 +26,7 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
                                         otherwise, use it only for bending 
                                         moments.
     '''
-    def getExtendedProperties(element):
+    def get_extended_properties(element):
         '''Return the values of the lateral buckling reduction reduction 
            factor (chiLT) and the axial load reduction factor (chiN)
            properties of an element.
@@ -86,7 +86,7 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,V2,0.0,0.0,0.0,M2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            chiLT, chiN, FcE, FbE = getExtendedProperties(e)
+            chiLT, chiN, FcE, FbE = get_extended_properties(e)
             if(chiLT): # lateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
                 internalForcesDict[1]['chiLT']= chiLT
@@ -108,7 +108,7 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            chiLT, chiN, FcE, FbE= getExtendedProperties(e)
+            chiLT, chiN, FcE, FbE= get_extended_properties(e)
             if(chiLT): # ateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
                 internalForcesDict[1]['chiLT']= chiLT
@@ -156,7 +156,7 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
     return combInternalForcesDict
 
-def exportInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):
+def export_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):
     '''Writes a comma separated values file with the element's internal forces.
 
     :param nmbComb: combination name.
@@ -167,7 +167,7 @@ def exportInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= Fal
                                         otherwise, use it only for bending 
                                         moments.
     '''
-    errMsg= 'exportInternalForces deprecated use getInternalForcesDict'
+    errMsg= 'export_internal_forces deprecated use get_internal_forces_dict'
     errMsg+= 'with apropriate arguments'
     for e in elems:
         elementType= e.type()
@@ -224,7 +224,7 @@ def exportInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= Fal
             lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
       
 
-def exportShellInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):
+def export_shell_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):
     '''Writes a comma separated values file with the element's internal forces.
 
     :param nmbComb: combination name.
@@ -235,7 +235,7 @@ def exportShellInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces
                                         otherwise, use it only for bending 
                                         moments.
     '''
-    errMsg= 'exportShellInternalForces deprecated use exportInternalForces'
+    errMsg= 'export_shell_internal_forces deprecated use export_internal_forces'
     errMsg+= ' with apropriate arguments'
     lmsg.error(errMsg)
     internalForces= internal_forces.ShellMaterialInternalForces()
@@ -248,7 +248,7 @@ def exportShellInternalForces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces
         outStr= nmbComb+", "+str(e.tag)+", "+str(i)+", "+force.getCSVString()+'\n'
         fDesc.write(outStr)
 
-def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fDesc, woodArmerAlsoForAxialForces= False):
+def exporta_esfuerzos_shell_set(preprocessor,nmbComb, st, fDesc, woodArmerAlsoForAxialForces= False):
     '''Writes a comma separated values file with the element's internal forces.
 
     :param nmbComb: combination name.
@@ -260,13 +260,13 @@ def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fDesc, woodArmerAlsoForAx
                                         forces otherwise, use it only for 
                                         bending moments.
     '''
-    errMsg= 'exportaEsfuerzosShellSet deprecated use exportInternalForces'
+    errMsg= 'exporta_esfuerzos_shell_set deprecated use export_internal_forces'
     errMsg+= ' with apropriate arguments'
     lmsg.error(errMsg)
     elems= st.elements
     exportShellInternalForces(nmbComb,elems,fDesc, woodArmerAlsoForAxialForces= woodArmerAlsoForAxialForces)
 
-def exportBeamInternalForces(nmbComb, elems, fName):
+def export_beam_internal_forces(nmbComb, elems, fName):
     '''Writes a comma separated values file with the element's internal forces.
 
     :param nmbComb: name of the load combination.

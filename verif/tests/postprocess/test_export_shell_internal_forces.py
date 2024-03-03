@@ -93,7 +93,7 @@ analOk= analysis.analyze(1)
 from postprocess.reports import export_internal_forces
 setTotal= preprocessor.getSets["total"]
 fName= "/tmp/test_export_shell_internal_forces.txt"
-internalForcesDict=  export_internal_forces.getInternalForcesDict("test",setTotal.getElements)
+internalForcesDict=  export_internal_forces.get_internal_forces_dict("test",setTotal.getElements)
 with open(fName, 'w') as outfile:
     json.dump(internalForcesDict, outfile)
 
