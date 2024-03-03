@@ -89,6 +89,12 @@ class CrossSectionInternalForces:
         retval+= self.Mz*self.Mz
         return retval
 
+    def getCopy(self):
+        ''' Return a copy of this object.'''
+        retval= CrossSectionInternalForces()
+        retval.setFromDict(self.getDict())
+        return retval
+
     def getDict(self):
         '''returns a dictionary whith the values of the internal forces.'''
         retval= dict()
@@ -103,9 +109,13 @@ class CrossSectionInternalForces:
         # if(hasattr(self, 'FbE')):
         #     retval['FbE']= FbE
         return retval
+    
+    def setForcesFromDict(self, dct):
+        ''' Assing values to the internal forces extracting them from the
+            given dictionary.
 
-    def setFromDict(self,dct):
-        '''Sets the internal forces from the dictionary argument.'''
+        :param dct: dictionary containing the values of the forces.
+        '''
         self.N= dct['N']
         self.Vy= dct['Vy']
         self.Vz= dct['Vz']
@@ -124,6 +134,10 @@ class CrossSectionInternalForces:
         # AWC NDS-2018 critical buckling design value for bending.
         if('FbE' in dct.keys()): 
             self.FbE= dct['FbE']
+
+    def setFromDict(self,dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        self.setForcesFromDict(dct)
 
     def getCSVString(self):
         '''returns a comma separated values string that represents the

@@ -988,6 +988,75 @@ torsionResistance= TorsionResistanceRCLimitStateData()
 fatigueResistance= FatigueResistanceRCLimitStateData()
 vonMisesStressResistance= VonMisesStressLimitStateData()
 
+class CrossSectionInternalForces(internal_forces.CrossSectionInternalForces):
+    ''' Definition of the internal forces on a 3D section (6 degrees 
+        of freedom) in a finite element.
+
+    :ivar idComb: identifier of the combination to which the internal forces
+                  are due.
+    :ivar tagElem: identifier of the finite element.
+    :ivar idSection: identifier of the section in the element.
+    :ivar vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
+    '''
+    def __init__(self, idComb= None, tagElem= None, idSection=None, N= 0.0,Vy= 0.0,Vz= 0.0,T= 0.0,My= 0.0,Mz= 0.0):
+        '''Internal forces on a 3D section (6 degrees of freedom).
+
+        :param idComb: identifier of the load combination.
+        :param tagElem: identifier of the finite element.
+        :param idSection: identifier of the section in the element.
+        :param N: axial force.
+        :param Vy: shear force parallel to axis y.
+        :param Vz: shear force parallel to axis z.
+        :param T: Torque.
+        :param My: bending moment parallel to axis y.
+        :param Mz: bending moment parallel to axis z.
+        '''
+        super().__init__(N= N,Vy= Vy,Vz= Vz,T= T,My= My,Mz= Mz)
+        self.idComb= idComb
+        self.tagElem= tagElem
+        self.idSection= idSection
+
+    def getDict(self):
+        '''returns a dictionary whith the values of the internal forces.'''
+        retval= super().getDict()
+        retval['idComb']= self.idComb;
+        retval['tagElem']= self.tagElem
+        retval['idSection']= self.idSection
+        return retval
+
+    def setFromDict(self, dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        super().setFromDict(dct)
+        self.idComb= dct['idComb']
+        self.tagElem= dct['tagElem']
+        self.idSection= dct['idSection']
+
+    def getCopy(self):
+        ''' Return a copy of this object.'''
+        retval= CrossSectionInternalForces()
+        retval.setFromDict(self.getDict())
+        return retval
+
+def get_cross_section_internal_forces(internalForces, idComb, tagElem, key, vonMisesStressId):
+    ''' Return the CrossSectionInternalForces object containing the
+        internal forces in the given dictionary.
+
+    :param internalForces: Python dictionary containing the values
+                           for the internal forces.
+    :param idComb: identifier of the load combination.
+    :param tagElem: identifier of the finite element.
+    :param key: identifier of the section in the element.
+    :param vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
+    '''
+    retval= CrossSectionInternalForces(idComb= idComb, tagElem= tagElem, idSection= eval(key))
+    forces= internalForces[key]
+    retval.setForcesFromDict(forces)
+    if(vonMisesStressId in forces):
+        retval.vonMisesStress= forces[vonMisesStressId]
+    return retval
+        
 def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
     '''Extracts element and combination identifiers from the internal
     forces JSON file. Return elementTags, idCombs and internal-forces values
@@ -1000,29 +1069,7 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
                     results are analyzed)
     :param vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
-    '''
-    def get_cross_section_internal_forces(internalForces, idComb, tagElem, idSection, vonMisesStressId):
-        ''' Return the CrossSectionInternalForce object containing the
-            internal forces in the given dictionary.
-
-        :param internalForces: Python dictionary containing the values
-                               for the internal forces.
-        :param idComb: identifier of the load combination.
-        :param tagElem: identifier of the finite element.
-        :param idSection: identifier of the section in the element.
-        :param vonMisesStressId: identifier of the Von Mises stress to read
-                                (see NDMaterial and MembranePlateFiberSection).
-        '''
-        retval= internal_forces.CrossSectionInternalForces()
-        forces= internalForces[k]
-        retval.setFromDict(forces)
-        retval.idComb= idComb
-        retval.tagElem= tagElem
-        retval.idSection= idSection
-        if(vonMisesStressId in forces):
-            retval.vonMisesStress= forces[vonMisesStressId]
-        return retval
-        
+    '''        
     elementTags= set()
     idCombs= set()
     with open(intForcCombFileName) as json_file:
@@ -1042,9 +1089,8 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
                 #elementType= elementData['type']
                 internalForces= elementData['internalForces']
                 for k in internalForces.keys():
-                    idSection= eval(k)
                     elementTags.add(tagElem)
-                    crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection, vonMisesStressId= vonMisesStressId)
+                    crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
         setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
@@ -1058,11 +1104,10 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
                     #elementType= elementData['type']
                     internalForces= elementData['internalForces']
                     for k in internalForces.keys():
-                        idSection= eval(k)
                         elementTags.add(tagElem)
-                        crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection, vonMisesStressId= vonMisesStressId)
+                        crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
-    return (elementTags,idCombs,internalForcesValues)
+    return (elementTags, idCombs, internalForcesValues)
 
 def old_read_int_forces_file(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal

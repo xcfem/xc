@@ -1212,16 +1212,32 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         loadCombinations= intForcItems[1]
         internalForces= intForcItems[2]
         bucklingParameters= intForcItems[3]
-        ## Compute the new internal forces.
-        for loadComb in loadCombinations:
-            print(loadComb)
-            for eTag in elementTags:
-                print(eTag)
-                elementBucklingParameters= bucklingParameters[eTag]
-                print(elementBucklingParameters)
-                elementInternalForces= internalForces[eTag]
-                print(elementInternalForces)
-        return intForcItems
+        bucklingLoadFactors= intForcItems[4]
+        idCombs= set() # load combinations x modes
+        internalForcesValues= defaultdict(list) # load combination results for each mode.
+        if(len(bucklingParameters)>0):
+            minimumEccentricity= .02
+            print('Minimum eccentricity not implemented yet.')
+            numModes= len(bucklingLoadFactors)
+            ## Compute the new internal forces.
+            for loadComb in loadCombinations:
+                for i in range(0, numModes): # for each mode under this combination.
+                    loadCombMode= loadComb+'_mode_'+str(i+1)
+                    idCombs.add(loadCombMode) # load combination results for mode i.                
+                    for eTag in elementTags: # for each element.
+                        elementBucklingParameters= bucklingParameters[eTag]
+                        # Get fictitious eccentricities
+                        efi= elementBucklingParameters['Efi']
+                        elementSectionsInternalForces= internalForces[eTag]
+                        efz= max(efi[i][0],minimumEccentricity) # fictitious eccentricity Z axis.
+                        efy= max(efi[i][1],minimumEccentricity) # fictitious eccentricity Y axis.
+                        # newElementSectionsInternalForces= list()
+                        for iForces in elementSectionsInternalForces:
+                            newForces= iForces.getCopy()
+                            newForces.increaseEccentricities(ez= efz, ey= efy)
+                            newForces.idComb= loadCombMode
+                            internalForcesValues[eTag].append(newForces)
+        return (elementTags, idCombs, internalForcesValues)
             
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
@@ -2783,24 +2799,6 @@ def read_buckling_analysis_results(bucklingAnalysisResultsFileName, setCalc=None
                     means that all the elements in the file of internal forces
                     results are analyzed)
     '''
-    def get_cross_section_internal_forces(internalForces, idComb, tagElem, idSection):
-        ''' Return the CrossSectionInternalForce object containing the
-            internal forces in the given dictionary.
-
-        :param internalForces: Python dictionary containing the values
-                               for the internal forces.
-        :param idComb: identifier of the load combination.
-        :param tagElem: identifier of the finite element.
-        :param idSection: identifier of the section in the element.
-        '''
-        retval= internal_forces.CrossSectionInternalForces()
-        forces= internalForces[k]
-        retval.setFromDict(forces)
-        retval.idComb= idComb
-        retval.tagElem= tagElem
-        retval.idSection= idSection
-        return retval
-    
     elementTags= set()
     idCombs= set()
     with open(bucklingAnalysisResultsFileName) as json_file:
@@ -2827,7 +2825,7 @@ def read_buckling_analysis_results(bucklingAnalysisResultsFileName, setCalc=None
                 for k in internalForces.keys():
                     idSection= eval(k)
                     elementTags.add(tagElem)
-                    crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection)
+                    crossSectionInternalForces= lsd.get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= None)
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
                 bucklingParametersValues[tagElem]=  eheElementBucklingParameters[str(tagElem)]
     else:
@@ -2844,7 +2842,7 @@ def read_buckling_analysis_results(bucklingAnalysisResultsFileName, setCalc=None
                     for k in internalForces.keys():
                         idSection= eval(k)
                         elementTags.add(tagElem)
-                        crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection)
+                        crossSectionInternalForces= lsd.get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= None)
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
                     bucklingParametersValues[tagElem]=  eheElementBucklingParameters[str(tagElem)]
-    return (elementTags,idCombs,internalForcesValues, bucklingParametersValues)
+    return (elementTags,idCombs,internalForcesValues, bucklingParametersValues, bucklingLoadFactors)
