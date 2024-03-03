@@ -1073,7 +1073,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         iz= section.sectionProperties.i # Radius of gyration.
         # Lower slenderness limit.
         lowerSlendernessLimit= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= e1, e2= e2, sectionDepth= sectionDepthZ)
-        minimumEccentricity= max(.02, sectionDepth/20)
+        minimumEccentricity= max(.02, sectionDepthZ/20)
         for mode, Ncr in enumerate(Ncri):
             Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
             if(Ncr>0):
