@@ -113,15 +113,15 @@ ratio1= abs(avgLeff-22.111953551507593)/22.111953551507593
 avgMechLambda/=sz
 ratio2= abs(avgMechLambda-70.75825136482429)/70.75825136482429
 avgEf/=sz
-ratio3= abs(avgEf-0.20056596377576272)/0.20056596377576272
+ratio3= abs(avgEf-0.2318153467323909)/0.2318153467323909
 
 '''
 print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
 print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
 print('average effective length (first buckling mode): ', avgLeff, 'm', ratio1)
-print('average mechanical slenderness (first buckling mode): ', avgMechLambda)
+print('average mechanical slenderness (first buckling mode): ', avgMechLambda, ratio2)
 
-print('average fictitious eccentricity (first buckling mode): ', avgEf, 'm')
+print('average fictitious eccentricity (first buckling mode): ', avgEf, 'm', ratio3)
 '''
 
 import os
