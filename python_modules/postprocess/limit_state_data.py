@@ -23,6 +23,7 @@ from materials.sections import internal_forces
 from collections import defaultdict
 import csv
 from postprocess import control_vars as cv
+from postprocess.config import file_names as fn
 import json
 
 defaultSolutionProcedureType=  predefined_solutions.SimpleStaticLinear
@@ -501,7 +502,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
 
     :ivar numModes: number of buckling modes to compute.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= 'buckling_parameters_ULS', designSituation= 'permanent'):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituation= 'permanent'):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
@@ -591,9 +592,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: model space used to define the FE problem.
         '''
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+"; not implemented yet.")
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
     
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' This class does not perform limit state checking. Issue 
@@ -615,15 +614,12 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         '''
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+"; not implemented yet.")
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
     def __init__(self):
         '''Constructor '''
-        super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
+        super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= fn.normalStressesVerificationResultsFile, designSituation= 'permanent')
 
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -657,7 +653,7 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
     ''' Steel normal stresses data for limit state checking.'''
     def __init__(self):
         '''Constructor '''
-        super(NormalStressesSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
+        super(NormalStressesSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= fn.normalStressesVerificationResultsFile, designSituation= 'permanent')
 
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -687,7 +683,7 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
+        super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= fn.shearVerificationResultsFile, designSituation= 'permanent')
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -720,7 +716,7 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(ShearResistanceSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
+        super(ShearResistanceSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= fn.shearVerificationResultsFile, designSituation= 'permanent')
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -751,7 +747,7 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
 
     def __init__(self):
         '''Limit state data constructor '''
-        super(TorsionResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_torsionResistance', outputDataBaseFileName= 'verifRsl_torsionULS', designSituation= 'permanent')
+        super(TorsionResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_torsionResistance', outputDataBaseFileName= fn.torsionVerificationResultsFile, designSituation= 'permanent')
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -839,13 +835,13 @@ class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under rare loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(RareLoadsCrackControlRCLimitStateData,self).__init__('SLS_rareLoadsCrackControl','verifRsl_crackingSLS_rare', designSituation= 'rare')
+        super(RareLoadsCrackControlRCLimitStateData,self).__init__('SLS_rareLoadsCrackControl', fn.crackControlRareVerificationResultsFile, designSituation= 'rare')
 
 class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl','verifRsl_crackingSLS_freq', designSituation= 'frequent')
+        super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl', fn.crackControlFreqVerificationResultsFile, designSituation= 'frequent')
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -858,7 +854,7 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl','verifRsl_crackingSLS_qperm', designSituation= 'quasi-permanent')
+        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl', fn.crackControlQpermVerificationResultsFile, designSituation= 'quasi-permanent')
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -887,7 +883,7 @@ class FatigueResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance','verifRsl_fatigueULS', designSituation= 'fatigue')
+        super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance',fn.fatigueVerificationResultsFile, designSituation= 'fatigue')
             
 class VonMisesStressLimitStateData(ULS_LimitStateData):
     ''' Steel Von Mises stress limit state data.
@@ -901,7 +897,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         :param vonMisesStressId: identifier of the Von Mises stress to read
                                 (see NDMaterial and MembranePlateFiberSection).
         '''
-        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_VonMisesStressULS', designSituation= 'permanent')
+        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance', fn.vonMisesStressesVerificationResultsFile, designSituation= 'permanent')
         self.vonMisesStressId= vonMisesStressId
         
     def getInternalForcesDict(self, nmbComb, elems):

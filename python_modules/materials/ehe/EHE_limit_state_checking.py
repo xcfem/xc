@@ -19,6 +19,7 @@ from materials.sections.fiber_section import fiber_sets
 from materials import limit_state_checking_base as lscb
 from postprocess import limit_state_data as lsd
 from postprocess import control_vars as cv
+from postprocess.config import file_names as fn
 from misc_utils import log_messages as lmsg
 import scipy.interpolate
 from scipy import optimize
@@ -1072,6 +1073,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         iz= section.sectionProperties.i # Radius of gyration.
         # Lower slenderness limit.
         lowerSlendernessLimit= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= e1, e2= e2, sectionDepth= sectionDepthZ)
+        minimumEccentricity= max(.02, sectionDepth/20)
         for mode, Ncr in enumerate(Ncri):
             Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
             if(Ncr>0):
@@ -1080,9 +1082,9 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             mechLambda= Leff/iz # Compute mechanical slenderness
             mechLambdai.append(mechLambda)
             if(mechLambda<lowerSlendernessLimit):
-                ef= 0.0
+                ef= minimumEccentricity
             else:
-                ef= get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff)
+                ef= max(minimumEccentricity, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff))
             Efi.append(ef)
 
     elif(nDOF==12):
@@ -1093,7 +1095,9 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         iy= section.sectionProperties.iy # Radius of gyration about y axis.
         # Lower slenderness limit.
         lowerSlendernessLimitZ= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ez1, e2= ez2, sectionDepth= sectionDepthZ)
+        minimumEccentricityZ= max(.02, sectionDepthZ/20)
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
+        minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
             Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
             Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
@@ -1105,13 +1109,13 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             mechLambdaY= Leffy/iy # Compute mechanical slenderness
             mechLambdai.append((mechLambdaZ, mechLambdaY))
             if(mechLambdaZ<lowerSlendernessLimitZ):
-                efz= 0.0
+                efz= minimumEccentricityZ
             else:
-                efz= get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz)
+                efz= max(minimumEccentricityZ, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz))
             if(mechLambdaY<lowerSlendernessLimitY):
-                efy= 0.0
+                efy= minimumEccentricityY
             else:
-                efy= get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy)
+                efy= max(minimumEccentricityY, get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy))
             Efi.append((efz, efy))
 
     else:
@@ -1125,7 +1129,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= 'buckling_parameters_ULS', designSituation= 'permanent'):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituation= 'permanent'):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
@@ -1148,15 +1152,15 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         for e in xcSet.elements:
             elementBucklingParameters= {'Leffi':None, 'mechLambdai':None, 'Efi':None}
             section= e.physicalProperties.getVectorMaterials[0]
-            if(section.hasProp('sectionBucklingproperties')):
-                sectionBucklingproperties= section.getProp('sectionBucklingproperties')
-                reinforcementFactorZ= sectionBucklingproperties['reinforcementFactorZ']
-                sectionDepthZ= sectionBucklingproperties['sectionDepthZ']
-                reinforcementFactorY= sectionBucklingproperties['reinforcementFactorY']
-                sectionDepthY= sectionBucklingproperties['sectionDepthY']
-                Cz= sectionBucklingproperties['Cz']
-                Cy= sectionBucklingproperties['Cy']
-                rcSection= sectionBucklingproperties['sectionData']
+            if(section.hasProp('sectionBucklingProperties')):
+                sectionBucklingProperties= section.getProp('sectionBucklingProperties')
+                reinforcementFactorZ= sectionBucklingProperties['reinforcementFactorZ']
+                sectionDepthZ= sectionBucklingProperties['sectionDepthZ']
+                reinforcementFactorY= sectionBucklingProperties['reinforcementFactorY']
+                sectionDepthY= sectionBucklingProperties['sectionDepthY']
+                Cz= sectionBucklingProperties['Cz']
+                Cy= sectionBucklingProperties['Cy']
+                rcSection= sectionBucklingProperties['sectionData']
                 Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
                 elementBucklingParameters['Leffi']= Leffi
                 elementBucklingParameters['mechLambdai']= mechLambdai
@@ -1216,8 +1220,6 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         idCombs= set() # load combinations x modes
         internalForcesValues= defaultdict(list) # load combination results for each mode.
         if(len(bucklingParameters)>0):
-            minimumEccentricity= .02
-            print('Minimum eccentricity not implemented yet.')
             numModes= len(bucklingLoadFactors)
             ## Compute the new internal forces.
             for loadComb in loadCombinations:
@@ -1229,8 +1231,8 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
                         # Get fictitious eccentricities
                         efi= elementBucklingParameters['Efi']
                         elementSectionsInternalForces= internalForces[eTag]
-                        efz= max(efi[i][0],minimumEccentricity) # fictitious eccentricity Z axis.
-                        efy= max(efi[i][1],minimumEccentricity) # fictitious eccentricity Y axis.
+                        efz= efi[i][0] # fictitious eccentricity Z axis.
+                        efy= efi[i][1] # fictitious eccentricity Y axis.
                         # newElementSectionsInternalForces= list()
                         for iForces in elementSectionsInternalForces:
                             newForces= iForces.getCopy()

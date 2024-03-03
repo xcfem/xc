@@ -10,6 +10,7 @@ from postprocess import output_handler
 from solution import predefined_solutions
 from misc_utils import log_messages as lmsg
 from postprocess import control_vars
+from postprocess.config import file_names as fn
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2020, AO_O and LCPT"
@@ -400,7 +401,8 @@ def display_weld_results(modelSpace,welds2Check,ULS,set2displ=None):
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess import limit_state_data as lsd
 
-def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm, resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
+resVMfile= './tmp_results/verifications/'+fn.vonMisesStressesVerificationResultsFile+'.py'
+def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm, resVMfile= resVMfile):
     '''Generates the graphics corresponding to results of vonmises verification
     (efficiency and vonmises stresses)
     together with the tex file to include them in a report.
@@ -413,9 +415,7 @@ def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvRe
     :param rltvResPath: directory where to place the text file relative to reportPath
     :param grWidth: with to insert the graphics
     :param texfileNm: name of the tex file.
-    :param resVMfile: file containing results from Von Mises verification 
-                      (defaults to:
-                      './tmp_results/verifications/verifRsl_VonMisesStressULS.py')
+    :param resVMfile: file containing results from Von Mises verification.
     '''
     if(len(sets2disp)>0):
         preprocessor= sets2disp[0].getPreprocessor
@@ -444,7 +444,7 @@ def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvRe
             outphand.displayField(limitStateLabel= limitState.label, section= None, argument='CF', component= None, setToDisplay= st, fileName= grPath+graphNm+'.jpg')
             addGraph2Tex(f,rltvGrPath+graphNm,captTxt,grWidth)
 
-def gen_vonmises_results_baseplates(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
+def gen_vonmises_results_baseplates(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm, resVMfile= resVMfile):
     '''Generates the graphics corresponding to results of vonmises verification
     (efficiency and vonmises stresses) in baseplates,
     together with the tex file to include them in a report.
@@ -457,8 +457,6 @@ def gen_vonmises_results_baseplates(sets2disp,modelSpace,genDescr,specDescr,repo
     :param rltvResPath: directory where to place the text file relative to reportPath
     :param grWidth: with to insert the graphics
     :param texfileNm: name of the tex file.
-    :param resVMfile: file containing results from Von Mises verification (defaults 
-                      to './tmp_results/verifications/verifRsl_VonMisesStressULS.py')
     '''
     if(len(sets2disp)>0):
         preprocessor= sets2disp[0].getPreprocessor
