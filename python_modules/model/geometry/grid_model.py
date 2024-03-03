@@ -516,6 +516,16 @@ class GridModel(object):
             p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
             p.getPos.y= xyRotCent[1]+sinTheta*(xp-xyRotCent[0])+cosTheta*(yp-xyRotCent[1])
         sPtMove.clear()
+    
+    def rotPntsXYZrangeZAxis(self,XYZrange,angle,xyRotCent):
+        '''Rotates points in XYZrange around a Z axis passing by xyRotCent.
+
+        :param XYZrange: range for the search.
+        :param angle: rotation angle (degrees)
+        :param xyRotCent: coordinates [x,y] of the axis Z of rotation
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(XYZrange)
+        return self.rotPntsZAxis(ijkRange,angle,xyRotCent)
 
     def rotAllPntsZAxis(self,angle,xyRotCent):
         '''Rotates all points in the grid around a Z axis passing by xyRotCent.
@@ -543,7 +553,17 @@ class GridModel(object):
             p.getPos.y= yzRotCent[0]+cosTheta*(yp-yzRotCent[0])-sinTheta*(zp-yzRotCent[1])
             p.getPos.z= yzRotCent[1]+sinTheta*(yp-yzRotCent[0])+cosTheta*(zp-yzRotCent[1])
         sPtMove.clear()
+        
+    def rotPntsXYZrangeXAxis(self,XYZrange,angle,yzRotCent):
+        '''Rotates points in XYZrange around a X axis passing by yzRotCent.
 
+        :param XYZrange: range for the search.
+        :param angle: rotation angle (degrees)
+        :param yzRotCent: coordinates [y,z] of the axis X of rotation
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(XYZrange)
+        self.rotPntsXAxis(ijkRange,angle,xyRotCent)
+    
     def rotAllPntsXAxis(self,angle,yzRotCent):
         '''Rotates all points in the grid around a X axis passing by yzRotCent.
 
@@ -570,6 +590,16 @@ class GridModel(object):
             p.getPos.x= xzRotCent[0]+cosTheta*(xp-xzRotCent[0])-sinTheta*(zp-xzRotCent[1])
             p.getPos.z= xzRotCent[1]+sinTheta*(xp-xzRotCent[0])+cosTheta*(zp-xzRotCent[1])
         sPtMove.clear()
+
+    def rotPntsXYZtangeYAxis(self,XYZrange,angle,xzRotCent):
+        '''Rotates points in ijkRange around a Y axis passing by xzRotCent.
+
+        :param XYZrange: range for the search.
+        :param angle: rotation angle (degrees)
+        :param xzRotCent: coordinates [x,z] of the axis Y of rotation
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(XYZrange)
+        self.rotPntsYAxis(ijkRange,angle,xzRotCent)
 
     def rotAllPntsYAxis(self,angle,xzRotCent):
         '''Rotates all points in the grid around a X axis passing by yzRotCent.
