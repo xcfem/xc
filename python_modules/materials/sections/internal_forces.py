@@ -149,6 +149,35 @@ class CrossSectionInternalForces:
         '''Returns the internal forces in a list.'''
         return [self.N,self.Vy,self.Vz,self.T,self.My,self.Mz]
 
+    def increaseEccentricities(self, ez, ey):
+        ''' Increase the eccentricity of the axial force with the given values.
+
+        :param ez: additional eccentricity around z axis.
+        :param ey: additional eccentricity around y axis.
+        '''
+        incMz= self.N*ez
+        if(self.Mz>0): # Always increase the moment.
+            if(incMz>0): # both positive
+                self.Mz+= incMz
+            else: # increment negative.
+                self.Mz-= incMz
+        else: # Always increase the moment.
+            if(incMz>0): # increment positive.
+                self.Mz-= incMz
+            else: # both negative.
+                self.Mz+= incMz            
+        incMy= self.N*ey
+        if(self.My>0): # Always increase the moment.
+            if(incMy>0): # both positive
+                self.My+= incMy
+            else: # increment negative.
+                self.My-= incMy
+        else: # Always increase the moment.
+            if(incMy>0): # increment positive.
+                self.My-= incMy
+            else: # both negative.
+                self.My+= incMy
+
     def __str__(self):
         return str(self.getDict())
 
