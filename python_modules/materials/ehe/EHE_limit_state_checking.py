@@ -1137,7 +1137,8 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
-        '''Creates a dictionary with the displacements of the given nodes.
+        '''Creates a dictionary with the buckling parameters of the given
+           elements.
 
         :param nmbComb: combination name.
         :param xcSet: set containing the nodes to export the modes on.
@@ -1270,6 +1271,53 @@ class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressCont
         :param limitStateLabel: label that identifies the limit state.
         '''
         super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+# Buckling checking.
+class BiaxialBucklingController(BiaxialBendingNormalStressController):
+    '''Object that controls buckling limit state.'''
+
+    ControlVars= cv.BiaxialBucklingControlVars
+    
+    def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(BiaxialBucklingController, self).__init__(limitStateLabel)
+        
+    def check(self, elements, combName):
+        ''' Check the normal stresses for buckling limit states.
+
+        :param  elements: elements to check
+        :param  combName: name of the load combination being treated.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; not implemented yet.')
+        super(BiaxialBucklingController, self).check(elements= elements, combName= combName)
+
+class UniaxialBucklingController(UniaxialBendingNormalStressController):
+    '''Object that controls buckling limit state (uniaxial bending).'''
+
+    ControlVars= cv.UniaxialBucklingControlVars
+    
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(UniaxialBucklingController, self).__init__(limitStateLabel)
+        
+    def check(self, elements, combName):
+        ''' Check the normal stresses for buckling limit states.
+
+        :param  elements: elements to check
+        :param  combName: name of the load combination being treated.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; not implemented yet.')
+        super(UniaxialBucklingController, self).check(elements= elements, combName= combName)
 
 # Shear checking.
 
