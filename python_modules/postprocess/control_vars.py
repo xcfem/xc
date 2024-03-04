@@ -639,10 +639,120 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
         '''
         super(BiaxialBendingControlVars,self).setFromDict(dct)
         self.Mz= dct['Mz']
+
+class BiaxialBucklingControlVars(BiaxialBendingControlVars):
+    '''Control variables for buckling limit state verification 
+       verification.
+
+    :ivar LeffY: effective length for buckling around Y (weak) axis.
+    :ivar LeffZ: effective length for buckling around Z (strong) axis.
+    :ivar mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
+    :ivar mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
+    :ivar efY: additional eccentricity for buckling around Y (weak) axis.
+    :ivar efZ: additional eccentricity for buckling around Z (string) axis.
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0, LeffY= -1.0, LeffZ= -1.0, mechLambdaY= -1.0, mechLambdaZ= -1.0, efY= 0.0, efZ= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier.
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param LeffY: effective length for buckling around Y (weak) axis.
+        :param LeffZ: effective length for buckling around Z (strong) axis.
+        :param mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
+        :param mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
+        :param efY: additional eccentricity for buckling around Y (weak) axis.
+        :param efZ: additional eccentricity for buckling around Z (string) axis.
+        '''
+        super(BiaxialBucklingControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= My, Mz= Mz)
+        self.LeffY= LeffY # effective length for buckling around Y (weak) axis.
+        self.LeffZ= LeffZ # effective length for buckling around Z (strong) axis.
+        self.mechLambdaY= mechLambdaY # mechanical slenderness for buckling around Y (weak) axis.
+        self.mechLambdaZ= mechLambdaZ # mechanical slenderness for buckling around Z (string) axis.
+        self.efY= efY # additional eccentricity for buckling around Y (weak) axis.
+        self.efZ= efZ # additional eccentricity for buckling around Z (string) axis.
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(BiaxialBucklingControlVars, self).getDict()
+        retval.update({'LeffY': self.LeffY, 'LeffZ': self.LeffZ, 'mechLambdaY': self.mechLambdaY,'mechLambdaZ': self.mechLambdaZ, 'efY': self.efY, 'efZ': self.efZ})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
+        self.LeffY= dct['LeffY'] #effective length for buckling around Y (weak) axis.
+        self.LeffZ= dct['LeffZ'] #effective length for buckling around Z (strong) axis.
+        self.mechLambdaY= dct['mechLambdaY'] #mechanical slenderness for buckling around Y (weak) axis.
+        self.mechLambdaZ= dct['mechLambdaZ'] #mechanical slenderness for buckling around Z (string) axis.
+        self.efY= dct['efY'] #additional eccentricity for buckling around Y (weak) axis.
+        self.efZ= dct['efZ'] #additional eccentricity for buckling around Z (string) axis.
+
+class UniaxialBucklingControlVars(BiaxialBendingControlVars):
+    '''Control variables for buckling limit state verification 
+       verification.
+
+    :ivar LeffY: effective length for buckling around Y (weak) axis.
+    :ivar LeffZ: effective length for buckling around Z (strong) axis.
+    :ivar mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
+    :ivar mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
+    :ivar efY: additional eccentricity for buckling around Y (weak) axis.
+    :ivar efZ: additional eccentricity for buckling around Z (string) axis.
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0, LeffY= -1.0, LeffZ= -1.0, mechLambdaY= -1.0, mechLambdaZ= -1.0, efY= 0.0, efZ= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier.
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param LeffY: effective length for buckling around Y (weak) axis.
+        :param LeffZ: effective length for buckling around Z (strong) axis.
+        :param mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
+        :param mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
+        :param efY: additional eccentricity for buckling around Y (weak) axis.
+        :param efZ: additional eccentricity for buckling around Z (string) axis.
+        '''
+        super(UniaxialBucklingControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= My, Mz= Mz)
+        self.LeffY= LeffY # effective length for buckling around Y (weak) axis.
+        self.LeffZ= LeffZ # effective length for buckling around Z (strong) axis.
+        self.mechLambdaY= mechLambdaY # mechanical slenderness for buckling around Y (weak) axis.
+        self.mechLambdaZ= mechLambdaZ # mechanical slenderness for buckling around Z (string) axis.
+        self.efY= efY # additional eccentricity for buckling around Y (weak) axis.
+        self.efZ= efZ # additional eccentricity for buckling around Z (string) axis.
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(UniaxialBucklingControlVars, self).getDict()
+        retval.update({'LeffY': self.LeffY, 'LeffZ': self.LeffZ, 'mechLambdaY': self.mechLambdaY,'mechLambdaZ': self.mechLambdaZ, 'efY': self.efY, 'efZ': self.efZ})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
+        self.LeffY= dct['LeffY'] #effective length for buckling around Y (weak) axis.
+        self.LeffZ= dct['LeffZ'] #effective length for buckling around Z (strong) axis.
+        self.mechLambdaY= dct['mechLambdaY'] #mechanical slenderness for buckling around Y (weak) axis.
+        self.mechLambdaZ= dct['mechLambdaZ'] #mechanical slenderness for buckling around Z (string) axis.
+        self.efY= dct['efY'] #additional eccentricity for buckling around Y (weak) axis.
+        self.efZ= dct['efZ'] #additional eccentricity for buckling around Z (string) axis.
     
 class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
     '''Control variables for biaxial bending normal stresses LS 
-    verification en steel-shape elements.
+    verification on steel-shape elements.
 
     :ivar Ncrd:  design strength to axial compression
     :ivar McRdy: design moment strength about Y (weak) axis
