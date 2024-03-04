@@ -57,7 +57,7 @@ seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 2 # Bars defined in a two-dimensional space.
 seedElemHandler.defaultMaterial= xcSection.name
 seedElemHandler.defaultTransformation= cooTrf.name
-elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+elem= seedElemHandler.newElement("ElasticBeam3d")
 xcTotalSet= preprocessor.getSets.getSet('total')
 mesh= xcTotalSet.genMesh(xc.meshDir.I)
 

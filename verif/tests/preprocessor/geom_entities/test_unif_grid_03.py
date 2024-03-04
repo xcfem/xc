@@ -41,7 +41,7 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast3d.name
 seedElemHandler.dimElem= 3 # Dimension of element space
-brick= seedElemHandler.newElement("Brick",xc.ID([0,0,0,0,0,0,0,0]))
+brick= seedElemHandler.newElement("Brick")
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)

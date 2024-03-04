@@ -61,7 +61,7 @@ s.setElemSizeIJ(6.5*3e-3,3e-3)
 ## type of finite element we will want to use for our mesh.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= steel2d.name
-quad= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+quad= seedElemHandler.newElement("FourNodeQuad")
 quad.thickness= t
 
 ## Generate mesh

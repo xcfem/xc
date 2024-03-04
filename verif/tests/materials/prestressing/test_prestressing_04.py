@@ -59,7 +59,7 @@ prestressingSteel= strand.defDiagK(preprocessor,strandInitialStress)
 ## Concrete
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= conc.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellMITC4")
 s1.genMesh(xc.meshDir.I)
 s2.genMesh(xc.meshDir.I)
 
@@ -68,7 +68,7 @@ ln= modelSpace.getLineWithEndPoints(p4, p3)
 seedElemHandler.defaultMaterial= prestressingSteel.name
 seedElemHandler.dimElem= 3 # Bars defined in a two dimensional space.
 seedElemHandler.defaultMaterial= prestressingSteel.name
-strandTruss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
+strandTruss= seedElemHandler.newElement("Truss")
 strandTruss.sectionArea= strand.area
 ln.genMesh(xc.meshDir.I)
 

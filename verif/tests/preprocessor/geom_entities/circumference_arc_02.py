@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import geom
 import xc
@@ -7,12 +14,6 @@ import math
 import os
 from model import predefined_spaces
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 NumDiv= 13
 R= 2.0
@@ -31,7 +32,7 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 seedElemHandler.dimElem= 3 # Dimension of element space
-truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
+truss= seedElemHandler.newElement("Truss")
 truss.sectionArea= 10.0
 
 points= preprocessor.getMultiBlockTopology.getPoints

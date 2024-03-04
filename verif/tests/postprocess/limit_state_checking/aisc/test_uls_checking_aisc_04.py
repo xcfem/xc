@@ -65,7 +65,7 @@ trfs= preprocessor.getTransfCooHandler
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= xcSection.name
 seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
-elem= seedElemHandler.newElement("TrussSection",xc.ID([0,0]))
+elem= seedElemHandler.newElement("TrussSection")
 
 xcTotalSet= preprocessor.getSets.getSet('total')
 mesh= xcTotalSet.genMesh(xc.meshDir.I)

@@ -91,7 +91,7 @@ seedElemHandler= prep.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 2
 seedElemHandler.defaultMaterial= 'beam_mat'
 seedElemHandler.defaultTransformation='lin'
-beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ElasticBeam2d")
 beam2d.h=th_beam
 beam1.genMesh(xc.meshDir.I)
 beam2.genMesh(xc.meshDir.I)

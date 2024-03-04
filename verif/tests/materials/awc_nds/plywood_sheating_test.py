@@ -69,7 +69,7 @@ lin= trfs.newLinearCrdTransf2d("lin")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= section.name
 seedElemHandler.defaultTransformation= lin.name
-elem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+elem= seedElemHandler.newElement("ElasticBeam2d")
 
 xcTotalSet= preprocessor.getSets.getSet("total")
 mesh= infSet.genMesh(xc.meshDir.I)

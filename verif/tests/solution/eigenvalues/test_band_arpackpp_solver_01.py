@@ -49,7 +49,7 @@ elements= preprocessor.getElementHandler
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= lin.name
 seedElemHandler.defaultMaterial= scc.name
-beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ElasticBeam2d")
 beam2d.h= h
 beam2d.rho= m
 

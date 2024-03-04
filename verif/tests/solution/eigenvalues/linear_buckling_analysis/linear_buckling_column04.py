@@ -57,7 +57,7 @@ lin= modelSpace.newPDeltaCrdTransf("lin")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTransformation= lin.name
-beam2d= seedElemHandler.newElement("ForceBeamColumn2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ForceBeamColumn2d")
 beam2d.h= h
 beam2d.rho= 0.0
 

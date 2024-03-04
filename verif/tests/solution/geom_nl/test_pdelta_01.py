@@ -56,7 +56,7 @@ pd= modelSpace.newPDeltaCrdTransf("pd")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= pd.name
 seedElemHandler.defaultMaterial= scc.name
-beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ElasticBeam2d")
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(1, geom.Pos3d(0.0,0.0,0) )

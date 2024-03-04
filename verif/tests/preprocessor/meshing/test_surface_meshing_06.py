@@ -35,7 +35,7 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast2d.name
-elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("FourNodeQuad")
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt0= points.newPoint(geom.Pos3d(0.0,0.0,0.0))

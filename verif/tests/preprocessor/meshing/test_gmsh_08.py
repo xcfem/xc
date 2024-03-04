@@ -50,7 +50,7 @@ mat= typical_materials.defElasticMembranePlateSection(preprocessor, "mat",E=2.1e
 ### Define template element
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= mat.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellMITC4")
 
 ### Generate mesh.
 face.setNDiv(nDiv)

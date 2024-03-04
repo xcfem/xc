@@ -49,7 +49,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= xcSection.name
 seedElemHandler.defaultTransformation= lin.name
-elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+elem= seedElemHandler.newElement("ElasticBeam3d")
 
 xcTotalSet= preprocessor.getSets.getSet('total')
 mesh= xcTotalSet.genMesh(xc.meshDir.I)

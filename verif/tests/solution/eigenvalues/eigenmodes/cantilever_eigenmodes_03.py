@@ -57,7 +57,7 @@ s.nDivJ= numDiv
 # Mesh
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellMITC4")
 
 s.genMesh(xc.meshDir.I)
 # Constraints

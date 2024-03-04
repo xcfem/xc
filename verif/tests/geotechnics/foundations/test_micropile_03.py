@@ -111,7 +111,7 @@ seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 # Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= xcSection.name
 seedElemHandler.defaultTransformation= lin.name
-seedElem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+seedElem= seedElemHandler.newElement("ElasticBeam3d")
 l.genMesh(xc.meshDir.I)
 
 ### Constraints.
