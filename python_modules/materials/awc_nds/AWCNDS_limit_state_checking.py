@@ -635,7 +635,7 @@ class WallTopPlates(object):
         seedElemHandler= prep.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= section.name
         seedElemHandler.defaultTransformation= lin.name
-        elem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+        elem= seedElemHandler.newElement("ElasticBeam2d")
         if __debug__:
             if(not elem):
                 AssertionError('Can\'t create the element.')

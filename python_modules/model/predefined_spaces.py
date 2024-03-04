@@ -1408,7 +1408,7 @@ class PredefinedSpace(object):
         seedElementHandler= self.preprocessor.getElementHandler.seedElemHandler
         for face in structuralSurfaces:
             seedElementHandler.defaultMaterial= face.getProp('materialName')
-            seedElem= seedElementHandler.newElement(elementType,xc.ID([0,0,0,0]))
+            seedElem= seedElementHandler.newElement(elementType)
             if(__debug__):
                 if(not seedElem):
                     AssertionError('Can\'t create the seed element.')
@@ -1816,7 +1816,7 @@ class StructuralMechanics(PredefinedSpace):
             l.nDiv= 1
             l.setProp('material',material)
             l.setProp('area',area)
-            elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
+            elem= seedElemHandler.newElement(elementType)
             elem.sectionArea= area
             l.genMesh(xc.meshDir.I)
             if(crossSection):
@@ -1869,7 +1869,7 @@ class StructuralMechanics(PredefinedSpace):
                 v3d= l.getKVector
                 trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
             seedElemHandler.defaultTransformation= trf.names
-            elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
+            elem= seedElemHandler.newElement(elementType)
             if(__debug__):
                 if(not elem):
                     AssertionError('Can\'t create the element.')

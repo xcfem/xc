@@ -31,7 +31,7 @@ def genPlatesMesh(plateSetsToMesh, xc_materials, seedElemHandler):
             xcMat= xc_materials[matId]
             xcMat.h= s.getProp('thickness') # set thickness
             seedElemHandler.defaultMaterial= xcMat.name
-            seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+            seedElem= seedElemHandler.newElement("ShellMITC4")
             if __debug__:
                 if not seedElem:
                     AssertionError('Can\'t create seed element.')
@@ -83,7 +83,7 @@ def genRegularMesh(setsToMesh, xc_materials, seedElemHandler):
                 lmsg.error("Unknown material: '"+str(matId)+"'")
             xcMat.h= s.getProp('thickness') # set thickness
             seedElemHandler.defaultMaterial= xcMat.name
-            seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+            seedElem= seedElemHandler.newElement("ShellMITC4")
             if __debug__:
                 if not seedElem:
                     AssertionError('Can\'t create seed element.')
@@ -129,7 +129,7 @@ def genGmshMesh(setsToMesh, xc_materials, seedElemHandler):
     xcMat.h= thk # set thickness.
     ## Create seed element.
     seedElemHandler.defaultMaterial= xcMat.name
-    seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+    seedElem= seedElemHandler.newElement("ShellMITC4")
     if __debug__:
         if not seedElem:
             AssertionError('Can\'t create seed element.')

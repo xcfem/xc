@@ -52,7 +52,7 @@ class RawLineSetToMesh(SetToMesh):
             seedElemHandler.defaultTransformation= self.coordinateTransformation.getName()
         else:
             seedElemHandler.defaultTransformation= 'None'
-        return seedElemHandler.newElement(self.elemType,xc.ID([0,0]))
+        return seedElemHandler.newElement(self.elemType)
 
     def generateMesh(self, preprocessor,sectGeom='N'):
         '''Generate the mesh for the line set. 
@@ -148,7 +148,7 @@ class SurfSetToMesh(SetToMesh):
         '''Return the element that will be use to mesh the set.'''
         seedElemHandler= preprocessor.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= self.matSect.name
-        return seedElemHandler.newElement(self.elemType,xc.ID([0,0,0,0]))
+        return seedElemHandler.newElement(self.elemType)
 
     def generateMesh(self, preprocessor,sectGeom='N'):
         '''Generate the mesh for the surface set.
