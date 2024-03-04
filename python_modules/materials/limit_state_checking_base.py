@@ -161,7 +161,8 @@ class LimitStateControllerBase(object):
             its value if its bigger than the previous one.
 
         :param elem: finite element whose section will be checked.
-        :param elementInternalForces: internal forces acting on the steel shape.
+        :param elementInternalForces: internal forces acting on the element
+                                      sections.
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
@@ -450,14 +451,14 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
         '''
         super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
-    def check(self, elements, nmbComb):
+    def check(self, elements, combName):
         '''Launch checking.
 
           :param elements: elements to check.
-          :param nmbComb: load case name.
+          :param combName: load case name.
         '''
         if(self.verbose):
-            lmsg.log("Postprocessing combination: "+nmbComb)
+            lmsg.log("Postprocessing combination: "+combName)
         for e in elements:
             e.getResistingForce()
             scc= e.getSection() # Element section in the phantom model.
@@ -469,7 +470,7 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
             diagInt= e.getProp("diagInt")
             CFtmp= diagInt.getCapacityFactor(posEsf)
             if(CFtmp>e.getProp(self.limitStateLabel).CF):
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection,nmbComb,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
 
 
 class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
@@ -486,7 +487,7 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
         '''
         super(UniaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
-    def check(self,elements, combName):
+    def check(self, elements, combName):
         '''
         Check the normal stresses
 
