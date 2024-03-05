@@ -1146,7 +1146,7 @@ python tests/materials/ehe/test_fiber_section_shear_03.py
 echo "$BLEU" "    Torsion resistance determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_torsion_check_01.py
 echo "$BLEU" "    Shrinkage and creep determination tests (EHE-08)." "$NORMAL"
-python tests/materials/ehe/test_creep_01.py
+python tests/materials/ehe/test_creep_01.pys
 python tests/materials/ehe/test_creep_02.py
 python tests/materials/ehe/test_creep_03.py
 python tests/materials/ehe/test_shrinkage_01.py
@@ -1530,6 +1530,8 @@ echo "$BLEU" "      EHE limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_02.py
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_03.py
+echo "$BLEU" "      EHE limit state checking: buckling." "$NORMAL"
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_01.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py
