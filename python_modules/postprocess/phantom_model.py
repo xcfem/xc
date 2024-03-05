@@ -14,7 +14,6 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
-from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg
 from collections import defaultdict
 from postprocess import limit_state_data as lsd
@@ -214,16 +213,24 @@ class PhantomModel(object):
             controller.preprocessor= self.preprocessor
             controller.check(elements, key)
 
-    def write(self, outputCfg):
-        '''Writes results into the output file
+    def getControlVarsDict(self, outputCfg):
+        '''Return a dictionary with the values of the control variables for each element
 
-        :param controller:     object that controls limit state in elements
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (append or not
                the results to a file, generation or not of lists, ...)
         '''
-        outputFileName= outputCfg.outputDataBaseFileName
-        return cv.writeControlVarsFromPhantomElements(self.preprocessor, outputFileName, outputCfg)
+        controlVarName= outputCfg.controller.limitStateLabel
+        elements= self.preprocessor.getSets['total'].elements # all the elements in the phantom model.
+        retval= dict()
+        for e in elements:
+            eTag= e.getProp("idElem")
+            index= e.getProp('dir')
+            controlVar= e.getProp(controlVarName)
+            if not eTag in retval:
+                retval[eTag]= dict()
+            retval[eTag][index]= controlVar
+        return retval
 
     def runChecking(self, intForcItems, outputCfg):
         '''Run the analysis, check the results and write them into a file
@@ -241,7 +248,8 @@ class PhantomModel(object):
         if(controller):
             self.build(intForcItems= intForcItems, outputCfg= outputCfg)
             self.check(controller)
-            retval= self.write(outputCfg)
+            # Return the values of the control variables in a dictionary.
+            retval= self.getControlVarsDict(outputCfg)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

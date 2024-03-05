@@ -45,6 +45,24 @@ millimeter= UnitDefinitionPair('mm',1e3, 'length')
 milliradian= UnitDefinitionPair('x1E3 rad',1e3, 'plane angle')
 megapascal= UnitDefinitionPair('MPa',1e-6,'pressure')
 
+class LengthUnits(object):
+    ''' Units to use for the output of length magnitudes
+
+        :ivar lengthUnit: unit to express lengths.
+    '''
+    def __init__(self, lengthUnit= meter):
+        ''' Constructor.
+
+            :param lengthUnit: unit to express lengths.
+            :param planeAngleUnit: unit to express forces.
+        '''
+        self.lengthUnit= lengthUnit
+        
+    def getDecoratedLengthSymbol(self):
+        return self.lengthUnit.getDecoratedSymbol()
+
+defaultLengthUnits= LengthUnits(meter)
+
 class DynamicsUnits(object):
     ''' Units to use for the output of forces
 
@@ -110,10 +128,11 @@ class OutputUnits(object):
         :ivar displacementUnits: units for the displacements
         :ivar dynamicUnits: units for the forces and moments
     '''
-    def __init__(self,displacementUnits= defaultDisplacementUnits, dynamicUnits= defaultDynamicUnits):
+    def __init__(self,displacementUnits= defaultDisplacementUnits, dynamicUnits= defaultDynamicUnits, lengthUnits= defaultLengthUnits):
 
         self.displacementUnits= displacementUnits
         self.dynamicUnits= dynamicUnits
+        self.lengthUnits= lengthUnits
         #self.textUnitsRot='['+textUnitsRot+']'
         #self.textUnitsDispl='['+textUnitsDispl+']'
         #self.textUnitsLoadsIntForces='units:['+textUnitsLengthMoment+','+textUnitsForce+']'
@@ -144,7 +163,15 @@ class OutputUnits(object):
     
     def getLengthUnitSymbol(self):
         ''' Return the symbol for the length unit.'''
-        return self.dynamicUnits.getLengthUnitSymbol()
+        return self.lengthUnits.getLengthUnitSymbol()
+    
+    def getLengthUnitsScaleFactor(self):
+        ''' Return the scale factor for the displacement units.'''
+        return self.lengthUnits.lengthUnit.scaleFactor
+    
+    def getLengthUnitsDescription(self):
+        ''' Return the description for the displacement units.'''
+        return self.lengthUnits.lengthUnit.getDecoratedSymbol()
     
     def getForceUnitSymbol(self):
         ''' Return the symbol for the force unit.'''

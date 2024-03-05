@@ -41,8 +41,9 @@ class VerifOutVars(object):
     :ivar calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
            meant to be calculated (defaults to 'N')
     :ivar controller: object that controls the limit state checking.
+    :ivar outputDataBaseFileName: file name for the file of files to write the output on.
     '''
-    def __init__(self, setCalc=None, appendToResFile='N', listFile='N', calcMeanCF='N', controller= None):
+    def __init__(self, setCalc=None, appendToResFile='N', listFile='N', calcMeanCF='N', controller= None, outputDataBaseFileName= None):
         ''' Constructor.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
@@ -55,12 +56,14 @@ class VerifOutVars(object):
         :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
                meant to be calculated (defaults to 'N')
         :param controller: object that controls the limit state checking.
+        :param outputDataBaseFileName: file name for the file of files to write the output on.
         '''
         self.setCalc= setCalc
         self.appendToResFile= appendToResFile
         self.listFile= listFile
         self.calcMeanCF= calcMeanCF
         self.controller= controller
+        self.outputDataBaseFileName= outputDataBaseFileName
 
     def getCalcSetElements(self, preprocessor):
         ''' Return the set of elements to be analyzed.
@@ -74,12 +77,11 @@ class VerifOutVars(object):
             retval= preprocessor.getSets['total'].elements
         return retval
 
-    def runChecking(self, intForcCombFileName, outputDataBaseFileName, sections):
+    def runChecking(self, intForcCombFileName, sections):
         '''Launch checking.
 
         :param intForcCombFileName: Name of the file containing the internal 
                                     forces on the element sections.
-        :param outputDataBaseFileName: Name of the file to write the results on.
         :param sections: names of the sections to write the output for.
         '''
         retval= None
@@ -89,8 +91,10 @@ class VerifOutVars(object):
                 self.controller.initControlVars(self.setCalc)
                 # Update efficiency values.
                 self.controller.updateEfficiencyForSet(intForcCombFileName,self.setCalc)
-                prep= self.setCalc.getPreprocessor
-                retval= cv.writeControlVarsFromElements(preprocessor= prep, outputFileName= outputDataBaseFileName, outputCfg= self, sections= sections)
+                preprocessor= self.setCalc.getPreprocessor
+                elements= self.setCalc.elements
+                controlVarsDict= cv.get_control_vars_dict(elements= elements, controlVarName= self.controller.limitStateLabel, sections= sections)
+                retval= cv.write_control_vars_from_elements(preprocessor= preprocessor, controlVarsDict= controlVarsDict, outputCfg= self, sections= sections)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -448,7 +452,7 @@ class LimitStateData(object):
         :param sections: names of the sections to write the output for.
         '''
         intForcCombFileName= self.getInternalForcesFileName()
-        return outputCfg.runChecking(intForcCombFileName, self.getOutputDataBaseFileName(), sections)
+        return outputCfg.runChecking(intForcCombFileName, sections)
     
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -489,10 +493,9 @@ class ULS_LimitStateData(LimitStateData):
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
-        if(threeDim):
-            return crossSections.internalForcesVerification3D(limitStateData= self, matDiagType= "d", outputCfg= outputCfg)
-        else:
-            return crossSections.internalForcesVerification2D(limitStateData= self, matDiagType= "d", outputCfg= outputCfg)
+        controlVarsDict= crossSections.check(limitStateData= self, matDiagType= "d", outputCfg= outputCfg, threeDim= threeDim)
+        retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
+        return retval
         
 defaultLinearBucklingProcedureType= predefined_solutions.SpectraLinearBucklingAnalysis
 
@@ -595,8 +598,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
     
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
-        ''' This class does not perform limit state checking. Issue 
-            an error message.
+        ''' Perform buckling limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
@@ -612,8 +614,25 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
-        return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
+        dct= self.eheBucklingParametersDict['element_parameters']
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
+        controlVarsDict= crossSections.check(limitStateData= self, matDiagType= "d", outputCfg= outputCfg, threeDim= threeDim)
+        for eTag in controlVarsDict:
+            elementControlVars= controlVarsDict[eTag]
+            extendedData= dct[eTag]
+            Leffi= extendedData['Leffi']
+            mechLambdai= extendedData['mechLambdai']
+            Efi= extendedData['Efi']
+            for index in elementControlVars:
+                controlVar= elementControlVars[index]
+                loadCombination= controlVar.combName
+                mode= int(loadCombination.split('_')[-1])
+                (LeffZ, LeffY)= Leffi[mode]
+                (mechLambdaZ, mechLambdaY)= mechLambdai[mode]
+                (EfZ, EfY)= Efi[mode]
+                controlVar.setBucklingParameters(LeffZ= LeffZ, LeffY= LeffY, mechLambdaZ= mechLambdaZ, mechLambdaY= mechLambdaY, efZ= EfZ, efY= EfY, mode= mode)
+        retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
+        return retval
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
@@ -645,7 +664,7 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         
         
@@ -676,7 +695,7 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
         :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
                meant to be calculated (defaults to 'N')
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
     
 class ShearResistanceRCLimitStateData(ULS_LimitStateData):
@@ -709,7 +728,7 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         
 class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
@@ -739,7 +758,7 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
         :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
                meant to be calculated (defaults to 'N')
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
     
 class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
@@ -773,7 +792,7 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
 
 class SLS_LimitStateData(LimitStateData):
@@ -803,10 +822,9 @@ class SLS_LimitStateData(LimitStateData):
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
-        if(threeDim):
-            return crossSections.internalForcesVerification3D(limitStateData= self, matDiagType= "k", outputCfg= outputCfg)
-        else:
-            return crossSections.internalForcesVerification2D(limitStateData= self, matDiagType= "k", outputCfg= outputCfg)
+        controlVarsDict= crossSections.check(limitStateData= self, matDiagType= "k", outputCfg= outputCfg, threeDim= threeDim)
+        retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
+        return retval
 
 class CrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control limit state data base class.'''
@@ -828,7 +846,7 @@ class CrackControlRCLimitStateData(SLS_LimitStateData):
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         
 class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
@@ -915,7 +933,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         '''
         return readIntForcesFile(self.getInternalForcesFileName(), setCalc, vonMisesStressId= self.vonMisesStressId)
         
-    def checkElements(self,elementsToCheck,outputCfg= VerifOutVars()):
+    def checkElements(self, elementsToCheck, outputCfg= VerifOutVars()):
         '''Checking of fatigue under fatigue combinations loads in
         ultimate limit states (see self.dumpCombinations).
 
@@ -925,7 +943,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)
         '''
-        return elementsToCheck.internalForcesVerification3D(self, "d",outputCfg)
+        return elementsToCheck.check(limitStateData= self, matDiagType= "d", outputCfg= outputCfg, threeDim= True)
     
     def runChecking(self,outputCfg):
         '''This method reads, for the elements in setCalc,  the internal 
@@ -959,7 +977,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
                meant to be calculated (defaults to 'N')
         '''
-        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF)
+        outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()

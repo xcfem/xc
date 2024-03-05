@@ -1241,6 +1241,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
                             newForces.idComb= loadCombMode
                             internalForcesValues[eTag].append(newForces)
         return (elementTags, idCombs, internalForcesValues)
+    
             
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
@@ -1285,17 +1286,6 @@ class BiaxialBucklingController(BiaxialBendingNormalStressController):
         '''
         super(BiaxialBucklingController, self).__init__(limitStateLabel)
         
-    def check(self, elements, combName):
-        ''' Check the normal stresses for buckling limit states.
-
-        :param  elements: elements to check
-        :param  combName: name of the load combination being treated.
-        '''
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; not implemented yet.')
-        super(BiaxialBucklingController, self).check(elements= elements, combName= combName)
-
 class UniaxialBucklingController(UniaxialBendingNormalStressController):
     '''Object that controls buckling limit state (uniaxial bending).'''
 
@@ -1308,17 +1298,6 @@ class UniaxialBucklingController(UniaxialBendingNormalStressController):
         '''
         super(UniaxialBucklingController, self).__init__(limitStateLabel)
         
-    def check(self, elements, combName):
-        ''' Check the normal stresses for buckling limit states.
-
-        :param  elements: elements to check
-        :param  combName: name of the load combination being treated.
-        '''
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; not implemented yet.')
-        super(UniaxialBucklingController, self).check(elements= elements, combName= combName)
-
 # Shear checking.
 
 class ShearController(lscb.ShearControllerBase):

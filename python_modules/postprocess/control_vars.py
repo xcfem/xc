@@ -23,7 +23,7 @@ from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 
-__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'writeControlVarsFromElements', 'writeControlVarsFromElementsForAnsys', 'writeControlVarsFromPhantomElements']
+__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
 
 def getDiagramDirection(elem, component, defaultDirection):
     '''Return the direction vector to represent the diagram over the element
@@ -644,14 +644,15 @@ class BiaxialBucklingControlVars(BiaxialBendingControlVars):
     '''Control variables for buckling limit state verification 
        verification.
 
-    :ivar LeffY: effective length for buckling around Y (weak) axis.
-    :ivar LeffZ: effective length for buckling around Z (strong) axis.
-    :ivar mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
-    :ivar mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
-    :ivar efY: additional eccentricity for buckling around Y (weak) axis.
-    :ivar efZ: additional eccentricity for buckling around Z (string) axis.
+    :ivar LeffY: effective length for buckling around Y axis.
+    :ivar LeffZ: effective length for buckling around Z axis.
+    :ivar mechLambdaY: mechanical slenderness for buckling around Y axis.
+    :ivar mechLambdaZ: mechanical slenderness for buckling around Z axis.
+    :ivar efY: additional eccentricity for buckling around Y axis.
+    :ivar efZ: additional eccentricity for buckling around Z axis.
+    :ivar mode: buckling mode corresponding to the previous parameters.
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0, LeffY= -1.0, LeffZ= -1.0, mechLambdaY= -1.0, mechLambdaZ= -1.0, efY= 0.0, efZ= 0.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0, LeffY= -1.0, LeffZ= -1.0, mechLambdaY= -1.0, mechLambdaZ= -1.0, efY= 0.0, efZ= 0.0, mode= None):
         '''
         Constructor.
 
@@ -661,25 +662,40 @@ class BiaxialBucklingControlVars(BiaxialBendingControlVars):
         :param N:        axial force (defaults to 0.0)
         :param My:       bending moment about Y axis (defaults to 0.0)
         :param Mz:       bending moment about Z axis (defaults to 0.0)
-        :param LeffY: effective length for buckling around Y (weak) axis.
-        :param LeffZ: effective length for buckling around Z (strong) axis.
-        :param mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
-        :param mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
-        :param efY: additional eccentricity for buckling around Y (weak) axis.
-        :param efZ: additional eccentricity for buckling around Z (string) axis.
+        :param LeffY: effective length for buckling around Y axis.
+        :param LeffZ: effective length for buckling around Z axis.
+        :param mechLambdaY: mechanical slenderness for buckling around Y axis.
+        :param mechLambdaZ: mechanical slenderness for buckling around Z axis.
+        :param efY: additional eccentricity for buckling around Y axis.
+        :param efZ: additional eccentricity for buckling around Z axis.
+        :param mode: buckling mode that corresponds to the previous parameters.
         '''
         super(BiaxialBucklingControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= My, Mz= Mz)
-        self.LeffY= LeffY # effective length for buckling around Y (weak) axis.
-        self.LeffZ= LeffZ # effective length for buckling around Z (strong) axis.
-        self.mechLambdaY= mechLambdaY # mechanical slenderness for buckling around Y (weak) axis.
-        self.mechLambdaZ= mechLambdaZ # mechanical slenderness for buckling around Z (string) axis.
-        self.efY= efY # additional eccentricity for buckling around Y (weak) axis.
-        self.efZ= efZ # additional eccentricity for buckling around Z (string) axis.
+        self.setBucklingParameters(LeffZ= LeffZ, LeffY= LeffY, mechLambdaZ= mechLambdaZ, mechLambdaY= mechLambdaY, efZ= efZ, efY= efY, mode= mode)
+
+    def setBucklingParameters(self, LeffZ, LeffY, mechLambdaZ, mechLambdaY, efZ, efY, mode):
+        ''' Assigns values to the buckling parameters.
+
+        :param LeffZ: effective length for buckling around Z axis.
+        :param LeffY: effective length for buckling around Y axis.
+        :param mechLambdaZ: mechanical slenderness for buckling around Z axis.
+        :param mechLambdaY: mechanical slenderness for buckling around Y axis.
+        :param efZ: additional eccentricity for buckling around Z axis.
+        :param efY: additional eccentricity for buckling around Y axis.
+        :param mode: buckling mode that corresponds to the previous parameters.
+        '''
+        self.LeffY= LeffY # effective length for buckling around Y axis.
+        self.LeffZ= LeffZ # effective length for buckling around Z axis.
+        self.mechLambdaY= mechLambdaY # mechanical slenderness for buckling around Y axis.
+        self.mechLambdaZ= mechLambdaZ # mechanical slenderness for buckling around Z axis.
+        self.efY= efY # additional eccentricity for buckling around Y axis.
+        self.efZ= efZ # additional eccentricity for buckling around Z axis.
+        self.mode= mode # buckling mode that corresponds to the previous parameters.
         
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(BiaxialBucklingControlVars, self).getDict()
-        retval.update({'LeffY': self.LeffY, 'LeffZ': self.LeffZ, 'mechLambdaY': self.mechLambdaY,'mechLambdaZ': self.mechLambdaZ, 'efY': self.efY, 'efZ': self.efZ})
+        retval.update({'LeffY': self.LeffY, 'LeffZ': self.LeffZ, 'mechLambdaY': self.mechLambdaY,'mechLambdaZ': self.mechLambdaZ, 'efY': self.efY, 'efZ': self.efZ, 'mode': self.mode})
         return retval
        
     def setFromDict(self,dct):
@@ -688,25 +704,24 @@ class BiaxialBucklingControlVars(BiaxialBendingControlVars):
         :param dct: dictionary containing the values of the object members.
         '''
         super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
-        self.LeffY= dct['LeffY'] #effective length for buckling around Y (weak) axis.
-        self.LeffZ= dct['LeffZ'] #effective length for buckling around Z (strong) axis.
-        self.mechLambdaY= dct['mechLambdaY'] #mechanical slenderness for buckling around Y (weak) axis.
-        self.mechLambdaZ= dct['mechLambdaZ'] #mechanical slenderness for buckling around Z (string) axis.
-        self.efY= dct['efY'] #additional eccentricity for buckling around Y (weak) axis.
-        self.efZ= dct['efZ'] #additional eccentricity for buckling around Z (string) axis.
+        self.LeffY= dct['LeffY'] # effective length for buckling around Y axis.
+        self.LeffZ= dct['LeffZ'] # effective length for buckling around Z axis.
+        self.mechLambdaY= dct['mechLambdaY'] # mechanical slenderness for buckling around Y axis.
+        self.mechLambdaZ= dct['mechLambdaZ'] # mechanical slenderness for buckling around Z axis.
+        self.efY= dct['efY'] # additional eccentricity for buckling around Y axis.
+        self.efZ= dct['efZ'] # additional eccentricity for buckling around Z axis.
+        self.mode= dct['mode'] # buckling mode that corresponds to the previous parameters.
 
-class UniaxialBucklingControlVars(BiaxialBendingControlVars):
+class UniaxialBucklingControlVars(UniaxialBendingControlVars):
     '''Control variables for buckling limit state verification 
        verification.
 
-    :ivar LeffY: effective length for buckling around Y (weak) axis.
-    :ivar LeffZ: effective length for buckling around Z (strong) axis.
-    :ivar mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
-    :ivar mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
-    :ivar efY: additional eccentricity for buckling around Y (weak) axis.
-    :ivar efZ: additional eccentricity for buckling around Z (string) axis.
+    :ivar Leff: effective length for buckling.
+    :ivar mechLambda: mechanical slenderness for buckling.
+    :ivar ef: additional eccentricity for buckling.
+    :ivar mode: buckling mode corresponding to the previous parameters.
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0, LeffY= -1.0, LeffZ= -1.0, mechLambdaY= -1.0, mechLambdaZ= -1.0, efY= 0.0, efZ= 0.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,M= 0.0, Leff= -1.0, mechLambda= -1.0, ef= 0.0, mode= None):
         '''
         Constructor.
 
@@ -714,27 +729,32 @@ class UniaxialBucklingControlVars(BiaxialBendingControlVars):
         :param combName: name of the load combinations to deal with
         :param CF:       capacity factor (efficiency) (defaults to -1)
         :param N:        axial force (defaults to 0.0)
-        :param My:       bending moment about Y axis (defaults to 0.0)
-        :param Mz:       bending moment about Z axis (defaults to 0.0)
-        :param LeffY: effective length for buckling around Y (weak) axis.
-        :param LeffZ: effective length for buckling around Z (strong) axis.
-        :param mechLambdaY: mechanical slenderness for buckling around Y (weak) axis.
-        :param mechLambdaZ: mechanical slenderness for buckling around Z (string) axis.
-        :param efY: additional eccentricity for buckling around Y (weak) axis.
-        :param efZ: additional eccentricity for buckling around Z (string) axis.
+        :param M:       bending moment (defaults to 0.0)
+        :param Leff: effective length for buckling.
+        :param mechLambda: mechanical slenderness for buckling.
+        :param ef: additional eccentricity for buckling.
+        :param mode: buckling mode corresponding to the previous parameters.
         '''
-        super(UniaxialBucklingControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= My, Mz= Mz)
-        self.LeffY= LeffY # effective length for buckling around Y (weak) axis.
-        self.LeffZ= LeffZ # effective length for buckling around Z (strong) axis.
-        self.mechLambdaY= mechLambdaY # mechanical slenderness for buckling around Y (weak) axis.
-        self.mechLambdaZ= mechLambdaZ # mechanical slenderness for buckling around Z (string) axis.
-        self.efY= efY # additional eccentricity for buckling around Y (weak) axis.
-        self.efZ= efZ # additional eccentricity for buckling around Z (string) axis.
+        super(UniaxialBucklingControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, M= M)
+        self.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, ef= ef, mode= mode)
+        
+    def setBucklingParameters(self, Leff, mechLambda, ef, mode):
+        ''' Assigns values to the buckling parameters.
+
+        :param Leff: effective length for buckling.
+        :param mechLambda: mechanical slenderness for buckling.
+        :param ef: additional eccentricity for buckling.
+        :param mode: buckling mode corresponding to the previous parameters.
+        '''
+        self.Leff= Leff # effective length for buckling.
+        self.mechLambda= mechLambda # mechanical slenderness for buckling.
+        self.ef= ef # additional eccentricity for buckling.
+        self.mode= mode # buckling mode that corresponds to the previous parameters.
         
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(UniaxialBucklingControlVars, self).getDict()
-        retval.update({'LeffY': self.LeffY, 'LeffZ': self.LeffZ, 'mechLambdaY': self.mechLambdaY,'mechLambdaZ': self.mechLambdaZ, 'efY': self.efY, 'efZ': self.efZ})
+        retval.update({'Leff': self.Leff, 'mechLambda': self.mechLambda, 'ef': self.ef, 'mode':self.mode})
         return retval
        
     def setFromDict(self,dct):
@@ -743,12 +763,10 @@ class UniaxialBucklingControlVars(BiaxialBendingControlVars):
         :param dct: dictionary containing the values of the object members.
         '''
         super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
-        self.LeffY= dct['LeffY'] #effective length for buckling around Y (weak) axis.
-        self.LeffZ= dct['LeffZ'] #effective length for buckling around Z (strong) axis.
-        self.mechLambdaY= dct['mechLambdaY'] #mechanical slenderness for buckling around Y (weak) axis.
-        self.mechLambdaZ= dct['mechLambdaZ'] #mechanical slenderness for buckling around Z (string) axis.
-        self.efY= dct['efY'] #additional eccentricity for buckling around Y (weak) axis.
-        self.efZ= dct['efZ'] #additional eccentricity for buckling around Z (string) axis.
+        self.Leff= dct['Leff'] #effective length for buckling.
+        self.mechLambda= dct['mechLambda'] #mechanical slenderness for buckling.
+        self.ef= dct['ef'] #additional eccentricity for buckling.
+        self.mode= dct['mode'] # buckling mode that corresponds to the previous parameters.
     
 class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
     '''Control variables for biaxial bending normal stresses LS 
@@ -1526,17 +1544,93 @@ def readControlVars(preprocessor, inputFileName):
                 propValue= eval(nodeControlVars[propKey])
                 node.setProp(propKey, propValue)
 
-def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
-    '''Writes in file 'outputFileName' the control-variable values calculated for
+def get_control_vars_dict(elements, controlVarName, sections):
+    '''Return a dictionary with the values of the control variables for each
+     of the given elements.
+
+    :param elements: elements to get the control variables from.
+    :param controlVarName: name of the control var to populate the dictionary with.
+    :param sections: names of the sections of each element.
+    '''
+    retval= dict()
+    for e in elements:
+        eTag= e.tag
+        if not eTag in retval:
+            retval[eTag]= dict()
+        for s in sections:
+            propName= controlVarName+s
+            controlVar= e.getProp(propName)        
+            retval[eTag][propName]= controlVar
+    return retval            
+    
+def get_element_data_dict(controlVarsDict, controlVarName):
+    ''' Return a dictionary populated with the control variables for each element.
+
+    :param controlVarsDict: dictionary containing the values of the control 
+                            variables for each element.
+    :param controlVarName: name of the control var to populate the dictionary with.
+    '''
+    retval= dict()
+    for eTag in controlVarsDict:
+        elementControlVars= controlVarsDict[eTag]
+        if not eTag in retval:
+            retval[eTag]= dict()
+        for index in elementControlVars:
+            controlVar= elementControlVars[index]
+            sectionName= 'Sect'+str(index)
+            propName= controlVarName+sectionName
+            retval[eTag][propName]= controlVar.getStrConstructor()
+    return retval
+
+def write_latex_control_vars(outputFile, controlVarsDict):
+    ''' Write the values of the control vars in a LaTeX file.
+
+    :param outputFile: output file.
+    :param controlVarsDict: dictionary containing the values of the control 
+                            variables for each element.
+    '''
+    sectionLines= dict()
+    for eTag in controlVarsDict:
+        elementControlVars= controlVarsDict[eTag]
+        for index in elementControlVars:
+            controlVar= elementControlVars[index]
+            if not index in sectionLines:
+                sectionLines[index]= list()
+            outStr= controlVar.getLaTeXString(eTag,1e-3)
+            sectionLines[index].append(outStr)
+    for index in sectionLines:
+        header= 'Section '+str(index)+'\n'
+        outputFile.write(header)
+        for string in sectionLines[index]:
+            outputFile.write(string)
+            
+def get_capacity_factors_from_control_vars(controlVarsDict):
+    ''' Return the capacity factors from the given control vars.
+
+    :param controlVarsDict: dictionary containing the values of the control 
+                            variables for each element.
+    '''
+    retval= dict()
+    for eTag in controlVarsDict:
+        elementControlVars= controlVarsDict[eTag]
+        for index in elementControlVars:
+            controlVar= elementControlVars[index]
+            if not index in retval:
+                retval[index]= list()
+            retval[index].append(controlVar.getCF())
+    return retval
+            
+def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
+    '''Writes to file the control-variable values calculated for
      the RC elements in the phantom model.
 
-    :param preprocessor:   preprocessor from FEA model.
-    :param outputFileName: name to the files (.json and .tex)
+    :param controlVarsDict: dictionary containing the values of the control 
+                            variables for each element.
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (append or not
            the results to a file, generation or not of lists, ...)
     '''
-    elems= preprocessor.getSets['total'].elements # This total set belongs to the phantom model and contains all the calculated elements
+    outputFileName= outputCfg.outputDataBaseFileName # name for the .json and .tex files.
     controlVarName= outputCfg.controller.limitStateLabel
     dataDict= None
     jsonFileName= outputFileName+'.json'
@@ -1548,17 +1642,10 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
             lmsg.error("can't read from file: "+str(inputFileName))
     else:
         dataDict= dict()
-    elementDataDict= dict()
+    elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
     dataDict['elementData']= elementDataDict
-    for e in elems:
-        eTag= e.getProp("idElem")
-        if not eTag in elementDataDict:
-            elementDataDict[eTag]= dict()
-        controlVar= e.getProp(controlVarName)
-        #outStr= controlVar.getLaTeXString(eTag,1e-3)
-        sectionName= 'Sect'+str(e.getProp('dir'))
-        propName= controlVarName+sectionName
-        elementDataDict[eTag][propName]= controlVar.getStrConstructor()
+
+    # Write the dictionary in a JSON file.
     with open(jsonFileName, 'w') as f:
         json.dump(dataDict, f)       
 
@@ -1567,34 +1654,14 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
             texOutput= open(outputFileName+".tex","a+")
         else:
             texOutput= open(outputFileName+".tex","w+")
-        texOutput.write("Section 1\n")
-        for e in elems:
-            if(e.getProp("dir")==1):
-                eTag= e.getProp("idElem") 
-                controlVar= e.getProp(controlVarName)
-                outStr= controlVar.getLaTeXString(eTag,1e-3)
-                texOutput.write(outStr)
-        texOutput.write("Section 2\n")
-        for e in elems:
-            if(e.getProp("dir")==2):
-                eTag= e.getProp("idElem") 
-                #idSection= e.getProp("idSection")  
-                controlVar= e.getProp(controlVarName)
-                outStr= controlVar.getLaTeXString(eTag,1e-3)
-                texOutput.write(outStr)
+        write_latex_control_vars(outputFile= texOutput, controlVarsDict= controlVarsDict)
         texOutput.close()
     retval=None
     if outputCfg.calcMeanCF.lower()[0]=='y':
-        fcs1= [] #Capacity factors at section 1.
-        fcs2= [] #Capacity factors at section 2.
-        for e in elems:
-            if(e.getProp("dir")==1):
-                controlVar= e.getProp(controlVarName)
-                fcs1.append(controlVar.getCF())
-            if(e.getProp("dir")==2):
-                controlVar= e.getProp(controlVarName)
-                fcs2.append(controlVar.getCF())
-        retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
+        capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)
+        retval= list()
+        for key in capacityFactors:
+            retval.append(scipy.mean(capacityFactors[key]))
     return retval
 
 def getControlVarImportModuleStr(preprocessor, outputCfg, sections):
@@ -1621,11 +1688,12 @@ def getControlVarImportModuleStr(preprocessor, outputCfg, sections):
         lmsg.error('element set is empty.')
     return retval
 
-def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sections):
-    '''Writes in file 'outputFileName' the control-variable values calculated for elements in set 'setCalc'. 
+def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, sections):
+    '''Writes to file the control-variable values calculated for elements in set 'setCalc'. 
 
     :param preprocessor:    preprocessor from FEA model.
-    :param outputFileName: name of the files to write (.json and .tex)
+    :param controlVarsDict: dictionary containing the values of the control 
+                            variables for each element.
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (set of 
            elements to be analyzed [defaults to 'total'], append or not the 
@@ -1633,9 +1701,9 @@ def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sectio
            list file [defatults to 'N', ...)
     :param sections: names of the sections to write the output for.
     '''
-    elems= outputCfg.getCalcSetElements(preprocessor) # elements in set 'setCalc'
     controlVarName= outputCfg.controller.limitStateLabel
     dataDict= None
+    outputFileName= outputCfg.outputDataBaseFileName # name for the .json and .tex files.
     jsonFileName= outputFileName+'.json'
     if(outputCfg.appendToResFile.lower()[0]=='y' and os.path.isfile(jsonFileName)):
         try:
@@ -1649,14 +1717,14 @@ def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sectio
     # Write report in JSON format.
     importString= getControlVarImportModuleStr(preprocessor, outputCfg, sections)
     dataDict['importString']= importString
-    elementDataDict= dict()
+    elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
     dataDict['elementData']= elementDataDict
-    for e in elems:
-        elementDataDict[e.tag]= dict()
-        for s in sections:
-            propName= controlVarName+s
-            controlVar= e.getProp(propName)
-            elementDataDict[e.tag][propName]= controlVar.getStrConstructor()
+    # for e in elems:
+    #     elementDataDict[e.tag]= dict()
+    #     for s in sections:
+    #         propName= controlVarName+s
+    #         controlVar= e.getProp(propName)
+    #         elementDataDict[e.tag][propName]= controlVar.getStrConstructor()
     with open(jsonFileName, 'w') as f:
         json.dump(dataDict, f)
     
@@ -1666,32 +1734,27 @@ def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sectio
             texOutput= open(outputFileName+".tex","a+")
         else:
             texOutput= open(outputFileName+".tex","w+")
-        for s in sections:
-            texOutput.write("Section: "+s+"\n")
-            propName= controlVarName+s
-            for e in elems:
-                controlVar= e.getProp(propName)
-                outStr= controlVar.getLaTeXString(e.tag,1e-3)
-                texOutput.write(outStr)
+        write_latex_control_vars(outputFile= texOutput, controlVarsDict= controlVarsDict)
+        # for s in sections:
+        #     texOutput.write("Section: "+s+"\n")
+        #     propName= controlVarName+s
+        #     for e in elems:
+        #         controlVar= e.getProp(propName)
+        #         outStr= controlVar.getLaTeXString(e.tag,1e-3)
+        #         texOutput.write(outStr)
         texOutput.close()
     retval=None
     if outputCfg.calcMeanCF.lower()[0]=='y':
-        retval= list() # mean capacity factors
-        for s in sections:
-            sFcs= list()
-            propName= controlVarName+s
-            for e in elems:
-                controlVar= e.getProp(propName)
-                sFcs.append(controlVar.getCF())
-            retval.append(scipy.mean(sFcs))
+        capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)
+        retval= list()
+        for key in capacityFactors:
+            retval.append(scipy.mean(capacityFactors[key]))
     return retval
 
 
-def writeControlVarsFromElementsForAnsys(preprocessor,outputFileName, outputCfg, sectionName1, sectionName2):
+def write_control_vars_from_elements_for_ansys(preprocessor, outputCfg, sectionName1, sectionName2):
     '''
     :param preprocessor: preprocessor for the FE problem.
-    :param outputFileName: name of the output file containing the results 
-                          of the verification. 
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (set of 
            elements to be analyzed [defaults to 'total'], append or not the 
@@ -1710,6 +1773,7 @@ def writeControlVarsFromElementsForAnsys(preprocessor,outputFileName, outputCfg,
     texOutput1.write("Section 1\n")
     texOutput2= open("/tmp/texOutput2.tmp","w")
     texOutput2.write("Section 2\n")
+    outputFileName= outputCfg.outputDataBaseFileName # name for the .json and .tex files.
     ansysOutput1= open(outputFileName+".mac","w")
     ansysOutput2= open(outputFileName+"esf.mac","w")
     #printCabeceraListadoCapacityFactor("texOutput1","1 ("+ sectionName1 +")")

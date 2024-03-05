@@ -220,7 +220,6 @@ class RCMaterialDistribution(object):
         # intForcItems: tuple containing the element tags, the identifiers
         # of the load combinations and the values of the
         # internal forces.        
-        outputCfg.outputDataBaseFileName= limitStateData.getOutputDataBaseFileName()
         result= phantomModel.runChecking(intForcItems= intForcItems, outputCfg= outputCfg)
         return (feProblem, result)
 
@@ -261,6 +260,30 @@ class RCMaterialDistribution(object):
         tmp.clearAll() #Free memory.
         return retval
 
+    def check(self, limitStateData, matDiagType, outputCfg, threeDim= True):
+        '''Checking of normal stresses in ultimate limit states
+        (see self.dumpCombinations).
+
+        :param limitStateData: object that contains the name of the file
+                               containing the internal forces 
+                               obtained for each element 
+                               for the combinations analyzed and the
+                               controller to use for the checking.
+        :param matDiagType: type of the material diagram (d: design, 
+               k: characteristic).
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to a file,
+               generation or not of lists, ...)
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
+        '''
+        if(threeDim):
+            retval= self.internalForcesVerification3D(limitStateData= limitStateData, matDiagType= matDiagType, outputCfg= outputCfg)
+        else:
+            retval= self.internalForcesVerification2D(limitStateData= limitStateData, matDiagType= matDiagType, outputCfg= outputCfg)
+        return retval
+    
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the object contents.'''
         self.sectionDefinition.report(os, indentation)
