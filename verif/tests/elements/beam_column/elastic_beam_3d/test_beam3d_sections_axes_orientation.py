@@ -44,7 +44,8 @@ from postprocess import limit_state_data as lsd
 from materials.sia262 import SIA262_limit_state_checking
 from model import model_inquiry as minq
 from misc import matrix_utils
-from postprocess.control_vars import *
+from postprocess import control_vars as cv
+#from postprocess.control_vars import *
 from postprocess.config import default_config
 import logging
 
@@ -210,8 +211,9 @@ lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 # Using runChecking method we create the phantom model and run the checking on it. Unlike other check methods that also creates the phantom model this one doesn't clear the model after carrying out the verification. This method returns a tuple with the FE model (phantom model) and the result of verification
 feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
-outputCfg= lsd.VerifOutVars(controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel))
-(FEcheckedModel,checkResult)= reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance, matDiagType="d",threeDim= True, outputCfg= outputCfg)  
+outputCfg= lsd.VerifOutVars(controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel), outputDataBaseFileName= lsd.normalStressesResistance.getOutputDataBaseFileName())
+(FEcheckedModel, controlVarsDict)= reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance, matDiagType="d",threeDim= True, outputCfg= outputCfg)
+cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
 feProblem.errFileName= "cerr" # Print errors if any
 
 #Set with all the elements in the phantom model 
