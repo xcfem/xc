@@ -13,9 +13,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import scipy.interpolate
-
-
 from materials.ec3 import EC3_materials
 
 steelMaterial= EC3_materials.S355JR
