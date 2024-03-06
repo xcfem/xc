@@ -246,9 +246,9 @@ class SandySoilLayers(pile.SoilLayers):
 #          =  \ _ /  =
 #           =       = 
 #              = =    
-#      
-class Micropile(pile.CircularPile):
-    '''Micropile foundation model according to "Guía para el proyecto y la 
+#
+class MicropileSection(object):
+    '''Micropile cross section model according to "Guía para el proyecto y la 
       ejecución de micropilotes en obras de carreteras." by «Ministerio 
       de Fomento" 2009. Spain.
     
@@ -256,17 +256,13 @@ class Micropile(pile.CircularPile):
     :ivar pipeSection: cross-section of the tubular reinforcement.
     :ivar axialRebar: reinforcement steel bar in the axis of the micropile.
     '''
-    def __init__(self, pileSet, pileDiam, soilLayers, mortarMaterial, pipeSection, axialRebar= None, pileType= 'endBearing', soilAggressivity= 'aggresiveBackfill', designLife= 100, Fe= 1.5, Fuc= 0.5):
+    def __init__(self, diameter, mortarMaterial, pipeSection, axialRebar= None, soilAggressivity= 'aggresiveBackfill', designLife= 100, Fe= 1.5, Fuc= 0.5):
         ''' Constructor.
 
-        :param pileSet: set of nodes and elements defining a single pile.
-        :param pileDiam: diameter of the micropile.
-        :param soilLayers: properties of the soil horizons.
+        :param diameter: diameter of the micropile.
         :param mortarMaterial: mortar material.
         :param pipeSection: cross-section of the tubular reinforcement.
         :param axialRebar: reinforcement steel bar in the axis of the micropile.
-        :param pileType: "endBearing" for end bearing piles 
-                        "friction" for friction piles
         :param soilAggressivity: soil aggresivity descriptor
                                  ('unalteredNatural', 'pollutedNatural',
                                   'aggresiveNatural', 'backfill',
@@ -276,14 +272,7 @@ class Micropile(pile.CircularPile):
         :param Fuc: reduction factor of the cross-section area due to the 
                     type of the union taken from table 3.4.
         '''
-        E= 0.0
-        if(pipeSection):
-            E= pipeSection.steelType.E
-        elif(mortarMaterial):
-            E= mortarMaterial.concrete.getEcm()
-        elif(axialRebar):
-            E= axialRebar.steel.Es
-        super(Micropile, self).__init__(E= E, pileType= pileType, soilLayers= soilLayers, diameter= pileDiam, pileSet= pileSet)
+        self.diameter= diameter
         self.mortarMaterial= mortarMaterial
         self.pipeSection= pipeSection
         self.axialRebar= axialRebar
@@ -292,6 +281,27 @@ class Micropile(pile.CircularPile):
         self.Fe= Fe
         self.Fuc= Fuc
 
+    def getElasticModulus(self):
+        ''' Return the average elastic modulus of the cross section.'''
+        retval= 0.0
+        totalArea= 0.0
+        As= 0.0
+        Aa= 0.0
+        if(self.pipeSection):
+            As= self.pipeSection.A()
+            retval+= self.pipeSection.steelType.E*As
+            totalArea+= As
+        if(self.axialRebar):
+            Aa= self.axialRebar.getArea()
+            retval+= self.axialRebar.steel.Es
+            totalArea+= Aa
+        if(self.mortarMaterial):
+            Ac= self.getCrossSectionArea()-Aa-As
+            retval+= self.mortarMaterial.getEcm()
+            totalArea+= Ac
+        retval/= totalArea
+        return retval
+        
     def getCorrosionThicknessReduction(self):
         ''' Return the thickness reduction of the steel pipe according
             to table 2.4 of the Guia.
@@ -327,6 +337,10 @@ class Micropile(pile.CircularPile):
             di= self.pipeSection.getInsideDiameter()
             retval= max(math.pi/4.0*((de-2.0*re)**2-di**2)*self.Fuc, 0.0)
         return retval
+    
+    def getCrossSectionArea(self):
+        '''Return the cross-sectional area of the pile'''
+        return math.pi*(self.diameter/2.0)**2
 
     def getNcRd(self, C_R= 10):
         ''' Return the compressive structural strength of the micropile
@@ -399,11 +413,11 @@ class Micropile(pile.CircularPile):
         if(self.pipeSection):
             re= self.getCorrosionThicknessReduction() # Corroded steel.
             de= self.pipeSection.getOutsideDiameter() # External diameter
-            t= self.t() # Pipe wall thickness.
+            t= self.pipeSection.t() # Pipe wall thickness.
             dr= de-2*re # Reduced external diameter.
             tr= t-re # Reduced thickness.
             ratio= dr/tr
-            fy= self.pipeSection.steelType.fy() # elastic limit stress.
+            fy= self.pipeSection.steelType.fy # elastic limit stress.
             if(ratio<=16450e6/fy):
                 Wpl= self.getWpl()
                 retval= Wpl
@@ -417,7 +431,7 @@ class Micropile(pile.CircularPile):
         retval*= fyd*Fuf
         return retval
 
-    def getBendingEfficiency(self, Nd, Md, Vd= 0.0, Fuf= 0.5):
+    def getBendingEfficiency(self, Nd, Md, Vd, C_R= 10.0, Fuf= 0.5):
         '''Return bending efficiency
 
         :param Nd: required axial strength.
@@ -426,17 +440,21 @@ class Micropile(pile.CircularPile):
         :param Fuf: bending modulus reduction factor depending of the type
                     of the connection. Defaults to 0.5 
         '''
-        if(Nd!=0.0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+': for compressed sections not implemented yet.')
+        NcRd= self.getNcRd(C_R= C_R)
         McRd= self.getMcRd(Fuf= Fuf)
         VcRd= self.getVcRd()
-        if(abs(Vd)<=0.5*VcRd):
-            retval= Md/McRd
+        if(Nd<0.0):
+            retval= -Nd/NcRd+abs(Md)/McRd+abs(Vd)/VcRd
+        elif(Nd==0.0):
+            if(abs(Vd)<=0.5*VcRd):
+                retval= Md/McRd
+            else:
+                ro= (2*Vd/VcRd-1)**2
+                retval= (1-ro)*McRd
         else:
-            ro= (2*Vd/VcRd-1)**2
-            retval= (1-ro)*McRd
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': for tensioned sections not implemented yet.')     
         return retval
         
     def defElasticSection3d(self,preprocessor, overrideRho= None):
@@ -486,6 +504,147 @@ class Micropile(pile.CircularPile):
                             the material density.
         '''
         return self.pipeSection.defElasticShearSection2d(preprocessor, majorAxis= majorAxis, overrideRho= overrideRho)
+    
+class Micropile(pile.CircularPile):
+    '''Micropile foundation model according to "Guía para el proyecto y la 
+      ejecución de micropilotes en obras de carreteras." by «Ministerio 
+      de Fomento" 2009. Spain.
+    
+    :ivar pileDiam: diameter of the pile
+    :ivar pipeSection: cross-section of the tubular reinforcement.
+    :ivar axialRebar: reinforcement steel bar in the axis of the micropile.
+    '''
+    def __init__(self, pileSet, pileDiam, soilLayers, mortarMaterial, pipeSection, axialRebar= None, pileType= 'endBearing', soilAggressivity= 'aggresiveBackfill', designLife= 100, Fe= 1.5, Fuc= 0.5):
+        ''' Constructor.
+
+        :param pileSet: set of nodes and elements defining a single pile.
+        :param pileDiam: diameter of the micropile.
+        :param soilLayers: properties of the soil horizons.
+        :param mortarMaterial: mortar material.
+        :param pipeSection: cross-section of the tubular reinforcement.
+        :param axialRebar: reinforcement steel bar in the axis of the micropile.
+        :param pileType: "endBearing" for end bearing piles 
+                        "friction" for friction piles
+        :param soilAggressivity: soil aggresivity descriptor
+                                 ('unalteredNatural', 'pollutedNatural',
+                                  'aggresiveNatural', 'backfill',
+                                  'aggresiveBackfill') according to table 2.4.
+        :param designLife: design service life of the micropile (in years).
+        :param Fe: influence of the execution technique taken from table 3.5.
+        :param Fuc: reduction factor of the cross-section area due to the 
+                    type of the union taken from table 3.4.
+        '''
+        self.micropileCrossSection= MicropileSection(diameter= pileDiam, mortarMaterial= mortarMaterial, pipeSection= pipeSection, axialRebar= axialRebar, designLife= designLife, soilAggressivity= soilAggressivity, Fe= Fe, Fuc= Fuc)
+
+        E= self.micropileCrossSection.getElasticModulus()
+        super(Micropile, self).__init__(E= E, pileType= pileType, soilLayers= soilLayers, diameter= pileDiam, pileSet= pileSet)
+
+    def getCorrosionThicknessReduction(self):
+        ''' Return the thickness reduction of the steel pipe according
+            to table 2.4 of the Guia.
+
+        :param designLife: design service life of the micropile (in years).
+        '''
+        return self.micropileCrossSection.getCorrosionThicknessReduction()
+ 
+    def getSteelPipeDesignArea(self):
+        ''' Return the design value of the steel pipe cross-section area
+            according to clause 3.6.1 of the Guía.
+        '''
+        return self.micropileCrossSection.getSteelPipeDesignArea()
+
+    def getNcRd(self, C_R= 10):
+        ''' Return the compressive structural strength of the micropile
+            according to the clause 3.6.1 of the Guía.
+
+        :param C_R: adimensional coefficient from the table 3.6.
+        '''
+        return self.micropileCrossSection.getNcRd(C_R= C_R)
+
+    def getVcRd(self):
+        ''' Return the shear strength of the micropile according to clause
+            A-4.2 of the "Guía".'''
+        return self.micropileCrossSection.getVcRd()
+
+    def getWpl(self):
+        ''' Return the plastic modulus of the remaining steel section
+            (reduced due to the corrosion).
+        '''
+        return self.micropileCrossSection.getWpl()
+    
+    def getWel(self):
+        ''' Return the elastic modulus of the remaining steel section
+            (reduced due to the corrosion).
+        '''
+        return self.micropileCrossSection.getWel()
+
+    def getMcRd(self, Fuf= 0.5):
+        ''' Return the bending strength of the micropile according to clause
+            A-4.2 of the "Guía".
+
+        :param Fuf: bending modulus reduction factor depending of the type
+                    of the connection. Defaults to 0.5 
+        '''
+        return self.micropileCrossSection.getMcRd(Fuf= Fuf)
+
+    def getBendingEfficiency(self, Nd, Md, Vd= 0.0, Fuf= 0.5):
+        '''Return bending efficiency
+
+        :param Nd: required axial strength.
+        :param Mzd: required bending strength.
+        :param Vyd: required shear strength.
+        :param Fuf: bending modulus reduction factor depending of the type
+                    of the connection. Defaults to 0.5 
+        '''
+        return self.micropileCrossSection.getBendingEfficiency(Nd= Nd, Md= Md, Vd= Vd, Fuf= Fuf)
+        
+    def defElasticSection3d(self,preprocessor, overrideRho= None):
+        ''' Return an elastic section appropriate for 3D beam analysis
+
+        :param  preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.micropileCrossSection.defElasticSection3d(preprocessor= preprocessor, overrideRho= overrideRho)
+    
+    def defElasticShearSection3d(self,preprocessor, overrideRho= None):
+        '''elastic section appropriate for 3D beam analysis, including shear 
+           deformations
+
+        :param preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.micropileCrossSection.defElasticShearSection3d(preprocessor= preprocessor, overrideRho= overrideRho)
+
+    def defElasticSection1d(self,preprocessor, overrideRho= None):
+        ''' Return an elastic section appropriate for truss analysis.
+
+        :param preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.micropileCrossSection.defElasticSection1d(preprocessor= preprocessor, overrideRho= overrideRho)
+    
+    def defElasticSection2d(self,preprocessor, majorAxis= True, overrideRho= None):
+        ''' Return an elastic section appropriate for 2D beam analysis
+
+        :param preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.micropileCrossSection.defElasticSection2d(preprocessor= preprocessor, majorAxis= majorAxis, overrideRho= overrideRho)
+    
+    def defElasticShearSection2d(self,preprocessor, majorAxis= True, overrideRho= None):
+        '''elastic section appropriate for 2D beam analysis, including shear deformations
+
+        :param  preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        return self.micropileCrossSection.defElasticShearSection2d(preprocessor= preprocessor, majorAxis= majorAxis, overrideRho= overrideRho)
 
     def getEstimatedTipReactionModulus(self, NcEk_Rcd= 1.0):
         ''' Return an estimation of the tip reaction modulus according to the expression
