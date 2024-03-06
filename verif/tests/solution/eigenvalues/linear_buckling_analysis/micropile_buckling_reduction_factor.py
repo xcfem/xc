@@ -106,11 +106,11 @@ linearBucklingAnalysis.setup()
 analOk= linearBucklingAnalysis.solve()
 
 eulerBucklingLoad= linearBucklingAnalysis.analysis.getEigenvalue(1)
-k= math.pi/micropileLength*math.sqrt(micropile.pipeSection.EIz()/eulerBucklingLoad)
+k= math.pi/micropileLength*math.sqrt(micropile.micropileCrossSection.pipeSection.EIz()/eulerBucklingLoad)
 # Compute effective length.
 effectiveLength= k*micropileLength
 # Buckling reduction factor (equal for both axis).
-chiN= micropile.pipeSection.getBucklingReductionFactorZ(Leq= effectiveLength)
+chiN= micropile.micropileCrossSection.pipeSection.getBucklingReductionFactorZ(Leq= effectiveLength)
 ratio1= abs(chiN-0.41829303076129865)
 
 '''
