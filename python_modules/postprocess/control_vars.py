@@ -553,7 +553,7 @@ class AxialForceControlVars(CFN):
 
     :ivar idSection: section identifier
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',N= 0.0):
+    def __init__(self,idSection= 'nil',combName= 'nil', N= 0.0):
         '''
         Constructor.
 
@@ -561,7 +561,7 @@ class AxialForceControlVars(CFN):
         :param combName: name of the load combinations to deal with
         :param N:        axial force (defaults to 0.0)
         '''
-        super(AxialForceControlVars,self).__init__(combName, N)
+        super(AxialForceControlVars,self).__init__(combName= combName, N= N)
         self.idSection= idSection # Section identifier.
 
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
