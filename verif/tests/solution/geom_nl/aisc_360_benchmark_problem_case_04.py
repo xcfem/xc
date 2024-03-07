@@ -56,7 +56,7 @@ cooTrf= modelSpace.newPDeltaCrdTransf("pd",xc.Vector([1,0,0]))
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= xcSection.name
 seedElemHandler.defaultTransformation= cooTrf.name
-elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+elem= seedElemHandler.newElement("ElasticBeam3d")
 xcTotalSet= preprocessor.getSets.getSet('total')
 mesh= xcTotalSet.genMesh(xc.meshDir.I)
 

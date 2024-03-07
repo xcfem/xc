@@ -56,7 +56,7 @@ corot= modelSpace.newCorotCrdTransf("corot")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTransformation= corot.name
-beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ElasticBeam2d")
 beam2d.h= h
 beam2d.rho= 0.0
 

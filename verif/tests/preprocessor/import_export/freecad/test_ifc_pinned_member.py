@@ -92,7 +92,7 @@ def createMesh(xcSet, section):
     for l in xcSet.getLines:
         vDir= l.getProp('webOrientation')
         lin.xzVector= xc.Vector([vDir.x, vDir.y, vDir.z])
-        elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+        elem= seedElemHandler.newElement("ElasticBeam3d")
         l.genMesh(xc.meshDir.I)
     xcSet.fillDownwards()
     

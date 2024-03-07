@@ -46,7 +46,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTransformation= lin.name
-beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+beam3d= seedElemHandler.newElement("ElasticBeam3d")
 beam3d.rho= m
 
 

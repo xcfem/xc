@@ -33,7 +33,7 @@ elasticMembranePlateSectionTest= typical_materials.defElasticMembranePlateSectio
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elasticMembranePlateSectionTest.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellMITC4")
 
 pt1= modelSpace.newKPoint(R,0.0,0.0)
 pt2= modelSpace.newKPoint((R*cos45),(R*sin45),0.0)

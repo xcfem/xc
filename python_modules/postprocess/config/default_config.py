@@ -17,6 +17,7 @@ import tempfile
 import xc
 from postprocess import output_styles
 from postprocess import limit_state_data as lsd
+from postprocess.config import file_names as fn
 from misc_utils import log_messages as lmsg
 
 def findDirectoryUpwards(fNameMark: str):
@@ -301,149 +302,195 @@ class ProjectDirTree(object):
     def getRltvReportLoadsGrPath(self):
         ''' Return the relative path for the load graphic files.'''        
         return self.getRltvGraphicsPath()+'loads/'
-    
+
+    # Normal stresses limit state results.
     def getVerifNormStrFile(self):
         ''' Return the path of the normal stresses verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_normStrsULS.json'
+        return self.getFullVerifPath()+fn.normalStressesVerificationResultsFile+'.json'
     
     def getReportNormStrFile(self):
         ''' Return the path of the normal stresses verification
             report file.'''
-        return self.getFullTextReportPath()+'report_normStrsULS.tex'
+        return self.getFullTextReportPath()+fn.normalStressesVerificationReportFile+'.tex'
     
     def getReportNormStrGrPath(self):
         ''' Return the path for the normal stresses verification
             graphics files.'''
-        return self.getFullGraphicsPath()+'normStrsULS/'
+        return self.getFullGraphicsPath()+fn.normalStressesDirectory
         
     def getRltvReportNormStrGrPath(self):
         ''' Return the path for the normal stresses verification
             graphics files.'''
-        return self.getRltvGraphicsPath()+'normStrsULS/'
+        return self.getRltvGraphicsPath()+fn.normalStressesDirectory
 
+    # Buckling limit state results.
+    def getVerifBucklingFile(self):
+        ''' Return the path of the buckling verification
+            results file.'''
+        return self.getFullVerifPath()+fn.bucklingVerificationResultsFile+'.json'
+
+    def getReportBucklingFile(self):
+        ''' Return the path of the buckling verification
+            report file.'''
+        return self.getFullTextReportPath()+fn.bucklingVerificationReportFile+'.tex'
+    
+    def getReportBucklingGrPath(self):
+        ''' Return the path for the buckling verification
+            graphics files.'''
+        return self.getFullGraphicsPath()+fn.bucklingDirectory
+        
+    def getRltvReportBucklingGrPath(self):
+        ''' Return the path for the buckling verification
+            graphics files.'''
+        return self.getRltvGraphicsPath()+fn.bucklingDirectory
+    
+    # Shear limit state results.
     def getVerifShearFile(self):
         ''' Return the path of the shear verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_shearULS.json'
+        return self.getFullVerifPath()+fn.shearVerificationResultsFile+'.json'
     
     def getReportShearFile(self):
         ''' Return the path of the shear verification
             report file.'''
-        return self.getFullTextReportPath()+'report_shearULS.tex'
+        return self.getFullTextReportPath()+fn.shearVerificationReportFile+'.tex'
     
     def getReportShearGrPath(self):
         ''' Return the path for the shear verification
             graphics files.'''
-        return self.getFullGraphicsPath()+'shearULS/'
+        return self.getFullGraphicsPath()+fn.shearDirectory
 
     def getRltvReportShearGrPath(self):
         ''' Return the path for the shear verification
             graphics files.'''
-        return self.getRltvGraphicsPath()+'shearULS/'
+        return self.getRltvGraphicsPath()+fn.shearDirectory
+    
+    # Torsion limit state results.
+    def getVerifTorsionFile(self):
+        ''' Return the path of the torsion verification
+            results file.'''
+        return self.getFullVerifPath()+fn.torsionVerificationResultsFile+'.json'
+    
+    def getReportTorsionFile(self):
+        ''' Return the path of the torsion verification
+            report file.'''
+        return self.getFullTextReportPath()+fn.torsionVerificationReportFile+'.tex'
+    
+    def getReportTorsionGrPath(self):
+        ''' Return the path for the torsion verification
+            graphics files.'''
+        return self.getFullGraphicsPath()+fn.torsionDirectory
 
+    def getRltvReportTorsionGrPath(self):
+        ''' Return the path for the torsion verification
+            graphics files.'''
+        return self.getRltvGraphicsPath()+fn.torsionDirectory
+
+    # Von Mises stresses.
     def getVerifVonMisesStressFile(self):
         ''' Return the path of the VonMisesStress verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_VonMisesStressULS.json'
+        return self.getFullVerifPath()+fn.vonMisesStressesVerificationResultsFile+'.json'
     
     def getReportVonMisesStressFile(self):
         ''' Return the path of the VonMisesStress verification
             report file.'''
-        return self.getFullTextReportPath()+'report_VonMisesStressULS.tex'
+        return self.getFullTextReportPath()+fn.vonMisesStressesVerificationReportFile+'.tex'
     
     def getReportVonMisesStressGrPath(self):
         ''' Return the path for the VonMisesStress verification
             graphics files.'''
-        return self.getFullGraphicsPath()+'VonMisesStressULS/'
+        return self.getFullGraphicsPath()+fn.vonMisesStressesDirectory
 
     def getRltvReportVonMisesStressGrPath(self):
         ''' Return the path for the VonMisesStress verification
             graphics files.'''
-        return self.getRltvGraphicsPath()+'VonMisesStressULS/'
+        return self.getRltvGraphicsPath()+fn.vonMisesStressesDirectory
 
-    # Rare loads.
+    # Cracking. Rare loads.
     def getVerifCrackRareFile(self):
         ''' Return the path of the crack verification
             results file (rare loads).'''
-        return self.getFullVerifPath()+'verifRsl_crackingSLS_rare.json'
+        return self.getFullVerifPath()+fn.crackControlRareVerificationResultsFile+'.json'
     
     def getReportCrackRareFile(self):
         ''' Return the path of the crack verification
             report file (rare loads).'''
-        return self.getFullTextReportPath()+'report_crackingSLS_rare.tex'
+        return self.getFullTextReportPath()+fn.crackControlRareVerificationReportFile+'.tex'
     
     def getReportCrackRareGrPath(self):
         ''' Return the path for the crack verification
             graphics files (rare loads).'''
-        return self.getFullGraphicsPath()+'crackingSLS_rare/' 
+        return self.getFullGraphicsPath()+fn.crackControlRareDirectory
         
     def getRltvReportCrackRareGrPath(self):
         ''' Return the path for the crack verification
             graphics files (rare loads).'''
-        return self.getRltvGraphicsPath()+'crackingSLS_rare/'
+        return self.getRltvGraphicsPath()+fn.crackControlRareDirectory
 
-    # Frequent loads.
+    # Crack control. Frequent loads.
     def getVerifCrackFreqFile(self):
         ''' Return the path of the crack verification
             results file (frequent loads).'''
-        return self.getFullVerifPath()+'verifRsl_crackingSLS_freq.json'
+        return self.getFullVerifPath()+fn.crackControlFreqVerificationResultsFile+'.json'
         
     def getReportCrackFreqFile(self):
         ''' Return the path of the crack verification
             report file (frequent loads).'''
-        return self.getFullTextReportPath()+'report_crackingSLS_freq.tex'
+        return self.getFullTextReportPath()+fn.crackControlFreqVerificationReportFile+'.tex'
     
     def getReportCrackFreqGrPath(self):
         ''' Return the path for the crack verification
             graphics files (frequent loads).'''
-        return self.getFullGraphicsPath()+'crackingSLS_freq/' 
+        return self.getFullGraphicsPath()+fn.crackControlFreqDirectory
         
     def getRltvReportCrackFreqGrPath(self):
         ''' Return the path for the crack verification
             graphics files (frequent loads).'''
-        return self.getRltvGraphicsPath()+'crackingSLS_freq/' 
+        return self.getRltvGraphicsPath()+fn.crackControlFreqDirectory
         
-    # Quasi-permanent loads.
+    # Crack control. Quasi-permanent loads.
     def getVerifCrackQpermFile(self):
         ''' Return the path of the crack verification
             results file (quasi-permanent loads).'''
-        return self.getFullVerifPath()+'verifRsl_crackingSLS_qperm.json'
+        return self.getFullVerifPath()+fn.crackControlQpermVerificationResultsFile+'.json'
     
     def getReportCrackQpermFile(self):
         ''' Return the path of the crack verification
             report file (quasi-permanent loads).'''
-        return self.getFullTextReportPath()+'report_crackingSLS_qperm.tex'
+        return self.getFullTextReportPath()+fn.crackControlQpermVerificationReportFile+'.tex'
     
     def getReportCrackQpermGrPath(self):
         ''' Return the path for the crack verification
             graphics files (quasi-permanent loads).'''
-        return self.getFullGraphicsPath()+'crackingSLS_qperm/' 
+        return self.getFullGraphicsPath()+fn.crackControlQpermDirectory
         
     def getRltvReportCrackQpermGrPath(self):
         ''' Return the path for the crack verification
             graphics files (quasi-permanent loads).'''
-        return self.getRltvGraphicsPath()+'crackingSLS_qperm/' 
-        
+        return self.getRltvGraphicsPath()+fn.crackControlQpermDirectory
+
+    # Fatigue
     def getVerifFatigueFile(self):
         ''' Return the path of the fatigue verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_fatigueULS.json'
+        return self.getFullVerifPath()+fn.fatigueVerificationResultsFile+'.json'
     
     def getReportFatigueFile(self):
         ''' Return the path of the fatigue verification
             report file.'''
-        return self.getFullTextReportPath()+'report_fatigueStrsULS.tex'
+        return self.getFullTextReportPath()+fn.fatigueVerificationReportFile+'.tex'
     
     def getReportFatigueGrPath(self):
         ''' Return the path for the fatigue verification
             graphics files.'''
-        return self.getFullGraphicsPath()+'fatigueStrsULS/'
+        return self.getFullGraphicsPath()+fn.fatigueDirectory
 
     def getRltvReportFatigueGrPath(self):
         ''' Return the path for the fatigue verification
             graphics files.'''
-        return self.getRltvGraphicsPath()+'fatigueStrsULS/'
+        return self.getRltvGraphicsPath()+fn.fatigueDirectory
 
     def getVerifFile(self, limitStateLabel):
         '''Return the path of the verification results file
@@ -453,8 +500,12 @@ class ProjectDirTree(object):
         '''
         if(limitStateLabel=='ULS_normalStressesResistance'):
             return self.getVerifNormStrFile()
+        elif(limitStateLabel=='ULS_bucklingResistance'):
+            return self.getVerifBucklingFile()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getVerifShearFile()
+        elif(limitStateLabel=='ULS_torsionResistance'):
+            return self.getVerifTorsionFile()
         elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
             return self.getVerifCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
@@ -479,8 +530,12 @@ class ProjectDirTree(object):
         '''
         if(limitStateLabel=='ULS_normalStressesResistance'):
             return self.getReportNormStrFile()
+        elif(limitStateLabel=='ULS_bucklingResistance'):
+            return self.getReportBucklingFile()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getReportShearFile()
+        elif(limitStateLabel=='ULS_torsionResistance'):
+            return self.getReportTorsionFile()
         elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
             return self.getReportCrackRareFile()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
@@ -505,8 +560,12 @@ class ProjectDirTree(object):
         '''
         if(limitStateLabel=='ULS_normalStressesResistance'):
             return self.getReportNormStrGrPath()
+        elif(limitStateLabel=='ULS_bucklingResistance'):
+            return self.getReportBucklingGrPath()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getReportShearGrPath()
+        elif(limitStateLabel=='ULS_torsionResistance'):
+            return self.getReportTorsionGrPath()
         elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
             return self.getReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
@@ -531,8 +590,12 @@ class ProjectDirTree(object):
         '''
         if(limitStateLabel=='ULS_normalStressesResistance'):
             return self.getRltvReportNormStrGrPath()
+        elif(limitStateLabel=='ULS_bucklingResistance'):
+            return self.getRltvReportBucklingGrPath()
         elif(limitStateLabel=='ULS_shearResistance'):
             return self.getRltvReportShearGrPath()
+        elif(limitStateLabel=='ULS_torsionResistance'):
+            return self.getRltvReportTorsionGrPath()
         elif(limitStateLabel=='SLS_rareLoadsCrackControl'):
             return self.getRltvReportCrackRareGrPath()
         elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
@@ -550,13 +613,13 @@ class ProjectDirTree(object):
             return None
     
     def getReportSimplLCFile(self):
-        return self.getFullTextReportPath()+'report_resSimplLC.tex'
+        return self.getFullTextReportPath()+fn.simpleLoadCaseReportFile+'.tex'
     
     def getReportSimplLCGrPath(self):
-        return self.getFullGraphicsPath()+'resSimplLC/'
+        return self.getFullGraphicsPath()+fn.simpleLoadCaseResultsDirectory
 
     def getRltvReportSimplLCGrPath(self):
-        return self.getRltvGraphicsPath()+'resSimplLC/'
+        return self.getRltvGraphicsPath()+fn.simpleLoadCaseResultsDirectory
 
     def getPathList(self):
         ''' Return the project directory tree.'''
@@ -571,7 +634,9 @@ class ProjectDirTree(object):
 #        retval.append(self.getReportLoadsFile())
         retval.append(self.getReportLoadsGrPath())
         retval.append(self.getReportNormStrGrPath())
+        retval.append(self.getReportBucklingGrPath())
         retval.append(self.getReportShearGrPath())
+        retval.append(self.getReportTorsionGrPath())
         retval.append(self.getReportCrackFreqGrPath())
         retval.append(self.getReportCrackQpermGrPath())
         retval.append(self.getReportFatigueGrPath())

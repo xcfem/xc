@@ -67,7 +67,7 @@ elementHandler.defaultMaterial= fakeMaterial.name
 fakeElement= elementHandler.newElement("ZeroLength",xc.ID([0,0]))
 fakeElement.setVerbosityLevel(0) # Avoid warning about set element tag
 fakeElement.tag= 3063
-fakeElement.setVerbosityLevel(1)
+fakeElement.setVerbosityLevel(1) # Restore verbosity level.
 xcTotalSet= preprocessor.getSets.getSet('total')
 fakeElementSet= xcTotalSet.getElements
 # end of the fake stuff.

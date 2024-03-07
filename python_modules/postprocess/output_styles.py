@@ -101,6 +101,14 @@ class OutputStyle(object):
         ''' Return the symbol for the length units.'''
         return self.outputUnits.getLengthUnitSymbol()
     
+    def getLengthUnitsScaleFactor(self):
+        ''' Return the scale factor for the displacement units.'''
+        return self.outputUnits.getLengthUnitsScaleFactor()
+    
+    def getLengthUnitsDescription(self):
+        ''' Return the description for the displacement units.'''
+        return self.outputUnits.getLengthUnitsDescription()
+    
     def getForceUnitSymbol(self):
         ''' Return the symbol for the force units.'''
         return self.outputUnits.getForceUnitSymbol()
@@ -148,6 +156,18 @@ class OutputStyle(object):
             fConvUnits= 1.0
             unitDescription= '-'
         elif(itemToDisp.startswith('chi')): # strength reduction factors
+            fConvUnits= 1.0
+            unitDescription= '-'
+        elif(itemToDisp=='Leff' or itemToDisp=='LeffY' or  itemToDisp=='LeffZ'):
+            fConvUnits= self.getLengthUnitsScaleFactor()
+            unitDescription= self.getLengthUnitsDescription()
+        elif(itemToDisp=='mechLambda' or itemToDisp=='mechLambdaY' or  itemToDisp=='mechLambdaZ'):
+            fConvUnits= 1.0
+            unitDescription= '-'
+        elif(itemToDisp=='ef' or itemToDisp=='efY' or  itemToDisp=='efZ'):
+            fConvUnits= self.getLengthUnitsScaleFactor()
+            unitDescription= self.getLengthUnitsDescription()
+        elif(itemToDisp=='mode'):
             fConvUnits= 1.0
             unitDescription= '-'
         else:
@@ -213,7 +233,17 @@ sp_capTexts={
     'wk': 'abertura de fisura',
     's_rmax': 'separación entre fisuras',
     'sigma_s': 'máxima tensión en la armadura',
-    'sigma_c': 'máxima tensión de compresión en el hormigón'
+    'sigma_c': 'máxima tensión de compresión en el hormigón',
+    'Leff': 'longitud de pandeo.',
+    'mechLambda': 'esbeltez mecánica.',
+    'ef': 'excentricidad adicional por pandeo.',
+    'LeffZ': 'longitud de pandeo (eje Z).',
+    'LeffY': 'longitud de pandeo (eje Y).',
+    'mechLambdaZ': 'esbeltez mecánica (eje Z).',
+    'mechLambdaY': 'esbeltez mecánica (eje Y).',
+    'efZ': 'excentricidad adicional por pandeo (eje Z).',
+    'efY': 'excentricidad adicional por pandeo (eje Y).',
+    'mode': 'modo de pandeo.'
   }
 
 #English caption texts
@@ -264,6 +294,16 @@ en_capTexts={
     'vm_stress': 'Von Mises stress',
     'sigma_s': 'max. steel stress',
     'sigma_c': 'max. concrete compressive-stress',
+    'Leff': 'effective length for buckling.',
+    'mechLambda': 'mechanical slenderness for buckling.',
+    'ef': 'additional eccentricity for buckling.',
+    'LeffZ': 'effective length for buckling around Z axis.',
+    'LeffY': 'effective length for buckling around Y axis.',
+    'mechLambdaZ': 'mechanical slenderness for buckling around Z axis.',
+    'mechLambdaY': 'mechanical slenderness for buckling around Y axis.',
+    'efZ': 'additional eccentricity for buckling around Z axis.',
+    'efY': 'additional eccentricity for buckling around Y axis.',
+    'mode': 'buckling mode corresponding to the previous parameters.'
   }
 
 #Caption texts in French
@@ -315,4 +355,14 @@ fr_capTexts={
     'wk': 'overture de fissure',
     'sigma_s':"contrainte maximale dans l'armature",
     'sigma_c': 'contrainte de compression maximale du béton',
+    'Leff': 'longueur de flambement.',
+    'mechLambda': 'élancement.',
+    'ef': 'eccentricité additionnelle.',
+    'LeffZ': 'longueur de flambement (axe Z).',
+    'LeffY': 'longueur de flambement (axe Y).',
+    'mechLambdaZ': 'élancement (axe Z).',
+    'mechLambdaY': 'élancement (axe Y).',
+    'efZ': 'eccentricité additionnelle (axe Z).',
+    'efY': 'eccentricité additionnelle (axe Y).',
+    'mode': 'mode de flambage.',
   }

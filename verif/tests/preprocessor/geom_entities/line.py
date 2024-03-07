@@ -44,7 +44,7 @@ testEqualOperator= (l==l)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 # Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= elast.name
-truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
+truss= seedElemHandler.newElement("Truss")
 truss.sectionArea= 10
 
 setTotal= preprocessor.getSets.getSet("total")

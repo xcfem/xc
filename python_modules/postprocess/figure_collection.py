@@ -3,6 +3,7 @@
 import sys
 from postprocess import utils_display
 from postprocess import control_vars
+from postprocess.config import file_names as fn
 from misc_utils import log_messages as lmsg
 
 
@@ -70,7 +71,7 @@ class FigsCollectionPlotter(object):
         figureList.append(utils_display.FigureDefinition(partName,"Flexion","FCCP2",txtFCnormalStresses,self.reinforcementText2))
 
         # Plot control vars.
-        outputFilesSuffix= "verifRsl_normStrsULS"
+        outputFilesSuffix= fn.normalStressesVerificationResultsFile
         self.plotCommonControlVars(preprocessor= preprocessor, partName= partName, elemSetName= elemSetName, figureList= figureList, outputFilesSuffix= outputFilesSuffix)
 
     def plotShear(self,preprocessor,partName,elemSetName):
@@ -87,7 +88,7 @@ class FigsCollectionPlotter(object):
         figureList.append(utils_display.FigureDefinition(partName,eluStr,"VyCP2",txtVyCP2,self.reinforcementText2,self.fUnits))
         figureList.append(utils_display.FigureDefinition(partName,eluStr,"FCCP2",txtFCshearStresses,self.reinforcementText2))
         # Plot control vars.
-        outputFilesSuffix= "verifRsl_shearULS"
+        outputFilesSuffix= fn.shearVerificationResultsFile
         self.plotCommonControlVars(preprocessor= preprocessor, partName= partName, elemSetName= elemSetName, figureList= figureList, outputFilesSuffix= outputFilesSuffix)
 
     def plotCrackingControlVars(self, preprocessor, partName, elemSetName, slsStr):
@@ -101,13 +102,13 @@ class FigsCollectionPlotter(object):
         figureList= []
         if(slsStr=='characteristic'):
             slsId= "FissurationRare"
-            slsPrefix= 'verifRsl_crackingSLS_rare'
+            slsPrefix= fn.crackControlRareVerificationResultsFile
         elif(slsStr=='frequent'):
             slsId= "FissurationFreq"
-            slsPrefix= 'verifRsl_crackingSLS_freq'
+            slsPrefix= fn.crackControlFreqVerificationResultsFile
         elif(slsStr=='quasi-permanent'):
             slsId= "FissurationQP"
-            slsPrefix= 'verifRsl_crackingSLS_qp'
+            slsPrefix= fn.crackControlQpermVerificationResultsFile
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -169,7 +170,7 @@ class FigsCollectionPlotter(object):
 
 
         #Load properties to display:
-        fName= self.fieldFilesPath + "verifRsl_fatigueULS.json"
+        fName= self.fieldFilesPath + fn.fatigueVerificationResultsFile+'.json'
         control_vars.readControlVars(preprocessor= preprocessor, inputFileName= fName)
 
         elemSet= preprocessor.getSets.getSet(elemSetName).elements
@@ -184,4 +185,4 @@ class FigsCollectionPlotter(object):
 
         tp= utils_display.TakePhotos(elemSetName)
         tp.pthGraphOutput= self.graphicOutputPath
-        tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_verifRsl_fatigueULS.tex",self.latexOutputPath+partName+"_verifRsl_fatigueULS_list_figures.tex")
+        tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+fatigueVerificationReportFile+'.tex', self.latexOutputPath+partName+'_'+fn.fatigueVerificationResultsFile+'_list_figures.tex')

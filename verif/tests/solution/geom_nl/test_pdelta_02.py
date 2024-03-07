@@ -46,7 +46,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTransformation= pd.name
-beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ElasticBeam2d")
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0))

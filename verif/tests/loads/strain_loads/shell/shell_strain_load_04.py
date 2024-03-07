@@ -38,7 +38,7 @@ memb1= typical_materials.defMembranePlateFiberSection(preprocessor,name='ring_ma
 # Seed element definition
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
-elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellNLDKGQ")
 
 # Block topology (ne-quarter of the plate)
 L_2= L/2.0

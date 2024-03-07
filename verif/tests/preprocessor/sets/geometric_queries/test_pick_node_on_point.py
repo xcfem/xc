@@ -31,7 +31,7 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 # Mesh generation.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast2d.name
-elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("FourNodeQuad")
 s.setElemSizeIJ(0.1, 0.1)
 s.genMesh(xc.meshDir.I)
 

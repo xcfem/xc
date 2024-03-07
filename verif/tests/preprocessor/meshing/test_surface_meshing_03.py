@@ -36,7 +36,7 @@ matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= matPrb.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellMITC4")
 
 
 

@@ -215,21 +215,21 @@ class TrussBase(TrussGeometry):
         seedElemHandler.defaultTransformation= self.crdTransf.getName()  # Orientation of the element axis.
         # Lower chord
         seedElemHandler.defaultMaterial= self.lowerChordMaterial.name  # Material name.
-        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0])) # lgtm [py/multiple-definition]
+        beam3d= seedElemHandler.newElement("ElasticBeam3d") # lgtm [py/multiple-definition]
         self.lowerChordSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # Upper chord
         seedElemHandler.defaultMaterial= self.upperChordMaterial.name  # Material name.
-        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0])) # lgtm [py/multiple-definition]
+        beam3d= seedElemHandler.newElement("ElasticBeam3d") # lgtm [py/multiple-definition]
         self.upperChordSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # Diagonals
         seedElemHandler.defaultMaterial= self.diagonalMaterial.name  # Material name.
         seedElemHandler.dimElem= 3 #Bars defined ina a three-dimensional space.
-        trussElem= seedElemHandler.newElement('Truss',xc.ID([0,0])) # lgtm [py/multiple-definition]
+        trussElem= seedElemHandler.newElement('Truss') # lgtm [py/multiple-definition]
         trussElem.sectionArea= self.diagonalArea
         self.diagonalSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # End posts
         seedElemHandler.defaultMaterial= self.postsMaterial.name  # Material name.
-        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0])) # lgtm [py/multiple-definition]
+        beam3d= seedElemHandler.newElement("ElasticBeam3d") # lgtm [py/multiple-definition]
         if(__debug__):
             if(not beam3d):
                 AssertionError('Can\'t create the beam seed element.')        

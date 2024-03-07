@@ -1371,6 +1371,7 @@ echo "$BLEU" "  Foundation design tests." "$NORMAL"
 python tests/geotechnics/foundations/test_skin_friction.py
 python tests/geotechnics/foundations/test_pile_01.py
 python tests/geotechnics/foundations/test_pile_02.py
+python tests/geotechnics/foundations/test_micropile_cross_section.py
 python tests/geotechnics/foundations/test_micropile_01.py
 python tests/geotechnics/foundations/test_micropile_02.py
 python tests/geotechnics/foundations/test_micropile_03.py
@@ -1530,6 +1531,8 @@ echo "$BLEU" "      EHE limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_02.py
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_03.py
+echo "$BLEU" "      EHE limit state checking: buckling." "$NORMAL"
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_01.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py

@@ -1133,7 +1133,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         seedElemHandler= preprocessor.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= foundationXCSection.name
         seedElemHandler.defaultTransformation= transformationName
-        seedElem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+        seedElem= seedElemHandler.newElement("ElasticBeam2d")
         if(__debug__):
             if(not seedElem):
                 AssertionError('Can\'t create seed element.')

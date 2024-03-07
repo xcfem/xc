@@ -19,6 +19,7 @@ from materials.sections.fiber_section import fiber_sets
 from materials import limit_state_checking_base as lscb
 from postprocess import limit_state_data as lsd
 from postprocess import control_vars as cv
+from postprocess.config import file_names as fn
 from misc_utils import log_messages as lmsg
 import scipy.interpolate
 from scipy import optimize
@@ -1072,6 +1073,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         iz= section.sectionProperties.i # Radius of gyration.
         # Lower slenderness limit.
         lowerSlendernessLimit= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= e1, e2= e2, sectionDepth= sectionDepthZ)
+        minimumEccentricity= max(.02, sectionDepthZ/20)
         for mode, Ncr in enumerate(Ncri):
             Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
             if(Ncr>0):
@@ -1080,9 +1082,9 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             mechLambda= Leff/iz # Compute mechanical slenderness
             mechLambdai.append(mechLambda)
             if(mechLambda<lowerSlendernessLimit):
-                ef= 0.0
+                ef= minimumEccentricity
             else:
-                ef= get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff)
+                ef= max(minimumEccentricity, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff))
             Efi.append(ef)
 
     elif(nDOF==12):
@@ -1093,7 +1095,9 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         iy= section.sectionProperties.iy # Radius of gyration about y axis.
         # Lower slenderness limit.
         lowerSlendernessLimitZ= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ez1, e2= ez2, sectionDepth= sectionDepthZ)
+        minimumEccentricityZ= max(.02, sectionDepthZ/20)
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
+        minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
             Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
             Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
@@ -1105,13 +1109,13 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             mechLambdaY= Leffy/iy # Compute mechanical slenderness
             mechLambdai.append((mechLambdaZ, mechLambdaY))
             if(mechLambdaZ<lowerSlendernessLimitZ):
-                efz= 0.0
+                efz= minimumEccentricityZ
             else:
-                efz= get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz)
+                efz= max(minimumEccentricityZ, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz))
             if(mechLambdaY<lowerSlendernessLimitY):
-                efy= 0.0
+                efy= minimumEccentricityY
             else:
-                efy= get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy)
+                efy= max(minimumEccentricityY, get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy))
             Efi.append((efz, efy))
 
     else:
@@ -1125,7 +1129,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= 'buckling_parameters_ULS', designSituation= 'permanent'):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituation= 'permanent'):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
@@ -1133,7 +1137,8 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
-        '''Creates a dictionary with the displacements of the given nodes.
+        '''Creates a dictionary with the buckling parameters of the given
+           elements.
 
         :param nmbComb: combination name.
         :param xcSet: set containing the nodes to export the modes on.
@@ -1148,15 +1153,15 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         for e in xcSet.elements:
             elementBucklingParameters= {'Leffi':None, 'mechLambdai':None, 'Efi':None}
             section= e.physicalProperties.getVectorMaterials[0]
-            if(section.hasProp('sectionBucklingproperties')):
-                sectionBucklingproperties= section.getProp('sectionBucklingproperties')
-                reinforcementFactorZ= sectionBucklingproperties['reinforcementFactorZ']
-                sectionDepthZ= sectionBucklingproperties['sectionDepthZ']
-                reinforcementFactorY= sectionBucklingproperties['reinforcementFactorY']
-                sectionDepthY= sectionBucklingproperties['sectionDepthY']
-                Cz= sectionBucklingproperties['Cz']
-                Cy= sectionBucklingproperties['Cy']
-                rcSection= sectionBucklingproperties['sectionData']
+            if(section.hasProp('sectionBucklingProperties')):
+                sectionBucklingProperties= section.getProp('sectionBucklingProperties')
+                reinforcementFactorZ= sectionBucklingProperties['reinforcementFactorZ']
+                sectionDepthZ= sectionBucklingProperties['sectionDepthZ']
+                reinforcementFactorY= sectionBucklingProperties['reinforcementFactorY']
+                sectionDepthY= sectionBucklingProperties['sectionDepthY']
+                Cz= sectionBucklingProperties['Cz']
+                Cy= sectionBucklingProperties['Cy']
+                rcSection= sectionBucklingProperties['sectionData']
                 Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
                 elementBucklingParameters['Leffi']= Leffi
                 elementBucklingParameters['mechLambdai']= mechLambdai
@@ -1212,16 +1217,31 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         loadCombinations= intForcItems[1]
         internalForces= intForcItems[2]
         bucklingParameters= intForcItems[3]
-        ## Compute the new internal forces.
-        for loadComb in loadCombinations:
-            print(loadComb)
-            for eTag in elementTags:
-                print(eTag)
-                elementBucklingParameters= bucklingParameters[eTag]
-                print(elementBucklingParameters)
-                elementInternalForces= internalForces[eTag]
-                print(elementInternalForces)
-        return intForcItems
+        bucklingLoadFactors= intForcItems[4]
+        idCombs= set() # load combinations x modes
+        internalForcesValues= defaultdict(list) # load combination results for each mode.
+        if(len(bucklingParameters)>0):
+            numModes= len(bucklingLoadFactors)
+            ## Compute the new internal forces.
+            for loadComb in loadCombinations:
+                for i in range(0, numModes): # for each mode under this combination.
+                    loadCombMode= loadComb+'_mode_'+str(i+1)
+                    idCombs.add(loadCombMode) # load combination results for mode i.                
+                    for eTag in elementTags: # for each element.
+                        elementBucklingParameters= bucklingParameters[eTag]
+                        # Get fictitious eccentricities
+                        efi= elementBucklingParameters['Efi']
+                        elementSectionsInternalForces= internalForces[eTag]
+                        efz= efi[i][0] # fictitious eccentricity Z axis.
+                        efy= efi[i][1] # fictitious eccentricity Y axis.
+                        # newElementSectionsInternalForces= list()
+                        for iForces in elementSectionsInternalForces:
+                            newForces= iForces.getCopy()
+                            newForces.increaseEccentricities(ez= efz, ey= efy)
+                            newForces.idComb= loadCombMode
+                            internalForcesValues[eTag].append(newForces)
+        return (elementTags, idCombs, internalForcesValues)
+    
             
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
@@ -1253,6 +1273,31 @@ class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressCont
         '''
         super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
+# Buckling checking.
+class BiaxialBucklingController(BiaxialBendingNormalStressController):
+    '''Object that controls buckling limit state.'''
+
+    ControlVars= cv.BiaxialBucklingControlVars
+    
+    def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(BiaxialBucklingController, self).__init__(limitStateLabel)
+        
+class UniaxialBucklingController(UniaxialBendingNormalStressController):
+    '''Object that controls buckling limit state (uniaxial bending).'''
+
+    ControlVars= cv.UniaxialBucklingControlVars
+    
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(UniaxialBucklingController, self).__init__(limitStateLabel)
+        
 # Shear checking.
 
 class ShearController(lscb.ShearControllerBase):
@@ -2783,24 +2828,6 @@ def read_buckling_analysis_results(bucklingAnalysisResultsFileName, setCalc=None
                     means that all the elements in the file of internal forces
                     results are analyzed)
     '''
-    def get_cross_section_internal_forces(internalForces, idComb, tagElem, idSection):
-        ''' Return the CrossSectionInternalForce object containing the
-            internal forces in the given dictionary.
-
-        :param internalForces: Python dictionary containing the values
-                               for the internal forces.
-        :param idComb: identifier of the load combination.
-        :param tagElem: identifier of the finite element.
-        :param idSection: identifier of the section in the element.
-        '''
-        retval= internal_forces.CrossSectionInternalForces()
-        forces= internalForces[k]
-        retval.setFromDict(forces)
-        retval.idComb= idComb
-        retval.tagElem= tagElem
-        retval.idSection= idSection
-        return retval
-    
     elementTags= set()
     idCombs= set()
     with open(bucklingAnalysisResultsFileName) as json_file:
@@ -2827,7 +2854,7 @@ def read_buckling_analysis_results(bucklingAnalysisResultsFileName, setCalc=None
                 for k in internalForces.keys():
                     idSection= eval(k)
                     elementTags.add(tagElem)
-                    crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection)
+                    crossSectionInternalForces= lsd.get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= None)
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
                 bucklingParametersValues[tagElem]=  eheElementBucklingParameters[str(tagElem)]
     else:
@@ -2844,7 +2871,7 @@ def read_buckling_analysis_results(bucklingAnalysisResultsFileName, setCalc=None
                     for k in internalForces.keys():
                         idSection= eval(k)
                         elementTags.add(tagElem)
-                        crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, idSection= idSection)
+                        crossSectionInternalForces= lsd.get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= None)
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
                     bucklingParametersValues[tagElem]=  eheElementBucklingParameters[str(tagElem)]
-    return (elementTags,idCombs,internalForcesValues, bucklingParametersValues)
+    return (elementTags,idCombs,internalForcesValues, bucklingParametersValues, bucklingLoadFactors)

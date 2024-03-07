@@ -47,7 +47,7 @@ cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,rho)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= cable.name
 seedElemHandler.dimElem= 2 # Dimension of element space
-truss= seedElemHandler.newElement("CorotTruss",xc.ID([0,0]))
+truss= seedElemHandler.newElement("CorotTruss")
 truss.sectionArea= area
 # seed element definition ends
 

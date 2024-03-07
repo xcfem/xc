@@ -61,7 +61,7 @@ seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 2 # Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTransformation= lin.name
-beam2d= seedElemHandler.newElement("ElasticTimoshenkoBeam2d",xc.ID([0,0]))
+beam2d= seedElemHandler.newElement("ElasticTimoshenkoBeam2d")
 beam2d.h= h
 
 xcTotalSet= preprocessor.getSets.getSet("total")

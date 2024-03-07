@@ -155,10 +155,12 @@ XC::Element *XC::ElementHandler::SeedElemHandler::newElement(const std::string &
 //! @param type: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticTimoshenkoBeam2d', 'ElasticBeam3d', 'ElasticTimoshenkoBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
 XC::Element *XC::ElementHandler::SeedElemHandler::newElement(const std::string &type, const ID &nodeTags)
   {
-    // std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
-    //           << "; seed element does not need to initialize its nodes."
-    //           << " Remove the node tags parameter."
-    //           << Color::def << std::endl;
+    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+              << "; seed element does not need to initialize its nodes."
+              << " Remove the node tags parameter or use the regular"
+              << " element handler if you don't want XC to generate the"
+              << " mesh for you."
+              << Color::def << std::endl;
     this->elementType= type;
     return ProtoElementHandler::newElement(type, nodeTags);
   }

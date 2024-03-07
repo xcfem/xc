@@ -62,7 +62,7 @@ s.setElemSizeIJ(1.5*10e-3,10e-3)
 ## type of finite element we will want to use for our mesh.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= plateFiber.name
-quad= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+quad= seedElemHandler.newElement("ShellMITC4")
 
 ## Generate mesh
 s.genMesh(xc.meshDir.I)

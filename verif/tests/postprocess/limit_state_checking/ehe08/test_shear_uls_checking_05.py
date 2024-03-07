@@ -78,7 +78,7 @@ s.nDivJ= 3
 # Generate mesh.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= rcSection.name
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellMITC4")
 s.genMesh(xc.meshDir.I)
 
 # Constraints.
@@ -219,10 +219,9 @@ else:
 # oh= output_handler.OutputHandler(modelSpace)
 
 # # oh.displayFEMesh()
-# #Load properties to display:
-# from postprocess.control_vars import *
-# modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifShearFile())
+# # Load control variables to display:
+# limitState.readControlVars(modelSpace= modelSpace)
 # argument= 'CF' #Possible arguments: 'CF','Vy','Vz'
-# oh.displayFieldDirs1and2(limitStateLabel=lsd.shearResistance.label, argument=argument, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
+# oh.displayFieldDirs1and2(limitStateLabel= limitState.label, argument=argument, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
 
 cfg.cleandirs()  # Clean after yourself.

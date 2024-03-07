@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' Sheet-piles according to chapter 14 of the book "Principles of Foundation 
-Engineering" of Braja M. Das. Eight Edition. CENGAGE Learning. 2016.
+Engineering" of Braja M. Das. Eight Edition. CENGAGE Learning. 2016. ISBN-13: 978-1-305-08155-0
 
-Example 14.2 (same as example 14.1 assuming the absence of water table).
+Example 14.2 page 723 (same as example 14.1 assuming the absence of water table).
 '''
 
 from __future__ import division

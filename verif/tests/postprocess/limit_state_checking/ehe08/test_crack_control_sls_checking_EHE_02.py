@@ -142,8 +142,8 @@ else:
 
 # # oh.displayFEMesh()
 # #Load properties to display:
-# from postprocess.control_vars import *
-# modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifCrackFreqFile())
+# # Load control variables to display:
+# limitState.readControlVars(modelSpace= modelSpace)
 # arguments= ['wk', 'CF', 'N', 'My', 'Mz'] # Possible arguments: 'CF','wk', 'N', 'My'
 # for arg in arguments:
 #     oh.displayBeamResult(attributeName= limitState.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)

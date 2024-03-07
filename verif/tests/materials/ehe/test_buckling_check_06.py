@@ -120,7 +120,7 @@ ratio1= abs(avgLeff-22.111953551507593)/22.111953551507593
 avgMechLambda/=sz
 ratio2= abs(avgMechLambda-70.75825136482429)/70.75825136482429
 avgEf/=sz
-ratio3= abs(avgEf-0.20056596377576272)/0.20056596377576272
+ratio3= abs(avgEf-0.2318153467323909)/0.2318153467323909
 
 '''
 import matplotlib.pyplot as plt

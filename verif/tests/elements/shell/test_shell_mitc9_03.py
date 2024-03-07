@@ -72,7 +72,7 @@ canti_mat = typical_materials.defElasticMembranePlateSection(preprocessor, "cant
 # *********Elements*********
 seedElemHandler = preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial = "canti_mat"
-elem = seedElemHandler.newElement("ShellMITC9", xc.ID([0,0,0,0,0,0,0,0,0]))
+elem= seedElemHandler.newElement("ShellMITC9")
 
 
 # *********Mesh*********
