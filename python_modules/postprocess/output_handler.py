@@ -162,7 +162,7 @@ class OutputHandler(object):
 #        displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
         displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor)
 
-    def displayScalarPropertyAtNodes(self,propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
+    def displayScalarPropertyAtNodes(self, propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
         '''displays the scalar property defined at the nodes of the set.
 
         :param propeToDisp: scalar property defined at nodes. 
@@ -433,7 +433,7 @@ class OutputHandler(object):
         :param setToDisplay: set of elements (any type) to be depicted 
                              as context.
         :param scaleFactor:  factor of scale to apply to the auto-scaled display
-                             (defaults to 1)
+                             (defaults to 1).
         :param caption:      caption to display
         :param fileName:     file to dump the display
         :param defFScale:    factor to apply to current displacement of nodes 
@@ -458,8 +458,8 @@ class OutputHandler(object):
             displaySettings.displayScene(caption=caption,fileName=fileName)
 
     def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, overrideScaleFactor= None,orientScbar=1, titleScbar=None, defaultDirection= 'J',captionText=None):
-        '''displays the component of internal forces in the set of entities as a 
-         diagram over lines (i.e. appropriated for beam elements).
+        '''displays the component of internal forces in the set of entities as
+           a diagram over lines (i.e. appropriated for beam elements).
 
         :param itemToDisp: component of the internal forces 
           ('N', 'Qy' (or 'Vy'), 'Qz' (or 'Vz'), 'My', 'Mz', 'T') to be depicted 
@@ -677,8 +677,8 @@ class OutputHandler(object):
             displaySettings.displayScene(caption=caption,fileName=fileName)
 
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
-        '''displays the a displacement (uX,uY,...) or a property defined in nodes 
-        as a diagram over lines.
+        '''displays the a displacement (uX,uY,...) or a property defined in 
+           nodes as a diagram over lines.
 
         :param itemToDisp: item to display (uX,uY,...).
         :param setToDisplay: set of entities (elements of type beam) to be 
@@ -715,8 +715,8 @@ class OutputHandler(object):
             displaySettings.displayScene(caption=caption,fileName=fileName)
 
     def displayElementValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
-        '''displays the a displacement (uX,uY,...) or a property defined in nodes 
-        as a diagram over lines.
+        '''displays the a displacement (uX,uY,...) or a property defined in 
+           nodes as a diagram over lines.
 
         :param itemToDisp: item to display (uX,uY,...).
         :param setToDisplay: set of entities (elements of type beam) to be 
