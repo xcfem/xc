@@ -761,7 +761,7 @@ def getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     :param ue: Perimeter of the middle line of the effective hollow section.
 
     '''
-    return math.radians(getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)*7000+29) 
+    return math.radians(29+7000*getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)) 
 
 def getBetaVcuEHE08(theta, thetaE):
     '''getBetaVcuEHE08(theta,thetaE) [units: N, m, rad]
@@ -772,8 +772,8 @@ def getBetaVcuEHE08(theta, thetaE):
     :param theta: angle between the concrete compressed struts and the 
                   member axis (figure 44.2.3.1.a EHE).    
     '''
-    cotgTheta=1/math.tan(theta)
-    cotgThetaE=1/math.tan(thetaE)
+    cotgTheta= 1/math.tan(theta)
+    cotgThetaE= 1/math.tan(thetaE)
     retval=0.0
     if cotgTheta<0.5:
         methodName= sys._getframe(0).f_code.co_name
@@ -789,6 +789,37 @@ def getBetaVcuEHE08(theta, thetaE):
                 lmsg.warning(methodName+'; theta angle (theta= '+str(math.degrees(theta))+') is too big.')
     return retval
   
+def getVcuEHE08CrackAngle(fcv, fcd, gammaC, Ncd, Ac, b0, d, AsPas, AsAct, theta, thetaEVcu):
+    '''getVcuEHE08(fcv, fcd, gammaC, Ncd, Ac, b0, d, AsPas,AsAct, theta, thetaEVcu) 
+     [units: N, m, rad]
+     Return the value of Vcu (contribution of the concrete to shear strength)
+     for members WITH shear reinforcement, according to clause 
+     44.2.3.2.2 of EHE-08.
+
+    :param fcv: effective concrete shear strength. For members without shear 
+                reinforcement fcv= min(fck,60MPa). For members with shear 
+                reinforcement fcv= min(fck,100MPa). In both cases, if 
+                concrete quality control is not direct fcv= 15 MPa.
+    :param fcd: design value of concrete compressive strength).
+    :param gammaC: Partial safety factor for concrete.
+    :param Ncd: design value of axial force in concrete
+                (positive if in tension).
+    :param Ac: concrete section total area.
+    :param b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+     at a distance greater than the effective depth of the section.
+    :param theta: angle between the concrete compressed struts and the member 
+     axis (figure 44.2.3.1.a EHE)
+    :param thetaEvCu: reference angle of inclination of cracks (in radians).
+    '''
+    chi=min(2,1+math.sqrt(200/(d*1000.)))  # must be expressed in meters.
+    sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
+    FcvVcu=getFcvEHE08(0.15,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
+    betaVcu= getBetaVcuEHE08(theta,thetaEVcu)
+    return FcvVcu*betaVcu*b0*d
 
  
 def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
@@ -826,15 +857,8 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     :param Ae: Area enclosed by the middle line of the effective hollow section.
     :param ue: Perimeter of the middle line of the effective hollow section.
     '''
-  
-    chi=min(2,1+math.sqrt(200/(d*1000.)))   #HA DE EXPRESARSE EN METROS.
-    sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
-    FcvVcu=getFcvEHE08(0.15,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
-    thetaEVcu=getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)
-    betaVcu=getBetaVcuEHE08(theta,thetaEVcu)
-    return FcvVcu*betaVcu*b0*d
-  
-
+    thetaEVcu= getCrackAngleEHE08(Nd= Nd, Md= Md, Vd= Vd, Td= Td, z= z, AsPas= AsPas, AsAct= AsAct, Es= Es, Ep= Ep, Fp= Fp, Ae= Ae, ue= ue)
+    return getVcuEHE08CrackAngle(fcv= fcv, fcd= fcd, gammaC= gammaC, Ncd= Ncd, Ac= Ac, b0= b0, d= d, AsPas= AsPas, AsAct= AsAct, theta= theta, thetaEVcu= thetaEVcu)
 
   
 def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue, circular= False):
@@ -1442,18 +1466,22 @@ class ShearController(lscb.ShearControllerBase):
                     self.tensionedRebars.area= tensionedReinforcement.getArea(1)
                 else:
                     self.tensionedRebars.area= 0.0
-                self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
-                self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
+                self.thetaFisuras= getCrackAngleEHE08(Nd= Nd, Md= Md, Vd= Vd, Td= Td, z= self.mechanicLeverArm, AsPas= self.tensionedRebars.area, AsAct= 0.0, Es= self.reinforcementElasticModulus, Ep= 0.0, Fp= 0.0, Ae= self.VuAe, ue= self.Vuue)
+                self.Vcu= getVcuEHE08CrackAngle(fcv= self.fckH, fcd= self.fcdH, gammaC= self.gammaC, Ncd= self.concreteAxialForce, Ac= self.concreteArea, b0= self.strutWidth, d= self.effectiveDepth, AsPas= self.tensionedRebars.area, AsAct= 0.0, theta= self.theta, thetaEVcu= self.thetaFisuras)
                 self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS, circular)
                 self.Vu2= self.Vcu+self.Vsu
             else: # Uncracked section
                 # I (LCPT) don't find an expression for this case in EHE
-                # so I ignore the shear reinforcement.
                 axes= scc.getInternalForcesAxes()
-                self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axes)
-                self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axes))
                 self.strutWidth= scc.getCompressedStrutWidth() # b0
-                self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
+                self.thetaFisuras= math.radians(29) # compressed web so epsilon x= 0.0
+                self.Vcu= getVcuEHE08CrackAngle(fcv= self.fckH, fcd= self.fcdH, gammaC= self.gammaC, Ncd= self.concreteAxialForce, Ac= self.concreteArea, b0= self.strutWidth, d= self.effectiveDepth, AsPas= self.tensionedRebars.area, AsAct= 0.0, theta= self.theta, thetaEVcu= self.thetaFisuras)
+                self.mechanicLeverArm= scc.getMechanicLeverArm()
+                self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS, circular)
+                self.Vu2= self.Vcu+self.Vsu
+                # self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axes)
+                # self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axes))
+                # self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
             self.Vu= min(self.Vu1,self.Vu2)
 
     def calcVuEHE08(self, scc, torsionParameters, Nd, Md, Vd, Td, rcSets, circular= False):
