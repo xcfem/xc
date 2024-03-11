@@ -312,12 +312,12 @@ class PeckPressureEnvelope(EarthPressureBase):
         Engineering" from Braja M. Das.
 
       :ivar H: height of the cut.
-      :ivar phi: effective friction angle of sand.
+      :ivar phi: effective friction angle of sand [radians].
     '''
     def __init__(self,phi , zGround, gammaSoil, zWater, gammaWater, H):
         ''' Constructor.
 
-        :param phi: effective friction angle of sand.
+        :param phi: effective friction angle of sand [radians]
         :param zGround: global Z coordinate of ground level.
         :param gammaSoil: weight density of soil.
         :param zWater: global Z coordinate of groundwater level.
@@ -661,8 +661,8 @@ class SeismicPressureDistribution(EarthPressureBase):
       :ivar H: height of the structure.
       :ivar kv: seismic coefficient of vertical acceleration.
       :ivar kh: seismic coefficient of horizontal acceleration.
-      :ivar psi: back face inclination of the structure (<= PI/2)
-      :ivar phi: angle of internal friction of soil.
+      :ivar psi: back face inclination of the structure (<= PI/2) [radians]
+      :ivar phi: angle of internal friction of soil [radians]
       :ivar beta: slope inclination of backfill.
     '''
     def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, beta):
@@ -673,8 +673,8 @@ class SeismicPressureDistribution(EarthPressureBase):
         :param H: height of the structure.
         :param kv: seismic coefficient of vertical acceleration.
         :param kh: seismic coefficient of horizontal acceleration.
-        :param psi: back face inclination of the structure (<= PI/2)
-        :param phi: angle of internal friction of soil.
+        :param psi: back face inclination of the structure (<= PI/2) [radians]
+        :param phi: angle of internal friction of soil  [radians].
         :param beta: slope inclination of backfill.
         '''
         
@@ -689,7 +689,7 @@ class SeismicPressureDistribution(EarthPressureBase):
     def setPhi(self, phi):
         ''' Assigns the value of the angle of internal friction of soil.
 
-        :param phi: angle of internal friction of soil.
+        :param phi: angle of internal friction of soil  [radians].
         '''
         self.phi= phi
         self.update()
@@ -728,8 +728,8 @@ class MononobeOkabePressureDistribution(SeismicPressureDistribution):
         :param H: height of the structure.
         :param kv: seismic coefficient of vertical acceleration.
         :param kh: seismic coefficient of horizontal acceleration.
-        :param psi: back face inclination of the structure (<= PI/2)
-        :param phi: angle of internal friction of soil.
+        :param psi: back face inclination of the structure (<= PI/2)  [radians]
+        :param phi: angle of internal friction of soil  [radians].
         :param delta_ad: angle of friction soil - structure.
         :param beta: slope inclination of backfill.
         :param Kas: static earth pressure coefficient.
@@ -771,8 +771,8 @@ class IskanderPressureDistribution(SeismicPressureDistribution):
         :param H: height of the structure.
         :param kv: seismic coefficient of vertical acceleration.
         :param kh: seismic coefficient of horizontal acceleration.
-        :param psi: back face inclination of the structure (<= PI/2)
-        :param phi: angle of internal friction of soil.
+        :param psi: back face inclination of the structure (<= PI/2) [radians]
+        :param phi: angle of internal friction of soil [radians].
         :param beta: slope inclination of backfill.
         :param c: cohesion
         '''
