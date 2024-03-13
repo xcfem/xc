@@ -29,12 +29,12 @@ def active_earth_pressure_coefficient_Kad(psi, phi, theta, delta_ad, beta):
         to Mononobe-Okabe according to EN1998-5 §E.4.
 
         :param psi: back face inclination of the structure (<= PI/2)
-        :param phi: angle of internal friction of soil.
+        :param phi: angle of internal friction of soil [radians].
         :param theta: angle of weight with vertical:
            - kv= seismic coefficient of vertical acceleration.
            - kh= seismic coefficient of horizontal acceleration.
            - tan(theta)= kh/(1+kv) AND tan(theta)= kh/(1-kv)
-        :param delta_ad: angle of friction soil - structure.
+        :param delta_ad: angle of friction soil - structure [radians].
         :param beta: slope inclination of terrain.
     '''
     num= (math.sin(psi+phi-theta))**2
@@ -52,8 +52,8 @@ def passive_earth_pressure_coefficient_Kpd(psi, phi, theta, beta):
     ''' Return the passive earth pressure coefficient according
         to Mononobe-Okabe according to EN1998-5 §E.4.
 
-        :param psi: back face inclination of the structure (<= PI/2)
-        :param phi: angle of internal friction of soil.
+        :param psi: back face inclination of the structure (<= PI/2) [radians]
+        :param phi: angle of internal friction of soil [radians].
         :param theta: angle of weight with vertical:
            - kv= seismic coefficient of vertical acceleration.
            - kh= seismic coefficient of horizontal acceleration.
@@ -74,8 +74,8 @@ def overpressure_dry(H, gamma_soil, kv, kh, psi, phi, delta_ad, beta, Kas):
         :param gamma_soil: unit weight of soil (backfill)
         :param kv: seismic coefficient of vertical acceleration.
         :param kh: seismic coefficient of horizontal acceleration.
-        :param psi: back face inclination of the structure (<= PI/2)
-        :param phi: angle of internal friction of soil.
+        :param psi: back face inclination of the structure (<= PI/2) [radians]
+        :param phi: angle of internal friction of soil [radians].
         :param delta_ad: angle of friction soil - structure.
         :param beta: slope inclination of backfill.
         :param Kas: static earth pressure coefficient 
