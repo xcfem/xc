@@ -160,6 +160,7 @@ const XC::Vector &XC::BrickSurfaceLoad::getResistingForce(void) const
   {
     internalForces.Zero();
 
+    const double factoredPressure= mLoadFactor*my_pressure;
     // loop over Gauss points
     for(int i = 0; i < SL_NUM_NODE; i++)
       {
@@ -168,10 +169,11 @@ const XC::Vector &XC::BrickSurfaceLoad::getResistingForce(void) const
 	// loop over nodes
 	for(int j = 0; j < SL_NUM_NODE; j++)
 	  {
+	    const double mynij= myNI(j);
 	    // loop over dof
 	    for(int k = 0; k < 3; k++)
 	      {
-		internalForces[j*3+k]-=  mLoadFactor*my_pressure*myNhat(k)*myNI(j);
+		internalForces[j*3+k]-= factoredPressure*myNhat(k)*mynij;
 	      }
 	  }
       }
