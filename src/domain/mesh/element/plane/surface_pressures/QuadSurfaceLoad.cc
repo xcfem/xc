@@ -42,19 +42,19 @@ XC::Matrix XC::QuadSurfaceLoad::tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF);
 //! @brief Constructor.
 XC::QuadSurfaceLoad::QuadSurfaceLoad(int tag, int Nd1, int Nd2, double pressure)
   : SurfaceLoadBase<QSL_NUM_NODE>(tag, ELE_TAG_QuadSurfaceLoad, pressure, 1.0),
-   internalForces(QSL_NUM_DOF),
-   g(QSL_NUM_NDF), 
-   myNhat(QSL_NUM_NDF)
+    internalForces(QSL_NUM_DOF),
+    g(QSL_NUM_NDF), 
+    myNhat(QSL_NUM_NDF)
   {
     theNodes.set_id_nodes(Nd1,Nd2);
   }
 
 //! @brief Default constructor.
 XC::QuadSurfaceLoad::QuadSurfaceLoad(int tag)
-  :SurfaceLoadBase<QSL_NUM_NODE>(tag, ELE_TAG_QuadSurfaceLoad, 0.0, 1.0),
-   internalForces(QSL_NUM_DOF),
-   g(QSL_NUM_NDF), 
-   myNhat(QSL_NUM_NDF)
+  : SurfaceLoadBase<QSL_NUM_NODE>(tag, ELE_TAG_QuadSurfaceLoad, 0.0, 1.0),
+    internalForces(QSL_NUM_DOF),
+    g(QSL_NUM_NDF), 
+    myNhat(QSL_NUM_NDF)
   {}
 
 XC::QuadSurfaceLoad::~QuadSurfaceLoad(void)
@@ -72,7 +72,7 @@ void XC::QuadSurfaceLoad::setDomain(Domain *theDomain)
     // calculate vector g
     const Vector &dcrd1= theNodes[0]->getCrds();
     const Vector &dcrd2= theNodes[1]->getCrds();
-    g= (dcrd2 - dcrd1).Normalized();
+    g= (dcrd2 - dcrd1);
   }
 
 //! @brief return number of dofs
@@ -83,7 +83,7 @@ int XC::QuadSurfaceLoad::getNumDOF(void) const
 int XC::QuadSurfaceLoad::UpdateBase(double Xi) const
   {
 
-    // normal vector to primary surface as cross product of g1 and g2
+    // normal vector to primary surface.
     myNhat(0)= -g(1);
     myNhat(1)= g(0);
 
@@ -93,7 +93,7 @@ int XC::QuadSurfaceLoad::UpdateBase(double Xi) const
 const XC::Matrix &XC::QuadSurfaceLoad::getTangentStiff(void) const
   { return tangentStiffness; }
 
-const XC::Matrix & XC::QuadSurfaceLoad::getInitialStiff(void) const
+const XC::Matrix &XC::QuadSurfaceLoad::getInitialStiff(void) const
   { return getTangentStiff(); }
     
 
@@ -102,15 +102,16 @@ const XC::Vector &XC::QuadSurfaceLoad::getResistingForce(void) const
     internalForces.Zero();
 
     // Only one Gauss point -> no Loop.
-    this->UpdateBase(0.0);
+    this->UpdateBase(0.5);
 
+    const double factoredPressure= mLoadFactor*my_pressure;
     // loop over nodes
     for(int j = 0; j < QSL_NUM_NODE; j++)
       {
 	// loop over dof
 	for(int k = 0; k < QSL_NUM_NDF; k++)
 	  {
-	    internalForces[j*2+k]-=  mLoadFactor*my_pressure*myNhat(k)*0.5;
+	    internalForces[j*2+k]-=  factoredPressure*myNhat(k)*0.5;
 	  }
       }
     return internalForces;
@@ -156,7 +157,7 @@ int XC::QuadSurfaceLoad::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(18);
+    inicComm(12);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -169,7 +170,7 @@ int XC::QuadSurfaceLoad::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::QuadSurfaceLoad::recvSelf(const Communicator &comm)
   {
-    inicComm(18);
+    inicComm(12);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
