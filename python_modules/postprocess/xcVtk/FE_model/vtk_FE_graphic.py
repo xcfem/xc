@@ -188,7 +188,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         # elif(self.gridRecord.entToLabel=="nodes"):
         #   vtk_define_mesh_nodes.VtkDisplayIdsNodes(self.renderer)
         # else:
-        #   print("Entity: ", self.gridRecord.entToLabel, " unknown.")
+        #   lmsg.error("Entity: "+ self.gridRecord.entToLabel+ " unknown.")
 
     def FEmeshGraphic(self,setToDisplay,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'),defFScale=0.0):
         ''' Graphic of the FE mesh
