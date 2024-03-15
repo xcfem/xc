@@ -27,11 +27,10 @@ def flatten_attribute(elemSet,attributeName, treshold, limit):
       v= e.getProp(attributeName)
       if(v>treshold):
         vCorr= 2*math.atan(v)/math.pi*(limit-treshold)+treshold
-        #print("v= ", v, " vCorr=", vCorr)
         e.setProp(attributeName,vCorr)
         flattened+= 1
     if(flattened>0):
-      print("flattened ", flattened, 'values over', len(elemSet))
+        lmsg.info("flattened "+str(flattened)+' values over '+str(elemSet))
 
 def create_attribute_at_nodes(xcSet,attributeName,initialValue):
     ''' Create an attribute on the nodes of the set passed as parameter.

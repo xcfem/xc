@@ -384,13 +384,6 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; displayElementUniformLoad not implemented.')
-            # points= ele.getPoints(3,1,1,True)
-            # i= 0
-            # for capa in points:
-            #   for pos in capa: 
-            #     print(pos)
-            #     utils_vtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())
-            #     i+= 1
 
     def displayElementalLoads(self, preprocessor,loadPattern, color, fScale):
         # loadPattern.addToDomain()

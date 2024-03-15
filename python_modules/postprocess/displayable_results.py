@@ -80,8 +80,6 @@ class ResultsDescriptionContainer(dict):
             partName= partToDisplay.partName
             index= result.getReinforcementLabel()
             reinforcementText= partToDisplay.reinforcementLabels[index-1]
-            print('**** key= ', key)
-            print('**** label= ', self.limitStateData.label)
             figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,key,result.description,reinforcementText,result.units)
             retval.append(figDef)
         return retval
@@ -93,7 +91,7 @@ class ResultsDescriptionContainer(dict):
         :param partToDisplay: part of the model that will be displayed.
         '''
         latexFigsFilename= self.getLaTeXOutputFileName(partToDisplay.getShortName())
-        print('latexFigsFilename= ', latexFigsFilename)
+        lmsg.info('latexFigsFilename= '+str(latexFigsFilename))
         latexListFilename= self.getLaTeXFigureListFileName(partToDisplay.getShortName())
         figList= self.getFigureDefinitionList(partToDisplay)
         tp.displayFigures(figList,latexFigsFilename,latexListFilename)
@@ -195,8 +193,7 @@ issRRfisFrench= ResultsDescriptionContainer(rareCrackControl,[
 #Issues sous charges durables - contraintes normales
 nsr= lsd.normalStressesResistance
 cVars= cv.BiaxialBendingControlVars().getFieldNames()
-print('cVars= ', cVars)
-print('XXX Continue here.')
+
 '''
 issDRnormFrench= ResultsDescriptionContainer(nsr,[ResultDescription("FCCP1","Facteur de capacité (contraintes normales) des éléments sous charges durables (ELUT2*)"),
     ResultDescription("NCP1","Effort normal associé au facteur de capacité (contraintes normales) sous charges durables", 'kN/m'),
