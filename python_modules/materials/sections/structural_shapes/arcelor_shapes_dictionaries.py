@@ -234,7 +234,7 @@ arcelor_shapes['AU']= AU
 #         for t in dataList:
 #             output+= "'"+t[0]+"':"+row[t[1]]+t[2]+', '
 #         output+= "'E':2.1e+11, 'nu':0.3}"
-#         print(output)
+#         lmsg.info(output)
 # finally:
 #     f.close()
 
