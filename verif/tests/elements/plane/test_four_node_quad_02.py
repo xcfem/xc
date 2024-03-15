@@ -43,6 +43,7 @@ n8= nodes.newNodeXY(L,h)
 # Materials definition
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,0.0)
 
+# Element definition.
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast2d.name
 quad1= elements.newElement("FourNodeQuad",xc.ID([n1.tag,n2.tag,n6.tag,n5.tag]))
