@@ -48,3 +48,19 @@ class_<XC::DruckerPragerPlaneStrain , bases<XC::DruckerPrager>, boost::noncopyab
 
 class_<XC::DruckerPrager3D , bases<XC::DruckerPrager>, boost::noncopyable >("DruckerPrager3D", no_init)
   ;
+
+class_<XC::InitialStateAnalysisWrapper, bases<XC::NDMaterial>, boost::noncopyable >("DruckerPrager3D", no_init)
+   .def("setup", &XC::InitialStateAnalysisWrapper::setup, "Set the dimension and wrapped material.")
+  .add_property("intialStateAnalysisPhase", XC::InitialStateAnalysisWrapper::getInitialStateAnalysisPhase, XC::InitialStateAnalysisWrapper::setInitialStateAnalysisPhase, "Get/set the initialStateAnalysisPhase flag (if true, initial state phase is computed).")
+  ;
+
+class_<XC::ContactMaterialBase, bases<XC::NDMaterial>, boost::noncopyable >("ContactMaterialBase", no_init)
+  .add_property("frictionCoeff", &XC::ContactMaterialBase::getFrictionCoeff, &XC::ContactMaterialBase::setFrictionCoeff, "Get/set the interface frictional coefficient: tan(phi).")
+  .add_property("stiffness", &XC::ContactMaterialBase::getStiffness, &XC::ContactMaterialBase::setStiffness, "Get/set the interface cohesive intercept.")
+  .add_property("cohesion", &XC::ContactMaterialBase::getcohesion, &XC::ContactMaterialBase::setcohesion, "Get/set the interface cohesive intercept.")
+  .add_property("tensileStrength", &XC::ContactMaterialBase::getTensileStrength, &XC::ContactMaterialBase::setTensileStrength, "Get/set the interface tensile strength.")
+  ;
+class_<XC::ContactMaterial2D, bases<XC::ContactMaterialBase>, boost::noncopyable >("ContactMaterial2D", no_init)
+  ;
+class_<XC::ContactMaterial3D, bases<XC::ContactMaterialBase>, boost::noncopyable >("ContactMaterial3D", no_init)
+  ;

@@ -184,6 +184,9 @@
 #include "material/nD/uw_materials/DruckerPrager.h"
 #include "material/nD/uw_materials/DruckerPragerPlaneStrain.h"
 #include "material/nD/uw_materials/DruckerPrager3D.h"
+#include "material/nD/uw_materials/InitialStateAnalysisWrapper.h"
+#include "material/nD/uw_materials/ContactMaterial2D.h"
+#include "material/nD/uw_materials/ContactMaterial3D.h"
 
 // Fibers
 #include "material/section/fiber_section/fiber/UniaxialFiber2d.h"

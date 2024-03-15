@@ -124,7 +124,7 @@ class DruckerPrager: public NDMaterial
     Vector mState; //!< state vector for output
 
     //functions
-    int  updateElasticParam(void); //updated Elastic Parameters based on mean stress 
+    int updateElasticParam(void); //updated Elastic Parameters based on mean stress 
 
     //plasticity integration routine
     void plastic_integrator(void);

@@ -25,48 +25,29 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
+//Contact2D.h
+                                                                        
+#include "NDMaterialPhysicalProperties.h"
 
-#ifndef NDMaterialWrapper_h
-#define NDMaterialWrapper_h
-
-#include "material/MaterialWrapper.h"
-#include "material/nD/NDMaterial.h"
+#ifndef Contact2D_h
+#define Contact2D_h
 
 namespace XC {
+  class ContactMaterial2D;
   
-//! @ingroup MatUnx
+//! @ingroup PysicalProperties
 //
-//! @brief Encapsulates a copy to an uniaxial material.
-class NDMaterialWrapper: public MaterialWrapper<NDMaterial, MAT_TAG_NDMaterialWrapper>
+//! @brief Physical properties for solid mechanics.
+class Contact2D: public NDMaterialPhysicalProperties
   {
   public:
-    NDMaterialWrapper(void);
-    NDMaterialWrapper(const NDMaterial &material);
-    
-    double getRho(void) const;
-    // send back strain
-    const Vector& getStrain() const;
-    // send back stress
-    const Vector& getStress() const;
-    // send back the tangent
-    const Matrix &getTangent() const;
-    const Matrix &getInitialTangent() const;
-    
-    // set the strain to be sent to the main material
-    int setTrialStrain(const Vector &);
-    
-    const std::string &getType(void) const;
-    int getOrder(void) const;
-    
-    int commitState(void);
-    int revertToLastCommit(void);
-    int revertToStart(void);
-    
-    Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
-    int getResponse(int responseID, Information &matInformation);
+    Contact2D(const size_t &nMat= 0, const ContactMaterial2D *ptr_mat= nullptr);
+    Contact2D(const size_t &, ContactMaterial2D &);
+
+    const ContactMaterial2D *getContactMaterial(const int &i= 0) const;
+    ContactMaterial2D *getContactMaterial(const int &i= 0);
+
   };
+
 } // end of XC namespace
-
-
 #endif
-

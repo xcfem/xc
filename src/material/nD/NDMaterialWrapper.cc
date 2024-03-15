@@ -35,5 +35,60 @@ XC::NDMaterialWrapper::NDMaterialWrapper(const NDMaterial &material)
   : MaterialWrapper<NDMaterial, MAT_TAG_NDMaterialWrapper>(material)
   {}
 
+double XC::NDMaterialWrapper::getRho(void) const
+// this function gets the mass density from the main material
+  {
+    return theMaterial->getRho();
+  }
 
+const XC::Vector &XC::NDMaterialWrapper::getStrain(void) const
+// this function sends the strain back to the element
+  { return theMaterial->getStrain(); }
 
+const XC::Vector &XC::NDMaterialWrapper::getStress(void) const
+// this function sends the stress back to the element
+  {
+    return theMaterial->getStress();
+  }
+
+int XC::NDMaterialWrapper::setTrialStrain(const Vector &strain_from_element)
+// this function receives the strain from the element and sends strain to material
+  {
+    return theMaterial->setTrialStrain(strain_from_element);
+  }
+
+//! brief this function sends the tangent back to the element
+const XC::Matrix &XC::NDMaterialWrapper::getTangent(void) const
+  { return theMaterial->getTangent(); }
+
+const XC::Matrix &XC::NDMaterialWrapper::getInitialTangent(void) const
+// this function sends the initial tangent back to the element
+  { return theMaterial->getInitialTangent(); }
+
+const std::string &XC::NDMaterialWrapper::getType(void) const
+  { return theMaterial->getType(); }
+int XC::NDMaterialWrapper::getOrder(void) const
+  { return theMaterial->getOrder(); }
+
+int XC::NDMaterialWrapper::commitState(void)
+  {
+    return theMaterial->commitState();
+  }
+
+int XC::NDMaterialWrapper::revertToLastCommit(void)
+  { return theMaterial->revertToLastCommit(); }
+
+int XC::NDMaterialWrapper::revertToStart(void)
+  {
+    return theMaterial->revertToStart();
+  }
+  
+XC::Response *XC::NDMaterialWrapper::setResponse(const std::vector<std::string> &argv, Information &info)
+  {
+    return theMaterial->setResponse(argv, info);
+  }
+
+int XC::NDMaterialWrapper::getResponse(int responseID, Information &matInfo)
+  {
+    return theMaterial->getResponse(responseID, matInfo);
+  }

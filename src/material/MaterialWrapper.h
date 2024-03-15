@@ -30,6 +30,7 @@
 #define MaterialWrapper_h
 
 #include "utility/actor/actor/MovableObject.h"
+#include <utility/recorder/response/MaterialResponse.h>
 
 namespace XC {
   
@@ -61,11 +62,15 @@ class MaterialWrapper: public MovableObject
       { return theMaterial; }
     virtual void setMaterial(const MatType &);
     
+    void Print(std::ostream &, int flag =0) const;
+    int getMainClassTag(void) const;
+    
     int sendData(Communicator &);  
     int recvData(const Communicator &);
     
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
+    
   };
   
 //! @brief Free memory allocated for the uniaxial material.
@@ -128,6 +133,11 @@ MaterialWrapper<MatType, cTag> &MaterialWrapper<MatType, cTag>::operator=(const 
     copy(other.theMaterial);
     return *this;
   }
+  
+template <typename MatType, int cTag>
+int MaterialWrapper<MatType, cTag>::getMainClassTag(void) const
+// this function sends the class tag of the main material
+  { return theMaterial->getClassTag(); }
 
 template <typename MatType, int cTag>
 int MaterialWrapper<MatType, cTag>::sendData(Communicator &comm)
@@ -136,6 +146,12 @@ int MaterialWrapper<MatType, cTag>::sendData(Communicator &comm)
     int res= 0;
     res+= sendMaterialPtr(theMaterial,getDbTagData(),comm,BrokedPtrCommMetaData(1,2,3));
     return res;
+  }
+
+template <typename MatType, int cTag>
+void MaterialWrapper<MatType, cTag>::Print(std::ostream &s, int flag) const
+  {
+    theMaterial->Print(s, flag);
   }
 
 template <typename MatType, int cTag>
@@ -179,6 +195,8 @@ int MaterialWrapper<MatType, cTag>::recvSelf(const Communicator &comm)
       res+= recvData(comm);
     return res;
   }
+
+  
 } // end of XC namespace
 
 

@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -25,48 +24,35 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
+//NDMaterialPhysicalProperties.cc
 
-#ifndef NDMaterialWrapper_h
-#define NDMaterialWrapper_h
+#include "Contact2D.h"
+#include "material/nD/uw_materials/ContactMaterial2D.h"
 
-#include "material/MaterialWrapper.h"
-#include "material/nD/NDMaterial.h"
+//! @brief Constructor.
+XC::Contact2D::Contact2D(const size_t &nMat,const ContactMaterial2D *ptr_mat)
+  :NDMaterialPhysicalProperties(nMat,ptr_mat)
+  {}
 
-namespace XC {
-  
-//! @ingroup MatUnx
-//
-//! @brief Encapsulates a copy to an uniaxial material.
-class NDMaterialWrapper: public MaterialWrapper<NDMaterial, MAT_TAG_NDMaterialWrapper>
+//! @brief Constructor.
+XC::Contact2D::Contact2D(const size_t &nMat, ContactMaterial2D &theMat)
+  : NDMaterialPhysicalProperties(nMat,&theMat)
+  {}
+
+
+const XC::ContactMaterial2D *XC::Contact2D::getContactMaterial(const int &i) const
   {
-  public:
-    NDMaterialWrapper(void);
-    NDMaterialWrapper(const NDMaterial &material);
-    
-    double getRho(void) const;
-    // send back strain
-    const Vector& getStrain() const;
-    // send back stress
-    const Vector& getStress() const;
-    // send back the tangent
-    const Matrix &getTangent() const;
-    const Matrix &getInitialTangent() const;
-    
-    // set the strain to be sent to the main material
-    int setTrialStrain(const Vector &);
-    
-    const std::string &getType(void) const;
-    int getOrder(void) const;
-    
-    int commitState(void);
-    int revertToLastCommit(void);
-    int revertToStart(void);
-    
-    Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
-    int getResponse(int responseID, Information &matInformation);
-  };
-} // end of XC namespace
+    const ContactMaterial2D *retval= nullptr;
+    if(this->size()>0)
+      retval= dynamic_cast< const ContactMaterial2D *>(theMaterial[i]);
+    return retval;
+  }
 
 
-#endif
-
+XC::ContactMaterial2D *XC::Contact2D::getContactMaterial(const int &i)
+  {
+    ContactMaterial2D *retval= nullptr;
+    if(this->size()>0)
+      retval= dynamic_cast<ContactMaterial2D *>(theMaterial[i]);
+    return retval;
+  }

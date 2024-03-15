@@ -1175,6 +1175,64 @@ def defDruckerPragerPlaneStrain(preprocessor, name, k, G, sigY, mRho, mRhoBar, K
     retval.setup(elastFlag)
     return retval
 
+def defInitialStateAnalysisWrapper(preprocessor, name, ndim, encapsulatedMaterial):
+    ''' Create a initial state analysis wrapper material.
+
+    :param preprocessor: pre-processor or the finite element problem.
+    :param name: material identifier.
+    :param ndim: problem dimension (2 or 3).
+    :param encapsulatedMaterial: encapsulated material.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("initial_state_analysis_wrapper", matName)
+    retval.setup(ndim, encapsulatedMaterial)
+    return retval
+
+def defContactMaterial2D(preprocessor, name, mu, G, c, t):
+    ''' Create a 2D conctact material.
+
+    :param preprocessor: pre-processor or the finite element problem.
+    :param name: material identifier.
+    :param mu: interface frictional coefficient: tan(phi)
+    :param G: interface stiffness parameter
+    :param c: interface cohesive intercept
+    :param t: interface tensile strength 
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("contact_material_2d", matName)
+    retval.frictionCoeff= mu
+    retval.stiffness= G
+    retval.cohesion= c
+    retval.tensileStrength= t
+    return retval
+
+def defContactMaterial3D(preprocessor, name, mu, G, c, t):
+    ''' Create a 2D conctact material.
+
+    :param preprocessor: pre-processor or the finite element problem.
+    :param name: material identifier.
+    :param mu: interface frictional coefficient
+    :param G: interface stiffness parameter
+    :param c: interface cohesive intercept
+    :param t: interface tensile strength 
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("contact_material_2d", matName)
+    retval.frictionCoeff= mu
+    retval.stiffness= G
+    retval.cohesion= c
+    retval.tensileStrength= t
+    return retval
+
 def defPlasticDamageConcretePlaneStress(preprocessor, name, E, nu, ft, fc, beta= 0.6, Ap= 0.5, An= 2.0, Bn= 0.75):
     ''' Create plane stress concrete material.
 
