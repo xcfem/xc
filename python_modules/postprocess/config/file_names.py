@@ -34,6 +34,12 @@ torsionVerificationResultsFile= 'verifRsl_torsionULS'
 torsionVerificationReportFile= 'report_torsionULS'
 torsionDirectory= 'torsionULS/'
 
+# EN 1992-1-1:2004. Annex F.
+# Tension reinforcement expressions for in-plane stress conditions
+ec2InPlaneStressVerificationResultsFile= 'verifRsl_ec2_in-plane_stressULS'
+ec2InPlaneStressVerificationReportFile= 'report_ec2_in-plane_stressULS'
+ec2InPlaneStressDirectory= 'ec2_in-plane_stressULS/'
+
 # Von Mises stresses.
 vonMisesStressesVerificationResultsFile= 'verifRsl_VonMisesStressULS'
 vonMisesStressesVerificationReportFile= 'report_VonMisesStressULS'

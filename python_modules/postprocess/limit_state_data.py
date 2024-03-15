@@ -20,6 +20,7 @@ from postprocess.reports import export_displacements as ed
 from postprocess.reports import export_modes as em
 from misc_utils import log_messages as lmsg
 from materials.sections import internal_forces
+from materials import stresses
 from collections import defaultdict
 import csv
 from postprocess import control_vars as cv
@@ -170,7 +171,7 @@ class LimitStateData(object):
 
         :param setCalc: elements to read internal forces for.
         '''
-        return readIntForcesFile(self.getInternalForcesFileName(), setCalc)
+        return read_internal_forces_file(self.getInternalForcesFileName(), setCalc)
     
     # def readReactions(self, nodeSet):
     #     ''' Read the reactions for the nodes in the set argument.
@@ -199,7 +200,7 @@ class LimitStateData(object):
         # intForcItems: tuple containing the element tags, the identifiers
         # of the load combinations and the values of the
         # internal forces.        
-        intForcItems= readIntForcesFile(intForcCombFileName, setCalc= setCalc)
+        intForcItems= read_internal_forces_file(intForcCombFileName, setCalc= setCalc)
         return intForcItems 
             
     def getDisplacementsDict(self, nmbComb, nodes):
@@ -931,7 +932,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
 
         :param setCalc: elements to read internal forces for.
         '''
-        return readIntForcesFile(self.getInternalForcesFileName(), setCalc, vonMisesStressId= self.vonMisesStressId)
+        return read_internal_forces_file(self.getInternalForcesFileName(), setCalc, vonMisesStressId= self.vonMisesStressId)
         
     def checkElements(self, elementsToCheck, outputCfg= VerifOutVars()):
         '''Checking of fatigue under fatigue combinations loads in
@@ -1000,6 +1001,7 @@ woodShearResistance= ShearResistanceSteelLimitStateData()
 torsionResistance= TorsionResistanceRCLimitStateData()
 
 fatigueResistance= FatigueResistanceRCLimitStateData()
+# on Mises
 vonMisesStressResistance= VonMisesStressLimitStateData()
 
 class CrossSectionInternalForces(internal_forces.CrossSectionInternalForces):
@@ -1123,6 +1125,124 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
     return (elementTags, idCombs, internalForcesValues)
 
+class GaussPointStresses(stresses.Stresses3D):
+    ''' Definition of the stresses in Gauss point of a 2D element
+
+    :ivar idComb: identifier of the combination to which the stresses
+                  are due.
+    :ivar tagElem: identifier of the finite element.
+    :ivar idGaussPoint: identifier of the section in the element.
+    :ivar vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
+    '''
+    def __init__(self, idComb= None, tagElem= None, idGaussPoint=None, sigma_11= 0.0, sigma_12= 0.0, sigma_13= 0.0, sigma_22= 0.0, sigma_23= 0.0, sigma_33= 0.0):
+        '''Internal forces on a 3D section (6 degrees of freedom).
+
+        :param idComb: identifier of the load combination.
+        :param tagElem: identifier of the finite element.
+        :param idGaussPoint: identifier of the section in the element.
+        :param sigma_11:  (1,1) component of the stress tensor.
+        :param sigma_12:  (1,2) component of the stress tensor.
+        :param sigma_22:  (2,2) component of the stress tensor.
+        '''
+        super().__init__(sigma_11= sigma_11, sigma_12= sigma_12, sigma_13= sigma_13, sigma_22= sigma_22, sigma_23= sigma_23, sigma_33= sigma_33)
+        self.idComb= idComb
+        self.tagElem= tagElem
+        self.idGaussPoint= idGaussPoint
+
+    def getDict(self):
+        '''returns a dictionary whith the values of the internal forces.'''
+        retval= super().getDict()
+        retval['idComb']= self.idComb;
+        retval['tagElem']= self.tagElem
+        retval['idGaussPoint']= self.idGaussPoint
+        return retval
+
+    def setFromDict(self, dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        super().setFromDict(dct= dct)
+        self.idComb= dct['idComb']
+        self.tagElem= dct['tagElem']
+        self.idGaussPoint= dct['idSection']
+
+    def getCopy(self):
+        ''' Return a copy of this object.'''
+        retval= GaussPointStresses()
+        retval.setFromDict(self.getDict())
+        return retval
+    
+def get_gauss_point_stresses(stresses, idComb, tagElem, key, vonMisesStressId):
+    ''' Return the CrossSectionInternalForces object containing the
+        internal forces in the given dictionary.
+
+    :param stresses: Python dictionary containing the values
+                           for the stresses.
+    :param idComb: identifier of the load combination.
+    :param tagElem: identifier of the finite element.
+    :param key: identifier of the gauss point in the element.
+    :param vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
+    '''
+    retval= GaussPointStresses(idComb= idComb, tagElem= tagElem, idGaussPoint= eval(key))
+    strss= stresses[key]
+    retval.setStressesFromDict(strss)
+    if(vonMisesStressId in stresses):
+        retval.vonMisesStress= stresses[vonMisesStressId]
+    return retval
+
+def read_stresses_dict(stressesCombFileName, setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
+    '''Extracts element and combination identifiers from the internal
+    forces JSON file. Return elementTags, idCombs and stresses values
+    
+    :param stressesCombFileName: name of the file containing the stresses
+                                 obtained for each element for 
+                                 the combinations analyzed
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed)
+    :param vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
+    '''        
+    elementTags= set()
+    idCombs= set()
+    with open(stressesCombFileName) as json_file:
+        combStressesDict= json.load(json_file)
+    json_file.close()
+    
+    stressesValues= defaultdict(list)
+    
+    if(not setCalc):
+        for comb in combStressesDict.keys():
+            idComb= str(comb)
+            idCombs.add(idComb)
+            elements= combStressesDict[comb]
+            for elemId in elements.keys():
+                tagElem= eval(elemId)
+                elementData= elements[elemId]
+                #elementType= elementData['type']
+                stresses= elementData['stresses']
+                for k in stresses.keys():
+                    elementTags.add(tagElem)
+                    stresses= get_gauss_point_stresses(stresses= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
+                    stressesValues[tagElem].append(stresses)
+    else:
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+        for idComb in combStressesDict.keys():
+            idCombs.add(idComb)
+            elements= combStressesDict[idComb]
+            for elemId in elements.keys():
+                tagElem= eval(elemId)
+                if(tagElem in setElTags): # search element tag
+                    elementData= elements[elemId]
+                    #elementType= elementData['type']
+                    internalForces= elementData['stresses']
+                    for k in internalForces.keys():
+                        elementTags.add(tagElem)
+                        stresses= get_gauss_point_stresses(stresses= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
+                        stressesValues[tagElem].append(stresses)
+    return (elementTags, idCombs, stressesValues)
+
+
 def old_read_int_forces_file(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal
     forces listing file. Return elementTags, idCombs and 
@@ -1177,7 +1297,7 @@ def old_read_int_forces_file(intForcCombFileName,setCalc=None):
     f.close()
     return (elementTags,idCombs,internalForcesValues)
 
-def readIntForcesFile(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
+def read_internal_forces_file(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
     '''Extracts element and combination identifiers from the internal
     forces listing file. Return elementTags, idCombs and 
     internal-forces values
@@ -1191,15 +1311,17 @@ def readIntForcesFile(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_
     :param vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
     '''
-    f= open(intForcCombFileName,"r")
-    c= f.read(1)
-    if(c=='{'):
-        retval= read_int_forces_dict(intForcCombFileName,setCalc, vonMisesStressId)
+    if('PlaneStress' in intForcCombFileName):
+        retval= read_stresses_dict(stressesCombFileName= intForcCombFileName, setCalc= setCalc, vonMisesStressId= vonMisesStressId)
     else:
-        retval= old_read_int_forces_file(intForcCombFileName,setCalc)
-    f.close()
+        f= open(intForcCombFileName,"r")
+        c= f.read(1)
+        if(c=='{'):
+            retval= read_int_forces_dict(intForcCombFileName,setCalc, vonMisesStressId)
+        else: # legacy file format.
+            retval= old_read_int_forces_file(intForcCombFileName,setCalc)
+        f.close()
     return retval
-
 
 def string_el_max_axial_force(element,section,setName,combName,axialForc):
     retval='preprocessor.getElementHandler.getElement('+str(element)+').setProp("maxAxialForceSect'+str(section)+'",AxialForceControlVars('+'idSection= "' + setName + 'Sects'+str(section)+'"' + ', combName= "' + combName +'", N= ' + str(axialForc) + ')) \n'
@@ -1214,7 +1336,7 @@ def calc_max_tension_axial_forces(setCalc,intForcCombFileName,outputFileName):
     :param setCalc: set of elements to be analyzed.
     '''
     f=open(outputFileName,"w")
-    etags,combs,intForc=readIntForcesFile(intForcCombFileName,setCalc)
+    etags,combs,intForc= read_internal_forces_file(intForcCombFileName,setCalc)
     setName=setCalc.name
     for el in etags:
         #init tension axial forces
@@ -1245,7 +1367,7 @@ def calc_max_compression_axial_forces(setCalc,intForcCombFileName,outputFileName
     :param setCalc: set of elements to be analyzed.
     '''
     f=open(outputFileName,"w")
-    etags,combs,intForc=readIntForcesFile(intForcCombFileName,setCalc)
+    etags,combs,intForc= read_internal_forces_file(intForcCombFileName,setCalc)
     setName= setCalc.name
     for el in etags:
         #init compression axial forces

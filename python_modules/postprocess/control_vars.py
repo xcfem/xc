@@ -22,6 +22,7 @@ import scipy
 from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
+from materials import stresses
 
 __all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
 
@@ -1355,6 +1356,114 @@ class FatigueControlVars(ControlVarsBase):
         self.Mu= dct['Mu']
         self.Vu= dct['Vu']
 
+
+
+#       ___ _                    _                     __
+#      | _ \ |__ _ _ _  ___   __| |_ _ _ ___ ______   / /
+#      |  _/ / _` | ' \/ -_) (_-<  _| '_/ -_|_-<_-<  / / 
+#      |_| |_\__,_|_||_\___| /__/\__|_| \___/__/__/ /_/  
+#       _ __| |__ _ _ _  ___   __| |_ _ _ __ _(_)_ _     
+#      | '_ \ / _` | ' \/ -_) (_-<  _| '_/ _` | | ' \    
+#      | .__/_\__,_|_||_\___| /__/\__|_| \__,_|_|_||_|   
+#      |_|                                               
+# Plane stress / plane strain control vars.
+class PlaneStressControlVars(ControlVarsBase, stresses.Stresses2D):
+    '''2D solid mechanics stresses control vars.
+
+    :ivar CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+    '''
+    def __init__(self, combName= 'nil', CF= -1.0, sigma_11= 0.0, sigma_12= 0.0, sigma_22= 0.0):
+        ''' Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param sigma_11:  (1,1) component of the stress tensor.
+        :param sigma_12:  (1,2) component of the stress tensor.
+        :param sigma_22:  (2,2) component of the stress tensor.
+        '''
+        ControlVarsBase.__init__(self, combName)
+        stresses.Stresses2D.__init__(self, sigma_11= sigma_11, sigma_12= sigma_12, sigma_22= sigma_22)
+        self.CF= CF # Capacity factor or efficiency
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= ControlVarsBase.getDict(self)
+        retval.update(stresses.Stresses2D.getDict(self))
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        ControlVarsBase.setFromDict(self, dct)
+        stresses.Stresses2D.setFromDict(self, dct)
+
+    def getCF(self):
+        ''' Return the capacity factor.'''
+        return self.CF
+
+#       ___ ___ ___    _     _                       ___ 
+#      | __/ __|_  )__/ |   /_\  _ _  _ _  _____ __ | __|
+#      | _| (__ / /___| |  / _ \| ' \| ' \/ -_) \ / | _| 
+#      |___\___/___|  |_| /_/ \_\_||_|_||_\___/_\_\ |_|  
+# EN 1992-1-1:2004. Annex F.
+# Tension reinforcement expressions for in-plane stress conditions
+class Ec2InPlaneStressControlVars(PlaneStressControlVars):
+    '''Control vars to check tension reinforcement expressions for 
+       in-plane stress conditions according to Annex F of Eurocode 2
+       part 1.
+
+    :ivar ftd1_req: required reinforcement strength along the axis 1.
+    :ivar ftd2_req: required reinforcement strength along the axis 2.
+    :ivar sigma_c_req: required concrete strength.
+    '''
+    def __init__(self, combName= 'nil', CF= -1.0, sigma_11= 0.0, sigma_12= 0.0, sigma_22= 0.0, ftd1_req= 0.0, ftd2_req= 0.0, sigma_c_req= 0.0, ftd1_cf= -1.0, ftd2_cf= -1.0, sigma_c_cf= -1.0):
+        ''' Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param sigma_11:  (1,1) component of the stress tensor.
+        :param sigma_12:  (1,2) component of the stress tensor.
+        :param sigma_22:  (2,2) component of the stress tensor.
+        :param ftd1_req: required reinforcement strength along the axis 1.
+        :param ftd2_req: required reinforcement strength along the axis 2.
+        :param sigma_c_req: required concrete strength.
+        :param ftd1_cf: capacity factor of the required reinforcement strength along the axis 1.
+        :param ftd2_cf: capacity factor of the required reinforcement strength along the axis 2.
+        :param sigma_c_cf: capacity factor of the required concrete strength.
+        '''
+        super(Ec2InPlaneStressControlVars,self).__init__(combName, CF= CF, sigma_11= sigma_11, sigma_12= sigma_12, sigma_22= sigma_22)
+        self.ftd1_req= ftd1_req # required reinforcement strength along the axis 1.
+        self.ftd2_req= ftd2_req # required reinforcement strength along the axis 2.
+        self.sigma_c_req= sigma_c_req # required concrete strength.
+        self.ftd1_cf= ftd1_cf # capacity factor of the required reinforcement strength along the axis 1.
+        self.ftd2_cf= ftd2_cf # capacity factor of the required reinforcement strength along the axis 2.
+        self.sigma_c_cf= sigma_c_cf # capacity factor of the required concrete strength.
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(Ec2InPlaneStressControlVars,self).getDict()
+        retval.update({'ftd1_req':self.ftd1_req, 'ftd2_req':self.ftd2_req, 'sigma_c_req':self.sigma_c_req, 'ftd1_cf':self.ftd1_cf, 'ftd2_cf':self.ftd2_cf, 'sigma_c_cf':self.sigma_c_cf})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(VonMisesControlVars, self).setFromDict(dct)
+        self.ftd1_req= dct['ftd1_req']
+        self.ftd2_req= dct['ftd2_req']
+        self.sigma_c_req= dct['sigma_c_req']
+        self.ftd1_cf= dct['ftd1_cf']
+        self.ftd2_cf= dct['ftd2_cf']
+        self.sigma_c_cf= dct['sigma_c_cf']
+
+    def getCF(self):
+        ''' Return the capacity factor.'''
+        return self.CF
+        
 #      __   __          __  __ _            
 #      \ \ / /__ _ _   |  \/  (_)___ ___ ___
 #       \ V / _ \ ' \  | |\/| | (_-</ -_|_-<
@@ -1374,7 +1483,7 @@ class VonMisesControlVars(ControlVarsBase):
         :param CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
         '''
         super(VonMisesControlVars,self).__init__(combName)
-        self.vm_stress= vm_stress #Shear along y axis.
+        self.vm_stress= vm_stress # von Mises stress.
         self.CF= CF # Capacity factor or efficiency
 
     def getDict(self):
