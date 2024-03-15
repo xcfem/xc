@@ -183,8 +183,6 @@ class StressCalc(object):
             Nsp= self.Asp*self.sgsp
             Msp= Nsp*(self.h/2-self.rp)
         self.xx= x
-        # print("residN(x= ", x ,")= ", (self.N-Nc+Ns-Nsp)/1e3)
-        # print("residM(x= ", x ,")= ", (self.M+Mc-Ms+Msp)/1e3)
         return self.M+Mc-Ms+Msp
 
     def solve(self,N, M):
