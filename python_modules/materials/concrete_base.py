@@ -840,7 +840,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         if(overrideRho!=None):
             rho= overrideRho
         return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm(), rho= rho)
-        
+            
     def defElasticSection2d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropriate 
          for elastic analysis of 2D beam elements.
@@ -949,11 +949,26 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                             the material density.
         '''
         if(name is None):
-            name= self.materialName+'_plane_strain'
+            name= self.materialName+'_elastic_isotropic_plane_strain'
         rho= self.density()
         if(overrideRho!=None):
             rho= overrideRho
         return typical_materials.defElasticIsotropicPlaneStrain(preprocessor, name= name, E= self.getEcm(), nu= self.nuc, rho= rho)
+    
+    def defElasticIsotropicPlaneStress(self, preprocessor, name:str= None, overrideRho= None):
+        ''' Defines an elastic isotropic plane stress material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param name: name for the new material.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        if(name is None):
+            name= self.materialName+'_elastic_isotropic_plane_stress'
+        rho= self.density()
+        if(overrideRho!=None):
+            rho= overrideRho
+        return typical_materials.defElasticIsotropicPlaneStress(preprocessor, name= name, E= self.getEcm(), nu= self.nuc, rho= rho)
 
 class paramTensStiffness(object):
     '''Parameters to generate a concrete02 material based on the tension-stiffening constitutive 
