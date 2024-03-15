@@ -175,7 +175,7 @@ class LimitStateControllerBase(object):
                                     forces on the element sections.
         '''
         # Read internal forces results.
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc)
+        intForcItems= lsd.read_internal_forces_file(intForcCombFileName, setCalc)
         return intForcItems[2]
 
     def updateEfficiencyForSet(self, intForcCombFileName, setCalc= None):
