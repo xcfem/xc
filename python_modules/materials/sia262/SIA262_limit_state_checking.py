@@ -402,23 +402,6 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
             stressCalc.solve(Ntmp, MyTmp)
             sigma_sPos= stressCalc.sgs
             sigma_sNeg= stressCalc.sgsp
-            # sigma_c= stressCalc.sgc
-            #print("sgc0= ", stressCalc.sgc0)
-            # sigma_s= 0.0
-            # eNC= datosScc.depth/3
-            # As= max(datosScc.getAsPos(),datosScc.getAsNeg())
-            # denom= 0.5*As*0.9*datosScc.depth
-            # if(abs(Ntmp)<1e-6):
-            #   sigma_s= MyTmp/denom
-            # else:
-            #   exc= abs(MyTmp/Ntmp)
-            #   if(exc<eNC):
-            #     sg= Ntmp/datosScc.getAc()
-            #     sg+= MyTmp/datosScc.getI()*datosScc.depth/2
-            #     sigma_s= 10*sg
-            #   else:
-            #     sigma_s= MyTmp/denom
-            # print("eNC= ", eNC, " exc= ", exc, "sigma_s= ", sigma_s/1e6)
             CFPos= sigma_sPos/self.limitStress #Positive face capacity factor.
             CFNeg= sigma_sNeg/self.limitStress #Negative face capacity factor.
             elementControlVars= None
