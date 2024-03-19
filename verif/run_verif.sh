@@ -251,12 +251,16 @@ python tests/actions/wind/test_wind_cylindr_01.py
 python tests/actions/wind/test_wind_cylindr_02.py
 python tests/actions/wind/test_wind_beam_truss.py
 python tests/actions/wind/test_cte_wind_load.py
+echo "$BLEU" "  IAP wind action tests." "$NORMAL"
 python tests/actions/wind/test_iap_wind_load_01.py
 python tests/actions/wind/test_iap_wind_load_02.py
 python tests/actions/wind/test_iap_wind_load_03.py
 python tests/actions/wind/test_iap_hiding_ratio.py
+echo "$BLEU" "  IAPF wind action tests." "$NORMAL"
 python tests/actions/wind/test_iapf_wind_load_01.py
 python tests/actions/wind/test_iapf_wind_load_02.py
+echo "$BLEU" "  EC1 wind action tests." "$NORMAL"
+python tests/actions/wind/test_ec1_cylinder_force_coefficient.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
