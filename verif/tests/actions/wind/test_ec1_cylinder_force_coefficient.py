@@ -34,7 +34,7 @@ w_effRef= 804.5745670535356
 ratio4= abs(w_eff-w_effRef)/w_effRef
 
 '''
-rint("cf0= ", cf0)
+print("cf0= ", cf0)
 print("ratio1= ", ratio1)
 print('endEffectFactor= ', endEffectFactor)
 print("ratio2= ", ratio2)
