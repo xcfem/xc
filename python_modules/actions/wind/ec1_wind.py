@@ -29,6 +29,15 @@ def get_probability_factor(T:float, K= 0.2, n= 0.5):
     '''
     return math.pow((1.0-K*math.log(-math.log(1-1/T)))/(1-K*math.log(-math.log(0.98))),n)
 
+def get_basic_velocity_pressure(vb, rho= 1.25):
+    ''' Return the basic velocity pressure according to expression (4.10)
+        of EN 1991-1-4:2005.
+
+    :param vb: basic wind velocity.
+    :param rho: air density.
+    '''
+    return 0.5*rho*vb**2
+
 def get_z0(terrainCategory:str):
     ''' Return the rugosity length according to table 4.1 of EN 1991-1-4:2005.
 
@@ -95,15 +104,6 @@ def get_turbulence_intensity(terrainCategory:str, z, zMax= 200.0, k1= 1.0, c0= 1
         lmsg.error(methodName+'; value of z= '+str(z)+' out of range (0,200] m.')
     return retval
 
-def get_basic_velocity_pressure(vb, rho= 1.25):
-    ''' Return the basic velocity pressure according to expression (4.10)
-        of EN 1991-1-4:2005.
-
-    :param vb: basic wind velocity.
-    :param rho: air density.
-    '''
-    return 0.5*rho*vb**2
-
 def get_peak_velocity_pressure(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0):
     ''' Return the basic velocity pressure according to expression (4.10)
         of EN 1991-1-4:2005.
@@ -137,6 +137,23 @@ def get_exposure_factor(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.25, k1= 
     retval= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0)
     retval/= get_basic_velocity_pressure(vb= vb, rho= rho)
     return retval
+
+cfx0_a= scipy.interpolate.interp1d([0.0, 0.3627, 4.0, 12.0], [2.4, 2.4, 1.3, 1.3], kind='linear')
+cfx0_b= scipy.interpolate.interp1d([0.0, 0.3627, 5.0, 12.0], [2.4, 2.4, 1.0, 1.0], kind='linear')
+
+def get_bridge_deck_force_coefficient(b, dtot, solidParapets= True):
+    ''' Return the value of the force coefficient for bridge decks according
+        to figure 8.3 of EN 1991-1-4:2005.
+
+    :param b: deck width.
+    :param dtot: sum of the projected (windward) depth of the structure
+    '''
+    b_dtot= b/dtot
+    if(solidParapets):
+        return cfx0_b(b_dtot)
+    else:
+        return cfx0_a(b_dtot)
+    
 
 def get_cylinder_reynolds_number(b, v, nu= 15e-6):
     ''' Return the reynolds number of the flow around a cylinder based on the

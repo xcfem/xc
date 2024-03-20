@@ -261,6 +261,8 @@ python tests/actions/wind/test_iapf_wind_load_01.py
 python tests/actions/wind/test_iapf_wind_load_02.py
 echo "$BLEU" "  EC1 wind action tests." "$NORMAL"
 python tests/actions/wind/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
+python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
