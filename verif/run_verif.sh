@@ -261,6 +261,7 @@ python tests/actions/wind/test_iapf_wind_load_01.py
 python tests/actions/wind/test_iapf_wind_load_02.py
 echo "$BLEU" "  EC1 wind action tests." "$NORMAL"
 python tests/actions/wind/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/test_ec1_bridge_deck_vertical_force_coefficient.py
 python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
 python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
 python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
