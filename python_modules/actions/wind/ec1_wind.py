@@ -105,7 +105,7 @@ def get_turbulence_intensity(terrainCategory:str, z, zMax= 200.0, k1= 1.0, c0= 1
     return retval
 
 def get_peak_velocity_pressure(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0):
-    ''' Return the basic velocity pressure according to expression (4.10)
+    ''' Return the peak velocity pressure according to expression (4.8)
         of EN 1991-1-4:2005.
 
     :param terrainCategory: terrain category.
@@ -121,6 +121,34 @@ def get_peak_velocity_pressure(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.2
     Iv= get_turbulence_intensity(terrainCategory= terrainCategory, z= z, k1= k1, c0= c0)
     return (1+7*Iv)*0.5*rho*vm**2
     
+def get_rectangular_wall_peak_velocity_pressure_distribution(b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, factor= 1.0):
+    ''' Return the peak velocity pressure distribution of a rectangular wall
+        according to figure 7.4 of EN 1991-1-4:2005.
+
+    :param b: wall width.
+    :param h: wall height.
+    :param terrainCategory: terrain category.
+    :param vb: basic wind velocity.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: air density.
+    :param k1: turbulence factor.
+    :param c0: orography factor.
+    :param factor: factor multiplying the returned pressures.
+    '''
+    qph= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= h, zMax= zMax, rho= rho, k1= k1, c0= c0)
+    if(h<b):
+        zi= [0, h]
+        pi= [qph*factor, qph*factor]
+    elif(h<2*b):
+        qpb= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= b, zMax= zMax, rho= rho, k1= k1, c0= c0)
+        epsZ= h/1e2
+        zi= [0, b-epsZ, b+epsZ, h]
+        pi= [qpb*factor, qpb*factor, qph*factor, qph*factor]
+    else:
+        qpb= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= b, zMax= zMax, rho= rho, k1= k1, c0= c0)
+        zi= [0, b, h-b, h]
+        pi= [qpb*factor, qpb*factor, qph*factor, qph*factor]
+    return scipy.interpolate.interp1d(zi, pi, kind='linear'), zi
 
 def get_exposure_factor(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0):
     ''' Return the exposure factor pressure according to expression (4.9),
@@ -237,6 +265,132 @@ def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float
     pressureDistrib1= scipy.interpolate.interp1d(xi, y1i, kind='linear')
     return (pressureDistrib0, pressureDistrib1)
 
+# Rectangular sections.
+cf0_rs_xi= [.1, .2, .6, .7, 1, 2, 5, 10, 20, 50, 1000]
+cf0_rs_yi= [2.0, 2.0, 2.35, 2.4, 2.1, 1.65, 1.0, 0.9, 0.9, 0.9, 0.9]
+cf0_rs= scipy.interpolate.interp1d(cf0_rs_xi, cf0_rs_yi, kind='linear')
+def get_rectangular_section_force_coefficient_without_free_end_flow(d, b):
+    ''' Return the force coefficient of the flow around a rectangular section
+        according to the figure 7.23 of EN 1991-1-4:2005.
+ 
+    :param d: length of the section (parallel to wind direction).
+    :param b: width of the section (perpendicular to wind direction).
+    '''
+    return float(cf0_rs(d/b))
+
+psi_r_ss_xi= [0, 0.2, 0.4, 1e3]
+psi_r_ss_yi= [1.0, 0.5, 0.5, 0.5]
+psi_r_ss= scipy.interpolate.interp1d(psi_r_ss_xi, psi_r_ss_yi, kind='linear')
+def get_square_section_round_corners_reduction_factor(b, r):
+    ''' Return the reduction factor for a square cross-section with rounded
+        corners according to figurea 7.24 of EN 1991-1-4:2005.
+ 
+     :param b: width of the section (perpendicular to wind direction).
+     :param r: radius of the corners.
+    '''
+    return float(psi_r_ss(r/b))
+
+def get_polygonal_section_lambda(b, l):
+    ''' Return the value of lambdar for a cylinder according to table 7.16
+        of EN 1991-1-4:2005.
+
+    :param b: width of the section (perpendicular to wind direction).
+    :param l: length of the prism.
+    '''
+    if(l>=50):
+        retval= min(1.4*l/b, 70)
+    elif(l<15):
+        retval= min(2*l/b, 70)
+    else:
+        v50= min(1.4*l/b, 70)
+        v15= min(2*l/b, 70)
+        retval= (v50-v15)/35*(l-15)+v15
+    return retval
+
+def logarithmic_expression(x0, F0, x1, F1, x):
+    ''' Computes the value of a function defined by a linear-log plot.
+
+    See: https://en.wikipedia.org/wiki/Semi-log_plot
+
+    :param (x0, F0): first point of a straight line in the graph.
+    :param (x1, F1): second point of a straight line in the graph.
+    '''
+    return (F1-F0)/math.log10(x1/x0)*math.log10(x/x0)+F0
+
+def get_end_effect_factor(lmbd:float,  solidityRatio= 1.0):
+    ''' Return the end effect factor according to figure 7.36
+        of EN 1991-1-4:2005.
+
+    :param lmbd: effective slenderness of the structure.
+    :param solidityRatio: ratio between the projected areas of the member and the area of the evelope.
+    '''
+    retval= None
+    if(solidityRatio == 1.0):
+        if(lmbd<=10):
+            retval= logarithmic_expression(x0= 1, F0= 0.6, x1= 10, F1=  0.698, x= lmbd)
+        elif(lmbd<=70.0):
+            retval= logarithmic_expression(x0= 10, F0= 0.698, x1= 70, F1=  0.9182, x= lmbd)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; not yet implementd for lambda greater than 70.')
+            
+
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; not yet implementd for solidity ratios different from 1.0.')
+    return retval  
+
+def get_polygonal_section_end_effect_factor(b, l, solidityRatio= 1.0):
+    ''' Return the end effect factor for a prism according to figure 7.36
+        of EN 1991-1-4:2005.
+
+    :param b: width of the section (perpendicular to wind direction).
+    :param l: length of the prism.
+    :param solidityRatio: ratio between the projected areas of the member and the area of the evelope.
+    '''
+    retval= None
+    l= get_polygonal_section_lambda(b= b, l= l)
+    return get_end_effect_factor(l)
+
+def get_rectangular_section_force_coefficient(d, b, l, r= 0.0, solidityRatio= 1.0):
+    ''' Return the force coefficient of the flow around a rectangular prism
+        according to expression (7.9) of EN 1991-1-4:2005.
+ 
+    :param d: length of the section (parallel to wind direction).
+    :param b: width of the section (perpendicular to wind direction).
+    :param l: length of the prism.
+    :param r: radius of the corners.
+    :param solidityRatio: ratio between the projected areas of the member and the area of the evelope.
+    '''
+    cf0= get_rectangular_section_force_coefficient_without_free_end_flow(d= d, b= b)
+    psi_r= get_square_section_round_corners_reduction_factor(b= b, r= r)
+    psi_l= get_polygonal_section_end_effect_factor(b= b, l=10.0, solidityRatio= 1.0)
+
+    return cf0*psi_r*psi_l
+
+def get_rectangular_prism_pressure_distribution(d, b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, cscd= 1.0, r= 0.0):
+    ''' Return the wind pressure distribution of a rectangular prism
+        according to EN 1991-1-4:2005.
+
+    :param d: length of the section (parallel to wind direction).
+    :param b: width of the prism (perpendicular to wind direction).
+    :param h: prism height.
+    :param terrainCategory: terrain category.
+    :param vb: basic wind velocity.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: air density.
+    :param k1: turbulence factor.
+    :param c0: orography factor.
+    :param cscd: structural factor.
+    :param r: radius of the corners.
+    '''
+    cf= get_rectangular_section_force_coefficient(d= d, b= b, l= h, r= r, solidityRatio= 1.0)
+    factor= cscd*cf
+    p, zi= get_rectangular_wall_peak_velocity_pressure_distribution(b= b, h= h, terrainCategory= terrainCategory, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, factor= factor)
+    return p, zi
+
+
+# Circular cylindrical sections.
 def get_cylinder_reynolds_number(b, v, nu= 15e-6):
     ''' Return the reynolds number of the flow around a cylinder based on the
         equation 7.15 of EN 1991-1-4:2005.
@@ -264,19 +418,8 @@ def get_cylinder_lambda(b, l):
         retval= (v50-v15)/35*(l-15)+v15
     return retval
 
-def logarithmic_expression(x0, F0, x1, F1, x):
-    ''' Computes the value of a function defined by a linear-log plot.
-
-    See: https://en.wikipedia.org/wiki/Semi-log_plot
-
-    :param (x0, F0): first point of a straight line in the graph.
-    :param (x1, F1): second point of a straight line in the graph.
-    '''
-    return (F1-F0)/math.log10(x1/x0)*math.log10(x/x0)+F0
-
-
 def get_cylinder_end_effect_factor(b, l, solidityRatio= 1.0):
-    ''' Return the end effect factor for a cylinder according to table 7.36
+    ''' Return the end effect factor for a cylinder according to figure 7.36
         of EN 1991-1-4:2005.
 
     :param b: diameter of the cylinder.
@@ -285,20 +428,7 @@ def get_cylinder_end_effect_factor(b, l, solidityRatio= 1.0):
     '''
     retval= None
     l= get_cylinder_lambda(b= b, l= l)
-    if(solidityRatio == 1.0):
-        if(l<=10):
-            retval= logarithmic_expression(x0= 1, F0= 0.6, x1= 10, F1=  0.698, x= l)
-        elif(l<=70.0):
-            retval= logarithmic_expression(x0= 10, F0= 0.698, x1= 70, F1=  0.9182, x= l)
-        else:
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(methodName+'; not yet implementd for lambda greater than 70.')
-            
-
-    else:
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(methodName+'; not yet implementd for solidity ratios different from 1.0.')
-    return retval  
+    return get_end_effect_factor(l)
 
 def get_cylinder_force_coefficient_without_free_end_flow(b, v, k, nu= 15e-6):
     ''' Return the force coefficient of the flow around a cylinder based on the
