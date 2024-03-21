@@ -39,7 +39,7 @@ ratio3= abs(cr-1.0066802996441269)/1.0066802996441269
 # Compute turbulence intensity
 c0= 1.0 # orography factor
 vm= cr*c0*vb
-k1= 1.0
+k1= 1.0 # turbulence factor.
 Iv= ec1_wind.get_turbulence_intensity(terrainCategory= terrainCategory, z= z, zMax= zMax, k1= k1, c0= c0)
 ratio4= abs(Iv-0.18873916581775485)/0.18873916581775485
 
