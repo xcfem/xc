@@ -14,18 +14,25 @@ __email__= "l.pereztato@ciccp.es"
 from actions.wind import ec1_wind
 
 # Compute the value of the force coefficient without free-end flow.
+terrainCategory= 'II'
+z= 40.0 # High pier
+zMax= 200.0
+k1= 1.0 # turbulence factor.
+c0= 1.0 # orography factor
+vb= 24.033 # basic wind velocity.
+
 b= 0.4
 l= 15
-v= 43.67
-cf0= ec1_wind.get_cylinder_force_coefficient_without_free_end_flow(b=b, v= v, k= .2e-3, nu= 15e-6)
-cf0Ref= 0.7964917399135781
+k= .2e-3
+cf0= ec1_wind.get_cylinder_force_coefficient_without_free_end_flow(b=b, k= k, terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= 1.25, k1= k1, nu= 15e-6)
+cf0Ref= 0.7964968861801018
 ratio1= abs(cf0-cf0Ref)/cf0Ref
 
 endEffectFactor= ec1_wind.get_cylinder_end_effect_factor(b= b, l= l, solidityRatio= 1.0)
 endEffectFactorRef= 0.8475704393676162
 ratio2= abs(endEffectFactor-endEffectFactorRef)/endEffectFactorRef
 
-cf= ec1_wind.get_cylinder_force_coefficient(b=b, l= l, v= v, k= .2e-3, nu= 15e-6, solidityRatio= 1.0)
+cf= ec1_wind.get_cylinder_force_coefficient(b=b, l= l, k= k, terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= 1.25, k1= k1, nu= 15e-6, solidityRatio= 1.0)
 cfRef= cf0Ref*endEffectFactorRef
 ratio3= abs(cf-cfRef)/cfRef
 
