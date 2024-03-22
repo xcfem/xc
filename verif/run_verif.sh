@@ -260,6 +260,7 @@ python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffi
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_squat_rectangular_pier.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_high_circular_cylindrical_pier.py 
 echo "$BLEU" "    IAP wind action tests." "$NORMAL"
 python tests/actions/wind/iap/test_iap_wind_load_01.py
 python tests/actions/wind/iap/test_iap_wind_load_02.py
