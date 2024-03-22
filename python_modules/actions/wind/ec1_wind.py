@@ -430,33 +430,47 @@ def get_cylinder_end_effect_factor(b, l, solidityRatio= 1.0):
     l= get_cylinder_lambda(b= b, l= l)
     return get_end_effect_factor(l)
 
-def get_cylinder_force_coefficient_without_free_end_flow(b, v, k, nu= 15e-6):
+def get_cylinder_force_coefficient_without_free_end_flow(b, k, terrainCategory:str, vb, z, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, nu= 15e-6):
     ''' Return the force coefficient of the flow around a cylinder based on the
-        expressions in the figurea 7.28 of EN 1991-1-4:2005.
+        expressions in the figure 7.28 of EN 1991-1-4:2005.
  
     :param b: diameter of the cylinder.
-    :param v: wind velocity.
-    :param k: equivalent surface roughness.
+    :param k: equivalent surface roughness (see table 7.13 of EN 1991-1-4:2005).
+    :param terrainCategory: terrain category.
+    :param vb: basic wind velocity.
+    :param z: height above ground.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: air density.
+    :param k1: turbulence factor.
+    :param c0: orography factor.
     :param nu: kinematic viscosity of the air (ν=15*10-6 m2/s).
     '''
     retval= 0.18*math.log10(10*k/b)
+    qp= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0)
+    v= math.sqrt(2*qp/rho) # See NOTE 2 on figure 7.28
     Re= get_cylinder_reynolds_number(b= b, v= v, nu= nu)
     retval/= 1+0.4*math.log10(Re/1e6)
     retval+= 1.2
     return retval
 
-def get_cylinder_force_coefficient(b, l, v, k, nu= 15e-6, solidityRatio= 1.0):
+def get_cylinder_force_coefficient(b, l, k, terrainCategory:str, vb, z, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, nu= 15e-6, solidityRatio= 1.0):
     ''' Return the force coefficient of the flow around a cylinder according to 
         expression (7.19) of EN 1991-1-4:2005.
  
     :param b: diameter of the cylinder.
     :param l: length of the cylinder.
-    :param v: peak wind velocity.
-    :param k: equivalent surface roughness.
+    :param k: equivalent surface roughness (see table 7.13 of EN 1991-1-4:2005).
+    :param terrainCategory: terrain category.
+    :param vb: basic wind velocity.
+    :param z: height above ground.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: air density.
+    :param k1: turbulence factor.
+    :param c0: orography factor.
     :param nu: kinematic viscosity of the air (ν=15*10-6 m2/s).
     :param solidityRatio: ratio between the projected areas of the member and the area of the evelope.
     '''
-    cf0= get_cylinder_force_coefficient_without_free_end_flow(b=b, v= v, k= k, nu= nu)
+    cf0= get_cylinder_force_coefficient_without_free_end_flow(b=b, k= k, terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0, nu= nu)
     endEffectFactor= get_cylinder_end_effect_factor(b= b, l= l, solidityRatio= solidityRatio)
     return cf0*endEffectFactor
 
@@ -469,7 +483,7 @@ def get_cylinder_effective_wind_pressure(terrainCategory:str, vb, z, b, l, k, zM
     :param z: height above ground.
     :param b: diameter of the cylinder.
     :param l: length of the cylinder.
-    :param k: equivalent surface roughness.
+    :param k: equivalent surface roughness (see table 7.13 of EN 1991-1-4:2005).
     :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
     :param rho: air density.
     :param k1: turbulence factor.
@@ -480,5 +494,5 @@ def get_cylinder_effective_wind_pressure(terrainCategory:str, vb, z, b, l, k, zM
     '''
     qp= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0)
     v= math.sqrt(2.0*qp/rho)
-    cf= get_cylinder_force_coefficient(b=b, l= l, v= v, k= k, nu= nu, solidityRatio= solidityRatio)
+    cf= get_cylinder_force_coefficient(b=b, l= l, k= k, terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0, nu= nu, solidityRatio= solidityRatio)
     return cf*qp*structuralFactor
