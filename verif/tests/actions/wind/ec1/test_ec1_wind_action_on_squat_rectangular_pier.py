@@ -38,7 +38,7 @@ zMax= 200.0
 k1= 1.0 # turbulence factor.
 c0= 1.0 # orography factor
 qp= ec1_wind.get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0)
-qpRef= 1071.7931242585819 # There is an error in the example.
+qpRef= 1071.7931242585819
 ratio1= abs(qp-qpRef)/qpRef
 
 # Compute the force coefficient.
@@ -81,7 +81,7 @@ print('Fw= ', Fw/1e3, 'kN', ratio6)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio0)<1e-4) and (abs(ratio2)<1e-4) and (abs(ratio3)<1e-4) and (abs(ratio4)<1e-4) and (abs(ratio5)<1e-4) and (abs(ratio6)<1e-4):
+if (abs(ratio0)<1e-4) and (abs(ratio1)<1e-4) and (abs(ratio2)<1e-4) and (abs(ratio3)<1e-4) and (abs(ratio4)<1e-4) and (abs(ratio5)<1e-4) and (abs(ratio6)<1e-4):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
