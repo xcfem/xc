@@ -244,29 +244,32 @@ echo "$BLEU" "  Snow action tests." "$NORMAL"
 python tests/actions/snow/test_snowSIA.py
 python tests/actions/snow/test_snowASCE7.py
 echo "$BLEU" "  Wind action tests." "$NORMAL"
-python tests/actions/wind/test_windSIA.py
-python tests/actions/wind/test_windASCE7.py
-python tests/actions/wind/test_windASCE7_16.py
 python tests/actions/wind/test_wind_cylindr_01.py
 python tests/actions/wind/test_wind_cylindr_02.py
 python tests/actions/wind/test_wind_beam_truss.py
-python tests/actions/wind/test_cte_wind_load.py
+echo "$BLEU" "  ASCE7 wind action tests." "$NORMAL"
+python tests/actions/wind/asce7/test_windASCE7.py
+python tests/actions/wind/asce7/test_windASCE7_16.py
 echo "$BLEU" "  IAP wind action tests." "$NORMAL"
-python tests/actions/wind/test_iap_wind_load_01.py
-python tests/actions/wind/test_iap_wind_load_02.py
-python tests/actions/wind/test_iap_wind_load_03.py
-python tests/actions/wind/test_iap_hiding_ratio.py
+python tests/actions/wind/iap/test_iap_wind_load_01.py
+python tests/actions/wind/iap/test_iap_wind_load_02.py
+python tests/actions/wind/iap/test_iap_wind_load_03.py
+python tests/actions/wind/iap/test_iap_hiding_ratio.py
 echo "$BLEU" "  IAPF wind action tests." "$NORMAL"
-python tests/actions/wind/test_iapf_wind_load_01.py
-python tests/actions/wind/test_iapf_wind_load_02.py
+python tests/actions/wind/iapf/test_iapf_wind_load_01.py
+python tests/actions/wind/iapf/test_iapf_wind_load_02.py
 echo "$BLEU" "  EC1 wind action tests." "$NORMAL"
-python tests/actions/wind/test_ec1_cylinder_force_coefficient.py
-python tests/actions/wind/test_ec1_bridge_deck_vertical_force_coefficient.py
-python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
-python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
-python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
-python tests/actions/wind/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
-python tests/actions/wind/test_ec1_wind_action_on_squat_rectangular_pier.py
+python tests/actions/wind/ec1/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_bridge_deck_vertical_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_squat_rectangular_pier.py
+echo "$BLEU" "  SIA wind action tests." "$NORMAL"
+python tests/actions/wind/sia/test_windSIA.py
+echo "$BLEU" "  CTE wind action tests." "$NORMAL"
+python tests/actions/wind/cte/test_cte_wind_load.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
