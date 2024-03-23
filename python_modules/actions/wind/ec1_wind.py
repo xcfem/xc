@@ -505,3 +505,43 @@ def get_cylinder_effective_wind_pressure(terrainCategory:str, vb, z, b, l, k, zM
     v= math.sqrt(2.0*qp/rho)
     cf= get_cylinder_force_coefficient(b=b, l= l, k= k, terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0, nu= nu, solidityRatio= solidityRatio)
     return cf*qp*structuralFactor
+
+def get_turbulent_length_scale(terrainCategory:str, z:float, zt= 200.0, Lt= 300):
+    ''' Compute the turbulent length scale according to expression (B.1) 
+        of EN 1991-1-4:2005. 
+
+    :param terrainCategory: terrain category.
+    :param z: height above ground (m).
+    '''
+    zmin= get_zmin(terrainCategory)
+    z0= get_z0(terrainCategory)
+    a= 0.67+0.05*math.log(z0)
+    z_calc= max(z, zmin)
+    return Lt*math.pow(z_calc/zt, a)
+
+def get_phi_long_wind_reduction_factor(terrainCategory:str, z:float, L:float, zt= 200.0, Lt= 300):
+    ''' Compute the value of the phi function according to clause 8.3.4(1) of
+        the Spanish annex for EN 1991-1-4:2005. 
+
+    :param terrainCategory: terrain category.
+    :param z: height above ground (m).
+    :param L: bridge length.
+    '''
+    Lz= get_turbulent_length_scale(terrainCategory= terrainCategory, z= z, zt= zt, Lt= Lt)
+    retval= 0.23+ 0.182*math.log(L/Lz)
+    return max(min(retval,1.0), 0.0)
+
+def get_spanish_annex_long_wind_reduction_factor(terrainCategory:str, z:float, L:float, c0= 1.0, zt= 200.0, Lt= 300):
+    ''' Compute the value of the longitudinal wind reduction factor according
+        to clause 8.3.4(1) of the Spanish annex for EN 1991-1-4:2005. 
+
+    :param terrainCategory: terrain category.
+    :param z: height above ground (m).
+    :param L: bridge length.
+    :param c0: orography factor.
+    '''
+    z0= get_z0(terrainCategory)
+    denom= c0*math.log(z/z0)+7
+    phi= get_phi_long_wind_reduction_factor(terrainCategory= terrainCategory, z= z, L= L, zt= zt, Lt= Lt)
+    retval= 1-7/denom*phi
+    return retval
