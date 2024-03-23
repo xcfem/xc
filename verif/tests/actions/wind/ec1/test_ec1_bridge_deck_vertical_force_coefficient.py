@@ -17,45 +17,45 @@ from actions.wind import ec1_wind
 # Compute the value of the force coefficient without free-end flow.
 b= 4
 dtot= 2
-cfz_2_0= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= 0.0, beta= 0.0)
+cfz_2_0= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= 0.0, beta= 0.0)
 cfz_2_0Ref= 0.6642857142857143
 ratio= list()
 ratio.append(abs(cfz_2_0-cfz_2_0Ref)/cfz_2_0Ref)
 
-cfz_2_3= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(3), beta= 0.0)
+cfz_2_3= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(3), beta= 0.0)
 cfz_2_3Ref= 0.7139610389610389
 ratio.append(abs(cfz_2_3-cfz_2_3Ref)/cfz_2_3Ref)
 
-cfz_2_6= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(6), beta= 0.0)
+cfz_2_6= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(6), beta= 0.0)
 cfz_2_6Ref= 0.7636363636363637
 ratio.append(abs(cfz_2_6-cfz_2_6Ref)/cfz_2_6Ref)
 
-cfz_2_8= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(8), beta= 0.0)
+cfz_2_8= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(8), beta= 0.0)
 cfz_2_8Ref= 0.7943181818181818
 ratio.append(abs(cfz_2_8-cfz_2_8Ref)/cfz_2_8Ref)
 
-cfz_2_10= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(10), beta= 0.0)
+cfz_2_10= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(10), beta= 0.0)
 cfz_2_10Ref= 0.825
 ratio.append(abs(cfz_2_10-cfz_2_10Ref)/cfz_2_10Ref)
 
 b= 40.0
-cfz_20_0= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= 0.0, beta= 0.0)
+cfz_20_0= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= 0.0, beta= 0.0)
 cfz_20_0Ref= 0.15
 ratio.append(abs(cfz_20_0-cfz_20_0Ref)/cfz_20_0Ref)
 
-cfz_20_3= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(3), beta= 0.0)
+cfz_20_3= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(3), beta= 0.0)
 cfz_20_3Ref= 0.5181818181818182
 ratio.append(abs(cfz_20_3-cfz_20_3Ref)/cfz_20_3Ref)
 
-cfz_20_6= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(6), beta= 0.0)
+cfz_20_6= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(6), beta= 0.0)
 cfz_20_6Ref= 0.8863636363636364
 ratio.append(abs(cfz_20_6-cfz_20_6Ref)/cfz_20_6Ref)
 
-cfz_20_8= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(8), beta= 0.0)
+cfz_20_8= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(8), beta= 0.0)
 cfz_20_8Ref= 0.8931818181818182
 ratio.append(abs(cfz_20_8-cfz_20_8Ref)/cfz_20_8Ref)
 
-cfz_20_10= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= math.radians(10), beta= 0.0)
+cfz_20_10= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtot, alpha= math.radians(10), beta= 0.0)
 cfz_20_10Ref= 0.9
 ratio.append(abs(cfz_20_10-cfz_20_10Ref)/cfz_20_10Ref)
 
