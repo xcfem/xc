@@ -186,18 +186,21 @@ cfz_10= scipy.interpolate.interp1d([0.0, 4, 22.0, 1e3], [0.75, 0.9, 0.9, 0.9], k
 cfz_6= scipy.interpolate.interp1d([0.0, 22.0, 1e3], [0.75, 0.9, 0.9], kind='linear')
 cfz_0= scipy.interpolate.interp1d([0.0, 14.0, 22.0, 1e3], [0.75, 0.15, 0.15, 0.15], kind='linear')
 
-def get_bridge_deck_vertical_force_coefficient(b, dtot, alpha= math.radians(10), beta= 0.0):
+def get_bridge_deck_vertical_force_coefficient(b, dtotVP, alpha= math.radians(10), beta= 0.0):
     ''' Return the value of the vertical force coefficient for bridge decks 
         according to figure 8.6 of EN 1991-1-4:2005.
 
     :param b: deck width.
-    :param dtot: sum of the projected (windward) depth of the structure.
+    :param dtotVP: sum of the projected (windward) depth of the structure. Here
+                 d_tot must be computed disregarding the traffic and any 
+                 bridge equipment (see NOTE 1 in clause 8.3.3 of 
+                 EN 1991-1-4:2005.
     :parma alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
     :param beta: superelevation of the bridge deck (see figure 8.6 of EN 1991-1-4:2005).
     '''
     angle10= math.radians(10)
     angle6= math.radians(6)
-    b_dtot= b/dtot
+    b_dtot= b/dtotVP
     theta= abs(beta+alpha)
     if(theta>=angle10):
         retval= cfz_10(b_dtot)
@@ -211,14 +214,17 @@ def get_bridge_deck_vertical_force_coefficient(b, dtot, alpha= math.radians(10),
         retval= (topValue-bottomValue)/angle6*theta+bottomValue
     return retval
 
-def get_vertical_pressure(terrainCategory:str, b:float, dtot:float, z:float, vb:float, zMax= 200.0, rho= 1.25, k1:float= 1.0, c0:float= 1.0, alpha= math.radians(10), beta= 0.0):
+def get_vertical_pressure(terrainCategory:str, b:float, dtotVP:float, z:float, vb:float, zMax= 200.0, rho= 1.25, k1:float= 1.0, c0:float= 1.0, alpha= math.radians(10), beta= 0.0):
     ''' Return the value of the average vertical pressure according to clause
         4.2.5.1.2 of IAP-11.
 
     :param terrainCategory: terrain category according to clause 4.2.2 
                             of IAP-11.
     :param b: deck width.
-    :param dtot: sum of the projected (windward) depth of the structure.
+    :param dtotVP: sum of the projected (windward) depth of the structure. Here
+                 d_tot must be computed disregarding the traffic and any 
+                 bridge equipment (see NOTE 1 in clause 8.3.3 of 
+                 EN 1991-1-4:2005.
     :param z: Height above ground surface at the site of the building or 
               other structure.
     :param v_b: basic wind velocity according to clause 4.2.1 of IAP-11.
@@ -232,10 +238,10 @@ def get_vertical_pressure(terrainCategory:str, b:float, dtot:float, z:float, vb:
     # Compute peak velocity pressure (qp= qb*ce).
     qp= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0)
     # Compute vertical force coefficient
-    cfz= get_bridge_deck_vertical_force_coefficient(b= b, dtot= dtot, alpha= alpha, beta= beta)
+    cfz= get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtotVP, alpha= alpha, beta= beta)
     return (qp*-cfz, qp*cfz)
 
-def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float, dtot:float, z:float, vb:float, zMax= 200.0, rho= 1.25, k1:float= 1.0, c0:float= 1.0, alpha= math.radians(10), beta= 0.0):
+def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float, dtotVP:float, z:float, vb:float, zMax= 200.0, rho= 1.25, k1:float= 1.0, c0:float= 1.0, alpha= math.radians(10), beta= 0.0):
     ''' Return the vertical pressure distribution over a bridge deck, so 
         the resultant force has a horizontal eccentricity of a quarter 
         of the deck width.
@@ -244,7 +250,10 @@ def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float
                             of IAP-11.
     :param x0: leftmost point of the deck.
     :param x1: rigthmost point of the deck.
-    :param dtot: sum of the projected (windward) depth of the structure.
+    :param dtotVP: sum of the projected (windward) depth of the structure. Here
+                 d_tot must be computed disregarding the traffic and any 
+                 bridge equipment (see NOTE 1 in clause 8.3.3 of 
+                 EN 1991-1-4:2005.
     :param z: Height above ground surface.
     :param vb: basic wind velocity.
     :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
@@ -256,7 +265,7 @@ def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float
     '''
     b= x1-x0 # Deck width
     # Compute vertical pressure.
-    averagePressure= get_vertical_pressure(terrainCategory= terrainCategory, b= b, dtot= dtot, z= z, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, alpha= alpha, beta= beta)
+    averagePressure= get_vertical_pressure(terrainCategory= terrainCategory, b= b, dtotVP= dtotVP, z= z, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, alpha= alpha, beta= beta)
     (a,b)= base_wind.getLinearDistribution(h= b, hR= 0.75*b)
     xi= [x0, x1]
     y0i= [averagePressure[0]*a, averagePressure[0]*b]

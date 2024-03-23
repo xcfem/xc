@@ -82,14 +82,19 @@ Fw= pw*Aref
 ratio9= abs(Fw-2963.24245797305e3)/2963.24245797305e3
 
 # Compute vertical wind force.
+## Here d_tot must be computed disregarding the traffic
+## and any bridge equipment (see NOTE 1 in clause 8.3.3
+## of EN 1991-1-4:2005.
+concreteSupport= 0.2
+dtotVP= girdersDepth+deckThickness+concreteSupport
 alph= math.radians(10)
 beta= 0.0
-cfz= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= deckWidth, dtot= dtot, alpha= alph, beta= beta)
+cfz= ec1_wind.get_bridge_deck_vertical_force_coefficient(b= deckWidth, dtotVP= dtotVP, alpha= alph, beta= beta)
 Fwz= cscd*cfx*qp*deckWidth*deckLength
 # Compute vertical pressure distribution.
-vpd= ec1_wind.get_vertical_pressure_distribution(terrainCategory= terrainCategory, x0= -deckWidth/2.0, x1= deckWidth/2.0, dtot= dtot, z= z, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, alpha= alph, beta= beta)
+vpd= ec1_wind.get_vertical_pressure_distribution(terrainCategory= terrainCategory, x0= -deckWidth/2.0, x1= deckWidth/2.0, dtotVP= dtotVP, z= z, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, alpha= alph, beta= beta)
 
-ratio10= abs(cfz-0.8338379133674896)/0.8338379133674896
+ratio10= abs(cfz-0.8790322580645161)/0.8790322580645161
 
 '''
 print('c_prob= ', c_prob, ratio1)
@@ -111,6 +116,7 @@ vp0= (float(vpd[0](-deckWidth/2.0)), float(vpd[0](deckWidth/2.0)))
 vp1= (float(vpd[1](-deckWidth/2.0)), float(vpd[1](deckWidth/2.0)))
 print(vp0)
 print(vp1)
+print(cfz, ratio10)
 '''
 
 import os
