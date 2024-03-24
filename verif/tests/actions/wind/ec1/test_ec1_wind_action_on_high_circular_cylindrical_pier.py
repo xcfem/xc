@@ -33,7 +33,7 @@ cscd= 1.0 # structural factor.
 
 # Compute peak velocity pressure.
 terrainCategory= 'II'
-z= 40.0 # High pier
+z= 40.0 # High pier. Conservative aproach (see 7.9.2(5) in EN 1991-1-4:2005).
 zMax= 200.0
 k1= 1.0 # turbulence factor.
 c0= 1.0 # orography factor
@@ -43,7 +43,7 @@ ratio1= abs(qp-qpRef)/qpRef
 
 # Compute the force coefficient.
 b= 4.0 # pier diameter.
-l= 40.0 # pier height.
+l= z # pier height.
 k= 0.2e-3 # smooth concrete see table 7.13 of EN 1991-1-4:2005
 cf0= ec1_wind.get_cylinder_force_coefficient_without_free_end_flow(b= b, k= k, terrainCategory= terrainCategory, vb= vb, z= z, zMax= zMax, rho= rho, k1= k1, c0= c0, nu=15e-6)
 ratio2= abs(cf0-0.7892818551764009)/0.7892818551764009
