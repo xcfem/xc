@@ -275,9 +275,14 @@ python tests/actions/wind/sia/test_windSIA.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
+echo "$BLEU" "    IAP thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_iap_thermal.py
+echo "$BLEU" "    IAPF thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_iapf_thermal.py
-python tests/actions/thermal/test_ec1_thermal.py
+echo "$BLEU" "    EC1 thermal action tests." "$NORMAL"
+python tests/actions/thermal/test_ec1_thermal_01.py
+python tests/actions/thermal/test_ec1_thermal_02.py
+python tests/actions/thermal/test_ec1_thermal_03.py
 echo "$BLEU" "  Traffic loads tests." "$NORMAL"
 python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
