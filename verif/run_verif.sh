@@ -244,6 +244,7 @@ echo "$BLEU" "  Snow action tests." "$NORMAL"
 python tests/actions/snow/test_snowSIA.py
 python tests/actions/snow/test_snowASCE7.py
 python tests/actions/snow/test_snow_ec1.py
+python tests/actions/snow/test_snow_iapf.py
 echo "$BLEU" "  Wind action tests." "$NORMAL"
 python tests/actions/wind/test_wind_cylindr_01.py
 python tests/actions/wind/test_wind_cylindr_02.py

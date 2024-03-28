@@ -58,11 +58,11 @@ def get_snow_specific_weight(z:float):
     '''
     if(z<800):
         retval= 1.5e3
-    elif((z>=800) and (z<1000.0)):
+    elif(z<1000.0):
         retval= 2.0e3
-    elif((z>=1000) and (z<1500.0)):
+    elif(z<1500.0):
         retval= 2.7e3
-    elif((z>=1500) and (z<=1800.0)):
+    elif(z<=1800.0):
         retval= 3.3e3
     else:
         retval= None
