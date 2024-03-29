@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test distribution of wind pressures in the cylindrical body of a tank'''
+''' Test LaTeX report generation of load cases.'''
 
 from __future__ import division
 from __future__ import print_function
