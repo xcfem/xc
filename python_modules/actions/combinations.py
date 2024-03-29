@@ -11,6 +11,7 @@ import os
 import sys
 import json
 import csv
+import math
 from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 from misc_utils import log_messages as lmsg
@@ -144,13 +145,40 @@ class SituationCombs(dict):
             comb_dict[key]= comb.expr
         retval['combinations']= comb_dict
         return retval
-
+ 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
         self.description= dct['description']
         comb_dict= dct['combinations']
         for key in comb_dict:
             self.add(key, comb_dict[key])        
+           
+    def renumber(self, prefix:str= '', start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param prefix: prefix to use for the new combination name.
+        :param start: first index to use.
+        '''
+        data= self.getDict()
+        comb_dict= data['combinations']
+        comb_dict_keys= list(comb_dict.keys())
+        numberOfCombinations= len(comb_dict_keys)
+        if(numberOfCombinations>0):
+            numberOfDigits= int(math.log10(numberOfCombinations))+1
+            self.clear() # remove previous values.
+            self.description= data['description']
+            for i, key in enumerate(comb_dict_keys):
+                indexStr= str(i+start).rjust(numberOfDigits, '0')
+                newKey= prefix+indexStr
+                self.add(newKey, comb_dict[key])
+            
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        # self.description= dct['description']
+        for r in rows:
+            key= r[2]
+            combExpr= r[3]
+            self.add(key, combExpr)        
            
     def getNameExpressionPairs(self):
         ''' Return a list of (combinationName, combinationExpression) tuples.'''
@@ -267,8 +295,7 @@ class SituationCombs(dict):
         '''
         data= self.getDict()
         with open(outputFileName, 'w') as outfile:
-            json.dump(data, outfile)
-        
+            json.dump(data, outfile)           
 
 class SituationsSet(object):
     '''Set of situations as used in limit states
@@ -276,7 +303,7 @@ class SituationsSet(object):
     :ivar name:        name to identify the situation set
     :ivar situations:  set of situations
     '''
-    def __init__(self,name: str):
+    def __init__(self, name: str):
         '''Constructor.
 
         :ivar name: name to identify the situation set.
@@ -384,6 +411,33 @@ class SLSCombinations(SituationsSet):
         self.qp.setFromDict(dct['qp'])
         self.earthquake.setFromDict(dct['earthquake'])
         
+    def renumber(self, start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param start: first index to use.
+        '''
+        self.rare.renumber(prefix= 'SLSR', start= start)
+        self.freq.renumber(prefix= 'SLSF', start= start)
+        self.qp.renumber(prefix= 'SLSQP', start= start)
+        self.earthquake.renumber(prefix= 'SLSEQ', start= start)
+        
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        classifiedRows= dict()
+        for r in rows:
+            r1= r[1]
+            if(r1 not in classifiedRows):
+                classifiedRows[r1]= list()
+            classifiedRows[r1].append(r)
+        if('rare' in classifiedRows):
+            self.rare.setFromCSV(classifiedRows['rare'])
+        if('freq' in classifiedRows):
+            self.freq.setFromCSV(classifiedRows['freq'])
+        if('qp' in classifiedRows):
+            self.qp.setFromCSV(classifiedRows['qp'])
+        if('earthquake' in classifiedRows):
+            self.earthquake.setFromCSV(classifiedRows['earthquake'])
+            
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.rare.getNeutralFormat(counter,'SLSR', mapLoadCases)
         retval.update(self.freq.getNeutralFormat(counter+len(retval),'SLSF', mapLoadCases))
@@ -441,6 +495,33 @@ class ULSCombinations(SituationsSet):
         self.acc.setFromDict(dct['acc'])
         self.fatigue.setFromDict(dct['fatigue'])
         self.earthquake.setFromDict(dct['earthquake'])
+
+    def renumber(self, start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param start: first index to use.
+        '''
+        self.perm.renumber(prefix= 'ULS', start= start)
+        self.acc.renumber(prefix= 'ULSA', start= start)
+        self.fatigue.renumber(prefix= 'ULSF', start= start)
+        self.earthquake.renumber(prefix= 'ULSEQ', start= start)
+        
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        classifiedRows= dict()
+        for r in rows:
+            r1= r[1]
+            if(r1 not in classifiedRows):
+                classifiedRows[r1]= list()
+            classifiedRows[r1].append(r)
+        if('perm' in classifiedRows):
+            self.perm.setFromCSV(classifiedRows['perm'])
+        if('acc' in classifiedRows):
+            self.acc.setFromCSV(classifiedRows['acc'])
+        if('fatigue' in classifiedRows):
+            self.fatigue.setFromCSV(classifiedRows['fatigue'])
+        if('earthquake' in classifiedRows):
+            self.earthquake.setFromCSV(classifiedRows['earthquake'])
         
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.perm.getNeutralFormat(counter,'ULST2', mapLoadCases)
@@ -485,9 +566,36 @@ class CombContainer(object):
         return retval
 
     def setFromDict(self,dct):
-        ''' Set the fields from the values of the dictionary argument.'''
+        ''' Set the fields from the values of the given dictionary.'''
         self.SLS.setFromDict(dct['SLS'])
         self.ULS.setFromDict(dct['ULS'])
+
+
+    def renumber(self, start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param start: first index to use.
+        '''
+        self.SLS.renumber(start= start)
+        self.ULS.renumber(start= start)
+        
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        slsRows= list()
+        ulsRows= list()
+        for r in rows:
+            r0= r[0]
+            if(r0=='ULS'):
+                ulsRows.append(r)
+            elif(r0=='SLS'):
+                slsRows.append(r)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+': limit state: \''+str(r0)+'\' unknown.')
+                exit(1)
+        self.ULS.setFromCSV(ulsRows)
+        self.SLS.setFromCSV(slsRows)
         
     def getNames(self):
         '''returns a list of the combination names.'''
@@ -597,6 +705,18 @@ class CombContainer(object):
         with open(inputFileName, 'r') as f:
             combsDict= json.load(f)
         self.setFromDict(combsDict)
+
+    def readFromCSV(self, inputFileName):
+        ''' Read the load combinations from a CSV file.
+
+        :param inputFileName: name of the input file.
+        '''
+        rows= list()
+        with open(inputFileName, 'r') as f:
+            reader= csv.reader(f)
+            for row in reader:
+                rows.append(row)
+        self.setFromCSV(rows)
 
                   
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):

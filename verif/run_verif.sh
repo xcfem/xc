@@ -326,6 +326,7 @@ python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinat
 echo "$BLEU" "  Load combination container tests." "$NORMAL"
 python tests/actions/load_combinations/comb_container/test_comb_container_01.py
 python tests/actions/load_combinations/comb_container/test_comb_container_02.py
+python tests/actions/load_combinations/comb_container/test_comb_container_03.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
