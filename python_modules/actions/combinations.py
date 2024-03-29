@@ -7,9 +7,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
+import os
 import sys
 import json
 import csv
+import tempfile
 from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 from misc_utils import log_messages as lmsg
@@ -49,16 +51,21 @@ class CombinationRecord(object):
     def getNameExpressionPair(self):
         ''' Return a (combinationName, combinationExpression) tuple.'''
         return (self.name, self.expr)
+
+    def getLaTeXCode(self):
+        ''' Return the LaTeX string corresponding to this combination.'''
+        retval= self.name.replace('_','\\_')
+        retval+= ' & '
+        retval+= self.expr.replace('*',' ')
+        retval+= '\\\\\n'
+        return retval
     
     def exportToLatex(self, outputFile):
-         '''Creates LaTeX tables and put the combinations in them.
-
+        '''Creates LaTeX tables and put the combinations in them.
+        
          :param outputFile: file to write into.
          '''
-         outputFile.write(self.name.replace('_','\\_'))
-         outputFile.write(' & ')
-         outputFile.write(self.expr.replace('*',' '))
-         outputFile.write('\\\\\n')
+        outputFile.write(self.getLaTeXCode())
 
     def getLoadCaseDispParameters(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc, unitsScaleForc= 1e-3, unitsScaleMom= 1e-3, unitsScaleDisp= 1e3, unitsDispl= '[mm]'):
         '''Return a suitable LoadCaseDispParameters for the combination.
@@ -172,39 +179,61 @@ class SituationCombs(dict):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+': couln\'t create combination: \''+key+'\'')
-            
-    def exportToLatex(self, outputFile):
+
+    def getLaTeXCode(self, limitState= None, small= True):
         '''Creates LaTeX tables and put the combinations in them.
 
         :param outputFile: file to write into.
+        :param limitState: description of the limit state to which 
+                           this situation corresponds.
+        :param small: if true, use small font.
         '''
+        retval= str()
         if(len(self)>0):
-            outputFile.write('\\begin{center}\n')
-            outputFile.write('\\begin{longtable}{|l|p{10cm}|}\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\multicolumn{2}{|c|}{'+self.description+'}\\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\endfirsthead\n')
+            if(limitState):
+                header= limitState+' '+self.description
+            else:
+                header= self.description
+            retval+= ('\\begin{center}\n')
+            if(small):
+                retval+= ('\\begin{small}\n')
+            retval+= ('\\begin{longtable}{|l|p{10cm}|}\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endfirsthead\n')
 
-            outputFile.write('\\hline\n')
-            outputFile.write('\\multicolumn{2}{|c|}{'+self.description+'}\\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\endhead\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endhead\n')
 
-            outputFile.write('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
-            outputFile.write('\\endfoot\n')
+            retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
+            retval+= ('\\endfoot\n')
 
-            outputFile.write('\\hline\n')
-            outputFile.write('\\endlastfoot\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endlastfoot\n')
             for key in sorted(self):
-                self[key].exportToLatex(outputFile)
-            outputFile.write('\hline\n')
-            outputFile.write('\end{longtable}\n')
-            outputFile.write('\end{center}\n')
+                retval+= self[key].getLaTeXCode()
+            retval+= ('\hline\n')
+            retval+= ('\end{longtable}\n')
+            if(small):
+                retval+= ('\\end{small}\n')
+            retval+= ('\end{center}\n')
+        return retval
+            
+    def exportToLatex(self, outputFile, limitState= None):
+        '''Creates LaTeX tables and put the combinations in them.
+
+        :param outputFile: file to write into.
+        :param limitState: description of the limit state to which 
+                           this situation corresponds.
+        '''
+        outputFile.write(self.getLaTeXCode(limitState= limitState))
 
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
@@ -284,11 +313,18 @@ class SituationsSet(object):
         '''
         for s in self.situations:
             s.dumpCombinations(xcCombHandler)
+
+    def getLaTeXCode(self):
+        '''Return the LaTeX code corresponding to the combinations in this
+           container.'''
+        retval= ''
+        for s in self.situations:
+            retval+= s.getLaTeXCode(limitState= self.name)
+        return retval
             
     def exportToLatex(self, outputFile):
         '''Creates LaTeX tables and put the combinations in them.'''
-        for s in self.situations:
-            s.exportToLatex(outputFile)
+        ouputFile.write(self.getLaTeXCode())
         
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
@@ -481,13 +517,58 @@ class CombContainer(object):
         xcCombHandler= preprocessor.getLoadHandler.getLoadCombinations
         for ls in self.limitStates:
             ls.dumpCombinations(xcCombHandler)
+
+    def getLaTeXCode(self):
+        ''' Return the LaTeX code correspoding to the combinations in this
+            container.'''
+        retval= ''
+        for ls in self.limitStates:
+            retval+= ls.getLaTeXCode()
+        return retval
             
     def exportToLatex(self, fileName):
-        '''Creates LaTeX tables and put the combinations in them.'''
-        f = open(fileName, "w")
-        for ls in self.limitStates:
-            ls.exportToLatex(f)
-        f.close()
+        '''Creates LaTeX tables and put the combinations in them.
+
+        :param fileName: output file name.
+        '''
+        with open(fileName, "w") as f:
+            f.write(self.getLaTeXCode())
+
+    def exportToPDF(self, fileName):
+        ''' Creates a PDF file and write the combinations to it.
+
+        :param fileName: output file name.
+        '''
+        texDocument= u'''\documentclass{article}
+        \\usepackage[utf8]{inputenc}
+        \\usepackage{longtable}
+        \\begin{document}
+        **LaTeXCode**
+        \end{document}
+        '''
+        latexCode= self.getLaTeXCode()
+        texDocument= texDocument.replace('**LaTeXCode**', latexCode)
+        with tempfile.NamedTemporaryFile(mode= 'w', delete= False) as tmp:
+            tmp.write(texDocument)
+            outputFileName= tmp.name
+        os.rename(outputFileName, outputFileName+'.tex')
+        outputFileName+='.tex'
+        dirName= os.path.dirname(outputFileName)
+        pdfLaTeXCommand= 'pdflatex --interaction=batchmode'
+        pdfLaTeXCommand+= ' -output-directory '+ dirName 
+        pdfLaTeXCommand+= ' ' + outputFileName
+        print(pdfLaTeXCommand)
+        os.system(pdfLaTeXCommand)    
+        os.system(pdfLaTeXCommand)    
+        os.system(pdfLaTeXCommand)
+        pdfOutput= outputFileName.replace('.tex', '.pdf')
+        os.replace(pdfOutput, fileName)
+        ### Remove unneeded files
+        for extension in ['.aux', '.log']:
+            fName= outputFileName.replace('.tex', extension)
+            os.unlink(fName)
+        os.unlink(outputFileName)
+            
 
     def getList(self):
         ''' Return a list populated with the combinations.'''
@@ -534,7 +615,17 @@ class CombContainer(object):
         '''
         data= self.getDict()
         with open(outputFileName, 'w') as outfile:
-            json.dump(data, outfile)        
+            json.dump(data, outfile)
+
+    def readFromJSON(self, inputFileName):
+        ''' Read the load combinations from a JSON file.
+
+        :param inputFileName: name of the input file.
+        '''
+        with open(inputFileName, 'r') as f:
+            combsDict= json.load(f)
+        self.setFromDict(combsDict)
+
                   
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
