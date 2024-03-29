@@ -11,10 +11,10 @@ import os
 import sys
 import json
 import csv
-import tempfile
 from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 from misc_utils import log_messages as lmsg
+from misc.latex import latex_utils
 
 
 class CombinationRecord(object):
@@ -539,36 +539,8 @@ class CombContainer(object):
 
         :param fileName: output file name.
         '''
-        texDocument= u'''\documentclass{article}
-        \\usepackage[utf8]{inputenc}
-        \\usepackage{longtable}
-        \\begin{document}
-        **LaTeXCode**
-        \end{document}
-        '''
         latexCode= self.getLaTeXCode()
-        texDocument= texDocument.replace('**LaTeXCode**', latexCode)
-        with tempfile.NamedTemporaryFile(mode= 'w', delete= False) as tmp:
-            tmp.write(texDocument)
-            outputFileName= tmp.name
-        os.rename(outputFileName, outputFileName+'.tex')
-        outputFileName+='.tex'
-        dirName= os.path.dirname(outputFileName)
-        pdfLaTeXCommand= 'pdflatex --interaction=batchmode'
-        pdfLaTeXCommand+= ' -output-directory '+ dirName 
-        pdfLaTeXCommand+= ' ' + outputFileName
-        print(pdfLaTeXCommand)
-        os.system(pdfLaTeXCommand)    
-        os.system(pdfLaTeXCommand)    
-        os.system(pdfLaTeXCommand)
-        pdfOutput= outputFileName.replace('.tex', '.pdf')
-        os.replace(pdfOutput, fileName)
-        ### Remove unneeded files
-        for extension in ['.aux', '.log']:
-            fName= outputFileName.replace('.tex', extension)
-            os.unlink(fName)
-        os.unlink(outputFileName)
-            
+        latex_utils.latex_to_pdf(latexCode= latexCode, pdfFileName= fileName)
 
     def getList(self):
         ''' Return a list populated with the combinations.'''

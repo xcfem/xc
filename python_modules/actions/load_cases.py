@@ -7,6 +7,7 @@ __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 
 from misc_utils import log_messages as lmsg
+from misc.latex import latex_utils
 
 class LoadCase(object):
     '''Definition of a load case.
@@ -31,7 +32,7 @@ class LoadCase(object):
     def create(self):
         '''Create the load case and set it as current
         '''
-        lPatterns=self.preprocessor.getLoadHandler.getLoadPatterns
+        lPatterns= self.preprocessor.getLoadHandler.getLoadPatterns
         lPatterns.newTimeSeries(self.timeSType,self.timeSName)
         lPatterns.currentTimeSeries=self.timeSName
         lPatterns.newLoadPattern(self.loadPType,self.name)
@@ -65,9 +66,24 @@ class LoadCaseManager(object):
            self.timeSeries[tsName]= ts
        self.loadPatterns.currentTimeSeries= tsName
        for name in names:
-           if(name not in self.loadCases): # Load pattern not already defined.
-               self.loadCases[name]= self.loadPatterns.newLoadPattern('default',name)
+           self.newSimpleLoadPattern(name= name)
 
+    def newSimpleLoadPattern(self, name):
+       '''Define a load pattern with constant time series.
+
+       :param name: name for the new load pattern.
+       '''
+       if(name not in self.loadCases): # Load pattern not already defined.
+           self.appendLoadPattern(self.loadPatterns.newLoadPattern('default',name))
+
+    def appendLoadPattern(self, lp):
+        ''' Appends an already defined load pattern.
+
+        :param lp: load pattern to append.
+        '''
+        if(lp.name not in self.loadCases): # not already in the container.
+            self.loadCases[lp.name]= lp
+        
     def setCurrentLoadCase(self, name, newLoadCase= False):
        '''Sets current load case.
 
@@ -82,7 +98,6 @@ class LoadCaseManager(object):
                lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
        return self.getLoadCase(name)
     
-
     def getCurrentLoadCase(self):
        '''Returns current load case.'''
        name= self.loadPatterns.currentLoadPattern
@@ -90,7 +105,64 @@ class LoadCaseManager(object):
 
     def getLoadCase(self,name):
        return self.loadCases[name]
+    
+    def getLaTeXCode(self, small= True):
+        ''' Return the LaTeX string corresponding to load cases in the
+            container.
 
+        :param small: if true, use small font.
+        '''
+        retval= str()
+        if(len(self.loadCases)>0):
+            header= 'Actions'
+            retval+= ('\\begin{center}\n')
+            if(small):
+                retval+= ('\\begin{small}\n')
+            retval+= ('\\begin{longtable}{|l|p{10cm}|}\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\textbf{Code} & \\textbf{Description} \\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endfirsthead\n')
+
+            retval+= ('\\hline\n')
+            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\textbf{Code} & \\textbf{Description} \\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endhead\n')
+
+            retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
+            retval+= ('\\endfoot\n')
+
+            retval+= ('\\hline\n')
+            retval+= ('\\endlastfoot\n')
+            for key in self.loadCases:
+                loadCase= self.loadCases[key]
+                retval+= key + ' & '+ loadCase.description +'\\\\\n'
+            retval+= ('\hline\n')
+            retval+= ('\end{longtable}\n')
+            if(small):
+                retval+= ('\\end{small}\n')
+            retval+= ('\end{center}\n')
+        return retval
+    
+    def exportToLatex(self, fileName):
+        '''Creates LaTeX tables and put the combinations in them.
+
+        :param fileName: output file name.
+        '''
+        with open(fileName, "w") as f:
+            f.write(self.getLaTeXCode())
+            
+    def exportToPDF(self, fileName):
+        ''' Creates a PDF file and write the combinations to it.
+
+        :param fileName: output file name.
+        '''
+        latexCode= self.getLaTeXCode()
+        latex_utils.latex_to_pdf(latexCode= latexCode, pdfFileName= fileName)
 
 def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):
     '''Clear all load patterns in the model and create a new TimeSeries
