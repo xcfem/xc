@@ -303,20 +303,25 @@ python tests/actions/traffic_loads/railway_traffic/test_ec1_traction_and_braking
 python tests/actions/traffic_loads/railway_traffic/test_ec1_line_load_design_situation_ii.py
 
 # Load combinations tests.
-echo "$BLEU" "Forming load combination tests." "$NORMAL"
+echo "$BLEU" "Load combination tests." "$NORMAL"
 python tests/actions/load_combinations/test_action.py
 python tests/actions/load_combinations/test_action_group.py
-python tests/actions/load_combinations/test_ehe_secondaries_00.py
-python tests/actions/load_combinations/test_ehe_accidentales.py
-python tests/actions/load_combinations/test_iap11_01.py
-python tests/actions/load_combinations/test_iap11_02.py
 python tests/actions/load_combinations/test_combination_dict.py
 python tests/actions/load_combinations/test_split_combination.py
-python tests/actions/load_combinations/test_sia_pont_ferroviaire.py
-python tests/actions/load_combinations/test_ec0_road_bridge_context.py
-python tests/actions/load_combinations/test_ec0_traffic_groups.py
-python tests/actions/load_combinations/test_ec0_seismic_combinations.py
-python tests/actions/load_combinations/test_ec0_railway_bridge_load_combinations.py
+echo "$BLEU" "  Forming load combination tests." "$NORMAL"
+echo "$BLEU" "    Forming load combination according to EHE." "$NORMAL"
+python tests/actions/load_combinations/ehe/test_ehe_secondaries_00.py
+python tests/actions/load_combinations/ehe/test_ehe_accidentales.py
+echo "$BLEU" "    Forming load combination according to IAP." "$NORMAL"
+python tests/actions/load_combinations/iap/test_iap11_01.py
+python tests/actions/load_combinations/iap/test_iap11_02.py
+echo "$BLEU" "    Forming load combination according to SIA 260." "$NORMAL"
+python tests/actions/load_combinations/sia/test_sia_pont_ferroviaire.py
+echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
+python tests/actions/load_combinations/ec0/test_ec0_road_bridge_context.py
+python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
+python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py
+python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"

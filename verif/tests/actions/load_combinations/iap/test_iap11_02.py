@@ -87,7 +87,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
 # Read reference data.
-refFile= pth+'/../../aux/reference_files/ref_test_iap11_02.json'
+refFile= pth+'/../../../aux/reference_files/ref_test_iap11_02.json'
 with open(refFile) as f:
    refValues= json.load(f)
 eluPersistCoefsRef= refValues['eluPersistCoefsRef']

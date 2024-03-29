@@ -13,26 +13,25 @@ from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
 lcg= ec0_es.combGenerator
 # Permanent load.
-G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.')
-# Settlement load.
-S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.')
+G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge')
+# Railway traffic load.
+S= lcg.newRailwayTrafficAction(actionName= 'Q', actionDescription= 'Traffic.', context= 'railway_bridge', combinationFactorsName= 'LM71_alone_uls')
 # Thermal load.
 T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge')
-# Traffic load.
-actionTuples= [('TS','Tandem system','road_traffic_loads_gr1a_trucks'), ('UDL','Uniformly distributed load.','road_traffic_loads_gr1a_udl')]
-actionGroup= lcg.newActionGroup(family= 'variables', actionTuples= actionTuples, partialSafetyFactorsName= 'road_traffic')
+# Seismic action.
+A2= lcg.newSeismicAction(actionName= 'A2', actionDescription= 'Earthquake.', ulsImportanceFactor= 1.3)
 
 lcg.computeCombinations()
 
 # Write results.
-outputFileName= 'ec0_traffic_groups.py'
+outputFileName= 'ec0_seismic_combinations.py'
 lcg.writeXCLoadCombinations(outputFileName= outputFileName)
 
 # Get current path.
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
-refFile= pth+'/../../aux/reference_files/ref_'+outputFileName
+refFile= pth+'/../../../aux/reference_files/ref_'+outputFileName
 comparisonOK= filecmp.cmp(refFile, outputFileName, shallow=False)
     
 from misc_utils import log_messages as lmsg
