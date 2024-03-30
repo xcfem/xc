@@ -21,11 +21,18 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::QuadSurfaceLoad, bases<ElementBase4N > >("QuadSurfaceLoad")
+typedef XC::SurfaceLoadBase<2> surface_load_base_2n;
+class_<surface_load_base_2n, bases<ElementBase2N>, boost::noncopyable >("surface_load_base_2n", no_init);
+
+class_<XC::QuadSurfaceLoad, bases<surface_load_base_2n >, boost::noncopyable >("QuadSurfaceLoad", no_init)
    .add_property("pressure",&XC::QuadSurfaceLoad::getPressure, &XC::QuadSurfaceLoad::setPressure,"Get/set the pressure load.")
+   .def("getLength",&XC::QuadSurfaceLoad::getLength, "Returns element length.")
    ;
 
-class_<XC::BrickSurfaceLoad, bases<ElementBase4N > >("BrickSurfaceLoad")
+typedef XC::SurfaceLoadBase<4> surface_load_base_4n;
+class_<surface_load_base_4n, bases<ElementBase4N>, boost::noncopyable >("surface_load_base_4n", no_init);
+
+class_<XC::BrickSurfaceLoad, bases<surface_load_base_4n > >("BrickSurfaceLoad")
    .add_property("pressure",&XC::BrickSurfaceLoad::getPressure, &XC::BrickSurfaceLoad::setPressure,"Get/set the pressure load.")
    ;
 
