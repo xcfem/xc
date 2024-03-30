@@ -807,7 +807,7 @@ Pos3d XC::Element1D::getProjection(const Pos3d &p,bool initialGeometry) const
     return sg.Projection(p);
   }
 
-//! @brief Return the segment defined by the element.
+//! @brief Return the length of the segment defined by the element.
 double XC::Element1D::getLength(bool initialGeometry) const
   {
     if(initialGeometry)
