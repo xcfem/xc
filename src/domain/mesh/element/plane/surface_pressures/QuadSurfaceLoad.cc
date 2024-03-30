@@ -36,6 +36,7 @@
 #include "QuadSurfaceLoad.h"
 #include "domain/load/ElementalLoad.h"
 #include "domain/mesh/node/Node.h"
+#include "vtkCellType.h"
 
 XC::Matrix XC::QuadSurfaceLoad::tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF);
 
@@ -89,6 +90,23 @@ int XC::QuadSurfaceLoad::UpdateBase(double Xi) const
 
     return 0;
   }
+
+//! @brief Return the element dimension (0, 1, 2 or 3).
+size_t XC::QuadSurfaceLoad::getDimension(void) const
+  { return 1; }
+
+//! @brief Return the length of the segment defined by the element.
+double XC::QuadSurfaceLoad::getLength(bool initialGeometry) const
+  {
+    if(initialGeometry)
+      return dist(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
+    else
+      return dist(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
+  }
+
+//! @brief VTK interface.
+int XC::QuadSurfaceLoad::getVtkCellType(void) const
+  { return VTK_LINE; }
 
 const XC::Matrix &XC::QuadSurfaceLoad::getTangentStiff(void) const
   { return tangentStiffness; }

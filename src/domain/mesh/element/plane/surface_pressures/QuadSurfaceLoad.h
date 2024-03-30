@@ -76,6 +76,10 @@ class QuadSurfaceLoad: public SurfaceLoadBase<QSL_NUM_NODE>
     int getNumDOF(void) const;        
     void setDomain(Domain *theDomain);
 
+    size_t getDimension(void) const;
+    double getLength(bool initialGeometry= true) const;
+    int getVtkCellType(void) const;
+    
     // public methods to obtain stiffness, mass, damping and 
     // residual information    
     const Matrix &getTangentStiff(void) const;
