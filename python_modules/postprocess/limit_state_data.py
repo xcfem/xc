@@ -115,15 +115,16 @@ class LimitStateData(object):
     :ivar outputDataBaseFileName: name (whithout extension) of the 
                                        file that contains the results to
                                        display.
-    :ivar designSituation: design situation; permanent, quasi-permanent,
-                           frequent, rare, earthquake. 
+    :ivar designSituations: design situations that will be checked; 
+                            i. e. uls_permanent, sls_quasi-permanent,
+                            sls_frequent, sls_rare, uls_earthquake, etc. 
     :ivar woodArmerAlsoForAxialForces: if true, use Wood-Armer method for
                                        both axial and bending internal
                                        forces otherwise, use it only for 
                                        bending moments.
     '''
     envConfig= None # configuration of XC environment variables.
-    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation, woodArmerAlsoForAxialForces= False, cfg= None):
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituations, woodArmerAlsoForAxialForces= False, cfg= None):
         '''Limit state data constructor.
 
 
@@ -131,8 +132,9 @@ class LimitStateData(object):
         :param outputDataBaseFileName: name (whithout extension) of the 
                                        file that contains the results to
                                        display.
-        :param designSituation: design situation; permanent, quasi-permanent,
-                                frequent, rare, earthquake. 
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, sls_quasi-permanent,
+                                 sls_frequent, sls_rare, uls_earthquake, etc. 
         :param woodArmerAlsoForAxialForces: if true, use Wood-Armer method for
                                             both axial and bending internal
                                             forces otherwise, use it only for 
@@ -141,7 +143,7 @@ class LimitStateData(object):
         '''
         self.label= limitStateLabel
         self.outputDataBaseFileName= outputDataBaseFileName
-        self.designSituation= designSituation
+        self.designSituations= designSituations
         self.woodArmerAlsoForAxialForces= woodArmerAlsoForAxialForces
         LimitStateData.envConfig= cfg
 
@@ -271,9 +273,9 @@ class LimitStateData(object):
                               combination families (ULS, fatigue, SLS,...)
                               see actions/combinations module.
         '''
-        return combContainer.getCorrespondingLoadCombinations(self.designSituation)
+        return combContainer.getCorrespondingLoadCombinations(self.designSituations)
     
-    def dumpCombinations(self,combContainer,loadCombinations):
+    def dumpCombinations(self, combContainer, loadCombinations):
         '''Load into the solver the combinations needed for this limit state.
 
         :param combContainer: container with the definition of the different
@@ -282,14 +284,16 @@ class LimitStateData(object):
         :param loadCombinations: load combination handler inside the XC solver.
         '''
         loadCombinations.clear()
-        # Get the combinations corresponding to this design situation.
-        combinations= self.getCorrespondingLoadCombinations(combContainer)
-        if(combinations):
-            combinations.dumpCombinations(loadCombinations)
+        # Get the combinations corresponding to the design situations.
+        situationsCombs= self.getCorrespondingLoadCombinations(combContainer)
+        if(situationsCombs): # for each situation.
+            for combinations in situationsCombs:
+                if(combinations): # if not empty.
+                    combinations.dumpCombinations(loadCombinations)
         else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; something went wrong. Couldn\'t dump the load combinations.")
+           className= type(self).__name__
+           methodName= sys._getframe(0).f_code.co_name
+           lmsg.warning(className+'.'+methodName+"; something went wrong. No combinations to analyze.")    
         return loadCombinations
                          
     def getLastCalculationTime(self):
@@ -469,7 +473,7 @@ class LimitStateData(object):
 class ULS_LimitStateData(LimitStateData):
     ''' Ultimate limit state data for permanent or transient combinations.'''
     
-    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituations):
         '''Constructor.
 
         :param limitStateLabel: limit state check label; Something like "Fatigue" 
@@ -477,10 +481,11 @@ class ULS_LimitStateData(LimitStateData):
         :param outputDataBaseFileName: name (whithout extension) of the 
                                        file that contains the results to
                                        display.
-        :param designSituation: design situation; permanent, quasi-permanent,
-                                frequent, rare, earthquake. 
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_accidental,
+                                 uls_earthquake, etc. 
         '''
-        super(ULS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        super(ULS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
 
     def check(self, crossSections, outputCfg= VerifOutVars(), threeDim= True):
         '''Checking of normal stresses in ultimate limit states
@@ -500,18 +505,23 @@ class ULS_LimitStateData(LimitStateData):
         
 defaultLinearBucklingProcedureType= predefined_solutions.SpectraLinearBucklingAnalysis
 
+default_uls_design_situations= ['uls_permanent', 'uls_accidental', 'uls_earthquake']
+
 class BucklingParametersLimitStateData(ULS_LimitStateData):
     ''' Buckling parameters data for limit state checking.
 
 
     :ivar numModes: number of buckling modes to compute.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituation= 'permanent'):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= default_uls_design_situations):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, sls_quasi-permanent,
+                                 sls_frequent, sls_rare, uls_earthquake, etc. 
         '''
-        super(BucklingParametersLimitStateData, self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        super(BucklingParametersLimitStateData, self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
         self.numModes= numModes
         
     def prepareResultsDictionaries(self):
@@ -637,9 +647,14 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
     
 class NormalStressesRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
-    def __init__(self):
-        '''Constructor '''
-        super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= fn.normalStressesVerificationResultsFile, designSituation= 'permanent')
+    def __init__(self, designSituations= default_uls_design_situations):
+        '''Constructor 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, sls_quasi-permanent,
+                                 sls_frequent, sls_rare, uls_earthquake, etc. 
+        '''
+        super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= fn.normalStressesVerificationResultsFile, designSituations= designSituations)
 
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -671,9 +686,13 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
         
 class NormalStressesSteelLimitStateData(ULS_LimitStateData):
     ''' Steel normal stresses data for limit state checking.'''
-    def __init__(self):
-        '''Constructor '''
-        super(NormalStressesSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= fn.normalStressesVerificationResultsFile, designSituation= 'permanent')
+    def __init__(self, designSituations= default_uls_design_situations):
+        '''Constructor 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_earthquake, etc. 
+        '''
+        super(NormalStressesSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= fn.normalStressesVerificationResultsFile, designSituations= designSituations)
 
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -701,9 +720,13 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
     
 class ShearResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= fn.shearVerificationResultsFile, designSituation= 'permanent')
+    def __init__(self, designSituations= default_uls_design_situations):
+        '''Limit state data constructor 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_earthquake, etc. 
+        '''
+        super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= fn.shearVerificationResultsFile, designSituations= designSituations)
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -734,9 +757,13 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
         
 class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(ShearResistanceSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= fn.shearVerificationResultsFile, designSituation= 'permanent')
+    def __init__(self, designSituations= default_uls_design_situations):
+        '''Limit state data constructor 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_earthquake, etc. 
+        '''
+        super(ShearResistanceSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= fn.shearVerificationResultsFile, designSituations= designSituations)
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -765,9 +792,13 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
 class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete torsion strength limit state data.'''
 
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(TorsionResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_torsionResistance', outputDataBaseFileName= fn.torsionVerificationResultsFile, designSituation= 'permanent')
+    def __init__(self, designSituations= default_uls_design_situations):
+        '''Constructor.
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_earthquake, etc. 
+        '''
+        super(TorsionResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_torsionResistance', outputDataBaseFileName= fn.torsionVerificationResultsFile, designSituations= designSituations)
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -799,17 +830,18 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
 class SLS_LimitStateData(LimitStateData):
     ''' Serviceability limit state data for frequent load combinations.'''
     
-    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituations):
         '''Constructor.
 
         :param limitStateLabel: limit state check label; Something like "Fatigue"                               or "CrackControl".
         :param outputDataBaseFileName: name (whithout extension) of the 
                                        file that contains the results to
                                        display.
-        :param designSituation: design situation; permanent, quasi-permanent,
-                                frequent, rare, earthquake. 
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
         '''
-        super(SLS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        super(SLS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
 
     def check(self, crossSections, outputCfg= VerifOutVars(), threeDim= True):
         '''Checking of crack width under frequent loads in serviceability 
@@ -852,15 +884,25 @@ class CrackControlRCLimitStateData(SLS_LimitStateData):
         
 class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under rare loads limit state data.'''
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(RareLoadsCrackControlRCLimitStateData,self).__init__('SLS_rareLoadsCrackControl', fn.crackControlRareVerificationResultsFile, designSituation= 'rare')
+    def __init__(self, designSituations= ['sls_rare']):
+        '''Limit state data constructor 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(RareLoadsCrackControlRCLimitStateData,self).__init__('SLS_rareLoadsCrackControl', fn.crackControlRareVerificationResultsFile, designSituations= designSituations)
 
 class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl', fn.crackControlFreqVerificationResultsFile, designSituation= 'frequent')
+    def __init__(self, designSituations= ['sls_frequent']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl', fn.crackControlFreqVerificationResultsFile, designSituations= designSituations)
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -871,9 +913,14 @@ class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
         
 class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl', fn.crackControlQpermVerificationResultsFile, designSituation= 'quasi-permanent')
+    def __init__(self, designSituations= ['sls_quasi-permanent']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl', fn.crackControlQpermVerificationResultsFile, designSituations= designSituations)
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -884,9 +931,14 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                 
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(FreqLoadsDisplacementControlLimitStateData,self).__init__('SLS_frequentLoadsDisplacementControl','', designSituation= 'frequent')
+    def __init__(self, designSituations= ['sls_frequent']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(FreqLoadsDisplacementControlLimitStateData,self).__init__('SLS_frequentLoadsDisplacementControl','', designSituations= designSituations)
         
     def check(self,reinfConcreteSections):
         '''Checking of displacements under frequent loads in
@@ -900,9 +952,14 @@ class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
 
 class FatigueResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
-    def __init__(self):
-        '''Limit state data constructor '''
-        super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance',fn.fatigueVerificationResultsFile, designSituation= 'fatigue')
+    def __init__(self, designSituations= ['uls_fatigue']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_accidental,
+                                 uls_earthquake, etc. 
+        '''
+        super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance',fn.fatigueVerificationResultsFile, designSituations= designSituations)
             
 class VonMisesStressLimitStateData(ULS_LimitStateData):
     ''' Steel Von Mises stress limit state data.
@@ -910,13 +967,16 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
     :ivar vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
     '''
-    def __init__(self, vonMisesStressId= 'max_von_mises_stress'):
+    def __init__(self, vonMisesStressId= 'max_von_mises_stress', designSituations= default_uls_design_situations):
         '''Von Mises stress limit state data constructor.
 
         :param vonMisesStressId: identifier of the Von Mises stress to read
                                 (see NDMaterial and MembranePlateFiberSection).
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_accidental,
+                                 uls_earthquake, etc. 
         '''
-        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance', fn.vonMisesStressesVerificationResultsFile, designSituation= 'permanent')
+        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance', fn.vonMisesStressesVerificationResultsFile, designSituations= designSituations)
         self.vonMisesStressId= vonMisesStressId
         
     def getInternalForcesDict(self, nmbComb, elems):

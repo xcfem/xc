@@ -1153,12 +1153,14 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituation= 'permanent'):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_earthquake, etc.
         '''
-        super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
         '''Creates a dictionary with the buckling parameters of the given

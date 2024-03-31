@@ -1544,10 +1544,13 @@ class Ec2InPlaneStressLimitStateData(lsd.ULS_LimitStateData):
     ''' In-plane stress conditions limit state data.
 
     '''
-    def __init__(self):
+    def __init__(self, designSituations= lsd.default_uls_design_situations):
         '''Constructor.
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_earthquake, etc.
         '''
-        super(Ec2InPlaneStressLimitStateData,self).__init__(limitStateLabel= 'ULS_Ec2InPlaneStressResistance', outputDataBaseFileName= fn.ec2InPlaneStressVerificationResultsFile, designSituation= 'permanent')
+        super(Ec2InPlaneStressLimitStateData,self).__init__(limitStateLabel= 'ULS_Ec2InPlaneStressResistance', outputDataBaseFileName= fn.ec2InPlaneStressVerificationResultsFile, designSituations= designSituations)
         
     def getStressesDict(self, nmbComb, elems):
         '''Creates a dictionary with the element's stresses.

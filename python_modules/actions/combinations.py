@@ -734,37 +734,33 @@ class CombContainer(object):
             retval= self.ULS.getLoadCaseDispParameters(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
         return retval
 
-    def getCorrespondingLoadCombinations(self, designSituation):
+    def getCorrespondingLoadCombinations(self, designSituations):
         '''Return the load combinations needed for the design situation
            argument.
 
-        :param desingSituation: string identifying the design situation
-                                (i. e.: permanent, quasi-permanent,
-                                        sls_earthquake, ...).
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, sls_quasi-permanent,
+                                 sls_frequent, sls_rare, uls_earthquake, etc. 
         '''
-        retval= None
-        if(designSituation=='permanent'):
-            retval= self.ULS.perm
-        elif(designSituation== 'fatigue'):
-            retval= self.ULS.fatigue
-        elif(designSituation== 'accidental'):
-            retval= self.ULS.acc
-        elif(designSituation== 'uls_earthquake'):
-            retval= self.ULS.earthquake
-        elif(designSituation== 'quasi-permanent'):
-            retval= self.SLS.qp
-        elif(designSituation== 'frequent'):
-            retval= self.SLS.freq
-        elif(designSituation== 'rare'):
-            retval= self.SLS.rare
-        elif(designSituation== 'sls_earthquake'):
-            retval= self.SLS.earthquake
-        else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(designSituation)+"' unknown.")
+        retval= list()
+        if('uls_permanent' in designSituations):
+            retval.append(self.ULS.perm)
+        if('uls_fatigue' in designSituations):
+            retval.append(self.ULS.fatigue)
+        if('uls_accidental' in designSituations):
+            retval.append(self.ULS.acc)
+        if('uls_earthquake' in designSituations):
+            retval.append(self.ULS.earthquake)
+        if('sls_quasi-permanent' in designSituations):
+            retval.append(self.SLS.qp)
+        if('sls_frequent' in designSituations):
+            retval.append(self.SLS.freq)
+        if('sls_rare' in designSituations):
+            retval.append(self.SLS.rare)
+        if('sls_earthquake' in designSituations):
+            retval.append(self.SLS.earthquake)
         if(len(retval)==0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(designSituation)+"' has no defined combinations.")
+            lmsg.warning(className+'.'+methodName+"; design situations: '"+str(designSituations)+"' have no defined combinations.")
         return retval
