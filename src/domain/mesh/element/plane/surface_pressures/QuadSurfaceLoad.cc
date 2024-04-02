@@ -37,6 +37,9 @@
 #include "domain/load/ElementalLoad.h"
 #include "domain/mesh/node/Node.h"
 #include "vtkCellType.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/coo_sys/Rect2d2dCooSys.h"
 
 XC::Matrix XC::QuadSurfaceLoad::tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF);
 
@@ -102,6 +105,25 @@ double XC::QuadSurfaceLoad::getLength(bool initialGeometry) const
       return dist(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
     else
       return dist(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
+  }
+
+//! @brief Returns a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::QuadSurfaceLoad::getLocalAxes(bool initialGeometry) const
+  {
+    static Matrix retval;
+    double factor= 0.0;
+    if(!initialGeometry)
+      factor= 1.0;
+    const Pos2d p0= theNodes[0]->getCurrentPosition2d(factor);
+    const Pos2d p1= theNodes[1]->getCurrentPosition2d(factor);
+    const Rect2d2dCooSys sc(p0,p1);
+    const Vector2d i= sc.getIVector();
+    retval= Matrix(2,2);
+    retval(0,0)= i.x(); retval(0,1)= i.y();
+    const Vector2d j= sc.getJVector();
+    retval(1,0)= j.x(); retval(1,1)= j.y();
+    return retval;
   }
 
 //! @brief VTK interface.
