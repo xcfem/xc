@@ -105,6 +105,10 @@ class LoadCaseManager(object):
 
     def getLoadCase(self,name):
        return self.loadCases[name]
+
+    def getLoadCasesNames(self):
+        ''' Return the names of the load cases in the container.'''
+        return list(self.loadCases.keys())
     
     def getLaTeXCode(self, small= True):
         ''' Return the LaTeX string corresponding to load cases in the

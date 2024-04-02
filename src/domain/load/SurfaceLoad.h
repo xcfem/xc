@@ -74,8 +74,12 @@ class SurfaceLoad: public ElementBodyLoad
 
     const Vector &getData(int &type, const double &loadFactor) const;
     
+    std::string Category(void) const;
+    
     double getPressure(void) const;
     void setPressure(const double &);
+    virtual Vector getLocalForce(void) const;
+    Vector3d getVector3dLocalForce(void) const;
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
