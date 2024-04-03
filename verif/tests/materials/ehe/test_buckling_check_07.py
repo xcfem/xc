@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Check buckling computations using the results of a linear buckling 
-analysis. Same test as test_buckling_check_09.py but with the Y and Z
+analysis. Same test as test_buckling_check_06.py but with the Y and Z
 axes swapped.
 '''
 
