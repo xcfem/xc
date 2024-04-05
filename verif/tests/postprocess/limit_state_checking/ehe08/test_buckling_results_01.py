@@ -149,8 +149,10 @@ meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcr
 ratio1= abs(meanCFs[0]-0.42772948185061505)/0.42772948185061505
 ratio2= abs(meanCFs[1]-0.4382047524250554)/0.4382047524250554
 
+'''
 print(meanCFs[0], ratio1)
 print(meanCFs[1], ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
