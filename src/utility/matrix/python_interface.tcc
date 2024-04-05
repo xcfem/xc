@@ -68,6 +68,7 @@ class_<XC::Vector, bases<CommandEntity> >("Vector")
   .def("putComponents",&XC::Vector::putComponents,"Assigns the specified values to the specified set of vector components")
   .def("addComponents",&XC::Vector::addComponents,"Sums the specified values to the specified set of vector components")
   .def("Normalized",&XC::Vector::Normalized,"Returns normalizxed vector.")
+//.def("assemble", &XC::Vector::Assemble, "assemble(V:XC::Vector, l:XC::ID, fact:float) Assemble the given vector into this one using the specified positions.")
   ;
 
 
