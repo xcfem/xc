@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Check buckling computations using the results of a linear buckling 
-analysis. 3D structural analysis model.
+analysis. Same test as test_buckling_check_08.py but with the Y and Z
+axes swapped.
 '''
 
 from __future__ import division
@@ -17,7 +18,7 @@ from materials.sections.fiber_section import def_simple_RC_section
 from materials.sections.fiber_section import def_column_RC_section
 from misc_utils import log_messages as lmsg
 
-__author__= "Luis Claudio Pérez Tato (LCPT)"
+__author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2024, LCPT"
 __license__= "GPL"
 __version__= "3.0"
@@ -27,18 +28,12 @@ __email__= "l.pereztato@gmail.com"
 concr= EHE_materials.HA30
 steel= EHE_materials.B500S
 ## Section geometry.
-diameter= 1.25 # Section diameter expressed in meters.
-cover= 0.05 # Concrete cover expressed in meters.
-rcSection= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
+sectionWidth= 1.4
+sectionDepth= 0.45
+rcSection= def_simple_RC_section.RCRectangularSection(name= 'flatColumnsRCSection', sectionDescr= 'columns section', concrType= concr, reinfSteelType= steel, width= sectionWidth, depth= sectionDepth, swapReinforcementAxes= True)
 ## Reinforcement.
-rebarDiam= 25e-3
-rebarArea= math.pi*(rebarDiam/2.0)**2
-numOfRebars= 24
-shearRebarsDiam= 16e-3
-mechCover= cover-shearRebarsDiam-rebarDiam/2.0
-mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*mechCover), nominalCover= cover+shearRebarsDiam)])
-## Put the reinforcement in the section.
-rcSection.mainReinf= mainReinf
+firstTopLayer, secondTopLayer, firstBottomLayer, secondBottomLayer= rcSection.defineMainReinforcement(nominalCover= 0.04, fiStirr= 12e-3, topLayersDiameters= [32e-3, None], bottomLayersDiameters= [32e-3, None], lateralLayersDiameters= [25e-3, None], nRebarsHoriz= 6, nRebarsVert= 11)
+rcSection.defineShearReinforcementYZ(nShReinfBranchesY= 4, fiStirrY= 12e-3, spacingY= 0.15, nShReinfBranchesZ= 8, fiStirrZ= 12e-3, spacingZ= 0.15)
 
 # Finite element model.
 ## Problem type
@@ -72,8 +67,8 @@ l1.genMesh(xc.meshDir.I)
 ## Constraints.
 bottomNode= p1.getNode()
 topNode= p2.getNode()
-modelSpace.fixNode('000_FF0',bottomNode.tag) # pinned.
-modelSpace.fixNode('00F_FFF',topNode.tag) # pinned.
+modelSpace.fixNode('000_FF0',bottomNode.tag) # pinned
+modelSpace.fixNode('00F_FFF',topNode.tag) # pinned
 
 ## Loads
 lp0= modelSpace.newLoadPattern(name= 'lp0')
@@ -103,12 +98,14 @@ avgEf= 0.0 # Average fictitious eccentricity.
 results= dict()
 for e in xcTotalSet.elements:
     # Critical axial load.
-    reinforcementFactorZ= 2 # Circular section table 43.5.1 of EHE-08.
-    reinforcementFactorY= 2 # Circular section table 43.5.1
-    Cz= 0.2 # table 43.1.2 of EHE-08.
-    Cy= 0.2
-    Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
-    avgLeff+= Leffi[0] # Effective length for the first mode.
+    reinforcementFactorZ= 1 # Rectangular section table 43.5.1 of EHE-08.
+    reinforcementFactorY= 1 # Rectangular section table 43.5.1 of EHE-08.
+    Cz= 0.24 # table 43.1.2 of EHE-08.
+    Cy= 0.24
+    sectionDepthZ= sectionWidth
+    sectionDepthY= sectionDepth
+    Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    avgLeff+= Leffi[0] # Effective length for the first mode Y axis.
     avgMechLambda+= mechLambdai[0] # Mechanical slenderness for the first mode.
     avgEf+= Efi[0][0] # Fictitious eccentricity for the first mode Y axis.
     z= e.getPosCentroid(False).z
@@ -116,51 +113,52 @@ for e in xcTotalSet.elements:
 
 sz= len(xcTotalSet.elements)
 avgLeff/=sz
-ratio1= abs(avgLeff-22.111953551507593)/22.111953551507593
+ratio1= abs(avgLeff-24.562653042759433)/24.562653042759433
 avgMechLambda/=sz
-ratio2= abs(avgMechLambda-70.75825136482429)/70.75825136482429
+ratio2= abs(avgMechLambda-189.08339128331272)/189.08339128331272
 avgEf/=sz
-ratio3= abs(avgEf-0.2318153467323909)/0.2318153467323909
+ratio3= abs(avgEf-1.0332958871738163)/1.0332958871738163
 
 '''
-# import matplotlib.pyplot as plt
-# Leff= dict()
-# mechLambda= dict()
-# efi= dict()
-# sorted_results= dict(sorted(results.items())) # sort on z.
-# for i, bucklingLoadFactor in enumerate(bucklingLoadFactors): # iterate through modes.
-#     mode= i+1
-#     zi= list()
-#     Leff[mode]= list()
-#     mechLambda[mode]= list()
-#     efi[mode]= list()
-#     for z in sorted_results: # For each z coordinate.
-#         zi.append(z)
-#         values= sorted_results[z]
-#         eTag= values[0]
-#         lz= values[1][i] # Results for mode i.
-#         Leff[mode].append(round(lz,2)) 
-#         ml= values[2][i]
-#         mechLambda[mode].append(round(ml,0)) 
-#         ef= values[3][i]
-#         efi[mode].append(round(ef,2)) 
+import matplotlib.pyplot as plt
+Leff= dict()
+mechLambda= dict()
+efi= dict()
+sorted_results= dict(sorted(results.items())) # sort on z.
+for i, bucklingLoadFactor in enumerate(bucklingLoadFactors): # iterate through modes.
+    mode= i+1
+    zi= list()
+    Leff[mode]= list()
+    mechLambda[mode]= list()
+    efi[mode]= list()
+    for z in sorted_results: # For each z coordinate.
+        zi.append(z)
+        values= sorted_results[z]
+        eTag= values[0]
+        lz= values[1][i] # Results for mode i.
+        Leff[mode].append(round(lz,1)) 
+        ml= values[2][i]
+        mechLambda[mode].append(round(ml,0)) 
+        ef= values[3][i]
+        efi[mode].append(round(ef,3)) 
 
-#     # Display results.
-#     plt.title('effective length for mode: '+str(mode))
-#     plt.ylabel('z')
-#     plt.xlabel('Leff')
-#     plt.plot(Leff[mode], zi)
-#     plt.show()
-#     plt.title('mechanical slendernes for mode: '+str(mode))
-#     plt.ylabel('z')
-#     plt.xlabel('mechLambda')
-#     plt.plot(mechLambda[mode], zi)
-#     plt.show()
-#     plt.title('additional eccentricity for mode: '+str(mode))
-#     plt.ylabel('z')
-#     plt.xlabel('efi')
-#     plt.plot(efi[mode], zi)
-#     plt.show()
+    # Display results.
+    plt.title('effective length for mode: '+str(mode))
+    plt.ylabel('z')
+    plt.xlabel('Leff')
+    plt.plot(Leff[mode], zi)
+    plt.show()
+    plt.title('mechanical slenderness for mode: '+str(mode))
+    plt.ylabel('z')
+    plt.xlabel('mechLambda')
+    plt.plot(mechLambda[mode], zi)
+    plt.show()
+    plt.title('additional eccentricity for mode: '+str(mode))
+    plt.ylabel('z')
+    plt.xlabel('efi')
+    plt.plot(efi[mode], zi)
+    plt.show()
+        
 
 print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
 print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
@@ -179,12 +177,12 @@ else:
     lmsg.error(fname+' ERROR.')
 
 # # Graphic stuff.
-# from postprocess import output_handler
-# oh= output_handler.OutputHandler(modelSpace)
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
 # oh.displayFEMesh()
 # oh.displayLoads()
-# oh.displayLocalAxes()
-# oh.displayEigenvectors(mode= 1)
+# for mode in [1, 2, 3]:
+#     oh.displayEigenvectors(mode= mode)
 # oh.displayIntForcDiag('Mz')
 # # oh.displayEigenResult(1, defFScale= 10.0)
 # # oh.displayLocalAxes()

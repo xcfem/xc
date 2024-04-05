@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Verify computation of buckling limit state parameters using a linear
-    buckling analysis. Circular RC section.
+    buckling analysis. Rectangular RC section.
 
 '''
 
@@ -30,18 +30,12 @@ from postprocess import element_section_map
 concr= EHE_materials.HA30
 steel= EHE_materials.B500S
 ## Section geometry.
-diameter= 1.25 # Section diameter expressed in meters.
-cover= 0.05 # Concrete cover expressed in meters.
-rcSection= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
+sectionWidth= 1.4
+sectionDepth= 0.45
+rcSection= def_simple_RC_section.RCRectangularSection(name= 'flatColumnsRCSection', sectionDescr= 'columns section', concrType= concr, reinfSteelType= steel, width= sectionWidth, depth= sectionDepth, swapReinforcementAxes= True)
 ## Reinforcement.
-rebarDiam= 25e-3
-rebarArea= math.pi*(rebarDiam/2.0)**2
-numOfRebars= 24
-shearRebarsDiam= 16e-3
-mechCover= cover-shearRebarsDiam-rebarDiam/2.0
-mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(diameter-2*mechCover), nominalCover= cover+shearRebarsDiam)])
-## Put the reinforcement in the section.
-rcSection.mainReinf= mainReinf
+firstTopLayer, secondTopLayer, firstBottomLayer, secondBottomLayer= rcSection.defineMainReinforcement(nominalCover= 0.04, fiStirr= 12e-3, topLayersDiameters= [32e-3, None], bottomLayersDiameters= [32e-3, None], lateralLayersDiameters= [25e-3, None], nRebarsHoriz= 6, nRebarsVert= 11)
+rcSection.defineShearReinforcementYZ(nShReinfBranchesY= 4, fiStirrY= 12e-3, spacingY= 0.15, nShReinfBranchesZ= 8, fiStirrZ= 12e-3, spacingZ= 0.15)
 
 # Finite element model.
 ## Problem type
@@ -59,18 +53,18 @@ l1= modelSpace.newLine(p1, p2)
 l1.nDiv= 6
 
 ## Geometric transformations
-corot= modelSpace.newCorotCrdTransf("corot", xzVector= xc.Vector([1,0,0]))
+corot= modelSpace.newCorotCrdTransf("corot", xzVector= xc.Vector([0,1,0]))
 modelSpace.setDefaultCoordTransf(corot)
 
 ## Finite element material
 xcSection= rcSection.defElasticShearSection3d(preprocessor)
 ### Properties to compute element buckling parameters.
-sectionBucklingProperties= {'reinforcementFactorZ': 2, # Circular section table 43.5.1 of EHE-08.
-                            'sectionDepthZ': diameter,
-                            'reinforcementFactorY': 2, # Circular section table 43.5.1 of EHE-08.
-                            'sectionDepthY': diameter,
-                            'Cz': 0.2, # table 43.1.2 of EHE-08.
-                            'Cy': 0.2, # table 43.1.2 of EHE-08.
+sectionBucklingProperties= {'reinforcementFactorZ': 1, # Rectangular section table 43.5.1 of EHE-08.
+                            'sectionDepthZ': sectionWidth,
+                            'reinforcementFactorY': 1, # Rectangular section table 43.5.1 of EHE-08.
+                            'sectionDepthY': sectionDepth,
+                            'Cz': 0.24, # table 43.1.2 of EHE-08.
+                            'Cy': 0.24, # table 43.1.2 of EHE-08.
                             'sectionData': rcSection}
 xcSection.setProp('sectionBucklingProperties', sectionBucklingProperties)
 modelSpace.setDefaultMaterial(xcSection)
@@ -91,15 +85,15 @@ modelSpace.fixNode('00F_FFF',topNode.tag)
 ### Permanent load.
 g1= modelSpace.newLoadPattern(name= 'G1')
 N= -2000e3
-MzTop= 1000e3
-MzBottom= 1000e3
+MzTop= 500e3
+MzBottom= 500e3
 g1.newNodalLoad(topNode.tag, xc.Vector([0, 0, N, MzTop, 0, 0]))
 g1.newNodalLoad(bottomNode.tag, xc.Vector([0,0,0, MzBottom, 0, 0]))
 ### Variable load.
 q1= modelSpace.newLoadPattern(name= 'Q1')
 N= -990e3
-MzTop= 1000e3
-MzBottom= 970e3
+MzTop= 500e3
+MzBottom= 370e3
 q1.newNodalLoad(topNode.tag, xc.Vector([0, 0, N, MzTop, 0, 0]))
 q1.newNodalLoad(bottomNode.tag, xc.Vector([0,0,0, MzBottom, 0, 0]))
 
@@ -142,15 +136,16 @@ controller= EHE_limit_state_checking.BiaxialBucklingController(bucklingParameter
 ###               meant to be calculated (defaults to 'N')
 ### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
 ###           false if it's 2D (Fx,Fy,Mz).
+feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='Y', controller= controller, threeDim= True)
+feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results. The reference values doesn't come from a benchmark test,
 # they serve only to verify that the code run as intended.
-ratio1= abs(meanCFs[0]-0.42772948185061505)/0.42772948185061505
-ratio2= abs(meanCFs[1]-0.4382047524250554)/0.4382047524250554
+ratio1= abs(meanCFs[0]-0.5478014386732756)/0.5478014386732756
+ratio2= abs(meanCFs[1]-0.542054397567014)/0.542054397567014
 
-print(meanCFs[0], ratio1)
-print(meanCFs[1], ratio2)
+# print(meanCFs)
 
 import os
 from misc_utils import log_messages as lmsg
@@ -160,15 +155,16 @@ if (ratio1<1e-4) & (ratio2<1e-4):
 else:
     lmsg.error(fname+' ERROR.')
 
-# # #########################################################
-# # # Graphic stuff.
+# #########################################################
+# # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
-# # oh.displayFEMesh()
-# # Load control variables to display:
+# oh.displayFEMesh()
+# Load control variables to display:
 # bucklingParametersLSD.readControlVars(modelSpace= modelSpace)
-# arguments= ['My', 'Mz', 'CF', 'LeffY', 'LeffZ', 'mechLambdaY', 'mechLambdaZ', 'efY', 'efZ', 'mode'] 
+# arguments= ['My', 'Mz', 'CF', 'Leff', 'mechLambda', 'efY', 'efZ', 'mode'] 
+# arguments= ['Leff', 'CF']
 # for arg in arguments:
 #     oh.displayBeamResult(attributeName= bucklingParametersLSD.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)
     

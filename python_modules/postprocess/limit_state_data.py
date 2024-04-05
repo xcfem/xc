@@ -638,10 +638,10 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                 controlVar= elementControlVars[index]
                 loadCombination= controlVar.combName
                 mode= int(loadCombination.split('_')[-1])
-                (LeffZ, LeffY)= Leffi[mode]
-                (mechLambdaZ, mechLambdaY)= mechLambdai[mode]
+                Leff= Leffi[mode]
+                mechLambda= mechLambdai[mode]
                 (EfZ, EfY)= Efi[mode]
-                controlVar.setBucklingParameters(LeffZ= LeffZ, LeffY= LeffY, mechLambdaZ= mechLambdaZ, mechLambdaY= mechLambdaY, efZ= EfZ, efY= EfY, mode= mode)
+                controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode)
         retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
         return retval
     
