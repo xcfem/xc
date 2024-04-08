@@ -28,7 +28,7 @@
 ### Linear algebra
 
 #### Eigenproblems
-
+ - [Spectra C++ Library For Large Scale Eigenvalue Problems](https://spectralib.org/)
  - [Arpack (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).](http://www.caam.rice.edu/software/ARPACK/)
  - [Arpack++ (object-oriented version of the ARPACK package).](http://www.caam.rice.edu/software/ARPACK/)
 
