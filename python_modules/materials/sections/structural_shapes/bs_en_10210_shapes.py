@@ -35,3 +35,8 @@ class HFSHSShape(structural_steel.QHShape):
     def t(self):
         '''Return the wall thickness.'''
         return self.get('e')
+
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
+        return self.get('e')

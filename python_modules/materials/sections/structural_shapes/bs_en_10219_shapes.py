@@ -42,6 +42,11 @@ class CFSHSShape(structural_steel.QHShape):
     def t(self):
         '''Return the wall thickness.'''
         return self.get('e')
+
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
+        return self.get('e')
     
 #  EN 10219 cold formed rectangular hollow tubes.
 
@@ -74,6 +79,11 @@ class CFRHSShape(structural_steel.QHShape):
         '''Return the wall thickness'''
         return self.get('e')
 
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
+        return self.get('e')
+    
 # EN 10219 cold formed circular hollow tubes.
 
 CFCHS= bs_en_10219_shapes_dictionaries.shapes['CFCHS']
