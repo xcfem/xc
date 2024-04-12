@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
+''' Fiber model verification test.'''
 from __future__ import print_function
-# Fiber model verification test.
-
-import xc
-from model import predefined_spaces
-from materials import typical_materials
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+import math
 
 yF= -2.0 # Fiber on the third quadrant.
 zF= -3.0

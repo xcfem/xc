@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# Verification test of the addFiber function
+'''Verification test of the addFiber function.'''
 
-import xc
-from model import predefined_spaces
-from materials import typical_materials
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import xc
+from model import predefined_spaces
+from materials import typical_materials
 
 yF= -2.0 # Fiber on the second quadrant.
 zF= 3.0

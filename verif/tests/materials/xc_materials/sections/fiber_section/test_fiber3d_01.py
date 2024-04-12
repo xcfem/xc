@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+'''Testing fiber section model of Steel01 uniaxial material.'''
+
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
@@ -7,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-# Testing fiber section model of Steel01 uniaxial material.
 
 import sys
 import xc
