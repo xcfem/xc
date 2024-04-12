@@ -38,6 +38,7 @@
 #include "utility/geom/d2/Grid2d.h"
 #include "utility/geom/d2/2d_polygons/Quadrilateral2d.h"
 #include <utility/matrix/Matrix.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 // L +-----------------------+ K
 //   |                       |
@@ -176,15 +177,38 @@ void XC::QuadSectRegion::swap(void)
     vertCoord= tmp;
   }
 
-//! @brief Assigns vertex coordinates.
-void XC::QuadSectRegion::setQuad(const Quadrilateral2d &quad)
+//! @brief Assing the vertices from the given points.
+void XC::QuadSectRegion::setVertices(const Pos2d &vI, const Pos2d &vJ, const Pos2d &vK, const Pos2d &vL)
   {
-    Pos2d vI= quad.Vertice0(I); Pos2d vJ= quad.Vertice0(J);
-    Pos2d vK= quad.Vertice0(K); Pos2d vL= quad.Vertice0(L);
     vertCoord(I,Y)= vI.x(); vertCoord(I,Z)= vI.y();
     vertCoord(J,Y)= vJ.x(); vertCoord(J,Z)= vJ.y();
     vertCoord(K,Y)= vK.x(); vertCoord(K,Z)= vK.y();
     vertCoord(L,Y)= vL.x(); vertCoord(L,Z)= vL.y();
+  }
+
+//! @brief Assigns vertex coordinates from the given quadrilateral.
+void XC::QuadSectRegion::setQuad(const Quadrilateral2d &quad)
+  {
+    const Pos2d vI= quad.Vertice0(I); const Pos2d vJ= quad.Vertice0(J);
+    const Pos2d vK= quad.Vertice0(K); const Pos2d vL= quad.Vertice0(L);
+    setVertices(vI, vJ, vK, vL);
+  }
+
+//! @brief Assigns vertex coordinates from the given polygon.
+void XC::QuadSectRegion::setPolygon(const Polygon2d &plg)
+  {
+    const size_t numVertices= plg.getNumVertices();
+    if(numVertices>=4)
+      {
+	const Pos2d vI= plg.Vertice0(I); const Pos2d vJ= plg.Vertice0(J);
+	const Pos2d vK= plg.Vertice0(K); const Pos2d vL= plg.Vertice0(L);
+	setVertices(vI, vJ, vK, vL);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; four vertices were expected instead of: "
+	        << numVertices
+		<< Color::def << std::endl;
   }
 
 Polygon2d XC::QuadSectRegion::getPolygon(void) const

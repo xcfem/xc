@@ -83,8 +83,10 @@ class QuadSectRegion: public QuadCellRegion
     Pos2d getJVertex(void) const;
     Pos2d getKVertex(void) const;
     Pos2d getLVertex(void) const;
+    void setVertices(const Pos2d &vI, const Pos2d &vJ, const Pos2d &vK, const Pos2d &vL);
     Quadrilateral2d getQuad(void) const;
     void setQuad(const Quadrilateral2d &);
+    void setPolygon(const Polygon2d &);
     Polygon2d getPolygon(void) const;
     void swap(void);
 
