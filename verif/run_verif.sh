@@ -1043,6 +1043,7 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_02.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_03.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
+python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
