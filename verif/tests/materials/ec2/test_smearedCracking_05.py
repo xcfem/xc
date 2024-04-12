@@ -351,7 +351,7 @@ else:
 #   fiberSet: set of fibers to be represented
 #   title:    general title for the graphic
 #   fileName: name of the graphic file (defaults to None: no file generated)
-#   nContours: number of contours to be generated (defaults to 100)
+#   nContours: number of contours to be generated (defaults to None ->each fiber is represented by a marker
 # ''' 
 # # utils_display.plotStressStrainFibSet(fiberSet=fibersSccEl1,title='cross-section fibers',fileName='problem.jpeg')
 # utils_display.plotStressStrainFibSet(fiberSet=setsRCEl1.concrFibers.fSet,title='cross-section concrete fibers',fileName='problem.jpeg')
