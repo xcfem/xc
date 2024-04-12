@@ -2999,7 +2999,7 @@ class HSSShape(structural_steel.QHShape):
 HFSHS= bs_en_10210_shapes.HFSHS
 
 class HFSHSShape(HSSShape):
-    ''' Hollow structural section.
+    ''' Hot formed square hollow structural section.
     '''
     def __init__(self,steel,name):
         ''' Constructor.
@@ -3014,6 +3014,11 @@ class HFSHSShape(HSSShape):
         '''Return wall thickess'''
         return self.get('e')
 
+    def tw(self):
+        ''' Return the web thickness (used in 
+            Eurocode 3 shearBucklingVerificationNeeded).'''
+        return self.get('e')
+    
     def getDesignWallThickness(self):
         '''Return HSS design wall thickess'''
         return self.get('e')

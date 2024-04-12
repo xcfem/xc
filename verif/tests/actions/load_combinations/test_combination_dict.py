@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Check the getCombinationDict function (see utils.py in 
+    load_combination_utils).
+'''
 
 from __future__ import print_function
 

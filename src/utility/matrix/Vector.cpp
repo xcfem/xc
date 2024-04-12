@@ -267,7 +267,7 @@ int XC::Vector::resize(int newSize)
   }
 
 
-//! @brief Method to assemble into object the Vector V using the ID l.
+//! @brief Method to assemble into this vector the Vector V using the ID l.
 //!
 //! Assembles into the current Vector the Vector \p V. The contents of the
 //! current Vector at location ({\em loc(i)}) is set equal to the current

@@ -499,7 +499,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
                                     forces on the element sections.
         '''
         # Read internal forces results.
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc, self.vonMisesStressId)
+        intForcItems= lsd.read_internal_forces_file(intForcCombFileName, setCalc, self.vonMisesStressId)
         return intForcItems[2]
             
     def updateEfficiency(self, elem, elementInternalForces):

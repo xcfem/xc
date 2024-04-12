@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' Verify computation of buckling limit state parameters using a linear
-    buckling analysis.'''
+    buckling analysis. Circular RC section.
+
+'''
 
 from __future__ import print_function
 
@@ -142,9 +144,15 @@ controller= EHE_limit_state_checking.BiaxialBucklingController(bucklingParameter
 ###           false if it's 2D (Fx,Fy,Mz).
 meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='Y', controller= controller, threeDim= True)
 
-# Check results.
-ratio1= abs(meanCFs[0]-0.44699749129219174)/0.44699749129219174
-ratio2= abs(meanCFs[1]-0.45686928571844354)/0.45686928571844354
+# Check results. The reference values doesn't come from a benchmark test,
+# they serve only to verify that the code run as intended.
+ratio1= abs(meanCFs[0]-0.42772948185061505)/0.42772948185061505
+ratio2= abs(meanCFs[1]-0.4382047524250554)/0.4382047524250554
+
+'''
+print(meanCFs[0], ratio1)
+print(meanCFs[1], ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

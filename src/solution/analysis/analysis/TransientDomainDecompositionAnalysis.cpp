@@ -211,9 +211,6 @@ int XC::TransientDomainDecompositionAnalysis::initialize(void)
 //! @brief Make the changes derived of a change in the domain.
 int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   {
-
-    int result = 0;
-  
     getAnalysisModelPtr()->clearAll();    
     getConstraintHandlerPtr()->clearAll();
 
@@ -221,7 +218,7 @@ int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
     // causes the creation of XC::FE_Element and XC::DOF_Group objects
     // and their addition to the XC::AnalysisModel.
   
-    result = getConstraintHandlerPtr()->handle();
+    int result = getConstraintHandlerPtr()->handle();
     if(result < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";

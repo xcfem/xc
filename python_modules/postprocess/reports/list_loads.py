@@ -53,8 +53,8 @@ def ElementLoadList(loadPattern, outputFile, fmt):
     supertabular.cabeceraSupertabular(outputFile,7,defCampos,idsCampos,caption)
     preprocessor= loadPattern.getPreprocessor()
     loads= preprocessor.getLoadPatterns
-    print("Number of load patterns: "+len(loads))
-    print("Number of loads on elements: "+ loadPattern.getNumEleLoads())
+    lmsg.info("Number of load patterns: "+str(len(loads)))
+    lmsg.info("Number of loads on elements: "+ str(loadPattern.getNumEleLoads()))
     eleLoads= loadPattern.getEleLoads()
     for l in eleLoads:
         if(l.category=="nodef"):
@@ -76,7 +76,7 @@ def listNodalLoads(loadPattern, outputFile, fmt):
     defCampos= "|r|c|c|r|r|r|r|"
     idsCampos= "Id & Acc. & Type & x & Fx & Fy &Fz \\\\\n - & - & - &  & kN & kN & kN "
     supertabular.cabeceraSupertabular(outputFile,7,defCampos,idsCampos,caption) 
-    print("Number of nodal loads: "+ loadPattern.getNumNodalLoads())
+    lmsg.infor("Number of nodal loads: "+ str(loadPattern.getNumNodalLoads()))
     nodalLoads= loadPattern.getNodalLoads()
     for l in nodalLoads:
         load= l.load

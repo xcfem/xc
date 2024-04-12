@@ -217,7 +217,7 @@ def getLinearTemperatureDifferenceComponent(bridgeType:int, topWarmerThanBottom=
     :param ballast: true if the bridge deck is covered with ballast (0.75 m thick).
     :param waterproofedOnly: true if the bridge deck is only waterproofed with a darck color waterproofing layer.
     '''
-    k_sur= getKSur(bridgeType= bridgeType, surfacingDepth= surfacingDepth, ballast= ballast, waterproofedOnly= waterproofedOnly)
+    k_sur= getKSur(bridgeType= bridgeType, topWarmerThanBottom= topWarmerThanBottom, surfacingDepth= surfacingDepth, ballast= ballast, waterproofedOnly= waterproofedOnly)
     retval= k_sur
     if(topWarmerThanBottom):
         if(bridgeType==concrete_deck_type):
@@ -225,7 +225,7 @@ def getLinearTemperatureDifferenceComponent(bridgeType:int, topWarmerThanBottom=
             retval*= 15.0
         elif(bridgeType==concrete_beam or bridgeType==concrete_slab):
             retval*= 15.0
-        elif(bridge_type==concrete_box_girder):
+        elif(bridgeType==concrete_box_girder):
             retval*= 10
         elif(bridgeType==composite_deck_type):
             retval*= 15.0
@@ -240,7 +240,7 @@ def getLinearTemperatureDifferenceComponent(bridgeType:int, topWarmerThanBottom=
             retval*= 8.0
         elif(bridgeType==concrete_beam or bridgeType==concrete_slab):
             retval*= 8.0
-        elif(bridge_type==concrete_box_girder):
+        elif(bridgeType==concrete_box_girder):
             retval*= 5.0
         elif(bridgeType==composite_deck_type):
             retval*= 18.0

@@ -42,6 +42,28 @@ class NDMaterialWrapper: public MaterialWrapper<NDMaterial, MAT_TAG_NDMaterialWr
   public:
     NDMaterialWrapper(void);
     NDMaterialWrapper(const NDMaterial &material);
+    
+    double getRho(void) const;
+    // send back strain
+    const Vector& getStrain() const;
+    // send back stress
+    const Vector& getStress() const;
+    // send back the tangent
+    const Matrix &getTangent() const;
+    const Matrix &getInitialTangent() const;
+    
+    // set the strain to be sent to the main material
+    int setTrialStrain(const Vector &);
+    
+    const std::string &getType(void) const;
+    int getOrder(void) const;
+    
+    int commitState(void);
+    int revertToLastCommit(void);
+    int revertToStart(void);
+    
+    Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
+    int getResponse(int responseID, Information &matInformation);
   };
 } // end of XC namespace
 

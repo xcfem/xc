@@ -36,25 +36,29 @@
 #include "QuadSurfaceLoad.h"
 #include "domain/load/ElementalLoad.h"
 #include "domain/mesh/node/Node.h"
+#include "vtkCellType.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/coo_sys/Rect2d2dCooSys.h"
 
 XC::Matrix XC::QuadSurfaceLoad::tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF);
 
 //! @brief Constructor.
 XC::QuadSurfaceLoad::QuadSurfaceLoad(int tag, int Nd1, int Nd2, double pressure)
   : SurfaceLoadBase<QSL_NUM_NODE>(tag, ELE_TAG_QuadSurfaceLoad, pressure, 1.0),
-   internalForces(QSL_NUM_DOF),
-   g(QSL_NUM_NDF), 
-   myNhat(QSL_NUM_NDF)
+    internalForces(QSL_NUM_DOF),
+    g(QSL_NUM_NDF), 
+    myNhat(QSL_NUM_NDF)
   {
     theNodes.set_id_nodes(Nd1,Nd2);
   }
 
 //! @brief Default constructor.
 XC::QuadSurfaceLoad::QuadSurfaceLoad(int tag)
-  :SurfaceLoadBase<QSL_NUM_NODE>(tag, ELE_TAG_QuadSurfaceLoad, 0.0, 1.0),
-   internalForces(QSL_NUM_DOF),
-   g(QSL_NUM_NDF), 
-   myNhat(QSL_NUM_NDF)
+  : SurfaceLoadBase<QSL_NUM_NODE>(tag, ELE_TAG_QuadSurfaceLoad, 0.0, 1.0),
+    internalForces(QSL_NUM_DOF),
+    g(QSL_NUM_NDF), 
+    myNhat(QSL_NUM_NDF)
   {}
 
 XC::QuadSurfaceLoad::~QuadSurfaceLoad(void)
@@ -72,7 +76,7 @@ void XC::QuadSurfaceLoad::setDomain(Domain *theDomain)
     // calculate vector g
     const Vector &dcrd1= theNodes[0]->getCrds();
     const Vector &dcrd2= theNodes[1]->getCrds();
-    g= (dcrd2 - dcrd1).Normalized();
+    g= (dcrd2 - dcrd1);
   }
 
 //! @brief return number of dofs
@@ -83,17 +87,53 @@ int XC::QuadSurfaceLoad::getNumDOF(void) const
 int XC::QuadSurfaceLoad::UpdateBase(double Xi) const
   {
 
-    // normal vector to primary surface as cross product of g1 and g2
+    // normal vector to primary surface.
     myNhat(0)= -g(1);
     myNhat(1)= g(0);
 
     return 0;
   }
 
+//! @brief Return the element dimension (0, 1, 2 or 3).
+size_t XC::QuadSurfaceLoad::getDimension(void) const
+  { return 1; }
+
+//! @brief Return the length of the segment defined by the element.
+double XC::QuadSurfaceLoad::getLength(bool initialGeometry) const
+  {
+    if(initialGeometry)
+      return dist(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
+    else
+      return dist(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
+  }
+
+//! @brief Returns a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::QuadSurfaceLoad::getLocalAxes(bool initialGeometry) const
+  {
+    static Matrix retval;
+    double factor= 0.0;
+    if(!initialGeometry)
+      factor= 1.0;
+    const Pos2d p0= theNodes[0]->getCurrentPosition2d(factor);
+    const Pos2d p1= theNodes[1]->getCurrentPosition2d(factor);
+    const Rect2d2dCooSys sc(p0,p1);
+    const Vector2d i= sc.getIVector();
+    retval= Matrix(2,2);
+    retval(0,0)= i.x(); retval(0,1)= i.y();
+    const Vector2d j= sc.getJVector();
+    retval(1,0)= j.x(); retval(1,1)= j.y();
+    return retval;
+  }
+
+//! @brief VTK interface.
+int XC::QuadSurfaceLoad::getVtkCellType(void) const
+  { return VTK_LINE; }
+
 const XC::Matrix &XC::QuadSurfaceLoad::getTangentStiff(void) const
   { return tangentStiffness; }
 
-const XC::Matrix & XC::QuadSurfaceLoad::getInitialStiff(void) const
+const XC::Matrix &XC::QuadSurfaceLoad::getInitialStiff(void) const
   { return getTangentStiff(); }
     
 
@@ -102,15 +142,16 @@ const XC::Vector &XC::QuadSurfaceLoad::getResistingForce(void) const
     internalForces.Zero();
 
     // Only one Gauss point -> no Loop.
-    this->UpdateBase(0.0);
+    this->UpdateBase(0.5);
 
+    const double factoredPressure= mLoadFactor*my_pressure;
     // loop over nodes
     for(int j = 0; j < QSL_NUM_NODE; j++)
       {
 	// loop over dof
 	for(int k = 0; k < QSL_NUM_NDF; k++)
 	  {
-	    internalForces[j*2+k]-=  mLoadFactor*my_pressure*myNhat(k)*0.5;
+	    internalForces[j*2+k]-=  factoredPressure*myNhat(k)*0.5;
 	  }
       }
     return internalForces;
@@ -156,7 +197,7 @@ int XC::QuadSurfaceLoad::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(18);
+    inicComm(12);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -169,7 +210,7 @@ int XC::QuadSurfaceLoad::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::QuadSurfaceLoad::recvSelf(const Communicator &comm)
   {
-    inicComm(18);
+    inicComm(12);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 

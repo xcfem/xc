@@ -43,7 +43,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
 
-refFile= pth+'/../../aux/reference_files/ref_'+outputFileName
+refFile= pth+'/../../../aux/reference_files/ref_'+outputFileName
 
 # Check results.
 comparisonOK= filecmp.cmp(refFile, outputPath, shallow=False)

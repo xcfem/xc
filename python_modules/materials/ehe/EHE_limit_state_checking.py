@@ -14,6 +14,7 @@ import functools
 import sys
 import json
 import geom
+import xc
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import fiber_sets
 from materials import limit_state_checking_base as lscb
@@ -29,6 +30,7 @@ from materials.sections import rebar_family as rf
 from postprocess.reports import common_formats as fmt
 from collections import defaultdict
 from materials.sections import internal_forces
+from model.mesh import element_vectors
 
 class RebarController(lscb.EURebarController):
     '''Control of some parameters as development length 
@@ -1065,6 +1067,8 @@ def get_lower_slenderness_limit(C:float, nonDimensionalAxialForce:float, e1, e2,
     retval= min(35.0*math.sqrt(retval),100.0)
     return retval
 
+
+
 def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDepthZ, Cz, reinforcementFactorZ, sectionDepthY= None, Cy= None, reinforcementFactorY= None):
     ''' Return the effective length, mechanical slenderness and fictitious eccentricity for the given buckling load factors.
 
@@ -1110,28 +1114,52 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             else:
                 ef= max(minimumEccentricity, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff))
             Efi.append(ef)
-
     elif(nDOF==12):
         ez1, ez2, ey1, ey2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
+        # Get the element nodes.
+        nodes= element.nodes
+        coordTransf= element.getCoordTransf
+        EA= section.sectionProperties.EA()
         EIz= section.sectionProperties.EIz()
         EIy= section.sectionProperties.EIy()
         iz= section.sectionProperties.iz # Radius of gyration about z axis.
         iy= section.sectionProperties.iy # Radius of gyration about y axis.
+        sectionStiffnessMatrix= xc.Matrix([[EIz, 0],[0, EIy]])
         # Lower slenderness limit.
         lowerSlendernessLimitZ= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ez1, e2= ez2, sectionDepth= sectionDepthZ)
         minimumEccentricityZ= max(.02, sectionDepthZ/20)
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
+            # Compute the stiffness in the direction of buckling for this mode.
+            ## Check if it is a translational buckling.
+            globalEigenvector= (0.5*(nodes[0].getEigenvector(mode+1)+nodes[1].getEigenvector(mode+1))).Normalized()
+            # index_max= min(range(len(globalEigenvector)), key=globalEigenvector.__getitem__)
+            globalEigenvectorXYZ= xc.Vector(list(globalEigenvector)[0:3])
+            ## Get the direction of buckling.
+            ### Convert to local coordinates.
+            localEigenvector= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorXYZ)
+            ### Remove axial (x) component and normalize.
+            localEigenvectorYZ= xc.Vector([localEigenvector[1], localEigenvector[2]])
+            normYZ= localEigenvectorYZ.Norm()
+            # Normalize
+            localEigenvectorYZ= localEigenvectorYZ.Normalized()
+            ## Compute the projected stiffness
+            EI= localEigenvectorYZ.dot(sectionStiffnessMatrix*localEigenvectorYZ)
+            # Compute the effective length.
+            Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
+            if(Ncr>0):
+                Leff= -Leff
+            Leffi.append(Leff)
+            # Compute the mechanical slenderness
+            i_mode= math.sqrt(EI/EA) # radius of giration.
+            mechLambda= Leff/i_mode # Compute mechanical slenderness
+            mechLambdai.append(mechLambda)
+            # Compute minimum eccentricity.
             Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
             Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
-            if(Ncr>0):
-                Leffz= -Leffz
-                Leffy= -Leffy
-            Leffi.append((Leffz, Leffy))
             mechLambdaZ= Leffz/iz # Compute mechanical slenderness
             mechLambdaY= Leffy/iy # Compute mechanical slenderness
-            mechLambdai.append((mechLambdaZ, mechLambdaY))
             if(mechLambdaZ<lowerSlendernessLimitZ):
                 efz= minimumEccentricityZ
             else:
@@ -1140,8 +1168,9 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                 efy= minimumEccentricityY
             else:
                 efy= max(minimumEccentricityY, get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy))
-            Efi.append((efz, efy))
-
+            eccentricityVector= xc.Vector([efz, efy])
+            ef= abs(eccentricityVector.dot(localEigenvectorYZ))
+            Efi.append((ef*localEigenvectorYZ[0], ef*localEigenvectorYZ[1]))
     else:
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
@@ -1153,12 +1182,14 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituation= 'permanent'):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, uls_earthquake, etc.
         '''
-        super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
         '''Creates a dictionary with the buckling parameters of the given

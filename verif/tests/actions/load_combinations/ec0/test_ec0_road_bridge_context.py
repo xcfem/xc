@@ -14,24 +14,26 @@ from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 lcg= ec0_es.combGenerator
 # Permanent load.
 G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge')
-# Railway traffic load.
-S= lcg.newRailwayTrafficAction(actionName= 'Q', actionDescription= 'Traffic.', context= 'railway_bridge', combinationFactorsName= 'LM71_alone_uls')
+# Settlement load.
+S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.', context= 'road_bridge')
+# Hidrostatic pressure.
+W= lcg.newHydrostaticPressureAction(actionName= 'W', actionDescription= 'Hydrostatic pressure', context= 'road_bridge')
 # Thermal load.
 T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge')
-# Seismic action.
-A2= lcg.newSeismicAction(actionName= 'A2', actionDescription= 'Earthquake.', ulsImportanceFactor= 1.3)
+# Uniform traffic load.
+TL= lcg.newUniformLoadAction(actionName= 'TL', actionDescription= 'Traffic load.')
 
 lcg.computeCombinations()
 
 # Write results.
-outputFileName= 'ec0_seismic_combinations.py'
+outputFileName= 'ec0_road_bridge_context.py'
 lcg.writeXCLoadCombinations(outputFileName= outputFileName)
 
 # Get current path.
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
-refFile= pth+'/../../aux/reference_files/ref_'+outputFileName
+refFile= pth+'/../../../aux/reference_files/ref_'+outputFileName
 comparisonOK= filecmp.cmp(refFile, outputFileName, shallow=False)
     
 from misc_utils import log_messages as lmsg

@@ -180,7 +180,7 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
 size_t XC::Element::getDimension(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "is not implemented.\n";
+              << " is not implemented.\n";
     return 0;
   }
 

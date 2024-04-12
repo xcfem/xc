@@ -52,6 +52,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                     category= eLoad.category
                     if(category=='uniform' or category=='raw'):
                         if(hasattr(eLoad,'getVector3dLocalForce')):
+                            localForce3d= eLoad.getVector3dLocalForce()
                             tags= eLoad.elementTags
                             for i in range(0,len(tags)):
                                 eTag= tags[i]
@@ -60,9 +61,9 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                                     dim= elem.getDimension
                                     if(dim==1):
                                         if eTag in retval:
-                                            retval[eTag]+= eLoad.getVector3dLocalForce()
+                                            retval[eTag]+= localForce3d
                                         else:
-                                            retval[eTag]= eLoad.getVector3dLocalForce()
+                                            retval[eTag]= localForce3d
                     elif(category=='punctual'):
                         # Concentrated load must be treated elsewhere
                         className= type(self).__name__

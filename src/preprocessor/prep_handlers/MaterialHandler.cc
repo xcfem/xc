@@ -158,6 +158,9 @@
 #include "material/nD/uw_materials/DruckerPrager.h"
 #include "material/nD/uw_materials/DruckerPragerPlaneStrain.h"
 #include "material/nD/uw_materials/DruckerPrager3D.h"
+#include "material/nD/uw_materials/InitialStateAnalysisWrapper.h"
+#include "material/nD/uw_materials/ContactMaterial2D.h"
+#include "material/nD/uw_materials/ContactMaterial3D.h"
 
 // RC multilayer.
 #include "material/nD/rc_multilayer/PlateRebarMaterial.h"
@@ -393,6 +396,12 @@ XC::Material *load_nD_material(int tag_mat,const std::string &cmd)
       retval= new XC::DruckerPragerPlaneStrain(tag_mat);
     else if(cmd == "drucker-prager_3d")
       retval= new XC::DruckerPrager3D(tag_mat);
+    else if(cmd == "initial_state_analysis_wrapper")
+      retval= new XC::InitialStateAnalysisWrapper(tag_mat);
+    else if(cmd == "contact_material_2d")
+      retval= new XC::ContactMaterial2D(tag_mat);
+    else if(cmd == "contact_material_3d")
+      retval= new XC::ContactMaterial3D(tag_mat);
     else if(cmd == "plastic_damage_concrete_plane_stress")
       retval= new XC::PlasticDamageConcretePlaneStress(tag_mat);
     else if(cmd == "plate_rebar")

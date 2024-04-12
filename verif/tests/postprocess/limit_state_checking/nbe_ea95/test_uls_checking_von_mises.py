@@ -135,7 +135,7 @@ for ls in limitStates:
 
 ### Check material resistance.
 #### Limit state to check.
-limitState= lsd.vonMisesStressResistance
+limitState= limitStates[0]
 #### Build controller.
 controller= NBE_EA95_limit_state_checking.VonMisesStressController(limitState.label)
 #### Perform checking.

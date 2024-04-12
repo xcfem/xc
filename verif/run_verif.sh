@@ -215,6 +215,7 @@ python tests/utility/geom/ezdxf_test_01.py
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_prestressing.py
+python tests/actions/test_report_load_cases.py
 echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
 python tests/actions/earth_pressure/test_uniform_pressure_on_ground_01.py
@@ -243,26 +244,48 @@ python tests/actions/quake/test_NCSP_01.py
 echo "$BLEU" "  Snow action tests." "$NORMAL"
 python tests/actions/snow/test_snowSIA.py
 python tests/actions/snow/test_snowASCE7.py
+python tests/actions/snow/test_snow_ec1.py
+python tests/actions/snow/test_snow_iapf.py
 echo "$BLEU" "  Wind action tests." "$NORMAL"
-python tests/actions/wind/test_windSIA.py
-python tests/actions/wind/test_windASCE7.py
-python tests/actions/wind/test_windASCE7_16.py
 python tests/actions/wind/test_wind_cylindr_01.py
 python tests/actions/wind/test_wind_cylindr_02.py
 python tests/actions/wind/test_wind_beam_truss.py
-python tests/actions/wind/test_cte_wind_load.py
-python tests/actions/wind/test_iap_wind_load_01.py
-python tests/actions/wind/test_iap_wind_load_02.py
-python tests/actions/wind/test_iap_wind_load_03.py
-python tests/actions/wind/test_iap_hiding_ratio.py
-python tests/actions/wind/test_iapf_wind_load_01.py
-python tests/actions/wind/test_iapf_wind_load_02.py
+echo "$BLEU" "    ASCE7 wind action tests." "$NORMAL"
+python tests/actions/wind/asce7/test_windASCE7.py
+python tests/actions/wind/asce7/test_windASCE7_16.py
+echo "$BLEU" "    CTE wind action tests." "$NORMAL"
+python tests/actions/wind/cte/test_cte_wind_load.py
+echo "$BLEU" "    EC1 wind action tests." "$NORMAL"
+python tests/actions/wind/ec1/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py 
+python tests/actions/wind/ec1/test_ec1_bridge_deck_vertical_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_squat_rectangular_pier.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_high_circular_cylindrical_pier.py 
+echo "$BLEU" "    IAP wind action tests." "$NORMAL"
+python tests/actions/wind/iap/test_iap_wind_load_01.py
+python tests/actions/wind/iap/test_iap_wind_load_02.py
+python tests/actions/wind/iap/test_iap_wind_load_03.py
+python tests/actions/wind/iap/test_iap_hiding_ratio.py
+echo "$BLEU" "    IAPF wind action tests." "$NORMAL"
+python tests/actions/wind/iapf/test_iapf_wind_load_01.py
+python tests/actions/wind/iapf/test_iapf_wind_load_02.py
+echo "$BLEU" "    SIA wind action tests." "$NORMAL"
+python tests/actions/wind/sia/test_windSIA.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
+echo "$BLEU" "    IAP thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_iap_thermal.py
+echo "$BLEU" "    IAPF thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_iapf_thermal.py
-python tests/actions/thermal/test_ec1_thermal.py
+echo "$BLEU" "    EC1 thermal action tests." "$NORMAL"
+python tests/actions/thermal/test_ec1_thermal_01.py
+python tests/actions/thermal/test_ec1_thermal_02.py
+python tests/actions/thermal/test_ec1_thermal_03.py
 echo "$BLEU" "  Traffic loads tests." "$NORMAL"
 python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 python tests/actions/traffic_loads/test_ec1_additional_amplification_factor.py
@@ -281,20 +304,29 @@ python tests/actions/traffic_loads/railway_traffic/test_ec1_traction_and_braking
 python tests/actions/traffic_loads/railway_traffic/test_ec1_line_load_design_situation_ii.py
 
 # Load combinations tests.
-echo "$BLEU" "Forming load combination tests." "$NORMAL"
+echo "$BLEU" "Load combination tests." "$NORMAL"
 python tests/actions/load_combinations/test_action.py
 python tests/actions/load_combinations/test_action_group.py
-python tests/actions/load_combinations/test_ehe_secondaries_00.py
-python tests/actions/load_combinations/test_ehe_accidentales.py
-python tests/actions/load_combinations/test_iap11_01.py
-python tests/actions/load_combinations/test_iap11_02.py
 python tests/actions/load_combinations/test_combination_dict.py
 python tests/actions/load_combinations/test_split_combination.py
-python tests/actions/load_combinations/test_sia_pont_ferroviaire.py
-python tests/actions/load_combinations/test_ec0_road_bridge_context.py
-python tests/actions/load_combinations/test_ec0_traffic_groups.py
-python tests/actions/load_combinations/test_ec0_seismic_combinations.py
-python tests/actions/load_combinations/test_ec0_railway_bridge_load_combinations.py
+echo "$BLEU" "  Forming load combination tests." "$NORMAL"
+echo "$BLEU" "    Forming load combination according to EHE." "$NORMAL"
+python tests/actions/load_combinations/ehe/test_ehe_secondaries_00.py
+python tests/actions/load_combinations/ehe/test_ehe_accidentales.py
+echo "$BLEU" "    Forming load combination according to IAP." "$NORMAL"
+python tests/actions/load_combinations/iap/test_iap11_01.py
+python tests/actions/load_combinations/iap/test_iap11_02.py
+echo "$BLEU" "    Forming load combination according to SIA 260." "$NORMAL"
+python tests/actions/load_combinations/sia/test_sia_pont_ferroviaire.py
+echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
+python tests/actions/load_combinations/ec0/test_ec0_road_bridge_context.py
+python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
+python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py
+python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations.py
+echo "$BLEU" "  Load combination container tests." "$NORMAL"
+python tests/actions/load_combinations/comb_container/test_comb_container_01.py
+python tests/actions/load_combinations/comb_container/test_comb_container_02.py
+python tests/actions/load_combinations/comb_container/test_comb_container_03.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
@@ -882,6 +914,7 @@ echo "$BLEU" "    Surface pressures." "$NORMAL"
 python tests/loads/surface_pressures/test_brick_surface_pressures_01.py
 python tests/loads/surface_pressures/test_brick_surface_pressures_02.py
 python tests/loads/surface_pressures/test_quad_surface_pressures_01.py
+python tests/loads/surface_pressures/test_quad_surface_pressures_02.py
 echo "$BLEU" "    Dynamic loads." "$NORMAL"
 python tests/loads/dynamic_loads/test_node_load_history_01.py
 python tests/loads/dynamic_loads/test_node_load_history_02.py
@@ -1010,6 +1043,7 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_02.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_03.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
+python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
@@ -1163,6 +1197,8 @@ python tests/materials/ehe/test_buckling_check_04.py
 python tests/materials/ehe/test_buckling_check_05.py
 python tests/materials/ehe/test_buckling_check_06.py
 python tests/materials/ehe/test_buckling_check_07.py
+python tests/materials/ehe/test_buckling_check_08.py
+python tests/materials/ehe/test_buckling_check_09.py
 
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
@@ -1226,7 +1262,8 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
-python tests/materials/ec3/test_cross_section_verification.py
+python tests/materials/ec3/test_cross_section_verification_01.py
+python tests/materials/ec3/test_cross_section_verification_02.py
 python tests/materials/ec3/test_beam_control_points_01.py
 python tests/materials/ec3/test_beam_control_points_02.py
 python tests/materials/ec3/test_biax_bend_coeff.py
@@ -1511,6 +1548,8 @@ python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
 echo "$BLEU" "      EC2 limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_02.py
+echo "$BLEU" "      EC2 limit state checking: annex F." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec2/eurocode2_annex_f_test.py
 echo "$BLEU" "    EC3 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py
@@ -1533,6 +1572,7 @@ python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_check
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_02.py
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_03.py
 echo "$BLEU" "      EHE limit state checking: buckling." "$NORMAL"
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_01.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py

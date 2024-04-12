@@ -35,7 +35,7 @@ err+= (TminBridge+13.21641702458804)**2
 err+= (ATcon-28.21641702458804)**2
 err+= (ATexp-30.6987676947775)**2
 err+= (deltaTMheat-13.2)**2
-err+= (deltaTMcool-7.04)**2
+err+= (deltaTMcool-8.48)**2
 err= math.sqrt(err)
 
 '''

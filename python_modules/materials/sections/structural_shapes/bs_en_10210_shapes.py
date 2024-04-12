@@ -13,20 +13,6 @@ from materials.sections.structural_shapes import bs_en_10210_shapes_dictionaries
 ''' Eurocode 3 (in accordance with the UK National Annex) (BS EN 10210-2: 2006).'''
 
 HFSHS= bs_en_10210_shapes_dictionaries.HFSHS
-for item in HFSHS:
-    shape= HFSHS[item]
-    A= shape['A']
-    E= shape['E']
-    nu= shape['nu']
-    b= shape['b']
-    h= shape['h']
-    e= shape['e']
-    shape['alpha']= 0.5*5/6.0
-    shape['G']= E/(2*(1+nu))
-    shape['Avy']= 2*0.7*h*e
-    shape['Avz']= 2*0.7*b*e
-    shape['Wyel']= shape['Wzel']
-    shape['Wypl']= shape['Wzpl']
 
 class HFSHSShape(structural_steel.QHShape):
     def __init__(self,steel,name):
@@ -34,4 +20,9 @@ class HFSHSShape(structural_steel.QHShape):
 
     def t(self):
         '''Return the wall thickness.'''
+        return self.get('e')
+
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
         return self.get('e')

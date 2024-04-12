@@ -40,7 +40,7 @@ class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad",
   .add_property("axialComponent", &XC::BeamMecLoad::getAxialComponent, &XC::BeamMecLoad::setAxialComponent)
   .add_property("transComponent", &XC::BeamMecLoad::getTransComponent, &XC::BeamMecLoad::setTransComponent)
   .add_property("transYComponent", &XC::BeamMecLoad::getTransComponent, &XC::BeamMecLoad::setTransComponent)
-  .def("getLocalForce",&XC::BeamMecLoad::getLocalForce,"Returns local coordinates or force vector.")
+  .def("getLocalForce",&XC::BeamMecLoad::getLocalForce,"Returns local coordinates of the force vector.")
   .def("getLocalMoment",&XC::BeamMecLoad::getLocalMoment,"Returns local coordinates of bending moment vector.")
   .def("getVector3dLocalForce",&XC::BeamMecLoad::getVector3dLocalForce,"Returns a Vector3d with the local coordinates of the force vector.")
   .def("getVector3dLocalMoment",&XC::BeamMecLoad::getVector3dLocalMoment,"Returns a Vector3d with the local coordinates of bending moment vector.")

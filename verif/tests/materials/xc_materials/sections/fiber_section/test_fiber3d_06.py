@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Verification test of addFiber function.'''
+
 from __future__ import print_function
-# Verification test of addFiber function
 
 import xc
 from model import predefined_spaces

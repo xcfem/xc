@@ -7,12 +7,15 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
+import os
 import sys
 import json
 import csv
+import math
 from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 from misc_utils import log_messages as lmsg
+from misc.latex import latex_utils
 
 
 class CombinationRecord(object):
@@ -49,16 +52,21 @@ class CombinationRecord(object):
     def getNameExpressionPair(self):
         ''' Return a (combinationName, combinationExpression) tuple.'''
         return (self.name, self.expr)
+
+    def getLaTeXCode(self):
+        ''' Return the LaTeX string corresponding to this combination.'''
+        retval= self.name.replace('_','\\_')
+        retval+= ' & '
+        retval+= self.expr.replace('*',' ')
+        retval+= '\\\\\n'
+        return retval
     
     def exportToLatex(self, outputFile):
-         '''Creates LaTeX tables and put the combinations in them.
-
+        '''Creates LaTeX tables and put the combinations in them.
+        
          :param outputFile: file to write into.
          '''
-         outputFile.write(self.name.replace('_','\\_'))
-         outputFile.write(' & ')
-         outputFile.write(self.expr.replace('*',' '))
-         outputFile.write('\\\\\n')
+        outputFile.write(self.getLaTeXCode())
 
     def getLoadCaseDispParameters(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc, unitsScaleForc= 1e-3, unitsScaleMom= 1e-3, unitsScaleDisp= 1e3, unitsDispl= '[mm]'):
         '''Return a suitable LoadCaseDispParameters for the combination.
@@ -137,13 +145,40 @@ class SituationCombs(dict):
             comb_dict[key]= comb.expr
         retval['combinations']= comb_dict
         return retval
-
+ 
     def setFromDict(self,dct):
         ''' Set the fields from the values of the dictionary argument.'''
         self.description= dct['description']
         comb_dict= dct['combinations']
         for key in comb_dict:
             self.add(key, comb_dict[key])        
+           
+    def renumber(self, prefix:str= '', start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param prefix: prefix to use for the new combination name.
+        :param start: first index to use.
+        '''
+        data= self.getDict()
+        comb_dict= data['combinations']
+        comb_dict_keys= list(comb_dict.keys())
+        numberOfCombinations= len(comb_dict_keys)
+        if(numberOfCombinations>0):
+            numberOfDigits= int(math.log10(numberOfCombinations))+1
+            self.clear() # remove previous values.
+            self.description= data['description']
+            for i, key in enumerate(comb_dict_keys):
+                indexStr= str(i+start).rjust(numberOfDigits, '0')
+                newKey= prefix+indexStr
+                self.add(newKey, comb_dict[key])
+            
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        # self.description= dct['description']
+        for r in rows:
+            key= r[2]
+            combExpr= r[3]
+            self.add(key, combExpr)        
            
     def getNameExpressionPairs(self):
         ''' Return a list of (combinationName, combinationExpression) tuples.'''
@@ -172,39 +207,61 @@ class SituationCombs(dict):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+': couln\'t create combination: \''+key+'\'')
-            
-    def exportToLatex(self, outputFile):
+
+    def getLaTeXCode(self, limitState= None, small= True):
         '''Creates LaTeX tables and put the combinations in them.
 
         :param outputFile: file to write into.
+        :param limitState: description of the limit state to which 
+                           this situation corresponds.
+        :param small: if true, use small font.
         '''
+        retval= str()
         if(len(self)>0):
-            outputFile.write('\\begin{center}\n')
-            outputFile.write('\\begin{longtable}{|l|p{10cm}|}\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\multicolumn{2}{|c|}{'+self.description+'}\\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\endfirsthead\n')
+            if(limitState):
+                header= limitState+' '+self.description
+            else:
+                header= self.description
+            retval+= ('\\begin{center}\n')
+            if(small):
+                retval+= ('\\begin{small}\n')
+            retval+= ('\\begin{longtable}{|l|p{10cm}|}\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endfirsthead\n')
 
-            outputFile.write('\\hline\n')
-            outputFile.write('\\multicolumn{2}{|c|}{'+self.description+'}\\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
-            outputFile.write('\\hline\n')
-            outputFile.write('\\endhead\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endhead\n')
 
-            outputFile.write('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
-            outputFile.write('\\endfoot\n')
+            retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
+            retval+= ('\\endfoot\n')
 
-            outputFile.write('\\hline\n')
-            outputFile.write('\\endlastfoot\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\endlastfoot\n')
             for key in sorted(self):
-                self[key].exportToLatex(outputFile)
-            outputFile.write('\hline\n')
-            outputFile.write('\end{longtable}\n')
-            outputFile.write('\end{center}\n')
+                retval+= self[key].getLaTeXCode()
+            retval+= ('\hline\n')
+            retval+= ('\end{longtable}\n')
+            if(small):
+                retval+= ('\\end{small}\n')
+            retval+= ('\end{center}\n')
+        return retval
+            
+    def exportToLatex(self, outputFile, limitState= None):
+        '''Creates LaTeX tables and put the combinations in them.
+
+        :param outputFile: file to write into.
+        :param limitState: description of the limit state to which 
+                           this situation corresponds.
+        '''
+        outputFile.write(self.getLaTeXCode(limitState= limitState))
 
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
@@ -238,8 +295,7 @@ class SituationCombs(dict):
         '''
         data= self.getDict()
         with open(outputFileName, 'w') as outfile:
-            json.dump(data, outfile)
-        
+            json.dump(data, outfile)           
 
 class SituationsSet(object):
     '''Set of situations as used in limit states
@@ -247,7 +303,7 @@ class SituationsSet(object):
     :ivar name:        name to identify the situation set
     :ivar situations:  set of situations
     '''
-    def __init__(self,name: str):
+    def __init__(self, name: str):
         '''Constructor.
 
         :ivar name: name to identify the situation set.
@@ -284,11 +340,18 @@ class SituationsSet(object):
         '''
         for s in self.situations:
             s.dumpCombinations(xcCombHandler)
+
+    def getLaTeXCode(self):
+        '''Return the LaTeX code corresponding to the combinations in this
+           container.'''
+        retval= ''
+        for s in self.situations:
+            retval+= s.getLaTeXCode(limitState= self.name)
+        return retval
             
     def exportToLatex(self, outputFile):
         '''Creates LaTeX tables and put the combinations in them.'''
-        for s in self.situations:
-            s.exportToLatex(outputFile)
+        ouputFile.write(self.getLaTeXCode())
         
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
@@ -348,6 +411,33 @@ class SLSCombinations(SituationsSet):
         self.qp.setFromDict(dct['qp'])
         self.earthquake.setFromDict(dct['earthquake'])
         
+    def renumber(self, start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param start: first index to use.
+        '''
+        self.rare.renumber(prefix= 'SLSR', start= start)
+        self.freq.renumber(prefix= 'SLSF', start= start)
+        self.qp.renumber(prefix= 'SLSQP', start= start)
+        self.earthquake.renumber(prefix= 'SLSEQ', start= start)
+        
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        classifiedRows= dict()
+        for r in rows:
+            r1= r[1]
+            if(r1 not in classifiedRows):
+                classifiedRows[r1]= list()
+            classifiedRows[r1].append(r)
+        if('rare' in classifiedRows):
+            self.rare.setFromCSV(classifiedRows['rare'])
+        if('freq' in classifiedRows):
+            self.freq.setFromCSV(classifiedRows['freq'])
+        if('qp' in classifiedRows):
+            self.qp.setFromCSV(classifiedRows['qp'])
+        if('earthquake' in classifiedRows):
+            self.earthquake.setFromCSV(classifiedRows['earthquake'])
+            
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.rare.getNeutralFormat(counter,'SLSR', mapLoadCases)
         retval.update(self.freq.getNeutralFormat(counter+len(retval),'SLSF', mapLoadCases))
@@ -405,6 +495,33 @@ class ULSCombinations(SituationsSet):
         self.acc.setFromDict(dct['acc'])
         self.fatigue.setFromDict(dct['fatigue'])
         self.earthquake.setFromDict(dct['earthquake'])
+
+    def renumber(self, start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param start: first index to use.
+        '''
+        self.perm.renumber(prefix= 'ULS', start= start)
+        self.acc.renumber(prefix= 'ULSA', start= start)
+        self.fatigue.renumber(prefix= 'ULSF', start= start)
+        self.earthquake.renumber(prefix= 'ULSEQ', start= start)
+        
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        classifiedRows= dict()
+        for r in rows:
+            r1= r[1]
+            if(r1 not in classifiedRows):
+                classifiedRows[r1]= list()
+            classifiedRows[r1].append(r)
+        if('perm' in classifiedRows):
+            self.perm.setFromCSV(classifiedRows['perm'])
+        if('acc' in classifiedRows):
+            self.acc.setFromCSV(classifiedRows['acc'])
+        if('fatigue' in classifiedRows):
+            self.fatigue.setFromCSV(classifiedRows['fatigue'])
+        if('earthquake' in classifiedRows):
+            self.earthquake.setFromCSV(classifiedRows['earthquake'])
         
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.perm.getNeutralFormat(counter,'ULST2', mapLoadCases)
@@ -449,9 +566,36 @@ class CombContainer(object):
         return retval
 
     def setFromDict(self,dct):
-        ''' Set the fields from the values of the dictionary argument.'''
+        ''' Set the fields from the values of the given dictionary.'''
         self.SLS.setFromDict(dct['SLS'])
         self.ULS.setFromDict(dct['ULS'])
+
+
+    def renumber(self, start:int= 0):
+        ''' Renumber the combinations of this container.
+
+        :param start: first index to use.
+        '''
+        self.SLS.renumber(start= start)
+        self.ULS.renumber(start= start)
+        
+    def setFromCSV(self, rows):
+        ''' Set the fields from the values of the given rows.'''
+        slsRows= list()
+        ulsRows= list()
+        for r in rows:
+            r0= r[0]
+            if(r0=='ULS'):
+                ulsRows.append(r)
+            elif(r0=='SLS'):
+                slsRows.append(r)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+': limit state: \''+str(r0)+'\' unknown.')
+                exit(1)
+        self.ULS.setFromCSV(ulsRows)
+        self.SLS.setFromCSV(slsRows)
         
     def getNames(self):
         '''returns a list of the combination names.'''
@@ -481,13 +625,30 @@ class CombContainer(object):
         xcCombHandler= preprocessor.getLoadHandler.getLoadCombinations
         for ls in self.limitStates:
             ls.dumpCombinations(xcCombHandler)
+
+    def getLaTeXCode(self):
+        ''' Return the LaTeX code correspoding to the combinations in this
+            container.'''
+        retval= ''
+        for ls in self.limitStates:
+            retval+= ls.getLaTeXCode()
+        return retval
             
     def exportToLatex(self, fileName):
-        '''Creates LaTeX tables and put the combinations in them.'''
-        f = open(fileName, "w")
-        for ls in self.limitStates:
-            ls.exportToLatex(f)
-        f.close()
+        '''Creates LaTeX tables and put the combinations in them.
+
+        :param fileName: output file name.
+        '''
+        with open(fileName, "w") as f:
+            f.write(self.getLaTeXCode())
+
+    def exportToPDF(self, fileName):
+        ''' Creates a PDF file and write the combinations to it.
+
+        :param fileName: output file name.
+        '''
+        latexCode= self.getLaTeXCode()
+        latex_utils.latex_to_pdf(latexCode= latexCode, pdfFileName= fileName)
 
     def getList(self):
         ''' Return a list populated with the combinations.'''
@@ -534,7 +695,29 @@ class CombContainer(object):
         '''
         data= self.getDict()
         with open(outputFileName, 'w') as outfile:
-            json.dump(data, outfile)        
+            json.dump(data, outfile)
+
+    def readFromJSON(self, inputFileName):
+        ''' Read the load combinations from a JSON file.
+
+        :param inputFileName: name of the input file.
+        '''
+        with open(inputFileName, 'r') as f:
+            combsDict= json.load(f)
+        self.setFromDict(combsDict)
+
+    def readFromCSV(self, inputFileName):
+        ''' Read the load combinations from a CSV file.
+
+        :param inputFileName: name of the input file.
+        '''
+        rows= list()
+        with open(inputFileName, 'r') as f:
+            reader= csv.reader(f)
+            for row in reader:
+                rows.append(row)
+        self.setFromCSV(rows)
+
                   
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
@@ -551,37 +734,33 @@ class CombContainer(object):
             retval= self.ULS.getLoadCaseDispParameters(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
         return retval
 
-    def getCorrespondingLoadCombinations(self, designSituation):
+    def getCorrespondingLoadCombinations(self, designSituations):
         '''Return the load combinations needed for the design situation
            argument.
 
-        :param desingSituation: string identifying the design situation
-                                (i. e.: permanent, quasi-permanent,
-                                        sls_earthquake, ...).
+        :param designSituations: design situations that will be checked; 
+                                 i. e. uls_permanent, sls_quasi-permanent,
+                                 sls_frequent, sls_rare, uls_earthquake, etc. 
         '''
-        retval= None
-        if(designSituation=='permanent'):
-            retval= self.ULS.perm
-        elif(designSituation== 'fatigue'):
-            retval= self.ULS.fatigue
-        elif(designSituation== 'accidental'):
-            retval= self.ULS.acc
-        elif(designSituation== 'uls_earthquake'):
-            retval= self.ULS.earthquake
-        elif(designSituation== 'quasi-permanent'):
-            retval= self.SLS.qp
-        elif(designSituation== 'frequent'):
-            retval= self.SLS.freq
-        elif(designSituation== 'rare'):
-            retval= self.SLS.rare
-        elif(designSituation== 'sls_earthquake'):
-            retval= self.SLS.earthquake
-        else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(designSituation)+"' unknown.")
+        retval= list()
+        if('uls_permanent' in designSituations):
+            retval.append(self.ULS.perm)
+        if('uls_fatigue' in designSituations):
+            retval.append(self.ULS.fatigue)
+        if('uls_accidental' in designSituations):
+            retval.append(self.ULS.acc)
+        if('uls_earthquake' in designSituations):
+            retval.append(self.ULS.earthquake)
+        if('sls_quasi-permanent' in designSituations):
+            retval.append(self.SLS.qp)
+        if('sls_frequent' in designSituations):
+            retval.append(self.SLS.freq)
+        if('sls_rare' in designSituations):
+            retval.append(self.SLS.rare)
+        if('sls_earthquake' in designSituations):
+            retval.append(self.SLS.earthquake)
         if(len(retval)==0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(designSituation)+"' has no defined combinations.")
+            lmsg.warning(className+'.'+methodName+"; design situations: '"+str(designSituations)+"' have no defined combinations.")
         return retval

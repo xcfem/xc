@@ -28,12 +28,12 @@ modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 ## Nodes.
 x0= 0.0; x1= 1.0
 y0= 0.0; y1= 1.0
-area= 1.0
+area= x1
 ### Bottom
-nod1= nodes.newNodeXY(0,0)
-nod2= nodes.newNodeXY(1,0)
-nod3= nodes.newNodeXY(1,1)
-nod4= nodes.newNodeXY(0,1)
+nod1= nodes.newNodeXY(x0,y0)
+nod2= nodes.newNodeXY(x1,y0)
+nod3= nodes.newNodeXY(x1,y1)
+nod4= nodes.newNodeXY(x0,y1)
 
 ## Constraints
 for n in [nod1, nod2]:

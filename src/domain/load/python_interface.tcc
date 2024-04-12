@@ -52,6 +52,8 @@ class_<XC::SurfaceLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("Surfac
   .add_property("pressure",&XC::SurfaceLoad::getPressure, &XC::SurfaceLoad::setPressure,"Get/set the pressure load.")
   .def("setPressure", &XC::SurfaceLoad::setPressure,"Set the pressure load.")
   .def("getPressure", &XC::SurfaceLoad::getPressure,"Get the pressure load.")
+  .def("getLocalForce",&XC::SurfaceLoad::getLocalForce,"Returns local coordinates of the force vector.")
+  .def("getVector3dLocalForce",&XC::SurfaceLoad::getVector3dLocalForce,"Returns a Vector3d with the local coordinates of the force vector.")
   ;
 
 #include "beam_loads/python_interface.tcc"

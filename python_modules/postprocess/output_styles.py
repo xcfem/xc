@@ -140,7 +140,10 @@ class OutputStyle(object):
         elif(itemToDisp=='wk' or itemToDisp=='s_rmax'):
             fConvUnits= self.getDisplacementUnitsScaleFactor()
             unitDescription= self.getDisplacementUnitsDescription()
-        elif(itemToDisp=='CF' or itemToDisp=='getCF'):
+        elif(itemToDisp=='CF' or itemToDisp=='getCF'): # capacity factor
+            fConvUnits= 1.0
+            unitDescription= ''
+        elif(itemToDisp.endswith('_cf')): # capacity factor.
             fConvUnits= 1.0
             unitDescription= ''
         elif(itemToDisp.startswith('sigma_')):
@@ -225,6 +228,7 @@ sp_capTexts={
     'normalStressCheck': 'Comprobación ELU tensiones normales',
     'ULS_shearResistance': 'Comprobación ELU esfuerzo cortante',
     'ULS_VonMisesStressResistance': 'Comprobación ELU tensiones de Von Mises',
+    'ULS_Ec2InPlaneStressResistance': 'Comprobación ELU de armaduras en elementos en tensión plana.',
     'getMaxSteelStress': "tensión máxima en la armadura",
     'SLS_rareLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga raros',
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
@@ -277,6 +281,7 @@ en_capTexts={
     'ULS_normalStressesResistance': 'ULS normal stresses check',
     'ULS_shearResistance': 'ULS shear check',
     'ULS_VonMisesStressResistance': 'ULS Von Mises stresses check',
+    'ULS_Ec2InPlaneStressResistance': 'ULS tension reinforcement check for in-plane stress conditions.',
     'getMaxSteelStress': 'steel maximum stress',
     'SLS_rareLoadsCrackControl': 'SLS cracking, rare actions',
     'SLS_frequentLoadsCrackControl': 'SLS cracking, frequent actions',
@@ -341,6 +346,7 @@ fr_capTexts={
     'normalStressCheck': 'Vérification ELU contraintes normales',
     'ULS_shearResistance': 'Vérification ELU effort tranchant',
     'ULS_VonMisesStressResistance': 'Vérification ELU contraintes de Von Mises.',
+    'ULS_Ec2InPlaneStressResistance': 'Verification ELU des armatures tendues dans les situations de contraintes planes.',
     'getMaxSteelStress': "contrainte maximale dans l'armature",
     'SLS_rareLoadsCrackControl': 'Vérification ELS fissuration, cas de charge rares',
     'SLS_frequentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge fréquents',

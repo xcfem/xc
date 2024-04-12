@@ -94,6 +94,22 @@ for shapeName in shapesDict:
     shapeRecord['h_flat']= h_flat
     b_flat= shapeRecord['b']-3.0*shapeRecord['e']
     shapeRecord['b_flat']= b_flat
+    
+# Compute auxiliary data for CFSHS shapes.
+for item in shapesDict:
+    shape= shapesDict[item]
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    h= shape['h']
+    e= shape['e']
+    shape['alpha']= 0.5*5/6.0
+    shape['G']= E/(2*(1+nu))
+    shape['Avy']= 2*0.7*h*e
+    shape['Avz']= 2*0.7*b*e
+    shape['Wyel']= shape['Wzel']
+    shape['Wypl']= shape['Wzpl']
             
 jsonFile= open(fNameOut, "w")
 jsonFile.write(json.dumps(shapesDict))

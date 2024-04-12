@@ -13,27 +13,26 @@ from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
 lcg= ec0_es.combGenerator
 # Permanent load.
-G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge')
+G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.')
 # Settlement load.
-S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.', context= 'road_bridge')
-# Hidrostatic pressure.
-W= lcg.newHydrostaticPressureAction(actionName= 'W', actionDescription= 'Hydrostatic pressure', context= 'road_bridge')
+S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.')
 # Thermal load.
 T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge')
-# Uniform traffic load.
-TL= lcg.newUniformLoadAction(actionName= 'TL', actionDescription= 'Traffic load.')
+# Traffic load.
+actionTuples= [('TS','Tandem system','road_traffic_loads_gr1a_trucks'), ('UDL','Uniformly distributed load.','road_traffic_loads_gr1a_udl')]
+actionGroup= lcg.newActionGroup(family= 'variables', actionTuples= actionTuples, partialSafetyFactorsName= 'road_traffic')
 
 lcg.computeCombinations()
 
 # Write results.
-outputFileName= 'ec0_road_bridge_context.py'
+outputFileName= 'ec0_traffic_groups.py'
 lcg.writeXCLoadCombinations(outputFileName= outputFileName)
 
 # Get current path.
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
-refFile= pth+'/../../aux/reference_files/ref_'+outputFileName
+refFile= pth+'/../../../aux/reference_files/ref_'+outputFileName
 comparisonOK= filecmp.cmp(refFile, outputFileName, shallow=False)
     
 from misc_utils import log_messages as lmsg

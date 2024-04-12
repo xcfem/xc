@@ -56,7 +56,7 @@ values= [('ELSF', lcg.getSLSFrequentCombinations(), "load_combs_els_freq.py"), (
 for (prefix, loadCombinations, outputFileName) in values:
     ec.writeXCLoadCombinations(prefix= prefix, loadCombinations= loadCombinations, outputFileName= outputFileName)
     # Compare with reference file.
-    refFile= pth+'/../../aux/reference_files/ref_'+outputFileName
+    refFile= pth+'/../../../aux/reference_files/ref_'+outputFileName
     comparisonOK= comparisonOK and filecmp.cmp(refFile, outputFileName, shallow=False)
     os.remove(outputFileName) # clean up after yourself.
     

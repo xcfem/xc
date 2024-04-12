@@ -72,8 +72,8 @@ l1.genMesh(xc.meshDir.I)
 ## Constraints.
 bottomNode= p1.getNode()
 topNode= p2.getNode()
-modelSpace.fixNode('000_FF0',bottomNode.tag)
-modelSpace.fixNode('00F_FFF',topNode.tag)
+modelSpace.fixNode('000_FF0',bottomNode.tag) # pinned.
+modelSpace.fixNode('00F_FFF',topNode.tag) # pinned.
 
 ## Loads
 lp0= modelSpace.newLoadPattern(name= 'lp0')
@@ -108,9 +108,9 @@ for e in xcTotalSet.elements:
     Cz= 0.2 # table 43.1.2 of EHE-08.
     Cy= 0.2
     Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
-    avgLeff+= Leffi[0][0] # Effective length for the first mode Z axis.
-    avgMechLambda+= mechLambdai[0][0] # Mechanical slenderness for the first mode.
-    avgEf+= Efi[0][0] # Fictitious eccentricity for the first mode Z axis.
+    avgLeff+= Leffi[0] # Effective length for the first mode.
+    avgMechLambda+= mechLambdai[0] # Mechanical slenderness for the first mode.
+    avgEf+= Efi[0][0] # Fictitious eccentricity for the first mode Y axis.
     z= e.getPosCentroid(False).z
     results[z]= (e.tag, Leffi, mechLambdai, Efi)
 
@@ -123,79 +123,51 @@ avgEf/=sz
 ratio3= abs(avgEf-0.2318153467323909)/0.2318153467323909
 
 '''
-import matplotlib.pyplot as plt
-LeffZ= dict()
-LeffY= dict()
-mechLambdaZ= dict()
-mechLambdaY= dict()
-efiZ= dict()
-efiY= dict()
-sorted_results= dict(sorted(results.items())) # sort on z.
-for i, bucklingLoadFactor in enumerate(bucklingLoadFactors): # iterate through modes.
-    mode= i+1
-    zi= list()
-    LeffZ[mode]= list()
-    LeffY[mode]= list()
-    mechLambdaZ[mode]= list()
-    mechLambdaY[mode]= list()
-    efiZ[mode]= list()
-    efiY[mode]= list()
-    for z in sorted_results: # For each z coordinate.
-        zi.append(z)
-        values= sorted_results[z]
-        eTag= values[0]
-        lz= values[1][i][0] # Results for mode i.
-        ly= values[1][i][1]
-        LeffZ[mode].append(lz) 
-        LeffY[mode].append(ly) 
-        mlz= values[2][i][0]
-        mly= values[2][i][1]
-        mechLambdaZ[mode].append(mlz) 
-        mechLambdaY[mode].append(mly) 
-        ez= values[3][i][0]
-        ey= values[3][i][1]
-        efiZ[mode].append(ez) 
-        efiY[mode].append(ey) 
+# import matplotlib.pyplot as plt
+# Leff= dict()
+# mechLambda= dict()
+# efi= dict()
+# sorted_results= dict(sorted(results.items())) # sort on z.
+# for i, bucklingLoadFactor in enumerate(bucklingLoadFactors): # iterate through modes.
+#     mode= i+1
+#     zi= list()
+#     Leff[mode]= list()
+#     mechLambda[mode]= list()
+#     efi[mode]= list()
+#     for z in sorted_results: # For each z coordinate.
+#         zi.append(z)
+#         values= sorted_results[z]
+#         eTag= values[0]
+#         lz= values[1][i] # Results for mode i.
+#         Leff[mode].append(round(lz,2)) 
+#         ml= values[2][i]
+#         mechLambda[mode].append(round(ml,0)) 
+#         ef= values[3][i]
+#         efi[mode].append(round(ef,2)) 
 
-    # Display results.
-    plt.title('effective length for mode: '+str(mode)+' (z axis)')
-    plt.ylabel('z')
-    plt.xlabel('Leff_z')
-    plt.plot(LeffZ[mode], zi)
-    plt.show()
-    plt.title('effective length for mode: '+str(mode)+' (y axis)')
-    plt.ylabel('z')
-    plt.xlabel('Leff_y')
-    plt.plot(LeffY[mode], zi)
-    plt.show()
-    plt.title('mechanical slendernes for mode: '+str(mode)+' (z axis)')
-    plt.ylabel('z')
-    plt.xlabel('mechLambda_z')
-    plt.plot(mechLambdaZ[mode], zi)
-    plt.show()
-    plt.title('mechanical slendernes for mode: '+str(mode)+' (y axis)')
-    plt.ylabel('z')
-    plt.xlabel('mechLambda_y')
-    plt.plot(mechLambdaY[mode], zi)
-    plt.show()
-    plt.title('additional eccentricity for mode: '+str(mode)+' (z axis)')
-    plt.ylabel('z')
-    plt.xlabel('efi_z')
-    plt.plot(efiZ[mode], zi)
-    plt.show()
-    plt.title('additional eccentricity for mode: '+str(mode)+' (y axis)')
-    plt.ylabel('z')
-    plt.xlabel('efi_y')
-    plt.plot(efiY[mode], zi)
-    plt.show()
-        
+#     # Display results.
+#     plt.title('effective length for mode: '+str(mode))
+#     plt.ylabel('z')
+#     plt.xlabel('Leff')
+#     plt.plot(Leff[mode], zi)
+#     plt.show()
+#     plt.title('mechanical slendernes for mode: '+str(mode))
+#     plt.ylabel('z')
+#     plt.xlabel('mechLambda')
+#     plt.plot(mechLambda[mode], zi)
+#     plt.show()
+#     plt.title('additional eccentricity for mode: '+str(mode))
+#     plt.ylabel('z')
+#     plt.xlabel('efi')
+#     plt.plot(efi[mode], zi)
+#     plt.show()
 
 print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
 print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
-print('average effective length (first buckling mode): ', avgLeff, 'm', ratio1)
-print('average mechanical slenderness (first buckling mode): ', avgMechLambda, ratio2)
+print('average effective length (first buckling mode): ', avgLeff, 'm, ratio1= ', ratio1)
+print('average mechanical slenderness (first buckling mode): ', avgMechLambda, ' ratio2= ', ratio2)
 
-print('average fictitious eccentricity (first buckling mode): ', avgEf, 'm', ratio3)
+print('average fictitious eccentricity (first buckling mode): ', avgEf, 'm, ratio3= ', ratio3)
 '''
 
 import os
@@ -211,7 +183,8 @@ else:
 # oh= output_handler.OutputHandler(modelSpace)
 # oh.displayFEMesh()
 # oh.displayLoads()
-# oh.displayEigenvectors(1)
+# oh.displayLocalAxes()
+# oh.displayEigenvectors(mode= 1)
 # oh.displayIntForcDiag('Mz')
 # # oh.displayEigenResult(1, defFScale= 10.0)
 # # oh.displayLocalAxes()

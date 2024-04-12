@@ -62,9 +62,11 @@ class_<XC::QuadSectRegion, bases<XC::QuadCellRegion> >("QuadSectRegion")
   .def("setTileSizeJK",&XC::QuadSectRegion::setTileSizeJK,"Sets numbers of divisions to get a tile JK side smaller than size.")
   .def("setTileSize",&XC::QuadSectRegion::setTileSize,"Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.")
   .def("swap",&XC::QuadSectRegion::swap)
-  .def("getQuad",&XC::QuadSectRegion::getQuad)
-  .def("getPolygon",&XC::QuadSectRegion::getPolygon)
-  .def("setQuad",&XC::QuadSectRegion::setQuad)
+.def("setVertices", &XC::QuadSectRegion::setVertices, "setVertices(pI, pJ, pK, pL), assigns the quad region vertices.")
+  .def("getPolygon",&XC::QuadSectRegion::getPolygon, "return a polygon with the same vertices of the region.")
+  .def("setPolygon",&XC::QuadSectRegion::setPolygon, "assigns the quad region vertices from those in the given polygon.")
+  .def("getQuad",&XC::QuadSectRegion::getQuad, "return a quadrilateral with the same vertices of the region.")
+  .def("setQuad",&XC::QuadSectRegion::setQuad, "assigns the quad vertices from thonse in the given quad.")
   ;
 
 class_<XC::PolygonSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("PolygonSectRegion", no_init);
@@ -77,7 +79,7 @@ class_<XC::PolygonSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("P
 class_<XC::RegionContainer, bases<XC::SectionMassProperties>, boost::noncopyable >("RegionContainer", no_init)
   .def("__iter__", boost::python::iterator<XC::RegionContainer >())
   .add_property("getBnd",&XC::RegionContainer::getBnd, "Returns regions boundary.")
-.def("newQuadRegion",make_function(&XC::RegionContainer::newQuadRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new quadrilateral region named with the string argument.")
+  .def("newQuadRegion",make_function(&XC::RegionContainer::newQuadRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new quadrilateral region named with the string argument.")
   .def("newCircularRegion",make_function(&XC::RegionContainer::newCircularRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new circular region named with the string argument.")
    ;
 

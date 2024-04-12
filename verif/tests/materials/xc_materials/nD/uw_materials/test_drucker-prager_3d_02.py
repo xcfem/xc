@@ -15,7 +15,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from model.boundary_cond import opensees_style
 from solution import predefined_solutions
 
 # Model definition

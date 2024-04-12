@@ -16,7 +16,7 @@ F= 1 # Force magnitude
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-
+from misc_utils import log_messages as lmsg
 
 # Model definition
 feProblem= xc.FEProblem()
@@ -60,6 +60,8 @@ lp0.newNodalLoad(n2.tag,xc.Vector([F/2.0,0]))
 modelSpace.addLoadCaseToDomain(lp0.name) # Append load pattern to domain.
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
+if(result!=0):
+    lmsg.error('Can\'t solve.')
 
 deltax= n2.getDisp[0] 
 deltay= n2.getDisp[1] 
@@ -83,7 +85,6 @@ print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
  '''
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5):
     print('test '+fname+': ok.')

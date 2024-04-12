@@ -1190,7 +1190,7 @@ class BoltedPlateController(lsc.LimitStateControllerBase):
                force results
         :param setCalc: set of elements to check
         '''
-        intForcItems= limit_state_data.readIntForcesFile(intForcCombFileName,setCalc)
+        intForcItems= limit_state_data.read_internal_forces_file(intForcCombFileName,setCalc)
         internalForcesValues= intForcItems[2]
         worstCase= WorstCase()
         for e in setCalc.elements:

@@ -24,6 +24,7 @@
 // Description: This file contains the implementation for the SurfaceLoad class.
 
 #include "SurfaceLoad.h"
+#include "utility/geom/pos_vec/Vector3d.h"
 
 //! @brief Constructor.
 XC::SurfaceLoad::SurfaceLoad(int tag,const ID &tags_elems, const double &press)
@@ -43,6 +44,9 @@ const XC::Vector &XC::SurfaceLoad::getData(int &type, const double &loadFactor) 
     return data;
   }
 
+std::string XC::SurfaceLoad::Category(void) const
+  { return "uniform"; }
+
 //! @brief Set the pressure.
 double XC::SurfaceLoad::getPressure(void) const
   { return this->pressure; }
@@ -51,6 +55,27 @@ double XC::SurfaceLoad::getPressure(void) const
 void XC::SurfaceLoad::setPressure(const double &d)
   { this->pressure= d; }
 
+//! @brief Returns force expressed in local coordinates.
+XC::Vector XC::SurfaceLoad::getLocalForce(void) const
+  {
+    Vector retval(2);
+    retval(0)= 0.0;
+    retval(1)= pressure;
+    return retval;
+  }
+
+//! @brief Return the local components of the
+//! force in a Vector3d. 
+Vector3d XC::SurfaceLoad::getVector3dLocalForce(void) const
+  {
+    Vector f= getLocalForce();
+    Vector3d retval;
+    if(f.Size()>2)
+      retval= Vector3d(f[0],f[1],f[2]);
+    else
+      retval= Vector3d(f[0],f[1],0.0);
+    return retval;
+  }
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::SurfaceLoad::getDbTagData(void) const

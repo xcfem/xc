@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 from materials.sections import internal_forces
 from misc_utils import log_messages as lmsg
 from model import model_inquiry
@@ -77,6 +78,17 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
                 if(avgMaxVM):
                     internalForcesDict[i].update({vonMisesStressId:avgMaxVM})
             elemDict['internalForces']= internalForcesDict
+        elif('FourNodeQuad' in elementType):
+            e.getResistingForce()
+            elementStresses= e.physicalProperties.getVectorMaterials.getValues('stress', False)
+            stressesDict= dict()
+            numGaussPoints= elementStresses.noRows
+            for i in range(0, numGaussPoints):
+                sX= elementStresses(i,0)
+                sY= elementStresses(i,1)
+                sXY= elementStresses(i,2)/2.0
+                stressesDict[i]= {'sigma_11':sX, 'sigma_22':sY, 'sigma_12':sXY}
+            elemDict['stresses']= stressesDict
         elif('Beam2d' in elementType):
             e.getResistingForce()
             internalForcesDict= dict()
@@ -143,7 +155,8 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
             internalForcesDict= dict()
             nDOFs= len(F[0]) # Number of degrees of freedom.
             if(nDOFs!= 6):
-                lmsg.warning('exportInternalForces for '+str(nDOFs)+ " DOFs in element type: '"+elementType+"' not implemented.")
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(methodName+'; for '+str(nDOFs)+ " DOFs in element type: '"+elementType+"' not implemented.")
             else:
                 F0= F[0]
                 internalForces= internal_forces.CrossSectionInternalForces(N= F0[0],Vy= F0[1], Vz= F0[2],T= F0[3],My= F0[4], Mz= F0[5]) # Internal forces at the origin node.
@@ -153,7 +166,8 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
                 internalForcesDict[1]= internalForces.getDict()
             elemDict['internalForces']= internalForcesDict
         else:
-            lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+"; element type: '"+elementType+"' unknown.")
     return combInternalForcesDict
 
 def export_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):
@@ -219,9 +233,11 @@ def export_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= F
                     endStr+= " , "+str(e.getProp(extProp))
             fDesc.write(endStr+'\n')
         elif('ZeroLength' in elementType):
-            lmsg.warning("exportInternalForces for element type: '"+elementType+"' not implemented.")
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(methodName+"; for element type: '"+elementType+"' not implemented.")
         else:
-            lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+"; error; element type: '"+elementType+"' unknown.")
       
 
 def export_shell_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= False):

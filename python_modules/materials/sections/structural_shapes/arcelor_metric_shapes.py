@@ -492,6 +492,8 @@ class HEShape(structural_steel.IShape):
 
         
 class RHSShape(structural_steel.QHShape):
+    ''' Rectangular hollow structural section.
+    '''
     def __init__(self,steel,name):
         super(RHSShape,self).__init__(steel,name,RHS)
 
@@ -499,14 +501,25 @@ class RHSShape(structural_steel.QHShape):
         '''Return the wall thickness'''
         return self.get('e')
 
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
+        return self.get('e')
         
 class SHSShape(structural_steel.QHShape):
+    ''' Square hollow structural section.
+    '''
     def __init__(self,steel,name):
         super(SHSShape,self).__init__(steel,name,SHS)
         
     def t(self):
         '''Return the wall thickness'''
         return self.get('e')    
+
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
+        return self.get('e')
 
 class UPNShape(structural_steel.UShape):
     def __init__(self,steel,name):
@@ -520,6 +533,7 @@ class AUShape(structural_steel.SteelShape):
         return self.get('P')
 
 class CHSShape(structural_steel.CHShape):
+    ''' Circular hollow section.'''
     def __init__(self,steel,name):
         ''' Constructor.
 

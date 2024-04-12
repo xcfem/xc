@@ -211,7 +211,7 @@ class CombGenerator(object):
         return retval
             
     def writeXCLoadCombinations(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic'], outputFileName= None):
-        ''' Write the load combinations in a format readably by XC.
+        ''' Write the load combinations in a format readable by XC.
 
         :param situations: project situations of interest.
         :param outputFileName: name of the output file (if None use standard output).

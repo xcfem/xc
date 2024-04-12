@@ -224,25 +224,24 @@ int XC::StaticDomainDecompositionAnalysis::initialize(void)
 //! domain.
 int XC::StaticDomainDecompositionAnalysis::domainChanged(void)
   {
-  Domain *the_Domain = this->getDomainPtr();
-  int stamp = the_Domain->hasDomainChanged();
-  domainStamp = stamp;
+    Domain *the_Domain = this->getDomainPtr();
+    int stamp = the_Domain->hasDomainChanged();
+    domainStamp = stamp;
 
-  int result = 0;
-  
-  getAnalysisModelPtr()->clearAll();    
-  getConstraintHandlerPtr()->clearAll();
+    getAnalysisModelPtr()->clearAll();    
+    getConstraintHandlerPtr()->clearAll();
 
-  // now we invoke handle() on the constraint handler which
-  // causes the creation of XC::FE_Element and XC::DOF_Group objects
-  // and their addition to the XC::AnalysisModel.
+    // now we invoke handle() on the constraint handler which
+    // causes the creation of XC::FE_Element and XC::DOF_Group objects
+    // and their addition to the XC::AnalysisModel.
   
-  result = getConstraintHandlerPtr()->handle();
-  if (result < 0) {
-    std::cerr << "XC::StaticDomainDecompositionAnalysis::handle() - ";
-    std::cerr << "XC::ConstraintHandler::handle() failed";
-    return -1;
-  }	
+    int result= getConstraintHandlerPtr()->handle();
+    if(result < 0)
+      {
+	std::cerr << "XC::StaticDomainDecompositionAnalysis::handle() - ";
+	std::cerr << "XC::ConstraintHandler::handle() failed";
+	return -1;
+      }	
   
   // we now invoke number() on the numberer which causes
   // equation numbers to be assigned to all the DOFs in the

@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
-from __future__ import print_function
+''' Circular regions verification test. Home made test.'''
 
-import geom
-import xc
-from model import predefined_spaces
-from materials import typical_materials
-import math
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+import math
 
 Es= 2.1e11
 nu= 0.3

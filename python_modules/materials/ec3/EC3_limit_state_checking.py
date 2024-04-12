@@ -366,7 +366,6 @@ class Member(steel_member_base.BucklingMember):
 
         # Compute lateral buckling reduction factor.
         lrfLT= self.getFlexuralStrengthReductionFactor()
-        # print(lrfLT)
 
         return self.shape.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= Vyd, chiN= lrfN, chiLT= lrfLT)
 

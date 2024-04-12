@@ -171,7 +171,7 @@ class EC3Shape(object):
     :ivar sectionClass: section classification according to 
                         clause 5.5 of EC3-1-1:2005.
     '''
-    def __init__(self,name, typo= 'rolled', sectionClass= None):
+    def __init__(self, name, typo= 'rolled', sectionClass= None):
         '''
           Constructor.
 
@@ -396,7 +396,7 @@ class EC3Shape(object):
     
     def shearBucklingVerificationNeeded(self):
         '''Return true if shear buckling verification is needed according
-           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).ç
+           to expression 6.22 of EC3-1-1:2005 (clause 6.2.6 paragraph 6).
         '''
         epsilon= math.sqrt(235e6/self.steelType.fy)
         eta= 1.0 #Conservative
@@ -551,16 +551,19 @@ class EC3Shape(object):
         :param NplRd: design plastic resistancc to normal forces of the 
                       gross cross-section.
         '''
-        n= NEd/NplRd
-        if self.name[0] in ['I','H']: # I and H sections.
-            alpha=2
-            beta=max(1,5*n)
-        elif self.name[:2] == 'CH': # circular hollow sections.
-            alpha=2
-            beta=2
+        n= abs(NEd/NplRd)
+        if self.name[:4] in ['HFRH','HFSH']: # hot formed rectangular hollow sections.
+            alpha=min(6,abs(1.66/(1-1.13*n**2)))
+            beta=alpha
         elif self.name[:2] in ['RH','SH']: # rectangular hollow sections.
             alpha=min(6,abs(1.66/(1-1.13*n**2)))
             beta=alpha
+        elif self.name[0] in ['I','H']: # I and H sections.
+            alpha=2
+            beta= max(1,5*n)
+        elif self.name[:2] == 'CH': # circular hollow sections.
+            alpha=2
+            beta=2
         else:  #conservative
             alpha=1
             beta=1
@@ -587,8 +590,8 @@ class EC3Shape(object):
             McRdz= self.getMcRdz()*bendingFactor
             MvRdz= self.getMvRdz(Vyd)
             MbRdz= chiLT*MvRdz # Lateral buckling reduction.
-            alpha, beta=self.getBiaxBendCoeffs(Nd,NcRd)
-            mCF= (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta # Bending efficiency
+            alpha, beta= self.getBiaxBendCoeffs(Nd,NcRd)
+            mCF= math.pow((abs(Mzd)/MbRdz),alpha)+math.pow((abs(Myd)/McRdy),beta) # Bending efficiency
             CF= math.sqrt(nCF**2+mCF**2)
             return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
         else:
@@ -732,7 +735,7 @@ def getHollowShapedSectionBucklingCurve(shape, hotFinished):
         retval= 'c'
     return retval    
 
-class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
+class IPNShape(EC3Shape, arcelor_metric_shapes.IPNShape):
     """IPN shape with Eurocode 3 verification routines."""
     def __init__(self, steel, name):
         ''' Constructor.
@@ -773,7 +776,91 @@ class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
         '''
         return getIShapedRolledSectionBucklingCurve(self, majorAxis)
 
-class SHSShape(EC3Shape,arcelor_metric_shapes.SHSShape):
+class HollowBoxShape(EC3Shape):
+    ''' Structural hollow shapes.'''
+    def __init__(self, name, typo= 'rolled', sectionClass= None):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'SHS175x175x8')
+        '''
+        super(HollowBoxShape, self).__init__(name= name, typo= typo, sectionClass= sectionClass)
+
+    def get_aw(self):
+        ''' Compute the aw parameter to be used in expression (6.39) of
+            EC3.1.1.
+        '''
+        retval= None
+        if(self.typo!='rolled'):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': not implementef for '+str(self.typo)+' sections.')
+        
+        b= self.b()
+        t= self.t()
+        A= self.A()
+        retval= min(0.5, (A-2*b*t)/A)
+        return retval
+    
+    def get_af(self):
+        ''' Compute the aw parameter to be used in expression (6.39) of
+            EC3.1.1.
+        '''
+        retval= None
+        if(self.typo!='rolled'):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': not implementef for '+str(self.typo)+' sections.')
+        
+        h= self.h()
+        t= self.t()
+        A= self.A()
+        retval= min(0.5, (A-2*h*t)/A)
+        return retval
+
+    def getBendingFactors(self, nCF):
+        '''Return the bending factors according to paragraph (5)
+          of the clause 6.2.9 of EC3.1.1.
+
+        :param nCF: axial efficiency of the section.
+        '''
+        # Bending efficiency.
+        bendingFactorY= min((1-nCF)/(1-0.5*self.get_af()),1.0)
+        bendingFactorZ= min((1-nCF)/(1-0.5*self.get_aw()),1.0)
+        return bendingFactorY, bendingFactorZ
+    
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN= 1.0, chiLT=1.0):
+        '''Return biaxial bending efficiency according to paragraph (5)
+          of the clause 6.2.9 of EC3.1.1. (only class 1 and 2 
+          cross-sections are considered currently).
+
+        :param Nd: design value of the axial force.
+        :param Myd: design value of the bending moment about y-y axis.
+        :param Mzd: design value of the bending moment about z-z axis.
+        :param Vyd: design value of the shear force on y axis.
+        :param chiN: flexural buckling reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
+        '''
+        if(self.sectionClass<=2):
+            # Axial efficiency.
+            NcRd= chiN*self.getNcRd() # Flexural buckling reduction.
+            nCF= abs(Nd)/NcRd
+            # Bending efficiency.
+            bendingFactorY, bendingFactorZ= self.getBendingFactors(nCF)
+            McRdy= self.getMcRdy()*bendingFactorY
+            McRdz= self.getMcRdz()*bendingFactorZ
+            MvRdz= self.getMvRdz(Vyd)
+            MbRdz= chiLT*MvRdz # Lateral buckling reduction.
+            alpha, beta= self.getBiaxBendCoeffs(Nd,NcRd)
+            mCF= math.pow((abs(Mzd)/MbRdz),alpha)+math.pow((abs(Myd)/McRdy),beta) # Bending efficiency
+            CF= math.sqrt(nCF**2+mCF**2)
+            return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': not implemented for cross section class greater than 2.')
+            return None
+    
+class SHSShape(HollowBoxShape, arcelor_metric_shapes.SHSShape):
     """SHS shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
@@ -819,7 +906,7 @@ So:
 
 '''
 
-class HEShape(EC3Shape,arcelor_metric_shapes.HEShape):
+class HEShape(EC3Shape, arcelor_metric_shapes.HEShape):
     """HE shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
@@ -861,7 +948,7 @@ class AUShape(EC3Shape, arcelor_metric_shapes.AUShape):
         super(AUShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.AUShape.__init__(self,steel,name)
 
-class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
+class CHSShape(EC3Shape, arcelor_metric_shapes.CHSShape):
     """CHS shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
@@ -968,7 +1055,7 @@ class UBShape(EC3Shape,arcelor_metric_shapes.UBShape):
 
 from materials.sections.structural_shapes import bs_en_10210_shapes
 
-class HFSHSShape(EC3Shape, bs_en_10210_shapes.HFSHSShape):
+class HFSHSShape(HollowBoxShape, bs_en_10210_shapes.HFSHSShape):
     """BS EN 10210-2: 2006 steel shapes with Eurocode 3 
        verification routines.
     """
@@ -993,7 +1080,7 @@ class HFSHSShape(EC3Shape, bs_en_10210_shapes.HFSHSShape):
         
 from materials.sections.structural_shapes import bs_en_10219_shapes
 
-class CFSHSShape(EC3Shape, bs_en_10219_shapes.CFSHSShape):
+class CFSHSShape(HollowBoxShape, bs_en_10219_shapes.CFSHSShape):
     """BS EN 10219-2: cold formed square hollow steel shapes 
        with Eurocode 3 verification routines.
     """
@@ -1016,7 +1103,7 @@ class CFSHSShape(EC3Shape, bs_en_10219_shapes.CFSHSShape):
         hotFinished= (self.typo=='rolled')
         return getHollowShapedSectionBucklingCurve(self, hotFinished= hotFinished)
         
-class CFRHSShape(EC3Shape, bs_en_10219_shapes.CFRHSShape):
+class CFRHSShape(HollowBoxShape, bs_en_10219_shapes.CFRHSShape):
     """BS EN 10219-2: cold formed rectangular hollow steel shapes 
        with Eurocode 3 verification routines.
     """

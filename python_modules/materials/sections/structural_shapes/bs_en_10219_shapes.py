@@ -13,20 +13,6 @@ from materials.sections.structural_shapes import bs_en_10219_shapes_dictionaries
 # EN 10219 cold formed square hollow tubes.
 
 CFSHS= bs_en_10219_shapes_dictionaries.shapes['CFSHS']
-for item in CFSHS:
-    shape= CFSHS[item]
-    A= shape['A']
-    E= shape['E']
-    nu= shape['nu']
-    b= shape['b']
-    h= shape['h']
-    e= shape['e']
-    shape['alpha']= 0.5*5/6.0
-    shape['G']= E/(2*(1+nu))
-    shape['Avy']= 2*0.7*h*e
-    shape['Avz']= 2*0.7*b*e
-    shape['Wyel']= shape['Wzel']
-    shape['Wypl']= shape['Wzpl']
     
 class CFSHSShape(structural_steel.QHShape):
     ''' Cold formed square hollow sections according to 
@@ -41,6 +27,11 @@ class CFSHSShape(structural_steel.QHShape):
 
     def t(self):
         '''Return the wall thickness.'''
+        return self.get('e')
+
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
         return self.get('e')
     
 #  EN 10219 cold formed rectangular hollow tubes.
@@ -74,6 +65,11 @@ class CFRHSShape(structural_steel.QHShape):
         '''Return the wall thickness'''
         return self.get('e')
 
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
+        return self.get('e')
+    
 # EN 10219 cold formed circular hollow tubes.
 
 CFCHS= bs_en_10219_shapes_dictionaries.shapes['CFCHS']
