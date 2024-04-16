@@ -201,8 +201,8 @@ class TrainLoadModel(tlm.TrainLoadModel):
         return retval
             
     def getUniformLineLoadForDesignSituationII(self, bridgeLength= 20.0):
-        ''' Return the Uniformly distributed equivalent line load for Design
-            Situation II according to paragraph (4) of clause 6.7.1 of 
+        ''' Return the uniformly distributed equivalent line load for design
+            situation II according to paragraph (4) of clause 6.7.1 of 
             Eurocode 1 part 2.
 
         :param bridgeLength: length of the bridge.
