@@ -268,6 +268,8 @@ class SolutionProcedure(object):
         ''' Define the constraint handler and return a reference to it.'''
         if(self.cHandlerType=='penalty'):
             self.cHandler= self.modelWrapper.newConstraintHandler("penalty_constraint_handler")
+            if(not hasattr(self, "alphaSP")):
+                self.setPenaltyFactors()
             self.cHandler.alphaSP= self.alphaSP
             self.cHandler.alphaMP= self.alphaMP
         elif(self.cHandlerType=='transformation'):
@@ -1526,7 +1528,7 @@ class LinearBucklingAnalysis(object):
     :ivar eigenSOEType: type of the system of equations object for the eigenproblem part of the analysis.
     :ivar eigenSolverType: type of the solver for the eigenproblem part of the analysis.
     '''
-    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'band_arpackpp_soe', eigenSolverType= 'band_arpackpp_solver'):
+    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'band_arpackpp_soe', eigenSolverType= 'band_arpackpp_solver', printFlag= 0):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1551,9 +1553,10 @@ class LinearBucklingAnalysis(object):
         self.maxNumIter= maxNumIter 
         self.soeType= soeType 
         self.solverType= solverType 
-        self.solutionAlgorithmType= solutionAlgorithmType 
+        self.solutionAlgorithmType= solutionAlgorithmType
+        self.printFlag= printFlag
         self.eigenSOEType= eigenSOEType 
-        self.eigenSolverType= eigenSolverType 
+        self.eigenSolverType= eigenSolverType
                 
     def soluControlSetup(self):
         ''' Defines the solution control object.'''
@@ -1572,10 +1575,10 @@ class LinearBucklingAnalysis(object):
         ''' Defines the solution procedure in the finite element 
             problem object.
         '''
-        self.staticPart= BucklingAnalysisStaticPart(prb= self.feProblem, constraintHandlerType= self.constraintHandlerType, numberingMethod= self.numberingMethod , convTestType= self.convTestType, convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, soeType= self.soeType, solverType= self.solverType , solutionAlgorithmType= self.solutionAlgorithmType)
+        self.staticPart= BucklingAnalysisStaticPart(prb= self.feProblem, constraintHandlerType= self.constraintHandlerType, numberingMethod= self.numberingMethod , convTestType= self.convTestType, convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, soeType= self.soeType, solverType= self.solverType , solutionAlgorithmType= self.solutionAlgorithmType, printFlag= self.printFlag)
         self.staticPart.setup()
 
-        self.eigenPart= BucklingAnalysisEigenPart(prb= self.feProblem, staticAnalysisPart= self.staticPart, soeType= self.eigenSOEType, solverType= self.eigenSolverType)
+        self.eigenPart= BucklingAnalysisEigenPart(prb= self.feProblem, staticAnalysisPart= self.staticPart, soeType= self.eigenSOEType, solverType= self.eigenSolverType, printFlag= self.printFlag)
         self.eigenPart.setup()
         self.soluControlSetup()
         self.analysisSetup()
