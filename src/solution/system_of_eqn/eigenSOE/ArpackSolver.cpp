@@ -199,19 +199,11 @@ int XC::ArpackSolver::solve(void)
 		  << "; at moment only solves generalized problems.\n";
 	return -1;
       }
+    theSOE = theArpackSOE->theSOE;
     if(!theSOE)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; no LinearSOE object has been set\n";
-        return -1;
-      }
-
-    theSOE = theArpackSOE->theSOE;
-
-    if(!theSOE)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; no LinearSOE set." << std::endl;
         return -1;
       }
 
@@ -223,11 +215,7 @@ int XC::ArpackSolver::solve(void)
     int ncv = getNCV(n, nev);
     int ldv = n;
     int lworkl = ncv*ncv + 8*ncv;
-    if (nev > 1) {
-      ncv = nev+1;
-      lworkl = ncv*ncv + 8*ncv;
-      //opserr << "now - ncv = " << ncv << ", lworkl = " << lworkl << endln;
-    }
+
     int processID = theArpackSOE->processID;
 
     // set up the space for ARPACK functions.
