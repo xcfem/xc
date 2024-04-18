@@ -18,35 +18,31 @@ __email__= "l.pereztato@gmail.com"
 NumDiv= 25
 CooMax= 10.0
 
+# Define problem type.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-
-# Problem type
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
-# Material
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
-
-
 # Problem geometry
-points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(geom.Pos3d(0,0,0))
-pt2= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= modelSpace.newKPoint(0,0,0)
+pt2= modelSpace.newKPoint(CooMax,CooMax,CooMax)
 
-lines= preprocessor.getMultiBlockTopology.getLines
-l= lines.newLine(pt1.tag,pt2.tag)
+l= modelSpace.newLine(pt1, pt2)
 l.nDiv= NumDiv
 
 testEqualOperator= (l==l)
 
 # Mesh generation
+## Define material
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
+## Define seed element.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 # Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= elast.name
 truss= seedElemHandler.newElement("Truss")
 truss.sectionArea= 10
-
+## Generate mesh.
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
