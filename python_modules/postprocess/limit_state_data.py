@@ -462,7 +462,8 @@ class LimitStateData(object):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
@@ -604,7 +605,8 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
     
@@ -659,7 +661,8 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
 
@@ -697,7 +700,8 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
 
@@ -731,7 +735,8 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
         
@@ -768,7 +773,8 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
         
@@ -803,7 +809,8 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
         
@@ -907,7 +914,8 @@ class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
         
@@ -925,7 +933,8 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
                 

@@ -577,7 +577,6 @@ class WallTopPlates(object):
         :param title: problem title.
         :param plateSection: plate section.
         :param nodes: node handler.
-        :param modelSpace: structural mechanics two-dimensional model of the plates.
         :param studSpacing: spacing of the studs that support the plates.
         :param trussSpacing: spacing of the trusses supported by the plates.
         :param pointLoadFactor: ??

@@ -23,7 +23,7 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
     def __init__(self, modelSpace, calcSet, reactionNodeSet, reactionCheckTolerance, deactivationCandidates, lstSteelBeams, softSteelMembers):
         ''' Constructor.
 
-        :param modelSpace: model space of the problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model.
         :param calcSet: element set to compute internal forces on.
         :param reactionNodeSet: node set to compute reactions on.
         :param reactionCheckTolerance: tolerance when checking reaction values.
@@ -193,7 +193,7 @@ class SimpleAISCAnalysisContext(AISCAnalysisContext):
     def __init__(self, modelSpace, calcSet, reactionNodes, reactionCheckTolerance, lstSteelBeams, softSteelMembers):
         ''' Constructor.
 
-        :param modelSpace: model space of the problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model.
         :param calcSet: element set to compute internal forces on.
         :param reactionNodes: nodes attached to the foundation.
         :param reactionCheckTolerance: tolerance when checking reaction values.

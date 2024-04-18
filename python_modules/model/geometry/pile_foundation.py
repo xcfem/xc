@@ -6,7 +6,8 @@ from model.mesh import finit_el_model as fem
 def gen_pile_cap_1column_4piles(modelSpace,nodCol,distXpile,distYpile,Hpilecap,nameSetStruts,nameSetTies):
     '''Generate pile cap for one column with a pile foundation of 4 piles. Return the two sets of elements generated (struts and ties)  and the nodes where piles start (topNodPiles)
 
-    :param modelSpace: model space
+    :param modelSpace: PredefinedSpace object used to create the FE model
+                       (see predefined_spaces.py).
     :param nodCol: node of the column
     :param distXpile: distance between piles in X direction
     :param distYpile: distance between piles in Y direction
@@ -67,7 +68,8 @@ def gen_pile_cap_1column_4piles(modelSpace,nodCol,distXpile,distYpile,Hpilecap,n
 def gen_pile_cap_Ncolumns_Nx2_piles(modelSpace,nodCols,distXpile,distYpile,Hpilecap,nameSetStruts,nameSetTies):
     '''Generate pile cap for N columns with a pile foundation of N (X direction) by  2 (Y direction) piles. Return the two sets of elements generated (struts and ties)  and the nodes where piles start (topNodPiles)
 
-    :param modelSpace: model space
+    :param modelSpace: PredefinedSpace object used to create the FE model
+                       (see predefined_spaces.py).
     :param nodCols: [nodeCol1,nodeCol2, ..., nodeColN] nodes of columns 1, 2, .., N in order of
                     increasing coordinate X.
     :param distXpile: distance between piles in X direction
@@ -113,7 +115,8 @@ def gen_pile_cap_Ncolumns_Nx2_piles(modelSpace,nodCols,distXpile,distYpile,Hpile
 def gen_pile_cap_2columns_4piles(modelSpace,nodCols,distXpile,distYpile,Hpilecap,nameSetStruts,nameSetTies):
     '''Generate pile cap for two columns with a pile foundation of 4 piles. Return the two sets of elements generated (struts and ties)  and the nodes where piles start (topNodPiles)
 
-    :param modelSpace: model space
+    :param modelSpace: PredefinedSpace object used to create the FE model
+                       (see predefined_spaces.py).
     :param nodCols: [nodeCol1,nodeCol2] nodes of columns 1 and 2 where X 
                     coordinate of node 1 is less than X coord. of node 2
     :param distXpile: distance between piles in X direction
@@ -183,7 +186,8 @@ def gen_pile_cap_2columns_4piles(modelSpace,nodCols,distXpile,distYpile,Hpilecap
 def gen_pile_cap_2columns_3X2Ypiles(modelSpace,nodCols,distXpile,distYpile,Hpilecap,nameSetStruts,nameSetTies):
     '''Generate pile cap for two columns with a pile foundation of 3 piles in X direction and 2 piles in Y direction. Return the two sets of elements generated (struts and ties) and the nodes where piles start (topNodPiles)
 
-    :param modelSpace: model space
+    :param modelSpace: PredefinedSpace object used to create the FE model
+                       (see predefined_spaces.py).
     :param nodCols: [nodeCol1,nodeCol2] nodes of columns 1 and 2 where X 
                   coordinate of node 1 is less than X coord. of node 2
     :param distXpile: distance between piles in X direction
@@ -269,7 +273,8 @@ def gen_pile_cap_2columns_3X2Ypiles(modelSpace,nodCols,distXpile,distYpile,Hpile
 def gen_piles(modelSpace,topNodPiles,pileDiam,pileLenght,pileMat,eSize,pileType,bearingCapPile,soils,nameSetPiles,alphaK=[1,1,1]):
     '''Generate piles that start in a pile-cap. Return the set of piles created.
 
-    :param modelSpace: model space
+    :param modelSpace: PredefinedSpace object used to create the FE model
+                       (see predefined_spaces.py).
     :param topNodPiles: nodes of the pile-cap where piles start.
     :param pileDiam: diameter of the pile.
     :param pileLenght: length of each pile.

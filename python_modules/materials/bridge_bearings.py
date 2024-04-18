@@ -248,11 +248,12 @@ class ElastomericBearing(Bearing):
             lmsg.warning(className+'.'+methodName+'; materials already defined, command ignored.')
             
 
-    def putBetweenNodes(self, modelSpace,iNodA:int, iNodB:int, orientation= None):
+    def putBetweenNodes(self, modelSpace, iNodA:int, iNodB:int, orientation= None):
         ''' Puts the bearing between the nodes. The element must be oriented so that its local x axis is in the direction of the longitudinal axis of the bridge and its local y axis parallel to the transverse axis of the transverse axis of the bridge.
 
 
-        :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         :param iNodA (int): first node identifier (tag).
         :param iNodB (int): second node identifier (tag).
         :param orientation: (list) of two vectors [x,yp] used to orient 
@@ -271,9 +272,10 @@ class ElastomericBearing(Bearing):
     def putAsSupport(self,modelSpace, iNod:int , orientation= None):
         ''' Puts the bearing between the nodes.
 
-            :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
-            :param iNod (int): node to support.
-
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        :param iNod (int): node to support.
+        :param orientation: orientation of the new element.
         '''
         nodeHandler= modelSpace.getNodeHandler()
         newNode= nodeHandler.duplicateNode(iNod) # new node.

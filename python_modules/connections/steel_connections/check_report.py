@@ -450,7 +450,7 @@ def gen_vonmises_results_baseplates(sets2disp,modelSpace,genDescr,specDescr,repo
     together with the tex file to include them in a report.
 
     :param sets2disp: sets of elements to display successively
-    :param modelSpace: model-space
+    :param modelSpace: PredefinedSpace object used to create the FE model.
     :param genDescr: general description
     :param specDescr: specific description
     :param reportPath: directory where report is to be generated

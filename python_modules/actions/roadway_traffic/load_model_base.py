@@ -851,7 +851,8 @@ class NotionalLanes(object):
         ''' Creates the XC sets with the elements that fall inside
             each of the notional lanes of the argument.
 
-        :param modelSpace: model space used to define the FE problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         :param originSet: set with the elements to pick from.
         '''
         self.laneSets= list()

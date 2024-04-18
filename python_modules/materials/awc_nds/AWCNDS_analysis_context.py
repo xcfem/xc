@@ -19,7 +19,8 @@ class AnalysisContext(analysis_context.AnalysisContextBase):
     def __init__(self, modelSpace, calcSet, reactionNodeSet, reactionCheckTolerance, deactivationCandidates, bucklingMembers, silent= False):
         ''' Constructor.
 
-        :param modelSpace: model space of the problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         :param calcSet: element set to compute internal forces on.
         :param reactionNodeSet: node set to compute reactions on.
         :param reactionCheckTolerance: tolerance when checking reaction values.
@@ -182,7 +183,8 @@ class SimpleAnalysisContext(AnalysisContext):
     def __init__(self, modelSpace, calcSet, bucklingMembers, reactionNodes= None, reactionCheckTolerance= None, silent= False):
         ''' Constructor.
 
-        :param modelSpace: model space of the problem.
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         :param calcSet: element set to compute internal forces on.
         :param reactionNodes: nodes attached to the foundation.
         :param reactionCheckTolerance: tolerance when checking reaction values.

@@ -32,8 +32,8 @@ class OutputHandler(object):
         '''Defines the dimension of the space and the number 
          of DOFs for each node.
 
-         :param modelSpace: FE model data
-         :param outputStyle: style of the output.
+        :param modelSpace: PredefinedSpace object used to create the FE model.
+        :param outputStyle: style of the output.
         '''
         self.modelSpace= modelSpace
         self.outputStyle= outputStyle

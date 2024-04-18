@@ -309,7 +309,8 @@ class LoadCaseDispParameters(RecordDisp):
         '''Creates the graphics files of loads for the load case and insert
            them in a LaTex file
 
-        :param modelSpace: model space object (see predefined_spaces.py).
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
         :param texFile:    laTex file where to include the graphics 
                            (e.g.:'text/report_loads.tex')
         :param cfg: instance of EnvConfig class with config parameters
