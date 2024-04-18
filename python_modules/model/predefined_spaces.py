@@ -493,8 +493,12 @@ class PredefinedSpace(object):
         return self.preprocessor.getMultiBlockTopology.getPoints.getNearest(pos3d)
 
     def getLoadHandler(self):
-        ''' Return the preprocessor material handler.'''
+        ''' Return the preprocessor load handler.'''
         return self.preprocessor.getLoadHandler
+
+    def getLoadCombinationsHandler(self):
+        ''' Return the preprocessor load combinations handler.'''
+        return self.getLoadHandler().getLoadCombinations
 
     def getCurrentTime(self):
         ''' Return the value of the current pseudo-time.'''
