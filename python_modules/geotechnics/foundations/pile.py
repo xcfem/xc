@@ -16,6 +16,76 @@ from materials.sections import section_properties as sp
 from materials import typical_materials
 from model import predefined_spaces
 
+def get_node_zs(nodes):
+    ''' Return a list of tuples containing the (node, z) paris with the z 
+        coordinate sorted in descending order.'''
+    def takeSecond(tupla):
+       return tupla[1]
+    retval= [(n,n.get3dCoo[2]) for n in nodes]
+    retval.sort(key=takeSecond, reverse=True) # y in descending order
+    return retval
+
+def get_node_ys(nodes):
+    ''' Return a list of tuples containing the (node, y) paris with the y 
+        coordinate sorted in descending order.'''
+    def takeSecond(tupla):
+       return tupla[1]
+    retval= [(n,n.get3dCoo[1]) for n in nodes]
+    retval.sort(key=takeSecond, reverse=True) # y in descending order
+    return retval
+
+def generate_springs_pile_2d(modelSpace, nodes, linearSpringsConstants):
+    '''Generate the springs that simulate the soils along the pile in a 2D
+       problem.
+
+    :param modelSpace: PredefinedSpace object used to create the FE model
+                       (see predefined_spaces.py).
+    :param nodes: nodes that will be attached by the springs.
+    :param linearSpringsConstants: dictionary containing the linear spring
+                                   constants corresponding to each node.
+    '''
+    #init spring elastic materials
+    prep= modelSpace.preprocessor
+    springX= typical_materials.defElasticMaterial(prep,'springX',1e-5)
+    springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
+    retval= list() # Spring elements.
+    modelSpace= predefined_spaces.getModelSpace(prep)
+    for n in nodes:
+        if(n.tag in linearSpringsConstants):
+            k_i= linearSpringsConstants[n.tag]
+            springX.E= k_i[0] # horizontal component.
+            springY.E= k_i[1] # vertical component.
+            newNode, newElement= modelSpace.setBearing(n.tag, [springX.name, springY.name])
+            retval.append(newElement) # append the "spring" element.
+    return retval
+
+def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants):
+    '''Generate the springs that simulate the soils along the pile in a 3D
+       problem.
+
+    :param modelSpace: PredefinedSpace object used to create the FE model
+                       (see predefined_spaces.py).
+    :param nodes: nodes that will be attached by the springs.
+    :param linearSpringsConstants: dictionary containing the linear spring
+                                   constants corresponding to each node.
+    '''
+    #init spring elastic materials
+    prep= modelSpace.preprocessor
+    springX= typical_materials.defElasticMaterial(prep,'springX',1e-5)
+    springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
+    springZ= typical_materials.defElasticMaterial(prep,'springZ',1e-5)
+    retval= list() # Spring elements.
+    modelSpace= predefined_spaces.getModelSpace(prep)
+    for n in nodes:
+        if(n.tag in linearSpringsConstants):
+            k_i= linearSpringsConstants[n.tag]
+            springX.E= k_i[0]
+            springY.E= k_i[1]
+            springZ.E= k_i[2]
+            newNode, newElement= modelSpace.setBearing(n.tag,['springX','springY','springZ'])
+            retval.append(newElement) # append the "spring" element.
+    return retval
+
 class SoilLayers(object):
     ''' Base class for soil horizons in pile computations.
 
@@ -160,20 +230,12 @@ class Pile(object):
     def getNodeZs(self):
         ''' Return a list of tuples containing the node an its z coordinate
             sorted in descending order.'''
-        def takeSecond(tupla):
-           return tupla[1]
-        retval= [(n,n.get3dCoo[2]) for n in self.pileSet.nodes]
-        retval.sort(key=takeSecond,reverse=True) # y in descending order
-        return retval
+        return get_node_zs(nodes= self.pileSet.nodes)
     
     def getNodeYs(self):
         ''' Return a list of tuples containing the node an its z coordinate
             sorted in descending order.'''
-        def takeSecond(tupla):
-           return tupla[1]
-        retval= [(n,n.get3dCoo[1]) for n in self.pileSet.nodes]
-        retval.sort(key=takeSecond,reverse=True) # y in descending order
-        return retval
+        return get_node_ys(nodes= self.pileSet.nodes)
     
     def getLinearSpringsConstants2D(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
         '''Compute the spring contants that simulate the soils along the pile 
@@ -217,19 +279,10 @@ class Pile(object):
         # Compute the 3D spring constants and ignore the second horizontal
         # component.
         linearSpringsConstants= self.getLinearSpringsConstants2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_y)
-        #init spring elastic materials
         prep= self.pileSet.getPreprocessor
-        springX= typical_materials.defElasticMaterial(prep,'springX',1e-5)
-        springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
-        self.springs= list() # Spring elements.
         modelSpace= predefined_spaces.getModelSpace(prep)
-        for n in self.pileSet.nodes:
-            if(n.tag in linearSpringsConstants):
-                k_i= linearSpringsConstants[n.tag]
-                springX.E= k_i[0] # horizontal component.
-                springY.E= k_i[1] # vertical component.
-                newNode, newElement= modelSpace.setBearing(n.tag, [springX.name, springY.name])
-                self.springs.append(newElement) # append the "spring" element.
+        self.springs= generate_springs_pile_2d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants) 
+
     
     def generateSpringsPile3D(self, alphaKh_x, alphaKh_y, alphaKv_z):
         '''Generate the springs that simulate the soils along the pile in a 3D
@@ -243,21 +296,9 @@ class Pile(object):
                           a single pile in Z direction
         '''
         linearSpringsConstants= self.getLinearSpringsConstants3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z)
-        #init spring elastic materials
         prep= self.pileSet.getPreprocessor
-        springX= typical_materials.defElasticMaterial(prep,'springX',1e-5)
-        springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
-        springZ= typical_materials.defElasticMaterial(prep,'springZ',1e-5)
-        self.springs= list() # Spring elements.
         modelSpace= predefined_spaces.getModelSpace(prep)
-        for n in self.pileSet.nodes:
-            if(n.tag in linearSpringsConstants):
-                k_i= linearSpringsConstants[n.tag]
-                springX.E= k_i[0]
-                springY.E= k_i[1]
-                springZ.E= k_i[2]
-                newNode, newElement= modelSpace.setBearing(n.tag,['springX','springY','springZ'])
-                self.springs.append(newElement) # append the "spring" element.
+        self.springs= generate_springs_pile_3d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants)
         
     def generateSpringsPile(self, alphaKh_x, alphaKh_y, alphaKv_z):
         '''Generate the springs that simulate the soils along the pile
