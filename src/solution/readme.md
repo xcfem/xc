@@ -54,3 +54,7 @@ This folder contains the code that deals with the solution of the finite element
 ### PFEM
 PFEM has not been migrated from OpenSees yet.
 - [The PFEM in OpenSees](https://portwooddigital.com/2023/11/06/the-pfem-in-opensees/)
+
+### Less common problems
+
+- [Solving when all DOFs are constained: Most Solvers Can Be Marplots](https://portwooddigital.com/2020/08/27/most-solvers-can-be-marplots/)

@@ -11,3 +11,7 @@ A UniaxialMaterial object represents uniaxial stress-strain (or force-deformatio
 - [Parallel material](https://opensees.berkeley.edu/wiki/index.php/Parallel_Material)
 - [Elastic-Perfectly Plastic Material](https://opensees.berkeley.edu/wiki/index.php/Elastic-Perfectly_Plastic_Material)
 - [Concrete Zero](https://portwooddigital.com/2023/07/09/concrete-zero/)
+
+## Material testing
+
+- [Material Testing with White Noise](https://portwooddigital.com/2024/04/21/material-testing-with-white-noise/)
