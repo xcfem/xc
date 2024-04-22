@@ -32,7 +32,7 @@ scc10x20.nDivJK= 32 # number of cells in JK direction
 
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
+    pth= "."
 sys.path.append(pth+"/../../../../../../aux/")
 import fiber_section_test_macros
 
@@ -70,6 +70,7 @@ EA= matStiffnessMatrix(0,0)
 EARef= fiber_section_test_macros.sumAreas*E
 EI= matStiffnessMatrix(1,1)
 EIRef= scc10x20.Iz()*E
+EIz= rectang.EIz()
 
 # Check quantities:
 referenceCenterOfMassY= 0.0
@@ -84,13 +85,14 @@ ratio7= (fiber_section_test_macros.SzPosG-scc10x20.getPlasticSectionModulusZ())/
 ratio8= ((scc10x20.getPlasticMomentZ(fy)-Mp1)/scc10x20.getPlasticMomentZ(fy))
 ratio9= abs(EA-EARef)/EARef
 ratio10= abs(EI-EIRef)/EIRef
+ratio11= abs(EIz-EIRef)/EIRef
 
 '''
 print('EA= ', EA)
 print('EARef= ', EARef)
 print('EI= ', EI)
+print('EIz= ', EIz)
 print('EIRef= ', EIRef)
-print('I1= ', I1)
 print('Iz= ', scc10x20.Iz())
 print('ratio1= ', ratio1)
 print('ratio2= ', ratio2)
@@ -102,11 +104,12 @@ print('ratio7= ', ratio7)
 print('ratio8= ', ratio8)
 print('ratio9= ', ratio9)
 print('ratio10= ', ratio10)
+print('ratio11= ', ratio11)
 '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-2) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-2) & (abs(ratio7)<1e-12) & (abs(ratio8)<1e-12) & (abs(ratio9)<1e-12) & (abs(ratio10)<1e-2):
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-2) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-2) & (abs(ratio7)<1e-12) & (abs(ratio8)<1e-12) & (abs(ratio9)<1e-12) & (abs(ratio10)<1e-2) & (abs(ratio11)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

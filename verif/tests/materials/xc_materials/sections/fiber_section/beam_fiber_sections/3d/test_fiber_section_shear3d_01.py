@@ -47,7 +47,7 @@ preprocessor=  feProblem.getPreprocessor
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy) # elastic perfectly-plastic uniaxial material
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear response in y direction.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear response in z direction.
 # Section geometry
 # creation
 geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
@@ -59,9 +59,9 @@ fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomRectang.name)
 sa.setupFibers()
 fiber_section_test_macros.extractFiberSectionProperties(sa,scc10x20, fy)
-sa.setRespVyByName(respVy.name)
-sa.setRespVzByName(respVz.name)
-sa.setRespTByName(respT.name)
+sa.setRespVyByName(respVy.name) # Set shear response in y direction.
+sa.setRespVzByName(respVz.name) # Set shear response in z direction.
+sa.setRespTByName(respT.name) # Set torsion response.
 
 zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, sa.name)
 

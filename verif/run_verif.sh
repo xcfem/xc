@@ -1055,6 +1055,20 @@ python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_regi
 echo "$BLEU" "      Compound sections." "$NORMAL"
 python tests/materials/xc_materials/sections/test_compound_section_01.py
 python tests/materials/xc_materials/sections/test_compound_section_02.py
+echo "$BLEU" "      Section stiffness." "$NORMAL"
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_01.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_02.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_03.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_04.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_05.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_06.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_07.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_08.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_09.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_10.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_11.py
+python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_12.py
+
 echo "$BLEU" "      Elastic section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_2d_sign_convention_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_2d_01.py
@@ -1062,7 +1076,6 @@ python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_3d_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_section_3d_01.py
-python tests/materials/xc_materials/sections/elastic_section/test_tangent_stiffness_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_03.py
@@ -1070,7 +1083,6 @@ python tests/materials/xc_materials/sections/elastic_section/test_section_rotati
 python tests/materials/xc_materials/sections/elastic_section/test_section_properties_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_properties_02.py
 echo "$BLEU" "      Fiber section tests." "$NORMAL"
-python tests/materials/xc_materials/sections/fiber_section/test_tangent_stiffness_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_reg_cuad_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_straight_reinf_layer_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber2d_01.py
