@@ -79,6 +79,26 @@ class SteelShape(sp.SectionProperties):
     def A(self):
         '''return cross-sectional area'''
         return self.get('A')
+    
+    def Avy(self):
+        '''return shear area along y axis'''
+        return self.get('Avy')
+    
+    def Avz(self):
+        '''return shear area along z axis'''
+        return self.get('Avz')
+
+    def EA(self):
+        '''return cross-sectional axial stiffness.'''
+        return self.steelType.E*self.A()
+    
+    def GAy(self):
+        '''return cross-sectional shear stiffness along y axis.'''
+        return self.steelType.G()*self.Avy()
+    
+    def GAz(self):
+        '''return cross-sectional shear stiffness along y axis.'''
+        return self.steelType.G()*self.Avz()
 
     def Iy(self):
         '''return second moment of area about y-axis (weak axis)'''
@@ -171,7 +191,10 @@ class SteelShape(sp.SectionProperties):
     
     def alphaZ(self):
         '''return shear shape factor with respect to z-axis (strong axis)'''
-        return 1.0-self.alphaY()
+        retval= 1e-6
+        if('Avz' in self.shape):
+            retval= self.get('Avz')/self.A()
+        return retval
 
 #Avz is not usually defined for steel sections
 #    def alphaZ(self):
@@ -304,7 +327,7 @@ class SteelShape(sp.SectionProperties):
         '''
         return super(SteelShape,self).defElasticSection3d(preprocessor, self.steelType, overrideRho= overrideRho)
     
-    def defElasticShearSection3d(self,preprocessor, overrideRho= None):
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
         '''elastic section appropriate for 3D beam analysis, including shear 
            deformations
 
