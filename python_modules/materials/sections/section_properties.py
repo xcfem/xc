@@ -548,6 +548,14 @@ class RectangularSection(SectionProperties):
     def A(self):
         '''Return cross-sectional area of the section'''
         return self.b*self.h
+
+    def Ay(self):
+        '''Return the corrected area for shear along y axis.'''
+        return 5.0/6.0*self.A()
+
+    def Az(self):
+        '''Return the corrected area for shear along z axis.'''
+        return 5.0/6.0*self.A()
   
     def hCOG(self):
         '''Return distance from the bottom fiber to the 
@@ -568,6 +576,10 @@ class RectangularSection(SectionProperties):
     def Iz(self):
         '''Return second moment of area about the local z-axis'''
         return 1/12.0*self.b*self.h**3
+
+    def Iyz(self):
+        '''Return the product of inertia about the local axes.'''
+        return 0.0
   
     def J(self):
         '''Return torsional constant of the section'''
