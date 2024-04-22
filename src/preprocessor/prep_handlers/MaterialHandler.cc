@@ -489,21 +489,21 @@ XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::Mater
       retval= new XC::ElasticSection1d(tag_mat,mhandler);
     else if(cmd == "elastic_section_2d")
       retval= new XC::ElasticSection2d(tag_mat,mhandler);
-    else if(cmd == "elasticShearSection2d")
+    else if((cmd == "elasticShearSection2d") || (cmd == "elastic_shear_section_2d"))
       retval= new XC::ElasticShearSection2d(tag_mat,mhandler);
     else if(cmd == "elastic_section_3d")
       retval= new XC::ElasticSection3d(tag_mat,mhandler);
-    else if(cmd == "elasticShearSection3d")
+    else if((cmd == "elasticShearSection3d")  || (cmd == "elastic_shear_section_3d"))
       retval= new XC::ElasticShearSection3d(tag_mat,mhandler);
     else if(cmd == "fiber_section_2d")
       retval= new XC::FiberSection2d(tag_mat,mhandler);
-    else if(cmd == "fiberSectionShear2d")
+    else if(cmd == "fiberSectionShear2d" || (cmd == "fiber_section_shear_2d"))
       retval= new XC::FiberSectionShear2d(tag_mat,mhandler);
     else if(cmd == "fiber_section_3d")
       retval= new XC::FiberSection3d(tag_mat,mhandler);
     else if(cmd == "fiber_section_GJ")
       retval= new XC::FiberSectionGJ(tag_mat,mhandler);
-    else if(cmd == "fiberSectionShear3d")
+    else if((cmd == "fiberSectionShear3d") || (cmd == "fiber_section_shear_3d"))
       retval= new XC::FiberSectionShear3d(tag_mat,mhandler);
     else if(cmd == "generic_section_1d")
       retval= new XC::GenericSection1d(tag_mat);
