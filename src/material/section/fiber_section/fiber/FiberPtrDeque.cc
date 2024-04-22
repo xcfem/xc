@@ -2023,9 +2023,9 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSectionGJ &SectionGJ,CrossSecti
     krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
-    krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
+    krGJ.kData[15]= SectionGJ.GJ(); //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
 
-    krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
+    krGJ.rData[3]= SectionGJ.GJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
     return 0;
   }
 
@@ -2078,9 +2078,9 @@ int XC::FiberPtrDeque::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,Cros
     krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
-    krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
+    krGJ.kData[15]= SectionGJ.GJ(); //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
 
-    krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
+    krGJ.rData[3]= SectionGJ.GJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
     return retval;
   }
 
@@ -2141,7 +2141,7 @@ const XC::Matrix &XC::FiberPtrDeque::getInitialTangent(const FiberSectionGJ &Sec
     kInitialData[8]= kInitialData[2]; //Symmetry.
     kInitialData[9]= kInitialData[6]; //Symmetry.
 
-    kInitialData[15]= SectionGJ.GJ; //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
+    kInitialData[15]= SectionGJ.GJ(); //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
     return kInitial;
   }
 

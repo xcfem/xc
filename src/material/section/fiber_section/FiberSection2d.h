@@ -97,6 +97,7 @@ class FiberSection2d: public FiberSectionBase
     virtual void setupFibers(void);
 
     const Matrix &getInitialTangent(void) const;
+    virtual const double &EIz(void) const;
 
     int revertToLastCommit(void);    
     int revertToStart(void);

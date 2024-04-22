@@ -94,6 +94,10 @@ class FiberSectionShear3d: public FiberSection3d
     SectionForceDeformation *getCopy(void) const;
     const ResponseId &getResponseType(void) const;
     int getOrder(void) const;
+    
+    virtual const double &GJ(void) const;
+    virtual const double &GAy(void) const;
+    virtual const double &GAz(void) const;
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

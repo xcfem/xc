@@ -85,6 +85,11 @@ class ElasticShearSection3d: public BaseElasticSection3d
     const Matrix &getInitialTangent(void) const;
     const Matrix &getSectionFlexibility(void) const;
     const Matrix &getInitialFlexibility(void) const;
+    virtual const double &EIy(void) const;
+    virtual const double &EIyz(void) const;
+    virtual const double &GJ(void) const;
+    virtual const double &GAy(void) const;
+    virtual const double &GAz(void) const;
   
     SectionForceDeformation *getCopy(void) const;
     const ResponseId &getResponseType(void) const;

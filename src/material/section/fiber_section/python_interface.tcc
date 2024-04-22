@@ -83,7 +83,9 @@ class_<XC::FiberSection3dBase , bases<XC::FiberSectionBase>, boost::noncopyable 
 
 class_<XC::FiberSection3d, bases<XC::FiberSection3dBase>, boost::noncopyable >("FiberSection3d", no_init);
 
-class_<XC::FiberSectionGJ, bases<XC::FiberSection3dBase>, boost::noncopyable >("FiberSectionGJ", no_init);
+class_<XC::FiberSectionGJ, bases<XC::FiberSection3dBase>, boost::noncopyable >("FiberSectionGJ", no_init)
+  .def("setGJ",&XC::FiberSectionGJ::setGJ, "Assigns the value of the torsional stiffness GJ.")
+  ;
 
 class_<XC::FiberSectionShear3d , bases<XC::FiberSection3d>, boost::noncopyable >("FiberSectionShear3d", no_init)
   .def("setRespVyByName",&XC::FiberSectionShear3d::setRespVyByName)

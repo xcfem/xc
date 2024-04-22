@@ -73,7 +73,7 @@ class FiberSectionRepr;
 class FiberSectionGJ: public FiberSection3dBase
   {
   private:
-    double GJ;
+    double gj;
   protected:
     friend class FiberPtrDeque;
  
@@ -89,8 +89,10 @@ class FiberSectionGJ: public FiberSection3dBase
 
     virtual void setupFibers(void);
 
-    inline const double &getGJ(void) const
-      { return GJ; }
+    inline virtual const double &GJ(void) const
+      { return gj; }
+    inline void setGJ(const double &gj_)
+      { this->gj= gj_; }
     const Matrix &getInitialTangent(void) const;
 
     int revertToLastCommit(void);
@@ -106,7 +108,7 @@ class FiberSectionGJ: public FiberSection3dBase
 
   };
 
-FiberSectionGJ FiberSectionReprToFiberSectionGJ(const int &tag,const FiberSectionRepr &fiberSectionRepr,const double &GJ);
+FiberSectionGJ FiberSectionReprToFiberSectionGJ(const int &,const FiberSectionRepr &,const double &);
 
 
 } // end of XC namespace

@@ -92,6 +92,19 @@ XC::Fiber *XC::FiberSection3dBase::addFiber(int tag,const MaterialHandler &ldr,c
     return retval;
   }
 
+//! @brief Returns the bending stiffness of the cross-section with respect to eht y axis.
+const double &XC::FiberSection3dBase::EIy(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(2, 2);
+  }
+
+//! @brief Returns the product of inertia multiplied by the Young modulus.
+const double &XC::FiberSection3dBase::EIyz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(1,2);
+  }
 int XC::FiberSection3dBase::updateParameter(int parameterID, Information &info)
   {
     int ok= -1;

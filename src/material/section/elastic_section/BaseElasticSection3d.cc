@@ -90,6 +90,34 @@ double XC::BaseElasticSection3d::getStrain(const double &y,const double &z) cons
     return (def(0) + y*def(1) + z*def(2));
   }
 
+//! @brief Returns the bending stiffness of the cross-section around the z axis.
+const double &XC::BaseElasticSection3d::EIz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(1,1);
+  }
+
+//! @brief Returns the bending stiffness of the cross-section with respect to eht y axis.
+const double &XC::BaseElasticSection3d::EIy(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(2, 2);
+  }
+
+//! @brief Returns the product of inertia multiplied by the Young modulus.
+const double &XC::BaseElasticSection3d::EIyz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(1,2);
+  }
+
+//! @brief Returns the torsional stiffness.
+const double &XC::BaseElasticSection3d::GJ(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(3,3);
+  }
+
 //! @brief Setst the mass properties of the section.
 void XC::BaseElasticSection3d::setCrossSectionProperties(const CrossSectionProperties3d &cs)  
   { ctes_scc= cs; }

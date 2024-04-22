@@ -71,6 +71,8 @@ class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::S
   .add_property("deformationPlane", &XC::PrismaticBarCrossSection::getDeformationPlane, &XC::PrismaticBarCrossSection::setTrialDeformationPlane,"section deformation plane.")
   .add_property("initialDeformationPlane", &XC::PrismaticBarCrossSection::getInitialDeformationPlane, &XC::PrismaticBarCrossSection::setInitialDeformationPlane,"initial section deformation plane.")
   .def("EA", make_function(&XC::PrismaticBarCrossSection::EA, return_value_policy<copy_const_reference>() ), "return axial stiffness.")
+  .def("GAy", make_function(&XC::PrismaticBarCrossSection::GAy, return_value_policy<copy_const_reference>() ), " return shear stiffness on y axis.")
+  .def("GAz", make_function(&XC::PrismaticBarCrossSection::GAz, return_value_policy<copy_const_reference>() ), " return shear stiffness on z axis.")
   .def("EIz", make_function(&XC::PrismaticBarCrossSection::EIz, return_value_policy<copy_const_reference>() ), " return bending stiffness around z axis.")
   .def("EIy", make_function(&XC::PrismaticBarCrossSection::EIy, return_value_policy<copy_const_reference>() ), " return bending stiffness around y axis.")
   .def("EIyz", make_function(&XC::PrismaticBarCrossSection::EIyz, return_value_policy<copy_const_reference>() ), " return the product of inertia multiplied by the Young modulus.")

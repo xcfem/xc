@@ -221,6 +221,13 @@ const XC::Vector &XC::FiberSectionShear2d::getStressResultant(void) const
     return s;
   }
 
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::FiberSectionShear2d::GAy(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(2,2);
+  }
+
 //! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::FiberSectionShear2d::getCopy(void) const
   { return new FiberSectionShear2d(*this); }

@@ -71,15 +71,15 @@
 
 //! @brief Constructor.
 XC::FiberSectionGJ::FiberSectionGJ(int tag,const fiber_list &fiberList, double gj,XC::MaterialHandler *mat_ldr)
-  : FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,fiberList,mat_ldr), GJ(gj)
+  : FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,fiberList,mat_ldr), gj(gj)
   { fibers.setup(*this,fiberList,kr); }
 
 XC::FiberSectionGJ::FiberSectionGJ(int tag,MaterialHandler *mat_ldr)
-  : FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,mat_ldr),GJ(1.0) {}
+  : FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,mat_ldr),gj(1.0) {}
 
 //! @brief Constructor for blank object that recvSelf needs to be invoked upon
 XC::FiberSectionGJ::FiberSectionGJ(MaterialHandler *mat_ldr):
-  FiberSection3dBase(0,SEC_TAG_FiberSectionGJ,4,mat_ldr), GJ(1.0) {}
+  FiberSection3dBase(0,SEC_TAG_FiberSectionGJ,4,mat_ldr), gj(1.0) {}
 
 void XC::FiberSectionGJ::setupFibers(void)
   {
@@ -147,11 +147,11 @@ void XC::FiberSectionGJ::Print(std::ostream &s, int flag) const
   {
     s << "\nFiberSectionGJ, tag: " << this->getTag() << std::endl;
     s << "\tSection code: " << getResponseType();
-    s << "\tTorsional Stiffness: " << GJ << std::endl;
+    s << "\tTorsional Stiffness: " << gj << std::endl;
 
     if(flag == 1)
       fibers.Print(s,flag);
   }
 
-XC::FiberSectionGJ XC::FiberSectionReprToFiberSectionGJ(const int &tag,const XC::FiberSectionRepr &fiberSectionRepr,const double &GJ)
-  { return fiberSectionRepr.getFiberSectionGJ(tag,GJ); }
+XC::FiberSectionGJ XC::FiberSectionReprToFiberSectionGJ(const int &tag,const XC::FiberSectionRepr &fiberSectionRepr,const double &gj)
+  { return fiberSectionRepr.getFiberSectionGJ(tag,gj); }

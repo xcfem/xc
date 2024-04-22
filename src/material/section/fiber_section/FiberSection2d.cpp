@@ -156,6 +156,7 @@ int XC::FiberSection2d::setTrialSectionDeformation(const Vector &deforms)
 const XC::Matrix &XC::FiberSection2d::getInitialTangent(void) const
   { return fibers.getInitialTangent(*this); }
 
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::FiberSection2d::getCopy(void) const
   { return new FiberSection2d(*this); }
 
@@ -164,6 +165,13 @@ const XC::ResponseId &XC::FiberSection2d::getResponseType(void) const
 
 int XC::FiberSection2d::getOrder(void) const
   { return getResponseType().Size(); }
+
+//! @brief Returns the bending stiffness of the cross-section around the z axis.
+const double &XC::FiberSection2d::EIz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(1,1);
+  }
 
 //! @brief Returns the section to its last committed state.
 int XC::FiberSection2d::revertToLastCommit(void)

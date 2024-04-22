@@ -46,6 +46,7 @@
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
 #include "utility/utils/misc_utils/inertia.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,MaterialHandler *mat_ldr)
@@ -100,8 +101,9 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getDeformationPlane(void) con
 //! @brief Returns strain at position being passed as parameter.
 double XC::PrismaticBarCrossSection::getStrain(const double &y,const double &z) const
   {
-    std::cerr << "getStrain not implemented for class: "
-              << getClassName() << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "not implemented."
+              << Color::def << std::endl;
     return 0.0;
   }
 
@@ -144,16 +146,71 @@ const double &XC::PrismaticBarCrossSection::EA(void) const
   { return getSectionTangent()(0,0); }
 //! @brief Returns the bending stiffness of the cross-section en torno the z axis.
 const double &XC::PrismaticBarCrossSection::EIz(void) const
-  { return getSectionTangent()(1,1); }
-//! @brief Returns the bending stiffness of the cross-section en torno the y axis.
+  {
+    const Matrix &tang= this->getSectionTangent();
+    const size_t sz= tang.noRows();
+    if(sz<2)
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; this section has not inertia."
+                  << Color::def << std::endl;
+	exit(-1);
+      }
+    return tang(1,1);
+  }
+//! @brief Returns the bending stiffness of the cross-section with respect to eht y axis.
 const double &XC::PrismaticBarCrossSection::EIy(void) const
-  { return getSectionTangent()(2,2); }
+  {
+    static const double retval= -1.0; 
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    exit(-1);
+    return retval;
+  }
 //! @brief Returns the product of inertia multiplied by the Young modulus.
 const double &XC::PrismaticBarCrossSection::EIyz(void) const
-  { return getSectionTangent()(1,2); }
+  {
+    static const double retval= -1.0; 
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    exit(-1);
+    return retval;
+  }
+
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::PrismaticBarCrossSection::GAy(void) const
+  {
+    static const double retval= -1.0; 
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    exit(-1);
+    return retval;
+  }
+  
+//! @brief Returns the shear stiffness along z axis.
+const double &XC::PrismaticBarCrossSection::GAz(void) const
+  {
+    static const double retval= -1.0; 
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    exit(-1);
+    return retval;
+  }
+
 //! @brief Returns the torsional stiffness.
 const double &XC::PrismaticBarCrossSection::GJ(void) const
-  { return getSectionTangent()(3,3); }
+  {
+    static const double retval= -1.0; 
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    exit(-1);
+    return retval;
+  }
 
 //! @brief Returns the angle that defines the principal axis of inertia.
 double XC::PrismaticBarCrossSection::getTheta(void) const

@@ -73,17 +73,17 @@ bool XC::CrossSectionProperties3d::check_values(void)
 
 //! @brief Constructor.
 XC::CrossSectionProperties3d::CrossSectionProperties3d(void)
-  :CrossSectionProperties2d(), iy(0), iyz(0), j(0), alpha_z(0) {}
+  : CrossSectionProperties2d(), iy(0), iyz(0), j(0), alpha_z(0) {}
 
 //! @brief Constructor.
 XC::CrossSectionProperties3d::CrossSectionProperties3d(double E_in, double A_in, double Iz_in, double Iy_in, double G_in, double J_in, double ay, double az, double r)
-  : CrossSectionProperties2d(E_in,A_in,Iz_in,G_in, ay, r), iy(Iy_in),
+  : CrossSectionProperties2d(E_in, A_in, Iz_in, G_in, ay, r), iy(Iy_in),
     iyz(0), j(J_in), alpha_z(az)
   { check_values(); }
 
 //! @brief Constructor.
 XC::CrossSectionProperties3d::CrossSectionProperties3d(double EA_in, double EIz_in, double EIy_in, double GJ_in)
-  : CrossSectionProperties2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in), alpha_z(0)
+  : CrossSectionProperties2d(EA_in, EIz_in), iy(EIy_in), iyz(0), j(GJ_in), alpha_z(0)
   { check_values(); }
 
 //! @brief Constructor.

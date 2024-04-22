@@ -80,6 +80,14 @@ double XC::BaseElasticSection2d::getStrain(const double &y,const double &z) cons
     return (def(0) + y*def(1));
   }
 
+//! @brief Returns the bending stiffness of the cross-section around the z axis.
+const double &XC::BaseElasticSection2d::EIz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(1,1);
+  }
+
+
 //! @brief Send object members through the communicator argument.
 int XC::BaseElasticSection2d::sendData(Communicator &comm)
   {

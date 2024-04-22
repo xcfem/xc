@@ -75,6 +75,7 @@ class FiberSectionShear2d: public FiberSection2d
     const Matrix &getInitialTangent(void) const;
     const Matrix &getSectionFlexibility(void) const;
     const Matrix &getInitialFlexibility(void) const;
+    virtual const double &GAy(void) const;
 
     int commitState(void);
     int revertToLastCommit(void);    

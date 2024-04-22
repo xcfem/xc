@@ -87,7 +87,7 @@ const XC::Matrix &XC::ElasticShearSection2d::getSectionFlexibility(void) const
 const XC::Matrix &XC::ElasticShearSection2d::getInitialFlexibility(void) const
   { return getSectionFlexibility(); }
 
-
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::ElasticShearSection2d::getCopy(void) const
   { return new ElasticShearSection2d(*this); }
 
@@ -96,6 +96,13 @@ const XC::ResponseId &XC::ElasticShearSection2d::getResponseType(void) const
 
 int XC::ElasticShearSection2d::getOrder(void) const
   { return 3; }
+
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::ElasticShearSection2d::GAy(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(2,2);
+  }
 
 //! @brief Send object members through the communicator argument.
 int XC::ElasticShearSection2d::sendData(Communicator &comm)

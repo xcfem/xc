@@ -92,6 +92,42 @@ const XC::Matrix &XC::ElasticShearSection3d::getSectionFlexibility(void) const
 const XC::Matrix &XC::ElasticShearSection3d::getInitialFlexibility(void) const
   { return ctes_scc.getInitialFlexibility6x6(); }
 
+//! @brief Returns the bending stiffness of the cross-section with respect to eht y axis.
+const double &XC::ElasticShearSection3d::EIy(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(3, 3);
+  }
+
+//! @brief Returns the product of inertia multiplied by the Young modulus.
+const double &XC::ElasticShearSection3d::EIyz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(1,3);
+  }
+
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::ElasticShearSection3d::GAy(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(2,2);
+  }
+
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::ElasticShearSection3d::GAz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(4,4);
+  }
+
+//! @brief Returns the torsional stiffness.
+const double &XC::ElasticShearSection3d::GJ(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(5,5);
+  }
+
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::ElasticShearSection3d::getCopy(void) const
   { return new ElasticShearSection3d(*this); }
 

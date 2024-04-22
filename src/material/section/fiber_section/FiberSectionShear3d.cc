@@ -355,6 +355,27 @@ const XC::Vector &XC::FiberSectionShear3d::getStressResultant(void) const
     return s;
   }
 
+//! @brief Returns the torsional stiffness.
+const double &XC::FiberSectionShear3d::GJ(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(5,5);
+  }
+
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::FiberSectionShear3d::GAy(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(3,3);
+  }
+
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::FiberSectionShear3d::GAz(void) const
+  {
+    const Matrix &tang= this->getSectionTangent();
+    return tang(4,4);
+  }
+
 //! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::FiberSectionShear3d::getCopy(void) const
   { return new FiberSectionShear3d(*this); }

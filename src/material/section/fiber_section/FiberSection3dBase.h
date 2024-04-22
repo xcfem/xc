@@ -87,6 +87,9 @@ class FiberSection3dBase: public FiberSectionBase
     Fiber *addFiber(Fiber &)= 0;
     Fiber *addFiber(int tag,const MaterialHandler &,const std::string &nmbMat,const double &, const Vector &position);
 
+    virtual const double &EIy(void) const;
+    virtual const double &EIyz(void) const;
+    
     virtual double getStrain(const double &y,const double &z) const;
 
     int updateParameter(int parameterID, Information &info);

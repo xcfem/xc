@@ -57,6 +57,7 @@ class BaseElasticSection2d: public BaseElasticSection
     CrossSectionProperties2d &getCrossSectionProperties(void);   
     void setCrossSectionProperties(const CrossSectionProperties2d &);  
     void sectionGeometry(const std::string &);
+    virtual const double &EIz(void) const;
 
     inline double getRho(void) const
       { return ctes_scc.getRho(); }

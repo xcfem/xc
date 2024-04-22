@@ -77,11 +77,13 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     HalfPlane2d getCompressedHalfPlane(void) const;
     HalfPlane2d getCompressedHalfPlane(const Line2d &) const;
 
-    const double &EA(void) const;
-    const double &EIz(void) const;
-    const double &EIy(void) const;
-    const double &EIyz(void) const;
-    const double &GJ(void) const;
+    virtual const double &EA(void) const;
+    virtual const double &EIz(void) const;
+    virtual const double &EIy(void) const;
+    virtual const double &EIyz(void) const;
+    virtual const double &GAy(void) const;
+    virtual const double &GAz(void) const;
+    virtual const double &GJ(void) const;
     double getTheta(void) const;
     double getEI1(void) const;
     double getEI2(void) const;

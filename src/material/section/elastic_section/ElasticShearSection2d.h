@@ -68,7 +68,6 @@ class ResponseId;
 class ElasticShearSection2d: public BaseElasticSection2d
   {
   private:
-  
     static Vector s;
     int parameterID;
   protected:
@@ -84,6 +83,7 @@ class ElasticShearSection2d: public BaseElasticSection2d
     const Matrix &getInitialTangent(void) const;
     const Matrix &getSectionFlexibility(void) const;
     const Matrix &getInitialFlexibility(void) const;
+    virtual const double &GAy(void) const;
   
     SectionForceDeformation *getCopy(void) const;
     const ResponseId &getResponseType(void) const;
