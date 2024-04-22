@@ -26,7 +26,7 @@ for item in shapesDict:
     b= shape['b']
     h= shape['h']
     e= shape['e']
-    shape['alpha']= 0.5*5/6.0
+    shape['alpha']= 1.0 # 0.5*5/6.0
     shape['G']= E/(2*(1+nu))
     shape['Avy']= 2*0.7*h*e
     shape['Avz']= 2*0.7*b*e
