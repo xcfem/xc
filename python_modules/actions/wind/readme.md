@@ -12,8 +12,10 @@ The modules on this folder compute the loads due to wind according to the follow
 - [SIA 261: Actions sur les structures porteuses](http://www.webnorm.ch/collection%20des%20normes/ing%c3%a9nieur/sia%20261/f/2020/F/Product)
 
 ## References
-
 - [Wind loads (MIT course)](https://web.mit.edu/course/4/4.441/1_lectures/1_lecture18/1_lecture18.html)
 - [Wind load (designingbuildings.co.uk)](https://www.designingbuildings.co.uk/wiki/Wind_load)
 - [Eurocode applied; EN1991: Actions on Structures](https://eurocodeapplied.com/design/en1991)
 - [Reynolds number](https://en.wikipedia.org/wiki/Reynolds_number)
+- [Efectos de la Modelación de Presiones por Viento en Altura sobre la Estabilidad de Tanques de Almacenamiento de Fluidos](https://cimec.org.ar/ojs/index.php/mc/article/view/4697)
+- [OpenFOAM](https://www.openfoam.com/)
+- [Static wind loads estimation on buildings using OPENFOAM](https://repositorio.uniandes.edu.co/entities/publication/44aa7aff-5c8b-4bb9-9cd9-d763f409d103)
