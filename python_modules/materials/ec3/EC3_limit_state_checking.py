@@ -65,11 +65,16 @@ def getMvRdz(steelShape, Vd):
     McRdz= steelShape.getMcRdz()
     reductionCoeff= steelShape.getBendingResistanceReductionCoefficient(Vd)
     if(reductionCoeff<=0.0):
-        return McRdz
+        retval= McRdz
     else:
         Aw= steelShape.hw()*steelShape.tw()
         sustr= reductionCoeff*Aw**2/4.0/steelShape.tw()
-        return min((steelShape.getWz()-sustr)*steelShape.steelType.fy/steelShape.steelType.gammaM0(),McRdz)
+        remainingWz= steelShape.getWz()-sustr
+        if(remainingWz>0.0):
+            retval= min(remainingWz*steelShape.steelType.fy/steelShape.steelType.gammaM0(),McRdz)
+        else:
+            retval= McRdz/1e6 # avoid division by zero
+    return retval
 
 def getLateralBucklingImperfectionFactor(steelShape):
     ''' Returns lateral torsional imperfection factor depending of the type of section 
