@@ -382,6 +382,9 @@ int XC::Pinching4Material::revertToStart(void)
     Cstrain = 0.0;
     Cstress = 0.0;
     CstrainRate = 0.0;
+
+    this->SetEnvelope();
+    
     lowCstateStrain = envlpNegStrain(0);
     lowCstateStress = envlpNegStress(0);
     hghCstateStrain = envlpPosStrain(0);
@@ -394,10 +397,21 @@ int XC::Pinching4Material::revertToStart(void)
     CgammaF = 0.0;
     CnCycle = 0.0;
 
+    TnCycle = CnCycle;
+    Tstrain = Cstrain;
+    Tstress = Cstress;
     Ttangent = envlpPosStress(0)/envlpPosStrain(0);
     dstrain = 0.0;
     gammaKUsed = 0.0;
     gammaFUsed = 0.0;
+
+    state3Stress.Zero();
+    state3Strain.Zero();
+    state4Stress.Zero();
+    state4Strain.Zero();	
+
+    envlpPosDamgdStress = envlpPosStress;
+    envlpNegDamgdStress = envlpNegStress;	
 
     kElasticPosDamgd = kElasticPos;
     kElasticNegDamgd = kElasticNeg;
@@ -408,94 +422,7 @@ int XC::Pinching4Material::revertToStart(void)
   }
 
 XC::UniaxialMaterial* XC::Pinching4Material::getCopy(void) const
-{
-        Pinching4Material *theCopy = new Pinching4Material (this->getTag(),
-                stress1p, strain1p, stress2p, strain2p, stress3p, strain3p, stress4p, strain4p,
-        stress1n, strain1n, stress2n, strain2n, stress3n, strain3n, stress4n, strain4n,
-        rDispP, rForceP, uForceP, rDispN, rForceN, uForceN,gammaK1,gammaK2,gammaK3,gammaK4,
-                gammaKLimit,gammaD1,gammaD2,gammaD3,gammaD4,gammaDLimit,gammaF1,gammaF2,gammaF3,gammaF4,
-                gammaFLimit,gammaE,DmgCyc);
-        
-        theCopy->rDispN = rDispN;
-        theCopy->rDispP = rDispP;
-        theCopy->rForceN = rForceN;
-        theCopy->rForceP = rForceP;
-        theCopy->uForceN = uForceN;
-        theCopy->uForceP = uForceP;
-
-        // Trial state variables
-        theCopy->Tstress = Tstress;
-        theCopy->Tstrain = Tstrain;
-        theCopy->Ttangent = Ttangent;
-
-        // Coverged material history parameters
-        theCopy->Cstate = Cstate;
-        theCopy->Cstrain = Cstrain;
-        theCopy->Cstress = Cstress;
-        theCopy->CstrainRate = CstrainRate;
-
-        theCopy->lowCstateStrain = lowCstateStrain;
-        theCopy->lowCstateStress = lowCstateStress;
-        theCopy->hghCstateStrain = hghCstateStrain;
-        theCopy->hghCstateStress = hghCstateStress;
-        theCopy->CminStrainDmnd = CminStrainDmnd;
-        theCopy->CmaxStrainDmnd = CmaxStrainDmnd;
-        theCopy->Cenergy = Cenergy;
-        theCopy->CgammaK = CgammaK;
-        theCopy->CgammaD = CgammaD;
-        theCopy->CgammaF = CgammaF;
-        theCopy->CnCycle = CnCycle;
-        theCopy->gammaKUsed = gammaKUsed;
-        theCopy->gammaFUsed = gammaFUsed;
-        theCopy->DmgCyc = DmgCyc;
-
-        // trial material history parameters
-        theCopy->Tstate = Tstate;
-        theCopy->dstrain = dstrain;
-        theCopy->lowTstateStrain = lowTstateStrain;
-        theCopy->lowTstateStress = lowTstateStress;
-        theCopy->hghTstateStrain = hghTstateStrain;
-        theCopy->hghTstateStress = hghTstateStress;
-        theCopy->TminStrainDmnd = TminStrainDmnd;
-        theCopy->TmaxStrainDmnd = TmaxStrainDmnd;
-        theCopy->Tenergy = Tenergy;
-        theCopy->TgammaK = TgammaK;
-        theCopy->TgammaD = TgammaD;
-        theCopy->TgammaF = TgammaF;
-        theCopy->TnCycle = TnCycle;
-
-        // Strength and stiffness parameters
-        theCopy->kElasticPos = kElasticPos;
-        theCopy->kElasticNeg = kElasticNeg;
-        theCopy->kElasticPosDamgd = kElasticPosDamgd;
-        theCopy->kElasticNegDamgd = kElasticNegDamgd;
-        theCopy->uMaxDamgd = uMaxDamgd;
-        theCopy->uMinDamgd = uMinDamgd;
-
-        for (int i = 0; i<6; i++)
-        {
-                theCopy->envlpPosStrain(i) = envlpPosStrain(i);
-                theCopy->envlpPosStress(i) = envlpPosStress(i);
-                theCopy->envlpNegStrain(i) = envlpNegStrain(i);
-                theCopy->envlpNegStress(i) = envlpNegStress(i);
-                theCopy->envlpNegDamgdStress(i) = envlpNegDamgdStress(i);
-                theCopy->envlpPosDamgdStress(i) = envlpPosDamgdStress(i);
-        }
-
-        for (int j = 0; j<4; j++)
-        {
-                theCopy->state3Strain(j) = state3Strain(j);
-                theCopy->state3Stress(j) = state3Stress(j);
-                theCopy->state4Strain(j) = state4Strain(j);
-                theCopy->state4Stress(j) = state4Stress(j);
-        }
-
-        theCopy->energyCapacity = energyCapacity;
-        theCopy->kunload = kunload;
-        theCopy->elasticStrainEnergy = elasticStrainEnergy;
-
-        return theCopy;
-}
+  { return new Pinching4Material(*this); }
 
 int XC::Pinching4Material::sendSelf(Communicator &comm)
 {
