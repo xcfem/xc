@@ -154,6 +154,30 @@ class SteelShape(sp.SectionProperties):
         ''' return the product G*J (G=shear modulus, J=St. Venant torsional constant) '''
         return self.steelType.G()*self.It()
 
+    def getPlasticMomentZ(self):
+        ''' Return the theoretical plastic moment of the section (without
+            taking into acount the class of the section) with respect to
+            z-axis (strong axis).'''
+        return self.get('Wzpl')*self.steelType.fy
+    
+    def getPlasticMomentY(self):
+        ''' Return the theoretical plastic moment of the section (without
+            taking into acount the class of the section) with respect to
+            y-axis (weak axis).'''
+        return self.get('Wypl')*self.steelType.fy
+    
+    def getElasticMomentZ(self):
+        ''' Return the theoretical elastic moment of the section (without
+            taking into acount the class of the section) with respect to
+            z-axis (strong axis).'''
+        return self.get('Wzel')*self.steelType.fy
+    
+    def getElasticMomentY(self):
+        ''' Return the theoretical elastic moment of the section (without
+            taking into acount the class of the section) with respect to
+            y-axis (weak axis).'''
+        return self.get('Wyel')*self.steelType.fy
+
     def getWz(self):
         '''return section modulus with respect to z-axis (strong axis).
         '''
