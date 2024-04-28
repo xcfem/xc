@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -73,13 +74,26 @@ delta= n2.getDisp[2]  # z displacement of node 2
 
 beam3d.getResistingForce()
 M= beam3d.getMz1
-V= beam3d.getVy()
 
 
 deltateor= (-F*L**3/(3*E*Iz))
-ratio1= (delta/deltateor)
-ratio2= (M/(-F*L))
-ratio3= (V/F)
+ratio1= abs(delta-deltateor)/deltateor
+MRef= -F*L
+ratio2= abs(M-MRef)/MRef
+V= beam3d.getVy()
+ratio3= abs(V-F)/F
+
+# Check getMz1 and getMz2 (LP 28/04/2024).
+Mz1= beam3d.getMz1
+Mz1Ref= MRef
+Mz2= beam3d.getMz2
+ratio4= math.sqrt((Mz1-Mz1Ref)**2+(Mz2)**2)
+
+# Check getVy1 and getVy2 (LP 28/04/2024).
+Vy1= beam3d.getVy1
+VyRef= V
+Vy2= beam3d.getVy2
+ratio5= math.sqrt((VyRef-Vy1)**2+(VyRef-Vy2)**2)
 
 '''
 print("delta prog.= ", delta)
@@ -88,9 +102,12 @@ print("ratio1= ",ratio1)
 print("M= ",M)
 print("ratio2= ",ratio2)
 print("V= ",V)
-print("ratio3= ",ratio3})
+print("ratio3= ",ratio3)
+print('Mz1Ref= ', Mz1Ref/1e3, 'Mz1= ', Mz1/1e3, ' Mz2= ', Mz2/1e3, ' ratio4= ', ratio4)
+print('Vy1Ref= ', VyRef/1e3, 'Vy1= ', Vy1/1e3, ' Vy2= ', Vy2/1e3, ' ratio5= ', ratio5)
 '''
-cumple= (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5)
+
+cumple= (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
@@ -98,3 +115,16 @@ if cumple:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('Mz')
+# # oh.displayIntForcDiag('My')
+# # oh.displayIntForcDiag('Vz')
+# oh.displayIntForcDiag('Vy')

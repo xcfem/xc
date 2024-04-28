@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import sys
 import xc
 from solution import predefined_solutions
@@ -38,7 +39,7 @@ n1= nodes.newNodeXYZ(0,0.0,0.0)
 n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))
 
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
@@ -94,28 +95,42 @@ result= analysis.analyze(10)
 
 
 nodes.calculateNodalReactions(True,1e-7) 
-delta= n2.getDisp[2]  # z displacement of node 2
-Rz= n1.getReaction[2] 
-RMy= n1.getReaction[4] 
+# Check results.
 
-elements= preprocessor.getElementHandler
+## Deflection.
+delta= n2.getDisp[2]  # z displacement of node 2
+deltateor= (-F*L**3/(3*E*Iz))
+ratio1= (abs((delta-deltateor)/deltateor))
 
 el.getResistingForce()
 scc= el.getSections()[0]
-
-V= scc.getStressResultantComponent("Vy")
+## Axial load.
 N0= scc.getStressResultantComponent("N")
-M= scc.getStressResultantComponent("Mz")
-
-
-deltateor= (-F*L**3/(3*E*Iz))
-ratio1= (abs((delta-deltateor)/deltateor))
 ratio2= (abs(N0))
-MTeor= (F*L)
+## Bending moment around element z axis.
+M= scc.getStressResultantComponent("Mz")
+MTeor= (-F*L)
 ratio3= (abs((M-MTeor)/MTeor))
-ratio4= (abs((V+F)/F))
+## Shear force.
+V= scc.getStressResultantComponent("Vy")
+ratio4= (abs((V-F)/F))
+## Reaction.
+Rz= n1.getReaction[2] 
 ratio5= (abs((Rz-F)/F))
-ratio6= (abs((RMy+MTeor)/MTeor))
+RMy= n1.getReaction[4] 
+ratio6= (abs((RMy-MTeor)/MTeor))
+
+# Check getMz1 and getMz2 (LP 28/04/2024).
+Mz1= el.getMz1
+Mz1Ref= MTeor
+Mz2= el.getMz2
+ratio7= math.sqrt((Mz1-Mz1Ref)**2+(Mz2)**2)
+
+# Check getVy1 and getVy2 (LP 28/04/2024).
+Vy1= el.getVy1
+VyRef= V
+Vy2= el.getVy2
+ratio8= math.sqrt((VyRef-Vy1)**2+(VyRef-Vy2)**2)
 
 ''' 
 print("delta: ",delta)
@@ -132,11 +147,27 @@ print("Rz= ",Rz)
 print("ratio5= ",ratio5)
 print("RMy= ",RMy)
 print("ratio6= ",ratio6)
-   '''
+print('Mz1Ref= ', Mz1Ref/1e3, 'Mz1= ', Mz1/1e3, ' Mz2= ', Mz2/1e3, ' ratio7= ', ratio7)
+print('Vy1Ref= ', VyRef/1e3, 'Vy1= ', Vy1/1e3, ' Vy2= ', Vy2/1e3, ' ratio8= ', ratio8)
+'''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<0.02) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) &  (abs(ratio5)<1e-10) & (abs(ratio6)<1e-10):
+if (abs(ratio1)<0.02) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) &  (abs(ratio5)<1e-10) & (abs(ratio6)<1e-10) & (abs(ratio7)<1e-10) & (abs(ratio8)<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('Mz')
+# # oh.displayIntForcDiag('My')
+# # oh.displayIntForcDiag('Vz')
+# oh.displayIntForcDiag('Vy')
