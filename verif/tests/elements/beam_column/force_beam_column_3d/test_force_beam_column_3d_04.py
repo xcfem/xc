@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Horizontal cantilever under torsion load at its end. Home made test.'''
 
 from __future__ import print_function
-# Horizontal cantilever under tension load at its end.
+# 
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import sys
 import xc
 from solution import predefined_solutions
@@ -102,19 +103,22 @@ result= analysis.analyze(10)
 
 nodes.calculateNodalReactions(True,1e-7) 
 delta= n2.getDisp[3]  # z displacement of node 2
-RMT= n1.getReaction[3] 
+deltateor= (M*L/(G*J))
+ratio1= (abs((delta-deltateor)/deltateor))
 
-elements= preprocessor.getElementHandler
+RMT= n1.getReaction[3] 
 
 el.getResistingForce()
 scc= el.getSections()[0]
 
 M1= scc.getStressResultantComponent("T")
 
-deltateor= (M*L/(G*J))
-ratio1= (abs((delta-deltateor)/deltateor))
 ratio2= (abs((M+RMT)/M))
 ratio3= (abs((M-M1)/M))
+# Check getT1 and getT2 (LP 28/04/2024).
+T1= el.getT1
+T2= el.getT2
+ratio4= math.sqrt((M-T1)**2+(M-T2)**2)
 
 ''' 
 print("delta: ",delta)
@@ -125,12 +129,26 @@ print("RMT= ",RMT)
 print("ratio2= ",ratio2)
 print("M1= ",M1)
 print("ratio3= ",ratio3)
+print('M= ', M/1e3, 'T1= ', T1/1e3, ' T2= ', T2/1e3, ' ratio4= ', ratio4)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<0.02) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10):
+if (abs(ratio1)<0.02) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('Mz')
+# # oh.displayIntForcDiag('My')
+# oh.displayIntForcDiag('T')
+# #oh.displayLocalAxes()

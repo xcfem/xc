@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -73,20 +74,27 @@ theta= n2.getDisp[3] # x rotation of the node
 
 beam3d.getResistingForce()
 M1= beam3d.getT()
+ratio1= abs(M1-M)/M
 
 
+thetaRef= (M*L/(G*J))
+ratio2= abs(theta-thetaRef)/thetaRef
 
-thetateor= (M*L/(G*J))
-ratio1= (M1/M)
-ratio2= (theta/thetateor)
+# Check getT1 and getT2 (LP 28/04/2024).
+T1= beam3d.getT1
+T2= beam3d.getT2
+ratio3= math.sqrt((M-T1)**2+(M-T2)**2)
+
 ''' 
 print("M1= ",M1)
 print(ratio1)
 print("theta prog.= ", theta)
-print("theta teor.= ", thetateor)
+print("theta Ref.= ", thetaRef)
 print(ratio2)
- '''
-cumple= (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5)
+print('M= ', M/1e3, 'T1= ', T1/1e3, ' T2= ', T2/1e3, ' ratio3= ', ratio3)
+'''
+
+cumple= (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10)& (abs(ratio3)<1e-10)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
@@ -94,3 +102,17 @@ if cumple:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('Mz')
+# # oh.displayIntForcDiag('My')
+# oh.displayIntForcDiag('T')
+# # oh.displayIntForcDiag('Vz')
+# # oh.displayIntForcDiag('Vy')
