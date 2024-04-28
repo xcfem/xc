@@ -46,13 +46,10 @@ class ControlVarDiagram(cd.ColoredDiagram):
         self.component= component
         self.defaultDirection= defaultDirection
 
-    def getElementComponentData(self,elem):
-        '''Return the data to use to represent the diagram over the element
+    def getElementComponentData(self, elem):
+        '''Return the data to be used to represent the diagram over the element
 
         :param elem: element to deal with.
-        :param component: component to show. 
-               Valid components are: 'N', 'Qy', 'Vy', 'Qz', 'Vz', 'My', 'Mz', 
-               'T'
         '''
         # default values
         elemVDir= None
@@ -85,7 +82,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 value1= None
                 value2= None
         else:
-            [elemVDir,value1,value2]= cv.getElementInternalForceComponentData(elem, self.component, self.defaultDirection)
+            [elemVDir,value1,value2]= cv.get_element_internal_force_component_data(elem, self.component, self.defaultDirection)
         return [elemVDir,value1,value2]
 
     def getMaxAbsComp(self):

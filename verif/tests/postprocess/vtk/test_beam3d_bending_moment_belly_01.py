@@ -128,7 +128,7 @@ modelSpace.analyze(calculateNodalReactions=True)
 xcTotalSet= modelSpace.getTotalSet()
 MzValues= list()
 for e in xcTotalSet.elements:
-    MzValues.append(cv.getElementInternalForceComponentData(e, 'Mz', defaultDirection= 'J'))
+    MzValues.append(cv.get_element_internal_force_component_data(e, 'Mz', defaultDirection= 'J'))
 
 
 refMzValues= [[geom.Vector3d(0, 0, 1),   0.0, -1000],

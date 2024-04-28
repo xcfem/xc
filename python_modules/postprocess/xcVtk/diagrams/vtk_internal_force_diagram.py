@@ -45,7 +45,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
         :param silent: if true don't complain about non-existent properties.
         '''
         # this code seems not used anymore 17/05/2020 LCPT
-        return cv.getElementInternalForceComponentData(elem, self.component, self.defaultDirection)
+        return cv.get_element_internal_force_component_data(elem, self.component, self.defaultDirection)
 
     def addDiagram(self):
         self.creaEstrucDatosDiagrama()
