@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Sign criteria for the internal forces o a elastic beam 2d element.
+''' Sign criteria for the internal forces on an elastic beam 2d element.
     2D cantilever beam, start node  with all its 3DOF fixed, point loads on the 
     end node (L). Home made test.'''
 
