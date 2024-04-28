@@ -59,12 +59,12 @@ if(not pth):
   pth= "."
 auxModulePath= pth+"/../aux"
 sys.path.append(auxModulePath)
-import testQuadRegion as tqr
+import test_quad_region as tqr
 
 materialHandler= preprocessor.getMaterialHandler
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
-testQuadRegion= tqr.getTestQuadRegion(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
+testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
 fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 A= quadFibers.getFibers().getArea(1.0)

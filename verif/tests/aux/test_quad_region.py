@@ -8,7 +8,7 @@ __email__= "l.pereztato@gmail.com"
 
 import geom
 
-def getTestQuadRegion(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK):
+def get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK):
     ''' Return a quad region for test purposes.
 
     :param preprocessor: pre-processor for the finite element problem.
