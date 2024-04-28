@@ -108,21 +108,24 @@ print("deltaTeor: ",deltateor)
 print("ratio1= ",ratio1)
 print(N0)
 print("ratio2= ",ratio2)
+print('F= ', F/1e3, 'N1= ', N1/1e3, ' N2= ', N2/1e3, ' ratio3= ', ratio3)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-10 and abs(ratio2)<1e-10:
+if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-# oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
-# oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
-oh.displayIntForcDiag('N')
-oh.displayIntForcDiag('M')
-#oh.displayLocalAxes()
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('M')
+# # oh.displayLocalAxes()

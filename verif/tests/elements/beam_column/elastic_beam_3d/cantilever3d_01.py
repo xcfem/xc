@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -74,7 +75,11 @@ N1= beam3d.getN1
 
 deltateor= (F*L/(E*A))
 ratio1= (delta-deltateor)/deltateor
-ratio2= (N1-F)/F
+
+# Check getN1 and getN2 (LP 28/04/2024).
+N1= beam3d.getN1
+N2= beam3d.getN2
+ratio2= math.sqrt((F-N1)**2+(F-N2)**2)
 
 # print(delta)
 # print(deltateor)
@@ -90,3 +95,14 @@ if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('M')
+# # oh.displayLocalAxes()
