@@ -356,6 +356,13 @@ python tests/elements/change_material_properties/test_change_element_material_pr
 python tests/elements/change_material_properties/test_change_element_material_properties_03.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_01.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_02.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_03.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_04.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_05.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_06.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_07.py
 python tests/elements/beam_column/elastic_beam_2d/beam_test1.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_01.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_02.py
@@ -398,19 +405,23 @@ python tests/elements/beam_column/timoshenko_beam3d_sign_criteria_01.py
 python tests/elements/beam_column/timoshenko_beam3d_test1.py
 python tests/elements/beam_column/timoshenko_beam3d_test2.py
 echo "$BLEU" "    Force beam-column 2D tests." "$NORMAL"
-python tests/elements/beam_column/test_force_beam_column_2d_01.py
-python tests/elements/beam_column/test_force_beam_column_2d_02.py
-python tests/elements/beam_column/test_force_beam_column_2d_03.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_01.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_02.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_03.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_04.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_05.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_06.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_07.py
+python tests/elements/beam_column/force_beam_column_2d/plastic_hinge_on_cantilever.py
 echo "$BLEU" "    Force beam-column 3D tests." "$NORMAL"
-python tests/elements/beam_column/test_force_beam_column_3d_01.py
-python tests/elements/beam_column/test_force_beam_column_3d_02.py
-python tests/elements/beam_column/test_force_beam_column_3d_03.py
-python tests/elements/beam_column/test_force_beam_column_3d_04.py
-python tests/elements/beam_column/test_force_beam_column_3d_05.py
-python tests/elements/beam_column/test_force_beam_column_3d_06.py
-python tests/elements/beam_column/plastic_hinge_on_cantilever.py
-python tests/elements/beam_column/test_integration_options_01.py
-python tests/elements/beam_column/test_strains_sign_01.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_01.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_02.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_03.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_04.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_05.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_06.py
+python tests/elements/beam_column/force_beam_column_3d/test_integration_options_01.py
+python tests/elements/beam_column/force_beam_column_3d/test_strains_sign_01.py
 echo "$BLEU" "  Zero length elements tests." "$NORMAL"
 python tests/elements/zero_length/zero_length_element_test_01.py
 python tests/elements/zero_length/zero_length_element_test_02.py
