@@ -497,7 +497,7 @@ class OutputHandler(object):
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
-        diagram.addDiagram()
+        diagram.addDiagram() # add the diagram to the scene.
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.setupGrid(setToDisplay)
