@@ -1,5 +1,5 @@
-# Home made test
 # -*- coding: utf-8 -*-
+''' Home made test. Horizontal cantilever under vertical load at his front end.'''
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -8,8 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Ménsula sometida a carga vertical en su extremo.
-
+import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -77,18 +76,48 @@ ratio1= (delta/deltateor)
 ratio2= abs((M-MTeor)/MTeor)
 ratio3= (V/F)
 
-# print('delta= ', delta)
-# print('refDelta= ', deltateor)
-# print('ratio1= ', ratio1)
-# print("M= ",M)
-# print(ratio2)
-# print("V1= ",V)
-# print(ratio3)
+# Check getMy1 and getMy2 (LP 28/04/2024).
+My1= beam3d.getMy1
+My1Ref= F*L
+My2= beam3d.getMy2
+ratio4= math.sqrt((My1-My1Ref)**2+(My2)**2)
+
+# Check getVz1 and getVz2 (LP 28/04/2024).
+Vz1= beam3d.getVz1
+VzRef= -F
+Vz2= beam3d.getVz2
+ratio5= math.sqrt((Vz1-VzRef)**2+(Vz2-VzRef)**2)
+
+'''
+print('delta= ', delta)
+print('refDelta= ', deltateor)
+print('ratio1= ', ratio1)
+print("M= ",M)
+print(ratio2)
+print("V1= ",V)
+print(ratio3)
+print('My1Ref= ', My1Ref/1e3, 'My1= ', My1/1e3, ' My2= ', My2/1e3, ' ratio4= ', ratio4)
+print('Vz1Ref= ', VzRef/1e3, 'Vz1= ', Vz1/1e3, ' Vz2= ', Vz2/1e3, ' ratio5= ', ratio5)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5):
+if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('Mz')
+# oh.displayIntForcDiag('My')
+# oh.displayIntForcDiag('Vz')
+# # oh.displayIntForcDiag('Vy')
+# #oh.displayLocalAxes()
