@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Ménsula sometida a carga vertical en su extremo.'''
+''' Home made test. Horizontal cantilever under vertical load at its end.'''
 
 from __future__ import print_function
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Horizontal cantilever under tension load at its end.'''
+''' Home made test. Horizontal cantilever under vertical load at its end.'''
 
 from __future__ import print_function
 
