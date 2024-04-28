@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.  Horizontal cantilever under tension load at its end..'''
-
+''' Home made test. Horizontal cantilever under vertical load at its back end.'''
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -33,33 +32,30 @@ F= 1.5e3 # Load magnitude (kN)
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-
-# Problem geometry
 n1= nodes.newNodeXY(0,0.0)
 n2= nodes.newNodeXY(L,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin")
 
-# Define material.
-sectionProperties= xc.CrossSectionProperties2d()
+# Materials
+sectionProperties= xc.CrossSectionProperties3d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.I= Iz
 section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
-# Define element.
+# Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag, n2.tag]))
 
-modelSpace.fixNode000(n1.tag)
+modelSpace.fixNode000(n2.tag)
 
-# Load definition.
+# Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(n2.tag,xc.Vector([F,0,0]))
+lp0.newNodalLoad(n1.tag, xc.Vector([0,-F,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -67,29 +63,49 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-delta= n2.getDisp[0] # x displacement of node 2.
+delta= n1.getDisp[1] # ydisplacement of node 2.
+deltateor= (-F*L**3/(3*E*Iz))
+ratio1= abs(delta-deltateor)/deltateor
+
 beam2d.getResistingForce()
-N1= beam2d.getN1
+M= beam2d.getM2
+MTeor= -F*L
+ratio2= abs((M-MTeor)/MTeor)
 
-deltateor= (F*L/(E*A))
-ratio1= (delta-deltateor)/deltateor
+V= beam2d.getV
 
-# Check getN1 and getN2 (LP 28/04/2024).
-N1= beam2d.getN1
-N2= beam2d.getN2
-ratio2= math.sqrt((F-N1)**2+(F-N2)**2)
+ratio3= abs(V-F)/F
 
-# print(delta)
-# print(deltateor)
-# print(ratio1)
-# print(N1)
-# print(ratio2)
+# Check getM1 and getM2 (LP 28/04/2024).
+M1= beam2d.getM1
+M2Ref= -F*L
+M2= beam2d.getM2
+ratio4= math.sqrt((M1)**2+(M2-M2Ref)**2)
 
+# Check getV1 and getV2 (LP 28/04/2024).
+V1= beam2d.getV1
+VRef= F
+V2= beam2d.getV2
+ratio5= math.sqrt((V1-VRef)**2+(V2-VRef)**2)
+
+'''
+print('delta= ', delta)
+print('refDelta= ', deltateor)
+print('ratio1= ', ratio1)
+print("M= ",M)
+print("MTeor= ",MTeor)
+print('ratio2= ', ratio2)
+print('F= ', F)
+print("V= ",V)
+print('ratio3= ', ratio3)
+print('M2Ref= ', M2Ref/1e3, 'M1= ', M1/1e3, ' M2= ', M2/1e3, ' ratio4= ', ratio4)
+print('V1Ref= ', VRef/1e3, 'V1= ', V1/1e3, ' V2= ', V2/1e3, ' ratio5= ', ratio5)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
@@ -101,6 +117,7 @@ else:
 # # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
 # oh.displayLocalAxes()
 # oh.displayLoads()
-# oh.displayIntForcDiag('N')
-# # oh.displayIntForcDiag('M')
-# # oh.displayLocalAxes()
+# # oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('M')
+# oh.displayIntForcDiag('V')
+# #oh.displayLocalAxes()

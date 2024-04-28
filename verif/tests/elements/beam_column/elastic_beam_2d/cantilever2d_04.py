@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Home made test.  Horizontal cantilever under tension load at its end..'''
+''' Home made test.  Horizontal cantilever under uniform tension load 
+along its length.'''
 
 from __future__ import print_function
 
@@ -59,7 +60,12 @@ modelSpace.fixNode000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(n2.tag,xc.Vector([F,0,0]))
+modelSpace.setCurrentLoadPattern(lp0.name)
+crdTransf= beam2d.getCoordTransf
+vIElem= crdTransf.getIVector
+vJElem= crdTransf.getJVector
+loadVector= (F/L)*vIElem
+beam2d.vector2dUniformLoadGlobal(loadVector)
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -68,16 +74,14 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
 delta= n2.getDisp[0] # x displacement of node 2.
-beam2d.getResistingForce()
-N1= beam2d.getN1
-
-deltateor= (F*L/(E*A))
+deltateor= (F*L/(E*A))/2.0
 ratio1= (delta-deltateor)/deltateor
 
+beam2d.getResistingForce()
 # Check getN1 and getN2 (LP 28/04/2024).
 N1= beam2d.getN1
 N2= beam2d.getN2
-ratio2= math.sqrt((F-N1)**2+(F-N2)**2)
+ratio2= math.sqrt((F-N1)**2+(N2)**2)
 
 # print(delta)
 # print(deltateor)

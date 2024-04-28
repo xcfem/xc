@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.  Horizontal cantilever under tension load at its end..'''
+''' Horizontal cantilever under horizontal load at its tip.'''
 
 from __future__ import print_function
 
@@ -28,38 +28,39 @@ Iz= 8.49e-8 # Cross section moment of inertia (m4)
 L= 1.5 # Bar length (m)
 
 # Load
-F= 1.5e3 # Load magnitude (kN)
-
-feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeHandler
+M= 1.5e3 # Moment magnitude (kN)
 
 # Problem type
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-
-# Problem geometry
 n1= nodes.newNodeXY(0,0.0)
 n2= nodes.newNodeXY(L,0.0)
 
-lin= modelSpace.newLinearCrdTransf("lin")
 
-# Define material.
+# Geometric transformation(s)
+lin= modelSpace.newLinearCrdTransf("lin")
+# Materials
 sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.I= Iz
 section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
-# Define element.
+# Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 
+
+# Constraints
 modelSpace.fixNode000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(n2.tag,xc.Vector([F,0,0]))
+
+lp0.newNodalLoad(n2.tag, xc.Vector([0,0,M]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -67,33 +68,56 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-delta= n2.getDisp[0] # x displacement of node 2.
+
+delta= n2.getDisp[1]  # y displacement of node 2
+deltaRef= M*L**2/(2*E*Iz)
+ratio1= abs(delta-deltaRef)/deltaRef
+
+theta= n2.getDisp[2]  # y rotation of the node
+thetaRef= (M*L/(E*Iz))
+ratio2= abs(theta-thetaRef)/thetaRef
+
+elements= preprocessor.getElementHandler
+
 beam2d.getResistingForce()
-N1= beam2d.getN1
+M1= beam2d.getM1
+ratio3= abs(M1-M)/M
 
-deltateor= (F*L/(E*A))
-ratio1= (delta-deltateor)/deltateor
+V= beam2d.getV
 
-# Check getN1 and getN2 (LP 28/04/2024).
-N1= beam2d.getN1
-N2= beam2d.getN2
-ratio2= math.sqrt((F-N1)**2+(F-N2)**2)
+# Check getM1 and getM2 (LP 28/04/2024).
+M1= beam2d.getM1
+MRef= M
+M2= beam2d.getM2
+ratio4= math.sqrt((MRef-M1)**2+(MRef-M2)**2)
 
-# print(delta)
-# print(deltateor)
-# print(ratio1)
-# print(N1)
-# print(ratio2)
+# Check getV1 and getV2 (LP 28/04/2024).
+V1= beam2d.getV1
+V2= beam2d.getV2
+ratio5= math.sqrt(V1**2+V2**2)
 
+''' 
+print("delta prog.= ", delta)
+print("delta ref.= ", deltaRef)
+print("ratio1= ",ratio1)
+print("theta prog.= ", theta)
+print("theta ref.= ", thetaRef)
+print("ratio2= ",ratio2)
+print("M1= ",M1)
+print("ratio3= ",ratio3)
+print('MRef= ', MRef/1e3, 'M1= ', M1/1e3, ' M2= ', M2/1e3, ' ratio4= ', ratio4)
+print('V1Ref= ', 0/1e3, 'V1= ', V1/1e3, ' V2= ', V2/1e3, ' ratio5= ', ratio5)
+'''
 
+cumple= (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
+if cumple:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-    
+
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
@@ -101,6 +125,8 @@ else:
 # # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
 # oh.displayLocalAxes()
 # oh.displayLoads()
-# oh.displayIntForcDiag('N')
-# # oh.displayIntForcDiag('M')
-# # oh.displayLocalAxes()
+# # oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('M')
+# oh.displayIntForcDiag('V')
+# #oh.displayIntForcDiag('T')
+# #oh.displayLocalAxes()
