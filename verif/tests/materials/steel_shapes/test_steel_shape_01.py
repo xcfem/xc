@@ -76,7 +76,7 @@ FC= elem.getProp("FCTN")
 deltateor= -0.1417
 ratio1= (abs(delta-deltateor)/deltateor)
 ratio2= ((M-F*L)/(F*L))
-ratio3= ((F+V)/F)
+ratio3= ((F-V)/F)
 ratio4= ((FC-0.661959)/0.661959)
 
 '''   
