@@ -81,7 +81,7 @@ ratio1= abs(delta-deltateor)/deltateor
 MRef= -F*L
 ratio2= abs(M-MRef)/MRef
 V= beam3d.getVy()
-ratio3= abs(V-F)/F
+ratio3= abs(V+F)/F
 
 # Check getMz1 and getMz2 (LP 28/04/2024).
 Mz1= beam3d.getMz1

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Horizontal cantilever under horizontal load at its tip.'''
+''' Horizontal cantilever under bending load load at its tip.'''
 
 from __future__ import print_function
 

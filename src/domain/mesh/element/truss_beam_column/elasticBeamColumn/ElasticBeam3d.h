@@ -197,19 +197,19 @@ class ElasticBeam3d: public ElasticBeam3dBase
     //! Warning! call "calc_resisting_force" before calling this method.
     inline double getVy1(void) const
       {
-        return -q.Vy(theCoordTransf->getInitialLength())-p0[1]; 
+        return this->getVy()-p0[1]; 
       }
     //! @brief Internal y shear force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
     inline double getVy2(void) const
       {
-        return p0[2]-q.Vy(theCoordTransf->getInitialLength());
+        return p0[2]+this->getVy();
       }
     //! @brief Internal shear force in the middle of the element.
     //! Warning! call "calc_resisting_force" before calling this method.
     inline double getVy(void) const
       {
-        return q.Vy(theCoordTransf->getInitialLength()); //Shear along y.
+        return -q.Vy(theCoordTransf->getInitialLength()); //Shear along y.
       }
         
     //! @brief z shear drived over the bar in its back end.
@@ -228,19 +228,19 @@ class ElasticBeam3d: public ElasticBeam3dBase
     //! Warning! call "calc_resisting_force" before calling this method.
     inline double getVz1(void) const
       {
-        return -q.Vz(theCoordTransf->getInitialLength())-p0[3];
+        return this->getVz()-p0[3];
       }
     //! @brief Internal z shear force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
     inline double getVz2(void) const
       {
-        return p0[4]-q.Vz(theCoordTransf->getInitialLength());
+        return p0[4]+this->getVz();
       }
     //! @brief Internal z shear force in the middle of the element.
     //! Warning! call "calc_resisting_force" before calling this method.
     inline double getVz(void) const
       {
-        return q.Vz(theCoordTransf->getInitialLength());
+        return -q.Vz(theCoordTransf->getInitialLength());
       }
     
     //! @brief Internal bending moment about y axis at the back end.   

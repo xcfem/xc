@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Cantilever under horizontal uniform load in local x direction.'''
+''' Home made test. Cantilever under horizontal uniform load in local x 
+    direction.'''
 
 from __future__ import print_function
 
@@ -60,7 +61,6 @@ modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-
 eleLoad= lp0.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.axialComponent= f
@@ -72,6 +72,8 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
 delta= n2.getDisp[0]  # Node 2 xAxis displacement
+deltateor= (f*L**2/(2*E*A))
+ratio1= (delta/deltateor)
 
 beam3d.getResistingForce()
 N1= beam3d.getN1 # axial force at the back end.
@@ -79,9 +81,7 @@ N2= beam3d.getN2 # axial force at the front end.
 
 
 
-deltateor= (f*L**2/(2*E*A))
-ratio1= (delta/deltateor)
-N1teor= (f*L)
+N1teor= f*L
 ratio2= (N1/N1teor)
 ratio3= (abs(N2)<1e-3)
 
@@ -94,7 +94,7 @@ print("N1teor= ",N1teor)
 print("ratio2= ",ratio2)
 print("N2= ",N2)
 print("N2teor= ",0)
-print("ratio3= ",ratio3})
+print("ratio3= ",ratio3)
 '''
 
 import os
@@ -104,3 +104,14 @@ if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('M')
+# # oh.displayLocalAxes()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Cantilever under uniform vertical load in local y axis.'''
+''' Home made test. Cantilever under uniform vertical load on local axis y.'''
 
 from __future__ import print_function
 
@@ -59,7 +59,6 @@ modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-
 eleLoad= lp0.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.transComponent= -f
@@ -78,18 +77,20 @@ beam3d.getResistingForce()
 Mz1= beam3d.getMz1 # Moment at the back end of the beam
 Mz2= beam3d.getMz2 # Moment at the front end of the beam
 Vy1= beam3d.getVy1 # Shear force at the back end of the beam
+Vy= beam3d.getVy() # Shear force at the middle of the element.
 Vy2= beam3d.getVy2 # Shear force at the front end of the beam
 
 
-
 deltateor= (-f*L**4/(8*E*Iz))
-ratio1= (delta/deltateor)
-Mz1teor= (-f*L*L/2)
-ratio2= (Mz1/Mz1teor)
-ratio3= (abs(Mz2)<1e-3)
+ratio1= abs(delta-deltateor)/deltateor
+
+Mz1teor= -f*L*L/2
+ratio2= abs(Mz1-Mz1teor)/Mz1teor
+ratio3= abs(Mz2)
 Vy1teor= (-f*L)
-ratio4= (Vy1/Vy1teor)
-ratio5= (abs(Vy2)<1e-3)
+ratio4= abs(Vy1-Vy1teor)/Vy1teor
+ratio5= abs(Vy2)
+ratio6= abs(Vy-Vy1teor/2.0)/(Vy1teor/2.0)
 
 '''
 print("delta= ",delta)
@@ -107,12 +108,27 @@ print("ratio4= ",ratio4)
 print("Vy2= ",Vy2)
 print("Vy2teor= ",0)
 print("ratio5= ",ratio5)
+print("ratio6= ",ratio6)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4-1.0)<1e-5) & (abs(ratio5-1.0)<1e-5):
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-10) & (ratio3<1e-8) & (abs(ratio4)<1e-10) & (ratio5<1e-8) & (ratio6<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('Mz')
+# # oh.displayIntForcDiag('My')
+# # oh.displayIntForcDiag('Vz')
+# oh.displayIntForcDiag('Vy')
+# #oh.displayLocalAxes()
