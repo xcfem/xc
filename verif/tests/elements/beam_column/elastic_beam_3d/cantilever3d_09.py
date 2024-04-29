@@ -71,6 +71,8 @@ result= analysis.analyze(1)
 
 
 delta= n2.getDisp[1]  # Node 2 yAxis displacement global
+deltateor= (-f*L**4/(8*E*Iy))
+ratio1= abs(delta-deltateor)/deltateor
 
 beam3d.getResistingForce()
 My1= beam3d.getMy1 # Moment at the back end of the beam
@@ -80,8 +82,6 @@ Vz2= beam3d.getVz2 # Shear force at the front end of the beam
 
 
 
-deltateor= (-f*L**4/(8*E*Iy))
-ratio1= abs(delta-deltateor)/deltateor
 My1teor= -f*L*L/2
 ratio2= abs((My1-My1teor)/My1teor)
 ratio3= abs(My2)
