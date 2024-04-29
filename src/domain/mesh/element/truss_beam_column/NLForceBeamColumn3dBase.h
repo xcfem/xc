@@ -159,7 +159,7 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getMz2(void) const
       {
-        return -Secommit.Mz2(); 
+        return Secommit.Mz2(); 
       }
 
     //! @brief Mean bending moment.
@@ -170,7 +170,7 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     //! @brief y shear.
     inline double getVy(void) const
       {
-        return Secommit.Vy(theCoordTransf->getInitialLength()); 
+        return -Secommit.Vy(theCoordTransf->getInitialLength()); 
       }
 
     //! @brief y shear drived over the bar at its back end.
@@ -191,21 +191,21 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVy1(void) const
       {
-        return -Secommit.Vy(theCoordTransf->getInitialLength())-p0[1]; 
+        return this->getVy()-p0[1]; 
       }
 
     //! @brief y shear at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVy2(void) const
       {
-        return Secommit.Vy(theCoordTransf->getInitialLength())-p0[2]; 
+        return p0[2]+this->getVy(); 
       }
 
     //! @brief z shear.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVz(void) const
       {
-        return Secommit.Vz(theCoordTransf->getInitialLength()); 
+        return -Secommit.Vz(theCoordTransf->getInitialLength()); 
       }
 
     //! @brief z shear drived over the bar at its back end.
@@ -226,21 +226,21 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVz1(void) const
       {
-        return -Secommit.Vz(theCoordTransf->getInitialLength())-p0[3]; 
+        return this->getVz()-p0[3]; 
       }
 
     //! @brief z shear at its front end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getVz2(void) const
       {
-        return Secommit.Vz(theCoordTransf->getInitialLength())-p0[4];
+        return p0[4]+this->getVz();
       }
 
     //! @brief Moment about y axis at the back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getMy1(void) const
       {
-        return Secommit.My1();
+        return -Secommit.My1();
       }
 
     //! @brief Moment about y axis at the front end.
@@ -266,7 +266,7 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getT1(void) const
       {
-        return Secommit.T1(); //+p0[0]; 
+        return -Secommit.T1(); //+p0[0]; 
       }
 
     //! @brief Torsor at the front end.
