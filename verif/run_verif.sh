@@ -423,6 +423,9 @@ python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d
 python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_04.py
 python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_05.py
 python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_06.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_07.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_08.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_09.py
 python tests/elements/beam_column/force_beam_column_3d/test_integration_options_01.py
 python tests/elements/beam_column/force_beam_column_3d/test_strains_sign_01.py
 echo "$BLEU" "  Zero length elements tests." "$NORMAL"
