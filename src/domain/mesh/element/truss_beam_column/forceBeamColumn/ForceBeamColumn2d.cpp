@@ -185,6 +185,18 @@ XC::Element* XC::ForceBeamColumn2d::getCopy(void) const
 XC::ForceBeamColumn2d::~ForceBeamColumn2d(void)
   { free_mem(); }
 
+//! @brief Return a pointer to the beam integrator object.
+const XC::BeamIntegration *XC::ForceBeamColumn2d::getIntegrator(void) const
+  { return this->beamIntegr; }
+
+//! @brief Returns the location of the sections along the element.
+boost::python::list XC::ForceBeamColumn2d::getSectionLocationsPy(void) const
+  { return this->beamIntegr->getSectionLocationsPy(this->getNumSections(), this->theCoordTransf->getInitialLength()); }
+
+//! @brief Return the weights corresponding to each section.
+boost::python::list XC::ForceBeamColumn2d::getSectionWeightsPy(void) const
+  { return this->beamIntegr->getSectionWeightsPy(this->getNumSections(), this->theCoordTransf->getInitialLength()); }
+
 //! @brief Returns the value of the persistent (does not get wiped out by
 //! zeroLoad) initial deformation of the element.
 const std::vector<XC::Vector> &XC::ForceBeamColumn2d::getPersistentInitialSectionDeformation(void) const

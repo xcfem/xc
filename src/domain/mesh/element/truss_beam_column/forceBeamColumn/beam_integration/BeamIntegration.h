@@ -84,9 +84,11 @@ class BeamIntegration: public MovableObject, public CommandEntity
     inline virtual ~BeamIntegration(void) {}
 
     virtual void getSectionWeights(int nIP, double L, double *wt) const= 0;
+    boost::python::list getSectionWeightsPy(int nIP, double L) const;
     const Vector &getIntegrPointWeights(int nIP, double L) const;
 
     virtual void getSectionLocations(int nIP, double L, double *xi) const= 0;
+    boost::python::list getSectionLocationsPy(int nIP, double L) const;
     const Matrix &getIntegrPointCoords(int nIP, double L) const;
     const Matrix &getIntegrPointNaturalCoords(int nIP, double L) const;
     const Matrix &getIntegrPointLocalCoords(int nIP, double L) const;

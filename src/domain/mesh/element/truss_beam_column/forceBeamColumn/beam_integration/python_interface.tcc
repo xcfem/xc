@@ -21,7 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::BeamIntegration, bases<CommandEntity>, boost::noncopyable >("BeamIntegration", no_init);
+class_<XC::BeamIntegration, bases<CommandEntity>, boost::noncopyable >("BeamIntegration", no_init)
+  ;
 class_<XC::LegendreBeamIntegration, bases<XC::BeamIntegration>, boost::noncopyable >("LegendreBeamIntegration", no_init);
 
 class_<XC::LobattoBeamIntegration , bases<XC::BeamIntegration>, boost::noncopyable >("LobattoBeamIntegration", no_init);

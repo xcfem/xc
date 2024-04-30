@@ -113,7 +113,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     int revertToStart(void);
     
     void getCurrentDisplacements(Vector &, Vector &);
-    int update(void);    
+    int update(void);
   
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;    
@@ -123,7 +123,11 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
   
-    const Vector &getResistingForceIncInertia(void) const;            
+    const Vector &getResistingForceIncInertia(void) const;
+
+    const BeamIntegration *getIntegrator(void) const;
+    boost::python::list getSectionLocationsPy(void) const;
+    boost::python::list getSectionWeightsPy(void) const;
   
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

@@ -152,6 +152,18 @@ XC::Element* XC::ForceBeamColumn3d::getCopy(void) const
 XC::ForceBeamColumn3d::~ForceBeamColumn3d(void)
   { free_mem(); }
 
+//! @brief Return a pointer to the beam integrator object.
+const XC::BeamIntegration *XC::ForceBeamColumn3d::getIntegrator(void) const
+  { return this->beamIntegr; }
+
+//! @brief Returns the location of the sections along the element.
+boost::python::list XC::ForceBeamColumn3d::getSectionLocationsPy(void) const
+  { return this->beamIntegr->getSectionLocationsPy(this->getNumSections(), this->theCoordTransf->getInitialLength()); }
+
+//! @brief Return the weights corresponding to each section.
+boost::python::list XC::ForceBeamColumn3d::getSectionWeightsPy(void) const
+  { return this->beamIntegr->getSectionWeightsPy(this->getNumSections(), this->theCoordTransf->getInitialLength()); }
+
 //! @brief Returns the value of the persistent (does not get wiped out by
 //! zeroLoad) initial deformation of the element.
 const std::vector<XC::Vector> &XC::ForceBeamColumn3d::getPersistentInitialSectionDeformation(void) const
@@ -885,7 +897,7 @@ void XC::ForceBeamColumn3d::getForceInterpolatMatrix(double xi, Matrix &b, const
       }
   }
 
-void XC::ForceBeamColumn3d::getDistrLoadInterpolatMatrix(double xi, Matrix &bp, const XC::ID &code)
+void XC::ForceBeamColumn3d::getDistrLoadInterpolatMatrix(double xi, Matrix &bp, const ID &code)
   {
     bp.Zero();
 
@@ -1281,8 +1293,8 @@ void XC::ForceBeamColumn3d::compSectionDisplacements(std::vector<Vector> &sectio
       }
 
     Vector v(numSections), w(numSections);
-    static XC::Vector xl(NDM), uxb(NDM);
-    static XC::Vector xg(NDM), uxg(NDM);
+    static Vector xl(NDM), uxb(NDM);
+    static Vector xg(NDM), uxg(NDM);
     // double theta;                             // angle of twist of the sections
 
     // v = ls * kappa_z;
