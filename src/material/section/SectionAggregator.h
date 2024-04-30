@@ -70,11 +70,11 @@
 #include <material/section/AggregatorAdditions.h>
 
 namespace XC {
-//! @ingroup MATSCC
 //
 //! @brief SectionAggregator decorates an MP
 //! section (couple bending and axial) with an uncoupled shear
 //! relation.
+//! @ingroup MATSCC
 class SectionAggregator: public PrismaticBarCrossSection
   {
   private:
