@@ -63,20 +63,18 @@ sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Define FE mesh.
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sa.name)
-# Constraints
+## Define constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)
 
-# Loads definition
+## Define loads
 lp0= modelSpace.newLoadPattern(name= '0')
-
 loadVy= 2e4
 loadVz= 3e4
 loadMx= 1e3
 loadMz= 0.999*scc10x20.getPlasticMomentZ(fy)
 lp0.newNodalLoad(nodB.tag,xc.Vector([0,loadVy,loadVz,loadMx,0,loadMz]))
-
-# We add the load case to domain.
+### Add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 
