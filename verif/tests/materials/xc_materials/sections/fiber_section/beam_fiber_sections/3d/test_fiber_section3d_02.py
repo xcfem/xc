@@ -61,7 +61,7 @@ fiberSectionRepr.setGeomNamed(geomRectang.name)
 rectang.setupFibers()
 fiber_section_test_macros.extractFiberSectionProperties(rectang,scc10x20, fy)
 
-zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "rectang")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "rectang")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)

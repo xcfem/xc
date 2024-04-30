@@ -81,7 +81,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomSecHA.name)
 secHA.setupFibers()
 
-zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "secHA")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "secHA")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

@@ -56,7 +56,7 @@ materialHandler= preprocessor.getMaterialHandler
 
 # Section geometry
 section.defRCSection(preprocessor,matDiagType= 'k')
-zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

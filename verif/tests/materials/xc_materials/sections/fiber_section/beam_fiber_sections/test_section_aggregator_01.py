@@ -62,7 +62,7 @@ sa.setSection("rectang")
 sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Define FE mesh.
-zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, sa.name)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sa.name)
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)
