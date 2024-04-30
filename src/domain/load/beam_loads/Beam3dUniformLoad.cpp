@@ -106,10 +106,10 @@ const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L
         retval(0,i)= wx*(L-x);// Axial
         
         retval(1,i)= wy*0.5*x*(x-L); // Moment
-        retval(2,i)= wy*(x-0.5*L); // Shear
+        retval(2,i)= wy*(x-0.5*L); // Shear along y.
         
         retval(3,i)= wz*0.5*x*(L-x);// Moment
-        retval(4,i)= wz*(x-0.5*L);// Shear
+        retval(4,i)= wz*(0.5*L-x);// Shear along z.
       }
     return retval;
   }
