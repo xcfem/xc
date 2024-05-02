@@ -63,8 +63,8 @@ sectionBucklingProperties= {'reinforcementFactorZ': 1, # Rectangular section tab
                             'sectionDepthZ': sectionWidth,
                             'reinforcementFactorY': 1, # Rectangular section table 43.5.1 of EHE-08.
                             'sectionDepthY': sectionDepth,
-                            'Cz': 0.24, # table 43.1.2 of EHE-08.
-                            'Cy': 0.24, # table 43.1.2 of EHE-08.
+                            'Cz': 0.24, # clause 43.1.2 of EHE-08.
+                            'Cy': 0.24, # clause 43.1.2 of EHE-08.
                             'sectionData': rcSection}
 xcSection.setProp('sectionBucklingProperties', sectionBucklingProperties)
 modelSpace.setDefaultMaterial(xcSection)
