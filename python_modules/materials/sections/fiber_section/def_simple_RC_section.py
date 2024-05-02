@@ -251,7 +251,7 @@ class ReinfRow(object):
     :ivar width: width of the cross-section (defautls to 1m)
     :ivar cover: concrete cover.
     '''
-    def __init__(self, rebarsDiam=None, areaRebar= None, rebarsSpacing= None, nRebars= None, width= 1.0, nominalCover= 0.03, nominalLatCover= 0.03):
+    def __init__(self, rebarsDiam=None, areaRebar= None, rebarsSpacing= None, nRebars= None, width= 1.0, nominalCover= 0.03, nominalLatCover= 0.03, silent= False):
         ''' Constructor.
 
         :param rebarsDiam: diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
@@ -261,12 +261,14 @@ class ReinfRow(object):
         :param width: width of the cross-section (defautls to 1 m)
         :param nominalCover: nominal cover (defaults to 0.03m)
         :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
+        :param silent: if true don't issue warning messages.
         '''
         # Set the rebar diameter and area.
         if(rebarsDiam and areaRebar):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; you must define either the diameter or the area of rebars, but not both.')
+            if(not silent):
+                lmsg.warning(className+'.'+methodName+'; you must define either the diameter or the area of rebars, but not both.')
             
         if(rebarsDiam):
             self.setRebarDiameter(rebarsDiam)
@@ -275,16 +277,23 @@ class ReinfRow(object):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; you must define either the diameter or the rebar area.')
-            exit(1)
+            if(not silent):
+                lmsg.error(className+'.'+methodName+'; you must define either the diameter or the rebar area.')
+                exit(1)
+            else:
+                self.rebarsDiam= 12e-3 # set an arbitrary diameter.
         self.width= width
         if(nRebars and rebarsSpacing):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; you must define either the number of bars or its spacing, but not both.')
+            if(not silent):
+                lmsg.warning(className+'.'+methodName+'; you must define either the number of bars or its spacing, but not both.')
             
         if nRebars:
             self.setNumberOfBars(nRebars= nRebars, width= width, nominalLatCover= nominalLatCover)
+        else:
+            if silent: # set an arbitrary number of rebars.
+                self.setNumberOfBars(nRebars= 2, width= width, nominalLatCover= nominalLatCover)
         if rebarsSpacing:
             self.setSpacing(rebarsSpacing= rebarsSpacing, width= width)
             
