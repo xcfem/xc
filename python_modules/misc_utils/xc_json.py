@@ -11,7 +11,9 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 
 import json
+import xc
 import importlib
+import inspect
 
 def fully_qualified_classname(obj):
     ''' Return the fullyqualified class name of a python object
@@ -26,7 +28,16 @@ def fully_qualified_classname(obj):
     return retval
 
 class XCJSONEncoder(json.JSONEncoder):
-    ''' JSON encoder for XC objects.'''
+    ''' JSON encoder for XC objects.
+
+    :ivar alreadyExportedObjects: objects already exported.
+    '''
+    
+    def __init__(self, **kwargs):
+        ''' Constructor.'''
+        super().__init__(**kwargs)
+        self.alreadyExportedObjects= dict()
+        
     def default(self, obj):
         ''' Overloas encoding method.
 
@@ -34,32 +45,87 @@ class XCJSONEncoder(json.JSONEncoder):
         '''
         if(hasattr(obj, "getDict")):
             className= fully_qualified_classname(obj)
-            object_dict= {'class_name':className, 'object_id':id(obj)}
-            object_dict.update(obj.getDict())
+            objectId= id(obj)
+            if(objectId in self.alreadyExportedObjects):
+                object_dict= {'object_ref':objectId}
+            else:
+                object_dict= {'class_name':className, 'object_id':objectId}
+                object_dict.update(obj.getDict())
+                self.alreadyExportedObjects[objectId]= obj
             return object_dict
         else:
             return super().default(obj)
+
+def broke_xc_object(preprocessor, dct):
+    ''' Return an xc object from the data in the given dictionary.
+
+    :param preprocessor: preprocessor of the FE problem.
+    :param dct: Python dictionary.
+    '''
+    retval= None
+    prefix= 'xc.'
+    fullyQualifiedClassName= dct['class_name']
+    className= fullyQualifiedClassName[len(prefix):]
+    if(className=='Vector'):
+        values= dct['values']
+        retval= xc.Vector(values)
+    elif(className=='ElasticShearSection3d'):
+        materialHandler= preprocessor.getMaterialHandler
+        matTag= dct['tag']
+        if(materialHandler.materialExists(matTag)): # already defined.
+            retval= materialHandler.getMaterial(matTag)
+        else:
+            matName= dct['name']
+            retval= materialHandler.newMaterial("elasticShearSection3d", matName)
+            retval.setFromDict(dct)
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; class: '+str(className) + ' not implemented yet.')
+        lmsg.error
+    return retval
+    
         
 class XCJSONDecoder(json.JSONDecoder):
-    ''' JSON encoder for XC objects.'''
+    ''' JSON encoder for XC objects.
+
+    :ivar objectDict: XC object readed from a JSON file.
+    '''
     
     def __init__(self, **kwargs):
         ''' Constructor.'''
         kwargs["object_hook"] = self.object_hook
         super().__init__(**kwargs)
-    
+        self.objectDict= dict()
+
     def object_hook(self, dct):
         ''' Create XC object from dictionary.
 
         :param dct: Python dictionary.
         '''
         if('class_name' in dct):
-            fullyQualifiedClassName= dct['class_name']
-            className= fullyQualifiedClassName.split('.')[-1]
-            moduleName= fullyQualifiedClassName.removesuffix('.'+className)
-            importedClass= getattr(importlib.import_module(moduleName), className)
-            obj= importedClass(silent= True) # Don't issue warning messages.
-            obj.setFromDict(dct)
+            objId= dct['object_id']
+            obj= None
+            if(objId in self.objectDict): # already loaded.
+                obj= self.objectDict[objId]
+            else: # new object.
+                fullyQualifiedClassName= dct['class_name']
+                if(fullyQualifiedClassName.startswith('xc.')):
+                    obj= broke_xc_object(preprocessor= self.preprocessor, dct= dct)
+                else:
+                    className= fullyQualifiedClassName.split('.')[-1]
+                    moduleName= fullyQualifiedClassName.removesuffix('.'+className)
+                    importedClass= getattr(importlib.import_module(moduleName), className)
+                    parameters= inspect.signature(importedClass.__init__).parameters
+                    if('silent' in parameters):
+                        obj= importedClass(silent= True) # Don't issue warning messages.
+                    else:
+                        obj= importedClass()
+                    obj.setFromDict(dct)
+                self.objectDict[objId]= obj # for future reference.
+            return obj
+        elif('object_ref' in dct):
+            objId= dct['object_ref']
+            obj= self.objectDict[objId]
             return obj
         else:
             return dct
