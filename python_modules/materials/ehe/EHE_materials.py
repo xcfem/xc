@@ -152,7 +152,7 @@ class EHEConcrete(concrete_base.Concrete):
     """
     linearCoefficientOfThermalExpansion= 1e-5 # linear coefficient of thermal expansion according to clause 39.10 of EHE-08.
 
-    def __init__(self,nmbConcrete, fck, gammaC,typeAggregate='cuarcita'):
+    def __init__(self,nmbConcrete= None, fck= 0.0, gammaC= 1.5, typeAggregate='cuarcita'):
         ''' Constructor.
 
         :param nmbConcrete: name of the concrete
@@ -167,6 +167,27 @@ class EHEConcrete(concrete_base.Concrete):
         super(EHEConcrete,self).__init__(nmbConcrete,fck, gammaC)
         self.typeAggregate= typeAggregate
 
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        retval= super().getDict()
+        retval.update({'aggregate_type':self.typeAggregate})
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        self.typeAggregate= dct['aggregate_type']
+        super().setFromDict(dct)              
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super().__eq__(other= other)
+            if(retval):
+                retval= (self.typeAggregate == other.typeAggregate)
+        else:
+            retval= True
+        return retval
+    
     def getM(self, steel):
         ''' Return the "m" coefficient according to table 69.5.1.2.a of
             EHE-08

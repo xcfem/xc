@@ -175,17 +175,47 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.initTensStiff=False
         self.alfacc= alphacc
 
+    def getDict(self):
+        ''' Return a dictionary with the values of the object members.'''
+        retval= super().getDict()
+        retval.update({'fck':self.fck, 'gamma_c':self.gmmC, 'init_tens_stiff':self.initTensStiff, 'alpha_cc':self.alfacc})
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        self.fck= dct['fck']
+        self.gmmC= dct['gamma_c']
+        self.initTensStiff= dct['init_tens_stiff']
+        self.alfacc= dct['alpha_cc']
+        super().setFromDict(dct)
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super().__eq__(other= other)
+            if(retval):
+                retval= (self.fck == other.fck)
+            if(retval):
+                retval= (self.gmmC == other.gmmC)
+            if(retval):
+                retval= (self.initTensStiff == other.initTensStiff)
+            if(retval):
+                retval= (self.alfacc == other.alfacc)
+        else:
+            retval= True
+        return retval
+        
     def setupName(self, matName):
         ''' Material setup.
 
         :param matName: material name.
         '''
         super().setupName(matName)
-        
-        # Creep model for concrete.
-        self.nmbDiagTD= "dgTD"+self.materialName # Name identifying the linear elastic stress-strain diagram.
-        self.matTagTD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
-        self.materialDiagramTD= None # Design stress-strain diagram.
+        if(matName):
+            # Creep model for concrete.
+            self.nmbDiagTD= "dgTD"+self.materialName # Name identifying the linear elastic stress-strain diagram.
+            self.matTagTD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
+            self.materialDiagramTD= None # Design stress-strain diagram.
     
     def density(self,reinforced= True):
         '''Return concrete density in kg/m3.'''
@@ -1223,7 +1253,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     Es= 2e11 # Elastic modulus of the material.
     k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
     rho= 7850 # kg/m3
-    def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
+    def __init__(self,steelName= None, fyk= 0.0, emax= 0.0, gammaS= 1.15, k=1.05):
         ''' Constructor.
 
         :param steelName: identifier for the steel material.
@@ -1239,6 +1269,37 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         self.emax= emax # Ultimate strain (rupture strain)
         self.k=k        # fmaxk/fyk ratio
 
+    def getDict(self):
+        ''' Return a dictionary with the object values.'''
+        retval= super().getDict()
+        retval.update({'fyk':self.fyk, 'gamma_s':self.gammaS, 'e_max':self.emax, 'k': self.k})
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        super().setFromDict(dct)
+        self.fyk= dct['fyk']
+        self.gammaS= dct['gamma_s']
+        self.emax= dct['e_max']
+        self.k= dct['k']
+        
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super().__eq__(other= other)
+            if(retval):
+                retval= (self.fyk==other.fyk)
+            if(retval):
+                retval= (self.gammaS==other.gammaS)
+            if(retval):
+                retval= (self.emax==other.emax)
+            if(retval):
+                retval= (self.k==other.k)
+        else:
+            retval= True
+        return retval
+    
     def fmaxk(self):
         ''' Characteristic ultimate strength. '''
         return self.k*self.fyk

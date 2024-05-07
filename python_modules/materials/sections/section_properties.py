@@ -53,12 +53,15 @@ class SectionProperties(object):
         ''' Put member values in a dictionary.'''
         xcMatDict= None
         if(self.xc_material):
-            xcMatDict= self.xc_material.getDict()
+            xcMatDict= self.xc_material
         retval= {'name':self.name, 'xc_material':xcMatDict}
         return retval
 
     def setFromDict(self,dct):
-        ''' Read member values from a dictionary.'''
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
         self.name= dct['name']
         self.xc_material= dct['xc_material']
         
@@ -532,6 +535,22 @@ class RectangularSection(SectionProperties):
         super(RectangularSection,self).__init__(name)
         self.b= b
         self.h= h
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super().getDict()
+        retval['b']= self.b
+        retval['h']= self.h
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        super().setFromDict(dct)
+        self.b= dct['b']
+        self.h= dct['h']
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
@@ -775,6 +794,23 @@ class CircularSection(SectionProperties):
         self.Rext= Rext
         self.Rint= Rint
       
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super().getDict()
+        retval['r_ext']= self.Rext
+        retval['r_int']= self.Rint
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        super().setFromDict(dct)
+        self.Rext= dct['r_ext']
+        self.Rint= dct['r_int']
+        
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
