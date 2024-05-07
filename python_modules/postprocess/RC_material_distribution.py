@@ -7,6 +7,7 @@ from __future__ import division
 import sys
 from postprocess import element_section_map
 import json
+from misc_utils import xc_json
 import pickle
 from misc_utils import log_messages as lmsg
 import xc
@@ -51,7 +52,7 @@ class RCMaterialDistribution(object):
 
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
-        retval= {'sectionDefinition': self.sectionDefinition.getDict(), 'sectionDistribution': self.sectionDistribution.getDict(), 'elementSetNames':self.elementSetNames}
+        retval= {'section_definition': self.sectionDefinition, 'section_map': self.sectionDistribution, 'element_set_names':self.elementSetNames}
         return retval
     
     def setFromDict(self, dct):
@@ -59,10 +60,22 @@ class RCMaterialDistribution(object):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        self.sectionDefinition.setFromDict(dct['sectionDefinition'])
-        self.sectionDistribution.setFromDict(dct['sectionDistribution'])
-        self.elementSetNames= dct['elementSetNames']
+        self.sectionDefinition= dct['section_definition']
+        self.sectionDistribution= dct['section_map']
+        self.elementSetNames= dct['element_set_names']
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.sectionDefinition == other.sectionDefinition)
+            if(retval):
+                retval= (self.sectionDistribution == other.sectionDistribution)
+            if(retval):
+                retval= (self.elementSetNames == other.elementSetNames)
+        else:
+            retval= True
+        return retval
+    
     def assign(self, elemSet, setRCSects):
         '''Assigns the sections names to the elements of the set.
 
@@ -167,14 +180,14 @@ class RCMaterialDistribution(object):
         if(not fileName):
             fileName= 'map_sections_reinforcement.json'
         with open(fileName, 'w') as f:
-            json.dump(data, f)
+            json.dump(data, f, cls= xc_json.XCJSONEncoder)
 
     def readFromJSON(self, fileName= None):
         '''Writes object data from a JSON file.'''
         if(not fileName):
             fileName= 'map_sections_reinforcement.json'
         with open(fileName, 'r') as f:
-            data= json.load(f)
+            data= json.load(f, cls=xc_json.XCJSONDecoder)
         self.setFromDict(data)
 
     def load(self):

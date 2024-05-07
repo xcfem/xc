@@ -11,6 +11,7 @@ from materials.sections.fiber_section import def_simple_RC_section
 from materials.sections import RC_sections_container as sc
 from materials import typical_materials
 import matplotlib.pyplot as plt
+from collections import UserDict
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -61,10 +62,7 @@ class ElementSections(object):
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= {'name': self.name, 'directions': self.directions, 'gaussPoints': self.gaussPoints}
-        tmp= list()
-        for rcs in self.lstRCSects:
-            tmp.append(rcs.getDict())
-        retval['lstRCSects']= tmp
+        retval['lstRCSects']= self.lstRCSects
         return retval
     
     def setFromDict(self, dct):
@@ -75,12 +73,22 @@ class ElementSections(object):
         self.name= dct['name']
         self.directions= dct['directions']
         self.gaussPoints= dct['gaussPoints']
-        tmp= dct['lstRCSects']
-        if(len(tmp)>0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+"; reading RC section list not implementd yet.")
+        self.lstRCSects= dct['lstRCSects']
 
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.name == other.name)
+            if(retval):
+                retval= (self.directions == other.directions)
+            if(retval):
+                retval= (self.gaussPoints == other.gaussPoints)
+            if(retval):
+                retval= (self.lstRCSects == other.lstRCSects)                
+        else:
+            retval= True
+        return retval
+    
     def append_section(self, RCSect):
         ''' Append the section argument to the container.
 
@@ -219,7 +227,7 @@ class RawShellSections(ElementSections):
         for templateSection in self.templateSections:
             templateSection.report(os, indentation)
     
-class setRCSections2SetElVerif(ElementSections):
+class SetRCSections2SetElVerif(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
        sections. The items of the list are instances of the 
        object *RCRectangularSection*
@@ -234,7 +242,7 @@ class setRCSections2SetElVerif(ElementSections):
         :param gaussPoints: list of the integration points to consider for each
                            element.
         '''
-        super(setRCSections2SetElVerif,self).__init__(name,directions, gaussPoints)
+        super(SetRCSections2SetElVerif,self).__init__(name,directions, gaussPoints)
 
     def setShearReinf(self,sectNmb,nShReinfBranches,areaShReinfBranch,spacing):
         '''sets parameters of the shear reinforcement of the simple section 
@@ -316,7 +324,7 @@ class setRCSections2SetElVerif(ElementSections):
         '''
         return self.lstRCSects[sectNmb-1].getNBarNeg()
 
-class RCSlabBeamSection(setRCSections2SetElVerif):
+class RCSlabBeamSection(SetRCSections2SetElVerif):
     '''This class is used to define the variables that make up the two 
     reinforced concrete sections that define the two reinforcement directions
     of a slab or the front and back ending sections of a beam element
@@ -343,7 +351,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
     :ivar dir2ShReinfZ: instance of class ShearReinforcement that represents
                         the Z shear reinforcement in section 2
     '''
-    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0):
+    def __init__(self,name= None,sectionDescr= None,concrType= None,reinfSteelType= None,depth= None,width=1.0):
         '''Constructor.
 
 
@@ -369,6 +377,66 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.dir2ShReinfY= def_simple_RC_section.ShearReinforcement()
         self.dir2ShReinfZ= def_simple_RC_section.ShearReinforcement()
 
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super().getDict()
+        retval.update({'section_description': self.sectionDescr, 'concrete_type': self.concrType, 'reinforcing_steel_type':self.reinfSteelType, 'depth':self.depth, 'width':self.width, 'dir1_positive_rebar_rows':self.dir1PositvRebarRows, 'dir1_negative_rebar_rows':self.dir1NegatvRebarRows, 'dir2_positive_rebar_rows':self.dir2PositvRebarRows, 'dir2_negative_rebar_rows':self.dir2NegatvRebarRows, 'dir1_shear_reinforcement_y':self.dir1ShReinfY, 'dir1_shear_reinforcement_z':self.dir1ShReinfZ, 'dir2_shear_reinforcement_y':self.dir2ShReinfY, 'dir2_shear_reinforcement_z':self.dir2ShReinfZ})
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        self.sectionDescr= dct['section_description']
+        self.concrType= dct['concrete_type']
+        self.reinfSteelType= dct['reinforcing_steel_type']
+        self.depth= dct['depth']
+        self.width= dct['width']
+        self.dir1PositvRebarRows= dct['dir1_positive_rebar_rows']
+        self.dir1NegatvRebarRows= dct['dir1_negative_rebar_rows']
+        self.dir2PositvRebarRows= dct['dir2_positive_rebar_rows']
+        self.dir2NegatvRebarRows= dct['dir2_negative_rebar_rows']
+        self.dir1ShReinfY= dct['dir1_shear_reinforcement_y']
+        self.dir1ShReinfZ= dct['dir1_shear_reinforcement_z']
+        self.dir2ShReinfY= dct['dir2_shear_reinforcement_y']
+        self.dir2ShReinfZ= dct['dir2_shear_reinforcement_z']
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= super().__eq__(other)
+            if(retval):
+                retval= (self.sectionDescr == other.sectionDescr)
+            if(retval):
+                retval= (self.concrType == other.concrType)
+            if(retval):
+                retval= (self.reinfSteelType == other.reinfSteelType)
+            if(retval):
+                retval= (self.depth == other.depth)
+            if(retval):
+                retval= (self.width == other.width)
+            if(retval):
+                retval= (self.dir1PositvRebarRows == other.dir1PositvRebarRows)
+            if(retval):
+                retval= (self.dir1NegatvRebarRows == other.dir1NegatvRebarRows)
+            if(retval):
+                retval= (self.dir2PositvRebarRows == other.dir2PositvRebarRows)
+            if(retval):
+                retval= (self.dir2NegatvRebarRows == other.dir2NegatvRebarRows)
+            if(retval):
+                retval= (self.dir1ShReinfY == other.dir1ShReinfY)
+            if(retval):
+                retval= (self.dir1ShReinfZ == other.dir1ShReinfZ)
+            if(retval):
+                retval= (self.dir2ShReinfY == other.dir2ShReinfY)
+            if(retval):
+                retval= (self.dir2ShReinfZ == other.dir2ShReinfZ)
+        else:
+            retval= True
+        return retval
+    
     def createSections(self):
         '''create the fiber sections of type 'RCRectangularSection' that 
         represent the reinforced concrete fiber section to be used for the
@@ -609,9 +677,7 @@ class RCMemberSection(ElementSections):
         ''' Return a dictionary containing the object data.'''
         retval= super().getDict()
         tmp= list()
-        for ts in self.templateSections:
-            tmp.append(ts.getDict())
-        retval['templateSections']= tmp
+        retval['templateSections']= self.templateSections
         return retval
     
     def setFromDict(self, dct):
@@ -646,7 +712,7 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
             sys.stderr.write("element: "+ str(e.tag) + " section undefined.\n")
             e.setProp(code,0.0)
 
-class ElementSectionMap(dict):
+class ElementSectionMap(object):
     '''dictionary that stores a section name(s) for each element number. 
        This way it defines  a spatial distribution of the sections over
        the structure.
@@ -658,14 +724,22 @@ class ElementSectionMap(dict):
 
     def __init__(self):
         ''' Constructor.'''
-        super(ElementSectionMap, self).__init__()
+        self.elementSections= dict() # Store sections of each element.
         self.elementDimension= dict() # Store dimension (1, 2 or 3) of each element.
+    def __setitem__(self, index, data):
+        self.elementSections[index]= data
+          
+    def __getitem__(self, index):
+        return self.elementSections[index]
+
+    def keys(self):
+        return self.elementSections.keys()
         
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= dict()
-        retval['base']= self
-        retval['elementDimension']= self.elementDimension
+        retval['element_sections']= self.elementSections
+        retval['element_dimension']= self.elementDimension
         return retval
     
     def setFromDict(self, dct):
@@ -673,8 +747,22 @@ class ElementSectionMap(dict):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        self.update(dct['base'])
-        self.elementDimension= dct['elementDimension']
+        for key in dct['element_sections']:
+            value= dct['element_sections'][key]
+            self.elementSections[int(key)]= value
+        for key in dct['element_dimension']:
+            value= dct['element_dimension'][key]
+            self.elementDimension[int(key)]= value
+
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.elementSections == other.elementSections)
+            if(retval):
+                retval= (self.elementDimension == other.elementDimension)
+        else:
+            retval= True
+        return retval
     
     def getElementDimension(self, elemTag):
         ''' Return the dimension of the element whose tag is being passed
@@ -706,10 +794,10 @@ class ElementSectionMap(dict):
 
         for e in elemSet:
             if(not e.hasProp(self.propName)):
-                self[e.tag]= list()
+                self.elementSections[e.tag]= list()
                 self.elementDimension[e.tag]= e.getDimension
                 for s in setRCSects.lstRCSects:
-                    self[e.tag].append(s.name)
+                    self.elementSections[e.tag].append(s.name)
                 e.setProp(self.propName, setRCSects.name)
             else:
                 className= type(self).__name__
