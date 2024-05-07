@@ -87,6 +87,23 @@ XC::TaggedObject *XC::TaggedObject::getCopy(void) const
     return nullptr;
   }
 
+//! @brief Return true if both objects are equal.
+bool XC::TaggedObject::isEqual(const TaggedObject &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= (typeid(*this) == typeid(other));
+	if(retval)
+	  {
+	    retval= CommandEntity::isEqual(other);
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Set tag.
 //!
 //! Sets the tag of the object to be \p newTag. It is provided so that

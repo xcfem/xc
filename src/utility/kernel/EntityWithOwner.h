@@ -37,6 +37,7 @@ class EntityWithOwner
     EntityWithOwner *owner; //! Object that owns THIS ONE.
   protected:
     static int verbosity; //!< Verbosity level.
+    virtual bool isEqual(const EntityWithOwner &) const;
    public:
     EntityWithOwner(EntityWithOwner *owr= nullptr);
     EntityWithOwner(const EntityWithOwner &);

@@ -51,10 +51,9 @@
 #include "material/section/elastic_section/ElasticShearSection3d.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Matrix.h"
-
-
 #include <cstdlib>
 #include "material/section/ResponseId.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Vector XC::ElasticShearSection3d::s(6);
 XC::Matrix XC::ElasticShearSection3d::ks(6,6);
@@ -64,6 +63,21 @@ XC::ElasticShearSection3d::ElasticShearSection3d(void)
 
 XC::ElasticShearSection3d::ElasticShearSection3d(int tag, MaterialHandler *mat_ldr)
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,6,mat_ldr) {}
+
+//! @brief Return true if both objects are equal.
+bool XC::ElasticShearSection3d::isEqual(const ElasticShearSection3d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= BaseElasticSection3d::isEqual(other);
+	if(retval)
+	  retval= (parameterID==other.parameterID);
+      }
+    return retval;
+  }
 
 const XC::Vector &XC::ElasticShearSection3d::getStressResultant(void) const
   {
@@ -153,6 +167,21 @@ int XC::ElasticShearSection3d::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ElasticShearSection3d::getPyDict(void) const
+  {
+    boost::python::dict retval= BaseElasticSection3d::getPyDict();
+    retval["parameterID"]= parameterID;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ElasticShearSection3d::setPyDict(const boost::python::dict &d)
+  {
+    BaseElasticSection3d::setPyDict(d);
+    this->parameterID= boost::python::extract<int>(d["parameterID"]);
+  }
+
 int XC::ElasticShearSection3d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -162,7 +191,9 @@ int XC::ElasticShearSection3d::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -173,13 +204,17 @@ int XC::ElasticShearSection3d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids."
+	        << Color::def <<  std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def <<  std::endl;
       }
     return res;
   }

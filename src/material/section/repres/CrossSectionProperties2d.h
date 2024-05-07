@@ -125,6 +125,8 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
     
     int setParameter(const std::vector<std::string> &,Parameter &,SectionForceDeformation *);
     int updateParameter(int parameterID, Information &info);

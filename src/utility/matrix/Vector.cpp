@@ -1258,6 +1258,22 @@ boost::python::list XC::Vector::getPyList(void) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Vector::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["values"]= this->getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Vector::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    const boost::python::list tmp= boost::python::extract<boost::python::list>(d["values"]);
+    this->operator=(Vector(tmp));
+  }
+
 //! @brief Read vector from a binary file.
 void XC::Vector::read(std::ifstream &is)
   {

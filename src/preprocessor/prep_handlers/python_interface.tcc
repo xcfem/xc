@@ -44,10 +44,16 @@ class_<XC::NodeHandler, bases<XC::PrepHandler>, boost::noncopyable >("NodeHandle
   .def("duplicateNode", &XC::NodeHandler::duplicateNode,return_internal_reference<>(),"\n""duplicateNode(orgNodeTag) \n" "Create a duplicate copy of node with ID=orgNodeTag")
   ;
 
+bool (XC::MaterialHandler::*materialExistsFromName)(const std::string &) const= &XC::MaterialHandler::materialExists;
+bool (XC::MaterialHandler::*materialExistsFromTag)(const int &) const= &XC::MaterialHandler::materialExists;
+XC::Material &(XC::MaterialHandler::*getMaterialFromName)(const std::string &)= &XC::MaterialHandler::getMaterial;
+XC::Material &(XC::MaterialHandler::*getMaterialFromTag)(const int &)= &XC::MaterialHandler::getMaterial;
 class_<XC::MaterialHandler, bases<XC::PrepHandler>, boost::noncopyable >("MaterialHandler", no_init)
   .def("newMaterial", &XC::MaterialHandler::newMaterial,return_internal_reference<>(),"Creates a new material.")
-  .def("getMaterial", &XC::MaterialHandler::getMaterial,return_internal_reference<>(),"Returns the material which name being passed as parameter.")
-  .def("materialExists",&XC::MaterialHandler::materialExists,"True if material is already defined.")
+  .def("getMaterial", getMaterialFromName,return_internal_reference<>(),"Returns the material with the given name.")
+  .def("getMaterial", getMaterialFromTag,return_internal_reference<>(),"Returns the material with the given tag.")
+  .def("materialExists",materialExistsFromName,"True if material is already defined.")
+  .def("materialExists",materialExistsFromTag,"True if material is already defined.")
   .def("getName",&XC::MaterialHandler::getName,"Returns the name that corresponds to the identifier.")
   .def("newSectionGeometry", &XC::MaterialHandler::newSectionGeometry,return_internal_reference<>())
   .def("getSectionGeometry", &XC::MaterialHandler::getSectionGeometry,return_internal_reference<>(),"Returns section geometry whose name is given.")

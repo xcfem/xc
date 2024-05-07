@@ -94,11 +94,13 @@ class MaterialHandler: public PrepHandler
     InteractionDiagram2d *find_ptr_interaction_diagram2d(const std::string &nmb);
     const InteractionDiagram2d *find_ptr_interaction_diagram2d(const std::string &nmb) const;
     bool materialExists(const std::string &nmb) const;
+    bool materialExists(const int &tag) const;
     bool sectionGeometryExists(const std::string &nmb) const;
     bool InteractionDiagramExists(const std::string &nmb) const;
     bool InteractionDiagramExists2d(const std::string &nmb) const;
     Material *newMaterial(const std::string &,const std::string &);
     Material &getMaterial(const std::string &);
+    Material &getMaterial(const int &);
     SectionGeometry *newSectionGeometry(const std::string &);
     SectionGeometry &getSectionGeometry(const std::string &);
     InteractionDiagram *newInteractionDiagram(const std::string &);

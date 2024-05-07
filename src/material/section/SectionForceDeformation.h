@@ -93,6 +93,7 @@ class SectionForceDeformation: public Material
 
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
+    bool isEqual(const SectionForceDeformation &) const;
   public:
     SectionForceDeformation(int tag,int classTag,MaterialHandler *mat_ldr= nullptr);
     inline virtual ~SectionForceDeformation(void) {}
@@ -164,6 +165,9 @@ class SectionForceDeformation: public Material
 
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &info);
     virtual int getResponse(int responseID, Information &info);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);

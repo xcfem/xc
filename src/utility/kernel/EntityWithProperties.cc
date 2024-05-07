@@ -29,21 +29,6 @@ EntityWithProperties::EntityWithProperties(EntityWithProperties *owr)
   : EntityWithOwner(owr)
   {}
 
-//! @brief Comparison operator.
-bool EntityWithProperties::operator==(const EntityWithProperties &other) const
-  {
-    bool retval= false;
-    if(this==&other)
-      retval= true;
-    else
-      {
-        retval= EntityWithOwner::operator==(other);
-        if(retval)
-          retval= (python_dict==other.python_dict);
-       }
-    return retval;
-  }
-
 //! @brief Clear python properties map.
 void EntityWithProperties::clearPyProps(void)
   { python_dict.clear(); }
@@ -104,6 +89,38 @@ void EntityWithProperties::copyPropsFrom(const EntityWithProperties &other)
 //! @brief Return a std::map container with the properties of the object.
 const EntityWithProperties::PythonDict &EntityWithProperties::getPropertiesDict(void) const
   { return python_dict; }
+
+//! @brief Return true if both objects are equal.
+bool EntityWithProperties::isEqual(const EntityWithProperties &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= EntityWithOwner::isEqual(other);
+	if(retval)
+	  {
+            const PythonDict &otherDict= other.python_dict;
+            retval= (python_dict==otherDict);
+            // for(PythonDict::const_iterator i= otherDict.begin();i!= otherDict.end();i++)
+	    //   {
+	    // 	const std::string &key= (*i).first;
+	    // 	PythonDict::const_iterator j= python_dict.find(key);
+	    // 	if(j!= python_dict.end()) // key exists.
+	    // 	  {
+	    // 	    const boost::python::object otherObject= (*i).second;
+	    // 	    const boost::python::object thisObject= (*j).second;
+	    // 	    if(&otherObject == &thisObject)
+	    // 	      retval= true;
+	    // 	    else
+	    // 	      retval= (otherObject==thisObject);
+	    // 	  }
+	    //   }
+	  }
+      }
+    return retval;
+  }
 
 //! @brief Return a Python dictionary containing the object members values.
 boost::python::dict EntityWithProperties::getPyDict(void) const

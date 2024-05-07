@@ -934,6 +934,15 @@ XC::Material &XC::MaterialHandler::getMaterial(const std::string &nmb)
     return *retval;
   }
 
+//! @brief Returns a reference to the material which identifier
+//! is being passed as parameter.
+XC::Material &XC::MaterialHandler::getMaterial(const int &tag)
+  {
+    Material *retval= find_ptr(tag);
+    assert(retval);
+    return *retval;
+  }
+
 //! @brief Returns a reference to the section geometry which identifier
 //! is being passed as parameter. 
 XC::SectionGeometry &XC::MaterialHandler::getSectionGeometry(const std::string &nmb)
@@ -955,6 +964,10 @@ XC::InteractionDiagram &XC::MaterialHandler::getInteractionDiagram(const std::st
 //! @brief True if material exists.
 bool XC::MaterialHandler::materialExists(const std::string &nmb) const
   { return (materials.find(nmb)!=materials.end()); }
+
+//! @brief True if material exists.
+bool XC::MaterialHandler::materialExists(const int &tag) const
+  { return (this->find_ptr(tag)!=nullptr); }
 
 //! @brief Returns true if the section geometry identified by
 //! the string being passed as parameter exists.

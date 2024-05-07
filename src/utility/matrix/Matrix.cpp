@@ -154,16 +154,22 @@ XC::Matrix::Matrix(const Vector &v)
 //! @brief Constructor (Python interface).
 XC::Matrix::Matrix(const boost::python::list &l)
   :numRows(len(l)), numCols(0)
-  {
-    const boost::python::list &row0= boost::python::extract<boost::python::list>(l[0]);
-    numCols= len(row0);
-    // copy the components
-    resize(numRows,numCols);
-    for(int i=0; i<numRows; i++)
+  {    
+    if(numRows>0)
       {
-        const boost::python::list &rowI= boost::python::extract<boost::python::list>(l[i]);
-        for(int j= 0; j<numCols;j++)
-          (*this)(i,j)= boost::python::extract<double>(rowI[j]);
+	const boost::python::list &row0= boost::python::extract<boost::python::list>(l[0]);
+	numCols= len(row0);
+	if(numCols>0)
+	  {
+	    // copy the components
+	    resize(numRows,numCols);
+	    for(int i=0; i<numRows; i++)
+	      {
+		const boost::python::list &rowI= boost::python::extract<boost::python::list>(l[i]);
+		for(int j= 0; j<numCols;j++)
+		  (*this)(i,j)= boost::python::extract<double>(rowI[j]);
+	      }
+	  }
       }
   }
 
@@ -1083,7 +1089,6 @@ XC::Vector XC::Matrix::getCol(int col) const
     return retval;
   }
 
-
 //! @brief Put the vector at the i-th col.
 void XC::Matrix::putCol(int j, const Vector &v)
   {
@@ -1099,7 +1104,20 @@ void XC::Matrix::putCol(int j, const Vector &v)
 	        << " col: " << j << " out of range[0,"
 	        << numCols << ").\n";
   }
-		
+
+//! @brief Return the matrix values in a Python list.
+boost::python::list XC::Matrix::getPyList(void) const
+  {
+    boost::python::list retval;
+    for(int i=0; i<this->numCols; i++)
+      {
+	boost::python::list tmp= this->getRow(i).getPyList();
+        retval.append(tmp);
+      }
+    return retval;
+    
+  }
+
 // Matrix &operator=(const Matrix  &V):
 //      the assignment operator, This is assigned to be a copy of V. if sizes
 //      are not compatible this.data [] is deleted. The data pointers will not

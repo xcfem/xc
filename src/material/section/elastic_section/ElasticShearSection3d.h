@@ -76,6 +76,7 @@ class ElasticShearSection3d: public BaseElasticSection3d
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    bool isEqual(const ElasticShearSection3d &) const;
   public:
     ElasticShearSection3d(int tag, MaterialHandler *mat_ldr= nullptr);
     ElasticShearSection3d(void);
@@ -97,6 +98,8 @@ class ElasticShearSection3d: public BaseElasticSection3d
   
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
   
     void Print(std::ostream &s, int flag = 0) const;
   

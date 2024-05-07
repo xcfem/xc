@@ -67,7 +67,7 @@ class BaseElasticSection3d: public BaseElasticSection
     CrossSectionProperties3d ctes_scc; //!< Mechanical properties of the section.
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
+    bool isEqual(const BaseElasticSection3d &) const;
   public:
     BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialHandler *mat_ldr= nullptr);    
     BaseElasticSection3d(int tag,int classTag,const size_t &dim,MaterialHandler *mat_ldr= nullptr);    
@@ -90,6 +90,8 @@ class BaseElasticSection3d: public BaseElasticSection
 
     double getStrain(const double &y,const double &z) const;
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
     void Print(std::ostream &s, int flag =0) const;
   };
 

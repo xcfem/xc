@@ -74,6 +74,21 @@ void XC::BaseElasticSection1d::sectionGeometry(const std::string &cod_geom)
 		<< "; material handler not set." << std::endl;
   }
 
+//! @brief Return true if both objects are equal.
+bool XC::BaseElasticSection1d::isEqual(const BaseElasticSection1d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= BaseElasticSection::isEqual(other);
+	if(retval)
+	  retval= (ctes_scc==other.ctes_scc);
+      }
+    return retval;
+  }
+
 //! brief Returns strain at position being passed as parameter.
 double XC::BaseElasticSection1d::getStrain(const double &y,const double &z) const
   {

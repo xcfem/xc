@@ -33,14 +33,14 @@ class EntityWithProperties: public EntityWithOwner
   {
   public:
     typedef std::map<std::string, boost::python::object> PythonDict;    
+  protected:
+    bool isEqual(const EntityWithProperties &) const;
   private:
     static inline const std::string py_prop_prefix= "py_prop";
     
     PythonDict python_dict; //!< Python variables.
   public:
     EntityWithProperties(EntityWithProperties *owr= nullptr);
-    
-    virtual bool operator==(const EntityWithProperties &) const;
     
     void clearPyProps(void);
     bool hasPyProp(const std::string &);

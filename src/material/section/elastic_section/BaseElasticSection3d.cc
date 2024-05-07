@@ -49,6 +49,21 @@ XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size
 XC::BaseElasticSection3d::BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc(ctes) {}
 
+//! @brief Return true if both objects are equal.
+bool XC::BaseElasticSection3d::isEqual(const BaseElasticSection3d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= BaseElasticSection::isEqual(other);
+	if(retval)
+	  retval= (ctes_scc==other.ctes_scc);
+      }
+    return retval;
+  }
+
 //! @brief Set the mass properties of the section from the section geometry
 //! identified by the argument.
 void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
@@ -137,6 +152,22 @@ int XC::BaseElasticSection3d::recvData(const Communicator &comm)
     int res= BaseElasticSection::recvData(comm);
     res+= comm.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(6));
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::BaseElasticSection3d::getPyDict(void) const
+  {
+    boost::python::dict retval= BaseElasticSection::getPyDict();
+    retval["section_constants"]= this->ctes_scc.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::BaseElasticSection3d::setPyDict(const boost::python::dict &d)
+  {
+    BaseElasticSection::setPyDict(d);
+    const boost::python::dict &section_constants= boost::python::extract<boost::python::dict>(d["section_constants"]);
+    this->ctes_scc.setPyDict(section_constants);
   }
 
 void XC::BaseElasticSection3d::Print(std::ostream &s, int flag) const

@@ -42,6 +42,23 @@
 XC::BaseElasticSection::BaseElasticSection(int tag, int classTag, const size_t &dim, MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim) {}
 
+//! @brief Return true if both objects are equal.
+bool XC::BaseElasticSection::isEqual(const BaseElasticSection &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= PrismaticBarCrossSection::isEqual(other);
+	if(retval)
+	  {
+	    retval= ((this->eTrial==other.eTrial) and (this->eInic==other.eInic) and (this->eCommit==other.eCommit));
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Commits the section state.
 int XC::BaseElasticSection::commitState(void)
   {
@@ -121,6 +138,28 @@ int XC::BaseElasticSection::recvData(const Communicator &comm)
     res+= comm.receiveVector(eInic,getDbTagData(),CommMetaData(4));
     res+= comm.receiveVector(eCommit,getDbTagData(),CommMetaData(5));
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::BaseElasticSection::getPyDict(void) const
+  {
+    boost::python::dict retval= PrismaticBarCrossSection::getPyDict();
+    retval["eTrial"]= this->eTrial.getPyList();
+    retval["eInic"]= this->eInic.getPyList();
+    retval["eCommit"]= this->eCommit.getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::BaseElasticSection::setPyDict(const boost::python::dict &d)
+  {
+    PrismaticBarCrossSection::setPyDict(d);
+    const boost::python::list &eTrial_lst= boost::python::extract<boost::python::list>(d["eTrial"]);
+    this->eTrial= Vector(eTrial_lst);
+    const boost::python::list &eInic_lst= boost::python::extract<boost::python::list>(d["eInic"]);
+    this->eInic= Vector(eInic_lst);
+    const boost::python::list &eCommit_lst= boost::python::extract<boost::python::list>(d["eCommit"]);
+    this->eCommit= Vector(eCommit_lst);
   }
 
 //! @brief Printing.

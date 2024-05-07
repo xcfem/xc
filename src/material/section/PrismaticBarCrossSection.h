@@ -44,10 +44,9 @@ namespace XC {
 
 class DeformationPlane;
 
-//! @ingroup MATSCC
-//
 //! @brief Base class for beam-column cross sections.
 //! Constitutive equations of the section.
+//! @ingroup MATSCC
 class PrismaticBarCrossSection: public SectionForceDeformation
   {
     
