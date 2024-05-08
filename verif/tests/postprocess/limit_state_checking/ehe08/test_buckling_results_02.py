@@ -59,13 +59,14 @@ modelSpace.setDefaultCoordTransf(corot)
 ## Finite element material
 xcSection= rcSection.defElasticShearSection3d(preprocessor)
 ### Properties to compute element buckling parameters.
-sectionBucklingProperties= {'reinforcementFactorZ': 1, # Rectangular section table 43.5.1 of EHE-08.
-                            'sectionDepthZ': sectionWidth,
-                            'reinforcementFactorY': 1, # Rectangular section table 43.5.1 of EHE-08.
-                            'sectionDepthY': sectionDepth,
-                            'Cz': 0.24, # clause 43.1.2 of EHE-08.
-                            'Cy': 0.24, # clause 43.1.2 of EHE-08.
-                            'sectionData': rcSection}
+sectionBucklingProperties= EHE_limit_state_checking.SectionBucklingProperties(
+    reinforcementFactorZ= 1, # Rectangular section table 43.5.1 of EHE-08.
+    sectionDepthZ= sectionWidth,
+    reinforcementFactorY= 1, # Rectangular section table 43.5.1 of EHE-08.
+    sectionDepthY= sectionDepth,
+    Cz= 0.24, # clause 43.1.2 of EHE-08.
+    Cy= 0.24, # clause 43.1.2 of EHE-08.
+    sectionObject= rcSection)
 xcSection.setProp('sectionBucklingProperties', sectionBucklingProperties)
 modelSpace.setDefaultMaterial(xcSection)
 
