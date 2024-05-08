@@ -71,26 +71,19 @@
 
 //! @brief Constructor (it's used in FiberSectionShear2d).
 XC::FiberSection2d::FiberSection2d(int tag,int classTag,MaterialHandler *mat_ldr)
-  : FiberSectionBase(tag, classTag, 2, mat_ldr) {}
+  : FiberSectionBase(tag, classTag, 2, mat_ldr), parameterID(0) {}
 
 // constructors:
 XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,MaterialHandler *mat_ldr)
-  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,2,mat_ldr)
+  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,2,mat_ldr), parameterID(0)
   {
     fibers.setup(*this,fiberList,kr);
-// AddingSensitivity:BEGIN ////////////////////////////////////
-    parameterID= 0;
-// AddingSensitivity:END //////////////////////////////////////
   }
 
 //! @brief Constructor.
 XC::FiberSection2d::FiberSection2d(int tag, MaterialHandler *mat_ldr)
-  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,2,mat_ldr)
-  {
-// AddingSensitivity:BEGIN ////////////////////////////////////
-    parameterID= 0;
-// AddingSensitivity:END //////////////////////////////////////
-  }
+  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,2,mat_ldr), parameterID(0)
+  {}
 
 //! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection2d::addFiber(Fiber &newFiber)

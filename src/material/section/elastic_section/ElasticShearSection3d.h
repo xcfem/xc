@@ -78,8 +78,8 @@ class ElasticShearSection3d: public BaseElasticSection3d
     int recvData(const Communicator &);
     bool isEqual(const ElasticShearSection3d &) const;
   public:
-    ElasticShearSection3d(int tag, MaterialHandler *mat_ldr= nullptr);
     ElasticShearSection3d(void);
+    ElasticShearSection3d(int tag, MaterialHandler *mat_ldr= nullptr);
   
     const Vector &getStressResultant(void) const;
     const Matrix &getSectionTangent(void) const;

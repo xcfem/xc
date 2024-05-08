@@ -58,11 +58,13 @@
 XC::Vector XC::ElasticShearSection3d::s(6);
 XC::Matrix XC::ElasticShearSection3d::ks(6,6);
 
+//! @brief Default constructor.
 XC::ElasticShearSection3d::ElasticShearSection3d(void)
-  :BaseElasticSection3d(0, SEC_TAG_Elastic3d,6) {}
+  :BaseElasticSection3d(0, SEC_TAG_Elastic3d,6), parameterID(0) {}
 
+//! @brief Constructor.
 XC::ElasticShearSection3d::ElasticShearSection3d(int tag, MaterialHandler *mat_ldr)
-  :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,6,mat_ldr) {}
+  :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,6,mat_ldr), parameterID(0) {}
 
 //! @brief Return true if both objects are equal.
 bool XC::ElasticShearSection3d::isEqual(const ElasticShearSection3d &other) const
