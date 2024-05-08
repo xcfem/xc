@@ -41,6 +41,17 @@ class MaterialWithDKDiagrams(object):
         ''' Set the member values from those in the given dictionary.'''
         matName= dct['material_name']
         self.setupName(matName)
+        
+    @classmethod
+    def newFromDict(cls, dct):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        newObject.setFromDict(dct)
+        return newObject
 
     def __eq__(self, other):
         '''Overrides the default implementation'''

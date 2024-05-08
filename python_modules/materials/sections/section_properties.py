@@ -51,10 +51,10 @@ class SectionProperties(object):
     
     def getDict(self):
         ''' Put member values in a dictionary.'''
-        xcMatDict= None
+        xcMat= None
         if(self.xc_material):
-            xcMatDict= self.xc_material
-        retval= {'name':self.name, 'xc_material':xcMatDict}
+            xcMat= self.xc_material
+        retval= {'name':self.name, 'xc_material':xcMat, 'torsional_stiffness_factor': self.torsionalStiffnessFactor}
         return retval
 
     def setFromDict(self,dct):
@@ -64,6 +64,7 @@ class SectionProperties(object):
         '''
         self.name= dct['name']
         self.xc_material= dct['xc_material']
+        self.torsionalStiffnessFactor= dct['torsional_stiffness_factor']
         
     def A(self):
         '''cross-sectional area (abstract method)'''
@@ -794,7 +795,6 @@ class CircularSection(SectionProperties):
         self.Rext= Rext
         self.Rint= Rint
       
-    
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super().getDict()

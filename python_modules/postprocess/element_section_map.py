@@ -75,6 +75,17 @@ class ElementSections(object):
         self.gaussPoints= dct['gaussPoints']
         self.lstRCSects= dct['lstRCSects']
 
+    @classmethod
+    def newFromDict(cls, dct):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        newObject.setFromDict(dct)
+        return newObject
+
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -676,7 +687,6 @@ class RCMemberSection(ElementSections):
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super().getDict()
-        tmp= list()
         retval['templateSections']= self.templateSections
         return retval
     
@@ -726,6 +736,7 @@ class ElementSectionMap(object):
         ''' Constructor.'''
         self.elementSections= dict() # Store sections of each element.
         self.elementDimension= dict() # Store dimension (1, 2 or 3) of each element.
+        
     def __setitem__(self, index, data):
         self.elementSections[index]= data
           
@@ -753,7 +764,20 @@ class ElementSectionMap(object):
         for key in dct['element_dimension']:
             value= dct['element_dimension'][key]
             self.elementDimension[int(key)]= value
+            
+    @classmethod
+    def newFromDict(cls, dct):
+        ''' Builds a new object from the data in the given dictionary.
 
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        newObject.elementSections= dict() # Store sections of each element.
+        newObject.elementDimension= dict() # Store dimension (1, 2 or 3) of each element.
+        newObject.setFromDict(dct)
+        return newObject
+    
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):

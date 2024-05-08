@@ -31,8 +31,8 @@ class SectionContainer(object):
         type, rebar positions,...).
 
         '''
-        self.sections= [] # List with the section definitions.
-        self.mapSections= {} # Dictionary with pairs (sectionName, reference to
+        self.sections= list() # List with the section definitions.
+        self.mapSections= dict() # Dictionary with pairs (sectionName, reference to
                              # section definition.
         self.mapInteractionDiagrams= None
 
@@ -57,7 +57,19 @@ class SectionContainer(object):
         if('mapInteractionDiagrams' in dct):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.') 
+            lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.')
+            
+    @classmethod
+    def newFromDict(cls, dct):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        newObject.mapSections= dict()
+        newObject.setFromDict(dct)
+        return newObject
     
     def __eq__(self, other):
         '''Overrides the default implementation'''

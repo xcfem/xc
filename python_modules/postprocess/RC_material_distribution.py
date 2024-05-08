@@ -63,7 +63,18 @@ class RCMaterialDistribution(object):
         self.sectionDefinition= dct['section_definition']
         self.sectionDistribution= dct['section_map']
         self.elementSetNames= dct['element_set_names']
+            
+    @classmethod
+    def newFromDict(cls, dct):
+        ''' Builds a new object from the data in the given dictionary.
 
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        newObject.setFromDict(dct)
+        return newObject
+    
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -176,16 +187,17 @@ class RCMaterialDistribution(object):
 
     def writeToJSON(self, fileName= None):
         '''Writes this object in a JSON file.'''
-        data= self.getDict()
         if(not fileName):
             fileName= 'map_sections_reinforcement.json'
         with open(fileName, 'w') as f:
-            json.dump(data, f, cls= xc_json.XCJSONEncoder)
+            json.dump(self, f, cls= xc_json.XCJSONEncoder)
 
-    def readFromJSON(self, fileName= None):
+    def readFromJSON(self, fileName= None, preprocessor= None):
         '''Writes object data from a JSON file.'''
         if(not fileName):
             fileName= 'map_sections_reinforcement.json'
+        if(preprocessor):
+            xc_json.XCJSONDecoder.preprocessor= preprocessor
         with open(fileName, 'r') as f:
             data= json.load(f, cls=xc_json.XCJSONDecoder)
         self.setFromDict(data)

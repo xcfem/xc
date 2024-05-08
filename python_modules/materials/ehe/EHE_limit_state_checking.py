@@ -1178,6 +1178,92 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lmsg.error(errMsg)
     return Leffi, mechLambdai, Efi
 
+class SectionBucklingProperties(object):
+    ''' Properties that define the buckling behavior of the RC section
+        according to clause 43.1 of EHE-08.
+
+    :ivar reinforcementFactorZ: reinforcement factor according to table 43.5.1 of EHE-08 (z axis).
+    :ivar sectionDepthZ: section depth (z axis).
+    :ivar Cz: clause 43.1.2 of EHE-08 (z axis).
+    :ivar reinforcementFactorY: reinforcement factor according to table 43.5.1 of EHE-08 (y axis).
+    :ivar sectionDepthY: section depth (y axis).
+    :ivar Cy: clause 43.1.2 of EHE-08 (y axis).
+    :ivar sectionData:  object derived from RCSectionBase used to define the reinforced concrete section.
+    '''
+    def __init__(self, reinforcementFactorZ, sectionDepthZ, Cz,reinforcementFactorY, sectionDepthY, Cy, sectionObject):
+        ''' Constructor.
+
+        :param reinforcementFactorZ: reinforcement factor according to table 43.5.1 of EHE-08 (z axis).
+        :param sectionDepthZ: section depth (z axis).
+        :param Cz: clause 43.1.2 of EHE-08 (z axis).
+        :param reinforcementFactorY: reinforcement factor according to table 43.5.1 of EHE-08 (y axis).
+        :param sectionDepthY: section depth (y axis).
+        :param Cy: clause 43.1.2 of EHE-08 (y axis).
+        :param sectionObject:  object derived from RCSectionBase used to define the reinforced concrete section.
+        '''
+        self.reinforcementFactorZ= reinforcementFactorZ
+        self.sectionDepthZ= sectionDepthZ
+        self.Cz= Cz
+        self.reinforcementFactorY= reinforcementFactorY
+        self.sectionDepthY= sectionDepthY
+        self.Cy= Cy
+        self.sectionObject= sectionObject
+        
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= {'reinforcementFactorZ': self.reinforcementFactorZ,
+                 'sectionDepthZ': self.sectionDepthZ,
+                 'reinforcementFactorY': self.reinforcementFactorY,
+                 'sectionDepthY': self.sectionDepthY,
+                 'Cz': self.Cz,
+                 'Cy': self.Cy,
+                 'sectionObject': self.sectionObject}
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        self.reinforcementFactorZ= dct['reinforcementFactorZ']
+        self.sectionDepthZ= dct['sectionDepthZ']
+        self.Cz= dct['Cz']
+        self.reinforcementFactorY= dct['reinforcementFactorY']
+        self.sectionDepthY= dct['sectionDepthY']
+        self.Cy= dct['Cy']
+        self.sectionObject= dct['sectionObject']
+        
+    @classmethod
+    def newFromDict(cls, dct):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        newObject.setFromDict(dct)
+        return newObject
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.reinforcementFactorZ == other.reinforcementFactorZ)
+            if(retval):
+                retval= (self.sectionDepthZ == other.sectionDepthZ)
+            if(retval):
+                retval= (self.Cz == other.Cz)
+            if(retval):
+                retval= (self.reinforcementFactorY == other.reinforcementFactorY)
+            if(retval):
+                retval= (self.sectionDepthY == other.sectionDepthY)
+            if(retval):
+                retval= (self.Cy == other.Cy)
+            if(retval):
+                retval= (self.sectionObject == other.sectionObject)
+        else:
+            retval= True
+        return retval
+    
 class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
@@ -1210,13 +1296,13 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
             section= e.physicalProperties.getVectorMaterials[0]
             if(section.hasProp('sectionBucklingProperties')):
                 sectionBucklingProperties= section.getProp('sectionBucklingProperties')
-                reinforcementFactorZ= sectionBucklingProperties['reinforcementFactorZ']
-                sectionDepthZ= sectionBucklingProperties['sectionDepthZ']
-                reinforcementFactorY= sectionBucklingProperties['reinforcementFactorY']
-                sectionDepthY= sectionBucklingProperties['sectionDepthY']
-                Cz= sectionBucklingProperties['Cz']
-                Cy= sectionBucklingProperties['Cy']
-                rcSection= sectionBucklingProperties['sectionData']
+                reinforcementFactorZ= sectionBucklingProperties.reinforcementFactorZ
+                sectionDepthZ= sectionBucklingProperties.sectionDepthZ
+                reinforcementFactorY= sectionBucklingProperties.reinforcementFactorY
+                sectionDepthY= sectionBucklingProperties.sectionDepthY
+                Cz= sectionBucklingProperties.Cz
+                Cy= sectionBucklingProperties.Cy
+                rcSection= sectionBucklingProperties.sectionObject
                 Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
                 elementBucklingParameters['Leffi']= Leffi
                 elementBucklingParameters['mechLambdai']= mechLambdai
