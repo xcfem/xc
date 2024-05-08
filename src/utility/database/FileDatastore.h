@@ -165,7 +165,6 @@ class FileDatastore: public FE_Datastore
     int currentMaxInt;
     int currentMaxDouble;
 
-    void free_mem(void);
     void alloc(const size_t &sz);
     std::string getFileName(const std::string &, int idSize,int commitTag) const;
     FileDatastoreOutputFile *getFileStruct(FilesMap &, const std::string &, int objSize, int stepSize, int commitTag);
