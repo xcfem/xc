@@ -33,13 +33,14 @@ class XCJSONEncoder(json.JSONEncoder):
     :ivar alreadyExportedObjects: objects already exported.
     '''
     
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         ''' Constructor.'''
-        super().__init__(**kwargs)
+        kwargs['check_circular'] = False  # no need to check anymore
+        super().__init__(*args, **kwargs)
         self.alreadyExportedObjects= dict()
         
     def default(self, obj):
-        ''' Overloas encoding method.
+        ''' Overloads encoding method.
 
         :param obj: object to encode.
         '''
@@ -52,9 +53,10 @@ class XCJSONEncoder(json.JSONEncoder):
                 object_dict= {'class_name':className, 'object_id':objectId}
                 object_dict.update(obj.getDict())
                 self.alreadyExportedObjects[objectId]= obj
-            return object_dict
+            retval= object_dict
         else:
-            return super().default(obj)
+            retval= super().default(obj)
+        return retval
 
 def broke_xc_object(preprocessor, dct):
     ''' Return an xc object from the data in the given dictionary.
@@ -115,12 +117,7 @@ class XCJSONDecoder(json.JSONDecoder):
                     className= fullyQualifiedClassName.split('.')[-1]
                     moduleName= fullyQualifiedClassName.removesuffix('.'+className)
                     importedClass= getattr(importlib.import_module(moduleName), className)
-                    parameters= inspect.signature(importedClass.__init__).parameters
-                    if('silent' in parameters):
-                        obj= importedClass(silent= True) # Don't issue warning messages.
-                    else:
-                        obj= importedClass()
-                    obj.setFromDict(dct)
+                    obj= importedClass.newFromDict(dct)
                 self.objectDict[objId]= obj # for future reference.
             return obj
         elif('object_ref' in dct):
