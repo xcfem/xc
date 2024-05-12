@@ -1543,6 +1543,7 @@ class LinearBucklingAnalysis(object):
         :param solutionAlgorithmType: type of the solution algorithm for the static part of the analysis.
         :param eigenSOEType: type of the system of equations object for the eigenproblem part of the analysis.
         :param eigenSolverType: type of the solver for the eigenproblem part of the analysis.
+        :param printFlag: if not zero print convergence results on each step.
         '''
         self.feProblem= prb
         self.numModes= numModes
@@ -1591,7 +1592,7 @@ class LinearBucklingAnalysis(object):
 class SpectraLinearBucklingAnalysis(LinearBucklingAnalysis):
     ''' Linear buckling analysis that uses Spectra library to solve the eigenproblem part.
     '''
-    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'spectra_soe', eigenSolverType= 'spectra_solver'):
+    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solutionAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'spectra_soe', eigenSolverType= 'spectra_solver', printFlag= 0):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1606,8 +1607,9 @@ class SpectraLinearBucklingAnalysis(LinearBucklingAnalysis):
         :param solutionAlgorithmType: type of the solution algorithm for the static part of the analysis.
         :param eigenSOEType: type of the system of equations object for the eigenproblem part of the analysis.
         :param eigenSolverType: type of the solver for the eigenproblem part of the analysis.
+        :param printFlag: if not zero print convergence results on each step.
         '''
-        super().__init__(prb= prb, numModes= numModes, constraintHandlerType= constraintHandlerType, numberingMethod= numberingMethod, convTestType= convTestType, convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= soeType, solverType= solverType, solutionAlgorithmType= solutionAlgorithmType, eigenSOEType= eigenSOEType, eigenSolverType= eigenSolverType)
+        super().__init__(prb= prb, numModes= numModes, constraintHandlerType= constraintHandlerType, numberingMethod= numberingMethod, convTestType= convTestType, convergenceTestTol= convergenceTestTol, maxNumIter= 1000, soeType= soeType, solverType= solverType, solutionAlgorithmType= solutionAlgorithmType, eigenSOEType= eigenSOEType, eigenSolverType= eigenSolverType, printFlag= printFlag)
     
 # Displacement control analysis.
 class DisplacementControlBase(SolutionProcedure):
