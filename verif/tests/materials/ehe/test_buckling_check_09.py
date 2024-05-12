@@ -177,8 +177,8 @@ else:
     lmsg.error(fname+' ERROR.')
 
 # # Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
 # oh.displayFEMesh()
 # oh.displayLoads()
 # for mode in [1, 2, 3]:
