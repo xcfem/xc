@@ -638,12 +638,19 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
             Efi= extendedData['Efi']
             for index in elementControlVars:
                 controlVar= elementControlVars[index]
-                loadCombination= controlVar.combName
-                mode= int(loadCombination.split('_')[-1])
-                Leff= Leffi[mode]
-                mechLambda= mechLambdai[mode]
-                (EfZ, EfY)= Efi[mode]
-                controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode)
+                loadCombinationName= controlVar.combName
+                mode= int(loadCombinationName.split('_')[-1])
+                if(mode<=len(Leffi)):
+                    Leff= Leffi[mode-1]
+                    mechLambda= mechLambdai[mode-1]
+                    (EfZ, EfY)= Efi[mode-1]
+                    controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode)
+                else:
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+"; can't get item: "+str(mode)+' from list: '+str(Leffi))
+                    exit(1)
+                    
         retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
         return retval
     
