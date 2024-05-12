@@ -1234,14 +1234,15 @@ class SectionBucklingProperties(object):
         self.sectionObject= dct['sectionObject']
         
     @classmethod
-    def newFromDict(cls, dct):
+    def newFromDict(cls, dct= None):
         ''' Builds a new object from the data in the given dictionary.
 
         :param cls: class of the object itself.
         :param dct: dictionary contaning the data.
         '''
         newObject = cls.__new__(cls) # just object.__new__
-        newObject.setFromDict(dct)
+        if(dct):
+            newObject.setFromDict(dct)
         return newObject
         
     def __eq__(self, other):

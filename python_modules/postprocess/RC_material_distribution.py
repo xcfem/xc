@@ -65,14 +65,15 @@ class RCMaterialDistribution(object):
         self.elementSetNames= dct['element_set_names']
             
     @classmethod
-    def newFromDict(cls, dct):
+    def newFromDict(cls, dct= None):
         ''' Builds a new object from the data in the given dictionary.
 
         :param cls: class of the object itself.
         :param dct: dictionary contaning the data.
         '''
         newObject = cls.__new__(cls) # just object.__new__
-        newObject.setFromDict(dct)
+        if(dct):
+            newObject.setFromDict(dct)
         return newObject
     
     def __eq__(self, other):
@@ -200,7 +201,9 @@ class RCMaterialDistribution(object):
             xc_json.XCJSONDecoder.preprocessor= preprocessor
         with open(fileName, 'r') as f:
             data= json.load(f, cls=xc_json.XCJSONDecoder)
-        self.setFromDict(data)
+        self.sectionDefinition= data.sectionDefinition
+        self.sectionDistribution= data.sectionDistribution
+        self.elementSetNames= data.elementSetNames
 
     def load(self):
         '''Reads this object from a pickle file.'''

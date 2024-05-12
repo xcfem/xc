@@ -76,14 +76,15 @@ class ElementSections(object):
         self.lstRCSects= dct['lstRCSects']
 
     @classmethod
-    def newFromDict(cls, dct):
+    def newFromDict(cls, dct= None):
         ''' Builds a new object from the data in the given dictionary.
 
         :param cls: class of the object itself.
         :param dct: dictionary contaning the data.
         '''
         newObject = cls.__new__(cls) # just object.__new__
-        newObject.setFromDict(dct)
+        if(dct):
+            newObject.setFromDict(dct)
         return newObject
 
     def __eq__(self, other):
@@ -696,11 +697,7 @@ class RCMemberSection(ElementSections):
         :param dct: dictionary containing the values of the object members.
         '''
         super().setFromDict(dct)
-        tmp= dct['templateSections']
-        if(len(tmp)>0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+"; reading template section list not implementd yet.")
+        self.templateSections= dct['templateSections']
 
     def createSections(self):
         '''create the fiber sections that represent the reinforced concrete fiber 

@@ -43,6 +43,7 @@ sectionBucklingProperties= {'reinforcementFactorZ': 2, # Circular section table 
 
 # Get data in JSON format.
 rawData= json.dumps(sectionBucklingProperties, cls=xc_json.XCJSONEncoder)
+
 # Get XC objects from raw data.
 xc_json.XCJSONDecoder.preprocessor= preprocessor
 xcData= json.loads(rawData, cls=xc_json.XCJSONDecoder)

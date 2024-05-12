@@ -130,7 +130,7 @@ def total_keys(test_dict):
 numKeys= total_keys(item_dict)
 
 # Check some results.
-testOK= (numKeys==53)
+testOK= (numKeys==57)
 
 '''
 print('total number of keys: ', numKeys)

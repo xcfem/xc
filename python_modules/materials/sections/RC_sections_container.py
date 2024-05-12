@@ -60,7 +60,7 @@ class SectionContainer(object):
             lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.')
             
     @classmethod
-    def newFromDict(cls, dct):
+    def newFromDict(cls, dct= None):
         ''' Builds a new object from the data in the given dictionary.
 
         :param cls: class of the object itself.
@@ -68,7 +68,8 @@ class SectionContainer(object):
         '''
         newObject = cls.__new__(cls) # just object.__new__
         newObject.mapSections= dict()
-        newObject.setFromDict(dct)
+        if(dct):
+            newObject.setFromDict(dct)
         return newObject
     
     def __eq__(self, other):
