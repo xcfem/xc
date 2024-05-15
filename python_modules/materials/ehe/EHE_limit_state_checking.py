@@ -1135,42 +1135,56 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             ## Check if it is a translational buckling.
             globalEigenvector= (0.5*(nodes[0].getEigenvector(mode+1)+nodes[1].getEigenvector(mode+1))).Normalized()
             # index_max= min(range(len(globalEigenvector)), key=globalEigenvector.__getitem__)
-            globalEigenvectorXYZ= xc.Vector(list(globalEigenvector)[0:3])
+            globalEigenvectorDisp= xc.Vector(list(globalEigenvector)[0:3]) # Displacement components of the eigenvector.
+            globalEigenvectorRot=  xc.Vector(list(globalEigenvector)[3:6]) # Rotational components of the eigenvector.
             ## Get the direction of buckling.
             ### Convert to local coordinates.
-            localEigenvector= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorXYZ)
-            ### Remove axial (x) component and normalize.
-            localEigenvectorYZ= xc.Vector([localEigenvector[1], localEigenvector[2]])
-            normYZ= localEigenvectorYZ.Norm()
-            # Normalize
-            localEigenvectorYZ= localEigenvectorYZ.Normalized()
-            ## Compute the projected stiffness
-            EI= localEigenvectorYZ.dot(sectionStiffnessMatrix*localEigenvectorYZ)
-            # Compute the effective length.
-            Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
-            if(Ncr>0):
-                Leff= -Leff
-            Leffi.append(Leff)
-            # Compute the mechanical slenderness
-            i_mode= math.sqrt(EI/EA) # radius of giration.
-            mechLambda= Leff/i_mode # Compute mechanical slenderness
-            mechLambdai.append(mechLambda)
-            # Compute minimum eccentricity.
-            Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
-            Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
-            mechLambdaZ= Leffz/iz # Compute mechanical slenderness
-            mechLambdaY= Leffy/iy # Compute mechanical slenderness
-            if(mechLambdaZ<lowerSlendernessLimitZ):
+            localEigenvectorDisp= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorDisp)
+            normDisp= localEigenvectorDisp.Norm()
+            localEigenvectorRot= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorRot)
+            normRot= localEigenvectorRot.Norm()
+            if(normDisp>normRot):
+                ### Remove axial (x) component and normalize.
+                localEigenvectorDispYZ= xc.Vector([localEigenvectorDisp[1], localEigenvectorDisp[2]])
+                # Normalize
+                localEigenvectorDispYZ= localEigenvectorDispYZ.Normalized()
+                ## Compute the projected stiffness
+                EI= localEigenvectorDispYZ.dot(sectionStiffnessMatrix*localEigenvectorDispYZ)
+                # Compute the effective length.
+                Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
+                if(Ncr>0):
+                    Leff= -Leff
+                Leffi.append(Leff)
+                # Compute the mechanical slenderness
+                i_mode= math.sqrt(EI/EA) # radius of giration.
+                mechLambda= Leff/i_mode # Compute mechanical slenderness
+                mechLambdai.append(mechLambda)
+                # Compute minimum eccentricity.
+                absNcr= abs(Ncr)
+                Leffz= math.sqrt((EIz*math.pi**2)/absNcr) # Effective length.
+                Leffy= math.sqrt((EIy*math.pi**2)/absNcr) # Effective length.
+                mechLambdaZ= Leffz/iz # Compute mechanical slenderness
+                mechLambdaY= Leffy/iy # Compute mechanical slenderness
+                if(mechLambdaZ<lowerSlendernessLimitZ):
+                    efz= minimumEccentricityZ
+                else:
+                    efz= max(minimumEccentricityZ, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz))
+                if(mechLambdaY<lowerSlendernessLimitY):
+                    efy= minimumEccentricityY
+                else:
+                    efy= max(minimumEccentricityY, get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy))
+                eccentricityVector= xc.Vector([efz, efy])
+                ef= abs(eccentricityVector.dot(localEigenvectorDispYZ))
+                Efi.append((ef*localEigenvectorDispYZ[0], ef*localEigenvectorDispYZ[1]))
+            else: # torsional buckling
+                iO2= iz**2+iy**2 # +yO**2+zO**2 # (y0 and z0 Coordinates of the shear center with respect to the centroid)
+                iO= math.sqrt(iO2) # radius of gyration.
+                # No torsional buckling for concrete sections so minimum eccentricities.
+                Leffi.append(0.0)
+                mechLambdai.append(0.0)
                 efz= minimumEccentricityZ
-            else:
-                efz= max(minimumEccentricityZ, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz))
-            if(mechLambdaY<lowerSlendernessLimitY):
                 efy= minimumEccentricityY
-            else:
-                efy= max(minimumEccentricityY, get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy))
-            eccentricityVector= xc.Vector([efz, efy])
-            ef= abs(eccentricityVector.dot(localEigenvectorYZ))
-            Efi.append((ef*localEigenvectorYZ[0], ef*localEigenvectorYZ[1]))
+                Efi.append((efz, efy))                
     else:
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
