@@ -504,7 +504,6 @@ class HEShape(structural_steel.IShape):
     def getWarpingConstant(self):
         ''' Return the value of the section warping constant.'''
         return self.get('Iw')
-
         
 class RHSShape(structural_steel.QHShape):
     ''' Rectangular hollow structural section.
@@ -520,11 +519,7 @@ class RHSShape(structural_steel.QHShape):
         ''' Return the web thickness (used in Eurocode 3
             shearBucklingVerificationNeeded).'''
         return self.get('e')
-        
-    def getWarpingConstant(self):
-        ''' Return the value of the section warping constant.'''
-        return self.get('Iw')
-        
+                
 class SHSShape(structural_steel.QHShape):
     ''' Square hollow structural section.
     '''
@@ -539,10 +534,6 @@ class SHSShape(structural_steel.QHShape):
         ''' Return the web thickness (used in Eurocode 3
             shearBucklingVerificationNeeded).'''
         return self.get('e')
-        
-    def getWarpingConstant(self):
-        ''' Return the value of the section warping constant.'''
-        return self.get('Iw')
 
 class UPNShape(structural_steel.UShape):
     def __init__(self,steel,name):
@@ -595,9 +586,6 @@ class CHSShape(structural_steel.CHShape):
         '''Return shear shape factor with respect to local z-axis'''
         return self.alphaY()
         
-    def getWarpingConstant(self):
-        ''' Return the value of the section warping constant.'''
-        return self.get('Iw')
         
 class UCShape(structural_steel.IShape):
     def __init__(self,steel,name):

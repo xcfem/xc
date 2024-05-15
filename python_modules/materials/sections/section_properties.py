@@ -1457,18 +1457,23 @@ class CompoundSection(SectionProperties):
 
     :ivar name: name identifying the section.
     '''
-    def __init__(self,name, section_list):
+    def __init__(self, name, section_list, Iw):
         ''' Constructor.
 
         :param name: name identifying the section.
+        :param section_list: list of sections.
+        :param Iw: warping constant of the compound section.
         '''
         super(CompoundSection,self).__init__(name)
         self.sectionList= section_list
+        self.Iw= Iw
       
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
             retval= super(CompoundSection,self).__eq__(other)
+            if(retval):
+                retval= (self.Iw == other.Iw)
             if(retval):
                 retval= (len(self.sectionList) == len(other.sectionList))
             for sectionA, sectionB in zip(self.sectionList, other.sectionList):
@@ -1485,6 +1490,10 @@ class CompoundSection(SectionProperties):
         for s in self.sectionList:
             retval+= s[1].A()
         return retval
+
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.Iw
   
     def yCenterOfMass(self):
         '''y coordinate of the center of mass.'''
