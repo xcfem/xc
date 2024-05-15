@@ -1292,10 +1292,10 @@ echo "$BLEU" "  Steel sections test." "$NORMAL"
 echo "$BLEU" "    steel shapes tests." "$NORMAL"
 python tests/materials/steel_shapes/test_aisc_w_shapes.py
 python tests/materials/steel_shapes/test_aisc_hss_shapes.py
-python tests/materials/steel_shapes/test_steel_shape_01.py
-python tests/materials/steel_shapes/test_steel_shape_02.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
+python tests/materials/steel_shapes/test_arcelor_metric_shapes_03.py
+python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
 python tests/materials/ec3/test_cross_section_verification_01.py
