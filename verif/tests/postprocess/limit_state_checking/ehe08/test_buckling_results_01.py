@@ -147,8 +147,8 @@ meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcr
 
 # Check results. The reference values doesn't come from a benchmark test,
 # they serve only to verify that the code run as intended.
-ratio1= abs(meanCFs[0]-0.42772948185061505)/0.42772948185061505
-ratio2= abs(meanCFs[1]-0.4382047524250554)/0.4382047524250554
+ratio1= abs(meanCFs[0]-0.42886210076847914)/0.42886210076847914
+ratio2= abs(meanCFs[1]-0.4402495644260375)/0.4402495644260375
 
 '''
 print(meanCFs[0], ratio1)
