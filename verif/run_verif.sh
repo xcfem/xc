@@ -1099,6 +1099,7 @@ python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_3d_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_section_3d_01.py
+python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_section_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_03.py
