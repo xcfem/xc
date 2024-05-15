@@ -23,13 +23,16 @@
 
 const double &(XC::CrossSectionProperties1d::*getE)(void) const= &XC::CrossSectionProperties1d::E;
 const double &(XC::CrossSectionProperties1d::*getA)(void) const= &XC::CrossSectionProperties1d::A;
+const double &(XC::CrossSectionProperties1d::*getIw)(void) const= &XC::CrossSectionProperties1d::Iw;
 class_<XC::CrossSectionProperties1d, bases<CommandEntity> >("CrossSectionProperties1d")
   .add_property("dimension", &XC::CrossSectionProperties1d::getDimension,"Section dimension (1, 2 or 3).")
   .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setE,"Elastic modulus.")
   .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setA,"Area.")
   .add_property("rho", &XC::CrossSectionProperties1d::getRho, &XC::CrossSectionProperties1d::setRho,"Material density.")
+  .add_property("Iw", make_function( getIw, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setIw,"Warping constant.")
   .add_property("linearRho", &XC::CrossSectionProperties1d::getLinearRho, &XC::CrossSectionProperties1d::setLinearRho,"Material linear density.")
   .def("EA", &XC::CrossSectionProperties1d::EA, "Tensional stiffness.")
+  .def("EIw", &XC::CrossSectionProperties1d::EIw, "Warping stiffness.")
   .def(self_ns::str(self_ns::self))
   ;
 
@@ -64,6 +67,7 @@ class_<XC::CrossSectionProperties3d, bases<XC::CrossSectionProperties2d> >("Cros
   .def("EA", &XC::CrossSectionProperties3d::EA, "Tensional stiffness.")
   .def("EIz", &XC::CrossSectionProperties3d::EIz, "Flexural stiffness around z axis.")
   .def("EIy", &XC::CrossSectionProperties3d::EIy, "Flexural stiffness around y axis.")
+  .def("GJ", &XC::CrossSectionProperties3d::GJ, "Torsional stiffness.")
   .def("rotate",&XC::CrossSectionProperties3d::rotate,"Rotate section (deprecated).")
   .def("getI1",&XC::CrossSectionProperties3d::getI1)
   .def("getI2",&XC::CrossSectionProperties3d::getI2)

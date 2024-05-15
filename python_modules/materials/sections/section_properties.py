@@ -122,6 +122,10 @@ class SectionProperties(object):
         '''torsional constant of the section (abstract method)'''
         raise Exception('Abstract method, please override')
   
+    def getWarpingConstant(self):
+        '''torsional constant of the section (abstract method)'''
+        raise Exception('Abstract method, please override')
+  
     def Wyel(self):
         '''section modulus with respect to local y-axis (abstract method)'''
         raise Exception('Abstract method, please override')
@@ -281,7 +285,7 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name, A= csp.A,E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy, J= csp.J, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name, A= csp.A,E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy, J= csp.J, Iw= csp.Iw, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -316,7 +320,7 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= csp.A, E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy,J= csp.J, alpha_y= csp.AlphaY, alpha_z= csp.AlphaZ, linearRho= rho)
+                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= csp.A, E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy,J= csp.J, Iw= csp.Iw, alpha_y= csp.AlphaY, alpha_z= csp.AlphaZ, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -350,7 +354,7 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,A= csp.A, E= E, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,A= csp.A, Iw= csp.Iw, E= E, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -388,7 +392,7 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A,E= E, I= I, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A, Iw= csp.Iw,E= E, I= I, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -426,7 +430,7 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,csp.A,E= E, G= csp.G, I= I, alpha= csp.Alpha, linearRho= rho)
+                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,csp.A, Iw= csp.Iw, E= E, G= csp.G, I= I, alpha= csp.Alpha, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -439,6 +443,7 @@ class SectionProperties(object):
         retval= xc.CrossSectionProperties2d()
         retval.E= material.E
         retval.A= self.A()
+        retval.Iw= self.getWarpingConstant()
         retval.I= self.Iz()
         retval.G= material.G()
         retval.Alpha= self.alphaY()
@@ -450,6 +455,7 @@ class SectionProperties(object):
         retval= xc.CrossSectionProperties3d()
         retval.E= material.E
         retval.A= self.A()
+        retval.Iw= self.getWarpingConstant()
         retval.Iz= self.Iz()
         retval.Iy= self.Iy()
         retval.G= material.G()
@@ -700,6 +706,24 @@ class RectangularSection(SectionProperties):
     def getTorsionalStiffness(self, G):
         '''Return the torsional stiffness of the section.'''
         return G*self.J()
+
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant according to
+        expression (22) in the article: Lateral torsional stability of timber 
+        beams. Ivan Baláž, Yvona Koleková Proceedings of the 6th International
+        Conference on Mechanics and Materials in Design, 2015.
+        '''
+        if(self.b<self.h):
+            b= self.b
+            h= self.h
+        else:
+            h= self.b
+            b= self.h
+        b_h= b/h
+        b_h2= b_h**2
+        b_h3= b_h2*b_h
+        b_h5= b_h3*b_h2
+        return (1-4.884*b_h2+4.97*b_h3-1.067*b_h5)*b**3*h**3/144.0
     
     def getShearStiffnessY(self, G):
         '''Return the shear stiffness of the section.'''
@@ -879,6 +903,10 @@ class CircularSection(SectionProperties):
         retval= 2.0*self.Iy()*self.torsionalStiffnessFactor
         return retval
     
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return 0.0
+    
     def alphaY(self):
         '''Return distortion coefficient with respect to local Y axis
            (see Oñate, Cálculo de estructuras por el MEF page 122)
@@ -932,16 +960,28 @@ class CircularSection(SectionProperties):
 class GenericSection(SectionProperties):
     '''Mechanical properties of generic section 
 
-    :ivar area:         cross-sectional area
-    :ivar Iy:           second moment of area about the local y-axis
-    :ivar Iz:           second moment of area about the local z-axis
-    :ivar Jtors:        torsional constant of the section
-    :ivar Wy:           section modulus with respect to local y-axis
-    :ivar Wz:           section modulus with respect to local z-axis
-    :ivar alphY:        shear shape factor with respect to local y-axis
-    :ivar alphZ:        shear shape factor with respect to local z-axis
+    :ivar area: cross-sectional area
+    :ivar Iy: second moment of area about the local y-axis
+    :ivar Iz: second moment of area about the local z-axis
+    :ivar Jtors: torsional constant of the section
+    :ivar Wy: section modulus with respect to local y-axis
+    :ivar Wz: section modulus with respect to local z-axis
+    :ivar alphY: shear shape factor with respect to local y-axis
+    :ivar alphZ: shear shape factor with respect to local z-axis
     '''
-    def __init__(self,name,area,I_y,I_z,Jtors,W_y,W_z,alphY,alphZ):
+    def __init__(self,name,area,I_y,I_z,Jtors,W_y,W_z,alphY,alphZ, Iw= 0.0):
+        ''' Constructor.
+        :param area: cross-sectional area
+        :param Iy: second moment of area about the local y-axis
+        :param Iz: second moment of area about the local z-axis
+        :param Jtors: torsional constant of the section
+        :param Wy: section modulus with respect to local y-axis
+        :param Wz: section modulus with respect to local z-axis
+        :param alphY: shear shape factor with respect to local y-axis
+        :param alphZ: shear shape factor with respect to local z-axis
+        :param Iw: warping constant.
+        '''
+
         super(GenericSection,self).__init__(name)
         self.area=area
         self.I_y=I_y
@@ -951,6 +991,7 @@ class GenericSection(SectionProperties):
         self.W_z=W_z
         self.alphY=alphY
         self.alphZ=alphZ
+        self.Iw= Iw
       
     def __eq__(self, other):
         '''Overrides the default implementation'''
@@ -972,6 +1013,8 @@ class GenericSection(SectionProperties):
                 retval= (self.alphY == other.alphY)
             if(retval):
                 retval= (self.alphZ == other.alphZ)
+            if(retval):
+                retval= (self.Iw == other.Iw)
         else:
             retval= True
         return retval
@@ -991,7 +1034,11 @@ class GenericSection(SectionProperties):
     def J(self):
         '''Return torsional constant of the section'''
         return self.Jtors*self.torsionalStiffnessFactor
-  
+
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.Iw
+    
     def Wyel(self):
         '''Return section modulus with respect to local y-axis'''
         return self.W_y
@@ -1144,8 +1191,8 @@ class ISection(SectionProperties):
         '''Return shear shape factor with respect to local z-axis'''
         return 0.69
   
-    def getWarpingMoment(self):
-        '''Return warping moment of a I-section
+    def getWarpingConstant(self):
+        '''Return warping constant of an I-section
 
         reference: article «I Beam» of Wikipedia.
         '''
@@ -1225,6 +1272,13 @@ class PolygonalSection(SectionProperties):
         '''
         R2= self.A()/math.pi
         return 0.5*math.pi*R2**2*self.torsionalStiffnessFactor
+    
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; not implemented yet.')
+        return 0.0
     
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''

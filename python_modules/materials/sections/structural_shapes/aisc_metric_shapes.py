@@ -1304,7 +1304,7 @@ class IShape(WShape, structural_steel.IShape):
         idict['k1'] = 0
         idict['bSlendernessRatio'] = bf / 2 / tf
         idict['hSlendernessRatio'] = hw / tw
-        idict['Cw'] = isection.getWarpingMoment()
+        idict['Cw'] = isection.getWarpingConstant()
         idict['Avy']= idict['h'] * tw # depth of the section* web thickness
         idict['Avz']= 2 / 3.0 * bf * tf # 2/3 * combined area of the flanges. 
         idict['alpha']= idict['Avy']/idict['A']
