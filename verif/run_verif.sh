@@ -1445,6 +1445,7 @@ echo "$BLEU" "  Foundation design tests." "$NORMAL"
 python tests/geotechnics/foundations/test_skin_friction.py
 python tests/geotechnics/foundations/test_pile_01.py
 python tests/geotechnics/foundations/test_pile_02.py
+python tests/geotechnics/foundations/test_pile_03.py
 python tests/geotechnics/foundations/test_micropile_cross_section.py
 python tests/geotechnics/foundations/test_micropile_01.py
 python tests/geotechnics/foundations/test_micropile_02.py

@@ -11,6 +11,7 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 import math
+from scipy.constants import g
 from misc_utils import log_messages as lmsg
 from materials.sections import section_properties as sp
 from materials import typical_materials
@@ -247,6 +248,17 @@ class Pile(object):
                           a single pile in Y direction
         '''
         raise Exception('Abstract method, please override')
+
+    def getBromsLateralSubgradeReactionModulus(self, E):
+        ''' Return the lateral subgrade reaction of the soil according to Broms
+        formula (Geotecnia y Cimientos Vol. III Cimentaciones, Excavaciones y 
+        Aplicaciones. ISBN: 8472070174, 9788472070172.
+
+        E: modulus of deformation of soil.
+        '''
+        area= self.getCrossSectionArea()
+        diameter= 2*math.sqrt(area/math.pi)
+        return 0.75*(E/diameter)
         
     def getLinearSpringsConstants3D(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
         '''Compute the spring contants that simulate the soils along the pile 
