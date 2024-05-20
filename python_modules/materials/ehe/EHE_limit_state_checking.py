@@ -1095,6 +1095,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
     Leffi= list() # Effective lengths for each mode.
     mechLambdai= list() # Mechanical slenderness for each mode.
     Efi= list() # Fictitious eccentricity for each mode.
+    pi2= math.pi**2
     if(nDOF==6): # 2D element.
         e1, e2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
         EI= section.sectionProperties.EI()
@@ -1103,7 +1104,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimit= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= e1, e2= e2, sectionDepth= sectionDepthZ)
         minimumEccentricity= max(.02, sectionDepthZ/20)
         for mode, Ncr in enumerate(Ncri):
-            Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
+            Leff= math.sqrt((EI*pi2)/abs(Ncr)) # Effective length.
             if(Ncr>0):
                 Leff= -Leff
             Leffi.append(Leff)
@@ -1131,12 +1132,14 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
+            node0Eigenvector= nodes[0].getEigenvector(mode+1)
+            node1Eigenvector= nodes[1].getEigenvector(mode+1)
             # Compute the stiffness in the direction of buckling for this mode.
             ## Check if it is a translational buckling.
-            globalEigenvector= (0.5*(nodes[0].getEigenvector(mode+1)+nodes[1].getEigenvector(mode+1))).Normalized()
+            globalEigenvector= (0.5*(node0Eigenvector+node1Eigenvector)).Normalized()
             # index_max= min(range(len(globalEigenvector)), key=globalEigenvector.__getitem__)
             globalEigenvectorDisp= xc.Vector(list(globalEigenvector)[0:3]) # Displacement components of the eigenvector.
-            globalEigenvectorRot=  xc.Vector(list(globalEigenvector)[3:6]) # Rotational components of the eigenvector.
+            globalEigenvectorRot= xc.Vector(list(globalEigenvector)[3:6]) # Rotational components of the eigenvector.
             ## Get the direction of buckling.
             ### Convert to local coordinates.
             localEigenvectorDisp= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorDisp)
@@ -1151,7 +1154,8 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                 ## Compute the projected stiffness
                 EI= localEigenvectorDispYZ.dot(sectionStiffnessMatrix*localEigenvectorDispYZ)
                 # Compute the effective length.
-                Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
+                absNcr= abs(Ncr)
+                Leff= math.sqrt((EI*pi2)/absNcr) # Effective length.
                 if(Ncr>0):
                     Leff= -Leff
                 Leffi.append(Leff)
@@ -1160,9 +1164,8 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                 mechLambda= Leff/i_mode # Compute mechanical slenderness
                 mechLambdai.append(mechLambda)
                 # Compute minimum eccentricity.
-                absNcr= abs(Ncr)
-                Leffz= math.sqrt((EIz*math.pi**2)/absNcr) # Effective length.
-                Leffy= math.sqrt((EIy*math.pi**2)/absNcr) # Effective length.
+                Leffz= math.sqrt((EIz*pi2)/absNcr) # Effective length.
+                Leffy= math.sqrt((EIy*pi2)/absNcr) # Effective length.
                 mechLambdaZ= Leffz/iz # Compute mechanical slenderness
                 mechLambdaY= Leffy/iy # Compute mechanical slenderness
                 if(mechLambdaZ<lowerSlendernessLimitZ):
