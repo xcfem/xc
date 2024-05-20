@@ -55,7 +55,6 @@
 #include "domain/mesh/element/ElemWithMaterial.h"
 #include "domain/mesh/element/utils/physical_properties/Contact2D.h"
 
-
 // number of nodes per element
 #define BC2D_NUM_NODE 4
 // number of dimensions
@@ -64,12 +63,15 @@
 #define BC2D_NUM_DOF  10
 
 namespace XC {
-class Domain;
-class Node;
-class Channel;
-class NDMaterial;
 class ContactMaterial2D;
 
+//! @brief 2D beam contact element.
+//! The BeamContact2D element is a three-dimensional beam-to-node contact element which defines a frictional contact
+//! interface between a beam element and a separate body. The retained nodes (3 DOF) are the endpoints of the beam
+//! element, and the constrained node (2 DOF) is a node from a second body. The Lagrange multiplier node (2 DOF)
+//! is required to enforce the contact condition. Each contact element should have a unique Lagrange multiplier
+//! node. The Lagrange multiplier node should not be fixed, otherwise the contact condition will not work. 
+//! @ingroup Elem  
 class BeamContact2D : public ElemWithMaterial<BC2D_NUM_NODE, Contact2D>
   {
   private:
@@ -83,7 +85,7 @@ class BeamContact2D : public ElemWithMaterial<BC2D_NUM_NODE, Contact2D>
     double mGapTol;                  // gap tolerance
     double mForceTol;                // force tolerance
     int mIniContact;                 // initial contact switch (0 = notInContact, 1 = inContact)
-	                                 // default is set for initially inContact 
+	                             // default is set for initially inContact 
 
     // boolean variables
     bool inContact;
@@ -134,13 +136,24 @@ class BeamContact2D : public ElemWithMaterial<BC2D_NUM_NODE, Contact2D>
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    void setup(void);
   public:
-    BeamContact2D(int tag, int Nd1, int Nd2, int NdS, int NdL, ContactMaterial2D &theMat, double width, double tolG, double tolF, int cSwitch = 0);
     BeamContact2D(int tag= 0, const ContactMaterial2D *mat= nullptr);
+    BeamContact2D(int tag, int Nd1, int Nd2, int NdS, int NdL, ContactMaterial2D &theMat, double width, double tolG, double tolF, int cSwitch = 0);
+    Element *getCopy(void) const;
 
     // public methods to obtain information about dof and connectivity
-    int getNumDOF(void);
+    int getNumDOF(void) const;
     void setDomain(Domain *theDomain);
+
+    void setWidth(const double &);
+    double getWidth(void) const;
+    void setGapTolerance(const double &);
+    double getGapTolerance(void) const;
+    void setForceTolerance(const double &);
+    double getForceTolerance(void) const;
+    void setInitialContactFlag(const int &);
+    double getInitialContactFlag(void) const;
 
     // public methods to set the state of the element
     int commitState(void);

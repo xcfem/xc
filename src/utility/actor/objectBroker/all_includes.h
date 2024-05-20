@@ -260,9 +260,10 @@
 #include "domain/mesh/element/truss_beam_column/nonlinearBeamColumn/element/NLBeamColumn3d.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn2d.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn3d.h"
-
 #include "domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn2d.h"
 #include "domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn3d.h"
+#include "domain/mesh/element/uw_elements/BeamContact2D.h"
+#include "domain/mesh/element/uw_elements/BeamContact3D.h"
 
 #include "domain/mesh/element/volumetric/brick/Brick.h"
 #include "domain/mesh/element/volumetric/8nbrick/EightNodeBrick.h"

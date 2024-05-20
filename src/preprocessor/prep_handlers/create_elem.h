@@ -69,6 +69,24 @@ ELEM *new_element_gen_mat_crd(int tag_elem, const Material *ptrMat, const CrdTra
     ELEM *retval= new ELEM(tag_elem,ptrMat,ptrTrf); //We create it.
     return retval;
   }
+  
+//! @brief Creates an element of type ELEM with a material of type MAT and a coordinate transformation.
+//! @tparam ELEM: type of element to create.
+//! @tparam MAT: type of material to assign to the element.
+template <typename ELEM, typename MAT>
+ELEM *new_element_mat_crd(int tag_elem, const Material *ptrMat, const CrdTransf *ptrTrf)
+  {
+    ELEM *retval= nullptr;
+    const MAT *ptr_mat= dynamic_cast<const MAT *>(ptrMat);
+    if(ptr_mat)
+      {
+        retval= new ELEM(tag_elem,ptr_mat, ptrTrf); //We create it.
+      }
+    else
+      std::cerr << "Could not cast the material pointer."
+	        << std::endl;
+    return retval;
+  }
 
 template <typename ELEM>
 ELEM *new_element_dim_gen_mat_crd(int tag_elem,int dime, const Material *ptrMat, const CrdTransf *ptrTrf)
@@ -109,12 +127,6 @@ ELEM *new_element_mat(int tag_elem, const Material *ptrMat)
     return retval;
   }
 
-template <typename ELEM>
-ELEM *new_element_mat_crd(int tag_elem, const Material *ptrMat, const CrdTransf *ptrTrf)
-  {
-    ELEM *retval= new ELEM(tag_elem,ptrMat,ptrTrf); //We create it.
-    return retval;
-  }
 } // end of XC namespace
 
 #endif

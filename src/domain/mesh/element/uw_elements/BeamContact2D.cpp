@@ -51,13 +51,36 @@
 
 #include "BeamContact2D.h"
 #include "domain/component/Parameter.h"
-#include <domain/mesh/node/Node.h>
+#include "domain/mesh/node/Node.h"
 #include "material/nD/uw_materials/ContactMaterial2D.h"
 
+void XC::BeamContact2D::setup(void)
+  {
+    if (mIniContact == 0)
+      {
+	inContact          = true;
+	was_inContact      = true;
+	to_be_released     = false;
+	should_be_released = false;
+	in_bounds          = true;
+
+      }
+    else
+      {
+	inContact          = false;
+	was_inContact      = false;
+	to_be_released     = false;
+	should_be_released = false;
+	in_bounds          = true;
+      }
+
+    mGap= 0.0;
+    mLambda = 0.0;
+  }
 
 // constructors
 XC::BeamContact2D::BeamContact2D(int tag, int Nd1, int Nd2, int NdS, int NdL, ContactMaterial2D &theMat, double width, double tolG, double tolF, int cSwitch)
-  : ElemWithMaterial<4, Contact2D>(tag,ELE_TAG_BeamContact2D, Contact2D(1,theMat)),
+  : ElemWithMaterial<BC2D_NUM_NODE, Contact2D>(tag,ELE_TAG_BeamContact2D, Contact2D(1,theMat)),
     mTangentStiffness(BC2D_NUM_DOF, BC2D_NUM_DOF),
     mInternalForces(BC2D_NUM_DOF),
     mIniContact(cSwitch),
@@ -89,31 +112,11 @@ XC::BeamContact2D::BeamContact2D(int tag, int Nd1, int Nd2, int NdS, int NdL, Co
     mForceTol = tolF;
     mIniContact = cSwitch;
 
-    if (mIniContact == 0)
-      {
-	inContact          = true;
-	was_inContact      = true;
-	to_be_released     = false;
-	should_be_released = false;
-	in_bounds          = true;
-
-      }
-    else
-      {
-	inContact          = false;
-	was_inContact      = false;
-	to_be_released     = false;
-	should_be_released = false;
-	in_bounds          = true;
-      }
-
-    mGap    = 0.0;
-    mLambda = 0.0;
-
+    setup();
   }
 
 XC::BeamContact2D::BeamContact2D(int tag, const ContactMaterial2D *ptr_mat)
-  :ElemWithMaterial<4, Contact2D>(tag,ELE_TAG_BeamContact2D,Contact2D(1,ptr_mat)),
+  :ElemWithMaterial<BC2D_NUM_NODE, Contact2D>(tag,ELE_TAG_BeamContact2D,Contact2D(1,ptr_mat)),
    mTangentStiffness(BC2D_NUM_DOF, BC2D_NUM_DOF),
    mInternalForces(BC2D_NUM_DOF),
    mEye1(BC2D_NUM_DIM, BC2D_NUM_DIM),
@@ -135,10 +138,44 @@ XC::BeamContact2D::BeamContact2D(int tag, const ContactMaterial2D *ptr_mat)
    mDcrd_s(BC2D_NUM_DIM),
    mDisp_a_n(3),
    mDisp_b_n(3)
-  {}
+  {
+    setup();
+  }
 
-int XC::BeamContact2D::getNumDOF(void)
+//! @brief Virtual constructor.
+XC::Element *XC::BeamContact2D::getCopy(void) const
+  { return new BeamContact2D(*this); }
+
+int XC::BeamContact2D::getNumDOF(void) const
   { return BC2D_NUM_DOF; }
+
+void XC::BeamContact2D::setWidth(const double &d)
+  { mRadius = d/2; }
+
+double XC::BeamContact2D::getWidth(void) const
+  { return 2.0*mRadius; }
+
+void XC::BeamContact2D::setGapTolerance(const double &d)
+  { mGapTol= d; }
+
+double XC::BeamContact2D::getGapTolerance(void) const
+  { return mGapTol; }
+
+void XC::BeamContact2D::setForceTolerance(const double &d)
+  { mForceTol= d; }
+
+double XC::BeamContact2D::getForceTolerance(void) const
+  { return mForceTol; }
+
+void XC::BeamContact2D::setInitialContactFlag(const int &i)
+  {
+    mIniContact= i;
+    setup();
+  }
+
+double XC::BeamContact2D::getInitialContactFlag(void) const
+  { return mIniContact; }
+
 
 void XC::BeamContact2D::setDomain(Domain *theDomain)
   {
@@ -172,8 +209,8 @@ void XC::BeamContact2D::setDomain(Domain *theDomain)
     mb_1 = ma_1;
 
     // perform projection of secondary node to beam centerline
-    mXi = ((mDcrd_b - mDcrd_s)^(mDcrd_b - mDcrd_a))/mLength;  // initial assumption
-    mXi = Project(mXi);                                       // actual location
+    mXi= ((mDcrd_b - mDcrd_s)^(mDcrd_b - mDcrd_a))/mLength;  // initial assumption
+    mXi= Project(mXi);                                       // actual location
 
     // initialize contact state based on projection
     in_bounds = ((mXi > 0.000) && (mXi < 1.000));
@@ -219,10 +256,10 @@ int XC::BeamContact2D::commitState(void)
     if ((retVal = this->ElemWithMaterial<BC2D_NUM_NODE, Contact2D>::commitState()) != 0) {
 	    std::cerr << "XC::BeamContact2D::commitState() - failed in base class";
 	}
-	retVal = physicalProperties.commitState();
+    retVal = physicalProperties.commitState();
 
-	return retVal;
-}
+    return retVal;
+  }
 
 int XC::BeamContact2D::revertToLastCommit()
   {
@@ -269,13 +306,13 @@ int XC::BeamContact2D::revertToStart()
 	return physicalProperties.revertToStart();
 }
 
+//! @brief This function updates variables for an incremental step n to n+1
 int XC::BeamContact2D::update(void)
-// this function updates variables for an incremental step n to n+1
-{
+  {
     double tensileStrength;
-	Vector a1(BC2D_NUM_DIM);
+    Vector a1(BC2D_NUM_DIM);
     Vector b1(BC2D_NUM_DIM);
-	Vector a1_n(BC2D_NUM_DIM);
+    Vector a1_n(BC2D_NUM_DIM);
     Vector b1_n(BC2D_NUM_DIM);
     Vector disp_a(3);
     Vector disp_b(3);
@@ -284,21 +321,22 @@ int XC::BeamContact2D::update(void)
     double rot_b;
     Vector x_c(BC2D_NUM_DIM);
 
-	// update secondary node coordinates
-	mDcrd_s = mIcrd_s + theNodes[2]->getTrialDisp();
+    // update secondary node coordinates
+    mDcrd_s = mIcrd_s + theNodes[2]->getTrialDisp();
 
-	// update Lagrange multiplier value
-	disp_L  = theNodes[3]->getTrialDisp();
-	mLambda = disp_L(0);
+    // update Lagrange multiplier value
+    disp_L  = theNodes[3]->getTrialDisp();
+    mLambda = disp_L(0);
 
-	// update nodal coordinates
-	disp_a = theNodes[0]->getTrialDisp();
-	disp_b = theNodes[1]->getTrialDisp();
-
-	for (int i = 0; i < 2; i++) {
-	    mDcrd_a(i) = mIcrd_a(i) + disp_a(i);
-		mDcrd_b(i) = mIcrd_b(i) + disp_b(i);
-	}
+    // update nodal coordinates
+    disp_a = theNodes[0]->getTrialDisp();
+    disp_b = theNodes[1]->getTrialDisp();
+    
+    for (int i = 0; i < 2; i++)
+      {
+	mDcrd_a(i) = mIcrd_a(i) + disp_a(i);
+	mDcrd_b(i) = mIcrd_b(i) + disp_b(i);
+      }
 
 	// compute incremental rotation from step n to step n+1
 	rot_a = disp_a(2) - mDisp_a_n(2);
@@ -368,66 +406,55 @@ int XC::BeamContact2D::update(void)
 
 double XC::BeamContact2D::Project(double xi)
 // this function computes the centerline projection for the current step
-{
-    double xi_p;
-	double H1;
-	double H2;
-	double H3;
-	double H4;
-    double dH1;
-	double dH2;
-	double dH3;
-	double dH4;
-	double R;
-	double DR;
-	double dxi;
-	Vector a1(BC2D_NUM_DIM);
-    Vector b1(BC2D_NUM_DIM);
-	Vector x_c_p(BC2D_NUM_DIM);
-	Vector t_c(BC2D_NUM_DIM);
-	Vector ddx_c(BC2D_NUM_DIM);
+  {
+    std::cout << "xi= " << xi << std::endl;
+    
+    // initialize to previous projection location
+    double xi_p = xi;
 
-	// initialize to previous projection location
-	xi_p = xi;
+    // update end point tangents
+    UpdateEndFrames();
 
-	// update end point tangents
-	UpdateEndFrames();
-
-	// set tangent vectors
-	a1 = Geta1();
-	b1 = Getb1();
-
-	// Hermitian basis functions and first derivatives
-	H1 = 1.0 - 3.0*xi_p*xi_p + 2.0*xi_p*xi_p*xi_p;
-	H2 = xi_p - 2.0*xi_p*xi_p + xi_p*xi_p*xi_p;
-	H3 = 3.0*xi_p*xi_p - 2*xi_p*xi_p*xi_p;
-	H4 = -xi_p*xi_p + xi_p*xi_p*xi_p;
-	dH1 = -6.0*xi_p + 6.0*xi_p*xi_p;
-	dH2 = 1.0 - 4.0*xi_p + 3.0*xi_p*xi_p;
-	dH3 = 6.0*xi_p - 6.0*xi_p*xi_p;
-	dH4 = -2.0*xi_p + 3.0*xi_p*xi_p;
+    // set tangent vectors
+    const Vector &a1= Geta1();
+    const Vector &b1= Getb1();
+    
+    // Hermitian basis functions and first derivatives
+    double H1 = 1.0 - 3.0*xi_p*xi_p + 2.0*xi_p*xi_p*xi_p;
+    double H2 = xi_p - 2.0*xi_p*xi_p + xi_p*xi_p*xi_p;
+    double H3 = 3.0*xi_p*xi_p - 2*xi_p*xi_p*xi_p;
+    double H4 = -xi_p*xi_p + xi_p*xi_p*xi_p;
+    double dH1 = -6.0*xi_p + 6.0*xi_p*xi_p;
+    double dH2 = 1.0 - 4.0*xi_p + 3.0*xi_p*xi_p;
+    double dH3 = 6.0*xi_p - 6.0*xi_p*xi_p;
+    double dH4 = -2.0*xi_p + 3.0*xi_p*xi_p;
 
     // compute current projection coordinate and tangent
-	x_c_p = mDcrd_a*H1 + a1*mLength*H2 + mDcrd_b*H3 + b1*mLength*H4;
-	t_c   = mDcrd_a*dH1 + a1*mLength*dH2 + mDcrd_b*dH3 + b1*mLength*dH4;
+    Vector x_c_p = mDcrd_a*H1 + a1*mLength*H2 + mDcrd_b*H3 + b1*mLength*H4;
+    Vector t_c   = mDcrd_a*dH1 + a1*mLength*dH2 + mDcrd_b*dH3 + b1*mLength*dH4;
 	
-	// compute initial value of residual
-	R = (mDcrd_s - x_c_p)^t_c;
+    // compute initial value of residual
+    double R= (mDcrd_s - x_c_p)^t_c;
 
-	// iterate to determine new value of xi
-	int Gapcount = 0;
-	while (fabs(R/mLength) > mGapTol && Gapcount < 50) {
-	
-		// compute current curvature vector
-		ddx_c = Get_dxc_xixi(xi_p);
+    std::cout << "R= " << R << std::endl;
+    // iterate to determine new value of xi
+    int Gapcount = 0;
+    double DR;
+    double dxi;
+    Vector ddx_c(BC2D_NUM_DIM);
+    while (fabs(R/mLength) > mGapTol && Gapcount < 50)
+      {
+	// compute current curvature vector
+	ddx_c = Get_dxc_xixi(xi_p);
 
-		// increment projection location
-		DR   = ((mDcrd_s - x_c_p)^ddx_c) - (t_c^t_c);
-		dxi  = -R/DR;
-		xi_p = xi_p + dxi;
+	// increment projection location
+	DR   = ((mDcrd_s - x_c_p)^ddx_c) - (t_c^t_c);
+	dxi  = -R/DR;
+	xi_p = xi_p + dxi;
+        std::cout << "xi_p= " << xi_p << std::endl;
 
 		// Hermitian basis functions and first derivatives
-	    H1 = 1.0 - 3.0*xi_p*xi_p + 2.0*xi_p*xi_p*xi_p;
+	H1 = 1.0 - 3.0*xi_p*xi_p + 2.0*xi_p*xi_p*xi_p;
     	H2 = xi_p - 2.0*xi_p*xi_p + xi_p*xi_p*xi_p;
     	H3 = 3.0*xi_p*xi_p - 2*xi_p*xi_p*xi_p;
     	H4 = -xi_p*xi_p + xi_p*xi_p*xi_p;
@@ -436,121 +463,101 @@ double XC::BeamContact2D::Project(double xi)
     	dH3 = 6.0*xi_p - 6.0*xi_p*xi_p;
     	dH4 = -2.0*xi_p + 3.0*xi_p*xi_p;
 
-		// update projection coordinate and tangent
-		x_c_p = mDcrd_a*H1 + a1*mLength*H2 + mDcrd_b*H3 + b1*mLength*H4;
-	    t_c   = mDcrd_a*dH1 + a1*mLength*dH2 + mDcrd_b*dH3 + b1*mLength*dH4;
+	// update projection coordinate and tangent
+	x_c_p = mDcrd_a*H1 + a1*mLength*H2 + mDcrd_b*H3 + b1*mLength*H4;
+	t_c   = mDcrd_a*dH1 + a1*mLength*dH2 + mDcrd_b*dH3 + b1*mLength*dH4;
 
-		// compute residual
+	// compute residual
     	R = (mDcrd_s - x_c_p)^t_c;
 
-		Gapcount += 1;
-	}
+	Gapcount += 1;
+      }
 
-	// update normal vector for current projection
-	mNormal = (mDcrd_s - x_c_p)/((mDcrd_s - x_c_p).Norm());
+    // update normal vector for current projection
+    mNormal = (mDcrd_s - x_c_p)/((mDcrd_s - x_c_p).Norm());
 
-	// update Hermitian basis functions and derivatives
-	mShape(0)  = H1;
-	mShape(1)  = H2;
-	mShape(2)  = H3;
-	mShape(3)  = H4;
-	mDshape(0) = dH1;
-	mDshape(1) = dH2;
-	mDshape(2) = dH3;
-	mDshape(3) = dH4;
+    // update Hermitian basis functions and derivatives
+    mShape(0)  = H1;
+    mShape(1)  = H2;
+    mShape(2)  = H3;
+    mShape(3)  = H4;
+    mDshape(0) = dH1;
+    mDshape(1) = dH2;
+    mDshape(2) = dH3;
+    mDshape(3) = dH4;
 
-	return xi_p;
-}
+    std::cout << "xi_p= " << xi_p << std::endl;
+    return xi_p;
+  }
 
 int XC::BeamContact2D::UpdateBase(double xi)
 // this function computes the surface tangent vector g_xi
-{
-    Vector t_c(BC2D_NUM_DIM);
-	Vector ddx_c(BC2D_NUM_DIM);
-	Vector d_c1(BC2D_NUM_DIM);
-	Vector c_2(BC2D_NUM_DIM);
-	Vector d_c2(BC2D_NUM_DIM);
-	
+  {	
     // compute current projection tangent
-	t_c = Get_dxc_xi(xi);
+    const Vector t_c = Get_dxc_xi(xi);
 
-	// set value of unit tangent vector c1
-	mc_1 = t_c/t_c.Norm();
+    // set value of unit tangent vector c1
+    mc_1 = t_c/t_c.Norm();
 
-	// compute current projection curvature
-	ddx_c = Get_dxc_xixi(xi);
+    // compute current projection curvature
+    const Vector ddx_c = Get_dxc_xixi(xi);
 
-	// compute derivative of c1 with respect to xi
-	d_c1 = (1/t_c.Norm())*(ddx_c - ((mc_1^ddx_c)*mc_1));
+    // compute derivative of c1 with respect to xi
+    const Vector d_c1 = (1/t_c.Norm())*(ddx_c - ((mc_1^ddx_c)*mc_1));
 
-	// determine orthogonal vector c2
-	c_2(0) = -mc_1(1);  c_2(1) = mc_1(0);
+    // determine orthogonal vector c2
+    Vector c_2(BC2D_NUM_DIM);
+    c_2(0) = -mc_1(1);  c_2(1) = mc_1(0);
 
-	// compute local coordinate transformation term
-	mrho = mRadius*(mNormal^c_2);
+    // compute local coordinate transformation term
+    mrho = mRadius*(mNormal^c_2);
 
-	// compute change in c2 with xi
-	d_c2 = -(d_c1^c_2)*mc_1;
+    // compute change in c2 with xi
+    const Vector d_c2 = -(d_c1^c_2)*mc_1;
 
     // compute surface tangent vector
-	mg_xi = t_c + mrho*d_c2;
+    mg_xi = t_c + mrho*d_c2;
 
-	return 0;
-}
+    return 0;
+  }
 
 XC::Vector XC::BeamContact2D::Get_dxc_xi(double xi)
 // this function computes the first derivative of x_c wrt xi
-{
-    double dH1;
-	double dH2;
-	double dH3;
-	double dH4;
-	Vector a1(BC2D_NUM_DIM);
-	Vector b1(BC2D_NUM_DIM);
-	Vector dx(BC2D_NUM_DIM);
+  {
+    // first derivatives of Hermitian basis functions
+    double dH1 = -6.0*xi + 6.0*xi*xi;
+    double dH2 = 1.0 - 4.0*xi + 3.0*xi*xi;
+    double dH3 = 6.0*xi - 6.0*xi*xi;
+    double dH4 = -2.0*xi + 3.0*xi*xi;
 
-	// first derivatives of Hermitian basis functions
-    dH1 = -6.0*xi + 6.0*xi*xi;
-	dH2 = 1.0 - 4.0*xi + 3.0*xi*xi;
-	dH3 = 6.0*xi - 6.0*xi*xi;
-	dH4 = -2.0*xi + 3.0*xi*xi;
-
-	// tangent vectors
-	a1 = Geta1();
-	b1 = Getb1();
+    // tangent vectors
+    const Vector &a1= Geta1();
+    const Vector &b1 = Getb1();
 
     // compute current projection tangent
-	dx = mDcrd_a*dH1 + a1*mLength*dH2 + mDcrd_b*dH3 + b1*mLength*dH4;
+    Vector dx = mDcrd_a*dH1 + a1*mLength*dH2 + mDcrd_b*dH3 + b1*mLength*dH4;
 
-	return dx;
-}
+    return dx;
+  }
 
 XC::Vector XC::BeamContact2D::Get_dxc_xixi(double xi)
 // this function computes the second derivative of x_c wrt xi
-{
-    double ddH1;
-	double ddH2;
-	double ddH3;
-	double ddH4;
-	Vector a1(BC2D_NUM_DIM);
-	Vector b1(BC2D_NUM_DIM);
-	Vector ddx(BC2D_NUM_DIM);
-	
-	// second derivatives of Hermitian basis functions
-	ddH1 = -6.0 + 12.0*xi;
-	ddH2 = -4.0 + 6.0*xi;
-	ddH3 =  6.0 - 12.0*xi;
-	ddH4 = -2.0 + 6.0*xi;
+  {
+    // second derivatives of Hermitian basis functions
+    double ddH1 = -6.0 + 12.0*xi;
+    double ddH2 = -4.0 + 6.0*xi;
+    double ddH3 =  6.0 - 12.0*xi;
+    double ddH4 = -2.0 + 6.0*xi;
 
-	// tangent vectors
-	a1 = Geta1();
-	b1 = Getb1();
+    // tangent vectors
+    const Vector &a1= Geta1();
+    const Vector &b1 = Getb1();
 
 	// compute current curvature vector
-	ddx = mDcrd_a*ddH1 + a1*mLength*ddH2 + mDcrd_b*ddH3 + b1*mLength*ddH4;
+    Vector ddx = mDcrd_a*ddH1 + a1*mLength*ddH2 + mDcrd_b*ddH3 + b1*mLength*ddH4;
 
-	return ddx;
-}
+    return ddx;
+  }
 
 void
 XC::BeamContact2D::ComputeB(void)
@@ -746,6 +753,7 @@ int XC::BeamContact2D::recvData(const Communicator &comm)
     res+=comm.receiveInt(mIniContact,getDbTagData(),CommMetaData(9));
     return res;
   }
+
 //! @brief Sends object through the communicator argument.
 int XC::BeamContact2D::sendSelf(Communicator &comm)
   {
