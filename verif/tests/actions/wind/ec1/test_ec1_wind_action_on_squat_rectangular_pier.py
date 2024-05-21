@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Compute the wind force on a bridge deck without traffic.
+''' Compute the wind force on a squat rectangular pier.
 
 Based on the example 3.3.1 of the publication Bridge Design to Eurocodes
 Worked examples. European Commission 2012. ISBN 978-92-79-22823-0
@@ -74,7 +74,7 @@ print('qp= ', qp, ratio1)
 print('cf0= ', cf0, ratio2)
 print('psi_r= ', psi_r, ratio3)
 print('psi_l= ', psi_l, ratio4)
-print('cf0= ', cf, ratio5)
+print('cf= ', cf, ratio5)
 print('Fw= ', Fw/1e3, 'kN', ratio6)
 '''
 
