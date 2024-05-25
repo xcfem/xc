@@ -192,9 +192,9 @@ meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcr
 ratio1= abs(meanCFs[0]-0.5114839791471346)/0.5114839791471346
 ratio2= abs(meanCFs[1]-0.5118539852365022)/0.5118539852365022
 
+'''
 print(meanCFs[0], ratio1)
 print(meanCFs[1], ratio2)
-'''
 '''
 
 import os
@@ -205,16 +205,16 @@ if (ratio1<1e-4) & (ratio2<1e-4):
 else:
     lmsg.error(fname+' ERROR.')
 
-# #########################################################
-# # Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
+# # #########################################################
+# # # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayFEMesh()
-# Load control variables to display:
-bucklingParametersLSD.readControlVars(modelSpace= modelSpace)
-arguments= ['My', 'Mz', 'CF', 'Leff', 'mechLambda', 'efY', 'efZ', 'mode'] 
-for arg in arguments:
-    oh.displayBeamResult(attributeName= bucklingParametersLSD.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)
+# # oh.displayFEMesh()
+# # Load control variables to display:
+# bucklingParametersLSD.readControlVars(modelSpace= modelSpace)
+# arguments= ['My', 'Mz', 'CF', 'Leff', 'mechLambda', 'efY', 'efZ', 'mode'] 
+# for arg in arguments:
+#     oh.displayBeamResult(attributeName= bucklingParametersLSD.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)
     
 cfg.cleandirs()  # Clean after yourself.
