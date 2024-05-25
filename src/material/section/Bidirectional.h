@@ -105,12 +105,17 @@ class Bidirectional: public SectionForceDeformation
 	
     static Vector s;
     static Matrix ks;
+
+    void initialize(void);
+    void copy(const Bidirectional &);
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    Bidirectional(int tag, double E, double sigY, double Hiso, double Hkin);
     Bidirectional(int tag= 0);
+    Bidirectional(int tag, double E, double sigY, double Hiso, double Hkin);
+    Bidirectional(const Bidirectional &);
+    Bidirectional &operator=(const Bidirectional &);
 
     int setInitialSectionDeformation(const Vector &v);
     int setTrialSectionDeformation(const Vector &v);
