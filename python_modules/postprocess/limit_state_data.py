@@ -213,13 +213,16 @@ class LimitStateData(object):
         '''
         return ed.getDisplacementsDict(nmbComb= nmbComb, nodes= nodes)
     
-    def getModesDict(self, nmbComb, xcSet):
+    def getModesDict(self, nmbComb, xcSet, eigenvectorNormThreshold= 1e-3):
         '''Creates a dictionary with the modes of the given nodes.
 
          :param nmbComb: combination name.
          :param xcSet: set containing the nodes to export the modes on.
+         :param eigenvectorNormThreshold: if the node eigenvector has a norm
+                                          smaller than this threshold it is 
+                                          considered null.
         '''
-        return em.getModesDict(nmbComb= nmbComb, xcSet= xcSet)
+        return em.get_modes_dict(nmbComb= nmbComb, xcSet= xcSet)
 
     def getInternalForcesSubset(self, elementsOfInterestTags):
         ''' Return a dictionary containing the internal forces for the given
