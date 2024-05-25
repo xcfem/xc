@@ -1284,24 +1284,37 @@ int XC::Mesh::calculateNodalReactions(bool inclInertia, const double &tol)
     return retval;
   }
 
-//! @brief Normalize the node eigenvectors for
-//! the mode argument.
-double XC::Mesh::normalizeEigenvectors(int mode)
+//! @brief Return the maximum infinity norm of the nodes eigenvectors.
+double XC::Mesh::getEigenvectorsMaxNormInf(int mode) const
   {
-    double norm= 0.0;
+    double retval= 0.0;
     const int numModes= getDomain()->getNumModes();
     if(mode<=numModes)
       {
 	Node *theNode= nullptr;
-	NodeIter &theNodes = this->getNodes();
+	Mesh *this_no_const= const_cast<Mesh *>(this);
+	NodeIter &theNodes = this_no_const->getNodes(); // Not very elegant.
 	while((theNode = theNodes()) != nullptr)
 	  {
 	    const Vector eigenvector= theNode->getEigenvector(mode);
-	    norm= std::max(norm,eigenvector.NormInf());
+	    retval= std::max(retval,eigenvector.NormInf());
 	  }
-	if(norm!= 0.0)
+      }
+    return retval;
+  }
+
+//! @brief Normalize the node eigenvectors for
+//! the mode argument.
+double XC::Mesh::normalizeEigenvectors(int mode)
+  {
+    const double norm= this->getEigenvectorsMaxNormInf(mode);
+    const int numModes= getDomain()->getNumModes();
+    if(mode<=numModes)
+      {
+	if((norm>0.0) && (norm!=1.0))
 	  {
-	    theNodes = this->getNodes();
+ 	    Node *theNode= nullptr;
+	    NodeIter &theNodes = this->getNodes();
 	    while((theNode = theNodes()) != nullptr)
 	      {
 		Vector eigenvector= theNode->getEigenvector(mode);
@@ -1311,9 +1324,10 @@ double XC::Mesh::normalizeEigenvectors(int mode)
 	      }
 	  }
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; eigenvector for mode: " << mode
-		    << " has zero norm." << std::endl;
+	  if(norm==0.0)
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; eigenvector for mode: " << mode
+		      << " has zero norm." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -1324,5 +1338,20 @@ double XC::Mesh::normalizeEigenvectors(int mode)
     return norm;
   }
 
-
-
+//! @brief Normalize the node eigenvectors for
+//! all the computed modes.
+boost::python::list XC::Mesh::normalizeEigenvectors(void)
+  {
+    boost::python::list retval;
+    const int numModes= getDomain()->getNumModes();
+    for(int mode= 1; mode<=numModes; mode++)
+      {
+        double norm= this->getEigenvectorsMaxNormInf(mode);
+	if((norm>0.0) && (norm!=1.0))
+	  {
+	    norm= this->normalizeEigenvectors(mode);
+	    retval.append(norm);
+	  }
+      }
+    return retval;
+  }

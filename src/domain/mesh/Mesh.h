@@ -211,7 +211,9 @@ class Mesh: public MeshComponentContainer
     virtual int setMass(const Matrix &mass, int nodeTag);
 
     virtual int calculateNodalReactions(bool inclInertia, const double &);
+    double getEigenvectorsMaxNormInf(int mode) const;
     double normalizeEigenvectors(int mode);
+    boost::python::list normalizeEigenvectors(void);
 
     static void setDeadSRF(const double &);
   };

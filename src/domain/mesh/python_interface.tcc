@@ -36,6 +36,8 @@ XC::Node *(XC::Mesh::*getNearestNodePtrMesh)(const Pos3d &)= &XC::Mesh::getNeare
 XC::ElementIter &(XC::Mesh::*getElementIter)(void)= &XC::Mesh::getElements;
 XC::Element *(XC::Mesh::*getElementPtr)(int tag)= &XC::Mesh::getElement;
 XC::Element *(XC::Mesh::*getNearestElementPtrMesh)(const Pos3d &)= &XC::Mesh::getNearestElement;
+double (XC::Mesh::*normalizeEigenvectorsMode)(int mode)= &XC::Mesh::normalizeEigenvectors;
+boost::python::list (XC::Mesh::*normalizeAllEigenvectors)(void)= &XC::Mesh::normalizeEigenvectors;
 class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh", no_init)
   .add_property("getNodeIter", make_function( getNodeIter, return_internal_reference<>() ))
   .def("getDefaultNodeTag", &XC::Mesh::getDefaultNodeTag, "Return the default tag for the next node.")
@@ -61,7 +63,9 @@ class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh",
   .def("getNearestElement",make_function(getNearestElementPtrMesh, return_internal_reference<>() ),"Returns nearest node.")
   .def("setDeadSRF",XC::Mesh::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation. Syntax: setDeadSRF(factor)")
   .staticmethod("setDeadSRF")
-  .def("normalizeEigenvectors",&XC::Mesh::normalizeEigenvectors,"Normalize node eigenvectors for the argument mode. Syntax: normalizeEigenvectors(mode)")
+  .def("getEigenvectorsMaxNormInf", &XC::Mesh::getEigenvectorsMaxNormInf,"Return the maximum infinity norm of the nodes eigenvectors.")
+  .def("normalizeEigenvectors", normalizeEigenvectorsMode,"Normalize node eigenvectors for the argument mode. Syntax: normalizeEigenvectors(mode)")
+  .def("normalizeEigenvectors", normalizeAllEigenvectors,"Normalize node eigenvectors for all the computed modes. Syntax: normalizeEigenvectors()")
   .add_property("totalMass", &XC::Mesh::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::Mesh::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   ;
