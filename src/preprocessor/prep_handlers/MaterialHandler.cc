@@ -559,6 +559,7 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialHandl
 XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const std::string &cod_mat)
   {
     Material *retval= load_material(tag_mat,mat_type,this);
+    
     if(retval)
       {
         retval->set_owner(this);
