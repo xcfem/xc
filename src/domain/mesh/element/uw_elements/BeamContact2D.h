@@ -76,67 +76,68 @@ class BeamContact2D : public ElemWithMaterial<BC2D_NUM_NODE, Contact2D>
   {
   private:
     // objects
-    mutable Matrix mTangentStiffness;        // tangent stiffness matrix
-    mutable Vector mInternalForces;          // vector of internal forces
 	
     // input quantities
-    double mLength;                  // length of beam element
-    double mRadius;                  // radius of beam
-    double mGapTol;                  // gap tolerance
-    double mForceTol;                // force tolerance
-    int mIniContact;                 // initial contact switch (0 = notInContact, 1 = inContact)
-	                             // default is set for initially inContact 
-
+    mutable double mLength; //!< length of beam element
+    double mRadius; //!< radius of beam
+    double mGapTol; //!< gap tolerance
+    double mForceTol; //!< force tolerance
+    int mIniContact; //!< initial contact switch (0 = notInContact, 1 = inContact) default is set for initially inContact 
+    
     // boolean variables
-    bool inContact;
-    bool was_inContact;
-    bool to_be_released;
-    bool should_be_released;
-    bool in_bounds;
+    mutable bool inContact;
+    mutable bool was_inContact;
+    mutable bool to_be_released;
+    mutable bool should_be_released;
+    mutable bool in_bounds;
 
-	// calculation variables
-    double mXi;                      // centerline projection coordinate
-    double mGap;                     // current value of the gap
-    double mLambda;                  // current value of contact force (Lagrange Mult)
+    mutable Matrix mTangentStiffness; //!< tangent stiffness matrix
+    mutable Vector mInternalForces; //!< vector of internal forces
+    
+    // calculation variables
+    mutable double mXi; //!< centerline projection coordinate
+    mutable double mGap; //!< current value of the gap
+    mutable double mLambda; //!< current value of contact force (Lagrange Mult)
 
-    Matrix mEye1;                    // identity tensor
-    Matrix mEyeS;                    // skew symmetric transformation tensor
-    Vector mg_xi;                    // surface tangent vector
-    Vector mNormal;                  // normal vector
-    Vector mShape;                   // vector of Hermitian shape functions
-    Vector mDshape;                  // vector of Hermitian shape function derivatives
+    Matrix mEye1; //!< identity tensor
+    Matrix mEyeS; //!< skew symmetric transformation tensor
+    mutable Vector mg_xi; //!< surface tangent vector
+    mutable Vector mNormal; //!< normal vector
+    mutable Vector mShape; //!< vector of Hermitian shape functions
+    mutable Vector mDshape; //!< vector of Hermitian shape function derivatives
 
-    Vector mBn;                      // gap-displacement vector
-    Vector mBs;                      // slip-displacement vector
+    mutable Vector mBn; //!< gap-displacement vector
+    mutable Vector mBs; //!< slip-displacement vector
 	
-    Vector ma_1;                     // tangent vector at node a
-    Vector mb_1;                     // tangent vector at node b
-    Vector mc_1;                     // tangent vector at centerline projection
-    double mrho;                     // local coordinate transformation term
+    mutable Vector ma_1; //!< tangent vector at node a
+    mutable Vector mb_1; //!< tangent vector at node b
+    mutable Vector mc_1; //!< tangent vector at centerline projection
+    mutable double mrho; //!< local coordinate transformation term
 	
-    Vector mIcrd_a;                  // initial coordinates of node a
-    Vector mIcrd_b;                  // initial coordinates of node a
-    Vector mIcrd_s;                  // initial coordinates of secondary node
-    Vector mDcrd_a;                  // initial coordinates of node a
-    Vector mDcrd_b;                  // initial coordinates of node a
-    Vector mDcrd_s;                  // initial coordinates of secondary node
-    Vector mDisp_a_n;                // total disp & rotation of node a @ step n
-    Vector mDisp_b_n;                // total disp & rotation of node b @ step n
+    mutable Vector mIcrd_a; //!< initial coordinates of node a
+    mutable Vector mIcrd_b; //!< initial coordinates of node a
+    mutable Vector mIcrd_s; //!< initial coordinates of secondary node
+    mutable Vector mDcrd_a; //!< initial coordinates of node a
+    mutable Vector mDcrd_b; //!< initial coordinates of node a
+    mutable Vector mDcrd_s; //!< initial coordinates of secondary node
+    mutable Vector mDisp_a_n; //!< total disp & rotation of node a @ step n
+    mutable Vector mDisp_b_n; //!< total disp & rotation of node b @ step n
 
     // member functions
-    double Project(double xi);       // method to determine centerline projection
-    void ComputeB(void);             // method to compute Bn and Bs @ step n
-    int UpdateBase(double xi);       // method to update base vector g_xi
-    void UpdateEndFrames(void);      // method to update end node tangent vectors 
-    Vector Get_dxc_xi(double xi);    // returns dx_c/dxi
-    Vector Get_dxc_xixi(double xi);  // returns d^2(x_c)/dxi^2
-    Vector Geta1(void);              // returns last converged a_1
-    Vector Getb1(void);              // returns last converged b_1
-
+    double Project(double xi) const;
+    void ComputeB(void) const;
+    int UpdateBase(double xi) const;       
+    void UpdateEndFrames(void) const;
+    Vector Get_dxc_xi(double xi) const;
+    Vector Get_dxc_xixi(double xi) const;
+    Vector Geta1(void) const;
+    Vector Getb1(void) const;
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-    void setup(void);
+    void setup_contact_state(void) const;
+    void update_contact_state(void);
+    bool initialize_parameters(void) const;
   public:
     BeamContact2D(int tag= 0, const ContactMaterial2D *mat= nullptr);
     BeamContact2D(int tag, int Nd1, int Nd2, int NdS, int NdL, ContactMaterial2D &theMat, double width, double tolG, double tolF, int cSwitch = 0);
