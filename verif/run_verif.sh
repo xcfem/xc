@@ -1043,6 +1043,7 @@ echo "$BLEU" "      UW materials." "$NORMAL"
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_01.py
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_02.py
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_03.py
+python tests/materials/xc_materials/nD/uw_materials/test_initial_state_analysis_wrapper.py
 
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
 python tests/materials/xc_materials/sections/plate_section/test_material_elastic_membrane_plate_section_01.py

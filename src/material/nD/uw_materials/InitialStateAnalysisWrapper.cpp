@@ -49,7 +49,7 @@ XC::InitialStateAnalysisWrapper::InitialStateAnalysisWrapper(int tag, NDMaterial
     setup(ndim, mainMat);
   }
 
-void XC::InitialStateAnalysisWrapper::setup(int ndim, NDMaterial &mainMat)
+void XC::InitialStateAnalysisWrapper::setup(int ndim, const NDMaterial &mainMat)
   {
     mDIM= ndim;
     mEpsilon_o.resize(3*ndim-3);
@@ -94,6 +94,14 @@ void XC::InitialStateAnalysisWrapper::setInitialStateAnalysisPhase(const bool &b
 
 int XC::InitialStateAnalysisWrapper::getOrder(void) const
   { return theMainMaterial.getOrder(); }
+
+//! @brief Return a pointer to the wrapped material.
+const XC::NDMaterial *XC::InitialStateAnalysisWrapper::getMaterial(void) const
+  { return theMainMaterial.getMaterial(); }
+
+//! @brief Return a pointer to the wrapped material.
+XC::NDMaterial *XC::InitialStateAnalysisWrapper::getMaterial(void)
+  { return theMainMaterial.getMaterial(); }
 
 //! @brief Sets the encapsulated material.
 void XC::InitialStateAnalysisWrapper::setMaterial(const NDMaterial &material)

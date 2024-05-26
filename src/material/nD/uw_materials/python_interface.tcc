@@ -49,9 +49,13 @@ class_<XC::DruckerPragerPlaneStrain , bases<XC::DruckerPrager>, boost::noncopyab
 class_<XC::DruckerPrager3D , bases<XC::DruckerPrager>, boost::noncopyable >("DruckerPrager3D", no_init)
   ;
 
-class_<XC::InitialStateAnalysisWrapper, bases<XC::NDMaterial>, boost::noncopyable >("DruckerPrager3D", no_init)
+XC::NDMaterial *(XC::InitialStateAnalysisWrapper::*get_nd_encapsulated_material)(void)= &XC::InitialStateAnalysisWrapper::getMaterial;
+class_<XC::InitialStateAnalysisWrapper, bases<XC::NDMaterial>, boost::noncopyable >("InitialStateAnalysisWrapper", no_init)
    .def("setup", &XC::InitialStateAnalysisWrapper::setup, "Set the dimension and wrapped material.")
-  .add_property("intialStateAnalysisPhase", XC::InitialStateAnalysisWrapper::getInitialStateAnalysisPhase, XC::InitialStateAnalysisWrapper::setInitialStateAnalysisPhase, "Get/set the initialStateAnalysisPhase flag (if true, initial state phase is computed).")
+  .add_property("encapsulatedMaterial", make_function(get_nd_encapsulated_material,return_internal_reference<>()), "Get the encapsulated material.")
+  .def("getInitialStateAnalysisPhase", &XC::InitialStateAnalysisWrapper::getInitialStateAnalysisPhase,"Return the initial state analysis phase flag.").staticmethod("getInitialStateAnalysisPhase")
+  .def("setInitialStateAnalysisPhase", &XC::InitialStateAnalysisWrapper::setInitialStateAnalysisPhase,"Set the initial state analysis phase flag.").staticmethod("setInitialStateAnalysisPhase")
+//.add_property("initialStateAnalysisPhase", &XC::InitialStateAnalysisWrapper::getInitialStateAnalysisPhase, &XC::InitialStateAnalysisWrapper::setInitialStateAnalysisPhase, "Get/set the initialStateAnalysisPhase flag (if true, initial state phase is computed).")
   ;
 
 class_<XC::ContactMaterialBase, bases<XC::NDMaterial>, boost::noncopyable >("ContactMaterialBase", no_init)
