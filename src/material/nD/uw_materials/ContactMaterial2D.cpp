@@ -84,7 +84,7 @@ void XC::ContactMaterial2D::zero(void)
 }
 
 
-int XC::ContactMaterial2D::setTrialStrain (const Vector &strain_from_element)
+int XC::ContactMaterial2D::setTrialStrain(const Vector &strain_from_element)
 {
 #ifdef DEBUG
         opserr << "XC::ContactMaterial2D::setTrialStrain()" << std::endl;
@@ -296,16 +296,13 @@ void XC::ContactMaterial2D::Print(std::ostream &s, int flag )
 
 
 int XC::ContactMaterial2D::updateParameter(int responseID, Information &info)
-{
-    if (responseID==20) frictionCoeff=info.theDouble;
-	if (responseID==21) stiffness=info.theDouble;
-
-	if (responseID == 1) {
-		mFrictFlag = info.theDouble;
-	}
-
-  return 0;
-}
+  {
+    if(responseID==20)
+      this->frictionCoeff=info.theDouble;
+    if (responseID==21)
+      this->stiffness=info.theDouble;
+    return XC::ContactMaterialBase::updateParameter(responseID, info);
+  }
 
 //! @brief Send material.
 int XC::ContactMaterial2D::sendData(Communicator &comm)

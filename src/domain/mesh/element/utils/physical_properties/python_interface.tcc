@@ -121,3 +121,13 @@ class_<XC::ElasticSection3dPhysicalProperties, bases<ElasticSectionPhysicalPrope
 // class_<XC::Joint3DPhysicalProperties, bases<XC::UniaxialMatPhysicalProperties>, boost::noncopyable  >("Joint3DPhysicalProperties", no_init)
 //    ;
 
+XC::ContactMaterial2D *(XC::Contact2D::*getContactMaterial2D)(const int &) = &XC::Contact2D::getContactMaterial;
+class_<XC::Contact2D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopyable  >("Contact2D", no_init)
+  .def("getContactMaterial", make_function(getContactMaterial2D, return_internal_reference<>()),"Returns the contact material.")
+   ;
+
+XC::ContactMaterial3D *(XC::Contact3D::*getContactMaterial3D)(const int &) = &XC::Contact3D::getContactMaterial;
+class_<XC::Contact3D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopyable  >("Contact3D", no_init)
+  .def("getContactMaterial", make_function(getContactMaterial3D, return_internal_reference<>()),"Returns the contact material.")
+   ;
+

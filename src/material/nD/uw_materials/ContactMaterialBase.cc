@@ -38,24 +38,20 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <domain/component/Parameter.h>
 
-int XC::ContactMaterialBase::mFrictFlag= 1;
-
 //full constructor
 XC::ContactMaterialBase::ContactMaterialBase(int tag, int classTag, int dim, double mu, double G, double c, double t)
- : NDMaterial(tag, classTag),
-   strain_vec(dim),
-   stress_vec(dim),
-   tangent_matrix(dim,dim)
+  : NDMaterial(tag, classTag),
+    frictionCoeff(mu), stiffness(G), cohesion(c), tensileStrength(t),
+    mFrictFlag(true),
+    strain_vec(dim),
+    stress_vec(dim),
+    tangent_matrix(dim,dim)
   {
 #ifdef DEBUG
     opserr << "XC::ContactMaterialBase::ContactMaterialBase" << endln;
 #endif
-    frictionCoeff = mu;
     mMu = mu;
-    stiffness = G;
-    cohesion  = c;
     mCo = c;
-    tensileStrength = t;
     mTen = t;
 
   }
@@ -63,79 +59,65 @@ XC::ContactMaterialBase::ContactMaterialBase(int tag, int classTag, int dim, dou
 //null constructor
 XC::ContactMaterialBase::ContactMaterialBase(int tag, int classTag, int dim) 
  : NDMaterial(tag, classTag),
+   frictionCoeff(0.0), stiffness(1.0), cohesion(0.0), tensileStrength(0.0),
+   mFrictFlag(true),
    strain_vec(dim),
    stress_vec(dim),
    tangent_matrix(dim,dim)
   {
-    frictionCoeff = 0.0;
-    stiffness = 1.0;
-    cohesion  = 0.0;
-    tensileStrength = 0.0;
+    mMu= 0.0;
+    mCo= 0.0;
+    mTen= 0.0;
   }
 
 const XC::Matrix & XC::ContactMaterialBase::getInitialTangent(void) const
   {
-#ifdef DEBUG
-        opserr << "XC::ContactMaterialBase::getInitialTangent()" << endln;
-#endif
-
     return tangent_matrix;      //tangent is empty matrix
   }
 
 
 const XC::Vector & XC::ContactMaterialBase::getStress(void) const
   {
-#ifdef DEBUG
-        opserr << "XC::ContactMaterialBase::getStress()" << endln;
-#endif
-
     return stress_vec;
   }
 
 
 const XC::Vector & XC::ContactMaterialBase::getStrain(void) const
   {
-#ifdef DEBUG
-        opserr << "XC::ContactMaterialBase::setStrain()" << endln;
-#endif
-
     return strain_vec;
   }
 
 
-
-
 int XC::ContactMaterialBase::revertToLastCommit (void)
-{
-#ifdef DEBUG
-        opserr << "XC::ContactMaterialBase::revertToLastCommit()" << endln;
-#endif
-
+  {
         return 0;
-}
+  }
 
 int XC::ContactMaterialBase::UpdateFrictionalState(void)
-{
-	if (mFrictFlag == 1 && mFlag == 1) {
-		frictionCoeff = mMu;
-		cohesion = mCo;
-		tensileStrength = mTen;
-		mFlag = 0;
+  {
+    if(mFrictFlag && mFlag == 1)
+      {
+	frictionCoeff = mMu;
+	cohesion = mCo;
+	tensileStrength = mTen;
+	mFlag = 0;
 
-		// ensure tensile strength is inbounds
-		if (tensileStrength > cohesion / frictionCoeff ) {
-			tensileStrength = cohesion / frictionCoeff;
-		}
+	// ensure tensile strength is inbounds
+	if (tensileStrength > cohesion / frictionCoeff )
+	  {
+	    tensileStrength = cohesion / frictionCoeff;
+	  }
 		
-	} else if (mFrictFlag != 1) {
-		frictionCoeff = 0.0;
-		cohesion = 0.0;
-		tensileStrength = 0.0;
-		mFlag = 1;
-	}
-
-	return 0;
-}
+      }
+    else if (!mFrictFlag)
+      {
+	frictionCoeff = 0.0;
+	cohesion = 0.0;
+	tensileStrength = 0.0;
+	mFlag = 1;
+      }
+    return 0;
+  }
 
 
 double XC::ContactMaterialBase::getcohesion(void) const
@@ -149,6 +131,18 @@ double XC::ContactMaterialBase::getTensileStrength(void) const
 
 void XC::ContactMaterialBase::ScaleTensileStrength(const double len)
   { tensileStrength *= len; }
+
+int XC::ContactMaterialBase::updateParameter(int responseID, Information &info)
+  {
+    if(responseID == 1)
+      {
+	if(info.theDouble==0.0)
+	  this->mFrictFlag= false;
+	else
+	  this->mFrictFlag= true;
+      }
+    return 0;
+  }
 
 int XC::ContactMaterialBase::setParameter(const std::vector<std::string> &, Parameter &)
   {
@@ -165,7 +159,7 @@ int XC::ContactMaterialBase::sendData(Communicator &comm)
     res+= comm.sendVector(strain_vec, getDbTagData(), CommMetaData(4));
     res+= comm.sendVector(stress_vec, getDbTagData(), CommMetaData(5));
     res+= comm.sendMatrix(tangent_matrix, getDbTagData(), CommMetaData(6));
-    res+= comm.sendBool(inSlip, getDbTagData(), CommMetaData(7));
+    res+= comm.sendBools(inSlip, mFrictFlag, getDbTagData(), CommMetaData(7));
     return res;
   }
 
@@ -179,6 +173,6 @@ int XC::ContactMaterialBase::recvData(const Communicator &comm)
     res+= comm.receiveVector(strain_vec, getDbTagData(), CommMetaData(4));
     res+= comm.receiveVector(stress_vec, getDbTagData(), CommMetaData(5));
     res+= comm.receiveMatrix(tangent_matrix, getDbTagData(), CommMetaData(6));
-    res+= comm.receiveBool(inSlip, getDbTagData(), CommMetaData(7));
+    res+= comm.receiveBools(inSlip, mFrictFlag, getDbTagData(), CommMetaData(7));
     return res;
   }

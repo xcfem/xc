@@ -132,6 +132,13 @@ int XC::InitialStateAnalysisWrapper::commitState(void)
     return theMainMaterial.commitState();
   }
 
+//! @brief Return the initial strain.
+const XC::Vector &XC::InitialStateAnalysisWrapper::getInitialGeneralizedStrain(void) const
+  { return mEpsilon_o; }
+
+void XC::InitialStateAnalysisWrapper::setInitialGeneralizedStrain(const Vector &eps)
+  { mEpsilon_o= eps; }
+
 int XC::InitialStateAnalysisWrapper::revertToLastCommit(void)
   { return theMainMaterial.revertToLastCommit(); }
 

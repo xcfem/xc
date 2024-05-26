@@ -59,6 +59,9 @@ class_<XC::InitialStateAnalysisWrapper, bases<XC::NDMaterial>, boost::noncopyabl
   ;
 
 class_<XC::ContactMaterialBase, bases<XC::NDMaterial>, boost::noncopyable >("ContactMaterialBase", no_init)
+  .add_property("frictionFlag", &XC::ContactMaterialBase::getFrictionFlag, &XC::ContactMaterialBase::setFrictionFlag, "Activates/deactivates the friction in the contact.")
+  .def("setFrictionFlag", &XC::ContactMaterialBase::setFrictionFlag, "Set the valou of the friction flag (if true activate the friction in the contact).")
+  .def("getFrictionFlag", &XC::ContactMaterialBase::getFrictionFlag, "Get the valou of the friction flag.")
   .add_property("frictionCoeff", &XC::ContactMaterialBase::getFrictionCoeff, &XC::ContactMaterialBase::setFrictionCoeff, "Get/set the interface frictional coefficient: tan(phi).")
   .add_property("stiffness", &XC::ContactMaterialBase::getStiffness, &XC::ContactMaterialBase::setStiffness, "Get/set the interface cohesive intercept.")
   .add_property("cohesion", &XC::ContactMaterialBase::getcohesion, &XC::ContactMaterialBase::setcohesion, "Get/set the interface cohesive intercept.")

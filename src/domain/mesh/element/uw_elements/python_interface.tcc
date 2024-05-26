@@ -28,7 +28,9 @@ typedef XC::ElementBase<4> beam_contact_element_base_4n;
 class_<beam_contact_element_base_4n, bases<XC::Element>, boost::noncopyable >("beam_contact_element_base_4n", no_init);
 
 typedef XC::ElemWithMaterial<4,XC::Contact2D> beam_contact_2d_base_4n;
+XC::Contact2D &(beam_contact_2d_base_4n::*getContact2DPhysicalProp)(void)= &beam_contact_2d_base_4n::getPhysicalProperties;
 class_<beam_contact_2d_base_4n, bases<beam_contact_element_base_4n>, boost::noncopyable >("<beam_contact_2d_base_4n", no_init)
+  .add_property("physicalProperties", make_function(getContact2DPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
   ;
 
 class_<XC::BeamContact2D, bases<beam_contact_2d_base_4n>, boost::noncopyable >("BeamContact2D", no_init)
@@ -39,7 +41,9 @@ class_<XC::BeamContact2D, bases<beam_contact_2d_base_4n>, boost::noncopyable >("
    ;
 
 typedef XC::ElemWithMaterial<4,XC::Contact3D> beam_contact_3d_base_4n;
+XC::Contact3D &(beam_contact_3d_base_4n::*getContact3DPhysicalProp)(void)= &beam_contact_3d_base_4n::getPhysicalProperties;
 class_<beam_contact_3d_base_4n, bases<beam_contact_element_base_4n>, boost::noncopyable >("<beam_contact_3d_base_4n", no_init)
+  .add_property("physicalProperties", make_function(getContact3DPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
   ;
 
 class_<XC::BeamContact3D, bases<beam_contact_3d_base_4n>, boost::noncopyable >("BeamContact3D", no_init)

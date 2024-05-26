@@ -69,8 +69,8 @@ class ContactMaterialBase: public NDMaterial
     // functions
     int UpdateFrictionalState(void);
 
-	// variables for update of friction coefficient
-    static int mFrictFlag;
+    // variables for update of friction coefficient
+    bool mFrictFlag;
     int mFlag;
     double mMu;
     double mCo;
@@ -85,9 +85,9 @@ class ContactMaterialBase: public NDMaterial
 
     // static vectors and matrices
     Vector strain_vec;      // generalized strain state
-        // strain_vec(0) -> gap     ... current gap distance
-        // strain_vec(1) -> slip    ... incremental slip
-        // strain_vec(2) -> lambda  ... lagrangean multiplier -> t_n
+    // strain_vec(0) -> gap     ... current gap distance
+    // strain_vec(1) -> slip    ... incremental slip
+    // strain_vec(2) -> lambda  ... lagrangean multiplier -> t_n
 
     Vector stress_vec;      // generalized stress state
         // stress_vec(0) -> t_n     ... normal contact force
@@ -110,24 +110,28 @@ class ContactMaterialBase: public NDMaterial
     const Vector &getStress(void) const;
     const Vector &getStrain(void) const;
 
+    bool getFrictionFlag(void) const
+      { return this->mFrictFlag; }
+    void setFrictionFlag(const bool &b)
+      { this->mFrictFlag= b; }
     double getFrictionCoeff(void) const
-      { return frictionCoeff; }
+      { return this->frictionCoeff; }
     void setFrictionCoeff(const double &fc)
-      {frictionCoeff= fc; }
+      { this->frictionCoeff= fc; }
     double getStiffness(void) const
-      { return stiffness; }
+      { return this->stiffness; }
     void setStiffness(const double &s)
-      { stiffness= s; }
+      { this->stiffness= s; }
     //Get cohesion function for use in contact element
     double getcohesion(void) const;
     void setcohesion(const double &s)
-      { cohesion= s; }
+      { this->cohesion= s; }
     void ScaleCohesion(const double len);
 
     //Get tensile strength function for use in contact element
     double getTensileStrength(void) const;
     void setTensileStrength(const double &ts)
-      { tensileStrength= ts; }
+      { this->tensileStrength= ts; }
     void ScaleTensileStrength(const double len);
 
     bool getContactState(void) const
@@ -139,6 +143,7 @@ class ContactMaterialBase: public NDMaterial
 
     // public methods for material stage update
     int setParameter(const std::vector<std::string> &, Parameter &);
+    int updateParameter(int responseID, Information &eleInformation);
   };
 } // end XC namespace
 

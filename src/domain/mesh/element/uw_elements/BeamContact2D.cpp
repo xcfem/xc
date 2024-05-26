@@ -179,7 +179,7 @@ double XC::BeamContact2D::getInitialContactFlag(void) const
 bool XC::BeamContact2D::initialize_parameters(void) const
   {
     bool retval= false;
-    if((mRadius>0) and (mLength==0.0)) // if width assigned and not
+    if((this->mRadius>0) and (this->mLength==0.0)) // if width assigned and not
       {                                // already initialized.
         setup_contact_state();
 	// initialize coordinate vectors
@@ -193,7 +193,7 @@ bool XC::BeamContact2D::initialize_parameters(void) const
 	mDisp_b_n.Zero();
 
 	// length of beam element
-	mLength= (mDcrd_b - mDcrd_a).Norm();
+	this->mLength= (mDcrd_b - mDcrd_a).Norm();
 
 	// initialize tangent vectors at beam nodes
 	ma_1= (mDcrd_b - mDcrd_a)/mLength;
@@ -202,7 +202,6 @@ bool XC::BeamContact2D::initialize_parameters(void) const
 	// perform projection of secondary node to beam centerline
 	mXi= ((mDcrd_b - mDcrd_s)^(mDcrd_b - mDcrd_a))/mLength;  // initial assumption
 	mXi= Project(mXi);                                       // actual location
-
 	// initialize contact state based on projection
 	in_bounds= ((mXi > 0.000) && (mXi < 1.000));
 	inContact= (was_inContact && in_bounds);
@@ -415,10 +414,10 @@ double XC::BeamContact2D::Project(double xi) const
 
     // iterate to determine new value of xi
     int Gapcount= 0;
-    double DR;
-    double dxi;
+    double DR= 0.0;
+    double dxi= 0.0;
     Vector ddx_c(BC2D_NUM_DIM);
-    while (fabs(R/mLength) > mGapTol && Gapcount < 50)
+    while ((fabs(R/mLength) > this->mGapTol) && (Gapcount < 50))
       {
 	// compute current curvature vector
 	ddx_c= Get_dxc_xixi(xi_p);
@@ -445,11 +444,16 @@ double XC::BeamContact2D::Project(double xi) const
 	// compute residual
     	R= (mDcrd_s - x_c_p)^t_c;
 
-	Gapcount += 1;
+	Gapcount++;
       }
 
     // update normal vector for current projection
-    mNormal= (mDcrd_s - x_c_p)/((mDcrd_s - x_c_p).Norm());
+    const double norm= (mDcrd_s - x_c_p).Norm();
+    if(norm<1e-6)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; something went wrong normal vector is null. "
+		<< Color::def << std::endl;
+    mNormal= (mDcrd_s - x_c_p)/norm;
 
     // update Hermitian basis functions and derivatives
     mShape(0)= H1;

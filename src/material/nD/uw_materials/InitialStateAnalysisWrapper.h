@@ -102,6 +102,9 @@ class InitialStateAnalysisWrapper : public NDMaterial
     static bool getInitialStateAnalysisPhase(void);
     static void setInitialStateAnalysisPhase(const bool &);
 
+    const Vector &getInitialGeneralizedStrain(void) const;
+    void setInitialGeneralizedStrain(const Vector &);
+    
     // send back strain
     const Vector& getStrain() const;
     // send back stress

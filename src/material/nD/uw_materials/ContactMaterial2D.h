@@ -102,7 +102,7 @@ class ContactMaterial2D : public ContactMaterialBase
 
     void Print(std::ostream &, int flag =0);
 
-	// public methods for material stage update
+    // public methods for material stage update
     int updateParameter(int responseID, Information &eleInformation);
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &); 

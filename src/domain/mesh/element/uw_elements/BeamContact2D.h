@@ -115,10 +115,10 @@ class BeamContact2D : public ElemWithMaterial<BC2D_NUM_NODE, Contact2D>
     mutable double mrho; //!< local coordinate transformation term
 	
     mutable Vector mIcrd_a; //!< initial coordinates of node a
-    mutable Vector mIcrd_b; //!< initial coordinates of node a
+    mutable Vector mIcrd_b; //!< initial coordinates of node b
     mutable Vector mIcrd_s; //!< initial coordinates of secondary node
     mutable Vector mDcrd_a; //!< initial coordinates of node a
-    mutable Vector mDcrd_b; //!< initial coordinates of node a
+    mutable Vector mDcrd_b; //!< initial coordinates of node b
     mutable Vector mDcrd_s; //!< initial coordinates of secondary node
     mutable Vector mDisp_a_n; //!< total disp & rotation of node a @ step n
     mutable Vector mDisp_b_n; //!< total disp & rotation of node b @ step n
