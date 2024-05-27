@@ -1135,8 +1135,10 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
             node0Eigenvector= nodes[0].getEigenvector(mode+1)
+            node0EigenvectorNorm= node0Eigenvector.Norm()
             node1Eigenvector= nodes[1].getEigenvector(mode+1)
-            if((node0Eigenvector.Norm()>eigenvectorNormThreshold) or (node0Eigenvector.Norm()>eigenvectorNormThreshold)):
+            node1EigenvectorNorm= node1Eigenvector.Norm()
+            if((node0EigenvectorNorm>eigenvectorNormThreshold) or (node1EigenvectorNorm>eigenvectorNormThreshold)):
                 # Compute the stiffness in the direction of buckling for this mode.
                 ## Check if it is a translational buckling.
                 globalEigenvector= (0.5*(node0Eigenvector+node1Eigenvector)).Normalized()
@@ -1295,14 +1297,18 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations, eigenvectorNormThreshold= 1e-3):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
         :param designSituations: design situations that will be checked; 
                                  i. e. uls_permanent, uls_earthquake, etc.
+        :param eigenvectorNormThreshold: if the node eigenvector has a norm 
+                                         smaller than this threshold it is 
+                                         considered null.
         '''
         super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
+        self.eigenvectorNormThreshold= eigenvectorNormThreshold
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
         '''Creates a dictionary with the buckling parameters of the given
@@ -1335,7 +1341,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
                 Cz= sectionBucklingProperties.Cz
                 Cy= sectionBucklingProperties.Cy
                 rcSection= sectionBucklingProperties.sectionObject
-                Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+                Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold)
                 elementBucklingParameters['Leffi']= Leffi
                 elementBucklingParameters['mechLambdai']= mechLambdai
                 elementBucklingParameters['Efi']= Efi
