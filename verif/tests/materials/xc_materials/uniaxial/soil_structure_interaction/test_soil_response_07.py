@@ -24,7 +24,7 @@ rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000)
 depth= 3.0 # 3 m
 tributaryArea= 1.5 # 1.5 m2
 
-samplePoints, initStrain= earth_pressure.getHorizontalSoilReactionDiagram(depth= depth, tributaryArea= tributaryArea, gamma= rankineSoil.gamma(), Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= 30e6)
+samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(depth= depth, tributaryArea= tributaryArea, gamma= rankineSoil.gamma(), Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= 30e6)
 
 # Model definition
 feProblem= xc.FEProblem()

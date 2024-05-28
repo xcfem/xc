@@ -386,7 +386,7 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     return maxPressure, pressureFunction, minWeight, maxWeight
     
     
-def getHorizontalSoilReactionDiagram(depth, tributaryArea, gamma, Ka, K0, Kp, Kh):
+def get_horizontal_soil_reaction_diagram(depth, tributaryArea, gamma, Ka, K0, Kp, Kh):
     ''' Return the points of the force-displacement diagram.
 
     :param depth: depth of the point.
