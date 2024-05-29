@@ -66,14 +66,17 @@ soilMaterialRight= zlRight.getMaterials()[0]
 zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
 
 
-### "retaining earth" spring.
+### "earth retaining structure" spring.
 elements.defaultMaterial= k.name
 spring= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 spring.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
 
 # Solve 
 solProc= predefined_solutions.PenaltyKrylovNewton(prb= feProblem, maxNumIter= 10, numSteps= 10, convergenceTestTol= 1e-4, printFlag= 0)
-solProc.solve()
+ok= solProc.solve()
+if(ok!=0):
+    lmsg.error('Can\'t solve')
+    exit(1)
 
 dispXN2= n2.getDisp[0]
 ratio0= dispXN2
@@ -99,7 +102,10 @@ toKill.killElements()
 # zlLeft.setMaterial(0, kk.name)
 
 # Solve again
-solProc.solve()
+ok= solProc.solve()
+if(ok!=0):
+    lmsg.error('Can\'t solve')
+    exit(1)
 
 dispXN2B= n2.getDisp[0]
 NRight= zlRight.getResistingForce()[0]
@@ -108,6 +114,11 @@ rightMaterialStressB= soilMaterialRight.getStress()
 NLeft= zlLeft.getResistingForce()[0]
 leftMaterialStrainB= soilMaterialLeft.getStrain()
 leftMaterialStressB= soilMaterialLeft.getStress()
+NSpring= spring.getResistingForce()[0]
+
+ratio3= abs(NLeft)/abs(NRight) # NLeft almost zero.
+ratio4= abs(NSpring+NRight)/abs(NSpring)
+
 
 '''
 print('\nright material strain: ', rightMaterialStrain)
@@ -115,7 +126,6 @@ print('right material stress: ', rightMaterialStress)
 print('dispXN2= ', dispXN2)
 print('left material strain: ', leftMaterialStrain)
 print('left material stress: ', leftMaterialStress)
-
 print('dispXN2B= ', dispXN2B)
 print('NRight= ', NRight/1e3, 'kN')
 print('right material strain: ', rightMaterialStrainB)
@@ -123,11 +133,15 @@ print('right material stress: ', rightMaterialStressB)
 print('NLeft= ', NLeft/1e3, 'kN')
 print('left material strain: ', leftMaterialStrainB)
 print('left material stress: ', leftMaterialStressB)
+print('ratio3= ', ratio3)
+print('NSpring= ', NSpring/1e3, ' kN')
+print('ratio4= ', ratio4)
 '''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(abs(ratio0)<1e-12 and abs(ratio1)<1e-4 and abs(ratio2)<1e-4):
+if((abs(ratio0)<1e-12) and (abs(ratio1)<1e-4) and (abs(ratio2)<1e-4) and (abs(ratio3)<1e-5) and (abs(ratio4)<1e-5)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
