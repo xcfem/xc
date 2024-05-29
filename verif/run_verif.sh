@@ -945,6 +945,7 @@ python tests/loads/dynamic_loads/test_node_load_history_03.py
 python tests/loads/dynamic_loads/test_node_load_history_04.py
 echo "$BLEU" "    Path time loads." "$NORMAL"
 python tests/loads/path_time_loads/test_path_time_load_01.py
+python tests/loads/path_time_loads/test_node_imposed_varying_displacement_01.py
 echo "$BLEU" "    Computing load combination tests." "$NORMAL"
 python tests/loads/combinations/add_loads_01.py
 python tests/loads/combinations/test_add_load_cases.py
