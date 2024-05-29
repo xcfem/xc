@@ -275,7 +275,7 @@ int XC::Vector::resize(int newSize)
 //! location (\p i). returns \f$0\f$ if successful. A warning message is
 //! printed for each invalid location in the current Vector or \p V and a
 //! \f$-1\f$ is returned. 
-int XC::Vector::Assemble(const XC::Vector &V, const ID &l, double fact )
+int XC::Vector::Assemble(const Vector &V, const ID &l, double fact )
   {
     int result= 0;
     int pos;
