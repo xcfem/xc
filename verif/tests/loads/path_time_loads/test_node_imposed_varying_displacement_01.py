@@ -68,7 +68,10 @@ steps= list(range(nSteps))
 errDisp= 0.0
 errForc= 0.0
 for i in steps[1:]:
+    # Don't warn about no equations.
+    if(i==1): feProblem.errFileName= "/tmp/erase.err"
     customSolProc.analysis.analyze(1)
+    if(i==1): feProblem.errFileName= "cerr"
     uX= nod2.getDisp[0]
     errDisp+= (uX- dispValues[i])**2
     computedDisplacements.append(uX)
