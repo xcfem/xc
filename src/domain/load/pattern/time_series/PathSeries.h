@@ -80,19 +80,25 @@ class Vector;
 //! intervals. For a pseudo time not at a path point, linear interpolation
 //! is performed to determine the load factor. If the time specified is
 //! beyond the last path point a load factor of \f$0.0\f$ will be returned.
+//! Specify useLast= true to use the last data point instead of 0.0.
 class PathSeries: public PathSeriesBase
   {
   private:
     double pathTimeIncr; //!< Time step.
+    bool useLast;  //!< if true use last value after the end of the series.
+    double startTime; //!< provide a start time for provided load factors.
+    bool prependZero; //!< if true prepend a zero value to the series of load factors.
+    void prepend_zero_if_appropriate(void);
   protected:
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
 
   public:
     // constructors
-    PathSeries(const Vector &thePath,double pathTimeIncr = 1.0, double cf= 1.0);
-    PathSeries(const std::string &fileName, double pathTimeIncr = 1.0, double cf= 1.0);
     PathSeries(void);
+    PathSeries(const Vector &thePath,double pathTimeIncr = 1.0, double cf= 1.0, bool useLast = false, bool prependZero = false, double startTime = 0.0);
+    PathSeries(const std::string &fileName, double pathTimeIncr = 1.0, double cf= 1.0, bool useLast = false, bool prependZero = false, double startTime = 0.0);
+    
     //! @brief Virtual constructor.
     TimeSeries *getCopy(void) const
       { return new PathSeries(*this); }
@@ -104,6 +110,20 @@ class PathSeries: public PathSeriesBase
       { pathTimeIncr= d; }
     inline double getTimeIncr(double) const
       {return pathTimeIncr;}
+    inline double getTimeIncr(void) const
+      {return pathTimeIncr;}
+    inline void setStartTime(const double &d)
+      { this->startTime= d; }
+    inline double getStartTime(void) const
+      {return this->startTime;}
+    inline void setUseLast(const bool &b)
+      { this->useLast= b; }
+    inline bool getUseLast(void) const
+      {return this->useLast;}
+    inline void setPrependZero(const bool &b)
+      { this->prependZero= b; }
+    inline bool getPrependZero(void) const
+      {return this->prependZero;}
 
     void readFromFile(const std::string &fileName);
 
