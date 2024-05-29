@@ -384,7 +384,22 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     xMax= optimize.fminbound(lambda x: -pressureFunction(x), x1= minWeight, x2= maxWeight)
     maxPressure= pressureFunction(xMax)
     return maxPressure, pressureFunction, minWeight, maxWeight
-    
+
+def get_earth_thrusts(depth,  tributaryArea, gamma, Ka, K0, Kp):
+    ''' Return the earth thrusts corresponding to the given argumenst.
+
+    :param depth: depth of the point.
+    :param tributaryArea: area on which the pressure acts.
+    :param Ka: active earth pressure coefficient.
+    :param K0: earth pressure at rest coefficient.
+    :param Kp: passive earth pressure coefficient.
+    :param Kh: horizontal Winkler modulus.
+    '''
+    factor= depth*gamma*tributaryArea
+    Ea= Ka*factor
+    E0= K0*factor
+    Ep= Kp*factor
+    return Ea, E0, Ep
     
 def get_horizontal_soil_reaction_diagram(depth, tributaryArea, gamma, Ka, K0, Kp, Kh):
     ''' Return the points of the force-displacement diagram.
@@ -396,9 +411,7 @@ def get_horizontal_soil_reaction_diagram(depth, tributaryArea, gamma, Ka, K0, Kp
     :param Kp: passive earth pressure coefficient.
     :param Kh: horizontal Winkler modulus.
     '''
-    Ea= Ka*depth*gamma*tributaryArea
-    E0= K0*depth*gamma*tributaryArea
-    Ep= Kp*depth*gamma*tributaryArea
+    Ea, E0, Ep= get_earth_thrusts(depth= depth, tributaryArea= tributaryArea, gamma= gamma, Ka= Ka, K0= K0, Kp= Kp)
     # Compute active and passive limits.
     activeLimit= (Ea-E0)/Kh
     passiveLimit= (Ep-E0)/Kh
