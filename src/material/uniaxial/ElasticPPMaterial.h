@@ -67,7 +67,6 @@
 #include <material/uniaxial/EPPBaseMaterial.h>
 
 namespace XC {
-//! @ingroup MatUnx
 //
 //! @brief Elastic perfectly plastic material.
 //!
@@ -76,6 +75,7 @@ namespace XC {
 //! relationship is given by the linear equation \f$\sigma = E * \epsilon\f$
 //! while the material is elastic and \f$| \sigma = E * \epsilon_p |\f$  while
 //! the material is undergoing plastic deformation.
+//! @ingroup MatUnx
 class ElasticPPMaterial: public EPPBaseMaterial
   {
   private:
