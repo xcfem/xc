@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' JSON encoder and decoder for XC classes.'''
 
 from __future__ import division
 from __future__ import print_function
