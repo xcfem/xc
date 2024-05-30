@@ -970,6 +970,7 @@ python tests/materials/test_get_material_names.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_init_strain_material_01.py
+python tests/materials/xc_materials/uniaxial/test_init_stress_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
 python tests/materials/xc_materials/uniaxial/test_viscous_material_01.py
