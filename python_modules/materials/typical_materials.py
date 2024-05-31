@@ -37,7 +37,7 @@ class BasicElasticMaterial(object):
         '''shear modulus.'''
         return self.E/(2*(1+self.nu))
 
-    def defElasticMaterial(self, preprocessor, name= None, overrideRho= None):
+    def defElasticMaterial(self, preprocessor, name= None, overrideRho= None, initStrain= 0.0):
         ''' Return an elastic uniaxial material appropriate for example for
             truss elements
 
@@ -45,6 +45,7 @@ class BasicElasticMaterial(object):
         :param name: name for the new material (if None compute a suitable name).
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
+        :param initStrain: initial strain.
         '''        
         materialHandler= preprocessor.getMaterialHandler
         matName= name
@@ -56,6 +57,8 @@ class BasicElasticMaterial(object):
         if(overrideRho):
             matRho= overrideRho
         retval.rho= matRho
+        if(initStrain!=0.0):
+            retval.initialStrain= initStrain
         return retval
     
     def defElasticIsotropic3d(self, preprocessor, name= None, overrideRho= None):
@@ -122,7 +125,7 @@ class BasicElasticMaterial(object):
         self.rho= dct['rho']
         
 
-def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3):
+def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3, initStrain= 0.0):
     '''Constructs an elastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -131,18 +134,20 @@ def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3):
     :param rho: mass density
     :param overrideRho: if defined (not None), override the value of 
                         the material density.
+    :param initStrain: initial strain.
     '''
-    tmp= BasicElasticMaterial(E, nu, rho)
-    return tmp.defElasticMaterial(preprocessor, name)
+    tmp= BasicElasticMaterial(E= E, nu= nu, rho= rho)
+    return tmp.defElasticMaterial(preprocessor, name= name, initStrain= initStrain)
 
-def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
+def defElasticPPMaterial(preprocessor,name, E, fyp, fyn, initStrain= 0.0):
     '''Constructs an elastic perfectly-plastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
-    :param name: name identifying the material (if None compute a suitable name)
-    :param E: tangent in the elastic zone of the stress-strain diagram
-    :param fyp: stress at which material reaches plastic state in tension
-    :param fyn: stress at which material reaches plastic state in compression
+    :param name: name identifying the material (if None compute a suitable name).
+    :param E: tangent in the elastic zone of the stress-strain diagram,
+    :param fyp: stress at which material reaches plastic state in tension.
+    :param fyn: stress at which material reaches plastic state in compression.
+    :param initStrain: initial strain.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
@@ -152,6 +157,8 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
     retval.E= E
     retval.fyp= fyp
     retval.fyn= fyn
+    if(initStrain!=0.0):
+        retval.setInitialStrain(initStrain)
     retval.revertToStart() # Compute material derived parameters.
     return retval
 
