@@ -555,6 +555,8 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
         return new TzLiq1();
       case MAT_TAG_QzSimple1:
         return new QzSimple1();
+      case MAT_TAG_EyBasic:
+        return new EyBasic();
 
 //         case MAT_TAG_PySimple2:
 //                 return new PySimple2();

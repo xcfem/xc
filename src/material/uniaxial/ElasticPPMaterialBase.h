@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -44,77 +45,92 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.6 $
-// $Date: 2003/02/14 23:01:38 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ElasticPPMaterial.cpp,v $
+// $Revision: 1.5 $
+// $Date: 2003/02/25 23:33:38 $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ElasticPPMaterialBase.h,v $
                                                                         
-                                                                        
-// File: ~/material/ElasticPPMaterial.C
+#ifndef ElasticPPMaterialBase_h
+#define ElasticPPMaterialBase_h
+
+// File: ~/material/ElasticPPMaterialBase.h
 //
 // Written: fmk 
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class implementation for 
-// ElasticMaterial. 
+// Description: This file contains the class definition for 
+// ElasticPPMaterialBase. ElasticPPMaterialBase provides the abstraction
+// of an elastic perfectly plastic uniaxial material, 
 //
-// What: "@(#) ElasticPPMaterial.C, revA"
+// What: "@(#) ElasticPPMaterialBase.h, revA"
 
+#include <material/uniaxial/EPPBaseMaterial.h>
 
-#include <material/uniaxial/ElasticPPMaterial.h>
-#include <utility/matrix/Vector.h>
-#include <cmath>
-#include <cfloat>
-#include "utility/utils/misc_utils/colormod.h"
-
-
-//! @brief Sets the positive yield stress value (tension).
-void XC::ElasticPPMaterial::set_fyp(const double &f)
+namespace XC {
+//
+//! @brief Elastic perfectly plastic material.
+//!
+//! This class provides the abstraction of an elastic
+//! perfectly plastic uniaxial material, i.e. the stress-strain
+//! relationship is given by the linear equation \f$\sigma = E * \epsilon\f$
+//! while the material is elastic and \f$| \sigma = E * \epsilon_p |\f$  while
+//! the material is undergoing plastic deformation.
+//! @ingroup MatUnx
+class ElasticPPMaterialBase: public EPPBaseMaterial
   {
-    fyp= f;
-    if(fyp < 0)
+  protected:
+    double fyp, fyn; //!< positive and negative yield stress
+    double ep; //!< plastic strain at last commit
+    double commitStress; //!< last committed stress
+    double EnergyP; //!< Energy stored in the material by SAJalali
+
+    //! @brief Computes yield function value.
+    inline double yield_function(const double &sigtrial) const
       {
-        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	          << "; fyp < 0, setting > 0"
-	          << Color::def << std::endl;
-        fyp*= -1.;
+        if(sigtrial>=0.0)
+          return (sigtrial - fyp);
+        else
+          return (-sigtrial + fyn);
       }
-  }
 
-//! @brief Set the yield stress a compression value.
-void XC::ElasticPPMaterial::set_fyn(const double &f)
-  {
-    fyn= f;
-    if(fyn > 0)
-      {
-        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	          << "; fyn > 0, setting < 0"
-	          << Color::def << std::endl;
-        fyn*= -1.;
-      }  
-  }
+    inline double get_total_strain(void) 
+      { return EPPBaseMaterial::get_total_strain()-ep; }
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
+  public:
+    ElasticPPMaterialBase(int tag, int classTag, double E, double eyp);    
+    ElasticPPMaterialBase(int tag, int classTag, double E, double eyp, double eyn, double ezero);    
+    ElasticPPMaterialBase(int tag, int classTag);    
 
-//! @brief Constructor.
-//! @param[in] tag material identifier.
-//! @param[in] e material elastic modulus.
-//! @param[in] eyp positive yield strain value (tension).
-XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp)
-  // MAT_TAG_ElasticPPMaterial
-  :ElasticPPMaterialBase(tag, MAT_TAG_ElasticPPMaterial, e, eyp) {}
+    virtual void set_fyp(const double &);
+    void set_eyp(const double &);
+    virtual void set_fyn(const double &);
+    void set_eyn(const double &);
+    double get_fyp(void) const;
+    double get_eyp(void) const;
+    double get_fyn(void) const;
+    double get_eyn(void) const;
+    virtual double getEnergy(void)
+      { return EnergyP; }
 
-//! @brief Constructor.
-//! @param[in] tag material identifier.
-//! @param[in] e material elastic modulus.
-//! @param[in] eyp positive yield strain value (tension).
-//! @param[in] eyn negative yield strain value (compression).
-XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp,double eyn, double ez )
-  :ElasticPPMaterialBase(tag, MAT_TAG_ElasticPPMaterial,e,eyp, eyn, ez) {}
+    int setTrialStrain(double strain, double strainRate = 0.0); 
 
-//! @brief Constructor.
-XC::ElasticPPMaterial::ElasticPPMaterial(int tag)
-  :ElasticPPMaterialBase(tag, MAT_TAG_ElasticPPMaterial){}
+    int commitState(void);
+    int revertToLastCommit(void);    
+    int revertToStart(void);    
 
-//! @brief Virtual constructor.
-XC::UniaxialMaterial *XC::ElasticPPMaterial::getCopy(void) const
-  { return new ElasticPPMaterial(*this); }
+    UniaxialMaterial *getCopy(void) const;
+    
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
+    
+    void Print(std::ostream &s, int flag =0) const;
+
+  };
+} // end of XC namespace
+
+
+#endif
+
+
 

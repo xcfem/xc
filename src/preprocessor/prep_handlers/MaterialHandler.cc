@@ -81,6 +81,7 @@
 #include "material/uniaxial/soil_structure_interaction/TzSimple1.h"
 #include "material/uniaxial/soil_structure_interaction/PyLiq1.h"
 #include "material/uniaxial/soil_structure_interaction/TzLiq1.h"
+#include "material/uniaxial/soil_structure_interaction/EyBasic.h"
 
 #include "material/uniaxial/snap/Bilinear.h"
 #include "material/uniaxial/snap/Clough.h"
@@ -218,7 +219,9 @@ XC::Material *load_uniaxial_py_material(int tag_mat,const std::string &cmd)
       retval= new XC::PyLiq1(tag_mat);
     else if(cmd == "tz_liq1")
       retval= new XC::TzLiq1(tag_mat);
-    return retval;
+    else if((cmd == "ey_base") || (cmd == "EyBasic"))
+      retval= new XC::EyBasic(tag_mat);
+   return retval;
   }
 
 XC::Material *load_uniaxial_snap_material(int tag_mat,const std::string &cmd)

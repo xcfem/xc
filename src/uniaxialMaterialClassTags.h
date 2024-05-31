@@ -117,4 +117,5 @@
 #define MAT_TAG_TDConcreteMC10NL                227
 
 #define MAT_TAG_UniaxialMaterialWrapper        2000
+#define MAT_TAG_EyBasic                        3000
 #endif

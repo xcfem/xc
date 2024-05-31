@@ -52,6 +52,7 @@
 #include "material/uniaxial/soil_structure_interaction/TzLiq1.h"
 #include "material/uniaxial/soil_structure_interaction/generators/PySimple1Gen.h"
 #include "material/uniaxial/soil_structure_interaction/generators/TzSimple1Gen.h"
+#include "material/uniaxial/soil_structure_interaction/EyBasic.h"
 //#include "material/uniaxial/soil_structure_interaction/PySimple2.h"
 //#include "material/uniaxial/soil_structure_interaction/TzSimple2.h"
 //#include "material/uniaxial/soil_structure_interaction/QzSimple2.h"

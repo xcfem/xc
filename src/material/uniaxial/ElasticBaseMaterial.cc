@@ -27,8 +27,8 @@
 //ElasticBaseMaterial.cc
 
 #include <material/uniaxial/ElasticBaseMaterial.h>
-
 #include "utility/matrix/Vector.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -96,8 +96,9 @@ int XC::ElasticBaseMaterial::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -108,15 +109,17 @@ int XC::ElasticBaseMaterial::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-           std::cerr << getClassName() << "::" << __FUNCTION__
-		     << "; failed to receive data.\n";
+           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		     << "; failed to receive data."
+	             << Color::def << std::endl;
       }
     return res;
   }

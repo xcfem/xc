@@ -24,6 +24,8 @@
 class_<XC::UniaxialMaterial,XC::UniaxialMaterial *, bases<XC::Material>, boost::noncopyable >("UniaxialMaterial", no_init)
   .add_property("rho", &XC::UniaxialMaterial::getRho, &XC::UniaxialMaterial::setRho,"Material density.")
   .add_property("initialStrain", &XC::UniaxialMaterial::getInitialStrain, &XC::UniaxialMaterial::setInitialStrain,"Value of the initial strain.")
+  .def("getInitialStrain", &XC::UniaxialMaterial::getInitialStrain, "Get the initial strain.")
+  .def("setInitialStrain", &XC::UniaxialMaterial::setInitialStrain, "Set the initial strain.")
   .def("incrementInitialStrain", &XC::UniaxialMaterial::incrementInitialStrain, "Increments initial strain.")
   .def("zeroInitialStrain", &XC::UniaxialMaterial::zeroInitialStrain, "Zeroes initial strain.")
   .def("setTrialStrain", &XC::UniaxialMaterial::setTrialStrain,"Assigns trial strain.")
@@ -57,13 +59,15 @@ class_<XC::EPPBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable 
 
 class_<XC::EPPGapMaterial , bases<XC::EPPBaseMaterial>, boost::noncopyable >("EPPGapMaterial", no_init);
 
-class_<XC::ElasticPPMaterial , bases<XC::EPPBaseMaterial>, boost::noncopyable >("ElasticPPMaterial", no_init)
-  .add_property("fyp", &XC::ElasticPPMaterial::get_fyp, &XC::ElasticPPMaterial::set_fyp,"Positive yield stress.")
-  .add_property("eyp", &XC::ElasticPPMaterial::get_eyp,"Positive yield strain.")
-  .add_property("fyn", &XC::ElasticPPMaterial::get_fyn, &XC::ElasticPPMaterial::set_fyn,"Negative yield stress.")
-  .add_property("eyn", &XC::ElasticPPMaterial::get_eyn,"Negative yield strain.")
+class_<XC::ElasticPPMaterialBase , bases<XC::EPPBaseMaterial>, boost::noncopyable >("ElasticPPMaterialBase", no_init)
+  .add_property("fyp", &XC::ElasticPPMaterialBase::get_fyp, &XC::ElasticPPMaterialBase::set_fyp,"Positive yield stress.")
+  .add_property("eyp", &XC::ElasticPPMaterialBase::get_eyp,"Positive yield strain.")
+  .add_property("fyn", &XC::ElasticPPMaterialBase::get_fyn, &XC::ElasticPPMaterialBase::set_fyn,"Negative yield stress.")
+  .add_property("eyn", &XC::ElasticPPMaterialBase::get_eyn,"Negative yield strain.")
   ;
 
+class_<XC::ElasticPPMaterial , bases<XC::ElasticPPMaterialBase>, boost::noncopyable >("ElasticPPMaterial", no_init)
+  ;
 
 class_<XC::CableMaterial, bases<XC::ElasticBaseMaterial> >("CableMaterial")
   .add_property("prestress", &XC::CableMaterial::getPrestress, &XC::CableMaterial::setPrestress,"Cable's prestress.")
@@ -92,7 +96,11 @@ class_<XC::InitStrainBaseMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boos
 
 class_<XC::InitStrainMaterial, bases<XC::InitStrainBaseMaterial>, boost::noncopyable >("InitStrainMaterial", no_init);
 
-class_<XC::InitStressMaterial, bases<XC::InitStrainBaseMaterial>, boost::noncopyable >("InitStressMaterial", no_init);
+class_<XC::InitStressMaterial, bases<XC::InitStrainBaseMaterial>, boost::noncopyable >("InitStressMaterial", no_init)
+  .add_property("initialStress", &XC::InitStressMaterial::getInitialStress, &XC::InitStressMaterial::setInitialStress,"Get/set the initial stress.")
+  .def("setInitialStress", &XC::InitStressMaterial::setInitialStress,"Set the initial stress.")
+  .def("getInitialStress", &XC::InitStressMaterial::getInitialStress,"Get the initial stress.")
+  ;
 
 class_<XC::MinMaxMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("MinMaxMaterial", no_init);
 
