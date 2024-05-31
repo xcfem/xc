@@ -976,6 +976,7 @@ python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
 python tests/materials/xc_materials/uniaxial/test_viscous_material_01.py
 echo "$BLEU" "      Elastic perfectly plastic material tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_elasticpp_material_01.py
+python tests/materials/xc_materials/uniaxial/test_elasticpp_material_02.py
 echo "$BLEU" "      Uniaxial concrete materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
@@ -1017,6 +1018,7 @@ echo "$BLEU" "      Connected materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_01.py
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_02.py
 echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
