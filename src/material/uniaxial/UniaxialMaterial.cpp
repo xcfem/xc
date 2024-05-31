@@ -217,7 +217,6 @@ void XC::UniaxialMaterial::setInitialGeneralizedStrain(const Vector &iS)
 //! @brief Revert the material to its initial state.
 int XC::UniaxialMaterial::revertToStart(void)
   {
-    zeroInitialStrain();
     return 0;
   }
 
