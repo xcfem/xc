@@ -969,14 +969,16 @@ echo "$BLEU" "Materials tests." "$NORMAL"
 python tests/materials/test_get_material_names.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/test_elastic_material.py
+python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
 python tests/materials/xc_materials/uniaxial/test_init_strain_material_01.py
 python tests/materials/xc_materials/uniaxial/test_init_stress_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
 python tests/materials/xc_materials/uniaxial/test_viscous_material_01.py
 echo "$BLEU" "      Elastic perfectly plastic material tests." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/test_elasticpp_material_01.py
-python tests/materials/xc_materials/uniaxial/test_elasticpp_material_02.py
+python tests/materials/xc_materials/uniaxial/elastic_pp_material/test_elasticpp_material_01.py
+python tests/materials/xc_materials/uniaxial/elastic_pp_material/test_elasticpp_material_02.py
 echo "$BLEU" "      Uniaxial concrete materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
@@ -1013,12 +1015,11 @@ python tests/materials/xc_materials/uniaxial/cable/test_cable_material04.py
 python tests/materials/xc_materials/uniaxial/cable/test_cable_material05.py
 python tests/materials/xc_materials/uniaxial/cable/test_cable_material06.py
 python tests/materials/xc_materials/uniaxial/cable/test_cable_material07.py
-python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
 echo "$BLEU" "      Connected materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_01.py
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_02.py
 echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
