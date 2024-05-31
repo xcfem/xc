@@ -51,6 +51,7 @@
 #include <material/uniaxial/InitStressMaterial.h>
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Determine the initial strain.
 int XC::InitStressMaterial::findInitialStrain(void)
@@ -80,10 +81,12 @@ int XC::InitStressMaterial::findInitialStrain(void)
       tmp->setTrialStrain(epsInit);
     else
       {
-	std::cerr << "WARNING: InitStressMaterial - could not find initStrain to within tol for material: " << tmp->getTag()
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: could not find initStrain to within tol for material: "
+		  << tmp->getTag()
 		  << " wanted sigInit: " << sigInit
 		  << " using tStress: " << tmp->getStress()
-		  << std::endl;
+		  << Color::def << std::endl;
         return -1;
       }
     return 0;
@@ -120,14 +123,35 @@ XC::InitStressMaterial::InitStressMaterial(int tag)
 int XC::InitStressMaterial::setInitialStrain(const double &initStrain)
   {
     InitStrainBaseMaterial::setInitialStrain(initStrain);
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; the initial strain for this material is controlled"
+              << " by the initial stress. Use InitStrainMaterial instead."
+              << Color::def << std::endl;
+    return -1;
+  }
+
+//! @brief Assigns the initial stress.
+int XC::InitStressMaterial::setInitialStress(const double &d)
+  {
+    int retval= -1;
+    this->sigInit= d;
     UniaxialMaterial *tmp= this->getMaterial();
     if(tmp)
       {
 	if(this->findInitialStrain() == 0)
-	  tmp->commitState();
-      }    
-    return 0;
+	  {
+	    tmp->commitState();
+	    retval= 0;
+	  }
+	else
+	  retval= -1;
+      }
+    return retval;
   }
+
+//! @brief Return the initial stress.
+double XC::InitStressMaterial::getInitialStress(void) const
+  { return sigInit; }
 
 int XC::InitStressMaterial::setTrialStrain(double strain, double strainRate)
   {
@@ -175,8 +199,9 @@ int XC::InitStressMaterial::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send data.\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << Color::def << std::endl;    
     return res;
   }
 
@@ -186,8 +211,9 @@ int XC::InitStressMaterial::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << ";  data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << ";  data could not be received."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
