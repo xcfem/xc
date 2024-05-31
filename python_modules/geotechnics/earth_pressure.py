@@ -432,3 +432,49 @@ def get_horizontal_soil_reaction_diagram(depth, tributaryArea, gamma, Ka, K0, Kp
 
     return [lowerBoundPt, activeLimitPt, atRestPt, passiveLimitPt, upperBoundPt], initStrain
 
+
+def def_ey_basic_material(preprocessor, name, E, fyp, fyn):
+    '''Constructs an elastic perfectly-plastic uniaxial material adapted
+       to represent the horizontal thrust of a soil.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name identifying the material (if None compute a suitable name)
+    :param E: tangent in the elastic zone of the stress-strain diagram
+    :param fyp: stress at which material reaches plastic state in tension
+    :param fyn: stress at which material reaches plastic state in compression
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("EyBasic", matName)
+    retval.E= E
+    retval.fyp= fyp
+    retval.fyn= fyn
+    retval.revertToStart() # Compute material derived parameters.
+    return retval
+
+def def_horizontal_subgrade_reaction_nl_material(preprocessor, name, depth, tributaryArea, soil, Kh):
+    ''' Return the points of the force-displacement diagram.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name identifying the material (if None compute a suitable name)
+    :param depth: depth of the point.
+    :param tributaryArea: area on which the pressure acts.
+    :param soil: soil model object.
+    :param Kh: horizontal Winkler modulus.
+    '''
+    # Compute corresponding earth thrusts (active, at rest, passive).
+    Ea, E0, Ep= get_earth_thrusts(depth= depth, tributaryArea= tributaryArea, gamma= soil.gamma(), Ka= soil.Ka(), K0= soil.K0Jaky(), Kp= soil.Kp())
+    # Define nonlinear spring material
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    eyMatName= 'ey'+matName
+    eyBasicMaterial= def_ey_basic_material(preprocessor, name= eyMatName, E= Kh, fyp= -Ea, fyn= -Ep)
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("init_stress_material", matName)
+    retval.setMaterial(eyBasicMaterial.name)
+    retval.setInitialStress(-E0)
+    return retval
+
