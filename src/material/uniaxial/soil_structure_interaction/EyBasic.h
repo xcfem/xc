@@ -54,11 +54,22 @@ class EyBasic: public ElasticPPMaterialBase
   {
   public:
     EyBasic(int tag= 0);    
-    EyBasic(int tag, double E, double eyp);    
-    EyBasic(int tag, double E, double eyp, double eyn, double ezero);    UniaxialMaterial *getCopy(void) const;    
+    EyBasic(int tag, double E, double eyp, double eyn, double ezero);
+    UniaxialMaterial *getCopy(void) const;    
 
     void set_fyp(const double &);
     void set_fyn(const double &);
+    
+    inline double getLowerYieldStress(void)
+      { return get_fyn(); }
+    void setLowerYieldStress(const double &d)
+      { set_fyn(d); }
+    double getUpperYieldStress(void)
+      { return get_fyp(); }
+    void setUpperYieldStress(const double &d)
+      { set_fyp(d); }
+    
+    void setParameters(const double &, const double &, const double &);
   };
 } // end of XC namespace
 
