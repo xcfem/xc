@@ -1020,6 +1020,7 @@ python tests/materials/xc_materials/uniaxial/connected/test_series_material_01.p
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_02.py
 echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_01.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_02.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
@@ -1172,7 +1173,8 @@ python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_j
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_j2_plate_fibre_material_03.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 echo "$BLEU" "    concrete shapes tests." "$NORMAL"
-python tests/materials/concrete_shapes/test_mass_properties_rc_section.py
+python tests/materials/concrete_shapes/test_mass_properties_rc_section_01.py
+python tests/materials/concrete_shapes/test_mass_properties_rc_section_02.py
 python tests/materials/concrete_shapes/test_reinf_row_01.py
 python tests/materials/concrete_shapes/test_reinf_row_02.py
 python tests/materials/concrete_shapes/test_reinf_layers_01.py
