@@ -1557,7 +1557,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.getRespT(self, preprocessor, self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
+        return section_properties.RectangularSection.getRespT(self, preprocessor= preprocessor, G= self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
 
     def getRespVy(self, preprocessor):
         '''Material for modeling Y shear response of section.
