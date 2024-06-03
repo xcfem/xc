@@ -28,7 +28,9 @@ J= flatColumnsRCSection.J()
 refJ= c*b**3*(1/3.0-0.21*b/c)
 ratio1= abs(J-refJ)/refJ
 
-GJ= flatColumnsRCSection.getTorsionalStiffness()
+elasticMatData= flatColumnsRCSection.getElasticMaterialData()
+sectionProperties= flatColumnsRCSection.getCrossSectionProperties3D(material= elasticMatData)
+ratio2= abs(J-sectionProperties.J)
 
 
 
@@ -37,12 +39,14 @@ GJ= flatColumnsRCSection.getTorsionalStiffness()
 print(J)
 print(refJ)
 print(ratio1)
+print(sectionProperties)
+print(ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<.01):
+if((ratio1<.01) and (ratio2==0.0)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
