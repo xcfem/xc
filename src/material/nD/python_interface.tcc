@@ -44,6 +44,7 @@ class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >
   .def("setInitialStrain", &XC::ElasticIsotropicMaterial::setInitialStrain, "Set the value of the initial strain.")
   .def("getInitialStrain", make_function(&XC::ElasticIsotropicMaterial::getInitialStrain, return_internal_reference<>()), "Return the value of the initial strain.")
   ;
+
 #include "elastic_isotropic/python_interface.tcc"
 
 //class_<XC::FeapMaterial , bases<XC::NDMaterial>, boost::noncopyable >("FeapMaterial", no_init);
@@ -76,5 +77,14 @@ class_<material_vector_NDMat, bases<vectorNDMaterial, CommandEntity>, boost::non
   ;
 
 #include "template_3d_ep/python_interface.tcc"
-#include "uw_materials/python_interface.tcc"
 
+typedef XC::MaterialWrapper<XC::NDMaterial, MAT_TAG_NDMaterialWrapper> nd_material_wrapper;
+XC::NDMaterial *(nd_material_wrapper::*get_nd_material)(void)= &nd_material_wrapper::getMaterial;
+class_<nd_material_wrapper,boost::noncopyable>("nd_material_wrapper", no_init)
+  .add_property("encapsulatedMaterial", make_function(get_nd_material,return_internal_reference<>()), "Get the encapsulated material.")
+  ;
+
+class_<XC::NDMaterialWrapper, bases<nd_material_wrapper>, boost::noncopyable >("NDMaterialWrapper", no_init)
+  ;
+
+#include "uw_materials/python_interface.tcc"

@@ -47,7 +47,7 @@ class BaseElasticSection1d: public BaseElasticSection
 
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
+    bool isEqual(const BaseElasticSection1d &) const;
   public:
     BaseElasticSection1d(int tag,int classTag, const double &E, const double &A);
     BaseElasticSection1d(int tag,int classTag, MaterialHandler *mat_ldr= nullptr);    

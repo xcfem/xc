@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import xc
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
+import xc
 
 def get_analysis(feProblem):
     solu= feProblem.getSoluProc

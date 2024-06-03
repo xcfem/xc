@@ -110,7 +110,6 @@ n3= nodes.newNodeXYZ(0.0,0.0,Lbeam)
 
 
 # Geometric transformations
-trfs= preprocessor.getTransfCooHandler
 # Coord. trasformation for beam in global X direction
 #local Z axis of the element
 # parallel to global -Y (it matches

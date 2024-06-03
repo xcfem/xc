@@ -179,6 +179,7 @@ class Matrix: public CommandEntity
     void putRow(int , const Vector &);
     Vector getCol(int col) const;
     void putCol(int , const Vector &);
+    boost::python::list getPyList(void) const;
 
     template <class TNSR>
     Matrix &operator=(const TNSR &);

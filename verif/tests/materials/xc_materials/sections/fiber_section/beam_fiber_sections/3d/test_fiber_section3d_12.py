@@ -42,7 +42,7 @@ fiberSectionRepr= secHP.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomSecPret01.name)
 secHP.setupFibers()
 
-zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "secHP")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "secHP")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

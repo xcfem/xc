@@ -344,13 +344,9 @@ void XC::ContactMaterial3D::Print(std::ostream &s, int flag )
 }
 
 int XC::ContactMaterial3D::updateParameter(int responseID, Information &info)
-{
-  if (responseID == 1) {
-    mFrictFlag = info.theDouble;
+  {
+    return XC::ContactMaterialBase::updateParameter(responseID, info);
   }
-  
-  return 0;
-}
 
 //! @brief Send material.
 int XC::ContactMaterial3D::sendData(Communicator &comm)

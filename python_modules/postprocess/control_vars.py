@@ -24,7 +24,7 @@ from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 from materials import stresses
 
-__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'getElementInternalForceComponentData', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
+__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
 
 def getDiagramDirection(elem, component, defaultDirection):
     '''Return the direction vector to represent the diagram over the element
@@ -51,7 +51,7 @@ def getDiagramDirection(elem, component, defaultDirection):
     return elemVDir
     
 
-def getElementInternalForceComponentData(elem, component, defaultDirection):
+def get_element_internal_force_component_data(elem, component, defaultDirection):
     '''Return the data to use to represent the diagram over the element
 
     :param elem: element to deal with.

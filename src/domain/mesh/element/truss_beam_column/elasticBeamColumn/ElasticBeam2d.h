@@ -137,13 +137,13 @@ class ElasticBeam2d: public ElasticBeam2dBase
     
     //! @brief Internal shear force in the middle of the element.
     inline double getV(void) const
-      { return (q(1)+q(2))/theCoordTransf->getInitialLength(); }
+      { return -(q(1)+q(2))/theCoordTransf->getInitialLength(); }
     //! @brief Internal shear force at the back end.   
     inline double getV1(void) const
-      { return -getV()-p0[1]; }
+      { return getV()-p0[1]; }
     //! @brief Internal shear force at the front end.   
     inline double getV2(void) const
-      { return -getV()+p0[2]; }
+      { return getV()+p0[2]; }
     
     //! @brief Internal axial force at the back end.   
     inline double getN1(void) const

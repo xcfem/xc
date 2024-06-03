@@ -63,9 +63,9 @@
 
 #include <material/uniaxial/ElasticPPMaterial.h>
 #include <utility/matrix/Vector.h>
-
 #include <cmath>
 #include <cfloat>
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Sets the positive yield stress value (tension).
@@ -74,15 +74,12 @@ void XC::ElasticPPMaterial::set_fyp(const double &f)
     fyp= f;
     if(fyp < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; fyp < 0, setting > 0\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; fyp < 0, setting > 0"
+	          << Color::def << std::endl;
         fyp*= -1.;
       }
   }
-
-//! @brief Sets the positive yield strain value (tension).
-void XC::ElasticPPMaterial::set_eyp(const double &eyp)
-  { set_fyp(E*eyp); }
 
 //! @brief Set the yield stress a compression value.
 void XC::ElasticPPMaterial::set_fyn(const double &f)
@@ -90,27 +87,20 @@ void XC::ElasticPPMaterial::set_fyn(const double &f)
     fyn= f;
     if(fyn > 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; fyn > 0, setting < 0\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; fyn > 0, setting < 0"
+	          << Color::def << std::endl;
         fyn*= -1.;
       }  
   }
-
-//! @brief Asigna el yield stress a compression value.
-void XC::ElasticPPMaterial::set_eyn(const double &eyn)
-  { set_fyn(E*eyn); }
 
 //! @brief Constructor.
 //! @param[in] tag material identifier.
 //! @param[in] e material elastic modulus.
 //! @param[in] eyp positive yield strain value (tension).
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp)
-  :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,e,0.0), fyp(0.0), fyn(0.0),
-   ep(0.0), commitStress(0.0), EnergyP(0.0)
-  {
-    set_eyp(eyp);
-    fyn = -fyp;
-  }
+  // MAT_TAG_ElasticPPMaterial
+  :ElasticPPMaterialBase(tag, MAT_TAG_ElasticPPMaterial, e, eyp) {}
 
 //! @brief Constructor.
 //! @param[in] tag material identifier.
@@ -118,160 +108,13 @@ XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp)
 //! @param[in] eyp positive yield strain value (tension).
 //! @param[in] eyn negative yield strain value (compression).
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag, double e, double eyp,double eyn, double ez )
-  :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,e,ez), fyp(0.0), fyn(0.0),
-   ep(0.0), commitStress(0.0), EnergyP(0.0)
-  {
-    set_eyp(eyp);
-    set_eyn(eyn);
-  }
+  :ElasticPPMaterialBase(tag, MAT_TAG_ElasticPPMaterial,e,eyp, eyn, ez) {}
 
 //! @brief Constructor.
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag)
-  :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,0.0,0.0), fyp(0.0), fyn(0.0),
-   ep(0.0), commitStress(0.0), EnergyP(0.0) {}
-
-//! @brief Sets trial strain.
-int XC::ElasticPPMaterial::setTrialStrain(double strain, double strainRate)
-  {
-  /*
-    if (fabs(trialStrain - strain) < DBL_EPSILON)
-      return 0;
-  */
-    trialStrain = strain;
-
-    // compute trial stress
-    const double sigtrial= E * get_total_strain(); // trial stress
-
-    const double f= yield_function(sigtrial); //yield function
-
-    const double fYieldSurface= - E * DBL_EPSILON;
-    if(f<=fYieldSurface )
-      {
-        // elastic
-        trialStress= sigtrial;
-        trialTangent= E;
-      }
-    else
-      {
-        // plastic
-        if(sigtrial>0.0)
-          { trialStress = fyp; }
-        else
-          { trialStress = fyn; }
-        trialTangent = 0.0;
-      }
-    return 0;
-  }
-
-//! @brief Commit material state.
-int XC::ElasticPPMaterial::commitState(void)
-  {
-
-    // compute trial stress
-    const double sigtrial= E * get_total_strain(); // trial stress
-
-    const double f= yield_function(sigtrial); //yield function
-
-    const double fYieldSurface= - E * DBL_EPSILON;
-    if(f>fYieldSurface)
-      {
-        // plastic
-        if(sigtrial>0.0)
-          { ep+= f / E; }
-        else
-          { ep-= f / E; }
-      }
-    //added by SAJalali for energy recorder
-    EnergyP+= 0.5*(commitStress + trialStress)*(trialStrain - commitStrain);
-    
-    EPPBaseMaterial::commitState();
-    commitStress= trialStress;
-    return 0;
-  }        
-
-//! @brief Returns the material state to its last commit.
-int XC::ElasticPPMaterial::revertToLastCommit(void)
-  {
-    EPPBaseMaterial::revertToLastCommit();
-    trialStress = commitStress;
-    return 0;
-  }
-
-
-//! @brief Returns the material to its initial state.
-int XC::ElasticPPMaterial::revertToStart(void)
-  {
-    int retval= EPPBaseMaterial::revertToStart();
-    ep = 0.0; // plastic strain at last commit
-    commitStress= 0.0;
-    EnergyP = 0.0; //by SAJalali
-    return retval;
-  }
+  :ElasticPPMaterialBase(tag, MAT_TAG_ElasticPPMaterial){}
 
 //! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::ElasticPPMaterial::getCopy(void) const
   { return new ElasticPPMaterial(*this); }
 
-//! @brief Send object members through the communicator argument.
-int XC::ElasticPPMaterial::sendData(Communicator &comm)
-  {
-    int res= EPPBaseMaterial::sendData(comm);
-    res+= comm.sendDoubles(fyp, fyn, ep, commitStress, EnergyP, getDbTagData(),CommMetaData(4));
-    return res;
-  }
-
-//! @brief Receives object members through the communicator argument.
-int XC::ElasticPPMaterial::recvData(const Communicator &comm)
-  {
-    int res= EPPBaseMaterial::recvData(comm);
-    res+= comm.receiveDoubles(fyp, fyn, ep, commitStress, EnergyP, getDbTagData(),CommMetaData(4));
-    return res;
-  }
-
-int XC::ElasticPPMaterial::sendSelf(Communicator &comm)
-  {
-    setDbTag(comm);
-    const int dataTag= getDbTag();
-    inicComm(5);
-    int res= sendData(comm);
-
-    res+= comm.sendIdData(getDbTagData(),dataTag);
-    if(res < 0)
-      std::cerr << "WARNING ElasticPPMaterial::sendSelf() - " 
-                << dataTag << " failed to send.";
-    return res;
-  }
-
-int XC::ElasticPPMaterial::recvSelf(const Communicator &comm)
-  {
-    inicComm(5);
-    const int dataTag= getDbTag();
-    int res= comm.receiveIdData(getDbTagData(),dataTag);
-
-    if(res<0)
-      std::cerr << "WARNING ElasticPPMaterial::recvSelf() - "
-                << dataTag << " failed to receive ID\n";
-    else
-      res+= recvData(comm);
-    return res;
-  }
-
-void XC::ElasticPPMaterial::Print(std::ostream &s, int flag) const
-  {
-    s << "ElasticPP tag: " << this->getTag() << std::endl;
-    s << "  E: " << E << std::endl;
-    s << "  ep: " << ep << std::endl;
-    s << "  Otress: " << trialStress << " tangent: " << trialTangent << std::endl;
-  }
-
-double XC::ElasticPPMaterial::get_fyp(void) const
-  { return fyp; }
-
-double XC::ElasticPPMaterial::get_eyp(void) const
-  { return fyp/E; }
-
-double XC::ElasticPPMaterial::get_fyn(void) const
-  { return fyn; }
-
-double XC::ElasticPPMaterial::get_eyn(void) const
-  { return fyn/E; }

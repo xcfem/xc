@@ -63,7 +63,7 @@ sa.setRespVyByName(respVy.name) # Set shear response in y direction.
 sa.setRespVzByName(respVz.name) # Set shear response in z direction.
 sa.setRespTByName(respT.name) # Set torsion response.
 
-zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, sa.name)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sa.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

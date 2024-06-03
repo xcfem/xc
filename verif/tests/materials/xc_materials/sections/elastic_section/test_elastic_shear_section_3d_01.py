@@ -14,10 +14,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
-preprocessor=  feProblem.getPreprocessor
-
 # Rectangular cross-section definition
 scc10x20=  section_properties.RectangularSection(name="rectang",b=.10,h=.20) # Section geometry.
 matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500) # Section material.
@@ -27,7 +23,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 matPoteau= scc10x20.defElasticShearSection3d(preprocessor,matscc10x20)
-elemZLS= zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.name)
+elemZLS= zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, scc10x20.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

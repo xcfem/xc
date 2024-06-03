@@ -99,6 +99,10 @@ class MultiLinear : public UniaxialMaterial
 
     void setupPyList(const boost::python::list &points);
     int getNumPoints(void) const;
+    const Vector &getBackboneStrains(void) const;
+    boost::python::list getBackboneStrainsPy(void) const;
+    const Vector &getBackboneStresses(void) const;
+    boost::python::list getBackboneStressesPy(void) const;
     
     int setTrialStrain(double strain, double strainRate = 0.0);
     double getStrain(void) const;

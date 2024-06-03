@@ -150,8 +150,8 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         ''' Return a dictionary containing the object data.'''
         retval= super(RCCircularSection, self).getDict()
         retval.update(section_properties.CircularSection.getDict(self))
-        retval['mainReinf']= self.mainReinf.getDict()
-        retval['shReinf']= self.shReinf.getDict()
+        retval['mainReinf']= self.mainReinf
+        retval['shReinf']= self.shReinf
         return retval
     
     def setFromDict(self, dct):
@@ -161,8 +161,8 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         '''
         super(RCCircularSection, self).setFromDict(dct)
         section_properties.CircularSection.setFromDict(self, dct)
-        self.mainReinf.setFromDict(dct['mainReinf'])
-        self.shReinf.setFromDict(dct['shReinf'])
+        self.mainReinf= dct['mainReinf']
+        self.shReinf= dct['shReinf']
         
     def __eq__(self, other):
         ''' Redefines equal operator.'''

@@ -39,9 +39,8 @@
 
 namespace XC {
 
-//! @ingroup Elem
-//
 //! @brief Element with material
+//! @ingroup Elem
 template <int NNODOS, class PhysProp>
 class ElemWithMaterial: public ElementBase<NNODOS>
   {
@@ -172,8 +171,9 @@ Matrix ElemWithMaterial<NNODOS, PhysProp>::getExtrapolatedValues(const Matrix &v
 //! Gauss points to nodes.
 //! @tparam NNODOS: number of nodes.
 //! @tparam PhysProp: type of material container (physical properties).
+//! 
 //! @param code: identifier of the requested value.
-//! @param silent: if true don't complaint about non-existen property.
+//! @param silent: if true, don't complaint about non-existent property.
 template <int NNODOS,class PhysProp>
 boost::python::list ElemWithMaterial<NNODOS, PhysProp>::getValuesAtNodes(const std::string &code, bool silent) const
   {

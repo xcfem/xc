@@ -72,9 +72,20 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 
+//! @brief if prependZero== true, prepend a zero value to the series of load factors
+void XC::PathSeries::prepend_zero_if_appropriate(void)
+  {
+    if((this->prependZero) && (this->thePath.Size()>0))
+      {
+	Vector newPath= Vector(this->thePath.Size()+1);
+	newPath.Assemble(this->thePath, 1);
+	this->thePath= newPath;
+      }
+  }
+
 //! @brief Default constructor.
 XC::PathSeries::PathSeries(void)	
-  :PathSeriesBase(TSERIES_TAG_PathSeries), pathTimeIncr(1.0) {}
+  :PathSeriesBase(TSERIES_TAG_PathSeries), pathTimeIncr(1.0), useLast(false), startTime(0.0), prependZero(false) {}
 
 		   
 //! @brief Constructor.
@@ -86,9 +97,11 @@ XC::PathSeries::PathSeries(void)
 //! specified at \p theTimeIncr time intervals.
 //! @param theTimeIncr: time step.
 //! @param theFactor:  constant factor used in the relation.
-XC::PathSeries::PathSeries(const Vector &theLoadPath, double theTimeIncr, double theFactor)
+XC::PathSeries::PathSeries(const Vector &theLoadPath, double theTimeIncr, double theFactor, bool useLast, bool prependZero, double startTime)
   : PathSeriesBase(TSERIES_TAG_PathSeries,theLoadPath,theFactor),
-    pathTimeIncr(theTimeIncr) {}
+    pathTimeIncr(theTimeIncr),
+    useLast(useLast), startTime(startTime), prependZero(prependZero)
+  { prepend_zero_if_appropriate(); }
 
 
 //! @brief Constructor.
@@ -100,8 +113,9 @@ XC::PathSeries::PathSeries(const Vector &theLoadPath, double theTimeIncr, double
 //! specified at \p theTimeIncr time intervals.
 //! @param theTimeIncr: time step.
 //! @param theFactor:  constant factor used in the relation.
-XC::PathSeries::PathSeries(const std::string &fileName, double theTimeIncr, double theFactor)
-  :PathSeriesBase(TSERIES_TAG_PathSeries,theFactor),pathTimeIncr(theTimeIncr)
+XC::PathSeries::PathSeries(const std::string &fileName, double theTimeIncr, double theFactor, bool useLast, bool prependZero, double startTime)
+  :PathSeriesBase(TSERIES_TAG_PathSeries,theFactor), pathTimeIncr(theTimeIncr),
+    useLast(useLast), startTime(startTime), prependZero(prependZero) 
   { readFromFile(fileName); }
 
 //! @brief Read path from file.
@@ -128,6 +142,7 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
             theFile1.close(); // finally close the file
           }
       }
+    prepend_zero_if_appropriate();
   }
 
 //! @brief Returns the value of the factor at the pseudo-time.
@@ -139,19 +154,25 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
 double XC::PathSeries::getFactor(double pseudoTime) const
   {
     double retval= 0.0;
-    if(pseudoTime > 0.0)
+    const long long size= thePath.Size();
+    if(pseudoTime >= this->startTime && (size>0))
       {
         // determine indexes into the data array whose boundary holds the time
-        const double incr = pseudoTime/pathTimeIncr;
+        const double incr= pseudoTime/pathTimeIncr;
         const long long incr1= static_cast<long long>(floor(incr));
         const long long incr2= incr1+1;
 
-        if(incr2 <thePath.Size())
+        if(incr2 < size)
           {
-            const double value1= thePath(incr1);
-            const double value2= thePath(incr2);
-            retval= cFactor*(value1 + (value2-value1)*(pseudoTime/pathTimeIncr - incr1));
+            const double &value1= thePath[incr1];
+            const double &value2= thePath[incr2];
+            retval= cFactor*(value1 + (value2-value1)*(incr - incr1));
           }
+	else
+	  {
+	    if(useLast)
+	      retval= cFactor*this->thePath[size-1];
+	  }
       }
     return retval;
   }

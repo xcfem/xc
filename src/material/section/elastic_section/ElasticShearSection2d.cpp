@@ -60,11 +60,14 @@
 
 XC::Vector XC::ElasticShearSection2d::s(3);
 
-XC::ElasticShearSection2d::ElasticShearSection2d(int tag, MaterialHandler *mat_ldr)
-  : BaseElasticSection2d(tag,SEC_TAG_ElasticShear2d,3,mat_ldr) {}
-
+//! @brief Default constructor.
 XC::ElasticShearSection2d::ElasticShearSection2d(void)
-  :BaseElasticSection2d(0, SEC_TAG_ElasticShear2d,3),parameterID(0) {}
+  :BaseElasticSection2d(0, SEC_TAG_ElasticShear2d,3), parameterID(0) {}
+
+//! @brief Constructor.
+XC::ElasticShearSection2d::ElasticShearSection2d(int tag, MaterialHandler *mat_ldr)
+  : BaseElasticSection2d(tag,SEC_TAG_ElasticShear2d,3,mat_ldr), parameterID(0)
+  {}
 
 const XC::Vector &XC::ElasticShearSection2d::getStressResultant(void) const
   {

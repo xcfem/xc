@@ -96,6 +96,9 @@ eulerBucklingLoadFactor2= linearBucklingAnalysis.analysis.getEigenvalue(2)
 eulerBucklingLoadFactor3= linearBucklingAnalysis.analysis.getEigenvalue(3)
 bucklingLoadFactors= [eulerBucklingLoadFactor1, eulerBucklingLoadFactor2, eulerBucklingLoadFactor3]
 
+# Normalize eigenvectors if needed.
+norms= preprocessor.getDomain.getMesh.normalizeEigenvectors()
+
 xcTotalSet= modelSpace.getTotalSet()
 
 avgLeff= 0.0 # Average effective length.

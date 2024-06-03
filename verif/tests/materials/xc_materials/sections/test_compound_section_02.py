@@ -39,7 +39,7 @@ sectionList= []
 for p in positions:
     sectionList.append([geom.Pos2d(p[0],p[1]),chsSection])
 
-compoundSection= sp.CompoundSection('CDTrager',sectionList)
+compoundSection= sp.CompoundSection('CDTrager',sectionList, Iw= 0.0)
 fs2dSectionShape= compoundSection.defElasticShearSection2d(preprocessor,S355JR)
 
 yCenter= compoundSection.yCenterOfMass()

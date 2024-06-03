@@ -25,29 +25,6 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-/* ****************************************************************** **
-**    OpenSees - Open System for Earthquake Engineering Simulation    **
-**          Pacific Earthquake Engineering Research Center            **
-**                                                                    **
-**                                                                    **
-** (C) Copyright 1999, The Regents of the University of California    **
-** All Rights Reserved.                                               **
-**                                                                    **
-** Commercial use of this program without express permission of the   **
-** University of California, Berkeley, is strictly prohibited.  See   **
-** file 'COPYRIGHT'  in main directory for information on usage and   **
-** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
-**                                                                    **
-** Developed by:                                                      **
-**   Frank McKenna (fmckenna@ce.berkeley.edu)                         **
-**   Gregory L. Fenves (fenves@ce.berkeley.edu)                       **
-**   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
-**                                                                    **
-** ****************************************************************** */
-                                                                        
-// $Revision: 1.5 $
-// $Date: 2003/02/25 23:33:38 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ElasticPPMaterial.h,v $
                                                                         
 #ifndef ElasticPPMaterial_h
 #define ElasticPPMaterial_h
@@ -64,10 +41,9 @@
 //
 // What: "@(#) ElasticPPMaterial.h, revA"
 
-#include <material/uniaxial/EPPBaseMaterial.h>
+#include "material/uniaxial/ElasticPPMaterialBase.h"
 
 namespace XC {
-//! @ingroup MatUnx
 //
 //! @brief Elastic perfectly plastic material.
 //!
@@ -76,57 +52,17 @@ namespace XC {
 //! relationship is given by the linear equation \f$\sigma = E * \epsilon\f$
 //! while the material is elastic and \f$| \sigma = E * \epsilon_p |\f$  while
 //! the material is undergoing plastic deformation.
-class ElasticPPMaterial: public EPPBaseMaterial
+//! @ingroup MatUnx
+class ElasticPPMaterial: public ElasticPPMaterialBase
   {
-  private:
-    double fyp, fyn; //!< positive and negative yield stress
-    double ep; //!< plastic strain at last commit
-    double commitStress; //!< last committed stress
-    double EnergyP; //!< Energy stored in the material by SAJalali
-
-    //! @brief Computes yield function value.
-    inline double yield_function(const double &sigtrial) const
-      {
-        if(sigtrial>=0.0)
-          return (sigtrial - fyp);
-        else
-          return (-sigtrial + fyn);
-      }
-  protected:
-    inline double get_total_strain(void) 
-      { return EPPBaseMaterial::get_total_strain()-ep; }
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
-
   public:
-    ElasticPPMaterial(int tag, double E, double eyp);    
-    ElasticPPMaterial(int tag, double E, double eyp, double eyn, double ezero);    
     ElasticPPMaterial(int tag= 0);    
+    ElasticPPMaterial(int tag, double E, double eyp);    
+    ElasticPPMaterial(int tag, double E, double eyp, double eyn, double ezero);
+    UniaxialMaterial *getCopy(void) const;    
 
     void set_fyp(const double &);
-    void set_eyp(const double &);
     void set_fyn(const double &);
-    void set_eyn(const double &);
-    double get_fyp(void) const;
-    double get_eyp(void) const;
-    double get_fyn(void) const;
-    double get_eyn(void) const;
-    virtual double getEnergy(void)
-      { return EnergyP; }
-
-    int setTrialStrain(double strain, double strainRate = 0.0); 
-
-    int commitState(void);
-    int revertToLastCommit(void);    
-    int revertToStart(void);    
-
-    UniaxialMaterial *getCopy(void) const;
-    
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &s, int flag =0) const;
-
   };
 } // end of XC namespace
 

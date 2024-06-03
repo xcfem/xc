@@ -81,6 +81,7 @@
 #include "material/uniaxial/soil_structure_interaction/TzSimple1.h"
 #include "material/uniaxial/soil_structure_interaction/PyLiq1.h"
 #include "material/uniaxial/soil_structure_interaction/TzLiq1.h"
+#include "material/uniaxial/soil_structure_interaction/EyBasic.h"
 
 #include "material/uniaxial/snap/Bilinear.h"
 #include "material/uniaxial/snap/Clough.h"
@@ -218,7 +219,9 @@ XC::Material *load_uniaxial_py_material(int tag_mat,const std::string &cmd)
       retval= new XC::PyLiq1(tag_mat);
     else if(cmd == "tz_liq1")
       retval= new XC::TzLiq1(tag_mat);
-    return retval;
+    else if((cmd == "ey_base") || (cmd == "EyBasic"))
+      retval= new XC::EyBasic(tag_mat);
+   return retval;
   }
 
 XC::Material *load_uniaxial_snap_material(int tag_mat,const std::string &cmd)
@@ -559,6 +562,7 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialHandl
 XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const std::string &cod_mat)
   {
     Material *retval= load_material(tag_mat,mat_type,this);
+    
     if(retval)
       {
         retval->set_owner(this);
@@ -934,6 +938,15 @@ XC::Material &XC::MaterialHandler::getMaterial(const std::string &nmb)
     return *retval;
   }
 
+//! @brief Returns a reference to the material which identifier
+//! is being passed as parameter.
+XC::Material &XC::MaterialHandler::getMaterial(const int &tag)
+  {
+    Material *retval= find_ptr(tag);
+    assert(retval);
+    return *retval;
+  }
+
 //! @brief Returns a reference to the section geometry which identifier
 //! is being passed as parameter. 
 XC::SectionGeometry &XC::MaterialHandler::getSectionGeometry(const std::string &nmb)
@@ -955,6 +968,10 @@ XC::InteractionDiagram &XC::MaterialHandler::getInteractionDiagram(const std::st
 //! @brief True if material exists.
 bool XC::MaterialHandler::materialExists(const std::string &nmb) const
   { return (materials.find(nmb)!=materials.end()); }
+
+//! @brief True if material exists.
+bool XC::MaterialHandler::materialExists(const int &tag) const
+  { return (this->find_ptr(tag)!=nullptr); }
 
 //! @brief Returns true if the section geometry identified by
 //! the string being passed as parameter exists.

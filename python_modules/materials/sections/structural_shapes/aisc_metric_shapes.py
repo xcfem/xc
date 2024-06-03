@@ -409,7 +409,11 @@ class WShape(structural_steel.IShape):
         ''' Return internal web height: clear distance between flanges
         less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
-
+    
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('Cw')
+    
     def getFlangeThickness(self):
         ''' Return the thickness of the flange.'''
         return self.get('tf')
@@ -1304,7 +1308,7 @@ class IShape(WShape, structural_steel.IShape):
         idict['k1'] = 0
         idict['bSlendernessRatio'] = bf / 2 / tf
         idict['hSlendernessRatio'] = hw / tw
-        idict['Cw'] = isection.getWarpingMoment()
+        idict['Cw'] = isection.getWarpingConstant()
         idict['Avy']= idict['h'] * tw # depth of the section* web thickness
         idict['Avz']= 2 / 3.0 * bf * tf # 2/3 * combined area of the flanges. 
         idict['alpha']= idict['Avy']/idict['A']
@@ -1378,7 +1382,11 @@ class CShape(structural_steel.UShape):
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
-        
+    
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('Cw')
+    
     def getFlangeWidth(self):
         ''' Return the width of the flange.'''
         return self.get('b')
@@ -1728,6 +1736,10 @@ class LShape(structural_steel.LShape):
         '''
         super(LShape,self).__init__(steel,name,L)
 
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('Cw')
+    
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
@@ -2443,6 +2455,10 @@ class HSSShape(structural_steel.QHShape):
             retval= True
         return retval
 
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('C')
+    
     def t(self):
         '''Return HSS nominal wall thickess'''
         # HSS shapes have two values of thickness:
@@ -3058,6 +3074,10 @@ class CHSSShape(structural_steel.CHShape):
         # t: according to the readme of AISC Shapes Database v15.0 is
         # the thickness of angle leg.
         return self.get('tnom')
+        
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('C')
     
     def getSlendernessRatio(self):
         ''' Return the slenderness ratio.'''

@@ -13,7 +13,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials.sections.structural_shapes import arcelor_metric_shapes
-from materials.sections import structural_steel
 from materials.ec3 import EC3_materials
 from postprocess import def_vars_control as vc
 from postprocess import callback_controls as cc
@@ -36,7 +35,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE) # Section geometry.
+HE400B= arcelor_metric_shapes.HEShape(steel= S275JR, name= "HE_400_B") # Section geometry.
 profil= HE400B.defElasticShearSection3d(preprocessor)
 
 # Elements definition
@@ -76,7 +75,7 @@ FC= elem.getProp("FCTN")
 deltateor= -0.1417
 ratio1= (abs(delta-deltateor)/deltateor)
 ratio2= ((M-F*L)/(F*L))
-ratio3= ((F+V)/F)
+ratio3= ((F-V)/F)
 ratio4= ((FC-0.661959)/0.661959)
 
 '''   

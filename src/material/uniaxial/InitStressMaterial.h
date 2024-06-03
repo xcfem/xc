@@ -69,7 +69,6 @@ namespace XC {
 class InitStressMaterial: public InitStrainBaseMaterial
   {
   protected:
-    double epsInit;
     double sigInit;
 
     DbTagData &getDbTagData(void) const;
@@ -85,6 +84,8 @@ class InitStressMaterial: public InitStrainBaseMaterial
     virtual void setMaterial(const UniaxialMaterial &);
     
     virtual int setInitialStrain(const double &);
+    int setInitialStress(const double &);
+    double getInitialStress(void) const;
     
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStrain(void) const;          

@@ -166,17 +166,17 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
     switch(classTag)
       {
         case ELE_TAG_Truss:
-             return new Truss();
+	  return new Truss();
         case ELE_TAG_TrussSection:
-             return new TrussSection();
+	  return new TrussSection();
         case ELE_TAG_CorotTruss:
-             return new CorotTruss();
+	  return new CorotTruss();
         case ELE_TAG_CorotTrussSection:
-             return new CorotTrussSection();
+	  return new CorotTrussSection();
         case ELE_TAG_ZeroLength:
-             return new ZeroLength();
+	  return new ZeroLength();
         case ELE_TAG_ZeroLengthContact2D:
-             return new ZeroLengthContact2D();
+	  return new ZeroLengthContact2D();
         case ELE_TAG_ZeroLengthSection:
              return new ZeroLengthSection();
 //         case ELE_TAG_ZeroLengthContact2D:
@@ -186,71 +186,75 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
              //case ELE_TAG_ZeroLengthND:
              //return new ZeroLengthND();
         case ELE_TAG_FourNodeQuadUP:
-             return new FourNodeQuadUP();
+	  return new FourNodeQuadUP();
         case ELE_TAG_FourNodeQuad:
-             return new FourNodeQuad();
+	  return new FourNodeQuad();
         case ELE_TAG_ElasticBeam2d:
-             return new ElasticBeam2d();
+	  return new ElasticBeam2d();
         case ELE_TAG_ElasticTimoshenkoBeam2d:
-             return new ElasticTimoshenkoBeam2d();
+	  return new ElasticTimoshenkoBeam2d();
         case ELE_TAG_ElasticBeam3d:
-                return new ElasticBeam3d();
+	  return new ElasticBeam3d();
         case ELE_TAG_ElasticTimoshenkoBeam3d:
-             return new ElasticTimoshenkoBeam3d();
+	  return new ElasticTimoshenkoBeam3d();
         case ELE_TAG_BeamWithHinges2d:
-             return new BeamWithHinges2d();
+	  return new BeamWithHinges2d();
         case ELE_TAG_BeamWithHinges3d:
-             return new BeamWithHinges3d();
+	  return new BeamWithHinges3d();
         case ELE_TAG_NLBeamColumn2d:
-             return new NLBeamColumn2d();
+	  return new NLBeamColumn2d();
         case ELE_TAG_NLBeamColumn3d:
-             return new NLBeamColumn3d();
+	  return new NLBeamColumn3d();
         case ELE_TAG_ForceBeamColumn2d:
-             return new ForceBeamColumn2d();
+	  return new ForceBeamColumn2d();
         case ELE_TAG_ForceBeamColumn3d:
-             return new ForceBeamColumn3d();
+	  return new ForceBeamColumn3d();
         case ELE_TAG_DispBeamColumn2d:
-             return new DispBeamColumn2d();
+	  return new DispBeamColumn2d();
         case ELE_TAG_DispBeamColumn3d:
-             return new DispBeamColumn3d();
+	  return new DispBeamColumn3d();
+        case ELE_TAG_BeamContact2D:
+	  return new BeamContact2D();
+        case ELE_TAG_BeamContact3D:
+	  return new BeamContact3D();
         case ELE_TAG_EnhancedQuad:
-                return new EnhancedQuad();
+	  return new EnhancedQuad();
         case ELE_TAG_NineNodeMixedQuad:
-                return new NineNodeMixedQuad();
+	  return new NineNodeMixedQuad();
         case ELE_TAG_ConstantPressureVolumeQuad:
-                return new ConstantPressureVolumeQuad();
+	  return new ConstantPressureVolumeQuad();
         case ELE_TAG_Brick:
-                return new Brick();
+	  return new Brick();
         case ELE_TAG_ShellMITC4:
-                return new ShellMITC4();
+	  return new ShellMITC4();
         case ELE_TAG_ShellMITC9:
-                return new ShellMITC9();
+	  return new ShellMITC9();
         case ELE_TAG_ShellNLDKGQ:
-                return new ShellNLDKGQ();
+	  return new ShellNLDKGQ();
         case ELE_TAG_ASDShellQ4:
-                return new ASDShellQ4();
+	  return new ASDShellQ4();
         case ELE_TAG_BbarBrick:
-                return new BbarBrick();
+	  return new BbarBrick();
         case ELE_TAG_Joint2D:                                // Arash
-                return new Joint2D();                        // Arash
+	  return new Joint2D();                        // Arash
         case ELE_TAG_Nine_Four_Node_QuadUP:
-            return new NineFourNodeQuadUP();
+	  return new NineFourNodeQuadUP();
         case ELE_TAG_BrickUP:
-            return new BrickUP();
+	  return new BrickUP();
         case ELE_TAG_Twenty_Eight_Node_BrickUP:
-            return new TwentyEightNodeBrickUP();
+	  return new TwentyEightNodeBrickUP();
         case ELE_TAG_EightNodeBrick_u_p_U:
-            return new EightNodeBrick_u_p_U();
+	  return new EightNodeBrick_u_p_U();
         case ELE_TAG_TwentyNodeBrick_u_p_U:
-            return new TwentyNodeBrick_u_p_U();
+	  return new TwentyNodeBrick_u_p_U();
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-		       << "; no Element type exists for class tag "
-		       << classTag << std::endl;
-             return nullptr;
+	  std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+		    << "; no Element type exists for class tag "
+		    << classTag << std::endl;
+	  return nullptr;
 
-         }
-}
+      }
+  }
 
 //! @brief Broke a node from its class tag.
 XC::Node *XC::FEM_ObjectBroker::getNewNode(int classTag)
@@ -551,6 +555,8 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
         return new TzLiq1();
       case MAT_TAG_QzSimple1:
         return new QzSimple1();
+      case MAT_TAG_EyBasic:
+        return new EyBasic();
 
 //         case MAT_TAG_PySimple2:
 //                 return new PySimple2();

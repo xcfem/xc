@@ -32,7 +32,7 @@ steel= EHE_materials.B500S
 ## Section geometry.
 diameter= 1.25 # Section diameter expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
-rcSection= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
+rcSection= def_column_RC_section.RCCircularSection(name='rcSection',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 ## Reinforcement.
 rebarDiam= 25e-3
 rebarArea= math.pi*(rebarDiam/2.0)**2
@@ -65,13 +65,14 @@ modelSpace.setDefaultCoordTransf(corot)
 ## Finite element material
 xcSection= rcSection.defElasticShearSection3d(preprocessor)
 ### Properties to compute element buckling parameters.
-sectionBucklingProperties= {'reinforcementFactorZ': 2, # Circular section table 43.5.1 of EHE-08.
-                            'sectionDepthZ': diameter,
-                            'reinforcementFactorY': 2, # Circular section table 43.5.1 of EHE-08.
-                            'sectionDepthY': diameter,
-                            'Cz': 0.2, # table 43.1.2 of EHE-08.
-                            'Cy': 0.2, # table 43.1.2 of EHE-08.
-                            'sectionData': rcSection}
+sectionBucklingProperties= EHE_limit_state_checking.SectionBucklingProperties(
+    reinforcementFactorZ= 2, # Circular section table 43.5.1 of EHE-08.
+    sectionDepthZ= diameter,
+    reinforcementFactorY= 2, # Circular section table 43.5.1 of EHE-08.
+    sectionDepthY= diameter,
+    Cz= 0.2, # clause 43.1.2 of EHE-08.
+    Cy= 0.2, # clause 43.1.2 of EHE-08.
+    sectionObject= rcSection)
 xcSection.setProp('sectionBucklingProperties', sectionBucklingProperties)
 modelSpace.setDefaultMaterial(xcSection)
 
@@ -146,8 +147,8 @@ meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcr
 
 # Check results. The reference values doesn't come from a benchmark test,
 # they serve only to verify that the code run as intended.
-ratio1= abs(meanCFs[0]-0.42772948185061505)/0.42772948185061505
-ratio2= abs(meanCFs[1]-0.4382047524250554)/0.4382047524250554
+ratio1= abs(meanCFs[0]-0.42886210076847914)/0.42886210076847914
+ratio2= abs(meanCFs[1]-0.4402495644260375)/0.4402495644260375
 
 '''
 print(meanCFs[0], ratio1)

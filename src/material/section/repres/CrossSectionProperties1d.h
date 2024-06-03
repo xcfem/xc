@@ -54,6 +54,7 @@ class CrossSectionProperties1d: public CommandEntity, public MovableObject
     double e; //!< Elastic modulus.
     double a; //!< Area. 
     double rho;  //!< Material density.
+    double iw; //< Warping constant.
     static Matrix ks;
   protected:
     virtual DbTagData &getDbTagData(void) const;
@@ -81,6 +82,12 @@ class CrossSectionProperties1d: public CommandEntity, public MovableObject
       { return a; }
     inline void setA(const double &aa)
       { a= aa; }
+    //! @brief Return warping constant.
+    inline const double &Iw(void) const
+      { return iw; }
+    //! @brief Set warping constant.
+    inline void setIw(const double &d)
+      { iw= d; }
     inline double getRho(void) const
       { return rho; }
     inline void setRho(const double &r)
@@ -91,6 +98,9 @@ class CrossSectionProperties1d: public CommandEntity, public MovableObject
     //! @brief Return axial stiffness.
     inline double EA(void) const
       { return e*a; }
+    //! @brief Return warping stiffness.
+    inline double EIw(void) const
+      { return e*iw; }
     
     const Matrix &getSectionTangent1x1(void) const;
     const Matrix &getInitialTangent1x1(void) const;
@@ -99,6 +109,8 @@ class CrossSectionProperties1d: public CommandEntity, public MovableObject
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
     
     int setParameter(const std::vector<std::string> &,Parameter &,SectionForceDeformation *);
     int updateParameter(int parameterID, Information &info);

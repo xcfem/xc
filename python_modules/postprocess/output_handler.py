@@ -497,7 +497,7 @@ class OutputHandler(object):
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
-        diagram.addDiagram()
+        diagram.addDiagram() # add the diagram to the scene.
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.setupGrid(setToDisplay)
@@ -750,11 +750,65 @@ class OutputHandler(object):
                 caption= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
             displaySettings.displayScene(caption=caption,fileName=fileName)
 
-    def displayEigenvectors(self, mode= 1, setToDisplay=None, caption= None, fileName=None,defFScale=0.0):
+    def extractEigenvectorComponents(self, mode= 1, setToDisplay=None, defFScale=0.0, showDispComponents= True, showRotComponents= True):
         '''Displays the computed eigenvectors on the set argument.
 
-        :param setToDisplay: set of elements to be displayed (defaults to total set)
         :param mode: mode to which the eigenvectors belong.
+        :param setToDisplay: set of elements to be displayed (defaults to total set)
+        :param defFScale: factor to apply to current displacement of nodes 
+                      so that the display position of each node equals to
+                      the initial position plus its displacement multiplied
+                      by this factor. (Defaults to 0.0, i.e. display of 
+                      initial/undeformed shape)
+        :param showDispComponents: if false, don't show the displacement components of the eigenvectors.
+        :param showRotComponents: if false, don't show the rotational components of the eigenvectors.
+        '''
+        preprocessor= self.modelSpace.preprocessor
+        domain= preprocessor.getDomain
+        numModes= domain.numModes # number of computed modes.
+        dispPairs= list()
+        rotPairs= list()
+        maxAbs= 0
+        LrefModSize= 0.0
+        if(mode<=numModes):
+            norm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
+            if __debug__:
+                if(not norm):
+                    AssertionError('Can\'t normalize eigenvectors.')
+            #auto-scale
+            LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
+            threshold= LrefModSize/1000.0
+            for n in setToDisplay.nodes:
+                if(showDispComponents): # show displacement components.
+                    disp3d= n.getEigenvectorDisp3dComponents(mode)
+                    modDisp3d= disp3d.getModulus()
+                    if(modDisp3d>threshold):
+                        p= n.getCurrentPos3d(defFScale)
+                        dispPairs.append(([p.x,p.y,p.z],[disp3d.x,disp3d.y,disp3d.z]))
+                else: # don't show displacement components.
+                    modDisp3d= 0.0
+                if(showRotComponents): # show rotational components.
+                    rot3d= n.getEigenvectorRot3dComponents(mode)
+                    modRot3d= rot3d.getModulus()
+                    if(modRot3d>threshold):
+                        p= n.getCurrentPos3d(defFScale)
+                        rotPairs.append(([p.x,p.y,p.z],[rot3d.x,rot3d.y,rot3d.z]))
+                else: # don't show rotational components.
+                    modRot3d= 0.0
+                modR= max(modDisp3d, modRot3d)
+                if(modR>maxAbs):
+                    maxAbs=modR
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; mode: '+str(mode)+' out of range (1,'+str(numModes)+')')
+        return dispPairs, rotPairs, LrefModSize, maxAbs
+        
+    def displayEigenvectors(self, mode= 1, setToDisplay=None, caption= None, fileName=None, defFScale=0.0, showDispComponents= True, showRotComponents= True):
+        '''Displays the computed eigenvectors on the set argument.
+
+        :param mode: mode to which the eigenvectors belong.
+        :param setToDisplay: set of elements to be displayed (defaults to total set)
         :param caption: text to display in the graphic. Defaults to 
                ` None` in this case the text is the load case description
                and the units of the loads.
@@ -765,62 +819,53 @@ class OutputHandler(object):
                       the initial position plus its displacement multiplied
                       by this factor. (Defaults to 0.0, i.e. display of 
                       initial/undeformed shape)
+        :param showDispComponents: if false, don't show the displacement components of the eigenvectors.
+        :param showRotComponents: if false, don't show the rotational components of the eigenvectors.
         '''
+        if((showDispComponents==False) and (showRotComponents==False)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; no components to display. Command ignored.')
+            return
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        preprocessor= self.modelSpace.preprocessor
-        domain= preprocessor.getDomain
-        numModes= domain.numModes # number of computed modes.
-        if(mode<=numModes):
-            norm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
-            if __debug__:
-                if(not norm):
-                    AssertionError('Can\'t normalize eigenvectors.')
-            #auto-scale
-            LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-            maxAbs= 0.0
-            dispPairs= list()
-            rotPairs= list()
-            threshold= LrefModSize/1000.0
-            for n in setToDisplay.nodes:
-                disp3d= n.getEigenvectorDisp3dComponents(mode)
-                rot3d= n.getEigenvectorRot3dComponents(mode)
-                modDisp3d= disp3d.getModulus()
-                if(modDisp3d>threshold):
-                    p=n.getCurrentPos3d(defFScale)
-                    dispPairs.append(([p.x,p.y,p.z],[disp3d.x,disp3d.y,disp3d.z]))
-                modRot3d= rot3d.getModulus()
-                if(modRot3d>threshold):
-                    p=n.getCurrentPos3d(defFScale)
-                    rotPairs.append(([p.x,p.y,p.z],[rot3d.x,rot3d.y,rot3d.z]))
-                modR= max(modDisp3d,modRot3d)
-                if(modR>maxAbs):
-                    maxAbs=modR
-            scaleFactor= self.outputStyle.eigenvectorsScaleFactor
-            if(maxAbs > 0):
-                scaleFactor*=0.15*LrefModSize/(maxAbs)
-            #
-            if(not caption):
-                caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
-            vFieldD= vf.VectorField(name='Deigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
-            vFieldR= vf.VectorField(name='Reigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
-            vFieldD.populateFromPairList(dispPairs)
-            vFieldR.populateFromPairList(rotPairs)
+        # Extract components of eigenvectors from the model results.
+        dispPairs, rotPairs, LrefModSize, maxAbs= self.extractEigenvectorComponents(mode= mode, setToDisplay= setToDisplay, defFScale= defFScale, showDispComponents= showDispComponents, showRotComponents= showRotComponents)
+        scaleFactor= self.outputStyle.eigenvectorsScaleFactor
+        if(maxAbs > 0):
+            scaleFactor*=0.15*LrefModSize/(maxAbs)
+        # Set caption.
+        if(not caption):
+            caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
+        if(showDispComponents):
+            if(len(dispPairs)>0):
+                vFieldD= vf.VectorField(name='Deigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
+                vFieldD.populateFromPairList(dispPairs)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no displacement components to display.')
+        if(showRotComponents):
+            if(len(rotPairs)>0):
+                vFieldR= vf.VectorField(name='Reigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
+                vFieldR.populateFromPairList(rotPairs)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no rotational components to display.')
 
-            displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-            displaySettings.cameraParameters= self.getCameraParameters()
-            displaySettings.setupGrid(setToDisplay)
-            meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
-            if(meshSceneOk):
-                scOrient= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
-                if(len(dispPairs)>0):
-                    vFieldD.addToDisplay(displaySettings,orientation=scOrient,title='Displacement')
-                    scOrient+=1
-                if(len(rotPairs)>0):
-                    vFieldR.addToDisplay(displaySettings,orientation=scOrient,title='Rotation')
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.setupGrid(setToDisplay)
+        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        if(meshSceneOk):
+            scOrient= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
+            if(len(dispPairs)>0):
+                vFieldD.addToDisplay(displaySettings,orientation=scOrient,title='Displacement')
+                scOrient+=1
+            if(len(rotPairs)>0):
+                vFieldR.addToDisplay(displaySettings,orientation=scOrient,title='Rotation')
                 displaySettings.displayScene(caption,fileName)
-        else:
-            lmsg.error('mode: '+str(mode)+' out of range (1,'+str(numModes)+')')
         
     def displayEigenResult(self,eigenMode, setToDisplay=None,  accelMode=None, caption= '',fileName=None, defFScale= 0.0):
         '''Display the deformed shape and/or the equivalent static forces 

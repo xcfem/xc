@@ -128,7 +128,7 @@ ratio7= math.sqrt((Mz1-Mz1Ref)**2+(Mz2)**2)
 
 # Check getVy1 and getVy2 (LP 28/04/2024).
 Vy1= el.getVy1
-VyRef= V
+VyRef= -V
 Vy2= el.getVy2
 ratio8= math.sqrt((VyRef-Vy1)**2+(VyRef-Vy2)**2)
 

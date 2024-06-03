@@ -82,46 +82,47 @@ BOOST_PYTHON_MODULE(xc_base)
       ;
 
 const EntityWithOwner *(EntityWithOwner::*getOwner)(void) const= &EntityWithOwner::Owner;
-    class_<EntityWithOwner,EntityWithOwner *, boost::noncopyable  >("EntityWithOwner", no_init)
-      .add_property("owner", make_function( getOwner, return_internal_reference<>() ), "returns object's owner (container).")
-      .def("setVerbosityLevel", &EntityWithOwner::setVerbosityLevel,"Set verbosity level.")
-        .staticmethod("setVerbosityLevel")
-      .def("getVerbosityLevel", &EntityWithOwner::getVerbosityLevel,"Get verbosity level.")
-      .staticmethod("getVerbosityLevel")
-      .def("tipo", &EntityWithOwner::getClassName,"DEPRECATED Return the class name.")
-      .def("type", &EntityWithOwner::getClassName,"Returns class name.")
-      ;
+class_<EntityWithOwner,EntityWithOwner *, boost::noncopyable  >("EntityWithOwner", no_init)
+  .add_property("owner", make_function( getOwner, return_internal_reference<>() ), "returns object's owner (container).")
+  .def("setVerbosityLevel", &EntityWithOwner::setVerbosityLevel,"Set verbosity level.")
+  .staticmethod("setVerbosityLevel")
+  .def("getVerbosityLevel", &EntityWithOwner::getVerbosityLevel,"Get verbosity level.")
+  .staticmethod("getVerbosityLevel")
+  .def("tipo", &EntityWithOwner::getClassName,"DEPRECATED Return the class name.")
+  .def("type", &EntityWithOwner::getClassName,"Returns class name.")
+  .def("__eq__", &EntityWithOwner::operator==)
+  ;
     
-    class_<EntityWithProperties, bases<EntityWithOwner> >("EntityWithProperties")
-      .def("hasProp", &EntityWithProperties::hasPyProp,"True if property exists.")
-      .def("getProp", &EntityWithProperties::getPyProp,"Return a user defined property.")
-      .def("setProp", &EntityWithProperties::setPyProp,"Sets the value of a user defined property.")
-      .def("getPropNames", &EntityWithProperties::getPropNames,"Return the names of the object properties.")
-      .def("copyPropsFrom", &EntityWithProperties::copyPropsFrom,"Copy the properties from the argument.")
-      .def("getDict", &EntityWithProperties::getPyDict,"Return a Python dictionary containing the object members values.")
-      .def("setFromDict", &EntityWithProperties::setPyDict,"Set the values of the object members from a Python dictionary.")
+class_<EntityWithProperties, bases<EntityWithOwner> >("EntityWithProperties")
+  .def("hasProp", &EntityWithProperties::hasPyProp,"True if property exists.")
+  .def("getProp", &EntityWithProperties::getPyProp,"Return a user defined property.")
+  .def("setProp", &EntityWithProperties::setPyProp,"Sets the value of a user defined property.")
+  .def("getPropNames", &EntityWithProperties::getPropNames,"Return the names of the object properties.")
+  .def("copyPropsFrom", &EntityWithProperties::copyPropsFrom,"Copy the properties from the argument.")
+  .def("getDict", &EntityWithProperties::getPyDict,"Return a Python dictionary containing the object members values.")
+  .def("setFromDict", &EntityWithProperties::setPyDict,"Set the values of the object members from a Python dictionary.")
   ;
 
-    StandardOutputWrapper &(CommandEntity::*getStandardOutputWrapper)(void)= &CommandEntity::getStandardOutputWrapper;
-    class_<CommandEntity, bases<EntityWithProperties> >("CommandEntity")
-      .add_property("standardOutputWrapper", make_function( getStandardOutputWrapper, return_internal_reference<>() ), "returns standard output wrapper.")
-      .add_property("logFileName", make_function( &CommandEntity::getLogFileName, return_internal_reference<>() ), &CommandEntity::setLogFileName)
-      .add_property("errFileName", make_function( &CommandEntity::getErrFileName, return_internal_reference<>() ), &CommandEntity::setErrFileName)
-      .add_property("outputFileName", make_function( &CommandEntity::getOutputFileName, return_internal_reference<>() ), &CommandEntity::setOutputFileName)
-      .def("evalPy", &CommandEntity_eval,"Evaluates expresion.")
-      .def("execPy", &CommandEntity_exec,"Executes code block.")
-      .def("execFilePy", &CommandEntity_exec_file,"Executes code block.")
+StandardOutputWrapper &(CommandEntity::*getStandardOutputWrapper)(void)= &CommandEntity::getStandardOutputWrapper;
+class_<CommandEntity, bases<EntityWithProperties> >("CommandEntity")
+  .add_property("standardOutputWrapper", make_function( getStandardOutputWrapper, return_internal_reference<>() ), "returns standard output wrapper.")
+  .add_property("logFileName", make_function( &CommandEntity::getLogFileName, return_internal_reference<>() ), &CommandEntity::setLogFileName)
+  .add_property("errFileName", make_function( &CommandEntity::getErrFileName, return_internal_reference<>() ), &CommandEntity::setErrFileName)
+  .add_property("outputFileName", make_function( &CommandEntity::getOutputFileName, return_internal_reference<>() ), &CommandEntity::setOutputFileName)
+  .def("evalPy", &CommandEntity_eval,"Evaluates expresion.")
+  .def("execPy", &CommandEntity_exec,"Executes code block.")
+  .def("execFilePy", &CommandEntity_exec_file,"Executes code block.")
   ;
 
-    class_<NamedEntity, bases<CommandEntity> >("NamedEntity")
-      //.add_property("nombr e", make_function( &NamedEntity::getName, return_value_policy<copy_const_reference>()), &NamedEntity::setName,"DEPRECATED returns object name.")
-      .add_property("name", make_function( &NamedEntity::getName, return_value_policy<copy_const_reference>()), &NamedEntity::setName,"returns object name.")
+class_<NamedEntity, bases<CommandEntity> >("NamedEntity")
+  //.add_property("nombr e", make_function( &NamedEntity::getName, return_value_policy<copy_const_reference>()), &NamedEntity::setName,"DEPRECATED returns object name.")
+  .add_property("name", make_function( &NamedEntity::getName, return_value_policy<copy_const_reference>()), &NamedEntity::setName,"returns object name.")
       ;
 
-    class_<ProtoMatrix, boost::noncopyable>("ProtoMatrix", no_init)
-      .add_property("nRow",&ProtoMatrix::getNumberOfRows,"returns number of rows.")
-      .add_property("nCol",&ProtoMatrix::getNumberOfColumns,"returns number of columns.")
-      ;
-    def("resetStandardOutput",resetStandardOutput);
+class_<ProtoMatrix, boost::noncopyable>("ProtoMatrix", no_init)
+  .add_property("nRow",&ProtoMatrix::getNumberOfRows,"returns number of rows.")
+  .add_property("nCol",&ProtoMatrix::getNumberOfColumns,"returns number of columns.")
+  ;
+def("resetStandardOutput",resetStandardOutput);
   }
 

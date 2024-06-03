@@ -107,6 +107,18 @@ class ShearReinforcement(object):
         self.angAlphaShReinf= dct['angAlphaShReinf']
         self.angThetaConcrStruts= dct['angThetaConcrStruts']
     
+    @classmethod
+    def newFromDict(cls, dct= None):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        if(dct):
+            newObject.setFromDict(dct)
+        return newObject
+    
     def getAs(self):
         '''returns the area per unit length of the family of shear 
            reinforcements.
@@ -277,6 +289,7 @@ class ReinfRow(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; you must define either the diameter or the rebar area.')
             exit(1)
+
         self.width= width
         if(nRebars and rebarsSpacing):
             className= type(self).__name__
@@ -331,6 +344,18 @@ class ReinfRow(object):
         self.cover= dct['cover']
         if('latCover' in dct):
             self.latCover= dct['latCover']
+            
+    @classmethod
+    def newFromDict(cls, dct= None):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        if(dct):
+            newObject.setFromDict(dct)
+        return newObject
 
     def setRebarDiameter(self, rebarDiameter):
         '''Set the diameter of the rebars.
@@ -498,7 +523,7 @@ class LongReinfLayers(object):
         ''' Return a dictionary containing the object data.'''
         tmp= list()
         for rr in self.rebarRows:
-            tmp.append(rr.getDict())
+            tmp.append(rr)
         retval= {'rebarRows':tmp}
         return retval
     
@@ -507,12 +532,19 @@ class LongReinfLayers(object):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        super().setFromDict(dct)
-        tmp= dct['rebarRows']
-        if(len(tmp)>0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+"; reading rebar rows list not implementd yet.")
+        self.rebarRows= dct['rebarRows']
+            
+    @classmethod
+    def newFromDict(cls, dct= None):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        if(dct):
+            newObject.setFromDict(dct)
+        return newObject
             
     def append(self, rebarRow:ReinfRow):
         ''' Append a reinforcement row to the list.
@@ -711,7 +743,7 @@ class RCFiberSectionParameters(object):
     :ivar nDivJK:          number of cells in JK (height or tangential)
                            direction
     '''
-    def __init__(self, concrType=None, reinfSteelType=None, nDivIJ= 10, nDivJK= 10):
+    def __init__(self, concrType, reinfSteelType, nDivIJ= 10, nDivJK= 10):
         self.concrType= concrType
         self.concrDiagName= None
         self.reinfSteelType= reinfSteelType
@@ -719,6 +751,42 @@ class RCFiberSectionParameters(object):
         self.nDivIJ= nDivIJ
         self.nDivJK= nDivJK
         
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= dict()
+        retval['concrete_type']= self.concrType
+        retval['concrete_diagram_name']= self.concrDiagName
+        retval['reinforcing_steel_type']= self.reinfSteelType
+        retval['reinforcing_steel_diagram_name']= self.reinfDiagName
+        retval['n_div_ij']= self.nDivIJ
+        retval['n_div_jk']= self.nDivJK
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        self.concrType= dct['concrete_type']
+        self.concrDiagName= dct['concrete_diagram_name']
+        self.reinfSteelType= dct['reinforcing_steel_type']
+        self.reinfDiagName= dct['reinforcing_steel_diagram_name']
+        self.nDivIJ= dct['n_div_ij']
+        self.nDivJK= dct['n_div_jk']
+        
+            
+    @classmethod
+    def newFromDict(cls, dct= None):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        if(dct):
+            newObject.setFromDict(dct)
+        return newObject
+    
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -871,6 +939,35 @@ class RCSectionBase(object):
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         self.fiberSectionRepr= None
         
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= dict()
+        retval['section_description']= self.sectionDescr
+        retval['fiber_section_parameters']= self.fiberSectionParameters
+        retval['fiber_section_representation']= self.fiberSectionRepr
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        self.sectionDescr= dct['section_description']
+        self.fiberSectionParameters= dct['fiber_section_parameters']
+        self.fiberSectionRepr= dct['fiber_section_representation']
+        
+    @classmethod
+    def newFromDict(cls, dct= None):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        if(dct):
+            newObject.setFromDict(dct)
+        return newObject
+    
     def __eq__(self, other):
         '''Overrides the default implementation'''
         if(self is not other):
@@ -1373,6 +1470,33 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         self.shReinfY= ShearReinforcement(familyName= 'Vy')
         # Torsion reinforcement.
         self.torsionReinf= TorsionReinforcement(familyName= 'T')
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        # retval= super(BasicRectangularRCSection, self).getDict()
+        # retval.update(section_properties.RectangularSection.getDict(self))
+        retval= dict()
+        retval['rc_section_base']= RCSectionBase.getDict(self)
+        retval['section_properties']= section_properties.RectangularSection.getDict(self)
+        retval['swap_reinforcement_axes']= self.swapReinforcementAxes
+        retval['shear_reinforcement_z']= self.shReinfZ
+        retval['shear_reinforcement_y']= self.shReinfY
+        retval['torsion_reinforcement']= self.torsionReinf
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        # super(BasicRectangularRCSection, self).setFromDict(dct)
+        # section_properties.RectangularSection.setFromDict(self, dct)
+        RCSectionBase.setFromDict(self, dct['rc_section_base'])
+        section_properties.RectangularSection.setFromDict(self, dct['section_properties'])
+        self.swapReinforcementAxes= dct['swap_reinforcement_axes']
+        self.shReinfZ= dct['shear_reinforcement_z']
+        self.shReinfY= dct['shear_reinforcement_y']
+        self.torsionReinf= dct['torsion_reinforcement']
                 
     def __eq__(self, other):
         '''Overrides the default implementation'''
@@ -1608,6 +1732,19 @@ class RCRectangularSection(BasicRectangularRCSection):
         self.minCover= 0.0 
         self.positvRebarRows= LongReinfLayers() # list of ReinfRow data (positive face)
         self.negatvRebarRows= LongReinfLayers() # list of ReinfRow data (negative face)
+        
+    def getDict(self):
+        ''' Return a dictionary with the values of the object members.'''
+        retval= super().getDict()
+        retval.update({'min_cover':self.minCover, 'positive_rebar_rows':self.positvRebarRows, 'negative_rebar_rows':self.negatvRebarRows})
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        super().setFromDict(dct)
+        self.minCover= dct['min_cover']
+        self.positvRebarRows= dct['positive_rebar_rows']
+        self.negatvRebarRows= dct['negative_rebar_rows']
             
     def __eq__(self, other):
         '''Overrides the default implementation'''

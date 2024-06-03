@@ -214,13 +214,16 @@ class LimitStateData(object):
         '''
         return ed.getDisplacementsDict(nmbComb= nmbComb, nodes= nodes)
     
-    def getModesDict(self, nmbComb, xcSet):
+    def getModesDict(self, nmbComb, xcSet, eigenvectorNormThreshold= 1e-3):
         '''Creates a dictionary with the modes of the given nodes.
 
          :param nmbComb: combination name.
          :param xcSet: set containing the nodes to export the modes on.
+         :param eigenvectorNormThreshold: if the node eigenvector has a norm
+                                          smaller than this threshold it is 
+                                          considered null.
         '''
-        return em.getModesDict(nmbComb= nmbComb, xcSet= xcSet)
+        return em.get_modes_dict(nmbComb= nmbComb, xcSet= xcSet)
 
     def getInternalForcesSubset(self, elementsOfInterestTags):
         ''' Return a dictionary containing the internal forces for the given
@@ -698,12 +701,19 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
             Efi= extendedData['Efi']
             for index in elementControlVars:
                 controlVar= elementControlVars[index]
-                loadCombination= controlVar.combName
-                mode= int(loadCombination.split('_')[-1])
-                Leff= Leffi[mode]
-                mechLambda= mechLambdai[mode]
-                (EfZ, EfY)= Efi[mode]
-                controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode)
+                loadCombinationName= controlVar.combName
+                mode= int(loadCombinationName.split('_')[-1])
+                if(mode<=len(Leffi)):
+                    Leff= Leffi[mode-1]
+                    mechLambda= mechLambdai[mode-1]
+                    (EfZ, EfY)= Efi[mode-1]
+                    controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode)
+                else:
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+"; can't get item: "+str(mode)+' from list: '+str(Leffi))
+                    exit(1)
+                    
         retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
         return retval
     

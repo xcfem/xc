@@ -56,9 +56,9 @@
 XC::Vector XC::Bidirectional::s(2);
 XC::Matrix XC::Bidirectional::ks(2,2);
 
-//! @brief Constructor.
-XC::Bidirectional::Bidirectional(int tag, double e, double sy, double Hi, double Hk)
-  : SectionForceDeformation(tag, SEC_TAG_Bidirectional), E(e), sigY(sy), Hiso(Hi), Hkin(Hk)
+
+//! @brief Initialize members.
+void XC::Bidirectional::initialize(void)
   {
     for(int i = 0; i < 2; i++)
       {
@@ -66,24 +66,53 @@ XC::Bidirectional::Bidirectional(int tag, double e, double sy, double Hi, double
         eP_n1[i] = 0.0;
         q_n[i]  = 0.0;
         q_n1[i] = 0.0;
+	e_n1Trial[i]= 0.0;
       }
     alpha_n  = 0.0;
     alpha_n1 = 0.0;
   }
 
-//! @brief Constructor.
-XC::Bidirectional::Bidirectional(int tag)
-  : SectionForceDeformation(tag, SEC_TAG_Bidirectional), E(0.0), sigY(0.0), Hiso(0.0), Hkin(0.0)
+//! @brief Copy members.
+void XC::Bidirectional::copy(const Bidirectional &other)
   {
     for(int i = 0; i < 2; i++)
       {
-        eP_n[i]  = 0.0;
-        eP_n1[i] = 0.0;
-        q_n[i]  = 0.0;
-        q_n1[i] = 0.0;
+        this->eP_n[i]= other.eP_n[i];
+        this->eP_n1[i]= other.eP_n1[i];
+        this->q_n[i]= other.q_n[i];
+        this->q_n1[i]= other.q_n1[i];
+	this->e_n1Trial[i]= other.e_n1Trial[i];
       }
-    alpha_n  = 0.0;
-    alpha_n1 = 0.0;
+
+    this->alpha_n  = other.alpha_n;
+    this->alpha_n1 = other.alpha_n1;
+  }
+
+//! @brief Constructor.
+XC::Bidirectional::Bidirectional(int tag, double e, double sy, double Hi, double Hk)
+  : SectionForceDeformation(tag, SEC_TAG_Bidirectional), E(e), sigY(sy), Hiso(Hi), Hkin(Hk)
+  { initialize(); }
+
+//! @brief Constructor.
+XC::Bidirectional::Bidirectional(int tag)
+  : SectionForceDeformation(tag, SEC_TAG_Bidirectional), E(0.0), sigY(0.0), Hiso(0.0), Hkin(0.0)
+  { initialize(); }
+
+//! @brief Copy constructor.
+XC::Bidirectional::Bidirectional(const Bidirectional &other)
+  : SectionForceDeformation(other), E(other.E), sigY(other.sigY), Hiso(other.Hiso), Hkin(other.Hkin)
+  { copy(other); }
+
+//! @brief assignment operator.
+XC::Bidirectional &XC::Bidirectional::operator=(const Bidirectional &other)
+  {
+    SectionForceDeformation::operator=(other);
+    this->E= other.E;
+    this->sigY= other.sigY;
+    this->Hiso= other.Hiso;
+    this->Hkin= other.Hkin;
+    this->copy(other);
+    return *this;
   }
 
 //! @brief Set the value of the initial deformation.
@@ -291,42 +320,28 @@ int XC::Bidirectional::commitState(void)
 
 //! @brief Revert to the last committed state.
 int XC::Bidirectional::revertToLastCommit(void)
-  { return 0; }
+  {
+    eP_n1[0] = eP_n[0];
+    eP_n1[1] = eP_n[1];
+
+    q_n1[0] = q_n[0];
+    q_n1[1] = q_n[1];
+
+    alpha_n1 = alpha_n;
+    
+    return 0;
+  }
 
 //! @brief Revert to the last committed state.
 int XC::Bidirectional::revertToStart(void)
   {
-    for (int i = 0; i < 2; i++)
-      {
-	eP_n[i]  = 0.0;
-	eP_n1[i] = 0.0;
-	q_n[i]  = 0.0;
-	q_n1[i] = 0.0;
-      }
-
-    alpha_n  = 0.0;
-    alpha_n1 = 0.0;
+    initialize();
     return 0;
   }
 
 //! @brief Virtual constructor.
 XC::SectionForceDeformation* XC::Bidirectional::getCopy(void) const
-  {
-    Bidirectional *theCopy = new Bidirectional (this->getTag(), E, sigY, Hiso, Hkin);
-
-    for(int i = 0; i < 2; i++)
-      {
-        theCopy->eP_n[i]  = eP_n[i];
-        theCopy->eP_n1[i] = eP_n1[i];
-        theCopy->q_n[i]  = q_n[i];
-        theCopy->q_n1[i] = q_n1[i];
-      }
-
-    theCopy->alpha_n  = alpha_n;
-    theCopy->alpha_n1 = alpha_n1;
-
-    return theCopy;
-  }
+  { return new Bidirectional(*this); }
 
 //! @brief Get material type.
 const XC::ResponseId &XC::Bidirectional::getResponseType(void) const

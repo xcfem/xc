@@ -50,6 +50,21 @@ XC::BaseElasticSection2d::BaseElasticSection2d(int classTag,const size_t &dim)
 XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size_t &dim, const double &E, const double &A, const double &I,double G, const double &alpha)
   : BaseElasticSection(tag, classTag,dim ), ctes_scc(E,A,I,G,alpha) {}
 
+//! @brief Return true if both objects are equal.
+bool XC::BaseElasticSection2d::isEqual(const BaseElasticSection2d &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= BaseElasticSection::isEqual(other);
+	if(retval)
+	  retval= (ctes_scc==other.ctes_scc);
+      }
+    return retval;
+  }
+
 void XC::BaseElasticSection2d::sectionGeometry(const std::string &cod_geom)
   {
     const MaterialHandler *ldr= getMaterialHandler();

@@ -95,6 +95,9 @@ eulerBucklingLoadFactor2= linearBucklingAnalysis.analysis.getEigenvalue(2)
 eulerBucklingLoadFactor3= linearBucklingAnalysis.analysis.getEigenvalue(3)
 bucklingLoadFactors= [eulerBucklingLoadFactor1, eulerBucklingLoadFactor2, eulerBucklingLoadFactor3]
 
+# Normalize eigenvectors if needed.
+norms= preprocessor.getDomain.getMesh.normalizeEigenvectors()
+                
 xcTotalSet= modelSpace.getTotalSet()
 
 avgLeff= 0.0 # Average effective length.
@@ -123,6 +126,13 @@ avgEf/=sz
 ratio3= abs(avgEf-0.2318153467323909)/0.2318153467323909
 
 '''
+print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
+print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
+print('average effective length (first buckling mode): ', avgLeff, 'm, ratio1= ', ratio1)
+print('average mechanical slenderness (first buckling mode): ', avgMechLambda, ' ratio2= ', ratio2)
+
+print('average fictitious eccentricity (first buckling mode): ', avgEf, 'm, ratio3= ', ratio3)
+
 # import matplotlib.pyplot as plt
 # Leff= dict()
 # mechLambda= dict()
@@ -161,13 +171,6 @@ ratio3= abs(avgEf-0.2318153467323909)/0.2318153467323909
 #     plt.xlabel('efi')
 #     plt.plot(efi[mode], zi)
 #     plt.show()
-
-print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
-print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
-print('average effective length (first buckling mode): ', avgLeff, 'm, ratio1= ', ratio1)
-print('average mechanical slenderness (first buckling mode): ', avgMechLambda, ' ratio2= ', ratio2)
-
-print('average fictitious eccentricity (first buckling mode): ', avgEf, 'm, ratio3= ', ratio3)
 '''
 
 import os

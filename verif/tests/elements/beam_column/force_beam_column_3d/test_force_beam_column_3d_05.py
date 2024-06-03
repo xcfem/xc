@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Horizontal cantilever under tension load at its end.'''
+''' Home made test. Horizontal cantilever under bending load at its end.'''
 
 from __future__ import print_function
 
@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import sys
 import xc
 from solution import predefined_solutions
@@ -42,7 +43,7 @@ n1= nodes.newNodeXYZ(0,0.0,0.0)
 n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))
 
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
@@ -97,42 +98,69 @@ result= analysis.analyze(10)
 
 nodes.calculateNodalReactions(True,1e-7) 
 delta= n2.getDisp[2]  # z displacement of node 2
+deltateor= (-M*L**2/(2*E*Iz))
+ratio1= abs(delta-deltateor)/deltateor
 theta= n2.getDisp[4]  # y rotation of the node
-RM= n1.getReaction[4] 
+thetateor= (M*L/(E*Iz))
+ratio2= abs(theta-thetateor)/thetateor
 
-elements= preprocessor.getElementHandler
+RM= n1.getReaction[4] 
+ratio3= (abs((M+RM)/M))
 
 el.getResistingForce()
 scc= el.getSections()[0]
 
 V= scc.getStressResultantComponent("Vz")
 M1= scc.getStressResultantComponent("Mz")
+ratio4= abs((M+M1)/M)
 
-deltateor= (-M*L**2/(2*E*Iz))
-thetateor= (M*L/(E*Iz))
-ratio1= (abs((delta-deltateor)/deltateor))
-ratio2= (abs((M+RM)/M))
-ratio3= (abs((M-M1)/M))
-ratio4= (abs((theta-thetateor)/thetateor))
+# Check getMz1 and getMz2 (LP 28/04/2024).
+Mz1= el.getMz1
+MRef= -M
+Mz2= el.getMz2
+ratio5= math.sqrt((MRef-Mz1)**2+(MRef-Mz2)**2)
 
-''' 
+# Check getVy1 and getVy2 (LP 28/04/2024).
+Vy1= el.getVy1
+Vy2= el.getVy2
+ratio6= math.sqrt(Vy1**2+Vy2**2)
+
+'''
 print("delta: ",delta)
 print("deltaTeor: ",deltateor)
+print("ratio1= ",ratio1)
 print("theta: ",theta)
 print("thetaTeor: ",thetateor)
-print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
 print("M= ",M)
 print("RM= ",RM)
-print("ratio2= ",ratio2)
-print("M1= ",M1)
 print("ratio3= ",ratio3)
+print("M= ",M)
+print("M1= ",M1)
 print("ratio4= ",ratio4)
-   '''
+print('MRef= ', MRef/1e3, 'Mz1= ', Mz1/1e3, ' Mz2= ', Mz2/1e3, ' ratio5= ', ratio5)
+print('Vy1Ref= ', 0/1e3, 'Vy1= ', Vy1/1e3, ' Vy2= ', Vy2/1e3, ' ratio6= ', ratio6)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<0.02) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(ratio4)<0.02):
+if (abs(ratio1)<0.02) & (abs(ratio2)<0.02) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10) & (abs(ratio6)<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('Mz')
+# oh.displayIntForcDiag('Vy')
+# # # oh.displayIntForcDiag('My')
+# # # oh.displayIntForcDiag('Vz')
+# #oh.displayIntForcDiag('T')
+# #oh.displayLocalAxes()

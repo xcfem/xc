@@ -340,6 +340,27 @@ int XC::CrossSectionProperties3d::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::CrossSectionProperties3d::getPyDict(void) const
+  {
+    boost::python::dict retval= CrossSectionProperties2d::getPyDict();
+    retval["iy"]= this->iy;
+    retval["iyz"]= this->iyz;
+    retval["j"]= this->j;
+    retval["alpha_z"]= this->alpha_z;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::CrossSectionProperties3d::setPyDict(const boost::python::dict &d)
+  {
+    CrossSectionProperties2d::setPyDict(d);
+    this->iy= boost::python::extract<double>(d["iy"]);
+    this->iyz= boost::python::extract<double>(d["iyz"]);
+    this->j= boost::python::extract<double>(d["j"]);
+    this->alpha_z= boost::python::extract<double>(d["alpha_z"]);
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::CrossSectionProperties3d::sendSelf(Communicator &comm)
   {

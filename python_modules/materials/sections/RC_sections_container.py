@@ -31,21 +31,14 @@ class SectionContainer(object):
         type, rebar positions,...).
 
         '''
-        self.sections= [] # List with the section definitions.
-        self.mapSections= {} # Dictionary with pairs (sectionName, reference to
+        self.sections= list() # List with the section definitions.
+        self.mapSections= dict() # Dictionary with pairs (sectionName, reference to
                              # section definition.
         self.mapInteractionDiagrams= None
 
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
-        tmp= list()
-        for s in self.sections:
-            tmp.append(s.getDict())
-        retval= {'sections':tmp}
-        tmp= list()
-        for key in self.mapSections:
-            tmp.append(key)
-        retval['mapSections']= tmp
+        retval= {'section_list': self.sections, 'map_sections': self.mapSections}
         if(self.mapInteractionDiagrams):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -57,19 +50,43 @@ class SectionContainer(object):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; not implemented yet.') 
-        tmp= dct['sections']
-        for sd in tmp:
-            lmsg.log(sd)
-        tmp= dct['mapSections']
-        for sectionName in tmp:
-            lmsg.log('search for section: '+sectionName)
+        self.sections= dct['section_list']
+        for key in dct['map_sections']:
+            value= dct['map_sections'][key]
+            self.mapSections[key]= value
         if('mapInteractionDiagrams' in dct):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.') 
+            lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.')
+            
+    @classmethod
+    def newFromDict(cls, dct= None):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        newObject.mapSections= dict()
+        if(dct):
+            newObject.setFromDict(dct)
+        return newObject
+    
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.sections == other.sections)
+            if(retval):
+                retval= (self.mapSections == other.mapSections)
+            if(retval):
+                if(self.mapInteractionDiagrams):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.')
+                
+        else:
+            retval= True
+        return retval
     
     def append(self, rcSections):
         ''' Append the argument to the container.
@@ -94,8 +111,8 @@ class SectionContainer(object):
         ''' Return section named nmb (if founded) '''
         retval= None
         for s in self.sections:
-          if(s.name==nmb):
-            retval= s
+            if(s.name==nmb):
+                retval= s
         return retval
 
     def createRCsections(self, preprocessor, matDiagType):

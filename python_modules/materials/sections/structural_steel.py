@@ -606,7 +606,17 @@ class QHShape(SteelShape):
     def hw(self):
         '''Return web height'''
         return self.h()-2*self.t()
-      
+
+    def getWarpingConstant(self):
+        ''' Return the value of the warping constant.'''
+        b= self.b()-self.t()
+        h= self.h()-self.t()
+        t= self.t()
+        retval= b**2*h**2/24.0
+        retval*= (b*t-h*t)**2/(b*t+h*t)**2
+        retval*= (b*t-h*t)
+        return retval
+    
     def getRho(self):
         ''' Return mass per unit length. '''
         return self.get('P')
@@ -660,6 +670,10 @@ class CHShape(SteelShape):
     def getOutsideDiameter(self):
         ''' Returns the outside diameter. '''
         return self.get('OD')
+    
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return 2*self.J()/self.getOutsideDiameter()
 
     
 class UShape(SteelShape):

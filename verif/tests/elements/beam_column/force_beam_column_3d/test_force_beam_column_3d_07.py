@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import sys
 import xc
 from solution import predefined_solutions
@@ -25,7 +26,7 @@ z0= 0
 L= 1.5 # Bar length (m)
 
 # Load
-F= 1.5e3 # Load magnitude en N
+f= 1.5e3 # Load magnitude en N
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
@@ -48,16 +49,16 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
   pth= "."
-auxModulePath= pth+"/../../aux"
+auxModulePath= pth+"/../../../aux"
 sys.path.append(auxModulePath)
-import testQuadRegion as tqr
+import test_quad_region as tqr
 
 # Definition of a new empty fiber section named 'quadFibers' and stored in a
 # Python variable of the same name (surprisingly enough).
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section representation
                                                      # of 'quadFibers'
-testQuadRegion= tqr.getTestQuadRegion(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
+testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
 fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry (regions and rebars)
                                                   # to the fiber section representation
                                                   # of 'quadFibers'
@@ -79,24 +80,31 @@ modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0,0,0,0]))
+eleLoad= lp0.newElementalLoad("beam3d_uniform_load")
+eleLoad.elementTags= xc.ID([beam3d.tag]) 
+eleLoad.axialComponent= f
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
+
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)
 
-nodes= preprocessor.getNodeHandler 
 delta= n2.getDisp[0]  # Node 2 xAxis displacement
+deltateor= (f*L**2/(2*E*A))
+ratio1= abs(delta-deltateor)/deltateor
 
 beam3d.getResistingForce()
 scc= beam3d.getSections()[0]
 
 N0= scc.getStressResultantComponent("N")
+N0teor= f*L
+ratio2= abs(N0-N0teor)/N0teor
 
-deltateor= (F*L/(E*A))
-ratio1= (abs((delta-deltateor)/deltateor))
-ratio2= (abs((N0-F)/F))
+# Check getN1 and getN2 (LP 28/04/2024).
+N1= beam3d.getN1
+N2= beam3d.getN2
+ratio3= math.sqrt((f*L-N1)**2+(N2)**2)
 
 ''' 
 print("delta: ",delta)
@@ -104,13 +112,24 @@ print("deltaTeor: ",deltateor)
 print("ratio1= ",ratio1)
 print(N0)
 print("ratio2= ",ratio2)
+print('F= ', F/1e3, 'N1= ', N1/1e3, ' N2= ', N2/1e3, ' ratio3= ', ratio3)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-10 and abs(ratio2)<1e-10:
+if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('M')
+# # oh.displayLocalAxes()

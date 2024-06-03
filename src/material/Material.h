@@ -92,6 +92,8 @@ class ID;
 //! in the domain. 
 class Material: public TaggedObject, public MovableObject
   {
+  protected:
+    bool isEqual(const Material &) const;
   public:
     Material(int tag, int classTag);
 
@@ -126,7 +128,9 @@ class Material: public TaggedObject, public MovableObject
     virtual int commitState(void) = 0;
     virtual int revertToLastCommit(void) = 0;
     virtual int revertToStart(void) = 0;
-
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
   };
 
 int sendMaterialPtr(Material *,DbTagData &,Communicator &comm,const BrokedPtrCommMetaData &);

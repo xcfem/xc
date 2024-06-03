@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Home made test. Horizontal cantilever under vertical bending load at its
+    end.'''
 
 from __future__ import print_function
 
@@ -9,8 +10,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Horizontal cantilever under tension load at its end.
+# 
 
+import math
 import sys
 import xc
 from solution import predefined_solutions
@@ -114,11 +116,22 @@ V= scc.getStressResultantComponent("Vz")
 M1= scc.getStressResultantComponent("My")
 
 deltateor= (M*L**2/(2*E*Iy))
+ratio1= abs(delta-deltateor)/deltateor
 thetateor= (M*L/(E*Iy))
-ratio1= (abs((delta-deltateor)/deltateor))
-ratio2= (abs((M+RM)/M))
-ratio3= (abs((M+M1)/M))
-ratio4= (abs((theta-thetateor)/thetateor))
+ratio2= abs(theta-thetateor)/thetateor
+ratio3= abs(M+RM)/M
+ratio4= abs(M+M1)/M
+
+# Check getMy1 and getMy2 (LP 28/04/2024).
+My1= el.getMy1
+MRef= -M
+My2= el.getMy2
+ratio5= math.sqrt((MRef-My1)**2+(MRef-My2)**2)
+
+# Check getVz1 and getVz2 (LP 28/04/2024).
+Vz1= el.getVz1
+Vz2= el.getVz2
+ratio6= math.sqrt(Vz1**2+Vz2**2)
 
 ''' 
 print("delta: ",delta)
@@ -132,11 +145,29 @@ print("ratio2= ",ratio2)
 print("M1= ",M1)
 print("ratio3= ",ratio3)
 print("ratio4= ",ratio4)
+print('MRef= ', MRef/1e3, 'My1= ', My1/1e3, ' My2= ', My2/1e3, ' ratio5= ', ratio5)
+print('Vz1Ref= ', 0/1e3, 'Vz1= ', Vz1/1e3, ' Vz2= ', Vz2/1e3, ' ratio6= ', ratio6)
    '''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<0.02) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(ratio4)<0.02):
+if (abs(ratio1)<0.02) & (abs(ratio2)<0.02) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10) & (abs(ratio6)<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('Mz')
+# # oh.displayIntForcDiag('Vy')
+# oh.displayIntForcDiag('My')
+# oh.displayIntForcDiag('Vz')
+# #oh.displayIntForcDiag('T')
+# #oh.displayLocalAxes()

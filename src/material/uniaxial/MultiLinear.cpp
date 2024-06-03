@@ -77,6 +77,9 @@ void XC::MultiLinear::setup_data(void)
       }
   }
 
+//! @brief Constructs the material from the values of stresses and strains.
+//! @param ss: backbone stresses.
+//! @param ee: backbone strains.
 void XC::MultiLinear::setup(const Vector &ss, const Vector &ee)
   {
     if(fabs(ee[0])<1e-8)
@@ -86,8 +89,8 @@ void XC::MultiLinear::setup(const Vector &ss, const Vector &ee)
 		  << " the material response. Data ignored."
 	          << std::endl;
 	const int sz= ee.Size();
-	this->e0.resize(sz-1);
-	this->s0.resize(sz-1);
+	this->e0.resize(sz-1); // strains.
+	this->s0.resize(sz-1); // stresses.
 	for(int i= 1;i<sz;i++)
 	  {
 	    e0[i-1]= ee[i];
@@ -96,8 +99,8 @@ void XC::MultiLinear::setup(const Vector &ss, const Vector &ee)
       }
     else
       {
-        this->e0= ee; //strain
-        this->s0= ss; //stress
+        this->e0= ee; // strains.
+        this->s0= ss; // stresses.
       }
     this->numSlope = this->e0.Size();
     data.resize(numSlope, 6);
@@ -197,6 +200,34 @@ int XC::MultiLinear::setTrialStrain(double strain, double strainRate)
         tStress = data(tSlope, 3) + (tStrain - data(tSlope, 1)) * tTangent;
       }
     return 0;
+  }
+
+//! @brief Return the strains that define the material backbone.
+const XC::Vector &XC::MultiLinear::getBackboneStrains(void) const
+  { return this->e0; }
+
+//! @brief Return the strains that define the material backbone.
+boost::python::list XC::MultiLinear::getBackboneStrainsPy(void) const
+  {
+    boost::python::list retval;
+    const size_t sz= this->e0.Size();
+    for(size_t i= 0; i<sz; i++)
+      retval.append(this->e0[i]);
+    return retval;
+  }
+
+//! @brief Return the stresses that define the material backbone.
+const XC::Vector &XC::MultiLinear::getBackboneStresses(void) const
+  { return this->s0; }
+
+//! @brief Return the stresses that define the material backbone.
+boost::python::list XC::MultiLinear::getBackboneStressesPy(void) const
+  {
+    boost::python::list retval;
+    const size_t sz= this->e0.Size();
+    for(size_t i= 0; i<sz; i++)
+      retval.append(this->e0[i]);
+    return retval;
   }
 
 double XC::MultiLinear::getStrain(void) const

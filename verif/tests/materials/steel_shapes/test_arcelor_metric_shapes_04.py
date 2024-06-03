@@ -13,7 +13,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials.sections.structural_shapes import arcelor_metric_shapes
-from materials.sections import structural_steel
 from materials.ec3 import EC3_materials
 from postprocess import def_vars_control as vc
 from postprocess import callback_controls as cc
@@ -28,7 +27,8 @@ F= 50e3 # Load magnitude (kN)
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE) 
+#HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE) 
+HE400B= arcelor_metric_shapes.HEShape(steel= S275JR, name= "HE_400_B") # Section geometry.
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -81,7 +81,7 @@ EI=  HE400B.EIy()
 deltateor= F*L**3/3/EI
 ratio1= (abs(delta+deltateor)/deltateor)
 ratio2= ((M-F*L)/(F*L))
-ratio3= ((F-V)/F)
+ratio3= ((F+V)/F)
 ratio4= ((FC-2.64674)/2.64674)
 
 '''   

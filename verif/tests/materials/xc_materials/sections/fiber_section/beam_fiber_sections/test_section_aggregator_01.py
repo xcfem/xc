@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-''' Verification test of a rectangular fiber section with an
-    elasto plastic material model.'''
+''' Section aggregator class verification test. Checking the response for trivial load cases.'''
 
-#    written from "Nociones de cálculo plástico." Carlos Benito Hernández.
-#    page 26 and following.
-#    url={https://books.google.es/books?id=v7bbMwEACAAJ},
+from __future__ import print_function
+
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -22,64 +19,62 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-# Section geometry
-# creation
-# Rectangular cross-section definition
+# Auxiliary modules.
+pth= os.path.dirname(__file__)
+if(not pth):
+  pth= "."
+sys.path.append(pth+"/../../../../../aux/")
+import fiber_section_test_macros # fiber section convenience functions.
+
+# Define section geometry
+## Rectangular cross-section definition
 b= 10 # Cross section width  [cm]
 h= 20 # Cross section depth [cm]
 scc10x20= section_properties.RectangularSection('scc10x20',b,h)
 scc10x20.nDivIJ= 32 # number of cells in IJ direction  
 scc10x20.nDivJK= 32 # number of cells in JK direction
 
-pth= os.path.dirname(__file__)
-if(not pth):
-  pth= "."
-sys.path.append(pth+"/../../../../../aux/")
-import fiber_section_test_macros
+# Define XC problem.
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
+# Materials definition
 fy= 2600 # yield stress [kp/cm2]
 E= 2.1e6 # initial elastic tangent [kp/cm2.
-
-feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # No warning messages
-preprocessor=  feProblem.getPreprocessor
-# Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear response in y direction.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear response in y direction.
 
-# Section geometry
-# creation
+# Define section geometry
+materialHandler= preprocessor.getMaterialHandler
 geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 
 reg= scc10x20.getRegion(geomRectang,"epp")
-rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","rectang")
+rectang= materialHandler.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomRectang.name)
 rectang.setupFibers()
 fiber_section_test_macros.extractFiberSectionProperties(rectang,scc10x20, fy)
+# Define section aggregator
+sa= materialHandler.newMaterial("section_aggregator","sa")
+sa.setSection("rectang")
+sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
-materialHandler= preprocessor.getMaterialHandler
-agg= materialHandler.newMaterial("section_aggregator","sa")
-agg.setSection("rectang")
-agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
-
-zlElement, nodA, nodB= scc3d_testing_bench.sectionModel(preprocessor, "sa")
-# Constraints
+# Define FE mesh.
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sa.name)
+## Define constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)
 
-# Loads definition
+## Define loads
 lp0= modelSpace.newLoadPattern(name= '0')
-
 loadVy= 2e4
 loadVz= 3e4
 loadMx= 1e3
 loadMz= 0.999*scc10x20.getPlasticMomentZ(fy)
 lp0.newNodalLoad(nodB.tag,xc.Vector([0,loadVy,loadVz,loadMx,0,loadMz]))
-
-# We add the load case to domain.
+### Add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 

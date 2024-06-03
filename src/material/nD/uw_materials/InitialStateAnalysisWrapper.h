@@ -90,9 +90,11 @@ class InitialStateAnalysisWrapper : public NDMaterial
     // set the strain to be sent to the main material
     int setTrialStrain(const Vector &strain_from_element);
 
+    const NDMaterial *getMaterial(void) const;
+    NDMaterial *getMaterial(void);
     virtual void setMaterial(const NDMaterial &);
     void setMaterial(const std::string &);
-    void setup(int ndim, NDMaterial &);
+    void setup(int ndim, const NDMaterial &);
     
     // get mass density from main material
     double getRho(void) const;
@@ -100,6 +102,9 @@ class InitialStateAnalysisWrapper : public NDMaterial
     static bool getInitialStateAnalysisPhase(void);
     static void setInitialStateAnalysisPhase(const bool &);
 
+    const Vector &getInitialGeneralizedStrain(void) const;
+    void setInitialGeneralizedStrain(const Vector &);
+    
     // send back strain
     const Vector& getStrain() const;
     // send back stress

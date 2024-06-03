@@ -51,7 +51,7 @@ class BaseElasticSection: public PrismaticBarCrossSection
     
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
+    bool isEqual(const BaseElasticSection &) const;
 
   public:
     BaseElasticSection(int tag,int classTag,const size_t &dim,MaterialHandler *mat_ldr= nullptr);    
@@ -74,6 +74,8 @@ class BaseElasticSection: public PrismaticBarCrossSection
     virtual double getRho(void) const= 0;
     virtual void setRho(const double &)= 0;
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);        
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

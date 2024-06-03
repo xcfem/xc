@@ -83,6 +83,23 @@ const XC::Matrix *ptr_initial_tangent= nullptr;
 XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,MaterialHandler *mat_ldr)
   : Material(tag,classTag), material_handler(mat_ldr) {}
 
+//! @brief Return true if both objects are equal.
+bool XC::SectionForceDeformation::isEqual(const SectionForceDeformation &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= Material::isEqual(other);
+	if(retval)
+	  {
+	    retval= (this->fDefault==other.fDefault);
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Comma separated internal forces names to with the section contributes with stiffness.
 std::string XC::SectionForceDeformation::getResponseTypeString(void) const
   { return getResponseType().getString(); }
@@ -433,6 +450,22 @@ int XC::SectionForceDeformation::recvData(const Communicator &comm)
     setTag(getDbTagDataPos(1));
     int res= comm.receiveMatrix(fDefault,getDbTagData(),CommMetaData(2));
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::SectionForceDeformation::getPyDict(void) const
+  {
+    boost::python::dict retval= Material::getPyDict();
+    retval["fDefault"]= this->fDefault.getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SectionForceDeformation::setPyDict(const boost::python::dict &d)
+  {
+    Material::setPyDict(d);
+    const boost::python::list &fDefault_lst= boost::python::extract<boost::python::list>(d["fDefault"]);
+    this->fDefault= Matrix(fDefault_lst);
   }
 
 // AddingSensitivity:BEGIN ////////////////////////////////////////

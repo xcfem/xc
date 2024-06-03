@@ -51,6 +51,12 @@ python tests/utility/misc_utils/testStairCaseFunction.py
 python tests/utility/misc_utils/test_linear_interpolation.py
 python tests/utility/misc_utils/test_remove_accents.py
 python tests/utility/misc_utils/test_mplgraphic.py
+python tests/utility/misc_utils/test_xc_json_01.py
+python tests/utility/misc_utils/test_xc_json_02.py
+python tests/utility/misc_utils/test_xc_json_03.py
+python tests/utility/misc_utils/test_xc_json_04.py
+python tests/utility/misc_utils/test_xc_json_05.py
+python tests/utility/misc_utils/test_xc_json_06.py
 echo "$BLEU" "  Config tests." "$NORMAL"
 python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
@@ -356,6 +362,13 @@ python tests/elements/change_material_properties/test_change_element_material_pr
 python tests/elements/change_material_properties/test_change_element_material_properties_03.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_01.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_02.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_03.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_04.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_05.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_06.py
+python tests/elements/beam_column/elastic_beam_2d/cantilever2d_07.py
 python tests/elements/beam_column/elastic_beam_2d/beam_test1.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_01.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_02.py
@@ -378,6 +391,9 @@ python tests/elements/beam_column/elastic_beam_3d/cantilever3d_07.py
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_08.py
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_09.py
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_10.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_11.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_12.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_13.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_sign_criteria_01.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_sign_criteria_02.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_sign_criteria_03.py
@@ -398,19 +414,26 @@ python tests/elements/beam_column/timoshenko_beam3d_sign_criteria_01.py
 python tests/elements/beam_column/timoshenko_beam3d_test1.py
 python tests/elements/beam_column/timoshenko_beam3d_test2.py
 echo "$BLEU" "    Force beam-column 2D tests." "$NORMAL"
-python tests/elements/beam_column/test_force_beam_column_2d_01.py
-python tests/elements/beam_column/test_force_beam_column_2d_02.py
-python tests/elements/beam_column/test_force_beam_column_2d_03.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_01.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_02.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_03.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_04.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_05.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_06.py
+python tests/elements/beam_column/force_beam_column_2d/test_force_beam_column_2d_07.py
+python tests/elements/beam_column/force_beam_column_2d/plastic_hinge_on_cantilever.py
 echo "$BLEU" "    Force beam-column 3D tests." "$NORMAL"
-python tests/elements/beam_column/test_force_beam_column_3d_01.py
-python tests/elements/beam_column/test_force_beam_column_3d_02.py
-python tests/elements/beam_column/test_force_beam_column_3d_03.py
-python tests/elements/beam_column/test_force_beam_column_3d_04.py
-python tests/elements/beam_column/test_force_beam_column_3d_05.py
-python tests/elements/beam_column/test_force_beam_column_3d_06.py
-python tests/elements/beam_column/plastic_hinge_on_cantilever.py
-python tests/elements/beam_column/test_integration_options_01.py
-python tests/elements/beam_column/test_strains_sign_01.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_01.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_02.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_03.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_04.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_05.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_06.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_07.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_08.py
+python tests/elements/beam_column/force_beam_column_3d/test_force_beam_column_3d_09.py
+python tests/elements/beam_column/force_beam_column_3d/test_integration_options_01.py
+python tests/elements/beam_column/force_beam_column_3d/test_strains_sign_01.py
 echo "$BLEU" "  Zero length elements tests." "$NORMAL"
 python tests/elements/zero_length/zero_length_element_test_01.py
 python tests/elements/zero_length/zero_length_element_test_02.py
@@ -922,6 +945,7 @@ python tests/loads/dynamic_loads/test_node_load_history_03.py
 python tests/loads/dynamic_loads/test_node_load_history_04.py
 echo "$BLEU" "    Path time loads." "$NORMAL"
 python tests/loads/path_time_loads/test_path_time_load_01.py
+python tests/loads/path_time_loads/test_node_imposed_varying_displacement_01.py
 echo "$BLEU" "    Computing load combination tests." "$NORMAL"
 python tests/loads/combinations/add_loads_01.py
 python tests/loads/combinations/test_add_load_cases.py
@@ -945,14 +969,16 @@ echo "$BLEU" "Materials tests." "$NORMAL"
 python tests/materials/test_get_material_names.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/test_elasticpp_material_01.py
-python tests/materials/xc_materials/uniaxial/test_steel01.py
-python tests/materials/xc_materials/uniaxial/test_steel02.py
-python tests/materials/xc_materials/uniaxial/test_steel02_prestressing.py
+python tests/materials/xc_materials/uniaxial/test_elastic_material.py
+python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
 python tests/materials/xc_materials/uniaxial/test_init_strain_material_01.py
+python tests/materials/xc_materials/uniaxial/test_init_stress_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_01.py
 python tests/materials/xc_materials/uniaxial/test_multilinear_material_02.py
 python tests/materials/xc_materials/uniaxial/test_viscous_material_01.py
+echo "$BLEU" "      Elastic perfectly plastic material tests." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/elastic_pp_material/test_elasticpp_material_01.py
+python tests/materials/xc_materials/uniaxial/elastic_pp_material/test_elasticpp_material_02.py
 echo "$BLEU" "      Uniaxial concrete materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
@@ -967,35 +993,41 @@ python tests/materials/xc_materials/uniaxial/concrete/test_HA25_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HA25_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HP45_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HP45_02.py
+echo "$BLEU" "      steel materials." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/steel/test_steel01.py
+python tests/materials/xc_materials/uniaxial/steel/test_steel02.py
+python tests/materials/xc_materials/uniaxial/steel/test_steel02_prestressing.py
 echo "$BLEU" "      EHE reinforcing steel." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/test_B400S_01.py
-python tests/materials/xc_materials/uniaxial/test_B400S_02.py
-python tests/materials/xc_materials/uniaxial/test_B500S_01.py
-python tests/materials/xc_materials/uniaxial/test_B500S_02.py
+python tests/materials/xc_materials/uniaxial/steel/test_B400S_01.py
+python tests/materials/xc_materials/uniaxial/steel/test_B400S_02.py
+python tests/materials/xc_materials/uniaxial/steel/test_B500S_01.py
+python tests/materials/xc_materials/uniaxial/steel/test_B500S_02.py
 echo "$BLEU" "      SIA reinforcing steel." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/test_B500A_01.py
-python tests/materials/xc_materials/uniaxial/test_B500A_02.py
-python tests/materials/xc_materials/uniaxial/test_B500B_01.py
-python tests/materials/xc_materials/uniaxial/test_B500B_02.py
+python tests/materials/xc_materials/uniaxial/steel/test_B500A_01.py
+python tests/materials/xc_materials/uniaxial/steel/test_B500A_02.py
+python tests/materials/xc_materials/uniaxial/steel/test_B500B_01.py
+python tests/materials/xc_materials/uniaxial/steel/test_B500B_02.py
 echo "$BLEU" "      cable material." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/test_cable_material01.py
-python tests/materials/xc_materials/uniaxial/test_cable_material02.py
-python tests/materials/xc_materials/uniaxial/test_cable_material03.py
-python tests/materials/xc_materials/uniaxial/test_cable_material04.py
-python tests/materials/xc_materials/uniaxial/test_cable_material05.py
-python tests/materials/xc_materials/uniaxial/test_cable_material06.py
-python tests/materials/xc_materials/uniaxial/test_cable_material07.py
-python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
+python tests/materials/xc_materials/uniaxial/cable/test_cable_material01.py
+python tests/materials/xc_materials/uniaxial/cable/test_cable_material02.py
+python tests/materials/xc_materials/uniaxial/cable/test_cable_material03.py
+python tests/materials/xc_materials/uniaxial/cable/test_cable_material04.py
+python tests/materials/xc_materials/uniaxial/cable/test_cable_material05.py
+python tests/materials/xc_materials/uniaxial/cable/test_cable_material06.py
+python tests/materials/xc_materials/uniaxial/cable/test_cable_material07.py
 echo "$BLEU" "      Connected materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_01.py
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_02.py
 echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_03.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_04.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_05.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_06.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_07.py
 echo "$BLEU" "      Rail structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/track_structure_interaction/test_track_structure_interaction_spring_01.py
 
@@ -1020,6 +1052,7 @@ echo "$BLEU" "      UW materials." "$NORMAL"
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_01.py
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_02.py
 python tests/materials/xc_materials/nD/uw_materials/test_drucker-prager_3d_03.py
+python tests/materials/xc_materials/nD/uw_materials/test_initial_state_analysis_wrapper.py
 
 echo "$BLEU" "      Plate and membrane materials." "$NORMAL"
 python tests/materials/xc_materials/sections/plate_section/test_material_elastic_membrane_plate_section_01.py
@@ -1076,6 +1109,7 @@ python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_3d_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_section_3d_01.py
+python tests/materials/xc_materials/sections/elastic_section/test_elastic_shear_section_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_02.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_rotation_3d_03.py
@@ -1268,10 +1302,10 @@ echo "$BLEU" "  Steel sections test." "$NORMAL"
 echo "$BLEU" "    steel shapes tests." "$NORMAL"
 python tests/materials/steel_shapes/test_aisc_w_shapes.py
 python tests/materials/steel_shapes/test_aisc_hss_shapes.py
-python tests/materials/steel_shapes/test_steel_shape_01.py
-python tests/materials/steel_shapes/test_steel_shape_02.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
+python tests/materials/steel_shapes/test_arcelor_metric_shapes_03.py
+python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
 python tests/materials/ec3/test_cross_section_verification_01.py
@@ -1421,6 +1455,7 @@ echo "$BLEU" "  Foundation design tests." "$NORMAL"
 python tests/geotechnics/foundations/test_skin_friction.py
 python tests/geotechnics/foundations/test_pile_01.py
 python tests/geotechnics/foundations/test_pile_02.py
+python tests/geotechnics/foundations/test_pile_03.py
 python tests/geotechnics/foundations/test_micropile_cross_section.py
 python tests/geotechnics/foundations/test_micropile_01.py
 python tests/geotechnics/foundations/test_micropile_02.py
@@ -1585,7 +1620,9 @@ python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_check
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_03.py
 echo "$BLEU" "      EHE limit state checking: buckling." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_01.py
-python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_01.py
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_02.py
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_03.py
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_04.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py

@@ -98,7 +98,7 @@ V= beam3d.getVz()
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= ((delta-deltateor)/deltateor)
 ratio2= abs((M-MTeor)/MTeor)
-ratio3= (V/F)
+ratio3= abs(V+F)/F
 
 ''' 
 print("delta0= ",delta0)
@@ -114,7 +114,7 @@ print("ratio3= ",ratio3)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(delta0)<1e-11) & (abs(ratio1)<1e-9) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5):
+if (abs(delta0)<1e-11) & (abs(ratio1)<1e-9) & (ratio2<1e-5) & (abs(ratio3)<1e-5):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

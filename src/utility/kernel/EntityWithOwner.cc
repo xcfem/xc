@@ -61,16 +61,26 @@ EntityWithOwner &EntityWithOwner::operator=(const EntityWithOwner &other)
     return *this;
   }
 
-//! @brief Comparison operator.
-bool EntityWithOwner::operator==(const EntityWithOwner &other) const
+//! @brief Return true if both objects are equal.
+bool EntityWithOwner::isEqual(const EntityWithOwner &other) const
   {
     bool retval= false;
     if(this==&other)
       retval= true;
     else
-      { retval= (owner==other.owner); }
+      {
+	retval= (typeid(*this) == typeid(other));
+	if(retval)
+	  {
+	    retval= (this->owner==other.owner);
+	  }
+      }
     return retval;
   }
+
+//! @brief Comparison operator.
+bool EntityWithOwner::operator==(const EntityWithOwner &other) const
+  { return this->isEqual(other); }
 
 //! @brief Returns demangled class name.
 std::string EntityWithOwner::getClassName(void) const

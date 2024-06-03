@@ -61,7 +61,7 @@ fiberSectionRepr.setGeomNamed(geomRectang.name) # Assign the geometry.
 sa.setupFibers()
 fiber_section_test_macros.extractFiberSectionProperties(sa,scc10x20, fy)
 
-zlElement, nodA, nodB= scc2d_testing_bench.sectionModel(preprocessor, sa.name)
+zlElement, nodA, nodB= scc2d_testing_bench.section_model(preprocessor, sa.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)

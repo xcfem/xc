@@ -1069,7 +1069,7 @@ def get_lower_slenderness_limit(C:float, nonDimensionalAxialForce:float, e1, e2,
 
 
 
-def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDepthZ, Cz, reinforcementFactorZ, sectionDepthY= None, Cy= None, reinforcementFactorY= None):
+def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDepthZ, Cz, reinforcementFactorZ, sectionDepthY= None, Cy= None, reinforcementFactorY= None, eigenvectorNormThreshold= 1e-3):
     ''' Return the effective length, mechanical slenderness and fictitious eccentricity for the given buckling load factors.
 
     :param element: element to compute the buckling parameters for.
@@ -1085,6 +1085,8 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
               whose values are: 0.24 for symmetrical reinforcement on two 
               opposing sides in the bending plane, 0.20 for equal reinforcement on the four sides, 0.16 for symmetrical reinforcement on the lateral sides.
     :param reinforcementFactorY: reinforcement factor computed as $\beta= \frac{(d-d')^2}{4*i_s^2}$ with $i_s$ being the radius of gyration of the reinforcements about the y axis.
+    :param eigenvectorNormThreshold: if the node eigenvector has a norm smaller
+                                     than this threshold it is considered null.
     '''
     N= element.getN() # Element axial load.
     Ncri= [x * N for x in bucklingLoadFactors]
@@ -1095,6 +1097,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
     Leffi= list() # Effective lengths for each mode.
     mechLambdai= list() # Mechanical slenderness for each mode.
     Efi= list() # Fictitious eccentricity for each mode.
+    pi2= math.pi**2
     if(nDOF==6): # 2D element.
         e1, e2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
         EI= section.sectionProperties.EI()
@@ -1103,7 +1106,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimit= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= e1, e2= e2, sectionDepth= sectionDepthZ)
         minimumEccentricity= max(.02, sectionDepthZ/20)
         for mode, Ncr in enumerate(Ncri):
-            Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
+            Leff= math.sqrt((EI*pi2)/abs(Ncr)) # Effective length.
             if(Ncr>0):
                 Leff= -Leff
             Leffi.append(Leff)
@@ -1131,46 +1134,71 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
-            # Compute the stiffness in the direction of buckling for this mode.
-            ## Check if it is a translational buckling.
-            globalEigenvector= (0.5*(nodes[0].getEigenvector(mode+1)+nodes[1].getEigenvector(mode+1))).Normalized()
-            # index_max= min(range(len(globalEigenvector)), key=globalEigenvector.__getitem__)
-            globalEigenvectorXYZ= xc.Vector(list(globalEigenvector)[0:3])
-            ## Get the direction of buckling.
-            ### Convert to local coordinates.
-            localEigenvector= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorXYZ)
-            ### Remove axial (x) component and normalize.
-            localEigenvectorYZ= xc.Vector([localEigenvector[1], localEigenvector[2]])
-            normYZ= localEigenvectorYZ.Norm()
-            # Normalize
-            localEigenvectorYZ= localEigenvectorYZ.Normalized()
-            ## Compute the projected stiffness
-            EI= localEigenvectorYZ.dot(sectionStiffnessMatrix*localEigenvectorYZ)
-            # Compute the effective length.
-            Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
-            if(Ncr>0):
-                Leff= -Leff
-            Leffi.append(Leff)
-            # Compute the mechanical slenderness
-            i_mode= math.sqrt(EI/EA) # radius of giration.
-            mechLambda= Leff/i_mode # Compute mechanical slenderness
-            mechLambdai.append(mechLambda)
-            # Compute minimum eccentricity.
-            Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
-            Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
-            mechLambdaZ= Leffz/iz # Compute mechanical slenderness
-            mechLambdaY= Leffy/iy # Compute mechanical slenderness
-            if(mechLambdaZ<lowerSlendernessLimitZ):
+            node0Eigenvector= nodes[0].getEigenvector(mode+1)
+            node0EigenvectorNorm= node0Eigenvector.Norm()
+            node1Eigenvector= nodes[1].getEigenvector(mode+1)
+            node1EigenvectorNorm= node1Eigenvector.Norm()
+            if((node0EigenvectorNorm>eigenvectorNormThreshold) or (node1EigenvectorNorm>eigenvectorNormThreshold)):
+                # Compute the stiffness in the direction of buckling for this mode.
+                ## Check if it is a translational buckling.
+                globalEigenvector= (0.5*(node0Eigenvector+node1Eigenvector)).Normalized()
+                # index_max= min(range(len(globalEigenvector)), key=globalEigenvector.__getitem__)
+                globalEigenvectorDisp= xc.Vector(list(globalEigenvector)[0:3]) # Displacement components of the eigenvector.
+                globalEigenvectorRot= xc.Vector(list(globalEigenvector)[3:6]) # Rotational components of the eigenvector.
+                ## Get the direction of buckling.
+                ### Convert to local coordinates.
+                localEigenvectorDisp= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorDisp)
+                normDisp= localEigenvectorDisp.Norm()
+                localEigenvectorRot= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorRot)
+                normRot= localEigenvectorRot.Norm()
+                if(normDisp>normRot):
+                    ### Remove axial (x) component and normalize.
+                    localEigenvectorDispYZ= xc.Vector([localEigenvectorDisp[1], localEigenvectorDisp[2]])
+                    # Normalize
+                    localEigenvectorDispYZ= localEigenvectorDispYZ.Normalized()
+                    ## Compute the projected stiffness
+                    EI= localEigenvectorDispYZ.dot(sectionStiffnessMatrix*localEigenvectorDispYZ)
+                    # Compute the effective length.
+                    absNcr= abs(Ncr)
+                    Leff= math.sqrt((EI*pi2)/absNcr) # Effective length.
+                    if(Ncr>0):
+                        Leff= -Leff
+                    Leffi.append(Leff)
+                    # Compute the mechanical slenderness
+                    i_mode= math.sqrt(EI/EA) # radius of giration.
+                    mechLambda= Leff/i_mode # Compute mechanical slenderness
+                    mechLambdai.append(mechLambda)
+                    # Compute minimum eccentricity.
+                    Leffz= math.sqrt((EIz*pi2)/absNcr) # Effective length.
+                    Leffy= math.sqrt((EIy*pi2)/absNcr) # Effective length.
+                    mechLambdaZ= Leffz/iz # Compute mechanical slenderness
+                    mechLambdaY= Leffy/iy # Compute mechanical slenderness
+                    if(mechLambdaZ<lowerSlendernessLimitZ):
+                        efz= minimumEccentricityZ
+                    else:
+                        efz= max(minimumEccentricityZ, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz))
+                    if(mechLambdaY<lowerSlendernessLimitY):
+                        efy= minimumEccentricityY
+                    else:
+                        efy= max(minimumEccentricityY, get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy))
+                    eccentricityVector= xc.Vector([efz, efy])
+                    ef= abs(eccentricityVector.dot(localEigenvectorDispYZ))
+                    Efi.append((ef*localEigenvectorDispYZ[0], ef*localEigenvectorDispYZ[1]))
+                else: # torsional buckling
+                    iO2= iz**2+iy**2 # +yO**2+zO**2 # (y0 and z0 Coordinates of the shear center with respect to the centroid)
+                    iO= math.sqrt(iO2) # radius of gyration.
+                    # No torsional buckling for concrete sections so minimum eccentricities.
+                    Leffi.append(0.0)
+                    mechLambdai.append(0.0)
+                    efz= minimumEccentricityZ
+                    efy= minimumEccentricityY
+                    Efi.append((efz, efy))
+            else: # Element not affected by this buckling mode.
+                Leffi.append(0.0)
+                mechLambdai.append(0.0)
                 efz= minimumEccentricityZ
-            else:
-                efz= max(minimumEccentricityZ, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= ez2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leffz))
-            if(mechLambdaY<lowerSlendernessLimitY):
                 efy= minimumEccentricityY
-            else:
-                efy= max(minimumEccentricityY, get_fictitious_eccentricity(sectionDepth= sectionDepthY, firstOrderEccentricity= ey2, reinforcementFactor= reinforcementFactorY, epsilon_y= steel.eyd(), radiusOfGyration= iy, bucklingLength= Leffy))
-            eccentricityVector= xc.Vector([efz, efy])
-            ef= abs(eccentricityVector.dot(localEigenvectorYZ))
-            Efi.append((ef*localEigenvectorYZ[0], ef*localEigenvectorYZ[1]))
+                Efi.append((efz, efy))
     else:
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
@@ -1178,18 +1206,109 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lmsg.error(errMsg)
     return Leffi, mechLambdai, Efi
 
+class SectionBucklingProperties(object):
+    ''' Properties that define the buckling behavior of the RC section
+        according to clause 43.1 of EHE-08.
+
+    :ivar reinforcementFactorZ: reinforcement factor according to table 43.5.1 of EHE-08 (z axis).
+    :ivar sectionDepthZ: section depth (z axis).
+    :ivar Cz: clause 43.1.2 of EHE-08 (z axis).
+    :ivar reinforcementFactorY: reinforcement factor according to table 43.5.1 of EHE-08 (y axis).
+    :ivar sectionDepthY: section depth (y axis).
+    :ivar Cy: clause 43.1.2 of EHE-08 (y axis).
+    :ivar sectionData:  object derived from RCSectionBase used to define the reinforced concrete section.
+    '''
+    def __init__(self, reinforcementFactorZ, sectionDepthZ, Cz,reinforcementFactorY, sectionDepthY, Cy, sectionObject):
+        ''' Constructor.
+
+        :param reinforcementFactorZ: reinforcement factor according to table 43.5.1 of EHE-08 (z axis).
+        :param sectionDepthZ: section depth (z axis).
+        :param Cz: clause 43.1.2 of EHE-08 (z axis).
+        :param reinforcementFactorY: reinforcement factor according to table 43.5.1 of EHE-08 (y axis).
+        :param sectionDepthY: section depth (y axis).
+        :param Cy: clause 43.1.2 of EHE-08 (y axis).
+        :param sectionObject:  object derived from RCSectionBase used to define the reinforced concrete section.
+        '''
+        self.reinforcementFactorZ= reinforcementFactorZ
+        self.sectionDepthZ= sectionDepthZ
+        self.Cz= Cz
+        self.reinforcementFactorY= reinforcementFactorY
+        self.sectionDepthY= sectionDepthY
+        self.Cy= Cy
+        self.sectionObject= sectionObject
+        
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= {'reinforcementFactorZ': self.reinforcementFactorZ,
+                 'sectionDepthZ': self.sectionDepthZ,
+                 'reinforcementFactorY': self.reinforcementFactorY,
+                 'sectionDepthY': self.sectionDepthY,
+                 'Cz': self.Cz,
+                 'Cy': self.Cy,
+                 'sectionObject': self.sectionObject}
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        self.reinforcementFactorZ= dct['reinforcementFactorZ']
+        self.sectionDepthZ= dct['sectionDepthZ']
+        self.Cz= dct['Cz']
+        self.reinforcementFactorY= dct['reinforcementFactorY']
+        self.sectionDepthY= dct['sectionDepthY']
+        self.Cy= dct['Cy']
+        self.sectionObject= dct['sectionObject']
+        
+    @classmethod
+    def newFromDict(cls, dct= None):
+        ''' Builds a new object from the data in the given dictionary.
+
+        :param cls: class of the object itself.
+        :param dct: dictionary contaning the data.
+        '''
+        newObject = cls.__new__(cls) # just object.__new__
+        if(dct):
+            newObject.setFromDict(dct)
+        return newObject
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(self is not other):
+            retval= (self.reinforcementFactorZ == other.reinforcementFactorZ)
+            if(retval):
+                retval= (self.sectionDepthZ == other.sectionDepthZ)
+            if(retval):
+                retval= (self.Cz == other.Cz)
+            if(retval):
+                retval= (self.reinforcementFactorY == other.reinforcementFactorY)
+            if(retval):
+                retval= (self.sectionDepthY == other.sectionDepthY)
+            if(retval):
+                retval= (self.Cy == other.Cy)
+            if(retval):
+                retval= (self.sectionObject == other.sectionObject)
+        else:
+            retval= True
+        return retval
+    
 class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations, eigenvectorNormThreshold= 1e-3):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
         :param designSituations: design situations that will be checked; 
                                  i. e. uls_permanent, uls_earthquake, etc.
+        :param eigenvectorNormThreshold: if the node eigenvector has a norm 
+                                         smaller than this threshold it is 
+                                         considered null.
         '''
         super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
+        self.eigenvectorNormThreshold= eigenvectorNormThreshold
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
         '''Creates a dictionary with the buckling parameters of the given
@@ -1202,6 +1321,11 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         preprocessor= xcSet.getPreprocessor
         domain= preprocessor.getDomain
         eigenvalues= domain.getEigenvaluesList()
+        # Normalize eigenvectors if needed.
+        for mode in range(0, len(eigenvalues)):
+            norm= domain.getMesh.getEigenvectorsMaxNormInf(mode+1)
+            if(abs(norm-1.0)>1e-4):
+                norm= domain.getMesh.normalizeEigenvectors(mode+1)
         retval['buckling_load_factors']= eigenvalues
         elementParametersDict= dict()
         retval['element_parameters']= elementParametersDict
@@ -1210,14 +1334,14 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
             section= e.physicalProperties.getVectorMaterials[0]
             if(section.hasProp('sectionBucklingProperties')):
                 sectionBucklingProperties= section.getProp('sectionBucklingProperties')
-                reinforcementFactorZ= sectionBucklingProperties['reinforcementFactorZ']
-                sectionDepthZ= sectionBucklingProperties['sectionDepthZ']
-                reinforcementFactorY= sectionBucklingProperties['reinforcementFactorY']
-                sectionDepthY= sectionBucklingProperties['sectionDepthY']
-                Cz= sectionBucklingProperties['Cz']
-                Cy= sectionBucklingProperties['Cy']
-                rcSection= sectionBucklingProperties['sectionData']
-                Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+                reinforcementFactorZ= sectionBucklingProperties.reinforcementFactorZ
+                sectionDepthZ= sectionBucklingProperties.sectionDepthZ
+                reinforcementFactorY= sectionBucklingProperties.reinforcementFactorY
+                sectionDepthY= sectionBucklingProperties.sectionDepthY
+                Cz= sectionBucklingProperties.Cz
+                Cy= sectionBucklingProperties.Cy
+                rcSection= sectionBucklingProperties.sectionObject
+                Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold)
                 elementBucklingParameters['Leffi']= Leffi
                 elementBucklingParameters['mechLambdai']= mechLambdai
                 elementBucklingParameters['Efi']= Efi

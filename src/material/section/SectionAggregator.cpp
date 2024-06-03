@@ -153,14 +153,6 @@ XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theS
     resize();
   }
 
-//! @brief Copy constructor.
-XC::SectionAggregator::SectionAggregator(const SectionAggregator &other)
-  : PrismaticBarCrossSection(other),
-    theSection(nullptr), theAdditions(other.theAdditions)
-   {
-     copy_section(other.theSection);
-     resize();
-   }
 
 //! @brief Constructor.
 XC::SectionAggregator::SectionAggregator(int tag, const AggregatorAdditions &theAdds,MaterialHandler *mat_ldr)
@@ -184,6 +176,15 @@ XC::SectionAggregator::SectionAggregator(int tag,MaterialHandler *mat_ldr)
 XC::SectionAggregator::SectionAggregator(MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(0, SEC_TAG_Aggregator,mat_ldr),
     theSection(nullptr), theAdditions(this) {}
+
+//! @brief Copy constructor.
+XC::SectionAggregator::SectionAggregator(const SectionAggregator &other)
+  : PrismaticBarCrossSection(other),
+    theSection(nullptr), theAdditions(other.theAdditions)
+   {
+     copy_section(other.theSection);
+     resize();
+   }
 
 //! @brief Assignment operator.
 XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator &other)

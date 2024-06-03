@@ -53,7 +53,7 @@ namespace XC {
 
 //! @ingroup NDMat
 //
-//! @brief ??
+//! @brief PressureDependMultiYield materials are elastic-plastic materials for simulating the essential response characteristics of pressure sensitive soil materials under general loading conditions. Such characteristics include dilatancy (shear-induced volume contraction or dilation) and non-flow liquefaction (cyclic mobility), typically exhibited in sands or silts during monotonic or cyclic loading.
 class PressureDependMultiYield02: public PressureDependMultiYieldBase
   {
   private:

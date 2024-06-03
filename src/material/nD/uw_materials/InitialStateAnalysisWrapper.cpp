@@ -49,7 +49,7 @@ XC::InitialStateAnalysisWrapper::InitialStateAnalysisWrapper(int tag, NDMaterial
     setup(ndim, mainMat);
   }
 
-void XC::InitialStateAnalysisWrapper::setup(int ndim, NDMaterial &mainMat)
+void XC::InitialStateAnalysisWrapper::setup(int ndim, const NDMaterial &mainMat)
   {
     mDIM= ndim;
     mEpsilon_o.resize(3*ndim-3);
@@ -95,6 +95,14 @@ void XC::InitialStateAnalysisWrapper::setInitialStateAnalysisPhase(const bool &b
 int XC::InitialStateAnalysisWrapper::getOrder(void) const
   { return theMainMaterial.getOrder(); }
 
+//! @brief Return a pointer to the wrapped material.
+const XC::NDMaterial *XC::InitialStateAnalysisWrapper::getMaterial(void) const
+  { return theMainMaterial.getMaterial(); }
+
+//! @brief Return a pointer to the wrapped material.
+XC::NDMaterial *XC::InitialStateAnalysisWrapper::getMaterial(void)
+  { return theMainMaterial.getMaterial(); }
+
 //! @brief Sets the encapsulated material.
 void XC::InitialStateAnalysisWrapper::setMaterial(const NDMaterial &material)
   { theMainMaterial.setMaterial(material); }
@@ -123,6 +131,13 @@ int XC::InitialStateAnalysisWrapper::commitState(void)
   {
     return theMainMaterial.commitState();
   }
+
+//! @brief Return the initial strain.
+const XC::Vector &XC::InitialStateAnalysisWrapper::getInitialGeneralizedStrain(void) const
+  { return mEpsilon_o; }
+
+void XC::InitialStateAnalysisWrapper::setInitialGeneralizedStrain(const Vector &eps)
+  { mEpsilon_o= eps; }
 
 int XC::InitialStateAnalysisWrapper::revertToLastCommit(void)
   { return theMainMaterial.revertToLastCommit(); }

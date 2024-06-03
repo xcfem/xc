@@ -38,7 +38,7 @@ sectionList= []
 for p in positions:
     sectionList.append([geom.Pos2d(p[0],p[1]),girderSection])
 
-compoundSection= sp.CompoundSection('compoundSection',sectionList)
+compoundSection= sp.CompoundSection('compoundSection',sectionList, Iw= 0.0)
 
 yCenter= compoundSection.yCenterOfMass()
 zCenter= compoundSection.zCenterOfMass()

@@ -52,6 +52,7 @@
 #include "domain/mesh/element/utils/Information.h"
 #include "utility/recorder/response/MaterialResponse.h"
 #include "domain/component/Parameter.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Sets the encapsulated material.
 void XC::InitStrainMaterial::setMaterial(const UniaxialMaterial &material)
@@ -141,8 +142,9 @@ int XC::InitStrainMaterial::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send data.\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << Color::def << std::endl;    
     return res;
   }
 
@@ -152,8 +154,9 @@ int XC::InitStrainMaterial::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << ";  data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << ";  data could not be received."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -187,10 +190,14 @@ int XC::InitStrainMaterial::getResponse(int responseID, Information &matInformat
 //! @brief Print stuff.
 void XC::InitStrainMaterial::Print(std::ostream &s, int flag) const
   {
-    s << "InitStrainMaterial tag: " << this->getTag() << std::endl;
-    s << "\tMaterial: " << this->getMaterial()->getTag() << std::endl;
-    s << "\tinitial strain: " << epsInit << std::endl;
-    s << "\tlocal strain: " << localStrain << std::endl;
+    s << "InitStrainMaterial tag: " << this->getTag()
+      << std::endl
+      << "\tMaterial: " << this->getMaterial()->getTag()
+      << std::endl
+      << "\tinitial strain: " << epsInit
+      << std::endl
+      << "\tlocal strain: " << localStrain
+      << std::endl;
   }
 
 int XC::InitStrainMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)

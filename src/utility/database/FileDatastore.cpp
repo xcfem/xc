@@ -160,12 +160,8 @@ int XC::FileDatastoreOutputFile::openFile(const std::string &fileName, int dataS
     return 0;
   }
 
-void XC::FileDatastore::free_mem(void)
-  {}
-
 void XC::FileDatastore::alloc(const size_t &sz)
   {
-    free_mem();
     charPtrData.resize(sz);
   }
 
@@ -178,7 +174,7 @@ void XC::FileDatastore::alloc(const size_t &sz)
 //! memory for the arrays an error message is printed and the program
 //! is terminated.
 XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(dataBaseName, preprocessor, theObjBroker), charPtrData(), currentMaxInt(0), currentMaxDouble(0)
+  :FE_Datastore(dataBaseName, preprocessor, theObjBroker), currentCommitTag(-1), charPtrData(), currentMaxInt(0), currentMaxDouble(0)
   { resizeDouble(1024); }
 
 //! @brief Destructor.
@@ -187,8 +183,6 @@ XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &p
 //! obtained from the heap in the constructor are returned to the heap.
 XC::FileDatastore::~FileDatastore(void)
   {
-    free_mem();
-
     theIDFiles.clear();
     theMatFiles.clear();
     theVectFiles.clear();

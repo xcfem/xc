@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Ménsula sometida a carga horizontal en su extremo.'''
+''' Horizontal cantilever under bending load load at its tip.'''
 
 from __future__ import print_function
 
@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -81,24 +82,37 @@ V= beam3d.getVz()
 
 
 
-deltateor= (M*L**2/(2*E*Iz))
-thetateor= (M*L/(E*Iz))
-ratio1= (delta/-deltateor)
-ratio2= (M1/-M)
-ratio3= (theta/thetateor)
+deltaRef= -(M*L**2/(2*E*Iz))
+ratio1= abs(delta-deltaRef)/deltaRef
+ratio2= abs(M1+M)/M
+thetaRef= (M*L/(E*Iz))
+ratio3= abs(theta-thetaRef)/thetaRef
+
+# Check getMz1 and getMz2 (LP 28/04/2024).
+Mz1= beam3d.getMz1
+MRef= -M
+Mz2= beam3d.getMz2
+ratio4= math.sqrt((MRef-Mz1)**2+(MRef-Mz2)**2)
+
+# Check getVy1 and getVy2 (LP 28/04/2024).
+Vy1= beam3d.getVy1
+Vy2= beam3d.getVy2
+ratio5= math.sqrt(Vy1**2+Vy2**2)
 
 ''' 
 print("delta prog.= ", delta)
-print("delta teor.= ", deltateor)
+print("delta ref.= ", deltaRef)
 print("ratio1= ",ratio1)
 print("M1= ",M1)
 print("ratio2= ",ratio2)
 print("theta prog.= ", theta)
-print("theta teor.= ", thetateor)
+print("theta ref.= ", thetaRef)
 print("ratio3= ",ratio3)
+print('MRef= ', MRef/1e3, 'Mz1= ', Mz1/1e3, ' Mz2= ', Mz2/1e3, ' ratio4= ', ratio4)
+print('Vy1Ref= ', 0/1e3, 'Vy1= ', Vy1/1e3, ' Vy2= ', Vy2/1e3, ' ratio5= ', ratio5)
  '''
 
-cumple= (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5)
+cumple= (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
@@ -106,3 +120,18 @@ if cumple:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# # oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('Mz')
+# oh.displayIntForcDiag('Vy')
+# # # oh.displayIntForcDiag('My')
+# # # oh.displayIntForcDiag('Vz')
+# #oh.displayIntForcDiag('T')
+# #oh.displayLocalAxes()

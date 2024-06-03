@@ -57,21 +57,28 @@ bool XC::CrossSectionProperties1d::check_values(void)
         a= 1.0;
         retval= false;
       }
+    if(iw < 0.0)
+      {
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Input Iw <= 0.0 ... setting Iw to 0.0\n";
+        iw= 0.0;
+        retval= false;
+      }
     return retval;
   }
 
 //! @brief Constructor.
 XC::CrossSectionProperties1d::CrossSectionProperties1d(void)
-  :CommandEntity(), MovableObject(0), e(0), a(0), rho(0) {}
+  :CommandEntity(), MovableObject(0), e(0), a(0), rho(0), iw(0) {}
 
 //! @brief Constructor.
 XC::CrossSectionProperties1d::CrossSectionProperties1d(double EA_in)
-  : CommandEntity(), MovableObject(0), e(1.0), a(EA_in), rho(0)
+  : CommandEntity(), MovableObject(0), e(1.0), a(EA_in), rho(0), iw(0)
   { check_values(); }
 
 //! @brief Constructor.
 XC::CrossSectionProperties1d::CrossSectionProperties1d(const SectionForceDeformation &section)
-  : CommandEntity(), MovableObject(0), e(1.0), a(0.0), rho(0)
+  : CommandEntity(), MovableObject(0), e(1.0), a(0.0), rho(0), iw(0)
   {
     const Matrix &sectTangent= section.getInitialTangent();
     const ResponseId &sectCode= section.getResponseType();
@@ -146,6 +153,11 @@ int XC::CrossSectionProperties1d::setParameter(const std::vector<std::string> &a
         param.setValue(getRho());
         return param.addObject(3,scc);
       }
+    if(argv[0] == "Iw")
+      {
+        param.setValue(Iw());
+        return param.addObject(4,scc);
+      }
     return -1;
   }
 
@@ -169,13 +181,34 @@ XC::DbTagData &XC::CrossSectionProperties1d::getDbTagData(void) const
 //! @brief Send members through the communicator argument.
 int XC::CrossSectionProperties1d::sendData(Communicator &comm)
   {
-    return comm.sendDoubles(e,a,rho,getDbTagData(),CommMetaData(0)); }
+    return comm.sendDoubles(e,a,rho,iw,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Receives members through the communicator argument.
 int XC::CrossSectionProperties1d::recvData(const Communicator &comm)
   {
-    int retval= comm.receiveDoubles(e,a,rho,getDbTagData(),CommMetaData(0));
+    int retval= comm.receiveDoubles(e,a,rho,iw,getDbTagData(),CommMetaData(0));
     return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::CrossSectionProperties1d::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["e"]= this->e;
+    retval["a"]= this->a;
+    retval["rho"]= this->rho;
+    retval["iw"]= this->iw;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::CrossSectionProperties1d::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    this->e= boost::python::extract<double>(d["e"]);
+    this->a= boost::python::extract<double>(d["a"]);
+    this->rho= boost::python::extract<double>(d["rho"]);
+    this->iw= boost::python::extract<double>(d["iw"]);
   }
 
 //! @brief Sends object through the communicator argument.

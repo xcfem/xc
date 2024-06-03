@@ -62,3 +62,5 @@ class_<XC::Simple1GenBase, bases<CommandEntity>, boost::noncopyable >("Simple1Ge
 class_<XC::PySimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("PySimple1Gen", no_init);
 class_<XC::TzSimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("TzSimple1Gen", no_init);
 
+class_<XC::EyBasic, bases<XC::ElasticPPMaterialBase>, boost::noncopyable >("EyBasic", no_init)
+  ;

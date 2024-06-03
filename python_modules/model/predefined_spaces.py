@@ -317,6 +317,14 @@ class PredefinedSpace(object):
         self.preprocessor.getElementHandler.defaultTransformation= coordinateTransformation.name
         self.preprocessor.getElementHandler.seedElemHandler.defaultTransformation= coordinateTransformation.name
 
+    def setElementDimension(self, elementDimension):
+        ''' Set the dimension for the new elements (when appropriate).
+
+        :param elementDimension: dimension for the new elements (1, 2 or 3).
+        '''
+        self.preprocessor.getElementHandler.dimElem= elementDimension
+        self.preprocessor.getElementHandler.seedElemHandler.dimElem= elementDimension
+
     def newElement(self, elementType:str, nodeTags):
         ''' Create a new element.
 

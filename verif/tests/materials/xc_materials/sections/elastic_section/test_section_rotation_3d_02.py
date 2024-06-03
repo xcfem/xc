@@ -77,7 +77,7 @@ V= beam3d.getVy()
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= abs(delta-deltateor)/deltateor
 ratio2= abs((F*L)-M)/(F*L)
-ratio3= abs(V+F)/F
+ratio3= abs(V-F)/F
 
 ''' 
 print("delta= ",delta)

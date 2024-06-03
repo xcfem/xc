@@ -275,7 +275,7 @@ int XC::Vector::resize(int newSize)
 //! location (\p i). returns \f$0\f$ if successful. A warning message is
 //! printed for each invalid location in the current Vector or \p V and a
 //! \f$-1\f$ is returned. 
-int XC::Vector::Assemble(const XC::Vector &V, const ID &l, double fact )
+int XC::Vector::Assemble(const Vector &V, const ID &l, double fact )
   {
     int result= 0;
     int pos;
@@ -1256,6 +1256,22 @@ boost::python::list XC::Vector::getPyList(void) const
     for(size_t i=0; i<sz; i++) 
       retval.append((*this)(i));
     return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Vector::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["values"]= this->getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Vector::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    const boost::python::list tmp= boost::python::extract<boost::python::list>(d["values"]);
+    this->operator=(Vector(tmp));
   }
 
 //! @brief Read vector from a binary file.

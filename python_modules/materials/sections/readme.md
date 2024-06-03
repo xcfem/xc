@@ -19,3 +19,8 @@ Tools to deal with cross-sections to be used with beams or rods or by themselves
 - [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant#Circle)
 - [Section properties](https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/properties/)
 - [Section modulus](https://en.wikipedia.org/wiki/Section_modulus#Plastic_section_modulus)
+#### Warping constant of rectangular sections.
+- [PAPER REF: 5742 LATERAL TORSIONAL STABILITY OF TIMBER BEAMS](https://paginas.fe.up.pt/clme/m2d2015/Proceedings/data/papers/5742.pdf)
+#### Warping constant of thin-walled sections
+- [TORSIONAL SECTION PROPERTIES OF STEEL SHAPES Canadian Institute of Steel Construction, 2002](http://dir.cisc-icca.ca/files/technical/techdocs/updates/torsionprop.pdf)
+

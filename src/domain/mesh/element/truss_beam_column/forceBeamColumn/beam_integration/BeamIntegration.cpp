@@ -80,13 +80,35 @@ void XC::BeamIntegration::getWeightsDeriv(int nIP, double L, double dLdh,double 
       dwtsdh[i] = 0.0;
   }
 
-//! @brief Returns the weights (entre 0 y 1).
+//! @brief Returns the weights (between 0 and 1).
 const XC::Vector &XC::BeamIntegration::getIntegrPointWeights(int numSections, double L) const
   {
     static Vector retval;
     std::vector<double> wi(numSections);
     getSectionWeights(numSections,L,&wi[0]);
     retval= Vector(&wi[0],numSections);
+    return retval;
+  }
+
+//! @brief Return the weights corresponding to each section.
+boost::python::list XC::BeamIntegration::getSectionWeightsPy(int numSections, double L) const
+  {
+    std::vector<double> wi(numSections);
+    this->getSectionWeights(numSections,L,&wi[0]);
+    boost::python::list retval;
+    for(std::vector<double>::const_iterator i= wi.begin(); i!= wi.end(); i++)
+      { retval.append(*i); }
+    return retval;
+  }
+
+//! @brief Returns the location of the sections along the element.
+boost::python::list XC::BeamIntegration::getSectionLocationsPy(int numSections, double L) const
+  {
+    std::vector<double> xi(numSections);
+    this->getSectionLocations(numSections,L,&xi[0]);
+    boost::python::list retval;
+    for(std::vector<double>::const_iterator i= xi.begin(); i!= xi.end(); i++)
+      { retval.append(*i); }
     return retval;
   }
 

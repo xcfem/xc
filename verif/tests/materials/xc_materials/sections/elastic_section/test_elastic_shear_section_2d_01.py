@@ -26,7 +26,7 @@ matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2
 
 # Materials definition
 matPoteau= scc10x20.defElasticShearSection2d(preprocessor,matscc10x20)
-elemZLS, n1, n2= scc2d_testing_bench.sectionModel(preprocessor, scc10x20.name)
+elemZLS, n1, n2= scc2d_testing_bench.section_model(preprocessor, scc10x20.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)

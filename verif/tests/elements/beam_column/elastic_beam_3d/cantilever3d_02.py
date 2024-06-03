@@ -74,7 +74,7 @@ V= beam3d.getVz()
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= (delta/deltateor)
 ratio2= abs((M-MTeor)/MTeor)
-ratio3= (V/F)
+ratio3= abs(V+F)/F
 
 # Check getMy1 and getMy2 (LP 28/04/2024).
 My1= beam3d.getMy1
@@ -103,7 +103,7 @@ print('Vz1Ref= ', VzRef/1e3, 'Vz1= ', Vz1/1e3, ' Vz2= ', Vz2/1e3, ' ratio5= ', r
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10):
+if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

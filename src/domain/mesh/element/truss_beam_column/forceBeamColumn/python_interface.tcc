@@ -22,9 +22,13 @@
 //python_interface.tcc
 
 class_<XC::ForceBeamColumn2d, bases<XC::NLForceBeamColumn2dBase>, boost::noncopyable >("ForceBeamColumn2d", no_init)
+  .def("getSectionLocations",&XC::ForceBeamColumn2d::getSectionLocationsPy,"Returns the positions of the sections along the element.")
+  .def("getSectionWeights",&XC::ForceBeamColumn2d::getSectionWeightsPy,"Returns the weights corresponding to each of the element sections.")
    ;
 
 class_<XC::ForceBeamColumn3d, bases<XC::NLForceBeamColumn3dBase>, boost::noncopyable >("ForceBeamColumn3d", no_init)
+  .def("getSectionLocations",&XC::ForceBeamColumn3d::getSectionLocationsPy,"Returns the positions of the sections along the element.")
+  .def("getSectionWeights",&XC::ForceBeamColumn3d::getSectionWeightsPy,"Returns the weights corresponding to each of the element sections.")
    ;
 
 #include "beam_integration/python_interface.tcc"

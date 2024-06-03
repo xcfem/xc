@@ -52,6 +52,7 @@
 #include "material/uniaxial/soil_structure_interaction/TzLiq1.h"
 #include "material/uniaxial/soil_structure_interaction/generators/PySimple1Gen.h"
 #include "material/uniaxial/soil_structure_interaction/generators/TzSimple1Gen.h"
+#include "material/uniaxial/soil_structure_interaction/EyBasic.h"
 //#include "material/uniaxial/soil_structure_interaction/PySimple2.h"
 //#include "material/uniaxial/soil_structure_interaction/TzSimple2.h"
 //#include "material/uniaxial/soil_structure_interaction/QzSimple2.h"
@@ -260,9 +261,10 @@
 #include "domain/mesh/element/truss_beam_column/nonlinearBeamColumn/element/NLBeamColumn3d.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn2d.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn3d.h"
-
 #include "domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn2d.h"
 #include "domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn3d.h"
+#include "domain/mesh/element/uw_elements/BeamContact2D.h"
+#include "domain/mesh/element/uw_elements/BeamContact3D.h"
 
 #include "domain/mesh/element/volumetric/brick/Brick.h"
 #include "domain/mesh/element/volumetric/8nbrick/EightNodeBrick.h"

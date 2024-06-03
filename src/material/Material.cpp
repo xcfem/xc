@@ -65,6 +65,7 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
 #include "domain/domain/Domain.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @param matName: name of the material.
 const XC::Material *XC::Material::getMaterialByName(const std::string &matName) const
@@ -75,11 +76,12 @@ const XC::Material *XC::Material::getMaterialByName(const std::string &matName) 
       retval= material_handler->find_ptr(matName);
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to preprocessor." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor."
+		  << Color::def << std::endl;
       }
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
 		<< "material identified by: '" << matName
 		<< "' not found.\n";      
     return retval;
@@ -94,13 +96,31 @@ const XC::Material *XC::Material::getMaterialByName(const std::string &matName) 
 XC::Material::Material(int tag, int classTag)
   :TaggedObject(tag), MovableObject(classTag) {}
 
+//! @brief Return true if both objects are equal.
+bool XC::Material::isEqual(const Material &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+	retval= (typeid(*this) == typeid(other));
+	if(retval)
+	  {
+	    retval= TaggedObject::isEqual(other);
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Returns (if possible) a pointer to the material handler (owner).
 const XC::MaterialHandler *XC::Material::getMaterialHandler(void) const
   {
     const MaterialHandler *retval= dynamic_cast<const MaterialHandler *>(Owner());
     if(!retval)
-      std::cerr << "Material::" << __FUNCTION__
-	        << "; material handler not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; material handler not defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -109,8 +129,9 @@ XC::MaterialHandler *XC::Material::getMaterialHandler(void)
   {
     MaterialHandler *retval= dynamic_cast<MaterialHandler *>(Owner());
     if(!retval)
-      std::cerr << "Material::" << __FUNCTION__
-	        << "; material handler not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; material handler not defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -122,8 +143,9 @@ const XC::Domain *XC::Material::getDomain(void) const
     if(mHandler)
       retval= mHandler->getDomain();
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; no connection with problem domain." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; no connection with problem domain."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -135,8 +157,9 @@ XC::Domain *XC::Material::getDomain(void)
     if(mHandler)
       retval= mHandler->getDomain();
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; no connection with problem domain." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; no connection with problem domain."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -191,9 +214,10 @@ XC::Matrix XC::Material::getValues(const std::string &cod, bool silent) const
       }
     else
       if(!silent)
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	 	  << "; property: " << cod
-	          << " not found." << std::endl;
+	          << " not found."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -232,8 +256,9 @@ int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,Communicator &comm,const Bro
         res= comm.sendMovable(*ptr,dt,md);
       }
     if(res < 0)
-      std::cerr << "Material::" << __FUNCTION__
-                << "; failed to send material\n";
+      std::cerr << Color::red << __FUNCTION__
+                << "; failed to send material"
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -259,3 +284,27 @@ XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const Communica
     return retval;
   }
 
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Material::getPyDict(void) const
+  {
+    boost::python::dict retval= TaggedObject::getPyDict();
+    retval["name"]= this->getName();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Material::setPyDict(const boost::python::dict &d)
+  {
+    TaggedObject::setPyDict(d);
+    // Check that it has been created with the same name.
+    const std::string tmp= boost::python::extract<std::string>(d["name"]);
+    if(tmp!=this->getName())
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; name of the material has changed from: '"
+		  << tmp << "' to: '" << this->getName()
+		  << "'"
+		  << Color::def << std::endl;
+      }
+  }

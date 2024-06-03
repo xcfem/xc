@@ -96,14 +96,14 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     const Vector &getResistingForce(void) const;
 
     inline double getV(void) const //Shear force in the middle.
-      { return (Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength(); }
+      { return -(Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength(); }
     inline double getV1(void) const //Shear force in the back end.
-      { return -getV()-p0[1]; }
+      { return getV()-p0[1]; }
     inline double getV2(void) const //Shear force in the front end.
-      { return -getV()+p0[2]; }
+      { return getV()+p0[2]; }
     //! @brief Internal axial force at the back end.   
     inline double getN1(void) const
-      { return -Secommit(0)+p0[0]; }
+      { return Secommit(0)-p0[0]; }
     //! @brief Internal axial force at the front end.   
     inline double getN2(void) const
       { return Secommit(0); }
