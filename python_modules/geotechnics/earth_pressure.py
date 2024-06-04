@@ -79,25 +79,28 @@ class RankineSoil(fs.FrictionalSoil):
             sPhi= math.sin(phi)
             retval= math.atan(sPhi*math.sin(rhoAngle)/(1-sPhi*math.cos(rhoAngle)))
         return retval
-      
-    def getActivePressureAtDepth(self, z, waterTableDepth= 6.023e23):
+
+    def getPressureAtDepth(self, K, z, waterTableDepth= 6371e3):
         ''' Returns the active presure at depth z
 
+        :param K: pressure coefficient.
         :param z: depth to compute the pressure.
         :param waterTableDepth: depth of the water table.
         '''
         if(z<=waterTableDepth):
-            retval= self.gamma()*z*self.Ka()
+            retval= self.gamma()*z*K
         else:
             retval= self.gamma()*waterTableDepth
             retval+= self.submergedGamma()*(z-waterTableDepth)
-            retval*= self.Ka()
+            retval*= K
         return retval
+      
           
     def Kp(self, designValue= False):
         '''Returns Rankine's passive earth pressure coefficient.
 
-        :param designValue: if true use the design value of the internal friction.
+        :param designValue: if true use the design value of the internal 
+                            friction.
         '''
         cBeta= math.cos(self.beta)
         if(designValue):
@@ -106,7 +109,92 @@ class RankineSoil(fs.FrictionalSoil):
             cPhi= math.cos(self.phi)
         r= math.sqrt(cBeta**2-cPhi**2)
         return cBeta*(cBeta+r)/(cBeta-r)
+    
+    def K0Jaky(self, designValue= False):
+        '''Returns Jaky's coefficient (earth pressure at rest).
+
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+        
+        if(designValue):
+            sPhi= math.sin(self.getDesignPhi())
+        else:
+            sPhi= math.sin(self.phi)
+        return 1.0-sPhi
       
+    def getActivePressureAtDepth(self, z, waterTableDepth= 6371e3, designValue= False):
+        ''' Returns the active presure at depth z
+
+        :param z: depth to compute the pressure.
+        :param waterTableDepth: depth of the water table.
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+        Ka= self.Ka(designValue= designValue)
+        return self.getPressureAtDepth(K= Ka, z= z, waterTableDepth= waterTableDepth)
+    def getPassivePressureAtDepth(self, z, waterTableDepth= 6371e3, designValue= False):
+        ''' Returns the passive presure at depth z
+
+        :param z: depth to compute the pressure.
+        :param waterTableDepth: depth of the water table.
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+        Kp= self.Kp(designValue= designValue)
+        return self.getPressureAtDepth(K= Kp, z= z, waterTableDepth= waterTableDepth)
+    
+    def getAtRestPressureAtDepth(self, z, waterTableDepth= 6371e3, designValue= False):
+        ''' Returns the active presure at depth z
+
+        :param z: depth to compute the pressure.
+        :param waterTableDepth: depth of the water table.
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+        K0= self.K0Jaky(designValue= designValue)
+        return self.getPressureAtDepth(K= K0, z= z, waterTableDepth= waterTableDepth)
+
+    def getEarthThrusts(self, depth, tributaryArea, waterTableDepth= 6371e3, designValue= False):
+        ''' Returns the active presure at depth z
+
+        :param depth: depth to compute the pressure.
+        :param tributaryArea: area on which the pressure acts.
+        :param waterTableDepth: depth of the water table.
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+
+        Ea= self.getActivePressureAtDepth(z= depth, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # active.
+        E0= self.getAtRestPressureAtDepth(z= depth, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # at rest.
+        Ep= self.getPassivePressureAtDepth(z= depth, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # passive.
+        return Ea, E0, Ep
+        
+    def defHorizontalSubgradeReactionNlMaterial(self, preprocessor, name, depth, tributaryArea, Kh, waterTableDepth= 6371e3, designValue= False):
+        ''' Return the points of the force-displacement diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name identifying the material (if None compute a suitable name)
+        :param depth: depth of the point.
+        :param tributaryArea: area on which the pressure acts.
+        :param Kh: horizontal Winkler modulus.
+        :param waterTableDepth: depth of the water table.
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+        # Compute corresponding earth thrusts (active, at rest, passive).
+        Ea, E0, Ep= self.getEarthThrusts(depth= depth, tributaryArea= tributaryArea, waterTableDepth= waterTableDepth, designValue= designValue)
+        # Define nonlinear spring material
+        matName= name
+        if(not matName):
+            matName= uuid.uuid1().hex            
+        eyMatName= 'ey'+matName
+        eyBasicMaterial= def_ey_basic_material(preprocessor, name= eyMatName, E= Kh, upperYieldStress= -Ea, lowerYieldStress= -Ep)
+        materialHandler= preprocessor.getMaterialHandler
+        retval= materialHandler.newMaterial("init_stress_material", matName)
+        retval.setMaterial(eyBasicMaterial.name)
+        retval.setInitialStress(-E0)
+        return retval
 
 # Earth pressure according to Coulomb's Theory.
 # This theory is valid if the backfill surface is plane and the wall-bacfill
@@ -393,12 +481,11 @@ def get_earth_thrusts(depth,  tributaryArea, gamma, Ka, K0, Kp):
     :param Ka: active earth pressure coefficient.
     :param K0: earth pressure at rest coefficient.
     :param Kp: passive earth pressure coefficient.
-    :param Kh: horizontal Winkler modulus.
     '''
     factor= depth*gamma*tributaryArea
-    Ea= Ka*factor
-    E0= K0*factor
-    Ep= Kp*factor
+    Ea= Ka*factor # active.
+    E0= K0*factor # at rest.
+    Ep= Kp*factor # passive.
     return Ea, E0, Ep
     
 def get_horizontal_soil_reaction_diagram(depth, tributaryArea, gamma, Ka, K0, Kp, Kh):
@@ -433,15 +520,17 @@ def get_horizontal_soil_reaction_diagram(depth, tributaryArea, gamma, Ka, K0, Kp
     return [lowerBoundPt, activeLimitPt, atRestPt, passiveLimitPt, upperBoundPt], initStrain
 
 
-def def_ey_basic_material(preprocessor, name, E, fyp, fyn):
+def def_ey_basic_material(preprocessor, name, E, upperYieldStress, lowerYieldStress):
     '''Constructs an elastic perfectly-plastic uniaxial material adapted
        to represent the horizontal thrust of a soil.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the material (if None compute a suitable name)
     :param E: tangent in the elastic zone of the stress-strain diagram
-    :param fyp: stress at which material reaches plastic state in tension
-    :param fyn: stress at which material reaches plastic state in compression
+    :param upperYieldStress: stress at which material reaches plastic state 
+                             in decompression.
+    :param lowerYieldStress: stress at which material reaches plastic state 
+                             in compression.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
@@ -449,32 +538,8 @@ def def_ey_basic_material(preprocessor, name, E, fyp, fyn):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("EyBasic", matName)
     retval.E= E
-    retval.fyp= fyp
-    retval.fyn= fyn
+    retval.setLowerYieldStress(lowerYieldStress) # passive state yield stress.
+    retval.setUpperYieldStress(upperYieldStress) # active state yield stress.
     retval.revertToStart() # Compute material derived parameters.
-    return retval
-
-def def_horizontal_subgrade_reaction_nl_material(preprocessor, name, depth, tributaryArea, soil, Kh):
-    ''' Return the points of the force-displacement diagram.
-
-    :param preprocessor: preprocessor of the finite element problem.
-    :param name: name identifying the material (if None compute a suitable name)
-    :param depth: depth of the point.
-    :param tributaryArea: area on which the pressure acts.
-    :param soil: soil model object.
-    :param Kh: horizontal Winkler modulus.
-    '''
-    # Compute corresponding earth thrusts (active, at rest, passive).
-    Ea, E0, Ep= get_earth_thrusts(depth= depth, tributaryArea= tributaryArea, gamma= soil.gamma(), Ka= soil.Ka(), K0= soil.K0Jaky(), Kp= soil.Kp())
-    # Define nonlinear spring material
-    matName= name
-    if(not matName):
-        matName= uuid.uuid1().hex
-    eyMatName= 'ey'+matName
-    eyBasicMaterial= def_ey_basic_material(preprocessor, name= eyMatName, E= Kh, fyp= -Ea, fyn= -Ep)
-    materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("init_stress_material", matName)
-    retval.setMaterial(eyBasicMaterial.name)
-    retval.setInitialStress(-E0)
     return retval
 

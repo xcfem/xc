@@ -63,4 +63,11 @@ class_<XC::PySimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("PySimp
 class_<XC::TzSimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("TzSimple1Gen", no_init);
 
 class_<XC::EyBasic, bases<XC::ElasticPPMaterialBase>, boost::noncopyable >("EyBasic", no_init)
+  .add_property("lowerYieldStress", &XC::EyBasic::getLowerYieldStress, &XC::EyBasic::setLowerYieldStress, "Get/set the value of the lower yield stress (decompression).")
+  .def("getLowerYieldStress", &XC::EyBasic::getLowerYieldStress, "Get the value of the lower yield stress (decompression).")
+  .def("setLowerYieldStress", &XC::EyBasic::setLowerYieldStress, "Set the value of the lower yield stress (decompression).")
+  .add_property("upperYieldStress", &XC::EyBasic::getUpperYieldStress, &XC::EyBasic::setUpperYieldStress, "Get/set the value of the upper yield stress (compression).")
+  .def("getUpperYieldStress", &XC::EyBasic::getUpperYieldStress, "Get the value of the upper yield stress (compression).")
+  .def("setUpperYieldStress", &XC::EyBasic::setUpperYieldStress, "Set the value of the upper yield stress (compression).")
+  .def("setParameters", &XC::EyBasic::setParameters, "setParameters(E, lowerYS, upperYS), Update the values of the material parameters: elastic modulus, lower yield stress and upper yield stress.")
   ;

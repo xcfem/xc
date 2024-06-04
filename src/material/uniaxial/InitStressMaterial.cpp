@@ -57,23 +57,25 @@
 int XC::InitStressMaterial::findInitialStrain(void)
   {
     // determine the initial strain
-    double tol=1e-12;
-    double dSig = sigInit;
+    double tol= 1e-12;
+    double dSig= sigInit;
     double tStrain = 0.0, tStress = 0.0;
     int count = 0;
 
     UniaxialMaterial *tmp= this->getMaterial();
+    double K= tmp->getTangent();
+    double dStrain= dSig/K;
     do
       {
         count++;
-        double K = tmp->getTangent();
-        double dStrain = dSig/K;
-        tStrain += dStrain;
+        tStrain+= dStrain;
         tmp->setTrialStrain(tStrain);
         tStress = tmp->getStress();
-        dSig= sigInit-tStress;
+        dSig= sigInit-tStress; // residual.
+        K = tmp->getTangent();
+        dStrain = dSig/K;
       }
-    while ((fabs(tStress-sigInit) > tol) && (count <= 100));
+    while ((fabs(dSig) > tol) && (count <= 100));
 
     epsInit = tStrain;
 

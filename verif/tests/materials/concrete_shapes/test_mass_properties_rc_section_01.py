@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Reinforced concrete section. Crack control verification test.
-   results are compared with those of the «Prontuario informático del hormigón armado». '''
+''' Check the values of mass properties (area, inertia, etc.) returned by
+    object of RCRectangularSection class. 
+'''
 from __future__ import print_function
 from __future__ import division
 

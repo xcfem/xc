@@ -61,15 +61,8 @@ void XC::EyBasic::set_fyn(const double &f)
 //! @brief Constructor.
 //! @param[in] tag material identifier.
 //! @param[in] e material elastic modulus.
-//! @param[in] eyp positive yield strain value (tension).
-XC::EyBasic::EyBasic(int tag, double e, double eyp)
-  : ElasticPPMaterialBase(tag, MAT_TAG_EyBasic, e,eyp) {}
-
-//! @brief Constructor.
-//! @param[in] tag material identifier.
-//! @param[in] e material elastic modulus.
-//! @param[in] eyp positive yield strain value (tension).
-//! @param[in] eyn negative yield strain value (compression).
+//! @param[in] upper yield strain value (decompression).
+//! @param[in] lower yield strain value (compression).
 XC::EyBasic::EyBasic(int tag, double e, double eyp,double eyn, double ez )
   : ElasticPPMaterialBase(tag, MAT_TAG_EyBasic, e,eyp, eyn, ez) {}
 
@@ -81,3 +74,11 @@ XC::EyBasic::EyBasic(int tag)
 XC::UniaxialMaterial *XC::EyBasic::getCopy(void) const
   { return new EyBasic(*this); }
 
+//! @brief Set the values of the parameters that define the material response.
+void XC::EyBasic::setParameters(const double &E, const double &lowerYS, const double &upperYS)
+  {
+    this->setTangent(E); // deformation modulus.
+    this->setLowerYieldStress(lowerYS); // lower yield stress (compression).
+    this->setUpperYieldStress(upperYS); // upper yield stress (decompression).
+    this->revertToStart(); // recompute internal parameters.
+  }

@@ -52,6 +52,7 @@ class EPPBaseMaterial: public ElasticBaseMaterial
       { return trialStress; }
     inline double getTangent(void) const
       { return trialTangent; }
+    void setTangent(const double &);
     
     int commitState(void);
     int revertToLastCommit(void);    

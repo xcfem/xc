@@ -59,8 +59,15 @@ int XC::EPPBaseMaterial::revertToStart(void)
     int retval= ElasticBaseMaterial::revertToStart();
     commitStrain= 0.0;
     trialStress= 0.0;
-    trialTangent= E;
+    trialTangent= this->E;
     return retval;
+  }
+
+//! @brief Set the value of the material tangent modulus.
+void XC::EPPBaseMaterial::setTangent(const double &d)
+  {
+    ElasticBaseMaterial::setE(d);
+    trialTangent= d;
   }
 
 //! @brief Send object members through the communicator argument.

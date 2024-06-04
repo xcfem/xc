@@ -231,14 +231,14 @@ class SectionProperties(object):
         ''' returns a name to identify the shear Z response of the section'''
         return self.name+"RespVz"
   
-    def getRespT(self,preprocessor, G):
+    def getRespT(self, preprocessor, G):
         ''' Return an elastic material for modeling torsional response of 
            section.
 
         :param preprocessor: preprocessor of the finite element problem.
         :param G: shear modulus.
         '''
-        return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.getTorsionalStiffness(G)) # Torsional response of the section.
+        return typical_materials.defElasticMaterial(preprocessor, self.respTName(), self.getTorsionalStiffness(G)) # Torsional response of the section.
     
     def getRespVy(self, preprocessor, G):
         ''' Return an elastic material for modeling the resoponse of the
