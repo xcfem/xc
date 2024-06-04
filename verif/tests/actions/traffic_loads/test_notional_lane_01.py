@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-'''Test getContiguousLaneSegment method.'''
+'''Test getContiguousLaneSegment method that return the contour of another 
+   piece of road lane that continues the given one at its beginning 
+   (if length<0) or at its end (if length>0'''
 
 from __future__ import division
 from __future__ import print_function
