@@ -565,8 +565,8 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         solutionProcedure.setup()
         preprocessor= feProblem.getPreprocessor
         loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
-        #Putting combinations inside XC.
-        loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
+        # Putting combinations inside XC.
+        loadCombinations= self.dumpCombinations(combContainer, loadCombinations)
 
         self.prepareResultsDictionaries()
         for key in loadCombinations.getKeys():
@@ -582,7 +582,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                 lmsg.error(className+'.'+methodName+"; can't solve.")
             # Store results.
             self.updateResults(combName= comb.getName, calcSet= setCalc, constrainedNodes= constrainedNodeSet)
-            comb.removeFromDomain() #Remove combination from the model.
+            comb.removeFromDomain() # Remove combination from the model.
         
         self.writeAnalysisResults()
         
