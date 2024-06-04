@@ -1086,6 +1086,21 @@ boost::python::list XC::Domain::getEigenvaluesPy(void) const
     return tmp.getPyList();
   }
 
+//! @brief Remove the stored eigenvectors.
+void XC::Domain::clearEigenvectors(void)
+  { this->mesh.clearEigenvectors(); }
+
+//! @brief Remove the stored eigenvalues.
+void XC::Domain::clearEigenvalues(void)
+  { this->theEigenvalues.resize(0); }
+
+//! @brief Remove the stored eigenvalues and eigenvectors.
+void XC::Domain::clearEigendata(void)
+  {
+    this->clearEigenvectors();
+    this->clearEigenvalues();
+  }
+
 //! @brief Returns a vector with the computed angular frequencies (for each mode).
 XC::Vector XC::Domain::getAngularFrequencies(void) const
   {

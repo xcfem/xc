@@ -214,6 +214,7 @@ class Mesh: public MeshComponentContainer
     double getEigenvectorsMaxNormInf(int mode) const;
     double normalizeEigenvectors(int mode);
     boost::python::list normalizeEigenvectors(void);
+    void clearEigenvectors(void);
 
     static void setDeadSRF(const double &);
   };

@@ -1600,6 +1600,12 @@ XC::Matrix XC::Node::getNormalizedEigenvectors(void) const
     return retval;
   }
 
+//! @brief Remove the stored eigenvectors.
+void XC::Node::clearEigenvectors(void)
+  {
+    theEigenvectors.resize(0,0);
+  }
+
 //! @brief Return the "modal" position of the node scaled by
 //! factor: return initPos+ factor * getNormalizedEigenvector(mode).
 Pos2d XC::Node::getEigenPosition2d(const double &factor, int mode) const

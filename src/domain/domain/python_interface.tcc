@@ -71,4 +71,7 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("getTotalEffectiveModalMass",&XC::Domain::getTotalEffectiveModalMass,"getTotalEffectiveModalMass(): return the total mass.")
   .add_property("totalMass", &XC::Domain::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::Domain::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
+  .def("clearEigenvectors", &XC::Domain::clearEigenvectors,"Remove the stored eigenvectors.")
+  .def("clearEigenvalues", &XC::Domain::clearEigenvalues,"Remove the stored eigenvalues.")
+  .def("clearEigendata", &XC::Domain::clearEigendata,"Remove the stored eigenvalues and eigenvectors.")
   ;

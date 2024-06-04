@@ -68,4 +68,5 @@ class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh",
   .def("normalizeEigenvectors", normalizeAllEigenvectors,"Normalize node eigenvectors for all the computed modes. Syntax: normalizeEigenvectors()")
   .add_property("totalMass", &XC::Mesh::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::Mesh::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
+  .def("clearEigenvectors", &XC::Mesh::clearEigenvectors,"Remove the stored eigenvectors.")
   ;
