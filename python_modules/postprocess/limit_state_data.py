@@ -13,6 +13,8 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 import pickle
 import os
 import sys
+import re
+import json
 from solution import predefined_solutions
 from postprocess.reports import export_internal_forces as eif
 from postprocess.reports import export_reactions as er
@@ -25,7 +27,6 @@ from collections import defaultdict
 import csv
 from postprocess import control_vars as cv
 from postprocess.config import file_names as fn
-import json
 
 defaultSolutionProcedureType=  predefined_solutions.SimpleStaticLinear
 
@@ -472,6 +473,72 @@ class LimitStateData(object):
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+"; not implemented yet.")
 
+    def getCriticalLCombs(self,threshold):
+        '''Pick the load combinations for which the capacity factor exceeds the given threshold.
+        
+        Returns a dictionary with the following keys:
+        - limitStateName: label of the limit state in question
+        - threshold: capacity factor's  threshold above which the load combinations are selected
+        - nElems: number of elements in the limit state verification file.
+        - sect1_critical_comb: dictionary of key:value pairs, where keys are the name of the 
+                               load combination and its value is the percentage of elements for
+                               which the threshold is exceeded (for section 1 of the elements)
+        - sect2_critical_comb: same as sect1_critical_comb in the case of element's section 2.
+        - critical_combNms: list with all critical combinations
+        '''
+        verifFile=self.getOutputDataBaseFileName()+'.json'
+        # read json file
+        if os.path.isfile(verifFile):
+            f=open(verifFile,'r') # Open JSON file
+            inputDct= json.load(f)
+            f.close()
+        else:
+            lmsg.error('File '+verifFile+'does not exist')
+            return
+        nElems=len(inputDct['elementData'])
+        sect1CritCmb=dict()
+        sect2CritCmb=dict()
+        allCritCmb=list()
+        # Section 1
+        for e in inputDct['elementData'].keys():
+            #section 1
+            s=inputDct['elementData'][e][self.label+"Sect1"]
+            posCF=re.search('CF= \d+\.*\d+',s)
+            CF=eval(s[posCF.start()+4:posCF.end()])
+            if CF>threshold:
+                posCombNm=re.search('combName= \"\w+\"',s)
+                combNm=str(s[posCombNm.start()+11:posCombNm.end()-1])
+                if combNm in sect1CritCmb.keys():
+                    sect1CritCmb[combNm]+=1
+                else:
+                    sect1CritCmb[combNm]=1
+                    allCritCmb.append(combNm)
+        # Section 2
+        for e in inputDct['elementData'].keys():
+            s=inputDct['elementData'][e][self.label+"Sect2"]
+            posCF=re.search('CF= \d+\.*\d+',s)
+            CF=eval(s[posCF.start()+4:posCF.end()])
+            if CF>threshold:
+                posCombNm=re.search('combName= \"\w+\"',s)
+                combNm=str(s[posCombNm.start()+11:posCombNm.end()-1])
+                if combNm in sect2CritCmb.keys():
+                    sect2CritCmb[combNm]+=1
+                else:
+                    sect2CritCmb[combNm]=1
+                    if combNm not in sect1CritCmb.keys():
+                        allCritCmb.append(combNm)
+        # express in percentage
+        for elu in sect1CritCmb.keys(): sect1CritCmb[elu]=round(sect1CritCmb[elu]/nElems*100,2)
+        for elu in sect2CritCmb.keys(): sect2CritCmb[elu]=round(sect2CritCmb[elu]/nElems*100,2)
+        retval={'limitStateName':self.label,
+                'threshold':threshold,
+                'nElems':nElems,
+                'sect1_critical_comb':sect1CritCmb,
+                'sect2_critical_comb':sect2CritCmb,
+                'critical_combNms':allCritCmb,
+                }
+        return retval
+    
 #20181117 end
 
 class ULS_LimitStateData(LimitStateData):
