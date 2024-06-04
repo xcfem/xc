@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Compute the wind force coefficient on a circular cylinder according to
-the expressions in the figurea 7.28 of EN 1991-1-4:2005.'''
+''' Compute the wind force vertical force coefficient for bridge decks 
+    according to figure 8.6 of EN 1991-1-4:2005.'''
 
 from __future__ import print_function
 from __future__ import division
