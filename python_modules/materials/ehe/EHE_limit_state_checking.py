@@ -1134,9 +1134,10 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
-            node0Eigenvector= nodes[0].getEigenvector(mode+1)
+            mode1= mode+1 
+            node0Eigenvector= nodes[0].getEigenvector(mode1)
             node0EigenvectorNorm= node0Eigenvector.Norm()
-            node1Eigenvector= nodes[1].getEigenvector(mode+1)
+            node1Eigenvector= nodes[1].getEigenvector(mode1)
             node1EigenvectorNorm= node1Eigenvector.Norm()
             if((node0EigenvectorNorm>eigenvectorNormThreshold) or (node1EigenvectorNorm>eigenvectorNormThreshold)):
                 # Compute the stiffness in the direction of buckling for this mode.
@@ -1398,28 +1399,30 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         bucklingParameters= intForcItems[3]
         bucklingLoadFactors= intForcItems[4]
         idCombs= set() # load combinations x modes
-        internalForcesValues= defaultdict(list) # load combination results for each mode.
+        newInternalForces= defaultdict(list) # load combination results for each mode.
         if(len(bucklingParameters)>0):
             numModes= len(bucklingLoadFactors)
+            modes= list(range(0, numModes))
             ## Compute the new internal forces.
             for loadComb in loadCombinations:
-                for i in range(0, numModes): # for each mode under this combination.
-                    loadCombMode= loadComb+'_mode_'+str(i+1)
+                for mode in modes: # for each mode under this combination.
+                    loadCombMode= loadComb+'_mode_'+str(mode+1)
                     idCombs.add(loadCombMode) # load combination results for mode i.                
                     for eTag in elementTags: # for each element.
                         elementBucklingParameters= bucklingParameters[eTag]
                         # Get fictitious eccentricities
                         efi= elementBucklingParameters['Efi']
                         elementSectionsInternalForces= internalForces[eTag]
-                        efz= efi[i][0] # fictitious eccentricity Z axis.
-                        efy= efi[i][1] # fictitious eccentricity Y axis.
+                        efz= efi[mode][0] # fictitious eccentricity Z axis.
+                        efy= efi[mode][1] # fictitious eccentricity Y axis.
                         # newElementSectionsInternalForces= list()
                         for iForces in elementSectionsInternalForces:
-                            newForces= iForces.getCopy()
-                            newForces.increaseEccentricities(ez= efz, ey= efy)
-                            newForces.idComb= loadCombMode
-                            internalForcesValues[eTag].append(newForces)
-        return (elementTags, idCombs, internalForcesValues)
+                            if(iForces.idComb==loadComb): # if the internal forces correspond to this load combination
+                                newForces= iForces.getCopy()
+                                newForces.increaseEccentricities(ez= efz, ey= efy)
+                                newForces.idComb= loadCombMode
+                                newInternalForces[eTag].append(newForces)            
+        return (elementTags, idCombs, newInternalForces)
     
             
 #       _    _       _ _        _        _       
