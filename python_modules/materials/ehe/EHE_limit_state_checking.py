@@ -1097,6 +1097,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
     Leffi= list() # Effective lengths for each mode.
     mechLambdai= list() # Mechanical slenderness for each mode.
     Efi= list() # Fictitious eccentricity for each mode.
+    strongAxisBucklingPercent= list()
     pi2= math.pi**2
     if(nDOF==6): # 2D element.
         e1, e2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
@@ -1117,8 +1118,10 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             else:
                 ef= max(minimumEccentricity, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff))
             Efi.append(ef)
+            strongAxisBucklingPercent.append(0.0) # can't buckle around another axis.
     elif(nDOF==12):
         ez1, ez2, ey1, ey2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
+        elementWeakAxis= element.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
         # Get the element nodes.
         nodes= element.nodes
         coordTransf= element.getCoordTransf
@@ -1152,6 +1155,9 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                 normDisp= localEigenvectorDisp.Norm()
                 localEigenvectorRot= coordTransf.getVectorLocalCoordFromGlobal(globalEigenvectorRot)
                 normRot= localEigenvectorRot.Norm()
+                # Compute the dot product of the displacement eigenvector
+                # and the element weak axis.
+                dotProduct= elementWeakAxis.dot(globalEigenvectorDisp)
                 if(normDisp>normRot):
                     ### Remove axial (x) component and normalize.
                     localEigenvectorDispYZ= xc.Vector([localEigenvectorDisp[1], localEigenvectorDisp[2]])
@@ -1165,6 +1171,24 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                     if(Ncr>0):
                         Leff= -Leff
                     Leffi.append(Leff)
+                    if(abs(dotProduct)>eigenvectorNormThreshold):
+                        sphericTensor= (abs(EIz-EIy)<1e-6)
+                        if(sphericTensor): # both axes are strong (or weak)
+                            dotProduct= 0.0
+                        # else:
+                        #     print('mode= ', mode1)
+                        #     print('element: ', element.tag)
+                        #     print('position: ', element.getPosCentroid(True))
+                        #     print('node0EigenvectorNorm= ', node0EigenvectorNorm)
+                        #     print('node1EigenvectorNorm= ', node1EigenvectorNorm)
+                        #     print('sphericTensor= ', sphericTensor)
+                        #     print('elementStrongAxis= ', element.getVDirStrongAxisGlobalCoord(True))
+                        #     print('elementWeakAxis= ', elementWeakAxis)
+                        #     print('globalEigenvectorDisp= ', globalEigenvectorDisp)
+                        #     print('dotProduct= ', dotProduct)
+                        #     print('normDisp= ', normDisp)
+                        #     print('normRot= ', normRot)
+                        #     print('Leff= ', Leff)
                     # Compute the mechanical slenderness
                     i_mode= math.sqrt(EI/EA) # radius of giration.
                     mechLambda= Leff/i_mode # Compute mechanical slenderness
@@ -1185,6 +1209,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                     eccentricityVector= xc.Vector([efz, efy])
                     ef= abs(eccentricityVector.dot(localEigenvectorDispYZ))
                     Efi.append((ef*localEigenvectorDispYZ[0], ef*localEigenvectorDispYZ[1]))
+
                 else: # torsional buckling
                     iO2= iz**2+iy**2 # +yO**2+zO**2 # (y0 and z0 Coordinates of the shear center with respect to the centroid)
                     iO= math.sqrt(iO2) # radius of gyration.
@@ -1194,18 +1219,20 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                     efz= minimumEccentricityZ
                     efy= minimumEccentricityY
                     Efi.append((efz, efy))
+                strongAxisBucklingPercent.append(dotProduct)
             else: # Element not affected by this buckling mode.
                 Leffi.append(0.0)
                 mechLambdai.append(0.0)
                 efz= minimumEccentricityZ
                 efy= minimumEccentricityY
                 Efi.append((efz, efy))
+                strongAxisBucklingPercent.append(0.0)
     else:
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
         errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
         lmsg.error(errMsg)
-    return Leffi, mechLambdai, Efi
+    return Leffi, mechLambdai, Efi, strongAxisBucklingPercent
 
 class SectionBucklingProperties(object):
     ''' Properties that define the buckling behavior of the RC section
@@ -1331,7 +1358,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         elementParametersDict= dict()
         retval['element_parameters']= elementParametersDict
         for e in xcSet.elements:
-            elementBucklingParameters= {'Leffi':None, 'mechLambdai':None, 'Efi':None}
+            elementBucklingParameters= {'Leffi':None, 'mechLambdai':None, 'Efi':None, 'strongAxisBucklingPercent':None}
             section= e.physicalProperties.getVectorMaterials[0]
             if(section.hasProp('sectionBucklingProperties')):
                 sectionBucklingProperties= section.getProp('sectionBucklingProperties')
@@ -1342,10 +1369,11 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
                 Cz= sectionBucklingProperties.Cz
                 Cy= sectionBucklingProperties.Cy
                 rcSection= sectionBucklingProperties.sectionObject
-                Leffi, mechLambdai, Efi= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold)
+                Leffi, mechLambdai, Efi, strongAxisBucklingPercent= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold)
                 elementBucklingParameters['Leffi']= Leffi
                 elementBucklingParameters['mechLambdai']= mechLambdai
                 elementBucklingParameters['Efi']= Efi
+                elementBucklingParameters['strongAxisBucklingPercent']= strongAxisBucklingPercent
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name

@@ -650,8 +650,9 @@ class BiaxialBucklingControlVars(BiaxialBendingControlVars):
     :ivar efY: additional eccentricity for buckling around Y axis.
     :ivar efZ: additional eccentricity for buckling around Z axis.
     :ivar mode: buckling mode corresponding to the previous parameters.
+    :ivar strongAxisBucklingPercent: dot product (projection) of the buckling eigenvector over the strong axis.
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0, Leff= -1.0, mechLambda= -1.0, efY= 0.0, efZ= 0.0, mode= None):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0, Leff= -1.0, mechLambda= -1.0, efY= 0.0, efZ= 0.0, mode= None, strongAxisBucklingPercent= 0.0):
         '''
         Constructor.
 
@@ -666,11 +667,12 @@ class BiaxialBucklingControlVars(BiaxialBendingControlVars):
         :param efY: additional eccentricity around Y axis.
         :param efZ: additional eccentricity around Z axis.
         :param mode: buckling mode that corresponds to the previous parameters.
+        :param strongAxisBucklingPercent: dot product (projection) of the buckling eigenvector over the strong axis.
         '''
         super(BiaxialBucklingControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= My, Mz= Mz)
-        self.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= efZ, efY= efY, mode= mode)
+        self.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= efZ, efY= efY, mode= mode, strongAxisBucklingPercent= strongAxisBucklingPercent)
 
-    def setBucklingParameters(self, Leff, mechLambda, efZ, efY, mode):
+    def setBucklingParameters(self, Leff, mechLambda, efZ, efY, mode, strongAxisBucklingPercent):
         ''' Assigns values to the buckling parameters.
 
         :param Leff: effective length.
@@ -678,17 +680,19 @@ class BiaxialBucklingControlVars(BiaxialBendingControlVars):
         :param efZ: additional eccentricity around Z axis.
         :param efY: additional eccentricity around Y axis.
         :param mode: buckling mode that corresponds to the previous parameters.
+        :param strongAxisBucklingPercent: dot product (projection) of the buckling eigenvector over the strong axis.
         '''
         self.Leff= Leff # effective length.
         self.mechLambda= mechLambda # mechanical slenderness.
         self.efY= efY # additional eccentricity around Y axis.
         self.efZ= efZ # additional eccentricity around Z axis.
         self.mode= mode # buckling mode that corresponds to the previous parameters.
+        self.strongAxisBucklingPercent= strongAxisBucklingPercent # dot product (projection) of the buckling eigenvector over the strong axis.
         
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(BiaxialBucklingControlVars, self).getDict()
-        retval.update({'Leff': self.Leff, 'mechLambda': self.mechLambda, 'efY': self.efY, 'efZ': self.efZ, 'mode': self.mode})
+        retval.update({'Leff': self.Leff, 'mechLambda': self.mechLambda, 'efY': self.efY, 'efZ': self.efZ, 'mode': self.mode, 'strongAxisBucklingPercent':self.strongAxisBucklingPercent})
         return retval
        
     def setFromDict(self,dct):
@@ -702,6 +706,7 @@ class BiaxialBucklingControlVars(BiaxialBendingControlVars):
         self.efY= dct['efY'] # additional eccentricity around Y axis.
         self.efZ= dct['efZ'] # additional eccentricity around Z axis.
         self.mode= dct['mode'] # buckling mode that corresponds to the previous parameters.
+        self.strongAxisBucklingPercent= dct['strongAxisBucklingPercent'] # dot product (projection) of the buckling eigenvector over the strong axis.
 
 class UniaxialBucklingControlVars(UniaxialBendingControlVars):
     '''Control variables for buckling limit state verification 
