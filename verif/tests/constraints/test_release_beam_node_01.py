@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Home made test.
-
+'''Home-made test that addresses the realeasing of some degree of freedom at the extremities of the beam element.
+'''
 from __future__ import division
 from __future__ import print_function
 
