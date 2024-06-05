@@ -29,13 +29,13 @@ deltaB= math.atan(H/V)
 deltaL= 0.0
 q= 4.4
 
-NgammaSTS= shortTermSoil.Ngamma(1.8)
-NqSTS= shortTermSoil.Nq()
-NcSTS= shortTermSoil.Nc()
-dcSTS= shortTermSoil.dc(D,Beff)
-scSTS= shortTermSoil.sc(Beff,Leff)
-icSTS= shortTermSoil.ic(Vload= V, HloadB= H, HloadL= 0.0,Beff= Beff, Leff= Leff)
-quSTS= shortTermSoil.qu(q,D,Beff,Leff,V,H,0.0,1.8)
+NgammaSTS= shortTermSoil.Ngamma(1.8) # wedge weight multiplier for the Brinch-Hasen formula
+NqSTS= shortTermSoil.Nq() # overburden multiplier for the Brinch-Hasen formula
+NcSTS= shortTermSoil.Nc() # cohesion multiplier for the Brinch-Hasen formula.
+dcSTS= shortTermSoil.dc(D,Beff) # depth factor for cohesion
+scSTS= shortTermSoil.sc(Beff,Leff) # factor that introduces the effect of foundation shape on the cohesion component.
+icSTS= shortTermSoil.ic(Vload= V, HloadB= H, HloadL= 0.0,Beff= Beff, Leff= Leff) # factor that introduces the effect of load inclination on the cohesion component.
+quSTS= shortTermSoil.qu(q,D,Beff,Leff,V,H,0.0,1.8) # Ultimate bearing capacity pressure of the soil
 
 err= abs(NgammaSTS)**2 
 err+= abs(NqSTS-1.0)**2
@@ -50,25 +50,26 @@ err+= (abs(quSTS-64.0)/64.0)**2 #Better approximation of i_c than
 # Long-term bearing capacity.
 longTermSoil= fcs.FrictionalCohesiveSoil(math.radians(30.0),c=1.7,rho= (2.2-1.0)/9.81)
 
-NgammaLTS= longTermSoil.Ngamma(1.8)
-NqLTS= longTermSoil.Nq()
-NcLTS= longTermSoil.Nc()
-dcLTS= longTermSoil.dc(D,Beff)
-scLTS= longTermSoil.sc(Beff,Leff)
-sgammaLTS= longTermSoil.sgamma(Beff,Leff)
-dgammaLTS= longTermSoil.dgamma()
-iqLTS= longTermSoil.iq(Vload= V, HloadB= H, HloadL= 0.0)
-sqLTS= longTermSoil.sq(Beff,Leff)
-dqLTS= longTermSoil.dq(D,Beff)
-igammaLTS= longTermSoil.igamma(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff)
-icLTS= longTermSoil.ic(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff)
-quGammaLTS= longTermSoil.quGamma(D,Beff,Leff,V,H,0.0,1.8)
+NgammaLTS= longTermSoil.Ngamma(1.8) # wedge weight multiplier for the Brinch-Hasen formula.
+NqLTS= longTermSoil.Nq() # overburden multiplier for the Brinch-Hasen formula
+NcLTS= longTermSoil.Nc()  # cohesion multiplier for the Brinch-Hasen formula
+dcLTS= longTermSoil.dc(D,Beff) # depth factor for cohesion
+scLTS= longTermSoil.sc(Beff,Leff) # factor that introduces the effect of foundation shape on the cohesion component.
+sgammaLTS= longTermSoil.sgamma(Beff,Leff) # factor that introduces the effect of foundation shape on the self weight component
+dgammaLTS= longTermSoil.dgamma() # factor that introduces the effect of foundation depth on the self weight component.
+iqLTS= longTermSoil.iq(Vload= V, HloadB= H, HloadL= 0.0) # factor that introduces the effect of load inclination on the overburden component
+sqLTS= longTermSoil.sq(Beff,Leff) # Factor that introduces the effect of foundation shape on the overburden component.
+dqLTS= longTermSoil.dq(D,Beff) # overburden factor for foundation depth.
+igammaLTS= longTermSoil.igamma(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff) # Factor that introduces the effect of load inclination on    the self weight component.
+icLTS= longTermSoil.ic(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff) # Factor that introduces the effect of load inclination on the cohesion component
+quGammaLTS= longTermSoil.quGamma(D,Beff,Leff,V,H,0.0,1.8) # gamma "component" of the ultimate bearing capacity pressure of 
+   the soil.
 quGammaTeorLTS= 0.5*1.2*Beff*NgammaLTS*sgammaLTS*dgammaLTS*igammaLTS
-quCohesionLTS= longTermSoil.quCohesion(D= D, Beff= Beff, Leff= Leff, Vload= V, HloadB= H, HloadL= 0.0, psi= 0.0, eta= 0.0)
+quCohesionLTS= longTermSoil.quCohesion(D= D, Beff= Beff, Leff= Leff, Vload= V, HloadB= H, HloadL= 0.0, psi= 0.0, eta= 0.0) # Cohesion "component" of the ultimate bearing capacity pressure of the soil.
 quCohesionTeorLTS= 1.7*NcLTS*scLTS*dcLTS*icLTS
-quQLTS= longTermSoil.quQ(q,D,Beff,Leff,V,H,0.0)
+quQLTS= longTermSoil.quQ(q,D,Beff,Leff,V,H,0.0) # Overburden component of the ultimate bearing capacity pressure of the soil.
 quQTeorLTS= q*NqLTS*sqLTS*dqLTS*iqLTS
-quLTS= longTermSoil.qu(q,D,Beff,Leff,V,H,0.0,1.8)
+quLTS= longTermSoil.qu(q,D,Beff,Leff,V,H,0.0,1.8) # Ultimate bearing capacity pressure of the soil.
 quTeorLTS= quGammaTeorLTS+quCohesionTeorLTS+quQTeorLTS
 
 err+= (abs(NgammaLTS-18)/18)**2
