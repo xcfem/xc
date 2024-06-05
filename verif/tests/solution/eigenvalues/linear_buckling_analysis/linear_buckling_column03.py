@@ -29,7 +29,7 @@ from materials import typical_materials
 # from postprocess import output_handler
 
 
-''' NO DA MUY BUENOS RESULTADOS
+''' RESULTS ARE A BIT POOR
 
    The problem is probably related with the fact that the elements are unable
    to reproduce the little delta effect (see example test_pdelta_01.xc).
@@ -41,7 +41,7 @@ h= 0.2 # Cross section depth in meters
 A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Moment of inertia in m4
 E=1e4/I # Elastic modulus en N/m2
-P= -100 # Carga vertical sobre la columna.
+P= -100 # Vertical load over the column.
 
 NumDiv= 6
 
