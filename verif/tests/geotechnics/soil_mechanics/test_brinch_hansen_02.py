@@ -62,8 +62,7 @@ sqLTS= longTermSoil.sq(Beff,Leff) # Factor that introduces the effect of foundat
 dqLTS= longTermSoil.dq(D,Beff) # overburden factor for foundation depth.
 igammaLTS= longTermSoil.igamma(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff) # Factor that introduces the effect of load inclination on    the self weight component.
 icLTS= longTermSoil.ic(Vload= V, HloadB= H, HloadL= 0.0, Beff= Beff, Leff= Leff) # Factor that introduces the effect of load inclination on the cohesion component
-quGammaLTS= longTermSoil.quGamma(D,Beff,Leff,V,H,0.0,1.8) # gamma "component" of the ultimate bearing capacity pressure of 
-   the soil.
+quGammaLTS= longTermSoil.quGamma(D,Beff,Leff,V,H,0.0,1.8) # gamma "component" of the ultimate bearing capacity pressure of the soil.
 quGammaTeorLTS= 0.5*1.2*Beff*NgammaLTS*sgammaLTS*dgammaLTS*igammaLTS
 quCohesionLTS= longTermSoil.quCohesion(D= D, Beff= Beff, Leff= Leff, Vload= V, HloadB= H, HloadL= 0.0, psi= 0.0, eta= 0.0) # Cohesion "component" of the ultimate bearing capacity pressure of the soil.
 quCohesionTeorLTS= 1.7*NcLTS*scLTS*dcLTS*icLTS
