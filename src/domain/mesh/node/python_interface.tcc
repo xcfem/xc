@@ -122,6 +122,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getEffectiveModalMass",&XC::Node::getEffectiveModalMass,"Returns the effective modal mass corresponding to the i-th mode.")
   .add_property("getEffectiveModalMasses",&XC::Node::getEffectiveModalMasses,"Returns the effective modal masses for all the computed modes.")
   .def("getEquivalentStaticLoad",&XC::Node::getEquivalentStaticLoad,"getEquivalentStaticLoad(mode,modeAccel): return the equivalent static load for the mode being passed as parameter and the acceleration corresponding to that mode.")
+  .def("clearEigenvectors", &XC::Node::clearEigenvectors,"Remove the stored eigenvectors.")
 
   .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
 

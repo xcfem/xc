@@ -304,6 +304,7 @@ class Node: public MeshComponent
     Pos3d getEigenPosition3d(const double &, int) const;
     Vector3d getEigenvectorDisp3dComponents(int ) const;
     Vector3d getEigenvectorRot3dComponents(int ) const;
+    void clearEigenvectors(void);
     
     //Angular frequencies.
     double getAngularFrequency(int) const;

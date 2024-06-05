@@ -1216,6 +1216,35 @@ class PredefinedSpace(object):
                 result= self.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
+    def getEigenvectorsMaxNormInf(self, mode):
+        ''' Return the maximum value of the infinity norm for the eigenvectors
+            computed for the given node at each mode.
+
+        :param mode: eingenmode.
+        '''
+        retval= None
+        domain= self.preprocessor.getDomain
+        if(mode<=domain.numModes):
+            retval= self.preprocessor.getDomain.getMesh.getEigenvectorsMaxNormInf(mode)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+'; eigenmode: '+str(mode)+' not computed.')
+        return retval
+    
+    def normalizeEigenvectors(self, mode):
+        ''' Normalize the eigenvectors corresponding to the given mode if not
+            already done.
+
+        :param mode: eingenmode.
+        '''
+        retval= self.getEigenvectorsMaxNormInf(mode)
+        if(abs(retval-1.0)>1e-4):
+            domain= self.preprocessor.getDomain
+            retval= domain.getMesh.normalizeEigenvectors(mode)
+            retval= domain.getMesh.getEigenvectorsMaxNormInf(mode)
+        return retval
+    
     def zeroEnergyModes(self, numModes= 1):
         ''' Obtains the zero energy modes of the finite element model.
 

@@ -173,6 +173,9 @@ class OutputStyle(object):
         elif(itemToDisp=='mode'):
             fConvUnits= 1.0
             unitDescription= '-'
+        elif(itemToDisp=='strongAxisBucklingPercent'):
+            fConvUnits= 1.0
+            unitDescription= 'Dot product (projection) of the buckling eigenvector over the strong axis.'
         else:
             fConvUnits= self.getForceUnitsScaleFactor()
             unitDescription= self.getForceUnitsDescription()

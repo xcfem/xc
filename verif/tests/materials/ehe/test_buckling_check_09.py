@@ -95,12 +95,29 @@ norms= preprocessor.getDomain.getMesh.normalizeEigenvectors()
 
 xcTotalSet= modelSpace.getTotalSet()
 
+# Check direction of eigenvectors for buckling mode 1.
+dotProduct= 0.0
+for e in xcTotalSet.elements:
+    elementNodes= e.nodes
+    eigenvector0= e.nodes[0].getEigenvector(1)
+    eigenvector1= e.nodes[1].getEigenvector(1)
+    dispEigenvector= 0.5*(eigenvector0+eigenvector1)
+    dispEigenvector= xc.Vector(list(dispEigenvector)[0:3])
+    elementWeakAxis= e.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
+    dotProduct+= elementWeakAxis.dot(dispEigenvector)**2
+dotProduct= math.sqrt(dotProduct)
+normal= (dotProduct<1e-8) # buckling mode normal to weak axis.
+
 avgLeff_1= 0.0 # Average effective length for the first mode.
 avgMechLambda_1= 0.0 # Average mechanical slenderness for the first mode.
 avgEf_1= 0.0 # Average fictitious eccentricity for the first mode.
+avgStrongAxisBucklingPercent_1= 0.0 # dot product (projection) of the buckling eigenvector over the strong axis.
+
 avgLeff_2= 0.0 # Average effective length for the second mode.
 avgMechLambda_2= 0.0 # Average mechanical slenderness for the second mode.
 avgEf_2= 0.0 # Average fictitious eccentricity for the second mode.
+avgStrongAxisBucklingPercent_2= 0.0 # dot product (projection) of the buckling eigenvector over the strong axis.
+
 results= dict()
 for e in xcTotalSet.elements:
     # Critical axial load.
@@ -110,15 +127,21 @@ for e in xcTotalSet.elements:
     Cy= 0.24
     sectionDepthZ= sectionWidth
     sectionDepthY= sectionDepth
-    Leffi, mechLambdai, Efi= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    Leffi, mechLambdai, Efi, strongAxisBucklingPercent= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    # First mode
     avgLeff_1+= Leffi[0] # Effective length for the first mode Y axis.
     avgMechLambda_1+= mechLambdai[0] # Mechanical slenderness for the first mode.
     avgEf_1+= Efi[0][0] # Fictitious eccentricity for the first mode Y axis.
+    avgStrongAxisBucklingPercent_1+= strongAxisBucklingPercent[0] # dot product (projection) of the buckling eigenvector over the strong axis.
+
+    # Second mode.
     avgLeff_2+= Leffi[1] # Effective length for the second mode Y axis.
     avgMechLambda_2+= mechLambdai[1] # Mechanical slenderness for the second mode.
     avgEf_2+= Efi[1][0] # Fictitious eccentricity for the second mode Y axis.
+    avgStrongAxisBucklingPercent_2+= strongAxisBucklingPercent[1] # dot product (projection) of the buckling eigenvector over the strong axis.
+    
     z= e.getPosCentroid(False).z
-    results[z]= (e.tag, Leffi, mechLambdai, Efi)
+    results[z]= (e.tag, Leffi, mechLambdai, Efi, strongAxisBucklingPercent)
 
 sz= len(xcTotalSet.elements)
 # First mode values.
@@ -128,6 +151,9 @@ avgMechLambda_1/=sz
 ratio2= abs(avgMechLambda_1-189.08339128331272)/189.08339128331272
 avgEf_1/=sz
 ratio3= abs(avgEf_1-1.0332958871738163)/1.0332958871738163
+avgStrongAxisBucklingPercent_1/= sz
+ratio7= abs(avgStrongAxisBucklingPercent_1)
+
 # Second mode values (torsional buckling).
 avgLeff_2/=sz
 ratio4= abs(avgLeff_2)
@@ -135,7 +161,35 @@ avgMechLambda_2/=sz
 ratio5= abs(avgMechLambda_2)
 avgEf_2/=sz
 ratio6= abs(avgEf_2-0.07)/.07
+avgStrongAxisBucklingPercent_2/= sz
+ratio8= abs(avgStrongAxisBucklingPercent_2-0.18932198192378955)/0.18932198192378955
 
+
+'''
+print('buckling mode normal to weak axis: ', normal)
+print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
+print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
+print('average effective length (first buckling mode): ', avgLeff_1, 'm, ratio1= ', ratio1)
+print('average mechanical slenderness (first buckling mode): ', avgMechLambda_1, ' ratio2= ', ratio2)
+
+print('average fictitious eccentricity (first buckling mode): ', avgEf_1, 'm, ratio3= ', ratio3)
+print('average strong axis buckling percentage (first buckling mode): ', avgStrongAxisBucklingPercent_1, ' ratio7= ', ratio7)
+
+print('\naverage effective length (second buckling mode): ', avgLeff_2, 'm, ratio4= ', ratio4)
+print('average mechanical slenderness (second buckling mode): ', avgMechLambda_2, ' ratio5= ', ratio5)
+
+print('average fictitious eccentricity (second buckling mode): ', avgEf_2, 'm, ratio6= ', ratio6)
+print('average strong axis buckling percentage (second buckling mode): ', avgStrongAxisBucklingPercent_2, ' ratio8= ', ratio8)
+'''
+
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if(normal and (ratio1<1e-3) and (ratio2<1e-3) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-3) and (ratio6<1e-4) and (ratio7<1e-5) and (ratio8<1e-4)):
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
+    
 '''
 import matplotlib.pyplot as plt
 Leff= dict()
@@ -175,27 +229,9 @@ for i, bucklingLoadFactor in enumerate(bucklingLoadFactors): # iterate through m
     plt.xlabel('efi')
     plt.plot(efi[mode], zi)
     plt.show()
-        
-
-print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
-print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
-print('average effective length (first buckling mode): ', avgLeff_1, 'm, ratio1= ', ratio1)
-print('average mechanical slenderness (first buckling mode): ', avgMechLambda_1, ' ratio2= ', ratio2)
-
-print('average fictitious eccentricity (first buckling mode): ', avgEf_1, 'm, ratio3= ', ratio3)
-print('average effective length (second buckling mode): ', avgLeff_2, 'm, ratio4= ', ratio4)
-print('average mechanical slenderness (second buckling mode): ', avgMechLambda_2, ' ratio5= ', ratio5)
-
-print('average fictitious eccentricity (second buckling mode): ', avgEf_2, 'm, ratio6= ', ratio6)
 '''
 
-import os
-from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
-if((ratio1<1e-3) and (ratio2<1e-3) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-3) and (ratio6<1e-4)):
-    print('test '+fname+': ok.')
-else:
-    lmsg.error(fname+' ERROR.')
+
 
 # # Graphic stuff.
 # from postprocess import output_handler

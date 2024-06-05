@@ -1355,3 +1355,12 @@ boost::python::list XC::Mesh::normalizeEigenvectors(void)
       }
     return retval;
   }
+
+//! @brief Remove the stored eigenvectors.
+void XC::Mesh::clearEigenvectors(void)
+  {
+    Node *theNode= nullptr;
+    NodeIter &theNodes = this->getNodes();
+    while((theNode = theNodes()) != nullptr)
+      {	theNode->clearEigenvectors(); }
+  }
