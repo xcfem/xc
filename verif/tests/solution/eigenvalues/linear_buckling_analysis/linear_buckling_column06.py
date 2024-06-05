@@ -36,7 +36,7 @@ h= 0.2 # Cross section depth in meters
 A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Moment of inertia in m4
 E=30E9 # Elastic modulus en N/m2
-P= -100 # Carga vertical sobre la columna.
+P= -100 # Vertical load over the column.
 
 NumDiv= 6
 

@@ -36,7 +36,7 @@ I= 1/12.0*b*h**3 # Moment of inertia in m4
 E=1e4/I # Elastic modulus en N/m2
 nu= 0.3
 G= E/(2*(1+nu))
-P= -100 # Carga vertical sobre la columna.
+P= -100 # Vertical load over the column.
 
 NumDiv= 6
 
