@@ -95,6 +95,19 @@ norms= preprocessor.getDomain.getMesh.normalizeEigenvectors()
 
 xcTotalSet= modelSpace.getTotalSet()
 
+# Check direction of eigenvectors for buckling mode 1.
+dotProduct= 0.0
+for e in xcTotalSet.elements:
+    elementNodes= e.nodes
+    eigenvector0= e.nodes[0].getEigenvector(1)
+    eigenvector1= e.nodes[1].getEigenvector(1)
+    dispEigenvector= 0.5*(eigenvector0+eigenvector1)
+    dispEigenvector= xc.Vector(list(dispEigenvector)[0:3])
+    elementWeakAxis= e.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
+    dotProduct+= elementWeakAxis.dot(dispEigenvector)**2
+dotProduct= math.sqrt(dotProduct)
+normal= (dotProduct<1e-8) # buckling mode normal to weak axis.
+
 avgLeff_1= 0.0 # Average effective length for the first mode.
 avgMechLambda_1= 0.0 # Average mechanical slenderness for the first mode.
 avgEf_1= 0.0 # Average fictitious eccentricity for the first mode.
@@ -137,6 +150,28 @@ avgEf_2/=sz
 ratio6= abs(avgEf_2-0.07)/.07
 
 '''
+print('buckling mode normal to weak axis: ', normal)
+print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
+print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
+print('average effective length (first buckling mode): ', avgLeff_1, 'm, ratio1= ', ratio1)
+print('average mechanical slenderness (first buckling mode): ', avgMechLambda_1, ' ratio2= ', ratio2)
+
+print('average fictitious eccentricity (first buckling mode): ', avgEf_1, 'm, ratio3= ', ratio3)
+print('average effective length (second buckling mode): ', avgLeff_2, 'm, ratio4= ', ratio4)
+print('average mechanical slenderness (second buckling mode): ', avgMechLambda_2, ' ratio5= ', ratio5)
+
+print('average fictitious eccentricity (second buckling mode): ', avgEf_2, 'm, ratio6= ', ratio6)
+'''
+
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if(normal and (ratio1<1e-3) and (ratio2<1e-3) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-3) and (ratio6<1e-4)):
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
+    
+'''
 import matplotlib.pyplot as plt
 Leff= dict()
 mechLambda= dict()
@@ -175,27 +210,9 @@ for i, bucklingLoadFactor in enumerate(bucklingLoadFactors): # iterate through m
     plt.xlabel('efi')
     plt.plot(efi[mode], zi)
     plt.show()
-        
-
-print('first euler buckling load factor: ', eulerBucklingLoadFactor1)
-print('second euler buckling load factor: ', eulerBucklingLoadFactor2)
-print('average effective length (first buckling mode): ', avgLeff_1, 'm, ratio1= ', ratio1)
-print('average mechanical slenderness (first buckling mode): ', avgMechLambda_1, ' ratio2= ', ratio2)
-
-print('average fictitious eccentricity (first buckling mode): ', avgEf_1, 'm, ratio3= ', ratio3)
-print('average effective length (second buckling mode): ', avgLeff_2, 'm, ratio4= ', ratio4)
-print('average mechanical slenderness (second buckling mode): ', avgMechLambda_2, ' ratio5= ', ratio5)
-
-print('average fictitious eccentricity (second buckling mode): ', avgEf_2, 'm, ratio6= ', ratio6)
 '''
 
-import os
-from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
-if((ratio1<1e-3) and (ratio2<1e-3) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-3) and (ratio6<1e-4)):
-    print('test '+fname+': ok.')
-else:
-    lmsg.error(fname+' ERROR.')
+
 
 # # Graphic stuff.
 # from postprocess import output_handler
