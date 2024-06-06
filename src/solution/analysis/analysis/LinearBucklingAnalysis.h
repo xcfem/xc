@@ -58,7 +58,7 @@ class LinearBucklingAnalysis: public StaticAnalysis
     SolutionStrategy *eigen_solu; //!< Solution strategy for the eigenvalue problem.
     LinearBucklingEigenAnalysis linearBucklingEigenAnalysis; //!< Eigenvalue analysis.
     int numModes;
-    int linear_buckling_analysis_step; //!Step in which the linear buckling analysis is started.
+    int linear_buckling_analysis_step; //!< Step in which the linear buckling analysis is started.
   protected:
     friend class SolutionProcedure;
     LinearBucklingAnalysis(SolutionStrategy *,SolutionStrategy *);
@@ -73,6 +73,12 @@ class LinearBucklingAnalysis: public StaticAnalysis
       { return numModes; }
     void setNumModes(const int &nm)
       { numModes= nm; }
+
+    int getLinearBucklingAnalysisStep(void) const
+      { return this->linear_buckling_analysis_step; }
+    void setLinearBucklingAnalysisStep(const int &i)
+      { linear_buckling_analysis_step= i; }
+
     inline const LinearBucklingEigenAnalysis &getEigenAnalysis(void) const
       { return linearBucklingEigenAnalysis; }
     inline LinearBucklingEigenAnalysis &getEigenAnalysis(void)
