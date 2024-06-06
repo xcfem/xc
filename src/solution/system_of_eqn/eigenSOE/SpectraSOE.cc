@@ -140,7 +140,10 @@ int XC::SpectraSOE::addA(const Matrix &a, const ID &id, double fact)
 
 //! @brief Zeroes the matrix A.
 void XC::SpectraSOE::zeroA(void)
-  { A.setZero(); }
+  {
+    A.setZero();
+    tripletListA.clear();
+  }
 
 //! @brief Assemblies into M the matrix being passed as parameter
 //! multimplied by the fact parameter.
@@ -202,6 +205,7 @@ int XC::SpectraSOE::addM(const Matrix &m, const ID &id, double fact)
 void XC::SpectraSOE::store_mass_matrix(void)
   {
     resize_mass_matrix_if_needed(this->size);
+    massMatrix.clear(); // make all the coefficients zero.
     for(int k=0; k<M.outerSize(); ++k)
       for(Eigen::SparseMatrix<double>::InnerIterator it(M,k); it; ++it)
         {
@@ -230,6 +234,7 @@ void XC::SpectraSOE::zeroM(void)
   { 
     EigenSOE::zeroM();
     M.setZero();
+    tripletListM.clear();
   }
 
 //! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
@@ -238,6 +243,49 @@ void XC::SpectraSOE::identityM(void)
     M.setIdentity();
   }
 
+// //! @brief Return the rows of the mass matrix in a Python list.
+// boost::python::list XC::SpectraSOE::getMPy(void) const
+//   {
+//     boost::python::list retval;
+//     const size_t nRows= M.rows();
+//     const size_t nCols= M.cols();
+//     for(size_t i=0; i < nRows; ++i )
+//       {
+// 	boost::python::list row= boost::python::list();
+//         for(size_t j=0; j<nCols; ++j )
+// 	  {
+//             const double &tmp= M.coeff(i,j);
+//             if(tmp)
+// 	      row.append(tmp);
+//             else
+// 	      row.append(0.0);
+// 	  }
+// 	retval.append(row);
+//       }
+//     return retval;
+//   }
+
+//! @brief Return the rows of the mass matrix in a Python list.
+boost::python::list XC::SpectraSOE::getAPy(void) const
+  {
+    boost::python::list retval;
+    const size_t nRows= A.rows();
+    const size_t nCols= A.cols();
+    for(size_t i=0; i < nRows; ++i )
+      {
+	boost::python::list row= boost::python::list();
+        for(size_t j=0; j<nCols; ++j )
+	  {
+            const double &tmp= A.coeff(i,j);
+            if(tmp)
+	      row.append(tmp);
+            else
+	      row.append(0.0);
+	  }
+	retval.append(row);
+      }
+    return retval;
+  }
 
 int XC::SpectraSOE::sendSelf(Communicator &comm)
   { return 0; }
