@@ -32,6 +32,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
 #include <solution/analysis/model/FE_EleIter.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::LinearBucklingIntegrator::LinearBucklingIntegrator(SolutionStrategy *owr)
@@ -50,8 +51,9 @@ int XC::LinearBucklingIntegrator::formKt(void)
     AnalysisModel *mdl= getAnalysisModelPtr();
     if(!mdl || !theSOE)
       {
-	std::cerr << "WARNING XC::LinearBucklingIntegrator::formKtplusDt -";
-	std::cerr << " no AnalysisModel or EigenSOE has been set\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no AnalysisModel or EigenSOE has been set."
+	          << Color::def << std::endl;
 	return -1;
       }
     
@@ -61,7 +63,7 @@ int XC::LinearBucklingIntegrator::formKt(void)
     // loop through the FE_Elements getting them to form the tangent
     // FE_EleIter &theEles1 = mdl->getFEs();
     FE_Element *elePtr= nullptr;
-    flagK= 0; //mass matrix (see formEleTangent)
+    flagK= 0; //stiffness matrix (see formEleTangent)
     theSOE->zeroM(); //zerous the M matrix.
 
     // while((elePtr = theEles1()) != 0) 
@@ -72,18 +74,20 @@ int XC::LinearBucklingIntegrator::formKt(void)
     FE_EleIter &theEles2= mdl->getFEs();    
     while((elePtr= theEles2()) != 0)
       {
-	if(theSOE->addM(elePtr->getTangent(this), elePtr->getID()) < 0) //guarda en M.
+	if(theSOE->addM(elePtr->getTangent(this), elePtr->getID()) < 0) //store in M.
           {
-	    std::cerr << "WARNING XC::LinearBucklingIntegrator::formKt;";
-	    std::cerr << " failed in addM for ID " << elePtr->getID();	    
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " failed in addM for ID " << elePtr->getID()
+		      << Color::def << std::endl;	    
 	    result = -2;
 	  }
       }
     return result;    
   }
 
-
+//! @brief Print stuff.
 void XC::LinearBucklingIntegrator::Print(std::ostream &s, int flag) const
   {
-    s << "\t XC::LinearBucklingIntegrator: \n";
+    s << "\t " << getClassName() << ": "
+      << std::endl;;
   }
