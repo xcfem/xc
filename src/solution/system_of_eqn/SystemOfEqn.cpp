@@ -63,6 +63,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include "solution/SolutionStrategy.h"
 #include "solution/graph/graph/Graph.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor. The integer \p classTag is provided to
 //! the constructor for the base class MovableObject.
@@ -101,24 +102,34 @@ int XC::SystemOfEqn::checkSize(Graph &theGraph) const
   {
     const int retval= theGraph.getNumVertex();
     if(retval==0)
-      std::cerr << "WARNING! " << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red <<  "WARNING! " << getClassName() << "::" << __FUNCTION__
 	        << "; model has zero DOFs, add nodes or reduce constraints."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
 //! @brief Stores the matrices and vectors in a temporal file.
 void XC::SystemOfEqn::save(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red <<  getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet."
-	      << std::endl;
+	      << Color::def << std::endl;
   }
 
 //! @brief Restore the matrices and vectors from a temporal file.
 void XC::SystemOfEqn::restore(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red <<  getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet."
-	      << std::endl;
+	      << Color::def << std::endl;
+  }
+
+//! @brief Return a Python list containing the rows of the system matrix.
+boost::python::list XC::SystemOfEqn::getAPy(void) const
+  {
+    std::cerr << Color::red <<  getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    boost::python::list retval;
+    return retval;
   }
