@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Trivial test of TDConcreteMC10 material constitutive model.  
+TDConcreteMC10: uniaxial time-dependent concrete material object with linear behavior in compression, nonlinear behavior in tension (REF: Tamai et al., 1988) and creep and shrinkage according to fib Model Code 2010.
 
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
