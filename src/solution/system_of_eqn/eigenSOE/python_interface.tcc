@@ -22,7 +22,8 @@
 //python_interface.tcc
 
 class_<XC::EigenSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("EigenSOE", "Base class for eigenproblem systems of equations.", no_init)
-.def("newSolver", &XC::EigenSOE::newSolver,return_internal_reference<>()," \n""newSolver(type)""Define the solver to be used.""Parameters: \n""type: type of solver. Available types: 'band_arpack_solver', 'band_arpackpp_solver', 'sym_band_eigen_solver', 'full_gen_eigen_solver', 'sym_arpack_solver'")
+  .def("newSolver", &XC::EigenSOE::newSolver,return_internal_reference<>()," \n""newSolver(type)""Define the solver to be used.""Parameters: \n""type: type of solver. Available types: 'band_arpack_solver', 'band_arpackpp_solver', 'sym_band_eigen_solver', 'full_gen_eigen_solver', 'sym_arpack_solver'")
+  .def("getM", &XC::EigenSOE::getMPy, "Return a python list containing the rows of the mass matrix.")
   ;
 
 class_<XC::ArpackSOEBase, bases<XC::EigenSOE>, boost::noncopyable >("ArpackSOEBase", no_init)

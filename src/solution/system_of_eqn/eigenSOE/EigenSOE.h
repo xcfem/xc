@@ -95,6 +95,7 @@ class EigenSOE: public SystemOfEqn
     virtual void zeroA(void) = 0;
     virtual void zeroM(void);
     virtual void identityM(void);
+    virtual boost::python::list getMPy(void) const;
 
     const int &getNumModes(void) const;
     bool standardProblem(void) const;
