@@ -1130,7 +1130,6 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         EIy= section.sectionProperties.EIy()
         iz= section.sectionProperties.iz # Radius of gyration about z axis.
         iy= section.sectionProperties.iy # Radius of gyration about y axis.
-        sectionStiffnessMatrix= xc.Matrix([[EIz, 0],[0, EIy]])
         # Lower slenderness limit.
         lowerSlendernessLimitZ= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ez1, e2= ez2, sectionDepth= sectionDepthZ)
         minimumEccentricityZ= max(.02, sectionDepthZ/20)
@@ -1164,6 +1163,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                     # Normalize
                     localEigenvectorDispYZ= localEigenvectorDispYZ.Normalized()
                     ## Compute the projected stiffness
+                    sectionStiffnessMatrix= xc.Matrix([[EIz, 0],[0, EIy]])
                     EI= localEigenvectorDispYZ.dot(sectionStiffnessMatrix*localEigenvectorDispYZ)
                     # Compute the effective length.
                     absNcr= abs(Ncr)
@@ -1175,20 +1175,34 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                         sphericTensor= (abs(EIz-EIy)<1e-6)
                         if(sphericTensor): # both axes are strong (or weak)
                             dotProduct= 0.0
-                        # else:
-                        #     print('mode= ', mode1)
-                        #     print('element: ', element.tag)
-                        #     print('position: ', element.getPosCentroid(True))
-                        #     print('node0EigenvectorNorm= ', node0EigenvectorNorm)
-                        #     print('node1EigenvectorNorm= ', node1EigenvectorNorm)
-                        #     print('sphericTensor= ', sphericTensor)
-                        #     print('elementStrongAxis= ', element.getVDirStrongAxisGlobalCoord(True))
-                        #     print('elementWeakAxis= ', elementWeakAxis)
-                        #     print('globalEigenvectorDisp= ', globalEigenvectorDisp)
-                        #     print('dotProduct= ', dotProduct)
-                        #     print('normDisp= ', normDisp)
-                        #     print('normRot= ', normRot)
-                        #     print('Leff= ', Leff)
+# **************************************************                    
+                    # if(Leff>40.0):
+                    #     print('mode= ', mode1)
+                    #     print('element: ', element.tag)
+                    #     print('position: ', element.getPosCentroid(True))
+                    #     print('node0EigenvectorNorm= ', node0EigenvectorNorm)
+                    #     print('node1EigenvectorNorm= ', node1EigenvectorNorm)
+                    #     print('sphericTensor= ', sphericTensor)
+                    #     elementStrongAxis= element.getVDirStrongAxisGlobalCoord(True)
+                    #     print('elementStrongAxis= ', elementStrongAxis)
+                    #     print('elementWeakAxis= ', elementWeakAxis)
+                    #     print('globalEigenvectorDisp= ', globalEigenvectorDisp)
+                    #     print('dotProduct= ', dotProduct)
+                    #     print('normDisp= ', normDisp)
+                    #     print('normRot= ', normRot)
+                    #     print('Leff= ', Leff)
+                    #     print('EI= ', EI/1e6)
+                    #     print('EIz= ', EIz/1e6)
+                    #     print('EIy= ', EIy/1e6)
+                    #     localStrongAxis= coordTransf.getVectorLocalCoordFromGlobal(elementStrongAxis)
+                    #     localStrongAxisYZ= xc.Vector([localStrongAxis[1], localStrongAxis[2]])
+                    #     localWeakAxis= coordTransf.getVectorLocalCoordFromGlobal(elementWeakAxis)
+                    #     localWeakAxisYZ= xc.Vector([localWeakAxis[1], localWeakAxis[2]])
+                    #     print('localEigenvectorDispYZ= ', localEigenvectorDispYZ)
+                    #     print('sectionStiffnessMatrix= ', sectionStiffnessMatrix)
+                    #     print('localStrongAxisYZ= ', localStrongAxisYZ)
+                    #     print('localWeakAxisYZ= ', localWeakAxisYZ)
+# **************************************************                    
                     # Compute the mechanical slenderness
                     i_mode= math.sqrt(EI/EA) # radius of giration.
                     mechLambda= Leff/i_mode # Compute mechanical slenderness
