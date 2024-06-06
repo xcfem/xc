@@ -51,10 +51,11 @@ int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)
     int result = 0;
     Domain *the_Domain = this->getDomainPtr();
 
-    // check for change in XC::Domain since last step. As a change can
+    // check for change in domain since last step. As a change can
     // occur in a commit() in a domaindecomp with load balancing
     // this must now be inside the loop
-    int stamp = the_Domain->hasDomainChanged();
+    const int stamp = the_Domain->hasDomainChanged();
+
     if(stamp != domainStamp)
       {
 	domainStamp = stamp;
