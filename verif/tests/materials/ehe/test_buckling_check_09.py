@@ -125,8 +125,8 @@ for e in xcTotalSet.elements:
     reinforcementFactorY= 1 # Rectangular section table 43.5.1 of EHE-08.
     Cz= 0.24 # table 43.1.2 of EHE-08.
     Cy= 0.24
-    sectionDepthZ= sectionWidth
-    sectionDepthY= sectionDepth
+    sectionDepthZ= sectionDepth
+    sectionDepthY= sectionWidth
     Leffi, mechLambdai, Efi, strongAxisBucklingPercent= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
     # First mode
     avgLeff_1+= Leffi[0] # Effective length for the first mode Y axis.
@@ -150,7 +150,7 @@ ratio1= abs(avgLeff_1-24.562653042759433)/24.562653042759433
 avgMechLambda_1/=sz
 ratio2= abs(avgMechLambda_1-189.08339128331272)/189.08339128331272
 avgEf_1/=sz
-ratio3= abs(avgEf_1-1.0332958871738163)/1.0332958871738163
+ratio3= abs(avgEf_1-1.1222770226784107)/1.1222770226784107
 avgStrongAxisBucklingPercent_1/= sz
 ratio7= abs(avgStrongAxisBucklingPercent_1)
 
@@ -160,10 +160,9 @@ ratio4= abs(avgLeff_2)
 avgMechLambda_2/=sz
 ratio5= abs(avgMechLambda_2)
 avgEf_2/=sz
-ratio6= abs(avgEf_2-0.07)/.07
+ratio6= abs(avgEf_2-0.0225)/.0225
 avgStrongAxisBucklingPercent_2/= sz
 ratio8= abs(avgStrongAxisBucklingPercent_2-0.18932198192378955)/0.18932198192378955
-
 
 '''
 print('buckling mode normal to weak axis: ', normal)
@@ -181,6 +180,7 @@ print('average mechanical slenderness (second buckling mode): ', avgMechLambda_2
 print('average fictitious eccentricity (second buckling mode): ', avgEf_2, 'm, ratio6= ', ratio6)
 print('average strong axis buckling percentage (second buckling mode): ', avgStrongAxisBucklingPercent_2, ' ratio8= ', ratio8)
 '''
+
 
 import os
 from misc_utils import log_messages as lmsg

@@ -121,8 +121,8 @@ for e in xcTotalSet.elements:
     reinforcementFactorY= 1 # Rectangular section table 43.5.1 of EHE-08.
     Cz= 0.24 # table 43.1.2 of EHE-08.
     Cy= 0.24
-    sectionDepthZ= sectionWidth
-    sectionDepthY= sectionDepth
+    sectionDepthZ= sectionDepth
+    sectionDepthY= sectionWidth
     Leffi, mechLambdai, Efi, strongAxisBucklingPercent= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
     
     avgLeff+= Leffi[0] # Effective length for the first mode Y axis.
@@ -139,7 +139,7 @@ ratio1= abs(avgLeff-24.562653042759433)/24.562653042759433
 avgMechLambda/=sz
 ratio2= abs(avgMechLambda-189.08339128331272)/189.08339128331272
 avgEf/=sz
-ratio3= abs(avgEf-1.0332958871738163)/1.0332958871738163
+ratio3= abs(avgEf-1.1222770226784107)/1.1222770226784107
 avgStrongAxisBucklingPercent/= sz
 ratio4= abs(avgStrongAxisBucklingPercent)
 
