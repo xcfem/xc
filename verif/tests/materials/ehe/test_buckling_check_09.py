@@ -44,7 +44,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Problem geometry
-H= 20.36 # Buckling length.
+H= 9.8 # Buckling length.
 p2= modelSpace.newKPoint(0,0,H)
 p1= modelSpace.newKPoint(0,0,0)
 l1= modelSpace.newLine(p1, p2)
@@ -146,23 +146,23 @@ for e in xcTotalSet.elements:
 sz= len(xcTotalSet.elements)
 # First mode values.
 avgLeff_1/=sz
-ratio1= abs(avgLeff_1-24.562653042759433)/24.562653042759433
+ratio1= abs(avgLeff_1-9.17089124728)/9.17089124728
 avgMechLambda_1/=sz
-ratio2= abs(avgMechLambda_1-189.08339128331272)/189.08339128331272
+ratio2= abs(avgMechLambda_1-67.3316648310)/67.3316648310
 avgEf_1/=sz
-ratio3= abs(avgEf_1-1.1222770226784107)/1.1222770226784107
+ratio3= abs(avgEf_1-0.18946099620006)/0.18946099620006
 avgStrongAxisBucklingPercent_1/= sz
 ratio7= abs(avgStrongAxisBucklingPercent_1)
 
 # Second mode values (torsional buckling).
 avgLeff_2/=sz
-ratio4= abs(avgLeff_2)
+ratio4= abs(avgLeff_2-2.427544774046208)/2.427544774046208
 avgMechLambda_2/=sz
-ratio5= abs(avgMechLambda_2)
+ratio5= abs(avgMechLambda_2-5.718469562023277)/5.718469562023277
 avgEf_2/=sz
 ratio6= abs(avgEf_2-0.0225)/.0225
 avgStrongAxisBucklingPercent_2/= sz
-ratio8= abs(avgStrongAxisBucklingPercent_2-0.18932198192378955)/0.18932198192378955
+ratio8= abs(avgStrongAxisBucklingPercent_2-0.0772716854822)/0.0772716854822
 
 '''
 print('buckling mode normal to weak axis: ', normal)
