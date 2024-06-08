@@ -1248,6 +1248,8 @@ python tests/materials/ehe/test_buckling_check_06.py
 python tests/materials/ehe/test_buckling_check_07.py
 python tests/materials/ehe/test_buckling_check_08.py
 python tests/materials/ehe/test_buckling_check_09.py
+python tests/materials/ehe/test_buckling_check_10.py
+python tests/materials/ehe/test_buckling_check_11.py
 
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
@@ -1627,6 +1629,8 @@ python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_02.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_03.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_04.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_05.py
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_06.py
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_07.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py
