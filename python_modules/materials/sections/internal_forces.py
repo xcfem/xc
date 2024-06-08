@@ -169,28 +169,38 @@ class CrossSectionInternalForces:
         :param ez: additional eccentricity around z axis.
         :param ey: additional eccentricity around y axis.
         '''
-        incMz= self.N*ez
-        if(self.Mz>0): # Always increase the moment.
-            if(incMz>0): # both positive
-                self.Mz+= incMz
-            else: # increment negative.
-                self.Mz-= incMz
-        else: # Always increase the moment.
-            if(incMz>0): # increment positive.
-                self.Mz-= incMz
-            else: # both negative.
-                self.Mz+= incMz            
-        incMy= self.N*ey
-        if(self.My>0): # Always increase the moment.
-            if(incMy>0): # both positive
-                self.My+= incMy
-            else: # increment negative.
-                self.My-= incMy
-        else: # Always increase the moment.
-            if(incMy>0): # increment positive.
-                self.My-= incMy
-            else: # both negative.
-                self.My+= incMy
+        if(abs(ez)>0): # additional eccentricity not zero.
+            e0z= self.Mz/self.N
+            incMz= self.N*ez
+            if(abs(e0z/ez)>1e-3): # original eccentricity not zero.
+                if(self.Mz>0): # Always increase the moment.
+                    if(incMz>0): # both positive
+                        self.Mz+= incMz
+                    else: # increment negative.
+                        self.Mz-= incMz
+                else: # Always increase the moment.
+                    if(incMz>0): # increment positive.
+                        self.Mz-= incMz
+                    else: # both negative.
+                        self.Mz+= incMz
+            else: # original eccentricity almost zero.
+                self.Mz= incMz
+        if(abs(ey)>0): # additional eccentricity not zero.
+            e0y= self.My/self.N
+            incMy= self.N*ey
+            if(abs(e0y/ey)>1e-3): # original eccentricity not zero.
+                if(self.My>0): # Always increase the moment.
+                    if(incMy>0): # both positive
+                        self.My+= incMy
+                    else: # increment negative.
+                        self.My-= incMy
+                else: # Always increase the moment.
+                    if(incMy>0): # increment positive.
+                        self.My-= incMy
+                    else: # both negative.
+                        self.My+= incMy
+            else: # original eccentricity almost zero.
+                self.My= incMy
 
     def __str__(self):
         return str(self.getDict())
