@@ -707,7 +707,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
             mechLambdai= extendedData['mechLambdai']
             Efi= extendedData['Efi']
             strongAxisBucklingPercent= extendedData['strongAxisBucklingPercent']
-            CFncr_i= extendedData['CFncr_i']
+            alpha_cr_i= extendedData['alpha_cr_i']
             for index in elementControlVars:
                 controlVar= elementControlVars[index]
                 loadCombinationName= controlVar.combName
@@ -717,9 +717,9 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                     Leff= Leffi[mode0]
                     mechLambda= mechLambdai[mode0]
                     (EfZ, EfY)= Efi[mode0]
-                    CFncr= CFncr_i[mode0]
+                    alpha_cr= alpha_cr_i[mode0]
                     dotProduct= strongAxisBucklingPercent[mode0]
-                    controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode, CFncr= CFncr, strongAxisBucklingPercent= dotProduct)
+                    controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode, alpha_cr= alpha_cr, strongAxisBucklingPercent= dotProduct)
                 else:
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name

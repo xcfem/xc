@@ -1098,7 +1098,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
     mechLambdai= list() # Mechanical slenderness for each mode.
     Efi= list() # Fictitious eccentricity for each mode.
     strongAxisBucklingPercent= list()
-    CFncr_i= list() # N/Ncr
+    alpha_cr_i= list() # Ncr/N factor by which the design loading would have to be increased to cause elastic instability (see Eurocode 4:2004 cl.5.2.1(2)).
     pi2= math.pi**2
     if(nDOF==6): # 2D element.
         e1, e2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
@@ -1124,7 +1124,10 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                 ef= max(minimumEccentricity, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff))
             Efi.append(ef)
             strongAxisBucklingPercent.append(0.0) # can't buckle around another axis.
-            CFncr_i.append(N/Ncr)
+            if(abs(N)>0):
+                alpha_cr_i.append(Ncr/N)
+            else:
+                alpha_cr_i.append(1e3)
     elif(nDOF==12):
         ez1, ez2, ey1, ey2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
         elementWeakAxis= element.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
@@ -1142,8 +1145,11 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
+            if(abs(N)>0):
+                alpha_cr_i.append(Ncr/N)
+            else:
+                alpha_cr_i.append(1e3)
             mode1= mode+1
-            CFncr_i.append(N/Ncr)
             node0Eigenvector= nodes[0].getEigenvector(mode1)
             node0EigenvectorNorm= node0Eigenvector.Norm()
             node1Eigenvector= nodes[1].getEigenvector(mode1)
@@ -1230,7 +1236,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                         print('Leff= ', Leff)
                         print('Ncr= ', Ncr/1e3, 'kN')
                         print('N= ', N/1e3, 'kN')
-                        print('CFncr= ', N/Ncr)
+                        print('alpha_cr= ', Ncr/N)
                         print('mechLambda= ', mechLambda)
                         print('lowerSlendernessLimit= ', lowerSlendernessLimit)
                         print('minimumEccentricity= ', minimumEccentricity, ' m')
@@ -1282,7 +1288,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         methodName= sys._getframe(0).f_code.co_name
         errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
         lmsg.error(errMsg)
-    retval= {'Leffi':Leffi, 'mechLambdai': mechLambdai, 'Efi': Efi, 'strongAxisBucklingPercent': strongAxisBucklingPercent, 'CFncr_i':CFncr_i}
+    retval= {'Leffi':Leffi, 'mechLambdai': mechLambdai, 'Efi': Efi, 'strongAxisBucklingPercent': strongAxisBucklingPercent, 'alpha_cr_i':alpha_cr_i}
     return retval
 
 class SectionBucklingProperties(object):
