@@ -1143,7 +1143,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
             mode1= mode+1
-            CFncr_i= N/Ncr
+            CFncr_i.append(N/Ncr)
             node0Eigenvector= nodes[0].getEigenvector(mode1)
             node0EigenvectorNorm= node0Eigenvector.Norm()
             node1Eigenvector= nodes[1].getEigenvector(mode1)
