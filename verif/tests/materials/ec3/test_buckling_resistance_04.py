@@ -78,9 +78,9 @@ avgLeff= 0.0
 avgNbRd= 0.0
 # Compute critical axial loads.
 for e in xcTotalSet.elements:
-    Leffi, mechLambdai, Xi, NbRdi= EC3_limit_state_checking.get_buckling_parameters(element= e, bucklingLoadFactors= bucklingLoadFactors, steelShape= steelShape)
-    avgLeff+= Leffi[0]
-    avgNbRd+= NbRdi[0]
+    bucklingParameters= EC3_limit_state_checking.get_buckling_parameters(element= e, bucklingLoadFactors= bucklingLoadFactors, steelShape= steelShape)
+    avgLeff+= bucklingParameters['Leffi'][0]
+    avgNbRd+= bucklingParameters['NbRdi'][0]
 
 sz= len(xcTotalSet.elements)
 avgLeff/=sz

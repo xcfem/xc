@@ -1098,6 +1098,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
     mechLambdai= list() # Mechanical slenderness for each mode.
     Efi= list() # Fictitious eccentricity for each mode.
     strongAxisBucklingPercent= list()
+    CFncr_i= list() # N/Ncr
     pi2= math.pi**2
     if(nDOF==6): # 2D element.
         e1, e2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
@@ -1123,6 +1124,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                 ef= max(minimumEccentricity, get_fictitious_eccentricity(sectionDepth= sectionDepthZ, firstOrderEccentricity= e2, reinforcementFactor= reinforcementFactorZ, epsilon_y= steel.eyd(), radiusOfGyration= iz, bucklingLength= Leff))
             Efi.append(ef)
             strongAxisBucklingPercent.append(0.0) # can't buckle around another axis.
+            CFncr_i.append(N/Ncr)
     elif(nDOF==12):
         ez1, ez2, ey1, ey2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
         elementWeakAxis= element.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
@@ -1140,7 +1142,8 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimitY= get_lower_slenderness_limit(C= Cy, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= ey1, e2= ey2, sectionDepth= sectionDepthY)
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
-            mode1= mode+1 
+            mode1= mode+1
+            CFncr_i= N/Ncr
             node0Eigenvector= nodes[0].getEigenvector(mode1)
             node0EigenvectorNorm= node0Eigenvector.Norm()
             node1Eigenvector= nodes[1].getEigenvector(mode1)
@@ -1279,7 +1282,8 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         methodName= sys._getframe(0).f_code.co_name
         errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
         lmsg.error(errMsg)
-    return Leffi, mechLambdai, Efi, strongAxisBucklingPercent
+    retval= {'Leffi':Leffi, 'mechLambdai': mechLambdai, 'Efi': Efi, 'strongAxisBucklingPercent': strongAxisBucklingPercent, 'CFncr_i':CFncr_i}
+    return retval
 
 class SectionBucklingProperties(object):
     ''' Properties that define the buckling behavior of the RC section
@@ -1416,11 +1420,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
                 Cz= sectionBucklingProperties.Cz
                 Cy= sectionBucklingProperties.Cy
                 rcSection= sectionBucklingProperties.sectionObject
-                Leffi, mechLambdai, Efi, strongAxisBucklingPercent= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold)
-                elementBucklingParameters['Leffi']= Leffi
-                elementBucklingParameters['mechLambdai']= mechLambdai
-                elementBucklingParameters['Efi']= Efi
-                elementBucklingParameters['strongAxisBucklingPercent']= strongAxisBucklingPercent
+                elementBucklingParameters= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name

@@ -142,7 +142,12 @@ for e in xcTotalSet.elements:
     reinforcementFactorY= 1 # Rectangular section table 43.5.1 of EHE-08.
     sectionDepthZ= sectionDepth
     sectionDepthY= sectionWidth
-    Leffi, mechLambdai, Efi, strongAxisBucklingPercent= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    # Compute buckling parameters.
+    bucklingParameters= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    Leffi= bucklingParameters['Leffi']
+    mechLambdai= bucklingParameters['mechLambdai']
+    Efi= bucklingParameters['Efi']
+    # strongAxisBucklingPercent= bucklingParameters['strongAxisBucklingPercent']
     ef_mode_1= xc.Vector([Efi[0][0], Efi[0][1]])
     tmp= min((ef_mode_1-ef_mode_1_ref).Norm(), (ef_mode_1+ef_mode_1_ref).Norm())
     err_ef_mode_1+= tmp**2

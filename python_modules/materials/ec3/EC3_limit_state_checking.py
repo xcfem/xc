@@ -109,10 +109,12 @@ def get_buckling_parameters(element, bucklingLoadFactors, steelShape):
     mechLambdai= list() # Mechanical slenderness for each mode.
     Xi= list() # Buckling reduction factors.
     NbRdi= list() # buckling resistance for each mode.
+    CFncr_i= list() # N/Ncr for each mode.
     if(nDOF==6): # 2D element.
         EI= section.sectionProperties.EI()
         iz= section.sectionProperties.i # Radius of gyration.
         for mode, Ncr in enumerate(Ncri):
+            CFncr_i= N/Ncr
             Leff= math.sqrt((EI*math.pi**2)/abs(Ncr)) # Effective length.
             if(Ncr>0):
                 Leff= -Leff
@@ -127,6 +129,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, steelShape):
         iz= section.sectionProperties.iz # Radius of gyration about z axis.
         iy= section.sectionProperties.iy # Radius of gyration about y axis.
         for mode, Ncr in enumerate(Ncri):
+            CFncr_i= N/Ncr
             Leffz= math.sqrt((EIz*math.pi**2)/abs(Ncr)) # Effective length.
             Leffy= math.sqrt((EIy*math.pi**2)/abs(Ncr)) # Effective length.
             if(Ncr>0):
@@ -145,7 +148,9 @@ def get_buckling_parameters(element, bucklingLoadFactors, steelShape):
         methodName= sys._getframe(0).f_code.co_name
         errMsg= className+'.'+methodName+"; not implemented for elements with. " + str(nDOF) + " degrees of freedom."
         lmsg.error(errMsg)
-    return Leffi, mechLambdai, Xi, NbRdi
+    retval= {'Leffi':Leffi, 'mechLambdai': mechLambdai, 'Xi': Xi, 'NbRdi':NbRdi, 'CFncr_i':CFncr_i}
+    
+    return retval
 
 class BeamSupportCoefficients(object):
 

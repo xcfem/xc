@@ -103,7 +103,11 @@ for e in xcTotalSet.elements:
     # Critical axial load.
     bucklingLoadFactors= [eulerBucklingLoadFactor1, eulerBucklingLoadFactor2]
     reinforcementFactor= 2 # Circular section table 43.5.1
-    Leffi, mechLambdai, Efi, strongAxisBucklingPercent= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= 0.2, reinforcementFactorZ= reinforcementFactor)
+    bucklingParameters= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= 0.2, reinforcementFactorZ= reinforcementFactor)
+    Leffi= bucklingParameters['Leffi']
+    mechLambdai= bucklingParameters['mechLambdai']
+    Efi= bucklingParameters['Efi']
+    strongAxisBucklingPercent= bucklingParameters['strongAxisBucklingPercent']
     avgLeff+= Leffi[0] # Effective length for the first mode.
     avgMechLambda+= mechLambdai[0] # Mechanical slenderness for the first mode.
     avgEf+= Efi[0] # Fictitious eccentricity for the first mode.
