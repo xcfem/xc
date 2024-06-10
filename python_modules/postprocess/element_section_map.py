@@ -120,30 +120,35 @@ class ElementSections(object):
         '''
         return next((sct for sct in self.lstRCSects if(sct.name==sectionName)), None)
 
-    def createSections(self, templateSections):
+    def createSections(self, templateSections, forceCreation= False):
         '''create the fiber sections that represent the material to be used 
         for the checking on each integration point and/or each direction. These
         sections are also added to the attribute 'lstRCSects' that contains 
         the list of sections.
+
+        :param forceCreation: if true, creeate the sections even if the internal
+                              section container is not empty.
         '''
-        if(len(self.lstRCSects)>0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; sections already created in: '"+str(self.name)+"'")
-        ngp= len(self.gaussPoints)
-        ndir= len(self.directions)
-        if(ngp>1 and ndir>1):
-            i= 0
-            for gp in self.gaussPoints:
-                for d in self.directions:
-                    self.creaSingleSection(templateSections[i], direction= d, gaussPnt= gp)
-                    i+= 1
-        elif(ngp==1 and ndir>0): # ngp==1
-            for i, d in enumerate(self.directions):
-                self.creaSingleSection(templateSections[i], direction= d, gaussPnt= None)
-        elif(ndir==1 and ngp>0): # ndir==1
-            for i, gp in enumerate(self.gaussPoints):
-                self.creaSingleSection(templateSections[i], direction= None, gaussPnt= gp)
+        alreadyCreated= (len(self.lstRCSects)>0)
+        if((not alreadyCreated) or forceCreation):
+            if(len(self.lstRCSects)>0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+"; sections already created in: '"+str(self.name)+"'")
+            ngp= len(self.gaussPoints)
+            ndir= len(self.directions)
+            if(ngp>1 and ndir>1):
+                i= 0
+                for gp in self.gaussPoints:
+                    for d in self.directions:
+                        self.creaSingleSection(templateSections[i], direction= d, gaussPnt= gp)
+                        i+= 1
+            elif(ngp==1 and ndir>0): # ngp==1
+                for i, d in enumerate(self.directions):
+                    self.creaSingleSection(templateSections[i], direction= d, gaussPnt= None)
+            elif(ndir==1 and ngp>0): # ndir==1
+                for i, gp in enumerate(self.gaussPoints):
+                    self.creaSingleSection(templateSections[i], direction= None, gaussPnt= gp)
             
     def creaSingleSection(self, templateSection, direction, gaussPnt):
         '''create a copy of the section argument for the gauss points and
@@ -222,11 +227,12 @@ class RawShellSections(ElementSections):
         self.templateSections= templateSections
         
     def createSections(self):
-        '''create the fiber sections that represent the reinforced concrete fiber 
-        section to be used for the checking on each integration point and/or each 
-        direction. These sections are also added to the attribute 'lstRCSects' 
-        that contains the list of sections.
+        '''create the fiber sections that represent the reinforced concrete
+        fiber section to be used for the checking on each integration point 
+        and/or each direction. These sections are also added to the attribute
+       'lstRCSects' that contains the list of sections.
         '''
+        print(self.alreadyDefinedSections)
         for templateSection in self.templateSections:
             name= templateSection.name
             if(not name in self.alreadyDefinedSections): # new section.
