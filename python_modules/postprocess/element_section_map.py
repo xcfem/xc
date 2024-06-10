@@ -232,7 +232,6 @@ class RawShellSections(ElementSections):
         and/or each direction. These sections are also added to the attribute
        'lstRCSects' that contains the list of sections.
         '''
-        print(self.alreadyDefinedSections)
         for templateSection in self.templateSections:
             name= templateSection.name
             if(not name in self.alreadyDefinedSections): # new section.
