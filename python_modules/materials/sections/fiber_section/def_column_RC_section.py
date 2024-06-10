@@ -183,6 +183,17 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         else:
             retval= False
         return retval
+
+    def getShearReinforcementArea(self):
+        '''Return the total shear reinforcement area by member unit length.'''
+        retval= self.shReinf.getAs()
+        return retval
+    
+    def getTotalReinforcementArea(self):
+        ''' Return the total reinforcement area by member unit length.'''
+        retval= self.getMainReinforcementArea()
+        retval+= self.getShearReinforcementArea()
+        return retval
     
     def isCircular(self):
         ''' Return true if it's a circular section.'''

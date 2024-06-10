@@ -1551,6 +1551,23 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
             retval= self.shReinfY
         return retval
 
+    def getShearReinforcementArea(self):
+        '''Return the total shear reinforcement area by member unit length.'''
+        retval= self.getShearReinfY().getAs()
+        retval+= self.getShearReinfZ().getAs()
+        return retval
+
+    def getTorsionReinforcementArea(self):
+        '''Return the total torsion reinforcement area by member unit length.'''
+        return self.torsionReinf.getAs()
+
+    def getTotalReinforcementArea(self):
+        ''' Return the total reinforcement area by member unit length.'''
+        retval= self.getMainReinforcementArea()
+        retval+= self.getShearReinforcementArea()
+        retval+= self.getTorsionReinforcementArea()
+        return retval
+        
     def getW1(self):
         ''' Section modulus of the gross section with respect to the most tensioned fiber.'''
         retval= self.getAc()*self.getDepth()/2.0
