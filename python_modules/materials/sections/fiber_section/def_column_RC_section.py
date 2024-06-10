@@ -52,12 +52,15 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
 
     def __eq__(self, other):
         ''' Redefines equal operator.'''
-        if(self is not other):
-            retval= super(RCRectangularColumnSection, self).__eq__(other)
-            if(retval):
-                retval= (self.mainBars == other.mainBars)
+        if(other is not None):
+            if(self is not other):
+                retval= super(RCRectangularColumnSection, self).__eq__(other)
+                if(retval):
+                    retval= (self.mainBars == other.mainBars)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
         
 
@@ -166,16 +169,19 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         
     def __eq__(self, other):
         ''' Redefines equal operator.'''
-        if(self is not other):
-            retval= super(RCCircularSection, self).__eq__(other)
-            if(retval):
-                retval= section_properties.CircularSection.__eq__(self, other)
-            if(retval):
-                retval= (self.mainReinf == other.mainReinf)
-            if(retval):
-                retval= (self.shReinf == other.shReinf)
+        if(other is not None):
+            if(self is not other):
+                retval= super(RCCircularSection, self).__eq__(other)
+                if(retval):
+                    retval= section_properties.CircularSection.__eq__(self, other)
+                if(retval):
+                    retval= (self.mainReinf == other.mainReinf)
+                if(retval):
+                    retval= (self.shReinf == other.shReinf)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def isCircular(self):

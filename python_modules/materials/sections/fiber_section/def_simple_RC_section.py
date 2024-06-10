@@ -68,20 +68,23 @@ class ShearReinforcement(object):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.familyName == other.familyName)
-            if(retval):
-                retval= (self.nShReinfBranches == other.nShReinfBranches)
-            if(retval):
-                retval= (self.areaShReinfBranch == other.areaShReinfBranch)
-            if(retval):
-                retval= (self.shReinfSpacing == other.shReinfSpacing)
-            if(retval):
-                retval= (self.angAlphaShReinf == other.angAlphaShReinf)
-            if(retval):
-                retval= (self.angThetaConcrStruts == other.angThetaConcrStruts)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.familyName == other.familyName)
+                if(retval):
+                    retval= (self.nShReinfBranches == other.nShReinfBranches)
+                if(retval):
+                    retval= (self.areaShReinfBranch == other.areaShReinfBranch)
+                if(retval):
+                    retval= (self.shReinfSpacing == other.shReinfSpacing)
+                if(retval):
+                    retval= (self.angAlphaShReinf == other.angAlphaShReinf)
+                if(retval):
+                    retval= (self.angThetaConcrStruts == other.angThetaConcrStruts)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getDict(self):
@@ -306,22 +309,25 @@ class ReinfRow(object):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.rebarsDiam == other.rebarsDiam)
-            if(retval):
-                retval= (self.areaRebar == other.areaRebar)
-            if(retval):
-                retval= (self.rebarsSpacing == other.rebarsSpacing)
-            if(retval):
-                retval= (self.nRebars == other.nRebars)
-            if(retval):
-                retval= (self.width == other.width)
-            if(retval):
-                retval= (self.cover == other.cover)
-            if(retval and hasattr(self,'latCover')):
-                retval= (self.latCover == other.latCover)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.rebarsDiam == other.rebarsDiam)
+                if(retval):
+                    retval= (self.areaRebar == other.areaRebar)
+                if(retval):
+                    retval= (self.rebarsSpacing == other.rebarsSpacing)
+                if(retval):
+                    retval= (self.nRebars == other.nRebars)
+                if(retval):
+                    retval= (self.width == other.width)
+                if(retval):
+                    retval= (self.cover == other.cover)
+                if(retval and hasattr(self,'latCover')):
+                    retval= (self.latCover == other.latCover)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
 
     def getDict(self):
@@ -500,15 +506,18 @@ class LongReinfLayers(object):
                     
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (len(self.rebarRows) == len(other.rebarRows))
-            if(retval):
-                for rowA, rowB in zip(self.rebarRows, other.rebarRows):
-                    retval= (rowA==rowB)
-                    if(not retval):
-                        break
+        if(other is not None):
+            if(self is not other):
+                retval= (len(self.rebarRows) == len(other.rebarRows))
+                if(retval):
+                    for rowA, rowB in zip(self.rebarRows, other.rebarRows):
+                        retval= (rowA==rowB)
+                        if(not retval):
+                            break
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def __getitem__(self, index):
@@ -789,20 +798,23 @@ class RCFiberSectionParameters(object):
     
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.concrType == other.concrType)
-            if(retval):
-                retval= (self.concrDiagName == other.concrDiagName)
-            if(retval):
-                retval= (self.reinfSteelType == other.reinfSteelType)
-            if(retval):
-                retval= (self.reinfDiagName == other.reinfDiagName)
-            if(retval):
-                retval= (self.nDivIJ == other.nDivIJ)
-            if(retval):
-                retval= (self.nDivJK == other.nDivJK)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.concrType == other.concrType)
+                if(retval):
+                    retval= (self.concrDiagName == other.concrDiagName)
+                if(retval):
+                    retval= (self.reinfSteelType == other.reinfSteelType)
+                if(retval):
+                    retval= (self.reinfDiagName == other.reinfDiagName)
+                if(retval):
+                    retval= (self.nDivIJ == other.nDivIJ)
+                if(retval):
+                    retval= (self.nDivJK == other.nDivJK)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
 
     def nDivCirc(self):
@@ -970,14 +982,17 @@ class RCSectionBase(object):
     
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.sectionDescr == other.sectionDescr)
-            if(retval):
-                retval= (self.fiberSectionParameters == other.fiberSectionParameters)
-            if(retval):
-                retval= (self.fiberSectionRepr == other.fiberSectionRepr)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.sectionDescr == other.sectionDescr)
+                if(retval):
+                    retval= (self.fiberSectionParameters == other.fiberSectionParameters)
+                if(retval):
+                    retval= (self.fiberSectionRepr == other.fiberSectionRepr)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getCopy(self):
@@ -1500,18 +1515,21 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
                 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(BasicRectangularRCSection, self).__eq__(other)
-            if(retval):
-                retval= section_properties.RectangularSection.__eq__(self, other)
-            if(retval):
-                retval= (self.shReinfZ== other.shReinfZ)
-            if(retval):
-                retval= (self.shReinfY== other.shReinfY)
-            if(retval):
-                retval= (self.torsionReinf== other.torsionReinf)
+        if(other is not None):
+            if(self is not other):
+                retval= super(BasicRectangularRCSection, self).__eq__(other)
+                if(retval):
+                    retval= section_properties.RectangularSection.__eq__(self, other)
+                if(retval):
+                    retval= (self.shReinfZ== other.shReinfZ)
+                if(retval):
+                    retval= (self.shReinfY== other.shReinfY)
+                if(retval):
+                    retval= (self.torsionReinf== other.torsionReinf)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
 
     def getCopy(self):
@@ -1748,20 +1766,23 @@ class RCRectangularSection(BasicRectangularRCSection):
             
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(RCRectangularSection, self).__eq__(other)
-            if(retval):
-                retval= (self.minCover == other.minCover)
-            if(retval):
-                retval= (self.shReinfZ == other.shReinfZ)
-            if(retval):
-                retval= (self.shReinfY == other.shReinfY)
-            if(retval):
-                retval= (self.positvRebarRows == other.positvRebarRows)
-            if(retval):
-                retval= (self.negatvRebarRows == other.negatvRebarRows)
+        if(other is not None):
+            if(self is not other):
+                retval= super(RCRectangularSection, self).__eq__(other)
+                if(retval):
+                    retval= (self.minCover == other.minCover)
+                if(retval):
+                    retval= (self.shReinfZ == other.shReinfZ)
+                if(retval):
+                    retval= (self.shReinfY == other.shReinfY)
+                if(retval):
+                    retval= (self.positvRebarRows == other.positvRebarRows)
+                if(retval):
+                    retval= (self.negatvRebarRows == other.negatvRebarRows)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
 
     def flipReinforcement(self):

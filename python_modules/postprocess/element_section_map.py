@@ -89,16 +89,19 @@ class ElementSections(object):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.name == other.name)
-            if(retval):
-                retval= (self.directions == other.directions)
-            if(retval):
-                retval= (self.gaussPoints == other.gaussPoints)
-            if(retval):
-                retval= (self.lstRCSects == other.lstRCSects)                
+        if(other is not None):
+            if(self is not other):
+                retval= (self.name == other.name)
+                if(retval):
+                    retval= (self.directions == other.directions)
+                if(retval):
+                    retval= (self.gaussPoints == other.gaussPoints)
+                if(retval):
+                    retval= (self.lstRCSects == other.lstRCSects)                
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def append_section(self, RCSect):
@@ -417,36 +420,39 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super().__eq__(other)
-            if(retval):
-                retval= (self.sectionDescr == other.sectionDescr)
-            if(retval):
-                retval= (self.concrType == other.concrType)
-            if(retval):
-                retval= (self.reinfSteelType == other.reinfSteelType)
-            if(retval):
-                retval= (self.depth == other.depth)
-            if(retval):
-                retval= (self.width == other.width)
-            if(retval):
-                retval= (self.dir1PositvRebarRows == other.dir1PositvRebarRows)
-            if(retval):
-                retval= (self.dir1NegatvRebarRows == other.dir1NegatvRebarRows)
-            if(retval):
-                retval= (self.dir2PositvRebarRows == other.dir2PositvRebarRows)
-            if(retval):
-                retval= (self.dir2NegatvRebarRows == other.dir2NegatvRebarRows)
-            if(retval):
-                retval= (self.dir1ShReinfY == other.dir1ShReinfY)
-            if(retval):
-                retval= (self.dir1ShReinfZ == other.dir1ShReinfZ)
-            if(retval):
-                retval= (self.dir2ShReinfY == other.dir2ShReinfY)
-            if(retval):
-                retval= (self.dir2ShReinfZ == other.dir2ShReinfZ)
+        if(other is not None):
+            if(self is not other):
+                retval= super().__eq__(other)
+                if(retval):
+                    retval= (self.sectionDescr == other.sectionDescr)
+                if(retval):
+                    retval= (self.concrType == other.concrType)
+                if(retval):
+                    retval= (self.reinfSteelType == other.reinfSteelType)
+                if(retval):
+                    retval= (self.depth == other.depth)
+                if(retval):
+                    retval= (self.width == other.width)
+                if(retval):
+                    retval= (self.dir1PositvRebarRows == other.dir1PositvRebarRows)
+                if(retval):
+                    retval= (self.dir1NegatvRebarRows == other.dir1NegatvRebarRows)
+                if(retval):
+                    retval= (self.dir2PositvRebarRows == other.dir2PositvRebarRows)
+                if(retval):
+                    retval= (self.dir2NegatvRebarRows == other.dir2NegatvRebarRows)
+                if(retval):
+                    retval= (self.dir1ShReinfY == other.dir1ShReinfY)
+                if(retval):
+                    retval= (self.dir1ShReinfZ == other.dir1ShReinfZ)
+                if(retval):
+                    retval= (self.dir2ShReinfY == other.dir2ShReinfY)
+                if(retval):
+                    retval= (self.dir2ShReinfZ == other.dir2ShReinfZ)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def createSections(self):
@@ -777,12 +783,15 @@ class ElementSectionMap(object):
     
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.elementSections == other.elementSections)
-            if(retval):
-                retval= (self.elementDimension == other.elementDimension)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.elementSections == other.elementSections)
+                if(retval):
+                    retval= (self.elementDimension == other.elementDimension)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getElementDimension(self, elemTag):

@@ -180,12 +180,15 @@ class EHEConcrete(concrete_base.Concrete):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super().__eq__(other= other)
-            if(retval):
-                retval= (self.typeAggregate == other.typeAggregate)
+        if(other is not None):
+            if(self is not other):
+                retval= super().__eq__(other= other)
+                if(retval):
+                    retval= (self.typeAggregate == other.typeAggregate)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getM(self, steel):

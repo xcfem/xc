@@ -43,14 +43,17 @@ class SteelShape(sp.SectionProperties):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(SteelShape, self).__eq__(other)
-            if(retval):
-                retval= (self.steelType == other.steelType)
-            if(retval):
-                retval= (self.shape == other.shape)
+        if(other is not None):
+            if(self is not other):
+                retval= super(SteelShape, self).__eq__(other)
+                if(retval):
+                    retval= (self.steelType == other.steelType)
+                if(retval):
+                    retval= (self.shape == other.shape)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getDict(self):
@@ -417,12 +420,15 @@ class IShape(SteelShape):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(IShape, self).__eq__(other)
-            if(retval):
-                retval= (self.tileSize == other.tileSize)
+        if(other is not None):
+            if(self is not other):
+                retval= super(IShape, self).__eq__(other)
+                if(retval):
+                    retval= (self.tileSize == other.tileSize)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
 
     def updateQuantities(self):
@@ -581,14 +587,17 @@ class QHShape(SteelShape):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(QHShape, self).__eq__(other)
-            if(retval):
-                retval= (self.bHalf == other.bHalf)
-            if(retval):
-                retval= (self.hHalf == other.hHalf)
+        if(other is not None):
+            if(self is not other):
+                retval= super(QHShape, self).__eq__(other)
+                if(retval):
+                    retval= (self.bHalf == other.bHalf)
+                if(retval):
+                    retval= (self.hHalf == other.hHalf)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getSymmetry(self):

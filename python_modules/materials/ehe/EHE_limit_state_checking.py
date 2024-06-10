@@ -1218,39 +1218,6 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                         ef= get_fictitious_eccentricity(sectionDepth= sectionDepth, firstOrderEccentricity= firstOrderEccentricity, reinforcementFactor= reinforcementFactor, epsilon_y= steel.eyd(), radiusOfGyration= i_mode, bucklingLength= Leff)
                         ef= max(minimumEccentricity, ef)
                     ef= ef*localEigenvectorDispYZ
-# **************************************************                    
-                    if(Leff>40.0):
-                        print('mode= ', mode1)
-                        print('element: ', element.tag)
-                        print('position: ', element.getPosCentroid(True))
-                        print('node0EigenvectorNorm= ', node0EigenvectorNorm)
-                        print('node1EigenvectorNorm= ', node1EigenvectorNorm)
-                        print('sphericTensor= ', sphericTensor)
-                        elementStrongAxis= element.getVDirStrongAxisGlobalCoord(True)
-                        print('elementStrongAxis= ', elementStrongAxis)
-                        print('elementWeakAxis= ', elementWeakAxis)
-                        print('globalEigenvectorDisp= ', globalEigenvectorDisp)
-                        print('dotProduct= ', dotProduct)
-                        print('normDisp= ', normDisp)
-                        print('normRot= ', normRot)
-                        print('Leff= ', Leff)
-                        print('Ncr= ', Ncr/1e3, 'kN')
-                        print('N= ', N/1e3, 'kN')
-                        print('alpha_cr= ', Ncr/N)
-                        print('mechLambda= ', mechLambda)
-                        print('lowerSlendernessLimit= ', lowerSlendernessLimit)
-                        print('minimumEccentricity= ', minimumEccentricity, ' m')
-                        print('ef= ', ef, ' m')
-                        print('EI= ', EI/1e6)
-                        localStrongAxis= coordTransf.getVectorLocalCoordFromGlobal(elementStrongAxis)
-                        localStrongAxisYZ= xc.Vector([localStrongAxis[1], localStrongAxis[2]])
-                        localWeakAxis= coordTransf.getVectorLocalCoordFromGlobal(elementWeakAxis)
-                        localWeakAxisYZ= xc.Vector([localWeakAxis[1], localWeakAxis[2]])
-                        print('localEigenvectorDispYZ= ', localEigenvectorDispYZ)
-                        print('sectionStiffnessMatrix= ', sectionStiffnessMatrix)
-                        print('localStrongAxisYZ= ', localStrongAxisYZ)
-                        print('localWeakAxisYZ= ', localWeakAxisYZ)
-# **************************************************
                     efz= ef[0]
                     if(abs(efz/sectionDepth)<1e-3):
                         efz= 0.0
@@ -1360,22 +1327,25 @@ class SectionBucklingProperties(object):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.reinforcementFactorZ == other.reinforcementFactorZ)
-            if(retval):
-                retval= (self.sectionDepthZ == other.sectionDepthZ)
-            if(retval):
-                retval= (self.Cz == other.Cz)
-            if(retval):
-                retval= (self.reinforcementFactorY == other.reinforcementFactorY)
-            if(retval):
-                retval= (self.sectionDepthY == other.sectionDepthY)
-            if(retval):
-                retval= (self.Cy == other.Cy)
-            if(retval):
-                retval= (self.sectionObject == other.sectionObject)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.reinforcementFactorZ == other.reinforcementFactorZ)
+                if(retval):
+                    retval= (self.sectionDepthZ == other.sectionDepthZ)
+                if(retval):
+                    retval= (self.Cz == other.Cz)
+                if(retval):
+                    retval= (self.reinforcementFactorY == other.reinforcementFactorY)
+                if(retval):
+                    retval= (self.sectionDepthY == other.sectionDepthY)
+                if(retval):
+                    retval= (self.Cy == other.Cy)
+                if(retval):
+                    retval= (self.sectionObject == other.sectionObject)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
 class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
