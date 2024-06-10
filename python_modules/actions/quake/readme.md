@@ -10,3 +10,4 @@ Earthquake loads.
 - [Earthquake-Resistant Design Concepts](https://www.fema.gov/sites/default/files/2020-07/fema_earthquake-resistant-design-concepts_p-749.pdf)
 - [Norma de Construcción Sismorresistente](https://es.wikipedia.org/wiki/Norma_de_Construcci%C3%B3n_Sismorresistente)
 - [How to Apply a Pulse Ground Motion](https://portwooddigital.com/2023/11/01/how-to-apply-a-pulse-ground-motion/)
+- [Effective Earthquake Forces](https://portwooddigital.com/2024/06/02/effective-earthquake-forces/)
