@@ -51,6 +51,7 @@ python tests/utility/misc_utils/testStairCaseFunction.py
 python tests/utility/misc_utils/test_linear_interpolation.py
 python tests/utility/misc_utils/test_remove_accents.py
 python tests/utility/misc_utils/test_mplgraphic.py
+python tests/utility/misc_utils/test_eq_operator.py
 python tests/utility/misc_utils/test_xc_json_01.py
 python tests/utility/misc_utils/test_xc_json_02.py
 python tests/utility/misc_utils/test_xc_json_03.py
