@@ -70,6 +70,7 @@ class CommandEntity;
 namespace XC {
 class Channel;
 
+class TaggedObject;
 class GraphNumberer;
 class Vertex;
 
@@ -227,6 +228,8 @@ class FEM_ObjectBroker: public ObjectBroker
 
     virtual int addUniaxialMaterial(int classTag, const std::string &, const std::string &, UniaxialMaterial *(*)(void));
   };
+
+TaggedObject *get_new_tagged_object(const std::string &className, const int &classTag);
 } // end of XC namespace
 
 #endif

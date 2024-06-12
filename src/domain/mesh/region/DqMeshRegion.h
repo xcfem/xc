@@ -32,6 +32,7 @@
 
 #include <deque>
 #include <iostream>
+#include <boost/python/dict.hpp>
 
 namespace XC {
 
@@ -73,6 +74,9 @@ class DqMeshRegion: protected std::deque<MeshRegion *>
 
     MeshRegion *getRegion(int tag);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     void Print(std::ostream &s) const;
   };
 

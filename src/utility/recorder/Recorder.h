@@ -99,6 +99,9 @@ class Recorder: public MovableObject, public CommandEntity
     virtual int setDomain(Domain &theDomain);
     virtual int sendSelf(Communicator &);  
     virtual int recvSelf(const Communicator &);
+
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

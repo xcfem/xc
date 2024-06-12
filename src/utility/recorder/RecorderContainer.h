@@ -63,7 +63,7 @@ class RecorderContainer
     RecorderContainer(DataOutputHandler::map_output_handlers *oh= nullptr);
     virtual ~RecorderContainer(void);
 
-    Recorder *newRecorder(const std::string &,DataOutputHandler *oh= nullptr);
+    Recorder *newRecorder(const std::string &, DataOutputHandler *oh= nullptr);
     virtual int addRecorder(Recorder &theRecorder);
     inline recorder_iterator recorder_begin(void)
       { return theRecorders.begin(); }
@@ -78,6 +78,9 @@ class RecorderContainer
     virtual int removeRecorders(void);
     void setLinks(Domain *dom);
     void SetOutputHandlers(DataOutputHandler::map_output_handlers *oh);
+
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

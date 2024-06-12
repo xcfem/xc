@@ -127,10 +127,29 @@ int XC::PseudoTimeTracker::recvSelf(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PseudoTimeTracker::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    retval["currentTime"]= currentTime; // current pseudo time
+    retval["committedTime"]= committedTime; // the committed pseudo time
+    retval["dT"]= dT; // difference between committed and current time
+    retval["eigenvalueTimeSet"]= eigenvalueTimeSet;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PseudoTimeTracker::setPyDict(const boost::python::dict &d)
+  {
+    currentTime= boost::python::extract<double>(d["currentTime"]);
+    committedTime= boost::python::extract<double>(d["committedTime"]);
+    dT= boost::python::extract<double>(d["dT"]);
+    eigenvalueTimeSet= boost::python::extract<double>(d["eigenvalueTimeSet"]);
+  }
+
 //! @brief Print stuff.
 void XC::PseudoTimeTracker::Print(std::ostream &s, int flag) const
   {
-
     s << "Pseudo time Information\n";
     s << "\tCurrent Time: " << currentTime;
     s << "\ntCommitted Time: " << committedTime;

@@ -102,6 +102,36 @@ XC::MeshRegion *XC::DqMeshRegion::getRegion(int tag)
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::DqMeshRegion::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    boost::python::list region_lst;
+    for(const_iterator i= begin();i!= end(); i++)
+      {
+	const MeshRegion *tmp= dynamic_cast<const MeshRegion *>(*i);
+	if(tmp)
+	  region_lst.append(tmp->getPyDict());
+      }
+    retval["values"]= region_lst;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::DqMeshRegion::setPyDict(const boost::python::dict &d)
+  {
+    const boost::python::list region_lst= boost::python::extract<boost::python::list>(d["values"]);
+    const size_t sz= len(region_lst);
+    for(size_t i= 0; i<sz; i++)
+      {
+	boost::python::dict tmp= boost::python::extract<boost::python::dict>(region_lst[i]);
+	const int tag= boost::python::extract<int>(tmp["tag"]);
+	MeshRegion newMR(tag);
+	newMR.setPyDict(tmp);
+	this->add(newMR);
+      }
+  }
+
 void XC::DqMeshRegion::Print(std::ostream &os) const
   {
     for(const_iterator i= begin();i!=end();i++)

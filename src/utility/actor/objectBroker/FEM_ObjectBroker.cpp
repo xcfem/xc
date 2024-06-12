@@ -62,6 +62,7 @@
 
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "all_includes.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 typedef struct uniaxialPackage
@@ -93,9 +94,10 @@ XC::Actor *XC::FEM_ObjectBroker::getNewActor(int classTag, Channel *theChannel)
 #endif
 
   default:
-    std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+    std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 	      << "; no ActorType type exists for class tag: "
-	      << classTag << std::endl;
+	      << classTag
+	      << Color::def << std::endl;
     return nullptr;
   }
   }
@@ -111,9 +113,10 @@ XC::PartitionedModelBuilder *XC::FEM_ObjectBroker::getPtrNewPartitionedModelBuil
              */
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		       << "; no PartitionedModelBuilder type exists for class tag "
-		       << classTag << std::endl;
+		       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -132,9 +135,10 @@ XC::GraphNumberer *XC::FEM_ObjectBroker::getPtrNewGraphNumberer(int classTag)
       case GraphNUMBERER_TAG_SimpleNumberer:
         return new SimpleNumberer();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; no GraphNumberer type exists for class tag "
-		  << classTag << std::endl;
+		  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -147,9 +151,10 @@ XC::Vertex *XC::FEM_ObjectBroker::getNewVertex(int classTag)
         case GRAPH_TAG_Vertex:
              return new Vertex();
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		       << "; no Vertex type exists for class tag "
-		       << classTag << std::endl;
+		       << classTag
+		       << Color::def << std::endl;
              return nullptr;
       }
   }
@@ -248,9 +253,10 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
         case ELE_TAG_TwentyNodeBrick_u_p_U:
 	  return new TwentyNodeBrick_u_p_U();
         default:
-	  std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+	  std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		    << "; no Element type exists for class tag "
-		    << classTag << std::endl;
+		    << classTag
+		    << Color::def << std::endl;
 	  return nullptr;
 
       }
@@ -264,9 +270,10 @@ XC::Node *XC::FEM_ObjectBroker::getNewNode(int classTag)
         case NOD_TAG_Node:
              return new Node(classTag);
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		       << "; no Node type exists for class tag "
-		       << classTag << std::endl;
+		       << classTag
+		       << Color::def << std::endl;
              return nullptr;
       }
   }
@@ -281,9 +288,10 @@ XC::MFreedom_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
       case CNSTRNT_TAG_MFreedom_Joint2D:
         return new MFreedom_Joint2D();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; no MFreedom_Constraint type exists for class tag "
-		  << classTag << std::endl;
+		  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -296,9 +304,10 @@ XC::MRMFreedom_Constraint *XC::FEM_ObjectBroker::getNewMRMP(int classTag)
       case CNSTRNT_TAG_MRMFreedom_Constraint:
         return new MRMFreedom_Constraint(0,classTag);
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; MRMFreedom_Constraint type exists for class tag "
-		  << classTag << std::endl;
+		  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -317,9 +326,10 @@ XC::SFreedom_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
         case CNSTRNT_TAG_ImposedMotionSP1:
              return new ImposedMotionSP1();
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		       << "; no SFreedom_Constraint type exists for class tag "
-		       << classTag << std::endl;
+		       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -333,9 +343,10 @@ XC::NodalLoad *XC::FEM_ObjectBroker::getNewNodalLoad(int classTag)
       case LOAD_TAG_NodalLoad:
         return new NodalLoad(0,classTag);
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; no NodalLoad type exists for class tag "
-		  << classTag << std::endl;
+		  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -373,9 +384,10 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
       case LOAD_TAG_SurfaceLoad:
 	return new SurfaceLoad();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; no NodalLoad type exists for class tag "
-		  << classTag << std::endl;
+		  << classTag
+		  << Color::def << std::endl;
         return 0;
       }
     return nullptr;
@@ -393,9 +405,10 @@ XC::CrdTransf2d *XC::FEM_ObjectBroker::getNewCrdTransf2d(int classTag)
       case CRDTR_TAG_CorotCrdTransf2d:
         return new CorotCrdTransf2d();
       default:
-         std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+         std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
                    << "; no XC::CrdTransf2d type exists for class tag "
-                   << classTag << std::endl;
+                   << classTag
+		   << Color::def << std::endl;
          return nullptr;
       }
   }
@@ -412,9 +425,10 @@ XC::CrdTransf3d *XC::FEM_ObjectBroker::getNewCrdTransf3d(int classTag)
       case CRDTR_TAG_CorotCrdTransf3d:
         return new CorotCrdTransf3d();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no XC::CrdTransf3d type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no XC::CrdTransf3d type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -438,9 +452,10 @@ XC::ShellCrdTransf3dBase *XC::FEM_ObjectBroker::getNewShellCrdTransf3d(int class
       case CRDTR_TAG_ShellLinearCrdTransf3d:
         return new ShellLinearCrdTransf3d();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no XC::CrdTransf3d type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no CrdTransf3d type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -502,9 +517,10 @@ XC::BeamIntegration *XC::FEM_ObjectBroker::getNewBeamIntegration(int classTag)
       // 	return new RegularizedHingeIntegration();
 
       default:
-	std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+	std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << " - no BeamIntegration type exists for class tag "
-		  << classTag << std::endl;
+		  << classTag
+		  << Color::def << std::endl;
 	return nullptr;
       }
   }
@@ -631,9 +647,10 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
 //               }
 //             matCommands = matCommands->next;
 //           }
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no XC::UniaxialMaterial type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no UniaxialMaterial type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -687,9 +704,10 @@ XC::SectionForceDeformation *XC::FEM_ObjectBroker::getNewSection(int classTag)
 	retval= new Bidirectional();
 	break;
       default:
-	   std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+	   std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		     << " - no section type exists for class tag "
-		     << classTag << std::endl;
+		     << classTag
+		     << Color::def << std::endl;
 	   retval= nullptr;
       }
     return retval;
@@ -735,9 +753,10 @@ XC::NDMaterial *XC::FEM_ObjectBroker::getNewNDMaterial(int classTag)
   //   case ND_TAG_FeapMaterial03:
   //     return new FeapMaterial03();
     default:
-      std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-       << "; no XC::NDMaterial type exists for class tag "
-                << classTag << std::endl;
+      std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		<< "; no XC::NDMaterial type exists for class tag "
+                << classTag
+		<< Color::def << std::endl;
       return nullptr;
     }
   }
@@ -765,9 +784,10 @@ XC::Fiber *XC::FEM_ObjectBroker::getNewFiber(int classTag)
       case FIBER_TAG_Uniaxial3d:
         return new UniaxialFiber3d();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no XC::Fiber type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no XC::Fiber type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -784,9 +804,10 @@ XC::FrictionModel *XC::FEM_ObjectBroker::getNewFrictionModel(int classTag)
       case FRN_TAG_VPDependentFriction:
         return new VPDependentFriction();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no FrictionModel type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no FrictionModel type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return 0;
       }
   }
@@ -803,9 +824,10 @@ XC::ConvergenceTest *XC::FEM_ObjectBroker::getNewConvergenceTest(CommandEntity *
       case CONVERGENCE_TEST_CTestEnergyIncr:
         return new CTestEnergyIncr(owr);
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no XC::ConvergenceTest type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no XC::ConvergenceTest type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -818,9 +840,10 @@ XC::NodeLocker *XC::FEM_ObjectBroker::getNewNodeLocker(int classTag)
       case PATTERN_TAG_NodeLocker:
         return new NodeLocker();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
          << "; no Load type exists for class tag "
-                  << classTag << std::endl;
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -837,9 +860,10 @@ XC::LoadPattern *XC::FEM_ObjectBroker::getNewLoadPattern(int classTag)
       case PATTERN_TAG_MultiSupportPattern:
         return new MultiSupportPattern();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no Load type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no Load type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -852,9 +876,10 @@ XC::LoadCombination *XC::FEM_ObjectBroker::getNewLoadCombination(int classTag)
       case LOAD_TAG_LoadCombination:
         return new LoadCombination();
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no load type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no load type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -869,9 +894,10 @@ XC::GroundMotion *XC::FEM_ObjectBroker::getNewGroundMotion(int classTag)
         case GROUND_MOTION_TAG_InterpolatedGroundMotion:
           return new InterpolatedGroundMotion();
         default:
-          std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+          std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
            << "; no ground motion type exists for class tag "
-                    << classTag << std::endl;
+                    << classTag
+		    << Color::def << std::endl;
           return nullptr;
 
       }
@@ -895,9 +921,10 @@ XC::TimeSeries *XC::FEM_ObjectBroker::getNewTimeSeries(int classTag)
         case TSERIES_TAG_TrigSeries:
           return new TrigSeries;
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no time series type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no time series type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -911,9 +938,10 @@ XC::TimeSeriesIntegrator *XC::FEM_ObjectBroker::getNewTimeSeriesIntegrator(int c
       case TIMESERIES_INTEGRATOR_TAG_Trapezoidal:
           return new TrapezoidalTimeSeriesIntegrator();
       default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no time series integrator exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no time series integrator exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -928,9 +956,10 @@ XC::Matrix *XC::FEM_ObjectBroker::getPtrNewMatrix(int classTag, int noRows, int 
         case MATRIX_TAG_Matrix:
              return new Matrix(noRows,noCols);
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no matrix type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no matrix type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -946,9 +975,10 @@ XC::Vector *XC::FEM_ObjectBroker::getPtrNewVector(int classTag, int size)
 
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no XC::Vector type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no XC::Vector type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -965,9 +995,10 @@ XC::ID *XC::FEM_ObjectBroker::getPtrNewID(int classTag, int size)
 
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no XC::ID type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no XC::ID type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -993,9 +1024,10 @@ XC::DataOutputHandler *XC::FEM_ObjectBroker::getPtrNewDataOutputHandler(int clas
              return new DataOutputDatabaseHandler();
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no XC::DataOutputHandler type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no XC::DataOutputHandler type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -1021,9 +1053,10 @@ XC::Recorder *XC::FEM_ObjectBroker::getPtrNewRecorder(int classTag)
           return 0;
   //           return new TclFeViewer();
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no Recorder type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no Recorder type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
      }
@@ -1055,9 +1088,10 @@ XC::ConstraintHandler *XC::FEM_ObjectBroker::getNewConstraintHandler(int classTa
              return new TransformationConstraintHandler(nullptr);
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no ConstraintHandler type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no ConstraintHandler type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
      }
@@ -1082,9 +1116,10 @@ XC::DOF_Numberer *XC::FEM_ObjectBroker::getNewNumberer(int classTag)
 #endif
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no XC::ConstraintHandler type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no XC::ConstraintHandler type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -1100,9 +1135,10 @@ XC::AnalysisModel *XC::FEM_ObjectBroker::getNewAnalysisModel(int classTag)
         return new AnalysisModel(nullptr);
 
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no AnalysisModel type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no AnalysisModel type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -1134,9 +1170,10 @@ XC::EquiSolnAlgo *XC::FEM_ObjectBroker::getNewEquiSolnAlgo(int classTag)
              return new Broyden(nullptr);
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no XC::EquiSolnAlgo type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no XC::EquiSolnAlgo type exists for class tag "
+                       << classTag
+		       << Color::def << std::endl;
              return nullptr;
 
          }
@@ -1159,9 +1196,10 @@ XC::LineSearch *XC::FEM_ObjectBroker::getLineSearch(int classTag)
     case  LINESEARCH_TAGS_SecantLineSearch:
       return new SecantLineSearch();
     default:
-      std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-       << "; no EquiSolnAlgo type exists for class tag "
-                << classTag << std::endl;
+      std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		<< "; no EquiSolnAlgo type exists for class tag "
+                << classTag
+		<< Color::def << std::endl;
       return 0;
     }
   }
@@ -1174,9 +1212,10 @@ XC::DomainDecompAlgo *XC::FEM_ObjectBroker::getNewDomainDecompAlgo(int classTag)
              return new DomainDecompAlgo(nullptr);
 
         default:
-             std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-              << "; no XC::DomainDecompAlgo type exists for class tag "
-                       << classTag << std::endl;
+             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		       << "; no XC::DomainDecompAlgo type exists for class tag "
+                       << classTag
+		       << std::endl;
              return nullptr;
 
          }
@@ -1201,9 +1240,10 @@ XC::StaticIntegrator *XC::FEM_ObjectBroker::getNewStaticIntegrator(int classTag)
 
 
         default:
-	  std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+	  std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 	            << "; no StaticIntegrator type exists for class tag "
-		    << classTag << std::endl;
+		    << classTag
+		    << Color::def << std::endl;
              return nullptr;
 
          }
@@ -1234,9 +1274,10 @@ XC::TransientIntegrator *XC::FEM_ObjectBroker::getNewTransientIntegrator(int cla
           return new CentralDifferenceAlternative(nullptr);      // must recvSelf
 
         default:
-          std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-           << "; no TransientIntegrator type exists for class tag "
-                    << classTag << std::endl;
+          std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		    << "; no TransientIntegrator type exists for class tag "
+                    << classTag
+		    << Color::def << std::endl;
           return 0;
       }
   }
@@ -1259,9 +1300,10 @@ XC::IncrementalIntegrator *XC::FEM_ObjectBroker::getNewIncrementalIntegrator(int
         return new DistributedDisplacementControl(nullptr); // must recvSelf
 #endif
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-         << "; no IncrementalIntegrator type exists for class tag "
-                  << classTag << std::endl;
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no IncrementalIntegrator type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -1298,9 +1340,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             lastLinearSolver = theSlowSolver;
             return theSOE;
         } else {
-            std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+            std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
              << "; no SlowLinearSOESolver type exists for class tag "
-                      << classTagSolver << std::endl;
+                      << classTagSolver 
+		      << Color::def << std::endl;
             return nullptr;
         }
 
@@ -1320,9 +1363,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
           }
         else
           {
-            std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-             << "; no FullGenLinSOESolver type exists for class tag "
-                      << classTagSolver << std::endl;
+            std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		      << "; no FullGenLinSOESolver type exists for class tag "
+                      << classTagSolver
+		      << Color::def << std::endl;
             return nullptr;
           }
       case LinSOE_TAGS_BandGenLinSOE:
@@ -1336,9 +1380,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no XC::BandGenLinSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no XC::BandGenLinSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 
@@ -1354,9 +1399,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no BandSPDLinSOESolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no BandSPDLinSOESolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 
@@ -1378,12 +1424,14 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
               lastLinearSolver = theProfileSPDSolver;
               return nullptr;
             }
-          else {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no ProfileSPD_LinSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+          else
+	    {
+	      std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no ProfileSPD_LinSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
-          }
+	    }
 
 
 #ifdef _PETSC
@@ -1398,9 +1446,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no PetscSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no PetscSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 #endif
@@ -1418,9 +1467,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no DistributedBandGenLinSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no DistributedBandGenLinSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 
@@ -1436,9 +1486,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no DistributedBandSPDLinSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no DistributedBandSPDLinSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 
@@ -1463,9 +1514,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no ProfileSPD_LinSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no ProfileSPD_LinSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 
@@ -1481,9 +1533,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no DistributedSparseGenLinSolverSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no DistributedSparseGenLinSolverSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 
@@ -1507,9 +1560,10 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no DistributedSparseGenLinSolverSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no DistributedSparseGenLinSolverSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 #else
@@ -1525,18 +1579,19 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
             }
           else
             {
-              std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-               << "; no SparseGenLinSolverSolver type exists for class tag "
-                        << classTagSolver << std::endl;
+              std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+			<< "; no SparseGenLinSolverSolver type exists for class tag "
+                        << classTagSolver
+			<< Color::def << std::endl;
               return nullptr;
             }
 
 #endif
 
         default:
-          std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-           << "; no XC::LinearSOE type exists for class tag "
-                    << classTagSOE << std::endl;
+          std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		    << "; no XC::LinearSOE type exists for class tag "
+                    << classTagSOE << Color::def << std::endl;
           return nullptr;
     }
   }
@@ -1569,9 +1624,10 @@ XC::EigenSOE *XC::FEM_ObjectBroker::getNewEigenSOE(int classTagSOE)
           theSOE = new BandArpackppSOE(nullptr);
           break;
         default:
-          std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-           << "; no EigenSOE type exists for class tag "
-                    << classTagSOE << std::endl;
+          std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		    << "; no EigenSOE type exists for class tag "
+                    << classTagSOE
+		    << Color::def << std::endl;
       }
     return theSOE;
   }
@@ -1596,17 +1652,19 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getPtrNewDDLinearSOE(int classTagSOE, int c
             return theSOE;
         }
         else {
-            std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
-             << "; no ProfileSPD XC::Domain XC::Solver type exists for class tag "
-                      << classTagDDSolver << std::endl;
+            std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		      << "; no ProfileSPD XC::Domain XC::Solver type exists for class tag "
+                      << classTagDDSolver
+		      << Color::def << std::endl;
             return nullptr;
         }
 
 
       default:
-        std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
                   << "; no LinearSOE type exists for class tag "
-                  << classTagSOE << std::endl;
+                  << classTagSOE
+		  << Color::def << std::endl;
         return nullptr;
 
     }
@@ -1628,9 +1686,10 @@ XC::DomainDecompositionAnalysis *XC::FEM_ObjectBroker::getNewDomainDecompAnalysi
 #endif
 
       default:
-        std::cerr << "ObjectBroker::getNewDomainDecompAnalysis "
+        std::cerr << Color::red << "FEM_ObjectBroker::getNewDomainDecompAnalysis "
                   << "; no DomainDecompAnalysis type exists for class tag " 
-                  << classTag << std::endl;
+                  << classTag
+		  << Color::def << std::endl;
         return nullptr;
 
     }
@@ -1639,7 +1698,9 @@ XC::DomainDecompositionAnalysis *XC::FEM_ObjectBroker::getNewDomainDecompAnalysi
 //! @brief Broke a Subdomain object from its class tag.
 XC::Subdomain *XC::FEM_ObjectBroker::getSubdomainPtr(int classTag)
   {
-    std::cerr << "FEM_ObjectBroker: NOT IMPLEMENTED YET";
+    std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
     return nullptr;
   }
 
@@ -1687,9 +1748,9 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const std::string &l
       {
         if(getLibraryFunction(lib, funcName, &libHandle, (void **)&funcPtr) != 0)
           {
-            std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+            std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 	              << "; could not find function: " << funcName
-	              << std::endl;
+	              << Color::def << std::endl;
             return -1;
           }
       }
@@ -1703,7 +1764,9 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const std::string &l
     UniaxialPackage *theMat= new UniaxialPackage;
     if(theMat == nullptr)
       {
-        std::cerr << "FEM_ObjectBroker::addUniaxialMaterial - could not add lib, out of memory\n";
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; could not add lib, out of memory."
+		  << Color::def << std::endl;
         return -1;
       }
     theMat->classTag= classTag;
@@ -1713,4 +1776,28 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const std::string &l
     theMat->next= theUniaxialPackage;
     theUniaxialPackage = theMat;
     return 0;
+  }
+
+const std::vector<std::string> node_class_names{"XC::Node"};
+const std::vector<std::string> crd_transf_class_names{"XC::LinearCrdTransf2d"};
+
+bool find_class_name(const std::vector<std::string> &class_names, const std::string &className)
+  {
+    return (std::find(class_names.begin(), class_names.end(), className)!= class_names.end());
+  }
+
+XC::TaggedObject *XC::get_new_tagged_object(const std::string &className, const int &classTag)
+  {
+    FEM_ObjectBroker broker;
+    TaggedObject *retval= nullptr;
+    if(find_class_name(node_class_names, className))
+      retval= broker.getNewNode(classTag);
+    else if(find_class_name(crd_transf_class_names,className))
+      retval= broker.getNewCrdTransf(classTag);
+    if(!retval)
+      std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+	        << "; no " << className
+	        << " type exists for class tag: " << classTag
+	        << Color::def << std::endl;
+    return retval;
   }

@@ -65,6 +65,8 @@ class PseudoTimeTracker: public MovableObject
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     void Print(std::ostream &s, int flag =0) const;
   };

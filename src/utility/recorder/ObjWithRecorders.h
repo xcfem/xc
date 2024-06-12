@@ -43,6 +43,9 @@ class ObjWithRecorders: public CommandEntity, public RecorderContainer
   {
   public:
     ObjWithRecorders(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

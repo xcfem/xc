@@ -157,6 +157,9 @@ class TaggedObjectStorage: public CommandEntity, public MovableObject
     int receive(int dbTag,const Communicator &,T *(FEM_ObjectBroker::*p)(int));
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     //! Invoke {\em Print(s,flag)} on all objects which have been added to
     //! the container. 
     virtual void Print(std::ostream &s, int flag =0) const=0;

@@ -57,7 +57,8 @@
 //
 // What: "@(#) Recorder.cpp, revA"
 
-#include <utility/recorder/Recorder.h>
+#include "utility/recorder/Recorder.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Recorder::Recorder(int classTag)
   :MovableObject(classTag), CommandEntity() {}
@@ -66,8 +67,9 @@ XC::Recorder::Recorder(int classTag)
 //! What the method does depends on the concrete subtype.
 int XC::Recorder::playback(int)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
     return 0;
   }
 
@@ -81,14 +83,34 @@ int XC::Recorder::setDomain(Domain &theDomain)
 
 int XC::Recorder::sendSelf(Communicator &comm)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not yet implemented.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not yet implemented."
+	      << Color::def << std::endl;
     return 0;
   }
 
 int XC::Recorder::recvSelf(const Communicator &comm)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not yet implemented.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented."
+	      << Color::def << std::endl;
     return 0;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Recorder::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Recorder::setPyDict(const boost::python::dict &d)
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet."
+	      << Color::def << std::endl;    
   }
