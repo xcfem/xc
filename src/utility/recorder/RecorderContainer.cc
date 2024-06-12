@@ -162,7 +162,7 @@ XC::Recorder *XC::RecorderContainer::newRecorder(const std::string &cod,DataOutp
 //! @brief Destructor.
 XC::RecorderContainer::~RecorderContainer(void)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       delete *i; 
     theRecorders.erase(theRecorders.begin(),theRecorders.end());
   }
@@ -181,7 +181,7 @@ int XC::RecorderContainer::addRecorder(Recorder &theRecorder)
 //! which have been added.
 int XC::RecorderContainer::record(int cTag, double timeStamp)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       (*i)->record(cTag, timeStamp);
     return 0;
   }
@@ -190,14 +190,14 @@ int XC::RecorderContainer::record(int cTag, double timeStamp)
 //! which have been added.
 void XC::RecorderContainer::restart(void)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       (*i)->restart();
   }
 
 //! @brief Remove the recorders.
 int XC::RecorderContainer::removeRecorders(void)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       delete *i; 
     theRecorders.erase(theRecorders.begin(),theRecorders.end());
     return 0;
@@ -208,7 +208,7 @@ void XC::RecorderContainer::setLinks(Domain *ptr_dom)
   {
     if(ptr_dom)
       {
-        for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+        for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
           {
             DomainRecorderBase *tmp= dynamic_cast<DomainRecorderBase *>(*i);
             if(tmp)

@@ -44,11 +44,11 @@ class Recorder;
 class RecorderContainer
   {
   public:
-    typedef std::list<Recorder *> lista_recorders;
-    typedef lista_recorders::iterator recorder_iterator;
-    typedef lista_recorders::const_iterator const_recorder_iterator; 
+    typedef std::list<Recorder *> recorders_list;
+    typedef recorders_list::iterator recorder_iterator;
+    typedef recorders_list::const_iterator const_recorder_iterator; 
   private:
-    lista_recorders theRecorders; //!< recorders list.
+    recorders_list theRecorders; //!< recorders list.
     DataOutputHandler::map_output_handlers *output_handlers; //!< output handlers.
 
   protected:
