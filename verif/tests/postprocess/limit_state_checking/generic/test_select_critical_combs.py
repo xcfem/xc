@@ -32,9 +32,9 @@ lCombShearULS=limitState.getCriticalLCombs(threshold=0.9)
 ratio1= abs(lCombNormalULS['sect1_critical_comb']['ELU408']-0.2727272727)/0.2727272727
 ratio2= abs(lCombShearULS['sect2_critical_comb']['ELU810']-.0303030303)/.03030303
 compCritNorm=['ELU408', 'ELU810', 'ELU815']
-ratio3= (lCombNormalULS['critical_combNms']==compCritNorm)
+ratio3= (lCombNormalULS['critical_comb_names']==compCritNorm)
 compCritShear=['ELU406', 'ELU317', 'ELU408', 'ELU390', 'ELU810']
-ratio4= (lCombShearULS['critical_combNms']==compCritShear)
+ratio4= (lCombShearULS['critical_comb_names']==compCritShear)
 
 '''
 print(lCombNormalULS['sect1_critical_comb']['ELU408'])
