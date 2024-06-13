@@ -720,7 +720,15 @@ class EnvConfig(output_styles.OutputStyle):
         self.colors=setBasicColors
         self.grWidth=grWidth
 
+    def setWorkingDirectory(self, pth):
+        ''' Assign the working directory.
+
+        :param pth: path to use as working directory.
+        '''
+        self.projectDirTree.workingDirectory= pth
+        
     def getWorkingDirectory(self):
+        ''' Return the current working directory.'''
         return self.projectDirTree.workingDirectory
     
     def makedirs(self, pth):
