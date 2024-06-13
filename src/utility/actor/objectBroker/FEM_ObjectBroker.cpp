@@ -63,7 +63,12 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "all_includes.h"
 #include "utility/utils/misc_utils/colormod.h"
-
+#include "material/nD/nd_material_class_names.h"
+#include "material/uniaxial/uniaxial_material_class_names.h"
+#include "material/section/section_material_class_names.h"
+#include "domain/mesh/node/node_class_names.h"
+#include "domain/mesh/element/utils/coordTransformation/coordinate_transformation_class_names.h"
+#include "domain/mesh/element/element_class_names.h"
 
 typedef struct uniaxialPackage
   {
@@ -1778,22 +1783,29 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const std::string &l
     return 0;
   }
 
-const std::vector<std::string> node_class_names{"XC::Node"};
-const std::vector<std::string> crd_transf_class_names{"XC::LinearCrdTransf2d"};
 
-bool find_class_name(const std::vector<std::string> &class_names, const std::string &className)
-  {
-    return (std::find(class_names.begin(), class_names.end(), className)!= class_names.end());
-  }
 
+const std::vector<std::string> crd_transf_class_identifiers{"XC::LinearCrdTransf2d"};
+
+//! @brief Creates a new object whose class is determined by the given class name and class tag.
+//! @param className: the class name is used to determine the adequate broker method.
+//! @param classTag: the class tag defines the specific type of the object (see classTags.h).
 XC::TaggedObject *XC::get_new_tagged_object(const std::string &className, const int &classTag)
   {
-    FEM_ObjectBroker broker;
+    static FEM_ObjectBroker broker;
     TaggedObject *retval= nullptr;
-    if(find_class_name(node_class_names, className))
+    if(XC::is_nd_material(className))
+      retval= broker.getNewNDMaterial(classTag);
+    else if(XC::is_uniaxial_material(className))
+      retval= broker.getNewUniaxialMaterial(classTag);
+    else if(XC::is_section_material(className))
+      retval= broker.getNewSection(classTag);
+    else if(XC::is_node(className))
       retval= broker.getNewNode(classTag);
-    else if(find_class_name(crd_transf_class_names,className))
+    else if(XC::is_coordinate_transformation(className))
       retval= broker.getNewCrdTransf(classTag);
+    else if(XC::is_element(className))
+      retval= broker.getNewElement(classTag);
     if(!retval)
       std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 	        << "; no " << className

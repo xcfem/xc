@@ -167,7 +167,7 @@ class FEM_ObjectBroker: public ObjectBroker
     virtual MFreedom_Constraint *getNewMP(int classTag);
     virtual MRMFreedom_Constraint *getNewMRMP(int classTag);
     virtual SFreedom_Constraint *getNewSP(int classTag);
-    virtual NodalLoad     *getNewNodalLoad(int classTag);
+    virtual NodalLoad *getNewNodalLoad(int classTag);
     virtual ElementalLoad *getNewElementalLoad(int classTag);
 
     virtual CrdTransf2d *getNewCrdTransf2d(int classTag);
@@ -177,7 +177,7 @@ class FEM_ObjectBroker: public ObjectBroker
 
     virtual BeamIntegration *getNewBeamIntegration(int classTag);
 
-    virtual UniaxialMaterial  *getNewUniaxialMaterial(int classTag);
+    virtual UniaxialMaterial *getNewUniaxialMaterial(int classTag);
     virtual SectionForceDeformation *getNewSection(int classTag);
     virtual NDMaterial *getNewNDMaterial(int classTag);
     virtual Fiber *getNewFiber(int classTag);
@@ -189,13 +189,13 @@ class FEM_ObjectBroker: public ObjectBroker
     virtual LoadPattern *getNewLoadPattern(int classTag);
     virtual LoadCombination *getNewLoadCombination(int classTag);
     virtual GroundMotion *getNewGroundMotion(int classTag);
-    virtual TimeSeries  *getNewTimeSeries(int classTag);
-    virtual TimeSeriesIntegrator  *getNewTimeSeriesIntegrator(int classTag);
+    virtual TimeSeries *getNewTimeSeries(int classTag);
+    virtual TimeSeriesIntegrator *getNewTimeSeriesIntegrator(int classTag);
 
     // matrix vector and id objects
-    virtual Matrix	  *getPtrNewMatrix(int classTag, int noRows, int noCols);
-    virtual Vector	  *getPtrNewVector(int classTag, int size);
-    virtual ID	          *getPtrNewID(int classTag, int size);
+    virtual Matrix *getPtrNewMatrix(int classTag, int noRows, int noCols);
+    virtual Vector *getPtrNewVector(int classTag, int size);
+    virtual ID *getPtrNewID(int classTag, int size);
 
     // methods for output objects
     virtual DataOutputHandler *getPtrNewDataOutputHandler(int classTag);
