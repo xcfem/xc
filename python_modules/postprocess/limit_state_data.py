@@ -13,7 +13,6 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 import pickle
 import os
 import sys
-import re
 import json
 from solution import predefined_solutions
 from postprocess.reports import export_internal_forces as eif
@@ -495,32 +494,30 @@ class LimitStateData(object):
         else:
             lmsg.error("file: '"+verifFile+"' does not exist")
             return
-        nElems=len(inputDct['elementData'])
-        sect1CritCmb=dict()
-        sect2CritCmb=dict()
+        elementData= inputDct['elementData']
+        nElems= len(elementData)
+        sect1CritCmb= dict()
+        sect2CritCmb= dict()
         allCritCmb=list()
         # Section 1
-        for e in inputDct['elementData'].keys():
-            #section 1
-            s=inputDct['elementData'][e][self.label+"Sect1"]
-            posCF=re.search('CF= \d+\.*\d+',s)
-            CF=eval(s[posCF.start()+4:posCF.end()])
+        for e in elementData.keys():
+            s= elementData[e][self.label+"Sect1"] # section 1
+            controlVar= eval('cv.'+s)
+            CF= controlVar.CF
             if CF>threshold:
-                posCombNm=re.search('combName= \"\w+\"',s)
-                combNm=str(s[posCombNm.start()+11:posCombNm.end()-1])
+                combNm= controlVar.combName
                 if combNm in sect1CritCmb.keys():
                     sect1CritCmb[combNm]+=1
                 else:
                     sect1CritCmb[combNm]=1
                     allCritCmb.append(combNm)
         # Section 2
-        for e in inputDct['elementData'].keys():
-            s=inputDct['elementData'][e][self.label+"Sect2"]
-            posCF=re.search('CF= \d+\.*\d+',s)
-            CF=eval(s[posCF.start()+4:posCF.end()])
+        for e in elementData.keys():
+            s=elementData[e][self.label+"Sect2"]
+            controlVar= eval('cv.'+s)
+            CF= controlVar.CF
             if CF>threshold:
-                posCombNm=re.search('combName= \"\w+\"',s)
-                combNm=str(s[posCombNm.start()+11:posCombNm.end()-1])
+                combNm= controlVar.combName
                 if combNm in sect2CritCmb.keys():
                     sect2CritCmb[combNm]+=1
                 else:
