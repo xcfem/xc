@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Controls that the relative total norm displacement increment
-    doesn't crash when when the relative increment is almost zero.'''
+    doesn't crash when the relative increment is almost zero.'''
 
 from __future__ import print_function
 from __future__ import division

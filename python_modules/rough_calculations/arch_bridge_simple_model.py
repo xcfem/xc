@@ -9,6 +9,14 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
+''' Arch bridge rough calculations.
+
+  based on Maria Garlock's papers:
+  file: L4_-_Arches_Jan_11_-_final.pdf 
+  file: L8-_Tied_Arches_Jan_10.pdf
+'''
+
+
 from rough_calculations import arch_bridge_rough_base as base
 
 class ArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
@@ -39,6 +47,7 @@ class ArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
         due to a two concentrated loads in quarterpoints
         '''
         return Qconc*self.L/4.0/self.d
+    
     #Compressive stress
     def getQconcCompStress(self,Qconc,A):
         '''Approximation of the compressive stress in a section of the 
@@ -47,7 +56,8 @@ class ArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
         (H, that, in turn, i equal to the horizontal reaction at the abutment)
         as an approximation for the compressive force in the arch at any location
         '''  
-        return -self.getQconcHabtm(Qconc)/A  
+        return -self.getQconcHabtm(Qconc)/A
+    
     #Bending moments in a parabolic three hinged arch produced by 
     #concentrated live forces placed at quarterspans
     def getMmaxQconc(self,Qconc):
