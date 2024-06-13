@@ -9,8 +9,17 @@ __email__= "l.pereztato@gmail.com"
 
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
+import os
+from misc_utils import log_messages as lmsg
 
-cfg=default_config.EnvConfig(resultsPath='tests/',verifPath='aux/')
+pth= os.path.dirname(__file__)
+# print("pth= ", pth)
+if(not pth):
+  pth= "."
+auxModulePath= pth+"/../../../../"
+cfg= default_config.EnvConfig(resultsPath= 'tests/',verifPath= 'aux/')
+cfg.setWorkingDirectory(auxModulePath)
+
 
 limitState=lsd.normalStressesResistance # any limit state that has been previously checked
 limitState.envConfig=cfg
@@ -26,10 +35,8 @@ compCritNorm=['ELU408', 'ELU810', 'ELU815']
 ratio3=(lCombNormalULS['critical_combNms']==compCritNorm)
 compCritShear=['ELU406', 'ELU317', 'ELU408', 'ELU390', 'ELU810']
 ratio4=(lCombShearULS['critical_combNms']==compCritShear)
-import os
-from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
 
+fname= os.path.basename(__file__)
 if (ratio1<1e-6) and (ratio2<1e-6) and ratio3 and ratio4:
     print('test '+fname+': ok.')
 else:
