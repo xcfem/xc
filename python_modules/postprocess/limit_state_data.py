@@ -489,7 +489,7 @@ class LimitStateData(object):
         verifFile=self.getOutputDataBaseFileName()+'.json'
         # read json file
         if os.path.isfile(verifFile):
-            f=open(verifFile,'r') # Open JSON file
+            f= open(verifFile,'r') # Open JSON file
             inputDct= json.load(f)
             f.close()
         else:
@@ -527,14 +527,14 @@ class LimitStateData(object):
                     sect2CritCmb[combNm]=1
                     if combNm not in sect1CritCmb.keys():
                         allCritCmb.append(combNm)
-        # express in percentage
-        for elu in sect1CritCmb.keys(): sect1CritCmb[elu]=round(sect1CritCmb[elu]/nElems*100,2)
-        for elu in sect2CritCmb.keys(): sect2CritCmb[elu]=round(sect2CritCmb[elu]/nElems*100,2)
+        # expressed per unit
+        for elu in sect1CritCmb.keys(): sect1CritCmb[elu]= sect1CritCmb[elu]/nElems # per unit
+        for elu in sect2CritCmb.keys(): sect2CritCmb[elu]= sect2CritCmb[elu]/nElems # per unit
         retval={'limitStateName':self.label,
                 'threshold':threshold,
                 'nElems':nElems,
-                'sect1_critical_comb':sect1CritCmb,
-                'sect2_critical_comb':sect2CritCmb,
+                'sect1_critical_comb':sect1CritCmb, # per unit
+                'sect2_critical_comb':sect2CritCmb, # per unit
                 'critical_combNms':allCritCmb,
                 }
         return retval

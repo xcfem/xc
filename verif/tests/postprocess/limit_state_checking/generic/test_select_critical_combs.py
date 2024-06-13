@@ -29,12 +29,19 @@ limitState=lsd.shearResistance
 limitState.envConfig=cfg
 lCombShearULS=limitState.getCriticalLCombs(threshold=0.9)
 
-ratio1=abs(lCombNormalULS['sect1_critical_comb']['ELU408']-27.27)
-ratio2=abs(lCombShearULS['sect2_critical_comb']['ELU810']-3.03)
+ratio1= abs(lCombNormalULS['sect1_critical_comb']['ELU408']-0.2727272727)/0.2727272727
+ratio2= abs(lCombShearULS['sect2_critical_comb']['ELU810']-.0303030303)/.03030303
 compCritNorm=['ELU408', 'ELU810', 'ELU815']
-ratio3=(lCombNormalULS['critical_combNms']==compCritNorm)
+ratio3= (lCombNormalULS['critical_combNms']==compCritNorm)
 compCritShear=['ELU406', 'ELU317', 'ELU408', 'ELU390', 'ELU810']
-ratio4=(lCombShearULS['critical_combNms']==compCritShear)
+ratio4= (lCombShearULS['critical_combNms']==compCritShear)
+
+'''
+print(lCombNormalULS['sect1_critical_comb']['ELU408'])
+print(ratio1)
+print(lCombShearULS['sect2_critical_comb']['ELU810'])
+print(ratio2)
+'''
 
 fname= os.path.basename(__file__)
 if (ratio1<1e-6) and (ratio2<1e-6) and ratio3 and ratio4:
