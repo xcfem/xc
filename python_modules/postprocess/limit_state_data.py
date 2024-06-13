@@ -483,7 +483,7 @@ class LimitStateData(object):
                                load combination and its value is the percentage of elements for
                                which the threshold is exceeded (for section 1 of the elements)
         - sect2_critical_comb: same as sect1_critical_comb in the case of element's section 2.
-        - critical_combNms: list with all critical combinations
+        - critical_comb_names: list with the names of all the critical combinations
         '''
         verifFile=self.getOutputDataBaseFileName()+'.json'
         # read json file
@@ -513,7 +513,7 @@ class LimitStateData(object):
                     allCritCmb.append(combNm)
         # Section 2
         for e in elementData.keys():
-            s=elementData[e][self.label+"Sect2"]
+            s= elementData[e][self.label+"Sect2"] # section 2
             controlVar= eval('cv.'+s)
             CF= controlVar.getCF()
             if CF>threshold:
@@ -532,7 +532,7 @@ class LimitStateData(object):
                 'nElems':nElems,
                 'sect1_critical_comb':sect1CritCmb, # per unit
                 'sect2_critical_comb':sect2CritCmb, # per unit
-                'critical_combNms':allCritCmb,
+                'critical_comb_names':allCritCmb,
                 }
         return retval
     
