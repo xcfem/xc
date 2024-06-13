@@ -503,7 +503,7 @@ class LimitStateData(object):
         for e in elementData.keys():
             s= elementData[e][self.label+"Sect1"] # section 1
             controlVar= eval('cv.'+s)
-            CF= controlVar.CF
+            CF= controlVar.getCF()
             if CF>threshold:
                 combNm= controlVar.combName
                 if combNm in sect1CritCmb.keys():
@@ -515,7 +515,7 @@ class LimitStateData(object):
         for e in elementData.keys():
             s=elementData[e][self.label+"Sect2"]
             controlVar= eval('cv.'+s)
-            CF= controlVar.CF
+            CF= controlVar.getCF()
             if CF>threshold:
                 combNm= controlVar.combName
                 if combNm in sect2CritCmb.keys():
@@ -660,13 +660,10 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         return retval
         
     def writeAnalysisResults(self):
-        '''Write the analysis results.
-
-        :param bucklingAnalysisResults: buckling analysis results.
-        '''
-        bucklingAnalysisResultsDict= self.getResultsDict()
+        '''Write the analysis results. '''
+        analysisResultsDict= self.getResultsDict()
         with open(self.fNameBucklingAnalysisResults, 'w') as outfile:
-            json.dump(bucklingAnalysisResultsDict, outfile)
+            json.dump(analysisResultsDict, outfile)
         outfile.close()
         
     def readControlVars(self, modelSpace):
