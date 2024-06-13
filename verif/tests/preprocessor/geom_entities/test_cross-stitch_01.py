@@ -55,7 +55,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 setTotal= preprocessor.getSets.getSet("total")
 
-feProblem.setVerbosityLevel(0) # Dont print(warning messages about element seed.)
+feProblem.setVerbosityLevel(0) # Don't print(warning messages about element seed.)
 setL1= preprocessor.getSets.getSet(l1.name)
 setL1.genMesh(xc.meshDir.I)
 
