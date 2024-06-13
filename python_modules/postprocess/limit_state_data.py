@@ -493,7 +493,7 @@ class LimitStateData(object):
             inputDct= json.load(f)
             f.close()
         else:
-            lmsg.error('File '+verifFile+'does not exist')
+            lmsg.error("file: '"+verifFile+"' does not exist")
             return
         nElems=len(inputDct['elementData'])
         sect1CritCmb=dict()
