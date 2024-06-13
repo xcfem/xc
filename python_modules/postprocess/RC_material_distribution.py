@@ -78,14 +78,17 @@ class RCMaterialDistribution(object):
     
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.sectionDefinition == other.sectionDefinition)
-            if(retval):
-                retval= (self.sectionDistribution == other.sectionDistribution)
-            if(retval):
-                retval= (self.elementSetNames == other.elementSetNames)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.sectionDefinition == other.sectionDefinition)
+                if(retval):
+                    retval= (self.sectionDistribution == other.sectionDistribution)
+                if(retval):
+                    retval= (self.elementSetNames == other.elementSetNames)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def assign(self, elemSet, setRCSects):

@@ -39,6 +39,7 @@ class_<XC::SolutionStrategy, bases<CommandEntity>, boost::noncopyable >("Solutio
   .add_property("getIntegrator", make_function( getSolutionStrategyIntegrator, return_internal_reference<>() ),"return a reference to the integragor.")
   .add_property("getSolutionAlgorithm", make_function( getSolutionStrategySolutionAlgorithm, return_internal_reference<>() ),"return a reference to the solution algorithm.")
   .add_property("getConvergenceTest", make_function( getSolutionStrategyConvergenceTest, return_internal_reference<>() ),"return a reference to the convergence test.")
+  .def("revertToStart", &XC::SolutionStrategy::revertToStart, "Revert to the initial state")
     ;
 
 class_<XC::SolutionStrategyMap, bases<CommandEntity>, boost::noncopyable >("SolutionStrategyMap", no_init)

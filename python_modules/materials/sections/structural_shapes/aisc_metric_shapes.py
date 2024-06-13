@@ -395,10 +395,13 @@ class WShape(structural_steel.IShape):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(WShape, self).__eq__(other)
+        if(other is not None):
+            if(self is not other):
+                retval= super(WShape, self).__eq__(other)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
 
     def h(self):
@@ -2449,10 +2452,13 @@ class HSSShape(structural_steel.QHShape):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(HSSShape, self).__eq__(other)
+        if(other is not None):
+            if(self is not other):
+                retval= super(HSSShape, self).__eq__(other)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
 
     def getWarpingConstant(self):

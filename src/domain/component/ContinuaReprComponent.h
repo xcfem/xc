@@ -59,6 +59,9 @@ class ContinuaReprComponent: public DomainComponent
     //! @brief Activates the component.
     virtual void alive(void)
       { dead= false; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 } // end of XC namespace

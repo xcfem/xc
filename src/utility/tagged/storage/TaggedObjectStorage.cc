@@ -34,6 +34,7 @@
 
 #include "utility/actor/actor/MovableObject.h"
 #include "utility/actor/actor/MovableID.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 XC::ID XC::TaggedObjectStorage::dbTags;
@@ -156,8 +157,9 @@ int XC::TaggedObjectStorage::sendObjectTags(Communicator &comm)
         res+= comm.sendID(objTags,getDbTagData(),CommMetaData(posDbTag3));
       }
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; communicator failed to send the IDs.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; communicator failed to send the IDs."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -172,7 +174,9 @@ const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const Com
         res= comm.receiveID(retVal,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
-      std::cerr << "TaggedObjectStorage::receiveTags - communicator failed to receive the IDs.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; communicator failed to receive the IDs."
+		<< Color::def << std::endl;
     return retVal;
   }
 
@@ -205,15 +209,18 @@ int XC::TaggedObjectStorage::sendObjects(Communicator &comm)
                 res= tmp->sendSelf(comm);
                 if(res<0)
                   {
-                    std::cerr << getClassName() << "::" << __FUNCTION__
+                    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		              << "; object with tag "
-                              << ptr->getTag() << " failed in sendSelf.\n";
+                              << ptr->getTag() << " failed in sendSelf."
+		              << Color::def << std::endl;
                     break;
                   }
               }
             else
-	      std::cerr << "The object with tag: "
-                        << ptr->getTag() << " is not movable." << std::endl;
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; the object with tag: "
+                        << ptr->getTag() << " is not movable."
+			<< Color::def << std::endl;
           }
       }
     return res;
@@ -234,18 +241,81 @@ int XC::TaggedObjectStorage::receiveObjects(const Communicator &comm)
             res= tmp->recvSelf(comm);
             if(res<0)
               {
-                std::cerr << "TaggedObjectStorage::receive - object with tag "
-                          << ptr->getTag() << " failed.\n";
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; object with tag "
+                          << ptr->getTag() << " failed."
+			  << Color::def << std::endl;
                 break;
               }
           }
         else
-	  std::cerr << "The object with tag: " << ptr->getTag()
-		    << " is not movable." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; the object with tag: " << ptr->getTag()
+		    << " is not movable."
+		    << Color::def << std::endl;
       }
     return res;
   }
 
+boost::python::dict XC::TaggedObjectStorage::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    const int size= getNumComponents();
+    boost::python::list values;
+    if(size>0)
+      {
+        TaggedObject *ptr= nullptr;
+	TaggedObjectStorage *this_no_const= const_cast<TaggedObjectStorage *>(this);
+        TaggedObjectIter &theIter= this_no_const->getComponents();
+        // loop over nodes in mesh adding their dbTag to the ID
+        while((ptr= theIter()) != nullptr)
+          {
+	    const MovableObject *mv_tmp= dynamic_cast<MovableObject *>(ptr);
+	    int classTag= -1;
+	    if(mv_tmp) // is movable.
+	      {
+		classTag= mv_tmp->getClassTag();
+	      }
+	    else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; the object with tag: " << ptr->getTag()
+			<< " is not movable."
+			<< Color::def << std::endl;
+	      
+            const TaggedObject *tg_tmp= dynamic_cast<const TaggedObject *>(ptr);
+            if(tg_tmp)
+              {
+		boost::python::dict objDict= tg_tmp->getPyDict();
+		objDict["classTag"]= classTag;
+		values.append(objDict);
+	      }
+            else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                        << "; failed when reading object: "
+			<< ptr->getTag()
+			<< Color::def << std::endl;
+          }
+      }
+    retval["values"]= values; 
+    return retval;    
+  }
+
+void XC::TaggedObjectStorage::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    boost::python::list values= boost::python::extract<boost::python::list>(d["values"]);
+    const size_t sz= len(values);
+    for(size_t i= 0; i<sz; i++)
+      {
+	boost::python::dict objectDict= boost::python::extract<boost::python::dict>(values[i]);
+	const int classTag= boost::python::extract<int>(objectDict["classTag"]);
+	const std::string className= boost::python::extract<std::string>(objectDict["className"]);
+	TaggedObject *newObject= get_new_tagged_object(className, classTag);
+	if(newObject)
+	  newObject->setPyDict(objectDict);
+	this->addComponent(newObject);
+      }
+  }
 
 
 //! @brief Send members through the communicator argument.
@@ -277,7 +347,9 @@ int XC::TaggedObjectStorage::sendSelf(Communicator &comm)
     const int dbTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dbTag);
     if(res<0)
-      std::cerr << "TaggedObjectStorage::sendSelf() - failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 

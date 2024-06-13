@@ -98,6 +98,27 @@ int XC::RayleighDampingFactors::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::RayleighDampingFactors::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["alphaM"]= this->alphaM;
+    retval["betaK"]= this->betaK;
+    retval["betaK0"]= this->betaK0;
+    retval["betaKc"]= this->betaKc;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::RayleighDampingFactors::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    this->alphaM= boost::python::extract<double>(d["alphaM"]);
+    this->betaK= boost::python::extract<double>(d["betaK"]);
+    this->betaK0= boost::python::extract<double>(d["betaK0"]);
+    this->betaKc= boost::python::extract<double>(d["betaKc"]);
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::RayleighDampingFactors::sendSelf(Communicator &comm)
   {

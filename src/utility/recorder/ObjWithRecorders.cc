@@ -54,3 +54,21 @@
 XC::ObjWithRecorders::ObjWithRecorders(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
   : CommandEntity(owr), RecorderContainer(oh) {}
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ObjWithRecorders::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["recorders"]= RecorderContainer::getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ObjWithRecorders::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    if(d.has_key("recorders"))
+      {
+        const boost::python::dict tmp= boost::python::extract<boost::python::dict>(d["recorders"]);
+        RecorderContainer::setPyDict(tmp);
+      }
+  }

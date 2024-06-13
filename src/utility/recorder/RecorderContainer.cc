@@ -64,96 +64,106 @@
 #include <utility/recorder/PatternRecorder.h>
 #include <utility/recorder/NodePropRecorder.h>
 #include <utility/recorder/ElementPropRecorder.h>
-
-
-#include "boost/any.hpp"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::RecorderContainer::RecorderContainer(DataOutputHandler::map_output_handlers *oh)
   : theRecorders(), output_handlers(oh) {}
 
 
 //! @brief Read a Recorder object from file.
-XC::Recorder *XC::RecorderContainer::newRecorder(const std::string &cod,DataOutputHandler *output_handler)
+XC::Recorder *XC::RecorderContainer::newRecorder(const std::string &cod, DataOutputHandler *output_handler)
   {
     Recorder *retval= nullptr;
-    if(cod == "data_store_recorder")
+    if((cod == "data_store_recorder") or (cod== "XC::DatastoreRecorder"))
       {
         DatastoreRecorder *tmp= new DatastoreRecorder();
         retval= tmp;
       }
-    else if(cod == "drift_recorder")
+    else if((cod == "drift_recorder") or (cod== "XC::DriftRecorder"))
       {
         DriftRecorder *tmp= new DriftRecorder();
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "RecorderContainer; new recorder: " << cod 
-                    << " no hay gestores de salida." << std::endl;
+          std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		    << "; new recorder: " << cod 
+                    << " no output handler."
+		    << Color::def << std::endl;
         retval= tmp;
       }
-    else if(cod == "element_recorder")
+    else if((cod == "element_recorder") or (cod== "XC::ElementRecorder"))
       {
         ElementRecorder *tmp= new ElementRecorder();
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "RecorderContainer; new recorder: " << cod 
-                    << " no hay gestores de salida." << std::endl;
+          std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		    << "; new recorder: " << cod 
+                    << " no output handler."
+		    << Color::def << std::endl;
         retval= tmp;
       }
-    else if(cod == "envelope_element_recorder")
+    else if((cod == "envelope_element_recorder") or (cod== "XC::EnvelopeElementRecorder"))
       {
         EnvelopeElementRecorder *tmp= new EnvelopeElementRecorder();
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "RecorderContainer; new recorder: " << cod 
-                    << " no hay gestores de salida." << std::endl;
+          std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		    << "; new recorder: " << cod 
+                    << " no output handler."
+		    << Color::def << std::endl;
         retval= tmp;
       }
-    else if(cod == "envelope_node_recorder")
+    else if((cod == "envelope_node_recorder") or (cod== "XC::EnvelopeNodeRecorder"))
       {
         EnvelopeNodeRecorder *tmp= new EnvelopeNodeRecorder();
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "RecorderContainer; new recorder: " << cod 
-                    << " no hay gestores de salida." << std::endl;
+          std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		    << "; new recorder: " << cod 
+                    << " no output handler."
+		    << Color::def << std::endl;
         retval= tmp;
       }
-    else if(cod == "max_node_disp_recorder")
+    else if((cod == "max_node_disp_recorder") or (cod== "XC::MaxNodeDispRecorder"))
       {
         MaxNodeDispRecorder *tmp= new MaxNodeDispRecorder();
         retval= tmp;
       }
-    else if(cod == "node_recorder")
+    else if((cod == "node_recorder") or (cod== "XC::NodeRecorder"))
       {
         NodeRecorder *tmp= new NodeRecorder();
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "RecorderContainer; new recorder: " << cod 
-                    << " no hay gestores de salida." << std::endl;
+          std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		    << "; new recorder: " << cod 
+                    << " no output handler."
+		    << Color::def << std::endl;
         retval= tmp;
       }
-    else if(cod == "pattern_recorder")
+    else if((cod == "pattern_recorder") or (cod== "XC::PatternRecorder"))
       {
         PatternRecorder *tmp= new PatternRecorder();
         retval= tmp;
       }
-    else if(cod == "node_prop_recorder")
+    else if((cod == "node_prop_recorder") or (cod== "XC::NodePropRecorder"))
       {
         NodePropRecorder *tmp= new NodePropRecorder(get_domain_ptr());
         retval= tmp;
       }
-    else if(cod == "element_prop_recorder")
+    else if((cod == "element_prop_recorder") or (cod== "XC::ElementPropRecorder"))
       {
         ElementPropRecorder *tmp= new ElementPropRecorder(get_domain_ptr());
         retval= tmp;
       }
     else
-      std::cerr << "Recorder type: '" << cod
-                << "' unknown." << std::endl;
+      std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		<< "; recorder type: '" << cod
+                << "' unknown."
+		<< Color::def << std::endl;
     if(retval)
       addRecorder(*retval);
     return retval;
@@ -162,7 +172,7 @@ XC::Recorder *XC::RecorderContainer::newRecorder(const std::string &cod,DataOutp
 //! @brief Destructor.
 XC::RecorderContainer::~RecorderContainer(void)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       delete *i; 
     theRecorders.erase(theRecorders.begin(),theRecorders.end());
   }
@@ -181,7 +191,7 @@ int XC::RecorderContainer::addRecorder(Recorder &theRecorder)
 //! which have been added.
 int XC::RecorderContainer::record(int cTag, double timeStamp)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       (*i)->record(cTag, timeStamp);
     return 0;
   }
@@ -190,14 +200,14 @@ int XC::RecorderContainer::record(int cTag, double timeStamp)
 //! which have been added.
 void XC::RecorderContainer::restart(void)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       (*i)->restart();
   }
 
 //! @brief Remove the recorders.
 int XC::RecorderContainer::removeRecorders(void)
   {
-    for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+    for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
       delete *i; 
     theRecorders.erase(theRecorders.begin(),theRecorders.end());
     return 0;
@@ -208,7 +218,7 @@ void XC::RecorderContainer::setLinks(Domain *ptr_dom)
   {
     if(ptr_dom)
       {
-        for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+        for(recorders_list::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
           {
             DomainRecorderBase *tmp= dynamic_cast<DomainRecorderBase *>(*i);
             if(tmp)
@@ -216,7 +226,9 @@ void XC::RecorderContainer::setLinks(Domain *ptr_dom)
           }
       }
     else
-      std::cerr << "RecorderContainer::setLinks; domain no set." << std::endl;
+      std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		<< "; domain not set."
+		<< Color::def << std::endl;
   }
 
 //! @brief Set the outputhandlers container.
@@ -235,4 +247,37 @@ int XC::RecorderContainer::recvData(const Communicator &comm)
     //Position 1 and 2 are reserved for members of
     //this class.
     return 0;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::RecorderContainer::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    boost::python::list recorder_lst;
+    for(recorders_list::const_iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
+      {
+	DomainRecorderBase *tmp= dynamic_cast<DomainRecorderBase *>(*i);
+	if(tmp)
+	  recorder_lst.append(tmp->getPyDict());
+      }
+    retval["values"]= recorder_lst;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::RecorderContainer::setPyDict(const boost::python::dict &d)
+  {
+    const boost::python::list recorder_lst= boost::python::extract<boost::python::list>(d["values"]);
+    const size_t sz= len(recorder_lst);
+    for(size_t i= 0; i<sz; i++)
+      {
+	boost::python::dict tmp= boost::python::extract<boost::python::dict>(recorder_lst[i]);
+	const std::string className= boost::python::extract<std::string>(tmp["className"]);
+	Recorder *newR= this->newRecorder(className);
+	if(!newR) // failed.
+	  std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__
+		    << "; can't read recorder of type: '" << className
+		    << "'."
+		    << Color::def << std::endl;
+      }
   }

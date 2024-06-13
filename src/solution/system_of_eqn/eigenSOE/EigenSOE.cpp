@@ -190,6 +190,28 @@ void XC::EigenSOE::zeroM(void)
     massMatrix.clear();
   }
 
+//! @brief Return the rows of the mass matrix in a Python list.
+boost::python::list XC::EigenSOE::getMPy(void) const
+  {
+    boost::python::list retval;
+    const size_t nRows= massMatrix.size1();
+    const size_t nCols= massMatrix.size2();
+    for(size_t i=0; i < nRows; ++i )
+      {
+	boost::python::list row= boost::python::list();
+        for(size_t j=0; j<nCols; ++j )
+	  {
+            const double *tmp= massMatrix.find_element( i, j );
+            if(tmp)
+	      row.append(*tmp);
+            else
+	      row.append(0.0);
+	  }
+	retval.append(row);
+      }
+    return retval;
+  }
+
 //! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
 void XC::EigenSOE::identityM(void)
   {

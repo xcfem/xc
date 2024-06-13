@@ -56,10 +56,13 @@ class MaterialWithDKDiagrams(object):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.materialName==other.materialName)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.materialName==other.materialName)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def setupName(self, matName):

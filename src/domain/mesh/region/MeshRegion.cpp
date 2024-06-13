@@ -307,6 +307,29 @@ int XC::MeshRegion::recvSelf(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MeshRegion::getPyDict(void) const
+  {
+    boost::python::dict retval= ContinuaReprComponent::getPyDict();
+    retval["rayFactors"]= rayFactors.getPyDict();
+    retval["theNodes"]= theNodes.getPyDict();
+    retval["theElements"]= theElements.getPyDict();
+    retval["currentGeoTag"]= currentGeoTag;
+    retval["lastGeoSendTag"]= lastGeoSendTag;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MeshRegion::setPyDict(const boost::python::dict &d)
+  {
+    ContinuaReprComponent::setPyDict(d);
+    this->rayFactors.setPyDict(boost::python::extract<boost::python::dict>(d["rayFactors"]));
+    this->theNodes.setPyDict(boost::python::extract<boost::python::dict>(d["theNodes"]));
+    this->theElements.setPyDict(boost::python::extract<boost::python::dict>(d["theElements"]));
+    this->currentGeoTag= boost::python::extract<int>(d["currentGeoTag"]);
+    this->lastGeoSendTag= boost::python::extract<int>(d["lastGeoSendTag"]);
+  }
+
 void XC::MeshRegion::Print(std::ostream &s, int flag) const
   {
     s << "Region: " << this->getTag() << std::endl;

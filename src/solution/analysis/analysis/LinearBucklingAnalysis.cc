@@ -49,7 +49,7 @@
 XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SolutionStrategy *static_analysis, SolutionStrategy *buckling_analysis)
   : StaticAnalysis(static_analysis), eigen_solu(buckling_analysis),
     linearBucklingEigenAnalysis(buckling_analysis),
-    numModes(0),linear_buckling_analysis_step(0) {}
+    numModes(0), linear_buckling_analysis_step(0) {}
 
 //! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::LinearBucklingAnalysis::clearAll(void)
@@ -98,7 +98,7 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
 int XC::LinearBucklingAnalysis::domainChanged(void)
   {
     int retval= StaticAnalysis::domainChanged();
-    linearBucklingEigenAnalysis.domainChanged();
+    retval+= linearBucklingEigenAnalysis.domainChanged();
     return retval;
   }
 

@@ -93,6 +93,11 @@ class EigenAnalysis: public Analysis
     virtual int setIntegrator(EigenIntegrator &theIntegrator);
     virtual int setEigenSOE(EigenSOE &theSOE);  
 
+    int getDomainStamp(void) const
+      { return domainStamp; }
+    void setDomainStamp(const int &i)
+      { domainStamp= i; }
+
     //Eigenvectors.
     virtual const Vector &getEigenvector(int mode) const;
     Vector getNormalizedEigenvector(int mode) const;

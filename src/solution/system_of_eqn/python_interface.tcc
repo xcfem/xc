@@ -22,6 +22,7 @@
 //python_interface.tcc
 
 class_<XC::SystemOfEqn, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("SystemOfEqn", no_init)
+  .def("getA", &XC::SystemOfEqn::getAPy, "Return a python list containing the rows of the system matrix.")
   ;
 
 class_<XC::Solver, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Solver", no_init)

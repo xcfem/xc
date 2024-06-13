@@ -191,18 +191,21 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super().__eq__(other= other)
-            if(retval):
-                retval= (self.fck == other.fck)
-            if(retval):
-                retval= (self.gmmC == other.gmmC)
-            if(retval):
-                retval= (self.initTensStiff == other.initTensStiff)
-            if(retval):
-                retval= (self.alfacc == other.alfacc)
+        if(other is not None):
+            if(self is not other):
+                retval= super().__eq__(other= other)
+                if(retval):
+                    retval= (self.fck == other.fck)
+                if(retval):
+                    retval= (self.gmmC == other.gmmC)
+                if(retval):
+                    retval= (self.initTensStiff == other.initTensStiff)
+                if(retval):
+                    retval= (self.alfacc == other.alfacc)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
         
     def setupName(self, matName):
@@ -1286,18 +1289,21 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super().__eq__(other= other)
-            if(retval):
-                retval= (self.fyk==other.fyk)
-            if(retval):
-                retval= (self.gammaS==other.gammaS)
-            if(retval):
-                retval= (self.emax==other.emax)
-            if(retval):
-                retval= (self.k==other.k)
+        if(other is not None):
+            if(self is not other):
+                retval= super().__eq__(other= other)
+                if(retval):
+                    retval= (self.fyk==other.fyk)
+                if(retval):
+                    retval= (self.gammaS==other.gammaS)
+                if(retval):
+                    retval= (self.emax==other.emax)
+                if(retval):
+                    retval= (self.k==other.k)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def fmaxk(self):

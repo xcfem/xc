@@ -51,6 +51,7 @@ python tests/utility/misc_utils/testStairCaseFunction.py
 python tests/utility/misc_utils/test_linear_interpolation.py
 python tests/utility/misc_utils/test_remove_accents.py
 python tests/utility/misc_utils/test_mplgraphic.py
+python tests/utility/misc_utils/test_eq_operator.py
 python tests/utility/misc_utils/test_xc_json_01.py
 python tests/utility/misc_utils/test_xc_json_02.py
 python tests/utility/misc_utils/test_xc_json_03.py
@@ -597,6 +598,7 @@ python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_colum
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column04.py
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column05.py
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column06.py # Depends on spectra library.
+python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column07.py # Depends on spectra library.
 python tests/solution/eigenvalues/linear_buckling_analysis/micropile_buckling_reduction_factor.py
 python tests/solution/eigenvalues/linear_buckling_analysis/square_plate_buckling_01.py
 python tests/solution/eigenvalues/linear_buckling_analysis/square_plate_buckling_02.py # Depends on spectra library.
@@ -1247,6 +1249,8 @@ python tests/materials/ehe/test_buckling_check_06.py
 python tests/materials/ehe/test_buckling_check_07.py
 python tests/materials/ehe/test_buckling_check_08.py
 python tests/materials/ehe/test_buckling_check_09.py
+python tests/materials/ehe/test_buckling_check_10.py
+python tests/materials/ehe/test_buckling_check_11.py
 
 echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
@@ -1626,6 +1630,8 @@ python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_02.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_03.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_04.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_05.py
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_06.py
+python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_07.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py

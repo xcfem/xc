@@ -68,6 +68,7 @@
 #include "../mesh/Mesh.h"
 #include "../constraints/ConstrContainer.h"
 #include "utility/matrix/Vector.h"
+#include "domain/mesh/region/DqMeshRegion.h"
 
 namespace XC {
 class Element;
@@ -117,7 +118,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
   {
   private:
     PseudoTimeTracker timeTracker;//!< pseudo time
-    std::string CallbackCommit; //!< Instructions that are executed on each llamada a commit.
+    std::string callbackCommit; //!< Instructions that are executed on each call to commit method.
 
     int dbTag; //!< Tag for the database.
     int currentGeoTag; //!< an integer used to mark if domain has changed
@@ -127,10 +128,10 @@ class Domain: public ObjWithRecorders, public DistributedBase
     ConstrContainer constraints;//!< Constraint container.
     Vector theEigenvalues; //!< Eigenvalues.
     Vector modalParticipationFactors; //!< Modal participation factors.
-    DqMeshRegion *theRegions;
+    DqMeshRegion theRegions;
     std::deque<std::string> activeCombinations;//!< load combinations currently active.
     
-    TaggedObjectStorage  *theParameters;        
+    TaggedObjectStorage *theParameters;        
     SingleDomParamIter *theParamIter;
     std::deque<int> paramIndex;
 
@@ -307,6 +308,9 @@ class Domain: public ObjWithRecorders, public DistributedBase
     friend int sendDomain(Domain &, int posDbTag,DbTagData &,Communicator &comm);
     friend int receiveDomain(Domain &, int posDbTag,DbTagData &,const Communicator &comm);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
 

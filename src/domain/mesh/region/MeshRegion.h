@@ -108,6 +108,9 @@ class MeshRegion: public ContinuaReprComponent
     // methods to send & recv data for database/parallel applications
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     virtual void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

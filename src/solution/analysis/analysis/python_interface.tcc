@@ -27,6 +27,7 @@ class_<XC::Analysis, XC::Analysis *, bases<CommandEntity>, boost::noncopyable >(
   .add_property("analysisAggregation",make_function(&XC::Analysis::getSolutionStrategyPtr, return_internal_reference<>() ),"return a reference to the analysis aggregation.")
   .add_property("getDomain", make_function( getAnalysisDomain, return_internal_reference<>() ),"return a reference to the domain.")
   .add_property("linearSOE", make_function(&XC::Analysis::getLinearSOEPtr, return_internal_reference<>() ),"return a reference to the system of equations.")
+  .add_property("eigenSOE", make_function(&XC::Analysis::getEigenSOEPtr, return_internal_reference<>() ),"return a reference to the eigen system of equations.")
   ;
 
 class_<XC::StaticAnalysis, bases<XC::Analysis>, boost::noncopyable >("StaticAnalysis", no_init)
@@ -55,6 +56,10 @@ class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnaly
   .def("getPeriods",&XC::EigenAnalysis::getPeriods)
   .def("getFrequencies",&XC::EigenAnalysis::getFrequencies)
   .def("getNumModes",&XC::EigenAnalysis::getNumModes)
+// Domain stamp.
+  .add_property("domainStamp",&XC::EigenAnalysis::getDomainStamp,&XC::EigenAnalysis::setDomainStamp, "Get/set the value of the domain stamp.")
+  .def("getDomainStamp",&XC::EigenAnalysis::getDomainStamp, "Get the value of the domain stamp.")
+  .def("setDomainStamp",&XC::EigenAnalysis::setDomainStamp, "Set the value of the domain stamp.")
   //Modal participation factors.
   .def("getModalParticipationFactor",&XC::EigenAnalysis::getModalParticipationFactor)
   .def("getModalParticipationFactors",&XC::EigenAnalysis::getModalParticipationFactors)
@@ -71,16 +76,22 @@ class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnaly
   .def("analyze", &XC::EigenAnalysis::analyze,"Performs the analysis, the argument is the number of modes to compute.")
   ;
 
+class_<XC::LinearBucklingEigenAnalysis, bases<XC::EigenAnalysis>, boost::noncopyable >("LinearBucklingEigenAnalysis", no_init)
+  .def("getEigenvalue", make_function(&XC::LinearBucklingEigenAnalysis::getEigenvalue, return_value_policy<copy_const_reference>()) )
+  ;
+
+XC::LinearBucklingEigenAnalysis &(XC::LinearBucklingAnalysis::*getLinearBucklingEigenAnalysis)(void)= &XC::LinearBucklingAnalysis::getEigenAnalysis;
 class_<XC::LinearBucklingAnalysis, bases<XC::StaticAnalysis>, boost::noncopyable >("LinearBucklingAnalysis", no_init)
-  .add_property("numModes",&XC::LinearBucklingAnalysis::getNumModes,&XC::LinearBucklingAnalysis::setNumModes)
+  .add_property("numModes",&XC::LinearBucklingAnalysis::getNumModes,&XC::LinearBucklingAnalysis::setNumModes, "Get/set the number of modes to compute.")
+  .def("getLinearBucklingAnalysisStep", &XC::LinearBucklingAnalysis::getLinearBucklingAnalysisStep, "Return the step number for linear buckling analysis.")
+  .def("setLinearBucklingAnalysisStep", &XC::LinearBucklingAnalysis::setLinearBucklingAnalysisStep, "Set the step number for linear buckling analysis.")
+  .add_property("linearBucklingAnalysisStep",&XC::LinearBucklingAnalysis::getLinearBucklingAnalysisStep,&XC::LinearBucklingAnalysis::setLinearBucklingAnalysisStep, "Get/set the step number for linear buckling analysis.")
   .def("getEigenvalue", make_function(&XC::LinearBucklingAnalysis::getEigenvalue, return_value_policy<copy_const_reference>()) )
   .def("getEigenvaluesList",&XC::LinearBucklingAnalysis::getEigenvaluesPy,"Return a Python list with the computed eigenvalues.")
   .def("getNormalizedEigenvectorComponents", &XC::LinearBucklingAnalysis::getNormalizedEigenvectorPy, "Return the components of the eigenvector in a Python list.")
   .def("getNormalizedEigenvectorsList",&XC::LinearBucklingAnalysis::getNormalizedEigenvectorsPy, "Return a Python list with the computed eigenvectors for each mode.")
-  ;
-
-class_<XC::LinearBucklingEigenAnalysis, bases<XC::EigenAnalysis>, boost::noncopyable >("LinearBucklingEigenAnalysis", no_init)
-  .def("getEigenvalue", make_function(&XC::LinearBucklingEigenAnalysis::getEigenvalue, return_value_policy<copy_const_reference>()) )
+  .add_property("getEigenAnalysis", make_function( getLinearBucklingEigenAnalysis, return_internal_reference<>() ),"TO DEPRECATE. Return a reference to the internal eigenanalysis object.")
+  .add_property("eigenAnalysis", make_function( getLinearBucklingEigenAnalysis, return_internal_reference<>() ),"return a reference to the internal eigenanalysis object.")
   ;
 
 class_<XC::IllConditioningAnalysis, bases<XC::EigenAnalysis>, boost::noncopyable >("IllConditioningAnalysis", no_init)

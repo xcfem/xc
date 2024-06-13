@@ -93,7 +93,6 @@
 #include <solution/graph/graph/Vertex.h>
 #include "solution/graph/graph/Graph.h"
 #include "domain/mesh/region/MeshRegion.h"
-#include "domain/mesh/region/DqMeshRegion.h"
 #include <solution/analysis/analysis/Analysis.h>
 #include "utility/database/FE_Datastore.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
@@ -102,6 +101,7 @@
 #include "utility/actor/actor/CommMetaData.h"
 #include "domain/component/Parameter.h"
 #include "domain/domain/single/SingleDomParamIter.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 void XC::Domain::free_mem(void)
   {
@@ -135,8 +135,9 @@ bool XC::Domain::check_containers(void) const
     // check that there was space to create the data structures
     if(theParameters == nullptr)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; out of memory.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; out of memory."
+		  << Color::def << std::endl;
         return false;
       }
     else
@@ -150,9 +151,9 @@ bool XC::Domain::check_containers(void) const
 //!
 //! @param owr: object that contains this one.
 XC::Domain::Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
-  :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0),
+  :ObjWithRecorders(owr,oh),timeTracker(),callbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0),
-   mesh(this), constraints(this), theRegions(nullptr),
+   mesh(this), constraints(this), theRegions(),
    activeCombinations(), lastChannel(0), lastGeoSendTag(-1)
   {
     alloc_containers();
@@ -172,9 +173,9 @@ XC::Domain::Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh
 //! @param numLoadPatterns: number of load patterns.
 //! @param numNodeLockers: number of node lockers.
 XC::Domain::Domain(CommandEntity *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
-  :ObjWithRecorders(owr,oh),timeTracker(), CallbackCommit(""), dbTag(0),
+  :ObjWithRecorders(owr,oh),timeTracker(), callbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0), mesh(this),
-   constraints(this), theRegions(nullptr), activeCombinations(), lastChannel(0),
+   constraints(this), theRegions(), activeCombinations(), lastChannel(0),
    lastGeoSendTag(-1)
   {
     alloc_containers();
@@ -204,12 +205,7 @@ void XC::Domain::clearAll(void)
     // clean out the containers
     mesh.clearAll();
 
-    if(theRegions)
-      {
-        theRegions->clearAll();
-        delete theRegions;
-        theRegions= nullptr;
-      }
+    theRegions.clearAll();
     activeCombinations.clear();
 
     // set the time back to 0.0
@@ -314,9 +310,10 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int p
     bool result= constraints.addSFreedom_Constraint(spConstraint,pattern);
     if(!result)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; " << pattern
-                  << " pattern could not add the SFreedom_Constraint\n";
+                  << " pattern could not add the SFreedom_Constraint."
+		  << Color::def << std::endl;
         return false;
       }
 
@@ -369,11 +366,12 @@ bool XC::Domain::addElementalLoad(ElementalLoad *load, int loadPatternTag)
     bool result= constraints.addElementalLoad(load,loadPatternTag);
     if(result == false)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; no pattern with tag "
 		  << loadPatternTag
 		  << " in the model, not adding the ele load"
-		  << *load << std::endl;
+		  << *load
+		  << Color::def << std::endl;
         return false;
       }
 
@@ -484,9 +482,10 @@ bool XC::Domain::addLoadPattern(LoadPattern *lp)
     else
       {
         if(verbosity>3)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; can't add load pattern identified by: "
-                    << lp->getTag() << "'\n";
+                    << lp->getTag() << "'"
+		    << Color::def << std::endl;
       }
     return result;
   }
@@ -539,9 +538,10 @@ bool XC::Domain::addParameter(Parameter *theParam)
     TaggedObject *other= theParameters->getComponentPtr(paramTag);
     if(other!=0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; parameter with tag "
-		  << paramTag << "already exists in model\n"; 
+		  << paramTag << "already exists in model."
+		  << Color::def << std::endl; 
         return false;
       }
 
@@ -550,9 +550,10 @@ bool XC::Domain::addParameter(Parameter *theParam)
 
     if(!result)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; parameter " << paramTag
-		  << "could not be added to container\n";
+		  << "could not be added to container."
+		  << Color::def << std::endl;
         theParam->setDomain(this);
         return result;
       }
@@ -1251,8 +1252,9 @@ int XC::Domain::addRecorder(Recorder &theRecorder)
   {
     if(theRecorder.setDomain(*this) != 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; recorder could not be added.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; recorder could not be added."
+		  << Color::def << std::endl;
         return -1;
       }
     else
@@ -1263,19 +1265,14 @@ int XC::Domain::addRecorder(Recorder &theRecorder)
 //! @brief Adds a region.
 int XC::Domain::addRegion(MeshRegion &theRegion)
   {
-    if(!theRegions)
-      theRegions= new DqMeshRegion();
-    theRegions->add(theRegion);
+    theRegions.add(theRegion);
     return 0;
   }
 
 //! @brief Returns a pointer to the region identified by the argument.
 XC::MeshRegion *XC::Domain::getRegion(int tag)
   {
-    MeshRegion *retval= nullptr;
-    if(theRegions)
-      retval= theRegions->getRegion(tag);
-    return retval;
+    return theRegions.getRegion(tag);
   }
 
 //! @brief Builds the element graph.
@@ -1364,6 +1361,67 @@ int XC::Domain::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Domain::getPyDict(void) const
+  {
+    boost::python::dict retval= ObjWithRecorders::getPyDict();
+    retval["timeTracker"]= timeTracker.getPyDict();
+    retval["callbackCommit"]= callbackCommit;
+    retval["dbTag"]= dbTag;
+    retval["currentGeoTag"]= currentGeoTag;
+    retval["hasDomainChangedFlag"]= hasDomainChangedFlag;
+    retval["commitTag"]= commitTag;
+    retval["mesh"]= mesh.getPyDict();
+    retval["constraints"]= constraints.getPyDict();
+    retval["theEigenvalues"]= theEigenvalues.getPyDict();
+    retval["modalParticipationFactors"]= modalParticipationFactors.getPyDict();
+    retval["theRegions"]= theRegions.getPyDict();
+    boost::python::list active_combinations;
+    for(std::deque<std::string>::const_iterator i= activeCombinations.begin(); i!=activeCombinations.end(); i++)
+      active_combinations.append(*i);
+    retval["activeCombinations"]= active_combinations;
+    if(theParameters)
+      retval["theParameters"]= theParameters->getPyDict();
+    boost::python::list param_index;
+    for(std::deque<int>::const_iterator i= paramIndex.begin(); i!=paramIndex.end(); i++)
+      param_index.append(*i);
+    retval["paramIndex"]= param_index;
+    retval["lastChannel"]= this->lastChannel;
+    retval["lastGeoSendTag"]= this->lastGeoSendTag;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Domain::setPyDict(const boost::python::dict &d)
+  {
+    ObjWithRecorders::setPyDict(d);
+    timeTracker.setPyDict(boost::python::extract<boost::python::dict>(d["timeTracker"]));
+    callbackCommit= boost::python::extract<std::string>(d["callbackCommit"]);
+    dbTag= boost::python::extract<int>(d["dbTag"]);
+    currentGeoTag= boost::python::extract<int>(d["currentGeoTag"]);
+    hasDomainChangedFlag= boost::python::extract<bool>(d["hasDomainChangedFlag"]);
+    commitTag= boost::python::extract<int>(d["commitTag"]);
+    mesh.setPyDict(boost::python::extract<boost::python::dict>(d["mesh"]));
+    constraints.setPyDict(boost::python::extract<boost::python::dict>(d["constraints"]));
+    theEigenvalues.setPyDict(boost::python::extract<boost::python::dict>(d["theEigenvalues"]));
+    modalParticipationFactors.setPyDict(boost::python::extract<boost::python::dict>(d["modalParticipationFactors"]));
+    theRegions.setPyDict(boost::python::extract<boost::python::dict>(d["theRegions"]));
+    boost::python::list active_combinations= boost::python::extract<boost::python::list>(d["activeCombinations"]);
+    const size_t sz= len(active_combinations);
+    for(size_t i= 0; i<sz; i++)
+      this->activeCombinations.push_back(boost::python::extract<std::string>(active_combinations[i]));
+    if(d.has_key("theParameters"))
+      {
+	theParameters->setPyDict(boost::python::extract<boost::python::dict>(d["theParameters"]));
+      }
+    boost::python::list param_index= boost::python::extract<boost::python::list>(d["paramIndex"]);
+    const size_t sz_pi= len(param_index);
+    for(size_t i= 0; i<sz_pi; i++)
+      this->paramIndex.push_back(boost::python::extract<int>(param_index[i]));
+    this->lastChannel= boost::python::extract<int>(d["lastChannel"]);
+    this->lastGeoSendTag= boost::python::extract<int>(d["lastGeoSendTag"]);
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::Domain::sendSelf(Communicator &comm)
   {
@@ -1378,8 +1436,9 @@ int XC::Domain::sendSelf(Communicator &comm)
       dbTag = comm.getChannel()->getDbTag();
     retval+= comm.sendIdData(getDbTagData(),dbTag);
     if(retval < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; communicator failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; communicator failed to send data."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -1396,13 +1455,15 @@ int XC::Domain::recvSelf(const Communicator &comm)
 
     int retval= comm.receiveIdData(getDbTagData(),dbTag);
     if(retval < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; communicator failed to recv the initial ID.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; communicator failed to recv the initial ID."
+		<< Color::def << std::endl;
     else
       retval+= recvData(comm);
     if(retval<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received."
+		<< Color::def << std::endl;
     return retval;
   }
   
@@ -1467,7 +1528,8 @@ int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const Communicator 
     int res= comm.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));
     res+= dom.recvSelf(comm);
     if(res < 0)
-      std::cerr << __FUNCTION__
-		<< "; failed to receive vector data.\n";
+      std::cerr << Color::red << __FUNCTION__
+		<< "; failed to receive vector data."
+		<< Color::def << std::endl;
     return res;
   }

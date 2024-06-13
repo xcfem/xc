@@ -59,7 +59,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Problem geometry
-H= 20.36 # Buckling length.
+H= 11# 20.36 # Buckling length.
 ### Circular column (short column to make sure this column doesn't affect the first buckling modes).
 p2= modelSpace.newKPoint(0,0,H/10.0)
 p1= modelSpace.newKPoint(0,0,0)
@@ -111,6 +111,15 @@ l1.genMesh(xc.meshDir.I)
 modelSpace.setDefaultMaterial(xcFlatSection)
 l2.genMesh(xc.meshDir.I)
 
+circSectionElements= modelSpace.defSet('circSectionElements')
+for e in l1.elements:
+    circSectionElements.elements.append(e)
+circSectionElements.fillDownwards()
+flatSectionElements= modelSpace.defSet('flatSectionElements')
+for e in l2.elements:
+    flatSectionElements.elements.append(e)
+flatSectionElements.fillDownwards()
+
 ## Constraints.
 ## Circular column.
 circularColumnBottomNode= p1.getNode()
@@ -145,7 +154,6 @@ q1.newNodalLoad(circularColumnBottomNode.tag, xc.Vector([0,0,0, MzBottom, 0, 0])
 q1.newNodalLoad(flatColumnTopNode.tag, xc.Vector([0, 0, N, MzTop/2, 0, 0]))
 q1.newNodalLoad(flatColumnBottomNode.tag, xc.Vector([0,0,0, 0.4*MzBottom, 0, 0]))
 
-
 ## Load combinations
 combContainer= combs.CombContainer()
 ### ULS combination.
@@ -166,9 +174,12 @@ bucklingParametersLSD.analyzeLoadCombinations(combContainer= combContainer, setC
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 sectContainer= reinfConcreteSectionDistribution.sectionDefinition # sectContainer container
 ## Store the section in the data structure that the "phantom model" uses
-columnRCSects= element_section_map.RCMemberSection('test', [rcCircularSection, rcCircularSection])
-sectContainer.append(columnRCSects)
-reinfConcreteSectionDistribution.assign(elemSet= calcSet.elements, setRCSects= columnRCSects)
+circularColumnRCSects= element_section_map.RCMemberSection('circular', [rcCircularSection, rcCircularSection])
+sectContainer.append(circularColumnRCSects)
+reinfConcreteSectionDistribution.assign(elemSet= circSectionElements.elements, setRCSects= circularColumnRCSects)
+flatColumnRCSects= element_section_map.RCMemberSection('flat', [rcFlatSection, rcFlatSection])
+sectContainer.append(flatColumnRCSects)
+reinfConcreteSectionDistribution.assign(elemSet= flatSectionElements.elements, setRCSects= flatColumnRCSects)
 ## Build controller.
 controller= EHE_limit_state_checking.BiaxialBucklingController(bucklingParametersLSD.label)
 
@@ -185,12 +196,14 @@ controller= EHE_limit_state_checking.BiaxialBucklingController(bucklingParameter
 ###               meant to be calculated (defaults to 'N')
 ### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
 ###           false if it's 2D (Fx,Fy,Mz).
+feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='Y', controller= controller, threeDim= True)
+feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results. The reference values doesn't come from a benchmark test,
 # they serve only to verify that the code run as intended.
-ratio1= abs(meanCFs[0]-0.5114839791471346)/0.5114839791471346
-ratio2= abs(meanCFs[1]-0.5118539852365022)/0.5118539852365022
+ratio1= abs(meanCFs[0]-0.2702879844580217)/0.2702879844580217
+ratio2= abs(meanCFs[1]-0.2715583207753639)/0.2715583207753639
 
 '''
 print(meanCFs[0], ratio1)
@@ -216,5 +229,6 @@ else:
 # arguments= ['My', 'Mz', 'CF', 'Leff', 'mechLambda', 'efY', 'efZ', 'mode'] 
 # for arg in arguments:
 #     oh.displayBeamResult(attributeName= bucklingParametersLSD.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)
-    
+# # #########################################################
+
 cfg.cleandirs()  # Clean after yourself.

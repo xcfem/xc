@@ -89,16 +89,19 @@ class ElementSections(object):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.name == other.name)
-            if(retval):
-                retval= (self.directions == other.directions)
-            if(retval):
-                retval= (self.gaussPoints == other.gaussPoints)
-            if(retval):
-                retval= (self.lstRCSects == other.lstRCSects)                
+        if(other is not None):
+            if(self is not other):
+                retval= (self.name == other.name)
+                if(retval):
+                    retval= (self.directions == other.directions)
+                if(retval):
+                    retval= (self.gaussPoints == other.gaussPoints)
+                if(retval):
+                    retval= (self.lstRCSects == other.lstRCSects)                
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def append_section(self, RCSect):
@@ -117,30 +120,35 @@ class ElementSections(object):
         '''
         return next((sct for sct in self.lstRCSects if(sct.name==sectionName)), None)
 
-    def createSections(self, templateSections):
+    def createSections(self, templateSections, forceCreation= False):
         '''create the fiber sections that represent the material to be used 
         for the checking on each integration point and/or each direction. These
         sections are also added to the attribute 'lstRCSects' that contains 
         the list of sections.
+
+        :param forceCreation: if true, creeate the sections even if the internal
+                              section container is not empty.
         '''
-        if(len(self.lstRCSects)>0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; sections already created in: '"+str(self.name)+"'")
-        ngp= len(self.gaussPoints)
-        ndir= len(self.directions)
-        if(ngp>1 and ndir>1):
-            i= 0
-            for gp in self.gaussPoints:
-                for d in self.directions:
-                    self.creaSingleSection(templateSections[i], direction= d, gaussPnt= gp)
-                    i+= 1
-        elif(ngp==1 and ndir>0): # ngp==1
-            for i, d in enumerate(self.directions):
-                self.creaSingleSection(templateSections[i], direction= d, gaussPnt= None)
-        elif(ndir==1 and ngp>0): # ndir==1
-            for i, gp in enumerate(self.gaussPoints):
-                self.creaSingleSection(templateSections[i], direction= None, gaussPnt= gp)
+        alreadyCreated= (len(self.lstRCSects)>0)
+        if((not alreadyCreated) or forceCreation):
+            if(len(self.lstRCSects)>0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+"; sections already created in: '"+str(self.name)+"'")
+            ngp= len(self.gaussPoints)
+            ndir= len(self.directions)
+            if(ngp>1 and ndir>1):
+                i= 0
+                for gp in self.gaussPoints:
+                    for d in self.directions:
+                        self.creaSingleSection(templateSections[i], direction= d, gaussPnt= gp)
+                        i+= 1
+            elif(ngp==1 and ndir>0): # ngp==1
+                for i, d in enumerate(self.directions):
+                    self.creaSingleSection(templateSections[i], direction= d, gaussPnt= None)
+            elif(ndir==1 and ngp>0): # ndir==1
+                for i, gp in enumerate(self.gaussPoints):
+                    self.creaSingleSection(templateSections[i], direction= None, gaussPnt= gp)
             
     def creaSingleSection(self, templateSection, direction, gaussPnt):
         '''create a copy of the section argument for the gauss points and
@@ -219,10 +227,10 @@ class RawShellSections(ElementSections):
         self.templateSections= templateSections
         
     def createSections(self):
-        '''create the fiber sections that represent the reinforced concrete fiber 
-        section to be used for the checking on each integration point and/or each 
-        direction. These sections are also added to the attribute 'lstRCSects' 
-        that contains the list of sections.
+        '''create the fiber sections that represent the reinforced concrete
+        fiber section to be used for the checking on each integration point 
+        and/or each direction. These sections are also added to the attribute
+       'lstRCSects' that contains the list of sections.
         '''
         for templateSection in self.templateSections:
             name= templateSection.name
@@ -417,36 +425,39 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super().__eq__(other)
-            if(retval):
-                retval= (self.sectionDescr == other.sectionDescr)
-            if(retval):
-                retval= (self.concrType == other.concrType)
-            if(retval):
-                retval= (self.reinfSteelType == other.reinfSteelType)
-            if(retval):
-                retval= (self.depth == other.depth)
-            if(retval):
-                retval= (self.width == other.width)
-            if(retval):
-                retval= (self.dir1PositvRebarRows == other.dir1PositvRebarRows)
-            if(retval):
-                retval= (self.dir1NegatvRebarRows == other.dir1NegatvRebarRows)
-            if(retval):
-                retval= (self.dir2PositvRebarRows == other.dir2PositvRebarRows)
-            if(retval):
-                retval= (self.dir2NegatvRebarRows == other.dir2NegatvRebarRows)
-            if(retval):
-                retval= (self.dir1ShReinfY == other.dir1ShReinfY)
-            if(retval):
-                retval= (self.dir1ShReinfZ == other.dir1ShReinfZ)
-            if(retval):
-                retval= (self.dir2ShReinfY == other.dir2ShReinfY)
-            if(retval):
-                retval= (self.dir2ShReinfZ == other.dir2ShReinfZ)
+        if(other is not None):
+            if(self is not other):
+                retval= super().__eq__(other)
+                if(retval):
+                    retval= (self.sectionDescr == other.sectionDescr)
+                if(retval):
+                    retval= (self.concrType == other.concrType)
+                if(retval):
+                    retval= (self.reinfSteelType == other.reinfSteelType)
+                if(retval):
+                    retval= (self.depth == other.depth)
+                if(retval):
+                    retval= (self.width == other.width)
+                if(retval):
+                    retval= (self.dir1PositvRebarRows == other.dir1PositvRebarRows)
+                if(retval):
+                    retval= (self.dir1NegatvRebarRows == other.dir1NegatvRebarRows)
+                if(retval):
+                    retval= (self.dir2PositvRebarRows == other.dir2PositvRebarRows)
+                if(retval):
+                    retval= (self.dir2NegatvRebarRows == other.dir2NegatvRebarRows)
+                if(retval):
+                    retval= (self.dir1ShReinfY == other.dir1ShReinfY)
+                if(retval):
+                    retval= (self.dir1ShReinfZ == other.dir1ShReinfZ)
+                if(retval):
+                    retval= (self.dir2ShReinfY == other.dir2ShReinfY)
+                if(retval):
+                    retval= (self.dir2ShReinfZ == other.dir2ShReinfZ)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def createSections(self):
@@ -777,12 +788,15 @@ class ElementSectionMap(object):
     
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.elementSections == other.elementSections)
-            if(retval):
-                retval= (self.elementDimension == other.elementDimension)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.elementSections == other.elementSections)
+                if(retval):
+                    retval= (self.elementDimension == other.elementDimension)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getElementDimension(self, elemTag):

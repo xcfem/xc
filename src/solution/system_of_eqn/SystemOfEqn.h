@@ -108,6 +108,8 @@ class SystemOfEqn: public MovableObject, public CommandEntity
     virtual int solve(void)= 0;
     virtual void save(void) const;
     virtual void restore(void);
+
+    virtual boost::python::list getAPy(void) const;
   };
 } // end of XC namespace
 

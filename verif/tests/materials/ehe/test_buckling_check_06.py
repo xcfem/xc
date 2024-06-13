@@ -111,10 +111,15 @@ for e in xcTotalSet.elements:
     reinforcementFactorY= 2 # Circular section table 43.5.1
     Cz= 0.2 # table 43.1.2 of EHE-08.
     Cy= 0.2
-    Leffi, mechLambdai, Efi, strongAxisBucklingPercent= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    # Compute buckling parameters.
+    bucklingParameters= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= diameter, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= diameter, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    Leffi= bucklingParameters['Leffi']
     avgLeff+= Leffi[0] # Effective length for the first mode.
+    mechLambdai= bucklingParameters['mechLambdai']
     avgMechLambda+= mechLambdai[0] # Mechanical slenderness for the first mode.
+    Efi= bucklingParameters['Efi']
     avgEf+= Efi[0][0] # Fictitious eccentricity for the first mode Y axis.
+    strongAxisBucklingPercent= bucklingParameters['strongAxisBucklingPercent']
     avgStrongAxisBucklingPercent+= strongAxisBucklingPercent[0] # dot product (projection) of the buckling eigenvector over the strong axis.
     
     z= e.getPosCentroid(False).z

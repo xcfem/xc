@@ -173,6 +173,9 @@ class OutputStyle(object):
         elif(itemToDisp=='mode'):
             fConvUnits= 1.0
             unitDescription= '-'
+        elif(itemToDisp=='alpha_cr'): # factor by which the design loading would have to be increased to cause elastic instability (see Eurocode 4:2004 cl.5.2.1(2)).
+            fConvUnits= 1.0
+            unitDescription= ''
         elif(itemToDisp=='strongAxisBucklingPercent'):
             fConvUnits= 1.0
             unitDescription= 'Dot product (projection) of the buckling eigenvector over the strong axis.'
@@ -250,7 +253,8 @@ sp_capTexts={
     'mechLambdaY': 'esbeltez mecánica (eje Y).',
     'efZ': 'excentricidad adicional por pandeo (eje Z).',
     'efY': 'excentricidad adicional por pandeo (eje Y).',
-    'mode': 'modo de pandeo.'
+    'mode': 'modo de pandeo.',
+    'alpha_cr': 'Ncr/N'
   }
 
 #English caption texts
@@ -311,7 +315,8 @@ en_capTexts={
     'mechLambdaY': 'mechanical slenderness for buckling around Y axis.',
     'efZ': 'additional eccentricity for buckling around Z axis.',
     'efY': 'additional eccentricity for buckling around Y axis.',
-    'mode': 'buckling mode corresponding to the previous parameters.'
+    'mode': 'buckling mode corresponding to the previous parameters.',
+    'alpha_cr': 'Ncr/N'
   }
 
 #Caption texts in French
@@ -374,4 +379,5 @@ fr_capTexts={
     'efZ': 'eccentricité additionnelle (axe Z).',
     'efY': 'eccentricité additionnelle (axe Y).',
     'mode': 'mode de flambage.',
+    'alpha_cr': 'Ncr/N'
   }

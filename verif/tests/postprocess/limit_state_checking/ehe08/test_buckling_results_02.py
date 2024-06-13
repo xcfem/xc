@@ -46,7 +46,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Problem geometry
-H= 20.36 # Buckling length.
+H= 13.0#20.36 # Buckling length.
 p2= modelSpace.newKPoint(0,0,H)
 p1= modelSpace.newKPoint(0,0,0)
 l1= modelSpace.newLine(p1, p2)
@@ -86,8 +86,8 @@ modelSpace.fixNode('00F_FFF',topNode.tag)
 ### Permanent load.
 g1= modelSpace.newLoadPattern(name= 'G1')
 N= -2000e3
-MzTop= 500e3
-MzBottom= 500e3
+MzTop= 1000e3
+MzBottom= -1000e3
 g1.newNodalLoad(topNode.tag, xc.Vector([0, 0, N, MzTop, 0, 0]))
 g1.newNodalLoad(bottomNode.tag, xc.Vector([0,0,0, MzBottom, 0, 0]))
 ### Variable load.
@@ -143,8 +143,8 @@ feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results. The reference values doesn't come from a benchmark test,
 # they serve only to verify that the code run as intended.
-ratio1= abs(meanCFs[0]-0.5478014386732756)/0.5478014386732756
-ratio2= abs(meanCFs[1]-0.542054397567014)/0.542054397567014
+ratio1= abs(meanCFs[0]-0.9213895059244708)/0.9213895059244708
+ratio2= abs(meanCFs[1]-0.9852785840915605)/0.9852785840915605
 
 # print(meanCFs)
 
@@ -162,10 +162,10 @@ else:
 # oh= output_handler.OutputHandler(modelSpace)
 
 # oh.displayFEMesh()
-# Load control variables to display:
+# # Load control variables to display:
 # bucklingParametersLSD.readControlVars(modelSpace= modelSpace)
 # arguments= ['My', 'Mz', 'CF', 'Leff', 'mechLambda', 'efY', 'efZ', 'mode'] 
-# arguments= ['Leff', 'CF']
+# arguments= ['Leff', 'CF', 'mechLambda']
 # for arg in arguments:
 #     oh.displayBeamResult(attributeName= bucklingParametersLSD.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)
     

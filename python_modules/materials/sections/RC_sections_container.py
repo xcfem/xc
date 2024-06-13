@@ -74,18 +74,21 @@ class SectionContainer(object):
     
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.sections == other.sections)
-            if(retval):
-                retval= (self.mapSections == other.mapSections)
-            if(retval):
-                if(self.mapInteractionDiagrams):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.')
-                
+        if(other is not None):
+            if(self is not other):
+                retval= (self.sections == other.sections)
+                if(retval):
+                    retval= (self.mapSections == other.mapSections)
+                if(retval):
+                    if(self.mapInteractionDiagrams):
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.warning(className+'.'+methodName+'; not implemented yet for interaction diagrams.')
+
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def append(self, rcSections):

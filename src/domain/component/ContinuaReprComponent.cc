@@ -27,7 +27,6 @@
 //ContinuaReprComponent.cc
 
 #include "ContinuaReprComponent.h"
-
 #include "utility/matrix/ID.h"
 
 XC::ContinuaReprComponent::ContinuaReprComponent(int classTag)
@@ -52,3 +51,17 @@ int XC::ContinuaReprComponent::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ContinuaReprComponent::getPyDict(void) const
+  {
+    boost::python::dict retval= DomainComponent::getPyDict();
+    retval["dead"]= dead;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ContinuaReprComponent::setPyDict(const boost::python::dict &d)
+  {
+    DomainComponent::setPyDict(d);
+    this->dead= boost::python::extract<int>(d["dead"]);
+  }

@@ -39,14 +39,17 @@ class SectionProperties(object):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= (self.name == other.name)
-            if(retval):
-                retval= (self.xc_material == other.xc_material)
-            if(retval):
-                retval= (self.torsionalStiffnessFactor== other.torsionalStiffnessFactor)
+        if(other is not None):
+            if(self is not other):
+                retval= (self.name == other.name)
+                if(retval):
+                    retval= (self.xc_material == other.xc_material)
+                if(retval):
+                    retval= (self.torsionalStiffnessFactor== other.torsionalStiffnessFactor)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def getDict(self):
@@ -561,14 +564,17 @@ class RectangularSection(SectionProperties):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(RectangularSection,self).__eq__(other)
-            if(retval):
-                retval= (self.b == other.b)
-            if(retval):
-                retval= (self.h== other.h)
+        if(other is not None):
+            if(self is not other):
+                retval= super(RectangularSection,self).__eq__(other)
+                if(retval):
+                    retval= (self.b == other.b)
+                if(retval):
+                    retval= (self.h== other.h)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
       
     def A(self):
@@ -837,14 +843,17 @@ class CircularSection(SectionProperties):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(CircularSection,self).__eq__(other)
-            if(retval):
-                retval= (self.Rext == other.Rext)
-            if(retval):
-                retval= (self.Rint== other.Rint)
+        if(other is not None):
+            if(self is not other):
+                retval= super(CircularSection,self).__eq__(other)
+                if(retval):
+                    retval= (self.Rext == other.Rext)
+                if(retval):
+                    retval= (self.Rint== other.Rint)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def A(self):
@@ -995,28 +1004,31 @@ class GenericSection(SectionProperties):
       
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(GenericSection,self).__eq__(other)
-            if(retval):
-                retval= (self.area == other.area)
-            if(retval):
-                retval= (self.I_y == other.I_y)
-            if(retval):
-                retval= (self.I_z == other.I_z)
-            if(retval):
-                retval= (self.Jtors == other.Jtors)
-            if(retval):
-                retval= (self.W_y == other.W_y)
-            if(retval):
-                retval= (self.W_z == other.W_z)
-            if(retval):
-                retval= (self.alphY == other.alphY)
-            if(retval):
-                retval= (self.alphZ == other.alphZ)
-            if(retval):
-                retval= (self.Iw == other.Iw)
+        if(other is not None):
+            if(self is not other):
+                retval= super(GenericSection,self).__eq__(other)
+                if(retval):
+                    retval= (self.area == other.area)
+                if(retval):
+                    retval= (self.I_y == other.I_y)
+                if(retval):
+                    retval= (self.I_z == other.I_z)
+                if(retval):
+                    retval= (self.Jtors == other.Jtors)
+                if(retval):
+                    retval= (self.W_y == other.W_y)
+                if(retval):
+                    retval= (self.W_z == other.W_z)
+                if(retval):
+                    retval= (self.alphY == other.alphY)
+                if(retval):
+                    retval= (self.alphZ == other.alphZ)
+                if(retval):
+                    retval= (self.Iw == other.Iw)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def A(self):
@@ -1101,22 +1113,25 @@ class ISection(SectionProperties):
       
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(ISection,self).__eq__(other)
-            if(retval):
-                retval= (self.wTF == other.wTF)
-            if(retval):
-                retval= (self.tTF == other.tTF)
-            if(retval):
-                retval= (self.tW == other.tW)
-            if(retval):
-                retval= (self.hW == other.hW)
-            if(retval):
-                retval= (self.wBF == other.wBF)
-            if(retval):
-                retval= (self.tBF == other.tBF)
+        if(other is not None):
+            if(self is not other):
+                retval= super(ISection,self).__eq__(other)
+                if(retval):
+                    retval= (self.wTF == other.wTF)
+                if(retval):
+                    retval= (self.tTF == other.tTF)
+                if(retval):
+                    retval= (self.tW == other.tW)
+                if(retval):
+                    retval= (self.hW == other.hW)
+                if(retval):
+                    retval= (self.wBF == other.wBF)
+                if(retval):
+                    retval= (self.tBF == other.tBF)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def hTotal(self):
@@ -1216,12 +1231,15 @@ class PolygonalSection(SectionProperties):
         
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(PolygonalSection,self).__eq__(other)
-            if(retval):
-                retval= (self.plg == other.plg)
+        if(other is not None):
+            if(self is not other):
+                retval= super(PolygonalSection,self).__eq__(other)
+                if(retval):
+                    retval= (self.plg == other.plg)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
         
     def reCenter(self):
@@ -1351,20 +1369,23 @@ class TSection(PolygonalSection):
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(TSection,self).__eq__(other)
-            if(retval):
-                retval= (self.webWidth == other.webWidth)
-            if(retval):
-                retval= (self.webHeight == other.webHeight)
-            if(retval):
-                retval= (self.flangeWidth == other.flangeWidth)
-            if(retval):
-                retval= (self.flangeThickness == other.flangeThickness)
-            if(retval):
-                retval= (self.chamferSide == other.chamferSide)
+        if(other is not None):
+            if(self is not other):
+                retval= super(TSection,self).__eq__(other)
+                if(retval):
+                    retval= (self.webWidth == other.webWidth)
+                if(retval):
+                    retval= (self.webHeight == other.webHeight)
+                if(retval):
+                    retval= (self.flangeWidth == other.flangeWidth)
+                if(retval):
+                    retval= (self.flangeThickness == other.flangeThickness)
+                if(retval):
+                    retval= (self.chamferSide == other.chamferSide)
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def buildContour(self):
@@ -1470,18 +1491,21 @@ class CompoundSection(SectionProperties):
       
     def __eq__(self, other):
         '''Overrides the default implementation'''
-        if(self is not other):
-            retval= super(CompoundSection,self).__eq__(other)
-            if(retval):
-                retval= (self.Iw == other.Iw)
-            if(retval):
-                retval= (len(self.sectionList) == len(other.sectionList))
-            for sectionA, sectionB in zip(self.sectionList, other.sectionList):
-                retval= (sectionA == sectionB)
-                if(not retval):
-                    break
+        if(other is not None):
+            if(self is not other):
+                retval= super(CompoundSection,self).__eq__(other)
+                if(retval):
+                    retval= (self.Iw == other.Iw)
+                if(retval):
+                    retval= (len(self.sectionList) == len(other.sectionList))
+                for sectionA, sectionB in zip(self.sectionList, other.sectionList):
+                    retval= (sectionA == sectionB)
+                    if(not retval):
+                        break
+            else:
+                retval= True
         else:
-            retval= True
+            retval= False
         return retval
     
     def A(self):

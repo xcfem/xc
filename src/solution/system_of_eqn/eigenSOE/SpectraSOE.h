@@ -73,8 +73,10 @@ class SpectraSOE: public EigenSOE
 
     inline const Eigen::SparseMatrix<double> &getA(void) const
       { return A; }
+    virtual boost::python::list getAPy(void) const;
     inline const Eigen::SparseMatrix<double> &getM(void) const
       { return M; }
+    //virtual boost::python::list getMPy(void) const;
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);    
