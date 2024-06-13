@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Test values of slipstream effect according to EC1-2 clause 6.6. Home made test.'''
+''' Test values of centrifugal load according to clause 6.5.1 of EC1-2 clause 6.6. Home made test.'''
+
 
 from __future__ import division
 from __future__ import print_function
