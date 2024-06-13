@@ -153,6 +153,16 @@ class SituationCombs(dict):
         for key in comb_dict:
             self.add(key, comb_dict[key])        
            
+    def find(self, loadCombName:str):
+        ''' Return the load combination with the given name.
+
+        :param loadCombName: name of the load combination to find.
+        '''
+        retval= None
+        if(loadCombName in self):
+            retval= self[loadCombName]
+        return retval
+    
     def renumber(self, prefix:str= '', start:int= 0):
         ''' Renumber the combinations of this container.
 
@@ -410,6 +420,20 @@ class SLSCombinations(SituationsSet):
         self.freq.setFromDict(dct['freq'])
         self.qp.setFromDict(dct['qp'])
         self.earthquake.setFromDict(dct['earthquake'])
+
+    def find(self, loadCombName:str):
+        ''' Return the load combination with the given name.
+
+        :param loadCombName: name of the load combination to find.
+        '''
+        retval= self.rare.find(loadCombName= loadCombName)
+        if(retval is None):
+            retval= self.freq.find(loadCombName= loadCombName)
+        if(retval is None):
+            retval= self.qp.find(loadCombName= loadCombName)
+        if(retval is None):
+            retval= self.earthquake.find(loadCombName= loadCombName)
+        return retval
         
     def renumber(self, start:int= 0):
         ''' Renumber the combinations of this container.
@@ -496,6 +520,20 @@ class ULSCombinations(SituationsSet):
         self.fatigue.setFromDict(dct['fatigue'])
         self.earthquake.setFromDict(dct['earthquake'])
 
+    def find(self, loadCombName:str):
+        ''' Return the load combination with the given name.
+
+        :param loadCombName: name of the load combination to find.
+        '''
+        retval= self.perm.find(loadCombName= loadCombName)
+        if(retval is None):
+            retval= self.acc.find(loadCombName= loadCombName)
+        if(retval is None):
+            retval= self.fatigue.find(loadCombName= loadCombName)
+        if(retval is None):
+            retval= self.earthquake.find(loadCombName= loadCombName)
+        return retval
+            
     def renumber(self, start:int= 0):
         ''' Renumber the combinations of this container.
 
@@ -570,7 +608,16 @@ class CombContainer(object):
         self.SLS.setFromDict(dct['SLS'])
         self.ULS.setFromDict(dct['ULS'])
 
+    def find(self, loadCombName:str):
+        ''' Return the load combination with the given name.
 
+        :param loadCombName: name of the load combination to find.
+        '''
+        retval= self.SLS.find(loadCombName= loadCombName)
+        if(retval is None):
+            retval= self.ULS.find(loadCombName= loadCombName)
+        return retval
+    
     def renumber(self, start:int= 0):
         ''' Renumber the combinations of this container.
 
