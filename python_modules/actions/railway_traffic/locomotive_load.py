@@ -87,6 +87,10 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         dY= self.ySpacing/2.0
         return [geom.Pos2d(0,-dY), geom.Pos2d(0,+dY)]
 
+    def getWheelLoad(self):
+        ''' Return half the axle load.'''
+        return self.axleLoad/2.0
+    
     def getClassifiedWheelLoad(self):
         ''' Return the load on each wheel affected by the classification factor.'''
         return self.getAxleClassifiedLoad()/2.0

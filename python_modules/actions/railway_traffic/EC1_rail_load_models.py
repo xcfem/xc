@@ -63,7 +63,7 @@ def centrifugal_force_reduction_factor(v, Lf):
         coefF= 1-(vkmh-120)/1000*(814/vkmh+1.75)*(1-math.sqrt(2.88/Lf)) 
     else:
        coefF= 0.197+0.803*(math.sqrt(2.88/Lf))
-    coefF= max(coefF,0.35)
+    coefF= min(max(coefF,0.35), 1.0)
     return coefF
 
 def get_centrifugal_forces(v, Lf, r, Qvk, qvk):
@@ -107,7 +107,7 @@ class LocomotiveLoad(ll.LocomotiveLoad):
     def getCentrifugalLoadPerWheel(self, v, Lf, r):
         ''' Compute the characteristic values of the concentrated (Qtk) and 
             distributed (qtk) centrifugal forces according to equations (6.17)
-            and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+            and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraphs 8 and 9).
 
         :param v: speed (m/s).
         :param Lf: influence length of the loaded part of curved track on the 
@@ -115,9 +115,19 @@ class LocomotiveLoad(ll.LocomotiveLoad):
                    structural element under consideration (m).
         :param r: radius of curvature (m).
         '''
-        ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
+        v120= 120/3.6
+        cfrf= centrifugal_force_reduction_factor(v= v, Lf= Lf) # eq. (6.19)
+        inertiaFactor= v*v/constants.g/r # eq. (6.17)
         classifiedWheelLoad= self.getClassifiedWheelLoad()
-        return ff*classifiedWheelLoad
+        if(v>v120): # table 6.8 
+            inertiaFactor120= v120*v120/constants.g/r # eq. (6.18)
+            wheelLoad= self.getWheelLoad()
+            f1= inertiaFactor*cfrf*wheelLoad
+            f2= inertiaFactor120*classifiedWheelLoad
+            retval= max(f1, f2)
+        else:
+            retval= inertiaFactor*classifiedWheelLoad
+        return retval
                                    
     def getCentrifugalWheelLoads(self, v, Lf, r, trackCrossSection= None, h= 1.8):
         ''' Compute the characteristic values of the concentrated (Qtk) and 
@@ -161,9 +171,9 @@ class TrainLoadModel(tlm.TrainLoadModel):
     ''' Model for the loads of a according to EC-1.'''
     
     def getCentrifugalWheelLoads(self, v, Lf, r, trackCrossSection):
-        ''' Compute the characteristic values of the concentrated (Qtk) and 
-            distributed (qtk) centrifugal forces according to equations (6.17)
-            and (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
+        ''' Compute the characteristic values of the concentrated (Qtk)
+            centrifugal forces according to equations (6.17) and (6.19)
+            and table 6.7 of Eurocode 1 part 2.
 
         :param v: speed (m/s).
         :param Lf: influence length of the loaded part of curved track on the 
@@ -173,6 +183,32 @@ class TrainLoadModel(tlm.TrainLoadModel):
         :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
         '''
         return self.locomotive.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection, h= self.h)
+
+    def getCentrifugalUniformLoad(self, v, Lf, r):
+        ''' Compute the characteristic values of the distributed (qtk)
+            centrifugal forces according to equation (6.18) and (6.19)
+            and table 6.7 of Eurocode 1 part 2.
+
+        :param v: speed (m/s).
+        :param Lf: influence length of the loaded part of curved track on the 
+                   bridge, which is most unfavourable for the design of the 
+                   structural element under consideration (m).
+        :param r: radius of curvature (m).
+        '''
+        v120= 120/3.6
+        cfrf= centrifugal_force_reduction_factor(v= v, Lf= Lf) # eq. (6.19)
+        inertiaFactor= v*v/constants.g/r # eq. (6.18)
+        classifiedUniformLoad= self.getClassifiedUniformLoad()
+        if(v>v120): # table 6.8 
+            inertiaFactor120= v120*v120/constants.g/r # eq. (6.18)
+            uniformLoad= self.uniformLoad
+            f1= inertiaFactor*cfrf*uniformLoad
+            f2= inertiaFactor120*classifiedUniformLoad
+            retval= max(f1, f2)
+        else:
+            retval= inertiaFactor*classifiedUniformLoad
+        return retval
+        
 
     def getCentrifugalLoadPerMeter(self, v, Lf, r, trackCrossSection):
         ''' Compute the characteristic values of the concentrated (Qtk) and 
@@ -186,9 +222,7 @@ class TrainLoadModel(tlm.TrainLoadModel):
         :param r: radius of curvature (m).
         :param trackCrossSection: object that defines the cant and the gauge of the track (see TrackCrossSection class).
         '''
-        ff= v*v/constants.g/r*centrifugal_force_reduction_factor(v= v, Lf= Lf)
-        classifiedUniformLoad= self.getClassifiedUniformLoad()
-        q= ff*classifiedUniformLoad
+        q= self.getCentrifugalUniformLoad(v= v, Lf= Lf, r= r)
         if(trackCrossSection):
             # Distribute the load
             Q= [q,0,0] # Centrifugal load.

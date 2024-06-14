@@ -13,31 +13,31 @@ __email__= "l.pereztato@gmail.com"
 import math
 from actions.railway_traffic import EC1_rail_load_models as ec1
 
-V= 200 # Maximum train speed (km/h)
+V= 160 # Maximum train speed (km/h)
 v= V/3.6 # Maximum train speed (m/s)
-r= 2200 # radius of curvature.
+r= 1280 # radius of curvature.
 
-Lf=  5.0 # influence length of the loaded part of curved track on the bridge, which is most unfavourable for the design of the structural element under consideration [m].
+Lf=  170.0 # influence length of the loaded part of curved track on the bridge, which is most unfavourable for the design of the structural element under consideration [m].
 
-locomotiveCentrifugalLoads= ec1.locomotiveLM1.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r)
+locomotiveLoad= ec1.LocomotiveLoad()
+
+centrifugalLoadPerWheel= locomotiveLoad.getCentrifugalLoadPerWheel(v= v, Lf= Lf, r= r)
 
 
 # Check values.
 err= 0.0
-refValue= 15.87522673982712e3
-for load in locomotiveCentrifugalLoads:
-    err+= (load-refValue)**2
-err= math.sqrt(err)
+refValue= 14.990817520966214e3
+ratio1= abs(centrifugalLoadPerWheel-refValue)/refValue
 
 '''
-print('locomotive centrifugal loads: ', locomotiveCentrifugalLoads)
-print('reference value: ', refValue/1e3)
+print('centrifugal load per wheel: ',centrifugalLoadPerWheel/1e3)
+print('ratio1= ', ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (err<1e-11):
+if(ratio1<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

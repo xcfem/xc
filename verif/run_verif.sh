@@ -309,6 +309,9 @@ python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_slipstream_effec
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_01.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_02.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_03.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_04.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_05.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_06.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_traction_and_braking_force.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_line_load_design_situation_ii.py
 echo "$BLEU" "      IAPF traffic loads tests. Railway traffic." "$NORMAL"
