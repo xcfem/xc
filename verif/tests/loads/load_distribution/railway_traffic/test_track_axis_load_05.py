@@ -165,7 +165,7 @@ while(nLoad):
 # totalLoadRef= geom.SlidingVectorsSystem3d(geom.Pos3d(0,0,0), geom.Vector3d(26.0284e3, 190.515e3, -3.54625e3), geom.Vector3d(-1.42484e+06,477469,3.1818e+07))
 # Values have changed after the Eigen 3 headers (which CGAL also uses) have been
 # added to the source tree. Eigen 3 libraries are required by the Spectra libraries that are used in XC for eigenvalue computation.
-totalLoadRef= geom.SlidingVectorsSystem3d(geom.Pos3d(0,0,0), geom.Vector3d(23903.3, 197539, 601.8), geom.Vector3d(-1.44854e+06,323168,3.20938e+07))
+totalLoadRef= geom.SlidingVectorsSystem3d(geom.Pos3d(0,0,0), geom.Vector3d(19754.8, 163256, 497.355), geom.Vector3d(-1.19714e+06,267081,2.65238e+07))
 
 test= totalLoad-totalLoadRef
 R= test.getResultant()
