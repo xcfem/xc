@@ -302,13 +302,17 @@ python tests/actions/traffic_loads/test_ec1_notional_lane_computation_02.py
 python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_01.py
 python tests/actions/traffic_loads/test_ec1_lm1_tandem_position_02.py
 echo "$BLEU" "    Traffic loads tests. Railway traffic." "$NORMAL"
-python tests/actions/traffic_loads/railway_traffic/test_derailment_SIA.py
-python tests/actions/traffic_loads/railway_traffic/test_ec1_slipstream_effect.py
-python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_01.py
-python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_02.py
-python tests/actions/traffic_loads/railway_traffic/test_ec1_railway_centrifugal_force_03.py
-python tests/actions/traffic_loads/railway_traffic/test_ec1_traction_and_braking_force.py
-python tests/actions/traffic_loads/railway_traffic/test_ec1_line_load_design_situation_ii.py
+echo "$BLEU" "      SIA traffic loads tests. Railway traffic." "$NORMAL"
+python tests/actions/traffic_loads/railway_traffic/sia/test_derailment_SIA.py
+echo "$BLEU" "      EC1 traffic loads tests. Railway traffic." "$NORMAL"
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_slipstream_effect.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_01.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_02.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_03.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_traction_and_braking_force.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_line_load_design_situation_ii.py
+echo "$BLEU" "      IAPF traffic loads tests. Railway traffic." "$NORMAL"
+python tests/actions/traffic_loads/railway_traffic/iapf/test_iapf_railway_centrifugal_force_01.py
 
 # Load combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"

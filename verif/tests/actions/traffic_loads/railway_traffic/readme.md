@@ -1,4 +1,5 @@
 # Railway traffic loads verification tests
+Load and load eﬀects of traﬃc loads on railway bridges.
 
 ### Dynamic load factors.
 Dynamic load factors (ϕ) relate the magnitude of vertical wheel-to-rail loads in operation (dynamic loads) to static loads resulting from the weight of the vehicle and its contents, as a function of train speed.
