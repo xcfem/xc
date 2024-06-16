@@ -110,7 +110,7 @@ cfg= default_config.get_temporary_env_config()
 ### Analyze combinations and save buckling parameters
 xcTotalSet= modelSpace.getTotalSet()
 calcSet= xcTotalSet
-bucklingParametersLSD= EHE_limit_state_checking.BucklingParametersLimitStateData(numModes= 4)
+bucklingParametersLSD= EHE_limit_state_checking.BucklingParametersLimitStateData(numModes= 4, alpha_cr_threshold= 40.0) # alpha_cr_threshold= 40.0 is clearly excessive
 bucklingParametersLSD.setEnvConfig(cfg)
 bucklingParametersLSD.analyzeLoadCombinations(combContainer= combContainer, setCalc= calcSet)
 
