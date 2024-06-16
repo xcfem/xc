@@ -111,6 +111,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 self.elements.append(e)
         if(self.rgMinMax): # filter values.
             self.valueCouples= self.filterValueCouples(self.valueCouples)
+            lmsg.warning('Displayed values have been clipped whitin the range: ('+str(self.rgMinMax[0])+', '+str(self.rgMinMax[1])+"), so they don't correspond to the computed ones.")
         self.autoScale() # Update scale.
 
     def getMaxAbsComp(self):

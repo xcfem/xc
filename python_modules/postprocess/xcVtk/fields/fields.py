@@ -79,6 +79,7 @@ class ScalarField(fb.FieldBase):
                 self.updateMinMax(tmp)
             else:
                 self.updateMinMaxWithinRange(tmp,self.rgMinMax)
+                lmsg.warning('Displayed values have been clipped whitin the range: ('+str(self.rgMinMax[0])+', '+str(self.rgMinMax[1])+"), so they don't correspond to the computed ones.")
             self.arr.SetTuple1(n.getIdx,tmp)
         return self.arr
 

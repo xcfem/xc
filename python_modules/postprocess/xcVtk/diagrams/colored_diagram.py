@@ -216,6 +216,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
             posNode0= elem.getNodes[0].getCurrentPos3d(defFScale)
             posNode1= elem.getNodes[1].getCurrentPos3d(defFScale)
             diagramIndex= self.createDiagramInterval(offset= diagramIndex, org= posNode0, valOrg= v0, dest= posNode1, valDest= v1, dirVector= self.vDir)
+        if(rg.MinMax):
+            lmsg.warning('Displayed values have been clipped whitin the range: ('+str(self.rgMinMax[0])+', '+str(self.rgMinMax[1])+") so they don't correspond to the computed ones.")
         return diagramIndex
 
     def filterValueCouples(self, valueCouples):
