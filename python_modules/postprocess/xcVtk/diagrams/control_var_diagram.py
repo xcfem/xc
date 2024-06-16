@@ -20,36 +20,48 @@ class ControlVarDiagram(cd.ColoredDiagram):
 
     :ivar sets: list of element sets for which the diagram will be 
           displayed.
-    :iver attributeName: name of the element's property that has the 
+    :ivar attributeName: name of the element's property that has the 
            control var in it for example as in 
            elem.getProp(attributeName).component.
     :ivar component: property to be displayed 
           (possible arguments: 'CF', 'N', 'My', 'Mz', 'wk',...)
     :ivar defaultDirection: default direction of the diagram (J: element local
                             j vector or K: element local K vector).
+    :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax iqn red
+              (defaults to None)
+    :ivar lRefModSize: reference length of the model (how big the model is). Used to autoscale the diagram.
     '''
-    def __init__(self, scaleFactor, fUnitConv, sets, attributeName, component, defaultDirection= 'J'):
+    def __init__(self, scaleFactor, fUnitConv, sets, attributeName, component, defaultDirection= 'J', rgMinMax= None, lRefModSize= 1.0):
         ''' Diagram constructor
 
         :param scaleFactor: scale factor for the diagram (can be negative too).
         :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :param sets:      list of element sets for which the diagram will be displayed.
-        :param attributeName: name of the 
-        :param component: property to be displayed 
-                         (possible arguments: 'N', 'My', 'Mz'Vz,...)
+        :param attributeName: name of the property that containst the control
+                              variable.
+        :param component: component of the control variable to be displayed 
+                         (possible arguments: 'N', 'My', 'Mz'Vz,...).
         :param defaultDirection: default direction of the diagram (J: element local
                                  j vector or K: element local K vector).
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the scalar field (if any) to be represented. All 
+                         the values less than vmin are displayed in blue and 
+                         those greater than vmax in red (defaults to None)
+        :param lRefModSize: reference length of the model (how big the model is). Used to autoscale the diagram.
         '''
-        super(ControlVarDiagram,self).__init__(scaleFactor,fUnitConv)
-        self.conjuntos= sets
+        super(ControlVarDiagram,self).__init__(scaleFactor= scaleFactor,fUnitConv= fUnitConv, rgMinMax= rgMinMax)
+        self.elemSets= sets
         self.attributeName= attributeName 
         self.component= component
         self.defaultDirection= defaultDirection
+        self.lRefModSize= lRefModSize
 
     def getElementComponentData(self, elem):
         '''Return the data to be used to represent the diagram over the element
 
-        :param elem: element to deal with.
+        :param elem: element to get the components for.
         '''
         # default values
         elemVDir= None
@@ -85,34 +97,54 @@ class ControlVarDiagram(cd.ColoredDiagram):
             [elemVDir,value1,value2]= cv.get_element_internal_force_component_data(elem, self.component, self.defaultDirection)
         return [elemVDir,value1,value2]
 
+    def computeDiagramValues(self):
+        ''' Return the values needed to create the diagram representation.'''
+        self.dirVectors= list()
+        self.valueCouples= list()
+        self.elements= list()
+        for s in self.elemSets:
+            for e in s.elements:
+                e.getResistingForce()
+                componentData= self.getElementComponentData(e)
+                self.dirVectors.append(componentData[0])
+                self.valueCouples.append((componentData[1], componentData[2]))
+                self.elements.append(e)
+        if(self.rgMinMax): # filter values.
+            self.valueCouples= self.filterValueCouples(self.valueCouples)
+        self.autoScale() # Update scale.
+
     def getMaxAbsComp(self):
         '''Return the maximum absolute value of the component.
         It is used only for calculating auto-scale parameter, so 
         we compare only values of the component in first node of the elements
         '''
         maxV= 0.0
-        for s in self.conjuntos:
-            for e in s.elements:
-                e.getResistingForce()
-                # direction irrelevant here.
-                elementComponentData= self.getElementComponentData(e) 
-                v1= abs(elementComponentData[1])
-                maxV= max(v1, maxV)
-                v2= abs(elementComponentData[2])
-                maxV= max(v2, maxV)
-        return maxV            
+        for (v0, v1) in self.valueCouples:
+            maxV= max(abs(v0), maxV)
+            maxV= max(abs(v1), maxV)
+        return maxV
+
+    def autoScale(self):
+        ''' Autoscale the diagram. '''
+        maxAbsComp= self.getMaxAbsComp()
+        if(maxAbsComp>0):
+            self.scaleFactor*= 0.15*self.lRefModSize/(maxAbsComp*self.fUnitConv)
+
+    def clear(self):
+        ''' Clear the diagram data.'''
+        self.dirVectors.clear()
+        self.elements.clear()
+        self.valueCouples.clear()
 
     def addDiagram(self):
         '''Add diagram to the scene.'''
         self.creaEstrucDatosDiagrama()
         self.creaLookUpTable()
         self.creaActorDiagrama()
-        indxDiagrama= 0
-        for s in self.conjuntos:
-            for e in s.elements:
-                e.getResistingForce()
-                componentData= self.getElementComponentData(e)
-                indxDiagrama= self.appendDataFromElementEnds(componentData[0],e,indxDiagrama,componentData[1],componentData[2])
+        diagramIndex= 0
+        self.computeDiagramValues()
+        diagramIndex= self.appendDataFromElementEnds(dirVectors= self.dirVectors, elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples)
+        self.clear()
         self.updateLookUpTable()
         self.updateActorDiagrama()
 

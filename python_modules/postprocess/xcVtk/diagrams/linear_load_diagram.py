@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ''' Display of loads over linear elements. '''
 
 from __future__ import print_function
@@ -23,18 +23,26 @@ class LinearLoadDiagram(cd.ColoredDiagram):
           linear loaded element the sum of active loads on it
           (defaults to None)
     '''
-    def __init__(self,setToDisp,scale,fUnitConv,component):
+    def __init__(self, setToDisp, scale, lRefModSize, fUnitConv, component, rgMinMax= None):
         ''' Constructor.
 
         :param setToDisp: set to display.
+        :param scale: scale factor for the diagram (can be negative too).
+        :param lRefModSize: reference length of the model (how big the model is).
+        :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :param component: component to display.
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the scalar field (if any) to be represented. All 
+                         the values less than vmin are displayed in blue and 
+                         those greater than vmax in red (defaults to None)
         '''
-        super(LinearLoadDiagram,self).__init__(scale,fUnitConv)
-        self.setToDisp=setToDisp
+        super(LinearLoadDiagram,self).__init__(scaleFactor= scale, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
+        self.setToDisp= setToDisp
         self.component= component
-        self.dictActLoadVectors=None
+        self.dictActLoadVectors= None
+        self.lRefModSize= lRefModSize        
 
-    def sumElementalUniformLoads(self,actLP):
+    def sumElementalUniformLoads(self, actLP):
         ''' Iterate over active load patterns and cumulate on elements their 
         elemental unifirm loads. Returns a dictionary that stores for each 
         linear loaded element the sum of active loads on it
@@ -81,32 +89,43 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         return retval
        
 
-    def dumpElementalLoads(self, actLP, indxDiagram):
+    def dumpElementalLoads(self, actLP, diagramIndex, defFScale= 0.0):
         ''' Iterate over loaded elements dumping its loads into the graphic.
 
         :param actLP: list of active load patterns.
+        :param diagramIndex: index-counter for the values to insert.
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape).
         '''
         preprocessor=actLP[0].getDomain.getPreprocessor
         if not self.dictActLoadVectors:
             self.dictActLoadVectors=self.sumElementalUniformLoads(actLP)
+        valueCouples= list()
+        elements= list()
         if(self.component=='axialComponent'):
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
                 self.vDir= elem.getJVector3d(True)
                 axialLoad=self.dictActLoadVectors[eTag].x
-                indxDiagram= self.appendDataToDiagram(elem,indxDiagram,axialLoad,axialLoad)
+                elements.append(elem)
+                valueCouples.append((axialLoad, axialLoad))      
         elif(self.component in ['transComponent','transYComponent']):  # transComponent only for 2D models
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
                 self.vDir= elem.getJVector3d(True)
                 transLoad=self.dictActLoadVectors[eTag].y
-                indxDiagram= self.appendDataToDiagram(elem,indxDiagram,transLoad,transLoad)
+                elements.append(elem)
+                valueCouples.append((transLoad,transLoad))
         elif(self.component=='transZComponent'):  
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
                 self.vDir= elem.getKVector3d(True)
                 transZLoad=self.dictActLoadVectors[eTag].z
-                indxDiagram= self.appendDataToDiagram(elem,indxDiagram,transZLoad,transZLoad)
+                elements.append(elem)
+                valueCouples.append((transZLoad,transZLoad))
         elif(self.component=='xyzComponents'):
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
@@ -117,14 +136,19 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 v= localForce.x*vI+localForce.y*vJ+localForce.z*vK
                 self.vDir= v.normalized()
                 totLoad= v.getModulus()
-                indxDiagram= self.appendDataToDiagram(elem, indxDiagram, totLoad, totLoad)
+                elements.append(elem)
+                valueCouples.append((totLoad, totLoad))
         else:
             lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
-        return indxDiagram
+        if(valueCouples):
+            diagramIndex= self.appendDataToDiagram(elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples, defFScale= defFScale)      
+        return diagramIndex
  
-    def getMaxAbsComp(self,preprocessor):
+    def getMaxAbsComp(self, preprocessor):
         '''Return the maximum absolute value of the component.
-        It is used for calculating auto-scale parameter
+        It is used for calculating auto-scale parameter.
+
+        :param preprocessor: pre-processor of the finite element problem.
         '''
         activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
         if(len(activeLoadPatterns)<1):
@@ -147,24 +171,43 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
         return retval
 
-    def dumpLoads(self, preprocessor, indxDiagram):
-        ''' Dump loads over elements.'''
+    def autoScale(self, preprocessor):
+        ''' Autoscale the diagram.
+
+        :param preprocessor: pre-processor of the finite element problem.
+        '''
+        maxAbsComp= self.getMaxAbsComp(preprocessor= preprocessor)
+        if(maxAbsComp>0):
+            self.scaleFactor*= LrefModSize/maxAbs*100.0
+        return maxAbsComp
+
+    def dumpLoads(self, preprocessor, diagramIndex, defFScale= 0.0):
+        ''' Dump loads over elements.
+
+        :param preprocessor: pre-processor of the finite element problem.
+        :param diagramIndex: index-counter for the values to insert.
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape).
+        '''
         activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
         if(len(activeLoadPatterns)<1):
             lmsg.warning('No active load patterns.')
         retval= 0
         actLP=[lp.data() for lp in activeLoadPatterns]
-        retval= self.dumpElementalLoads(actLP,indxDiagram)
+        retval= self.dumpElementalLoads(actLP, diagramIndex, defFScale= defFScale)
         return retval
 
-    def addDiagram(self,preprocessor):
+    def addDiagram(self,preprocessor, defFScale= 0.0):
         self.creaEstrucDatosDiagrama()
         self.creaLookUpTable()
         self.creaActorDiagrama()
 
-        indxDiagram= 0
-        indxDiagram= self.dumpLoads(preprocessor,indxDiagram)
+        diagramIndex= 0
+        diagramIndex= self.dumpLoads(preprocessor= preprocessor, diagramIndex= diagramIndex, defFScale= defFScale)
 
-        if(indxDiagram>0):
+        if(diagramIndex>0):
             self.updateLookUpTable()
             self.updateActorDiagrama()

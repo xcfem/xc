@@ -20,7 +20,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
     :ivar defaultDirection: default direction of the diagram (J: element local
                             j vector or K: element local K vector).
     '''
-    def __init__(self,scale,fUnitConv,sets,component, defaultDirection= 'J'):
+    def __init__(self,scale, fUnitConv, sets, component, defaultDirection= 'J', rgMinMax= None):
         ''' Diagram constructor
 
         :param scale:     scale factor for the diagram (can be negative too).
@@ -30,9 +30,10 @@ class InternalForceDiagram(cd.ColoredDiagram):
                          (possible arguments: 'N', 'My', 'Mz'Vz,...)
         :param defaultDirection: default direction of the diagram (J: element
                                  local j vector or K: element local K vector).
+
         '''
 
-        super(InternalForceDiagram,self).__init__(scale,fUnitConv)
+        super(InternalForceDiagram,self).__init__(scaleFactor= scale, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
         self.conjuntos= sets
         self.component= component
         self.defaultDirection= defaultDirection
@@ -52,12 +53,18 @@ class InternalForceDiagram(cd.ColoredDiagram):
         self.creaLookUpTable()
         self.creaActorDiagrama()
 
-        indxDiagrama= 0
+        diagramIndex= 0
+        dirVectors= list()
+        valueCouples= list()
+        elements= list()
         for s in self.conjuntos:
             for e in s.elements:
                 e.getResistingForce()
                 componentData= self.getElementComponentData(e)
-                indxDiagrama= self.appendDataFromElementEnds(componentData[0],e,indxDiagrama, componentData[1], componentData[2])
+                dirVectors.append(componentData[0])
+                valueCouples.append((componentData[1], componentData[2]))
+                elements.append(e)
+        diagramIndex= self.appendDataFromElementEnds(dirVectors= dirVectors, elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples)
 
         self.updateLookUpTable()
         self.updateActorDiagrama()

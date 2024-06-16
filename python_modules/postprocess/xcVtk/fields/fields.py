@@ -25,7 +25,7 @@ class ScalarField(fb.FieldBase):
                 (defaults to None)
 
     '''
-    def __init__(self, name, functionName, component=None, fUnitConv= 1.0,rgMinMax=None):
+    def __init__(self, name, functionName, component=None, fUnitConv= 1.0,rgMinMax= None):
         ''' Constructor.
 
         :param name: node property that contains the value to represent.
@@ -97,10 +97,6 @@ class ScalarField(fb.FieldBase):
 class ExtrapolatedScalarField(ScalarField):
     '''Scalar field defined at nodes.
 
-    :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-                of the scalar field (if any) to be represented. All the values 
-                less than vmin are displayed in blue and those greater than vmax 
-                in red (defaults to None)
     '''
     def __init__(self,name, functionName, xcSet, component= None, fUnitConv= 1.0,rgMinMax=None):
         ''' Constructor.

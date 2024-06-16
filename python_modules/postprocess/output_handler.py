@@ -16,6 +16,8 @@ from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.fields import vector_field as vf
 from postprocess.xcVtk.fields import load_vector_field as lvf
 from postprocess.xcVtk.diagrams import control_var_diagram as cvd
+from postprocess.xcVtk.diagrams import beam_result_diagram as brd
+from postprocess.xcVtk.diagrams import internal_force_diagram as ifd
 from postprocess.xcVtk.diagrams import linear_load_diagram as lld
 from postprocess.xcVtk.diagrams import node_property_diagram as npd
 from postprocess.xcVtk.diagrams import element_property_diagram as epd
@@ -183,7 +185,7 @@ class OutputHandler(object):
               (defaults to None)
 
         '''
-        field= fields.ScalarField(name=propToDisp,functionName="getProp",component=None,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
+        field= fields.ScalarField(name=propToDisp,functionName="getProp",component=None, fUnitConv= fUnitConv, rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.displayMesh(xcSets=setToDisplay, field= field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
@@ -386,8 +388,8 @@ class OutputHandler(object):
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         if not captionText:
             captionText= self.getCaptionText('Reactions', unitDescription, setToDisplay)
-        vFieldF= vf.VectorField(name='Freact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
-        vFieldM= vf.VectorField(name='Mreact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
+        vFieldF= vf.VectorField(name='Freact', fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
+        vFieldM= vf.VectorField(name='Mreact', fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
         vFieldF.populateFromPairList(forcePairs)
         vFieldM.populateFromPairList(momentPairs)
 
@@ -447,7 +449,8 @@ class OutputHandler(object):
                                  local j vector or K: element local K vector).
         '''
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component, defaultDirection= defaultDirection)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component, defaultDirection= defaultDirection, lRefModSize= LrefModSize)
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -490,13 +493,9 @@ class OutputHandler(object):
             scaleFactor= self.outputStyle.internalForcesDiagramScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
-        diagAux= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
-        maxAbs= diagAux.getMaxAbsComp()
-        if maxAbs > 0:
-            scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
+        diagram= ifd.InternalForceDiagram(scaleFactor= scaleFactor, lRefModSize= LrefModSize,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
         diagram.addDiagram() # add the diagram to the scene.
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -623,15 +622,13 @@ class OutputHandler(object):
                 AssertionError('Can\'t setup grid.')
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
-            scOrient=1 #scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
+            scOrient=1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             # auto-scaling parameters
             LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
             elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay, scale=elLoadScaleF, fUnitConv= unitConversionFactor, component=elLoadComp)
-            maxAbs= diagram.getMaxAbsComp(preprocessor)
+            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay, scale=elLoadScaleF, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
+            maxAbs= diagram.autoScale(preprocessor)
             if(maxAbs>0.0):
-                elLoadScaleF*= LrefModSize/maxAbs*100.0
-                diagram.scaleFactor= elLoadScaleF
                 #Linear loads
                 diagram.addDiagram(preprocessor)
                 if(diagram.isValid()):
@@ -694,10 +691,8 @@ class OutputHandler(object):
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-        lmsg.warning("Auto scale not implemented yet.")
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-        scaleFactor= LrefModSize/unitConversionFactor 
-        diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= itemToDisp)
+        diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= itemToDisp)
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -732,8 +727,8 @@ class OutputHandler(object):
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-        scaleFactor= 1.0
-        diagram= epd.ElementPropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
+        diagram= epd.ElementPropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp)
         diagram.addDiagram()
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
@@ -913,7 +908,7 @@ class OutputHandler(object):
             displaySettings.displayScene(caption,fileName)
         return displaySettings
 
-    def displayBeamResult(self,attributeName,itemToDisp,beamSetDispRes,setToDisplay=None,caption=None,fileName=None,defFScale=0.0, defaultDirection= 'J'):
+    def displayBeamResult(self, attributeName, itemToDisp, beamSetDispRes, setToDisplay=None, caption=None, fileName=None, defFScale=0.0, defaultDirection= 'J', rgMinMax= None):
         '''display results for beam elements from a limit state verification file.
 
         :param attributeName:attribute name(e.g. 'ULS_normalStressesResistance')
@@ -933,6 +928,10 @@ class OutputHandler(object):
 
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the scalar field (if any) to be represented. All 
+                         the values less than vmin are displayed in blue and 
+                         those greater than vmax in red (defaults to None)
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -942,25 +941,20 @@ class OutputHandler(object):
             e0= beamSetDispRes.elements[0]
             propName= attributeName+'Sect1'
             if(e0.hasProp(propName)):
-                LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-                lstArgVal=[e.getProp(propName)(itemToDisp) for e in beamSetDispRes.elements]
+                lRefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
                 unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-                scaleFactor= 1.0
-                maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
-                if(maxAbs>0):
-                    scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
                 if not caption:
                     if hasattr(beamSetDispRes,'description'):
                         descrSet= beamSetDispRes.description.capitalize()
                     if(len(descrSet)==0): # No description provided.
                         descrSet= beamSetDispRes.name
                     caption= attributeName + ', ' + itemToDisp +' '+unitDescription+ '. '+ descrSet
-                diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp, defaultDirection= defaultDirection)
+                diagram= brd.BeamResultDiagram(scaleFactor= 1.0, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, sets=[beamSetDispRes], attributeName= attributeName, component= itemToDisp, defaultDirection= defaultDirection, rgMinMax= rgMinMax)
                 diagram.addDiagram()
                 displaySettings= vtk_FE_graphic.DisplaySettingsFE()
                 displaySettings.cameraParameters= self.getCameraParameters()
                 displaySettings.setupGrid(setToDisplay)
-                meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
+                meshSceneOk= displaySettings.defineMeshScene(None, defFScale,color= setToDisplay.color)
                 if(meshSceneOk):
                     displaySettings.appendDiagram(diagram) #Append diagram to the scene.
                     displaySettings.displayScene(caption= caption,fileName= fileName)

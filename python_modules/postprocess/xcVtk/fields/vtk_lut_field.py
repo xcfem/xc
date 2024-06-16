@@ -21,7 +21,7 @@ class LUTField(object):
     on linear elements
 
     :ivar fUnitConv:  units conversion factor
-    :ivar lookUpTable:object that is used by mapper objects to map scalar values
+    :ivar lookUpTable: object that is used by mapper objects to map scalar values
                   into rga (red-green-blue-alpha transparency) color specification
                   or rga into scalar values. 
     :ivar scalarBar:  legend that indicates to the viewer the correspondence between 
