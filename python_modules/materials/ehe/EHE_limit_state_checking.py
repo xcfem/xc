@@ -1068,7 +1068,7 @@ def get_lower_slenderness_limit(C:float, nonDimensionalAxialForce:float, e1, e2,
 
 
 
-def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDepthZ, Cz, reinforcementFactorZ, sectionDepthY= None, Cy= None, reinforcementFactorY= None, eigenvectorNormThreshold= 1e-3):
+def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDepthZ, Cz, reinforcementFactorZ, sectionDepthY= None, Cy= None, reinforcementFactorY= None, eigenvectorNormThreshold= 1e-3, alpha_cr_threshold= 10.0):
     ''' Return the effective length, mechanical slenderness and fictitious eccentricity for the given buckling load factors.
 
     :param element: element to compute the buckling parameters for.
@@ -1086,6 +1086,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
     :param reinforcementFactorY: reinforcement factor computed as $\beta= \frac{(d-d')^2}{4*i_s^2}$ with $i_s$ being the radius of gyration of the reinforcements about the y axis.
     :param eigenvectorNormThreshold: if the node eigenvector has a norm smaller
                                      than this threshold it is considered null.
+    :param alpha_cr_threshold: # Lower limit for the Ncr/N factor by which the design loading would have to be increased to cause elastic instability (see Eurocode 4:2004 cl.5.2.1(2)). For values of alpha_cr greater than alpha_cr_threshold the instability effect is ignored.
     '''
     maxMechLambda= 100.0 # According to clause 43.5 of EHE-08.
     N= element.getN() # Element axial load.
@@ -1146,15 +1147,16 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         minimumEccentricityY= max(.02, sectionDepthY/20)
         for mode, Ncr in enumerate(Ncri):
             if(abs(N)>0):
-                alpha_cr_i.append(Ncr/N)
+                alpha_cr= Ncr/N
             else:
-                alpha_cr_i.append(1e3)
+                alpha_cr= 1e3
+            alpha_cr_i.append(alpha_cr)
             mode1= mode+1
             node0Eigenvector= nodes[0].getEigenvector(mode1)
             node0EigenvectorNorm= node0Eigenvector.Norm()
             node1Eigenvector= nodes[1].getEigenvector(mode1)
             node1EigenvectorNorm= node1Eigenvector.Norm()
-            if((node0EigenvectorNorm>eigenvectorNormThreshold) or (node1EigenvectorNorm>eigenvectorNormThreshold)):
+            if(((node0EigenvectorNorm>eigenvectorNormThreshold) or (node1EigenvectorNorm>eigenvectorNormThreshold)) and (alpha_cr<alpha_cr_threshold)):
                 # Compute the stiffness in the direction of buckling for this mode.
                 ## Check if it is a translational buckling.
                 globalEigenvector= (0.5*(node0Eigenvector+node1Eigenvector)).Normalized()
@@ -1352,7 +1354,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
     
     ''' Buckling parameters data for limit state checking.
     '''
-    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations, eigenvectorNormThreshold= 1e-3):
+    def __init__(self, numModes= 4, limitStateLabel= 'ULS_bucklingParametersComputation', outputDataBaseFileName= fn.bucklingVerificationResultsFile, designSituations= lsd.default_uls_design_situations, eigenvectorNormThreshold= 1e-3, alpha_cr_threshold= 10.0):
         '''Constructor
 
         :param numModes: number of buckling modes to compute.
@@ -1361,9 +1363,11 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         :param eigenvectorNormThreshold: if the node eigenvector has a norm 
                                          smaller than this threshold it is 
                                          considered null.
+        :param alpha_cr_threshold: # Lower limit for the Ncr/N factor by which the design loading would have to be increased to cause elastic instability (see Eurocode 4:2004 cl.5.2.1(2)). For values of alpha_cr greater than alpha_cr_threshold the instability effect is ignored.
         '''
         super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
         self.eigenvectorNormThreshold= eigenvectorNormThreshold
+        self.alpha_cr_threshold= alpha_cr_threshold
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
         '''Creates a dictionary with the buckling parameters of the given
@@ -1396,7 +1400,7 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
                 Cz= sectionBucklingProperties.Cz
                 Cy= sectionBucklingProperties.Cy
                 rcSection= sectionBucklingProperties.sectionObject
-                elementBucklingParameters= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold)
+                elementBucklingParameters= get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= eigenvalues, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, eigenvectorNormThreshold= self.eigenvectorNormThreshold, alpha_cr_threshold= self.alpha_cr_threshold)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
