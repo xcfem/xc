@@ -144,7 +144,7 @@ for e in xcTotalSet.elements:
     sectionDepthZ= sectionDepth
     sectionDepthY= sectionWidth
     # Compute buckling parameters.
-    bucklingParameters= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY)
+    bucklingParameters= EHE_limit_state_checking.get_buckling_parameters(element= e, rcSection= rcSection, bucklingLoadFactors= bucklingLoadFactors, sectionDepthZ= sectionDepthZ, Cz= Cz, reinforcementFactorZ= reinforcementFactorZ, sectionDepthY= sectionDepthY, Cy= Cy, reinforcementFactorY= reinforcementFactorY, alpha_cr_threshold= 25.0)
     Efi= bucklingParameters['Efi']
     ef_mode_1= xc.Vector([Efi[0][0], Efi[0][1]])
     tmp= min((ef_mode_1-ef_mode_1_ref).Norm(), (ef_mode_1+ef_mode_1_ref).Norm())
