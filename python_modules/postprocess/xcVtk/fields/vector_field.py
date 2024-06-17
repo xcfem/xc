@@ -32,7 +32,7 @@ class VectorField(fb.FieldBase):
         self.mapper.ScalarVisibilityOn()
         self.mapper.SetScalarRange(self.data.lengths.GetRange())
         self.mapper.SelectColorArray(self.data.lengthsName)
-        self.creaLookUpTable()
+        self.createLookUpTable()
         self.mapper.SetLookupTable(self.lookUpTable)
         return self.mapper
 
