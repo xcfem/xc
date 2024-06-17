@@ -121,7 +121,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                 if(__debug__):
                     if(not arr):
                         AssertionError('Can\'t create the array.')
-                field.creaLookUpTable()      
+                field.createLookUpTable()      
             # Load nodes in vtk
             if eigenMode is None:
                 for n in nodeSet:
