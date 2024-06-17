@@ -139,15 +139,15 @@ class ControlVarDiagram(cd.ColoredDiagram):
 
     def addDiagram(self):
         '''Add diagram to the scene.'''
-        self.creaEstrucDatosDiagrama()
-        self.creaLookUpTable()
-        self.creaActorDiagrama()
-        diagramIndex= 0
         self.computeDiagramValues()
+        
+        self.createDiagramDataStructure()
+        diagramIndex= 0
         diagramIndex= self.appendDataFromElementEnds(dirVectors= self.dirVectors, elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples)
+        self.createLookUpTable()
+        #self.updateLookUpTable()
+        self.createDiagramActor()
+        # self.updateDiagramActor()
         self.clear()
-        self.updateLookUpTable()
-        self.updateActorDiagrama()
-
 
 

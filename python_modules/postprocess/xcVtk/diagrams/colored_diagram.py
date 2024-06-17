@@ -46,7 +46,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         else:
             self.rgMinMax= None
 
-    def creaEstrucDatosDiagrama(self):
+    def createDiagramDataStructure(self):
         # Crea las estructuras de datos necesarias para crear el diagrama.
         self.initializeMinMax()
         self.points= vtk.vtkPoints()
@@ -160,19 +160,18 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         vOrg= valOrg*self.fUnitConv
         vDest= valDest*self.fUnitConv
         if(self.rgMinMax):
-            self.updateMinMaxWithinRange(value= valOrg, rg= self.rgMinMax)
-            self.updateMinMaxWithinRange(value= valDest, rg= self.rgMinMax)
+            self.updateMinMaxWithinRange(value= vOrg, rg= self.rgMinMax)
+            self.updateMinMaxWithinRange(value= vDest, rg= self.rgMinMax)
         else:
-            self.updateMinMax(value= valOrg)
-            self.updateMinMax(value= valDest)
+            self.updateMinMax(value= vOrg)
+            self.updateMinMax(value= vDest)
         if(vOrg*vDest>0.0):
             return self.createConstantSignDiagramInterval(offset, org, vOrg, dest, vDest, dirVector= dirVector)
         else:
             return self.createChangedSignDiagramInterval(offset, org, vOrg, dest, vDest, dirVector= dirVector)
 
-    def creaActorDiagrama(self):
+    def createDiagramActor(self):
       # Crea el actor para el diagrama.
-
       self.diagram= vtk.vtkPolyData()
       self.diagram.SetPoints(self.points)
       point_data= self.diagram.GetPointData()
@@ -181,11 +180,10 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
       self.mapper= vtk.vtkPolyDataMapper()
       self.mapper.SetInputData(self.diagram)
-      self.mapper.SetScalarRange(self.valMin,self.valMax)
+      self.mapper.SetScalarRange(self.valMin, self.valMax)
       self.mapper.SetLookupTable(self.lookUpTable)
       self.actor= vtk.vtkActor() 
       self.actor.SetMapper(self.mapper)
-
 
     def addDiagramToScene(self, recordDisplay,orientation=1,title=None):
       ''' Adds the diagram to de scene'''
@@ -236,7 +234,6 @@ class ColoredDiagram(vtk_lut_field.LUTField):
             retval= list()
             # vMax= max(max(valueCouples, key= itemgetter(0))[0], max(valueCouples, key= itemgetter(1))[1])
             # vMin= min(min(valueCouples, key= itemgetter(0))[0], min(valueCouples, key= itemgetter(1))[1])
-            # print(vMax, vMin)
             vMin= self.rgMinMax[0]
             vMax= self.rgMinMax[1]
             for (v0, v1) in valueCouples:
