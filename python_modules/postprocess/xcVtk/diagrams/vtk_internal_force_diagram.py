@@ -49,9 +49,9 @@ class InternalForceDiagram(cd.ColoredDiagram):
         return cv.get_element_internal_force_component_data(elem, self.component, self.defaultDirection)
 
     def addDiagram(self):
-        self.creaEstrucDatosDiagrama()
-        self.creaLookUpTable()
-        self.creaActorDiagrama()
+        self.createDiagramDataStructure()
+        self.createLookUpTable()
+        self.createDiagramActor()
 
         diagramIndex= 0
         dirVectors= list()
@@ -67,7 +67,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
         diagramIndex= self.appendDataFromElementEnds(dirVectors= dirVectors, elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples)
 
         self.updateLookUpTable()
-        self.updateActorDiagrama()
+        self.updateDiagramActor()
 
 
 
