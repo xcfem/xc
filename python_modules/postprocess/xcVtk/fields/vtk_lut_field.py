@@ -43,20 +43,27 @@ class LUTField(object):
         self.actor= None
 
     def updateMinMax(self,value):
+        ''' Update the minimum and maximum values of the field.
+
+        :param value: value to update the range with.
+        ''' 
         self.valMin= min(self.valMin,value)
         self.valMax= max(self.valMax,value)
 
-    def updateMinMaxWithinRange(self,value,rg):
+    def updateMinMaxWithinRange(self, value, rg):
         '''updates the minimum and maximum values of the scalar field
         forcing these extreme values within the range rg=(vmin,vmax)
 
-        All the values less than vmin are represented in blue and those greater than
-        vmax are displayed in red
-        '''
-        self.valMin= min(self.valMin,max(value,rg[0]))
-        self.valMax= max(self.valMax,min(value,rg[1]))
+        All the values less than vmin are represented in blue and those 
+        greater than vmax are displayed in red
 
-    def initializeMinMax(self,value= 1.0e99):
+        :param value: value to update the range with.
+        :param rg: range to force.
+        '''
+        self.valMin= min(self.valMin, max(value,rg[0]))
+        self.valMax= max(self.valMax, min(value,rg[1]))
+
+    def initializeMinMax(self, value= 1.0e99):
         '''Initialize minimum and maximum values that hopefully
            will be replaced by the real ones.''' 
         self.valMin= value #Extremely BIG (yes BIG) positive value.
@@ -65,7 +72,7 @@ class LUTField(object):
     def isValid(self):
         return (self.valMax > -1e+99) or (self.valMin<1e+99)
 
-    def creaLookUpTable(self):
+    def createLookUpTable(self):
         ''' Creates a  lookUpTable, that is an object used by mapper objects 
         to map scalar values into rga (red-green-blue-alpha transparency) color 
         specification or rga into scalar values. 
@@ -73,6 +80,8 @@ class LUTField(object):
         self.lookUpTable= vtk.vtkLookupTable()
         self.lookUpTable.SetNumberOfTableValues(1024)
         self.lookUpTable.SetHueRange(0.667,0)
+        if(self.isValid): # Range is valid.
+            self.lookUpTable.SetTableRange(self.valMin,self.valMax)
         self.lookUpTable.Build()
 
 
@@ -84,9 +93,8 @@ class LUTField(object):
         self.lookUpTable.SetTableRange(self.valMin,self.valMax)
         self.lookUpTable.Build()
 
-    def updateActorDiagrama(self):
-        '''Updates de actor
-        '''
+    def updateDiagramActor(self):
+        '''Updates the diagram actor scalar range.'''
         self.mapper.SetScalarRange(self.valMin,self.valMax)
 
     def creaColorScaleBar(self,orientation=1,title=None):
