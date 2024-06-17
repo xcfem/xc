@@ -178,7 +178,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         '''
         maxAbsComp= self.getMaxAbsComp(preprocessor= preprocessor)
         if(maxAbsComp>0):
-            self.scaleFactor*= LrefModSize/maxAbs*100.0
+            self.scaleFactor*= self.lRefModSize/maxAbsComp*100.0
         return maxAbsComp
 
     def dumpLoads(self, preprocessor, diagramIndex, defFScale= 0.0):
@@ -201,13 +201,22 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         return retval
 
     def addDiagram(self,preprocessor, defFScale= 0.0):
+        ''' Create the diagram actor.
+       
+        :param preprocessor: pre-processor of the finite element problem.
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape).
+        '''
         self.createDiagramDataStructure()
-        self.createLookUpTable()
-        self.createDiagramActor()
 
         diagramIndex= 0
         diagramIndex= self.dumpLoads(preprocessor= preprocessor, diagramIndex= diagramIndex, defFScale= defFScale)
 
         if(diagramIndex>0):
-            self.updateLookUpTable()
-            self.updateDiagramActor()
+            self.createLookUpTable()
+            self.createDiagramActor()
+            # self.updateLookUpTable()
+            # self.updateDiagramActor()
