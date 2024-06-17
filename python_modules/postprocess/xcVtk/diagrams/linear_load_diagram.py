@@ -201,13 +201,13 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         return retval
 
     def addDiagram(self,preprocessor, defFScale= 0.0):
-        self.creaEstrucDatosDiagrama()
-        self.creaLookUpTable()
-        self.creaActorDiagrama()
+        self.createDiagramDataStructure()
+        self.createLookUpTable()
+        self.createDiagramActor()
 
         diagramIndex= 0
         diagramIndex= self.dumpLoads(preprocessor= preprocessor, diagramIndex= diagramIndex, defFScale= defFScale)
 
         if(diagramIndex>0):
             self.updateLookUpTable()
-            self.updateActorDiagrama()
+            self.updateDiagramActor()
