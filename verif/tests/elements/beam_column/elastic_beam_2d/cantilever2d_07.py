@@ -120,7 +120,7 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 # # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
-# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 5.0)
 # oh.displayLocalAxes()
 # oh.displayLoads()
 # # oh.displayIntForcDiag('N')
