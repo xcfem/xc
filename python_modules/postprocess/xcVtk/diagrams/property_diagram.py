@@ -61,9 +61,9 @@ class PropertyDiagram(cd.ColoredDiagram):
         self.valueCouples.clear()
 
     def addDiagram(self, defFScale= 0.0):
-        self.creaEstrucDatosDiagrama()
-        self.creaLookUpTable()
-        self.creaActorDiagrama()
+        self.createDiagramDataStructure()
+        self.createLookUpTable()
+        self.createDiagramActor()
 
         diagramIndex= 0
         for s in self.lstSets:
@@ -71,5 +71,5 @@ class PropertyDiagram(cd.ColoredDiagram):
 
         self.clear()
         self.updateLookUpTable()
-        self.updateActorDiagrama()
+        self.updateDiagramActor()
 
