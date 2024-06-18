@@ -10,6 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 import sys
+import os
 import math
 import uuid
 import geom
@@ -22,6 +23,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from misc.latex import latex_utils
 from postprocess.reports import common_formats as cf
+from postprocess.reports import latex_reports as ltxr
+import io # strstream Python equivalent
 
 # Classes defining reinforcement.
 
@@ -1282,6 +1285,16 @@ class RCSectionBase(object):
             self.latexReportMainReinforcementLayer(f, concreteArea, os)
         os.write("\\end{tabular} \\\\\n")
 
+    def getCrossSectionFigureFileName(self, outputPath= None):
+        ''' Return the file name to use for the cross-section graphics.
+
+        :param outputPath: directory to write the section plot into.
+        '''
+        retval= ''.join(x for x in self.name if x.isalnum())
+        if(outputPath):
+            retval= outputPath+'/'+retval
+        return retval
+
     def latexReport(self, os= sys.stdout, graphicWidth='70mm', outputPath= None, includeGraphicsPath= None):
         ''' Write a report of the object in LaTeX format.
 
@@ -1290,19 +1303,20 @@ class RCSectionBase(object):
         :param outputPath: directory to write the section plot into.
         :param includeGraphicsPath: directory to use in the latex includegraphics command.
         '''
+        temporaryFiles= list()
         # Retrieve section geometry definition.
         materialHandler= self.fiberSectionRepr.getMaterialHandler
         gmSectName= self.gmSectionName()
         geomSection= materialHandler.getSectionGeometry(gmSectName)
         # Plot cross-section
-        crossSectionFigureFName= ''.join(x for x in self.name if x.isalnum())
+        crossSectionFigureFName= self.getCrossSectionFigureFileName(outputPath= outputPath)
         if(self.geomSection):
             epsFileName= crossSectionFigureFName+'.eps'
-            if(outputPath):
-                epsFileName= outputPath+'/'+epsFileName
             pfs.plot_section_geometry(geomSection,epsFileName)
+            temporaryFiles.append(Path(epsFileName))
             # Convert the image to PNG
             pfs.eps2png(inputFileName= epsFileName, outputFileName= None)
+            temporaryFiles.append(Path(epsFileName).with_suffix('.png'))
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -1402,7 +1416,42 @@ class RCSectionBase(object):
         os.write('\\end{center}\n')
         os.write('\\caption{'+self.sectionDescr+' ('+ latex_utils.toLaTeX(self.name) +').'+'} \\label{tb_'+self.name.replace(' ','_')+'}\n')
         os.write('\\end{table}\n')
+        return temporaryFiles
 
+    def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True):
+        ''' Write a report of the object in LaTeX format.
+
+        :param outputFileName: name of the output file.
+        :param graphicWidth: width for the cross-section graphic.
+        :param showPDF: if true display the PDF output on the screen.
+        :param keepPDF: if true don't remove the PDF output.
+        '''
+        if(showPDF or keepPDF):
+            if(not outputFileName):
+                outputFileName= self.gmSectionName()+'.tex'
+            outputPath= '/tmp/'
+            ltxIOString= io.StringIO()
+            crossSectionFigures= self.latexReport(os= ltxIOString, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= outputPath)
+            ltxIOString.seek(0)
+            ltxString= ltxr.rc_section_report_latex_header+str(ltxIOString.read())+ltxr.rc_section_report_latex_tail
+            ltxIOString.close()
+            pdfFile= ltxr.latex_string_to_pdf(texString= str(ltxString), outputFileName= outputFileName, showPDF= showPDF)
+            # Remove temporary files
+            ## cross-section graphics.
+            for f in crossSectionFigures:
+                f.unlink()
+            ## LaTeX source file
+            Path(outputPath+outputFileName).unlink()
+            if(showPDF):
+                input("Press Enter to continue...")
+            if(not keepPDF): # remove PDF file.
+                if os.path.exists(pdfFile):
+                    os.remove(pdfFile)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; both showPDF and keepPDF are false; nothing to do.')
+        
     def writeDXF(self, modelSpace, concreteLayerName= 'concrete', reinforcementLayerName= 'reinforcement'):
         ''' Writes the shape contour in the model
             space argument.

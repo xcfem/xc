@@ -95,6 +95,7 @@ ratio1= ((secHAParamsFis.Wk-0.383585469616e-3)/0.383585469616e-3)
 
 
 '''
+section.pdfReport(showPDF= True, keepPDF= False)
 section.plot(preprocessor) # Display section geometry
 print("Wk= ", secHAParamsFis.Wk*1e3,"mm")
 print("ratio1= ", ratio1)

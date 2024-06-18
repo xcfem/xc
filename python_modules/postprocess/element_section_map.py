@@ -175,7 +175,13 @@ class ElementSections(object):
             self.append_section(sect)
 
     def plot(self, preprocessor, matDiagType= 'k'):
-        ''' Get a drawing of the sections using matplotlib.'''
+        ''' Get a drawing of the sections using matplotlib.
+
+        :param preprocessor: pre-processor of the FE problem.
+        :param matDiagType: diagram type; if "k" use the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" use the design values one.
+        '''
         numSections= len(self.lstRCSects)
         if(numSections>0):
             numColumns= 2
@@ -193,6 +199,17 @@ class ElementSections(object):
                         section= self.lstRCSects[idx]
                         section.subplot(axs[r,c], preprocessor, matDiagType)
             plt.show()
+            
+    def pdfReport(self, graphicWidth='70mm', showPDF= False, keepPDF= True):
+        ''' Get a drawing of the sections using matplotlib.
+
+        :param graphicWidth: width for the cross-section graphic.
+        :param showPDF: if true display the PDF output on the screen.
+        :param keepPDF: if true don't remove the PDF output.
+        '''
+        numSections= len(self.lstRCSects)
+        for section in self.lstRCSects:
+            section.pdfReport(graphicWidth= graphicWidth, showPDF= showPDF, keepPDF= keepPDF)
             
 class RawShellSections(ElementSections):
     '''This class is an specialization of ElemenSections for rectangulars

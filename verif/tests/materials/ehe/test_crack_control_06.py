@@ -79,6 +79,7 @@ ratio1= secHAParamsFis.Wk
 
 
 ''' 
+datosScc1LosC.pdfReport(showPDF= True, keepPDF= False)
 datosScc1LosC.plot(preprocessor) # Display section geometry
 print("ratio1= ",ratio1)
 '''

@@ -8,6 +8,7 @@ __email__= "ana.ortega@ciccp.es "
 
 import matplotlib.pyplot as plt
 from postprocess.reports import graph_material
+from postprocess.reports import latex_reports as ltxr
 
 class ConcreteReport(object):
     '''Constructs LaTex tables for depicting porperties of concrete 
@@ -79,31 +80,11 @@ def report_concrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNa
     concrRep= ConcreteReport(concrDiag)
     grFileNameNoPath=grFileName.split('/')[grFileName.count('/')]
     f=open(texFileName,'w')
-    f.write('\\documentclass{article} \n')
-    f.write('\\usepackage{graphicx} \n')
-    f.write('\\usepackage{multirow} \n')
-    f.write('\\usepackage{wasysym} \n')
-    f.write('\\usepackage{gensymb} \n')
-    f.write('\\begin{document} \n')
-    f.write('\\begin{table} \n')
-    f.write('\\begin{center} \n')
-    f.write('\\begin{tabular}{ll} \n')
-    f.write('\\begin{minipage}{95mm} \n')
-    f.write('\\vspace{2mm} \n')
-    f.write('\\begin{center} \n')
-    f.write('\\includegraphics[width=90mm]{'+grFileNameNoPath+'} \n')
-    f.write('\\end{center} \n')
-    f.write('\\vspace{1pt} \n')
-    f.write('\\end{minipage} &  \n')
-    f.write('\\begin{tabular}{lr}  \n') 
+    f.write(ltxr.concrete02_report_latex_header)
     f.write(concrRep.tableCompress())
     f.write(concrRep.tableTens())
     f.write(concrRep.tableTensStiff(paramTensStiffening))
-    f.write('\\end{tabular} \n')
-    f.write('\\end{tabular} \n')
-    f.write('\\end{center} \n')
-    f.write('\\end{table} \n')
-    f.write('\\end{document} \n')
+    f.write(ltxr.concrete02_report_latex_tail)
     f.close()
     return
    
