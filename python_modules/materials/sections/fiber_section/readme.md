@@ -12,6 +12,7 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 - [Two Fibers Explain So Much](https://portwooddigital.com/2022/02/06/two-fibers-explain-so-much/)
 - [Something, Something, Something Fiber](https://portwooddigital.com/2022/02/27/something-something-something-fiber/)
 - [How to Find the Neutral Axis](http://portwooddigital.com/2022/11/09/how-to-find-the-neutral-axis/)
+- [Section modulus](https://en.wikipedia.org/wiki/Section_modulus)
 
 ### Reinforced concrete
 <!-- language: lang-none -->

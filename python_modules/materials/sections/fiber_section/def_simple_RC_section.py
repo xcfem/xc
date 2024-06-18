@@ -1295,158 +1295,185 @@ class RCSectionBase(object):
             retval= outputPath+'/'+retval
         return retval
 
-    def latexReport(self, os= sys.stdout, graphicWidth='70mm', outputPath= None, includeGraphicsPath= None):
+    def latexReport(self, os= sys.stdout, graphicWidth='70mm', outputPath= None, includeGraphicsPath= None, preprocessor= None, matDiagType= 'k'):
         ''' Write a report of the object in LaTeX format.
 
         :param os: output stream.
         :param graphicWidth: width for the cross-section graphic.
         :param outputPath: directory to write the section plot into.
         :param includeGraphicsPath: directory to use in the latex includegraphics command.
+        :param preprocessor: pre-processor of the FE problem.
+        :param matDiagType: diagram type; if "k" use the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" use the design values one.
         '''
         temporaryFiles= list()
         # Retrieve section geometry definition.
-        materialHandler= self.fiberSectionRepr.getMaterialHandler
-        gmSectName= self.gmSectionName()
-        geomSection= materialHandler.getSectionGeometry(gmSectName)
-        # Plot cross-section
-        crossSectionFigureFName= self.getCrossSectionFigureFileName(outputPath= outputPath)
-        if(self.geomSection):
-            epsFileName= crossSectionFigureFName+'.eps'
-            pfs.plot_section_geometry(geomSection,epsFileName)
-            temporaryFiles.append(Path(epsFileName))
-            # Convert the image to PNG
-            pfs.eps2png(inputFileName= epsFileName, outputFileName= None)
-            temporaryFiles.append(Path(epsFileName).with_suffix('.png'))
+        if(not self.fiberSectionRepr):
+            if(preprocessor):
+                self.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= "; no section representation for section: '"+self.name+"'. and undefined preprocessor. Can't call defRCSection."
+                lmsg.error(className+'.'+methodName+errMsg)
+        if(self.fiberSectionRepr):
+            materialHandler= self.fiberSectionRepr.getMaterialHandler
+            gmSectName= self.gmSectionName()
+            geomSection= materialHandler.getSectionGeometry(gmSectName)
+            # Plot cross-section
+            crossSectionFigureFName= self.getCrossSectionFigureFileName(outputPath= outputPath)
+            if(self.geomSection):
+                epsFileName= crossSectionFigureFName+'.eps'
+                pfs.plot_section_geometry(geomSection,epsFileName)
+                temporaryFiles.append(Path(epsFileName))
+                # Convert the image to PNG
+                pfs.eps2png(inputFileName= epsFileName, outputFileName= None)
+                temporaryFiles.append(Path(epsFileName).with_suffix('.png'))
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; geometry of section: '+self.name+' not defined\n')
+            # Some convenience lines.
+            os.write('%% ****** Packages needed for LaTeX document: ****** \n')
+            os.write('%%\\usepackage{graphicx} %%\postscript includes\n')
+            os.write('%%\\usepackage{multirow} %%\multirow command\n')
+            os.write('%%\\usepackage{wasysym} %%\permil command\n')
+            os.write('%%\\usepackage{gensymb} %%\degree command\n')
+            # Write table header.
+            os.write('\\begin{table}\n')
+            os.write('\\begin{center}\n')
+            os.write('\\begin{tabular}{|c|}\n')
+            os.write('\\hline\n')
+            os.write('\\begin{large} '+latex_utils.toLaTeX(self.name)+' \end{large}\\\\\n')
+            os.write('\\hline\n')
+            os.write(self.sectionDescr+'\\\\\n')
+            os.write('\\hline\n')
+            # Section geometry
+            os.write('\\begin{tabular}{c|l}\n')
+            ## Include figure in table
+            os.write('\\begin{minipage}{85mm}\n')
+            os.write('\\vspace{2mm}\n')
+            os.write('\\begin{center}\n')
+            #  name without extension to allow pdfLatex choose the file
+            nameWOExt= Path(crossSectionFigureFName).stem
+            if(includeGraphicsPath):
+                nameWOExt= includeGraphicsPath+'/'+nameWOExt
+            os.write('\\includegraphics[width='+graphicWidth+']{'+nameWOExt+'}\n')
+            os.write('\\end{center}\n')
+            os.write('\\vspace{1pt}\n')
+            os.write('\\end{minipage} & \n')
+            self.latexReportGeometry(os)
+            os.write('\\end{tabular} \\\\\n')
+            # Write materials.
+            os.write('\\hline\n')
+            os.write('\\textbf{Materials - mechanical properties}:\\\\\n')
+            os.write('\\hline\n')
+            os.write('\\begin{tabular}{ll}\n')
+            concrete= self.fiberSectionParameters.concrType
+            os.write('Concrete: '+concrete.materialName+' & Modulus of elasticity: $E_c= '+'{0:.2f}'.format(concrete.Ecm()/1e9)+'\\ GPa$\\\\\n')
+            os.write('\\hline\n')
+            steel= self.fiberSectionParameters.reinfSteelType
+            os.write('Steel: '+steel.materialName+' & Modulus of elasticity: $E_s= '+'{0:.2f}'.format(steel.Es/1e9)+'\\ GPa$\\\\\n')
+            os.write('\\end{tabular} \\\\\n')
+            os.write('\\hline\n')
+            # Write section mechanical properties.
+            os.write('\\textbf{Sections - geometric and mechanical characteristics}:\\\\\n')
+            os.write('\\hline\n')
+            os.write('Gross section:\\\\\n')
+            GB= self.geomSection.getCenterOfMassGrossSection() # Center of mass.
+            AB= self.geomSection.getAreaGrossSection() # Area
+            IyB= self.geomSection.getIyGrossSection() # Inertia
+            IzB= self.geomSection.getIzGrossSection()
+            PyzB= self.geomSection.getPyzGrossSection()
+            JTorsion= self.getJTorsion()
+            os.write('\\hline\n')
+            os.write('\\begin{tabular}{ll}\n')
+            os.write('$A_{gross}='+cf.fmt6_3f.format(AB) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(IyB*1e4) +' & '+cf.fmt5_2f.format(PyzB) +' \\\\ 0.00 & '+cf.fmt5_2f.format(PyzB) +' & '+cf.fmt5_2f.format(IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
+            os.write('& \\\\\n')
+            os.write('C.O.G.: $('+cf.fmt5_3f.format(GB[0])+','+cf.fmt5_3f.format(GB[1])+')\\ m$  & \\\\\n')
+            os.write('\\end{tabular} \\\\\n')
+            os.write('\\hline\n')
+            os.write('Homogenized section:\\\\\n')
+            preprocessor= materialHandler.getPreprocessor
+            tangConcr= self.getConcreteDiagram(preprocessor).getTangent()
+            GH= self.geomSection.getCenterOfMassHomogenizedSection(tangConcr) # Center of gravity of the homogenized section
+            AH= self.geomSection.getAreaHomogenizedSection(tangConcr) # Area of the homogenized section
+            IyH= self.geomSection.getIyHomogenizedSection(tangConcr) # Inertia tensor of homogenized section.
+            IzH=  self.geomSection.getIzHomogenizedSection(tangConcr)
+            PyzH= self.geomSection.getPyzHomogenizedSection(tangConcr)
+
+            os.write('\\hline\n')
+            os.write('\\begin{tabular}{ll}\n')
+            os.write('$A_{homog.}='+cf.fmt6_3f.format(AH) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(IyH*1e4) +' & '+cf.fmt5_2f.format(PyzH) +' \\\\ 0.00 & '+cf.fmt5_2f.format(PyzH) +' & '+cf.fmt5_2f.format(IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
+            os.write('& \\\\\n')
+            os.write('C.O.G.: $('+cf.fmt5_3f.format(GH[0])+','+cf.fmt5_3f.format(GH[1])+')\\ m$  & \\\\\n')
+            os.write('\\end{tabular} \\\\\n')
+            os.write('\\hline\n')
+            # Passive reinforcement.
+            os.write('\\textbf{Passive reinforcement}:\\\\\n')
+            os.write('\\hline\n')
+            ## Main reinforcement.
+            self.latexReportMainReinforcement(os)
+            ## Shear reinforcement.
+            os.write('\\hline\n')
+            os.write('Layers of shear reinforcement:\\\\\n')
+            os.write('\\hline\n')
+            os.write('\\begin{tabular}{cccccccc}\n')
+            os.write('Id & N$^o$ branch & $\\phi$ & area & spac. & area/m & $\\alpha$ & $\\beta$\\\\\n')
+            os.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
+            self.latexReportShearReinforcement(os)
+            os.write('\\end{tabular} \\\\\n')
+            os.write('\\hline\n')
+            os.write('\\end{tabular}\n')
+            os.write('\\end{center}\n')
+            os.write('\\caption{'+self.sectionDescr+' ('+ latex_utils.toLaTeX(self.name) +').'+'} \\label{tb_'+self.name.replace(' ','_')+'}\n')
+            os.write('\\end{table}\n')
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; geometry of section: '+self.name+' not defined\n')
-        # Some convenience lines.
-        os.write('%% ****** Packages needed for LaTeX document: ****** \n')
-        os.write('%%\\usepackage{graphicx} %%\postscript includes\n')
-        os.write('%%\\usepackage{multirow} %%\multirow command\n')
-        os.write('%%\\usepackage{wasysym} %%\permil command\n')
-        os.write('%%\\usepackage{gensymb} %%\degree command\n')
-        # Write table header.
-        os.write('\\begin{table}\n')
-        os.write('\\begin{center}\n')
-        os.write('\\begin{tabular}{|c|}\n')
-        os.write('\\hline\n')
-        os.write('\\begin{large} '+latex_utils.toLaTeX(self.name)+' \end{large}\\\\\n')
-        os.write('\\hline\n')
-        os.write(self.sectionDescr+'\\\\\n')
-        os.write('\\hline\n')
-        # Section geometry
-        os.write('\\begin{tabular}{c|l}\n')
-        ## Include figure in table
-        os.write('\\begin{minipage}{85mm}\n')
-        os.write('\\vspace{2mm}\n')
-        os.write('\\begin{center}\n')
-        #  name without extension to allow pdfLatex choose the file
-        nameWOExt= Path(crossSectionFigureFName).stem
-        if(includeGraphicsPath):
-            nameWOExt= includeGraphicsPath+'/'+nameWOExt
-        os.write('\\includegraphics[width='+graphicWidth+']{'+nameWOExt+'}\n')
-        os.write('\\end{center}\n')
-        os.write('\\vspace{1pt}\n')
-        os.write('\\end{minipage} & \n')
-        self.latexReportGeometry(os)
-        os.write('\\end{tabular} \\\\\n')
-        # Write materials.
-        os.write('\\hline\n')
-        os.write('\\textbf{Materials - mechanical properties}:\\\\\n')
-        os.write('\\hline\n')
-        os.write('\\begin{tabular}{ll}\n')
-        concrete= self.fiberSectionParameters.concrType
-        os.write('Concrete: '+concrete.materialName+' & Modulus of elasticity: $E_c= '+'{0:.2f}'.format(concrete.Ecm()/1e9)+'\\ GPa$\\\\\n')
-        os.write('\\hline\n')
-        steel= self.fiberSectionParameters.reinfSteelType
-        os.write('Steel: '+steel.materialName+' & Modulus of elasticity: $E_s= '+'{0:.2f}'.format(steel.Es/1e9)+'\\ GPa$\\\\\n')
-        os.write('\\end{tabular} \\\\\n')
-        os.write('\\hline\n')
-        # Write section mechanical properties.
-        os.write('\\textbf{Sections - geometric and mechanical characteristics}:\\\\\n')
-        os.write('\\hline\n')
-        os.write('Gross section:\\\\\n')
-        GB= self.geomSection.getCenterOfMassGrossSection() # Center of mass.
-        AB= self.geomSection.getAreaGrossSection() # Area
-        IyB= self.geomSection.getIyGrossSection() # Inertia
-        IzB= self.geomSection.getIzGrossSection()
-        PyzB= self.geomSection.getPyzGrossSection()
-        JTorsion= self.getJTorsion()
-        os.write('\\hline\n')
-        os.write('\\begin{tabular}{ll}\n')
-        os.write('$A_{gross}='+cf.fmt6_3f.format(AB) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(IyB*1e4) +' & '+cf.fmt5_2f.format(PyzB) +' \\\\ 0.00 & '+cf.fmt5_2f.format(PyzB) +' & '+cf.fmt5_2f.format(IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
-        os.write('& \\\\\n')
-        os.write('C.O.G.: $('+cf.fmt5_3f.format(GB[0])+','+cf.fmt5_3f.format(GB[1])+')\\ m$  & \\\\\n')
-        os.write('\\end{tabular} \\\\\n')
-        os.write('\\hline\n')
-        os.write('Homogenized section:\\\\\n')
-        preprocessor= materialHandler.getPreprocessor
-        tangConcr= self.getConcreteDiagram(preprocessor).getTangent()
-        GH= self.geomSection.getCenterOfMassHomogenizedSection(tangConcr) # Center of gravity of the homogenized section
-        AH= self.geomSection.getAreaHomogenizedSection(tangConcr) # Area of the homogenized section
-        IyH= self.geomSection.getIyHomogenizedSection(tangConcr) # Inertia tensor of homogenized section.
-        IzH=  self.geomSection.getIzHomogenizedSection(tangConcr)
-        PyzH= self.geomSection.getPyzHomogenizedSection(tangConcr)
-        
-        os.write('\\hline\n')
-        os.write('\\begin{tabular}{ll}\n')
-        os.write('$A_{homog.}='+cf.fmt6_3f.format(AH) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ cf.fmt5_2f.format(JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ cf.fmt5_2f.format(IyH*1e4) +' & '+cf.fmt5_2f.format(PyzH) +' \\\\ 0.00 & '+cf.fmt5_2f.format(PyzH) +' & '+cf.fmt5_2f.format(IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
-        os.write('& \\\\\n')
-        os.write('C.O.G.: $('+cf.fmt5_3f.format(GH[0])+','+cf.fmt5_3f.format(GH[1])+')\\ m$  & \\\\\n')
-        os.write('\\end{tabular} \\\\\n')
-        os.write('\\hline\n')
-        # Passive reinforcement.
-        os.write('\\textbf{Passive reinforcement}:\\\\\n')
-        os.write('\\hline\n')
-        ## Main reinforcement.
-        self.latexReportMainReinforcement(os)
-        ## Shear reinforcement.
-        os.write('\\hline\n')
-        os.write('Layers of shear reinforcement:\\\\\n')
-        os.write('\\hline\n')
-        os.write('\\begin{tabular}{cccccccc}\n')
-        os.write('Id & N$^o$ branch & $\\phi$ & area & spac. & area/m & $\\alpha$ & $\\beta$\\\\\n')
-        os.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
-        self.latexReportShearReinforcement(os)
-        os.write('\\end{tabular} \\\\\n')
-        os.write('\\hline\n')
-        os.write('\\end{tabular}\n')
-        os.write('\\end{center}\n')
-        os.write('\\caption{'+self.sectionDescr+' ('+ latex_utils.toLaTeX(self.name) +').'+'} \\label{tb_'+self.name.replace(' ','_')+'}\n')
-        os.write('\\end{table}\n')
+            errMsg= "; no section representation for section: '"+self.name+"'. Can't create report. Have you called defRCSection (or defRCSection2d) method?"
+            lmsg.error(className+'.'+methodName+errMsg)
         return temporaryFiles
 
-    def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True):
+    def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True, preprocessor= None, matDiagType= 'k'):
         ''' Write a report of the object in LaTeX format.
 
         :param outputFileName: name of the output file.
         :param graphicWidth: width for the cross-section graphic.
         :param showPDF: if true display the PDF output on the screen.
         :param keepPDF: if true don't remove the PDF output.
+        :param preprocessor: pre-processor of the FE problem.
+        :param matDiagType: diagram type; if "k" use the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" use the design values one.
         '''
         if(showPDF or keepPDF):
             if(not outputFileName):
                 outputFileName= self.gmSectionName()+'.tex'
             outputPath= '/tmp/'
             ltxIOString= io.StringIO()
-            crossSectionFigures= self.latexReport(os= ltxIOString, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= outputPath)
-            ltxIOString.seek(0)
-            ltxString= ltxr.rc_section_report_latex_header+str(ltxIOString.read())+ltxr.rc_section_report_latex_tail
-            ltxIOString.close()
-            pdfFile= ltxr.latex_string_to_pdf(texString= str(ltxString), outputFileName= outputFileName, showPDF= showPDF)
-            # Remove temporary files
-            ## cross-section graphics.
-            for f in crossSectionFigures:
-                f.unlink()
-            ## LaTeX source file
-            Path(outputPath+outputFileName).unlink()
-            if(showPDF):
-                input("Press Enter to continue...")
-            if(not keepPDF): # remove PDF file.
-                if os.path.exists(pdfFile):
-                    os.remove(pdfFile)
+            crossSectionFigures= self.latexReport(os= ltxIOString, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= outputPath, preprocessor= preprocessor, matDiagType= matDiagType)
+            if(crossSectionFigures):
+                ltxIOString.seek(0)
+                ltxString= ltxr.rc_section_report_latex_header+str(ltxIOString.read())+ltxr.rc_section_report_latex_tail
+                ltxIOString.close()
+                pdfFile= ltxr.latex_string_to_pdf(texString= str(ltxString), outputFileName= outputFileName, showPDF= showPDF)
+                # Remove temporary files
+                ## cross-section graphics.
+                for f in crossSectionFigures:
+                    f.unlink()
+                ## LaTeX source file
+                Path(outputPath+outputFileName).unlink()
+                if(showPDF):
+                    input("Press Enter to continue...")
+                if(not keepPDF): # remove PDF file.
+                    if os.path.exists(pdfFile):
+                        os.remove(pdfFile)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; latexReport returned nothing.')                     
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -1617,9 +1644,33 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         retval+= self.getTorsionReinforcementArea()
         return retval
         
-    def getW1(self):
+    def getW1z(self):
         ''' Section modulus of the gross section with respect to the most tensioned fiber.'''
-        retval= self.getAc()*self.getDepth()/2.0
+        b= self.getWidth()
+        h= self.getDepth()
+        return b*h**2/6.0
+        
+    def getW1y(self):
+        ''' Section modulus of the gross section with respect to the most tensioned fiber.'''
+        b= self.getWidth()
+        h= self.getDepth()
+        return h*b**2/6.0
+
+    def getW1(self, bendingAxis= 'z'):
+        ''' Section modulus of the gross section with respect to the most tensioned fiber.
+
+        :param bendingAxis: bending axis ('z' or 'y').
+        '''
+        retval= None
+        if(bendingAxis=='z'):
+            retval= self.getW1z()
+        elif(bendingAxis=='y'):
+            retval= self.getW1y()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"; bending axis must be 'z' or 'y'"
+            lmsg.error(errMsg)
         return retval
     
     def getDepth(self):

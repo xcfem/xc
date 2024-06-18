@@ -2387,8 +2387,8 @@ class BeamReinforcementRatios(ReinforcementRatios):
         return retval
     
     def getMinimumMechanicalAmount(self):
-        ''' Minimum mechanical reinforcement amount according to
-            clause 42.3.2 of EHE-08.'''
+        ''' Minimum mechanical reinforcement amount according to clause 
+            42.3.2 of EHE-08.'''
         retval= (self.W1/self.z*self.concrete.getFlexuralTensileStrength(self.h))
         if(self.Ap!=0.0): # prestressing
             retval+= self.P/self.z*(self.W1/self.Ac+self.e)
@@ -2533,13 +2533,14 @@ class TieReinforcementRatios(ReinforcementRatios):
             msg= className+'.'+methodName+"; reinforcement area: "+str(As*1e4)+" cm, gives a ratio below minimal mechanical reinforcement amount: "+str(ctMinMec*1e4)+" cm2\n"
             lmsg.warning(msg)
 
-def get_min_and_max_reinforcement(memberType:str, rcSection, Nd):
+def get_min_and_max_reinforcement(memberType:str, rcSection, Nd, bendingAxis= 'z'):
     ''' Return the minimum and maximum reinforcement areas for the given 
         section.
 
     :param memberType: member type: 'beam', 'column', 'tie', ...
     :param rcSection: reinforced concrete section.
-    :param Nd: design value of the internal axial load. 
+    :param Nd: design value of the internal axial load.
+    :param bendingAxis: bending axis ('z' or 'y'). 
     '''
     if(memberType=='column'):
         columnReinfRatios= ColumnReinforcementRatios(Ac= rcSection.getAc(), concrete= rcSection.getConcreteType(), reinforcingSteel= rcSection.getReinfSteelType())
@@ -2553,7 +2554,7 @@ def get_min_and_max_reinforcement(memberType:str, rcSection, Nd):
         asMax= None
     elif(memberType=='beam'):
         Ac= rcSection.getAc()
-        W1= rcSection.getW1()
+        W1= rcSection.getW1(bendingAxis= bendingAxis)
         h= rcSection.getDepth()
         beamReinfRatios= BeamReinforcementRatios(Ac= Ac, concrete= rcSection.getConcreteType(), reinforcingSteel= rcSection.getReinfSteelType(), W1= W1, h= h)
         asMinGeom= beamReinfRatios.getMinimumGeometricAmount()
