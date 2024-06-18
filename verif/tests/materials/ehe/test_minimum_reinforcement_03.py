@@ -18,7 +18,7 @@ from materials.ehe import EHE_limit_state_checking
 from materials.sections.fiber_section import def_simple_RC_section
 from misc_utils import log_messages as lmsg
 
-concrete= EHE_materials.HA35
+concrete= EHE_materials.HA30
 steel= EHE_materials.B500S
 side= 1.5
 
@@ -29,7 +29,7 @@ asMinGeomBeam, asMinMechBeam, asMaxBeam= EHE_limit_state_checking.get_min_and_ma
 
 # Check results.
 ratio1= abs(asMinGeomBeam-63e-4)/63e-4
-ratio2= abs(asMinMechBeam-103.82222272358034e-4)/103.82222272358034e-4
+ratio2= abs(asMinMechBeam-31.227547283338332e-4)/31.227547283338332e-4
 
 '''
 print('Minimum amount of reinforcement (geometric ratio): As= ', asMinGeomBeam*1e4, 'cm2')
