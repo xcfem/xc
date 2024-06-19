@@ -49,7 +49,7 @@ class_<XC::RectangularSeries, bases<XC::PulseBaseSeries>, boost::noncopyable >("
 
 class_<XC::PathSeriesBase, bases<XC::CFactorSeries>, boost::noncopyable >("PathSeriesBase", no_init)
   .add_property("path", &XC::PathSeriesBase::getPath,&XC::PathSeriesBase::setPath, "Get/set the series path.")
-  .add_property("lastSendCommitTag", &XC::PathSeriesBase::getLastSendCommitTag,&XC::PathSeriesBase::setLastSendCommitTag)
+  .add_property("useLast", &XC::PathSeriesBase::getUseLast, &XC::PathSeriesBase::setUseLast, "Get/set useLast (use the last value of the series if time greater than end time).")
   ;
 
 double (XC::PathSeries::*get_time_increment_double)(double) const= &XC::PathSeries::getTimeIncr;
@@ -59,7 +59,6 @@ class_<XC::PathSeries, bases<XC::PathSeriesBase>, boost::noncopyable >("PathSeri
   .def("setTimeIncr",&XC::PathSeries::setTimeIncr,"setTimeIncr(factor): sets time increment.")
   .add_property("timeIncr", get_time_increment_void, &XC::PathSeries::setTimeIncr, "Get/set the time increment value.")
   .add_property("startTime", &XC::PathSeries::getStartTime, &XC::PathSeries::setStartTime, "Get/set the start time.")
-  .add_property("useLast", &XC::PathSeries::getUseLast, &XC::PathSeries::setUseLast, "Get/set the start time.")
   .def("readFromFile",&XC::PathSeries::readFromFile,"Read motion data from file.")
   ;
 

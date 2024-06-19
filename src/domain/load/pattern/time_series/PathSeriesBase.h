@@ -44,7 +44,7 @@ class PathSeriesBase: public CFactorSeries
   {
   protected:
     Vector thePath; //!< vector containing the data points
-    int lastSendCommitTag;
+    bool useLast;
 
     static size_t load_vector_from_file(Vector &v,std::istream &is);
 
@@ -52,8 +52,8 @@ class PathSeriesBase: public CFactorSeries
     int recvData(const Communicator &comm);
   public:
     // constructors
-    PathSeriesBase(int classTag,const double &cf= 1.0);
-    PathSeriesBase(int classTag,const Vector &thePath,const double &cf= 1.0);
+    PathSeriesBase(int classTag,const double &cf= 1.0, bool last= false);
+    PathSeriesBase(int classTag,const Vector &thePath,const double &cf= 1.0, bool last= false);
 
     size_t getNumDataPoints(void) const;
     size_t getNumDataPointsOnFile(const std::string &) const;
@@ -63,10 +63,10 @@ class PathSeriesBase: public CFactorSeries
       { return thePath; }
     inline void setPath(const Vector &d)
       { thePath= d; }
-    inline int getLastSendCommitTag(void) const
-      { return lastSendCommitTag; }
-    inline void setLastSendCommitTag(const int &d)
-      { lastSendCommitTag= d; }
+    inline void setUseLast(const bool &b)
+      { this->useLast= b; }
+    inline bool getUseLast(void) const
+      {return this->useLast;}
 
     void Print(std::ostream &s, int flag =0) const;
   };

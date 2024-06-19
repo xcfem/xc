@@ -93,9 +93,9 @@ class PathTimeSeries: public PathSeriesBase
   public:
     // constructors  
     PathTimeSeries(void);
-    PathTimeSeries(const Vector &thePath,const Vector &theTime,  double cfactor = 1.0);
-    PathTimeSeries(const std::string &fileNamePath, const std::string &fileNameTime, double cfactor = 1.0);    
-    PathTimeSeries(const std::string &fileName,double cfactor = 1.0);
+    PathTimeSeries(const Vector &thePath,const Vector &theTime,  double cfactor = 1.0, bool useLast= false);
+    PathTimeSeries(const std::string &fileNamePath, const std::string &fileNameTime, double cfactor = 1.0, bool useLast= false);    
+    PathTimeSeries(const std::string &fileName,double cfactor = 1.0, bool useLast= false);
     TimeSeries *getCopy(void) const
       { return new PathTimeSeries(*this); }
     

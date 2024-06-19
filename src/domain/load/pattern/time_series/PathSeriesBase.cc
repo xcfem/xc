@@ -35,14 +35,14 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
-XC::PathSeriesBase::PathSeriesBase(int classTag, const double &theFactor)	
-  :CFactorSeries(classTag,theFactor), lastSendCommitTag(-1) {}
+XC::PathSeriesBase::PathSeriesBase(int classTag, const double &theFactor, bool last)	
+  : CFactorSeries(classTag,theFactor), useLast(last) {}
 
 		   
 //! @brief Constructor.
-XC::PathSeriesBase::PathSeriesBase(int classTag,const Vector &theLoadPath,const double &theFactor)
+XC::PathSeriesBase::PathSeriesBase(int classTag,const Vector &theLoadPath,const double &theFactor, bool last)
   :CFactorSeries(classTag,theFactor),
-   thePath(theLoadPath), lastSendCommitTag(-1)
+   thePath(theLoadPath), useLast(last)
   {}
 
 //! @brief Return the number of points that define the path.
@@ -121,7 +121,7 @@ int XC::PathSeriesBase::sendData(Communicator &comm)
   {
     int res= sendData(comm);
     res+= comm.sendVector(thePath,getDbTagData(),CommMetaData(1));
-    res+= comm.sendInt(lastSendCommitTag,getDbTagData(),CommMetaData(2));
+    res+= comm.sendBool(useLast,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -130,7 +130,7 @@ int XC::PathSeriesBase::recvData(const Communicator &comm)
   {
     int res= recvData(comm);
     res+= comm.receiveVector(thePath,getDbTagData(),CommMetaData(1));
-    res+= comm.receiveInt(lastSendCommitTag,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveBool(useLast,getDbTagData(),CommMetaData(2));
     return res;
   }
 

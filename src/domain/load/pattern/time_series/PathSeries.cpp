@@ -85,7 +85,8 @@ void XC::PathSeries::prepend_zero_if_appropriate(void)
 
 //! @brief Default constructor.
 XC::PathSeries::PathSeries(void)	
-  :PathSeriesBase(TSERIES_TAG_PathSeries), pathTimeIncr(1.0), useLast(false), startTime(0.0), prependZero(false) {}
+  :PathSeriesBase(TSERIES_TAG_PathSeries),
+   pathTimeIncr(1.0), startTime(0.0), prependZero(false) {}
 
 		   
 //! @brief Constructor.
@@ -98,9 +99,9 @@ XC::PathSeries::PathSeries(void)
 //! @param theTimeIncr: time step.
 //! @param theFactor:  constant factor used in the relation.
 XC::PathSeries::PathSeries(const Vector &theLoadPath, double theTimeIncr, double theFactor, bool useLast, bool prependZero, double startTime)
-  : PathSeriesBase(TSERIES_TAG_PathSeries,theLoadPath,theFactor),
-    pathTimeIncr(theTimeIncr),
-    useLast(useLast), startTime(startTime), prependZero(prependZero)
+  : PathSeriesBase(TSERIES_TAG_PathSeries,theLoadPath,theFactor, useLast),
+    pathTimeIncr(theTimeIncr), startTime(startTime),
+    prependZero(prependZero)
   { prepend_zero_if_appropriate(); }
 
 
@@ -114,8 +115,9 @@ XC::PathSeries::PathSeries(const Vector &theLoadPath, double theTimeIncr, double
 //! @param theTimeIncr: time step.
 //! @param theFactor:  constant factor used in the relation.
 XC::PathSeries::PathSeries(const std::string &fileName, double theTimeIncr, double theFactor, bool useLast, bool prependZero, double startTime)
-  :PathSeriesBase(TSERIES_TAG_PathSeries,theFactor), pathTimeIncr(theTimeIncr),
-    useLast(useLast), startTime(startTime), prependZero(prependZero) 
+  :PathSeriesBase(TSERIES_TAG_PathSeries,theFactor, useLast),
+   pathTimeIncr(theTimeIncr), startTime(startTime),
+   prependZero(prependZero) 
   { readFromFile(fileName); }
 
 //! @brief Read path from file.

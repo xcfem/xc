@@ -81,8 +81,8 @@ XC::PathTimeSeries::PathTimeSeries(void)
 //! @param theLoadPath: vector containing the data points.
 //! @param theTimePath: vector containing the time values (abscissae).
 //! @param theFactor:  constant factor used in the relation.
-XC::PathTimeSeries::PathTimeSeries(const Vector &theLoadPath, const Vector &theTimePath, double theFactor)
-  :PathSeriesBase(TSERIES_TAG_PathTimeSeries,theLoadPath,theFactor),time(theTimePath), currentTimeLoc(0) {}
+XC::PathTimeSeries::PathTimeSeries(const Vector &theLoadPath, const Vector &theTimePath, double theFactor, bool last)
+  :PathSeriesBase(TSERIES_TAG_PathTimeSeries,theLoadPath,theFactor, last),time(theTimePath), currentTimeLoc(0) {}
 
 
 //! @brief Constructor.
@@ -90,14 +90,14 @@ XC::PathTimeSeries::PathTimeSeries(const Vector &theLoadPath, const Vector &theT
 //! @param fileName: name of the file containing the data points.
 //! @param fileTimeName: name of the file containing the time values.
 //! @param theFactor:  constant factor used in the relation.
-XC::PathTimeSeries::PathTimeSeries(const std::string &filePathName,const std::string &fileTimeName, double theFactor)
-  :PathSeriesBase(TSERIES_TAG_PathTimeSeries, theFactor), currentTimeLoc(0)
+XC::PathTimeSeries::PathTimeSeries(const std::string &filePathName,const std::string &fileTimeName, double theFactor, bool last)
+  :PathSeriesBase(TSERIES_TAG_PathTimeSeries, theFactor, last), currentTimeLoc(0)
   { readFromFiles(filePathName,fileTimeName); }
 
 
 //! @brief Constructor.
-XC::PathTimeSeries::PathTimeSeries(const std::string &fileName, double theFactor)
-  :PathSeriesBase(TSERIES_TAG_PathTimeSeries,theFactor), currentTimeLoc(0)
+XC::PathTimeSeries::PathTimeSeries(const std::string &fileName, double theFactor, bool last)
+  :PathSeriesBase(TSERIES_TAG_PathTimeSeries, theFactor, last), currentTimeLoc(0)
   { readFromFile(fileName); }
 
 //! @brief Read path from file.
@@ -260,6 +260,8 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
     double time1= time(currentTimeLoc);
 
     // check for another quick return
+    if(pseudoTime < time1 && currentTimeLoc == 0)
+      return 0.0;
     if(pseudoTime == time1)
       return cFactor * thePath(currentTimeLoc);
 
@@ -269,10 +271,12 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
 
     // check we are not at the end
     if(pseudoTime > time1 && currentTimeLoc == sizem1)
-      return 0.0;
-
-    if(pseudoTime < time1 && currentTimeLoc == 0)
-      return 0.0;
+      {
+	if (useLast == false)
+	  return 0.0;
+	else
+	  return cFactor*thePath[sizem1];
+      }
 
     // otherwise go find the current interval
     double time2= time(currentTimeLoc+1);
@@ -286,7 +290,12 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
           }
         // if pseudo time greater than ending time return 0
         if(pseudoTime > time2)
-          return 0.0;
+	  {
+	    if(useLast == false)
+	      return 0.0;
+	    else
+	      return cFactor*thePath[sizem1];
+	  }
       }
     else if(pseudoTime < time1)
       {

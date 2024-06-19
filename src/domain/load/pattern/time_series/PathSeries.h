@@ -85,7 +85,6 @@ class PathSeries: public PathSeriesBase
   {
   private:
     double pathTimeIncr; //!< Time step.
-    bool useLast;  //!< if true use last value after the end of the series.
     double startTime; //!< provide a start time for provided load factors.
     bool prependZero; //!< if true prepend a zero value to the series of load factors.
     void prepend_zero_if_appropriate(void);
@@ -116,10 +115,6 @@ class PathSeries: public PathSeriesBase
       { this->startTime= d; }
     inline double getStartTime(void) const
       {return this->startTime;}
-    inline void setUseLast(const bool &b)
-      { this->useLast= b; }
-    inline bool getUseLast(void) const
-      {return this->useLast;}
     inline void setPrependZero(const bool &b)
       { this->prependZero= b; }
     inline bool getPrependZero(void) const
