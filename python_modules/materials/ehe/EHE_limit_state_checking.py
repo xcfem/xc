@@ -1100,7 +1100,6 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
     Efi= list() # Fictitious eccentricity for each mode.
     strongAxisBucklingPercent= list()
     alpha_cr_i= list() # Ncr/N factor by which the design loading would have to be increased to cause elastic instability (see Eurocode 4:2004 cl.5.2.1(2)).
-    pi2= math.pi**2
     if(nDOF==6): # 2D element.
         e1, e2= get_element_buckling_eccentricities(element) # Compute eccentricities according to clause 43.1.2
         EI= section.sectionProperties.EI()
@@ -1109,7 +1108,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
         lowerSlendernessLimit= get_lower_slenderness_limit(C= Cz, nonDimensionalAxialForce= nonDimensionalAxialForce, e1= e1, e2= e2, sectionDepth= sectionDepthZ)
         minimumEccentricity= max(.02, sectionDepthZ/20)
         for mode, Ncr in enumerate(Ncri):
-            Leff= math.sqrt((EI*pi2)/abs(Ncr)) # Effective length.
+            Leff= math.pi * math.sqrt(EI/abs(Ncr)) # Effective length.
             if(Ncr>0):
                 Leff= -Leff
             Leffi.append(Leff)
@@ -1185,7 +1184,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                     lowerSlendernessLimit=  lowerSlendernessLimitVector.dot(localEigenvectorDispYZ)
                     # Compute the effective length.
                     absNcr= abs(Ncr)
-                    Leff= math.sqrt((EI*pi2)/absNcr) # Effective length.
+                    Leff= math.pi*math.sqrt(EI/absNcr) # Effective length.
                     if(Ncr>0):
                         Leff= -Leff
                     Leffi.append(Leff)
