@@ -15,7 +15,7 @@ motionPath= None
 motionPathSize= 0
 motionFactor= 0.0
 motionPeakFactor= 0.0
-motionLastSendCommitTag= 0.0
+motionUseLast= True
 motionPathTimeIncrement= 0.0
 
 feProblem= xc.FEProblem()
@@ -39,13 +39,13 @@ motionPath= mr.history.accel.path
 motionPathSize= mr.history.getNumberOfDataPoints()
 motionFactor= mr.history.accel.getFactor(0.5)
 motionPeakFactor= mr.history.accel.getPeakFactor()
-motionLastSendCommitTag= mr.history.accel.lastSendCommitTag
+motionUseLast= mr.history.accel.useLast
 motionPathTimeIncrement= mr.history.accel.getTimeIncr(0.5)
 
 ratio1= (motionDuration-4)/4
 ratio2= (motionFactor-1.5)/1.5
 ratio3= (motionPeakFactor-4)/4
-ratio4= (motionLastSendCommitTag+1)
+ratio4= (motionUseLast==False)
 ratio5= (motionPathTimeIncrement-1)
 ratio6= (motionPathSize-4)/4
 
@@ -57,7 +57,7 @@ print("factor= ",motionFactor)
 print("ratio2= ",ratio2)
 print("peak factor= ",motionPeakFactor)
 print("ratio3= ",ratio3)
-print("lastSendCommitTag= ",motionLastSendCommitTag)
+print("motionUseLast= ",motionUseLast)
 print("ratio4= ",ratio4)
 print("path time increment= ",motionPathTimeIncrement)
 print("ratio5= ",ratio5)
@@ -68,7 +68,7 @@ print("ratio6= ",ratio6)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-15) & (abs(ratio5)<1e-15) & (abs(ratio6)<1e-15):
+if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (ratio4==True) & (abs(ratio5)<1e-15) & (abs(ratio6)<1e-15):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
