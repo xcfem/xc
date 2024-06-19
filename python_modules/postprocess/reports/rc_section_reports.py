@@ -105,14 +105,14 @@ class RCSectionReportGenerator(object):
         :param oldSteelType: type of the last plotted steel diagram.
         :param reportFile: name of the LaTeX file where the figure will be included.
         '''
-        newSteel= newRCSection.fiberSectionParameters.reinfSteelType
-        newConcrete= newRCSection.fiberSectionParameters.concrType
-        if newSteel != oldSteelType or newConcrete != oldConcreteType:
-            self.plotSteelDiagram(preprocessor= preprocessor, steelType= newSteel, reportFile= reportFile)
-            self.plotConcreteDiagram(preprocessor= preprocessor, concreteType= newSteel, reportFile= reportFile)
-            return newConcrete, newSteel
+        newSteelType= newRCSection.fiberSectionParameters.reinfSteelType
+        newConcreteType= newRCSection.fiberSectionParameters.concrType
+        if newSteelType != oldSteelType or newConcreteType != oldConcreteType:
+            self.plotSteelDiagram(preprocessor= preprocessor, steelType= newSteelType, reportFile= reportFile)
+            self.plotConcreteDiagram(preprocessor= preprocessor, concreteType= newConcreteType, reportFile= reportFile)
+            return newConcreteType, newSteelType
         else:
-            return oldConcrete, oldSteel
+            return oldConcreteType, oldSteelType
         reportFile.write('\\newpage\n\n')
 
     def rcSectionLatexReport(self, preprocessor, rcSection, reportFile):
