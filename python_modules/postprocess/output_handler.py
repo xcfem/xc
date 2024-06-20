@@ -631,7 +631,7 @@ class OutputHandler(object):
             if(maxAbs>0.0):
                 #Linear loads
                 diagram.addDiagram(preprocessor)
-                if(diagram.isValid()):
+                if(diagram.rangeIsValid()):
                     displaySettings.appendDiagram(diagram, orientScbar=scOrient,
                                                   titleScbar='Linear loads ('+self.getOutputForceUnitSym()+'/'+
                                                   self.getOutputLengthUnitSym()+')' )

@@ -69,7 +69,7 @@ class LUTField(object):
         self.valMin= value #Extremely BIG (yes BIG) positive value.
         self.valMax= -self.valMin #Extremely BIG negative value.
 
-    def isValid(self):
+    def rangeIsValid(self):
         return (self.valMax > -1e+99) or (self.valMin<1e+99)
 
     def createLookUpTable(self):
@@ -80,7 +80,7 @@ class LUTField(object):
         self.lookUpTable= vtk.vtkLookupTable()
         self.lookUpTable.SetNumberOfTableValues(1024)
         self.lookUpTable.SetHueRange(0.667,0)
-        if(self.isValid): # Range is valid.
+        if(self.rangeIsValid()): # Range is valid.
             self.lookUpTable.SetTableRange(self.valMin,self.valMax)
         self.lookUpTable.Build()
 
