@@ -1116,7 +1116,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
             mechLambdai.append(mechLambda)
             if(mechLambda>maxMechLambda):
                 methodName= sys._getframe(0).f_code.co_name
-                warningMsg= methodName+"; mechanical slenderness exceeded for this simplified method: (" + str(mechLambda) + ">"+str(maxMechLambda)+")."
+                warningMsg= methodName+"; mechanical slenderness exceeded in mode: "+ str(mode+1) + "for this simplified method: (" + str(mechLambda) + ">"+str(maxMechLambda)+"), load factor: "+str(bucklingLoadFactors[mode])+"."
                 lmsg.warning(warningMsg)
             if(mechLambda<lowerSlendernessLimit):
                 ef= minimumEccentricity
@@ -1197,7 +1197,7 @@ def get_buckling_parameters(element, bucklingLoadFactors, rcSection, sectionDept
                     mechLambda= Leff/i_mode # Compute mechanical slenderness
                     if(mechLambda>maxMechLambda):
                         methodName= sys._getframe(0).f_code.co_name
-                        warningMsg= methodName+"; mechanical slenderness exceeded for this simplified method: (" + str(mechLambda) + ">"+str(maxMechLambda)+")."
+                        warningMsg= methodName+"; mechanical slenderness exceeded in mode: "+ str(mode1) + "for this simplified method: (" + str(mechLambda) + ">"+str(maxMechLambda)+"), load factor: "+str(bucklingLoadFactors[mode])+"."
                         lmsg.warning(warningMsg)
                     mechLambdai.append(mechLambda)
                     ## Compute the projected minimum eccentricity.
