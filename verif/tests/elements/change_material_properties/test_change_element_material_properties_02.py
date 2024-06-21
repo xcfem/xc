@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Change the material of an element.'''
+'''Change the properties of the material of a ElasticBeam2d element.'''
 
 from __future__ import print_function
 from __future__ import division
