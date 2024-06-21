@@ -65,6 +65,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
+# Check results.
 deltax= n2.getDisp[0]
 deltay= n2.getDisp[1] 
 RX= n1.getReaction[0]
@@ -77,13 +78,13 @@ ratio4= (KY*deltay)/FY
 
 ''' 
 print("RX= ",RX)
+print("ratio1= ", ratio1)
 print("dx= ",deltax)
+print("ratio2= ", ratio2)
 print("RY= ",RY)
+print("ratio3= ", ratio3)
 print("dy= ",deltay)
-print("ratio1= ",(ratio1))
-print("ratio2= ",(ratio2))
-print("ratio3= ",(ratio3))
-print("ratio4= ",(ratio4))
+print("ratio4= ", ratio4)
    '''
   
 import os
