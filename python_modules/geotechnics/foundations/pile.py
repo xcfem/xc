@@ -294,6 +294,7 @@ class Pile(object):
         prep= self.pileSet.getPreprocessor
         modelSpace= predefined_spaces.getModelSpace(prep)
         self.springs= generate_springs_pile_2d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants) 
+        return self.springs
 
     
     def generateSpringsPile3D(self, alphaKh_x, alphaKh_y, alphaKv_z):
@@ -311,6 +312,7 @@ class Pile(object):
         prep= self.pileSet.getPreprocessor
         modelSpace= predefined_spaces.getModelSpace(prep)
         self.springs= generate_springs_pile_3d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants)
+        return self.springs
         
     def generateSpringsPile(self, alphaKh_x, alphaKh_y, alphaKv_z):
         '''Generate the springs that simulate the soils along the pile
@@ -324,15 +326,16 @@ class Pile(object):
         '''
         preprocessor= self.pileSet.getPreprocessor
         numDOFs= preprocessor.getNodeHandler.numDOFs
+        retval= None
         if(numDOFs==6): # 3D structural mechanics
-            self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z)
+            retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z)
         elif(numDOFs==3):
-            self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z)
+            retval= self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for '+str(numDOFs) + ' degrees of freedom.')
-            
+        return retval
             
 
 class CircularPile(Pile):
