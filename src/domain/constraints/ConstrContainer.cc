@@ -1084,49 +1084,56 @@ int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
+//! Set the tags of the active load patterns.
+void XC::ConstrContainer::setTagsLPs(const ID &loadPatternsTags)
+  {
+    Domain *dom= getDomain();
+    assert(dom);
+    Preprocessor *preprocessor= dom->getPreprocessor();
+    if(preprocessor)
+      {
+	LoadHandler &loadHandler= preprocessor->getLoadHandler();
+	LoadPattern *load= nullptr;
+	const size_t sz= loadPatternsTags.Size();
+	for(size_t i=0;i<sz;i++)
+	  {
+	    load= loadHandler.getLoadPatterns().findLoadPattern(loadPatternsTags[i]);
+	    if(load)
+	      {
+		if(addLoadPattern(load))
+		  load->setDomain(dom);
+		else
+		  {
+		    if(verbosity>3)
+		      {
+			const MapLoadPatterns &lPatterns= loadHandler.getLoadPatterns();
+			std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; could not add load pattern: '"
+				  << lPatterns.getLoadPatternName(load)
+				  << "' with tag: " << load->getTag() << std::endl;
+		      }
+		  }
+	      }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< " load with tag: " << loadPatternsTags[i]
+			<< "not found." << std::endl;
+	  }
+      }
+  }
+
+
 //! @brief Receives the active load patterns tags through the communicator argument.
 int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTag,const Communicator &comm)
   {
-    Domain *dom= getDomain();
     int res= 0;
     static ID loadPatternsTags;
     const int flag= getDbTagDataPos(posFlag);
     if(flag != 0)
       {
         res= comm.receiveID(loadPatternsTags,getDbTagData(),CommMetaData(posDbTag));
-    
-        assert(dom);
-        Preprocessor *preprocessor= dom->getPreprocessor();
-        if(preprocessor)
-          {
-            LoadHandler &loadHandler= preprocessor->getLoadHandler();
-            LoadPattern *load= nullptr;
-            const size_t sz= loadPatternsTags.Size();
-            for(size_t i=0;i<sz;i++)
-              {
-                load= loadHandler.getLoadPatterns().findLoadPattern(loadPatternsTags[i]);
-                if(load)
-                  {
-                    if(addLoadPattern(load))
-                      load->setDomain(dom);
-                    else
-                      {
-                        if(verbosity>3)
-                          {
-                            const MapLoadPatterns &lPatterns= loadHandler.getLoadPatterns();
-	                    std::cerr << getClassName() << "::" << __FUNCTION__
-			              << "; could not add load pattern: '"
-                                      << lPatterns.getLoadPatternName(load)
-                                      << "' with tag: " << load->getTag() << std::endl;
-                          }
-                      }
-                  }
-                else
-	          std::cerr << getClassName() << "::" << __FUNCTION__
-		            << " load with tag: " << loadPatternsTags[i]
-			    << "not found." << std::endl;
-              }
-          }
+
+	this->setTagsLPs(loadPatternsTags);
       }
     return res;
   }
@@ -1151,34 +1158,40 @@ int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag
     return res;
   }
 
+//! @brief Sets the tags of the node lockers.
+void XC::ConstrContainer::setTagsNLs(const ID &nLockersTags)
+  {
+    Domain *dom= getDomain();
+    assert(dom);
+    Mesh &mesh= dom->getMesh();
+    NodeLocker *nl= nullptr;
+    const size_t sz= nLockersTags.Size();
+    for(size_t i=0;i<sz;i++)
+      {
+	nl= mesh.getNodeLockers().buscaNodeLocker(nLockersTags[i]);
+	if(nl)
+	  {
+	    if(addNodeLocker(nl))
+	      nl->setDomain(dom);
+	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; node locker identified by : "
+		    << nLockersTags[i] << " not found." << std::endl;
+      }
+  }    
+
 //! @brief Receives the node lockers tags through the communicator argument.
 int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag,const Communicator &comm)
   {
-    Domain *dom= getDomain();
     int res= 0;
     static ID nLockersTags;
     const int flag= getDbTagDataPos(posFlag);
     if(flag != 0)
       {
         res= comm.receiveID(nLockersTags,getDbTagData(),CommMetaData(posDbTag));
-    
-        assert(dom);
-        Mesh &mesh= dom->getMesh();
-        NodeLocker *nl= nullptr;
-        const size_t sz= nLockersTags.Size();
-        for(size_t i=0;i<sz;i++)
-          {
-            nl= mesh.getNodeLockers().buscaNodeLocker(nLockersTags[i]);
-            if(nl)
-              {
-                if(addNodeLocker(nl))
-                  nl->setDomain(dom);
-              }
-            else
-              std::cerr << getClassName() << "::" << __FUNCTION__
-		        << "; node locker identified by : "
-                        << nLockersTags[i] << " not found." << std::endl;
-          }
+
+	this->setTagsNLs(nLockersTags);
       }
     return res;
   }
@@ -1204,6 +1217,56 @@ int XC::ConstrContainer::recvData(const Communicator &comm)
     res+= recvNLockersTags(3,4,comm);
     res+= recvLPatternsTags(5,6,comm);
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ConstrContainer::getPyDict(void) const
+  {
+    boost::python::dict retval= MeshComponentContainer::getPyDict();
+    retval["theSPs"]= theSPs->getPyDict();
+    retval["theMPs"]= theMPs->getPyDict();
+    retval["theMRMPs"]= theMRMPs->getPyDict();
+    //Node lockers tags.
+    const std::deque<int> nl_tags= getTagsNLs();
+    const size_t nl_tags_sz= nl_tags.size();
+    boost::python::list nl_tags_lst;
+    for(size_t i= 0; i<nl_tags_sz; i++)
+      nl_tags_lst.append(nl_tags[i]);
+    retval["nl_tags"]= nl_tags_lst;
+    // load patterns tags.
+    const std::deque<int> lp_tags= getTagsLPs();
+    const size_t lp_tags_sz= lp_tags.size();
+    boost::python::list lp_tags_lst;
+    for(size_t i= 0; i<lp_tags_sz; i++)
+      lp_tags_lst.append(lp_tags[i]);
+    retval["lp_tags"]= lp_tags_lst;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ConstrContainer::setPyDict(const boost::python::dict &d)
+  {
+    MeshComponentContainer::setPyDict(d);
+    if(theSPs)
+      theSPs->setPyDict(boost::python::extract<boost::python::dict>(d["theSPs"]));
+    if(theMPs)
+      theMPs->setPyDict(boost::python::extract<boost::python::dict>(d["theMPs"]));
+    if(theMRMPs)
+      theMRMPs->setPyDict(boost::python::extract<boost::python::dict>(d["theMRMPs"]));
+    //Node lockers tags.
+    boost::python::list nl_tags_lst= boost::python::extract<boost::python::list>(d["nl_tags"]);
+    const size_t nl_tags_sz= boost::python::len(nl_tags_lst);
+    ID nl_tags(nl_tags_sz);
+    for(size_t i= 0; i<nl_tags_sz; i++)
+      nl_tags[i]= boost::python::extract<int>(nl_tags_lst[i]);
+    setTagsNLs(nl_tags);
+    // Load patterns tags.
+    boost::python::list lp_tags_lst= boost::python::extract<boost::python::list>(d["lp_tags"]);
+    const size_t lp_tags_sz= boost::python::len(lp_tags_lst);
+    ID lp_tags(lp_tags_sz);
+    for(size_t i= 0; i<lp_tags_sz; i++)
+      lp_tags[i]= boost::python::extract<int>(lp_tags_lst[i]);
+    setTagsLPs(lp_tags);
   }
 
 //! @brief Sends object through the communicator argument.

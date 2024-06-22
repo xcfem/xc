@@ -205,6 +205,8 @@ class Mesh: public MeshComponentContainer
 
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     // nodal methods required in mesh interface for parallel interprter
     virtual double getNodeDisp(int nodeTag, int dof, int &errorFlag);

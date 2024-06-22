@@ -90,6 +90,9 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     void Print(std::ostream &os) const;
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     bool equalNumDOF(void);
     bool checkNumDOF(const size_t &, const size_t &);
     

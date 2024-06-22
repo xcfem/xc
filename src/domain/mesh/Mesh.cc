@@ -46,12 +46,12 @@
 #include <solution/graph/graph/Vertex.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include <climits>
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/tagged/DefaultTag.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 const double XC::Mesh::reactionValueThreshold= 1.0e-6; //Reactions with norm under this value can be considered zero.
@@ -101,8 +101,9 @@ bool XC::Mesh::check_containers(void) const
     // check that there was space to create the data structures
     if (theElements ==0 || theNodes == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; out of memory.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; out of memory."
+		  << Color::def << std::endl;
         return false;
       }
     else
@@ -136,8 +137,9 @@ XC::Mesh::Mesh(CommandEntity *owr,TaggedObjectStorage &theNodesStorage,TaggedObj
 
     // check that the containers are empty
     if(theElements->getNumComponents()!=0 || theNodes->getNumComponents()!=0)
-       std::cerr << getClassName() << "::" << __FUNCTION__
-		 << "(&, & ...) - out of memory.\n";
+       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		 << "(&, & ...) - out of memory."
+		 << Color::def << std::endl;
     init_bounds();
     tagNodeCheckReactionException= -1;
   }
@@ -240,8 +242,9 @@ bool XC::Mesh::addElement(Element *element)
   {
     if(!element)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; pointer to element is null." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; pointer to element is null."
+		  << Color::def << std::endl;
         return false;
       }
     const int eleTag = element->getTag();
@@ -252,7 +255,8 @@ bool XC::Mesh::addElement(Element *element)
       {
         std::clog << getClassName() << "::" << __FUNCTION__
 		  << "; element with tag " << eleTag
-		  << " already exists in model.\n";
+		  << " already exists in model."
+		  << Color::def << std::endl;
         return false;
       }
 
@@ -261,9 +265,10 @@ bool XC::Mesh::addElement(Element *element)
     if(result)
       add_element_to_domain(element);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; element " << eleTag
-		<< " could not be added to container.\n";
+		<< " could not be added to container."
+		  << Color::def << std::endl;
     return result;
   }
 
@@ -335,16 +340,18 @@ bool XC::Mesh::addNode(Node * node)
       {
         std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; node with tag " << nodTag
-		  << " already exists in model.\n";
+		  << " already exists in model."
+		  << Color::def << std::endl;
         return false;
       }
     bool result= theNodes->addComponent(node);
     if(result)
       add_node_to_domain(node);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; node with tag " << nodTag
-		<< " could not be added to container.\n";
+		<< " could not be added to container."
+		  << Color::def << std::endl;
     return result;
   }
 
@@ -565,9 +572,10 @@ void XC::Mesh::freeze_dead_nodes(const std::string &lockerName)
         getDomain()->addNodeLocker(locker);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; can't find locker: '"
-		<< lockerName << "'\n";
+		<< lockerName << "'"
+		<< Color::def << std::endl;
   }
 
 //! @brief Clears the constraints over activated nodes 
@@ -587,9 +595,10 @@ void XC::Mesh::melt_alive_nodes(const std::string &lockerName)
         lockers.borraNodeLocker(lockerName);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; can't find locker: '"
-		<< lockerName << "'\n";
+		<< lockerName << "'"
+		<< Color::def << std::endl;
   }
 
 //! @brief Returns the number of elements.
@@ -720,8 +729,9 @@ XC::Graph &XC::Mesh::getElementGraph(void)
         if(this->buildEleGraph(theElementGraph) == 0)
           eleGraphBuiltFlag = true;
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to build the element graph.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to build the element graph."
+		    << Color::def << std::endl;
       }
     // return the Graph
     return theElementGraph;
@@ -747,8 +757,9 @@ XC::Graph &XC::Mesh::getNodeGraph(void)
         if(this->buildNodeGraph(theNodeGraph) == 0)
             nodeGraphBuiltFlag = true;
         else
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; failed to build the node graph.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to build the node graph."
+		      << Color::def << std::endl;
       }
     // return the XC::Graph
     return theNodeGraph;
@@ -925,8 +936,9 @@ int XC::Mesh::update(void)
       { ok += theEle->update(); }
 
     if(ok != 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; mesh failed in update.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; mesh failed in update."
+		<< Color::def << std::endl;
     return ok;
   }
 
@@ -942,13 +954,16 @@ void XC::Mesh::setGraphBuiltFlags(const bool &f)
 //! @brief Imprime el domain.
 void XC::Mesh::Print(std::ostream &s, int flag) const
   {
+    s << "Current Mesh Information:" << std::endl;
 
-    s << "Current Mesh Information:\n";
-
-    s << "\nNODE DATA: NumNodes: " << theNodes->getNumComponents() << "\n";
+    s << "\nNODE DATA: NumNodes: "
+      << theNodes->getNumComponents() << ""
+      << std::endl;
     theNodes->Print(s, flag);
 
-    s << "\nELEMENT DATA: NumEle: " << theElements->getNumComponents() << "\n";
+    s << "\nELEMENT DATA: NumEle: "
+      << theElements->getNumComponents() << ""
+      << std::endl;
     theElements->Print(s, flag);
   }
 
@@ -988,7 +1003,8 @@ int XC::Mesh::buildEleGraph(Graph &theEleGraph)
       theElementTagVertices[j] = -1;
     std::clog << getClassName() << "::" << __FUNCTION__
 	      << "; buildEleGraph numVertex maxEleNum " << numVertex
-	      << " " << maxEleNum << std::endl;
+	      << " " << maxEleNum
+	      << Color::def << std::endl;
     // now create the vertices with a reference equal to the element number.
     // and a tag which ranges from 0 through numVertex-1
 
@@ -1169,6 +1185,48 @@ int XC::Mesh::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Mesh::getPyDict(void) const
+  {
+    boost::python::dict retval= MeshComponentContainer::getPyDict();
+    if(theNodes)
+      retval["nodes"]= theNodes->getPyDict();
+    if(theElements)
+      retval["elements"]= theElements->getPyDict();
+    retval["bounds"]= theBounds.getPyList();
+    retval["tagNodeCheckReactionException"]= tagNodeCheckReactionException;
+    retval["lockers"]= lockers.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Mesh::setPyDict(const boost::python::dict &d)
+  {
+    MeshComponentContainer::setPyDict(d);
+    if(d.has_key("nodes"))
+      {
+	if(theNodes)
+	  { theNodes->setPyDict(boost::python::extract<boost::python::dict>(d["nodes"])); }
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; node container not initialized."
+		    << Color::def << std::endl;
+      }
+    if(d.has_key("elements"))
+      {
+	if(theElements)
+	  { theElements->setPyDict(boost::python::extract<boost::python::dict>(d["elements"])); }
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; element container not initialized."
+		    << Color::def << std::endl;
+      }
+    add_elements_to_domain();
+    theBounds= Vector(boost::python::extract<boost::python::list>(d["bounds"]));
+    tagNodeCheckReactionException= boost::python::extract<int>(d["tagNodeCheckReactionException"]);
+    lockers.setPyDict(boost::python::extract<boost::python::dict>(d["lockers"]));
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::Mesh::sendSelf(Communicator &comm)
   {
@@ -1177,8 +1235,9 @@ int XC::Mesh::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; communicator failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; communicator failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -1190,7 +1249,7 @@ int XC::Mesh::recvSelf(const Communicator &comm)
     inicComm(5);
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; communicator failed to recv the initial ID.\n";
     else
       res+= recvData(comm);
@@ -1325,16 +1384,17 @@ double XC::Mesh::normalizeEigenvectors(int mode)
 	  }
 	else
 	  if(norm==0.0)
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; eigenvector for mode: " << mode
-		      << " has zero norm." << std::endl;
+		      << " has zero norm."
+		      << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; requested mode: " << mode
 		<< " out of range: [" << 0
 		<< "," << numModes << ")"
-		<< std::endl;
+		<< Color::def << std::endl;
     return norm;
   }
 

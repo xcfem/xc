@@ -342,6 +342,8 @@ class Node: public MeshComponent
     // public methods for output
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);

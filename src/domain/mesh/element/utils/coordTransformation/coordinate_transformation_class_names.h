@@ -35,7 +35,7 @@ namespace XC {
   
 //! @brief Return true if the given class name corresponds to a coordinate transformation.
 bool is_coordinate_transformation(const std::string &className)
-  { return (XC::crd_transf_class_names.find(className)!= XC::node_class_names.end()); }
+  { return (XC::crd_transf_class_names.find(className)!= XC::crd_transf_class_names.end()); }
   
 } // end of XC namespace
 

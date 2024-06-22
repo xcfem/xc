@@ -1897,7 +1897,7 @@ int XC::Node::recvData(const Communicator &comm)
     res+= comm.receiveMatrix(R,getDbTagData(),CommMetaData(10));
     res+= comm.receiveDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11));
     res+= comm.receiveMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
-    index= -1;
+    this->index= -1;
     res+= comm.receiveMovable(disp,getDbTagData(),CommMetaData(13));
     res+= comm.receiveMovable(vel,getDbTagData(),CommMetaData(14));
     res+= comm.receiveMovable(accel,getDbTagData(),CommMetaData(15));
@@ -1908,6 +1908,63 @@ int XC::Node::recvData(const Communicator &comm)
     set_id_constraints(nodeLockersTags, constraintsTags);
     setup_matrices(theMatrices,numberDOF);
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Node::getPyDict(void) const
+  {
+    boost::python::dict retval= DomainComponent::getPyDict();
+    retval["numberDOF"]= numberDOF;
+    retval["mass"]= mass.getPyList();
+    retval["reaction"]= reaction.getPyList();
+    retval["unbalLoad"]= unbalLoad.getPyList();
+    retval["unbalLoadWithInertia"]= unbalLoadWithInertia.getPyList();
+    retval["Crd"]= Crd.getPyList();
+    retval["R"]= R.getPyList();
+    retval["alphaM"]= alphaM;
+    retval["tributary"]= tributary;
+    retval["theEigenvectors"]= theEigenvectors.getPyList();
+    retval["disp"]= disp.getPyDict();
+    retval["vel"]= vel.getPyDict();
+    retval["accel"]= accel.getPyDict();
+    const ID nodeLockersTags= get_node_lockers_tags();
+    retval["node_loackers_tags"]= nodeLockersTags.getPyList(); 
+    std::vector<ID> constraintsTags= get_constraints_tags();
+    boost::python::list pyList;
+    for( std::vector<ID>::const_iterator i= constraintsTags.begin(); i!= constraintsTags.end(); i++)
+      pyList.append((*i).getPyList());
+    retval["constraintsTags"]= pyList; 
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Node::setPyDict(const boost::python::dict &d)
+  {
+    DomainComponent::setPyDict(d);
+    this->numberDOF= boost::python::extract<int>(d["numberDOF"]);
+    mass= Matrix(boost::python::extract<boost::python::list>(d["mass"]));
+    reaction= Vector(boost::python::extract<boost::python::list>(d["reaction"]));
+    unbalLoad= Vector(boost::python::extract<boost::python::list>(d["unbalLoad"]));
+    unbalLoadWithInertia= Vector(boost::python::extract<boost::python::list>(d["unbalLoadWithInertia"]));
+    Crd= Vector(boost::python::extract<boost::python::list>(d["Crd"]));
+    R= Matrix(boost::python::extract<boost::python::list>(d["R"]));
+    this->alphaM= boost::python::extract<double>(d["alphaM"]);
+    this->tributary= boost::python::extract<double>(d["tributary"]);
+    theEigenvectors= Matrix(boost::python::extract<boost::python::list>(d["theEigenvectors"]));
+    this->index= -1;
+    disp.setPyDict(boost::python::extract<boost::python::dict>(d["disp"]));
+    vel.setPyDict(boost::python::extract<boost::python::dict>(d["vel"]));
+    accel.setPyDict(boost::python::extract<boost::python::dict>(d["accel"]));
+    ID nodeLockersTags= ID(boost::python::extract<boost::python::list>(d["node_loackers_tags"]));
+    boost::python::list pyList= boost::python::extract<boost::python::list>(d["constraintsTags"]);
+    const size_t sz= boost::python::len(pyList);
+    std::vector<ID> constraintsTags(sz);
+    for(size_t i= 0;i<sz; i++)
+      {
+	constraintsTags[i]= ID(boost::python::extract<boost::python::list>(pyList[i]));
+      }
+    this->set_id_constraints(nodeLockersTags, constraintsTags);
+    setup_matrices(theMatrices,numberDOF);    
   }
 
 //! @brief Send the object through the communicator argument.

@@ -317,6 +317,21 @@ int XC::NodePtrsWithIDs::sendData(Communicator &comm)
 int XC::NodePtrsWithIDs::recvData(const Communicator &comm)
   { return comm.receiveID(connectedExternalNodes,getDbTagData(),CommMetaData(0)); }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::NodePtrsWithIDs::getPyDict(void) const
+  {
+    boost::python::dict retval= NodePtrs::getPyDict();
+    retval["connectedExternalNodes"]= connectedExternalNodes.getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::NodePtrsWithIDs::setPyDict(const boost::python::dict &d)
+  {
+    NodePtrs::setPyDict(d);
+    this->connectedExternalNodes= ID(boost::python::extract<boost::python::list>(d["connectedExternalNodes"]));
+  }
+
 int XC::NodePtrsWithIDs::sendSelf(Communicator &comm)
   {
     inicComm(1); 

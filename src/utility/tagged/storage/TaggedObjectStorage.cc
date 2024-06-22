@@ -312,8 +312,14 @@ void XC::TaggedObjectStorage::setPyDict(const boost::python::dict &d)
 	const std::string className= boost::python::extract<std::string>(objectDict["className"]);
 	TaggedObject *newObject= get_new_tagged_object(className, classTag);
 	if(newObject)
-	  newObject->setPyDict(objectDict);
-	this->addComponent(newObject);
+	  {
+	    newObject->setPyDict(objectDict);
+	    this->addComponent(newObject);
+	  }
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive object. Class mame: " << className << " class tag: " << classTag
+		    << Color::def << std::endl;
       }
   }
 

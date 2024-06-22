@@ -110,6 +110,8 @@ class ConstrContainer: public MeshComponentContainer
 
     void free_mem(void);
     DbTagData &getDbTagData(void) const;
+    void setTagsNLs(const ID &);
+    void setTagsLPs(const ID &);
     int sendLPatternsTags(const int &,const int &,Communicator &);
     int recvLPatternsTags(const int &,const int &,const Communicator &);
     int sendNLockersTags(const int &,const int &,Communicator &comm);
@@ -175,6 +177,8 @@ class ConstrContainer: public MeshComponentContainer
 
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     virtual void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, const ConstrContainer &);

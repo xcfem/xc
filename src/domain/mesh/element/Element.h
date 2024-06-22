@@ -321,6 +321,8 @@ class Element: public MeshComponent
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

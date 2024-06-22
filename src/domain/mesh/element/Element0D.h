@@ -90,6 +90,9 @@ class Element0D: public ElementBase<2>
       { return extrapolation_matrix; }
 
     virtual void setUpVectors(const Vector &, const Vector &);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 

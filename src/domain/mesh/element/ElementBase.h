@@ -68,6 +68,9 @@ class ElementBase: public Element
     NodePtrsWithIDs &getNodePtrs(void);
     const NodePtrsWithIDs &getNodePtrs(void) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 
@@ -155,6 +158,22 @@ int XC::ElementBase<NNODES>::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+template <int NNODES>
+boost::python::dict XC::ElementBase<NNODES>::getPyDict(void) const
+  {
+    boost::python::dict retval= Element::getPyDict();
+    retval["nodes"]= theNodes.getPyDict();
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+template <int NNODES>
+void XC::ElementBase<NNODES>::setPyDict(const boost::python::dict &d)
+  {
+    Element::setPyDict(d);
+    theNodes.setPyDict(boost::python::extract<boost::python::dict>(d["nodes"]));
+  }
+  
 //! @brief Return position of the element centroid.
 template <int NNODES>
 Pos3d XC::ElementBase<NNODES>::getCenterOfMassPosition(bool initialGeometry) const

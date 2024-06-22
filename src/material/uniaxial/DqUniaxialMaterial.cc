@@ -427,7 +427,12 @@ boost::python::dict XC::DqUniaxialMaterial::getPyDict(void) const
     boost::python::list materialList;
     const size_t sz= size();
     for(size_t i= 0;i<sz;i++)
-      materialList.append((*this)[i]->getPyDict());
+      {
+	const UniaxialMaterial *mat= (*this)[i];
+	boost::python::dict matDict= mat->getPyDict();
+	matDict["classTag"]= mat->getClassTag();
+        materialList.append(matDict);
+      }
     retval["materials"]= materialList;
     return retval;
   }

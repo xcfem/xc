@@ -448,7 +448,8 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
     if(dimf1>1)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; sewing in 2 or 3 dimensions not implemented." << std::endl;
+		  << "; sewing in 2 or 3 dimensions not implemented."
+		  << std::endl;
       }
     return retval;
   }
@@ -488,3 +489,21 @@ int XC::Element0D::getVtkCellType(void) const
   { return VTK_VERTEX; }
 
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Element0D::getPyDict(void) const
+  {
+    boost::python::dict retval= ElementBase<2>::getPyDict();
+    retval["dimension"]= dimension;
+    retval["numDOF"]= numDOF;
+    retval["transformation"]= transformation.getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Element0D::setPyDict(const boost::python::dict &d)
+  {
+    ElementBase<2>::setPyDict(d);
+    dimension= boost::python::extract<int>(d["dimension"]);
+    numDOF= boost::python::extract<int>(d["numDOF"]);
+    transformation= Matrix(boost::python::extract<boost::python::list>(d["transformation"]));
+  }

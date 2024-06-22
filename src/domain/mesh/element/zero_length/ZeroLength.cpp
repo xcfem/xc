@@ -313,6 +313,48 @@ void XC::ZeroLength::setUpType(const size_t &numDOFsNodes)
       }
   }
 
+//! @brief Sets the matrix dimensions from element type.
+void XC::ZeroLength::setUpType(void)
+  {
+    if(this->elemType==D1N2)
+      {
+        numDOF = 2;
+        theMatrix = &ZeroLengthM2;
+        theVector = &ZeroLengthV2;
+      }
+    else if(this->elemType == D2N4)
+      {
+        numDOF = 4;
+        theMatrix = &ZeroLengthM4;
+        theVector = &ZeroLengthV4;
+      }
+    else if(this->elemType == D2N6)
+      {
+        numDOF = 6;
+        theMatrix = &ZeroLengthM6;
+        theVector = &ZeroLengthV6;
+      }
+    else if(this->elemType == D3N6)
+      {
+        numDOF = 6;
+        theMatrix = &ZeroLengthM6;
+        theVector = &ZeroLengthV6;
+      }
+    else if(this->elemType == D3N12)
+      {
+        numDOF = 12;
+        theMatrix = &ZeroLengthM12;
+        theVector = &ZeroLengthV12;
+      }
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING cannot handle element type:" << this->elemType
+		  << std::endl;
+        return;
+      }
+  }
+
 //! @brief Returns the value of the persistent (does not get wiped out by
 //! zeroLoad) initial deformation of the section.
 const XC::Vector &XC::ZeroLength::getPersistentInitialSectionDeformation(void) const
@@ -776,7 +818,8 @@ int XC::ZeroLength::recvData(const Communicator &comm)
 boost::python::dict XC::ZeroLength::getPyDict(void) const
   {
     boost::python::dict retval= Element0D::getPyDict();
-    retval["elemType"]= this->elemType;
+    const int et= this->elemType;
+    retval["elemType"]= et;
     if(this->theMatrix)
       retval["theMatrix"]= this->theMatrix->getPyList();
     if(this->theVector)
@@ -791,8 +834,9 @@ boost::python::dict XC::ZeroLength::getPyDict(void) const
 void XC::ZeroLength::setPyDict(const boost::python::dict &d)
   {
     Element0D::setPyDict(d);
-    const int et= boost::python::extract<int>(d["elemeType"]);
+    const int et= boost::python::extract<int>(d["elemType"]);
     this->elemType= Etype(et);
+    this->setUpType();
     if(d.has_key("theMatrix"))
       {
 	if(this->theMatrix)
@@ -803,7 +847,7 @@ void XC::ZeroLength::setPyDict(const boost::python::dict &d)
 	else
 	  {
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; 'theMatrix' key is missing."
+		      << "; 'theMatrix' member is not initialized."
 		      << Color::def << std::endl;
 	  }
       }
@@ -817,7 +861,7 @@ void XC::ZeroLength::setPyDict(const boost::python::dict &d)
 	else
 	  {
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; 'theVector' key is missing."
+		      << "; 'theVector' member is not initialized."
 		      << Color::def << std::endl;
 	  }
       }

@@ -86,6 +86,7 @@
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 #include "vtkCellType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 std::deque<XC::Matrix> XC::Element::theMatrices;
 std::deque<XC::Vector> XC::Element::theVectors1;
@@ -179,32 +180,36 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
 //! @brief Returns the element dimension (0, 1, 3 or 3).
 size_t XC::Element::getDimension(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return 0;
   }
 
 //! @brief Return the element length
 double XC::Element::getLength(bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "is not implemented.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "is not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
 //! @brief Return the element area
 double XC::Element::getArea(bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "is not implemented.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "is not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
 //! @brief Return the element volume
 double XC::Element::getVolume(bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "is not implemented.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "is not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -260,20 +265,20 @@ void XC::Element::replaceNode(Node *oldNode, Node *newNode)
 	    setIdNode(position, newTag);
 	  }
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; node: " << oldNode->getTag()
 	            << " does not belong to this element."
-	            << std::endl;
+	            << Color::def << std::endl;
       }
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__;
 	if(!oldNode)
 	  std::cerr << "; null pointer to the old node (first argument)."
-	            << std::endl;
+	            << Color::def << std::endl;
 	if(!newNode)
 	  std::cerr << "; null pointer to the new node (second argument)."
-	            << std::endl;
+	            << Color::def << std::endl;
       }
   }
 
@@ -283,8 +288,9 @@ void XC::Element::setDomain(Domain *theDomain)
     MeshComponent::setDomain(theDomain);
     if(!theDomain)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << " the domain parameter is null\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << " the domain parameter is null"
+		  << Color::def << std::endl;
         getNodePtrs().inic();
       }
     else
@@ -295,8 +301,9 @@ void XC::Element::setDomain(Domain *theDomain)
 //! acceleration argument.
 void XC::Element::createInertiaLoad(const Vector &)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet."
+	      << Color::def << std::endl;
   }
 
 //! @brief Zeroes the loads over the element.
@@ -698,20 +705,20 @@ const XC::Matrix &XC::Element::getDampSensitivity(int gradNumber)
     if(rayFactors.getBetaK() != 0.0)
       {
         theMatrix.addMatrix(1.0, this->getTangentStiff(), 0.0); // Don't use this and DDM
-        std::cerr << getClassName() << __FUNCTION__
+        std::cerr << Color::red << getClassName() << __FUNCTION__
 		  << "; Rayleigh damping with non-zero betaCurrentTangent"
 	          << " is not compatible with DDM sensitivity analysis"
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     if(rayFactors.getBetaK0() != 0.0)
       theMatrix.addMatrix(1.0, this->getInitialStiffSensitivity(gradNumber), rayFactors.getBetaK0());
     if(rayFactors.getBetaKc() != 0.0)
       {
         theMatrix.addMatrix(1.0, Kc, 0.0);      // Don't use this and DDM
-        std::cerr << getClassName() << __FUNCTION__
+        std::cerr << Color::red << getClassName() << __FUNCTION__
                   << "Rayleigh damping with non-zero betaCommittedTangent"
 	          << " is not compatible with DDM sensitivity analysis"
-		  << std::endl;
+		  << Color::def << std::endl;
       }
 
     // return the computed matrix
@@ -779,8 +786,9 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
 
     if(nodeIndex == -1)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; HUH!\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; HUH!"
+		  << Color::def << std::endl;
         return -1;
       }
 
@@ -818,9 +826,9 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
 
 XC::ParticlePos3d XC::Element::getNaturalCoordinates(const Pos3d &, bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; must be overloaded in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
     static const ParticlePos3d retval;
     return retval;
   }
@@ -829,9 +837,9 @@ XC::ParticlePos3d XC::Element::getNaturalCoordinates(const Pos3d &, bool initial
 //! @brief Returns interpolation factors for a material point.
 XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; must be overloaded in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
     static const int numberNodes= getNumExternalNodes();
     return Vector(numberNodes);
   }
@@ -839,9 +847,9 @@ XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
 //! @brief Returns interpolation factors for a material point.
 XC::Vector XC::Element::getInterpolationFactors(const Pos3d &) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; must be overloaded in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
     static const int numberNodes= getNumExternalNodes();
     return Vector(numberNodes);
   }
@@ -849,18 +857,18 @@ XC::Vector XC::Element::getInterpolationFactors(const Pos3d &) const
 //! @brief Interfaz con VTK.
 int XC::Element::getVtkCellType(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; must be overloaded in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
     return VTK_EMPTY_CELL;
   }
 
 //! @brief Returns the Gauss integration model of the element.
 const XC::GaussModel &XC::Element::getGaussModel(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; must be overloaded in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
     return gauss_model_empty;
   }
 
@@ -868,9 +876,9 @@ const XC::GaussModel &XC::Element::getGaussModel(void) const
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
     NodesEdge retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; is not defined."
-              << std::endl;
+              << Color::def << std::endl;
     return retval;
   }
 
@@ -878,9 +886,9 @@ XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
 //! that ends in the nodes being passed as parameters.
 int XC::Element::getEdgeNodes(const Node *,const Node *) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; is not defined."
-              << std::endl;
+              << Color::def << std::endl;
     return -1;
   }
 
@@ -899,9 +907,9 @@ int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
 XC::ID XC::Element::getEdgesNode(const Node *) const
   {
     ID retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; is not defined."
-              << std::endl;
+              << Color::def << std::endl;
     return retval;
   }
 
@@ -939,9 +947,9 @@ XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
 XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; not defined."
-              << std::endl;
+              << Color::def << std::endl;
     return retval;
   }
 
@@ -956,8 +964,9 @@ std::set<XC::SetBase *> XC::Element::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; preprocessor needed."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -985,8 +994,9 @@ const XC::Material *XC::Element::get_material_ptr(const std::string &matName) co
       }
     else
       {
-	std::cerr << this->getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to preprocessor." << std::endl;
+	std::cerr <<  Color::red << this->getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor."
+		  << Color::def << std::endl;
       }
     return retval;
   }
@@ -1055,8 +1065,9 @@ bool XC::Element::Out(const GeomObj2d &obj,const double &factor, const double &t
 XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   {
     Matrix retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " must be implemented in derived classes." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " must be implemented in derived classes."
+	      << Color::def << std::endl;
     return retval;
   }
 
@@ -1130,9 +1141,9 @@ Pos3d XC::Element::getPosNode(const size_t &i,bool initialGeometry) const
 Pos3dArray3d XC::Element::getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     Pos3dArray3d retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; must be implemented in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
     return retval;
   }
 
@@ -1149,9 +1160,9 @@ void XC::Element::dumpTributaries(const std::vector<double> &t) const
 //! node of the element
 void XC::Element::computeTributaryLengths(bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << " must be overloaded in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
   }
 
 //! @brief Returns the tributary length corresponding to the node being passed
@@ -1170,9 +1181,9 @@ double XC::Element::getTributaryLengthByTag(const int &tag) const
 //! @brief Compute tributary areas for each element node.
 void XC::Element::computeTributaryAreas(bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; must be implemented in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
   }
 
 //! @brief Returns the tributary area corresponding to the node.
@@ -1190,9 +1201,9 @@ double XC::Element::getTributaryAreaByTag(const int &tag) const
 //! node of the element
 void XC::Element::computeTributaryVolumes(bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; must be implemented in derived classes."
-              << std::endl;
+              << Color::def << std::endl;
   }
 
 //! @brief Returns the tributary volume corresponding to the node being passed
@@ -1215,8 +1226,9 @@ double XC::Element::getTributaryVolumeByTag(const int &tag) const
 //! @param initialGeometry: if true check with undeformed model.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -1227,8 +1239,9 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
 //! @param initialGeometry: if true check with undeformed model.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -1236,8 +1249,9 @@ double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
 //! being passed as parameter.
 double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -1245,8 +1259,9 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
 //! being passed as parameter.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -1256,8 +1271,9 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
 Pos2d XC::Element::getProjection(const Pos2d &p,bool initialGeometry) const
   {
     Pos2d retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return retval;
   }
   
@@ -1267,8 +1283,9 @@ Pos2d XC::Element::getProjection(const Pos2d &p,bool initialGeometry) const
 Pos3d XC::Element::getProjection(const Pos3d &p,bool initialGeometry) const
   {
     Pos3d retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return retval;
   }
 
@@ -1276,8 +1293,9 @@ Pos3d XC::Element::getProjection(const Pos3d &p,bool initialGeometry) const
 Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
   {
     Pos3d retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return retval;
   }
 
@@ -1298,8 +1316,9 @@ XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
 BoolArray3d XC::Element::getNodePattern(void) const
   {
     BoolArray3d retval(1,1,1,false);
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet."
+	      << Color::def << std::endl;
     return retval;
   }
 
@@ -1307,15 +1326,17 @@ BoolArray3d XC::Element::getNodePattern(void) const
 //! @brief Places the element on the mesh.
 XC::ElemPtrArray3d XC::Element::put_on_mesh(const NodePtrArray3d &, meshing_dir) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return ElemPtrArray3d();
   }
 
 XC::ElemPtrArray3d XC::Element::sew(const SetEstruct &f1,const SetEstruct &f2) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " is not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented."
+	      << Color::def << std::endl;
     return ElemPtrArray3d();
   }
 
@@ -1323,8 +1344,9 @@ XC::ElemPtrArray3d XC::Element::sew(const SetEstruct &f1,const SetEstruct &f2) c
 std::set<std::string> XC::Element::getMaterialNames(void) const
   {
     std::set<std::string> retval;    
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet."
+	      << Color::def << std::endl;
     return retval;
   }
   
@@ -1388,4 +1410,21 @@ int XC::Element::recvData(const Communicator &comm)
     nodeIndex= getDbTagDataPos(4);
     res+= comm.receiveVector(load,getDbTagData(),CommMetaData(5));
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Element::getPyDict(void) const
+  {
+    boost::python::dict retval= MeshComponent::getPyDict();
+    retval["nodeIndex"]= nodeIndex;
+    retval["load"]= load.getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Element::setPyDict(const boost::python::dict &d)
+  {
+    MeshComponent::setPyDict(d);
+    nodeIndex= boost::python::extract<int>(d["nodeIndex"]);
+    load= Vector(boost::python::extract<boost::python::list>(d["load"]));
   }
