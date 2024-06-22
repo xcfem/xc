@@ -184,5 +184,5 @@ boost::python::dict XC::DomainComponent::getPyDict(void) const
 void XC::DomainComponent::setPyDict(const boost::python::dict &d)
   {
     TaggedObject::setPyDict(d);
-    idx= boost::python::extract<size_t>(d["int"]);
+    idx= boost::python::extract<size_t>(d["idx"]);
   }

@@ -107,8 +107,9 @@ class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
-
     void Print(std::ostream &s, int flag =0) const;
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
     
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

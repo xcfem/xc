@@ -33,6 +33,7 @@
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableID.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Copy the list being passed as parameter.
 void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &other,SectionForceDeformation *s)
@@ -46,8 +47,9 @@ void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &other,SectionFo
           {
             if(!other[i])
               {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; null uniaxial material pointer.\n";
+	        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; null uniaxial material pointer."
+			  << Color::def << std::endl;
                 return;
               }
             if(s)
@@ -56,8 +58,9 @@ void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &other,SectionFo
               (*this)[i]= other[i]->getCopy();
             if(!(*this)[i])
               {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
-		          << "; failed to copy uniaxial material\n";
+	        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		          << "; failed to copy uniaxial material"
+			  << Color::def << std::endl;
 	        exit(-1);
               }
           }
@@ -161,10 +164,11 @@ int XC::DqUniaxialMaterial::commitState(void)
         int tmp= (*i)->commitState();
         if(tmp!=0)
           {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; MaterialModel failed to commitState():"
 	              << std::endl;
 	    (*i)->Print(std::cerr);
+	    std::cerr << Color::def;
 	  }
         err+= tmp;
       }
@@ -180,10 +184,11 @@ int XC::DqUniaxialMaterial::revertToLastCommit(void)
         int tmp= (*i)->revertToLastCommit();
         if(tmp!=0)
           {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; MaterialModel failed to revertToLastCommit():"
 	              << std::endl;
 	    (*i)->Print(std::cerr);
+	    std::cerr << Color::def;
 	  }
         err+= tmp;
       }
@@ -199,10 +204,11 @@ int XC::DqUniaxialMaterial::revertToStart(void)
         int tmp= (*i)->revertToStart();
         if(tmp!=0)
           {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; MaterialModel failed to revertToStart():"
 	              << std::endl;
 	    (*i)->Print(std::cerr);
+	    std::cerr << Color::def;
 	  }
         err+= tmp;
       }
@@ -330,8 +336,9 @@ void XC::DqUniaxialMaterial::getStress(Vector &s,const size_t &offset) const
 void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDeformation *s)
   {
     if(!t)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; pointer to material is null." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to material is null."
+		<< Color::def << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -342,8 +349,9 @@ void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDef
         if(tmp)
           lst_ptr::push_back(tmp);
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; can't create an UniaxialMaterial" << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; can't create an UniaxialMaterial"
+		    << Color::def << std::endl;
       }
   }
 
@@ -351,8 +359,9 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
   {
     UniaxialMaterial *tmp= nullptr;
     if(!t)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; pointer to material is null." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to material is null."
+		<< Color::def << std::endl;
     else
       {
         if(s)
@@ -362,8 +371,9 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
         if(tmp)
           lst_ptr::push_front(tmp);
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; can't create UniaxialMaterial" << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; can't create UniaxialMaterial"
+		    << Color::def << std::endl;
       }
   }
 
@@ -400,11 +410,52 @@ int XC::DqUniaxialMaterial::recvData(const Communicator &comm)
         // Receive the material
         (*this)[i]= comm.getBrokedMaterial((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
         if(!(*this)[i])
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; material " << i
-		    << "failed to recv itself.\n";
+		    << "failed to recv itself."
+		    << Color::def << std::endl;
       }
     return res;
+  }
+
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::DqUniaxialMaterial::getPyDict(void) const
+  {
+    boost::python::dict retval=  CommandEntity::getPyDict();
+    // Send materials.
+    boost::python::list materialList;
+    const size_t sz= size();
+    for(size_t i= 0;i<sz;i++)
+      materialList.append((*this)[i]->getPyDict());
+    retval["materials"]= materialList;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::DqUniaxialMaterial::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    const boost::python::list materialList= boost::python::extract<boost::python::list>(d["materials"]);
+    const size_t sz= boost::python::len(materialList);
+    this->clearAll();
+    this->resize(sz);
+    for(size_t i= 0;i<sz; i++)
+      {
+	boost::python::dict materialDict= boost::python::extract<boost::python::dict>(materialList[i]);
+	const int classTag= boost::python::extract<int>(materialDict["classTag"]);
+	const std::string className= boost::python::extract<std::string>(materialDict["className"]);
+	UniaxialMaterial *newMaterial= dynamic_cast<UniaxialMaterial *>(get_new_tagged_object(className, classTag));
+	if(newMaterial)
+	  (*this)[i]= newMaterial;
+	else
+	  {
+	    (*this)[i]= nullptr;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to read material."
+		      << Color::def << std::endl;
+	  }
+      }
   }
 
 //! @brief Sends object through the communicator argument.
@@ -417,8 +468,9 @@ int XC::DqUniaxialMaterial::sendSelf(Communicator &comm)
     inicComm(dbTagData.Size());
     res+= comm.sendIdData(dbTagData,dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; " << dataTag << " failed to send.";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; " << dataTag << " failed to send."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -430,14 +482,16 @@ int XC::DqUniaxialMaterial::recvSelf(const Communicator &comm)
     inicComm(dbTagData.Size());
     int res= comm.receiveIdData(dbTagData,dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; " << dataTag << " failed to receive ID\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; " << dataTag << " failed to receive ID"
+		<< Color::def << std::endl;
     else
       {
         res+= recvData(comm);
         if(res < 0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; - failed to receive data\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; - failed to receive data"
+		    << Color::def << std::endl;
       }
     return res;
   }
@@ -491,7 +545,7 @@ double XC::DqUniaxialMaterial::getStressSensitivity(int gradIndex, bool conditio
 
     for(size_t i = 1; i < sz; i++)
       {
-        double k0 = (*this)[i]->getInitialTangent();
+        const double k0 = (*this)[i]->getInitialTangent();
         //dsdh += k0/(29000*144.0);
       }
     //dsdh -= 0.125;

@@ -68,6 +68,7 @@
 #include "utility/matrices/m_double.h"
 
 #include "AuxMatrix.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 #define MATRIX_WORK_AREA 400
 #define INT_WORK_AREA 20
@@ -98,16 +99,18 @@ XC::Matrix::Matrix(int nRows,int nCols)
 #ifdef _G3DEBUG
     if(nRows < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: tried to init matrix ";
-        std::cerr << "with num rows: " << nRows << " <0\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: tried to init matrix "
+		  << "with num rows: " << nRows << " <0"
+	          << Color::def << std::endl;
         numRows= 0; numCols =0;
       }
     if(nCols < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: tried to init matrix";
-        std::cerr << "with num cols: " << nCols << " <0\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: tried to init matrix"
+		  << "with num cols: " << nCols << " <0"
+	          << Color::def << std::endl;
         numRows= 0; numCols =0;
       }
 #endif
@@ -131,16 +134,18 @@ XC::Matrix::Matrix(double *theData, int nRows, int nCols)
 #ifdef _G3DEBUG
     if(nRows < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: tried to init matrix with numRows: ";
-        std::cerr << nRows << " <0\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: tried to init matrix with numRows: "
+		  << nRows << " <0"
+	          << Color::def << std::endl;
         numRows= 0; numCols =0;
       }
     if(nCols < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix with numCols: ";
-        std::cerr << nCols << " <0\n";
+        std::cerr << nCols << " <0"
+	          << Color::def << std::endl;
         numRows= 0; numCols =0;
       }    
 #endif
@@ -173,6 +178,35 @@ XC::Matrix::Matrix(const boost::python::list &l)
       }
   }
 
+//! @brief Populate the matrix with the values of the given list.
+void XC::Matrix::setPyList(const boost::python::list &l)
+  {
+    const int nR= len(l);
+    if(nR==this->numRows) //same number of columns.
+      {
+	const boost::python::list &row0= boost::python::extract<boost::python::list>(l[0]);
+	const int nC= len(row0);
+	if(nC==this->numCols) // same number of rows.
+	  {
+	    // copy the components
+	    for(int i=0; i<numRows; i++)
+	      {
+		const boost::python::list &rowI= boost::python::extract<boost::python::list>(l[i]);
+		for(int j= 0; j<numCols;j++)
+		  (*this)(i,j)= boost::python::extract<double>(rowI[j]);
+	      }
+	  }
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; different number of columns."
+		    << Color::def << std::endl;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; different number of rows."
+		<< Color::def << std::endl;
+  }
+
 //
 // METHODS - Zero, Assemble, Solve
 //
@@ -196,8 +230,9 @@ void XC::Matrix::Identity(void)
   {
     Zero();
     if(noRows()!=noCols())
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not an square matrix." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not an square matrix."
+		<< Color::def << std::endl;
     const int n= std::min(noRows(),noCols());
     for(int i=0;i<n;i++)
       (*this)(i,i)= 1.0;
@@ -210,9 +245,10 @@ int XC::Matrix::resize(int n_rows, int n_columns)
 
     if(newSize<0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; rows " << n_rows << " or cols " << n_columns
-		  << " specified <= 0\n";
+		  << " specified <= 0"
+	          << Color::def << std::endl;
         return -1;
       }
     else if(newSize == 0)
@@ -261,9 +297,10 @@ int XC::Matrix::Assemble(const Matrix &V, const ID &rows, const ID &cols, double
 	      (*this)(pos_Rows,pos_Cols) += V(j,i)*fact;
             else
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING: position (" << pos_Rows
-			  << "," << pos_Cols << ") outside bounds \n";
+			  << "," << pos_Cols << ") outside bounds "
+			  << Color::def << std::endl;
 	        res= -1;
               }
           }
@@ -313,26 +350,29 @@ int XC::Matrix::Solve(const Vector &b, Vector &x) const
 #ifdef _G3DEBUG    
     if(numRows != numCols)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	  	  << "; the matrix of dimensions " 
 	          << numRows << ", " << numCols
-		<< " is not square " << std::endl;
+		  << " is not square "
+		  << Color::def << std::endl;
         return -1;
       }
 
     if(n != x.Size())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; dimension of x, " << numRows
-		  << "is not same as matrix " <<  x.Size() << std::endl;
+		  << "is not same as matrix " <<  x.Size()
+		  << Color::def << std::endl;
         return -2;
       }
 
     if(n != b.Size())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << ";- dimension of x, " << numRows
-		  << "is not same as matrix " <<  b.Size() << std::endl;
+		  << "is not same as matrix " <<  b.Size()
+		  << Color::def << std::endl;
         return -2;
       }
 #endif
@@ -372,34 +412,37 @@ int XC::Matrix::Solve(const Matrix &b, Matrix &x) const
 #ifdef _G3DEBUG    
     if(numRows != numCols)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; the matrix of dimensions ["
-		  << numRows << " " <<  numCols << "] is not square\n";
+		  << numRows << " " <<  numCols << "] is not square"
+	          << Color::def << std::endl;
         return -1;
       }
 
     if(n != x.numRows)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; #rows of X, " << x.numRows
-		  << " is not same as the matrices: " << numRows << std::endl;
+		  << " is not same as the matrices: " << numRows
+		  << Color::def << std::endl;
         return -2;
       }
 
     if(n != b.numRows)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; #rows of B, " << b.numRows
-		  << " is not same as the matrices: " << numRows << std::endl;
+		  << " is not same as the matrices: " << numRows
+		  << Color::def << std::endl;
         return -2;
       }
 
     if(x.numCols != b.numCols)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; #cols of B, " << b.numCols
 		  << " , is not same as that of X, b " <<  x.numCols
-		  << std::endl;
+		  << Color::def << std::endl;
         return -3;
       }
 #endif
@@ -458,18 +501,19 @@ int XC::Matrix::Invert(Matrix &theInverse) const
 #ifdef _G3DEBUG    
     if(numRows != numCols)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; the matrix of dimensions ["
-		  << numRows << "," << numCols << "] is not square\n";
+		  << numRows << "," << numCols << "] is not square"
+	          << Color::def << std::endl;
         return -1;
       }
 
     if(n != theInverse.numRows)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; #rows of X, " << numRows
 		  << ", is not same as matrix " << theInverse.numRows
-		  << std::endl;
+		  << Color::def << std::endl;
         return -2;
       }
 #endif
@@ -526,8 +570,9 @@ int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther
 
 #ifdef _G3DEBUG
     if((other.numRows != numRows) || (other.numCols != numCols)) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatible matrices\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible matrices"
+	          << Color::def << std::endl;
       return -1;
     }
 #endif
@@ -593,10 +638,12 @@ int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double 
       return 0;
 
 #ifdef _G3DEBUG
-    if((other.numRows != numCols) || (other.numCols != numRows)) {
-      std::cerr << "Matrix::addMatrixTranspose(): incompatible matrices\n";
-      return -1;
-    }
+    if((other.numRows != numCols) || (other.numCols != numRows))
+      {
+	std::cerr << "Matrix::addMatrixTranspose(): incompatible matrices"
+	          << Color::def << std::endl;
+	return -1;
+      }
 #endif
 
     if(factThis == 1.0)
@@ -682,11 +729,13 @@ int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix 
     if(thisFact == 1.0 && otherFact == 0.0)
       return 0;
 #ifdef _G3DEBUG
-    if((B.numRows != numRows) || (C.numCols != numCols) || (B.numCols != C.numRows)) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatible matrices, this\n";
-      return -1;
-    }
+    if((B.numRows != numRows) || (C.numCols != numCols) || (B.numCols != C.numRows))
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; incompatible matrices, this"
+	          << Color::def << std::endl;
+	return -1;
+      }
 #endif
     const int dataSize= data.Size();
     // NOTE: looping as per blas3 dgemm_: j,k,i
@@ -760,10 +809,12 @@ int XC::Matrix::addMatrixTransposeProduct(double thisFact,
     return 0;
 
 #ifdef _G3DEBUG
-  if((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows)) {
-    std::cerr << "Matrix::addMatrixProduct(): incompatible matrices, this\n";
-    return -1;
-  }
+  if((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows))
+    {
+      std::cerr << "Matrix::addMatrixProduct(): incompatible matrices, this"
+		<< Color::def << std::endl;
+      return -1;
+    }
 #endif
 
   if(thisFact == 1.0) {
@@ -824,11 +875,13 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
       return 0;
 #ifdef _G3DEBUG
     if((numCols != numRows) || (B.numCols != B.numRows) || (T.numCols != numRows) ||
-	(T.numRows != B.numCols)) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatible matrices\n";
-      return -1;
-    }
+	(T.numRows != B.numCols))
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; incompatible matrices"
+	          << Color::def << std::endl;
+	return -1;
+      }
 #endif
 
     // cheack work area can hold the temporary matrix
@@ -932,10 +985,13 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
       return 0;
 #ifdef _G3DEBUG
     if((numRows != A.numRows) || (A.numCols != B.numRows) || (B.numCols != C.numRows) ||
-	(C.numCols != numCols)) {
-      std::cerr << "Matrix::addMatrixTripleProduct() - incompatible matrices\n";
-      return -1;
-    }
+	(C.numCols != numCols))
+      {
+	std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+		   << "; incompatible matrices"
+	          << Color::def << std::endl;
+	return -1;
+      }
 #endif
 
     // cheack work area can hold the temporary matrix
@@ -1051,9 +1107,10 @@ XC::Vector XC::Matrix::getRow(int row) const
 	  retval(j)= (*this)(row,j);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << " row: " << row << " out of range[0,"
-	        << numRows << ").\n";
+	        << numRows << ")."
+	          << Color::def << std::endl;
     return retval;
   }
 
@@ -1068,9 +1125,10 @@ void XC::Matrix::putRow(int i, const Vector &v)
 	  (*this)(i,j)= v(j);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << " row: " << i << " out of range[0,"
-	        << numRows << ").\n";
+	        << numRows << ")."
+		<< Color::def << std::endl;
   }
 
 //! @brief Return the column which index being passed as parameter.
@@ -1083,9 +1141,10 @@ XC::Vector XC::Matrix::getCol(int col) const
           retval(i)= (*this)(i,col);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << " column: " << col << " out of range[0,"
-	        << numCols << ").\n";
+	        << numCols << ")."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -1100,9 +1159,10 @@ void XC::Matrix::putCol(int j, const Vector &v)
 	  (*this)(i,j)= v(i);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << " col: " << j << " out of range[0,"
-	        << numCols << ").\n";
+	        << numCols << ")."
+		<< Color::def << std::endl;
   }
 
 //! @brief Return the matrix values in a Python list.
@@ -1220,9 +1280,9 @@ XC::Matrix &XC::Matrix::operator/=(double fact)
         else
           {
             // print out the warning message
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING: 0 factor specified all values in Matrix set to ";
-            std::cerr << MATRIX_VERY_LARGE_VALUE << std::endl;
+            std::cerr << MATRIX_VERY_LARGE_VALUE << Color::def << std::endl;
 
             for(int i=0; i<dataSize; i++)
 	      *dblDataPtr++= MATRIX_VERY_LARGE_VALUE;
@@ -1299,8 +1359,9 @@ XC::Matrix XC::Matrix::operator/(double fact) const
   {
     if(fact == 0.0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ERROR divide-by-zero\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR divide-by-zero"
+	          << Color::def << std::endl;
 	exit(0);
       }
     Matrix result(*this);
@@ -1332,8 +1393,9 @@ XC::Vector XC::Matrix::operator*(const Vector &V) const
     
     if(V.Size() != numCols)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatible sizes\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; incompatible sizes"
+	          << Color::def << std::endl;
 	return result;
       } 
     
@@ -1379,8 +1441,9 @@ XC::Vector XC::Matrix::operator^(const Vector &V) const
     
     if(V.Size() != numRows)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatible sizes\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; incompatible sizes"
+	          << Color::def << std::endl;
         return result;
       } 
 
@@ -1453,8 +1516,9 @@ XC::Matrix XC::Matrix::operator*(const Matrix &M) const
     
     if(numCols != M.numRows || result.numRows != numRows)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatible sizes\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; incompatible sizes"
+	          << Color::def << std::endl;
 	return result;
       } 
 
@@ -1507,8 +1571,9 @@ XC::Matrix XC::Matrix::operator^(const Matrix &M) const
   
     if(numRows != M.numRows || result.numRows != numCols)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatible sizes\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; incompatible sizes"
+	          << Color::def << std::endl;
         return result;
       } 
 
@@ -1538,8 +1603,9 @@ XC::Matrix &XC::Matrix::operator+=(const Matrix &M)
 #ifdef _G3DEBUG
   if(numRows != M.numRows || numCols != M.numCols)
     {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; matrices incompatible\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; matrices incompatible"
+	          << Color::def << std::endl;
       return *this;
     }
 #endif
@@ -1558,10 +1624,11 @@ XC::Matrix &XC::Matrix::operator-=(const Matrix &M)
 #ifdef _G3DEBUG
   if(numRows != M.numRows || numCols != M.numCols)
     {
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << ";  matrices incompatible [" << numRows << " "
 	        << numCols << "]" << "[" << M.numRows << "]"
-	        << M.numCols << "]\n";
+	        << M.numCols << "]"
+	          << Color::def << std::endl;
       return *this;
     }
 #endif
@@ -1697,8 +1764,9 @@ int XC::Matrix::Assemble(const Matrix &V, int init_row, int init_col, double fac
   }  
   else 
   {
-     std::cerr << getClassName() << "::" << __FUNCTION__
-	       << "; WARNING: position outside bounds \n";
+     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	       << "; WARNING: position outside bounds "
+	          << Color::def << std::endl;
      res= -1;
   }
 
@@ -1741,8 +1809,9 @@ int XC::Matrix::AssembleTranspose(const Matrix &V, int init_row, int init_col, d
   }  
   else 
   {
-     std::cerr << getClassName() << "::" << __FUNCTION__
-	       << "; WARNING: position outside bounds \n";
+     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	       << "; WARNING: position outside bounds "
+	          << Color::def << std::endl;
      res= -1;
   }
 
@@ -1778,8 +1847,9 @@ int XC::Matrix::Extract(const Matrix &V, int init_row, int init_col, double fact
   }  
   else 
   {
-     std::cerr << getClassName() << "::" << __FUNCTION__
-	       << "; WARNING: position outside bounds \n";
+     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	       << "; WARNING: position outside bounds "
+	          << Color::def << std::endl;
      res= -1;
   }
 
@@ -1853,8 +1923,8 @@ double XC::Matrix::Norm2(void) const
           r+= prod(i,i);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; non-square matrix." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; non-square matrix." << Color::def << std::endl;
     return r;
   }
 
@@ -1890,10 +1960,10 @@ double XC::Matrix::OneNorm(void) const
 #ifdef _G3DEBUG    
     if(numRows != numCols)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	  	  << "; the matrix of dimensions " 
 	          << numRows << ", " << numCols
-		<< " is not square " << std::endl;
+		<< " is not square " << Color::def << std::endl;
         return -1;
       }
 
@@ -1932,10 +2002,10 @@ double XC::Matrix::RCond(void) const
 #ifdef _G3DEBUG    
     if(numRows != numCols)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	  	  << "; the matrix of dimensions " 
 	          << numRows << ", " << numCols
-		<< " is not square " << std::endl;
+		<< " is not square " << Color::def << std::endl;
         return -1;
       }
 
@@ -1969,9 +2039,9 @@ double XC::Matrix::RCond(void) const
     //         singular, and division by zero will occur if it is used
     //         to solve a system of equations.
     if(info != 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
     	        << "; LaPack dgtrf_ failure with error: " << info
-    	        << std::endl;
+    	        << Color::def << std::endl;
     else
       {
 	//Computes the reciprocal norm.
@@ -1982,9 +2052,9 @@ double XC::Matrix::RCond(void) const
 	//   = 0:  successful exit
 	//   < 0:  if INFO = -i, the i-th argument had an illegal value
 	if(info != 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; LaPack dgecon_ failure with error: " << info
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     return retval;
   }

@@ -148,6 +148,12 @@ class ID: public CommandEntity, public std::vector<int>
     void reverse(void);
     ID getReversed(void) const;
 
+    
+    boost::python::list getPyList(void) const;
+    void setPyList(const boost::python::list &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     friend std::ostream &operator<<(std::ostream &, const ID &);
     //    friend istream &operator>>(istream &s, ID &V);    
 

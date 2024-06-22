@@ -227,6 +227,9 @@ class FEM_ObjectBroker: public ObjectBroker
     Parameter *getParameter(int classTag);
 
     virtual int addUniaxialMaterial(int classTag, const std::string &, const std::string &, UniaxialMaterial *(*)(void));
+
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 TaggedObject *get_new_tagged_object(const std::string &className, const int &classTag);

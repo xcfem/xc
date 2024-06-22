@@ -237,6 +237,43 @@ XC::ID XC::getIDFromIntPtr(const int *d,const int &size)
     return retval;
   }
 
+//! @brief Return the vector values in a Python list.
+boost::python::list XC::ID::getPyList(void) const
+  {
+    boost::python::list retval;
+    const size_t sz= Size();
+    for(size_t i=0; i<sz; i++) 
+      retval.append((*this)(i));
+    return retval;
+  }
+
+//! @brief Populate the vector with the values of the given list.
+void XC::ID::setPyList(const boost::python::list &lst)
+  {
+    const int sz= len(lst);
+    if(this->Size()==sz) // copy the components
+      {
+	for(int i=0; i<sz; i++)
+	  (*this)[i]= boost::python::extract<int>(lst[i]);
+      }
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ID::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["values"]= this->getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ID::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    const boost::python::list tmp= boost::python::extract<boost::python::list>(d["values"]);
+    this->operator=(ID(tmp));
+  }
+
 // friend istream &operator>>(istream &s, ID &V)
 //        A function is defined to allow user to input the data into a XC::ID which has already
 //        been constructed with data, i.e. ID(int) or XC::ID(const XC::ID &) constructors.

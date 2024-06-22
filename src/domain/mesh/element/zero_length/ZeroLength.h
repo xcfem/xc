@@ -104,7 +104,7 @@ class ZeroLength: public Element0D
     Matrix *theMatrix; //!< pointer to objects matrix
     Vector *theVector; //!< pointer to objects vector
     // Storage for uniaxial material models
-    ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials and related directionss.
+    ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials and related directions.
 
     Matrix t1d; //!< hold the transformation matrix.
     Vector persistentInitialDeformation; //!< Persistent initial displacement difference at element level. Used to store the deformation during the inactive phase of the element (if any).
@@ -191,6 +191,8 @@ class ZeroLength: public Element0D
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

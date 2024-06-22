@@ -80,10 +80,14 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
       { return directions[i]; }
     inline int &getDir(const size_t i)
       { return directions[i]; }
+    boost::python::list getDirections(void) const;
+    void setDirections(const boost::python::list &);
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
     
     size_t getGeneralizedStressSize(void) const;
     size_t getGeneralizedStrainSize(void) const;

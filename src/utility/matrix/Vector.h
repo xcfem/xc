@@ -198,6 +198,7 @@ class Vector: public CommandEntity
       { return to_string(*this); }
     
     boost::python::list getPyList(void) const;
+    void setPyList(const boost::python::list &);
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
     

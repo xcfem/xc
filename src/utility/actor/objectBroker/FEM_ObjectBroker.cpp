@@ -1784,6 +1784,20 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const std::string &l
   }
 
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::FEM_ObjectBroker::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    // Nothing to keep.
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::FEM_ObjectBroker::setPyDict(const boost::python::dict &d)
+  {
+    // Nothing to read.
+  }
+
 
 const std::vector<std::string> crd_transf_class_identifiers{"XC::LinearCrdTransf2d"};
 

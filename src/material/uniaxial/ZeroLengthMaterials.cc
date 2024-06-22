@@ -208,11 +208,47 @@ int XC::ZeroLengthMaterials::recvData(const Communicator &comm)
     int res= DqUniaxialMaterial::recvData(comm);
     // Receive directions.
     ID dir;
-    res+= comm.receiveID(dir,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveID(dir ,getDbTagData(),CommMetaData(2));
     const size_t sz= dir.Size();
     for(size_t i= 0;i<sz;i++)
       directions.push_back(dir[i]);
     return res;
+  }
+
+//! @brief Return the directions or the materials in a Python list.
+boost::python::list XC::ZeroLengthMaterials::getDirections(void) const
+  {
+    boost::python::list retval;
+    const size_t sz= directions.size();
+    for(size_t i= 0;i<sz;i++)
+      retval.append(directions[i]);
+    return retval;
+  }    
+
+//! @brief Set the directions of the materials from a Python list.
+void XC::ZeroLengthMaterials::setDirections(const boost::python::list &l)
+  {
+    const size_t sz= len(l);
+    this->directions.resize(sz);
+    for(size_t i= 0; i<sz; i++)
+      this->directions[i]= boost::python::extract<int>(l[i]);
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ZeroLengthMaterials::getPyDict(void) const
+  {
+    boost::python::dict retval= DqUniaxialMaterial::getPyDict();
+     // Send directions.
+    retval["dir"]= this->getDirections();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ZeroLengthMaterials::setPyDict(const boost::python::dict &d)
+  {
+    DqUniaxialMaterial::setPyDict(d);
+    const boost::python::list tmp= boost::python::extract<boost::python::list>(d["dir"]);
+    this->setDirections(tmp);
   }
 
 //! @brief Send the object through the communicator.

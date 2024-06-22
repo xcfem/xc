@@ -78,6 +78,8 @@
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/ElementalLoad.h"
 
+#include "utility/utils/misc_utils/colormod.h"
+
 // initialise the class wide variables
 XC::Matrix XC::ZeroLength::ZeroLengthM2(2,2);
 XC::Matrix XC::ZeroLength::ZeroLengthM4(4,4);
@@ -115,7 +117,7 @@ XC::ZeroLength::ZeroLength(int tag)
 XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, const Vector &yp,UniaxialMaterial &theMat, int direction)
   : Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp),
     theMatrix(nullptr), theVector(nullptr),
-    theMaterial1d(this,theMat,direction),
+    theMaterial1d(this, theMat, direction),
     persistentInitialDeformation()
     {}
 
@@ -136,7 +138,7 @@ XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, con
 XC::ZeroLength::ZeroLength(int tag,int dim,const Material *ptr_mat,int direction)
   :Element0D(tag,ELE_TAG_ZeroLength,0,0,dim),
    theMatrix(nullptr), theVector(nullptr),
-   theMaterial1d(this,cast_material<UniaxialMaterial>(ptr_mat),direction),
+   theMaterial1d(this, cast_material<UniaxialMaterial>(ptr_mat), direction),
    persistentInitialDeformation() {}
 
 //! @brief Construct element with multiple unidirectional materials
@@ -751,6 +753,7 @@ int XC::ZeroLength::sendData(Communicator &comm)
     res+= comm.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
     res+= comm.sendMovable(theMaterial1d,getDbTagData(),CommMetaData(17));
     res+= comm.sendMatrix(t1d,getDbTagData(),CommMetaData(18));
+    res+= comm.sendVector(persistentInitialDeformation, getDbTagData(), CommMetaData(19));
     return res;
   }
 
@@ -765,13 +768,68 @@ int XC::ZeroLength::recvData(const Communicator &comm)
     theVector= comm.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
     res+= comm.receiveMovable(theMaterial1d,getDbTagData(),CommMetaData(17));
     res+= comm.receiveMatrix(t1d,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveVector(persistentInitialDeformation, getDbTagData(), CommMetaData(19));
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ZeroLength::getPyDict(void) const
+  {
+    boost::python::dict retval= Element0D::getPyDict();
+    retval["elemType"]= this->elemType;
+    if(this->theMatrix)
+      retval["theMatrix"]= this->theMatrix->getPyList();
+    if(this->theVector)
+      retval["theVector"]= this->theVector->getPyList();
+    retval["theMaterial1d"]= this->theMaterial1d.getPyDict(); // array of pointers to 1d materials and related directions.
+    retval["t1d"]= t1d.getPyDict(); // hold the transformation matrix.
+    retval["persistentInitialDeformation"]= persistentInitialDeformation.getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ZeroLength::setPyDict(const boost::python::dict &d)
+  {
+    Element0D::setPyDict(d);
+    const int et= boost::python::extract<int>(d["elemeType"]);
+    this->elemType= Etype(et);
+    if(d.has_key("theMatrix"))
+      {
+	if(this->theMatrix)
+	  {
+	    const boost::python::list values= boost::python::extract<boost::python::list>(d["theMatrix"]);
+	    this->theMatrix->setPyList(values);
+	  }
+	else
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; 'theMatrix' key is missing."
+		      << Color::def << std::endl;
+	  }
+      }
+    if(d.has_key("theVector"))
+      {
+	if(this->theVector)
+	  {
+	    const boost::python::list values= boost::python::extract<boost::python::list>(d["theVector"]);
+	    this->theVector->setPyList(values);
+	  }
+	else
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; 'theVector' key is missing."
+		      << Color::def << std::endl;
+	  }
+      }
+     this->theMaterial1d.setPyDict(boost::python::extract<boost::python::dict>(d["theMaterial1d"]));
+     this->t1d.setPyDict(boost::python::extract<boost::python::dict>(d["t1d"]));
+     this->persistentInitialDeformation.setPyList(boost::python::extract<boost::python::list>(d["persistentInitialDeformation"]));
   }
 
 //! @brief Sends object through the communicator argument.
 int XC::ZeroLength::sendSelf(Communicator &comm)
   {
-    inicComm(19);
+    inicComm(20);
 
     int res= sendData(comm);
 
@@ -786,7 +844,7 @@ int XC::ZeroLength::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::ZeroLength::recvSelf(const Communicator &comm)
   {
-    inicComm(19);
+    inicComm(20);
 
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);

@@ -1258,6 +1258,17 @@ boost::python::list XC::Vector::getPyList(void) const
     return retval;
   }
 
+//! @brief Populate the vector with the values of the given list.
+void XC::Vector::setPyList(const boost::python::list &lst)
+  {
+    const int sz= len(lst);
+    if(this->Size()==sz) // copy the components
+      {
+	for(int i=0; i<sz; i++)
+	  theData[i]= boost::python::extract<double>(lst[i]);
+      }
+  }
+
 //! @brief Return a Python dictionary with the object members values.
 boost::python::dict XC::Vector::getPyDict(void) const
   {

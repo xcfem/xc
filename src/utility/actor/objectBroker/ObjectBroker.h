@@ -81,8 +81,8 @@ class ObjectBroker
     public:
       ObjectBroker(void);
     
-    boost::python::dict getPyDict(void) const;
-    void setPyDict(const boost::python::dict &);    
+    virtual boost::python::dict getPyDict(void) const;
+    virtual void setPyDict(const boost::python::dict &);    
   };
 } // end of XC namespace
 
