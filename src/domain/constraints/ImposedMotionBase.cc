@@ -126,6 +126,23 @@ int XC::ImposedMotionBase::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ImposedMotionBase::getPyDict(void) const
+  {
+    boost::python::dict retval= SFreedom_Constraint::getPyDict();
+    retval["groundMotionTag"]= this->groundMotionTag;
+    retval["patternTag"]= this->patternTag;
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ImposedMotionBase::setPyDict(const boost::python::dict &d)
+  {
+    SFreedom_Constraint::setPyDict(d);
+    this->groundMotionTag= boost::python::extract<int>(d["groundMotionTag"]);
+    this->patternTag= boost::python::extract<int>(d["patternTag"]);
+  }
+
+
 //! @brief Sends object through the communicator argument.
 int XC::ImposedMotionBase::sendSelf(Communicator &comm)
   {

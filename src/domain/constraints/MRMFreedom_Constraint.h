@@ -106,6 +106,8 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     // methods for output
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
     
     int getVtkCellType(void) const;
 

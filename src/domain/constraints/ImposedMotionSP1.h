@@ -91,6 +91,8 @@ class ImposedMotionSP1: public ImposedMotionBase
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

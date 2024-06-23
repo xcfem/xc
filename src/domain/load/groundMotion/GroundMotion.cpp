@@ -54,12 +54,8 @@
 
 
 #include "GroundMotion.h"
-#include <domain/load/pattern/TimeSeriesIntegrator.h>
-#include <domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator.h>
-
-#include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/matrix/ID.h>
-
+#include "utility/utils/misc_utils/colormod.h"
 
 
 
@@ -122,14 +118,28 @@ const XC::Vector &XC::GroundMotion::getDispVelAccel(double time) const
     return data;
   }
 
+//! @brief Sends object through the communicator argument.
+boost::python::dict XC::GroundMotion::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["data"]= this->data.getPyList();
+    return retval;
+  }
+  
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::GroundMotion::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    this->data= Vector(boost::python::extract<boost::python::list>(d["data"]));
+  }
 
 int  XC::GroundMotion::sendSelf(Communicator &comm)
   {
-    std::cerr << "XC::GroundMotion::sendSelf not implemented." << std::endl;
-
-
-  return 0;
-}
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
+    return 0;
+  }
 
 
 int XC::GroundMotion::recvSelf(const Communicator &comm)

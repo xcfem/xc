@@ -111,6 +111,20 @@ int XC::ImposedMotionSP1::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ImposedMotionSP1::getPyDict(void) const
+  {
+    boost::python::dict retval= ImposedMotionBase::getPyDict();
+    retval["destroyMotion"]= this->destroyMotion;
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ImposedMotionSP1::setPyDict(const boost::python::dict &d)
+  {
+    ImposedMotionBase::setPyDict(d);
+    this->destroyMotion= boost::python::extract<int>(d["destroyMotion"]);
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::ImposedMotionSP1::sendSelf(Communicator &comm)
   {

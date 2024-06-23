@@ -161,6 +161,22 @@ int XC::MFreedom_ConstraintBase::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MFreedom_ConstraintBase::getPyDict(void) const
+  {
+    boost::python::dict retval= Constraint::getPyDict();
+    retval["constraintMatrix"]= this->constraintMatrix.getPyList();
+    retval["constrDOF"]= this->constrDOF.getPyList();
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MFreedom_ConstraintBase::setPyDict(const boost::python::dict &d)
+  {
+    Constraint::setPyDict(d);
+    this->constraintMatrix= Matrix(boost::python::extract<boost::python::list>(d["constraintMatrix"]));
+    this->constrDOF= ID(boost::python::extract<boost::python::list>(d["constrDOF"]));
+  }
+
 //! @brief Printing.
 //!
 //! Prints out the MFreedom\_Constraints tag, then the tags of the constrained

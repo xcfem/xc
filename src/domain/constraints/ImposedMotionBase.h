@@ -51,6 +51,8 @@ class ImposedMotionBase: public SFreedom_Constraint
     GroundMotion *theGroundMotion;  // pointer to ground motion
     Node *theNode; //!< pointer to node being constrained
     Vector theGroundMotionResponse; // the ground motions response
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // constructors    
     ImposedMotionBase(int classTag);        
@@ -66,10 +68,10 @@ class ImposedMotionBase: public SFreedom_Constraint
 
     int getMotion(void);
 
-    int sendData(Communicator &comm);
-    int recvData(const Communicator &comm);
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

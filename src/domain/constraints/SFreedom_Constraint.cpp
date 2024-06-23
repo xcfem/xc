@@ -226,6 +226,28 @@ int XC::SFreedom_Constraint::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::SFreedom_Constraint::getPyDict(void) const
+  {
+    boost::python::dict retval= Constraint::getPyDict();
+    retval["dofNumber"]= dofNumber;
+    retval["loadPatternTag"]= loadPatternTag;
+    retval["valueC"]= valueC;
+    retval["valueR"]= valueR;
+    retval["isConstant"]= isConstant;
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SFreedom_Constraint::setPyDict(const boost::python::dict &d)
+  {
+    Constraint::setPyDict(d);
+    this->dofNumber= boost::python::extract<int>(d["dofNumber"]);
+    this->loadPatternTag= boost::python::extract<int>(d["loadPatternTag"]);
+    this->valueC= boost::python::extract<double>(d["valueC"]);
+    this->valueR= boost::python::extract<double>(d["valueR"]);
+    this->isConstant= boost::python::extract<bool>(d["isConstant"]);
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::SFreedom_Constraint::sendSelf(Communicator &comm)
   {

@@ -109,6 +109,8 @@ class GroundMotion: public MovableObject, public CommandEntity
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
     
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual double getAccelSensitivity(double time)= 0;

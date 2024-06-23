@@ -257,6 +257,20 @@ int XC::GroundMotionRecord::recvSelf(const Communicator &comm)
   return 0;
 }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::GroundMotionRecord::getPyDict(void) const
+  {
+    boost::python::dict retval= GroundMotion::getPyDict();
+    retval["history"]= this->history.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::GroundMotionRecord::setPyDict(const boost::python::dict &d)
+  {
+    GroundMotion::setPyDict(d);
+    this->history.setPyDict(boost::python::extract<boost::python::dict>(d["history"]));
+  }
 // AddingSensitivity:BEGIN //////////////////////////////////////////
 double XC::GroundMotionRecord::getAccelSensitivity(double time)
   { return history.getAccelSensitivity(time); }

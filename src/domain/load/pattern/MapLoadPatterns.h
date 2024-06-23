@@ -135,8 +135,8 @@ class MapLoadPatterns: public LoadHandlerMember
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
-
-
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 //! @brief Create a TimeSeries object.

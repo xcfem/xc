@@ -68,7 +68,11 @@
 #include "material/section/section_material_class_names.h"
 #include "domain/mesh/node/node_class_names.h"
 #include "domain/mesh/element/utils/coordTransformation/coordinate_transformation_class_names.h"
+#include "domain/constraints/constraint_class_names.h"
 #include "domain/mesh/element/element_class_names.h"
+#include "domain/load/groundMotion/ground_motion_class_names.h"
+#include "domain/load/pattern/time_series/time_series_class_names.h"
+#include "domain/load/pattern/load_patterns/load_pattern_class_names.h"
 
 typedef struct uniaxialPackage
   {
@@ -931,8 +935,7 @@ XC::TimeSeries *XC::FEM_ObjectBroker::getNewTimeSeries(int classTag)
                        << classTag
 		       << Color::def << std::endl;
              return nullptr;
-
-         }
+      }
   }
 
 //! @brief Broke a time series object from its class tag.
@@ -1801,7 +1804,7 @@ void XC::FEM_ObjectBroker::setPyDict(const boost::python::dict &d)
 
 const std::vector<std::string> crd_transf_class_identifiers{"XC::LinearCrdTransf2d"};
 
-//! @brief Creates a new object whose class is determined by the given class name and class tag.
+//! @brief Creates a new tagged object whose class is determined by the given class name and class tag.
 //! @param className: the class name is used to determine the adequate broker method.
 //! @param classTag: the class tag defines the specific type of the object (see classTags.h).
 XC::TaggedObject *XC::get_new_tagged_object(const std::string &className, const int &classTag)
@@ -1820,6 +1823,14 @@ XC::TaggedObject *XC::get_new_tagged_object(const std::string &className, const 
       retval= broker.getNewCrdTransf(classTag);
     else if(XC::is_element(className))
       retval= broker.getNewElement(classTag);
+    else if(XC::is_sp_constraint(className))
+      retval= broker.getNewSP(classTag);
+    else if(XC::is_mp_constraint(className))
+      retval= broker.getNewMP(classTag);
+    else if(XC::is_mrmp_constraint(className))
+      retval= broker.getNewMRMP(classTag);
+    else if(XC::is_load_pattern(className))
+      retval= broker.getNewLoadPattern(classTag);
     if(!retval)
       std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 	        << "; no " << className
@@ -1827,3 +1838,22 @@ XC::TaggedObject *XC::get_new_tagged_object(const std::string &className, const 
 	        << Color::def << std::endl;
     return retval;
   }
+//! @brief Creates a new movable object whose class is determined by the given class name and class tag.
+//! @param className: the class name is used to determine the adequate broker method.
+//! @param classTag: the class tag defines the specific type of the object (see classTags.h).
+XC::MovableObject *XC::get_new_movable_object(const std::string &className, const int &classTag)
+  {
+    static FEM_ObjectBroker broker;
+    MovableObject *retval= nullptr;
+    if(XC::is_ground_motion(className))
+      retval= broker.getNewGroundMotion(classTag);
+    else if(XC::is_time_series(className))
+      retval= broker.getNewTimeSeries(classTag);
+    if(!retval)
+      std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+	        << "; no " << className
+	        << " type exists for class tag: " << classTag
+	        << Color::def << std::endl;
+    return retval;
+  }
+

@@ -151,6 +151,20 @@ void XC::Constraint::Print(std::ostream &s, int flag) const
     s << "\t XC::Node: " << constrNodeTag << std::endl;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::Constraint::getPyDict(void) const
+  {
+    boost::python::dict retval= ContinuaReprComponent::getPyDict();
+    retval["constrNodeTag"]= constrNodeTag;
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::Constraint::setPyDict(const boost::python::dict &d)
+  {
+    ContinuaReprComponent::setPyDict(d);
+    this->constrNodeTag= boost::python::extract<int>(d["constrNodeTag"]);
+  }
+
 //! @brief returns the VTK cell type.
 int XC::Constraint::getVtkCellType(void) const
   {

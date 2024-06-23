@@ -216,6 +216,22 @@ int XC::MFreedom_Constraint::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MFreedom_Constraint::getPyDict(void) const
+  {
+    boost::python::dict retval= MFreedom_ConstraintBase::getPyDict();
+    retval["retainDOF"]= this->retainDOF.getPyList();
+    retval["retainedNodeTag"]= this->retainedNodeTag;
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MFreedom_Constraint::setPyDict(const boost::python::dict &d)
+  {
+    MFreedom_ConstraintBase::setPyDict(d);
+    this->retainDOF= ID(boost::python::extract<boost::python::list>(d["retainDOF"]));
+    this->retainedNodeTag= boost::python::extract<int>(d["retainedNodeTag"]);
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::MFreedom_Constraint::sendSelf(Communicator &comm)
   {

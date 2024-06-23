@@ -51,14 +51,13 @@
 //Loads.
 #include "domain/load/NodalLoad.h"
 #include "domain/load/elem_load.h"
+
 //Constraints.
 #include "domain/constraints/SFreedom_Constraint.h"
-
 #include "domain/domain/Domain.h"
-
-
-
 #include "utility/actor/actor/MovableMap.h"
+
+#include "utility/utils/misc_utils/colormod.h"
 
 
 
@@ -387,6 +386,96 @@ int XC::MapLoadPatterns::recvData(const Communicator &comm)
     res+= comm.receiveString(lpcode,getDbTagData(),CommMetaData(3));
     res+= comm.receiveInts(tag_el,tag_nl,tag_spc,getDbTagData(),CommMetaData(4));
     return res;
+  }
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MapLoadPatterns::getPyDict(void) const
+  {
+    boost::python::dict retval= LoadHandlerMember::getPyDict();
+    boost::python::dict tSeriesDict;
+    for(map_timeseries::const_iterator i= tseries.begin(); i!= tseries.end(); i++)
+      {
+	const std::string key= (*i).first;
+	const TimeSeries *value= (*i).second;
+	boost::python::dict tmp= value->getPyDict();
+	tmp["classTag"]= value->getClassTag();
+	tSeriesDict[key]= tmp;
+      }
+    retval["tseries"]= tSeriesDict;
+    retval["time_series_name"]= time_series_name;
+    boost::python::dict lPatternsDict;
+    for(map_loadpatterns::const_iterator i= loadpatterns.begin(); i!= loadpatterns.end(); i++)
+      {
+	const std::string key= (*i).first;
+	const LoadPattern *value= (*i).second;
+	boost::python::dict tmp= value->getPyDict();
+	tmp["classTag"]= value->getClassTag();
+	lPatternsDict[key]= tmp;
+      }
+    retval["loadpatterns"]= lPatternsDict;
+    retval["lpcode"]= lpcode;
+    retval["tag_el"]= tag_el;
+    retval["tag_nl"]= tag_nl;
+    retval["tag_spc"]= tag_spc;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MapLoadPatterns::setPyDict(const boost::python::dict &d)
+  {
+    LoadHandlerMember::setPyDict(d);
+    boost::python::dict tSeriesDict= boost::python::extract<boost::python::dict>(d["tseries"]);
+    boost::python::list ts_items= tSeriesDict.items();
+    const size_t ts_sz= len(ts_items);
+    if(ts_sz>0)
+      {
+	for(size_t i=0; i<ts_sz; i++)
+	  {
+	    const std::string key= boost::python::extract<std::string>(ts_items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(ts_items[i][1]);
+	    const int classTag= boost::python::extract<int>(itemDict["classTag"]);
+	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    TimeSeries *newObject= dynamic_cast<TimeSeries *>(get_new_movable_object(className, classTag));
+	    if(newObject)
+	      {
+		newObject->setPyDict(itemDict);
+		this->tseries[key]= newObject;
+	      }
+	    else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; failed to receive object. Class mame: "
+			<< className << " class tag: " << classTag
+			<< Color::def << std::endl;
+	  }	
+      }
+    this->time_series_name= boost::python::extract<std::string>(d["time_series_name"]);
+    boost::python::dict lPatternsDict= boost::python::extract<boost::python::dict>(d["loadpatterns"]);
+    boost::python::list lp_items= lPatternsDict.items();
+    const size_t lp_sz= len(lp_items);
+    if(lp_sz>0)
+      {
+	for(size_t i=0; i<lp_sz; i++)
+	  {
+	    const std::string key= boost::python::extract<std::string>(lp_items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(lp_items[i][1]);
+	    const int classTag= boost::python::extract<int>(itemDict["classTag"]);
+	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    LoadPattern *newObject= dynamic_cast<LoadPattern *>(get_new_tagged_object(className, classTag));
+	    if(newObject)
+	      {
+		newObject->setPyDict(itemDict);
+		this->loadpatterns[key]= newObject;
+	      }
+	    else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; failed to receive object. Class mame: "
+			<< className << " class tag: " << classTag
+			<< Color::def << std::endl;
+	  }	
+      }
+    this->lpcode= boost::python::extract<std::string>(d["lpcode"]);
+    this->tag_el= boost::python::extract<int>(d["tag_el"]);
+    this->tag_nl= boost::python::extract<int>(d["tag_nl"]);
+    this->tag_spc= boost::python::extract<int>(d["tag_spc"]);    
   }
 
 //! @brief Sends object through the communicator argument.

@@ -27,16 +27,11 @@
 #ifndef section_material_class_names_h
 #define section_material_class_names_h
 
-#include <set>
-
 namespace XC {
 
-  const std::set<std::string> section_material_class_names= {"XC::SectionForceDeformation", "XC::Bidirectional", "XC::GenericSectionNd", "XC::Isolator2spring", "XC::PlateBase", "XC::ElasticPlateBase", "XC::ElasticPlateProto<>", "XC::ElasticMembranePlateSection", "XC::ElasticPlateSection", "XC::MembranePlateFiberSectionBase", "XC::LayeredShellFiberSection", "XC::MembranePlateFiberSection", "XC::PrismaticBarCrossSection", "XC::BaseElasticSection", "XC::BaseElasticSection1d", "XC::ElasticSection1d", "XC::BaseElasticSection2d", "XC::ElasticSection2d", "XC::ElasticShearSection2d", "XC::BaseElasticSection3d", "XC::ElasticSection3d", "XC::ElasticShearSection3d", "XC::FiberSectionBase", "XC::FiberSection2d", "XC::FiberSectionShear2d", "XC::FiberSection3dBase", "XC::FiberSection3d", "XC::FiberSectionShear3d", "XC::FiberSectionGJ", "XC::GenericSection1d", "XC::SectionAggregator", "XC::YieldSurfaceSection2d", "XC::YS_Section2D01", "XC::YS_Section2D02"};
-  
 //! @brief Return true if the given class name corresponds to a coordinate transformation.
-bool is_section_material(const std::string &className)
-  { return (XC::section_material_class_names.find(className)!= XC::section_material_class_names.end()); }
-  
+bool is_section_material(const std::string &className);  
+
 } // end of XC namespace
 
 #endif

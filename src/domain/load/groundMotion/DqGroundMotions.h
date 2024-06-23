@@ -39,10 +39,10 @@ namespace XC {
 
   class GroundMotion;
 
-//! @ingroup GMotion
 //
 //! @brief Seismic definitions container.
-  class DqGroundMotions: public CommandEntity, public MovableObject
+//! @ingroup GMotion
+class DqGroundMotions: public CommandEntity, public MovableObject
   {
   protected:
     typedef std::deque<GroundMotion *> dq_ptr_GroundMotions;
@@ -52,12 +52,9 @@ namespace XC {
     typedef dq_ptr_GroundMotions::const_iterator const_iterator;
 
     dq_ptr_GroundMotions gMotions; //!< Pointers to GroundMotion container.
-
-
-
+    
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
     
   public:
     DqGroundMotions(const size_t &num= 0);
@@ -90,7 +87,6 @@ namespace XC {
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
-
 
     void Print(std::ostream &s,const int &flag) const;
   };

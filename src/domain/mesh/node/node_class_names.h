@@ -27,15 +27,9 @@
 #ifndef node_class_names_h
 #define node_class_names_h
 
-#include <set>
-
 namespace XC {
 
-  const std::set<std::string> node_class_names= {"XC::Node", "XC::DummyNode"};
-  
-//! @brief Return true if the given class name corresponds to a node.
-bool is_node(const std::string &className)
-  { return (XC::node_class_names.find(className)!= XC::node_class_names.end()); }
+bool is_node(const std::string &className);
   
 } // end of XC namespace
 

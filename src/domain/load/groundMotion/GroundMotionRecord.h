@@ -76,8 +76,6 @@ class GroundMotionRecord: public GroundMotion
   {
   private:
     MotionHistory history;
-  protected:
-
   public:
     GroundMotionRecord(void);
     GroundMotionRecord(const std::string &fileNameAccel, double timeStep, double fact = 1.0, double dTintegration = 0.01);
@@ -100,6 +98,8 @@ class GroundMotionRecord: public GroundMotion
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual double getAccelSensitivity(double time);

@@ -125,7 +125,6 @@ class FrictionModel;
 
 class ConvergenceTest;
 class SectionForceDeformation;
-class GroundMotion;
 
 class DataOutputHandler;
 class Recorder;
@@ -133,6 +132,9 @@ class Recorder;
 class Actor;
 
 class Parameter;
+
+class MovableObject;
+class GroundMotion;
 
 //! @ingroup IPComm
 //
@@ -233,6 +235,7 @@ class FEM_ObjectBroker: public ObjectBroker
   };
 
 TaggedObject *get_new_tagged_object(const std::string &className, const int &classTag);
+MovableObject *get_new_movable_object(const std::string &className, const int &classTag);
 } // end of XC namespace
 
 #endif

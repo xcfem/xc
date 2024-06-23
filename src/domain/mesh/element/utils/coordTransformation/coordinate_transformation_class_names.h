@@ -27,15 +27,11 @@
 #ifndef coordinate_transformation_class_names_h
 #define coordinate_transformation_class_names_h
 
-#include <set>
 
 namespace XC {
-
-  const std::set<std::string> crd_transf_class_names= {"XC::CrdTransf", "XC::CrdTransf2d", "XC::CorotCrdTransf2d", "XC::SmallDispCrdTransf2d", "XC::LinearCrdTransf2d", "XC::PDeltaCrdTransf2d", "XC::CrdTransf3d", "XC::CorotCrdTransf3d", "XC::SmallDispCrdTransf3d", "XC::LinearCrdTransf3d", "XC::PDeltaCrdTransf3d", "XC::ASDShellQ4CorotationalTransformation", "XC::ShellCrdTransf3dBase", "XC::ShellLinearCrdTransf3d", "XC::ShellUpBasisCrdTransf3d", "XC::ShellNLCrdTransf3d"};
   
 //! @brief Return true if the given class name corresponds to a coordinate transformation.
-bool is_coordinate_transformation(const std::string &className)
-  { return (XC::crd_transf_class_names.find(className)!= XC::crd_transf_class_names.end()); }
+bool is_coordinate_transformation(const std::string &className);
   
 } // end of XC namespace
 

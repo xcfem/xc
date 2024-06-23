@@ -70,6 +70,8 @@ class Constraint: public ContinuaReprComponent
 
     virtual int getVtkCellType(void) const;
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
     virtual void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

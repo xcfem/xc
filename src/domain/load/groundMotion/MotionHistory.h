@@ -94,6 +94,8 @@ class MotionHistory: public CommandEntity
     void loadAccelFile(const std::string &fileNameAccel,const double &timeStep,const double &theFactor);
     void loadAccelTimeFile(const std::string &fileNameAccel, const std::string &fileNameTime,const double &theFactor);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

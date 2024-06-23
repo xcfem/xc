@@ -80,11 +80,9 @@ class InterpolatedGroundMotion: public GroundMotion
     typedef std::vector<MotionHistory> vector_motions;
   private:
     vector_motions theMotions;
-    Vector *factors;
+    Vector factors;
     
     double deltaPeak;  // increment for determining a peak response
-    void free_mem(void);
-    void copy(const Vector *);
   public:
     InterpolatedGroundMotion(void);
     InterpolatedGroundMotion(const InterpolatedGroundMotion &);
@@ -107,6 +105,8 @@ class InterpolatedGroundMotion: public GroundMotion
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual double getAccelSensitivity(double time);

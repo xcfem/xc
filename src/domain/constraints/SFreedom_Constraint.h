@@ -89,7 +89,7 @@ class SFreedom_Constraint: public Constraint
     double valueR; //!< the reference value
     double valueC; //!< if constant = the reference value, if not constant = the reference value * load factor
     bool isConstant; //!< flag indicating if constant
-    int  loadPatternTag;
+    int loadPatternTag;
 
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
@@ -121,8 +121,9 @@ class SFreedom_Constraint: public Constraint
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
-
     virtual void Print(std::ostream &s, int flag =0) const;
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

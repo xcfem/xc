@@ -32,6 +32,7 @@
 #include "domain/load/pattern/LoadCombination.h"
 #include "domain/domain/Domain.h"
 #include "utility/actor/actor/MovableMap.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
 XC::LoadCombinationGroup::LoadCombinationGroup(LoadHandler *owr)
@@ -225,6 +226,53 @@ int XC::LoadCombinationGroup::recvData(const Communicator &comm)
         (*i).second->recvDescomp();
       }
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::LoadCombinationGroup::getPyDict(void) const
+  {
+    boost::python::dict retval= LoadHandlerMember::getPyDict();
+    boost::python::dict lCombDict;
+    for(const_iterator i= begin(); i!= end(); i++)
+      {
+	const std::string key= (*i).first;
+	const LoadCombination *value= (*i).second;
+	boost::python::dict tmp= value->getPyDict();
+	tmp["classTag"]= value->getClassTag();
+	lCombDict[key]= tmp;
+      }
+    retval["combinations"]= lCombDict;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::LoadCombinationGroup::setPyDict(const boost::python::dict &d)
+  {
+    LoadHandlerMember::setPyDict(d);
+    boost::python::dict lCombDict= boost::python::extract<boost::python::dict>(d["combinations"]);
+    boost::python::list items= lCombDict.items();
+    const size_t sz= len(items);
+    if(sz>0)
+      {
+	for(size_t i=0; i<sz; i++)
+	  {
+	    const std::string key= boost::python::extract<std::string>(items[i][0]);
+	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+	    const int classTag= boost::python::extract<int>(itemDict["classTag"]);
+	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    LoadCombination *newObject= dynamic_cast<LoadCombination *>(get_new_tagged_object(className, classTag));
+	    if(newObject)
+	      {
+		newObject->setPyDict(itemDict);
+		(*this)[key]= newObject;
+	      }
+	    else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; failed to receive object. Class mame: "
+			<< className << " class tag: " << classTag
+			<< Color::def << std::endl;
+	  }
+      }
   }
 
 //! @brief Sends object through the communicator argument.

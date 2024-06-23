@@ -34,6 +34,7 @@
 #include <domain/load/pattern/time_series/PathSeries.h>
 #include <domain/load/pattern/time_series/PathTimeSeries.h>
 #include <utility/matrix/Vector.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 
 
@@ -317,4 +318,23 @@ void XC::MotionHistory::loadAccelTimeFile(const std::string &fileNameAccel, cons
     if(!theAccelSeries)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; unable to create PathTimeSeries.\n";
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MotionHistory::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MotionHistory::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
   }

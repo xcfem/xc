@@ -64,43 +64,26 @@
 #include <classTags.h>
 #include <utility/matrix/Vector.h>
 
-void XC::InterpolatedGroundMotion::free_mem(void)
-  {
-    if(factors)
-      {
-        delete factors;
-        factors= nullptr;
-      }
-  }
-
-void XC::InterpolatedGroundMotion::copy(const Vector *v)
-  {
-    free_mem();
-    if(v)
-      factors= new Vector(*v);
-  }
-
 XC::InterpolatedGroundMotion::InterpolatedGroundMotion()
 :GroundMotion(GROUND_MOTION_TAG_InterpolatedGroundMotion),
- theMotions(0), factors(nullptr), deltaPeak(0.0) {}
+ theMotions(0), factors(), deltaPeak(0.0) {}
 
 XC::InterpolatedGroundMotion::InterpolatedGroundMotion(const InterpolatedGroundMotion &other)
-  :GroundMotion(other),theMotions(other.theMotions), factors(nullptr), deltaPeak(other.deltaPeak)
-  { copy(other.factors); }
+  :GroundMotion(other),theMotions(other.theMotions), factors(other.factors), deltaPeak(other.deltaPeak)
+  {}
 
 XC::InterpolatedGroundMotion::InterpolatedGroundMotion(const vector_motions &groundMotions, const Vector &fact, double dT)
 :GroundMotion(GROUND_MOTION_TAG_InterpolatedGroundMotion),
- theMotions(groundMotions), factors(nullptr), deltaPeak(dT)
+ theMotions(groundMotions), factors(fact), deltaPeak(dT)
   {
     assert(size_t(fact.Size()) == groundMotions.size());
-    copy(&fact);
   }
 
 XC::InterpolatedGroundMotion &XC::InterpolatedGroundMotion::operator=(const InterpolatedGroundMotion &other)
   {
     GroundMotion::operator=(other);
     theMotions= other.theMotions;
-    copy(other.factors);
+    factors= other.factors;
     deltaPeak= other.deltaPeak;
     return *this;
   }
@@ -111,13 +94,13 @@ XC::GroundMotion *XC::InterpolatedGroundMotion::getCopy(void) const
 
 //! @brief Destructor.
 XC::InterpolatedGroundMotion::~InterpolatedGroundMotion(void)
-  { free_mem(); }
+  {}
 
 //! @brief Return the duration of the motion history.
 double XC::InterpolatedGroundMotion::getDuration(void) const
   {
     double value = 0.0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
       {
         const double motionValue= theMotions[i].getDuration();
@@ -178,9 +161,9 @@ double XC::InterpolatedGroundMotion::getAccel(double time) const
       return 0.0;
 
     double value= 0.0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
-      { value += (*factors)(i) * theMotions[i].getAccel(time); }
+      { value += factors(i) * theMotions[i].getAccel(time); }
     return value;
   }
 
@@ -189,9 +172,9 @@ double XC::InterpolatedGroundMotion::getVel(double time) const
     if(time < 0.0)
       return 0.0;
     double value = 0.0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
-      { value += (*factors)(i) * theMotions[i].getVel(time); }
+      { value += factors(i) * theMotions[i].getVel(time); }
     return value;
   }
 
@@ -200,9 +183,9 @@ double XC::InterpolatedGroundMotion::getDisp(double time) const
     if(time < 0.0) return 0.0;
 
     double value = 0.0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
-      { value += (*factors)(i) * theMotions[i].getDisp(time); }
+      { value += factors(i) * theMotions[i].getDisp(time); }
     return value;
   }
 
@@ -219,11 +202,11 @@ const XC::Vector &XC::InterpolatedGroundMotion::getDispVelAccel(double time) con
     data.Zero();
     static XC::Vector motionData(3);
 
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
       {
         motionData= theMotions[i].getDispVelAccel(motionData,time);
-        motionData*= (*factors)(i);
+        motionData*= factors(i);
         data+= motionData;
       }
     return data;
@@ -243,19 +226,51 @@ int XC::InterpolatedGroundMotion::recvSelf(const Communicator &comm)
     return -1;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::InterpolatedGroundMotion::getPyDict(void) const
+  {
+    boost::python::dict retval= GroundMotion::getPyDict();
+    boost::python::list vector_motions_lst;
+    for(vector_motions::const_iterator i= theMotions.begin(); i!= theMotions.end(); i++)
+      {
+	MotionHistory mh= (*i);
+	vector_motions_lst.append(mh.getPyDict());
+      }
+    retval["vector_motions"]= vector_motions_lst;
+    retval["factors"]= factors.getPyList();
+    retval["deltaPeak"]= deltaPeak;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::InterpolatedGroundMotion::setPyDict(const boost::python::dict &d)
+  {
+    GroundMotion::setPyDict(d);
+    boost::python::list vector_motions_lst= boost::python::extract<boost::python::list>(d["vector_motions"]);
+    const size_t sz= boost::python::len(vector_motions_lst);
+    theMotions.resize(sz);
+    for(size_t i= 0; i<sz; i++)
+      {
+	boost::python::dict tmp= boost::python::extract<boost::python::dict>(vector_motions_lst[i]);
+	theMotions[i].setPyDict(tmp);
+      }
+    factors= Vector(boost::python::extract<boost::python::list>(d["factors"]));
+    deltaPeak= boost::python::extract<double>(d["deltaPeak"]);
+  }
+
 // AddingSensitivity:BEGIN //////////////////////////////////////////
 double XC::InterpolatedGroundMotion::getAccelSensitivity(double time)
   {
     double value= 0.0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
-      { value += (*factors)(i) * theMotions[i].getAccelSensitivity(time); }
+      { value += factors(i) * theMotions[i].getAccelSensitivity(time); }
     return value;
   }
 int XC::InterpolatedGroundMotion::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     int retval= 0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
       retval= theMotions[i].setParameter(argv,param);
     return retval;
@@ -264,7 +279,7 @@ int XC::InterpolatedGroundMotion::setParameter(const std::vector<std::string> &a
 int XC::InterpolatedGroundMotion::updateParameter(int parameterID, Information &info)
   {
     int retval= 0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
       retval= theMotions[i].updateParameter(parameterID,info);
     return retval;
@@ -273,7 +288,7 @@ int XC::InterpolatedGroundMotion::updateParameter(int parameterID, Information &
 int XC::InterpolatedGroundMotion::activateParameter(int pparameterID)
   {
     int retval= 0;
-    const int numMotions = factors->Size();
+    const int numMotions = factors.Size();
     for(int i=0; i<numMotions; i++)
       retval= theMotions[i].activateParameter(pparameterID);
     return retval;
