@@ -1222,9 +1222,12 @@ void XC::Mesh::setPyDict(const boost::python::dict &d)
 		    << Color::def << std::endl;
       }
     add_elements_to_domain();
-    theBounds= Vector(boost::python::extract<boost::python::list>(d["bounds"]));
-    tagNodeCheckReactionException= boost::python::extract<int>(d["tagNodeCheckReactionException"]);
-    lockers.setPyDict(boost::python::extract<boost::python::dict>(d["lockers"]));
+    if(d.has_key("bounds"))
+      { theBounds= Vector(boost::python::extract<boost::python::list>(d["bounds"])); }
+    if(d.has_key("tagNodeCheckReactionException"))
+      { tagNodeCheckReactionException= boost::python::extract<int>(d["tagNodeCheckReactionException"]); }
+    if(d.has_key("lockers"))
+      { lockers.setPyDict(boost::python::extract<boost::python::dict>(d["lockers"])); }
   }
 
 //! @brief Sends object through the communicator argument.

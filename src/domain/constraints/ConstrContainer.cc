@@ -1255,26 +1255,32 @@ boost::python::dict XC::ConstrContainer::getPyDict(void) const
 void XC::ConstrContainer::setPyDict(const boost::python::dict &d)
   {
     MeshComponentContainer::setPyDict(d);
-    if(theSPs)
+    if(theSPs && d.has_key("theSPs"))
       theSPs->setPyDict(boost::python::extract<boost::python::dict>(d["theSPs"]));
-    if(theMPs)
+    if(theMPs && d.has_key("theMPs"))
       theMPs->setPyDict(boost::python::extract<boost::python::dict>(d["theMPs"]));
-    if(theMRMPs)
+    if(theMRMPs && d.has_key("theMRMPs"))
       theMRMPs->setPyDict(boost::python::extract<boost::python::dict>(d["theMRMPs"]));
     //Node lockers tags.
-    boost::python::list nl_tags_lst= boost::python::extract<boost::python::list>(d["nl_tags"]);
-    const size_t nl_tags_sz= boost::python::len(nl_tags_lst);
-    ID nl_tags(nl_tags_sz);
-    for(size_t i= 0; i<nl_tags_sz; i++)
-      nl_tags[i]= boost::python::extract<int>(nl_tags_lst[i]);
-    setTagsNLs(nl_tags);
-    // Load patterns tags.
-    boost::python::list lp_tags_lst= boost::python::extract<boost::python::list>(d["lp_tags"]);
-    const size_t lp_tags_sz= boost::python::len(lp_tags_lst);
-    ID lp_tags(lp_tags_sz);
-    for(size_t i= 0; i<lp_tags_sz; i++)
-      lp_tags[i]= boost::python::extract<int>(lp_tags_lst[i]);
-    setTagsLPs(lp_tags);
+    if(d.has_key("nl_tags"))
+      {
+	boost::python::list nl_tags_lst= boost::python::extract<boost::python::list>(d["nl_tags"]);
+	const size_t nl_tags_sz= boost::python::len(nl_tags_lst);
+	ID nl_tags(nl_tags_sz);
+	for(size_t i= 0; i<nl_tags_sz; i++)
+	  nl_tags[i]= boost::python::extract<int>(nl_tags_lst[i]);
+	setTagsNLs(nl_tags);
+      }
+    if(d.has_key("lp_tags"))
+      {
+	// Load patterns tags.
+	boost::python::list lp_tags_lst= boost::python::extract<boost::python::list>(d["lp_tags"]);
+	const size_t lp_tags_sz= boost::python::len(lp_tags_lst);
+	ID lp_tags(lp_tags_sz);
+	for(size_t i= 0; i<lp_tags_sz; i++)
+	  lp_tags[i]= boost::python::extract<int>(lp_tags_lst[i]);
+	setTagsLPs(lp_tags);
+      }
   }
 
 //! @brief Sends object through the communicator argument.

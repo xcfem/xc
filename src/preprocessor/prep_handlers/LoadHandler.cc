@@ -143,34 +143,40 @@ boost::python::dict XC::LoadHandler::getPyDict(void) const
 void XC::LoadHandler::setPyDict(const boost::python::dict &d)
   {
     PrepHandler::setPyDict(d);
-    boost::python::dict ground_motions_dict= boost::python::extract<boost::python::dict>(d["ground_motions"]);
-    boost::python::list items= ground_motions_dict.items();
-    const size_t sz= len(items);
-    if(sz>0)
+    if(d.has_key("ground_motions"))
       {
-	for(size_t i=0; i<sz; i++)
+	boost::python::dict ground_motions_dict= boost::python::extract<boost::python::dict>(d["ground_motions"]);
+	boost::python::list items= ground_motions_dict.items();
+	const size_t sz= len(items);
+	if(sz>0)
 	  {
-	    const std::string key= boost::python::extract<std::string>(items[i][0]);
-	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
-	    const int classTag= boost::python::extract<int>(itemDict["classTag"]);
-	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
-	    GroundMotion *newObject= dynamic_cast<GroundMotion *>(get_new_movable_object(className, classTag));
-	    if(newObject)
+	    for(size_t i=0; i<sz; i++)
 	      {
-		newObject->setPyDict(itemDict);
-		this->ground_motions[key]= newObject;
+		const std::string key= boost::python::extract<std::string>(items[i][0]);
+		const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
+		const int classTag= boost::python::extract<int>(itemDict["classTag"]);
+		const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+		GroundMotion *newObject= dynamic_cast<GroundMotion *>(get_new_movable_object(className, classTag));
+		if(newObject)
+		  {
+		    newObject->setPyDict(itemDict);
+		    this->ground_motions[key]= newObject;
+		  }
+		else
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << "; failed to receive object. Class mame: "
+			    << className << " class tag: " << classTag
+			    << Color::def << std::endl;
 	      }
-	    else
-	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-			<< "; failed to receive object. Class mame: "
-			<< className << " class tag: " << classTag
-			<< Color::def << std::endl;
-	  }
 	
+	  }
       }
-    this->lpatterns.setPyDict(boost::python::extract<boost::python::dict>(d["lpatterns"]));
-    this->tag_lp= boost::python::extract<int>(d["tag_lp"]);
-    this->combinations.setPyDict(boost::python::extract<boost::python::dict>(d["combinations"]));
+    if(d.has_key("lpatterns"))
+      this->lpatterns.setPyDict(boost::python::extract<boost::python::dict>(d["lpatterns"]));
+    if(d.has_key("tag_lp"))
+      this->tag_lp= boost::python::extract<int>(d["tag_lp"]);
+    if(d.has_key("combinations"))
+      this->combinations.setPyDict(boost::python::extract<boost::python::dict>(d["combinations"]));
   }
 
 //! @brief Sends object through the communicator argument.
