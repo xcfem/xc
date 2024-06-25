@@ -15,6 +15,7 @@ import vtk
 from postprocess.xcVtk.fields import field_base as fb
 from postprocess import extrapolate_elem_attr
 from postprocess import control_vars as cv
+from misc_utils import log_messages as lmsg
 
 class ScalarField(fb.FieldBase):
     '''Scalar field defined at nodes.
