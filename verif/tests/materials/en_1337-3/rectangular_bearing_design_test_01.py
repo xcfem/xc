@@ -29,8 +29,11 @@ class EN1337RectangularLaminatedBearing:
     :ivar n: number of elastomer layers.
     :ivar C: side cover.
     :ivar ted: edge cover.
+    :ivar G: nominal value of conventional shear modulus of elastomeric bearing.
+    :ivar gammaM: partial safety factor which value may be chosen in the 
+                  National Annex. The recommended value is γm = 1.00.
     '''
-    def __init__(self, a, b, tb, ti, ts, tso, Te, Tb, n, C, ted):
+    def __init__(self, a, b, tb, ti, ts, tso, Te, Tb, n, C, ted, G= 0.9e6, gammaM= 1.0):
         ''' Constructor.
 
         :param a: bearing length (see figure 2 of EN 1337-3:2005).
@@ -44,6 +47,10 @@ class EN1337RectangularLaminatedBearing:
         :param n: number of elastomer layers.
         :param C: side cover.
         :param ted: edge cover.
+        :param G: nominal value of conventional shear modulus of elastomeric 
+                  bearing (seel table 1 of EN 1337-3:2005).
+        :param gammaM: partial safety factor which value may be chosen in the 
+                       National Annex. The recommended value is γm = 1.00.
         '''
         self.a= a # bearing length (see figure 2 of EN 1337-3:2005).
         self.b= b # bearing width (see figure 2 of EN 1337-3:2005).
@@ -56,6 +63,9 @@ class EN1337RectangularLaminatedBearing:
         self.n= n # number of elastomer layers.
         self.C= C # side cover
         self.ted= ted # edge cover.
+        self.G= G # nominal value of conventional shear modulus of elastomeric 
+                  # bearing (seel table 1 of EN 1337-3:2005).
+        self.gammaM= gammaM
 
     def getNumberOfSteelLaminate(self):
         ''' Return the number of steel laminates.'''
@@ -104,15 +114,44 @@ class EN1337RectangularLaminatedBearing:
         aMinus2C= self.getEffectiveLength()
         bMinus2C= self.getEffectiveWidth()
         factor= 0.5*(aMinus2C*bMinus2C)/(aMinus2C+bMinus2C)
-        print('factor= ', factor)
-        print('ti= ', self.ted)
-        print('retval= ', factor/1.4/self.ted)
         return factor/(1.4*self.ted)
+
+    def getShapeFactor(self):
+        ''' Return the shape factor of the elastomer according to expression (3)
+            of clause  5.3.3.1 of EN 1337-3:2005.'''
+        return min(self.getShapeFactorS1(), self.getShapeFactorS2())
+
+    def getCompressiveStrain(self, vxd, vyd, Fzd):
+        ''' Return the value of the compressive strain due to the give vertical
+            design force according to expression (8) of clause 5.3.3.2 of 
+            EN 1337-3:2005.
+
+        :param vxd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "a" (length) of 
+                    the bearing due to all design load effects.
+        :param vyd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "b" (width) of the 
+                    bearing due to all design load effects.
+        :param Fzd: vertical design force.
+        '''
+        retval= 1.5*Fzd
+        Ar= self.getReducedEffectiveArea(vxd= vxd, vyd= vyd)
+        retval/= (self.G*Ar*self.getShapeFactor())
+        return retval
+
+    def getAllowableStrain(self):
+        ''' Return the allowable compressive strain according to expression (2)
+            cl. 5.3.3 of EN 1337-3:2005.
+        '''
+        return 7.0/self.gammaM
+    
         
     
 # Maximum displacements.
 vxd= 141.8e-3
 vyd= 33.5e-3
+# Loads.
+Fzd= 2746.8e3 # design vertical load.
 
 bearing= EN1337RectangularLaminatedBearing(a= 0.55, b= 0.5, tb= 0.172, ti= 0.011, ts= 2e-3, Te= 0.146, tso= 0.0, Tb= 0.172, n= 12, C= 5e-3, ted= 7e-3)
 
@@ -127,6 +166,10 @@ S1= bearing.getShapeFactorS1()
 ratio3= abs(S1-11.676963812886143)/11.676963812886143
 S2= bearing.getShapeFactorS2()
 ratio4= abs(S2-13.106796116504853)/13.106796116504853
+# Compressive strain
+eps_cd= bearing.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd)
+print(eps_cd)
+ratio5= abs(eps_cd-2.2146438317891426)/2.2146438317891426
 
 print('Effective area: Ae= '+'{:.3f}'.format(effectiveArea)+' m2')
 print(ratio1)
@@ -136,3 +179,5 @@ print('Shape factor considering inner layer: S1= '+'{:.2f}'.format(S1))
 print(ratio3)
 print('Shape factor considering outer layer: S2= '+'{:.2f}'.format(S2))
 print(ratio4)
+print('Compressive strain: eps_cd= '+'{:.2f}'.format(eps_cd))
+print(ratio5)
