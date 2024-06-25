@@ -1,3 +1,19 @@
+# -*- coding: utf-8 -*-
+''' Test of reinforced rectangular elastomeric bearing design accordint
+    to EN 1337-3:2005.
+
+    Data obtained from an analysis from Mageba.
+'''
+
+from __future__ import division
+from __future__ import print_function
+
+
+__author__= "Luis Claudio Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 class EN1337RectangularLaminatedBearing:
     ''' Reinforced rectangular elastomeric bearing according to EN 1337-3:2005.
@@ -73,10 +89,30 @@ class EN1337RectangularLaminatedBearing:
         retval= self.getEffectiveArea()
         retval*= (1-vxd/self.getEffectiveLength()-vyd/self.getEffectiveWidth())
         return retval
+
+    def getShapeFactorS1(self):
+        ''' Return the shape factor of the elastomer considering inner layer
+            according to clause  5.3.3.1 of EN 1337-3:2005 (expression (3)).'''
+        aMinus2C= self.getEffectiveLength()
+        bMinus2C= self.getEffectiveWidth()
+        factor= 0.5*(aMinus2C*bMinus2C)/(aMinus2C+bMinus2C)
+        return factor/self.ti
+        
+    def getShapeFactorS2(self):
+        ''' Return the shape factor of the elastomer considering outer layer
+            according to clause  5.3.3.1 of EN 1337-3:2005 (expression (3)).'''
+        aMinus2C= self.getEffectiveLength()
+        bMinus2C= self.getEffectiveWidth()
+        factor= 0.5*(aMinus2C*bMinus2C)/(aMinus2C+bMinus2C)
+        print('factor= ', factor)
+        print('ti= ', self.ted)
+        print('retval= ', factor/1.4/self.ted)
+        return factor/(1.4*self.ted)
+        
     
 # Maximum displacements.
-vxd= 43.4e-3
-vyd= 4.6e-3
+vxd= 141.8e-3
+vyd= 33.5e-3
 
 bearing= EN1337RectangularLaminatedBearing(a= 0.55, b= 0.5, tb= 0.172, ti= 0.011, ts= 2e-3, Te= 0.146, tso= 0.0, Tb= 0.172, n= 12, C= 5e-3, ted= 7e-3)
 
@@ -85,8 +121,18 @@ effectiveArea= bearing.getEffectiveArea()
 ratio1= abs(effectiveArea-264600.0e-6)/264600.0e-6
 # Compute reduced effective area.
 reducedArea= bearing.getReducedEffectiveArea(vxd= vxd, vyd= vyd)
-
+ratio2= abs(reducedArea-177027e-6)/177027e-6
+# Shape factor.
+S1= bearing.getShapeFactorS1()
+ratio3= abs(S1-11.676963812886143)/11.676963812886143
+S2= bearing.getShapeFactorS2()
+ratio4= abs(S2-13.106796116504853)/13.106796116504853
 
 print('Effective area: Ae= '+'{:.3f}'.format(effectiveArea)+' m2')
 print(ratio1)
 print('Reduced effective area: Ar= '+'{:.3f}'.format(reducedArea)+' m2')
+print(ratio2)
+print('Shape factor considering inner layer: S1= '+'{:.2f}'.format(S1))
+print(ratio3)
+print('Shape factor considering outer layer: S2= '+'{:.2f}'.format(S2))
+print(ratio4)
