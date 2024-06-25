@@ -2687,40 +2687,63 @@ def shearBetweenWebAndFlangesStrength(fck,gammac,hf,Asf,Sf,fyd):
 
 
 class BlockMember(object):
-    def __init__(self,a,b,a1,b1):
-      '''
-      Constructor.
+    ''' Checking of solid block members under concentrated loads, according
+        to clause 61 of EHE-08.
 
-      Parameters:
-        :param a: side length.
-        :param a1: length of the side of the loaded area parallel to a.
-        :param b: side length.
-        :param b1: length of the side of the loaded area parallel to b.
-      '''
-      self.a= a
-      self.a1= a1
-      self.b= b
-      self.b1= b1
+    :ivar a: side length (see figure 61.1.a of EHE-08).
+    :ivar a1: length of the side of the loaded area parallel to a (see figure 61.1.a of EHE-08).
+    :ivar b: side length (see figure 61.1.a of EHE-08).
+    :ivar b1: length of the side of the loaded area parallel to b (see figure 61.1.a of EHE-08).
+    :ivar concrete: concrete material.
+    :ivar steel: steel material.
+    '''
+    def __init__(self, a, b, a1, b1, concrete, steel):
+        '''
+        Constructor.
+
+        Parameters:
+          :param a: side length (see figure 61.1.a of EHE-08).
+          :param b: side length (see figure 61.1.a of EHE-08).
+          :param a1: length of the side of the loaded area parallel to a (see figure 61.1.a of EHE-08).
+          :param b1: length of the side of the loaded area parallel to b (see figure 61.1.a of EHE-08).
+          :param concrete: concrete material.
+          :param steel: reinforcing steel material.
+        '''
+        self.a= a
+        self.a1= a1
+        self.b= b
+        self.b1= b1
+        self.concrete= concrete
+        self.steel= steel
+      
     def getAc(self):
-      '''Return area of the block member.'''
-      return self.a*self.b
+        '''Return area of the block member.'''
+        return self.a*self.b
+  
     def getAc1(self):
-      '''Return block member loaded area.'''
-      return self.a1*self.b1
-    def getF3cd(self, fcd):
-      '''Return the value of f3cd.'''
-      return min(math.sqrt(self.getAc()/self.Ac1()),3.3)*fcd
-    def getNuConcentratedLoad(self, fcd):
-      '''
-      Return the the maximum compressive force that can be obtained in the
-      Ultimate Limit State of on a restricted surface (see figure 61.1.a on
-      page 302 of EHE-08), of area Ac1 , concentrically and homothetically 
-      situated on another area, Ac.
+        '''Return block member loaded area.'''
+        return self.a1*self.b1
+  
+    def getF3cd(self):
+        '''Return the value of f3cd according to clause 61.2 of EHE-08.'''
+        return min(math.sqrt(self.getAc()/self.getAc1()),3.3)*self.concrete.fcd()
+  
+    def getNuConcentratedLoad(self):
+        ''' Return the the maximum compressive force that can be obtained in the
+        Ultimate Limit State of on a restricted surface (see figure 61.1.a on
+        page 302 of EHE-08), of area Ac1 , concentrically and homothetically 
+        situated on another area, Ac.
 
-      Parameters:
-      :param fcd: design compressive strength of concrete.
-      '''
-      return self.getAc1()*self.getF3cd(fcd)
+        '''
+        return self.getAc1()*self.getF3cd()
+
+    def getConcreteEfficiency(self, Nd):
+        ''' Return the efficiency of the concrete strength.
+
+        :param Nd: concentrated load.
+        '''
+        return Nd/(-self.getNuConcentratedLoad())
+        
     def getUad(self, Nd):
         '''
         Return the design tension for the transverse reinforcement in
@@ -2730,15 +2753,16 @@ class BlockMember(object):
           :param Nd: concentrated load.
         '''
         return 0.25*((self.a-self.a1)/self.a)*Nd
-    def getReinforcementAreaAd(self, Nd, fyd):
+    
+    def getReinforcementAreaAd(self, Nd):
         '''
         Return the area of the reinforcement parallel to side a
         (see figure 61.1.a page 302 EHE-08)
 
           :param Nd: concentrated load.
-          :param fyd: steel yield strength.
         '''
-        return self.getUad(Nd)/min(fyd,400e6)
+        return self.getUad(Nd)/min(self.steel.fyd(), 400e6)
+    
     def getUbd(self, Nd):
         '''
         Return the design tension for the transverse reinforcement in
@@ -2748,7 +2772,7 @@ class BlockMember(object):
         '''
         return 0.25*((self.b-self.b1)/self.b)*Nd
     
-    def getReinforcementAreaBd(self, Nd, fyd):
+    def getReinforcementAreaBd(self, Nd):
         '''
         Return the area of the reinforcement parallel to side b
         (see figure 61.1.a page 302 EHE-08)
@@ -2756,7 +2780,7 @@ class BlockMember(object):
           :param Nd: concentrated load.
           :param fyd: steel yield strength.
         '''
-        return self.getUbd(Nd)/min(fyd,400e6)
+        return self.getUbd(Nd)/min(self.steel.fyd(), 400e6)
 
 
 class LongShearJoints(object):
