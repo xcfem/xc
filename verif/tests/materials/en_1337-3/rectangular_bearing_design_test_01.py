@@ -19,13 +19,13 @@ import math
 from misc_utils import log_messages as lmsg
 from materials.en_1337 import en_1337_3 as en
     
-# Maximum displacements.
+# Maximum displacements from the Mageba report (page 1).
 vxd= 141.8e-3 # m
 vyd= 33.5e-3 # m
-# Rotations.
+# Rotations from the Mageba report (page 1).
 alpha_ad= 0.0030 # rad
 alpha_bd= 0.0 # rad
-# Loads.
+# Loads from the Mageba report (page 1).
 Fzd= 2746.8e3 # design vertical load.
 Vmin= 1226.3e3 # minimum vertical load.
 Vperm= 1589.2e3 # design permanent load.
@@ -42,24 +42,24 @@ effectiveArea= bearing.getEffectiveArea()
 ratio1= abs(effectiveArea-264600.0e-6)/264600.0e-6
 # Compute reduced effective area.
 reducedArea= bearing.getReducedEffectiveArea(vxd= vxd, vyd= vyd)
-ratio2= abs(reducedArea-177027e-6)/177027e-6
+ratio2= abs(reducedArea-177027e-6)/177027e-6 # from the Mageba report page 1.
 # Shape factor.
 S1= bearing.getShapeFactorS1()
-ratio3= abs(S1-11.676963812886143)/11.676963812886143
+ratio3= abs(S1-11.676963812886143)/11.676963812886143 # 11.68 in the Mageba report (page 1).
 S2= bearing.getShapeFactorS2()
-ratio4= abs(S2-13.106796116504853)/13.106796116504853
+ratio4= abs(S2-13.106796116504853)/13.106796116504853 # 13.11 in the Mageba report (page 1).
 # Compute compressive strain
 eps_cd= bearing.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd)
-ratio5= abs(eps_cd-2.2146438317891426)/2.2146438317891426
+ratio5= abs(eps_cd-2.2146438317891426)/2.2146438317891426 # 2.21 in the Mageba report (page 1).
 # Compute shear strain.
 eps_qd= bearing.getShearStrain(vxd= vxd, vyd= vyd)
-ratio6= abs(eps_qd-0.997968710058754)/0.997968710058754
+ratio6= abs(eps_qd-0.997968710058754)/0.997968710058754 # 0.998 in the Mageba report (page 1).
 # Compute strain due to angular rotation.
 eps_alphad= bearing.getAngularRotationStrain(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-ratio7= abs(eps_alphad-0.24803719008264463)/0.24803719008264463
+ratio7= abs(eps_alphad-0.24803719008264463)/0.24803719008264463 # 0.25 in the Mageba report (page 1).
 # Compute total strain.
 eps_td= bearing.getTotalStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-ratio8= abs(eps_td-5.433696054797232)/5.433696054797232
+ratio8= abs(eps_td-5.433696054797232)/5.433696054797232 # 5.43 in the Mageba report (page 1).
 
 # Compute minimum thickness of steel laminate.
 thk= bearing.getStrictReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
@@ -71,24 +71,24 @@ ratio9+= abs(thkCF-1)
 # Check buckling stability.
 buckLimStress= bearing.getBucklingLimitStress()
 buckCF= bearing.getBucklingEfficiency(vxd= vxd, vyd= vyd, Fzd= Fzd)
-buckCFRef= 15.5/26.0 # from the Mageba report.
+buckCFRef= 15.5/26.0 # from the Mageba report (page 2).
 ratio10= abs(buckCF-buckCFRef)/buckCFRef
 
 # Compute total vertical deflection.
 Vzd= bearing.getTotalVerticalDeflection(vxd= vxd, vyd= vyd, Fzd= Fzd)
-VzdRef= 4.362070755417235e-3
+VzdRef= 4.362070755417235e-3 # 4.4 in the Mageba report (page 2).
 ratio11= abs(Vzd-VzdRef)/VzdRef
 
 # Compute rotational deflection.
 rotDef= bearing.getRotationalDeflection(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
 rotCF= bearing.getRotationalLimitEfficiency(vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-rotCFRef= 0.54/4.8 # from the Mageba report.
+rotCFRef= 0.54/4.8 # from the Mageba report (page 2).
 ratio12= abs(rotCF-rotCFRef)/rotCFRef
 
 # Friction check.
 sigma_perm= bearing.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Vperm)
 sgPermCF= bearing.getPermCompressiveStressEfficiency(vxd= vxd, vyd= vyd, Fzd_min_perm= Vperm)
-sgPermCFRef= 3/8.98 # from the Mageba report.
+sgPermCFRef= 3/8.98 # from the Mageba report (page 2).
 ratio13= abs(sgPermCF-sgPermCFRef)/sgPermCFRef
 frictionCoef= bearing.getFrictionCoefficient(vxd= vxd, vyd= vyd, Fzd_min= Vmin, concreteBedding= True)
 frictionForce= bearing.getFrictionForce(vxd= vxd, vyd= vyd, Fzd_min= Vmin, concreteBedding= True)
