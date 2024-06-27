@@ -65,6 +65,8 @@ ratio8= abs(eps_td-5.433696054797232)/5.433696054797232
 thk= bearing.getStrictReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
 minThk= bearing.getRequiredReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
 ratio9= abs(thk-1.8883532788898882e-3)/1.8883532788898882e-3
+thkCF= bearing.getPlateThicknessEfficiency(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
+ratio9+= abs(thkCF-1)
 
 # Check buckling stability.
 buckLimStress= bearing.getBucklingLimitStress()
