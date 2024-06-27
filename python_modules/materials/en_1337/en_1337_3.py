@@ -16,6 +16,19 @@ import os
 import math
 from misc_utils import log_messages as lmsg
 
+def get_shape_factor(bearing, effectiveThickness):
+    ''' Return the shape factor of the elastomer according to expression (3)
+        of EN 1337-3:2005 (expression (3)).
+
+    :param effectiveThickness: effective thickness of an individual elastomer layer in compression.
+    '''
+    aMinus2C= bearing.getEffectiveLength()
+    bMinus2C= bearing.getEffectiveWidth()
+    loadedArea= aMinus2C*bMinus2C
+    forceFreePerimeter= 2*(aMinus2C+bMinus2C)
+    return loadedArea/(forceFreePerimeter*effectiveThickness)
+    
+
 class RectangularLaminatedBearing:
     ''' Reinforced rectangular elastomeric bearing according to EN 1337-3:2005.
 
@@ -105,20 +118,15 @@ class RectangularLaminatedBearing:
         return retval
 
     def getShapeFactorS1(self):
-        ''' Return the shape factor of the elastomer considering inner layer
-            according to clause  5.3.3.1 of EN 1337-3:2005 (expression (3)).'''
-        aMinus2C= self.getEffectiveLength()
-        bMinus2C= self.getEffectiveWidth()
-        factor= 0.5*(aMinus2C*bMinus2C)/(aMinus2C+bMinus2C)
-        return factor/self.ti
+        ''' Return the shape factor of the elastomer considering inner layers
+            according to clause  5.3.3.1 of EN 1337-3:2005 (expression (3)).
+        '''
+        return get_shape_factor(bearing= self, effectiveThickness= self.ti)
         
     def getShapeFactorS2(self):
         ''' Return the shape factor of the elastomer considering outer layer
             according to clause  5.3.3.1 of EN 1337-3:2005 (expression (3)).'''
-        aMinus2C= self.getEffectiveLength()
-        bMinus2C= self.getEffectiveWidth()
-        factor= 0.5*(aMinus2C*bMinus2C)/(aMinus2C+bMinus2C)
-        return factor/(1.4*self.ted)
+        return get_shape_factor(bearing= self, effectiveThickness= 1.4*self.ted)
 
     def getShapeFactor(self, innerLayer= True):
         ''' Return the shape factor of the elastomer according to expression (3)
@@ -269,6 +277,22 @@ class RectangularLaminatedBearing:
         retval= self.getStrictReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= withHoles) 
         return max(retval, 2e-3)
 
+    def getPlateThicknessEfficiency(self, vxd, vyd, Fzd, withHoles= False):
+        ''' Return the efficiency of the plate thickness according to
+            expression (12) of clause 5.3.3.5 of EN 1337-3:2005.
+
+        :param vxd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "a" (length) of 
+                    the bearing due to all design load effects.
+        :param vyd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "b" (width) of the 
+                    bearing due to all design load effects.
+        :param Fzd: vertical design force.
+        :param withHoles: true if the reinforcing plate has holes in it.
+        '''
+        reqThk= self.getRequiredReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= withHoles)
+        return reqThk/self.ts
+
     def getBucklingLimitStress(self):
         ''' Return the limit stress to avoid buckling instability according to 
             expression (15) of clause 5.3.3.6 of EN 1337-3:2005.
@@ -308,8 +332,8 @@ class RectangularLaminatedBearing:
         '''
         Eb= 2000e6
         sigma= self.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd)
-        S1= self.getShapeFactorS1()
-        retval= 1/(5*self.G*S1**2)
+        S= self.getShapeFactorS1()
+        retval= 1/(5*self.G*S**2)
         retval+= 1/Eb
         retval*= self.n*sigma*self.ti
         return retval

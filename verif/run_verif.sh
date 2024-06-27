@@ -1312,6 +1312,9 @@ python tests/materials/aci/test_aci_anchor_comb_tension_shear.py
 echo "$BLEU" "    TM 5-809-3 tests." "$NORMAL"
 python tests/materials/tm5_809_3/test_equivalent_wall_thickness.py
 python tests/materials/tm5_809_3/tm_5_809_3_test01.py
+echo "$BLEU" "    EN 1337 tests." "$NORMAL"
+python tests/materials/en_1337-3/rectangular_bearing_design_test_01.py
+python tests/materials/en_1337-3/rectangular_bearing_design_test_02.py
 
 echo "$BLEU" "  Steel sections test." "$NORMAL"
 echo "$BLEU" "    steel shapes tests." "$NORMAL"
