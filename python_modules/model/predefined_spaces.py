@@ -603,16 +603,25 @@ class PredefinedSpace(object):
         lpName= self.getCurrentLoadPatternName()
         return self.getLoadPattern(lpName)
 
-    def newLoadCombination(self, name:str, loadCaseExpression:str):
+    def newLoadCombination(self, name:str, loadCaseExpression:str, force= False):
         '''Defines a new combination and add it to the domain.
 
            :param name: name of the load combination.
-           :param loadCaseExpression: expression that defines de load case as a
+           :param loadCaseExpression: expression that defines the load case as a
                                       combination of previously defined actions
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
+           :param force: if true, force redefinition of the load combination
+                         even if it exists.
         '''
         combs= self.getLoadHandler().getLoadCombinations
-        return combs.newLoadCombination(name,loadCaseExpression)
+        retval= None
+        if(force):
+            retval= combs.newLoadCombination(name,loadCaseExpression)
+        else:
+            retval= combs.getComb(name)
+            if(retval is None): # does not already exists. 
+                retval= combs.newLoadCombination(name,loadCaseExpression)
+        return retval
         
     def removeLoadCombination(self, name:str):
         ''' Remove the load combination with the given name. Returns true if
@@ -1123,15 +1132,17 @@ class PredefinedSpace(object):
         ''' Remove all the load cases from the domain.'''
         self.preprocessor.resetLoadCase()        
         
-    def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str):
+    def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str, force= False):
         '''Defines a new combination and add it to the domain.
 
            :param loadCaseName: name of the load pattern or combination.
            :param loadCaseExpression: expression that defines de load case as a
                                       combination of previously defined actions
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
+           :param force: if true, force redefinition of the load combination
+                         even if it exists.
         '''
-        lCase= self.newLoadCombination(loadCaseName,loadCaseExpression)
+        lCase= self.newLoadCombination(loadCaseName, loadCaseExpression, force= force)
         self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(lCase.name)
 
