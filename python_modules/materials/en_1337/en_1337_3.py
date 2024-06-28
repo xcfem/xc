@@ -395,12 +395,8 @@ class RectangularLaminatedBearing:
                     bearing due to all design load effects.
         :param Fzd_min_perm: minimum vertical design force under permanent loads.
         '''
-        sgLim= 3.0
-        retval= self.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd_min_perm)/1e6
-        if(retval>sgLim): # sigma > sgLim MPa => OK
-            retval= sgLim/retval
-        else: # sigma > sgLim MPa => OK
-            retval= retval/sgLim
+        sgLim= 3.0e6
+        retval= sgLim/self.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd_min_perm)
         return retval
 
     def getFrictionCoefficient(self, vxd, vyd, Fzd_min, concreteBedding= True):
