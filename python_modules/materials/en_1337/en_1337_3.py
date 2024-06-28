@@ -239,6 +239,23 @@ class RectangularLaminatedBearing:
         '''
         return 7.0/self.gammaM
 
+    def getTotalStrainEfficiency(self, vxd, vyd, Fzd, alpha_ad, alpha_bd):
+        ''' Return the value of the total strain according to expression (1)
+            of clause 5.3.3 of EN 1337-3:2005.
+
+        :param vxd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "a" (length) of 
+                    the bearing due to all design load effects.
+        :param vyd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "b" (width) of the 
+                    bearing due to all design load effects.
+        :param Fzd: vertical design force.
+        :param alpha_ad: angle of rotation across the width, a, of the bearing.
+        :param alpha_bd: angle of rotation (if any) across the length, b, of the bearing.
+        '''
+        totalStrain= self.getTotalStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd)
+        return totalStrain/self.getAllowableTotalStrain()
+
     def getStrictReinforcedPlateThickness(self, vxd, vyd, Fzd, withHoles= False):
         ''' Return the value of the minimum plate thickness according to
             expression (12) of clause 5.3.3.5 of EN 1337-3:2005.
