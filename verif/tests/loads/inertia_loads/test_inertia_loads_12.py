@@ -62,7 +62,7 @@ modelSpace.fixNode("000_000", n2.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 accel= xc.Vector([0,0,gravity])
 truss.createInertiaLoad(accel)
 # We add the load case to domain.
