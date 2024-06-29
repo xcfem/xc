@@ -119,3 +119,14 @@ if (abs(ratio1)<1e-7):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayIntForcDiag('N')
+# # oh.displayIntForcDiag('M')
+# # oh.displayLocalAxes()
