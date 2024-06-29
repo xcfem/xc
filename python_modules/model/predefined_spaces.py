@@ -548,18 +548,22 @@ class PredefinedSpace(object):
         '''
         time_series.plot_time_series(timeSeries= timeSeries, timeIncrement= timeIncrement, timeUnits= timeUnits)
         
-    def newLoadPattern(self, name:str, lpType= 'default'):
+    def newLoadPattern(self, name:str, lpType= 'default', setCurrent= False):
         ''' Creates a times series -modulation of the load
             in time-.
 
         :param name: name of the new time load pattern.
         :param lpType: type of the load pattern -default, uniform_excitation,
                        multi_support_pattern, pbowl_loading-.
+        :param setCurrent: if true set the newly created load pattern as the
+                           current load pattern.
         '''
         lPatterns= self.getLoadHandler().getLoadPatterns
         if(lPatterns.currentTimeSeries=='nil'):
             self.newTimeSeries()
         lp= lPatterns.newLoadPattern(lpType, name)
+        if(setCurrent):
+            self.setCurrentLoadPattern(lp.name)
         return lp
 
     def removeLoadPattern(self, name:str):
