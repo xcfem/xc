@@ -15,6 +15,7 @@ __email__= "l.pereztato@gmail.com"
 import os
 import math
 from misc_utils import log_messages as lmsg
+from materials import bridge_bearings
 
 def get_shape_factor(bearing, effectiveThickness):
     ''' Return the shape factor of the elastomer according to expression (3)
@@ -29,7 +30,7 @@ def get_shape_factor(bearing, effectiveThickness):
     return loadedArea/(forceFreePerimeter*effectiveThickness)
     
 
-class RectangularLaminatedBearing:
+class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
     ''' Reinforced rectangular elastomeric bearing according to EN 1337-3:2005.
 
     :ivar a: bearing length (see figure 2 of EN 1337-3:2005).
@@ -68,22 +69,22 @@ class RectangularLaminatedBearing:
                        National Annex. The recommended value is γm = 1.00.
         :param fy: yield stress of the reinforcing steel.
         '''
-        self.a= a # bearing width -shorter dimension of rectangular bearing- (see figure 2 of EN 1337-3:2005).
-        self.b= b # bearing length -longer dimension of a rectangular bearing- (see figure 2 of EN 1337-3:2005).
+        super().__init__(G= G, a= a, b= b, e= Te)
         self.tb= tb # total height (see figure 2 of EN 1337-3:2005).
         self.ti= ti # thickness of individual elastomer layer (see figure 2 of EN 1337-3:2005).
         self.ts= ts # thickness of steel reinforcing plate (see figure 2 of EN 1337-3:2005).
         self.tso= tso # thickness of outer steel reinforcing plate.
-        self.Te= Te # total elastomer thickness.
         self.Tb= Tb # total nominal thickness of bearing.
         self.n= n # number of elastomer layers.
         self.C= C # side cover
         self.ted= ted # edge cover.
-        self.G= G # nominal value of conventional shear modulus of elastomeric 
-                  # bearing (seel table 1 of EN 1337-3:2005).
         self.gammaM= gammaM
         self.fy= fy
 
+    def Te(self):
+        ''' Return the total elastomer thickness.'''
+        return self.e
+    
     def getNumberOfSteelLaminate(self):
         ''' Return the number of steel laminates.'''
         return n+1
@@ -190,7 +191,7 @@ class RectangularLaminatedBearing:
                     bearing due to all design load effects.
         '''
         vxyd= math.sqrt(vxd**2+vyd**2)
-        return vxyd/self.Te
+        return vxyd/self.Te()
 
     def getAllowableShearStrain(self):
         ''' Return the allowable shear strain according to the clause 5.3.3.3 of
@@ -316,7 +317,7 @@ class RectangularLaminatedBearing:
         '''
         S1= self.getShapeFactorS1()
         retval= 2*self.getEffectiveLength()*self.G*S1
-        retval/= (3*self.Te)
+        retval/= (3*self.Te())
         return retval
 
     def getBucklingEfficiency(self, vxd, vyd, Fzd):
@@ -441,3 +442,4 @@ class RectangularLaminatedBearing:
         '''
         frictionForce= self.getFrictionForce(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min, concreteBedding= concreteBedding)
         return math.sqrt(Fxd**2+Fyd**2)/frictionForce
+
