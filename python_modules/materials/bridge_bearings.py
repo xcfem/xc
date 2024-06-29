@@ -275,11 +275,22 @@ class ElastomericBearing(Bearing):
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
         :param iNod (int): node to support.
-        :param orientation: orientation of the new element.
+         :param orientation: (list) of two vectors [x,yp] used to orient 
+            the zero length element, where: 
+            x: are the vector components in global coordinates defining 
+               local x-axis (optional)
+            yp: vector components in global coordinates defining a  vector
+                 that lies in the local x-y plane of the element (optional).
+          If the optional orientation vector are not specified, the local
+          element axes coincide with the global axes. Otherwise, the local
+          z-axis is defined by the cross product between the vectors x 
+          and yp specified in the command line.
         '''
         nodeHandler= modelSpace.getNodeHandler()
         newNode= nodeHandler.duplicateNode(iNod) # new node.
         
+        if(len(self.materials)==0): # No materials defined yet.
+            self.defineMaterials(modelSpace.preprocessor)
         newElement= modelSpace.setBearingBetweenNodes(newNode.tag,iNod,self.materials, orientation)
         # Boundary conditions
         numDOFs= nodeHandler.numDOFs
