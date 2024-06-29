@@ -32,7 +32,7 @@ Vperm= 1589.2e3 # design permanent load.
 Fxd= 166.8e3 # design horizontal load along x.
 Fyd= 49.1e3 # design horizontal load along y.
 
-bearing= en.RectangularLaminatedBearing(a= 0.55, b= 0.5, tb= 0.172, ti= 0.011, ts= 2e-3, Te= 0.146, tso= 0.0, Tb= 0.172, n= 12, C= 5e-3, ted= 7e-3)
+bearing= en.RectangularLaminatedBearing(a= 0.5, b= 0.55, tb= 0.172, ti= 0.011, ts= 2e-3, Te= 0.146, tso= 0.0, Tb= 0.172, n= 12, C= 5e-3, ted= 7e-3)
 
 # Compute effective area.
 effectiveArea= bearing.getEffectiveArea()

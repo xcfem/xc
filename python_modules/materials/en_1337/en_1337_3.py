@@ -68,8 +68,8 @@ class RectangularLaminatedBearing:
                        National Annex. The recommended value is γm = 1.00.
         :param fy: yield stress of the reinforcing steel.
         '''
-        self.a= a # bearing length (see figure 2 of EN 1337-3:2005).
-        self.b= b # bearing width (see figure 2 of EN 1337-3:2005).
+        self.a= a # bearing width -shorter dimension of rectangular bearing- (see figure 2 of EN 1337-3:2005).
+        self.b= b # bearing length -longer dimension of a rectangular bearing- (see figure 2 of EN 1337-3:2005).
         self.tb= tb # total height (see figure 2 of EN 1337-3:2005).
         self.ti= ti # thickness of individual elastomer layer (see figure 2 of EN 1337-3:2005).
         self.ts= ts # thickness of steel reinforcing plate (see figure 2 of EN 1337-3:2005).
@@ -90,11 +90,11 @@ class RectangularLaminatedBearing:
 
     def getEffectiveLength(self):
         ''' Return the length of the steel plates.'''
-        return self.a-2*self.C
+        return self.b-2*self.C
     
     def getEffectiveWidth(self):
         ''' Return the width of the steel plates.'''
-        return self.b-2*self.C
+        return self.a-2*self.C
     
     def getEffectiveArea(self):
         ''' Return the effective area of the bearing (area of the steel 
