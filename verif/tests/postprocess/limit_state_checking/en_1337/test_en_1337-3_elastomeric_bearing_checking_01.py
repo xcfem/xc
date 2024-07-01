@@ -172,9 +172,9 @@ else:
 
 
 # # Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-oh.displayBlocks()
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
 # # oh.displayFEMesh()
 # # oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
 # oh.displayLocalAxes()
