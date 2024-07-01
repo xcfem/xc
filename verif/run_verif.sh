@@ -1644,6 +1644,8 @@ python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_04.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_05.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_06.py
 python tests/postprocess/limit_state_checking/ehe08/test_buckling_results_07.py
+echo "$BLEU" "    EN 1337 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/en_1337/test_en_1337-3_elastomeric_bearing_checking_01.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py
