@@ -49,7 +49,7 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
                   National Annex. The recommended value is γm = 1.00.
     :ivar fy: yield stress of the reinforcing steel.
     '''
-    def __init__(self, a, b, tb, ti, ts, tso, Te, Tb, n, C, ted, G= 0.9e6, gammaM= 1.0, fy= 235e6):
+    def __init__(self, a, b, tb, ti, ts, tso, Te, Tb, n, C, ted, G= 0.9e6, gammaM= 1.0, fy= 235e6, bearing_type= None):
         ''' Constructor.
 
         :param a: bearing length (see figure 2 of EN 1337-3:2005).
@@ -68,8 +68,9 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
         :param gammaM: partial safety factor which value may be chosen in the 
                        National Annex. The recommended value is γm = 1.00.
         :param fy: yield stress of the reinforcing steel.
+        :param bearing_type: string that identifies the type of the bearing in the problem.
         '''
-        super().__init__(G= G, a= a, b= b, e= Te)
+        super().__init__(G= G, a= a, b= b, e= Te, bearing_type= bearing_type)
         self.tb= tb # total height (see figure 2 of EN 1337-3:2005).
         self.ti= ti # thickness of individual elastomer layer (see figure 2 of EN 1337-3:2005).
         self.ts= ts # thickness of steel reinforcing plate (see figure 2 of EN 1337-3:2005).
@@ -84,6 +85,14 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
     def Te(self):
         ''' Return the total elastomer thickness.'''
         return self.e
+
+    def getTypeId(self):
+        ''' Return the string that identifies the bearing type.'''
+        if(self.bearing_type):
+            retval= self.bearing_type
+        else:
+            retval= str(self.a)+'x'+str(self.b)+'x'+str(self.tb)
+        return retval
     
     def getNumberOfSteelLaminate(self):
         ''' Return the number of steel laminates.'''
@@ -443,3 +452,23 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
         frictionForce= self.getFrictionForce(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min, concreteBedding= concreteBedding)
         return math.sqrt(Fxd**2+Fyd**2)/frictionForce
 
+    def putBetweenNodes(self, modelSpace, iNodA:int, iNodB:int, orientation= None):
+        ''' Puts the bearing between the nodes. The element must be oriented so that its local x axis is in the direction of the longitudinal axis of the bridge and its local y axis parallel to the transverse axis of the transverse axis of the bridge.
+
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        :param iNodA (int): first node identifier (tag).
+        :param iNodB (int): second node identifier (tag).
+        :param orientation: (list) of two vectors [x,yp] used to orient 
+                    the zero length element, where: 
+                    x: are the vector components in global coordinates defining 
+                        local x-axis, that must be parallel to the bridge longitudinal axis (optional)
+                    yp: vector components in global coordinates defining a  vector
+                          that lies in the local x-y plane of the element (optional).
+                          If the optional orientation vector are not specified, the local
+                          element axes coincide with the global axes
+        '''
+        newNode, newElement= super().putBetweenNodes(modelSpace= modelSpace, iNodA= iNodA, iNodB= iNodB, orientation= orientation)
+        newElement.setProp('bearing_type', getTypeId())
+        return newNode, newElement

@@ -54,18 +54,21 @@ class Bearing(object):
     :ivar id: object identifier (auto).
     '''
     _ids = count(0) #Object counter.
-    def __init__(self):
+    def __init__(self, bearing_type= None):
         ''' Constructor.
 
-        :param materials: material list (one material for each degree 
-                         of freedom).
-        :param materialHandler: XC material handler.
-        :param id: object identifier (auto).
+        :param bearing_type: string that identifies the type of the bearing in the problem.
         '''
         self.materials= list()
         self.materialHandler= None
         self.id= next(self._ids) # Object identifier.
+        self.bearing_type= bearing_type
         
+
+    def getTypeId(self):
+        ''' Return the string that identifies the bearing type.'''
+        return self.bearing_type
+    
     def getMaterial(self,i):
         ''' Returns the i-th uniaxial material that modelizes the response in the i-th direction.'''
         return self.materialHandler.getMaterial(self.materials[i])
@@ -143,15 +146,16 @@ class ElastomericBearing(Bearing):
     yBeta= [0.14,0.171,0.196,0.229,0.263,0.281,0.299,0.313,1/3.0]
     betaTable= scipy.interpolate.interp1d(xBeta,yBeta)
 
-    def __init__(self,G: float,a: float,b: float ,e: float):
+    def __init__(self,G: float,a: float,b: float ,e: float, bearing_type= None):
         '''Class constructor.
 
         :param G: elastomer shear modulus.
         :param a: width of the bearing (parallel to bridge longitudinal axis).
         :param b: length of the bearing (parallel to the bridge transverse axis)
         :param e: net thickness of the bearing (without steel plates).
+        :param bearing_type: string that identifies the type of the bearing in the problem.
         '''
-        super(ElastomericBearing,self).__init__()
+        super(ElastomericBearing,self).__init__(bearing_type= bearing_type)
         self.G= G
         self.a= a
         self.b= b
@@ -267,7 +271,9 @@ class ElastomericBearing(Bearing):
         '''
         if(len(self.materials)==0): # No materials defined yet.
             self.defineMaterials(modelSpace.preprocessor)
-        return modelSpace.setBearingBetweenNodes(iNodA,iNodB, self.materials, orientation)
+        newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB, self.materials, orientation)
+        newElement.setProp('bearing_type', self.getTypeId())
+        return newElement
 
     def putAsSupport(self,modelSpace, iNod:int , orientation= None):
         ''' Puts the bearing between the nodes.
@@ -292,6 +298,7 @@ class ElastomericBearing(Bearing):
         if(len(self.materials)==0): # No materials defined yet.
             self.defineMaterials(modelSpace.preprocessor)
         newElement= modelSpace.setBearingBetweenNodes(newNode.tag,iNod,self.materials, orientation)
+        newElement.setProp('bearing_type', self.getTypeId()) 
         # Boundary conditions
         numDOFs= nodeHandler.numDOFs
         for i in range(0,numDOFs):
@@ -321,7 +328,7 @@ class PTFEPotBearingMat(Bearing):
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
-    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e5,deltaFrict=20e-3,Fperp=None):
+    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e5,deltaFrict=20e-3,Fperp=None, bearing_type= None):
         '''Class constructor.
 
         :param d: pot diameter.
@@ -331,8 +338,9 @@ class PTFEPotBearingMat(Bearing):
         :param deltaFrict: Displacement when the friction force is reached (defaults to 20 mm).
         :parma Fperp: compressive force perperdicular to the pot surface. If Fperp is not given, the 
                       compressive stress is taken as 35Mpa
+        :param bearing_type: string that identifies the type of the bearing in the problem.
         '''
-        super(PTFEPotBearingMat,self).__init__()
+        super(PTFEPotBearingMat,self).__init__(bearing_type= bearing_type)
         self.d= d
         self.unidirX=unidirX
         self.unidirY=unidirY
@@ -410,8 +418,9 @@ class PotBearing(object):
                           that lies in the local x-y plane of the element. (local y-axis)
                     If the optional orientation vector are not specified, the local
                     element axes coincide with the global axes
+        :param bearing_type: string that identifies the type of the bearing in the problem.
          '''
-        self.potMat=potMat
+        self.potMat= potMat
         self.nodA=nodA
         self.nodB=nodB
         self.orientation=orientation
@@ -429,6 +438,7 @@ class PotBearing(object):
         if(defaultMaterial):
             elems.defaultMaterial= defaultMaterial
             self.potElem= elems.newElement("ZeroLength",xc.ID([self.nodA.tag,self.nodB.tag]))
+            self.potElem.setProp('bearing_type', self.potMat.getTypeId())
             self.potElem.clearMaterials()
             if(self.orientation): #Orient element.
                 self.potElem.setupVectors(self.orientation[0],self.orientation[1])
