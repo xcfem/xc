@@ -252,7 +252,11 @@ class ShellMaterialInternalForces:
         self.q23= q23
 
     def setFromAverageInShellElement(self,element,fConv= 1.0):
-        '''Extracts the average internal forces from the element.'''
+        '''Extracts the average internal forces from the element.
+
+        :param element: element to get the internal forces from.
+        :param fConv: conversion factor.
+        '''
         element.getResistingForce()
         physProp= element.physicalProperties
         self.n1= physProp.getMeanGeneralizedStressByName("n1")*fConv
@@ -263,6 +267,7 @@ class ShellMaterialInternalForces:
         self.m12= physProp.getMeanGeneralizedStressByName("m12")*fConv
         self.q13= physProp.getMeanGeneralizedStressByName("q13")*fConv
         self.q23= physProp.getMeanGeneralizedStressByName("q23")*fConv
+        # Change the internal forces reference system if needed.
         if(element.hasProp('theta')):
             theta= element.getProp('theta')
             self.transform(theta)
