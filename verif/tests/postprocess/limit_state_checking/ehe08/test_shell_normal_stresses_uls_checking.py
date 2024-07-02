@@ -29,7 +29,7 @@ rootLogger.setLevel(logging.ERROR)
 feProblem= xc.FEProblem()
 
 elementTags= [2524,2527]
-#Reinforced concrete sections on each element.
+# Reinforced concrete sections on each element.
 reinfConcreteSections= RC_material_distribution.RCMaterialDistribution()
 
 # Set-up material distribution and element dimensions.
@@ -63,7 +63,6 @@ deckSections.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_sim
 sections.append(deckSections)
 
 # # Display sections geometry
-# feProblem= xc.FEProblem()
 # preprocessor=  feProblem.getPreprocessor
 # deckSections.plot(preprocessor, matDiagType= 'k')
 
@@ -87,7 +86,7 @@ limitState= lsd.normalStressesResistance
 controller= EHE_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSections,listFile='N', calcMeanCF='Y', threeDim= True, controller= controller)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSections,listFile='N', calcMeanCF='Y', threeDim= False, controller= controller)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results.
