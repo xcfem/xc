@@ -267,9 +267,12 @@ class ShellMaterialInternalForces:
             theta= element.getProp('theta')
             self.transform(theta)
 
-    def transform(self,theta):
+    def transform(self, theta):
         '''Calculates the components for a reference system rotated 
-           the angle being passed as parameter.'''
+           the given angle.
+
+        :param theta: angle of the new reference system with the original one.
+        '''
         N= transformInternalForces([self.n1,self.n2,self.n12],theta)
         self.n1= N[0]; self.n2= N[1]; self.n12= N[2]
         M= transformInternalForces([self.m1,self.m2,self.m12],theta)
