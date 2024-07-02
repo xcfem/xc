@@ -35,8 +35,8 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 concrete= EHE_materials.HA30
 steel= EHE_materials.B500S
 ## Geometry
-b= 1.42
-h= 0.20
+b= 1.42 # width
+h= 0.20 # depth
 ## RC section.
 rcSection= def_simple_RC_section.RCRectangularSection(name='BeamSection', width= 1.0, depth= h, concrType= concrete, reinfSteelType= steel)
 dummySection= rcSection.defElasticMembranePlateSection(preprocessor) # Elastic membrane plate section.
