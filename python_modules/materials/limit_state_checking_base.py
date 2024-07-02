@@ -466,8 +466,17 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
             Ntmp= scc.getStressResultantComponent("N")
             MyTmp= scc.getStressResultantComponent("My")
             MzTmp= scc.getStressResultantComponent("Mz")
-            posEsf= geom.Pos3d(Ntmp,MyTmp,MzTmp)
             diagInt= e.getProp("diagInt")
+            diagDimension= diagInt.getDimension()
+            if(diagDimension==2):
+                posEsf= geom.Pos2d(Ntmp,MyTmp) # assume MzTmp is zero.
+                if(abs(MzTmp)>1e-3):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    warningMsg= className+'.'+methodName+' element: '+str(e.tag)+'; using a two-dimensional interaction with biaxial bending internal forces (Mz!=0) use a three-dimensional one instead.'
+                    lmsg.warning(warningMsg)
+            else:
+                posEsf= geom.Pos3d(Ntmp,MyTmp,MzTmp)                    
             CFtmp= diagInt.getCapacityFactor(posEsf)
             if(CFtmp>e.getProp(self.limitStateLabel).CF):
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
