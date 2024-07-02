@@ -110,7 +110,6 @@ class ElementSections(object):
         :param RCSect: reinforced concrete section to append.
         '''
         self.lstRCSects.append(RCSect)
-        return
 
     def find_section(self, sectionName):
         ''' Return the section whose name is the value passed as parameter or
@@ -120,6 +119,13 @@ class ElementSections(object):
         '''
         return next((sct for sct in self.lstRCSects if(sct.name==sectionName)), None)
 
+    def getSectionNames(self):
+        ''' Return the names of the secions in the container.'''
+        retval= list()
+        for sct in self.lstRCSects:
+            retval.append(sct.name)
+        return retval
+            
     def createSections(self, templateSections, forceCreation= False):
         '''create the fiber sections that represent the material to be used 
         for the checking on each integration point and/or each direction. These
@@ -392,7 +398,7 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
     :ivar dir2ShReinfZ: instance of class ShearReinforcement that represents
                         the Z shear reinforcement in section 2
     '''
-    def __init__(self,name= None,sectionDescr= None,concrType= None,reinfSteelType= None,depth= None,width=1.0):
+    def __init__(self,name= None, sectionDescr= None,concrType= None,reinfSteelType= None,depth= None,width=1.0):
         '''Constructor.
 
 
@@ -764,8 +770,7 @@ class ElementSectionMap(object):
     def __init__(self):
         ''' Constructor.'''
         self.elementSections= dict() # Store sections of each element.
-        self.elementDimension= dict() # Store dimension (1, 2 or 3) of each element.
-        
+        self.elementDimension= dict() # Store dimension (1, 2 or 3) of each element.        
     def __setitem__(self, index, data):
         self.elementSections[index]= data
           
@@ -787,11 +792,13 @@ class ElementSectionMap(object):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        for key in dct['element_sections']:
-            value= dct['element_sections'][key]
+        elementSections= dct['element_sections']
+        for key in elementSections:
+            value= elementSections[key]
             self.elementSections[int(key)]= value
-        for key in dct['element_dimension']:
-            value= dct['element_dimension'][key]
+        elementDimension= dct['element_dimension']
+        for key in elementDimension:
+            value= elementDimension[key]
             self.elementDimension[int(key)]= value
             
     @classmethod
@@ -826,14 +833,13 @@ class ElementSectionMap(object):
 
         :param tagElem: master element identifier.
         '''
-        if elemTag in self.elementDimension.keys():
+        if elemTag in self.elementDimension:
             return self.elementDimension[elemTag]
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+"; element: "+ str(elemTag) + " not found.")
-            
-        
+
     def assign(self, elemSet, setRCSects):
         '''Assigns the sections names to the elements of the set.
 
@@ -850,15 +856,18 @@ class ElementSectionMap(object):
 
         for e in elemSet:
             if(not e.hasProp(self.propName)):
-                self.elementSections[e.tag]= list()
-                self.elementDimension[e.tag]= e.getDimension
+                eTag= e.tag # element identifier.
+                # Element dimension.
+                self.elementDimension[eTag]= e.getDimension
+                # Element sections.
+                self.elementSections[eTag]= list()
                 for s in setRCSects.lstRCSects:
-                    self.elementSections[e.tag].append(s.name)
+                    self.elementSections[eTag].append(s.name)
                 e.setProp(self.propName, setRCSects.name)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+"; element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
+                lmsg.error(className+'.'+methodName+"; element: "+ str(eTag) + " has already a section ("+e.getProp(self.propName)+")\n")
         return retval # Return the number of "assigned" elements.
     
     def assignFromElementProperties(self, elemSet, sectionWrapperName):
