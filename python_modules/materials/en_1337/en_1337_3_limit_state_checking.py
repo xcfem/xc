@@ -133,10 +133,10 @@ def check_results_en_1337_3(analysisResults, bearingElements, bearingMatDict):
                 cf= results['sigma_perm_cf']
                 if(sigma_perm_cf>cf): # Update worst-case for the element.
                     sigma_perm= bearingMat.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd)
-                    sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm:':sigma_perm, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+                    sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm':sigma_perm, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
             else: # no data for this element yet.
                 sigma_perm= bearingMat.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd)
-                sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm:':sigma_perm, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+                sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm':sigma_perm, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
             # Check friction
             Fxd= elem_results['Fxd']
             Fyd= elem_results['Fyd']
@@ -197,14 +197,14 @@ def check_results_en_1337_3(analysisResults, bearingElements, bearingMatDict):
                     compressive_strain_outer= bearingMat.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
                     shear_strain= bearingMat.getShearStrain(vxd= vxd, vyd= vyd)
                     rotation_strain= bearingMat.getAngularRotationStrain(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-                    total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain:':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+                    total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
             else: # no data for this element yet.
                 total_strain= bearingMat.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd)
                 compressive_strain_inner= bearingMat.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= True)
                 compressive_strain_outer= bearingMat.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
                 shear_strain= bearingMat.getShearStrain(vxd= vxd, vyd= vyd)
                 rotation_strain= bearingMat.getAngularRotationStrain(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-                total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain:':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+                total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
             # Check minimum thickness of steel laminate.
             laminate_thickness_cf= bearingMat.getPlateThicknessEfficiency(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
             if(eTag in laminate_thickness_results):
@@ -212,10 +212,10 @@ def check_results_en_1337_3(analysisResults, bearingElements, bearingMatDict):
                 cf= results['laminate_thickness_cf']
                 if(laminate_thickness_cf>cf): # Update worst-case for the element.
                     req_laminate_thickness= bearingMat.getRequiredReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
-                    laminate_thickness_results[eTag]= {'laminate_thickness_cf':laminate_thickness_cf, 'req_laminate_thickness:':req_laminate_thickness, 'laminate_thickness':bearingMat.ts, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'with_holes':False, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+                    laminate_thickness_results[eTag]= {'laminate_thickness_cf':laminate_thickness_cf, 'req_laminate_thickness':req_laminate_thickness, 'laminate_thickness':bearingMat.ts, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'with_holes':False, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
             else: # no data for this element yet.
                 req_laminate_thickness= bearingMat.getRequiredReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
-                laminate_thickness_results[eTag]= {'laminate_thickness_cf':laminate_thickness_cf, 'req_laminate_thickness:':req_laminate_thickness, 'laminate_thickness':bearingMat.ts, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'with_holes':False, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+                laminate_thickness_results[eTag]= {'laminate_thickness_cf':laminate_thickness_cf, 'req_laminate_thickness':req_laminate_thickness, 'laminate_thickness':bearingMat.ts, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'with_holes':False, 'comb':lcName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
             # Check buckling stability of steel laminate.
             buckling_stability_cf= bearingMat.getBucklingEfficiency(vxd= vxd, vyd= vyd, Fzd= Fzd)
             if(eTag in buckling_stability_results):
