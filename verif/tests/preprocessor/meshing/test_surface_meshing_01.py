@@ -32,11 +32,6 @@ nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 # Materials definition
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
-
-
-
-# Material.
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
 # Problem geometry.
