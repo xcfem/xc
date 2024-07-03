@@ -1632,6 +1632,7 @@ python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_07.p
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_08.py
 echo "$BLEU" "      EHE limit state checking: normal stresses." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_shell_normal_stresses_uls_checking.py
+python tests/postprocess/limit_state_checking/ehe08/test_skewed_slab_reinforcement_01.py
 echo "$BLEU" "      EHE limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_01.py
 python tests/postprocess/limit_state_checking/ehe08/test_crack_control_sls_checking_EHE_02.py

@@ -12,3 +12,4 @@ The computed results were as follows:
 ## References.
 - [EHE](https://es.wikipedia.org/wiki/Instrucci%C3%B3n_Espa%C3%B1ola_del_Hormig%C3%B3n_Estructural)
 - [Cálculo civil](https://calculocivil.com/es/ehe08/fisura/calculo)
+- [Design of concrete slab elements in biaxial bending](https://www.researchgate.net/publication/304624036_DESIGN_OF_CONCRETE_SLAB_ELEMENTS_IN_BIAXIAL_BENDING)
