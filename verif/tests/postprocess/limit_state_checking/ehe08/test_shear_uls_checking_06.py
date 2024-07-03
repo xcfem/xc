@@ -112,10 +112,18 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 # Set environment for limit state data storage.
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
+
+## Set limit state to check.
+limitState= lsd.shearResistance
+### In 2/07/2024 the default value for woodArmerAlsoForAxialForces has been
+### changed to True because (it is safer and the user can set it to False if
+### needed). Here we set it to False to get the same results than before.
+limitState.woodArmerAlsoForAxialForces= False 
+
 ### Analyze combinations and save internal forces for all the components
 ### of the total set.
 xcTotalSet= preprocessor.getSets.getSet('total')
-lsd.shearResistance.analyzeLoadCombinations(combContainer,xcTotalSet) 
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:
@@ -193,8 +201,6 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
         super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 0, convergenceTestTol= 1e-3)
 
 # Checking shear stresses.
-## Limit state to check.
-limitState= lsd.shearResistance
 ## Build controller.
 controller= EHE_limit_state_checking.ShearController(limitStateLabel= limitState.label, solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.

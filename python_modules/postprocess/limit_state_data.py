@@ -124,7 +124,7 @@ class LimitStateData(object):
                                        bending moments.
     '''
     envConfig= None # configuration of XC environment variables.
-    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituations, woodArmerAlsoForAxialForces= False, cfg= None):
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituations, woodArmerAlsoForAxialForces= True, cfg= None):
         '''Limit state data constructor.
 
 

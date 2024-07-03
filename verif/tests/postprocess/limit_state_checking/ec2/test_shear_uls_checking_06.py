@@ -111,8 +111,12 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-### Set limit state.
+### Set limit state to check.
 limitState= lsd.shearResistance
+### In 2/07/2024 the default value for woodArmerAlsoForAxialForces has been
+### changed to True because (it is safer and the user can set it to False if
+### needed). Here we set it to False to get the same results than before.
+limitState.woodArmerAlsoForAxialForces= False 
 ### Save internal forces.
 limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
