@@ -205,7 +205,7 @@ class CrossSectionInternalForces:
     def __str__(self):
         return str(self.getDict())
 
-def transformInternalForces(iForces,theta):
+def transform_internal_forces(iForces,theta):
     '''Computes internal forces in a system rotated theta
        degrees with respect to the z(3) axis.'''
     cos2T= math.cos(2*theta)
@@ -278,11 +278,11 @@ class ShellMaterialInternalForces:
 
         :param theta: angle of the new reference system with the original one.
         '''
-        N= transformInternalForces([self.n1,self.n2,self.n12],theta)
+        N= transform_internal_forces([self.n1,self.n2,self.n12],theta)
         self.n1= N[0]; self.n2= N[1]; self.n12= N[2]
-        M= transformInternalForces([self.m1,self.m2,self.m12],theta)
+        M= transform_internal_forces([self.m1,self.m2,self.m12],theta)
         self.m1= M[0]; self.m2= M[1]; self.m12= M[2]
-        Q= transformInternalForces([self.q13,self.q23,0.0],theta)
+        Q= transform_internal_forces([self.q13,self.q23,0.0],theta)
         self.q13= Q[0]; self.q23= Q[1]
 
     def getDict(self):

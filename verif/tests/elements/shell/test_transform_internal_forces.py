@@ -17,7 +17,7 @@ n1= -11000
 n2= -3000
 n12= -4200
 
-NP= xc.Vector(internal_forces.transformInternalForces([n1,n2,n12],math.radians(41)))
+NP= xc.Vector(internal_forces.transform_internal_forces([n1,n2,n12],math.radians(41)))
 NPTeor= xc.Vector([-11715.8,-2284.18,3376.55])
 ratio= (NP-NPTeor).Norm()/NPTeor.Norm()
 
