@@ -217,9 +217,9 @@ class ElementSections(object):
                             corresponding to characteristic values of the 
                             material, if "d" use the design values one.
         '''
-        numSections= len(self.lstRCSects)
         for section in self.lstRCSects:
             section.pdfReport(graphicWidth= graphicWidth, showPDF= showPDF, keepPDF= keepPDF, preprocessor= preprocessor, matDiagType= matDiagType)
+
             
 class RawShellSections(ElementSections):
     '''This class is an specialization of ElemenSections for rectangulars
@@ -254,7 +254,7 @@ class RawShellSections(ElementSections):
         self.templateSections= templateSections
         
     def createSections(self):
-        '''create the fiber sections that represent the reinforced concrete
+        '''Create the fiber sections that represent the reinforced concrete
         fiber section to be used for the checking on each integration point 
         and/or each direction. These sections are also added to the attribute
        'lstRCSects' that contains the list of sections.
@@ -264,7 +264,7 @@ class RawShellSections(ElementSections):
             if(not name in self.alreadyDefinedSections): # new section.
                 self.append_section(templateSection)
                 self.alreadyDefinedSections.append(name)
-
+                
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the object contents.
 
@@ -486,6 +486,12 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
         else:
             retval= False
         return retval
+
+    def getCopy(self):
+        ''' Return a copy of this object.'''
+        retval= RCSlabBeamSection()
+        retval.setFromDict(self.getDict())
+        return retval
     
     def createSections(self):
         '''create the fiber sections of type 'RCRectangularSection' that 
@@ -498,7 +504,7 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
         templateSection2= self.getTemplateSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
         super(RCSlabBeamSection,self).createSections([templateSection1,templateSection2])
 
-    def getTemplateSection(self, posReb,negReb,YShReinf,ZShReinf):
+    def getTemplateSection(self, posReb, negReb, YShReinf, ZShReinf):
         ''' Return the template section to use with createSingleSection
             method.'''
         sect= def_simple_RC_section.RCRectangularSection(name= self.name, sectionDescr= self.sectionDescr, concrType= self.concrType, reinfSteelType= self.reinfSteelType, width= self.width, depth= self.depth)
