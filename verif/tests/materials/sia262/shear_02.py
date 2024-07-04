@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Home made test: check shear for very small sollicitations.
+''' Check shear verification for very small sollicitations. Home made test.'''
 
 from __future__ import print_function
 from __future__ import division
