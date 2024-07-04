@@ -505,7 +505,7 @@ class OutputHandler(object):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption= captionText,fileName= fileName)
         
-    def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
+    def displayIntForc(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText=None):
         '''displays the component of internal forces in the 
         set of entities as a scalar field (i.e. appropriated for 2D elements; 
         shells...).
@@ -549,6 +549,41 @@ class OutputHandler(object):
             displaySettings.cameraParameters= self.getCameraParameters()
             if not captionText: captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
             field.display(displaySettings=displaySettings,caption= captionText,fileName=fileName, defFScale=defFScale)
+
+    def displayElementProp(self, propName:str, setToDisplay= None, fileName= None, defFScale=0.0, rgMinMax= None, captionText=None):
+        '''displays the given property component of internal forces in the 
+        set of entities as a scalar field (i.e. appropriated for 2D elements; 
+        shells...).
+
+        :param propName: string that identifies the property to display.
+        :param setToDisplay: set of entities to be represented (defaults to all 
+             entities)
+        :param fileName: name of the file to plot the graphic. Defaults to None,
+             in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
+              of the field to be represented  (in units of calculation, 
+              not units of display). All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+        :param captionText: caption text. Defaults to None, in which case the 
+                            default caption text (property name + set name) is
+                            created.
+           '''
+        if(setToDisplay is None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        elSet= setToDisplay.elements
+        if(len(elSet)>0):
+            field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= 1.0, rgMinMax=rgMinMax)
+            displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+            displaySettings.cameraParameters= self.getCameraParameters()
+            if not captionText:
+                captionText= self.getCaptionText(propName, '', setToDisplay)
+            field.display(displaySettings=displaySettings,caption= captionText,fileName=fileName, defFScale=defFScale)            
             
     def displayLoadVectors(self, setToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Displays load vectors on the set argument.
