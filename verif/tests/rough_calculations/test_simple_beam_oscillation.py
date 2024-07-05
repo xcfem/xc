@@ -9,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import rough_calculations.ng_punching_shear
 import os
 import math
 from actions.railway_traffic import IAPF_rail_load_models as rm
