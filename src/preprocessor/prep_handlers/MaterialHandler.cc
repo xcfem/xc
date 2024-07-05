@@ -202,6 +202,8 @@
 #include "material/yieldSurface/plasticHardeningMaterial/MultiLinearKp.h"
 #include "material/yieldSurface/plasticHardeningMaterial/NullPlasticMaterial.h"
 
+#include "utility/utils/misc_utils/colormod.h"
+
 //! @brief Default constructor.
 XC::MaterialHandler::MaterialHandler(Preprocessor *owr)
   : PrepHandler(owr), tag_mat(0) {}
@@ -569,18 +571,19 @@ XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const
         if(materials.find(cod_mat)!=materials.end()) //Material exists.
           {
 	    if(getVerbosityLevel()> 1)
-	      std::clog << getClassName() << "::" << __FUNCTION__
+	      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	                << "; warning material: '"
-                        << cod_mat << "' redefined." << std::endl;
+                        << cod_mat << "' redefined."
+			<< Color::def << std::endl;
             delete materials[cod_mat];
           }
         materials[cod_mat]= retval;
         tag_mat++;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; material type: '" << mat_type << "' not found."
-	        << std::endl;
+	        << Color::def << std::endl;
     return retval;
   }
 
@@ -590,9 +593,9 @@ XC::SectionGeometry *XC::MaterialHandler::newSectionGeometry(const std::string &
     XC::SectionGeometry *retval= nullptr;
     if(sections_geometry.find(cod)!=sections_geometry.end()) //Section geometry already exists.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; warning! section: '"
-                  << cod << "' already exists. "<< '.' << std::endl;
+                  << cod << "' already exists. "<< '.' << Color::def << std::endl;
         retval= sections_geometry[cod];
        }
     else
@@ -610,9 +613,9 @@ XC::InteractionDiagram *XC::MaterialHandler::newInteractionDiagram(const std::st
     InteractionDiagram *retval= nullptr;
     if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagrams exists.
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING the interaction diagram named: '"
-                   << cod_diag << "' already exists. " << std::endl;
+                   << cod_diag << "' already exists. " << Color::def << std::endl;
          retval= interaction_diagrams[cod_diag];
       }
     else
@@ -629,9 +632,9 @@ XC::InteractionDiagram2d *XC::MaterialHandler::new2DInteractionDiagram(const std
     InteractionDiagram2d *retval= nullptr;
     if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram already exists.
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING interaction diagram named: '"
-                   << cod_diag << "' already exists. " << std::endl;
+                   << cod_diag << "' already exists. " << Color::def << std::endl;
          retval= interaction_diagrams2D[cod_diag];
       }
     else
@@ -655,8 +658,10 @@ XC::InteractionDiagram *XC::MaterialHandler::calcInteractionDiagram(const std::s
             const std::string cod_diag= "diagInt"+cod_scc;
             if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagram exists.
               {
-	        std::clog << "MaterialHandler::calcInteractionDiagram; ¡ojo! se redefine el interaction diagram named: '"
-                          << cod_diag << "'." << std::endl;
+	        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+			  << "; warning! redefining interaction diagram named: '"
+                          << cod_diag << "'."
+			  << Color::def << std::endl;
                 delete interaction_diagrams[cod_diag];
               }
             else
@@ -666,12 +671,15 @@ XC::InteractionDiagram *XC::MaterialHandler::calcInteractionDiagram(const std::s
               }
           }
         else
-          std::cerr << "Material: '" << cod_scc
-                    << "' is not a fiber section material." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; material: '" << cod_scc
+                    << "' is not a fiber section material." << Color::def << std::endl;
       }
     else
-      std::cerr << "Material: '"
-                      << cod_scc << "' not found. Ignored.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; material: '"
+		<< cod_scc << "' not found. Ignored."
+		<< Color::def << std::endl;
     return diagI;     
   }
 
@@ -688,9 +696,9 @@ XC::InteractionDiagram2d *XC::MaterialHandler::calcInteractionDiagramNMy(const s
             const std::string cod_diag= "diagIntNMy"+cod_scc;
             if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram exists.
               {
-	        std::clog << getClassName() << "::" << __FUNCTION__
+	        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		          << "; ¡warning! interaction diagram: '"
-                          << cod_diag << "' redefined." << std::endl;
+                          << cod_diag << "' redefined." << Color::def << std::endl;
                 delete interaction_diagrams2D[cod_diag];
               }
             else
@@ -700,12 +708,16 @@ XC::InteractionDiagram2d *XC::MaterialHandler::calcInteractionDiagramNMy(const s
               }
           }
         else
-          std::cerr << "Material: '" << cod_scc
-                    << "' is not a fiber section material." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; material: '" << cod_scc
+                    << "' is not a fiber section material."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << "Material : '"
-                      << cod_scc << "' not found. Ignored.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; material : '" << cod_scc
+		<< "' not found. Ignored."
+		<< Color::def << std::endl;
     return diagI;     
   }
 
@@ -722,8 +734,11 @@ XC::InteractionDiagram2d *XC::MaterialHandler::calcInteractionDiagramNMz(const s
             const std::string cod_diag= "diagIntNMz"+cod_scc;
             if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram exists.
               {
-	        std::clog << "MaterialHandler::calcInteractionDiagramNMz; ¡ojo! se redefine el interaction diagram named: '"
-                          << cod_diag << "'." << std::endl;
+	        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+			  << ";  warning! interaction diagram : '"
+                          << cod_diag
+			  << "' is being redefined."
+			  << Color::def << std::endl;
                 delete interaction_diagrams2D[cod_diag];
               }
             else
@@ -733,12 +748,16 @@ XC::InteractionDiagram2d *XC::MaterialHandler::calcInteractionDiagramNMz(const s
               }
           }
         else
-          std::cerr << "Material: '" << cod_scc
-                    << "' is not a fiber section material." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; material: '" << cod_scc
+                    << "' is not a fiber section material."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << "Material : '"
-                      << cod_scc << "' not found. Ignored.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; material: '"
+		<< cod_scc << "' not found. Ignored."
+		<< Color::def << std::endl;
     return diagI;     
   }
 

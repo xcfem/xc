@@ -48,6 +48,7 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::FEM_ObjectBroker XC::FEProblem::theBroker;
 XC::Domain *XC::FEProblem::theActiveDomain= nullptr;
@@ -78,14 +79,17 @@ XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const s
       dataBase= new PyDictDatastore(name, preprocessor, theBroker);
     else
       {  
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING No database type exists "
 		  << "for database of type:" << type
-		  << "valid database type File\n";
+		  << "valid database type File"
+	          << Color::def << std::endl;
       }
     if(!dataBase)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ran out of memory - database File " << name << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ran out of memory - database File "
+		<< name
+		<< Color::def << std::endl;
     return dataBase; 
   }
 
@@ -119,14 +123,17 @@ void XC::FEProblem::setPyDict(const boost::python::dict &d)
     const size_t sz= len(items);
     if(sz>0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; reading of output handlers not implemented yet."
-	          << std::endl;
+	          << Color::def << std::endl;
 	for(size_t i=0; i<sz; i++)
 	  {
 	    const std::string key= boost::python::extract<std::string>(items[i][0]);
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
-	    std::cerr << " ouput handler: " << key << " ignored." << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " ouput handler: " << key
+		      << " ignored."
+		      << Color::def << std::endl;
 	  }
       }
     preprocessor.setPyDict(boost::python::extract<boost::python::dict>(d["preprocessor"]));

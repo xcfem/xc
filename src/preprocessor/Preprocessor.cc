@@ -35,6 +35,7 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "boost/lexical_cast.hpp"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 #include "utility/matrix/ID.h"
@@ -52,15 +53,17 @@ XC::Preprocessor::Preprocessor(const Preprocessor &other)
     nodeHandler(this), elementHandler(this), loadHandler(this), constraintHandler(this),
     mbt(this),sets(this)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; this object must no be copied." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; this object must no be copied."
+	      << Color::def << std::endl;
   }
 
 //! @brief Assignment operator (prohibited).
 XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &other)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; can't assign a preprocessor object." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; can't assign a preprocessor object."
+	      << Color::def << std::endl;
     return *this;
   }
 
@@ -149,9 +152,9 @@ void XC::Preprocessor::resetLoadCase(void)
     if(domain)
       domain->resetLoadCase();
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; domain not defined (null ptr)."
-                << std::endl;
+                << Color::def << std::endl;
   }
 
 
@@ -233,8 +236,9 @@ int XC::Preprocessor::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data"
+	          << Color::def << std::endl;
     return res;
   }
 
@@ -246,15 +250,17 @@ int XC::Preprocessor::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	          << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+	          << Color::def << std::endl;
       }
     return res;
   }
@@ -286,9 +292,10 @@ void XC::Preprocessor::setPyDict(const boost::python::dict &d)
 	if(domain)
 	  domain->setPyDict(boost::python::extract<boost::python::dict>(d["domain"]));
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; ERROR; domain creation from Python dictionary"
-	            << " not implemented yet." << std::endl;
+	            << " not implemented yet."
+		    << Color::def << std::endl;
       }
     transf.setPyDict(boost::python::extract<boost::python::dict>(d["transf_coo_handler"]));
     beamIntegrators.setPyDict(boost::python::extract<boost::python::dict>(d["beam_integrators"]));

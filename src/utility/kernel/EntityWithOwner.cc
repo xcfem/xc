@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <cxxabi.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 // Static variables.
 int EntityWithOwner::verbosity= 1;
@@ -33,8 +34,9 @@ EntityWithOwner::EntityWithOwner(EntityWithOwner *owr)
   : owner(owr)
   {
     if(this == owner)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; ¡ojo!, object is owner of itself." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; warning!, object is owner of itself."
+		<< Color::def << std::endl;
   }
 
 //! @brief Copy constructor
@@ -42,8 +44,9 @@ EntityWithOwner::EntityWithOwner(const EntityWithOwner &other)
   : owner(other.owner)
   {
     if(this == owner)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; ¡ojo!, object is owner of itself." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; warning!, object is owner of itself."
+		<< Color::def << std::endl;
   }
 
 //! @brief Assignment operator.
@@ -52,10 +55,11 @@ EntityWithOwner &EntityWithOwner::operator=(const EntityWithOwner &other)
     owner= other.owner;
     if(this == owner)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ¡ojo!, objeto of class: '"
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; warning!, object of class: '"
 		  << getClassName() 
-                  << "', owns itself." << std::endl;
+                  << "', owns itself."
+		  << Color::def << std::endl;
         owner= nullptr;
       }
     return *this;
@@ -122,9 +126,9 @@ void EntityWithOwner::setPyDict(const boost::python::dict &d)
     // const size_t ownerAddr= boost::python::extract<size_t>(d["ownerAddress"]);
     // //XXX we need a mechanism to restore the owner from its address.
     // if(ownerAddr!=0)
-    //   std::cerr << getClassName() << "::" << __FUNCTION__
+    //   std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
     // 	        << "; mechanism to restore the owner from its address"
     // 	        << " not implemented yet."
-    // 	        << std::endl;
+    // 	        << Color::def << std::endl;
   }
 
