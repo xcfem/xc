@@ -3,6 +3,7 @@
     allows to create a deep copy of an existing object and then modify it 
     without affecting original one (see https://docs.python.org/3/library/copy.html for an explanation about copy operations in Python).'''
 
+
 from __future__ import print_function
 from __future__ import division
 
@@ -37,30 +38,48 @@ testRCSection.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_si
 testRCSection.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= testLongitudinalRebarsDiam, rebarsSpacing= testLongitudinalRebarsSpacing, nominalCover= testNominalBottomCover+testTransverseRebarsDiam)])
 
 shearReinforcedRCSection= testRCSection.getCopy()
-equalBefore= (shearReinforcedRCSection==testRCSection)
+shearReinforcedRCSection.rename('shearReinforcedRCSection')
 
 ### Shear reinforcement.
 shReinfSpacing= 0.2
 shearReinforcedRCSection.dir2ShReinfY= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShReinfBranches= 2, areaShReinfBranch= math.pi*(12e-3)**2/4.,shReinfSpacing= shReinfSpacing, angAlphaShReinf= math.pi/2.0)
-equalAfter= (shearReinforcedRCSection==testRCSection)
 
-'''
-print(equalBefore)
-print(equalAfter)
-'''
+
+import xc
+problem=xc.FEProblem()
+preprocessor=problem.getPreprocessor
+testRCSection.defRCSections(preprocessor= preprocessor)
+shearReinforcedRCSection.defRCSections(preprocessor= preprocessor)
+
+# Check that the shearReinforcedRCSection is modified without affecting the
+# testRCSection object; in other words that the reinforcement definition of
+# both objects are not pointing to the same object.
+
+numBranchesA= list()
+numBranchesB= list()
+for rcsA, rcsB in zip(testRCSection.lstRCSects, shearReinforcedRCSection.lstRCSects):
+    numBranchesA.append(rcsA.shReinfY.nShReinfBranches)
+    numBranchesB.append(rcsB.shReinfY.nShReinfBranches)
+
+error= 0    
+refValues= [0, 0, 0, 2]
+for value, refValue in zip(numBranchesA+numBranchesB, refValues):
+    error+= (value-refValue)
+
+    
+# testRCSection.pdfReport(showPDF= True, keepPDF= False)
+# shearReinforcedRCSection.pdfReport(showPDF= True, keepPDF= False)
+# print('shearReinforcedRCSection.name= '+str(shearReinforcedRCSection.name))
+# print(numBranchesA)
+# print(numBranchesB)
+# print(error)
+
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (equalBefore and not equalAfter):
+if (error==0):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Matplotlib output
-# import xc
-# problem=xc.FEProblem()
-# preprocessor=problem.getPreprocessor
-# testRCSection.createSections()
-# testRCSection.plot(preprocessor= preprocessor)
-    

@@ -1191,6 +1191,7 @@ python tests/materials/concrete_shapes/test_reinf_layers_01.py
 python tests/materials/concrete_shapes/test_rc_section_01.py
 python tests/materials/concrete_shapes/test_rc_section_02.py
 python tests/materials/concrete_shapes/test_rc_slab_beam_section_copy_01.py
+python tests/materials/concrete_shapes/test_rc_slab_beam_section_copy_02.py
 python tests/materials/concrete_shapes/test_reinforcement_placement_01.py
 python tests/materials/concrete_shapes/test_reinforcement_placement_02.py
 python tests/materials/concrete_shapes/test_reinforcement_placement_03.py

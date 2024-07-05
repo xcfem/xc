@@ -45,7 +45,7 @@ class ElementSections(object):
                       lstRCSects[4]= integration point 3, direction 1
                       lstRCSects[5]= integration point 3, direction 2                      
     ''' 
-    def __init__(self,name,directions= [1, 2], gaussPoints= [1]):
+    def __init__(self, name, directions= [1, 2], gaussPoints= [1]):
         '''Constructor.
 
         :param name: name given to the list of reinforced concrete sections
@@ -103,7 +103,12 @@ class ElementSections(object):
         else:
             retval= False
         return retval
-    
+
+    def rename(self, newName):
+        ''' Change the object name.'''
+        self.name= newName
+        self.lstRCSects= list() # remove any old defined section.
+        
     def append_section(self, RCSect):
         ''' Append the section argument to the container.
 
@@ -179,6 +184,22 @@ class ElementSections(object):
             sect.name= name
             sect.sectionDescr= description
             self.append_section(sect)
+            
+    def defRCSections(self, preprocessor, matDiagType= 'k'):
+        ''' Definition of XC reinforced concrete sections.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+        '''
+        if(len(self.lstRCSects)>0):
+            for section in self.lstRCSects:
+                section.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "; no section representation for section: '"+self.name+"'. Can't create report. Have you called createSections method?"
+            lmsg.error(className+'.'+methodName+errMsg)
 
     def plot(self, preprocessor, matDiagType= 'k'):
         ''' Get a drawing of the sections using matplotlib.
@@ -217,8 +238,15 @@ class ElementSections(object):
                             corresponding to characteristic values of the 
                             material, if "d" use the design values one.
         '''
-        for section in self.lstRCSects:
-            section.pdfReport(graphicWidth= graphicWidth, showPDF= showPDF, keepPDF= keepPDF, preprocessor= preprocessor, matDiagType= matDiagType)
+        if(len(self.lstRCSects)>0):
+            for section in self.lstRCSects:
+                section.pdfReport(graphicWidth= graphicWidth, showPDF= showPDF, keepPDF= keepPDF, preprocessor= preprocessor, matDiagType= matDiagType)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "; no section representation for section: '"+self.name+"'. Can't create report. Have you called defRCSection (or defRCSection2d) method?"
+            lmsg.error(className+'.'+methodName+errMsg)
+                
 
             
 class RawShellSections(ElementSections):
@@ -253,6 +281,20 @@ class RawShellSections(ElementSections):
         super(RawShellSections,self).__init__(name, directions, gaussPoints)
         self.templateSections= templateSections
         
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super().getDict()
+        retval['templateSections']= self.templateSections
+        return retval
+    
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super().setFromDict(dct)
+        self.templateSections= dct['templateSections']
+
     def createSections(self):
         '''Create the fiber sections that represent the reinforced concrete
         fiber section to be used for the checking on each integration point 
@@ -265,6 +307,17 @@ class RawShellSections(ElementSections):
                 self.append_section(templateSection)
                 self.alreadyDefinedSections.append(name)
                 
+    def defRCSections(self, preprocessor, matDiagType= 'k'):
+        ''' Definition of XC reinforced concrete sections.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+        '''
+        if(len(self.lstRCSects)==0): # sections not yet created.
+            self.createSections()
+        super().defRCSections(preprocessor= preprocessor, matDiagType= matDiagType)
+        
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the object contents.
 
@@ -503,7 +556,17 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
         templateSection1= self.getTemplateSection(posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
         templateSection2= self.getTemplateSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
         super(RCSlabBeamSection,self).createSections([templateSection1,templateSection2])
+        
+    def defRCSections(self, preprocessor, matDiagType= 'k'):
+        ''' Definition of XC reinforced concrete sections.
 
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+        '''
+        if(len(self.lstRCSects)==0): # sections not yet created.
+            self.createSections()
+        super().defRCSections(preprocessor= preprocessor, matDiagType= matDiagType)
     def getTemplateSection(self, posReb, negReb, YShReinf, ZShReinf):
         ''' Return the template section to use with createSingleSection
             method.'''
@@ -750,6 +813,17 @@ class RCMemberSection(ElementSections):
         that contains the list of sections.
         '''
         super(RCMemberSection,self).createSections(self.templateSections)
+        
+    def defRCSections(self, preprocessor, matDiagType= 'k'):
+        ''' Definition of XC reinforced concrete sections.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+        '''
+        if(len(self.lstRCSects)==0): # sections not yet created.
+            self.createSections()
+        super().defRCSections(preprocessor= preprocessor, matDiagType= matDiagType)
         
 def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
     '''add to each element of the set the
