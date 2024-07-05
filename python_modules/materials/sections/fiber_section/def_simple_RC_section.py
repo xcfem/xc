@@ -43,7 +43,7 @@ class ShearReinforcement(object):
     :ivar angThetaConcrStruts: angle between the concrete's compression struts 
                              and the axis of the member expressed in radians.
     '''
-    def __init__(self, familyName= None,nShReinfBranches= 0.0, areaShReinfBranch= 0.0, shReinfSpacing= 0.2, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0):
+    def __init__(self, familyName= None,nShReinfBranches= 0, areaShReinfBranch= 0.0, shReinfSpacing= 0.2, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0):
         '''
         :param familyName: name identifying the family of shear reinforcing bars.
         :param nShReinfBranches:  number of effective branches. 
