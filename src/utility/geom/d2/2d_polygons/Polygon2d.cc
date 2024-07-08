@@ -30,13 +30,17 @@
 #include "utility/geom/d2/BND2d.h"
 
 #include <CGAL/Boolean_set_operations_2.h>
-#include <boost/any.hpp>
 #include "mark_bayazit.h"
 
 #include "utility/geom/center_of_mass.h"
 #include "utility/geom/trf/Translation2d.h"
 #include "utility/geom/lists/utils_list_pos2d.h"
 #include "utility/geom/pos_vec/Pos2dList.h"
+
+// Boost geometry.
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
 
 Pos2d at(const Polygon2d &p, int i)
   {
@@ -62,7 +66,7 @@ Polygon2d::Polygon2d(const GeomObj::list_Pos2d &lv)
 //! @brief Constructor.
 Polygon2d::Polygon2d(const Polyline2d &p)
   {
-    //XXX Falla si la linea se interseca a sí misma.
+    //XXX Fails if the line self-intersects.
     for(Polyline2d::const_iterator i= p.begin(); i!=p.end(); i++)
       push_back(*i);
   }
@@ -95,9 +99,8 @@ Polygon2d::Polygon2d(const std::list<Polygon2d> &lp)
 GeomObj *Polygon2d::getCopy(void) const
   { return new Polygon2d(*this); }
 
-//! @brief Return a polygon parallel to this one at the distance
-//! being passed as parameter. The new polygon will be exterior
-//! if the distance is positive.
+//! @brief Return a polygon parallel to this one at the given distance.
+//! The new polygon will be exterior if the distance is positive.
 Polygon2d Polygon2d::offset(const GEOM_FT &d) const
   {
     Polygon2d retval;
@@ -122,6 +125,70 @@ Polygon2d Polygon2d::offset(const GEOM_FT &d) const
 	else
 	  retval.cgpol= *offset_polygons[0];
       }
+    return retval;
+  }
+//! @brief Returns the buffer (a polygon being the spatial point set
+//! collection within a specified maximum distance from this polygon) of this
+//! polygon. 
+Polygon2d Polygon2d::buffer(const GEOM_FT &buffer_distance) const
+  {
+    typedef boost::geometry::model::d2::point_xy<GEOM_FT> point_xy;
+    typedef boost::geometry::model::polygon<point_xy> polygon_type;
+    
+    const GeomObj::list_Pos2d vertexList= this->getVertexList();
+    // Store boost points in vector.
+    std::vector< point_xy > pointList;
+    GeomObj::list_Pos2d::const_iterator firstPointIter= vertexList.begin();
+    for(GeomObj::list_Pos2d::const_iterator i= firstPointIter; i!= vertexList.end(); i++)
+      {
+	const Pos2d &p= (*i);
+	pointList.push_back(point_xy(p.x(),p.y()));
+      }
+    // Close the polygon.
+    const Pos2d &firstPoint= *firstPointIter;
+    pointList.push_back(point_xy(firstPoint.x(), firstPoint.y()));
+    
+    // create Boost polygon
+    polygon_type poly;
+    // assign points to Boost polygon
+    boost::geometry::assign_points(poly, pointList);
+    
+    // Declare output
+    boost::geometry::model::multi_polygon<polygon_type> result;
+    // Declare strategies
+    const int points_per_circle = 36;
+    boost::geometry::strategy::buffer::distance_symmetric<GEOM_FT> distance_strategy(buffer_distance);
+    boost::geometry::strategy::buffer::join_round join_strategy(points_per_circle);
+    boost::geometry::strategy::buffer::end_round end_strategy(points_per_circle);
+    boost::geometry::strategy::buffer::point_circle circle_strategy(points_per_circle);
+    boost::geometry::strategy::buffer::side_straight side_strategy;
+    // Create the buffer of a polygon
+    boost::geometry::buffer(poly, result,
+                distance_strategy, side_strategy,
+                join_strategy, end_strategy, circle_strategy);
+    // Extract results.
+    Polygon2d retval;
+    const size_t numPolygons= result.size();
+    if(numPolygons>0)
+      {
+	if(numPolygons>1)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; we get more than a polygon. Only the first one will be returned."
+		    << std::endl;
+	const polygon_type &polygon_result= result[0];
+    
+	//getting the vertices back
+	for(auto it = boost::begin(boost::geometry::exterior_ring(polygon_result)); it != boost::end(boost::geometry::exterior_ring(polygon_result)); ++it)
+	  {
+	    const double &x= boost::geometry::get<0>(*it);
+	    const double &y= boost::geometry::get<1>(*it);
+	    retval.push_back(Pos2d(x,y));
+	  }
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no buffer were computed. Something went wrong."
+		<< std::endl;
     return retval;
   }
 

@@ -128,6 +128,7 @@ class Polygon2d: public PolygonalSurface2d
     void makeCounterClockWise(void);
 
     Polygon2d offset(const GEOM_FT &d) const;
+    Polygon2d buffer(const GEOM_FT &d) const;
 
     inline GEOM_FT AreaSigno(void) const
       { return cgpol.area(); }
