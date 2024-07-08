@@ -29,7 +29,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-
+## Define nodes.
 n1= nodes.newNodeIDXY(1,0,0)
 n2= nodes.newNodeIDXY(2,2,0)
 n2.setTrialDisp(xc.Vector([0.002,0.003]))
@@ -37,12 +37,12 @@ n3= nodes.newNodeIDXY(3,2,1)
 n3.setTrialDisp(xc.Vector([0.006,0.0032]))
 n4= nodes.newNodeIDXY(4,0,1)
 
-
+## Define material.
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
-# Elements definition
+## Define elements.
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast2d.name
-quad4n= elements.newElement("FourNodeQuad",xc.ID([1,2,3,4]))
+quad4n= elements.newElement("FourNodeQuad",xc.ID([n1.tag, n2.tag, n3.tag, n4.tag]))
 
 preprocessor.getDomain.commit()
 detJ= quad4n.detJ(0.0,0.0)
