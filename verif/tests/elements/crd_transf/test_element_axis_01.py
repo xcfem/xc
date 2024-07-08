@@ -47,19 +47,19 @@ elements.defaultMaterial= section.name
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 
-fuerte= beam3d.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
-debil= beam3d.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
+strong= beam3d.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
+weak= beam3d.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
 sectionAngle= beam3d.getStrongAxisAngle()
-ratio1= ((fuerte[0])**2+(fuerte[2])**2)
-ratio2= ((debil[0])**2+(debil[1])**2)
+ratio1= ((strong[0])**2+(strong[2])**2)
+ratio2= ((weak[0])**2+(weak[1])**2)
 ratio3= abs(sectionAngle-math.pi/2)/(math.pi/2)
 
 
 
 ''' 
-print("strong axis: ", fuerte)
+print("strong axis: ", strong)
 print("ratio1= ",ratio1)
-print("weak axis: ", debil)
+print("weak axis: ", weak)
 print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
   '''
