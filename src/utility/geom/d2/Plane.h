@@ -86,6 +86,7 @@ class Plane : public Surface3d
     Ray3d Projection(const Ray3d &) const;
     Segment3d Projection(const Segment3d &) const;
     GeomObj3d::list_Pos3d Projection(const GeomObj3d::list_Pos3d &) const;
+    boost::python::list Projection(const boost::python::list &) const;
     //Polygon3d Projection(const Polygon3d &) const;
 
     virtual Vector3d Normal(void) const;

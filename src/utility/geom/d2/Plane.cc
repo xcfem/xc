@@ -227,13 +227,29 @@ Segment3d Plane::Projection(const Segment3d &s) const
     return retval;
   }
 
-GeomObj3d::list_Pos3d Plane::Projection(const GeomObj3d::list_Pos3d &ptos) const
+//! @brief Return the projection of the given points.
+GeomObj3d::list_Pos3d Plane::Projection(const GeomObj3d::list_Pos3d &points) const
   {
     GeomObj3d::list_Pos3d retval;
-    for(GeomObj3d::list_Pos3d::const_iterator i=ptos.begin();i!=ptos.end();i++)
+    for(GeomObj3d::list_Pos3d::const_iterator i=points.begin();i!=points.end();i++)
       retval.push_back(Projection(*i));
     return retval;
   }
+
+//! @brief Return the projection of the given points.
+boost::python::list Plane::Projection(const boost::python::list &points) const
+  {
+    boost::python::list retval;
+    const int sz= len(points);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      {
+	const Pos3d pt= boost::python::extract<Pos3d>(points[i]);
+        retval.append(this->Projection(pt));
+      }
+    return retval;
+  }
+
 // Polygono Plane::Projection(const Polygono &pg) const
 //   { return pg.Projection(*this); }
 

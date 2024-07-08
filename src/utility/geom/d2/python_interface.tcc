@@ -154,6 +154,7 @@ Vector3d (Plane::*Vector3dProjection)(const Vector3d &) const= &Plane::Projectio
 Line3d (Plane::*Line3dProjection)(const Line3d &) const= &Plane::Projection;
 Ray3d (Plane::*Ray3dProjection)(const Ray3d &) const= &Plane::Projection;
 Segment3d (Plane::*Segment3dProjection)(const Segment3d &) const= &Plane::Projection;
+boost::python::list (Plane::*Pos3dListProjection)(const boost::python::list &) const= &Plane::Projection;
 Line3d (Plane::*IntersPlane)(const Plane &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersLine3d)(const Line3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersRay3d)(const Ray3d &) const= &Plane::getIntersection;
@@ -183,6 +184,7 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("getProjection",Line3dProjection, "Return the projection of the line.")
   .def("getProjection",Ray3dProjection, "Return the projection of the ray.")
   .def("getProjection",Segment3dProjection, "Return the projection of the segment.")
+  .def("getProjection",Pos3dListProjection, "Return the projection of the points of the given list.")
   .def("getXYTrace",&Plane::XYTrace,"return the trace on the XY plane.")
   .def("getXZTrace",&Plane::XZTrace,"return the trace on the XZ plane.")
   .def("getYZTrace",&Plane::YZTrace,"return the trace on the YZ plane.")
