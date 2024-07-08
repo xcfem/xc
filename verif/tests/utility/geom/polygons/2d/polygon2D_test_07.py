@@ -28,23 +28,23 @@ if abs(ratio1)<1e-10 and abs(ratio2)<1e-10:
 else:
     lmsg.error('test: '+fname+' ERROR.')
 
-# Graphic output
-import matplotlib.pyplot as plt
-def getXYVertices(plg):
-    x= list()
-    y= list()
-    vertices= plg.getVertices()
-    for p in vertices:
-        x.append(p.x)
-        y.append(p.y)
-    x.append(vertices[0].x)
-    y.append(vertices[0].y)
-    return x,y
+# # Graphic output
+# import matplotlib.pyplot as plt
+# def getXYVertices(plg):
+#     x= list()
+#     y= list()
+#     vertices= plg.getVertices()
+#     for p in vertices:
+#         x.append(p.x)
+#         y.append(p.y)
+#     x.append(vertices[0].x)
+#     y.append(vertices[0].y)
+#     return x,y
     
-fig = plt.figure()
-ax = fig.add_subplot(111)
-x,y= getXYVertices(pol1)
-ax.plot(x,y,'tab:blue')
-x,y= getXYVertices(pol2)
-ax.plot(x,y,'tab:red')
-plt.show()
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# x,y= getXYVertices(pol1)
+# ax.plot(x,y,'tab:blue')
+# x,y= getXYVertices(pol2)
+# ax.plot(x,y,'tab:red')
+# plt.show()
