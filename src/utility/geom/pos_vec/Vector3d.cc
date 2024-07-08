@@ -54,7 +54,7 @@ Vector3d::Vector3d(const boost::python::list &l)
       {
         const GEOM_FT m1=  boost::python::extract<GEOM_FT>(l[0]);
 	const GEOM_FT m2=  boost::python::extract<GEOM_FT>(l[1]);
-	const GEOM_FT m3=  boost::python::extract<GEOM_FT>(l[1]);
+	const GEOM_FT m3=  boost::python::extract<GEOM_FT>(l[2]);
         cgvct= CGVector_3(m1,m2,m3);
       }
     else
