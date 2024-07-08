@@ -37,6 +37,8 @@ XC::Vector (XC::Node::*getMaxModalAccelerationForDOFs)(int,const double &,const 
 void (XC::Node::*fixDOFs)(const XC::ID &, const XC::Vector &)= &XC::Node::fix;
 bool (XC::Node::*In3D)(const GeomObj3d &,const double &,const double &) const= &XC::Node::In;
 bool (XC::Node::*Out3D)(const GeomObj3d &,const double &,const double &) const= &XC::Node::Out;
+bool (XC::Node::*In2D)(const GeomObj2d &,const double &,const double &) const= &XC::Node::In;
+bool (XC::Node::*Out2D)(const GeomObj2d &,const double &,const double &) const= &XC::Node::Out;
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ),"Return node coordinates.")
   .add_property("getNumberDOF", &XC::Node::getNumberDOF,"Return the number of DOFs of the node.")
@@ -53,6 +55,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("setPos", &XC::Node::setPos,"\n""setPos(Pos3d) \n""Set node position.")
   .def("In", In3D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
   .def("Out", Out3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies outside the geometric object.")
+  .def("In", In2D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
+  .def("Out", Out2D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies outside the geometric object.")
   //Call Policies: here we don't use return_internal_reference because
   // if we do so we obtain always last calculated value and that makes impossible
   // to put history results in a Python list for example. That's why we use

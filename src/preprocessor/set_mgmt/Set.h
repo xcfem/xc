@@ -91,7 +91,15 @@ class Set: public SetMeshComp
 
     bool In(const Node *) const;
     bool In(const Element *) const;
-    
+    Set pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
+    Set pickNodesInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
+    Set pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
+    Set pickElemsInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
+    Set pickElemsCrossing(const std::string &, const GeomObj3d &, const double &tol= 0.0);
+    Set pickElemsCrossing(const std::string &, const GeomObj2d &, const double &tol= 0.0);
+    Set pickElemsOfType(const std::string &, const std::string &);
+    Set pickElemsOfDimension(const std::string &, const size_t &);
+
 
     //! @brief Return a reference to the entities container.
     virtual const SetEntities &getEntities(void) const

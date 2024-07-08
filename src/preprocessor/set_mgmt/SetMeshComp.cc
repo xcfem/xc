@@ -635,6 +635,20 @@ XC::SetMeshComp XC::SetMeshComp::pickNodesInside(const std::string &newSetName, 
     return retval;    
   }
 
+//! @brief Return a new set that contains the nodes that lie insiof the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::SetMeshComp XC::SetMeshComp::pickNodesInside(const std::string &newSetName, const GeomObj2d &geomObj, const double &tol)
+  {
+    SetMeshComp retval(newSetName);
+    retval.nodes= nodes.pickNodesInside(geomObj,tol);
+    retval.nodes.set_owner(&retval);
+    return retval;    
+  }
+
 //! @brief Return the nodes current position boundary.
 //!
 //! @param factor: scale factor for the current position

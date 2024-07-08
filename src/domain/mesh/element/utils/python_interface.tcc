@@ -52,11 +52,14 @@ class_<vector_ptr_nodes, boost::noncopyable>("vector_ptr_nodes")
 XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool initialGeometry)= &XC::NodePtrs::getNearestNode;
 bool (XC::NodePtrs::*NodePtrsIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::In;
 bool (XC::NodePtrs::*NodePtrsOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::Out;
+int (XC::NodePtrs::*getNodeIndexPTR)(const XC::Node *) const= &XC::NodePtrs::getNodeIndex;
+int (XC::NodePtrs::*getNodeIndexTAG)(const int &tag) const= &XC::NodePtrs::getNodeIndex;
 class_<XC::NodePtrs, bases<CommandEntity,vector_ptr_nodes>, boost::noncopyable >("NodePtrs", no_init)
   .def("getNearestNode",make_function(getNearestNodePtr, return_internal_reference<>() ),"Return nearest node.")
   .def("In", NodePtrsIn3D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
   .def("Out", NodePtrsOut3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")
-  .def("getNodeIndex", &XC::NodePtrs::getNodeIndex, " Return the index of the node in the array.")
+  .def("getNodeIndex", getNodeIndexPTR, " Return the index of the node in the array.")
+  .def("getNodeTAG", getNodeIndexTAG, " Return the index of the node in the array.")
   ;
 
 class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsWithIDs", no_init)

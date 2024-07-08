@@ -526,7 +526,7 @@ const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,con
 const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   {
     const Vector &rf= getResistingForce();
-    return getNodeResistingComponents(iNod,rf);
+    return getNodeResistingComponents(iNod, rf);
   }
 
 //! @brief Returns the generalized force (including inertia forces)
@@ -534,11 +534,11 @@ const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNod) const
   {
     const Vector &rf= getResistingForceIncInertia();
-    return getNodeResistingComponents(iNod,rf);
+    return getNodeResistingComponents(iNod, rf);
   }
 
-//! @brief Returns the generalized force (including inertia forces)
-//! of the element over the node identified by the argument.
+//! @brief Returns the generalized force of the element over the node
+//! identified by the argument.
 const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
   {
     const int iNode= getNodePtrs().getNodeIndex(ptrNod);
@@ -551,6 +551,24 @@ const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNod) const
   {
     const int iNode= getNodePtrs().getNodeIndex(ptrNod);
+    assert(iNode>=0);
+    return getNodeResistingForceIncInertia(iNode);
+  }
+
+//! @brief Returns the generalized force of the element over the node
+//! identified by the given integer.
+const XC::Vector &XC::Element::getNodeResistingForceByTag(const int &tag) const
+  {
+    const int iNode= getNodePtrs().getNodeIndex(tag);
+    assert(iNode>=0);
+    return getNodeResistingForce(iNode);
+  }
+  
+//! @brief Returns the generalized force (including inertia forces)
+//! of the element over the node identified by the given integer.
+const XC::Vector &XC::Element::getNodeResistingForceIncInertiaByTag(const int &tag) const
+  {
+    const int iNode= getNodePtrs().getNodeIndex(tag);
     assert(iNode>=0);
     return getNodeResistingForceIncInertia(iNode);
   }

@@ -117,6 +117,7 @@ class NodePtrs: public CommandEntity, public std::vector<Node *>
 
     const std::vector<int> &getTags(void) const;
     int getNodeIndex(const Node *) const;
+    int getNodeIndex(const int &tag) const;
 
     void reverse(void);
   };

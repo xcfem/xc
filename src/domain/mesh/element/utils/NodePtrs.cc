@@ -558,6 +558,20 @@ int XC::NodePtrs::getNodeIndex(const Node *ptrNod) const
     return retval;
   }
 
+//! @brief Return the index of the node tag in the array.
+int XC::NodePtrs::getNodeIndex(const int &tag) const
+  {
+    int retval= -1;
+    const size_t sz= size();
+    for(size_t i=0;i<sz;i++)
+      if((*this)[i]->getTag()==tag)
+        {
+          retval= i;
+          break;
+        }
+    return retval;
+  }
+
 
 //! @brief Resets tributary areas (or lengths or volumes) of connected nodes.
 void XC::NodePtrs::resetTributaries(void) const

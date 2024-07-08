@@ -35,13 +35,16 @@ class_<dq_ptrs_node, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_node",n
   ;
 
 XC::Node *(XC::DqPtrsNode::*getNearestNodeDqPtrs)(const Pos3d &)= &XC::DqPtrsNode::getNearest;
+XC::DqPtrsNode (XC::DqPtrsNode::*DQPTNpickNodesInside3D)(const GeomObj3d &, const double &)= &XC::DqPtrsNode::pickNodesInside;
+XC::DqPtrsNode (XC::DqPtrsNode::*DQPTNpickNodesInside2D)(const GeomObj2d &, const double &)= &XC::DqPtrsNode::pickNodesInside;
 class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .def("append", &XC::DqPtrsNode::push_back,"Appends node at the end of the list.")
   .def("pushFront", &XC::DqPtrsNode::push_front,"Push node at the beginning of the list.")
   .add_property("getNumLiveNodes", &XC::DqPtrsNode::getNumLiveNodes)
   .add_property("getNumDeadNodes", &XC::DqPtrsNode::getNumDeadNodes)
   .def("getNearestNode",make_function(getNearestNodeDqPtrs, return_internal_reference<>() ),"Returns nearest node.")
-  .def("pickNodesInside",&XC::DqPtrsNode::pickNodesInside,"pickNodesInside(geomObj,tol) return the nodes inside the geometric object.")
+  .def("pickNodesInside",DQPTNpickNodesInside3D,"pickNodesInside(geomObj,tol) return the nodes inside the geometric object.")
+  .def("pickNodesInside",DQPTNpickNodesInside2D,"pickNodesInside(geomObj,tol) return the nodes inside the geometric object.")
   .def("getBnd", &XC::DqPtrsNode::Bnd, "Returns nodes boundary.")
   .def("getCentroid", &XC::DqPtrsNode::getCentroid, "Returns nodes centroid.")
   .def("getRegressionPlane", &XC::DqPtrsNode::getRegressionPlane, "Returns nodes regression plane.")
@@ -142,6 +145,8 @@ void (XC::SetMeshComp::*substract_nodes)(const XC::DqPtrsNode &)= &XC::SetMeshCo
 void (XC::SetMeshComp::*substract_elements)(const XC::DqPtrsElem &)= &XC::SetMeshComp::substract;
 void (XC::SetMeshComp::*substract_constraints)(const XC::SetMeshComp::lst_ptr_constraints &)= &XC::SetMeshComp::substract;
 void (XC::SetMeshComp::*substract_mesh_comp)(const XC::SetMeshComp &)= &XC::SetMeshComp::substract;
+XC::SetMeshComp (XC::SetMeshComp::*SMCpickNodesInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::SetMeshComp::pickNodesInside;
+XC::SetMeshComp (XC::SetMeshComp::*SMCpickNodesInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::SetMeshComp::pickNodesInside;
 XC::SetMeshComp (XC::SetMeshComp::*SMCpickElemsInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::SetMeshComp::pickElemsInside;
 XC::SetMeshComp (XC::SetMeshComp::*SMCpickElemsInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::SetMeshComp::pickElemsInside;
 XC::SetMeshComp (XC::SetMeshComp::*SMCpickElemsCrossing3D)(const std::string &, const GeomObj3d &, const double &)= &XC::SetMeshComp::pickElemsCrossing;
@@ -173,7 +178,8 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no
   .def("appendFromGeomEntity", &XC::SetMeshComp::appendFromGeomEntity,"Extend this set with the nodes and elements of the geometric entity being passed as parameter.")
   .def("clear",&XC::SetMeshComp::clear,"Removes all items.")
   .def("empty",&XC::SetMeshComp::empty,"Return true if the set is empty.")
-  .def("pickNodesInside",&XC::SetMeshComp::pickNodesInside,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
+  .def("pickNodesInside",SMCpickNodesInside3D,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
+  .def("pickNodesInside",SMCpickNodesInside2D,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
   .def("pickElemsInside", SMCpickElemsInside3D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("pickElemsInside", SMCpickElemsInside2D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("pickElemsCrossing", SMCpickElemsCrossing3D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
@@ -341,6 +347,12 @@ void (XC::Set::*extend_surfaces)(const XC::SetEntities::lst_surface_ptrs &)= &XC
 void (XC::Set::*extend_bodies)(const XC::SetEntities::lst_body_pointers &)= &XC::Set::extend;
 void (XC::Set::*extend_ugrids)(const XC::SetEntities::lst_ptr_uniform_grids &)= &XC::Set::extend;
 void (XC::Set::*extend_set)(const XC::Set &)= &XC::Set::extend;
+XC::Set (XC::Set::*SETpickNodesInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickNodesInside;
+XC::Set (XC::Set::*SETpickNodesInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickNodesInside;
+XC::Set (XC::Set::*SETpickElemsInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickElemsInside;
+XC::Set (XC::Set::*SETpickElemsInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickElemsInside;
+XC::Set (XC::Set::*SETpickElemsCrossing3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickElemsCrossing;
+XC::Set (XC::Set::*SETpickElemsCrossing2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickElemsCrossing;
 class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
   .add_property("useGmsh", &XC::Set::getUseGmsh, &XC::Set::setUseGmsh, "Get/set the useGmsh member value.")
@@ -368,6 +380,12 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("selectSurfacesFromTagList", &XC::Set::selSurfacesFromListPy,"Add to the set the surfaces identified by the given tags.")
   .def("selectBodiesFromTagList", &XC::Set::selBodiesFromListPy,"Add to the set the bodies identified by the given tags.")
   .def("selectUgridsFromTagList", &XC::Set::selUgridsFromListPy,"Add to the set the ugrids identified by the given tags.")
+  .def("pickNodesInside",SETpickNodesInside3D,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
+  .def("pickNodesInside",SETpickNodesInside2D,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
+  .def("pickElemsInside", SETpickElemsInside3D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsInside", SETpickElemsInside2D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsCrossing", SETpickElemsCrossing3D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsCrossing", SETpickElemsCrossing2D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("extend", extend_nodes, "Appends the nodes in the argument to the set.")
   .def("extend", extend_elements, "Appends the elements in the argument to the set.")
   .def("extend", extend_constraints, "Appends the constraints in the argument to the set.")

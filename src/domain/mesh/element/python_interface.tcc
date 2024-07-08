@@ -31,6 +31,12 @@ Pos2d (XC::Element::*getProjection2D)(const Pos2d &,bool) const= &XC::Element::g
 Pos3d (XC::Element::*getProjection3D)(const Pos3d &,bool) const= &XC::Element::getProjection;
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
+const XC::Vector &(XC::Element::*getNodeResistingForceINOD)(const size_t &iNod) const= &XC::Element::getNodeResistingForce;
+const XC::Vector &(XC::Element::*getNodeResistingForceIncInertiaINOD)(const size_t &iNod) const= &XC::Element::getNodeResistingForceIncInertia;
+const XC::Vector &(XC::Element::*getNodeResistingForcePTR)(const XC::Node *) const= &XC::Element::getNodeResistingForce;
+const XC::Vector &(XC::Element::*getNodeResistingForceIncInertiaPTR)(const XC::Node *) const= &XC::Element::getNodeResistingForceIncInertia;
+const XC::Vector &(XC::Element::*getNodeResistingForceTAG)(const int &) const= &XC::Element::getNodeResistingForceByTag;
+const XC::Vector &(XC::Element::*getNodeResistingForceIncInertiaTAG)(const int &) const= &XC::Element::getNodeResistingForceIncInertiaByTag;
 const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::getInitialStiff;
 const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::getTangentStiff;
 const XC::Matrix &(XC::Element::*getMassRef)(void) const= &XC::Element::getMass;
@@ -64,6 +70,12 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("update", &XC::Element::update,"Updates the element state.")
   .def("getNumDOF", &XC::Element::getNumDOF,"Return the number of element DOFs.")
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")
+  .def("getNodeResistingForce", make_function(getNodeResistingForceINOD, return_internal_reference<>() ),"getNodeResistingForce(ith node): returns the generalized force of the element over the given node.")
+  .def("getNodeResistingForceIncInertia", make_function(getNodeResistingForceIncInertiaINOD, return_internal_reference<>() ),"getNodeResistingForceIncInertia(ith node): returns the generalized force of the element over the given node including inertia effects.")
+  .def("getNodeResistingForce", make_function(getNodeResistingForcePTR, return_internal_reference<>() ), "getNodeResistingForce(node): returns the generalized force of the element over the given node.")
+  .def("getNodeResistingForceIncInertiaByTag", make_function(getNodeResistingForceIncInertiaPTR, return_internal_reference<>() ),"getNodeResistingForceIncInertia(node): returns the generalized force of the element over the given node including inertia effects.")
+  .def("getNodeResistingForceByTag", make_function(getNodeResistingForceTAG, return_internal_reference<>() ),"getNodeResistingForce(nodeTag): returns the generalized force of the element over the given node.")
+  .def("getNodeResistingForceIncInertiaByTag", make_function(getNodeResistingForceIncInertiaTAG, return_internal_reference<>() ),"getNodeResistingForceIncInertia(nodeTag): returns the generalized force of the element over the given node including inertia effects.")
   .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Return tangent stiffness matrix.")
   .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Return initial stiffness matrix.")
   .add_property("mass", make_function(getMassRef, return_internal_reference<>()) ,"Element mass matrix.")

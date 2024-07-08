@@ -238,6 +238,8 @@ class Element: public MeshComponent
     const Vector &getNodeResistingForceIncInertia(const size_t &iNod) const;
     const Vector &getNodeResistingForce(const Node *) const;
     const Vector &getNodeResistingForceIncInertia(const Node *) const;
+    const Vector &getNodeResistingForceByTag(const int &) const;
+    const Vector &getNodeResistingForceIncInertiaByTag(const int &) const;
     Vector getEquivalentStaticLoad(int mode,const double &) const;
     Matrix getEquivalentStaticNodalLoads(int mode,const double &) const;
 

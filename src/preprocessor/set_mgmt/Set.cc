@@ -282,6 +282,116 @@ XC::Set XC::Set::getMeshComponentsSet(void) const
     return retval;
   }
 
+//! @brief Return a new set that contains the nodes that lie insiof the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickNodesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickNodesInside("", geomObj,tol);
+    retval.setNodes(tmp.getNodes());
+    return retval;
+  }
+
+//! @brief Return a new set that contains the nodes that lie insiof the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickNodesInside(const std::string &newSetName, const GeomObj2d &geomObj, const double &tol)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickNodesInside("", geomObj,tol);
+    retval.setNodes(tmp.getNodes());
+    return retval;
+  }
+
+//! @brief Return a new set that contains the elements that lie inside of the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickElemsInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickElemsInside("", geomObj,tol);
+    retval.setElements(tmp.getElements());
+    return retval;
+  }
+
+//! @brief Return a new set that contains the elements that lie inside of the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickElemsInside(const std::string &newSetName, const GeomObj2d &geomObj, const double &tol)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickElemsInside("", geomObj,tol);
+    retval.setElements(tmp.getElements());
+    return retval;
+  }
+
+//! @brief Return a new set with the elements that cross (i.e. have nodes
+//! inside and outside) the given geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickElemsCrossing(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickElemsCrossing("", geomObj,tol);
+    retval.setElements(tmp.getElements());
+    return retval;
+  }
+
+//! @brief Return a new set with the elements that cross (i.e. have nodes
+//! inside and outside) the given geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickElemsCrossing(const std::string &newSetName, const GeomObj2d &geomObj, const double &tol)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickElemsCrossing("", geomObj,tol);
+    retval.setElements(tmp.getElements());
+    return retval;
+  }
+
+//! @brief Return a new set that contains the elements that match the
+//! type.
+//!
+//! @param newSetName: name for the new set.
+//! @param typeName: string that must be contained in the class name.
+XC::Set XC::Set::pickElemsOfType(const std::string &newSetName, const std::string &eType)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickElemsOfType("", eType);
+    retval.setElements(tmp.getElements());
+    return retval;
+  }
+  
+//! @brief Return a new set that contains the elements of the specified
+//! dimension.
+//!
+//! @param newSetName: name for the new set.
+//! @param targetDim: element dimension (point: 0, line: 1, surface: 2, volume: 3)
+XC::Set XC::Set::pickElemsOfDimension(const std::string &newSetName, const size_t &dim)
+  {
+    Set retval(newSetName, this->getPreprocessor());
+    const SetMeshComp tmp= this->getMeshComp().pickElemsOfDimension("", dim);
+    retval.setElements(tmp.getElements());
+    return retval;
+  }
+
 //! @brief Return a new set that contains the points that lie insiof the
 //! geometric object.
 //!

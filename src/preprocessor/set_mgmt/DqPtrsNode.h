@@ -38,6 +38,7 @@
 class Vector3d;
 class ExprAlgebra;
 class GeomObj3d;
+class GeomObj2d;
 class BND3d;
 class Plane;
 
@@ -67,6 +68,7 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     bool InNodeTags(const ID &) const;
     std::set<int> getTags(void) const;
     DqPtrsNode pickNodesInside(const GeomObj3d &, const double &tol= 0.0);
+    DqPtrsNode pickNodesInside(const GeomObj2d &, const double &tol= 0.0);
     BND3d Bnd(const double &) const;
     Pos3d getCentroid(const double &) const;
     Plane getRegressionPlane(const double &) const;
