@@ -90,6 +90,7 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def("clip",clipRay, "Clips the ray.")
   .def("clip",clipSegment, "Clips the segment.")
   .def("clip",clipPolygon, "Return the given polygon clipped by this one.")
+  .def("swap", &Polygon2d::swap,"Reverse the orientation of the polygon.")
   ;
 
 std::vector<double> (Quadrilateral2d::*get2DPointNaturalCoordinates)(const Pos2d &) const= &Quadrilateral2d::getNaturalCoordinates;
