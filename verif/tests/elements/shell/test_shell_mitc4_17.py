@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-'''Verification test taken from example 2-005 of 
-   the SAP 2000 verification manual.'''
+'''Verification test taken from example 2-005 of the SAP 2000 verification 
+   manual.'''
 
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
 
 NumDivI= 32
 NumDivJ= 32
@@ -22,11 +28,6 @@ unifLoad= 0.0001 # Uniform load in lb/in2.
 ptLoad= 0.0004 # Punctual load in lb.
 nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Tributary load on each node
 
-import geom
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
-from materials import typical_materials
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -69,10 +70,7 @@ for l in sides:
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-
-
-
-nNodes= s.getNumNodes
+nNodes= s.getNumNodes # get number of nodes.
 capa1= s.getNodeLayers.getLayer(0)
 nf= capa1.nRow
 nc= capa1.nCol
@@ -81,9 +79,7 @@ for i in range(2,nf):
       node= capa1.getNode(i,j)
       lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
 
-
-
-nElems= s.getNumElements
+nElems= s.getNumElements # get number of nodes.
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
