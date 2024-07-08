@@ -134,7 +134,7 @@ Polygon2d Polygon2d::buffer(const GEOM_FT &buffer_distance) const
   {
     typedef boost::geometry::model::d2::point_xy<GEOM_FT> point_xy;
     typedef boost::geometry::model::polygon<point_xy> polygon_type;
-    
+
     const GeomObj::list_Pos2d vertexList= this->getVertexList();
     // Store boost points in vector.
     std::vector< point_xy > pointList;
@@ -147,7 +147,9 @@ Polygon2d Polygon2d::buffer(const GEOM_FT &buffer_distance) const
     // Close the polygon.
     const Pos2d &firstPoint= *firstPointIter;
     pointList.push_back(point_xy(firstPoint.x(), firstPoint.y()));
-    
+    bool clockwise= this->clockwise();
+    if(!clockwise)
+      std::reverse(pointList.begin(), pointList.end());
     // create Boost polygon
     polygon_type poly;
     // assign points to Boost polygon

@@ -144,6 +144,7 @@ python tests/utility/geom/polygons/2d/polygon2D_test_14.py
 python tests/utility/geom/polygons/2d/polygon2D_test_15.py
 python tests/utility/geom/polygons/2d/polygon2D_test_16.py
 python tests/utility/geom/polygons/2d/polygon2D_test_17.py
+python tests/utility/geom/polygons/2d/polygon2D_test_18.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
