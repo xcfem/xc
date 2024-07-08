@@ -109,6 +109,8 @@ class NodePtrs: public CommandEntity, public std::vector<Node *>
     bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Corta(const Plane &,bool initialGeometry= true) const;
+    bool Crosses(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Crosses(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
 
     void resetTributaries(void) const;
     void dumpTributaries(const std::vector<double> &) const;

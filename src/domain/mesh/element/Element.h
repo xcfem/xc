@@ -280,6 +280,8 @@ class Element: public MeshComponent
     bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Crosses(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Crosses(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     virtual double getDist2(const Pos2d &p,bool initialGeometry= true) const;
     virtual double getDist(const Pos2d &p,bool initialGeometry= true) const;
     virtual double getDist2(const Pos3d &p,bool initialGeometry= true) const;

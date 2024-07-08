@@ -162,6 +162,9 @@ class SetMeshComp: public SetBase
     void sel_elements_from_list(const ID &tags);
     bool In(const Element *) const;
     SetMeshComp pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
+    SetMeshComp pickElemsInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
+    SetMeshComp pickElemsCrossing(const std::string &, const GeomObj3d &, const double &tol= 0.0);
+    SetMeshComp pickElemsCrossing(const std::string &, const GeomObj2d &, const double &tol= 0.0);
     SetMeshComp pickElemsOfType(const std::string &, const std::string &);
     SetMeshComp pickElemsOfDimension(const std::string &, const size_t &);
     inline boost::python::list getElementTypesPy(void) const

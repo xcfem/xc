@@ -669,7 +669,7 @@ void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
       }
   }
 
-//! @brief Return a new set that contains the elements that lie insiof the
+//! @brief Return a new set that contains the elements that lie inside of the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -679,6 +679,48 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsInside(const std::string &newSetName, 
   {
     SetMeshComp retval(newSetName);
     retval.elements= elements.pickElemsInside(geomObj, tol);
+    retval.elements.set_owner(&retval);
+    return retval;
+  }
+
+//! @brief Return a new set that contains the elements that lie inside of the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::SetMeshComp XC::SetMeshComp::pickElemsInside(const std::string &newSetName, const GeomObj2d &geomObj, const double &tol)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsInside(geomObj, tol);
+    retval.elements.set_owner(&retval);
+    return retval;
+  }
+
+//! @brief Return a new set with the elements that cross (i.e. have nodes
+//! inside and outside) the given geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::SetMeshComp XC::SetMeshComp::pickElemsCrossing(const std::string &newSetName, const GeomObj2d &geomObj, const double &tol)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsCrossing(geomObj, tol);
+    retval.elements.set_owner(&retval);
+    return retval;
+  }
+
+//! @brief Return a new set with the elements that cross (i.e. have nodes
+//! inside and outside) the given geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::SetMeshComp XC::SetMeshComp::pickElemsCrossing(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsCrossing(geomObj, tol);
     retval.elements.set_owner(&retval);
     return retval;
   }

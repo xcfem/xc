@@ -36,6 +36,7 @@
 
 class Polyline3d;
 class GeomObj3d;
+class GeomObj2d;
 class BND3d;
 
 namespace XC {
@@ -73,6 +74,9 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     BND3d Bnd(const double &) const;    
     std::deque<Polyline3d> getContours(const double &factor= 0.0) const;
     DqPtrsElem pickElemsInside(const GeomObj3d &, const double &tol= 0.0);
+    DqPtrsElem pickElemsInside(const GeomObj2d &, const double &tol= 0.0);
+    DqPtrsElem pickElemsCrossing(const GeomObj3d &, const double &tol= 0.0);    
+    DqPtrsElem pickElemsCrossing(const GeomObj2d &, const double &tol= 0.0);    
     std::set<std::string> getMaterialNames(void) const;
     boost::python::list getMaterialNamesPy(void) const;
     std::set<std::string> getTypes(void) const;

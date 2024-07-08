@@ -68,6 +68,10 @@ class_<dq_ptrs_element, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_elem
   ;
 
 XC::Element *(XC::DqPtrsElem::*getNearestElementDqPtrs)(const Pos3d &)= &XC::DqPtrsElem::getNearest;
+XC::DqPtrsElem (XC::DqPtrsElem::*pickElemsInside3D)(const GeomObj3d &, const double &)= &XC::DqPtrsElem::pickElemsInside;
+XC::DqPtrsElem (XC::DqPtrsElem::*pickElemsInside2D)(const GeomObj2d &, const double &)= &XC::DqPtrsElem::pickElemsInside;
+XC::DqPtrsElem (XC::DqPtrsElem::*pickElemsCrossing3D)(const GeomObj3d &, const double &)= &XC::DqPtrsElem::pickElemsCrossing;    
+XC::DqPtrsElem (XC::DqPtrsElem::*pickElemsCrossing2D)(const GeomObj2d &, const double &)= &XC::DqPtrsElem::pickElemsCrossing;    
 class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("append", &XC::DqPtrsElem::push_back,"Appends element at the end of the list.")
   .def("pushFront", &XC::DqPtrsElem::push_front,"Push element at the beginning of the list.")
@@ -76,7 +80,10 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("getNearestElement",make_function(getNearestElementDqPtrs, return_internal_reference<>() ),"Returns nearest element.")
   .def("getBnd", &XC::DqPtrsElem::Bnd, "Returns elements boundary.")
   .def("getContours",&XC::DqPtrsElem::getContours,"Returns contour(s) from the element set in the form of closed 3D polylines.")
-  .def("pickElemsInside",&XC::DqPtrsElem::pickElemsInside,"pickElemsInside(geomObj,tol) return the elements inside the geometric object.") 
+  .def("pickElemsInside",pickElemsInside3D, "pickElemsInside(setName, geomObj,tol) return the elements inside the geometric object.") 
+  .def("pickElemsInside",pickElemsInside2D, "pickElemsInside(setName, geomObj,tol) return the elements inside the geometric object.") 
+  .def("pickElemsCrossing",pickElemsCrossing3D, "pickElemsCrossing(setName, geomObj,tol) return the elements inside the geometric object.") 
+  .def("pickElemsCrossing",pickElemsCrossing2D, "pickElemsCrossing(setName, geomObj,tol) return the elements inside the geometric object.") 
   .def("pickElemsOfType",&XC::DqPtrsElem::pickElemsOfType,"pickElemsOfType(typeName) return the elements whose type contains the string.")
   .def("pickElemsOfDimension",&XC::DqPtrsElem::pickElemsOfDimension,"pickElemsOfDimension(dim) return the elements whose dimension equals the argument.")
   .def("getTypes",&XC::DqPtrsElem::getTypesPy,"getElementTypes() return a list with the element types in the container.")
@@ -135,6 +142,10 @@ void (XC::SetMeshComp::*substract_nodes)(const XC::DqPtrsNode &)= &XC::SetMeshCo
 void (XC::SetMeshComp::*substract_elements)(const XC::DqPtrsElem &)= &XC::SetMeshComp::substract;
 void (XC::SetMeshComp::*substract_constraints)(const XC::SetMeshComp::lst_ptr_constraints &)= &XC::SetMeshComp::substract;
 void (XC::SetMeshComp::*substract_mesh_comp)(const XC::SetMeshComp &)= &XC::SetMeshComp::substract;
+XC::SetMeshComp (XC::SetMeshComp::*SMCpickElemsInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::SetMeshComp::pickElemsInside;
+XC::SetMeshComp (XC::SetMeshComp::*SMCpickElemsInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::SetMeshComp::pickElemsInside;
+XC::SetMeshComp (XC::SetMeshComp::*SMCpickElemsCrossing3D)(const std::string &, const GeomObj3d &, const double &)= &XC::SetMeshComp::pickElemsCrossing;
+XC::SetMeshComp (XC::SetMeshComp::*SMCpickElemsCrossing2D)(const std::string &, const GeomObj2d &, const double &)= &XC::SetMeshComp::pickElemsCrossing;
 class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no_init)
   .add_property("name", &XC::SetMeshComp::getStrName, &XC::SetMeshComp::newName,"get object name.")
   .def("rename",&XC::SetMeshComp::rename,"Change the name of the set.")
@@ -163,7 +174,10 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no
   .def("clear",&XC::SetMeshComp::clear,"Removes all items.")
   .def("empty",&XC::SetMeshComp::empty,"Return true if the set is empty.")
   .def("pickNodesInside",&XC::SetMeshComp::pickNodesInside,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
-  .def("pickElemsInside",&XC::SetMeshComp::pickElemsInside,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsInside", SMCpickElemsInside3D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsInside", SMCpickElemsInside2D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsCrossing", SMCpickElemsCrossing3D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsCrossing", SMCpickElemsCrossing2D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("getElementTypes",&XC::SetMeshComp::getElementTypesPy,"getElementTypes() return a list with the element types in the container.")
   .def("pickElemsOfType",&XC::SetMeshComp::pickElemsOfType,"pickElemsOfType(typeName) return the elements whose type contains the string argument.")
   .def("getElementDimensions",&XC::SetMeshComp::getElementDimensionsPy,"getElementDimensions() return a list with the dimensions of the elements in the container.")

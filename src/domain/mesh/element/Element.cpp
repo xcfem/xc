@@ -1050,15 +1050,31 @@ const XC::Matrix &XC::Element::getCooNodes(void) const
 std::deque<Pos3d> XC::Element::getPosNodes(bool initialGeometry) const
   { return getNodePtrs().getPositions(initialGeometry); }
 
+//! @brief Return true if the element is inside the given object.
 bool XC::Element::In(const GeomObj3d &obj,const double &factor, const double &tol) const
   { return getNodePtrs().In(obj,factor,tol); }
+
+//! @brief Return true if the element is outside the given object.
 bool XC::Element::Out(const GeomObj3d &obj,const double &factor, const double &tol) const
   { return getNodePtrs().Out(obj,factor,tol); }
+
+//! @brief Return true if the element is inside the given object.
 bool XC::Element::In(const GeomObj2d &obj,const double &factor, const double &tol) const
   { return getNodePtrs().In(obj,factor,tol); }
+
+//! @brief Return true if the element is outside the given object.
 bool XC::Element::Out(const GeomObj2d &obj,const double &factor, const double &tol) const
   { return getNodePtrs().Out(obj,factor,tol); }
 
+//! @brief Return true if the element cross (i.e. have nodes inside and
+//! outside) the given geometric object.
+bool XC::Element::Crosses(const GeomObj3d &obj,const double &factor, const double &tol) const
+  { return getNodePtrs().Crosses(obj,factor,tol); }
+  
+//! @brief Return true if the element cross (i.e. have nodes inside and
+//! outside) the given geometric object.
+bool XC::Element::Crosses(const GeomObj2d &obj,const double &factor, const double &tol) const
+  { return getNodePtrs().Crosses(obj,factor,tol); }
 
 //! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]

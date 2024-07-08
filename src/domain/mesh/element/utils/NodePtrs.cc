@@ -34,6 +34,7 @@
 #include "domain/domain/Domain.h"
 
 #include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/d3/BND3d.h"
 
@@ -458,6 +459,58 @@ bool XC::NodePtrs::Corta(const Plane &plane,bool initialGeometry) const
     complementario.swap();
     bool out= In(complementario,factor,0.0);
     return (!in && !out);
+  }
+
+//! @brief Returns true if some nodes are inside the object and others are
+//! outside.
+bool XC::NodePtrs::Crosses(const GeomObj3d &obj,const double &factor,const double &tol) const
+  {
+    bool in= false;
+    bool out= false;
+    bool retval= false;
+    for(const_iterator i= begin();i!= end();i++)
+      {
+        const Node *tmp= *i;
+        if(tmp)
+	  {
+            if(tmp->In(obj,factor,tol))
+	      { in= true; }
+	    else
+	      { out= true; }
+	    if(in && out)
+	      {
+		retval= true;
+		break;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Returns true if some nodes are inside the object and others are
+//! outside.
+bool XC::NodePtrs::Crosses(const GeomObj2d &obj,const double &factor,const double &tol) const
+  {
+    bool in= false;
+    bool out= false;
+    bool retval= false;
+    for(const_iterator i= begin();i!= end();i++)
+      {
+        const Node *tmp= *i;
+        if(tmp)
+	  {
+            if(tmp->In(obj,factor,tol))
+	      { in= true; }
+	    else
+	      { out= true; }
+	    if(in && out)
+	      {
+		retval= true;
+		break;
+	      }
+	  }
+      }
+    return retval;
   }
 
 //! @brief Returns the node closest to the point being passed as parameter.

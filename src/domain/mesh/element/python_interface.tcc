@@ -39,6 +39,10 @@ XC::Matrix (XC::Element::*getTotalMassRef)(void) const= &XC::Element::getTotalMa
 const XC::Matrix &(XC::Element::*getDampRef)(void) const= &XC::Element::getDamp;
 bool (XC::Element::*ElementIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::In;
 bool (XC::Element::*ElementOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::Out;
+bool (XC::Element::*ElementIn2D)(const GeomObj2d &,const double &,const double &) const= &XC::Element::In;
+bool (XC::Element::*ElementOut2D)(const GeomObj2d &,const double &,const double &) const= &XC::Element::Out;
+bool (XC::Element::*ElementCrosses3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::Crosses;
+bool (XC::Element::*ElementCrosses2D)(const GeomObj2d &,const double &,const double &) const= &XC::Element::Crosses;
 void (XC::Element::*setIdNodesRef)(const XC::ID &inodes)= &XC::Element::setIdNodes;
 double (XC::Element::*getDistPos2d)(const Pos2d &,bool initialGeometry) const= &XC::Element::getDist;
 double (XC::Element::*getDistPos3d)(const Pos3d &,bool initialGeometry) const= &XC::Element::getDist;
@@ -73,6 +77,10 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getCooCentroid",&XC::Element::getCenterOfMassCoordinates,"getCenterOfMassCoordinates(initialCoordinates) return centroid's coordinates. If initialCoordinates==True, return the initial coordinates otherwise return the current coordinates.")
   .def("In", ElementIn3D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
   .def("Out", ElementOut3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")
+  .def("In", ElementIn2D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
+  .def("Out", ElementOut2D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")
+  .def("Crosses", ElementCrosses3D,"\n""Crosses(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement crosses (has nodes at both sides of) the geometric object.")
+  .def("Crosses", ElementCrosses2D,"\n""Crosses(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement crosses (has nodes at both sides of) the geometric object.")
   .def("getLocalAxes",&XC::Element::getLocalAxes,"Return the element local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
   .def("getPoints",&XC::Element::getPoints,"Return a uniform grid of points over the element.")
   .def("getDist",getDistPos3d,"Return the distance from the point to this element.")
