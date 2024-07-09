@@ -208,15 +208,13 @@ GEOM_FT PlanePolyline3d::GetZMin(void) const
     return retval;
   }
 
-//! @brief Return the nearest 2D segment (the name getNearestSegment is already taken in Polyline2d and Polyline3d).
+//! @brief Return the nearest 2D segment.
 //! @param p: point to which the returned segment is the closest one.
-Segment3d PlanePolyline3d::getNearestLink(const Pos3d &p) const
+Segment3d PlanePolyline3d::getNearestSegment(const Pos3d &p) const
   {
     Segment3d retval;
-    const Plane plane= getPlane(); // Get the plane containing the polyline.
-    const Pos3d prj= plane.Projection(p); // Compute projection.
-    const Pos2d p2d(to_2d(prj)); // Convert to 2D.
-    Polyline2d::const_iterator i= pline2d.getNearestSegment(p2d);
+    const Pos2d p2d= this->computePos2d(p); // Convert to 2D.
+    Polyline2d::const_iterator i= pline2d.getNearestSegmentIter(p2d);
     Polyline2d::const_iterator j= i+1;
     if((i!=pline2d.end()) and (j!=pline2d.end()))
       {
@@ -238,10 +236,26 @@ Segment3d PlanePolyline3d::getNearestLink(const Pos3d &p) const
     return retval;
   }
 
+//! @brief Return the projection of the given point into the polyline.
+//! @param p: point to be projected.
+Pos3d PlanePolyline3d::Projection(const Pos3d &p) const
+  {
+    Segment3d nearestSegment= this->getNearestSegment(p);
+    const Pos3d retval= nearestSegment.Projection(p);
+    return retval;
+  }
+
+//! @brief Return the length along the polyline upto the given point.
+GEOM_FT PlanePolyline3d::getLengthUpTo(const Pos3d &p) const
+  {
+    const Pos2d p2d= this->computePos2d(p); // Convert to 2D.
+    return this->pline2d.getLengthUpTo(p2d);
+  }
+
 //! @brief Append the projection of the vertex to the polyline.
 const Pos3d PlanePolyline3d::appendVertex(const Pos3d &p)
   {
-    const Plane plane= getPlane(); // Get the plane containing the polyline.
+    const Plane plane= this->getPlane(); // Get the plane containing the polyline.
     const Pos3d prj= plane.Projection(p); // Compute projection.
     const Pos2d p2d(to_2d(prj)); // Convert to 2D.
     pline2d.appendVertex(p2d); // Append it to the polyline.
@@ -251,7 +265,7 @@ const Pos3d PlanePolyline3d::appendVertex(const Pos3d &p)
 //! @brief Append a vertex to the beginning of the polyline.
 const Pos3d PlanePolyline3d::appendVertexLeft(const Pos3d &p)
   {
-    const Plane plane= getPlane(); // Get the plane containing the polyline.
+    const Plane plane= this->getPlane(); // Get the plane containing the polyline.
     const Pos3d prj= plane.Projection(p); // Compute projection.
     const Pos2d p2d(to_2d(prj)); // Convert to 2D.
     pline2d.appendVertexLeft(p2d); // Append it to the polyline.
@@ -262,9 +276,7 @@ const Pos3d PlanePolyline3d::appendVertexLeft(const Pos3d &p)
 //! splitting the nearest segment.
 void PlanePolyline3d::insertVertex(const Pos3d &p, const GEOM_FT &tol)
   {
-    const Plane plane= getPlane(); // Get the plane containing the polyline.
-    const Pos3d prj= plane.Projection(p); // Compute projection.
-    const Pos2d p2d(to_2d(prj)); // Convert to 2D.
+    const Pos2d p2d= this->computePos2d(p); // Convert to 2D.
     this->pline2d.insertVertex(p2d); // Insert it into the polyline.
   }
 
@@ -274,9 +286,7 @@ void PlanePolyline3d::insertVertex(const Pos3d &p, const GEOM_FT &tol)
 //! from p to the end if sgn >= 0
 PlanePolyline3d PlanePolyline3d::getChunk(const Pos3d &p,const short int &sgn, const GEOM_FT &tol) const
   {
-    const Plane plane= getPlane(); // Get the plane containing the polyline.
-    const Pos3d prj= plane.Projection(p); // Compute projection.
-    const Pos2d p2d(to_2d(prj)); // Convert to 2D.
+    const Pos2d p2d= this->computePos2d(p); // Convert to 2D.
     Polyline2d pline= this->pline2d.getChunk(p2d, sgn, tol);
     return PlanePolyline3d(this->getRef(), pline);
   }
@@ -286,9 +296,7 @@ PlanePolyline3d PlanePolyline3d::getChunk(const Pos3d &p,const short int &sgn, c
 //! greater than tol add the vertex to the resulting polyline.
 PlanePolyline3d PlanePolyline3d::getLeftChunk(const Pos3d &p, const GEOM_FT &tol) const
   {
-    const Plane plane= getPlane(); // Get the plane containing the polyline.
-    const Pos3d prj= plane.Projection(p); // Compute projection.
-    const Pos2d p2d(to_2d(prj)); // Convert to 2D.
+    const Pos2d p2d= this->computePos2d(p); // Convert to 2D.
     Polyline2d pline= this->pline2d.getLeftChunk(p2d, tol);
     return PlanePolyline3d(this->getRef(), pline);
   }
@@ -298,9 +306,7 @@ PlanePolyline3d PlanePolyline3d::getLeftChunk(const Pos3d &p, const GEOM_FT &tol
 //! greater than tol add the vertex to the resulting polyline.
 PlanePolyline3d PlanePolyline3d::getRightChunk(const Pos3d &p, const GEOM_FT &tol) const
   {
-    const Plane plane= getPlane(); // Get the plane containing the polyline.
-    const Pos3d prj= plane.Projection(p); // Compute projection.
-    const Pos2d p2d(to_2d(prj)); // Convert to 2D.
+    const Pos2d p2d= this->computePos2d(p); // Convert to 2D.
     Polyline2d pline= this->pline2d.getRightChunk(p2d, tol);
     return PlanePolyline3d(this->getRef(), pline);
   }

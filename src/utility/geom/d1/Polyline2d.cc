@@ -130,6 +130,27 @@ bool Polyline2d::In(const Pos2d &p, const double &tol) const
     return retval;
   }
 
+//! @brief Return the length along the polyline upto the given point.
+GEOM_FT Polyline2d::getLengthUpTo(const Pos2d &p) const
+  {
+    GEOM_FT retval= 0.0;    
+    if(!empty())
+      {
+	const_iterator nearestSegmentIter= this->getNearestSegmentIter(p);
+	const_iterator first= begin();
+	const_iterator last= std::prev(end());
+	list_Pos2d::const_iterator j=first;
+	for(;j != nearestSegmentIter;j++)
+	  {
+	    const Segment2d &sg= getSegment(j);
+	    retval+= sg.getLength();
+	  }
+	const Pos2d lastVertex= *j;
+	retval+= lastVertex.dist(p);
+      }
+    return retval;
+  }
+
 //! @brief Return the squared distance to the polyline.
 GEOM_FT Polyline2d::dist2(const Pos2d &p) const
   {
@@ -152,8 +173,9 @@ GEOM_FT Polyline2d::dist2(const Pos2d &p) const
 GEOM_FT Polyline2d::dist(const Pos2d &p) const
   { return sqrt(this->dist2(p)); }
 
-//! @brief Return the nearest segment to the argument.
-Polyline2d::const_iterator Polyline2d::getNearestSegment(const Pos2d &p) const    
+//! @brief Return the nearest segment to the given point.
+//! @param: point to find the nearest segment to.
+Polyline2d::const_iterator Polyline2d::getNearestSegmentIter(const Pos2d &p) const    
   {
     Polyline2d::const_iterator retval= end();
     const size_t nv= getNumVertices();
@@ -185,16 +207,16 @@ Polyline2d::const_iterator Polyline2d::getNearestSegment(const Pos2d &p) const
 //! @param p: point to which the returned segment is the closest one.
 int Polyline2d::getNearestSegmentIndex(const Pos2d &p) const
   {
-    const_iterator i= this->getNearestSegment(p);
+    const_iterator i= this->getNearestSegmentIter(p);
     return std::distance(this->begin(), i);
   }
 
-//! @brief Return the nearest 2D segment (the name getNearestSegment is already taken).
+//! @brief Return the nearest 2D segment.
 //! @param p: point to which the returned segment is the closest one.
-Segment2d Polyline2d::getNearestLink(const Pos2d &p) const
+Segment2d Polyline2d::getNearestSegment(const Pos2d &p) const
   {
     Segment2d retval;
-    const_iterator i= this->getNearestSegment(p);
+    const_iterator i= this->getNearestSegmentIter(p);
     const_iterator j= i+1;
     if((i!=this->end()) and (j!=this->end()))
       retval= Segment2d(*i,*j);
@@ -212,6 +234,14 @@ Segment2d Polyline2d::getNearestLink(const Pos2d &p) const
     return retval;
   }
 
+//! @brief Return the projection of the given point into the polyline.
+//! @param p: point to be projected.
+Pos2d Polyline2d::Projection(const Pos2d &p) const
+  {
+    Segment2d nearestSegment= this->getNearestSegment(p);
+    const Pos2d retval= nearestSegment.Projection(p);
+    return retval;
+  }
 
 //! @brief Return the maximum value of the i coordinate.
 GEOM_FT Polyline2d::GetMax(unsigned short int i) const
@@ -671,7 +701,7 @@ void Polyline2d::insertVertex(const Pos2d &p, const GEOM_FT &tol)
     const GEOM_FT distToVertex= p.dist(nearestVertex);
     if(distToVertex>tol) // No vertices close to p
       {
-        const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
+        const_iterator vertexIter= getNearestSegmentIter(p)+1; //Segment end vertex.
         insert(vertexIter,p);
       }
   }
@@ -696,7 +726,7 @@ Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn, const GEOM_
 	distToVertex= p.dist(nearestVertex);
 	// Deal with the case in which two
 	// vertices are equally distant from p.
-	const_iterator nearestSegmentIter= getNearestSegment(p);
+	const_iterator nearestSegmentIter= getNearestSegmentIter(p);
 	const Segment2d nearestSegment= getSegment(nearestSegmentIter);
 	const GEOM_FT distToSegment= nearestSegment.dist(p);
 	if((distToSegment<distToVertex) and (sgn>0))
@@ -740,7 +770,7 @@ boost::python::list Polyline2d::split(const Pos2d &p) const
     Polyline2d retvalA, retvalB;
     const_iterator nearestVertexIter= getNearestPoint(p);
     const Pos2d nearestVertex= *nearestVertexIter;
-    const_iterator nearestSegmentIter= getNearestSegment(p);
+    const_iterator nearestSegmentIter= getNearestSegmentIter(p);
     const Segment2d nearestSegment= getSegment(nearestSegmentIter);
     const GEOM_FT distToVertex= p.dist(nearestVertex);
     const GEOM_FT distToSegment= nearestSegment.dist(p);

@@ -30,6 +30,7 @@
 #include "../BND2d.h"
 #include <plotter.h>
 #include "utility/geom/pos_vec/Pos2dList.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Return los vertices of the polygon.
 GeomObj::list_Pos2d PolygonalSurface2d::getVertices(void) const
@@ -474,12 +475,13 @@ Segment2d PolygonalSurface2d::Clip(const Line2d &r) const
         retval= *sg_list.begin();
         if(sg_list.size()>1)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
   		      << "; the polygon clips the line in"
-                      << sg_list.size() << " segments." << std::endl;
-	    std::cerr << "sg_list: ";
+                      << sg_list.size() << " segments."
+		      << std::endl
+		      << "sg_list: ";
             ::print(std::cerr,sg_list.begin(),sg_list.end());
-	    std::cerr << std::endl;
+	    std::cerr << Color::def << std::endl;
           }
       }
     return retval;
@@ -494,9 +496,10 @@ Segment2d PolygonalSurface2d::Clip(const Ray2d &sr) const
       {
         retval= *sg_list.begin();
         if(sg_list.size()>1)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; the polygon clips the ray in"
-                    << sg_list.size() << " segments." << std::endl;
+                    << sg_list.size() << " segments."
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -511,12 +514,91 @@ Segment2d PolygonalSurface2d::Clip(const Segment2d &sg) const
       {
         retval= *sg_list.begin();
         if(sg_list.size()>1)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; the polygon clips the segment on "
-                    << sg_list.size() << " segments." << std::endl;
+                    << sg_list.size() << " segments."
+		    << Color::def << std::endl;
       }
     else
       { retval.setExists(false); }
+    return retval;
+  }
+
+//! @brief Return the nearest edge to the given point.
+//! @param: point to find the nearest segment to.
+int PolygonalSurface2d::getNearestEdgeIndex(const Pos2d &p) const    
+  {
+    const size_t ne= getNumEdges();
+    int retval= -1;
+    if(ne>0)
+      {
+	retval= 0;
+	const Segment2d tmp= this->Lado0(retval);
+	double dist2= tmp.dist2(p);
+	if(ne>1)
+	  {
+	    for(size_t i= 1; i<ne;i++)
+	      {
+		const Segment2d edge= this->Lado0(i);
+		const double d2= edge.dist2(p);
+		if(d2<dist2)
+		  {
+		    retval= i;
+		    dist2= d2;
+		  }
+	      }
+	  }
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the polygon has no edges. Returning -1."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return the nearest edge to the given point.
+//! @param: point to find the nearest segment to.
+Segment2d PolygonalSurface2d::getNearestEdge(const Pos2d &p) const    
+  {
+    Segment2d retval;
+    const int nearestEdgeIndex= this->getNearestEdgeIndex(p);
+    if(nearestEdgeIndex>=0)
+      retval= this->Lado0(nearestEdgeIndex);
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the polygon has no edges. Returning garbage."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return the projection of the given point into the polyline.
+//! @param p: point to be projected.
+Pos2d PolygonalSurface2d::Projection(const Pos2d &p) const
+  {
+    Segment2d nearestSegment= this->getNearestEdge(p);
+    const Pos2d retval= nearestSegment.Projection(p);
+    return retval;
+  }
+
+//! @brief Return the length along the perimeter upto the given point.
+GEOM_FT PolygonalSurface2d::getLengthUpTo(const Pos2d &p) const
+  {
+    GEOM_FT retval= 0.0;
+    if(!empty())
+      {
+	const int nearestSegmentIndex= this->getNearestEdgeIndex(p);
+	for(int i= 0;i < nearestSegmentIndex;i++)
+	  {
+	    const Segment2d &sg= this->Lado0(i);
+	    retval+= sg.getLength();
+	  }
+	const Pos2d lastVertex= this->Vertice0(nearestSegmentIndex+1);
+	retval+= lastVertex.dist(p);
+      }
     return retval;
   }
 

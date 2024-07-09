@@ -179,7 +179,7 @@ GEOM_FT Polyline3d::dist(const Pos3d &p) const
   { return sqrt(this->dist2(p)); }
 
 //! @brief Return the nearest segment to the argument.
-Polyline3d::const_iterator Polyline3d::getNearestSegment(const Pos3d &p) const    
+Polyline3d::const_iterator Polyline3d::getNearestSegmentIter(const Pos3d &p) const    
   {
     Polyline3d::const_iterator retval= end();
     const size_t nv= getNumVertices();
@@ -211,16 +211,16 @@ Polyline3d::const_iterator Polyline3d::getNearestSegment(const Pos3d &p) const
 //! @param p: point to which the returned segment is the closest one.
 int Polyline3d::getNearestSegmentIndex(const Pos3d &p) const
   {
-    const_iterator i= this->getNearestSegment(p);
+    const_iterator i= this->getNearestSegmentIter(p);
     return std::distance(this->begin(), i);
   }
 
-//! @brief Return the nearest 3D segment (the name getNearestSegment is already taken).
+//! @brief Return the nearest 3D segment.
 //! @param p: point to which the returned segment is the closest one.
-Segment3d Polyline3d::getNearestLink(const Pos3d &p) const
+Segment3d Polyline3d::getNearestSegment(const Pos3d &p) const
   {
     Segment3d retval;
-    const_iterator i= this->getNearestSegment(p);
+    const_iterator i= this->getNearestSegmentIter(p);
     const_iterator j= i+1;
     if((i!=this->end()) and (j!=this->end()))
       retval= Segment3d(*i,*j);
@@ -234,6 +234,36 @@ Segment3d Polyline3d::getNearestLink(const Pos3d &p) const
 	else
 	  std::cerr << " Polyline is empty.";
 	std::cerr << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return the projection of the given point into the polyline.
+//! @param p: point to be projected.
+Pos3d Polyline3d::Projection(const Pos3d &p) const
+  {
+    Segment3d nearestSegment= this->getNearestSegment(p);
+    const Pos3d retval= nearestSegment.Projection(p);
+    return retval;
+  }
+
+//! @brief Return the length along the polyline upto the given point.
+GEOM_FT Polyline3d::getLengthUpTo(const Pos3d &p) const
+  {
+    GEOM_FT retval= 0.0;    
+    if(!empty())
+      {
+	const_iterator nearestSegmentIter= this->getNearestSegmentIter(p);
+	const_iterator first= begin();
+	const_iterator last= std::prev(end());
+	list_Pos3d::const_iterator j=first;
+	for(;j != nearestSegmentIter;j++)
+	  {
+	    const Segment3d &sg= getSegment(j);
+	    retval+= sg.getLength();
+	  }
+	const Pos3d lastVertex= *j;
+	retval+= lastVertex.dist(p);
       }
     return retval;
   }
@@ -687,7 +717,7 @@ void Polyline3d::insertVertex(const Pos3d &p, const GEOM_FT &tol)
     const GEOM_FT distToVertex= p.dist(nearestVertex);
     if(distToVertex>tol) // No vertices close to p
       {
-        const_iterator vertexIter= getNearestSegment(p)+1; //Segment end vertex.
+        const_iterator vertexIter= getNearestSegmentIter(p)+1; //Segment end vertex.
         insert(vertexIter, p);
       }
   }
@@ -708,7 +738,7 @@ Polyline3d Polyline3d::getChunk(const Pos3d &p,const short int &sgn, const GEOM_
 	distToVertex= p.dist(nearestVertex);
 	// Deal with the case in which two
 	// vertices are equally distant from p.
-	const_iterator nearestSegmentIter= getNearestSegment(p);
+	const_iterator nearestSegmentIter= getNearestSegmentIter(p);
 	const Segment3d nearestSegment= getSegment(nearestSegmentIter);
 	const GEOM_FT distToSegment= nearestSegment.dist(p);
 	if((distToSegment<distToVertex) and (sgn>0))
@@ -752,7 +782,7 @@ boost::python::list Polyline3d::split(const Pos3d &p) const
     Polyline3d retvalA, retvalB;
     const_iterator nearestVertexIter= getNearestPoint(p);
     const Pos3d nearestVertex= *nearestVertexIter;
-    const_iterator nearestSegmentIter= getNearestSegment(p);
+    const_iterator nearestSegmentIter= getNearestSegmentIter(p);
     const Segment3d nearestSegment= getSegment(nearestSegmentIter);
     GEOM_FT distToVertex= p.dist(nearestVertex);
     GEOM_FT distToSegment= nearestSegment.dist(p);

@@ -100,6 +100,9 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     //! @brief Return the length of the object.
     virtual GEOM_FT getLength(void) const
       { return GeomObj::list_Pos2d::getLength(); }
+    virtual GEOM_FT getLengthUpTo(const Pos2d &) const;
+    inline GEOM_FT getLambda(const Pos2d &p) const
+      { return getLengthUpTo(p); }
     virtual GEOM_FT GetMax(unsigned short int i) const;
     //Return the maximum value of the i coordinate.
     virtual GEOM_FT GetMin(unsigned short int i) const;
@@ -111,14 +114,10 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     Segment2d getSegment(const const_iterator &i) const;
     Segment2d getSegment(const size_t &i) const;
     Segment2d getSegment0(const size_t &i) const;
-    const_iterator getNearestSegment(const Pos2d &) const;    
-/*     virtual list_Pos2d Int(unsigned short int i, const double d) const */
-/*       { */
-/*         cerr << "Polyline2d Int(i,d) not implemented" << endl; */
-/*         return list_Pos2d(); */
-/*       } */
+    const_iterator getNearestSegmentIter(const Pos2d &) const;    
     int getNearestSegmentIndex(const Pos2d &) const;
-    Segment2d getNearestLink(const Pos2d &) const;
+    Segment2d getNearestSegment(const Pos2d &) const;
+    Pos2d Projection(const Pos2d &) const;
     Polyline2d offset(const GEOM_FT &d) const;
     Polygon2d getBufferPolygon(const GEOM_FT &d, const size_t &numVertices= 8) const;
     //! @brief Return the intersections of the polyline with

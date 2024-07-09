@@ -41,6 +41,14 @@ class PlanePolyline3d: public D2to3d
     typedef Polyline2d::const_iterator const_iterator;    
   protected:
     Polyline2d pline2d;
+
+    inline Pos2d computePos2d(const Pos3d &p) const
+      {
+	const Plane plane= this->getPlane(); // Get the plane containing the polyline.
+	const Pos3d prj= plane.Projection(p); // Compute projection.
+	const Pos2d p2d(to_2d(prj)); // Convert to 2D.
+	return p2d;
+      }
   public:
     PlanePolyline3d(void): D2to3d(),pline2d() {}
     template <typename InputIterator>
@@ -81,6 +89,9 @@ class PlanePolyline3d: public D2to3d
     //! @brief Return the length of the object.
     inline GEOM_FT getLength(void) const
       { return pline2d.getLength(); }
+    GEOM_FT getLengthUpTo(const Pos3d &) const;
+    inline GEOM_FT getLambda(const Pos3d &p) const
+      { return getLengthUpTo(p); }
     bool isClosed(const GEOM_FT &tol= 1e-6) const;
     const_iterator getSegmentAtLength(const GEOM_FT &s) const;
     int getIndexOfSegmentAtLength(const GEOM_FT &s) const;
@@ -126,7 +137,8 @@ class PlanePolyline3d: public D2to3d
     GEOM_FT GetMin(unsigned short int i) const;
     bool In(const Pos3d &p,const double &tol) const;
     bool TocaCuadrante(const int &) const;
-    Segment3d getNearestLink(const Pos3d &) const;
+    Segment3d getNearestSegment(const Pos3d &) const;
+    Pos3d Projection(const Pos3d &) const;
 
     // GEOM_FT distSigno(const Pos3d &p) const;
     // GEOM_FT dist(const Pos3d &p) const;

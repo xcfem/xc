@@ -63,6 +63,10 @@ class PolygonalSurface2d: public Surface2d
       { return Vertice0(j); }
     Segment2d Lado(unsigned int i) const;
     Segment2d Lado0(unsigned int i) const;
+    int getNearestEdgeIndex(const Pos2d &) const;
+    Segment2d getNearestEdge(const Pos2d &) const;
+    Pos2d Projection(const Pos2d &) const;
+    
     GeomObj::list_Pos2d getVertices(void) const;
     Vector2d getLado0Normal(const size_t i) const;
     Vector2d getVertex0Normal(const size_t i) const;
@@ -70,10 +74,14 @@ class PolygonalSurface2d: public Surface2d
     int getIndexOfProximalEdge(const Pos2d &) const;
     int getIndexOfDistalVertex(const Pos2d &) const;
     int getIndexOfProximalVertex(const Pos2d &) const;
+    
     Polyline2d getPolyline(void) const;
     virtual GEOM_FT getLength(void) const;
     inline GEOM_FT getPerimeter(void) const
       { return getLength(); }
+    virtual GEOM_FT getLengthUpTo(const Pos2d &) const;
+    inline GEOM_FT getLambda(const Pos2d &p) const
+      { return getLengthUpTo(p); }
     inline GEOM_FT AreaSigno(void) const
       { return moment_sign(0,0); }
     virtual GEOM_FT getArea(void) const;

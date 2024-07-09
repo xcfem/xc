@@ -85,6 +85,9 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     //! @brief Return the length of the object.
     virtual GEOM_FT getLength(void) const
       { return GeomObj::list_Pos3d::getLength(); }
+    virtual GEOM_FT getLengthUpTo(const Pos3d &) const;
+    inline GEOM_FT getLambda(const Pos3d &p) const
+      { return getLengthUpTo(p); }
     virtual GEOM_FT GetMax(unsigned short int i) const;
     virtual GEOM_FT GetMin(unsigned short int i) const;
     Polyline3d GetMayores(unsigned short int i,const GEOM_FT &d) const;
@@ -92,9 +95,11 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     
     Segment3d getSegment(const list_Pos3d::const_iterator &) const;
     Segment3d getSegment(const size_t &) const;
-    const_iterator getNearestSegment(const Pos3d &) const;
+    const_iterator getNearestSegmentIter(const Pos3d &) const;
     int getNearestSegmentIndex(const Pos3d &) const;
-    Segment3d getNearestLink(const Pos3d &) const;
+    Segment3d getNearestSegment(const Pos3d &) const;
+    Pos3d Projection(const Pos3d &) const;
+
     
     //list_Pos3d Int(unsigned short int i,const GEOM_FT &d) const;
     list_Pos3d getIntersection(const Plane &) const;
