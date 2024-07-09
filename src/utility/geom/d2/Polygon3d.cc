@@ -493,6 +493,45 @@ bool Polygon3d::counterclockwise(const Pos3d &vPoint) const
 void Polygon3d::swap(void)
   { plg2d.swap(); }
 
+//! @brief Return a polygon parallel to this one at the given distance.
+//! The new polygon will be exterior if the distance is positive.
+Polygon3d Polygon3d::offset(const GEOM_FT &d) const
+  {
+    Polygon2d tmp= this->plg2d.offset(d);
+    return Polygon3d(this->getRef(), tmp);
+  }
+
+//! @brief Returns the buffer (a polygon being the spatial point set
+//! collection within a specified maximum distance from this polygon) of this
+//! polygon. 
+Polygon3d Polygon3d::buffer(const GEOM_FT &buffer_distance) const
+  {
+    Polygon2d tmp= this->plg2d.buffer(buffer_distance);
+    return Polygon3d(this->getRef(), tmp);
+  }
+
+//! @brief Return the projection of the given point into the polyline.
+//! @param p: point to be projected.
+Pos3d Polygon3d::Projection(const Pos3d &p) const
+  {
+    const Plane plane= getPlane();
+    const Pos3d prj= plane.Projection(p);
+    const Pos2d p2d(to_2d(prj));
+    const Pos2d prj2d= this->plg2d.Projection(p2d);
+    const Pos3d retval= to_3d(prj2d);
+    return retval;
+  }
+
+//! @brief Return the length along the perimeter upto the given point.
+GEOM_FT Polygon3d::getLengthUpTo(const Pos3d &p) const
+  {
+    const Plane plane= getPlane();
+    const Pos3d prj= plane.Projection(p);
+    const Pos2d p2d(to_2d(prj));
+    const GEOM_FT retval= this->plg2d.getLengthUpTo(p2d);
+    return retval;
+  }
+
 //! @brief Return the orientation of the polygon (clockwise or
 //! counterclockwise).
 std::string Polygon3d::orientation(const Pos3d &vPoint) const

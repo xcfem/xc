@@ -85,6 +85,14 @@ class Polygon3d: public D2to3d
     void swap(void);
     std::string orientation(const Pos3d &) const;
 
+    Pos3d Projection(const Pos3d &) const;
+    virtual GEOM_FT getLengthUpTo(const Pos3d &) const;
+    inline GEOM_FT getLambda(const Pos3d &p) const
+      { return getLengthUpTo(p); }
+    
+    Polygon3d offset(const GEOM_FT &d) const;
+    Polygon3d buffer(const GEOM_FT &d) const;
+    
     Plane getPlaneFromSide0(unsigned int i) const;
     Plane getPlaneFromSide(unsigned int i) const;
 
