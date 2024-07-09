@@ -127,6 +127,7 @@ Polygon2d Polygon2d::offset(const GEOM_FT &d) const
       }
     return retval;
   }
+
 //! @brief Returns the buffer (a polygon being the spatial point set
 //! collection within a specified maximum distance from this polygon) of this
 //! polygon. 
@@ -179,8 +180,8 @@ Polygon2d Polygon2d::buffer(const GEOM_FT &buffer_distance) const
 		    << std::endl;
 	const polygon_type &polygon_result= result[0];
     
-	//getting the vertices back
-	for(auto it = boost::begin(boost::geometry::exterior_ring(polygon_result)); it != boost::end(boost::geometry::exterior_ring(polygon_result)); ++it)
+	//getting the vertices back (except the last one because it's repeated).
+	for(auto it = boost::begin(boost::geometry::exterior_ring(polygon_result)); it != std::prev(boost::end(boost::geometry::exterior_ring(polygon_result))); ++it)
 	  {
 	    const double &x= boost::geometry::get<0>(*it);
 	    const double &y= boost::geometry::get<1>(*it);
