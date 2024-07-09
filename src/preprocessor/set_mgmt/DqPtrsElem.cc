@@ -446,7 +446,7 @@ XC::DqPtrsElem XC::DqPtrsElem::pickElemsCrossing(const GeomObj3d &geomObj, const
       {
         Element *e= (*i);
         assert(e);
-	if(e->Crosses(geomObj,tol))
+	if(e->Crosses(geomObj, 1.0, tol))
 	  retval.push_back(e);
       }
     return retval;    
@@ -464,7 +464,7 @@ XC::DqPtrsElem XC::DqPtrsElem::pickElemsCrossing(const GeomObj2d &geomObj, const
       {
         Element *e= (*i);
         assert(e);
-	if(e->Crosses(geomObj,tol))
+	if(e->Crosses(geomObj, 1.0, tol))
 	  retval.push_back(e);
       }
     return retval;    
