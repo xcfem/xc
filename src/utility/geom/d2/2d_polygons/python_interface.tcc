@@ -47,6 +47,7 @@ class_<PolygonalSurface2d, bases<Surface2d>, boost::noncopyable >("PolygonalSurf
   .def("getNearestEdge", &PolygonalSurface2d::getNearestEdge,"Return the closest edge to the given point.")
   .def("getProjection", &PolygonalSurface2d::Projection,"Return the projection of the given point onto the polygolal surface contour.")
   .def("getLengthUpTo", &PolygonalSurface2d::getLengthUpTo, "Return the length along the perimeter until the point p is reached.")
+  .def("getLambda", &PolygonalSurface2d::getLambda, "Return the length along the perimeter until the point p is reached.")
   .def("getPolyline",&PolygonalSurface2d::getPolyline)
   .def("getVertices",&PolygonalSurface2d::getVertices,"Return the vertices list.")
   .def("getApproxTangentPositions",&PolygonalSurface2d::getApproxTangentPositions,"Return the points for which the polygon is almost tangent to the direction argument.")
