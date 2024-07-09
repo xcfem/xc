@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Extract results from the finite element model.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2022, LCPT, AO_O"
