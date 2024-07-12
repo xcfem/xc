@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Test made from the example 7.2 of the book: 
     Introducción Al Estudio Del Elemento Finito en Ingeniería. 
     Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
@@ -7,6 +6,8 @@ from __future__ import print_function
     isbn={9789701702604},
     url={https://books.google.ch/books?id=auQwAAAACAAJ},
 '''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
