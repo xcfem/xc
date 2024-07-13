@@ -132,7 +132,7 @@ if test -f installed_files_history.txt; then
 else
     echo "${green}Create installed_files_history.txt${clear}"
     touch installed_files_history.txt
-    exit 1
+    exit 0
 fi
 cat installed_files_history.txt installed_files.txt | sort | uniq > tmp.txt
 mv tmp.txt installed_files_history.txt
