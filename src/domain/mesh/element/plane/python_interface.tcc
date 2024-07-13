@@ -47,8 +47,9 @@ class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("Qu
    ;
 
 class_<XC::SolidMech4N, bases<QuadBase4N_Mech2D>, boost::noncopyable >("SolidMech4N", no_init)
-  .def("getMeanInternalForce",&XC::SolidMech4N::getMeanInternalForce)
-  .def("getMeanInternalDeformation",&XC::SolidMech4N::getMeanInternalDeformation)
+  .def("getMeanInternalForce",&XC::SolidMech4N::getMeanInternalForce, "Return the average value of the internal force that corresponds to the given symbol")
+  .def("getMeanInternalDeformation",&XC::SolidMech4N::getMeanInternalDeformation, "Return the average value of the internal deformation that corresponds to the given symbol")
+  .def("getLocalCoordinatesOfNode", &XC::SolidMech4N::getLocalCoordinatesOfNode, "Return the local coordinates of the i-th node.")
   ;
 
 #include "fourNodeQuad/python_interface.tcc"
