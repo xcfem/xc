@@ -61,7 +61,7 @@
 #include "domain/mesh/element/plane/QuadBase4N.h"
 #include "domain/mesh/element/utils/physical_properties/SolidMech2D.h"
 #include "domain/mesh/element/utils/body_forces/BodyForces2D.h"
-#include "domain/mesh/element/ElemWithMaterial.h"
+#include "domain/mesh/element/utils/ParticlePos2d.h"
 
 namespace XC {
 class NDMaterial;
@@ -76,6 +76,7 @@ class QuadRawLoad;
 class SolidMech4N: public QuadBase4N<SolidMech2D>
   {
   protected:
+    std::vector<ParticlePos2d> xl= {ParticlePos2d(-1,-1), ParticlePos2d(1, -1), ParticlePos2d(1,1), ParticlePos2d(-1,1)};
     mutable Matrix Ki;
     
     int sendData(Communicator &);
@@ -90,7 +91,9 @@ class SolidMech4N: public QuadBase4N<SolidMech2D>
     void strainLoad(const Matrix &);
     
     void checkElem(void);
-    
+
+    inline ParticlePos2d getLocalCoordinatesOfNode(const int &i) const
+      { return xl[i % 4]; }
     double getMeanInternalForce(const std::string &) const;
     double getMeanInternalDeformation(const std::string &) const;
   };
