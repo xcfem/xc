@@ -23,11 +23,18 @@
 
 class_<XC::Information, boost::noncopyable >("Information", no_init);
 
-class_<XC::ParticlePos3d>("ParticlePos3d")
+class_<XC::ParticlePos2d>("ParticlePos2d")
+  .def(init<const double &, const double &>())
+  .def(init<Pos2d>())
+  .add_property("r", make_function( &XC::ParticlePos2d::r_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos2d::set_r_coordinate, "r coordinate.")
+  .add_property("s", make_function( &XC::ParticlePos2d::s_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos2d::set_s_coordinate, "s coordinate.")
+  .def(self_ns::str(self_ns::self))
+  ;
+
+class_<XC::ParticlePos3d, bases<XC::ParticlePos2d> >("ParticlePos3d")
+  .def(init<const double &, const double &, const double &>())
   .def(init<Pos2d>())
   .def(init<Pos3d>())
-  .add_property("r", make_function( &XC::ParticlePos3d::r_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_r_coordinate, "r coordinate.")
-  .add_property("s", make_function( &XC::ParticlePos3d::s_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_s_coordinate, "s coordinate.")
   .add_property("t", make_function( &XC::ParticlePos3d::t_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_t_coordinate, "t coordinate.")
   .def(self_ns::str(self_ns::self))
   ;
