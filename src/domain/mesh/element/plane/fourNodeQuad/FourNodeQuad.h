@@ -69,6 +69,7 @@ class NDMaterial;
 class Material;
 class Response;
 class GaussPoint;
+class ParticlePos2d;
 
 //! @ingroup PlaneElements
 //
@@ -132,6 +133,8 @@ class FourNodeQuad: public SolidMech4N
     const Vector &getResistingForceIncInertia(void) const;            
     virtual void createInertiaLoad(const Vector &);
 
+    Pos2d getCartesianCoordinates(const ParticlePos2d &, bool initialGeometry= true) const;
+    
     // public methods for element output
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

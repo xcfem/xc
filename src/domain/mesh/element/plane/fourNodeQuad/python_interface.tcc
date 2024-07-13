@@ -23,6 +23,7 @@
 
 class_<XC::FourNodeQuad, bases<XC::SolidMech4N>, boost::noncopyable >("FourNodeQuad", no_init)
   .def("detJ", &XC::FourNodeQuad::detJ)
+  .def("getCartesianCoordinates", &XC::FourNodeQuad::getCartesianCoordinates, "Returns cartesian coordinates of the given point.")
    ;
 
 class_<XC::EnhancedQuad, bases<XC::SolidMech4N>, boost::noncopyable >("EnhancedQuad", no_init)

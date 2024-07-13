@@ -62,13 +62,11 @@
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
 
-
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/load/volumetric/SelfWeight.h"
 #include "domain/load/plane/QuadRawLoad.h"
-
 
 
 double XC::FourNodeQuad::matrixData[64];
@@ -833,7 +831,40 @@ double XC::FourNodeQuad::shapeFunction(const GaussPoint &gp) const
     return detJ;
   }
 
-//! @brief ??
+
+//! @brief Return the cartesian coordinates corresponding to the given natural
+//! coordinates.
+Pos2d XC::FourNodeQuad::getCartesianCoordinates(const ParticlePos2d &pt, bool initialGeometry) const
+  {
+    const double &xi= pt.r_coordinate();
+    const double &eta= pt.s_coordinate();
+   
+    const double oneMinuseta = 1.0-eta;
+    const double onePluseta = 1.0+eta;
+    const double oneMinusxi = 1.0-xi;
+    const double onePlusxi = 1.0+xi;
+
+    // Shape functions.
+    const double N1= 0.25*oneMinusxi*oneMinuseta; // N_1
+    const double N2= 0.25*onePlusxi*oneMinuseta; // N_2
+    const double N3= 0.25*onePlusxi*onePluseta;  // N_3
+    const double N4= 0.25*oneMinusxi*onePluseta; // N_4
+    
+    //Node positions
+    double factor= 1.0;
+    if(initialGeometry)
+      factor= 0.0;
+    const Pos3d n1Pos= theNodes[0]->getCurrentPosition3d(factor);
+    const Pos3d n2Pos= theNodes[1]->getCurrentPosition3d(factor);
+    const Pos3d n3Pos= theNodes[2]->getCurrentPosition3d(factor);
+    const Pos3d n4Pos= theNodes[3]->getCurrentPosition3d(factor);
+    
+    const double x= N1*n1Pos.x()+N2*n2Pos.x()+N3*n3Pos.x()+N4*n4Pos.x();
+    const double y= N1*n1Pos.y()+N2*n2Pos.y()+N3*n3Pos.y()+N4*n4Pos.y();
+    return Pos2d(x,y);
+  }
+
+//! @brief Define the values of the pressure load at the element nodes.
 void XC::FourNodeQuad::setPressureLoadAtNodes(void)
   {
     pressureLoad.Zero();
