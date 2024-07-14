@@ -329,6 +329,29 @@ boost::python::list XC::MapSet::get_sets_containing_element_py(const int &elemen
 XC::MapSet::~MapSet(void)
   { clearAll(); }
 
+//! @brief Remove the given node from the sets.
+void XC::MapSet::removeNode(Node *n)
+  {
+    this->total->remove(n);
+    MapSetBase::removeNode(n);
+  }
+
+//! @brief Remove the given element from the sets.
+void XC::MapSet::removeElement(Element *elem)
+  {
+    this->total->remove(elem);
+    MapSetBase::removeElement(elem);
+  }
+
+
+//! @brief Remove the given element from the sets.
+void XC::MapSet::removeConstraint(Constraint *c)
+  {
+    this->total->remove(c);
+    MapSetBase::removeConstraint(c);
+  }
+
+
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::MapSet::getDbTagData(void) const

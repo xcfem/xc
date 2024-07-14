@@ -41,6 +41,7 @@
 namespace XC {
 
 class Domain;
+class Constraint;
 
 //!  @brief Sets container.
 //!  @ingroup Set
@@ -108,6 +109,10 @@ class MapSet: public PreprocessorContainer, public MovableObject, public MapSetB
       { return open_sets; }
     Set *defSet(const std::string &);
     void removeSet(const std::string &);
+
+    void removeNode(Node *);
+    void removeElement(Element *);
+    void removeConstraint(Constraint *);
 
     std::set<SetBase *> get_sets_containing_node(const int &);
     boost::python::list get_sets_containing_node_py(const int &);

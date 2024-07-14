@@ -30,6 +30,7 @@ class_<ElemWithMaterial4N_Mech2D, bases<ElementBase4N >, boost::noncopyable >("E
   .add_property("extrapolationMatrix",make_function(&ElemWithMaterial4N_Mech2D::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
   .def("getExtrapolatedValues", &ElemWithMaterial4N_Mech2D::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
   .def("setMaterial", &ElemWithMaterial4N_Mech2D::setMaterial,"Set the element material.")
+  .def("copyMaterialFrom", &ElemWithMaterial4N_Mech2D::copyMaterialFrom, "Copy the material from the given element.")
    ;
 
 class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyable >("PlaneElement4N_Mech2D", no_init)

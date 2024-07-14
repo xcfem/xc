@@ -73,6 +73,7 @@ class_<material_vector_NDMat, bases<vectorNDMaterial, CommandEntity>, boost::non
   .add_property("generalizedStresses", &material_vector_NDMat::getGeneralizedStresses, "Return generalized stresses.")
   .add_property("generalizedStrains", &material_vector_NDMat::getGeneralizedStrains, "Return generalized strains.")
   .def("getNames",&material_vector_NDMat::getNamesPy,"Returns the names of the materials.")
+  .def("getTags",&material_vector_NDMat::getTagsPy,"Returns the tags of the materials.")
   .def("getValues",&material_vector_NDMat::getValues,"Ask the materials for the values corresponding to the argument code (stress, strain, ...).")
   ;
 

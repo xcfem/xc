@@ -220,6 +220,36 @@ bool XC::SetBase::In(const Body *) const
 bool XC::SetBase::In(const UniformGrid *) const
   { return false; }
 
+//! @brief Removes the given node from the set.
+bool XC::SetBase::remove(Node *)
+  {
+    std::cerr << Color::red
+	      << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet."
+	      << Color::def << std::endl;
+    return false;
+  }
+
+//! @brief Removes the given element from the set.
+bool XC::SetBase::remove(Element *)
+  {
+    std::cerr << Color::red
+	      << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet."
+	      << Color::def << std::endl;
+    return false;
+  }
+
+//! @brief Removes the given constraint from the set.
+bool XC::SetBase::remove(Constraint *)
+  {
+    std::cerr << Color::red
+	      << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet."
+	      << Color::def << std::endl;
+    return false;
+  }
+
 //! @brief Reset tributary areas (or lengths, or volumes) for the nodes that
 //! are connected to the set elements.
 void XC::SetBase::resetTributaries(void) const

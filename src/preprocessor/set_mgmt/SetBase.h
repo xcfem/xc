@@ -39,6 +39,7 @@
 #include "utility/matrix/Vector.h"
 
 namespace XC {
+class Constraint;
 class SFreedom_Constraint;
 class Face;
 class Body;
@@ -70,7 +71,10 @@ class SetBase: public EntMdlrBase
 
     bool interiorNode(const Node *) const;
     virtual bool In(const Node *) const= 0;
+    virtual bool remove(Node *);
     virtual bool In(const Element *) const= 0;
+    virtual bool remove(Element *);
+    virtual bool remove(Constraint *);
     virtual bool In(const Pnt *) const;
     virtual bool In(const Edge *) const;
     virtual bool In(const Face *) const;

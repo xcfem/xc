@@ -103,6 +103,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     
     std::set<std::string> getNames(void) const;
     boost::python::list getNamesPy(void) const;
+    std::set<int> getTags(void) const;
+    boost::python::list getTagsPy(void) const;
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
@@ -602,6 +604,27 @@ boost::python::list MaterialVector<MAT>::getNamesPy(void) const
     boost::python::list retval;
     std::set<std::string> tmp= getNames();
     for(std::set<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }  
+
+//! @brief Return the identifiers of the materials.
+template <class MAT>
+std::set<int> MaterialVector<MAT>::getTags(void) const
+  {
+    std::set<int> retval;
+    for(const_iterator i= mat_vector::begin();i!=mat_vector::end();i++)
+      retval.insert((*i)->getTag());
+    return retval;
+  }
+
+//! @brief Return the identifiers of the materials in a python list.
+template <class MAT>
+boost::python::list MaterialVector<MAT>::getTagsPy(void) const
+  {
+    boost::python::list retval;
+    std::set<int> tmp= getTags();
+    for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
         retval.append(*i);
     return retval;
   }  

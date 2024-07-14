@@ -71,6 +71,7 @@ class ElemWithMaterial: public ElementBase<NNODOS>
     void setPhysicalProperties(const PhysProp &);
     inline virtual std::set<std::string> getMaterialNames(void) const
       { return physicalProperties.getMaterialNames(); }
+    void copyMaterialFrom(const ElemWithMaterial &, bool reverToStart= true);
     
     virtual const Matrix &getExtrapolationMatrix(void) const;
     Matrix getExtrapolatedValues(const Matrix &) const;
@@ -103,6 +104,14 @@ void ElemWithMaterial<NNODOS, PhysProp>::setMaterial(const std::string &matName)
 		    << "material identified by: '" << matName
 		    << "' is not a suitable material.\n";
       }
+  }
+
+//! @brief Copy the material from the given element.
+template <int NNODOS,class PhysProp>
+void ElemWithMaterial<NNODOS, PhysProp>::copyMaterialFrom(const ElemWithMaterial &other, bool reverToStart)
+  {
+    this->physicalProperties= other.physicalProperties;
+    this->physicalProperties.revertToStart();
   }
   
 template <int NNODOS,class PhysProp>

@@ -356,7 +356,7 @@ bool XC::Mesh::addNode(Node * node)
   }
 
 
-//! @brief Deletes the element identified by the tag being passed as parameter.
+//! @brief Removes from the domain the element identified by the tag being passed as parameter.
 //!
 //! To remove the element whose tag is given by \p tag from the
 //! mesh. This is achieved by invoking {\em removeComponent(tag)} on the
@@ -381,6 +381,22 @@ bool XC::Mesh::removeElement(int tag)
         dom->domainChange(); //mark the domain as having changed
       }
     return res;
+  }
+
+//! @brief Removes the given alement from the mesh.
+//! @param e: element to remove from the mesh.
+//! @param deleteObject: if true delete the removed element.
+bool XC::Mesh::remove(Element *e, bool deleteObject)
+  {
+    bool retval= false;
+    // remove the object from the container
+    if(e)
+      {
+        retval= this->removeElement(e->getTag());
+        if(deleteObject)
+	  delete e;
+      }
+    return retval;
   }
 
 //! @brief Remove from mesh the node identified by the argument.
@@ -408,6 +424,22 @@ bool XC::Mesh::removeNode(int tag)
         dom->domainChange();
       }
     return res;
+  }
+
+//! @brief Removes the the given node.
+//! @param n: node to remove from the mesh.
+//! @param deleteObject: if true delete the removed node.
+bool XC::Mesh::remove(Node *n, bool deleteObject)
+  {
+    bool retval= false;
+    // remove the object from the container
+    if(n)
+      {
+        retval= this->removeElement(n->getTag());
+        if(deleteObject)
+	  delete n;
+      }
+    return retval;
   }
 
 //! @brief Clears the pointers to node DOF groups.

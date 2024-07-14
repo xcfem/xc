@@ -95,6 +95,54 @@ void XC::Preprocessor::updateSets(Element *new_elem)
       }
   }
 
+//! @brief Removes the node from all the sets.
+void XC::Preprocessor::removeFromSets(Node *n)
+  {
+    sets.removeNode(n);
+  }
+
+//! @brief Removes the node from the problem.
+//! @param n: node to remove.
+//! @param deleteObject: if true delete the removed node.
+void XC::Preprocessor::remove(Node *n, bool deleteObject)
+  {
+    this->removeFromSets(n);
+    if(domain)
+      domain->remove(n, deleteObject);
+  }
+
+//! @brief Removes the element from all the sets.
+void XC::Preprocessor::removeFromSets(Element *elem)
+  {
+    sets.removeElement(elem);
+  }
+
+//! @brief Removes the element from the problem.
+//! @param e: element to remove.
+//! @param deleteObject: if true delete the removed element.
+void XC::Preprocessor::remove(Element *e, bool deleteObject)
+  {
+    this->removeFromSets(e);
+    if(domain)
+      domain->remove(e, deleteObject);
+  }
+
+//! @brief Removes the constraint from all the sets.
+void XC::Preprocessor::removeFromSets(Constraint *c)
+  {
+    sets.removeConstraint(c);
+  }
+
+//! @brief Removes the constraint from the problem.
+//! @param c: constraint to remove.
+//! @param deleteObject: if true delete the removed constraint.
+void XC::Preprocessor::remove(Constraint *c, bool deleteObject)
+  {
+    this->removeFromSets(c);
+    if(domain)
+      domain->remove(c, deleteObject);
+  }
+
 //! @brief Insert the pointer to the constraint in the "total" set and in the 
 //! sets that are currently opened.
 void XC::Preprocessor::updateSets(Constraint *new_constraint)

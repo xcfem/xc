@@ -30,6 +30,7 @@ class_<PhysicalProperties_NDMat,  bases<CommandEntity,XC::MovableObject>, boost:
   .add_property("generalizedStrains",&PhysicalProperties_NDMat::getGeneralizedStrains,"Returns a matrix with strain values for each gauss point.")
   .add_property("generalizedStresses",&PhysicalProperties_NDMat::getGeneralizedStresses,"Returns a matrix with stress values for each gauss point.")
   .def("setMaterial",setMaterialPtr,"Set material.")
+  .def("copyMaterialFrom", &PhysicalProperties_NDMat::copyMaterialFrom, "Copy the material data from the give physical properties");
    ;
 
 const XC::Vector &(XC::NDMaterialPhysicalProperties::*getCommittedStrainVector)(const size_t &) const= &XC::NDMaterialPhysicalProperties::getCommittedStrain;

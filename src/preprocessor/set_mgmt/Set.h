@@ -90,7 +90,9 @@ class Set: public SetMeshComp
     Set getMeshComponentsSet(void) const;
 
     bool In(const Node *) const;
+    bool remove(Node *);
     bool In(const Element *) const;
+    bool remove(Element *);
     Set pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     Set pickNodesInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
     Set pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
@@ -100,6 +102,7 @@ class Set: public SetMeshComp
     Set pickElemsOfType(const std::string &, const std::string &);
     Set pickElemsOfDimension(const std::string &, const size_t &);
 
+    bool remove(Constraint *);
 
     //! @brief Return a reference to the entities container.
     virtual const SetEntities &getEntities(void) const

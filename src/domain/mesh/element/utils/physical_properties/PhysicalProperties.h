@@ -63,6 +63,8 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     void setMaterial(const MAT *,const std::string &);
     void setMaterial(size_t i,const MAT *);
     void setMaterial(size_t i,const MAT &);
+    void copyMaterialFrom(const PhysicalProperties<MAT> &other)
+      { this->theMaterial= other.theMaterial; }
 
     // public methods to set the state of the properties
     int commitState(void);
@@ -79,9 +81,13 @@ class PhysicalProperties: public CommandEntity, public MovableObject
       { return theMaterial.getNames(); }
     inline boost::python::list getMaterialNamesPy(void) const
       { return theMaterial.getNamesPy(); }
+    inline std::set<std::string> getMaterialTags(void) const
+      { return theMaterial.getTags(); }
+    inline boost::python::list getMaterialTagsPy(void) const
+      { return theMaterial.getTagsPy(); }
 
-    inline void copyPropsFrom(const EntityWithProperties *otherMat)
-      { theMaterial.copyPropsFrom(otherMat); }
+    inline void copyPropsFrom(const EntityWithProperties *other)
+      { theMaterial.copyPropsFrom(other); }
 
     inline MAT *operator[](const size_t &i)
       { return theMaterial[i]; }

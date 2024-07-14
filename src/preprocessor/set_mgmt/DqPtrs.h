@@ -97,6 +97,7 @@ class DqPtrs: public CommandEntity, protected std::deque<T *>
     inline size_type size(void) const
       { return lst_ptr::size(); }
     bool in(const T *) const;
+    bool remove(T *);
     //void sort_on_prop(const std::string &cod,const bool &ascending= true);
     
     boost::python::list getPythonList(void);
@@ -227,7 +228,21 @@ bool DqPtrs<T>::in(const T *ptr) const
     return retval;
   }
 
-
+//! @brief Remove the given pointer from the container.
+template<class T>
+bool DqPtrs<T>::remove(T *ptr)
+  {
+    bool retval= false;
+    for(const_iterator i= begin();i!= end();i++)
+      if(*i==ptr)
+        {
+          retval= true;
+	  this->erase(i);
+          break;
+        }
+    return retval;
+  }
+  
 template <class T>
 bool DqPtrs<T>::push_back(T *t)
   {

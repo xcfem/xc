@@ -49,8 +49,6 @@ class Element1D;
 //! 
 class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
   {
-    KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing elements (element centroids).
-
     Element1D *get_nearest_element_1d(const Vector &, const std::string &);
   public:
     DqPtrsElem(CommandEntity *owr= nullptr);

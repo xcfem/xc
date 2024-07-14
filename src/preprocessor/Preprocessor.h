@@ -93,8 +93,6 @@ class Preprocessor: public CommandEntity, public MovableObject
     friend class ElementHandler;
     friend class BoundaryCondHandler;
     friend class FEProblem;
-    void updateSets(Element *);
-    void updateSets(Constraint *);
 
     SetEstruct *find_struct_set(const std::string &nmb);
   public:
@@ -109,6 +107,14 @@ class Preprocessor: public CommandEntity, public MovableObject
     FE_Datastore *getDataBase(void);
 
     void updateSets(Node *);
+    void removeFromSets(Node *);
+    void remove(Node *, bool deleteObject);
+    void updateSets(Element *);
+    void removeFromSets(Element *);
+    void remove(Element *, bool deleteObject);
+    void updateSets(Constraint *);
+    void removeFromSets(Constraint *);
+    void remove(Constraint *, bool deleteObject);
 
     MapSet &get_sets(void)
       { return sets; }

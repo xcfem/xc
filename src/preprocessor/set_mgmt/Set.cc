@@ -248,9 +248,21 @@ bool XC::Set::getUseGmsh(void) const
 bool XC::Set::In(const Node *n) const
   { return SetMeshComp::In(n); }
 
+//! @brief Removes the given node from the set.
+bool XC::Set::remove(Node *n)
+  { return SetMeshComp::remove(n); }
+
 //! @brief Returns true if the element belongs to the set.
 bool XC::Set::In(const Element *e) const
   { return SetMeshComp::In(e); }
+
+//! @brief Removes the given element from the set.
+bool XC::Set::remove(Element *e)
+  { return SetMeshComp::remove(e); }
+
+//! @brief Removes the given constraint from the set.
+bool XC::Set::remove(Constraint *c)
+  { return SetMeshComp::remove(c); }
 
 //!  @brief Triggers mesh generation from set components.
 //!

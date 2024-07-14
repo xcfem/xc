@@ -67,6 +67,7 @@ class DqPtrsKDTree: public DqPtrs<T>
     //void extend_cond(const DqPtrsKDTree &,const std::string &cond);
     bool push_back(T *);
     bool push_front(T *);
+    bool remove(T *);
     void clearAll(void);
 
     T *getNearest(const Pos3d &p);
@@ -157,7 +158,17 @@ bool XC::DqPtrsKDTree<T,KDTree>::push_front(T *t)
     if(retval)
       kdtree.insert(*t);
     return retval;
-}
+  }
+
+//! @brief Removes an object from the container.
+template <class T,class KDTree>
+bool XC::DqPtrsKDTree<T,KDTree>::remove(T *t)
+  {
+    bool retval= DqPtrs<T>::remove(t);
+    if(retval)
+      kdtree.erase(*t);
+    return retval;
+  }
 
 //! @brief Clears out the list of pointers and erases the properties of the object (if any).
 template <class T,class KDTree>

@@ -41,6 +41,7 @@ namespace XC {
 
 class SetBase;
 class Set;
+class Constraint;
 class SetEstruct;
 class EntMdlr;
 class Pnt;
@@ -85,6 +86,9 @@ class MapSetBase: public std::map<std::string,SetBase *>
     bool exists(const std::string &nmb) const;
     void remove(const std::string &);
     void rename(const std::string &, const std::string &);
+    void removeNode(Node *);
+    void removeElement(Element *);
+    void removeConstraint(Constraint *);
     
     boost::python::list getSetsNamesPy(void) const;
     boost::python::list getKeysPy(void) const;

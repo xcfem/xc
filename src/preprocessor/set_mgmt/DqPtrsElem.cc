@@ -59,7 +59,6 @@ XC::DqPtrsElem::DqPtrsElem(const std::set<const Element *> &st)
 XC::DqPtrsElem &XC::DqPtrsElem::operator=(const DqPtrsElem &other)
   {
     DqPtrsKDTree<Element,KDTreeElements>::operator=(other);
-    kdtreeElements= other.kdtreeElements;
     return *this;
   }
 

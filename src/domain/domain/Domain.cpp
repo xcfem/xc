@@ -381,12 +381,26 @@ bool XC::Domain::addElementalLoad(ElementalLoad *load, int loadPatternTag)
   }
 
 //! @brief Remove the element identified by the argument.
+//! @param tag: identifier of the element to remove from the mesh.
 bool XC::Domain::removeElement(int tag)
   { return mesh.removeElement(tag); }
 
+//! @brief Remove the element from the domain.
+//! @param e: element to remove from the mesh.
+//! @param deleteObject: if true delete the removed element.
+bool XC::Domain::remove(Element *e, bool deleteObject)
+  { return mesh.remove(e, deleteObject); }
+
 //! @brief Remove the node identified by the argument.
+//! @param tag: identifier of the node to remove from the mesh.
 bool XC::Domain::removeNode(int tag)
   { return mesh.removeNode(tag); }
+
+//! @brief Remove the node from the domain.
+//! @param n: node to remove from the mesh.
+//! @param deleteObject: if true delete the removed node.
+bool XC::Domain::remove(Node *n, bool deleteObject)
+  { return mesh.remove(n, deleteObject); }
 
 //! @brief Remove the single freedom constraint from the load pattern
 //! identified by the argument.
@@ -455,6 +469,34 @@ bool XC::Domain::removeMRMFreedom_Constraint(int tag)
     if(result)
       domainChange();
     return result;
+  }
+//! @brief Remove the element from the domain.
+//! @param c: constraint to remove from the domain.
+//! @param deleteObject: if true delete the removed constraint.
+bool XC::Domain::remove(Constraint *c, bool deleteObject)
+  {
+    bool retval= false;
+    if(c)
+      {
+        SFreedom_Constraint *spc= dynamic_cast<SFreedom_Constraint *>(c);
+        if(spc)
+	  retval= this->removeSFreedom_Constraint(spc->getTag());
+	else
+	  {
+	    MFreedom_Constraint *mfc= dynamic_cast<MFreedom_Constraint *>(c);
+	    if(mfc)
+	      retval= this->removeMFreedom_Constraint(mfc->getTag());
+	    else
+	      {
+		MRMFreedom_Constraint *mrmf= dynamic_cast<MRMFreedom_Constraint *>(c);
+		if(mrmf)
+		  retval= this->removeMRMFreedom_Constraint(mrmf->getTag());
+	      }
+	  }
+	if(deleteObject)
+	  delete c;
+      }
+    return retval;
   }
 
 //! @brief Appends the load pattern to the domain.

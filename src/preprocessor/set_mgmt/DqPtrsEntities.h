@@ -221,7 +221,7 @@ BND3d DqPtrsEntities<T>::Bnd(void) const
     return retval;
   }
 
-//! @brief Removes the objects that belongs also to the parameter.
+//! @brief Removes the objects that belongs also to the given container.
 template <class T>
 void DqPtrsEntities<T>::remove(const DqPtrsEntities<T> &other)
   {
@@ -234,7 +234,7 @@ void DqPtrsEntities<T>::remove(const DqPtrsEntities<T> &other)
       }
   }
 
-//! @brief Removes the objects that belongs also to the parameter.
+//! @brief Removes the objects that belongs also to the given container.
 template <class T>
 void DqPtrsEntities<T>::intersect(const DqPtrsEntities<T> &other)
   {

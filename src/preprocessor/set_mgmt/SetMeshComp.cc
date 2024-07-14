@@ -259,9 +259,21 @@ void XC::SetMeshComp::addElement(Element *ePtr)
 bool XC::SetMeshComp::In(const Node *n) const
   { return nodes.in(n); }
 
+//! @brief Remove the given node from the set.
+bool XC::SetMeshComp::remove(Node *n)
+  { return nodes.remove(n); }
+
 //! @brief Returns true if the element belongs to the set.
 bool XC::SetMeshComp::In(const Element *e) const
   { return elements.in(e); }
+
+//! @brief Remove the given element from the set.
+bool XC::SetMeshComp::remove(Element *e)
+  { return elements.remove(e); }
+
+//! @brief Remove the given constraint from the set.
+bool XC::SetMeshComp::remove(Constraint *c)
+  { return constraints.remove(c); }
 
 //! @brief Assigns index to each object in the set (nodes,elements,points...)
 //! to be able to use them in VTK.

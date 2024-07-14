@@ -139,6 +139,7 @@ class SetMeshComp: public SetBase
       { nodes.clearAll(); }
     void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
+    bool remove(Node *);
     SetMeshComp pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     SetMeshComp pickNodesInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
     BND3d Bnd(const double &) const;
@@ -162,6 +163,7 @@ class SetMeshComp: public SetBase
       { elements.clearAll(); }
     void sel_elements_from_list(const ID &tags);
     bool In(const Element *) const;
+    bool remove(Element *);
     SetMeshComp pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     SetMeshComp pickElemsInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
     SetMeshComp pickElemsCrossing(const std::string &, const GeomObj3d &, const double &tol= 0.0);
@@ -181,6 +183,7 @@ class SetMeshComp: public SetBase
       { return constraints.size(); }
     //! @brief Adds a constraint.
     void addConstraint(Constraint *);
+    bool remove(Constraint *);
     //! @brief Return the constraints container.
     virtual const DqPtrsConstraint &getConstraints(void) const
       { return constraints; }
