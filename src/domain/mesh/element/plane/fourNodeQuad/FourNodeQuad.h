@@ -61,7 +61,6 @@
 #include "domain/mesh/element/plane/SolidMech4N.h"
 #include "domain/mesh/element/utils/physical_properties/SolidMech2D.h"
 #include "domain/mesh/element/utils/body_forces/BodyForces2D.h"
-#include "domain/mesh/element/ElemWithMaterial.h"
 #include "domain/mesh/element/utils/fvectors/FVectorQuad.h"
 
 namespace XC {
