@@ -355,6 +355,108 @@ XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void)
 const XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void) const
   { return findLoadPattern(lpcode); }
 
+//! @brief Return the load patterns that act on the given node.
+std::list<XC::LoadPattern *> XC::MapLoadPatterns::getLoadPatternsActingOn(const Node *n)
+  {
+    std::list<XC::LoadPattern *> retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+	LoadPattern *lp= (*i).second;
+	if(lp->actsOn(n))
+	  retval.push_back(lp);
+      }
+    return retval;
+  }
+
+//! @brief Return the load patterns that act on the given node.
+boost::python::list XC::MapLoadPatterns::getLoadPatternsActingOnPy(const Node *n)
+  {
+    std::list<LoadPattern *> tmp= this->getLoadPatternsActingOn(n);
+    boost::python::list retval;
+    for(std::list<XC::LoadPattern *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	LoadPattern *lp= *i;
+	boost::python::object pyObj(boost::ref(*lp));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Removes the given node from all the load patterns.
+void XC::MapLoadPatterns::removeLoadsOn(const Node *n)
+  {
+    std::list<XC::LoadPattern *> retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+	LoadPattern *lp= (*i).second;
+	lp->removeLoadsOn(n);
+      }
+  }
+
+//! @brief Copy the loads from the first node to the second one.
+//! @param fromNode: node to copy the loads from.
+//! @param toNode: node to copy the loads to.
+void XC::MapLoadPatterns::copyLoads(const Node *fromNode, const Node *toNode)
+  {
+    std::list<XC::LoadPattern *> affectedLoadPatterns= this->getLoadPatternsActingOn(fromNode);
+    for(std::list<XC::LoadPattern *>::iterator i= affectedLoadPatterns.begin();i!=affectedLoadPatterns.end();i++)
+      {
+	LoadPattern *lp= *i;
+	lp->copyLoads(fromNode, toNode);
+      }
+  }
+
+//! @brief Return the load patterns that act on the given element.
+std::list<XC::LoadPattern *> XC::MapLoadPatterns::getLoadPatternsActingOn(const Element *e)
+  {
+    std::list<XC::LoadPattern *> retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+	LoadPattern *lp= (*i).second;
+	if(lp->actsOn(e))
+	  retval.push_back(lp);
+      }
+    return retval;
+  }
+
+//! @brief Return the load patterns that act on the given element.
+boost::python::list XC::MapLoadPatterns::getLoadPatternsActingOnPy(const Element *e)
+  {
+    std::list<XC::LoadPattern *> tmp= this->getLoadPatternsActingOn(e);
+    boost::python::list retval;
+    for(std::list<XC::LoadPattern *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	LoadPattern *lp= *i;
+	boost::python::object pyObj(boost::ref(*lp));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Removes the given element from all the load patterns.
+void XC::MapLoadPatterns::removeLoadsOn(const Element *e)
+  {
+    std::list<XC::LoadPattern *> retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+	LoadPattern *lp= (*i).second;
+	lp->removeLoadsOn(e);
+      }
+  }
+
+//! @brief Copy the loads from the first element to the second one.
+//! @param fromElement: element to copy the loads from.
+//! @param toElement: element to copy the loads to.
+void XC::MapLoadPatterns::copyLoads(const Element *fromElement, const Element *toElement)
+  {
+    std::list<XC::LoadPattern *> affectedLoadPatterns= this->getLoadPatternsActingOn(fromElement);
+    for(std::list<XC::LoadPattern *>::iterator i= affectedLoadPatterns.begin();i!=affectedLoadPatterns.end();i++)
+      {
+	LoadPattern *lp= *i;
+	lp->copyLoads(fromElement, toElement);
+      }
+  }
+
 //! @brief Return a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::MapLoadPatterns::getDbTagData(void) const

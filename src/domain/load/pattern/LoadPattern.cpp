@@ -58,6 +58,7 @@
 #include <cstdlib>
 #include <utility/matrix/ID.h>
 #include "domain/domain/Domain.h"
+#include "domain/mesh/node/Node.h"
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <domain/load/pattern/TimeSeries.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
@@ -366,6 +367,46 @@ bool XC::LoadPattern::removeElementalLoad(int tag)
     if(result) currentGeoTag++;
     return result;
   }
+
+//! @brief Return true if the load pattern acts on the given node.
+bool XC::LoadPattern::actsOn(const Node *n) const
+  { return theLoads.actsOn(n); }
+
+//! @brief Removes the given node from all the load patterns.
+void XC::LoadPattern::removeLoadsOn(const Node *n)
+  { theLoads.removeLoadsOn(n); }
+
+//! @brief Copy the loads from the first node to the second one.
+//! @param fromNode: node to copy the loads from.
+//! @param toNode: node to copy the loads to.
+void XC::LoadPattern::copyLoads(const Node *fromNode, const Node *toNode)
+  {
+    std::list<NodalLoad *> loads= theLoads.getLoadsOn(fromNode);
+    MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
+    for(std::list<NodalLoad *>::const_iterator i= loads.begin(); i!=loads.end();i++)
+      {
+	NodalLoad *orgLoad= *i;
+	int nextTag= map->getCurrentNodeLoadTag();
+	NodalLoad *destLoad= orgLoad->getCopy(nextTag);
+	destLoad->setNodeTag(toNode->getTag());
+	if(addNodalLoad(destLoad))
+	  map->setCurrentNodeLoadTag(++nextTag);
+      }
+  }
+
+//! @brief Return true if the load pattern acts on the given element.
+bool XC::LoadPattern::actsOn(const Element *e) const
+  { return theLoads.actsOn(e); }
+
+//! @brief Removes the given element from all the load patterns.
+void XC::LoadPattern::removeLoadsOn(const Element *e)
+  { theLoads.removeLoadsOn(e); }
+
+//! @brief Copy the loads from the first element to the second one.
+//! @param fromElement: element to copy the loads from.
+//! @param toElement: element to copy the loads to.
+void XC::LoadPattern::copyLoads(const Element *fromElement, const Element *toElement)
+  { theLoads.copyLoads(fromElement, toElement); }
 
 //! @brief Apply the load for pseudo-time being passed as parameter.
 void XC::LoadPattern::applyLoad(double pseudoTime)

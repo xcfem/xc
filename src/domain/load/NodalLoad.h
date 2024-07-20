@@ -103,11 +103,13 @@ class NodalLoad: public Load
     NodalLoad(int tag, int theClassTag=  LOAD_TAG_NodalLoad);
     NodalLoad(int tag, int node, int classTag);
     NodalLoad(int tag, int node, const Vector &load, bool isLoadConstant = false);
+    NodalLoad *getCopy(const int &);
 
     virtual void setDomain(Domain *newDomain);
     inline const Node *getNode(void) const
       { return get_node_ptr(); }
     virtual int getNodeTag(void) const;
+    void setNodeTag(const int &);
     virtual void applyLoad(double loadFactor);
 
     const Vector &getLoadVector(void) const;

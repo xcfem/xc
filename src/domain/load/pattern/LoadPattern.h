@@ -160,7 +160,14 @@ class LoadPattern: public NodeLocker
     virtual void clearLoads(void);
     virtual bool removeNodalLoad(int tag);
     virtual bool removeElementalLoad(int tag);
- 
+
+    bool actsOn(const Node *) const;
+    void removeLoadsOn(const Node *);
+    void copyLoads(const Node *, const Node *);
+    bool actsOn(const Element *) const;
+    void removeLoadsOn(const Element *);
+    void copyLoads(const Element *, const Element *);
+    
     // methods to apply loads
     virtual void applyLoad(double pseudoTime = 0.0);
     virtual void setLoadConstant(void);

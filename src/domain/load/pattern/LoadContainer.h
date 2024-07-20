@@ -53,6 +53,7 @@
 #ifndef LoadContainer_h
 #define LoadContainer_h
 
+#include <list>
 #include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
@@ -115,6 +116,13 @@ class LoadContainer: public CommandEntity, public MovableObject
     int getNumElementalLoads(void) const;
     int getNumLoads(void) const;
     bool empty(void) const;
+
+    bool actsOn(const Node *) const;
+    void removeLoadsOn(const Node *);
+    std::list<NodalLoad *> getLoadsOn(const Node *);
+    bool actsOn(const Element *) const;
+    void removeLoadsOn(const Element *);
+    void copyLoads(const Element *, const Element *);
 
     // methods to remove things (loads, time_series,...)
     virtual void clearAll(void);

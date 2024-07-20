@@ -52,7 +52,9 @@ XC::TimeSeries *(XC::LoadPattern::*getTimeSeries)(void)= &XC::LoadPattern::getTi
 double &(XC::LoadPattern::*getGammaFRef)(void)= &XC::LoadPattern::GammaF;
 XC::ElementalLoad *(XC::LoadPattern::*defElementalLoad)(const std::string &)= &XC::LoadPattern::newElementalLoad;
 XC::LoadContainer &(XC::LoadPattern::*getLoadsRef)(void)= &XC::LoadPattern::getLoads;
-class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern", no_init)
+void (XC::LoadPattern::*copyNodalLoads)(const XC::Node *, const XC::Node *)= &XC::LoadPattern::copyLoads;
+void (XC::LoadPattern::*copyElementalLoads)(const XC::Element *, const XC::Element *)= &XC::LoadPattern::copyLoads;
+class_<XC::LoadPattern, XC::LoadPattern*, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern", no_init)
   .def("getName", make_function(&XC::LoadPattern::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
   .add_property("name", make_function(&XC::LoadPattern::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
   .add_property("description", make_function( &XC::LoadPattern::getDescription, return_value_policy<return_by_value>() ), &XC::LoadPattern::setDescription,"load case description.")
@@ -68,6 +70,8 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
   .add_property("loads", make_function(getLoadsRef, return_internal_reference<>() ),"return a reference to the load container.")
   .def("removeNodalLoad",&XC::LoadPattern::removeNodalLoad,"removes the nodal load with the tag passed as parameter.")
   .def("removeElementalLoad",&XC::LoadPattern::removeElementalLoad,"remove the elemental load with the tag passed as parameter.")
+  .def("copyLoads",copyNodalLoads, "Copy the loads on the first node to the second one.") 
+  .def("copyLoads",copyElementalLoads, "Copy the loads on the first element to the second one.") 
   .def("clearLoads",&XC::LoadPattern::clearLoads,"Delete the pattern loads.")
   .def("addToDomain", &XC::LoadPattern::addToDomain,"Add load pattern to the domain.")
   .def("removeFromDomain", &XC::LoadPattern::removeFromDomain,"Removes the load pattern from the domain.")

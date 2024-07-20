@@ -57,7 +57,7 @@
 #include "domain/load/ElementalLoad.h"
 #include "utility/matrix/Vector.h"
 #include "preprocessor/set_mgmt/SetBase.h"
-
+#include "domain/mesh/element/Element.h"
 
 //! @brief Constructor.
 //!
@@ -81,6 +81,38 @@ int XC::ElementalLoad::numElements(void) const
 //! @brief Return the identifiers of the loaded elements.
 const XC::ID &XC::ElementalLoad::getElementTags(void) const
   { return elemTags; }
+
+//! @brief Return true if the load acts on the element identified by the given
+//! tag.
+bool XC::ElementalLoad::actsOnElement(const int &eTag) const
+  {
+    const int loc= elemTags.getLocation(eTag);
+    return (loc>=0);
+  }
+
+//! @brief Return true if the load acts on the given element.
+bool XC::ElementalLoad::actsOn(const Element *e) const
+  {
+    bool retval= false;
+    if(e)
+      retval= this->actsOnElement(e->getTag());
+    return retval;
+  }
+
+//! @brief Remove the load on the given element.
+void XC::ElementalLoad::removeLoadOn(const Element *e)
+  {
+    if(e)
+      this->elemTags.removeValue(e->getTag());
+  }
+
+//! @brief Extend the load to the given element.
+void XC::ElementalLoad::addLoadOn(const Element *e)
+  {
+    if(e)
+      if(!(this->actsOn(e))) // if not already added.
+	this->elemTags.push_back(e->getTag());
+  }
 
 //! @brief Return the category of the load.
 //!

@@ -128,6 +128,13 @@ XC::NodalLoad::NodalLoad(int tag, int nodeTag, const Vector &theLoad, bool isLoa
     // AddingSensitivity:END ///////////////////////////////////////
   }
 
+//! @brief Virtual constructor.
+XC::NodalLoad *XC::NodalLoad::getCopy(const int &tag)
+  {
+    XC::NodalLoad *retval= new NodalLoad(*this);
+    retval->setTag(tag);
+    return retval;
+  }
 
 //! @brief To set the associated Domain object.
 //! 
@@ -141,6 +148,10 @@ void XC::NodalLoad::setDomain(Domain *newDomain)
 //! Returns the identifier of the loaded node.
 int XC::NodalLoad::getNodeTag(void) const
   { return loadedNode; }
+
+//! Set the identifier of the loaded node.
+void XC::NodalLoad::setNodeTag(const int &i)
+  { loadedNode= i; }
 
 //! @brief Returns a reference to the load vector.
 const XC::Vector &XC::NodalLoad::getLoadVector(void) const

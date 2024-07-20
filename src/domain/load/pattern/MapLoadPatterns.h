@@ -132,6 +132,15 @@ class MapLoadPatterns: public LoadHandlerMember
       { return tag_nl; }
     inline void setCurrentNodeLoadTag(const int &n)
       { tag_nl= n; }
+    
+    std::list<LoadPattern *> getLoadPatternsActingOn(const Node *);
+    boost::python::list getLoadPatternsActingOnPy(const Node *);
+    void removeLoadsOn(const Node *);
+    void copyLoads(const Node *, const Node *);
+    std::list<LoadPattern *> getLoadPatternsActingOn(const Element *);
+    boost::python::list getLoadPatternsActingOnPy(const Element *);
+    void removeLoadsOn(const Element *);
+    void copyLoads(const Element *, const Element *);
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

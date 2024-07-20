@@ -242,6 +242,111 @@ bool XC::LoadContainer::removeNodalLoad(int tag)
 bool XC::LoadContainer::removeElementalLoad(int tag)
   { return theElementalLoads->removeComponent(tag); }
 
+//! @brief Return true if the load pattern acts on the given node.
+bool XC::LoadContainer::actsOn(const Node *n) const
+  {
+    bool retval= false;
+    NodalLoad *nodLoad= nullptr;
+    // Workaround to avoid error caused by NodalLoadIter
+    LoadContainer *this_no_const= const_cast<LoadContainer *>(this);
+    NodalLoadIter &theNodalIter= this_no_const->getNodalLoads();
+
+    while((nodLoad = theNodalIter()) != nullptr)
+      {
+	const Node *loadedNode= nodLoad->getNode();
+	if(loadedNode==n)
+	  {
+	    retval= true;
+	    break;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Remove the loads acting on the given node.
+void XC::LoadContainer::removeLoadsOn(const Node *n)
+  {
+    NodalLoad *nodLoad= nullptr;
+    NodalLoadIter &theNodalIter= this->getNodalLoads();
+    std::list<int> loadsToRemove;
+    while((nodLoad = theNodalIter()) != nullptr)
+      {
+	const Node *loadedNode= nodLoad->getNode();
+	if(loadedNode==n)
+	  { loadsToRemove.push_back(nodLoad->getTag()); }
+      }
+    for(std::list<int>::const_iterator i= loadsToRemove.begin(); i!= loadsToRemove.end(); i++)
+      this->removeNodalLoad(*i);
+  }
+
+//! @brief Return the loads acting on the given node.
+std::list<XC::NodalLoad *> XC::LoadContainer::getLoadsOn(const Node *n)
+  {
+    std::list<NodalLoad *> retval; 
+    NodalLoad *nodLoad= nullptr;
+    NodalLoadIter &theNodalLoadIter= this->getNodalLoads();
+    while((nodLoad = theNodalLoadIter()) != 0)
+      {
+	if(nodLoad->getNode()==n)
+	  retval.push_back(nodLoad);
+      }
+    return retval;
+  }
+
+//! @brief Return true if the load pattern acts on the given element.
+bool XC::LoadContainer::actsOn(const Element *e) const
+  {
+    bool retval= false;
+    
+    ElementalLoad *eleLoad= nullptr;
+    // Workaround to avoid error caused by ElementalLoadIter
+    LoadContainer *this_no_const= const_cast<LoadContainer *>(this);
+    ElementalLoadIter &theElementalIter= this_no_const->getElementalLoads();
+    while((eleLoad = theElementalIter()) != 0)
+      {
+	if(eleLoad->actsOn(e))
+	  {
+	    retval= true;
+	    break;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Remove the loads acting on the given element.
+void XC::LoadContainer::removeLoadsOn(const Element *e)
+  {
+    std::list<int> emptyElementalLoads;
+    ElementalLoad *eleLoad= nullptr;
+    ElementalLoadIter &theElementalIter= this->getElementalLoads();
+    while((eleLoad = theElementalIter()) != 0)
+      {
+	if(eleLoad->actsOn(e))
+	  {
+	    eleLoad->removeLoadOn(e);
+	    const int ne= eleLoad->numElements();
+	    if(ne==0)
+	      emptyElementalLoads.push_back(eleLoad->getTag());
+	  }
+      }
+    for(std::list<int>::const_iterator i= emptyElementalLoads.begin(); i!=emptyElementalLoads.end();i++)
+      this->removeElementalLoad(*i);
+  }
+
+//! @brief Copy the loads from the first element to the second one.
+//! @param fromElement: element to copy the loads from.
+//! @param toElement: element to copy the loads to.
+void XC::LoadContainer::copyLoads(const Element *fromElement, const Element *toElement)
+  {
+    ElementalLoad *eleLoad= nullptr;
+    ElementalLoadIter &theElementalIter= this->getElementalLoads();
+    while((eleLoad = theElementalIter()) != 0)
+      {
+	if(eleLoad->actsOn(fromElement))
+	  eleLoad->addLoadOn(toElement);
+      }    
+  }
+
 //! @brief Apply the load multiplied by the factor.
 //! 
 //! To apply the load for the pseudo time \p pseudoTime. From the
