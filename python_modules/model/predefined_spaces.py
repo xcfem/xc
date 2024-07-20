@@ -340,7 +340,14 @@ class PredefinedSpace(object):
         :param nodeTags: list of the identifiers of the element nodes.
         '''
         return self.preprocessor.getElementHandler.seedElemHandler.newElement(elementType)
-    
+
+    def removeElement(self, element):
+        ''' Remove the given element from the FE problem.
+     
+        :param element: element to remove.
+        '''
+        return self.preprocessor.removeElement(element)
+
     def getElements(self, tags: Sequence[int]):
         ''' Return the elements that correspond to the argument
             tags.
@@ -362,26 +369,6 @@ class PredefinedSpace(object):
         ''' Return the node handler for this model.'''
         return self.preprocessor.getNodeHandler
 
-    # Produces inconsistency between 'total' set and the elements in
-    # the domain.
-    # def removeNode(self, nodeTag):
-    #     ''' Remove the node identified by the argument.
-
-    #     :param nodeTag: node tag.
-    #     '''
-    #     mesh= self.preprocessor.getDomain.getMesh
-    #     return mesh.removeNode(nodeTag)
-    
-    # Produces inconsistency between 'total' set and the elements in
-    # the domain.
-    # def removeElement(self, eTag):
-    #     ''' Remove the element identified by the argument.
-
-    #     :param eTag: element tag.
-    #     '''
-    #     mesh= self.preprocessor.getDomain.getMesh
-    #     return mesh.removeElement(eTag)
-    
     def newNodeX(self, x):
         ''' Create a new node.
 
@@ -412,6 +399,13 @@ class PredefinedSpace(object):
         :param v: xc vector
         '''
         return self.getNodeHandler().newNodeFromVector(v)
+
+    def removeNode(self, node):
+        ''' Remove the given node from the FE problem.
+     
+        :param node: node to remove:
+        '''
+        return self.preprocessor.removeNode(node)
     
     def getNodes(self, tags: Sequence[int]):
         ''' Return the nodes that correspond to the argument
@@ -606,6 +600,36 @@ class PredefinedSpace(object):
         ''' Return the current load pattern.'''
         lpName= self.getCurrentLoadPatternName()
         return self.getLoadPattern(lpName)
+
+    def getLoadPatternsActingOnNode(self, n):
+        ''' Return the load patterns that act on the given node.
+
+        :param n: node to search load patterns acting on.
+        '''
+        return self.getLoadHandler().getLoadPatternsActingOn(n)
+    
+    def getLoadPatternsActingOnElement(self, e):
+        ''' Return the load patterns that act on the given element.
+
+        :param e: element to search load patterns acting on.
+        '''
+        return self.getLoadHandler().getLoadPatternsActingOn(e)
+
+    def copyNodalLoads(self, fromNode, toNode):
+        ''' Copy the nodal loads acting on the first node to the second one.
+
+        :param fromNode: node to copy the loads from.
+        :param toNode: node to copy the loads to.
+        '''
+        return self.getLoadHandler().copyLoads(fromNode, toNode)
+    
+    def copyElementalLoads(self, fromElement, toElement):
+        ''' Copy the nodal loads acting on the first element to the second one.
+
+        :param fromElement: element to copy the loads from.
+        :param toElement: element to copy the loads to.
+        '''
+        return self.getLoadHandler().copyLoads(fromElement, toElement)
 
     def newLoadCombination(self, name:str, loadCaseExpression:str, force= False):
         '''Defines a new combination and add it to the domain.
@@ -1028,6 +1052,40 @@ class PredefinedSpace(object):
         retval.name= setName # remove all the expressions from name.
         return retval
 
+    def getSetsContainingNode(self, node):
+        ''' Return the sets that contain the given node.
+
+        :param node: node that is contained by the returned sets.
+        '''
+        return self.preprocessor.getSets.getSetsContaining(node)
+
+    def copyNodeSets(self, nodeFrom, nodeTo):
+        ''' Add the second node to all the sets containing the first one.
+
+        :param nodeFrom: node to get the sets it belongs from.
+        :parem nodeTo: node to add to the sets.
+        '''
+        nodeSets= self.getSetsContainingNode(nodeFrom)
+        for xcSet in nodeSets:
+            xcSet.nodes.append(nodeTo)        
+    
+    def getSetsContainingElement(self, element):
+        ''' Return the sets that contain the given element.
+
+        :param element: element that is contained by the returned sets.
+        '''
+        return self.preprocessor.getSets.getSetsContaining(element)
+
+    def copyElementSets(self, elementFrom, elementTo):
+        ''' Add the second element to all the sets containing the first one.
+
+        :param elementFrom: element to get the sets it belongs from.
+        :parem elementTo: element to add to the sets.
+        '''
+        elementSets= self.getSetsContainingElement(elementFrom)
+        for xcSet in elementSets:
+            xcSet.elements.append(elementTo)        
+    
     def pickElementsInZone(self, zone, resultSet, originSet= None):
         ''' Return a set containing the elements that lie
             inside the zone argument.
