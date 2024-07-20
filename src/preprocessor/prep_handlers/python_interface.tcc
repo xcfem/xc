@@ -123,12 +123,20 @@ class_<XC::BoundaryCondHandler, bases<XC::PrepHandler>, boost::noncopyable >("Bo
 
 XC::MapLoadPatterns &(XC::LoadHandler::*getLoadPatternsRef)(void)= &XC::LoadHandler::getLoadPatterns;
 XC::LoadCombinationGroup &(XC::LoadHandler::*getLoadCombinationsRef)(void)= &XC::LoadHandler::getLoadCombinations;
+boost::python::list (XC::LoadHandler::*getLoadPatternsActionOnNode)(const XC::Node *)= &XC::LoadHandler::getLoadPatternsActingOnPy;
+boost::python::list (XC::LoadHandler::*getLoadPatternsActionOnElement)(const XC::Element *)= &XC::LoadHandler::getLoadPatternsActingOnPy;
+void (XC::LoadHandler::*copyNodalLoads)(const XC::Node *, const XC::Node *)= &XC::LoadHandler::copyLoads;
+void (XC::LoadHandler::*copyElementalLoads)(const XC::Element *, const XC::Element *)= &XC::LoadHandler::copyLoads;
 class_<XC::LoadHandler, bases<XC::PrepHandler>, boost::noncopyable >("LoadHandler", no_init)
   .add_property("getLoadPatterns", make_function( getLoadPatternsRef, return_internal_reference<>() ), "Return the load pattern container.")
   .add_property("getLoadCombinations", make_function( getLoadCombinationsRef, return_internal_reference<>() ))
   .def("addToDomain", &XC::LoadHandler::addToDomain,return_internal_reference<>(),"Add combination to the domain.")
   .def("removeFromDomain", &XC::LoadHandler::removeFromDomain,return_internal_reference<>(),"Removes the combination from the domain.")
   .def("removeAllFromDomain", &XC::LoadHandler::removeAllFromDomain,return_internal_reference<>(),"Removes all loads cases from the domain.")
+  .def("getLoadPatternsActingOn", getLoadPatternsActionOnNode, "Return the load patterns that act on the given node.")
+  .def("getLoadPatternsActingOn", getLoadPatternsActionOnElement, "Return the load patterns that act on the given element.")
+  .def("copyLoads",copyNodalLoads, "Copy the loads on the first node to the second one.") 
+  .def("copyLoads",copyElementalLoads, "Copy the loads on the first element to the second one.") 
     ;
 
 XC::CrdTransf *(XC::TransfCooHandler::*getCoordTransf)(const std::string &)= &XC::TransfCooHandler::find_ptr;

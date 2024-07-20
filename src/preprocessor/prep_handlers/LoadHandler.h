@@ -33,6 +33,7 @@
 #include "PrepHandler.h"
 #include "domain/load/pattern/MapLoadPatterns.h"
 #include "domain/load/pattern/LoadCombinationGroup.h"
+#include <list>
 
 namespace XC {
 class GroundMotion;
@@ -71,11 +72,26 @@ class LoadHandler: public PrepHandler
     inline const int &getTagLP(void) const
       { return tag_lp; }
     inline void setTagLP(const int &tlp)
-      { tag_lp= tlp; } 
+      { tag_lp= tlp; }
+    
     MapLoadPatterns &getLoadPatterns(void)
       { return lpatterns; }
     const MapLoadPatterns &getLoadPatterns(void) const
       { return lpatterns; }
+    map_ground_motions &getGroundMotions(void)
+      { return ground_motions; }
+    const map_ground_motions &getGroundMotions(void) const
+      { return ground_motions; }
+    
+    std::list<LoadPattern *> getLoadPatternsActingOn(const Node *);
+    boost::python::list getLoadPatternsActingOnPy(const Node *);
+    void removeLoadsOn(const Node *);
+    void copyLoads(const Node *, const Node *);
+    std::list<LoadPattern *> getLoadPatternsActingOn(const Element *);
+    boost::python::list getLoadPatternsActingOnPy(const Element *);
+    void removeLoadsOn(const Element *);
+    void copyLoads(const Element *, const Element *);
+    
     LoadCombinationGroup &getLoadCombinations(void)
       { return combinations; }
     const LoadCombinationGroup &getLoadCombinations(void) const

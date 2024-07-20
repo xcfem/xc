@@ -84,6 +84,58 @@ void XC::LoadHandler::clearAll(void)
 XC::LoadHandler::~LoadHandler(void)
   { clearAll(); }
 
+//! @brief Return the load patterns that act on the given node.
+std::list<XC::LoadPattern *> XC::LoadHandler::getLoadPatternsActingOn(const Node *n)
+  {
+    return lpatterns.getLoadPatternsActingOn(n);
+  }
+
+//! @brief Return the load patterns that act on the given node.
+boost::python::list XC::LoadHandler::getLoadPatternsActingOnPy(const Node *n)
+  {
+    return lpatterns.getLoadPatternsActingOnPy(n);
+  }
+
+//! @brief Removes the given node from all the load patterns.
+void XC::LoadHandler::removeLoadsOn(const Node *n)
+  {
+    lpatterns.removeLoadsOn(n);
+  }
+
+//! @brief Copy the loads from the first node to the second one.
+//! @param fromNode: node to copy the loads from.
+//! @param toNode: node to copy the loads to.
+void XC::LoadHandler::copyLoads(const Node *fromNode, const Node *toNode)
+  {
+    lpatterns.copyLoads(fromNode, toNode);
+  }
+
+//! @brief Return the load patterns that act on the given element.
+std::list<XC::LoadPattern *> XC::LoadHandler::getLoadPatternsActingOn(const Element *e)
+  {
+    return lpatterns.getLoadPatternsActingOn(e);
+  }
+
+//! @brief Return the load patterns that act on the given element.
+boost::python::list XC::LoadHandler::getLoadPatternsActingOnPy(const Element *e)
+  {
+    return lpatterns.getLoadPatternsActingOnPy(e);
+  }
+
+//! @brief Removes the given element from all the load patterns.
+void XC::LoadHandler::removeLoadsOn(const Element *e)
+  {
+    lpatterns.removeLoadsOn(e);
+  }
+
+//! @brief Copy the loads from the first element to the second one.
+//! @param fromElement: element to copy the loads from.
+//! @param toElement: element to copy the loads to.
+void XC::LoadHandler::copyLoads(const Element *fromElement, const Element *toElement)
+  {
+    lpatterns.copyLoads(fromElement, toElement);
+  }
+
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::LoadHandler::getDbTagData(void) const

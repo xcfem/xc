@@ -101,14 +101,26 @@ void XC::Preprocessor::removeFromSets(Node *n)
     sets.removeNode(n);
   }
 
+//! @brief Removes the node from all the load patterns.
+void XC::Preprocessor::removeFromLoadPatterns(Node *n)
+  {
+    loadHandler.removeLoadsOn(n);
+  }
+
 //! @brief Removes the node from the problem.
 //! @param n: node to remove.
-//! @param deleteObject: if true delete the removed node.
-void XC::Preprocessor::remove(Node *n, bool deleteObject)
+bool XC::Preprocessor::remove(Node *n)
   {
     this->removeFromSets(n);
+    this->removeFromLoadPatterns(n);
+    bool retval= false;
     if(domain)
-      domain->remove(n, deleteObject);
+      domain->remove(n);
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Removes the element from all the sets.
@@ -117,14 +129,28 @@ void XC::Preprocessor::removeFromSets(Element *elem)
     sets.removeElement(elem);
   }
 
+//! @brief Removes the element from all the load patterns.
+void XC::Preprocessor::removeFromLoadPatterns(Element *e)
+  {
+    loadHandler.removeLoadsOn(e);
+  }
+
 //! @brief Removes the element from the problem.
 //! @param e: element to remove.
-//! @param deleteObject: if true delete the removed element.
-void XC::Preprocessor::remove(Element *e, bool deleteObject)
+bool XC::Preprocessor::remove(Element *e)
   {
+    bool retval= false;
     this->removeFromSets(e);
+    this->removeFromLoadPatterns(e);
     if(domain)
-      domain->remove(e, deleteObject);
+      {
+        retval= domain->remove(e);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Removes the constraint from all the sets.
@@ -135,12 +161,17 @@ void XC::Preprocessor::removeFromSets(Constraint *c)
 
 //! @brief Removes the constraint from the problem.
 //! @param c: constraint to remove.
-//! @param deleteObject: if true delete the removed constraint.
-void XC::Preprocessor::remove(Constraint *c, bool deleteObject)
+bool XC::Preprocessor::remove(Constraint *c)
   {
     this->removeFromSets(c);
+    bool retval= false;
     if(domain)
-      domain->remove(c, deleteObject);
+      retval= domain->remove(c);
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Insert the pointer to the constraint in the "total" set and in the 

@@ -38,9 +38,9 @@ XC::MultiBlockTopology &(XC::Preprocessor::*getMultiBlockTopologyRef)(void)= &XC
 XC::MapSet &(XC::Preprocessor::*getSetsRef)(void)= &XC::Preprocessor::get_sets;
 XC::Domain *(XC::Preprocessor::*getDomainRf)(void)= &XC::Preprocessor::getDomain;
 XC::FEProblem *(XC::Preprocessor::*getProblemRf)(void)= &XC::Preprocessor::getProblem;
-void (XC::Preprocessor::*removeElement)(XC::Element *, bool)= &XC::Preprocessor::remove;
-void (XC::Preprocessor::*removeNode)(XC::Node *, bool)= &XC::Preprocessor::remove;
-void (XC::Preprocessor::*removeConstraint)(XC::Constraint *, bool)= &XC::Preprocessor::remove;
+bool (XC::Preprocessor::*removeElement)(XC::Element *)= &XC::Preprocessor::remove;
+bool (XC::Preprocessor::*removeNode)(XC::Node *)= &XC::Preprocessor::remove;
+bool (XC::Preprocessor::*removeConstraint)(XC::Constraint *)= &XC::Preprocessor::remove;
 class_<XC::Preprocessor, bases<CommandEntity>, boost::noncopyable >("Preprocessor", no_init)
   .add_property("getNodeHandler", make_function( getNodeHandlerRef, return_internal_reference<>() ))
   .add_property("getMaterialHandler", make_function( getMaterialHandlerRef, return_internal_reference<>() ))
