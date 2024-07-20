@@ -387,9 +387,8 @@ bool XC::Domain::removeElement(int tag)
 
 //! @brief Remove the element from the domain.
 //! @param e: element to remove from the mesh.
-//! @param deleteObject: if true delete the removed element.
-bool XC::Domain::remove(Element *e, bool deleteObject)
-  { return mesh.remove(e, deleteObject); }
+bool XC::Domain::remove(Element *e)
+  { return mesh.remove(e); }
 
 //! @brief Remove the node identified by the argument.
 //! @param tag: identifier of the node to remove from the mesh.
@@ -398,9 +397,8 @@ bool XC::Domain::removeNode(int tag)
 
 //! @brief Remove the node from the domain.
 //! @param n: node to remove from the mesh.
-//! @param deleteObject: if true delete the removed node.
-bool XC::Domain::remove(Node *n, bool deleteObject)
-  { return mesh.remove(n, deleteObject); }
+bool XC::Domain::remove(Node *n)
+  { return mesh.remove(n); }
 
 //! @brief Remove the single freedom constraint from the load pattern
 //! identified by the argument.
@@ -472,8 +470,7 @@ bool XC::Domain::removeMRMFreedom_Constraint(int tag)
   }
 //! @brief Remove the element from the domain.
 //! @param c: constraint to remove from the domain.
-//! @param deleteObject: if true delete the removed constraint.
-bool XC::Domain::remove(Constraint *c, bool deleteObject)
+bool XC::Domain::remove(Constraint *c)
   {
     bool retval= false;
     if(c)
@@ -493,8 +490,6 @@ bool XC::Domain::remove(Constraint *c, bool deleteObject)
 		  retval= this->removeMRMFreedom_Constraint(mrmf->getTag());
 	      }
 	  }
-	if(deleteObject)
-	  delete c;
       }
     return retval;
   }

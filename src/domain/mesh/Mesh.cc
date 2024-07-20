@@ -368,33 +368,28 @@ bool XC::Mesh::addNode(Node * node)
 //! domainChange()} on itself before a pointer to the element is returned. 
 bool XC::Mesh::removeElement(int tag)
   {
-    // remove the object from the container
-    bool res= theElements->removeComponent(tag);
-    
-    if(res)
+    Domain *dom= getDomain();
+    if(dom)
       {
-        Domain *dom= getDomain();
-
         Element *elem= dom->getElement(tag);
         if(elem) kdtreeElements.erase(*elem);
 
         dom->domainChange(); //mark the domain as having changed
       }
+    // remove the object from the container
+    bool res= theElements->removeComponent(tag);
     return res;
   }
 
 //! @brief Removes the given alement from the mesh.
 //! @param e: element to remove from the mesh.
-//! @param deleteObject: if true delete the removed element.
-bool XC::Mesh::remove(Element *e, bool deleteObject)
+bool XC::Mesh::remove(Element *e)
   {
     bool retval= false;
     // remove the object from the container
     if(e)
       {
         retval= this->removeElement(e->getTag());
-        if(deleteObject)
-	  delete e;
       }
     return retval;
   }
@@ -409,35 +404,30 @@ bool XC::Mesh::remove(Element *e, bool deleteObject)
 //! domainChange()} on itself before a pointer to the Node is returned. 
 bool XC::Mesh::removeNode(int tag)
   {
-
-    // remove the object from the container
-    bool res= theNodes->removeComponent(tag);
-
-    if(res)
+    Domain *dom= getDomain();
+    if(dom)
       {
-        Domain *dom= getDomain();
-
         Node *nod= dom->getNode(tag);
         if(nod) kdtreeNodes.erase(*nod);
 
         // mark the domain has having changed
         dom->domainChange();
       }
+    // remove the object from the container
+    bool res= theNodes->removeComponent(tag);
+    
     return res;
   }
 
 //! @brief Removes the the given node.
 //! @param n: node to remove from the mesh.
-//! @param deleteObject: if true delete the removed node.
-bool XC::Mesh::remove(Node *n, bool deleteObject)
+bool XC::Mesh::remove(Node *n)
   {
     bool retval= false;
     // remove the object from the container
     if(n)
       {
-        retval= this->removeElement(n->getTag());
-        if(deleteObject)
-	  delete n;
+        retval= this->removeNode(n->getTag());
       }
     return retval;
   }

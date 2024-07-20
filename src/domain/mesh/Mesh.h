@@ -113,11 +113,11 @@ class Mesh: public MeshComponentContainer
     // methods to populate a mesh
     virtual bool addNode(Node *);
     virtual bool removeNode(int tag);
-    bool remove(Node *, bool deleteObject);
+    bool remove(Node *);
 
     virtual bool addElement(Element *);
     virtual bool removeElement(int tag);
-    bool remove(Element *, bool deleteObject);
+    bool remove(Element *);
 
     virtual void clearAll(void);
 

@@ -180,14 +180,14 @@ class Domain: public ObjWithRecorders, public DistributedBase
     // methods to remove the components
     virtual void clearAll(void);
     virtual bool removeElement(int tag);
-    bool remove(Element *, bool deleteObject);
+    bool remove(Element *);
     virtual bool removeNode(int tag);
-    bool remove(Node *, bool deleteObject);
+    bool remove(Node *);
     virtual bool removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag);
     virtual bool removeSFreedom_Constraint(int tag);
     virtual bool removeMFreedom_Constraint(int tag);
     virtual bool removeMRMFreedom_Constraint(int tag);
-    bool remove(Constraint *, bool deleteObject);
+    bool remove(Constraint *);
     virtual bool removeLoadPattern(int loadTag);
     virtual bool removeNodeLocker(int nlTag);
     bool removeLoadPattern(LoadPattern *lp);
