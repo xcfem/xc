@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Test model of micropile in sandy soil. Home made test.'''
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2022, LCPT"
 __license__= "GPL"
