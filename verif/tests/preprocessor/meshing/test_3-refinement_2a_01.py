@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders.
+''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template 2a.
 
 '''
 from __future__ import print_function
@@ -84,11 +84,11 @@ else:
 
 
                                                                     
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-oh.displayFEMesh()
-oh.displayLocalAxes()
-# oh.displayReactions()
-# oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
-# oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayLocalAxes()
+# # oh.displayReactions()
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+# # oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)

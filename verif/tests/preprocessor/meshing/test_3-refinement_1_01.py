@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template number 2a.
+''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template number 1.
 
 '''
 from __future__ import print_function
@@ -32,30 +32,11 @@ n1= modelSpace.newNodeXY(1, 0)
 n2= modelSpace.newNodeXY(1, 1)
 n3= modelSpace.newNodeXY(0, 1)
 
-n10= modelSpace.newNodeXY(3, 0)
-n11= modelSpace.newNodeXY(3+1, 0)
-n12= modelSpace.newNodeXY(3+1, 1)
-n13= modelSpace.newNodeXY(3, 1)
-
-n20= modelSpace.newNodeXY(3, 3)
-n21= modelSpace.newNodeXY(3+1, 3)
-n22= modelSpace.newNodeXY(3+1, 3+1)
-n23= modelSpace.newNodeXY(3, 3+1)
-
-n30= modelSpace.newNodeXY(0, 3)
-n31= modelSpace.newNodeXY(1, 3)
-n32= modelSpace.newNodeXY(1, 3+1)
-n33= modelSpace.newNodeXY(0, 3+1)
-
 ## Define material.
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E= 30e6, nu= 0.3, rho= 0.0)
 ## Define elements.
 modelSpace.setDefaultMaterial(elast2d)
 quad1= modelSpace.newElement("FourNodeQuad",[n0.tag, n1.tag, n2.tag, n3.tag])
-quad2= modelSpace.newElement("FourNodeQuad",[n10.tag, n11.tag, n12.tag, n13.tag])
-quad3= modelSpace.newElement("FourNodeQuad",[n20.tag, n21.tag, n22.tag, n23.tag])
-quad4= modelSpace.newElement("FourNodeQuad",[n30.tag, n31.tag, n32.tag, n33.tag])
-
 
 ## Define loads.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -66,19 +47,11 @@ eleLoad.setStrainComp(1,0,1e-4)
 eleLoad.setStrainComp(2,0,1e-4)
 eleLoad.setStrainComp(3,0,1e-4)
 
-# Set subdivision levels.
-## Quad 1
-n0.setProp("subdivisionLevel",2)
-n1.setProp("subdivisionLevel",2)
-## Quad 2
-n11.setProp("subdivisionLevel",2)
-n12.setProp("subdivisionLevel",2)
-## Quad 3
-n22.setProp("subdivisionLevel",2)
-n23.setProp("subdivisionLevel",2)
-## Quad 4
-n33.setProp("subdivisionLevel",2)
-n30.setProp("subdivisionLevel",2)
+
+n0.setProp("subdivisionLevel",1) # mark corner node.
+# n1.setProp("subdivisionLevel",1)
+# n2.setProp("subdivisionLevel",1)
+# n3.setProp("subdivisionLevel",1)
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -91,8 +64,8 @@ while maxNodeSubdivisionLevel>0:
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesOK= (nNodes==4*34)
-nElementsOK= (nElements==4*25)
+nNodesOK= (nNodes==7)
+nElementsOK= (nElements==3)
 testOK= (maxNodeSubdivisionLevel==0) and nNodesOK and nElementsOK
 
 '''
@@ -107,7 +80,6 @@ if testOK:
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')
-
 
                                                                     
 # # Graphic stuff.

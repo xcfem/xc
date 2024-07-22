@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template number 2a.
+''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template number 3.
 
 '''
 from __future__ import print_function
@@ -70,15 +70,23 @@ eleLoad.setStrainComp(3,0,1e-4)
 ## Quad 1
 n0.setProp("subdivisionLevel",2)
 n1.setProp("subdivisionLevel",2)
+n2.setProp("subdivisionLevel",2)
+n3.setProp("subdivisionLevel",2)
 ## Quad 2
 n11.setProp("subdivisionLevel",2)
 n12.setProp("subdivisionLevel",2)
+n13.setProp("subdivisionLevel",2)
+n10.setProp("subdivisionLevel",2)
 ## Quad 3
 n22.setProp("subdivisionLevel",2)
 n23.setProp("subdivisionLevel",2)
+n20.setProp("subdivisionLevel",2)
+n21.setProp("subdivisionLevel",2)
 ## Quad 4
 n33.setProp("subdivisionLevel",2)
 n30.setProp("subdivisionLevel",2)
+n31.setProp("subdivisionLevel",2)
+n32.setProp("subdivisionLevel",2)
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -91,8 +99,8 @@ while maxNodeSubdivisionLevel>0:
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesOK= (nNodes==4*34)
-nElementsOK= (nElements==4*25)
+nNodesOK= (nNodes==4*80)
+nElementsOK= (nElements==4*61)
 testOK= (maxNodeSubdivisionLevel==0) and nNodesOK and nElementsOK
 
 '''
@@ -108,8 +116,6 @@ if testOK:
 else:
     lmsg.error(fname+' ERROR.')
 
-
-                                                                    
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)

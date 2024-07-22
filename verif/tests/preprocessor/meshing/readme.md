@@ -8,3 +8,6 @@ The tests named `test\_surface_meshing\_XX.py` generate regular quad meshes from
 ## Paving algorithm
 
 The tests named `test\_paving\_XX.py` use the paving algorithm (see `/usr/local/src/prg/xc/src/utility/paving/Paver.h` and `src/preprocessor/multi_block_topology/entities/2d/PolygonalFace.h`).
+
+## Mesh refinement
+See article: [Algorithms for Quadrilateral and Hexahedral Mesh Generation](https://www.robertschneiders.de/papers/vki.pdf)
