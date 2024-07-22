@@ -362,10 +362,11 @@ def create_new_elements(modelSpace, nodePositions, nodeSubstitutions):
         modelSpace.removeElement(oldElement)
 
 def compute_subdivision_levels(xcSet):
-    ''' Perform a refinement step on the given set.
+    ''' Compute the subdivision levels of the elements of the given set.
 
     :param xcSet: set whose subdivision levels will be computed.
     '''
+    maxSubdivisionLevel= 0
     for e in xcSet.elements:
         elementSubdivisionLevel= 0
         for n in e.nodes:
@@ -376,8 +377,25 @@ def compute_subdivision_levels(xcSet):
             if(nodeSubdivisionLevel!=0):
                 nodePos= n.getInitialPos3d
                 print('    element: ', e.tag, 'node: ', n.tag, 'node subL: ', nodeSubdivisionLevel, ' pos: ', nodePos)
-        print('element: ', e.tag, elementSubdivisionLevel)
-        
+        maxSubdivisionLevel= max(maxSubdivisionLevel, elementSubdivisionLevel)
+    print('maxSubdivisionLevel= ', maxSubdivisionLevel)
+    return maxSubdivisionLevel
+
+def get_max_node_subdivision_level(xcSet):
+    ''' Compute the maximum node subdivision level among the nodes of the 
+        given set.
+
+    :param xcSet: set whose maximum subdivision level among its nodes will be computed.
+    '''
+    maxSubdivisionLevel= 0
+    for n in xcSet.nodes:
+        nodeSubdivisionLevel= 0
+        if(n.hasProp('subdivisionLevel')):
+            nodeSubdivisionLevel= n.getProp('subdivisionLevel')
+        maxSubdivisionLevel= max(maxSubdivisionLevel, nodeSubdivisionLevel)
+    print('maxNodeSubdivisionLevel= ', maxSubdivisionLevel)
+    return maxSubdivisionLevel
+
 def refinement_step(modelSpace, xcSet):
     ''' Perform a refinement step on the given set.
 
