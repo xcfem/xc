@@ -48,8 +48,10 @@ eleLoad.setStrainComp(2,0,1e-4)
 eleLoad.setStrainComp(3,0,1e-4)
 
 
+# n0.setProp("subdivisionLevel",1)
+# n1.setProp("subdivisionLevel",1)
+n3.setProp("subdivisionLevel",1)
 n0.setProp("subdivisionLevel",1)
-n1.setProp("subdivisionLevel",1)
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -82,11 +84,11 @@ else:
 
 
                                                                     
-# # Graphic stuff.
-# from postprocess import output_handler
-# oh= output_handler.OutputHandler(modelSpace)
-# oh.displayFEMesh()
-# oh.displayLocalAxes()
-# # oh.displayReactions()
-# # oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
-# # oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
+# Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+oh.displayFEMesh()
+oh.displayLocalAxes()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
