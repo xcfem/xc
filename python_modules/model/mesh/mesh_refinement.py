@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Mesh 3-refinement code as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders.'''
+''' Mesh 3-refinement code as defined in: "Algorithms for Quadrilateral and Hexahedral Mesh Generation" Robert Schneiders.'''
 
 from __future__ import print_function
 
@@ -85,6 +85,11 @@ def set_refinement_templates(xcSet):
                 refinementTemplateCode= '2b'
             else:
                 refinementTemplateCode= '2a'
+        elif(markedNodesSum == 3):
+            if(markedNodesIndices==[0, 2, 3]):
+                markedNodesIndices= [2, 3, 0]
+            elif(markedNodesIndices==[0, 1, 3]):
+                markedNodesIndices= [3, 0, 1]
         e.setProp('refinementTemplateCode', refinementTemplateCode)
         e.setProp('markedNodesIndices', markedNodesIndices)
 
