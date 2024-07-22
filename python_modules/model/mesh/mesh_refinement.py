@@ -54,7 +54,7 @@ refinementTemplatePoints= [refinementTemplatePoints_0, refinementTemplatePoints_
 refinementTemplateConnectivity= dict()
 refinementTemplateConnectivity['1']= [(0, 1, 5, 4), (1, 3, 15, 5), (4, 5, 15, 12)]
 refinementTemplateConnectivity['2a']= [(0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (4, 5, 9, 12), (5, 6, 10, 9), (6, 7, 15, 10), (9, 10, 15, 12)] 
-refinementTemplateConnectivity['2b']= [(0, 1, 5, 4),  (1, 3, 6, 5), (4, 5, 9, 12), (5, 6, 10, 9), (6, 3, 11, 10), (10, 11, 15, 14)]
+refinementTemplateConnectivity['2b']= [(0, 1, 5, 4),  (1, 3, 6, 5), (4, 5, 9, 12), (5, 6, 10, 9), (6, 3, 11, 10), (10, 11, 15, 14), (9, 10, 14, 12)]
 refinementTemplateConnectivity['3']= [(0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (4, 5, 9, 12), (5, 6, 10, 9), (6, 7, 11, 10), (9, 10, 14, 12), (10, 11, 15, 14)]
 refinementTemplateConnectivity['4']= [(0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (4, 5, 9, 8), (5, 6, 10, 9), (6, 7, 11, 10), (8, 9, 13, 12), (9, 10, 14, 13),  (10, 11, 15, 14)]
 
