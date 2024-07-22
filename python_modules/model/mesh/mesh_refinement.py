@@ -77,7 +77,10 @@ def set_refinement_templates(xcSet):
         markedNodesSum= sum(markedNodes)
         refinementTemplateCode= str(markedNodesSum)
         if(markedNodesSum == 2):
-            diagonal= (abs(markedNodesIndices[1]-markedNodesIndices[0])>1)
+            if(markedNodesIndices==[0,3]): # if last side.
+                markedNodesIndices= [3,0]
+            indicesDist= abs(markedNodesIndices[1]-markedNodesIndices[0])
+            diagonal= (indicesDist==2)
             if(diagonal):
                 refinementTemplateCode= '2b'
             else:
@@ -203,13 +206,9 @@ def compute_node_positions(xcSet):
             nSL[12]= nodeSubdivisionLevels[nIndex[12]] # pos. 12 in the pt. arrangement.
             # Edge subdivision levels.
             edge_0_3_subdivisionLevel= min(nSL[0], nSL[3])
-            print('edge_0_3_subdivisionLevel= ', edge_0_3_subdivisionLevel)
             edge_3_15_subdivisionLevel= min(nSL[3], nSL[15])
-            print('edge_3_15_subdivisionLevel= ', edge_3_15_subdivisionLevel)
             edge_15_12_subdivisionLevel= min(nSL[15], nSL[12])
-            print('edge_15_12_subdivisionLevel= ', edge_15_12_subdivisionLevel)
             edge_12_0_subdivisionLevel= min(nSL[12], nSL[0])
-            print('edge_12_0_subdivisionLevel= ', edge_12_0_subdivisionLevel)
             # Edge nodes.
             edge_0_3_nodes= (cornerNodes[0], cornerNodes[3])
             edge_3_15_nodes= (cornerNodes[3], cornerNodes[15])
@@ -376,9 +375,7 @@ def compute_subdivision_levels(xcSet):
             elementSubdivisionLevel= max(elementSubdivisionLevel, nodeSubdivisionLevel)
             if(nodeSubdivisionLevel!=0):
                 nodePos= n.getInitialPos3d
-                print('    element: ', e.tag, 'node: ', n.tag, 'node subL: ', nodeSubdivisionLevel, ' pos: ', nodePos)
         maxSubdivisionLevel= max(maxSubdivisionLevel, elementSubdivisionLevel)
-    print('maxSubdivisionLevel= ', maxSubdivisionLevel)
     return maxSubdivisionLevel
 
 def get_max_node_subdivision_level(xcSet):
@@ -393,7 +390,6 @@ def get_max_node_subdivision_level(xcSet):
         if(n.hasProp('subdivisionLevel')):
             nodeSubdivisionLevel= n.getProp('subdivisionLevel')
         maxSubdivisionLevel= max(maxSubdivisionLevel, nodeSubdivisionLevel)
-    print('maxNodeSubdivisionLevel= ', maxSubdivisionLevel)
     return maxSubdivisionLevel
 
 def refinement_step(modelSpace, xcSet):
