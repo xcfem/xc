@@ -71,18 +71,22 @@ eleLoad.setStrainComp(3,0,1e-4)
 n0.setProp("subdivisionLevel",2)
 n1.setProp("subdivisionLevel",2)
 n2.setProp("subdivisionLevel",2)
+n3.setProp("subdivisionLevel",0)
 ## Quad 2
 n11.setProp("subdivisionLevel",2)
 n12.setProp("subdivisionLevel",2)
 n13.setProp("subdivisionLevel",2)
+n10.setProp("subdivisionLevel",0)
 ## Quad 3
 n22.setProp("subdivisionLevel",2)
 n23.setProp("subdivisionLevel",2)
 n20.setProp("subdivisionLevel",2)
+n21.setProp("subdivisionLevel",0)
 ## Quad 4
 n33.setProp("subdivisionLevel",2)
 n30.setProp("subdivisionLevel",2)
 n31.setProp("subdivisionLevel",2)
+n32.setProp("subdivisionLevel",0)
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -111,8 +115,6 @@ if testOK:
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')
-
-
                                                                     
 # # Graphic stuff.
 # from postprocess import output_handler

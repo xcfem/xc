@@ -191,7 +191,10 @@ def compute_node_positions(xcSet):
                 if(n.hasProp('subdivisionLevel')):
                     nodeSubdivisionLevel= n.getProp('subdivisionLevel')
                 nodeSubdivisionLevels.append(max(nodeSubdivisionLevel-1, 0))
+            # Compute element subdivision level.
             elementSubdivisionLevel= max(nodeSubdivisionLevels)
+            if(elementSubdivisionLevel>0):
+                e.setProp('subdivisionLevel', elementSubdivisionLevel)
             nIndex= dict()
             nIndex[0]= templateRotation # pos. 0 in the point arrangement.
             nIndex[3]= (1+templateRotation) % 4 # pos. 3 in the pt. arrangement.
@@ -238,7 +241,10 @@ def compute_node_positions(xcSet):
                             nodeSubdivisionLevel= None # will be update later.
                         elif( i in [5, 6, 9, 10]): # interior nodes.
                             sharedNode= False
-                            nodeSubdivisionLevel= max(elementSubdivisionLevel-1, 0)
+                            if(refinementTemplateCode=='4'):
+                                nodeSubdivisionLevel= max(elementSubdivisionLevel, 0)
+                            else:
+                                nodeSubdivisionLevel= max(elementSubdivisionLevel-1, 0)
                         else: # edge nodes.
                             if(i in [1, 2]):
                                 edgeSubdivisionLevel= edge_0_3_subdivisionLevel
@@ -268,7 +274,7 @@ def compute_node_positions(xcSet):
                     else:
                         existingNodeId= indexesAlreadyVisited[i]
                         newElementNodeIDs.append(existingNodeId)
-                newElementDict[newElementId]= {'from_element':e, 'node_ids':newElementNodeIDs}
+                newElementDict[newElementId]= {'from_element':e, 'node_ids':newElementNodeIDs, 'element_subdivision_level': elementSubdivisionLevel}
                 newElementId+= 1
     return {'new_nodes':newNodeDict, 'new_elements':newElementDict, 'elements_to_remove':elementsToRemove}
 
@@ -322,6 +328,9 @@ def create_new_nodes(modelSpace, nodePositions):
           else:
               cartesianCoord= nodeData['cartesian_coord']
               newNode= modelSpace.newNodeXY(cartesianCoord[0], cartesianCoord[1])
+              subdivisionLevel= nodeData['node_subdivision_level']
+              if(subdivisionLevel!=0):
+                  newNode.setProp('subdivisionLevel', subdivisionLevel)
               nodeSubstitutions[nodeKey]= newNode.tag
               nodeTag= newNode.tag
           alreadyVisited[nodeKey]= nodeTag
@@ -378,8 +387,7 @@ def compute_subdivision_levels(xcSet):
             if(n.hasProp('subdivisionLevel')):
                 nodeSubdivisionLevel= n.getProp('subdivisionLevel')
             elementSubdivisionLevel= max(elementSubdivisionLevel, nodeSubdivisionLevel)
-            if(nodeSubdivisionLevel!=0):
-                nodePos= n.getInitialPos3d
+        e.setProp('subdivisionLevel', elementSubdivisionLevel)
         maxSubdivisionLevel= max(maxSubdivisionLevel, elementSubdivisionLevel)
     return maxSubdivisionLevel
 
@@ -409,4 +417,38 @@ def refinement_step(modelSpace, xcSet):
     nodeSubstitutions= create_new_nodes(modelSpace= modelSpace, nodePositions= nodePositions)
     create_new_elements(modelSpace= modelSpace, nodePositions= nodePositions, nodeSubstitutions= nodeSubstitutions)
     
-        
+def compute_node_subdivision_level(xcSet):
+    ''' Compute the subdivision level of the nodes from the subdivision level
+        of the elements according to expression (3) of the article.
+
+    :param xcSet: set whose elements will be refined.
+    '''
+    ## Compute node subdivision level according with expression (3) of the article.
+    maxSubdivisionLevel= 0
+    for n in xcSet.nodes:
+        connectedElements= n.getConnectedElements()
+        nodeSubdivisionLevel= 0
+        for e in connectedElements:
+            elementSubdivisionLevel= 0
+            if(e.hasProp('subdivisionLevel')):
+               elementSubdivisionLevel= e.getProp('subdivisionLevel')
+            nodeSubdivisionLevel= max(elementSubdivisionLevel,nodeSubdivisionLevel)
+        n.setProp('subdivisionLevel', nodeSubdivisionLevel)
+        maxSubdivisionLevel= max(maxSubdivisionLevel, nodeSubdivisionLevel)
+    return maxSubdivisionLevel
+    
+def refine_mesh(modelSpace, xcSet):
+    ''' Perform a mesh refinement using the so called "3-refinement" procedure
+        as described in the article "Algorithms for Quadrilateral and 
+        Hexahedral Mesh Generation" Robert Schneiders.'
+
+    :param modelSpace: wrapper of the finite element model.
+    :param xcSet: set whose elements will be refined.
+    '''
+    retval= compute_node_subdivision_level(xcSet= xcSet)
+    while retval>0:
+        refinement_step(modelSpace= modelSpace, xcSet= xcSet)
+        compute_subdivision_levels(xcSet= xcSet)
+        retval= get_max_node_subdivision_level(xcSet= xcSet)
+    return retval
+    
