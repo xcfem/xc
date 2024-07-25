@@ -93,52 +93,52 @@ def set_refinement_templates(xcSet):
         e.setProp('refinementTemplateCode', refinementTemplateCode)
         e.setProp('markedNodesIndices', markedNodesIndices)
 
-class EdgeNodesDict(object):
+class EdgeCornerNodesDict(object):
     ''' Dictionary containing the nodes on the edges of the already existing
         elements.
 
     '''
     def __init__(self):
         ''' Constructor.'''
-        self.edgeNodesDict= dict()
+        self.edgeCornerNodesDict= dict()
 
     @staticmethod
-    def getEdgeKey(edgeNodes):
+    def getEdgeKey(edgeCornerNodes):
         ''' Compute the edge key from the given end nodes.
         
-        :param edgeNodes: list containing the two end nodes of the edge.
+        :param edgeCornerNodes: list containing the two end nodes of the edge.
         '''
         retval= None
-        if(len(edgeNodes)>1):
-            cornerNode0Tag= edgeNodes[0].tag
-            cornerNode1Tag= edgeNodes[1].tag
+        if(len(edgeCornerNodes)>1):
+            cornerNode0Tag= edgeCornerNodes[0].tag
+            cornerNode1Tag= edgeCornerNodes[1].tag
             if(cornerNode0Tag<cornerNode1Tag):
                 cornerNode0Tag, cornerNode1Tag= cornerNode1Tag, cornerNode0Tag
             retval= (cornerNode0Tag, cornerNode1Tag)
         return retval
         
-    def findNodesOnEdge(self, edgeNodes):
+    def findNodesOnEdge(self, edgeCornerNodes):
         ''' Return the nodes on the edge with the given end nodes.
         
-        :param edgeNodes: list containing the two end nodes of the edge.
+        :param edgeCornerNodes: list containing the two end nodes of the edge.
         '''
         retval= list()
-        edgeKey= EdgeNodesDict.getEdgeKey(edgeNodes)
+        edgeKey= EdgeCornerNodesDict.getEdgeKey(edgeCornerNodes)
         if(edgeKey):
-            if(edgeKey in self.edgeNodesDict):
-                retval= self.edgeNodesDict[edgeKey]
+            if(edgeKey in self.edgeCornerNodesDict):
+                retval= self.edgeCornerNodesDict[edgeKey]
         return retval
 
-    def findMatchingNode(self, edgeNodes, cartesianCoordinates, nodeDict):
+    def findMatchingNodeOnEdge(self, edgeCornerNodes, cartesianCoordinates, nodeDict):
         ''' Return the node on the same edge with the same position (if any).
 
-        :param edgeNodes: list containing the two end nodes of the edge.
+        :param edgeCornerNodes: list containing the two end nodes of the edge.
         :param cartesianCoordinates: cartesian coordinates of the matching node.
         :param nodeDict: dictionary containing the nodes already created.
         '''
         retval= None
-        edgeNodesIDs= self.findNodesOnEdge(edgeNodes)
-        for otherNodeId in edgeNodesIDs:
+        edgeCornerNodesIDs= self.findNodesOnEdge(edgeCornerNodes)
+        for otherNodeId in edgeCornerNodesIDs:
             otherNodeData= nodeDict[otherNodeId]
             otherCartesianCoord= otherNodeData['cartesian_coord']
             dist2= otherCartesianCoord.dist2(cartesianCoordinates)
@@ -147,22 +147,45 @@ class EdgeNodesDict(object):
                 break
         return retval
 
-    def newEdgeNode(self, edgeNodes, nodeId):
+    def newEdgeNode(self, edgeCornerNodes, nodeId):
         ''' Append the node to the list of nodes of the corresponding edge.
 
-        :param edgeNodes: list containing the two end nodes of the edge.
+        :param edgeCornerNodes: list containing the two end nodes of the edge.
         :param nodeId: identifier of the node.
         '''
-        edgeKey= EdgeNodesDict.getEdgeKey(edgeNodes)
+        edgeKey= EdgeCornerNodesDict.getEdgeKey(edgeCornerNodes)
         if(edgeKey):
-            if(edgeKey in self.edgeNodesDict):
-                self.edgeNodesDict[edgeKey].append(nodeId)
+            if(edgeKey in self.edgeCornerNodesDict):
+                self.edgeCornerNodesDict[edgeKey].append(nodeId)
             else:
-                self.edgeNodesDict[edgeKey]= [nodeId]
+                self.edgeCornerNodesDict[edgeKey]= [nodeId]
+
+    def computeNodesOnEdgeSubdivisionLevels(self, xcSet, nodeDict):
+        ''' Compute the subdivision levels of the edges.
+
+        :param xcSet: set whose subdivision levels will be computed.
+        :param nodeDict: dictionary containing the data for the new nodes.
+        '''
+        domain= xcSet.getPreprocessor.getDomain
+        for edgeKey in self.edgeCornerNodesDict:
+            firstNodeTag= edgeKey[0]
+            firstNode= domain.getNode(firstNodeTag)
+            firstNodeSubdivisionLevel= 0
+            if(firstNode.hasProp('subdivisionLevel')):
+                firstNodeSubdivisionLevel= firstNode.getProp('subdivisionLevel')
+            secondNodeTag= edgeKey[1]
+            secondNode= domain.getNode(secondNodeTag)
+            secondNodeSubdivisionLevel= 0
+            if(secondNode.hasProp('subdivisionLevel')):
+                secondNodeSubdivisionLevel= secondNode.getProp('subdivisionLevel')
+            edgeSubdivisionLevel= min(firstNodeSubdivisionLevel, secondNodeSubdivisionLevel)
+            edgeNodes= self.edgeCornerNodesDict[edgeKey]
+            for nodeID in edgeNodes:
+                nodeData= nodeDict[nodeID]
+                nodeData['subdivision_level']= edgeSubdivisionLevel
         
-        
-def compute_node_positions(xcSet):
-    ''' Compute the position of the new nodes for the elements of the given set.
+def compute_refined_mesh(xcSet):
+    ''' Compute the refined mesh for the elements of the given set.
 
     :param xcSet: set whose elements will be refined.
     '''
@@ -171,30 +194,21 @@ def compute_node_positions(xcSet):
     newNodeId= 0
     newElementDict= dict()
     newElementId= 0
-    edgeNodesDict= EdgeNodesDict()
+    edgeCornerNodesDict= EdgeCornerNodesDict()
     elementsToRemove= list()
+    cornerNodesTags= dict()
     for e in xcSet.elements:
         refinementTemplateCode= '0'
         if(e.hasProp('refinementTemplateCode')):
             refinementTemplateCode= e.getProp('refinementTemplateCode')
-        if(refinementTemplateCode!='0'):
+        if(refinementTemplateCode!='0'): # Element to be refined.
             elementsToRemove.append(e)
+            # Get element nodes.
+            elementNodes= list(e.nodes)
             markedNodesIndices= e.getProp('markedNodesIndices')
             templateRotation= markedNodesIndices[0]
+            # Compute positios of the new nodes.
             rotatedRefinementTemplatePoints= refinementTemplatePoints[templateRotation]
-            # Get node subdivision levels.
-            nodeSubdivisionLevels= list()
-            elementNodes= list()
-            for n in e.nodes:
-                elementNodes.append(n)
-                nodeSubdivisionLevel= 0
-                if(n.hasProp('subdivisionLevel')):
-                    nodeSubdivisionLevel= n.getProp('subdivisionLevel')
-                nodeSubdivisionLevels.append(max(nodeSubdivisionLevel-1, 0))
-            # Compute element subdivision level.
-            elementSubdivisionLevel= max(nodeSubdivisionLevels)
-            if(elementSubdivisionLevel>0):
-                e.setProp('subdivisionLevel', elementSubdivisionLevel)
             nIndex= dict()
             nIndex[0]= templateRotation # pos. 0 in the point arrangement.
             nIndex[3]= (1+templateRotation) % 4 # pos. 3 in the pt. arrangement.
@@ -206,17 +220,6 @@ def compute_node_positions(xcSet):
             cornerNodes[3]= elementNodes[nIndex[3]]
             cornerNodes[15]= elementNodes[nIndex[15]]
             cornerNodes[12]= elementNodes[nIndex[12]]
-            # Node subdivision levels.
-            nSL= dict()
-            nSL[0]= nodeSubdivisionLevels[nIndex[0]] # pos. 0 in the pt. arrangement.
-            nSL[3]= nodeSubdivisionLevels[nIndex[3]] # pos. 3 in the pt. arrangement.
-            nSL[15]= nodeSubdivisionLevels[nIndex[15]] # pos. 15 in the pt. arrangement.
-            nSL[12]= nodeSubdivisionLevels[nIndex[12]] # pos. 12 in the pt. arrangement.
-            # Edge subdivision levels.
-            edge_0_3_subdivisionLevel= min(nSL[0], nSL[3])
-            edge_3_15_subdivisionLevel= min(nSL[3], nSL[15])
-            edge_15_12_subdivisionLevel= min(nSL[15], nSL[12])
-            edge_12_0_subdivisionLevel= min(nSL[12], nSL[0])
             # Edge nodes.
             edge_0_3_nodes= (cornerNodes[0], cornerNodes[3])
             edge_3_15_nodes= (cornerNodes[3], cornerNodes[15])
@@ -233,122 +236,135 @@ def compute_node_positions(xcSet):
                 for i in indexes:
                     if(i not in indexesAlreadyVisited):
                         existingNode= None
-                        edgeNodes= list()
+                        edgeCornerNodes= list()
                         matchingNode= None
-                        sharedNode= True
-                        if( i in [0, 3, 12, 15]): # corner nodes.
-                            existingNode= cornerNodes[i]
-                            nodeSubdivisionLevel= None # will be update later.
-                        elif( i in [5, 6, 9, 10]): # interior nodes.
-                            sharedNode= False
-                            if(refinementTemplateCode=='4'):
-                                nodeSubdivisionLevel= max(elementSubdivisionLevel, 0)
-                            else:
-                                nodeSubdivisionLevel= max(elementSubdivisionLevel-1, 0)
-                        else: # edge nodes.
-                            if(i in [1, 2]):
-                                edgeSubdivisionLevel= edge_0_3_subdivisionLevel
-                                edgeNodes= [cornerNodes[0], cornerNodes[3]]
-                            elif(i in [7, 11]):
-                                edgeSubdivisionLevel= edge_3_15_subdivisionLevel
-                                edgeNodes= [cornerNodes[3], cornerNodes[15]]
-                            elif(i in [13, 14]):
-                                edgeSubdivisionLevel= edge_15_12_subdivisionLevel
-                                edgeNodes= [cornerNodes[15], cornerNodes[12]]
-                            elif(i in [4, 8]):
-                                edgeSubdivisionLevel= edge_12_0_subdivisionLevel
-                                edgeNodes= [cornerNodes[12], cornerNodes[0]]
-                            nodeSubdivisionLevel= edgeSubdivisionLevel
-
+                        interiorNode= False
                         naturalCoord= rotatedRefinementTemplatePoints[i]
                         naturalCoord= xc.ParticlePos2d(naturalCoord[0], naturalCoord[1])
                         cartesianCoord= e.getCartesianCoordinates(naturalCoord, True)
-                        edgeNodesIDs= edgeNodesDict.findNodesOnEdge(edgeNodes)
-                        matchingNode= edgeNodesDict.findMatchingNode(edgeNodes= edgeNodes, cartesianCoordinates= cartesianCoord, nodeDict= newNodeDict)
-                        if(matchingNode is None):
-                            edgeNodesDict.newEdgeNode(edgeNodes= edgeNodes, nodeId= newNodeId)
-                        newNodeDict[newNodeId]= {'from_element':e, 'natural_coord':naturalCoord, 'cartesian_coord':cartesianCoord, 'existing_node':existingNode, 'matching_node': matchingNode, 'shared_node':sharedNode, 'node_subdivision_level': nodeSubdivisionLevel}
-                        newElementNodeIDs.append(newNodeId)
-                        indexesAlreadyVisited[i]= newNodeId
+                        if( i in [0, 3, 12, 15]): # corner nodes.
+                            existingNode= cornerNodes[i]
+                            # Search for corner matching node.
+                            existingNodeTag= existingNode.tag
+                            if(existingNodeTag in cornerNodesTags):
+                                matchingNode= cornerNodesTags[existingNodeTag]
+                            else:
+                                cornerNodesTags[existingNodeTag]= newNodeId
+                        elif( i in [5, 6, 9, 10]): # interior nodes.
+                            interiorNode= True
+                        else: # edge nodes.
+                            if(i in [1, 2]):
+                                edgeCornerNodes= [cornerNodes[0], cornerNodes[3]]
+                            elif(i in [7, 11]):
+                                edgeCornerNodes= [cornerNodes[3], cornerNodes[15]]
+                            elif(i in [13, 14]):
+                                edgeCornerNodes= [cornerNodes[15], cornerNodes[12]]
+                            elif(i in [4, 8]):
+                                edgeCornerNodes= [cornerNodes[12], cornerNodes[0]]
+
+                            # Check for matching node on edge.
+                            matchingNode= edgeCornerNodesDict.findMatchingNodeOnEdge(edgeCornerNodes= edgeCornerNodes, cartesianCoordinates= cartesianCoord, nodeDict= newNodeDict)
+                        if(matchingNode is None): # No matching node.
+                            edgeCornerNodesDict.newEdgeNode(edgeCornerNodes= edgeCornerNodes, nodeId= newNodeId)
+                            newNodeDict[newNodeId]= {'from_element':e, 'natural_coord':naturalCoord, 'cartesian_coord':cartesianCoord, 'existing_node':existingNode, 'interior_node':interiorNode}
+                            newElementNodeIDs.append(newNodeId)
+                            indexesAlreadyVisited[i]= newNodeId
+                        else:
+                            newElementNodeIDs.append(matchingNode)
+                            indexesAlreadyVisited[i]= matchingNode
                         newNodeId+= 1
                     else:
                         existingNodeId= indexesAlreadyVisited[i]
                         newElementNodeIDs.append(existingNodeId)
-                newElementDict[newElementId]= {'from_element':e, 'node_ids':newElementNodeIDs, 'element_subdivision_level': elementSubdivisionLevel}
+                newElementDict[newElementId]= {'from_element':e, 'node_ids':newElementNodeIDs}
                 newElementId+= 1
-    return {'new_nodes':newNodeDict, 'new_elements':newElementDict, 'elements_to_remove':elementsToRemove}
+    # Compute subdivision levels.
+    ## Update subdivision levels of the existing nodes.
+    alreadyVisitedNodes= set()
+    for nodeKey in newNodeDict:
+        nodeData= newNodeDict[nodeKey]
+        existingNode= nodeData['existing_node']
+        if(existingNode): # node already exists.
+            existingNodeTag= existingNode.tag
+            if(not existingNodeTag in alreadyVisitedNodes): # don't update twice.
+                alreadyVisitedNodes.add(existingNodeTag)
+                oldSubdivisionLevel= 0
+                if(existingNode.hasProp('subdivisionLevel')):
+                    oldSubdivisionLevel= existingNode.getProp('subdivisionLevel')
+                newSubdivisionLevel= max(oldSubdivisionLevel-1, 0)
+                existingNode.setProp('subdivisionLevel', newSubdivisionLevel)
+            else:
+                newSubdivisionLevel= existingNode.getProp('subdivisionLevel')
+            nodeData['subdivision_level']= newSubdivisionLevel
 
-def create_new_nodes(modelSpace, nodePositions):
+    ## Compute subdivision levels of the new nodes on element edges.
+    edgeCornerNodesDict.computeNodesOnEdgeSubdivisionLevels(xcSet= xcSet, nodeDict= newNodeDict)
+    ## Update subdivision levels of the existing elements.
+    for e in xcSet.elements:
+        elementSubdivisionLevel= 0
+        for n in e.nodes:
+            nodeSubdivisionLevel= 0
+            if(n.hasProp('subdivisionLevel')):
+                nodeSubdivisionLevel= n.getProp('subdivisionLevel')
+                elementSubdivisionLevel= max(nodeSubdivisionLevel, elementSubdivisionLevel)
+        refinementTemplateCode= None
+        if(e.hasProp('refinementTemplateCode')):
+            refinementTemplateCode= e.getProp('refinementTemplateCode')
+        if(refinementTemplateCode=='4'):
+            elementSubdivisionLevel+= 1
+        e.setProp('subdivisionLevel', elementSubdivisionLevel-1)
+    ## Compute subdivision levels of the new nodes on element interior.
+    for nodeKey in newNodeDict:
+        nodeData= newNodeDict[nodeKey]
+        interiorNode= nodeData['interior_node']
+        if(interiorNode):
+            fromElement= nodeData['from_element']
+            elementSubdivisionLevel= 0
+            if(fromElement.hasProp('subdivisionLevel')):
+                elementSubdivisionLevel= fromElement.getProp('subdivisionLevel')
+            nodeData['subdivision_level']= max(elementSubdivisionLevel, 0)
+    return {'new_nodes':newNodeDict, 'new_elements':newElementDict, 'elements_to_remove':elementsToRemove, 'edges':edgeCornerNodesDict}
+
+def create_new_nodes(modelSpace, refinedMesh):
     ''' Create the nodes needed to refine the mesh.
 
     :param modelSpace: wrapper of the finite element model.
-    :param nodePositions: dictionary returned by compute_node_positions 
-                          containing the information about the position
-                          of the new nodes.
+    :param refinedMesh: dictionary returned by compute_refined_mesh 
+                        containing the information about the position
+                        of the new nodes.
     '''
     # Create new nodes.
     nodeSubstitutions= dict()
-    alreadyVisited= dict()
-    newNodeDict= nodePositions['new_nodes']
+    newNodeDict= refinedMesh['new_nodes']
     for nodeKey in newNodeDict:
-        if(nodeKey not in alreadyVisited):
-          nodeData= newNodeDict[nodeKey]
-          existingNode= nodeData['existing_node']
-          sharedNode= nodeData['shared_node']
-          matchingNode= nodeData['matching_node']
-          cartesianCoord= nodeData['cartesian_coord']
-          if(existingNode or sharedNode):
-              if(existingNode): # corner node.
-                  nodeSubstitutions[nodeKey]= existingNode.tag
-                  subdivisionLevel= 0
-                  if(existingNode.hasProp('subdivisionLevel')):
-                      subdivisionLevel= existingNode.getProp('subdivisionLevel')
-                  if(subdivisionLevel!=0):
-                      existingNode.setProp('subdivisionLevel', subdivisionLevel-1)
-                  nodeTag= existingNode.tag
-              else: # edge node.
-                  if(matchingNode):
-                      if(matchingNode in alreadyVisited):
-                          nodeSubstitutions[nodeKey]= alreadyVisited[matchingNode]
-                      else:
-                          newNode= modelSpace.newNodeXY(cartesianCoord[0], cartesianCoord[1])
-                          subdivisionLevel= nodeData['node_subdivision_level']
-                          if(subdivisionLevel!=0):
-                              newNode.setProp('subdivisionLevel', subdivisionLevel)
-                          nodeTag= newNode.tag
-                          nodeSubstitutions[nodeKey]= nodeTag
-                          nodeSubstitutions[matchingNode]= nodeTag 
-                  else:
-                      newNode= modelSpace.newNodeXY(cartesianCoord[0], cartesianCoord[1])
-                      subdivisionLevel= nodeData['node_subdivision_level']
-                      if(subdivisionLevel!=0):
-                          newNode.setProp('subdivisionLevel', subdivisionLevel)
-                      nodeSubstitutions[nodeKey]= newNode.tag
-                      nodeTag= newNode.tag
-          else:
-              cartesianCoord= nodeData['cartesian_coord']
-              newNode= modelSpace.newNodeXY(cartesianCoord[0], cartesianCoord[1])
-              subdivisionLevel= nodeData['node_subdivision_level']
-              if(subdivisionLevel!=0):
-                  newNode.setProp('subdivisionLevel', subdivisionLevel)
-              nodeSubstitutions[nodeKey]= newNode.tag
-              nodeTag= newNode.tag
-          alreadyVisited[nodeKey]= nodeTag
+        if(nodeKey not in nodeSubstitutions):
+            nodeData= newNodeDict[nodeKey]
+            existingNode= nodeData['existing_node']
+            if(not existingNode): # new node.
+                cartesianCoord= nodeData['cartesian_coord']
+                newNode= modelSpace.newNodeXY(cartesianCoord[0], cartesianCoord[1])
+                subdivisionLevel= nodeData['subdivision_level']
+                if(subdivisionLevel!=0):
+                    newNode.setProp('subdivisionLevel', subdivisionLevel)
+                nodeTag= newNode.tag
+            else:
+                nodeTag= existingNode.tag
+        nodeSubstitutions[nodeKey]= nodeTag
     return nodeSubstitutions
           
-def create_new_elements(modelSpace, nodePositions, nodeSubstitutions):
+def create_new_elements(modelSpace, refinedMesh, nodeSubstitutions):
     ''' Create the elements needed to refine the mesh.
 
     :param modelSpace: wrapper of the finite element model.
-    :param nodePositions: dictionary returned by compute_node_positions 
-                          containing the information about the position
-                          of the new nodes.
+    :param refinedMesh: dictionary returned by compute_refined_mesh 
+                        containing the information about the new
+                        elements.
     :param nodeSubstitutions: dictionary containing the node identifiers
                               corresponding to each of the node keys in
                               newNodesDict.
     '''
     # Create new elements.
-    newElementDict= nodePositions['new_elements']
+    newElementDict= refinedMesh['new_elements']
     elementsToRemove= dict()
     for eId in newElementDict:
         elementData= newElementDict[eId]
@@ -413,9 +429,9 @@ def refinement_step(modelSpace, xcSet):
     '''
     set_refinement_templates(xcSet)
 
-    nodePositions= compute_node_positions(xcSet)
-    nodeSubstitutions= create_new_nodes(modelSpace= modelSpace, nodePositions= nodePositions)
-    create_new_elements(modelSpace= modelSpace, nodePositions= nodePositions, nodeSubstitutions= nodeSubstitutions)
+    refinedMesh= compute_refined_mesh(xcSet)
+    nodeSubstitutions= create_new_nodes(modelSpace= modelSpace, refinedMesh= refinedMesh)
+    create_new_elements(modelSpace= modelSpace, refinedMesh= refinedMesh, nodeSubstitutions= nodeSubstitutions)
     
 def compute_node_subdivision_level(xcSet):
     ''' Compute the subdivision level of the nodes from the subdivision level
