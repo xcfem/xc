@@ -32,6 +32,8 @@ class_<XC::PseudoTimeTracker, bases<XC::MovableObject>, boost::noncopyable >("Ps
 XC::Mesh &(XC::Domain::*getMeshRef)(void)= &XC::Domain::getMesh;
 XC::Preprocessor *(XC::Domain::*getPreprocessor)(void)= &XC::Domain::getPreprocessor;
 XC::ConstrContainer &(XC::Domain::*getConstraintsRef)(void)= &XC::Domain::getConstraints;
+XC::Node *(XC::Domain::*getNode)(int)= &XC::Domain::getNode;
+XC::Element *(XC::Domain::*getElement)(int)= &XC::Domain::getElement;
 class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", no_init)
   .add_property("getPreprocessor", make_function( getPreprocessor, return_internal_reference<>() ),"returns preprocessor.")
   .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
@@ -74,4 +76,6 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("clearEigenvectors", &XC::Domain::clearEigenvectors,"Remove the stored eigenvectors.")
   .def("clearEigenvalues", &XC::Domain::clearEigenvalues,"Remove the stored eigenvalues.")
   .def("clearEigendata", &XC::Domain::clearEigendata,"Remove the stored eigenvalues and eigenvectors.")
+  .def("getNode", make_function( getNode, return_internal_reference<>() ),"getNode(tag): return the node identified by the given integer tag.")
+  .def("getElement", make_function( getElement, return_internal_reference<>() ),"getElement(tag): return the element identified by the given integer tag.")
   ;
