@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template number 4.
+''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template 2a.
 
 '''
 from __future__ import print_function
@@ -27,16 +27,29 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 ## Define nodes.
+#
+#    3              4              5
+#     +-------------+-------------+
+#     |             |             |
+#     |   quad 1    |   quad 2    |
+#     |             |             |
+#     |             |             |
+#     +-------------+-------------+
+#    0              1              2
+#
 n0= modelSpace.newNodeXY(0, 0)
 n1= modelSpace.newNodeXY(1, 0)
-n2= modelSpace.newNodeXY(1, 1)
+n2= modelSpace.newNodeXY(2, 0)
 n3= modelSpace.newNodeXY(0, 1)
+n4= modelSpace.newNodeXY(1, 1)
+n5= modelSpace.newNodeXY(2, 1)
 
 ## Define material.
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E= 30e6, nu= 0.3, rho= 0.0)
 ## Define elements.
 modelSpace.setDefaultMaterial(elast2d)
-quad1= modelSpace.newElement("FourNodeQuad",[n0.tag, n1.tag, n2.tag, n3.tag])
+quad1= modelSpace.newElement("FourNodeQuad",[n0.tag, n1.tag, n4.tag, n3.tag])
+quad2= modelSpace.newElement("FourNodeQuad",[n1.tag, n2.tag, n5.tag, n4.tag])
 
 ## Define loads.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -48,10 +61,9 @@ eleLoad.setStrainComp(2,0,1e-4)
 eleLoad.setStrainComp(3,0,1e-4)
 
 SL= 2
-n0.setProp("subdivisionLevel", SL) # mark all nodes.
+n0.setProp("subdivisionLevel", SL)
 n1.setProp("subdivisionLevel", SL)
 n2.setProp("subdivisionLevel", SL)
-n3.setProp("subdivisionLevel", SL)
 
 xcTotalSet= modelSpace.getTotalSet()
 
@@ -64,8 +76,8 @@ while maxNodeSubdivisionLevel>0:
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesOK= (nNodes==100)
-nElementsOK= (nElements==81)
+nNodesOK= (nNodes==64)
+nElementsOK= (nElements==50)
 testOK= (maxNodeSubdivisionLevel==0) and nNodesOK and nElementsOK
 
 '''
@@ -80,6 +92,7 @@ if testOK:
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')
+
                                                                     
 # # Graphic stuff.
 # from postprocess import output_handler

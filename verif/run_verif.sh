@@ -730,21 +730,24 @@ python tests/preprocessor/meshing/test_gmsh_08.py
 python tests/preprocessor/meshing/test_gmsh_09.py
 python tests/preprocessor/meshing/test_gmsh_10.py
 echo "$BLEU" "    Mesh refinement tests." "$NORMAL"
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_1_01.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_1_02.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_1_03.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_2a_01.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_2a_02.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_2a_03.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_2b_01.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_2b_02.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_2b_03.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_3_01.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_3_02.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_3_03.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_4_01.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_4_02.py
-python tests/preprocessor/meshing/test_refinement/test_3-refinement_4_03.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_1_01.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_1_02.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_1_03.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_2a_01.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_2a_02.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_2a_03.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_2a_04.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_2b_01.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_2b_02.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_2b_03.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_3_01.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_3_02.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_3_03.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_4_01.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_4_02.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_4_03.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement_stable_transition.py
+python tests/preprocessor/meshing/mesh_refinement/test_3-refinement.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py

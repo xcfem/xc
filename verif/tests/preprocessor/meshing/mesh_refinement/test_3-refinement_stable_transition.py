@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders. Test connectivity template number 4.
+''' Test 3-refinement algorithm as defined in: «Algorithms for Quadrilateral and Hexahedral Mesh Generation» Robert Schneiders.
 
 '''
 from __future__ import print_function
@@ -11,13 +11,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-
 import geom
 import xc
+from model.mesh import mesh_refinement
 
 from model import predefined_spaces
 from materials import typical_materials
-from model.mesh import mesh_refinement
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -29,43 +28,41 @@ modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 ## Define nodes.
 n0= modelSpace.newNodeXY(0, 0)
 n1= modelSpace.newNodeXY(1, 0)
-n2= modelSpace.newNodeXY(1, 1)
+n2= modelSpace.newNodeXY(2, 0)
 n3= modelSpace.newNodeXY(0, 1)
+n4= modelSpace.newNodeXY(1, 1)
+n5= modelSpace.newNodeXY(2, 1)
+n6= modelSpace.newNodeXY(0, 2)
+n7= modelSpace.newNodeXY(1, 2)
+n8= modelSpace.newNodeXY(2, 2)
+n9= modelSpace.newNodeXY(0, 3)
+n10= modelSpace.newNodeXY(1, 3)
+n11= modelSpace.newNodeXY(2, 3)
 
 ## Define material.
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E= 30e6, nu= 0.3, rho= 0.0)
 ## Define elements.
 modelSpace.setDefaultMaterial(elast2d)
-quad1= modelSpace.newElement("FourNodeQuad",[n0.tag, n1.tag, n2.tag, n3.tag])
+quad1= modelSpace.newElement("FourNodeQuad",[n0.tag, n1.tag, n4.tag, n3.tag])
+quad2= modelSpace.newElement("FourNodeQuad",[n1.tag, n2.tag, n5.tag, n4.tag])
+quad3= modelSpace.newElement("FourNodeQuad",[n3.tag, n4.tag, n7.tag, n6.tag])
+quad4= modelSpace.newElement("FourNodeQuad",[n4.tag, n5.tag, n8.tag, n7.tag])
+quad5= modelSpace.newElement("FourNodeQuad",[n6.tag, n7.tag, n10.tag, n9.tag])
+quad6= modelSpace.newElement("FourNodeQuad",[n7.tag, n8.tag, n11.tag, n10.tag])
 
-## Define loads.
-lp0= modelSpace.newLoadPattern(name= '0')
-eleLoad= lp0.newElementalLoad("quad_strain_load")
-eleLoad.elementTags= xc.ID([quad1.tag])
-eleLoad.setStrainComp(0,0,1e-4) #(id of Gauss point, id of component, value)
-eleLoad.setStrainComp(1,0,1e-4)
-eleLoad.setStrainComp(2,0,1e-4)
-eleLoad.setStrainComp(3,0,1e-4)
-
+# Subdivision level assignment
 SL= 2
-n0.setProp("subdivisionLevel", SL) # mark all nodes.
-n1.setProp("subdivisionLevel", SL)
-n2.setProp("subdivisionLevel", SL)
-n3.setProp("subdivisionLevel", SL)
+quad1.setProp("subdivisionLevel", SL)
+quad2.setProp("subdivisionLevel", SL)
 
 xcTotalSet= modelSpace.getTotalSet()
-
-maxNodeSubdivisionLevel= mesh_refinement.get_max_node_subdivision_level(xcSet= xcTotalSet)
-while maxNodeSubdivisionLevel>0:
-    mesh_refinement.refinement_step(modelSpace= modelSpace, xcSet= xcTotalSet)
-    mesh_refinement.compute_subdivision_levels(xcSet= xcTotalSet)
-    maxNodeSubdivisionLevel= mesh_refinement.get_max_node_subdivision_level(xcSet= xcTotalSet)
-
+maxNodeSubdivisionLevel= mesh_refinement.refine_mesh(modelSpace= modelSpace, xcSet= xcTotalSet)
+            
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesOK= (nNodes==100)
-nElementsOK= (nElements==81)
+nNodesOK= (nNodes==238)
+nElementsOK= (nElements==214)
 testOK= (maxNodeSubdivisionLevel==0) and nNodesOK and nElementsOK
 
 '''
@@ -80,7 +77,7 @@ if testOK:
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')
-                                                                    
+                                                                   
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
