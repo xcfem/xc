@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
+''' Taken from "Development of Membrane, Plate and Flat Shell Elements in Java- article"
+
+https://vtechworks.lib.vt.edu/server/api/core/bitstreams/edb7e2db-eebf-43e9-aa1f-cfca4b8a46e9/content
+
+ '''
+
 from __future__ import print_function
-''' Taken from -Development of Membrane, Plate and Flat Shell Elements in Java- article '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -63,13 +68,9 @@ lp0.newNodalLoad(nod8.tag,xc.Vector([0,-F,0,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-
-
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-
-
 
 # Retrieving node displacements.
 UX8= nod8.getDisp[0] # Node 8 xAxis displacement
