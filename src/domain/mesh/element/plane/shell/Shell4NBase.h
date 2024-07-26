@@ -138,6 +138,7 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     void computeBasis(void);
     ParticlePos3d getLocalCoordinatesOfNode(const int &) const;
     ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;
+    Pos3d getCartesianCoordinates(const ParticlePos2d &,bool initialGeometry= true) const;    
     Pos3d getCartesianCoordinates(const ParticlePos3d &,bool initialGeometry= true) const;    
     
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

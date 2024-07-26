@@ -583,7 +583,7 @@ XC::Vector XC::Shell4NBase::getInterpolationFactors(const ParticlePos3d &pos) co
 //! @brief Return the cartesian coordinates of the argument.
 //!
 //! @param p: position in natural coordinates.
-Pos3d XC::Shell4NBase::getCartesianCoordinates(const ParticlePos3d &p, bool initialGeometry) const
+Pos3d XC::Shell4NBase::getCartesianCoordinates(const ParticlePos2d &p, bool initialGeometry) const
   {
     Pos3d retval;
     //Values of the shape functions.
@@ -610,6 +610,15 @@ Pos3d XC::Shell4NBase::getCartesianCoordinates(const ParticlePos3d &p, bool init
     const double z= N1*n1Pos.z()+N2*n2Pos.z()+N3*n3Pos.z()+N4*n4Pos.z();
     retval= Pos3d(x,y,z);
     return retval;
+  }
+
+//! @brief Return the cartesian coordinates of the argument.
+//!
+//! @param p: position in natural coordinates.
+Pos3d XC::Shell4NBase::getCartesianCoordinates(const ParticlePos3d &p, bool initialGeometry) const
+  {
+    const ParticlePos2d p2d(p.r_coordinate(), p.s_coordinate());
+    return getCartesianCoordinates(p2d, initialGeometry);
   }
 
 //! @brief Returns interpolation factors for a material point.

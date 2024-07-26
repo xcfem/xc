@@ -33,12 +33,15 @@ XC::Vector (XC::Shell4NBase::*getParticlePos3dInterpolationFactors)(const XC::Pa
 XC::Vector (XC::Shell4NBase::*getPos3dInterpolationFactors)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
 XC::Vector (XC::Shell4NBase::*getParticlePos3dInterpolatedDisplacements)(const XC::ParticlePos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
 XC::Vector (XC::Shell4NBase::*getPos3dInterpolatedDisplacements)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
+Pos3d (XC::Shell4NBase::*getCartesianCoordinates2D)(const XC::ParticlePos2d &,bool) const= &XC::ShellMITC4::getCartesianCoordinates;
+Pos3d (XC::Shell4NBase::*getCartesianCoordinates3D)(const XC::ParticlePos3d &,bool) const= &XC::ShellMITC4::getCartesianCoordinates;
 class_<XC::Shell4NBase, bases<QuadBase4N_SFD>, boost::noncopyable >("Shell4NBase", no_init)
     .def("computeBasis", &XC::ShellMITC4Base::computeBasis,"Compute local coordinates and basis")
     .add_property("getCoordTransf", make_function( getCoordTransfRef, return_internal_reference<>() ))
     .def("getLocalCoordinatesOfNode", &XC::ShellMITC4Base::getLocalCoordinatesOfNode,"Returns local coordinates of node i.")
     .def("getNaturalCoordinates", &XC::ShellMITC4Base::getNaturalCoordinates,"Returns natural coordinates of the given point.")
-    .def("getCartesianCoordinates", &XC::ShellMITC4Base::getCartesianCoordinates,"Returns cartesian coordinates of the given point.")
+    .def("getCartesianCoordinates", getCartesianCoordinates2D,"Returns cartesian coordinates of the given point.")
+    .def("getCartesianCoordinates", getCartesianCoordinates3D,"Returns cartesian coordinates of the given point.")
     .def("getMeanInternalForce",&XC::ShellMITC4Base::getMeanInternalForce)
     .def("getMeanInternalDeformation",&XC::ShellMITC4Base::getMeanInternalDeformation)
     .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors)
