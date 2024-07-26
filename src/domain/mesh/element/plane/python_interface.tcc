@@ -80,6 +80,7 @@ class_<ElemWithMaterial4N_SFD, bases<ElementBase4N >, boost::noncopyable >("Elem
   .add_property("physicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
   .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setMaterial", &ElemWithMaterial4N_SFD::setMaterial,"Set the element material.")
+  .def("copyMaterialFrom", &ElemWithMaterial4N_SFD::copyMaterialFrom, "Copy the material from the given element.")
    ;
 
 class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("PlaneElement4N_SFD", no_init)
