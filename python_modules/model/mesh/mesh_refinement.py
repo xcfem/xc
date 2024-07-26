@@ -240,8 +240,18 @@ def compute_refined_mesh(xcSet):
                         matchingNode= None
                         interiorNode= False
                         naturalCoord= rotatedRefinementTemplatePoints[i]
-                        naturalCoord= xc.ParticlePos2d(naturalCoord[0], naturalCoord[1])
-                        cartesianCoord= e.getCartesianCoordinates(naturalCoord, True)
+                        elementDimension= e.getDimension
+                        if(elementDimension==2):
+                            naturalCoord= xc.ParticlePos2d(naturalCoord[0], naturalCoord[1])
+                            cartesianCoord= e.getCartesianCoordinates(naturalCoord, True)
+                        elif(elementDimension==3):
+                            naturalCoord= xc.ParticlePos3d(naturalCoord[0], naturalCoord[1], naturalCoord[2])
+                            cartesianCoord= e.getCartesianCoordinates(naturalCoord, True)
+                        else:
+                            className= type(self).__name__
+                            methodName= sys._getframe(0).f_code.co_name
+                            lmsg.error(className+'.'+methodName+'; not implemented for elements of dimension: '+str(elementDimension))
+                            
                         if( i in [0, 3, 12, 15]): # corner nodes.
                             existingNode= cornerNodes[i]
                             # Search for corner matching node.
@@ -342,7 +352,11 @@ def create_new_nodes(modelSpace, refinedMesh):
             existingNode= nodeData['existing_node']
             if(not existingNode): # new node.
                 cartesianCoord= nodeData['cartesian_coord']
-                newNode= modelSpace.newNodeXY(cartesianCoord[0], cartesianCoord[1])
+                spaceDimension= cartesianCoord.getDimension()
+                if(spaceDimension==2):
+                    newNode= modelSpace.newNodeXY(cartesianCoord[0], cartesianCoord[1])
+                elif(spaceDimension==3):
+                    newNode=  modelSpace.newNodeXYZ(cartesianCoord[0], cartesianCoord[1], cartesianCoord[2])
                 subdivisionLevel= nodeData['subdivision_level']
                 if(subdivisionLevel!=0):
                     newNode.setProp('subdivisionLevel', subdivisionLevel)
@@ -373,8 +387,9 @@ def create_new_elements(modelSpace, refinedMesh, nodeSubstitutions):
         for nId in nodeIds:
             nodeTag= nodeSubstitutions[nId]
             nodeTags.append(nodeTag)
-        newElement= modelSpace.newElement("FourNodeQuad",nodeTags)
         fromElement= elementData['from_element']
+        elementType= fromElement.tipo().removeprefix('XC::')
+        newElement= modelSpace.newElement(elementType, nodeTags)
         # Transfer material.
         newElement.copyMaterialFrom(fromElement, True)
         # Transfer properties.
