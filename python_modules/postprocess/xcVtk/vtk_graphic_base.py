@@ -74,8 +74,11 @@ class RecordDefGrid(object):
         '''Return the length of the diagonal of the bounding box.'''
         return self.getSetBND().diagonal
 
-    def setupSet(self,setToDisplay):
-        ''' Prepares the set to be displayed.''' 
+    def setupSet(self, setToDisplay):
+        ''' Prepares the set to be displayed.
+
+        :param setToDisplay: set to be displayed.
+        '''
         if(setToDisplay):
             self.xcSet= setToDisplay
             self.xcSet.fillDownwards()
@@ -314,7 +317,7 @@ class DisplaySettings(object):
         self.renWin.Finalize()
         iren.TerminateApp()
         
-    def displayScene(self,caption= '', fileName= None):
+    def displayScene(self, caption= '', fileName= None):
         ''' Displaying scene
 
         :param caption: caption to display with the scene.
