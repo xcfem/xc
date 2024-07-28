@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Taken from example 2-005 of the SAP 2000 verification manual.'''
-# The obtained error is near 1.8% it can be the aspect ratio
-# of the element. See comments on page EXAMPLE 2-005 - 7
-# in the SAP 2000 manual.
+''' Taken from example 2-005 of the SAP 2000 verification manual.
+
+The obtained error is near 1.8% it can be the aspect ratio
+of the element. See comments on page EXAMPLE 2-005 - 7
+in the SAP 2000 manual.
+'''
 
 from __future__ import print_function
 

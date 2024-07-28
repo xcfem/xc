@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+'''Test taken from section 6.7 (control 1) of the book
+«Los forjados reticulares: diseño, análisis, construcción y patología»
+by Florentino Regalado Tesoro ISBN: 978-8493069650.'''
+
 from __future__ import print_function
-# Test taken from section 6.7 (control 1) of the book
-# «Los forjados reticulares: diseño, análisis, construcción y patología»
-# by Florentino Regalado Tesoro ISBN: 978-8493069650.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
