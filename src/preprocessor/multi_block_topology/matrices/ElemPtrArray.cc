@@ -80,6 +80,44 @@ const XC::Element *XC::ElemPtrArray::findElement(const int &tag) const
     return retval;
   }
 
+//! @brief Remove the given element from the array (set the corresponding
+//! pointer to null).
+//! @param ePtr: pointer to the element to remove.
+bool XC::ElemPtrArray::removeElement(Element *ePtr)
+  {
+    bool retval= false;
+    if(ePtr)
+      {
+	const Element *tmp= nullptr;
+	const size_t numberOfRows= getNumberOfRows();
+	const size_t numberOfColumns= getNumberOfColumns();
+	for(size_t j= 1;j<=numberOfRows;j++)
+	  for(size_t k= 1;k<=numberOfColumns;k++)
+	    {
+	      tmp= operator()(j,k);
+	      if(tmp)
+		{
+		  if(ePtr == tmp)
+		    {
+		      (*this)(j,k)= nullptr;
+		      retval= true;
+		      break;
+		    }
+		}
+	    }
+      }
+    return retval;
+  }
+
+//! @brief Remove the element identifie by the given tag from the array (set
+//! the corresponding pointer to null).
+//! @param tag: identifier of the element to remove.
+bool XC::ElemPtrArray::removeElement(const int &tag)
+  {
+    Element *ePtr= findElement(tag);
+    return removeElement(ePtr);
+  }
+
 //! @brief Returns the node closest to the point being passed as parameter.
 XC::Element *XC::ElemPtrArray::getNearestElement(const Pos3d &p)
   {

@@ -159,22 +159,31 @@ void XC::MapSetBase::clearSets(void)
 //! @brief Remove the given node from the sets.
 void XC::MapSetBase::removeNode(Node *n)
   {
-    for(iterator i= begin();i!=end();i++)
-      (*i).second->remove(n);
+    if(n)
+      {
+	for(iterator i= begin();i!=end();i++)
+	  (*i).second->remove(n);
+      }
   }
 
 //! @brief Remove the given element from the sets.
 void XC::MapSetBase::removeElement(Element *elem)
   {
-    for(iterator i= begin();i!=end();i++)
-      (*i).second->remove(elem);
+    if(elem)
+      {
+	for(iterator i= begin();i!=end();i++)
+	  (*i).second->remove(elem);
+      }
   }
 
 //! @brief Remove the given constraint from the sets.
 void XC::MapSetBase::removeConstraint(Constraint *c)
   {
-    for(iterator i= begin();i!=end();i++)
-      (*i).second->remove(c);
+    if(c)
+      {
+	for(iterator i= begin();i!=end();i++)
+	  (*i).second->remove(c);
+      }
   }
 
 //! @brief Destructor.

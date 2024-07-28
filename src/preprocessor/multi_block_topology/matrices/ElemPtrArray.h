@@ -60,6 +60,8 @@ class ElemPtrArray: public PtrArrayBase<Element>
     const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
+    bool removeElement(Element *);
+    bool removeElement(const int &);
     boost::python::list getPyElementList(void) const;
     
     std::set<const Element *> getConnectedElements(const Node *) const;

@@ -56,6 +56,8 @@ class ElemPtrArray3d: public PtrArray3dBase<ElemPtrArray>
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
     boost::python::list getPyElementList(void) const;
+    bool removeElement(Element *);
+    bool removeElement(const int &);
     
     // Loads on elements.
     void vector2dPointLoadGlobal(const Vector &,const Vector &);

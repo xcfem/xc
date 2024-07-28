@@ -65,7 +65,7 @@ class PtrArrayBase: public TMatrix<T *,std::vector<T *> >, public CommandEntity
     bool Null(void) const;
     bool HasNull(void) const;
 
-    void dim(const size_t &,const size_t &);
+    void dim(const size_t &, const size_t &);
 
     std::vector<int> getRowObjectsTags(const size_t &);
     std::vector<int> getColumnObjectsTags(const size_t &);

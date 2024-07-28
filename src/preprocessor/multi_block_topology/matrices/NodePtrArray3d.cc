@@ -159,6 +159,32 @@ boost::python::list XC::NodePtrArray3d::getPyNodeList(void) const
     return retval;
   }
 
+//! @brief Remove the given node from the array.
+//! @param ePtr: pointer to the node to remove.
+bool XC::NodePtrArray3d::removeNode(Node *ePtr)
+  {
+    bool retval= false;
+    if(ePtr)
+      {
+	const size_t numberOfLayers= getNumberOfLayers();
+	for(size_t i=1;i<=numberOfLayers;i++)
+	  {
+	    NodePtrArray &layer= operator()(i);
+	    retval= layer.removeNode(ePtr);
+	    if(retval) break;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Remove the given node from the array.
+//! @param tag: identifier of the node to remove.
+bool XC::NodePtrArray3d::removeNode(const int &tag)
+  {
+    Node *ePtr= findNode(tag);
+    return this->removeNode(ePtr);
+  }
+
 XC::Vector XC::NodePtrArray3d::IRowSimpsonIntegration(const size_t &f,const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {
     const_ref_i_row iRow= getIRowConstRef(f,c);

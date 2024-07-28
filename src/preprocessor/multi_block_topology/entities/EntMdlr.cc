@@ -266,6 +266,22 @@ XC::Element *XC::EntMdlr::findElement(const int &tag)
 const XC::Element *XC::EntMdlr::findElement(const int &tag) const
   { return ttzElements.findElement(tag); }
 
+//! @brief Remove the given element from the array.
+bool XC::EntMdlr::remove(Element *ePtr)
+  { return ttzElements.removeElement(ePtr); }
+
+//! @brief Remove the element identifie by the given tag from the array.
+bool XC::EntMdlr::removeElement(const int &tag)
+  { return ttzElements.removeElement(tag); }
+
+//! @brief Remove the given node from the array.
+bool XC::EntMdlr::remove(Node *nPtr)
+  { return ttzNodes.removeNode(nPtr); }
+
+//! @brief Remove the node identifie by the given tag from the array.
+bool XC::EntMdlr::removeNode(const int &tag)
+  { return ttzNodes.removeNode(tag); }
+
 //! @brief Creates a set that corresponds to a row of nodes and elements.
 XC::SetEstruct *XC::EntMdlr::create_row_set(const Array3dRange &rango,const std::string &nmb)
   {

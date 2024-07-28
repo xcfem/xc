@@ -29,7 +29,6 @@
 #include "ElemPtrArray3d.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/Element1D.h"
-//#include <boost/any.hpp>
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "boost/lexical_cast.hpp"
 
@@ -57,6 +56,32 @@ XC::Element *XC::ElemPtrArray3d::findElement(const int &tag)
         if(retval) break;
       }
     return retval;
+  }
+
+//! @brief Remove the given element from the array.
+//! @param ePtr: pointer to the element to remove.
+bool XC::ElemPtrArray3d::removeElement(Element *ePtr)
+  {
+    bool retval= false;
+    if(ePtr)
+      {
+	const size_t numberOfLayers= getNumberOfLayers();
+	for(size_t i=1;i<=numberOfLayers;i++)
+	  {
+	    ElemPtrArray &layer= operator()(i);
+	    retval= layer.removeElement(ePtr);
+	    if(retval) break;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Remove the given element from the array.
+//! @param tag: identifier of the element to remove.
+bool XC::ElemPtrArray3d::removeElement(const int &tag)
+  {
+    Element *ePtr= findElement(tag);
+    return this->removeElement(ePtr);
   }
 
 //! @brief Returns (if it exists) a pointer to the element

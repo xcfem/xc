@@ -119,6 +119,44 @@ const XC::Node *XC::NodePtrArray::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
+//! @brief Remove the given node from the array (set the corresponding
+//! pointer to null).
+//! @param nPtr: pointer to the node to remove.
+bool XC::NodePtrArray::removeNode(Node *nPtr)
+  {
+    bool retval= false;
+    if(nPtr)
+      {
+	const Node *tmp= nullptr;
+	const size_t numberOfRows= getNumberOfRows();
+	const size_t numberOfColumns= getNumberOfColumns();
+	for(size_t j= 1;j<=numberOfRows;j++)
+	  for(size_t k= 1;k<=numberOfColumns;k++)
+	    {
+	      tmp= operator()(j,k);
+	      if(tmp)
+		{
+		  if(nPtr == tmp)
+		    {
+		      (*this)(j,k)= nullptr;
+		      retval= true;
+		      break;
+		    }
+		}
+	    }
+      }
+    return retval;
+  }
+
+//! @brief Remove the node identifie by the given tag from the array (set
+//! the corresponding pointer to null).
+//! @param tag: identifier of the node to remove.
+bool XC::NodePtrArray::removeNode(const int &tag)
+  {
+    Node *nPtr= findNode(tag);
+    return removeNode(nPtr);
+  }
+
 //! @brief Returns a Python list containing the nodes of this array.
 boost::python::list XC::NodePtrArray::getPyNodeList(void) const
   {

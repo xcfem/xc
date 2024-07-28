@@ -250,15 +250,22 @@ bool XC::Set::In(const Node *n) const
 
 //! @brief Removes the given node from the set.
 bool XC::Set::remove(Node *n)
-  { return SetMeshComp::remove(n); }
+  {
+    bool retval= entities.remove(n);
+    return (retval || SetMeshComp::remove(n));
+  }
 
 //! @brief Returns true if the element belongs to the set.
 bool XC::Set::In(const Element *e) const
   { return SetMeshComp::In(e); }
 
 //! @brief Removes the given element from the set.
+//! @param ePtr: pointer to the element to remove.
 bool XC::Set::remove(Element *e)
-  { return SetMeshComp::remove(e); }
+  {
+    bool retval= entities.remove(e);
+    return (retval || SetMeshComp::remove(e));
+  }
 
 //! @brief Removes the given constraint from the set.
 bool XC::Set::remove(Constraint *c)

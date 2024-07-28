@@ -278,7 +278,11 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
         for(size_t i=1;i<=numberOfLayers;i++)
           for(size_t j=1;j<=numberOfRows;j++)
             for(size_t k=1;k<=numberOfColumns;k++)
-              mc.addElement(ttz_elements(i,j,k));
+	      {
+		Element *tmp= ttz_elements(i,j,k);
+		if(tmp)
+                  mc.addElement(ttz_elements(i,j,k));
+	      }
 
       }
     // Lines
@@ -292,7 +296,12 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
         for(size_t i=1;i<=numberOfLayers;i++)
           for(size_t j=1;j<=numberOfRows;j++)
             for(size_t k=1;k<=numberOfColumns;k++)
-              mc.addElement(ttz_elements(i,j,k));
+	      {
+		Element *tmp= ttz_elements(i,j,k);
+		if(tmp)
+                  mc.addElement(ttz_elements(i,j,k));
+	      }
+		
       }
     // Points
     for(pnt_iterator i= points.begin();i!=points.end();i++)
@@ -1097,6 +1106,30 @@ double XC::SetEntities::getAverageElementSize(void) const
 	  totalNDiv+= line.NDiv();
 	}
     return totalLength/totalNDiv;
+  }
+
+//! @brief Remove the given element from the entities (set the corresponding
+//! pointer to null).
+//! @param ePtr: pointer to the element to remove.
+bool XC::SetEntities::remove(Element *ePtr)
+  {
+    bool retval= bodies.remove(ePtr);
+    retval= (retval || surfaces.remove(ePtr));
+    retval= (retval || lines.remove(ePtr));
+    retval= (retval || points.remove(ePtr));
+    return retval;
+  }
+
+//! @brief Remove the given node from the entities (set the corresponding
+//! pointer to null).
+//! @param nPtr: pointer to the element to remove.
+bool XC::SetEntities::remove(Node *nPtr)
+  {
+    bool retval= bodies.remove(nPtr);
+    retval= (retval || surfaces.remove(nPtr));
+    retval= (retval || lines.remove(nPtr));
+    retval= (retval || points.remove(nPtr));
+    return retval;
   }
 
 //! @brief Return a new set that contains the bodies that lie insiof the

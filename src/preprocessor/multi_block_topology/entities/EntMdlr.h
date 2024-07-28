@@ -113,11 +113,15 @@ class EntMdlr: public SetEstruct
     virtual const Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
     Node *findNode(const int &tag);
     const Node *findNode(const int &tag) const;
+    bool remove(Node *);
+    bool removeNode(const int &);
 
     Element *findElement(const int &);
     const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
+    bool remove(Element *);
+    bool removeElement(const int &);
     std::set<const Element *> getConnectedElements(const Node *) const;
     std::set<Element *> getConnectedElements(const Node *);
     boost::python::list getConnectedElementsPy(const Node *);

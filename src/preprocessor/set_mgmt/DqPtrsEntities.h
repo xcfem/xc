@@ -67,6 +67,8 @@ class DqPtrsEntities: public DqPtrs<T>
 
     void remove(const DqPtrsEntities<T> &other);
     void intersect(const DqPtrsEntities<T> &other);
+    bool remove(Element *);
+    bool remove(Node *);
 
     T *searchName(const std::string &nmb);
     T *findTag(const size_t &);
@@ -246,6 +248,46 @@ void DqPtrsEntities<T>::intersect(const DqPtrsEntities<T> &other)
 	  this->erase(j);
       }
   }
+
+//! @brief Remove the given element from the entities of this container
+// (remove means set the corresponding pointer to null).
+//! @param ePtr: pointer to the element to remove.
+template <class T>
+bool DqPtrsEntities<T>::remove(Element *ePtr)
+  {
+    bool retval= false;
+    if(ePtr)
+      {
+	for(const_iterator i= this->begin();i!= this->end();i++)
+	  {
+	    T *t= (*i);
+	    const bool tmp= t->remove(ePtr);
+	    if(tmp)
+	      retval= true;
+	  }
+      }
+    return retval;
+  }
+  
+//! @brief Remove the given node from the entities of this container
+// (remove means set the corresponding pointer to null).
+//! @param nPtr: pointer to the node to remove.
+template <class T>
+bool DqPtrsEntities<T>::remove(Node *nPtr)
+  {
+    bool retval= false;
+    if(nPtr)
+      {
+	for(const_iterator i= this->begin();i!= this->end();i++)
+	  {
+	    T *t= (*i);
+	    const bool tmp= t->remove(nPtr);
+	    if(tmp)
+	      retval= true;
+	  }
+      }
+    return retval;
+  }  
 
 //! @brief -= (difference) operator.
 template <class T>

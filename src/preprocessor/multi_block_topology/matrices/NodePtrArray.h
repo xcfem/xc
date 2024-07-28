@@ -59,6 +59,8 @@ class NodePtrArray: public PtrArrayBase<Node>
     const Node *findNode(const int &tag) const;
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
+    bool removeNode(Node *);
+    bool removeNode(const int &);
     boost::python::list getPyNodeList(void) const;
 
   };

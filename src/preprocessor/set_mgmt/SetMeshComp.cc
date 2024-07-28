@@ -572,7 +572,6 @@ std::set<int> XC::SetMeshComp::getConstraintTags(void) const
     return retval;
   }
 
-
 //! @brief Appends to the set being passed as parameter
 //! the nodes that touch any of the elements of the set.
 void XC::SetMeshComp::fillDownwards(void)

@@ -221,6 +221,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     double getMaxElementSize(void) const;
     double getMinElementSize(void) const;
     double getAverageElementSize(void) const;
+    bool remove(Element *);
+    bool remove(Node *);
 
     void fillUpwards(const SetMeshComp &);
     void fillDownwards(void);
