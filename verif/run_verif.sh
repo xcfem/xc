@@ -767,7 +767,8 @@ python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_4_01.p
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_4_02.py
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_4_03.py
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_stable_transition.py
-python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement.py
+python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_01.py
+python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_02.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
