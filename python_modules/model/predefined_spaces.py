@@ -1059,16 +1059,6 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getSets.getSetsContaining(node)
 
-    def copyNodeSets(self, nodeFrom, nodeTo):
-        ''' Add the second node to all the sets containing the first one.
-
-        :param nodeFrom: node to get the sets it belongs from.
-        :parem nodeTo: node to add to the sets.
-        '''
-        nodeSets= self.getSetsContainingNode(nodeFrom)
-        for xcSet in nodeSets:
-            xcSet.nodes.append(nodeTo)        
-    
     def getSetsContainingElement(self, element):
         ''' Return the sets that contain the given element.
 
@@ -1076,16 +1066,6 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getSets.getSetsContaining(element)
 
-    def copyElementSets(self, elementFrom, elementTo):
-        ''' Add the second element to all the sets containing the first one.
-
-        :param elementFrom: element to get the sets it belongs from.
-        :parem elementTo: element to add to the sets.
-        '''
-        elementSets= self.getSetsContainingElement(elementFrom)
-        for xcSet in elementSets:
-            xcSet.elements.append(elementTo)        
-    
     def pickElementsInZone(self, zone, resultSet, originSet= None):
         ''' Return a set containing the elements that lie
             inside the zone argument.
