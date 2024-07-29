@@ -58,6 +58,8 @@ class_<PolygonalSurface2d, bases<Surface2d>, boost::noncopyable >("PolygonalSurf
   .def("clip",clipLine, "Clips the line by the polygonal surface.")
   .def("clip",clipRay, "Clips the ray by the polygonal surface.")
   .def("clip",clipSegment, "Clips the segment by the polygonal surface.")
+  .def("dist", &PolygonalSurface2d::Dist, "Return the distance from the point to the polygon.")
+  .def("signedDist", &PolygonalSurface2d::DistSigno, " return the signed distance fromt the point to the polygon (positive if the point is outside the polygon).")
   ;
 
 typedef std::list<Polygon2d> polygon_2D_list;

@@ -2037,14 +2037,28 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
   }
 
 //! @brief Adds the node to the sets being passed as parameters.
-void XC::Node::add_to_sets(std::set<SetBase *> &sets)
+void XC::Node::add_to_sets(std::set<SetBase *> &other_sets)
   {
-    for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
+    std::set<SetBase *> this_sets= this->get_sets();
+    for(std::set<SetBase *>::iterator i= other_sets.begin();i!= other_sets.end();i++)
       {
-        SetMeshComp *s= dynamic_cast<SetMeshComp *>(*i);
-        if(s) s->addNode(this);
+	SetBase *other_set= *i;
+	if(this_sets.count(other_set)==0) // element not already in set.
+	  {
+	    SetMeshComp *other_smc= dynamic_cast<SetMeshComp *>(other_set);
+	    if(other_smc)
+	      other_smc->addNode(this);
+	  }
       }
   }
+
+//! @brief Add this element to all the sets containing the given one.
+void XC::Node::copySetsFrom(const Node &n)
+  {
+    std::set<SetBase *> other_sets= n.get_sets();
+    this->add_to_sets(other_sets);
+  }
+
 //! @brief Prints node data.
 //!
 //! Causes the node to print out its tag, mass matrix, and committed

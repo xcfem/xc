@@ -143,6 +143,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getMaxModalDisplacementForDOFs",getMaxModalDisplacementForDOFs)
   .def("getMaxModalVelocityForDOFs",getMaxModalVelocityForDOFs)
   .def("getMaxModalAccelerationForDOFs",getMaxModalAccelerationForDOFs)
+  .def("copySetsFrom", &XC::Node::copySetsFrom,"Add this node to all the sets containing the given node.")
    ;
 
 XC::Node *(XC::NodeIter::*op_node_iter_parenthesis)(void)= &XC::NodeIter::operator();

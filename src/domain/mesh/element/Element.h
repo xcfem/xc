@@ -324,6 +324,7 @@ class Element: public MeshComponent
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
+    void copySetsFrom(const Element &);
 
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

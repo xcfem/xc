@@ -347,6 +347,7 @@ class Node: public MeshComponent
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
+    void copySetsFrom(const Node &);
 
     virtual void Print(std::ostream &s, int flag = 0) const;
 

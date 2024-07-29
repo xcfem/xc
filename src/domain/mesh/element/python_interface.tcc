@@ -125,6 +125,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getCoordinateSystem",&XC::Element::getCooSys,"Return the element coordinate system.")
   .def("getValuesAtNodes",&XC::Element::getValuesAtNodes,"getValuesAtNodes(string, silent): return the value of the argument at the element nodes. If silent==True don't complain about non-existent property.")
   .def("createInertiaLoad", &XC::Element::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
+  .def("copySetsFrom", &XC::Element::copySetsFrom,"Add this element to all the sets containing the given element.")
    ;
 
 XC::Element *(XC::ElementIter::*element_iter_parenthesis_op)(void)= &XC::ElementIter::operator();

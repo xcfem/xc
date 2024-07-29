@@ -362,7 +362,7 @@ GEOM_FT PolygonalSurface2d::DistSigno(const Pos2d &p,const bool &clockwise) cons
     return retval;
   }
 
-//! @brief Return the distance from the point to the polígono.
+//! @brief Return the distance from the point to the polygon.
 //! The distance is computed as the maximim of:
 //! -The signed distances from the point to each of the planes that contain
 //! one of the sides and are perpendicular to the surface.

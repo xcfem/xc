@@ -989,13 +989,26 @@ std::set<XC::SetBase *> XC::Element::get_sets(void) const
   }
 
 //! @brief Adds the element to the sets being passed as parameters.
-void XC::Element::add_to_sets(std::set<SetBase *> &sets)
+void XC::Element::add_to_sets(std::set<SetBase *> &other_sets)
   {
-    for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
+    std::set<SetBase *> this_sets= this->get_sets();
+    for(std::set<SetBase *>::iterator i= other_sets.begin();i!= other_sets.end();i++)
       {
-        SetMeshComp *s= dynamic_cast<SetMeshComp *>(*i);
-        if(s) s->addElement(this);
+	SetBase *other_set= *i;
+	if(this_sets.count(other_set)==0) // element not already in set.
+	  {
+	    SetMeshComp *other_smc= dynamic_cast<SetMeshComp *>(other_set);
+	    if(other_smc)
+	      other_smc->addElement(this);
+	  }
       }
+  }
+
+//! @brief Add this element to all the sets containing the given one.
+void XC::Element::copySetsFrom(const Element &e)
+  {
+    std::set<SetBase *> other_sets= e.get_sets();
+    this->add_to_sets(other_sets);
   }
 
 //! @brief Return a pointer to the material that corresponds to the name.
