@@ -7,3 +7,4 @@ Spatial distributions of loads and/or constraints on the finite element model. E
 - [Multiple-Support Excitation](https://portwooddigital.com/2021/08/29/multiple-support-excitation/)
 - [Get the Accel Out](https://portwooddigital.com/2022/06/08/get-the-accel-out/)
 - [Effective Earthquake Forces](https://portwooddigital.com/2024/06/02/effective-earthquake-forces/)
+- [Static Analysis with Uniform Excitation](https://portwooddigital.com/2024/07/28/static-analysis-with-uniform-excitation/)

@@ -13,6 +13,10 @@ Classes that implement the different types of analysis:
 - [Explicit and implicit methods](https://en.wikipedia.org/wiki/Explicit_and_implicit_methods)
 - [Implicit vs Explicit Finite Element Method (FEM): What Is the Difference?](https://www.simscale.com/blog/implicit-vs-explicit-fem/)
 
+### Static analysis
+
+- [Static Analysis with Uniform Excitation](https://portwooddigital.com/2024/07/28/static-analysis-with-uniform-excitation/)
+
 ### Buckling analysis
 - [Linear buckling analysis](https://portwooddigital.com/2021/05/29/right-under-your-nose)
 - [That’s a Large Mass](https://portwooddigital.com/2021/08/01/thats-a-large-mass/)
