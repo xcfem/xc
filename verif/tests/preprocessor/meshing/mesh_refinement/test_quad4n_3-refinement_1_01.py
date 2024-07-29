@@ -42,7 +42,7 @@ quad1= modelSpace.newElement("FourNodeQuad",[n0.tag, n1.tag, n2.tag, n3.tag])
 lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("quad_strain_load")
 eleLoad.elementTags= xc.ID([quad1.tag])
-eleLoad.setStrainComp(0,0,1e-4) #(id of Gauss point, id of component, value)
+eleLoad.setStrainComp(0,0,1e-4) # (id of Gauss point, id of component, value)
 eleLoad.setStrainComp(1,0,1e-4)
 eleLoad.setStrainComp(2,0,1e-4)
 eleLoad.setStrainComp(3,0,1e-4)
@@ -85,7 +85,7 @@ else:
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
-# oh.displayFEMesh()
+# # oh.displayFEMesh()
 # oh.displayLocalAxes()
 # # oh.displayReactions()
 # # oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
