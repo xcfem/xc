@@ -10,6 +10,8 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import xc
+import math
+from collections import deque
 
 # Refinement templates.
 
@@ -377,9 +379,11 @@ def create_new_elements(modelSpace, refinedMesh, nodeSubstitutions):
                               corresponding to each of the node keys in
                               newNodesDict.
     '''
+    retval= list()
     # Create new elements.
     newElementDict= refinedMesh['new_elements']
     elementsToRemove= dict()
+    cos45= math.cos(math.pi/4.0)
     for eId in newElementDict:
         elementData= newElementDict[eId]
         nodeIds= elementData['node_ids']
@@ -388,6 +392,26 @@ def create_new_elements(modelSpace, refinedMesh, nodeSubstitutions):
             nodeTag= nodeSubstitutions[nId]
             nodeTags.append(nodeTag)
         fromElement= elementData['from_element']
+        # Element orientation.
+        fromElementIVector= fromElement.getIVector3d(True)
+        fromElementJVector= fromElement.getJVector3d(True)
+        futureElementNodes= modelSpace.getNodes(nodeTags)
+        futureElementIVector= (futureElementNodes[1].getInitialPos3d-futureElementNodes[0].getInitialPos3d).normalized()
+        localICoord= futureElementIVector.dot(fromElementIVector)
+        localJCoord= futureElementIVector.dot(fromElementJVector)
+        nodeListRotation= 0
+        if(abs(localICoord)<cos45):
+            if(localJCoord>0):
+                nodeListRotation= 1
+            else:
+                nodeListRotation= -1
+        elif(abs(localJCoord)<cos45):
+            if(localICoord<0):
+                nodeListRotation= -2
+        if(nodeListRotation!=0):
+            tmp= deque(nodeTags)
+            tmp.rotate(nodeListRotation)
+            nodeTags = list(tmp)
         elementType= fromElement.tipo().removeprefix('XC::')
         newElement= modelSpace.newElement(elementType, nodeTags)
         # Transfer material.
@@ -395,15 +419,17 @@ def create_new_elements(modelSpace, refinedMesh, nodeSubstitutions):
         # Transfer properties.
         newElement.copyPropsFrom(fromElement)
         # Transfer sets.
-        modelSpace.copyElementSets(fromElement, newElement)
+        newElement.copySetsFrom(fromElement)
         # Transfer loads.
         modelSpace.copyElementalLoads(fromElement, newElement)
+        retval.append(newElement)
         # Mark the old element.
         if(fromElement.tag not in elementsToRemove):
             elementsToRemove[fromElement.tag]= fromElement
     for eleTag in elementsToRemove:
         oldElement= elementsToRemove[eleTag]
         modelSpace.removeElement(oldElement)
+    return retval
 
 def compute_subdivision_levels(xcSet):
     ''' Compute the subdivision levels of the elements of the given set.
@@ -446,7 +472,8 @@ def refinement_step(modelSpace, xcSet):
 
     refinedMesh= compute_refined_mesh(xcSet)
     nodeSubstitutions= create_new_nodes(modelSpace= modelSpace, refinedMesh= refinedMesh)
-    create_new_elements(modelSpace= modelSpace, refinedMesh= refinedMesh, nodeSubstitutions= nodeSubstitutions)
+    retval= create_new_elements(modelSpace= modelSpace, refinedMesh= refinedMesh, nodeSubstitutions= nodeSubstitutions)
+    return retval
     
 def compute_node_subdivision_level(xcSet):
     ''' Compute the subdivision level of the nodes from the subdivision level
@@ -477,8 +504,9 @@ def refine_mesh(modelSpace, xcSet):
     :param xcSet: set whose elements will be refined.
     '''
     retval= compute_node_subdivision_level(xcSet= xcSet)
+    newElements= list()
     while retval>0:
-        refinement_step(modelSpace= modelSpace, xcSet= xcSet)
+        newElements= refinement_step(modelSpace= modelSpace, xcSet= xcSet)
         compute_subdivision_levels(xcSet= xcSet)
         retval= get_max_node_subdivision_level(xcSet= xcSet)
     return retval
