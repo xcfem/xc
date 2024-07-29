@@ -51,6 +51,10 @@ modelSpace.setDefaultMaterial(elast2d)
 quad1= modelSpace.newElement("FourNodeQuad",[n0.tag, n1.tag, n4.tag, n3.tag])
 quad2= modelSpace.newElement("FourNodeQuad",[n1.tag, n2.tag, n5.tag, n4.tag])
 
+# Define sets.
+testSet1= modelSpace.defSet('testSet1', elements= [quad1])
+testSet2= modelSpace.defSet('testSet2', elements= [quad2])
+
 ## Define loads.
 lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("quad_strain_load")
@@ -75,14 +79,19 @@ while maxNodeSubdivisionLevel>0:
 
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
+nElementsTestSet1= len(testSet1.elements)
+nElementsTestSet2= len(testSet2.elements)
+
 
 nNodesOK= (nNodes==64)
-nElementsOK= (nElements==50)
+nElementsOK= (nElements==50) and (nElementsTestSet1== 25) and (nElementsTestSet2==25)
 testOK= (maxNodeSubdivisionLevel==0) and nNodesOK and nElementsOK
 
 '''
 print('number of nodes: ', nNodes)
 print('number of elements: ', nElements)
+print(len(testSet1.elements))
+print(len(testSet2.elements))
 '''
 
 import os
