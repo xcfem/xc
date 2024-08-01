@@ -14,22 +14,22 @@ __email__= "l.pereztato@gmail.com"
 from materials.ec2 import EC2_materials
 
 concrete= EC2_materials.C30
-concrete.cemType='N'   #class N cement
+concrete.cemType= 'N'   # class N cement
 RH= 70  # ambient relative humidity(%)
 t= 1e9 # age of the concrete.
 ts= 7  #  age of the concrete at end of curing
 Ac= 1.0 # concrete cross-sectional area 
-u= 2     # part of cross-section perimeter exposed to drying
+u= 2 # part of cross-section perimeter exposed to drying
 h0=2*Ac/u  # notional size of the member h0.
 
 kh= concrete.getShrKh(h0)
 ratio1= abs(kh-0.7)/0.7
 
-Epscd0= concrete.getShrEpscd0(RH)   # Basic drying shrinkage strain
+Epscd0= concrete.getShrEpscd0(RH) # Basic drying shrinkage strain
 ratio2= abs(Epscd0+36.20942640862215e-5)/-36.20942640862215e-5
 Epsca= concrete.getShrEpsca(t) # Autogenous shrinkage strain
 ratio3= abs(Epsca+5e-5)/5e-5
-Epscs= concrete.getShrEpscs(t,ts,RH,h0)   #Total shrinkage
+Epscs= concrete.getShrEpscs(t,ts,RH,h0) # Total shrinkage
 ratio4= abs(Epscs+30.35e-5)/30.35e-5
 
 '''
