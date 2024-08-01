@@ -64,7 +64,7 @@ epsilon_cd_7= concrete.getShrEpscd(t= t0,ts= ts, RH= RH, h0= h0) # Drying shrink
 epsilon_cd_100= concrete.getShrEpscd(t= t,ts= ts, RH= RH, h0= h0) # Drying shrinkage strain
 epsilon_cd_93= epsilon_cd_100-epsilon_cd_7
 ratio1= abs(epsilon_cd_93+4.04e-5)/4.04e-5
-### Autogenours shrinkage.
+### Autogenous shrinkage.
 epsilon_ca_100= concrete.getShrEpsca(t= t, t0= t0) # autogenous shrinkage strain.
 ### Total shrinkage.
 epsilon_cs_100= concrete.getShrEpscs(t,ts,RH,h0, t0= t0) # Total shrinkage
@@ -91,7 +91,7 @@ t= time_steps[1]
 ### Drying shrinkage.
 epsilon_cd_300= concrete.getShrEpscd(t= t,ts= ts, RH= RH, h0= h0) # Drying shrinkage strain
 epsilon_cd_t300_t100= epsilon_cd_300-epsilon_cd_100
-### Autogenours shrinkage.
+### Autogenous shrinkage.
 epsilon_ca_t300= concrete.getShrEpsca(t= t)
 epsilon_ca_t300_t100= concrete.getShrEpsca(t= t, t0= t0) # autogenous shrinkage strain.
 ### Total shrinkage.
@@ -129,7 +129,7 @@ t= time_steps[2]
 ### Drying shrinkage.
 epsilon_cd_30y= concrete.getShrEpscd(t= t,ts= ts, RH= RH, h0= h0) # Drying shrinkage strain
 epsilon_cd_t30y_t300= epsilon_cd_30y-epsilon_cd_300
-### Autogenours shrinkage.
+### Autogenous shrinkage.
 epsilon_ca_t30y_t300= concrete.getShrEpsca(t= t, t0= t0) # autogenous shrinkage strain.
 ### Total shrinkage.
 epsilon_cs_30y= concrete.getShrEpscs(t,ts,RH,h0, t0= t0) # Total shrinkage
