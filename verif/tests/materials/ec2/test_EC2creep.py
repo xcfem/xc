@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-'''Creep verification test.''' 
-#Data for comparison from the JRC technical report: 
-#"Bridge design to Eurocodes. Worked examples"
+'''Creep verification test.
+
+ Data for comparison from the JRC technical report: 
+ "Bridge design to Eurocodes. Worked examples"
+'''
+
 from __future__ import print_function
 from __future__ import division
 
@@ -26,33 +29,39 @@ h0=2*Ac/u  #notional size of the member h0.
 RH=80               #ambient relative humidity(%)
 t=1e6               #long term
 #age of concrete in days at loading
-t0concreting=22         #mean value t0 of all the slab concreting phases
-t0shrinkage=1           #shrinkage is assumed to begin at the age of 1 day
-t0equipments=88         #age of concrete when non-structural bridge equipments are loaded
-t0settlement=50         #a settlement is assumed to occur at t0=50 days
+t0concreting=22 # mean value t0 of all the slab concreting phases
+t0shrinkage=1 # shrinkage is assumed to begin at the age of 1 day
+t0equipments=88 # age of concrete when non-structural bridge equipments are loaded
+t0settlement=50 # a settlement is assumed to occur at t0= 50 days
 
-t0=t0settlement                 #age of concrete in days at loading
-alfa1=concrDeck.getCreepAlfa1() #Coefficient for the calculation of the creep coefficient
+t0=t0settlement # age of concrete in days at loading
+alfa1=concrDeck.getCreepAlfa1() # coefficient for the calculation of the creep
+                                # coefficient
 ratio1=round(alfa1,2)-0.87
-alfa2=concrDeck.getCreepAlfa2() #Coefficient for the calculation of the creep coefficient
+alfa2=concrDeck.getCreepAlfa2() # coefficient for the calculation of the creep
+                                # coefficient
 ratio2=round(alfa2,2)-0.96
-alfa3=concrDeck.getCreepAlfa3() #Coefficient for the calculation of the creep coefficient
+alfa3=concrDeck.getCreepAlfa3() # coefficient for the calculation of the creep
+                                # coefficient
 ratio3=round(alfa3,2)-0.90
-fiRH=concrDeck.getCreepFiRH(RH,h0) #factor to allow for the effect of relative humidity
-                                     #on the notional creep coefficient
+fiRH=concrDeck.getCreepFiRH(RH,h0) # factor to allow for the effect of relative
+                                   # humidity on the notional creep coefficient
 ratio4=round(fiRH,2)-1.15
-betafcm=concrDeck.getCreepBetafcm()  #factor to allow for the effect of concrete strength
-                                     #on the notional creep coefficient
+betafcm=concrDeck.getCreepBetafcm() # factor to allow for the effect of
+                                    # concrete strength on the notional creep
+                                    # coefficient
 ratio5=round(betafcm,2)-2.56
-betat0=concrDeck.getCreepBetat0(t0)  #factor to allow for the effect of concrete age at loading
-                                     #on the notional creep coefficient
+betat0=concrDeck.getCreepBetat0(t0)  # factor to allow for the effect of
+                                     # concrete age at loading
+                                     # on the notional creep coefficient
 ratio6=round(betat0,2)-0.44
-fi0=concrDeck.getCreepFi0(t0,RH,h0) #notational creep coefficient for the calculation 
-                                      #of the creep coefficient
+fi0=concrDeck.getCreepFi0(t0,RH,h0) # notional creep coefficient for the
+                                    # calculation of the creep coefficient
 ratio7=round(fi0,2)-1.29
-betactt0=concrDeck.getCreepBetactt0(t,t0,RH,h0) #coefficient to describe the development of 
-                                                  #creep with time after loading
-ratio8=round(betactt0,2)-1.00
+betactt0=concrDeck.getCreepBetactt0(t,t0,RH,h0) # coefficient to describe the
+                                                # development of creep with
+                                                # time after loading
+ratio8= round(betactt0,2)-1.00
 
 #Creep coefficients:
 fitt0Concreting=concrDeck.getCreepFitt0(t,t0concreting,RH,h0)
