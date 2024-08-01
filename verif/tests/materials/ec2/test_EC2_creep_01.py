@@ -2,7 +2,8 @@
 '''Creep verification test.
 
  Data for comparison from the JRC technical report: 
- "Bridge design to Eurocodes. Worked examples"
+ "Bridge design to Eurocodes. Worked examples ISBN 978-92-79-22823-0" 
+  page 82. 
 '''
 
 from __future__ import print_function
@@ -14,32 +15,27 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-
-
 from materials.ec2 import EC2_materials
 
-#Data
+# Data
 
-#Type of concrete used in the deck slab
+# Type of concrete used in the deck slab
 concrDeck= EC2_materials.EC2Concrete("C35/45",-35e6,1.5)
 
-Ac=3.9     #area of the concrete slab (m2)
-u=11.6     #perimeter exposed to drying (m)
-h0=2*Ac/u  #notional size of the member h0.
-RH=80               #ambient relative humidity(%)
-t=1e6               #long term
-#age of concrete in days at loading
+Ac= 3.9 # area of the concrete slab (m2)
+u=11.6 # perimeter exposed to drying (m)
+h0=2*Ac/u # notional size of the member h0.
+RH=80 # ambient relative humidity(%)
+t=1e6 # long term age of concrete in days at loading.
 t0concreting=22 # mean value t0 of all the slab concreting phases
 t0shrinkage=1 # shrinkage is assumed to begin at the age of 1 day
 t0equipments=88 # age of concrete when non-structural bridge equipments are loaded
 t0settlement=50 # a settlement is assumed to occur at t0= 50 days
 
 t0=t0settlement # age of concrete in days at loading
-alfa1=concrDeck.getCreepAlfa1() # coefficient for the calculation of the creep
-                                # coefficient
+alfa1=concrDeck.getCreepAlfa1() # influence of the concrete strength (page 82)
 ratio1=round(alfa1,2)-0.87
-alfa2=concrDeck.getCreepAlfa2() # coefficient for the calculation of the creep
-                                # coefficient
+alfa2=concrDeck.getCreepAlfa2() # influence of the concrete strength (page 82)
 ratio2=round(alfa2,2)-0.96
 alfa3=concrDeck.getCreepAlfa3() # coefficient for the calculation of the creep
                                 # coefficient

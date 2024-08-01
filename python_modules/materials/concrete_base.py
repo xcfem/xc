@@ -784,6 +784,24 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         fi0=self.getCreepFiRH(RH,h0)*self.getCreepBetafcm()*self.getCreepBetat0(t0)
         return fi0
 
+    def getCreepBetaH(self, RH, h0):
+        '''coefficient coefficient depending on the relative humidity (RH) 
+           and the notional member size
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.8a and B8b)
+ 
+        :param RH: ambient relative humidity(%)
+        :param h0: notional size of the member.
+                   - h0=2*Ac/u, where:
+                   - Ac= cross sectional area
+                   - u = perimeter of the member in contact with the atmosphere
+        '''
+        fcmMPa=abs(self.getFcm())/1e6
+        if fcmMPa <= 35:
+            retval= min(1.5*(1+(0.012*RH)**18)*h0*1e3+250,1500) # B.8a
+        else:
+            retval= min(1.5*(1+(0.012*RH)**18)*h0*1e3+250*self.getCreepAlfa3(),1500*self.getCreepAlfa3()) # B.8b
+        return retval
+
     def getCreepBetactt0(self,t,t0,RH,h0):
         '''coefficient to describe the development of creep with time after loading, used to calculate the creep coefficient
         (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.2)
@@ -798,10 +816,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                    - u = perimeter of the member in contact with the atmosphere
         '''
         fcmMPa=abs(self.getFcm())/1e6
-        if fcmMPa <= 35:
-            betaH= min(1.5*(1+(0.012*RH)**18)*h0*1e3+250,1500)
-        else:
-            betaH=min(1.5*(1+(0.012*RH)**18)*h0*1e3+250*self.getCreepAlfa3(),1500*self.getCreepAlfa3())
+        betaH= self.getCreepBetaH(RH= RH, h0= h0)
         betactt0=((t-t0)/(betaH+t-t0))**0.3
         return betactt0
 
