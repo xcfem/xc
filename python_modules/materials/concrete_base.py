@@ -644,13 +644,16 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return shrBetadstts 
 
 #   Autogenous shrinkage strain
-    def getShrEpsca(self,t):
+    def getShrEpsca(self, t, t0= 0.0):
         '''Autogenous shrinkage strain according to expression 3.11 of 
            clause 3.1.4 Eurocode 2:2004 part 1-1. DEPRECATED in Eurocode 2:2021
 
         :param t: age of concrete in days at the moment considered
+        :param t0: minimum age of concrete for loading (see SOFiSTiK Benchmark
+                   No. 21. Real Creep and Shrinkage Calculation of a T-Beam
+                   Prestressed CS page 7). 
         '''
-        epsca=self.getShrEpscainf(t)*self.getShrBetaast(t)
+        epsca=self.getShrEpscainf(t)*self.getShrBetaast(t= t, t0= t0)
         return epsca
 
     def getShrEpscainf(self,t):
@@ -663,19 +666,24 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         epscainf=2.5*(self.fckMPa()-10)*1e-6
         return epscainf*(-1)
 
-    def getShrBetaast(self,t):
+    def getShrBetaast(self, t, t0= 0.0):
         '''coefficient for calculating the autogenous shrinkage strain
         according to expression 3.13 of clause 3.1.4 Eurocode 2:2004 part 1-1
         and to expression B.27 of clause B.6 Eurocode 2:2021 part 1-1
 
         :param t: age of concrete in days at the moment considered
+        :param t0: minimum age of concrete for loading (see SOFiSTiK Benchmark
+                   No. 21. Real Creep and Shrinkage Calculation of a T-Beam
+                   Prestressed CS page 7). 
         '''
-        t=max(0,t)
+        t= max(0,t)
         betaast=1-math.exp(-0.2*t**0.5)
+        if(t0!=0.0):
+            betaast-= 1-math.exp(-0.2*t0**0.5)
         return betaast
 
 #Total shrinkage
-    def getShrEpscs(self, t:float, ts:float ,RH:float, h0:float):
+    def getShrEpscs(self, t:float, ts:float ,RH:float, h0:float, t0= 0):
         '''Total shrinkage strain = 
         autogenous + drying shrinkages
 
@@ -687,12 +695,15 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                   - h0= 2*Ac/u, where:
                   - Ac= cross sectional area
                   - u = perimeter of the member in contact with the atmosphere
+        :param t0: minimum age of concrete for loading (see SOFiSTiK Benchmark
+                   No. 21. Real Creep and Shrinkage Calculation of a T-Beam
+                   Prestressed CS page 7). 
         '''
-        epscs= self.getShrEpscd(t,ts,RH,h0)+self.getShrEpsca(t)
+        epscs= self.getShrEpscd(t,ts,RH,h0)+self.getShrEpsca(t= t, t0= t0)
         return epscs
 
 #Creep
-    def getCreepFitt0(self,t,t0,RH,h0):
+    def getCreepFitt0(self,t,t0,RH,h0, gamma_t0= 0.3):
         '''Creep coefficient  
         (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.1)
 
@@ -704,8 +715,14 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                   - h0= 2*Ac/u, where:
                   - Ac= cross sectional area
                   - u = perimeter of the member in contact with the atmosphere
+        :param gamma_t0: exponent of the expression (B.7) of EN 1992-1-1:2004.
+                         This equation is identical to the equation 5.1-71a of
+                         the ﬁb Model Code 2010 except for this exponent that
+                         is computed there with equation 5.1-71b. The exponent
+                         is introduced here as a parameter to allowing use the
+                         expression of the Model Code 2010.
         '''
-        fitt0= self.getCreepFi0(t0,RH,h0)*self.getCreepBetactt0(t,t0,RH,h0)
+        fitt0= self.getCreepFi0(t0,RH,h0)*self.getCreepBetactt0(t,t0,RH,h0, gamma_t0= gamma_t0)
         return fitt0
 
     def getCreepAlfa1(self):
@@ -802,22 +819,28 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             retval= min(1.5*(1+(0.012*RH)**18)*h0*1e3+250*self.getCreepAlfa3(),1500*self.getCreepAlfa3()) # B.8b
         return retval
 
-    def getCreepBetactt0(self,t,t0,RH,h0):
+    def getCreepBetactt0(self,t,t0,RH,h0, gamma_t0= 0.3):
         '''coefficient to describe the development of creep with time after loading, used to calculate the creep coefficient
-        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.2)
+        (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.7)
  
-        :param t:     age of concrete in days at the moment considered
-        :param t0:    age of concrete in days at loading
-        :param RH:    ambient relative humidity(%)
-        :param h0:  notional size of the member.
+        :param t: age of concrete in days at the moment considered.
+        :param t0: age of concrete in days at loading.
+        :param RH: ambient relative humidity(%)
+        :param h0: notional size of the member.
 
                    - h0=2*Ac/u, where:
                    - Ac= cross sectional area
                    - u = perimeter of the member in contact with the atmosphere
+        :param gamma_t0: exponent of the expression (B.7) of EN 1992-1-1:2004.
+                         This equation is identical to the equation 5.1-71a of
+                         the ﬁb Model Code 2010 except for this exponent that
+                         is computed there with equation 5.1-71b. The exponent
+                         is introduced here as a parameter to allowing use the
+                         expression of the Model Code 2010.
         '''
         fcmMPa=abs(self.getFcm())/1e6
         betaH= self.getCreepBetaH(RH= RH, h0= h0)
-        betactt0=((t-t0)/(betaH+t-t0))**0.3
+        betactt0=((t-t0)/(betaH+t-t0))**gamma_t0
         return betactt0
 
 #Parabola-rectangle diagrams for concrete under compression 
