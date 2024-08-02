@@ -45,3 +45,17 @@ m_double string_to_m_double(const std::string &str)
     return retval;
   }
 
+boost::python::list m_double_to_py_list(const m_double &m)
+  {
+    boost::python::list retval;
+    const size_t n_rows= m.getNumberOfRows();
+    const size_t n_columns= m.getNumberOfColumns();
+    for(size_t i=1; i<=n_rows; i++)
+      {
+	boost::python::list tmp;
+	for(size_t j= 1; j<=n_columns; j++)
+	  tmp.append(m(i,j));
+        retval.append(tmp);
+      }
+    return retval;
+  }

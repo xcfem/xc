@@ -193,6 +193,7 @@ class ZMatrix : public TMatrix<numero,vectorZ<numero> >
     friend ZMatrix<numero> operator^(const ZMatrix<numero> &v1,const ZMatrix<numero> &v2)
     //¡Ojo! está escrito para vectores de dimensión 3 xxx.
       { return prod_vectorial(v1,v2); }
+    
   };
 
 template <class numero> template<class InputIterator>
@@ -643,6 +644,8 @@ void ZMatrix<numero>::Input(const std::string &str)
 template <class treal>  
 inline treal Abs(const ZMatrix<treal> &m)
   { return m.Abs(); }
+  
+
 
 #endif
 

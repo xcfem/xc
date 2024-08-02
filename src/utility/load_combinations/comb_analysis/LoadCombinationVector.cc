@@ -23,7 +23,6 @@
 #include "LoadCombinationVector.h"
 #include "utility/utils/text/en_letra.h"
 
-
 //! @brief Constructor.
 cmb_acc::LoadCombinationVector::LoadCombinationVector(const size_t &sz)
   : std::vector<Action>(sz), CommandEntity()
@@ -192,19 +191,32 @@ void cmb_acc::LoadCombinationVector::Numera(const std::string &prefix)
   }
 
 //! @brief Return the factors that correspond to the actions in the argument
-//! in each of the combinations of this vector.
-m_double cmb_acc::LoadCombinationVector::getCoeficientes(const std::vector<std::string> &base) const
+//! in each of the load combinations of this vector.
+m_double cmb_acc::LoadCombinationVector::getCoefficients(const std::vector<std::string> &base) const
   {
     const size_t n_rows= size();
     const size_t n_cols= base.size();
     m_double retval(n_rows,n_cols);
     for(size_t i= 0;i<n_rows;i++)
       {
-        const std::vector<double> coefs_i= (*this)[i].getCoeficientes(base);
+        const std::vector<double> coefs_i= (*this)[i].getCoefficients(base);
         for(size_t j= 0;j<n_cols;j++)
           retval(i+1,j+1)= coefs_i[j];
       }
     return retval;
+  }
+
+
+//! @brief Return the factors that correspond to the actions in the argument
+//! in each of the load combinations of this vector.
+boost::python::list cmb_acc::LoadCombinationVector::getCoefficientsPy(const boost::python::list &base) const
+  {
+    std::vector<std::string> v_string;
+    const size_t sz= boost::python::len(base);
+    for(size_t i= 0;i<sz;++i)
+      v_string.push_back(boost::python::extract<std::string>(base[i]));
+    const m_double tmp= this->getCoefficients(v_string);
+    return m_double_to_py_list(tmp);
   }
 
 //! @brief Print stuff.

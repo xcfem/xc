@@ -49,7 +49,8 @@ class LoadCombinationVector: public std::vector<Action>, public CommandEntity
     void Numera(const std::string &prefix= "H");
     const LoadCombinationVector &GetDistintas(void) const;
     const LoadCombinationVector &GetNoNulas(const double &tol) const;
-    m_double getCoeficientes(const std::vector<std::string> &) const;
+    m_double getCoefficients(const std::vector<std::string> &) const;
+    boost::python::list getCoefficientsPy(const boost::python::list &) const;
     void Print(std::ostream &os) const;
   };
 
