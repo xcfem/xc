@@ -337,6 +337,7 @@ python tests/actions/load_combinations/ehe/test_ehe_accidentales.py
 echo "$BLEU" "    Forming load combination according to IAP." "$NORMAL"
 python tests/actions/load_combinations/iap/test_iap11_01.py
 python tests/actions/load_combinations/iap/test_iap11_02.py
+python tests/actions/load_combinations/iap/test_iap11_03.py
 echo "$BLEU" "    Forming load combination according to SIA 260." "$NORMAL"
 python tests/actions/load_combinations/sia/test_sia_pont_ferroviaire.py
 echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
