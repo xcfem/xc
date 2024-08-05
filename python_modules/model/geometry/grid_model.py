@@ -195,6 +195,10 @@ class GridModel(object):
     :ivar dicLin: generated dictionary with all the lines linked to the grid. 
           Each key is the name of a line, the value associated is the line 
           itself.
+    :ivar dicHexaedr: generated dictionary with all the hexaedral volumes 
+          linked to the grid. 
+          Each key is the name of a volume, the value associated is the volume
+          itself.
     :ivar dicQuadSurf: generated dictionary with all the surfaces linked to the grid. 
           Each key is the name of a surface, the value associated is the surface 
           itself.
@@ -210,6 +214,7 @@ class GridModel(object):
         self.indices= self.prep.getMultiBlockTopology.get3DNets.new3DNet()
         self.indices.dim(len(self.gridCoo[0]),len(self.gridCoo[1]),len(self.gridCoo[2]))
         self.pointCounter=0
+        self.dicHexaedr=dict()
         self.dicQuadSurf=dict()
         self.dicLin=dict()
         self.xCentCoo=xCentCoo
@@ -269,6 +274,14 @@ class GridModel(object):
         tagPto= self.indices.getPnt(indPnt[0]+1,indPnt[1]+1,indPnt[2]+1).tag
         return tagPto
 
+    def gridHexaedrName(self,pt1,pt2,pt3,pt4,pt5,pt6,pt7,pt8):
+        '''Return the name of the hexaedral volume defined by 8 points.
+
+        :param pt1,pt2,pt3,pt4,pt5,pt6,pt7,pt8: tags of the points (in right order) 
+               that define the hexaedral volume
+        '''
+        return 'v'+'%06.0f' % pt1 +'%06.0f' % pt2 +'%06.0f' % pt3 +'%06.0f' % pt4+'%06.0f' % pt5 +'%06.0f' % pt6 +'%06.0f' % pt7 +'%06.0f' % pt8
+    
     def gridSurfName(self,pt1,pt2,pt3,pt4):
         '''Return the name of the quadrangle surface defined by 4 points.
 
@@ -287,6 +300,22 @@ class GridModel(object):
         '''
         return 'l'+'%06.0f' % pt1 +'%06.0f' % pt2
 
+    def getNmHexaedrInRange(self,ijkRange,closeCyl='N'):
+        '''Return a list with the names of the hexedral volumes limited by a volume 
+        defined by the coordinates that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+
+        :param ijkRange: instance of IJKRange class
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N') (not yet implemented)
+        '''
+        (imin,jmin,kmin)=ijkRange.ijkMin
+        (imax,jmax,kmax)=ijkRange.ijkMax
+        indPtsVols=[((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k),(i,j,k+1),(i+1,j,k+1),(i+1,j+1,k+1),(i,j+1,k+1)) for i in range(imin,imax) for j in range(jmin,jmax) for k in range(kmin,kmax)]
+        nmVols=[self.getNameHexaedr(indPt) for indPt in indPtsVols]
+        return nmVols
+        
     def getNmSurfInRange(self,ijkRange,closeCyl='N'):
         '''Return a list with the names of the surfaces limited by a volume 
         defined by the coordinates that correspond to the indices in the grid 
@@ -782,6 +811,23 @@ class GridModel(object):
             p.getPos.y= self.yCentCoo++1/paramCoo*math.sin(ang)
         sPtMove.clear()
             
+    def newHexaedrGridVol(self,volName):
+        '''Generate the hexaedral volume defined by the 8 vertex whose tags
+        are implicit in the name of the volume.
+
+        :param volName: name given to the grid volume
+        return the hexaedral volumrn
+        '''
+        # points= self.prep.getMultiBlockTopology.getPoints
+        (tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)=(int(volName[1:7]),int(volName[7:13]),int(volName[13:19]),int(volName[19:25]),int(volName[26:31]),int(volName[32:37]),int(volName[38:43]),int(volName[44:49]))
+        volumes= self.prep.getMultiBlockTopology.getBodies
+        hv= volumes.newBlockPts(tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)
+        hv.name= volName
+#        hv.nDivI=1 #initialization values of number of divisions
+#        hv.nDivJ=1
+#        hv.nDivK=1
+        return hv
+    
     def newQuadGridSurface(self,surfName):
         '''Generate the quadrangle surface defined by the 4 vertex whose tags
         are implicit in the name of the surface.
@@ -798,13 +844,25 @@ class GridModel(object):
         qs.nDivJ=1 
         return qs
 
+    def getNameHexaedr(self,ind8Pnt):
+        '''Return the name of the hexaedral volume defined by the 8 vertices 
+        whose indices in the grid are passed as parameters. 
+
+        :param ind8Pnt: tuple of ordered points defined by their grid indices 
+                        (i,j,k)
+        :return: the hexaedral volume
+        '''
+        (pto1,pto2,pto3,pto4,pto5,pto6,pto7,pto8)=tuple([self.getTagPntGrid(ind8Pnt[i]) for i in range(8)])
+        nameVol= self.gridHexaedrName(pto1,pto2,pto3,pto4,pto5,pto6,pto7,pto8)
+        return nameVol
+    
     def getNameQuadGridSurface(self,ind4Pnt):
         '''Return the name of the quadrangle surface defined by the 4 vertices 
         whose indices in the grid are passed as parameters. 
 
         :param ind4Pnt: tuple of ordered points defined by their grid indices 
                         (i,j,k)
-        :return: the quadrangle surface
+        :return: the quadrangle surface nane
         '''
         (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
         nameSurf= self.gridSurfName(pto1,pto2,pto3,pto4)
@@ -837,6 +895,26 @@ class GridModel(object):
         ln.nDiv=1 #initialization value
         return ln
 
+    def appendHexaedrRange(self,ijkRange,setVol,closeCyl='N'):
+        '''generate the hexaedral volumes limited by a region defined by the 
+        coordinates that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax)
+        and append them to the set named 'setName'.
+        Add those volumes to the dictionary dicHexaedr.
+
+        :param ijkRange: instance of IJKRange class
+        :param setVol: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+        
+        '''
+        nmVolinRang=self.getNmHexaedrInRange(ijkRange,closeCyl)
+        for nameVol in nmVolinRang:
+            v= self.newHexaedrGridVol(nameVol)
+            self.dicHexaedr[nameVol]= v
+            setVol.getBodies.append(v)
+            
     def appendSurfRange(self,ijkRange,setSurf,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
@@ -857,6 +935,24 @@ class GridModel(object):
             self.dicQuadSurf[nameSurf]= s
             setSurf.getSurfaces.append(s)
 
+    def genHexaedrOneRegion(self,ijkRange,setName,closeCyl='N'):
+        '''generate the hexaedral volumes limited by a region defined 
+        by the coordinates that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax).
+        Return a set with the volumes generated.
+        Add those volumes to the dictionary dicHexaedr.
+
+        :param ijkRange: instance of IJKRange class
+        :param setName: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+ 
+        '''
+        setVol= self.prep.getSets.defSet(setName)
+        self.appendHexaedrRange(ijkRange,setVol,closeCyl)
+        return setVol
+    
     def genSurfOneRegion(self,ijkRange,setName,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
@@ -875,6 +971,21 @@ class GridModel(object):
         self.appendSurfRange(ijkRange,setSurf,closeCyl)
         return setSurf
     
+    def genHexaedrOneXYZRegion(self,xyzRange,setName,closeCyl='N'):
+        '''generate the hexaedral volumes limited by a region defined by the 
+        coordinates
+        defined in the range  xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Return a set with the volumes generated.
+        Add those volumes to the dictionary dicHexaedr
+
+        :param xyzRange: range xyz
+        :param setName: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+         '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.genHexaedrOneRegion(ijkRange,setName,closeCyl)
+
     def genSurfOneXYZRegion(self,xyzRange,setName,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         defined in the range  xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
@@ -889,6 +1000,26 @@ class GridModel(object):
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         return self.genSurfOneRegion(ijkRange,setName,closeCyl)
 
+    def genHexaedrfMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
+        '''generate the hexaedral volums limited by all the regions included in the 
+        list of ijkRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        Return a set with the volumes generated.
+        Add those volumes to the dictionary dicHexaedr
+
+        :param lstIJKRange: list of instances of IJKRange class
+        :param setName: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+        '''
+        setVol= self.prep.getSets.defSet(setName)
+        for rg in lstIJKRange:
+            self.appendHexaedrRange(rg,setVol,closeCyl)
+        return setVol
+    
     def genSurfMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
         '''generate the surfaces limited by all the regions included in the 
         list of ijkRanges passed as parameter.
@@ -909,6 +1040,24 @@ class GridModel(object):
             self.appendSurfRange(rg,setSurf,closeCyl)
         return setSurf
 
+    def genHexaedrMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
+        '''generate the hexaedral volumes limited by all the regions included in the 
+        list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the coordinates in ranges xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Return a set with the volumes generated.
+        Add those volumes to the dictionary dicHexaedr
+
+        :param lstXYZRange: list of ranges xyz
+        :param setName: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+         '''
+        lstIJKRange=list()
+        for rg in lstXYZRange:
+            lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
+        return self.genHexaedrMultiRegion(lstIJKRange,setName,closeCyl)
+    
     def genSurfMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
         '''generate the surfaces limited by all the regions included in the 
         list of xyzRanges passed as parameter.
@@ -991,8 +1140,8 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.genLinMultiRegion(lstIJKRange,setName)
         
-    def getSetSurfOneRegion(self,ijkRange,setName,closeCyl='N'):
-        '''return the set of surfaces and all the entities(lines, 
+    def getSetHexaedrOneRegion(self,ijkRange,setName,closeCyl='N'):
+        '''return the set of hexaedral volumes and all the entities(surfaces,lines, 
         points, elements, nodes, ...) associated 
         with them in a region limited by the coordinates
         that correspond to the indices in the grid 
@@ -1004,14 +1153,28 @@ class GridModel(object):
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         '''
-        setSurf= self.prep.getSets.defSet(setName)
-        nmSurfinRang=self.getNmSurfInRange(ijkRange,closeCyl)
-        for nameSurf in nmSurfinRang:
-            if nameSurf in self.dicQuadSurf:
-                setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
-        setSurf.fillDownwards()    
-        return setSurf
+        setVol= self.prep.getSets.defSet(setName)
+        nmVolinRang=self.getNmHexaedrInRange(ijkRange,closeCyl)
+        for nameVol in nmHexaedrinRang:
+            if nameVol in self.dicHexaedr:
+                setVol.getBodies.append(self.dicHexaedr[nameVol])
+        setVol.fillDownwards()    
+        return setVol
 
+    def getSubsetHexaedrOneRegion(self,superset,ijkRange,nameSubset,closeCyl='N'):
+        '''return from the set 'superset' the set of surfaces and all the entities
+        (surfaces,lines, points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetHexaedrOneRegion(ijkRange,'auxSet',closeCyl)
+        subset=getSetIntersVol(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+        
     def getSubsetSurfOneRegion(self,superset,ijkRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
@@ -1026,6 +1189,15 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
         
+    def getSetHexaedrOneXYZRegion(self,xyzRange,setName,closeCyl='N'):
+        '''return the set of volumes and all the entities(lines, 
+        points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.getSetHexaedrOneRegion(ijkRange,setName,closeCyl)
+        
     def getSetSurfOneXYZRegion(self,xyzRange,setName,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
@@ -1035,6 +1207,18 @@ class GridModel(object):
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         return self.getSetSurfOneRegion(ijkRange,setName,closeCyl)
         
+    def getSubsetHexaedrOneXYZRegion(self,superset,xyzRange,nameSubset,closeCyl='N'):
+        '''return from the set 'superset' the set of volumes and all the entities
+        (surfaces,lines, points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetHexaedrOneXYZRegion(xyzRange,'auxSet',closeCyl)
+        subset=getSetIntersVol(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+
     def getSubsetSurfOneXYZRegion(self,superset,xyzRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
@@ -1048,6 +1232,30 @@ class GridModel(object):
         return subset
 
     
+    def getSetHexaedrMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
+        '''return the set of hexaedral volumes and all the entities
+        (surfaces, lines, points, elements, nodes, ...) 
+        associated with them in a all
+        the regions  included in the list of ijkRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+
+        :param lstIJKRange: list of instances of IJKRange class
+        :param setName: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+        '''
+        setVol= self.prep.getSets.defSet(setName)
+        for rg in lstIJKRange:
+            nmVolinRang=self.getNmHexaedrInRange(rg,closeCyl)
+            for nameVol in nmVolinRang:
+                if nameVol in self.dicHexaedr:
+                    setVol.getBodies.append(self.dicHexaedr[nameVol])
+        setVol.fillDownwards()    
+        return setVol
+
     def getSetSurfMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
@@ -1071,6 +1279,21 @@ class GridModel(object):
         setSurf.fillDownwards()    
         return setSurf
 
+    def getSubsetHexaedrMultiRegion(self,superset,lstIJKRange,nameSubset,closeCyl='N'):
+        '''return from the set 'superset' the set of hexaedral volumes and all the entities
+        (lines, points, elements, nodes, ...) associated with them in a all
+        the regions  included in the list of ijkRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetHexaedrMultiRegion(lstIJKRange,'auxSet',closeCyl)
+        subset=getSetIntersVol(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getSubsetSurfMultiRegion(self,superset,lstIJKRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
@@ -1086,6 +1309,18 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
     
+    def getSethexaedrMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
+        '''return the set of volumes and all the entities(surfaces, lines,
+        points, elements, nodes, ...) associated with them in a all
+        the regions  included in the list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to coordinates in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        lstIJKRange=list()
+        for rg in lstXYZRange:
+            lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
+        return self.getSetHexaedrMultiRegion(lstIJKRange,setName,closeCyl)
+        
     def getSetSurfMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
@@ -1098,6 +1333,20 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.getSetSurfMultiRegion(lstIJKRange,setName,closeCyl)
         
+    def getSubsetHexaedrMultiXYZRegion(self,superset,lstXYZRange,nameSubset,closeCyl='N'):
+        '''return from the set 'superset' the set of volumes and all the entities
+        (surfaces, lines, points, elements, nodes, ...) associated with them in a all
+        the regions  included in the list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to coordinates in range 
+        xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetHexaedrMultiXYZRegion(lstXYZRange,'auxSet',closeCyl)
+        subset=getSetIntersVol(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getSubsetSurfMultiXYZRegion(self,superset,lstXYZRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
@@ -1420,6 +1669,22 @@ class GridModel(object):
             multiLstGridPnt.append(indLst)
         setLin=self.getSetLinFromMultiLstGridPnt(multiLstGridPnt,setName)
         return setLin
+
+def getSetIntersVol(set1,set2,setNameInter):
+    '''Return a set of volumes, intersection of those in 'set1' and 'set2'
+
+    :param set1, set2: sets containing volumes to search intersection
+    :param setNameInter: name of the set of surfaces to return
+    '''
+    prep=set1.getPreprocessor
+    if prep.getSets.exists(setNameInter): prep.getSets.removeSet(setNameInter) 
+    setInters=prep.getSets.defSet(setNameInter)
+    volSet1=set1.getBodies
+    volSet2=set2.getBodies
+    volSetInters=setInters.getBodies
+    for s in volSet2:
+        if s in volSet1: volSetInters.append(s)
+    return setInters
 
 def getSetIntersSurf(set1,set2,setNameInter):
     '''Return a set of surfaces intersection of those in 'set1' and 'set2'
