@@ -25,6 +25,7 @@
 
 #include "utility/utils/misc_utils/matem.h"
 #include "ZMatrix.h"
+#include "utility/kernel/python_utils.h"
 
 typedef ZMatrix<double> m_double;
 
@@ -33,5 +34,7 @@ m_double identidad(const size_t &,const size_t &);
 
 
 m_double string_to_m_double(const std::string &);
+
+boost::python::list m_double_to_py_list(const m_double &m);
 
 #endif

@@ -87,3 +87,11 @@ if abs(ratio1)<1e-10:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayLoads()
+# # oh.displayLocalAxes()
+# # oh.displayReactions()

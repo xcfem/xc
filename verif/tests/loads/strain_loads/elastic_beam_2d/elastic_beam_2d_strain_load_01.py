@@ -59,7 +59,6 @@ modelSpace.fixNode('000', n2.tag)
 factor= 0.85
 lp0= modelSpace.newLoadPattern(name= '0')
 lp0.gammaF= factor
-#\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam2d.tag])
 thermalDeformation= xc.DeformationPlane(alpha*AT)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Test taken from example 5-001 of SAP2000 verification manual.'''
+'''Check surface load over a quad element edge.'''
 
 from __future__ import print_function
 
@@ -132,3 +132,11 @@ if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayLoads()
+# # oh.displayLocalAxes()
+# # oh.displayReactions()

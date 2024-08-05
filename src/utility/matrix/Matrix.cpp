@@ -1169,7 +1169,7 @@ void XC::Matrix::putCol(int j, const Vector &v)
 boost::python::list XC::Matrix::getPyList(void) const
   {
     boost::python::list retval;
-    for(int i=0; i<this->numCols; i++)
+    for(int i=0; i<this->numRows; i++)
       {
 	boost::python::list tmp= this->getRow(i).getPyList();
         retval.append(tmp);

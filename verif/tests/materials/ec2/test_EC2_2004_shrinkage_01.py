@@ -26,11 +26,11 @@ RH=80                   #ambient relative humidity(%)
 vCalc=[]
 vComp=[]
 #Shrinkage deformation at traffic opening
-t=77     #age of the concrete at traffic opening
-ts=1     #drying shrinkage begins at the age 1 day
-Ac=3.9     #area of the concrete slab (m2)
-u=11.6     #perimeter exposed to drying (m)
-h0=2*Ac/u  #notional size of the member h0.
+t=77     # age of the concrete at traffic opening
+ts=1     # drying shrinkage begins at the age 1 day
+Ac=3.9     # area of the concrete slab (m2)
+u=11.6     # perimeter exposed to drying (m)
+h0=2*Ac/u  # notional size of the member h0.
 #   autogenous shrinkage
 Epscainf=concrDeck.getShrEpscainf(t)  #coefficient for calculating the autogenous shrinkage strain
 vCalc.append(round(Epscainf*(-1),7))
@@ -61,11 +61,11 @@ Betadstts=concrDeck.getShrBetadstts(t,ts,h0)   #coefficient  for the calculation
 
 vCalc.append(round(Betadstts,1))
 vComp.append(0.1)
-Epscd=concrDeck.getShrEpscd(t,ts,RH,h0)   #Drying shrinkage strain
+Epscd=concrDeck.getShrEpscd(t,ts,RH,h0)   # Drying shrinkage strain
 
 vCalc.append(round(Epscd*(-1),7))
 vComp.append(1.8e-5)
-Epscs=concrDeck.getShrEpscs(t,ts,RH,h0)   #Total shrinkage 
+Epscs=concrDeck.getShrEpscs(t,ts,RH,h0)   # Total shrinkage 
 
 vCalc.append(round(Epscs*(-1),5))
 vComp.append(7.0e-5)

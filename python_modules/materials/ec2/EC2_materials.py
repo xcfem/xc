@@ -288,7 +288,28 @@ class EC2Concrete(concrete_base.Concrete):
         :param sigmaT0: constant compressive stress applied on day t0 (negative sign).
         '''
         return self.getCreepFitt0(t,t0,RH,h0)*sigmaT0/self.getEcm()
-    
+
+    def getBearingStrength(self, fbed= None, dryConnection= False):
+        ''' Return the bearing strength of the concrete according to paragraph
+           (2) of the clause 10.9.5.2 of EN 1992-1-1:2004.
+
+        :param fbed: design strength of bedding material (if none it is 
+                     supposed to be greater than the strength of the bearing
+                     concrete).
+        :param dryConnection: set to true when the connection corresponds to
+                              a dry one according to paragrah (3) of the clause
+                              10.9.4.3 of EN 1992-1-1:2004.
+        '''
+        fcd= self.fcd()
+        if(dryConnection):
+            retval= 0.4*fcd
+        else:
+            retval= 0.85*fcd
+            if(fbed is not None):
+                retval= min(retval, fbed)
+        return retval
+            
+        
 #    def getEcmT(self):
 #        """
 #        EC2Ecmt: approximate value of the modulus of elasticity [Pa] at age 
@@ -301,7 +322,13 @@ class EC2Concrete2021(EC2Concrete):
     """Concrete model according to Eurocode 2:2021
     """
 
-    def __init__(self,nmbConcrete, fck, gammaC):
+    def __init__(self, nmbConcrete, fck, gammaC):
+        ''' Constructor.
+
+        :param nmbConcrete: concrete name.
+        :param fck: characteristic (5%) cylinder strength of the concrete.
+        :param gammaC: partial safety factor for concrete.
+        '''
         super(EC2Concrete2021,self).__init__(nmbConcrete,fck, gammaC)
 
     # Autogenous shrinkage strain

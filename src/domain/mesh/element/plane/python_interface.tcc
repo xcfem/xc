@@ -43,8 +43,8 @@ class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyab
    ;
 
 class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("QuadBase4N_Mech2D", no_init)
-  .add_property("rho", &XC::FourNodeQuad::getRho,&XC::FourNodeQuad::setRho)
-  .add_property("thickness", &XC::FourNodeQuad::getThickness,&XC::FourNodeQuad::setThickness)
+  .add_property("rho", &XC::FourNodeQuad::getRho,&XC::FourNodeQuad::setRho, "Get/set the mass density of the element.")
+  .add_property("thickness", &XC::FourNodeQuad::getThickness,&XC::FourNodeQuad::setThickness, "Get/set the thickness of the element.")
    ;
 
 class_<XC::SolidMech4N, bases<QuadBase4N_Mech2D>, boost::noncopyable >("SolidMech4N", no_init)

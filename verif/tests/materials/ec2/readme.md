@@ -13,3 +13,6 @@ Verification test for the checkings made according to Eurocode 2.
  - [The Concrete Center. Eurocode 2. Detailing](https://www.concretecentre.com/Codes/Eurocode-2/Detailing.aspx)
  - [Table of reinforcement anchorage length and lap length](https://eurocodeapplied.com/design/en1992/anchorage-and-lap-length-table)
  - [EC2: Lap length of reinforcements](https://calculocivil.com/eu/ec2/lap/calc)
+
+### Shrinkage and creep.
+ - [SOFiSTiK 2020 | Benchmark No. 21; Real Creep and Shrinkage Calculation of a T-Beam Prestressed CS](https://docs.sofistik.com/2020/en/verification/_static/verification/pdf/dce-en21.pdf)

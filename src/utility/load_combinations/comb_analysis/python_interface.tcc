@@ -39,6 +39,8 @@ class_<ActionWeightingMap, bases<NamedEntity>, boost::noncopyable >("ActionWeigh
   ;
 
 class_<LoadCombinationVector, bases<v_accion,CommandEntity> >("LoadCombContainer")
+  .def("getCoefficients", &LoadCombinationVector::getCoefficients, "Return the factors that correspond to the actions names in the given list.")
+ .def("getCoefficients", &LoadCombinationVector::getCoefficientsPy, "Return the factors that correspond to the actions names in the given list.")
   ;
 
 class_<LoadCombinations, bases<CommandEntity> >("Combinations")

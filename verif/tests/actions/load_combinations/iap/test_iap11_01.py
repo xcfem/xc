@@ -28,9 +28,9 @@ coeficientesRef_elu_persistentes= [[1.0, 1.0, 1.0, 0.0, 0.0], [1.0, 1.0, 1.35, 0
 
 coeficientes_elu_persistentes= []
 combAcc= lcg.getULSTransientCombinations()
-base= xc_base.vector_string_from_py_list(["G1","G2","G3","Q1a_1","Q1a_2"])
+base= ["G1","G2","G3","Q1a_1","Q1a_2"]
 for comb in combAcc:
-  coeficientes_elu_persistentes.append(xc_base.vector_double_to_py_list(comb.getCoeficientes(base)))
+  coeficientes_elu_persistentes.append(comb.getCoefficients(base))
 
 error= 0
 import numpy

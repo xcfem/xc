@@ -128,7 +128,8 @@ class Action: public NamedEntity
         return retval;
       }
 
-    std::vector<double> getCoeficientes(const std::vector<std::string> &) const;
+    std::vector<double> getCoefficients(const std::vector<std::string> &) const;
+    boost::python::list getCoefficientsPy(const boost::python::list &) const;
     virtual void Print(std::ostream &os) const;
   };
 

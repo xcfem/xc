@@ -16,13 +16,6 @@ import re
 import math
 import json
 
-def extractCoefficients(loadCombinations, actionNames):
-    retval= list()
-    base= xc_base.vector_string_from_py_list(actionNames)
-    for comb in loadCombinations:
-        coefs= comb.getCoeficientes(base)
-        retval.append(xc_base.vector_double_to_py_list(coefs))
-    return retval
 
 def computeError(coefs, coefsRef):
     retval= 0.0
@@ -96,29 +89,29 @@ elsCharacteristicCoefsRef= refValues['elsCharacteristicCoefsRef']
 elsFrequentCoefsRef= refValues['elsFrequentCoefsRef']
 elsQuasiPermanentCoefsRef= refValues['elsQuasiPermanentCoefsRef']
 
-eluPersistCoefs= extractCoefficients(eluPersist, actionNames)
+eluPersistCoefs= eluPersist.getCoefficients(actionNames)
 
 
 err+= computeError(eluPersistCoefs, eluPersistCoefsRef)
 
 
 eluSeismic= lcg.getULSSeismicCombinations()
-eluSeismicCoefs= extractCoefficients(eluSeismic, actionNames)
+eluSeismicCoefs= eluSeismic.getCoefficients(actionNames)
 
 err+= computeError(eluSeismicCoefs, eluSeismicCoefsRef)
 
 elsCharacteristic= lcg.getSLSCharacteristicCombinations()
-elsCharacteristicCoefs= extractCoefficients(elsCharacteristic, actionNames)
+elsCharacteristicCoefs= elsCharacteristic.getCoefficients(actionNames)
 
 err+= computeError(elsCharacteristicCoefs, elsCharacteristicCoefsRef)
 
 elsFrequent= lcg.getSLSFrequentCombinations()
-elsFrequentCoefs= extractCoefficients(elsFrequent, actionNames)
+elsFrequentCoefs= elsFrequent.getCoefficients(actionNames)
 
 err+= computeError(elsFrequentCoefs, elsFrequentCoefsRef)
 
 elsQuasiPermanent= lcg.getSLSQuasiPermanentCombinations()
-elsQuasiPermanentCoefs= extractCoefficients(elsQuasiPermanent, actionNames)
+elsQuasiPermanentCoefs= elsQuasiPermanent.getCoefficients(actionNames)
 
 err+= computeError(elsQuasiPermanentCoefs, elsQuasiPermanentCoefsRef)
 

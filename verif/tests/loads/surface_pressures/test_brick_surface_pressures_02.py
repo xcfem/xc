@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Test taken from example 5-001 of SAP2000 verification manual.'''
+'''Check surface loads on brick element face.'''
 
 from __future__ import print_function
 

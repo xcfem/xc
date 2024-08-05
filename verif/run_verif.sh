@@ -337,6 +337,7 @@ python tests/actions/load_combinations/ehe/test_ehe_accidentales.py
 echo "$BLEU" "    Forming load combination according to IAP." "$NORMAL"
 python tests/actions/load_combinations/iap/test_iap11_01.py
 python tests/actions/load_combinations/iap/test_iap11_02.py
+python tests/actions/load_combinations/iap/test_iap11_03.py
 echo "$BLEU" "    Forming load combination according to SIA 260." "$NORMAL"
 python tests/actions/load_combinations/sia/test_sia_pont_ferroviaire.py
 echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
@@ -1319,10 +1320,12 @@ python tests/materials/ec2/test_EC2_max_min_reinforcement_area_02.py
 python tests/materials/ec2/test_lap_length_01.py
 python tests/materials/ec2/test_EC2Concrete.py
 echo "$BLEU" "    EC2 misc. shrinkage and creep tests." "$NORMAL"
-python tests/materials/ec2/test_EC2creep.py
+python tests/materials/ec2/test_EC2_creep_01.py
+python tests/materials/ec2/test_EC2_creep_02.py
 python tests/materials/ec2/test_EC2_2004_shrinkage_01.py
 python tests/materials/ec2/test_EC2_2004_shrinkage_02.py
 python tests/materials/ec2/test_EC2_2021_shrinkage.py
+python tests/materials/ec2/test_ec2_creep_and_shrinkage_calculation.py
 echo "$BLEU" "    EC2 crack amplitude determination tests." "$NORMAL"
 python tests/materials/ec2/test_crack_control_without_direct_calculation_01.py
 python tests/materials/ehe/test_crack_control_01.py

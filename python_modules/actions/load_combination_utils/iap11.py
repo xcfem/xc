@@ -9,6 +9,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import loadCombinations
 from actions.load_combination_utils import utils
+from misc_utils import log_messages as lmsg
 
 factors= loadCombinations.Factors()
 
@@ -22,8 +23,13 @@ partial_safety_factors= factors.getPartialSafetyFactors()
 partial_safety_factors["permanentes"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1.35,1,1),loadCombinations.SLSPartialSafetyFactors(1,1))
 
 #Coef. de ponderación para acciones permanentes de valor no constante (G*)
-#Coeficientes de ponderación para acciones permanentes de valor no constante debidas al pretensado P1 (armaduras postesas).
+# Coeficientes de ponderación para acciones permanentes de valor no constante debidas al pretensado P1 (armaduras postesas).
 partial_safety_factors["permanentes_nc_Pret1Post"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1,1,1),loadCombinations.SLSPartialSafetyFactors(0.9,1.1))
+# Acciones debidas al pretensado en zonas de anclaje.
+partial_safety_factors["permanentes_nc_Pret1Post_anchorage"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1.2,1,1),loadCombinations.SLSPartialSafetyFactors(0.9,1.1))
+# Acciones debidas al pretensado para comprobaciones de pandeo debidas al axil
+# producido por un pretensado exterior.
+partial_safety_factors["permanentes_nc_Pret1Post_exterior_buckling"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1.3,1,1),loadCombinations.SLSPartialSafetyFactors(0.9,1.1))
 #Coeficientes de ponderación para acciones permanentes de valor no constante debidas al pretensado P1 (armaduras pretesas).
 partial_safety_factors["permanentes_nc_Pret1Pret"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1,1,1),loadCombinations.SLSPartialSafetyFactors(0.95,1.05))
 #Coeficientes de ponderación para acciones permanentes de valor no constante debidas al pretensado P2.
@@ -109,6 +115,39 @@ class CombGenerator(utils.CombGenerator):
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
         return self.newAction(family= "permanentes",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanentes', partialSafetyFactorsName= "permanentes", dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+    def newPrestressingAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, anchorageZone= False, bucklingDueToExternallyPresstressing= False):
+        ''' Creates a permanent action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param anchorageZone: if true use the partial safety factors 
+                              corresponding to prestressing in anchorage zones
+                              according with table 6.2b of IAP-11.
+        :param bucklingDueToExternallyPresstressing: if true use the partial 
+                                                     safety factors 
+                                                     corresponding to buckling
+                                                     verifications due to 
+                                                     axial loads introduced
+                                                     by external prestressing.
+        '''
+        
+        if(anchorageZone and bucklingDueToExternallyPresstressing):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+'; you can specify anchorage zone or buckling due to axial load introduced by external prestressing, but not both. Assuming the most restrictive of them.' 
+            lmsg.error(errMsg)
+            partialSafetyFactorsName= "permanentes_nc_Pret1Post_exterior_buckling"
+        elif(anchorageZone):
+            partialSafetyFactorsName= "permanentes_nc_Pret1Post_anchorage"
+        elif(bucklingDueToExternallyPresstressing):
+            partialSafetyFactorsName= "permanentes_nc_Pret1Post_exterior_buckling"
+        else:
+            partialSafetyFactorsName= "permanentes_nc_Pret1Post"
+        return self.newAction(family= "permanentes",actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanentes', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
     def newHeavyVehicleAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None, notDeterminant= False):
         ''' Creates a heavy vehicle action and appends it to the combinations 

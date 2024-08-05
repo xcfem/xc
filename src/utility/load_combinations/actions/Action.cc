@@ -25,8 +25,7 @@
 #include "utility/utils/text/text_string.h"
 #include "utility/utils/text/en_letra.h"
 #include "utility/utils/text/latex.h"
-
-
+#include "utility/kernel/python_utils.h"
 #include "ActionWrapperList.h"
 #include "utility/functions/algebra/ExprAlgebra.h"
 
@@ -141,7 +140,7 @@ void cmb_acc::Action::setPyDict(const boost::python::dict &d)
 
 //! @brief When it's a combination, it returns the factors that multiply
 //! each of the actions in the argument.
-std::vector<double> cmb_acc::Action::getCoeficientes(const std::vector<std::string> &base) const
+std::vector<double> cmb_acc::Action::getCoefficients(const std::vector<std::string> &base) const
   {
     const size_t sz= base.size();
     std::vector<double> retval(sz,0.0);
@@ -153,6 +152,19 @@ std::vector<double> cmb_acc::Action::getCoeficientes(const std::vector<std::stri
         if(j!=descomp.end())
           retval[i]= j->second;
       }
+    return retval;
+  }
+
+//! @brief When it's a combination, it returns the factors that multiply
+//! each of the actions in the argument.
+boost::python::list cmb_acc::Action::getCoefficientsPy(const boost::python::list &base) const
+  {
+    std::vector<std::string> v_string;
+    const size_t sz= boost::python::len(base);
+    for(size_t i= 0;i<sz;++i)
+      v_string.push_back(boost::python::extract<std::string>(base[i]));
+    const std::vector<double> tmp= this->getCoefficients(v_string);
+    boost::python::list retval= vector_double_to_py_list(tmp);
     return retval;
   }
 
