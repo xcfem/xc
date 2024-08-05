@@ -105,12 +105,12 @@ columnZCurvature= columnStrains[1]
 
 ## Load case definition.
 creep= modelSpace.newLoadPattern(name= 'creep')
-factor= 0.87835325 # This value has no other meaning than reaching an almost zero
+factor= 2.3525 # This value has no other meaning than reaching an almost zero
                    # bending moment in the front end of the column.
 eleLoad= creep.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([column.tag])
 ### set imposed strain: [epsilon, zCurvature, yCurvature]
-creepDeformation= xc.DeformationPlane(xc.Vector([0.0, -factor*columnZCurvature, 0.0]))
+creepDeformation= xc.DeformationPlane(xc.Vector([0.0, factor*columnZCurvature, 0.0]))
 eleLoad.backEndDeformationPlane= creepDeformation
 eleLoad.frontEndDeformationPlane= creepDeformation
 # We add the load case to domain.

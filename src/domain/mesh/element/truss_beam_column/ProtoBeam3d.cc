@@ -247,9 +247,9 @@ const XC::Vector &XC::ProtoBeam3d::getSectionDeformation(void) const
     // retval(5)= dx2-dx1: Element twist/L.
     retval(0)-= e0(0);
     retval(1)-= e0(1);
-    retval(2)-= e0(1);
-    retval(1)-= e0(2);
-    retval(2)-= e0(2);
+    retval(2)+= e0(1);
+    retval(3)-= e0(2);
+    retval(4)+= e0(2);
     return retval;
   }
 

@@ -948,6 +948,8 @@ python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_03.p
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_04.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_05.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_06.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_07.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_08.py
 python tests/loads/strain_loads/elastic_beam_2d/test_beam_2d_creep_simulation_01.py
 python tests/loads/strain_loads/elastic_beam_2d/test_shrinkage_simulation_01.py
 echo "$BLEU" "      Strain loads on 2D force beam column." "$NORMAL"
@@ -976,6 +978,8 @@ python tests/loads/strain_loads/shell/shell_grad_strain_load_01.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_02.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_03.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_04.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_05.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_06.py
 echo "$BLEU" "    Inertia loads." "$NORMAL"
 python tests/loads/inertia_loads/test_inertia_loads_00.py
 python tests/loads/inertia_loads/test_inertia_loads_01.py

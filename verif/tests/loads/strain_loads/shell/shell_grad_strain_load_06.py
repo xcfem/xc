@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Deflection of a cantilever beam due to a temperature gradient.
+''' Deflection of a simply supported beam due to a temperature gradient.
 
     Strain component 4: curvature around local x axis 
     (normal to local y axis)
@@ -57,12 +57,10 @@ s.genMesh(xc.meshDir.I)
 
 ### Constraints.
 xcTotalSet= modelSpace.getTotalSet()
-# Get the line at y= 0
-for l in xcTotalSet.lines:
-    center= l.getCentroid()
-    if(center.y==0.0):
-        for n in l.nodes:
-            modelSpace.fixNode('000_0FF', n.tag)
+modelSpace.fixNode('000_FFF', pt1.getNode().tag)
+modelSpace.fixNode('000_FFF', pt2.getNode().tag)
+modelSpace.fixNode('F00_FFF', pt3.getNode().tag)
+modelSpace.fixNode('F00_FFF', pt4.getNode().tag)
             
 ## Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -83,17 +81,16 @@ result= analysis.analyze(1)
 ### Get displacements.
 zDisp= 0.0
 count= 0
-# Get the line at x= L
-for l in xcTotalSet.lines:
-    center= l.getCentroid()
-    if(abs(center.y-L)<1e-4):
-        for n in l.nodes:
-            zDisp+= n.getDisp[2]
-            count+= 1
+# Get the nodes at y= L/2
+for n in xcTotalSet.nodes:
+    pos= n.getInitialPos3d
+    if(abs(pos.y-L/2.0)<1e-4):
+        zDisp+= n.getDisp[2]
+        count+= 1
 zDisp/=count
 
 # Check result.
-zDispRef= -temperatureGradient*alpha*L**2/2.0/thickness# Deflection of a cantileve
+zDispRef= temperatureGradient*alpha*L**2/8.0/thickness# Deflection of a cantileve
 ratio= abs(zDisp-zDispRef)/zDispRef
 
 '''

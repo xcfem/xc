@@ -213,7 +213,7 @@ const XC::Vector &XC::ProtoBeam2d::getSectionDeformation(void) const
     // retval(2)= (dy1-dy2)/L: Rotation about z/L.
     retval(0)-= e0(0);
     retval(1)-= e0(1);
-    retval(2)-= e0(1);
+    retval(2)+= e0(1); // reverse sign LP 02/08/2024.
     return retval;
   }
 
