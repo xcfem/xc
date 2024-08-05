@@ -64,7 +64,7 @@ eleLoad.elementTags= xc.ID([beam1.tag, beam2.tag])
 yCurvature= -AT*alpha/h
 # We introduce the "inverse" curvature as initial deformation to
 # get the desired effect.
-deformation= xc.DeformationPlane(xc.Vector([0.0, 0.0, -yCurvature]))
+deformation= xc.DeformationPlane(xc.Vector([0.0, 0.0, -yCurvature/2.0]))
 eleLoad.backEndDeformationPlane= deformation
 eleLoad.frontEndDeformationPlane= deformation
 # We add the load case to domain.
@@ -74,8 +74,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= False)
 
 # Check results.
-zDeflection= n3.getDisp[1]
-zDeflectionRef= -AT*alpha*L**2/2.0/h# Deflection of a cantilever due to a temperature gradient.
+zDeflection= n3.getDisp[2]
+zDeflectionRef= AT*alpha*L**2/2.0/h# Deflection of a cantilever due to a temperature gradient.
 ratio= abs(zDeflection-zDeflectionRef)/zDeflectionRef
 
 '''
@@ -89,7 +89,7 @@ print("ratio= ", ratio)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio<1e-8):
+if(abs(ratio)<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

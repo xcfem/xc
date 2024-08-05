@@ -40,6 +40,10 @@ n1= nodes.newNodeXYZ(0.0,0,0)
 n2= nodes.newNodeXYZ(L/2.0,0,0)
 n3= nodes.newNodeXYZ(L,0,0)
 
+n4= nodes.newNodeXYZ(0.0,0.0, 2.0)
+n5= nodes.newNodeXYZ(L/2.0,0.0, 2.0)
+n6= nodes.newNodeXYZ(L,0.0, 2.0)
+
 ### Elements.
 #### Define materials.
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
@@ -50,9 +54,12 @@ modelSpace.setDefaultCoordTransf(lin)
 #### Elements.
 beam1= modelSpace.newElement(elementType= "ElasticBeam3d", nodeTags= [n1.tag, n2.tag])
 beam2= modelSpace.newElement(elementType= "ElasticBeam3d", nodeTags= [n2.tag, n3.tag])
+beam3= modelSpace.newElement(elementType= "ElasticBeam3d", nodeTags= [n4.tag, n5.tag])
+beam4= modelSpace.newElement(elementType= "ElasticBeam3d", nodeTags= [n5.tag, n6.tag])
 
 # Constraints
-modelSpace.fixNode('000_000',n1.tag)
+modelSpace.fixNode('000_000', n1.tag)
+modelSpace.fixNode('000_000', n4.tag)
 
 ## Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -63,9 +70,11 @@ M= 1e3
 yCurvature= M/(E*Iy)
 # We introduce the "inverse" curvature as initial deformation to
 # get the desired effect.
-deformation= xc.DeformationPlane(xc.Vector([0.0, 0.0, -yCurvature]))
+deformation= xc.DeformationPlane(xc.Vector([0.0, 0.0, -yCurvature/2.0])) # deformation for point (0,1)= curvature/2.0
 eleLoad.backEndDeformationPlane= deformation
 eleLoad.frontEndDeformationPlane= deformation
+# Equivalent nodal load at node n6
+nodalLoad= lp0.newNodalLoad(n6.tag, xc.Vector([0.0,0.0,0.0, 0.0, M, 0.0]) )
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -73,22 +82,27 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= False)
 
 # Check results.
-zDeflection= n3.getDisp[1]
-zDeflectionRef= M*(L**2)/(2.0*E*Iy) # Deflection of a cantilever with a couple moment at the free end.
-ratio= abs(zDeflection-zDeflectionRef)/zDeflectionRef
+zDeflection3= n3.getDisp[2]
+zDeflectionRef= -M*(L**2)/(2.0*E*Iy) # Deflection of a cantilever with a couple moment at the free end.
+zDeflection6= n6.getDisp[2]
+ratio1= abs(zDeflection3-zDeflectionRef)/zDeflectionRef
+ratio2= abs(zDeflection6-zDeflectionRef)/zDeflectionRef
 
 '''
 print(n3.getDisp)
+print(n6.getDisp)
 print("curvature= ", yCurvature)
-print("zDeflection= ", zDeflection*1e3, 'mm')
 print("zDeflectionRef= ", zDeflectionRef*1e3, 'mm')
-print("ratio= ", ratio)
+print("zDeflection3= ", zDeflection3*1e3, 'mm')
+print("ratio1= ", ratio1)
+print("zDeflection6= ", zDeflection6*1e3, 'mm')
+print("ratio2= ", ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio<1e-8):
+if((abs(ratio1)<1e-8) and (abs(ratio2)<1e-8)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
@@ -97,6 +111,8 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 # oh.displayFEMesh()
+# oh.displayLocalAxes()
 # # oh.displayReactions()
-# # oh.displayIntForcDiag('N', defFScale= 2.0)
-# oh.displayDispRot('uY', defFScale= 1000.0)
+# oh.displayIntForcDiag('My', defFScale= 2.0)
+# oh.displayDispRot('uZ', defFScale= 2.0)
+
