@@ -948,6 +948,8 @@ python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_03.p
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_04.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_05.py
 python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_06.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_07.py
+python tests/loads/strain_loads/elastic_beam_2d/elastic_beam_2d_strain_load_08.py
 python tests/loads/strain_loads/elastic_beam_2d/test_beam_2d_creep_simulation_01.py
 python tests/loads/strain_loads/elastic_beam_2d/test_shrinkage_simulation_01.py
 echo "$BLEU" "      Strain loads on 2D force beam column." "$NORMAL"
