@@ -33,7 +33,7 @@
 
 #include "material/section/ResponseId.h"
 
-XC::BeamStrainLoad::BeamStrainLoad(int tag, const XC::ID &theElementTags)
+XC::BeamStrainLoad::BeamStrainLoad(int tag, const ID &theElementTags)
   :BeamLoad(tag, LOAD_TAG_BeamStrainLoad, theElementTags) {}
 
 XC::BeamStrainLoad::BeamStrainLoad(int tag)
