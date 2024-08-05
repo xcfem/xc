@@ -55,14 +55,14 @@ zCurvature= M/(E*I)
 heating= modelSpace.newLoadPattern(name= 'heating')
 eleLoad= heating.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam1.tag])
-deformation= xc.DeformationPlane(xc.Vector([0.0, -zCurvature]))
+deformation= xc.DeformationPlane(xc.Vector([0.0, -zCurvature/2.0])) # deformation for point (0,1)= curvature/2.0
 eleLoad.backEndDeformationPlane= deformation
 eleLoad.frontEndDeformationPlane= deformation
 eleLoad= heating.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam2.tag])
 # We introduce the "inverse" curvature as initial deformation to
 # get the desired effect.
-deformation= xc.DeformationPlane(xc.Vector([0.0, -2*zCurvature]))
+deformation= xc.DeformationPlane(xc.Vector([0.0, -2*zCurvature/2.0])) # deformation for point (0,1)= curvature/2.0
 eleLoad.backEndDeformationPlane= deformation
 eleLoad.frontEndDeformationPlane= deformation
 # We add the load case to domain.
@@ -75,12 +75,12 @@ result= modelSpace.analyze(calculateNodalReactions= False)
 cooling= modelSpace.newLoadPattern(name= 'cooling')
 eleLoad= cooling.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam1.tag])
-deformation= xc.DeformationPlane(xc.Vector([0.0, zCurvature]))
+deformation= xc.DeformationPlane(xc.Vector([0.0, zCurvature/2.0])) # deformation for point (0,1)= curvature/2.0
 eleLoad.backEndDeformationPlane= deformation
 eleLoad.frontEndDeformationPlane= deformation
 eleLoad= cooling.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam2.tag])
-deformation= xc.DeformationPlane(xc.Vector([0.0, 2*zCurvature]))
+deformation= xc.DeformationPlane(xc.Vector([0.0, 2*zCurvature/2.0])) # deformation for point (0,1)= curvature/2.0
 eleLoad.backEndDeformationPlane= deformation
 eleLoad.frontEndDeformationPlane= deformation
 # We add the load case to domain.

@@ -99,12 +99,12 @@ columnZCurvature= columnStrains[1]
 
 ## Load case definition.
 creep= modelSpace.newLoadPattern(name= 'creep')
-factor= 0.87835325 # This value has no other meaning than reaching an almost zero
-                   # bending moment in the front end of the column.
+factor= 2.3525 # This value has no other meaning than reaching an almost zero
+               # bending moment in the front end of the column.
 eleLoad= creep.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([column.tag])
 ### set imposed strain: [epsilon, zCurvature]
-creepDeformation= xc.DeformationPlane(xc.Vector([0.0, -factor*columnZCurvature]))
+creepDeformation= xc.DeformationPlane(xc.Vector([0.0, factor*columnZCurvature]))
 eleLoad.backEndDeformationPlane= creepDeformation
 eleLoad.frontEndDeformationPlane= creepDeformation
 # We add the load case to domain.
@@ -128,13 +128,13 @@ print('before column epsilon= ', columnStrains[0], 'column z curvature: ', colum
 print('factor= ', factor)
 print('after column M1= ', columnM1b/1e3)
 print('after column M2= ', columnM2b/1e3)
-print(ratio)
+print('ratio= ', ratio)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio<1e-3):
+if(abs(ratio)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
