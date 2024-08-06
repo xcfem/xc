@@ -1000,7 +1000,7 @@ class GridModel(object):
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         return self.genSurfOneRegion(ijkRange,setName,closeCyl)
 
-    def genHexaedrfMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
+    def genHexaedrMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
         '''generate the hexaedral volums limited by all the regions included in the 
         list of ijkRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -1057,6 +1057,7 @@ class GridModel(object):
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.genHexaedrMultiRegion(lstIJKRange,setName,closeCyl)
+    
     
     def genSurfMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
         '''generate the surfaces limited by all the regions included in the 
