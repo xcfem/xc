@@ -50,7 +50,6 @@ def generate_springs_pile_2d(modelSpace, nodes, linearSpringsConstants):
     springX= typical_materials.defElasticMaterial(prep,'springX',1e-5)
     springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
     retval= list() # Spring elements.
-    modelSpace= predefined_spaces.getModelSpace(prep)
     for n in nodes:
         if(n.tag in linearSpringsConstants):
             k_i= linearSpringsConstants[n.tag]
@@ -76,7 +75,6 @@ def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants):
     springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
     springZ= typical_materials.defElasticMaterial(prep,'springZ',1e-5)
     retval= list() # Spring elements.
-    modelSpace= predefined_spaces.getModelSpace(prep)
     for n in nodes:
         if(n.tag in linearSpringsConstants):
             k_i= linearSpringsConstants[n.tag]
