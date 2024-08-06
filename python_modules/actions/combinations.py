@@ -16,6 +16,7 @@ from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 from misc_utils import log_messages as lmsg
 from misc.latex import latex_utils
+from actions.load_combination_utils import utils
 
 
 class CombinationRecord(object):
@@ -102,6 +103,17 @@ class CombinationRecord(object):
         '''
         outputStr= prefix+'.add("'+str(self.name)+'","'+str(self.expr)+'")\n'
         os.write(outputStr)
+
+    def splitExpr(self, actions):
+        ''' Split the expression in two parts: the first one containing the
+            given actions and the second one with the rest of the load
+            combination.
+
+        :param actions: names of the actions to be extracted to the first part.
+        '''
+        part1, part2= utils.splitCombination(self.expr, actions)
+        return part1, part2
+
 
 class SituationCombs(dict):
     '''Dictionary of combinations for a situation (frequent, rare, 
