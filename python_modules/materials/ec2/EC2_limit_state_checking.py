@@ -24,7 +24,7 @@ from materials.sections import rebar_family as rf
 
 class RebarController(lscb.EURebarController):
     '''Control of some parameters as development length 
-       minimum reinforcement and so on.
+       minimumreinforcement and so on.
 
     :ivar eta1: coefficient related to the quality of the bond condition 
                  and the position of the bar during concreting.
@@ -576,6 +576,7 @@ class EC2RebarFamily(rf.RebarFamily):
       ''' Return the basic anchorage length of the bars.'''
       rebarController= self.getRebarController()
       return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
+  
     def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, steelStressLimit= 450e6, memberType= None, sigmaC= 0.0, effectiveCover= 45e-3):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
@@ -703,7 +704,17 @@ class EC2RebarFamily(rf.RebarFamily):
         :param thickness: height of the rectangular section.
         '''
         return getShearResistanceCrackedNoShearReinf(concrete= concrete, NEd= Nd, Ac=thickness*b, Asl= self.getAs(), bw= b, d=0.8*thickness, nationalAnnex= self.nationalAnnex)
-    
+
+    def getMinClearDist(self,maxAggrSize):
+        '''Return the minimum clear (horizontal and vertical) distance between 
+        individual parallel bars or horizontal layers of parallel bars 
+        according to EN 1992-1-1, art. 8.2
+
+        :param maxAggrSize: maximum aggregate size
+        '''
+        retval=max(20e-3,self.diam,maxAggrSize+5e-3)
+        return retval
+
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
     ''' Creates a dictionary with predefined rebar families.
@@ -1115,7 +1126,7 @@ def getAsMinColumns(concrete, reinfSteel, NEd, Ac, nationalAnnex= None):
 
     :param concrete: concrete material.
     :param reinfSteel: reinforcing steel material.
-    :param NEd: sdesign axial compression force.
+    :param NEd: design axial compression force.
     :param Ac: area of the concrete section.
     :param nationalAnnex: identifier of the national annex.
     '''
@@ -1164,7 +1175,7 @@ def getAsMinWalls(concrete, reinfSteel, Ac, thickness, vertical= True, compresse
     :param nationalAnnex: identifier of the national annex.
     '''
     if(nationalAnnex=='Spain'):
-        fyk= self.steel.fyk
+        fyk= reinfSteel.fyk
         if(vertical): # 9.6.2 (1)
             if(fyk>=500e6):
                 retval= 0.0009*Ac
