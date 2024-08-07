@@ -535,7 +535,6 @@ class GridModel(object):
             for p in sPtMove.getPoints:
                 rad,ang,z=self.getCylCooPnt(p)
                 p.getPos.z+= slopeX*(rad-xZeroSlope)+slopeY*(ang-yZeroSlope)
-                print('R=',rad,'A=',ang,'z=',z, 'yZeroSlope=',yZeroSlope,'slopeY=',slopeY)
         sPtMove.clear()
 
     def slopePointsXYZrange(self,XYZrange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0,cylCoo=False):
