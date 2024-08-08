@@ -32,6 +32,7 @@
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/geom/d2/2d_polygons/Triangle2d.h"
 #include "utility/geom/trf/Trf2d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Return el moment of inertia with respect to the line argument.
 GEOM_FT GeomGroup2d::inertia(const Line2d &e) const
@@ -39,9 +40,10 @@ GEOM_FT GeomGroup2d::inertia(const Line2d &e) const
     if(objetos.empty()) return 0.0;
     if(!equal_dimension())
       {
-        cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	     << "; warning, the object of the group have"
-	     << " different dimensions." << endl;
+	     << " different dimensions."
+	     << Color::def << std::endl;
       }
     pdeque_geom_obj::const_iterator i(objetos.begin());
     GEOM_FT retval((*i)->I(e));
@@ -65,8 +67,9 @@ GEOM_FT GeomGroup2d::Iy(void) const
 //! the x and y axis passing through the center of mass.
 GEOM_FT GeomGroup2d::Pxy(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	 << "; not implemented, 0 is returned." << endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented, 0 is returned."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -76,9 +79,10 @@ Pos2d GeomGroup2d::getCenterOfMass(void) const
     if(objetos.empty()) return Pos2d();
     if(!equal_dimension())
       {
-        cerr << getClassName() << "::" << __FUNCTION__
-	     << "; Warning!, the objects in the group"
-	     << " have different dimensions." << endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; Warning!, the objects in the group"
+		  << " have different dimensions."
+		  << Color::def << std::endl;
       }
     pdeque_geom_obj::const_iterator i(objetos.begin());
     GEOM_FT area_i= (*i)->getCenterOfMassArea();

@@ -28,6 +28,7 @@
 #include "utility/geom/d1/Line3d.h"
 #include "utility/geom/d1/Ray3d.h"
 #include "utility/geom/d1/Segment3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //Return the moment of inertia with respect to the line argument
 GEOM_FT GeomGroup3d::inertia(const Line3d &e) const
@@ -35,9 +36,10 @@ GEOM_FT GeomGroup3d::inertia(const Line3d &e) const
     if(objetos.empty()) return 0.0;
     if(!equal_dimension())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; Warning!, the objects of the group have"
-	          << " different dimensions." << std::endl;
+	          << " different dimensions."
+		  << Color::def << std::endl;
       }
     pdeque_geom_obj::const_iterator i(objetos.begin());
     GEOM_FT retval((*i)->I(e));
@@ -66,8 +68,9 @@ GEOM_FT GeomGroup3d::Iz(void) const
 //! the x and y axis passing through the center of mass.
 GEOM_FT GeomGroup3d::Pxy(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented, 0 is returned." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented, 0 is returned."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -77,9 +80,10 @@ Pos3d GeomGroup3d::getCenterOfMass(void) const
     if(objetos.empty()) return Pos3d();
     if(!equal_dimension())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; Warning!, the objects of this group"
-	          << " have different dimensions." << std::endl;
+	          << " have different dimensions."
+		  << Color::def << std::endl;
       }    pdeque_geom_obj::const_iterator i(objetos.begin());
     GEOM_FT area_i= (*i)->getCenterOfMassArea();
     Vector3d num= (*i)->getCenterOfMass().VectorPos()*area_i;
