@@ -39,6 +39,7 @@
 #include "utility/geom/pos_vec/Pos3dArray.h"
 #include "utility/geom/pos_vec/Pos3dArray3d.h"
 #include "vtkCellType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 // Numbering of vertices:
 //
@@ -67,6 +68,17 @@
 //    |        |/
 //    +--------+
 //
+
+// Face indexes.
+const std::vector< std::tuple<size_t, size_t, size_t, size_t> > face_vertices
+  {
+    std::tuple<size_t, size_t, size_t, size_t> {0, 3, 2, 1}, // vertices of face 0
+    std::tuple<size_t, size_t, size_t, size_t> {0, 1, 5, 4}, // vertices of face 1
+    std::tuple<size_t, size_t, size_t, size_t> {1, 2, 6, 5}, // vertices of face 2
+    std::tuple<size_t, size_t, size_t, size_t> {2, 3, 7, 6}, // vertices of face 3
+    std::tuple<size_t, size_t, size_t, size_t> {0, 4, 7, 3}, // vertices of face 4
+    std::tuple<size_t, size_t, size_t, size_t> {4, 5, 6, 7}  // vertices of face 5
+  };
 
 //! @brief Constructor.
 XC::Block::Block(Preprocessor *m,const std::string &name)
@@ -153,12 +165,13 @@ XC::Face *XC::Block::newFace(const size_t &i,Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
     if(retval)
       { put(i,retval); }
     else
-       std::cerr << getClassName() << "::" << __FUNCTION__
+       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		 << "; surface with vertices: "
                  << pA->getName() << ", " << pB->getName()
                  << pC->getName() << " and " << pB->getName()
 		 << " not found in definition of block: '"
-                 << getName() << "'" << std::endl;
+                 << getName() << "'"
+		 << Color::def << std::endl;
     return retval;
   }
 
@@ -289,7 +302,7 @@ void XC::Block::put(const size_t &i,Face *s)
   {
     size_t first= 1;
     int sense= 1;
-    if( (i>0) && (i<5)) //Is a side face.
+    if((i>0) && (i<5)) //Is a side face.
       {
         const Face *base= sups[0].Surface();
         first= s->CommonEdge(*base); //Index of the line in common with the base.
@@ -305,9 +318,10 @@ void XC::Block::put(const size_t &i,Face *s)
         if(!face) { iFace=3; face= sups[iFace].Surface(); }
         if(!face) { iFace=4; face= sups[iFace].Surface(); }
         if(!face)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; error before introducing face 5 you must introduce"
-	            << " either the 1 , 2 , 3 or 4 faces." << std::endl;
+	            << " either the 1 , 2 , 3 or 4 faces."
+		    << Color::def << std::endl;
         else
           {
             first= face->CommonEdge(*s); //Index of the line in common of s with the face.
@@ -318,11 +332,12 @@ void XC::Block::put(const size_t &i,Face *s)
               }
             else //They don't share a common edge.
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; error: Block(" << getName() << "); the face "
 			  << s->getName() 
                           << " does not share a common edge with face "
-			  << face->getName() << '.' << std::endl;
+			  << face->getName() << '.'
+			  << Color::def << std::endl;
               }
           }
       }
@@ -333,9 +348,9 @@ void XC::Block::put(const size_t &i,Face *s)
       if(sense==-1)
         forward= false;
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; the surfaces do not share a common edge."
-		  << std::endl;
+		  << Color::def << std::endl;
     sups[i]= BodyFace(this,s,first,forward);
   }
 
@@ -347,9 +362,10 @@ void XC::Block::insert(const size_t &i)
     if(s)
       put(index(s),s);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << i
-		<< " not found." << std::endl;
+		<< " not found."
+		<< Color::def << std::endl;
   }
 
 //! @brief Create and insert the faces from the indices passed
@@ -364,12 +380,8 @@ void XC::Block::append_faces(const std::vector<size_t> &face_indexes)
 //! @brief Trigger the creation of nodes on faces.
 void XC::Block::create_face_nodes(void)
   {
-    sups[0].create_nodes();
-    sups[1].create_nodes();
-    sups[2].create_nodes();
-    sups[3].create_nodes();
-    sups[4].create_nodes();
-    sups[5].create_nodes();
+    for(size_t i= 0; i<6; i++)
+      sups[i].create_nodes();
   }
 
 //! @brief Return (ndivI+1)*(ndivJ+1)*(ndivK+1) positions for the nodes.
@@ -397,22 +409,34 @@ void XC::Block::create_face_nodes(void)
 //! - Edge 12 has indices (numberOfLayers,1,k=1..ncol) 
 Pos3dArray3d XC::Block::get_positions(void) const
   {
-    const size_t ndiv_12= NDivI();
-    const size_t ndiv_23= NDivJ();
+    const size_t ndiv_12= NDivJ();
+    const size_t ndiv_23= NDivI();
     const size_t ndiv_15= NDivK();
-    const Pos3d p1= getVertex(1)->getPos();
-    const Pos3d p2= getVertex(2)->getPos();
-    const Pos3d p3= getVertex(3)->getPos();
-    const Pos3d p4= getVertex(4)->getPos();
-    const Pos3d p5= getVertex(5)->getPos();
-    const Pos3d p6= getVertex(6)->getPos();
-    const Pos3d p7= getVertex(7)->getPos();
-    const Pos3d p8= getVertex(8)->getPos();
-    const Pos3dArray ptos_l5= Pos3dArray(p1,p5,ndiv_15);
-    const Pos3dArray ptos_l6= Pos3dArray(p2,p6,ndiv_15);
-    const Pos3dArray ptos_l7= Pos3dArray(p3,p7,ndiv_15);
-    const Pos3dArray ptos_l8= Pos3dArray(p4,p8,ndiv_15);
-    Pos3dArray3d retval(ptos_l5,ptos_l6,ptos_l7,ptos_l8,ndiv_12,ndiv_23);
+    const Pos3d &p1= getVertex(1)->getPos();
+    const Pos3d &p2= getVertex(2)->getPos();
+    const Pos3d &p3= getVertex(3)->getPos();
+    const Pos3d &p4= getVertex(4)->getPos();
+    const Pos3d &p5= getVertex(5)->getPos();
+    const Pos3d &p6= getVertex(6)->getPos();
+    const Pos3d &p7= getVertex(7)->getPos();
+    const Pos3d &p8= getVertex(8)->getPos();
+    const Pos3dArray ptos_l15= Pos3dArray(p1,p5,ndiv_15);
+    const Pos3dArray ptos_l46= Pos3dArray(p4,p6,ndiv_15);
+    const Pos3dArray ptos_l37= Pos3dArray(p3,p7,ndiv_15);
+    const Pos3dArray ptos_l28= Pos3dArray(p2,p8,ndiv_15);
+    Pos3dArray3d retval(ptos_l15, ptos_l46, ptos_l37, ptos_l28, ndiv_12, ndiv_23);
+    // const size_t n_layers= retval.getNumberOfLayers();
+    // const size_t n_rows= retval.getNumberOfRows();
+    // const size_t n_cols= retval.getNumberOfColumns();
+    // for(size_t i= 1; i<=n_layers; i++)
+    //   for(size_t j= 1; j<=n_rows; j++)
+    // 	for(size_t k= 1; k<=n_cols; k++)
+    // 	  {
+    // 	    bool interior= (i!=1 && i!=n_layers) && (j!=1 && j!=n_rows) && (k!=1 && k!=n_rows);
+    // 	    std::cout << "(" << i << ", " << j << "; " << k << ") pos= "
+    // 		      << retval(i,j,k)
+    // 		      << " interior: " << interior << std::endl;
+    // 	  }
     return retval;
   }
 
@@ -449,115 +473,156 @@ void XC::Block::setNDivK(const size_t &nDiv)
       sups[i].Surface()->ConciliaNDivIJ();
   }
 
+typedef std::tuple<size_t, size_t, size_t> ijk_node_key;
+
+struct ijk_node_key_hash : public std::unary_function<ijk_node_key, std::size_t>
+  {
+    std::size_t operator()(const ijk_node_key& k) const
+    {
+      return std::get<0>(k) ^ std::get<1>(k) ^ std::get<2>(k);
+    }
+  };
+struct ijk_node_key_equal : public std::binary_function<ijk_node_key, ijk_node_key, bool>
+  {
+    bool operator()(const ijk_node_key& v0, const ijk_node_key& v1) const
+      {
+	return (std::get<0>(v0) == std::get<0>(v1) && std::get<1>(v0) == std::get<1>(v1) && std::get<2>(v0) == std::get<2>(v1));
+      }
+  };
+ 
+typedef std::unordered_map<const ijk_node_key, Pos3d, ijk_node_key_hash, ijk_node_key_equal> map_pending_node_positions;
+
 //! @brief Create nodes for the block.
 void XC::Block::create_nodes(void)
   {
-    std::cout << "Entra Block::create_nodes" << std::endl;
     checkNDivs();
     if(ttzNodes.Null())
       {
         create_face_nodes();
-        BodyFace &bottom= sups[0];
-        BodyFace &top= sups[5];
-        BodyFace &leftFace= sups[1];
-        BodyFace &rightFace= sups[3];
-        BodyFace &frontFace= sups[2];
-        BodyFace &backFace= sups[4];
 
-        const size_t n_layers= NDivK()+1;
-        const size_t n_rows= NDivJ()+1;
-        const size_t n_cols= NDivI()+1;
-        ttzNodes = NodePtrArray3d(n_layers,n_rows,n_cols); //Pointers to node.
         Pos3dArray3d node_pos= get_positions(); //Node positions.
+        const size_t n_layers= node_pos.getNumberOfLayers();
+        const size_t n_rows= node_pos.getNumberOfRows();
+        const size_t n_cols= node_pos.getNumberOfColumns();
+        ttzNodes= NodePtrArray3d(n_layers, n_rows, n_cols); //Pointers to node.
 
-        //Vertices.
-	ttzNodes(1,1,1)= getVertex(1)->getNode();
-        std::cout << "Nd1= " << ttzNodes(1,1,1)->getInitialPosition3d() << std::endl;
-        ttzNodes(1,n_rows,1)= getVertex(2)->getNode();
-        std::cout << "Nd2= " << ttzNodes(1,n_rows,1)->getInitialPosition3d() << std::endl;
-	ttzNodes(1,n_rows,n_cols)= getVertex(3)->getNode();
-        ttzNodes(1,1,n_cols)= getVertex(4)->getNode();
-	ttzNodes(n_layers,1,1)= getVertex(5)->getNode();
-        std::cout << "Nd5= " << ttzNodes(n_layers,1,1)->getInitialPosition3d() << std::endl;
-        ttzNodes(n_layers,n_rows,1)= getVertex(6)->getNode();
-        std::cout << "Nd6= " << ttzNodes(n_layers,n_rows,1)->getInitialPosition3d() << std::endl;
-	ttzNodes(n_layers,n_rows,n_cols)= getVertex(7)->getNode();
-        ttzNodes(n_layers,1,n_cols)= getVertex(8)->getNode();
 
-        const Node *n1= ttzNodes(1,1,1);
-        const Node *n2= ttzNodes(1,n_rows,1);
-        const Node *n3= ttzNodes(1,n_rows,n_cols);
-        const Node *n4= ttzNodes(1,1,n_cols);
-        const Node *n5= ttzNodes(n_layers,1,1);
-        const Node *n6= ttzNodes(n_layers,n_rows,1);
-        const Node *n7= ttzNodes(n_layers,n_rows,n_cols);
-        const Node *n8= ttzNodes(n_layers,1,n_cols);
+	// Populate pending_node_positions with all the position in the faces
+	// of the block.
+	map_pending_node_positions pending_node_positions;
+	const std::vector<size_t> layers({1, n_layers}); // First and last layer.
+	for(std::vector<size_t>::const_iterator il= layers.begin(); il!= layers.end(); il++)
+	  {
+	    for(size_t i= 1; i<=n_rows; i++)
+	      for(size_t j= 1; j<=n_cols; j++)
+		{
+		  const size_t i_layer= *il;
+		  const Pos3d &pos= node_pos(i_layer, i, j);
+		  pending_node_positions[std::make_tuple(i_layer, i, j)]= pos;
+		}
+	  }
+	const std::vector<size_t> rows({1, n_rows}); // First and last row.
+	for(std::vector<size_t>::const_iterator ir= rows.begin(); ir!= rows.end(); ir++)
+	  {
+	    for(size_t i= 1; i<=n_layers; i++)
+	      for(size_t j= 1; j<=n_cols; j++)
+		{
+		  const size_t i_row= *ir;
+		  const Pos3d &pos= node_pos(i, i_row, j);
+		  pending_node_positions[std::make_tuple(i, i_row, j)]= pos;
+		}
+	  }
+	const std::vector<size_t> columns({1, n_cols}); // First and last column.
+	for(std::vector<size_t>::const_iterator ic= columns.begin(); ic!= columns.end(); ic++)
+	  {
+	    for(size_t i= 1; i<=n_layers; i++)
+	      for(size_t j= 1; j<=n_rows; j++)
+		{
+		  const size_t i_col= *ic;
+		  const Pos3d &pos= node_pos(i, j, i_col);
+		  pending_node_positions[std::make_tuple(i, j, i_col)]= pos;
+		}
+	  }
+	// Vertex nodes.
+	for(size_t ivertex= 1; ivertex<=8; ivertex++)
+	  {
+	    const Node *nPtr= getVertex(ivertex)->getNode();
+	    const Pos3d pos= nPtr->getInitialPosition3d();
+	    std::list<ijk_node_key> keys_to_remove;
+	    for(map_pending_node_positions::const_iterator j= pending_node_positions.begin(); j!= pending_node_positions.end(); j++)
+	      {
+		const Pos3d pB= (*j).second;
+		const double d2= dist2(pos,pB);
+		if(d2<1e-4) // found.
+		  {
+		    const ijk_node_key &key= (*j).first;
+		    const size_t ii= get<0>(key);
+		    const size_t jj= get<1>(key);
+		    const size_t kk= get<2>(key);
+		    ttzNodes(ii, jj, kk)= const_cast<Node *>(nPtr);
+		    keys_to_remove.push_back(key);
+		  }
+	      }
+	    const size_t num_keys_to_remove= keys_to_remove.size();
+	    if(num_keys_to_remove==0)
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; node: " << nPtr->getTag()
+			  << " in position: " << pos << " not found."
+			  << Color::def << std::endl;
+	      }
+	    for(std::list<ijk_node_key>::const_iterator k= keys_to_remove.begin(); k!= keys_to_remove.end();k++)
+	      { pending_node_positions.erase(*k); }	    
+   	  }
+	// Face nodes.
+	for(size_t iface= 0; iface<6; iface++)
+	  {
 
-    std::cout << "n_layers= " << n_layers << std::endl;
-    std::cout << "n_rows= " << n_rows << std::endl;
-    std::cout << "n_cols= " << n_cols << std::endl;
-
-    std::cout << "bottom" << std::endl;
-        //Linking with the nodes of the bottom i=1
-        ID IJK1= bottom.Surface()->getNodeIndices(n1);
-        ID IJK2= bottom.Surface()->getNodeIndices(n2);
-        ID IJK4= bottom.Surface()->getNodeIndices(n4);
-	std::cout << "IJK1= " << IJK1 << std::endl;
-	std::cout << "IJK2= " << IJK2 << std::endl;
-	std::cout << "IJK4= " << IJK4 << std::endl;
-        size_t ind_i= 0, ind_j= 0;
-        if((IJK2[1]-IJK1[1])>0)
-          { ind_i= 1; ind_j= 2; }
-        else if((IJK2[2]-IJK1[2])>0)
-          { ind_j= 1; ind_i= 2; }
-        const size_t nf= abs(IJK2[ind_i]-IJK1[ind_i])+1;
-        const size_t nc= abs(IJK4[ind_j]-IJK1[ind_j])+1;
-	std::cout << "ind_i= " << ind_i << " nf= " << nf << std::endl;
-	std::cout << "ind_j= " << ind_j << " nc= " << nc << std::endl;
-        double d2= 0;
-        for(size_t i=1;i<=nf;i++)
-          for(size_t j=1;j<=nc;j++)
-            {
-              size_t J= (IJK2[ind_i]-IJK1[ind_i])/(nf-1)*(i-1)+IJK1[ind_i];
-              size_t K= (IJK4[ind_j]-IJK1[ind_j])/(nc-1)*(j-1)+IJK1[ind_j];
-              if(ind_i<ind_j)
-                ttzNodes(1,J,K)= bottom.getNode(i,j);
-              else
-                ttzNodes(1,J,K)= bottom.getNode(j,i);
-              d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),node_pos(1,J,K));
-              if(d2>1e-4)
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; error while linking node: ("
-                          << i << "," << j << ") in face." << std::endl;
-		std::cout << "i= " << i << " j= " << j
-			  << " J= " << J << " K= " << K 
-			  << " dist2= " << d2 << std::endl;
-            }
-	/*
-    std::cout << "top" << std::endl;
-        //Top i=n_layers
-        IJK1= top.Surface()->getNodeIndices(n5);
-        IJK2= top.Surface()->getNodeIndices(n7);
-        for(size_t i=1;i<=n_rows;i++)
-          for(size_t j=1;j<=n_cols;j++)
-            {
-              size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(i-1)+IJK1[1];
-              size_t K= (IJK2[2]-IJK1[2])/(n_cols-1)*(j-1)+IJK1[2];
-              ttzNodes(n_layers,J,K)= top.getNode(i,j);
-            }
-
-        //Lateral izquierdo j=1.
-        IJK1= leftFace.Surface()->getNodeIndices(n1);
-        IJK2= leftFace.Surface()->getNodeIndices(n6);
-        for(size_t i=1;i<=n_rows;i++)
-          for(size_t j=1;j<=n_cols;j++)
-            {
-              size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(j-1)+IJK1[1];
-              size_t K= (IJK2[2]-IJK1[2])/(n_rows-1)*(j-1)+IJK1[2];
-              ttzNodes(n_layers,J,K)= top.getNode(i,j);
-            }
-	*/
-
+	    const BodyFace &currentFace= sups[iface];
+	    const Face *face= currentFace.Surface();
+	    const std::list<const Node *> faceNodes= face->getNodes();
+	    for(std::list<const Node *>::const_iterator i= faceNodes.begin(); i!= faceNodes.end(); i++)
+	      {
+		const Node *n= *i;
+		const Pos3d pos= n->getInitialPosition3d();
+		std::list<ijk_node_key> keys_to_remove;
+		for(map_pending_node_positions::const_iterator j= pending_node_positions.begin(); j!= pending_node_positions.end(); j++)
+		  {
+		    const Pos3d pB= (*j).second;
+		    const double d2= dist2(pos,pB);
+		    if(d2<1e-4) // found.
+		      {
+			const ijk_node_key &key= (*j).first;
+			const size_t ii= get<0>(key);
+			const size_t jj= get<1>(key);
+			const size_t kk= get<2>(key);
+			ttzNodes(ii, jj, kk)= const_cast<Node *>(n);
+		        keys_to_remove.push_back(key);
+		      }
+		  }
+		for(std::list<ijk_node_key>::const_iterator k= keys_to_remove.begin(); k!= keys_to_remove.end();k++)
+		  { pending_node_positions.erase(*k); }
+	      }
+	  }
+	const size_t num_pending_nodes= pending_node_positions.size();
+	if(num_pending_nodes!=0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; some face nodes where not detected: " << std::endl;
+	    for(map_pending_node_positions::const_iterator j= pending_node_positions.begin(); j!= pending_node_positions.end(); j++)
+	      {
+		const Pos3d pos= (*j).second;
+		const ijk_node_key &key= (*j).first;
+		const size_t ii= get<0>(key);
+		const size_t jj= get<1>(key);
+		const size_t kk= get<2>(key);
+		std::cerr << "node: (" << ii << " ," << jj << " ," << kk << ")"
+			  << " in position: " << pos << std::endl;
+	      }
+	    std::cerr << Color::def << std::endl;
+	  }
+	
+        // Interior nodes. 
         for(size_t k= 2;k<n_layers;k++) //interior layers.
           for(size_t j= 2;j<n_rows;j++) //interior rows.
             for(size_t i= 2;i<n_cols;i++) //interior columns.
@@ -565,16 +630,17 @@ void XC::Block::create_nodes(void)
       }
     else
       if(verbosity>2)
-        std::clog << getClassName() << "::" << __FUNCTION__
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
-		  << "' already exist." << std::endl;      
+		  << "' already exist."
+		  << Color::def << std::endl;      
   }
 
 //! @brief Trigger mesh generation.
 void XC::Block::genMesh(meshing_dir dm)
   {
     if(verbosity>3)
-      std::clog << "Meshing Block...(" << getName() << ")...";
+      std::clog << Color::yellow << "Meshing Block...(" << getName() << ")...";
     create_nodes();
     if(ttzElements.Null())
       create_elements(dm);
@@ -584,7 +650,8 @@ void XC::Block::genMesh(meshing_dir dm)
 	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
     if(verbosity>3)
-      std::clog << "done." << std::endl;
+      std::clog << "done."
+		<< Color::def << std::endl;
   }
 //! @brief Creates and inserts the the faces that link the points
 //! from the indexes being passed as parameter.
@@ -599,23 +666,37 @@ void XC::Block::addPoints(const ID &point_indexes)
 
 	    Pnt *p= BuscaPnt(point_indexes(i));
 	    if(!p)
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; point: " << point_indexes(i-1)
 			<< " not found in definition of surface: '"
-			<< getName() << "'" << std::endl;
+			<< getName() << "'"
+			<< Color::def << std::endl;
 	    pntPtrs[i]= p;
 	  }
-	newFace(0,pntPtrs[0],pntPtrs[3],pntPtrs[2],pntPtrs[1]); //Bottom
-	newFace(1,pntPtrs[0],pntPtrs[1],pntPtrs[5],pntPtrs[4]); //Left-side face
-	newFace(2,pntPtrs[1],pntPtrs[2],pntPtrs[6],pntPtrs[5]); //Front face
-	newFace(3,pntPtrs[2],pntPtrs[3],pntPtrs[7],pntPtrs[6]); //Right-side face
-	newFace(4,pntPtrs[0],pntPtrs[4],pntPtrs[7],pntPtrs[3]); //Back face
-	newFace(5,pntPtrs[4],pntPtrs[5],pntPtrs[6],pntPtrs[7]); //Top
+	//
+	//     5 +---------+ 8     0: Bottom face; vertices 1,4,3,2. (0,3,2,1)
+	//      /|        /|       1: Left-side face; vertices 1,2,6,5. (0,1,5,4)
+	//     / |       / |       2: Front face; vertices 2,3,7,6. (1,2,6,5)
+	//  6 +---------+7 |       3: Right-side face; vertices 3,4,8,7. (2,3,7,6)
+	//    |  |      |  |       4: Back face; vertices 1,5,8,4. (0,4,7,3)
+	//    |1 +------|--+ 4     5: Top face; vertices 5,6,7,8. (4,5,6,7)
+	//    | /       | /
+	//    |/        |/
+	//  2 +---------+ 3
+	//
+	for(size_t ii= 0; ii<6; ii++)
+	  {
+	    const std::tuple<size_t, size_t, size_t, size_t> &tpl= face_vertices[ii];
+	    const size_t i= get<0>(tpl); const size_t j= get<1>(tpl);
+	    const size_t k= get<2>(tpl); const size_t l= get<3>(tpl);
+	    this->newFace(ii, pntPtrs[i],pntPtrs[j],pntPtrs[k],pntPtrs[l]);
+	  }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; exactly eight points are needed, we got: "
-		<< np << std::endl;
+		<< np
+		<< Color::def << std::endl;
   }
 
 //! @brief Creates and inserts the faces from the points identified
@@ -624,15 +705,17 @@ void XC::Block::setPoints(const ID &point_indexes)
   {
     const size_t np= point_indexes.Size(); //Number of indexes.
     if(np!=8)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; block definition needs "
-                << 8 << " points, we got: " << np << ".\n";
+                << 8 << " points, we got: " << np << "."
+	        << Color::def << std::endl;
     else
       {
         if(getNumberOfDefinedFaces()>0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; warning redefinition of block: '"
-                    << getName() << "'.\n";
+                    << getName() << "'."
+	            << Color::def << std::endl;
 
 	addPoints(point_indexes);
       }
@@ -659,9 +742,10 @@ void XC::Block::setPyDict(const boost::python::dict &d)
     boost::python::list faceList= boost::python::extract<boost::python::list>(d["faces"]);
     const size_t numFaces= boost::python::len(faceList);
     if(numFaces!=6)
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << Color::red << getClassName() << __FUNCTION__
 	        << "; six faces expected, got: "
-		<< numFaces << std::endl;
+		<< numFaces
+		<< Color::def << std::endl;
     Preprocessor *prep= getPreprocessor();
     if(prep)
       {
@@ -675,6 +759,7 @@ void XC::Block::setPyDict(const boost::python::dict &d)
 	this->update_topology();
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; preprocessor needed."
+		<< Color::def << std::endl;
   }

@@ -161,7 +161,7 @@ XC::CmbEdge::Side *XC::Body::BodyFace::getSide(const size_t &i)
 //! @brief Return a pointer to the i-th vertex of the face.
 const XC::Pnt *XC::Body::BodyFace::getVertex(const size_t &i) const
   {
-    const XC::Pnt *retval= nullptr;
+    const Pnt *retval= nullptr;
     const CmbEdge::Side *l= getSide(i);
     if(l)
       {
@@ -178,12 +178,23 @@ XC::Pnt *XC::Body::BodyFace::getVertex(const size_t &i)
   { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).getVertex(i)); }
 
 //! @brief Return a pointer to the (i,j) node of the face.
-XC::Node *XC::Body::BodyFace::getNode(const size_t &i,const size_t &j)
+XC::Node *XC::Body::BodyFace::getNode(const size_t &i, const size_t &j)
   {
     assert(surface);
     return surface->getNode(i,j);
   }
 
+std::vector<XC::Node *> XC::Body::BodyFace::getCornerNodes(void)
+  {
+    std::vector<Node *> retval= {nullptr, nullptr, nullptr, nullptr};
+    for(size_t i= 1; i<=4; i++)
+      {
+	Pnt *p= this->getVertex(i);
+	if(p)
+	  retval[i-1]= p->getNode();
+      }
+    return retval;
+  }
 //! @brief Return the positions for the nodes on a face.
 Pos3dArray XC::Body::BodyFace::get_positions(void) const
   {

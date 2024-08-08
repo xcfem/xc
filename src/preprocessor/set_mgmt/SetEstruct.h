@@ -32,6 +32,7 @@
 
 #include "SetBase.h"
 #include <map>
+#include <list>
 #include "domain/mesh/node/NodeTopology.h"
 
 namespace XC {
@@ -93,10 +94,14 @@ class SetEstruct: public SetBase
     inline Element *getElementIJK(const size_t &i,const size_t &j,const size_t &k)
       { return getElement(i,j,k); }
 
+    std::list<const Node *> getNodes(void) const;
+    std::list<Node *> getNodes(void);
     std::set<int> getNodeTags(void) const;
-    boost::python::list getNodes(void);
+    boost::python::list getNodesPy(void);
+    std::list<const Element *> getElements(void) const;
+    std::list<Element *> getElements(void);
     std::set<int> getElementTags(void) const;
-    boost::python::list getElements(void);
+    boost::python::list getElementsPy(void);
     
     void createInertiaLoads(const Vector &);
   };

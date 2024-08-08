@@ -193,9 +193,16 @@ const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Return the indexes of the node being passed as parameter.
+//! @brief Return the indexes of the given node.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return ttzNodes.getNodeIndices(n); }
+
+//! @brief Return the indexes of the nearest node to the given position.
+XC::ID XC::EntMdlr::getIndicesOfNearestNode(const Pos3d &p) const
+  {
+    const Node *n= this->getNearestNode(p);
+    return this->getNodeIndices(n);
+  }
 
 //! @brief Returns a pointer to the element which indexes
 //! are being passed as parameters.
