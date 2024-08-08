@@ -156,9 +156,9 @@ feProblem.errFileName= "cerr" # From now on display errors if any.
 ratio1= abs(meanCFs[0]-0.61652927)/0.61652927
 ratio2= abs(meanCFs[1]-0.61652927)/0.61652927
 
+'''
 print(meanCFs[0], ratio1)
 print(meanCFs[1], ratio2)
-'''
 '''
 
 from misc_utils import log_messages as lmsg
