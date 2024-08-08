@@ -60,7 +60,8 @@ class Block: public Body
     virtual size_t getNumberOfFaces(void) const;
     size_t getNumberOfDefinedFaces(void) const;
     void update_topology(void);
-    virtual std::set<const Face *> getSurfaces(void);
+    virtual std::set<const Face *> getSurfaces(void) const;
+    virtual std::set<Face *> getSurfaces(void);
     const BodyFace *getFace(const size_t &i) const;
     Face *newFace(const size_t &i,Pnt *,Pnt *,Pnt *,Pnt *);
     CmbEdge::Side *getEdge(const size_t &i);

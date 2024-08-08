@@ -250,9 +250,22 @@ XC::Pnt *XC::Block::getVertex(const size_t &i)
   }
 
 //! @brief Return the surfaces that close the solid.
-std::set<const XC::Face *> XC::Block::getSurfaces(void)
+std::set<const XC::Face *> XC::Block::getSurfaces(void) const
   {
     std::set<const Face *> retval;
+    if(!sups[0].Vacia()) retval.insert(sups[0].Surface());
+    if(!sups[1].Vacia()) retval.insert(sups[1].Surface());
+    if(!sups[2].Vacia()) retval.insert(sups[2].Surface());
+    if(!sups[3].Vacia()) retval.insert(sups[3].Surface());
+    if(!sups[4].Vacia()) retval.insert(sups[4].Surface());
+    if(!sups[5].Vacia()) retval.insert(sups[5].Surface());
+    return retval;
+  }
+
+//! @brief Return the surfaces that close the solid.
+std::set<XC::Face *> XC::Block::getSurfaces(void)
+  {
+    std::set<Face *> retval;
     if(!sups[0].Vacia()) retval.insert(sups[0].Surface());
     if(!sups[1].Vacia()) retval.insert(sups[1].Surface());
     if(!sups[2].Vacia()) retval.insert(sups[2].Surface());
@@ -506,7 +519,6 @@ void XC::Block::create_nodes(void)
         const size_t n_cols= node_pos.getNumberOfColumns();
         ttzNodes= NodePtrArray3d(n_layers, n_rows, n_cols); //Pointers to node.
 
-
 	// Populate pending_node_positions with all the position in the faces
 	// of the block.
 	map_pending_node_positions pending_node_positions;
@@ -623,10 +635,27 @@ void XC::Block::create_nodes(void)
 	  }
 	
         // Interior nodes. 
-        for(size_t k= 2;k<n_layers;k++) //interior layers.
+        for(size_t i= 2;i<n_layers;i++) //interior layers.
           for(size_t j= 2;j<n_rows;j++) //interior rows.
-            for(size_t i= 2;i<n_cols;i++) //interior columns.
+            for(size_t k= 2;k<n_cols;k++) //interior columns.
               create_node(node_pos(i,j,k),i,j,k);
+	
+	for(size_t i= 1; i<=n_layers; i++)
+	  for(size_t j= 1; j<=n_rows; j++)
+	    for(size_t k= 1; k<=n_cols; k++)
+	      {
+		const Node *nPtr= ttzNodes(i,j,k);
+		if(!nPtr) // null pointer.
+		  {
+		    bool interior= (i!=1 && i!=n_layers) && (j!=1 && j!=n_rows) && (k!=1 && k!=n_rows);
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; null pointer at position: ("
+			      << i << ", " << j << ", " << k << ") pos= "
+			      << node_pos(i,j,k)
+			      << " interior: " << interior
+			      << Color::def << std::endl;
+		  }
+	      }
       }
     else
       if(verbosity>2)
