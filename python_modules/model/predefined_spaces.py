@@ -476,7 +476,14 @@ class PredefinedSpace(object):
 
     def conciliaNDivs(self):
         '''Conciliate the number of divisions of the lines.'''
-        return self.preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
+        bodies= self.preprocessor.getMultiBlockTopology.getBodies
+        if(bodies.size>0):
+            retval= bodies.conciliaNDivs()
+        else:
+            surfaces= self.preprocessor.getMultiBlockTopology.getSurfaces
+            retval= surfaces.conciliaNDivs()
+        return retval
+    
     def getNDivErrorsTags(self):
         ''' Return the identifies of the lines that have an incomptible number of divisions.'''
         return self.preprocessor.getMultiBlockTopology.getSurfaces.getNDivErrorsTags()
