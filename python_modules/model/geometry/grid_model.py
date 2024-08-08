@@ -772,6 +772,15 @@ class GridModel(object):
         '''
         IJKrange=self.getIJKrangeFromXYZrange(XYZrange)
         self.scaleCoorZPointsRange(IJKrange,zOrig,scale)
+
+    def moveCylPointToRadius(self,pnt,radius):
+        '''Move point in the cylindrical coordinate system 
+        to radius coordinate given as parameter
+        '''
+        vdir=geom.Vector2d(pnt.getPos.x-self.xCentCoo,pnt.getPos.y-self.yCentCoo,).normalized()
+        pnt.getPos.x= self.xCentCoo+radius*vdir.x
+        pnt.getPos.y= self.yCentCoo+radius*vdir.y
+         
         
     def moveCylPointsIJKrangeToRadius(self,ijkRange,radius):
         '''Move points in a 3D grid-region limited by the ijkRange 
@@ -780,10 +789,8 @@ class GridModel(object):
         given as parameter
         '''
         sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
-        for p in sPtMove.getPoints:
-            vdir=geom.Vector2d(p.getPos.x-self.xCentCoo,p.getPos.y-self.yCentCoo,).normalized()
-            p.getPos.x= self.xCentCoo+radius*vdir.x
-            p.getPos.y= self.yCentCoo+radius*vdir.y
+        for pnt in sPtMove.getPoints:
+            self.moveCylPointToRadius(pnt,radius)
         sPtMove.clear()
 
     def moveCylPointsXYZrangeToRadius(self,xyzRange,radius):
@@ -794,6 +801,48 @@ class GridModel(object):
         '''
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         self.moveCylPointsIJKrangeToRadius(ijkRange,radius)
+
+    def moveCylPointsIJKRangeToVarRadius(self,ijkRange,RangMin,RangMax):
+        '''Move points in a 3D grid-region limited by the ijkRange
+        ((imin,jmin,kmin),(imax,jmax,kmax))
+        in the cylindrical coordinate system to a varibale radius 
+        coordinate given as parameter 
+        
+        :param ijkRange: range of index
+        :param RangMin: radius to which move point of minimum angle in each 
+               of the ijRanges included in ijkRange 
+        :param RangMax: radius to which move point of maximum angle in each 
+               of the ijRanges included in ijkRange 
+        '''
+        lstIJranges=ijkRange.extractIncludedIJranges()
+        for r in lstIJranges:
+            (imin,jmin,kmin)=ijkRange.ijkMin
+            (imax,jmax,kmax)=ijkRange.ijkMax
+            angMin=self.gridCoo[1][jmin]
+            angMax=self.gridCoo[1][jmax]
+            slope=(RangMax-RangMin)/(angMax-angMin)
+            for i in range(imin,imax+1):
+                for j in range(jmin,jmax+1):
+                    ang=self.gridCoo[1][j]
+                    radius=RangMin+slope*(ang-angMin)
+                    pnt=self.getPntGrid((i,j,kmin))
+                    self.moveCylPointToRadius(pnt,radius)
+                    
+    def moveCylPointsXYXRangeToVarRadius(self,xyzRange,RangMin,RangMax):
+        '''Move points in a 3D grid-region limited by the xyzRange
+        ((xmin,ymin,zmin),(xmax,ymax,zmax))
+        in the cylindrical coordinate system to a varibale radius 
+        coordinate given as parameter 
+        
+        :param ijkRange: range of index
+        :param RangMin: radius to which move point of minimum angle in each 
+               of the ijRanges included in ijkRange 
+        :param RangMax: radius to which move point of maximum angle in each 
+               of the ijRanges included in ijkRange 
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        self.moveCylPointsIJKRangeToVarRadius(ijkRange,RangMin,RangMax)
+                                        
         
     def movePointsRangeToZcylinder(self,ijkRange,xCent,yCent,R):
         '''Moves the points in the range to make them belong to 
@@ -1199,7 +1248,7 @@ class GridModel(object):
             if nameSurf in self.dicQuadSurf:
                 setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
         setSurf.fillDownwards()    
-        return setVol
+        return setSurf
     
     def getSetHexaedrOneRegion(self,ijkRange,setName,closeCyl='N'):
         '''return the set of hexaedral volumes and all the entities(surfaces,lines, 
