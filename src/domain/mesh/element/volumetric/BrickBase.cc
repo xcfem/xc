@@ -33,6 +33,7 @@
 #include "vtkCellType.h"
 #include "utility/geom/d3/3d_polyhedrons/Tetrahedron3d.h"
 #include "domain/mesh/element/utils/ParticlePos3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 const int XC::BrickBase::numberNodes; //!< Number of nodes.
 const int XC::BrickBase::ndm; //!< Space dimension
@@ -103,39 +104,101 @@ BoolArray3d XC::BrickBase::getNodePattern(void) const
   }
 
 //! @brief Put the element on the mesh being passed as parameter.
-XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,meshing_dir dm) const
+XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const NodePtrArray3d &nodes, meshing_dir dm) const
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();
     const size_t numberOfRows= nodes.getNumberOfRows();
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
-    ElemPtrArray3d retval(numberOfLayers-1,numberOfRows-1,numberOfColumns-1);
+    ElemPtrArray3d retval(numberOfLayers-1, numberOfRows-1, numberOfColumns-1);
     if(mesh_dim<3)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; three-dimensional mesh needed, can't create elements."
-		<< std::endl;
+		<< Color::def << std::endl;
     else
       {
         for(size_t i=1;i<numberOfLayers;i++)
           for(size_t j=1;j<numberOfRows;j++)
             for(size_t k=1;k<numberOfColumns;k++)
               {
-	        XC::Element *tmp= this->getCopy();
                 const Node *Nd1= nodes(i,j,k);
+		if(!Nd1)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i << ", " << j << "; " << k << ")"
+			     << " is null."
+			     << Color::def << std::endl;
                 const Node *Nd2= nodes(i,j+1,k);
+		if(!Nd2)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i << ", " << j+1 << "; " << k << ")"
+			     << " is null."
+			     << Color::def << std::endl;
                 const Node *Nd3= nodes(i,j+1,k+1);
+		if(!Nd3)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i << ", " << j+1 << "; " << k+1 << ")"
+			     << " is null."
+			     << Color::def << std::endl;
                 const Node *Nd4= nodes(i,j,k+1);
-                const Node *Nd5= nodes(i+1,j,k);
-                const Node *Nd6= nodes(i+1,j+1,k);
-                const Node *Nd7= nodes(i+1,j+1,k+1);
-                const Node *Nd8= nodes(i+1,j,k+1);
-                bool changed= tmp->getNodePtrs().set_id_nodes(Nd1->getTag(),Nd2->getTag(),Nd3->getTag(),Nd4->getTag(),Nd5->getTag(),Nd6->getTag(),Nd7->getTag(),Nd8->getTag());
-		if(changed)
-		  std::cerr << getClassName() << "::" << __FUNCTION__
-	                    << "; nodes were already assingned.."
-		             << std::endl;
+		if(!Nd4)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i << ", " << j << "; " << k+1 << ")"
+			     << " is null."
+			     << Color::def << std::endl;
 
-                retval(i,j,k)= tmp;
+                const Node *Nd5= nodes(i+1,j,k);
+		if(!Nd5)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i+1 << ", " << j << "; " << k << ")"
+			     << " is null."
+			     << Color::def << std::endl;
+                const Node *Nd6= nodes(i+1,j+1,k);
+		if(!Nd6)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i+1 << ", " << j+1 << "; " << k << ")"
+			     << " is null."
+			     << Color::def << std::endl;
+                const Node *Nd7= nodes(i+1,j+1,k+1);
+		if(!Nd7)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i+1 << ", " << j+1 << "; " << k+1 << ")"
+			     << " is null."
+			     << Color::def << std::endl;
+                const Node *Nd8= nodes(i+1,j,k+1);
+		if(!Nd8)
+		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+			     << " pointer at position: "
+			     << "(" << i+1 << ", " << j << "; " << k+1 << ")"
+			     << " is null."
+			     << Color::def << std::endl;
+		if(Nd1 && Nd2 && Nd3 && Nd4 && Nd5 && Nd6 && Nd7 && Nd8)
+		  {
+	            Element *tmp= this->getCopy();
+		    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1->getTag(),Nd2->getTag(),Nd3->getTag(),Nd4->getTag(),Nd5->getTag(),Nd6->getTag(),Nd7->getTag(),Nd8->getTag());
+		    if(changed)
+		      {
+			std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+				  << "; nodes were already assingned.."
+				  << Color::def << std::endl;
+		      }
+		    retval(i,j,k)= tmp;
+		  }
+		else
+		  {    
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; some nodes pointers are null. Element: "
+		              << "(" << i << ", " << j << "; " << k << ")"
+		              << " ignored."
+			      << Color::def << std::endl;
+		    retval(i,j,k)= nullptr;
+		  }
               }
       }
     return retval;
