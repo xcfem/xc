@@ -143,78 +143,117 @@ void XC::SetEstruct::add_elements_to_handler(const ElemPtrArray3d &elements)
       }
   }
 
+//! @brief Return the nodes of the set in a list.
+std::list<const XC::Node *> XC::SetEstruct::getNodes(void) const
+  {
+    std::list<const Node *> retval;
+    const size_t numberOfLayers= getNumNodeLayers();
+    if(numberOfLayers>0)
+      {
+        const size_t numberOfRows= getNumNodeRows();
+        const size_t numberOfColumns= getNumNodeColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
+              retval.push_back(getNode(i,j,k));
+      }
+    return retval;
+  }
+
+//! @brief Return the nodes of the set in a list.
+std::list<XC::Node *> XC::SetEstruct::getNodes(void)
+  {
+    std::list<Node *> retval;
+    const size_t numberOfLayers= getNumNodeLayers();
+    if(numberOfLayers>0)
+      {
+        const size_t numberOfRows= getNumNodeRows();
+        const size_t numberOfColumns= getNumNodeColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
+              retval.push_back(getNode(i,j,k));
+      }
+    return retval;
+  }
+
 //! @brief Returns the tags of the nodes.
 std::set<int> XC::SetEstruct::getNodeTags(void) const
   {
     std::set<int> retval;
-    const size_t numberOfLayers= getNumNodeLayers();
-    if(numberOfLayers>0)
-      {
-        const size_t numberOfRows= getNumNodeRows();
-        const size_t numberOfColumns= getNumNodeColumns();
-        for(size_t i= 1;i<=numberOfLayers;i++)
-          for(size_t j= 1;j<=numberOfRows;j++)
-            for(size_t k= 1;k<=numberOfColumns;k++)
-              retval.insert(getNode(i,j,k)->getTag());
-      }
+    const std::list<const Node *> tmp= this->getNodes();
+    for(std::list<const Node *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      retval.insert((*i)->getTag());
     return retval;
   }
 
 //! @brief Return the nodes of the set in a Python list.
-boost::python::list XC::SetEstruct::getNodes(void)
+boost::python::list XC::SetEstruct::getNodesPy(void)
   {
     boost::python::list retval;
-    const size_t numberOfLayers= getNumNodeLayers();
-    if(numberOfLayers>0)
+    const std::list<Node *> tmp= this->getNodes();
+    for(std::list<Node *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
       {
-        const size_t numberOfRows= getNumNodeRows();
-        const size_t numberOfColumns= getNumNodeColumns();
-        for(size_t i= 1;i<=numberOfLayers;i++)
-          for(size_t j= 1;j<=numberOfRows;j++)
-            for(size_t k= 1;k<=numberOfColumns;k++)
-              {
-                Node *tmp= getNode(i,j,k);
-                boost::python::object pyObj(boost::ref(*tmp));
-                retval.append(pyObj);
-              }
+	Node *tmp= *i;
+	boost::python::object pyObj(boost::ref(*tmp));
+	retval.append(pyObj);
       }
     return retval;
   }
 
+//! @brief Returns the elements in a list.
+std::list<const XC::Element *> XC::SetEstruct::getElements(void) const
+  {
+    std::list<const Element *> retval;
+    const size_t numberOfLayers= getNumElementLayers();
+    if(numberOfLayers>0)
+      {
+        const size_t numberOfRows= getNumElementRows();
+        const size_t numberOfColumns= getNumElementColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
+              retval.push_back(getElement(i,j,k));
+      }
+    return retval;
+  }
+
+//! @brief Returns the elements in a list.
+std::list<XC::Element *> XC::SetEstruct::getElements(void)
+  {
+    std::list<Element *> retval;
+    const size_t numberOfLayers= getNumElementLayers();
+    if(numberOfLayers>0)
+      {
+        const size_t numberOfRows= getNumElementRows();
+        const size_t numberOfColumns= getNumElementColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
+              retval.push_back(getElement(i,j,k));
+      }
+    return retval;
+  }
 
 //! @brief Returns the tags of the elements.
 std::set<int> XC::SetEstruct::getElementTags(void) const
   {
     std::set<int> retval;
-    const size_t numberOfLayers= getNumElementLayers();
-    if(numberOfLayers>0)
-      {
-        const size_t numberOfRows= getNumElementRows();
-        const size_t numberOfColumns= getNumElementColumns();
-        for(size_t i= 1;i<=numberOfLayers;i++)
-          for(size_t j= 1;j<=numberOfRows;j++)
-            for(size_t k= 1;k<=numberOfColumns;k++)
-              retval.insert(getElement(i,j,k)->getTag());
-      }
+    const std::list<const XC::Element *> tmp= this->getElements();
+    for(std::list<const XC::Element *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      retval.insert((*i)->getTag());
     return retval;
   }
 
-boost::python::list XC::SetEstruct::getElements(void)
+boost::python::list XC::SetEstruct::getElementsPy(void)
   {
     boost::python::list retval;
-    const size_t numberOfLayers= getNumElementLayers();
-    if(numberOfLayers>0)
+    const std::list<Element *> tmp= this->getElements();
+    for(std::list<Element *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
       {
-        const size_t numberOfRows= getNumElementRows();
-        const size_t numberOfColumns= getNumElementColumns();
-        for(size_t i= 1;i<=numberOfLayers;i++)
-          for(size_t j= 1;j<=numberOfRows;j++)
-            for(size_t k= 1;k<=numberOfColumns;k++)
-              {
-                Element *tmp= getElement(i,j,k);
-                boost::python::object pyObj(boost::ref(*tmp));
-                retval.append(pyObj);
-              }
+	Element *tmp= *i;
+	boost::python::object pyObj(boost::ref(*tmp));
+	retval.append(pyObj);
       }
     return retval;
   }

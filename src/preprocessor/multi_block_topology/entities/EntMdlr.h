@@ -109,6 +109,7 @@ class EntMdlr: public SetEstruct
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
     ID getNodeIndices(const Node *) const;
+    ID getIndicesOfNearestNode(const Pos3d &) const;
     virtual Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1);
     virtual const Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
     Node *findNode(const int &tag);

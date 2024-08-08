@@ -100,6 +100,7 @@ class Body: public EntMdlr
         bool checkNDivs(void) const;
 	
         Node *getNode(const size_t &,const size_t &);
+	std::vector<Node *> getCornerNodes(void);
 	
         boost::python::dict getPyDict(void) const;
         void setPyDict(SurfaceMap &, const boost::python::dict &);

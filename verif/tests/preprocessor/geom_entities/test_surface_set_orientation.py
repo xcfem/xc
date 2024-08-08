@@ -75,9 +75,9 @@ if(err<1e-12):
 else:
     lmsg.error(fname+' ERROR.')
 
-# from postprocess import output_handler
 
 #Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # oh.displayBlocks()#setToDisplay= )

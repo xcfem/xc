@@ -681,9 +681,6 @@ python tests/preprocessor/geom_entities/test_reflection_01.py
 python tests/preprocessor/geom_entities/test_cartesian_ref_sys_01.py
 python tests/preprocessor/geom_entities/test_cartesian_ref_sys_02.py
 python tests/preprocessor/geom_entities/test_cartesian_ref_sys_03.py
-python tests/preprocessor/geom_entities/test_unif_grid_01.py
-python tests/preprocessor/geom_entities/test_unif_grid_02.py
-python tests/preprocessor/geom_entities/test_unif_grid_03.py
 python tests/preprocessor/geom_entities/test_quadrilateral_surface_01.py
 python tests/preprocessor/geom_entities/test_quadrilateral_surface_02.py
 python tests/preprocessor/geom_entities/test_quadrilateral_surface_03.py
@@ -702,7 +699,15 @@ python tests/preprocessor/geom_entities/split_line_02.py
 python tests/preprocessor/geom_entities/split_line_03.py
 python tests/preprocessor/geom_entities/test_split_lines_01.py
 python tests/preprocessor/geom_entities/test_split_lines_02.py
+python tests/preprocessor/geom_entities/test_unif_grid_01.py
+python tests/preprocessor/geom_entities/test_unif_grid_02.py
+python tests/preprocessor/geom_entities/test_unif_grid_03.py
 python tests/preprocessor/geom_entities/test_block_definition.py
+python tests/preprocessor/geom_entities/test_block_01.py
+python tests/preprocessor/geom_entities/test_block_02.py
+python tests/preprocessor/geom_entities/test_block_03.py
+python tests/preprocessor/geom_entities/test_block_04.py
+
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py
 python tests/preprocessor/meshing/test_surface_meshing_01.py

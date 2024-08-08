@@ -17,9 +17,10 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-# Materials definition
+# Material definition
 elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.25,0.0)
-
+# Mesh
+## Nodes.
 nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nod9= nodes.newNodeXYZ(0,0,0)
@@ -31,7 +32,7 @@ nod14= nodes.newNodeXYZ(1,0,1)
 nod15= nodes.newNodeXYZ(1,1,1)
 nod16= nodes.newNodeXYZ(0,1,1)
 
-
+## Elements.
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast3d.name
 brick= elements.newElement("Brick",xc.ID([nod9.tag,nod10.tag,nod11.tag,nod12.tag,nod13.tag,nod14.tag,nod15.tag,nod16.tag]))

@@ -40,6 +40,7 @@
 #include "utility/geom/d2/Polygon3d.h"
 
 #include "boost/lexical_cast.hpp"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
 XC::NodePtrArray3d::NodePtrArray3d(const size_t n_layers)
@@ -82,11 +83,11 @@ XC::Node *XC::NodePtrArray3d::getNearestNode(const Pos3d &p)
     double d= DBL_MAX;
     double tmp= 0;
     if(numberOfLayers>100)
-      std::clog << getClassName() << "::" << __FUNCTION__
-	        << "Node pointers array has "
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	        << "; node pointers array has "
                 << numberOfLayers << " layers. "
                 << "It is better to search by coordinates in the associated set."
-                << std::endl;
+                << Color::def << std::endl;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
         NodePtrArray &layer= operator()(i);
@@ -122,6 +123,15 @@ XC::ID XC::NodePtrArray3d::getNodeIndices(const Node *n) const
                 break;
               }
           }
+    if(retval[0]==-1) // not found. 
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; node "
+		  << n->getTag() << " in position: "
+		  << n->getInitialPosition3d() << " not found. "
+		  << Color::def << std::endl;
+	std::exit(EXIT_FAILURE);
+      }
     return retval;
   }
 
@@ -305,14 +315,16 @@ std::vector<XC::Node *> getNodePtrs(const XC::NodePtrArray3d::constant_i_layer_c
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     if(j>=numberOfRows)
       {
-        std::cerr << __FUNCTION__ << "; row index j= " << j
-		  << " out of range.\n";
+        std::cerr << Color::red << __FUNCTION__ << "; row index j= " << j
+		  << " out of range."
+	          << Color::def << std::endl;
         return retval;
       }
     if(k>=numberOfColumns)
       {
-        std::cerr << __FUNCTION__ << "; column index k= " << k
-		  << " out of range.\n";
+        std::cerr << Color::red << __FUNCTION__ << "; column index k= " << k
+		  << " out of range."
+		  << Color::def << std::endl;
         return retval;
       }
 
@@ -326,8 +338,10 @@ std::vector<XC::Node *> getNodePtrs(const XC::NodePtrArray3d::constant_i_layer_c
         if(ptr)
           retval[cont]= ptr;
 	else
-          std::cerr << __FUNCTION__ << "; error obtaining node at ("
-			<< j << ',' << k << ").\n";
+          std::cerr << Color::red << __FUNCTION__
+		    << "; error obtaining node at ("
+		    << j << ',' << k << ")."
+		    << Color::def << std::endl;
 	cont++;
       }
     return retval;
@@ -374,10 +388,11 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer
     const double area= tmp.getArea();
     if(area<elem_warning_area)
       {
-        std::clog << __FUNCTION__
+        std::clog << Color::yellow << __FUNCTION__
 		  << "; area for (" << j << ',' << k
                   << ") cell is too small (" << area << ").\n"
-		  << " polygon " << tmp << std::endl;
+		  << " polygon " << tmp
+		  << Color::def << std::endl;
       }
     return retval;
   }
@@ -412,9 +427,11 @@ std::vector<int> XC::getNodeIdsQuad9N(const XC::NodePtrArray3d::constant_i_layer
     const double area= tmp.getArea();
     if(area<1e-3)
       {
-        std::cerr << "Area for (" << j << ',' << k
-                  << ") cell is too small (" << area << ").\n";
-        std::cerr << " polygon " << tmp << std::endl;
+        std::cerr << Color::red << __FUNCTION__
+		  << "Area for (" << j << ',' << k
+                  << ") cell is too small (" << area << ").\n"
+		  << " polygon " << tmp << Color::def
+		  << std::endl;
       }
     return retval;
   }
