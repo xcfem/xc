@@ -274,6 +274,24 @@ class GridModel(object):
         tagPto= self.indices.getPnt(indPnt[0]+1,indPnt[1]+1,indPnt[2]+1).tag
         return tagPto
 
+    def getXYZcooPnt(self,pnt):
+        ''' Return the (x,y,z) coordinates of point pnt'''
+        pos=pnt.getPos
+        return (pos.x,pos.y,pos.z)
+
+    def getCylCooPnt(self,pnt):
+        ''' Return the cylindrical coorfinates of the point pnt
+        (radius,angle in degrees from X axis counterclockwise, Z)
+        '''
+        x,y,z=self.getXYZcooPnt(pnt)
+        deltaX=x-self.xCentCoo
+        deltaY=y-self.yCentCoo        
+        radius=math.sqrt(deltaX**2+deltaY**2)
+        angle=math.degrees(math.atan2(deltaY,deltaX))
+        if angle<0: angle+=360
+        return (radius,angle,z)
+        
+        
     def gridHexaedrName(self,pt1,pt2,pt3,pt4,pt5,pt6,pt7,pt8):
         '''Return the name of the hexaedral volume defined by 8 points.
 
@@ -378,7 +396,7 @@ class GridModel(object):
 
         - Origin: point of coordinates (xCentCoo,yCentCoo,0)
         - Longitudinal axis: Z
-        - Azimuth expressed in degrees counterclockwise from the X-axis direction
+        - Azimuth expressed in degrees counterclockwise from the X-axis direction (Z+)
         
         Coordinates are defined:
         
@@ -456,6 +474,7 @@ class GridModel(object):
           p.getPos.y+= vDisp[1]
           p.getPos.z+= vDisp[2]
         sPtMove.clear()
+        
 
     def moveAllPoints(self,vDisp):
         '''Move all points in the grid to a new position
@@ -490,12 +509,14 @@ class GridModel(object):
         p.getPos.z+= vDisp[2]
         
 
-    def slopePointsRange(self,ijkRange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0):
+    def slopePointsRange(self,ijkRange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0,cylCoo=False):
         '''Applies one or two slopes (in X and Y directions) 
         to points in a 3D grid-region limited by 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). Only Z coordinate
         of points is modified.
+        If cylindrical coordinates (cylCoo=True), x is taken as the radius and
+        y is taken as the angle
 
         :param ijkRange: range for the search.
         :param slopeX: slope in X direction, expressed as deltaZ/deltaX 
@@ -504,17 +525,25 @@ class GridModel(object):
         :param slopeY: slope in Y direction, expressed as deltaZ/deltaY)
                        (defaults to 0 = no slope applied)
         :param yZeroSlope: coordinate Y of the "rotation axis".
+        :param cylCoo: True if cylindric coordinates (defaults to False)
         '''
         sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
-        for p in sPtMove.getPoints:
-          p.getPos.z+= slopeX*(p.getPos.x-xZeroSlope)+slopeY*(p.getPos.y-yZeroSlope)
+        if not cylCoo:
+            for p in sPtMove.getPoints:
+                p.getPos.z+= slopeX*(p.getPos.x-xZeroSlope)+slopeY*(p.getPos.y-yZeroSlope)
+        else:
+            for p in sPtMove.getPoints:
+                rad,ang,z=self.getCylCooPnt(p)
+                p.getPos.z+= slopeX*(rad-xZeroSlope)+slopeY*(ang-yZeroSlope)
         sPtMove.clear()
 
-    def slopePointsXYZrange(self,XYZrange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0):
+    def slopePointsXYZrange(self,XYZrange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0,cylCoo=False):
         '''Applies one or two slopes (in X and Y directions) 
         to points in a 3D grid-region limited by an
         xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         Only Z coordinate of points is modified.
+        If cylindrical coordinates (cylCoo=True), x is taken as the radius and
+        y is taken as the angle
 
         :param XYZrange: range for the search.
         :param slopeX: slope in X direction, expressed as deltaZ/deltaX 
@@ -523,10 +552,11 @@ class GridModel(object):
         :param slopeY: slope in Y direction, expressed as deltaZ/deltaY)
                        (defaults to 0 = no slope applied)
         :param yZeroSlope: coordinate Y of the "rotation axis".
+        :param cylCoo: True if cylindric coordinates (defaults to False)
         '''
 
         ijkRange=self.getIJKrangeFromXYZrange(XYZrange)
-        return self.slopePointsRange(ijkRange,slopeX,xZeroSlope,slopeY,yZeroSlope)
+        return self.slopePointsRange(ijkRange,slopeX,xZeroSlope,slopeY,yZeroSlope,cylCoo)
         
     def rotPntsZAxis(self,ijkRange,angle,xyRotCent):
         '''Rotates points in ijkRange around a Z axis passing by xyRotCent.
@@ -620,7 +650,7 @@ class GridModel(object):
             p.getPos.z= xzRotCent[1]+sinTheta*(xp-xzRotCent[0])+cosTheta*(zp-xzRotCent[1])
         sPtMove.clear()
 
-    def rotPntsXYZtangeYAxis(self,XYZrange,angle,xzRotCent):
+    def rotPntsXYZrangeYAxis(self,XYZrange,angle,xzRotCent):
         '''Rotates points in ijkRange around a Y axis passing by xzRotCent.
 
         :param XYZrange: range for the search.
@@ -743,8 +773,9 @@ class GridModel(object):
         IJKrange=self.getIJKrangeFromXYZrange(XYZrange)
         self.scaleCoorZPointsRange(IJKrange,zOrig,scale)
         
-    def moveCylPointsRadius(self,ijkRange,radius):
+    def moveCylPointsIJKrangeToRadius(self,ijkRange,radius):
         '''Move points in a 3D grid-region limited by the ijkRange 
+        ((imin,jmin,kmin),(imax,jmax,kmax))
         in the cylindrical coordinate system to radius coordinate 
         given as parameter
         '''
@@ -753,9 +784,17 @@ class GridModel(object):
             vdir=geom.Vector2d(p.getPos.x-self.xCentCoo,p.getPos.y-self.yCentCoo,).normalized()
             p.getPos.x= self.xCentCoo+radius*vdir.x
             p.getPos.y= self.yCentCoo+radius*vdir.y
-            
         sPtMove.clear()
 
+    def moveCylPointsXYZrangeToRadius(self,xyzRange,radius):
+        '''Move points in a 3D grid-region limited by the xyzRange
+        ((xmin,ymin,zmin),(xmax,ymax,zmax))
+        in the cylindrical coordinate system to radius coordinate 
+        given as parameter
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        self.moveCylPointsIJKrangeToRadius(ijkRange,radius)
+        
     def movePointsRangeToZcylinder(self,ijkRange,xCent,yCent,R):
         '''Moves the points in the range to make them belong to 
         a cylinder with radius R and axis parallel to global Z passing 
@@ -1141,6 +1180,27 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.genLinMultiRegion(lstIJKRange,setName)
         
+    def getSetSurfOneRegion(self,ijkRange,setName,closeCyl='N'):
+        '''return the set of surfaces and all the entities (lines, 
+        points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax).
+
+        :param ijkRange: instance of IJKRange class
+        :param setName: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+        '''
+        setSurf= self.prep.getSets.defSet(setName)
+        nmSurfinRang=self.getNmSurfInRange(ijkRange,closeCyl)
+        for nameSurf in nmSurfinRang:
+            if nameSurf in self.dicQuadSurf:
+                setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
+        setSurf.fillDownwards()    
+        return setVol
+    
     def getSetHexaedrOneRegion(self,ijkRange,setName,closeCyl='N'):
         '''return the set of hexaedral volumes and all the entities(surfaces,lines, 
         points, elements, nodes, ...) associated 

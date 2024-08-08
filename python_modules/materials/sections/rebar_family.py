@@ -116,6 +116,19 @@ class RebarRow(Rebar):
                         equal to (width/spacing).
         '''
         return self.getAs(width, roundUp)*self.steel.fyd()
+
+    def getClearDist(self):
+        '''Return the clear distance between parallel bars
+        '''
+        retval=self.spacing-self.diam
+        return retval
+
+    def getClearDistLap(self):
+        '''Return the clear distance between lapped parallel bars
+        Lapped bars are supposed to touch one another within the lap length
+        '''
+        retval=self.spacing-2*self.diam
+        return retval
     
 class RebarFamily(RebarRow):
     ''' Family of reinforcement bars.'''

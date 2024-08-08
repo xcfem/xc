@@ -151,7 +151,7 @@ class CameraParameters(object):
         elif(self.viewName.lower()=="ypos"):
           self.viewUpVc= [0,0,1]
           self.posCVc= [0,100,0]
-        elif(self.viewName.lower()=="YNeg"):
+        elif(self.viewName.lower()=="yneg"):
           self.viewUpVc= [0,0,1]
           self.posCVc= [0,-100,0]
         elif(self.viewName.lower()=="xpos"):
