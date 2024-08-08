@@ -39,6 +39,7 @@
 #include "utility/geom/coo_sys/Rect3d3dCooSys.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "vtkCellType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 double extrapolation_data[2]= {1.0,-1.0};
 
@@ -63,29 +64,32 @@ bool XC::Element0D::Vxy::check(void) const
     const double nx= x.Norm();
     if(nx<1e-6)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; vector I= " << x
                   << " has a very small modulus: "
-                  << nx << std::endl;
+                  << nx
+		  << Color::def << std::endl;
         retval= false;
       }
     const double ny= y.Norm();
     if(ny<1e-6)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; vector J= " << y
                   << " has a very small modulus: "
-                  << ny << std::endl;
+                  << ny
+		  << Color::def << std::endl;
         retval= false;
       }
     Vector3d vx(x[0],x[1],x[2]);
     Vector3d vy(y[0],y[1],y[2]);
     if(parallel(vx,vy))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; vector I= " << x
                   << " and J= " << y << " are almost parallel, angle: "
-                  << angle(vx,vy) << " radians." << std::endl;
+                  << angle(vx,vy) << " radians."
+		  << Color::def << std::endl;
         retval= false;
       }
     return retval;
@@ -183,9 +187,9 @@ const XC::Vector &XC::Element0D::getZ(void) const
 XC::Matrix XC::Element0D::getLocalAxes(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "not implemented for deformed geometry."
-                << std::endl;
+                << Color::def << std::endl;
     return transformation;
   }
 
@@ -193,9 +197,9 @@ XC::Matrix XC::Element0D::getLocalAxes(bool initialGeometry) const
 Rect3d3dCooSys XC::Element0D::getCooSys(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "not implemented for deformed geometry."
-                << std::endl;
+                << Color::def << std::endl;
     const Vector3d x(transformation(0,0), transformation(0,1), transformation(0,2));
     const Vector3d y(transformation(1,0), transformation(1,1), transformation(1,2));
     const Vector3d z(transformation(2,0), transformation(2,1), transformation(2,2));
@@ -210,8 +214,9 @@ void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
   { 
     // check that vectors for orientation are correct size
     if(x.Size() != 3 || yp.Size() != 3 )
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; incorrect dimension of orientation vectors\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; incorrect dimension of orientation vectors."
+	        << Color::def << std::endl;
 			
     // establish orientation of element for the transformation matrix
     // z = x cross yp
@@ -233,8 +238,9 @@ void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
 
     // check valid x and y vectors, i.e. not parallel and not of zero length
     if(xn == 0 || yn == 0 || zn == 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; invalid vectors (parallel or zero length vectors).\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; invalid vectors (parallel or zero length vectors)."
+	        << Color::def << std::endl;
     
     // create transformation matrix of direction cosines
     for(int i= 0;i<3;i++)
@@ -255,8 +261,9 @@ void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
     // ensure the connectedExternalNode ID is of correct size & set values
     if(theNodes.size() != 2)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed to create an ID of correct size\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed to create an ID of correct size."
+	          << Color::def << std::endl;
         exit(-1);
       }
     
@@ -283,10 +290,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
     const size_t dimf2= f2.Dimension();
     if(dimf1!=dimf2)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; the sets: " << f1.getName() << " y " << f2.getName()
                   << " have different dimension (" << dimf1  << " y " << dimf2
-                  << ")." << std::endl;
+                  << ")."
+		  << Color::def << std::endl;
         return retval;
       }
     if(dimf1==1)
@@ -303,9 +311,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(i,1,1)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(i,1,1)= tmp;
                   }
               }
@@ -319,9 +327,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(1,i,1)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(i,1,1)= tmp;
                   }
               }
@@ -335,9 +343,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(1,1,i)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(i,1,1)= tmp;
                   }
               }
@@ -354,9 +362,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(i,1,1)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(1,i,1)= tmp;
                   }
               }
@@ -370,9 +378,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(1,i,1)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(1,i,1)= tmp;
                   }
               }
@@ -386,9 +394,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(1,1,i)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(1,i,1)= tmp;
                   }
               }
@@ -405,9 +413,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(i,1,1)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(1,1,i)= tmp;
                   }
               }
@@ -421,9 +429,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(1,i,1)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(1,1,i)= tmp;
                   }
               }
@@ -437,9 +445,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     const int Nd2= f2.getNode(1,1,i)->getTag();
                     bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
 		    if(changed)
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				<< ": element nodes were already assingned."
-				<< std::endl;
+				<< Color::def << std::endl;
                     retval(1,1,i)= tmp;
                   }
               }
@@ -447,9 +455,9 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
       }
     if(dimf1>1)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; sewing in 2 or 3 dimensions not implemented."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     return retval;
   }

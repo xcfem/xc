@@ -111,11 +111,7 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const NodePtrArray3d &nodes, meshi
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
     ElemPtrArray3d retval(numberOfLayers-1, numberOfRows-1, numberOfColumns-1);
-    if(mesh_dim<3)
-      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	        << "; three-dimensional mesh needed, can't create elements."
-		<< Color::def << std::endl;
-    else
+    if(mesh_dim==3) // 3D mesh required.
       {
         for(size_t i=1;i<numberOfLayers;i++)
           for(size_t j=1;j<numberOfRows;j++)
