@@ -708,6 +708,7 @@ python tests/preprocessor/geom_entities/test_block_02.py
 python tests/preprocessor/geom_entities/test_block_03.py
 python tests/preprocessor/geom_entities/test_block_04.py
 python tests/preprocessor/geom_entities/test_block_05.py
+python tests/preprocessor/geom_entities/test_block_06.py
 
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py
