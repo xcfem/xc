@@ -122,7 +122,8 @@ class Body: public EntMdlr
     virtual size_t getNumberOfVertices(void) const= 0;
     //! @brief Return the number of faces in the object.
     virtual size_t getNumberOfFaces(void) const= 0;
-    virtual std::set<const Face *> getSurfaces(void)= 0;
+    virtual std::set<const Face *> getSurfaces(void) const= 0;
+    virtual std::set<Face *> getSurfaces(void)= 0;
     virtual const BodyFace *getFace(const size_t &i) const= 0;
     virtual const CmbEdge::Side *getEdge(const size_t &i) const= 0;
     virtual const Pnt *getVertex(const size_t &i) const= 0;
