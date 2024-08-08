@@ -266,6 +266,31 @@ def lstElem_to_set(preprocessor,lstElem,setName):
     return s  
 
 
+def append_quadSurfaces_on_points(setPoints,setSurf,onlyIncluded=True):
+    '''append to a set of surfaces those attached to a given set of points.
+
+    :param setPoints:    set of points
+    :param setSurf    :  set of surfaces 
+    :param onlyIncluded: True to select only lines whose both ends are in the 
+                         set of points
+                         False to select all lines that 'touch' the set of 
+                         points
+                         (defaults to True)
+                         
+    '''
+    prep=setPoints.getPreprocessor
+    allSurf=prep.getSets.getSet('total').getSurfaces
+    lstTagsPnt=[p.tag for p in setPoints.getPoints]
+    Dqsurf=setSurf.getSurfaces
+    if onlyIncluded==True:
+        lstSurf=[s for s in allSurf if (s.getKPoints()[0] in lstTagsPnt and s.getKPoints()[1] in lstTagsPnt and s.getKPoints()[2]  in lstTagsPnt and s.getKPoints()[3]  in lstTagsPnt)]
+    else:
+        lstSurf=[s for s in allSurf if (s.getKPoints()[0] in lstTagsPnt or s.getKPoints()[1] in lstTagsPnt or s.getKPoints()[2] in lstTagsPnt or s.getKPoints()[3] in lstTagsPnt)]
+    for s in lstSurf:
+        if s not in Dqsurf:
+            Dqsurf.append(s)
+    
+        
 def get_lines_on_points(setPoints,setLinName,onlyIncluded=True):
     '''return a set of lines (and all the entities of lower rank associated) 
     from a given set of points.
