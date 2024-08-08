@@ -225,11 +225,11 @@ void XC::SetEntities::clearAll(void)
 void XC::SetEntities::fillDownwards(void)
   {
     // Bodies
-//     for(lst_bodies::iterator i=bodies.begin();i!=bodies.end();i++)
-//       {
-//         lst_surfaces ss= (*i)->getSurfaces();
-//         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
-//       }
+    for(lst_body_pointers::iterator i= bodies.begin();i!= bodies.end();i++)
+      {
+        std::set<Face *> ss= (*i)->getSurfaces();
+        surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
+      }
     
     // Surface holes.
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
@@ -262,11 +262,11 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
   {
     fillDownwards(); // append entities.
     // Bodies
-//     for(lst_bodies::iterator i=bodies.begin();i!=bodies.end();i++)
-//       {
-//         lst_surfaces ss= (*i)->getSurfaces();
-//         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
-//       }
+    for(lst_body_pointers::iterator i=bodies.begin();i!=bodies.end();i++)
+      {
+        std::set<Face *> ss= (*i)->getSurfaces();
+        surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
+      }
     // Surfaces
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
