@@ -1180,6 +1180,27 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.genLinMultiRegion(lstIJKRange,setName)
         
+    def getSetSurfOneRegion(self,ijkRange,setName,closeCyl='N'):
+        '''return the set of surfaces and all the entities (lines, 
+        points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax).
+
+        :param ijkRange: instance of IJKRange class
+        :param setName: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+        '''
+        setSurf= self.prep.getSets.defSet(setName)
+        nmSurfinRang=self.getNmSurfInRange(ijkRange,closeCyl)
+        for nameSurf in nmSurfinRang:
+            if nameSurf in self.dicQuadSurf:
+                setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
+        setSurf.fillDownwards()    
+        return setVol
+    
     def getSetHexaedrOneRegion(self,ijkRange,setName,closeCyl='N'):
         '''return the set of hexaedral volumes and all the entities(surfaces,lines, 
         points, elements, nodes, ...) associated 
