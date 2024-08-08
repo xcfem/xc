@@ -38,6 +38,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "utility/geom/pos_vec/Pos3dArray.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor
 XC::SideSequence::SideSequence(const size_t first,const bool &_forward)
@@ -200,16 +201,18 @@ Pos3dArray XC::Body::BodyFace::get_positions(void) const
   {
     if(!surface)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; pointer to surface is null." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; pointer to surface is null."
+		  << Color::def << std::endl;
         return Pos3dArray(); 
       }
     const int numEdges= surface->getNumberOfEdges();
     if(numEdges!=4)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; can't mesh " << numEdges
-	          << " edges surfaces." << std::endl;
+	          << " edges surfaces."
+		  << Color::def << std::endl;
         return Pos3dArray();
       }
     const CmbEdge::Side *l1= getSide(1);
@@ -220,16 +223,18 @@ Pos3dArray XC::Body::BodyFace::get_positions(void) const
     //Columns of point quasi.parallels to l1 and l3 and increasing index from l1 to l3.
     if(l1->NDiv()!=l3->NDiv())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; lines 1 and 3 have different number of divisions. "
-	          << "Can't generate mesh." << std::endl;
+	          << "Can't generate mesh."
+		  << Color::def << std::endl;
         return Pos3dArray();
       }
     if(l2->NDiv()!=l4->NDiv())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; lines 2 and 4 have different number of divisions. "
-	          << "Can't generate mesh." << std::endl;
+	          << "Can't generate mesh."
+		  << Color::def << std::endl;
         return Pos3dArray();
       }
     Pos3dArray ptos_l1= l1->getNodePosForward();
@@ -254,8 +259,9 @@ void XC::Body::BodyFace::create_nodes(void)
     if(surface)
       surface->create_nodes();
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; pointer to surface is null." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to surface is null."
+		<< Color::def << std::endl;
   }
 
 //! @brief Return a Python dictionary with the object members values.
@@ -293,16 +299,18 @@ BND3d XC::Body::Bnd(void) const
     const size_t nv= getNumberOfVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; body is empty." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; body is empty."
+		  << Color::def << std::endl;
       }
     else
       {
         retval= BND3d(getVertex(1)->getPos(),getVertex(1)->getPos());
 	if(nv<2)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; body has only one point." << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; body has only one point."
+		      << Color::def << std::endl;
 	  }
 	else
 	  {
@@ -316,8 +324,9 @@ BND3d XC::Body::Bnd(void) const
 //! @brief Returns the object volume
 double XC::Body::getVolume(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
     return 0.0;
   }
 //! @brief Returns true if this object lies inside the
@@ -328,13 +337,15 @@ bool XC::Body::In(const GeomObj3d &geomObj, const double &tol) const
     const size_t nv= getNumberOfVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; body is empty." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; body is empty."
+		  << Color::def << std::endl;
       }
     else if(nv<2)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; body has only one point." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; body has only one point."
+		  << Color::def << std::endl;
 	retval= geomObj.In(getVertex(1)->getPos(),tol);
       }
     else
@@ -368,8 +379,9 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; preprocessor needed."
+		<< Color::def << std::endl;
     return retval;
   }
 

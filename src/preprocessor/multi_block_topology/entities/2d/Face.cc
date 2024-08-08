@@ -44,6 +44,7 @@
 #include "vtkCellType.h"
 
 #include <gmsh.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::Face::Face(void)
@@ -94,9 +95,10 @@ int XC::Face::get_index_opposite_side(const int &indice) const
 	retval= (indice+n_2) % numSides;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; number of sides is odd. There is no"
-	        << " opposite side." << std::endl;
+	        << " opposite side."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -124,15 +126,17 @@ XC::Edge *XC::Face::get_opposite_side(const Edge *l)
             retval= lines[indOpp].getEdge();
 	  }
 	else //No la encuentra.
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; line :" << l->getName() 
 		    << " is not an edge of the surface: "
-		    << getName() << std::endl;
+		    << getName()
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; number of sides is odd. There is no"
-	        << " opposite side." << std::endl;
+	        << " opposite side."
+		<< Color::def << std::endl;
     return retval;    
   }
 
@@ -149,19 +153,21 @@ size_t XC::Face::calc_ndiv_opposite_sides(const Edge *edgeA,const size_t &nd) co
         if(ndA==ndB)
           retval= ndA;
         else
-	  std::cerr << __FUNCTION__ << "; sides: "
+	  std::cerr << Color::red << __FUNCTION__ << "; sides: "
                     << edgeA->getName() << " y " << edgeB->getName() 
                     << " are already meshed, and they have different number of divisions ("
-                    << ndA << " y " << ndB << std::endl;
+                    << ndA << " y " << ndB
+		    << Color::def << std::endl;
       }
     else if(edgeA->hasNodes()) //A edge already meshed.
       {
         if(ndA!=nd)
           {
-	    std::clog << __FUNCTION__ << "; edge: "
+	    std::clog << Color::red << __FUNCTION__ << "; edge: "
                       << edgeA->getName()
                       << " is already meshed, division number can't be changed."
-                      << " to " << nd << " keeping NDiv= " << ndA << std::endl;
+                      << " to " << nd << " keeping NDiv= " << ndA
+		      << Color::def << std::endl;
             retval= ndA;
           }
       }
@@ -169,10 +175,11 @@ size_t XC::Face::calc_ndiv_opposite_sides(const Edge *edgeA,const size_t &nd) co
       {
         if(ndB!=nd)
           {
-	    std::clog << __FUNCTION__ << "; edge: "
+	    std::clog << Color::red << __FUNCTION__ << "; edge: "
                       << edgeB->getName()
                       << " is already meshed, division number can't be changed."
-                      << " to " << nd << " keeping NDiv= " << ndB << std::endl;
+                      << " to " << nd << " keeping NDiv= " << ndB
+		      << Color::def << std::endl;
             retval= ndB;
           }
       }
@@ -199,8 +206,9 @@ void XC::Face::setNDiv(const size_t &nd)
           (*i).setNDiv(nd);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; no sides defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; no sides defined."
+		<< Color::def << std::endl;
   }
 
 
@@ -216,12 +224,12 @@ void XC::Face::setNDivI(const size_t &ndi)
       }
     else
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; surface: " << getName()
 	          << " has an odd number of sides: "
 	          << numSides << " cannot set sizes on I sides."
 	          << " Using setNDiv instead."
-	          << std::endl;
+	          << Color::def << std::endl;
 	setNDiv(ndi);
       }
   }
@@ -238,12 +246,12 @@ void XC::Face::setNDivJ(const size_t &ndj)
       }
     else
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; surface: " << getName()
 	          << " has an odd number of sides: "
 	          << numSides << " cannot set sizes on J sides."
 	          << " Using setNDiv instead."
-	          << std::endl;
+	          << Color::def << std::endl;
 	setNDiv(ndj);
       }
   }
@@ -258,10 +266,11 @@ void XC::Face::set_ndiv_opposite_sides(const size_t &A,const size_t &nd)
         Edge *edgeA= lines[A].getEdge();
         const size_t ndc= calc_ndiv_opposite_sides(edgeA,nd);
 	if(ndc!=nd)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; cannot set the number of divisions"
 		    << " to " << nd << " using " << ndc
-	            << " instead." << std::endl;
+	            << " instead."
+		    << Color::def << std::endl;
         if(ndc>0)
           {
 	    const size_t B= get_index_opposite_side(A);
@@ -275,9 +284,10 @@ void XC::Face::set_ndiv_opposite_sides(const size_t &A,const size_t &nd)
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; number of sides is odd: " 
-                << lines.size() << " there is no opposite side." << std::endl;
+                << lines.size() << " there is no opposite side."
+		<< Color::def << std::endl;
   }
 
 //! @brief If the i-th edge and its opposite edges are incompatibles return a
@@ -307,13 +317,15 @@ bool XC::Face::checkNDivs(const size_t &i) const
       {
         const size_t ndivA= tmp[0]->NDiv();
         const size_t ndivB= tmp[1]->NDiv();
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; lines: "
-                  << tmp[0]->getName() << " and "
-                  << tmp[1]->getName() 
-                  << " of surface: " << getName()
-                  << " have different number of divisions ("
-                  << ndivA << " y " << ndivB << ')' << std::endl;
+	if(verbosity>0)
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		    << "; lines: "
+		    << tmp[0]->getName() << " and "
+		    << tmp[1]->getName() 
+		    << " of surface: " << getName()
+		    << " have different number of divisions ("
+		    << ndivA << " y " << ndivB << ')'
+		    << Color::def << std::endl;
         return false;
       }
     else
@@ -415,12 +427,12 @@ void XC::Face::SetElemSizeI(const double &sz)
       }	
     else
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; surface: " << getName()
 	          << " has an odd number of sides: "
 	          << numSides << " cannot set sizes on I and J sides."
 	          << " Using setElemSize instead."
-	          << std::endl;
+	          << Color::def << std::endl;
 	SetElemSize(sz);
       }
   }
@@ -448,12 +460,12 @@ void XC::Face::SetElemSizeJ(const double &sz)
       }	
     else
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; surface: " << getName()
 	          << " has an odd number of sides: "
 	          << numSides << " cannot set sizes on I and J sides."
 	          << " Using setElemSize instead."
-	          << std::endl;
+	          << Color::def << std::endl;
 	SetElemSize(sz);
       }
   }
@@ -472,12 +484,12 @@ void XC::Face::SetElemSizeIJ(const double &szI,const double &szJ)
       }
     else
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; surface: " << getName()
 	          << " has an odd number of sides: "
 	          << numSides << " cannot set sizes on I and J sides."
 	          << " Using setElemSize instead."
-	          << std::endl;
+	          << Color::def << std::endl;
 	SetElemSize(szI);
       }
   }
@@ -538,10 +550,10 @@ void XC::Face::addHole(PolygonalFace *pFace)
   {
     // Check if hole is already added
     if(findHolePtr(pFace))
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; hole: " << pFace->getName()
 		<< " is already added. Doing nothing."
-	        << std::endl;
+	        << Color::def << std::endl;
     else
       {
 	pFace->setHole(true);
@@ -674,16 +686,17 @@ std::vector<XC::Node *> XC::Face::create_interior_nodes(const std::vector<Pos3d>
 	    for(size_t i=0;i<sz;i++)
 	      retval[i]= create_node(positions[i],1,1,i+1);
 	    if(verbosity>5)
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; created " << ttzNodes.NumPtrs() << " node(s)."
-			<< std::endl;
+			<< Color::def << std::endl;
 	  }
       }
     else
       if(verbosity>2)
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		  << "; nodes from entity: '" << getName()
-		  << "' already exist." << std::endl;
+		  << "' already exist."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -710,16 +723,17 @@ int XC::Face::create_elements_from_quads(const std::deque<std::vector<int> > &qu
 		ttzElements(1,1,i+1)= tmp;
 	      }
 	    else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; empty quad at position: " << i
-			<< std::endl;
+			<< Color::def << std::endl;
 	  }
 	add_elements_to_handler(ttzElements);
 	retval= numElements;
       }
     else if(verbosity>0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; seed element not set." << std::endl;
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; seed element not set."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -804,19 +818,21 @@ int XC::Face::SenseOfEdge(const Edge *l,const Face &other) const
     const size_t ind_l_esta= IndiceEdge(l);
     if(ind_l_esta == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; line :" << l->getName() 
                   << " is not an edge of the surface: "
-		  << getName() << std::endl;
+		  << getName()
+		  << Color::def << std::endl;
         return 0;
       }
     const size_t ind_l_other= other.IndiceEdge(l);
     if(ind_l_other == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; line :" << l->getName() 
                   << " is not an edge of the surface: "
-		  << other.getName() << std::endl;
+		  << other.getName()
+		  << Color::def << std::endl;
         return 0;
       }
     //Search the edges on each surface;
@@ -1042,8 +1058,9 @@ std::set<XC::SetBase *> XC::Face::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; preprocessor needed."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -1088,16 +1105,18 @@ const XC::Node *XC::Face::getNode(const size_t &i,const size_t &j) const
     else if(ttzNodes.isKConstantLayer())
       retval= CmbEdge::getNode(i,j,1);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; the node set is not one-dimensional." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; the node set is not one-dimensional."
+		<< Color::def << std::endl;
     return retval;
   }
 
 //! @brief Returns a pointer to node which index is being passed as parameter.
 XC::Node *XC::Face::getNode(const size_t &i)
   {
-    std::cerr << getClassName() << __FUNCTION__
-              << "; must not be called with only one index." << std::endl; 
+    std::cerr << Color::red << getClassName() << __FUNCTION__
+              << "; must not be called with only one index."
+	      << Color::def << std::endl; 
     return nullptr;
   }
 
@@ -1190,8 +1209,9 @@ void XC::Face::setPyDict(const boost::python::dict &d)
 	this->update_topology();
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; preprocessor needed."
+		<< Color::def << std::endl;
     this->hole= boost::python::extract<bool>(d["hole"]);
   }
 

@@ -158,7 +158,11 @@ std::set<const XC::Edge *> XC::SurfaceMap::getHomologousSides(const Edge *edge) 
   }
 
 //! @brief Find a face between the points or creates a new one.
-//! and inserts it on the container
+//! and inserts it on the container.
+//! @param pA: first vertex of the new (or existing) face.
+//! @param pB: second vertex of the new (or existing) face.
+//! @param pC: third vertex of the new (or existing) face.
+//! @param pD: fourth vertex of the new (or existing) face.
 XC::Face *XC::SurfaceMap::findOrCreateFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
   {
     Face *retval= nullptr;
@@ -174,7 +178,9 @@ XC::Face *XC::SurfaceMap::findOrCreateFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
 			<< "), are the same." << std::endl;
 	retval= find_face_ptr_by_vertices(*pA,*pB,*pC,*pD);
         if(!retval) //Face doesn't exists.
-          retval= newQuadSurfacePts(pA->getTag(),pB->getTag(),pC->getTag(),pD->getTag());
+	  {
+	    retval= newQuadSurfacePts(pA->getTag(),pB->getTag(),pC->getTag(),pD->getTag());
+	  }
         if(!retval)
 	  std::cerr << getClassName() << __FUNCTION__
 		    << "; can't get a surface"

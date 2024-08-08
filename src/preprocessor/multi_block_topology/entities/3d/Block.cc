@@ -157,13 +157,18 @@ XC::Block::BodyFace *XC::Block::getFace(const size_t &i)
 
 //! @brief Creates a new face between the points being passed as parameters
 //! and inserts it on the faces set.
+//! @param i: index of the face in this block.
+//! @param pA: first vertex of the new (or existing) face.
+//! @param pB: second vertex of the new (or existing) face.
+//! @param pC: third vertex of the new (or existing) face.
+//! @param pD: fourth vertex of the new (or existing) face.
 XC::Face *XC::Block::newFace(const size_t &i,Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
   {
     Face *retval= nullptr;
     assert(getPreprocessor());
     retval= dynamic_cast<Face *>(getPreprocessor()->getMultiBlockTopology().getSurfaces().findOrCreateFace(pA,pB,pC,pD));
     if(retval)
-      { put(i,retval); }
+      { put(i, retval); }
     else
        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		 << "; surface with vertices: "
