@@ -101,7 +101,8 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
 
-modelSpace.constraints.removeSPConstraint(spcTag)
+#modelSpace.constraints.removeSPConstraint(spcTag)
+modelSpace.removeConstraint(spc)
 
 # Solution procedure
 result= modelSpace.analyze(calculateNodalReactions= True)

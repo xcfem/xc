@@ -72,11 +72,9 @@ result= analysis.analyze(1)
 nodes= preprocessor.getNodeHandler 
 delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
-
-
-
-modelSpace.constraints.removeSPConstraint(spc.tag)
-# remove_fix{20}
+# Remove the constraint.
+# modelSpace.constraints.removeSPConstraint(spc.tag)
+modelSpace.removeConstraint(spc)
 
 
 
