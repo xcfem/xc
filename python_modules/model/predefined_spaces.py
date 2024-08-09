@@ -668,6 +668,30 @@ class PredefinedSpace(object):
         combs= self.getLoadHandler().getLoadCombinations
         return combs.remove(name)
 
+    def removeSPConstraint(self, constraintToRemove):
+        ''' Remove the given constrain. Returns true if
+            the constraint has been succesfully removed.
+
+        :param constraintToRemove: constraint to remove.
+        '''
+        return self.preprocessor.removeSFreedom_Constraint(constraintToRemove)
+
+    def removeMFreedom_Constraint(self, constraintToRemove):
+        ''' Remove the given constrain. Returns true if
+            the constraint has been succesfully removed.
+
+        :param constraintToRemove: constraint to remove.
+        '''
+        return self.preprocessor.removeMFreedom_Constraint(constraintToRemove)
+
+    def removeMRMFreedom_Constraint(self, constraintToRemove):
+        ''' Remove the given constrain. Returns true if
+            the constraint has been succesfully removed.
+
+        :param constraintToRemove: constraint to remove.
+        '''
+        return self.preprocessor.removeMRMFreedom_Constraint(constraintToRemove)
+
     def newSPConstraint(self, nodeTag: int, dof: int, prescribedDisp= 0.0):
         ''' Prescribe displacement for node DOFs.
 
