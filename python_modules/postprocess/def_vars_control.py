@@ -115,13 +115,13 @@ def updateEnvelopeInternalForcesTruss(trussElem):
     maxN= trussElem.getProp('N+') # [back node value, front node value]
     minN= trussElem.getProp('N-')
     if(N1>maxN[0]):
-      maxN[0]= N1
+        maxN[0]= N1
     if(N1<minN[0]):
-      minN[0]= N1
+        minN[0]= N1
     if(N2>maxN[1]):
-      maxN[1]= N2
+        maxN[1]= N2
     if(N2<minN[1]):
-      minN[1]= N2
+        minN[1]= N2
     trussElem.setProp('N+',maxN)
     trussElem.setProp('N-',minN)
 
@@ -138,30 +138,36 @@ def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
     minN= beamElem2D.getProp('N-')
     minM= beamElem2D.getProp('Mz-')
     minV= beamElem2D.getProp('Vy-')
+    # Back node axial load.
     if(N1>maxN[0]):
-      maxN[0]= N1
+        maxN[0]= N1
     if(N1<minN[0]):
-      minN[0]= N1
+        minN[0]= N1
+    # Back node bending moment.
     if(M1>maxM[0]):
-      maxM[0]= M1
+        maxM[0]= M1
     if(M1<minM[0]):
-      minM[0]= M1
+        minM[0]= M1
+    # Back node shear load.
     if(V1>maxV[0]):
-      maxV[0]= V1
+        maxV[0]= V1
     if(V1<minV[0]):
-      minV[0]= V1
+        minV[0]= V1
+    # Front node axial load.
     if(N2>maxN[1]):
-      maxN[1]= N2
+        maxN[1]= N2
     if(N2<minN[1]):
-      minN[1]= N2
+        minN[1]= N2
+    # Front node axial load.
     if(M2>maxM[1]):
-      maxM[1]= M2
+        maxM[1]= M2
     if(M2<minM[1]):
-      minM[1]= M2
+        minM[1]= M2
+    # Front node axial load.
     if(V2>maxV[1]):
-      maxV[1]= V2
+        maxV[1]= V2
     if(V2<minV[1]):
-      minV[1]= V2
+        minV[1]= V2
     beamElem2D.setProp('N+',maxN)
     beamElem2D.setProp('Mz+',maxM)
     beamElem2D.setProp('Vy+',maxV)
@@ -253,17 +259,17 @@ def updateEnvelopeInternalForcesBeamElem(beamElem):
     beamElem.setProp('T-',minT)
   
 def defSteelShapeElasticRangeElementParameters(e,shape):
-  e.setProp("nmbSecc",shape.name)
-  e.setProp("Area",shape.A())
-  e.setProp("fyd",shape.steelType.fyd())
-  e.setProp("fydV",shape.steelType.fydV())
+    e.setProp("nmbSecc",shape.name)
+    e.setProp("Area",shape.A())
+    e.setProp("fyd",shape.steelType.fyd())
+    e.setProp("fydV",shape.steelType.fydV())
 
-  e.setProp("Wyel",shape.get('Wyel'))
-  e.setProp("Wzel",shape.get('Wzel'))
-  e.setProp("AreaQz",shape.get('AreaQz'))
-  e.setProp("AreaQy",shape.get('AreaQy'))
+    e.setProp("Wyel",shape.get('Wyel'))
+    e.setProp("Wzel",shape.get('Wzel'))
+    e.setProp("AreaQz",shape.get('AreaQz'))
+    e.setProp("AreaQy",shape.get('AreaQy'))
 
 
 def defSteelShapeElasticRangeParametersForSet(elems,shape):
-  for e in elems:
-    defSteelShapeElasticRangeElementParameters(e,shape)
+    for e in elems:
+        defSteelShapeElasticRangeElementParameters(e,shape)
