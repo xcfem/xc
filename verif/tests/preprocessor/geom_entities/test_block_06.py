@@ -58,11 +58,14 @@ pt12= modelSpace.newKPoint(0,2,1)
 bodies= preprocessor.getMultiBlockTopology.getBodies
 b1= bodies.newBlockPts(pt1.tag, pt2.tag, pt3.tag, pt4.tag, pt5.tag, pt6.tag, pt7.tag, pt8.tag)
 b2= bodies.newBlockPts(pt4.tag, pt3.tag, pt9.tag, pt10.tag, pt8.tag, pt7.tag, pt11.tag, pt12.tag)
+
+vl= b2.getVerbosityLevel() # Get current verbosity level.
 b2.setVerbosityLevel(0) # Don't bother with warning messages
                         # that will be solved.
 b2.nDivI= 2
 b2.nDivJ= 2
 b2.nDivK= 2
+b2.setVerbosityLevel(vl) # Restore previous verbosity level.
 
 modelSpace.conciliaNDivs()
 
