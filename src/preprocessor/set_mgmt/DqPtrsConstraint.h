@@ -50,7 +50,7 @@ class DqPtrsConstraint: public DqPtrs<Constraint>
     explicit DqPtrsConstraint(const std::deque<Constraint *> &ts);
     explicit DqPtrsConstraint(const std::set<const Constraint *> &ts);
 
-    std::set<int> getTags(void) const;
+    const ID &getTypes(void) const;
 
     Constraint *buscaConstrainto(const int &tag);
     const Constraint *buscaConstrainto(const int &tag) const;

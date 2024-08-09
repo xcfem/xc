@@ -418,7 +418,7 @@ bool XC::Domain::remove(Node *n)
 //! domain).
 bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
-    bool retval= constraints.removeSFreedom_Constraint(theNode,theDOF,loadPatternTag);
+    const bool retval= constraints.removeSFreedom_Constraint(theNode,theDOF,loadPatternTag);
     if(retval)
       domainChange();
     return retval;
@@ -430,7 +430,7 @@ bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatt
 //! @param tag: identifier of the single freedom constraint.
 bool XC::Domain::removeSFreedom_Constraint(int tag)
   {
-    bool retval= constraints.removeSFreedom_Constraint(tag);
+    const bool retval= constraints.removeSFreedom_Constraint(tag);
     if(retval)
       domainChange();
     return retval;
@@ -450,7 +450,7 @@ bool XC::Domain::removeSFreedom_Constraint(int tag)
 //! @param tag: identifier of the constraint.
 bool XC::Domain::removeMFreedom_Constraint(int tag)
   {
-    bool result = constraints.removeMFreedom_Constraint(tag);
+    const bool result= constraints.removeMFreedom_Constraint(tag);
     if(result)
       domainChange();
     return result;
@@ -463,11 +463,12 @@ bool XC::Domain::removeMFreedom_Constraint(int tag)
 //! @param tag: identifier of the constraint.
 bool XC::Domain::removeMRMFreedom_Constraint(int tag)
   {
-    bool result = constraints.removeMRMFreedom_Constraint(tag);
+    const bool result= constraints.removeMRMFreedom_Constraint(tag);
     if(result)
       domainChange();
     return result;
   }
+
 //! @brief Remove the element from the domain.
 //! @param c: constraint to remove from the domain.
 bool XC::Domain::remove(Constraint *c)
@@ -846,7 +847,6 @@ const XC::Element *XC::Domain::getElement(int tag) const
 bool XC::Domain::existNode(int tag)
  { return mesh.existNode(tag); }
 
-
 //! @brief Return a pointer to the node identified by the argument.
 //!
 //! @param tag: node identifier.
@@ -858,6 +858,60 @@ XC::Node *XC::Domain::getNode(int tag)
 //! @param tag: node identifier.
 const XC::Node *XC::Domain::getNode(int tag) const
   { return mesh.getNode(tag); }
+
+//! @brief Return true if the SFreedom constraint exists.
+//!
+//! @param tag: constraint identifier.
+bool XC::Domain::existSFreedom_Constraint(int tag)
+ { return constraints.existSFreedom_Constraint(tag); }
+
+//! @brief Return a pointer to the SFreedom constraint identified by the argument.
+//!
+//! @param tag: constraint identifier.
+XC::Constraint *XC::Domain::getSFreedom_Constraint(int tag)
+  { return constraints.getSFreedom_Constraint(tag); }
+
+//! @brief Return a pointer to the SFreedom constraint identified by the argument.
+//!
+//! @param tag: constraint identifier.
+const XC::Constraint *XC::Domain::getSFreedom_Constraint(int tag) const
+  { return constraints.getSFreedom_Constraint(tag); }
+
+//! @brief Return true if the MFreedom constraint exists.
+//!
+//! @param tag: constraint identifier.
+bool XC::Domain::existMFreedom_Constraint(int tag)
+ { return constraints.existMFreedom_Constraint(tag); }
+
+//! @brief Return a pointer to the MFreedom constraint identified by the argument.
+//!
+//! @param tag: constraint identifier.
+XC::Constraint *XC::Domain::getMFreedom_Constraint(int tag)
+  { return constraints.getMFreedom_Constraint(tag); }
+
+//! @brief Return a pointer to the MFreedom constraint identified by the argument.
+//!
+//! @param tag: constraint identifier.
+const XC::Constraint *XC::Domain::getMFreedom_Constraint(int tag) const
+  { return constraints.getMFreedom_Constraint(tag); }
+
+//! @brief Return true if the MRMFreedom constraint exists.
+//!
+//! @param tag: constraint identifier.
+bool XC::Domain::existMRMFreedom_Constraint(int tag)
+ { return constraints.existMRMFreedom_Constraint(tag); }
+
+//! @brief Return a pointer to the MRMFreedom constraint identified by the argument.
+//!
+//! @param tag: constraint identifier.
+XC::Constraint *XC::Domain::getMRMFreedom_Constraint(int tag)
+  { return constraints.getMRMFreedom_Constraint(tag); }
+
+//! @brief Return a pointer to the MRMFreedom constraint identified by the argument.
+//!
+//! @param tag: constraint identifier.
+const XC::Constraint *XC::Domain::getMRMFreedom_Constraint(int tag) const
+  { return constraints.getMRMFreedom_Constraint(tag); }
 
 
 //! @brief Return a pointer to the parameter identified by the argument.

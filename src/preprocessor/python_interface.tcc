@@ -56,6 +56,11 @@ class_<XC::Preprocessor, bases<CommandEntity>, boost::noncopyable >("Preprocesso
   .def("resetLoadCase",&XC::Preprocessor::resetLoadCase)
   .def("setDeadSRF",XC::Preprocessor::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .def("removeElement", removeElement, "Remove the given element from the FE problem.")
+  .def("removeElement", &XC::Preprocessor::removeElement, "Remove the element with the given tag from the FE problem.")
   .def("removeNode", removeNode, "Remove the given node from the FE problem.")
+  .def("removeNode", &XC::Preprocessor::removeNode, "Remove the node with the given tag from the FE problem.")
   .def("removeConstraint", removeConstraint, "Remove the given node from the FE problem.")
+  .def("removeSFreedom_Constraint", &XC::Preprocessor::removeSFreedom_Constraint, "Remove the constraint with the given tag from the FE problem.")
+  .def("removeMFreedom_Constraint", &XC::Preprocessor::removeMFreedom_Constraint, "Remove the constraint with the given tag from the FE problem.")
+  .def("removeMRMFreedom_Constraint", &XC::Preprocessor::removeMRMFreedom_Constraint, "Remove the constraint with the given tag from the FE problem.")
   ;

@@ -222,6 +222,16 @@ class Domain: public ObjWithRecorders, public DistributedBase
     bool existNode(int tag);
     virtual Node *getNode(int tag);
     virtual const Node *getNode(int tag) const;
+    bool existSFreedom_Constraint(int tag);
+    virtual Constraint *getSFreedom_Constraint(int tag);
+    virtual const Constraint *getSFreedom_Constraint(int tag) const;
+    bool existMFreedom_Constraint(int tag);
+    virtual Constraint *getMFreedom_Constraint(int tag);
+    virtual const Constraint *getMFreedom_Constraint(int tag) const;
+    bool existMRMFreedom_Constraint(int tag);
+    virtual Constraint *getMRMFreedom_Constraint(int tag);
+    virtual const Constraint *getMRMFreedom_Constraint(int tag) const;
+    
 
     virtual Parameter *getParameter(int tag);        
     virtual const Parameter *getParameter(int tag) const;        

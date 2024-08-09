@@ -133,10 +133,15 @@ class ConstrContainer: public MeshComponentContainer
     std::map<int,NodeLocker *> &getNodeLockers(void);
     virtual SFreedom_ConstraintIter &getDomainAndLoadPatternSPs();
 
+    virtual bool existSFreedom_Constraint(int tag) const;
     virtual SFreedom_Constraint *getSFreedom_Constraint(int tag);
+    virtual const SFreedom_Constraint *getSFreedom_Constraint(int tag) const;
+    virtual bool existMFreedom_Constraint(int tag) const;
     virtual MFreedom_Constraint *getMFreedom_Constraint(int tag);
+    virtual const MFreedom_Constraint *getMFreedom_Constraint(int tag) const;
+    virtual bool existMRMFreedom_Constraint(int tag) const;
     virtual MRMFreedom_Constraint *getMRMFreedom_Constraint(int tag);
-    virtual Constraint *getConstraint(int tag);
+    virtual const MRMFreedom_Constraint *getMRMFreedom_Constraint(int tag) const;
     LoadPattern *getLoadPattern(const int &);
     const LoadPattern *getLoadPattern(const int &) const;
     NodeLocker *getNodeLocker(const int &, bool silent= false);
