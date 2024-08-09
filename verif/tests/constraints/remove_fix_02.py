@@ -84,7 +84,6 @@ elem1= elements.newElement("ForceBeamColumn3d",xc.ID([nod1.tag,nod2.tag]))
 # Constraints
 modelSpace.fixNode000_000(nod1.tag)
 spc= modelSpace.constraints.newSPConstraint(nod2.tag,1,0.0)
-spcTag= spc.tag
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -100,9 +99,8 @@ nodes= preprocessor.getNodeHandler
 delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
-
-#modelSpace.constraints.removeSPConstraint(spcTag)
-modelSpace.removeConstraint(spc)
+# Remove constraint.
+modelSpace.removeSPConstraint(spc.tag)
 
 # Solution procedure
 result= modelSpace.analyze(calculateNodalReactions= True)
