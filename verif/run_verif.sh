@@ -840,6 +840,7 @@ python tests/preprocessor/import_export/json/test_import_xc_model_01.py
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
 python tests/constraints/remove_fix_01.py
 python tests/constraints/remove_fix_02.py
+python tests/constraints/remove_equal_dof_01.py
 python tests/constraints/test_elastic_bearing_01.py
 python tests/constraints/test_elastic_bearing_02.py
 python tests/constraints/test_elastic_bearing_03.py
