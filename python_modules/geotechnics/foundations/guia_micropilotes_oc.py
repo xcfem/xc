@@ -435,8 +435,9 @@ class MicropileSection(object):
         '''Return bending efficiency
 
         :param Nd: required axial strength.
-        :param Mzd: required bending strength.
-        :param Vyd: required shear strength.
+        :param Md: required bending strength.
+        :param Vd: required shear strength.
+        :param C_R: adimensional coefficient from the table 3.6.
         :param Fuf: bending modulus reduction factor depending of the type
                     of the connection. Defaults to 0.5 
         '''
