@@ -1273,7 +1273,7 @@ class GridModel(object):
         '''
         setVol= self.prep.getSets.defSet(setName)
         nmVolinRang=self.getNmHexaedrInRange(ijkRange,closeCyl)
-        for nameVol in nmHexaedrinRang:
+        for nameVol in nmVolinRang:
             if nameVol in self.dicHexaedr:
                 setVol.getBodies.append(self.dicHexaedr[nameVol])
         setVol.fillDownwards()    
