@@ -196,7 +196,7 @@ class SetMeshComp: public SetBase
     //! @brief Clears out the constraints.
     void clearConstraints(void)
       { constraints.clearAll(); }
-    void sel_constraints_from_list(const ID &tags);
+    void sel_constraints_from_list(const ID &tags, const ID &types);
 
     void appendFromGeomEntity(const SetBase &);
 

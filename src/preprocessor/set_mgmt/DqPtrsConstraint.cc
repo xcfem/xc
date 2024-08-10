@@ -28,7 +28,10 @@
 #include "DqPtrsConstraint.h"
 #include "domain/constraints/Constraint.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
-#include "utility/functions/algebra/ExprAlgebra.h"
+//#include "utility/functions/algebra/ExprAlgebra.h"
+#include "domain/constraints/SFreedom_Constraint.h"
+#include "domain/constraints/MFreedom_Constraint.h"
+#include <domain/constraints/MRMFreedom_Constraint.h>
 
 
 //! @brief Constructor.
@@ -102,12 +105,41 @@ void XC::DqPtrsConstraint::numerate(void)
       }
   }
 
-//! @brief Returns the tags of the elements.
-std::set<int> XC::DqPtrsConstraint::getTags(void) const
+//! @brief Returns the tags of the constraints.
+const XC::ID &XC::DqPtrsConstraint::getTypes(void) const
   {
-    std::set<int> retval;
-    for(const_iterator i= begin();i!=end();i++)
-      retval.insert((*i)->getTag());
+    static ID retval;
+    const int sz= size();
+    if(sz>0)
+      {
+        retval.resize(sz);
+        int loc =0;
+        // loop over objs in deque adding their dbTag to the ID
+        for(const_iterator i= begin();i!=end();i++, loc++)
+          {
+	    const Constraint *c= *i;
+	    int cType= -1;
+	    if(c)
+	      {
+		const SFreedom_Constraint *spc= dynamic_cast<const SFreedom_Constraint *>(c);
+		if(spc)
+		  cType= 0;
+		else
+		  {
+		    const MFreedom_Constraint *mfc= dynamic_cast<const MFreedom_Constraint *>(c);
+		    if(mfc)
+		      cType= 1;
+		    else
+		      {
+			const MRMFreedom_Constraint *mrmf= dynamic_cast<const MRMFreedom_Constraint *>(c);
+			if(mrmf)
+			  cType= 2;
+		      }
+		  }
+	      }
+            retval(loc)= cType;
+          }
+      }
     return retval;
   }
 
@@ -146,3 +178,4 @@ XC::DqPtrsConstraint XC::operator*(const DqPtrsConstraint &a,const DqPtrsConstra
       }
     return retval;    
   }
+ 

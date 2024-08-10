@@ -110,13 +110,18 @@ class Preprocessor: public CommandEntity, public MovableObject
     void removeFromSets(Node *);
     void removeFromLoadPatterns(Node *);
     bool remove(Node *);
+    bool removeNode(const int &);
     void updateSets(Element *);
     void removeFromSets(Element *);
     void removeFromLoadPatterns(Element *);
     bool remove(Element *);
+    bool removeElement(const int &);
     void updateSets(Constraint *);
     void removeFromSets(Constraint *);
     bool remove(Constraint *);
+    bool removeSFreedom_Constraint(const int &);
+    bool removeMFreedom_Constraint(const int &);
+    bool removeMRMFreedom_Constraint(const int &);
 
     MapSet &get_sets(void)
       { return sets; }

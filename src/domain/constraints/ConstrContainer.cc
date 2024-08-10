@@ -602,6 +602,15 @@ XC::SFreedom_Constraint *XC::ConstrContainer::getSFreedom_Constraint(int tag)
     return result;
   }
 
+//! @brief Returns a pointer to the single freedom constraint whose identifier is being passed as parameter.
+//!
+//! @param tag: constraint identifier.
+const XC::SFreedom_Constraint *XC::ConstrContainer::getSFreedom_Constraint(int tag) const
+  {
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getSFreedom_Constraint(tag);
+  }
+
 //! @brief Returns a pointer to the multi-freedom constraint identified by
 //! the argument.
 //!
@@ -613,6 +622,16 @@ XC::MFreedom_Constraint *XC::ConstrContainer::getMFreedom_Constraint(int tag)
     if(!mc) return nullptr;
     MFreedom_Constraint *result= dynamic_cast<MFreedom_Constraint *>(mc);
     return result;
+  }
+
+//! @brief Returns a pointer to the multi-freedom constraint identified by
+//! the argument.
+//!
+//! @param tag: constraint identifier.
+const XC::MFreedom_Constraint *XC::ConstrContainer::getMFreedom_Constraint(int tag) const
+  {
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getMFreedom_Constraint(tag);
   }
 
 //! @brief Returns a pointer to the multi-row multi-freedom constraint
@@ -628,17 +647,43 @@ XC::MRMFreedom_Constraint *XC::ConstrContainer::getMRMFreedom_Constraint(int tag
     return result;
   }
 
-//! @brief Returns a pointer to the constraint whose identifier is
-//! being passed as parameter.
+//! @brief Returns a pointer to the multi-row multi-freedom constraint
+//! identified by the argument.
 //!
 //! @param tag: constraint identifier.
-XC::Constraint *XC::ConstrContainer::getConstraint(int tag)
+const XC::MRMFreedom_Constraint *XC::ConstrContainer::getMRMFreedom_Constraint(int tag) const
   {
-    Constraint *retval= getSFreedom_Constraint(tag);
-    if(!retval)
-      retval= getMFreedom_Constraint(tag);
-    if(!retval)
-      retval= getMRMFreedom_Constraint(tag);
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getMRMFreedom_Constraint(tag);
+  }
+
+//! @brief Returns true if the constraint exists.
+//!
+//! @param tag: constraint identifier.
+bool XC::ConstrContainer::existSFreedom_Constraint(int tag) const
+  {
+    const Constraint *tmp= this->getSFreedom_Constraint(tag);
+    bool retval= (tmp!=nullptr);
+    return retval;
+  }
+
+//! @brief Returns true if the constraint exists.
+//!
+//! @param tag: constraint identifier.
+bool XC::ConstrContainer::existMFreedom_Constraint(int tag) const
+  {
+    const Constraint *tmp= this->getMFreedom_Constraint(tag);
+    bool retval= (tmp!=nullptr);
+    return retval;
+  }
+
+//! @brief Returns true if the constraint exists.
+//!
+//! @param tag: constraint identifier.
+bool XC::ConstrContainer::existMRMFreedom_Constraint(int tag) const
+  {
+    const Constraint *tmp= this->getMRMFreedom_Constraint(tag);
+    bool retval= (tmp!=nullptr);
     return retval;
   }
 
@@ -792,7 +837,7 @@ void XC::ConstrContainer::applyLoad(double timeStep)
       theSP->applyConstraint(timeStep);
   }
 
-//! @brief Search on the container all the single freedom constraints with the node and degree of freedom being passed as parameter.
+//! @brief Search on the container all the single freedom constraints with the node and degree of freedom given.
 std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag, int theDOF) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -807,7 +852,7 @@ std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag, int theDOF) con
   }
 
 //! @brief Search on the container all the single freedom constraints that
-//! affect the node whose tag is being passed as parameter.
+//! affect the node whose tag is given.
 std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -815,7 +860,7 @@ std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag) const
   }
 
 //! @brief Search on the container all the multi-freedom constraints that
-//! affect the node and degree of freedom being passed as parameter.
+//! affect the node and degree of freedom given.
 std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag, int theDOF) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -823,7 +868,7 @@ std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag, int theDOF) con
   }
 
 //! @brief Search on the container all the multi-freedom constraints that
-//! affect the node whose tag is being passed as parameter.
+//! affect the node whose tag is given.
 std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -840,7 +885,7 @@ std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag, int theDOF) c
   }
 
 //! @brief Search on the container all the multi retained multi-freedom
-//! constraints that affect the node whose tag is being passed as parameter.
+//! constraints that affect the node whose tag is given.
 std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);

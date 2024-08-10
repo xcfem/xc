@@ -34,6 +34,7 @@
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 #include "domain/constraints/MFreedom_Constraint.h"
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
@@ -46,8 +47,6 @@
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/d3/BND3d.h"
 #include "utility/utils/misc_utils/colormod.h"
-
-
 
 //! @brief Constructor.
 XC::SetMeshComp::SetMeshComp(const std::string &nmb,Preprocessor *md)
@@ -796,7 +795,7 @@ void XC::SetMeshComp::addConstraint(Constraint *c)
 //! @brief Select the constraints identified by the tags.
 //!
 //! @param tags: identifiers of the constraints.
-void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
+void XC::SetMeshComp::sel_constraints_from_list(const ID &tags, const ID &cTypes)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -806,12 +805,32 @@ void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
-              if((tmp= preprocessor->getDomain()->getConstraints().getConstraint(tags(i))))
+	      const int cType= cTypes[i]; // Constraint type.
+	      const int tag= tags(i); // Identifier.
+	      switch(cType)
+		{
+		  case 0:
+		    tmp= preprocessor->getDomain()->getConstraints().getSFreedom_Constraint(tag);
+		    break;
+		  case 1:
+		    tmp= preprocessor->getDomain()->getConstraints().getMFreedom_Constraint(tag);
+		    break;
+		  case 2:
+		    tmp= preprocessor->getDomain()->getConstraints().getMRMFreedom_Constraint(tag);
+		    break;
+		  default:
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; constraint identified by: "
+			      << tag << " has an unknown type: " << cType
+			      << Color::def << std::endl;
+		    break;
+		}
+              if(tmp)
                 constraints.push_back(tmp);
               else
 		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; constraint identified by: "
-                          << tags(i) << " not found."
+                          << tag << " not found."
 			  << Color::def << std::endl;
             }
 
@@ -837,6 +856,8 @@ int XC::SetMeshComp::sendData(Communicator &comm)
     res+= nodes.sendTags(3,4,getDbTagData(),comm);
     res+= elements.sendTags(5,6,getDbTagData(),comm);
     res+= constraints.sendTags(7,8,getDbTagData(),comm);
+    const ID &cTypes= constraints.getTypes();
+    res+= comm.sendID(cTypes,getDbTagData(),CommMetaData(9));
     return res;
   }
 
@@ -850,7 +871,9 @@ int XC::SetMeshComp::recvData(const Communicator &comm)
     tmp= elements.receiveTags(5,6,getDbTagData(),comm);
     sel_elements_from_list(tmp);
     tmp= constraints.receiveTags(7,8,getDbTagData(),comm);
-    sel_constraints_from_list(tmp);
+    ID cTypes;
+    res+= comm.receiveID(cTypes,getDbTagData(),CommMetaData(9));
+    sel_constraints_from_list(tmp, cTypes);
     return res;
   }
 
@@ -942,10 +965,36 @@ boost::python::dict XC::SetMeshComp::getPyDict(void) const
     boost::python::list constraintTags;
     for(constraint_const_iterator i= constraints.begin(); i!=constraints.end(); i++)
       {
-	const Constraint *e= *i;
-        constraintTags.append(e->getTag());
+	const Constraint *c= *i;
+        constraintTags.append(c->getTag());
       }
     retval["constraintTags"]= constraintTags;
+    boost::python::list constraintTypes;
+    for(constraint_const_iterator i= constraints.begin(); i!=constraints.end(); i++)
+      {
+	const Constraint *c= *i;
+	int cType= -1;
+	if(c)
+	  {
+	    const SFreedom_Constraint *spc= dynamic_cast<const SFreedom_Constraint *>(c);
+	    if(spc)
+	      cType= 0;
+	    else
+	      {
+		const MFreedom_Constraint *mfc= dynamic_cast<const MFreedom_Constraint *>(c);
+		if(mfc)
+		  cType= 1;
+		else
+		  {
+		    const MRMFreedom_Constraint *mrmf= dynamic_cast<const MRMFreedom_Constraint *>(c);
+		    if(mrmf)
+		      cType= 2;
+		  }
+	      }
+	  }
+        constraintTypes.append(cType);
+      }
+    retval["constraintTypes"]= constraintTypes;
     return retval;
   }
 
@@ -957,8 +1006,6 @@ void XC::SetMeshComp::setPyDict(const boost::python::dict &d)
     const size_t numNodes= boost::python::len(nodeTags);
     boost::python::list elementTags= boost::python::extract<boost::python::list>(d["elementTags"]);
     const size_t numElements= boost::python::len(elementTags);
-    boost::python::list constraintTags= boost::python::extract<boost::python::list>(d["constraintTags"]);
-    const size_t numConstraints= boost::python::len(constraintTags);
     ID nIds(numNodes);
     for(size_t i= 0; i<numNodes; i++)
       {
@@ -972,12 +1019,19 @@ void XC::SetMeshComp::setPyDict(const boost::python::dict &d)
 	const size_t elementTag= boost::python::extract<int>(elementTags[i]);
 	eIds[i]= elementTag;
       }
-    sel_elements_from_list(eIds);   
+    sel_elements_from_list(eIds);
+    
+    boost::python::list constraintTags= boost::python::extract<boost::python::list>(d["constraintTags"]);
+    const size_t numConstraints= boost::python::len(constraintTags);
+    boost::python::list constraintTypes= boost::python::extract<boost::python::list>(d["constraintTypes"]);
     ID cIds(numConstraints);
+    ID cTypes(numConstraints);
     for(size_t i= 0; i<numConstraints; i++)
       {
-	const size_t constraintTag= boost::python::extract<int>(constraintTags[i]);
+	const int constraintTag= boost::python::extract<int>(constraintTags[i]);
 	cIds[i]= constraintTag;
+	const int constraintType= boost::python::extract<int>(constraintTypes[i]);
+	cTypes[i]= constraintType;
       }
-    sel_constraints_from_list(cIds);
+    sel_constraints_from_list(cIds, cTypes);
   }

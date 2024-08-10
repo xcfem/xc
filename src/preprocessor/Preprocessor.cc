@@ -123,6 +123,24 @@ bool XC::Preprocessor::remove(Node *n)
     return retval;
   }
 
+//! @brief Removes the node from the problem.
+//! @param tag: identifier of the node to remove.
+bool XC::Preprocessor::removeNode(const int &tag)
+  {
+    bool retval= false;
+    if(domain)
+      {
+	Node *n= domain->getNode(tag);
+	if(n)
+	  retval= this->remove(n);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
+  }
+
 //! @brief Removes the element from all the sets.
 void XC::Preprocessor::removeFromSets(Element *elem)
   {
@@ -153,6 +171,24 @@ bool XC::Preprocessor::remove(Element *e)
     return retval;
   }
 
+//! @brief Removes the element from the problem.
+//! @param tag: identifier of the element to remove.
+bool XC::Preprocessor::removeElement(const int &tag)
+  {
+    bool retval= false;
+    if(domain)
+      {
+	Element *e= domain->getElement(tag);
+	if(e)
+	  retval= this->remove(e);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
+  }
+
 //! @brief Removes the constraint from all the sets.
 void XC::Preprocessor::removeFromSets(Constraint *c)
   {
@@ -167,6 +203,60 @@ bool XC::Preprocessor::remove(Constraint *c)
     bool retval= false;
     if(domain)
       retval= domain->remove(c);
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Removes the constraint from the problem.
+//! @param tag: identifier of the constraint to remove.
+bool XC::Preprocessor::removeSFreedom_Constraint(const int &tag)
+  {
+    bool retval= false;
+    if(domain)
+      {
+	Constraint *c= domain->getSFreedom_Constraint(tag);
+	if(c)
+	  retval= this->remove(c);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Removes the constraint from the problem.
+//! @param tag: identifier of the constraint to remove.
+bool XC::Preprocessor::removeMFreedom_Constraint(const int &tag)
+  {
+    bool retval= false;
+    if(domain)
+      {
+	Constraint *c= domain->getMFreedom_Constraint(tag);
+	if(c)
+	  retval= this->remove(c);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
+                << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Removes the constraint from the problem.
+//! @param tag: identifier of the constraint to remove.
+bool XC::Preprocessor::removeMRMFreedom_Constraint(const int &tag)
+  {
+    bool retval= false;
+    if(domain)
+      {
+	Constraint *c= domain->getMRMFreedom_Constraint(tag);
+	if(c)
+	  retval= this->remove(c);
+      }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; domain not defined (null ptr)."
