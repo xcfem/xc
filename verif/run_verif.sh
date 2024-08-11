@@ -206,6 +206,8 @@ python tests/utility/geom/plane_test_02.py
 python tests/utility/geom/plane_test_03.py
 #python tests/utility/geom/plane_test_04.py
 python tests/utility/geom/plane_test_05.py
+echo "$BLEU" "  3D polyhedrons." "$NORMAL"
+python tests/utility/geom/polyhedrons/test_hexahedron_01.py
 # echo "$BLEU" "  3D half spaces." "$NORMAL"
 # python tests/utility/geom/halfspace3d_test_01.py
 # python tests/utility/geom/halfspace3d_test_02.py
