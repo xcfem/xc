@@ -25,6 +25,7 @@ XC::Pnt *(XC::Edge::*getP1)(void)= &XC::Edge::P1;
 XC::Pnt *(XC::Edge::*getP2)(void)= &XC::Edge::P2;
 XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::getFirstNode;
 XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::getLastNode;
+XC::Pnt *(XC::Edge::*getEdgeVertexPtr)(const size_t &)= &XC::Edge::getVertex;
 class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for one-dimensional geometry objects." ,no_init)
   .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::setNDiv,"Number of divisions.")
   .def("setNDiv", &XC::Edge::setNDiv,"Set the number of divisions.")
@@ -36,7 +37,7 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
   .add_property("segments",&XC::Edge::getSegmentsPy,"Return the segments")
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
-  .def("getVertex",make_function(&XC::Edge::getVertex, return_internal_reference<>()),"Return i-th vertex.")
+  .def("getVertex",make_function(getEdgeVertexPtr, return_internal_reference<>()),"Return i-th vertex.")
   .def("getLength", &XC::Edge::getLength,"Return the length of the edge.")
   .def("getElemSize", &XC::Edge::getElemSize,"Return the element size.")
   .def("getCentroid", &XC::Edge::getCentroid,"Return the centroid of the edge.")

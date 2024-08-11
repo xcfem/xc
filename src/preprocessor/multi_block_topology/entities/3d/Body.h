@@ -127,6 +127,10 @@ class Body: public EntMdlr
     virtual const BodyFace *getFace(const size_t &i) const= 0;
     virtual const CmbEdge::Side *getEdge(const size_t &i) const= 0;
     virtual const Pnt *getVertex(const size_t &i) const= 0;
+    virtual Pnt *getVertex(const size_t &i)= 0;
+    std::deque<const Pnt *> getVertices(void) const;
+    std::deque<Pnt *> getVertices(void);
+    boost::python::list getVerticesPy(void);
     std::vector<int> getIndicesVertices(void) const;
     virtual BND3d Bnd(void) const;
     virtual double getVolume(void) const;

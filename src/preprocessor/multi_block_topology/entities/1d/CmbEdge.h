@@ -186,6 +186,7 @@ class CmbEdge: public Edge
     std::deque<Side *> findSides(const Pos3d &);
     
     virtual const Pnt *getVertex(const size_t &i) const;
+    virtual Pnt *getVertex(const size_t &i);
     std::deque<Pnt *> getVertices(void);
     std::deque<const Pnt *> getVertices(void) const;
     std::set<const Pnt *> getVertexSet(void) const;

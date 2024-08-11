@@ -79,6 +79,15 @@ const XC::Pnt *XC::LineBase::getVertex(const size_t &i) const
       return p2;
   }
 
+//! @brief Return the i-th vertex.
+XC::Pnt *XC::LineBase::getVertex(const size_t &i)
+  {
+    if(i==1)
+      return p1;
+    else
+      return p2;
+  }
+
 //! @brief Return the parameter of the point on the line (distance to the
 //! line first point measured over the line).
 double XC::LineBase::getLambda(const Node &n) const

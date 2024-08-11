@@ -73,6 +73,7 @@ class CircularArc: public LineBase
     inline virtual size_t getNumberOfVertices(void) const
       { return 3; }
     virtual const Pnt *getVertex(const size_t &i) const;
+    virtual Pnt *getVertex(const size_t &i);
     virtual void SetVertice(const size_t &,Pnt *);
     virtual BND3d Bnd(void) const;
     int getVtkCellType(void) const;

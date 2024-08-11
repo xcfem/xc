@@ -907,6 +907,15 @@ const XC::Pnt *XC::CmbEdge::getVertex(const size_t &i) const
     else
       return P2();
   }
+  
+//! @brief Return the i-th vertex.
+XC::Pnt *XC::CmbEdge::getVertex(const size_t &i)
+  {
+    if(i<getNumberOfVertices())
+      return getSide(i)->P1();
+    else
+      return P2();
+  }
 
 //! @brief Return the vertices.
 std::deque<XC::Pnt *> XC::CmbEdge::getVertices(void)

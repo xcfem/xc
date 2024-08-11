@@ -402,7 +402,46 @@ void XC::Body::set_surf(Face *s)
      { s->insert_body(this); }
   }
 
-//! Return indices of the vertices.
+//! @brief Return the vertices of the body.
+std::deque<const XC::Pnt *> XC::Body::getVertices(void) const
+  {
+    const size_t nv= this->getNumberOfVertices();
+    std::deque<const Pnt *> retval(nv);
+    if(nv>=1)
+      {
+        for(size_t i=0;i<nv;i++)
+          retval[i]= this->getVertex(i+1);
+      }
+    return retval;
+  }
+//! @brief Return the vertices of the body.
+std::deque<XC::Pnt *> XC::Body::getVertices(void)
+  {
+    const size_t nv= this->getNumberOfVertices();
+    std::deque<Pnt *> retval(nv);
+    if(nv>=1)
+      {
+        for(size_t i=0;i<nv;i++)
+          retval[i]= this->getVertex(i+1);
+      }
+    return retval;
+  }
+
+//! @brief Return the vertices of the body.
+boost::python::list XC::Body::getVerticesPy(void)
+  {
+    boost::python::list retval;
+    const std::deque<Pnt *> lst= this->getVertices();
+    for(std::deque<Pnt *>::const_iterator i= lst.begin();i!=lst.end();i++)
+      {
+	Pnt *p= *i;
+	boost::python::object pyObj(boost::ref(*p));
+        retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! Return indices of the vertices (for VTK graphics).
 std::vector<int> XC::Body::getIndicesVertices(void) const
   {
     const size_t nv= getNumberOfVertices();

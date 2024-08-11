@@ -78,6 +78,15 @@ const XC::Pnt *XC::CircularArc::getVertex(const size_t &i) const
       return p3;
   }
 
+//! @brief Return the i-th vertex.
+XC::Pnt *XC::CircularArc::getVertex(const size_t &i)
+  {
+    if(i<3)
+      return LineBase::getVertex(i);
+    else
+      return p3;
+  }
+
 //! @brief Set the i-th vertex.
 void XC::CircularArc::SetVertice(const size_t &i,Pnt *p)
   {

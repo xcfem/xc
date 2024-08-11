@@ -901,6 +901,10 @@ int XC::Face::setIOrientation(const Vector3d &v)
 const XC::Pnt *XC::Face::getVertex(const size_t &i) const
   { return getSide(i)->P1(); }
 
+//! @brief Returns the i-th vertex.
+XC::Pnt *XC::Face::getVertex(const size_t &i)
+  { return getSide(i)->P1(); }
+
 //! @brief Returns the contour of the face as a 3D polyline.
 Polyline3d XC::Face::getContour(void) const
   { return getPolyline(); }

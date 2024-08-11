@@ -83,6 +83,7 @@ class Edge: public EntMdlr
     virtual Vector3d getKVector(void) const;
     virtual Matrix getLocalAxes(void) const;
     virtual const Pnt *getVertex(const size_t &i) const= 0;
+    virtual Pnt *getVertex(const size_t &i)= 0;
     virtual void SetVertice(const size_t &,Pnt *)= 0;
     std::vector<int> getIndicesVertices(void) const;
     virtual std::deque<Pnt *> getVertices(void);

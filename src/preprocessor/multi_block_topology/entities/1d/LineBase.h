@@ -68,6 +68,7 @@ class LineBase: public Edge
     void create_nodes(const std::deque<Pos3d> &positions);
 
     virtual const Pnt *getVertex(const size_t &i) const;
+    virtual Pnt *getVertex(const size_t &i);
     virtual void SetVertice(const size_t &,Pnt *);
     void SetVertice(const size_t &,const size_t &);
     void SetVertices(Pnt *,Pnt *);

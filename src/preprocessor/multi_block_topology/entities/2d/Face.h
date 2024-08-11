@@ -124,6 +124,7 @@ class Face: public CmbEdge
     size_t getNumberOfVertices(void) const
       { return getNumberOfEdges(); }
     virtual const Pnt *getVertex(const size_t &i) const;
+    virtual Pnt *getVertex(const size_t &i);
     Pnt *findVertex(const Pos3d &);
     Pos3d getCentroid(void) const;
     Plane getPlane(void) const;
