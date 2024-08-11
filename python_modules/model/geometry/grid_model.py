@@ -407,11 +407,11 @@ class GridModel(object):
         points= self.prep.getMultiBlockTopology.getPoints
         inicTag=points.defaultTag
         lstPt=[(i+1,j+1,k+1,
-                self.xCentCoo+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
-                self.yCentCoo+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
-                self.gridCoo[2][k]) for i in range(len(self.gridCoo[0]))
-               for j in range(len(self.gridCoo[1]))
-               for k in range(len(self.gridCoo[2])) ]
+            self.xCentCoo+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
+            self.yCentCoo+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
+            self.gridCoo[2][k]) for i in range(len(self.gridCoo[0]))
+            for j in range(len(self.gridCoo[1]))
+            for k in range(len(self.gridCoo[2])) ]
         for p in lstPt:
             (i,j,k,x,y,z)=p
             self.pointCounter+=1
@@ -773,16 +773,24 @@ class GridModel(object):
         IJKrange=self.getIJKrangeFromXYZrange(XYZrange)
         self.scaleCoorZPointsRange(IJKrange,zOrig,scale)
 
-    def moveCylPointToRadius(self,pnt,radius):
+    def moveCylPointToRadius(self,pnt,radius,xCent=None,yCent=None):
         '''Move point in the cylindrical coordinate system 
-        to radius coordinate given as parameter
+        to radius coordinate given as parameter. By default, it will 
+        take the center at the center of the self cylindrical coordinate-system, 
+        although other X and/or Y coordinates can be given for the new circumference arc.
+
+        :param pnt: point to move
+        :param radius: radius 
         '''
-        vdir=geom.Vector2d(pnt.getPos.x-self.xCentCoo,pnt.getPos.y-self.yCentCoo,).normalized()
-        pnt.getPos.x= self.xCentCoo+radius*vdir.x
-        pnt.getPos.y= self.yCentCoo+radius*vdir.y
+        centXcoo= xCent if xCent else self.xCentCoo
+        centYcoo= yCent if yCent else self.yCentCoo
+        
+        vdir=geom.Vector2d(pnt.getPos.x-centXcoo,pnt.getPos.y-centYcoo,).normalized()
+        pnt.getPos.x= centXcoo+radius*vdir.x
+        pnt.getPos.y= centYcoo+radius*vdir.y
          
         
-    def moveCylPointsIJKrangeToRadius(self,ijkRange,radius):
+    def moveCylPointsIJKrangeToRadius(self,ijkRange,radius,xCent=None,yCent=None):
         '''Move points in a 3D grid-region limited by the ijkRange 
         ((imin,jmin,kmin),(imax,jmax,kmax))
         in the cylindrical coordinate system to radius coordinate 
@@ -790,10 +798,10 @@ class GridModel(object):
         '''
         sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
         for pnt in sPtMove.getPoints:
-            self.moveCylPointToRadius(pnt,radius)
+            self.moveCylPointToRadius(pnt,radius,xCent,yCent)
         sPtMove.clear()
 
-    def moveCylPointsXYZrangeToRadius(self,xyzRange,radius):
+    def moveCylPointsXYZrangeToRadius(self,xyzRange,radius,xCent=None,yCent=None):
         '''Move points in a 3D grid-region limited by the xyzRange
         ((xmin,ymin,zmin),(xmax,ymax,zmax))
         in the cylindrical coordinate system to radius coordinate 
@@ -802,7 +810,7 @@ class GridModel(object):
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         self.moveCylPointsIJKrangeToRadius(ijkRange,radius)
 
-    def moveCylPointsIJKRangeToVarRadius(self,ijkRange,RangMin,RangMax):
+    def moveCylPointsIJKRangeToVarRadius(self,ijkRange,RangMin,RangMax,xCent=None,yCent=None):
         '''Move points in a 3D grid-region limited by the ijkRange
         ((imin,jmin,kmin),(imax,jmax,kmax))
         in the cylindrical coordinate system to a varibale radius 
@@ -826,9 +834,9 @@ class GridModel(object):
                     ang=self.gridCoo[1][j]
                     radius=RangMin+slope*(ang-angMin)
                     pnt=self.getPntGrid((i,j,kmin))
-                    self.moveCylPointToRadius(pnt,radius)
+                    self.moveCylPointToRadius(pnt,radius,xCent,yCent)
                     
-    def moveCylPointsXYXRangeToVarRadius(self,xyzRange,RangMin,RangMax):
+    def moveCylPointsXYXRangeToVarRadius(self,xyzRange,RangMin,RangMax,xCent=None,yCent=None):
         '''Move points in a 3D grid-region limited by the xyzRange
         ((xmin,ymin,zmin),(xmax,ymax,zmax))
         in the cylindrical coordinate system to a varibale radius 
@@ -904,10 +912,10 @@ class GridModel(object):
         are implicit in the name of the volume.
 
         :param volName: name given to the grid volume
-        return the hexaedral volumrn
+        return the hexaedral volumen
         '''
         # points= self.prep.getMultiBlockTopology.getPoints
-        (tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)=(int(volName[1:7]),int(volName[7:13]),int(volName[13:19]),int(volName[19:25]),int(volName[26:31]),int(volName[32:37]),int(volName[38:43]),int(volName[44:49]))
+        (tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)=(int(volName[1:7]),int(volName[7:13]),int(volName[13:19]),int(volName[19:25]),int(volName[25:31]),int(volName[31:37]),int(volName[37:43]),int(volName[43:49]))
         volumes= self.prep.getMultiBlockTopology.getBodies
         hv= volumes.newBlockPts(tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)
         hv.name= volName
@@ -1265,7 +1273,7 @@ class GridModel(object):
         '''
         setVol= self.prep.getSets.defSet(setName)
         nmVolinRang=self.getNmHexaedrInRange(ijkRange,closeCyl)
-        for nameVol in nmHexaedrinRang:
+        for nameVol in nmVolinRang:
             if nameVol in self.dicHexaedr:
                 setVol.getBodies.append(self.dicHexaedr[nameVol])
         setVol.fillDownwards()    
