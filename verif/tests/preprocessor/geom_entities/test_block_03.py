@@ -55,6 +55,13 @@ b1.nDivI= 1
 b1.nDivJ= 2
 b1.nDivK= 1
 
+# Get the vertices with the block internal order.
+vertices= b1.getVertices()
+internalOrderOfVertices= [pt1, pt4, pt3, pt2, pt5, pt6, pt7, pt8]
+vDiff= 0
+for v1, v2 in zip(vertices, internalOrderOfVertices):
+    vDiff+= abs(v1.tag-v2.tag)
+
 # Mesh definition.
 ## Seed element.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
@@ -74,7 +81,7 @@ err= math.sqrt(err)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(err<=1e-8):
+if((err<=1e-8) and (vDiff==0)):
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')
