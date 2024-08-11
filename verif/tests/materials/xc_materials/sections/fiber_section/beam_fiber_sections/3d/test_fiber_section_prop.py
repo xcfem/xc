@@ -276,23 +276,22 @@ if((abs(ratio0)<1e-7) & (abs(ratio1)<1e-1) & (abs(slopeBP)>1e15) & (abs(ratio3)<
 else:
     lmsg.error(fname+' ERROR.')
 
-'''
-from materials.sections.fiber_section import plot_fiber_section as pfs
+# Section output
+# from materials.sections.fiber_section import plot_fiber_section as pfs
 
-fsPlot= pfs.FibSectFeaturesToplot(fiberSection=sccEl1)
-fsPlot.colorNeutralAxis= 'r'
-fsPlot.colorBendingPlane='g'
-fsPlot.colorCompressionPlane='b'
-fsPlot.colorTensionPlane='m'
-fsPlot.colorIntForcAxis='c'
-fsPlot.colorLeverArm='orange'
-fsPlot.colorEffDepth='purple'
-fsPlot.colorEffConcrArea='brown'
-fsPlot.MaxEffHeight=heffmax_EHE
-fsPlot.colorGrossEffConcrAreaContours='m'
-fig1,ax2d=fsPlot.generatePlot()
-fig1.show()
-fig1.savefig('fig1.png')
-'''
+# fsPlot= pfs.FibSectFeaturesToplot(fiberSection=sccEl1)
+# fsPlot.colorNeutralAxis= 'r'
+# fsPlot.colorBendingPlane='g'
+# fsPlot.colorCompressionPlane='b'
+# fsPlot.colorTensionPlane='m'
+# fsPlot.colorIntForcAxis='c'
+# fsPlot.colorLeverArm='orange'
+# fsPlot.colorEffDepth='purple'
+# fsPlot.colorEffConcrArea='brown'
+# fsPlot.MaxEffHeight=heffmax_EC2
+# fsPlot.colorGrossEffConcrAreaContours='m'
+# fig1,ax2d=fsPlot.generatePlot()
+# fig1.show()
+# fig1.savefig('fig1.png')
 
 

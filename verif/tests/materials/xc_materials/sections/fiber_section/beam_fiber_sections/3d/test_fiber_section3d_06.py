@@ -88,3 +88,10 @@ if (abs(ratio1)<1e-4) & (abs(ratio2)<1e-4) :
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Section output
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# plot_fiber_section.mplot_section_geometry(ax, sectionGeometry= concreteSectionGeom01)
+# plt.show()

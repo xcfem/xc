@@ -1007,6 +1007,15 @@ class RCSectionBase(object):
         ''' returns the name of the geometric section'''
         return "geom"+self.name
 
+    def getMaterialHandler(self):
+        ''' Return the material handler used to define the XC materials
+            corresponding to this section object.'''
+        return self.fiberSectionRepr.getMaterialHandler
+        
+    def getSectionGeometry(self):
+        ''' Return the geometry defined for this section in XC.'''
+        return self.getMaterialHandler().getSectionGeometry(self.gmSectionName())
+    
     def getConcreteType(self):
         ''' returns the concrete type of this sections.'''
         return self.fiberSectionParameters.concrType
@@ -1318,9 +1327,7 @@ class RCSectionBase(object):
                 errMsg= "; no section representation for section: '"+self.name+"'. and undefined preprocessor. Can't call defRCSection."
                 lmsg.error(className+'.'+methodName+errMsg)
         if(self.fiberSectionRepr):
-            materialHandler= self.fiberSectionRepr.getMaterialHandler
-            gmSectName= self.gmSectionName()
-            geomSection= materialHandler.getSectionGeometry(gmSectName)
+            geomSection= self.getSectionGeometry()
             # Plot cross-section
             crossSectionFigureFName= self.getCrossSectionFigureFileName(outputPath= outputPath)
             if(self.geomSection):
@@ -1395,7 +1402,7 @@ class RCSectionBase(object):
             os.write('\\end{tabular} \\\\\n')
             os.write('\\hline\n')
             os.write('Homogenized section:\\\\\n')
-            preprocessor= materialHandler.getPreprocessor
+            preprocessor= self.getMaterialHandler().getPreprocessor
             tangConcr= self.getConcreteDiagram(preprocessor).getTangent()
             GH= self.geomSection.getCenterOfMassHomogenizedSection(tangConcr) # Center of gravity of the homogenized section
             AH= self.geomSection.getAreaHomogenizedSection(tangConcr) # Area of the homogenized section
@@ -1490,9 +1497,7 @@ class RCSectionBase(object):
         # Draw contour
         # Retrieve section geometry definition.
         if(self.fiberSectionRepr):
-            materialHandler= self.fiberSectionRepr.getMaterialHandler
-            gmSectName= self.gmSectionName()
-            geomSection= materialHandler.getSectionGeometry(gmSectName)
+            geomSection= self.getSectionGeometry()
             write_dxf(geomSection= geomSection, modelSpace= modelSpace, concreteLayerName= concreteLayerName, reinforcementLayerName= reinforcementLayerName)
         else:
             className= type(self).__name__

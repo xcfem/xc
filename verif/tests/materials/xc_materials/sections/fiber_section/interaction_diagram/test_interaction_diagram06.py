@@ -82,3 +82,11 @@ else:
 # interactionDiagramGraphic.setupGraphic(diag)
 # interactionDiagramGraphic.show()
 
+# # Section output
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# preprocessor.getMaterialHandler
+# plot_fiber_section.mplot_section_geometry(ax, sectionGeometry= sccData.getSectionGeometry())
+# plt.show()

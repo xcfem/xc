@@ -126,3 +126,11 @@ if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-9) & (abs(ratio5)
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Section output
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# plot_fiber_section.mplot_section_geometry(ax, sectionGeometry= geomSecPret01)
+# plt.show()
