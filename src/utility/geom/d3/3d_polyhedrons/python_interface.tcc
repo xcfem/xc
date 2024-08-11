@@ -30,5 +30,9 @@ class_<Tetrahedron3d, bases<PolyhedronBase> >("Polyhedron3d")
   ;
 
 class_<Hexahedron3d, bases<Polyhedron3d> >("Hexahedron3d")
+  .def(init<>())
+  .def(init<Pos3d, Pos3d, Pos3d, Pos3d, Pos3d, Pos3d, Pos3d, Pos3d>())  
+  .add_property("signedVolume", &Hexahedron3d::getVolumeWithSign, "returns object volume with sign.")
+  .add_property("volume", &Hexahedron3d::getVolume, "returns object volume.")
   ;
 

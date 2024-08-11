@@ -22,6 +22,7 @@
 
 #include "Hexahedron3d.h"
 #include "Polyhedron3d.h"
+#include "Tetrahedron3d.h"
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 
@@ -89,7 +90,33 @@ GEOM_FT Hexahedron3d::getVolumeWithSign(void) const
 
 //! @brief Return the volume of the object.
 GEOM_FT Hexahedron3d::getVolume(void) const
-  { return std::abs(getVolumeWithSign()); }
+  {
+    std::vector<Pos3d> tmp(8);
+    CGPolyhedron_3::Vertex_const_iterator v_iter= this->cgpolyhedron.vertices_begin();
+    size_t i= 0;
+    for(;v_iter!= this->cgpolyhedron.vertices_end(); v_iter++, i++)
+      {
+	Pos3d p= v_iter->point();
+	tmp[i]= p;
+      }
+    std::vector<Pos3d> vertices(8);
+    std::vector<int> order({1, 3, 6, 0, 2, 4, 7, 5});
+    for(size_t i= 0; i<8; i++)
+      {	vertices[i]= tmp[order[i]]; }
+    const Tetrahedron3d t1(vertices[0], vertices[1], vertices[3], vertices[4]);
+    const Tetrahedron3d t2(vertices[4], vertices[1], vertices[3], vertices[5]);
+    const Tetrahedron3d t3(vertices[4], vertices[5], vertices[3], vertices[7]);
+    const Tetrahedron3d t4(vertices[1], vertices[2], vertices[3], vertices[6]);
+    const Tetrahedron3d t5(vertices[3], vertices[1], vertices[6], vertices[5]);
+    const Tetrahedron3d t6(vertices[5], vertices[6], vertices[3], vertices[7]);
+    GEOM_FT retval= t1.getVolume();
+    retval+= t2.getVolume();
+    retval+= t3.getVolume();
+    retval+= t4.getVolume();
+    retval+= t5.getVolume();
+    retval+= t6.getVolume();
+    return retval;
+  }
 
 //! @brief Returns true if point inside hexahedron.
 bool Hexahedron3d::In(const Pos3d &p,const double &tol) const
