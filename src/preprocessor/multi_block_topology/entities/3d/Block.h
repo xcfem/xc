@@ -86,6 +86,8 @@ class Block: public Body
     void create_nodes(void);
     void genMesh(meshing_dir dm);
     
+    double getVolume(void) const;
+    
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
   };

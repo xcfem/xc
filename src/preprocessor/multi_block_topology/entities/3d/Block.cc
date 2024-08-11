@@ -38,6 +38,7 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "utility/geom/pos_vec/Pos3dArray.h"
 #include "utility/geom/pos_vec/Pos3dArray3d.h"
+#include "utility/geom/d3/3d_polyhedrons/Hexahedron3d.h"
 #include "vtkCellType.h"
 #include "utility/utils/misc_utils/colormod.h"
 
@@ -753,6 +754,23 @@ void XC::Block::setPoints(const ID &point_indexes)
 
 	addPoints(point_indexes);
       }
+  }
+
+double XC::Block::getVolume(void) const
+  {
+    const std::deque<const Pnt *> vertices= this->getVertices();
+    std::vector<int> order({0, 3, 2, 1, 4, 5, 6, 7});
+    const Pos3d p0= vertices[order[0]]->getPos();
+    const Pos3d p1= vertices[order[1]]->getPos();
+    const Pos3d p2= vertices[order[2]]->getPos();
+    const Pos3d p3= vertices[order[3]]->getPos();
+    const Pos3d p4= vertices[order[4]]->getPos();
+    const Pos3d p5= vertices[order[5]]->getPos();
+    const Pos3d p6= vertices[order[6]]->getPos();
+    const Pos3d p7= vertices[order[7]]->getPos();
+    const Hexahedron3d h(p0, p1, p2, p3, p4, p5, p6, p7);
+    const double retval= h.getVolume();
+    return retval;
   }
 
 //! @brief Return a Python dictionary with the object members values.

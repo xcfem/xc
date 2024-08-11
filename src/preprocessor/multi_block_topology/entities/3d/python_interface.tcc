@@ -31,6 +31,7 @@ class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body","Si
   .add_property("getIdxVertices",&XC::Body::getIndicesVertices)
   .def("getVertex",make_function(getBodyVertexPtr,return_internal_reference<>()),"Return the vertex corresponding to the index argument.")
   .def("getVertices", &XC::Body::getVerticesPy, "Return the vertices that define the body in a Python list.")
+  .def("getVolume",&XC::Body::getVolume,"Return the volume of the body.")
    ;
 
 const XC::Body::BodyFace *(XC::Block::*getFacePtr)(const size_t &) const= &XC::Block::getFace;
