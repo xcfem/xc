@@ -912,10 +912,10 @@ class GridModel(object):
         are implicit in the name of the volume.
 
         :param volName: name given to the grid volume
-        return the hexaedral volumrn
+        return the hexaedral volumen
         '''
         # points= self.prep.getMultiBlockTopology.getPoints
-        (tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)=(int(volName[1:7]),int(volName[7:13]),int(volName[13:19]),int(volName[19:25]),int(volName[26:31]),int(volName[32:37]),int(volName[38:43]),int(volName[44:49]))
+        (tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)=(int(volName[1:7]),int(volName[7:13]),int(volName[13:19]),int(volName[19:25]),int(volName[25:31]),int(volName[31:37]),int(volName[37:43]),int(volName[43:49]))
         volumes= self.prep.getMultiBlockTopology.getBodies
         hv= volumes.newBlockPts(tgPt1,tgPt2,tgPt3,tgPt4,tgPt5,tgPt6,tgPt7,tgPt8)
         hv.name= volName
