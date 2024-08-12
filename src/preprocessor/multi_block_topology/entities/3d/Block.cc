@@ -38,6 +38,7 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "utility/geom/pos_vec/Pos3dArray.h"
 #include "utility/geom/pos_vec/Pos3dArray3d.h"
+#include "utility/geom/pos_vec/Pos3dList.h"
 #include "utility/geom/d3/3d_polyhedrons/Hexahedron3d.h"
 #include "vtkCellType.h"
 #include "utility/utils/misc_utils/colormod.h"
@@ -255,6 +256,7 @@ XC::Pnt *XC::Block::getVertex(const size_t &i)
     return retval;
   }
 
+
 //! @brief Return the surfaces that close the solid.
 std::set<const XC::Face *> XC::Block::getSurfaces(void) const
   {
@@ -403,6 +405,29 @@ void XC::Block::create_face_nodes(void)
       sups[i].create_nodes();
   }
 
+Pos3d XC::Block::getCentroid(void) const
+  {
+    Pos3dList tmp;
+    const Pos3d &p1= getVertex(1)->getPos();
+    tmp.appendPoint(p1);
+    const Pos3d &p2= getVertex(2)->getPos();
+    tmp.appendPoint(p2);
+    const Pos3d &p3= getVertex(3)->getPos();
+    tmp.appendPoint(p3);
+    const Pos3d &p4= getVertex(4)->getPos();
+    tmp.appendPoint(p4);
+    
+    const Pos3d &p5= getVertex(5)->getPos();
+    tmp.appendPoint(p5);
+    const Pos3d &p6= getVertex(6)->getPos();
+    tmp.appendPoint(p6);
+    const Pos3d &p7= getVertex(7)->getPos();
+    tmp.appendPoint(p7);
+    const Pos3d &p8= getVertex(8)->getPos();
+    tmp.appendPoint(p8);
+    return tmp.getCenterOfMass();
+  }
+
 //! @brief Return (ndivI+1)*(ndivJ+1)*(ndivK+1) positions for the nodes.
 //!
 //! The returned 3D-matrix of points is organized as follows:
@@ -431,19 +456,51 @@ Pos3dArray3d XC::Block::get_positions(void) const
     const size_t ndiv_12= NDivJ();
     const size_t ndiv_23= NDivI();
     const size_t ndiv_15= NDivK();
+
+    Pos3dList bottomFace;
     const Pos3d &p1= getVertex(1)->getPos();
+    bottomFace.appendPoint(p1);
     const Pos3d &p2= getVertex(2)->getPos();
+    bottomFace.appendPoint(p2);
     const Pos3d &p3= getVertex(3)->getPos();
+    bottomFace.appendPoint(p3);
     const Pos3d &p4= getVertex(4)->getPos();
+    bottomFace.appendPoint(p4);
+    
+    Pos3dList topFace;
     const Pos3d &p5= getVertex(5)->getPos();
+    topFace.appendPoint(p5);
     const Pos3d &p6= getVertex(6)->getPos();
+    topFace.appendPoint(p6);
     const Pos3d &p7= getVertex(7)->getPos();
+    topFace.appendPoint(p7);
     const Pos3d &p8= getVertex(8)->getPos();
+    topFace.appendPoint(p8);
+
+    // Compute face orientation.
+    const Pos3d centroid= this->getCentroid();
+    bool bottomFaceClockWise= bottomFace.clockwise(centroid);
+    bool topFaceClockWise= bottomFace.clockwise(centroid);
     const Pos3dArray ptos_l15= Pos3dArray(p1,p5,ndiv_15);
-    const Pos3dArray ptos_l46= Pos3dArray(p4,p6,ndiv_15);
     const Pos3dArray ptos_l37= Pos3dArray(p3,p7,ndiv_15);
-    const Pos3dArray ptos_l28= Pos3dArray(p2,p8,ndiv_15);
-    Pos3dArray3d retval(ptos_l15, ptos_l46, ptos_l37, ptos_l28, ndiv_12, ndiv_23);
+    Pos3dArray3d retval;
+    if(bottomFaceClockWise && topFaceClockWise)
+      {
+	const Pos3dArray ptos_l46= Pos3dArray(p4,p6,ndiv_15);
+	const Pos3dArray ptos_l28= Pos3dArray(p2,p8,ndiv_15);
+        retval= Pos3dArray3d(ptos_l15, ptos_l46, ptos_l37, ptos_l28, ndiv_12, ndiv_23);
+      }
+    else if(!bottomFaceClockWise && !topFaceClockWise)
+      {
+	const Pos3dArray ptos_l26= Pos3dArray(p2,p6,ndiv_15);
+	const Pos3dArray ptos_l48= Pos3dArray(p4,p8,ndiv_15);
+        retval= Pos3dArray3d(ptos_l15, ptos_l26, ptos_l37, ptos_l48, ndiv_12, ndiv_23);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; wrong orientation of vertices for block: "
+		<< this->getTag()
+		<< Color::def << std::endl;
     // const size_t n_layers= retval.getNumberOfLayers();
     // const size_t n_rows= retval.getNumberOfRows();
     // const size_t n_cols= retval.getNumberOfColumns();
@@ -456,6 +513,32 @@ Pos3dArray3d XC::Block::get_positions(void) const
     // 		      << retval(i,j,k)
     // 		      << " interior: " << interior << std::endl;
     // 	  }
+    return retval;
+  }
+
+//! @brief Return the positions that will be used for the nodes when meshing.
+boost::python::list XC::Block::getPositionsPy(void) const
+  {
+    boost::python::list retval;
+    Pos3dArray3d node_pos= this->get_positions(); //Node positions.
+    const size_t n_layers= node_pos.getNumberOfLayers();
+    const size_t n_rows= node_pos.getNumberOfRows();
+    const size_t n_cols= node_pos.getNumberOfColumns();
+    for(size_t k= 1; k<=n_layers; k++)
+      {
+	boost::python::list row_list;
+	for(size_t i= 1; i<=n_rows; i++)
+	  {
+	    boost::python::list row;
+	    for(size_t j= 1; j<=n_cols; j++)
+	      {
+		const Pos3d &pos= node_pos(k, i, j);
+		row.append(pos);
+	      }
+	    row_list.append(row);
+	  }
+	retval.append(row_list);
+      }
     return retval;
   }
 
@@ -519,7 +602,7 @@ void XC::Block::create_nodes(void)
       {
         create_face_nodes();
 
-        Pos3dArray3d node_pos= get_positions(); //Node positions.
+        Pos3dArray3d node_pos= this->get_positions(); //Node positions.
         const size_t n_layers= node_pos.getNumberOfLayers();
         const size_t n_rows= node_pos.getNumberOfRows();
         const size_t n_cols= node_pos.getNumberOfColumns();

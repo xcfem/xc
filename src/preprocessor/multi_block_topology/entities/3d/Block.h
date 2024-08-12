@@ -48,6 +48,7 @@ class Block: public Body
     void append_faces(const std::vector<size_t> &);
     void create_face_nodes(void);
     Pos3dArray3d get_positions(void) const;
+    void create_nodes(void);
 
     virtual BodyFace *getFace(const size_t &i);
   public:
@@ -68,6 +69,9 @@ class Block: public Body
     const CmbEdge::Side *getEdge(const size_t &i) const;
     Pnt *getVertex(const size_t &i);
     const Pnt *getVertex(const size_t &i) const;
+    boost::python::list getPositionsPy(void) const;
+    virtual Pos3d getCentroid(void) const;
+    
     int getVtkCellType(void) const;
 
     void addPoints(const ID &);
@@ -83,7 +87,6 @@ class Block: public Body
     std::deque<const Edge *> getNDivErrors(void) const;
     bool checkNDivs(void) const;
     
-    void create_nodes(void);
     void genMesh(meshing_dir dm);
     
     double getVolume(void) const;
