@@ -200,7 +200,7 @@ int XC::QuadBase4N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(this->isDead())
       std::cerr << this->getClassName() 
-                << "; load over inactiva element: "
+                << "; load over inactive element: "
                 << this->getTag() << std::endl;
     else
       {

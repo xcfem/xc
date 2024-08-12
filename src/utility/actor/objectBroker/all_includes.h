@@ -382,6 +382,7 @@
 #include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
+#include "domain/load/volumetric/BrickStrainLoad.h"
 #include "domain/load/SurfaceLoad.h"
 #include "domain/load/volumetric/BrickSelfWeight.h"
 #include "domain/load/pattern/NodeLocker.h"

@@ -89,6 +89,9 @@ class BrickBase: public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     BoolArray3d getNodePattern(void) const;
     int getVtkCellType(void) const;
 
+    void zeroLoad(void);	
+    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    
     Matrix getLocalAxes(bool initialGeometry= true) const;
     Pos3d getGlobalCoordinates(const double &r, const double &s, const double &t) const;  
     ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;

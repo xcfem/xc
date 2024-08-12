@@ -33,6 +33,7 @@
 #include "vtkCellType.h"
 #include "utility/geom/d3/3d_polyhedrons/Tetrahedron3d.h"
 #include "domain/mesh/element/utils/ParticlePos3d.h"
+#include "domain/load/volumetric/ThreedimStrainLoad.h"
 #include "utility/utils/misc_utils/colormod.h"
 
 const int XC::BrickBase::numberNodes; //!< Number of nodes.
@@ -528,4 +529,38 @@ XC::ParticlePos3d XC::BrickBase::getNaturalCoordinates(const Pos3d &pos,bool ini
                 << "; natural coordinates of point: "
                 << pos << " not found." << std::endl;
     return retval;
+  }
+
+//! @brief Zeroes loads on element.
+void XC::BrickBase::zeroLoad(void)
+  {
+    ElemWithMaterial<8,NDMaterialPhysicalProperties>::zeroInitialGeneralizedStrains(); //Removes initial deformations.
+  }
+
+//! @brief Adds to the element the load being passed as parameter.
+int XC::BrickBase::addLoad(ElementalLoad *theLoad, double loadFactor)
+  {
+    if(this->isDead())
+      std::cerr << this->getClassName() 
+                << "; load over inactive element: "
+                << this->getTag() << std::endl;
+    else
+      {
+        if(const ThreedimStrainLoad *strainLoad= dynamic_cast<const ThreedimStrainLoad *>(theLoad)) //Prescribed strains.
+          {
+            static std::vector<Vector> initStrains;
+            initStrains= strainLoad->getStrains();
+            for(std::vector<Vector>::iterator i= initStrains.begin();i!=initStrains.end();i++)
+              (*i)*= loadFactor;
+            this->physicalProperties.getMaterialsVector().incrementInitialGeneralizedStrains(initStrains);
+          }
+        else
+          {
+            std::cerr << this->getClassName() << "::" << __FUNCTION__
+	              << "; load type unknown for element with tag: " <<
+            this->getTag() << std::endl;
+            return -1;
+          }
+      }
+    return 0;
   }

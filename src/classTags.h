@@ -201,6 +201,7 @@
 #define LOAD_TAG_BidimStrainLoad          5050 //Added by LCPT.
 #define LOAD_TAG_ShellStrainLoad          5060 //Added by LCPT.
 #define LOAD_TAG_QuadStrainLoad           5070 //Added by LCPT.
+#define LOAD_TAG_ThreedimStrainLoad          5080 //Added by LCPT.
 
 
 #define MAT_TAG_IsotropicLinElastic         1001

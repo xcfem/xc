@@ -61,6 +61,8 @@ XC::ElementalLoad *XC::process_element_load(XC::LoadPattern *lp,int &tag_el,cons
       retval= new_elem_load<QuadStrainLoad>(lp,tag_el);
     else if(loadType == "shell_strain_load")
       retval= new_elem_load<ShellStrainLoad>(lp,tag_el);
+    else if(loadType == "brick_strain_load")
+      retval= new_elem_load<BrickStrainLoad>(lp,tag_el);
     else if(loadType == "truss_temp_load")
       {
 	std::cerr << __FUNCTION__ << "; load type: '"

@@ -66,6 +66,7 @@
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/load/ElementalLoad.h"
+#include "domain/load/volumetric/SelfWeight.h"
 
 //static data
 const int XC::Brick::numberGauss; //!< Number of Gauss points.
@@ -379,32 +380,47 @@ void XC::Brick::zeroLoad(void)
 int XC::Brick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     int retval= -1;
-    int type;
-    const Vector &data= theLoad->getData(type, loadFactor);
-
-    if(type==LOAD_TAG_BrickSelfWeight)
-      {
-	applyLoad= true;
-	appliedB[0]+= loadFactor*bf[0];
-	appliedB[1]+= loadFactor*bf[1];
-	appliedB[2]+= loadFactor*bf[2];
-        retval= 0;
-      }
-    else if(type==LOAD_TAG_SelfWeight)
-      {
-	// added compatibility with selfWeight class implemented for all continuum elements, C.McGann, U.W.
-	applyLoad= true;
-	appliedB[0]+= loadFactor*data(0)*bf[0];
-	appliedB[1]+= loadFactor*data(1)*bf[1];
-	appliedB[2]+= loadFactor*data(2)*bf[2];
-	retval= 0;
-      }
+    if(isDead())
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << "; load over inactive element: "
+                << getTag() << std::endl;
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; ele with tag: " << this->getTag()
-		  << " does not deal with load type: " << type << "\n";
-        retval= -1;
+	if(SelfWeight *brickLoad= dynamic_cast<SelfWeight *>(theLoad))
+	  {
+	    const int loadType= theLoad->getClassTag();
+
+	    if(loadType==LOAD_TAG_BrickSelfWeight)
+	      {
+		applyLoad= true;
+		appliedB[0]+= loadFactor*bf[0];
+		appliedB[1]+= loadFactor*bf[1];
+		appliedB[2]+= loadFactor*bf[2];
+		retval= 0;
+	      }
+	    else if(loadType==LOAD_TAG_SelfWeight)
+	      {
+		// added compatibility with selfWeight class implemented
+		// for all continuum elements, C.McGann, U.W.
+		applyLoad= true;
+		//int type= -1;
+		//const Vector &data= theLoad->getData(type, loadFactor);
+		
+		appliedB[0]+= loadFactor*brickLoad->getXFact()*bf[0];
+		appliedB[1]+= loadFactor*brickLoad->getYFact()*bf[1];
+		appliedB[2]+= loadFactor*brickLoad->getZFact()*bf[2];
+		retval= 0;
+	      }
+	    else
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; ele with tag: " << this->getTag()
+			  << " does not deal with load type: " << loadType << "\n";
+		retval= -1;
+	      }
+	  }
+	else
+	  retval= BrickBase::addLoad(theLoad,loadFactor);
       }
     return retval;
   }
