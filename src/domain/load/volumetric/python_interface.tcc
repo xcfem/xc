@@ -21,5 +21,18 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::BrickSelfWeight, bases<XC::ElementBodyLoad>, boost::noncopyable >("BrickSelfWeight", no_init);
+class_<XC::ThreedimLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("ThreedimLoad", no_init)
+  .add_property("category", &XC::ThreedimLoad::Category)
+  ;
 
+class_<XC::BrickSelfWeight, bases<XC::ThreedimLoad>, boost::noncopyable >("BrickSelfWeight", no_init)
+  ;
+
+class_<XC::ThreedimStrainLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("ThreedimStrainLoad", no_init)
+  .def("getStrain",make_function(&XC::ThreedimStrainLoad::getStrain, return_internal_reference<>() ))
+  .def("getStrains",make_function(&XC::ThreedimStrainLoad::getStrains, return_internal_reference<>() ))
+  .def("setStrainComp",&XC::ThreedimStrainLoad::setStrainComp)
+  ;
+
+class_<XC::BrickStrainLoad, bases<XC::ThreedimStrainLoad>, boost::noncopyable >("QuadStrainLoad", no_init)
+  ;

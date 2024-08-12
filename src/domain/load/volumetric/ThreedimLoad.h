@@ -25,37 +25,31 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
+//ThreedimLoad.h
                                                                         
-#ifndef BrickSelfWeight_h
-#define BrickSelfWeight_h
+#ifndef ThreedimLoad_h
+#define ThreedimLoad_h
 
-// Written: ZHYang, UCDavis
 
-// Purpose: This file contains the class definition for 8 node brick self weight load.
-
-#include "domain/load/volumetric/ThreedimLoad.h"
+#include <domain/load/ElementBodyLoad.h>
 
 namespace XC {
+
 //! @ingroup ElemLoads
 //
-//! @brief Hexahedron self weight.
-class BrickSelfWeight: public ThreedimLoad
+//! @brief Load over threedimensional elements.
+class ThreedimLoad: public ElementBodyLoad
   {
-  private:
-    static Vector data;
   protected:
-    int sendData(Communicator &comm);
-    int recvData(const Communicator &comm);
 
   public:
-    BrickSelfWeight(int tag= 0);
-    BrickSelfWeight(int tag, const ID &theElementTags);
+    ThreedimLoad(int tag, int classTag,const ID &theElementTags);
+    ThreedimLoad(int tag, int classTag);
 
-    const Vector &getData(int &type, const double &loadFactor) const;
+    virtual std::string Category(void) const;
 
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-    void Print(std::ostream &s, int flag =0) const;       
+    void Print(std::ostream &s, int flag =0) const;
+
   };
 } // end of XC namespace
 

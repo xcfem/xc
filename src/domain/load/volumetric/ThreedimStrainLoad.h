@@ -25,37 +25,51 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
+//ThreedimStrainLoad.h
                                                                         
-#ifndef BrickSelfWeight_h
-#define BrickSelfWeight_h
+#ifndef ThreedimStrainLoad_h
+#define ThreedimStrainLoad_h
 
-// Written: ZHYang, UCDavis
-
-// Purpose: This file contains the class definition for 8 node brick self weight load.
-
-#include "domain/load/volumetric/ThreedimLoad.h"
+#include "ThreedimLoad.h"
 
 namespace XC {
 //! @ingroup ElemLoads
 //
-//! @brief Hexahedron self weight.
-class BrickSelfWeight: public ThreedimLoad
+//! @brief Load due to restricted material expansion or contraction on bidimensional elements.
+class ThreedimStrainLoad: public ThreedimLoad
   {
   private:
-    static Vector data;
+    std::vector<Vector> strains; //!< Imposed strains on each Gauss point.	
   protected:
+    DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
 
   public:
-    BrickSelfWeight(int tag= 0);
-    BrickSelfWeight(int tag, const ID &theElementTags);
-
+    ThreedimStrainLoad(int tag, const std::vector<Vector> &, const ID &theElementTags);
+    ThreedimStrainLoad(int tag, const size_t &, const Vector &, const ID &theElementTags);
+    ThreedimStrainLoad(int tag, const size_t &, const ID &theElementTags);
+    ThreedimStrainLoad(int tag, const size_t &, const Vector &);
+    ThreedimStrainLoad(int tag, const size_t &);
+    ThreedimStrainLoad(const size_t &s= 8);
+  
+    inline const std::vector<Vector> &getStrains(void) const
+      { return strains; }
+    inline std::vector<Vector> &Strains(void)
+      { return strains; }
+    inline const Vector &getStrain(const size_t &i) const
+      { return strains[i]; }
+    inline Vector &Strain(const size_t &i)
+      { return strains[i]; }
+    void setStrains(const Matrix &);
+    void setStrainComp(const size_t &,const size_t &,const double &);
     const Vector &getData(int &type, const double &loadFactor) const;
 
+  
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;       
+
   };
 } // end of XC namespace
 

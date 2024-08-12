@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -25,39 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-                                                                        
-#ifndef BrickSelfWeight_h
-#define BrickSelfWeight_h
 
-// Written: ZHYang, UCDavis
 
-// Purpose: This file contains the class definition for 8 node brick self weight load.
+#include "BrickStrainLoad.h"
+#include "utility/matrix/Vector.h"
+#include "utility/matrix/ID.h"
 
-#include "domain/load/volumetric/ThreedimLoad.h"
+//! @brief Constructor.
+XC::BrickStrainLoad::BrickStrainLoad(int tag, const ID &theElementTags)
+  :ThreedimStrainLoad(tag,8,Vector(3), theElementTags) {}
 
-namespace XC {
-//! @ingroup ElemLoads
-//
-//! @brief Hexahedron self weight.
-class BrickSelfWeight: public ThreedimLoad
-  {
-  private:
-    static Vector data;
-  protected:
-    int sendData(Communicator &comm);
-    int recvData(const Communicator &comm);
-
-  public:
-    BrickSelfWeight(int tag= 0);
-    BrickSelfWeight(int tag, const ID &theElementTags);
-
-    const Vector &getData(int &type, const double &loadFactor) const;
-
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-    void Print(std::ostream &s, int flag =0) const;       
-  };
-} // end of XC namespace
-
-#endif
-
+//! @brief Constructor.
+XC::BrickStrainLoad::BrickStrainLoad(int tag)
+  :ThreedimStrainLoad(tag,8,Vector(3)) {}

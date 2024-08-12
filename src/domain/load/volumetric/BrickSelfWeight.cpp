@@ -63,13 +63,10 @@
 XC::Vector XC::BrickSelfWeight::data(1);
 
 XC::BrickSelfWeight::BrickSelfWeight(int tag, const XC::ID &theElementTags)
-  :ElementBodyLoad(tag, LOAD_TAG_BrickSelfWeight, theElementTags) {}
+  :ThreedimLoad(tag, LOAD_TAG_BrickSelfWeight, theElementTags) {}
 
 XC::BrickSelfWeight::BrickSelfWeight(int tag)
-  :ElementBodyLoad(tag, LOAD_TAG_BrickSelfWeight) {}
-
-XC::BrickSelfWeight::BrickSelfWeight(void)
-  :ElementBodyLoad(LOAD_TAG_BrickSelfWeight) {}
+  :ThreedimLoad(tag, LOAD_TAG_BrickSelfWeight) {}
 
 const XC::Vector &XC::BrickSelfWeight::getData(int &type, const double &loadFactor) const
   {
@@ -83,7 +80,7 @@ const XC::Vector &XC::BrickSelfWeight::getData(int &type, const double &loadFact
 //! communicator being passed as parameter.
 int XC::BrickSelfWeight::sendData(Communicator &comm)
   {
-    int res= ElementBodyLoad::sendData(comm);
+    int res= ThreedimLoad::sendData(comm);
     return res;
   }
 
@@ -91,7 +88,7 @@ int XC::BrickSelfWeight::sendData(Communicator &comm)
 //! communicator being passed as parameter.
 int XC::BrickSelfWeight::recvData(const Communicator &comm)
   {        
-    int res= ElementBodyLoad::recvData(comm);
+    int res= ThreedimLoad::recvData(comm);
     return res;
   }
 

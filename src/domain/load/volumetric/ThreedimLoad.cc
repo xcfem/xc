@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -25,39 +24,22 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-                                                                        
-#ifndef BrickSelfWeight_h
-#define BrickSelfWeight_h
+//ThreedimLoad.cpp
 
-// Written: ZHYang, UCDavis
+#include "ThreedimLoad.h"
 
-// Purpose: This file contains the class definition for 8 node brick self weight load.
+XC::ThreedimLoad::ThreedimLoad(int tag,int classTag,const ID &theElementTags)
+  :ElementBodyLoad(tag, classTag, theElementTags) {}
 
-#include "domain/load/volumetric/ThreedimLoad.h"
+XC::ThreedimLoad::ThreedimLoad(int tag,int classTag)
+  :ElementBodyLoad(tag, classTag) {}
 
-namespace XC {
-//! @ingroup ElemLoads
-//
-//! @brief Hexahedron self weight.
-class BrickSelfWeight: public ThreedimLoad
+//! @brief Print stuff.
+void XC::ThreedimLoad::Print(std::ostream &s, int flag) const
   {
-  private:
-    static Vector data;
-  protected:
-    int sendData(Communicator &comm);
-    int recvData(const Communicator &comm);
+    s << "ThreedimLoad - Reference load" << std::endl;
+    ElementBodyLoad::Print(s,flag);
+  }
 
-  public:
-    BrickSelfWeight(int tag= 0);
-    BrickSelfWeight(int tag, const ID &theElementTags);
-
-    const Vector &getData(int &type, const double &loadFactor) const;
-
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-    void Print(std::ostream &s, int flag =0) const;       
-  };
-} // end of XC namespace
-
-#endif
-
+std::string XC::ThreedimLoad::Category(void) const
+  { return "threedim_nodef"; }
