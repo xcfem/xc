@@ -360,9 +360,9 @@ int XC::FourNodeQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
       {
         if(SelfWeight *quadLoad= dynamic_cast<SelfWeight *>(theLoad))
 	  {
-	    // added compatability with selfWeight class implemented
+	    // added compatibility with selfWeight class implemented
 	    // for all continuum elements, C.McGann, U.W.
-	    //applyLoad = 1;
+	    // applyLoad = 1;
 	    bf[0]+= loadFactor*quadLoad->getXFact();
 	    bf[1]+= loadFactor*quadLoad->getYFact();
 	    bf[2]+= loadFactor*quadLoad->getZFact();
