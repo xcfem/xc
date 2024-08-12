@@ -32,8 +32,8 @@
 
 //! @brief Constructor.
 XC::QuadStrainLoad::QuadStrainLoad(int tag, const ID &theElementTags)
-  :BidimStrainLoad(tag,4,Vector(3), theElementTags) {}
+  :BidimStrainLoad(tag,4,Vector(2), theElementTags) {}
 
 //! @brief Constructor.
 XC::QuadStrainLoad::QuadStrainLoad(int tag)
-  :BidimStrainLoad(tag,4,Vector(3)) {}
+  :BidimStrainLoad(tag,4,Vector(2)) {}
