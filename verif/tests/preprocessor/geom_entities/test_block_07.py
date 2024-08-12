@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial check of quadrilateral surfaces.'''
+''' Trivial check of 3D block.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -53,7 +53,7 @@ pt10= modelSpace.newKPoint(1,0,2)
 pt11= modelSpace.newKPoint(1,1,2)
 pt12= modelSpace.newKPoint(0,1,2)
 
-# Define quadrilateral surface.
+# Define block.
 bodies= preprocessor.getMultiBlockTopology.getBodies
 b1= bodies.newBlockPts(pt1.tag, pt2.tag, pt3.tag, pt4.tag, pt5.tag, pt6.tag, pt7.tag, pt8.tag)
 b1.nDivI= 1
