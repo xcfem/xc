@@ -13,6 +13,9 @@ __email__= "l.pereztato@gmail.com"
 from actions.railway_traffic import ec1_slipstream_effect
 
 # Compute some values
+# v: speed of the train.
+# a_g: distance from the track axis to the surface of the structure (m).
+# h_g: distance from top of rail level to the underside of the structure (m).
 q1k_300_2dot3= ec1_slipstream_effect.q1k(v= 300/3.6, a_g= 2.3)
 q1k_300_6dot3= ec1_slipstream_effect.q1k(v= 300/3.6, a_g= 6.0)
 q2k_300_5= ec1_slipstream_effect.q2k(v= 300/3.6, h_g= 5.0)
