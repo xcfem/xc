@@ -197,11 +197,18 @@ class EC2Concrete(concrete_base.Concrete):
         
     def getShearStrengthReductionFactor(self, nationalAnnex= None):
         ''' Return the strength reduction factor for concrete cracked in shear
-            according to expression 6.6N of EC2:2004.
+            according to expression 6.6N of EC2:2004 (clause 6.2.2).
         
         :param nationalAnnex: identifier of the national annex.
         '''
-        return 0.6*(1-self.fckMPa()/250) # equation 6.6N
+        if((nationalAnnex is None) or (nationalAnnex=='Spain')):
+            retval= 0.6*(1-self.fckMPa()/250) # equation 6.6N
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' not implemented yet. Using recommended values.')
+            retval= 0.6*(1-self.fckMPa()/250) # equation 6.6N
+        return retval
         
     def getMinShearReinfRatio(self, shearReinfSteel, nationalAnnex= None):
         ''' Return the minimum shear reinforcement ratio according
@@ -212,16 +219,21 @@ class EC2Concrete(concrete_base.Concrete):
         '''
         fyk= shearReinfSteel.fyk # characteristic value of the shear
                                  # reinforcement yield strength.
-        if(nationalAnnex=='Spain'):
+        if(nationalAnnex is None):
+            retval= 0.08*math.sqrt(self.fckMPa())/(fyk/1e6)
+        elif(nationalAnnex=='Spain'):
             retval= self.fctm()/7.5/fyk # Spanish national annex.
         else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' not implemented yet. Using recommended values.')
             retval= 0.08*math.sqrt(self.fckMPa())/(fyk/1e6)
         return retval
 
     def getAlphaCw(self, NEd, Ac, nationalAnnex= None):
         ''' Return the coefficient taking account of the state of the stress 
             in the compression chord according to expressions 6.11aN, 6.11bN
-            and 6.11cN of EC2:2004.
+            and 6.11cN of EC2:2004 (clause 6.2.3).
 
         :param NEd: axial force in the cross-section due to loading 
                     or prestressing.
@@ -245,6 +257,11 @@ class EC2Concrete(concrete_base.Concrete):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; excessive concrete stress: '+str(sigma_cp/1e6)+' MPa.')
             retval= 1e-6
+        if(nationalAnnex is not None): # something specified.
+            if(nationalAnnex!='Spain'): # not spain nor default.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' not implemented yet. Using recommended values.')
         return retval
     
     def getConcreteFlangeShearStressStrength(self, nationalAnnex= None):
@@ -254,6 +271,11 @@ class EC2Concrete(concrete_base.Concrete):
         :param nationalAnnex: identifier of the national annex.
         '''
         k= 0.4 # Depends on national annex.
+        if(nationalAnnex is not None): # something specified.
+            if(nationalAnnex!='Spain'): # not spain nor default.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' not implemented yet. Using recommended values.')        
         return k*self.fctd()
 
     def getUltimateBondStress(self, rebarDiameter, eta1= 0.7):
@@ -699,3 +721,100 @@ rebar25_S500B= rebar_family.Rebar(diam= 25e-3, steel= S500B)
 rebar32_S500B= rebar_family.Rebar(diam= 32e-3, steel= S500B) 
 rebar40_S500B= rebar_family.Rebar(diam= 40e-3, steel= S500B) 
 rebar50_S500B= rebar_family.Rebar(diam= 50e-3, steel= S500B) 
+
+
+
+#       ___            _                 _           
+#      | _ \_ _ ___ __| |_ _ _ ___ _____(_)_ _  __ _ 
+#      |  _/ '_/ -_|_-<  _| '_/ -_|_-<_-< | ' \/ _` |
+#      |_| |_| \___/__/\__|_| \___/__/__/_|_||_\__, |
+#       __| |_ ___ ___| |                      |___/ 
+#      (_-<  _/ -_) -_) |                            
+#      /__/\__\___\___|_|                            
+# ************* Prestressing steel. ********************
+# ******** According to EN 1992-1-1:2004 ***************
+# Applicable clauses:
+# 3.3 Prestressing steel
+# 5.10 Prestressed members and structures
+# 10.3.2 Prestressing steel
+class PrestressingSteel(concrete_base.PrestressingSteel):
+    ''' Prestressing steel model according to EC2.
+
+    :ivar euk: elongation at maximum load.
+    '''
+    def __init__(self,steelName, fp01k, euk= None, fmax= 1860e6, alpha= 0.75, steelRelaxationClass= 1, tendonClass= 'strand', Es= 195e9):
+        ''' Prestressing steel base class.
+
+        :param steelName: steel name.
+        :param fp01k: Characteristic 0,1% proof-stress of prestressing steel.
+        :param euk: elongation at maximum load.
+        :param fmax: Tensile strength.
+        :param alpha: initial stress-to-strength ratio.
+        :param steelRelaxationClass: Relaxation class 1: normal, 
+                                     2: improved, 
+                                     and 3: relaxation for bars.
+        :param tendonClass: tendon class: wire, strand or bar.
+        :param Es: elastic modulus (see clause 3.3.6 paragraphs (2) and (3).
+        '''
+        super(PrestressingSteel,self).__init__(steelName= steelName, fpk= fp01k, fmax= fmax, alpha= alpha, steelRelaxationClass= steelRelaxationClass, tendonClass= tendonClass, Es= Es)
+        if(euk):
+            self.euk= euk
+        else:
+            self.euk= 0.02/0.9 # See clause 3.3.6 paragraph (7)
+
+    def get_fp01k(self):
+        '''Return the characteristic value of the 0.1% proof-stress of the
+           prestressing steel.'''
+        return self.fpk
+
+    def get_fpk(self):
+        '''Return the characteristic value of the tensile strength of the
+           prestressing steel.
+        '''
+        return self.fmax
+
+    def getMaximumStressingStress(self, overStressing= False, nationalAnnex= None):
+        ''' Return the maximum stressing stress (i.e. the stress at the active
+            end during tensioning) according to clause 5.10.2.1 of 
+            EN 1992-1-1:2004.
+
+        :param overStressing: apply paragraph (2) of clause 5.10.2.1.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        if(overStressing): # see 5.10.2.1 (2)
+            if(nationalAnnex is None):
+                k3= 0.95
+            elif(nationalAnnex=='Spain'): 
+                k3= 0.90
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' unknown. Using recommended values.')
+            retval= k3*self.get_fp01k()
+        else: # see 5.10.2.1 (1)P
+            if(nationalAnnex is None):
+                k1= 0.8
+                k2= 0.9
+            elif(nationalAnnex=='Spain'): 
+                k1= 0.75
+                k2= 0.85             
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' unknown. Using recommended values.')
+            retval= min(k1*self.get_fpk(), k2*self.get_fp01k())
+        return retval
+    
+    def getMaximumStressingForce(self, Ap, overStressing= False, nationalAnnex= None):
+        ''' Return the maximum stressing force (i.e. the force at the active
+            end during tensioning) according to clause 5.10.2.1 of 
+            EN 1992-1-1:2004.
+
+        :param Ap: cross-sectional area of the tendon.
+        :param overStressing: apply paragraph (2) of clause 5.10.2.1.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        return Ap*self.getMaximumStressingStress(overStressing= overStressing, nationalAnnex= nationalAnnex)
+    
+# Prestressing steel.
+Y1860S7= PrestressingSteel(steelName= "Y1860S7",fp01k= 1171e6, fmax= 1860e6)
