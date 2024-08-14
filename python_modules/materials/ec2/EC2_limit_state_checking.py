@@ -402,7 +402,7 @@ class CrackController(lscb.LimitStateControllerBase):
         :param x: depth of the neutral axis.
         '''
         s_r_max= self.s_r_max(k2= k2, cover= cover, reinfPhi= reinfPhi, spacing= spacing, ro_eff= ro_eff)
-        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff, shortTermLoading= self.shortTermLoading)
+        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff)
         return meanStrainDifference*s_r_max
     
     def check(self, elements, loadCombinationName):

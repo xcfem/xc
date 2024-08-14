@@ -1346,7 +1346,7 @@ python tests/materials/ec2/test_EC2_2021_shrinkage.py
 python tests/materials/ec2/test_ec2_creep_and_shrinkage_calculation.py
 echo "$BLEU" "    EC2 crack amplitude determination tests." "$NORMAL"
 python tests/materials/ec2/test_crack_control_without_direct_calculation_01.py
-python tests/materials/ehe/test_crack_control_01.py
+python tests/materials/ec2/test_crack_control_01.py
 python tests/materials/ec2/test_smearedCracking_01.py
 python tests/materials/ec2/test_smearedCracking_02.py
 python tests/materials/ec2/test_smearedCracking_03.py

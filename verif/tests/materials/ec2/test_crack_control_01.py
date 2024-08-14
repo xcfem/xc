@@ -36,7 +36,7 @@ sg_max= 175.74e6 # maximum stress in the reinforcement immediately after
                  # formation of the crack.
 
 # Crack control.
-crackController= EC2_limit_state_checking.CrackController(limitStateLabel= 'SLS_crack')
+crackController= EC2_limit_state_checking.CrackController(limitStateLabel= 'SLS_crack', shortTermLoading= False)
 
 # maximum final crack spacing
 k2= 0.5 # Bending (see EC2 clause 7.3.4).
@@ -53,10 +53,10 @@ ro_eff= As/Ac_eff # effective reinforcement ratio.
 s_r_max= crackController.s_r_max(k2= k2, cover= c, reinfPhi= rebarRow.getDiam(), spacing= rebarSpacing, ro_eff= ro_eff)
 ratio1= abs(s_r_max-274.1230178669006e-3)/274.1230178669006e-3
 # Compute mean strain difference using equation 7.9 of EC2.
-meanStrainDifference= crackController.meanStrainDifference(sigma_s= sg_max, steel= steel, concrete= concrete, ro_eff= ro_eff, shortTermLoading= False)
+meanStrainDifference= crackController.meanStrainDifference(sigma_s= sg_max, steel= steel, concrete= concrete, ro_eff= ro_eff)
 ratio2= abs(meanStrainDifference-0.0005535415351842659)/0.0005535415351842659
 # Compute Wk
-Wk= crackController.computeWk(sigma_s= sg_max, steel= steel, concrete= concrete, ro_eff= ro_eff, k2= k2, cover= c, reinfPhi= rebarRow.getDiam(), spacing= rebarSpacing, shortTermLoading= False)
+Wk= crackController.computeWk(sigma_s= sg_max, steel= steel, concrete= concrete, ro_eff= ro_eff, k2= k2, cover= c, reinfPhi= rebarRow.getDiam(), spacing= rebarSpacing)
 ratio3= abs(Wk-0.15173847613938812e-3)/0.15173847613938812e-3
 
 '''
