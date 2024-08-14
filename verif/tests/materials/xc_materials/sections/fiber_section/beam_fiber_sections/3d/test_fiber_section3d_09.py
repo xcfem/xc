@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
+
+from __future__ import print_function
 
 # feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
 

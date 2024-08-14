@@ -13,8 +13,6 @@ import os
 import sys
 import xc
 from misc import scc3d_testing_bench
-
-
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import fiber_sets
 from model import predefined_spaces
