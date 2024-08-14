@@ -458,6 +458,20 @@ class PredefinedSpace(object):
         ''' Return the preprocessor material handler.'''
         return self.preprocessor.getMaterialHandler
 
+    def getMaterialFromTag(self, tag):
+        ''' Return the material which has the given tag.
+
+        :param tag: tag of the desired material.
+        '''
+        return self.preprocessor.getMaterialHandler.getMaterial(tag)
+
+    def getMaterialFromName(self, name):
+        ''' Return the material which has the given name.
+
+        :param tag: name of the desired material.
+        '''
+        return self.preprocessor.getMaterialHandler.getMaterial(name)
+    
     def setCreepOn(self):
         ''' Activates creep for TD concrete materials.'''
         self.getMaterialHandler().setCreepOn()
