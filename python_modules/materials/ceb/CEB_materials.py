@@ -12,9 +12,15 @@ import math
 import scipy.interpolate
 from materials import concrete_base
 
+#       ___            _                 _           
+#      | _ \_ _ ___ __| |_ _ _ ___ _____(_)_ _  __ _ 
+#      |  _/ '_/ -_|_-<  _| '_/ -_|_-<_-< | ' \/ _` |
+#      |_| |_| \___/__/\__|_| \___/__/__/_|_||_\__, |
+#       __| |_ ___ ___| |                      |___/ 
+#      (_-<  _/ -_) -_) |                            
+#      /__/\__\___\___|_|                            
 # ************* Prestressing steel. ********************
-
-class CEBPrestressingSteel(concrete_base.PrestressingSteel):
+class CEBPrestressingSteel(concrete_base.CEB_EHE_PrestressingSteel):
     ''' Prestressing steel according to Model Code CEB-FIP 1990.
 
     :param fpk: Elastic limit.

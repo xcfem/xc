@@ -521,7 +521,7 @@ rebar50_B500S= rebar_family.Rebar(diam= 50e-3, steel= B500S)
 # Relaxation of steel according to EHE-08 (Artº 38.9)
 # and Model Code CEB-FIP 1990.
 
-class PrestressingSteel(concrete_base.PrestressingSteel):
+class PrestressingSteel(concrete_base.CEB_EHE_PrestressingSteel):
     ''' Prestressing steel model according to EHE-08. 
 
     :ivar alpha: stress-to-strength ratio.
@@ -535,10 +535,6 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
     #For bars:
     ptsRO1000Bars= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,2,3,7])
 
-    # Points from the table 38.9.b of EHE-08 to determine
-    # relaxation at times shorter than 1000 hours.
-    ptsShortTermRelaxation= scipy.interpolate.interp1d([0, 1, 5, 20, 100, 200, 500, 1000],[0, 0.25, 0.45, 0.55, 0.7, 0.8, 0.9, 1])
-    
     # Table 70.2.3 of EHE
     x= [25e6,30e6,35e6,40e6,45e6,50e6]
     ## For strands
@@ -565,12 +561,6 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         super(PrestressingSteel,self).__init__(steelName= steelName, fpk= fpk, fmax= fmax, alpha= alpha, steelRelaxationClass= steelRelaxationClass, tendonClass= tendonClass, Es= Es)
         self.alpha= alpha # initial stress-to-strength ratio.
         
-    def tInic(self):
-        ''' Return final presstressing (initial at 75 percent  and 25 
-            percent of total losses).
-        '''
-        return self.alpha**2*self.fmax 
-    
     def getDesignAdherenceStress(self, concrete, pos, t= 28):
         ''' Return the design value of the adherence stress according
             to the commentaries to the article 70.2.3 of EHE.

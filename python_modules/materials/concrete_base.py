@@ -1554,6 +1554,14 @@ def testReinfSteelDesignDiagram(preprocessor, matRecord):
         e= e+incr
     return errMax
 
+#       ___            _                 _           
+#      | _ \_ _ ___ __| |_ _ _ ___ _____(_)_ _  __ _ 
+#      |  _/ '_/ -_|_-<  _| '_/ -_|_-<_-< | ' \/ _` |
+#      |_| |_| \___/__/\__|_| \___/__/__/_|_||_\__, |
+#       __| |_ ___ ___| |                      |___/ 
+#      (_-<  _/ -_) -_) |                            
+#      /__/\__\___\___|_|                            
+# ************* Prestressing steel. ********************
 class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
     '''Prestressing steel parameters 
 
@@ -1563,7 +1571,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
                                  and 3: relaxation for bars.
     :ivar tendonClass: Tendon class wire, strand or bar.
     '''
-    def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand', Es= 190e9):
+    def __init__(self, steelName, fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand', Es= 190e9):
         ''' Prestressing steel base class.
 
            :param fpk: Elastic limit.
@@ -1607,6 +1615,49 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD
 
+
+class CEB_EHE_PrestressingSteel(PrestressingSteel):
+    ''' Prestressing steel base class for EHE and CEB standards.
+
+    :ivar alpha: stress-to-strength ratio.
+    '''
+    # Points from the table 38.9.b of EHE-08 to determine
+    # relaxation at times shorter than 1000 hours.
+    ptsShortTermRelaxation= scipy.interpolate.interp1d([0, 1, 5, 20, 100, 200, 500, 1000],[0, 0.25, 0.45, 0.55, 0.7, 0.8, 0.9, 1])
+    
+    def __init__(self, steelName, fpk, fmax= 1860e6, alpha= 0.75, steelRelaxationClass= 1, tendonClass= 'strand', Es= 190e9):
+        ''' Prestressing steel base class.
+
+           :param steelName: steel name.
+           :param fpk: Elastic limit.
+           :param fmax: Steel strength.
+           :param alpha: stress-to-strength ratio.
+           :param steelRelaxationClass: Relaxation class 1: normal, 
+                                        2: improved, 
+                                        and 3: relaxation for bars.
+           :param tendonClass: tendon class: wire, strand or bar.
+           :param Es: elastic modulus.
+        '''
+    
+        super(CEB_EHE_PrestressingSteel,self).__init__(steelName= steelName, fpk= fpk, fmax= fmax, alpha= alpha, steelRelaxationClass= steelRelaxationClass, tendonClass= tendonClass, Es= Es)
+        self.alpha= alpha # initial stress-to-strength ratio.
+    
+    def getKRelaxation(self):
+        ''' Return the value of k factor for the relaxation expression
+           from the relaxation class. See Model Code 1990 paragraph 2.3.4.5.
+        '''
+        if(self.steelRelaxationClass==1):
+            return 0.12 
+        elif(self.steelRelaxationClass==2):
+            return 0.19 
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; relaxation class : '+str(self.steelRelaxationClass)+' not implemented.')
+            return 0
+        
+    def tInic(self):
+        return self.alpha**2*self.fmax # Final presstressing (initial at 75 percent  and 25 percent of total losses).
 
 def createInteractionDiagram(materialHandler, concreteDiagram, steelDiagram, concreteSection):
     ''' Return the three-dimensional interaction Diagram for the section.
