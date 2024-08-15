@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Prestressing of a concrete truss. Home made test.'''
 from __future__ import print_function
 
-# Home made test: prestressing a concrete truss.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2021, LCPT and AOO"
