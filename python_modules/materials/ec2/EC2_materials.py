@@ -817,4 +817,5 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         return Ap*self.getMaximumStressingStress(overStressing= overStressing, nationalAnnex= nationalAnnex)
     
 # Prestressing steel.
-Y1860S7= PrestressingSteel(steelName= "Y1860S7",fp01k= 1171e6, fmax= 1860e6)
+Y1860S7= PrestressingSteel(steelName= "Y1860S7",fp01k= 0.85*1860e6, fmax= 1860e6)
+Y1770= PrestressingSteel(steelName= "Y1770",fp01k= 1520e6, fmax= 1770e6)
