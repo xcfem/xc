@@ -840,11 +840,62 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
             immediately after tensioning or transfer) according to clause 
             5.10.3(2) of EN 1992-1-1:2004.
 
-        :param Ap: cross-sectional area of the tendon.
+        :param Ap: cross-sectional area of the tendon(s).
         :param nationalAnnex: identifier of the national annex.
         '''
         return Ap*self.getMaximumInitialStress(nationalAnnex= nationalAnnex)
+
+    def getTimeDependentStressLosses(self, Ap, concrete, Ac, Ic, z_cp, epsilon_cs, fi_t_t0, delta_sigma_pr, sigma_c_qp):
+        ''' Return the time dependent losses of prestress according to clause
+            5.10.6 od of EN 1992-1-1:2004.
+
+        :param Ap: cross-sectional area of the tendon(s).
+        :param concrete: concrete material.
+        :param Ac: area of the concrete section.
+        :param Ic: second moment of area of the concrete section.
+        :param z_cp: distance between the centre of gravity of the concrete
+                     section and the tendons.
+        :param epsilon_cs: estimated shrinkage strain according to 3.1.4(6).
+        :param fi_t_t0: creep coefficient at a time t and load application 
+                        at time t0.
+        :param delta_sigma_pr: absolute value of the variation of stress in 
+                               the tendons at location x, at time t, due to 
+                               the relaxation of the prestressing steel.
+        :param sigma_c_qp: stress in the concrete adjacent to the tendons, due
+                           to self-weight and initial prestress and other 
+                           quasi-permanent actions where relevant.
+        '''
+        Ep= self.Es
+        Ecm= concrete.Ecm()
+        Ep_Ecm= Ep/Ecm
+        num= epsilon_cs*Ep+0.8*delta_sigma_pr+Ep_Ecm*fi_t_t0*sigma_c_qp
+        denom= 1+Ep_Ecm*Ap/Ac*(1+Ac/Ic*z_cp**2)*(1+0.8*fi_t_t0)
+        return num/denom
     
+    def getTimeDependentForceLosses(self, Ap, concrete, Ac, Ic, z_cp, epsilon_cs, fi_t_t0, delta_sigma_pr, sigma_c_qp):
+        ''' Return the time dependent losses of prestress according to clause
+            5.10.6 od of EN 1992-1-1:2004.
+
+        :param Ap: cross-sectional area of the tendon(s).
+        :param concrete: concrete material.
+        :param Ac: area of the concrete section.
+        :param Ic: second moment of area of the concrete section.
+        :param z_cp: distance between the centre of gravity of the concrete
+                     section and the tendons.
+        :param epsilon_cs: estimated shrinkage strain according to 3.1.4(6).
+        :param fi_t_t0: creep coefficient at a time t and load application 
+                        at time t0.
+        :param delta_sigma_pr: absolute value of the variation of stress in 
+                               the tendons at location x, at time t, due to 
+                               the relaxation of the prestressing steel.
+        :param sigma_c_qp: stress in the concrete adjacent to the tendons, due
+                           to self-weight and initial prestress and other 
+                           quasi-permanent actions where relevant.
+        '''
+        retval= self.getTimeDependentStressLosses(Ap= Ap, concrete= concrete, Ac= Ac, Ic= Ic, z_cp= z_cp, epsilon_cs= epsilon_cs, fi_t_t0= fi_t_t0, delta_sigma_pr= delta_sigma_pr, sigma_c_qp= sigma_c_qp)
+        retval*= Ap
+        return retval
+        
 # Prestressing steel.
 Y1860S7= PrestressingSteel(steelName= "Y1860S7",fp01k= 0.85*1860e6, fmax= 1860e6)
 Y1770= PrestressingSteel(steelName= "Y1770",fp01k= 1520e6, fmax= 1770e6)
