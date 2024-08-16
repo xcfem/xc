@@ -847,7 +847,7 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
 
     def getTimeDependentStressLosses(self, Ap, concrete, Ac, Ic, z_cp, epsilon_cs, fi_t_t0, delta_sigma_pr, sigma_c_qp):
         ''' Return the time dependent losses of prestress according to clause
-            5.10.6 od of EN 1992-1-1:2004.
+            5.10.6 od of EN 1992-1-1:2004 (expression (5.46))
 
         :param Ap: cross-sectional area of the tendon(s).
         :param concrete: concrete material.
@@ -874,7 +874,7 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
     
     def getTimeDependentForceLosses(self, Ap, concrete, Ac, Ic, z_cp, epsilon_cs, fi_t_t0, delta_sigma_pr, sigma_c_qp):
         ''' Return the time dependent losses of prestress according to clause
-            5.10.6 od of EN 1992-1-1:2004.
+            5.10.6 of EN 1992-1-1:2004.
 
         :param Ap: cross-sectional area of the tendon(s).
         :param concrete: concrete material.
@@ -895,7 +895,62 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         retval= self.getTimeDependentStressLosses(Ap= Ap, concrete= concrete, Ac= Ac, Ic= Ic, z_cp= z_cp, epsilon_cs= epsilon_cs, fi_t_t0= fi_t_t0, delta_sigma_pr= delta_sigma_pr, sigma_c_qp= sigma_c_qp)
         retval*= Ap
         return retval
+
+    def getMu(self, sigma_pi):
+        ''' Return the value of mu= sigma_pi/fpk according to clause 3.3.2(5)
+            of EN 1992-1-1:2004.
+
+        :param sigma_pi: for post-tensioning sigma_pi is the value of the
+                         initial prestress.
+        '''
+        return max(sigma_pi/self.get_fpk(), 0.55)
+
+    def getRo1000(self):
+        ''' Return the value for ro_1000 according to paragraph (6) of clause
+            3.3.2 of EN 1992-1-1:2004.
+        '''
+        if(self.steelRelaxationClass==1):
+            retval= 0.08
+        elif(self.steelRelaxationClass==2):
+            retval= 0.025
+        elif(self.steelRelaxationClass==3):
+            retval= 0.04
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; relaxation class: '+str(self.steelRelaxationClass)+' unknown. Returning none.')
+            retval= None
+        return retval
+
+    def getRelaxationLoss(self, sigma_pi, t, ro1000= None):
+        ''' Return the value of the relaxation loss according to clause 3.3.2(7)
+            of EN 1992-1-1:2004.
+
+        :param sigma_pi: for post-tensioning sigma_pi is the value of the
+                         initial prestress.
+        :param t: time after tensioning (in hours).
+        '''
+        if(ro1000 is None):
+            ro1000= 100.0*self.getRo1000()
+        retval= ro1000
+        mu= self.getMu(sigma_pi)
+        if(self.steelRelaxationClass==1):
+            retval*= 5.39; b= 6.7
+        elif(self.steelRelaxationClass==2):
+            retval*= 0.66; b=9.1
+        elif(self.steelRelaxationClass==3):
+            retval*= 1.98; b= 8
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; relaxation class: '+str(self.steelRelaxationClass)+' unknown. Returning none.')
+            retval= None
+        if(retval):
+            retval*= math.exp(b*mu)*math.pow(t/1000, 0.75*(1-mu))*1e-5
+            retval*= sigma_pi
+        return retval
+        
         
 # Prestressing steel.
 Y1860S7= PrestressingSteel(steelName= "Y1860S7",fp01k= 0.85*1860e6, fmax= 1860e6)
-Y1770= PrestressingSteel(steelName= "Y1770",fp01k= 1520e6, fmax= 1770e6)
+Y1770= PrestressingSteel(steelName= "Y1770",fp01k= 1520e6, fmax= 1770e6, steelRelaxationClass= 2)

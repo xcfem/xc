@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-''' Test calculation of prestressing losses to the following clauses of
-    EC2:2004:
+''' Test calculation of stress relaxation of prestressing steel according to
+    the following clauses of EC2:2004:
 
-    - Stress-strain curves for concrete and prestressing steel
-      (Section 3.1.7, 3.3.6).
-    - Veriﬁcation by the partial factor method - Design values (Section 2.4.2).
-    - Prestressing force (Section 5.10.2, 5.10.3)
+    - Properties (Section 3.3.2)
+    - Annex D: Detailed calculation method for prestressing steel relaxation losses (Section D.1).
+    - Strength (Section 3.3.3)
 
-    Inspired on: "DCE-EN18 Creep and Shrinkage Calculation of a Rectangular 
-    Prestressed Concrete CS" from the SOFiSTiK verification manual.
-    URL: https://docs.sofistik.com/2023/en/verification/_static/verification/pdf/dce-en18.pdf
+    Inspired on: "DCE-EN22 Stress Relaxation of Prestressing Steel - DIN EN 
+    1992-1-1" from the SOFiSTiK verification manual.
+    URL: https://docs.sofistik.com/2023/en/verification/_static/verification/pdf/dce-en22.pdf
 '''
 
 __author__= "Luis Claudio Pérez Tato (LCPT)"
@@ -19,17 +18,15 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import geom
-from scipy.constants import g
-from materials.ec2 import EC2_materials
-from materials.mc10 import MC10_materials
 from materials.sections import section_properties as sp
-from materials.prestressing import prestressed_concrete
 from model.geometry import geom_utils
 import numpy as np
 from scipy.constants import g
 from scipy.interpolate import interp1d
+from materials.prestressing import prestressed_concrete
 from misc_utils import log_messages as lmsg
+from materials.ec2 import EC2_materials
+import geom
 
 # National annex.
 nationalAnnex= 'Germany' # DIN EN 1992-1-1:2004 (German National Annex).
@@ -94,60 +91,16 @@ initialStresses= tendon.stressAfterLossFriction-anchorageSlipLosses #loss along 
 initialStressFunc= interp1d(tendon.fineProjXYcoord, initialStresses)
 midSpanInitialStress= initialStressFunc(10.0)
 
-# Load actions.
-## Self weight.
-selfWeightLoad= concrete.density()*concreteSection.A()*10#*g
-Mg= selfWeightLoad*L**2/8.0 # bending moment at mid-span.
 ## Prestressing axial load.
-Np= midSpanInitialStress*Ap # initial prestressing force at mid-span.
+P0= midSpanInitialStress*Ap # initial prestressing force at mid-span.
+sigma_p_0= midSpanInitialStress
 
-# Prestress and self-weight at construction stage section 0 (P+G cs0)
-## Construction stage 0 section:
-positions= [geom.Pos2d(0,0), geom.Pos2d(0,eDuctMidspan)]
-sectionList= list()
-for p, section in zip(positions, [concreteSection, ductHole]):
-    sectionList.append([p, section])
-cs0Section= sp.CompoundSection('cs0Section',sectionList, Iw= 0.0)
-## Bending moment at mid-span.
-zp= eTendonMidspan-cs0Section.yCenterOfMass()
-Mp= Np*zp
-My= Mg+Mp
-## Stress at the top of the mid-span section in case II.
-yTop= concreteSection.h/2.0+cs0Section.yCenterOfMass()
-sigma_c_qp= -Np/cs0Section.A()+My/cs0Section.Iz()*yTop
-ratio1= abs(sigma_c_qp+4.82e6)/4.82e6
-
-# Calculation of creep and shrinkage at x= 10.0 m midspan:
-t0= 28 # minimun age of concrete for loading.
-ts= 0 # age of concrete at start of drying shrinkage.
-t= 1000000+28 # age of concrete at the moment considered.
-u= 4
-RH= 80
-h0= 2*concreteSection.A()/u
-# Shrinkage strain
-## Drying shrinkage strain before prestressing.
-epsilon_cd_t0= concrete.getShrEpscd(t= t0,ts= ts, RH= RH, h0= h0)
-## Drying shrinkage strain at time t.
-epsilon_cd_t= concrete.getShrEpscd(t= t, ts= ts, RH= RH, h0= h0) 
-## Drying shrinkage strain "seen" by the prestressing load.
-epsilon_cd= epsilon_cd_t-epsilon_cd_t0
-ratio2= abs(epsilon_cd+1.668e-4)/1.668e-4
-## Autogenous shrinkage strain "seen" by the prestressing load.
-epsilon_ca= concrete.getShrEpsca(t= t, t0= t0) # autogenous shrinkage strain.
-ratio3= abs(epsilon_ca+2.169e-5)/2.169e-5
-## Total shrinkage "seen" by the prestressing load.
-epsilon_cs= epsilon_cd+epsilon_ca
-# Creep
-gamma_t0= MC10_materials.gamma_t0(t0= t0)
-fi_t_t0= concrete.getCreepFitt0(t= t, t0= t0, RH= RH, h0= h0,gamma_t0= gamma_t0)
-# According to EN, the creep value is related to the tangent Young’s
-# modulus Ec, where Ec being deﬁned as 1.05*Ecm. To account for
-# this, SOFiSTiK adopts this scaling for the computed creep coefﬁcient.
-fi_t_t0/=1.05
+# Calculating the prestressing losses due relaxation.
+mu= prestressingSteel.getMu(sigma_pi= sigma_p_0)
+delta_sigma_pr= prestressingSteel.getRelaxationLoss(sigma_pi= sigma_p_0, t= 1e3, ro1000= None)
+ratio1= abs(delta_sigma_pr-15.388e6)/15.388e6
 
 # Time dependent losses of prestress according to 5.10.6
-delta_sigma_pr= 0.0 # reduction of stress due to relaxation (Δσpr) is ignored.
-
 # Ap: cross-sectional area of the tendon(s).
 # concrete: concrete material.
 # Ac: area of the concrete section.
@@ -164,25 +117,43 @@ delta_sigma_pr= 0.0 # reduction of stress due to relaxation (Δσpr) is ignored.
 #             to self-weight and initial prestress and other 
 #             quasi-permanent actions where relevant.
 
-deltaSigma= prestressingSteel.getTimeDependentStressLosses(Ap= Ap, concrete= concrete, Ac= concreteSection.A(), Ic= concreteSection.Iz(), z_cp= eTendonMidspan, epsilon_cs= epsilon_cs, fi_t_t0= fi_t_t0, delta_sigma_pr= delta_sigma_pr, sigma_c_qp= sigma_c_qp)
-deltaP= deltaSigma*Ap
-ratio4= abs(deltaP+195.11e3)/195.11e3
+# Creep and shrinkage is not taken into account therefore we have:
+fi_t_t0= 0
+sigma_c_qp= 1 # (irrelevant)
+epsilon_cs= 0
+delta_sigma_pr/=0.8 # Difference between formula in DIN 1045-1 8.7.3 (6) and
+                    # equation (5.46) of EN 1992-1-1:2004
+## Construction stage 0 section:
+positions= [geom.Pos2d(0,0), geom.Pos2d(0,eDuctMidspan)]
+sectionList= list()
+for p, section in zip(positions, [concreteSection, ductHole]):
+    sectionList.append([p, section])
+cs0Section= sp.CompoundSection('cs0Section',sectionList, Iw= 0.0)
+deltaStress= prestressingSteel.getTimeDependentStressLosses(Ap= Ap, concrete= concrete, Ac= cs0Section.A(), Ic= cs0Section.Iz(), z_cp= eTendonMidspan, epsilon_cs= epsilon_cs, fi_t_t0= fi_t_t0, delta_sigma_pr= delta_sigma_pr, sigma_c_qp= sigma_c_qp)
+## Recompute sigma_p_0
+sigma_p_0-= 0.3*deltaStress
+## And iterate:
+delta_sigma_pr= prestressingSteel.getRelaxationLoss(sigma_pi= sigma_p_0, t= 1e3, ro1000= None)
+ratio2= abs(delta_sigma_pr-15.043e6)/15.043e6
+## We ignore the tendon strain terms in the SOFiSTiK example.
+deltaPpr= delta_sigma_pr*Ap
+refDeltaPpr= 15.043e6*Ap
+ratio3= abs(deltaPpr-refDeltaPpr)/refDeltaPpr
+deltaPprRatio= deltaPpr/P0
 
 '''
-print('\n1) Calculating the shrinkage displacements «seen» by the prestressing load.')
-print('   Drying shrinkage strain: epsilon_cd= '+'{:.2f}'.format(epsilon_cd*1e4)+'e-4', ' ratio2= ', ratio2)
-print('   Autogeonous shrinkage strain: epsilon_ca= '+'{:.2f}'.format(epsilon_ca*1e5)+'e-5', ' ratio3= ', ratio3)
-print('   Total shrinkage strain: epsilon_cs= '+'{:.2f}'.format(epsilon_cs*1e5)+'e-5')
-print('\n2) Calculating creep.')
-print('   Creep coefficient fi(t, t0)= '+'{:.3f}'.format(fi_t_t0))
-print('\n3) Calculating losses due to creep and shrinkage (relaxation ignored).')
-print('   Stress losses due to creep and shrinkage delta_sigma= '+'{:.2f}'.format(deltaSigma/1e6)+' MPa')
-print('   Force losses due to creep and shrinkage deltaP= '+'{:.2f}'.format(deltaP/1e3)+' kN', ' ratio4= ', ratio4)
+print("P0= ", P0/1e3)
+print("sigma_p_0= ", sigma_p_0/1e6)
+print("mu= ", mu)
+print("delta_sigma_pr= ", delta_sigma_pr/1e6, ratio2)
+print("deltaStress= ", deltaStress/1e6)
+print("deltaPpr= ", deltaPpr/1e3, ratio3)
+print("deltaPprRatio= ", deltaPprRatio*100)
 '''
 
 import os
 fname= os.path.basename(__file__)
-if((ratio1<1e-3) and (ratio2<1e-3) and (ratio3<1e-4) and (ratio3<1e-4) and (ratio4<1e-3)):
+if((ratio1<1e-3) and (ratio2<1e-2) and (ratio3<1e-2)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

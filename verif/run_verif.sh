@@ -1369,6 +1369,7 @@ python tests/materials/ec2/test_EC2_shear_between_web_and_flanges_01.py
 echo "$BLEU" "    EC2 prestressing." "$NORMAL"
 python tests/materials/ec2/test_ec2_prestressing_01.py
 python tests/materials/ec2/test_ec2_prestressing_02.py
+python tests/materials/ec2/test_ec2_prestressing_03.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
