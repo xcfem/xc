@@ -1167,6 +1167,7 @@ python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_regi
 echo "$BLEU" "      Compound sections." "$NORMAL"
 python tests/materials/xc_materials/sections/test_compound_section_01.py
 python tests/materials/xc_materials/sections/test_compound_section_02.py
+python tests/materials/xc_materials/sections/test_compound_section_03.py
 echo "$BLEU" "      Section stiffness." "$NORMAL"
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_01.py
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_02.py
