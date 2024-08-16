@@ -27,7 +27,6 @@ from materials.ec2 import EC2_materials
 from materials import concrete_base
 from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
-# import matplotlib.pyplot as plt
 import numpy as np
 
 #Data from the experiment
@@ -192,5 +191,6 @@ else:
     lmsg.error(fname+' ERROR.')
 
 ### FIGURES
+# import matplotlib.pyplot as plt
 # plt.plot(strain,stress)
 # plt.show()
