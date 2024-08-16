@@ -57,10 +57,9 @@ class PrestressTendon(object):
             yCoor.append(v.y)
             zCoor.append(v.z)
         self.fineCoordMtr=np.array([xCoor,yCoor,zCoor])
-        return
             
 
-    def pntsInterpTendon(self,nPntsFine,smoothness,kgrade=3):
+    def pntsInterpTendon(self, nPntsFine, smoothness, kgrade=3):
         '''Generates a cubic spline (default) or a spline of grade kgrade 
         interpolation from the rough points and calculates its value and 
         the value of its derivative in nPntsFine equispaced.
@@ -87,7 +86,6 @@ class PrestressTendon(object):
         self.fineScoord=self.getCumLength()
         x0,y0=(self.fineCoordMtr[0][0],self.fineCoordMtr[1][0])
         self.fineProjXYcoord=((self.fineCoordMtr[0]-x0)**2+(self.fineCoordMtr[1]-y0)**2)**0.5
-        return
 
     def getLengthSequence(self):
         '''Return for each point in fineCoordMtr the distance to the preceding 
@@ -319,13 +317,14 @@ class PrestressTendon(object):
         '''Apply stress in each tendon element with the corresponding 
         value of stress defined in stressMtr
 
-        :param stressMtr: matrix of dimension 1*number of nodes in the tendon                          with the stress to be applied to each of the elements 
+        :param stressMtr: matrix of dimension 1*number of nodes in the tendon
+                          with the stress to be applied to each of the elements 
                           (from left to right)
         '''
         stressMtrToElem=(stressMtr[1:]+stressMtr[:-1])/2.0
         for e, s in zip(self.lstOrderedElems,stressMtrToElem):
-            m=e.getMaterial()
-            m.prestress=s
+            m= e.getMaterial()
+            m.prestress= s
             e.update()
         return
     
