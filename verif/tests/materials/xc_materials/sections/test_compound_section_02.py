@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Compound section class verification test. Home made test.'''
 
 from __future__ import print_function
 

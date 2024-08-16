@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-''' Home made test.'''
+''' Compound section class verification test. Home made test.'''
 
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2021, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
 import geom
-import xc
 from materials.sections import section_properties as sp
 from materials.ec3 import EC3_materials
 
