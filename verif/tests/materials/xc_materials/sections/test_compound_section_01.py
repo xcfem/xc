@@ -11,7 +11,6 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
 import geom
 from materials.sections import section_properties as sp
-from materials.ec3 import EC3_materials
 
 # Geometry
 girderSectionWidth= 0.21
