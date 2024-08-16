@@ -1078,6 +1078,38 @@ class GenericSection(SectionProperties):
     def A(self):
         '''Return cross-sectional area'''
         return self.area
+    
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        retval= None
+        if(self.Iz()>0.0):
+            if(self.Wzel()>0.0):
+                retval= self.Iz()/self.Wzel()
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= 'section modulus is zero, so yMax is infinity.'
+                lmsg.error(className+'.'+methodName+'; '+errMsg)
+        else:
+            retval= 0.0
+        return retval
+    
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        retval= None
+        if(self.Iy()>0.0):
+            if(self.Wyel()>0.0):
+                retval= self.Iy()/self.Wyel()
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= 'section modulus is zero, so yMax is infinity.'
+                lmsg.error(className+'.'+methodName+'; '+errMsg)
+        else:
+            retval= 0.0
+        return retval
   
     def Iy(self):
         '''Return second moment of area about the local y-axis'''
