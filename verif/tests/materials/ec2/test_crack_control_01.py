@@ -6,16 +6,16 @@
 from __future__ import division
 from __future__ import print_function
 
-import math
-from materials.ec2 import EC2_materials
-from materials.ec2 import EC2_limit_state_checking
-from materials.sections import rebar_family
-
 __author__= "Luis Claudio Pérez Tato (LCPT)"
 __copyright__= "Copyright 2023, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import math
+from materials.ec2 import EC2_materials
+from materials.ec2 import EC2_limit_state_checking
+from materials.sections import rebar_family
 
 # Geometry.
 b= 0.4 # Section width (m).
