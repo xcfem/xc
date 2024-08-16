@@ -38,14 +38,13 @@ concreteSection= sp.RectangularSection(name= 'concreteSection', b= 1.0, h= 1.0)
 d= 0.95 # effective depth.
 ## Beam.
 L= 20.0 # beam span.
-# Duct.
+## Duct.
 ductDiam= 97e-3 # duct diameter.
 ductArea= math.pi*(ductDiam/2.0)**2 # duct area.
 eEnds= 0.0 # eccentricity of duct at both ends of the beam
 eDuctMidspan=-0.396 # eccentricity of the duct at midspan [m]
 ductHole= sp.Hole(name= 'ductHole', section= sp.CircularSection(name= 'duct', Rext= ductDiam/2.0, Rint=0.0))
-
-# Prestressing
+## Prestressing
 Ap= 28.5e-4 # prestressing steel area.
 eTendonMidspan= -.3901 # See computation of Mp1 (first equation on page 8).
 angl_Parab_XZ= 0.0 # angle between the vertical plane that contains the parabola and the plane XZ.
@@ -74,7 +73,6 @@ tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Materials.
 concrete= EC2_materials.C35 # concrete.
 prestressingSteel= EC2_materials.Y1770 # prestressig steel.
-
 
 ratioAlphaEp= prestressingSteel.Es/concrete.getEcm()
 tendonEquivalentArea= (ratioAlphaEp-1)*Ap
