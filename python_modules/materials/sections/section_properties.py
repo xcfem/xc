@@ -73,15 +73,33 @@ class SectionProperties(object):
         '''cross-sectional area (abstract method)'''
         raise Exception('Abstract method, please override')
     
+    def yCenterOfMass(self):
+        '''y coordinate of the center of mass.'''
+        return 0.0
+  
+    def zCenterOfMass(self):
+        '''z coordinate of the center of mass.'''
+        return 0.0
+
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        raise Exception('Abstract method, please override')
+        
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        raise Exception('Abstract method, please override')
+    
     def hCOG(self):
         '''Return distance from the bottom fiber to the 
-        centre of gravity of the section.
+        center of gravity of the section.
         '''
         raise Exception('Abstract method, please override')
   
     def bCOG(self):
         '''Return distance from the leftmost fiber to the 
-        centre of gravity of the section.
+        center of gravity of the section.
         '''
         raise Exception('Abstract method, please override')
     
@@ -104,7 +122,7 @@ class SectionProperties(object):
            the axis parallel to Z that passes through section centroid.
         '''
         return math.sqrt(self.Iz()/self.A())
-
+      
     def I(self, majorAxis):
         ''' Return the second moment of area about the local major or minor
             axis.
@@ -130,12 +148,14 @@ class SectionProperties(object):
         raise Exception('Abstract method, please override')
   
     def Wyel(self):
-        '''section modulus with respect to local y-axis (abstract method)'''
-        raise Exception('Abstract method, please override')
+        '''Return section modulus with respect to local y-axis'''
+        zmax= self.zMax()
+        return self.Iy()/zmax
   
     def Wzel(self):
-        '''section modulus with respect to local z-axis (abstract method)'''
-        raise Exception('Abstract method, please override')
+        '''Return section modulus with respect to local z-axis'''
+        ymax= self.yMax()
+        return self.Iz()/ymax
   
     def SteinerY(self,z):
         '''Return the moment of inertia obtained by applying
@@ -588,16 +608,26 @@ class RectangularSection(SectionProperties):
     def Az(self):
         '''Return the corrected area for shear along z axis.'''
         return 5.0/6.0*self.A()
+
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        return self.h/2.0
+        
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        return self.b/2.0
   
     def hCOG(self):
         '''Return distance from the bottom fiber to the 
-        centre of gravity of the section.
+        center of gravity of the section.
         '''
         return self.h/2.0
   
     def bCOG(self):
         '''Return distance from the leftmost fiber to the 
-        centre of gravity of the section.
+        center of gravity of the section.
         '''
         return self.b/2.0
   
@@ -616,14 +646,6 @@ class RectangularSection(SectionProperties):
     def J(self):
         '''Return torsional constant of the section'''
         return self.getJTorsion()
-  
-    def Wyel(self):
-        '''Return section modulus with respect to local y-axis'''
-        return self.Iy()/(self.b/2.0)
-  
-    def Wzel(self):
-        '''Return section modulus with respect to local z-axis'''
-        return self.Iz()/(self.h/2.0)
   
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
@@ -892,6 +914,28 @@ class CircularSection(SectionProperties):
         ''' Return the internal diameter.'''
         return 2.0*self.Rint
     
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        return self.Rext
+        
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        return self.Rext
+    
+    def hCOG(self):
+        '''Return distance from the bottom fiber to the 
+        center of gravity of the section.
+        '''
+        return self.Rext
+  
+    def bCOG(self):
+        '''Return distance from the leftmost fiber to the 
+        center of gravity of the section.
+        '''
+        return self.Rext
+    
     def Iy(self):
         '''Return second moment of area about the local y-axis'''
         return 1.0/4.0*math.pi*(self.Rext**4-self.Rint**4)
@@ -1145,9 +1189,21 @@ class ISection(SectionProperties):
         retval=self.wTF*self.tTF+self.tW*self.hW+self.wBF*self.tBF
         return retval
   
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        ymax= max(self.hCOG(),self.hTotal()-self.hCOG())
+        return ymax
+        
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        zmax=max(self.wTF/2.0,self.wBF/2.0)
+        return zmax
+    
     def hCOG(self):
         '''Return distance from the bottom fiber of the inferior flange to the 
-        centre of gravity of the section.
+        center of gravity of the section.
         '''
         ATF=self.wTF*self.tTF
         AW=self.tW*self.hW
@@ -1180,17 +1236,7 @@ class ISection(SectionProperties):
         retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
         retval*= self.torsionalStiffnessFactor
         return retval
-  
-    def Wyel(self):
-        '''Return section modulus with respect to local y-axis'''
-        zmax=max(self.wTF/2.0,self.wBF/2.0)
-        return self.Iy()/zmax
-  
-    def Wzel(self):
-        '''Return section modulus with respect to local z-axis'''
-        ymax=max(self.hCOG(),self.hTotal()-self.hCOG())
-        return self.Iz()/ymax
-  
+    
     def Wxel(self):
         ''' Return torsional section modulus of the section.
 
@@ -1473,10 +1519,207 @@ def solicitationTypeString(tipoSol):
     else: 
         return "error"
 
+class Hole(SectionProperties):
+    '''Section that returns the negative counterparts of the section properties
+       to simulate a hole in another section object,...)
+
+    :ivar section: cross-section of the hole. 
+    '''
+    def __init__(self, name, section):
+        ''' Constructor.
+
+        :param name: name identifying the hole.
+        :param section: cross-section of the hole.
+        '''
+        super(Hole,self).__init__(name)
+        self.section= section
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(other is not None):
+            if(self is not other):
+                retval= super(Hole,self).__eq__(other)
+                if(retval):
+                    retval= (self.section == other.section)
+            else:
+                retval= True
+        else:
+            retval= False
+        return retval
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super().getDict()
+        retval.update({'section':self.section})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        super().setFromDict(dct)
+        self.section= dct['section']
+        
+    def A(self):
+        '''Return cross-sectional area.'''
+        return -self.section.A()
+    
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        return self.section.yMax()
+        
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        return self.section.zMax()
+    
+    def hCOG(self):
+        '''Return distance from the bottom fiber to the 
+        center of gravity of the hole.
+        '''
+        return self.section.hCOG()
+
+    def bCOG(self):
+        '''Return distance from the leftmost fiber to the 
+        center of gravity of the section.
+        '''
+        return self.section.bCOG()
+  
+    def Iy(self):
+        '''Return second moment of area about the local y-axis'''
+        return -self.section.Iy()
+    
+    def Iz(self):
+        '''Return second moment of area about the local z-axis'''
+        return -self.section.Iz()
+
+    def J(self):
+        '''Return torsional constant of the section'''
+        return -self.section.J()
+  
+    def Wyel(self):
+        '''Return section modulus with respect to local y-axis'''
+        return -self.section.Wyel()
+  
+    def Wzel(self):
+        '''Return section modulus with respect to local z-axis'''
+        return -self.section.Wzel()
+  
+    def alphaY(self):
+        '''Return shear shape factor with respect to local y-axis'''
+        return self.section.alphaY()
+  
+    def alphaZ(self):
+        '''Return shear shape factor with respect to local z-axis'''
+        return self.section.alphaZ()
+  
+    def getYieldMomentY(self,fy):
+        '''Return section yield moment.
+
+           :param fy: material yield stress.
+        '''
+        return -self.section.getYieldMomentY(fy= fy)
+  
+    def getElasticSectionModulusY(self):
+        '''Returns the elastic section modulus with respect to the y axis.
+        '''
+        return -self.section.getElasticSectionModulusY()
+  
+    def getPlasticSectionModulusY(self):
+        '''Returns the plastic section modulus.
+
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+        '''
+        return -self.section.getPlasticSectionModulusY()
+  
+    def getYieldMomentZ(self,fy):
+        '''Return section yield moment.
+
+           :param fy: material yield stress.
+        '''
+        return -self.section.getYieldMomentZ(fy= fy)
+  
+    def getElasticSectionModulusZ(self):
+        '''Returns the elastic section modulus with respect to the z axis.'''
+        return -self.section.getElasticSectionModulusZ()
+  
+    def getPlasticSectionModulusZ(self):
+        '''Returns the plastic section modulus of the hole.
+        '''
+        return -self.section.getPlasticSectionModulusZ()
+  
+    def getJTorsion(self):
+        '''Return torsional constant of the hole.
+        '''
+        return -self.section.getJTorsion()
+  
+    def getTorsionalStiffness(self, G):
+        '''Return the torsional stiffness of the hole.'''
+        return -self.section.getTorsinalStiffnes(G= G)
+
+    def getWarpingConstant(self):
+        ''' Return the value of the hole warping constant.
+        '''
+        return -self.section.getWarpingConstant()
+    
+    def getShearStiffnessY(self, G):
+        '''Return the shear stiffness of the hole.'''
+        return self.section.getShearStiffnessY(G= G)
+    
+    def getShearStiffnessZ(self, G):
+        '''Return the shear stiffness of the hole.'''
+        return self.section.getShearStiffnessZ(G= G)
+
+    def getRegion(self, gm, nmbMat, twoDimensionalMember= False):
+        '''Generation of a quadrilateral region from the hole 
+        geometry.
+
+        :param gm: object of type section_geometry
+        :param nmbMat: name of the material (string)
+        :param twoDimensionalMember: true if the region corresponds to a 
+                                     two-dimensional member.
+        '''
+        return self.section.getRegion(gm= gm, nmbMat= nmbMat, twoDimensionalMember= woDimensionalMember)
+    
+    def getContourPoints(self):
+        ''' Return the vertices of the rectangle.'''
+        return self.section.getContourPoints()
+    
+    def defElasticMembranePlateSection(self, preprocessor, material, overrideRho= None, reductionFactor= 1.0):
+        '''Elastic membrane plate section appropriate for shell analysis.
+
+        :param preprocessor: preprocessor object.
+        :param material: material constitutive model (for which 
+                         E is the Young's modulus nu the Poisson's ratio).
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
+        :param reductionFactor: factor that divides the elastic
+                                modulus to simulate the effect of cracking,
+                                creep, etc.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' cannot return an elastic membrane plate section.')
+        return None
+        
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        super(Hole,self).report(os= os, indentation= indentation)
+        self.section.report(os= os, indentation= indentation+'  ')
+
+        
 class CompoundSection(SectionProperties):
     '''Compound section properties (area, moments of inertia,...)
 
-    :ivar name: name identifying the section.
+    :ivar section_list: list of sections.
+    :ivar Iw: warping constant of the compound section.
     '''
     def __init__(self, name, section_list, Iw):
         ''' Constructor.
@@ -1540,7 +1783,47 @@ class CompoundSection(SectionProperties):
             retval+= s[0].x*area
         retval/= totalArea
         return retval
-  
+
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        yCOG= self.yCenterOfMass()
+        retval= -1
+        for s in self.sectionList:
+            yCOG_s= s[0].y+s[1].yCenterOfMass()-yCOG
+            yMax_s= abs(yCOG_s)+s[1].yMax()
+            retval= max(retval, yMax_s)
+        return retval
+        
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        zCOG= self.zCenterOfMass()
+        retval= -1
+        for s in self.sectionList:
+            zCOG_s= s[0].x+s[1].zCenterOfMass()-zCOG
+            zMax_s= abs(zCOG_s)+s[1].zMax()
+            retval= max(retval, zMax_s)
+        return retval
+    
+    def hCOG(self):
+        '''Return distance from the bottom fiber to the 
+        center of gravity of the section.
+        '''
+        yCOG= self.yCenterOfMass()
+        retval= 1
+        for s in self.sectionList:
+            yCOG_s= s[0].y+s[1].yCenterOfMass()-yCOG
+            hCOG_s= yCOG_s-abs(s[1].hCOG())
+            retval= min(retval, hCOG_s)
+        return -retval
+
+    def bCOG(self):
+        '''Return distance from the leftmost fiber to the 
+        center of gravity of the section.
+        '''
+        raise Exception('Not implemented yet.')
+        
     def Iy(self):
       '''second moment of area about the local y-axis.'''
       zCenter= self.zCenterOfMass()
@@ -1589,7 +1872,7 @@ class CompoundSection(SectionProperties):
             retval+= s[1].alphaZ()*area
         retval/= totalArea
         return retval
-
+    
     def draw(self, notes= None):
         ''' Draw the section contour using pyplot.
 
