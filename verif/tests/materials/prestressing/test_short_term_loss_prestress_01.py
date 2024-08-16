@@ -49,11 +49,11 @@ sigmap0max=1239e6 # Initial stress of cable [Pa]
 Aps=2850e-6 # Area of cable [m2]
 
 # Interpolation
-n_points_rough=5 # number of points provided to the interpolation algorithm
-n_points_fine=101 # number of points interpolated
+n_points_rough= 5 # number of points provided to the interpolation algorithm
+n_points_fine= 101 # number of points interpolated
 
 # Anchorage slip
-deltaL=5e-3 # anchorage draw-in (provided by manufacturer) [m]
+deltaL= 5e-3 # anchorage draw-in (provided by manufacturer) [m]
 
 # Rough results from direct calculation (formula):
 lp_anch_lhe=419.3 # loss of prestress force at left-hand end anchorage [kN]
@@ -65,10 +65,10 @@ P_re=3214.8 # prestress force at right end [kN]
 # XC model
 # Tendon [m] definition, layout and friction losses
 a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
-x_parab_rough,y_parab_rough,z_parab_rough=geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
+x_parab_rough,y_parab_rough,z_parab_rough= geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
 
-tendon=presconc.PrestressTendon([])
-tendon.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
+tendon= presconc.PrestressTendon([])
+tendon.roughCoordMtr= np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 # Interpolated 3D spline 
 tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
