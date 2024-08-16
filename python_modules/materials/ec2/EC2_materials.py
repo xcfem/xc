@@ -774,15 +774,15 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         return self.fmax
 
     def getMaximumStressingStress(self, overStressing= False, nationalAnnex= None):
-        ''' Return the maximum stressing stress (i.e. the stress at the active
-            end during tensioning) according to clause 5.10.2.1 of 
+        ''' Return the maximum prestressing stress (i.e. the stress at the 
+            active end during tensioning) according to clause 5.10.2.1 of 
             EN 1992-1-1:2004.
 
         :param overStressing: apply paragraph (2) of clause 5.10.2.1.
         :param nationalAnnex: identifier of the national annex.
         '''
         if(overStressing): # see 5.10.2.1 (2)
-            if(nationalAnnex is None):
+            if((nationalAnnex is None) or (nationalAnnex=='Germany')):
                 k3= 0.95
             elif(nationalAnnex=='Spain'): 
                 k3= 0.90
@@ -792,7 +792,7 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
                 lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' unknown. Using recommended values.')
             retval= k3*self.get_fp01k()
         else: # see 5.10.2.1 (1)P
-            if(nationalAnnex is None):
+            if((nationalAnnex is None) or (nationalAnnex=='Germany')):
                 k1= 0.8
                 k2= 0.9
             elif(nationalAnnex=='Spain'): 
@@ -806,7 +806,7 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         return retval
     
     def getMaximumStressingForce(self, Ap, overStressing= False, nationalAnnex= None):
-        ''' Return the maximum stressing force (i.e. the force at the active
+        ''' Return the maximum prestressing force (i.e. the force at the active
             end during tensioning) according to clause 5.10.2.1 of 
             EN 1992-1-1:2004.
 
@@ -815,6 +815,35 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         :param nationalAnnex: identifier of the national annex.
         '''
         return Ap*self.getMaximumStressingStress(overStressing= overStressing, nationalAnnex= nationalAnnex)
+    
+    def getMaximumInitialStress(self, nationalAnnex= None):
+        ''' Return the maximum initial stress (i.e. the stress in the tendon
+            immediately after tensioning or transfer) according to clause 
+            5.10.3(2) of EN 1992-1-1:2004.
+
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        if((nationalAnnex is None) or (nationalAnnex in ['Germany', 'Spain'])):
+            k7= 0.75
+            k8= 0.85
+        else:
+            k7= 0.75
+            k8= 0.85
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; national annex: '+str(nationalAnnex)+' unknown. Using recommended values.')
+        retval= min(k7*self.get_fpk(), k8*self.get_fp01k())
+        return retval
+    
+    def getMaximumInitialForce(self, Ap, nationalAnnex= None):
+        ''' Return the maximum initial force (i.e. the force in the tendon
+            immediately after tensioning or transfer) according to clause 
+            5.10.3(2) of EN 1992-1-1:2004.
+
+        :param Ap: cross-sectional area of the tendon.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        return Ap*self.getMaximumInitialStress(nationalAnnex= nationalAnnex)
     
 # Prestressing steel.
 Y1860S7= PrestressingSteel(steelName= "Y1860S7",fp01k= 0.85*1860e6, fmax= 1860e6)
