@@ -82,10 +82,31 @@ for e, refCen in zip(b1.elements, refCentroids):
 
 err= math.sqrt(err)
 
+# Check fill downwards.
+testSet= modelSpace.defSet(setName= 'testSet', bodies= [b1])
+testSet.fillDownwards()
+numBodies= len(testSet.bodies)
+numSurfaces= len(testSet.surfaces)
+numLines= len(testSet.lines)
+numPoints= len(testSet.points)
+numElements= len(testSet.elements)
+numNodes= len(testSet.nodes)
+fillDownwardsOK= (numBodies==1) and (numSurfaces==6) and (numLines==12) and (numPoints==8) and (numElements==2) and (numNodes==12)
+
+'''
+print(numBodies)
+print(numSurfaces)
+print(numLines)
+print(numPoints)
+print(numElements)
+print(numNodes)
+print(fillDownwardsOK)
+'''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((err<=1e-8) and (ratio1<=1e-8) and (vDiff==0)):
+if((err<=1e-8) and (ratio1<=1e-8) and (vDiff==0) and fillDownwardsOK):
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')

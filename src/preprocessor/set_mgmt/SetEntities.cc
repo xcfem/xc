@@ -264,8 +264,18 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
     // Bodies
     for(lst_body_pointers::iterator i=bodies.begin();i!=bodies.end();i++)
       {
-        std::set<Face *> ss= (*i)->getSurfaces();
-        surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
+        ElemPtrArray3d &ttz_elements= (*i)->getTtzElements();
+        const size_t numberOfLayers= ttz_elements.getNumberOfLayers();
+        const size_t numberOfRows= ttz_elements.getNumberOfRows();
+        const size_t numberOfColumns= ttz_elements.getNumberOfColumns();
+        for(size_t i=1;i<=numberOfLayers;i++)
+          for(size_t j=1;j<=numberOfRows;j++)
+            for(size_t k=1;k<=numberOfColumns;k++)
+	      {
+		Element *tmp= ttz_elements(i,j,k);
+		if(tmp)
+                  mc.addElement(ttz_elements(i,j,k));
+	      }
       }
     // Surfaces
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
