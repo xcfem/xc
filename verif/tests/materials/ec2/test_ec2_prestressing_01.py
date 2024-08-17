@@ -77,7 +77,6 @@ ratioAlphaEp= prestressingSteel.Es/concrete.getEcm()
 tendonEquivalentArea= (ratioAlphaEp-1)*Ap
 tendonEquivalentRadius= math.sqrt(tendonEquivalentArea/math.pi)
 tendonEquivalentSection= sp.CircularSection(name= 'tendonEquivalentSection', Rext= tendonEquivalentRadius, Rint=0.0)
-Ac_ideal= concreteSection.A()+tendonEquivalentSection.A()
 
 # 5.10.2.1 (1)P: Prestress force during tensioning - Maximum stressing force.
 sigma_p_max= prestressingSteel.getMaximumStressingStress(nationalAnnex= nationalAnnex)
@@ -170,7 +169,6 @@ ratio13= abs(sigma_cbIV+4.51e6)/4.51e6
 '''
 print('ratioAlphaEp= '+'{:.2f}'.format(ratioAlphaEp))
 print('Net concrete area: Ac,net= '+'{:.4f}'.format(cs0Section.A())+' m2')
-print('Ideal concrete area: Ac,ideal= '+'{:.4f}'.format(Ac_ideal)+' m2')
 
 print('\nMaximum prestressing stress: sigma_p_max= '+'{:.1f}'.format(sigma_p_max/1e6)+' MPa')
 print('Maximum prestressing force: Pmax= '+'{:.1f}'.format(Pmax/1e3)+' kN', 'ratio1= ', ratio1)
