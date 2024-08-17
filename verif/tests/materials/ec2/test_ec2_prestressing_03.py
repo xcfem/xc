@@ -34,7 +34,6 @@ nationalAnnex= 'Germany' # DIN EN 1992-1-1:2004 (German National Annex).
 # Section geometry.
 ## Concrete.
 concreteSection= sp.RectangularSection(name= 'concreteSection', b= 1.0, h= 1.0)
-d= 0.95 # effective depth.
 ## Beam.
 L= 20.0 # beam span.
 ## Duct.
