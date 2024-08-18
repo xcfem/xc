@@ -94,7 +94,14 @@ midSpanInitialStress= initialStressFunc(10.0)
 P0= midSpanInitialStress*Ap # initial prestressing force at mid-span.
 sigma_p_0= midSpanInitialStress
 
-# Calculating the prestressing losses due relaxation.
+#       ___ _           _                      
+#      / __| |_ ___ ___| |                     
+#      \__ \  _/ -_) -_) |                     
+#      |___/\__\___\___|_|      _   _          
+#      | _ \___| |__ ___ ____ _| |_(_)___ _ _  
+#      |   / -_) / _` \ \ / _` |  _| / _ \ ' \ 
+#      |_|_\___|_\__,_/_\_\__,_|\__|_\___/_||_|
+# Calculating the prestressing losses due steel relaxation.
 mu= prestressingSteel.getMu(sigma_pi= sigma_p_0)
 delta_sigma_pr= prestressingSteel.getRelaxationLoss(sigma_pi= sigma_p_0, t= 1e3, ro1000= None)
 ratio1= abs(delta_sigma_pr-15.388e6)/15.388e6
