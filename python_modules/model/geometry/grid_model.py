@@ -1427,7 +1427,7 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
     
-    def getSethexaedrMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
+    def getSetHexaedrMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
         '''return the set of volumes and all the entities(surfaces, lines,
         points, elements, nodes, ...) associated with them in a all
         the regions  included in the list of xyzRanges passed as parameter.
