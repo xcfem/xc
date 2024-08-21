@@ -367,12 +367,17 @@ int XC::FourNodeQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
 	    bf[1]+= loadFactor*quadLoad->getYFact();
 	    bf[2]+= loadFactor*quadLoad->getZFact();
 	  }
+        else if(QuadRawLoad *quadRawLoad= dynamic_cast<QuadRawLoad *>(theLoad))
+          {
+            const std::vector<double> ones(4, 1.0);
+            quadRawLoad->addReactionsInBasicSystem(ones,loadFactor,p0); // Accumulate reactions in basic system
+          }
         else if(QuadMecLoad *quadMecLoad= dynamic_cast<QuadMecLoad *>(theLoad))
           {
    	    computeTributaryAreas();
             const std::vector<double> areas= getTributaryAreas();
             quadMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
-          }	
+          }
         else
           return SolidMech4N::addLoad(theLoad,loadFactor);
       }

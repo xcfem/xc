@@ -1011,6 +1011,8 @@ python tests/loads/inertia_loads/test_inertia_loads_12.py
 python tests/loads/inertia_loads/test_inertia_loads_13.py
 python tests/loads/inertia_loads/test_inertia_loads_14.py
 python tests/loads/inertia_loads/test_inertia_loads_15.py
+python tests/loads/inertia_loads/test_inertia_loads_16.py
+python tests/loads/inertia_loads/test_inertia_loads_17.py
 echo "$BLEU" "    Surface pressures." "$NORMAL"
 python tests/loads/surface_pressures/test_brick_surface_pressures_01.py
 python tests/loads/surface_pressures/test_brick_surface_pressures_02.py

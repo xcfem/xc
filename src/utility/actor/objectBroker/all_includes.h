@@ -292,6 +292,8 @@
 #include "domain/mesh/element/utils/fvectors/FVectorBeamColumn2d.h"
 #include "domain/mesh/element/utils/fvectors/FVectorBeamColumn3d.h"
 #include "domain/mesh/element/utils/fvectors/FVectorShell.h"
+#include "domain/mesh/element/utils/fvectors/FVectorQuad.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBrick.h"
 
 
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/HingeMidpointBeamIntegration.h"
@@ -383,6 +385,7 @@
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
 #include "domain/load/volumetric/BrickStrainLoad.h"
+#include "domain/load/volumetric/BrickRawLoad.h"
 #include "domain/load/SurfaceLoad.h"
 #include "domain/load/volumetric/BrickSelfWeight.h"
 #include "domain/load/pattern/NodeLocker.h"

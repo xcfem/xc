@@ -121,7 +121,7 @@ const XC::QuadRawLoad *XC::SolidMech4N::vector2dRawLoadLocal(const std::vector<V
             LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
             if(lp)
               {
-                retval= new QuadRawLoad(loadTag,nLoads,eTags);
+                retval= new QuadRawLoad(loadTag, nLoads, eTags);
                 lp->addElementalLoad(retval);
                 lPatterns.setCurrentElementLoadTag(loadTag+1);
               }

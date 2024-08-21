@@ -25,6 +25,10 @@ class_<XC::ThreedimLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("Three
   .add_property("category", &XC::ThreedimLoad::Category)
   ;
 
+class_<XC::ThreedimMecLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("ThreedimMecLoad", no_init)
+  .def("getResultant", &XC::ThreedimMecLoad::getResultant,"Returns load resultant (force and moment integration over the elements).")
+  ;
+
 class_<XC::BrickSelfWeight, bases<XC::ThreedimLoad>, boost::noncopyable >("BrickSelfWeight", no_init)
   ;
 

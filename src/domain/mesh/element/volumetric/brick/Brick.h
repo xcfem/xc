@@ -56,6 +56,7 @@
 
 #include <domain/mesh/element/volumetric/BrickBase.h>
 #include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBrick.h"
 
 namespace XC {
 //! @ingroup ElemVol
@@ -69,7 +70,8 @@ class Brick: public BrickBase
     static const int nShape = 4;
     
     BodyForces3D bf; //!< Body forces
-    double appliedB[ndf];	//!< Body forces applied with load
+    FVectorBrick p0; //!< Reactions in the basic system due to element loads
+    double appliedB[ndf]; //!< Body forces applied with load
     bool applyLoad;
     
     mutable Matrix *Ki;
@@ -147,7 +149,8 @@ class Brick: public BrickBase
     
     const Vector &getResistingForce(void) const; //get residual
     const Vector &getResistingForceIncInertia(void) const; //get residual with inertia terms
-
+    virtual void createInertiaLoad(const Vector &);
+ 
     // public methods for element output
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

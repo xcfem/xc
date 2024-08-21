@@ -67,6 +67,7 @@
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/load/ElementalLoad.h"
 #include "domain/load/volumetric/SelfWeight.h"
+#include "domain/load/volumetric/BrickRawLoad.h"
 
 //static data
 const int XC::Brick::numberGauss; //!< Number of Gauss points.
@@ -95,7 +96,7 @@ const int brick_nstress= 6;
 
 //! @brief Default constructor
 XC::Brick::Brick(void)
-  :BrickBase(ELE_TAG_Brick), applyLoad(false), Ki(nullptr)
+  :BrickBase(ELE_TAG_Brick), p0(), applyLoad(false), Ki(nullptr)
   {
     B.Zero();
   }
@@ -103,14 +104,16 @@ XC::Brick::Brick(void)
 
 //! @brief full constructor
 XC::Brick::Brick(int tag,const NDMaterial *ptr_mat)
-  :BrickBase(tag, ELE_TAG_Brick,NDMaterialPhysicalProperties(8,ptr_mat)), applyLoad(false), Ki(nullptr)
+  :BrickBase(tag, ELE_TAG_Brick,NDMaterialPhysicalProperties(8,ptr_mat)),
+   p0(), applyLoad(false), Ki(nullptr)
   {
     B.Zero();
   }
 
 //! @brief full constructor
 XC::Brick::Brick( int tag, int node1,int node2,int node3,int node4,int node5,int node6,int node7,int node8, NDMaterial &theMaterial,const BodyForces3D &bForces)
-  :BrickBase(tag,ELE_TAG_Brick,node1,node2,node3,node4,node5,node6,node7,node8,NDMaterialPhysicalProperties(8,&theMaterial)), bf(bForces), applyLoad(false), Ki(nullptr)
+  :BrickBase(tag,ELE_TAG_Brick,node1,node2,node3,node4,node5,node6,node7,node8,NDMaterialPhysicalProperties(8,&theMaterial)), bf(bForces),
+   p0(), applyLoad(false), Ki(nullptr)
   {
     B.Zero();
   }
@@ -375,6 +378,7 @@ void XC::Brick::zeroLoad(void)
     appliedB[0]= 0.0;
     appliedB[1]= 0.0;
     appliedB[2]= 0.0;
+    p0.zero();
   }
 
 int XC::Brick::addLoad(ElementalLoad *theLoad, double loadFactor)
@@ -419,8 +423,13 @@ int XC::Brick::addLoad(ElementalLoad *theLoad, double loadFactor)
 		retval= -1;
 	      }
 	  }
+        else if(BrickRawLoad *brickRawLoad= dynamic_cast<BrickRawLoad *>(theLoad))
+          {
+            const std::vector<double> ones(8,1.0);
+            brickRawLoad->addReactionsInBasicSystem(ones,loadFactor,p0); // Accumulate reactions in basic system
+          }
 	else
-	  retval= BrickBase::addLoad(theLoad,loadFactor);
+	  retval= BrickBase::addLoad(theLoad, loadFactor);
       }
     return retval;
   }
@@ -463,6 +472,9 @@ const XC::Vector &XC::Brick::getResistingForce(void) const
     formResidAndTangent( tang_flag );
     if(!load.isEmpty())
       resid-= load;
+    
+    resid+= p0.getVector();
+    
     if(isDead())
       resid*=dead_srf;
     return resid;
@@ -501,7 +513,7 @@ void XC::Brick::formInertiaTerms( int tangFlag ) const
 
     static Vector momentum(ndf);
 
-    double temp, rho, massJK;
+    double massJK;
 
     //zero mass
     mass.Zero( );
@@ -512,7 +524,6 @@ void XC::Brick::formInertiaTerms( int tangFlag ) const
     //gauss loop
     for(int i= 0; i < numberGauss; i++ )
       {
-
         //extract shape functions from saved array
         for(int p = 0; p < nShape; p++ )
 	  {
@@ -520,56 +531,88 @@ void XC::Brick::formInertiaTerms( int tangFlag ) const
 	      shp[p][q]  = Shape[p][q][i];
           } // end for p
 
-      //node loop to compute acceleration
-      momentum.Zero( );
-      for(int j= 0; j < numberNodes; j++ )
-	//momentum+= shp[massIndex][j] * ( theNodes[j]->getTrialAccel()  );
-	momentum.addVector( 1.0,
-			    theNodes[j]->getTrialAccel(),
-			    shp[massIndex][j] );
-
-
-      //density
-      rho = physicalProperties[i]->getRho();
-
-
-      //multiply acceleration by density to form momentum
-      momentum*= rho;
-
-
-      //residual and tangent calculations node loops
-      int jj= 0;
-      for(int j= 0; j < numberNodes; j++ )
-	{
-
-	temp = shp[massIndex][j] * dvol[i];
-
-	for(int p = 0; p < ndf; p++ )
-	  resid(jj+p )+= ( temp * momentum(p) ) ;
-
-
-	if(tangFlag == 1 )
+	//node loop to compute acceleration
+	momentum.Zero( );
+	for(int j= 0; j < numberNodes; j++ )
+	  //momentum+= shp[massIndex][j] * ( theNodes[j]->getTrialAccel()  );
+	  momentum.addVector( 1.0,
+			      theNodes[j]->getTrialAccel(),
+			      shp[massIndex][j] );
+	//density
+	const double rho= physicalProperties[i]->getRho();
+	//multiply acceleration by density to form momentum
+	momentum*= rho;
+	//residual and tangent calculations node loops
+	int jj= 0;
+	for(int j= 0; j < numberNodes; j++ )
 	  {
-	    //multiply by density
-	    temp *= rho;
 
-	    //node-node mass
-	    int kk= 0;
-	    for(int k= 0; k < numberNodes; k++ )
+	    double temp= shp[massIndex][j] * dvol[i];
+
+	    for(int p = 0; p < ndf; p++ )
+	      resid(jj+p )+= ( temp * momentum(p) ) ;
+
+
+	    if(tangFlag == 1 )
 	      {
-		 massJK = temp * shp[massIndex][k];
-		 for(int p = 0; p < ndf; p++ )
-		   mass(jj+p, kk+p )+= massJK;
-		 kk+= ndf;
-	       } // end for k loop
-	  } // end if tang_flag
+		//multiply by density
+		temp *= rho;
 
-	jj+= ndf;
-      } // end for j loop
+		//node-node mass
+		int kk= 0;
+		for(int k= 0; k < numberNodes; k++ )
+		  {
+		    massJK = temp * shp[massIndex][k];
+		    for(int p = 0; p < ndf; p++ )
+		      mass(jj+p, kk+p )+= massJK;
+		    kk+= ndf;
+		  } // end for k loop
+	      } // end if tang_flag
+	    
+	    jj+= ndf;
+	  } // end for j node loop
+      } //end for i gauss loop
+  }
 
-
-    } //end for i gauss loop
-
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+//!
+//! @param accel: acceleration vector.
+void XC::Brick::createInertiaLoad(const Vector &accel)
+  {
+    const bool haveRho= physicalProperties.haveRho();
+    if(haveRho)
+       {
+	 const int nNodes= 8;
+	 const int nGDL= 3;
+	 const int dim= nNodes*nGDL;
+	 // Create 8x3= 24 rows acceleration vector.
+	 Vector nodeAccel(dim);
+	 nodeAccel.Zero();
+	 for(int i= 0; i<nNodes; i++)
+	   for(int j= 0; j<nGDL;j++)
+	     {
+	       const int k= nGDL*i+j;
+	       nodeAccel(k)= accel(j);
+	     }
+	 const int tangFlag= 1;
+	 formInertiaTerms(tangFlag);
+	 Vector force(dim);
+	 force.addMatrixVector(1.0, mass, nodeAccel, -1.0);//= -mass*nodeAccel;
+	 // Extract nodal loads.
+	 std::vector<Vector> nLoads(nNodes);
+	 for(int i=0;i<nNodes;i++)
+	   {
+	     Vector nLoad(nGDL);
+	     for(int j= 0; j<nGDL;j++)
+	       {
+	         const int k= nGDL*i+j;
+	         nLoad(j)+= force(k);
+	       }
+	     nLoads[i]= nLoad;
+	   }
+        vector3dRawLoadGlobal(nLoads);
+      }
   }
 
 //! @brief Form residual and tangent
@@ -858,6 +901,7 @@ int XC::Brick::sendData(Communicator &comm)
     int res= BrickBase::sendData(comm);
     res+= comm.sendDoubles(bf[0],bf[1],bf[2],getDbTagData(),CommMetaData(8));
     res+= comm.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(15));
     return res;
   }
 
@@ -867,13 +911,14 @@ int XC::Brick::recvData(const Communicator &comm)
     int res= BrickBase::recvData(comm);
     res+= comm.receiveDoubles(bf[0],bf[1],bf[2],getDbTagData(),CommMetaData(8));
     Ki= comm.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(15));
     return res;
   }
 
 //! @brief Sends object through the communicator argument.
 int XC::Brick::sendSelf(Communicator &comm)
   {
-    inicComm(15);
+    inicComm(16);
     int res= sendData(comm);
 
     const int dataTag= getDbTag();
@@ -888,7 +933,7 @@ int XC::Brick::sendSelf(Communicator &comm)
 int XC::Brick::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
-    ID data(15);
+    ID data(16);
     int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__

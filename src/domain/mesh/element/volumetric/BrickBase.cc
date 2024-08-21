@@ -35,6 +35,7 @@
 #include "domain/mesh/element/utils/ParticlePos3d.h"
 #include "domain/load/volumetric/ThreedimStrainLoad.h"
 #include "utility/utils/misc_utils/colormod.h"
+#include "domain/load/volumetric/BrickRawLoad.h"
 
 const int XC::BrickBase::numberNodes; //!< Number of nodes.
 const int XC::BrickBase::ndm; //!< Space dimension
@@ -120,61 +121,61 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const NodePtrArray3d &nodes, meshi
               {
                 const Node *Nd1= nodes(i,j,k);
 		if(!Nd1)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i << ", " << j << "; " << k << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i << ", " << j << "; " << k << ")"
+			    << " is null."
+			    << Color::def << std::endl;
                 const Node *Nd2= nodes(i,j+1,k);
 		if(!Nd2)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i << ", " << j+1 << "; " << k << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i << ", " << j+1 << "; " << k << ")"
+			    << " is null."
+			    << Color::def << std::endl;
                 const Node *Nd3= nodes(i,j+1,k+1);
 		if(!Nd3)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i << ", " << j+1 << "; " << k+1 << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i << ", " << j+1 << "; " << k+1 << ")"
+			    << " is null."
+			    << Color::def << std::endl;
                 const Node *Nd4= nodes(i,j,k+1);
 		if(!Nd4)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i << ", " << j << "; " << k+1 << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i << ", " << j << "; " << k+1 << ")"
+			    << " is null."
+			    << Color::def << std::endl;
 
                 const Node *Nd5= nodes(i+1,j,k);
 		if(!Nd5)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i+1 << ", " << j << "; " << k << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i+1 << ", " << j << "; " << k << ")"
+			    << " is null."
+			    << Color::def << std::endl;
                 const Node *Nd6= nodes(i+1,j+1,k);
 		if(!Nd6)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i+1 << ", " << j+1 << "; " << k << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i+1 << ", " << j+1 << "; " << k << ")"
+			    << " is null."
+			    << Color::def << std::endl;
                 const Node *Nd7= nodes(i+1,j+1,k+1);
 		if(!Nd7)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i+1 << ", " << j+1 << "; " << k+1 << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i+1 << ", " << j+1 << "; " << k+1 << ")"
+			    << " is null."
+			    << Color::def << std::endl;
                 const Node *Nd8= nodes(i+1,j,k+1);
 		if(!Nd8)
-		  std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
-			     << " pointer at position: "
-			     << "(" << i+1 << ", " << j << "; " << k+1 << ")"
-			     << " is null."
-			     << Color::def << std::endl;
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			    << " pointer at position: "
+			    << "(" << i+1 << ", " << j << "; " << k+1 << ")"
+			    << " is null."
+			    << Color::def << std::endl;
 		if(Nd1 && Nd2 && Nd3 && Nd4 && Nd5 && Nd6 && Nd7 && Nd8)
 		  {
 	            Element *tmp= this->getCopy();
@@ -476,9 +477,9 @@ XC::Matrix XC::BrickBase::getLocalAxes(bool initialGeometry) const
   {
     Matrix retval(3,3);
     if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; for deformed geometry not implemented."
-                << std::endl;
+                << Color::def << std::endl;
     
     const Vector &coor1= theNodes[1]->getCrds();
     const Vector &coor2= theNodes[2]->getCrds();
@@ -525,9 +526,10 @@ XC::ParticlePos3d XC::BrickBase::getNaturalCoordinates(const Pos3d &pos,bool ini
     if(inverseCoordinateTransform(pnt, xl, solution))
       retval= ParticlePos3d(solution[0],solution[1],solution[2]);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; natural coordinates of point: "
-                << pos << " not found." << std::endl;
+                << pos << " not found."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -541,9 +543,10 @@ void XC::BrickBase::zeroLoad(void)
 int XC::BrickBase::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(this->isDead())
-      std::cerr << this->getClassName() 
+      std::cerr << Color::red << this->getClassName() 
                 << "; load over inactive element: "
-                << this->getTag() << std::endl;
+                << this->getTag()
+		<< Color::def << std::endl;
     else
       {
         if(const ThreedimStrainLoad *strainLoad= dynamic_cast<const ThreedimStrainLoad *>(theLoad)) //Prescribed strains.
@@ -556,11 +559,85 @@ int XC::BrickBase::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << this->getClassName() << "::" << __FUNCTION__
-	              << "; load type unknown for element with tag: " <<
-            this->getTag() << std::endl;
+            std::cerr << Color::red << this->getClassName() << "::" << __FUNCTION__
+	              << "; load type: '"
+	              << theLoad->getClassName()
+	              << "', unknown for element with tag: "
+		      << this->getTag()
+		      << Color::def << std::endl;
             return -1;
           }
       }
     return 0;
+  }
+
+//! @brief Defines a load over the element from a vector of nodal loads
+//! in local coordinates.
+//!
+//! @param nLoads: loads on each element node.
+const XC::BrickRawLoad *XC::BrickBase::vector3dRawLoadLocal(const std::vector<Vector> &nLoads)
+  {
+    BrickRawLoad *retval= nullptr;
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
+        static ID eTags(1);
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
+
+        const size_t sz= nLoads.size();
+	const size_t nn= getNumExternalNodes();
+        if(sz==nn)
+          {
+            LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
+            if(lp)
+              {
+                retval= new BrickRawLoad(loadTag, nLoads, eTags);
+                lp->addElementalLoad(retval);
+                lPatterns.setCurrentElementLoadTag(loadTag+1);
+              }
+            else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                        << " there is no current load pattern."
+                        << " Load ignored."
+			<< Color::def << std::endl; 
+          }
+        else
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                    << "; a vector of dimension " << nn
+	            << " was expected."
+		    << Color::def << std::endl;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; modeler not defined."
+		<< Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Defines a load over the element from a vector of nodal loads
+//! in global coordinates.
+//!
+//! @param nLoads: loads on each element node.
+const XC::BrickRawLoad *XC::BrickBase::vector3dRawLoadGlobal(const std::vector<Vector> &nLoads)
+  {
+    const BrickRawLoad *retval= nullptr;
+    const size_t sz= nLoads.size();
+    const size_t nn= getNumExternalNodes();
+    if(sz==nn)
+      {
+	std::vector<Vector> tmp(nn);
+	for(size_t i= 0;i<nn;i++)
+	  {
+	    tmp[i]= nLoads[i]; // No transformation needed.
+	  }
+        retval= vector3dRawLoadLocal(tmp);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; a vector of dimension " << nn
+                << " was expected."
+		<< Color::def << std::endl;
+    return retval;
   }

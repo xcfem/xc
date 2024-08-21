@@ -33,7 +33,14 @@ class_<FVectorData5, bases<XC::FVector>, boost::noncopyable >("FVectorData5", no
 
 class_<XC::FVectorBeamColumn3d, bases<FVectorData5>, boost::noncopyable >("FVectorBeamColumn3d", no_init);
 
+typedef XC::FVectorData<8> FVectorData8;
+class_<FVectorData8, bases<XC::FVector>, boost::noncopyable >("FVectorData8", no_init);
+
+class_<XC::FVectorQuad, bases<FVectorData8>, boost::noncopyable >("FVectorQuad", no_init);
+
 typedef XC::FVectorData<24> FVectorData24;
 class_<FVectorData24, bases<XC::FVector>, boost::noncopyable >("FVectorData24", no_init);
 
 class_<XC::FVectorShell, bases<FVectorData24>, boost::noncopyable >("FVectorShell", no_init);
+
+class_<XC::FVectorBrick, bases<FVectorData24>, boost::noncopyable >("FVectorBrick", no_init);
