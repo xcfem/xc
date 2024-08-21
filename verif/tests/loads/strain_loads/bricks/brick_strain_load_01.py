@@ -4,7 +4,7 @@
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2024, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -23,36 +23,33 @@ elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.2
 ## Nodes.
 nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-nod9= nodes.newNodeXYZ(0,0,0)
-nod10= nodes.newNodeXYZ(1,0,0)
-nod11= nodes.newNodeXYZ(1,1,0)
-nod12= nodes.newNodeXYZ(0,1,0)
-nod13= nodes.newNodeXYZ(0,0,1)
-nod14= nodes.newNodeXYZ(1,0,1)
-nod15= nodes.newNodeXYZ(1,1,1)
-nod16= nodes.newNodeXYZ(0,1,1)
+n0= nodes.newNodeXYZ(0,0,0)
+n1= nodes.newNodeXYZ(1,0,0)
+n2= nodes.newNodeXYZ(1,1,0)
+n3= nodes.newNodeXYZ(0,1,0)
+n4= nodes.newNodeXYZ(0,0,1)
+n5= nodes.newNodeXYZ(1,0,1)
+n6= nodes.newNodeXYZ(1,1,1)
+n7= nodes.newNodeXYZ(0,1,1)
 
 ## Elements.
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast3d.name
-brick= elements.newElement("Brick",xc.ID([nod9.tag,nod10.tag,nod11.tag,nod12.tag,nod13.tag,nod14.tag,nod15.tag,nod16.tag]))
+brick= elements.newElement("Brick",xc.ID([n0.tag, n1.tag, n2.tag, n3.tag, n4.tag, n5.tag, n6.tag, n7.tag]))
 
-constraints= preprocessor.getBoundaryCondHandler
-# Constrain the displacement of the nodes in the base.
-nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
-nod10.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
-nod11.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
-nod12.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
+for n in [n0, n1, n2, n3]:
+    modelSpace.fixNode('000', n.tag)
 
 # Load case definition.
 alpha= 1.2e-5 # Thermal expansion coefficient of the steel
 AT= 10.0 # Temperature increment (Celsius degrees)
+strain= alpha*AT
 lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("brick_strain_load")
 eleLoad.elementTags= xc.ID([brick.tag])
 for gaussPoint in range(0, 8):
     for gdl in range(0, 3):
-        eleLoad.setStrainComp(gaussPoint,gdl,alpha*AT) #(id of Gauss point, id of component, value)
+        eleLoad.setStrainComp(gaussPoint,gdl,strain) #(id of Gauss point, id of component, value)
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -60,10 +57,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-R9= nod9.getReaction
-R10= nod10.getReaction
-R11= nod11.getReaction
-R12= nod12.getReaction
+R9= n0.getReaction
+R10= n1.getReaction
+R11= n2.getReaction
+R12= n3.getReaction
 
 
 RA= R9+R12
