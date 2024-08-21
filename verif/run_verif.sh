@@ -994,6 +994,7 @@ python tests/loads/strain_loads/shell/shell_grad_strain_load_05.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_06.py
 echo "$BLEU" "      Strain loads on bricks." "$NORMAL"
 python tests/loads/strain_loads/bricks/brick_strain_load_01.py
+python tests/loads/strain_loads/bricks/brick_strain_load_02.py
 echo "$BLEU" "    Inertia loads." "$NORMAL"
 echo "$BLEU" "      Inertia loads on trusses." "$NORMAL"
 python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_01.py
