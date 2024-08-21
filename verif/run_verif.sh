@@ -995,24 +995,30 @@ python tests/loads/strain_loads/shell/shell_grad_strain_load_06.py
 echo "$BLEU" "      Strain loads on bricks." "$NORMAL"
 python tests/loads/strain_loads/bricks/brick_strain_load_01.py
 echo "$BLEU" "    Inertia loads." "$NORMAL"
-python tests/loads/inertia_loads/test_inertia_loads_00.py
-python tests/loads/inertia_loads/test_inertia_loads_01.py
-python tests/loads/inertia_loads/test_inertia_loads_02.py
-python tests/loads/inertia_loads/test_inertia_loads_03.py
-python tests/loads/inertia_loads/test_inertia_loads_04.py
-python tests/loads/inertia_loads/test_inertia_loads_05.py
-python tests/loads/inertia_loads/test_inertia_loads_06.py
-python tests/loads/inertia_loads/test_inertia_loads_07.py
-python tests/loads/inertia_loads/test_inertia_loads_08.py
-python tests/loads/inertia_loads/test_inertia_loads_09.py
-python tests/loads/inertia_loads/test_inertia_loads_10.py
-python tests/loads/inertia_loads/test_inertia_loads_11.py
-python tests/loads/inertia_loads/test_inertia_loads_12.py
-python tests/loads/inertia_loads/test_inertia_loads_13.py
-python tests/loads/inertia_loads/test_inertia_loads_14.py
-python tests/loads/inertia_loads/test_inertia_loads_15.py
-python tests/loads/inertia_loads/test_inertia_loads_16.py
-python tests/loads/inertia_loads/test_inertia_loads_17.py
+echo "$BLEU" "      Inertia loads on trusses." "$NORMAL"
+python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_01.py
+python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_02.py
+python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_03.py
+python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_04.py
+python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_05.py
+python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_06.py
+echo "$BLEU" "      Inertia loads on 2D elastic beams." "$NORMAL"
+python tests/loads/inertia_loads/elastic_beam_2d/test_inertia_loads_elastic_beam_2d_01.py
+echo "$BLEU" "      Inertia loads on 3D elastic beams." "$NORMAL"
+python tests/loads/inertia_loads/elastic_beam_3d/test_inertia_loads_elastic_beam_3d_01.py
+python tests/loads/inertia_loads/elastic_beam_3d/test_inertia_loads_elastic_beam_3d_02.py
+echo "$BLEU" "      Inertia loads on shell elements." "$NORMAL"
+python tests/loads/inertia_loads/shell/test_inertia_loads_shell_01.py
+python tests/loads/inertia_loads/shell/test_inertia_loads_shell_02.py
+python tests/loads/inertia_loads/shell/test_inertia_loads_shell_03.py
+python tests/loads/inertia_loads/shell/test_inertia_loads_shell_04.py
+python tests/loads/inertia_loads/shell/test_inertia_loads_shell_05.py
+python tests/loads/inertia_loads/shell/test_inertia_loads_shell_06.py
+echo "$BLEU" "      Inertial loads on quads." "$NORMAL"
+python tests/loads/inertia_loads/quads/test_inertia_loads_quad_01.py
+echo "$BLEU" "      Inertial loads on bricks." "$NORMAL"
+python tests/loads/inertia_loads/bricks/test_inertia_loads_brick_01.py
+python tests/loads/inertia_loads/bricks/test_inertia_loads_brick_02.py
 echo "$BLEU" "    Surface pressures." "$NORMAL"
 python tests/loads/surface_pressures/test_brick_surface_pressures_01.py
 python tests/loads/surface_pressures/test_brick_surface_pressures_02.py
