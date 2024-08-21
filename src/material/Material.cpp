@@ -230,9 +230,19 @@ void XC::Material::update(void)
 //! @param incS: strain increment.
 void XC::Material::incrementInitialGeneralizedStrain(const Vector &incS)
   {
-    Vector initStrain= getInitialGeneralizedStrain();
-    initStrain+= incS;
-    setInitialGeneralizedStrain(initStrain);
+    Vector initStrain= this->getInitialGeneralizedStrain();
+    const size_t this_sz= initStrain.Size();
+    const size_t other_sz= incS.Size();
+    if(this_sz==other_sz)
+      {
+        initStrain+= incS;
+	setInitialGeneralizedStrain(initStrain);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; different sizes of strain vectors: " << this_sz
+		<< " != " << other_sz 
+		<< Color::def << std::endl;
   }
 
 //! @brief zeroes initial generalized strain

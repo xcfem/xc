@@ -30,10 +30,11 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 
+const size_t strainSize= 6; // six components: [xx, yy, zz, xy, xz, yz]
 //! @brief Constructor.
 XC::BrickStrainLoad::BrickStrainLoad(int tag, const ID &theElementTags)
-  :ThreedimStrainLoad(tag,8,Vector(3), theElementTags) {}
+  : ThreedimStrainLoad(tag, 8, Vector(strainSize), theElementTags) {}
 
 //! @brief Constructor.
 XC::BrickStrainLoad::BrickStrainLoad(int tag)
-  :ThreedimStrainLoad(tag,8,Vector(3)) {}
+  : ThreedimStrainLoad(tag, 8, Vector(strainSize)) {}

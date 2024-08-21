@@ -46,12 +46,12 @@ class ThreedimStrainLoad: public ThreedimLoad
     int recvData(const Communicator &comm);
 
   public:
+    ThreedimStrainLoad(const size_t &sz= 8);
+    ThreedimStrainLoad(int tag, const size_t &);
+    ThreedimStrainLoad(int tag, const size_t &, const Vector &);
+    ThreedimStrainLoad(int tag, const size_t &, const ID &theElementTags);
     ThreedimStrainLoad(int tag, const std::vector<Vector> &, const ID &theElementTags);
     ThreedimStrainLoad(int tag, const size_t &, const Vector &, const ID &theElementTags);
-    ThreedimStrainLoad(int tag, const size_t &, const ID &theElementTags);
-    ThreedimStrainLoad(int tag, const size_t &, const Vector &);
-    ThreedimStrainLoad(int tag, const size_t &);
-    ThreedimStrainLoad(const size_t &s= 8);
   
     inline const std::vector<Vector> &getStrains(void) const
       { return strains; }
@@ -63,6 +63,8 @@ class ThreedimStrainLoad: public ThreedimLoad
       { return strains[i]; }
     void setStrains(const Matrix &);
     void setStrainComp(const size_t &,const size_t &,const double &);
+    boost::python::list getStrainsPy(void) const;
+    void setStrainsPy(const boost::python::list &);
     const Vector &getData(int &type, const double &loadFactor) const;
 
   

@@ -34,7 +34,7 @@ class_<XC::BrickSelfWeight, bases<XC::ThreedimLoad>, boost::noncopyable >("Brick
 
 class_<XC::ThreedimStrainLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("ThreedimStrainLoad", no_init)
   .def("getStrain",make_function(&XC::ThreedimStrainLoad::getStrain, return_internal_reference<>() ))
-  .def("getStrains",make_function(&XC::ThreedimStrainLoad::getStrains, return_internal_reference<>() ))
+  .def("getStrains",&XC::ThreedimStrainLoad::getStrainsPy, "Return the values of the strains for each gauss point.")
   .def("setStrainComp",&XC::ThreedimStrainLoad::setStrainComp)
   ;
 

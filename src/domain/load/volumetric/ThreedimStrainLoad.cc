@@ -36,22 +36,38 @@
 #include "utility/matrix/Matrix.h"
 
 
-XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag, const std::vector<Vector> &t,const ID &theElementTags)
+XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag, const std::vector<Vector> &t, const ID &theElementTags)
   :ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad, theElementTags), strains(t) {}
-XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag,const size_t &sz,const Vector &t,const ID &theElementTags)
+XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag, const size_t &sz,const Vector &t, const ID &theElementTags)
   :ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad, theElementTags), strains(sz,t) {}
 
 XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag,const size_t &sz, const ID &theElementTags)
-  :ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad, theElementTags), strains(sz) {}
+  : ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad, theElementTags), strains(sz) {}
 
-XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag,const size_t &sz, const Vector &t)
-  :ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad), strains(sz,t) {}
+XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag, const size_t &sz, const Vector &t)
+  : ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad), strains(sz,t) {}
 
 XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag,const size_t &sz)
-  :ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad), strains(sz) {}
+  : ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad), strains(sz) {}
 
 XC::ThreedimStrainLoad::ThreedimStrainLoad(const size_t &sz)
-  :ThreedimLoad(0,LOAD_TAG_ThreedimStrainLoad), strains(sz) {}
+  : ThreedimLoad(0,LOAD_TAG_ThreedimStrainLoad), strains(sz) {}
+
+//! @brief Return the values of the strains in a Python list.
+boost::python::list XC::ThreedimStrainLoad::getStrainsPy(void) const
+  {
+    boost::python::list retval;
+    for(std::vector<Vector>::const_iterator i= strains.begin(); i!=strains.end(); i++)
+      {
+	const Vector &v= *i;
+	const size_t sz= v.Size();
+	boost::python::list row;
+	for(size_t j= 0; j<sz; j++)
+	  row.append(v[j]);
+        retval.append(row);
+      }
+    return retval;
+  }
 
 //! @brief Sets the strains for a Gauss point.
 //! @param i: Gauss point index.
@@ -65,17 +81,19 @@ void XC::ThreedimStrainLoad::setStrainComp(const size_t &i,const size_t &j,const
         if(j<size_t(def.Size()))
           def(j)= strain;
         else
-          std::cerr << getClassName() << "::setStrainComp "
+          std::cerr << getClassName() << "::" << __FUNCTION__
                     << " component: " << j
-	            << " doesn't exist." << std::endl;
+	            << " doesn't exist."
+		    << std::endl;
       }
     else
-      std::cerr << getClassName() << "::setStrainComp "
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << " gauss point: "  << i
-                << " doesn't exist." << std::endl;
+                << " doesn't exist."
+		<< std::endl;
   }
 
-//! @brief Asigna las strains.
+//! @brief Set the values of the strains.
 void XC::ThreedimStrainLoad::setStrains(const Matrix &def)
   {
     const int nRows= def.noRows();
@@ -89,6 +107,45 @@ void XC::ThreedimStrainLoad::setStrains(const Matrix &def)
         tmp[i]= ri;
       }
     strains= tmp;
+  }
+
+//! @brief Set the values of the strains from a Python list.
+void XC::ThreedimStrainLoad::setStrainsPy(const boost::python::list &values)
+  {
+    size_t nRows= len(values);
+    const size_t sz= strains.size();
+    if(nRows!=sz)
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING, input list has " << nRows
+	          << " rows "
+	          << " which is different from the number of rows in the strain vector: "
+	          << sz
+		  << std::endl;
+	nRows= std::min(nRows, sz);
+      }
+    for(size_t i= 0; i<nRows; i++)
+      {
+	boost::python::list row= boost::python::extract<boost::python::list>(values[i]);
+	size_t rsz= len(row);
+	const size_t srsz= strains[0].Size();
+	if(rsz!=srsz)
+	  {
+	    std::clog << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING, input list has " << rsz
+		      << " componenets "
+		      << " which is different from the number of components of the strain vector: "
+		      << srsz
+		      << std::endl;
+	    rsz= std::min(rsz, srsz);
+	  }
+        for(size_t j= 0; j<rsz; j++)
+	  {
+	    const double strain= boost::python::extract<double>(row[j]);
+	    this->setStrainComp(i, j, strain);
+	  }
+      }
+    
   }
 
 const XC::Vector &XC::ThreedimStrainLoad::getData(int &type, const double &loadFactor) const

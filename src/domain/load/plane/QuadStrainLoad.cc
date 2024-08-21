@@ -30,10 +30,11 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 
+const size_t strainSize= 3; // three components: [xx, yy, xy]
 //! @brief Constructor.
 XC::QuadStrainLoad::QuadStrainLoad(int tag, const ID &theElementTags)
-  :BidimStrainLoad(tag,4,Vector(2), theElementTags) {}
+  :BidimStrainLoad(tag,4,Vector(strainSize), theElementTags) {}
 
 //! @brief Constructor.
 XC::QuadStrainLoad::QuadStrainLoad(int tag)
-  :BidimStrainLoad(tag,4,Vector(2)) {}
+  :BidimStrainLoad(tag,4,Vector(strainSize)) {}

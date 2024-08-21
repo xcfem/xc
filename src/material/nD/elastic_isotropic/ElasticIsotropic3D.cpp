@@ -61,12 +61,12 @@ XC::Vector XC::ElasticIsotropic3D::sigma(6); // global for ElasticIsotropic3D on
 
 //! @brief Constructor.
 XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag)
-  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, 0.0, 0.0, 0.0)
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D, 6, 0.0, 0.0, 0.0)
   {}
 
 //! @brief Constructor.
 XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag, double E, double nu, double rho)
-  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, E, nu, rho)
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D, 6, E, nu, rho)
   {}
 
 
