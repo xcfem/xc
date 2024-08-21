@@ -1014,11 +1014,11 @@ python tests/loads/inertia_loads/shell/test_inertia_loads_shell_03.py
 python tests/loads/inertia_loads/shell/test_inertia_loads_shell_04.py
 python tests/loads/inertia_loads/shell/test_inertia_loads_shell_05.py
 python tests/loads/inertia_loads/shell/test_inertia_loads_shell_06.py
-echo "$BLEU" "      Inertial loads on quads." "$NORMAL"
-python tests/loads/inertia_loads/quads/test_inertia_loads_quad_01.py
-echo "$BLEU" "      Inertial loads on bricks." "$NORMAL"
-python tests/loads/inertia_loads/bricks/test_inertia_loads_brick_01.py
-python tests/loads/inertia_loads/bricks/test_inertia_loads_brick_02.py
+echo "$BLEU" "      Inertia loads on quads." "$NORMAL"
+python tests/loads/inertia_loads/quad/test_inertia_loads_quad_01.py
+echo "$BLEU" "      Inertia loads on bricks." "$NORMAL"
+python tests/loads/inertia_loads/brick/test_inertia_loads_brick_01.py
+python tests/loads/inertia_loads/brick/test_inertia_loads_brick_02.py
 echo "$BLEU" "    Surface pressures." "$NORMAL"
 python tests/loads/surface_pressures/test_brick_surface_pressures_01.py
 python tests/loads/surface_pressures/test_brick_surface_pressures_02.py
