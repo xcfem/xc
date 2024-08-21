@@ -6,7 +6,7 @@
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2024, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -30,8 +30,7 @@ zList=[0.0, 0.25, 0.5, 0.75, 1.0]
 
 area= math.pi*(r2**2-r1**2)*(1-1/ndiv)
 volume= (zList[-1]-zList[0])*area
-
-#angList= angList[0:5]
+### Compute node positions.
 positions= list()
 count= 0
 for a in angList:
