@@ -57,6 +57,7 @@
 
 #include "domain/mesh/element/ElementBase.h"
 #include "domain/load/ElementalLoad.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 namespace XC {
 
@@ -105,8 +106,9 @@ int SurfaceLoadBase<NNODES>::commitState(void)
     // call element commitState to do any base class stuff
     if((retVal = this->ElementBase<NNODES>::commitState()) != 0)
       {
-        std::cerr << this->getClassName() << "::" << __FUNCTION__
-	          << "; failed in base class";
+        std::cerr << Color::red << this->getClassName() << "::" << __FUNCTION__
+	          << "; failed in base class"
+	          << Color::def << std::endl;
       }
 
     return retVal; 
@@ -157,9 +159,10 @@ int SurfaceLoadBase<NNODES>::addLoad(ElementalLoad *theLoad, double loadFactor)
       }
     else
       {
-	std::cerr << this->getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << this->getClassName() << "::" << __FUNCTION__
 		  << "; ele with tag: " << this->getTag()
-		  << " does not accept load type: " << type << std::endl;
+		  << " does not accept load type: " << type
+		  << Color::def << std::endl;
 	return -1;
       }
     return -1;
