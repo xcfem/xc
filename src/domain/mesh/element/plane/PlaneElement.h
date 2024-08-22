@@ -253,6 +253,7 @@ Plane XC::PlaneElement<NNODES, PhysProp>::getPlane(bool initialGeometry) const
 //! @brief Returns the element contour as a polygon.
 //! @tparam NNODES number of nodes.
 //! @tparam PhysProp material properties.
+//! @param initialGeometry: if true returns the area of the undeformed geometry.
 template <int NNODES,class PhysProp>
 Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
