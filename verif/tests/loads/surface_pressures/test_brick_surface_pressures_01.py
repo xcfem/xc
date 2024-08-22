@@ -26,26 +26,25 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
 # Define mesh.
 ## Nodes.
-x0= 0.0; x1= 1.0
-z0= 0.0; z1= 1.0
-y0= 0.0; y1= 1.0
 area= 1.0
 ### Bottom
 nod1= nodes.newNodeXYZ(0,0,0)
 nod2= nodes.newNodeXYZ(1,0,0)
 nod3= nodes.newNodeXYZ(1,1,0)
 nod4= nodes.newNodeXYZ(0,1,0)
+### Top
 nod5= nodes.newNodeXYZ(0,0,1)
 nod6= nodes.newNodeXYZ(1,0,1)
 nod7= nodes.newNodeXYZ(1,1,1)
 nod8= nodes.newNodeXYZ(0,1,1)
 
 ## Constraints
-for n in [nod1, nod2, nod3, nod4]:
+constrainedNodes= [nod1, nod2, nod3, nod4]
+for n in constrainedNodes:
     n.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
 ## Pressure
-pressure= -0.1
+pressure= -1e3
 
 ## Brick elements
 elements= preprocessor.getElementHandler
@@ -53,19 +52,23 @@ elements.defaultMaterial= elast3d.name
 brick= elements.newElement("Brick",xc.ID([nod1.tag, nod2.tag, nod3.tag, nod4.tag, nod5.tag, nod6.tag, nod7.tag, nod8.tag]))
 
 # Surface load elements.
-surfaceLoad= elements.newElement("BrickSurfaceLoad",xc.ID([nod5.tag, nod6.tag, nod7.tag, nod8.tag]))
+topNodes= [nod5.tag, nod6.tag, nod7.tag, nod8.tag]
+brickSurfaceLoad= elements.newElement("BrickSurfaceLoad",xc.ID(topNodes))
 
 # Load pattern.
 ## First load pattern.
 lpA= modelSpace.newLoadPattern(name= 'A')
 eleLoad= lpA.newElementalLoad("surface_load")
-eleLoad.elementTags= xc.ID([surfaceLoad.tag])
+eleLoad.dim= 3 # 3D space.
 eleLoad.pressure= pressure # applied pressure loading normal to the surface, outward is positive, inward is negative.
+eleLoad.elementTags= xc.ID([brickSurfaceLoad.tag])
+
 ## Second load pattern.
 lpB= modelSpace.newLoadPattern(name= 'B')
 eleLoad= lpB.newElementalLoad("surface_load")
-eleLoad.elementTags= xc.ID([surfaceLoad.tag])
+eleLoad.dim= 3 # 3D space.
 eleLoad.pressure= -pressure # applied pressure loading normal to the surface, outward is positive, inward is negative.
+eleLoad.elementTags= xc.ID([brickSurfaceLoad.tag])
 ## First load combination.
 combC= modelSpace.newLoadCombination("C","1.0*A+1.0*B")
 ## Secont load combination.
@@ -78,7 +81,7 @@ result= modelSpace.analyze(calculateNodalReactions= True)
 
 # Compute reactions.
 RzA= 0
-for n in [nod1, nod2, nod3, nod4]:
+for n in constrainedNodes:
     RzA+= n.getReaction[2]
 
 # Compute solution for load B.
@@ -88,7 +91,7 @@ result= modelSpace.analyze(calculateNodalReactions= True)
 
 # Compute reactions.
 RzB= 0
-for n in [nod1, nod2, nod3, nod4]:
+for n in constrainedNodes:
     RzB+= n.getReaction[2]
 
 # Compute solution for combination C.
@@ -98,7 +101,7 @@ result= modelSpace.analyze(calculateNodalReactions= True)
 
 # Compute reactions.
 RzC= 0
-for n in [nod1, nod2, nod3, nod4]:
+for n in constrainedNodes:
     RzC+= n.getReaction[2]
 
 # Compute solution for combination D.
@@ -108,7 +111,7 @@ result= modelSpace.analyze(calculateNodalReactions= True)
 
 # Compute reactions.
 RzD= 0
-for n in [nod1, nod2, nod3, nod4]:
+for n in constrainedNodes:
     RzD+= n.getReaction[2]
     
 # Compute force.
@@ -137,3 +140,11 @@ if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()
+# oh.displayLoads()
+# # oh.displayLocalAxes()
+# oh.displayReactions()
