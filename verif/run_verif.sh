@@ -554,6 +554,9 @@ python tests/elements/birth_and_death/test_awakening_in_hot_model_shell_mitc4_01
 python tests/elements/birth_and_death/test_awakening_in_hot_model_four_node_quad.py
 python tests/elements/birth_and_death/test_awakening_in_hot_model_zero_length.py
 
+echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
+python tests/elements/
+
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
