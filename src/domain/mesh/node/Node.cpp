@@ -2648,11 +2648,17 @@ Vector3d XC::Node::get3dMomentComponents(const Vector &v) const
 //! @brief Increments the node reaction.
 int XC::Node::addReactionForce(const Vector &add, double factor)
   {
-    // check vector of appropraie size
-    if(add.Size() != numberDOF)
+    // check vector of appropraie size.
+    const int addSz= add.Size();
+    if(addSz != numberDOF)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		  << "; vector not of correct size."
+		  << "; vector not of correct size in node: "
+	          << this->getTag()
+	          << " size is: "
+	          << addSz
+	          << " and should be: "
+	          << numberDOF
 	          << Color::def << std::endl;
         return -1;
       }
