@@ -74,8 +74,9 @@ surfaceLoad8= elements.newElement("BrickSurfaceLoad",xc.ID([nod14.tag, nod15.tag
 # Load pattern.
 lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("surface_load")
-eleLoad.elementTags= xc.ID([surfaceLoad5.tag, surfaceLoad6.tag, surfaceLoad7.tag, surfaceLoad8.tag])
+eleLoad.dim= 3 # 3D space.
 eleLoad.pressure= pressure # applied pressure loading normal to the surface, outward is positive, inward is negative.
+eleLoad.elementTags= xc.ID([surfaceLoad5.tag, surfaceLoad6.tag, surfaceLoad7.tag, surfaceLoad8.tag])
 modelSpace.addLoadCaseToDomain(lp0.name) # Add the load case to the domain.
 
 # Compute solution.
@@ -105,6 +106,7 @@ else:
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
-# oh.displayFEMesh()
+# # oh.displayFEMesh()
+# oh.displayLoads()
 # # oh.displayLocalAxes()
 # # oh.displayReactions()
