@@ -32,7 +32,6 @@
 
 #include "domain/mesh/element/plane/QuadBase4N.h"
 #include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
-#include "domain/mesh/element/utils/coordTransformation/ShellCrdTransf3dBase.h"
 #include "ShellBData.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
@@ -44,7 +43,9 @@ namespace XC {
 
 class ShellRawLoad;
 class ShellUniformLoad;
-
+class ShellCrdTransf3dBase;
+class ParticlePos2d;
+  
 //! @ingroup PlaneElements
 //
 //! @brief Base class for four node shell elements.

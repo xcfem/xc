@@ -66,12 +66,9 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
 #include "domain/mesh/element/utils/coordTransformation/ShellLinearCrdTransf3d.h"
-
-
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MovableVectors.h"
-
 
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"

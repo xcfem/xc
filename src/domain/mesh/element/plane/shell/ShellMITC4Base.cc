@@ -57,13 +57,10 @@
 #include <material/section/SectionForceDeformation.h>
 #include <domain/domain/Domain.h>
 #include <domain/mesh/element/utils/coordTransformation/R3vectors.h>
-
-
+#include "domain/mesh/element/utils/coordTransformation/ShellCrdTransf3dBase.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MovableVectors.h"
-
-
 #include "utility/geom/d2/Polygon3d.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"

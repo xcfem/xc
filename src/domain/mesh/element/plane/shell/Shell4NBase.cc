@@ -58,6 +58,7 @@
 #include "material/section/SectionForceDeformation.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
+#include "domain/mesh/element/utils/coordTransformation/ShellCrdTransf3dBase.h"
 #include "domain/load/volumetric/SelfWeight.h"
 
 
@@ -830,7 +831,7 @@ int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const in
       {
         data.setDbTagDataPos(posFlag,0);
         data.setDbTagDataPos(posClassTag,theCoordTransf->getClassTag());
-        comm.sendMovable(*theCoordTransf,data,CommMetaData(posDbTag));
+        retval= comm.sendMovable(*theCoordTransf,data,CommMetaData(posDbTag));
       }
     return retval;
   }
@@ -852,7 +853,7 @@ int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const in
           }
         if(theCoordTransf)
           {
-            comm.receiveMovable(*theCoordTransf,data,CommMetaData(posDbTag));
+            res= comm.receiveMovable(*theCoordTransf,data,CommMetaData(posDbTag));
             theCoordTransf->revertToLastCommit();// Revert the crdtransf to its last committed state
             if(res<0)
               std::cerr << getClassName() << "::" << __FUNCTION__
