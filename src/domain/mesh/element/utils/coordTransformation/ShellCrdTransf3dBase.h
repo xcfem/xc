@@ -54,6 +54,7 @@ class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
     Vector g1; //!< Vector 1 of the reference trihedron.
     Vector g2; //!< Vector 2 of the reference trihedron.
     Vector g3; //!< Vector 3 of the reference trihedron.
+    
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
@@ -63,13 +64,19 @@ class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
     const Vector &local_to_global_resisting_force(const Vector &pl) const;
     const Matrix &local_to_global_stiff_matrix(const Matrix &kl) const;
 
+
   public:
     ShellCrdTransf3dBase(void);
+    ShellCrdTransf3dBase(const Vector &,const Vector &,const Vector &);
     inline virtual ~ShellCrdTransf3dBase(void)
       {}
-    ShellCrdTransf3dBase(const Vector &,const Vector &,const Vector &);
     virtual ShellCrdTransf3dBase *getCopy(void) const= 0;
 
+    void setUnitVectors(const Vector &,const Vector &,const Vector &);
+    void setUnitVectors(const Vector3d &,const Vector3d &,const Vector3d &);
+    void setUnitVectors(const Vector &,const Vector &);
+    void setUnitVectors(const Vector3d &,const Vector3d &);
+    
     //! @brief Returns the transformation matrix.
     Matrix getTrfMatrix(void) const;
     //! @brief Returns the first local axis (contained in the plane of the element)

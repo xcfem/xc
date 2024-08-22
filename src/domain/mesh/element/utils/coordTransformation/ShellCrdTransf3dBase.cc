@@ -55,6 +55,41 @@ XC::ShellCrdTransf3dBase::ShellCrdTransf3dBase(const Vector &v1,const Vector &v2
   : CommandEntity(), MovableObject(0), theNodes(nullptr),
     vpos_centroide(3,0.0), g1(v1), g2(v2), g3(v3) {}
 
+//! @brief Assigns the unit vectors of the transformation.
+void XC::ShellCrdTransf3dBase::setUnitVectors(const Vector &v1, const Vector &v2, const Vector &v3)
+  {
+    g1= v1;
+    g2= v2;
+    g3= v3;
+  }
+
+//! @brief Assigns the unit vectors of the transformation.
+void XC::ShellCrdTransf3dBase::setUnitVectors(const Vector3d &v1, const Vector3d &v2, const Vector3d &v3)
+  {
+    g1= Vector(v1);
+    g2= Vector(v2);
+    g3= Vector(v3);
+  }
+
+//! @brief Assigns the unit vectors of the transformation.
+void XC::ShellCrdTransf3dBase::setUnitVectors(const Vector &v1, const Vector &v2)
+  {
+    g1= v1;
+    g2= v2;
+    const Vector3d v3d1(v1[0], v1[1], v1[2]);
+    const Vector3d v3d2(v2[0], v2[1], v2[2]);
+    const Vector3d v3d3(v3d1.getCross(v3d2));
+    g3= Vector(v3d3);
+  }
+
+//! @brief Assigns the unit vectors of the transformation.
+void XC::ShellCrdTransf3dBase::setUnitVectors(const Vector3d &v1, const Vector3d &v2)
+  {
+    g1= Vector(v1);
+    g2= Vector(v2);
+    g3= Vector(v1.getCross(v2));
+  }
+
 int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)
   {
     theNodes= &ptrs;
