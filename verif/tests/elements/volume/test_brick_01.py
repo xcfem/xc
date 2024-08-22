@@ -19,7 +19,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-# from postprocess import output_handler
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -71,12 +70,6 @@ lp0.newNodalLoad(n4.tag,xc.Vector([0,0,-80000]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-# # Output stuff.
-# oh= output_handler.OutputHandler(modelSpace)
-
-# ## Uncomment to display the mesh
-# oh.displayFEMesh()
-# oh.displayLoads()
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -100,3 +93,10 @@ if(ratio<1e-4):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # # Output stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# ## Uncomment to display the mesh
+# oh.displayFEMesh()
+# oh.displayLoads()
