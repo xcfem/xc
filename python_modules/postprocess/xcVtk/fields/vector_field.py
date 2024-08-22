@@ -17,9 +17,18 @@ from postprocess.xcVtk.fields import vector_field_data as vfd
 
 class VectorField(fb.FieldBase):
     '''Vector field defined at points.'''
-    def __init__(self,name,fUnitConv,scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()):
+    def __init__(self,name,fUnitConv, scaleFactor, showPushing= True, symType=vtk.vtkArrowSource()):
+        '''
+        Constructor.
+        
+        :param loadPatternName: name of the load pattern to display.
+        :param fUnitConv: unit conversion factor.
+        :param scaleFactor: scale factor for the size of the vectors.
+        :param showPushing: if true the loads ares showed pushing the loaded point (as oppssed to pull). Default: True
+        :param components: index of the components of the load. Default: [0,1,2]
+        '''
         super(VectorField,self).__init__(name,fUnitConv)
-        self.data= vfd.VectorFieldData(name,3,scaleFactor)
+        self.data= vfd.VectorFieldData(name, 3, scaleFactor)
         self.showPushing= showPushing #If true vector push else pulls from point
         self.symType=symType
 
