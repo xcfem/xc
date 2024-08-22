@@ -26,17 +26,15 @@
 //----------------------------------------------------------------------------
 
 #include "domain/load/ElementBodyLoad.h"
-#include <domain/mesh/element/Element.h>
+#include "domain/mesh/element/Element.h"
 #include <domain/domain/Domain.h>
-
-
-
 #include "utility/matrices/m_int.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableID.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/MapSet.h"
 #include "domain/mesh/node/Node.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor. Provided for the FEM_Object broker; the tag
 //! and elementTag need to be supplied in recvSelf();
@@ -59,11 +57,16 @@ void XC::ElementBodyLoad::setDomain(Domain *theDomain)
     ElementalLoad::setDomain(theDomain);
     const size_t sz= elemTags.Size();
     if(sz==0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-                << "; no element identifiers." << std::endl;
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+                << "; no element identifiers."
+		<< Color::def << std::endl;
     else
       theElements.setPtrs(theDomain,elemTags);
   }
+
+//! @brief Return a constant reference to the element container.
+const XC::ElementPtrs &XC::ElementBodyLoad::getElementPtrs(void) const
+  { return theElements; }
 
 //! @brief Applies the load to the elements.
 void XC::ElementBodyLoad::applyLoad(double loadFactor) 
@@ -78,13 +81,14 @@ void XC::ElementBodyLoad::applyLoad(double loadFactor)
 	  theElements.setPtrs(dom, elemTags);
 	sz= theElements.size();
 	if(sz!=numEle)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; the number of pointers (" << sz
 		    << ") does not match the number of identifiers ("
 		    << numEle << "); something went wrong."
 		    << " Load tag: " << getTag()
 		    << " load pattern tag: " << getLoadPatternTag()
-		    << " element tags: " << elemTags << std::endl;
+		    << " element tags: " << elemTags
+		    << Color::def << std::endl;
       }
     for(int i=0; i<sz; i++)
       if(theElements[i])

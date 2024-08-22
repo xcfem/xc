@@ -55,6 +55,8 @@ class ElementBodyLoad: public ElementalLoad
     ElementBodyLoad(int tag, int classTag);
     ElementBodyLoad(int tag, int classTag, const ID &theElementTags);
 
+    const ElementPtrs &getElementPtrs(void) const;
+
     virtual void setDomain(Domain *theDomain);
     virtual void applyLoad(double loadfactor);
 
