@@ -63,24 +63,29 @@ namespace XC {
 class SurfaceLoad: public ElementBodyLoad
   {
   private:
+    int dim; //!< Dimension of the space.
     double pressure; //!< Pressure on the surface.
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    SurfaceLoad(int tag= 0, const double &pressure= 0.0);
-    SurfaceLoad(int tag,const ID &tags_elems, const double &pressure= 0.0);
+    SurfaceLoad(int tag= 0, const int &dim= 2, const double &pressure= 0.0);
+    SurfaceLoad(int tag,const ID &tags_elems, const int &dim= 2, const double &pressure= 0.0);
 
     const Vector &getData(int &type, const double &loadFactor) const;
     
     std::string Category(void) const;
     
+    int getDim(void) const;
+    void setDim(const int &);
     double getPressure(void) const;
     void setPressure(const double &);
     virtual Vector getLocalForce(void) const;
     Vector3d getVector3dLocalForce(void) const;
 
+    virtual void applyLoad(double loadfactor);
+    
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
     void Print(std::ostream &, int flag = 0);

@@ -49,6 +49,7 @@ class_<XC::ElementalLoadIter, boost::noncopyable >("ElementalLoadIter", no_init)
 class_<XC::ElementBodyLoad, bases<XC::ElementalLoad>, boost::noncopyable >("ElementBodyLoad", no_init);
 
 class_<XC::SurfaceLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("SurfaceLoad", no_init)
+  .add_property("dim",&XC::SurfaceLoad::getDim, &XC::SurfaceLoad::setDim,"Get/set the space dimension (2 or 3).")
   .add_property("pressure",&XC::SurfaceLoad::getPressure, &XC::SurfaceLoad::setPressure,"Get/set the pressure load.")
   .def("setPressure", &XC::SurfaceLoad::setPressure,"Set the pressure load.")
   .def("getPressure", &XC::SurfaceLoad::getPressure,"Get the pressure load.")

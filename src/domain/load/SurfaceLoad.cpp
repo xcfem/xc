@@ -25,15 +25,17 @@
 
 #include "SurfaceLoad.h"
 #include "utility/geom/pos_vec/Vector3d.h"
-
-//! @brief Constructor.
-XC::SurfaceLoad::SurfaceLoad(int tag,const ID &tags_elems, const double &press)
-  : ElementBodyLoad(tag, LOAD_TAG_SurfaceLoad, tags_elems), pressure(press)
-  {}
+#include "domain/mesh/element/Element.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
-XC::SurfaceLoad::SurfaceLoad(int tag, const double &press)
-  : ElementBodyLoad(tag, LOAD_TAG_SurfaceLoad), pressure(press)
+XC::SurfaceLoad::SurfaceLoad(int tag, const int &dm, const double &press)
+  : ElementBodyLoad(tag, LOAD_TAG_SurfaceLoad), dim(dm), pressure(press)
+  {}
+
+//! @brief Constructor.
+XC::SurfaceLoad::SurfaceLoad(int tag, const ID &tags_elems, const int &dm, const double &press)
+  : ElementBodyLoad(tag, LOAD_TAG_SurfaceLoad, tags_elems), dim(dm), pressure(press)
   {}
 
 const XC::Vector &XC::SurfaceLoad::getData(int &type, const double &loadFactor) const
@@ -47,6 +49,15 @@ const XC::Vector &XC::SurfaceLoad::getData(int &type, const double &loadFactor) 
 std::string XC::SurfaceLoad::Category(void) const
   { return "uniform"; }
 
+
+//! @brief Get the dimension of the space (2 or 3).
+int XC::SurfaceLoad::getDim(void) const
+  { return this->dim; }
+
+//! @brief Set the dimension of the space (2 or 3).
+void XC::SurfaceLoad::setDim(const int &i)
+  { this->dim= i; }
+
 //! @brief Set the pressure.
 double XC::SurfaceLoad::getPressure(void) const
   { return this->pressure; }
@@ -58,9 +69,10 @@ void XC::SurfaceLoad::setPressure(const double &d)
 //! @brief Returns force expressed in local coordinates.
 XC::Vector XC::SurfaceLoad::getLocalForce(void) const
   {
-    Vector retval(2);
+    Vector retval(dim);
     retval(0)= 0.0;
-    retval(1)= pressure;
+    retval(1)= 0.0;
+    retval(dim-1)= pressure;
     return retval;
   }
 
@@ -76,11 +88,40 @@ Vector3d XC::SurfaceLoad::getVector3dLocalForce(void) const
       retval= Vector3d(f[0],f[1],0.0);
     return retval;
   }
+
+//! @brief Applies the load to the elements.
+void XC::SurfaceLoad::applyLoad(double loadFactor) 
+  {
+    const ElementPtrs &elemPtrs= this->getElementPtrs();
+    const int sz= elemPtrs.size();
+    for(int i=0; i<sz; i++)
+      if(elemPtrs[i])
+	{
+	  const Element *elem= elemPtrs[i];
+	  const int elemDim= elem->getDimension();
+	  if(elemDim!=(this->dim-1))
+	    {
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; - element with tag: "
+		        << elem->getTag()
+		        << " of class: "
+			<< elem->getClassName()
+		        << " has dimension: " << elemDim
+		        << " and this surface load has dimension: "
+		        << dim
+		        << "; so it is not compatible."
+		        << Color::def << std::endl;
+	      exit(-1);
+	    }
+	}
+    ElementBodyLoad::applyLoad(loadFactor);
+  }
+
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::SurfaceLoad::getDbTagData(void) const
   {
-    static DbTagData retval(4);
+    static DbTagData retval(5);
     return retval;
   }
 
@@ -88,7 +129,8 @@ XC::DbTagData &XC::SurfaceLoad::getDbTagData(void) const
 int XC::SurfaceLoad::sendData(Communicator &comm)
   {
     int res= ElementBodyLoad::sendData(comm);
-    res+= comm.sendDouble(pressure,getDbTagData(),CommMetaData(3));
+    res+= comm.sendInt(dim,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDouble(pressure,getDbTagData(),CommMetaData(4));
     return res;
   }
 
@@ -96,30 +138,33 @@ int XC::SurfaceLoad::sendData(Communicator &comm)
 int XC::SurfaceLoad::recvData(const Communicator &comm)
   {
     int res= ElementBodyLoad::recvData(comm);
-    res+= comm.receiveDouble(pressure,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveInt(dim,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDouble(pressure,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 int XC::SurfaceLoad::sendSelf(Communicator &comm)
   {
-    inicComm(4);
+    inicComm(5);
     int result= sendData(comm);
     const int dbTag= getDbTag();
     result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; - failed to send extra data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; - failed to send data."
+	        << Color::def << std::endl;
     return result;
   }
 
 int XC::SurfaceLoad::recvSelf(const Communicator &comm)
   {
-    inicComm(4);
+    inicComm(5);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; data could not be received\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received"
+		<< Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
