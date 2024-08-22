@@ -555,8 +555,7 @@ python tests/elements/birth_and_death/test_awakening_in_hot_model_four_node_quad
 python tests/elements/birth_and_death/test_awakening_in_hot_model_zero_length.py
 
 echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
-python tests/elements/
-
+python tests/elements//mixed_dofs/test_brick_and_shell_01.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
