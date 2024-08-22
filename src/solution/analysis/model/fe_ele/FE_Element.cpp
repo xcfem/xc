@@ -254,7 +254,8 @@ int XC::FE_Element::setID(void)
     if(!theModel)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	          << "; WARNING - no AnalysisModel set." << Color::def << std::endl;
+	          << "; WARNING - no AnalysisModel set."
+		  << Color::def << std::endl;
         return -1;
       }
 
@@ -267,7 +268,8 @@ int XC::FE_Element::setID(void)
         if(!dofPtr)
           {
             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING null DOF_Group pointer." << Color::def << std::endl;
+		      << "; WARNING null DOF_Group pointer."
+		      << Color::def << std::endl;
             return -2;
           }
 
@@ -280,7 +282,8 @@ int XC::FE_Element::setID(void)
             {
               std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			<< "; WARNING -  numDOF and"
-			<< " number of dof at the DOF_Groups\n";
+			<< " number of dof at the DOF_Groups"
+		        << Color::def << std::endl;
               return -3;
             }
       }
