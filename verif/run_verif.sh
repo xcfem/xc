@@ -1021,6 +1021,7 @@ echo "$BLEU" "      Inertia loads on bricks." "$NORMAL"
 python tests/loads/inertia_loads/brick/test_inertia_loads_brick_01.py
 python tests/loads/inertia_loads/brick/test_inertia_loads_brick_02.py
 echo "$BLEU" "    Surface pressures." "$NORMAL"
+python tests/loads/surface_pressures/test_brick_surface_pressures_00.py
 python tests/loads/surface_pressures/test_brick_surface_pressures_01.py
 python tests/loads/surface_pressures/test_brick_surface_pressures_02.py
 python tests/loads/surface_pressures/test_quad_surface_pressures_01.py
