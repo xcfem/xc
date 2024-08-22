@@ -64,11 +64,11 @@ eleLoad.dim= 3 # 3D space.
 eleLoad.pressure= pressure # applied pressure loading normal to the surface, outward is positive, inward is negative.
 eleLoad.elementTags= xc.ID([brickSurfaceLoad.tag])
     
-# Compute solution for load A.
+# Compute solution.
 modelSpace.addLoadCaseToDomain(lp.name) # Add the load case to the domain.
 result= modelSpace.analyze(calculateNodalReactions= True)
-# Compute reactions.
 
+# Compute reactions.
 Rx= .0
 Ry= .0
 Rz= .0
