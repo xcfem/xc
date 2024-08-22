@@ -53,13 +53,14 @@ elements.defaultMaterial= elast2d.name
 quad= elements.newElement("FourNodeQuad",xc.ID([nod1.tag, nod2.tag, nod3.tag, nod4.tag]))
 
 # Surface load elements.
-surfaceLoad= elements.newElement("QuadSurfaceLoad",xc.ID([nod4.tag, nod3.tag]))
+quadSurfaceLoad= elements.newElement("QuadSurfaceLoad",xc.ID([nod4.tag, nod3.tag]))
 
 # Load pattern.
 lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("surface_load")
-eleLoad.elementTags= xc.ID([surfaceLoad.tag])
+eleLoad.dim= 2 # 2D space.
 eleLoad.pressure= pressure # applied pressure loading normal to the surface, outward is positive, inward is negative.
+eleLoad.elementTags= xc.ID([quadSurfaceLoad.tag])
 
 # Compute solution for load 0.
 modelSpace.addLoadCaseToDomain(lp0.name) # Add the load case to the domain.

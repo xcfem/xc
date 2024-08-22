@@ -48,19 +48,22 @@ elements.defaultMaterial= elast2d.name
 quad= elements.newElement("FourNodeQuad",xc.ID([nod1.tag, nod2.tag, nod3.tag, nod4.tag]))
 
 # Surface load elements.
-surfaceLoad= elements.newElement("QuadSurfaceLoad",xc.ID([nod4.tag, nod3.tag]))
+quadSurfaceLoad= elements.newElement("QuadSurfaceLoad",xc.ID([nod4.tag, nod3.tag]))
 
 # Load pattern.
 ## First load pattern.
 lpA= modelSpace.newLoadPattern(name= 'A')
 eleLoad= lpA.newElementalLoad("surface_load")
-eleLoad.elementTags= xc.ID([surfaceLoad.tag])
+eleLoad.dim= 2 # 2D space.
 eleLoad.pressure= pressure # applied pressure loading normal to the surface, outward is positive, inward is negative.
+eleLoad.elementTags= xc.ID([quadSurfaceLoad.tag])
+
 ## Second load pattern.
 lpB= modelSpace.newLoadPattern(name= 'B')
 eleLoad= lpB.newElementalLoad("surface_load")
-eleLoad.elementTags= xc.ID([surfaceLoad.tag])
+eleLoad.dim= 2 # 2D space.
 eleLoad.pressure= -pressure # applied pressure loading normal to the surface, outward is positive, inward is negative.
+eleLoad.elementTags= xc.ID([quadSurfaceLoad.tag])
 ## First load combination.
 combC= modelSpace.newLoadCombination("C","1.0*A+1.0*B")
 ## Secont load combination.
