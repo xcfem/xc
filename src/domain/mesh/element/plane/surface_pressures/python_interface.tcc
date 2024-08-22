@@ -32,7 +32,9 @@ class_<XC::QuadSurfaceLoad, bases<surface_load_base_2n >, boost::noncopyable >("
 typedef XC::SurfaceLoadBase<4> surface_load_base_4n;
 class_<surface_load_base_4n, bases<ElementBase4N>, boost::noncopyable >("surface_load_base_4n", no_init);
 
+XC::ShellLinearCrdTransf3d *(XC::BrickSurfaceLoad::*getBrickSurfaceLoadCoordTransf)(void)= &XC::BrickSurfaceLoad::getCoordTransf;
 class_<XC::BrickSurfaceLoad, bases<surface_load_base_4n > >("BrickSurfaceLoad")
    .add_property("pressure",&XC::BrickSurfaceLoad::getPressure, &XC::BrickSurfaceLoad::setPressure,"Get/set the pressure load.")
+   .add_property("getCoordTransf", make_function( getBrickSurfaceLoadCoordTransf, return_internal_reference<>() ))
    ;
 
