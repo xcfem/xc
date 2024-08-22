@@ -19,12 +19,13 @@ class LoadOnPoints(vf.VectorField):
     '''Draws punctual loads.'''
     def __init__(self,loadPatternName,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2]):
         '''
-        Parameters:
-          loadPatternName: name of the load pattern to display.
-          fUnitConv: unit conversion factor.
-          scaleFactor: scale factor for the size of the vectors.
-          showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
-          components: index of the components of the load. Default: [0,1,2] 
+        Constructor.
+        
+        :param loadPatternName: name of the load pattern to display.
+        :param fUnitConv: unit conversion factor.
+        :param scaleFactor: scale factor for the size of the vectors.
+        :param showPushing: if true the loads ares showed pushing the loaded point (as oppssed to pull). Default: True
+        :param components: index of the components of the load. Default: [0,1,2]
         '''
         super(LoadOnPoints,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
         self.components= components
@@ -265,14 +266,14 @@ class LoadVectorField(LoadOnPoints):
         return self.dumpVectors(preprocessor, defFScale,showElementalLoads=False,showNodalLoads=True)
     
     def dumpElementalLoads(self, preprocessor, defFScale):
-            ''' Iterate over nodal loads dumping them into the graphic.
+        ''' Iterate over nodal loads dumping them into the graphic.
 
-            :param preprocessor: preprocessor of the FE problem.
-            :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor.
-            '''
-            return self.dumpVectors(preprocessor, defFScale, showElementalLoads=True, showNodalLoads=False)
+        :param preprocessor: preprocessor of the FE problem.
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor.
+        '''
+        return self.dumpVectors(preprocessor, defFScale, showElementalLoads=True, showNodalLoads=False)
     
 
