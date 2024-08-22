@@ -57,11 +57,10 @@
 
 #include "domain/mesh/element/plane/surface_pressures/SurfaceLoadBase.h"
 #include "utility/geom/d2/Polygon3d.h"
-#include "domain/mesh/element/utils/coordTransformation/ShellLinearCrdTransf3d.h"
 
 namespace XC {
 class ShellLinearCrdTransf3d;
-  
+
 // number of nodes per element
 const int SL_NUM_NODE= 4;
 // d.o.f. per node
@@ -74,13 +73,15 @@ const int SL_NUM_DDOF(SL_NUM_DOF);
 class BrickSurfaceLoad: public SurfaceLoadBase<SL_NUM_NODE>
   {
   private:
-    // method to update base vectors
+    // method to update base vectors g1 & g2
     int UpdateBase(double Xi, double Eta) const;
 
     mutable Vector internalForces; //!< vector of Internal Forces
     //Vector theVector; //!< vector to return the residual
 
-    mutable ShellLinearCrdTransf3d theCoordTransf;
+    mutable Vector g1; //!< tangent vector  = d(x_Xi)/d_xi
+    mutable Vector g2; //!< tangent vector  = d(x_Xi)/d_eta 
+    mutable Vector myNhat; //!< normal Vector 
 
     mutable Vector myNI; //!< shape functions
 
@@ -102,7 +103,7 @@ class BrickSurfaceLoad: public SurfaceLoadBase<SL_NUM_NODE>
     BrickSurfaceLoad(int tag, int Nd1, int Nd2, int Nd3, int Nd4, double pressure);
     ~BrickSurfaceLoad(void);
     Element *getCopy(void) const;
-
+    
     size_t getDimension(void) const;
     ShellLinearCrdTransf3d *getCoordTransf(void);
     const ShellLinearCrdTransf3d *getCoordTransf(void) const;
@@ -110,7 +111,7 @@ class BrickSurfaceLoad: public SurfaceLoadBase<SL_NUM_NODE>
     std::deque<Pos3d> getNodePositions(bool initialGeometry= true) const;
     double getArea(bool initialGeometry) const;
     int getVtkCellType(void) const;
-    
+
     // public methods to obtain information about dof & connectivity    
     int getNumDOF(void) const;        
     void setDomain(Domain *theDomain);
