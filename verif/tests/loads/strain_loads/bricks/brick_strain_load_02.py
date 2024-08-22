@@ -123,7 +123,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-# Check results (no external forces => no reactions).
+# Check results.
+## Check reactions (no external forces => no reactions).
 R0= 0
 R1= 0
 R2= 0
@@ -135,11 +136,43 @@ for n in fixedNodes:
 
 testOK= (abs(R0)<1e-10) and (abs(R1)<1e-10) and (abs(R1)<1e-10)
 
+## Check displacements.
+allNodes= xcTotalSet.nodes
+node0Disp= allNodes[0].getDisp
+uXMax= node0Disp[0]
+uXMin= uXMax
+uYMax= node0Disp[1]
+uYMin= uYMax
+uZMax= node0Disp[2]
+uZMin= uZMax
+
+for n in xcTotalSet.nodes:
+    disp= n.getDisp
+    uXMax= max(disp[0], uXMax)
+    uXMin= min(disp[0], uXMin)
+    uYMax= max(disp[1], uYMax)
+    uYMin= min(disp[1], uYMin)
+    uZMax= max(disp[2], uZMax)
+    uZMin= min(disp[2], uZMin)
+
+err= math.sqrt((uXMax-0.1479981545344665e-3)**2+(uXMin+0.18828260695015306e-3)**2+(uYMax-0.1784504383693609e-3)**2+(uYMin+0.17670398773247603e-3)**2+(uZMax-0.19960366222876175e-3)**2+(uZMin+0.015203306021049667e-3)**2)
+
+testOK= testOK and (err<1e-6)
+
+    
 '''
 print('R0= ', R0)
 print('R1= ', R1)
 print('R2= ', R2)
+print('uXMax= '+str(uXMax*1e3)+' mm')
+print('uXMin= '+str(uXMin*1e3)+' mm')
+print('uYMax= '+str(uYMax*1e3)+' mm')
+print('uYMin= '+str(uYMin*1e3)+' mm')
+print('uZMax= '+str(uZMax*1e3)+' mm')
+print('uZMin= '+str(uZMin*1e3)+' mm')
+print('err= ', err)
 '''
+
 
 import os
 from misc_utils import log_messages as lmsg
