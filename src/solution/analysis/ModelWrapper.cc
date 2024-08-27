@@ -36,6 +36,7 @@
 #include <solution/analysis/handler/PenaltyConstraintHandler.h>
 #include <solution/analysis/handler/PlainHandler.h>
 #include <solution/analysis/handler/TransformationConstraintHandler.h>
+#include <solution/analysis/handler/AutoConstraintHandler.h>
 
 //Numberer.
 #include "solution/analysis/numberer/DOF_Numberer.h"
@@ -93,6 +94,8 @@ bool XC::ModelWrapper::alloc_constraint_handler(const std::string &nmb)
       theHandler=new PlainHandler(this);
     else if(nmb=="transformation_constraint_handler")
       theHandler=new TransformationConstraintHandler(this);
+    else if(nmb=="auto_constraint_handler")
+      theHandler=new AutoConstraintHandler(this);
     else
       std::cerr << "Constraint handler: '"
                 << nmb << " unknown." << std::endl;

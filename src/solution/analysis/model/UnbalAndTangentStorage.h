@@ -25,46 +25,50 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//UnbalAndTangent.h
+//UnbalAndTangentStorage.h
                                                                         
                                                                         
-#ifndef UnbalAndTangent_h
-#define UnbalAndTangent_h
+#ifndef UnbalAndTangentStorage_h
+#define UnbalAndTangentStorage_h
 
-#include "solution/analysis/UnbalAndTangentStorage.h"
+#include <vector>
+#include <map>
+#include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
 
 namespace XC {
 
 //! @ingroup Analysis
 //
-//! @brief Unbalanced force vector and tangent stiffness matrix.
-class UnbalAndTangent
+//! @brief Unbalanced force vectors and tangent stiffness matrices.
+//! This data structure is used to share those vectors and matrices
+//! among all the instatiations of a class. See DOF_Group.cpp,
+//! TransformationDOF_Group.cpp, FE_Element.cpp and TransformationFE.cpp
+class UnbalAndTangentStorage
   {
   private:
-    size_t nDOF;
-    Vector *theResidual;
-    Matrix *theTangent;
-    UnbalAndTangentStorage &unbalAndTangentArray; //!< Reference to array of class wide vectors and matrices
-    bool free_mem(void);
-    void alloc(void);
-    void copy(const UnbalAndTangent &);
+    std::vector<Matrix> theMatrices; //!< array of matrices
+    std::vector<Vector> theVectors;  //!< array of vectors
 
+    std::map<size_t, Matrix> theMatrixMap; //!< map of matrices.
+    std::map<size_t, Vector> theVectorMap; //!< map of vectors.
+    
+    void setTangent(const size_t &);
+    void setUnbalance(const size_t &);
   public:
-    UnbalAndTangent(const size_t &,UnbalAndTangentStorage &);
-    UnbalAndTangent(const UnbalAndTangent &);
-    UnbalAndTangent &operator=(const UnbalAndTangent &);
-    virtual ~UnbalAndTangent(void);
+    UnbalAndTangentStorage(const size_t &);    
 
-    inline const size_t &getNumDOF(void) const
-      { return nDOF; }
+    void alloc(const size_t &);
 
-    const Matrix &getTangent(void) const;
-    Matrix &getTangent(void);
-    const Vector &getResidual(void) const;
-    Vector &getResidual(void);
+    inline size_t size(void) const
+      { return theMatrices.size(); }
+
+    const Matrix &getTangent(const size_t &) const;
+    Matrix &getTangent(const size_t &);
+    const Vector &getUnbalance(const size_t &) const;
+    Vector &getUnbalance(const size_t &);
   };
 } // end of XC namespace
 
 #endif
-
 

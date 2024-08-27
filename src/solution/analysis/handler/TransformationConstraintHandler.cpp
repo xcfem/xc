@@ -449,7 +449,13 @@ int XC::TransformationConstraintHandler::enforceSPs(void)
       {
         // upward cast - safe as i put it in this location
         TransformationDOF_Group *theDof= dynamic_cast<TransformationDOF_Group *>(theDOFs[numDOF-i]);
-        theDof->enforceSPs();
+        theDof->enforceSPs(1);
+      }
+    for(int k=1; k<=numConstrainedNodes; k++)
+      {
+	// upward cast - safe as i put it in this location
+	TransformationDOF_Group *theDof= dynamic_cast<TransformationDOF_Group *>(theDOFs[numDOF-k]);
+	theDof->enforceSPs(0);
       }
     for(std::set<FE_Element *>::iterator j=theFEs.begin(); j!=theFEs.end(); j++)
       (*j)->updateElement();

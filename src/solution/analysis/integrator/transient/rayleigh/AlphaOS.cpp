@@ -350,20 +350,20 @@ int XC::AlphaOS::formElementResidual(void)
             res = -2;
           }        
         // add Ki*d -> R-F(d)+Ki*d
-        const double tmp_c2= c2;
-        const double tmp_c3= c3;
-        alpha = alpha-1.0;
-        c2 = c3 = 0.0; // no contribution of C and M to tangent
-        const Vector Ki_d = elePtr->getTangForce(Ut.get() - Upt.get());
-        if(theSOE->addB(Ki_d, elePtr->getID())<0)
-          {
-            std::cerr << "WARNING AlphaOS::formElementResidual -";
-            std::cerr << " failed in addB for XC::ID " << elePtr->getID();
-            res = -2;
-          }
-        alpha = alpha+1.0;
-        c2= tmp_c2;
-        c3= tmp_c3;
+        if(alpha < 1.0)
+	  {
+	    Vector Ki_d;
+	    if (statusFlag == CURRENT_TANGENT)
+	      { Ki_d = elePtr->getK_Force(Ut.get() - Upt.get()); }
+	    else if  (statusFlag == INITIAL_TANGENT)
+	      { Ki_d = elePtr->getKi_Force(Ut.get() - Upt.get()); }
+	    if(theSOE->addB(Ki_d, elePtr->getID())<0)
+	      {
+		std::cerr << "WARNING AlphaOS::formElementResidual -";
+		std::cerr << " failed in addB for XC::ID " << elePtr->getID();
+		res = -2;
+	      }
+	  }
       }
     return res;
   }

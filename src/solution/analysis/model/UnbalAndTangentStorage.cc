@@ -33,33 +33,67 @@ XC::UnbalAndTangentStorage::UnbalAndTangentStorage(const size_t &n)
   : theMatrices(n), theVectors(n) {}
 
 const XC::Matrix &XC::UnbalAndTangentStorage::getTangent(const size_t &i) const
-  { return theMatrices[i]; }
+  {
+    if(i<theMatrices.size())
+      return theMatrices[i];
+    else
+      return theMatrixMap.at(i);
+  }
 
 XC::Matrix &XC::UnbalAndTangentStorage::getTangent(const size_t &i)
-  { return theMatrices[i]; }
+  {
+    if(i<theMatrices.size())
+      return theMatrices[i];
+    else
+      return theMatrixMap.at(i);
+  }
 
 const XC::Vector &XC::UnbalAndTangentStorage::getUnbalance(const size_t &i) const
-  { return theVectors[i]; }
+  {
+    if(i<theVectors.size())
+      return theVectors[i];
+    else
+      return theVectorMap.at(i);
+  }
 
 XC::Vector &XC::UnbalAndTangentStorage::getUnbalance(const size_t &i)
-  { return theVectors[i]; }
+  {
+    if(i<theVectors.size())
+      return theVectors[i];
+    else
+      return theVectorMap.at(i);
+  }
 
 //! @brief Initializes the i-th unbalance vector.
-XC::Vector *XC::UnbalAndTangentStorage::setUnbalance(const size_t &i)
+void XC::UnbalAndTangentStorage::setUnbalance(const size_t &i)
   {
-    if(theVectors[i].isEmpty())
-      { theVectors[i]= Vector(i); }
-    return &theVectors[i];
+    if(i>=theVectors.size())
+      { theVectorMap[i]= Vector(i); }
+    else
+      {
+        if(theVectors[i].isEmpty())
+          { theVectors[i]= Vector(i); }
+      }
   }
 
-//! @brief Initializes the i-th unbalance matrix.
-XC::Matrix *XC::UnbalAndTangentStorage::setTangent(const size_t &i)
+//! @brief Initializes the i-th tangent matrix.
+void XC::UnbalAndTangentStorage::setTangent(const size_t &i)
   {
-    if(theMatrices[i].isEmpty())
-      { theMatrices[i]= Matrix(i,i); }
-    return &theMatrices[i];
+    if(i>=theMatrices.size())
+      {	theMatrixMap[i]= Matrix(i, i); }
+    else
+      {
+        if(theMatrices[i].isEmpty())
+          { theMatrices[i]= Matrix(i,i); }
+      }
   }
 
+//! @brief Initializes the i-th tangent matrix and unbalance vector.
+void XC::UnbalAndTangentStorage::alloc(const size_t &i)
+  {
+    this->setUnbalance(i);
+    this->setTangent(i);    
+  }
 
 
 

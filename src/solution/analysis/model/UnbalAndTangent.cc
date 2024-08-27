@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -25,42 +24,47 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//UnbalAndTangentStorage.h
-                                                                        
-                                                                        
-#ifndef UnbalAndTangentStorage_h
-#define UnbalAndTangentStorage_h
+//UnbalAndTangent.cpp
 
-#include <vector>
-#include "utility/matrix/Vector.h"
-#include "utility/matrix/Matrix.h"
+#include "UnbalAndTangent.h"
 
-namespace XC {
 
-//! @ingroup Analysis
-//
-//! @brief Unbalanced force vector and tangent stiffness matrix.
-class UnbalAndTangentStorage
+void XC::UnbalAndTangent::alloc(void)
   {
-  private:
-    std::vector<Matrix> theMatrices; //!< array of matrices
-    std::vector<Vector> theVectors;  //!< array of vectors
+    unbalAndTangentArray->alloc(nDOF);
+  }
 
-  public:
-    UnbalAndTangentStorage(const size_t &);    
+//! @brief Constructor.
+XC::UnbalAndTangent::UnbalAndTangent(const size_t &n,UnbalAndTangentStorage &a)
+  :nDOF(n), unbalAndTangentArray(&a) 
+  { alloc(); }
 
-    Vector *setUnbalance(const size_t &);
-    Matrix *setTangent(const size_t &);
+//! @brief destructor.
+XC::UnbalAndTangent::~UnbalAndTangent(void)
+  {
+    unbalAndTangentArray= nullptr;
+  }
 
-    inline size_t size(void) const
-      { return theMatrices.size(); }
+//! @brief Return the tangent stiffness matrix.
+const XC::Matrix &XC::UnbalAndTangent::getTangent(void) const
+  {
+    return unbalAndTangentArray->getTangent(this->nDOF);
+  }
 
-    const Matrix &getTangent(const size_t &) const;
-    Matrix &getTangent(const size_t &);
-    const Vector &getUnbalance(const size_t &) const;
-    Vector &getUnbalance(const size_t &);
-  };
-} // end of XC namespace
+//! @brief Return the tangent stiffness matrix.
+XC::Matrix &XC::UnbalAndTangent::getTangent(void)
+  {
+    return unbalAndTangentArray->getTangent(this->nDOF);
+  }
 
-#endif
+//! @brief Returns the residual vector.
+const XC::Vector &XC::UnbalAndTangent::getResidual(void) const
+  {
+    return unbalAndTangentArray->getUnbalance(this->nDOF);
+  }
 
+//! @brief Return the residual vector.
+XC::Vector &XC::UnbalAndTangent::getResidual(void)
+  {
+    return unbalAndTangentArray->getUnbalance(this->nDOF);
+  }
