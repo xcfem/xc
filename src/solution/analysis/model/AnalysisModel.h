@@ -166,6 +166,7 @@ class AnalysisModel: public MovableObject, public CommandEntity
     virtual void setCurrentDomainTime(double newTime);
     virtual void setRayleighDampingFactors(const RayleighDampingFactors &rF);
 
+    friend class AutoConstraintHandler;
     virtual bool addDOF_Group(DOF_Group *theDOF_Grp);
     virtual bool addFE_Element(FE_Element *theFE_Ele);
 
