@@ -418,6 +418,7 @@
 #include "solution/analysis/handler/PenaltyConstraintHandler.h"
 #include "solution/analysis/handler/LagrangeConstraintHandler.h"
 #include "solution/analysis/handler/TransformationConstraintHandler.h"
+#include "solution/analysis/handler/AutoConstraintHandler.h"
 
 // dof numberer header files
 #include "solution/analysis/numberer/DOF_Numberer.h"
