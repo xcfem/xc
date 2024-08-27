@@ -12,8 +12,13 @@ This folder contain tests relative to constraint creation and removal. All the e
 + Simulation of rigid links between nodes: `test_huge_xxx.py` and `test_rigid_xxx.py`.
 
 ## References
+ - [Handle Your Constraints with Care](https://portwooddigital.com/2020/06/05/handle-your-constraints-with-care/)
  - [Support and Connection Types](https://web.mit.edu/4.441/1_lectures/1_lecture13/1_lecture13.html)
  - [Handling of Constraints in Finite-Element Response Sensitivity Analysis](http://jaguar.ucsd.edu/sensitivity/Gu_2009_b.pdf)
  - [Rigid Diaphragm for 2D Models](https://portwooddigital.com/2022/11/05/rigid-diaphragm-for-2d-models/)
  - [Handle Your Constraints with Care](https://portwooddigital.com/2020/06/05/handle-your-constraints-with-care/)
  - [A Rigid Bar Walks Into a Bar](https://portwooddigital.com/2023/04/02/a-rigid-bar-walks-into-a-bar/)
+- [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
+- [MultiFreedom constraints II](https://quickfem.com/wp-content/uploads/IFEM.Ch09.pdf)
+- [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)
+ - [Concepts and Applications of Finite Element Analysis](https://books.google.es/books/about/Concepts_and_Applications_of_Finite_Elem.html?id=b8seAQAAIAAJ&redir_esc=y)
