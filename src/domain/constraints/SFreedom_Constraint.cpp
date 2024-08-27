@@ -67,6 +67,7 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "vtkCellType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
 //! 
@@ -76,14 +77,17 @@
 //!
 //! @param classTag: class identifier.
 XC::SFreedom_Constraint::SFreedom_Constraint(int classTag)
-  : Constraint(classTag), dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), loadPatternTag(-1) {}
+  : Constraint(classTag), dofNumber(0),
+    valueR(0.0), valueC(0.0), initialValue(0.0),
+    isConstant(true), loadPatternTag(-1) {}
 
 //! @brief Constructor.
 //!
 //! @param tag: Constraint identifier.
 //! @param nodeTag: identifier of the node to constraint tag.
 XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag)
-  : Constraint(tag, nodeTag,CNSTRNT_TAG_SFreedom_Constraint), dofNumber(0), valueR(0.0), valueC(0.0),
+  : Constraint(tag, nodeTag,CNSTRNT_TAG_SFreedom_Constraint), dofNumber(0),
+    valueR(0.0), valueC(0.0), initialValue(0.0),
     isConstant(true), loadPatternTag(-1) {}
 
 //! @brief Constructor for a subclass to use.
@@ -99,8 +103,9 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag)
 //! @param ndof: DOF number to constraint.
 //! @param classTag: class identifier.
 XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int classTag)
-  :Constraint(tag, nodeTag,classTag), dofNumber(ndof), valueR(0.0), valueC(0.0), isConstant(true), 
-   loadPatternTag(-1)
+  :Constraint(tag, nodeTag,classTag), dofNumber(ndof),
+   valueR(0.0), valueC(0.0), initialValue(0.0),
+   isConstant(true), loadPatternTag(-1)
  // valueC is set to 1.0 so that homo will be false when recvSelf() invoked
  // should be ok as valueC cannot be used by subclasses and subclasses should
  // not be used if it is a homogeneous constraint.
@@ -121,8 +126,10 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int
 //! @param value: prescribed value for DOF.
 //! @param ISconstant: True if the prescribed value is constant in time.
 XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, double value, bool ISconstant)
-  :Constraint(tag, nodeTag, CNSTRNT_TAG_SFreedom_Constraint), dofNumber(ndof), valueR(value), valueC(value), isConstant(ISconstant),
- loadPatternTag(-1) {}
+  :Constraint(tag, nodeTag, CNSTRNT_TAG_SFreedom_Constraint), dofNumber(ndof),
+   valueR(value), valueC(value), initialValue(0.0),
+   isConstant(ISconstant), loadPatternTag(-1)
+  {}
 
 //! @brief Virtual constructor.
 XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(void) const
@@ -157,6 +164,13 @@ bool XC::SFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
 //! the constructor. 
 double XC::SFreedom_Constraint::getValue(void) const
   { return valueC; }
+
+//! @brief Returns the initial value of the constraint.
+double XC::SFreedom_Constraint::getInitialValue(void)
+  {
+    // return the initial value of the constraint
+    return initialValue;
+  }
 
 //! @brief Applies the constraint with the load factor
 //! being passed as parameter.
@@ -199,6 +213,43 @@ void XC::SFreedom_Constraint::setLoadPatternTag(int tag)
 int XC::SFreedom_Constraint::getLoadPatternTag(void) const
   { return loadPatternTag;  }
 
+void XC::SFreedom_Constraint::setDomain(Domain* theDomain)
+  {
+    // store initial state
+    if(theDomain)
+      {
+        if (!initialized)
+	  { // don't do it if setDomain called after recvSelf when already initialized!
+	    const int nodeTag= this->getNodeTag();
+            const Node* theNode = theDomain->getNode(nodeTag);
+            if(theNode == 0)
+	      {
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; constrained node: "
+			  << nodeTag
+		          << " does not exist in Domain."
+			  << Color::def << std::endl;
+                exit(-1);
+	      }
+            const Vector &U= theNode->getTrialDisp();
+            if(dofNumber < 0 || dofNumber >= U.Size())
+	      {
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; Constrained DOF " << dofNumber
+			  << " out of bounds [0-" << U.Size()
+			  << "]"
+		          << Color::def << std::endl;
+                exit(-1);
+	      }
+            initialValue= U(dofNumber);
+            initialized= true;
+	  }
+      }
+
+    // call base class implementation
+    Constraint::setDomain(theDomain);
+  }
+
 //! @brief Returns a vector to store the dbTags of the object members.
 XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
   {
@@ -210,9 +261,9 @@ XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
 int XC::SFreedom_Constraint::sendData(Communicator &comm)
   {
     int res= Constraint::sendData(comm);
-    res+= comm.sendInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(3));
-    res+= comm.sendDoubles(valueC,valueR,getDbTagData(),CommMetaData(4));
-    res+= comm.sendBool(isConstant,getDbTagData(),CommMetaData(5));
+    res+= comm.sendInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(valueC,valueR,initialValue,getDbTagData(),CommMetaData(5));
+    res+= comm.sendBool(isConstant,getDbTagData(),CommMetaData(6));
     return res;
   }
 
@@ -220,9 +271,9 @@ int XC::SFreedom_Constraint::sendData(Communicator &comm)
 int XC::SFreedom_Constraint::recvData(const Communicator &comm)
   {
     int res= Constraint::recvData(comm);
-    res+= comm.receiveInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(3));
-    res+= comm.receiveDoubles(valueC,valueR,getDbTagData(),CommMetaData(4));
-    res+= comm.receiveBool(isConstant,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(valueC,valueR,initialValue,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveBool(isConstant,getDbTagData(),CommMetaData(6));
     return res;
   }
 
@@ -234,6 +285,7 @@ boost::python::dict XC::SFreedom_Constraint::getPyDict(void) const
     retval["loadPatternTag"]= loadPatternTag;
     retval["valueC"]= valueC;
     retval["valueR"]= valueR;
+    retval["initialValue"]= initialValue;
     retval["isConstant"]= isConstant;
     return retval;
   }
@@ -245,6 +297,7 @@ void XC::SFreedom_Constraint::setPyDict(const boost::python::dict &d)
     this->loadPatternTag= boost::python::extract<int>(d["loadPatternTag"]);
     this->valueC= boost::python::extract<double>(d["valueC"]);
     this->valueR= boost::python::extract<double>(d["valueR"]);
+    this->initialValue= boost::python::extract<double>(d["initialValue"]);
     this->isConstant= boost::python::extract<bool>(d["isConstant"]);
   }
 
@@ -256,8 +309,9 @@ int XC::SFreedom_Constraint::sendSelf(Communicator &comm)
     const int dbTag= getDbTag();
     result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send extra data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send extra data."
+	        << Color::def << std::endl;
     return result;
   }
 
@@ -268,8 +322,9 @@ int XC::SFreedom_Constraint::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -280,12 +335,14 @@ int XC::SFreedom_Constraint::recvSelf(const Communicator &comm)
 int XC::SFreedom_Constraint::getVtkCellType(void) const
   { return VTK_VERTEX; }
 
-
 //! @brief Prints constraint information.
 void XC::SFreedom_Constraint::Print(std::ostream &s, int flag) const
   {
     Constraint::Print(s,flag);
-    s << " DOF: " << dofNumber;
-    s << " ref value: " << valueR << " current value: " << valueC << std::endl;
+    s << " DOF: " << dofNumber
+      << " ref value: " << valueR
+      << " current value: " << valueC
+      << " initial value: " << initialValue
+      << std::endl;
   }
 

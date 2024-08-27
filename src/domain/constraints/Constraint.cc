@@ -29,14 +29,14 @@
 #include "domain/constraints/Constraint.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
-
 #include "utility/matrix/ID.h"
 #include "vtkCellType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor; receives the tag of the class as a paramenter.
 //! @param classTag: identifier for the object class (see classTags.h).
 XC::Constraint::Constraint(int classTag)
-  :ContinuaReprComponent(0,classTag), constrNodeTag(0) {}
+  :ContinuaReprComponent(0,classTag), constrNodeTag(0), initialized(false) {}
 
 
 //! @brief Constructor.
@@ -44,7 +44,7 @@ XC::Constraint::Constraint(int classTag)
 //! @param tag: identifier for the constraint.
 //! @param node: identifier for the node that will be constrained.
 XC::Constraint::Constraint(int tag, int node, int classTag)
-  :ContinuaReprComponent(tag, classTag), constrNodeTag(node) {}
+  :ContinuaReprComponent(tag, classTag), constrNodeTag(node), initialized(false) {}
 
 //! @brief Destructor.
 XC::Constraint::~Constraint(void)
@@ -73,7 +73,18 @@ void XC::Constraint::setDomain(Domain *model)
         if(model)
           {
             Node *n= model->getNode(constrNodeTag);
-            if(n) n->connect(this);
+            if(n)
+	      n->connect(this);
+	    else
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; constrained node: "
+			  << constrNodeTag
+		          << " does not exist in Domain."
+			  << Color::def << std::endl;
+                exit(-1);
+
+	      }
           }
       }
   }
@@ -98,6 +109,14 @@ const XC::Node *XC::Constraint::getNode(void) const
     Domain *tmp= getDomain();
     if(tmp)
       retval= tmp->getNode(constrNodeTag);
+      if(retval == 0)
+	{
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; Constrained node does not exist in Domain\n"
+		    << constrNodeTag
+		    << Color::def << std::endl;
+	  exit(-1);
+	}
     return retval;
   }
 
@@ -119,8 +138,9 @@ bool XC::Constraint::affectsNode(int nodeTag) const
 bool XC::Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
   {
     bool retval= false;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " not implemented."
+	      << Color::def << std::endl;
     return retval;
   }
 
@@ -130,6 +150,7 @@ int XC::Constraint::sendData(Communicator &comm)
   {
     int res= ContinuaReprComponent::sendData(comm);
     res+= comm.sendInt(constrNodeTag,getDbTagData(),CommMetaData(2));
+    res+= comm.sendBool(initialized,getDbTagData(),CommMetaData(3));
     return res;
   }
 
@@ -139,6 +160,7 @@ int XC::Constraint::recvData(const Communicator &comm)
   {
     int res= ContinuaReprComponent::recvData(comm);
     res+= comm.receiveInt(constrNodeTag,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveBool(initialized,getDbTagData(),CommMetaData(3));
     return res;
   }
 
@@ -156,6 +178,7 @@ boost::python::dict XC::Constraint::getPyDict(void) const
   {
     boost::python::dict retval= ContinuaReprComponent::getPyDict();
     retval["constrNodeTag"]= constrNodeTag;
+    retval["initialized"]= initialized;
     return retval;
   }
 //! @brief Set the values of the object members from a Python dictionary.
@@ -163,12 +186,15 @@ void XC::Constraint::setPyDict(const boost::python::dict &d)
   {
     ContinuaReprComponent::setPyDict(d);
     this->constrNodeTag= boost::python::extract<int>(d["constrNodeTag"]);
+    this->initialized= boost::python::extract<bool>(d["initialized"]);
   }
 
 //! @brief returns the VTK cell type.
 int XC::Constraint::getVtkCellType(void) const
   {
-    std::cerr << "Constraint::getVtkCellType; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
     return VTK_EMPTY_CELL;
   }
 

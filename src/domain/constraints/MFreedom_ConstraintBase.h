@@ -59,10 +59,12 @@ class MFreedom_ConstraintBase: public Constraint
   {
   protected:
     Matrix constraintMatrix;  //!< Constraint matrix.
-    ID constrDOF;  //!< ID of constrained DOF at constrained node
+    ID constrDOF; //!< ID of constrained DOF at constrained node
+    Vector Uc0; //!< initial displacement at constrained DOFs (same size as constrDOF)
     
     void set_constraint(const Matrix &c);
     void set_constrained_dofs(const ID &);
+    void initializeUc0(const Domain *);
   protected:
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
@@ -86,11 +88,15 @@ class MFreedom_ConstraintBase: public Constraint
     virtual const ID &getRetainedDOFs(void) const= 0;            
     virtual const ID &getConstrainedDOFs(void) const;        
     virtual const Matrix &getConstraint(void) const;
+    virtual const Vector &getConstrainedDOFsInitialDisplacement(void) const;
     virtual size_t getNumRetainedNodes(void) const= 0;
-    virtual std::vector<XC::Node *> getPointersToRetainedNodes(void) const= 0;
+    virtual std::vector<Node *> getPointersToRetainedNodes(void)= 0;
+    virtual std::vector<const Node *> getPointersToRetainedNodes(void) const= 0;
     std::vector<int> getIdxNodes(void) const;
 
     bool isTimeVarying(void) const;
+
+    void setDomain(Domain *);
 
     bool affectsNode(int ) const;
     bool affectsNodeAndDOF(int theNode, int theDOF) const;

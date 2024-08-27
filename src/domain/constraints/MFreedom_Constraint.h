@@ -114,10 +114,12 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
   {
   protected:
     int retainedNodeTag; //!< Tag of the retained node.
-    ID retainDOF;  //!< ID of retained DOF at retained node
+    ID retainDOF; //!< ID of retained DOF at retained node
+    Vector Ur0; //!< initial displacement at retained node  (same size as retainDOF)
     
     void set_retained_dofs(const ID &);
     void set_constrained_retained_dofs(const ID &constrainedDOF,const ID &retainedDOF);
+    void initializeUr0(const Domain *);
   protected:
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
@@ -143,11 +145,15 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     //! @brief Returns the number of retained nodes.
     virtual size_t getNumRetainedNodes(void) const
       { return 1; }
-    std::vector<XC::Node *> getPointersToRetainedNodes(void) const;
+    std::vector<Node *> getPointersToRetainedNodes(void);
+    std::vector<const Node *> getPointersToRetainedNodes(void) const;
     bool affectsNode(int ) const;
     bool affectsNodeAndDOF(int , int ) const;
     virtual const ID &getRetainedDOFs(void) const;            
     virtual int applyConstraint(double pseudoTime);
+    virtual const Vector &getRetainedDOFsInitialDisplacement(void) const;
+
+    void setDomain(Domain *);
 
     // methods for output
     virtual int sendSelf(Communicator &);

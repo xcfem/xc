@@ -47,17 +47,73 @@
 #include "vtkCellType.h"
 #include "utility/geom/pos_vec/Pos3d.h"
 
+void XC::MRMFreedom_Constraint::initializeUr0i(void)
+  {
+    const size_t nrn= this->getNumRetainedNodes();
+    Ur0i.resize(nrn);
+    const ID &retainDOF= this->getRetainedDOFs();
+    const size_t sz= retainDOF.Size();
+    for(std::vector<Vector>::iterator i= Ur0i.begin(); i!=Ur0i.end();i++)
+      {
+	Vector &ur0_i= *i;
+	ur0_i.resize(sz);
+	ur0_i.Zero();
+      }
+  }
+
+void XC::MRMFreedom_Constraint::initializeUr0i(const Domain *model)
+  {
+    const ID &retainedNodeTags= this->getRetainedNodeTags();
+    const size_t sz= retainedNodeTags.Size();
+    for(size_t j= 0; j<sz; j++)
+      {
+	const int retainedNodeTag= retainedNodeTags[j];
+	const Node* theRetainedNode= model->getNode(retainedNodeTag);
+	if(theRetainedNode == nullptr)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL Retained node: "
+		      << retainedNodeTag
+		      << "does not exist in domain."
+		      << std::endl;
+	    exit(-1);
+	  }
+	Vector &ur0_j= Ur0i[j];
+	const Vector &Ur= theRetainedNode->getTrialDisp();
+	const ID &idr= getRetainedDOFs();
+	for(int i = 0; i < idr.Size(); ++i)
+	  {
+	    const int rdof = idr(i);
+	    if (rdof < 0 || rdof >= Ur.Size())
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; FATAL Error: Retained DOF "
+			  << rdof
+			  << " out of bounds [0-" << Ur.Size() << "]"
+			  << std::endl;
+		exit(-1);
+	      }
+	    ur0_j(i) = Ur(rdof);
+	  }
+      }
+  }
 
 //! @brief Constructor.	// Arash
 //! @param tag: tag for the constraint.
 //! @param classTag: tag of the object class.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,int clasTag)		
- : MFreedom_ConstraintBase(tag,0,clasTag) {}
+ : MFreedom_ConstraintBase(tag,0,clasTag)
+  {
+    initializeUr0i();
+  }
 
 //! @brief Constructor. // LCPT
 //! @param tag: tag for the constraint.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag)		
- : MFreedom_ConstraintBase(tag, 0,CNSTRNT_TAG_MRMFreedom_Constraint) {}
+ : MFreedom_ConstraintBase(tag, 0,CNSTRNT_TAG_MRMFreedom_Constraint)
+  {
+    initializeUr0i();
+  }
 
 //! @brief Constructor to be called from subclasses.
 //! @param tag: tag for the constraint.
@@ -66,7 +122,10 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag)
 //! @param constrainedDOF: identifiers of the constrained degrees of freedom.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr,const ID &constrainedDOF)
   : MFreedom_ConstraintBase(tag, nodeConstr, constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint), 
-    retainedNodeTags(retainedNodes) {}
+    retainedNodeTags(retainedNodes)
+  {
+    initializeUr0i();
+  }
 
 //! @brief Constructor to be called from subclasses.
 //! @param tag: tag for the constraint.
@@ -76,8 +135,10 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNode
 //! @param classTag: tag of the object class.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr,const ID &constrainedDOF, int classTag)
   : MFreedom_ConstraintBase(tag, nodeConstr, constrainedDOF, classTag),
-   retainedNodeTags(retainedNodes) { }
-
+   retainedNodeTags(retainedNodes)
+  {
+    initializeUr0i();
+  }
 
 //! Constructor.
 //! @param tag: tag for the constraint.
@@ -86,7 +147,10 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNode
 //! @param constr: constraint matrix.
 //! @param constrainedDOF: identifiers of the constrained degrees of freedom.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr, const Matrix &constr,const ID &constrainedDOF)
-  : MFreedom_ConstraintBase(tag, nodeConstr, constr, constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint), retainedNodeTags(retainedNodes) {}
+  : MFreedom_ConstraintBase(tag, nodeConstr, constr, constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint), retainedNodeTags(retainedNodes)
+  {
+    initializeUr0i();
+  }
 
 //! Constructor.
 //! @param tag: tag for the constraint.
@@ -96,7 +160,9 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNode
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,const Element &elem, const Node &node, const ID &constrainedDOF)
   : MFreedom_ConstraintBase(tag, node.getTag(), constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint)
   {
-    retainedNodeTags= elem.getNodePtrs().getExternalNodes();
+    
+    this->retainedNodeTags= elem.getNodePtrs().getExternalNodes();
+    initializeUr0i();
     const size_t numNodes= retainedNodeTags.Size();
     const size_t numDOFs= constrainedDOF.Size();
     constraintMatrix= Matrix(numDOFs,numNodes*numDOFs);
@@ -165,6 +231,24 @@ bool XC::MRMFreedom_Constraint::affectsNode(int nodeTag) const
     return retval;
   }
 
+//! @brief Sets the domain for the constraint.
+//! @param model: domain in which the constraint is created.
+void XC::MRMFreedom_Constraint::setDomain(Domain *model)
+  {
+    // store initial state
+    if(model)
+      {
+        if(!initialized)
+	  { // don't do it if setDomain called after recvSelf when already initialized!
+	    initializeUc0(model);
+	    initializeUr0i(model);
+            this->initialized = true;
+	  }
+      }
+    // call base class implementation
+    MFreedom_ConstraintBase::setDomain(model);    
+  }
+
 //! @brief Returns true if the constraint affects the node and DOF arguments.
 bool XC::MRMFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
   {
@@ -188,11 +272,23 @@ bool XC::MRMFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
   }
 
 //! @brief Returns a vector with the pointers to the retained nodes.
-std::vector<XC::Node *> XC::MRMFreedom_Constraint::getPointersToRetainedNodes(void) const
+std::vector<XC::Node *> XC::MRMFreedom_Constraint::getPointersToRetainedNodes(void)
   {
     const ID &retainedNodes= getRetainedNodeTags();
     const size_t sz= retainedNodes.size();
     std::vector<Node *> retval(sz,nullptr);
+    Domain *theDomain= getDomain();
+    for(size_t i= 0;i<sz;i++)
+      retval[i]= theDomain->getNode(retainedNodes[i]);
+    return retval;
+  }
+
+//! @brief Returns a vector with the pointers to the retained nodes.
+std::vector<const XC::Node *> XC::MRMFreedom_Constraint::getPointersToRetainedNodes(void) const
+  {
+    const ID &retainedNodes= getRetainedNodeTags();
+    const size_t sz= retainedNodes.size();
+    std::vector<const Node *> retval(sz,nullptr);
     Domain *theDomain= getDomain();
     for(size_t i= 0;i<sz;i++)
       retval[i]= theDomain->getNode(retainedNodes[i]);
@@ -205,6 +301,18 @@ int XC::MRMFreedom_Constraint::applyConstraint(double timeStamp)
     // does nothing MRMFreedom_Constraint objects are time invariant
     return 0;
   }
+
+//! @brief Return the initial displacements of the retained DOFs for all the
+//! retained nodes.
+const std::vector<XC::Vector> &XC::MRMFreedom_Constraint::getRetainedDOFsInitialDisplacements(void) const
+  { return Ur0i; }
+
+//! @brief Return the initial displacements of the retained DOFs for the j-th
+//! node.
+const XC::Vector &XC::MRMFreedom_Constraint::getRetainedDOFsInitialDisplacement(const size_t &j) const
+  { return Ur0i[j]; }
+
+
 
 //! @brief Add to nodes the actions due to this constraint.
 //! See "Calculation within MSC/Nastran of the forces transmitted by

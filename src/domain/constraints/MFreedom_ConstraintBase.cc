@@ -38,7 +38,7 @@
 #include <cstdlib>
 #include <utility/matrix/ID.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include <boost/any.hpp>
+#include "domain/domain/Domain.h"
 
 #include "utility/matrices/m_int.h"
 #include "domain/domain/Domain.h"
@@ -53,7 +53,11 @@ void XC::MFreedom_ConstraintBase::set_constraint(const Matrix &c)
 //! @brief Set the constrained degrees of freedom.
 //! @param constrainedDOF: constrained degrees of freedom.
 void XC::MFreedom_ConstraintBase::set_constrained_dofs(const ID &constrainedDOF)
-  { constrDOF= constrainedDOF; }
+  {
+    constrDOF= constrainedDOF;
+    Uc0.resize(constrDOF.Size());
+    Uc0.Zero();
+  }
 
 //! @brief Constructor.
 //! @param tag: tag for the constraint.
@@ -91,6 +95,55 @@ XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr, co
   {
     set_constrained_dofs(constrainedDOF);    
     set_constraint(constr);
+  }
+
+//! @brief Compute the initial displacement at constrained DOFs. 
+void XC::MFreedom_ConstraintBase::initializeUc0(const Domain *model)
+  {
+    const int constrainedNodeTag= this->getNodeConstrained();
+    const Node *theConstrainedNode = model->getNode(constrainedNodeTag);
+    if(theConstrainedNode == nullptr)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL Constrained node: "
+		  << constrainedNodeTag
+		  << " does not exist in Domain"
+		  << std::endl;
+	exit(-1);
+      }
+    const Vector &Uc= theConstrainedNode->getTrialDisp();
+    const ID &idc= getConstrainedDOFs();
+    for(int i = 0; i < idc.Size(); ++i)
+      {
+	const int cdof= idc(i);
+	if (cdof < 0 || cdof >= Uc.Size())
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL Error: Constrained DOF "
+		      << cdof
+		      << " out of bounds [0-" << Uc.Size() << "]"
+		      << std::endl;
+	    exit(-1);
+	  }
+	Uc0(i) = Uc(cdof);
+      }    
+  }
+
+//! @brief Sets the domain for the constraint.
+//! @param model: domain in which the constraint is created.
+void XC::MFreedom_ConstraintBase::setDomain(Domain *model)
+  {
+    // store initial state
+    if(model)
+      {
+        if(!initialized)
+	  { // don't do it if setDomain called after recvSelf when already initialized!4
+	    initializeUc0(model);
+            this->initialized = true;
+	  }
+      }
+    // call base class implementation
+    Constraint::setDomain(model);    
   }
 
 //! @brief Returns true if the constraints affects the
@@ -143,12 +196,18 @@ int XC::MFreedom_ConstraintBase::addResistingForceToNodalReaction(bool inclInert
 const XC::Matrix &XC::MFreedom_ConstraintBase::getConstraint(void) const
   { return constraintMatrix; }
 
+const XC::Vector &XC::MFreedom_ConstraintBase::getConstrainedDOFsInitialDisplacement(void) const
+  {
+    return Uc0;
+  }
+
 //! @brief Send data through the communicator argument.
 int XC::MFreedom_ConstraintBase::sendData(Communicator &comm)
   {
     int res= Constraint::sendData(comm);
-    res+= comm.sendMatrix(constraintMatrix,getDbTagData(),CommMetaData(3));
-    res+= comm.sendID(constrDOF,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMatrix(constraintMatrix,getDbTagData(),CommMetaData(4));
+    res+= comm.sendID(constrDOF,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(Uc0, CommMetaData(6));
     return res;
   }
 
@@ -156,8 +215,9 @@ int XC::MFreedom_ConstraintBase::sendData(Communicator &comm)
 int XC::MFreedom_ConstraintBase::recvData(const Communicator &comm)
   {
     int res= Constraint::recvData(comm);
-    res+= comm.receiveMatrix(constraintMatrix,getDbTagData(),CommMetaData(3));
-    res+= comm.receiveID(constrDOF,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMatrix(constraintMatrix,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveID(constrDOF,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVector(Uc0,getDbTagData(),CommMetaData(6));
     return res;
   }
 
@@ -167,6 +227,7 @@ boost::python::dict XC::MFreedom_ConstraintBase::getPyDict(void) const
     boost::python::dict retval= Constraint::getPyDict();
     retval["constraintMatrix"]= this->constraintMatrix.getPyList();
     retval["constrDOF"]= this->constrDOF.getPyList();
+    retval["Uc0"]= this->Uc0;
     return retval;
   }
 //! @brief Set the values of the object members from a Python dictionary.
@@ -175,6 +236,7 @@ void XC::MFreedom_ConstraintBase::setPyDict(const boost::python::dict &d)
     Constraint::setPyDict(d);
     this->constraintMatrix= Matrix(boost::python::extract<boost::python::list>(d["constraintMatrix"]));
     this->constrDOF= ID(boost::python::extract<boost::python::list>(d["constrDOF"]));
+    this->Uc0= Vector(boost::python::extract<boost::python::list>(d["Uc0"]));
   }
 
 //! @brief Printing.
@@ -183,20 +245,22 @@ void XC::MFreedom_ConstraintBase::setPyDict(const boost::python::dict &d)
 //! and retained nodes, then the two ID's and finally the constraint Matrix.
 void XC::MFreedom_ConstraintBase::Print(std::ostream &s, int flag) const
   {     
-    s << "MFreedom_ConstraintBase: " << this->getTag() << "\n";
-    s << "\tNode Constrained: " << getNodeConstrained();
-    s << " constrained dof: " << constrDOF;    
-    s << " constraint matrix: " << constraintMatrix << "\n";
+    s << "MFreedom_ConstraintBase: " << this->getTag() << std::endl
+      << "\tNode Constrained: " << getNodeConstrained()
+      << " constrained dof: " << constrDOF
+      << " constraint matrix: " << constraintMatrix
+      << " constrained initial displacement: " << Uc0
+      << std::endl;
   }
 
-
+//! @brief Return the indices of the nodes (for VTK).
 std::vector<int> XC::MFreedom_ConstraintBase::getIdxNodes(void) const
   {
     
     Domain *theDomain= getDomain();
     const int constrainedNodeTag= getNodeConstrained();
     const Node *constrainedNode= theDomain->getNode(constrainedNodeTag);   
-    std::vector<Node *> retainedNodes= getPointersToRetainedNodes();   
+    std::vector<const Node *> retainedNodes= getPointersToRetainedNodes();   
 
     const size_t sz= retainedNodes.size()+1;
     std::vector<int> retval(sz,-1);

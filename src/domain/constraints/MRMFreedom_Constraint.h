@@ -60,20 +60,23 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
   {
   protected:
     ID retainedNodeTags; //!< Retained nodes tags.
+    std::vector<Vector> Ur0i; //!< initial displacements at retained nodes (same size as retainDOF)
 
   protected:
+    void initializeUr0i(void);
+    void initializeUr0i(const Domain *);
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
     // constructors        
-    MRMFreedom_Constraint(int tag , int classTag ); // Arash
+    MRMFreedom_Constraint(int tag , int classTag); // Arash
     MRMFreedom_Constraint(int tag); // LCPT
 
     MRMFreedom_Constraint(int tag,const ID &, int nodeConstr, int classTag);    
 
     MRMFreedom_Constraint(int tag,const ID &, int nodeConstr, const ID &constrainedDOF);    
-    MRMFreedom_Constraint(int tag,const ID &, int nodeConstr, const ID &constrainedDOF,int classTag);    
+    MRMFreedom_Constraint(int tag,const ID &, int nodeConstr, const ID &constrainedDOF,int classTag);
 
     MRMFreedom_Constraint(int tag,const ID &, int nodeConstr, const Matrix &, const ID &constrainedDOF);
     MRMFreedom_Constraint(int tag,const Element &, const Node &, const ID &);
@@ -91,7 +94,8 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
       { return getConstrainedDOFs(); } //Same as constrained.
     virtual size_t getNumRetainedNodes(void) const
       { return retainedNodeTags.size(); }
-    std::vector<XC::Node *> getPointersToRetainedNodes(void) const;
+    std::vector<Node *> getPointersToRetainedNodes(void);
+    std::vector<const Node *> getPointersToRetainedNodes(void) const;
     int getNumDofGroups(void) const;         
     int getNumDofs(void) const;           
     int getNumRetainedDofs(void) const;           
@@ -100,6 +104,10 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     bool affectsNode(int ) const;
     bool affectsNodeAndDOF(int , int ) const;
     virtual int applyConstraint(double pseudoTime);
+    const std::vector<Vector> &getRetainedDOFsInitialDisplacements(void) const;
+    virtual const Vector &getRetainedDOFsInitialDisplacement(const size_t &) const;
+
+    void setDomain(Domain *);
 
     int addResistingForceToNodalReaction(bool inclInertia);
 

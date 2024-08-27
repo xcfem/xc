@@ -88,6 +88,7 @@ class SFreedom_Constraint: public Constraint
     int dofNumber; //!< identifies which of the nodes dof is constrained 
     double valueR; //!< the reference value
     double valueC; //!< if constant = the reference value, if not constant = the reference value * load factor
+    double initialValue; // the value of the dof when the sp constrain is added to the domain
     bool isConstant; //!< flag indicating if constant
     int loadPatternTag;
 
@@ -108,9 +109,12 @@ class SFreedom_Constraint: public Constraint
     virtual bool affectsNodeAndDOF(int , int ) const;
     virtual int applyConstraint(double loadFactor);    
     virtual double getValue(void) const;
+    virtual double getInitialValue(void);
     virtual bool isHomogeneous(void) const;
     virtual void setLoadPatternTag(int loadPaternTag);
     virtual int getLoadPatternTag(void) const;
+
+    void setDomain(Domain *);
     
     inline void setIsConstant(const bool &b)
       { isConstant= b; }

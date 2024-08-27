@@ -49,6 +49,7 @@ class Constraint: public ContinuaReprComponent
   {
   protected:
     int constrNodeTag; //!< constrained node tag
+    bool initialized; //!< a flag to avoid recomputing the intial value in setDomain if already initialized
 
     int sendData(Communicator &);
     int recvData(const Communicator &);

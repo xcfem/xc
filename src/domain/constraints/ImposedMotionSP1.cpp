@@ -99,7 +99,7 @@ int XC::ImposedMotionSP1::applyConstraint(double time)
 int XC::ImposedMotionSP1::sendData(Communicator &comm)
   {
     int result= ImposedMotionBase::sendData(comm);
-    result+= comm.sendInt(destroyMotion,getDbTagData(),CommMetaData(9));
+    result+= comm.sendInt(destroyMotion,getDbTagData(),CommMetaData(8));
     return result;
   }
 
@@ -107,7 +107,7 @@ int XC::ImposedMotionSP1::sendData(Communicator &comm)
 int XC::ImposedMotionSP1::recvData(const Communicator &comm)
   {
     int res= ImposedMotionBase::recvData(comm);
-    res+= comm.receiveInt(destroyMotion,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveInt(destroyMotion,getDbTagData(),CommMetaData(8));
     return res;
   }
 
@@ -128,7 +128,7 @@ void XC::ImposedMotionSP1::setPyDict(const boost::python::dict &d)
 //! @brief Sends object through the communicator argument.
 int XC::ImposedMotionSP1::sendSelf(Communicator &comm)
   {
-    static ID data(10);
+    static ID data(9);
     int result= sendData(comm);
     const int dbTag = this->getDbTag();
     result+= comm.sendIdData(getDbTagData(),dbTag);
@@ -140,7 +140,7 @@ int XC::ImposedMotionSP1::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::ImposedMotionSP1::recvSelf(const Communicator &comm)
   {
-    static ID data(10);
+    static ID data(9);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
