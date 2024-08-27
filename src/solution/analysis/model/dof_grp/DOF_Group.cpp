@@ -68,6 +68,7 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "solution/analysis/integrator/TransientIntegrator.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 const int MAX_NUM_DOF= 256;
 
@@ -85,8 +86,9 @@ void XC::DOF_Group::inicID(void)
     // get number of DOF & verify valid
     if(sz <= 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; node must have at least 1 dof." << sz;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; node must have at least 1 dof." << sz
+	          << Color::def << std::endl;
         exit(-1);
       }
 
@@ -168,8 +170,11 @@ void XC::DOF_Group::setID(int index, int value)
       myID(index) = value;
     else
       {
-        std::cerr << "WARNING DOF_Group::setID - invalid location ";
-        std::cerr << index << " in ID of size " << getNumDOF() << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - invalid location "
+		  << index << " in ID of size "
+		  << getNumDOF()
+		  << Color::def << std::endl;
       }
   }
 
@@ -191,6 +196,9 @@ void XC::DOF_Group::setID(const ID &copy)
 //! for the mapping. 
 const XC::ID &XC::DOF_Group::getID(void) const
   { return myID; }
+
+int XC::DOF_Group::doneID(void)
+  { return 0; }
 
 int XC::DOF_Group::inicID(const int &value)
   {
@@ -282,14 +290,16 @@ void  XC::DOF_Group::addMtoTang(double fact)
       {
         if(unbalAndTangent.getTangent().addMatrix(1.0, myNode->getMass(), fact) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << ";  invoking addMatrix() on the tangent failed.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << ";  invoking addMatrix() on the tangent failed."
+	              << Color::def << std::endl;
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; no node associated, "
-	        << "subclass should provide the method.\n";
+	        << "subclass should provide the method."
+		<< Color::def << std::endl;
   }
 
 
@@ -299,14 +309,16 @@ void XC::DOF_Group::addCtoTang(double fact)
       {
         if(unbalAndTangent.getTangent().addMatrix(1.0, myNode->getDamp(), fact) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; invoking addMatrix() on the tangent failed.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; invoking addMatrix() on the tangent failed."
+		      << Color::def << std::endl;
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; no node associated, "
-	        << "subclass should provide the method.\n";
+	        << "subclass should provide the method."
+		<< Color::def << std::endl;
   }
 
 //! @brief To zero the unbalance vector.
@@ -339,14 +351,16 @@ void XC::DOF_Group::addPtoUnbalance(double fact)
       {
         if(unbalAndTangent.getResidual().addVector(1.0, myNode->getUnbalancedLoad(), fact) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; invoking addVector() on the unbalance failed.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; invoking addVector() on the unbalance failed."
+	              << Color::def << std::endl;
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; no node associated, "
-	        << "subclass should provide the method.\n";
+      std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
+		 << "; no node associated, "
+		 << "subclass should provide the method."
+		 << Color::def << std::endl;
   }
 
 
@@ -356,14 +370,16 @@ void XC::DOF_Group::addPIncInertiaToUnbalance(double fact)
       {
         if(unbalAndTangent.getResidual().addVector(1.0, myNode->getUnbalancedLoadIncInertia(), fact) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; invoking addVector() on the unbalance failed\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; invoking addVector() on the unbalance failed."
+		      << Color::def << std::endl;
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; no node associated, "
-	        << "subclass should provide the method.\n";
+	        << "subclass should provide the method."
+		<< Color::def << std::endl;
   }
 
 
@@ -371,9 +387,10 @@ void XC::DOF_Group::addM_Force(const XC::Vector &Udotdot, double fact)
   {
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; no node associated, "
-		  << " subclass should not call this method \n";
+		  << " subclass should not call this method."
+		  << Color::def << std::endl;
         return;
       }
     else
@@ -391,29 +408,32 @@ void XC::DOF_Group::addM_Force(const XC::Vector &Udotdot, double fact)
 	  }
 
 	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getMass(), accel, fact) < 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; invoking addMatrixVector() "
-		    << " on the unbalance failed.\n";
+		    << " on the unbalance failed."
+	            << Color::def << std::endl;
       }
   }
 
 
 
-const XC::Vector &XC::DOF_Group::getTangForce(const XC::Vector &Udotdot, double fact)
+const XC::Vector &XC::DOF_Group::getTangForce(const Vector &Udotdot, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not yet implemented";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented."
+	      << Color::def << std::endl;
     return unbalAndTangent.getResidual();
   }
 
 
-const XC::Vector &XC::DOF_Group::getM_Force(const XC::Vector &Udotdot, double fact)
+const XC::Vector &XC::DOF_Group::getM_Force(const Vector &Udotdot, double fact)
   {
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; no node associated"
-		  << " subclass should not call this method \n";
+		  << " subclass should not call this method."
+		  << Color::def << std::endl;
         return unbalAndTangent.getResidual();
       }
 
@@ -429,19 +449,21 @@ const XC::Vector &XC::DOF_Group::getM_Force(const XC::Vector &Udotdot, double fa
       }
 
     if(unbalAndTangent.getResidual().addMatrixVector(0.0, myNode->getMass(), accel, fact) < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; invoking addMatrixVector() on the unbalance failed.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; invoking addMatrixVector() on the unbalance failed."
+		<< Color::def << std::endl;
     return unbalAndTangent.getResidual();
   }
 
 
 
-const XC::Vector &XC::DOF_Group::getC_Force(const XC::Vector &Udotdot, double fact)
+const XC::Vector &XC::DOF_Group::getC_Force(const Vector &Udotdot, double fact)
   {
     if(!myNode)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; no XC::Node associated, "
-	        << " subclass should not call this method \n";
+	        << " subclass should not call this method."
+		<< Color::def << std::endl;
     else
       {
 	const int sz= getNumDOF();
@@ -457,8 +479,9 @@ const XC::Vector &XC::DOF_Group::getC_Force(const XC::Vector &Udotdot, double fa
 	  }
 
 	if(unbalAndTangent.getResidual().addMatrixVector(0.0, myNode->getDamp(), accel, fact) < 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; invoking addMatrixVector() on the unbalance failed.\n";
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; invoking addMatrixVector() on the unbalance failed."
+		    << Color::def << std::endl;
       }
     return unbalAndTangent.getResidual();
   }
@@ -470,13 +493,14 @@ const XC::Vector &XC::DOF_Group::getC_Force(const XC::Vector &Udotdot, double fa
 //! result of invoking getDisp() on the node. If there is no associated
 //! node object, an error message is printed and an error Vector is
 //! returned.
-const XC::Vector &XC::DOF_Group::getCommittedDisp(void)
+const XC::Vector &XC::DOF_Group::getCommittedDisp(void) const
   {
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; no associated node, "
-		  << " returning the error Vector.\n";
+		  << " returning the error Vector."
+		  << Color::def << std::endl;
         return errVect;
       }
     else
@@ -488,13 +512,14 @@ const XC::Vector &XC::DOF_Group::getCommittedDisp(void)
 //! To return the committed velocity at the associated node. Returns the
 //! result of invoking getVel() on the node. If there is no associated node
 //! object, an error message is printed and an error Vector is returned.
-const XC::Vector &XC::DOF_Group::getCommittedVel(void)
+const XC::Vector &XC::DOF_Group::getCommittedVel(void) const
   {
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; no associated node "
-		  << " returning the error Vector.\n";
+		  << " returning the error Vector."
+		  << Color::def << std::endl;
         return errVect;
       }
     else
@@ -506,13 +531,14 @@ const XC::Vector &XC::DOF_Group::getCommittedVel(void)
 //! Return the committed acceleration at the associated node. Returns result of
 //! invoking  getAccel() on the Node. If there is no associated node
 //! object, an error message is printed and an error Vector is returned.
-const XC::Vector &XC::DOF_Group::getCommittedAccel(void)
+const XC::Vector &XC::DOF_Group::getCommittedAccel(void) const
   {
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; no associated node "
-		  << " returning the error Vector.\n";
+		  << " returning the error Vector."
+		  << Color::def << std::endl;
         return errVect;
       }
     else
@@ -535,8 +561,9 @@ const XC::Vector &XC::DOF_Group::getCommittedAccel(void)
 void XC::DOF_Group::setNodeDisp(const Vector &u)
   {
     if(!myNode)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; no associated node." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; no associated node."
+		<< Color::def << std::endl;
     else
       {
 	Vector &disp= unbalAndTangent.getResidual();
@@ -570,8 +597,9 @@ void XC::DOF_Group::setNodeVel(const Vector &udot)
   {
 
     if(!myNode)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; no associated node." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; no associated node."
+		<< Color::def << std::endl;
     else
       {
 	 Vector &vel = unbalAndTangent.getResidual();
@@ -607,8 +635,9 @@ void XC::DOF_Group::setNodeVel(const Vector &udot)
 void XC::DOF_Group::setNodeAccel(const Vector &udotdot)
   {
     if(!myNode)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; no associated node." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; no associated node."
+		<< Color::def << std::endl;
     else
       {
 	Vector &accel = unbalAndTangent.getResidual();;
@@ -634,8 +663,9 @@ void XC::DOF_Group::incrNodeDisp(const Vector &u)
   {
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; no associated node.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; no associated node."
+		  << Color::def << std::endl;
         exit(-1);
       }
     else
@@ -644,8 +674,9 @@ void XC::DOF_Group::incrNodeDisp(const Vector &u)
 
 	if(disp.Size() == 0)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; out of space\n";
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; out of space"
+		      << Color::def << std::endl;
 	    return;
 	  }
 
@@ -678,8 +709,9 @@ void XC::DOF_Group::incrNodeVel(const Vector &udot)
 
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; no associated node.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; no associated node."
+		  << Color::def << std::endl;
         exit(-1);
       }
     else
@@ -711,8 +743,9 @@ void XC::DOF_Group::incrNodeAccel(const Vector &udotdot)
 
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; no associated node.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; no associated node."
+		  << Color::def << std::endl;
         exit(-1);
       }
     else
@@ -739,9 +772,10 @@ const XC::Vector &XC::DOF_Group::getTrialDisp(void) const
       return myNode->getTrialDisp();
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << ": no associated Node "
-		  << " returning the error Vector\n";
+		  << " returning the error Vector"
+		  << Color::def << std::endl;
 	return errVect;
       }
   }
@@ -753,9 +787,10 @@ const XC::Vector &XC::DOF_Group::getTrialVel(void) const
       return myNode->getTrialVel();
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << ": no associated Node "
-		  << " returning the error Vector\n";
+		  << " returning the error Vector"
+		  << Color::def << std::endl;
 	return errVect;
       }
   }
@@ -767,9 +802,10 @@ const XC::Vector &XC::DOF_Group::getTrialAccel(void) const
       return myNode->getTrialAccel();
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << ": no associated Node "
-		  << " returning the error Vector\n";
+		  << " returning the error Vector"
+		  << Color::def << std::endl;
 	return errVect;
       }
   }
@@ -780,8 +816,9 @@ void XC::DOF_Group::setEigenvector(int mode, const Vector &theVector)
 
     if(!myNode)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; no associated node.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; no associated node."
+		  << Color::def << std::endl;
         exit(-1);
       }
     else
@@ -803,7 +840,7 @@ void XC::DOF_Group::setEigenvector(int mode, const Vector &theVector)
   }
 
 
-XC::Matrix *XC::DOF_Group::getT(void)
+const XC::Matrix *XC::DOF_Group::getT(void) const
   { return nullptr; }
 
 
@@ -813,13 +850,15 @@ void XC::DOF_Group::addLocalM_Force(const Vector &accel, double fact)
     if(myNode)
       {
         if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getMass(), accel, fact) < 0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; invoking addMatrixVector() on the unbalance failed.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; invoking addMatrixVector() on the unbalance failed."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no node associated, "
-		<< " subclass should not call this method \n";
+		<< " subclass should not call this method "
+		<< Color::def << std::endl;
   }
 
 
@@ -898,9 +937,10 @@ int XC::DOF_Group::saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot,int gr
 void XC::DOF_Group::addM_ForceSensitivity(const XC::Vector &Udotdot, double fact)
   {
     if(!myNode)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no node associated"
-		<< " subclass should not call this method \n";
+		<< " subclass should not call this method "
+		  << Color::def << std::endl;
     else
       {
 	const int sz= getNumDOF();
@@ -915,17 +955,19 @@ void XC::DOF_Group::addM_ForceSensitivity(const XC::Vector &Udotdot, double fact
 	  }
 
 	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getMassSensitivity(), accel, fact) < 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; invoking addMatrixVector() on the unbalance failed\n";
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; invoking addMatrixVector() on the unbalance failed"
+		    << Color::def << std::endl;
       }
   }
 
 void XC::DOF_Group::addD_Force(const XC::Vector &Udot, double fact)
   {
     if(!myNode)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no node associated"
-		<< " subclass should not call this method \n";
+		<< " subclass should not call this method "
+		<< Color::def << std::endl;
     else
       {
 	const int sz= getNumDOF();
@@ -940,17 +982,19 @@ void XC::DOF_Group::addD_Force(const XC::Vector &Udot, double fact)
 	  }
 
 	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getDamp(), vel, fact) < 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; invoking addMatrixVector() on the unbalance failed\n";
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; invoking addMatrixVector() on the unbalance failed"
+		    << Color::def << std::endl;
       }
   }
 
 void XC::DOF_Group::addD_ForceSensitivity(const Vector &Udot, double fact)
   {
     if(!myNode)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no node associated"
-		<< " subclass should not call this method \n";
+		<< " subclass should not call this method "
+		<< Color::def << std::endl;
     else
       {
 	const int sz= getNumDOF();
@@ -966,8 +1010,9 @@ void XC::DOF_Group::addD_ForceSensitivity(const Vector &Udot, double fact)
 	  }
 
 	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getDampSensitivity(), vel, fact) < 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; invoking addMatrixVector() on the unbalance failed\n";
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; invoking addMatrixVector() on the unbalance failed"
+		    << Color::def << std::endl;
       }
   }
 

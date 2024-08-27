@@ -62,26 +62,27 @@
 #include <cstdlib>
 
 #include <domain/mesh/node/Node.h>
-#include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <solution/analysis/integrator/TransientIntegrator.h>
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <domain/constraints/MFreedom_Constraint.h>
 #include <domain/constraints/MRMFreedom_Constraint.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 //!
 //! @param tag: object identifier.
 //! @param spPtr: pointer to a single DOF constraint.
 XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, SFreedom_Constraint &spPtr)
-  :DOF_Group(tag, 1) {}
+  :DOF_Group(tag, 1), m_lagrange_variable(1) {}
 
 //! @brief Constructor.
 //!
 //! @param tag: object identifier.
 //! @param spPtr: pointer to a multiple DOF constraint.
 XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MFreedom_Constraint &mpPtr)
-  :DOF_Group(tag, (mpPtr.getRetainedDOFs()).Size())
+  : DOF_Group(tag, (mpPtr.getRetainedDOFs()).Size()),
+    m_lagrange_variable(mpPtr.getConstrainedDOFs().Size())
   {}
 
 //! @brief Constructor.
@@ -89,7 +90,8 @@ XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MFreedom_Constraint &mpPtr)
 //! @param tag: object identifier.
 //! @param spPtr: pointer to a multiple row multiple DOF constraint.
 XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MRMFreedom_Constraint &mrmpPtr)
-  :DOF_Group(tag, mrmpPtr.getRetainedDOFs().Size())
+  :DOF_Group(tag, mrmpPtr.getRetainedDOFs().Size()),
+   m_lagrange_variable(mrmpPtr.getConstrainedDOFs().Size())
   {}
 
 //! @brief Does nothing; the Lagrange FE_Elements provide coeffs to tangent.
@@ -108,58 +110,106 @@ const XC::Vector &XC::LagrangeDOF_Group::getUnbalance(Integrator *theIntegrator)
     return unbalAndTangent.getResidual();
   }
 
-// void setNodeDisp(const XC::Vector &u);
+// void setNodeDisp(const Vector &u);
 //	Method to set the corresponding nodes displacements to the
 //	values in u, components identified by myID;
 
 //! @brief Does nothing. The lagrange multipliers are associated with no Nodes
 //! in the Domain.
 void XC::LagrangeDOF_Group::setNodeDisp(const Vector &u)
-  { return; }
+  {
+    m_lagrange_variable.Zero();
+    const ID &ids= this->getID();
+    for (int i = 0; i < this->getNumDOF(); i++)
+      {
+        int loc = ids(i);
+        if (loc >= 0)
+	  m_lagrange_variable(i) = u(loc);
+      }
+#ifdef LAG_DOF_VERBOSE
+    std::cerr << "LAG DOF: set U (total) = " << u;
+    std::cerr << "   -> LM = " << m_lagrange_variable;
+#endif // LAG_DOF_VERBOSE
+  }
 	
 	
 //! @brief Does nothing. The lagrange multipliers are associated with no Nodes
 //! in the Domain.
-void XC::LagrangeDOF_Group::setNodeVel(const XC::Vector &udot)
+void XC::LagrangeDOF_Group::setNodeVel(const Vector &udot)
   { return; }
 
 
 //! @brief Does nothing. The lagrange multipliers are associated with no Nodes
 //! in the Domain.
-void XC::LagrangeDOF_Group::setNodeAccel(const XC::Vector &udotdot)
+void XC::LagrangeDOF_Group::setNodeAccel(const Vector &udotdot)
   { return; }
 
 //! @brief Does nothing. The lagrange multipliers are associated with no Nodes
 //! in the Domain.
-void XC::LagrangeDOF_Group::incrNodeDisp(const XC::Vector &u)
-  { return; }
+void XC::LagrangeDOF_Group::incrNodeDisp(const Vector &u)
+  {
+    const ID &ids = this->getID();
+    for(int i = 0; i < this->getNumDOF(); i++)
+      {
+        int loc = ids(i);
+        if (loc >= 0)
+	  m_lagrange_variable(i) += u(loc);
+      }
+#ifdef LAG_DOF_VERBOSE
+    opserr << "LAG DOF: set U (increment) = " << u;
+    opserr << "   -> LM = " << m_lagrange_variable;
+#endif // LAG_DOF_VERBOSE
+
+  }
 	
 //! @brief Does nothing. The lagrange multipliers are associated with no Nodes
 //! in the Domain.
-void XC::LagrangeDOF_Group::incrNodeVel(const XC::Vector &udot)
+void XC::LagrangeDOF_Group::incrNodeVel(const Vector &udot)
   { return; }
 
 //! @brief Does nothing. The lagrange multipliers are associated with no Nodes
 //! in the Domain.
-void XC::LagrangeDOF_Group::incrNodeAccel(const XC::Vector &udotdot)
+void XC::LagrangeDOF_Group::incrNodeAccel(const Vector &udotdot)
   { return; }
 
 
-const XC::Vector &XC::LagrangeDOF_Group::getCommittedDisp(void)
+const XC::Vector &XC::LagrangeDOF_Group::getCommittedDisp(void) const
   { 
-    unbalAndTangent.getResidual().Zero();
+    // note: this is actually the trial one. but this method is only
+    // called by traansient integrators during the domainChanged method
+    // (trial and committed should be the same)
+    return m_lagrange_variable;
+  }
+
+const XC::Vector &XC::LagrangeDOF_Group::getCommittedVel(void) const
+  {
+    LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
+    this_no_const->unbalAndTangent.getResidual().Zero();
     return unbalAndTangent.getResidual();
   }
 
-const XC::Vector &XC::LagrangeDOF_Group::getCommittedVel(void)
+const XC::Vector &XC::LagrangeDOF_Group::getCommittedAccel(void) const
   {
-    unbalAndTangent.getResidual().Zero();
+    LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
+    this_no_const->unbalAndTangent.getResidual().Zero();
+    return unbalAndTangent.getResidual();
+  }
+const XC::Vector &XC::LagrangeDOF_Group::getTrialDisp(void) const
+  {
+    return m_lagrange_variable;
+  }
+
+const XC::Vector& XC::LagrangeDOF_Group::getTrialVel(void) const
+  {
+    LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
+    this_no_const->unbalAndTangent.getResidual().Zero();
     return unbalAndTangent.getResidual();
   }
 
-const XC::Vector &XC::LagrangeDOF_Group::getCommittedAccel(void)
+const XC::Vector& XC::LagrangeDOF_Group::getTrialAccel() const
   {
-    unbalAndTangent.getResidual().Zero();
+    LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
+    this_no_const->unbalAndTangent.getResidual().Zero();
     return unbalAndTangent.getResidual();
   }
 
@@ -178,24 +228,25 @@ void XC::LagrangeDOF_Group::addPtoUnbalance(double fact)
 void XC::LagrangeDOF_Group::addPIncInertiaToUnbalance(double fact)
   {}
 
-void XC::LagrangeDOF_Group::addM_Force(const XC::Vector &Udotdot, double fact)
+void XC::LagrangeDOF_Group::addM_Force(const Vector &Udotdot, double fact)
   {}
 
-const XC::Vector &XC::LagrangeDOF_Group::getTangForce(const XC::Vector &disp, double fact)
+const XC::Vector &XC::LagrangeDOF_Group::getTangForce(const Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not yet implemented\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not yet implemented."
+	      << Color::def << std::endl;
     unbalAndTangent.getResidual().Zero();
     return unbalAndTangent.getResidual();
   }
 
-const XC::Vector &XC::LagrangeDOF_Group::getC_Force(const XC::Vector &disp, double fact)
+const XC::Vector &XC::LagrangeDOF_Group::getC_Force(const Vector &disp, double fact)
   {
     unbalAndTangent.getResidual().Zero();
     return unbalAndTangent.getResidual();
   }
 
-const XC::Vector &XC::LagrangeDOF_Group::getM_Force(const XC::Vector &disp, double fact)
+const XC::Vector &XC::LagrangeDOF_Group::getM_Force(const Vector &disp, double fact)
   {
     unbalAndTangent.getResidual().Zero();
     return unbalAndTangent.getResidual();

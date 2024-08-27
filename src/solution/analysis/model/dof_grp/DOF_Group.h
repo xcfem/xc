@@ -72,7 +72,7 @@
 #include <utility/matrix/ID.h>
 #include <utility/tagged/TaggedObject.h>
 #include <vector>
-#include "solution/analysis/UnbalAndTangent.h"
+#include "solution/analysis/model/UnbalAndTangent.h"
 
 namespace XC {
 class Node;
@@ -121,10 +121,11 @@ class DOF_Group: public TaggedObject
     void  addLocalM_Force(const Vector &Udotdot, double fact = 1.0);     
 
     // protected variables - a copy for each object of the class            
-    UnbalAndTangent unbalAndTangent;
+    mutable UnbalAndTangent unbalAndTangent;
     Node *myNode;
 
     friend class AnalysisModel;
+    friend class AutoConstraintHandler;
     DOF_Group(int tag, Node *myNode);
     DOF_Group(int tag, int ndof);
   public:
@@ -134,6 +135,7 @@ class DOF_Group: public TaggedObject
     virtual void setID(const ID &values);
     virtual const ID &getID(void) const;
     int inicID(const int &value);
+    virtual int doneID(void);    
 
     virtual int getNodeTag(void) const;
     //! @brief Returns the total number of DOFs in the DOF\_Group. 
@@ -160,9 +162,9 @@ class DOF_Group: public TaggedObject
     virtual const Vector &getM_Force(const Vector &x, double fact = 1.0);
 
     // methods to obtain committed responses from the nodes
-    virtual const Vector &getCommittedDisp(void);
-    virtual const Vector &getCommittedVel(void);
-    virtual const Vector &getCommittedAccel(void);
+    virtual const Vector &getCommittedDisp(void) const;
+    virtual const Vector &getCommittedVel(void) const;
+    virtual const Vector &getCommittedAccel(void) const;
     
     // methods to update the trial response at the nodes
     virtual void setNodeDisp(const Vector &u);
@@ -181,7 +183,7 @@ class DOF_Group: public TaggedObject
     virtual void setEigenvector(int mode, const Vector &eigenvalue);
 	
     // method added for TransformationDOF_Groups
-    virtual Matrix *getT(void);
+    virtual const Matrix *getT(void) const;
 
 // AddingSensitivity:BEGIN ////////////////////////////////////
     virtual void addM_ForceSensitivity(const Vector &Udotdot, double fact = 1.0);        

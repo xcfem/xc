@@ -67,7 +67,12 @@
 
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include "utility/matrix/Matrix.h"
-#include "solution/analysis/UnbalAndTangent.h"
+#include "solution/analysis/model/UnbalAndTangent.h"
+
+// M.Petracca 2024. Unified approach to constraints
+#define TRANSF_INCREMENTAL_SP
+#define TRANSF_INCREMENTAL_MP
+//#define TRANSF_INCREMENTAL_MP_DEBUG
 
 namespace XC {
 class MFreedom_ConstraintBase;
@@ -89,22 +94,30 @@ class TransformationDOF_Group: public DOF_Group
   private:
     MFreedom_ConstraintBase *mfc; //!< Pointer to multi-freedom constraint.
     
-    Matrix Trans;
+    mutable Matrix Trans;
     ID modID;
     int modNumDOF;
-    UnbalAndTangent unbalAndTangentMod;
-    
+    mutable UnbalAndTangent unbalAndTangentMod;
+    int needRetainedData;
     std::vector<SFreedom_Constraint *> theSPs; //!< Pointers to single-freedom constraints.
     
     // static variables - single copy for all objects of the class	    
     static UnbalAndTangentStorage unbalAndTangentArrayMod; //!< array of class wide vectors and matrices
-    static int numTransDOFs; //!< number of objects        
     static TransformationConstraintHandler *theHandler; //!< Transformation constraint handler.
 
-    void arrays_setup(int numNodalDOF, int numConstrainedNodeRetainedDOF, int numRetainedNodeDOF);
+#ifdef TRANSF_INCREMENTAL_MP
+    // used to store locally the total displacement as we cannot rely 
+    // on getting it from the retained node when processing the constrained
+    // node: the retained node may have been processed before
+    mutable Vector modTotalDisp;
+    static Vector modTrialDispOld;
+#endif // TRANSF_INCREMENTAL_MP
+    
+    void arrays_setup(int numNodalDOF, int numConstrainedNodeRetainedDOF, int numRetainedNodeDOF, int numRetainedNodes);
     void initialize(TransformationConstraintHandler *);
   protected:
     friend class AnalysisModel;
+    friend class AutoConstraintHandler;
     TransformationDOF_Group(int tag, Node *myNode, MFreedom_ConstraintBase *, TransformationConstraintHandler*);
     TransformationDOF_Group(int tag, Node *myNode, TransformationConstraintHandler *);
     std::vector<SFreedom_Constraint *> getSFreedomConstraintArray(int ) const;
@@ -113,9 +126,11 @@ class TransformationDOF_Group: public DOF_Group
     size_t getNumRetainedNodes(void) const;
     size_t getNumRetainedNodeDOFs(void) const;
     std::vector<Node *> getPointersToRetainedNodes(void);
-    const Vector &setupResidual(int numCNodeDOF, const ID &,const ID &, const Vector &, const std::vector<Node *> &,const Vector &(Node::*response)(void) const);
-    const Vector &getCommittedResponse(const Vector &(Node::*response)(void) const);
-    void setupResidual(const Vector &,int (Node::*setTrial)(const Vector &));
+    std::vector<const Node *> getPointersToRetainedNodes(void) const;
+    const Vector &setupResidual(int numCNodeDOF, const ID &,const ID &, const Vector &, const std::vector<const Node *> &,const Vector &(Node::*response)(void) const) const;
+    const Vector &getTrialResponse(const Vector &(Node::*response)(void) const) const;
+    const Vector &getCommittedResponse(const Vector &(Node::*response)(void) const) const;
+    void setupResidual(const Vector &,int (Node::*setTrial)(const Vector &), const Vector &(Node::*response)(void) const) const;
   public:
     ~TransformationDOF_Group();
     
@@ -123,7 +138,7 @@ class TransformationDOF_Group: public DOF_Group
     int doneID(void);    
     const ID &getID(void) const; 
     virtual void setID(int dof, int value);    
-    Matrix *getT(void);
+    const Matrix *getT(void) const;
     virtual int getNumDOF(void) const;    
     virtual int getNumFreeDOF(void) const;
     virtual int getNumConstrainedDOF(void) const;
@@ -140,14 +155,14 @@ class TransformationDOF_Group: public DOF_Group
     const Vector &getM_Force(const Vector &x, double fact = 1.0);
     
     // methods to obtain trial responses from the nodes
-    const Vector &getTrialDisp(void);
-    const Vector &getTrialVel(void);
-    const Vector &getTrialAccel(void);
+    const Vector &getTrialDisp(void) const;
+    const Vector &getTrialVel(void) const;
+    const Vector &getTrialAccel(void) const;
 
     // methods to obtain committed responses from the nodes
-    const Vector &getCommittedDisp(void);
-    const Vector &getCommittedVel(void);
-    const Vector &getCommittedAccel(void);
+    const Vector &getCommittedDisp(void) const;
+    const Vector &getCommittedVel(void) const;
+    const Vector &getCommittedAccel(void) const;
     
     // methods to update the trial response at the nodes
     void setNodeDisp(const Vector &u);
@@ -161,7 +176,7 @@ class TransformationDOF_Group: public DOF_Group
     virtual void setEigenvector(int mode, const Vector &eigenvalue);
 
     int addSFreedom_Constraint(SFreedom_Constraint &theSP);
-    int enforceSPs(void);
+    int enforceSPs(int doMP);
 
 // AddingSensitivity:BEGIN ////////////////////////////////////
     void addM_ForceSensitivity(const Vector &Udotdot, double fact = 1.0);        

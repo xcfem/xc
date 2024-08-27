@@ -66,6 +66,8 @@
 // What: "@(#) LagrangeDOF_Group.h, revA"
 
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
+#include <utility/matrix/Vector.h>
+
 namespace XC {
 class SFreedom_Constraint;
 class MFreedom_Constraint;
@@ -82,6 +84,10 @@ class MRMFreedom_Constraint;
 //! multi-point constraints into the system of equation.
 class LagrangeDOF_Group: public DOF_Group
   {
+  private:
+    // we don't have a physical Node, so we need a persistent storage
+    // for the lagrange multipliers so that the lagrange FE can correctly compute the residual
+    Vector m_lagrange_variable;
   protected:
     friend class AnalysisModel;
     LagrangeDOF_Group(int tag, SFreedom_Constraint &);    
@@ -95,9 +101,12 @@ class LagrangeDOF_Group: public DOF_Group
     virtual const Vector &getUnbalance(Integrator *theIntegrator);
 
     // methods to obtain committed responses .. always 0
-    virtual const Vector &getCommittedDisp(void);
-    virtual const Vector &getCommittedVel(void);
-    virtual const Vector &getCommittedAccel(void);
+    virtual const Vector &getCommittedDisp(void) const;
+    virtual const Vector &getCommittedVel(void) const;
+    virtual const Vector &getCommittedAccel(void) const;
+    virtual const Vector &getTrialDisp() const;
+    virtual const Vector &getTrialVel() const;
+    virtual const Vector &getTrialAccel() const;
     
     // methods to update the trial response at the nodes
     virtual void setNodeDisp(const Vector &u);
