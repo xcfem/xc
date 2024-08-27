@@ -55,8 +55,8 @@ beam2= elements.newElement("ForceBeamColumn3d",xc.ID([n2.tag, n3.tag]))
 
     
 # Constraints
-modelSpace.fixNode000_000(1)
-modelSpace.fixNode000_000(3)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_000(n3.tag)
 
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
