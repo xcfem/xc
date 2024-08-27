@@ -76,17 +76,24 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Compute solution.
 
-## SOME REMARKS ABOUT THE SOLUTION PROCEDURE:
+## DISCUSSION ABOUT THE SOLUTION PROCEDURE:
 ## The linear solver gives poor results
 ## The Krylov Newton gives excellent results but is a bit slow (to check why).
 ## The penalty Newton-Raphson gives good results but only converges
 ## if the energy increment convergence test is used and the tolerances
 ## are increased a bit.
+## Finally the static linear solver using a transformation constraint handler
+## gives excellent results and is really fast.
 
+### Static linear solver.
 # result= modelSpace.analyze(calculateNodalReactions= True)
+### Penalty Krylov Newton solver
 # solProc= predefined_solutions.PenaltyKrylovNewton(feProblem, printFlag= 0)
-solProc= predefined_solutions.PenaltyNewtonRaphson(feProblem, convergenceTestTol= 1e-7, convTestType= 'energy_incr_conv_test', printFlag= 0)
-solProc.solveComb(lp0.name, calculateNodalReactions= True, reactionCheckTolerance= 1e-7)
+# solProc= predefined_solutions.PenaltyNewtonRaphson(feProblem, convergenceTestTol= 1e-7, convTestType= 'energy_incr_conv_test', printFlag= 0)
+# solProc.solveComb(lp0.name, calculateNodalReactions= True, reactionCheckTolerance= 1e-7)
+### Static linear solver with with transformation constraint handler.
+solProc= predefined_solutions.SimpleTransformationStaticLinear(feProblem, printFlag= 0)
+solProc.solveComb(lp0.name, calculateNodalReactions= True)
 
 # Compute reactions.
 Rx= .0
@@ -112,11 +119,10 @@ print('ratio3= ', ratio3)
 print('Fz= ', Fz)
 '''
 
-
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((ratio1<1e-8) and (ratio2<1e-8) and (ratio3<1e-8)):
+if((abs(ratio1)<1e-10) and (abs(ratio2)<1e-10) and (abs(ratio3)<1e-10)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
