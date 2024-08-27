@@ -78,7 +78,7 @@ toKill.getElements.append(trussB)
 modelSpace.deactivateElements(toKill)
 
 # Solve with dead element.
-result= modelSpace.analyze(calculateNodalReactions= True)
+result= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance= 1e-6)
 
 ux_II= n2.getDisp[0]
 ux_refII=2.0*ux_refI # Only one active element
@@ -129,7 +129,7 @@ print("error= ",error)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if error<1e-5:
+if(error<1e-5):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

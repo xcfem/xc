@@ -108,17 +108,15 @@ RB1= n1.getReaction[0]
 RB2= n2.getReaction[0] 
 
 
-
 dXTeor= 2*F/(E*h*L)
 dZTeor= 2*F*L**3/(3.0*E*I)
 
 ratio1= (R1/F)
-ratio2= ((R2+F)/F)
-ratio3= ((RB1+F)/F)
+ratio2= (abs(R2+F)/F)
+ratio3= (abs(RB1+F)/F)
 ratio4= (RB2)
-ratio5= ((dXTeor-deltaxB3)/dXTeor)
-ratio6= ((dZTeor-deltazB3)/dZTeor)
-
+ratio5= (abs(dXTeor-deltaxB3)/dXTeor)
+ratio6= (abs(dZTeor-deltazB3)/dZTeor)
 
 ''' 
 print("R1= ",R1)
@@ -153,7 +151,7 @@ print("ratio6= ",ratio6)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<0.1)):
+if((abs(ratio1)<1e-8) & (abs(ratio2)<1e-8) & (abs(ratio3)<1e-8) & (abs(ratio4)<1e-8) & (abs(ratio5)<0.1)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

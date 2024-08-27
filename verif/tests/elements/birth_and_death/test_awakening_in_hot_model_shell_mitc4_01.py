@@ -41,9 +41,8 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 #       |             |
 #       |             |
 #       | n1       n2 |
-#       +-------------+ --> F/2
-#                     |
-#                     v F/2
+#      >+-------------+ --> F/2
+#       ^             ^
 #
 
 ### Nodes.
@@ -70,7 +69,7 @@ plateB= elements.newElement("ShellMITC4",xc.ID([n1.tag, n2.tag, n3.tag, n4.tag])
 
 ### Constraints
 modelSpace.fixNode("000FF0", n1.tag)
-modelSpace.fixNode("FF0FFF", n2.tag)
+modelSpace.fixNode("F00FFF", n2.tag)
 modelSpace.fixNode("FF0FFF", n3.tag)
 modelSpace.fixNode("FF0FFF", n4.tag)
 
@@ -88,7 +87,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 ## Compute solution
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, printFlag= 0)
-result= solProc.solve(calculateNodalReactions= True)
+result= solProc.solve(calculateNodalReactions= True, reactionCheckTolerance= 1e-6)
 
 Ra= n1.getReaction[0] # Horizontal reaction.
 ratio0= abs(Ra+F/2)/(F/2)
@@ -158,7 +157,7 @@ print('Ux1c= ', Ux1c, ' ratio10= ', ratio10)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio0)<1e-8) &(abs(ratio1)<1e-5) & (abs(ratio3)<1e-8) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-8) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5):
+if (abs(ratio0)<1e-5) &(abs(ratio1)<1e-8) & (abs(ratio3)<1e-8) & (abs(ratio4)<1e-8) & (abs(ratio5)<1e-8) & (abs(ratio6)<1e-8) & (abs(ratio7)<1e-8) & (abs(ratio8)<1e-8) & (abs(ratio9)<1e-8) & (abs(ratio10)<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

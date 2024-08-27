@@ -121,7 +121,7 @@ print("ratio4= ",ratio4)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5):
+if (abs(ratio1)<1e-8) & (abs(ratio2)<1e-8) & (abs(ratio3)<1e-8) & (abs(ratio4)<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

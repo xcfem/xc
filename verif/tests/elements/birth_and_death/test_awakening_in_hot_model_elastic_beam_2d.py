@@ -68,7 +68,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 ## Compute solution
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, printFlag= 0)
-result= solProc.solve(calculateNodalReactions= True)
+result= solProc.solve(calculateNodalReactions= True, reactionCheckTolerance= 1e-10)
 
 # Check results.
 R1a= n1.getReaction[0]
