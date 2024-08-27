@@ -38,6 +38,51 @@ XC::MFreedom_FE::MFreedom_FE(int tag, int numDOF_Group, int ndof, MFreedom_Const
   : MPBase_FE(tag,numDOF_Group,ndof,Alpha), theMFreedom(&TheMP), theRetainedNode(nullptr)
   {}
 
+//! @brief Put the constradned DOFs displacements in the given vector.
+void XC::MFreedom_FE::assemble_constrained_DOF_displacements(Vector &uu) const
+  {
+    const ID &id1= theMFreedom->getConstrainedDOFs();
+    const int id1Sz= id1.Size();
+    const Vector &Uc = theConstrainedNode->getTrialDisp();
+    const Vector &Uc0 = theMFreedom->getConstrainedDOFsInitialDisplacement();
+    for(int i = 0; i < id1Sz; ++i)
+      {
+        const int cdof= id1(i);
+        if(cdof < 0 || cdof >= Uc.Size())
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL Error: Constrained DOF "
+		      << cdof << " out of bounds [0-" << Uc.Size() << "]"
+		  << Color::def << std::endl;
+            exit(-1);
+	  }
+        uu(i) = Uc(cdof) - Uc0(i);
+      }
+  }
+
+//! @brief Put the retained DOFs displacements in the given vector.
+void XC::MFreedom_FE::assemble_retained_DOF_displacements(Vector &uu, const int &offset) const
+  {
+    const ID &id2= theMFreedom->getRetainedDOFs();
+    const int id2Sz= id2.Size();
+    const Vector &Ur = theRetainedNode->getTrialDisp();
+    const Vector &Ur0 = theMFreedom->getRetainedDOFsInitialDisplacement();
+    for(int i = 0; i < id2Sz; ++i)
+      {
+        const int rdof = id2(i);
+        if(rdof < 0 || rdof >= Ur.Size())
+	  {
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL Error: Retained DOF "
+		      << rdof
+		      << " out of bounds [0-" << Ur.Size()
+		      << "]"
+		      << Color::def << std::endl;
+            exit(-1);
+	  }
+        uu(i + offset) = Ur(rdof) - Ur0(i);
+      }
+  }
 
 //! @brief determine the IDs in myID for those DOFs marked
 //! as constrained DOFs, this is obtained from the DOF_Group
@@ -52,8 +97,9 @@ int XC::MFreedom_FE::determineRetainedDOFsIDs(const int &offset)
     DOF_Group *theRetainedNodesDOFs = theRetainedNode->getDOF_GroupPtr();
     if(theRetainedNodesDOFs == 0)
      {
-	std::cerr << "WARNING XC::MFreedom_FE::setID(void)";
-	std::cerr << " - no DOF_Group with Retained XC::Node\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no DOF_Group with Retained node."
+	          << Color::def << std::endl;
 	return -2;
       }    
     
@@ -70,7 +116,8 @@ int XC::MFreedom_FE::determineRetainedDOFsIDs(const int &offset)
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; WARNING unknown DOF: "
 		      << retained << " at retained node: "
-		      << theRetainedNode->getTag() << Color::def << std::endl;
+		      << theRetainedNode->getTag()
+		      << Color::def << std::endl;
 	    myID(j+offset) = -1; // modify so nothing will be added
 	    retval= -3;
 	  }    	
@@ -78,17 +125,18 @@ int XC::MFreedom_FE::determineRetainedDOFsIDs(const int &offset)
           {
 	    if(retained >= theRetainedNodesID.Size())
               {
-		std::cerr << "WARNING XC::PenaltyMFreedom_FE::setID(void) - ";
-		std::cerr << " Nodes XC::DOF_Group too small\n";
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - nodes DOF_Group too small."
+		          << Color::def << std::endl;
 		myID(j+offset) = -1; // modify so nothing will be added 
 		retval= -4;
 	      }
 	    else
-	      myID(j+offset) = theRetainedNodesID(retained);
+	      myID(j+offset)= theRetainedNodesID(retained);
 	  }
       }
 
-     myDOF_Groups(1) = theRetainedNodesDOFs->getTag();
+     myDOF_Groups(1)= theRetainedNodesDOFs->getTag();
     return retval;
   }
 
@@ -98,8 +146,10 @@ XC::DOF_Group *XC::MFreedom_FE::determineRetainedNodeDofGrpPtr(void)
     DOF_Group *retval= nullptr;
     if(theRetainedNode == nullptr)
       {
-	std::cerr << "FATAL MPBase_FE::determineRetainedNodeDofGrpPtr() - Retained";
-	std::cerr << " node does not exist in domain.\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL - Retained"
+		  << " node does not exist in domain."
+		  << Color::def << std::endl;
 	exit(-1);
       }
     else // set up the dof groups tags
@@ -108,7 +158,9 @@ XC::DOF_Group *XC::MFreedom_FE::determineRetainedNodeDofGrpPtr(void)
         if(dofGrpPtr != nullptr) 
           retval= dofGrpPtr;	        
         else
-         std::cerr << "WARNING MPBase_FE::determineRetainedNodeDofGrpPtr() - node no Group yet?\n";
+         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		   << "; WARNING - node no Group yet?"
+		  << Color::def << std::endl;
       }
     return retval;
   }

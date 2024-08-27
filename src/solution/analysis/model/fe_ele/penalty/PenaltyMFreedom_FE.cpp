@@ -178,7 +178,25 @@ const XC::Matrix &XC::PenaltyMFreedom_FE::getTangent(Integrator *theNewIntegrato
 //! @brief Returns the residual, a \f$0\f$ Vector.
 const XC::Vector &XC::PenaltyMFreedom_FE::getResidual(Integrator *theNewIntegrator)
   {
-    // zero residual, CD = 0
+    // get the solution vector [Uc Ur]
+    static Vector UU;
+    const ID &id1= theMFreedom->getConstrainedDOFs();
+    const int id1Sz= id1.Size();
+    const ID &id2 = theMFreedom->getRetainedDOFs();
+    const int id2Sz= id2.Size();
+    const int size= id1Sz + id2Sz;
+    UU.resize(size);
+    // Constrained DOFs.
+    this->assemble_constrained_DOF_displacements(UU);
+
+    // Retained DOFs.
+    this->assemble_retained_DOF_displacements(UU, id1Sz);
+
+    // compute residual
+    const Matrix& KK = getTangent(theNewIntegrator);
+    resid.addMatrixVector(0.0, KK, UU, -1.0);
+
+    // done
     return resid;
   }
 
@@ -194,6 +212,15 @@ const XC::Vector &XC::PenaltyMFreedom_FE::getTangForce(const Vector &disp, doubl
   }
 
 const XC::Vector &XC::PenaltyMFreedom_FE::getK_Force(const Vector &disp, double fact)
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; WARNING - not yet implemented."
+              << Color::def << std::endl;
+    resid.Zero(); //Added by LCPT.
+    return resid;
+  }
+
+const XC::Vector &XC::PenaltyMFreedom_FE::getKi_Force(const Vector &disp, double fact)
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; WARNING - not yet implemented."

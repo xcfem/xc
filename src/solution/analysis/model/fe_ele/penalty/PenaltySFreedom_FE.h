@@ -97,6 +97,7 @@ class PenaltySFreedom_FE: public SFreedom_FE
     virtual const Vector &getTangForce(const Vector &x, double fact = 1.0);
 
     virtual const Vector &getK_Force(const Vector &x, double fact = 1.0);
+    virtual const Vector &getKi_Force(const Vector &x, double fact = 1.0);
     virtual const Vector &getC_Force(const Vector &x, double fact = 1.0);
     virtual const Vector &getM_Force(const Vector &x, double fact = 1.0);    
   };

@@ -71,6 +71,13 @@
 #include <domain/mesh/node/Node.h>
 #include <domain/constraints/MFreedom_Constraint.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
+#include "utility/utils/misc_utils/colormod.h"
+
+// Note 1:
+//    changed by M.Petracca: 2024. should be the constrained dof size.
+//    now it's the same because all MP constraints in opensees are one-to-one.
+//    but in the future we may implement generic constraints of the form:
+//    CDOF = a1*RDOF1 + a2*RDOF2 + ... + an*RDOFn + beta
 
 //!To construct a LagrangeMFreedom\_FE element to enforce the constraint
 //! specified by the MFreedom\_Constraint \p theMFreedom using a default value
@@ -88,7 +95,10 @@
 //! available for the Matrices and Vector or the constrained and retained Nodes
 //! of their DOF\_Groups do not exist.
 XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedom_Constraint &TheMFreedom, DOF_Group &theGroup, double Alpha)
-  :MFreedom_FE(tag, 3,(TheMFreedom.getConstrainedDOFs().Size()+TheMFreedom.getRetainedDOFs().Size()+TheMFreedom.getRetainedDOFs().Size()),TheMFreedom,Alpha), Lagrange_FE(theGroup)
+  :MFreedom_FE(tag, 3,(TheMFreedom.getConstrainedDOFs().Size()+
+		       TheMFreedom.getRetainedDOFs().Size()+
+		       TheMFreedom.getConstrainedDOFs().Size()), // *see note 1
+	       TheMFreedom,Alpha), Lagrange_FE(theGroup)
   {
     const Matrix &constraint = theMFreedom->getConstraint();
     const int noRows = constraint.noRows();
@@ -99,30 +109,42 @@ XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedo
     tang.Zero();	
     resid.Zero();
 
-    theRetainedNode= theDomain.getNode(theMFreedom->getNodeRetained());    
-    theConstrainedNode= theDomain.getNode(theMFreedom->getNodeConstrained());
-
-    if(theRetainedNode == 0)
+    this->theRetainedNode= theDomain.getNode(theMFreedom->getNodeRetained());
+    if(theRetainedNode == nullptr)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; no associated retained node\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no associated retained node."
+	          << Color::def << std::endl;
 	exit(-1);
       }
     
-    if(theConstrainedNode == 0)
+    this->theConstrainedNode= theDomain.getNode(theMFreedom->getNodeConstrained());
+    if(theConstrainedNode == nullptr)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; no asscoiated constrained node\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no associated constrained node."
+	          << Color::def << std::endl;
 	exit(-1);
       }
     
     if(theMFreedom->isTimeVarying() == false)
       { this->determineTangent(); }
-    
 
-    myDOF_Groups(0)= determineConstrainedNodeDofGrpPtr()->getTag();
-    myDOF_Groups(1)= determineRetainedNodeDofGrpPtr()->getTag();
-    myDOF_Groups(2) = getLagrangeDOFGroup()->getTag();
+    const DOF_Group *theConstrainedNodesDOFs= this->determineConstrainedNodeDofGrpPtr();
+    if(this->getLagrangeDOFGroup()->getID().Size() != theConstrainedNodesDOFs->getID().Size())
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - ConstrainedDOFs size != Lagrange size"
+		  << Color::def << std::endl;
+        exit(-1);
+      }
+    
+    const DOF_Group *theRetainedNodesDOFs= this->determineRetainedNodeDofGrpPtr();
+
+    
+    myDOF_Groups(0)= theConstrainedNodesDOFs->getTag();
+    myDOF_Groups(1)= theRetainedNodesDOFs->getTag();
+    myDOF_Groups(2)= getLagrangeDOFGroup()->getTag();
   }
 
 //! @brief  method to set the corresponding index of the ID to value.
@@ -174,9 +196,49 @@ const XC::Matrix &XC::LagrangeMFreedom_FE::getTangent(Integrator *theNewIntegrat
 
 //! @brief Returns the residual vector.
 const XC::Vector &XC::LagrangeMFreedom_FE::getResidual(Integrator *theNewIntegrator)
-  { return resid; }
+  {
+    // get the solution vector [Uc Ur lambda]
+    static Vector UU;
+    const ID &id1= theMFreedom->getConstrainedDOFs();
+    const int id1Sz= id1.Size();
+    const ID &id2= theMFreedom->getRetainedDOFs();
+    const int id2Sz= id2.Size();
+    const DOF_Group *theDofGroup= this->getLagrangeDOFGroup();
+    const ID &id3= theDofGroup->getID(); 
+    const int size= id1Sz + id2Sz + id3.Size();
+    UU.resize(size);
+    // Constrained DOFs.
+    this->assemble_constrained_DOF_displacements(UU);
 
+    // Retained DOFs.
+    this->assemble_retained_DOF_displacements(UU, id1Sz);
 
+    // Lagrange DOFs.
+    const int id3Sz= id3.Size();    
+    const Vector &lambda = theDofGroup->getTrialDisp();
+    for(int i = 0; i < id3Sz; ++i)
+      {
+        UU(i + id1Sz + id2Sz) = lambda(i);
+      }
+
+    /*
+    R = -C*U + G
+       .R = generalized residual vector
+       .C = constraint matrix
+       .U = generalized solution vector (displacement, lagrange multipliers)
+       .G = constrain values for non-homogeneous MP constraints (not available now)
+    | Ru |    | 0  A | | u |   | 0 |
+    |    | = -|      |*|   | + |   |
+    | Rl |    | A  0 | | l |   | g |
+    */
+
+    // compute residual
+    const Matrix &KK= getTangent(theNewIntegrator);
+    resid.addMatrixVector(0.0, KK, UU, -1.0);
+
+    // done
+    return resid;
+  }
 
 //! @brief CURRENTLY just returns the \f$0\f$ residual. THIS WILL NEED
 //! TO CHANGE FOR ELE-BY-ELE SOLVERS. 
@@ -189,6 +251,14 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getTangForce(const Vector &disp, doub
   }
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getK_Force(const Vector &disp, double fact)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
+    resid.Zero(); //Added by LCPT.
+    return resid;
+  }
+
+const XC::Vector &XC::LagrangeMFreedom_FE::getKi_Force(const Vector &disp, double fact)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";

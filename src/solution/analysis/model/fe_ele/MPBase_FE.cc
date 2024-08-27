@@ -46,8 +46,9 @@ int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &th
     DOF_Group *theConstrainedNodesDOFs = theConstrainedNode->getDOF_GroupPtr();
     if(theConstrainedNodesDOFs == 0)
       {
-	std::cerr << "WARNING MPBase_FE::setID(void)";
-	std::cerr << " - no DOF_Group with Constrained XC::Node\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no DOF_Group with Constrained node."
+		  << Color::def << std::endl;
 	return -2;
       }
     else
@@ -66,7 +67,8 @@ int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &th
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; WARNING unknown DOF: "
 		      << constrained << " at constrained node: "
-		      << theConstrainedNode->getTag() << Color::def << std::endl;
+		      << theConstrainedNode->getTag()
+		      << Color::def << std::endl;
 	    myID(i+offset) = -1; // modify so nothing will be added to equations
 	    retval = -3;
 	  }    	
@@ -74,8 +76,9 @@ int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &th
           {
 	    if(constrained >= theConstrainedNodesID.Size())
               {
-		std::cerr << "WARNING XC::MPBase_FE::setID(void) - ";
-		std::cerr << " Nodes XC::DOF_Group too small\n";
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING nodes DOF_Group too small"
+			  << Color::def << std::endl;
 		myID(i+offset) = -1; // modify so nothing will be added to equations
 		retval = -4;
 	      }
@@ -93,17 +96,20 @@ XC::DOF_Group *XC::MPBase_FE::determineConstrainedNodeDofGrpPtr(void)
     DOF_Group *retval= nullptr;
     if(theConstrainedNode == nullptr)
       {
-	std::cerr << "FATAL MPBase_FE::determineConstrainedNodeDofGrpPtr() - Constrained";
-	std::cerr << " node does not exist in domain.\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL - Constrained node does not exist in domain."
+		  << Color::def << std::endl;
 	exit(-1);
       }
     else // set up the dof groups tags
       {
         DOF_Group *dofGrpPtr= theConstrainedNode->getDOF_GroupPtr();
-       if(dofGrpPtr != nullptr) 
-         retval= dofGrpPtr;	        
-       else
-        std::cerr << "WARNING MPBase_FE::determineConstrainedNodeDofGrpPtr() - node no Group yet?\n";
+	if(dofGrpPtr != nullptr) 
+	  retval= dofGrpPtr;	        
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; WARNING - node no Group yet?"
+		    << Color::def << std::endl;
       }
     return retval;
   }

@@ -412,7 +412,7 @@ void XC::FE_Element::addKtToTang(double fact)
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0)// || myEle->isDead()) // Dead elements needed to avoid singular stiffness matrix.
           return;
         else if(myEle->isSubdomain() == false)
           unbalAndTangent.getTangent().addMatrix(1.0, myEle->getTangentStiff(),fact);
@@ -443,7 +443,7 @@ void XC::FE_Element::addCtoTang(double fact)
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0)// || myEle->isDead()) // Dead elements needed to avoid singular damping matrix.
           return;
         else if(myEle->isSubdomain() == false)
           unbalAndTangent.getTangent().addMatrix(1.0, myEle->getDamp(),fact);
@@ -474,7 +474,7 @@ void XC::FE_Element::addMtoTang(double fact)
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0)// || myEle->isDead()) // Dead elements needed to avoid singular mass matrix.
           return;
         else if(myEle->isSubdomain() == false)
           {
@@ -507,7 +507,7 @@ void XC::FE_Element::addKiToTang(double fact)
     if(myEle)
       {
 	// check for a quick return
-	if(fact == 0.0)
+	if(fact == 0.0)// || myEle->isDead()) // Dead elements needed to avoid singular stiffness matrix.
 	  return;
 	else if(myEle->isSubdomain() == false)
 	  unbalAndTangent.getTangent().addMatrix(1.0, myEle->getInitialStiff(), fact);
@@ -524,6 +524,21 @@ void XC::FE_Element::addKiToTang(double fact)
 	        << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
+void XC::FE_Element::activate(void)
+  { 
+    myEle->alive();
+  }
+
+void XC::FE_Element::deactivate(void)
+  { 
+    myEle->kill();
+  }
+
+
+bool XC::FE_Element::isActive(void) const
+  {
+    return myEle->isAlive();
+  }
 
 //! @brief Zeros the residual vector.
 //!
@@ -566,7 +581,7 @@ void XC::FE_Element::addRtoResidual(double fact)
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
             return;
         else if(myEle->isSubdomain() == false)
           {
@@ -602,7 +617,7 @@ void XC::FE_Element::addRIncInertiaToResidual(double fact)
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return;
         else if(myEle->isSubdomain() == false)
           {
@@ -644,43 +659,46 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
         unbalAndTangent.getResidual().Zero();
 
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return unbalAndTangent.getResidual();
+	else
+	  {
+	    // get the components we need out of the vector
+	    // and place in a temporary vector
+	    Vector tmp(numDOF);
+	    for(int i=0; i<numDOF; i++)
+	      {
+		int dof= myID(i);
+		if(dof >= 0)
+		  tmp(i)= disp(myID(i));
+		else
+		  tmp(i)= 0.0;
+	      }
 
-        // get the components we need out of the vector
-        // and place in a temporary vector
-        Vector tmp(numDOF);
-        for(int i=0; i<numDOF; i++)
-          {
-            int dof= myID(i);
-            if(dof >= 0)
-              tmp(i)= disp(myID(i));
-            else
-              tmp(i)= 0.0;
-          }
-
-        if(myEle->isSubdomain() == false)
-          {
-            // form the tangent again and then add the force
-            theIntegrator->formEleTangent(this);
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, unbalAndTangent.getTangent(),tmp,fact) < 0) 
-              {
-                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		          << "; WARNING - "
-			  << "addMatrixVector returned error." << Color::def << std::endl;
-              }
-          }
-        else
-          {
-	    Subdomain *theSub= dynamic_cast<Subdomain *>(myEle);
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, theSub->getTang(),tmp,fact) < 0)
-              {
-                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		          << "; WARNING - "
-			  << "addMatrixVector returned error." << Color::def << std::endl;
-              }
-          }
-        return unbalAndTangent.getResidual();
+	    if(myEle->isSubdomain() == false)
+	      {
+		// form the tangent again and then add the force
+		theIntegrator->formEleTangent(this);
+		if(unbalAndTangent.getResidual().addMatrixVector(1.0, unbalAndTangent.getTangent(),tmp,fact) < 0) 
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - "
+			      << "addMatrixVector returned error."
+			      << Color::def << std::endl;
+		  }
+	      }
+	    else
+	      {
+		Subdomain *theSub= dynamic_cast<Subdomain *>(myEle);
+		if(unbalAndTangent.getResidual().addMatrixVector(1.0, theSub->getTang(),tmp,fact) < 0)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - "
+			      << "addMatrixVector returned error." << Color::def << std::endl;
+		  }
+	      }
+	    return unbalAndTangent.getResidual();
+	  }
       }
     else
       {
@@ -692,7 +710,6 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
   }
 
 
-
 const XC::Vector &XC::FE_Element::getK_Force(const Vector &disp, double fact)
   {
     if(myEle != 0)
@@ -701,36 +718,83 @@ const XC::Vector &XC::FE_Element::getK_Force(const Vector &disp, double fact)
         unbalAndTangent.getResidual().Zero();
 
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
             return unbalAndTangent.getResidual();
+        else
+	  {
+	    // get the components we need out of the vector
+	    // and place in a temporary vector
+	    Vector tmp(numDOF);
+	    for(int i=0; i<numDOF; i++)
+	      {
+		int dof= myID(i);
+		if(dof >= 0)
+		  tmp(i)= disp(myID(i));
+		else
+		  tmp(i)= 0.0;
+	      }
 
-        // get the components we need out of the vector
-        // and place in a temporary vector
-        Vector tmp(numDOF);
-        for(int i=0; i<numDOF; i++)
-          {
-            int dof= myID(i);
-            if(dof >= 0)
-              tmp(i)= disp(myID(i));
-            else
-              tmp(i)= 0.0;
-          }
-
-        if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getTangentStiff(), tmp, fact) < 0)
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-                      << "; WARNING - "
-	              << "addMatrixVector returned error." << Color::def << std::endl;
-          }
-        return unbalAndTangent.getResidual();
+	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getTangentStiff(), tmp, fact) < 0)
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - "
+			  << "addMatrixVector returned error." << Color::def << std::endl;
+	      }
+	    return unbalAndTangent.getResidual();
+	  }
       }
     else
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING - no element *given "
-                  << ", subclasses must provide implementation." << Color::def << std::endl;
+                  << ", subclasses must provide implementation."
+		  << Color::def << std::endl;
         return errVector;
       }
+  }
+
+const XC::Vector &XC::FE_Element::getKi_Force(const Vector &disp, double fact)
+  {
+    if (myEle != 0)
+      {    
+	// zero out the force vector
+	unbalAndTangent.getResidual().Zero();
+
+	// check for a quick return
+	if(fact == 0.0 || myEle->isDead()) 
+	    return unbalAndTangent.getResidual();
+        else
+	  {
+	    // get the components we need out of the vector
+	    // and place in a temporary vector
+	    Vector tmp(numDOF);
+	    for(int i=0; i<numDOF; i++)
+	      {
+		int dof = myID(i);
+		if (dof >= 0)
+		  tmp(i) = disp(myID(i));
+		else
+		  tmp(i) = 0.0;
+	      }
+
+	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getInitialStiff(), tmp, fact) < 0)
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - addMatrixVector returned error"
+			  << Color::def << std::endl;		 
+	      }		
+
+	    return unbalAndTangent.getResidual();
+	  }
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no Element *given "
+		  << "- subclasses must provide implementation"
+	          << Color::def << std::endl;
+	return errVector;	
+      }    	            
   }
 
 //! Returns the product of elements current mass matrix
@@ -748,27 +812,29 @@ const XC::Vector &XC::FE_Element::getM_Force(const Vector &disp, double fact)
         unbalAndTangent.getResidual().Zero();
 
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
             return unbalAndTangent.getResidual();
-
-        // get the components we need out of the vector
-        // and place in a temporary vector
-        Vector tmp(numDOF);
-        for(int i=0; i<numDOF; i++)
-          {
-            int dof= myID(i);
-            if(dof >= 0)
-              tmp(i)= disp(myID(i));
-            else
-              tmp(i)= 0.0;
-          }
-        if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-                      << "; WARNING - "
-	              << "addMatrixVector returned error." << Color::def << std::endl;
-          }
-        return unbalAndTangent.getResidual();
+        else
+	  {
+	    // get the components we need out of the vector
+	    // and place in a temporary vector
+	    Vector tmp(numDOF);
+	    for(int i=0; i<numDOF; i++)
+	      {
+		int dof= myID(i);
+		if(dof >= 0)
+		  tmp(i)= disp(myID(i));
+		else
+		  tmp(i)= 0.0;
+	      }
+	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - "
+			  << "addMatrixVector returned error." << Color::def << std::endl;
+	      }
+	    return unbalAndTangent.getResidual();
+	  }
       }
     else
       {
@@ -787,27 +853,30 @@ const XC::Vector &XC::FE_Element::getC_Force(const XC::Vector &disp, double fact
         unbalAndTangent.getResidual().Zero();
 
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return unbalAndTangent.getResidual();
-
-        // get the components we need out of the vector
-        // and place in a temporary vector
-        Vector tmp(numDOF);
-        for(int i=0; i<numDOF; i++)
-          {
-            const int dof= myID(i);
-            if(dof >= 0)
-              tmp(i)= disp(myID(i));
-            else
-              tmp(i)= 0.0;
-          }
-        if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-                      << "; WARNING - "
-	              << "addMatrixVector returned error." << Color::def << std::endl;
-          }
-        return unbalAndTangent.getResidual();
+        else
+	  {
+	    // get the components we need out of the vector
+	    // and place in a temporary vector
+	    Vector tmp(numDOF);
+	    for(int i=0; i<numDOF; i++)
+	      {
+		const int dof= myID(i);
+		if(dof >= 0)
+		  tmp(i)= disp(myID(i));
+		else
+		  tmp(i)= 0.0;
+	      }
+	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - "
+			  << "addMatrixVector returned error."
+			  << Color::def << std::endl;
+	      }
+	    return unbalAndTangent.getResidual();
+	  }
       }
     else
       {
@@ -875,34 +944,37 @@ void XC::FE_Element::addM_Force(const XC::Vector &accel, double fact)
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return;
-        if(myEle->isSubdomain() == false)
-          {
-            // get the components we need out of the vector
-            // and place in a temporary vector
-            Vector tmp(numDOF);
-            for(int i=0; i<numDOF; i++)
-              {
-                const int loc= myID(i);
-                if(loc >= 0)
-                  tmp(i)= accel(loc);
-                else
-                  tmp(i)= 0.0;
-              }
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
-              {
-                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-                          << "; WARNING - "
-	                  << "addMatrixVector returned error." << Color::def << std::endl;
-              }
-          }
-        else
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING - "
-		      << "this should not be called on a subdomain!\n";
-          }
+	else
+	  {
+	    if(myEle->isSubdomain() == false)
+	      {
+		// get the components we need out of the vector
+		// and place in a temporary vector
+		Vector tmp(numDOF);
+		for(int i=0; i<numDOF; i++)
+		  {
+		    const int loc= myID(i);
+		    if(loc >= 0)
+		      tmp(i)= accel(loc);
+		    else
+		      tmp(i)= 0.0;
+		  }
+		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - "
+			      << "addMatrixVector returned error." << Color::def << std::endl;
+		  }
+	      }
+	    else
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - "
+			  << "this should not be called on a subdomain!\n";
+	      }
+	  }
       }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -922,34 +994,37 @@ void XC::FE_Element::addD_Force(const XC::Vector &accel, double fact)
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return;
-        if(myEle->isSubdomain() == false)
-          {
-            // get the components we need out of the vector
-            // and place in a temporary vector
-            Vector tmp(numDOF);
-            for(int i=0; i<numDOF; i++)
-              {
-                const int loc= myID(i);
-                if(loc >= 0)
-                  tmp(i)= accel(loc);
-                else
-                  tmp(i)= 0.0;
-              }
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
-              {
-                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-                          << "; WARNING - "
-	                  << "addMatrixVector returned error." << Color::def << std::endl;
-              }
-          }
-        else
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING - "
-		      << "this should not be called on a subdomain!\n";
-          }
+	else
+	  {
+	    if(myEle->isSubdomain() == false)
+	      {
+		// get the components we need out of the vector
+		// and place in a temporary vector
+		Vector tmp(numDOF);
+		for(int i=0; i<numDOF; i++)
+		  {
+		    const int loc= myID(i);
+		    if(loc >= 0)
+		      tmp(i)= accel(loc);
+		    else
+		      tmp(i)= 0.0;
+		  }
+		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - "
+			      << "addMatrixVector returned error." << Color::def << std::endl;
+		  }
+	      }
+	    else
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - "
+			  << "this should not be called on a subdomain!\n";
+	      }
+	  }
       }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -957,28 +1032,31 @@ void XC::FE_Element::addD_Force(const XC::Vector &accel, double fact)
                 << ", subclasses must provide implementation." << Color::def << std::endl;
   }
 
-void XC::FE_Element::addLocalM_Force(const XC::Vector &accel, double fact)
+void XC::FE_Element::addLocalM_Force(const Vector &accel, double fact)
   {
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return;
-        if(myEle->isSubdomain() == false)
-          {
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(),accel, fact) < 0)
-              {
-                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-                          << "; WARNING - "
-	                  << "addMatrixVector returned error." << Color::def << std::endl;
-              }
-          }
         else
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING - "
-		      << "this should not be called on a subdomain!\n";
-          }
+	  {
+	    if(myEle->isSubdomain() == false)
+	      {
+		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(),accel, fact) < 0)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - "
+			      << "addMatrixVector returned error." << Color::def << std::endl;
+		  }
+	      }
+	    else
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - "
+			  << "this should not be called on a subdomain!\n";
+	      }
+	  }
       }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -991,23 +1069,26 @@ void XC::FE_Element::addLocalD_Force(const XC::Vector &accel, double fact)
     if(myEle != 0)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return;
-        if(myEle->isSubdomain() == false)
-          {
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(),accel, fact) < 0)
-              {
-                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-                          << "; WARNING - "
-	                  << "addMatrixVector returned error." << Color::def << std::endl;
-              }
-          }
-        else
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING - "
-		      << "this should not be called on a subdomain!\n";
-          }
+	else
+	  {
+	    if(myEle->isSubdomain() == false)
+	      {
+		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(),accel, fact) < 0)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - "
+			      << "addMatrixVector returned error." << Color::def << std::endl;
+		  }
+	      }
+	    else
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - "
+			  << "this should not be called on a subdomain!\n";
+	      }
+	  }
       }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1098,7 +1179,7 @@ void XC::FE_Element::addLocalD_ForceSensitivity(int gradNumber, const XC::Vector
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return;
         if(myEle->isSubdomain() == false)
           {
@@ -1127,7 +1208,7 @@ void XC::FE_Element::addLocalM_ForceSensitivity(int gradNumber, const XC::Vector
     if(myEle)
       {
         // check for a quick return
-        if(fact == 0.0)
+        if(fact == 0.0 || myEle->isDead())
           return;
         if(myEle->isSubdomain() == false)
           {
@@ -1162,7 +1243,7 @@ int XC::FE_Element::commitSensitivity(int gradNum, int numGrads)
 
 int XC::FE_Element::updateElement(void)
   {
-    if(myEle)
+    if(myEle) // && myEle->isAlive()) element needed to avoid singular matrix.
       return myEle->update();
     else
       return 0;

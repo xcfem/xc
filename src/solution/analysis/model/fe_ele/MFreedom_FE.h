@@ -46,6 +46,8 @@ class MFreedom_FE: public MPBase_FE
     MFreedom_Constraint *theMFreedom;
     Node *theRetainedNode;    
 
+    void assemble_constrained_DOF_displacements(Vector &) const;
+    void assemble_retained_DOF_displacements(Vector &, const int &) const;
     MFreedom_FE(int tag, int numDOF_Group, int ndof, MFreedom_Constraint &theMFreedom,const double &alpha= 1.0);
     int determineConstrainedDOFsIDs(const int &);
     int determineRetainedDOFsIDs(const int &);

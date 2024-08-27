@@ -57,22 +57,23 @@
 //
 // the interface:
 
-#include <solution/analysis/model/fe_ele/lagrange/LagrangeSFreedom_FE.h>
+#include "solution/analysis/model/fe_ele/lagrange/LagrangeSFreedom_FE.h"
 #include <cstdlib>
 
-#include <domain/mesh/element/Element.h>
-#include <domain/domain/Domain.h>
-#include <domain/mesh/node/Node.h>
-#include <solution/analysis/model/dof_grp/DOF_Group.h>
-#include <solution/analysis/integrator/Integrator.h>
+#include "domain/mesh/element/Element.h"
+#include "domain/domain/Domain.h"
+#include "domain/mesh/node/Node.h"
+#include "solution/analysis/model/dof_grp/DOF_Group.h"
+#include "solution/analysis/integrator/Integrator.h"
 #include "domain/domain/subdomain/Subdomain.h"
-#include <solution/analysis/model/AnalysisModel.h>
-#include <utility/matrix/ID.h>
-#include <utility/matrix/Matrix.h>
-#include <utility/matrix/Vector.h>
-#include <domain/mesh/node/Node.h>
-#include <domain/constraints/SFreedom_Constraint.h>
-#include <solution/analysis/model/dof_grp/DOF_Group.h>
+#include "solution/analysis/model/AnalysisModel.h"
+#include "utility/matrix/ID.h"
+#include "utility/matrix/Matrix.h"
+#include "utility/matrix/Vector.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/constraints/SFreedom_Constraint.h"
+#include "solution/analysis/model/dof_grp/DOF_Group.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! Construct a LagrangeSFreedom\_FE element to enforce the constraint.
 //!
@@ -98,9 +99,10 @@ XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE(int tag, Domain &theDomain, SFreedo
     theNode= theDomain.getNode(nodeTag);    
     if(!theNode)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING node: " << nodeTag
-	          << " not found." << std::endl;
+		  << " not found."
+		  << Color::def << std::endl;
 	exit(-1);
       }
 
@@ -113,9 +115,10 @@ XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE(int tag, Domain &theDomain, SFreedo
     DOF_Group *theNodesDOFs= theNode->getDOF_GroupPtr();
     if(!theNodesDOFs)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING no DOF_Group found for constrained node: "
-		  << nodeTag << std::endl;
+		  << nodeTag
+		  << Color::def << std::endl;
 	exit(-1);
       }    
 
@@ -148,9 +151,10 @@ int XC::LagrangeSFreedom_FE::setID(void)
     DOF_Group *theNodesDOFs = theNode->getDOF_GroupPtr();
     if(!theNodesDOFs)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING no DOF_Group found for constrained node: "
-		  << theNode->getTag() << std::endl;
+		  << theNode->getTag()
+		  << Color::def << std::endl;
 	return -1;
       }
 
@@ -159,9 +163,10 @@ int XC::LagrangeSFreedom_FE::setID(void)
     
     if(restrainedDOF < 0 || restrainedDOF >= theNodesID.Size())
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red<< getClassName() << "::" << __FUNCTION__
 	          << "; WARNING restrained DOF: " << restrainedDOF
-	          << " is invalid.\n";
+	          << " is invalid."
+		  << Color::def << std::endl;
 	return -2;
       }
     
@@ -186,19 +191,42 @@ const XC::Matrix &XC::LagrangeSFreedom_FE::getTangent(Integrator *theIntegrator)
 //! degree-of-freedom is invalid. Returns this residual Vector.
 const XC::Vector &XC::LagrangeSFreedom_FE::getResidual(Integrator *theNewIntegrator)
   {
-    const double constraint = theSP->getValue();
-    const int constrainedDOF = theSP->getDOF_Number();
-    const Vector &nodeDisp = theNode->getTrialDisp();
+    const double constraint= theSP->getValue();
+    const double initialValue= theSP->getInitialValue();
+    const int constrainedDOF= theSP->getDOF_Number();
+    const Vector &nodeDisp= theNode->getTrialDisp();
+    const Vector &lambda= this->getLagrangeDOFGroup()->getTrialDisp();
 
     if(constrainedDOF < 0 || constrainedDOF >= nodeDisp.Size())
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << " constrained DOF " << constrainedDOF
-		  << " outside range.\n";
-	resid(1)= 0;
+		  << " outside range."
+		  << Color::def << std::endl;
+        resid.Zero();
+	return resid;
+      }
+    if(lambda.Size() != 1)
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << " Lambda.Size() = " << lambda.Size() << " != 1"
+	          << Color::def << std::endl;
+        resid.Zero();
+        return resid;
       }
     
-    resid(1)= alpha *(constraint - nodeDisp(constrainedDOF));
+    /*
+    R = -C*U + G
+       .R = generalized residual vector
+       .C = constraint matrix
+       .U = generalized solution vector (displacement, lagrange multipliers)
+       .G = imposed displacement values
+    | Ru |    | 0  A | | u |   | 0 |
+    |    | = -|      |*|   | + |   |
+    | Rl |    | A  0 | | l |   | g |
+    */
+    resid(0)= alpha * (-lambda(0));
+    resid(1)= alpha * (constraint - (nodeDisp(constrainedDOF) - initialValue));
     return resid;
   }
 
@@ -219,9 +247,10 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getTangForce(const XC::Vector &disp, 
     const int constrainedID = myID(1);
     if(constrainedID < 0 || constrainedID >= disp.Size())
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << " constrained ID " << constrainedID
-		  << " outside disp.\n";
+		  << " outside disp."
+	          << Color::def << std::endl;
 	resid(1)= constraint*alpha;
 	return resid;
       }
@@ -231,24 +260,36 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getTangForce(const XC::Vector &disp, 
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getK_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; WARNING not yet implemented\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING not yet implemented."
+              <<  Color::def << std::endl;
+    resid.Zero(); //Added by LCPT.
+    return resid;
+  }
+
+const XC::Vector &XC::LagrangeSFreedom_FE::getKi_Force(const XC::Vector &disp, double fact)
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING not yet implemented."
+              <<  Color::def << std::endl;
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getC_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; WARNING not yet implemented\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING not yet implemented."
+              <<  Color::def << std::endl;
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; WARNING not yet implemented\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING not yet implemented."
+              <<  Color::def << std::endl;
     resid.Zero(); //Added by LCPT.
     return resid;
   }

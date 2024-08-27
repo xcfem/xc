@@ -158,7 +158,10 @@ int XC::PenaltySFreedom_FE::setID(void)
 
 //! @brief Returns the tangent Matrix created in the constructor.
 const XC::Matrix &XC::PenaltySFreedom_FE::getTangent(Integrator *theNewIntegrator)
-  { return tang; }
+  {
+    this->tang(0,0)= this->alpha;
+    return this->tang;
+  }
 
 //! Sets the FE\_Elements contribution to the residual to be
 //! \f$\alpha * (U_s - U_t)\f$, where \f$U_s\f$ is the specified value of the
@@ -168,10 +171,8 @@ const XC::Matrix &XC::PenaltySFreedom_FE::getTangent(Integrator *theNewIntegrato
 //! degree-of-freedom is invalid. Returns this residual Vector set.
 const XC::Vector &XC::PenaltySFreedom_FE::getResidual(Integrator *theNewIntegrator)
   {
-    const double constraint = theSP->getValue();
-    const int constrainedDOF = theSP->getDOF_Number();
-    const Vector &nodeDisp = theNode->getTrialDisp();
-	
+    const int &constrainedDOF= theSP->getDOF_Number();
+    const Vector &nodeDisp= theNode->getTrialDisp();
     if(constrainedDOF < 0 || constrainedDOF >= nodeDisp.Size())
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -179,12 +180,16 @@ const XC::Vector &XC::PenaltySFreedom_FE::getResidual(Integrator *theNewIntegrat
 		  << constrainedDOF << " outside disp.\n";
 	resid(0) = 0;
       }
+    else
+      {
+	const double &constraint= theSP->getValue();
+	const double &initialValue= theSP->getInitialValue();
+	// resid(0) = alpha * (constraint - nodeDisp(constrainedDOF));    
+	// is replace with the following to remove possible problems with
+	// subtracting very small numbers
 
-    // resid(0) = alpha * (constraint - nodeDisp(constrainedDOF));    
-    // is replace with the following to remove possible problems with
-    // subtracting very small numbers
-
-    resid(0) = alpha * (constraint - nodeDisp(constrainedDOF));    
+	resid(0) = alpha * (constraint - (nodeDisp(constrainedDOF) - initialValue));
+      }
     return resid;
   }
 
@@ -215,7 +220,15 @@ const XC::Vector &XC::PenaltySFreedom_FE::getK_Force(const Vector &disp, double 
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; WARNING - not yet implemented\n";
-    resid.Zero(); //Added by LCPT.
+    resid(0) = 0.0;
+    return resid;
+  }
+
+const XC::Vector &XC::PenaltySFreedom_FE::getKi_Force(const Vector &disp, double fact)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING - not yet implemented\n";
+    resid(0) = 0.0;
     return resid;
   }
 
@@ -223,7 +236,7 @@ const XC::Vector &XC::PenaltySFreedom_FE::getC_Force(const Vector &disp, double 
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; WARNING - not yet implemented\n";
-    resid.Zero(); //Added by LCPT.
+    resid(0) = 0.0;
     return resid;
   }
 
@@ -231,7 +244,7 @@ const XC::Vector &XC::PenaltySFreedom_FE::getM_Force(const Vector &disp, double 
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; WARNING - not yet implemented\n";
-    resid.Zero(); //Added by LCPT.
+    resid(0) = 0.0;
     return resid;
   }
 

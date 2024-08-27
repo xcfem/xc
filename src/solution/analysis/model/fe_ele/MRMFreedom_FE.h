@@ -47,6 +47,8 @@ class MRMFreedom_FE: public MPBase_FE
     MRMFreedom_Constraint *theMRMP;
     std::vector<Node *> theRetainedNodes;    
 
+    void assemble_constrained_DOF_displacements(Vector &) const;
+    void assemble_retained_DOF_displacements(Vector &, const int &) const;
     MRMFreedom_FE(int tag, int numDOF_Group, int ndof, MRMFreedom_Constraint &,const double &alpha= 1.0);
     int determineConstrainedDOFsIDs(const int &);
     int determineRetainedDOFsIDs(const int &);

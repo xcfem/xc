@@ -98,7 +98,51 @@ const XC::Matrix &XC::LagrangeMRMFreedom_FE::getTangent(Integrator *theNewIntegr
   }
 
 const XC::Vector &XC::LagrangeMRMFreedom_FE::getResidual(Integrator *theNewIntegrator)
-  { return resid; }
+  {
+    // get the solution vector [Uc Ur lambda]
+    static Vector UU;
+    // Constrained DOFs.
+    const ID &id1= theMRMP->getConstrainedDOFs();
+    const int id1Sz= id1.Size();
+    // Retained DOFs.
+    const ID &id2= theMRMP->getRetainedDOFs();
+    const int id2Sz= id2.Size();
+    const int nrn= this->theRetainedNodes.size();
+    const int rsz= nrn*id2Sz;
+    // Lagrange DOFs.
+    const DOF_Group *theDofGroup= this->getLagrangeDOFGroup();
+    const ID &id3= theDofGroup->getID(); 
+    const int size= id1Sz + rsz + id3.Size();
+    UU.resize(size);
+    // Constrained DOFs.
+    this->assemble_constrained_DOF_displacements(UU);
+    // Retained DOFs.
+    this->assemble_retained_DOF_displacements(UU, id1Sz);
+    // Lagrange DOFs.
+    const int id3Sz= id3.Size();
+    const Vector &lambda = theDofGroup->getTrialDisp();
+    for(int i = 0; i < id3Sz; ++i)
+      {
+        UU(i + id1Sz + rsz) = lambda(i);
+      }
+    /*
+    R = -C*U + G
+       .R = generalized residual vector
+       .C = constraint matrix
+       .U = generalized solution vector (displacement, lagrange multipliers)
+       .G = constrain values for non-homogeneous MP constraints (not available now)
+    | Ru |    | 0  A | | u |   | 0 |
+    |    | = -|      |*|   | + |   |
+    | Rl |    | A  0 | | l |   | g |
+    */
+
+    // compute residual
+    const Matrix &KK= getTangent(theNewIntegrator);
+    resid.addMatrixVector(0.0, KK, UU, -1.0);
+
+    // done    
+    return resid;
+  }
 
 
 
@@ -111,6 +155,14 @@ const XC::Vector &XC::LagrangeMRMFreedom_FE::getTangForce(const Vector &disp, do
   }
 
 const XC::Vector &XC::LagrangeMRMFreedom_FE::getK_Force(const Vector &disp, double fact)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
+    resid.Zero(); //Added by LCPT.
+    return resid;
+  }
+
+const XC::Vector &XC::LagrangeMRMFreedom_FE::getKi_Force(const Vector &disp, double fact)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";

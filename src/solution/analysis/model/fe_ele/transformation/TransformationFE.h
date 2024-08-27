@@ -64,7 +64,7 @@
 // What: "@(#) TransformationFE.h, revA"
 
 #include <solution/analysis/model/fe_ele/FE_Element.h>
-#include "solution/analysis/UnbalAndTangent.h"
+#include "solution/analysis/model/UnbalAndTangent.h"
 
 namespace XC {
 class SFreedom_Constraint;
@@ -99,7 +99,7 @@ class TransformationFE: public FE_Element
     
     // static variables - single copy for all objects of the class	
     static UnbalAndTangentStorage unbalAndTangentArrayMod; //!< array of class wide vectors and matrices
-    static std::vector<Matrix *> theTransformations; //!< for holding pointers to the T matrices
+    static std::vector<const Matrix *> theTransformations; //!< for holding pointers to the T matrices
     static int numTransFE;     //!< number of objects    
     static int transCounter;   //!< a counter used to indicate when to do something
     static int sizeTransformations; //!< size of theTransformations array
@@ -128,6 +128,7 @@ class TransformationFE: public FE_Element
     // methods for ele-by-ele strategies
     virtual const Vector &getTangForce(const Vector &x, double fact = 1.0);
     virtual const Vector &getK_Force(const Vector &accel, double fcat = 1.0);
+    virtual const Vector &getKi_Force(const Vector &accel, double fcat = 1.0);
     virtual const Vector &getM_Force(const Vector &accel, double fcat = 1.0);
     virtual const Vector &getC_Force(const Vector &vel, double fcat = 1.0);
     virtual void addD_Force(const Vector &vel,   double fact = 1.0);

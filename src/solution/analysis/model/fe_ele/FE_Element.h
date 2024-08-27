@@ -65,7 +65,7 @@
 
 #include <utility/tagged/TaggedObject.h>
 #include "utility/matrix/ID.h"
-#include "solution/analysis/UnbalAndTangent.h"
+#include "solution/analysis/model/UnbalAndTangent.h"
 
 namespace XC {
 class TransientIntegrator;
@@ -133,6 +133,7 @@ class FE_Element: public TaggedObject
     ID myID;
 
     friend class AnalysisModel;
+    friend class AutoConstraintHandler;
     FE_Element(int tag, Element *theElement);
     FE_Element(int tag, int numDOF_Group, int ndof);
   public:
@@ -153,7 +154,12 @@ class FE_Element: public TaggedObject
     virtual void  addKtToTang(double fact = 1.0);
     virtual void  addKiToTang(double fact = 1.0);
     virtual void  addCtoTang(double fact = 1.0);    
-    virtual void  addMtoTang(double fact = 1.0);    
+    virtual void  addMtoTang(double fact = 1.0);
+
+    // activate and deactivate FE_Element.
+    void activate(void);
+    void deactivate(void);
+    bool isActive(void) const;
     
     // methods to allow integrator to build residual    
     virtual void  zeroResidual(void);    
@@ -163,6 +169,7 @@ class FE_Element: public TaggedObject
     // methods for ele-by-ele strategies
     virtual const Vector &getTangForce(const Vector &x, double fact = 1.0);
     virtual const Vector &getK_Force(const Vector &x, double fact = 1.0);
+    virtual const Vector &getKi_Force(const Vector &x, double fact = 1.0);
     virtual const Vector &getC_Force(const Vector &x, double fact = 1.0);
     virtual const Vector &getM_Force(const Vector &x, double fact = 1.0);
     virtual void  addM_Force(const Vector &accel, double fact = 1.0);    

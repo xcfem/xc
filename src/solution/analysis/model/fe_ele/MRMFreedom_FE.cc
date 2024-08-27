@@ -38,6 +38,59 @@ XC::MRMFreedom_FE::MRMFreedom_FE(int tag, int numDOF_Group, int ndof, MRMFreedom
   : MPBase_FE(tag,numDOF_Group,ndof,Alpha), theMRMP(&TheMP)
   {}
 
+//! @brief Put the constradned DOFs displacements in the given vector.
+void XC::MRMFreedom_FE::assemble_constrained_DOF_displacements(Vector &uu) const
+  {
+    const ID &id1= theMRMP->getConstrainedDOFs();
+    const int id1Sz= id1.Size();
+    const Vector &Uc = theConstrainedNode->getTrialDisp();
+    const Vector &Uc0 = theMRMP->getConstrainedDOFsInitialDisplacement();
+    for(int i = 0; i < id1Sz; ++i)
+      {
+        const int cdof= id1(i);
+        if(cdof < 0 || cdof >= Uc.Size())
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL Error: Constrained DOF "
+		      << cdof << " out of bounds [0-" << Uc.Size() << "]"
+		  << Color::def << std::endl;
+            exit(-1);
+	  }
+        uu(i) = Uc(cdof) - Uc0(i);
+      }
+  }
+
+//! @brief Put the retained DOFs displacements in the given vector.
+void XC::MRMFreedom_FE::assemble_retained_DOF_displacements(Vector &uu, const int &offset) const
+  {
+    int local_offset= offset;
+    const ID &id2= theMRMP->getRetainedDOFs();
+    const int id2Sz= id2.Size();
+    size_t jj= 0;
+    for(std::vector<Node *>::const_iterator j= this->theRetainedNodes.begin();
+	j!= theRetainedNodes.end(); j++, jj++)
+      {
+	const Node *theRetainedNode= *j;
+	const Vector &Ur = theRetainedNode->getTrialDisp();
+	const Vector &Ur0 = theMRMP->getRetainedDOFsInitialDisplacement(jj);
+	for(int i = 0; i < id2Sz; ++i)
+	  {
+	    const int rdof = id2(i);
+	    if(rdof < 0 || rdof >= Ur.Size())
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; FATAL Error: Retained DOF "
+			  << rdof
+			  << " out of bounds [0-" << Ur.Size()
+			  << "]"
+			  << Color::def << std::endl;
+		exit(-1);
+	      }
+	    uu(i + local_offset) = Ur(rdof) - Ur0(i);
+	  }
+	local_offset+= id2Sz;
+      }
+  }
 
 //! @brief determine the IDs in myID for those DOFs marked
 //! as constrained DOFs, this is obtained from the DOF_Group
@@ -60,8 +113,9 @@ int XC::MRMFreedom_FE::determineRetainedDOFsIDs(const int &offset)
         DOF_Group *theRetainedNodesDOFs = theRetainedNode->getDOF_GroupPtr();
         if(theRetainedNodesDOFs == 0)
           {
-	    std::cerr << "WARNING XC::MRMFreedom_FE::setID(void)";
-	    std::cerr << " - no XC::DOF_Group with Retained XC::Node\n";
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - no DOF_Group with retained Node"
+		      << Color::def << std::endl;
 	    return -2;
           }
 
@@ -84,8 +138,9 @@ int XC::MRMFreedom_FE::determineRetainedDOFsIDs(const int &offset)
               {
 	        if(retained >= theRetainedNodesID.Size())
                   {
-		    std::cerr << "WARNING XC::MRMFreedom_FE::setID(void) - ";
-		    std::cerr << " Nodes DOF_Group too small\n";
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - nodes DOF_Group too small."
+			      << Color::def << std::endl;
 		    myID(conta) = -1; // modify so nothing will be added 
 		    retval = -4;
 	          }
@@ -96,7 +151,8 @@ int XC::MRMFreedom_FE::determineRetainedDOFsIDs(const int &offset)
           }
         myDOF_Groups(i+1)= theRetainedNodesDOFs->getTag();
       }
-    if(retval>=0) retval+= conta-RetainedDOFs.Size();
+    if(retval>=0)
+      retval+= conta-RetainedDOFs.Size();
     return retval;
   }
 
@@ -114,8 +170,9 @@ int XC::MRMFreedom_FE::determineRetainedNodesDofGrpPtr(Domain &theDomain, const 
 
         if(theRetainedNode == 0)
           {
-	    std::cerr << "FATAL MRMFreedom_FE::determineRetainedNodesDofGrpPtr() - Retained";
-	    std::cerr << " node does not exist in Domain\n";
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL - Retained node does not exist in Domain"
+		      << Color::def << std::endl;
 	    std::cerr << retainedNodeTags(i) << std::endl;
 	    exit(-1);
           }	
@@ -125,7 +182,9 @@ int XC::MRMFreedom_FE::determineRetainedNodesDofGrpPtr(Domain &theDomain, const 
         if(dofGrpPtr!= 0)
           myDOF_Groups(i+offset) = dofGrpPtr->getTag();
         else 
-          std::cerr << "WARNING MRMFreedom_FE::MRMFreedom_FE() - node no Group yet?\n"; 
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; WARNING - node no Group yet?"
+		    << Color::def << std::endl; 
       }
     return offset+sz;
   }

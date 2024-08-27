@@ -95,6 +95,7 @@ class PenaltyMFreedom_FE: public MFreedom_FE
     Matrix C; //!< to hold the C matrix
 
     friend class AnalysisModel;
+    friend class AutoConstraintHandler;
     PenaltyMFreedom_FE(int tag, Domain &, MFreedom_Constraint &theMFreedom, double alpha);
   public:
 
@@ -105,6 +106,7 @@ class PenaltyMFreedom_FE: public MFreedom_FE
     virtual const Vector &getTangForce(const Vector &x, double fact = 1.0);
 
     virtual const Vector &getK_Force(const Vector &x, double fact = 1.0);
+    virtual const Vector &getKi_Force(const Vector &x, double fact = 1.0);
     virtual const Vector &getC_Force(const Vector &x, double fact = 1.0);
     virtual const Vector &getM_Force(const Vector &x, double fact = 1.0);
   };
