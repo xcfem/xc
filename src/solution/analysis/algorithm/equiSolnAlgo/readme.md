@@ -19,3 +19,4 @@ Iteration from the last time step to the current is done by the following method
 - [Krylov subspace](https://en.wikipedia.org/wiki/Krylov_subspace)
 - [A Brief Introduction to Krylov Space Methods for Solving Linear Systems](https://people.math.ethz.ch/~mhg/pub/biksm.pdf)
 - [A Krylov Subspace Accelerated Newton Algorithm](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=49d46f2df3420b3689212a24ce7e09f609e4a26b)
+- [Secant accelerated Newton Algorithm](https://portwooddigital.com/2024/08/18/secant-accelerated-newton-algorithm)
