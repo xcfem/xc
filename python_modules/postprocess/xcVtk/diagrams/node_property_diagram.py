@@ -45,8 +45,9 @@ class NodePropertyDiagram(pd.PropertyDiagram):
         ''' Return the values needed to create the diagram representation.'''
         self.valueCouples= list()
         self.elements= list()
+        self.directions= list()
         for e in eSet.elements:
-            self.vDir= e.getJVector3d(True) #initialGeometry= True
+            self.directions.append(e.getJVector3d(True)) #initialGeometry= True
             v0= self.getValueForNode(e.getNodes[0])
             v1= self.getValueForNode(e.getNodes[1])
             self.elements.append(e)

@@ -664,12 +664,11 @@ class OutputHandler(object):
             diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay, scale=elLoadScaleF, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
             maxAbs= diagram.autoScale(preprocessor)
             if(maxAbs>0.0):
-                #Linear loads
+                # Linear loads
                 diagram.addDiagram(preprocessor)
                 if(diagram.rangeIsValid()):
-                    displaySettings.appendDiagram(diagram, orientScbar=scOrient,
-                                                  titleScbar='Linear loads ('+self.getOutputForceUnitSym()+'/'+
-                                                  self.getOutputLengthUnitSym()+')' )
+                    titleScBar= 'Linear loads ('+self.getOutputForceUnitSym()+'/'+ self.getOutputLengthUnitSym()+')'
+                    displaySettings.appendDiagram(diagram, orientScbar=scOrient, titleScbar= titleScBar)
                     scOrient+=1
 
             vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.

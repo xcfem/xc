@@ -105,24 +105,25 @@ class LinearLoadDiagram(cd.ColoredDiagram):
             self.dictActLoadVectors=self.sumElementalUniformLoads(actLP)
         valueCouples= list()
         elements= list()
+        directions= list()
         if(self.component=='axialComponent'):
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
-                self.vDir= elem.getJVector3d(True)
+                directions.append(elem.getJVector3d(True))
                 axialLoad=self.dictActLoadVectors[eTag].x
                 elements.append(elem)
                 valueCouples.append((axialLoad, axialLoad))      
         elif(self.component in ['transComponent','transYComponent']):  # transComponent only for 2D models
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
-                self.vDir= elem.getJVector3d(True)
+                directions.append(elem.getJVector3d(True))
                 transLoad=self.dictActLoadVectors[eTag].y
                 elements.append(elem)
                 valueCouples.append((transLoad,transLoad))
         elif(self.component=='transZComponent'):  
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
-                self.vDir= elem.getKVector3d(True)
+                directions.append(elem.getKVector3d(True))
                 transZLoad=self.dictActLoadVectors[eTag].z
                 elements.append(elem)
                 valueCouples.append((transZLoad,transZLoad))
@@ -134,14 +135,14 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 vK= elem.getKVector3d(True)
                 localForce= self.dictActLoadVectors[eTag]
                 v= localForce.x*vI+localForce.y*vJ+localForce.z*vK
-                self.vDir= v.normalized()
+                directions.append(v.normalized())
                 totLoad= v.getModulus()
                 elements.append(elem)
                 valueCouples.append((totLoad, totLoad))
         else:
             lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
         if(valueCouples):
-            diagramIndex= self.appendDataToDiagram(elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples, defFScale= defFScale)      
+            diagramIndex= self.appendDataToDiagram(elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples, directions= directions, defFScale= defFScale)      
         return diagramIndex
  
     def getMaxAbsComp(self, preprocessor):

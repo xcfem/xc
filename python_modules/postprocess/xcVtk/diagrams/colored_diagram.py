@@ -32,7 +32,6 @@ class ColoredDiagram(vtk_lut_field.LUTField):
                          those greater than vmax in red (defaults to None)
         '''
         super(ColoredDiagram,self).__init__(fUnitConv)
-        self.vDir= [0,0,1]
         self.scaleFactor= scaleFactor
         self.diagram= None
         self.points= None
@@ -185,13 +184,13 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       self.actor= vtk.vtkActor() 
       self.actor.SetMapper(self.mapper)
 
-    def addDiagramToScene(self, recordDisplay,orientation=1,title=None):
+    def addDiagramToScene(self, recordDisplay, orientation=1, title=None):
       ''' Adds the diagram to de scene'''
       recordDisplay.renderer.AddActor(self.actor)
-      self.creaColorScaleBar(orientation,title)
+      self.creaColorScaleBar(orientation, title)
       recordDisplay.renderer.AddActor2D(self.scalarBar)
 
-    def appendDataToDiagram(self, elements, diagramIndex, valueCouples, defFScale=0.0):
+    def appendDataToDiagram(self, elements, diagramIndex, valueCouples, directions, defFScale=0.0):
         ''' Appends to the diagram the values being passed as parameter.
 
                        ___----* value2
@@ -204,16 +203,17 @@ class ColoredDiagram(vtk_lut_field.LUTField):
            :param diagramIndex: index-counter for the values to insert.
            :param valueCouples: (vStart, vEnd) couple of values at the start node
                                 and the end node of the element.
+           :param directions: direction of the diagram on each element.
            :param defFScale: factor to apply to current displacement of nodes 
                       so that the display position of each node equals to
                       the initial position plus its displacement multiplied
                       by this factor. (Defaults to 0.0, i.e. display of 
                       initial/undeformed shape)
         '''
-        for elem, (v0, v1) in zip(elements, valueCouples):
+        for elem, (v0, v1), direction in zip(elements, valueCouples, directions):
             posNode0= elem.getNodes[0].getCurrentPos3d(defFScale)
             posNode1= elem.getNodes[1].getCurrentPos3d(defFScale)
-            diagramIndex= self.createDiagramInterval(offset= diagramIndex, org= posNode0, valOrg= v0, dest= posNode1, valDest= v1, dirVector= self.vDir)
+            diagramIndex= self.createDiagramInterval(offset= diagramIndex, org= posNode0, valOrg= v0, dest= posNode1, valDest= v1, dirVector= direction)
         if(self.rgMinMax):
             lmsg.warning('Displayed values have been clipped whitin the range: ('+str(self.rgMinMax[0])+', '+str(self.rgMinMax[1])+") so they don't correspond to the computed ones.")
         return diagramIndex
