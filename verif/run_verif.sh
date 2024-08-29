@@ -472,6 +472,7 @@ echo "$BLEU" "  Plane elasticity elements tests." "$NORMAL"
 python tests/elements/plane/test_tri31.py
 python tests/elements/plane/test_four_node_quad_01.py
 python tests/elements/plane/test_four_node_quad_02.py
+python tests/elements/plane/test_four_node_quad_03.py
 python tests/elements/plane/test_maximum_corner_angle.py
 python tests/elements/plane/test_extrapolate_values_quad_01.py
 python tests/elements/plane/test_extrapolate_values_quad_02.py

@@ -19,17 +19,18 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
+# Material properties.
 E= 30e6 # Young modulus (psi)
 nu= 0.3 # Poisson's ratio
 rho= 0.0 # Density
 
 # Problem type
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
+# Define mesh. 
 ## Define nodes.
 n1= nodes.newNodeIDXY(1,0,0)
 n2= nodes.newNodeIDXY(2,2,0)
