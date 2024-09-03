@@ -15,3 +15,4 @@ Two dimensional elements to be used in 2D (plane strain or plane stress problems
 - [Nine Four Node Quad u-p Element](https://opensees.berkeley.edu/wiki/index.php/Nine_Four_Node_Quad_u-p_Element)
 - [Unrolling the Four Node Quad](https://portwooddigital.com/2022/09/11/unrolling-the-four-node-quad/)
 - [The Three Node Quad](https://portwooddigital.com/2023/08/20/the-three-node-quad/)
+- [Murum, cura te ipsum](https://portwooddigital.com/2024/09/02/murum-cura-te-ipsum/)
