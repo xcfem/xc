@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' home made test
-    vector3d_uniform_load_global function verification.'''
+    SlidingVectorLoad class verification (3D structural mechanics).'''
 
 from __future__ import print_function
 
