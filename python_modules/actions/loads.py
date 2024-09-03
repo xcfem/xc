@@ -758,37 +758,60 @@ class SlidingVectorLoad(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append the loads to the current load pattern.'''
         retval= list()
-        if(len(self.loadedNodes)>0):
-            n0= self.loadedNodes[0]
+        nodeList= self.loadedNodes
+        if(len(nodeList)>0):
+            n0= nodeList[0]
             numDOFs= n0.getNumberDOF
+            dimSpace= n0.dim
             if(numDOFs==6):
                 O=geom.Pos3d(self.pntCoord[0],self.pntCoord[1],self.pntCoord[2])
                 force=geom.Vector3d(self.loadVector[0],self.loadVector[1],self.loadVector[2])
                 moment=geom.Vector3d(self.loadVector[3],self.loadVector[4],self.loadVector[5])
                 loadSVS= geom.SlidingVectorsSystem3d(O,force,moment)
                 ptList= list()
-                nodeList= self.loadedNodes
-                if len(self.loadedNodes)>0:
-                    for n in self.loadedNodes:
-                        ptList.append(n.getInitialPos3d)
-                    loadVectors= loadSVS.distribute(ptList)
-                    for n, v in zip(nodeList,loadVectors):
-                        f= v.getVector3d()
-                        retval.append(n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0])))
+                for n in nodeList:
+                    ptList.append(n.getInitialPos3d)
+                loadVectors= loadSVS.distribute(ptList)
+                for n, v in zip(nodeList,loadVectors):
+                    f= v.getVector3d()
+                    retval.append(n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0])))
             elif(numDOFs==3):
-                O=geom.Pos2d(self.pntCoord[0],self.pntCoord[1])
-                force= geom.Vector2d(self.loadVector[0],self.loadVector[1])
-                moment= self.loadVector[2]
-                loadSVS= geom.SlidingVectorsSystem2d(O,force,moment)
-                ptList= list()
-                nodeList= self.loadedNodes
-                if len(self.loadedNodes)>0:
-                    for n in self.loadedNodes:
+                if(dimSpace==2):
+                    O= geom.Pos2d(self.pntCoord[0],self.pntCoord[1])
+                    force= geom.Vector2d(self.loadVector[0],self.loadVector[1])
+                    moment= self.loadVector[2]
+                    loadSVS= geom.SlidingVectorsSystem2d(O,force,moment)
+                    ptList= list()
+                    for n in nodeList:
                         ptList.append(n.getInitialPos2d)
                     loadVectors= loadSVS.distribute(ptList)
                     for n, v in zip(nodeList,loadVectors):
                         f= v.getVector2d()
                         retval.append(n.newLoad(xc.Vector([f.x,f.y,0.0])))
+                else:
+                    O= geom.Pos3d(self.pntCoord[0],self.pntCoord[1],self.pntCoord[2])
+                    force= geom.Vector3d(self.loadVector[0],self.loadVector[1],self.loadVector[2])
+                    moment= geom.Vector3d(0.0, 0.0, 0.0)
+                    loadSVS= geom.SlidingVectorsSystem3d(O,force,moment)
+                    ptList= list()
+                    for n in nodeList:
+                        ptList.append(n.getInitialPos3d)
+                    loadVectors= loadSVS.distribute(ptList)
+                    for n, v in zip(nodeList, loadVectors):
+                        f= v.getVector3d()
+                        retval.append(n.newLoad(xc.Vector([f.x,f.y, f.z])))
+            elif(numDOFs==2):
+                O= geom.Pos2d(self.pntCoord[0],self.pntCoord[1])
+                force= geom.Vector2d(self.loadVector[0],self.loadVector[1])
+                moment= 0.0
+                loadSVS= geom.SlidingVectorsSystem2d(O,force,moment)
+                ptList= list()
+                for n in nodeList:
+                    ptList.append(n.getInitialPos2d)
+                loadVectors= loadSVS.distribute(ptList)
+                for n, v in zip(nodeList, loadVectors):
+                    f= v.getVector2d()
+                    retval.append(n.newLoad(xc.Vector([f.x,f.y])))
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name

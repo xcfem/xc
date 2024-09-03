@@ -926,6 +926,8 @@ python tests/loads/concentrated_loads/test_vector3d_point_load_global_03.py
 echo "$BLEU" "    Load distribution." "$NORMAL"
 python tests/loads/load_distribution/test_sliding_vector_load_01.py
 python tests/loads/load_distribution/test_sliding_vector_load_02.py
+python tests/loads/load_distribution/test_sliding_vector_load_03.py
+python tests/loads/load_distribution/test_sliding_vector_load_04.py
 python tests/loads/load_distribution/test_surf_unif_load_distributed.py
 python tests/loads/load_distribution/test_wheel_load_distribution_01.py
 python tests/loads/load_distribution/test_notional_lane_load_distribution.py
