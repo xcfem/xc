@@ -23,10 +23,11 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 ## Problem geometry
 l= 10
+### k-points.
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0,0,0))
 pt2= points.newPoint(geom.Pos3d(l,0,0))
-
+### lines
 lines= preprocessor.getMultiBlockTopology.getLines
 ln= lines.newLine(pt1.tag,pt2.tag)
 ln.nDiv= 15 # Number of elements along the line.
@@ -80,3 +81,8 @@ if(error<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
