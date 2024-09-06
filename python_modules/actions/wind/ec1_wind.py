@@ -123,7 +123,8 @@ def get_peak_velocity_pressure(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.2
     
 def get_rectangular_wall_peak_velocity_pressure_distribution(b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, factor= 1.0):
     ''' Return the peak velocity pressure distribution of a rectangular wall
-        according to figure 7.4 of EN 1991-1-4:2005.
+        of a rectangular plan building according to figure 7.4 of 
+        EN 1991-1-4:2005.
 
     :param b: wall width.
     :param h: wall height.
@@ -545,3 +546,103 @@ def get_spanish_annex_long_wind_reduction_factor(terrainCategory:str, z:float, L
     phi= get_phi_long_wind_reduction_factor(terrainCategory= terrainCategory, z= z, L= L, zt= zt, Lt= Lt)
     retval= 1-7/denom*phi
     return retval
+
+# Values from the table 7.9 of EN 1991-1-4:2005.
+fsw_l_h= [3.0, 5.0, 10.0]
+fsw_cpnet_a= scipy.interpolate.interp1d(fsw_l_h, [2.3, 2.9, 3.4], kind='linear')
+fsw_cpnet_b= scipy.interpolate.interp1d(fsw_l_h, [1.4, 1.8, 2.1], kind='linear')
+fsw_cpnet_c= scipy.interpolate.interp1d(fsw_l_h, [1.2, 1.4, 1.7], kind='linear')
+# fsw_cpnet_d= [1.2, 1.2, 1.2] no need to interpolate.
+
+def get_free_standing_wall_abcd_cp(length:float, height:float, returnCornersLength= 0.0, solidityRatio= 1.0):
+    ''' Compute the value of the pressure coefficients $c_{p,net}$ for 
+        free-standing walls and parapets according to table 7.9 of 
+        clause 7.4.1 of EN 1991-1-4:2005. 
+
+    :param length: length of the free-standing wall.
+    :param height: height of the free-standing wall.
+    :param returnCornersLength: length of the return corner (see figure 7.19).
+    :param solidityRatio: solidity ratio.
+    '''
+    # Compute values of c_p,net for zones A, B, C and D
+    abcd= 4*[1.2]
+    l_h= length/height
+    if(solidityRatio==1.0):
+        if(returnCornersLength>=height):
+            abcd= [2.1, 1.8, 1.4, 1.2]
+        else:
+            factor= (1.0-returnCornersLength/height)
+            a= factor*float(fsw_cpnet_a(l_h))
+            b= factor*float(fsw_cpnet_b(l_h))
+            c= factor*float(fsw_cpnet_c(l_h))
+            d= factor*1.2
+            if(returnCornersLength==0.0):
+                abcd= [a, b, c, d]
+    elif(solidityRatio==0.8):
+        abcd= 4*[1.2]
+    else:
+        if(solidityRatio<0.8):
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; value of solidity ratio phi= '+str(phi)+' out of range [0.8, 1.0].')
+        else: # 0.8 < solidityRatio < 1.0
+            abcd1= get_free_standing_wall_abcd_cp(length= length, height= height, returnCornersLength= returnCornersLength, solidityRatio= 1.0)
+            abcd= list()
+            for v in abcd1:
+                abcd.append((v-1.2)/0.2*(solidityRatio-0.8)+1.2)
+    return abcd
+                
+def get_free_standing_wall_pressure_coefficients(length:float, height:float, returnCornersLength= 0.0, solidityRatio= 1.0):
+    ''' Compute the value of the pressure coefficients $c_{p,net}$ for 
+        free-standing walls and parapets according to clause 7.4.1 
+        of EN 1991-1-4:2005. 
+
+    :param length: length of the free-standing wall.
+    :param height: height of the free-standing wall.
+    :param returnCornersLength: length of the return corner (see figure 7.19).
+    :param solidityRatio: solidity ratio.
+    '''
+    # Compute values of c_p,net for zones A, B, C and D
+    abcd= get_free_standing_wall_abcd_cp(length= length, height= height, returnCornersLength= returnCornersLength, solidityRatio= solidityRatio)
+    # Compute interpolation function
+    l_h= length/height
+    dx= .01/2.0
+    xi= [0.0, 0.3*height-dx, .3*height+dx, 2*height-dx, 2*height+dx, 4*height-dx, 4*height+dx, length]
+    cp_i= [abcd[0], abcd[0], abcd[1], abcd[1], abcd[2], abcd[2], abcd[3], abcd[3]]
+    if(l_h<=4.0):
+        cp_i[7]= 0.0
+        cp_i[6]= 0.0
+    elif(l_h<=2.0):
+        cp_i[5]= 0.0
+        cp_i[4]= 0.0
+    elif(l_h<=0.3):
+        cp_i[3]= 0.0
+        cp_i[2]= 0.0
+    return xi, cp_i
+    
+def get_free_standing_wall_net_pressure_distribution(terrainCategory:str, vb:float, length:float, height:float, hBase:float, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, returnCornersLength= 0.0, solidityRatio= 1.0):
+    ''' Compute the net pressure distribution for free-standing walls and 
+        parapets according to clause 7.4.1 of EN 1991-1-4:2005.
+        The net pressure corresponds to the overall wind effect on the 
+        front face and the back face of the wall.
+
+    :param terrainCategory: terrain category.
+    :param vb: basic wind velocity.
+    :param length: length of the free-standing wall.
+    :param height: height of the free-standing wall.
+    :param hBase: height of wall base above ground.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: air density.
+    :param k1: turbulence factor.
+    :param c0: orography factor.
+    :param returnCornersLength: length of the return corner (see figure 7.19).
+    :param solidityRatio: solidity ratio.
+    '''
+    # Compute peak velocity pressure.
+    qp= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= hBase+height, zMax= zMax, rho= rho, k1= k1, c0= c0)
+
+    # Compute values of c_p,net for zones A, B, C and D
+    xi, cp_i= get_free_standing_wall_pressure_coefficients(length= length, height= height, returnCornersLength= returnCornersLength, solidityRatio= solidityRatio)
+    wnet_i= list()
+    for cp in cp_i:
+        wnet_i.append(cp*qp)
+    return scipy.interpolate.interp1d(xi, wnet_i, kind='linear')
