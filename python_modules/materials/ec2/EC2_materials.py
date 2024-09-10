@@ -949,6 +949,46 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
             retval*= math.exp(b*mu)*math.pow(t/1000, 0.75*(1-mu))*1e-5
             retval*= sigma_pi
         return retval
+
+    def getUltimateBondStress(self, concrete, bondConditionsCoeff= 0.7, tendonTypeCoeff= 1.2):
+        ''' Return the bond strength for anchorage according to expression
+            (8.20) of to clause 8.10.2.3(2) of EN 1992-1-1:2004.
+
+        :param concrete: concrete material.
+        :param tendonTypeCoeff: coefficient that takes into account the type 
+                                of tendon and the bond situation at anchorage
+                                (1.4 for indented wires and 1.2 for 7-wire
+                                strands.
+        :param bondConditionsCoeff: 1.0 for good bond conditions (see 8.4.2)
+                                    0.7 otherwise.
+        '''
+        return bondConditionsCoeff*tendonTypeCoeff*concrete.fctd()
+    
+    def getAnchorageLength(self, transmissionLength, concrete, tendonDiameter, sigma_pd, sigma_pminf, bondConditionsCoeff= 0.7, tendonTypeCoeff= 1.2, alpha2= 0.25):
+        ''' Return the bond strength for anchorage according to expression
+            (8.20) of to clause 8.10.2.3(2) of EN 1992-1-1:2004.
+
+        :param transmisionLength: upper design value of transmission length, 
+                                  see 8.10.2.2 (3).
+        :param concrete: concrete material.
+        :param tendonDiameter: diameter of the tendon.
+        :param sigma_pd: tendon stress corresponding to the force described in
+                         paragraph (1) of clause 8.10.2.3.
+        :param sigma_pminf: prestress after all losses.
+        :param tendonTypeCoeff: coefficient that takes into account the type 
+                                of tendon and the bond situation at anchorage
+                                (1.4 for indented wires and 1.2 for 7-wire
+                                strands.
+        :param bondConditionsCoeff: 1.0 for good bond conditions (see 8.4.2)
+                                    0.7 otherwise.
+        :param alpha2: 0.25 for tendons with circular corss section, and 0.19
+                       for 3 and 7-wire strands.
+        '''
+        fbpd= self.getUltimateBondStress(concrete= concrete, bondConditionsCoeff= bondConditionsCoeff, tendonTypeCoeff= tendonTypeCoeff)
+        return transmissionLength+alpha2*tendonDiameter*(sigma_pd-sigma_pminf)/fbpd
+        
+
+    
         
         
 # Prestressing steel.
