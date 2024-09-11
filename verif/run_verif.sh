@@ -1354,7 +1354,8 @@ python tests/materials/ec2/test_anchorage_length_01.py
 python tests/materials/ec2/test_EC2_max_min_reinforcement_area_01.py
 python tests/materials/ec2/test_EC2_max_min_reinforcement_area_02.py
 python tests/materials/ec2/test_lap_length_01.py
-python tests/materials/ec2/test_EC2Concrete.py
+python tests/materials/ec2/test_ec2_concrete_01.py
+python tests/materials/ec2/test_ec2_concrete_02.py
 echo "$BLEU" "    EC2 misc. shrinkage and creep tests." "$NORMAL"
 python tests/materials/ec2/test_EC2_creep_01.py
 python tests/materials/ec2/test_EC2_creep_02.py
