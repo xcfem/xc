@@ -515,6 +515,10 @@ python tests/elements/shell/test_tributary_area_01.py
 python tests/elements/shell/test_shell_mitc4_natural_coordinates_01.py
 python tests/elements/shell/test_transform_internal_forces.py
 python tests/elements/shell/test_gauss_points_cartesian_coordinates.py
+python tests/elements/shell/test_punching_shear_maximum_value_01.py
+python tests/elements/shell/test_punching_shear_maximum_value_02.py
+python tests/elements/shell/test_punching_shear_maximum_value_03.py
+python tests/elements/shell/test_punching_shear_maximum_value_04.py
 
 echo "$BLEU" "  Solid elements tests." "$NORMAL"
 python tests/elements/volume/test_brick_00.py
