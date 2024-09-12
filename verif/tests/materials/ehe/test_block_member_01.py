@@ -6,7 +6,7 @@
 from __future__ import division
 from __future__ import print_function
 
-__author__= "Ana Ortega (AO_O) Luis Claudio Pérez Tato (LCPT"
+__author__= "Ana Ortega (AO_O) Luis Claudio Pérez Tato (LCPT)"
 __copyright__= "Copyright 2024, AO_O LCPT"
 __license__= "GPL"
 __version__= "3.0"
@@ -23,7 +23,7 @@ steel= EHE_materials.B500S
 # Load
 Nd= 750e3
 
-# Block member.
+# Block member (see figure 61.1.a of EHE-08) .
 block= EHE_limit_state_checking.BlockMember(a= 0.25, a1= 0.15, b= 0.25, b1= 0.15, concrete= concrete, steel= steel)
 
 # Compute maximum compressive strength (clause 61.2).
