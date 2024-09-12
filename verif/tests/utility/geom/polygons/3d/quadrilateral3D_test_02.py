@@ -74,7 +74,7 @@ else:
 # from pathlib import Path
 # doc= ezdxf.new("R2000")
 # msp= doc.modelspace()
-# def getPoints(vertices):
+# def get_points(vertices):
 #     retval= list()
 #     for p in vertices:
 #         retval.append((p.x, p.y, 0.0))
@@ -82,8 +82,8 @@ else:
 #     retval.append((p.x, p.y, 0.0))
 #     return retval
 
-# # Write notional lane contour.
-# points= getPoints(quadCorners)
+# # Write contour.
+# points= get_points(quadCorners)
 # msp.add_polyline3d(points)
 # doc.saveas(Path(fname).stem+".dxf")
 
