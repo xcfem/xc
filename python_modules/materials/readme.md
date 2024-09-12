@@ -5,6 +5,7 @@ Python modules that make easier to define materials as defined in structural cod
 ## References
  - [Nonlinear Sections, Elastic Elements](https://portwooddigital.com/2022/07/24/nonlinear-sections-elastic-elements/)
  - [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant)
+ - [Multi-Linear Parallel](https://portwooddigital.com/2024/09/08/multi-linear-parallel/)
 
 ### Steel
 - [Eurocode 3](https://eurocodes.jrc.ec.europa.eu/showpage.php?id=133)
