@@ -92,6 +92,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getTributaryArea",make_function(&XC::Node::getTributary,return_value_policy<copy_const_reference>()))
   .def("getTributaryLength",make_function(&XC::Node::getTributary,return_value_policy<copy_const_reference>()))
   .def("getTributaryVolume",make_function(&XC::Node::getTributary,return_value_policy<copy_const_reference>()))
+  .def("getUnbalancedLoad", make_function(&XC::Node::getUnbalancedLoad,return_value_policy<copy_const_reference>()), "Return the unbalanced load for the node.")     
+  .def("getUnbalancedLoadIncInertia", make_function(&XC::Node::getUnbalancedLoadIncInertia,return_value_policy<copy_const_reference>()), "Return the unbalanced load for the node including inertia effects.")
   .def("getResistingForce",make_function(&XC::Node::getResistingForce,return_value_policy<copy_const_reference>()))
   .def("getResistingSlidingVectorsSystem3d",&XC::Node::getResistingSlidingVectorsSystem3d)
 
