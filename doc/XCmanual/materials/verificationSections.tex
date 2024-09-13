@@ -140,32 +140,12 @@ C_1= \frac{\sqrt{\sqrt{k} A_1+[\frac{(1-\sqrt{k})}{2} A_2]^2}+\frac{(1-\sqrt{k})
 \end{figure}
 
 \section{Check routines for reinforced concrete}
-\subsection{Verification of RC shell sections}
+
+\subsection{Verification of RC sections}
+
 \subsubsection{Sections definition}
-\paragraph{hormigonesEHE}
-\begin{verbatim}
-from materials.ehe import hormigonesEHE
-\end{verbatim}
-
-\paragraph{EHE\_reinforcing\_steel}
-\begin{verbatim}
-from materials.ehe import EHE_reinforcing_steel
-\end{verbatim}
-
-\paragraph{RecordRCSlabSection}
-\begin{verbatim}
-from materials.fiber_section import.defRCSimpleSection
-\end{verbatim}
 
 
-\subsubsection{Types of calculation}
-\paragraph{defInteractionDiagram}
-
-\paragraph{simple\_static\_linear}
-\begin{verbatim}
-from solution import predefined_solutions
-predefined_solutions.simple_static_linear
-\end{verbatim}
 
 \subsubsection{Limit State at Failure under normal stresses verification}
 
@@ -291,22 +271,9 @@ procesResultVerifFIS)
 \procesResultVerifFIS{} \\
 \end{paramFuncTable}
 
-%\subsubsection{defMaterialesK}
-%\noindent This function sets up the sections definition to be used for the verifications relating to Cracking Limit State. Characteristic values are used to define the properties of the materials (concrete, reinforcing steel) that make up the section.
-%\begin{verbatim}
-%from materials import xLamina
-%xLamina.defMateriales.defMaterialesK(preprocessor,path, nmbScc1, nmbScc2)
-%\end{verbatim}
-%\begin{paramFuncTable}
-%\preprocessor{} \\
-%{\tt defSecc} &   name identifying the class object used to define the properties of the section.\\
-%\end{paramFuncTable}
-
-
-
-
-
-
 
 \subsection{Verification of beam sections}
 
+\subsection{Punching shear calculation}
+
+\subsubsection{Punching shear calculation according to EC2}
