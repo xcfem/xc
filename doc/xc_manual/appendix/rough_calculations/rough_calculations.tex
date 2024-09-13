@@ -1,5 +1,7 @@
 \chapter{Rough calculations}
-\section{Punching shear} 
+One way to verify the results of your finite element analysis is to compare them with analytical solutions when available. Sometimes there is no analytical solution for the problem at hand, but you can use some approximation that can give us a clue about the accuracy of your analysis. This chapter describes the routines in the \href{https://github.com/xcfem/xc/tree/master/python_modules/rough_calculations}{\tt rough\_calculations} package, that are written for that purpose. 
+
+\section{Punching shear}
 \begin{verbatim}
 import rough_calculations.ng_punzonamiento as punch
 \end{verbatim}
@@ -57,7 +59,7 @@ b & distance from the right end of the beam \\
 \end{paramFuncTable}
 
 \clearpage
-\includepdf[pages={1-2}]{rough_calculations/figures/beam_formulas.pdf}
+\includepdf[pages={1-2}]{appendix/rough_calculations/figures/beam_formulas.pdf}
 
 \section{Masonry bridge}
 Functions for the assessment of a masonry arch bridge by means of a deterministic analytical method.
