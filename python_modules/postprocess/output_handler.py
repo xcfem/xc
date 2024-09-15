@@ -76,12 +76,13 @@ class OutputHandler(object):
         '''
         self.outputStyle.cameraParameters= cameraParameters
         
-    def displayBlocks(self, setToDisplay= None, caption= None, fileName=None):
+    def displayBlocks(self, setToDisplay= None, caption= None, displayLocalAxes= True, fileName=None):
         '''Display the blocks (points, lines, surfaces and volumes)
            of the set.
 
            :param setToDisplay: set to display.
            :param caption: title of the graphic.
+           :param displayLocalAxes: if true, show also local axes of entities.
            :param fileName: name of the file to plot the graphic. Defaults to 
                        None, in that case an screen display is generated
         '''
@@ -91,7 +92,7 @@ class OutputHandler(object):
             caption= setToDisplay.name+' set; blocks'
         displaySettings= vtk_CAD_graphic.DisplaySettingsBlockTopo()
         displaySettings.cameraParameters= self.getCameraParameters()
-        displaySettings.displayBlocks(setToDisplay,caption= caption, fileName= fileName)
+        displaySettings.displayBlocks(setToDisplay= setToDisplay, displayLocalAxes= displayLocalAxes, caption= caption, fileName= fileName)
         
     def displayFEMesh(self, setsToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Display the mesh (nodes, elements and constraints)

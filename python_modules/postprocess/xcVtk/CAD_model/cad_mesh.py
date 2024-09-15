@@ -16,7 +16,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es  ana.Ortega@ciccp.es"
 
 
-def VtkDefineActorKPoint(recordGrid, renderer, radius):
+def vtk_define_kpoint_actor(recordGrid, renderer, radius):
     '''Returns a vtkActor to represent key-points in a rendering scene.
     It defines the scale, orientation, rendering properties, textures, ...
 
@@ -47,22 +47,27 @@ def VtkDefineActorKPoint(recordGrid, renderer, radius):
 
     renderer.AddActor(visKPts)
 
-def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
-    ''' Actor for the surfaces.'''
+def vtk_define_cells_actor(gridRecord, renderer, reprType):
+    ''' Actor for lines and surfaces.
+
+    :param gridRecord: 
+    :param rendered: VTK renderer.
+    :param reprType: representation type (points, wireframe or surface).
+    '''
     uGridMapper= vtk.vtkDataSetMapper()
-    uGridMapper.SetInputData(recordGrid.uGrid)
+    uGridMapper.SetInputData(gridRecord.uGrid)
     cellActor= vtk.vtkActor()
     cellActor.SetMapper(uGridMapper)
     cellActor.GetProperty().SetColor(1,1,0)
-    if (tipoRepr=="points"):
+    if (reprType=="points"):
         cellActor.GetProperty().SetRepresentationToPoints()
-    elif(tipoRepr== "wireframe"):
+    elif(reprType== "wireframe"):
         cellActor.GetProperty().SetRepresentationToWireframe()
-    elif(tipoRepr== "surface"):
+    elif(reprType== "surface"):
         cellActor.GetProperty().SetRepresentationToSurface()
     else:
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(methodName+"; error: "+tipoRepr+" not implemented.")
+        lmsg.error(methodName+"; error: "+reprType+" not implemented.")
     renderer.AddActor(cellActor) # Actor para las celdas
 
 def VtkCargaIdsKPts(uGrid, setToDraw):
@@ -132,11 +137,11 @@ def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
 
     renderer.AddActor2D(cellLabels)
 
-def vtk_load_mesh_data(recordGrid):
+def vtk_load_mesh_data(gridRecord):
     kpoints= vtk.vtkPoints()
     # Grid definition
-    recordGrid.uGrid.SetPoints(kpoints)
-    setToDraw= recordGrid.xcSet
+    gridRecord.uGrid.SetPoints(kpoints)
+    setToDraw= gridRecord.xcSet
     setToDraw.numerate()
     pnts= setToDraw.getPoints
     kpoints.SetDataTypeToDouble()
@@ -145,16 +150,16 @@ def vtk_load_mesh_data(recordGrid):
     for p in pnts:
         kpoints.InsertPoint(p.getIdx,p.getPos.x,p.getPos.y,p.getPos.z)
     cellSet= setToDraw.getLines # cells are lines by default.
-    if(recordGrid.cellType=="faces"):
+    if(gridRecord.cellType=="faces"):
         cellSet= setToDraw.getSurfaces
-    elif (recordGrid.cellType=="bodies"):
+    elif (gridRecord.cellType=="bodies"):
         cellSet= setToDraw.getBodies
     for c in cellSet:
         vertices= xc_base.vector_int_to_py_list(c.getIdxVertices)
         vtx= vtk.vtkIdList()
         for vIndex in vertices:
             vtx.InsertNextId(vIndex)
-        recordGrid.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+        gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
 
 

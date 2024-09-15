@@ -55,8 +55,8 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
             cad_mesh.vtk_load_mesh_data(self.gridRecord)
             self.renderer= vtk.vtkRenderer()
             self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-            cad_mesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
-            cad_mesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
+            cad_mesh.vtk_define_kpoint_actor(self.gridRecord,self.renderer,0.02)
+            cad_mesh.vtk_define_cells_actor(gridRecord= self.gridRecord, renderer= self.renderer, reprType= "wireframe")
             self.renderer.ResetCamera()
             return True
         else:
