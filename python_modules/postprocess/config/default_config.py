@@ -19,6 +19,7 @@ from postprocess import output_styles
 from postprocess import limit_state_data as lsd
 from postprocess.config import file_names as fn
 from misc_utils import log_messages as lmsg
+from misc_utils import compat
 
 def findDirectoryUpwards(fNameMark: str):
     '''Search upwards to find the directory where the file
@@ -267,7 +268,10 @@ class ProjectDirTree(object):
         retval= self.workingDirectory+'/'+self.reportPath
         rltvTextReportPath= self.getRltvTextReportPath()
         if(rltvTextReportPath.startswith(self.reportPath)): # There is some bug here.
-            rltvTextReportPath= rltvTextReportPath.removeprefix(self.reportPath)
+            if sys.version_info < (3,9):
+                rltvTextReportPath= compat.removeprefix(rltvTextReportPath, self.reportPath)
+            else:
+                rltvTextReportPath= rltvTextReportPath.removeprefix(self.reportPath)
             retval+= rltvTextReportPath # Don't repeat the same directory.
         return retval
 

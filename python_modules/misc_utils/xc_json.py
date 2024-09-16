@@ -17,6 +17,7 @@ import xc
 import importlib
 import inspect
 from misc_utils import log_messages as lmsg
+from misc_utils import compat
 
 def fully_qualified_classname(obj):
     ''' Return the fullyqualified class name of a python object
@@ -142,7 +143,10 @@ class XCJSONDecoder(json.JSONDecoder):
             retval= self.broke_xc_object(fullyQualifiedClassName= fullyQualifiedClassName, tag= tag, name= name, dct= dct)
         else:
             className= fullyQualifiedClassName.split('.')[-1]
-            moduleName= fullyQualifiedClassName.removesuffix('.'+className)
+            if sys.version_info < (3,9):
+                moduleName= compat.removesuffix(fullyQualifiedClassName,'.'+className)
+            else:
+                moduleName= fullyQualifiedClassName.removesuffix('.'+className)
             importedClass= getattr(importlib.import_module(moduleName), className)
             retval= importedClass.newFromDict(dct)
         self.objectDict[objId]= retval # for future reference.

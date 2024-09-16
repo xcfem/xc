@@ -12,6 +12,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 import xc
 import math
 from collections import deque
+from misc_utils import compat
 
 # Refinement templates.
 
@@ -412,7 +413,10 @@ def create_new_elements(modelSpace, refinedMesh, nodeSubstitutions):
             tmp= deque(nodeTags)
             tmp.rotate(nodeListRotation)
             nodeTags = list(tmp)
-        elementType= fromElement.tipo().removeprefix('XC::')
+        if sys.version_info < (3,9):
+            elementType= compat.removeprefix(fromElement.tipo(), 'XC::')
+        else:
+            elementType= fromElement.tipo().removeprefix('XC::')
         newElement= modelSpace.newElement(elementType, nodeTags)
         # Transfer material.
         newElement.copyMaterialFrom(fromElement, True)
