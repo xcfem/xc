@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Example 6.3 from EC2 Worked Examples (rev A 31-03-2017)'''
+''' Check calculation of punching shear resistance according to clause 6.4.4 
+of Eurocode 2.
+
+Example based on the results obtained using: 
+https://eurocodeapplied.com/design/en1992/punching-shear-rectangular-internal-column
+'''
 
 from __future__ import print_function
 from __future__ import division
