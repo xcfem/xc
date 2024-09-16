@@ -1388,6 +1388,9 @@ python tests/materials/ec2/test_EC2_shear_03.py
 python tests/materials/ec2/test_EC2_shear_04.py
 python tests/materials/ec2/test_EC2_shear_05.py
 python tests/materials/ec2/test_EC2_shear_between_web_and_flanges_01.py
+echo "$BLEU" "    EC2 punching shear resistance determination tests." "$NORMAL"
+python tests/materials/ec2/test_ec2_punching_shear_01.py
+
 echo "$BLEU" "    EC2 prestressing." "$NORMAL"
 python tests/materials/ec2/test_ec2_prestressing_01.py
 python tests/materials/ec2/test_ec2_prestressing_02.py

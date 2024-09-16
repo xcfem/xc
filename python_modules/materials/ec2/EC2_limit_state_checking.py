@@ -1713,3 +1713,98 @@ class Ec2InPlaneStressController(lscb.LimitStateControllerBase):
                     cv= self.ControlVars(combName= stresses.idComb, CF= CFtmp, sigma_11= sigma_11, sigma_12= sigma_12, sigma_22= sigma_22, ftd1_req= ftd1_req, ftd2_req= ftd2_req, sigma_c_req= sigma_c_req, ftd1_cf= ftd1_cf, ftd2_cf= ftd2_cf, sigma_c_cf= sigma_c_cf)
                     elem.setProp(self.limitStateLabel, cv)
 
+def get_punching_shear_C_Rd_c(concrete, u0= 0.0, dy= 0.0, dz= 0.0, isFoundation= False, nationalAnnex= None):
+    ''' Return the value of C_RDc according to clause 6.4.4(1) of of EC2:2004.
+
+    :param concrete: concrete material.
+    :param isFoundation: if true return the value corresponding to 
+                       floor slabs/foundations.
+    :param u0: length of the punching shear critical perimeter.
+    :param dy: effective depth of the cross-section in y direction.
+    :param dz: effective depth of the cross-section in z direction.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    retval= 0.18/concrete.gmmC
+    if(nationalAnnex=='UK' and isFoundation):
+        retval= 0.15/concrete.gmmC
+    elif(nationalAnnex=='Germany'):
+        if(isFoundation):
+            retval= 0.15/concrete.gmmC
+        else:
+            d= (dy+dz)/2.0 # effective depth.
+            retval*= (0.1 *u0/d+0.6)
+    return retval
+
+def get_punching_v_min(concrete, dy= 0.0, dz= 0.0, isFoundation= False, nationalAnnex= None):
+    ''' Return the value of C_RDc according to clause 6.4.4(1) of of EC2:2004.
+
+    :param concrete: concrete material.
+    :param dy: effective depth of the cross-section in y direction.
+    :param dz: effective depth of the cross-section in z direction.
+    :param isFoundation: if true return the value corresponding to 
+                       floor slabs/foundations.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    d= (dy+dz)/2.0 # effective depth.
+    k= min(1+math.sqrt(0.2/d), 2.0)
+    fckMPa= -concrete.fck/1e6
+    if(nationalAnnex=='Spain'):
+        fckMPa= max(fckMPa, 60) 
+    retval= math.pow(k,1.5)*math.sqrt(fckMPa)*1e6
+    if(nationalAnnex=='Spain'):
+        retval*= 0.075/concrete.gmmC
+    elif(nationalAnnex=='UK'):
+        retval*= 0.035
+    elif(nationalAnnex=='Germany'):
+        if(d<=0.6):
+            retval*= 0.00525
+        elif(d>0.8):
+            retval*= 0.00375
+        else:
+            retval*= (0.00375-0.00525)/0.2*(d-0.6)+0.00525
+        retval/= concrete.gmmC
+    else:
+        retval*= 0.035
+    return retval
+        
+def get_puching_shear_resistance_whitout_punching_shear_reinforcement(concrete, dy, dz, rho_ly, rho_lz, sigma_cp_y= 0.0, sigma_cp_z= 0.0, isFoundation= False, nationalAnnex= None):
+    ''' Return the punching shear strength according to clause expression 
+        (6.47) of 6.4.4(1) of of EC2:2004.
+
+    :param concrete: concrete material.
+    :param dy: effective depth of the cross-section in y direction.
+    :param dz: effective depth of the cross-section in z direction.
+    :param rho_ly: bonded tension steel in y direction.
+    :param rho_lz: bonded tension steel in z direction.
+    :param sigma_cp_y: normal concrete stresses in the critical section y (negative if compression).
+    :param sigma_cp_z: normal concrete stresses in the critical section z (negative if compression).
+    :param isFoundation: if true return the value corresponding to 
+                       floor slabs/foundations.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    fckMPa= -concrete.fck/1e6
+    C_Rdc= get_punching_shear_C_Rd_c(concrete= concrete, isFoundation= isFoundation, nationalAnnex= nationalAnnex)
+    d= (dy+dz)/2.0 # effective depth.
+    k= min(1+math.sqrt(0.2/d), 2.0)
+    rho_l= min(math.sqrt(rho_ly*rho_lz), .02)
+    sigma_cp= 0.0
+    if((sigma_cp_y!=0.0) or (sigma_cp_z!=0.0)):
+        sigma_cp= -(sigma_cp_y+sigma_cp_z)/2.0
+    k1= 0.1
+    retval= C_Rdc*k*math.pow(100.0*rho_l*fckMPa,1/3.0)*1e6+k1*sigma_cp
+    v_min= get_punching_v_min(concrete= concrete, dy= dy, dz= dz, isFoundation= isFoundation, nationalAnnex= nationalAnnex)
+    retval= max(retval, v_min)
+    retval+= k1*sigma_cp
+    return retval
+
+def get_maximum_punching_shear_capacity_on_column_periphery(concrete, nationalAnnex= None):
+    ''' Return the maximum punching shear capacity around column according to
+        expression (6.47) of 6.4.4(1) of of EC2:2004.
+
+    :param concrete: concrete material.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    fcd= -concrete.fcd()
+    fck= -concrete.fck
+    nu= 0.6*(1-fck/250e6)
+    return 0.4*nu*fcd
