@@ -9,8 +9,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
-import xc
+import sys
 import math
+import xc
 from collections import deque
 from misc_utils import compat
 
