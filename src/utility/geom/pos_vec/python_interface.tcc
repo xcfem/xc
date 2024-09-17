@@ -250,8 +250,10 @@ GEOM_FT (SlidingVectorsSystem2d::*getMomentPos2D)(const Pos2d &) const= &Sliding
 Vector2d (SlidingVectorsSystem2d::*getResultant2D)(void) const= &SlidingVectorsSystem2d::getResultant;
 
 class_<SlidingVectorsSystem2d, bases<SlidingVector2d> >("SlidingVectorsSystem2d")
-  .def(init<Pos2d,Vector2d,GEOM_FT>())
   .def(init<SlidingVector2d>())
+  .def(init<Pos2d>())
+  .def(init<Pos2d,Vector2d>())
+  .def(init<Pos2d,Vector2d,GEOM_FT>())
   .def(init<SlidingVectorsSystem2d>()) // IMPORTANT: last constructor higher priority.
   .def("__eq__", &SlidingVectorsSystem2d::operator==)
   .def("__ne__", &SlidingVectorsSystem2d::operator!=)
@@ -309,7 +311,9 @@ Vector3d (SlidingVectorsSystem3d::*getResultant3D)(void) const= &SlidingVectorsS
 
 class_<SlidingVectorsSystem3d, bases<SlidingVector3d> >("SlidingVectorsSystem3d")
   .def(init<SlidingVector3d>())
-  .def(init<Pos3d,Vector3d,Vector3d>())
+  .def(init<Pos3d>())
+  .def(init<Pos3d, Vector3d>())
+  .def(init<Pos3d, Vector3d, Vector3d>())
   .def(init<SlidingVectorsSystem3d>()) // IMPORTANT: last constructor higher priority.
   .def("__eq__", &SlidingVectorsSystem3d::operator==)
   .def("__ne__", &SlidingVectorsSystem3d::operator!=)
