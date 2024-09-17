@@ -171,4 +171,5 @@ class ContourControlPositions(object):
             retval[nTag]= {'contour_position':contourPos, 'contour_lambda': contourLambda, 'sliding_vector_system': newSvs, 'tributary_length':tributaryLength}
         return retval
 
+
     

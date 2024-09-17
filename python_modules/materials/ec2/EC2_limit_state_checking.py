@@ -12,6 +12,7 @@ __email__= "ana.ortega@ciccp.es "
 import sys
 import math
 import scipy.interpolate
+import geom
 from materials import limit_state_checking_base as lscb
 from materials.ec2 import EC2_materials
 from materials.sections.fiber_section import fiber_sets
@@ -1799,7 +1800,7 @@ def get_puching_shear_resistance_whitout_punching_shear_reinforcement(concrete, 
 
 def get_maximum_punching_shear_capacity_on_column_periphery(concrete, nationalAnnex= None):
     ''' Return the maximum punching shear capacity around column according to
-        expression (6.47) of 6.4.4(1) of of EC2:2004.
+        expression (6.47) of 6.4.4(1) of EC2:2004.
 
     :param concrete: concrete material.
     :param nationalAnnex: identifier of the national annex.
@@ -1808,3 +1809,41 @@ def get_maximum_punching_shear_capacity_on_column_periphery(concrete, nationalAn
     fck= -concrete.fck
     nu= 0.6*(1-fck/250e6)
     return 0.4*nu*fcd
+
+def compute_punching_shear_beta(punchingPos, criticalPerimeterForces, criticalContourArea):
+    ''' Compute the value of beta accordint to expression 6.39 from clause
+        6.4.3(3) of EC2:2004.
+
+    :param punchingPos: position of the punching element.
+    :param criticalPerimeterForces: forces around the critical perimeter.
+    :param criticalContourArea: area of the critical contour.
+    '''
+    # Compute the centroid of the control perimeter.
+    
+    shearSVD= geom.SlidingVectorsSystem3d(punchingPos)
+    for nTag in criticalPerimeterForces:
+        nodeData= criticalPerimeterForces[nTag]
+        nodeSVD= nodeData['sliding_vector_system']
+        pos= nodeSVD.getOrg()
+        shearSVD+= geom.SlidingVectorsSystem3d(pos, nodeSVD.getResultant())
+        tributaryLength= criticalPerimeterForces[nTag]['tributary_length']
+    
+    moment= shearSVD.getMoment()
+    R= shearSVD.getResultant().getModulus()
+    # Compute eccentricities.
+    e_x= moment[1]/R
+    e_y= moment[0]/R
+    e_u= math.sqrt(e_x**2+e_y**2)
+    b_u= math.sqrt(criticalContourArea/math.pi)
+    retval= max(1+e_u/b_u, 1.05)
+    if(retval>2.0):
+        methodName= sys._getframe(0).f_code.co_name
+        warningMessage= methodName+'; beta factor greater than 2.0.\n'
+        warningMessage+= '  e_x= {:2f}'.format(e_x)+' m'
+        warningMessage+= '  e_y= {:2f}'.format(e_y)+' m'
+        warningMessage+= '  e_u= {:2f}'.format(e_u)+' m'
+        warningMessage+= '  b_u= {:2f}'.format(b_u)+' m'
+        warningMessage+= '  beta= {:2f}'.format(retval)
+        lmsg.warning(warningMessage)
+    return retval
+    
