@@ -21,14 +21,10 @@ from materials.ec2 import EC2_limit_state_checking
 # Material.
 concrete= EC2_materials.C30
 
-C_Rd_c= EC2_limit_state_checking.get_punching_shear_C_Rd_c(concrete= concrete)
-
 dy= 0.35
 rho_ly= 7.54e-4/dy
 dz= 0.34
 rho_lz= 7.54e-4/dz
-
-
 
 vRdc= EC2_limit_state_checking.get_puching_shear_resistance_whitout_punching_shear_reinforcement(concrete= concrete, dy= dy, dz= dz, rho_ly= rho_ly, rho_lz= rho_lz, sigma_cp_y= 0.0, sigma_cp_z= 0.0, isFoundation= False, nationalAnnex= None)
 vRd_max= EC2_limit_state_checking.get_maximum_punching_shear_capacity_on_column_periphery(concrete= concrete, nationalAnnex= None)
