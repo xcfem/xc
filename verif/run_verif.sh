@@ -524,6 +524,9 @@ echo "$BLEU" "  Solid elements tests." "$NORMAL"
 python tests/elements/volume/test_brick_00.py
 python tests/elements/volume/test_brick_01.py
 python tests/elements/volume/test_brick_02.py
+python tests/elements/volume/test_brick_03.py
+python tests/elements/volume/test_brick_04.py
+python tests/elements/volume/test_brick_05.py
 python tests/elements/volume/test_extrapolation_matrix.py
 python tests/elements/volume/test_brick_shape_functions.py
 python tests/elements/volume/test_extrapolate_values_brick.py

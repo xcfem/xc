@@ -18,7 +18,7 @@ from materials import typical_materials
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Material definition
-elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.25,0.0)
+elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",E= 1e6, nu= 0.25, rho= 0.0)
 # Mesh
 ## Nodes.
 nodes= preprocessor.getNodeHandler 
@@ -89,3 +89,15 @@ if(ratio1<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Output stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+## Uncomment to display the mesh
+oh.displayFEMesh()
+oh.displayLocalAxes()
+oh.displayLoads()
+oh.displayStresses('sigma_11')
+oh.displayStresses('sigma_22')
+oh.displayStresses('sigma_33')
+
