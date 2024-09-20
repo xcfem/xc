@@ -17,7 +17,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-# from postprocess import output_handler
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -70,12 +69,6 @@ nod14.fix(xc.ID([0,1,2]),xc.Vector([0.0015,0.001,0.0015]) )
 nod15.fix(xc.ID([0,1,2]),xc.Vector([0.002,0.002,0.002]) )
 nod16.fix(xc.ID([0,1,2]),xc.Vector([0.001,0.0015,0.0015]) )
 
-# # Graphic stuff.
-# oh= output_handler.OutputHandler(modelSpace)
-
-# ## Uncomment to display the mesh
-# oh.displayFEMesh()
-
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
@@ -102,9 +95,6 @@ for theorD, xcD in zip(theoreticalDisp, xcDisp):
 avgErr/=len(xcDisp)
 
 #print('avgErr= ',avgErr)
-#oh.displayDispRot('uZ')
-#oh.displayStresses('sigma_xx')
-#oh.displayStrains('epsilon_xx')
 
 import os
 from misc_utils import log_messages as lmsg
@@ -113,3 +103,11 @@ if(avgErr<1e-5):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # # Output stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# ## Uncomment to display the mesh
+# oh.displayDispRot('uZ')
+# oh.displayStresses('sigma_xx')
+# oh.displayStrains('epsilon_xx')

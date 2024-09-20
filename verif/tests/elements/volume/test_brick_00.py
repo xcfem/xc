@@ -12,7 +12,6 @@ __email__= "l.pereztato@gmail.com"
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-# from postprocess import output_handler
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -90,14 +89,14 @@ if(ratio1<1e-12):
 else:
     lmsg.error(fname+' ERROR.')
     
-# # Output stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-## Uncomment to display the mesh
-oh.displayFEMesh()
-oh.displayLocalAxes()
-oh.displayLoads()
-oh.displayStresses('sigma_11')
-oh.displayStresses('sigma_22')
-oh.displayStresses('sigma_33')
+# # # Output stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# ## Uncomment to display the mesh
+# oh.displayFEMesh()
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayStresses('sigma_11')
+# oh.displayStresses('sigma_22')
+# oh.displayStresses('sigma_33')
 

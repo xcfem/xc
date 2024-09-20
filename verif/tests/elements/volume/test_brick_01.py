@@ -94,9 +94,9 @@ if(ratio<1e-4):
 else:
     lmsg.error(fname+' ERROR.')
     
-# # Output stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-## Uncomment to display the mesh
-oh.displayFEMesh()
-oh.displayLoads()
+# # # Output stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# ## Uncomment to display the mesh
+# oh.displayFEMesh()
+# oh.displayLoads()
