@@ -1425,7 +1425,7 @@ class PredefinedSpace(object):
         :param setToCompute: set of elements to be processed.
         :param propToDefine: name of the property to define at the nodes.
         '''
-        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
+        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(elemSet= setToCompute.getElements, attributeName= propToDefine, function= self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
 
     def setNodePropertyFromElements(self, compName: str, xcSet: xc.Set, function, propToDefine: str):
         '''display the stresses on the elements.
@@ -1444,7 +1444,7 @@ class PredefinedSpace(object):
             propertyName+= compName
             vComp= function(compName)
         for n in nodSet:
-            n.setProp(propertyName,n.getProp(propToDefine)[vComp])
+            n.setProp(propertyName, n.getProp(propToDefine)[vComp])
         return propertyName
 
     def getDisplacementFileHeader(self):
