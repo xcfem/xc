@@ -1418,25 +1418,28 @@ class PredefinedSpace(object):
         '''
         return element.getValuesAtNodes(code, silent)
     
-    def computeValuesAtNodes(self, setToCompute: xc.Set, propToDefine= 'stress'):
-        ''' Extrapolate the stresses to the nodes of the set argument and
+    def computeValuesAtNodes(self, setToCompute: xc.Set, propToDefine= 'stress', transformToLocalCoord= False):
+        ''' Extrapolate the required values to the nodes of the set argument and
             stores them in the property "propToDefine".
 
         :param setToCompute: set of elements to be processed.
         :param propToDefine: name of the property to define at the nodes.
+        :param transformToLocalCoord: if true (and appropriate), express the obtained result in local coordinates.
         '''
-        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(elemSet= setToCompute.getElements, attributeName= propToDefine, function= self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
+        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(elemSet= setToCompute.getElements, attributeName= propToDefine, function= self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]), transformToLocalCoord= transformToLocalCoord)
 
-    def setNodePropertyFromElements(self, compName: str, xcSet: xc.Set, function, propToDefine: str):
+    def setNodePropertyFromElements(self, compName: str, xcSet: xc.Set, function, propToDefine: str, transformToLocalCoord= False):
         '''display the stresses on the elements.
 
         :param compName: name of the component of the magnitude ('sigma_11', 'strain_xx', ...)
         :param xcSet: set of nodes to define the propery at.
         :param function: function to call to retrieve the component value.
         :param propToDefine: name of the property to define at the nodes.
+        :param transformToLocalCoord: if true (and appropriate), express the 
+                                      obtained result in local coordinates.
         '''
         # Define the property at nodes.
-        self.computeValuesAtNodes(xcSet, propToDefine= propToDefine)
+        self.computeValuesAtNodes(xcSet, propToDefine= propToDefine, transformToLocalCoord= transformToLocalCoord)
         propertyName= propToDefine
         nodSet= xcSet.nodes
         vComp= 0

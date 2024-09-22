@@ -25,6 +25,7 @@
 
 #include "utility/matrices/ZMatrix.h"
 #include "cgal_types.h"
+#include <boost/python/list.hpp>
 
 
 
@@ -45,6 +46,8 @@ class FT_matrix: public ZMatrix<GEOM_FT>
     FT_matrix(size_type rows,size_type cols,GEOM_FT val);
     template <class InputIterator>
     FT_matrix(const size_t &,const size_t &,InputIterator ,InputIterator );
+    FT_matrix(const boost::python::list &l);
+    boost::python::list getPyList(void) const;
     FT_matrix getBox(size_t f1, size_t c1, size_t f2, size_t c2) const;
     FT_matrix getRow(size_t iRow) const;
     FT_matrix getColumn(size_t col) const;

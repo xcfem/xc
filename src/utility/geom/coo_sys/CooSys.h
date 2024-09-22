@@ -79,6 +79,10 @@ class CooSys: public ProtoGeom
       //Return the transformation matrix of this coordinates system to dest.
     FT_matrix getGlobalCoordinates(const FT_matrix &v) const;
     FT_matrix getLocalCoordinates(const FT_matrix &v) const;
+    FT_matrix getLocalMatrix(const FT_matrix &) const;
+    FT_matrix getGlobalMatrix(const FT_matrix &) const;
+    boost::python::list getLocalMatrixPy(const boost::python::list &) const;
+    boost::python::list getGlobalMatrixPy(const boost::python::list &) const;
 
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

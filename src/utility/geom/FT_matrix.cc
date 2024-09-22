@@ -56,6 +56,29 @@ FT_matrix::FT_matrix(const FT_matrix &orig,size_t f1, size_t c1, size_t f2, size
         (*this)(i,j)= orig(i+f1-1,j+c1-1);
   }
 
+//! @brief Constructor (Python interface).
+FT_matrix::FT_matrix(const boost::python::list &l)
+  : ZMatrix<GEOM_FT>(len(l), 0)
+  {
+    const size_t numRows= len(l);
+    if(numRows>0)
+      {
+	const boost::python::list &row0= boost::python::extract<boost::python::list>(l[0]);
+	const size_t numCols= len(row0);
+	if(numCols>0)
+	  {
+	    // copy the components
+	    resize(numRows,numCols, 0.0);
+	    for(size_t i=0; i<numRows; i++)
+	      {
+		const boost::python::list &rowI= boost::python::extract<boost::python::list>(l[i]);
+		for(size_t j= 0; j<numCols;j++)
+		  (*this)(i+1,j+1)= boost::python::extract<double>(rowI[j]);
+	      }
+	  }
+      }
+  }
+
 FT_matrix FT_matrix::getBox(size_t f1, size_t c1, size_t f2, size_t c2) const
   { return FT_matrix(*this,f1,c1,f2,c2); }
 FT_matrix FT_matrix::getRow(size_t iRow) const
@@ -65,6 +88,21 @@ FT_matrix FT_matrix::getColumn(size_t col) const
 
 FT_matrix FT_matrix::GetTrn(void) const
   { return traspuesta(*this); }
+
+//! @brief Return the matrix values in a Python list.
+boost::python::list FT_matrix::getPyList(void) const
+  {
+    boost::python::list retval;
+    for(size_t i=1; i<=this->n_rows; i++)
+      {
+	const FT_matrix m= this->getRow(i);
+	boost::python::list tmp;
+	for(size_t j= 1; j<=this->n_columns; j++)
+	  tmp.append((*this)(i,j));
+        retval.append(tmp);
+      }
+    return retval;    
+  }
 
 //! @brief Return the matrix recíproca de la being passed as parameter.
 FT_matrix operator-(const FT_matrix &m)

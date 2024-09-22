@@ -41,7 +41,7 @@ Rect3d3dCooSys::VGlobal Rect3d3dCooSys::getJVector(void) const
 //! @brief Return the unary vector K in global coordinates.
 Rect3d3dCooSys::VGlobal Rect3d3dCooSys::getKVector(void) const
   { return getAxisVDir(3); }
-
+    
 //! @brief Return the global coordinates of the vector.
 //!
 //! @param v: local coordinates of the vector.

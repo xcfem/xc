@@ -166,10 +166,12 @@ void CooSys::putRow(const size_t &axis,const FT_matrix &v)
 //! en locales al mismo vector expresado en globales.
 FT_matrix CooSys::TransAGlobal(void) const
   { return rot.GetTrn(); }
+
 //! @brief Return the matrix que transforma un vector expresado
 //! en globales al mismo vector expresado en locales.
 FT_matrix CooSys::TransDeGlobal(void) const
   { return rot; }
+
 //! @brief Return the transformation matrix from this system to
 //! the argument one.
 FT_matrix CooSys::GetTransA(const CooSys &dest) const
@@ -186,6 +188,36 @@ FT_matrix CooSys::getGlobalCoordinates(const FT_matrix &v) const
 //! @param v: vector in global coordinates.
 FT_matrix CooSys::getLocalCoordinates(const FT_matrix &v) const
   { return TransDeGlobal()*v; }
+
+//! @brief Return the given matrix expressed in local coordinates.
+FT_matrix CooSys::getLocalMatrix(const FT_matrix &m) const
+  {
+    const FT_matrix &T= rot;
+    const FT_matrix Tt= T.GetTrn();
+    return T*(m*Tt);
+  }
+
+//! @brief Return the given matrix expressed in global coordinates.
+FT_matrix CooSys::getGlobalMatrix(const FT_matrix &m) const
+  {
+    const FT_matrix &T= rot;
+    const FT_matrix Tt= T.GetTrn();
+    return Tt*(m*T);
+  }
+
+//! @brief Return the given matrix expressed in local coordinates.
+boost::python::list CooSys::getLocalMatrixPy(const boost::python::list &l) const
+  {
+    const FT_matrix tmp(l);
+    return this->getLocalMatrix(tmp).getPyList();
+  }
+
+//! @brief Return the given matrix expressed in global coordinates.
+boost::python::list CooSys::getGlobalMatrixPy(const boost::python::list &l) const
+  {
+    const FT_matrix tmp(l);
+    return this->getGlobalMatrix(tmp).getPyList();
+  }
 
 //! @brief Prints the matrix.
 void CooSys::Print(std::ostream &os) const

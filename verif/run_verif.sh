@@ -218,6 +218,7 @@ python tests/utility/geom/coordinate_systems/coosys_test_01.py
 python tests/utility/geom/coordinate_systems/refsys3d3d_test_01.py
 python tests/utility/geom/coordinate_systems/refsys2d3d_test_01.py
 python tests/utility/geom/coordinate_systems/tensor_transformation_test_01.py
+python tests/utility/geom/coordinate_systems/tensor_transformation_test_02.py
 echo "$BLEU" "    Transformations." "$NORMAL"
 python tests/utility/geom/trf/rotation2d_test_01.py
 python tests/utility/geom/trf/rotation2d_test_02.py

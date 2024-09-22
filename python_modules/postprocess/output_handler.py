@@ -226,7 +226,7 @@ class OutputHandler(object):
             captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
 
-    def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
+    def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None, transformToLocalCoord= False):
         '''display the stresses on the elements.
 
         :param itemToDisp: component of the stress ('sigma_11', 'sigma_22'...)
@@ -242,19 +242,22 @@ class OutputHandler(object):
               of the field to be represented  (in units of calculation, 
               not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red (defaults to None)
-        :param captionText: caption text. Defaults to None, in which case the default 
-                                 caption text (internal force +  units + set name) is created
+        :param captionText: caption text. Defaults to None, in which case the
+                            default caption text (internal force +  units + 
+                            set name) is created.
+        :param transformToLocalCoord: if true (and appropriate), express the 
+                                      obtained result in local coordinates.
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'stress')
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'stress', transformToLocalCoord= transformToLocalCoord)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
 
-    def displayStrains(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
+    def displayStrains(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None, transformToLocalCoord= False):
         '''displays the strains on the elements.
 
         :param itemToDisp: component of the stress ('eps_11', 'eps_22'...)
@@ -271,13 +274,16 @@ class OutputHandler(object):
               not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
-        :param captionText: caption text. Defaults to None, in which case the default 
-                                 caption text (internal force +  units + set name) is created
+        :param captionText: caption text. Defaults to None, in which case the
+                            default caption text (internal force +  units + 
+                            set name) is created.
+        :param transformToLocalCoord: if true (and appropriate), express the 
+                                      obtained result in local coordinates.
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentFromName, propToDefine= 'strain')
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentFromName, propToDefine= 'strain', transformToLocalCoord= transformToLocalCoord)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
@@ -303,13 +309,14 @@ class OutputHandler(object):
               not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
-        :param captionText: caption text. Defaults to None, in which case the default 
-                                 caption text (internal force +  units + set name) is created
+        :param captionText: caption text. Defaults to None, in which case the
+                            default caption text (internal force +  units + 
+                            set name) is created.
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= vMisesCode)
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= vMisesCode, transformToLocalCoord= False)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
         if not captionText:
             captionText= self.getCaptionText(vMisesCode, unitDescription, setToDisplay)
@@ -337,7 +344,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStateComponentFromName, propToDefine= 'state')
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStateComponentFromName, propToDefine= 'state', transformToLocalCoord= False)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)

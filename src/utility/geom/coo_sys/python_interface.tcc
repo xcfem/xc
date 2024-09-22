@@ -25,6 +25,10 @@ class_<CooSys, bases<ProtoGeom>, boost::noncopyable >("CooSys", no_init)
   .add_property("EsOrtogonal",&CooSys::EsOrtogonal)
   .add_property("EsOrtonormal",&CooSys::EsOrtonormal)
   .add_property("EsDextrogiro",&CooSys::EsDextrogiro)
+  .def("getGlobalMatrix",&CooSys::getGlobalMatrix)
+  .def("getLocalMatrix",&CooSys::getLocalMatrix)
+  .def("getGlobalMatrix",&CooSys::getGlobalMatrixPy)
+  .def("getLocalMatrix",&CooSys::getLocalMatrixPy)
   ;
 
 class_<Xd2dCooSys, bases<CooSys>, boost::noncopyable >("CooSysXd2d", no_init)

@@ -123,6 +123,15 @@ BOOST_PYTHON_MODULE(geom)
       .def("getBnd",&GeomObj3d::Bnd, "Return the boundary box for this object.")
      ;
 
+    GEOM_FT &(FT_matrix::*ft_matrix_at)(size_t,size_t)= &FT_matrix::operator();
+    class_<FT_matrix>("Matrix")
+      .def(init<boost::python::list>())
+      .def("__call__", ft_matrix_at, return_value_policy<return_by_value>())
+      .def("at", ft_matrix_at, return_value_policy<return_by_value>(),"Returns value at (i,j) position.")
+      .def("getList", &FT_matrix::getPyList, "Return the matrix components in a Python list of lists.")
+      .def(self_ns::str(self_ns::self))
+      .def(self_ns::repr(self_ns::self))
+      ;
     #include "lists/python_interface.tcc"
     #include "pos_vec/python_interface.tcc"
 

@@ -36,35 +36,35 @@ elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",E= 1e6,
 ## Nodes.
 nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-nod1= nodes.newNodeXYZ(0,0,0)
-nod2= nodes.newNodeXYZ(1,0,0)
-nod3= nodes.newNodeXYZ(1,1,0)
-nod4= nodes.newNodeXYZ(0,1,0)
-nod5= nodes.newNodeXYZ(0,0,1)
-nod6= nodes.newNodeXYZ(1,0,1)
-nod7= nodes.newNodeXYZ(1,1,1)
-nod8= nodes.newNodeXYZ(0,1,1)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(1,0,0)
+n3= nodes.newNodeXYZ(1,1,0)
+n4= nodes.newNodeXYZ(0,1,0)
+n5= nodes.newNodeXYZ(0,0,1)
+n6= nodes.newNodeXYZ(1,0,1)
+n7= nodes.newNodeXYZ(1,1,1)
+n8= nodes.newNodeXYZ(0,1,1)
 
 ## Elements.
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast3d.name
-brick= elements.newElement("Brick",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag,nod5.tag,nod6.tag,nod7.tag,nod8.tag]))
+brick= elements.newElement("Brick",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag,n5.tag,n6.tag,n7.tag,n8.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler
 # Constrain the displacement of the nodes in the base.
-nod1.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
-nod2.fix(xc.ID([1,2]),xc.Vector([0,0]))
-nod5.fix(xc.ID([1]),xc.Vector([0]))
-nod6.fix(xc.ID([1]),xc.Vector([0]))
-fixedNodes= [nod1, nod2, nod5, nod6]
+n1.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
+n2.fix(xc.ID([1,2]),xc.Vector([0,0]))
+n5.fix(xc.ID([1]),xc.Vector([0]))
+n6.fix(xc.ID([1]),xc.Vector([0]))
+fixedNodes= [n1, n2, n5, n6]
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-lp0.newNodalLoad(nod3.tag, xc.Vector([0,-1,0]))
-lp0.newNodalLoad(nod4.tag, xc.Vector([0,-1,0]))
-lp0.newNodalLoad(nod7.tag, xc.Vector([0,-1,0]))
-lp0.newNodalLoad(nod8.tag, xc.Vector([0,-1,0]))
+lp0.newNodalLoad(n3.tag, xc.Vector([0,-1,0]))
+lp0.newNodalLoad(n4.tag, xc.Vector([0,-1,0]))
+lp0.newNodalLoad(n7.tag, xc.Vector([0,-1,0]))
+lp0.newNodalLoad(n8.tag, xc.Vector([0,-1,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -78,11 +78,14 @@ modelSpace.computeValuesAtNodes(setToCompute= xcTotalSet, propToDefine= 'stress'
 sigma_xx_ref= 0.0
 sigma_yy_ref= -4.0
 sigma_zz_ref= 0.0
+err_xx= 0.0
+err_yy= 0.0
+err_zz= 0.0
 for n in xcTotalSet.nodes:
     stress= n.getProp('stress')
-    err_xx= (sigma_xx_ref-stress[0])**2
-    err_yy= (sigma_yy_ref-stress[1])**2
-    err_zz= (sigma_zz_ref-stress[2])**2
+    err_xx+= (sigma_xx_ref-stress[0])**2
+    err_yy+= (sigma_yy_ref-stress[1])**2
+    err_zz+= (sigma_zz_ref-stress[2])**2
     
 err_xx= math.sqrt(err_xx)
 err_yy= math.sqrt(err_yy)

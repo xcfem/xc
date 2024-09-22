@@ -75,6 +75,7 @@ class Pos3dArray3d;
 class Pos2d;
 class Pos3d;
 class Rect3d3dCooSys;
+class Rect2d2dCooSys;
 class GeomObj2d;
 class GeomObj3d;
 
@@ -273,6 +274,7 @@ class Element: public MeshComponent
     virtual Vector3d getJVector3d(bool initialGeometry= true) const;
     virtual Vector3d getKVector3d(bool initialGeometry= true) const;
     virtual Rect3d3dCooSys getCooSys(bool) const;    
+    virtual Rect2d2dCooSys getCooSys2d(bool) const;    
     Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
     std::deque<Pos3d> getPosNodes(bool initialGeometry= true) const;
     virtual Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;

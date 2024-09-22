@@ -11,6 +11,9 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es  ana.ortega@ciccp.es"
 
 import math
+import sys
+import geom
+import xc
 from misc_utils import log_messages as lmsg
 
 def flatten_attribute(elemSet,attributeName, treshold, limit):
@@ -64,7 +67,7 @@ def average_on_nodes(preprocessor, touchedNodes, attributeName):
     for tag in touchedNodes:
         n= preprocessor.getNodeHandler.getNode(tag)
         denom= touchedNodes[tag]
-        n.setProp(attributeName,n.getProp(attributeName)*(1.0/denom))
+        n.setProp(attributeName, n.getProp(attributeName)*(1.0/denom))
 
 def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
     '''Extrapolate element's function values to the nodes.
@@ -92,7 +95,49 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
     preprocessor= elemSet.owner.getPreprocessor
     average_on_nodes(preprocessor,touchedNodes, attributeName)
 
-def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= None, initialValue= 0.0):
+def transform_to_local_coordinates(element, value):
+    '''Transform the given value to local coordinates in the given element.
+
+    :param element: element to get local coordinates from.
+    :param value: value to transform:
+    '''
+    elementDimension= element.getDimension
+    if(elementDimension==2):
+        cooSys= element.get2DCoordinateSystem(True)
+    elif(elementDimension==3):
+        cooSys= element.getCoordinateSystem(True)
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; not implemented for elements of dimension: '+elementDimension)
+        
+    size= len(value)
+    if(size==1):
+        retval= value
+    else:
+        if(elementDimension==2):
+            if(size==3):
+                valueTensor= geom.Matrix([[value[0], value[2]],
+                                          [value[2], value[1]]])
+                tmp= cooSys.getLocalMatrix(valueTensor)
+                retval= xc.Vector([tmp(0,0), tmp(1,1), tmp(1,2)])
+            else:
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(methodName+'; expected size was 3, got a list of size: '+size)
+                retval= None                
+        elif(elementDimension==3):
+            if(size==6):
+                valueTensor= geom.Matrix([[value[0], value[3], value[4]],
+                                          [value[3], value[1], value[5]],
+                                          [value[4], value[5], value[2] ]])
+                tmp= cooSys.getLocalMatrix(valueTensor)
+                retval= xc.Vector([tmp(1,1), tmp(2,2), tmp(3,3), tmp(1,2), tmp(1,3), tmp(2,3)])
+            else:
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(methodName+'; expected size was 6, got a list of size: '+size)
+                retval= None
+    return retval
+
+def extrapolate_elem_data_to_nodes(elemSet, attributeName, function, argument= None, initialValue= 0.0, transformToLocalCoord= False):
     '''Extrapolate element's function values to the nodes.
 
     :param elemSet: set of elements.
@@ -101,8 +146,9 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
     :param function: name of the method to call for each element.
     :param argument: name of the argument for the function call function (optional).
     :param initialValue: initial value for the attribute defined at the nodes.
+    :param transformToLocalCoord: if true (and appropriate), express the obtained result in local coordinates.
     '''
-    touchedNodes= create_attribute_at_nodes(elemSet,attributeName,initialValue)
+    touchedNodes= create_attribute_at_nodes(elemSet, attributeName, initialValue)
     #Calculate totals.
     for e in elemSet:
         elemNodes= e.getNodes
@@ -110,14 +156,21 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
             values= function(e, argument)
         else:
             values= function(e)
+        szV= len(values)
         sz= len(elemNodes)
+        if(szV==0): # no values returned
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(methodName+'; no values returned for attribute name: '+attributeName)
+            values= sz*[None]
         for i in range(0,sz):
             n= elemNodes[i]
-            valueAtNode= values[i]
+            valueAtNode= values[i]                
             if(valueAtNode):
+                if(transformToLocalCoord): # if transform to local coordinates
+                    valueAtNode= transform_to_local_coordinates(element= e, value= valueAtNode)
                 oldValue= n.getProp(attributeName)
                 newValue= oldValue+valueAtNode
                 n.setProp(attributeName,newValue)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
-    average_on_nodes(preprocessor,touchedNodes, attributeName)
+    average_on_nodes(preprocessor= preprocessor, touchedNodes= touchedNodes, attributeName= attributeName)
