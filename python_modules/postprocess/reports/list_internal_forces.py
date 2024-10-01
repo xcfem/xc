@@ -48,9 +48,9 @@ def listLineSetInternalForces(nmbComb, xcSet, fmt, outputFile, ltxSectioning, ti
 
     for l in xcSet.lines:
         nmb= l.getName() 
-        outputFile.write("\hline\n")
-        outputFile.write("\multicolumn{9}{|l|}{Internal forces of bars on the line: "+nmb+"}\\\\\n")
-        outputFile.write("\hline\n")
+        outputFile.write("\\hline\n")
+        outputFile.write("\\multicolumn{9}{|l|}{Internal forces of bars on the line: "+nmb+"}\\\\\n")
+        outputFile.write("\\hline\n")
         listBarSetInternalForces(nmbComb,nmb,fmt,outputFile) 
     supertabular.cierraSupertabular(outputFile)
 
@@ -94,9 +94,9 @@ def listLineSetInternalForcesAndCF(nmbComb, xcSet, fmt, outputFile, ltxSectionin
 
     for l in xcSet.lines:
         nmb= l.getName()
-        outputFile.write("\hline\n")
-        outputFile.write("\multicolumn{10}{|l|}{Internal forces on the bars of the line: "+nmb+"}\\\\\n")
-        outputFile.write("\hline\n")
+        outputFile.write("\\hline\n")
+        outputFile.write("\\multicolumn{10}{|l|}{Internal forces on the bars of the line: "+nmb+"}\\\\\n")
+        outputFile.write("\\hline\n")
         listBarSetInternalForcesAndCF(nmbComb,l,fmt,outputFile,nmbDiag) 
     supertabular.cierraSupertabular(outputFile) 
 
@@ -148,9 +148,9 @@ def listaEsfuerzosTrussLineas(nmbComb, xcSet, fmt, outputFile, ltxSectioning, ti
 
     for l in xcSet.lines:
         nmb= l.getName()
-        outputFile.write("\hline\n")
-        outputFile.write("\multicolumn{5}{|l|}{Esfuerzos en elementos linea: "+nmb+"}\\\\\n")
-        outputFile.write("\hline\n")
+        outputFile.write("\\hline\n")
+        outputFile.write("\\multicolumn{5}{|l|}{Esfuerzos en elementos linea: "+nmb+"}\\\\\n")
+        outputFile.write("\\hline\n")
         listaDatosEsfuerzosTrussSet(nmbComb,nmb,fmt,outputFile) 
     supertabular.cierraSupertabular(outputFile) 
 

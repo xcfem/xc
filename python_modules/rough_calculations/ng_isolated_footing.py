@@ -41,7 +41,7 @@ class IsolatedFooting(object):
     retval+= "\\item Axil característico del pilar N$_k$ = " + fmt.Esf.format(self.Nk) + " kN\n"
     retval+= "\\item Tensión admisible del terreno $\\sigma_{adm}$ = " + fmt.Esf.format(self.Sadm) + " kN/m$^2$\n"
     retval+= "\\item Diámetro de la reinforcement longitudinal del pilar $\\Phi$ = " + fmt.Diam.format(self.FiArmPilar) + " cm\n"
-    retval+= "\item Escuadría del pilar $l$ = " +  fmt.Length.format(self.Lpilar) + " m\n"
+    retval+= "\\item Escuadría del pilar $l$ = " +  fmt.Length.format(self.Lpilar) + " m\n"
     retval+= "\\end{itemize}\n"
     return retval
 
@@ -60,7 +60,7 @@ class IsolatedFooting(object):
     retval+= "Footing reinforcement\n"
     Md=(1.5*self.Sadm*(self.Lzapata)**2/8)
     As=(Md/0.8/depth/500*1.15*10)
-    retval+= "$$M_d = 1.5 \\sigma_{adm} \\cfrac{a^2}{8}= " + fmt.Esf.format(Md) + "\\ kN \cdot m/m $$\n"
+    retval+= "$$M_d = 1.5 \\sigma_{adm} \\cfrac{a^2}{8}= " + fmt.Esf.format(Md) + "\\ kN \\cdot m/m $$\n"
     retval+= "$$A_s = \\cfrac{M_d}{0.8hf_{yd}} \\times 10 =" + fmt.Area.format(As) + "\\ cm^2/m $$\n"
     retval+= "\\begin{itemize}\n"
     retval+= "\\item Lower reinforcement must be placed in both directions\n"

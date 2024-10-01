@@ -43,7 +43,7 @@ class NodeLoadProperties(ctr.SCXMLPropertiesContainer):
   tableProp= None
   def __init__(self):
     super(NodeLoadProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.SCXMLPropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,r"XML\default","vertical",tbClsId,tbProgId)
     propName= prop.SCXMLProperty("0","Name","string",idName)
     propRefLoadCase= prop.SCXMLProperty("1","Load case","ref",idLoadCase)
     propRefLoadCase.value= rf.SCXMLRef(idLoadCaseRef,lcp.tbName)

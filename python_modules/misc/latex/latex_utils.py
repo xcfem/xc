@@ -41,12 +41,12 @@ def latex_to_pdf(latexCode:str, pdfFileName):
     :param latexCode: text in LaTeX format.
     :param pdfFileName: output file name.
     '''
-    texDocument= u'''\documentclass{article}
+    texDocument= u'''\\documentclass{article}
     \\usepackage[utf8]{inputenc}
     \\usepackage{longtable}
     \\begin{document}
     **LaTeXCode**
-    \end{document}
+    \\end{document}
     '''
     texDocument= texDocument.replace('**LaTeXCode**', latexCode)
     with tempfile.NamedTemporaryFile(mode= 'w', delete= False) as tmp:

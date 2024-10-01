@@ -24,7 +24,7 @@ class NodeProperties(ctr.SCXMLPropertiesContainer):
   tableDef= None
   def __init__(self):
     super(NodeProperties,self).__init__(nc.idNodeContainer,nc.idNodeContainer,nc.progIdNodes)
-    self.tableDef= propTable.SCXMLPropertiesTable(idNodeTable,"XML\default","vertical",nc.idNodeContainer,nc.progIdNodes)
+    self.tableDef= propTable.SCXMLPropertiesTable(idNodeTable,r"XML\default","vertical",nc.idNodeContainer,nc.progIdNodes)
     self.tableDef.properties.append(prop.SCXMLProperty("0","Name","string",idName))
     self.tableDef.properties.append(prop.SCXMLProperty("1","XCoord","param",idXCoord,"33619968"))
     self.tableDef.properties.append(prop.SCXMLProperty("2","YCoord","param",idYCoord,"33619968"))

@@ -7,8 +7,8 @@ two nodes with springs that introduce translational and/or rotational stiffness
 that are approximately equal to those of the real bearing.
 
 
-Examples\:
-    Examples of the use of these classes are given in the following verification tests\:
+Examples:
+    Examples of the use of these classes are given in the following verification tests:
         * ./verif/tests/elements/test_elastomeric_bearing_01.py
         * ./verif/tests/elements/test_pot_bearing_01.py
         * ./verif/tests/elements/test_pot_bearing_02.py

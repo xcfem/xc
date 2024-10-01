@@ -46,7 +46,7 @@ class ElementLoadProperties(ctr.SCXMLPropertiesContainer):
   tableProp= None
   def __init__(self):
     super(ElementLoadProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.SCXMLPropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,r"XML\default","vertical",tbClsId,tbProgId)
     propRefTable= prop.SCXMLProperty("0","Reference Table","table",idRefTable)
     propRefTable.value= propSubTable.SCXMLPropertiesSubTable('','',"vertical",'','')
     propRefTable.value.properties.append(prop.SCXMLProperty("0","Member Type","string",idMemberType))

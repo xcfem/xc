@@ -52,7 +52,7 @@ class ConcreteReport(object):
         retval='\\multicolumn{2}{c}{Tension-stiffening} \\\\ \n '
         retval+='\\hline \n '
         retval+='$\\nu$ & ' + str(paramTensStiffness.nu())+'  \\\\ \n '
-        retval+='$\\rho_{eff}$ & ' + str(paramTensStiffness.ro*1e2) +'\%  \\\\ \n '
+        retval+='$\\rho_{eff}$ & ' + str(paramTensStiffness.ro*1e2) +'\\%  \\\\ \n '
         retval+='\\multicolumn{2}{l}{exponential curve $\\alpha$=' + str(round(paramTensStiffness.alfa(),3)) +'} \\\\ \n '
         retval+='\\multicolumn{2}{l}{slope regression line:' + str(round(paramTensStiffness.regresLine()['slope']*1e-9,2)) +' } \\\\ \n '
         retval+='\\multicolumn{2}{l}{inters. point (onset carcking):} \\\\ \n '

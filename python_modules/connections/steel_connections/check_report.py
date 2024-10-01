@@ -306,7 +306,7 @@ def print_bolt_results(boltSets2Check):
         retval.append('\\multicolumn{5}{|l|}{\\textsc{Bolt set: ' + bset.description +'}} \\\\ \n')
         retval.append('\\multicolumn{1}{|l}{bolt steel = ' + btype.steelType.name + '} & \\multicolumn{2}{l}{bolt diam. = ' + str(btype.diameter*1e3) +' mm} & \\multicolumn{2}{l|}{bolt area = ' + str(round(btype.getArea()*1e4,2)) +  ' $cm^2$}  \\\\  \n')
         retval.append('\\multicolumn{1}{|l}{\\small{nominal tensile and shear strength:}} & \\multicolumn{2}{l}{$F_{nt}$ = ' + str(round(btype.getNominalTensileStrength()*1e-3,2)) + ' kN/bolt} & \\multicolumn{2}{l|}{$F_{nv}$ = ' + str(round(btype.getNominalShearStrength()*1e-3,2)) + ' kN/bolt}  \\\\  \n')
-        retval.append('\\multicolumn{1}{|l}{\\small{design tensile and shear strength:}} & \\multicolumn{2}{l}{$\Phi F_{nt}$ = ' + str(round(btype.getDesignTensileStrength()*1e-3,2)) + ' kN/bolt} & \\multicolumn{2}{l|}{$\Phi F_{nv}$ = ' + str(round(btype.getDesignShearStrength()*1e-3,2)) + ' kN/bolt}  \\\\  \n')
+        retval.append('\\multicolumn{1}{|l}{\\small{design tensile and shear strength:}} & \\multicolumn{2}{l}{$\\Phi F_{nt}$ = ' + str(round(btype.getDesignTensileStrength()*1e-3,2)) + ' kN/bolt} & \\multicolumn{2}{l|}{$\\Phi F_{nv}$ = ' + str(round(btype.getDesignShearStrength()*1e-3,2)) + ' kN/bolt}  \\\\  \n')
         retval.append('\\hline \n')
         retval.append('\\textbf{Bolt coord.} [m] & \\textbf{ULS} & \\textbf{N} [kN] & \\textbf{V} [kN] & \\textbf{CF} \\\\ \n')
         retval.append('\\hline \n')
@@ -358,7 +358,7 @@ def print_welds_results(singlWelds):
         retval.append('\\multicolumn{6}{|l|}{CF=' + str(round(par[1],2)) + '   in load case:' + par[0]+'} \\\\')
         if len(par)>2: # graphics have been generated
             retval.append('\\hline \n')
-            retval.append('\\multicolumn{3}{|c|}{\includegraphics[height=50mm]{'+par[2]+'_N}} & \\multicolumn{3}{|c|}{\includegraphics[height=50mm]{'+ par[2]+'_Vy}} \\\\')
+            retval.append('\\multicolumn{3}{|c|}{\\includegraphics[height=50mm]{'+par[2]+'_N}} & \\multicolumn{3}{|c|}{\\includegraphics[height=50mm]{'+ par[2]+'_Vy}} \\\\')
             retval.append('\\hline \n')
     retval.append('\\end{longtable} \n')
     retval.append('\\end{center} \n')

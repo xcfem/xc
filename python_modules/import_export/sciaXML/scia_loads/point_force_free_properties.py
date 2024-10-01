@@ -49,7 +49,7 @@ class PointForceFreeProperties(ctr.SCXMLPropertiesContainer):
   def __init__(self):
     '''Constructor.'''
     super(PointForceFreeProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.SCXMLPropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,r"XML\default","vertical",tbClsId,tbProgId)
     propRefLoadCase= prop.SCXMLProperty("0","Load case","ref",idLoadCase)
     propRefLoadCase.value= rf.SCXMLRef(idLoadCaseRef,lcp.tbName)
     propName= prop.SCXMLProperty("1","Name","string",idName)

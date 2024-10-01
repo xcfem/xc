@@ -12,7 +12,7 @@ def printCabeceraListadoTirante(archivo, tit):
   archivo.write("\\hline}\n")
   archivo.write("\\tablehead{%\n")
   archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{4}{|l|}{\small\sl \ldots continúa}\\\\\n")
+  archivo.write("\\multicolumn{4}{|l|}{\\small\\sl \\ldots continúa}\\\\\n")
   archivo.write("\\hline\n")
   archivo.write("\\multicolumn{4}{|c|}{",tit,"}\\\\\n")
   archivo.write("\\hline\n")
@@ -21,9 +21,9 @@ def printCabeceraListadoTirante(archivo, tit):
   archivo.write("\\hline}\n")
   archivo.write("\\tabletail{%\n")
   archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{4}{|r|}{\small\sl continúa\ldots}\\\\\n")
+  archivo.write("\\multicolumn{4}{|r|}{\\small\\sl continúa\\ldots}\\\\\n")
   archivo.write("\\hline}\n")
-  archivo.write("\\tablelasttail{\hline}\n")
+  archivo.write("\\tablelasttail{\\hline}\n")
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
 # Imprime el cierre del listado de de tensiones normales.

@@ -26,7 +26,7 @@ def printCabeceraListadoCapacityFactor(outputFile, sectionName):
     outputFile.write("\\hline}\n")
     outputFile.write("\\tablehead{%\n")
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{6}{|l|}{\small\sl \ldots continúa}\\\\\n")
+    outputFile.write("\\multicolumn{6}{|l|}{\\small\\sl \\ldots continúa}\\\\\n")
     outputFile.write("\\hline\n")
     # outputFile.write("\\multicolumn{6}{|c|}{\\textbf{"+nmbArch+"}}\\\\\n")
     outputFile.write("\\multicolumn{6}{|c|}{Comprobación de la sección "+ latex_utils.toLaTeX(sectionName)+"}\\\\\n")
@@ -36,9 +36,9 @@ def printCabeceraListadoCapacityFactor(outputFile, sectionName):
     outputFile.write("\\hline}\n")
     outputFile.write("\\tabletail{%\n")
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{6}{|r|}{\small\sl continúa\ldots}\\\\\n")
+    outputFile.write("\\multicolumn{6}{|r|}{\\small\\sl continúa\\ldots}\\\\\n")
     outputFile.write("\\hline}\n")
-    outputFile.write("\\tablelasttail{\hline}\n")
+    outputFile.write("\\tablelasttail{\\hline}\n")
     outputFile.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
 # Imprime el cierre del listado de capacity factors.

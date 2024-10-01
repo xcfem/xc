@@ -1290,7 +1290,7 @@ class RCSectionBase(object):
         os.write("Id & N$^o$ bars & $\\phi$ & area & c. geom. & eff. cover & $y_{COG}$ & $z_{COG}$\\\\\n")
         os.write(" &  & $(mm)$ & $(cm^2)$ & $(\\permil)$ & $(cm)$ & $(m)$ & $(m)$\\\\\n")
         for f in mainReinfFamilies:
-            os.write("\hline\n")
+            os.write("\\hline\n")
             self.latexReportMainReinforcementLayer(f, concreteArea, os)
         os.write("\\end{tabular} \\\\\n")
 
@@ -1343,16 +1343,16 @@ class RCSectionBase(object):
                 lmsg.error(className+'.'+methodName+'; geometry of section: '+self.name+' not defined\n')
             # Some convenience lines.
             os.write('%% ****** Packages needed for LaTeX document: ****** \n')
-            os.write('%%\\usepackage{graphicx} %%\postscript includes\n')
-            os.write('%%\\usepackage{multirow} %%\multirow command\n')
-            os.write('%%\\usepackage{wasysym} %%\permil command\n')
-            os.write('%%\\usepackage{gensymb} %%\degree command\n')
+            os.write('%%\\usepackage{graphicx} %%\\postscript includes\n')
+            os.write('%%\\usepackage{multirow} %%\\multirow command\n')
+            os.write('%%\\usepackage{wasysym} %%\\permil command\n')
+            os.write('%%\\usepackage{gensymb} %%\\degree command\n')
             # Write table header.
             os.write('\\begin{table}\n')
             os.write('\\begin{center}\n')
             os.write('\\begin{tabular}{|c|}\n')
             os.write('\\hline\n')
-            os.write('\\begin{large} '+latex_utils.toLaTeX(self.name)+' \end{large}\\\\\n')
+            os.write('\\begin{large} '+latex_utils.toLaTeX(self.name)+' \\end{large}\\\\\n')
             os.write('\\hline\n')
             os.write(self.sectionDescr+'\\\\\n')
             os.write('\\hline\n')

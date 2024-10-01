@@ -60,16 +60,16 @@ def writeMainReinforcement(listaFamMainReinforcement, concreteArea, archTex):
     if(numRows>10):
         count= 0
         for f in listaFamMainReinforcement:
-            archTex.write("\hline\n")
+            archTex.write("\\hline\n")
             MainReinforcementLayer(f).texWrite(archTex,concreteArea)
             count+= 1
             if(count>10):
                 break;
-        archTex.write("\hline\n")
+        archTex.write("\\hline\n")
         archTex.write('\\multicolumn{8}{c}{../..}\\\\')
     else:
         for f in listaFamMainReinforcement:
-            archTex.write("\hline\n")
+            archTex.write("\\hline\n")
             MainReinforcementLayer(f).texWrite(archTex,concreteArea)
     archTex.write("\\end{tabular} \\\\\n")
 
@@ -162,16 +162,16 @@ class SectionInfo(object):
             sys.stderr.write('error: geometry of section: '+self.sectName+' not defined\n')
         fileHandler= open(archTex,'w')
         fileHandler.write('%% ****** Packages needed for LaTeX document: ****** \n')
-        fileHandler.write('%%\\usepackage{graphicx} %%\postscript includes\n')
-        fileHandler.write('%%\\usepackage{multirow} %%\multirow command\n')
-        fileHandler.write('%%\\usepackage{wasysym} %%\permil command\n')
-        fileHandler.write('%%\\usepackage{gensymb} %%\degree command\n')
+        fileHandler.write('%%\\usepackage{graphicx} %%\\postscript includes\n')
+        fileHandler.write('%%\\usepackage{multirow} %%\\multirow command\n')
+        fileHandler.write('%%\\usepackage{wasysym} %%\\permil command\n')
+        fileHandler.write('%%\\usepackage{gensymb} %%\\degree command\n')
 
         fileHandler.write('\\begin{table}\n')
         fileHandler.write('\\begin{center}\n')
         fileHandler.write('\\begin{tabular}{|c|}\n')
         fileHandler.write('\\hline\n')
-        fileHandler.write('\\begin{large} '+latex_utils.toLaTeX(self.sectName)+' \end{large}\\\\\n')
+        fileHandler.write('\\begin{large} '+latex_utils.toLaTeX(self.sectName)+' \\end{large}\\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write(self.sectDescr+'\\\\\n')
         fileHandler.write('\\hline\n')

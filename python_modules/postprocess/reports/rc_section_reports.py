@@ -60,8 +60,8 @@ class RCSectionReportGenerator(object):
         # diagGraphic.savefig(grFileNm+'.eps')
         diagGraphic.savefig(grFileNm+'.jpeg')
         reportFile.write('\\begin{center}\n')
-        reportFile.write('\includegraphics[width=80mm]{'+grRltvFileNm+'}\n')
-        reportFile.write('\end{center}\n')
+        reportFile.write('\\includegraphics[width=80mm]{'+grRltvFileNm+'}\n')
+        reportFile.write('\\end{center}\n')
 
     def plotMaterialDiagram(self, preprocessor, materialType, reportFile):
         ''' Plot the stress strain diagram of the given material type.
@@ -73,8 +73,8 @@ class RCSectionReportGenerator(object):
         materialDiag= materialType.plotDesignStressStrainDiagram(preprocessor= preprocessor, path= self.graphicOutputPath)
         materialGrphFileName= materialType.materialName+'_design_stress_strain_diagram'
         reportFile.write('\\begin{center}\n')
-        reportFile.write('\includegraphics[width=120mm]{'+self.graphicOutputRelPath+materialGrphFileName+'}\n')
-        reportFile.write('\end{center}\n')
+        reportFile.write('\\includegraphics[width=120mm]{'+self.graphicOutputRelPath+materialGrphFileName+'}\n')
+        reportFile.write('\\end{center}\n')
 
     def plotSteelDiagram(self, preprocessor, steelType, reportFile):
         ''' Plot the stress strain diagram of the reinforcing steel.

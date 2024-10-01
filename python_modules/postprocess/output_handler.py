@@ -1104,7 +1104,7 @@ def insertGrInTex(texFile, grFileNm, grWdt, capText, labl=''):
     '''Include a graphic in a LaTeX file.
 
     :param texFile:    laTex file where to include the graphics 
-                       (e.g.\:'text/report_loads.tex')
+                       (e.g.:'text/report_loads.tex')
     :param grFileNm:   name of the graphic file with path and without extension
     :param grWdt:      width to be applied to graphics
     :param capText:    text for the caption

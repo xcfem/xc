@@ -145,11 +145,11 @@ class LoadCaseManager(object):
             for key in self.loadCases:
                 loadCase= self.loadCases[key]
                 retval+= key + ' & '+ loadCase.description +'\\\\\n'
-            retval+= ('\hline\n')
-            retval+= ('\end{longtable}\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\end{longtable}\n')
             if(small):
                 retval+= ('\\end{small}\n')
-            retval+= ('\end{center}\n')
+            retval+= ('\\end{center}\n')
         return retval
     
     def exportToLatex(self, fileName):

@@ -360,7 +360,7 @@ fr_capTexts={
     'SLS_frequentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge fréquents',
     'SLS_quasiPermanentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge quasi-permanents',
     'ULS_fatigueResistance': 'Vérification ELU fatigue',
-    'getAbsSteelStressIncrement': "vérification de l'armature. Différence de contrainte $\delta_{sd}(Q_{fat})$ sous les actions de fatigue",
+    'getAbsSteelStressIncrement': "vérification de l'armature. Différence de contrainte $\\delta_{sd}(Q_{fat})$ sous les actions de fatigue",
     'concreteBendingCF':'vérification du béton. Facteur de capacité contraintes de compression',
     'concreteLimitStress':'vérification du béton. Limites contraintes de compression',
     'concreteShearCF':'vérification du béton. Facteur de capacité effort tranchant',
