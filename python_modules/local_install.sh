@@ -125,16 +125,17 @@ fi
 
 # Install Python extensions.
 echo "Installing Python extensions."
-sudo python setup.py install --prefix=/usr/local --record installed_files.txt
-echo "Updating installed files history."
-if test -f installed_files_history.txt; then
-    echo "${green}installed_files_history.txt already exists: OK!${clear}"
-else
-    echo "${green}Create installed_files_history.txt${clear}"
-    touch installed_files_history.txt
-    exit 0
-fi
-cat installed_files_history.txt installed_files.txt | sort | uniq > tmp.txt
-mv tmp.txt installed_files_history.txt
-sudo rm installed_files.txt
-echo "${green}installed_files_history.txt updated.${clear}"
+export XC_INSTALLATION_PREFIX="/usr/local"
+sudo -H pip3 install . -v --quiet --log ./installation_report.log #--root-user-action=ignore
+# echo "Updating installed files history."
+# if test -f installed_files_history.txt; then
+#     echo "${green}installed_files_history.txt already exists: OK!${clear}"
+# else
+#     echo "${green}Create installed_files_history.txt${clear}"
+#     touch installed_files_history.txt
+#     exit 0
+# fi
+# cat installed_files_history.txt installed_files.txt | sort | uniq > tmp.txt
+# mv tmp.txt installed_files_history.txt
+# sudo rm installed_files.txt
+# echo "${green}installed_files_history.txt updated.${clear}"

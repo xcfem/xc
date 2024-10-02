@@ -1,7 +1,7 @@
 #!/bin/bash
-#Deletes all the modules previously installed by local_install.sh
-#This is done to solve the problem of zombie modules: Python files that has been
-#deleted or replaced but which remains installed in the machine.
+# Deletes all the modules previously installed by local_install.sh
+# This is done to solve the problem of zombie modules: Python files that has
+# been deleted or replaced but which remains installed in the machine.
 
 if [[ $EUID -ne 0 ]]; then
   error "Uninstall script must be run as root."
@@ -9,5 +9,11 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "Uninstalling Python modules."
-cat installed_files_history.txt | xargs rm -f
+pip3 uninstall XCModules
+if [ -f ./installed_files_history.txt ]; then
+    echo "Uninstalling from previous versions (before setuptools)."
+    cat ./installed_files_history.txt | xargs rm -f
+else
+    echo "No previous versions files to uninstall."
+echo "Remove compiled files."
 rm -r build/*
