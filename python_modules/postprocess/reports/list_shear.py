@@ -27,7 +27,7 @@ def printShearVerificationListingHeader(outputFile, sectionName, title):
     outputFile.write("\\hline}\n")
     outputFile.write("\\tablehead{%\n")
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{12}{|l|}{\small\sl \ldots continúa}\\\\\n")
+    outputFile.write("\\multicolumn{12}{|l|}{\\small\\sl \\ldots continúa}\\\\\n")
     outputFile.write("\\hline\n")
     outputFile.write("\\multicolumn{12}{|c|}{\\textbf{"+title+"}}\\\\\n")
     outputFile.write("\\multicolumn{12}{|c|}{Comprobación de la sección "+ latex_utils.toLaTeX(sectionName)+"}\\\\\n")
@@ -37,9 +37,9 @@ def printShearVerificationListingHeader(outputFile, sectionName, title):
     outputFile.write("\\hline}\n")
     outputFile.write("\\tabletail{%\n")
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{12}{|r|}{\small\sl continúa\ldots}\\\\\n")
+    outputFile.write("\\multicolumn{12}{|r|}{\\small\\sl continúa\\ldots}\\\\\n")
     outputFile.write("\\hline}\n")
-    outputFile.write("\\tablelasttail{\hline}\n")
+    outputFile.write("\\tablelasttail{\\hline}\n")
     outputFile.write("\\begin{supertabular}{|l|r|r|r|r|r|r|r|r|r|r|r|}\n")
 
 

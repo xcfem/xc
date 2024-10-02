@@ -23,7 +23,7 @@ import xml.etree.cElementTree as ET
 containerId= "{C0FBF7E1-4A71-11D4-AB86-00C06C452330}"
 containerClsId= containerId
 conainerProgId= "DataSetSciaTom.EP_LoadCombi.1"
-tbName= "XML\default"
+tbName= r"XML\default"
 tbProgId= "DataSetSciaTom.EP_LoadCombi.1"
 tbId= "2B68D91B-7B72-4386-824B-4CC9834281A9"
 tbClsId= containerClsId

@@ -13,7 +13,7 @@ def printTNListingHeaderSteelShape(archivo, tit):
   archivo.write("\\hline}\n")
   archivo.write("\\tablehead{%\n")
   archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{6}{|l|}{\small\sl \ldots continúa}\\\\\n")
+  archivo.write("\\multicolumn{6}{|l|}{\\small\\sl \\ldots continúa}\\\\\n")
   archivo.write("\\hline\n")
   archivo.write("\\multicolumn{6}{|c|}{",tit,"}\\\\\n")
   archivo.write("\\hline\n")
@@ -22,9 +22,9 @@ def printTNListingHeaderSteelShape(archivo, tit):
   archivo.write("\\hline}\n")
   archivo.write("\\tabletail{%\n")
   archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{6}{|r|}{\small\sl continúa\ldots}\\\\\n")
+  archivo.write("\\multicolumn{6}{|r|}{\\small\\sl continúa\\ldots}\\\\\n")
   archivo.write("\\hline}\n")
-  archivo.write("\\tablelasttail{\hline}\n")
+  archivo.write("\\tablelasttail{\\hline}\n")
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
 
@@ -73,7 +73,7 @@ def printVListingHeaderSteelShape(archivo, tit):
   archivo.write("\\hline}\n")
   archivo.write("\\tablehead{%\n")
   archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{5}{|l|}{\small\sl \ldots continúa}\\\\\n")
+  archivo.write("\\multicolumn{5}{|l|}{\\small\\sl \\ldots continúa}\\\\\n")
   archivo.write("\\hline\n")
   archivo.write("\\multicolumn{5}{|c|}{",tit,"}\\\\\n")
   archivo.write("\\hline\n")
@@ -82,9 +82,9 @@ def printVListingHeaderSteelShape(archivo, tit):
   archivo.write("\\hline}\n")
   archivo.write("\\tabletail{%\n")
   archivo.write("\\hline\n")
-  archivo.write("\\multicolumn{5}{|r|}{\small\sl continúa\ldots}\\\\\n")
+  archivo.write("\\multicolumn{5}{|r|}{\\small\\sl continúa\\ldots}\\\\\n")
   archivo.write("\\hline}\n")
-  archivo.write("\\tablelasttail{\hline}\n")
+  archivo.write("\\tablelasttail{\\hline}\n")
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
 def listSteelShapeVStrength(xcSet, fName, titulo):

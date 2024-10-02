@@ -111,8 +111,8 @@ class HorizontalElasticResponseSpectrum(object):
         # plotting the signal 
         pyplot.plot(Ti, sa, color ='blue')
 
-        pyplot.xlabel('$T\ (s)$')
-        pyplot.ylabel('$S_a(T)\ (m/s^2)$')
+        pyplot.xlabel('$T\\ (s)$')
+        pyplot.ylabel('$S_a(T)\\ (m/s^2)$')
         pyplot.title("Elastic response spectrum")
 
         pyplot.show()        

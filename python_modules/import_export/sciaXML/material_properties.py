@@ -68,7 +68,7 @@ class GenericMaterialProperties(BasicMaterialProperties):
   TableClsId= "{EDAF68F9-AA38-11D4-B3D9-00104BC3B531}"
   TableProgId= "EP_Material.EP_Material.1"
   def __init__(self):
-    super(GenericMaterialProperties,self).__init__(self.TableId,"XML\default","vertical",self.TableClsId,self.TableProgId)
+    super(GenericMaterialProperties,self).__init__(self.TableId,r"XML\default","vertical",self.TableClsId,self.TableProgId)
     propSpecificHeat= prop.SCXMLProperty("11","Specific heat","real",self.idSpecificHeat)
     propThermalConductivity= prop.SCXMLProperty("12","Thermal conductivity","real",self.idThermalConductivity)
     self.properties.append(propSpecificHeat) #11
@@ -82,7 +82,7 @@ class SteelSIAProperties(BasicMaterialProperties):
   idUltimateStrength= "{0BE3B3D1-86FA-11D4-B3AC-00104BC3B531}"
   idYieldStrength= "{0BE3B3D2-86FA-11D4-B3AC-00104BC3B531}"
   def __init__(self):
-    super(SteelSIAProperties,self).__init__(self.TableId,"XML\default","vertical",self.TableClsId,self.TableProgId)
+    super(SteelSIAProperties,self).__init__(self.TableId,r"XML\default","vertical",self.TableClsId,self.TableProgId)
     propThermalExpansionFireR= prop.SCXMLProperty("11","Thermal expansion (for fire resistance) ","real",self.idThermalExpansionFireR)
     propSpecificHeat= prop.SCXMLProperty("12","Specific heat","real",self.idSpecificHeat)
     propThermalConductivity= prop.SCXMLProperty("13","Thermal conductivity","real",self.idThermalConductivity)
@@ -107,7 +107,7 @@ class ConcreteSIAProperties(BasicMaterialProperties):
   idFcd= "{177072D9-FD3F-4495-9C07-5924590B6B8B}"
   idMVMCS= "{4C74CF90-7EC1-45FA-8A23-B40CED5857FA}"
   def __init__(self):
-    super(ConcreteSIAProperties,self).__init__(self.TableId,"XML\default","vertical",self.TableClsId,self.TableProgId)
+    super(ConcreteSIAProperties,self).__init__(self.TableId,r"XML\default","vertical",self.TableClsId,self.TableProgId)
     propSpecificHeat= prop.SCXMLProperty("11","Specific heat","real",self.idSpecificHeat)
     propThermalConductivity= prop.SCXMLProperty("12","Thermal conductivity","real",self.idThermalConductivity)
     propOrderInCode= prop.SCXMLProperty("13","Order in code","integer",self.idOrderInCode)

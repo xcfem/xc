@@ -38,9 +38,9 @@ def latex_spanish(fck, RH, Ac, u, h0mm, Epscainf, Betaast, t, Epsca, BetaRH, Alf
     outputStr+='Espesor medio en milímetros & $2A_c/u$ & '+str(round(h0mm,1))+ ' [mm] \\\\\n'
 
     outputStr+='\\multicolumn{3}{l}{\\textbf{Retracción autógena:}} \\\\\n'
-    outputStr+='Coeficiente $t=\\infty$ & $\\epsilon_{ca,\infty}$ & '+'{:.2e}'.format(Epscainf)+' \\\\\n'
+    outputStr+='Coeficiente $t=\\infty$ & $\\epsilon_{ca,\\infty}$ & '+'{:.2e}'.format(Epscainf)+' \\\\\n'
     outputStr+='Coeficiente t= '+ str(t)+ ' días & $\\beta_{as}(t)$ & '+str(round(Betaast,3))+' \\\\\n'
-    outputStr+='Deformación de retracción autógena & $\epsilon_{ca}(t)$ & '+ '{:.2e}'.format(Epsca)+ ' \\\\\n'
+    outputStr+='Deformación de retracción autógena & $\\epsilon_{ca}(t)$ & '+ '{:.2e}'.format(Epsca)+ ' \\\\\n'
 
     outputStr+='\\multicolumn{3}{l}{\\textbf{Retracción por secado: }} \\\\\n'
     outputStr+='Coeficiente $\\beta_{HR}$ & $\\beta_{HR}$ & '+str(BetaRH)+ ' \\\\\n'

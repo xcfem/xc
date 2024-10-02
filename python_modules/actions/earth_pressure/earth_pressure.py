@@ -204,7 +204,7 @@ class UniformPressureOnBackfill(PressureModelBase):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to the uniform load. According to
            11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
-           isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix\_EC)
+           isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix_EC)
 
         :param xcSet: set that contains the elements.
         :param vDir: unit xc vector defining pressures direction.
@@ -404,7 +404,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to the strip load. According to
            11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
-           isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix\_EC)
+           isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix_EC)
 
         :param xcSet: set that contains the elements.
         :param vDir: unit xc vector defining pressures direction.

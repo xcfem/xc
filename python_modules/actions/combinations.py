@@ -269,11 +269,11 @@ class SituationCombs(dict):
             retval+= ('\\endlastfoot\n')
             for key in sorted(self):
                 retval+= self[key].getLaTeXCode()
-            retval+= ('\hline\n')
-            retval+= ('\end{longtable}\n')
+            retval+= ('\\hline\n')
+            retval+= ('\\end{longtable}\n')
             if(small):
                 retval+= ('\\end{small}\n')
-            retval+= ('\end{center}\n')
+            retval+= ('\\end{center}\n')
         return retval
             
     def exportToLatex(self, outputFile, limitState= None):

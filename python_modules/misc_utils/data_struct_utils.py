@@ -71,7 +71,7 @@ def slugify(s):
 
     # "[some]___article's_title__"
     # "some___articles_title__"
-    s = re.sub('\W', '', s)
+    s = re.sub(r'\W', '', s)
 
     # "some___articles_title__"
     # "some   articles title  "
@@ -79,7 +79,7 @@ def slugify(s):
 
     # "some   articles title  "
     # "some articles title "
-    s = re.sub('\s+', ' ', s)
+    s = re.sub(r'\s+', ' ', s)
 
     # "some articles title "
     # "some articles title"
@@ -130,7 +130,7 @@ def natural_keys(text):
 
 def sort_human(l):
     convert = lambda text: float(text) if text.isdigit() else text
-    alphanum = lambda key: [convert(c) for c in re.split('([-+]?[0-9]*\.?[0-9]*)', key)]
+    alphanum = lambda key: [convert(c) for c in re.split(r'([-+]?[0-9]*\.?[0-9]*)', key)]
     l.sort(key=alphanum)
     return l
 

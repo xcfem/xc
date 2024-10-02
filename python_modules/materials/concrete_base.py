@@ -1051,7 +1051,7 @@ class paramTensStiffness(object):
 
     :ivar concrMat: concrete material of the RC section
     :ivar reinfMat: reinforcing steel material of the RC section 
-    :ivar reinfRatio: section reinforcement ratio, obtained as\:
+    :ivar reinfRatio: section reinforcement ratio, obtained as:
         -ro=As/Ac for members subjected to direct tension.
         -roef=As/Acef for members under bending, where Acef is the effective
         area, that corresponds to the tensile zone in the member section.
@@ -1059,7 +1059,7 @@ class paramTensStiffness(object):
         the neutral axis depth. Aef can be estimated as Aef~=bh/4 
     :ivar nPoints: number of (strain,stress) pairs of values to approximate the exponential
       decay curve adopted for the post-cracking range (defaults to 50)
-    :ivar diagType: type of diagram\: 'K' or 'k' for characteristic, 'D' or 'd' for design
+    :ivar diagType: type of diagram: 'K' or 'k' for characteristic, 'D' or 'd' for design
       (defaults to characteristic)
     :ivar E_c: concrete elastic modulus [Pa] [+] (defaults to concrMat.Ecm())
     :ivar f_ct: concrete tensile strength [Pa][+] (defaults to concrMat.fctd() or concrMat.fctk())

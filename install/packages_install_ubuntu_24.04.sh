@@ -10,7 +10,7 @@ fi
 version () { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 # print information about non-free packages
-echo "Some packages are in the \"contrib\" and \"non-free\" areas of the Debian distribution so these areas should be included in the sources.list file before running this script."
+echo "Some packages are in the \"contrib\" and \"non-free\" areas of the Ubuntu/Debian distribution so these areas should be included in the sources.list file before running this script."
 
 # verify that the user wants to continue, but skip this step if a
 # parameter DoNotAsk was given with script start.
@@ -32,6 +32,7 @@ packages_build="\
     libboost-all-dev"
 sudo apt-get install -y $packages_build
 
+# libdb-dev: Berkeley DB library
 packages_lib="\
     libarpack2-dev              \
     libarpack++2-dev            \
@@ -57,6 +58,7 @@ packages_lib="\
     libsuperlu-dev              \
     libsuitesparse-dev          \
     libvtk9-dev                 \
+    libvtk9-qt-dev              \
     libx11-dev                  \
     libmetis-dev"
 sudo apt-get install -y $packages_lib
@@ -89,21 +91,21 @@ packages_div="\
 #   formats.
 sudo apt-get install -y $packages_div
 
-
+packages_python="\
+    mayavi2 \
+    python3-ezdxf \
+    python3-cairo \
+    python3-cairo-dev"
+sudo apt-get install -y $packages_python
 
 # free disk space by cleaning install files
 sudo apt-get clean
 
-
-# mayavi installation. Ubuntu 'mayavi' package seems to require VTK 6,
-# so we use pip (to reconsider because we already use VTK 6 LCPT 24/09/2018)
-sudo -H pip3 install mayavi
-sudo -H pip3 install ezdxf
-sudo -H pip3 install pyexcel
-sudo -H pip3 install pyexcel-ods
-sudo -H pip3 install dxfwrite # To replace with ezdxf
-# cairo installation. 
-sudo -H pip3 install pycairo
+# Ubuntu 24.04 refuses to install the following packagres system-wide
+# unless you use --break-system-packages which seems too agressive.
+# For the moment we comment out the installation
+# sudo -H pip3 install pyexcel
+# sudo -H pip3 install pyexcel-ods
 
 # GMSH installation.
 GMSH_REQUIRED_VERSION="4.8.4"
@@ -117,7 +119,9 @@ then # Install GMSH
 	echo "$0: gmshHeader '${gmshHeader}' will be installed from Ubuntu repositories."
 	packages_gmsh="\
 	    libgmsh-dev                 \
-	    libgmsh4"
+	    python3-gmsh                \
+	    python3-pygmsh                \
+	    libgmsh4.12"
 	sudo apt-get install -y $packages_gmsh
     else
 	echo "\e[31m\e[1mPackaged version: $GMSH_PKG_VERSION is too old. GMSH 4.8 or later required."

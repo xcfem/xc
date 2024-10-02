@@ -4,7 +4,7 @@ def write_loads_mode(preprocessor,fName, iModo, aceleraciones):
     '''Write the equivalent static loads oftained for each node in the mode 
     passed as parameter
     '''
-    fName.write("\# Due to mass in nodes.)\n")
+    fName.write("\\# Due to mass in nodes.)\n")
     nodes= preprocessor.getNodeHandler
     for n in nodes:
         if(n.tag>0):
@@ -12,7 +12,7 @@ def write_loads_mode(preprocessor,fName, iModo, aceleraciones):
             fName.write("\\nodal_load{ \\nod{",n.tag,"}")
             fName.write(" \\val{",node_force,"} }\n")
 
-    fName.write("\n\n\# Due to mass in elements.)\n")
+    fName.write("\n\n\\# Due to mass in elements.)\n")
     elementos= preprocessor.getElementHandler
     for e in elementos:
         if(e.tag>0):

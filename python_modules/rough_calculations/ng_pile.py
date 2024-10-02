@@ -13,7 +13,7 @@ from postprocess.reports import common_formats as fmt
 
 
 # Nº de pilotes necesario y predimensionamiento de los mismos. Números gordos, 2ª ed., pag.30
-print("\input{cabecera.tex}")
+print("\\input{cabecera.tex}")
 
 # Datos necesarios
 Nk= 1000.0 # Axil característico del pilar (kN)
@@ -40,28 +40,28 @@ print("\\end{itemize}")
 print("Número de pilotes \\\\ \n ")
 Rpil=(Apil*Spil)
 npil=math.ceil(Nk/Rpil)
-print("$$Resistencia\ de\ un\ pilote\ R=A\\cdot\\sigma = ", fmt.Length.format(Rpil),"\ kN$$")
-print("$$N^o\ pilotes\ n=\\cfrac{N_k}{R} = ", int(npil),"\ pilotes$$")
+print("$$Resistencia\\ de\\ un\\ pilote\\ R=A\\cdot\\sigma = ", fmt.Length.format(Rpil),"\\ kN$$")
+print("$$N^o\\ pilotes\\ n=\\cfrac{N_k}{R} = ", int(npil),"\\ pilotes$$")
 print("Reinforcement \\\\ \n ")
 print("\\begin{itemize}")
 print("\\item{Axil de cálculo}")
 Nd=(1.5*Nk/npil)
-print("$$N_d = 1.5 \\cfrac{N_K}{n} = ", fmt.Esf.format(Nd),"\ kN$$")
+print("$$N_d = 1.5 \\cfrac{N_K}{n} = ", fmt.Esf.format(Nd),"\\ kN$$")
 print("\\item{Reinforcement}")
 As=((Nd-fck/1.5*Apil/1000)/fyk*1.15*10)
 print("$$N_d = f_{cd} A_c + f_{yd} A_s \\rightarrow $$")
-print("$$A_s = \\cfrac{N_d - f_{cd} A_c \\left[\\times \\cfrac{1}{1000}\\right]}{f_{yd}}[\\times 10] =", fmt.Area.format(As),"\ cm^2  $$")
+print("$$A_s = \\cfrac{N_d - f_{cd} A_c \\left[\\times \\cfrac{1}{1000}\\right]}{f_{yd}}[\\times 10] =", fmt.Area.format(As),"\\ cm^2  $$")
 print("\\item{Minimum reinforcement}")
-print("$$Min.\ geom.\ A_s \\ge 4\\permil A_c =", fmt.Area.format((Apil*40)),"\ cm^2 $$")
+print("$$Min.\\ geom.\\ A_s \\ge 4\\permil A_c =", fmt.Area.format((Apil*40)),"\\ cm^2 $$")
 Asmmec=(0.1*Apil*fck/1.5/fyk*1.15*10000)
-print("$$Min.\ mec.\ A_s \\ge\\cfrac{ 10\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\ cm^2 $$")
+print("$$Min.\\ mec.\\ A_s \\ge\\cfrac{ 10\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\\ cm^2 $$")
 print("\\item{Maximum reinforcement}")
 if(prefabricado=="si"):
   Asmmec=(0.6*Apil*fck/1.5/fyk*1.15*10000)
-  print("$$Max.\ mec.\ A_s \\le\\cfrac{ 60\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\ cm^2 $$")
+  print("$$Max.\\ mec.\\ A_s \\le\\cfrac{ 60\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\\ cm^2 $$")
 else:
   Asmmec=(Apil*fck/1.5/fyk*1.15*10000)
-  print("$$Max.\ mec.\ A_s \\le\\cfrac{ 100\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\ cm^2 $$")
+  print("$$Max.\\ mec.\\ A_s \\le\\cfrac{ 100\\% A_c f_{cd}}{f_{yd}}=", fmt.Area.format(Asmmec),"\\ cm^2 $$")
 
 print("\\item{Reinforcement tips} \\\\")
 print("\\begin{tabular}{lr}")
