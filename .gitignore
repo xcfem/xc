@@ -163,10 +163,14 @@ sympy-plots-for-*.tex/
 *.sav
 doc/XCmanual/XCmanual.pdf
 *~
-python_modules/build/lib*
 
-#python
+# Python
+python_modules/build/*
+python_modules/*.egg-info
 *.pyc
+
+
+# Version
 version.cc
 
 #sphinx
