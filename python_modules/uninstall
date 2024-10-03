@@ -1,19 +1,17 @@
-#!/bin/bash
+#!/bin/sh
 # Deletes all the modules previously installed by local_install.sh
 # This is done to solve the problem of zombie modules: Python files that has
 # been deleted or replaced but which remains installed in the machine.
 
-if [[ $EUID -ne 0 ]]; then
-  error "Uninstall script must be run as root."
-  exit 1
-fi
-
-echo "Uninstalling Python modules."
-pip3 uninstall XCModules
-if [ -f ./installed_files_history.txt ]; then
-    echo "Uninstalling from previous versions (before setuptools)."
-    cat ./installed_files_history.txt | xargs rm -f
+echo "Uninstalling Debian package."
+FILE=./xc_installation_target.txt
+if test -f "$FILE"; then
+    echo "$FILE exists."
+    package_file=$( tail -n 1 $FILE)
+    echo "package to uninstall: $package_file"
+    sudo dpkg --remove xc-python-modules
 else
-    echo "No previous versions files to uninstall."
-echo "Remove compiled files."
-rm -r build/*
+    echo "No previous package to uninstall."
+fi
+# Remove precompiled files.
+rm -rf build/*

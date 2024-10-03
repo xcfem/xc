@@ -1,6 +1,11 @@
 # Source: https://github.com/Changaco/version.py
 
-import xc
+import importlib.util
+xc_spec = importlib.util.find_spec("xc")
+xc_found = xc_spec is not None
+
+if xc_found:
+    import xc
 import json
 import os
 import subprocess
@@ -19,7 +24,10 @@ else:
         json.dump(last_xc_version_dict, fw)
 
 def get_xc_version():
-    xc_git_version= xc.getXCVersion()
+    if(xc_found):
+        xc_git_version= xc.getXCVersion()
+    else:
+        xc_git_version= last_xc_version_dict['last_xc_git_version']
     last_xc_git_version= last_xc_version_dict['last_xc_git_version']
     beta= int(last_xc_version_dict['beta'])
     if(xc_git_version != last_xc_git_version):
@@ -33,6 +41,7 @@ def get_xc_version():
     major= major_minor[0][1:]
     minor= major_minor[1]
     retval= major+'.'+minor+'.'+str(beta)
+        
     return retval
 
 if __name__ == '__main__':

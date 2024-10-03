@@ -22,7 +22,8 @@
 
 import os
 import logging
-import platform;
+import platform
+import site
 
 xc_deb_pkg_folder= None
 xc_installation_target= None
@@ -33,7 +34,6 @@ with open('./xc_installation_target.txt','r') as f:
     xc_deb_pkg_folder= f.readline().strip()
     xc_installation_target= f.readline().strip()
     usr_local_pth= f.readline().strip()
-    pth_to_libs= f.readline().strip()
 if (xc_version is None):
     logging.error('XC_VERSION not set.')
     exit(1)
@@ -49,9 +49,21 @@ if (xc_installation_target is None):
 if (usr_local_pth is None):
     logging.error('USR_LOCAL not set.')
     exit(1)
+    
+# Get site packages.
+site_packages= site.getsitepackages()
+pth_to_libs= None
+for pth in site_packages:
+    if(pth.startswith(usr_local_pth)):
+        pth_to_libs= pth
 if (pth_to_libs is None):
-    logging.error('PTH_TO_LIBS not set.')
+    logging.error('Can\'t find: '+str(usr_local_pth)+' among site packages.')
     exit(1)
+else:
+    pth_to_libs= xc_deb_pkg_folder+pth_to_libs
+    print('path to libs: ', pth_to_libs)
+    with open("./xc_installation_target.txt","a") as f:
+        f.write(pth_to_libs+'\n')
 
 # Prepare Debian package folder.
 ## Create config.ini

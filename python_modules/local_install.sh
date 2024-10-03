@@ -125,17 +125,29 @@ fi
 
 # Install Python extensions.
 echo "Installing Python extensions."
-export XC_INSTALLATION_PREFIX="/usr/local"
-sudo -H pip3 install . -v --quiet --log ./installation_report.log #--root-user-action=ignore
-# echo "Updating installed files history."
-# if test -f installed_files_history.txt; then
-#     echo "${green}installed_files_history.txt already exists: OK!${clear}"
-# else
-#     echo "${green}Create installed_files_history.txt${clear}"
-#     touch installed_files_history.txt
-#     exit 0
-# fi
-# cat installed_files_history.txt installed_files.txt | sort | uniq > tmp.txt
-# mv tmp.txt installed_files_history.txt
-# sudo rm installed_files.txt
-# echo "${green}installed_files_history.txt updated.${clear}"
+export XC_VERSION=$(python version.py)
+export SYS_ARCH=$(dpkg --print-architecture)
+export XC_DEB_PKG_FOLDER="./debian-pkg"
+export USR_LOCAL="/usr/local"
+export XC_INSTALLATION_TARGET="${XC_DEB_PKG_FOLDER}${USR_LOCAL}/tmp"
+echo "$XC_VERSION" > ./xc_installation_target.txt
+echo "$SYS_ARCH" >> ./xc_installation_target.txt
+echo "$XC_DEB_PKG_FOLDER" >> ./xc_installation_target.txt
+echo "$XC_INSTALLATION_TARGET" >> ./xc_installation_target.txt
+echo "$USR_LOCAL" >> ./xc_installation_target.txt
+rm -rf $XC_DEB_PKG_FOLDER
+mkdir $XC_DEB_PKG_FOLDER
+pip3 install . -v --quiet --log ./installation_report.log --upgrade --target=$XC_INSTALLATION_TARGET #--root-user-action=ignore
+python prepare_deb_pkg.py
+# Create debian package
+dpkg-deb --build $XC_DEB_PKG_FOLDER
+dpkg-name --overwrite "$XC_DEB_PKG_FOLDER.deb"
+XC_DEB_PKG=$(ls -t *.deb | head -1)
+echo "New Debian package: $XC_DEB_PKG"
+echo "Clean temporary files."
+rm -r $XC_DEB_PKG_FOLDER
+echo "Install package."
+sudo dpkg -i "$XC_DEB_PKG"
+echo "$XC_DEB_PKG" >> ./xc_installation_target.txt
+echo "Remove package files after installation."
+rm -vi *.deb

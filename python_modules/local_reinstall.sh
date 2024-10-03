@@ -4,7 +4,7 @@
 #deleted or replaced but which remains installed in the machine.
 
 echo "Uninstalling modules."
-sudo bash ./uninstall
+./uninstall
 echo "Reinstalling modules."
 sh ./local_install.sh
 
