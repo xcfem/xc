@@ -10,8 +10,6 @@ from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 import os
 from misc_utils import log_messages as lmsg
-from collections import OrderedDict
-from pyexcel_ods import save_data
 
 __author__= "Luis Claudio Pérez Tato (LCPT"
 __copyright__= "Copyright 2020, LCPT"
