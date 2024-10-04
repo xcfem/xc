@@ -54,7 +54,7 @@ pi= [ pressure(z) for z in zi]
 
 ##  call quad to integrate f from -4 to 0
 #force, int_err = integrate.quad(pressure, -4, 0)
-force= integrate.simpson(pi, zi, even='first')
+force= integrate.simpson(pi, zi)
 err= abs(force-10e3)/10e3
 
 '''
