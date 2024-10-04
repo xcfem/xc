@@ -253,7 +253,7 @@ print("ratio22= ", ratio22)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-6 and ratio2<1e-6 and ratio3<1e-6 and ratio4<1e-6 and ratio5<1e-6 and ratio6<1e-6 and ratio7<1e-6 and ratio8<1e-6 and ratio9<1e-6 and ratio10<1e-6 and ratio11<1e-6and ratio12<1e-6 and ratio13<1e-6 and ratio14<1e-6 and ratio15<1e-6 and ratio16<1e-6 and ratio17<1e-6 and ratio18<1e-6 and ratio19<1e-6 and ratio20<1e-6 and ratio21<1e-6 and ratio22<1e-6):
+if (ratio1<1e-6 and ratio2<1e-6 and ratio3<1e-6 and ratio4<1e-6 and ratio5<1e-6 and ratio6<1e-6 and ratio7<1e-6 and ratio8<1e-6 and ratio9<1e-6 and ratio10<1e-6 and ratio11<1e-6 and ratio12<1e-6 and ratio13<1e-6 and ratio14<1e-6 and ratio15<1e-6 and ratio16<1e-6 and ratio17<1e-6 and ratio18<1e-6 and ratio19<1e-6 and ratio20<1e-6 and ratio21<1e-6 and ratio22<1e-6):
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')

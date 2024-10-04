@@ -50,19 +50,6 @@ Pyz= points.Pxy()
 deltaX= points.getX(1,2)-points.getX(1,1)
 deltaY= points.getY(2,1)-points.getY(1,1)
 
-''' 
-for                          \inicio{i=1} \continua{i<=numFilas} \incremento{i=(i+1)
-  for j in range(1,j+1):
-                                 \bucle
-
-                                      print("x(",i,",",j,")= ",x(i,j)
-                                      print(" y(",i,",",j,")= ",y(i,j)
-
-
-
-
-'''
-
 def sqr(x):
   return x*x
 

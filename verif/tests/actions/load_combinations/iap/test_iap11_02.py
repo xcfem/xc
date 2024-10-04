@@ -58,9 +58,9 @@ lcg.computeCombinations()
 err= 0.0
 eluPersist= lcg.getULSTransientCombinations()
 
-gSmallRegex= re.compile('.*1.00\*G.*') # permanent load favourable.
-gBigRegex= re.compile('.*1.35\*G.*') # permanent load unfavourable.
-liveLoadRegex= re.compile('.*Q[12].*')
+gSmallRegex= re.compile(r'.*1.00\*G.*') # permanent load favourable.
+gBigRegex= re.compile(r'.*1.35\*G.*') # permanent load unfavourable.
+liveLoadRegex= re.compile(r'.*Q[12].*')
 windRegex= re.compile('.*Qviento.*') # wind load present.
 for comb in eluPersist:
     expr= comb.name

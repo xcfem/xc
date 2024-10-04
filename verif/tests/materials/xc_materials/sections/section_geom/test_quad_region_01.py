@@ -42,20 +42,6 @@ Iy= points.Iy() # Inertia around the y axis.
 Pxy= points.Pxy() # Inertia product.
 deltaX= points.getX(1,2)-points.getX(1,1) 
 deltaY= points.getY(2,2)-points.getY(1,1)
-
-''' 
-for  \inicio{i=1} \continua{i<=numFilas} \incremento{i=(i+1)
-  for j in range(1,j+1):
-                                 \bucle
-
-                                      print("x(",i,",",j,")= ",x(i,j)
-                                      print(" y(",i,",",j,")= ",y(i,j)
-
-
-
-
-'''
-
 numQuadsTeor= n1*n2
 numFilasTeor= (n2+1)
 numColsTeor= (n1+1)

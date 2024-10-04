@@ -32,7 +32,7 @@ print(xi, yi, err)
 import matplotlib.pyplot as plt
 plt.title("Additional amplification factor.")
 plt.xlabel("D")
-plt.ylabel(r'$\Delta \varphi_{fat}$')
+plt.ylabel(r'$\\Delta \\varphi_{fat}$')
 plt.plot(xi, yi)
 plt.grid()
 plt.show()

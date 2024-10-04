@@ -89,7 +89,7 @@ ratio3= R[2]-MomY
 ratio4= R[1]-MomZFibersDq
 ratio5= R[2]-MomYFibersDq
 
-''' 
+'''
 print("F= ",F)
 print("MomY= ",MomY)
 print("MomZ= ",MomZ)
@@ -99,20 +99,20 @@ print("A= ",A)
 print("eps= ",eps)
 print("yG= ",yG)
 print("zG= ",zG,"\n\n")
-print("IEA= ",IEA   \print{" IK12= ",IK12} \print{" IK13= ",IK13)
-print("IK21= ",IK21} \print{" IEIy= ",IEIy} \print{" IK23= ",IK23)
-print("IK31= ",IK31} \print{" IK32= ",IK32} \print{" IEIz= ",IEIz,"\n\n")
+print("IEA= ",IEA  ," IK12= ",IK12," IK13= ",IK13)
+print("IK21= ",IK21," IEIy= ",IEIy," IK23= ",IK23)
+print("IK31= ",IK31," IK32= ",IK32," IEIz= ",IEIz,"\n\n")
 
-print("TEA= ",TEA}   \print{" TK12= ",TK12} \print{" TK13= ",TK13)
-print("TK21= ",TK21} \print{" TEIy= ",TEIy} \print{" TK23= ",TK23)
-print("TK31= ",TK31} \print{" TK32= ",TK32} \print{" TEIz= ",TEIz,"\n\n")
+print("TEA= ",TEA  ," TK12= ",TK12," TK13= ",TK13)
+print("TK21= ",TK21," TEIy= ",TEIy," TK23= ",TK23)
+print("TK31= ",TK31," TK32= ",TK32," TEIz= ",TEIz,"\n\n")
 
 print("R= ",R)
 
-print("ratio1= ",(ratio1))
-print("ratio2= ",(ratio2))
-print("ratio3= ",(ratio3))
-print("ratio4= ",(ratio4))
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
 '''
 
 import os

@@ -24,7 +24,7 @@ mTeor=fuerza*brazo
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if m.x==0 and m.y==0and m.z==mTeor:
+if m.x==0 and m.y==0 and m.z==mTeor:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
