@@ -60,6 +60,7 @@ packages_lib="\
     libvtk9-dev                 \
     libvtk9-qt-dev              \
     libx11-dev                  \
+    libspectra-dev              \
     libmetis-dev"
 sudo apt-get install -y $packages_lib
 
