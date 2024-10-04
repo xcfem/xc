@@ -9,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from pyexcel_ods import get_data
 import json
 
 # Load raw catalog data.
