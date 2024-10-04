@@ -179,7 +179,7 @@ for i in range(0,nMod):
 
 
 for k in range(0,3):
-    maxDispCQC[k]= math.sqrt(maxDispCQC[k])
+    maxDispCQC[k]= math.sqrt(maxDispCQC[k][0])
 
 maxDispCQC= xc.Vector(maxDispCQC)
 ratioDispCQC= (maxDispCQC-maxDispCQCTeor).Norm()

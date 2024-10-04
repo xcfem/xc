@@ -110,7 +110,7 @@ def fit_parabola(x, y):
     '''Fits the equation "y = ax^2 + bx + c" given exactly 3 points as two
     lists or arrays of x & y coordinates
     '''
-    A = np.zeros((3,3), dtype=np.float)
+    A = np.zeros((3,3), dtype=float)
     A[:,0] = x**2
     A[:,1] = x
     A[:,2] = 1
