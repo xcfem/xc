@@ -121,6 +121,7 @@ def read_shapes_from_spreadsheet(namePrefix, columnOrder, columnUnits, spreadshe
     # Convert to the desired units.
     for shapeName in retval:
         shapeRecord= retval[shapeName]
+        shapeRecord['nmb']= shapeName # set name
         for key in shapeRecord:
             if key in columnUnits: # convert to the desired units.
                 factor= columnUnits[key]
