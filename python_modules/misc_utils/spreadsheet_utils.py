@@ -104,7 +104,7 @@ def read_shapes_from_spreadsheet(namePrefix, columnOrder, columnUnits, spreadshe
             if(len(r)>0): # if not empty.
                 value= r[columnKeys['nmb']].value
                 if(value):
-                    name= str(value.replace(' ',''))
+                    name= str(value).replace(' ','')
                     if(name.startswith(namePrefix)):
                         shapeRecord= dict()
                         for key in columnOrder:
@@ -125,7 +125,10 @@ def read_shapes_from_spreadsheet(namePrefix, columnOrder, columnUnits, spreadshe
         for key in shapeRecord:
             if key in columnUnits: # convert to the desired units.
                 factor= columnUnits[key]
-                value= float(shapeRecord[key].replace(',',''))
+                value= shapeRecord[key]
+                if(isinstance(value, str)):
+                    value= value.replace(',','') # thousands separator.
+                value= float(value)
                 newValue= value*factor
                 shapeRecord[key]= newValue
             else: # convert to number if possible.
