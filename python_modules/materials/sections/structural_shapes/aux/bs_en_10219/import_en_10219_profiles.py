@@ -104,7 +104,6 @@ def post_process(shapesDict):
 
 shapesDict= dict()
 for namePrefix in ['CFCHS', 'CFSHS', 'RHS']:
-    print(namePrefix)
     shapesDict[namePrefix]= su.read_shapes_from_spreadsheet(namePrefix= namePrefix, columnOrder= columnOrder[namePrefix], columnUnits= columnUnits, spreadsheetFileName= fNameIn, E= 210000e6, nu= 0.3, post_processing_function= post_process)
     
 jsonFile= open(fNameOut, "w")
