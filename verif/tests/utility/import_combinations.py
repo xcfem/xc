@@ -11,7 +11,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 from import_export import load_combinations as lc
 import os
 
-fName= 'load_combinations.ods'
+fName= 'load_combinations.xlsx'
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
@@ -22,7 +22,7 @@ actions= ['selfWeight', 'deadLoad', 'earthPressure', 'pedestrianLoad', 'singleAx
 sheets= ['ELS_qp','ELU_T2','ELU_A','ELS_rare','ELS_freq']
 
 
-combs= lc.import_load_combinations_from_book(fPath, sheets, nameColumsRow= 1, combNameColumn= 'ID',actionLabels= actions)
+combs= lc.import_load_combinations_from_book(fPath, sheets, nameColumsRow= 1, combNameColumn= 'ID',actionLabels= actions, dataOnly= True)
 
 count= 0
 for key in combs.keys():

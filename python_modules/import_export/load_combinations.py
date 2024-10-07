@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import pyexcel as pe
+import openpyxl
 
 def to_str(s):
     try:
@@ -28,10 +28,27 @@ def to_float(s):
     except ValueError:
         return None
 
-def import_load_combinations_from_sheet(pyExcelBook, sheetName, nameColumsRow, combNameColumn, actionLabels):
+def name_columns_by_row(worksheet, row):
+    ''' Return a dictionary containing the column indexes corresponding the
+        contents of the given row.
+
+    :param worksheet: worksheet to process.
+    :param row: row containing the column names.
+    '''
+    retval= {}
+    current= 0
+    for col in worksheet.iter_cols(0, worksheet.max_column):
+        value= col[row].value
+        if(value):
+            retval[value]= current
+        current+= 1
+    return retval
+
+    
+def import_load_combinations_from_sheet(openpyxlBook, sheetName, nameColumsRow, combNameColumn, actionLabels):
     ''' Import load combinations from an spreadsheet sheet
 
-    :param pyExcelBook: spreadsheet book to import from.
+    :param openpyxlBook: spreadsheet book to import from.
     :param sheetName: name of the seet to import from.
     :param nameColumnsRow: row number of the column names.
     :param combNameColumn: label of the column that contains the 
@@ -39,26 +56,32 @@ def import_load_combinations_from_sheet(pyExcelBook, sheetName, nameColumsRow, c
     :param actionLabels: labels of the actions.
     '''
     retval= dict()
-    uls_sheet= pyExcelBook[sheetName]
-    uls_sheet.name_columns_by_row(1)
-    records = uls_sheet.to_records()
-    for record in records:
-        # keys = sorted(record.keys())
-        combName= to_str(record[combNameColumn])
-        combExpr= ''
-        if(len(combName)>0):
-            for a in actionLabels:
-                coef= to_float(record[a])
-                if(coef):
-                    if(coef!= 0):
-                        if(len(combExpr)>0):
-                            combExpr+= '+'
-                        combExpr+= str(coef)+'*'+a
-            if(len(combExpr)>0):
-                retval[combName]= combExpr
+    uls_sheet= openpyxlBook[sheetName]
+    column_names= name_columns_by_row(uls_sheet, 1)
+    rows= uls_sheet.rows
+    rowIndex= 0
+    for r in rows:
+        if(rowIndex>=2):
+            combName= to_str(r[column_names[combNameColumn]])
+            combExpr= ''
+            if(len(combName)>0):
+                for a in actionLabels:
+                    value= r[column_names[a]].value
+                    if(value):
+                        coef= to_float(value)
+                        if(coef):
+                            if(coef!= 0):
+                                if(len(combExpr)>0):
+                                    combExpr+= '+'
+                                combExpr+= str(coef)+'*'+a
+                    else:
+                        break
+                if(len(combExpr)>0):
+                    retval[combName]= combExpr
+        rowIndex+= 1
     return retval
     
-def import_load_combinations_from_book(fileName, sheetNames, nameColumsRow, combNameColumn, actionLabels):
+def import_load_combinations_from_book(fileName, sheetNames, nameColumsRow, combNameColumn, actionLabels, dataOnly= False):
     ''' Import load combinations from an spreadsheet sheet
 
     :param fileName: spreadsheet file name import from.
@@ -67,9 +90,10 @@ def import_load_combinations_from_book(fileName, sheetNames, nameColumsRow, comb
     :param combNameColumn: label of the column that contains the 
                            combination name.
     :param actionLabels: labels of the actions.
+    :param dataOnly: read last computed values for cells that contain a formula.
     '''
     retval= dict()
-    book= pe.get_book(file_name= fileName)
+    book= openpyxl.load_workbook(fileName, data_only= dataOnly)
     for name in sheetNames:
         retval[name]= import_load_combinations_from_sheet(book, name, nameColumsRow, combNameColumn, actionLabels)
     return retval
