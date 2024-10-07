@@ -61,7 +61,7 @@ def value_to_number(value):
     return retval
     
     
-def read_shapes_from_spreadsheet(namePrefix, columnOrder, columnUnits, spreadsheetFileName, E= 210000e6, nu= 0.3, post_processing_function= None):
+def read_shapes_from_spreadsheet(namePrefix, columnOrder, columnUnits, spreadsheetFileName, E= 210000e6, nu= 0.3, post_processing_function= None, dataOnly= False):
     ''' Read steel shapes data from a spreadsheet in xlsx format.
 
     :param namePrefix: prefix of the names in the spreadsheet that will be
@@ -88,10 +88,10 @@ def read_shapes_from_spreadsheet(namePrefix, columnOrder, columnUnits, spreadshe
     :param nu: Poisson coefficiente for the shape material.
     :param post_processing_function: function that will post-process the data
                                      (remove undesired characters on some field
-                                     and things like that). 
+                                     and things like that).
+    :param dataOnly: read last computed values for cells that contain a formula.
     '''
-    # data= get_data(fNameIn)
-    wb_obj= openpyxl.load_workbook(spreadsheetFileName)
+    wb_obj= openpyxl.load_workbook(spreadsheetFileName, data_only= dataOnly)
     
     columnKeys= dict()
     for count, key in enumerate(columnOrder):

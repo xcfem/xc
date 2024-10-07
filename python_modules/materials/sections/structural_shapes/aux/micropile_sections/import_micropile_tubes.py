@@ -12,8 +12,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-#from misc_utils import spreadsheet_utils as su
-import spreadsheet_utils_link as su
+from misc_utils import spreadsheet_utils as su
 import json
 
 fNameIn= "common_micropile_tubes.xlsx"
