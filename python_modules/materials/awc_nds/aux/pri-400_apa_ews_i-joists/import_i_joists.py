@@ -3,8 +3,8 @@
 from __future__ import print_function
 from __future__ import division
 
-from pyexcel_ods import get_data
 import json
+from misc_utils import spreadsheet_utils as su
 
 # Section axis:
 
@@ -40,56 +40,30 @@ import json
 #      load deflections of the I-joist in a simple-span
 #      application based on Eqs. 1 and 2.
 
-fNameIn= "asd_design_properties_apa_ews_performance_rated_i_joists.ods"
-fNameOut= '../pr_400_i_joists.json'
+fNameIn= "asd_design_properties_apa_ews_performance_rated_i_joists.xlsx"
+#fNameOut= '../pr_400_i_joists.json'
+fNameOut= './pp.json'
 
 columnOrder= ['','nmb', 'b', 'h', 'EI', 'Mr', 'Vr', 'Ir', 'ER_44_wo_stiff', 'ER_44_stiff', 'ER_102_wo_stiff', 'ER_102_stiff', 'VLCr', 'K']
-numColumns= len(columnOrder)
 columnUnits= {} # All units correspond to SI, no need of conversion.
 
-columnKeys= dict()
-for count, key in enumerate(columnOrder):
-    if(len(key)>0):
-        columnKeys[key]= count
+def post_process(shapesDict):
+    ''' Post-process data readed from the spreadsheet
 
-shapesDict= dict() # Dictionary with all the shapes.
+    :param shapesDict: dictionary containing the data imported from the
+                       spreadsheet.
+    '''
+    # Some post-processing:
+    retval= dict()
+    for shapeName in shapesDict:
+        shapeRecord= dict()
+        shapeRecord.update(shapesDict[shapeName])
+        retval[shapeName]= shapeRecord
+    return retval
+
 namePrefix= 'PRI'
-data= get_data(fNameIn)
-for sheet in data:
-    rows= data[sheet]
-    for r in rows:
-        if(len(r)>=numColumns): # if not empty.
-            name= r[columnKeys['nmb']].replace(' ','')
-            if(name.startswith(namePrefix)):
-                shapeRecord= dict()
-                for key in columnOrder:
-                    if(len(key)>0):
-                        column= columnKeys[key]
-                        shapeRecord[key]= r[column]
-                #shapeRecord['h']= shapeRecord['b']
-                shapeName= name+'_'+str(int(shapeRecord['h']*1000))
-                shapesDict[shapeName]= shapeRecord
-                
-# Some post-processing:
-# for shapeName in shapesDict:
-#     shapeRecord= shapesDict[shapeName]
-#     for key in shapeRecord:
-#         if(key=='nmb'):
-#             value= shapeRecord[key].replace(' ','')
-#             shapeRecord[key]= value
-#         if(key=='CheckAvailability'):
-#             value= shapeRecord[key]
-#             shapeRecord[key]= (value=='#')
-                
-#         if key in columnUnits:
-#             factor= columnUnits[key]
-#             value= shapeRecord[key].replace(',','')
-#             shapeRecord[key]= float(value+factor)
-#     h_flat= shapeRecord['h']-3.0*shapeRecord['e']
-#     shapeRecord['h_flat']= h_flat
-#     b_flat= shapeRecord['b']-3.0*shapeRecord['e']
-#     shapeRecord['b_flat']= b_flat
-            
+shapesDict= su.read_shapes_from_spreadsheet(namePrefix= namePrefix, columnOrder= columnOrder, columnUnits= columnUnits, spreadsheetFileName= fNameIn, E= 210000e6, nu= 0.3, post_processing_function= post_process, dataOnly= True)
+
 jsonFile= open(fNameOut, "w")
 jsonFile.write(json.dumps(shapesDict))
 jsonFile.close()
