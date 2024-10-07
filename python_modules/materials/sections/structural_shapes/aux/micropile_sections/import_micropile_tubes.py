@@ -7,69 +7,46 @@ With some elaboration (see spreadsheet formulas).
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2022, LCPT and AOO"
+__copyright__= "Copyright 2024, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from pyexcel_ods import get_data
+#from misc_utils import spreadsheet_utils as su
+import spreadsheet_utils_link as su
 import json
 
-fNameIn= "common_micropile_tubes.ods"
+fNameIn= "common_micropile_tubes.xlsx"
 fNameOut= '../common_micropile_tubes.json'
+fNameOut= './pp.json'
 
-columnOrder= dict()
-columnOrder['MP']= ['nmb', 'D', 'e', 'P', 'A', 'slendernessRatio', 'Iz', 'iz', 'Wzel', 'Wzpl', 'It', 'Wt', 'AL', 'AG', '']
+columnOrder= ['nmb', 'D', 'e', 'P', 'A', 'slendernessRatio', 'Iz', 'iz', 'Wzel', 'Wzpl', 'It', 'Wt', 'AL', 'AG', '']
 
-columnUnits= {'D':'e-3', 'e':'e-3', 'P':'', 'A':'e-4', 'slendernessRatio':'', 'Iz':'e-8', 'iz':'e-2', 'Wzel':'e-6', 'Wzpl':'e-6', 'Iy':'e-8', 'iy':'e-2', 'Wyel':'e-6', 'Wypl':'e-6', 'It':'e-8',  'Wt':'e-6'}
+columnUnits= {'D':1e-3, 'e':1e-3, 'A':1e-4, 'Iz':1e-8, 'iz':1e-2, 'Wzel':1e-6, 'Wzpl':1e-6, 'Iy':1e-8, 'iy':1e-2, 'Wyel':1e-6, 'Wypl':1e-6, 'It':1e-8,  'Wt':1e-6}
 
-def importSections(rows, namePrefix):
-    ''' Import the data corresponding to cold formed
-        square hollow sections.'''
+def post_process(shapesDict):
+    ''' Post-process data readed from the spreadsheet
+
+    :param shapesDict: dictionary containing the data imported from the
+                       spreadsheet.
+    '''
+    # Some post-processing:
     retval= dict()
-    cOrder= columnOrder[namePrefix]
-    numColumns= len(cOrder)
-    columnKeys= dict()
-    for count, key in enumerate(cOrder):
-        if(len(key)>0):
-            columnKeys[key]= count
-    for r in rows:
-        if(len(r)>=numColumns): # if not empty.
-            name= r[columnKeys['nmb']].replace(' ','')
-            if(name.startswith(namePrefix)):
-                shapeRecord= dict()
-                for key in cOrder:
-                    if(len(key)>0):
-                        column= columnKeys[key]
-                        shapeRecord[key]= r[column]
-                shapeRecord['Iy']= shapeRecord['Iz']
-                shapeRecord['iy']= shapeRecord['iz']
-                shapeRecord['Wyel']= shapeRecord['Wzel']
-                shapeRecord['Wypl']= shapeRecord['Wzpl']
-                    
-                shapeRecord['E']= 210000e6 # To deprecate
-                shapeRecord['nu']= 0.3 # To deprecate
-                retval[name]= shapeRecord
+    for shapeName in shapesDict:
+        shapeRecord= dict()
+        shapeRecord.update(shapesDict[shapeName])
+        shapeRecord['Iy']= shapeRecord['Iz']
+        shapeRecord['iy']= shapeRecord['iz']
+        shapeRecord['Wyel']= shapeRecord['Wzel']
+        shapeRecord['Wypl']= shapeRecord['Wzpl']
+        retval[shapeName]= shapeRecord
     return retval
 
-shapesDict= dict() # Dictionary with all the shapes.
-data= get_data(fNameIn)
-for sheetName in data:
-    rows= data[sheetName]
-    #if(sheetName in ['CFSHS', 'RHS']):
-    shapesDict[sheetName]= importSections(rows= rows, namePrefix= 'MP')
-    
-# Some post-processing:
-for shapePrefix in shapesDict:
-    sheetDict= shapesDict[shapePrefix]
-    for shapeName in sheetDict:
-        shapeRecord= sheetDict[shapeName]
-        for key in shapeRecord:
-            if key in columnUnits:
-                factor= columnUnits[key]
-                value= str(shapeRecord[key])#.replace(',','')
-                shapeRecord[key]= float(value+factor)
-    
+namePrefix= 'MP'
+
+shapesDict= dict()
+shapesDict[namePrefix]= su.read_shapes_from_spreadsheet(namePrefix= namePrefix, columnOrder= columnOrder, columnUnits= columnUnits, spreadsheetFileName= fNameIn, E= 210000e6, nu= 0.3, post_processing_function= post_process)
+
 jsonFile= open(fNameOut, "w")
 jsonFile.write(json.dumps(shapesDict))
 jsonFile.close()
