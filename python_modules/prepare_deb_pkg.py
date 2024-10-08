@@ -20,6 +20,12 @@
 # See http://www.xcingenieria.com/ or email : l.perez@xcingenieria.com
 #
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2024, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
+
 import os
 import logging
 import platform
@@ -66,9 +72,6 @@ else:
         f.write(pth_to_libs+'\n')
 
 # Prepare Debian package folder.
-## Create config.ini
-cmd= 'touch '+xc_deb_pkg_folder+'/config.ini'
-os.system(cmd)
 ## Create DEBIAN directory
 cmd= 'mkdir '+xc_deb_pkg_folder+'/DEBIAN/'
 os.system(cmd)
