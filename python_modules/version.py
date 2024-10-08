@@ -1,4 +1,11 @@
+# -*- coding: utf-8 -*-
 # Source: https://github.com/Changaco/version.py
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2024, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import importlib.util
 xc_spec = importlib.util.find_spec("xc")
