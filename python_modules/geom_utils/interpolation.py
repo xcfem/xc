@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
+
 import scipy.interpolate
 
 def interpolateLine(x0,y0,x1,y1,x):
