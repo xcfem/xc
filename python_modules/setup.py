@@ -22,6 +22,12 @@ from __future__ import print_function
 # See http://www.xcingenieria.com/ or email : l.perez@xcingenieria.com
 #
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
+
 from setuptools import setup
 from setuptools import find_packages
 from setuptools.command.install import install as _install
