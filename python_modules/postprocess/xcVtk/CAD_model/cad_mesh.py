@@ -8,6 +8,7 @@ import vtk
 import xc_base
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.CAD_model import create_array_set_data
+import random as rd 
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT AO_O"
@@ -47,7 +48,7 @@ def vtk_define_kpoint_actor(recordGrid, renderer, radius):
 
     renderer.AddActor(visKPts)
 
-def vtk_define_cells_actor(gridRecord, renderer, reprType):
+def vtk_define_cells_actor(gridRecord, renderer, reprType, color= [rd.random(),rd.random(),rd.random()]):
     ''' Actor for lines and surfaces.
 
     :param gridRecord: 
@@ -58,8 +59,8 @@ def vtk_define_cells_actor(gridRecord, renderer, reprType):
     uGridMapper.SetInputData(gridRecord.uGrid)
     cellActor= vtk.vtkActor()
     cellActor.SetMapper(uGridMapper)
-    cellActor.GetProperty().SetColor(1,1,0)
-    if (reprType=="points"):
+    cellActor.GetProperty().SetColor(color[0],color[1],color[2])
+    if(reprType=="points"):
         cellActor.GetProperty().SetRepresentationToPoints()
     elif(reprType== "wireframe"):
         cellActor.GetProperty().SetRepresentationToWireframe()
@@ -138,6 +139,21 @@ def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
     renderer.AddActor2D(cellLabels)
 
 def vtk_load_mesh_data(gridRecord):
+    '''Creates an VTK unstructured grid from the block topology entities.
+
+    :param gridRecord: instance of the RecordDefGrid class.
+    '''
+    def dump_cells(cellSet):
+        '''Dumps the cells in the given set into the VTK unstructured grid to
+           be represented later.
+
+        '''
+        for c in cellSet:
+            vertices= xc_base.vector_int_to_py_list(c.getIdxVertices)
+            vtx= vtk.vtkIdList()
+            for vIndex in vertices:
+                vtx.InsertNextId(vIndex)
+            gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)        
     kpoints= vtk.vtkPoints()
     # Grid definition
     gridRecord.uGrid.SetPoints(kpoints)
@@ -149,17 +165,12 @@ def vtk_load_mesh_data(gridRecord):
     kpoints.SetNumberOfPoints(nPoints)
     for p in pnts:
         kpoints.InsertPoint(p.getIdx,p.getPos.x,p.getPos.y,p.getPos.z)
-    cellSet= setToDraw.getLines # cells are lines by default.
-    if(gridRecord.cellType=="faces"):
-        cellSet= setToDraw.getSurfaces
-    elif (gridRecord.cellType=="bodies"):
-        cellSet= setToDraw.getBodies
-    for c in cellSet:
-        vertices= xc_base.vector_int_to_py_list(c.getIdxVertices)
-        vtx= vtk.vtkIdList()
-        for vIndex in vertices:
-            vtx.InsertNextId(vIndex)
-        gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+    if('lines' in gridRecord.cellTypes):
+        dump_cells(cellSet= setToDraw.getLines)
+    if('faces' in gridRecord.cellTypes):
+        dump_cells(cellSet= setToDraw.getSurfaces)
+    if('bodies' in gridRecord.cellTypes):
+        dump_cells(cellSet= setToDraw.getBodies)
 
 
 

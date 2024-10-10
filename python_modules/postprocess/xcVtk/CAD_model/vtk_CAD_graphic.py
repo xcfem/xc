@@ -44,10 +44,13 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
             lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+setToDisplay.name+"', it has not key points so I can't get set geometry (use fillDownwards?)")
         return lineAxesField, surfAxesField
         
-    def defineMeshScene(self):
-        ''' Define mesh scene on ouput display.'''
+    def defineMeshScene(self, displayCellTypes):
+        ''' Define mesh scene on ouput display.
+
+        :param displayCellTypes: types of cell to be displayed.
+        '''
         self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
-        self.gridRecord.cellType= "lines"
+        self.gridRecord.cellTypes= displayCellTypes
         setToDraw= self.gridRecord.xcSet
         self.gridRecord.uGrid.name= setToDraw.name+'_grid'
         numKPts= setToDraw.getPoints.size
@@ -56,7 +59,7 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
             self.renderer= vtk.vtkRenderer()
             self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
             cad_mesh.vtk_define_kpoint_actor(self.gridRecord,self.renderer,0.02)
-            cad_mesh.vtk_define_cells_actor(gridRecord= self.gridRecord, renderer= self.renderer, reprType= "wireframe")
+            cad_mesh.vtk_define_cells_actor(gridRecord= self.gridRecord, renderer= self.renderer, reprType= "surface")
             self.renderer.ResetCamera()
             return True
         else:
@@ -71,41 +74,31 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         # elif(entToLabel=="points"):
         #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsKPts(self.gridRecord,setToDraw,renderer)
 
-
-    def grafico_cad(self,setToDisplay,caption= ''):
-        ''' Establish the set of entities to be displayed and add a caption 
-
-        :param setToDisplay:   set to be represented
-        :param caption: text to display in the graphic.
-        '''
-        self.setupGrid(setToDisplay)
-        meshSceneOk= self.defineMeshScene()
-        if(meshSceneOk):
-            self.displayScene(caption= caption)
-
-    def displayBlockEntities(self, setToDisplay, caption, fileName= None):
+    def displayBlockEntities(self, setToDisplay, caption, displayCellTypes, fileName= None):
         ''' Display geometric entities (points, lines, surfaces and volumes)
 
         :param setToDisplay: set to be represented
         :param caption: text to display in the graphic.
+        :param displayCellTypes: types of cell to be displayed.
         :param fileName: name of the graphic file to create (if None then -> screen window).
         '''
         self.setupGrid(setToDisplay)
-        meshSceneOk= self.defineMeshScene()
+        meshSceneOk= self.defineMeshScene(displayCellTypes= displayCellTypes)
         if(meshSceneOk):
             self.displayScene(caption,fileName)
 
-    def displayLocalAxes(self, setToDisplay, caption, fileName= None):
+    def displayLocalAxes(self, setToDisplay, caption, displayCellTypes, fileName= None):
         '''Display the element local axes.
 
         :param setToDisplay:   set of elements to be displayed (defaults to total set)
         :param caption:        text to display in the graphic 
+        :param displayCellTypes: types of cell to be displayed.
         :param fileName: file name to store the image. If none -> window on screen.
         '''
         self.setupGrid(setToDisplay)
         # Draw local axes.
         lineAxesField, surfAxesField= self.defineLocalAxes(setToDisplay)
-        meshSceneOk= self.defineMeshScene()
+        meshSceneOk= self.defineMeshScene(displayCellTypes= displayCellTypes)
         if(meshSceneOk):
             if(lineAxesField):
                 lineAxesField.addToDisplay(self) # Draw lines local axes.
@@ -113,16 +106,17 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
                 surfAxesField.addToDisplay(self) # Draw quad surfaces local axes.
             self.displayScene(caption, fileName)
 
-    def displayBlocks(self, setToDisplay, displayLocalAxes= True, caption= '', fileName= None):
+    def displayBlocks(self, setToDisplay, displayLocalAxes= True, caption= '', fileName= None, displayCellTypes= ['lines', 'faces', 'bodies']):
         '''Display the element local axes.
 
         :param setToDisplay:   set of elements to be displayed (defaults to total set)
         :param displayLocalAxes: if true, show also local axes of entities.
         :param caption:        text to display in the graphic 
         :param fileName: file name to store the image. If none -> window on screen.
+        :param displayCellTypes: types of cell to be displayed.
         '''
         if(displayLocalAxes):
-            self.displayLocalAxes(setToDisplay, caption, fileName)
+            self.displayLocalAxes(setToDisplay= setToDisplay, caption= caption, displayCellTypes= displayCellTypes, fileName= fileName)
         else:
-            self.displayBlockEntities(setToDisplay, caption, fileName)
+            self.displayBlockEntities(setToDisplay= setToDisplay, caption= caption, displayCellTypes= displayCellTypes, fileName= fileName)
 

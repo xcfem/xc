@@ -39,7 +39,7 @@ class RecordDefGrid(object):
     def __init__(self):
         self.xcSet= None
         self.entToLabel= "nodes"
-        self.cellType= "nil"
+        self.cellTypes= list() # types of cells to be displayed.
         self.uGrid= None
 
     def getSetBND(self):
