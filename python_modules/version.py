@@ -48,7 +48,14 @@ def get_xc_version():
     major= major_minor[0][1:]
     minor= major_minor[1]
     retval= major+'.'+minor+'.'+str(beta)
-        
+    # Update dictionary.
+    last_xc_version_dict['beta']= beta
+    last_xc_version_dict['last_xc_git_version']= xc_git_version
+    last_xc_version_dict['last_git_short_hash']= xc_git_short_hash
+    last_xc_version_dict['last_xc_version']= retval
+    # Write dictionary to JSON.
+    with open(jsonFileName, "w") as fw:
+        json.dump(last_xc_version_dict, fw)    
     return retval
 
 if __name__ == '__main__':
