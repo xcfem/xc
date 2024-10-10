@@ -54,8 +54,8 @@
 
 
 // Controls on internal iteration between spring components
-const int PYmaxIterations = 20;
-const double PYtolerance = 1.0e-12;
+const int PYmaxIterations= 20;
+const double PYtolerance= 1.0e-12;
 
 /////////////////////////////////////////////////////////////////////
 //! @brief Constructor with data
@@ -326,8 +326,8 @@ int XC::PySimple1::setTrialStrain(double newy, double yRate)
     // Set trial values for displacement and load in the material
     // based on the last Tangent modulus.
     //
-    double dy = newy - T.y();
-    double dp = T.tang() * dy;
+    double dy= newy - T.y();
+    double dp= T.tang() * dy;
     TvRate    = yRate;
 
     // Limit the size of step (dy or dp) that can be imposed. Prevents
@@ -336,10 +336,34 @@ int XC::PySimple1::setTrialStrain(double newy, double yRate)
     //
     int numSteps = 1;
     double stepSize = 1.0;
-    if(fabs(dp/matCapacity) > 0.5) numSteps = 1 + int(fabs(dp/(0.5*matCapacity)));
-    if(fabs(dy/v50)  > 1.0 ) numSteps = 1 + int(fabs(dy/(1.0*v50)));
-    stepSize = 1.0/float(numSteps);
+    
+    double temp = fabs(dp/matCapacity);
+    if(temp > 0.5)
+      {
+	if (temp > 50)
+	  {
+	    numSteps = 100;
+	  }
+	else
+	  {
+	    numSteps = 1 + int(temp * 2.0);
+	  }
+      }
+    
+    temp = fabs(dy/v50);
+    if(temp > 1.0)
+      {
+	if (temp > 100)
+	  {
+	    numSteps = 100;
+	  }
+	else
+	  {
+	    numSteps = 1 + int(temp);
+	  }
+      }
     if(numSteps > 100) numSteps = 100;
+    stepSize = 1.0/float(numSteps);
 
     dy = stepSize * dy;
 

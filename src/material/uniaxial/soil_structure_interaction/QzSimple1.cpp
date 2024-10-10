@@ -330,7 +330,7 @@ void XC::QzSimple1::getNearField(double zlast, double dz, double dz_old)
   }
 
 /////////////////////////////////////////////////////////////////////
-int XC::QzSimple1::setTrialStrain (double newz, double zRate)
+int XC::QzSimple1::setTrialStrain(double newz, double zRate)
   {
     // Set trial values for displacement and load in the material
     // based on the last Tangent modulus.
@@ -345,10 +345,33 @@ int XC::QzSimple1::setTrialStrain (double newz, double zRate)
     //
     int numSteps= 1;
     double stepSize= 1.0;
-    if(fabs(dQ/matCapacity) > 0.5) numSteps= 1 + int(fabs(dQ/(0.5*matCapacity)));
-    if(fabs(dz/v50)  > 1.0 ) numSteps= 1 + int(fabs(dz/(1.0*v50)));
-    stepSize= 1.0/float(numSteps);
+    double temp = fabs(dQ/matCapacity);
+    if(temp > 0.5)
+      {
+	if(temp > 50)
+	  {
+	    numSteps = 100;
+	  }
+	else
+	  {
+	    numSteps = 1 + int(temp * 2.0);
+	  }
+      }
+
+    temp = fabs(dz/v50);
+    if(temp > 1.0)
+      {
+	if (temp > 100)
+	  {
+	    numSteps = 100;
+	  }
+	else
+	  {
+	    numSteps = 1 + int(temp);
+	  }
+      }    
     if(numSteps > 100) numSteps= 100;
+    stepSize= 1.0/float(numSteps);
 
     dz= stepSize * dz;
 
