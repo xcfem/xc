@@ -114,3 +114,15 @@ if((ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-10) & (ratio4<=1e-10) & (rati
 else:
     lmsg.error(fname+' ERROR.')
 
+# Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# oh.displayBlocks(displayLocalAxes= False)#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX')
+# oh.displayDispRot(itemToDisp='uY')
+# oh.displayDispRot(itemToDisp='uZ')
