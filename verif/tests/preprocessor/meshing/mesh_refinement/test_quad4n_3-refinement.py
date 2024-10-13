@@ -111,6 +111,7 @@ else:
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
+# xcTotalSet.color= xc.Vector([1,1,1])
 # oh.displayFEMesh()
 # oh.displayLocalAxes()
 # # oh.displayReactions()
