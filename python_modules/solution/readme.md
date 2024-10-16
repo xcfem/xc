@@ -24,6 +24,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
 
 ### Modal analysis
 - [Modal analysis of rigid multy-storey frames](https://structville.com/2016/04/on-modal-analysis-of-rigid-multi-storey-frames.html)
+- [All About Making that ZPA](https://portwooddigital.com/2024/10/06/all-about-making-that-zpa/)
 
 ### Time-domain transient analysis
 - [OpenSeesaw](https://portwooddigital.com/2021/11/12/openseesaw/)

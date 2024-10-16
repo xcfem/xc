@@ -8,3 +8,4 @@ This folder contains the verification examples used the accuracy of such analysi
 
 - [Modal analysis (Wikipedia)](https://en.wikipedia.org/wiki/Modal_analysis)
 - [Distributed Mass Beam Vibration](https://portwooddigital.com/2023/11/14/distributed-mass-beam-vibration/)
+- [All About Making that ZPA](https://portwooddigital.com/2024/10/06/all-about-making-that-zpa/)
