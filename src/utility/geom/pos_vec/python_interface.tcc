@@ -118,6 +118,7 @@ class_<Vector2d, bases<ProtoGeom> >("Vector2d")
   .def("getModulus", &Vector2d::GetModulus, "Return the modulus of the vector.")
   .def("getModulus2", &Vector2d::GetModulus2, "Return the squared modulus of the vector.")
   .def("getNormalVector", &Vector2d::Normal, "Return a vector normal to this one.")
+  .def("getRotatedVector", &Vector2d::Rotated, "Return the vector that results from rotating this one by the given angle.")
   .def("getList", &Vector2d::getPyList, "Return the vector components in a Python list.")
   .def(-self) // __neg__ (unary minus)
   .def(self + self)          // __add__

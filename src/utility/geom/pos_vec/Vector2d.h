@@ -117,8 +117,8 @@ class Vector2d: public ProtoGeom
 
     friend FT_matrix operator*(const FT_matrix &m,const Vector2d &v);
 
-    //void Gira(const GEOM_FT &ang_rad);
-    //Vector2d GetGirado(const double &ang_rad) const;
+    //void Rotate(const GEOM_FT &ang_rad);
+    Vector2d Rotated(const double &ang_rad) const;
     Vector2d Perpendicular(const Orientacion &o) const;
     Vector2d Perpendicular(const Vector2d &v) const;
     

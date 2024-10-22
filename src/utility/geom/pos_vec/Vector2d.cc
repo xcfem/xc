@@ -24,9 +24,9 @@
 #include "Pos2d.h"
 #include "Dir2d.h"
 #include <plotter.h>
-#include "utility/matrices/giros.h"
 #include "utility/geom/FT_matrix.h"
 #include "utility/utils/misc_utils/colormod.h"
+#include "utility/geom/trf/Rotation2d.h"
 
 //! @brief Constructor.
 Vector2d::Vector2d(const GEOM_FT &x,const GEOM_FT &y)
@@ -214,16 +214,19 @@ GEOM_FT dot(const FT_matrix &m, const Vector2d &v1)
   { return v1.GetDot(m); }
 
 
-// void Vector2d::Gira(const GEOM_FT &ang_rad)
+// void Vector2d::Rotate(const GEOM_FT &ang_rad)
 //   { (*this)= GetGirado(ang_rad); }
 
-// Vector2d Vector2d::GetGirado(const double &ang_rad) const
-//   { 
-//     Vector2d retval;
-//     CGTrfAfin_2 giro(CGAL::ROTATION,sin(ang_rad),cos(ang_rad));
-//     retval.cgvct = giro(cgvct);
-//     return retval;
-//   }
+//! @brief Return the vector that results from rotating this one
+//! by the given angle.
+Vector2d Vector2d::Rotated(const double &ang_rad) const
+  { 
+    Vector2d retval;
+    Rotation2d rot2d(ang_rad);
+    retval= rot2d.Transform(*this);
+    return retval;
+  }
+
 Vector2d Vector2d::Perpendicular(const Orientacion &o) const
   {
     Vector2d retval;
